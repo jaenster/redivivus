@@ -63,13 +63,23 @@ struct D2CrashReportStrc {
 namespace Fog::Src::ErrorManager {
 
 // Function declarations
+void __fastcall StubHook1_Unref_004016b0(uint32_t dwThreadId, HANDLE hThread);
 BOOL __stdcall FOG_ReturnZeroCallback(char * szFileName, void * pContext);
+void __fastcall StubHook1_Unref_00403f50(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_00405a50(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_00405a60(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_004072c0(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_004072d0(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_004072e0(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_004072f0(uint32_t dwThreadId, HANDLE hThread);
+void __fastcall StubHook1_Unref_00407300(uint32_t dwThreadId, HANDLE hThread);
 void __stdcall CrashGame();
 void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szString);
 DWORD __fastcall GetParentProcessId(int32_t nProcessId);
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize);
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport);
+int Unreferenced_00407dd0();
 void __stdcall InitializeSystemInfo();
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
 void EXIT_AtExit();
@@ -77,10 +87,16 @@ void EXIT_AtExit();
 void __fastcall StubHook1(uint32_t dwThreadId, HANDLE hThread);
 // Registers: nReserved (ECX) is 0 at every call site and not read.
 void __fastcall StubHook2(int32_t nReserved);
+void __fastcall StubHook2_Unref_00407fa0(int32_t nReserved);
+void __fastcall StubHook2_Unref_00407fb0(int32_t nReserved);
 void __fastcall LogStringConditional(int32_t nLogLevel, char * szText);
 uint32_t __stdcall GetErrorState();
 // @sourcefile .\Src\ErrorManager.cpp
 char * __fastcall StripPathPrefixToRelative(char * szText);
+void __fastcall StubHook2_Unref_00408050(int32_t nReserved);
+void __fastcall StubHook2_Unref_00408060(int32_t nReserved);
+void __fastcall StubHook2_Unref_00408070(int32_t nReserved);
+void __fastcall StubHook2_Unref_00408080(int32_t nReserved);
 // Returns the caller's return address, i.e. the instruction pointer of the call site. Body is MOV EAX,[ESP]; RET - it reads the return address off the stack and returns it. Takes NO arguments: the RET (not RET 4) leaves the caller's stack untouched, and the DWORD after the call is the __LINE__ value the caller pushed for the assert/halt call that follows. Fog ordinal #10265 @ RVA 0x8090.
 void * __stdcall GetInstructionPointer();
 void OutputDebugStringSimple(char * szText, ...);
@@ -131,6 +147,7 @@ void ERROR_UnrecoverableInternalError_Any(eFOG_ErrorType eErrorType, uint32_t dw
 void __fastcall ShowUnrecoverableErrorDialog(int32_t eErrorType, char * szText, int nLine, char * szSourceFile, va_list vaArgs);
 // Initializes Fog error manager and debugging subsystems on first call. Sets up project metadata (ID 0x108, "Diablo II", version "D2 1.14d"), retrieves executable directory via SFILE_GetExecutableDirectory into a 4096-byte buffer, initializes two critical sections for thread safety, starts the log writer thread, validates gadwBitMasks/gadwInvBitMasks lookup tables, and registers the exit handler. On subsequent calls with bLogGameStrartupInfo=TRUE, only logs startup info via LOGFILE_StoreGameStartupInfo.
 void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, BOOL bLogGameStrartupInfo);
+void __fastcall StubHook2_Unref_004095d0(int32_t nReserved);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 // 1 internal function (defined in .cpp)
 

@@ -6,6 +6,7 @@
 #include "globals/globals.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "Fog/Source/SFile.data.h"
+#include "D2Client/GAME/Game/Game.h"
 #include "D2Client/Renderer/Glide.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
@@ -3487,8 +3488,6 @@ char * gaLanguageNames_007273a8[15] = {
     (char*)0x006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_007273a8, "gaLanguageNames_007273a8");
 
-uint32_t gnCursorInvTypeAutoOpenC[5] = { 0x0, 0x1, 0x4, 0x2, 0x6 }; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenC, "gnCursorInvTypeAutoOpenC");
-
 int gaUnitSoundIdsAmazon[11] = {
     0xb3e,
     0xb43,
@@ -3663,6 +3662,33 @@ char * gaszLanguageNames[32] = {
     (char*)0x006cc77c,
     nullptr
 }; D2_GLOBAL_GUARD(gaszLanguageNames, "gaszLanguageNames");
+
+char s___AUItem_NewsTable___0072ff8c[24] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'I',
+    't',
+    'e',
+    'm',
+    '@',
+    'N',
+    'e',
+    'w',
+    's',
+    'T',
+    'a',
+    'b',
+    'l',
+    'e',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUItem_NewsTable___0072ff8c, "s___AUItem_NewsTable___0072ff8c");
 
 char gaQ33_Normal_AmazonBowCodes[5][4] = {
     { 'a', 'm', '1', ' ' },
@@ -10023,11 +10049,13 @@ uint8_t gabyFxamClassOffset[16] = {
     0x8
 }; D2_GLOBAL_GUARD(gabyFxamClassOffset, "gabyFxamClassOffset");
 
+_RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "lpCriticalSection_0077ae28");
+
 D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "gAncientsCloudSeed");
 
 D2DataTableTxtStrc sgtDataTable = {}; D2_GLOBAL_GUARD(sgtDataTable, "sgtDataTable");
 
-unsigned long long gpItemTypeTableContext = 0; D2_GLOBAL_GUARD(gpItemTypeTableContext, "gpItemTypeTableContext");
+_RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096d610, "lpCriticalSection_0096d610");
 
 uint32_t User32Reserved[26] = {}; D2_GLOBAL_GUARD(User32Reserved, "User32Reserved");
 
@@ -10843,18 +10871,17 @@ char * gpszExpansionStringTblPathFormat = s_data_local_lng__s_expansionstring_00
 char * gpszD2DataMpqName = s_d2data_mpq_006dc770; D2_GLOBAL_GUARD(gpszD2DataMpqName, "gpszD2DataMpqName");
 char * gpszPatchD2MpqName = s_patch_d2_mpq_006dc728; D2_GLOBAL_GUARD(gpszPatchD2MpqName, "gpszPatchD2MpqName");
 char * gpszD2ExpMpqName = s_d2exp_mpq_006cd3a0; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "gpszD2ExpMpqName");
-uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "gaScreenResolutionTableIndexArray");
-uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "gaScreenResolutionModeArray");
-uint32_t gnCursorInvTypeAutoOpenA = 0x5; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenA, "gnCursorInvTypeAutoOpenA");
+uint32_t gpServerMemHeap = 0x1; D2_GLOBAL_GUARD(gpServerMemHeap, "gpServerMemHeap");
+uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "gbLightmapColorEnabled");
 D2NPCMessageTableStrc gbQuestA5Q2Unknown[6] = {}; D2_GLOBAL_GUARD(gbQuestA5Q2Unknown, "gbQuestA5Q2Unknown");
 char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "gaLanguageNames_0074430c_11");
 uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "DWORD_007467b0");
 uint32_t DEFAULT_SECURITY_COOKIE = 0xbb40e64e; D2_GLOBAL_GUARD(DEFAULT_SECURITY_COOKIE, "DEFAULT_SECURITY_COOKIE");
 unsigned int gaCRT_FPremData_3 = 0x6a9a24; D2_GLOBAL_GUARD(gaCRT_FPremData_3, "gaCRT_FPremData_3");
 int TokenHashMapBucketSize = 0x10; D2_GLOBAL_GUARD(TokenHashMapBucketSize, "TokenHashMapBucketSize");
-uint32_t gnEngineMode = 0; D2_GLOBAL_GUARD(gnEngineMode, "gnEngineMode");
-uint32_t gdwSpellSelThrottleTick = 0; D2_GLOBAL_GUARD(gdwSpellSelThrottleTick, "gdwSpellSelThrottleTick");
+D2BNetClientCallbacksStrc * gpBNetCallbacks = 0; D2_GLOBAL_GUARD(gpBNetCallbacks, "gpBNetCallbacks");
 int gnTileClipLeft = 0; D2_GLOBAL_GUARD(gnTileClipLeft, "gnTileClipLeft");
+uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "gbSmackerKeepTempFile");
 grDrawLine GLIDEDLL__grDrawLine_8 = (grDrawLine)0; D2_GLOBAL_GUARD(GLIDEDLL__grDrawLine_8, "GLIDEDLL__grDrawLine_8");
 grDepthMask GLIDEDLL_grDepthMask_4 = (grDepthMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grDepthMask_4, "GLIDEDLL_grDepthMask_4");
 grDrawPoint GLIDEDLL_grDrawPoint_4 = (grDrawPoint)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawPoint_4, "GLIDEDLL_grDrawPoint_4");
@@ -10877,9 +10904,9 @@ grTexMaxAddress GLIDEDLL_grTexMaxAddress_4 = (grTexMaxAddress)0; D2_GLOBAL_GUARD
 grBufferClear GLIDEDLL_grBufferClear_12 = (grBufferClear)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferClear_12, "GLIDEDLL_grBufferClear_12");
 grChromakeyMode GLIDEDLL_grChromakeyMode_4 = (grChromakeyMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grChromakeyMode_4, "GLIDEDLL_grChromakeyMode_4");
 grBufferSwap GLIDEDLL_grBufferSwap_4 = (grBufferSwap)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferSwap_4, "GLIDEDLL_grBufferSwap_4");
-uint32_t gnQServerListenSocket = 0; D2_GLOBAL_GUARD(gnQServerListenSocket, "gnQServerListenSocket");
-unsigned int gpfnProfCoreInitCallback = {}; D2_GLOBAL_GUARD(gpfnProfCoreInitCallback, "gpfnProfCoreInitCallback");
+BOOL gbCodecUseFallbackDecompressor = 0; D2_GLOBAL_GUARD(gbCodecUseFallbackDecompressor, "gbCodecUseFallbackDecompressor");
 unsigned int UINT_0096d6a8 = {}; D2_GLOBAL_GUARD(UINT_0096d6a8, "UINT_0096d6a8");
+HMODULE hDbgHelpDll = 0; D2_GLOBAL_GUARD(hDbgHelpDll, "hDbgHelpDll");
 uint32_t dwCurrentThreadId = 0; D2_GLOBAL_GUARD(dwCurrentThreadId, "dwCurrentThreadId");
 uint32_t LastErrorValue = 0x0; D2_GLOBAL_GUARD(LastErrorValue, "LastErrorValue");
 uint32_t CountOfOwnedCriticalSections = 0x0; D2_GLOBAL_GUARD(CountOfOwnedCriticalSections, "CountOfOwnedCriticalSections");
@@ -11242,6 +11269,10 @@ uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Class::
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
+
+namespace D2Game::GAME::Rendering {
+
+} // namespace D2Game::GAME::Rendering
 
 namespace D2Client::UI::ui {
 

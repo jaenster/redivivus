@@ -75,6 +75,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00475c30",
+      "address": "00475c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475c30"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "Unreferenced_00475c30",
+        "D2MEM_VirtualFree"
+      ]
+    },
+    {
       "name": "VIEW_AllocPalettePointerTable",
       "address": "00475c40",
       "lines": [
@@ -91,6 +106,21 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t *"
+      ]
+    },
+    {
+      "name": "Unreferenced_00475d20",
+      "address": "00475d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475d20"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "Unreferenced_00475d20",
+        "D2MEM_VirtualFree"
       ]
     },
     {
@@ -111,6 +141,21 @@
         "int32_t",
         "uint32_t",
         "uint8_t *"
+      ]
+    },
+    {
+      "name": "Unreferenced_00475de0",
+      "address": "00475de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475de0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "Unreferenced_00475de0",
+        "D2MEM_VirtualFree"
       ]
     },
     {

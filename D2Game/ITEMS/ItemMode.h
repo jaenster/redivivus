@@ -38,6 +38,7 @@ void * __fastcall GetSavePacketList(struct D2ClientStrc * pClient);
 // @evidence Writes pClient->pSavePacketList (line 0x80a). 00538350 reads it (line 0x7ff).
 // A setter had been given the getter's name.
 void __fastcall SetSavePacketList(struct D2ClientStrc * pClient, void * pSavePacketList);
+void __fastcall ITEMMODE_NullSub_Unref_00558990(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 struct D2MonStatsTxt * __fastcall GetMonsterData(struct D2UnitStrc * pUnit);
 // Server-side callback invoked when an item/stat modifier (op-function) changes a unit stat by (fParam1 old -> fParam2 new). Extracts the stat index from the eSkill packed param, looks up its ItemStatCost.txt line, and fires associated aura item-events. Switches on the affected stat: maxhp/maxmana/maxstamina proportionally rescales the current hitpoints/mana/stamina; item_addclassskills/addskill_tab/nonclassskill/singleskill grant or remove the granted skill (allocating, broadcasting via 0x21, updating passive/pet stats, deselecting if leveled to 0); state toggles a unit state and gfx; item_aura activates/deactivates a periodic aura; item_charged_skill adds/removes a charged item skill. Pure side-effects on pUnit's stats/skills/states.
 // @sourcefile .\ITEMS\ItemMode.cpp
@@ -46,6 +47,7 @@ void __fastcall SendDropItemPacket(struct D2UnitStrc * pUnit, struct D2ClientStr
 void __fastcall PacketUpdateForClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall SERVER_ITEM_SendStackableUsagePackets(struct D2UnitStrc * pUnit, char * szFile, int32_t nLine);
+int Unreferenced_0055bfe0();
 void __fastcall ITEMMODE_ApplyItemToOwner(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
 void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApply);
 void __fastcall ITEMMODE_RemoveItemStates(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
@@ -64,9 +66,11 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, struct D2UnitStrc * 
 // Determines the body-location slot into which an item should be equipped on a unit, writing the chosen eD2BodyLoc to *pnBodyLoc. When bAutoEquip is clear it first verifies the item passes full equip requirements; otherwise only checks the required body type. Validates the item is identified, not broken/disabled, not a throwing potion. Handles quiver/ammo matching against the weapon already in the R/L arm, reads the item's two candidate body locations from ItemTypes.txt, and resolves conflicts between the new item and items already in those slots via ITEMMODE_GetItemTypeFlags/CheckItemTypeConflict. Returns 1 (with slot written) if a placement was found, 0 otherwise; halts via ErrorManager on null unit/item.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEMMODE_FindBestBodyLocForItem(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t * pnBodyLoc, uint32_t bAutoEquip);
+void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam);
 void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 int32_t __fastcall ITEMMODE_CheckItemRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
+int __fastcall Unreferenced_0055db80(int param_1);
 // Server-side recalculation of all equipped/charm item enable states for a player (or hireling, eUnitFlags bit 9). Validates each item against the wearer's current requirements: enables qualifying active charms, disables body-slot items that fail requirements (unequipping their stats), then runs a convergence loop re-enabling items whose requirements are now met (handling primary-weapon swap and socketed/set bonuses), and re-applies set bonuses for quality-5 (set) items. Finishes by validating item quality and refreshing inventory; if bSendPacket, sends S2C 0x48 (RecalcEquippedItems2) to the owning player's client. Counterpart to the client-side 0x47/0x48 handlers.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t bSendPacket);
@@ -211,6 +215,9 @@ void __fastcall SERVER_DropItemFromPlayer(::SGAMEDATA * pGame, struct D2UnitStrc
 BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int32_t bSkipRequirementsCheck, uint32_t * pbBadParams);
 // Explicit GuardStack(0)/GuardStack(1) tails on the two normal-completion paths; all error paths tail into a noreturn halt.
 BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
+void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam);
+BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
+BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2);
 // 30 internal functions (defined in .cpp)
 
 } // namespace D2Game::ITEMS::ItemMode

@@ -112,6 +112,14 @@ static uint32_t gnConnectionLostScreenState = 0; D2_STATIC_GUARD(gnConnectionLos
 
 namespace D2Client::Engine {
 
+void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae50(BOOL bConnectionLost) {
+    gaScreenResolutionTableIndexArray = bConnectionLost;
+}
+
+void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae70(BOOL bConnectionLost) {
+    gaScreenResolutionModeArray = bConnectionLost;
+}
+
 BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -282,6 +290,14 @@ void __stdcall DRAW_UI_OkCancel() {
     UI::ui::UI_DrawTextCentered(gnPanelOffsetX + 0xce, 0x136 - gnPanelOffsetY, gnPanelOffsetX + 0x12e, D2Lang::StrTable::strtable::GetLocaleString(0x13ee), 0);
     UI::ui::UI_DrawTextCentered(gnPanelOffsetX + 0x152, 0x136 - gnPanelOffsetY, gnPanelOffsetX + 0x1b2, D2Lang::StrTable::strtable::GetLocaleString(0x13ef), 0);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
+}
+
+int Unreferenced_00460170() {
+    if (!gbCharScreenOkButtonConfirmed && !gbCharScreenCancelPressed) {
+      return 0;
+    }
+
+    return 1;
 }
 
 void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
@@ -501,6 +517,14 @@ void __fastcall CLIENT_SetUnitFlag(D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet
     *(uint16_t*)pFlags &= ~wFlag;
 }
 
+void __fastcall Unreferenced_00460760(int param_1, int param_2) {
+    if (!(param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14))) {
+      return;
+    }
+
+    *(int*)(*(int*)(param_1 + 0x14) + 0x150) = param_2;
+}
+
 void __fastcall StoreLastSkillHit(eSkillEType pSkill, D2UnitStrc * pUnit, eD2UnitType nUnitType, uint32_t nUid) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer)) {
       return;
@@ -510,6 +534,30 @@ void __fastcall StoreLastSkillHit(eSkillEType pSkill, D2UnitStrc * pUnit, eD2Uni
     pUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId = pSkill;
     pUnit->pUnitData.pUnitDataPlayer->eTargetUnitType = nUnitType;
     pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = nUid;
+}
+
+int __fastcall Unreferenced_004607d0(int param_1) {
+    if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
+      return *(int*)(*(int*)(param_1 + 0x14) + 0x154);
+    }
+
+    return 0;
+}
+
+int __fastcall Unreferenced_004607f0(int param_1) {
+    if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
+      return *(int*)(*(int*)(param_1 + 0x14) + 0x158);
+    }
+
+    return 0;
+}
+
+int __fastcall Unreferenced_00460810(int param_1) {
+    if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
+      return *(int*)(*(int*)(param_1 + 0x14) + 0x15c);
+    }
+
+    return 0;
 }
 
 void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode, BOOL bMovePlayerUnit, D2UnitStrc * pUnit) {
@@ -633,6 +681,10 @@ void __fastcall CLIENT_SetUnitLightColor(D2UnitStrc * pUnit, int32_t dwRGB) {
     }
 
     Draw::LightMap::SetRGB(pLightMap, byRed, byGreen, byBlue);
+}
+
+void __fastcall LOADER_SetConnectionLostFlag_Unref_00468000(BOOL bConnectionLost) {
+    gnCursorInitialized = bConnectionLost;
 }
 
 } // namespace D2Client::Engine

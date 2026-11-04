@@ -243,6 +243,21 @@
       ]
     },
     {
+      "name": "SOUND_ShutdownAudio_Thunk_Unref_004df910",
+      "address": "004df910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df910"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_ShutdownAudio_Thunk_Unref_004df910",
+        "SOUND_GetSoundMixer"
+      ]
+    },
+    {
       "name": "SOUND_Is3DMixerActive",
       "address": "004df980",
       "lines": [
@@ -548,6 +563,20 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsInitializedDup_Unref_004e0680",
+      "address": "004e0680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0680"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitializedDup_Unref_004e0680"
       ]
     }
   ]

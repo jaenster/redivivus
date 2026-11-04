@@ -64,6 +64,10 @@ struct __attribute__((packed)) MCPPacketCltStr {
 namespace D2MCPClient::McpConnect {
 
 // Function declarations
+int16_t __stdcall GetD2GSRequestId_Unref_004166f0();
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_0043f840(char * pBytes, size_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004473f0(char * pBytes, size_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004476f0(char * pBytes, size_t nSize);
 void __stdcall FreeMCP();
 int32_t __stdcall HasPeerName();
 BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket();
@@ -81,13 +85,18 @@ void __stdcall MCPSTATE_SetJoinGameSuccess(BOOL bSuccess);
 BOOL __stdcall MCPSTATE_GetCreateGameSuccess();
 void __stdcall MCPSTATE_SetCreateGameSuccess(BOOL bSuccess);
 void __stdcall MCPSTATE_SetListGameSuccess(uint32_t bSuccess);
+BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449ca0();
+BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449cb0();
 void __stdcall MCPSTATE_SetCharDeleteSuccess(uint32_t bSuccess);
 uint32_t __stdcall MCPCONNECT_GetGameNameAndPassword(int32_t pGameNameOut, int32_t pPasswordOut);
 void __stdcall MCPCONNECT_SetGameNameAndPassword(uint32_t nDifficulty, char * szGameName, char * szPassword);
 struct D2McpGameInfoStrc * __stdcall MCPCONNECT_GetCharSelectBuffer();
 void __stdcall MCPCONNECT_ClearCharSelectBuffer();
+uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449d80();
 void __stdcall MCPSTATE_SetCharUpgradeSuccess(uint32_t bSuccess);
+uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449da0();
 void __stdcall MCPSTATE_SetCharCreateSuccess(uint32_t bSuccess);
+uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449dc0();
 void __stdcall MCPSTATE_SetD2GSConnectReady(uint32_t bReady);
 uint32_t __stdcall MCPCONNECT_GetD2GSGameHash();
 void __stdcall MCPCONNECT_SendCharCreate(char * szCharName, uint32_t dwArg1, uint32_t dwArg2);

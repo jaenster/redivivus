@@ -4,6 +4,40 @@
   "file": "D2Client/UI/Path.cpp",
   "functions": [
     {
+      "name": "DRAW_GetTypeOfBorder_Unref_0045ae60",
+      "address": "0045ae60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae60"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_GetTypeOfBorder_Unref_0045ae60"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_GetTypeOfBorder_Unref_0045ae80",
+      "address": "0045ae80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae80"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_GetTypeOfBorder_Unref_0045ae80"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "DRAW_GetTypeOfBorder",
       "address": "0045ae90",
       "lines": [

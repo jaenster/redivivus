@@ -12,6 +12,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/TokTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -24,15 +25,14 @@
 #endif
 
 
-static unsigned int nTxtMonModeSize = {}; D2_STATIC_GUARD(nTxtMonModeSize, "nTxtMonModeSize");
 static D2MonModeTxt * pTxtMonMode1 = 0; D2_STATIC_GUARD(pTxtMonMode1, "pTxtMonMode1");
 static D2MonModeTxt * pTxtMonMode2 = 0; D2_STATIC_GUARD(pTxtMonMode2, "pTxtMonMode2");
 static D2MonModeTxt * pTxtMonMode3 = 0; D2_STATIC_GUARD(pTxtMonMode3, "pTxtMonMode3");
-static unsigned int nTxtObjTypeModeSize = {}; D2_STATIC_GUARD(nTxtObjTypeModeSize, "nTxtObjTypeModeSize");
+unsigned int nTxtObjTypeModeSize = {}; D2_GLOBAL_GUARD(nTxtObjTypeModeSize, "nTxtObjTypeModeSize");
 static D2ObjTypeTxt * pTxtObjTypeMode = 0; D2_STATIC_GUARD(pTxtObjTypeMode, "pTxtObjTypeMode");
 static D2ObjTypeTxt * pTxtObjType = 0; D2_STATIC_GUARD(pTxtObjType, "pTxtObjType");
 static D2ObjModeTxt * pTxtObjMode = 0; D2_STATIC_GUARD(pTxtObjMode, "pTxtObjMode");
-static unsigned int nTxtPlrTypeModeSize = {}; D2_STATIC_GUARD(nTxtPlrTypeModeSize, "nTxtPlrTypeModeSize");
+unsigned int nTxtPlrTypeModeSize = {}; D2_GLOBAL_GUARD(nTxtPlrTypeModeSize, "nTxtPlrTypeModeSize");
 static D2PlrTypeModeTxt * pTxtPlrTypeMode1 = 0; D2_STATIC_GUARD(pTxtPlrTypeMode1, "pTxtPlrTypeMode1");
 static D2PlrTypeModeTxt * pTxtPlrTypeMode2 = 0; D2_STATIC_GUARD(pTxtPlrTypeMode2, "pTxtPlrTypeMode2");
 static D2PlrTypeModeTxt * pTxtPlrTypeMode3 = 0; D2_STATIC_GUARD(pTxtPlrTypeMode3, "pTxtPlrTypeMode3");

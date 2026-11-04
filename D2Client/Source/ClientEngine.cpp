@@ -18,6 +18,7 @@
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
+#include "D2Client/Warden/WardenClient.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -52,6 +53,7 @@
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
 #include "D2Win/Src/D2WinFont.h"
+#include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Fog.h"
 #include "Fog/Src/ErrorManager.h"
@@ -2237,6 +2239,14 @@ void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
     ;
 }
 
+int __fastcall Unreferenced_0046d9c0(int param_1) {
+    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtOverlaySize) {
+      return (int)(sgptDataTable->pTxtOverlay + param_1);
+    }
+
+    return 0;
+}
+
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(D2UnitStrc * pUnit) {
     if (pUnit) {
       if (!(pUnit->eUnitFlagsEx >> 3 & 1)) {
@@ -2283,6 +2293,28 @@ DWORD __fastcall CLIENT_GetEffectiveClassId(D2UnitStrc * pUnit) {
     }
 
     return -1;
+}
+
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690() {
+    D2gfx::D2GFX::RENDERER_TogglePerspective();
+}
+
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776a0() {
+    D2gfx::D2GFX::RENDERER_ToggleBlendedShadows();
+}
+
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776b0() {
+    D2gfx::D2GFX::D2GFX_ToggleLowQuality();
+}
+
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940() {
+    LPVOID* in_ECX;
+    Warden::WARDEN_FreeModuleLibraries(in_ECX);
+}
+
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0() {
+    LPVOID* in_ECX;
+    Warden::WARDEN_FreeModuleLibraries(in_ECX);
 }
 
 } // namespace D2Client::Source::ClientEngine

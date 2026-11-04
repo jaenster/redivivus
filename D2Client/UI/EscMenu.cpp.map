@@ -705,6 +705,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0047d5b0",
+      "address": "0047d5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d5b0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "Unreferenced_0047d5b0",
+        "ESCMENU_GetItemIndexFromMouseY"
+      ]
+    },
+    {
       "name": "ESCMENU_ClickMenuItem",
       "address": "0047d5c0",
       "lines": [

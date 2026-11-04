@@ -2107,6 +2107,20 @@
         "uint32_t",
         "uint8_t"
       ]
+    },
+    {
+      "name": "GFX_GetGfxSystemFlags_Unref_004723f0",
+      "address": "004723f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004723f0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetGfxSystemFlags_Unref_004723f0"
+      ]
     }
   ]
 }

@@ -75,6 +75,20 @@
       ]
     },
     {
+      "name": "Unreferenced_005a6250",
+      "address": "005a6250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a6250"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterMode",
+      "calledFunctions": [
+        "Unreferenced_005a6250"
+      ]
+    },
+    {
       "name": "SetCombatAndMonStats",
       "address": "005a6260",
       "lines": [

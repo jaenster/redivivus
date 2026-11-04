@@ -127,6 +127,10 @@ uint16_t gwcIMECompositionString[32] = {}; D2_GLOBAL_GUARD(gwcIMECompositionStri
 
 namespace D2Client::UI::Chat {
 
+void __stdcall CHAT_InitEmpty_Unref_00477970() {
+
+}
+
 // @sourcefile .\UI\chat.cpp
 static void CHAT_HandleIMECandidateList(HIMC hImc) {
     DWORD dwListCount;

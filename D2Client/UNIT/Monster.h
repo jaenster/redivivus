@@ -49,24 +49,6 @@ struct D2AiParamStrc {
     /* 0x20 */ struct D2MonStats2Txt * pMonStats2;
 };
 
-struct __attribute__((packed)) D2HirelingHireData {
-    /* 0x00 */ int32_t nId;
-    /* 0x04 */ int32_t nLevel;
-    /* 0x08 */ int32_t nHp;
-    /* 0x0C */ int32_t nStrength;
-    /* 0x10 */ int32_t nDexterity;
-    /* 0x14 */ int32_t nCost;
-    /* 0x18 */ int32_t nExperience;
-    /* 0x1C */ int32_t nDefense;
-    /* 0x20 */ int32_t nMinDamage;
-    /* 0x24 */ int32_t nMaxDamage;
-    /* 0x28 */ int32_t nShare;
-    /* 0x2C */ int32_t nResists;
-    /* 0x30 */ int32_t nHireDescription;
-    /* 0x34 */ int32_t field13_0x34;
-    /* 0x38 */ int16_t field14_0x38;
-};
-
 struct D2MercInitArgStrc {
     D2MercInitArgStrc() = default;
     D2MercInitArgStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
@@ -274,6 +256,7 @@ int32_t * __fastcall GetMonsterAi(struct D2UnitStrc * pUnit);
 int32_t __fastcall GetOwnerGUID(struct D2UnitStrc * pUnit);
 void __fastcall SetOwnerGUID(struct D2UnitStrc * pUnit, int32_t nOwnerGUID);
 int * __fastcall MONSTER_GetAiDataPtr(struct D2UnitStrc * pUnit);
+void __fastcall Unreferenced_004ae190(int param_1, int param_2);
 // Allocates and attaches a D2LightMapStrc to a monster unit. Computes the final light radius as the max of the monster's equipment light and its MonStats2 byLight value; special-cases Den of Evil quest monsters (clamped to radius 3). Replaces any existing light map and updates the unit's stored light radius.
 void __fastcall MONSTER_InitLightMap(struct D2UnitStrc * pUnit);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
@@ -297,6 +280,7 @@ void __stdcall MONSTER_SpawnFetishMissileSpread(struct D2UnitStrc * pUnit, eMiss
 struct D2MonStats2Txt * __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, struct D2MonStats2Txt * pD2MonStats2Txt, int nBloodDirSlot);
 // Central per-monster state/mode message dispatcher. Given a message type nParam (0..0x1d), a monster D2UnitStrc, and a server message handle, transitions the monster's path/anim mode: walk/run/move-to (0,1,4,5,etc.), got-hit (6,0x13), death (8) and dying/corpse (9), sequence/skill start (0x14,0x15,0x16), town-walk (0x12), etc. Restores collision and resets the 0x2000 path flag, sets target unit by type/GUID, calculates paths, applies per-classId special cases (unique death overlays/missiles/sounds, burrow transitions, special facing) keyed on the monster's base MonStats id, and updates UNITFLAG targetable/shadow/nodraw flags. Halts via Fog ErrorManager when a required pMessage is null. Tail applies velocity-percent stat changes and dispatches unique-mod walk callbacks. __fastcall (nParam in ECX, pUnit in EDX).
 void __fastcall MonsterMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);
+int __fastcall Unreferenced_004b1030(int param_1);
 uint32_t __fastcall NPCMENU_ParseSpeechData(int * pUnit, uint8_t * pParam, int * pnSpeechResult);
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(struct D2UnitStrc * pUnit, struct D2MercInitArgStrc * pMercInit);

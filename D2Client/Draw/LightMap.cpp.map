@@ -110,6 +110,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00474380",
+      "address": "00474380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474380"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "Unreferenced_00474380"
+      ]
+    },
+    {
       "name": "SetRGB",
       "address": "00474390",
       "lines": [

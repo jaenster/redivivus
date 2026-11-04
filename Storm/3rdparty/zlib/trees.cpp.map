@@ -4,6 +4,76 @@
   "file": "Storm/3rdparty/zlib/trees.cpp",
   "functions": [
     {
+      "name": "tr_static_init_Unref_00421040",
+      "address": "00421040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421040"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421040"
+      ]
+    },
+    {
+      "name": "tr_static_init_Unref_00421060",
+      "address": "00421060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421060"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421060"
+      ]
+    },
+    {
+      "name": "tr_static_init_Unref_00421070",
+      "address": "00421070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421070"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421070"
+      ]
+    },
+    {
+      "name": "tr_static_init_Unref_00421080",
+      "address": "00421080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421080"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421080"
+      ]
+    },
+    {
+      "name": "tr_static_init_Unref_004212b0",
+      "address": "004212b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212b0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_004212b0"
+      ]
+    },
+    {
       "name": "tr_static_init",
       "address": "0042b9d0",
       "lines": [

@@ -6617,4 +6617,16 @@ int __fastcall thunk_MISSILESMODE_SrvDoFn01_BasicMissile(::SGAMEDATA * pGame, D2
     return ::D2Game::MISSILES::MissilesMode::MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
 }
 
+BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00643880(::SGAMEDATA * pGame, D2UnitStrc * pMissile, D2UnitStrc * pTarget) {
+    return 1;
+}
+
+BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646260(::SGAMEDATA * pGame, D2UnitStrc * pMissile, D2UnitStrc * pTarget) {
+    return 1;
+}
+
+BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646270(::SGAMEDATA * pGame, D2UnitStrc * pMissile, D2UnitStrc * pTarget) {
+    return 1;
+}
+
 } // namespace D2Game::MISSILES::MissilesMode

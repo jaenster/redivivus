@@ -53,7 +53,11 @@ void __fastcall FreeWall2(struct D2GameViewStrc * pGameView);
 BOOL __stdcall WALL2_CollectRoomTilesAndUnits(struct D2RoomStrc * pRoom, struct D2Wall2DrawContextStrc * pDrawContext);
 // Client render-prep: rebuilds the per-frame "wall2" tile/unit draw list for the given game view. Allocates the draw list, computes the visible screen rect (expanding by 0x30 in perspective mode) and caches it in the RECT_* globals, then resets the wall2 entry/alloc counters and zero-fills the grid cell array. Maps the view center to iso grid coords (DRLG_OrthToIsoCoordsDiv160), seeds each grid cell's iso row/col, caches the local player's tile coords (UNIT_CenterX/YCoordsDiv5, gnPlayerTileGridIndex), then walks the current room tree via CallRoomCallback(WALL2_CollectRoomTilesAndUnits) to gather drawable tiles/units. Halts via Fog error if the wall2 buffer or the player unit is missing. Side effects: mutates view draw-list fields and several render globals.
 void __fastcall WALL2_BuildSceneDrawList(struct D2GameViewStrc * pGameView, uint32_t nTickCount);
+int __fastcall Unreferenced_004dddd0(int param_1);
+void __stdcall WALL2_OnAllocGameView_NoOp_Unref_004ddde0();
 void __stdcall WALL2_OnAllocGameView_NoOp();
+void __stdcall WALL2_OnAllocGameView_NoOp_Unref_004df920();
+void __stdcall WALL2_OnAllocGameView_NoOp_Unref_004df930();
 // 11 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)

@@ -77,6 +77,7 @@ struct tagTRACKMOUSEEVENT {
 namespace D2Win::Src::D2WinMain {
 
 // Function declarations
+BOOL __stdcall D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020();
 // Sets gnWindowInitState background DC6 pointer, returns 1
 BOOL __stdcall D2WINMAIN_SetBackgroundDC6(struct DC6 * pBackgroundDC6);
 // Sets gpCursorDC6 cursor DC6 pointer, returns 1
@@ -110,10 +111,12 @@ void __fastcall D2WINMAIN_SetControlActive(struct D2ControlStrc * pControl, BOOL
 BOOL __fastcall D2WINMAIN_IsControlActive(struct D2ControlStrc * pControl);
 // Tests if current mouse position (D2Client::Mouse::nPosX/Y) is inside the specified RECT using PtInRect
 BOOL __stdcall D2WINMAIN_TestMouseInRect(RECT * pRect);
+::D2WinEditBox * __stdcall FORMS_GetFormTextAndEditBox_Unref_004f97d0();
 void __stdcall DrawCursorOOG();
 void __stdcall DRAW_UI_Sprites();
 void __stdcall RENDERER_DrawOutOfGameScene();
 LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam);
+int __fastcall Unreferenced_004f9b30(int param_1);
 void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormKeyUpHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormActivate(struct D2UIMouseMsgStrc * pMsg);

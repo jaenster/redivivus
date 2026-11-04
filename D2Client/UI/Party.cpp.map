@@ -180,6 +180,22 @@
       ]
     },
     {
+      "name": "Unreferenced_0049a2a0",
+      "address": "0049a2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049a2a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Party",
+      "calledFunctions": [
+        "Unreferenced_0049a2a0",
+        "GetNextRosterPlayer",
+        "GetRosterLevel"
+      ]
+    },
+    {
       "name": "UI_DrawPartyMemberName",
       "address": "0049a2c0",
       "lines": [

@@ -1000,12 +1000,40 @@
       ]
     },
     {
+      "name": "Unreferenced_0051bea0",
+      "address": "0051bea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bea0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051bea0"
+      ]
+    },
+    {
       "name": "D2CheckExpansionGame",
       "address": "0051bec0",
       "lines": [],
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "D2CheckExpansionGame"
+      ]
+    },
+    {
+      "name": "Unreferenced_0051bed0",
+      "address": "0051bed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bed0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051bed0"
       ]
     },
     {
@@ -1055,6 +1083,21 @@
       ],
       "usedTypes": [
         "char *"
+      ]
+    },
+    {
+      "name": "Unreferenced_0051c170",
+      "address": "0051c170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c170"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051c170",
+        "NET_SID_CLIENT_Send_0x33_GetFileTime"
       ]
     },
     {
@@ -1299,6 +1342,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0051c570",
+      "address": "0051c570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c570"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051c570",
+        "WSASocket2_Send"
+      ]
+    },
+    {
       "name": "NET_SID_CLIENT_Send",
       "address": "0051c5c0",
       "lines": [
@@ -1320,6 +1378,21 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0051c6b0",
+      "address": "0051c6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c6b0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051c6b0",
+        "BNMESSQUEUE_EnqueueString"
       ]
     },
     {
@@ -1659,6 +1732,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0051d350",
+      "address": "0051d350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d350"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d350"
+      ]
+    },
+    {
       "name": "BNNEWS_SaveToCache",
       "address": "0051d370",
       "lines": [
@@ -1738,6 +1825,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0051d690",
+      "address": "0051d690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d690"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d690"
+      ]
+    },
+    {
       "name": "BNNEWS_ClearNewsTable",
       "address": "0051d6a0",
       "lines": [
@@ -1772,6 +1873,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0051d720",
+      "address": "0051d720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d720"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d720"
       ]
     },
     {
@@ -2092,6 +2207,24 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0051e240",
+      "address": "0051e240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e240"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051e240",
+        "DecodeAndLoadKeys",
+        "NET_SID_CLIENT_Send_0x42_CDKey3",
+        "FreeKeys",
+        "SID_SetStateFlag1"
       ]
     },
     {

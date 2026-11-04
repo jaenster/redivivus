@@ -34,6 +34,7 @@ int __stdcall SELECT_GetConstant13_Y();
 void SetSelectedUnit_I(struct D2UnitStrc * pUnit);
 void __stdcall ClearSelectedUnit();
 void __stdcall SetCanBeSelectedToFalse();
+int __stdcall SELECT_GetConstant13_Y_Unref_00467400();
 void __fastcall SELECT_SetPetSeedTimestamp(int32_t bEnabled, struct D2UnitStrc * pUnit, int32_t nTimestamp);
 void __fastcall SELECT_SetExclusionRect(RECT * pRect);
 int __fastcall UnitIsOfTypeMonster(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);

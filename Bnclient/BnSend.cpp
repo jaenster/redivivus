@@ -57,32 +57,6 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 #endif
 
 static char * szBnNewsChannelName = s_BNNews_D2DV_006df210; D2_STATIC_GUARD(szBnNewsChannelName, "szBnNewsChannelName");
-static char s___AUItem_NewsTable___0072ff8c[24] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'I',
-    't',
-    'e',
-    'm',
-    '@',
-    'N',
-    'e',
-    'w',
-    's',
-    'T',
-    'a',
-    'b',
-    'l',
-    'e',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_STATIC_GUARD(s___AUItem_NewsTable___0072ff8c, "s___AUItem_NewsTable___0072ff8c");
 static uint32_t g_nBNetServerToken = 0; D2_STATIC_GUARD(g_nBNetServerToken, "g_nBNetServerToken");
 static uint32_t g_nBNetClientToken = 0; D2_STATIC_GUARD(g_nBNetClientToken, "g_nBNetClientToken");
 static void * g_pBNetChannelListData = 0; D2_STATIC_GUARD(g_pBNetChannelListData, "g_pBNetChannelListData");
@@ -1027,9 +1001,21 @@ void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LO
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ InterlockedCompareExchange(pDestination, nExchange, nComperand);
 }
 
+int Unreferenced_0051bea0() {
+    LONG LVar1 = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    return LVar1;
+}
+
 // JMP thunk
 BOOL __stdcall D2CheckExpansionGame() {
     return ::Fog::D2CheckExpansionGame();
+}
+
+int __fastcall Unreferenced_0051bed0(int param_1) {
+    int extraout_EAX;
+    g_nBNetConnectionState = param_1;
+    Sleep(10);
+    return extraout_EAX;
 }
 
 // lpStartAddress parameter of CreateThread
@@ -1163,6 +1149,10 @@ void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2
       /* DWORD dwMilliseconds for Sleep */ Sleep(10);
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nCancelFlag = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
     }
+}
+
+void Unreferenced_0051c170() {
+    NET_SID_CLIENT_Send_0x33_GetFileTime("bnserver-D2DV.ini", 0x80000004);
 }
 
 D2BNetGatewayAccessStr * __stdcall BnetLoadAndReturn() {
@@ -1410,6 +1400,16 @@ BOOL __stdcall BNSEND_Disconnect() {
     return 1;
 }
 
+int __fastcall Unreferenced_0051c570(int param_1) {
+    char cVar1;
+    D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    char* pcVar2 = (char*)param_1;
+    pcVar2 = pcVar2 + strlen(pcVar2) + 1;
+    Fog::Src::Safesock::WSASocket2_Send(pNetData, (char*)param_1, (int)pcVar2 - (param_1 + 1));
+    Fog::Src::Safesock::WSASocket2_Send(pNetData, "\n", 1);
+    return 1;
+}
+
 int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t nSizeNoHeader) {
     int32_t nBytesSent;
     uint32_t nAllocaGuard;
@@ -1440,6 +1440,10 @@ int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t 
 
     _net_sid::SID_SetReadyFlag();
     return 0;
+}
+
+void __fastcall Unreferenced_0051c6b0(int param_1) {
+    BNMESSQUEUE_EnqueueString(1, (char*)param_1);
 }
 
 void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText) {
@@ -2032,6 +2036,19 @@ DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple) {
     return dwValue;
 }
 
+void __fastcall Unreferenced_0051d350(int param_1, int param_2) {
+    int iVar1;
+    if (!param_1) {
+      return;
+    }
+
+    for (iVar1 = 0x102; iVar1; iVar1--) {
+      *(uint32_t*)param_1 = *(uint32_t*)param_2;
+      param_2 = (int)(param_2 + 4);
+      param_1 = (int)(param_1 + 4);
+    }
+}
+
 // @sourcefile .\BNNews.cpp
 void __stdcall BNNEWS_SaveToCache() {
     void* nErrorAddr;
@@ -2192,6 +2209,14 @@ void __thiscall BNNEWS_ReallocateNewsTable(D2BnNewsTableStrc * pNewsTable, uint3
     Storm::Source::SMem::SMemFree(pObject, s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
+int __fastcall Unreferenced_0051d690(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    return param_1;
+}
+
 void __fastcall BNNEWS_ClearNewsTable(uint32_t * pNewsTable) {
     if ((void*)pNewsTable[2]) {
       Storm::Source::SMem::SMemFree((void*)pNewsTable[2], s___AUItem_NewsTable___0072ff8c, -2, 0);
@@ -2219,6 +2244,14 @@ void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int dwAdd
     }
 
     BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, nNewCount);
+}
+
+int __fastcall Unreferenced_0051d720(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    return param_1;
 }
 
 BOOL __stdcall BNNEWS_Shutdown() {
@@ -3066,6 +3099,17 @@ BOOL __stdcall NET_SID_CLIENT_Send_0x42_CDKey3() {
     }
 
     return 0;
+}
+
+int Unreferenced_0051e240() {
+    _net_sid::DecodeAndLoadKeys();
+    BOOL BVar1 = NET_SID_CLIENT_Send_0x42_CDKey3();
+    _net_sid::FreeKeys();
+    if (!BVar1) {
+      SID_SetStateFlag1(3);
+    }
+
+    return BVar1;
 }
 
 void __stdcall BNNEWS_DecodeCDKeys() {

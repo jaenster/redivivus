@@ -68,7 +68,6 @@
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/Quests/QUESTS/A5Q5.h"
-#include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillNec.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/Monster.h"
@@ -2569,7 +2568,10 @@ BOOL __fastcall ITEMEVENT_ApplyHitDamage(::SGAMEDATA * pGame, uint32_t nUnitEven
     D2DamageStrc sDamage;
     short int sCltOverlay;
     D2UnitStrc* pCaster = pUnit;
-    if (!(pUnit && pTarget && (pTarget->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER))) {
+    if (!pUnit || !pTarget) {
+      return 0;
+    }
+    if (pTarget->eUnitType != UNIT_PLAYER && pTarget->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 

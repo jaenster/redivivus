@@ -12,11 +12,15 @@
 namespace Bnclient::Debug {
 
 // Function declarations
+void DEBUG_Trace_Unref_00515ec0(char * str);
+void DEBUG_Trace_Unref_00515ed0(char * str);
 void __thiscall DEBUG_LogFormattedMessage(void * pThis, char * szMessage);
 void __fastcall DEBUG_SetLoggingFlag(int nLoggingFlag);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0051a470..0051a479; unreferenced in 1.14d.
 __time32_t __stdcall DEBUG_GetTime32(__time32_t * pTime);
 void DEBUG_Trace(char * str, ...);
+void DEBUG_Trace_Unref_0051d2d0(char * str);
+void DEBUG_Trace_Unref_0051d2e0(char * str);
 
 } // namespace Bnclient::Debug

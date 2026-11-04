@@ -72,25 +72,39 @@ struct __attribute__((packed)) ScreenMessage_t {
 namespace D2Client::UI::Text {
 
 // Function declarations
+void __fastcall TEXT_SetScrollCompleteCallback_Unref_0045afe0(pfnTextScrollComplete pfnCallback, void * pUserParam);
 void __stdcall thunk_TEXT_ClearChatMessages();
+void __fastcall TEXT_SetScrollCompleteCallback_Unref_004776d0(pfnTextScrollComplete pfnCallback, void * pUserParam);
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_004967e0();
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_00496980();
+struct D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049c160();
 void __stdcall TEXT_FreeTextBox(struct D2TextBoxStrc * pTextBox);
 void __stdcall TEXT_InitTextDisplaySettings();
 void __stdcall TEXT_FreeAllScreenMessages(struct D2ScreenMessageListStrc * pList);
 void __fastcall TEXT_SetTextDisplayMode(int32_t nDisplayMode);
+int __fastcall Unreferenced_0049d590(int param_1);
 void __fastcall TEXT_DrawTextBoxAtPosition(struct D2TextBoxStrc * pTextBox, int32_t nScreenX, int32_t nScreenY);
 void __stdcall TEXT_OnClickCloseNpcDialog(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall TEXT_SetNpcMenuSelection(struct D2UnitStrc * pUnit);
 void __stdcall TEXT_ClearNpcMenuSelection();
+int __fastcall Unreferenced_0049da60(int param_1);
+int __fastcall Unreferenced_0049dac0(int param_1);
+int __fastcall Unreferenced_0049dae0(int param_1, int param_2);
 struct ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(uint16_t * * ppwszText);
 void __fastcall TEXT_InsertScreenMessage(uint16_t * * ppwszText);
 void __stdcall TEXT_DrawChatMessages();
 void __stdcall TEXT_DrawPartyMessages();
 void __stdcall TEXT_FreeStaticTextBox();
 void __stdcall TEXT_DrawAllMessageLog();
+int Unreferenced_0049e390();
 void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor);
 void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor);
 void __fastcall TEXT_SetScrollCompleteCallback(pfnTextScrollComplete pfnCallback, void * pUserParam);
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0();
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e800();
 void __stdcall TEXT_SetTextBoxExclusionRect();
+int Unreferenced_0049e860();
+struct D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0();
 struct D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit();
 // Handles the 0x5a event message packet: switches on pMessageCtx->nMessageType, formats the localized message from the packet's names and argument, and prints it in pMessageCtx->nColor. pEventData is the format argument for message type 0x12, which also shakes the view and plays sound 0x1220.
 void __fastcall TEXT_HandleEventMessagePacket(struct D2Packet0x5aEventStructure * pMessageCtx);

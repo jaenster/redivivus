@@ -14,6 +14,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/FieldTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -59,8 +60,8 @@ static int gaFieldStepDeltaY[9] = {
     0x0
 }; D2_STATIC_GUARD(gaFieldStepDeltaY, "gaFieldStepDeltaY");
 static void * gpFieldDataTable = 0; D2_STATIC_GUARD(gpFieldDataTable, "gpFieldDataTable");
-static unsigned int gnFieldDataTableWidth = {}; D2_STATIC_GUARD(gnFieldDataTableWidth, "gnFieldDataTableWidth");
-static unsigned int gnFieldDataTableHeight = {}; D2_STATIC_GUARD(gnFieldDataTableHeight, "gnFieldDataTableHeight");
+unsigned int gnFieldDataTableWidth = {}; D2_GLOBAL_GUARD(gnFieldDataTableWidth, "gnFieldDataTableWidth");
+unsigned int gnFieldDataTableHeight = {}; D2_GLOBAL_GUARD(gnFieldDataTableHeight, "gnFieldDataTableHeight");
 static int gnFieldDataTableSize = 0; D2_STATIC_GUARD(gnFieldDataTableSize, "gnFieldDataTableSize");
 static unsigned int gnFieldTableHalfWidth = {}; D2_STATIC_GUARD(gnFieldTableHalfWidth, "gnFieldTableHalfWidth");
 static unsigned int gnFieldTableHalfHeight = {}; D2_STATIC_GUARD(gnFieldTableHalfHeight, "gnFieldTableHalfHeight");

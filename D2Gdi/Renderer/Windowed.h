@@ -41,12 +41,18 @@ struct __attribute__((packed)) BITMAPINFO256 {
 namespace D2Gdi::Renderer::Windowed {
 
 // Function declarations
+void __fastcall AdjustPerspectivePosition_Unref_00646010(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
+void __fastcall AdjustPerspectivePosition_Unref_006460d0(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
+void __fastcall ClearScreen_Unref_0065a3f0(BOOL bPartial);
+HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20();
+void __fastcall AdjustPerspectivePosition_Unref_006bf250(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 // @sourcefile .\Src\gdiCore.cpp
 BOOL __fastcall InitPerspective(struct D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers);
 // @sourcefile .\Src\gdiCore.cpp
 BOOL __fastcall Release();
 void __fastcall ClearCaches();
 BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode);
+void Unreferenced_006c7c90();
 BOOL __stdcall BeginCutScene();
 void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame);
 BOOL __fastcall CheckCutScene();
@@ -80,6 +86,7 @@ int * __fastcall GetRendererStatistics();
 void __fastcall RENDERER_WINDOWED_GetPalette(HPALETTE * phPalette, RGBQUAD * * ppRgbQuad);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
 void __fastcall RENDERER_WINDOWED_GetFramebufferInfo(uint32_t * ppvBitsOut, uint32_t * pnHeightOut, uint32_t * pnWidthOut);
+HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240();
 // Windowed renderer: returns palette pointer for the specified render mode. Reads from gpPaletteTable offsets 0x0-0x10C based on the nDrawMode index (0-6).
 BYTE * __fastcall RENDERER_WINDOWED_GetPalettePointer(int nDrawMode, uint32_t * pdwStateOut);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
@@ -122,6 +129,7 @@ void __thiscall RENDERER_WINDOWED_ClearScreen(int nParam, BYTE dwParam2, BYTE dw
 BOOL __fastcall DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
 BOOL __fastcall DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha);
 BOOL __fastcall DrawWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels);
+void __fastcall SetDefaultPerspectiveFactor_Unref_006c95c0();
 BOOL __fastcall DrawGroundTile(struct D2TileLibraryEntryStrc * pTile, struct D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, BYTE nAlpha, int nScreenPanels, void * pTileData);
 // @sourcefile .\Src\gdiSmack.cpp
 void __fastcall CloseSmacker(struct D2SmackerContextStrc * pContext);

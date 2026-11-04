@@ -50,5 +50,11 @@ int __thiscall OnMouseDown(::ListBoxImplementation * pThis, struct D2UIMouseMsgS
 int __thiscall OnMouseUp(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
 ::ListBoxImplementation * __thiscall Constructor(::ListBoxImplementation * pThis, int nPosX, int nPosY, int nWidth, int nHeight, int nItemSpacing, int nDefaultColor, int nDefaultFont, fpListBoxItemActivated pfnOnItemActivated, bool bTallRows);
 ::ListBoxImplementation * __thiscall ScalarDeletingDestructor(::ListBoxImplementation * pThis, uint32_t nFlags);
+int __thiscall OnRightArrow_Unref_0052e090(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
+int __thiscall OnRightArrow_Unref_0063c4b0(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
+int __thiscall OnRightArrow_Unref_0063e060(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
+int __thiscall OnRightArrow_Unref_00645030(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
+int __thiscall OnRightArrow_Unref_00645ff0(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
+int __thiscall OnRightArrow_Unref_00646000(::ListBoxImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation

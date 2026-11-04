@@ -22,6 +22,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004ac760",
+      "address": "004ac760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac760"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "Unreferenced_004ac760"
+      ]
+    },
+    {
       "name": "SetNameSeed",
       "address": "004ac780",
       "lines": [
@@ -549,6 +563,24 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType"
+      ]
+    },
+    {
+      "name": "SetNameSeed_Unref_005a0160",
+      "address": "005a0160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0160"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "SetNameSeed_Unref_005a0160"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
       ]
     }
   ]

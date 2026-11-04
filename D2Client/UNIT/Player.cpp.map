@@ -1328,6 +1328,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004637f0",
+      "address": "004637f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004637f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "Unreferenced_004637f0"
+      ]
+    },
+    {
       "name": "PLAYER_GetMonsterOwnerId",
       "address": "00463810",
       "lines": [

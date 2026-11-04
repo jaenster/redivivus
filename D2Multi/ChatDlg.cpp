@@ -244,6 +244,10 @@ void __fastcall LAUNCHER_StringManipUtility(char * szText, char cSeparator, int3
     Storm::Source::SSTR::SStrChr(szText, cSeparator);
 }
 
+int __fastcall Unreferenced_0043cc20(int param_1) {
+    return param_1 & 4;
+}
+
 // Loads all predefined DC6 image resources for the Battle.net launcher UI. Constructs resource paths using sprintf into a reusable buffer, then loads each DC6 file via IMAGE_LoadDC6 and stores the pointers in global variables (PTR_0077bc*). Resources include popup backgrounds, buttons, tabs for each character class, scrollbars, and selection/squelch auras.
 void __stdcall IMAGE_LoadPredefinedImagesExEx() {
     char szPathBuffer[260];
@@ -710,6 +714,18 @@ void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo) {
     D2Win::Src::D2Comp::D2COMP_SetCurrentFrame(gpChatDlgCharSelCompositeUnit, 0);
 }
 
+int Unreferenced_0043dce0() {
+    int iVar1 = 0;
+    if (gpChatDlgCharSelCompositeUnit) {
+      int extraout_EAX;
+      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpChatDlgCharSelCompositeUnit, 1);
+      iVar1 = extraout_EAX;
+    }
+
+    gpChatDlgCharSelCompositeUnit = 0;
+    return iVar1;
+}
+
 static void LAUNCHER_GetDifficultyNameStringId(int32_t nDifficulty, uint16_t * wszText) {
     uint16_t* pwszLocaleStr;
     switch (nDifficulty) {
@@ -1019,6 +1035,18 @@ static void StoreData(LPRECT pRect, int32_t nLength, char * szText) {
     gpChatMessageQueueHead = pChatNode;
     gpChatMessageQueueTail = pChatNode;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077ae28);
+}
+
+int Unreferenced_0043e370() {
+    EnterCriticalSection(&lpCriticalSection_0077ae28);
+    void* pvVar1 = 0;
+    if (gpChatMessageQueueHead) {
+      pvVar1 = gpChatMessageQueueHead;
+      gpChatMessageQueueHead = *(void**)((int)gpChatMessageQueueHead + 0xc);
+    }
+
+    LeaveCriticalSection(&lpCriticalSection_0077ae28);
+    return (int)pvVar1;
 }
 
 // @sourcefile .\Src\ChatDlg.cpp

@@ -130,6 +130,23 @@
       ]
     },
     {
+      "name": "Unreferenced_00597aa0",
+      "address": "00597aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597aa0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "Unreferenced_00597aa0",
+        "ITEM_CheckItemData_eD2ItemCmd",
+        "SetBodyLoc",
+        "CheckItemFlag"
+      ]
+    },
+    {
       "name": "ITEM_ProcessInventoryUpdates",
       "address": "00597b00",
       "lines": [

@@ -167,13 +167,25 @@ static int NPCINTRO_ListAct2[11] = {
 }; D2_STATIC_GUARD(NPCINTRO_ListAct2, "NPCINTRO_ListAct2");
 static int NPCINTRO_ListAct3[7] = { 0xf5, 0xfc, 0xfd, 0xfe, 0xff, 0x108, 0x129 }; D2_STATIC_GUARD(NPCINTRO_ListAct3, "NPCINTRO_ListAct3");
 static int NPCINTRO_ListAct5[7] = { 0x208, 0x209, 0x1ff, 0x200, 0x201, 0x202, 0x203 }; D2_STATIC_GUARD(NPCINTRO_ListAct5, "NPCINTRO_ListAct5");
-static BOOL DEBUGPRINT = 0; D2_STATIC_GUARD(DEBUGPRINT, "DEBUGPRINT");
 
 namespace D2Game::Quests::QUESTS {
 
 D2BitBufferStrc * __fastcall GetQuestBitBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pBitBuffer = D2Common::Units::GetPlayerData(pUnit);
     return pBitBuffer->pQuestRecord[pGame->nDifficulty];
+}
+
+int __fastcall Unreferenced_00543540(int param_1, int param_2) {
+    D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData((D2UnitStrc*)param_2);
+    return (int)pDVar1->pInteractedNPCs[*(uint8_t*)(param_1 + 0x6d)];
+}
+
+int __fastcall Unreferenced_00543560(int param_1) {
+    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtSuperUniquesSize) {
+      return sgptDataTable->pTxtSuperUniques[param_1].hcIdx;
+    }
+
+    return -1;
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
@@ -224,6 +236,18 @@ D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, 
     }
 
     return nullptr;
+}
+
+int __fastcall Unreferenced_00543690(int param_1, int param_2) {
+    int* piVar1;
+    int* piVar2;
+    for (piVar1 = *(int**)(param_1 + 0x74); piVar1 && (piVar2 = (int*)*piVar1 , piVar2 != 0); piVar1 = (int*)piVar1[1]) {
+      if (*piVar2 == param_2) {
+        return (int)piVar2;
+      }
+    }
+
+    return 0;
 }
 
 // Looks up quest data by internal quest ID and attaches it to a unit. For QUESTINT_TheSearchForCain attaches to the cage object (classId 0x3d) and calls Q04_SetRescueTrigger; for QUESTINT_RadamentsLair attaches to Radament (0xe5); for QUESTINT_TheSummoner runs Q14 join noop on the Summoner (0xfa). Falls through to QUEST_AttachToUnit for all others.
@@ -1728,6 +1752,10 @@ BOOL __fastcall QUEST_HasPlayerParticipated(D2QuestDataStrc * pQuestData, int32_
     return 0;
 }
 
+int __fastcall Unreferenced_005452f0(int param_1) {
+    return (uint32_t)*(uint16_t*)(param_1 + 0x80);
+}
+
 void __fastcall QUESTGUID_SetPlayerCountToZero(D2QuestGUIDStrc * pQuestGUID) {
     pQuestGUID->nPlayerCount = 0;
 }
@@ -1826,6 +1854,29 @@ void __fastcall FindSpawnableLocation(D2RoomStrc * pRoom, POINT * pPoint, uint32
     }
 
     *pRoomsNear = 0;
+}
+
+int __fastcall Unreferenced_005454e0(int param_1, int param_2) {
+    eD2UnitType eUnitType;
+    int extraout_EAX;
+    int32_t nUnitGUID;
+    if (!param_2) {
+      nUnitGUID = -1;
+      eUnitType = UNIT_COUNT;
+    } else {
+      nUnitGUID = *(int32_t*)(param_2 + 0xc);
+      eUnitType = *(eD2UnitType*)param_2;
+    }
+
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom((D2UnitStrc*)param_2), eUnitType, nUnitGUID);
+    D2Common::Units::RemoveCollision_Vector((D2UnitStrc*)param_2);
+    D2Common::Unit::RemoveUnitFromRoom((D2UnitStrc*)param_2);
+    if (param_2) {
+      *(uint32_t*)(param_2 + 0xc4) &= -3;
+    }
+
+    ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit((::SGAMEDATA*)param_1, (D2UnitStrc*)param_2);
+    return extraout_EAX;
 }
 
 void __fastcall SetRewardAndFinishFlags(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {

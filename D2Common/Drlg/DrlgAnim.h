@@ -34,6 +34,7 @@ void __fastcall AnimateTiles(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGANIM_AllocAnimatedTiles(struct D2DrlgGridStrc * pGrids, struct D2RoomExStrc * pRoomEx, int nFrameStep, struct D2DrlgTileDataStrc * pTiles, int nTileCount);
 // Wrapper calling DRLGANIM_AllocAnimatedTiles for wall/floor/shadow.
 void __fastcall DRLGROOMTILE_AllocAnimTiles(struct D2RoomExStrc * pRoomEx, int nFrameStep, struct D2DrlgGridStrc * pWallGrids, int nUnused1, struct D2DrlgGridStrc * pFloorGrids, int nUnused2, struct D2DrlgGridStrc * pRoofGrids);
+int __fastcall DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0(int nAnimIndex);
 // Returns the tile orientation value for a given animation index by indexing the static gnDrlgAnimFrameCounter lookup table. Maps DS1 animation indices to their corresponding DRLG orientation constants.
 int __fastcall DRLGANIM_GetOrientationFromIndex(int nAnimIndex);
 // 1 internal function (defined in .cpp)

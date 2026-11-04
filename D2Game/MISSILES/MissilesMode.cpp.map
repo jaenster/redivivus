@@ -3897,6 +3897,60 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_NoOp_Unref_00643880",
+      "address": "00643880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643880"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_NoOp_Unref_00643880"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_NoOp_Unref_00646260",
+      "address": "00646260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646260"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_NoOp_Unref_00646260"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_NoOp_Unref_00646270",
+      "address": "00646270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646270"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_NoOp_Unref_00646270"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
     }
   ]
 }

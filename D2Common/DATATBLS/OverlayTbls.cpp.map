@@ -200,6 +200,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00664800",
+      "address": "00664800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664800"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "Unreferenced_00664800"
+      ]
+    },
+    {
       "name": "MONSTER_GetComponentOverlay",
       "address": "00664860",
       "lines": [

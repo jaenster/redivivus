@@ -191,11 +191,39 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_00779214 = {}; D2_STATIC_GUARD(lp
 
 namespace Storm::Source::SComp {
 
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(void * pNode) {
+    int* piVar3;
+    int iVar1 = *(int*)pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
+    *(uint32_t*)pNode = 0;
+    *(uint32_t*)((int)pNode + 4) = 0;
+}
+
 void __thiscall LINKEDLIST_Unlink(int * pList, uint32_t * pNode) {
     *pList = (int)pNode;
     pList[1] = *pNode;
     *pList = (int)(pNode + 1);
     pList[2] = 0x20;
+}
+
+int __fastcall Unreferenced_0041d8a0(int param_1) {
+    uint32_t uVar2 = *(uint32_t*)(param_1 + 4);
+    int* piVar1 = (int*)(param_1 + 8);
+    (*piVar1)--;
+    *(uint32_t*)(param_1 + 4) = uVar2 >> 1;
+    if (!*piVar1) {
+      *(uint32_t*)(param_1 + 4) = **(uint32_t**)param_1;
+      (*(uint32_t**)param_1)++;
+      *(uint32_t*)(param_1 + 8) = 0x20;
+    }
+
+    return uVar2 & 1;
 }
 
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask) {
@@ -1148,6 +1176,38 @@ uint32_t __thiscall HUFFMAN_GetDecodedOffset(int * pNode, int * pBase) {
     return nOffset + (int)pBase;
 }
 
+int __fastcall Unreferenced_0041e930(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(void * pNode) {
+    int* piVar3;
+    int iVar1 = *(int*)pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
+    *(uint32_t*)pNode = 0;
+    *(uint32_t*)((int)pNode + 4) = 0;
+}
+
+int __fastcall Unreferenced_0041e9b0(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_0041e9d0(int param_1, int param_2) {
+    int iVar1 = *(int*)param_1;
+    *(uint32_t*)param_1 = *(uint32_t*)param_2;
+    *(int*)param_2 = iVar1;
+    return iVar1;
+}
+
 uint32_t __thiscall BITBUFFER_ReadBits(uint16_t * * pBitBuf, uint16_t * nBits, uint32_t nMask) {
     uint16_t* pBitPos = pBitBuf[2];
     if (pBitPos <= nBits) {
@@ -1166,6 +1226,30 @@ uint32_t __thiscall BITBUFFER_ReadBits(uint16_t * * pBitBuf, uint16_t * nBits, u
 
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize) {
     SCompDecompress(pDst, pnDstSize, pSrc, nSrcSize, 0);
+}
+
+int __fastcall Unreferenced_0041ea40(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+int __fastcall Unreferenced_0041ea60(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(void * pNode) {
+    int* piVar3;
+    int iVar1 = *(int*)pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
+    *(uint32_t*)pNode = 0;
+    *(uint32_t*)((int)pNode + 4) = 0;
 }
 
 int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrDefault) {
@@ -1193,6 +1277,12 @@ void __thiscall LINKEDLIST_UnlinkNode(int32_t pThis, int * pNode) {
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
     pNode[1] = 0;
+}
+
+int __fastcall Unreferenced_0041ebb0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
@@ -1276,6 +1366,30 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
     } while (nQuickIdx <= 0x7f);
 
     return (int32_t)pTreeNode[2];
+}
+
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(void * pNode) {
+    int* piVar3;
+    int iVar1 = *(int*)pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
+    *(uint32_t*)pNode = 0;
+    *(uint32_t*)((int)pNode + 4) = 0;
+}
+
+int __fastcall Unreferenced_0041ed70(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
 }
 
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef) {
@@ -4406,6 +4520,20 @@ void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_
     int pBytesWritten = HUFFMAN_DecompressBlock(aHuffCtx, pDst, *pnDstSize, (uint16_t**)sListHead);
     *pnDstSize = pBytesWritten;
     COMPRESS_DestroyEncoderContext(aHuffCtx);
+}
+
+void __fastcall LINKEDLIST_NodeDestructor_Unref_00420430(void * pNode) {
+    int* piVar3;
+    int iVar1 = *(int*)pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
+    *(uint32_t*)pNode = 0;
+    *(uint32_t*)((int)pNode + 4) = 0;
 }
 
 void StaticInit_CriticalSection_00779214() {

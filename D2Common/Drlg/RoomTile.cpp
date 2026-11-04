@@ -12,6 +12,7 @@
 #include "D2Common/D2RoomStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
+#include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgGridStrc.h"
 #include "D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "D2Common/Drlg/D2DrlgOrthStrc.h"
@@ -29,7 +30,6 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Preset.data.h"
@@ -1188,6 +1188,15 @@ void __fastcall DRLGROOMTILE_GrowTileDataArray(D2PoolManagerStrc * pMemory, D2Dr
 
     pTileGrid->sRoomTiles.pRoofTiles[nIndex].pNext = 0;
     pTileGrid->sRoomTiles.nRoofTilesCount += nAdditionalTiles;
+}
+
+int __fastcall Unreferenced_0066f030(int param_1) {
+    if (!param_1) {
+      return 0;
+    }
+
+    D2RoomExStrc* pDVar1 = DUNGEON::Dungeon::GetRoomExFromRoom((D2RoomStrc*)param_1);
+    return pDVar1->pRoomTiles->nShadows;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pPoolManagerStrc (EDI): D2PoolManagerStrc*

@@ -24,6 +24,7 @@ namespace D2Game::PLAYER::PlayerSave2 {
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00568d60..00568d69; unreferenced in 1.14d.
 __time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime);
+int Unreferenced_00568d70();
 int32_t __fastcall FindEndOfString(char * szString, int32_t nMaxSize);
 int __stdcall PLAYERSAVE2_LoadOldSavegame_ReturnZero();
 // Returns the 1-based index of the carried item matching nItemGUID in the player's inventory list, by iterating INVENTORY_GetFirstItem/GetNextItem/GetCarriedItem. Returns 0 if GUID is -1, inventory is null, or item not found. Halts with an internal error if the index would exceed 0x7FFE.

@@ -262,6 +262,10 @@ void __stdcall SetCleanupFunction() {
     CleanUpFn = (RecordCleanupFn)D2Hell::RegisterExitFunction((pfnFaultError)CallCloseRecordingFunction);
 }
 
+BOOL __stdcall IsRecording_Unref_00451960() {
+    return SettedUp;
+}
+
 void __stdcall RECORD_SetPlaybackActive() {
     gbIsPlaybackActive = 1;
 }

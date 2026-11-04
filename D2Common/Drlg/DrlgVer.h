@@ -29,6 +29,7 @@ struct D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(struct D2Poo
 void __fastcall DRLGVER_CreateRoomVertices(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * * ppVertices, struct D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, void * pDrlgRoomData);
 // @sourcefile .\DRLG\DrlgVer.cpp
 void __fastcall DRLGVER_FreeVertices(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * * ppVertices);
+int __fastcall Unreferenced_0067d250(int param_1);
 void __fastcall GetCoordDiff(struct D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int * pDiffY);
 
 } // namespace D2Common::Drlg::DrlgVer

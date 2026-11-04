@@ -4,6 +4,62 @@
   "file": "D2gfx/D2GFX.cpp",
   "functions": [
     {
+      "name": "RENDERER_TogglePerspective_Unref_0044dc40",
+      "address": "0044dc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dc40"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective_Unref_0044dc40"
+      ]
+    },
+    {
+      "name": "RENDERER_TogglePerspective_Unref_00474140",
+      "address": "00474140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474140"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective_Unref_00474140"
+      ]
+    },
+    {
+      "name": "RENDERER_TogglePerspective_Unref_004769b0",
+      "address": "004769b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004769b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective_Unref_004769b0"
+      ]
+    },
+    {
+      "name": "RENDERER_TogglePerspective_Unref_00477be0",
+      "address": "00477be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477be0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective_Unref_00477be0"
+      ]
+    },
+    {
       "name": "D2GFX_GetPerspectiveCapable_ForPerspectiveItem",
       "address": "0047d120",
       "lines": [],
@@ -28,6 +84,20 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_ResetViewport"
+      ]
+    },
+    {
+      "name": "Unreferenced_004f5040",
+      "address": "004f5040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5040"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "Unreferenced_004f5040"
       ]
     },
     {
@@ -57,6 +127,23 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetRendererMode"
+      ],
+      "usedTypes": [
+        "eD2RendererMode"
+      ]
+    },
+    {
+      "name": "D2GFX_GetRendererMode_Unref_004f5150",
+      "address": "004f5150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5150"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetRendererMode_Unref_004f5150"
       ],
       "usedTypes": [
         "eD2RendererMode"
@@ -164,6 +251,20 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetPerspective"
+      ]
+    },
+    {
+      "name": "D2GFX_GetLowQuality_Unref_004f51f0",
+      "address": "004f51f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f51f0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetLowQuality_Unref_004f51f0"
       ]
     },
     {
@@ -1337,6 +1438,34 @@
       ]
     },
     {
+      "name": "Unreferenced_004f6610",
+      "address": "004f6610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6610"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "Unreferenced_004f6610"
+      ]
+    },
+    {
+      "name": "Unreferenced_004f6640",
+      "address": "004f6640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6640"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "Unreferenced_004f6640"
+      ]
+    },
+    {
       "name": "D2GFX_SetPerspectiveScale",
       "address": "004f6670",
       "lines": [
@@ -1715,6 +1844,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004f8e90",
+      "address": "004f8e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8e90"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "Unreferenced_004f8e90",
+        "D2GFX_SetPaletteTable"
+      ]
+    },
+    {
       "name": "D2GFX_InitializeWindowSize",
       "address": "004f8ea0",
       "lines": [
@@ -1732,6 +1876,34 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_EnableVSync_Unref_00506a80",
+      "address": "00506a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506a80"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_EnableVSync_Unref_00506a80"
+      ]
+    },
+    {
+      "name": "D2GFX_ToggleLowQuality_Unref_00608520",
+      "address": "00608520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608520"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ToggleLowQuality_Unref_00608520"
       ]
     },
     {

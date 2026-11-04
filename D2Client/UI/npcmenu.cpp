@@ -3698,6 +3698,14 @@ static uint16_t gNpcMenuConfirmDialogStrings[40] = {}; D2_STATIC_GUARD(gNpcMenuC
 
 namespace D2Client::UI::npcmenu {
 
+int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_00486e00() {
+    return 0;
+}
+
+int32_t __stdcall GetInteractedUnitClassId_Unref_004b1020() {
+    return gnMonsterSpecialType;
+}
+
 void __thiscall NPCMENU_ConvertQuestId(short * nInput, uint16_t * pResult) {
     uint16_t nConvertedId = *nInput;
     if (nConvertedId < 0x100) {
@@ -3889,6 +3897,10 @@ int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t
     Text::TEXT_SetScrollCompleteCallback(nullptr, pUserParam);
     NPCMENU_ReopenTalkDialog();
     return 1;
+}
+
+void Unreferenced_004b1970() {
+    gnNpcMenuScrollMessageHead = 0;
 }
 
 void __fastcall NPCMENU_AddHandledMessageId(short wMsgId) {
@@ -4180,6 +4192,10 @@ static int NPCMENU_CanItemBeRepaired(D2UnitStrc * pUnit) {
     }
 
     return 1;
+}
+
+int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_004b2010() {
+    return 0;
 }
 
 // Cain's "Identify Items" (4020 NPCIdentify1) option callback: slot 1 of the Cain rows 16, 17, 18, 19 and 38 (cain2, cain5, cain3, cain4, cain6); installed by NPCMENU_InitializeMenuOptions and NPCMENU_EnableCainIdentifyOption.
@@ -5203,6 +5219,30 @@ void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
       nMessageCount--;
       pBytes = (D2GSPacketSrv0x91*)nNpcID;
     } while (nMessageCount);
+}
+
+int __fastcall Unreferenced_004b3560(int param_1) {
+    *(uint32_t*)(param_1 + 0x15) = 0;
+    *(uint32_t*)(param_1 + 0x19) = 0;
+    *(uint32_t*)(param_1 + 0x1d) = 0;
+    *(uint32_t*)(param_1 + 0x21) = 0;
+    *(uint32_t*)(param_1 + 0x25) = 0;
+    *(uint32_t*)(param_1 + 0x29) = 0;
+    *(uint32_t*)(param_1 + 0x2d) = 0;
+    *(uint32_t*)(param_1 + 0x31) = 0;
+    *(uint32_t*)(param_1 + 0x35) = 0;
+    *(uint32_t*)(param_1 + 0x39) = 0;
+    *(uint32_t*)(param_1 + 0x3d) = 0;
+    *(uint32_t*)(param_1 + 0x41) = 0;
+    *(uint32_t*)(param_1 + 0x45) = 0;
+    *(uint32_t*)(param_1 + 0x49) = 0;
+    *(uint32_t*)(param_1 + 0x4d) = 0;
+    *(uint32_t*)(param_1 + 0x51) = 0;
+    *(uint32_t*)(param_1 + 0x55) = 0;
+    *(uint32_t*)(param_1 + 0x59) = 0;
+    *(uint32_t*)(param_1 + 0x5d) = 0;
+    *(uint32_t*)(param_1 + 0x61) = 0;
+    return param_1;
 }
 
 // Shared callback of the Imbue (Charsi, string 4017), Add Sockets (Larzuk, 22748) and Personalize (Anya, 22749) menu options: frees the NPC dialog, closes UI_NPCMENU, resets the cursor and hover state, sets the NPC UI state to 7 and gnNpcMenuTransactionType to 0, then opens the cube-style item panel for the current NPC (UI_OpenHoradricCubeWithNpcInteraction(nCurrentInteractedNpcGUID)). Returns 1.

@@ -10,18 +10,11 @@
 #include "Fog/Fog.h"
 #include "Fog/SMem.h"
 #include "globals/globals.h"
-#include "D2Client/GAME/Rendering.data.h"
-#include "D2Client/UI/Panel.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace D2Game::GAME::Rendering {
-int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::GAME::Rendering::CurrentRendingEngine");
-} // namespace D2Game::GAME::Rendering
-uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "fps");
 static uint32_t gbFPSStatsEnabled = 0; D2_STATIC_GUARD(gbFPSStatsEnabled, "gbFPSStatsEnabled");
-uint32_t gnCurrentEngineFlags = 0; D2_GLOBAL_GUARD(gnCurrentEngineFlags, "gnCurrentEngineFlags");
 static uint32_t gbHideExtendedFPSStats = 0; D2_STATIC_GUARD(gbHideExtendedFPSStats, "gbHideExtendedFPSStats");
 
 namespace D2Client::GAME::Rendering {
@@ -31,9 +24,6 @@ void __fastcall SetupGamma(DWORD dwGamma) {
 }
 
 void __stdcall SetCurrentEngineToOne() {
-    // Static local variables (originally global data)
-    static uint32_t gnCurrentEngineIndex; D2_STATIC_GUARD_BSS(gnCurrentEngineIndex, "D2Client::GAME::Rendering::SetCurrentEngineToOne::gnCurrentEngineIndex");
-
     D2Game::GAME::Rendering::CurrentRendingEngine = 1;
     gnCurrentEngineIndex = 1;
 }
@@ -56,6 +46,10 @@ void __stdcall RENDERER_SetMode7() {
 
 int __stdcall GetCurrentEngine() {
     return D2Game::GAME::Rendering::CurrentRendingEngine;
+}
+
+int __stdcall GetCurrentEngine_Unref_00477740() {
+    return gnCurrentEngineIndex;
 }
 
 uint32_t __stdcall IsWindowMode() {

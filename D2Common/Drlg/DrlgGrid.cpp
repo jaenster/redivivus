@@ -25,6 +25,86 @@
 
 namespace D2Common::Drlg::DrlgGrid {
 
+void __fastcall ResetGrid_Unref_0040f570(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_00416810(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_00416890(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_004168b0(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_00416960(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_004169a0(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_0041c390(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_004203e0(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_0044be20(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_0044de50(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_0044dee0(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_0045ba70(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_00601bb0(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_00601d20(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_00601db0(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_0060e290(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
 // Recursive 4-directional flood-fill on grid cells.
 void __fastcall DRLGGRID_FloodFillGridCoords(int * pFloodFillContext, int nX, int nY, int nDirection) {
     // Static local variables (originally global data)
@@ -448,6 +528,11 @@ void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2Drl
     }
 }
 
+int __fastcall Unreferenced_0067cb60(int param_1, int param_2) {
+    void* pvVar1 = memcpy(*(void**)param_1, *(void**)param_2, *(int*)(param_2 + 0xc) * *(int*)(param_2 + 8) * 4);
+    return (int)pvVar1;
+}
+
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_InitGridCells(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight) {
     int nRow;
@@ -554,6 +639,11 @@ void __fastcall DRLGGRID_FreeGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * 
 
 // Clears grid metadata (flags/row offsets) and marks grid as unused.
 void __fastcall ResetGrid(D2DrlgGridStrc * pDrlgGrid) {
+    pDrlgGrid->pCellsFlags = 0;
+    pDrlgGrid->pCellsRowOffsets = 0;
+}
+
+void __fastcall ResetGrid_Unref_006c4030(D2DrlgGridStrc * pDrlgGrid) {
     pDrlgGrid->pCellsFlags = 0;
     pDrlgGrid->pCellsRowOffsets = 0;
 }

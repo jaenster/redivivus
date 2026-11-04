@@ -154,6 +154,21 @@ D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
     return nullptr;
 }
 
+int __fastcall Unreferenced_004b9440(int param_1) {
+    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
+    if (!param_1) {
+      return 0;
+    }
+
+    for (; pDVar1; pDVar1 = pDVar1->pNext) {
+      if (pDVar1->pChannel->nChannelHandle == param_1) {
+        return (int)pDVar1->pChannel;
+      }
+    }
+
+    return 0;
+}
+
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall SOUNDINST_StopChannel(int * pSoundInst) {
@@ -189,6 +204,22 @@ static void SOUND_ReleaseChannel(D2SoundChannelStrc * pChannel) {
     }
 
     pChannel->pListNode = 0;
+}
+
+int __fastcall Unreferenced_004b9560(int param_1) {
+    D2SoundChannelStrc* pDVar2;
+    if (param_1) {
+      D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
+      for (; pDVar1; pDVar1 = pDVar1->pNext) {
+        pDVar2 = pDVar1->pChannel;
+        if (pDVar2->nChannelHandle == param_1) {
+          return (uint32_t)(pDVar2 != 0);
+        }
+      }
+    }
+
+    pDVar2 = 0;
+    return (uint32_t)(pDVar2 != 0);
 }
 
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle) {
@@ -613,6 +644,30 @@ int __fastcall SOUND_StopChannelById(int32_t nSoundId) {
     return 0;
 }
 
+int __fastcall Unreferenced_004b9cd0(int param_1, int param_2) {
+    D2SoundChannelNodeStrc* in_EAX;
+    if (!param_1) {
+      return (int)in_EAX;
+    }
+
+    in_EAX = gpActiveSoundChannelsHead;
+    if (!gpActiveSoundChannelsHead) {
+      return (int)in_EAX;
+    }
+
+    while (in_EAX->pChannel->nChannelHandle != param_1) {
+      D2SoundChannelNodeStrc** ppDVar1;
+      ppDVar1 = &in_EAX->pNext;
+      in_EAX = *ppDVar1;
+      if (!*ppDVar1) {
+        return 0;
+      }
+    }
+
+    in_EAX->pChannel->nPriorityByte = (uint8_t)param_2;
+    return (int)in_EAX;
+}
+
 void __stdcall SOUND_PauseAll() {
     gnSoundChannelCount = 1;
     gpSoundChannelsArray = 0;
@@ -686,6 +741,18 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
 uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId) {
     D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, nSoundId);
     return (uint32_t)(pChannel != 0);
+}
+
+int Unreferenced_004b9eb0() {
+    uint32_t uVar1 = SoundHdr::SOUNDHDR_GetGlobal3();
+    uint32_t uVar2 = uVar1 / 3;
+    if (!(uVar1 % 3)) {
+      eD2Sounds nSoundId;
+      nSoundId = _Utils::RollRandomNumber(0xb76, 0x1230);
+      uVar2 = SOUND_PlaySound(nSoundId, nullptr, 0, 0, 0);
+    }
+
+    return uVar2;
 }
 
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration) {
@@ -1557,6 +1624,33 @@ int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFr
     }
 
     return nWrapDist;
+}
+
+int Unreferenced_004e41e0() {
+    int32_t iVar1 = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(sgpDrlgAct);
+    return (uint32_t)(2 < iVar1 - 1U);
+}
+
+int Unreferenced_004e4200() {
+    int extraout_EAX;
+    uint32_t uVar1 = Draw::Weather::WEATHER_CanHaveRain();
+    if (!uVar1) {
+      return 0;
+    }
+
+    Draw::Weather::WEATHER_FloatPassthrough();
+    return extraout_EAX;
+}
+
+int Unreferenced_004e4220() {
+    int extraout_EAX;
+    eD2Sounds eSound = SOUND_ALKOR_ACT3_Q5_EARLY_VA;
+    do {
+      SoundHdr::SOUNDHDR_ClearReferenceCounts(eSound);
+      eSound += SOUND_CURSOR_BUTTON_CLICK;
+    } while ((int)eSound < 0xb3d);
+
+    return extraout_EAX;
 }
 
 static void SOUND_SetVolumeForChannel(int32_t nChannelIndex) {

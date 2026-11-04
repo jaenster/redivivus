@@ -126,7 +126,6 @@ int nCursorDataIndex = 0; D2_GLOBAL_GUARD(nCursorDataIndex, "D2Client::Cursor::n
 static int32_t gCursorAnimationFrame = 0; D2_STATIC_GUARD(gCursorAnimationFrame, "gCursorAnimationFrame");
 static uint32_t gnCursorAnimStartTick = 0; D2_STATIC_GUARD(gnCursorAnimStartTick, "gnCursorAnimStartTick");
 int ItemTypeOnHand = 0; D2_GLOBAL_GUARD(ItemTypeOnHand, "ItemTypeOnHand");
-static int gnCursorInitialized = 0; D2_STATIC_GUARD(gnCursorInitialized, "gnCursorInitialized");
 
 namespace D2Client::Cursor {
 
@@ -220,6 +219,10 @@ void __fastcall CURSOR_SetCursorItem(D2UnitStrc * pUnit, int32_t nAnimFrame) {
     nCursorDataIndex = 6;
     gCursorAnimationFrame = nAnimFrame;
     ItemTypeOnHand = 6;
+}
+
+D2UnitStrc * __stdcall GetCursorItem_Unref_00468030() {
+    return (D2UnitStrc*)gCursorAnimationFrame;
 }
 
 void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon) {

@@ -97,6 +97,7 @@ void __fastcall Shrines_CombatBoostFunction(struct D2ObjectOperateFnArg * pArgum
 void __fastcall SHRINE_OnStaminaExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
 void __fastcall Shrines_StaminaBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
 void __fastcall Shrines_StatBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
+void __fastcall QUEST_DispatchObjectActivation_Unref_00583bc0(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall SHRINE_OnSkillExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
 void __fastcall Shrines_SkillBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
 // Object operate-handler invoked when a player activates a shrine. Guards against re-use (bails if already activated or wrong anim mode), records the activating player's GUID, marks the object dirty/update, and builds+attaches a floating hover-text label (shrine name string). Then looks up the shrine's D2ShrinesTxt record and dispatches its specific effect via OBJECTSHRINEFUNCTION[nCode].fpShrineHandler (falling back to Shrines_RefillFunction if none), validating the pointer with IsBadCodePtr. Schedules the shrine-reset event (nResetTimeInMins) and an object anim event. Returns Fog::GuardStack result (BOOL).

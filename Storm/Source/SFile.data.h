@@ -7,6 +7,7 @@
 
 #include "d2_platform.h"
 
+extern uint16_t gnSFileSearchLocale;
 extern uint32_t gnSSystemOption3;
 extern uint32_t gnSSystemOption1;
 extern uint32_t gnSSystemWaveBufferSize;

@@ -86,13 +86,14 @@ static pfnSFileReadError pfnSFileReadErrorHandler = (pfnSFileReadError)0; D2_STA
 static HANDLE ghAsyncIOThread = 0; D2_STATIC_GUARD(ghAsyncIOThread, "ghAsyncIOThread");
 static uint32_t gnSFileWaveStreamBufferSize = 0; D2_STATIC_GUARD(gnSFileWaveStreamBufferSize, "gnSFileWaveStreamBufferSize");
 static void * gpSFileExplodeWorkBuffer = 0; D2_STATIC_GUARD(gpSFileExplodeWorkBuffer, "gpSFileExplodeWorkBuffer");
+static LPDWORD lpThreadId_00779040 = 0; D2_STATIC_GUARD(lpThreadId_00779040, "lpThreadId_00779040");
 static uint32_t gbSFileAsyncIOShutdown = 0; D2_STATIC_GUARD(gbSFileAsyncIOShutdown, "gbSFileAsyncIOShutdown");
 static void * g_pStormMpqCryptTable = 0; D2_STATIC_GUARD(g_pStormMpqCryptTable, "g_pStormMpqCryptTable");
 static uint32_t gnSFileAsyncBudgetBytesPerSec = 0; D2_STATIC_GUARD(gnSFileAsyncBudgetBytesPerSec, "gnSFileAsyncBudgetBytesPerSec");
 static void * ghAsyncIOCompletionPort = 0; D2_STATIC_GUARD(ghAsyncIOCompletionPort, "ghAsyncIOCompletionPort");
 static HANDLE ghAsyncIOEvent = 0; D2_STATIC_GUARD(ghAsyncIOEvent, "ghAsyncIOEvent");
 static uint32_t gnSFileDirectAccessFlags = 0; D2_STATIC_GUARD(gnSFileDirectAccessFlags, "gnSFileDirectAccessFlags");
-static uint16_t gnSFileSearchLocale = 0; D2_STATIC_GUARD(gnSFileSearchLocale, "gnSFileSearchLocale");
+uint16_t gnSFileSearchLocale = 0; D2_GLOBAL_GUARD(gnSFileSearchLocale, "gnSFileSearchLocale");
 static uint8_t gnSFileSearchHashOffset = 0; D2_STATIC_GUARD(gnSFileSearchHashOffset, "gnSFileSearchHashOffset");
 static pfnSFileOpenCallback fpSFileOpenCallback = (pfnSFileOpenCallback)0; D2_STATIC_GUARD(fpSFileOpenCallback, "fpSFileOpenCallback");
 static void * gpSFileOpenCallbackParam = 0; D2_STATIC_GUARD(gpSFileOpenCallbackParam, "gpSFileOpenCallbackParam");
@@ -120,6 +121,22 @@ void __thiscall SFILE_CopyStreamBuffer4(uint32_t * pDest, uint32_t * pSrc) {
     pDest[1] = pSrc[1];
     pDest[2] = pSrc[2];
     pDest[3] = pSrc[3];
+}
+
+int __fastcall Unreferenced_00415190(int param_1) {
+    if (param_1 && *(int*)(param_1 + 0x14c)) {
+      return 1;
+    }
+
+    return 0;
+}
+
+int __fastcall Unreferenced_004151b0(int param_1) {
+    if (param_1 && *(int*)(param_1 + 0x150)) {
+      return 1;
+    }
+
+    return 0;
 }
 
 // Reads data from an internal buffer with bounds checking. Calculates available bytes (param3[4] - param3[1]), clamps to requested size (*param2), memcpy's from buffer (param3[0] + param3[1]), and advances read position (param3[1] += size). Returns actual bytes read.
@@ -364,6 +381,14 @@ void __thiscall SFILE_ShiftSectorTable(int32_t pSectorTable, uint32_t nSectorCou
     *(uint32_t*)((int)pDst + 0x20) = 0;
     *(uint32_t*)((int)pDst + 0x24) = 0;
     *(uint32_t*)((int)pDst + 0x28) = 0;
+}
+
+void __fastcall Unreferenced_00415730(int param_1) {
+    if (!param_1) {
+      return;
+    }
+
+    (*(int*)(param_1 + 0x148))++;
 }
 
 static int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec * pStream) {
@@ -1461,6 +1486,22 @@ uint32_t __thiscall SFILE_CompareFileTime1(int * pLink, int * pLeft) {
     return nValue + (int)pLeft;
 }
 
+int __fastcall Unreferenced_004167a0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+int __fastcall Unreferenced_004167f0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+int __fastcall Unreferenced_00416820(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+int __fastcall Unreferenced_00416850(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
 uint32_t __thiscall SFILE_CompareFileTime2(int * pLink, int * pLeft) {
     uint32_t nValue = pLink[1];
     if ((int)nValue < 0) {
@@ -1471,6 +1512,20 @@ uint32_t __thiscall SFILE_CompareFileTime2(int * pLink, int * pLeft) {
     }
 
     return nValue + (int)pLeft;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004168f0(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
 }
 
 uint32_t __thiscall SFILE_CompareFileSize1(int * pLink, int * pLeft) {
@@ -1507,6 +1562,57 @@ uint32_t __thiscall SFILE_CompareFileName(int * pLink, int * pLeft) {
     }
 
     return nValue + (int)pLeft;
+}
+
+int __fastcall Unreferenced_004169f0(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_00416a00(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_00416a10(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_00416a20(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_00416a30(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_00416a90(int param_1) {
+    if (param_1 && *(int*)(param_1 + 0x150)) {
+      return 1;
+    }
+
+    return 0;
+}
+
+int __fastcall Unreferenced_00416ab0(int param_1) {
+    if (param_1 && *(int*)(param_1 + 0x14c)) {
+      return 1;
+    }
+
+    return 0;
 }
 
 // @sourcefile .\SOURCE\SFILE.CPP
@@ -2079,6 +2185,42 @@ int __stdcall SFileAuthenticateArchive(D2ArchiveStrc * pArchive, uint32_t * pdwA
     return bVerified;
 }
 
+int __fastcall Unreferenced_00417850(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
+int __fastcall Unreferenced_004178a0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00417900(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+int __fastcall Unreferenced_00417940(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
+int __fastcall Unreferenced_00417990(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
 int __thiscall SFILE_AllocateFileRecord1(int32_t pThis, int32_t pLink) {
     if (pLink) {
       return pLink;
@@ -2625,6 +2767,44 @@ int __stdcall SFILE_OpenFileInternal(D2ArchiveStrc * pArchive, char * szFileName
     return nResult;
 }
 
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004183f0(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418430(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+int __fastcall Unreferenced_00418470(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
+}
+
 void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {
     int* pLink;
     int** ppSlot = pNode;
@@ -2698,6 +2878,10 @@ void __thiscall SFILE_RemoveFileRecordFromList2(int32_t pThis, int * pLink) {
     *(int*)(*pLink + 4) = pLink[1];
     *pLink = 0;
     pLink[1] = 0;
+}
+
+int __fastcall Unreferenced_004185b0(int param_1) {
+    return (uint32_t)!((int)*(uint32_t*)(param_1 + 8) <= 0 ? 0 : *(uint32_t*)(param_1 + 8));
 }
 
 uint32_t __thiscall SFILE_CompareFileRecord4(int32_t pThis, int32_t pLink) {
@@ -2776,6 +2960,76 @@ void __thiscall SFILE_RemoveFileRecordFromList5(int32_t pThis, int * pNode) {
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
     pNode[1] = 0;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004187c0(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418800(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418840(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418880(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004188c0(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
 }
 
 } // namespace Storm::Source::SFile
@@ -2895,6 +3149,12 @@ void __fastcall SFILE_CloseStreamHandle5(D2StormListHead * pThis) {
     }
 }
 
+int __fastcall Unreferenced_00418a40(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeArchiveRecord(D2ArchiveStrc * pArchive) {
     int* ppPrevSlot;
@@ -2958,6 +3218,20 @@ uint32_t __stdcall SFILE_GetOpenFlags() {
 void __stdcall SFILE_CloseArchiveByName(char * szText) {
     uint32_t dwFlags = SFILE_GetOpenFlags();
     SFILE_OpenFileInternal(nullptr, szText, (uint8_t)dwFlags);
+}
+
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418ba0(D2ArchiveStrc * pArchive) {
+    int* piVar3;
+    D2ArchiveStrc* pDVar1 = pArchive->pPrevLink;
+    if (!pDVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pArchive, -1);
+    *piVar3 = (int)pDVar1;
+    pArchive->pPrevLink->pNext = pArchive->pNext;
+    pArchive->pPrevLink = 0;
+    pArchive->pNext = 0;
 }
 
 void __fastcall SFILE_CloseAllOpenFiles1(D2ArchiveStrc * pArchive) {
@@ -3052,6 +3326,16 @@ void __fastcall SFILE_CloseStream4(D2StormListHead * pListHead) {
     pSVar1->pNext = 0;
 }
 
+int __fastcall Unreferenced_00418d80(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
+}
+
 void __fastcall SFILE_CloseStream5(D2StormListHead * pListHead) {
     int* ppPrevSlot;
     SFILE_CloseStreamHandle5(pListHead);
@@ -3066,6 +3350,18 @@ void __fastcall SFILE_CloseStream5(D2StormListHead * pListHead) {
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
+}
+
+int __fastcall Unreferenced_00418de0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
+int __fastcall Unreferenced_00418e50(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 void __fastcall SFILE_DestroyFileRecord(D2MPQFileStrc * pMPQFile) {
@@ -3159,6 +3455,12 @@ D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord2(int * * ppArchive, int32_t n
     return ppFileRecord;
 }
 
+int __fastcall Unreferenced_00418ff0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
 D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord2(D2ArchiveStrc * pArchive, uint8_t byFlags) {
     D2ArchiveStrc* pNextNode = pArchive->pPrevLink;
     if (pNextNode) {
@@ -3174,6 +3476,12 @@ D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord2(D2ArchiveStrc * pArchive, ui
     }
 
     return pArchive;
+}
+
+int __fastcall Unreferenced_00419060(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 // @sourcefile .\SOURCE\SFILE.CPP
@@ -4354,9 +4662,6 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
 
 // @blizzard CreateCdThread (SFILE.CPP)
 void __stdcall SFILE_CreateCdThread() {
-    // Static local variables (originally global data)
-    static LPDWORD lpThreadId_00779040; D2_STATIC_GUARD_BSS(lpThreadId_00779040, "Storm::Source::SFile::SFILE_CreateCdThread::lpThreadId_00779040");
-
     if (ghAsyncIOThread) {
       return;
     }
@@ -4364,6 +4669,15 @@ void __stdcall SFILE_CreateCdThread() {
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ ghAsyncIOEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ ghAsyncIOThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SFILE_CdThreadProc, (LPVOID)0x0, 0, (LPDWORD)&lpThreadId_00779040);
     /* int nPriority for SetThreadPriority */ /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(ghAsyncIOThread, 1);
+}
+
+int __fastcall Unreferenced_0041a8d0(int param_1, int param_2) {
+    SFILE_CreateCdThread();
+    HANDLE pvVar1 = ghAsyncIOThread;
+    LPDWORD pDVar2 = lpThreadId_00779040;
+    *(LPDWORD*)param_1 = lpThreadId_00779040;
+    *(HANDLE*)param_2 = pvVar1;
+    return (int)pDVar2;
 }
 
 // Under the SFile lock, sets the urgent flag (+0x1c) of every queued Storm read request whose buffer base (+0x24, SFILE_IssueRequest) is pReadBuffer. No-op if pReadBuffer is NULL. SFILE_SelectAsyncRequest caps an urgent request's deadline at 1000 ms (0041a51a).

@@ -290,6 +290,24 @@
       ]
     },
     {
+      "name": "Destructor_UnwindThunk_Unref_00603270",
+      "address": "00603270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603270"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_00603270",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ]
+    },
+    {
       "name": "GenerateUniqueHandle",
       "address": "00603280",
       "lines": [
@@ -666,6 +684,24 @@
       ]
     },
     {
+      "name": "Destructor_UnwindThunk_Unref_00604460",
+      "address": "00604460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604460"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_00604460",
+        "New"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ]
+    },
+    {
       "name": "NewNode",
       "address": "00604490",
       "lines": [
@@ -828,6 +864,24 @@
         "TSLink<CELLIST>",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_UnwindThunk_Unref_00604800",
+      "address": "00604800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604800"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_00604800",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
       ]
     },
     {

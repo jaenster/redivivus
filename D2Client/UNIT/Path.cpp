@@ -95,6 +95,11 @@ uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int16_t nTarg
     return nResult;
 }
 
+int Unreferenced_004804d0() {
+    uint32_t uVar1 = GAME::Game::GetPing();
+    return uVar1 + 0x32 >> 7;
+}
+
 // Client-side: requests a unit to move toward a clicked subtile (nX,nY low words), with eMoveType selecting an arrival threshold (1=walk:10, 2=run:0, else ping-scaled for the local player, or per-monster-anim for others). Records the click coords on the unit. Suppresses the move if already within the threshold or (for eMoveType 0) the previous target is closer than the click and the endpoints are on-screen. Otherwise finds the destination room (nearby or by subtile) and either: for the local player sends move packet 0x5f with current X/Y; for other players warps and continues the move; else updates the dynamic path collision flags. No return.
 void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY, uint32_t eMoveType, int32_t nPrevTargetX, int32_t nPrevTargetY) {
     D2UnitStrc* pPlayerUnit_lcl;

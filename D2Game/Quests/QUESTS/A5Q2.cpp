@@ -463,9 +463,10 @@ BOOL __fastcall Q32_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 // that contains its GUID, or -1 if not found. Used everywhere to map a unit back to its barricade group.
 int32_t __fastcall Q32_FindBarricadeGroup(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     int32_t* pPrisonerGUIDSlot;
+    D2QuestDataA5Q2Strc* pA5Q2 = pQuestData->pQuestSpecificData.pA5Q2;
     int nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
     int nBarricadeGroupIdx = 0;
-    int32_t* pGroupGUIDRow = pQuestData->pQuestSpecificData.pA5Q2->anBarricadeGUIDs;
+    int32_t* pGroupGUIDRow = pA5Q2->anBarricadeGUIDs;
     do {
       int nPrisonerSlotIdx;
       nPrisonerSlotIdx = 0;

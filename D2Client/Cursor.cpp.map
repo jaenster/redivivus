@@ -133,6 +133,23 @@
       ]
     },
     {
+      "name": "GetCursorItem_Unref_00468030",
+      "address": "00468030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468030"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "GetCursorItem_Unref_00468030"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
       "name": "UI_SetCursorToSpecialIcon",
       "address": "00468040",
       "lines": [

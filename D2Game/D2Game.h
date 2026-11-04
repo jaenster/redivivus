@@ -33,6 +33,7 @@ struct D2DrlgActStrc * __stdcall QSERVER_GetActFromFirstActiveGame(int32_t nActI
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __stdcall QSERVER_CountMonstersInFirstActiveGame();
 struct D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int32_t nSubtileX, int32_t nSubtileY);
+int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790();
 void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
@@ -49,6 +50,7 @@ void __stdcall nullsub_7Arg(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32
 // about behaviour.
 void __stdcall nullsub_B(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3);
 int __stdcall QSERVER_CountClientsWithStatusFlag0x20();
+void __fastcall GAME_SetNoSaveFlag_Unref_00544090(BOOL bResult);
 // Clears the global gbQuestReconnectMode flag (sets to 0), disabling quest-reconnect mode. Called during game teardown or after reconnect handling is complete.
 void __stdcall GAME_ClearGlobalFlag();
 void __stdcall TASK_InitializeClock();

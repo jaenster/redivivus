@@ -4,6 +4,21 @@
   "file": "D2Client/UNIT/Object.cpp",
   "functions": [
     {
+      "name": "TEXT_CleanupMessageLog_Unref_004b1d50",
+      "address": "004b1d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1d50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Object",
+      "calledFunctions": [
+        "TEXT_CleanupMessageLog_Unref_004b1d50",
+        "FreeDialogStrc"
+      ]
+    },
+    {
       "name": "AllocObjectData",
       "address": "004bc720",
       "lines": [

@@ -15,6 +15,7 @@ namespace D2Sound::D2SoundUntil {
 void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, void * pItem);
 void __fastcall SOUND_sD2SoundSmp_Free(int * * ppListHead, int32_t nSearchValue);
 BOOL __fastcall SOUNDUTIL_FindInLinkedList(int * pNode, int32_t nSearchValue);
+int __fastcall Unreferenced_005169f0(int param_1);
 void __fastcall SOUNDUTIL_FreeLinkedList(int * * ppListHead);
 void __fastcall SOUNDUTIL_AppendToLinkedList(void * * ppListHead, uint32_t dwNodeValue);
 // Maps file szText read-only and copies the size-prefixed blob located at image base + the dword at e_lfanew header (signature dword 0x454c 'LE', checked at 00516b61) +0xb8 (size at +8, data at +0xc) into pBuffer; returns TRUE on success, last error 0x7a when *pnBufferSize is too small.

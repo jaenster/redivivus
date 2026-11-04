@@ -40,6 +40,7 @@ int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex);
 int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
+struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00611d10();
 struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get();
 struct D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(int32_t nDifficulty);
 void __fastcall DATATBLS_BuildStatesDataBitMask(struct D2StatesDataTbls * pStatesData, uint32_t nFlagBit);
@@ -94,6 +95,7 @@ void __stdcall DATATBLS_FreePetTypeTxtTables();
 void __stdcall FreeTables();
 // Initialises all D2Common game-data text tables by sequentially calling individual TXT_AllocTxt_* loaders for every table category (items, monsters, skills, sounds, overlays, stats, levels, objects, arena, cubemod, belts, etc.). Called once at startup with the Fog memory pool; bGametypeIsOBNetHost and nZero2 gate expansion-specific level sub-tables.
 void __stdcall TXT_InitTxtFiles(struct D2PoolManagerStrc * pMemory, int32_t nZero2, int32_t bGametypeIsOBNetHost);
+struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00624710();
 // 7 internal functions (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::DataTbls

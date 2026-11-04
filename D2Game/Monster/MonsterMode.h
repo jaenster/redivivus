@@ -40,6 +40,7 @@ struct D2MonsterPathParamStrc * __fastcall GetAiParamFromUnit(struct D2UnitStrc 
 void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, struct D2MonsterPathParamStrc * pMonData);
 void __fastcall ResetEngagedCombatAndStats(struct D2UnitStrc * pUnit);
 void __fastcall MONSTERMODE_GetStoredPosition(int32_t pMonData, int32_t * pOutStoredX, int32_t * pOutStoredY, uint8_t * pOutStoredFlags);
+int __fastcall Unreferenced_005a6250(int param_1);
 void __fastcall SetCombatAndMonStats(struct D2MonsterPathParamStrc * pPathParam, int32_t nPathType, int32_t nVelocity, uint8_t nSteps);
 // @sourcefile .\MONSTER\MonsterMode.cpp
 struct D2MonsterPathParamStrc * __fastcall AllocAiParam(::SGAMEDATA * pGame);

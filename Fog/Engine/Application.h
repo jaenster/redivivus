@@ -78,6 +78,7 @@ namespace Fog::Engine::Application {
 
 // Function declarations
 bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
+int Unreferenced_004046d0();
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize);
 uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, struct D2FogDebugModuleEntryStrc * pModuleInfoOut);
 bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pModuleList);
@@ -91,6 +92,7 @@ void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);
 bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput);
+int Unreferenced_004067c0();
 uint32_t __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize);
 // 7 internal functions (defined in .cpp)
 

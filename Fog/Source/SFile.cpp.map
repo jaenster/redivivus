@@ -407,6 +407,48 @@
       ]
     },
     {
+      "name": "Unreferenced_00407260",
+      "address": "00407260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407260"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00407260"
+      ]
+    },
+    {
+      "name": "Unreferenced_00407280",
+      "address": "00407280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407280"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00407280"
+      ]
+    },
+    {
+      "name": "Unreferenced_00407290",
+      "address": "00407290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407290"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00407290"
+      ]
+    },
+    {
       "name": "SFILE_CalculateBufferOffset",
       "address": "004072a0",
       "lines": [

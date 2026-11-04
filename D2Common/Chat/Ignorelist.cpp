@@ -25,6 +25,38 @@ static IgnoreList * gpIgnoreList = 0; D2_STATIC_GUARD(gpIgnoreList, "gpIgnoreLis
 
 namespace D2Common::Chat::Ignorelist {
 
+void __stdcall IGNORELIST_Initialize_Unref_005fe0e0() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_005fe0f0() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_005fe110() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_005ff390() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_00601b50() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_0060ab70() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_0060ac50() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_0060b130() {
+
+}
+
 void __stdcall IGNORELIST_Shutdown() {
     if (gpIgnoreList) {
       gpIgnoreList->_vfptr->ScalarDeletingDestructor(gpIgnoreList, 1);
@@ -224,6 +256,14 @@ void __stdcall MISC_InitIgnorelist() {
 
 // Null stub for ignore list initialization - called during client mode init
 void __stdcall IGNORELIST_Initialize() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_0063a800() {
+
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_0063b9c0() {
 
 }
 

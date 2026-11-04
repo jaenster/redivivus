@@ -101,6 +101,7 @@ struct UIWidgetVtable {
 namespace D2Client::UI::Dialog {
 
 // Function declarations
+int __stdcall GetDialogCounter_Unref_004b70f0();
 void __stdcall INPUT_DialogClickHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogMouseDown(struct D2UIMouseMsgStrc * pMsg);
@@ -115,6 +116,7 @@ void __stdcall INPUT_DialogEnterKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DIALOG_InitializeSystem();
 void __stdcall DIALOG_CleanupSystem();
+int Unreferenced_004b7bc0();
 void __fastcall AllocDialogSub(struct D2DialogStrc * pDialog, void * pVtable, int32_t nParam2, int32_t nParam3);
 void __stdcall DIALOG_RegisterHandler();
 struct D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, int32_t fpDialogFunc2, int32_t nBackgroundId, int32_t nExtraParam);
@@ -126,8 +128,11 @@ void __fastcall DIALOG_SetSelectedLine(struct D2DialogStrc * pDialog, int32_t nS
 void __fastcall DIALOG_SetHighlightStyle(struct D2DialogStrc * pDialog, int32_t nStyle);
 void __fastcall DIALOG_RecalculateLayout(struct D2DialogStrc * pDialog);
 int32_t __fastcall DIALOG_GetSelectedIndex(struct D2DialogStrc * pDialog);
+int __fastcall Unreferenced_004b8590(int param_1, int param_2);
+int __fastcall Unreferenced_004b85b0(int param_1, int param_2);
 int __stdcall GetDialogCounter();
 void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
+void __stdcall DIALOG_InitializeSystem_Unref_004b9200();
 // 6 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Dialog

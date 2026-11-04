@@ -2,6 +2,7 @@
 
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Client/UI/SkillDesc.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Logging.h"
 #include "globals/globals.h"
 #include "D2Common/Logging/ProfCore.data.h"
@@ -2610,6 +2611,19 @@ void __fastcall PROFCORE_RegisterSlot(uint32_t nSlotId, uint8_t * pSlotData, uin
     (*pfnCallback)(nSlotId, pSlotData, dwFlags);
 }
 
+int Unreferenced_00611650() {
+    // Static local variables (originally global data)
+    static unsigned int gpfnProfCoreInitCallback; D2_STATIC_GUARD_BSS(gpfnProfCoreInitCallback, "D2Common::Logging::ProfCore::Unreferenced_00611650::gpfnProfCoreInitCallback");
+
+    if (gpfnProfCoreInitCallback) {
+      int iVar1;
+      iVar1 = (*(code*)gpfnProfCoreInitCallback)();
+      return iVar1;
+    }
+
+    return 0;
+}
+
 // Adds the QueryPerformanceCounter ticks elapsed since liStart to gaProfilingDumpFrequency[nIndex].liTime and counts the call.
 // Provenance: 1.14d asm 00611660-006116a3 (SUB/SBB [EBP+8]/[EBP+0xc], RET 8).
 void __fastcall PROFCORE_AccumulateTime(int nIndex, LARGE_INTEGER liStart) {
@@ -2629,6 +2643,10 @@ void __stdcall D2ProfileDump() {
       LOGGING_LogLine(1, 2, 1, 0x80000, ".\\Logging\\ProfCore.cpp", 0x54, "FUNCTION: %30s, TIME %12d, COUNT %5d", (D2ProfilingDumpFrequency*)(pLVar1 - 0xd), pLVar1->u.LowPart, *(int*)&pLVar1[1].u);
       pLVar1 += 0xf;
     } while ((int)pLVar1 < (intptr_t)((char*)&gaProfilingDumpFrequency + sizeof(gaProfilingDumpFrequency) + 104));
+}
+
+void __stdcall CloseProfCore_Unref_00654ef0() {
+    DATATBLS::MonsterTbls::FreeParsedTC();
 }
 
 } // namespace D2Common::Logging::ProfCore

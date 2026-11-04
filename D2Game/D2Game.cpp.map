@@ -155,6 +155,21 @@
       ]
     },
     {
+      "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
+      "address": "00534790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534790"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
+        "GAME_ClearGlobalFlag"
+      ]
+    },
+    {
       "name": "nullsub",
       "address": "005347b0",
       "lines": [
@@ -239,6 +254,20 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2ClientStrc *"
+      ]
+    },
+    {
+      "name": "GAME_SetNoSaveFlag_Unref_00544090",
+      "address": "00544090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00544090"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "GAME_SetNoSaveFlag_Unref_00544090"
       ]
     },
     {

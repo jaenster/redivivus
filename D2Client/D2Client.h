@@ -32,6 +32,7 @@ struct _CONTEXT;
 namespace D2Client {
 
 // Function declarations
+void __stdcall CMD_AutomapCenterOnPlayer_Unref_0040d530();
 // @sourcefile .\CORE\WINMAIN.CPP
 BOOL __stdcall WINMAIN_TestMemoryAccess(struct CMDPARAMS * pParams, char * szCmdLine);
 // Triggers end-game congrats flow: set gShowEndGameCongrats, reset beta index, send exit packet, set ExitVar3.
@@ -109,11 +110,15 @@ void __fastcall CLIENT_SetArenaFlags(eD2ArenaFlags eArenaFlags);
 // Sets or clears the ARENAFLAG_DefaultActive bit in CLIENT_ArenaFlags. bSet!=0 clears the bit (marks client as not default-active); bSet==0 sets the bit.
 void __fastcall CLIENT_ToggleDefaultActiveFlag(int32_t bSet);
 uint32_t __stdcall ROSTER_GetArenaKillCountGlobal();
+int Unreferenced_0047a9e0();
+int Unreferenced_0047a9f0();
+int Unreferenced_0047aa00();
 void __fastcall ROSTER_SetArenaKillCountGlobal(eD2PlayerClassIDDWORD dwValue);
 // Returns the default player class ID stored in global _eD2PlayerClassID_00712f00, used when creating a new character without an explicit class selection.
 eD2PlayerClassIDDWORD __stdcall CLIENT_GetDefaultCharClass();
 // Returns 1 if arena mode is active (bit 8 of CLIENT_ArenaFlags is set), indicating the game session is running in arena/PvP mode.
 uint32_t __stdcall CLIENT_IsArenaMode();
+int __fastcall Unreferenced_0047aa40(int param_1);
 void __stdcall INPUT_HandleIMEComposition(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleIMEStartComposition(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleIMEEndComposition(struct D2UIMouseMsgStrc * pMsg);
@@ -145,6 +150,7 @@ void __stdcall SHOP_CleanupAssets();
 void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(struct D2GSPacketSrv0x50 * pPacket);
 // Handles GS→client packet 0x5E (quest availability update): copies 37 bytes (9 dwords + 1 byte) from packet payload into aQuestAvailabilityPacket global buffer, then sets bReceivedQuestAvailabilityPacket=1.
 void __fastcall NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS(char * pBytes);
+int __stdcall Unreferenced_004b92d0(int param_1);
 uint32_t __stdcall GetQuestAvailabilityByIndex(int32_t nUnused, int32_t nQuestIndex);
 void __fastcall thunk_ExitGamePlayCutScene(int32_t pPacket);
 // Handles GS→client packet 0x89: forwards byte pBytes[1] (subcommand/type) to Storm::Source::ClientEngine::HandleIncoming0x89 for game-state update processing.
@@ -155,6 +161,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(struct D2UnitStrc * pUnit, int32_t bSkipCo
 int __stdcall TEXT_EmptyCallback();
 void __stdcall TEXT_InitializeTextSystem();
 void __stdcall TEXT_SetUnknownFlag(struct D2UIMouseMsgStrc * pMsg);
+int __stdcall TEXT_EmptyCallback_Unref_004c2530();
 void __stdcall SOUND_ClearGlobalState();
 void __fastcall MISSILES_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
 void __stdcall DRAW_WORLD_SetWarpFadeTimer();

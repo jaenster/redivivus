@@ -4,6 +4,80 @@
   "file": "D2Gdi/Renderer/Windowed.cpp",
   "functions": [
     {
+      "name": "AdjustPerspectivePosition_Unref_00646010",
+      "address": "00646010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646010"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "AdjustPerspectivePosition_Unref_00646010"
+      ]
+    },
+    {
+      "name": "AdjustPerspectivePosition_Unref_006460d0",
+      "address": "006460d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006460d0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "AdjustPerspectivePosition_Unref_006460d0"
+      ]
+    },
+    {
+      "name": "ClearScreen_Unref_0065a3f0",
+      "address": "0065a3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a3f0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "ClearScreen_Unref_0065a3f0",
+        "TXT_AllocItemDropData"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20",
+      "address": "006b2f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b2f20"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20"
+      ],
+      "usedTypes": [
+        "HBITMAP"
+      ]
+    },
+    {
+      "name": "AdjustPerspectivePosition_Unref_006bf250",
+      "address": "006bf250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf250"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "AdjustPerspectivePosition_Unref_006bf250"
+      ]
+    },
+    {
       "name": "InitPerspective",
       "address": "006c7a70",
       "lines": [
@@ -92,6 +166,20 @@
       ],
       "usedTypes": [
         "D2LogPalette256Strc"
+      ]
+    },
+    {
+      "name": "Unreferenced_006c7c90",
+      "address": "006c7c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7c90"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "Unreferenced_006c7c90"
       ]
     },
     {
@@ -528,6 +616,23 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240",
+      "address": "006c8240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8240"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240"
+      ],
+      "usedTypes": [
+        "HBITMAP"
       ]
     },
     {
@@ -1151,6 +1256,20 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SetDefaultPerspectiveFactor_Unref_006c95c0",
+      "address": "006c95c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c95c0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetDefaultPerspectiveFactor_Unref_006c95c0"
       ]
     },
     {

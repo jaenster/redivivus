@@ -564,6 +564,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00650800",
+      "address": "00650800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650800"
+        }
+      ],
+      "namespace": "D2Common::PATH::Path",
+      "calledFunctions": [
+        "Unreferenced_00650800",
+        "PATH_ResetPathState"
+      ]
+    },
+    {
       "name": "PATH_AdvanceUnitAlongPath",
       "address": "00650840",
       "lines": [

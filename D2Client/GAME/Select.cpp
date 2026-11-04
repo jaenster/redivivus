@@ -410,6 +410,10 @@ static int32_t SELECT_GetDistanceSquared(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
     return (nY2 - nY1) * (nY2 - nY1) + (nX2 - nX1) * (nX2 - nX1);
 }
 
+int __stdcall SELECT_GetConstant13_Y_Unref_00467400() {
+    return _Selection::bHasSelectedUnit;
+}
+
 void __fastcall SELECT_SetPetSeedTimestamp(int32_t bEnabled, D2UnitStrc * pUnit, int32_t nTimestamp) {
     if (!(bEnabled && pUnit)) {
       return;

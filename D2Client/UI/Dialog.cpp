@@ -142,6 +142,10 @@ uint32_t gnDialogCounter_b = 0; D2_GLOBAL_GUARD(gnDialogCounter_b, "D2Client::UI
 
 namespace D2Client::UI::Dialog {
 
+int __stdcall GetDialogCounter_Unref_004b70f0() {
+    return (int)gpDialogActual;
+}
+
 static void UI_ScrollNpcMenuList(int32_t nScrollDelta, D2DialogStrc * pDialog) {
     if (pDialog->nClickableCount <= 1) {
       return;
@@ -764,6 +768,21 @@ void __stdcall DIALOG_CleanupSystem() {
     gpDialogActual = 0;
 }
 
+int Unreferenced_004b7bc0() {
+    void* unaff_ESI;
+    void* pvVar1 = memset(unaff_ESI, 0, 0xb10);
+    *(uint32_t*)((int)unaff_ESI + 0x34) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0x38) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0x50) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0x4c) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0x2c) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0x30) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0xb08) = 0;
+    *(uint32_t*)((int)unaff_ESI + 0x44) = -1;
+    *(uint32_t*)((int)unaff_ESI + 0x5c) = 2;
+    return (int)pvVar1;
+}
+
 void __fastcall AllocDialogSub(D2DialogStrc * pDialog, void * pVtable, int32_t nParam2, int32_t nParam3) {
     if (!pDialog) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x355);
@@ -948,8 +967,8 @@ void __fastcall FreeDialogStrc(D2DialogStrc * pDialog) {
         Inv::INV_SetInventoryActive(1);
         GAME::Select::SELECT_SetExclusionRect(nullptr);
         pCurrentDialog = gpDialogActual;
+        pSubNode = pCurrentDialog->pDialogSub;
         gnDialogStructAllocCount = 0;
-        pSubNode = gpDialogActual->pDialogSub;
         while (pSubNode) {
           pNextSub = pSubNode->pNext;
           D2_FREE_AT(pSubNode, ".\\UI\\dialog.cpp", 0x425);
@@ -1220,6 +1239,27 @@ int32_t __fastcall DIALOG_GetSelectedIndex(D2DialogStrc * pDialog) {
     return -1;
 }
 
+int __fastcall Unreferenced_004b8590(int param_1, int param_2) {
+    if (param_1 && param_2 >= 0 && param_2 < *(int*)(param_1 + 0x50)) {
+      return param_2 * 0x110 + 0x68 + param_1;
+    }
+
+    return 0;
+}
+
+int __fastcall Unreferenced_004b85b0(int param_1, int param_2) {
+    int in_EAX;
+    if (param_1 && param_2) {
+      *(uint32_t*)(param_2 + 4) = *(uint32_t*)(param_1 + 0x30);
+      *(uint32_t*)param_2 = *(uint32_t*)(param_1 + 0x2c);
+      *(int*)(param_2 + 0xc) = *(int*)(param_1 + 0x38) + *(int*)(param_1 + 0x30);
+      in_EAX = *(int*)(param_1 + 0x34) + *(int*)(param_1 + 0x2c);
+      *(int*)(param_2 + 8) = in_EAX;
+    }
+
+    return in_EAX;
+}
+
 int __stdcall GetDialogCounter() {
     return gnDialogCounter_b;
 }
@@ -1277,6 +1317,10 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
       DIALOG_SetSelectedLine(pDialog, nIndex);
       return;
     }
+}
+
+void __stdcall DIALOG_InitializeSystem_Unref_004b9200() {
+    bReceivedQuestAvailabilityPacket = 0;
 }
 
 } // namespace D2Client::UI::Dialog

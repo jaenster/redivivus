@@ -452,6 +452,10 @@ void __stdcall TASK_FreeAllSlots() {
     LeaveCriticalSection(&lpCriticalSection_0088caa8);
 }
 
+void __fastcall TASK_Nop_Unref_00564940(D2UnitStrc * pItem) {
+
+}
+
 // @sourcefile .\GAME\Task.cpp
 uint32_t __stdcall TASK_AllocateTaskQueue() {
     D2TaskQueueSlotStrc* pNewSlot;

@@ -49,6 +49,7 @@ uint32_t __stdcall ERRORMANAGER_TryGetProcAddress(HMODULE hModule, FARPROC * ppf
 void __stdcall LIB_LoadAdvapi32();
 // lpHandlerProc parameter of RegisterServiceCtrlHandlerA
 void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl);
+int Unreferenced_00406470();
 // Early app bootstrap: set log path, parse cmdline/registry for app mode, init INI, then ApplicationMain.
 void __fastcall PreInitApplication(int32_t argc, char * * argv);
 // ServiceMain for the DIABLO2SRV service. Registers the control handler, reports

@@ -22,6 +22,8 @@ struct D2PathDirectionVectorStrc {
 namespace D2Client::UI::Path {
 
 // Function declarations
+uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae60();
+uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae80();
 uint32_t __stdcall DRAW_GetTypeOfBorder();
 void __fastcall TypeOfUiOverlayOverWorld(uint32_t eBorderType);
 int __stdcall GetMouseXOffset();

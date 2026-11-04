@@ -4,6 +4,34 @@
   "file": "D2Client/GAME/SCmd.cpp",
   "functions": [
     {
+      "name": "SCMD_Rcv_IgnoreShared_Unref_0045b090",
+      "address": "0045b090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b090"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv_IgnoreShared_Unref_0045b090"
+      ]
+    },
+    {
+      "name": "SCMD_Rcv_IgnoreShared_Unref_0045b0a0",
+      "address": "0045b0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b0a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv_IgnoreShared_Unref_0045b0a0"
+      ]
+    },
+    {
       "name": "SCMD_SetOrClearBitFlag",
       "address": "0045c430",
       "lines": [
@@ -72,6 +100,20 @@
       "usedTypes": [
         "D2SkillsTxt",
         "eD2Skills"
+      ]
+    },
+    {
+      "name": "Unreferenced_0045c4e0",
+      "address": "0045c4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c4e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "Unreferenced_0045c4e0"
       ]
     },
     {

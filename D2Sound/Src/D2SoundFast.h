@@ -36,6 +36,7 @@ void __stdcall SOUND_InitSoundEffectBuffers();
 void __fastcall SOUND_LoadWavFile(char * szText);
 void __fastcall SOUND_PlaySoundEffect(uint8_t * szSoundFile);
 BOOL __stdcall SOUND_IsAnySoundEffectPlaying();
+int Unreferenced_00514ff0();
 void __stdcall SOUND_FadeOutAllSoundEffects();
 int __stdcall SOUND_IsSoundEffectsInitialized();
 // @sourcefile .\Src\D2SoundFast.cpp

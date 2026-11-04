@@ -5,6 +5,7 @@
 #include "Fog/Source/SSignature.h"
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SBig.h"
+#include "Storm/Source/SLog.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "Fog/Engine/Application.data.h"
@@ -297,6 +298,12 @@ void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
     *pnW = 0;
 }
 
+int __fastcall Unreferenced_00425830(int param_1, int param_2) {
+    int iVar1 = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)param_2 << 8 | (uint16_t)(uint8_t)*(uint8_t*)(param_2 + 1)) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(param_2 + 2)) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(param_2 + 3));
+    *(int*)param_1 = iVar1;
+    return iVar1;
+}
+
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Transform, and filed under Storm::Source::SBig. Oracle name is the class method Sha1::Pump, PPC mangled symbol ".Pump__4Sha1FPUlPCUc" @100a2ee0 = Pump(unsigned long*, const unsigned char*). Basis: same two arguments (state array, 64-byte block), no callees in either build, and it is the sole callee of Sha1_Append/Sha1::Append. PPC body 1680 bytes vs 1339 here - both fully unrolled. NOT part of SBig: it is a client of SBig's file, not a member; module fixed to SSignature.
@@ -489,6 +496,13 @@ uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwHighWord, 
     return 0;
 }
 
+void __fastcall Unreferenced_00425ee0(int param_1, int param_2) {
+    *(char*)(param_2 + 3) = (char)param_1;
+    *(char*)(param_2 + 2) = (char)((uint32_t)param_1 >> 8);
+    *(char*)(param_2 + 1) = (char)((uint32_t)param_1 >> 0x10);
+    *(char*)param_2 = (char)((uint32_t)param_1 >> 0x18);
+}
+
 // Storm SBig SHA-1 implementation - init, update, and finalize functions
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Final. Oracle ".Finalize__4Sha1FPUc" @100a2ae0 = Finalize(unsigned char*). Basis: this+1 arg in both; sole callee is Sha1_Append / Sha1::Append in both; both emit the 8-byte big-endian bit length and then the 5 state words.
@@ -665,6 +679,10 @@ void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nData
     local_8 = -1;
     SBig::SBigDel(pPlainBn);
     ExceptionList = sehRecord;
+}
+
+void __fastcall SSIG_FreeBigNum_Unref_00518b80(void * * pBigNum) {
+    SLog::SLogClose((uint32_t)*pBigNum);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

@@ -22,6 +22,10 @@ void __stdcall UTILS_OnUnitModeChange_NoOp() {
 
 }
 
+void __stdcall UTILS_OnUnitModeChange_NoOp_Unref_004e4030() {
+
+}
+
 void __stdcall ANIM_OnSkillCastStub() {
 
 }
@@ -74,6 +78,14 @@ float __stdcall CalculateHypotenuse(float a, float b) {
 
 float __stdcall CalculateHypotenusePowered(float fX, float fY) {
     return fY * fY + fX * fX;
+}
+
+void __stdcall ANIM_OnSkillCastStub_Unref_004f52c0() {
+
+}
+
+void __stdcall ANIM_OnSkillCastStub_Unref_004f52d0() {
+
 }
 
 } // namespace D2Client::_Utils

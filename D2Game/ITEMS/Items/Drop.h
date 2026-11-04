@@ -88,6 +88,7 @@ namespace D2Game::ITEMS::Items::Drop {
 
 // Function declarations
 struct D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType);
+int Unreferenced_00555cc0();
 void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, int32_t pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset);
 int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries);
 void __fastcall ITEM_InitializeDroppedItem(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, uint32_t dwUnused);

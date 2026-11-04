@@ -47,6 +47,8 @@ int32_t __fastcall UNITSND_GetGroundMaterial(struct D2UnitStrc * pUnit);
 int32_t __fastcall UNITSND_GetFootstepSound(struct D2UnitStrc * pUnit, int32_t bIsRunning);
 // Plays a unit's footstep sound for the current animation frame. For monsters, gates on walk/run-like animation modes and MonStats class range. Computes the step interval from frame count, anim speed and footstep count (FsCnt, FootstepLayer/FsPrb/FsOff from MonSounds.txt for monsters), debounces against the last step tick (dwSfxStepTicks), and picks the loudest of three candidate frame offsets. Selects walk vs run footstep via UNITSND_GetFootstepSound, plays it with distance-scaled channel priority (quieter when not the local player), optionally plays the layered footstep sound by probability, and stamps dwSfxStepTicks. Client/sound side effect only.
 void __fastcall PlayUnitFootstepSound(struct D2UnitStrc * pUnit);
+int Unreferenced_004cb170();
+int Unreferenced_004cb180();
 void __fastcall UNITSND_StopAllSkillSounds(struct D2UnitStrc * pUnit);
 // Iterates the unit's active SFX channel list and stops or gracefully fades any channel whose base sound matches the unit's neutral (idle ambient) sound. bForceStop=1 kills the channel immediately; bForceStop=0 fades it. Halts with a fatal error if pUnit is null.
 void __stdcall UNITSND_UpdateNeutralSound(struct D2UnitStrc * pUnit, int32_t bForceStop);

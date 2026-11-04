@@ -125,6 +125,15 @@ BOOL __stdcall MessageBoxA_InsertPlayDisc() {
     return (uint32_t)(nMsgBoxResult == 1);
 }
 
+int Unreferenced_004fab60() {
+    UINT uType = 0x31;
+    char* lpCaption = "Diablo II";
+    char* lpText = "Insert Cinematics Disc";
+    HWND hWnd = D2gfx::D2GFX::GetHwnd();
+    int iVar1 = MessageBoxA(hWnd, lpText, lpCaption, uType);
+    return (uint32_t)(iVar1 == 1);
+}
+
 BOOL __stdcall MPQ_LoadAllDataMpqFiles() {
     MPQ_d2data = D2Hell::ARCHIVE_LoadMPQ("d2data.mpq", 0, nullptr, 1000);
     MPQ_d2sfx = D2Hell::ARCHIVE_LoadMPQ("d2sfx.mpq", 0, nullptr, 1000);

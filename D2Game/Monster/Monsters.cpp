@@ -506,6 +506,22 @@ D2MonLvlTxt * __fastcall GetMonLvlTxt(int32_t nMonLvlId) {
     return nullptr;
 }
 
+int Unreferenced_005a0030() {
+    return sgptDataTable->nTxtMonLvlSize;
+}
+
+int __fastcall Unreferenced_005a0040(int param_1) {
+    if (param_1 >= sgptDataTable->nTxtMonUmodSize) {
+      return 0;
+    }
+
+    return (int)(sgptDataTable->pTxtMonUmod + param_1);
+}
+
+int Unreferenced_005a0060() {
+    return sgptDataTable->nTxtMonUmodSize;
+}
+
 uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(D2UnitStrc * pUnit, int32_t nMonTypeFlag) {
     D2MonStatsTxt* pMonStatsTxt;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {

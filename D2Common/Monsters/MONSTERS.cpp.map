@@ -4,6 +4,40 @@
   "file": "D2Common/Monsters/MONSTERS.cpp",
   "functions": [
     {
+      "name": "MONSTERS_OnInitMonster_NoOp_Unref_0063db80",
+      "address": "0063db80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063db80"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_OnInitMonster_NoOp_Unref_0063db80"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MONSTERS_OnInitMonster_NoOp_Unref_0063e050",
+      "address": "0063e050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e050"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_OnInitMonster_NoOp_Unref_0063e050"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
       "name": "MONSTER_GetMissileForAnimEvent",
       "address": "0063e6b0",
       "lines": [

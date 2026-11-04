@@ -169,6 +169,35 @@
       ]
     },
     {
+      "name": "Unreferenced_0044fff0",
+      "address": "0044fff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fff0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Unreferenced_0044fff0",
+        "Destructor"
+      ]
+    },
+    {
+      "name": "Unreferenced_00450030",
+      "address": "00450030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450030"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Unreferenced_00450030"
+      ]
+    },
+    {
       "name": "Reserve",
       "address": "00450040",
       "lines": [
@@ -283,6 +312,34 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00450350",
+      "address": "00450350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450350"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_00450350"
+      ]
+    },
+    {
+      "name": "Unreferenced_00450370",
+      "address": "00450370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450370"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Unreferenced_00450370"
       ]
     },
     {

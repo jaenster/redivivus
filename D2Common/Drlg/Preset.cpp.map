@@ -567,6 +567,34 @@
       ]
     },
     {
+      "name": "Unreferenced_00666ff0",
+      "address": "00666ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666ff0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "Unreferenced_00666ff0"
+      ]
+    },
+    {
+      "name": "Unreferenced_00667000",
+      "address": "00667000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667000"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "Unreferenced_00667000"
+      ]
+    },
+    {
       "name": "DRLGPRESET_GetPickedFilePathFromRoomEx",
       "address": "00667010",
       "lines": [
@@ -651,6 +679,20 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00667420",
+      "address": "00667420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667420"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "Unreferenced_00667420"
       ]
     },
     {

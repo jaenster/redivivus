@@ -77,6 +77,7 @@ struct SMemHeapDetailsStrc {
 namespace Storm::Source::SMem {
 
 // Function declarations
+int __fastcall Unreferenced_004116e0(int param_1);
 uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId);
 uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash);
 // @blizzard ComputePageSize (SMEM.CPP)
@@ -86,6 +87,7 @@ void __fastcall SMEM_FreeHeap(LPVOID * ppListHead);
 // @blizzard SMemInitialize (SMEM.CPP)
 void __stdcall SMemInitialize();
 void __stdcall SMemSetDebugFlags(uint32_t dwFlags, uint8_t byMask);
+int Unreferenced_00411da0();
 // @blizzard DestroyHeap (SMEM.CPP)
 LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap);
 // @blizzard FreeEmptyHeaps (SMEM.CPP)

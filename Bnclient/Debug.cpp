@@ -11,6 +11,14 @@
 
 namespace Bnclient::Debug {
 
+void DEBUG_Trace_Unref_00515ec0(char * str) {
+
+}
+
+void DEBUG_Trace_Unref_00515ed0(char * str) {
+
+}
+
 void __thiscall DEBUG_LogFormattedMessage(void * pThis, char * szMessage) {
     Storm::Source::SLog::SLogWrite(*(uint32_t*)pThis, szMessage);
 }
@@ -30,6 +38,14 @@ __time32_t __stdcall DEBUG_GetTime32(__time32_t * pTime) {
 }
 
 void DEBUG_Trace(char * str, ...) {
+
+}
+
+void DEBUG_Trace_Unref_0051d2d0(char * str) {
+
+}
+
+void DEBUG_Trace_Unref_0051d2e0(char * str) {
 
 }
 

@@ -245,6 +245,12 @@ struct IDirectDrawPaletteVtbl;
 struct IDirectDrawSurface1Vtbl;
 
 // Data types
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+typedef unsigned long COLORREF;
+
+#endif // _WIN32
+
 struct D2ddDebugFont {
     /* 0x0000 */ uint8_t field_0x0;
     /* 0x0001 */ uint8_t _pad_0x0001[12287];
@@ -399,6 +405,8 @@ struct __attribute__((packed)) DDBLTFX {
 namespace D2DDraw::Renderer::DirectDraw {
 
 // Function declarations
+void __fastcall DrawImageFast_Unref_0045f7a0(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, BYTE nPaletteIndex);
+void __fastcall PerspectiveScalePosition_Unref_005043d0(int32_t nPosX, int32_t nPosY, int32_t nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);
 BOOL __fastcall Initialize(HINSTANCE hInstance);
 void __fastcall ClearCaches();
 BOOL __fastcall CheckCutScene();
@@ -480,6 +488,9 @@ void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pB
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
 void __stdcall BINK_RenderVideoFrame();
 void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFrameCallback pfnFrameCallback);
+BOOL __fastcall ActivateWindow_Unref_00513b80();
+void __fastcall SetDefaultPerspectiveFactor_Unref_00514040();
+void __fastcall SetDefaultPerspectiveFactor_Unref_00514050();
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2DDraw::Renderer::DirectDraw

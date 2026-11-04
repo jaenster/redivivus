@@ -184,6 +184,34 @@
       ]
     },
     {
+      "name": "Unreferenced_00421050",
+      "address": "00421050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421050"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421050"
+      ]
+    },
+    {
+      "name": "Unreferenced_00421090",
+      "address": "00421090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421090"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421090"
+      ]
+    },
+    {
       "name": "TSGrowableArray_Ui_CalcChunkSize",
       "address": "004210a0",
       "lines": [
@@ -234,6 +262,24 @@
       ],
       "usedTypes": [
         "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetDataPtr_Unref_00421150",
+      "address": "00421150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421150"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetDataPtr_Unref_00421150"
+      ],
+      "usedTypes": [
+        "BigBuffer",
         "uint32_t"
       ]
     },
@@ -327,6 +373,34 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004212a0",
+      "address": "004212a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_004212a0"
+      ]
+    },
+    {
+      "name": "Unreferenced_004212c0",
+      "address": "004212c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_004212c0"
       ]
     },
     {
@@ -501,6 +575,54 @@
       ]
     },
     {
+      "name": "TSFixedArray_Ui_Destructor_Unref_00421570",
+      "address": "00421570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421570"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_00421570",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_00421590",
+      "address": "00421590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421590"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_00421590",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetDataPtr_Unref_004215b0",
+      "address": "004215b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004215b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetDataPtr_Unref_004215b0"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "TSBaseArray_Ui_Copy",
       "address": "004215c0",
       "lines": [
@@ -617,6 +739,21 @@
       ]
     },
     {
+      "name": "TSFixedArray_Ui_Destructor_Unref_004217f0",
+      "address": "004217f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004217f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_004217f0",
+        "SMemFree"
+      ]
+    },
+    {
       "name": "TSFixedArray_Ui_Destructor",
       "address": "00421810",
       "lines": [
@@ -629,6 +766,34 @@
       "calledFunctions": [
         "TSFixedArray_Ui_Destructor",
         "SMemFree"
+      ]
+    },
+    {
+      "name": "Unreferenced_00421830",
+      "address": "00421830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421830"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421830"
+      ]
+    },
+    {
+      "name": "Unreferenced_00421860",
+      "address": "00421860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421860"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421860"
       ]
     },
     {
@@ -647,6 +812,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004218a0",
+      "address": "004218a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004218a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_004218a0"
       ]
     },
     {
@@ -2841,6 +3020,172 @@
       "usedTypes": [
         "BigData",
         "int32_t"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0044df10",
+      "address": "0044df10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044df10"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0044df10"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_00450870",
+      "address": "00450870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450870"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_00450870"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0047f930",
+      "address": "0047f930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f930"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0047f930"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0051d2c0",
+      "address": "0051d2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d2c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0051d2c0"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_0051d570",
+      "address": "0051d570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d570"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_0051d570",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_0051d670",
+      "address": "0051d670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d670"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_0051d670",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_00601e00",
+      "address": "00601e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601e00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_00601e00"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_00603f40",
+      "address": "00603f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603f40"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_00603f40"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e200",
+      "address": "0060e200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e200"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0060e200"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e220",
+      "address": "0060e220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e220"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0060e220"
+      ],
+      "usedTypes": [
+        "BigBuffer"
       ]
     },
     {

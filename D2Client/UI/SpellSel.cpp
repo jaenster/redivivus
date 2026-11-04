@@ -51,6 +51,7 @@
 #include "D2Win/Src/D2WinPalette.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
+#include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -1187,6 +1188,54 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
     } while (true);
 }
 
+int __fastcall Unreferenced_004aa6b0(int param_1) {
+    int in_EAX;
+    int extraout_EAX;
+    BOOL bWeaponSwap;
+    BOOL bShowTooltips;
+    if (!gbSpellSelMouseHandFlag) {
+      int nGridStartX;
+      bShowTooltips = 0;
+      bWeaponSwap = 0;
+      gSpellSelGridRegion.sGridIndex[0] = 0;
+      nGridStartX = ScreenSizeX - 0x80;
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, param_1);
+      in_EAX = extraout_EAX;
+    }
+
+    return in_EAX;
+}
+
+int Unreferenced_004aa6e0() {
+    int in_EAX;
+    if (gbSpellSelMouseHandFlag) {
+      int extraout_EAX;
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, 1, 1, 0);
+      in_EAX = extraout_EAX;
+    }
+
+    return in_EAX;
+}
+
+int Unreferenced_004aa710() {
+    int in_EAX;
+    int extraout_EAX;
+    BOOL bWeaponSwap;
+    BOOL bShowTooltips;
+    BOOL bChargedOnly;
+    if (!gbSpellSelMouseHandFlag) {
+      int nGridStartX;
+      bChargedOnly = 0;
+      bShowTooltips = 1;
+      bWeaponSwap = 0;
+      nGridStartX = ScreenSizeX - 0x80;
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
+      in_EAX = extraout_EAX;
+    }
+
+    return in_EAX;
+}
+
 void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nSteps) {
     int bSlotValid;
     uint32_t bPlayerDead = UNIT::Player::IsPlayerDead();
@@ -1270,6 +1319,10 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
     bIsWeaponSwap = 0;
     nStartX = ScreenSizeX - 0x80;
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nStartX, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
+}
+
+void __stdcall SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0() {
+    BooleanWaitingForSkillingMaybe = 0;
 }
 
 void __stdcall SPELLSEL_ClearWaitingForSkillFlag() {
@@ -1683,6 +1736,19 @@ void __stdcall SKILLTREE_RenderSkillTree() {
     int32_t bMouseOver = 0;
     uint16_t* pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszTabLabel, nTooltipX, nTooltipY, bMouseOver, nShowTooltip);
+}
+
+int Unreferenced_004ab7b0() {
+    // Static local variables (originally global data)
+    static uint32_t gdwSpellSelThrottleTick; D2_STATIC_GUARD_BSS(gdwSpellSelThrottleTick, "D2Client::UI::SpellSel::Unreferenced_004ab7b0::gdwSpellSelThrottleTick");
+
+    DWORD DVar1 = GetTickCount();
+    if (DVar1 - gdwSpellSelThrottleTick > 1000) {
+      gdwSpellSelThrottleTick = DVar1;
+      return 1;
+    }
+
+    return 0;
 }
 
 void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {

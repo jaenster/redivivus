@@ -105,6 +105,10 @@ static pfnRoomExDeactivationHandler gaRoomExDeactivationHandlers[4] = { &D2Commo
 
 namespace D2Common::DUNGEON::Dungeon {
 
+D2RoomExStrc * __fastcall GetRoomExFromRoom_Unref_005a6220(D2RoomStrc * pRoom) {
+    return pRoom->pRoomEx;
+}
+
 // Allocates D2DrlgActStrc, fills core fields, allocates DRLG act misc (server/client path), allocates environment, and initializes tile cache.
 // @sourcefile .\DUNGEON\Dungeon.cpp
 D2DrlgActStrc * __stdcall AllocAct(BYTE nActNo, int32_t dwInitSeed, BOOL bClientSide, ::SGAMEDATA * pGame, BYTE nDifficulty, D2PoolManagerStrc * pMemory, eD2LevelId eLevel, fAutoMap pfAutoMap, fTownAutoMap pfTownAutoMap) {

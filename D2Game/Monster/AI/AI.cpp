@@ -166,6 +166,10 @@ typedef int (__fastcall *UNITFINDTEST)(D2UnitStrc * pUnit, D2UnitFindArgStrc * p
 
 namespace D2Game::Monster::AI {
 
+uint32_t __fastcall ReturnFirstArgument_Unref_00518b90(uint32_t * pdwParam) {
+    return *pdwParam;
+}
+
 // Returns the squared Euclidean distance between two units' world positions. Reads static path coords for objects/items (unit types 2, 4-5) and dynamic path coords for monsters/players. Used by monster AI range checks.
 int32_t __fastcall GetDistanceBetween(D2UnitStrc * pUnit, D2UnitStrc * pOther) {
     int nX;
@@ -1817,6 +1821,14 @@ void __fastcall MONSTERAI_ExecuteAiFunction(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 }
 
+void __fastcall AI_Fn1_None_Unref_005b72a0(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
+
+}
+
+void __fastcall AI_Fn1_None_Unref_005b8740(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
+
+}
+
 // Computes the weighted Chebyshev distance between two units, supporting both dynamic-path (moving) and static-path (object/warp) unit types. Reads X/Y coords via path accessors, takes abs(dx) and abs(dy), subtracts pUnit's size in both axes (clamped to 0), then returns (max + 2*min) / 2 — the standard D2 diagonal-weighted tile metric. Used by monster AI to range-check targets.
 int32_t __fastcall GetDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int nAbsDiffY;
@@ -2117,6 +2129,25 @@ BOOL __fastcall TestIfMonsterCanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pTarg
     }
 
     return 1;
+}
+
+int __fastcall Unreferenced_005dc840(int param_1) {
+    BOOL BVar2;
+    if (param_1) {
+      int iVar1;
+      iVar1 = *(int*)param_1;
+      if (iVar1 >= 0) {
+        if (iVar1 <= 1) {
+          BVar2 = UNIT::SUnit::CheckForModeZeroDeath((D2UnitStrc*)param_1);
+          return (uint32_t)!BVar2;
+        }
+        if (iVar1 == 3) {
+          return 1;
+        }
+      }
+    }
+
+    return 0;
 }
 
 uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2UnitStrc * * ppAllyData) {
@@ -9914,6 +9945,20 @@ void __fastcall AITHINK_Fn1_SpecialHireNoOwner(::SGAMEDATA * pGame, D2UnitStrc *
     PlanNextAiMove(pGame, pUnit, 10);
 }
 
+int __fastcall Unreferenced_005e7d30(int param_1) {
+    if (!param_1) {
+      return 1;
+    }
+
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom((D2UnitStrc*)param_1);
+    if (!pRoom) {
+      return 1;
+    }
+
+    BOOL BVar1 = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+    return (uint32_t)(BVar1 != 0);
+}
+
 void __fastcall AITHINK_Fn1_TownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nDistToTarget = pAiParam->bEngagedInCombat;
     pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
@@ -14980,16 +15025,17 @@ void __fastcall AITHINK_Fn1_Ancient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     }
 }
 
+int __fastcall Unreferenced_005ef1e0(int param_1, int param_2) {
+    return *(uint32_t*)(*(int*)param_1 + 0x18) & param_2;
+}
+
 void __fastcall AI_SetClearFlags(D2AiParamStrc * pAiParam, uint32_t nFlags, int32_t bSet) {
-    int* pFlagsField;
     if (bSet) {
-      pFlagsField = &pAiParam->pMonsterAiGeneral->dwArg1;
-      *pFlagsField |= nFlags;
+      pAiParam->pMonsterAiGeneral->dwArg1 |= nFlags;
       return;
     }
 
-    pFlagsField = &pAiParam->pMonsterAiGeneral->dwArg1;
-    *pFlagsField &= ~nFlags;
+    pAiParam->pMonsterAiGeneral->dwArg1 &= ~nFlags;
 }
 
 // Callback invoked to spawn a Baal throne wave. Ensures SKILL_BaalMonsterSpawn is present on pUnit, sets its param1 to nParam (wave index), then fires SERVER_UNIT_CastSkill in mode 10 at the unit's own position +13 Y (spawning monsters at that location). Increments pMonsterAiGeneral->dwArg0 (wave counter), records next-wave frame in dwArg2 (currentFrame+100), and toggles dwArg1 bit-1 on then off (transient spawn-in-progress flag).
@@ -19215,6 +19261,19 @@ void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     PlanNextAiMove(pGame, pUnit, (int)nMonStatsBase->aip[2][nSeedLowScratch]);
+}
+
+int __fastcall Unreferenced_005f6e20(int param_1) {
+    uint32_t uVar1 = 0;
+    if (*(short int*)(param_1 + 0x32) > 0) {
+      uVar1 = *(short int*)(param_1 + 0x34) * 100 / (int)*(short int*)(param_1 + 0x32) - 100;
+      uVar1 = (int)uVar1 <= 0 ? 0 : uVar1;
+      if ((int)uVar1 >= 0x78) {
+        uVar1 = 0x78;
+      }
+    }
+
+    return uVar1;
 }
 
 // Per-think server AI for the Zakarum Zealot/Fanatic melee monster (__fastcall: pGame, pUnit, pAiParam). Computes a run-speed pct from MonStats Run/Velocity and current life pct. If the target resolves to a player and the act is Act III with the Blackened Temple quest completed, the monster flees (MONSTERAI_CommandRunAwayFromUnit) or wanders. While attacking, if life dropped below a difficulty-scaled threshold it sets a brief flee flag and runs away; then checks line-of-sight to the target's path position (CheckCollision_BlockPlayerMissile) and approaches/walks toward it if blocked. Out of combat it rolls a chance to walk to vs run to the target. In combat it rolls flee vs SetCombatStateAndApproachTarget, ending the think with CalledOnEndAiFunction1 (engage) using difficulty-indexed MonStats chances. Uses per-unit seed RNG for all rolls and stores flee state in the AiGeneral struct.

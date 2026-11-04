@@ -125,6 +125,20 @@
       ]
     },
     {
+      "name": "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0",
+      "address": "0066d7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d7e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0"
+      ]
+    },
+    {
       "name": "DRLGANIM_GetOrientationFromIndex",
       "address": "0066d7f0",
       "lines": [

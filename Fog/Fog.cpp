@@ -572,8 +572,32 @@ int32_t __fastcall BitScanReverse(uint32_t dwBits) {
     return nBitIndex + 1;
 }
 
+void __stdcall Return_Unref_00409c70() {
+
+}
+
+void __stdcall Return_Unref_0040a030() {
+
+}
+
+int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070() {
+    return 0;
+}
+
 int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero() {
     return 0;
+}
+
+void __stdcall Return_Unref_0040ada0() {
+
+}
+
+void __stdcall Return_Unref_0040b110() {
+
+}
+
+void __stdcall Return_Unref_0040b120() {
+
 }
 
 void __stdcall Return() {
@@ -593,6 +617,14 @@ float __stdcall MATH_sinTable_f32_Lookup(uint32_t findex) {
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
 void __fastcall THREADING_DeleteCriticalSection_Thunk(void * pElement) {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection((LPCRITICAL_SECTION)pElement);
+}
+
+void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70(void * pElement) {
+    EnterCriticalSection((LPCRITICAL_SECTION)pElement);
+}
+
+void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80(void * pElement) {
+    LeaveCriticalSection((LPCRITICAL_SECTION)pElement);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

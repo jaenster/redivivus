@@ -82,6 +82,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00520680",
+      "address": "00520680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520680"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "Unreferenced_00520680"
+      ]
+    },
+    {
       "name": "XSHA1_Transform",
       "address": "005206b0",
       "lines": [
@@ -148,6 +162,34 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "SID_GetReadyFlag"
+      ]
+    },
+    {
+      "name": "SID_GetReadyFlag_Unref_00520af0",
+      "address": "00520af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520af0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "SID_GetReadyFlag_Unref_00520af0"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00",
+      "address": "00520b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520b00"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00"
       ]
     },
     {
@@ -271,6 +313,20 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00520c30",
+      "address": "00520c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520c30"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "Unreferenced_00520c30"
       ]
     },
     {
@@ -974,6 +1030,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00521ba0",
+      "address": "00521ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00521ba0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "Unreferenced_00521ba0"
+      ]
+    },
+    {
       "name": "NET_SID_CLIENT_Send_0x50_AuthInfo",
       "address": "00521bf0",
       "lines": [
@@ -1313,6 +1383,20 @@
         "int8_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00522570",
+      "address": "00522570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00522570"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "Unreferenced_00522570"
       ]
     },
     {

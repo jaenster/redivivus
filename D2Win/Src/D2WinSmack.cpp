@@ -37,7 +37,6 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 char gpSmackerVideoBuffer[260] = {}; D2_GLOBAL_GUARD(gpSmackerVideoBuffer, "gpSmackerVideoBuffer");
 uint8_t gbSmackerVideoFlags = 0; D2_GLOBAL_GUARD(gbSmackerVideoFlags, "gbSmackerVideoFlags");
-uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "gbSmackerKeepTempFile");
 
 namespace D2Win::Src::D2WinSmack {
 

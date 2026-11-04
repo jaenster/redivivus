@@ -14,6 +14,14 @@ struct IgnoreList;
 namespace D2Common::Chat::Ignorelist {
 
 // Function declarations
+void __stdcall IGNORELIST_Initialize_Unref_005fe0e0();
+void __stdcall IGNORELIST_Initialize_Unref_005fe0f0();
+void __stdcall IGNORELIST_Initialize_Unref_005fe110();
+void __stdcall IGNORELIST_Initialize_Unref_005ff390();
+void __stdcall IGNORELIST_Initialize_Unref_00601b50();
+void __stdcall IGNORELIST_Initialize_Unref_0060ab70();
+void __stdcall IGNORELIST_Initialize_Unref_0060ac50();
+void __stdcall IGNORELIST_Initialize_Unref_0060b130();
 void __stdcall IGNORELIST_Shutdown();
 void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, char * pszDstBuf, int32_t nBufLen);
 void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, int32_t nDstBuf, int32_t nBufLen);
@@ -31,5 +39,7 @@ void __stdcall MISC_InitIgnorelist();
 ::IgnoreList * __stdcall MISC_GetIgnorelist();
 // Null stub for ignore list initialization - called during client mode init
 void __stdcall IGNORELIST_Initialize();
+void __stdcall IGNORELIST_Initialize_Unref_0063a800();
+void __stdcall IGNORELIST_Initialize_Unref_0063b9c0();
 
 } // namespace D2Common::Chat::Ignorelist

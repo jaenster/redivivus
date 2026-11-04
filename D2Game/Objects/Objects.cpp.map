@@ -319,6 +319,23 @@
       ]
     },
     {
+      "name": "Objects_InitFn05_Door_Unref_0054fb30",
+      "address": "0054fb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054fb30"
+        }
+      ],
+      "namespace": "D2Game::Objects::Objects",
+      "calledFunctions": [
+        "Objects_InitFn05_Door_Unref_0054fb30"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg"
+      ]
+    },
+    {
       "name": "Objects_InitFn22_Fire",
       "address": "0054fb40",
       "lines": [

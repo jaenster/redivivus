@@ -77,6 +77,19 @@ static uint32_t SMEM_GetHandleByCaller(int * pnName, uint32_t nNameLen) {
     return g_SMemCachedHeapNameHash;
 }
 
+int __fastcall Unreferenced_004116e0(int param_1) {
+    if (!param_1) {
+      return 0;
+    }
+
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 8);
+    if (*(uint8_t*)(param_1 + 3) & 4) {
+      puVar1 = (uint32_t*)*puVar1;
+    }
+
+    return (int)puVar1;
+}
+
 uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId) {
     return nHeapId & 0xff;
 }
@@ -432,6 +445,14 @@ void __stdcall SMemSetDebugFlags(uint32_t dwFlags, uint8_t byMask) {
     }
 
     g_SMemUnknownFlag = dwFlags >> 1 & 1;
+}
+
+int Unreferenced_00411da0() {
+    if (!g_SMemInitialized) {
+      SMemInitialize();
+    }
+
+    return g_SMemInitialized;
 }
 
 // @blizzard CombineFreeBlocks (SMEM.CPP)

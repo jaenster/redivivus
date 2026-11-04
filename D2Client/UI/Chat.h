@@ -42,6 +42,7 @@ struct D2ChatPacketBuildStrc {
 namespace D2Client::UI::Chat {
 
 // Function declarations
+void __stdcall CHAT_InitEmpty_Unref_00477970();
 // @sourcefile .\UI\chat.cpp
 void __stdcall INPUT_HandleIMENotify(struct D2UIMouseMsgStrc * pMsg);
 uint8_t __stdcall CHAT_CheckIMELanguage();

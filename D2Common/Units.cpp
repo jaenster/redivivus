@@ -369,6 +369,10 @@ static int gaAnimTableExpansion[80] = {
 
 namespace D2Common::Units {
 
+void __stdcall Return_Unref_005fe100(D2UnitStrc * pUnit, int32_t nParam) {
+
+}
+
 uint8_t __stdcall GetDirection(D2UnitStrc * pUnit) {
     uint8_t byDirection;
     if (!pUnit) {

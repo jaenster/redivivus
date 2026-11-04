@@ -20,6 +20,7 @@ namespace D2Client::GAME::RosterPets {
 struct D2PetTypeTxt * __fastcall GetPetTypeTxtById(int32_t nPetId);
 // @sourcefile .\GAME\RosterPets.cpp
 void __stdcall FreeRosterPet();
+int __fastcall Unreferenced_00478a90(int param_1);
 // @sourcefile .\GAME\RosterPets.cpp
 void __fastcall AddRosterPet(int32_t nRosterGUID, int32_t nOwnerGUID, int32_t nSkillId, int32_t nRosterType);
 // Registers a pet or mercenary in the client-side roster pet list. For skillID 7 (merc), first removes any existing merc for the owner, then adds the pet entry and populates seed/owner fields from pMercArg. If the merc unit already exists in the world, initializes it via MERC_InitializeFromPacket, marks it attackable, sets up its light map, and flags it for update.

@@ -405,6 +405,16 @@ void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
+int Unreferenced_004934b0() {
+    D2UnitStrc* pDVar1 = UNIT::Player::GetPlayerUnit_UI();
+    if (!pDVar1) {
+      return 0;
+    }
+
+    pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pDVar1->pInventory);
+    return (int)pDVar1;
+}
+
 int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
     eD2ItemTypes eItemType;
     BOOL bMeetsReqs;

@@ -1925,6 +1925,14 @@ void __stdcall FreeStatList(D2StatListStrc * pStatList) {
     FreeAnyStatList((D2StatListExStrc*)pStatList);
 }
 
+void __fastcall Unreferenced_00626cf0(int param_1) {
+    if (!(param_1 && *(uint32_t*)(param_1 + 0x10) & 0x80000000)) {
+      return;
+    }
+
+    FreeAnyStatList((D2StatListExStrc*)param_1);
+}
+
 void __stdcall STATLIST_FreeStatListMemory(D2UnitStrc * pUnit) {
     D2StatListExStrc* pPlayerStatsEx = pUnit->pStatsEx;
     if (!pPlayerStatsEx) {
@@ -2731,6 +2739,10 @@ BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId) {
     }
 
     return 0;
+}
+
+int Unreferenced_00627b30() {
+    return sgptDataTable->nTxtItemTypesSize;
 }
 
 // Always-zero stub used as the fnSkillCalcMethod callback where a formula context has no

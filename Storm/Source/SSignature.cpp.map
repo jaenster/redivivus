@@ -330,6 +330,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00425830",
+      "address": "00425830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425830"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "Unreferenced_00425830"
+      ]
+    },
+    {
       "name": "Sha1_Pump",
       "address": "00425850",
       "lines": [
@@ -382,6 +396,20 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00425ee0",
+      "address": "00425ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425ee0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "Unreferenced_00425ee0"
       ]
     },
     {
@@ -506,6 +534,24 @@
         "BigData *",
         "pfnEHHandlerRoutine",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SSIG_FreeBigNum_Unref_00518b80",
+      "address": "00518b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518b80"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_FreeBigNum_Unref_00518b80",
+        "SLogClose"
+      ],
+      "usedTypes": [
+        "void *"
       ]
     },
     {

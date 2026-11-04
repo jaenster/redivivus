@@ -4,6 +4,156 @@
   "file": "D2Client/GAME/Game/Game.cpp",
   "functions": [
     {
+      "name": "GAME_HasQueuedPrimaryClick_Unref_00402a80",
+      "address": "00402a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402a80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_HasQueuedPrimaryClick_Unref_00402a80"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_0040f860",
+      "address": "0040f860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f860"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_0040f860"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_004179f0",
+      "address": "004179f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004179f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_004179f0"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_00417a30",
+      "address": "00417a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417a30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_00417a30"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_00417c30",
+      "address": "00417c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417c30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_00417c30"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_0041c540",
+      "address": "0041c540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c540"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_0041c540"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_0041eb20",
+      "address": "0041eb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041eb20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_0041eb20"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unref_00426ac0",
+      "address": "00426ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426ac0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unref_00426ac0"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "GAME_SetMouseButtonEventPending_Unref_0044b870",
+      "address": "0044b870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b870"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_SetMouseButtonEventPending_Unref_0044b870"
+      ]
+    },
+    {
       "name": "GAMEDATA_TimerInitWithTickCount",
       "address": "0044bdf0",
       "lines": [
@@ -19,6 +169,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0044be10",
+      "address": "0044be10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Unreferenced_0044be10"
       ]
     },
     {
@@ -51,6 +215,20 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "SetRunKeyDown"
+      ]
+    },
+    {
+      "name": "GetGlobalAlwaysRun_Unref_0044be70",
+      "address": "0044be70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetGlobalAlwaysRun_Unref_0044be70"
       ]
     },
     {
@@ -99,6 +277,20 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "GetGlobalAlwaysRun_Unref_0044beb0",
+      "address": "0044beb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044beb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetGlobalAlwaysRun_Unref_0044beb0"
       ]
     },
     {
@@ -164,6 +356,20 @@
       ]
     },
     {
+      "name": "GAME_GetMouseButtonEventState_Unref_0044bf20",
+      "address": "0044bf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bf20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_GetMouseButtonEventState_Unref_0044bf20"
+      ]
+    },
+    {
       "name": "GAMEDATA_GetQueuedPrimaryClick",
       "address": "0044bf30",
       "lines": [
@@ -212,6 +418,23 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAME_HasQueuedPrimaryClick"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_HasQueuedPrimaryClick_Unref_0044bff0",
+      "address": "0044bff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bff0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_HasQueuedPrimaryClick_Unref_0044bff0"
       ],
       "usedTypes": [
         "uint32_t"
@@ -326,6 +549,21 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0044c340",
+      "address": "0044c340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c340"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Unreferenced_0044c340",
+        "SetCanBeSelectedToFalse"
       ]
     },
     {
@@ -510,6 +748,23 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop04_Unref_0044c6a0",
+      "address": "0044c6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c6a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop04_Unref_0044c6a0"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
       ]
     },
     {
@@ -856,6 +1111,20 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "UpdateFrameStats"
+      ]
+    },
+    {
+      "name": "Unreferenced_0044cd40",
+      "address": "0044cd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cd40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Unreferenced_0044cd40"
       ]
     },
     {
@@ -2012,6 +2281,23 @@
       ]
     },
     {
+      "name": "GAMEDATA_GetGlobalTickCount_Unref_0044dab0",
+      "address": "0044dab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dab0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetGlobalTickCount_Unref_0044dab0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "GAME_GetSyncTickCount",
       "address": "0044dac0",
       "lines": [
@@ -2108,6 +2394,23 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GetStepsOfMissileMovement"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetStepsOfMissileMovement_Unref_0044db20",
+      "address": "0044db20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044db20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetStepsOfMissileMovement_Unref_0044db20"
       ],
       "usedTypes": [
         "uint32_t"
@@ -2868,12 +3171,145 @@
       ]
     },
     {
+      "name": "ClientInit_Noop16_Unref_00452160",
+      "address": "00452160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00452160"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop16_Unref_00452160"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10",
+      "address": "0045bb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bb10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
       "name": "thunk_GAMEDATA_CheckAutomapCenterOnLoad",
       "address": "004690a0",
       "lines": [],
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_CheckAutomapCenterOnLoad"
+      ]
+    },
+    {
+      "name": "CLIENT_SetDifficulty_Unref_00552830",
+      "address": "00552830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00552830"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_SetDifficulty_Unref_00552830"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00602370",
+      "address": "00602370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602370"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced_Unref_00602370"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00602390",
+      "address": "00602390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602390"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced_Unref_00602390"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00603510",
+      "address": "00603510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603510"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced_Unref_00603510"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610",
+      "address": "0060e610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e610"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced_Unref_006c4140",
+      "address": "006c4140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4140"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced_Unref_006c4140"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
       ]
     },
     {

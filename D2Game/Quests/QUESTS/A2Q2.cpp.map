@@ -386,6 +386,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00599bf0",
+      "address": "00599bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00599bf0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q2",
+      "calledFunctions": [
+        "Unreferenced_00599bf0",
+        "HasQuestItem"
+      ]
+    },
+    {
       "name": "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2",
       "address": "00599c10",
       "lines": [

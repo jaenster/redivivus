@@ -829,6 +829,23 @@
       ]
     },
     {
+      "name": "Unreferenced_005d2b40",
+      "address": "005d2b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d2b40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillEMonst",
+      "calledFunctions": [
+        "Unreferenced_005d2b40",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ]
+    },
+    {
       "name": "SKILLEMONST_ProcessBloodMana",
       "address": "005d2b60",
       "lines": [

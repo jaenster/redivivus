@@ -33,5 +33,6 @@ extern uint32_t gnGlideColorCombineMode;
 extern uint32_t gnGlideAlphaBlendMode;
 extern uint32_t gnGlideTextureFilteringMode;
 extern uint32_t gbGlideInScene;
+extern uint32_t gbGlidePerspectiveMode;
 extern D2GlideVertexTexCacheBlockStrc gGlideVertex0;
 extern uint32_t gaGlideColorDebugGradientIndices[1024];

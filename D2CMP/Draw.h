@@ -63,6 +63,7 @@ double __stdcall DRAW_GetHueSector(double m1, double m2, double dHue);
 void __stdcall thunk_D2MEM_VirtualFree(LPVOID pMemory);
 uint8_t __stdcall D2GFX_GetColorWithAlphaFromPallete(LPPALETTEENTRY pPallete, uint32_t nAlpha, int32_t nRed, int32_t Green, int32_t nBlue);
 uint8_t __stdcall DRAW_FindFarthestPaletteColor(uint8_t * pPalette, int nPaletteSize, int nRed, int nGreen, int nBlue);
+int Unreferenced_006052f0();
 void __stdcall DRAW_SetTransparentColorRGB(uint32_t nRGB);
 BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath);
 BOOL __stdcall DRAW_InitPalette(LPCSTR szPaletteFile, int nStartIndex, int nEndIndex);

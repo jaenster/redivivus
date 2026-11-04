@@ -304,6 +304,10 @@ void __stdcall NET_SetPlayersCount(int32_t nCount) {
     Fog::Src::SetPerIpConnectionLimit(pQServer, nCount);
 }
 
+void __stdcall _NullSub_Unref_0052b270() {
+    Fog::Src::GetConnectedClients(pQServer);
+}
+
 void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
     Fog::Src::SetHackMode(pQServer, bResult);
 }
@@ -509,6 +513,10 @@ BOOL __stdcall NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer() {
       return 1;
     }
 
+    return (uint32_t)(nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYERUNCAPPED);
+}
+
+int Unreferenced_0052b800() {
     return (uint32_t)(nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYERUNCAPPED);
 }
 

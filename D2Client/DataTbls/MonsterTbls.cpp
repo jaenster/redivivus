@@ -26,6 +26,14 @@ D2MonStatsTxt * __fastcall TXT_MonStats_GetLine(int32_t nMonStatsId) {
     return nullptr;
 }
 
+int __fastcall Unreferenced_00451fb0(int param_1) {
+    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtMonStatsExSize) {
+      return (int)(sgptDataTable->pTxtMonStatsEx + param_1);
+    }
+
+    return 0;
+}
+
 D2MonStats2Txt * __fastcall TXT_MonStats_GetMonStats2(int32_t nClassId) {
     if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize) {
       int nMonStats2Id;
@@ -36,6 +44,14 @@ D2MonStats2Txt * __fastcall TXT_MonStats_GetMonStats2(int32_t nClassId) {
     }
 
     return nullptr;
+}
+
+int Unreferenced_00452020() {
+    return sgptDataTable->nTxtOverlaySize;
+}
+
+int Unreferenced_00452030() {
+    return sgptDataTable->nTxtItemStatCostSize;
 }
 
 D2StatesTxt * __fastcall TXT_States_GetLine(eD2States eState) {

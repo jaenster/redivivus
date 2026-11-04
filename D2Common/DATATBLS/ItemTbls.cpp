@@ -31,6 +31,7 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Common/D2Common.h"
 #include "D2Common/DATATBLS/ItemTbls.data.h"
+#include "D2Common/DATATBLS/TokTbls.data.h"
 #include "D2Common/Logging/ProfCore.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1184,6 +1185,10 @@ void __stdcall thunk_UnloadBin_LvlType() {
     DataTbls::UnloadBin(nTxtGemsSize.pTable);
 }
 
+D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo_Unref_006372b0() {
+    return (D2BooksTableStrc*)&nTxtGemsSize;
+}
+
 // Returns gem/rune table line for given index (192 bytes/entry). Used for socketed item property application.
 D2GemsTxt * __stdcall TXT_Gems_GetLine(int32_t nIndex) {
     if (!(nIndex < nTxtGemsSize.nSize && nIndex != -1)) {
@@ -1329,6 +1334,10 @@ void __fastcall TXT_AllocTxt_itemratio(D2PoolManagerStrc * pMemory) {
 
 void __stdcall thunk_UnloadBin_LvlMaze() {
     DataTbls::UnloadBin(pTxtItemRatio);
+}
+
+D2LowQualityItemsTableStrc * __stdcall TXT_LowQualityItems_GetTableInfo_Unref_00637900() {
+    return (D2LowQualityItemsTableStrc*)&nTxtItemRatioSize;
 }
 
 // QualityRatio.txt row lookup. Returns quality upgrade chance ratios for treasure class calculations. Used by ITEM_RollItemQuality to apply TC quality bonuses during quality cascade.
@@ -2081,6 +2090,22 @@ D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId) {
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x972);
     exit(-1);
+}
+
+D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_00654fd0() {
+    return (D2RunesTxtTableStrc*)&gnTreasureClassArraySize;
+}
+
+D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b450() {
+    return (D2RunesTxtTableStrc*)&nTxtPlrTypeModeSize;
+}
+
+D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b460() {
+    return (D2RunesTxtTableStrc*)&nTxtMonModeSize;
+}
+
+D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b470() {
+    return (D2RunesTxtTableStrc*)&nTxtObjTypeModeSize;
 }
 
 } // namespace D2Common::DATATBLS::ItemTbls

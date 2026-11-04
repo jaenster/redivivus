@@ -579,6 +579,34 @@
       ]
     },
     {
+      "name": "Unreferenced_004dddd0",
+      "address": "004dddd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dddd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "Unreferenced_004dddd0"
+      ]
+    },
+    {
+      "name": "WALL2_OnAllocGameView_NoOp_Unref_004ddde0",
+      "address": "004ddde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ddde0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_OnAllocGameView_NoOp_Unref_004ddde0"
+      ]
+    },
+    {
       "name": "WALL2_OnAllocGameView_NoOp",
       "address": "004dddf0",
       "lines": [
@@ -590,6 +618,34 @@
       "namespace": "D2Client::GAME::Wall2",
       "calledFunctions": [
         "WALL2_OnAllocGameView_NoOp"
+      ]
+    },
+    {
+      "name": "WALL2_OnAllocGameView_NoOp_Unref_004df920",
+      "address": "004df920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df920"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_OnAllocGameView_NoOp_Unref_004df920"
+      ]
+    },
+    {
+      "name": "WALL2_OnAllocGameView_NoOp_Unref_004df930",
+      "address": "004df930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df930"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_OnAllocGameView_NoOp_Unref_004df930"
       ]
     }
   ]

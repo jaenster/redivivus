@@ -73,6 +73,7 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
 void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int nWorldY);
 void __stdcall WEATHER_UpdateParticles(struct D2SeedStrc * pSeed);
 void __stdcall WEATHER_DrawParticles();
+int Unreferenced_00473720();
 uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags();
 void __stdcall DRAW_Overlay_Weather();
 void __fastcall WEATHER_DrawBubbles(struct D2DataArrayStrc * pBubbleArray, struct DC6 * * pDC6Table);
@@ -81,6 +82,9 @@ uint32_t __stdcall WEATHER_CanHaveRain();
 float __stdcall WEATHER_FloatPassthrough();
 void __fastcall WEATHER_SetGlobalFlag(int nValue);
 void __fastcall ENV_Rcv0x54_NoOp(char * pBytes);
+void __fastcall ENV_Rcv0x54_NoOp_Unref_00473cb0(char * pBytes);
+void __fastcall ENV_Rcv0x54_NoOp_Unref_00473cc0(char * pBytes);
+void __stdcall ENV_InitClientSide_NoOp_Unref_00473cd0();
 void __stdcall ENV_InitClientSide_NoOp();
 void __stdcall ENV_FreeClientSide_NoOp();
 void __fastcall WEATHER_TransitionState(uint32_t nState);

@@ -71,6 +71,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004804d0",
+      "address": "004804d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004804d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "Unreferenced_004804d0",
+        "GetPing"
+      ]
+    },
+    {
       "name": "PATH_MoveUnitToPoint",
       "address": "004804e0",
       "lines": [

@@ -251,6 +251,22 @@
       ]
     },
     {
+      "name": "Unreferenced_0044b780",
+      "address": "0044b780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b780"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "Unreferenced_0044b780",
+        "GetHwnd",
+        "D2GFX_ResetViewport"
+      ]
+    },
+    {
       "name": "D2IniData_Getter",
       "address": "0044b7a0",
       "lines": [
@@ -372,6 +388,23 @@
       ]
     },
     {
+      "name": "D2IniData_Getter_Unref_0044b890",
+      "address": "0044b890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b890"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "D2IniData_Getter_Unref_0044b890"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
       "name": "fAPPMODE_client_ReturnAppMode",
       "address": "0044b8a0",
       "lines": [
@@ -461,6 +494,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0044bb70",
+      "address": "0044bb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bb70"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "Unreferenced_0044bb70",
+        "QSERVER_InitializeServerState"
+      ]
+    },
+    {
       "name": "FreeQServer",
       "address": "0044bb80",
       "lines": [
@@ -507,6 +555,22 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0044bc10",
+      "address": "0044bc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bc10"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "Unreferenced_0044bc10",
+        "NET_D2GS_ConnectToServer",
+        "MessageGameLoop"
       ]
     },
     {

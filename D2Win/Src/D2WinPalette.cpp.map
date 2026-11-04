@@ -94,6 +94,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004fb1b0",
+      "address": "004fb1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb1b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "Unreferenced_004fb1b0",
+        "D2GFX_SetPalette"
+      ]
+    },
+    {
       "name": "D2WINPAL_CopyPalette",
       "address": "004fb1c0",
       "lines": [
@@ -185,6 +200,20 @@
       "namespace": "D2Win::Src::D2WinPalette",
       "calledFunctions": [
         "D2WINPAL_SetGammaRamp"
+      ]
+    },
+    {
+      "name": "D2WINPAL_SetGammaRamp_Unref_00509660",
+      "address": "00509660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509660"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPAL_SetGammaRamp_Unref_00509660"
       ]
     }
   ]

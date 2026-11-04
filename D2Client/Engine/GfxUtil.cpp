@@ -1534,4 +1534,12 @@ uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(D2UnitStrc * pUnit, int32_t nWo
     return 0;
 }
 
+void * __fastcall GFXUTIL_Identity_Unref_005641e0(void * pData) {
+    return pData;
+}
+
+void * __fastcall GFXUTIL_Identity_Unref_006c40c0(void * pData) {
+    return pData;
+}
+
 } // namespace D2Client::Engine::GfxUtil

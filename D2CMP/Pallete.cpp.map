@@ -120,6 +120,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00600c60",
+      "address": "00600c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600c60"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "Unreferenced_00600c60",
+        "D2MEM_FindLowestSetBit"
+      ]
+    },
+    {
       "name": "PALETTE_GetColorShiftIndex",
       "address": "00600c70",
       "lines": [

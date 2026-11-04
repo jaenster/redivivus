@@ -4,6 +4,50 @@
   "file": "D2Launch/MainMenus.cpp",
   "functions": [
     {
+      "name": "FORMS_DestroyListJmp_Unref_0041f930",
+      "address": "0041f930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f930"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_DestroyListJmp_Unref_0041f930",
+        "COMPRESS_DestroyEncoderContext"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyListJmp_Unref_0041f940",
+      "address": "0041f940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f940"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_DestroyListJmp_Unref_0041f940",
+        "COMPRESS_DestroyEncoderContext"
+      ]
+    },
+    {
+      "name": "Unreferenced_0042e5c0",
+      "address": "0042e5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e5c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_0042e5c0"
+      ]
+    },
+    {
       "name": "CRYPTO_ByteSwap16Array",
       "address": "0042e5d0",
       "lines": [
@@ -36,6 +80,35 @@
       ],
       "usedTypes": [
         "uint16_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0042e620",
+      "address": "0042e620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e620"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_0042e620"
+      ]
+    },
+    {
+      "name": "Unreferenced_0042e630",
+      "address": "0042e630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e630"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_0042e630",
+        "isalpha"
       ]
     },
     {
@@ -87,6 +160,20 @@
       ]
     },
     {
+      "name": "MAINMENU_GetGlobalValue2_Unref_0042e6c0",
+      "address": "0042e6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e6c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetGlobalValue2_Unref_0042e6c0"
+      ]
+    },
+    {
       "name": "IMAGE_LoadPredefinedImages",
       "address": "0042e6d0",
       "lines": [
@@ -135,6 +222,21 @@
       "calledFunctions": [
         "D2GFX_SetPaletteForDraw",
         "LoadPalette"
+      ]
+    },
+    {
+      "name": "Unreferenced_0042f370",
+      "address": "0042f370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f370"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_0042f370",
+        "D2GFX_SetPaletteForDraw"
       ]
     },
     {
@@ -1484,6 +1586,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00431020",
+      "address": "00431020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431020"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_00431020",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ]
+    },
+    {
       "name": "MAINMENU_DisplayCredits",
       "address": "00431050",
       "lines": [
@@ -1874,6 +1991,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00431c60",
+      "address": "00431c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431c60"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_00431c60"
+      ]
+    },
+    {
       "name": "MAINMENU_HandleNetworkPacket",
       "address": "00431c90",
       "lines": [
@@ -1987,6 +2118,26 @@
       ]
     },
     {
+      "name": "MAINMENU_OnPressGotoCharacterSelect_Unref_00431f50",
+      "address": "00431f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431f50"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressGotoCharacterSelect_Unref_00431f50",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
       "name": "MAINMENU_CheckCharacterSaveFileExists",
       "address": "00431f70",
       "lines": [
@@ -2007,6 +2158,46 @@
       ],
       "usedTypes": [
         "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressGotoCharacterSelect_Unref_00432020",
+      "address": "00432020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432020"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressGotoCharacterSelect_Unref_00432020",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressGotoCharacterSelect_Unref_00432040",
+      "address": "00432040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432040"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressGotoCharacterSelect_Unref_00432040",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
       ]
     },
     {
@@ -2078,6 +2269,24 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300",
+      "address": "00432300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432300"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300",
+        "UIMENU_ChangePassword"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
       ]
     },
     {
@@ -2493,6 +2702,25 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "Unreferenced_00433440",
+      "address": "00433440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433440"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_00433440",
+        "MAINMENU_ShowPopupDialog"
+      ],
+      "usedTypes": [
+        "WCHAR",
         "pfnUIMenuInstance"
       ]
     },
@@ -3797,6 +4025,40 @@
       ]
     },
     {
+      "name": "MAINMENU_OnPressSelectBattleNet_Unref_00436320",
+      "address": "00436320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436320"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressSelectBattleNet_Unref_00436320",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "Unreferenced_00436340",
+      "address": "00436340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436340"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Unreferenced_00436340",
+        "FORMS_DestroyList",
+        "UIMENU_MainMenuAgain"
+      ]
+    },
+    {
       "name": "MAINMENU_OnPressCommitNewCharacterAndStartGame",
       "address": "00436360",
       "lines": [
@@ -4584,6 +4846,25 @@
         "LAUNCHER_PollBNConnectionPump",
         "D2WINMAIN_ClearMessageLoopFlag",
         "MAINMENU_GetGlobalValue2"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
+      "address": "005c6cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6cb0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
+        "D2UpdateState"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "pfnUIMenuInstance"
       ]
     }
   ]

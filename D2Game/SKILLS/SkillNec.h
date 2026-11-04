@@ -95,6 +95,7 @@ BOOL __fastcall Skills_SrvStFunc_19_IsTargetOutsideTown(::SGAMEDATA * pGame, str
 BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
+int __fastcall Unreferenced_005c33d0(int param_1);
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill);
 uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nSkillId, struct D2NecroSkillArgStrc * pNecroSkillArg);

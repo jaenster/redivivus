@@ -50,6 +50,7 @@ void __stdcall SetupRecording();
 BOOL __stdcall IsNotRecording();
 void __stdcall CallCloseRecordingFunction(uint32_t uMsg, uint32_t wParam, uint32_t lParam);
 void __stdcall SetCleanupFunction();
+BOOL __stdcall IsRecording_Unref_00451960();
 void __stdcall RECORD_SetPlaybackActive();
 BOOL __stdcall IsRecording();
 BOOL __stdcall IsPlaybackActive();

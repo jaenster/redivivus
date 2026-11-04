@@ -1438,8 +1438,6 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
     }
 }; D2_GLOBAL_GUARD(gaPredefinedForms_b, "gaPredefinedForms_b");
 
-_RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "lpCriticalSection_0077ae28");
-
 D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "gbLanGameListEntryNamePadding2");
 
 D2GameListEntryStrc gbLanGameListEntryNamePadding[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding, "gbLanGameListEntryNamePadding");
@@ -1680,6 +1678,10 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
+
+namespace D2Game::GAME::Rendering {
+
+} // namespace D2Game::GAME::Rendering
 
 namespace D2Client::UI::ui {
 

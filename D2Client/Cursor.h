@@ -34,6 +34,7 @@ void __stdcall UI_HandleCursorMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall UI_HandleCursorMouseMove(struct D2UIMouseMsgStrc * pMsgEvent);
 void __stdcall UI_HandleCursorMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall CURSOR_SetCursorItem(struct D2UnitStrc * pUnit, int32_t nAnimFrame);
+struct D2UnitStrc * __stdcall GetCursorItem_Unref_00468030();
 void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon);
 void __fastcall ITEM_SetItemOnHand(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall GetCursorItem();

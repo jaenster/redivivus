@@ -124,6 +124,21 @@
       ]
     },
     {
+      "name": "_NullSub_Unref_0052b270",
+      "address": "0052b270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b270"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "_NullSub_Unref_0052b270",
+        "GetConnectedClients"
+      ]
+    },
+    {
       "name": "NET_HACK_SetUseQServerHack",
       "address": "0052b280",
       "lines": [
@@ -628,6 +643,20 @@
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ]
+    },
+    {
+      "name": "Unreferenced_0052b800",
+      "address": "0052b800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b800"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "Unreferenced_0052b800"
       ]
     },
     {

@@ -248,6 +248,10 @@ static BOOL __stdcall SCMD_ProcessFile(char * filename, int * pnCmdCtx, uint32_t
     return nResult;
 }
 
+int __fastcall Unreferenced_006c4010(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
 uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset) {
     uint32_t uOffset = *(uint32_t*)(pThis + 4);
     if ((int)uOffset < 0) {
@@ -258,6 +262,17 @@ uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset) {
     }
 
     return uOffset + nBaseOffset;
+}
+
+int __fastcall Unreferenced_006c40b0(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_006c40d0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
 }
 
 ::SCMD * __thiscall SCMD_GetListHead(::SCMD * pThis, ::SCMD * pNode) {
@@ -390,6 +405,16 @@ static StormCmdArgDefStrc * __stdcall SCMD_FindFlagDef(StormCmdArgDefStrc * cmdL
     return pMinLen;
 }
 
+int __fastcall Unreferenced_006c4360(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
+}
+
 uint32_t __thiscall SCMD_GetHandler(::SCMD * pThis, int nNodeOffset) {
     if (nNodeOffset) {
       return *(uint32_t*)(nNodeOffset + 4);
@@ -437,6 +462,12 @@ void __fastcall SCMD_ClearAll(D2StormListHead * nListPtr) {
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
+}
+
+int __fastcall Unreferenced_006c4470(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 ::SCMD * __thiscall SCMD_AllocNode(::SCMD * pThis, int nInsertMode, int nExtraSize, uint32_t dwAllocFlags) {

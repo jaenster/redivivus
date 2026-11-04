@@ -564,6 +564,15 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
     }
 }
 
+int __fastcall Unreferenced_00526d00(int param_1) {
+    uint16_t uVar1 = *(uint16_t*)param_1;
+    if (!((uVar1 < 0x590 || uVar1 > 0x5ff) && (uVar1 < 0x600 || uVar1 > 0x6ff))) {
+      return 0;
+    }
+
+    return 1;
+}
+
 BOOL __fastcall UNICODE_CheckLineBreakPosition(uint16_t * pWszText, int32_t nPos) {
     int nIsSpace;
     if (!nPos) {

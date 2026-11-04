@@ -38,6 +38,7 @@ namespace D2Multi::ComCallback {
 
 // Function declarations
 int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnused);
+int Unreferenced_00446ca0();
 // Returns gszCurrentChannelName, the name of the chat channel last joined (copied there by the "You have joined channel: %s" handler COMCALLBACK_HandleChannelError).
 // Provenance: asm 00446cf0 (MOV EAX,0x798d30); its one caller prefills the Create/Join Channels name edit box with it.
 char * __stdcall COMCALLBACK_GetCurrentChannelName();

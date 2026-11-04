@@ -4,6 +4,37 @@
   "file": "Fog/Src/QServer/QServer.cpp",
   "functions": [
     {
+      "name": "_NullSubRet8_Unref_004080a0",
+      "address": "004080a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004080a0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_NullSubRet8_Unref_004080a0"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "_NullSubRet4_Unref_006bc850",
+      "address": "006bc850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc850"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_NullSubRet4_Unref_006bc850"
+      ]
+    },
+    {
       "name": "_NullSubTrace",
       "address": "006be2f0",
       "lines": [
@@ -752,6 +783,22 @@
         "D2QServerHacklistEntryStrc",
         "D2QServerStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_006bf170",
+      "address": "006bf170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf170"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "Unreferenced_006bf170",
+        "AwaitAndClose",
+        "QSERVER_CloseAllConnections"
       ]
     },
     {

@@ -408,6 +408,20 @@
       ]
     },
     {
+      "name": "SPRITECACHE_Unlock_Unref_005fee00",
+      "address": "005fee00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee00"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Unlock_Unref_005fee00"
+      ]
+    },
+    {
       "name": "SPRITECACHE_GetTotalEntries",
       "address": "005fee10",
       "lines": [
@@ -442,6 +456,20 @@
       ]
     },
     {
+      "name": "SPRITECACHE_Unlock_Unref_005fee50",
+      "address": "005fee50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee50"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Unlock_Unref_005fee50"
+      ]
+    },
+    {
       "name": "SPRITECACHE_GetMaxSize",
       "address": "005fee60",
       "lines": [
@@ -470,6 +498,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_005fee80",
+      "address": "005fee80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "Unreferenced_005fee80"
       ]
     },
     {
@@ -1055,6 +1097,34 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_SetMaxSize_Unref_00624700",
+      "address": "00624700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624700"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_SetMaxSize_Unref_00624700"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_SetMaxSize_Unref_006b2f30",
+      "address": "006b2f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b2f30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_SetMaxSize_Unref_006b2f30"
       ]
     }
   ]

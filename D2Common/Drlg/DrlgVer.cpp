@@ -282,6 +282,25 @@ void __fastcall DRLGVER_FreeVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexSt
     *ppVertices = 0;
 }
 
+int __fastcall Unreferenced_0067d250(int param_1) {
+    int iVar1 = *(int*)param_1;
+    int iVar3 = 0;
+    while (true) {
+      int iVar2;
+      iVar2 = iVar1;
+      if (!iVar2) {
+        break;
+      }
+
+      iVar1 = *(int*)(iVar2 + 0x10);
+      *(int*)(iVar2 + 0x10) = iVar3;
+      iVar3 = iVar2;
+    }
+
+    *(int*)param_1 = iVar3;
+    return 0;
+}
+
 void __fastcall GetCoordDiff(D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int * pDiffY) {
     *pDiffX = pDrlgVertex->pNext->nPosX - pDrlgVertex->nPosX;
     *pDiffY = pDrlgVertex->pNext->nPosY - pDrlgVertex->nPosY;

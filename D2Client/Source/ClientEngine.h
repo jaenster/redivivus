@@ -80,9 +80,15 @@ void __stdcall CLIENT_ClearActiveUnitSlotArray();
 // - Special cases: Corpse seekers, idle wanderers, basic chase
 // Called from CUNIT_UpdateClientFramesAndAI
 void __fastcall CLIENT_DispatchMonsterAiBehavior(struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_0046d9c0(int param_1);
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(struct D2UnitStrc * pUnit);
 int __fastcall CLIENT_GetEffectiveAnimMode(struct D2UnitStrc * pUnit);
 DWORD __fastcall CLIENT_GetEffectiveClassId(struct D2UnitStrc * pUnit);
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690();
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776a0();
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776b0();
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940();
+void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0();
 // 19 internal functions (defined in .cpp)
 
 } // namespace D2Client::Source::ClientEngine

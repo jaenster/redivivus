@@ -137,6 +137,10 @@ void __fastcall MONSTERMODE_GetStoredPosition(int32_t pMonData, int32_t * pOutSt
     *pOutStoredFlags = *(uint8_t*)(pMonData + 0x20);
 }
 
+int __fastcall Unreferenced_005a6250(int param_1) {
+    return param_1 + 0x14;
+}
+
 void __fastcall SetCombatAndMonStats(D2MonsterPathParamStrc * pPathParam, int32_t nPathType, int32_t nVelocity, uint8_t nSteps) {
     if (nPathType) {
       pPathParam->nPathTypeOverride = nPathType;
@@ -192,7 +196,7 @@ static eD2PathTypes __stdcall GetPathCount(eD2PathTypes ePathType, uint8_t nDist
       pUnit->eUnitFlags |= UNITFLAG_DOUPDATE;
       D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0xf);
       D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
-      ePathType = PATHTYPE_FOLLOW_WALL;
+      return PATHTYPE_FOLLOW_WALL;
     }
 
     return ePathType;

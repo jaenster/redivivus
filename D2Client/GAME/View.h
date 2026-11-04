@@ -19,9 +19,12 @@ void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * 
 void __stdcall DrawLight();
 void __stdcall VIEW_Init();
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps);
+void __fastcall Unreferenced_00475c30(int param_1);
 // Allocates a (nDim × nDim × (nSteps+1)) pointer table via D2MEM_VirtualAlloc and fills it with pointers into gPaletteTransitionTable for each interpolated palette entry. Used to build lighting/palette blend lookup tables for the game view renderer. Returns the base pointer of the allocated table.
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSteps);
+void __fastcall Unreferenced_00475d20(int param_1);
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps);
+void __fastcall Unreferenced_00475de0(int param_1);
 void __stdcall VIEW_InitLookupTables();
 void __stdcall VIEW_FreeDC6Images();
 // Frees all five global palette lookup tables (gpViewPalPointerTable32x8, gpViewPalByteTable32x16, gpViewPalByteTable16x32, gpViewPalPointerTable32x32, gpViewPalByteTable32x40) via D2MEM_VirtualFree, NULLs them, resets gnSoundShakeVolume to 0, and calls VIEW_FreeDC6Images. Halts with an internal error if any table is NULL while an earlier one is not.

@@ -16,6 +16,34 @@
       "calledFunctions": [
         "GFX_Noop"
       ]
+    },
+    {
+      "name": "GFX_Noop_Unref_0046f9b0",
+      "address": "0046f9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f9b0"
+        }
+      ],
+      "namespace": "D2Client::SRC::CelCmp",
+      "calledFunctions": [
+        "GFX_Noop_Unref_0046f9b0"
+      ]
+    },
+    {
+      "name": "GFX_Noop_Unref_0046f9c0",
+      "address": "0046f9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f9c0"
+        }
+      ],
+      "namespace": "D2Client::SRC::CelCmp",
+      "calledFunctions": [
+        "GFX_Noop_Unref_0046f9c0"
+      ]
     }
   ]
 }

@@ -2744,6 +2744,14 @@ D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_
     return pRoom;
 }
 
+int __fastcall Unreferenced_004637f0(int param_1) {
+    if (param_1 && *(int*)param_1 == 1 && *(int*)(param_1 + 0x14)) {
+      return *(int*)(param_1 + 0x14) + 4;
+    }
+
+    return 0;
+}
+
 int __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
       return pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;

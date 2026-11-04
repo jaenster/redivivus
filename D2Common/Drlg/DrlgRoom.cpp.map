@@ -1124,6 +1124,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0066c020",
+      "address": "0066c020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c020"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "Unreferenced_0066c020",
+        "TXT_LevelDefs_GetLine"
+      ]
+    },
+    {
       "name": "DRLGWARP_GetVisArrayFromLevelId",
       "address": "0066c040",
       "lines": [
@@ -1146,6 +1161,21 @@
         "D2LevelDefsTxt",
         "eD2LevelId",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0066c090",
+      "address": "0066c090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c090"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "Unreferenced_0066c090",
+        "DRLGWARP_GetVisArrayFromLevelId"
       ]
     },
     {

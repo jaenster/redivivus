@@ -59,6 +59,7 @@ struct D2DrlgRoomTilesStrc {
 namespace D2Common::DUNGEON::Dungeon {
 
 // Function declarations
+struct D2RoomExStrc * __fastcall GetRoomExFromRoom_Unref_005a6220(struct D2RoomStrc * pRoom);
 // Allocates D2DrlgActStrc, fills core fields, allocates DRLG act misc (server/client path), allocates environment, and initializes tile cache.
 // @sourcefile .\DUNGEON\Dungeon.cpp
 struct D2DrlgActStrc * __stdcall AllocAct(BYTE nActNo, int32_t dwInitSeed, BOOL bClientSide, ::SGAMEDATA * pGame, BYTE nDifficulty, struct D2PoolManagerStrc * pMemory, eD2LevelId eLevel, fAutoMap pfAutoMap, fTownAutoMap pfTownAutoMap);

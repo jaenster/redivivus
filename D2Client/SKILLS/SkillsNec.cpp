@@ -572,6 +572,30 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem(D2UnitStrc * p
     return (uint32_t)!pTargetItem;
 }
 
+int Unreferenced_004f3fb0() {
+    D2UnitStrc* in_ECX;
+    D2UnitStrc* pUnit = UNIT::CUnit::GetConfirmedTargetUnit(in_ECX);
+    if (!pUnit) {
+      return 0;
+    }
+    if (pUnit->eUnitType != UNIT_MONSTER) {
+      return 0;
+    }
+
+    BOOL BVar1 = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
+    if (!BVar1) {
+      return 0;
+    }
+
+    uint32_t uVar2 = D2Common::Skills::D2CheckIfCorpseIsConsumable(pUnit, 0);
+    if (!uVar2) {
+      return 0;
+    }
+
+    int iVar3 = UNIT::Monster::MONSTER_CanBeConverted(pUnit);
+    return iVar3 ? (uint32_t)pUnit : 0;
+}
+
 // Client start-function for Necromancer Revive. Validates that the confirmed target is a revivable, consumable, convertible monster, then selects a missile type from the skill txt (cltmissilea/b/c) based on the monster's overlayHeight size class (1=medium, 3=large). Launches the selected missile with the corpse as target. Returns 1 on success, 0 if any check fails.
 BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;

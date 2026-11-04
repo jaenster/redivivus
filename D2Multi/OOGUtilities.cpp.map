@@ -236,6 +236,22 @@
       ]
     },
     {
+      "name": "Unreferenced_004414c0",
+      "address": "004414c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004414c0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "Unreferenced_004414c0",
+        "HasPeerName",
+        "AbleToJoinGameOrBanned"
+      ]
+    },
+    {
       "name": "JoinOrCreateGame",
       "address": "00441500",
       "lines": [
@@ -570,6 +586,20 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00442a70",
+      "address": "00442a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442a70"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "Unreferenced_00442a70"
       ]
     },
     {

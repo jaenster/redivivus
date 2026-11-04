@@ -29,6 +29,24 @@ typedef int (__stdcall *D2NpcMenuOptionFunc)();
 struct D2SpeechBankStrc;
 
 // Data types
+struct __attribute__((packed)) D2HirelingHireData {
+    /* 0x00 */ int32_t nId;
+    /* 0x04 */ int32_t nLevel;
+    /* 0x08 */ int32_t nHp;
+    /* 0x0C */ int32_t nStrength;
+    /* 0x10 */ int32_t nDexterity;
+    /* 0x14 */ int32_t nCost;
+    /* 0x18 */ int32_t nExperience;
+    /* 0x1C */ int32_t nDefense;
+    /* 0x20 */ int32_t nMinDamage;
+    /* 0x24 */ int32_t nMaxDamage;
+    /* 0x28 */ int32_t nShare;
+    /* 0x2C */ int32_t nResists;
+    /* 0x30 */ int32_t nHireDescription;
+    /* 0x34 */ int32_t field13_0x34;
+    /* 0x38 */ int16_t field14_0x38;
+};
+
 struct __attribute__((packed)) D2NpcMenuOptions {
     /* 0x00 */ int nNpcId;
     /* 0x04 */ int nOptionsCount;
@@ -69,6 +87,8 @@ struct __attribute__((packed)) D2SpeechBankStrc {
 namespace D2Client::UI::npcmenu {
 
 // Function declarations
+int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_00486e00();
+int32_t __stdcall GetInteractedUnitClassId_Unref_004b1020();
 void __thiscall NPCMENU_ConvertQuestId(short * nInput, uint16_t * pResult);
 struct D2UnitStrc * __stdcall GetInteractedUnit();
 void SetInteractedUnitInfo(struct D2UnitStrc * pUnit);
@@ -77,6 +97,7 @@ void __stdcall NPCMENU_SelectRandomDialogOption(struct D2NPCSpeechStrc * pSpeech
 void __stdcall NPCMENU_RandomizeAllNpcDialogs();
 uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind);
 int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, void * pDismissCallback);
+void Unreferenced_004b1970();
 void __fastcall NPCMENU_AddHandledMessageId(short wMsgId);
 bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId);
 int __stdcall NPCMENU_ShowSelectedDialogOption();
@@ -87,6 +108,7 @@ int __stdcall NPCMENU_EmptyDialogDrawHandler();
 int __stdcall NPCMENU_OpenTradeWithNpc();
 void __stdcall NPCMENU_HireMerc();
 BOOL NPCMENU_IsItemIdentified(struct D2UnitStrc * pUnit);
+int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_004b2010();
 // Cain's "Identify Items" (4020 NPCIdentify1) option callback: slot 1 of the Cain rows 16, 17, 18, 19 and 38 (cain2, cain5, cain3, cain4, cain6); installed by NPCMENU_InitializeMenuOptions and NPCMENU_EnableCainIdentifyOption.
 // Halts if the transaction-wait dialog (gpNpcHireMercDialog) is already open. Otherwise opens it with 3353 "Waiting for confirmation of transaction...", sets a 60 s deadline, NPC UI state 10, gnNpcMenuTransactionType = 4, and sends C->S 0x34 (NPC GUID) = identify all items. Returns 1.
 int __stdcall NPCMENU_CainIdentifyOptionCallback();
@@ -144,6 +166,7 @@ int __stdcall NPCMENU_GetCurrentShopMode();
 // Packet S->C 0x91 body, called by NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK.
 // Reads 12 word NPC class ids from the packet at +2. For each id below the MonStats count, sets bUpdated = 1 on every D2NPCSpeech entry with that nNpcID. Nothing in it is about trade or money.
 void __fastcall NPCMENU_MarkNpcSpeechesUpdated(struct D2GSPacketSrv0x91 * pBytes);
+int __fastcall Unreferenced_004b3560(int param_1);
 // Shared callback of the Imbue (Charsi, string 4017), Add Sockets (Larzuk, 22748) and Personalize (Anya, 22749) menu options: frees the NPC dialog, closes UI_NPCMENU, resets the cursor and hover state, sets the NPC UI state to 7 and gnNpcMenuTransactionType to 0, then opens the cube-style item panel for the current NPC (UI_OpenHoradricCubeWithNpcInteraction(nCurrentInteractedNpcGUID)). Returns 1.
 // Evidence: the only 3 references are the NPCMENU_Enable{CharsiImbue,LarzukSocket,AnyaPersonalize}Option stores; which service runs is chosen by the NPC, not here.
 int __stdcall NPCMENU_ItemServiceOptionCallback();

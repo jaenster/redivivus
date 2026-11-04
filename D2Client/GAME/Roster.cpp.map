@@ -181,6 +181,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004796b0",
+      "address": "004796b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004796b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "Unreferenced_004796b0",
+        "ROSTER_SortByName"
+      ]
+    },
+    {
       "name": "ROSTER_SortByLevel",
       "address": "004796d0",
       "lines": [
@@ -196,6 +211,21 @@
       "usedTypes": [
         "D2RosterStrc",
         "D2RosterStrc *"
+      ]
+    },
+    {
+      "name": "Unreferenced_00479740",
+      "address": "00479740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479740"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "Unreferenced_00479740",
+        "ROSTER_SortByLevel"
       ]
     },
     {
@@ -417,6 +447,34 @@
         "D2RosterStrc",
         "int32_t",
         "uint16_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00479b60",
+      "address": "00479b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479b60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "Unreferenced_00479b60"
+      ]
+    },
+    {
+      "name": "Unreferenced_00479b70",
+      "address": "00479b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479b70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "Unreferenced_00479b70"
       ]
     },
     {

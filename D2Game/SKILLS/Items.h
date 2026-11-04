@@ -14,31 +14,12 @@ struct D2ItemGenContextStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 
-struct D2BooksTxt;
 struct D2LowQualityItemsTxt;
 struct D2MagicAffixTxt;
 struct D2QualityItemsTxt;
 struct D2RareAffixTxt;
 
 // Data types
-struct D2BooksTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ struct D2BooksTxt * pTable;
-};
-
-struct D2BooksTxt {
-    /* 0x00 */ uint16_t name; // d2bs binfields FIELDTYPE_KEY_WORD
-    /* 0x02 */ char spellicon; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ int pSpell; // d2bs binfields FIELDTYPE_INT
-    /* 0x08 */ int scrollskill; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0C */ int bookskill; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x10 */ int basecost; // d2bs binfields FIELDTYPE_INT
-    /* 0x14 */ int costpercharge; // d2bs binfields FIELDTYPE_INT
-    /* 0x18 */ char scrollspellcode[4]; // d2bs binfields FIELDTYPE_RAW4
-    /* 0x1C */ char bookspellcode[4]; // d2bs binfields FIELDTYPE_RAW4
-};
-
 struct D2LowQualityItemsTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2LowQualityItemsTxt * pTable;

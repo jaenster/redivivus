@@ -106,6 +106,7 @@ typedef uint32_t (__fastcall *pfnObjectPlaceTestCallback)(::SGAMEDATA * pGame, e
 
 static int gnDirectionXOffsets[8] = { -0x1, 0x0, 0x1, -0x1, 0x1, -0x1, 0x0, 0x1 }; D2_STATIC_GUARD(gnDirectionXOffsets, "gnDirectionXOffsets");
 static int gnDirectionYOffsets[8] = { -0x1, -0x1, -0x1, 0x0, 0x0, 0x1, 0x1, 0x1 }; D2_STATIC_GUARD(gnDirectionYOffsets, "gnDirectionYOffsets");
+uint8_t gbObjectInitTableSetup = 0x40; D2_GLOBAL_GUARD(gbObjectInitTableSetup, "gbObjectInitTableSetup");
 static D2ObjectPopulateFnFunc OBJECTSPOPULATEFN[10] = {
     nullptr,
     (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn1,
@@ -838,6 +839,10 @@ void __fastcall Objects_InitFn01_Shrine(D2ObjectInitFnArg * pInitArg) {
     pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nShrineId;
     pShrineLine = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId);
     D2Common::Units::SetShrineTxtRecordInObjectData(pInitArg->pObject, pShrineLine);
+}
+
+void __fastcall Objects_InitFn05_Door_Unref_0054fb30(D2ObjectInitFnArg * pInitArg) {
+
 }
 
 void __fastcall Objects_InitFn22_Fire(D2ObjectInitFnArg * pInitArg) {
@@ -2829,9 +2834,6 @@ void __fastcall OBJECT_PopulateRoomObjects(::SGAMEDATA * pGame, D2RoomStrc * pRo
 }
 
 void __fastcall OBJECT_CallPopulateFn(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nObjectClassId) {
-    // Static local variables (originally global data)
-    static uint8_t gbObjectInitTableSetup = 0x40; D2_STATIC_GUARD(gbObjectInitTableSetup, "D2Game::Objects::OBJECT_CallPopulateFn::gbObjectInitTableSetup");
-
     int _bBadCodePtr;
     bool bBadCodePtr;
     eD2LevelId eRoomLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);

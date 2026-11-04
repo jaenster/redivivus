@@ -4,6 +4,34 @@
   "file": "Storm/WindowHandle.cpp",
   "functions": [
     {
+      "name": "WND_GetActiveWindow_Unref_0041c2a0",
+      "address": "0041c2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c2a0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetActiveWindow_Unref_0041c2a0"
+      ]
+    },
+    {
+      "name": "WND_GetActiveWindow_Unref_0041c2b0",
+      "address": "0041c2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c2b0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetActiveWindow_Unref_0041c2b0"
+      ]
+    },
+    {
       "name": "SMsgDoMessageLoop",
       "address": "004202a0",
       "lines": [
@@ -83,6 +111,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004203c0",
+      "address": "004203c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004203c0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_004203c0"
+      ]
+    },
+    {
       "name": "WND_ResolveListOffset",
       "address": "004203f0",
       "lines": [
@@ -97,6 +139,34 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00420470",
+      "address": "00420470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420470"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_00420470"
+      ]
+    },
+    {
+      "name": "Unreferenced_004204f0",
+      "address": "004204f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004204f0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_004204f0"
       ]
     },
     {
@@ -171,6 +241,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004206a0",
+      "address": "004206a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004206a0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_004206a0"
+      ]
+    },
+    {
       "name": "WND_GetNodeData",
       "address": "004206e0",
       "lines": [
@@ -223,6 +307,20 @@
         "D2StormListHead",
         "StormLinkStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004207d0",
+      "address": "004207d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004207d0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_004207d0"
       ]
     },
     {
@@ -384,6 +482,21 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00420ae0",
+      "address": "00420ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420ae0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_00420ae0",
+        "SMSG_DeleteWindow"
       ]
     },
     {
@@ -585,6 +698,34 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00420d80",
+      "address": "00420d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420d80"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_00420d80"
+      ]
+    },
+    {
+      "name": "Unreferenced_00420da0",
+      "address": "00420da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420da0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "Unreferenced_00420da0"
       ]
     },
     {

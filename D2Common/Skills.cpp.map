@@ -23,6 +23,34 @@
       ]
     },
     {
+      "name": "Unreferenced_006435c0",
+      "address": "006435c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006435c0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "Unreferenced_006435c0"
+      ]
+    },
+    {
+      "name": "Unreferenced_006435d0",
+      "address": "006435d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006435d0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "Unreferenced_006435d0"
+      ]
+    },
+    {
       "name": "SKILLS_GetOrAllocStateStatList",
       "address": "00643620",
       "lines": [

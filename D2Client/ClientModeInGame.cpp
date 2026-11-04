@@ -305,6 +305,17 @@ BOOL __stdcall LoadDataForGameAndSetupServer(D2IniConfigStrc * D2IniData) {
     return 1;
 }
 
+int Unreferenced_0044b780() {
+    int extraout_EAX;
+    HWND hWnd = D2gfx::D2GFX::GetHwnd();
+    if (hWnd) {
+      SendMessageA(hWnd, 0x1c, 0, 0);
+    }
+
+    D2gfx::D2GFX::D2GFX_ResetViewport();
+    return extraout_EAX;
+}
+
 D2IniConfigStrc * __stdcall D2IniData_Getter() {
     return D2IniData_client;
 }
@@ -368,6 +379,10 @@ void __stdcall CLIENTMODE_ClearIngameUIFlag() {
 
 void __fastcall D2CLIENT_SetExitVar1(BOOL bResult) {
     gbQuitGame = bResult;
+}
+
+D2IniConfigStrc * __stdcall D2IniData_Getter_Unref_0044b890() {
+    return (D2IniConfigStrc*)gbQuitGame;
 }
 
 // Client app-mode entry. Init memory/UI, load language + string tables, init TXT tables, then run pfModes[] loop. Returns to launcher based on quit/game type.
@@ -516,6 +531,11 @@ uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused) {
     return 1;
 }
 
+void Unreferenced_0044bb70() {
+    gbQServerRunning = 1;
+    D2Game::GAME::Server::QSERVER_InitializeServerState();
+}
+
 void __stdcall FreeQServer() {
     if (!gbQServerRunning) {
       return;
@@ -547,6 +567,12 @@ bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused) {
     }
 
     return nInitResult == 2;
+}
+
+int __fastcall Unreferenced_0044bc10(int param_1, int param_2) {
+    D2Net::SRC::Client::NET_D2GS_ConnectToServer(param_1, (char*)param_2);
+    _Message::MessageGameLoop((::fpGameLoopFunction)GameLoopFuncInitGame);
+    return 1;
 }
 
 // pfModes_StartServer: create/init QServer, connect to server, run MessageGameLoop for required user action; sets player count and globals.

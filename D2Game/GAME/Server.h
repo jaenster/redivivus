@@ -223,8 +223,20 @@ struct __attribute__((packed)) D2PacketD2GS_SC_0xFF01 {
 namespace D2Game::GAME::Server {
 
 // Function declarations
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00416880(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0041e960(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00420d90(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(int32_t pQServer);
+void __stdcall ServerInit_nullsub_Unref_0052b8f0();
+void __stdcall ServerInit_nullsub_Unref_0052b900();
 void __stdcall ServerInit_nullsub();
 void __stdcall ServerClose_nullsub();
+uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052bdc0();
+int __stdcall Unreferenced_0052bdd0(int param_1);
+int __fastcall Unreferenced_0052bde0(int param_1, int param_2, int param_3);
+int __fastcall Unreferenced_0052bdf0(int param_1, int param_2, int param_3);
+int __fastcall Unreferenced_0052be00(int param_1);
+int __fastcall Unreferenced_0052be10(int param_1);
 void SRVLog(int32_t nLogCategory, char * szText, ...);
 void __stdcall _TableNullSub0(uint32_t dwArg1, uint32_t dwArg2);
 void __stdcall _TableNullSub1(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3, uint32_t dwArg4, uint32_t dwArg5, uint32_t dwArg6, uint32_t dwArg7, uint32_t dwArg8, uint32_t dwArg9, uint32_t dwArg10, uint32_t dwArg11, uint32_t dwArg12, uint32_t dwArg13, uint32_t dwArg14, uint32_t dwArg15, uint32_t dwArg16, uint32_t dwArg17, uint32_t dwArg18);
@@ -251,6 +263,8 @@ void __fastcall _TableNullSub21(void * pParam);
 uint8_t * __stdcall _TableNullSub22();
 uint8_t * __stdcall _TableNullSub23();
 void __stdcall _TableNullSub24(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3, uint32_t dwArg4);
+void Unreferenced_0052bfc0();
+int Unreferenced_0052bfe0();
 int __stdcall FreeServer();
 int32_t __fastcall SERVER_IsTokenValid(uint16_t nToken);
 void __stdcall QSERVER_SetGlobalInstance(TSExportTableSync<::SGAMEDATA, struct HSGAMEDATA__*, struct HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState, void * pInitState);
@@ -324,6 +338,7 @@ void __stdcall QSERVER_Unused_HaltLine4453();
 BOOL __stdcall SERVER_IsHostedGamesRequestAllowed();
 BOOL __stdcall Return1_GameSetup_1();
 BOOL __fastcall CLIENT_ReceiveUploadedSave(uint32_t nClientId, struct D2GSMsg6CUploadSaveStrc * pMsg);
+uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052db90();
 void __stdcall QSERVER_GetMemoryUsage(uint32_t * pOutCurrent, uint32_t * pOutMax);
 uint32_t __stdcall ReturnArgument(uint32_t dwParam);
 // Returns the dword at 00731008 (initialised to 100, never written). Nothing calls or references this getter and it is the global's only reader; the meaning of the 100 is not proven.
@@ -341,6 +356,8 @@ void __stdcall GAME_SetFrameRate(int32_t nFrameRate);
 void __stdcall SetupStartingAct(int nAct);
 void __fastcall RemoveObject(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 void __fastcall RemoveObjects(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
+uint32_t __stdcall _TableNullSub20_Unref_0052e070();
+uint32_t __stdcall _TableNullSub20_Unref_0052e080();
 void __thiscall SERVER_EnterCriticalSection(int32_t pThis, int * pCriticalSection, int32_t nParam);
 uint32_t __stdcall ParamIsOne(int32_t nParam);
 uint32_t __thiscall QSERVER_TestGameFlags(int32_t pQServer, uint32_t nFlags);
@@ -432,6 +449,20 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
 void __fastcall SetStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
+void __stdcall _TableNullSub12_Unref_00532580();
+void __stdcall _TableNullSub12_Unref_005385e0();
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00539090(int32_t pQServer);
+void __stdcall _TableNullSub16_Unref_0053bbc0(uint32_t dwArg1, uint32_t dwArg2);
+void __stdcall _TableNullSub16_Unref_0053bbd0(uint32_t dwArg1, uint32_t dwArg2);
+void __stdcall _TableNullSub16_Unref_0053bbe0(uint32_t dwArg1, uint32_t dwArg2);
+void __stdcall _TableNullSub16_Unref_0053bbf0(uint32_t dwArg1, uint32_t dwArg2);
+void __stdcall _TableNullSub16_Unref_0053bc00(uint32_t dwArg1, uint32_t dwArg2);
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(int32_t pQServer);
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer);
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer);
 void StaticInit_Frames_TimeBetweenFrames();
 // 12 internal functions (defined in .cpp)
 

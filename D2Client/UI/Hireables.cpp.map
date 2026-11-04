@@ -263,6 +263,22 @@
       ]
     },
     {
+      "name": "Unreferenced_004934b0",
+      "address": "004934b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004934b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Hireables",
+      "calledFunctions": [
+        "Unreferenced_004934b0",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem"
+      ]
+    },
+    {
       "name": "UI_CheckItemCanEquipToHireling",
       "address": "004934d0",
       "lines": [

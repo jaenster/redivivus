@@ -9,7 +9,6 @@
 #include "D2Client/Engine/Particle.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/Rendering.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS/Skills.h"
@@ -56,6 +55,7 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
+#include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/D2LightMapStrc.h"
@@ -64,7 +64,6 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
-#include "D2gfx/D2GFX.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -678,11 +677,11 @@ void __fastcall PLRSKILLS_StateSetFn10_Redeemed(D2UnitStrc * pUnit, eD2States eS
     }
 
     memset(&sSkillArg, 0, 0x5c);
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.pMissile = pUnit;
     sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[1];
     sSkillArg.eSkillNo = (eD2Skills)pDVar1->skill;
     sSkillArg.nSkillLevel = 1;
-    sSkillArg.pOwner = pUnit;
-    sSkillArg.pMissile = pUnit;
     Missile::MakeMissile(&sSkillArg);
     if (!pUnit) {
       return;
@@ -1420,6 +1419,14 @@ int32_t __fastcall PLRSKILLS_CanUseSkillCheck(D2UnitStrc * pUnit, D2SkillStrc * 
 
     nCanUse = 0;
     return nCanUse;
+}
+
+void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070(D2UnitStrc * pUnit) {
+    Engine::Gfx::GetParticleFromUnit(pUnit);
+}
+
+void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20(D2UnitStrc * pUnit) {
+    Engine::Gfx::GFX_DrawUnitShadow(pUnit);
 }
 
 } // namespace D2Client::UNIT::PlrSkills

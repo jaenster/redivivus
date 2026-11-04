@@ -25,6 +25,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/ArenaTbls.data.h"
+#include "D2Common/DATATBLS/FieldTbls.data.h"
 #include "Storm/D2MPQFileStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -48,6 +50,42 @@ D2CubeMainTxt * pTxtCubeMain = 0; D2_GLOBAL_GUARD(pTxtCubeMain, "pTxtCubeMain");
 int nTxtCubeMainSize = 0; D2_GLOBAL_GUARD(nTxtCubeMainSize, "nTxtCubeMainSize");
 
 namespace D2Common::Txt::Cube {
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_006429d0(D2UnitStrc * pUnit) {
+
+}
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648370(D2UnitStrc * pUnit) {
+
+}
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648380(D2UnitStrc * pUnit) {
+
+}
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648430(D2UnitStrc * pUnit) {
+
+}
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648440(D2UnitStrc * pUnit) {
+
+}
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648450(D2UnitStrc * pUnit) {
+
+}
+
+void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00650ea0(D2UnitStrc * pUnit) {
+
+}
+
+void __stdcall FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740(D2UnitStrc * dwUnused) {
+
+}
+
+int32_t __stdcall CUBE_GetRecipeCount_Unref_00665760() {
+    return nTxtCharTemplateSize;
+}
 
 // Pads item code strings with spaces to 4 characters. Copies input string to output buffer and fills remaining characters with spaces (0x20). Used when parsing cube recipe item codes from CubMain.txt to normalize them for comparison.
 static void CUBE_PadItemCodeString(char * szText1, char * szText2) {
@@ -848,6 +886,10 @@ int32_t __stdcall CUBE_GetRecipeCount() {
     return nTxtCubeMainSize;
 }
 
+void __stdcall nullsub_Unref_0066a210(D2UnitStrc * pUnit, uint32_t dwParam2) {
+
+}
+
 void __stdcall nullsub(D2UnitStrc * pUnit, uint32_t dwParam2) {
 
 }
@@ -873,6 +915,52 @@ void __stdcall FIELDTBLS_FreeTables_NoOp() {
 void __stdcall FIELDTBLS_Unused_HaltLine101() {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65);
     exit(-1);
+}
+
+int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a490() {
+    return gnFieldDataTableWidth;
+}
+
+int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a4a0() {
+    return gnFieldDataTableHeight;
+}
+
+void __stdcall FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0() {
+
+}
+
+void CUBE_PadItemCodeString_Unref_006bcd50(char * szText1, char * szText2) {
+    char cVar1;
+    if (*szText1 == '\0') {
+      cVar1 = ' ';
+      *szText2 = ' ';
+      szText2[1] = ' ';
+      szText2[2] = ' ';
+    } else {
+      *szText2 = *szText1;
+      if (szText1[1] == '\0') {
+        szText2[1] = ' ';
+        szText2[2] = ' ';
+        szText2[3] = ' ';
+        return;
+      }
+
+      szText2[1] = szText1[1];
+      if (szText1[2] == '\0') {
+        szText2[2] = ' ';
+        szText2[3] = ' ';
+        return;
+      }
+
+      szText2[2] = szText1[2];
+      cVar1 = szText1[3];
+      if (cVar1 == '\0') {
+        szText2[3] = ' ';
+        return;
+      }
+    }
+
+    szText2[3] = cVar1;
 }
 
 } // namespace D2Common::Txt::Cube

@@ -36,6 +36,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/EscMenu.data.h"
+#include "D2Client/UI/MiniPanel.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/MainMenus.h"
 
@@ -52,6 +53,7 @@ static DC6 * gpMiniPanelButtonsDC6 = 0; D2_STATIC_GUARD(gpMiniPanelButtonsDC6, "
 static uint32_t gnMiniPanelRightScreen = 0; D2_STATIC_GUARD(gnMiniPanelRightScreen, "gnMiniPanelRightScreen");
 static uint32_t gnMiniPanelLeftScreen = 0; D2_STATIC_GUARD(gnMiniPanelLeftScreen, "gnMiniPanelLeftScreen");
 static uint32_t gnMiniPanelMouseOverButton = 0; D2_STATIC_GUARD(gnMiniPanelMouseOverButton, "gnMiniPanelMouseOverButton");
+uint32_t gnMiniPanelClickedButton = 0; D2_GLOBAL_GUARD(gnMiniPanelClickedButton, "gnMiniPanelClickedButton");
 static uint32_t gbMiniPanelSinglePlayer = 0; D2_STATIC_GUARD(gbMiniPanelSinglePlayer, "gbMiniPanelSinglePlayer");
 static uint32_t gnMiniPanelHoverState = 0; D2_STATIC_GUARD(gnMiniPanelHoverState, "gnMiniPanelHoverState");
 
@@ -349,6 +351,18 @@ BOOL __stdcall IsRightScreenOpen() {
     return 1;
 }
 
+int __fastcall Unreferenced_0047ec20(int param_1) {
+    if (param_1) {
+      BOOL BVar1;
+      BVar1 = ui::GetUIFlag(UI_MPTRADE);
+      if (!BVar1) {
+        return 1;
+      }
+    }
+
+    return 0;
+}
+
 static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
     BOOL _bFlagActive;
     bool bFlagActive;
@@ -421,9 +435,6 @@ static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
 }
 
 void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
-    // Static local variables (originally global data)
-    static uint32_t gnMiniPanelClickedButton; D2_STATIC_GUARD_BSS(gnMiniPanelClickedButton, "D2Client::UI::MiniPanel::INPUT_MiniPanelMouseUp::gnMiniPanelClickedButton");
-
     uint32_t bBeltHover;
     eD2UnitType eUnitType;
     eD2PlayerAnimMode eAnimMode;

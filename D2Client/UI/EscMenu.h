@@ -107,6 +107,7 @@ void __fastcall ESCMENU_InitAutomapCenterItem(struct D2EscMenuItemStrc * pItem, 
 void __fastcall UI_SLIDER_ApplyAutomapParty(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 void __fastcall ESCMENU_InitAutomapPartyItem(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 void __fastcall UI_SLIDER_InitAutomapParty(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
+int Unreferenced_0047d5b0();
 void __stdcall INPUT_EscMenuMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_EscMenuMouseUp(struct D2UIMouseMsgStrc * pMsg);
 // Navigates to next menu item (down arrow key). Increments selected index in gpEscMenuItemCount, wrapping to 0 at end. Skips disabled items by checking enable callback. Plays navigation sound.

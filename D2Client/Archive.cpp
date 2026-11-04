@@ -55,6 +55,21 @@ uint32_t __thiscall ARCHIVE_ComputeAddress(int * pNode, int32_t nBaseAddr) {
     return nOffset + nBaseAddr;
 }
 
+int __fastcall Unreferenced_0045b9d0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+int __fastcall Unreferenced_0045ba80(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_0045baa0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode) {
     if (nNode) {
       return nNode;
@@ -155,6 +170,12 @@ uint32_t __thiscall ARCHIVE_GetNodeSize(int32_t pThis, int32_t nNode) {
     return *(uint32_t*)(pThis + 8);
 }
 
+int __fastcall Unreferenced_0045bcb0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
 void __fastcall ARCHIVE_ClearList(int32_t nList) {
     int* pPrevLink;
     int* pNode;
@@ -190,6 +211,12 @@ void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList) {
     *(uint32_t*)(*pHead + 4) = *(uint32_t*)(nList + 8);
     *pHead = 0;
     *(uint32_t*)(nList + 8) = 0;
+}
+
+int __fastcall Unreferenced_0045bd80(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags) {

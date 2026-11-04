@@ -4,6 +4,20 @@
   "file": "D2Win/Src/D2WinMain.cpp",
   "functions": [
     {
+      "name": "D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020",
+      "address": "004f5020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5020"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020"
+      ]
+    },
+    {
       "name": "D2WINMAIN_SetBackgroundDC6",
       "address": "004f9140",
       "lines": [
@@ -347,6 +361,23 @@
       ]
     },
     {
+      "name": "FORMS_GetFormTextAndEditBox_Unref_004f97d0",
+      "address": "004f97d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f97d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_GetFormTextAndEditBox_Unref_004f97d0"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
       "name": "DrawCursorOOG",
       "address": "004f97e0",
       "lines": [
@@ -435,6 +466,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004f9b30",
+      "address": "004f9b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9b30"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "Unreferenced_004f9b30"
       ]
     },
     {

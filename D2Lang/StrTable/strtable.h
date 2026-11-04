@@ -35,6 +35,7 @@ namespace D2Lang::StrTable::strtable {
 
 // Function declarations
 BOOL __stdcall ARCHIVE_LoadMPQFiles();
+void __stdcall Unreferenced_005248e0();
 // @sourcefile .\StrTable\strtable.cpp
 void __fastcall STRTABLE_FreeMemory(void * pMemory);
 uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount);
@@ -47,6 +48,7 @@ uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey);
 void __stdcall STRINGTABLE_FreeStringTables();
 void STRTABLE_InitCRC(uint16_t * pwCRC);
 void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData);
+int __fastcall Unreferenced_00525010(int param_1);
 void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset);
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText);
 uint32_t __fastcall STRTABLE_GetLanguageId(char * szText);

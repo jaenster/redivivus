@@ -1045,6 +1045,14 @@ D2QuestLogStrc gQuestLog = {}; D2_GLOBAL_GUARD(gQuestLog, "gQuestLog");
 
 namespace D2Client::UI::QuestLog {
 
+void __stdcall QUESTLOG_ResetQuestSelections_Unref_004a18f0() {
+    gQuestLogSelectedQuestByAct[0] = -1;
+    gQuestLogSelectedQuestByAct[1] = -1;
+    gQuestLogSelectedQuestByAct[2] = -1;
+    gQuestLogSelectedQuestByAct[3] = -1;
+    gQuestLogSelectedQuestByAct[4] = -1;
+}
+
 static int32_t __fastcall QUESTLOG_FindQuestIndexById(int32_t nQuestId) {
     int nIndex = 0;
     do {
@@ -2230,6 +2238,17 @@ void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY)
       i++;
       gQuestLog.bZooMonsterSpawned = 1;
     } while ((int)i < nZooMonsterCount);
+}
+
+int __fastcall Unreferenced_004a3200(int param_1) {
+    int iVar1;
+    uint32_t* puVar2 = (uint32_t*)(param_1 + 7);
+    for (iVar1 = 0x96; iVar1; iVar1--) {
+      *puVar2 = 0;
+      puVar2++;
+    }
+
+    return param_1;
 }
 
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.

@@ -30,6 +30,28 @@ void __fastcall WriteValueBySize(D2BitBufferStrc * pBitBuffer, uint32_t nValue) 
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, 0x20);
 }
 
+int __fastcall Unreferenced_0053b140(int param_1, int param_2) {
+    int extraout_EAX_00;
+    if ((uint16_t)param_2 < 0x100) {
+      int extraout_EAX;
+      Fog::BitBuffer::WriteValueToBitBuffer((D2BitBufferStrc*)param_1, 0, 1);
+      Fog::BitBuffer::WriteValueToBitBuffer((D2BitBufferStrc*)param_1, param_2 & 0xffff, 8);
+      return extraout_EAX;
+    }
+
+    Fog::BitBuffer::WriteValueToBitBuffer((D2BitBufferStrc*)param_1, 1, 1);
+    Fog::BitBuffer::WriteValueToBitBuffer((D2BitBufferStrc*)param_1, (uint16_t)param_2, 0x10);
+    return extraout_EAX_00;
+}
+
+int __fastcall Unreferenced_0053b180(int param_1) {
+    if (param_1 && *(int*)param_1 == 1 && *(int*)(param_1 + 0x14)) {
+      return *(int*)(param_1 + 0x14) + 0x3c;
+    }
+
+    return 0;
+}
+
 void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, size_t nSize) {
     int32_t dwRetAddr;
     D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', dwRetAddr, szText, nSize);

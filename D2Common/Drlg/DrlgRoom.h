@@ -143,8 +143,10 @@ struct D2PresetUnitStrc * __fastcall AllocPresetUnit(struct D2RoomExStrc * pRoom
 struct D2PresetUnitStrc * __fastcall GetPresetUnits(struct D2RoomExStrc * pRoomEx);
 void __fastcall SetRoom(struct D2RoomExStrc * pRoomEx, struct D2RoomStrc * pRoom);
 void __fastcall GetRGB_IntensityFromRoomEx(struct D2RoomExStrc * pRoomEx, char * nIntensity, char * nRed, char * nGreen, char * nBlue);
+int __fastcall Unreferenced_0066c020(int param_1);
 // Retrieves the Vis array from the level definitions for the given level ID. Returns pointer to 8-entry vis array.
 int * __fastcall DRLGWARP_GetVisArrayFromLevelId(struct D2DrlgStrc * pDrlg, eD2LevelId eLevelId);
+void __fastcall Unreferenced_0066c090(int param_1);
 struct D2DrlgStrc * __fastcall GetDrlgFromRoomEx(struct D2RoomExStrc * pRoomEx);
 // Fully tears down a D2RoomExStrc: frees tile data, nearby-room pointer array, outdoor or preset area data (by nPresetType), all preset units, all orth links (bidirectionally removing cross-references for type-1 orths), detaches the room from the level's linked list (decrementing nRoomExCount), frees room tiles and coord list, then frees the RoomEx struct itself from the pool.
 // @sourcefile .\DRLG\DrlgRoom.cpp

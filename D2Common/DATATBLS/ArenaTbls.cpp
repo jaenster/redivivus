@@ -17,13 +17,14 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/ArenaTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 static int sgCharTemplateLevelIndex[64] = {}; D2_STATIC_GUARD(sgCharTemplateLevelIndex, "sgCharTemplateLevelIndex");
 static D2CharTemplateTxt * sgpTxtCharTemplate = 0; D2_STATIC_GUARD(sgpTxtCharTemplate, "sgpTxtCharTemplate");
-static int nTxtCharTemplateSize = 0; D2_STATIC_GUARD(nTxtCharTemplateSize, "nTxtCharTemplateSize");
+int nTxtCharTemplateSize = 0; D2_GLOBAL_GUARD(nTxtCharTemplateSize, "nTxtCharTemplateSize");
 static D2ArenaTxt * sgpTxtArena = 0; D2_STATIC_GUARD(sgpTxtArena, "sgpTxtArena");
 
 namespace D2Common::DATATBLS::ArenaTbls {

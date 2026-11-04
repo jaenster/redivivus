@@ -36,6 +36,48 @@
       ]
     },
     {
+      "name": "Unreferenced_0045b9d0",
+      "address": "0045b9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b9d0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045b9d0"
+      ]
+    },
+    {
+      "name": "Unreferenced_0045ba80",
+      "address": "0045ba80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ba80"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045ba80"
+      ]
+    },
+    {
+      "name": "Unreferenced_0045baa0",
+      "address": "0045baa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045baa0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045baa0"
+      ]
+    },
+    {
       "name": "ARCHIVE_GetNodeOrDefault",
       "address": "0045bb30",
       "lines": [
@@ -124,6 +166,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0045bcb0",
+      "address": "0045bcb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bcb0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045bcb0"
+      ]
+    },
+    {
       "name": "ARCHIVE_ClearList",
       "address": "0045bd00",
       "lines": [
@@ -158,6 +214,20 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0045bd80",
+      "address": "0045bd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bd80"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "Unreferenced_0045bd80"
       ]
     },
     {

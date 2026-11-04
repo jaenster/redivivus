@@ -262,9 +262,9 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUni
       sSkillArg.eSkillNo = eSkillArg;
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nFlags = 0x2001;
+      sSkillArg.nMissileTxtNo = eCorpseMissile;
       sSkillArg.nX = nFreeCoordTmp.x;
       sSkillArg.nY = nFreeCoordTmp.y;
-      sSkillArg.nMissileTxtNo = eCorpseMissile;
       UNIT::Missile::MakeMissile(&sSkillArg);
       sSkillArg.nMissileTxtNo = MISSILE_Corpseexplosion;
       UNIT::Missile::MakeMissile(&sSkillArg);

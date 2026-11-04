@@ -29,6 +29,7 @@ void __stdcall WaitForEmptyEvent(DWORD dwTimeout);
 void __stdcall NET_Thunk_QServerSwapWorkerSlotValue(int nWorkerIndex, int nNewSlotValueOrZero);
 void __stdcall NET_Thunk_QServerAddGameTokenFilter(uint32_t nExpectedMaskedToken, uint32_t nMaskTableIndex);
 void __stdcall NET_SetPlayersCount(int32_t nCount);
+void __stdcall _NullSub_Unref_0052b270();
 void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult);
 void NET_QServer_FreeAndSend0xB0ToEveryone();
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, size_t nSize);
@@ -63,6 +64,7 @@ void __stdcall NET_D2GS_SERVER_Send_0xAF00();
 // Wrapper that creates and stores the global QServer instance. Calls NET_QServer_Init with port 4000, three packet modes (setup/in-game/system), and registers four callbacks: packet size classifier, client accepted (0xAF01), client freed (0x70), and single-player packet handler. Stores result in global pQServer variable.
 void __stdcall QSERVER_CreateAndInit(eD2GSConnectionType neD2GSConnectionType, eD2GSGameType eD2GameType);
 BOOL __stdcall NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
+int Unreferenced_0052b800();
 void __fastcall NET_D2GS_CLIENT_SetD2GSConnectionType(eD2GSConnectionType neD2GSConnectionType);
 int __stdcall WSAGetLastError();
 // Determines the expected wire size of an inbound D2GS client packet. Reads opcode = pBytes[0]; if 0 bytes or opcode > 0xB4 returns 0 (invalid). Looks up NET_D2GS_CLIENT_INCOMING_SIZE[opcode] into *pExpectedSize: 0 = unknown (return 0), positive = fixed size (return 1). A negative (sentinel) table entry means variable-length: switches on opcode to compute the true size from header fields (e.g. 0x16/0x5b ushort@+1, 0x3e byte@+1, 0xae clamped ushort+3, 0xaf name-length, 0x94 (count+2)*3, 0x26 three SSTR string lengths). Returns 1 if the size was resolved (and the full packet is present in pBytesSize), 0 if truncated/invalid.

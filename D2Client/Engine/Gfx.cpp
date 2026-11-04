@@ -15,7 +15,6 @@
 #include "D2Client/Engine/Particle.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/PalShift.h"
-#include "D2Client/GAME/Rendering.h"
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/Source/ClientEngine.h"
@@ -71,6 +70,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/Draw/Weather.data.h"
+#include "D2Client/GAME/Rendering.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
@@ -3829,6 +3830,10 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
     }
 
     return 1;
+}
+
+int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0() {
+    return gnWeatherCurrentTransitionState;
 }
 
 } // namespace D2Client::Engine::Gfx

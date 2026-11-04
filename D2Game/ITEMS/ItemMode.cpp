@@ -57,7 +57,6 @@
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
-#include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillItem.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/Party.h"
@@ -77,6 +76,7 @@
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -103,6 +103,10 @@ void __fastcall SetSavePacketList(D2ClientStrc * pClient, void * pSavePacketList
     }
 
     pClient->pSavePacketList = pSavePacketList;
+}
+
+void __fastcall ITEMMODE_NullSub_Unref_00558990(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+
 }
 
 D2MonStatsTxt * __fastcall GetMonsterData(D2UnitStrc * pUnit) {
@@ -446,6 +450,13 @@ void __fastcall SERVER_ITEM_SendStackableUsagePackets(D2UnitStrc * pUnit, char *
         }
       }
     }
+}
+
+int Unreferenced_0055bfe0() {
+    int extraout_EAX;
+    D2UnitStrc* in_ECX;
+    SERVER_ITEM_SendStackableUsagePackets(in_ECX, ".\\ITEMS\\ItemMode.cpp", 0x1e5);
+    return extraout_EAX;
 }
 
 // Returns the skill ID associated with a scroll or book item unit. Checks if pUnit is a scroll (returns scrollskill) or book (returns bookskill) via the books.txt lookup using the item's magic suffix; returns -1 if not a scroll/book or if no books.txt record found. In: pUnit (ESI). Out: eD2Skills or 0xFFFFFFFF.
@@ -1902,6 +1913,10 @@ BOOL __fastcall ITEMMODE_FindBestBodyLocForItem(D2UnitStrc * pUnit, D2UnitStrc *
     }
 }
 
+void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+
+}
+
 void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam) {
 
 }
@@ -2058,6 +2073,22 @@ int32_t __fastcall ITEMMODE_CheckItemRequirements(D2UnitStrc * pUnit, D2UnitStrc
     }
 
     return bMeetsEquipReqs;
+}
+
+int __fastcall Unreferenced_0055db80(int param_1) {
+    D2ClientStrc* pDVar1;
+    if (param_1 && !*(int*)param_1) {
+      pDVar1 = UNIT::SUnit::SUNIT_GetClient((D2UnitStrc*)param_1, ".\\ITEMS\\ItemMode.cpp", 0xa44);
+      return (int)pDVar1;
+    }
+
+    D2UnitStrc* pUnit = Ai::AiGeneral::GetOwnerUnit((D2UnitStrc*)param_1);
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      pDVar1 = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xa49);
+      return (int)pDVar1;
+    }
+
+    return 0;
 }
 
 // Server-side recalculation of all equipped/charm item enable states for a player (or hireling, eUnitFlags bit 9). Validates each item against the wearer's current requirements: enables qualifying active charms, disables body-slot items that fail requirements (unequipping their stats), then runs a convergence loop re-enabling items whose requirements are now met (handling primary-weapon swap and socketed/set bonuses), and re-applies set bonuses for quality-5 (set) items. Finishes by validating item quality and refreshing inventory; if bSendPacket, sends S2C 0x48 (RecalcEquippedItems2) to the owning player's client. Counterpart to the client-side 0x47/0x48 handlers.
@@ -5272,9 +5303,8 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_ConsumeItemAndRemove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    uint32_t eItemFlags = (uint32_t)pGame;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xf94);
-    eItemFlags = 0;
+    uint32_t eItemFlags = 0;
     D2Common::ITEMS::Items::ITEM_SetServerSideFlag(&eItemFlags, 0x20, 1);
     GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pUnit, pItem, eItemFlags);
     ITEMMODE_DeleteItemFromCorpse(pGame, pUnit, pItem);
@@ -6981,6 +7011,29 @@ BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
     }
 
     return 1;
+}
+
+void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam) {
+
+}
+
+BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
+    int32_t iVar1 = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
+    switch (iVar1) {
+      case 2:
+        case 7:
+          {
+            return 0;
+          }
+      default:
+        {
+          return 1;
+        }
+    }
+}
+
+BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2) {
+    return 0;
 }
 
 } // namespace D2Game::ITEMS::ItemMode

@@ -1,0 +1,25 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/stpl_MappingEntryNode.cpp",
+  "functions": [
+    {
+      "name": "Clear_Unref_00604070",
+      "address": "00604070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604070"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Clear_Unref_00604070",
+        "InternalClear"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
+      ]
+    }
+  ]
+}

@@ -343,6 +343,35 @@ BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc 
     return 1;
 }
 
+int Unreferenced_00597aa0() {
+    int extraout_EAX;
+    D2UnitStrc* unaff_ESI;
+    uint32_t uVar1;
+    uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(unaff_ESI, ITEMCMD_BODYLOC_TAKE_ITEM);
+    if (!uVar1) {
+      uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(unaff_ESI, ITEMCMD_INVENTORY_SET_ITEM);
+      if (!uVar1) {
+        goto LAB_00597ac3;
+      }
+    }
+
+    D2Common::ITEMS::Items::SetBodyLoc(unaff_ESI, BODYLOC_NONE);
+    LAB_00597ac3:
+    uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(unaff_ESI, ITEMCMD_BODYLOC_EXCHANGE_ITEM);
+    int iVar3 = 0;
+    if (uVar1) {
+      BOOL BVar2;
+      BVar2 = D2Common::ITEMS::Items::CheckItemFlag(unaff_ESI, ITEMFLAG_TAKEN, 0x180, ".\\INVENTORY\\InvMode.cpp");
+      iVar3 = 0;
+      if (BVar2) {
+        D2Common::ITEMS::Items::SetBodyLoc(unaff_ESI, BODYLOC_NONE);
+        iVar3 = extraout_EAX;
+      }
+    }
+
+    return iVar3;
+}
+
 // Drains the pending-update queue on pUnit's inventory. For each queued GUID, looks up the item unit and clears body-loc overrides for TAKE/SET/EXCHANGE commands, then calls ITEM_ClearFlagsAndCommands. Recursively processes socketed-item sub-inventories. Finally deletes items marked ITEMCMD_DELETE. Called server-side after inventory transactions to apply deferred state changes.
 // @sourcefile .\INVENTORY\InvMode.cpp
 void __fastcall ITEM_ProcessInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

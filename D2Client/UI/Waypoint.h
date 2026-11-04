@@ -21,12 +21,14 @@ struct __attribute__((packed)) D2WaypointListEntryStrc {
 namespace D2Client::UI::Waypoint {
 
 // Function declarations
+void Unreferenced_0049c560();
 void __stdcall DRAW_UI_WaypointGFXLoad();
 void __stdcall FreeUiImages();
 void __stdcall InitializeWaypoints();
 void __stdcall WAYPOINT_SendClosePacket();
 void __stdcall WAYPOINT_Shutdown();
 void __stdcall WAYPOINT_PopulateList();
+int Unreferenced_0049c980();
 void __stdcall DRAW_UI_Waypoint();
 void __stdcall INPUT_WaypointTravel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall WAYPOINT_SendOpenPacket();

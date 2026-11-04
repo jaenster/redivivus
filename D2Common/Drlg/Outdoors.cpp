@@ -1470,6 +1470,10 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
     }
 }
 
+int __fastcall Unreferenced_00675290(int param_1, int param_2) {
+    return *(int*)(*(int*)(param_1 + 0x14) + 0x68 + param_2 * 4);
+}
+
 void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId) {
     D2UnkOutdoorStrc sBorderParams;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;

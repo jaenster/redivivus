@@ -2140,6 +2140,10 @@ void __fastcall Shrines_StatBoostFunction(D2ObjectOperateFnArg * pArguments, D2S
     ApplyShrineBonus(pArguments->sArg.pVictim, pArguments->pAttacker, pTxtShrines->dwDurationInFrames, nModifiedStatValue, OBJECTSHRINEFUNCTION[uShrineIdx].eStat, OBJECTSHRINEFUNCTION[uShrineIdx].nState, nullptr);
 }
 
+void __fastcall QUEST_DispatchObjectActivation_Unref_00583bc0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets((D2UnitStrc*)pGame);
+}
+
 void __fastcall SHRINE_OnSkillExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
     SKILLS::SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);

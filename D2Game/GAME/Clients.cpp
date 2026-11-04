@@ -265,6 +265,15 @@ void __fastcall AppearenceItems2(uint32_t pClient, D2UnitStrc * pUnit, uint32_t 
     exit(-1);
 }
 
+int Unreferenced_00537ab0() {
+    int extraout_EAX;
+    D2RoomStrc* unaff_ESI;
+    D2RoomStrc* unaff_EDI;
+    D2Common::DUNGEON::Dungeon::DRLGROOM_SwapRoomDataForRoomEx(unaff_ESI, unaff_EDI);
+    D2Common::DUNGEON::Dungeon::DRLGROOM_SwapActiveRoomExBetweenLevels(unaff_ESI, unaff_EDI);
+    return extraout_EAX;
+}
+
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall FreeClientList(::SGAMEDATA * pGame) {
     D2ClientStrc* pMemoryToFree = pGame->pClient;
@@ -2402,6 +2411,10 @@ void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, D2R
 
       return;
     }
+}
+
+void __stdcall ReturnVoid_Unref_0053c740(uint32_t dwParam) {
+
 }
 
 } // namespace D2Game::GAME::Clients

@@ -17,11 +17,13 @@ uint8_t * __fastcall D2WINPAL_GetActPalettePointer(int32_t nPaletteIndex);
 void __stdcall DRAW_SetOrReloadPalleteMain();
 void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift);
 uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
+int Unreferenced_004fb1b0();
 void __fastcall D2WINPAL_CopyPalette(void * pDest);
 // @sourcefile .\Src\D2WinPalette.cpp
 BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2);
 BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct);
 int __stdcall LoadPalette(char * szDatFile, char * szPl2File);
 void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode);
+void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode);
 
 } // namespace D2Win::Src::D2WinPalette

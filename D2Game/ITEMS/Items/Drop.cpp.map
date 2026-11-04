@@ -22,6 +22,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00555cc0",
+      "address": "00555cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555cc0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "Unreferenced_00555cc0",
+        "TXT_Items_GetSize"
+      ]
+    },
+    {
       "name": "ITEMDROP_AddToDropList",
       "address": "00555cd0",
       "lines": [

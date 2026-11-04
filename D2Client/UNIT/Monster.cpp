@@ -20,6 +20,7 @@
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/SkillDesc.h"
+#include "D2Client/UI/npcmenu.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
@@ -592,6 +593,14 @@ int * __fastcall MONSTER_GetAiDataPtr(D2UnitStrc * pUnit) {
     return (int*)&pUnit->pUnitData.pUnitDataPlayer->pArena;
 }
 
+void __fastcall Unreferenced_004ae190(int param_1, int param_2) {
+    if (!(param_1 && *(int*)param_1 == 1 && *(int*)(param_1 + 0x14))) {
+      return;
+    }
+
+    *(int*)(*(int*)(param_1 + 0x14) + 0x40) = param_2;
+}
+
 static void MONSTER_ResetToNeutralFacingTarget(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -761,9 +770,6 @@ static void MONSTER_SpawnRandomAttachedMissile(D2UnitStrc * pUnit) {
 
 // Performs class-ID-specific post-spawn setup for special/unique monsters. Handles: gnMonsterSpecialType pointer (0x96), collision-pattern reset for large monsters (0x9d/0x9e/0x13f), player targeting/facing (0x14b), BladeCreeper missile cast with owner assignment (0x19d), random attached missile (0x1f1/0x1f2/499/500), Baal teleport missile (0x23a), and random direction seeded from player RNG (0x158).
 static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
-    // Static local variables (originally global data)
-    static uint32_t gnMonsterSpecialType; D2_STATIC_GUARD_BSS(gnMonsterSpecialType, "D2Client::UNIT::Monster::MONSTER_InitSpecialMonster::gnMonsterSpecialType");
-
     D2UnitStrc* pTargetUnit;
     eD2Skills eSkill;
     int32_t nMissileLevel;
@@ -2830,6 +2836,20 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
     pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW;
     eNewAnimMode = Kick;
     goto apply_death_mode;
+}
+
+int __fastcall Unreferenced_004b1030(int param_1) {
+    D2UnitStrc* pDVar1;
+    if (*(int*)param_1 == 1 && *(int*)(param_1 + 0x14)) {
+      int nUnitGUID;
+      nUnitGUID = *(int*)(*(int*)(param_1 + 0x14) + 0x3c);
+      if (nUnitGUID != -1) {
+        pDVar1 = Player::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
+        return (int)pDVar1;
+      }
+    }
+
+    return 0;
 }
 
 uint32_t __fastcall NPCMENU_ParseSpeechData(int * pUnit, uint8_t * pParam, int * pnSpeechResult) {

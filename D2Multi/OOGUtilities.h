@@ -142,6 +142,7 @@ int __stdcall OOGUTIL_JoinChannelFromInput(struct D2ControlStrc * dwUnused);
 int __stdcall OOGUTIL_JoinDefaultChannel(struct D2ControlMsg * pControlMsg);
 int __stdcall OOGUTIL_HandleChannelListDoubleClick(struct D2ControlMsg * pControlMsg);
 void __stdcall AbleToJoinGameOrBanned(int32_t bBanned);
+int Unreferenced_004414c0();
 int __stdcall JoinOrCreateGame(DWORD dwUnused);
 // Attempts to restore MCP connection: displays connection message, creates thread if peer data exists, sends CharLogon packet. Returns 1 on success, 0 on failure.
 uint32_t __stdcall OOGMENU_RestoreMCPConnection();
@@ -154,6 +155,7 @@ int __stdcall CHAT_SendOutOfGameMessage();
 BOOL __stdcall OOGUTIL_OnPressChatWarningOk(struct D2ControlMsg * pControlMsg);
 int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix);
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText);
+int __fastcall Unreferenced_00442a70(int param_1, int param_2);
 char * __fastcall OOGUTIL_GetStringEnd(char * szText);
 uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars);
 // OOGMENU_AddGameToCache(pGameInfo = g_CharSelectBuffer): append one realm game to the JOIN-screen

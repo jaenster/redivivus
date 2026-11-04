@@ -167,6 +167,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, struct D2Unit
 int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, uint32_t eItemFormat, int32_t nStreamEnd, int32_t bUsePageHandler, short * * ppnBytesConsumed);
 int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pItemData, uint32_t eFormat, int32_t nStreamEnd, int32_t bUsePageHandler, short * * ppnShort);
 int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * pCorpseHeader, uint32_t nFormat, uint32_t nSize, uint32_t * pnBytesConsumed);
+int __fastcall Unreferenced_00533a60(int param_1, int param_2);
 uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t wHirelingId, uint32_t dwExperience);
 // Restores skill hotkeys and active left/right skill assignments from a legacy save stream. Reads up to 8 hotkey entries (indices 8-15) from pbParam, remapping raw skill byte values (0x9C-0xD8 range shifted +0x41, 0xFF → -1) via SetGotkeyInfo. If stream is long enough also restores shift-left/right skill slots. Outputs bytes consumed in *pnParam.
 // @sourcefile .\PLAYER\PlrSave.cpp

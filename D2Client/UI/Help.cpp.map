@@ -541,6 +541,23 @@
         "eD2UIvars",
         "eD2UIvarsSetType"
       ]
+    },
+    {
+      "name": "HELP_MiniPanelKeyNoOp_Unref_004e4040",
+      "address": "004e4040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4040"
+        }
+      ],
+      "namespace": "D2Client::UI::Help",
+      "calledFunctions": [
+        "HELP_MiniPanelKeyNoOp_Unref_004e4040"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
     }
   ]
 }

@@ -1500,6 +1500,25 @@
       ]
     },
     {
+      "name": "QUEST_DispatchObjectActivation_Unref_00583bc0",
+      "address": "00583bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00583bc0"
+        }
+      ],
+      "namespace": "D2Game::Objects::ObjectsMode",
+      "calledFunctions": [
+        "QUEST_DispatchObjectActivation_Unref_00583bc0",
+        "SKILLS_UpdatePassivesAndPets"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "SHRINE_OnSkillExpire",
       "address": "00583bd0",
       "lines": [

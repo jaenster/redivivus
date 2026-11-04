@@ -42,6 +42,10 @@ uint16_t gaButtonDescriptors[4] = { 0x10, 0xd49, 0xa, 0x102e }; D2_GLOBAL_GUARD(
 
 namespace D2Client::UI::Button::ButtonImplementation {
 
+int __thiscall OnMouseMove_Unref_00446880(::ButtonImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
 void __thiscall Destructor(::ButtonImplementation * pThis) {
     pThis->pVtable = (ButtonImplementationVtable*)(void*)ButtonImplementation::vftable;
     UI::Destructor((::UIWidget*)pThis);

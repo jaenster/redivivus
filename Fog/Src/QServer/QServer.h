@@ -369,6 +369,8 @@ struct D2QServerClientContainerStrc {
 namespace Fog::Src {
 
 // Function declarations
+void __stdcall _NullSubRet8_Unref_004080a0(struct D2QServerStrc * dwArg1, uint32_t dwArg2);
+void __stdcall _NullSubRet4_Unref_006bc850(uint32_t dwArg1);
 // The body here is a bare
 // RET (byte c3) - __cdecl, so the caller cleans up. Every call site pushes a tag pointer
 // (006cc837, the empty string) followed by a printf-style format and its arguments:
@@ -428,6 +430,7 @@ void __stdcall SetHacklistLineHook(struct D2QServerStrc * pQServer, fpD2QServerL
 void __stdcall SetReservedHook(struct D2QServerStrc * pQServer, void * pfnHook);
 void __stdcall SetClientServerTokenByClientId(struct D2QServerStrc * pQServer, int nClientId, uint32_t nServerToken);
 uint32_t __stdcall GetClientServerTokenByClientId(struct D2QServerStrc * pQServer, uint32_t nClientId);
+void __fastcall Unreferenced_006bf170(int param_1);
 // @sourcefile .\Src\QServer\QServer.cpp
 int __stdcall SendPacketToClient(struct D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId);
 void __stdcall SetHackMode(struct D2QServerStrc * pQServer, BOOL bUseQServerHack);

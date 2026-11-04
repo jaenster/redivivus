@@ -176,6 +176,37 @@
       ]
     },
     {
+      "name": "Unreferenced_0052aaa0",
+      "address": "0052aaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052aaa0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "Unreferenced_0052aaa0",
+        "WSAGetLastError",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ]
+    },
+    {
+      "name": "Unreferenced_0052aad0",
+      "address": "0052aad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052aad0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "Unreferenced_0052aad0",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ]
+    },
+    {
       "name": "ThreadClientToServer",
       "address": "0052ab00",
       "lines": [

@@ -88,6 +88,7 @@ void __fastcall D2WINFONT_FreeWordWrapList(void * * ppNodeList);
 struct D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, size_t nSize, int32_t bTrimLeadingSpace);
 // @sourcefile .\Src\D2WinFont.cpp
 struct D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * pnLineCount, int32_t nMaxWidth);
+int __fastcall Unreferenced_00502c40(int param_1);
 void __stdcall D2WINFONT_InitFontSystem();
 int32_t __fastcall SetAndReturnLastFont(int32_t nFontId);
 void __stdcall Draw_UnitNameUnderCursor();

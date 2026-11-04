@@ -890,4 +890,28 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     return pThis;
 }
 
+int __thiscall OnRightArrow_Unref_0052e090(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
+int __thiscall OnRightArrow_Unref_0063c4b0(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
+int __thiscall OnRightArrow_Unref_0063e060(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
+int __thiscall OnRightArrow_Unref_00645030(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
+int __thiscall OnRightArrow_Unref_00645ff0(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
+int __thiscall OnRightArrow_Unref_00646000(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    return 0;
+}
+
 } // namespace D2Client::UI::ListBox::ListBoxImplementation

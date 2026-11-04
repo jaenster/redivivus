@@ -101,6 +101,7 @@
 #include "D2Client/GAME/Server.h"
 #include "D2Client/Source/ClientEngine.data.h"
 #include "D2Client/UI/Inv.h"
+#include "D2Game/Objects/Objects.data.h"
 #include "D2Launch/CharSel.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/OOGUtilities.h"
@@ -230,7 +231,7 @@ static uint32_t gnConnectionRefusedReason = 0; D2_STATIC_GUARD(gnConnectionRefus
 static char CLIENT_GameName[20] = {}; D2_STATIC_GUARD(CLIENT_GameName, "CLIENT_GameName");
 static D2BNetClientCallbacksStrc * gpBNetClientCallbacks = 0; D2_STATIC_GUARD(gpBNetClientCallbacks, "gpBNetClientCallbacks");
 static int gConnectShortTimeoutStartTick = 0; D2_STATIC_GUARD(gConnectShortTimeoutStartTick, "gConnectShortTimeoutStartTick");
-static uint32_t gbBloodFlag = 0; D2_STATIC_GUARD(gbBloodFlag, "gbBloodFlag");
+uint32_t gbBloodFlag = 0; D2_GLOBAL_GUARD(gbBloodFlag, "gbBloodFlag");
 D2EndGameUiState gEndGameUiState = {}; D2_GLOBAL_GUARD(gEndGameUiState, "gEndGameUiState");
 static D2EndGameUiState gShowEndGameCutscene = {}; D2_STATIC_GUARD(gShowEndGameCutscene, "gShowEndGameCutscene");
 static D2EndGameUiState gCongratzOkClicked = {}; D2_STATIC_GUARD(gCongratzOkClicked, "gCongratzOkClicked");
@@ -264,10 +265,71 @@ static D2ClientTimerStrc gLoadTimerDurationMs = {}; D2_STATIC_GUARD(gLoadTimerDu
 
 namespace D2Client::GAME::Game {
 
+uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_00402a80() {
+    return (uint32_t)(hDbgHelpDll != (HMODULE)0x0);
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_0040f860(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_004179f0(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_00417a30(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_00417c30(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_0041c540(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_0041eb20(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __stdcall GAME_SetMouseButtonEventPending_Unref_0044b870() {
+    gdwAppMode = APPMODE_CONTINUE;
+}
+
 void __thiscall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, uint32_t dwDurationMs) {
     DWORD dwNowTick = GetTickCount();
     *pTimerStruct = dwNowTick;
     pTimerStruct[1] = dwDurationMs;
+}
+
+int __fastcall Unreferenced_0044be10(int param_1) {
+    return *(int*)(param_1 + 4) + *(int*)param_1;
 }
 
 void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue) {
@@ -277,6 +339,10 @@ void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue) {
 // Setter for gRunKeyDown (run modifier).
 void __fastcall SetRunKeyDown(BOOL bRunKeyDown) {
     gRunKeyDown = bRunKeyDown;
+}
+
+BOOL __stdcall GetGlobalAlwaysRun_Unref_0044be70() {
+    return gRunKeyDown;
 }
 
 void __fastcall SetGlobalAlwaysRun(int32_t nValue) {
@@ -289,6 +355,10 @@ BOOL __stdcall GetGlobalAlwaysRun() {
 
 void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown) {
     gClickModifierDown = bModifierDown;
+}
+
+BOOL __stdcall GetGlobalAlwaysRun_Unref_0044beb0() {
+    return gClickModifierDown;
 }
 
 // Compute mouse click modifier flags (run/always-run, modifier key).
@@ -317,6 +387,10 @@ uint32_t __stdcall GAME_GetPrimaryClickState() {
 
 int __stdcall GAME_GetMouseButtonEventState() {
     return gnMouseButtonEventState;
+}
+
+int __stdcall GAME_GetMouseButtonEventState_Unref_0044bf20() {
+    return gQueuedSecondaryClick;
 }
 
 int __stdcall GAMEDATA_GetQueuedPrimaryClick() {
@@ -355,6 +429,10 @@ void __stdcall UnderMouse_PrimaryClick(D2UIMouseMsgStrc * pMsg) {
 
 uint32_t __stdcall GAME_HasQueuedPrimaryClick() {
     return (uint32_t)(gnQueuedPrimaryClickX != 0);
+}
+
+uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_0044bff0() {
+    return (uint32_t)(gnQueuedSecondaryClickX != 0);
 }
 
 // Process queued primary click: build flags and call ClickMap(1,x,y,flags).
@@ -482,6 +560,16 @@ void __stdcall ProcessQueuedSecondaryClick() {
     }
 
     UNIT::Player::ClickMap(4, Cursor::GetMouseX(), Cursor::GetMouseY(), mouseEventFlags);
+}
+
+int Unreferenced_0044c340() {
+    int extraout_EAX;
+    gnMouseButtonEventState = 0x10;
+    gQueuedSecondaryClick = 0;
+    gnQueuedSecondaryClickX = 1;
+    gbMouseButtonEventPending = 0;
+    Select::SetCanBeSelectedToFalse();
+    return extraout_EAX;
 }
 
 void __stdcall INPUT_HandleSecondaryClick(D2UIMouseMsgStrc * pMsg) {
@@ -638,6 +726,10 @@ void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
     }
 
     pMouseEvent->bHandled = 0;
+}
+
+void __fastcall ClientInit_Noop04_Unref_0044c6a0(D2IniConfigStrc * pIni) {
+
 }
 
 void __stdcall GAMEDATA_CheckAutomapCenterOnLoad() {
@@ -1006,6 +1098,15 @@ void __stdcall UpdateFrameStats() {
     gClientGameData.gdwLastFrameSyncTick = gClientGameData.uGlobalTickCountA;
     gClientGameData.framesDrawn = 0;
     gClientGameData.framesSkipped = 0;
+}
+
+int Unreferenced_0044cd40() {
+    gClientGameData.gdwLastFrameSyncTick = gClientGameData.uGlobalTickCountA;
+    gClientGameData.fps_drawn = 0x19;
+    gClientGameData.fps_skip = 0;
+    gClientGameData.framesDrawn = 0;
+    gClientGameData.framesSkipped = 0;
+    return 0;
 }
 
 void __stdcall GAMEDATA_SendPeriodicPing() {
@@ -1783,6 +1884,10 @@ uint32_t __stdcall GAMEDATA_GetGlobalTickCount() {
     return gClientGameData.uGlobalTickCountA;
 }
 
+uint32_t __stdcall GAMEDATA_GetGlobalTickCount_Unref_0044dab0() {
+    return gClientGameData.gnFramesDrawnCounter;
+}
+
 uint32_t __stdcall GAME_GetSyncTickCount() {
     return gClientGameData.gdwSyncTickCount;
 }
@@ -1805,6 +1910,10 @@ int32_t __stdcall gnRecordingIndex() {
 
 uint32_t __stdcall GetStepsOfMissileMovement() {
     return gClientGameData.gdwSyncTickCountPrev;
+}
+
+uint32_t __stdcall GetStepsOfMissileMovement_Unref_0044db20() {
+    return (uint32_t)gClientGameData.gpClientPoolManager;
 }
 
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType() {
@@ -2949,9 +3058,59 @@ void __stdcall FreeLanguage() {
     ghLngLibrary = (HMODULE)0x0;
 }
 
+void __fastcall ClientInit_Noop16_Unref_00452160(D2IniConfigStrc * pIni) {
+
+}
+
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
 // JMP thunk
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad() {
     ::D2Client::GAME::Game::GAMEDATA_CheckAutomapCenterOnLoad();
+}
+
+void __fastcall CLIENT_SetDifficulty_Unref_00552830(char nDifficulty) {
+    gbObjectInitTableSetup = nDifficulty;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602390(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
+}
+
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(D2StormListHead * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

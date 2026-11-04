@@ -33,7 +33,6 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Client/UI/Panel.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 
@@ -46,6 +45,14 @@ static uint32_t gnBorderType = 0; D2_STATIC_GUARD(gnBorderType, "gnBorderType");
 static uint32_t MouseYRelatedB = 0; D2_STATIC_GUARD(MouseYRelatedB, "MouseYRelatedB");
 
 namespace D2Client::UI::Path {
+
+uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae60() {
+    return gaScreenResolutionTableIndexArray;
+}
+
+uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae80() {
+    return gaScreenResolutionModeArray;
+}
 
 uint32_t __stdcall DRAW_GetTypeOfBorder() {
     return gnBorderType;

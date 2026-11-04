@@ -31,6 +31,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00611650",
+      "address": "00611650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611650"
+        }
+      ],
+      "namespace": "D2Common::Logging::ProfCore",
+      "calledFunctions": [
+        "Unreferenced_00611650"
+      ]
+    },
+    {
       "name": "PROFCORE_AccumulateTime",
       "address": "00611660",
       "lines": [
@@ -64,6 +78,21 @@
       ],
       "usedTypes": [
         "LARGE_INTEGER"
+      ]
+    },
+    {
+      "name": "CloseProfCore_Unref_00654ef0",
+      "address": "00654ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00654ef0"
+        }
+      ],
+      "namespace": "D2Common::Logging::ProfCore",
+      "calledFunctions": [
+        "CloseProfCore_Unref_00654ef0",
+        "FreeParsedTC"
       ]
     }
   ]

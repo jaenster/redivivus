@@ -9,10 +9,10 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
-#include "D2Client/GAME/View.h"
 #include "D2Client/Renderer/Glide.h"
 #include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
+#include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Glide/glBlocks.h"
 #include "D2Glide/glFloorCache.h"
@@ -419,7 +419,7 @@ uint32_t gnGlideColorCombineMode = 0; D2_GLOBAL_GUARD(gnGlideColorCombineMode, "
 uint32_t gnGlideAlphaBlendMode = 0; D2_GLOBAL_GUARD(gnGlideAlphaBlendMode, "gnGlideAlphaBlendMode");
 uint32_t gnGlideTextureFilteringMode = 0; D2_GLOBAL_GUARD(gnGlideTextureFilteringMode, "gnGlideTextureFilteringMode");
 uint32_t gbGlideInScene = 0; D2_GLOBAL_GUARD(gbGlideInScene, "gbGlideInScene");
-static uint32_t gbGlidePerspectiveMode = 0; D2_STATIC_GUARD(gbGlidePerspectiveMode, "gbGlidePerspectiveMode");
+uint32_t gbGlidePerspectiveMode = 0; D2_GLOBAL_GUARD(gbGlidePerspectiveMode, "gbGlidePerspectiveMode");
 static uint32_t gnGlideSpriteSecondaryTMUEnabled = 0; D2_STATIC_GUARD(gnGlideSpriteSecondaryTMUEnabled, "gnGlideSpriteSecondaryTMUEnabled");
 static uint32_t gnGlideTMUIndex = 0; D2_STATIC_GUARD(gnGlideTMUIndex, "gnGlideTMUIndex");
 D2GlideVertexTexCacheBlockStrc gGlideVertex0 = {}; D2_GLOBAL_GUARD(gGlideVertex0, "gGlideVertex0");
@@ -856,6 +856,16 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
     RENDERER_GLIDE_InitSpriteCache();
     D2CMP::SRC::CelCmp::GFX_SetSpriteCacheMaxSize((size_t)(uintptr_t)glBlocks::GLBLOCKS_ReleaseTileTextures);
     return 1;
+}
+
+void Unreferenced_00509a70() {
+    (*GLIDEDLL_grBufferClear_12)(0, '\0', 0);
+    if (pD2GFXRenderedDataStrc->bVSync) {
+      (*GLIDEDLL_grBufferSwap_4)(1);
+      return;
+    }
+
+    (*GLIDEDLL_grBufferSwap_4)(0);
 }
 
 BOOL __stdcall RENDERER_GLIDE_DestroyWindow() {

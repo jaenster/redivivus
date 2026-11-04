@@ -704,6 +704,21 @@
       ]
     },
     {
+      "name": "Unreferenced_005049d0",
+      "address": "005049d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005049d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "Unreferenced_005049d0",
+        "STRUCT_FreeTxtLink"
+      ]
+    },
+    {
       "name": "D2COMP_IsItemTypeDescendant",
       "address": "00504a20",
       "lines": [

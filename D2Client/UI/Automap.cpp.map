@@ -388,6 +388,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00457ac0",
+      "address": "00457ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457ac0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "Unreferenced_00457ac0"
+      ]
+    },
+    {
       "name": "AUTOMAP_InsertCellIntoTree",
       "address": "00457b00",
       "lines": [
@@ -1145,6 +1159,21 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0045a280",
+      "address": "0045a280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a280"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "Unreferenced_0045a280",
+        "DC6_FreeAndDelete"
       ]
     },
     {

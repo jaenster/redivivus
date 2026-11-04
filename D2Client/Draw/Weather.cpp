@@ -42,7 +42,6 @@
 #include "D2Client/Draw/Weather.data.h"
 #include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/UI/Help.data.h"
-#include "D2Client/UI/Panel.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -90,7 +89,7 @@ static int nWeatherParticleCountAct5 = 0; D2_STATIC_GUARD(nWeatherParticleCountA
 static int gnWeatherAct5ParticleCount = 0; D2_STATIC_GUARD(gnWeatherAct5ParticleCount, "gnWeatherAct5ParticleCount");
 static int gnWeatherStateAct5 = 0; D2_STATIC_GUARD(gnWeatherStateAct5, "gnWeatherStateAct5");
 static int gnWeatherTransitionLock = 0; D2_STATIC_GUARD(gnWeatherTransitionLock, "gnWeatherTransitionLock");
-static int gnWeatherCurrentTransitionState = 0; D2_STATIC_GUARD(gnWeatherCurrentTransitionState, "gnWeatherCurrentTransitionState");
+int gnWeatherCurrentTransitionState = 0; D2_GLOBAL_GUARD(gnWeatherCurrentTransitionState, "gnWeatherCurrentTransitionState");
 
 namespace D2Client::Draw::Weather {
 
@@ -949,6 +948,29 @@ void __stdcall WEATHER_DrawParticles() {
     }
 }
 
+int Unreferenced_00473720() {
+    D2RoomStrc* pRoom;
+    eD2LevelId eLevel;
+    uint32_t* unaff_EBX;
+    uint32_t* unaff_EDI;
+    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
+    *unaff_EBX = 0;
+    *unaff_EDI = 0;
+    uint32_t uVar2 = 0;
+    if (pUnit) {
+      uint8_t uVar1;
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      uVar1 = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveRain(eLevel);
+      *unaff_EBX = (uint32_t)(uVar1 != '\0');
+      uVar1 = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveMud(eLevel);
+      uVar2 = (uint32_t)(uVar1 != '\0');
+      *unaff_EDI = uVar2;
+    }
+
+    return uVar2;
+}
+
 uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -1206,6 +1228,18 @@ void __fastcall WEATHER_SetGlobalFlag(int nValue) {
 }
 
 void __fastcall ENV_Rcv0x54_NoOp(char * pBytes) {
+
+}
+
+void __fastcall ENV_Rcv0x54_NoOp_Unref_00473cb0(char * pBytes) {
+
+}
+
+void __fastcall ENV_Rcv0x54_NoOp_Unref_00473cc0(char * pBytes) {
+
+}
+
+void __stdcall ENV_InitClientSide_NoOp_Unref_00473cd0() {
 
 }
 

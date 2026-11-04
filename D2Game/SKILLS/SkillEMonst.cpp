@@ -1142,6 +1142,20 @@ BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
+int Unreferenced_005d2b40() {
+    D2UnitStrc* unaff_EDI;
+    D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(unaff_EDI, STATE_blood_mana);
+    int iVar1 = 0;
+    if (pStatListEx) {
+      int extraout_EAX;
+      D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(unaff_EDI, pStatListEx);
+      D2Common::Stats::StatsEx::FreeStatList(&pStatListEx->sStatList);
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
+}
+
 // Applies a Blood Mana HP cost of nParam to pUnit. If HP is sufficient, deducts it and removes the STATE_blood_mana stat list when remaining HP falls below the skill's Param[4] threshold (in fixed-point). If HP is insufficient, forces HP to 0x100 (minimum alive) and removes the stat list.
 void __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost) {
     D2SkillsTxt* pSkillRecord;

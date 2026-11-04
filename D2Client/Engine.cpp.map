@@ -4,6 +4,34 @@
   "file": "D2Client/Engine.cpp",
   "functions": [
     {
+      "name": "LOADER_SetConnectionLostFlag_Unref_0045ae50",
+      "address": "0045ae50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae50"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_SetConnectionLostFlag_Unref_0045ae50"
+      ]
+    },
+    {
+      "name": "LOADER_SetConnectionLostFlag_Unref_0045ae70",
+      "address": "0045ae70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae70"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_SetConnectionLostFlag_Unref_0045ae70"
+      ]
+    },
+    {
       "name": "UI_IsMouseInRect",
       "address": "0045fb80",
       "lines": [
@@ -275,6 +303,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00460170",
+      "address": "00460170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460170"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "Unreferenced_00460170"
+      ]
+    },
+    {
       "name": "LOADER_DrawConnectionLostScreen",
       "address": "00460190",
       "lines": [
@@ -534,6 +576,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00460760",
+      "address": "00460760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460760"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "Unreferenced_00460760"
+      ]
+    },
+    {
       "name": "StoreLastSkillHit",
       "address": "00460780",
       "lines": [
@@ -551,6 +607,48 @@
         "eD2UnitType",
         "eSkillEType",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004607d0",
+      "address": "004607d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004607d0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "Unreferenced_004607d0"
+      ]
+    },
+    {
+      "name": "Unreferenced_004607f0",
+      "address": "004607f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004607f0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "Unreferenced_004607f0"
+      ]
+    },
+    {
+      "name": "Unreferenced_00460810",
+      "address": "00460810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460810"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "Unreferenced_00460810"
       ]
     },
     {
@@ -645,6 +743,20 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "LOADER_SetConnectionLostFlag_Unref_00468000",
+      "address": "00468000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468000"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_SetConnectionLostFlag_Unref_00468000"
       ]
     }
   ]

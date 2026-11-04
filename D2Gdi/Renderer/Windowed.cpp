@@ -14,6 +14,8 @@
 #include "D2Client/GAME/Draw.h"
 #include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
+#include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Multi/OOGUtilities.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -25,7 +27,10 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/GAME/View.data.h"
+#include "D2Direct3D/Renderer/Direct3D.data.h"
+#include "D2Gdi/Renderer/Windowed.data.h"
 #include "D2gfx/D2GFX.data.h"
+#include "Fog/D2PoolManagerStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -44,17 +49,37 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NE
 #endif
 
 
-static RGBQUAD prgbq_00989c40[256] = {}; D2_STATIC_GUARD(prgbq_00989c40, "prgbq_00989c40");
-static BYTE * gpGlidePaletteTableData[72] = {}; D2_STATIC_GUARD(gpGlidePaletteTableData, "gpGlidePaletteTableData");
-static HPALETTE RENDERER_WINDOWED_hPalette = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hPalette, "RENDERER_WINDOWED_hPalette");
-static HBITMAP RENDERER_WINDOWED_hDIBitmap = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hDIBitmap, "RENDERER_WINDOWED_hDIBitmap");
-static uint32_t RENDERER_WINDOWED_nScaleOffsetY = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_nScaleOffsetY, "RENDERER_WINDOWED_nScaleOffsetY");
-static uint32_t RENDERER_WINDOWED_nScaleWidth = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_nScaleWidth, "RENDERER_WINDOWED_nScaleWidth");
-static HFONT RENDERER_WINDOWED_hDebugFont = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hDebugFont, "RENDERER_WINDOWED_hDebugFont");
-static D2SmackerGlideBufferStrc gnSmackerGlideYOffset = {}; D2_STATIC_GUARD(gnSmackerGlideYOffset, "gnSmackerGlideYOffset");
-static uint32_t gnSmackerDecodeState = 0; D2_STATIC_GUARD(gnSmackerDecodeState, "gnSmackerDecodeState");
+RGBQUAD prgbq_00989c40[256] = {}; D2_GLOBAL_GUARD(prgbq_00989c40, "prgbq_00989c40");
+BYTE * gpGlidePaletteTableData[72] = {}; D2_GLOBAL_GUARD(gpGlidePaletteTableData, "gpGlidePaletteTableData");
+HPALETTE RENDERER_WINDOWED_hPalette = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hPalette, "RENDERER_WINDOWED_hPalette");
+HBITMAP RENDERER_WINDOWED_hDIBitmap = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hDIBitmap, "RENDERER_WINDOWED_hDIBitmap");
+uint32_t RENDERER_WINDOWED_nScaleOffsetY = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_nScaleOffsetY, "RENDERER_WINDOWED_nScaleOffsetY");
+uint32_t RENDERER_WINDOWED_nScaleWidth = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_nScaleWidth, "RENDERER_WINDOWED_nScaleWidth");
+HFONT RENDERER_WINDOWED_hDebugFont = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hDebugFont, "RENDERER_WINDOWED_hDebugFont");
+D2SmackerGlideBufferStrc gnSmackerGlideYOffset = {}; D2_GLOBAL_GUARD(gnSmackerGlideYOffset, "gnSmackerGlideYOffset");
+uint32_t gnSmackerDecodeState = 0; D2_GLOBAL_GUARD(gnSmackerDecodeState, "gnSmackerDecodeState");
 
 namespace D2Gdi::Renderer::Windowed {
+
+void __fastcall AdjustPerspectivePosition_Unref_00646010(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust) {
+
+}
+
+void __fastcall AdjustPerspectivePosition_Unref_006460d0(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust) {
+
+}
+
+void __fastcall ClearScreen_Unref_0065a3f0(BOOL bPartial) {
+    D2Common::DATATBLS::MonsterTbls::TXT_AllocItemDropData((D2PoolManagerStrc*)bPartial);
+}
+
+HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20() {
+    return (HBITMAP)g_bPerspectiveMode;
+}
+
+void __fastcall AdjustPerspectivePosition_Unref_006bf250(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust) {
+
+}
 
 // @sourcefile .\Src\gdiCore.cpp
 BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers) {
@@ -129,6 +154,12 @@ BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode) {
     RENDERER_WINDOWED_CreateDebugFont();
     RENDERER_WINDOWED_UpdateScaleFactor(nResolutionMode);
     return 1;
+}
+
+void Unreferenced_006c7c90() {
+    DeleteObject(RENDERER_WINDOWED_hDIBitmap);
+    gpRenderBackBufferBits = 0;
+    D2GfxRendereInitFunctionsStrc->nfpFillYBufferTable(nullptr, 0, 0, 0);
 }
 
 BOOL __stdcall BeginCutScene() {
@@ -415,6 +446,10 @@ void __fastcall RENDERER_WINDOWED_GetFramebufferInfo(uint32_t * ppvBitsOut, uint
       *pnWidthOut = RENDERER_nWindowWidth;
       return;
     }
+}
+
+HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240() {
+    return (HBITMAP)D2GfxRendereInitFunctionsStrc;
 }
 
 // Windowed renderer: returns palette pointer for the specified render mode. Reads from gpPaletteTable offsets 0x0-0x10C based on the nDrawMode index (0-6).
@@ -1325,6 +1360,10 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
     }
 
     return 0;
+}
+
+void __fastcall SetDefaultPerspectiveFactor_Unref_006c95c0() {
+
 }
 
 BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, BYTE nAlpha, int nScreenPanels, void * pTileData) {

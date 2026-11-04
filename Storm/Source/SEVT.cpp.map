@@ -4,6 +4,91 @@
   "file": "Storm/Source/SEVT.cpp",
   "functions": [
     {
+      "name": "LINKEDLIST_GetCount_Unref_0040f7c0",
+      "address": "0040f7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f7c0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_0040f7c0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_004177c0",
+      "address": "004177c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004177c0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_004177c0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_0041c4e0",
+      "address": "0041c4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c4e0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_0041c4e0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_0041eab0",
+      "address": "0041eab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041eab0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_0041eab0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_00420490",
+      "address": "00420490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420490"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_00420490"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "SEVT_NextPowerOf2",
       "address": "00426160",
       "lines": [
@@ -234,6 +319,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004269a0",
+      "address": "004269a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004269a0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "Unreferenced_004269a0"
+      ]
+    },
+    {
       "name": "SEvtPopState",
       "address": "004269c0",
       "lines": [
@@ -342,6 +441,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00426c60",
+      "address": "00426c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426c60"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "Unreferenced_00426c60"
+      ]
+    },
+    {
       "name": "LINKEDLIST_GetValueAtIndex",
       "address": "00426c80",
       "lines": [
@@ -394,6 +507,20 @@
         "D2StormListHead",
         "StormLinkStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00426d70",
+      "address": "00426d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426d70"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "Unreferenced_00426d70"
       ]
     },
     {
@@ -495,6 +622,259 @@
         "D2SevtHandlerNodeStrc",
         "pfnSEvtHandler",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0044de90",
+      "address": "0044de90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044de90"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0044de90"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0044ecc0",
+      "address": "0044ecc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ecc0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0044ecc0"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_0044ed00",
+      "address": "0044ed00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ed00"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_0044ed00"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0045b9f0",
+      "address": "0045b9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b9f0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0045b9f0"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0045ba30",
+      "address": "0045ba30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ba30"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0045ba30"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00601bf0",
+      "address": "00601bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601bf0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00601bf0"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00601d60",
+      "address": "00601d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601d60"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00601d60"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_00601f00",
+      "address": "00601f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601f00"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_00601f00"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_00601f60",
+      "address": "00601f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601f60"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_00601f60"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_006020b0",
+      "address": "006020b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006020b0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_006020b0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_006024a0",
+      "address": "006024a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006024a0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_006024a0"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0060e3b0",
+      "address": "0060e3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e3b0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0060e3b0"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_0060e440",
+      "address": "0060e440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e440"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_0060e440"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount_Unref_0060e5d0",
+      "address": "0060e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e5d0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount_Unref_0060e5d0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0060e690",
+      "address": "0060e690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e690"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0060e690"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0060e760",
+      "address": "0060e760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e760"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0060e760"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_006c4070",
+      "address": "006c4070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4070"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_006c4070"
       ]
     },
     {

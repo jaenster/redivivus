@@ -1136,6 +1136,7 @@ void * __stdcall Catch_All_006b4c73();
 int __stdcall BootDirect3d(HINSTANCE hInstance);
 void * __stdcall Catch_All_006b4d4b();
 BOOL __fastcall Initialize(HINSTANCE hInstance);
+int Unreferenced_006b5520();
 // @sourcefile .\Src\d3dCore.cpp
 BOOL Release();
 BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode);
@@ -1164,6 +1165,7 @@ void __fastcall DebugFillBackBuffer(int nPosX, int nPosY);
 void __stdcall RENDERER_D3D_InitializeTexturePools();
 void __stdcall RENDERER_D3D_ReleaseFontTextures();
 void __stdcall RENDERER_D3D_CreateFontTextures();
+int __fastcall Unreferenced_006b74f0(int param_1);
 void __fastcall DrawString(int nPosX, int nPosY, char * szFormat, va_list va);
 void __fastcall DrawLight(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int nPosY);
 int __fastcall RENDERER_D3D_InitializeFontSystem(int nBaseOffset);

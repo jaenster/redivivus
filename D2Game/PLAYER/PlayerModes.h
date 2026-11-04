@@ -21,6 +21,7 @@ typedef uint32_t eD2UnitType;
 namespace D2Game::PLAYER::PlayerModes {
 
 // Function declarations
+int32_t __fastcall PLRMODES_ModeCallback_DeathDead_Unref_0053b210(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 int32_t __fastcall PLRMODES_HasAnimEventLastOrComing5Frames(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
 // @sourcefile .\PLAYER\PlrModes.cpp

@@ -53,6 +53,7 @@ void __fastcall Objects_InitFn41_SewerStairs(struct D2ObjectInitFnArg * pInitArg
 void __fastcall Objects_InitFn42_SewerLever(struct D2ObjectInitFnArg * pInitArg);
 // Q19_OnPlayerCubeKhalimsWill (Khalim's Will). Callback when a player has the assembled Khalim's Will (transmuting relics in the cube). Reads Completed (and RewardAwaits when not complete) and updates the quest GUID per-player counters tracking who has assembled the Will. State reads only; no SetQuestState.
 void __fastcall Q19_OnPlayerCubeKhalimsWill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+int Unreferenced_005b8750();
 // Q19_CheckPlayerHasKhalimsEye (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Eye (0x20796571) and lacks the assembled Will (0x20326671), increments the quest GUID eye-needed counter. Used by the Eye relic portal drop to decide how many to spawn.
 BOOL __fastcall Q19_CheckPlayerHasKhalimsEye(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q19_CheckPlayerHasKhalimsBrain (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Brain (0x20726271) and lacks the assembled Will (0x20326671), increments the quest GUID counter. Drives how many Brain relics the portal chest drops.
@@ -74,6 +75,7 @@ void __fastcall Q19_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, 
 bool __fastcall Q19_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
 void __fastcall Q19_InitData(struct D2QuestDataStrc * pQuestData);
+void __fastcall Q19_Callback10_PlayerLeavesGame_Unref_005bdb10(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A3Q2

@@ -66,6 +66,7 @@ void __stdcall TASK_GameTickCallback(uint32_t nParam, struct D2TaskNodeStrc * pT
 void __stdcall thunk_QueryPerformanceFrequency_B();
 // @sourcefile .\GAME\Task.cpp
 void __stdcall TASK_FreeAllSlots();
+void __fastcall TASK_Nop_Unref_00564940(struct D2UnitStrc * pItem);
 // @sourcefile .\GAME\Task.cpp
 uint32_t __stdcall TASK_AllocateTaskQueue();
 // Enqueues a game task: stamps pTaskNode->dwTimestamp with TASK_GetTimestamp(), stores dwCallbackId and dwUserData, then, under lpCriticalSection_0088caa8, links pTaskNode->sLink at the tail of the last slot in the gsTaskQueueListHead ring, under that slot's critical section, bumps the slot's nTaskCount and gnTaskQueueTailIndex, and moves the slot link to the ring tail. Returns 1 when queued, 0 when the ring was uninitialised (it only self-links the head) or empty. Halts on NULL links (lines 0x77, 0x78, 0x6c).

@@ -41,6 +41,7 @@ void AllocEmptyRoomCoordList_Unused(struct D2PoolManagerStrc * pMemory, struct D
 void __fastcall FreeDrlgCoordList(struct D2RoomExStrc * pRoomEx);
 // Replaces all references to pOrientationGrid with pFloorGrid in pRoomEx's coordinate list, then recursively propagates the replacement to all neighbouring RoomEx entries that share the same level ID. Used during DRLG map-generation to commit a floor-grid assignment across a connected tile group.
 void __fastcall InitializeDrlgCoordList(struct D2RoomExStrc * pRoomEx, int nMatchIndex, int nNewIndex, int bNode);
+int __fastcall Unreferenced_0066c840(int param_1);
 // Two-pass wall flagging for DRLG layout grids. First pass: iterates pRoomEx's own wall tile array and calls AlterGridFlag for tiles that are standard left-side wall type (nFlags bits 0x1c000==0x4000, tileType!=15, non-special). Second pass: checks neighbouring rooms' map-link tile chains for matching wall tiles that project into pRoomEx bounds, flagging them with coordinate-transformed positions.
 void __stdcall DRLGLOGIC_SetGridWallFlags(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid);
 // Reads grid flags at each tile position and stores in tile entry offset +0x10.

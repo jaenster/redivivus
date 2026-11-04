@@ -436,6 +436,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00406470",
+      "address": "00406470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406470"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "Unreferenced_00406470"
+      ]
+    },
+    {
       "name": "PreInitApplication",
       "address": "004064c0",
       "lines": [

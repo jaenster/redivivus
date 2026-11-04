@@ -754,6 +754,36 @@
       ]
     },
     {
+      "name": "Unreferenced_004cb170",
+      "address": "004cb170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb170"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "Unreferenced_004cb170",
+        "TxtGetSoundIdLineFromUnit"
+      ]
+    },
+    {
+      "name": "Unreferenced_004cb180",
+      "address": "004cb180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb180"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "Unreferenced_004cb180",
+        "TxtGetSoundIdLineFromUnit"
+      ]
+    },
+    {
       "name": "UNITSND_StopAllSkillSounds",
       "address": "004cb190",
       "lines": [

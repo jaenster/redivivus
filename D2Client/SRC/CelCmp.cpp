@@ -12,4 +12,12 @@ void __stdcall GFX_Noop() {
 
 }
 
+void __stdcall GFX_Noop_Unref_0046f9b0() {
+
+}
+
+void __stdcall GFX_Noop_Unref_0046f9c0() {
+
+}
+
 } // namespace D2Client::SRC::CelCmp

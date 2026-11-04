@@ -22,6 +22,48 @@
       ]
     },
     {
+      "name": "Unreferenced_005a0030",
+      "address": "005a0030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0030"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "Unreferenced_005a0030"
+      ]
+    },
+    {
+      "name": "Unreferenced_005a0040",
+      "address": "005a0040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0040"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "Unreferenced_005a0040"
+      ]
+    },
+    {
+      "name": "Unreferenced_005a0060",
+      "address": "005a0060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0060"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "Unreferenced_005a0060"
+      ]
+    },
+    {
       "name": "MONSTER_CheckMonTypeHasFlag",
       "address": "005a0070",
       "lines": [

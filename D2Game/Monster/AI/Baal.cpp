@@ -1157,8 +1157,8 @@ void __fastcall BaalCrabAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, D2UnitSt
     int storedCommandArg2 = 0;
     D2MonsterAiCmdStrc* pInfernoCommand = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
     if (pInfernoCommand) {
-      storedCommandArg2 = pInfernoCommand->nCmdArg[2];
       storedCommandArg1 = pInfernoCommand->nCmdArg[1];
+      storedCommandArg2 = pInfernoCommand->nCmdArg[2];
     }
 
     BOOL currentInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);

@@ -43,6 +43,7 @@ struct D2LightMapStrc * __fastcall AllocLightMap(struct D2UnitStrc * pUnit, int3
 void __fastcall SetRadiusY(struct D2LightMapStrc * pLightMap, int32_t nValue);
 void __fastcall LIGHTMAP_SetRadius(struct D2LightMapStrc * pLightMap, int32_t nDiameter);
 int32_t __fastcall GetRadiusX(struct D2LightMapStrc * pLightMap);
+int Unreferenced_00474380();
 void __fastcall SetRGB(struct D2LightMapStrc * pLightMap, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 void __fastcall FreeLightMap(struct D2LightMapStrc * pLightMap);
 void __fastcall LIGHTMAP_ValidateAndReset(struct D2LightMapStrc * pLightMap);

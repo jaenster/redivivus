@@ -646,8 +646,8 @@ D2RoomExStrc * __fastcall DRLGROOMEX_AllocRoomEx(D2DrlgLevelStrc * pLevel, int n
     pRoomEx->pLevel = pLevel;
     pRoomEx->fRoomStatus = '\x04';
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-    D2SeedStrc* pSeed = &pRoomEx->sSeed;
     pLevel->sSeed = sNewSeed;
+    D2SeedStrc* pSeed = &pRoomEx->sSeed;
     Seed::InitSeed_Param_666(pSeed, sNewSeed.nSeedLow);
     sNewSeed = D2_SEED_NEXT(*pSeed);
     pSeed->nSeedHigh = sNewSeed.nSeedHigh;
@@ -1356,6 +1356,11 @@ void __fastcall GetRGB_IntensityFromRoomEx(D2RoomExStrc * pRoomEx, char * nInten
     *nBlue = pLevelDefs->ColorInfo.Blue;
 }
 
+int __fastcall Unreferenced_0066c020(int param_1) {
+    D2LevelDefsTxt* pDVar1 = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(*(eD2LevelId*)(*(int*)(param_1 + 0x58) + 0x1d0));
+    return pDVar1->DrlgType;
+}
+
 // Retrieves the Vis array from the level definitions for the given level ID. Returns pointer to 8-entry vis array.
 int * __fastcall DRLGWARP_GetVisArrayFromLevelId(D2DrlgStrc * pDrlg, eD2LevelId eLevelId) {
     D2LevelDefsTxt* pLevelDefs;
@@ -1377,6 +1382,10 @@ int * __fastcall DRLGWARP_GetVisArrayFromLevelId(D2DrlgStrc * pDrlg, eD2LevelId 
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x410);
     exit(-1);
+}
+
+void __fastcall Unreferenced_0066c090(int param_1) {
+    DRLGWARP_GetVisArrayFromLevelId(*(D2DrlgStrc**)(param_1 + 0x1b4), *(eD2LevelId*)(param_1 + 0x1d0));
 }
 
 D2DrlgStrc * __fastcall GetDrlgFromRoomEx(D2RoomExStrc * pRoomEx) {

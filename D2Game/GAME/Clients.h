@@ -46,6 +46,7 @@ void __fastcall SetCientFlag0x01(struct D2ClientStrc * pClient);
 void __fastcall SetGameDataHook(::SGAMEDATA * pGame);
 void __fastcall AppearenceItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
 void __fastcall AppearenceItems2(uint32_t pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
+int Unreferenced_00537ab0();
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall FreeClientList(::SGAMEDATA * pGame);
 // Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
@@ -177,6 +178,7 @@ void __fastcall UnusedUpdateFunctionForUnits(struct D2RoomStrc * pRoom, struct D
 void __fastcall FreePendingDrlgDeletes(::SGAMEDATA * pGame);
 void __fastcall MovementUpdateForClient(::SGAMEDATA * pGame, struct D2RoomStrc * * ppRoom, struct D2UnitStrc * pUnit);
 void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
+void __stdcall ReturnVoid_Unref_0053c740(uint32_t dwParam);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Clients

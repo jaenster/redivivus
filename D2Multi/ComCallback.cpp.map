@@ -44,6 +44,23 @@
       ]
     },
     {
+      "name": "Unreferenced_00446ca0",
+      "address": "00446ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446ca0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "Unreferenced_00446ca0",
+        "strrchr",
+        "tolower",
+        "D2WINSMACK_LoadAndDecodeSmacker"
+      ]
+    },
+    {
       "name": "COMCALLBACK_GetCurrentChannelName",
       "address": "00446cf0",
       "lines": [

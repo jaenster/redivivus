@@ -16,6 +16,7 @@ extern char RealmName[32];
 extern eD2PlayerClassID nD2PlayerClassID;
 // Long connection timeout start tick (5 min check in Client_CheckConnectionTimeouts).
 extern int gConnectLongTimeoutStartTick;
+extern uint32_t gbBloodFlag;
 // End-game UI state block (congrats/cutscene flags).
 extern D2EndGameUiState gEndGameUiState;
 // Beta screen slideshow index (page).

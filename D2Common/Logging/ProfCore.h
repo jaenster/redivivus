@@ -21,10 +21,12 @@ namespace D2Common::Logging::ProfCore {
 // Function declarations
 void __stdcall CloseProfCore();
 void __fastcall PROFCORE_RegisterSlot(uint32_t nSlotId, uint8_t * pSlotData, uint32_t dwFlags);
+int Unreferenced_00611650();
 // Adds the QueryPerformanceCounter ticks elapsed since liStart to gaProfilingDumpFrequency[nIndex].liTime and counts the call.
 // Provenance: 1.14d asm 00611660-006116a3 (SUB/SBB [EBP+8]/[EBP+0xc], RET 8).
 void __fastcall PROFCORE_AccumulateTime(int nIndex, LARGE_INTEGER liStart);
 // @sourcefile .\Logging\ProfCore.cpp
 void __stdcall D2ProfileDump();
+void __stdcall CloseProfCore_Unref_00654ef0();
 
 } // namespace D2Common::Logging::ProfCore

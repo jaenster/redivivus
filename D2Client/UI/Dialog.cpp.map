@@ -4,6 +4,20 @@
   "file": "D2Client/UI/Dialog.cpp",
   "functions": [
     {
+      "name": "GetDialogCounter_Unref_004b70f0",
+      "address": "004b70f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b70f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "GetDialogCounter_Unref_004b70f0"
+      ]
+    },
+    {
       "name": "UI_ScrollNpcMenuList",
       "address": "004b7100",
       "lines": [
@@ -447,6 +461,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004b7bc0",
+      "address": "004b7bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7bc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "Unreferenced_004b7bc0",
+        "memset"
+      ]
+    },
+    {
       "name": "AllocDialogSub",
       "address": "004b7c00",
       "lines": [
@@ -723,6 +752,34 @@
       ]
     },
     {
+      "name": "Unreferenced_004b8590",
+      "address": "004b8590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8590"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "Unreferenced_004b8590"
+      ]
+    },
+    {
+      "name": "Unreferenced_004b85b0",
+      "address": "004b85b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b85b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "Unreferenced_004b85b0"
+      ]
+    },
+    {
       "name": "GetDialogCounter",
       "address": "004b85e0",
       "lines": [
@@ -765,6 +822,20 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_InitializeSystem_Unref_004b9200",
+      "address": "004b9200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9200"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_InitializeSystem_Unref_004b9200"
       ]
     }
   ]

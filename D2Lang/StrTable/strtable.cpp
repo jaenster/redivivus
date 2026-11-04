@@ -443,6 +443,23 @@ BOOL __stdcall ARCHIVE_LoadMPQFiles() {
     return 1;
 }
 
+void __stdcall Unreferenced_005248e0() {
+    if (MPQ_d2data) {
+      D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2data);
+      MPQ_d2data = 0;
+    }
+    if (MPQ_patch_d2) {
+      D2Hell::ARCHIVE_FreeMpqFile(MPQ_patch_d2);
+      MPQ_patch_d2 = 0;
+    }
+    if (!MPQ_d2exp) {
+      return;
+    }
+
+    D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2exp);
+    MPQ_d2exp = 0;
+}
+
 static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc * pStrTable, uint16_t * * ppEntryTable, uint16_t wRawIndex, DWORD dwErrorCode) {
     uint32_t _wRawIndex;
     uint16_t wBoundedIndex = wRawIndex;
@@ -771,6 +788,11 @@ void STRTABLE_InitCRC(uint16_t * pwCRC) {
 
 void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData) {
     *pwCRC = *pwCRC << 8 ^ gwStrTableDefaultEncoding[(uint32_t)(*pwCRC >> 8) ^ (uint32_t)byData];
+}
+
+int __fastcall Unreferenced_00525010(int param_1) {
+    uint32_t in_EAX;
+    return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)in_EAX >> 0x10) << 16 | (uint32_t)(uint16_t)(short int)param_1);
 }
 
 void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset) {

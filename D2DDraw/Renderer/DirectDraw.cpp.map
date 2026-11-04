@@ -4,6 +4,41 @@
   "file": "D2DDraw/Renderer/DirectDraw.cpp",
   "functions": [
     {
+      "name": "DrawImageFast_Unref_0045f7a0",
+      "address": "0045f7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f7a0"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "DrawImageFast_Unref_0045f7a0"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PerspectiveScalePosition_Unref_005043d0",
+      "address": "005043d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005043d0"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "PerspectiveScalePosition_Unref_005043d0"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "Initialize",
       "address": "00510020",
       "lines": [
@@ -1407,6 +1442,48 @@
         "int32_t",
         "tagMSG",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "ActivateWindow_Unref_00513b80",
+      "address": "00513b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513b80"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "ActivateWindow_Unref_00513b80"
+      ]
+    },
+    {
+      "name": "SetDefaultPerspectiveFactor_Unref_00514040",
+      "address": "00514040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514040"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "SetDefaultPerspectiveFactor_Unref_00514040"
+      ]
+    },
+    {
+      "name": "SetDefaultPerspectiveFactor_Unref_00514050",
+      "address": "00514050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514050"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "SetDefaultPerspectiveFactor_Unref_00514050"
       ]
     }
   ]

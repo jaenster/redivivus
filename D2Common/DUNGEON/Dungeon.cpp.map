@@ -4,6 +4,24 @@
   "file": "D2Common/DUNGEON/Dungeon.cpp",
   "functions": [
     {
+      "name": "GetRoomExFromRoom_Unref_005a6220",
+      "address": "005a6220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a6220"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetRoomExFromRoom_Unref_005a6220"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
       "name": "AllocAct",
       "address": "006194a0",
       "lines": [

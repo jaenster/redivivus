@@ -155,6 +155,26 @@ BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor(BigBuffer * pBitSet) {
     return pBitSet;
 }
 
+int __fastcall Unreferenced_00421050(int param_1, int param_2) {
+    int in_EAX;
+    if (param_1) {
+      in_EAX = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)param_2);
+      *(uint8_t*)param_1 = *(uint8_t*)param_2;
+    }
+
+    return in_EAX;
+}
+
+int __fastcall Unreferenced_00421090(int param_1, int param_2) {
+    int in_EAX;
+    if (param_1) {
+      in_EAX = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)param_2);
+      *(uint8_t*)param_1 = *(uint8_t*)param_2;
+    }
+
+    return in_EAX;
+}
+
 // @was SBIG_BitSet_RoundUpPow2_Max64 (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED, and verified by hand this pass against the oracle's .CalcChunkSize__34TSGrowableArray<3RGN,10TSCD<3RGN>>FUi @10041a10, which is: when n is at least K, store K into this[0xc] and return K; otherwise repeatedly clear the lowest set bit of n while any bit remains, and return 1 if n reached zero. This function is that, with K = 0x40. The store of the cap into this[0xc] is the decisive tell and is present in both. Note the old name was wrong in DIRECTION as well as module: the loop that clears the lowest set bit rounds DOWN to a power of two, it does not round up. K = 256/sizeof(T) - 0x40 here for 4-byte elements, 8 in the oracle's RGN instantiation whose elements are 32 bytes.
@@ -208,6 +228,10 @@ void __thiscall SBIG_DynArray_Resize(int * pArray, int32_t nNewCount) {
 
     uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray[2], nNewCount * 4, s__I_00708874, -2, 0);
     pArray[2] = (int)pNewBuffer;
+}
+
+uint32_t * __fastcall SBIG_BigBuffer_GetDataPtr_Unref_00421150(BigBuffer * pBitSet) {
+    return pBitSet->pData;
 }
 
 // @was SBIG_BitSet_RoundUpPow2_Max256A (pass 6, 2026.08.28)
@@ -322,6 +346,24 @@ uint32_t __stdcall TSGrowableArray_UcAlt_RoundToChunk(uint32_t nValue, uint32_t 
     }
 
     return nValue;
+}
+
+int __fastcall Unreferenced_004212a0(int param_1, int param_2) {
+    int in_EAX;
+    if (param_1) {
+      in_EAX = *(int*)param_2;
+      *(int*)param_1 = in_EAX;
+    }
+
+    return in_EAX;
+}
+
+int __fastcall Unreferenced_004212c0(int param_1, int param_2) {
+    uint32_t in_EAX;
+    uint8_t uVar1 = *(uint8_t*)param_1;
+    *(uint8_t*)param_1 = *(uint8_t*)param_2;
+    *(uint8_t*)param_2 = uVar1;
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)uVar1);
 }
 
 // @was SBIG_BitSet_GetWord (pass 6, 2026.08.28)
@@ -525,6 +567,26 @@ void __thiscall SBIG_ArrayDwordReadAtCursor(uint32_t dwUnused, BigBuffer * pBigN
     SBIG_BigBuffer_GetFirstWord(pOutWord, pBigNum);
 }
 
+void __fastcall TSFixedArray_Ui_Destructor_Unref_00421570(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    SMem::SMemFree(*(void**)((int)pArray + 8), s__I_00708874, -2, 0);
+}
+
+void __fastcall TSFixedArray_Ui_Destructor_Unref_00421590(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    SMem::SMemFree(*(void**)((int)pArray + 8), s__E_00708880, -2, 0);
+}
+
+uint32_t * __fastcall SBIG_BigBuffer_GetDataPtr_Unref_004215b0(BigBuffer * pBitSet) {
+    return pBitSet->pData;
+}
+
 // @was SBIG_ArrayDwordAssignFromData (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE, upgraded this pass. It is the inner element-copy body of the oracle's .__as__ @100395e0, which MSVC outlined. Its call site inside TSGrowableArray_Ui_Assign 00421ba0 is Copy(src.m_count, src.m_data) on this, which is the Copy(Ui, const T*) signature. Not independently confirmed against a standalone oracle symbol, because MWCC never emitted one.
@@ -668,6 +730,14 @@ void __thiscall TSFixedArray_UcAlt_ReallocData(uint32_t * pArray, uint32_t nCapa
     SMem::SMemFree(pOldBuffer, s__D_0070888c, -2, 0);
 }
 
+void __fastcall TSFixedArray_Ui_Destructor_Unref_004217f0(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    SMem::SMemFree(*(void**)((int)pArray + 8), s__I_00708874, -2, 0);
+}
+
 // @was SBIG_ArrayDwordFreeBuffer (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE. Frees the m_data pointer at +8 and nothing else. Its only xrefs are MSVC exception-unwind funclets, which is where a destructor is referenced from.
@@ -680,6 +750,20 @@ void __fastcall TSFixedArray_Ui_Destructor(void * pArray) {
     SMem::SMemFree(*(void**)((int)pArray + 8), s__I_00708874, -2, 0);
 }
 
+int __fastcall Unreferenced_00421830(int param_1) {
+    int extraout_EAX;
+    _eh_vector_destructor_iterator_((void*)param_1, 0x14, 0x10, TSFixedArray_Ui_Destructor);
+    return extraout_EAX;
+}
+
+int __fastcall Unreferenced_00421860(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    return param_1;
+}
+
 // @was SBIG_ArrayDwordCopyAssign (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE. The oracle's operator= body MINUS the trailing chunk-field copy - i.e. the TSFixedArray form, which has no chunk field, as against TSGrowableArray_Ui_Assign 00421ba0 which has it.
@@ -690,6 +774,14 @@ void * __thiscall TSFixedArray_Ui_Assign(uint32_t * pArray, void * pSrcArray) {
     }
 
     return pArray;
+}
+
+int __fastcall Unreferenced_004218a0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    return param_1;
 }
 
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
@@ -4404,6 +4496,78 @@ static void __stdcall BigBuffer_FindPrime(int32_t nBitLength, BigBuffer * pnLowe
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigFindPrime(BigData * pResult, int32_t nBitLength, BigData * pLowerBound, BigData * pCoprimeWith) {
     BigBuffer_FindPrime(nBitLength, &pLowerBound->sPrimary, &pCoprimeWith->sPrimary, &pResult->sStack, &pResult->sPrimary);
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0044df10(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00450870(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0047f930(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0051d2c0(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    SMem::SMemFree(*(void**)((int)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
+}
+
+void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    SMem::SMemFree(*(void**)((int)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00601e00(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00603f40(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0060e200(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
+}
+
+BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0060e220(BigBuffer * pBitSet) {
+    pBitSet->nCapacity = 0;
+    pBitSet->nCount = 0;
+    pBitSet->pData = 0;
+    return pBitSet;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

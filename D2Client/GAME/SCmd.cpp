@@ -1029,6 +1029,14 @@ static size_t nD2PacketsClientBufferSize = 0; D2_STATIC_GUARD(nD2PacketsClientBu
 
 namespace D2Client::GAME::SCmd {
 
+void __fastcall SCMD_Rcv_IgnoreShared_Unref_0045b090(char * pBytes) {
+
+}
+
+void __fastcall SCMD_Rcv_IgnoreShared_Unref_0045b0a0(char * pBytes) {
+
+}
+
 void __fastcall SCMD_SetOrClearBitFlag(D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet) {
     if (!pUnit) {
       return;
@@ -1062,6 +1070,10 @@ D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2Skills eSkill) {
     }
 
     return nullptr;
+}
+
+int Unreferenced_0045c4e0() {
+    return sgptDataTable->nTxtSkillsCount;
 }
 
 D2ItemStatCostTxt * __fastcall TXT_ItemStatCost_GetLine(eD2UnitStat eUnitStat) {
@@ -1472,8 +1484,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID(D2UnitStrc * pUnit, D
 void __fastcall NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS(D2UnitStrc * pUnit, D2GSPacketSrv0x0F * pBytes) {
     D2ServerMessageHandleStrc msg;
     msg.nSkillId = (uint32_t)pBytes->wX;
-    msg.nTargetUnitType = (uint32_t)pBytes->nHitClass;
     msg.nItemId = (uint32_t)pBytes->wY;
+    msg.nTargetUnitType = (uint32_t)pBytes->nHitClass;
     UNIT::Path::PATH_MoveUnitToPoint(pUnit, pBytes->wX2, (uint32_t)pBytes->wY2, 0, 0, 0);
     UNIT::UnitMode::HandleMessage((uint32_t)pBytes->nMessageType, pUnit, &msg, 1);
 }

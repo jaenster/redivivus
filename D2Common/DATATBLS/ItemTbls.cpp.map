@@ -564,6 +564,23 @@
       ]
     },
     {
+      "name": "TXT_Books_GetTableInfo_Unref_006372b0",
+      "address": "006372b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006372b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "calledFunctions": [
+        "TXT_Books_GetTableInfo_Unref_006372b0"
+      ],
+      "usedTypes": [
+        "D2BooksTableStrc"
+      ]
+    },
+    {
       "name": "TXT_Gems_GetLine",
       "address": "006372c0",
       "lines": [
@@ -763,6 +780,23 @@
       "calledFunctions": [
         "thunk_UnloadBin_LvlMaze",
         "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_LowQualityItems_GetTableInfo_Unref_00637900",
+      "address": "00637900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00637900"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "calledFunctions": [
+        "TXT_LowQualityItems_GetTableInfo_Unref_00637900"
+      ],
+      "usedTypes": [
+        "D2LowQualityItemsTableStrc"
       ]
     },
     {
@@ -1142,6 +1176,74 @@
       "usedTypes": [
         "D2RunesTxt",
         "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_GetRuneTableSize_Unref_00654fd0",
+      "address": "00654fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00654fd0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "calledFunctions": [
+        "TXT_GetRuneTableSize_Unref_00654fd0"
+      ],
+      "usedTypes": [
+        "D2RunesTxtTableStrc"
+      ]
+    },
+    {
+      "name": "TXT_GetRuneTableSize_Unref_0065b450",
+      "address": "0065b450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b450"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "calledFunctions": [
+        "TXT_GetRuneTableSize_Unref_0065b450"
+      ],
+      "usedTypes": [
+        "D2RunesTxtTableStrc"
+      ]
+    },
+    {
+      "name": "TXT_GetRuneTableSize_Unref_0065b460",
+      "address": "0065b460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b460"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "calledFunctions": [
+        "TXT_GetRuneTableSize_Unref_0065b460"
+      ],
+      "usedTypes": [
+        "D2RunesTxtTableStrc"
+      ]
+    },
+    {
+      "name": "TXT_GetRuneTableSize_Unref_0065b470",
+      "address": "0065b470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b470"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "calledFunctions": [
+        "TXT_GetRuneTableSize_Unref_0065b470"
+      ],
+      "usedTypes": [
+        "D2RunesTxtTableStrc"
       ]
     }
   ]

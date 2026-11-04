@@ -121,6 +121,7 @@ void __fastcall AUTOMAP_RotateCellLeft(uint32_t dwUnused, struct D2AutomapCellSt
 void __stdcall AUTOMAP_RebalanceTreeRight(struct D2AutomapCellStrc * * ppRootNode);
 // AVL tree left rebalance: handles single left rotation (right-right case) and double left-right rotation based on grandchild balance factor. Halts on unexpected balance states.
 void __stdcall AUTOMAP_RebalanceTreeLeft(struct D2AutomapCellStrc * * ppCell);
+int __fastcall Unreferenced_00457ac0(int param_1, int param_2);
 // AUTOMAP_InsertCellIntoTree - Inserts an automap cell into an AVL tree.
 // Cells are sorted by (yPixel, xPixel, cellNo) with AVL self-balancing
 // using wWeight as the balance factor (-1, 0, +1).
@@ -179,6 +180,7 @@ void __stdcall AUTOMAP_DrawLevelName();
 void __stdcall AUTOMAP_DrawVersion();
 void __stdcall AUTOMAP_DrawServerIP();
 void __stdcall AUTOMAP_DrawDifficulty();
+int Unreferenced_0045a280();
 void __stdcall AUTOMAP_LoadDC6Sprites();
 // AUTOMAP_Init - Initializes the automap subsystem.
 // Loads DC6 sprite assets for all 4 act map tilesets

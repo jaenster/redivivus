@@ -5,6 +5,7 @@
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/Message.h"
+#include "D2Client/Renderer/Renderer.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Launch/MainMenus.h"
@@ -36,7 +37,6 @@
 #include "Storm/Storm.h"
 #include "Storm/WindowHandle.h"
 #include "globals/globals.h"
-#include "D2Client/UI/Panel.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Win/D2GFX.data.h"
 #include "D2Win/D2WinAccountList.h"
@@ -260,6 +260,11 @@ static uint32_t ghwndMsgHook = 0; D2_STATIC_GUARD(ghwndMsgHook, "ghwndMsgHook");
 static unsigned int gdwLastScreenshotTick = {}; D2_STATIC_GUARD(gdwLastScreenshotTick, "gdwLastScreenshotTick");
 
 namespace D2Win::Src::D2WinMain {
+
+BOOL __stdcall D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020() {
+    RENDERER_CurrentRenderedFunctions = 0;
+    return 1;
+}
 
 // Sets gnWindowInitState background DC6 pointer, returns 1
 BOOL __stdcall D2WINMAIN_SetBackgroundDC6(DC6 * pBackgroundDC6) {
@@ -602,6 +607,10 @@ BOOL __stdcall D2WINMAIN_TestMouseInRect(RECT * pRect) {
     return BVar1;
 }
 
+::D2WinEditBox * __stdcall FORMS_GetFormTextAndEditBox_Unref_004f97d0() {
+    return (::D2WinEditBox*)gbFormActivated;
+}
+
 void __stdcall DrawCursorOOG() {
     // Static local variables (originally global data)
     static int32_t gnCursorDrawPosX; D2_STATIC_GUARD_BSS(gnCursorDrawPosX, "D2Win::Src::D2WinMain::DrawCursorOOG::gnCursorDrawPosX");
@@ -747,6 +756,24 @@ LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lPa
 
     /* LPARAM lParam for DefWindowProcA */ /* WPARAM wParam for DefWindowProcA */ /* UINT Msg for DefWindowProcA */ /* HWND hWnd for DefWindowProcA */ lResult = DefWindowProcA(hWnd, uMsg, nWParam, lParam);
     return lResult;
+}
+
+int __fastcall Unreferenced_004f9b30(int param_1) {
+    D2ControlStrc* pDVar2 = D2Client::Forms::pFormImage;
+    if (!D2Client::Forms::pFormImage) {
+      return 1;
+    }
+
+    while (pDVar2 != (D2ControlStrc*)param_1) {
+      D2ControlStrc** ppDVar1;
+      ppDVar1 = &pDVar2->pNext;
+      pDVar2 = *ppDVar1;
+      if (!*ppDVar1) {
+        return 0;
+      }
+    }
+
+    return 1;
 }
 
 void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {

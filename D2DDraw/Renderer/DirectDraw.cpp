@@ -11,13 +11,10 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
-#include "D2Client/GAME/View.h"
 #include "D2Client/Message.h"
-#include "D2Client/Renderer/Glide.h"
 #include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
-#include "D2Glide/Renderer/Glide.h"
 #include "D2Multi/OOGUtilities.h"
 #include "D2Sound/Src/D2SoundSmp.h"
 #include "D2Win/DC6.h"
@@ -96,6 +93,14 @@ static uint32_t gnBinkDDrawSurfaceType = 0; D2_STATIC_GUARD(gnBinkDDrawSurfaceTy
 static uint32_t g_bBinkDDrawVideoQuitRequested = 0; D2_STATIC_GUARD(g_bBinkDDrawVideoQuitRequested, "g_bBinkDDrawVideoQuitRequested");
 
 namespace D2DDraw::Renderer::DirectDraw {
+
+void __fastcall DrawImageFast_Unref_0045f7a0(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, BYTE nPaletteIndex) {
+
+}
+
+void __fastcall PerspectiveScalePosition_Unref_005043d0(int32_t nPosX, int32_t nPosY, int32_t nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder) {
+
+}
 
 BOOL __fastcall Initialize(HINSTANCE hInstance) {
     // Static local variables (originally global data)
@@ -2468,6 +2473,18 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
 
     BinkClose(gpBinkVideoDirectDraw);
     gpBinkVideoDirectDraw = 0;
+}
+
+BOOL __fastcall ActivateWindow_Unref_00513b80() {
+    return 0;
+}
+
+void __fastcall SetDefaultPerspectiveFactor_Unref_00514040() {
+
+}
+
+void __fastcall SetDefaultPerspectiveFactor_Unref_00514050() {
+
 }
 
 } // namespace D2DDraw::Renderer::DirectDraw

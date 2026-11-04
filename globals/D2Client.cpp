@@ -267,9 +267,10 @@ int gaLevelAmbientMusicPlayedFlags[1024] = {}; D2_GLOBAL_GUARD(gaLevelAmbientMus
 // =============================================================================
 
 uint32_t gnLastMouseButtonEventType = 0x1; D2_GLOBAL_GUARD(gnLastMouseButtonEventType, "gnLastMouseButtonEventType");
+uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "gaScreenResolutionTableIndexArray");
+uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "gaScreenResolutionModeArray");
 int ScreenSizeX = 0x280; D2_GLOBAL_GUARD(ScreenSizeX, "ScreenSizeX");
 int ScreenSizeY = 0x1e0; D2_GLOBAL_GUARD(ScreenSizeY, "ScreenSizeY");
-uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "gbLightmapColorEnabled");
 int nSoundVolumeLeftChannel = 0x64; D2_GLOBAL_GUARD(nSoundVolumeLeftChannel, "nSoundVolumeLeftChannel");
 int nSoundVolumeRightChannel = 0x64; D2_GLOBAL_GUARD(nSoundVolumeRightChannel, "nSoundVolumeRightChannel");
 int nCashDisplayItemCount = 0x2; D2_GLOBAL_GUARD(nCashDisplayItemCount, "nCashDisplayItemCount");
@@ -304,7 +305,11 @@ D2UnitStrc * ServerSideUnitHashTables_2__0_[6][128] = {}; D2_GLOBAL_GUARD(Server
 D2UnitStrc * ServerSideUnitHashTables_3__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_3__0_, "ServerSideUnitHashTables_3__0_");
 D2UnitStrc * ServerSideUnitHashTables_4__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_4__0_, "ServerSideUnitHashTables_4__0_");
 D2UnitStrc * pPlayerUnit = 0; D2_GLOBAL_GUARD(pPlayerUnit, "pPlayerUnit");
+int gnCursorInitialized = 0; D2_GLOBAL_GUARD(gnCursorInitialized, "gnCursorInitialized");
 int gnGfxDirectionCountCache = 0; D2_GLOBAL_GUARD(gnGfxDirectionCountCache, "gnGfxDirectionCountCache");
+uint32_t gnCurrentEngineIndex = 0; D2_GLOBAL_GUARD(gnCurrentEngineIndex, "gnCurrentEngineIndex");
+uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "fps");
+uint32_t gnMonsterSpecialType = 0; D2_GLOBAL_GUARD(gnMonsterSpecialType, "gnMonsterSpecialType");
 uint32_t gnNpcMenuMercHireCost1 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost1, "gnNpcMenuMercHireCost1");
 uint32_t gnNpcMenuMercHireCost2 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost2, "gnNpcMenuMercHireCost2");
 uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "gbNpcMenuInitialized");
@@ -314,6 +319,7 @@ uint32_t gdwTradeThrottleTimestamp = 0; D2_GLOBAL_GUARD(gdwTradeThrottleTimestam
 bool gbTradeResetFlag = 0; D2_GLOBAL_GUARD(gbTradeResetFlag, "gbTradeResetFlag");
 uint32_t gnTradeAcceptedFlags = 0; D2_GLOBAL_GUARD(gnTradeAcceptedFlags, "gnTradeAcceptedFlags");
 int32_t g_nTradeWindowState = 0; D2_GLOBAL_GUARD(g_nTradeWindowState, "g_nTradeWindowState");
+BOOL bReceivedQuestAvailabilityPacket = 0; D2_GLOBAL_GUARD(bReceivedQuestAvailabilityPacket, "bReceivedQuestAvailabilityPacket");
 DC6 * gpMessageLogDC6 = 0; D2_GLOBAL_GUARD(gpMessageLogDC6, "gpMessageLogDC6");
 uint32_t nHoradricCubeUIState = 0; D2_GLOBAL_GUARD(nHoradricCubeUIState, "nHoradricCubeUIState");
 int gnPlayerCashDisplay = 0; D2_GLOBAL_GUARD(gnPlayerCashDisplay, "gnPlayerCashDisplay");
@@ -652,6 +658,16 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
+
+namespace D2Game::GAME::Rendering {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::GAME::Rendering::CurrentRendingEngine");
+
+} // namespace D2Game::GAME::Rendering
 
 namespace D2Client::UI::ui {
 

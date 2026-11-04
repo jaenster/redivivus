@@ -23,6 +23,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004046d0",
+      "address": "004046d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004046d0"
+        }
+      ],
+      "namespace": "Fog::Engine::Application",
+      "calledFunctions": [
+        "Unreferenced_004046d0"
+      ]
+    },
+    {
       "name": "DEBUG_GetPEImageType",
       "address": "00404730",
       "lines": [
@@ -353,6 +367,21 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004067c0",
+      "address": "004067c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004067c0"
+        }
+      ],
+      "namespace": "Fog::Engine::Application",
+      "calledFunctions": [
+        "Unreferenced_004067c0",
+        "SFileSetBasePath"
       ]
     },
     {

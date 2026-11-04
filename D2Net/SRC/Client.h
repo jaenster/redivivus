@@ -1351,6 +1351,8 @@ size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, size_t 
 size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, size_t nSize);
 // @sourcefile .\SRC\Client.cpp
 int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
+int Unreferenced_0052aaa0();
+int Unreferenced_0052aad0();
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall ThreadClientToServer(void * lpThreadParam);
 // Sends packet to server. Validates packet size <= 0x204 bytes, forwards to NET_SendPacketToClient (misnomer in callee name).

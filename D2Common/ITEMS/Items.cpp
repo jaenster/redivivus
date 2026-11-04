@@ -7684,4 +7684,20 @@ int32_t __stdcall SerializeItem(D2UnitStrc * pUnit, uint8_t * pBitStream, size_t
     return nBitsWritten;
 }
 
+BOOL __stdcall ReturnFalse_Unref_00648390(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+    return 0;
+}
+
+BOOL __stdcall ReturnFalse_Unref_00654e70(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+    return 0;
+}
+
+BOOL __stdcall ReturnFalse_Unref_0066a230(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+    return 0;
+}
+
+BOOL __stdcall ReturnFalse_Unref_0066a240(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
+    return 0;
+}
+
 } // namespace D2Common::ITEMS::Items

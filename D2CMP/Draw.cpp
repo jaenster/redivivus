@@ -240,6 +240,16 @@ uint8_t __stdcall DRAW_FindFarthestPaletteColor(uint8_t * pPalette, int nPalette
     return byBestIndex;
 }
 
+int Unreferenced_006052f0() {
+    int iVar1 = -0x100;
+    do {
+      gaColorDistanceLookupTable[iVar1 + 0x100] = iVar1 * iVar1;
+      iVar1++;
+    } while (iVar1 < 0x100);
+
+    return iVar1;
+}
+
 void __stdcall DRAW_SetTransparentColorRGB(uint32_t nRGB) {
     gnDrawTransparentColorRGB = (uint32_t)(uint16_t)((uint16_t)(uint8_t)(char)nRGB << 8 | (uint16_t)(uint8_t)(char)(nRGB >> 8)) << 8 | (uint8_t)(nRGB >> 0x10);
 }

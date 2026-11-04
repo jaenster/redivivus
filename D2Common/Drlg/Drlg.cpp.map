@@ -353,6 +353,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00642770",
+      "address": "00642770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00642770"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg",
+      "calledFunctions": [
+        "Unreferenced_00642770",
+        "TXT_LevelDefs_GetLine"
+      ]
+    },
+    {
       "name": "GetRoomByCoordsByLevel",
       "address": "006427a0",
       "lines": [
@@ -778,6 +793,20 @@
         "D2DrlgLevelStrc",
         "D2DrlgStrc",
         "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLG_ReturnZero_Unref_00643600",
+      "address": "00643600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643600"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg",
+      "calledFunctions": [
+        "DRLG_ReturnZero_Unref_00643600"
       ]
     },
     {

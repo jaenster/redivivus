@@ -449,6 +449,25 @@
       ]
     },
     {
+      "name": "Unreferenced_00473720",
+      "address": "00473720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473720"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "Unreferenced_00473720",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "LEVEL_CanHaveRain",
+        "LEVEL_CanHaveMud"
+      ]
+    },
+    {
       "name": "WEATHER_GetCurrentLevelWeatherFlags",
       "address": "00473770",
       "lines": [
@@ -641,6 +660,48 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp"
+      ]
+    },
+    {
+      "name": "ENV_Rcv0x54_NoOp_Unref_00473cb0",
+      "address": "00473cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473cb0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "ENV_Rcv0x54_NoOp_Unref_00473cb0"
+      ]
+    },
+    {
+      "name": "ENV_Rcv0x54_NoOp_Unref_00473cc0",
+      "address": "00473cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473cc0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "ENV_Rcv0x54_NoOp_Unref_00473cc0"
+      ]
+    },
+    {
+      "name": "ENV_InitClientSide_NoOp_Unref_00473cd0",
+      "address": "00473cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473cd0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "ENV_InitClientSide_NoOp_Unref_00473cd0"
       ]
     },
     {

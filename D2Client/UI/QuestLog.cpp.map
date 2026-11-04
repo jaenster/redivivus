@@ -4,6 +4,20 @@
   "file": "D2Client/UI/QuestLog.cpp",
   "functions": [
     {
+      "name": "QUESTLOG_ResetQuestSelections_Unref_004a18f0",
+      "address": "004a18f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a18f0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ResetQuestSelections_Unref_004a18f0"
+      ]
+    },
+    {
       "name": "QUESTLOG_FindQuestIndexById",
       "address": "004a1910",
       "lines": [
@@ -697,6 +711,20 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004a3200",
+      "address": "004a3200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3200"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "Unreferenced_004a3200"
       ]
     },
     {

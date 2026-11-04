@@ -88,6 +88,10 @@ __time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime) {
     return _Var1;
 }
 
+int Unreferenced_00568d70() {
+    return sgptDataTable->nSkillCountMaxPerClass;
+}
+
 int32_t __fastcall FindEndOfString(char * szString, int32_t nMaxSize) {
     char* pBufEnd = szString + nMaxSize;
     char* pPosition = szString;

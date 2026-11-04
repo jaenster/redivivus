@@ -19,6 +19,22 @@ struct D2PoolManagerStrc;
 namespace D2Common::Drlg::DrlgGrid {
 
 // Function declarations
+void __fastcall ResetGrid_Unref_0040f570(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_00416810(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_00416890(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_004168b0(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_00416960(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_004169a0(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_0041c390(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_004203e0(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_0044be20(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_0044de50(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_0044dee0(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_0045ba70(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_00601bb0(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_00601d20(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_00601db0(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_0060e290(struct D2DrlgGridStrc * pDrlgGrid);
 // Recursive 4-directional flood-fill on grid cells.
 void __fastcall DRLGGRID_FloodFillGridCoords(int * pFloodFillContext, int nX, int nY, int nDirection);
 void __fastcall OverwriteFlag(int * pFlag, int32_t nFlag);
@@ -46,6 +62,7 @@ void __fastcall DRLGGRID_ApplyFlagToBorderCells(struct D2DrlgGridStrc * pDrlgGri
 void __fastcall DRLGGRID_SetEdgeGridFlags(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgVertexStrc * pEdge, int nFlag, int eOperation, BOOL bIncludeEndpoints);
 // Bresenham line with perpendicular width, bounds-checked.
 void __fastcall DRLGGRID_SetLineFlagsWithWidth(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgVertexStrc * pEdge, struct D2DrlgCoordsStrc * pDrlgCoords, int nFlag, int eOperation, int nLineWidth);
+int __fastcall Unreferenced_0067cb60(int param_1, int param_2);
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_InitGridCells(struct D2PoolManagerStrc * pMemory, struct D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight);
 void __fastcall FillGrid(struct D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight, int * pCellPos, int * pCellRowOffsets);
@@ -61,6 +78,7 @@ void __fastcall FillExternalCellFlags(struct D2DrlgGridStrc * pDrlgGrid, struct 
 void __fastcall DRLGGRID_FreeGrid(struct D2PoolManagerStrc * pMemory, struct D2DrlgGridStrc * pGrid);
 // Clears grid metadata (flags/row offsets) and marks grid as unused.
 void __fastcall ResetGrid(struct D2DrlgGridStrc * pDrlgGrid);
+void __fastcall ResetGrid_Unref_006c4030(struct D2DrlgGridStrc * pDrlgGrid);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Common::Drlg::DrlgGrid

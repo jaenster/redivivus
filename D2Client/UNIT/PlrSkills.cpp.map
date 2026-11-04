@@ -1052,6 +1052,42 @@
         "int32_t",
         "uint32_t"
       ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070",
+      "address": "004da070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da070"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20",
+      "address": "004dca20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dca20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20",
+        "GFX_DrawUnitShadow"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
     }
   ]
 }

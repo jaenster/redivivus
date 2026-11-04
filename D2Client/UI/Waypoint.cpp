@@ -170,6 +170,11 @@ static int32_t WAYPOINT_GetWaypointIndexFromMouse(int32_t nMouseX, int32_t nMous
     return nIndex;
 }
 
+void Unreferenced_0049c560() {
+    gbWaypointButtonPressed = 0;
+    ClickingDownOnWaypointEntry = -1;
+}
+
 void __stdcall DRAW_UI_WaypointGFXLoad() {
     char szPath[260];
     if (!WaypointWayGateBackGround) {
@@ -459,6 +464,31 @@ void __stdcall WAYPOINT_PopulateList() {
 
       nWaypointIdIter++;
     } while ((int)nWaypointIdIter <= (int)(uint32_t)gaWaypointVisited[WaypointCurrentSelectedAct * 0xb + 10]);
+}
+
+int Unreferenced_0049c980() {
+    D2RoomStrc* pRoom;
+    eD2LevelId eLevel;
+    int extraout_EAX;
+    int extraout_EAX_00;
+    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
+    if (pUnit) {
+      eAct eVar1;
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      if (pRoom) {
+        eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        if (eLevel != LEVEL_None) {
+          eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+          Waypoint_SetWaypointArea((uint32_t)eVar1);
+          WAYPOINT_PopulateList();
+          return extraout_EAX;
+        }
+      }
+    }
+
+    WaypointCurrentSelectedAct = 0;
+    WAYPOINT_PopulateList();
+    return extraout_EAX_00;
 }
 
 void __stdcall DRAW_UI_Waypoint() {

@@ -125,6 +125,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004b9440",
+      "address": "004b9440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9440"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004b9440"
+      ]
+    },
+    {
       "name": "SOUNDINST_StopChannel",
       "address": "004b94a0",
       "lines": [
@@ -165,6 +179,20 @@
       "usedTypes": [
         "D2SoundChannelStrc",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004b9560",
+      "address": "004b9560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9560"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004b9560"
       ]
     },
     {
@@ -543,6 +571,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004b9cd0",
+      "address": "004b9cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9cd0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004b9cd0"
+      ]
+    },
+    {
       "name": "SOUND_PauseAll",
       "address": "004b9d00",
       "lines": [
@@ -633,6 +675,23 @@
         "D2SoundChannelStrc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004b9eb0",
+      "address": "004b9eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9eb0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004b9eb0",
+        "SOUNDHDR_GetGlobal3",
+        "RollRandomNumber",
+        "SOUND_PlaySound"
       ]
     },
     {
@@ -1029,6 +1088,52 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004e41e0",
+      "address": "004e41e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e41e0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004e41e0",
+        "DRLGENV_GetCycleIndexFromAct"
+      ]
+    },
+    {
+      "name": "Unreferenced_004e4200",
+      "address": "004e4200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4200"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004e4200",
+        "WEATHER_CanHaveRain",
+        "WEATHER_FloatPassthrough"
+      ]
+    },
+    {
+      "name": "Unreferenced_004e4220",
+      "address": "004e4220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4220"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "Unreferenced_004e4220",
+        "SOUNDHDR_ClearReferenceCounts"
       ]
     },
     {

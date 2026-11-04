@@ -18,6 +18,8 @@ typedef uint32_t eSkillEType;
 namespace D2Client::Engine {
 
 // Function declarations
+void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae50(BOOL bConnectionLost);
+void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae70(BOOL bConnectionLost);
 BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight);
 void __stdcall DrawPopupOk(int32_t bDiscPrompt);
 void __stdcall LOADER_CheckForInsertedDiscs();
@@ -32,6 +34,7 @@ void __stdcall INPUT_CharScreenOkCancel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall LOADER_DrawConnectionLostMessage();
 void __stdcall LOADER_DrawOkCancelButtons(int32_t nOkFrame, int32_t nCancelFrame);
 void __stdcall DRAW_UI_OkCancel();
+int Unreferenced_00460170();
 void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused);
 void __stdcall INPUT_CharScreenDualButtonDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_CharScreenDualButtonUp(struct D2UIMouseMsgStrc * pMsg);
@@ -55,10 +58,15 @@ uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
 // Alternate draw mode game loop with different event handler table and loop function
 uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal);
 void __fastcall CLIENT_SetUnitFlag(struct D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet);
+void __fastcall Unreferenced_00460760(int param_1, int param_2);
 void __fastcall StoreLastSkillHit(eSkillEType pSkill, struct D2UnitStrc * pUnit, eD2UnitType nUnitType, uint32_t nUid);
+int __fastcall Unreferenced_004607d0(int param_1);
+int __fastcall Unreferenced_004607f0(int param_1);
+int __fastcall Unreferenced_00460810(int param_1);
 void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode, BOOL bMovePlayerUnit, struct D2UnitStrc * pUnit);
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms();
 void __fastcall CLIENT_UpdateUnitLightRadius(struct D2UnitStrc * pUnit, int32_t nRadiusBonus);
 void __fastcall CLIENT_SetUnitLightColor(struct D2UnitStrc * pUnit, int32_t dwRGB);
+void __fastcall LOADER_SetConnectionLostFlag_Unref_00468000(BOOL bConnectionLost);
 
 } // namespace D2Client::Engine

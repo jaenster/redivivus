@@ -264,6 +264,23 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uin
     return pUnit;
 }
 
+int Unreferenced_004c10c0() {
+    D2UnitStrc* in_ECX;
+    D2SkillStrc* in_EDX;
+    int32_t iVar1 = PlrSkills::PLRSKILLS_CanUseSkillCheck(in_ECX, in_EDX);
+    switch (iVar1) {
+      case 2:
+        case 7:
+          {
+            return 0;
+          }
+      default:
+        {
+          return 1;
+        }
+    }
+}
+
 int32_t __fastcall ITEM_CheckItemEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitStrc* pWeaponSlot;
     eD2ItemTypes eQuiverType;
@@ -425,7 +442,7 @@ static void __stdcall ITEM_ReequipItemOnBody(D2UnitStrc * pUnit, int32_t bApplyE
 
 // Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
 // @sourcefile .\UNIT\Item.cpp
-static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
+void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
     uint8_t byItemComponent;
     eD2BodyLoc eBodyLoc;
     D2UnitStrc* pEquipItem;
@@ -1145,6 +1162,21 @@ void __fastcall HandleItemToCursor(uint8_t * pBytes) {
       Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
       return;
     }
+}
+
+int __fastcall Unreferenced_004c2150(int param_1) {
+    // Static local variables (originally global data)
+    static uint32_t gnCursorInvTypeAutoOpenC[5] = { 0x0, 0x1, 0x4, 0x2, 0x6 }; D2_STATIC_GUARD(gnCursorInvTypeAutoOpenC, "D2Client::UNIT::Unreferenced_004c2150::gnCursorInvTypeAutoOpenC");
+    static uint32_t gnCursorInvTypeAutoOpenA = 0x5; D2_STATIC_GUARD(gnCursorInvTypeAutoOpenA, "D2Client::UNIT::Unreferenced_004c2150::gnCursorInvTypeAutoOpenA");
+
+    uint32_t uVar1;
+    for (uVar1 = 0; uVar1 < gnCursorInvTypeAutoOpenA; uVar1++) {
+      if (param_1 == gnCursorInvTypeAutoOpenC[uVar1]) {
+        return 4;
+      }
+    }
+
+    return 3;
 }
 
 // @sourcefile .\UNIT\Item.cpp

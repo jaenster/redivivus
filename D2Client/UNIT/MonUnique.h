@@ -16,6 +16,7 @@ namespace D2Client::UNIT::MonUnique {
 
 // Function declarations
 uint8_t * __fastcall GetMonUModList(struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_004ac760(int param_1);
 void __fastcall SetNameSeed(struct D2UnitStrc * pUnit, uint16_t nNameSeed);
 void __fastcall SetBossId(struct D2UnitStrc * pUnit, int16_t nBossId);
 int16_t __fastcall GetBossId(struct D2UnitStrc * pUnit);
@@ -45,6 +46,7 @@ void __fastcall MONUNIQUE_SpawnExplodingArrowDeath(struct D2UnitStrc * pUnit, in
 // Per-frame callback for suicide-exploder monsters (e.g. Flesh Beast). Fires only at Death animation frame 4. Reads the monster's treasure class index (difficulty-adjusted) to decide the explosion type: index 1 spawns MISSILE_Suicidefireexplode, index>=2 spawns MISSILE_Suicideiceexplode. Always spawns MISSILE_Suicidecorpseexplode at the unit's position as the secondary corpse-burst effect.
 void __fastcall MONUNIQUE_SpawnSuicideExplosion(struct D2UnitStrc * pUnit, int32_t nUMod, uint32_t nParam2);
 void __fastcall MONUNIQUE_PregnantCorpseBurst(struct D2UnitStrc * pUnit);
+void __fastcall SetNameSeed_Unref_005a0160(struct D2UnitStrc * pUnit, uint16_t nNameSeed);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Client::UNIT::MonUnique

@@ -10,6 +10,8 @@
 // Forward declarations
 struct D2DataArrayStrc;
 
+extern int gnWeatherCurrentTransitionState;
+
 namespace D2Client::Draw::Weather {
 extern int gnWeatherRngRangeMax;
 extern int gnWeatherRngRangeMaxAct5;

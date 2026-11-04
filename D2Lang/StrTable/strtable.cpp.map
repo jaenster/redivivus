@@ -26,6 +26,21 @@
       ]
     },
     {
+      "name": "Unreferenced_005248e0",
+      "address": "005248e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005248e0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "Unreferenced_005248e0",
+        "ARCHIVE_FreeMpqFile"
+      ]
+    },
+    {
       "name": "STRTABLE_GetStringByIndex",
       "address": "00524930",
       "lines": [
@@ -244,6 +259,20 @@
       "usedTypes": [
         "uint16_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00525010",
+      "address": "00525010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525010"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "Unreferenced_00525010"
       ]
     },
     {

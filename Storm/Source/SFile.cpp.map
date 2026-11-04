@@ -38,6 +38,34 @@
       ]
     },
     {
+      "name": "Unreferenced_00415190",
+      "address": "00415190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415190"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00415190"
+      ]
+    },
+    {
+      "name": "Unreferenced_004151b0",
+      "address": "004151b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004151b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004151b0"
+      ]
+    },
+    {
       "name": "SFILE_DecompressLzw_BufferRead",
       "address": "004151d0",
       "lines": [
@@ -245,6 +273,20 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00415730",
+      "address": "00415730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415730"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00415730"
       ]
     },
     {
@@ -952,6 +994,62 @@
       ]
     },
     {
+      "name": "Unreferenced_004167a0",
+      "address": "004167a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004167a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004167a0"
+      ]
+    },
+    {
+      "name": "Unreferenced_004167f0",
+      "address": "004167f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004167f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004167f0"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416820",
+      "address": "00416820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416820"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416820"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416850",
+      "address": "00416850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416850"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416850"
+      ]
+    },
+    {
       "name": "SFILE_CompareFileTime2",
       "address": "004168c0",
       "lines": [
@@ -966,6 +1064,23 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_004168f0",
+      "address": "004168f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004168f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_004168f0"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
       ]
     },
     {
@@ -1017,6 +1132,104 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004169f0",
+      "address": "004169f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004169f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004169f0"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416a00",
+      "address": "00416a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a00"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416a00"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416a10",
+      "address": "00416a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a10"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416a10"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416a20",
+      "address": "00416a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a20"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416a20"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416a30",
+      "address": "00416a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a30"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416a30"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416a90",
+      "address": "00416a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416a90"
+      ]
+    },
+    {
+      "name": "Unreferenced_00416ab0",
+      "address": "00416ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416ab0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00416ab0"
       ]
     },
     {
@@ -1127,6 +1340,79 @@
         "pfnCryptSignHashA",
         "pfnCryptVerifySignatureA",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00417850",
+      "address": "00417850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417850"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417850"
+      ]
+    },
+    {
+      "name": "Unreferenced_004178a0",
+      "address": "004178a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004178a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004178a0"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_00417900",
+      "address": "00417900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417900"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_00417900"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "Unreferenced_00417940",
+      "address": "00417940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417940"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417940"
+      ]
+    },
+    {
+      "name": "Unreferenced_00417990",
+      "address": "00417990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417990"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00417990"
       ]
     },
     {
@@ -1474,6 +1760,54 @@
       ]
     },
     {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_004183f0",
+      "address": "004183f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004183f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_004183f0"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_00418430",
+      "address": "00418430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418430"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_00418430"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "Unreferenced_00418470",
+      "address": "00418470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418470"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418470"
+      ]
+    },
+    {
       "name": "SFILE_InsertFileRecordIntoList5",
       "address": "004184b0",
       "lines": [
@@ -1507,6 +1841,20 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004185b0",
+      "address": "004185b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004185b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_004185b0"
       ]
     },
     {
@@ -1615,6 +1963,91 @@
       ]
     },
     {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_004187c0",
+      "address": "004187c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004187c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_004187c0"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_00418800",
+      "address": "00418800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418800"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_00418800"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_00418840",
+      "address": "00418840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418840"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_00418840"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_00418880",
+      "address": "00418880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418880"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_00418880"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_004188c0",
+      "address": "004188c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004188c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_004188c0"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
       "name": "UnlinkAll",
       "address": "00418900",
       "lines": [
@@ -1705,6 +2138,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00418a40",
+      "address": "00418a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418a40"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418a40"
+      ]
+    },
+    {
       "name": "SFILE_FreeArchiveRecord",
       "address": "00418a50",
       "lines": [
@@ -1776,6 +2223,23 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1_Unref_00418ba0",
+      "address": "00418ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418ba0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1_Unref_00418ba0"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
       ]
     },
     {
@@ -1893,6 +2357,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00418d80",
+      "address": "00418d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418d80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418d80"
+      ]
+    },
+    {
       "name": "SFILE_CloseStream5",
       "address": "00418da0",
       "lines": [
@@ -1910,6 +2388,34 @@
         "D2StormListHead",
         "StormLinkStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00418de0",
+      "address": "00418de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418de0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418de0"
+      ]
+    },
+    {
+      "name": "Unreferenced_00418e50",
+      "address": "00418e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418e50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418e50"
       ]
     },
     {
@@ -1999,6 +2505,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00418ff0",
+      "address": "00418ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418ff0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00418ff0"
+      ]
+    },
+    {
       "name": "SFILE_FreeArchiveRecord2",
       "address": "00419000",
       "lines": [
@@ -2015,6 +2535,20 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00419060",
+      "address": "00419060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419060"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_00419060"
       ]
     },
     {
@@ -2564,6 +3098,21 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
+        "SFILE_CreateCdThread"
+      ]
+    },
+    {
+      "name": "Unreferenced_0041a8d0",
+      "address": "0041a8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a8d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "Unreferenced_0041a8d0",
         "SFILE_CreateCdThread"
       ]
     },

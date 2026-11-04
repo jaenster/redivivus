@@ -293,6 +293,11 @@ D2RosterStrc * __stdcall ROSTER_SortByName(D2RosterStrc * pRoster) {
     }
 }
 
+int Unreferenced_004796b0() {
+    gpRosterPlayers = ROSTER_SortByName(gpRosterPlayers);
+    return (int)gpRosterPlayers;
+}
+
 // Insertion-sorts a D2RosterStrc singly-linked list descending by nArenaScore (used as level proxy). Takes the head of an unsorted list via EAX, returns the head of the sorted list. Operates in-place by relinking pNext pointers; does not allocate.
 static D2RosterStrc * ROSTER_SortByLevel(D2RosterStrc * pRoster) {
     D2RosterStrc* pCur;
@@ -333,6 +338,11 @@ static D2RosterStrc * ROSTER_SortByLevel(D2RosterStrc * pRoster) {
       pNextRoster = pRoster;
       pRoster = pSavedNext;
     } while (true);
+}
+
+int Unreferenced_00479740() {
+    gpRosterPlayers = ROSTER_SortByLevel(gpRosterPlayers);
+    return (int)gpRosterPlayers;
 }
 
 // @sourcefile .\GAME\Roster.cpp
@@ -630,6 +640,22 @@ void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore) 
     pRoster->nArenaScore = (uint32_t)nArenaScore;
     ROSTER_RebuildPlayerParty();
     UI::Party::ResetPartyUi();
+}
+
+int __fastcall Unreferenced_00479b60(int param_1) {
+    if (!param_1) {
+      return 0;
+    }
+
+    return param_1 + 0x46;
+}
+
+int __fastcall Unreferenced_00479b70(int param_1) {
+    if (!param_1) {
+      return 0;
+    }
+
+    return param_1 + 0x4a;
 }
 
 // Returns arena score from roster entry field 0x18. Returns 0 if roster is null.

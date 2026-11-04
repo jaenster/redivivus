@@ -18,6 +18,20 @@
       ]
     },
     {
+      "name": "UTILS_OnUnitModeChange_NoOp_Unref_004e4030",
+      "address": "004e4030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4030"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "UTILS_OnUnitModeChange_NoOp_Unref_004e4030"
+      ]
+    },
+    {
       "name": "ANIM_OnSkillCastStub",
       "address": "004e4050",
       "lines": [
@@ -145,6 +159,34 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "CalculateHypotenusePowered"
+      ]
+    },
+    {
+      "name": "ANIM_OnSkillCastStub_Unref_004f52c0",
+      "address": "004f52c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f52c0"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "ANIM_OnSkillCastStub_Unref_004f52c0"
+      ]
+    },
+    {
+      "name": "ANIM_OnSkillCastStub_Unref_004f52d0",
+      "address": "004f52d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f52d0"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "ANIM_OnSkillCastStub_Unref_004f52d0"
       ]
     }
   ]

@@ -80,6 +80,8 @@ void __fastcall STATES_DispatchSetFunc(struct D2UnitStrc * pUnit, eD2States eSta
 // Dispatches the removal function for a state being stripped from pUnit. Looks up the state's remfunc index in D2StatesTxt, bounds-checks against STATESREMFUNC table (max 0x1e entries), calls the matching removal callback if non-null, then removes any unit-event of type 1 tied to the state if a matching stat-list exists. Validates pUnit non-null and eState in-range before any action.
 void __fastcall STATES_DispatchRemFunc(struct D2UnitStrc * pUnit, eD2States eState);
 int32_t __fastcall PLRSKILLS_CanUseSkillCheck(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
+void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070(struct D2UnitStrc * pUnit);
+void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20(struct D2UnitStrc * pUnit);
 // 3 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::PlrSkills

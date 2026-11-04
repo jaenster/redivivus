@@ -5,17 +5,19 @@
 #include "D2CMP/SRC/CelCmp/TCELENTRY.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Client/UI/ui.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "D2Common/Chat/Ignorelist/MappingEntryNode.h"
 #include "D2Common/Chat/Ignorelist/StringEntryNode.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Game/GAME/Targets.h"
+#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/Source/SFile.h"
+#include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -287,6 +289,31 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
     Storm::Source::SMem::SMemFree(this->m_data, s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0);
 }
 
+template<> int __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044fff0(int param_1) {
+    int extraout_EAX;
+    int* piVar4;
+    int* piVar1 = (int*)(param_1 + 0x10);
+    int iVar2 = *piVar1;
+    if (iVar2) {
+      piVar4 = (int*)D2_StormNextLink(piVar1, -1);
+      *piVar4 = iVar2;
+      *(uint32_t*)(*piVar1 + 4) = *(uint32_t*)(param_1 + 0x14);
+      *piVar1 = 0;
+      *(uint32_t*)(param_1 + 0x14) = 0;
+    }
+
+    ((TSGrowableArray<::SGAMEDATA>*)param_1)->Destructor();
+    return extraout_EAX;
+}
+
+template<> int __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    return param_1;
+}
+
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
     uint32_t nRequired = nCount + this->m_count;
     if (nRequired <= this->m_alloc) {
@@ -501,6 +528,22 @@ template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -5726
           return;
         }
     }
+}
+
+template<> int __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_00450350(int param_1) {
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    *(uint32_t*)(param_1 + 0x10) = 0;
+    return param_1;
+}
+
+template<> int __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_00450370(int param_1) {
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    *(uint32_t*)(param_1 + 0x10) = 0;
+    return param_1;
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {

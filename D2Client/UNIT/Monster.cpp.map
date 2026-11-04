@@ -253,6 +253,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004ae190",
+      "address": "004ae190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ae190"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Monster",
+      "calledFunctions": [
+        "Unreferenced_004ae190"
+      ]
+    },
+    {
       "name": "MONSTER_ResetToNeutralFacingTarget",
       "address": "004ae1d0",
       "lines": [
@@ -1049,6 +1063,21 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004b1030",
+      "address": "004b1030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1030"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Monster",
+      "calledFunctions": [
+        "Unreferenced_004b1030",
+        "UNITS_FindClientSideUnit"
       ]
     },
     {

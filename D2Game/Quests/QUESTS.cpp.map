@@ -25,6 +25,35 @@
       ]
     },
     {
+      "name": "Unreferenced_00543540",
+      "address": "00543540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00543540"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS",
+      "calledFunctions": [
+        "Unreferenced_00543540",
+        "GetPlayerData"
+      ]
+    },
+    {
+      "name": "Unreferenced_00543560",
+      "address": "00543560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00543560"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS",
+      "calledFunctions": [
+        "Unreferenced_00543560"
+      ]
+    },
+    {
       "name": "FreeQuestDataList",
       "address": "00543590",
       "lines": [
@@ -89,6 +118,20 @@
         "SGAMEDATA",
         "eD2QuestsInternal",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00543690",
+      "address": "00543690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00543690"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS",
+      "calledFunctions": [
+        "Unreferenced_00543690"
       ]
     },
     {
@@ -1351,6 +1394,20 @@
       ]
     },
     {
+      "name": "Unreferenced_005452f0",
+      "address": "005452f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005452f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS",
+      "calledFunctions": [
+        "Unreferenced_005452f0"
+      ]
+    },
+    {
       "name": "QUESTGUID_SetPlayerCountToZero",
       "address": "00545300",
       "lines": [
@@ -1410,6 +1467,25 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_005454e0",
+      "address": "005454e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005454e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS",
+      "calledFunctions": [
+        "Unreferenced_005454e0",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "ITEM_DeleteItemAndFreeUnit"
       ]
     },
     {

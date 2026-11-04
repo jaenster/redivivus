@@ -571,6 +571,21 @@
       ]
     },
     {
+      "name": "Unreferenced_006b5520",
+      "address": "006b5520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5520"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Unreferenced_006b5520",
+        "RENDERER_D3D_ClearBackbuffer"
+      ]
+    },
+    {
       "name": "Release",
       "address": "006b5550",
       "lines": [
@@ -1211,6 +1226,22 @@
         "IDirectDrawSurface7",
         "IDirectDrawSurface7 *",
         "tagRECT"
+      ]
+    },
+    {
+      "name": "Unreferenced_006b74f0",
+      "address": "006b74f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b74f0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Unreferenced_006b74f0",
+        "DIRECTD3D_LogError",
+        "SetPalette"
       ]
     },
     {

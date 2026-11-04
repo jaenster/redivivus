@@ -767,6 +767,12 @@ int32_t __stdcall TXT_LevelDefs_GetLevelType(eD2LevelId eLevel) {
     return pLevelDefs->LevelType;
 }
 
+int Unreferenced_00642770() {
+    eD2LevelId in_ECX;
+    D2LevelDefsTxt* pDVar1 = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(in_ECX);
+    return pDVar1->DrlgType;
+}
+
 int __fastcall GetRoomByCoordsByLevel(D2DrlgStrc * pDrlg, int32_t nX, int32_t nY) {
     D2DrlgLevelStrc* pLevel = pDrlg->pLevel;
     while (true) {
@@ -1355,6 +1361,10 @@ void __fastcall DRLG_FreeInactiveLevelData(D2DrlgStrc * pDrlg) {
         }
       }
     }
+}
+
+BOOL __stdcall DRLG_ReturnZero_Unref_00643600() {
+    return 0;
 }
 
 // Propagates tile animation data from one room's tile list to another. Copies animation frame data from the source room's tiles to the destination room's tiles. From DrlgAnim.cpp.

@@ -76,6 +76,14 @@ static uint32_t gaItemTypeBaseIdTable[510] = {}; D2_STATIC_GUARD(gaItemTypeBaseI
 
 namespace D2Common::INVENTORY::Inventory {
 
+void __stdcall NullSub_Unref_00611610(D2InventoryStrc * pInventory) {
+
+}
+
+void __stdcall NullSub_Unref_00611640(D2InventoryStrc * pInventory) {
+
+}
+
 // Returns the item's inventory node (&pItemData->pInventory, D2UnitDataItemStrc +0x5c), not a D2InventoryStrc; NULL when pUnit is not an item or has no item data. Provenance: 1.14d asm 0063a7f0 ADD EAX,0x5c.
 static D2ItemInventoryNodeStrc * INVENTORY_GetItemInventoryNode(D2UnitStrc * pUnit) {
     /* Please note that an item can have an inventory, its called sockets (or a
@@ -237,6 +245,14 @@ static void __stdcall INVENTORY_RemoveItemFromGrid(D2UnitStrc * pItem, D2Invento
     pItemData->sInvNode.pNextItemInPage = 0;
     pItemData->sInvNode.pPrevItemInPage = 0;
     pItemData->sInvNode.eInventoryGrid = INVENTORY_GRID_BODYLOC;
+}
+
+int __fastcall Unreferenced_0063aad0(int param_1) {
+    if (param_1 && *(int*)param_1 == 4) {
+      return 1;
+    }
+
+    return 0;
 }
 
 // Removes an item unit from its owning D2InventoryStrc. Validates inventory signature (0x1020304), removes the item from its grid slot, clears the cursor-item pointer or unlinks it from the item list, zeroes the item's inventory/grid references, clears the owner's stat bonuses via STATLIST_RemoveFromOwnerAndRecalc, and clears dwPrimaryWeaponGUID if it matched. Returns 1 on success, 0 on any validation failure.
@@ -1313,6 +1329,10 @@ BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2Unit
       return 0;
     }
 
+    return 1;
+}
+
+int __stdcall Unreferenced_0063bcb0(int param_1, int param_2, int param_3, int param_4) {
     return 1;
 }
 
@@ -5036,6 +5056,18 @@ void __stdcall SaveCharAppearance(D2UnitStrc * pUnit, char * pArray1, char * pAr
 
       pCurItem = pItemData->sInvNode.pNextItem;
     }
+}
+
+void __stdcall NullSub_Unref_00643610(D2InventoryStrc * pInventory) {
+
+}
+
+void __stdcall NullSub_Unref_006460c0(D2InventoryStrc * pInventory) {
+
+}
+
+void __stdcall NullSub_Unref_006460e0(D2InventoryStrc * pInventory) {
+
 }
 
 } // namespace D2Common::INVENTORY::Inventory

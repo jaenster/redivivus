@@ -38,6 +38,51 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgAnimTileGridStrc) == 0x14, "D2_NEW_AT(D2DrlgAnimTileGridStrc): the 32-bit layout must be the 0x14 bytes 1.14d allocates");
 
 
+static int gnDrlgAnimFrameCounter[42] = {
+    0x0,
+    0x1,
+    0x2,
+    0x1,
+    0x2,
+    0x3,
+    0x3,
+    0x5,
+    0x5,
+    0x6,
+    0x6,
+    0x7,
+    0x7,
+    0x8,
+    0x9,
+    0xa,
+    0xb,
+    0xc,
+    0xd,
+    0xe,
+    0xf,
+    0x10,
+    0x11,
+    0x12,
+    0x14,
+    0x0,
+    0x0,
+    0x1,
+    0x2,
+    0x5,
+    0x5,
+    0x7,
+    0x9,
+    0xb,
+    0xd,
+    0xe,
+    0xf,
+    0x10,
+    0x11,
+    0x12,
+    0x13,
+    0x14
+}; D2_STATIC_GUARD(gnDrlgAnimFrameCounter, "gnDrlgAnimFrameCounter");
+
 namespace D2Common::Drlg::DrlgAnim {
 
 // Scans every cell in the room's grid, looks up the tile in all tile projects, and for any tile whose library flags include bit 0x100 (animated) adds (matchCount-1) to the floor, wall, or roof animated tile counters in pRoomTiles and sets the animated-room flag 0x8000000 on pRoomEx.
@@ -287,54 +332,12 @@ void __fastcall DRLGROOMTILE_AllocAnimTiles(D2RoomExStrc * pRoomEx, int nFrameSt
     DRLGANIM_AllocAnimatedTiles(pRoofGrids, pRoomEx, nFrameStep, pTileGrid->sRoomTiles.pRoofTiles, pTileGrid->nShadows);
 }
 
+int __fastcall DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0(int nAnimIndex) {
+    return gnDrlgAnimFrameCounter[nAnimIndex + 0x1a];
+}
+
 // Returns the tile orientation value for a given animation index by indexing the static gnDrlgAnimFrameCounter lookup table. Maps DS1 animation indices to their corresponding DRLG orientation constants.
 int __fastcall DRLGANIM_GetOrientationFromIndex(int nAnimIndex) {
-    // Static local variables (originally global data)
-    static int gnDrlgAnimFrameCounter[42] = {
-    0x0,
-    0x1,
-    0x2,
-    0x1,
-    0x2,
-    0x3,
-    0x3,
-    0x5,
-    0x5,
-    0x6,
-    0x6,
-    0x7,
-    0x7,
-    0x8,
-    0x9,
-    0xa,
-    0xb,
-    0xc,
-    0xd,
-    0xe,
-    0xf,
-    0x10,
-    0x11,
-    0x12,
-    0x14,
-    0x0,
-    0x0,
-    0x1,
-    0x2,
-    0x5,
-    0x5,
-    0x7,
-    0x9,
-    0xb,
-    0xd,
-    0xe,
-    0xf,
-    0x10,
-    0x11,
-    0x12,
-    0x13,
-    0x14
-}; D2_STATIC_GUARD(gnDrlgAnimFrameCounter, "D2Common::Drlg::DrlgAnim::DRLGANIM_GetOrientationFromIndex::gnDrlgAnimFrameCounter");
-
     return gnDrlgAnimFrameCounter[nAnimIndex];
 }
 

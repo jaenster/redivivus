@@ -775,6 +775,10 @@ void __stdcall LOGMANAGER_UnwindDestructor_NoOp() {
 
 }
 
+int __fastcall Unreferenced_0040eb40(int param_1) {
+    return param_1 + 8;
+}
+
 // Element ctor/dtor for the eh-vector iterator over aTaskQueueCriticalSections.
 // The element is a CRITICAL_SECTION, but the iterator's callback slots are void (*)(void*),
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
@@ -1212,6 +1216,17 @@ uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase) {
     return nOffset + (int)pBase;
 }
 
+int __fastcall Unreferenced_0040f520(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
+int __fastcall Unreferenced_0040f580(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix) {
     char szLogsFolder[260];
     FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(szLogsFolder, 0x104);
@@ -1279,6 +1294,12 @@ void __fastcall LogToFile(uint32_t pLogRecord) {
     fwrite(szFileName + nNameLen + 1, Storm::Source::SSTR::SStrLen((char*)(szFileName + nNameLen + 1)), 1, pFile);
     DWORD dwNow = GetTickCount();
     gLogFileLastAccessTimeArray[nSlot] = dwNow;
+}
+
+int __fastcall Unreferenced_0040f810(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 void __fastcall UnlinkListNode(int * pNode) {
@@ -2083,6 +2104,26 @@ uint32_t LOGMGR_GetHighResolutionTime() {
     }
 
     return (dwNowTick - tBase.dwTick) / 1000 + tBase.nSeconds;
+}
+
+void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740() {
+
+}
+
+void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750() {
+
+}
+
+void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760() {
+
+}
+
+void StaticFini_gLogMessageQueueCS_Unref_00665930() {
+    EnterCriticalSection(&lpCriticalSection_0096d610);
+}
+
+void StaticFini_gLogMessageQueueCS_Unref_00665940() {
+    LeaveCriticalSection(&lpCriticalSection_0096d610);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

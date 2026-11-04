@@ -163,6 +163,7 @@ void __fastcall Objects_InitFn10(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn28_GoldPlaceholder(struct D2ObjectInitFnArg * pInitArg);
 // Shrine object initialization function (object init table entry 1). Reads the shrine-type param from ObjectsTxt; if 0, randomly rolls a shrine type from the Shrines table (up to 8 tries, filtered by dwLevelMin vs current level); if 1/2 rolls fixed shrine category 2/3; otherwise calls OBJECT_SelectRandomShrineType. Remaps certain shrine IDs (4→2, 5→3, 0x10→0x12), stores the result in the object's szCharName[4], and sets the ShrineTxt record pointer.
 void __fastcall Objects_InitFn01_Shrine(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn05_Door_Unref_0054fb30(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn22_Fire(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn24_FloorTrap(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn02_Urn(struct D2ObjectInitFnArg * pInitArg);

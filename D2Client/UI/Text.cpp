@@ -82,6 +82,7 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/Party.data.h"
 #include "D2Client/UI/Text.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/MainMenus.h"
@@ -213,9 +214,31 @@ static uint32_t gbTextEventHandlersRegistered = 0; D2_STATIC_GUARD(gbTextEventHa
 
 namespace D2Client::UI::Text {
 
+void __fastcall TEXT_SetScrollCompleteCallback_Unref_0045afe0(pfnTextScrollComplete pfnCallback, void * pUserParam) {
+    MouseXOffset = (uint32_t)(uintptr_t)pfnCallback;
+    MouseYOffset = (uint32_t)(uintptr_t)pUserParam;
+}
+
 // JMP thunk
 void __stdcall thunk_TEXT_ClearChatMessages() {
     ::D2Client::UI::Text::TEXT_ClearChatMessages();
+}
+
+void __fastcall TEXT_SetScrollCompleteCallback_Unref_004776d0(pfnTextScrollComplete pfnCallback, void * pUserParam) {
+    D2Game::GAME::Rendering::CurrentRendingEngine = (int)pfnCallback;
+    gnCurrentEngineIndex = (uint32_t)(uintptr_t)pUserParam;
+}
+
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_004967e0() {
+
+}
+
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_00496980() {
+
+}
+
+D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049c160() {
+    return (D2GSPacketSrv0x27_TextStrc*)Party::pPanel_inv_goldbtn;
 }
 
 static void TEXT_FreeTextLineList(D2TextLineStrc * pLine) {
@@ -356,6 +379,10 @@ void __stdcall TEXT_FreeAllScreenMessages(D2ScreenMessageListStrc * pList) {
 void __fastcall TEXT_SetTextDisplayMode(int32_t nDisplayMode) {
     gnTextDisplayMode = nDisplayMode;
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Text Display Beta", 0, nDisplayMode);
+}
+
+int __fastcall Unreferenced_0049d590(int param_1) {
+    return 0x70 - ((uint32_t)param_1 >> 10);
 }
 
 static BOOL TEXT_DrawScrollingTextBox(uint16_t * * ppwszText) {
@@ -605,6 +632,49 @@ void __fastcall TEXT_SetNpcMenuSelection(D2UnitStrc * pUnit) {
 
 void __stdcall TEXT_ClearNpcMenuSelection() {
     gbTextNpcMenuSelection = 0;
+}
+
+int __fastcall Unreferenced_0049da60(int param_1) {
+    int in_EAX;
+    int extraout_EAX_00;
+    int32_t iVar2;
+    if (!param_1) {
+      int extraout_EAX;
+      if (gbTextEventHandlersRegistered == 1) {
+        iVar2 = 7;
+        gbTextEventHandlersRegistered = param_1;
+        _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, iVar2);
+        return extraout_EAX;
+      }
+    } else if (param_1 == 1 && !gbTextEventHandlersRegistered) {
+      gbTextEventHandlersRegistered = param_1;
+      gbTextNpcMenuActive = GetTickCount();
+      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, 7);
+      in_EAX = extraout_EAX_00;
+    }
+
+    return in_EAX;
+}
+
+int __fastcall Unreferenced_0049dac0(int param_1) {
+    if (!param_1) {
+      return 0;
+    }
+    if (!(*(int*)(param_1 + 0x16) == 1 || !*(int*)(param_1 + 0x16))) {
+      return 0;
+    }
+
+    return 1;
+}
+
+int __fastcall Unreferenced_0049dae0(int param_1, int param_2) {
+    int iVar2;
+    uint16_t uVar1 = *(uint16_t*)(param_1 + 0x10);
+    *(int*)(param_2 + 4) += -0x32;
+    *(uint32_t*)param_2 = *(int*)param_2 - (uint32_t)(uVar1 >> 1);
+    iVar2 = *(int*)(param_2 + 4) + *(int*)(param_1 + 4) * -0xf - 3;
+    *(int*)(param_2 + 4) = iVar2;
+    return iVar2;
 }
 
 ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(uint16_t * * ppwszText) {
@@ -1026,6 +1096,11 @@ void __stdcall TEXT_DrawAllMessageLog() {
     }
 }
 
+int Unreferenced_0049e390() {
+    DWORD DVar1 = GetTickCount();
+    return DVar1 + 10000;
+}
+
 void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
     D2TextLineStrc* pDVar2;
     ::IgnoreList* ppIgnoreList;
@@ -1246,6 +1321,14 @@ void __fastcall TEXT_SetScrollCompleteCallback(pfnTextScrollComplete pfnCallback
     gpTextScrollCompleteParam = pUserParam;
 }
 
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0() {
+
+}
+
+void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e800() {
+
+}
+
 void __stdcall TEXT_SetTextBoxExclusionRect() {
     RECT nRectLeft;
     nRectLeft.top = gnScrollingTextBoxTopY;
@@ -1258,6 +1341,29 @@ void __stdcall TEXT_SetTextBoxExclusionRect() {
     nRectLeft.right = gnTextBoxExclusionX + 0x14f;
     GAME::Select::SELECT_SetExclusionRect(&nRectLeft);
     GAME::Select::ClearSelectedUnit();
+}
+
+int Unreferenced_0049e860() {
+    int in_EAX;
+    int extraout_EAX;
+    if (gpTextScrollBoxDC6) {
+      int nSoundId;
+      nSoundId = Sound::SOUND_StopSound(gpTextScrollBoxDC6);
+      in_EAX = 0;
+      if (nSoundId) {
+        Sound::SOUND_StopChannelGracefully(nSoundId, 0, 0, 4);
+        in_EAX = extraout_EAX;
+      }
+
+      gpTextScrollBoxDC6 = 0;
+    }
+
+    gpTextScrollBoxBuffer = 0;
+    return in_EAX;
+}
+
+D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0() {
+    return (D2GSPacketSrv0x27_TextStrc*)gnTextDisplayMode;
 }
 
 D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit() {

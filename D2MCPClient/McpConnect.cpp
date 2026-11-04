@@ -21,6 +21,7 @@
 #include "D2Client/Net/MCP.h"
 #include "D2Launch/MainMenus.h"
 #include "D2MCPClient/McpConnect.data.h"
+#include "Storm/Source/SFile.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -40,6 +41,7 @@ static uint32_t IsMcpGameJoinSuccesful = 0; D2_STATIC_GUARD(IsMcpGameJoinSuccesf
 namespace D2Client::MCP {
 uint16_t D2GSRequestId = 0; D2_GLOBAL_GUARD(D2GSRequestId, "D2Client::MCP::D2GSRequestId");
 } // namespace D2Client::MCP
+static uint32_t g_bMCPD2GSConnectReady = 0; D2_STATIC_GUARD(g_bMCPD2GSConnectReady, "g_bMCPD2GSConnectReady");
 namespace D2Client::Bnet {
 uint32_t D2GSGameHash = 0; D2_GLOBAL_GUARD(D2GSGameHash, "D2Client::Bnet::D2GSGameHash");
 } // namespace D2Client::Bnet
@@ -49,6 +51,7 @@ uint32_t D2GSGameToken = 0; D2_GLOBAL_GUARD(D2GSGameToken, "D2Client::MCP::D2GSG
 D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2Client::MCP::MCPD2QSSocket");
 } // namespace D2Client::MCP
 static uint8_t gMCPConnectionState[328] = {}; D2_STATIC_GUARD(gMCPConnectionState, "gMCPConnectionState");
+static uint32_t g_bMCPListGameSuccess = 0; D2_STATIC_GUARD(g_bMCPListGameSuccess, "g_bMCPListGameSuccess");
 static uint32_t g_nMCPJoinTimestamp = 0; D2_STATIC_GUARD(g_nMCPJoinTimestamp, "g_nMCPJoinTimestamp");
 D2McpGameInfoStrc g_CharSelectBuffer = {}; D2_GLOBAL_GUARD(g_CharSelectBuffer, "g_CharSelectBuffer");
 static char g_szMCPGameName[4] = {}; D2_STATIC_GUARD(g_szMCPGameName, "g_szMCPGameName");
@@ -56,7 +59,9 @@ static uint32_t g_bMCPJoinGameSuccess = 0; D2_STATIC_GUARD(g_bMCPJoinGameSuccess
 namespace D2Client::MCP {
 uint32_t D2GSJoinResult = 0; D2_GLOBAL_GUARD(D2GSJoinResult, "D2Client::MCP::D2GSJoinResult");
 } // namespace D2Client::MCP
+static uint32_t g_bMCPCharDeleteSuccess = 0; D2_STATIC_GUARD(g_bMCPCharDeleteSuccess, "g_bMCPCharDeleteSuccess");
 HANDLE MCPThread = 0; D2_GLOBAL_GUARD(MCPThread, "MCPThread");
+static uint32_t g_bMCPCharUpgradeSuccess = 0; D2_STATIC_GUARD(g_bMCPCharUpgradeSuccess, "g_bMCPCharUpgradeSuccess");
 namespace D2Client::MCP {
 char D2GSConnectIp[18] = {}; D2_GLOBAL_GUARD(D2GSConnectIp, "D2Client::MCP::D2GSConnectIp");
 } // namespace D2Client::MCP
@@ -67,12 +72,30 @@ static uint32_t g_bMCPCreateGameSuccess = 0; D2_STATIC_GUARD(g_bMCPCreateGameSuc
 namespace D2Client::MCP {
 void * CharListPacket = 0; D2_GLOBAL_GUARD(CharListPacket, "D2Client::MCP::CharListPacket");
 } // namespace D2Client::MCP
+pfnMCPPacketCallback g_pfnMCPCallback1 = (pfnMCPPacketCallback)0; D2_GLOBAL_GUARD(g_pfnMCPCallback1, "g_pfnMCPCallback1");
+pfnMCPPacketCallback g_pfnMCPCallback2 = (pfnMCPPacketCallback)0; D2_GLOBAL_GUARD(g_pfnMCPCallback2, "g_pfnMCPCallback2");
 pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
 pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCompleteCallback, "g_pfnMCPGameListCompleteCallback");
 pfnMCPMessage g_pfnMCPMessageCallback = (pfnMCPMessage)0; D2_GLOBAL_GUARD(g_pfnMCPMessageCallback, "g_pfnMCPMessageCallback");
 uint8_t gMCPGameListBuffer[28680] = {}; D2_GLOBAL_GUARD(gMCPGameListBuffer, "gMCPGameListBuffer");
 
 namespace D2MCPClient::McpConnect {
+
+int16_t __stdcall GetD2GSRequestId_Unref_004166f0() {
+    return gnSFileSearchLocale;
+}
+
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_0043f840(char * pBytes, size_t nSize) {
+    return 1;
+}
+
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004473f0(char * pBytes, size_t nSize) {
+    return 1;
+}
+
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004476f0(char * pBytes, size_t nSize) {
+    return 1;
+}
 
 void __stdcall FreeMCP() {
     if (D2Client::MCP::MCPD2QSSocket) {
@@ -172,16 +195,18 @@ void __stdcall MCPSTATE_SetCreateGameSuccess(BOOL bSuccess) {
 }
 
 void __stdcall MCPSTATE_SetListGameSuccess(uint32_t bSuccess) {
-    // Static local variables (originally global data)
-    static uint32_t g_bMCPListGameSuccess; D2_STATIC_GUARD_BSS(g_bMCPListGameSuccess, "D2MCPClient::McpConnect::MCPSTATE_SetListGameSuccess::g_bMCPListGameSuccess");
-
     g_bMCPListGameSuccess = bSuccess;
 }
 
-void __stdcall MCPSTATE_SetCharDeleteSuccess(uint32_t bSuccess) {
-    // Static local variables (originally global data)
-    static uint32_t g_bMCPCharDeleteSuccess; D2_STATIC_GUARD_BSS(g_bMCPCharDeleteSuccess, "D2MCPClient::McpConnect::MCPSTATE_SetCharDeleteSuccess::g_bMCPCharDeleteSuccess");
+BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449ca0() {
+    return g_bMCPListGameSuccess;
+}
 
+BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449cb0() {
+    return g_bMCPCharDeleteSuccess;
+}
+
+void __stdcall MCPSTATE_SetCharDeleteSuccess(uint32_t bSuccess) {
     g_bMCPCharDeleteSuccess = bSuccess;
 }
 
@@ -220,21 +245,27 @@ void __stdcall MCPCONNECT_ClearCharSelectBuffer() {
     memset(&g_CharSelectBuffer, 0, 0x18c);
 }
 
-void __stdcall MCPSTATE_SetCharUpgradeSuccess(uint32_t bSuccess) {
-    // Static local variables (originally global data)
-    static uint32_t g_bMCPCharUpgradeSuccess; D2_STATIC_GUARD_BSS(g_bMCPCharUpgradeSuccess, "D2MCPClient::McpConnect::MCPSTATE_SetCharUpgradeSuccess::g_bMCPCharUpgradeSuccess");
+uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449d80() {
+    return g_bMCPCharUpgradeSuccess;
+}
 
+void __stdcall MCPSTATE_SetCharUpgradeSuccess(uint32_t bSuccess) {
     g_bMCPCharUpgradeSuccess = bSuccess;
+}
+
+uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449da0() {
+    return g_bMCPCharCreateSuccess;
 }
 
 void __stdcall MCPSTATE_SetCharCreateSuccess(uint32_t bSuccess) {
     g_bMCPCharCreateSuccess = bSuccess;
 }
 
-void __stdcall MCPSTATE_SetD2GSConnectReady(uint32_t bReady) {
-    // Static local variables (originally global data)
-    static uint32_t g_bMCPD2GSConnectReady; D2_STATIC_GUARD_BSS(g_bMCPD2GSConnectReady, "D2MCPClient::McpConnect::MCPSTATE_SetD2GSConnectReady::g_bMCPD2GSConnectReady");
+uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449dc0() {
+    return g_bMCPD2GSConnectReady;
+}
 
+void __stdcall MCPSTATE_SetD2GSConnectReady(uint32_t bReady) {
     g_bMCPD2GSConnectReady = bReady;
 }
 
@@ -852,9 +883,6 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, size_t nSize) {
-    // Static local variables (originally global data)
-    static pfnMCPPacketCallback g_pfnMCPCallback1; D2_STATIC_GUARD_BSS(g_pfnMCPCallback1, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x08::g_pfnMCPCallback1");
-
     if (g_pfnMCPCallback1) {
       (*g_pfnMCPCallback1)(*(uint16_t*)(pBytes + 1), pBytes + 3);
     }
@@ -863,9 +891,6 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, size_t nSize) {
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, size_t nSize) {
-    // Static local variables (originally global data)
-    static pfnMCPPacketCallback g_pfnMCPCallback2; D2_STATIC_GUARD_BSS(g_pfnMCPCallback2, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x09::g_pfnMCPCallback2");
-
     if (g_pfnMCPCallback2) {
       (*g_pfnMCPCallback2)(*(uint16_t*)(pBytes + 1), pBytes + 4);
     }

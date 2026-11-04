@@ -2,9 +2,7 @@
 
 #include "D2Client/Renderer/Direct3D.h"
 #include "D2Client/D2GfxSettingsStrc.h"
-#include "D2Client/Renderer/Glide.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
-#include "D2Glide/Renderer/Glide.h"
 #include "globals/globals.h"
 #include "D2CMP/tagPALETTEENTRY.h"
 #include "D2Client/GAME/View.data.h"

@@ -36,6 +36,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/npcmenu.data.h"
+#include "D2Common/D2SeedStrc.h"
 #include "D2Common/DATATBLS/MonsterTbls.data.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -60,7 +61,6 @@ static char gDelim_n_NpcClass[4] = { 'n', 'p', 'c', '\x00' }; D2_STATIC_GUARD(gD
 uint32_t gszHirelingFieldName_act = 0x746361; D2_GLOBAL_GUARD(gszHirelingFieldName_act, "gszHirelingFieldName_act");
 char s_A_006ed5ac[2] = { 'A', '\x00' }; D2_GLOBAL_GUARD(s_A_006ed5ac, "s_A_006ed5ac");
 char s_B_006ed5b0[2] = { 'B', '\x00' }; D2_GLOBAL_GUARD(s_B_006ed5b0, "s_B_006ed5b0");
-static unsigned int gnTreasureClassArraySize = {}; D2_STATIC_GUARD(gnTreasureClassArraySize, "gnTreasureClassArraySize");
 static D2MonItemPercentTxt * pMonItemPercentTxt = 0; D2_STATIC_GUARD(pMonItemPercentTxt, "pMonItemPercentTxt");
 static D2UniqueNameTablesStrc gsTxtUniqueNameTables = {}; D2_STATIC_GUARD(gsTxtUniqueNameTables, "gsTxtUniqueNameTables");
 static unsigned int gnAutoItemTypeTCCount = {}; D2_STATIC_GUARD(gnAutoItemTypeTCCount, "gnAutoItemTypeTCCount");
@@ -646,6 +646,19 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
     return 1;
 }
 
+int Unreferenced_00653d30() {
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtMonStats) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtMonStats);
+      Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonStatsLink);
+      iVar1 = extraout_EAX;
+    }
+
+    sgtDataTable.pTxtMonStats = 0;
+    return iVar1;
+}
+
 void __stdcall MONSTER_SetVelocityByIndex(int32_t nMonStatsId, int16_t nVelocity) {
     if (!sgtDataTable.pTxtMonStats) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ef);
@@ -682,6 +695,44 @@ void __stdcall TXT_UnloadUniqueMonsterNameTables() {
 
       ppEntry = (D2UniqueNameTablesStrc*)(ppEntry->apTable + 1);
     } while ((int)ppEntry < (intptr_t)((char*)&gsTxtUniqueNameTables + 16));
+}
+
+int __fastcall Unreferenced_00653e50(int param_1, int param_2) {
+    if (!(param_1 && gsTxtUniqueNameTables.anSize[param_2] > 0)) {
+      return (int)(uintptr_t)&gwMonsterTblsDefaultId;
+    }
+
+    uint32_t uVar1 = D2Client::Archive::RANDOM_RandomNumberSelector((D2SeedStrc*)(param_1 + 0x20), gsTxtUniqueNameTables.anSize[param_2]);
+    uint16_t nStringIndex = *(uint16_t*)((int)gsTxtUniqueNameTables.apTable[param_2] + uVar1 * 2);
+    if (!nStringIndex) {
+      return (int)(uintptr_t)&gwMonsterTblsDefaultId;
+    }
+
+    uint16_t* pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
+    if (!pWVar2) {
+      return (int)(uintptr_t)&gwMonsterTblsDefaultId;
+    }
+
+    return (int)pWVar2;
+}
+
+uint16_t * __fastcall MONSTER_GetRandomUniquePrefix_Unref_00653e90(D2UnitStrc * pUnit) {
+    if (!(pUnit && gsTxtUniqueNameTables.anSize[0] > 0)) {
+      return (uint16_t*)&gwMonsterTblsDefaultId;
+    }
+
+    uint32_t uVar1 = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, gsTxtUniqueNameTables.anSize[0]);
+    uint16_t nStringIndex = *(uint16_t*)((int)gsTxtUniqueNameTables.apTable[0] + uVar1 * 2);
+    if (!nStringIndex) {
+      return (uint16_t*)&gwMonsterTblsDefaultId;
+    }
+
+    uint16_t* pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
+    if (!pWVar2) {
+      return (uint16_t*)&gwMonsterTblsDefaultId;
+    }
+
+    return pWVar2;
 }
 
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(D2UnitStrc * pUnit) {
@@ -1405,6 +1456,24 @@ void __fastcall TXT_AllocTxt_monumod(D2PoolManagerStrc * pMemory) {
     sgtDataTable.nTxtMonUmodSize = 0x100;
 }
 
+int Unreferenced_006552a0() {
+    if (sgtDataTable.pTxtMonUmodLink) {
+      Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonUmodLink);
+      sgtDataTable.pTxtMonUmodLink = 0;
+    }
+
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtMonUmod) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtMonUmod);
+      sgtDataTable.pTxtMonUmod = 0;
+      iVar1 = extraout_EAX;
+    }
+
+    sgtDataTable.nTxtMonUmodSize = 0;
+    return iVar1;
+}
+
 // Loads and compiles superuniques.txt into sgtDataTable. Declares the column schema (Superunique key, Name string-id, Class->MonStats link, hcIdx, MonSound link, Mod1-3, Min/MaxGrp, AutoPos, EClass, Stacks, Replaceable, Utrans/(N)/(H), TC/(N)/(H)->MonsterTbls links) and a TxtLink, then compiles via CompileTxt into pTxtSuperUniques (cap 0x200 rows). Builds the aTxtSuperUniquesHardcoded[] reverse-lookup array (init -1) mapping each row's hcIdx (<66) to its first row index, then asserts every hardcoded slot was filled (unrecoverable-halt at line 0x782 if any is still -1). Side effect: populates global superunique data table and hardcoded index map. Server-side D2Common DataTbls (MonsterTbls).
 void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
     int nIdx;
@@ -1466,6 +1535,23 @@ void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
 
       pHardcodedEntry++;
     } while ((int)pHardcodedEntry < (intptr_t)((char*)&sgtDataTable + 2916));
+}
+
+int Unreferenced_006556a0() {
+    if (sgtDataTable.pTxtSuperUniquesLink) {
+      Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtSuperUniquesLink);
+    }
+
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtSuperUniques) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtSuperUniques);
+      sgtDataTable.pTxtSuperUniques = 0;
+      iVar1 = extraout_EAX;
+    }
+
+    sgtDataTable.nTxtSuperUniquesSize = 0;
+    return iVar1;
 }
 
 D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique) {
@@ -1778,6 +1864,10 @@ void __fastcall TXT_AllocTxt_npc(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtNpc = (D2NpcTxt*)DataTbls::CompileTxt(pMemory, "npc", aNpcFieldDefs, &sgtDataTable.nTxtNpcSize, 0x4c);
 }
 
+void __stdcall thunk_UnloadBin_MonStats_Unref_006568f0() {
+    DataTbls::UnloadBin(sgtDataTable.pTxtNpc);
+}
+
 D2NpcTxt * __stdcall TXT_npc_GetLine(int32_t nNpc) {
     int nIndex = 0;
     D2NpcTxt* pEntry = sgtDataTable.pTxtNpc;
@@ -1844,6 +1934,16 @@ void __fastcall TXT_AllocTxt_monsounds(D2PoolManagerStrc * pMemory) {
     };
     sgtDataTable.pTxtMonSoundsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0x96f);
     sgtDataTable.pTxtMonSounds = (D2MonSoundsTxt*)DataTbls::CompileTxt(pMemory, "monsounds", monsounds, &sgtDataTable.nTxtMonSoundsSize, 0x94);
+}
+
+void __stdcall TXT_FreeTxt_sounds_Unref_00656f60() {
+    if (!sgtDataTable.pTxtMonSounds) {
+      return;
+    }
+
+    DataTbls::UnloadBin(sgtDataTable.pTxtMonSounds);
+    Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonSoundsLink);
+    sgtDataTable.nTxtMonSoundsSize = 0;
 }
 
 D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId) {
@@ -2126,6 +2226,18 @@ void __fastcall TXT_AllocTxt_monstats2(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonStatsEx = (D2MonStats2Txt*)DataTbls::CompileTxt(pMemory, "monstats2", monstats2, &sgtDataTable.nTxtMonStatsExSize, 0x134);
 }
 
+int Unreferenced_00658440() {
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtMonStatsEx) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtMonStatsEx);
+      Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonStats2Link);
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
+}
+
 // Breadth-first traversal of the monstypes.txt equiv1/equiv2/equiv3 parent-type hierarchy to test whether monster type nMonTypeId belongs to type nCheckTypeId. Returns 1 if found, 0 if not found, out-of-range, or stack depth exceeds 124. Despite its name, behaves as a monster-type membership test (analogous to ITEMTBLS_CheckItemTypeRecursive but for MonType with three equiv slots).
 BOOL __fastcall MONSTERTBLS_GetMonSeqFrameCount(int32_t nMonTypeId, int32_t nCheckTypeId) {
     int nNewStackSize;
@@ -2332,6 +2444,19 @@ void __fastcall TXT_AllocTxt_monprop(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonProp = (D2MonPropTxt*)DataTbls::CompileTxt(pMemory, "monprop", monprop, &sgtDataTable.nTxtMonPropSize, 0x138);
 }
 
+int Unreferenced_006594d0() {
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtMonProp) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtMonProp);
+      Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonPropLink);
+      iVar1 = extraout_EAX;
+    }
+
+    sgtDataTable.nTxtMonPropSize = 0;
+    return iVar1;
+}
+
 // Builds the monlvl.txt field-binding table (AC/TH/HP/DM/XP normal+nightmare+hell columns and their per-level L- variants, each an INT field with a target struct offset) on the stack, then calls DataTbls::CompileTxt to parse data/global/excel/monlvl.txt into the sgtDataTable.pTxtMonLvl array (count in nTxtMonLvlSize). Holds per-area-level monster scaling stats used to compute monster AC/to-hit/HP/damage/experience by level. Uses the gTxtCompilationMemPool; takes the game memory pool via ECX.
 void __fastcall TXT_AllocTxt_monlvl(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aMonLvlFieldTable[31] = {
@@ -2368,6 +2493,18 @@ void __fastcall TXT_AllocTxt_monlvl(D2PoolManagerStrc * pMemory) {
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
     sgtDataTable.pTxtMonLvl = (D2MonLvlTxt*)DataTbls::CompileTxt(pMemory, "monlvl", aMonLvlFieldTable, &sgtDataTable.nTxtMonLvlSize, 0x78);
+}
+
+int Unreferenced_00659970() {
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtMonLvl) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtMonLvl);
+      sgtDataTable.nTxtMonLvlSize = 0;
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
 }
 
 void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
@@ -2660,6 +2797,18 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
 
       return;
     }
+}
+
+int Unreferenced_0065a170() {
+    int iVar1 = 0;
+    if (sgtDataTable.pTxtMonEquip) {
+      int extraout_EAX;
+      DataTbls::UnloadBin(sgtDataTable.pTxtMonEquip);
+      sgtDataTable.nTxtMonEquipSize = 0;
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
 }
 
 // Frees all monster-related data tables from sgtDataTable. Unloads MonEquip, Npc, MonLvl, MonPreset, SuperUniques (+ txt link), MonUmod (+ txt link), MonStats (+ txt link), MonStats2 (+ txt link), MonProp (+ txt link), MonSounds (+ txt link), then delegates to MONSTERTBLS_FreeMonPropTxt, FreeParsedTC, and TXT_UnloadUniqueMonsterNameTables. Called during game shutdown or data table reload.

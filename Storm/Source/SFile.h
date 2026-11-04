@@ -236,6 +236,8 @@ namespace Storm::Source::SFile {
 void __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.
 void __thiscall SFILE_CopyStreamBuffer4(uint32_t * pDest, uint32_t * pSrc);
+int __fastcall Unreferenced_00415190(int param_1);
+int __fastcall Unreferenced_004151b0(int param_1);
 // Reads data from an internal buffer with bounds checking. Calculates available bytes (param3[4] - param3[1]), clamps to requested size (*param2), memcpy's from buffer (param3[0] + param3[1]), and advances read position (param3[1] += size). Returns actual bytes read.
 // @blizzard DecompressLzw_BufferRead (SFILE.CPP)
 uint32_t SFILE_DecompressLzw_BufferRead(void * pDstBuf, uint32_t * pnBytesRequested, void * pReadState);
@@ -253,6 +255,7 @@ void SFILE_DecompressLzw_BufferWrite(void * pSrc, uint32_t * pnBytes, void * pBu
 // @blizzard DecompressLzw (SFILE.CPP)
 int32_t __stdcall SFILE_DecompressLzw(int32_t pSrcData, int32_t pDstData, int32_t nDstSize);
 void __thiscall SFILE_ShiftSectorTable(int32_t pSectorTable, uint32_t nSectorCount);
+void __fastcall Unreferenced_00415730(int param_1);
 // @blizzard BuildDefaultBasePath (SFILE.CPP)
 void __stdcall SFILE_BuildDefaultBasePath();
 // @blizzard CheckForCdRom (SFILE.CPP)
@@ -391,16 +394,33 @@ void __stdcall SFileSetPlatform(uint8_t byPlatform);
 // @blizzard SFileUnloadFile (Storm 1.10b PPC)
 int32_t __stdcall SFileUnloadFile(void * pFile);
 uint32_t __thiscall SFILE_CompareFileTime1(int * pLink, int * pLeft);
+int __fastcall Unreferenced_004167a0(int param_1);
+int __fastcall Unreferenced_004167f0(int param_1);
+int __fastcall Unreferenced_00416820(int param_1);
+int __fastcall Unreferenced_00416850(int param_1);
 uint32_t __thiscall SFILE_CompareFileTime2(int * pLink, int * pLeft);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004168f0(struct D2ArchiveStrc * pArchive);
 uint32_t __thiscall SFILE_CompareFileSize1(int * pLink, int * pLeft);
 uint32_t __thiscall SFILE_CompareFileSize2(int * pLink, int * pLeft);
 uint32_t __thiscall SFILE_CompareFileName(int * pLink, int * pLeft);
+int __fastcall Unreferenced_004169f0(int param_1);
+int __fastcall Unreferenced_00416a00(int param_1);
+int __fastcall Unreferenced_00416a10(int param_1);
+int __fastcall Unreferenced_00416a20(int param_1);
+int __fastcall Unreferenced_00416a30(int param_1);
+int __fastcall Unreferenced_00416a90(int param_1);
+int __fastcall Unreferenced_00416ab0(int param_1);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard InternalReadAligned (SFILE.CPP)
 uint32_t __stdcall SFILE_InternalReadAligned(struct D2MPQFileStrc * pArchive, uint32_t nFileOffset, uint32_t * pDstBuf, uint32_t nReadLen);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileAuthenticateArchive (SFILE.CPP)
 int __stdcall SFileAuthenticateArchive(struct D2ArchiveStrc * pArchive, uint32_t * pdwAuthResult);
+int __fastcall Unreferenced_00417850(int param_1);
+int __fastcall Unreferenced_004178a0(int param_1);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00417900(struct D2ArchiveStrc * pArchive);
+int __fastcall Unreferenced_00417940(int param_1);
+int __fastcall Unreferenced_00417990(int param_1);
 int __thiscall SFILE_AllocateFileRecord1(int32_t pThis, int32_t pLink);
 int __thiscall SFILE_FreeFileRecord1(int32_t pThis, int32_t pLink);
 // @blizzard TSList::LinkNode (STORM.H)
@@ -420,33 +440,49 @@ BOOL __stdcall SFileDdaGetPos(struct D2MPQFileStrc * pFile, uint32_t * pdwCurren
 BOOL __stdcall SFileDdaGetVolume(int32_t hFile, int32_t * plVolume, int32_t * plPan);
 BOOL __stdcall SFileDdaSetVolume(int32_t hFile, int32_t lVolume, int32_t lPan);
 int __stdcall SFILE_OpenFileInternal(struct D2ArchiveStrc * pArchive, char * szFileName, uint8_t bSearchFlags);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004183f0(struct D2ArchiveStrc * pArchive);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418430(struct D2ArchiveStrc * pArchive);
+int __fastcall Unreferenced_00418470(int param_1);
 void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead);
 void __thiscall SFILE_RemoveFileRecordFromList2(int32_t pThis, int * pLink);
+int __fastcall Unreferenced_004185b0(int param_1);
 uint32_t __thiscall SFILE_CompareFileRecord4(int32_t pThis, int32_t pLink);
 void __thiscall SFILE_RemoveFileRecordFromList3(int32_t pThis, int * pLink);
 void __thiscall SFILE_RemoveFileRecordFromList4(int32_t pThis, int * pLink);
 uint32_t __thiscall SFILE_CompareFileRecord5(int32_t pThis, int32_t pLink);
 uint32_t __thiscall SFILE_CompareFileRecord6(int32_t pThis, int32_t pRecord);
 void __thiscall SFILE_RemoveFileRecordFromList5(int32_t pThis, int * pNode);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004187c0(struct D2ArchiveStrc * pArchive);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418800(struct D2ArchiveStrc * pArchive);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418840(struct D2ArchiveStrc * pArchive);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418880(struct D2ArchiveStrc * pArchive);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_004188c0(struct D2ArchiveStrc * pArchive);
 void __fastcall SFILE_CloseStreamHandle2(struct D2StormListHead * pThis);
 void __fastcall SFILE_CloseStreamHandle5(struct D2StormListHead * pThis);
+int __fastcall Unreferenced_00418a40(int param_1);
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeArchiveRecord(struct D2ArchiveStrc * pArchive);
 struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord1(struct D2ArchiveStrc * pArchive, uint8_t byFlags);
 uint32_t __stdcall SFILE_GetOpenFlags();
 void __stdcall SFILE_CloseArchiveByName(char * szText);
+void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418ba0(struct D2ArchiveStrc * pArchive);
 void __fastcall SFILE_CloseAllOpenFiles1(struct D2ArchiveStrc * pArchive);
 void __fastcall SFILE_CloseAllOpenFiles2(struct D2ArchiveStrc * pArchive);
 void __fastcall SFILE_CloseStream1(struct D2StormListHead * pListHead);
 void __fastcall SFILE_CloseStream2(struct D2StormListHead * pListHead);
 void __fastcall SFILE_CloseStream3(struct D2StormListHead * pListHead);
 void __fastcall SFILE_CloseStream4(struct D2StormListHead * pListHead);
+int __fastcall Unreferenced_00418d80(int param_1);
 void __fastcall SFILE_CloseStream5(struct D2StormListHead * pListHead);
+int __fastcall Unreferenced_00418de0(int param_1);
+int __fastcall Unreferenced_00418e50(int param_1);
 void __fastcall SFILE_DestroyFileRecord(struct D2MPQFileStrc * pMPQFile);
 struct D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord1(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
 struct D2MPQFileStrc * __thiscall SFILE_AllocFileRecord(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
 struct D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord2(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
+int __fastcall Unreferenced_00418ff0(int param_1);
 struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord2(struct D2ArchiveStrc * pArchive, uint8_t byFlags);
+int __fastcall Unreferenced_00419060(int param_1);
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeFileRecord(struct D2MPQFileStrc * pMPQFile);
 struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord3(struct D2ArchiveStrc * pArchive, uint8_t byFlags);
@@ -501,6 +537,7 @@ void __stdcall SFILE_SelectAsyncRequest(int32_t nFileHandle, uint32_t nCurrentFi
 DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam);
 // @blizzard CreateCdThread (SFILE.CPP)
 void __stdcall SFILE_CreateCdThread();
+int __fastcall Unreferenced_0041a8d0(int param_1, int param_2);
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
 void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nAsyncHandle);
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).

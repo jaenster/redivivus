@@ -373,6 +373,10 @@ void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int
     pCodeField[3] = -1;
 }
 
+D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00611d10() {
+    return (D2AnimDataStrc*)sgtDataTable.pTxtCharStats;
+}
+
 D2AnimDataStrc * __stdcall TXT_AnimTbls_Get() {
     return sgtDataTable.pAnimTbls;
 }
@@ -2231,6 +2235,10 @@ void __stdcall TXT_InitTxtFiles(D2PoolManagerStrc * pMemory, int32_t nZero2, int
     Txt::Cube::CUBE_LoadCubeMainTable(pMemory);
     TXT_AllocTxt_difficultylevels(pMemory);
     MonsterTbls::TXT_FreeTxt_sounds();
+}
+
+D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00624710() {
+    return (D2AnimDataStrc*)pLOGFILE;
 }
 
 } // namespace D2Common::DATATBLS::DataTbls

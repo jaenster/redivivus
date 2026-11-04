@@ -766,6 +766,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00502c40",
+      "address": "00502c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00502c40"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinFont",
+      "calledFunctions": [
+        "Unreferenced_00502c40"
+      ]
+    },
+    {
       "name": "D2WINFONT_InitFontSystem",
       "address": "00502c60",
       "lines": [

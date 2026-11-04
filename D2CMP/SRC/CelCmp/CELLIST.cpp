@@ -3,7 +3,7 @@
 #include "D2CMP/SRC/CelCmp/CELLIST.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Storm/H/stpl.h"
-#include "Storm/Source/SFile.h"
+#include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2CMP/SRC/CelCmp/TCELENTRY.h"

@@ -21,6 +21,7 @@ void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, in
 void __stdcall MINIPANEL_DrawAllButtons(int32_t bVisible);
 BOOL __stdcall IsLeftScreenOpen();
 BOOL __stdcall IsRightScreenOpen();
+int __fastcall Unreferenced_0047ec20(int param_1);
 void __stdcall INPUT_MiniPanelMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_MiniPanelMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall MINIPANEL_Init();

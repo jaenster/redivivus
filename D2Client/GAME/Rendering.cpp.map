@@ -103,6 +103,20 @@
       ]
     },
     {
+      "name": "GetCurrentEngine_Unref_00477740",
+      "address": "00477740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477740"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "GetCurrentEngine_Unref_00477740"
+      ]
+    },
+    {
       "name": "IsWindowMode",
       "address": "00477750",
       "lines": [

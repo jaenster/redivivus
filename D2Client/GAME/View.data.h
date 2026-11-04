@@ -10,6 +10,7 @@
 extern uint32_t gaSpriteArcaneStarYOffset;
 extern uint32_t gaSpriteArcaneStarXOffset;
 extern int nScaleFactor;
+extern uint32_t gnFrameDrawCounter;
 
 namespace D2Client::GAME::View {
 extern uint32_t SHAKE_StartTickcount;

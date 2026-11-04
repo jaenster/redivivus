@@ -1638,6 +1638,24 @@ static void PATH_ResetPathState(D2DynamicPathStrc * pDynamicPath) {
     pDynamicPath->nVelocityY = 0;
 }
 
+int __fastcall Unreferenced_00650800(int param_1) {
+    D2DynamicPathStrc* pDynamicPath = *(D2DynamicPathStrc**)(param_1 + 0x2c);
+    if (!pDynamicPath) {
+      return 0;
+    }
+
+    pDynamicPath->nFlags &= -9;
+    if (pDynamicPath->nFlags & 0x40000U) {
+      pDynamicPath->eCollisionFlag = 0;
+    }
+    if (pDynamicPath->nFlags & 0x20U && pDynamicPath->dwPathPoints > 0 && pDynamicPath->dwVelocity) {
+      return (int)pDynamicPath;
+    }
+
+    PATH_ResetPathState(pDynamicPath);
+    return 0;
+}
+
 BOOL __stdcall PATH_AdvanceUnitAlongPath(D2UnitStrc * pUnit, int pExternalPath) {
     uint32_t nTargetReached;
     uint32_t nPathFlags;

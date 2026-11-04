@@ -85,6 +85,10 @@
 
 namespace D2Game::PLAYER::PlayerModes {
 
+int32_t __fastcall PLRMODES_ModeCallback_DeathDead_Unref_0053b210(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
+    return 1;
+}
+
 int32_t __fastcall PLRMODES_HasAnimEventLastOrComing5Frames(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL nEndAnimFrame = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM);
     return (uint32_t)(pGame->dwGameFrame <= nEndAnimFrame + 5);

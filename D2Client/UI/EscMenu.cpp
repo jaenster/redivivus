@@ -33,7 +33,6 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/UI/Automap.data.h"
 #include "D2Client/UI/EscMenu.data.h"
-#include "D2Client/UI/Panel.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -58963,6 +58962,16 @@ static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
 
     nFoundIndex = -1;
     return nFoundIndex;
+}
+
+int Unreferenced_0047d5b0() {
+    int32_t unaff_EBX;
+    int32_t iVar1 = ESCMENU_GetItemIndexFromMouseY(unaff_EBX);
+    if (iVar1 != -1) {
+      gnEscMenuSelectedIndex = iVar1;
+    }
+
+    return iVar1;
 }
 
 static void __stdcall ESCMENU_ClickMenuItem(D2UIMouseMsgStrc * pMsg) {

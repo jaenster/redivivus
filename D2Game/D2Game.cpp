@@ -140,6 +140,12 @@ D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int
     return pFoundRoom;
 }
 
+int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790() {
+    int extraout_EAX;
+    GAME_ClearGlobalFlag();
+    return extraout_EAX;
+}
+
 void __stdcall nullsub(D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3) {
 
 }
@@ -188,6 +194,10 @@ int __stdcall QSERVER_CountClientsWithStatusFlag0x20() {
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
     return nMatchCount;
+}
+
+void __fastcall GAME_SetNoSaveFlag_Unref_00544090(BOOL bResult) {
+    DEBUGPRINT = bResult;
 }
 
 // Clears the global gbQuestReconnectMode flag (sets to 0), disabling quest-reconnect mode. Called during game teardown or after reconnect handling is complete.

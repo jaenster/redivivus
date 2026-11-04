@@ -88,6 +88,15 @@ D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType) {
     return nullptr;
 }
 
+int Unreferenced_00555cc0() {
+    D2ItemsTableStrc* pDVar1 = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
+    if (!pDVar1) {
+      return 0;
+    }
+
+    return pDVar1->nSize;
+}
+
 void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, int32_t pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset) {
     int nDropCount = *pnDropCount;
     if (nDropCount >= 0x3ff) {

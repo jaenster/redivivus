@@ -101,6 +101,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0047fbc0",
+      "address": "0047fbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fbc0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "Unreferenced_0047fbc0"
+      ]
+    },
+    {
       "name": "WARDEN_CbAllocModuleStruct",
       "address": "0047fbf0",
       "lines": [

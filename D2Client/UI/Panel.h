@@ -47,6 +47,9 @@ void __stdcall thunk_CMD_UseBeltSlot3();
 // Thunk to CMD_UseBeltSlot4 (00498d10). This is the address installed in the key-command
 // handler table.
 void __stdcall thunk_CMD_UseBeltSlot4();
+uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0047ec40();
+void __stdcall PANEL_SetBottomPanelGlobals1_Unref_004880f0();
+uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0048a690();
 void __stdcall LoadPanelImages();
 void __stdcall FreePanelImages();
 void __stdcall PANEL_DrawHostileIndicator();
@@ -69,6 +72,7 @@ void __stdcall PANEL_DrawBeltSlots(int32_t nFrameNumber);
 void __stdcall DRAW_EquipmentNeedArrows();
 void __stdcall Draw_EquipmentNeedToRepairBody();
 void __stdcall PANEL_DrawPanelLayout();
+int Unreferenced_00498310();
 void __stdcall PANEL_DrawLife();
 void __stdcall DRAW_UI_BorderLeft();
 void __stdcall DRAW_UI_BorderRight();

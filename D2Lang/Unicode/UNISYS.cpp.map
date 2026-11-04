@@ -251,6 +251,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00526d00",
+      "address": "00526d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526d00"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "Unreferenced_00526d00"
+      ]
+    },
+    {
       "name": "UNICODE_CheckLineBreakPosition",
       "address": "00526d30",
       "lines": [

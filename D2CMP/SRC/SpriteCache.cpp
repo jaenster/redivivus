@@ -30,6 +30,7 @@
 #include "globals/globals.h"
 #include "D2CMP/D2CMP.h"
 #include "D2CMP/SRC/SpriteCache.data.h"
+#include "D2Direct3D/Renderer/Direct3D.data.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -953,6 +954,10 @@ static void __stdcall SPRITECACHE_LoadAndCacheDC6(D2CelFileCacheEntryStrc * pCel
     return;
 }
 
+void __stdcall SPRITECACHE_Unlock_Unref_005fee00() {
+
+}
+
 uint32_t __stdcall SPRITECACHE_GetTotalEntries() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&D2GfxMemoryStrc_0089db60.lpCriticalSection);
     uint32_t nUsedMemory = D2GfxMemoryStrc_0089db60.nUsedMemory;
@@ -964,12 +969,20 @@ uint32_t __stdcall SPRITECACHE_GetCacheSize() {
     return D2GfxMemoryStrc_0089db60.pMaxMemory;
 }
 
+void __stdcall SPRITECACHE_Unlock_Unref_005fee50() {
+
+}
+
 int __stdcall SPRITECACHE_GetMaxSize() {
     return gCelDataCacheLru.nBytesUsed;
 }
 
 uint32_t __stdcall SPRITECACHE_GetCurrentSize() {
     return gCelDataCacheLru.dwBufSize;
+}
+
+int __fastcall Unreferenced_005fee80(int param_1) {
+    return (uint32_t)(*(int*)(param_1 + 0x2c) != 0);
 }
 
 // @sourcefile .\SRC\SpriteCache.cpp
@@ -2138,6 +2151,17 @@ BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(D2GfxDataStrc * pGfxData) {
     }
 
     return 0;
+}
+
+void __fastcall SPRITECACHE_SetMaxSize_Unref_00624700(size_t nSize) {
+    // Static local variables (originally global data)
+    static unsigned long long gpItemTypeTableContext = 0; D2_STATIC_GUARD(gpItemTypeTableContext, "D2CMP::SRC::SpriteCache::SPRITECACHE_SetMaxSize_Unref_00624700::gpItemTypeTableContext");
+
+    *(uint32_t*)(char*)&gpItemTypeTableContext = nSize;
+}
+
+void __fastcall SPRITECACHE_SetMaxSize_Unref_006b2f30(size_t nSize) {
+    g_bPerspectiveMode = nSize;
 }
 
 } // namespace D2CMP::SRC::SpriteCache

@@ -80,6 +80,16 @@ uint8_t * __fastcall GetMonUModList(D2UnitStrc * pUnit) {
     return (uint8_t*)pUnit->pUnitData.pUnitDataPlayer->pWaypoint;
 }
 
+int __fastcall Unreferenced_004ac760(int param_1) {
+    uint32_t in_EAX;
+    uint16_t uVar1 = (uint16_t)((uint32_t)in_EAX >> 0x10);
+    if (!(param_1 && *(int*)param_1 == 1 ? *(int*)(param_1 + 0x14) : 0)) {
+      return (uint32_t)uVar1 << 0x10;
+    }
+
+    return (uint32_t)((uint32_t)(uint16_t)uVar1 << 16 | (uint32_t)(uint16_t)*(uint16_t*)(*(int*)(param_1 + 0x14) + 0x14));
+}
+
 void __fastcall SetNameSeed(D2UnitStrc * pUnit, uint16_t nNameSeed) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -1028,6 +1038,14 @@ void __fastcall MONUNIQUE_PregnantCorpseBurst(D2UnitStrc * pUnit) {
     Missile::CastAttack(pUnit, MISSILE_Monstercorpseexplode, nPosX, nPosY, SKILL_Attack, 1);
     Missile::CastAttack(pUnit, MISSILE_PainWormAppear, nPosX, nPosY, SKILL_Attack, 1);
     Sound::SOUND_PlaySound(SOUND_NECROMANCER_NEEDMANA_1, pUnit, 0, 0, 0);
+}
+
+void __fastcall SetNameSeed_Unref_005a0160(D2UnitStrc * pUnit, uint16_t nNameSeed) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+      return;
+    }
+
+    pUnit->pUnitData.pUnitDataMonster->nNameSeed = nNameSeed;
 }
 
 } // namespace D2Client::UNIT::MonUnique

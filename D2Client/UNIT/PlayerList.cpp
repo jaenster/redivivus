@@ -162,6 +162,22 @@ uint32_t __fastcall GetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFl
     return 0;
 }
 
+int __fastcall Unreferenced_004dc480(int param_1, int param_2) {
+    D2PlayerListSubStrc* pDVar1;
+    D2PlayerListStrc* pDVar2 = GAME::Roster::GetPlayerList(param_1);
+    if (!(pDVar2 && param_1 != param_2)) {
+      return (uint32_t)pDVar2 & -65536;
+    }
+
+    for (pDVar1 = pDVar2->pEntry; pDVar2 = 0 , pDVar1 != 0; pDVar1 = pDVar1->pNext) {
+      if (pDVar1->nRosterGUID == param_2) {
+        return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)pDVar1 >> 0x10) << 16 | (uint32_t)(uint16_t)(short int)pDVar1->nFlags);
+      }
+    }
+
+    return (uint32_t)pDVar2 & -65536;
+}
+
 void __fastcall SetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag) {
     D2PlayerListStrc* pPlayerList = GAME::Roster::GetPlayerList(nUnitGUID);
     if (!(pPlayerList && nUnitGUID != nRosterGUID)) {

@@ -49,6 +49,7 @@ fnAppModeRun * __fastcall AppModeMultiplayerInit(HMODULE hModule);
 // Multiplayer app mode shutdown (no-op).
 void __stdcall AppModeMultiplayerShutdown();
 void __fastcall LAUNCHER_StringManipUtility(char * szText, char cSeparator, int32_t bFindLast);
+int __fastcall Unreferenced_0043cc20(int param_1);
 // Loads all predefined DC6 image resources for the Battle.net launcher UI. Constructs resource paths using sprintf into a reusable buffer, then loads each DC6 file via IMAGE_LoadDC6 and stores the pointers in global variables (PTR_0077bc*). Resources include popup backgrounds, buttons, tabs for each character class, scrollbars, and selection/squelch auras.
 void __stdcall IMAGE_LoadPredefinedImagesExEx();
 void __stdcall LAUNCHER_FreeLauncherImages();
@@ -74,10 +75,12 @@ BOOL __stdcall CHATDLG_IsLobbyInitialized();
 void __stdcall LAUNCHER_DestroyLauncherForms();
 int __stdcall isServerDown();
 void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo);
+int Unreferenced_0043dce0();
 void __stdcall UIMENU_CantTestItBeacuseItCrash();
 void __stdcall CHATDLG_DestroyLobbyChatForms();
 // @sourcefile .\Src\ChatDlg.cpp
 void CHATDLG_FreeChatMsgNode(void * * pChatNode);
+int Unreferenced_0043e370();
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages();
 void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, int32_t pszMessage);

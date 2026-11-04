@@ -4,6 +4,21 @@
   "file": "D2Client/D2Client.cpp",
   "functions": [
     {
+      "name": "CMD_AutomapCenterOnPlayer_Unref_0040d530",
+      "address": "0040d530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d530"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "CMD_AutomapCenterOnPlayer_Unref_0040d530",
+        "CleanupSymbolsWithRefcount"
+      ]
+    },
+    {
       "name": "WINMAIN_TestMemoryAccess",
       "address": "0044b550",
       "lines": [
@@ -1155,6 +1170,48 @@
       ]
     },
     {
+      "name": "Unreferenced_0047a9e0",
+      "address": "0047a9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a9e0"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "Unreferenced_0047a9e0"
+      ]
+    },
+    {
+      "name": "Unreferenced_0047a9f0",
+      "address": "0047a9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a9f0"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "Unreferenced_0047a9f0"
+      ]
+    },
+    {
+      "name": "Unreferenced_0047aa00",
+      "address": "0047aa00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047aa00"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "Unreferenced_0047aa00"
+      ]
+    },
+    {
       "name": "ROSTER_SetArenaKillCountGlobal",
       "address": "0047aa10",
       "lines": [
@@ -1203,6 +1260,21 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0047aa40",
+      "address": "0047aa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047aa40"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "Unreferenced_0047aa40",
+        "isspace"
       ]
     },
     {
@@ -1648,6 +1720,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004b92d0",
+      "address": "004b92d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b92d0"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "Unreferenced_004b92d0"
+      ]
+    },
+    {
       "name": "GetQuestAvailabilityByIndex",
       "address": "004b92e0",
       "lines": [
@@ -1820,6 +1906,20 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "TEXT_EmptyCallback_Unref_004c2530",
+      "address": "004c2530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2530"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "TEXT_EmptyCallback_Unref_004c2530"
       ]
     },
     {

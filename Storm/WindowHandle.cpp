@@ -7,11 +7,11 @@
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SEVT.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Launch/MainMenus.h"
+#include "Storm/Source/SErr.data.h"
 #include "Storm/WindowHandle.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -54,6 +54,14 @@ D2StormListHead gpWndTrackingListHead = {
 static uint32_t gpActiveWindow = 0; D2_STATIC_GUARD(gpActiveWindow, "gpActiveWindow");
 
 namespace Storm::WindowHandle {
+
+HWND __stdcall WND_GetActiveWindow_Unref_0041c2a0() {
+    return (HWND)dwLastErrorCode;
+}
+
+HWND __stdcall WND_GetActiveWindow_Unref_0041c2b0() {
+    return (HWND)gbSSystemErrorDialogActive;
+}
 
 // @blizzard SMsgDoMessageLoop (SMSG.CPP)
 WPARAM __stdcall SMsgDoMessageLoop(pfnStormMsgIdleCallback pfnIdleCallback, uint32_t dwUnused) {
@@ -111,6 +119,10 @@ uint32_t __stdcall WND_SetActiveWindow(uint32_t pWindow) {
     return 1;
 }
 
+int __fastcall Unreferenced_004203c0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+}
+
 uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
     uint32_t nOffset = pNode[1];
     if ((int)nOffset < 0) {
@@ -121,6 +133,17 @@ uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
     }
 
     return nOffset + (int)pBase;
+}
+
+int __fastcall Unreferenced_00420470(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
+int __fastcall Unreferenced_004204f0(int param_1) {
+    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
 }
 
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode) {
@@ -215,6 +238,16 @@ void __thiscall WND_UnlinkListNode(int32_t pThis, int * pNode) {
     pNode[1] = 0;
 }
 
+int __fastcall Unreferenced_004206a0(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
+}
+
 uint32_t __thiscall WND_GetNodeData(int32_t pThis, int32_t pNode) {
     if (pNode) {
       return *(uint32_t*)(pNode + 4);
@@ -262,6 +295,12 @@ void __fastcall WND_DetachAndClearChildren(D2StormListHead * pWindow) {
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
+}
+
+int __fastcall Unreferenced_004207d0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize, uint32_t dwFlags) {
@@ -407,6 +446,14 @@ static void __stdcall SMSG_InternalUnregister(uint32_t nEventId, char * szText1,
     Source::SEVT::SEvtUnregisterHandler(nEventId, (uint32_t)hWnd, (uint32_t)szText1, (pfnSEvtHandler)szText2);
 }
 
+int Unreferenced_00420ae0() {
+    while (gpWndTrackingListHead.terminator.pNext > 0) {
+      SMSG_DeleteWindow(*(uint32_t*)(gpWndTrackingListHead.terminator.pNext + 8));
+    }
+
+    return 1;
+}
+
 // @blizzard SMsgDispatchMessage (SMSG.CPP)
 BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARAM dwLParam, BOOL * pbHandled, LRESULT * plResult) {
     D2UIMouseMsgStrc hMsgWnd;
@@ -527,6 +574,17 @@ uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId) {
     D2_CHECK(!nResourceId);
     D2_CHECKS_END(Source::SErr::SErrSetLastError(0x57), nullptr);
     return (uint8_t*)GenericWndProc;
+}
+
+int __fastcall Unreferenced_00420d80(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    return 0;
+}
+
+int __fastcall Unreferenced_00420da0(int param_1) {
+    return *(int*)(param_1 + 4) - *(int*)(param_1 + 0x10);
 }
 
 uint32_t __thiscall WND_ByteBuffer_HasRoom(int32_t pThis, int32_t nAddBytes) {

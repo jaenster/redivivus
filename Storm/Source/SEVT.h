@@ -40,6 +40,11 @@ struct __attribute__((packed)) StormBreakCmdStrc {
 namespace Storm::Source::SEVT {
 
 // Function declarations
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0040f7c0(int * pList);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_004177c0(int * pList);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041c4e0(int * pList);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041eab0(int * pList);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_00420490(int * pList);
 // Calculates the next power of 2 greater than or equal to a given value passed in ECX. Used for sizing hash tables and event handler arrays. Returns the smallest power of 2 that can contain the input value times 2 plus 2.
 uint32_t __fastcall SEVT_NextPowerOf2(int nValue);
 // @sourcefile .\SOURCE\SEVT.CPP
@@ -78,6 +83,7 @@ uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList);
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
 uint32_t __thiscall LINKEDLIST_GetNodeOffset(int * pListInfo, int * pNode);
 void __fastcall LINKEDLIST_UnlinkSelf(int * pNode);
+int __fastcall Unreferenced_004269a0(int param_1);
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.
 // @oracle SEvtPopState
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
@@ -103,9 +109,11 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
 // Retrieves the count field from a linked list node with bitwise masking. Returns count masked with sign-extend logic to handle special count encodings. Used for size queries on list structures.
 uint32_t __thiscall LINKEDLIST_GetCountMasked(int32_t pThis, int32_t nNode);
 void __thiscall LINKEDLIST_GetHead(int32_t pThis, int * pListHead);
+int __fastcall Unreferenced_00426c60(int param_1);
 // Gets the value stored at a specific index within a linked list. Returns the value field at offset+4 from the node pointer. Handles NULL input by defaulting to the list head at this+8.
 uint32_t __thiscall LINKEDLIST_GetValueAtIndex(void * pListHead, int32_t nNode);
 void __fastcall LINKEDLIST_InsertHead(struct D2StormListHead * pList);
+int __fastcall Unreferenced_00426d70(int param_1);
 // Allocates a new linked list node via SMemAlloc with 12 bytes overhead plus data size. Initializes next/prev pointers to NULL. Optionally links the node into an existing list via LINKEDLIST_IsEmpty call.
 int * * __thiscall LINKEDLIST_AllocNode(int * * pListHead, int32_t pList, int32_t nDataSize, uint32_t dwAllocFlags);
 // Unlinks a node from its doubly-linked list by updating prev/next pointers of adjacent nodes. If bit 0 of bFreeMemory is set, also frees the node memory via SMemFree. Returns the unlinked node pointer.
@@ -126,6 +134,23 @@ uint32_t __thiscall LINKEDLIST_UnlinkFreeAndGetCount(void * pListHead, int * pNo
 // @rename-basis Behaviour. The only function in SEVT that invokes registered handler callbacks: SEVT_LookupEvent(arg1, arg2), then walks the event's handler table selecting nodes whose node[0] equals arg3 with a strictly decreasing node[1] priority, calling node[2] with arg4 as its single argument, and returning whether any handler ran. Nothing in the body is Windows-message specific - the old name's uMsg is the handler key that SEvtRegisterHandler stores at node[0], and the callback receives only arg4.
 // @former-name SEVT_DispatchWindowMessage (invented. Its caller WND_DispatchWindowMessage 00420b00 is the Windows-message layer; this is not.)
 BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, void * pData);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044de90(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ecc0(int * pNode);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0044ed00(int * pList);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045b9f0(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045ba30(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601bf0(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601d60(int * pNode);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_00601f00(int * pList);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601f60(int * pNode);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_006020b0(int * pList);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_006024a0(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e3b0(int * pNode);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e440(int * pList);
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e5d0(int * pList);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e690(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e760(int * pNode);
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_006c4070(int * pNode);
 void StaticInit_gSevtBreakCmdList();
 void StaticInit_CriticalSection_0077930c();
 void StaticFini_CriticalSection_0077930c();

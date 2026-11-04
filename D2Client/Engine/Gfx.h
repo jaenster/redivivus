@@ -7333,6 +7333,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(struct D2UnitStrc * pUnit);
 BOOL __fastcall GFX_DrawUnitSelectionShape(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, struct D2GamePalShiftGreenBloodStrc * pPalShift, int32_t bDrawStates);
+int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0();
 // 24 internal functions (defined in .cpp)
 
 } // namespace D2Client::Engine::Gfx

@@ -963,4 +963,8 @@ void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType,
     gbMiniPanel = 0;
 }
 
+void __stdcall HELP_MiniPanelKeyNoOp_Unref_004e4040(D2UIMouseMsgStrc * pMsg) {
+
+}
+
 } // namespace D2Client::UI::Help

@@ -474,6 +474,13 @@ void __fastcall Q19_OnPlayerCubeKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pU
     pDVar1->nCubedWillCount++;
 }
 
+int Unreferenced_005b8750() {
+    ::SGAMEDATA* in_ECX;
+    D2UnitStrc* in_EDX;
+    D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(in_ECX, in_EDX, 0x20326671);
+    return (uint32_t)!pDVar1;
+}
+
 // Q19_CheckPlayerHasKhalimsEye (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Eye (0x20796571) and lacks the assembled Will (0x20326671), increments the quest GUID eye-needed counter. Used by the Eye relic portal drop to decide how many to spawn.
 BOOL __fastcall Q19_CheckPlayerHasKhalimsEye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20796571);
@@ -970,6 +977,10 @@ void __fastcall Q19_InitData(D2QuestDataStrc * pQuestData) {
     memset(pQuestSpecificData, 0, 0xb0);
     pQuestSpecificData->nOrbUpdateMode = 0;
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
+}
+
+void __fastcall Q19_Callback10_PlayerLeavesGame_Unref_005bdb10(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
+
 }
 
 } // namespace D2Game::Quests::QUESTS::A3Q2

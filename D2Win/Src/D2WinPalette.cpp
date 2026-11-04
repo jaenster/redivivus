@@ -10,6 +10,7 @@
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
 #include "globals/globals.h"
+#include "D2Glide/Renderer/Glide.data.h"
 #include "D2Win/D2WinAnimImage.h"
 #include "D2Win/Src/D2WinPalette.data.h"
 
@@ -118,6 +119,12 @@ void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift) {
 uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
     uint8_t bVar1 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)nRed, (uint32_t)nGreen, (uint32_t)nBlue);
     return bVar1;
+}
+
+int Unreferenced_004fb1b0() {
+    int extraout_EAX;
+    D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
+    return extraout_EAX;
 }
 
 void __fastcall D2WINPAL_CopyPalette(void * pDest) {
@@ -269,6 +276,10 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
 
 void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode) {
     gbCompactLineSpacingMode = bCompactLineSpacingMode;
+}
+
+void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode) {
+    gbGlidePerspectiveMode = bCompactLineSpacingMode;
 }
 
 } // namespace D2Win::Src::D2WinPalette

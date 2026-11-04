@@ -455,6 +455,22 @@ BOOL __stdcall SOUND_IsAnySoundEffectPlaying() {
     return 0;
 }
 
+int Unreferenced_00514ff0() {
+    int in_EAX;
+    D2SoundSmpStrc** ppDVar1;
+    if (gnSoundEffectSampleCount) {
+      int extraout_EAX;
+      ppDVar1 = gpaSoundEffectBuffers;
+      do {
+        D2SoundSmp::SOUNDSMP_Stop(*ppDVar1);
+        ppDVar1++;
+        in_EAX = extraout_EAX;
+      } while ((int)ppDVar1 < (intptr_t)&gpaSoundEffectBuffers + 32);
+    }
+
+    return in_EAX;
+}
+
 void __stdcall SOUND_FadeOutAllSoundEffects() {
     if (!gnSoundEffectSampleCount) {
       return;

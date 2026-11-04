@@ -5,7 +5,6 @@
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
 #include "Storm/H/stpl.h"
-#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
@@ -31,13 +30,18 @@ typedef BOOL (__stdcall *pfnSErrDisplayCallback)(uint32_t dwErrorCode, char * sz
 char gdwSystemMemoryMax[2] = { ")" }; D2_GLOBAL_GUARD(gdwSystemMemoryMax, "gdwSystemMemoryMax");
 static SErrAppFatalContextStrc gpSSystemThreadContextCallback = {}; D2_STATIC_GUARD(gpSSystemThreadContextCallback, "gpSSystemThreadContextCallback");
 static _RTL_CRITICAL_SECTION lpCriticalSection_007790cc = {}; D2_STATIC_GUARD(lpCriticalSection_007790cc, "lpCriticalSection_007790cc");
+uint32_t gbSSystemErrorDialogActive = 0; D2_GLOBAL_GUARD(gbSSystemErrorDialogActive, "gbSSystemErrorDialogActive");
 static void * gpErrorModuleList = 0; D2_STATIC_GUARD(gpErrorModuleList, "gpErrorModuleList");
 static uint32_t gbFormatErrorModulesInitialized = 0; D2_STATIC_GUARD(gbFormatErrorModulesInitialized, "gbFormatErrorModulesInitialized");
 uint32_t gbSSystemShutdownInProgress = 0; D2_GLOBAL_GUARD(gbSSystemShutdownInProgress, "gbSSystemShutdownInProgress");
-static uint32_t dwLastErrorCode = 0; D2_STATIC_GUARD(dwLastErrorCode, "dwLastErrorCode");
+uint32_t dwLastErrorCode = 0; D2_GLOBAL_GUARD(dwLastErrorCode, "dwLastErrorCode");
 static pfnBlizzardError pfnBlizzardErrorCallback = (pfnBlizzardError)0; D2_STATIC_GUARD(pfnBlizzardErrorCallback, "pfnBlizzardErrorCallback");
 
 namespace Storm::Source::SErr {
+
+void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc) {
+    gpServerMemHeap = (uint32_t)(uintptr_t)pfnFunc;
+}
 
 // Stores the caller's function pointer into pfnBlizzardErrorCallback, which SErrDisplayError 0041caf0 invokes via CALL dword ptr [0x007790f8].
 // @name-authority CONFIRMED FROM THIS BINARY, not from the oracle. Game.exe has its own (24-entry) export table and this is ordinal 17 at RVA 0x1c0e0, mangled ?SErrSetBlizzardErrorFunction@@YIXP6IXPBD0QAPBDII_N@Z@Z (the literal lives at 007048b4). That decodes to __fastcall void (*)(void (__fastcall*)(const char*, const char*, const char* const*, unsigned, unsigned, bool)) - one function-pointer argument, matching the body exactly. This name is as authoritative as a name can get.
@@ -247,6 +251,13 @@ uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase) {
     return nOffset + (int)pBase;
 }
 
+int __fastcall Unreferenced_0041c410(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
 // Looks the message-source module for (dwMessageId >> 16) & 0xfff out of gpErrorModuleList, then calls FormatMessageA with that module as lpSource. Returns nonzero on success.
 // @was FORMAT_FormatErrorMessage (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrGetErrorStr, code vector 10015c50 (TVector 100cbe7c).
@@ -376,6 +387,16 @@ void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode) {
     pNode[1] = 0;
 }
 
+int __fastcall Unreferenced_0041c6e0(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
+}
+
 uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode) {
     if (pNode) {
       return *(uint32_t*)(pNode + 4);
@@ -427,6 +448,12 @@ void __fastcall TSList_HANDLER_Destructor(D2StormListHead * pList) {
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
+}
+
+int __fastcall Unreferenced_0041c7f0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags) {
@@ -562,9 +589,6 @@ uint32_t __thiscall SSYSTEM_ListRemoveAndFree(void * pList, int * pNode) {
 // @oracle Storm 1.10b PPC export SErrDisplayError, code vector 10015f80 (from the TVector export block at 100cbe6c).
 // @oracle-basis Callee set, near-identical across the two builds and unique in both: GetModuleFileName, memset, FindFirstFile, FindClose, SStrCopy, SStrChrR, LoadString, SStrLen, OutputDebugString, SStrPrintf/wsprintf, IsWindow, IsWindowVisible, MessageBox, the error critical-section pair, SErrGetErrorStr, and the process-exit tail (ExitProcess on PPC / TerminateProcess here). Arity 6 = 6. It is the largest function of the module in both builds (2384 B PPC / 1198 B here). Nine callers spanning SMem, SFile and SSystem, which is the profile of Storm's central error reporter.
 int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int32_t nTraceFlags, uint8_t * pCustomMsg, int32_t nMessageFlags, UINT nExitCode) {
-    // Static local variables (originally global data)
-    static uint32_t gbSSystemErrorDialogActive; D2_STATIC_GUARD_BSS(gbSSystemErrorDialogActive, "Storm::Source::SErr::SErrDisplayError::gbSSystemErrorDialogActive");
-
     // Frame slots -2396..-8 are ONE object: &nMsgBoxFlags is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -883,6 +907,14 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
 // @oracle-basis Instruction-for-instruction the same forwarder. The oracle body is li r4,0x0 ; bl 0x100156d0 (= SErrReportNamedResourceLeak) and nothing else; this one is DebugMemoryHandleError(szMessage, NULL). Same argument passed through in slot 1, same NULL in slot 2, same sole callee, one parameter against the target's two.
 void __stdcall SErrReportResourceLeak(char * szMessage) {
     SErrReportNamedResourceLeak(szMessage, nullptr);
+}
+
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230() {
+    InitializeCriticalSection(&lpCriticalSection_0077ae28);
+}
+
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240() {
+    DeleteCriticalSection(&lpCriticalSection_0077ae28);
 }
 
 void StaticInit_gStormErrorCallbackList() {

@@ -200,7 +200,6 @@ pfnSymSetOptions pSymSetOptions = (pfnSymSetOptions)0; D2_GLOBAL_GUARD(pSymSetOp
 pfnStackWalk pStackWalk = (pfnStackWalk)0; D2_GLOBAL_GUARD(pStackWalk, "Fog::Debug::pStackWalk");
 BOOL bBetterStackCrawls = 0; D2_GLOBAL_GUARD(bBetterStackCrawls, "Fog::Debug::bBetterStackCrawls");
 } // namespace Fog::Debug
-static HMODULE hDbgHelpDll = 0; D2_STATIC_GUARD(hDbgHelpDll, "hDbgHelpDll");
 static pfnSymGetModuleInfo64 pSymGetModuleInfo64 = (pfnSymGetModuleInfo64)0; D2_STATIC_GUARD(pSymGetModuleInfo64, "pSymGetModuleInfo64");
 static pfnSymGetSymFromAddr64 pSymGetSymFromAddr64 = (pfnSymGetSymFromAddr64)0; D2_STATIC_GUARD(pSymGetSymFromAddr64, "pSymGetSymFromAddr64");
 static pfnSymSetSearchPath pSymSetSearchPath = (pfnSymSetSearchPath)0; D2_STATIC_GUARD(pSymSetSearchPath, "pSymSetSearchPath");
@@ -301,6 +300,19 @@ bool __stdcall DEBUG_LoadDbgHelp64Apis() {
     return false;
 }
 
+int Unreferenced_00401c80() {
+    int in_EAX;
+    if (bDebugSymbolsInitialized != '\0') {
+      in_EAX = 0;
+      if (hDbgHelpDll) {
+        in_EAX = FreeLibrary(hDbgHelpDll);
+        hDbgHelpDll = (HMODULE)0x0;
+      }
+    }
+
+    return in_EAX;
+}
+
 int __stdcall InitializeDebugSymbols() {
     char* pLastBackslash;
     DWORD dwProcessId;
@@ -337,6 +349,16 @@ int __stdcall InitializeDebugSymbols() {
     }
 
     return uVar1 & -256;
+}
+
+int Unreferenced_00401dd0() {
+    int in_EAX;
+    if (bDebugSymbolsInitialized != '\0') {
+      in_EAX = (*pSymCleanupApi)(ghCurrentProcessHandle);
+      bDebugSymbolsInitialized = '\0';
+    }
+
+    return in_EAX;
 }
 
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
@@ -987,6 +1009,24 @@ int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight) {
     }
 
     return -(uint32_t)(*(uint32_t*)pRight > *(uint32_t*)pLeft);
+}
+
+int __fastcall Unreferenced_00402c30(int param_1, int param_2) {
+    int iVar1;
+    if (!param_2) {
+      uint32_t in_EAX;
+      return in_EAX & -256;
+    }
+
+    uint32_t* puVar2 = (uint32_t*)(*(int*)param_2 * 0x228 + 4 + param_2);
+    for (iVar1 = 0x8a; iVar1; iVar1--) {
+      *puVar2 = *(uint32_t*)param_1;
+      param_1 = (int)(param_1 + 4);
+      puVar2++;
+    }
+
+    (*(int*)param_2)++;
+    return (uint32_t)(*(uint32_t*)param_2 < 0x100);
 }
 
 static void FormatModuleDebugString(char * szText, D2FogDebugModuleEntryStrc * pModule) {

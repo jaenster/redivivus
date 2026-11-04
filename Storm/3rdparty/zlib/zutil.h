@@ -19,5 +19,6 @@ char * __fastcall zError(int nErr);
 void * __fastcall zcalloc(void * opaque, uint32_t items, uint32_t size);
 // @library zcfree (zlib zutil.c)
 void __fastcall zcfree(void * opaque, void * ptr);
+char * zlibVersion_Unref_0044ce80();
 
 } // namespace Storm::_3rdparty::zlib::zutil

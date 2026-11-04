@@ -252,6 +252,33 @@ int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues() {
     return bHasCompressionPacket;
 }
 
+int Unreferenced_0052aaa0() {
+    WSAGetLastError();
+    int iVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
+    if (!iVar1) {
+      int extraout_EAX;
+      EnterCriticalSection(&lpCriticalSection_00882ce8);
+      gnNetConnectionTimeoutMs = 0;
+      LeaveCriticalSection(&lpCriticalSection_00882ce8);
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
+}
+
+int Unreferenced_0052aad0() {
+    int iVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
+    if (!iVar1) {
+      int extraout_EAX;
+      EnterCriticalSection(&lpCriticalSection_00882ce8);
+      gnNetConnectionTimeoutMs = 0;
+      LeaveCriticalSection(&lpCriticalSection_00882ce8);
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
+}
+
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
     int nSelectResult;

@@ -118,6 +118,7 @@ void __stdcall STATLIST_DetachAndRecalc(struct D2StatListExStrc * pStatListEx);
 // Detaches pStatsEx from its parent (STATLIST_DetachAndRecalc), then frees all associated memory: base stat array, full-stat array, changed-stat ID array, state flags, and recursively frees non-root child stat lists. Finally frees the D2StatListExStrc itself.
 void __fastcall FreeAnyStatList(struct D2StatListExStrc * pPlayerStatsEx);
 void __stdcall FreeStatList(struct D2StatListStrc * pStatList);
+void __fastcall Unreferenced_00626cf0(int param_1);
 void __stdcall STATLIST_FreeStatListMemory(struct D2UnitStrc * pUnit);
 struct D2StatListExStrc * __stdcall AllocStatListEx(struct D2UnitStrc * pUnit, uint32_t dwFlags, fpStatListExChangeCb pfnStatChangeCb, ::SGAMEDATA * pGame);
 // Attaches child stat list pStatsEx to pOp45Owner's main D2StatListExStrc, then propagates the child's stats into the parent. Detaches/recalcs first and guards against link cycles. If the child has flag 0x2000 (INACTIVE) it is linked into the parent's pInactiveHead chain and returns; otherwise it is linked into the pActiveHead chain. For state stat lists with op4/op5-dependent stats it pre-applies their complex formulas (STATLIST_ApplyComplexStatFormula). Then it walks the child's effective/base stat array and calls STATLIST_PropagateStatChange for each into the parent: when nParam==0 it sets the 0x40000000 (NOCALCBONUS) flag and SKIPS stats flagged damagerelated; when nParam!=0 it clears that flag and propagates every stat. No return; mutates both lists and the unit's aggregate stats.
@@ -157,6 +158,7 @@ void __stdcall STATLIST_ToggleStateDisabled(struct D2UnitStrc * pUnit, eD2States
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.
 void __stdcall STATLIST_DeactivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId);
+int Unreferenced_00627b30();
 // Always-zero stub used as the fnSkillCalcMethod callback where a formula context has no
 // stat source.
 // @abi __fastcall int(int32_t nCalcCode @ECX, void *pContext @EDX). Body is XOR EAX,EAX / RET.

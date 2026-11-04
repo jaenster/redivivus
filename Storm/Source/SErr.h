@@ -36,6 +36,7 @@ struct StormSErrHandlerNode {
 namespace Storm::Source::SErr {
 
 // Function declarations
+void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc);
 // Stores the caller's function pointer into pfnBlizzardErrorCallback, which SErrDisplayError 0041caf0 invokes via CALL dword ptr [0x007790f8].
 // @name-authority CONFIRMED FROM THIS BINARY, not from the oracle. Game.exe has its own (24-entry) export table and this is ordinal 17 at RVA 0x1c0e0, mangled ?SErrSetBlizzardErrorFunction@@YIXP6IXPBD0QAPBDII_N@Z@Z (the literal lives at 007048b4). That decodes to __fastcall void (*)(void (__fastcall*)(const char*, const char*, const char* const*, unsigned, unsigned, bool)) - one function-pointer argument, matching the body exactly. This name is as authoritative as a name can get.
 // @oracle-negative 2026-08-28 pass 5, RECONFIRMED pass 6. NOT SErrSuppressErrors, despite an exact shape match. The PPC export SErrSuppressErrors @10015510 is also a single 'store the one argument to a global, return' (stw r3,-0x6644(r2); blr), byte-for-byte this function's shape (MOV [0x007790f8],ECX; RET) and the only such shape among the 19 SErr exports. Still refuted: the PPC global at r2-0x6644 is read in exactly one place, .SErrDisplayError @10015f80, as 'lwz r0; cmpwi r0,0; beq' - a boolean suppression flag - whereas 0x007790f8 here is CALLed. A flag and a callback slot are not the same thing. Pass 6 adds the decisive point: the binary's own export table names this function, and the name it gives is SErrSetBlizzardErrorFunction.
@@ -92,6 +93,7 @@ int __stdcall SErrRegisterMessageSource(uint16_t wModuleId, HMODULE dwModuleBase
 // @oracle-basis The PPC body is 80 B whose only callee is .SetLastError, alongside a store to a module global - the same two-step. 102 callers here, spread across every Storm module, which is the profile of the API every Storm entry point uses to report failure, and matches the oracle's use of SErrSetLastError inside SFile/SBig/SMem guard clauses.
 void __stdcall SErrSetLastError(DWORD dwErrCode);
 uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase);
+int __fastcall Unreferenced_0041c410(int param_1);
 // Looks the message-source module for (dwMessageId >> 16) & 0xfff out of gpErrorModuleList, then calls FormatMessageA with that module as lpSource. Returns nonzero on success.
 // @was FORMAT_FormatErrorMessage (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrGetErrorStr, code vector 10015c50 (TVector 100cbe7c).
@@ -103,10 +105,12 @@ int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode);
 void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget);
 uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode);
 void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode);
+int __fastcall Unreferenced_0041c6e0(int param_1);
 uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode);
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
 void __fastcall TSList_HANDLER_Destructor(struct D2StormListHead * pList);
+int __fastcall Unreferenced_0041c7f0(int param_1);
 int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags);
 int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory);
 // Under the error critical section, SMemAllocs a 12-byte list node, links it into gpStormErrorCallbackListHead and stores the caller's handler pointer at +8.
@@ -147,6 +151,8 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...);
 // @oracle Storm 1.10b PPC export SErrReportResourceLeak, code vector 10015840 (TVector 100cbeb4).
 // @oracle-basis Instruction-for-instruction the same forwarder. The oracle body is li r4,0x0 ; bl 0x100156d0 (= SErrReportNamedResourceLeak) and nothing else; this one is DebugMemoryHandleError(szMessage, NULL). Same argument passed through in slot 1, same NULL in slot 2, same sole callee, one parameter against the target's two.
 void __stdcall SErrReportResourceLeak(char * szMessage);
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230();
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240();
 void StaticInit_gStormErrorCallbackList();
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.
 void StaticFini_gStormErrorCallbackList();

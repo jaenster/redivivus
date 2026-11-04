@@ -14,7 +14,6 @@
 char * gpszPaletteSkyDat[4] = {}; D2_GLOBAL_GUARD(gpszPaletteSkyDat, "gpszPaletteSkyDat");
 char * gpszPaletteSkyPl2[4] = {}; D2_GLOBAL_GUARD(gpszPaletteSkyPl2, "gpszPaletteSkyPl2");
 D2WinTextBox * gpWinTextBoxRealmSelect = 0; D2_GLOBAL_GUARD(gpWinTextBoxRealmSelect, "gpWinTextBoxRealmSelect");
-D2BNetClientCallbacksStrc * gpBNetCallbacks = 0; D2_GLOBAL_GUARD(gpBNetCallbacks, "gpBNetCallbacks");
 
 namespace D2Common::Drlg::Maze {
 
@@ -133,6 +132,10 @@ namespace D2Client::CharScreen {
 int nSelectedCharIndex = -0x1; D2_GLOBAL_GUARD(nSelectedCharIndex, "D2Client::CharScreen::nSelectedCharIndex");
 
 } // namespace D2Client::CharScreen
+
+namespace D2Game::GAME::Rendering {
+
+} // namespace D2Game::GAME::Rendering
 
 namespace D2Client::UI::ui {
 

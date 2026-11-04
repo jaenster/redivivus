@@ -207,6 +207,20 @@
       ]
     },
     {
+      "name": "IsRecording_Unref_00451960",
+      "address": "00451960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451960"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "IsRecording_Unref_00451960"
+      ]
+    },
+    {
       "name": "RECORD_SetPlaybackActive",
       "address": "00451970",
       "lines": [

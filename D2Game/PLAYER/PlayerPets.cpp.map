@@ -170,6 +170,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00574810",
+      "address": "00574810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574810"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "Unreferenced_00574810",
+        "GetPlayerData"
+      ]
+    },
+    {
       "name": "KillingPets",
       "address": "00574850",
       "lines": [

@@ -19,6 +19,8 @@ namespace D2Client::Sound::SoundHdr {
 // Function declarations
 eD2LevelId __stdcall SOUND_GetCurrentLevelId();
 uint32_t __stdcall GetSoundEnv();
+int __stdcall SOUNDHDR_GetGlobal0_Unref_004817d0();
+int __stdcall SOUNDHDR_GetGlobal0_Unref_004817e0();
 int __stdcall SOUNDHDR_GetGlobal0();
 int __stdcall SOUNDHDR_GetGlobal1();
 int * __stdcall SOUNDHDR_GetGlobal2();
@@ -52,6 +54,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
 void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick);
 void __stdcall DRAW_AfterDraw();
 void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex);
+void __stdcall Cleanup_Unref_00522c20();
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Client::Sound::SoundHdr

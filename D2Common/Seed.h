@@ -15,6 +15,7 @@ struct D2SeedStrc;
 namespace D2Common::Seed {
 
 // Function declarations
+uint32_t __fastcall GetSeed_nSeedLow_Unref_0060dcf0(struct D2SeedStrc * pSeed);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00650dd0..00650dd9; unreferenced in 1.14d.
 __time32_t __stdcall SEED_GetTime32(__time32_t * pTime);

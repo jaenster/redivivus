@@ -64,6 +64,14 @@ typedef int32_t (__fastcall *pfnMonsterSpawnClassIdCb)(D2UnitStrc * pUnit);
 
 namespace D2Common::Monsters::MONSTERS {
 
+void __stdcall MONSTERS_OnInitMonster_NoOp_Unref_0063db80(D2UnitStrc * pUnit, uint32_t dwParam2) {
+
+}
+
+void __stdcall MONSTERS_OnInitMonster_NoOp_Unref_0063e050(D2UnitStrc * pUnit, uint32_t dwParam2) {
+
+}
+
 // Returns the missile id that a monster should fire at its current animation event frame. If pCurrentFrame is nonzero, scans forward through GetEventFrameInfo to find a throw/shoot event (type 1 or 2) within the delta since the last frame; returns ~MISSILE_Arrow (-1) if none found. Then indexes aMonstatsIndexUnknown by anim mode and monster class to get the missile id.
 eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(D2UnitStrc * pUnit, int32_t pCurrentFrame) {
     // Static local variables (originally global data)

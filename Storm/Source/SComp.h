@@ -78,7 +78,9 @@ struct __attribute__((packed)) D2CompressEncoderStrc {
 namespace Storm::Source::SComp {
 
 // Function declarations
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(void * pNode);
 void __thiscall LINKEDLIST_Unlink(int * pList, uint32_t * pNode);
+int __fastcall Unreferenced_0041d8a0(int param_1);
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask);
 void __thiscall LINKEDLIST_Clear(int32_t pBitBuffer, int32_t nBits);
 struct D2BitStreamWriterStrc * __thiscall LINKEDLIST_InsertAfter(struct D2BitStreamWriterStrc * pList, uint8_t * pNode, int32_t pNewNode);
@@ -123,11 +125,21 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
 // @sourcefile .\SOURCE\SCOMP.CPP
 uint32_t __stdcall SCOMP_CleanupTempBuffer();
 uint32_t __thiscall HUFFMAN_GetDecodedOffset(int * pNode, int * pBase);
+int __fastcall Unreferenced_0041e930(int param_1);
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(void * pNode);
+int __fastcall Unreferenced_0041e9b0(int param_1);
+int __fastcall Unreferenced_0041e9d0(int param_1, int param_2);
 uint32_t __thiscall BITBUFFER_ReadBits(uint16_t * * pBitBuf, uint16_t * nBits, uint32_t nMask);
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize);
+int __fastcall Unreferenced_0041ea40(int param_1);
+int __fastcall Unreferenced_0041ea60(int param_1);
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(void * pNode);
 int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrDefault);
 void __thiscall LINKEDLIST_UnlinkNode(int32_t pThis, int * pNode);
+int __fastcall Unreferenced_0041ebb0(int param_1);
 int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf);
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(void * pNode);
+int __fastcall Unreferenced_0041ed70(int param_1);
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef);
 void __fastcall LINKEDLIST_UnlinkAll(int32_t pList);
 void __fastcall LINKEDLIST_LinkBefore(void * pNode);
@@ -148,6 +160,7 @@ int32_t __fastcall HUFFMAN_ConstructorWithTable(int32_t pHuffCtx);
 void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnBytesWritten, uint8_t * pbSrc, int32_t nSrcLen, uint8_t * pbTableSel, uint32_t dwFlags);
 // @blizzard HuffmanDecompress (SCOMP.CPP)
 void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_t * pBitStreamCtx, uint32_t dwFlags, uint32_t dwParam);
+void __fastcall LINKEDLIST_NodeDestructor_Unref_00420430(void * pNode);
 void StaticInit_CriticalSection_00779214();
 void StaticFini_CriticalSection_00779214();
 // 7 internal functions (defined in .cpp)

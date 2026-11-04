@@ -1695,13 +1695,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit,
 
     int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nX = nTargetX;
     sSkillArg.nFlags = 1;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.nX = nTargetX;
     sSkillArg.nY = nTargetY;
+    sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nMissileTxtNo = MISSILE_Cursecenter;
-    sSkillArg.pOwner = pUnit;
-    sSkillArg.eSkillNo = eSkill;
     D2UnitStrc* pCurseMissile = UNIT::Missile::MakeMissile(&sSkillArg);
     if (pCurseMissile) {
       D2Common::Units::Missile::SetStreamMissile(pCurseMissile, nStreamMissile);

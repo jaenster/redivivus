@@ -164,6 +164,22 @@ int32_t __fastcall SKILLS_CalcSkillParam(eD2Skills eSkill, int32_t nSkillLevel) 
     return (nSkillLevel - 1) * pSkillsTxt->Param[7] + pSkillsTxt->Param[6];
 }
 
+int Unreferenced_006435c0() {
+    return sgptDataTable->nPassiveSkillsCount;
+}
+
+int __fastcall Unreferenced_006435d0(int param_1) {
+    D2DataTableTxtStrc* in_EAX;
+    if (param_1 >= 0) {
+      in_EAX = sgptDataTable;
+      if (param_1 < sgptDataTable->nPassiveSkillsCount) {
+        return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)sgptDataTable->pPassiveSkillsPerClassStrc >> 0x10) << 16 | (uint32_t)(uint16_t)sgptDataTable->pPassiveSkillsPerClassStrc[param_1].nSkillId);
+      }
+    }
+
+    return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)in_EAX >> 0x10) << 16 | (uint32_t)(uint16_t)0xffff);
+}
+
 // Gets or allocates a stat list associated with a given state on a unit. If arg1 is nonzero and no stat list exists for the state, allocates one and attaches it. If arg1 is zero, frees the existing stat list for that state.
 static D2StatListExStrc * __stdcall SKILLS_GetOrAllocStateStatList(int32_t bAlloc, D2UnitStrc * pUnit, eD2States eState) {
     eD2UnitType eUnitType;

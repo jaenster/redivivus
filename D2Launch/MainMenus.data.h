@@ -9,6 +9,7 @@
 #include "D2Win/D2WinAnimImage.h"
 
 // Forward declarations
+struct D2WinTextBox;
 struct DC6;
 struct FORMS_AnimFrameStrc;
 
@@ -108,3 +109,5 @@ extern DC6 * DC6_FrontEnd_paladin_pafws;
 extern uint32_t gbCinematicsMenuShown;
 extern uint32_t fpInsertPlayCd;
 extern uint32_t gbCdCheckPassed[25];
+extern D2WinTextBox * gpCtlBnetProgressBar;
+extern D2WinTextBox * gbBnetConnectionTimerActive;

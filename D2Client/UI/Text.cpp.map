@@ -4,12 +4,91 @@
   "file": "D2Client/UI/Text.cpp",
   "functions": [
     {
+      "name": "TEXT_SetScrollCompleteCallback_Unref_0045afe0",
+      "address": "0045afe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045afe0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetScrollCompleteCallback_Unref_0045afe0"
+      ],
+      "usedTypes": [
+        "pfnTextScrollComplete"
+      ]
+    },
+    {
       "name": "thunk_TEXT_ClearChatMessages",
       "address": "004691b0",
       "lines": [],
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
         "TEXT_ClearChatMessages"
+      ]
+    },
+    {
+      "name": "TEXT_SetScrollCompleteCallback_Unref_004776d0",
+      "address": "004776d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004776d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetScrollCompleteCallback_Unref_004776d0"
+      ],
+      "usedTypes": [
+        "pfnTextScrollComplete"
+      ]
+    },
+    {
+      "name": "TEXT_OnPanelUnregister_NoOp_Unref_004967e0",
+      "address": "004967e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004967e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnPanelUnregister_NoOp_Unref_004967e0"
+      ]
+    },
+    {
+      "name": "TEXT_OnPanelUnregister_NoOp_Unref_00496980",
+      "address": "00496980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496980"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnPanelUnregister_NoOp_Unref_00496980"
+      ]
+    },
+    {
+      "name": "TEXT_GetOverheadGlobalPointer_Unref_0049c160",
+      "address": "0049c160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c160"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_GetOverheadGlobalPointer_Unref_0049c160"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc"
       ]
     },
     {
@@ -148,6 +227,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0049d590",
+      "address": "0049d590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d590"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "Unreferenced_0049d590"
+      ]
+    },
+    {
       "name": "TEXT_DrawScrollingTextBox",
       "address": "0049d5a0",
       "lines": [
@@ -266,6 +359,52 @@
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
         "TEXT_ClearNpcMenuSelection"
+      ]
+    },
+    {
+      "name": "Unreferenced_0049da60",
+      "address": "0049da60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049da60"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "Unreferenced_0049da60",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "GetTickCount",
+        "MESSAGE_RegisterEventHandlerBatch"
+      ]
+    },
+    {
+      "name": "Unreferenced_0049dac0",
+      "address": "0049dac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049dac0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "Unreferenced_0049dac0"
+      ]
+    },
+    {
+      "name": "Unreferenced_0049dae0",
+      "address": "0049dae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049dae0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "Unreferenced_0049dae0"
       ]
     },
     {
@@ -449,6 +588,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0049e390",
+      "address": "0049e390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e390"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "Unreferenced_0049e390",
+        "GetTickCount"
+      ]
+    },
+    {
       "name": "TEXT_PrintGameString",
       "address": "0049e3a0",
       "lines": [
@@ -547,6 +701,34 @@
       ]
     },
     {
+      "name": "TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0",
+      "address": "0049e7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e7f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0"
+      ]
+    },
+    {
+      "name": "TEXT_OnPanelUnregister_NoOp_Unref_0049e800",
+      "address": "0049e800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e800"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnPanelUnregister_NoOp_Unref_0049e800"
+      ]
+    },
+    {
       "name": "TEXT_SetTextBoxExclusionRect",
       "address": "0049e810",
       "lines": [
@@ -563,6 +745,39 @@
       ],
       "usedTypes": [
         "RECT"
+      ]
+    },
+    {
+      "name": "Unreferenced_0049e860",
+      "address": "0049e860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e860"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "Unreferenced_0049e860",
+        "SOUND_StopSound",
+        "SOUND_StopChannelGracefully"
+      ]
+    },
+    {
+      "name": "TEXT_GetOverheadGlobalPointer_Unref_0049e8a0",
+      "address": "0049e8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e8a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_GetOverheadGlobalPointer_Unref_0049e8a0"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc"
       ]
     },
     {

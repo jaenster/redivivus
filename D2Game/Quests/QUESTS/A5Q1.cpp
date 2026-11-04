@@ -535,6 +535,14 @@ bool __fastcall Q31_SequenceFilter(D2QuestDataStrc * pQuestData) {
     return false;
 }
 
+void __fastcall Unreferenced_005875d0(int param_1) {
+    if (!(*(char*)(param_1 + 0xc) == '\0' && *(char*)(param_1 + 9) != '\0')) {
+      return;
+    }
+
+    *(uint8_t*)(param_1 + 0xc) = 1;
+}
+
 // A5Q1: on game load, rebuild volatile in-memory state (nStateFlagPrev@+0xb, nStateFlag@+0xc) from the player's persisted quest-record bits. Priority: Completed(0)/FinishedPrev(0xf)/RewardAwaits(1) -> prev=5 (done); Step0x04(4) -> prev2,flag3; Step0x03(3) -> prev1,flag3; Step0x02(2) -> prev1,flag2; else if player has spoken with Larzuk-intro NPC 0x201 and intro shown -> flag=1. Decompiler shows nQuestIdReal via [ESI+0xe0].
 void __fastcall Q31_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;

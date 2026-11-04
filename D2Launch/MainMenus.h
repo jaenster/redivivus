@@ -106,16 +106,23 @@ struct __attribute__((packed)) D2ControlMsg {
 namespace D2Launch::MainMenus {
 
 // Function declarations
+void __stdcall FORMS_DestroyListJmp_Unref_0041f930();
+void __stdcall FORMS_DestroyListJmp_Unref_0041f940();
+int __fastcall Unreferenced_0042e5c0(int param_1);
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
 void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
+int __fastcall Unreferenced_0042e620(int param_1);
+int __fastcall Unreferenced_0042e630(int param_1);
 void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut);
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance);
 void __stdcall MAINMENU_SetGlobalFlag();
+BOOL __stdcall MAINMENU_GetGlobalValue2_Unref_0042e6c0();
 // Loads all predefined DC6 image resources for main menus and UI elements. Constructs file paths using wsprintfA into a stack buffer, then loads 40+ DC6 images (buttons, backgrounds, popups) via IMAGE_LoadDC6. Expansion detection switches between classic and expansion asset paths for 8 conditional images.
 void __stdcall IMAGE_LoadPredefinedImages();
 void __stdcall IMAGE_FreePredefinedImages();
 // Loads a palette pair (.dat and .pl2 files) for rendering. Constructs full paths by prepending "DATA\\GLOBAL\\" to the input filenames, checks if the palette is "palette\\fechar\\pal.dat" via string comparison, sets global flag gnIsFecharPalette accordingly, then calls D2Win palette loader with the constructed paths.
 int __fastcall D2GFX_SetPaletteForDraw(char * szPaletteDat, char * szPalettePl2);
+int Unreferenced_0042f370();
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromList(int32_t nFormIndex);
 void __stdcall FORMS_DestroyList();
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nFormIndex);
@@ -224,6 +231,7 @@ void __stdcall MAINMENU_AppendCreditsEnd();
 // @sourcefile .\Src\MainMenus.cpp
 uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount);
 void __stdcall MAINMENU_SyncCreditsColumns();
+int Unreferenced_00431020();
 // @sourcefile .\Src\MainMenus.cpp
 // Registers: nReserved (ECX) is 0 at the only call site and not read.
 int __fastcall MAINMENU_DisplayCredits(int32_t nReserved);
@@ -242,15 +250,20 @@ BOOL __stdcall MAINMENU_OnPressTcpIpOptions(struct D2ControlMsg * pControlMsg);
 uint32_t __fastcall MAINMENU_DetectDoubleClick(struct D2ControlMsg * pMsg);
 void __stdcall UIMENU_ShowRealmNameOnButton();
 BOOL __stdcall MAINMENU_CleanupSoundAndClearMessageLoop(struct D2ControlMsg * pControlMsg);
+int __fastcall Unreferenced_00431c60(int param_1, int param_2);
 int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex);
 int __stdcall MAINMENU_ClearLoopFlagPump(int nFrameIndex);
 BOOL __stdcall UIMENU_TCPIPAddressInput(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressStartTcpIpTimer(struct D2ControlMsg * pControlMsg);
 int __stdcall MAINMENU_CreateGameServerThreadPump(int nFrameIndex);
+BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00431f50(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_CheckCharacterSaveFileExists();
+BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00432020(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00432040(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressInvokeCurrentMenuInstance(struct D2ControlMsg * pControlMsg);
 // Shows password change UI. Sets gbPasswordChangeInProgress flag, creates form with old/new password fields, email input. Validates Battle.net connectivity before showing.
 void __stdcall UIMENU_ChangePassword();
+BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressSaveAccountNameAndShowDisconnected(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2(struct D2ControlMsg * pControlMsg);
 uint32_t __stdcall MAINMENU_PollMCPThreadStatus();
@@ -269,6 +282,7 @@ void __fastcall UIMENU_CreatePopupWithContent(uint16_t * wszTitle, uint16_t * ws
 void __fastcall UIMENU_CreatePopupWithContentAndFooter(uint16_t * wszTitle, uint16_t * wszContent, uint16_t * wszFooter, pfnUIMenuInstance pMenuInstance);
 void __fastcall UIMENU_CrashingCantTestIt(uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, pfnUIMenuInstance pfnMenuInstance);
 void __fastcall MAINMENU_ShowPopupDialog(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance, int32_t bHasCancel);
+void __fastcall Unreferenced_00433440(uint16_t * param_1, pfnUIMenuInstance param_2);
 void __fastcall MAINMENU_ShowPopupWithCancel(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance);
 void __fastcall UIMENU_CreateSmallPopup(uint16_t * wszTitle, pfnUIMenuInstance pfnMenuInstance);
 BOOL __stdcall MAINMENU_DismissPopup(struct D2ControlStrc * pControl);
@@ -328,6 +342,8 @@ BOOL __stdcall MAINMENU_Unused13(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_Unused14(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressSelectBattleNet_Unref_00436320(struct D2ControlMsg * pControlMsg);
+int __stdcall Unreferenced_00436340(int param_1);
 BOOL __stdcall MAINMENU_OnPressCommitNewCharacterAndStartGame(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressCreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_ConfirmCreateCharacter();
@@ -381,6 +397,7 @@ uint32_t __fastcall MAINMENU_GetFlagBits8To12(uint32_t dwFlags);
 // Provenance: asm 00437a00..00437a12; unreferenced in 1.14d.
 char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex);
 int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex);
+void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance);
 // 7 internal functions (defined in .cpp)
 
 } // namespace D2Launch::MainMenus

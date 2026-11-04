@@ -8,6 +8,7 @@
 #include "D2Client/D2IniConfigStrc.h"
 #include "D2Client/Message.h"
 #include "D2Client/Sound/Sound.h"
+#include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -47,12 +48,15 @@
 #include "Fog/Src/Safesock.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
+#include "Storm/Source/SComp.h"
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Client/UNIT/PlrSkills.h"
+#include "D2Common/D2UnitStrc.h"
 #include "D2Launch/CharSel.data.h"
 #include "D2Launch/D2Launch.h"
 #include "D2Launch/Launcher.data.h"
@@ -4222,10 +4226,11 @@ static D2WinImage * gpCtlPatchProgressAnimImage = 0; D2_STATIC_GUARD(gpCtlPatchP
 static uint32_t gbMainMenuShowBNetRealmPanel = 0; D2_STATIC_GUARD(gbMainMenuShowBNetRealmPanel, "gbMainMenuShowBNetRealmPanel");
 static D2BNetRealmEntryStrc * * g_pBNetRealmList = 0; D2_STATIC_GUARD(g_pBNetRealmList, "g_pBNetRealmList");
 static int gnRealmListCount = 0; D2_STATIC_GUARD(gnRealmListCount, "gnRealmListCount");
+static uint32_t gnBnetConnectionSuccessFlag = 0; D2_STATIC_GUARD(gnBnetConnectionSuccessFlag, "gnBnetConnectionSuccessFlag");
 static uint32_t gnMCPConnectThreadHandle = 0; D2_STATIC_GUARD(gnMCPConnectThreadHandle, "gnMCPConnectThreadHandle");
 static D2ControlStrc * gpCtlBnetProgressBar2 = 0; D2_STATIC_GUARD(gpCtlBnetProgressBar2, "gpCtlBnetProgressBar2");
-static D2WinTextBox * gpCtlBnetProgressBar = 0; D2_STATIC_GUARD(gpCtlBnetProgressBar, "gpCtlBnetProgressBar");
-static D2WinTextBox * gbBnetConnectionTimerActive = 0; D2_STATIC_GUARD(gbBnetConnectionTimerActive, "gbBnetConnectionTimerActive");
+D2WinTextBox * gpCtlBnetProgressBar = 0; D2_GLOBAL_GUARD(gpCtlBnetProgressBar, "gpCtlBnetProgressBar");
+D2WinTextBox * gbBnetConnectionTimerActive = 0; D2_GLOBAL_GUARD(gbBnetConnectionTimerActive, "gbBnetConnectionTimerActive");
 static int gbBnetProgressActive = 0; D2_STATIC_GUARD(gbBnetProgressActive, "gbBnetProgressActive");
 static HANDLE ghBnetConnectHandle = 0; D2_STATIC_GUARD(ghBnetConnectHandle, "ghBnetConnectHandle");
 static unsigned int gbBNetConnectionProgressFlag = {}; D2_STATIC_GUARD(gbBNetConnectionProgressFlag, "gbBNetConnectionProgressFlag");
@@ -4243,6 +4248,21 @@ static D2ControlStrc * gpCtlBnetPasswordOkButton = 0; D2_STATIC_GUARD(gpCtlBnetP
 
 namespace D2Launch::MainMenus {
 
+void __stdcall FORMS_DestroyListJmp_Unref_0041f930() {
+    uint32_t* in_ECX;
+    Storm::Source::SComp::COMPRESS_DestroyEncoderContext(in_ECX);
+}
+
+void __stdcall FORMS_DestroyListJmp_Unref_0041f940() {
+    uint32_t* in_ECX;
+    Storm::Source::SComp::COMPRESS_DestroyEncoderContext(in_ECX);
+}
+
+int __fastcall Unreferenced_0042e5c0(int param_1) {
+    uint32_t in_EAX;
+    return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)in_EAX >> 0x10) << 16 | (uint32_t)(uint16_t)((uint16_t)param_1 << 8 | (uint16_t)param_1 >> 8));
+}
+
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount) {
     uint32_t nIndex;
     for (nIndex = 0; nIndex < nCount; nIndex++) {
@@ -4252,6 +4272,22 @@ void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount) {
 
 void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) {
     *pwOut = wValue;
+}
+
+int __fastcall Unreferenced_0042e620(int param_1) {
+    return (uint32_t)(*(short int*)param_1 == 10);
+}
+
+int __fastcall Unreferenced_0042e630(int param_1) {
+    if (*(uint16_t*)param_1 < 0x80) {
+      int iVar1;
+      iVar1 = isalpha((int)*(char*)param_1);
+      if (iVar1) {
+        return 1;
+      }
+    }
+
+    return 0;
 }
 
 void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut) {
@@ -4270,6 +4306,10 @@ void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance) {
 
 void __stdcall MAINMENU_SetGlobalFlag() {
     gbMainMenuUIActive = 1;
+}
+
+BOOL __stdcall MAINMENU_GetGlobalValue2_Unref_0042e6c0() {
+    return gbMainMenuUIActive;
 }
 
 // Loads all predefined DC6 image resources for main menus and UI elements. Constructs file paths using wsprintfA into a stack buffer, then loads 40+ DC6 images (buttons, backgrounds, popups) via IMAGE_LoadDC6. Expansion detection switches between classic and expansion asset paths for 8 conditional images.
@@ -4574,6 +4614,16 @@ int __fastcall D2GFX_SetPaletteForDraw(char * szPaletteDat, char * szPalettePl2)
     gnIsFecharPalette = (uint32_t)bIsFecharPalette;
     D2Win::Src::D2WinPalette::LoadPalette(szDatPath, szPl2Path);
     return 1;
+}
+
+int Unreferenced_0042f370() {
+    int in_EAX;
+    if (gnPaletteLoadedFlag) {
+      in_EAX = D2GFX_SetPaletteForDraw("palette\\fechar\\pal.dat", "palette\\fechar\\pal.pl2");
+      gnPaletteLoadedFlag = 0;
+    }
+
+    return in_EAX;
 }
 
 D2ControlStrc * __fastcall FORMS_CreateAnyFormFromList(int32_t nFormIndex) {
@@ -5765,6 +5815,13 @@ void __stdcall MAINMENU_SyncCreditsColumns() {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
 }
 
+int Unreferenced_00431020() {
+    int extraout_EAX;
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+    return extraout_EAX;
+}
+
 // @sourcefile .\Src\MainMenus.cpp
 // Registers: nReserved (ECX) is 0 at the only call site and not read.
 int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
@@ -6247,10 +6304,26 @@ BOOL __stdcall MAINMENU_CleanupSoundAndClearMessageLoop(D2ControlMsg * pControlM
     return 1;
 }
 
-int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex) {
-    // Static local variables (originally global data)
-    static uint32_t gnBnetConnectionSuccessFlag; D2_STATIC_GUARD_BSS(gnBnetConnectionSuccessFlag, "D2Launch::MainMenus::MAINMENU_HandleNetworkPacket::gnBnetConnectionSuccessFlag");
+int __fastcall Unreferenced_00431c60(int param_1, int param_2) {
+    int in_EAX;
+    if (param_2 == -1) {
+      return in_EAX;
+    }
+    if (*(uint8_t*)param_1 != 0xaf) {
+      in_EAX = *(uint8_t*)param_1 - 0xb0;
+      if (!in_EAX) {
+        gnBnetConnectionSuccessFlag = in_EAX;
+        return 0;
+      }
+    } else {
+      gnBnetConnectionSuccessFlag = 1;
+      in_EAX = 0;
+    }
 
+    return in_EAX;
+}
+
+int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex) {
     char szPacketBuffer[512];
     size_t nPacketSize;
     nPacketSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(szPacketBuffer, 0x200);
@@ -6371,6 +6444,13 @@ static void MAINMENU_SetSelectedClassInINI(eD2PlayerClassID ePlayerClass) {
     D2IniData_launcher->bASSASSIN = true;
 }
 
+BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00431f50(D2ControlMsg * pControlMsg) {
+    D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
+    FORMS_DestroyLists();
+    CharSel::UIMENU_CharacterSelectAllGameTypes();
+    return 1;
+}
+
 BOOL __stdcall MAINMENU_CheckCharacterSaveFileExists() {
     char acStack_708[1024];
     char szCharNameUtf8[256];
@@ -6388,6 +6468,20 @@ BOOL __stdcall MAINMENU_CheckCharacterSaveFileExists() {
     }
 
     return 0;
+}
+
+BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00432020(D2ControlMsg * pControlMsg) {
+    D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
+    FORMS_DestroyLists();
+    CharSel::UIMENU_CharacterSelectAllGameTypes();
+    return 1;
+}
+
+BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00432040(D2ControlMsg * pControlMsg) {
+    D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
+    FORMS_DestroyLists();
+    CharSel::UIMENU_CharacterSelectAllGameTypes();
+    return 1;
 }
 
 BOOL __stdcall MAINMENU_OnPressInvokeCurrentMenuInstance(D2ControlMsg * pControlMsg) {
@@ -6466,6 +6560,11 @@ void __stdcall UIMENU_ChangePassword() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpBnetPasswordConfirmEditBox, gpBnetAccountEditBox);
     FORMS_CreateAnyFormFromListExEx(0x5d);
     FORMS_CreateAnyFormFromListExEx(0x5e);
+}
+
+BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300(D2ControlMsg * pControlMsg) {
+    UIMENU_ChangePassword();
+    return 1;
 }
 
 BOOL __stdcall MAINMENU_OnPressSaveAccountNameAndShowDisconnected(D2ControlMsg * pControlMsg) {
@@ -6954,6 +7053,10 @@ void __fastcall MAINMENU_ShowPopupDialog(uint16_t * wszText, pfnUIMenuInstance p
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
     MAINMENU_SetMultilineText(wszText, pTextBox, 0, '\0');
     gpCurrentUIMenuInstance = pfnMenuInstance;
+}
+
+void __fastcall Unreferenced_00433440(uint16_t * param_1, pfnUIMenuInstance param_2) {
+    MAINMENU_ShowPopupDialog(param_1, param_2, 0);
 }
 
 void __fastcall MAINMENU_ShowPopupWithCancel(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance) {
@@ -8765,6 +8868,19 @@ BOOL __stdcall MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain(D2ControlMsg 
     return 1;
 }
 
+BOOL __stdcall MAINMENU_OnPressSelectBattleNet_Unref_00436320(D2ControlMsg * pControlMsg) {
+    gbMainMenuUIActive = 1;
+    UIMENU_MainMenuAgain();
+    return 1;
+}
+
+int __stdcall Unreferenced_00436340(int param_1) {
+    gpCurrentUIMenuInstance = MAINMENU_SetConnectFlag;
+    FORMS_DestroyList();
+    UIMENU_MainMenuAgain();
+    return 1;
+}
+
 BOOL __stdcall MAINMENU_OnPressCommitNewCharacterAndStartGame(D2ControlMsg * pControlMsg) {
     if (D2IniData_launcher->eCTEMP_eD2PlayerClassID == CLASS_ASSASSIN || D2IniData_launcher->eCTEMP_eD2PlayerClassID == CLASS_DRUID) {
       D2IniData_launcher->eCTEMP_eD2PlayerStatus |= PLAYERSTATUS_Expansion;
@@ -9593,6 +9709,10 @@ int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex) {
 
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
+}
+
+void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance) {
+    D2Game::SKILLS::SkillsServer::D2UpdateState((D2UnitStrc*)wszText, (eD2States)pfnMenuInstance, 1);
 }
 
 } // namespace D2Launch::MainMenus

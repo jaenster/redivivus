@@ -5,17 +5,19 @@
 #include "D2CMP/SRC/CelCmp/TCELENTRY.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Client/UI/ui.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "D2Common/Chat/Ignorelist/MappingEntryNode.h"
 #include "D2Common/Chat/Ignorelist/StringEntryNode.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Game/GAME/Targets.h"
+#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/Source/SFile.h"
+#include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -112,6 +114,18 @@ template<> TSLink<::SGAMEDATA>* TSExplicitList<SGAMEDATA, -572662307>::Link(::SG
     }
 
     return &this->m_terminator;
+}
+
+template<> int __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044ed40(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
+}
+
+template<> int __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044ed90(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 // Unreferenced copy of Link: address of pNode's link, or the terminator for a null node.
@@ -496,7 +510,7 @@ template<> void TSGrowableArray<SGAMEDATA>::Reserve(uint32_t nCount, int32_t bRo
     this->ReallocData(nNeeded);
 }
 
-template<> ::SGAMEDATA * TSGrowableArray<SGAMEDATA>::New() {
+template<> __attribute__((noinline)) inline ::SGAMEDATA * TSGrowableArray<SGAMEDATA>::New() {
     uint32_t nNeeded = this->m_count + 1;
     if (nNeeded > this->m_alloc) {
       uint32_t nGranularity;
@@ -533,6 +547,10 @@ template<> void TSGrowableArray<SGAMEDATA>::ReserveNoRound(uint32_t nCount) {
     }
 
     this->ReallocData(nNewCount);
+}
+
+template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor_UnwindThunk_Unref_00450f70() {
+    ((TSGrowableArray<::SGAMEDATA>*)this)->New();
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {

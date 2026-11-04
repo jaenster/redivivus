@@ -151,6 +151,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0047ec20",
+      "address": "0047ec20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ec20"
+        }
+      ],
+      "namespace": "D2Client::UI::MiniPanel",
+      "calledFunctions": [
+        "Unreferenced_0047ec20",
+        "GetUIFlag"
+      ]
+    },
+    {
       "name": "MINIPANEL_HandleButtonClick",
       "address": "0047ec50",
       "lines": [

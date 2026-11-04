@@ -1157,6 +1157,21 @@
       ]
     },
     {
+      "name": "Unreferenced_0065e9b0",
+      "address": "0065e9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e9b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "Unreferenced_0065e9b0",
+        "TXT_Items_GetLine"
+      ]
+    },
+    {
       "name": "ITEMMOD_RollRandomValue",
       "address": "0065e9e0",
       "lines": [

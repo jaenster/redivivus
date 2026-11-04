@@ -78,6 +78,7 @@ void __fastcall Q10_Callback05_ItemDropped(struct D2QuestDataStrc * pQuestData, 
 // counter at sQuestGUID.aPlayerGUID[9] (the 'vip'/viper-piece slot). Used by the
 // drop/pickup bookkeeping. No QuestRecord access.
 void __fastcall Q10_AdjustStaffPieceCount(int pQuestArg, int nCountDelta);
+int Unreferenced_00599bf0();
 // OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2. Object-operate fn for the Tomb-chest /
 // portal object that yields the Book of Skill scroll ('rt1 '). Activates the portal,
 // sets victim dropItemCode='rt1 ', counts eligible players via Q10_OnScrollPickup,

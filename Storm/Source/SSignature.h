@@ -79,6 +79,7 @@ void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round4. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0xCA62C1D6 + W - Parity with K4, SHA-1 rounds 60..79. See SHA1_Round1's plate.
 void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
+int __fastcall Unreferenced_00425830(int param_1, int param_2);
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Transform, and filed under Storm::Source::SBig. Oracle name is the class method Sha1::Pump, PPC mangled symbol ".Pump__4Sha1FPUlPCUc" @100a2ee0 = Pump(unsigned long*, const unsigned char*). Basis: same two arguments (state array, 64-byte block), no callees in either build, and it is the sole callee of Sha1_Append/Sha1::Append. PPC body 1680 bytes vs 1339 here - both fully unrolled. NOT part of SBig: it is a client of SBig's file, not a member; module fixed to SSignature.
@@ -90,6 +91,7 @@ void __thiscall Sha1_Append(struct D2Sha1ContextStrc * pCtx, uint8_t * pData, ui
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_PackTwoIntsToBytes. DESCRIPTIVE, not an oracle name. Writes 8 bytes big-endian: out[0..3] = the SECOND stack argument, out[4..7] = the first. The old parameter names (dwHighWord first) are therefore inverted with respect to the byte order it produces. This is the 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize both emit inline (cf. Sha1_Finalize's byLen0..byLen7 stack bytes and the PPC's rlwimi/stb chain at 100a2b00). Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
 uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwHighWord, uint32_t dwParam);
+void __fastcall Unreferenced_00425ee0(int param_1, int param_2);
 // Storm SBig SHA-1 implementation - init, update, and finalize functions
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Final. Oracle ".Finalize__4Sha1FPUc" @100a2ae0 = Finalize(unsigned char*). Basis: this+1 arg in both; sole callee is Sha1_Append / Sha1::Append in both; both emit the 8-byte big-endian bit length and then the 5 state words.
@@ -110,6 +112,7 @@ void __thiscall CryptRSA_Prepare(struct BigData * * ppKey, void * pModulusBytes,
 // Crypt::RSA::Process: one RSA operation in place on nDataLen bytes at pData. Loads the bytes into a BigData, computes SBigPowMod(out, in, ppKey[1] exponent, ppKey[0] modulus), writes the result back with SBigToBinaryBuffer and zero-fills any shorter tail; used for both signing (SSignatureGenerate) and verifying (SSignatureVerifyStream_Finish).
 // Provenance: 1.14d asm 004260a0; PPC Storm 1.10b symbol Process__Q25Crypt3RSAFPUcUl with the same callee set.
 void __thiscall CryptRSA_Process(struct BigData * * ppKey, void * pData, uint32_t nDataLen);
+void __fastcall SSIG_FreeBigNum_Unref_00518b80(void * * pBigNum);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ef8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9f28(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 // 2 internal functions (defined in .cpp)

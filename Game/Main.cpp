@@ -24,7 +24,6 @@
 #include "support/d2_trace.h"
 #include "globals/globals.h"
 #include "D2Client/ClientModeInGame.h"
-#include "D2Client/UI/Panel.h"
 #include "D2Launch/D2Launch.h"
 #include "D2Multi/ChatDlg.h"
 #include "D2gfx/D2GFX.data.h"
@@ -1656,6 +1655,27 @@ void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl) {
             return;
           }
     }
+}
+
+int Unreferenced_00406470() {
+    uint32_t* unaff_ESI;
+    uint32_t* unaff_EDI;
+    *unaff_EDI = 0;
+    *unaff_ESI = 0;
+    DWORD DVar1 = GetVersion();
+    if ((int)DVar1 < 0) {
+      return 0;
+    }
+
+    SC_HANDLE pSVar2 = OpenSCManagerA((LPCSTR)0x0, (LPCSTR)0x0, 0xf003f);
+    *unaff_ESI = (uint32_t)(uintptr_t)pSVar2;
+    if (!pSVar2) {
+      return 0;
+    }
+
+    pSVar2 = OpenServiceA(pSVar2, s_DIABLO2SRV_007065dc, 0xf01ff);
+    *unaff_EDI = (uint32_t)(uintptr_t)pSVar2;
+    return 1;
 }
 
 // Early app bootstrap: set log path, parse cmdline/registry for app mode, init INI, then ApplicationMain.

@@ -1642,6 +1642,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00626cf0",
+      "address": "00626cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00626cf0"
+        }
+      ],
+      "namespace": "D2Common::Stats::StatsEx",
+      "calledFunctions": [
+        "Unreferenced_00626cf0",
+        "FreeAnyStatList"
+      ]
+    },
+    {
       "name": "STATLIST_FreeStatListMemory",
       "address": "00626d10",
       "lines": [
@@ -2283,6 +2298,20 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00627b30",
+      "address": "00627b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627b30"
+        }
+      ],
+      "namespace": "D2Common::Stats::StatsEx",
+      "calledFunctions": [
+        "Unreferenced_00627b30"
       ]
     },
     {

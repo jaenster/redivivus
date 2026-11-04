@@ -114,6 +114,20 @@
       ]
     },
     {
+      "name": "Unreferenced_006c4010",
+      "address": "006c4010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4010"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "Unreferenced_006c4010"
+      ]
+    },
+    {
       "name": "SCMD_GetListOffset",
       "address": "006c4040",
       "lines": [
@@ -129,6 +143,34 @@
       "usedTypes": [
         "SCMD",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_006c40b0",
+      "address": "006c40b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c40b0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "Unreferenced_006c40b0"
+      ]
+    },
+    {
+      "name": "Unreferenced_006c40d0",
+      "address": "006c40d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c40d0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "Unreferenced_006c40d0"
       ]
     },
     {
@@ -224,6 +266,20 @@
       ]
     },
     {
+      "name": "Unreferenced_006c4360",
+      "address": "006c4360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4360"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "Unreferenced_006c4360"
+      ]
+    },
+    {
       "name": "SCMD_GetHandler",
       "address": "006c4380",
       "lines": [
@@ -276,6 +332,20 @@
         "D2StormListHead",
         "StormLinkStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_006c4470",
+      "address": "006c4470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4470"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "Unreferenced_006c4470"
       ]
     },
     {

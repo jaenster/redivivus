@@ -123,14 +123,17 @@ typedef void (__fastcall *fnEnterGame)(uint16_t wGameId, char * lpCharName, uint
 typedef void (__fastcall *fpForEachClientFn)(D2ClientStrc * pClient, void * pContext);
 #endif
 
+static uint8_t gaTableNullSub15_Data = 0x0; D2_STATIC_GUARD(gaTableNullSub15_Data, "gaTableNullSub15_Data");
 static unsigned short QServerNextToken = 0x1; D2_STATIC_GUARD(QServerNextToken, "QServerNextToken");
 uint32_t GameSeed = -0x1; D2_GLOBAL_GUARD(GameSeed, "GameSeed");
+static uint32_t dwCycleLastSecond = 0x19; D2_STATIC_GUARD(dwCycleLastSecond, "dwCycleLastSecond");
 static int32_t Frames_PerSecond = 0x19; D2_STATIC_GUARD(Frames_PerSecond, "Frames_PerSecond");
 static D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_STATIC_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
 // also labelled: lpCritical_GenerateToken, lpCriticalSection_00882d18
 static _RTL_CRITICAL_SECTION gQServerGameListCs = {}; D2_STATIC_GUARD(gQServerGameListCs, "gQServerGameListCs");
 static SGAMEDATA * gaQServerGameByToken[1025] = {}; D2_STATIC_GUARD(gaQServerGameByToken, "gaQServerGameByToken");
 static TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> * gpQServerGameState = 0; D2_STATIC_GUARD(gpQServerGameState, "gpQServerGameState");
+static int g_nMemoryCounter = 0; D2_STATIC_GUARD(g_nMemoryCounter, "g_nMemoryCounter");
 static int StartingAct = 0; D2_STATIC_GUARD(StartingAct, "StartingAct");
 static uint32_t maxMemoryUsage = 0; D2_STATIC_GUARD(maxMemoryUsage, "maxMemoryUsage");
 static int gbQServerSendPlayerPos = 0; D2_STATIC_GUARD(gbQServerSendPlayerPos, "gbQServerSendPlayerPos");
@@ -140,12 +143,68 @@ static uint32_t Frames_TimeBetweenFrames = 0; D2_STATIC_GUARD(Frames_TimeBetween
 
 namespace D2Game::GAME::Server {
 
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00416880(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0041e960(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00420d90(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void __stdcall ServerInit_nullsub_Unref_0052b8f0() {
+
+}
+
+void __stdcall ServerInit_nullsub_Unref_0052b900() {
+
+}
+
 void __stdcall ServerInit_nullsub() {
 
 }
 
 void __stdcall ServerClose_nullsub() {
 
+}
+
+uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052bdc0() {
+    // Static local variables (originally global data)
+    static uint32_t gnQServerListenSocket; D2_STATIC_GUARD_BSS(gnQServerListenSocket, "D2Game::GAME::Server::GAME_GetUnusedServerConstant_Unref_0052bdc0::gnQServerListenSocket");
+
+    return gnQServerListenSocket;
+}
+
+int __stdcall Unreferenced_0052bdd0(int param_1) {
+    uint32_t in_EAX;
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+}
+
+int __fastcall Unreferenced_0052bde0(int param_1, int param_2, int param_3) {
+    int extraout_EAX;
+    EnterCriticalSection((LPCRITICAL_SECTION)param_1);
+    return extraout_EAX;
+}
+
+int __fastcall Unreferenced_0052bdf0(int param_1, int param_2, int param_3) {
+    int extraout_EAX;
+    LeaveCriticalSection((LPCRITICAL_SECTION)param_1);
+    return extraout_EAX;
+}
+
+int __fastcall Unreferenced_0052be00(int param_1) {
+    return (uint32_t)param_1 >> 0xc & 7;
+}
+
+int __fastcall Unreferenced_0052be10(int param_1) {
+    return param_1 + 0xd0;
 }
 
 void SRVLog(int32_t nLogCategory, char * szText, ...) {
@@ -213,9 +272,6 @@ void __stdcall _TableNullSub14(uint32_t dwArg1) {
 }
 
 uint8_t * __stdcall _TableNullSub15() {
-    // Static local variables (originally global data)
-    static uint8_t gaTableNullSub15_Data = 0x0; D2_STATIC_GUARD(gaTableNullSub15_Data, "D2Game::GAME::Server::_TableNullSub15::gaTableNullSub15_Data");
-
     return &gaTableNullSub15_Data;
 }
 
@@ -259,6 +315,37 @@ uint8_t * __stdcall _TableNullSub23() {
 
 void __stdcall _TableNullSub24(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3, uint32_t dwArg4) {
 
+}
+
+void Unreferenced_0052bfc0() {
+    if (!IsBattleNetServer) {
+      return;
+    }
+
+    BattleNetServerService->fpLoadComplete();
+}
+
+int Unreferenced_0052bfe0() {
+    int iVar1 = 0;
+    ::SGAMEDATA** ppSVar2 = gaQServerGameByToken + 2;
+    do {
+      if (ppSVar2[-1] && ppSVar2[-1] != (::SGAMEDATA*)-1) {
+        iVar1++;
+      }
+      if (*ppSVar2 && *ppSVar2 != (::SGAMEDATA*)-1) {
+        iVar1++;
+      }
+      if (ppSVar2[1] && ppSVar2[1] != (::SGAMEDATA*)-1) {
+        iVar1++;
+      }
+      if (ppSVar2[2] && ppSVar2[2] != (::SGAMEDATA*)-1) {
+        iVar1++;
+      }
+
+      ppSVar2 += 4;
+    } while ((int)ppSVar2 < (intptr_t)&gaQServerGameByToken + 4104);
+
+    return iVar1;
 }
 
 int __stdcall FreeServer() {
@@ -435,7 +522,6 @@ BOOL __fastcall SetupGameChecks(int32_t nClientID2, D2GSMsg67GameLogonSPStrc * p
 
 void __stdcall QSERVER_InitializeMemoryCounters(uint32_t nInitialValue) {
     // Static local variables (originally global data)
-    static int g_nMemoryCounter; D2_STATIC_GUARD_BSS(g_nMemoryCounter, "D2Game::GAME::Server::QSERVER_InitializeMemoryCounters::g_nMemoryCounter");
     static int g_nMemoryCounterSecondary; D2_STATIC_GUARD_BSS(g_nMemoryCounterSecondary, "D2Game::GAME::Server::QSERVER_InitializeMemoryCounters::g_nMemoryCounterSecondary");
 
     g_nMemoryCounter = nInitialValue;
@@ -1350,7 +1436,6 @@ static void UpdateClients(::SGAMEDATA * pGame) {
 // Tracks game performance metrics and memory usage. Every 1000+ milliseconds, calculates cycles per second (FPS metric) as (cycle_count * 1000) / elapsed_ticks, resets cycle counter and updates dwTickCount. Samples memory pool usage and updates global peak memory tracker. Resets peak memory tracking every 10 seconds (0x2711 ticks). Increments dwCycleCount every call. Used for server monitoring and diagnostics.
 static void UpdatePerformanceMetrics(::SGAMEDATA * pGame) {
     // Static local variables (originally global data)
-    static uint32_t dwCycleLastSecond = 0x19; D2_STATIC_GUARD(dwCycleLastSecond, "D2Game::GAME::Server::UpdatePerformanceMetrics::dwCycleLastSecond");
     static uint32_t maxMemoryUsageTick; D2_STATIC_GUARD_BSS(maxMemoryUsageTick, "D2Game::GAME::Server::UpdatePerformanceMetrics::maxMemoryUsageTick");
 
     DWORD dwCurrentTick = GetTickCount();
@@ -1569,6 +1654,10 @@ BOOL __stdcall Return1_GameSetup_1() {
 BOOL __fastcall CLIENT_ReceiveUploadedSave(uint32_t nClientId, D2GSMsg6CUploadSaveStrc * pMsg) {
     int bResult = Clients::CLIENT_AccumulateSaveData(nClientId, pMsg + 1, (uint32_t)pMsg->nChunkSize, pMsg->nTotalSize, 0, 0, 0);
     return bResult;
+}
+
+uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052db90() {
+    return dwCycleLastSecond;
 }
 
 void __stdcall QSERVER_GetMemoryUsage(uint32_t * pOutCurrent, uint32_t * pOutMax) {
@@ -1812,6 +1901,14 @@ void __fastcall RemoveObject(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
 void __fastcall RemoveObjects(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     ForEachClient(pGame, (fpForEachClientFn)(void (__fastcall *)(D2ClientStrc*, D2UnitStrc*))Server::RemoveObject, pUnit);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
+}
+
+uint32_t __stdcall _TableNullSub20_Unref_0052e070() {
+    return 0;
+}
+
+uint32_t __stdcall _TableNullSub20_Unref_0052e080() {
+    return 0;
 }
 
 void __thiscall SERVER_EnterCriticalSection(int32_t pThis, int * pCriticalSection, int32_t nParam) {
@@ -3605,6 +3702,62 @@ void __fastcall SetStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValu
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
+}
+
+void __stdcall _TableNullSub12_Unref_00532580() {
+
+}
+
+void __stdcall _TableNullSub12_Unref_005385e0() {
+
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00539090(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void __stdcall _TableNullSub16_Unref_0053bbc0(uint32_t dwArg1, uint32_t dwArg2) {
+
+}
+
+void __stdcall _TableNullSub16_Unref_0053bbd0(uint32_t dwArg1, uint32_t dwArg2) {
+
+}
+
+void __stdcall _TableNullSub16_Unref_0053bbe0(uint32_t dwArg1, uint32_t dwArg2) {
+
+}
+
+void __stdcall _TableNullSub16_Unref_0053bbf0(uint32_t dwArg1, uint32_t dwArg2) {
+
+}
+
+void __stdcall _TableNullSub16_Unref_0053bc00(uint32_t dwArg1, uint32_t dwArg2) {
+
+}
+
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(int32_t pQServer) {
+    return (uint32_t)(*(int*)(pQServer + 4) != 0);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00601dd0(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_0060e0c0(int32_t pQServer) {
+    return (uint32_t)(*(int*)(pQServer + 4) != 0);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0060e230(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
+}
+
+void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer) {
+    return *(void**)(pQServer + 4);
 }
 
 void StaticInit_Frames_TimeBetweenFrames() {

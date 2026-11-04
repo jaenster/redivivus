@@ -2039,6 +2039,10 @@ int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pU
     return 1;
 }
 
+int __fastcall Unreferenced_00533a60(int param_1, int param_2) {
+    return (param_1 + 1) * param_1 * param_2 * 3;
+}
+
 // Lookup table function: given a character class index (wParam, 0x00–0x1b) and a character level (nParam), returns the base experience-point threshold (or similar save-load scalar) for that class/level bracket. All paths return a constant or one of two bracket constants selected by level comparison. Part of the old save-game loading path (PlayerSave), used when reconstructing character progression data from .d2s files.
 static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, int32_t nLevel) {
     switch (wHirelingId) {

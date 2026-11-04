@@ -75,6 +75,34 @@
       ]
     },
     {
+      "name": "SOUNDHDR_GetGlobal0_Unref_004817d0",
+      "address": "004817d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004817d0"
+        }
+      ],
+      "namespace": "D2Client::Sound::SoundHdr",
+      "calledFunctions": [
+        "SOUNDHDR_GetGlobal0_Unref_004817d0"
+      ]
+    },
+    {
+      "name": "SOUNDHDR_GetGlobal0_Unref_004817e0",
+      "address": "004817e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004817e0"
+        }
+      ],
+      "namespace": "D2Client::Sound::SoundHdr",
+      "calledFunctions": [
+        "SOUNDHDR_GetGlobal0_Unref_004817e0"
+      ]
+    },
+    {
       "name": "SOUNDHDR_GetGlobal0",
       "address": "004817f0",
       "lines": [
@@ -646,6 +674,22 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Cleanup_Unref_00522c20",
+      "address": "00522c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00522c20"
+        }
+      ],
+      "namespace": "D2Client::Sound::SoundHdr",
+      "calledFunctions": [
+        "Cleanup_Unref_00522c20",
+        "NET_SID_CLIENT_ClearIDEAContexts",
+        "NET_SID_CLIENT_ClearSHAContexts"
       ]
     }
   ]

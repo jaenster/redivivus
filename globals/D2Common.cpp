@@ -10,10 +10,10 @@
 #include "D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "D2Common/D2SeedStrc.h"
+#include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/DrlgGrid.h"
-#include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/SUNITNPC.h"
@@ -843,6 +843,8 @@ unsigned int gszTxtColName_op = 0x706f; D2_GLOBAL_GUARD(gszTxtColName_op, "gszTx
 int gaAct5SceneryPresetTable_0_0__1_[15][7] = {}; D2_GLOBAL_GUARD(gaAct5SceneryPresetTable_0_0__1_, "gaAct5SceneryPresetTable_0_0__1_");
 FILE * pLOGFILE = 0; D2_GLOBAL_GUARD(pLOGFILE, "pLOGFILE");
 BOOL bLOGFILE_ENABLED = 0; D2_GLOBAL_GUARD(bLOGFILE_ENABLED, "bLOGFILE_ENABLED");
+unsigned int gnTreasureClassArraySize = {}; D2_GLOBAL_GUARD(gnTreasureClassArraySize, "gnTreasureClassArraySize");
+unsigned int nTxtMonModeSize = {}; D2_GLOBAL_GUARD(nTxtMonModeSize, "nTxtMonModeSize");
 unsigned int gdwDrlgLevelPlacementFlags = {}; D2_GLOBAL_GUARD(gdwDrlgLevelPlacementFlags, "gdwDrlgLevelPlacementFlags");
 
 namespace D2Common::Drlg::Maze {
@@ -994,6 +996,10 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
+
+namespace D2Game::GAME::Rendering {
+
+} // namespace D2Game::GAME::Rendering
 
 namespace D2Client::UI::ui {
 

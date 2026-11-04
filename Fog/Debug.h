@@ -256,7 +256,9 @@ namespace Fog::Debug {
 // Function declarations
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.
 bool __stdcall DEBUG_LoadDbgHelp64Apis();
+int Unreferenced_00401c80();
 int __stdcall InitializeDebugSymbols();
+int Unreferenced_00401dd0();
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModuleBase, char * szModuleName);
 bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement);
@@ -280,6 +282,7 @@ void __stdcall ZeroStruct16Bytes(void * pStruct);
 void __stdcall ZeroStruct16BytesDuplicate(void * pStruct);
 void __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
 int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
+int __fastcall Unreferenced_00402c30(int param_1, int param_2);
 void __fastcall FormatAddressDebugString(uint32_t * pAddrInfo, char * pSymInfo, char * szOutput);
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport);
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp();

@@ -1298,9 +1298,6 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, ui
 
 // Decompress RLE image data - dispatcher to choose optimal decompression path
 void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, int32_t pBlendTable, int32_t pLookupTable2) {
-    // Static local variables (originally global data)
-    static BOOL gbCodecUseFallbackDecompressor; D2_STATIC_GUARD_BSS(gbCodecUseFallbackDecompressor, "D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEDispatcher::gbCodecUseFallbackDecompressor");
-
     uint8_t* pbRLEData;
     uint32_t nCopyCount;
     uint8_t* pbSrcRun;

@@ -46,6 +46,24 @@
       ]
     },
     {
+      "name": "ITEMMODE_NullSub_Unref_00558990",
+      "address": "00558990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558990"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_NullSub_Unref_00558990"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "GetMonsterData",
       "address": "0055b7e0",
       "lines": [
@@ -188,6 +206,21 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0055bfe0",
+      "address": "0055bfe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055bfe0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "Unreferenced_0055bfe0",
+        "SERVER_ITEM_SendStackableUsagePackets"
       ]
     },
     {
@@ -902,6 +935,24 @@
       ]
     },
     {
+      "name": "ITEMMODE_NullSub_Unref_0055d920",
+      "address": "0055d920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d920"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_NullSub_Unref_0055d920"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "ITEMMODE_ReturnOne",
       "address": "0055d930",
       "lines": [
@@ -1036,6 +1087,22 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0055db80",
+      "address": "0055db80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055db80"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "Unreferenced_0055db80",
+        "SUNIT_GetClient",
+        "GetOwnerUnit"
       ]
     },
     {
@@ -3658,6 +3725,57 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ReturnZero3_Unref_00570690",
+      "address": "00570690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570690"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ReturnZero3_Unref_00570690"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEMMODE_IsSkillUsableCheck_Unref_00580260",
+      "address": "00580260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580260"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_IsSkillUsableCheck_Unref_00580260",
+        "SKILLS_CanUseSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "RemoveStackItem_Unref_005e5270",
+      "address": "005e5270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005e5270"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "RemoveStackItem_Unref_005e5270"
       ]
     }
   ]

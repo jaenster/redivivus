@@ -437,6 +437,21 @@
       ]
     },
     {
+      "name": "Unreferenced_00514ff0",
+      "address": "00514ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514ff0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "Unreferenced_00514ff0",
+        "SOUNDSMP_Stop"
+      ]
+    },
+    {
       "name": "SOUND_FadeOutAllSoundEffects",
       "address": "00515020",
       "lines": [

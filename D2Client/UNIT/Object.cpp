@@ -4,11 +4,13 @@
 #include "D2Client/Core/Archive.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
+#include "D2Client/D2DialogStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Source/ClientEngine.h"
+#include "D2Client/UI/Dialog.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UNIT.h"
@@ -54,6 +56,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/npcmenu.data.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Object.data.h"
 #include "D2Common/D2SeedStrc.h"
@@ -287,6 +290,15 @@ static fnObjectClientFn gpObjectClientFunctionDispatchTable[19] = {
 }; D2_STATIC_GUARD(gpObjectClientFunctionDispatchTable, "gpObjectClientFunctionDispatchTable");
 
 namespace D2Client::UNIT::Object {
+
+void __stdcall TEXT_CleanupMessageLog_Unref_004b1d50() {
+    if (!UI::Dialog::gpNpcInteractionDialog) {
+      return;
+    }
+
+    UI::Dialog::FreeDialogStrc(UI::Dialog::gpNpcInteractionDialog);
+    UI::Dialog::gpNpcInteractionDialog = 0;
+}
 
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
 void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode) {

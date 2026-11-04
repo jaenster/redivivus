@@ -23,6 +23,35 @@
       ]
     },
     {
+      "name": "Unreferenced_0053b140",
+      "address": "0053b140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b140"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "Unreferenced_0053b140",
+        "WriteValueToBitBuffer"
+      ]
+    },
+    {
+      "name": "Unreferenced_0053b180",
+      "address": "0053b180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b180"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "Unreferenced_0053b180"
+      ]
+    },
+    {
       "name": "thunk_NET_D2GS_SERVER_SendPacketToClient",
       "address": "0053b1a3",
       "lines": [

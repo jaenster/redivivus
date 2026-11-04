@@ -683,6 +683,54 @@
       ]
     },
     {
+      "name": "Unreferenced_004aa6b0",
+      "address": "004aa6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa6b0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "Unreferenced_004aa6b0",
+        "GetPlayerUnit_UI",
+        "SPELLSEL_DrawSkillGrid"
+      ]
+    },
+    {
+      "name": "Unreferenced_004aa6e0",
+      "address": "004aa6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa6e0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "Unreferenced_004aa6e0",
+        "GetPlayerUnit_UI",
+        "SPELLSEL_DrawSkillGrid"
+      ]
+    },
+    {
+      "name": "Unreferenced_004aa710",
+      "address": "004aa710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa710"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "Unreferenced_004aa710",
+        "GetPlayerUnit_UI",
+        "SPELLSEL_DrawSkillGrid"
+      ]
+    },
+    {
       "name": "SPELLSEL_CycleRightHandSkills",
       "address": "004aa740",
       "lines": [
@@ -722,6 +770,20 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0",
+      "address": "004aa8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa8e0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0"
       ]
     },
     {
@@ -988,6 +1050,21 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004ab7b0",
+      "address": "004ab7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab7b0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "Unreferenced_004ab7b0",
+        "GetTickCount"
       ]
     },
     {

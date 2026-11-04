@@ -565,6 +565,114 @@
         "ListBoxImplementation",
         "uint32_t"
       ]
+    },
+    {
+      "name": "OnRightArrow_Unref_0052e090",
+      "address": "0052e090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e090"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow_Unref_0052e090"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow_Unref_0063c4b0",
+      "address": "0063c4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c4b0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow_Unref_0063c4b0"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow_Unref_0063e060",
+      "address": "0063e060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e060"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow_Unref_0063e060"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow_Unref_00645030",
+      "address": "00645030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645030"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow_Unref_00645030"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow_Unref_00645ff0",
+      "address": "00645ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645ff0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow_Unref_00645ff0"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow_Unref_00646000",
+      "address": "00646000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646000"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow_Unref_00646000"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
     }
   ]
 }

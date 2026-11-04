@@ -358,6 +358,24 @@
       ]
     },
     {
+      "name": "Unreferenced_004f3fb0",
+      "address": "004f3fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3fb0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Unreferenced_004f3fb0",
+        "GetConfirmedTargetUnit",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "D2CheckIfCorpseIsConsumable",
+        "MONSTER_CanBeConverted"
+      ]
+    },
+    {
       "name": "Skills_CltStFunc_SelectReviveMissileByMonsterSize",
       "address": "004f4000",
       "lines": [

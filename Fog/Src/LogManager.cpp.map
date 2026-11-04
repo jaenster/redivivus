@@ -198,6 +198,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0040eb40",
+      "address": "0040eb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040eb40"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "Unreferenced_0040eb40"
+      ]
+    },
+    {
       "name": "InitCriticalSection",
       "address": "0040eb50",
       "lines": [
@@ -455,6 +469,34 @@
       ]
     },
     {
+      "name": "Unreferenced_0040f520",
+      "address": "0040f520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f520"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "Unreferenced_0040f520"
+      ]
+    },
+    {
+      "name": "Unreferenced_0040f580",
+      "address": "0040f580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f580"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "Unreferenced_0040f580"
+      ]
+    },
+    {
       "name": "FILETOOLS_SetLogFilePathWithoutDateAndExtension2",
       "address": "0040f5a0",
       "lines": [
@@ -550,6 +592,20 @@
         "FILE",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0040f810",
+      "address": "0040f810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f810"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "Unreferenced_0040f810"
       ]
     },
     {
@@ -1239,6 +1295,76 @@
       "usedTypes": [
         "D2HighResTimestampStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740",
+      "address": "00413740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413740"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740"
+      ]
+    },
+    {
+      "name": "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750",
+      "address": "00416750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416750"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750"
+      ]
+    },
+    {
+      "name": "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760",
+      "address": "00416760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416760"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760"
+      ]
+    },
+    {
+      "name": "StaticFini_gLogMessageQueueCS_Unref_00665930",
+      "address": "00665930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665930"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "StaticFini_gLogMessageQueueCS_Unref_00665930"
+      ]
+    },
+    {
+      "name": "StaticFini_gLogMessageQueueCS_Unref_00665940",
+      "address": "00665940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665940"
+        }
+      ],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "StaticFini_gLogMessageQueueCS_Unref_00665940"
       ]
     },
     {

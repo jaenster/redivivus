@@ -199,6 +199,10 @@ int32_t __fastcall GetRadiusX(D2LightMapStrc * pLightMap) {
     return pLightMap->nRadiusX >> 3;
 }
 
+int Unreferenced_00474380() {
+    return 0x20;
+}
+
 void __fastcall SetRGB(D2LightMapStrc * pLightMap, uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
     if (!pLightMap) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x167);

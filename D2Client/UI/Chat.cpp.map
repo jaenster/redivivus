@@ -4,6 +4,20 @@
   "file": "D2Client/UI/Chat.cpp",
   "functions": [
     {
+      "name": "CHAT_InitEmpty_Unref_00477970",
+      "address": "00477970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477970"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_InitEmpty_Unref_00477970"
+      ]
+    },
+    {
       "name": "CHAT_HandleIMECandidateList",
       "address": "0047ad60",
       "lines": [

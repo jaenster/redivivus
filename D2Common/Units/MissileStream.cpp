@@ -117,8 +117,8 @@ void __stdcall ExecuteHit(D2UnitStrc * pUnit, int32_t eCollisionFlag, uint32_t n
     BOOL bBadPtr;
     int nPathIdx;
     D2PathPointStrc* pPathPoints;
-    uint16_t wY;
-    uint16_t wX;
+    uint32_t wY;
+    uint32_t wX;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0x10);
     PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -126,11 +126,11 @@ void __stdcall ExecuteHit(D2UnitStrc * pUnit, int32_t eCollisionFlag, uint32_t n
     D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
     for (nPathIdx = 0; nPathIdx < nPathCount; nPathIdx++) {
       eCollisionFlags eCollision;
-      wY = pPathPoints[nPathIdx].nY;
       wX = pPathPoints[nPathIdx].nX;
-      eCollision = Collision::CheckCollision_BlockAll_Width(pRoom, (uint32_t)wX, (uint32_t)wY, nWidth, eCollisionFlag);
+      wY = pPathPoints[nPathIdx].nY;
+      eCollision = Collision::CheckCollision_BlockAll_Width(pRoom, wX, wY, nWidth, eCollisionFlag);
       if (eCollision != COLBIT_NONE) {
-        pHitUnit = Collision::CallCollisionFunction(pRoom, (uint32_t)wX, (uint32_t)wY, (fpMissileSrvDoFuncData)Return1, nullptr, nWidth);
+        pHitUnit = Collision::CallCollisionFunction(pRoom, wX, wY, (fpMissileSrvDoFuncData)Return1, nullptr, nWidth);
         if (pHitUnit) {
           /* FARPROC lpfn for IsBadCodePtr */ bBadPtr = IsBadCodePtr((FARPROC)nfpHit);
           if (bBadPtr) {

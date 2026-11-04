@@ -179,6 +179,15 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
     return (uint32_t)!nCmpResult;
 }
 
+int __fastcall Unreferenced_0047fbc0(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    *(uint32_t*)(param_1 + 0x10) = 0;
+    return param_1;
+}
+
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize) {
     Storm::Source::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);

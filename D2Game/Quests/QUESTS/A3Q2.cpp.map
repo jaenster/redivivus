@@ -357,6 +357,21 @@
       ]
     },
     {
+      "name": "Unreferenced_005b8750",
+      "address": "005b8750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b8750"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q2",
+      "calledFunctions": [
+        "Unreferenced_005b8750",
+        "HasQuestItem"
+      ]
+    },
+    {
       "name": "Q19_CheckPlayerHasKhalimsEye",
       "address": "005b8770",
       "lines": [
@@ -614,6 +629,24 @@
         "D2QuestDataA3Q2Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q19_Callback10_PlayerLeavesGame_Unref_005bdb10",
+      "address": "005bdb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bdb10"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q2",
+      "calledFunctions": [
+        "Q19_Callback10_PlayerLeavesGame_Unref_005bdb10"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
       ]
     }
   ]

@@ -4,6 +4,159 @@
   "file": "D2Common/Txt/Cube.cpp",
   "functions": [
     {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_006429d0",
+      "address": "006429d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006429d0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_006429d0"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648370",
+      "address": "00648370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648370"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_00648370"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648380",
+      "address": "00648380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648380"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_00648380"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648430",
+      "address": "00648430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648430"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_00648430"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648440",
+      "address": "00648440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648440"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_00648440"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648450",
+      "address": "00648450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648450"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_00648450"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00650ea0",
+      "address": "00650ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650ea0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB_Unref_00650ea0"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740",
+      "address": "00663740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663740"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CUBE_GetRecipeCount_Unref_00665760",
+      "address": "00665760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665760"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_GetRecipeCount_Unref_00665760"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "CUBE_PadItemCodeString",
       "address": "00668510",
       "lines": [
@@ -224,6 +377,23 @@
       ]
     },
     {
+      "name": "nullsub_Unref_0066a210",
+      "address": "0066a210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a210"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "nullsub_Unref_0066a210"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
       "name": "nullsub",
       "address": "0066a220",
       "lines": [
@@ -320,6 +490,68 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
+      ]
+    },
+    {
+      "name": "CUBE_GetRecipeCount_Unref_0066a490",
+      "address": "0066a490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a490"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_GetRecipeCount_Unref_0066a490"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_GetRecipeCount_Unref_0066a4a0",
+      "address": "0066a4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a4a0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_GetRecipeCount_Unref_0066a4a0"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0",
+      "address": "0066b7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b7f0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0"
+      ]
+    },
+    {
+      "name": "CUBE_PadItemCodeString_Unref_006bcd50",
+      "address": "006bcd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcd50"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_PadItemCodeString_Unref_006bcd50"
       ]
     }
   ]

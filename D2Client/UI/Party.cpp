@@ -231,6 +231,12 @@ static void AllocUiPartyFromRoster(D2RosterStrc * pRoster, int32_t nPositionY) {
     Party::pUiParty = pUiParty;
 }
 
+int Unreferenced_0049a2a0() {
+    D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
+    uint32_t uVar1 = GAME::Roster::GetRosterLevel(pRoster);
+    return (uint32_t)((int)uVar1 >= 9);
+}
+
 static void __fastcall UI_DrawPartyMemberName(D2UiPartyStrc * pUiParty, int32_t nScreenY, int32_t nColor, int32_t bNarrowMode) {
     int i;
     uint16_t wszName[100];

@@ -1605,6 +1605,8 @@ int nD2CompItemsSize = 0; D2_GLOBAL_GUARD(nD2CompItemsSize, "nD2CompItemsSize");
 void * pD2CompItems = 0; D2_GLOBAL_GUARD(pD2CompItems, "pD2CompItems");
 uint8_t gaItemPaletteTransformData[241920] = {}; D2_GLOBAL_GUARD(gaItemPaletteTransformData, "gaItemPaletteTransformData");
 static uint8_t gaGlideEmblemPrimaryColorTableEntries[12] = {}; D2_STATIC_GUARD(gaGlideEmblemPrimaryColorTableEntries, "gaGlideEmblemPrimaryColorTableEntries");
+static D2TxtLinkStrc * gnHitClassTxtLinkHandle = 0; D2_STATIC_GUARD(gnHitClassTxtLinkHandle, "gnHitClassTxtLinkHandle");
+static D2TxtLinkStrc * pD2CompItemsLinker = 0; D2_STATIC_GUARD(pD2CompItemsLinker, "pD2CompItemsLinker");
 static D2TxtLinkStrc * gnItemTypesCacheHandle = 0; D2_STATIC_GUARD(gnItemTypesCacheHandle, "gnItemTypesCacheHandle");
 static void * gpItemTypesTxt = 0; D2_STATIC_GUARD(gpItemTypesTxt, "gpItemTypesTxt");
 static size_t gnD2CompCompressionBufferSize = 0; D2_STATIC_GUARD(gnD2CompCompressionBufferSize, "gnD2CompCompressionBufferSize");
@@ -3050,7 +3052,6 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     static D2ItemsTxt * pD2CompArmor; D2_STATIC_GUARD_BSS(pD2CompArmor, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompArmor");
     static size_t nD2CompMiscSize; D2_STATIC_GUARD_BSS(nD2CompMiscSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompMiscSize");
     static short * pD2CompItemsShortStructure; D2_STATIC_GUARD_BSS(pD2CompItemsShortStructure, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompItemsShortStructure");
-    static D2TxtLinkStrc * pD2CompItemsLinker; D2_STATIC_GUARD_BSS(pD2CompItemsLinker, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompItemsLinker");
 
     int j;
     int nItemIdx = 0;
@@ -3124,6 +3125,27 @@ void __fastcall D2COMP_LoadItemTypesTxt(D2PoolManagerStrc * pMemory) {
     };
     gnItemTypesCacheHandle = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\Src\\D2Comp.cpp", 0xa97);
     gpItemTypesTxt = LoadTxt(pMemory, "itemtypes", aBinFields, &gnD2CompCompressionBufferSize, 0xe4);
+}
+
+int Unreferenced_005049d0() {
+    if (pD2CompItemsLinker) {
+      Fog::Src::Excel::STRUCT_FreeTxtLink(pD2CompItemsLinker);
+      pD2CompItemsLinker = 0;
+    }
+    if (gnItemTypesCacheHandle) {
+      Fog::Src::Excel::STRUCT_FreeTxtLink(gnItemTypesCacheHandle);
+      gnItemTypesCacheHandle = 0;
+    }
+
+    int iVar1 = 0;
+    if (gnHitClassTxtLinkHandle) {
+      int extraout_EAX;
+      Fog::Src::Excel::STRUCT_FreeTxtLink(gnHitClassTxtLinkHandle);
+      gnHitClassTxtLinkHandle = 0;
+      iVar1 = extraout_EAX;
+    }
+
+    return iVar1;
 }
 
 int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncestorType) {
@@ -4242,7 +4264,6 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
 void __stdcall D2COMP_AllocTxt_EverythingItems() {
     // Static local variables (originally global data)
     static void * gpHitClassTxt; D2_STATIC_GUARD_BSS(gpHitClassTxt, "D2Win::Src::D2Comp::D2COMP_AllocTxt_EverythingItems::gpHitClassTxt");
-    static D2TxtLinkStrc * gnHitClassTxtLinkHandle; D2_STATIC_GUARD_BSS(gnHitClassTxtLinkHandle, "D2Win::Src::D2Comp::D2COMP_AllocTxt_EverythingItems::gnHitClassTxtLinkHandle");
     static uint32_t gbD2CompItemsAllocated; D2_STATIC_GUARD_BSS(gbD2CompItemsAllocated, "D2Win::Src::D2Comp::D2COMP_AllocTxt_EverythingItems::gbD2CompItemsAllocated");
 
     uint32_t nTwoHandedMapIdx;

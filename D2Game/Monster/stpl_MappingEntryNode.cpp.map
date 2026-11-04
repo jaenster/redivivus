@@ -1,0 +1,25 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/stpl_MappingEntryNode.cpp",
+  "functions": [
+    {
+      "name": "Clear_Unref_005de320",
+      "address": "005de320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005de320"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Clear_Unref_005de320",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
+      ]
+    }
+  ]
+}

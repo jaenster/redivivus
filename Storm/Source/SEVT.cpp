@@ -5,7 +5,6 @@
 #include "Game/Main.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -51,6 +50,26 @@ static uint32_t gnSevtRegisteredEventCount = 0; D2_STATIC_GUARD(gnSevtRegistered
 static _RTL_CRITICAL_SECTION lpCriticalSection_0077930c = {}; D2_STATIC_GUARD(lpCriticalSection_0077930c, "lpCriticalSection_0077930c");
 
 namespace Storm::Source::SEVT {
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0040f7c0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_004177c0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041c4e0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041eab0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_00420490(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
 
 // Calculates the next power of 2 greater than or equal to a given value passed in ECX. Used for sizing hash tables and event handler arrays. Returns the smallest power of 2 that can contain the input value times 2 plus 2.
 uint32_t __fastcall SEVT_NextPowerOf2(int nValue) {
@@ -507,6 +526,13 @@ void __fastcall LINKEDLIST_UnlinkSelf(int * pNode) {
     pNode[1] = 0;
 }
 
+int __fastcall Unreferenced_004269a0(int param_1) {
+    uint32_t uVar1 = param_1 + 4;
+    *(uint32_t*)uVar1 = uVar1;
+    *(uint32_t*)(param_1 + 8) = ~uVar1;
+    return ~uVar1;
+}
+
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.
 // @oracle SEvtPopState
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
@@ -648,6 +674,16 @@ void __thiscall LINKEDLIST_GetHead(int32_t pThis, int * pListHead) {
     pListHead[1] = 0;
 }
 
+int __fastcall Unreferenced_00426c60(int param_1) {
+    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
+    *puVar1 = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *puVar1 = (uint32_t)(uintptr_t)puVar1;
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+    return param_1;
+}
+
 // Gets the value stored at a specific index within a linked list. Returns the value field at offset+4 from the node pointer. Handles NULL input by defaulting to the list head at this+8.
 uint32_t __thiscall LINKEDLIST_GetValueAtIndex(void * pListHead, int32_t nNode) {
     if (nNode) {
@@ -696,6 +732,12 @@ void __fastcall LINKEDLIST_InsertHead(D2StormListHead * pList) {
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
+}
+
+int __fastcall Unreferenced_00426d70(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    return param_1;
 }
 
 // Allocates a new linked list node via SMemAlloc with 12 bytes overhead plus data size. Initializes next/prev pointers to NULL. Optionally links the node into an existing list via LINKEDLIST_IsEmpty call.
@@ -893,6 +935,194 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     }
 
     return bResult;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044de90(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ecc0(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0044ed00(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045b9f0(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045ba30(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601bf0(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601d60(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_00601f00(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601f60(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_006020b0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_006024a0(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e3b0(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e440(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e5d0(int * pList) {
+    return pList[2] <= 0 ? 0 : pList[2];
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e690(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e760(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_006c4070(int * pNode) {
+    int* piVar3;
+    int iVar1 = *pNode;
+    if (!iVar1) {
+      return;
+    }
+
+    piVar3 = (int*)D2_StormNextLink(pNode, -1);
+    *piVar3 = iVar1;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
 }
 
 void StaticInit_gSevtBreakCmdList() {

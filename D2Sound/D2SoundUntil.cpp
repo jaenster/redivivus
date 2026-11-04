@@ -75,6 +75,15 @@ BOOL __fastcall SOUNDUTIL_FindInLinkedList(int * pNode, int32_t nSearchValue) {
     return 1;
 }
 
+int __fastcall Unreferenced_005169f0(int param_1) {
+    int iVar1 = 0;
+    for (; param_1; param_1 = *(int*)(param_1 + 4)) {
+      iVar1++;
+    }
+
+    return iVar1;
+}
+
 void __fastcall SOUNDUTIL_FreeLinkedList(int * * ppListHead) {
     int* pMemoryToFree;
     int* pPrev;

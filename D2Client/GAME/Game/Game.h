@@ -88,22 +88,36 @@ struct D2ClientTimerStrc {
 namespace D2Client::GAME::Game {
 
 // Function declarations
+uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_00402a80();
+void __fastcall TSIntrusiveList_Clear_Unref_0040f860(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_004179f0(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_00417a30(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_00417c30(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_0041c540(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_0041eb20(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(struct D2StormListHead * pListHead);
+void __stdcall GAME_SetMouseButtonEventPending_Unref_0044b870();
 void __thiscall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, uint32_t dwDurationMs);
+int __fastcall Unreferenced_0044be10(int param_1);
 void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue);
 // Setter for gRunKeyDown (run modifier).
 void __fastcall SetRunKeyDown(BOOL bRunKeyDown);
+BOOL __stdcall GetGlobalAlwaysRun_Unref_0044be70();
 void __fastcall SetGlobalAlwaysRun(int32_t nValue);
 BOOL __stdcall GetGlobalAlwaysRun();
 void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown);
+BOOL __stdcall GetGlobalAlwaysRun_Unref_0044beb0();
 // Compute mouse click modifier flags (run/always-run, modifier key).
 uint32_t __stdcall GetMouseClickFlags();
 void __stdcall GAME_SetMouseButtonEventPending();
 uint32_t __stdcall GAME_GetPrimaryClickState();
 int __stdcall GAME_GetMouseButtonEventState();
+int __stdcall GAME_GetMouseButtonEventState_Unref_0044bf20();
 int __stdcall GAMEDATA_GetQueuedPrimaryClick();
 // Handle under-mouse primary click: set queued click, build flags, call ClickMap(0,...).
 void __stdcall UnderMouse_PrimaryClick(struct D2UIMouseMsgStrc * pMsg);
 uint32_t __stdcall GAME_HasQueuedPrimaryClick();
+uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_0044bff0();
 // Process queued primary click: build flags and call ClickMap(1,x,y,flags).
 // The player pointer stays in ECX across the call to GetMouseClickFlags (MOV ECX,EAX after GetPlayerUnit_UI, CALL GetMouseClickFlags, TEST ECX,ECX): GetMouseClickFlags (0044bec0) writes only EAX.
 void __stdcall ProcessQueuedPrimaryClick();
@@ -115,6 +129,7 @@ void __stdcall INPUT_HandlePrimaryClickUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleRightClick(struct D2UIMouseMsgStrc * pMsg);
 // Process queued secondary click: build flags (run/modifier) and call ClickMap(4,x,y,flags).
 void __stdcall ProcessQueuedSecondaryClick();
+int Unreferenced_0044c340();
 void __stdcall INPUT_HandleSecondaryClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleScrollDown(struct D2UIMouseMsgStrc * pMsg);
@@ -125,6 +140,7 @@ void __stdcall INPUT_HandleSysCommand(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandlePassthrough(struct D2UIMouseMsgStrc * pMsg);
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
 void __stdcall HandleMouseButtonEvent(struct D2UIMouseMsgStrc * pMouseEvent);
+void __fastcall ClientInit_Noop04_Unref_0044c6a0(struct D2IniConfigStrc * pIni);
 void __stdcall GAMEDATA_CheckAutomapCenterOnLoad();
 void __stdcall NET_D2GS_CLIENT_HandleAllNonVariableSizePackets();
 // Client-side world tick: init room, missiles, and DenOfEvil lighting for current act.
@@ -154,6 +170,7 @@ void __stdcall DrawLoadingMessage();
 // Compute frame-skip level based on elapsed ticks and fps_drawn.
 uint32_t __thiscall ComputeFrameSkipLevel(int32_t nElapsedTicks, int32_t nFpsDrawn);
 void __stdcall UpdateFrameStats();
+int Unreferenced_0044cd40();
 void __stdcall GAMEDATA_SendPeriodicPing();
 void __fastcall NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING(char * pBytes);
 void __fastcall GAME_SetSkillDelayEndFrame(int32_t nValue);
@@ -255,12 +272,14 @@ void __stdcall UI_ResetInputState();
 void __stdcall GAMEDATA_ClearQueuedClicks();
 int32_t __stdcall GetEntryIndex();
 uint32_t __stdcall GAMEDATA_GetGlobalTickCount();
+uint32_t __stdcall GAMEDATA_GetGlobalTickCount_Unref_0044dab0();
 uint32_t __stdcall GAME_GetSyncTickCount();
 void __fastcall GAME_SetSyncTickCount(uint32_t dwTickCount);
 uint32_t __stdcall GAMEDATA_GetFpsDrawn();
 uint32_t __stdcall GetFPSSkip();
 int32_t __stdcall gnRecordingIndex();
 uint32_t __stdcall GetStepsOfMissileMovement();
+uint32_t __stdcall GetStepsOfMissileMovement_Unref_0044db20();
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType();
 void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs);
 void __stdcall GAMEDATA_LoadActTiles(uint32_t nAct);
@@ -312,7 +331,15 @@ void __fastcall GAME_TryCopyFrom(::SGAMEDATA * pGame, ::SGAMEDATA * pGame2);
 // Register -lng command-line option handler (language file) via SCMD::SCmdRegisterArgument.
 BOOL __stdcall RegisterCmdLineLngOption();
 void __stdcall FreeLanguage();
+void __fastcall ClientInit_Noop16_Unref_00452160(struct D2IniConfigStrc * pIni);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(struct D2StormListHead * pListHead);
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad();
+void __fastcall CLIENT_SetDifficulty_Unref_00552830(char nDifficulty);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602390(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(struct D2StormListHead * pListHead);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 
 } // namespace D2Client::GAME::Game

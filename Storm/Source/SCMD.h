@@ -55,13 +55,18 @@ struct __attribute__((packed)) StormCmdArgDefStrc {
 namespace Storm::Source {
 
 // Function declarations
+int __fastcall Unreferenced_006c4010(int param_1);
 uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset);
+int __fastcall Unreferenced_006c40b0(int param_1);
+int __fastcall Unreferenced_006c40d0(int param_1);
 ::SCMD * __thiscall SCMD_GetListHead(::SCMD * pThis, ::SCMD * pNode);
 void __thiscall SCMD_MoveToList(::SCMD * pThis, ::SCMD * pNode, int nInsertMode, ::SCMD * pScmd);
 uint32_t __thiscall SCMD_GetNextOffset(::SCMD * pThis, ::SCMD * pNode);
 void __thiscall SCMD_UnlinkNode(::SCMD * pThis, ::SCMD * pNode);
+int __fastcall Unreferenced_006c4360(int param_1);
 uint32_t __thiscall SCMD_GetHandler(::SCMD * pThis, int nNodeOffset);
 void __fastcall SCMD_ClearAll(struct D2StormListHead * nListPtr);
+int __fastcall Unreferenced_006c4470(int param_1);
 ::SCMD * __thiscall SCMD_AllocNode(::SCMD * pThis, int nInsertMode, int nExtraSize, uint32_t dwAllocFlags);
 ::SCMD * __thiscall SCMD_FreeNode(::SCMD * pThis, uint8_t bFreeMemory);
 // Registers one command-line argument definition into Storm's command list.

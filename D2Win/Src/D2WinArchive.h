@@ -28,6 +28,7 @@ int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnS
 void __fastcall IMAGE_FreeImage(struct DC6 * pDC6);
 BOOL MessageBoxA_InsertExpansionDisc();
 BOOL __stdcall MessageBoxA_InsertPlayDisc();
+int Unreferenced_004fab60();
 BOOL __stdcall MPQ_LoadAllDataMpqFiles();
 struct D2PoolManagerStrc * __stdcall ReturnZero();
 uint32_t __stdcall D2WINARCHIVE_GetArchiveHandle();

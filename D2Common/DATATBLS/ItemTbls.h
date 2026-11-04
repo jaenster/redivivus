@@ -9,8 +9,6 @@
 #include "d2_platform.h"
 
 // Forward declarations
-struct D2BooksTableStrc;
-struct D2BooksTxt;
 struct D2GambleTableStrc;
 struct D2GemsTxt;
 struct D2ItemRatioTxt;
@@ -25,10 +23,28 @@ struct D2QualityItemsTableStrc;
 struct D2QualityItemsTxt;
 struct D2RareAffixTableStrc;
 struct D2RareAffixTxt;
-struct D2RunesTxt;
-struct D2RunesTxtTableStrc;
+
+struct D2BooksTxt;
 
 // Data types
+struct D2BooksTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2BooksTxt * pTable;
+};
+
+struct D2BooksTxt {
+    /* 0x00 */ uint16_t name; // d2bs binfields FIELDTYPE_KEY_WORD
+    /* 0x02 */ char spellicon; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ int pSpell; // d2bs binfields FIELDTYPE_INT
+    /* 0x08 */ int scrollskill; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0C */ int bookskill; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x10 */ int basecost; // d2bs binfields FIELDTYPE_INT
+    /* 0x14 */ int costpercharge; // d2bs binfields FIELDTYPE_INT
+    /* 0x18 */ char scrollspellcode[4]; // d2bs binfields FIELDTYPE_RAW4
+    /* 0x1C */ char bookspellcode[4]; // d2bs binfields FIELDTYPE_RAW4
+};
+
 struct D2ItemStatCostDescPriorityStrc {
     D2ItemStatCostDescPriorityStrc() = default;
     D2ItemStatCostDescPriorityStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
@@ -37,6 +53,64 @@ struct D2ItemStatCostDescPriorityStrc {
 
     /* 0x00 */ short nStatId; // ItemStatCost row index
     /* 0x02 */ short nDescPriority; // descpriority column; qsort key (SORT_ItemDescPriority)
+};
+
+struct D2RunesTxt {
+    /* 0x000 */ char name[64]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x080 */ char complete; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x081 */ char server; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x082 */ uint16_t field4_0x82;
+    /* 0x084 */ uint8_t field_0x84;
+    /* 0x085 */ uint8_t field_0x85;
+    /* 0x086 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x088 */ short itype2; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x08A */ short itype3; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x08C */ short itype4; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x08E */ short itype5; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x090 */ short itype6; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x092 */ short etype1; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x094 */ short etype2; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x096 */ short etype3; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x098 */ int rune1; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x09C */ int rune2; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0A0 */ int rune3; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0A4 */ int rune4; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0A8 */ int rune5; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0AC */ int rune6; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0B0 */ int t1code1; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0B4 */ int t1param1; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0B8 */ int t1min1; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0BC */ int t1max1; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0C0 */ int t1code2; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0C4 */ int t1param2; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0C8 */ int t1min2; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0CC */ int t1max2; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0D0 */ int t1code3; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0D4 */ int t1param3; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0D8 */ int t1min3; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0DC */ int t1max3; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0E0 */ int t1code4; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0E4 */ int t1param4; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0E8 */ int t1min4; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0EC */ int t1max4; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0F0 */ int t1code5; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0F4 */ int t1param5; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0F8 */ int t1min5; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0FC */ int t1max5; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x100 */ int t1code6; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x104 */ int t1param6; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x108 */ int t1min6; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x10C */ int t1max6; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x110 */ int t1code7; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x114 */ int t1param7; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x118 */ int t1min7; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x11C */ int t1max7; // d2bs binfields FIELDTYPE_SIGNEDINT
+};
+
+struct D2RunesTxtTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2RunesTxt * pTable;
 };
 
 namespace D2Common::DATATBLS::ItemTbls {
@@ -95,6 +169,7 @@ struct D2QualityItemsTxt * __stdcall TXT_QualityItems_GetLine(int32_t nIndex);
 // Compiles the gems.txt data table into the runtime pTxtGems array via CompileTxt with a 42-field schema (gem name/letter/code plus weapon/helm/shield mod triplets). For each row, resolves the 3-char gem letter code to a string-table index (STRTABLE_LookupString) stored at +0x2c, and links each gem to its owning item record: writes 0xFFFFFFFF placeholder gem-offset into the item's szCode area (+0x70) and sets sgpTxtItems[code].dwGemOffset to the gem's row index. Called once during item data-table init.
 void __fastcall TXT_AllocTxt_gems(struct D2PoolManagerStrc * pMemory);
 void __stdcall thunk_UnloadBin_LvlType();
+struct D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo_Unref_006372b0();
 // Returns gem/rune table line for given index (192 bytes/entry). Used for socketed item property application.
 struct D2GemsTxt * __stdcall TXT_Gems_GetLine(int32_t nIndex);
 // Defines the binary field schema for books.txt (name/KEY_WORD, scrollspellcode/RAW4, bookspellcode/RAW4, pSpell/INT, scrollskill/NAME_INT, bookskill/NAME_INT, spellicon/CHAR, basecost/INT, costpercharge/INT) and calls CompileTxt to parse it into pTxtBooks. In: pMemory pool.
@@ -114,6 +189,7 @@ struct D2LowQualityItemsTxt * __stdcall TXT_LowQualityItems_GetLine(int32_t nInd
 // Loads and compiles the ItemRatio.txt data table. Builds a D2BinFieldInputStrc field-definition array (Version, Uber, Class Specific, then Unique/Rare/Set/Magic/HiQuality/Normal drop-chance + Divisor + Min columns at their struct offsets) and passes it to DataTbls::CompileTxt with row size 0x44, storing the parsed table into the global pTxtItemRatio and its row count into nTxtItemRatioSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.
 void __fastcall TXT_AllocTxt_itemratio(struct D2PoolManagerStrc * pMemory);
 void __stdcall thunk_UnloadBin_LvlMaze();
+struct D2LowQualityItemsTableStrc * __stdcall TXT_LowQualityItems_GetTableInfo_Unref_00637900();
 // QualityRatio.txt row lookup. Returns quality upgrade chance ratios for treasure class calculations. Used by ITEM_RollItemQuality to apply TC quality bonuses during quality cascade.
 struct D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint32_t dwUnused, uint16_t nQualityTier);
 int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2);
@@ -148,6 +224,10 @@ struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize();
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRecord);
 struct D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId);
+struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_00654fd0();
+struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b450();
+struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b460();
+struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b470();
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::ItemTbls

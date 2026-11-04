@@ -89,6 +89,7 @@ struct __attribute__((packed)) D2QuestLogStrc {
 namespace D2Client::UI::QuestLog {
 
 // Function declarations
+void __stdcall QUESTLOG_ResetQuestSelections_Unref_004a18f0();
 void __stdcall QUESTLOG_SetActiveActFromPlayerRoom();
 void __stdcall QUESTLOG_ResetState();
 // Lazy-loads all quest log DC6 image assets on first call. Checks INV_GetItemDescDirtyFlag to avoid redundant loads, then conditionally loads 6 DC6 files via IMAGE_LoadDC6Ex: questbackground, questtabs (classic vs expansion variant), questsockets, questdone, invps, and questlast. All file paths are sprintf-formatted into a 260-byte buffer using format strings from gTxtCompilationMemPool.pOverflow with "DATA\\GLOBAL" directory prefix.
@@ -118,6 +119,7 @@ void __fastcall QUESTLOG_SetZooSpawnFlag(uint32_t nZooSpawnCounter);
 uint8_t __stdcall QUESTLOG_GetZooSpawnFlag();
 bool QUESTLOG_FindZooDummyMonster();
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY);
+int __fastcall Unreferenced_004a3200(int param_1);
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.
 void __stdcall QUESTLOG_LoadQuestIconsForAct(uint32_t nActIndex, int32_t bResetSelection);
 void __stdcall GameOverWtf();

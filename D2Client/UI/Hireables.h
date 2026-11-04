@@ -56,6 +56,7 @@ void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX);
 struct DC6 * __fastcall GetRosterIcon(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut);
 void __stdcall DRAW_Overlay_PetsAndPartyMembers();
 void __stdcall INPUT_HireableInteract(struct D2UIMouseMsgStrc * pMsg);
+int Unreferenced_004934b0();
 int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound);
 void __stdcall INPUT_HireableHireClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall UI_HandleHirelingTooltipHoverTimer(struct D2UIMouseMsgStrc * pMsg);

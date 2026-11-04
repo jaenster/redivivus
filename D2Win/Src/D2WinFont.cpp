@@ -20,7 +20,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Help.data.h"
-#include "D2Client/UI/Panel.h"
 #include "D2Win/Src/D2WinFont.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1218,6 +1217,17 @@ D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * p
       } while (nSegEnd > nSegStart);
     }
     goto append_line_node;
+}
+
+int __fastcall Unreferenced_00502c40(int param_1) {
+    int iVar1;
+    uint32_t* puVar2 = (uint32_t*)param_1;
+    for (iVar1 = 0x200; iVar1; iVar1--) {
+      *puVar2 = 0;
+      puVar2++;
+    }
+
+    return param_1;
 }
 
 void __stdcall D2WINFONT_InitFontSystem() {

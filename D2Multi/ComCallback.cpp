@@ -340,6 +340,7 @@ static pfnComCallback gaComCallbackDispatch[24] = {
 }; D2_STATIC_GUARD(gaComCallbackDispatch, "gaComCallbackDispatch");
 // also labelled: gszChannelUserCountFormat
 char gszCurrentChannelName[256] = {}; D2_GLOBAL_GUARD(gszCurrentChannelName, "gszCurrentChannelName");
+static char lpFileName_00798e30[260] = {}; D2_STATIC_GUARD(lpFileName_00798e30, "lpFileName_00798e30");
 static D2ChannelUserStrc * gpChannelUserListHead = 0; D2_STATIC_GUARD(gpChannelUserListHead, "gpChannelUserListHead");
 static void * gpChannelUserLinkedListHead = 0; D2_STATIC_GUARD(gpChannelUserLinkedListHead, "gpChannelUserLinkedListHead");
 static int gnChannelUserTotalCount = 0; D2_STATIC_GUARD(gnChannelUserTotalCount, "gnChannelUserTotalCount");
@@ -356,9 +357,6 @@ int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnused) {
 }
 
 static int COMCALLBACK_HandleBannerAdFile(uint32_t * pBannerAdData) {
-    // Static local variables (originally global data)
-    static char lpFileName_00798e30[260] = {}; D2_STATIC_GUARD(lpFileName_00798e30, "D2Multi::ComCallback::COMCALLBACK_HandleBannerAdFile::lpFileName_00798e30");
-
     char* pszExtension;
     int nExtChar;
     char szTempPath[260];
@@ -397,6 +395,24 @@ static int COMCALLBACK_HandleBannerAdFile(uint32_t * pBannerAdData) {
     D2_FREE_AT((void*)pBannerAdData[2], ".\\Src\\ComCallback.cpp", 0x386);
     D2_FREE_AT((void*)pBannerAdData[3], ".\\Src\\ComCallback.cpp", 0x387);
     return 1;
+}
+
+int Unreferenced_00446ca0() {
+    int nFlags;
+    if (lpFileName_00798e30[0] == '\0') {
+      return 0;
+    }
+
+    DWORD DVar1 = GetFileAttributesA(lpFileName_00798e30);
+    if (DVar1 != -1) {
+      char* pcVar2;
+      pcVar2 = strrchr(lpFileName_00798e30, 0x2e);
+      nFlags = tolower((int)pcVar2[1]);
+      D2Win::Src::D2WinSmack::D2WINSMACK_LoadAndDecodeSmacker(gpLobbyForm0.pCtlLobbyLadderMode, lpFileName_00798e30, nFlags);
+      return 1;
+    }
+
+    return 0;
 }
 
 // Returns gszCurrentChannelName, the name of the chat channel last joined (copied there by the "You have joined channel: %s" handler COMCALLBACK_HandleChannelError).

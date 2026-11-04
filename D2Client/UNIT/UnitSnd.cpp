@@ -3342,6 +3342,26 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     SetSfxStepTicks(nRecordingIdx, pUnit);
 }
 
+int Unreferenced_004cb170() {
+    D2UnitStrc* in_EAX;
+    D2MonSoundsTxt* pDVar1 = TxtGetSoundIdLineFromUnit(in_EAX);
+    if (!pDVar1) {
+      return 0;
+    }
+
+    return pDVar1->Neutral;
+}
+
+int Unreferenced_004cb180() {
+    D2UnitStrc* in_EAX;
+    D2MonSoundsTxt* pDVar1 = TxtGetSoundIdLineFromUnit(in_EAX);
+    if (!pDVar1) {
+      return 0;
+    }
+
+    return pDVar1->Taunt;
+}
+
 void __fastcall UNITSND_StopAllSkillSounds(D2UnitStrc * pUnit) {
     int nSoundField60;
     int32_t nSfxChannelId;

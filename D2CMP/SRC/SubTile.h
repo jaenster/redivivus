@@ -35,6 +35,7 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, char * * ppCompressed
 void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw);
 void __fastcall SUBTILE_ConvertToIndexed(uint32_t * pDstFrame, uint32_t * pSrcFrame, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
 char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
+int __fastcall Unreferenced_0060d7c0(int param_1);
 void __stdcall SUBTILE_ExtractIsometricPixels(struct D2GroundSubTileStrc * pSubTileEntry, uint8_t * pSrcPixelData);
 void __fastcall SUBTILE_RecompressExisting(struct D2GroundSubTileStrc * pSubTileEntry);
 void __fastcall CELCMP_CompressAllFramesWithColorKey(int32_t pSrcCelFile, int32_t pDstCelFile, uint32_t dwColorKey, uint8_t * pfnGetPaletteIndex);

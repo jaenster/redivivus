@@ -276,6 +276,23 @@
       ]
     },
     {
+      "name": "TASK_Nop_Unref_00564940",
+      "address": "00564940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564940"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_Nop_Unref_00564940"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
       "name": "TASK_AllocateTaskQueue",
       "address": "00564960",
       "lines": [

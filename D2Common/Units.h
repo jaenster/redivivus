@@ -24,6 +24,7 @@ typedef uint32_t eD2UnitType;
 namespace D2Common::Units {
 
 // Function declarations
+void __stdcall Return_Unref_005fe100(struct D2UnitStrc * pUnit, int32_t nParam);
 uint8_t __stdcall GetDirection(struct D2UnitStrc * pUnit);
 struct D2SkillStrc * __stdcall GetFirstSkill(struct D2UnitStrc * pUnit);
 struct D2SkillStrc * __stdcall GetLeftSkill(struct D2UnitStrc * pUnit);

@@ -28,6 +28,8 @@ namespace D2Game::GAME::Server::ServerCmd {
 
 // Function declarations
 void __fastcall WriteValueBySize(struct D2BitBufferStrc * pBitBuffer, uint32_t nValue);
+int __fastcall Unreferenced_0053b140(int param_1, int param_2);
+int __fastcall Unreferenced_0053b180(int param_1);
 void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, size_t nSize);
 int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFlags, uint16_t wUniqueCode, char * szPlayerName);
 void __fastcall NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(int32_t nClientId);

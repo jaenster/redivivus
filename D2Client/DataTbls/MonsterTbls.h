@@ -18,7 +18,10 @@ namespace D2Client::DataTbls::MonsterTbls {
 
 // Function declarations
 struct D2MonStatsTxt * __fastcall TXT_MonStats_GetLine(int32_t nMonStatsId);
+int __fastcall Unreferenced_00451fb0(int param_1);
 struct D2MonStats2Txt * __fastcall TXT_MonStats_GetMonStats2(int32_t nClassId);
+int Unreferenced_00452020();
+int Unreferenced_00452030();
 struct D2StatesTxt * __fastcall TXT_States_GetLine(eD2States eState);
 BOOL __fastcall TXT_MonStats_GetFlagsByBitOffset(int32_t nMonStatsId, TxtMonStatsField0x0c nBitOffset);
 

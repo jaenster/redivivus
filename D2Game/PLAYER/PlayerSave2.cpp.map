@@ -22,6 +22,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00568d70",
+      "address": "00568d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568d70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "Unreferenced_00568d70"
+      ]
+    },
+    {
       "name": "FindEndOfString",
       "address": "00568d80",
       "lines": [

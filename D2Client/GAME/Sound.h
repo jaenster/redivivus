@@ -66,6 +66,7 @@ BOOL __stdcall SOUND_IsInitialized();
 BOOL __stdcall SOUND_IsInitializedDup();
 void __stdcall SOUND_UpdateNonLoopingStreams();
 uint32_t __fastcall SOUND_GetStreamProgress(struct D2ClientSoundChannelStrc * pChannel);
+void __stdcall SOUND_ShutdownAudio_Thunk_Unref_004df910();
 BOOL __stdcall SOUND_Is3DMixerActive();
 uint32_t __stdcall SOUND_IsEaxMixerActive();
 // Body continues at 004df9e6, the JNZ target of 004df9de - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SOUND_FindPlayingById'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
@@ -84,6 +85,7 @@ struct D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(struct D
 // Returns a greeting sound id from pUnit's class-id greeting set, or 0 when the class has none. nMode 2 returns nReturnSoundId directly; otherwise picks nGreetingSoundId, or nInactiveSoundId 1 in 2 when nMode is 0, or the time-of-day id (+0/+1/+2 by DRLGENV_GetCycleIndexFromAct), retrying up to 20 times to avoid repeating nLastSoundId, and records the pick.
 // Provenance: 1.14d asm 004e0590; callers pass nMode 1 (004b510e greeting, 004cc04d mercenary) or the greeting mode (004b691b).
 int32_t __fastcall SOUND_SelectNpcGreetingSound(struct D2UnitStrc * pUnit, int32_t nMode);
+BOOL __stdcall SOUND_IsInitializedDup_Unref_004e0680();
 // 3 internal functions (defined in .cpp)
 
 } // namespace D2Client::GAME::Sound

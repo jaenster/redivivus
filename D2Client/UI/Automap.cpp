@@ -525,6 +525,18 @@ void __stdcall AUTOMAP_RebalanceTreeLeft(D2AutomapCellStrc * * ppCell) {
     return;
 }
 
+int __fastcall Unreferenced_00457ac0(int param_1, int param_2) {
+    int iVar1 = (int)*(short int*)(param_1 + 8) - (int)*(short int*)(param_2 + 8);
+    if (!iVar1) {
+      iVar1 = (int)*(short int*)(param_1 + 6) - (int)*(short int*)(param_2 + 6);
+      if (!iVar1 && gnAutoMapCellPriority[*(short int*)(param_1 + 4)] != -1 && gnAutoMapCellPriority[*(short int*)(param_1 + 4)] != gnAutoMapCellPriority[*(short int*)(param_2 + 4)]) {
+        iVar1 = (int)*(short int*)(param_1 + 4) - (int)*(short int*)(param_2 + 4);
+      }
+    }
+
+    return iVar1;
+}
+
 // AUTOMAP_InsertCellIntoTree - Inserts an automap cell into an AVL tree.
 // Cells are sorted by (yPixel, xPixel, cellNo) with AVL self-balancing
 // using wWeight as the balance factor (-1, 0, +1).
@@ -2378,6 +2390,23 @@ void __stdcall AUTOMAP_DrawDifficulty() {
     D2Win::Src::D2WinFont::DRAW_text(wText, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wText) - 0x10, nY, nFormatLen, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
     return;
+}
+
+int Unreferenced_0045a280() {
+    int in_EAX;
+    DC6** ppDVar1 = pAutoMapDC6;
+    do {
+      int extraout_EAX;
+      if (*ppDVar1) {
+        Core::Archive::DC6_FreeAndDelete(*ppDVar1);
+        in_EAX = extraout_EAX;
+      }
+
+      *ppDVar1 = 0;
+      ppDVar1++;
+    } while ((int)ppDVar1 < (intptr_t)((char*)&pAutoMapDC6 + sizeof(pAutoMapDC6)));
+
+    return in_EAX;
 }
 
 void __stdcall AUTOMAP_LoadDC6Sprites() {

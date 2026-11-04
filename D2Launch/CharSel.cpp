@@ -80,6 +80,7 @@ char PreferredClosedRealm[256] = {}; D2_GLOBAL_GUARD(PreferredClosedRealm, "Pref
 static D2ControlStrc * gaCharSelExpansionIconControls[8] = {}; D2_STATIC_GUARD(gaCharSelExpansionIconControls, "gaCharSelExpansionIconControls");
 static D2WinTextBox * gpaCharSelectDisplay = 0; D2_STATIC_GUARD(gpaCharSelectDisplay, "gpaCharSelectDisplay");
 static D2ControlStrc * gpCtlCharSelectGameTypeBtn = 0; D2_STATIC_GUARD(gpCtlCharSelectGameTypeBtn, "gpCtlCharSelectGameTypeBtn");
+static char gszLocalSaveFilenameBuffer[256] = {}; D2_STATIC_GUARD(gszLocalSaveFilenameBuffer, "gszLocalSaveFilenameBuffer");
 static D2ControlStrc * gpCtlCharSelDeleteButton = 0; D2_STATIC_GUARD(gpCtlCharSelDeleteButton, "gpCtlCharSelDeleteButton");
 uint32_t gnCharSelSelectedIndex = 0; D2_GLOBAL_GUARD(gnCharSelSelectedIndex, "gnCharSelSelectedIndex");
 static D2WinTextBox * gpCharSelExpansionToggle = 0; D2_STATIC_GUARD(gpCharSelExpansionToggle, "gpCharSelExpansionToggle");
@@ -299,6 +300,22 @@ static uint32_t CHARSEL_IsBetaRealm(uint16_t * wszText) {
     } while ((int)ppwszRealmName < (intptr_t)((char*)&pBetaRealmNames + sizeof(pBetaRealmNames)));
 
     return 0;
+}
+
+int __fastcall Unreferenced_00437f30(int param_1) {
+    uint32_t in_EAX;
+    int iVar2;
+    char cVar1 = *(char*)param_1;
+    char* pcVar3 = gszLocalSaveFilenameBuffer;
+    for (iVar2 = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)cVar1); cVar1 != '\0' && (char)iVar2 != '.'; iVar2 = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)iVar2 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)cVar1)) {
+      param_1++;
+      *pcVar3 = (char)iVar2;
+      cVar1 = *(char*)param_1;
+      pcVar3++;
+    }
+
+    *pcVar3 = '\0';
+    return iVar2;
 }
 
 static void CHARSEL_GetClassNameString(int nClassId, uint16_t * wszText) {
@@ -1008,9 +1025,19 @@ void __stdcall CHARSEL_DestroyAllCharEntries() {
     gpCharSelPendingEntry = 0;
 }
 
+int __fastcall Unreferenced_00438f40(int param_1) {
+    char cVar1;
+    char* pcVar2 = (char*)param_1;
+    pcVar2 = pcVar2 + strlen(pcVar2) + 1;
+    if (pcVar2 + (-2 - (param_1 + 1)) < (char*)0xe && pcVar2[param_1 + (-1 - (param_1 + 1))] != '-' && *(char*)param_1 != '_') {
+      return 1;
+    }
+
+    return 0;
+}
+
 void __stdcall CHARSEL_EnumerateLocalSaves() {
     // Static local variables (originally global data)
-    static char gszLocalSaveFilenameBuffer[256] = {}; D2_STATIC_GUARD(gszLocalSaveFilenameBuffer, "D2Launch::CharSel::CHARSEL_EnumerateLocalSaves::gszLocalSaveFilenameBuffer");
     static int gnLocalSaveFileCount; D2_STATIC_GUARD_BSS(gnLocalSaveFileCount, "D2Launch::CharSel::CHARSEL_EnumerateLocalSaves::gnLocalSaveFileCount");
 
     FILETIME ftLastWriteTime;
@@ -2008,6 +2035,19 @@ void __stdcall CHARSEL_ResetCharListUI() {
 
     D2Client::CharScreen::nSelectedCharIndex = 0;
     CHARSEL_UpdateSelectedCharDisplay();
+}
+
+int Unreferenced_0043a7e0() {
+    int in_EAX;
+    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+      int extraout_EAX;
+      MainMenus::FORMS_DestroyList();
+      CHARSEL_ResetCharListUI();
+      in_EAX = extraout_EAX;
+    }
+
+    gnCharSelSelectedIndex = 0;
+    return in_EAX;
 }
 
 void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {

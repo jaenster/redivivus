@@ -21,6 +21,7 @@ namespace D2Game::UNIT {
 void __fastcall SendUpdatedItemsToClient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, struct D2InventoryStrc * pInventory);
 void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
 BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+int Unreferenced_00597aa0();
 // Drains the pending-update queue on pUnit's inventory. For each queued GUID, looks up the item unit and clears body-loc overrides for TAKE/SET/EXCHANGE commands, then calls ITEM_ClearFlagsAndCommands. Recursively processes socketed-item sub-inventories. Finally deletes items marked ITEMCMD_DELETE. Called server-side after inventory transactions to apply deferred state changes.
 // @sourcefile .\INVENTORY\InvMode.cpp
 void __fastcall ITEM_ProcessInventoryUpdates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

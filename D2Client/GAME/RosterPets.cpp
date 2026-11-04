@@ -77,6 +77,22 @@ void __stdcall FreeRosterPet() {
     pRosterPet = 0;
 }
 
+int __fastcall Unreferenced_00478a90(int param_1) {
+    D2RosterPetStrc* pDVar1 = pRosterPet;
+    while (true) {
+      if (!pDVar1) {
+        return 0;
+      }
+      if (pDVar1->nRosterGUID == param_1) {
+        break;
+      }
+
+      pDVar1 = pDVar1->pNext;
+    }
+
+    return (int)pDVar1;
+}
+
 // @sourcefile .\GAME\RosterPets.cpp
 static void __fastcall ROSTERPETS_RemoveRosterPetsBySkillID(int32_t nRosterGUID) {
     D2RosterPetStrc* pPrev = 0;

@@ -28,7 +28,13 @@ namespace Fog {
 // Function declarations
 BOOL __stdcall D2CheckExpansionGame();
 int32_t __fastcall BitScanReverse(uint32_t dwBits);
+void __stdcall Return_Unref_00409c70();
+void __stdcall Return_Unref_0040a030();
+int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070();
 int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero();
+void __stdcall Return_Unref_0040ada0();
+void __stdcall Return_Unref_0040b110();
+void __stdcall Return_Unref_0040b120();
 void __stdcall Return();
 float __stdcall MATH_sinTable_f32_LookupOffset(int32_t findex);
 float __stdcall MATH_sinTable_f32_Lookup(uint32_t findex);
@@ -36,6 +42,8 @@ float __stdcall MATH_sinTable_f32_Lookup(uint32_t findex);
 // The element is a CRITICAL_SECTION, but the iterator's callback slots are void (*)(void*),
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
 void __fastcall THREADING_DeleteCriticalSection_Thunk(void * pElement);
+void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70(void * pElement);
+void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80(void * pElement);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca548(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 
 } // namespace Fog

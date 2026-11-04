@@ -99,6 +99,7 @@ void * __stdcall NET_SID_CLIENT_GetChannelNamePtr();
 // BATTLE.NET SID_CHATEVENT (0x0F) HANDLER
 // Receives chat event notifications from the Battle.net server with event type, flags, ping, username, and message text. Event types include: 0x01=show_user, 0x02=join, 0x03=leave, 0x04=whisper_recv, 0x05=talk, 0x06=broadcast, 0x07=channel, etc. Enqueues the raw packet bytes to the message queue (type 0) for asynchronous processing by the chat UI system.
 BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize);
+void __fastcall Unreferenced_00520680(int param_1);
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
 // Name per redivivus issue #36 (asm-verified hash variant).
 void __fastcall XSHA1_Transform(struct D2XSHA1ContextStrc * pShaCtx);
@@ -107,6 +108,8 @@ void __fastcall XSHA1_Transform(struct D2XSHA1ContextStrc * pShaCtx);
 void __fastcall XSHA1(struct D2XSHA1Strc * pOutput, char * szInput, size_t nInputSize);
 BOOL __stdcall SID_SetReadyFlag();
 BOOL __stdcall SID_GetReadyFlag();
+BOOL __stdcall SID_GetReadyFlag_Unref_00520af0();
+void * __stdcall NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00();
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount2();
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount1();
 int __stdcall SID_InitializeProtocolState();
@@ -114,6 +117,7 @@ BOOL __fastcall NET_SID_CLIENT_WaitForPacketId(uint8_t nPacketId);
 BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t nPacketId);
 void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId);
 uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId);
+int __fastcall Unreferenced_00520c30(int param_1, int param_2);
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize);
 // SID_CREATEACCOUNT (0x2A) response handler. Legacy account creation result. Receives (DWORD)Status where 0=success, 1=name too short, 2=invalid characters, 3=prohibited word, 4=already exists, 5=still processing. Stores status in global g_dwSIDCreateAccountStatus.
 BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount(char * pBytes, size_t nSize);
@@ -276,6 +280,7 @@ __time32_t __stdcall NET_SID_GetTime32_00521b40(__time32_t * pTime);
 void __stdcall NET_SID_CLIENT_InitializeSRP();
 // Frees the SRP context allocated by NET_SID_CLIENT_InitializeSRP, releasing the safe prime/generator parameters and any ephemeral key material.
 void __stdcall NET_SID_CLIENT_FreeSRP();
+int Unreferenced_00521ba0();
 // SID_AUTH_INFO (0x50) packet sender - Client authentication initialization request
 // Sends client platform and version information to Battle.net to initiate authentication:
 // - Protocol ID (4 bytes): 0x00000000
@@ -327,6 +332,7 @@ BOOL __stdcall NET_SID_CLIENT_GetSIDFlag2();
 void __stdcall NET_SID_ClearSrpPassword();
 uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(int32_t pCdKeyData, uint32_t nNibbleIndex);
 void __fastcall NET_SID_CLIENT_SetCDKeyNibble(int32_t pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue);
+int __fastcall Unreferenced_00522570(int param_1, int param_2);
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(int32_t pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue);
 void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn);
 void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, int32_t pOutBase5);

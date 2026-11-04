@@ -11,7 +11,8 @@
 // Forward declarations
 struct D2GridScreenCoordinates;
 
-extern uint8_t gbInvImageLoadToggle;
+extern int gnInvMouseX;
+extern int gpInvCursorItem;
 
 namespace D2Client::UI::Inv {
 extern D2GridScreenCoordinates pTradePage2GridScreenCoordinates;

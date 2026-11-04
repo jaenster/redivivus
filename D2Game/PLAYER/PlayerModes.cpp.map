@@ -4,6 +4,25 @@
   "file": "D2Game/PLAYER/PlayerModes.cpp",
   "functions": [
     {
+      "name": "PLRMODES_ModeCallback_DeathDead_Unref_0053b210",
+      "address": "0053b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b210"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ModeCallback_DeathDead_Unref_0053b210"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
       "name": "PLRMODES_HasAnimEventLastOrComing5Frames",
       "address": "0057ed70",
       "lines": [

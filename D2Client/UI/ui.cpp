@@ -103,6 +103,8 @@
 #include "D2Win/DC6Block.h"
 #include "D2Win/Src/D2WinFont.h"
 #include "D2Win/Src/D2WinPalette.h"
+#include "D2Win/Src/D2WinScrollbar.h"
+#include "D2Win/Src/D2WinTextBox.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -134,6 +136,7 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Launch/MainMenus.data.h"
 #include "D2Launch/MainMenus.h"
 #include "Fog/Engine/Application.data.h"
 
@@ -148,6 +151,10 @@
 #endif
 
 
+#ifndef RECON_FPTD_fnUnitIterCallback
+#define RECON_FPTD_fnUnitIterCallback
+typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
+#endif
 #ifndef RECON_FPTD_pfnEHHandlerRoutine
 #define RECON_FPTD_pfnEHHandlerRoutine
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
@@ -155,10 +162,6 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #ifndef RECON_FPTD_fpSpinnerRepeatAction
 #define RECON_FPTD_fpSpinnerRepeatAction
 typedef void (*fpSpinnerRepeatAction)();
-#endif
-#ifndef RECON_FPTD_fnUnitIterCallback
-#define RECON_FPTD_fnUnitIterCallback
-typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 #endif
 #ifndef RECON_FPTD_pfnTextScrollComplete
 #define RECON_FPTD_pfnTextScrollComplete
@@ -3003,6 +3006,79 @@ static uint8_t gbTradeWindowOpen = 0; D2_STATIC_GUARD(gbTradeWindowOpen, "gbTrad
 
 namespace D2Client::UI::ui {
 
+void * __fastcall MoveArgumentToEAX_Unref_0040f590(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_004168a0(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_004169e0(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00416a40(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00416a50(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00416a60(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00416a70(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00416a80(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_0041c420(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_0041e9c0(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00420420(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00420480(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00420e40(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00420e50(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_00421100(void * pParam) {
+    return pParam;
+}
+
+void * __fastcall MoveArgumentToEAX_Unref_004269b0(void * pParam) {
+    return pParam;
+}
+
+void __stdcall UI_ClearCursorAnimationState_Unref_00436ac0() {
+    gpCtlBnetProgressBar = 0;
+    gbBnetConnectionTimerActive = 0;
+}
+
+int UI_GoldInputCallback_ReturnZero_Unref_00437d10() {
+    return 0;
+}
+
 void __stdcall INPUT_ClearChatMessages(D2UIMouseMsgStrc * pMsg) {
     Text::TEXT_ClearChatMessages();
     pMsg->bHandled = 1;
@@ -3222,6 +3298,16 @@ void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor) {
 
     D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)gU16ImmunityStringBuffer1, wszText);
     gnImmunityText1Color = dwTextColor;
+}
+
+void __fastcall UI_StoreGlobalUIText_Unref_00452550(uint16_t * wszText, DWORD dwTextColor) {
+    if (!wszText) {
+      gU16ImmunityStringBuffer2[0] = 0;
+      return;
+    }
+
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)gU16ImmunityStringBuffer2, wszText);
+    gnImmunityText2Color = dwTextColor;
 }
 
 BOOL __fastcall UI_GetUniqueMonsterName(D2UnitStrc * pUnit, uint16_t nNameMode) {
@@ -3994,6 +4080,17 @@ void __stdcall UI_DrawPlayerStateOverlays() {
     }
 }
 
+int Unreferenced_004535d0() {
+    eD2GSGameType eVar1 = GAME::Game::CLIENT_GetD2GSGameType();
+    if (eVar1 != GAMETYPE_SINGLEPLAYER) {
+      int extraout_EAX;
+      UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)UI_DrawPlayerNameOverhead);
+      return extraout_EAX;
+    }
+
+    return 0;
+}
+
 void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
     uint16_t wKey;
     if (nButtonIndex == -1) {
@@ -4150,6 +4247,11 @@ BOOL __fastcall GetUIFlag(eD2UIvars eUI) {
     }
 
     return (&GFX_bShowUIFlag.Game)[eUI];
+}
+
+int Unreferenced_00453900() {
+    int iVar1 = Dialog::GetDialogCounter();
+    return (uint32_t)(iVar1 != 0);
 }
 
 // Handles key input and dismisses UI panels based on gUIFlagDismissModeTable. Scans all active UI flags and applies dismiss action (0=ignore, 1=close, 2=block, 4=close NPC). Special handling for quest log (index 5) and quest resurrect (index 9) with tick throttle. Returns 0 if action was blocked or consumed, 1 if input should propagate.
@@ -4756,6 +4858,16 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
     ExceptionList = pPrevExceptionList;
 }
 
+int Unreferenced_00454570() {
+    Dialog::gpDialog = 0;
+    gpCurrentDialog = 0;
+    gpDialogDefaultActionCallback = 0;
+    gpUiGoldDialogCancelButton = 0;
+    gpUiGoldTransactionDialog = 0;
+    gbKeyConfigModeActiveInDialog = 0;
+    return 0;
+}
+
 void __stdcall UI_DrawDialogBackground() {
     if (!Dialog::gpDialog) {
       return;
@@ -4845,6 +4957,10 @@ void __fastcall SetActNo(int32_t nActNo) {
     nLoadedActNo = nActNo;
 }
 
+int32_t __stdcall DRAW_GetLastPanelId_Unref_004547a0() {
+    return nLoadedActNo;
+}
+
 void __stdcall CleanupAfterLoadingAct() {
     // Static local variables (originally global data)
     static BOOL gbCleanupAfterLoadingActFlag; D2_STATIC_GUARD_BSS(gbCleanupAfterLoadingActFlag, "D2Client::UI::ui::CleanupAfterLoadingAct::gbCleanupAfterLoadingActFlag");
@@ -4925,6 +5041,17 @@ void __stdcall DRAW_RefreshNpcDialog() {
 
 uint32_t __stdcall DRAW_IsDialogActive() {
     return (uint32_t)(Dialog::gpDialog != 0);
+}
+
+int __fastcall Unreferenced_004549d0(int param_1) {
+    int iVar1;
+    uint32_t* puVar2 = (uint32_t*)param_1;
+    for (iVar1 = 0x28; iVar1; iVar1--) {
+      *puVar2 = 0;
+      puVar2++;
+    }
+
+    return param_1;
 }
 
 static void __stdcall DRAW_CenteredText(int32_t nFontId, int32_t nY, DWORD dwColor, uint16_t * wszText) {
@@ -6263,6 +6390,14 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
     } while (true);
 }
 
+void * __fastcall MoveArgumentToEAX_Unref_0045ba90(void * pParam) {
+    return pParam;
+}
+
+uint32_t __stdcall DRAW_IsDialogActive_Unref_0045fdd0() {
+    return (uint32_t)(gbCharScreenOkPressed != 0);
+}
+
 bool __stdcall UI_ShowPopupDialog() {
     gbCharScreenCancelPressed = 0;
     gbCharScreenOkButtonConfirmed = 0;
@@ -6283,6 +6418,10 @@ bool __stdcall UI_ShowPopupDialog() {
     GAME::Game::GAMEDATA_SetDrawFunction(0);
     Engine::LOADER_FreePopupImages();
     return bNotCancelled;
+}
+
+void __stdcall nullSub_CharonGameDraw_Unref_00463d70() {
+
 }
 
 void __stdcall nullSub_CharonGameDraw() {
@@ -6328,6 +6467,14 @@ void __stdcall UI_ToggleBeltRows() {
     }
 
     SetUIFlag(UI_BELTROWS, UI_TOGGLE, 0);
+}
+
+int __stdcall TRADE_GetTradeStatus_Unref_00486d80() {
+    if (g_nCurrentInventoryPage != 1 && g_nCurrentInventoryPage != 2) {
+      return 0;
+    }
+
+    return 1;
 }
 
 void __stdcall UI_ReadLineFromShortArray(short * pnDest, int32_t nMaxChars, short * * ppnShort) {
@@ -9728,6 +9875,10 @@ void __stdcall DRAW_UI_StatWindow_I() {
     }
 }
 
+void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004b3330() {
+
+}
+
 void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
     short int nMessage;
     bool bIsSideNpc;
@@ -9987,12 +10138,24 @@ void __fastcall UI_CloseTradeWindow(int32_t bToggleInventory) {
     g_nTradeWindowState = 0;
 }
 
+int Unreferenced_004b8a00() {
+    return (uint32_t)(gbTradeWindowOpen == '\0');
+}
+
 int __stdcall TRADE_GetTradeStatus() {
     if (g_nTradeWindowState != 1 && g_nTradeWindowState != 2) {
       return 0;
     }
 
     return 1;
+}
+
+void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004bf9c0() {
+
+}
+
+void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004c0080() {
+
 }
 
 void __stdcall UI_FreeHoradricCubeAssets() {
@@ -10281,6 +10444,20 @@ void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab) {
     nHoradricCubeUIState = 1;
     gnNpcShopSecondActiveTab = nNpcShopTab;
     UI_ShowHoradricCubeTransmuteDialog();
+}
+
+BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0() {
+    BOOL extraout_EAX;
+    D2UnitStrc* unaff_EBX;
+    UNIT::ITEM_RecalcAllEquippedItems_EBX(unaff_EBX);
+    return extraout_EAX;
+}
+
+BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0() {
+    BOOL extraout_EAX;
+    D2UnitStrc* unaff_EBX;
+    UNIT::ITEM_RecalcAllEquippedItems_EBX(unaff_EBX);
+    return extraout_EAX;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

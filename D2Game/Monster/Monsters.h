@@ -56,6 +56,9 @@ namespace D2Game::Monsters {
 
 // Function declarations
 struct D2MonLvlTxt * __fastcall GetMonLvlTxt(int32_t nMonLvlId);
+int Unreferenced_005a0030();
+int __fastcall Unreferenced_005a0040(int param_1);
+int Unreferenced_005a0060();
 uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(struct D2UnitStrc * pUnit, int32_t nMonTypeFlag);
 int32_t __fastcall GetUmodConstant(int32_t nUmodId);
 uint8_t * __fastcall GetMonUModList(struct D2UnitStrc * pUnit);

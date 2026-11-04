@@ -41,6 +41,7 @@ BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
 void __stdcall PATH_SnapPositionToTile(struct D2DynamicPathStrc * pDynamicPath);
 uint32_t __stdcall Get8FlagsFromDynamicPath(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall PATH_SetPathTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
+int __fastcall Unreferenced_00650800(int param_1);
 BOOL __stdcall PATH_AdvanceUnitAlongPath(struct D2UnitStrc * pUnit, int pExternalPath);
 BOOL __stdcall PATH_GetCollisionMaskAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 int32_t __stdcall PATH_GetCollisionTypeAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, int wPosX, int wPosY);

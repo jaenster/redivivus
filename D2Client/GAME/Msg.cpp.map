@@ -19,6 +19,20 @@
       ]
     },
     {
+      "name": "LOADING_GetProgressRatio_Unref_00477c90",
+      "address": "00477c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477c90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "LOADING_GetProgressRatio_Unref_00477c90"
+      ]
+    },
+    {
       "name": "NET_D2GS_CLIENT_Send_0x67",
       "address": "00477ca0",
       "lines": [

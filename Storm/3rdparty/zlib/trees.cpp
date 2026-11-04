@@ -2171,6 +2171,26 @@ uint8_t gaZlibLengthCodeTable[256] = {
 
 namespace Storm::_3rdparty::zlib::trees {
 
+void tr_static_init_Unref_00421040() {
+
+}
+
+void tr_static_init_Unref_00421060() {
+
+}
+
+void tr_static_init_Unref_00421070() {
+
+}
+
+void tr_static_init_Unref_00421080() {
+
+}
+
+void tr_static_init_Unref_004212b0() {
+
+}
+
 void tr_static_init() {
 
 }

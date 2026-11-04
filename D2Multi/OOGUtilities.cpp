@@ -413,6 +413,28 @@ void __stdcall AbleToJoinGameOrBanned(int32_t bBanned) {
     }
 }
 
+int Unreferenced_004414c0() {
+    uint32_t extraout_EAX;
+    int32_t bBanned;
+    eD2PlayerStatus eVar1 = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
+    uint32_t uVar2 = (uint32_t)eVar1;
+    if (!(eVar1 & PLAYERSTATUS_Died) || !(eVar1 & PLAYERSTATUS_Hardcore)) {
+      int32_t iVar3;
+      bBanned = 0;
+      if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+        iVar3 = D2MCPClient::McpConnect::HasPeerName();
+        if (!iVar3) {
+          bBanned = 1;
+        }
+      }
+
+      AbleToJoinGameOrBanned(bBanned);
+      uVar2 = extraout_EAX;
+    }
+
+    return uVar2;
+}
+
 int __stdcall JoinOrCreateGame(DWORD dwUnused) {
     // Static local variables (originally global data)
     static unsigned int gdwLastGameInfoPollTick; D2_STATIC_GUARD_BSS(gdwLastGameInfoPollTick, "D2Multi::OOGUtilities::JoinOrCreateGame::gdwLastGameInfoPollTick");
@@ -1294,6 +1316,12 @@ int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
 
     nCopyIndex = OOGUTIL_SendChatMessage(szMultiByte, 0);
     return nCopyIndex;
+}
+
+int __fastcall Unreferenced_00442a70(int param_1, int param_2) {
+    uint32_t uVar1 = *(uint32_t*)param_1 & -28673 | param_2 << 0xc;
+    *(uint32_t*)param_1 = uVar1;
+    return uVar1;
 }
 
 char * __fastcall OOGUTIL_GetStringEnd(char * szText) {

@@ -4,6 +4,40 @@
   "file": "D2Common/INVENTORY/Inventory.cpp",
   "functions": [
     {
+      "name": "NullSub_Unref_00611610",
+      "address": "00611610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611610"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub_Unref_00611610"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "NullSub_Unref_00611640",
+      "address": "00611640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611640"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub_Unref_00611640"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
       "name": "INVENTORY_GetItemInventoryNode",
       "address": "0063a7e0",
       "lines": [
@@ -104,6 +138,20 @@
         "D2UnitStrc *",
         "int32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0063aad0",
+      "address": "0063aad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063aad0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "Unreferenced_0063aad0"
       ]
     },
     {
@@ -704,6 +752,20 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0063bcb0",
+      "address": "0063bcb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bcb0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "Unreferenced_0063bcb0"
       ]
     },
     {
@@ -2447,6 +2509,57 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "NullSub_Unref_00643610",
+      "address": "00643610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643610"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub_Unref_00643610"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "NullSub_Unref_006460c0",
+      "address": "006460c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006460c0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub_Unref_006460c0"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "NullSub_Unref_006460e0",
+      "address": "006460e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006460e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub_Unref_006460e0"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
       ]
     }
   ]

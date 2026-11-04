@@ -240,6 +240,22 @@
       ]
     },
     {
+      "name": "Unreferenced_00537ab0",
+      "address": "00537ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537ab0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "Unreferenced_00537ab0",
+        "DRLGROOM_SwapRoomDataForRoomEx",
+        "DRLGROOM_SwapActiveRoomExBetweenLevels"
+      ]
+    },
+    {
       "name": "FreeClientList",
       "address": "00537ac0",
       "lines": [
@@ -2362,6 +2378,20 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "ReturnVoid_Unref_0053c740",
+      "address": "0053c740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053c740"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "ReturnVoid_Unref_0053c740"
       ]
     }
   ]

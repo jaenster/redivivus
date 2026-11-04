@@ -137,6 +137,11 @@ uint8_t * __stdcall PALETTE_GetItemPalette(int32_t nPaletteSet, int32_t nRow) {
     return nullptr;
 }
 
+int __fastcall Unreferenced_00600c60(int param_1) {
+    int32_t iVar1 = D2Hell::D2MEM_FindLowestSetBit(param_1);
+    return iVar1;
+}
+
 uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nIndex, uint32_t dwMask) {
     // Static local variables (originally global data)
     static uint32_t gdwPaletteTableSize[736] = {

@@ -32,6 +32,7 @@ void __fastcall AllocPlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID);
 void __fastcall FreePlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID);
 void __fastcall SetUnsetFlags(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag, BOOL bSetUnset);
 uint32_t __fastcall GetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag);
+int __fastcall Unreferenced_004dc480(int param_1, int param_2);
 void __fastcall SetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag);
 
 } // namespace D2Client::UNIT::PlayerList

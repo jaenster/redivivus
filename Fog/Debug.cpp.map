@@ -18,6 +18,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00401c80",
+      "address": "00401c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401c80"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "Unreferenced_00401c80"
+      ]
+    },
+    {
       "name": "InitializeDebugSymbols",
       "address": "00401cb0",
       "lines": [
@@ -32,6 +46,20 @@
         "__security_check_cookie",
         "strrchr",
         "strncpy_s"
+      ]
+    },
+    {
+      "name": "Unreferenced_00401dd0",
+      "address": "00401dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401dd0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "Unreferenced_00401dd0"
       ]
     },
     {
@@ -406,6 +434,20 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "CompareUintDescending"
+      ]
+    },
+    {
+      "name": "Unreferenced_00402c30",
+      "address": "00402c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402c30"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "Unreferenced_00402c30"
       ]
     },
     {

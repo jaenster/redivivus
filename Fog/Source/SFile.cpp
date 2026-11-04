@@ -457,6 +457,22 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
     }
 }
 
+int __fastcall Unreferenced_00407260(int param_1) {
+    *(uint32_t*)param_1 = 0;
+    *(uint32_t*)(param_1 + 4) = 0;
+    *(uint32_t*)(param_1 + 8) = 0;
+    *(uint32_t*)(param_1 + 0xc) = 0;
+    return param_1;
+}
+
+int __fastcall Unreferenced_00407280(int param_1) {
+    return param_1 + 0x408;
+}
+
+int __fastcall Unreferenced_00407290(int param_1) {
+    return *(int*)(param_1 + 0x808);
+}
+
 int32_t __thiscall SFILE_CalculateBufferOffset(int32_t pThis, int32_t nBufferOffset) {
     return nBufferOffset * 0x400 + 0x80c + pThis;
 }

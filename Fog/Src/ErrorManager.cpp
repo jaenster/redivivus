@@ -75,8 +75,44 @@ static uint32_t gbFogErrorManagerInitialized = 0; D2_STATIC_GUARD(gbFogErrorMana
 
 namespace Fog::Src::ErrorManager {
 
+void __fastcall StubHook1_Unref_004016b0(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
 BOOL __stdcall FOG_ReturnZeroCallback(char * szFileName, void * pContext) {
     return 0;
+}
+
+void __fastcall StubHook1_Unref_00403f50(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_00405a50(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_00405a60(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_004072c0(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_004072d0(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_004072e0(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_004072f0(uint32_t dwThreadId, HANDLE hThread) {
+
+}
+
+void __fastcall StubHook1_Unref_00407300(uint32_t dwThreadId, HANDLE hThread) {
+
 }
 
 void __stdcall CrashGame() {
@@ -252,6 +288,11 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     return true;
 }
 
+int Unreferenced_00407dd0() {
+    uint32_t in_EAX;
+    return in_EAX & -256;
+}
+
 void __stdcall InitializeSystemInfo() {
     _MEMORYSTATUS memoryStatus;
     uint32_t dwMajorVersion;
@@ -329,6 +370,14 @@ void __fastcall StubHook2(int32_t nReserved) {
 
 }
 
+void __fastcall StubHook2_Unref_00407fa0(int32_t nReserved) {
+
+}
+
+void __fastcall StubHook2_Unref_00407fb0(int32_t nReserved) {
+
+}
+
 void __fastcall LogStringConditional(int32_t nLogLevel, char * szText) {
     if (nLogLevel) {
       LogManager::LogWithCategory(szText, "%s");
@@ -366,6 +415,22 @@ char * __fastcall StripPathPrefixToRelative(char * szText) {
 
     pszResult = szText;
     return pszResult;
+}
+
+void __fastcall StubHook2_Unref_00408050(int32_t nReserved) {
+
+}
+
+void __fastcall StubHook2_Unref_00408060(int32_t nReserved) {
+
+}
+
+void __fastcall StubHook2_Unref_00408070(int32_t nReserved) {
+
+}
+
+void __fastcall StubHook2_Unref_00408080(int32_t nReserved) {
+
 }
 
 // Returns the caller's return address, i.e. the instruction pointer of the call site. Body is MOV EAX,[ESP]; RET - it reads the return address off the stack and returns it. Takes NO arguments: the RET (not RET 4) leaves the caller's stack untouched, and the DWORD after the call is the __LINE__ value the caller pushed for the assert/halt call that follows. Fog ordinal #10265 @ RVA 0x8090.
@@ -4997,6 +5062,10 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       Debug::DEBUG_LoadStackCrawlDbgHelp();
       Storm::Source::SErr::SErrSetBlizzardErrorFunction(CRASH_FillupCrashTxt);
     }
+}
+
+void __fastcall StubHook2_Unref_004095d0(int32_t nReserved) {
+
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

@@ -5,17 +5,19 @@
 #include "D2CMP/SRC/CelCmp/TCELENTRY.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Client/UI/ui.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "D2Common/Chat/Ignorelist/MappingEntryNode.h"
 #include "D2Common/Chat/Ignorelist/StringEntryNode.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Game/GAME/Targets.h"
+#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/Source/SFile.h"
+#include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -394,6 +396,10 @@ void __thiscall Destructor_UnwindThunk(TSGrowableArray<TSExplicitList<CELLIST, -
 template<> ::CELLIST * TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Ptr(uint32_t nHandle) {
     ::CELLIST* pCVar1 = this->TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(nHandle, &this->tKey);
     return pCVar1;
+}
+
+template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor_UnwindThunk_Unref_00603270() {
+    ((TSGrowableArray<::CELLIST>*)this)->Destructor();
 }
 
 template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<CELLIST, HCELLIST__*, 0>::GenerateUniqueHandle() {
@@ -834,7 +840,7 @@ template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRoun
     this->ReallocData(nRequiredCap);
 }
 
-template<> ::CELLIST * TSGrowableArray<CELLIST>::New() {
+template<> __attribute__((noinline)) inline ::CELLIST * TSGrowableArray<CELLIST>::New() {
     uint32_t nAlignStep;
     uint32_t nNextCount = this->m_count + 1;
     if (nNextCount > this->m_alloc) {
@@ -875,6 +881,10 @@ template<> void TSGrowableArray<CELLIST>::ReserveNoRound(uint32_t nCount) {
     }
 
     this->ReallocData(nRequiredCapacity);
+}
+
+template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor_UnwindThunk_Unref_00604460() {
+    ((TSGrowableArray<::CELLIST>*)this)->New();
 }
 
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
@@ -1094,6 +1104,10 @@ template<> __attribute__((noinline)) inline ::CELLIST * TSHashTable<CELLIST, HAS
     this->tFullList.m_terminator.m_prevlink = ppBucketSlot;
     pNewEntry->m_hashval = dwHashVal;
     return pNewEntry;
+}
+
+template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor_UnwindThunk_Unref_00604800() {
+    ((TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>*)this)->Destructor();
 }
 
 template<> TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>* TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::Constructor() {

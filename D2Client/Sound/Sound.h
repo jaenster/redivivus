@@ -240,9 +240,11 @@ float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2);
 float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2);
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3);
 struct D2SoundChannelStrc * __stdcall SOUND_GetChannelArray();
+int __fastcall Unreferenced_004b9440(int param_1);
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall SOUNDINST_StopChannel(int * pSoundInst);
+int __fastcall Unreferenced_004b9560(int param_1);
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle);
 int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle);
 int __fastcall SOUND_StopSound(int32_t nSoundId);
@@ -259,11 +261,13 @@ int __fastcall SOUND_GetSoundChannel(int32_t nSoundId);
 int __stdcall SOUND_IsMusicPlaying();
 BOOL __stdcall SOUND_GetAmbientMusicState();
 int __fastcall SOUND_StopChannelById(int32_t nSoundId);
+int __fastcall Unreferenced_004b9cd0(int param_1, int param_2);
 void __stdcall SOUND_PauseAll();
 void __stdcall SOUND_ResumeAll();
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId);
 BOOL __fastcall SOUND_IsChannelAvailable(struct D2SoundChannelStrc * pChanA, struct D2SoundChannelStrc * pChanB, int32_t bComparePan, int32_t bCompareTime);
 uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId);
+int Unreferenced_004b9eb0();
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration);
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime);
 void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, struct D2UnitStrc * pUnit, int32_t bForceStop);
@@ -278,6 +282,9 @@ void __stdcall SoundChaosDebug();
 BOOL __stdcall SOUND_IsDirectSoundAvailable();
 BOOL __stdcall SOUND_IsEaxAvailable();
 int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, uint32_t nModulus);
+int Unreferenced_004e41e0();
+int Unreferenced_004e4200();
+int Unreferenced_004e4220();
 void __stdcall SOUND_TogglePauseAll();
 // @wasnamed SOUND_UpdateAllChannels - one name on two different functions.
 // @evidence Calls GetSoundEnvironLine, Day_/Night_Ambience and _Event,

@@ -80,6 +80,20 @@
         "zcfree",
         "free"
       ]
+    },
+    {
+      "name": "zlibVersion_Unref_0044ce80",
+      "address": "0044ce80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce80"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zlibVersion_Unref_0044ce80"
+      ]
     }
   ]
 }

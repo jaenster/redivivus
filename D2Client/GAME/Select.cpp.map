@@ -247,6 +247,20 @@
       ]
     },
     {
+      "name": "SELECT_GetConstant13_Y_Unref_00467400",
+      "address": "00467400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467400"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_GetConstant13_Y_Unref_00467400"
+      ]
+    },
+    {
       "name": "SELECT_SetPetSeedTimestamp",
       "address": "00467410",
       "lines": [

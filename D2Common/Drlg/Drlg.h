@@ -249,6 +249,7 @@ struct D2RoomExStrc * __fastcall GetRoomOfCoord(struct D2DrlgLevelStrc * pLevel,
 BOOL __fastcall LEVEL_CheckIfLevelIsTown(eD2LevelId eLevel);
 BOOL __stdcall DRLG_ReturnZero();
 int32_t __stdcall TXT_LevelDefs_GetLevelType(eD2LevelId eLevel);
+int Unreferenced_00642770();
 int __fastcall GetRoomByCoordsByLevel(struct D2DrlgStrc * pDrlg, int32_t nX, int32_t nY);
 eAct __stdcall GetActNoFromLevelNumber(eD2LevelId eLevel);
 int32_t __stdcall TXT_LevelDefs_GetSaveMonsters(eD2LevelId eLevel);
@@ -280,6 +281,7 @@ void __fastcall ChangeActiveRoomBetweenLevels(struct D2RoomExStrc * pRoomEx, str
 // Frees room tile data and near-room arrays for neighboring level rooms.
 BOOL __stdcall DRLG_FreeAdjacentLevelRoomData(struct D2DrlgLevelStrc * pLevel);
 void __fastcall DRLG_FreeInactiveLevelData(struct D2DrlgStrc * pDrlg);
+BOOL __stdcall DRLG_ReturnZero_Unref_00643600();
 // Propagates tile animation data from one room's tile list to another. Copies animation frame data from the source room's tiles to the destination room's tiles. From DrlgAnim.cpp.
 void __fastcall DRLGANIM_PropagateAnimationData(struct D2RoomExStrc * pRoomExSrc, struct D2RoomExStrc * pRoomExDst);
 // Looks up tile library entry by type/index/subindex, randomly selects variant.

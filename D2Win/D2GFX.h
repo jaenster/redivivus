@@ -17,6 +17,7 @@ typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t para
 namespace D2Win::D2GFX {
 
 // Function declarations
+DWORD __stdcall BeginCutSceneAtResolutionMode0_Unref_0043b800();
 BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
 int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB);
 BOOL __stdcall UI_Init();

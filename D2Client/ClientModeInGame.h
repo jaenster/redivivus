@@ -63,6 +63,7 @@ BOOL __stdcall CmdLine_SaveDefaultCommandLine(struct CMDPARAMS * pParams, char *
 BOOL __stdcall CmdLine_SetAppMode(struct CMDPARAMS * pParams, char * szCmdLine);
 // LoadDataForGameAndSetupServer: registers cmdline options, loads core data, parses default command line from registry, ensures Save::szSaveCharacterName (username or "noname").
 BOOL __stdcall LoadDataForGameAndSetupServer(struct D2IniConfigStrc * D2IniData);
+int Unreferenced_0044b780();
 struct D2IniConfigStrc * __stdcall D2IniData_Getter();
 struct D2BNetClientCallbacksStrc * __stdcall CLIENT_GetGameVersionInfo();
 char * __stdcall CLIENTMODE_GetGamePasswordPart1();
@@ -71,13 +72,16 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart3();
 uint32_t __stdcall CLIENTMODE_GetIngameUIFlags();
 void __stdcall CLIENTMODE_ClearIngameUIFlag();
 void __fastcall D2CLIENT_SetExitVar1(BOOL bResult);
+struct D2IniConfigStrc * __stdcall D2IniData_Getter_Unref_0044b890();
 // Client app-mode entry. Init memory/UI, load language + string tables, init TXT tables, then run pfModes[] loop. Returns to launcher based on quit/game type.
 int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, struct D2IniConfigStrc * D2IniData);
 void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe);
 uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused);
+void Unreferenced_0044bb70();
 void __stdcall FreeQServer();
 int __stdcall CLIENTMODE_InitializeCallback();
 bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused);
+int __fastcall Unreferenced_0044bc10(int param_1, int param_2);
 // pfModes_StartServer: create/init QServer, connect to server, run MessageGameLoop for required user action; sets player count and globals.
 eD2ClientAppMode __stdcall NET_QServer_StartServer();
 uint32_t __stdcall CLIENTMODE_WaitForServerShutdown(uint32_t dwUnused);

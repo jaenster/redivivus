@@ -95,6 +95,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004fab60",
+      "address": "004fab60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fab60"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "Unreferenced_004fab60",
+        "GetHwnd"
+      ]
+    },
+    {
       "name": "MPQ_LoadAllDataMpqFiles",
       "address": "004fab90",
       "lines": [

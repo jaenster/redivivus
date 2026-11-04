@@ -554,6 +554,13 @@ void __fastcall Q10_AdjustStaffPieceCount(int pQuestArg, int nCountDelta) {
     pQuestData->pQuestSpecificData.pA2Q2->nVipCount += nCountDelta;
 }
 
+int Unreferenced_00599bf0() {
+    ::SGAMEDATA* in_ECX;
+    D2UnitStrc* in_EDX;
+    D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(in_ECX, in_EDX, 0x20747368);
+    return (uint32_t)!pDVar1;
+}
+
 // OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2. Object-operate fn for the Tomb-chest /
 // portal object that yields the Book of Skill scroll ('rt1 '). Activates the portal,
 // sets victim dropItemCode='rt1 ', counts eligible players via Q10_OnScrollPickup,

@@ -225,6 +225,23 @@
       ]
     },
     {
+      "name": "TXT_AnimTbls_Get_Unref_00611d10",
+      "address": "00611d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611d10"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AnimTbls_Get_Unref_00611d10"
+      ],
+      "usedTypes": [
+        "D2AnimDataStrc"
+      ]
+    },
+    {
       "name": "TXT_AnimTbls_Get",
       "address": "00611d20",
       "lines": [
@@ -1062,6 +1079,23 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AnimTbls_Get_Unref_00624710",
+      "address": "00624710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624710"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AnimTbls_Get_Unref_00624710"
+      ],
+      "usedTypes": [
+        "D2AnimDataStrc"
       ]
     }
   ]

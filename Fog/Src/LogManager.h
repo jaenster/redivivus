@@ -42,6 +42,7 @@ void __stdcall LogCpuInfo();
 BOOL __stdcall GetLoggerState_Stub();
 uint32_t ReturnParam2_Stub(uint32_t dwParam1, uint32_t dwParam2);
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp();
+int __fastcall Unreferenced_0040eb40(int param_1);
 // Element ctor/dtor for the eh-vector iterator over aTaskQueueCriticalSections.
 // The element is a CRITICAL_SECTION, but the iterator's callback slots are void (*)(void*),
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
@@ -61,12 +62,15 @@ void __stdcall CloseStaleLogFileHandles();
 void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName);
 void __fastcall CloseLogFileByName(uint8_t * szFileName);
 uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase);
+int __fastcall Unreferenced_0040f520(int param_1);
+int __fastcall Unreferenced_0040f580(int param_1);
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 long __fastcall GetLogFileSize(uint8_t * szFileName);
 // @sourcefile .\Src\LogManager.cpp
 char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, int32_t nEndOffset);
 // Writes one log record to its log file, prefixed with the record's time of day.
 void __fastcall LogToFile(uint32_t pLogRecord);
+int __fastcall Unreferenced_0040f810(int param_1);
 void __fastcall UnlinkListNode(int * pNode);
 int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr);
 void __stdcall ExitOrCrashCleanup();
@@ -113,6 +117,11 @@ int __stdcall IsWindowsNT();
 void InitHighResTimer();
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
 uint32_t LOGMGR_GetHighResolutionTime();
+void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740();
+void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750();
+void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760();
+void StaticFini_gLogMessageQueueCS_Unref_00665930();
+void StaticFini_gLogMessageQueueCS_Unref_00665940();
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9d08(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9d3b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9d98(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

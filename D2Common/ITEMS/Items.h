@@ -37,64 +37,6 @@ struct D2ItemCalcContextStrc {
     /* 0x04 */ int32_t nContext;
 };
 
-struct D2RunesTxt {
-    /* 0x000 */ char name[64]; // d2bs binfields FIELDTYPE_ASCII
-    /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
-    /* 0x080 */ char complete; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x081 */ char server; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x082 */ uint16_t field4_0x82;
-    /* 0x084 */ uint8_t field_0x84;
-    /* 0x085 */ uint8_t field_0x85;
-    /* 0x086 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x088 */ short itype2; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x08A */ short itype3; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x08C */ short itype4; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x08E */ short itype5; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x090 */ short itype6; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x092 */ short etype1; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x094 */ short etype2; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x096 */ short etype3; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x098 */ int rune1; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x09C */ int rune2; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0A0 */ int rune3; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0A4 */ int rune4; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0A8 */ int rune5; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0AC */ int rune6; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0B0 */ int t1code1; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0B4 */ int t1param1; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0B8 */ int t1min1; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0BC */ int t1max1; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0C0 */ int t1code2; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0C4 */ int t1param2; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0C8 */ int t1min2; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0CC */ int t1max2; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0D0 */ int t1code3; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0D4 */ int t1param3; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0D8 */ int t1min3; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0DC */ int t1max3; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0E0 */ int t1code4; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0E4 */ int t1param4; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0E8 */ int t1min4; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0EC */ int t1max4; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0F0 */ int t1code5; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0F4 */ int t1param5; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0F8 */ int t1min5; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0FC */ int t1max5; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x100 */ int t1code6; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x104 */ int t1param6; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x108 */ int t1min6; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x10C */ int t1max6; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x110 */ int t1code7; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x114 */ int t1param7; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x118 */ int t1min7; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x11C */ int t1max7; // d2bs binfields FIELDTYPE_SIGNEDINT
-};
-
-struct D2RunesTxtTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ struct D2RunesTxt * pTable;
-};
-
 struct __attribute__((packed)) D2RuneTableStrc {
     /* 0x00 */ char szName[64]; // runeword name (ASCII, starts here, 64 bytes)
     /* 0x40 */ char szRuneName[64]; // rune name column (ASCII, starts here, 64 bytes)
@@ -347,6 +289,10 @@ void __stdcall SerializeComplexItem(struct D2UnitStrc * pItemUnit, struct D2BitB
 // Serializes a single item unit to a bit buffer for network/save transmission. Writes the 0x4d4a item header (if pStatListEx present), item flags word, then delegates to SerializeComplexItem or SerializeSimpleItem based on COMPACT flag. Recursively serializes socketed child items when bAllItems is set. bIsCrude forces the CRUDE flag.
 void __fastcall SerializeItemToBitBuffer(struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude);
 int32_t __stdcall SerializeItem(struct D2UnitStrc * pUnit, uint8_t * pBitStream, size_t nBitStreamSize, struct D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude);
+BOOL __stdcall ReturnFalse_Unref_00648390(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
+BOOL __stdcall ReturnFalse_Unref_00654e70(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
+BOOL __stdcall ReturnFalse_Unref_0066a230(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
+BOOL __stdcall ReturnFalse_Unref_0066a240(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // 15 internal functions (defined in .cpp)
 
 } // namespace D2Common::ITEMS::Items

@@ -23,6 +23,11 @@ struct ct_data {
 namespace Storm::_3rdparty::zlib::trees {
 
 // Function declarations
+void tr_static_init_Unref_00421040();
+void tr_static_init_Unref_00421060();
+void tr_static_init_Unref_00421070();
+void tr_static_init_Unref_00421080();
+void tr_static_init_Unref_004212b0();
 void tr_static_init();
 uint32_t __fastcall _tr_tally(deflate_state * pDeflateState, int32_t nDist, int32_t nLc);
 uint32_t __fastcall bi_reverse(uint32_t nCode, int nLen);

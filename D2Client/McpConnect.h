@@ -25,6 +25,8 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 namespace D2Client::McpConnect {
 
 // Function declarations
+void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b1f0(pfnMCPMessage pfnCallback);
+void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b200(pfnMCPMessage pfnCallback);
 void __fastcall MCPCONNECT_SetGameListCallbacks(pfnMCPGameListEntry pfnEntryCallback, pfnVoidNoArgCallback pfnCompleteCallback);
 void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback);
 

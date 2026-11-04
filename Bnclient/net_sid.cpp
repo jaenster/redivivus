@@ -98,6 +98,14 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize) {
     return 1;
 }
 
+void __fastcall Unreferenced_00520680(int param_1) {
+    *(uint32_t*)param_1 = 0x67452301;
+    *(uint32_t*)(param_1 + 4) = 0xefcdab89;
+    *(uint32_t*)(param_1 + 8) = 0x98badcfe;
+    *(uint32_t*)(param_1 + 0xc) = 0x10325476;
+    *(uint32_t*)(param_1 + 0x10) = 0xc3d2e1f0;
+}
+
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
 // Name per redivivus issue #36 (asm-verified hash variant).
 void __fastcall XSHA1_Transform(D2XSHA1ContextStrc * pShaCtx) {
@@ -243,6 +251,14 @@ BOOL __stdcall SID_GetReadyFlag() {
     return g_bSIDProtocolReady;
 }
 
+BOOL __stdcall SID_GetReadyFlag_Unref_00520af0() {
+    return g_nRealmLogonResult;
+}
+
+void * __stdcall NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00() {
+    return gszCDKeyInUseByUsername;
+}
+
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount2() {
     return g_nSIDResponseCount2;
 }
@@ -306,6 +322,11 @@ void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId) {
 
 uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId) {
     return g_SIDPacketResponseFlags[nPacketId];
+}
+
+int __fastcall Unreferenced_00520c30(int param_1, int param_2) {
+    g_SIDPacketResponseFlags[param_1 & 0xffU] = param_2;
+    return param_1 & 0xffU;
 }
 
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize) {
@@ -1294,6 +1315,25 @@ void __stdcall NET_SID_CLIENT_FreeSRP() {
     SRP::SRP_FreeParameters(&g_pSrpContext);
 }
 
+int Unreferenced_00521ba0() {
+    uint32_t uVar3;
+    HMODULE hModule = LoadLibraryA("kernel32.dll");
+    if (hModule) {
+      FARPROC pFVar2;
+      pFVar2 = GetProcAddress(hModule, "GetSystemDefaultUILanguage");
+      if (pFVar2) {
+        uVar3 = (*pFVar2)();
+        FreeLibrary(hModule);
+        return (uint16_t)uVar3;
+      }
+
+      FreeLibrary(hModule);
+    }
+
+    LANGID LVar1 = GetSystemDefaultLangID();
+    return (uint32_t)LVar1;
+}
+
 // SID_AUTH_INFO (0x50) packet sender - Client authentication initialization request
 // Sends client platform and version information to Battle.net to initiate authentication:
 // - Protocol ID (4 bytes): 0x00000000
@@ -1611,6 +1651,11 @@ void __fastcall NET_SID_CLIENT_SetCDKeyNibble(int32_t pCdKeyData, uint32_t nNibb
     int nWordIndex = 3 - (nNibbleIndex >> 3);
     int8_t nBitShift = ((uint8_t)nNibbleIndex & 7) * '\x04';
     *(uint32_t*)(pCdKeyData + nWordIndex * 4) = ~(0xf << nBitShift) & *(uint32_t*)(pCdKeyData + nWordIndex * 4) | (nNibbleValue & 0xf) << nBitShift;
+}
+
+int __fastcall Unreferenced_00522570(int param_1, int param_2) {
+    uint8_t bVar1 = (uint8_t)param_2 & 0x1f;
+    return (*(uint32_t*)(param_1 + (3 - ((uint32_t)param_2 >> 5)) * 4) & 1 << bVar1) >> bVar1;
 }
 
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(int32_t pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue) {

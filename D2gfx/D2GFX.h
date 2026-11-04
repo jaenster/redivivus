@@ -18,7 +18,6 @@ struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
 typedef uint32_t DRAWMODE;
 typedef uint32_t GLOBALPALLETE;
-typedef uint32_t eD2RendererMode;
 
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
@@ -46,11 +45,17 @@ struct __attribute__((packed)) D2GFXWindowPlacementStrc {
 namespace D2gfx::D2GFX {
 
 // Function declarations
+void __stdcall RENDERER_TogglePerspective_Unref_0044dc40();
+void __stdcall RENDERER_TogglePerspective_Unref_00474140();
+void __stdcall RENDERER_TogglePerspective_Unref_004769b0();
+void __stdcall RENDERER_TogglePerspective_Unref_00477be0();
 BOOL __stdcall D2GFX_GetPerspectiveCapable_ForPerspectiveItem();
 BOOL __stdcall D2GFX_CheckGamma_ForGammaItem();
 void thunk_D2GFX_ResetViewport();
+int __stdcall Unreferenced_004f5040(int param_1, int param_2, int param_3);
 BOOL __stdcall D2GFX_Release();
 eD2RendererMode __stdcall D2GFX_GetRendererMode();
+eD2RendererMode __stdcall D2GFX_GetRendererMode_Unref_004f5150();
 DWORD __stdcall D2GFX_GetResolutionMode();
 BOOL __stdcall D2GFX_GetPerspectiveCapable();
 BOOL __stdcall D2GFX_GetFixAspect();
@@ -58,6 +63,7 @@ void __stdcall D2GFX_SetPerspectiveCapable(BOOL bResult);
 uint32_t __stdcall IsWindowMode();
 uint32_t __stdcall D2GFX_IsPerspectiveActive();
 void __stdcall D2GFX_SetPerspective(BOOL bPerspective);
+BOOL __stdcall D2GFX_GetLowQuality_Unref_004f51f0();
 void __stdcall D2GFX_SetBlendedShadows(BOOL bResult);
 BOOL __stdcall D2GFX_GetLowQuality();
 void __stdcall D2GFX_SetLowQuality(BOOL bResult);
@@ -129,6 +135,8 @@ void __stdcall D2GFX_DebugFillBackBuffer(int32_t nXpos, int32_t nYpos);
 void __stdcall D2GFX_UpdateScaleFactor();
 int32_t __stdcall D2GFX_GetScaleFactor();
 void __stdcall D2GFX_SetDefaultScaleFactor();
+int Unreferenced_004f6610();
+int Unreferenced_004f6640();
 void __stdcall D2GFX_SetPerspectiveScale(int32_t nXScale, int32_t nYScale);
 uint32_t __stdcall D2GFX_IsInPerspectiveBounds(int32_t nXpos, int32_t nYpos);
 void __stdcall D2GFX_AdjustPerspectivePosition(int32_t nXpos, int32_t nYpos, int32_t nBais, int * pXAdjust, int * pYAdjust);
@@ -150,7 +158,10 @@ void __stdcall D2GFX_InitializeLineBuffer();
 void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeight);
 // Initializes color lookup tables for palette blending. Populates gPaletteBlendLookupTable (256x256 entries) by blending all combinations of source and destination palette indices. Used by rendering functions for alpha blending and color effects.
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable);
+int Unreferenced_004f8e90();
 void __stdcall D2GFX_InitializeWindowSize();
+void __stdcall D2GFX_EnableVSync_Unref_00506a80();
+BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520();
 void StaticInit_gpszWindowClassName();
 void StaticInit_szWindowClassName();
 void StaticInit_gpszWindowTitle();

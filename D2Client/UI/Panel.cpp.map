@@ -40,6 +40,54 @@
       ]
     },
     {
+      "name": "PANEL_GetBeltSlotHoverFlag_Unref_0047ec40",
+      "address": "0047ec40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ec40"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_GetBeltSlotHoverFlag_Unref_0047ec40"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_SetBottomPanelGlobals1_Unref_004880f0",
+      "address": "004880f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004880f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_SetBottomPanelGlobals1_Unref_004880f0"
+      ]
+    },
+    {
+      "name": "PANEL_GetBeltSlotHoverFlag_Unref_0048a690",
+      "address": "0048a690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0048a690"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_GetBeltSlotHoverFlag_Unref_0048a690"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "LoadPanelImages",
       "address": "004967f0",
       "lines": [
@@ -707,6 +755,22 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00498310",
+      "address": "00498310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498310"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "Unreferenced_00498310",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom"
       ]
     },
     {

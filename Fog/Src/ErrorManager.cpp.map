@@ -4,6 +4,23 @@
   "file": "Fog/Src/ErrorManager.cpp",
   "functions": [
     {
+      "name": "StubHook1_Unref_004016b0",
+      "address": "004016b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004016b0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_004016b0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "FOG_ReturnZeroCallback",
       "address": "00402370",
       "lines": [
@@ -15,6 +32,142 @@
       "namespace": "Fog::Src::ErrorManager",
       "calledFunctions": [
         "FOG_ReturnZeroCallback"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_00403f50",
+      "address": "00403f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403f50"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_00403f50"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_00405a50",
+      "address": "00405a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405a50"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_00405a50"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_00405a60",
+      "address": "00405a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405a60"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_00405a60"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_004072c0",
+      "address": "004072c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004072c0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_004072c0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_004072d0",
+      "address": "004072d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004072d0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_004072d0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_004072e0",
+      "address": "004072e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004072e0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_004072e0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_004072f0",
+      "address": "004072f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004072f0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_004072f0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook1_Unref_00407300",
+      "address": "00407300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407300"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1_Unref_00407300"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -118,6 +271,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00407dd0",
+      "address": "00407dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407dd0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "Unreferenced_00407dd0"
+      ]
+    },
+    {
       "name": "InitializeSystemInfo",
       "address": "00407de0",
       "lines": [
@@ -192,6 +359,40 @@
       ]
     },
     {
+      "name": "StubHook2_Unref_00407fa0",
+      "address": "00407fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407fa0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_00407fa0"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StubHook2_Unref_00407fb0",
+      "address": "00407fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407fb0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_00407fb0"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "LogStringConditional",
       "address": "00407fc0",
       "lines": [
@@ -243,6 +444,74 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook2_Unref_00408050",
+      "address": "00408050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408050"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_00408050"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StubHook2_Unref_00408060",
+      "address": "00408060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408060"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_00408060"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StubHook2_Unref_00408070",
+      "address": "00408070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408070"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_00408070"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StubHook2_Unref_00408080",
+      "address": "00408080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408080"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_00408080"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {
@@ -645,6 +914,23 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook2_Unref_004095d0",
+      "address": "004095d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004095d0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2_Unref_004095d0"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {

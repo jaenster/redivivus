@@ -4,6 +4,24 @@
   "file": "D2Common/Seed.cpp",
   "functions": [
     {
+      "name": "GetSeed_nSeedLow_Unref_0060dcf0",
+      "address": "0060dcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060dcf0"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "GetSeed_nSeedLow_Unref_0060dcf0"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "SEED_GetTime32",
       "address": "00650dd0",
       "lines": [

@@ -85,6 +85,14 @@ static unsigned int gdwHacklistLastLogTime = {}; D2_STATIC_GUARD(gdwHacklistLast
 
 namespace Fog::Src {
 
+void __stdcall _NullSubRet8_Unref_004080a0(D2QServerStrc * dwArg1, uint32_t dwArg2) {
+
+}
+
+void __stdcall _NullSubRet4_Unref_006bc850(uint32_t dwArg1) {
+
+}
+
 // The body here is a bare
 // RET (byte c3) - __cdecl, so the caller cleans up. Every call site pushes a tag pointer
 // (006cc837, the empty string) followed by a printf-style format and its arguments:
@@ -779,6 +787,15 @@ static void FreeHacklistBuckets(D2QServerStrc * pQServer) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->nHacklistSize = 0;
     LeaveCriticalSection(&pQServer->csHacklist);
+}
+
+void __fastcall Unreferenced_006bf170(int param_1) {
+    if (*(int*)param_1) {
+      QServer::QServerNT::AwaitAndClose((D2QServerStrc*)param_1);
+      return;
+    }
+
+    QServer::QServer98::QSERVER_CloseAllConnections((D2QServerStrc*)param_1);
 }
 
 // Increments active-connection counter for a client IP in QServer's per-IP hash table.

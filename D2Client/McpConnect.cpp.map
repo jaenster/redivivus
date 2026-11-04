@@ -4,6 +4,40 @@
   "file": "D2Client/McpConnect.cpp",
   "functions": [
     {
+      "name": "MCPCONNECT_SetMessageCallback_Unref_0044b1f0",
+      "address": "0044b1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b1f0"
+        }
+      ],
+      "namespace": "D2Client::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetMessageCallback_Unref_0044b1f0"
+      ],
+      "usedTypes": [
+        "pfnMCPMessage"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SetMessageCallback_Unref_0044b200",
+      "address": "0044b200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b200"
+        }
+      ],
+      "namespace": "D2Client::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetMessageCallback_Unref_0044b200"
+      ],
+      "usedTypes": [
+        "pfnMCPMessage"
+      ]
+    },
+    {
       "name": "MCPCONNECT_SetGameListCallbacks",
       "address": "0044b210",
       "lines": [

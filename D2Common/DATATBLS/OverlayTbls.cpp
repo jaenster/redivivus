@@ -198,6 +198,23 @@ uint32_t __stdcall GetComponentsData(D2UnitStrc * pUnit, uint32_t nIndex) {
     return 0;
 }
 
+int __fastcall Unreferenced_00664800(int param_1, int param_2) {
+    if ((uint32_t)param_2 >= 0x10) {
+      return 0;
+    }
+
+    D2MonStats2Txt* pMonStatsExTxt = nullptr;
+    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtMonStatsSize) {
+      int iVar1 = (int)sgptDataTable->pTxtMonStats[param_1].MonStatsEx;
+      pMonStatsExTxt = iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + iVar1 : nullptr;
+    }
+    if (!pMonStatsExTxt) {
+      return 0;
+    }
+
+    return (uint32_t)pMonStatsExTxt->aComponents[param_2];
+}
+
 // Resolves the graphic-component (DCC/COF token) for one of a monster's render components by index and variant. Validates the unit is a monster, reads its MonStats2 component table, bounds-checks the variant, and looks up the base comp-code via DATATBLS_GetCompCodeByIndex. For Act II monsters it may override the component from the gnOverlayTblsCount / gnOverlayTblsMaxId tables depending on the monster's validated base class id (special-cases base id 0xaa). Returns the resolved component token (cast as D2UnitStrc*), or NULL for non-monsters / out-of-range component or variant.
 uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nComponentIdx, uint32_t nVariantIdx) {
     // Static local variables (originally global data)

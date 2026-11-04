@@ -597,7 +597,6 @@ D2DrlgPresetTypeTablesStrc gPresetTypeTables = {
     }
 }; D2_GLOBAL_GUARD(gPresetTypeTables, "gPresetTypeTables");
 D2DrlgFileCacheNodeStrc * gpDrlgFileCache = 0; D2_GLOBAL_GUARD(gpDrlgFileCache, "gpDrlgFileCache");
-static _RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_STATIC_GUARD(lpCriticalSection_0096d610, "lpCriticalSection_0096d610");
 
 namespace D2Common::Drlg::Preset {
 
@@ -1734,6 +1733,14 @@ int32_t __fastcall GetSizeY(int32_t nLvlPrestId) {
     return pLvlPrest->SizeY;
 }
 
+int __fastcall Unreferenced_00666ff0(int param_1) {
+    return *(int*)(*(int*)(param_1 + 0x20) + 0xec);
+}
+
+int __fastcall Unreferenced_00667000(int param_1) {
+    return **(int**)(param_1 + 0x20);
+}
+
 // DRLGPRESET_GetPickedFilePathFromRoomEx
 // Returns the file path string for the randomly selected preset map file.
 // Accesses pRoomEx->pRoomExDataPreset->pMap->pTxtLevelPrest->File[nRandomMapFileSelector].
@@ -1938,6 +1945,10 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
 
       nNearIdx++;
     } while (nNearIdx < pRoomEx->nDrlgRoomsExNearCount);
+}
+
+int __fastcall Unreferenced_00667420(int param_1) {
+    return *(int*)(**(int**)(param_1 + 0x14) + 0x20);
 }
 
 // @sourcefile .\DRLG\Preset.cpp

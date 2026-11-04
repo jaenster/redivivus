@@ -306,6 +306,18 @@ void __fastcall SKILLNEC_OnCurseExpire(D2UnitStrc * pUnit, eD2States eState, int
     SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);
 }
 
+int __fastcall Unreferenced_005c33d0(int param_1) {
+    if (param_1 != 0x17) {
+      if (param_1 != 0x1b) {
+        return param_1 != 0x38 ? 0 : 0xb;
+      }
+
+      return 0xc;
+    }
+
+    return 10;
+}
+
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill) {
     if (eSkill != SKILL_Penetrate) {
       return (uint32_t)(eSkill == SKILL_Meteor);

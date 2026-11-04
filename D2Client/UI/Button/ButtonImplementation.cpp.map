@@ -4,6 +4,24 @@
   "file": "D2Client/UI/Button/ButtonImplementation.cpp",
   "functions": [
     {
+      "name": "OnMouseMove_Unref_00446880",
+      "address": "00446880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446880"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnMouseMove_Unref_00446880"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
       "name": "Destructor",
       "address": "004babf0",
       "lines": [

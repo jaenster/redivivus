@@ -4,6 +4,20 @@
   "file": "D2Game/Monster/AI/AI.cpp",
   "functions": [
     {
+      "name": "ReturnFirstArgument_Unref_00518b90",
+      "address": "00518b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518b90"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "ReturnFirstArgument_Unref_00518b90"
+      ]
+    },
+    {
       "name": "GetDistanceBetween",
       "address": "005b0bd0",
       "lines": [
@@ -457,6 +471,44 @@
       ]
     },
     {
+      "name": "AI_Fn1_None_Unref_005b72a0",
+      "address": "005b72a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b72a0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "AI_Fn1_None_Unref_005b72a0"
+      ],
+      "usedTypes": [
+        "D2AiParamStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AI_Fn1_None_Unref_005b8740",
+      "address": "005b8740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b8740"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "AI_Fn1_None_Unref_005b8740"
+      ],
+      "usedTypes": [
+        "D2AiParamStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "GetDistance",
       "address": "005dc380",
       "lines": [
@@ -571,6 +623,21 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_005dc840",
+      "address": "005dc840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dc840"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "Unreferenced_005dc840",
+        "CheckForModeZeroDeath"
       ]
     },
     {
@@ -4976,6 +5043,22 @@
       ]
     },
     {
+      "name": "Unreferenced_005e7d30",
+      "address": "005e7d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005e7d30"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "Unreferenced_005e7d30",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown"
+      ]
+    },
+    {
       "name": "AITHINK_Fn1_TownRogue",
       "address": "005e7d60",
       "lines": [
@@ -7141,6 +7224,20 @@
       ]
     },
     {
+      "name": "Unreferenced_005ef1e0",
+      "address": "005ef1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ef1e0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "Unreferenced_005ef1e0"
+      ]
+    },
+    {
       "name": "AI_SetClearFlags",
       "address": "005ef1f0",
       "lines": [
@@ -9043,6 +9140,20 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_005f6e20",
+      "address": "005f6e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005f6e20"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "Unreferenced_005f6e20"
       ]
     },
     {

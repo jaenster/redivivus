@@ -1825,6 +1825,22 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, ((seedAdvanced.nSeedLow & 3) + 1) * 0x100, 0);
 }
 
+int __fastcall Unreferenced_0065e9b0(int param_1) {
+    D2ItemsTxt* pDVar1;
+    int in_EDX;
+    if (param_1 && *(int*)param_1 == 4) {
+      pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(*(uint32_t*)(param_1 + 4));
+      return (int)pDVar1;
+    }
+    if (!in_EDX) {
+      pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(-1);
+      return (int)pDVar1;
+    }
+
+    pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(*(uint32_t*)(in_EDX + 4));
+    return (int)pDVar1;
+}
+
 // Rolls a random integer in [nMin, nParam] using the item's seed (via GetItemSeed for UNIT_ITEM, pUnit->sSeed otherwise). If min==max returns min with no RNG call. Returns the rolled value in EAX.
 int32_t __fastcall ITEMMOD_RollRandomValue(D2UnitStrc * pUnit, int32_t nMin, int32_t nMax) {
     uint32_t nRolled;

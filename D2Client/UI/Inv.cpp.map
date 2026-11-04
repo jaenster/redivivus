@@ -1084,6 +1084,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00486ad0",
+      "address": "00486ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00486ad0"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "Unreferenced_00486ad0"
+      ]
+    },
+    {
       "name": "INV_GetGoldButtonX",
       "address": "00486ae0",
       "lines": [
@@ -1191,6 +1205,20 @@
       ],
       "usedTypes": [
         "eD2GSGameType"
+      ]
+    },
+    {
+      "name": "Unreferenced_00486d70",
+      "address": "00486d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00486d70"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "Unreferenced_00486d70"
       ]
     },
     {
@@ -1848,6 +1876,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00488890",
+      "address": "00488890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00488890"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "Unreferenced_00488890"
+      ]
+    },
+    {
       "name": "INV_CanReturnToShop",
       "address": "004888c0",
       "lines": [
@@ -2442,6 +2484,22 @@
       ]
     },
     {
+      "name": "Unreferenced_00489a10",
+      "address": "00489a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00489a10"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "Unreferenced_00489a10",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
+      ]
+    },
+    {
       "name": "INV_HandleStashMouseMove",
       "address": "00489a30",
       "lines": [
@@ -2492,6 +2550,23 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "INV_PanelKeyNoOp_Unref_00489cd0",
+      "address": "00489cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00489cd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "INV_PanelKeyNoOp_Unref_00489cd0"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
       ]
     },
     {
@@ -3230,6 +3305,24 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0048b640",
+      "address": "0048b640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0048b640"
+        }
+      ],
+      "namespace": "D2Client::UI::Inv",
+      "calledFunctions": [
+        "Unreferenced_0048b640",
+        "GetPlayerUnit_UI",
+        "GetRosterPetGUID",
+        "UNITS_FindClientSideUnit",
+        "SetUIFlag"
       ]
     },
     {

@@ -55,6 +55,20 @@
       ]
     },
     {
+      "name": "Unreferenced_005169f0",
+      "address": "005169f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005169f0"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "Unreferenced_005169f0"
+      ]
+    },
+    {
       "name": "SOUNDUTIL_FreeLinkedList",
       "address": "00516a10",
       "lines": [

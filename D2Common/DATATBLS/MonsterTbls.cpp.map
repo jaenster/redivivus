@@ -143,6 +143,22 @@
       ]
     },
     {
+      "name": "Unreferenced_00653d30",
+      "address": "00653d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00653d30"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_00653d30",
+        "UnloadBin",
+        "STRUCT_FreeTxtLink"
+      ]
+    },
+    {
       "name": "MONSTER_SetVelocityByIndex",
       "address": "00653d60",
       "lines": [
@@ -199,6 +215,42 @@
       ],
       "usedTypes": [
         "D2UniqueNameTablesStrc"
+      ]
+    },
+    {
+      "name": "Unreferenced_00653e50",
+      "address": "00653e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00653e50"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_00653e50",
+        "RANDOM_RandomNumberSelector",
+        "GetLocaleString"
+      ]
+    },
+    {
+      "name": "MONSTER_GetRandomUniquePrefix_Unref_00653e90",
+      "address": "00653e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00653e90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "MONSTER_GetRandomUniquePrefix_Unref_00653e90",
+        "RANDOM_RandomNumberSelector",
+        "GetLocaleString"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR"
       ]
     },
     {
@@ -622,6 +674,22 @@
       ]
     },
     {
+      "name": "Unreferenced_006552a0",
+      "address": "006552a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006552a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_006552a0",
+        "STRUCT_FreeTxtLink",
+        "UnloadBin"
+      ]
+    },
+    {
       "name": "TXT_AllocTxt_superuniques",
       "address": "006552e0",
       "lines": [
@@ -643,6 +711,22 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_006556a0",
+      "address": "006556a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006556a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_006556a0",
+        "STRUCT_FreeTxtLink",
+        "UnloadBin"
       ]
     },
     {
@@ -833,6 +917,21 @@
       ]
     },
     {
+      "name": "thunk_UnloadBin_MonStats_Unref_006568f0",
+      "address": "006568f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006568f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "thunk_UnloadBin_MonStats_Unref_006568f0",
+        "UnloadBin"
+      ]
+    },
+    {
       "name": "TXT_npc_GetLine",
       "address": "00656900",
       "lines": [
@@ -868,6 +967,22 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_FreeTxt_sounds_Unref_00656f60",
+      "address": "00656f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00656f60"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "TXT_FreeTxt_sounds_Unref_00656f60",
+        "UnloadBin",
+        "STRUCT_FreeTxtLink"
       ]
     },
     {
@@ -945,6 +1060,22 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "Unreferenced_00658440",
+      "address": "00658440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00658440"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_00658440",
+        "UnloadBin",
+        "STRUCT_FreeTxtLink"
       ]
     },
     {
@@ -1026,6 +1157,22 @@
       ]
     },
     {
+      "name": "Unreferenced_006594d0",
+      "address": "006594d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006594d0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_006594d0",
+        "UnloadBin",
+        "STRUCT_FreeTxtLink"
+      ]
+    },
+    {
       "name": "TXT_AllocTxt_monlvl",
       "address": "00659500",
       "lines": [
@@ -1042,6 +1189,21 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "Unreferenced_00659970",
+      "address": "00659970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00659970"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_00659970",
+        "UnloadBin"
       ]
     },
     {
@@ -1248,6 +1410,21 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_0065a170",
+      "address": "0065a170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a170"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "calledFunctions": [
+        "Unreferenced_0065a170",
+        "UnloadBin"
       ]
     },
     {

@@ -4236,6 +4236,74 @@
         "int32_t",
         "uint8_t"
       ]
+    },
+    {
+      "name": "ReturnFalse_Unref_00648390",
+      "address": "00648390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648390"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ReturnFalse_Unref_00648390"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ReturnFalse_Unref_00654e70",
+      "address": "00654e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00654e70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ReturnFalse_Unref_00654e70"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ReturnFalse_Unref_0066a230",
+      "address": "0066a230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a230"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ReturnFalse_Unref_0066a230"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ReturnFalse_Unref_0066a240",
+      "address": "0066a240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a240"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ReturnFalse_Unref_0066a240"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
     }
   ]
 }

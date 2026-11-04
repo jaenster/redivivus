@@ -13,6 +13,8 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
+char gszSFileCurrentDirPrefix[3] = { ".\\" }; D2_GLOBAL_GUARD(gszSFileCurrentDirPrefix, "gszSFileCurrentDirPrefix");
+
 uint8_t gabHuffmanCodeLengths[256] = {
     0x1,
     0x4,
@@ -398,6 +400,10 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
+
+namespace D2Game::GAME::Rendering {
+
+} // namespace D2Game::GAME::Rendering
 
 namespace D2Client::UI::ui {
 

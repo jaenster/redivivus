@@ -404,7 +404,8 @@ void __fastcall Q33_KillAnyaMonsterTimer(::SGAMEDATA * pGame) {
       return;
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pQuestData->pQuestSpecificData.pA5Q3->nAnyaCorpseGUID);
+    D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pA5Q3Data->nAnyaCorpseGUID);
     if (!pUnit) {
       return;
     }
@@ -1757,8 +1758,9 @@ BOOL __fastcall OBJOP_A5Q3_RescueAnyaFromPortal(D2ObjectOperateFnArg * pOperatio
       }
     } else {
       D2UnitDataPlayerStrc* pPlayerData;
+      D2UnitStrc* pAttacker = pOperation->pAttacker;
       pGame = pOperation->sArg.pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
+      pPlayerData = D2Common::Units::GetPlayerData(pAttacker);
       pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
       bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pPrisonQuest->nQuestIdReal, QUESTSTATE_Completed);
       if (!bQuestStateResult) {

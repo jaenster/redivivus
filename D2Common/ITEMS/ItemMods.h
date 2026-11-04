@@ -283,6 +283,7 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(struct D2UnitStrc * pUnit, struct D2RareAff
 // Checks whether an item matches the repair eligibility described by szRepairModes byte flags. Tests melee weapons (excl. staves/bows/crossbows/scepters/wands) against flag [1], body armor (excl. shields/boots/gloves/belts) against flag [0], then falls through a table of 9 specific item types (Shield, Scepter, Wand, Staff, Bow, Crossbow, Boots, Gloves, Belt) each paired with an individual mode flag. Returns 1 on match, 0 otherwise.
 uint32_t __stdcall ITEMMOD_MatchesRepairType(struct D2UnitStrc * pUnit, char * szRepairModes);
 void __stdcall ITEMMOD_RollGemRuneType(struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_0065e9b0(int param_1);
 // Rolls a random integer in [nMin, nParam] using the item's seed (via GetItemSeed for UNIT_ITEM, pUnit->sSeed otherwise). If min==max returns min with no RNG call. Returns the rolled value in EAX.
 int32_t __fastcall ITEMMOD_RollRandomValue(struct D2UnitStrc * pUnit, int32_t nMin, int32_t nMax);
 // Adds a stat to an item's stat list. Validates stat ID against ItemStatCost table, then calls ITEMMOD_GetOrCreateStatList to obtain or create the target stat list. Adds the shifted stat value via STATLIST_AddStatValue or D2AddStatToStatsListEx depending on nParam2. Special-cases poison (stat 0x3A) to also add/check UNITSTAT_poison_count. Returns nParam3 (the stat value) on success, 0 on invalid stat or missing stat list.

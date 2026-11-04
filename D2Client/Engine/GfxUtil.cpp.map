@@ -919,6 +919,34 @@
         "uint32_t",
         "uint8_t"
       ]
+    },
+    {
+      "name": "GFXUTIL_Identity_Unref_005641e0",
+      "address": "005641e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005641e0"
+        }
+      ],
+      "namespace": "D2Client::Engine::GfxUtil",
+      "calledFunctions": [
+        "GFXUTIL_Identity_Unref_005641e0"
+      ]
+    },
+    {
+      "name": "GFXUTIL_Identity_Unref_006c40c0",
+      "address": "006c40c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c40c0"
+        }
+      ],
+      "namespace": "D2Client::Engine::GfxUtil",
+      "calledFunctions": [
+        "GFXUTIL_Identity_Unref_006c40c0"
+      ]
     }
   ]
 }

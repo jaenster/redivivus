@@ -207,6 +207,10 @@ namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
 
+namespace D2Game::GAME::Rendering {
+
+} // namespace D2Game::GAME::Rendering
+
 namespace D2Client::UI::ui {
 
 } // namespace D2Client::UI::ui

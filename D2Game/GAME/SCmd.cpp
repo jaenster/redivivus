@@ -39,6 +39,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/OverlayTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -190,10 +191,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x5F_PortalFlags(D2ClientStrc * pClient, ui
 void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint8_t nHitClass, uint8_t nHpPercent) {
     D2GSPacketSrv0x0C aPacket;
     aPacket.nPacketId = nPacketId;
-    aPacket.dwUnitGUID = nUnitGUID;
     aPacket.nUnitType = nUnitType;
-    aPacket.nHitClass = nHitClass;
+    aPacket.dwUnitGUID = nUnitGUID;
     aPacket.nMessageType = nMessageType;
+    aPacket.nHitClass = nHitClass;
     aPacket.nHpPercent = nHpPercent;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 9, pClient);
 }

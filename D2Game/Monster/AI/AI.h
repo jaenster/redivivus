@@ -117,6 +117,7 @@ union D2WispFindScratchUnion {
 namespace D2Game::Monster::AI {
 
 // Function declarations
+uint32_t __fastcall ReturnFirstArgument_Unref_00518b90(uint32_t * pdwParam);
 // Returns the squared Euclidean distance between two units' world positions. Reads static path coords for objects/items (unit types 2, 4-5) and dynamic path coords for monsters/players. Used by monster AI range checks.
 int32_t __fastcall GetDistanceBetween(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther);
 void __fastcall AI_Fn1_None(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
@@ -167,6 +168,8 @@ uint32_t __fastcall AiDecideTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 // 4. Execute AI function pointer from MonStatsEx.pAiGeneral->fpFunction
 // Called every frame by MONSTER_EndOfFrameAiDispatch for active monsters
 void __fastcall MONSTERAI_ExecuteAiFunction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
+void __fastcall AI_Fn1_None_Unref_005b72a0(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
+void __fastcall AI_Fn1_None_Unref_005b8740(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Computes the weighted Chebyshev distance between two units, supporting both dynamic-path (moving) and static-path (object/warp) unit types. Reads X/Y coords via path accessors, takes abs(dx) and abs(dy), subtracts pUnit's size in both axes (clamped to 0), then returns (max + 2*min) / 2 — the standard D2 diagonal-weighted tile metric. Used by monster AI to range-check targets.
 int32_t __fastcall GetDistance(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Computes a weighted Chebyshev-style distance from pUnit to (nTargetX, nTargetY), subtracting half the unit's X size from each axis delta (clamped to 0). Returns (max*2 + min)/2, biasing toward the dominant axis. Used by monster AI to score approach distance accounting for unit collision size.
@@ -175,6 +178,7 @@ int32_t __fastcall GetCollisionDistanceFromXY(struct D2UnitStrc * pUnit, int32_t
 int32_t __fastcall MONSTERAI_GetDistanceToCoords(struct D2UnitStrc * pUnit, int32_t nX, int32_t nY);
 // Line-of-sight check for monster AI: returns BOOL (TRUE if pUnit has a clear shot at pTarget). Computes the tile distance via GetDistance and picks a perpendicular spread offset from a distance-indexed table (2 at dist<3, 3 mid, 4 far; default 3 beyond 0x18). Then runs three COLLISION_LOS collision tests via TestCollisionByCoordinates: the direct line to the target plus two offset rays (target +/- the perpendicular offset) so a target peeking past a wall corner still counts as hittable. Returns FALSE on null args (still wrapped through Fog::Debug::GuardStack). Read-only; no game-state mutation.
 BOOL __fastcall TestIfMonsterCanHitTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
+int __fastcall Unreferenced_005dc840(int param_1);
 uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2UnitStrc * * ppAllyData);
 int32_t __fastcall AI_ForEachFn04_FindDyingMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, uint32_t * test);
 uint32_t __fastcall MONSTERAI_GetThreatLevel(struct D2UnitStrc * pUnit);
@@ -419,6 +423,7 @@ void __fastcall AITHINK_Fn1_NpcOutOfTown(::SGAMEDATA * pGame, struct D2UnitStrc 
 void __fastcall AITHINK_Fn1_GoodNpcRanged(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // AI Function1 for aggressive-neutral monsters (e.g. Barricade animals). Only acts in Neutral anim and outside town. If a target exists: 80% chance attack via CalledOnEndAiFunction1(4) when in combat range, else 30% walk toward target. Without a target: 20% random wander, else idle for 10 frames.
 void __fastcall AITHINK_Fn1_SpecialHireNoOwner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
+int __fastcall Unreferenced_005e7d30(int param_1);
 void __fastcall AITHINK_Fn1_TownRogue(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AITHINK_Fn1_SpecialTownRogue(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Navigation AI tick for monsters using AI type 1 (e.g. town NPC wanderers). If the monster has an active AI sub-state, delegates immediately to PlanNextAiMove(10). Otherwise finds the nearest unit: if it is a non-trade-busy player and a random roll passes, plays an attach-sound event (0x12) and schedules move(0x14) with a 60-frame cooldown via dwArg1. If no player is close enough (distance >= 25 tiles), falls back to PlanNextAiMove(0x32). On proximity attack range, calls CalledOnEndAiFunction1 with mode 4.
@@ -531,6 +536,7 @@ void __fastcall AITHINK_AncientTalic(::SGAMEDATA * pGame, struct D2UnitStrc * pU
 // AI think-tick for Ancient Madawc (Act 5 Q5 Ancients boss). Idles (25 frames) while Ancient quest data is active. Selects a same-level target via AI_SelectTarget_SameLevelFilter. If in range of Skill1 (difficulty-scaled distance) and random roll (per difficulty) passes, fires MONSTERAI_CommandSkillSequence with Skill1 (throwing weapon attack). Otherwise, if in melee range, randomly selects melee attack direction (mode 4 or 5 via CalledOnEndAiFunction1); if out of melee range, approaches target. Falls back to 25-frame idle if no target.
 void __fastcall AITHINK_AncientMadawc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AITHINK_Fn1_Ancient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
+int __fastcall Unreferenced_005ef1e0(int param_1, int param_2);
 void __fastcall AI_SetClearFlags(struct D2AiParamStrc * pAiParam, uint32_t nFlags, int32_t bSet);
 // Callback invoked to spawn a Baal throne wave. Ensures SKILL_BaalMonsterSpawn is present on pUnit, sets its param1 to nParam (wave index), then fires SERVER_UNIT_CastSkill in mode 10 at the unit's own position +13 Y (spawning monsters at that location). Increments pMonsterAiGeneral->dwArg0 (wave counter), records next-wave frame in dwArg2 (currentFrame+100), and toggles dwArg1 bit-1 on then off (transient spawn-in-progress flag).
 void __fastcall BaalThroneClearFunc(struct D2UnitStrc * pUnit, int32_t nMonsterPresetId, struct D2AiParamStrc * pAiParam);
@@ -638,6 +644,7 @@ void __fastcall AITHINK_Fn1_Sarcophagus(::SGAMEDATA * pGame, struct D2UnitStrc *
 void __fastcall AITHINK_Fn1_ElementalBeast(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // AI Function1 handler for Flying Scimitar monster type. Floating weapon AI with charge attack, retreat, and proximity-based skill selection.
 void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
+int __fastcall Unreferenced_005f6e20(int param_1);
 // Per-think server AI for the Zakarum Zealot/Fanatic melee monster (__fastcall: pGame, pUnit, pAiParam). Computes a run-speed pct from MonStats Run/Velocity and current life pct. If the target resolves to a player and the act is Act III with the Blackened Temple quest completed, the monster flees (MONSTERAI_CommandRunAwayFromUnit) or wanders. While attacking, if life dropped below a difficulty-scaled threshold it sets a brief flee flag and runs away; then checks line-of-sight to the target's path position (CheckCollision_BlockPlayerMissile) and approaches/walks toward it if blocked. Out of combat it rolls a chance to walk to vs run to the target. In combat it rolls flee vs SetCombatStateAndApproachTarget, ending the think with CalledOnEndAiFunction1 (engage) using difficulty-indexed MonStats chances. Uses per-unit seed RNG for all rolls and stores flee state in the AiGeneral struct.
 void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // ForEach callback that searches for a wounded allied Hydra or Golem (classId 0xEB or 0xEE). Skips self, dead units, non-monsters, non-allies, and alignment==2 units. Accepts candidates within the search radius (ppSearchParams[3]) whose current HP percentage is below 61 (0x3D). Tracks the lowest-HP candidate in ppSearchParams[0] and increments a match counter in ppSearchParams[1]. Always returns 0.

@@ -559,6 +559,8 @@ void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame) {
     if (!pQuestContext) {
       return;
     }
+
+    D2QuestDataA2Q4Strc* pQuestData = pQuestContext->pQuestSpecificData.pA2Q4;
     if (pQuestContext->bIsNotIntroduction != '\0') {
       if (!pQuestContext->nStateFlag) {
         QUEST_SetStateFlag(pQuestContext, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x3bf);
@@ -569,7 +571,7 @@ void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame) {
         return;
       }
     } else {
-      Q12_OnJournalActivate(pQuestContext->pQuestSpecificData.pA2Q4, pQuestContext);
+      Q12_OnJournalActivate(pQuestData, pQuestContext);
     }
 }
 

@@ -1046,6 +1046,18 @@ bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID
     return false;
 }
 
+int __fastcall Unreferenced_005b9c80(int param_1, int param_2) {
+    int iVar1 = *(int*)(param_1 + 0x18);
+    if (*(char*)(iVar1 + 2) == '\x01') {
+      int iVar2 = !param_2 ? -1 : *(int*)(param_2 + 0xc);
+      if (*(int*)(iVar1 + 0x24) == iVar2) {
+        *(uint8_t*)(iVar1 + 2) = 0;
+      }
+    }
+
+    return iVar1;
+}
+
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,
 // returns its location (field_0x10) and GUID into pdwParam[0..1] and 1; else 0. Read-only.
 BOOL __fastcall Q20_GetSerpentLocation(::SGAMEDATA * pGame, uint32_t * pdwOut) {

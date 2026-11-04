@@ -1391,7 +1391,25 @@ void __fastcall WALL2_BuildSceneDrawList(D2GameViewStrc * pGameView, uint32_t nT
     }
 }
 
+int __fastcall Unreferenced_004dddd0(int param_1) {
+    *(uint32_t*)(param_1 + 0x14) = 0;
+    *(uint32_t*)(param_1 + 0x18) = 0;
+    return param_1;
+}
+
+void __stdcall WALL2_OnAllocGameView_NoOp_Unref_004ddde0() {
+
+}
+
 void __stdcall WALL2_OnAllocGameView_NoOp() {
+
+}
+
+void __stdcall WALL2_OnAllocGameView_NoOp_Unref_004df920() {
+
+}
+
+void __stdcall WALL2_OnAllocGameView_NoOp_Unref_004df930() {
 
 }
 

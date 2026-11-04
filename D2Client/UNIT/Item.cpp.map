@@ -120,6 +120,21 @@
       ]
     },
     {
+      "name": "Unreferenced_004c10c0",
+      "address": "004c10c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c10c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "Unreferenced_004c10c0",
+        "PLRSKILLS_CanUseSkillCheck"
+      ]
+    },
+    {
       "name": "ITEM_CheckItemEquipRequirements",
       "address": "004c10e0",
       "lines": [
@@ -786,6 +801,20 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004c2150",
+      "address": "004c2150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2150"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "Unreferenced_004c2150"
       ]
     },
     {

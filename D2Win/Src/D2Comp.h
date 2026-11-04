@@ -47,6 +47,7 @@ void * __stdcall D2COMP_LoadExcelTxtFile(struct D2PoolManagerStrc * pMemory, cha
 void * __stdcall LoadTxt(struct D2PoolManagerStrc * pMemory, char * szTxtName, struct D2BinFieldInputStrc * pBinFields, size_t * pSize, int32_t nLineLength);
 void __fastcall D2COMP_AllocTxt_Items(struct D2PoolManagerStrc * pMemory);
 void __fastcall D2COMP_LoadItemTypesTxt(struct D2PoolManagerStrc * pMemory);
+int Unreferenced_005049d0();
 int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncestorType);
 void __stdcall D2COMP_SetSelectionAndAuraImages(struct DC6 * pDC6, struct DC6 * pDC62);
 void __stdcall D2COMP_CreateCompositeUnit(uint32_t * pCompUnit, uint32_t nPlayerClassId, uint32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);

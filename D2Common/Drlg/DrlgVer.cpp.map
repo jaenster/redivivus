@@ -109,6 +109,20 @@
       ]
     },
     {
+      "name": "Unreferenced_0067d250",
+      "address": "0067d250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d250"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "Unreferenced_0067d250"
+      ]
+    },
+    {
       "name": "GetCoordDiff",
       "address": "0067d280",
       "lines": [

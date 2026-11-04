@@ -29,13 +29,18 @@ namespace D2Client::Archive {
 // Writes formatted text to a file handle using wvsprintfA. Variadic printf-style format arguments follow pFormat on the stack. Epilogue is a bare RET (no stack cleanup by callee), so the convention is __cdecl, not __stdcall.
 BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...);
 uint32_t __thiscall ARCHIVE_ComputeAddress(int * pNode, int32_t nBaseAddr);
+int __fastcall Unreferenced_0045b9d0(int param_1);
+int __fastcall Unreferenced_0045ba80(int param_1);
+int __fastcall Unreferenced_0045baa0(int param_1);
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode);
 uint32_t __thiscall ARCHIVE_GetNodeValue(int32_t pThis, int32_t nNode);
 void __thiscall ARCHIVE_UnlinkNode(int32_t pThis, int * pNode);
 void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, int * * ppTarget);
 uint32_t __thiscall ARCHIVE_GetNodeSize(int32_t pThis, int32_t nNode);
+int __fastcall Unreferenced_0045bcb0(int param_1);
 void __fastcall ARCHIVE_ClearList(int32_t nList);
 void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList);
+int __fastcall Unreferenced_0045bd80(int param_1);
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
 int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree);
 uint32_t __thiscall ARCHIVE_RemoveNode(int32_t pThis, int * pNode);

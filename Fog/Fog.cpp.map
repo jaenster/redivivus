@@ -43,6 +43,51 @@
       ]
     },
     {
+      "name": "Return_Unref_00409c70",
+      "address": "00409c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409c70"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_00409c70"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040a030",
+      "address": "0040a030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a030"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040a030"
+      ]
+    },
+    {
+      "name": "FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070",
+      "address": "0040a070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a070"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "FOG_GetAsyncFileCount_ReturnZero",
       "address": "0040abe0",
       "lines": [
@@ -57,6 +102,48 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040ada0",
+      "address": "0040ada0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040ada0"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040ada0"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040b110",
+      "address": "0040b110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b110"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040b110"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040b120",
+      "address": "0040b120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b120"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040b120"
       ]
     },
     {
@@ -119,6 +206,34 @@
       "namespace": "Fog",
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk"
+      ]
+    },
+    {
+      "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70",
+      "address": "0040eb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040eb70"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70"
+      ]
+    },
+    {
+      "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80",
+      "address": "0040eb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040eb80"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80"
       ]
     },
     {

@@ -4,6 +4,37 @@
   "file": "D2Client/UI/npcmenu.cpp",
   "functions": [
     {
+      "name": "NPCMENU_EmptyDialogDrawHandler_Unref_00486e00",
+      "address": "00486e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00486e00"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EmptyDialogDrawHandler_Unref_00486e00"
+      ]
+    },
+    {
+      "name": "GetInteractedUnitClassId_Unref_004b1020",
+      "address": "004b1020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1020"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "GetInteractedUnitClassId_Unref_004b1020"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "NPCMENU_ConvertQuestId",
       "address": "004b15f0",
       "lines": [
@@ -155,6 +186,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004b1970",
+      "address": "004b1970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1970"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "Unreferenced_004b1970"
       ]
     },
     {
@@ -437,6 +482,20 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_EmptyDialogDrawHandler_Unref_004b2010",
+      "address": "004b2010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2010"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EmptyDialogDrawHandler_Unref_004b2010"
       ]
     },
     {
@@ -1141,6 +1200,20 @@
         "D2GSPacketSrv0x91",
         "uint16_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004b3560",
+      "address": "004b3560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3560"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "Unreferenced_004b3560"
       ]
     },
     {

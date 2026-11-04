@@ -9,4 +9,3 @@
 
 extern char gpSmackerVideoBuffer[260];
 extern uint8_t gbSmackerVideoFlags;
-extern uint32_t gbSmackerKeepTempFile;

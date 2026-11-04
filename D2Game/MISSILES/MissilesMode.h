@@ -249,6 +249,9 @@ int __fastcall MISSILESMODE_SrvDoFn36_BaalFxControl(::SGAMEDATA * pGame, struct 
 // Server-side missile per-frame do-function for missile type 037. On each frame, checks up to three sub-missiles (SubMissile1/2/3 from the missile txt row): if the missile's remaining frames match the corresponding ParamN threshold, spawns the sub-missile at the missile's current position via SKILLS_CreateMissileAtTarget, inheriting the owner, skill ID, and level. After sub-missile checks, calls Missiles_SrvDoFunc_001 for standard movement/collision processing.
 int __fastcall MISSILESMODE_SrvDoFn37_Unused(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int __fastcall thunk_MISSILESMODE_SrvDoFn01_BasicMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00643880(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget);
+BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646260(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget);
+BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646270(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget);
 // 11 internal functions (defined in .cpp)
 
 } // namespace D2Game::MISSILES::MissilesMode

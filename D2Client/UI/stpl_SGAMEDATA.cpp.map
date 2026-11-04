@@ -1,0 +1,25 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/stpl_SGAMEDATA.cpp",
+  "functions": [
+    {
+      "name": "Destructor_UnwindThunk_Unref_004545a0",
+      "address": "004545a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004545a0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_004545a0",
+        "UI_CloseCurrentDialog"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
+      ]
+    }
+  ]
+}

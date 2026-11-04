@@ -19,6 +19,7 @@ typedef int (*fpButtonOnActivate)();
 namespace D2Client::UI::Button::ButtonImplementation {
 
 // Function declarations
+int __thiscall OnMouseMove_Unref_00446880(::ButtonImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
 void __thiscall Destructor(::ButtonImplementation * pThis);
 BOOL __thiscall IsMouseInBounds(::ButtonImplementation * pThis, struct D2UIMouseMsgStrc * pMsg);
 int __thiscall GetValue(::ButtonImplementation * pThis);

@@ -46,6 +46,13 @@ void __stdcall NET_SendPacket0x3f_0x1a() {
     NET_D2GS_CLIENT_Send_SHORT('?', 0x1a);
 }
 
+int __stdcall LOADING_GetProgressRatio_Unref_00477c90() {
+    // Static local variables (originally global data)
+    static uint32_t gnEngineMode; D2_STATIC_GUARD_BSS(gnEngineMode, "D2Client::GAME::Msg::LOADING_GetProgressRatio_Unref_00477c90::gnEngineMode");
+
+    return gnEngineMode;
+}
+
 // Client-side sender for opcode 0x67 (game join/create handshake). Fills D2GSPacketClt0x67 with game name, game type (SP/open-bnet/LAN/open), char class (or arena default), language code, arena flags (initialising to ClientUpdate|Expansion if zero), difficulty, and saved character name, then dispatches via NET_D2GS_CLIENT_SendPacketAfterChecks.
 void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName) {
     D2GSPacketClt0x67 packet;

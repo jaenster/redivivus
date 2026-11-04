@@ -4,6 +4,258 @@
   "file": "D2Client/UI/ui.cpp",
   "functions": [
     {
+      "name": "MoveArgumentToEAX_Unref_0040f590",
+      "address": "0040f590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040f590"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_0040f590"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_004168a0",
+      "address": "004168a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004168a0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_004168a0"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_004169e0",
+      "address": "004169e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004169e0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_004169e0"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00416a40",
+      "address": "00416a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a40"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00416a40"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00416a50",
+      "address": "00416a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a50"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00416a50"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00416a60",
+      "address": "00416a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a60"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00416a60"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00416a70",
+      "address": "00416a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a70"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00416a70"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00416a80",
+      "address": "00416a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416a80"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00416a80"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_0041c420",
+      "address": "0041c420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c420"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_0041c420"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_0041e9c0",
+      "address": "0041e9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e9c0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_0041e9c0"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00420420",
+      "address": "00420420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420420"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00420420"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00420480",
+      "address": "00420480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420480"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00420480"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00420e40",
+      "address": "00420e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420e40"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00420e40"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00420e50",
+      "address": "00420e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420e50"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00420e50"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_00421100",
+      "address": "00421100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421100"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_00421100"
+      ]
+    },
+    {
+      "name": "MoveArgumentToEAX_Unref_004269b0",
+      "address": "004269b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004269b0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_004269b0"
+      ]
+    },
+    {
+      "name": "UI_ClearCursorAnimationState_Unref_00436ac0",
+      "address": "00436ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436ac0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "UI_ClearCursorAnimationState_Unref_00436ac0"
+      ]
+    },
+    {
+      "name": "UI_GoldInputCallback_ReturnZero_Unref_00437d10",
+      "address": "00437d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437d10"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "UI_GoldInputCallback_ReturnZero_Unref_00437d10"
+      ]
+    },
+    {
       "name": "INPUT_ClearChatMessages",
       "address": "00452090",
       "lines": [
@@ -244,6 +496,24 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_StoreGlobalUIText",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "UI_StoreGlobalUIText_Unref_00452550",
+      "address": "00452550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00452550"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "UI_StoreGlobalUIText_Unref_00452550",
         "STRING_CopyWideString"
       ],
       "usedTypes": [
@@ -616,6 +886,22 @@
       ]
     },
     {
+      "name": "Unreferenced_004535d0",
+      "address": "004535d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004535d0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "Unreferenced_004535d0",
+        "CLIENT_GetD2GSGameType",
+        "CUNIT_IterateServerUnitsWithCallback"
+      ]
+    },
+    {
       "name": "UI_SetButtonKeyBinding",
       "address": "004535f0",
       "lines": [
@@ -677,6 +963,21 @@
       "usedTypes": [
         "eD2UIvars",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_00453900",
+      "address": "00453900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00453900"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "Unreferenced_00453900",
+        "GetDialogCounter"
       ]
     },
     {
@@ -1135,6 +1436,20 @@
       ]
     },
     {
+      "name": "Unreferenced_00454570",
+      "address": "00454570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00454570"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "Unreferenced_00454570"
+      ]
+    },
+    {
       "name": "UI_DrawDialogBackground",
       "address": "004545b0",
       "lines": [
@@ -1235,6 +1550,23 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "SetActNo"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_GetLastPanelId_Unref_004547a0",
+      "address": "004547a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004547a0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "DRAW_GetLastPanelId_Unref_004547a0"
       ],
       "usedTypes": [
         "int32_t"
@@ -1384,6 +1716,20 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Unreferenced_004549d0",
+      "address": "004549d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004549d0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "Unreferenced_004549d0"
       ]
     },
     {
@@ -1765,6 +2111,37 @@
       ]
     },
     {
+      "name": "MoveArgumentToEAX_Unref_0045ba90",
+      "address": "0045ba90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ba90"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "MoveArgumentToEAX_Unref_0045ba90"
+      ]
+    },
+    {
+      "name": "DRAW_IsDialogActive_Unref_0045fdd0",
+      "address": "0045fdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fdd0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "DRAW_IsDialogActive_Unref_0045fdd0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "UI_ShowPopupDialog",
       "address": "00460680",
       "lines": [
@@ -1788,6 +2165,20 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "nullSub_CharonGameDraw_Unref_00463d70",
+      "address": "00463d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463d70"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "nullSub_CharonGameDraw_Unref_00463d70"
       ]
     },
     {
@@ -1847,6 +2238,20 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "TRADE_GetTradeStatus_Unref_00486d80",
+      "address": "00486d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00486d80"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "TRADE_GetTradeStatus_Unref_00486d80"
       ]
     },
     {
@@ -3636,6 +4041,20 @@
       ]
     },
     {
+      "name": "CHAR_FreePanelAssets_NoOp_Unref_004b3330",
+      "address": "004b3330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3330"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "CHAR_FreePanelAssets_NoOp_Unref_004b3330"
+      ]
+    },
+    {
       "name": "UI_HandleNpcInteractionPacket",
       "address": "004b6dd0",
       "lines": [
@@ -3780,6 +4199,20 @@
       ]
     },
     {
+      "name": "Unreferenced_004b8a00",
+      "address": "004b8a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8a00"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "Unreferenced_004b8a00"
+      ]
+    },
+    {
       "name": "TRADE_GetTradeStatus",
       "address": "004b8a10",
       "lines": [
@@ -3791,6 +4224,34 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "TRADE_GetTradeStatus"
+      ]
+    },
+    {
+      "name": "CHAR_FreePanelAssets_NoOp_Unref_004bf9c0",
+      "address": "004bf9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf9c0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "CHAR_FreePanelAssets_NoOp_Unref_004bf9c0"
+      ]
+    },
+    {
+      "name": "CHAR_FreePanelAssets_NoOp_Unref_004c0080",
+      "address": "004c0080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0080"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "CHAR_FreePanelAssets_NoOp_Unref_004c0080"
       ]
     },
     {
@@ -4018,6 +4479,36 @@
       "calledFunctions": [
         "UI_OpenHoradricCubeWithNpcInteraction",
         "UI_ShowHoradricCubeTransmuteDialog"
+      ]
+    },
+    {
+      "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
+      "address": "004c16c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c16c0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
+        "ITEM_RecalcAllEquippedItems_EBX"
+      ]
+    },
+    {
+      "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
+      "address": "004c1be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1be0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
+        "ITEM_RecalcAllEquippedItems_EBX"
       ]
     },
     {
