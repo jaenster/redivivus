@@ -142,14 +142,8 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
       pExistingNode->pNext = gpTileProjectListHead;
       pExistingNode->pTileLibrary = pTileData;
       pExistingNode->pHash = pNewHash;
-      nNameCopyOffset = (int)pExistingNode - (int)szFilename;
       gpTileProjectListHead = pExistingNode;
-      do {
-        cNameChar = *szFilename;
-        szFilename[nNameCopyOffset] = cNameChar;
-        szFilename++;
-      } while (cNameChar != '\0');
-
+      strcpy((char*)pExistingNode, szFilename);
       *ppHash = pExistingNode->pHash;
       return pTileData;
     }

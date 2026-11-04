@@ -380,12 +380,7 @@ void __fastcall SOUND_LoadWavFile(char * szText) {
     *(uint32_t*)((int)pWavEntry + 0x54) = nAllocSize;
     gpWavFileCacheListHead = pWavEntry;
     *(uint32_t*)((int)pWavEntry + 0x58) = (uint32_t)(sWaveFormat.nChannels == 2);
-    int nNameOffset = (int)pWavEntry - (int)szText;
-    do {
-      cFilenameChar = *szText;
-      szText[nNameOffset] = cFilenameChar;
-      szText++;
-    } while (cFilenameChar != '\0');
+    strcpy((char*)pWavEntry, szText);
 }
 
 void __fastcall SOUND_PlaySoundEffect(uint8_t * szSoundFile) {

@@ -376,17 +376,17 @@ void __fastcall PARTY_SendRelationshipForPlayer(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     D2UnitPlayerListStrc* pListEntry = pPlayerData->pPlayerList;
+    while (pListEntry) {
+      if (pListEntry->nUnitGUID == nOtherGUID) {
+        break;
+      }
+
+      pListEntry = pListEntry->pNext;
+    }
+
     if (!pListEntry) {
       return;
     }
-
-    while (pListEntry->nUnitGUID != nOtherGUID) {
-      pListEntry = pListEntry->pNext;
-      if (!pListEntry) {
-        return;
-      }
-    }
-
     if (!pOtherUnit) {
       nOtherUnitGUID = -1;
     } else {

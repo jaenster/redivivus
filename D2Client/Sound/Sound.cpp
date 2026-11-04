@@ -1061,7 +1061,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
 
             nFadeVolStart = *(int*)pChanEntry->undefined_0x41;
             if (nFadeVolStart) {
-              memset(pChanEntry->undefined_0x41, 0, 4 * sizeof(pChanEntry->undefined_0x41[0]));
+              *(uint32_t*)pChanEntry->undefined_0x41 = 0;
               pChanEntry->nParam = nFadeVolStart;
             }
 

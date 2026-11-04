@@ -2899,7 +2899,7 @@ void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelStrc * pCharSel, int32_t bUn
       D2_FREE_AT(pCOFListHead, ".\\Src\\D2Comp.cpp", 0x889);
       if (*(DC6**)(pCharSel->szCharname + 0xbc)) {
         D2WinArchive::IMAGE_FreeImage(*(DC6**)(pCharSel->szCharname + 0xbc));
-        memset(pCharSel->szCharname + 188, 0, 4 * sizeof(pCharSel->szCharname[0]));
+        *(uint32_t*)(pCharSel->szCharname + 188) = 0;
       }
       if (!bUnlink) {
         return;

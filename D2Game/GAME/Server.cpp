@@ -1307,7 +1307,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
                 packet0x5a.nMessageType = '\x02';
                 packet0x5a.nColor = '\x04';
                 packet0x5a.nArg = 0;
-                memset(packet0x5a.szName2, 0, 4 * sizeof(packet0x5a.szName2[0]));
+                *(uint32_t*)packet0x5a.szName2 = 0;
                 Clients::GetAccountName(pClient, szAccountName);
                 pszAccountNameLoop = szAccountName;
                 pszAccountNameLoop = pszAccountNameLoop + strlen(pszAccountNameLoop) + 1;
@@ -2627,7 +2627,7 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
               sEvent.nPacketId = 'Z';
               sEvent.nMessageType = '\x0f';
               sEvent.nColor = '\x04';
-              memset(sEvent.szName2, 0, 4 * sizeof(sEvent.szName2[0]));
+              *(uint32_t*)sEvent.szName2 = 0;
               PLAYER::PlayerMsg::BroadcastEventMessage(pGame, &sEvent);
               break;
             }
@@ -3230,7 +3230,7 @@ void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId) {
           byPacketType.nMessageType = '\0';
           byPacketType.nColor = '\x04';
           byPacketType.nArg = 0;
-          memset(byPacketType.szName2, 0, 4 * sizeof(byPacketType.szName2[0]));
+          *(uint32_t*)byPacketType.szName2 = 0;
           Storm::Source::SSTR::SStrCopy(byPacketType.szName1, Clients::GetCharName(pClient), nCopyLen);
           PLAYER::PlayerMsg::BroadcastEventMessage(pGame, &byPacketType);
           Clients::CleanUpClient(pGame, Clients::GetClientNo(pClient), 1);

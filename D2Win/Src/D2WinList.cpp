@@ -150,16 +150,13 @@ int __fastcall D2WINLIST_GetSelectedIndex(::D2WinList * pList) {
 
     D2WinListEntry* pDVar1 = pList->sEntriesControl.pFirstEntry;
     int nIndex = 0;
-    if (!pDVar1) {
-      return -1;
-    }
+    while (pDVar1) {
+      if (pList->sEntriesControl.pSelectedEntry == pDVar1) {
+        break;
+      }
 
-    while (pList->sEntriesControl.pSelectedEntry != pDVar1) {
       pDVar1 = pDVar1->pNext;
       nIndex++;
-      if (!pDVar1) {
-        return -1;
-      }
     }
 
     if (!pDVar1) {
@@ -179,16 +176,13 @@ D2WinListEntry * __fastcall D2WINLIST_GetEntryByIndex(::D2WinList * pList, int n
 
     D2WinListEntry* pDVar1 = pList->sEntriesControl.pFirstEntry;
     int nCurIndex = 0;
-    if (!pDVar1) {
-      return nullptr;
-    }
+    while (pDVar1) {
+      if (nCurIndex == nIndex) {
+        break;
+      }
 
-    while (nCurIndex != nIndex) {
       pDVar1 = pDVar1->pNext;
       nCurIndex++;
-      if (!pDVar1) {
-        return nullptr;
-      }
     }
 
     if (!pDVar1) {

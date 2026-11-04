@@ -133,8 +133,8 @@ void StaticInit_gbChatLobbyInitialize() {
 
 void StaticInit_6caab0() {
     // Static local variables (originally global data)
-    static uint32_t gaKeyBindingDefaultArray = 0x1; D2_STATIC_GUARD(gaKeyBindingDefaultArray, "StaticInit_6caab0::gaKeyBindingDefaultArray");
+    static int gaKeyBindingDefaultArray = 0x1; D2_STATIC_GUARD(gaKeyBindingDefaultArray, "StaticInit_6caab0::gaKeyBindingDefaultArray");
     static int INT_007a6b0c; D2_STATIC_GUARD_BSS(INT_007a6b0c, "StaticInit_6caab0::INT_007a6b0c");
 
-    INT_007a6b0c = (int)(1000 / (int64_t)gaKeyBindingDefaultArray);
+    INT_007a6b0c = (int)(1000 / gaKeyBindingDefaultArray);
 }

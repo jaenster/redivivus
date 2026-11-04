@@ -1081,13 +1081,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       goto file_list_done;
       case -0x7fffffff:
         Debug::DEBUG_Trace("Processing Version file");
-      bOpened = (int)lpFileName_00881c58 - (int)szDestPath;
-      do {
-        byScanChar = *szDestPath;
-        szDestPath[bOpened] = byScanChar;
-        szDestPath++;
-      } while (byScanChar != '\0');
-
+      strcpy((char*)lpFileName_00881c58, szDestPath);
       return;
       case -0x7ffffffb:
         {

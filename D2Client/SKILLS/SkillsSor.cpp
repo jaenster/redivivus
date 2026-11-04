@@ -314,8 +314,8 @@ BOOL __fastcall Skills_CltDoFunc_Sor_HomingMissileVelocity(D2UnitStrc * pUnit, e
       }
 
       nBaseVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(eMissileId, nSkillLvl);
-      nBonusVelocity = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
-      Skills::SKILL_SpawnMissilesAtTarget(pUnit, pUnit, eMissileId, ~MISSILE_Arrow, eSkill, nSkillLvl, nBaseVelocity + nBonusVelocity);
+      nBaseVelocity += (int32_t)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
+      Skills::SKILL_SpawnMissilesAtTarget(pUnit, pUnit, eMissileId, ~MISSILE_Arrow, eSkill, nSkillLvl, nBaseVelocity);
       return 1;
     }
 

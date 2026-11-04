@@ -818,15 +818,16 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     D2QuestDataStrc* pQuestData = pGame->pQuestControl->pQuestData;
-    if (!pQuestData) {
-      return;
+    while (pQuestData) {
+      if (pQuestData->nQuestNoInternal == (nInternalQuestNo & 0xff)) {
+        break;
+      }
+
+      pQuestData = pQuestData->pPrev;
     }
 
-    while (pQuestData->nQuestNoInternal != (nInternalQuestNo & 0xff)) {
-      pQuestData = pQuestData->pPrev;
-      if (!pQuestData) {
-        return;
-      }
+    if (!pQuestData) {
+      return;
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0x57e);

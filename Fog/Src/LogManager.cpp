@@ -356,7 +356,7 @@ namespace Fog::Src::LogManager {
 
 int __stdcall DetectCpuVendor() {
     char szCpuVendor[16];
-    memset(szCpuVendor + 12, 0, 4 * sizeof(szCpuVendor[0]));
+    *(uint32_t*)(szCpuVendor + 12) = 0;
     int nCpuidResult = D2_Cpuid(0);
     *(uint32_t*)(char*)&szCpuVendor = *(uint32_t*)(nCpuidResult + 4);
     *(uint32_t*)((char*)&szCpuVendor + 4) = *(uint32_t*)(nCpuidResult + 8);

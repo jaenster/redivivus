@@ -719,7 +719,7 @@ int __fastcall EnterEmailMessagePumper(D2IniConfigStrc * pIniConfig, int32_t bCr
       char* szPass;
       szPass = pIniConfig->szLastKnownIpTcpIp;
       gpBNetCallbacks->pfnSendLogonRequest(pIniConfig->szLastBnetAccount, szPass);
-      memset(szPass, 0, 4 * sizeof(szPass[0]));
+      *(uint32_t*)szPass = 0;
       memset(pIniConfig->szLastKnownIpTcpIp + 4, 0, 20 * sizeof(pIniConfig->szLastKnownIpTcpIp[0]));
       D2Win::Src::D2WinMain::MessagePump(MainMenus::LAUNCHER_PollBNConnectionPump);
       if (gnBusyFlag || (bSocketConnected = MainMenus::MAINMENU_GetGlobalValue2() , bSocketConnected != 0)) {

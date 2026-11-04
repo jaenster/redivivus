@@ -205,20 +205,9 @@ uint32_t __stdcall MCPCONNECT_GetGameNameAndPassword(int32_t pGameNameOut, int32
 
 void __stdcall MCPCONNECT_SetGameNameAndPassword(uint32_t nDifficulty, char * szGameName, char * szPassword) {
     char ch;
-    int nCopyDelta = (int)g_szMCPGameName - (int)szGameName;
-    do {
-      ch = *szGameName;
-      szGameName[nCopyDelta] = ch;
-      szGameName++;
-    } while (ch != '\0');
-
-    nCopyDelta = (int)g_szMCPGamePassword - (int)szPassword;
-    do {
-      ch = *szPassword;
-      szPassword[nCopyDelta] = ch;
-      szPassword++;
-    } while (ch != '\0');
-
+    int nCopyDelta;
+    strcpy((char*)g_szMCPGameName, szGameName);
+    strcpy((char*)g_szMCPGamePassword, szPassword);
     g_nMCPGameDifficulty = nDifficulty;
 }
 
@@ -453,13 +442,7 @@ static char * __stdcall STRING_GetStringLength(char * szText, char * * ppszText,
       exit(-1);
     }
 
-    nCopyDelta = (int)szDest - (int)szText;
-    do {
-      byChar = *szText;
-      szText[nCopyDelta] = byChar;
-      szText++;
-    } while (byChar != '\0');
-
+    strcpy(szDest, szText);
     return szDest + (int)(pszScan + (1 - (int)pszLenBase));
 }
 
@@ -857,13 +840,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
       *pwGameNameLenDst = (uint16_t)*pbGameNameSrc;
       pszSrc = pszScan;
       pszSrc = pszSrc + strlen(pszSrc) + 1;
-      nCopyOffset = pszGameNameDst - (int)pszScan;
-      do {
-        cByte = *pszScan;
-        pszScan[nCopyOffset] = cByte;
-        pszScan++;
-      } while (cByte != '\0');
-
+      strcpy((char*)pszGameNameDst, pszScan);
       pszGameNameDst += 0x10;
       pbGameNameSrc++;
       pwGameNameLenDst++;

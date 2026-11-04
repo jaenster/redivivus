@@ -4679,11 +4679,11 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
     uIsMissilePotion = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wMissileType(pWeaponUnit);
     *pElemType = 0;
     nMinDmgTmp = D2Common::Units::Missile::GetMinDamage(nullptr, pUnit, uIsMissilePotion, 1);
-    nMaxDmgTmp = D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
-    pUnit2 = (D2UnitStrc*)(nMinDmgTmp + nMaxDmgTmp);
+    nMinDmgTmp += (int32_t)D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
+    pUnit2 = (D2UnitStrc*)nMinDmgTmp;
     nMinDmgTmp = D2Common::Units::Missile::GetMaxDamage(nullptr, pUnit, uIsMissilePotion, 1);
-    nMaxDmgTmp = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
-    nStrDexBonus = nMinDmgTmp + nMaxDmgTmp;
+    nMinDmgTmp += (int32_t)D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
+    nStrDexBonus = nMinDmgTmp;
     uint8_t byElemType;
     byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(uIsMissilePotion);
     switch (byElemType) {
@@ -5350,8 +5350,9 @@ void __fastcall SKILLDESC_DrawSkillDmgConversion(D2UnitStrc * pUnit, D2SkillStrc
     int32_t nKickMinApplied = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkill, nSkillLevel, 1);
     int nAuraMaxDmg = nKickMinApplied >> 8;
     nKickMinApplied = SKILLDESC_GetAuraBonusDamage();
-    int32_t nConvRangeBonus = DataTbls::TXT_Skills_GetSkillRange(eSkill, nSkillLevel);
-    int nConversionBonus = nKickMinApplied + nConvRangeBonus;
+    int32_t nConvRangeBonus;
+    nKickMinApplied += (int32_t)DataTbls::TXT_Skills_GetSkillRange(eSkill, nSkillLevel);
+    int nConversionBonus = nKickMinApplied;
     if (nConversionBonus) {
       nElemType = 3;
     }

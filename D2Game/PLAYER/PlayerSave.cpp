@@ -1700,7 +1700,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
       }
     }
 
-    memset(pItemUnknownStructure->szCode, 0, 4 * sizeof(pItemUnknownStructure->szCode[0]));
+    *(uint32_t*)pItemUnknownStructure->szCode = 0;
     pItemUnknownStructure->nItemClassid = -1;
     return 0x19;
 }

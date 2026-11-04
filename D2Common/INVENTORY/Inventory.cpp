@@ -2366,11 +2366,10 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, in
 
     pCurItem = pGridInfo->pFirstItem;
     if (pAfterItem) {
-      if (!pCurItem) {
-        return nullptr;
-      }
-
-      while (pCurItem != pAfterItem) {
+      while (pCurItem) {
+        if (pCurItem == pAfterItem) {
+          break;
+        }
         if (pCurItem->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
@@ -2384,9 +2383,10 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, in
         }
 
         pCurItem = pItemData->sInvNode.pNextItemInPage;
-        if (!pCurItem) {
-          return nullptr;
-        }
+      }
+
+      if (!pCurItem) {
+        return nullptr;
       }
 
       pAfterItemNode = INVENTORY_GetItemInventoryNode(pCurItem);

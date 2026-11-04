@@ -289,8 +289,8 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
       }
 
       nOffset = D2CMP::SRC::CelCmp::GetDC6OffsetX(spriteParams.pDC6Block);
-      iVar1 = D2Common::Units::GetTargetX(pUnit);
-      *pBoundsRect = iVar1 + nOffset - 0xc;
+      nOffset += (int32_t)D2Common::Units::GetTargetX(pUnit);
+      *pBoundsRect = nOffset - 0xc;
       nOffset = D2CMP::SRC::CelCmp::GetDC6Width(spriteParams.pDC6Block);
       pBoundsRect[2] = nOffset + 0x18 + *pBoundsRect;
       nOffset = D2CMP::SRC::CelCmp::GetDC6OffsetY(spriteParams.pDC6Block);

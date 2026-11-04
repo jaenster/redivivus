@@ -2527,7 +2527,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAA_AddUnit_0xA8_SetState(D2ClientStrc * p
 
 void __fastcall NET_D2GS_SERVER_Send_0x59_AssignPlayer(D2ClientStrc * pClient, uint32_t nUnitGUID, uint8_t byCharClass2, char * szCharNameSrc, uint16_t wSrcPosX, uint16_t wSrcPosY) {
     uint8_t byPacketId[26];
-    memset(byPacketId + 22, 0, 4 * sizeof(byPacketId[0]));
+    *(uint32_t*)(byPacketId + 22) = 0;
     byPacketId[5] = byCharClass2;
     d2_store24((char*)&byPacketId + 1, (uint32_t)nUnitGUID & 0xffffffu);
     byPacketId[0] = 'Y';

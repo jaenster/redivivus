@@ -735,8 +735,8 @@ BOOL __fastcall Skills_SrvDoFunc_022_Nova_FrostNova(::SGAMEDATA * pGame, D2UnitS
     if ((int)peMissileId >= 0 && (int)peMissileId < sgptDataTable->nTxtMissilesSize) {
       int32_t nVelocity;
       nVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(peMissileId, nSkillLvl);
-      nCalc0 = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl);
-      SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, peMissileId, eSkill, nSkillLvl, nVelocity + nCalc0);
+      nVelocity += (int32_t)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl);
+      SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, peMissileId, eSkill, nSkillLvl, nVelocity);
       return 1;
     }
 

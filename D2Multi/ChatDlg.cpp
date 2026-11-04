@@ -1723,13 +1723,7 @@ void __stdcall CHATDLG_ClearChatHistory() {
 void CHATDLG_AppendChatToHistory(char * szText) {
     char cCurrent;
     memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, 0x900);
-    int nDestDelta = (int)gaChatDlgHistoryBuffer - (int)szText;
-    do {
-      cCurrent = *szText;
-      szText[nDestDelta] = cCurrent;
-      szText++;
-    } while (cCurrent != '\0');
-
+    strcpy((char*)gaChatDlgHistoryBuffer, szText);
     gnChatHistoryEntryCount++;
     if (gnChatHistoryEntryCount < 10) {
       return;

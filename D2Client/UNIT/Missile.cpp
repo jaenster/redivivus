@@ -1557,8 +1557,8 @@ D2UnitStrc * __fastcall MISSILE_CreatePeriodicTrail(D2UnitStrc * pUnit, int32_t 
     }
 
     nRemainingFramesOrX = Units::GetXPosFromDynamicPathUnit(pUnit);
-    int32_t nRemFrameForSeed = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nRemainingFramesOrX + nRemFrameForSeed);
+    nRemainingFramesOrX += (int32_t)D2Common::Units::Missile::GetRemainingFrames(pUnit);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nRemainingFramesOrX);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x2003;
     sSkillArg.pOwner = pOwner;

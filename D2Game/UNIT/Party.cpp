@@ -456,17 +456,17 @@ void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t 
     }
 
     D2UnitPartyControlSub* pFoundSub = pGame->pPartyControl->pSub;
+    while (pFoundSub) {
+      if (pFoundSub->nPartyId == nPartyId) {
+        break;
+      }
+
+      pFoundSub = pFoundSub->pPrev;
+    }
+
     if (!pFoundSub) {
       return;
     }
-
-    while (pFoundSub->nPartyId != nPartyId) {
-      pFoundSub = pFoundSub->pPrev;
-      if (!pFoundSub) {
-        return;
-      }
-    }
-
     if (nPartyId == -1) {
       return;
     }

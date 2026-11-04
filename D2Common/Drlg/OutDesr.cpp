@@ -159,17 +159,17 @@ static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId
 void __fastcall DRLGOUTPLACE_PlaceAct2CanyonExitPresets(D2DrlgLevelStrc * pLevel) {
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2DrlgOrthStrc* pOutdoorRoom = pLevelData->pOrthData;
+    while (pOutdoorRoom) {
+      if (pOutdoorRoom->pLink.pLevel->eD2LevelId == 0x28) {
+        break;
+      }
+
+      pOutdoorRoom = pOutdoorRoom->pNext;
+    }
+
     if (!pOutdoorRoom) {
       return;
     }
-
-    while (pOutdoorRoom->pLink.pLevel->eD2LevelId != 0x28) {
-      pOutdoorRoom = pOutdoorRoom->pNext;
-      if (!pOutdoorRoom) {
-        return;
-      }
-    }
-
     if (pOutdoorRoom->neDrlgDirection == DIRECTION_NORTHWEST) {
       Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, pLevelData->nGridCoordsHeight - 1, 0x16b, -1, 0);
       return;

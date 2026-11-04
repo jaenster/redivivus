@@ -2406,17 +2406,17 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
     }
 
     pGfxInfoUnk = pGfxInfo->pGfxInfoUnk;
+    while (pGfxInfoUnk) {
+      if (pGfxInfoUnk->nAnimMode == nErrLine) {
+        break;
+      }
+
+      pGfxInfoUnk = pGfxInfoUnk->pNext;
+    }
+
     if (!pGfxInfoUnk) {
       return;
     }
-
-    while (pGfxInfoUnk->nAnimMode != nErrLine) {
-      pGfxInfoUnk = pGfxInfoUnk->pNext;
-      if (!pGfxInfoUnk) {
-        return;
-      }
-    }
-
     if (!pGfxInfoUnk->pCofDataArray[5]) {
       return;
     }
@@ -2535,17 +2535,17 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
     }
 
     pGfxInfoUnk = pGfxInfo->pGfxInfoUnk;
+    while (pGfxInfoUnk) {
+      if (pGfxInfoUnk->nAnimMode == nWeaponClassOrFlag) {
+        break;
+      }
+
+      pGfxInfoUnk = pGfxInfoUnk->pNext;
+    }
+
     if (!pGfxInfoUnk) {
       return 0;
     }
-
-    while (pGfxInfoUnk->nAnimMode != nWeaponClassOrFlag) {
-      pGfxInfoUnk = pGfxInfoUnk->pNext;
-      if (!pGfxInfoUnk) {
-        return 0;
-      }
-    }
-
     if (!(void*)pGfxInfoUnk->pCofDataArray[5]) {
       return 0;
     }

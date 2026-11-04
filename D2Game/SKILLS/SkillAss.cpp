@@ -1226,8 +1226,8 @@ BOOL __fastcall Skills_SrvDoFunc_036_ChargeRelease_MissileRing(::SGAMEDATA * pGa
     }
 
     int32_t nVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(nMissileId, nSkillLvl);
-    int32_t nCalcBonus = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl);
-    SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pTarget, nMissileId, eSkill, nSkillLvl, nVelocity + nCalcBonus);
+    nVelocity += (int32_t)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl);
+    SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pTarget, nMissileId, eSkill, nSkillLvl, nVelocity);
     return 1;
 }
 
@@ -2112,8 +2112,8 @@ static void __stdcall SKILLASS_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc 
 
     memset(&sDamage, 0, 0x70);
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit2, eSkill, nSkillLvl);
-    uint32_t nProgressiveToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_progressive_tohit, 0);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nSkillToHit + nProgressiveToHit, 0);
+    nSkillToHit += (uint32_t)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_progressive_tohit, 0);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nSkillToHit, 0);
     if (sDamage.wResultFlags & 1U) {
       int32_t nEnDmgCalc;
       sDamage.dwHitFlags |= 2;
@@ -3151,8 +3151,8 @@ BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStr
     uint32_t nSkillToHit;
     memset(&sDamage, 0, 0x70);
     nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillCopy, nSkillLvl);
-    nToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nSkillToHit + nToHit, 0);
+    nSkillToHit += (uint32_t)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nSkillToHit, 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Client::DataTbls::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
       SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, (D2UnitStrc*)nSkillLvl, pUnit);

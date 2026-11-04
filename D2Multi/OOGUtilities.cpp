@@ -2098,13 +2098,7 @@ BOOL __stdcall OOGUTIL_OnPressDifficultyHell(D2ControlMsg * pControlMsg) {
 // gnProfileUserHardcoreFlag / gnProfileUserExpansionFlag, which OOGUTIL_OnPressProfileLadder (00443ef0) reads to open the matching ladder and request that character's rank.
 static void __stdcall OOGUTIL_SetProfileUser(int nHardcoreFlag, int nExpansionFlag, char * szCharacterName) {
     char cChar;
-    int nDestOffset = (int)gszProfileCharacterName - (int)szCharacterName;
-    do {
-      cChar = *szCharacterName;
-      szCharacterName[nDestOffset] = cChar;
-      szCharacterName++;
-    } while (cChar != '\0');
-
+    strcpy((char*)gszProfileCharacterName, szCharacterName);
     gnProfileUserHardcoreFlag = nHardcoreFlag;
     gnProfileUserExpansionFlag = nExpansionFlag;
 }

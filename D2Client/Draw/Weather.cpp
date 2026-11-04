@@ -679,7 +679,7 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     }
 
     D2WeatherParticleStrc* pParticleArray = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
-    short int nParticleSlotIndex = (short int)(nSlot >> 0x10);
+    int nParticleSlotIndex = (short int)(nSlot >> 0x10);
     pParticleArray[nParticleSlotIndex].nDying = 0;
     int32_t nTemp = Seed::RollBetweenMinAndMax(pSeed, 0, ScreenSizeX);
     pParticleArray[nParticleSlotIndex].nPosX = nTemp;

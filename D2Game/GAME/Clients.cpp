@@ -1403,12 +1403,7 @@ void __fastcall SetGuildTag(D2ClientStrc * pClient, char * szGuildTag) {
 void __fastcall GetGuildName(D2ClientStrc * pClient, char * szGuildName) {
     char cChar;
     char* pcSrc = pClient->szGuildName;
-    int nOffset = (int)szGuildName - (int)pcSrc;
-    do {
-      cChar = *pcSrc;
-      pcSrc[nOffset] = cChar;
-      pcSrc++;
-    } while (cChar != '\0');
+    strcpy(szGuildName, pcSrc);
 }
 
 void __fastcall SetGuildName(D2ClientStrc * pClient, char * szGuildName) {

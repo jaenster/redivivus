@@ -2665,15 +2665,16 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
     } else if (!nNpcDataIdx) {
       pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpcSaved, &nNpcDataIdx);
       pInteractionEntry = pNpcData->pProxyInventories;
-      if (!pInteractionEntry) {
-        return 0;
+      while (pInteractionEntry) {
+        if (pInteractionEntry->nPlayerGUID == nPlayerUnitGUID) {
+          break;
+        }
+
+        pInteractionEntry = pInteractionEntry->pNext;
       }
 
-      while (pInteractionEntry->nPlayerGUID != nPlayerUnitGUID) {
-        pInteractionEntry = pInteractionEntry->pNext;
-        if (!pInteractionEntry) {
-          return 0;
-        }
+      if (!pInteractionEntry) {
+        return 0;
       }
 
       pNpcSaved = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInteractionEntry->pInventory);

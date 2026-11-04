@@ -2182,8 +2182,8 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     int nDexBonus = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitOrig, UNITSTAT_dexterity, 0);
     nBaseArmor += nDexBonus / 4;
     nSkillArmorPct = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnitOrig, UNITSTAT_skill_armor_percent, 0);
-    nItemArmorPct = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnitOrig, UNITSTAT_item_armor_percent, 0);
-    nDexBonus = nSkillArmorPct + nItemArmorPct;
+    nSkillArmorPct += (int32_t)Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnitOrig, UNITSTAT_item_armor_percent, 0);
+    nDexBonus = nSkillArmorPct;
     eHolyShieldState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitOrig, STATE_holyshield);
     if (eHolyShieldState != STATE_none) {
       eD2Skills eSkill;

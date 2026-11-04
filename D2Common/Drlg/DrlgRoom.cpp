@@ -128,15 +128,16 @@ void __fastcall DRLGWARP_SetAllWarpTilesSelectValue(D2RoomExStrc * pRoomEx, BOOL
 
 void __fastcall DRLGWARP_UpdateWarpRoomExSelect(D2RoomExStrc * pRoomEx, eD2LevelId eLevel) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
-    if (!pTileGrid) {
-      return;
+    while (pTileGrid) {
+      if (pTileGrid->pLvlWarpTxt->Id == eLevel) {
+        break;
+      }
+
+      pTileGrid = pTileGrid->pRoomTileNext;
     }
 
-    while (pTileGrid->pLvlWarpTxt->Id != eLevel) {
-      pTileGrid = pTileGrid->pRoomTileNext;
-      if (!pTileGrid) {
-        return;
-      }
+    if (!pTileGrid) {
+      return;
     }
 
     D2DrlgTileDataStrc* pTileData = pTileGrid->pTileListClearedOnSelect;
@@ -156,15 +157,16 @@ void __fastcall DRLGWARP_UpdateWarpRoomExSelect(D2RoomExStrc * pRoomEx, eD2Level
 
 void __fastcall DRLGWARP_UpdateWarpRoomExDeselect(D2RoomExStrc * pRoomEx, eD2LevelId eLevel) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
-    if (!pTileGrid) {
-      return;
+    while (pTileGrid) {
+      if (pTileGrid->pLvlWarpTxt->Id == eLevel) {
+        break;
+      }
+
+      pTileGrid = pTileGrid->pRoomTileNext;
     }
 
-    while (pTileGrid->pLvlWarpTxt->Id != eLevel) {
-      pTileGrid = pTileGrid->pRoomTileNext;
-      if (!pTileGrid) {
-        return;
-      }
+    if (!pTileGrid) {
+      return;
     }
 
     D2DrlgTileDataStrc* pFloorTile = pTileGrid->pTileListSetOnSelect;

@@ -59673,7 +59673,7 @@ void __stdcall DRAW_EscMenu() {
           bItemVisible = 0;
           nMouseY = pCurrentTable[nItemIndex].nExpansionOnly;
           pYPosition = (char*)&pCurrentTable[nItemIndex].nYPosition;
-          memset(pYPosition, 0, 4 * sizeof(pYPosition[0]));
+          *(uint32_t*)pYPosition = 0;
           if (!nMouseY || (bIsExpansion = Fog::D2CheckExpansionGame() , pCurrentTable = gpEscMenuCurrentTable , bIsExpansion != 0)) {
             pfnEnableCallback = pCurrentTable[nItemIndex].fpVisibilityCheck;
             if (!pfnEnableCallback || (bIsExpansion = (*pfnEnableCallback)() , pCurrentTable = gpEscMenuCurrentTable , bIsExpansion != 0)) {

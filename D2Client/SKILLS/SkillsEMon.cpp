@@ -241,8 +241,8 @@ BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtOwnerWithZ(D2UnitStrc * pUnit, eD
       int32_t nCalcB;
       nTotalFrames = D2Common::Units::Missile::GetTotalFrames(pMissile);
       nCalcB = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[1], eSkill, nSkillLvl);
-      nPosZShifted = Engine::Particle::PARTICLE_GetPosZShifted(pUnit);
-      nPosZ = nCalcB + nPosZShifted;
+      nCalcB += (int32_t)Engine::Particle::PARTICLE_GetPosZShifted(pUnit);
+      nPosZ = nCalcB;
       if (nTotalFrames) {
         nZStep = nPosZ / nTotalFrames;
       } else {

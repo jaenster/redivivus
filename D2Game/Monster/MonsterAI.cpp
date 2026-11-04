@@ -112,11 +112,12 @@ void __fastcall SendMercPackets(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_nextexp, 0);
     UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x1e, nStatVal);
     int32_t nStatTmp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_secondary_mindamage, 0);
-    int32_t nSecondaryStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_mindamage, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x15, nStatTmp + nSecondaryStatVal);
+    int32_t nSecondaryStatVal;
+    nStatTmp += (int32_t)D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_mindamage, 0);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x15, nStatTmp);
     nStatTmp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_secondary_maxdamage, 0);
-    nSecondaryStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_maxdamage, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x16, nStatTmp + nSecondaryStatVal);
+    nStatTmp += (int32_t)D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_maxdamage, 0);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x16, nStatTmp);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_fireresist, 0);
     UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x27, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_lightresist, 0);
@@ -427,17 +428,17 @@ void __fastcall FreeSpecificAiForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
 void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, D2MonsterAiStrc * pMonsterAi) {
     D2MonsterAiSubStrc* pSubAi = pMonsterAi->pAiSub;
+    while (pSubAi) {
+      if (pSubAi->pUnit == pUnit) {
+        break;
+      }
+
+      pSubAi = pSubAi->pNext;
+    }
+
     if (!pSubAi) {
       return;
     }
-
-    while (pSubAi->pUnit != pUnit) {
-      pSubAi = pSubAi->pNext;
-      if (!pSubAi) {
-        return;
-      }
-    }
-
     if (pSubAi->nState) {
       return;
     }
@@ -449,17 +450,17 @@ void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
     D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->pStream;
     D2MonsterAiSubStrc* pAiSub = (D2MonsterAiSubStrc*)((D2MissileStreamStrc*)pMonsterAi)->pStream;
+    while (pAiSub) {
+      if (pAiSub->pUnit == pUnit) {
+        break;
+      }
+
+      pAiSub = pAiSub->pNext;
+    }
+
     if (!pAiSub) {
       return;
     }
-
-    while (pAiSub->pUnit != pUnit) {
-      pAiSub = pAiSub->pNext;
-      if (!pAiSub) {
-        return;
-      }
-    }
-
     if (pAiSub->nState != 1) {
       return;
     }

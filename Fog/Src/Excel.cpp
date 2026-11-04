@@ -1243,7 +1243,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
 
               case FIELDTYPE_NAME_I_INT:
                 pCurDataPos = pRecord + nFillOffset;
-              memset(pCurDataPos, 0, 4 * sizeof(pCurDataPos[0]));
+              *(uint32_t*)pCurDataPos = 0;
               break;
               case FIELDTYPE_SHORT:
 

@@ -1013,8 +1013,8 @@ static D2UnitStrc * __stdcall MISSILES_SpawnPeriodicRandom(::SGAMEDATA * pGame, 
 
     D2SeedStrc* pSeed = &pUnit->sSeed;
     nTempVal = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-    int32_t nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-    D2Common::Seed::InitSeed_Param_666(pSeed, nTempVal + nRemainingFrames);
+    nTempVal += (int32_t)D2Common::Units::Missile::GetRemainingFrames(pUnit);
+    D2Common::Seed::InitSeed_Param_666(pSeed, nTempVal);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 3;
     sSkillArg.pOwner = pOwnerUnit;

@@ -1065,9 +1065,9 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
       pEntryCursor[-1] = 0;
       *pEntryCursor = 0;
       pbyGuidData4 = (uint8_t*)(pEntryCursor + 1);
-      memset(pbyGuidData4, 0, 4 * sizeof(pbyGuidData4[0]));
+      *(uint32_t*)pbyGuidData4 = 0;
       pbyGuidData4 = (uint8_t*)(pEntryCursor + 3);
-      memset(pbyGuidData4, 0, 4 * sizeof(pbyGuidData4[0]));
+      *(uint32_t*)pbyGuidData4 = 0;
       *(uint32_t*)(pEntryCursor + 5) = 0;
       *(uint32_t*)(pEntryCursor + 7) = 0;
       *(uint32_t*)(pEntryCursor + 9) = 0;

@@ -2213,7 +2213,7 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
 }
 
 void StaticInit_gwKeyNameBuffer() {
-    memset(gwKeyNameBuffer, 0, 4 * sizeof(gwKeyNameBuffer[0]));
+    *(uint32_t*)gwKeyNameBuffer = 0;
 }
 
 } // namespace D2Client::UI::CmdTbl

@@ -165,18 +165,18 @@ uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint
 
 short * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind) {
     short int wCurChar = *(short int*)pThis;
+    while (wCurChar) {
+      if (wCurChar == wCharToFind) {
+        break;
+      }
+
+      wCurChar = *(short int*)((int)pThis + 2);
+      pThis = (void*)((int)pThis + 2);
+    }
+
     if (!wCurChar) {
       return nullptr;
     }
-
-    while (wCurChar != wCharToFind) {
-      wCurChar = *(short int*)((int)pThis + 2);
-      pThis = (void*)((int)pThis + 2);
-      if (!wCurChar) {
-        return nullptr;
-      }
-    }
-
     if (!*(short int*)pThis) {
       return nullptr;
     }

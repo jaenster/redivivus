@@ -655,9 +655,9 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
 
             *(int*)pLinkSlot = nNodePtr;
             *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + pEntries - 0x1a);
-            memset(pSlot, 0, 4 * sizeof(pSlot[0]));
+            *(uint32_t*)pSlot = 0;
             pSlot = pEntryBase->szGameName + pEntries - 0x1a;
-            memset(pSlot, 0, 4 * sizeof(pSlot[0]));
+            *(uint32_t*)pSlot = 0;
           }
 
           nNodePtr = *(int*)(pEntryBase->szGameName + pEntries - 0x26);
@@ -672,9 +672,9 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
 
             *(int*)pLinkSlot = nNodePtr;
             *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + pEntries - 0x22);
-            memset(pSlot, 0, 4 * sizeof(pSlot[0]));
+            *(uint32_t*)pSlot = 0;
             pSlot = pEntryBase->szGameName + pEntries - 0x22;
-            memset(pSlot, 0, 4 * sizeof(pSlot[0]));
+            *(uint32_t*)pSlot = 0;
           }
 
           pEntryBase++;

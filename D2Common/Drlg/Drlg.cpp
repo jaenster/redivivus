@@ -4161,11 +4161,11 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
     pVertex->nPosX = pWildData->aExitPoints3[nPathIdx].nWorldX;
     pVertex->nPosY = pWildData->aExitPoints3[nPathIdx].nWorldY;
     pVertex = pVertex->pNext;
-    if (!pVertex) {
-      return;
-    }
+    while (pVertex) {
+      if (!pVertex->pNext) {
+        break;
+      }
 
-    while (pVertex->pNext) {
       int nGridX8;
       sSeedRollX = D2_SEED_NEXT(pLevel->sSeed);
       pLevel->sSeed = sSeedRollX;
@@ -4185,9 +4185,10 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
       pVertex->nPosX = pLevel->sCoordinatesAndSize.WorldPosition.x + nGridX8 + 3 + ((sSeedRollX.nSeedLow & 1) + 2) * nJitterX;
       pVertex->nPosY = pLevel->sCoordinatesAndSize.WorldPosition.y + nGridY8 + 3 + ((sSeedRollY.nSeedLow & 1) + 2) * nJitterDy;
       pVertex = pVertex->pNext;
-      if (!pVertex) {
-        return;
-      }
+    }
+
+    if (!pVertex) {
+      return;
     }
 
     pVertex->nPosX = pWildData->aExitPoints2[nPathIdx].nWorldX;

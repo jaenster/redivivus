@@ -127,17 +127,17 @@ void __fastcall SetUnsetFlags(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t n
     }
 
     D2PlayerListSubStrc* pEntry = pPlayerList->pEntry;
+    while (pEntry) {
+      if (pEntry->nRosterGUID == nRosterGUID) {
+        break;
+      }
+
+      pEntry = pEntry->pNext;
+    }
+
     if (!pEntry) {
       return;
     }
-
-    while (pEntry->nRosterGUID != nRosterGUID) {
-      pEntry = pEntry->pNext;
-      if (!pEntry) {
-        return;
-      }
-    }
-
     if (bSetUnset) {
       pEntry->nFlags |= nFlag;
       return;

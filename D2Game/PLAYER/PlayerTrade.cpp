@@ -1733,7 +1733,7 @@ void __fastcall SendEventMsg(D2UnitStrc * pUnit, uint8_t nMessageType, char * sz
       Storm::Source::SSTR::SStrCopy(sEventPacket.szName1, szName, 0x7fffffff);
       *(uint32_t*)((char*)&sEventPacket.szName1 + 12) &= 0xffffff;
     } else {
-      memset(sEventPacket.szName1, 0, 4 * sizeof(sEventPacket.szName1[0]));
+      *(uint32_t*)sEventPacket.szName1 = 0;
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x8ce);

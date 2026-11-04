@@ -5117,7 +5117,7 @@ void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, D2UnitStrc *
         packet0x5a.nArgTypes = (uint8_t)pUnit->eUnitType;
       }
 
-      memset(packet0x5a.szName2, 0, 4 * sizeof(packet0x5a.szName2[0]));
+      *(uint32_t*)packet0x5a.szName2 = 0;
       pClient = UNIT::SUnit::SUNIT_GetClient(pVictim, ".\\PLAYER\\PlrMsg.cpp", 0x19c9);
       szCharName = GAME::Clients::GetCharName(pClient);
       pVictimNameEnd = Storm::Source::SSTR::SStrLen(szCharName);

@@ -72,12 +72,7 @@ int32_t __stdcall GetExpireFrame(D2HoverTextStrc * pHover) {
 void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, char * szMessageOut) {
     char cChar;
     char* pcSrc = pHover->szMessage;
-    int nDstOffset = (int)szMessageOut - (int)pcSrc;
-    do {
-      cChar = *pcSrc;
-      pcSrc[nDstOffset] = cChar;
-      pcSrc++;
-    } while (cChar != '\0');
+    strcpy(szMessageOut, pcSrc);
 }
 
 void * __stdcall HOVERTEXT_GetTextLineList(D2HoverTextStrc * pHover) {

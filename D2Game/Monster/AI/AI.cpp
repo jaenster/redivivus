@@ -4950,8 +4950,8 @@ void __fastcall AI_Fn1_InvisoSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     D2UnitStrc* pSpawnedMonster;
     int32_t nSpawnYOut;
     int32_t nSpawnXOut;
-    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     int nDistanceToTarget = pAiParam->nDistanceToTarget;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (!pAiGeneral->dwArg0) {
       pAiGeneral->dwArg1 = (int)pMonStats->aip[0][pGame->nDifficulty];
@@ -5082,10 +5082,10 @@ void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     int64_t lSeedMul;
     int nOffsetX;
     D2SeedStrc sSeedRoll;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     uint32_t nDistToTarget = pAiParam->nDistanceToTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2UnitStrc* pUnitSaved = pUnit;
@@ -5311,9 +5311,9 @@ void __fastcall AI_Fn1_DesertTurret(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     uint8_t byGfxOffset;
     uint8_t byDifficulty;
     eD2UnitType eUnitType;
+    D2UnitStrc* pTargetUnit = pAiParam->pTarget;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pTargetUnit = pAiParam->pTarget;
     if (pMonStats->aSkill[0] >= 0 && !pAiGeneral->dwArg0) {
       SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, 0, 0);
       pAiGeneral->dwArg2 = 0;
@@ -5501,9 +5501,9 @@ void __fastcall AI_Fn1_Megademon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
 }
 
 void __fastcall AI_Fn1_ArcaneTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
+    D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2UnitStrc* pAttacker = pAiParam->pTarget;
     if (!pAiGeneral->dwArg1) {
       pAiGeneral->dwArg1 = (int)pMonStats->aip[0][pGame->nDifficulty];
     }
@@ -5542,8 +5542,8 @@ void __fastcall AI_Fn1_PantherJavelin(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t nDifficulty;
     uint32_t nSeedHighDiscard;
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pPrimaryTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2UnitStrc* pClosestTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&pAiParam, nullptr);
     if ((int)pAiParam < 8) {
@@ -5708,9 +5708,9 @@ void __fastcall AI_Fn1_ReanimatedHorde(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2SeedStrc DVar1;
     uint32_t uRandPct;
     int nEngagedFlag = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
@@ -6070,9 +6070,9 @@ void __fastcall AI_Fn1_Succubus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     D2UnitStrc* pAttacker;
     uint32_t uRandPct;
     uint32_t nDistToTargetU = pAiParam->nDistanceToTarget;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     ::SGAMEDATA* pGameSave = pGame;
     D2UnitStrc* pSelf = pUnit;
@@ -6476,9 +6476,9 @@ uint32_t __fastcall MONSTERAI_CountGolemReviveMonsters(uint32_t pGame, D2UnitStr
 void __fastcall AITHINK_Fn1_MinionSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct tCountParams;
     int nGameFrame;
+    D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pAttacker = pAiParam->pTarget;
     uint8_t nDifficultyIndex = pGame->nDifficulty;
     if (pAiGeneral->dwArg1 >= (int)pMonStats->aip[0][nDifficultyIndex]) {
       return;
@@ -6785,9 +6785,9 @@ void __fastcall AITHINK_Fn1_FrozenHorror(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     eD2States eFrostState;
     uint32_t nSkillLevel;
     int nDistToTarget = pAiParam->nDistanceToTarget;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t nSkillLevelCached = 0;
     if (pMonStats->aSkill[0] >= 0) {
       D2SkillStrc* pSkill;
@@ -6837,8 +6837,8 @@ void __fastcall AITHINK_Fn1_FrozenHorror(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 void __fastcall AITHINK_Fn1_BloodLord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc seedNext;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t nSeedLowSaved = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       seedNext = D2_SEED_NEXT(pUnit->sSeed);
@@ -8769,8 +8769,8 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int64_t lSeedProduct;
     D2SeedStrc sNewSeed;
     uint32_t nDistToTarget = pAiParam->nDistanceToTarget;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2MonsterAiCmdStrc* pHomeCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
     if (!pHomeCmd) {
@@ -10107,9 +10107,9 @@ void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t nMonFlag;
     int32_t nClassId;
     int32_t iVar1;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
-    int bEngagedCopy = pAiParam->bEngagedInCombat;
     int nDistToTarget = pAiParam->nDistanceToTarget;
+    int bEngagedCopy = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_terror);
     if (eUnitState == STATE_none) {
@@ -11670,9 +11670,9 @@ void __fastcall AITHINK_Fn1_7TIllusion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // AI tick for the Dark Wanderer (Act 3 Q7 boss). Queries Q24_GetDarkWandererSpawnCoords; if coords unavailable or target too far (≥20 units) idles. State machine in dwArg0: 1=walk to spawn coords, 2=poll distance and cast BaalMonsterSpawn skill at position (mode 0) + start portal timer once within 2 units (retries up to 3 times via ApplyCombatAndMonStats before forcing cast). Directly tied to quest progression logic.
 void __fastcall AITHINK_Fn1_DarkWanderer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2CoordStrc sSpawnCoord;
-    D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     int nDistToTarget = pAiParam->nDistanceToTarget;
     D2UnitStrc* pDVar2 = pAiParam->pTarget;
+    D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     BOOL bHasSpawnCoords = Quests::QUESTS::A3Q7::Q24_GetDarkWandererSpawnCoords(pGame, pUnit, &sSpawnCoord.nX);
     if (bHasSpawnCoords) {
       uint32_t nDistToSpawn;
@@ -13654,9 +13654,9 @@ void __fastcall AITHINK_Fn1_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
       nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
     }
 
+    int nDistToTarget = pAiParam->nDistanceToTarget;
     int bEngaged = pAiParam->bEngagedInCombat;
     D2UnitStrc* pCurrentTarget = pAiParam->pTarget;
-    int nDistToTarget = pAiParam->nDistanceToTarget;
     int nAvgSkillRange = ((int)pMonStats->aip[1][pGame->nDifficulty] + (int)pMonStats->aip[0][pGame->nDifficulty]) / 2;
     if (pCurrentTarget && pAiGeneral->dwArg1 < pGame->dwGameFrame) {
       uint32_t nAttackChanceRoll;
@@ -14242,8 +14242,8 @@ void __fastcall AITHINK_Fn1_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     int nPosX;
     D2SeedStrc newSeed;
     int nAiParam;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     int bEngaged = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pUnit->nNodeTableIndex == 0xb) {
       GAME::Targets::AddNodeToTable(pGame, pUnit, nullptr, 8);
@@ -14460,8 +14460,8 @@ void __fastcall AITHINK_Fn1_CatapultSpotter(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 void __fastcall AITHINK_Fn1_DeathMauler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc seedNext;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->bEngagedInCombat) {
       seedNext = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = seedNext;
@@ -14601,10 +14601,10 @@ void __fastcall AITHINK_Fn1_Nihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t nSeedHighTemp;
     int32_t nPosY;
     int32_t nSpawnPosY;
+    int nDistanceToTarget = pAiParam->nDistanceToTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int nDistanceToTarget = pAiParam->nDistanceToTarget;
     Quests::QUESTS::A5Q4::Q34_OnNihlathakAI(pGame);
     eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
     if (eState != STATE_none) {
@@ -15339,8 +15339,8 @@ uint32_t __fastcall MONSTERAI_FindEnergyMonster(uint32_t dwUnused, D2UnitStrc * 
 
 void __fastcall AITHINK_Fn1_PutridDefiler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sEnergySearchParams;
-    D2UnitStrc* pCachedTarget = pAiParam->pTarget;
     int nDistanceToTarget = pAiParam->nDistanceToTarget;
+    D2UnitStrc* pCachedTarget = pAiParam->pTarget;
     if (pCachedTarget && pAiParam->bEngagedInCombat) {
       AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pCachedTarget);
       return;
@@ -15372,8 +15372,8 @@ void __fastcall AITHINK_Fn1_PutridDefiler(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // AI think-tick for Brute-class monsters. If not yet in combat, scales flee chance by current HP percentage (clamped 40-100%), applies it, and flees from target (mode 7). In combat, rolls two RNG checks against difficulty-scaled MonStats thresholds: first decides attack vs idle, second (if attacking) chooses melee direction (mode 4 left vs mode 5 right). If neither attack roll passes, approaches target via SetCombatStateAndApproachTarget or idles 15 frames.
 void __fastcall AITHINK_Fn1_Brute(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->bEngagedInCombat) {
       D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
@@ -15415,8 +15415,8 @@ void __fastcall AITHINK_Fn1_Brute(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 
 void __fastcall AITHINK_Fn1_Skeleton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc sNextSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t uVar1 = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
@@ -15572,9 +15572,9 @@ void __fastcall AITHINK_Fn1_Bighead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 // Blood Hawk AI tick (AI function 1). When not engaged, rolls against difficulty-scaled MonStats fields to decide: charge the target (sets dwArg0=1 and walks toward it), wander randomly, or stand still. When engaged (dwArg0==1 previously set), rolls again to decide whether to break off the charge via CalledOnEndAiFunction1 or continue walking toward the target. Uses the unit's seed RNG and pGame->nDifficulty to scale probabilities.
 void __fastcall AITHINK_Fn1_BloodHawk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     if (pMonsterAiGeneral->dwArg0 == 1 && bEngagedInCombat) {
       pMonsterAiGeneral->dwArg0 = 0;
@@ -15822,10 +15822,10 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     uint32_t nSeedHighScratch;
     uint32_t nOverlay;
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int nDistanceToTarget = pAiParam->nDistanceToTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2UnitStrc* pUnitCopy = pUnit;
@@ -15931,8 +15931,8 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // AI Function1 handler for Wraith monster type. Decides between drain life skill, chase, and random movement based on RNG and MonStats2 thresholds.
 void __fastcall AITHINK_Fn1_Wraith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* nMonStatsPtr = pAiParam->pMonStats;
     D2UnitStrc* pDVar2 = pAiParam->pTarget;
+    D2MonStatsTxt* nMonStatsPtr = pAiParam->pMonStats;
     uint32_t nDifficulty = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
@@ -15960,10 +15960,10 @@ void __fastcall AITHINK_Fn1_CorruptRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2MonsterLevelDataStrc sLevelDiffData;
     int64_t nSeedProduct;
     D2SeedStrc sNextSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     uint32_t nDistanceToTarget = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pUnitCopy = pUnit;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     MONSTER_InitLevelDifficultyScaling(pGame, &sLevelDiffData, pRoom, pUnitCopy);
@@ -16227,8 +16227,8 @@ void __fastcall AITHINK_Fn1_QuillRat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 
 void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t nDifficulty = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
@@ -16522,8 +16522,8 @@ void __fastcall AITHINK_Fn1_ClawViper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t bSkillValidated;
     eD2States eStateColor;
     short int nStateType;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     int nDistToTarget = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->pMonsterAiGeneral->dwArg0) {
@@ -16600,10 +16600,10 @@ void __fastcall AITHINK_Fn1_ClawViperEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     eD2States eStateColor;
     short int nStateType;
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     int nDistToTarget = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->pMonsterAiGeneral->dwArg0) {
       nStateType = pMonStats->aip[5][pGame->nDifficulty];
       if (nStateType) {
@@ -16680,10 +16680,10 @@ void __fastcall AITHINK_Fn1_ClawViperEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Sand Leaper AI decision tick. If Skill1 is valid and target is within 5 tiles, rolls RNG against difficulty-scaled threshold; on success casts Skill1 at target. Otherwise, if not yet in combat: walks randomly when target is far (>10), probabilistically approaches or charges. If already in combat, rolls to call CalledOnEndAiFunction1(5). Falls through to PlanNextAiMove(10).
 void __fastcall AITHINK_Fn1_SandLeaper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     int nDistToTarget = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (-1 < pMonStats->aSkill[0] && nDistToTarget < 5) {
       uint32_t bSkillValid;
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
@@ -16781,8 +16781,8 @@ void __fastcall AITHINK_Fn1_PantherWoman(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 void __fastcall AITHINK_Fn1_Swarm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t nSeedHighScratch = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
@@ -16913,10 +16913,10 @@ void __fastcall AITHINK_Fn1_Scarab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 // Mummy AI decision tick. If currently attacking but not yet engaged, walks toward target. Within melee range and engaged: double-RNG chooses between two CalledOnEndAiFunction1 modes (4 or 5) or idles. Within range but not engaged: walks toward target. Out of range: RNG to wander randomly vs idle. All thresholds difficulty-scaled via TreasureClass offsets.
 void __fastcall AITHINK_Fn1_Mummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int nDistToTarget = pAiParam->nDistanceToTarget;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     BOOL bIsAttacking = MONSTERAI_IsMonsterAttacking(pUnit);
     if (bIsAttacking && !bEngagedInCombat) {
       MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
@@ -17023,9 +17023,9 @@ void __fastcall AITHINK_Fn1_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     uint32_t nSeedHighScratch2;
     uint32_t nSeedHighScratch;
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t nDistToTarget = pAiParam->nDistanceToTarget;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->bEngagedInCombat) {
       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = sNewSeed;
@@ -17516,8 +17516,8 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 
 // Combat AI tick for the Mosquito-type monster (Act 3 swamp). Uses a 3-state machine in dwArg0/dwArg1: state 0=walk toward target; state 1=random wander with step counter; state 2=approach-offset walk that transitions back to state 1. When engaged in combat, rolls against Skill1 chance: on success casts Skill1 on target; otherwise calls CalledOnEndAiFunction1. Resets state machine if a 20% idle-retreat roll fires.
 void __fastcall AITHINK_Fn1_Mosquito(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     if (pAiParam->bEngagedInCombat) {
       D2SeedStrc DVar1;
@@ -18060,9 +18060,9 @@ void __fastcall AITHINK_Fn1_Arach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 void __fastcall AITHINK_Fn1_ThornHulk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     D2SeedStrc newSeed;
+    D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2UnitStrc* pAttacker = pAiParam->pTarget;
     if (!pAiParam->bEngagedInCombat || !pAttacker) {
       pMonsterAiGeneral->dwArg0 = 0;
       MONSTERAI_CommandFleeFromUnit(pGame, pUnit, pAttacker, 7);
@@ -18698,8 +18698,8 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t uRandResult;
     uint32_t nDistance = pAiParam->nDistanceToTarget;
     int iVar1 = pAiParam->bEngagedInCombat;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2UnitStrc* pUnitSelf = pUnit;
     D2UnitStrc* pAttacker = FindTargetAndDistance(pGame, pUnit, &nDistance, nullptr);
@@ -18787,8 +18787,8 @@ void __fastcall AITHINK_Fn1_CorruptLancer(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t nRoll;
     D2SeedStrc sNewSeed;
     D2SeedStrc* pSeed = &pUnit->sSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     if (pAiParam->nDistanceToTarget > (int)pMonStats->aip[4][pGame->nDifficulty]) {
       D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, pAiParam->pMonStats2->MeleeRng);
@@ -18903,8 +18903,8 @@ void __fastcall AITHINK_Fn1_SkeletonBow(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 void __fastcall AITHINK_Fn1_MaggotLarva(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc seedNext;
-    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->bEngagedInCombat) {
       if (!pMonsterAiGeneral->dwArg0) {
@@ -19063,9 +19063,9 @@ void __fastcall AITHINK_Fn1_FoulCrowNest(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Duriel AI decision tick. On first call with no right-skill equipped, sets Skill4 (Holy Freeze) as the passive right skill. If not engaged in combat: RNG chance to cast Skill1 (charge/sting), otherwise applies combat state 0xD and walks toward target. If engaged: cascading RNG selects Skill3, Skill2, or melee attack (CalledOnEndAiFunction1 mode 4 or 5). All thresholds difficulty-scaled.
 void __fastcall AITHINK_Fn1_Duriel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* pDurielStats = pAiParam->pMonStats;
-    D2UnitStrc* pDurielTarget = pAiParam->pTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pDurielTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pDurielStats = pAiParam->pMonStats;
     if (pDurielStats->aSkill[3] >= 0) {
       D2SkillStrc* pRightSkill;
       pRightSkill = D2Common::Units::GetRightSkill(pUnit);
@@ -19118,8 +19118,8 @@ void __fastcall AITHINK_Fn1_Duriel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 
 // Sarcophagus AI tick (stationary mummy spawner). If target is beyond 25 tiles, idles. If spawn count (dwArg1) exceeds the difficulty-scaled cap, sets UNITFLAG_NOTC and issues null skill. Otherwise waits for spawn cooldown (dwArg0 = last frame), checks MONSTERAI_CanSpawnMonsterAt at its position; if valid, increments dwArg1, records current frame in dwArg0, and casts Skill1 to spawn a Mummy. Falls through to randomized idle delay. Nearly identical in structure to FoulCrowNest but with a larger spawn range check (0xE4 vs 0xCE).
 void __fastcall AITHINK_Fn1_Sarcophagus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (0x19 < pAiParam->nDistanceToTarget) {
       PlanNextAiMove(pGame, pUnit, 0x19);
@@ -19158,9 +19158,9 @@ void __fastcall AITHINK_Fn1_Sarcophagus(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 void __fastcall AITHINK_Fn1_ElementalBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bWasAttacking;
-    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pMonsterAiGeneral->dwArg0 == 2) {
       UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, pAttacker, 1);
@@ -19196,8 +19196,8 @@ void __fastcall AITHINK_Fn1_ElementalBeast(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // AI Function1 handler for Flying Scimitar monster type. Floating weapon AI with charge attack, retreat, and proximity-based skill selection.
 void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* nMonStatsBase = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* nMonStatsBase = pAiParam->pMonStats;
     uint32_t nSeedLowScratch = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
@@ -19247,8 +19247,8 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
     eD2UnitType eUnitTypeTmp;
     int64_t nSeedMul64;
     D2SeedStrc sNewSeed;
-    D2UnitStrc* pTargetRaw = pAiParam->pTarget;
     int bInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTargetRaw = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2SeedStrc* pSeed = &pUnit->sSeed;
@@ -20002,9 +20002,9 @@ void __fastcall AITHINK_Fn1_FrogDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t uRandResult;
     uint32_t nDifficulty;
     eD2UnitType eUnitType;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int nTargetDistance = pAiParam->nDistanceToTarget;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     if (!pAiGeneral->dwArg2) {
       if (pMonStats->aSkill[0] >= 0 && nTargetDistance > 0xc) {
@@ -20120,9 +20120,9 @@ void __fastcall AI_Fn1_Summoner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     int32_t nTargetPosX;
     D2SeedStrc sNewSeed;
     int32_t nAiParam;
+    int nDistance = pAiParam->nDistanceToTarget;
     D2UnitStrc* pSecondaryTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int nDistance = pAiParam->nDistanceToTarget;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     ::SGAMEDATA* pSecondaryGame = pGame;
     D2UnitStrc* pTarget = pSecondaryTarget;
@@ -20753,8 +20753,8 @@ void __fastcall AI_Fn1_GargoyleTrap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 // Server AI tick for Skeleton Mage monsters. Finds the nearest enemy via FindTargetAndDistance. If the target is beyond MonStats range-param[0] and a random roll beats flee-chance, applies combat state 0xa and walks toward the target with minimum step. If within melee range and roll beats melee-chance, applies state 0x19 and calls WalkTowardsUnitOffset (offset 5); on failure falls back to CalledOnEndAiFunction1 with mode 4. If within cast range and roll beats cast-chance, calls CalledOnEndAiFunction1 (cast mode 4) on the found target. When no target found but out of range, repeats the walk-toward-fallback-target logic. Otherwise rolls idle vs approach via PlanNextAiMove or SetCombatStateAndApproachTarget.
 void __fastcall AI_Fn1_SkeletonMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc sNextSeed;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pFallbackTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2UnitStrc* pFoundTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&pAiParam, nullptr);
     if (pFoundTarget) {
@@ -20877,9 +20877,9 @@ void __fastcall AI_Fn1_FetishShaman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     D2AiCmdArgumentsStrc aiCmdArgs;
     uint32_t nSeedHighTmp;
     D2SeedStrc sSeedNext;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     int nDistance = pAiParam->nDistanceToTarget;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pMonStats->aSkill[0] < 0 || (pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pMonStats->aSkill[0], -1) , !pSkill) || (nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) , nSkillLevel <= 0)) {
       nSkillLevel = 1;
     }
@@ -21082,9 +21082,9 @@ void __fastcall AI_Fn1_VileMother(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     uint32_t nRandHighTmp;
     int64_t llSeedMul;
     D2SeedStrc sSeedResult;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pTarget = pAiParam->pTarget;
     int bInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     if (!pUnit) {
       nAlignment = -1;
@@ -21186,10 +21186,10 @@ void __fastcall AI_Fn1_FingerMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     uint32_t uRandResult2;
     short int nSkill1Id;
     D2SeedStrc sSeedNext;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     int nRangeCheck = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pUnit_00 = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     int32_t nHpPct = D2Common::Units::GetCurrentLifePercentage(pUnit);
     uint32_t pRunSpeedBonus = 0;
@@ -21455,8 +21455,8 @@ void __fastcall AI_Fn1_Regurgitator(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 
 void __fastcall AI_Fn1_DoomKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t nSeedLowTmp = pUnit->sSeed.nSeedLow;
     if (pAiParam->bEngagedInCombat) {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
@@ -21487,10 +21487,10 @@ void __fastcall AI_Fn1_AbyssKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     eD2States eAuraState;
     uint32_t uRandResult;
     short int nAuraStateId;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int nDistance = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     int32_t nHpPct = D2Common::Units::GetCurrentLifePercentage(pUnit);
@@ -21612,9 +21612,9 @@ void __fastcall AI_Fn1_OblivionKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint8_t bySkillMode;
     short int nSkillId;
     D2SeedStrc sNewSeed;
-    D2MonStatsTxt* pMonStatsTxt = pAiParam->pMonStats;
     int nDistanceToTarget = pAiParam->nDistanceToTarget;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStatsTxt = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     sBloodLordScanParams.pBestUnit = 0;
     sBloodLordScanParams.nBestDistance = 0;
@@ -21717,9 +21717,9 @@ void __fastcall AI_Fn1_QuillMother(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     D2SeedStrc DVar1;
     uint32_t nSeedMulHi;
     int64_t nSeedProduct;
-    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int bInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     BOOL bIsAttacking = MONSTERAI_IsMonsterAttacking(pUnit);
     if (bIsAttacking) {
       D2AiCmdArgumentsStrc aiCmdArgs;
@@ -21778,8 +21778,8 @@ void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     eD2MonsterAnimMode eSpawnAnimMode;
     uint32_t nSpawnOffset;
     int32_t nDistToTarget;
-    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2AiParamStrc* pDVar1 = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (!pUnit) {
       eAnimMode = Death;

@@ -219,9 +219,9 @@ void __fastcall SPRITECACHE_TouchEntry(D2TileLibraryHeaderStrc * pTileLibrary) {
       if (pDVar2[nEntryIdx].pLruNode) {
         LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pDVar2[nEntryIdx].pLruNode);
         pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pSubTiles;
-        memset(pBVar1, 0, 4 * sizeof(pBVar1[0]));
+        *(uint32_t*)pBVar1 = 0;
         pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pLruNode;
-        memset(pBVar1, 0, 4 * sizeof(pBVar1[0]));
+        *(uint32_t*)pBVar1 = 0;
       }
 
       nEntryIdx++;

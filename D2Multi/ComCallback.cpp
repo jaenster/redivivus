@@ -812,13 +812,7 @@ void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * 
     }
 
     pNewNode = D2_ALLOC_AT(0x48, ".\\Src\\ComCallback.cpp", 0x93a);
-    nCmpResult = (int)pNewNode - (int)szUsername;
-    do {
-      cCopied = *szUsername;
-      szUsername[nCmpResult] = cCopied;
-      szUsername++;
-    } while (cCopied != '\0');
-
+    strcpy((char*)pNewNode, szUsername);
     nCmpResult = 0x32 - (int)pbRawData;
     do {
       byChar = *pbRawData;
@@ -2403,13 +2397,7 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
     D2Lang::Unicode::UNISYS::STRING_ConvertCharToWchar(wszChannelMsg, szFormatted, 0x240);
     OOGUtilities::OOGUTIL_AppendChatText(wszChannelMsg);
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(wszChannelMsg, 5);
-    i = (int)gszCurrentChannelName - (int)szChannelName;
-    do {
-      ch = *szChannelName;
-      szChannelName[i] = ch;
-      szChannelName++;
-    } while (ch != '\0');
-
+    strcpy((char*)gszCurrentChannelName, szChannelName);
     uint8_t* pbLastChannelDst = D2IniData_multiplayer->padding_0x35F + 2;
     char* pszSrc = gszCurrentChannelName;
     do {
