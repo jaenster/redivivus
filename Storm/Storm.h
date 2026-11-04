@@ -7,10 +7,12 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "Storm/Source/SFile.h"
+#include "D2Hell/D2Hell.h"
 
 // Forward declarations
 struct D2MPQFileStrc;
+struct D2StormAudioStreamRec;
+struct IDirectSoundBuffer;
 struct D2StormAsyncCompletionStrc;
 #ifndef RECON_FPTD_fnStormAsyncCompletion
 #define RECON_FPTD_fnStormAsyncCompletion
@@ -42,10 +44,9 @@ struct __attribute__((packed)) D2StormAsyncOpStrc {
     /* 0x40 */ struct D2StormAsyncCompletionStrc * pCompletion; // optional completion object; SFILE_IssueRequest stores its last argument here
 };
 
-struct D2StormListHead {
+struct __attribute__((packed)) D2StormListHead {
     /* 0x00 */ int32_t nLinkOffset; // byte offset of the link node within each element; signed
-    /* 0x04 */ struct StormLinkStrc * pPrevLink; // TSLink m_prevlink; the terminator's own address when empty
-    /* 0x08 */ int32_t pNext; // TSLink m_next; negative = ~&terminator, end of list
+    /* 0x04 */ StormLinkStrc terminator; // TSList m_terminator, a TSLink: m_prevlink is the terminator's own address when empty, m_next is ~&terminator (negative) at the end of the list
 };
 
 struct __attribute__((packed)) StormLinkedListStrc {

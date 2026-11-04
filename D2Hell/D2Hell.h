@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "Storm/Source/SFile.h"
 
 // Forward declarations
 struct D2ArchiveStrc;
@@ -81,9 +80,9 @@ struct StormFaultHandlerNode {
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
 };
 
-struct __attribute__((packed)) StormFaultHandlerNodeStrc {
-    /* 0x00 */ StormLinkStrc link;
-    /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
+struct StormLinkStrc {
+    /* 0x00 */ struct StormLinkStrc * pPrevLink; // points at the previous node's link, or at the list head's own link
+    /* 0x04 */ int pNext; // pointer to the NEXT ITEM (not its link); end of list is ~(int)&headLink, i.e. negative
 };
 
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
@@ -104,6 +103,11 @@ struct _CERT_INFO {
 };
 
 #endif // _WIN32
+
+struct __attribute__((packed)) StormFaultHandlerNodeStrc {
+    /* 0x00 */ StormLinkStrc link;
+    /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
+};
 
 namespace D2Hell {
 

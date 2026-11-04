@@ -222,7 +222,6 @@
       "usedTypes": [
         "D2StormListHead",
         "StormLinkStrc",
-        "StormLinkStrc *",
         "uint32_t"
       ]
     },

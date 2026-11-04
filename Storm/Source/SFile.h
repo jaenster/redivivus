@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Hell/D2Hell.h"
 
 // Forward declarations
 struct D2ArchiveStrc;
@@ -220,11 +221,6 @@ struct IDirectSoundBufferVtbl {
     /* 0x48 */ HRESULT (__stdcall *Stop)(void *);
     /* 0x4C */ HRESULT (__stdcall *Unlock)(void *, void *, DWORD, void *, DWORD);
     /* 0x50 */ HRESULT (__stdcall *Restore)(void *);
-};
-
-struct StormLinkStrc {
-    /* 0x00 */ struct StormLinkStrc * pPrevLink; // points at the previous node's link, or at the list head's own link
-    /* 0x04 */ int pNext; // pointer to the NEXT ITEM (not its link); end of list is ~(int)&headLink, i.e. negative
 };
 
 struct __attribute__((packed)) StormEventRecStrc {

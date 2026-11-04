@@ -6,11 +6,11 @@
 #pragma once
 
 #include "d2_platform.h"
+#include "D2Hell/D2Hell.h"
 #include "Storm/Storm.h"
 
 // Forward declarations
 struct D2StormListHead;
-struct StormLinkStrc;
 
 extern D2StormListHead gStormCmdListHeadBackslash;
 extern D2StormListHead gStormCmdListHeadSlash;

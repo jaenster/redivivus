@@ -6,7 +6,7 @@
 #pragma once
 
 #include "d2_platform.h"
-#include "Storm/Source/SFile.h"
+#include "D2Hell/D2Hell.h"
 #include "Storm/Storm.h"
 
 // Forward declarations

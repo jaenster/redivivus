@@ -338,7 +338,6 @@
       "usedTypes": [
         "D2StormListHead",
         "StormLinkStrc",
-        "StormLinkStrc *",
         "uint32_t"
       ]
     },
@@ -400,7 +399,6 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
-        "StormLinkStrc *",
         "int32_t",
         "pfnSErrDisplayCallback",
         "uint32_t"

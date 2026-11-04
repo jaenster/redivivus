@@ -7,9 +7,9 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Net/in_addr.h"
 #include "Fog/D2QServerStrc.h"
-#include "Storm/Source/SFile.h"
 
 // Forward declarations
 struct SGAMEDATA;

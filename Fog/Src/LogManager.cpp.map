@@ -770,7 +770,6 @@
       "usedTypes": [
         "D2StormListHead",
         "StormLinkStrc",
-        "StormLinkStrc *",
         "pfnEHHandlerRoutine",
         "uint32_t"
       ]

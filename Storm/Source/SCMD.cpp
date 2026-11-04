@@ -9,9 +9,9 @@
 #include "D2Game/Monster/MonsterAI.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/UNIT/sunitproxy.h"
+#include "D2Hell/D2Hell.h"
 #include "Storm/SCMD.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
@@ -67,13 +67,17 @@ static char s___AUCMDDEF___0074c47c[16] = {
 }; D2_STATIC_GUARD(s___AUCMDDEF___0074c47c, "s___AUCMDDEF___0074c47c");
 D2StormListHead gStormCmdListHeadBackslash = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gStormCmdListHeadBackslash.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gStormCmdListHeadBackslash.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gStormCmdListHeadBackslash, "gStormCmdListHeadBackslash");
 D2StormListHead gStormCmdListHeadSlash = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gStormCmdListHeadSlash.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gStormCmdListHeadSlash.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gStormCmdListHeadSlash, "gStormCmdListHeadSlash");
 static uint32_t gbScmdHasPriorityCommand = 0; D2_STATIC_GUARD(gbScmdHasPriorityCommand, "gbScmdHasPriorityCommand");
 
@@ -398,7 +402,7 @@ void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
     int* piNode;
     while (true) {
       int pListHead;
-      piNode = (int)(int*)nListPtr->pNext > 0 ? (int*)nListPtr->pNext : 0;
+      piNode = (int)(int*)nListPtr->terminator.pNext > 0 ? (int*)nListPtr->terminator.pNext : 0;
       if (!piNode) {
         break;
       }
@@ -417,17 +421,17 @@ void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
 void __fastcall SCMD_ClearAll(D2StormListHead * nListPtr) {
     int* piPrevLink;
     SCMD_ClearList(nListPtr);
-    StormLinkStrc** piNode = &nListPtr->pPrevLink;
-    StormLinkStrc* pListHead = *piNode;
+    StormLinkStrc* pSVar1 = &nListPtr->terminator;
+    StormLinkStrc* pListHead = pSVar1->pPrevLink;
     if (!pListHead) {
       return;
     }
 
-    piPrevLink = (int*)D2_StormNextLink(piNode, -1);
+    piPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
     *piPrevLink = (int)pListHead;
-    (*piNode)->pNext = nListPtr->pNext;
-    *piNode = 0;
-    nListPtr->pNext = 0;
+    pSVar1->pPrevLink->pNext = pSVar1->pNext;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
 }
 
 ::SCMD * __thiscall SCMD_AllocNode(::SCMD * pThis, int nInsertMode, int nExtraSize, uint32_t dwAllocFlags) {
@@ -524,7 +528,7 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
         pPrevLink = pNewNode;
       } else {
         pPrevLink = 0;
-        pNewNode = (StormCmdArgDefStrc*)&gStormCmdListHeadSlash.pPrevLink;
+        pNewNode = (StormCmdArgDefStrc*)&gStormCmdListHeadSlash.terminator;
       }
 
       pListHead = pNewNode->pPrev;
@@ -537,10 +541,10 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
         pNewNode->pNext = 0;
       }
 
-      pNewNode->pPrev = (StormCmdArgDefStrc*)gStormCmdListHeadSlash.pPrevLink;
-      pNewNode->pNext = (StormCmdArgDefStrc*)gStormCmdListHeadSlash.pPrevLink->pNext;
-      gStormCmdListHeadSlash.pPrevLink->pNext = (int)pPrevLink;
-      gStormCmdListHeadSlash.pPrevLink = (StormLinkStrc*)pNewNode;
+      pNewNode->pPrev = (StormCmdArgDefStrc*)gStormCmdListHeadSlash.terminator.pPrevLink;
+      pNewNode->pNext = (StormCmdArgDefStrc*)gStormCmdListHeadSlash.terminator.pPrevLink->pNext;
+      gStormCmdListHeadSlash.terminator.pPrevLink->pNext = (int)pPrevLink;
+      gStormCmdListHeadSlash.terminator.pPrevLink = (StormLinkStrc*)pNewNode;
     } else {
       ppBackslashCmdNode = (StormCmdArgDefStrc*)SMem::SMemAlloc(0x40, s___AUCMDDEF___0074c47c, -2, 8);
       if (ppBackslashCmdNode) {
@@ -549,7 +553,7 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
         pPrevLink = ppBackslashCmdNode;
       } else {
         pPrevLink = 0;
-        ppBackslashCmdNode = (StormCmdArgDefStrc*)&gStormCmdListHeadBackslash.pPrevLink;
+        ppBackslashCmdNode = (StormCmdArgDefStrc*)&gStormCmdListHeadBackslash.terminator;
       }
 
       pListHead = ppBackslashCmdNode->pPrev;
@@ -562,10 +566,10 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
         ppBackslashCmdNode->pNext = 0;
       }
 
-      ppBackslashCmdNode->pPrev = (StormCmdArgDefStrc*)gStormCmdListHeadBackslash.pPrevLink;
-      ppBackslashCmdNode->pNext = (StormCmdArgDefStrc*)gStormCmdListHeadBackslash.pPrevLink->pNext;
-      gStormCmdListHeadBackslash.pPrevLink->pNext = (int)pPrevLink;
-      gStormCmdListHeadBackslash.pPrevLink = (StormLinkStrc*)ppBackslashCmdNode;
+      ppBackslashCmdNode->pPrev = (StormCmdArgDefStrc*)gStormCmdListHeadBackslash.terminator.pPrevLink;
+      ppBackslashCmdNode->pNext = (StormCmdArgDefStrc*)gStormCmdListHeadBackslash.terminator.pPrevLink->pNext;
+      gStormCmdListHeadBackslash.terminator.pPrevLink->pNext = (int)pPrevLink;
+      gStormCmdListHeadBackslash.terminator.pPrevLink = (StormLinkStrc*)ppBackslashCmdNode;
     }
 
     SSTR::SStrCopy(pPrevLink->szName, szText, 0x10);
@@ -687,7 +691,7 @@ static BOOL __fastcall SCMD_PerformConversion(char * str, StormCmdArgDefStrc * c
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pOtherCmd = (StormCmdArgDefStrc*)pListHead->pNext; (int)pOtherCmd > 0; pOtherCmd = pOtherCmd->pNext) {
+      for (pOtherCmd = (StormCmdArgDefStrc*)pListHead->terminator.pNext; (int)pOtherCmd > 0; pOtherCmd = pOtherCmd->pNext) {
         if (pOtherCmd->nCmdGroupId == cmdDef->nCmdGroupId) {
           nArgTypeFlags = pOtherCmd->nArgTypeFlags & 0x30000;
           if (nArgTypeFlags == (cmdDef->nArgTypeFlags & 0x30000) && pOtherCmd != cmdDef) {
@@ -781,7 +785,7 @@ BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * 
           uVar2 = nPrefixLen - 1;
           if ((int)(szMatchBuf + nMatchNameLen + uVar2) < 0x100) {
             SSTR::SStrCopy(szMatchBuf + (nPrefixLen - 1), szText, 0x100);
-            pCmdEntry = SCMD_FindFlagDef((StormCmdArgDefStrc*)(gStormCmdListHeadSlash.pNext <= 0 ? 0 : gStormCmdListHeadSlash.pNext), szMatchBuf, 0);
+            pCmdEntry = SCMD_FindFlagDef((StormCmdArgDefStrc*)(gStormCmdListHeadSlash.terminator.pNext <= 0 ? 0 : gStormCmdListHeadSlash.terminator.pNext), szMatchBuf, 0);
             nMatchNameLen = nMatchLen;
             if (pCmdEntry) {
               nFlagNameLen = (int*)pCmdEntry->nTextLen;
@@ -877,7 +881,7 @@ uint32_t __stdcall SCmdCheckId(int nCmdId) {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pCmdNode = pListHead->pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
+      for (pCmdNode = pListHead->terminator.pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
         if (*(int*)(pCmdNode + 0xc) == nCmdId) {
           return *(uint32_t*)(pCmdNode + 0x38);
         }
@@ -905,7 +909,7 @@ uint32_t __stdcall SCmdDestroy() {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pNode = pListHead->pNext; pNode > 0; pNode = *(int*)(pNode + 4)) {
+      for (pNode = pListHead->terminator.pNext; pNode > 0; pNode = *(int*)(pNode + 4)) {
         if ((*(uint32_t*)(pNode + 8) & 0x30000) == 0x20000 && *(void**)(pNode + 0x3c)) {
           SMem::SMemFree(*(void**)(pNode + 0x3c), ".\\SOURCE\\SCMD.CPP", 0x212, 0);
           *(uint32_t*)(pNode + 0x3c) = 0;
@@ -936,7 +940,7 @@ int __stdcall SCmdGetNum(int nCmdId) {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pCmdNode = pListHead->pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
+      for (pCmdNode = pListHead->terminator.pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
         if (*(int*)(pCmdNode + 0xc) == nCmdId) {
           return *(int*)(pCmdNode + 0x3c);
         }
@@ -972,7 +976,7 @@ uint32_t __stdcall SCmdGetString(int dwCmdId, char * szText, int dwBufferSize) {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pCmdNode = pListHead->pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
+      for (pCmdNode = pListHead->terminator.pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
         if (*(int*)(pCmdNode + 0xc) == dwCmdId) {
           if (*(char**)(pCmdNode + 0x3c)) {
             SSTR::SStrCopy(szText, *(char**)(pCmdNode + 0x3c), dwBufferSize);
@@ -1074,7 +1078,7 @@ int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnkn
     }
 
     SMem::SMemZero(cmdCtx, 0x18);
-    pCmdList = gStormCmdListHeadBackslash.pNext <= 0 ? 0 : gStormCmdListHeadBackslash.pNext;
+    pCmdList = gStormCmdListHeadBackslash.terminator.pNext <= 0 ? 0 : gStormCmdListHeadBackslash.terminator.pNext;
     BVar1 = SCMD_ProcessString((uint32_t*)&pszCursor, cmdCtx, &pCmdList, pfnUnknownCallback, pfnErrorCallback);
     if (BVar1) {
       bSuccess = 1;
@@ -1122,12 +1126,12 @@ void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallba
 }
 
 void StaticInit_gStormCmdListBackslash() {
-    gStormCmdListHeadBackslash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadBackslash + 4);
+    gStormCmdListHeadBackslash.terminator.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadBackslash + 4);
     atexit(StaticFini_gStormCmdListBackslash);
 }
 
 void StaticInit_gStormCmdListSlash() {
-    gStormCmdListHeadSlash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadSlash + 4);
+    gStormCmdListHeadSlash.terminator.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadSlash + 4);
     atexit(StaticFini_gStormCmdListSlash);
 }
 
@@ -1135,30 +1139,30 @@ void StaticInit_gStormCmdListSlash() {
 void StaticFini_gStormCmdListBackslash() {
     uint32_t* pBackLink;
     SCMD_ClearList(&gStormCmdListHeadBackslash);
-    if (!gStormCmdListHeadBackslash.pPrevLink) {
+    if (!gStormCmdListHeadBackslash.terminator.pPrevLink) {
       return;
     }
 
     pBackLink = (uint32_t*)D2_StormNextLink((char*)&gStormCmdListHeadBackslash + 4, -1);
-    *pBackLink = (uint32_t)(uintptr_t)gStormCmdListHeadBackslash.pPrevLink;
-    gStormCmdListHeadBackslash.pPrevLink->pNext = gStormCmdListHeadBackslash.pNext;
-    gStormCmdListHeadBackslash.pPrevLink = 0;
-    gStormCmdListHeadBackslash.pNext = 0;
+    *pBackLink = (uint32_t)(uintptr_t)gStormCmdListHeadBackslash.terminator.pPrevLink;
+    gStormCmdListHeadBackslash.terminator.pPrevLink->pNext = gStormCmdListHeadBackslash.terminator.pNext;
+    gStormCmdListHeadBackslash.terminator.pPrevLink = 0;
+    gStormCmdListHeadBackslash.terminator.pNext = 0;
 }
 
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadSlash, then unlinks the list head itself.
 void StaticFini_gStormCmdListSlash() {
     uint32_t* pBackLink;
     SCMD_ClearList(&gStormCmdListHeadSlash);
-    if (!gStormCmdListHeadSlash.pPrevLink) {
+    if (!gStormCmdListHeadSlash.terminator.pPrevLink) {
       return;
     }
 
     pBackLink = (uint32_t*)D2_StormNextLink((char*)&gStormCmdListHeadSlash + 4, -1);
-    *pBackLink = (uint32_t)(uintptr_t)gStormCmdListHeadSlash.pPrevLink;
-    gStormCmdListHeadSlash.pPrevLink->pNext = gStormCmdListHeadSlash.pNext;
-    gStormCmdListHeadSlash.pPrevLink = 0;
-    gStormCmdListHeadSlash.pNext = 0;
+    *pBackLink = (uint32_t)(uintptr_t)gStormCmdListHeadSlash.terminator.pPrevLink;
+    gStormCmdListHeadSlash.terminator.pPrevLink->pNext = gStormCmdListHeadSlash.terminator.pNext;
+    gStormCmdListHeadSlash.terminator.pPrevLink = 0;
+    gStormCmdListHeadSlash.terminator.pNext = 0;
 }
 
 } // namespace Storm::Source

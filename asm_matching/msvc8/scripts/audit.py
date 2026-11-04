@@ -71,10 +71,57 @@ def load_context():
     return ref, model
 
 
+EH_HANDLER_PREFIX = '__ehhandler$'
+
+
+def eh_handler_of(ref, model):
+    """Original function start -> the __ehhandler stub its C++ EH frame
+    links: the `push -1; push offset stub` that opens the frame, the stub
+    being one eh_starts finds (`mov eax, offset FuncInfo; jmp
+    __CxxFrameHandler3`, FuncInfo starting with its magic)."""
+    stubs = set()
+    for s, (dec, _refs) in model.items():
+        for i, j in zip(dec.insns, dec.insns[1:]):
+            if i.bytes[0] == 0xb8 and len(i.bytes) == 5 and j.mnemonic == 'jmp':
+                try:
+                    magic = struct.unpack('<I', ref.pe.read(struct.unpack_from('<I', i.bytes, 1)[0], 4))[0]
+                except Exception:
+                    break
+                if magic in EH_MAGIC:
+                    stubs.add(s)
+                break
+    out = {}
+    for s, (dec, _refs) in model.items():
+        ins = dec.insns[:6]
+        for i, j in zip(ins, ins[1:]):
+            if i.bytes == b'\x6a\xff' and j.bytes[0] == 0x68 and len(j.bytes) == 5:
+                t = struct.unpack_from('<I', j.bytes, 1)[0]
+                if t in stubs:
+                    out[s] = t
+                break
+    return out
+
+
+_EH_HANDLERS = None
+
+
+def _eh_handlers():
+    global _EH_HANDLERS
+    if _EH_HANDLERS is None:
+        _EH_HANDLERS = eh_handler_of(*load_context())
+    return _EH_HANDLERS
+
+
 class SymMap(dict):
     """Our symbol -> original start: the funcmap's unambiguous symbols, and,
     for a symbol defined in no object of ours, the CRT function crtmap.tsv
-    names (so a call to _toupper is checked against the original's)."""
+    names (so a call to _toupper is checked against the original's).
+
+    A compiler-written `__ehhandler$<f>` (the stub VC8 emits for a function
+    f with a C++ EH frame) has no source and no funcmap row of its own: it is
+    the stub the original of f links into its frame, so the parent's `push
+    offset __ehhandler$<f>` is compared with the original's push of that
+    stub. Found only through f's own pair: nothing else names the stub."""
 
     def __init__(self, base, crt):
         super().__init__(base)
@@ -82,6 +129,9 @@ class SymMap(dict):
 
     def __missing__(self, sym):
         import objfuncs
+        if sym.startswith(EH_HANDLER_PREFIX):
+            parent = dict.get(self, sym[len(EH_HANDLER_PREFIX):])
+            return None if parent is None else _eh_handlers().get(parent)
         return self.crt.get(objfuncs.qualified(sym))
 
     def get(self, sym, default=None):

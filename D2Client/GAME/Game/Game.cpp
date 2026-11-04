@@ -2382,17 +2382,17 @@ void __stdcall GAMEDATA_ShowEndGameCutscene() {
 }
 
 void __fastcall TSIntrusiveList_Clear(D2StormListHead * pListHead) {
-    StormLinkStrc** ppSVar1 = &pListHead->pPrevLink;
-    *ppSVar1 = (StormLinkStrc*)ppSVar1;
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->pNext = ~(uint32_t)ppSVar1;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced(D2StormListHead * pListHead) {
-    StormLinkStrc** ppSVar1 = &pListHead->pPrevLink;
-    *ppSVar1 = (StormLinkStrc*)ppSVar1;
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->pNext = ~(uint32_t)ppSVar1;
+    pListHead->terminator.pNext = ~(uint32_t)pSVar1;
 }
 
 // Client network timeout checks; triggers CLIENT_ConnectionRefused on long waits or failed connects.

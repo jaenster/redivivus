@@ -92,6 +92,7 @@
 #include "D2Game/UNIT/sunitproxy.h"
 #include "D2Glide/glFloorCache.h"
 #include "D2Glide/glSubtileCache.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Launch/MainMenus.h"
@@ -115,7 +116,6 @@
 #include "Storm/Source/SCMD.h"
 #include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SFile.h"
 #include "Storm/Storm.h"
 #include "Storm/H/stpl.h"
 

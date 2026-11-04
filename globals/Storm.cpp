@@ -15,32 +15,42 @@
 
 D2StormListHead gMpqArchiveList = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gMpqArchiveList.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gMpqArchiveList.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gMpqArchiveList, "gMpqArchiveList");
 
 D2StormListHead gSFileAsyncReqQueue = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gSFileAsyncReqQueue.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gSFileAsyncReqQueue.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gSFileAsyncReqQueue, "gSFileAsyncReqQueue");
 
 D2StormListHead gSFileOpenFileList = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gSFileOpenFileList.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gSFileOpenFileList.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gSFileOpenFileList, "gSFileOpenFileList");
 
 D2StormListHead gSFileAudioStreamList = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gSFileAudioStreamList.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gSFileAudioStreamList.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gSFileAudioStreamList, "gSFileAudioStreamList");
 
 D2StormListHead gSFileStreamRecordList = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gSFileStreamRecordList.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gSFileStreamRecordList.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gSFileStreamRecordList, "gSFileStreamRecordList");
 
 char sRTTI_ARCHIVEREC_AllocTag[32] = {
@@ -141,8 +151,10 @@ char sRTTI_AUDIOSTREAM_AllocTag[20] = {
 
 D2StormListHead gnStormErrorCallbackCount = {
     /* .nLinkOffset = */ 0x0,
-    /* .pPrevLink = */ (StormLinkStrc*)&gnStormErrorCallbackCount.pPrevLink,
-    /* .pNext = */ 0x0
+    /* .terminator = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gnStormErrorCallbackCount.terminator.pPrevLink,
+        /* .pNext = */ 0x0
+    }
 }; D2_GLOBAL_GUARD(gnStormErrorCallbackCount, "gnStormErrorCallbackCount");
 
 char gszSSystemListAllocTag[14] = {

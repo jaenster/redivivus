@@ -2,12 +2,12 @@
 
 #include "Fog/Src/LogManager.h"
 #include "Bnclient/net_sid.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/Debug.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
@@ -1317,7 +1317,7 @@ void __stdcall ExitOrCrashCleanup() {
     uint32_t uElapsed = dwTickCountB - dwTickCountA;
     while (uElapsed < 1000) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nQueueCount = gLogMessageQueueHead.pNext <= 0 ? 0 : gLogMessageQueueHead.pNext;
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nQueueCount = gLogMessageQueueHead.terminator.pNext <= 0 ? 0 : gLogMessageQueueHead.terminator.pNext;
       LeaveCriticalSection(&gLogMessageQueueCS);
       if (!nQueueCount) {
         break;
@@ -1501,7 +1501,7 @@ void __fastcall RemoveAllListNodes(D2StormListHead * pListHead) {
     int* pNode;
     while (true) {
       int pNext;
-      pNode = (int)(int*)pListHead->pNext > 0 ? (int*)pListHead->pNext : 0;
+      pNode = (int)(int*)pListHead->terminator.pNext > 0 ? (int*)pListHead->terminator.pNext : 0;
       if (!pNode) {
         break;
       }
@@ -1533,14 +1533,14 @@ void __fastcall TeardownListFull(D2StormListHead * pListHead) {
     ExceptionList = &pPrevExceptionList;
     uint32_t dwSEHTryLevel = 0;
     RemoveAllListNodes(pListHead);
-    StormLinkStrc** pHeadLink = &pListHead->pPrevLink;
-    StormLinkStrc* pNext = *pHeadLink;
+    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    StormLinkStrc* pNext = pSVar1->pPrevLink;
     if (pNext) {
-      pPrevLink = (int*)D2_StormNextLink(pHeadLink, -1);
+      pPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
       *pPrevLink = (int)pNext;
-      (*pHeadLink)->pNext = pListHead->pNext;
-      *pHeadLink = 0;
-      pListHead->pNext = 0;
+      pSVar1->pPrevLink->pNext = pSVar1->pNext;
+      pSVar1->pPrevLink = 0;
+      pSVar1->pNext = 0;
     }
 
     ExceptionList = pPrevExceptionList;
@@ -1680,12 +1680,12 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
       pNode[1] = 0;
     }
 
-    *pNode = (int*)gLogMessageQueueHead.pPrevLink;
-    pNode[1] = (int*)gLogMessageQueueHead.pPrevLink->pNext;
-    gLogMessageQueueHead.pPrevLink->pNext = (int)pNode;
+    *pNode = (int*)gLogMessageQueueHead.terminator.pPrevLink;
+    pNode[1] = (int*)gLogMessageQueueHead.terminator.pPrevLink->pNext;
+    gLogMessageQueueHead.terminator.pPrevLink->pNext = (int)pNode;
     gLogMessageQueueCount++;
     gLogMessageQueueTotalBytes += (int)pNode[2];
-    gLogMessageQueueHead.pPrevLink = (StormLinkStrc*)pNode;
+    gLogMessageQueueHead.terminator.pPrevLink = (StormLinkStrc*)pNode;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
 }
 
@@ -1704,17 +1704,17 @@ DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
     do {
       int* pNode;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-      pNode = (int*)gLogMessageQueueHead.pNext;
-      if (gLogMessageQueueHead.pNext > 0) {
-        if (gLogMessageQueueHead.pNext) {
-          pNext = *(int*)gLogMessageQueueHead.pNext;
+      pNode = (int*)gLogMessageQueueHead.terminator.pNext;
+      if (gLogMessageQueueHead.terminator.pNext > 0) {
+        if (gLogMessageQueueHead.terminator.pNext) {
+          pNext = *(int*)gLogMessageQueueHead.terminator.pNext;
           if (pNext) {
-            nOffset = *(uint32_t*)(gLogMessageQueueHead.pNext + 4);
-            pNodeNextLink = (uint32_t*)(gLogMessageQueueHead.pNext + 4);
+            nOffset = *(uint32_t*)(gLogMessageQueueHead.terminator.pNext + 4);
+            pNodeNextLink = (uint32_t*)(gLogMessageQueueHead.terminator.pNext + 4);
             if ((int)nOffset < 0) {
               pPrevLink = (int*)~nOffset;
             } else {
-              pPrevLink = (int*)(nOffset + (gLogMessageQueueHead.pNext - *(int*)(pNext + 4)));
+              pPrevLink = (int*)(nOffset + (gLogMessageQueueHead.terminator.pNext - *(int*)(pNext + 4)));
             }
 
             *pPrevLink = pNext;
@@ -1822,12 +1822,12 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
         pNode[1] = 0;
       }
 
-      *pNode = (int*)gLogMessageQueueHead.pPrevLink;
-      pNode[1] = (int*)gLogMessageQueueHead.pPrevLink->pNext;
-      gLogMessageQueueHead.pPrevLink->pNext = (int)pNode;
+      *pNode = (int*)gLogMessageQueueHead.terminator.pPrevLink;
+      pNode[1] = (int*)gLogMessageQueueHead.terminator.pPrevLink->pNext;
+      gLogMessageQueueHead.terminator.pPrevLink->pNext = (int)pNode;
       gLogMessageQueueCount++;
       gLogMessageQueueTotalBytes += (int)pNode[2];
-      gLogMessageQueueHead.pPrevLink = (StormLinkStrc*)pNode;
+      gLogMessageQueueHead.terminator.pPrevLink = (StormLinkStrc*)pNode;
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
     }
 
@@ -2135,8 +2135,8 @@ void __stdcall LOGMGR_InitMessageQueue() {
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
     gLogMessageQueueHead.nLinkOffset = 0;
-    gLogMessageQueueHead.pPrevLink = (StormLinkStrc*)&gLogMessageQueueHead.pPrevLink;
-    gLogMessageQueueHead.pNext = ~(uintptr_t)((char*)&gLogMessageQueueHead + 4);
+    gLogMessageQueueHead.terminator.pPrevLink = &gLogMessageQueueHead.terminator;
+    gLogMessageQueueHead.terminator.pNext = ~(uintptr_t)((char*)&gLogMessageQueueHead + 4);
     uint32_t dwSEHTryLevel = -1;
     atexit(StaticFini_gLogMessageQueueHead);
     ExceptionList = pPrevExceptionList;
