@@ -85,7 +85,7 @@ void __fastcall Q01_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
     pQuestSpecificA1Q1->bAcceptedQuest = '\0';
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }
@@ -202,7 +202,7 @@ void __fastcall Q01_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
         pQuestData->fpSequenceFilter(pQuestData);
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 0);
       }
 
       pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
@@ -380,7 +380,7 @@ uint8_t __fastcall Q01_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
     D2QuestDataA1Q1Strc* pQuestDataA1Q1 = pQuestData->pQuestSpecificData.pA1Q1;
     if (pQuestData->nStateFlag == 4) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
     }
 
     pQuestDataA1Q1->bNotifiedCompletion = false;
@@ -443,7 +443,7 @@ void __fastcall Q01_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
     if (nPopulatedRooms <= nMonsterRegionRoomCount && pQuestGUID->nDenMonstersLeftToKillCount < 6) {
       pQuestData->nQuestPacketFlags = ' ';
-      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
       pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
       return;
     }
@@ -452,7 +452,7 @@ void __fastcall Q01_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = ' ';
-    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
 }
 
 // A1Q1 (Den of Evil) level-event / player-leave callback (slot 3). On event index 8 (player entered Den level): sets bEnteredDen, advances nStateFlag to 3 if it was 1 or 2, and if progress was below 2 broadcasts state 2 (\"found the Den\") and clears the slot-2 handler. On player-removed sentinel (pTextControl==1) with nStateFlag==2: if the player's record is neither Completed nor RewardAwaits, advances to 3 and broadcasts state 1. Both paths call Q01_SyncQuestStepToPlayer for all players.
@@ -475,7 +475,7 @@ void __fastcall Q01_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         pQuestDataA1Q1->bEnteredDen = true;
         if (pQuestData->nStateFlagPrev < 2) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
           pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
         } else if (!bDidSetStateFlag) {
           return;
@@ -496,7 +496,7 @@ void __fastcall Q01_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q01_SyncQuestStepToPlayer);
           if (pQuestData->nStateFlagPrev != 1) {
             pQuestData->nQuestPacketFlags = '\0';
-            QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, true);
+            QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
             pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
           }
         }

@@ -166,7 +166,7 @@ void __fastcall Q34_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     D2QuestDataA5Q4Strc* pQuestA5Q2Data = pQuestData->pQuestSpecificData.pA5Q4;
     if (pQuestA5Q2Data->bAcceptedQuest == 1) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
       pQuestA5Q2Data->bAcceptedQuest = 0;
     }
     if (!(pQuestA5Q2Data->bNotifiedCompletion && !pQuestA5Q2Data->bPortalSpawned)) {
@@ -264,7 +264,7 @@ void __fastcall Q34_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       }
     } else if (nMsgIndex == 0x4eb4) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, (uint32_t)pQuestData->nStateFlagPrev, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, (uint32_t)pQuestData->nStateFlagPrev, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
       pQuestSpecific = pQuestData->pGame;
       pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
       /* SetQuestState(Betrayal q0x26, Step0x04=4): on Nihlathak "return after kill"
@@ -549,7 +549,7 @@ uint8_t __fastcall Q34_OnNihlathakSpeak(::SGAMEDATA * pGame, D2QuestDataStrc * p
     D2QuestDataA5Q4Strc* pA5Q4SpecificData = pQuestData->pQuestSpecificData.pA5Q4;
     if (pQuestData->nStateFlagPrev != 4) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
     }
 
     pA5Q4SpecificData->bNihlathakSpeakTimerAdded = 0;
@@ -683,7 +683,7 @@ void __fastcall Q34_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
         bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x03);
         if (bQuestState) {
           pA5Q4Data->bNotifiedCompletion = 1;
-          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
           QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0x2c1);
           return;
         }
@@ -691,7 +691,7 @@ void __fastcall Q34_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
         bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x02);
         if (bQuestState) {
           pA5Q4Data->bNotifiedCompletion = 1;
-          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
           QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0x2c7);
         }
       }
@@ -712,7 +712,7 @@ void __fastcall Q34_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
     pQuestSpecificData->bAcceptedQuest = 0;
 }
 
@@ -763,7 +763,7 @@ void __fastcall Q34_OnNihlathakAI(::SGAMEDATA * pGame) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q34_NotifyQuestState, 1);
 }
 
 // A5Q4 (Betrayal of Harrogath) deferred-portal spawner. If field_0x89 is set and the unit is currently in Act V, spawns the LEVEL_NihlathaksTemple portal (classId 0x3c) at unit +(10,5) and clears field_0x89 on success. Handles the case where the portal could not spawn earlier (e.g. Halls of Pain waypoint not yet found). No QuestRecord access.

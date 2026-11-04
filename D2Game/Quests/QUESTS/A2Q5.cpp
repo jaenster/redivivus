@@ -184,7 +184,7 @@ void __fastcall Q13_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          fresh-completion moment, broadcast state 0xd */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_JustCompleted);
       if (BVar1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q13_NotifySummonerComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q13_NotifySummonerComplete, 1);
         /* SetQuestRecordState(TheSummoner, JustCompleted=0xd): mark server-side quest
                          record just-completed */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_TheSummoner, QUESTSTATE_JustCompleted);
         QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q5.cpp", 0xf4);
@@ -293,7 +293,7 @@ uint8_t __fastcall Q13_OnEndCallbackAndNotify(::SGAMEDATA * pGame, D2QuestDataSt
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q13_NotifySummonerComplete, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q13_NotifySummonerComplete, 1);
     pQuestSpecificData->bEndCallbackScheduled = 0;
     return '\x01';
 }

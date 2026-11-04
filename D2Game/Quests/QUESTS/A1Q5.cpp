@@ -236,12 +236,12 @@ void __fastcall Q05_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         bStateChanged = pQuestData->nStateFlagPrev < 1;
         if (bStateChanged) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
         }
         if (pQuestData->nStateFlagPrev == 3) {
           bStateChanged = true;
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
           if (pQuestData->nStateFlag < 3) {
             QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x129);
           }
@@ -703,7 +703,7 @@ void __fastcall Q05_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, nIndex, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, true);
+    QUEST_SetStateAndBroadcast(pQuestData, nIndex, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_SyncQuestStepToPlayer);
 }
 
@@ -730,7 +730,7 @@ void __fastcall Q05_CheckAndUpdateOnAreaEntry(::SGAMEDATA * pGame, D2UnitStrc * 
       if (bQuestState == 1 && pQuestData->nStateFlag != 3) {
         QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x2c1);
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_SyncQuestStepToPlayer);
       }
     }
@@ -873,7 +873,7 @@ uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
     D2QuestDataA1Q5Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q5;
     if (pQuestData->nStateFlag == 5) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
     }
 
     pA1Q4Data->field_0x11c = '\0';

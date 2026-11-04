@@ -129,7 +129,7 @@ void __fastcall Q31_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     D2QuestDataA5Q1Strc* pA5Q1Data = pQuestData->pQuestSpecificData.pA5Q1;
     if (pA5Q1Data->bLarzukTalked == 1) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
       pA5Q1Data->bLarzukTalked = 0;
     }
     if (pA5Q1Data->bRewardAccepted != 1) {
@@ -137,7 +137,7 @@ void __fastcall Q31_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
     pA5Q1Data->bRewardAccepted = 0;
 }
 
@@ -151,7 +151,7 @@ void Q31_HandleLarzukRewardState(D2QuestDataStrc * pQuestData, int32_t nParam, D
     uint8_t byUnitLow = (uint8_t)(uintptr_t)pUnit;
     if (pQuestSpecificData->bLarzukTalked == 1) {
       pQuestData->nQuestPacketFlags = byUnitLow;
-      QUEST_SetStateAndBroadcast(pQuestData, (int)((uintptr_t)&pUnit->eUnitType + 1), pUnit, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+      QUEST_SetStateAndBroadcast(pQuestData, (int)((uintptr_t)&pUnit->eUnitType + 1), pUnit, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
       pQuestSpecificData->bLarzukTalked = byUnitLow;
     }
     if (pQuestSpecificData->bRewardAccepted != 1) {
@@ -159,7 +159,7 @@ void Q31_HandleLarzukRewardState(D2QuestDataStrc * pQuestData, int32_t nParam, D
     }
 
     pQuestData->nQuestPacketFlags = byUnitLow;
-    QUEST_SetStateAndBroadcast(pQuestData, 4, pUnit, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 4, pUnit, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
     pQuestSpecificData->bRewardAccepted = byUnitLow;
 }
 
@@ -244,7 +244,7 @@ void __fastcall Q31_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
       pQuestData->fpSequenceFilter(pQuestData);
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
     }
     if (!pQuestArgs->pPlayer) {
       QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, -1);
@@ -450,7 +450,7 @@ void __fastcall Q31_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
 }
 
 // A5Q1 state-3 handler. On monster-gossip indices 0x6e..0x70 with intro shown: bump in-memory stateFlag to 3 and persist (Q31_SyncQuestProgress). On the Larzuk-leave path (index 0x6d): remove from GUID list; if stateFlag==2 and not Completed(0)/RewardAwaits(1), force stateFlag=3, and if prev==0 broadcast state 1, then re-persist.
@@ -479,7 +479,7 @@ void __fastcall Q31_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
             QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q1.cpp", 0x23f);
             if (!pQuestData->nStateFlagPrev) {
               pQuestData->nQuestPacketFlags = '\0';
-              QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+              QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
             }
 
             UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q31_SyncQuestProgress);
@@ -699,7 +699,7 @@ void __fastcall Q31_OnOverseerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
 }
 
 // A5Q1 preset-object load hook: when the Shenk preset object loads, copies its preset object list into the quest data; if Shenk was already spawned and his unit still exists, re-attaches the DRLG map file to his AI. No quest-record bit changes.

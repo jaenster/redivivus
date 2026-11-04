@@ -158,7 +158,7 @@ void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
     if (pA5Q3Data->bMalachaiTalked) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
       pA5Q3Data->bMalachaiTalked = 0;
     }
     if (!(pQuestData->bIsNotIntroduction != '\0' && pA5Q3Data->bIceScrollCollected && pQuestData->nStateFlagPrev < 4)) {
@@ -166,7 +166,7 @@ void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
     pA5Q3Data->bIceScrollCollected = 0;
 }
 
@@ -601,7 +601,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
             } else {
               if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 6) {
                 pQuestData->nQuestPacketFlags = '\0';
-                QUEST_SetStateAndBroadcast(pQuestData, 6, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+                QUEST_SetStateAndBroadcast(pQuestData, 6, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
               }
             }
 
@@ -738,7 +738,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
 }
 
 // Q33_PropagateCompleteToParty (PrisonOfIce): iterator cb. If this player has JustCompleted set, propagate completion
@@ -946,7 +946,7 @@ void __fastcall Q33_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
       if (!pQuestData->nStateFlagPrev) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
       } else if (bStatePast2) {
         goto cleanup_monsters;
       }
@@ -974,7 +974,7 @@ void __fastcall Q33_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x46e);
       if (!pQuestData->nStateFlagPrev) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
       }
 
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q33_UpdateQuestStep);
@@ -1655,7 +1655,7 @@ void __fastcall Q33_OnNpcNotifyPlayers(::SGAMEDATA * pGame) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
 }
 
 // Objects_InitFn74 (PrisonOfIce object init): records the (Anya prison/cave entrance) object GUID; if quest active and
@@ -1678,7 +1678,7 @@ void __fastcall Objects_InitFn74_FrozenAnya(D2ObjectInitFnArg * pInitArg) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
 }
 
 // Q33_TransformFrozenAnya (PrisonOfIce, quest timer): two-step transform of the frozen-Anya OBJECT into the rescued-Anya
@@ -1752,7 +1752,7 @@ BOOL __fastcall OBJOP_A5Q3_RescueAnyaFromPortal(D2ObjectOperateFnArg * pOperatio
       QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x4ea3);
       if (pPrisonQuest->nStateFlagPrev == 1) {
         pPrisonQuest->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pPrisonQuest, 3, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+        QUEST_SetStateAndBroadcast(pPrisonQuest, 3, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
         return 0;
       }
     } else {
@@ -1775,7 +1775,7 @@ BOOL __fastcall OBJOP_A5Q3_RescueAnyaFromPortal(D2ObjectOperateFnArg * pOperatio
             /* SetQuestState(RewardAwaits): Anya freed -> mark pending so Malah/Anya can
                          hand out the rewards */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
             pPrisonQuest->nQuestPacketFlags = '\0';
-            QUEST_SetStateAndBroadcast(pPrisonQuest, 5, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, true);
+            QUEST_SetStateAndBroadcast(pPrisonQuest, 5, nullptr, (::fpExecuteOnUnitFunction)Q33_NotifyQuestState, 1);
             NotifyPlayersAboutEvent(pPrisonQuest->pGame, 0x10);
             UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q33_PropagateCompleteToParty);
             UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q33_SetCannotComplete);

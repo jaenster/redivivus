@@ -2666,7 +2666,7 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
 }
 
 static void __stdcall AUTOMAP_DrawTextCentered(int32_t nCenterX, int32_t nBaseY, uint8_t byColor, char * szText) {
-    uint16_t wTextWide[26];
+    uint16_t wTextWide[23];
     char cCurChar;
     char* pStrScan;
     if (strlen(szText) == 0) {

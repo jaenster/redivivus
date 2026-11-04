@@ -103,7 +103,7 @@ void __fastcall Q13_AICallback_Summoner(::SGAMEDATA * pGame) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)A2Q5::Q13_NotifySummonerComplete, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)A2Q5::Q13_NotifySummonerComplete, 1);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A2Q5::Q13_UpdateQuestRecord);
 }
 
@@ -312,7 +312,7 @@ void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     if (nNpcClassId == 0xfb) {
       if (pDVar1->bTyraelPortalFlag == 1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
         pDVar1->bTyraelPortalFlag = 0;
         pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
         return;
@@ -320,7 +320,7 @@ void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     } else if (nNpcClassId == 0xc9) {
       if (pDVar1->bJerhynSpokeFlag == 1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
         pDVar1->bJerhynSpokeFlag = 0;
       } else {
         if (pDVar1->bDragoneyeSpokenFlag != 1) {
@@ -328,7 +328,7 @@ void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         }
 
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 6, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 6, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
         pDVar1->bDragoneyeSpokenFlag = 0;
       }
 
@@ -610,7 +610,7 @@ void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          game-wide quest record */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
           QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x284);
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
         }
 
         /* SetQuestState(TheSevenTombs, 0=Completed) — quest fully done (Tyrael freed,
@@ -662,7 +662,7 @@ uint8_t __fastcall Q14_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
     D2QuestDataA2Q6Strc* pBloodRavenData = pQuestData->pQuestSpecificData.pA2Q6;
     if (bPrevFlag != 5 && bPrevFlag != 4 && bPrevFlag != 3) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
     }
 
     pBloodRavenData->field_0x0 = 0;
@@ -847,7 +847,7 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
           }
 
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
           return;
         }
 
@@ -877,7 +877,7 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, false);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 0);
     record_player_step:
     Q14_UpdateQuestRecordStep(pQuestArgs->pGame, pQuestArgs->pPlayer, nullptr);
 }

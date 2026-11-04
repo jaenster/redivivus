@@ -200,7 +200,7 @@ void __fastcall Q12_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 1);
     pA2Q3Data->bAtmaSpokeToJerhyn = '\0';
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
@@ -290,7 +290,7 @@ void __fastcall Q12_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       if (sNPCOrMsgId == 0x18c) {
         if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 5) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, false);
+          QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 0);
         }
 
         dwQuestSpecificData = pA2Q4Specific;
@@ -323,7 +323,7 @@ void __fastcall Q12_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x1da);
         QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 1);
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_UpdateQuestRecord);
       }
     }
@@ -565,7 +565,7 @@ void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame) {
       }
       if (!pQuestContext->nStateFlagPrev) {
         pQuestContext->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestContext, 1, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestContext, 1, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 1);
         return;
       }
     } else {

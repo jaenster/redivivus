@@ -578,7 +578,7 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
         return;
       }
 
-      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, 1);
       if (pQuestArgs->pPlayer) {
         if (pQuestData->bIsNotIntroduction != '\0') {
           pGame = pQuestArgs->pGame;
@@ -698,7 +698,7 @@ void __fastcall Q36_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x272);
         if (pQuestData->nStateFlagPrev != 1) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, 1);
         }
 
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)SetStep0x2And0x3);
@@ -709,7 +709,7 @@ void __fastcall Q36_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
     if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 2) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, 1);
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)SetStep0x2And0x3);
@@ -775,7 +775,7 @@ bool __fastcall Q36_SequenceFilter(D2QuestDataStrc * pQuestData) {
       pA5Q6EveQuestData->pQuestSpecificData.pA5Q6->bAnyaTransformed = 1;
       pA5Q6EveQuestData->nStateFlag = 2;
       pA5Q6EveQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pA5Q6EveQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, true);
+      QUEST_SetStateAndBroadcast(pA5Q6EveQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, 1);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pA5Q6EveQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)SetStep0x2And0x3);
     }
 
@@ -886,7 +886,7 @@ void __fastcall SetFlagToOpenedStairs(::SGAMEDATA * pGame) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)SendQuestBitsIfNeeded, 1);
 }
 
 // A5Q6 Eve of Destruction. Returns 0 if the quest has been accepted (bAcceptedQuest) — i.e. Baal's lair entry is unlocked — else 1. Effectively "is Baal still gated / not yet reachable". Gate check for the Worldstone descent.

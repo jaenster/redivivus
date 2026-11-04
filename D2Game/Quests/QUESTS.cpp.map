@@ -669,7 +669,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "fpExecuteOnUnitFunction",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {

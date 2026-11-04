@@ -146,7 +146,7 @@ void __fastcall Q02_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, 1);
     pA1Q2Data->bAcceptedQuest = '\0';
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
@@ -185,7 +185,7 @@ void __fastcall Q02_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          completion broadcast/sound */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
     if (bQuestState && pQuestData->nStateFlag != 5) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, false);
+      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, 0);
       QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q2.cpp", 0xcd);
       /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
       if (bQuestState) {
@@ -261,7 +261,7 @@ void __fastcall Q02_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, 1);
     return '\x01';
 }
 
@@ -492,7 +492,7 @@ void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         pQuestData->nQuestPacketFlags = '\0';
       }
       if (pQuestData->nStateFlagPrev == 1 || !pQuestData->nStateFlagPrev) {
-        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, 1);
         goto sync_quest_step;
       }
       if (bStateFlagLow) {

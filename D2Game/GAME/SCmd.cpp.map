@@ -2479,8 +2479,7 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2GSPacketSrv0x8B",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -2653,8 +2652,7 @@
       "usedTypes": [
         "D2GSPacketSrv0x8E",
         "SGAMEDATA",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ]
     },
     {
@@ -2674,8 +2672,7 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2GSPacketSrv0x8E",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {

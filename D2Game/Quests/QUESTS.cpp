@@ -884,9 +884,9 @@ void __stdcall QUEST_SendQuestUpdateToPlayer_HaltTail(int nLine) {
     exit(-1);
 }
 
-void __fastcall QUEST_SetStateAndBroadcast(D2QuestDataStrc * pQuestData, int nPrevStateFlag, D2UnitStrc * pUnit, ::fpExecuteOnUnitFunction fpFunction, bool bExecute) {
+void __fastcall QUEST_SetStateAndBroadcast(D2QuestDataStrc * pQuestData, int nPrevStateFlag, D2UnitStrc * pUnit, ::fpExecuteOnUnitFunction fpFunction, uint8_t bExecute) {
     pQuestData->nStateFlagPrev = (uint8_t)nPrevStateFlag;
-    if (!bExecute) {
+    if (bExecute != 1) {
       return;
     }
     if (fpFunction) {
@@ -3112,7 +3112,7 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
       if (pQuestData->nStateFlagPrev < 4) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)A2Q4::Q12_NotifyArcaneComplete, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)A2Q4::Q12_NotifyArcaneComplete, 1);
       } else if (bFlagOver3) {
         return;
       }

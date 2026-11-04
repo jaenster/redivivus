@@ -116,7 +116,7 @@ void __fastcall Q03_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     if (pQuestSpecific->bCharsiNotified == 1) {
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q03_SyncQuestProgress);
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 1);
       pQuestSpecific->bCharsiNotified = 0;
       return;
     }
@@ -125,7 +125,7 @@ void __fastcall Q03_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 1);
     pQuestSpecific->bQuestAccepted = 0;
 }
 
@@ -310,7 +310,7 @@ void __fastcall Q03_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
     if (pQuestData->nStateFlagPrev != 1) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 1);
     }
 
     QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x189);
@@ -334,7 +334,7 @@ static bool __stdcall MallusHandler(D2QuestDataStrc * pQuestData) {
 
     QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x1c8);
     pQuestData->nQuestPacketFlags = '\x01';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 1);
     pA1Q3Data->field_0x08 = '\0';
     if (pA1Q3Data->bMalusTaken != '\x01') {
       return true;
@@ -362,7 +362,7 @@ void __fastcall Q03_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 1);
 }
 
 // Q03_Callback_14 (A1Q3) — item-pickup hook (handler slot 0xe). When the player picks up the Horadric Malus ('hdm ') and the quest is in-progress (nStateFlag != 5): increment nQuestItemCount; if count>0 and bMalusTaken and nMalusMode==2, set nStateFlagPrev=2 (arm the "Malus in hand" sub-state). No quest-record writes.
@@ -395,7 +395,7 @@ void __fastcall Q03_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 1);
 }
 
 // Q03_Callback_10 (A1Q3) — player-leaves-game hook (handler slot 10). Removes the leaving player (by nUnitGUID, or -1 if none) from the quest's participant GUID list (sQuestGUID +5). No quest-record writes.
@@ -493,7 +493,7 @@ BOOL __fastcall OBJOP_A1Q3_UseMalus(D2ObjectOperateFnArg * pOperation) {
       }
       if (pQuestData->nStateFlagPrev != 1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, 0);
       }
     }
 

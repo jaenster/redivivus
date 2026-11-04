@@ -645,7 +645,7 @@ void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWOR
       return;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, nLine, dwPlayerId, 1);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, nLine, dwPlayerId, true);
 }
 
 void __fastcall PLAYER_SetUniqueId(D2UnitStrc * pUnit, uint32_t dwUniqueId) {

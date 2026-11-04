@@ -132,7 +132,7 @@ void __fastcall Q06_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 1);
     pA1Q6Data->bQuestAccepted = '\0';
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }
@@ -215,7 +215,7 @@ void __fastcall Q06_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
           if (bQuestState) {
             pQuestData->nQuestPacketFlags = '\0';
-            QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, false);
+            QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 0);
             QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0xd6);
             /* SetQuestRecordState(JustCompleted): stamp JustCompleted into the server-side
                          quest record (all players) — Warriv reward turn-in (Act2 travel granted) */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
@@ -377,7 +377,7 @@ void __fastcall Q06_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     if (nAreaIndex == 0x25) {
       if (pQuestData->nStateFlagPrev < 2) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 1);
       } else {
         sync_unless_advanced:
         if (bQuestState) {
@@ -390,7 +390,7 @@ void __fastcall Q06_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
 
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, false);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 0);
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
@@ -579,7 +579,7 @@ uint8_t __fastcall Q06_TimerSpawnPortalAndNotify(::SGAMEDATA * pGame, D2QuestDat
     if (pDVar1->nDeathEventCounter == 0xc) {
       if (pQuestData->nStateFlagPrev != 3 && pQuestData->nStateFlagPrev != 0xd) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 1);
       }
 
       return '\x01';

@@ -108,7 +108,7 @@ void __fastcall Q32_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
     pQuestSpecificData->bQuestCompleted = 0;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }
@@ -207,7 +207,7 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
           pQuestData->fpSequenceFilter(pQuestData);
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, false);
+          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 0);
         }
 
         pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
@@ -569,7 +569,7 @@ void __fastcall Q32_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
     if (pQuestSpecificData->nPrisonersKilledByMonsters >= 5 && pQuestData->nStateFlagPrev != 0xc) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 0xc, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 0xc, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
       pQuestSpecificData->bQuestCompleted = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, pQuestArgs->pPlayer, (::fpExecuteOnUnitFunction)Q32_SetCannotComplete);
     }
@@ -606,7 +606,7 @@ void __fastcall Q32_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
       if (!pQuestData->nStateFlagPrev) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
         pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
       } else if (!bStateFlagAdvanced) {
         return;
@@ -644,7 +644,7 @@ void __fastcall Q32_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }
 
@@ -840,7 +840,7 @@ void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
     }
     if (!pQuestData->nStateFlagPrev && pA5Q2Data->nPrisonersKilledByMonsters < 5) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
     }
 
     int nBarricadeIdx = 0;
@@ -1075,7 +1075,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       BOOL bQuestStateResult;
       if (pQuestSpecificData->nPrisonersFreed > 0xb) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
         bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Completed);
         if (!bQuestStateResult) {
           bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_RewardAwaits);
@@ -1112,7 +1112,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                          cleared by Callback_13/14) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Step0x04);
     if (pQuestSpecificData->nPrisonersKilledByMonsters < 5) {
       pQuestData->nQuestPacketFlags = ' ';
-      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
     }
 
     pQuestSpecificData->bQuestCompleted = 0;
@@ -1252,7 +1252,7 @@ void __fastcall Q32_OnWussieAllPrisonersFreed(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
 }
 
 } // namespace D2Game::Quests::QUESTS::A5Q2

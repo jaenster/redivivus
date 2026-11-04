@@ -433,7 +433,7 @@ void __fastcall Q18_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
     if (pQuestData->nStateFlagPrev != 1) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
     }
 
     QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 0x166);
@@ -485,7 +485,7 @@ void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     if (nMessageIndex == 0x225) {
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 0x1a1);
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerUpdateTomeState);
       QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
       return;
@@ -521,7 +521,7 @@ void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, false);
+    QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 0);
     if (!pQuestArgs->pPlayer) {
       nPlayerGUID = -1;
     } else {
@@ -562,7 +562,7 @@ void __fastcall Q18_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 
     QUEST_DebugPrint(pQuestData->pGame, "tome acquired", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 0x261);
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
     QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 0x26c);
     if (!pQuestArgs->pPlayer) {
       QUESTGUID_AddPlayerToList(&pA3Q1Data->sQuestGUID, -1);
@@ -583,7 +583,7 @@ void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
 
     QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 0x281);
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
 }
 
 // OBJOP_A3Q1_KhalimsRelicAltar — Lam Esen's Tome object-operate fn (despite the "KhalimsRelicAltar" label this drops Lam Esen's Tome). When the source unit is dead/absent and the attacker has NOT yet Completed the quest: set the drop item code to the Tome (0x20626262) and ITEM_RewardItemToDrop it; on success update the quest-specific struct, install gossip/NPC handlers (Q18_Callback_00/_11), advance live state flag to 3, and broadcast state 1. If already Completed, just play the Moo sound. Reads record (Completed); does not write record bits.
@@ -636,7 +636,7 @@ BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(D2ObjectOperateFnArg * pOperation) 
       }
       if (pQuestData->nStateFlagPrev != 1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 0);
       }
     }
 
@@ -654,7 +654,7 @@ void __fastcall Q18_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 
     pA2Q3Data->bAllPlayersLeft = true;
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 8, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 8, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
 }
 
 // Q18_Callback_14 — Lam Esen's Tome, state-0xe handler (counterpart to _09). If the player carries the Tome, increments the pending-update counter; on the first increment during an active quest that was initialized, clears the flag and broadcasts state 2. No quest-record bits.
@@ -672,7 +672,7 @@ void __fastcall Q18_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 
     pA2Q3Data->bAllPlayersLeft = false;
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
 }
 
 // A3Q1 Lam Esen's Tome, state-0xd (load/join reconcile) handler. Reads the player's quest record: if Completed, sets JustCompleted transient and returns. If player carries the Tome (0x20626262), sets nStateFlag=4/prev=2 and registers the player in the GUID list. Otherwise restores nStateFlag from record bits: Step0x03 -> 3, Step0x02 -> 2 (prev=1). Writes only in-memory state and the one transient JustCompleted bit.

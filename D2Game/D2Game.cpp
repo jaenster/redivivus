@@ -318,7 +318,7 @@ uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
     D2QuestDataA2Q3Strc* pDVar1 = pQuestData->pQuestSpecificData.pA2Q3;
     if (pQuestData->nStateFlag == 4) {
       pQuestData->nQuestPacketFlags = '\0';
-      Quests::QUESTS::QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Quests::QUESTS::A2Q3::Q11_NotifyTaintedSunComplete, true);
+      Quests::QUESTS::QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Quests::QUESTS::A2Q3::Q11_NotifyTaintedSunComplete, 1);
     }
 
     pDVar1->field_0x06 = 0;

@@ -178,7 +178,7 @@ void __fastcall QUEST_RemoveQuestItemFromPlayer(::SGAMEDATA * pGame, struct D2Un
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nInternalQuestNo);
 void __stdcall QUEST_SendQuestUpdateToPlayer_HaltTail(int nLine);
-void __fastcall QUEST_SetStateAndBroadcast(struct D2QuestDataStrc * pQuestData, int nPrevStateFlag, struct D2UnitStrc * pUnit, ::fpExecuteOnUnitFunction fpFunction, bool bExecute);
+void __fastcall QUEST_SetStateAndBroadcast(struct D2QuestDataStrc * pQuestData, int nPrevStateFlag, struct D2UnitStrc * pUnit, ::fpExecuteOnUnitFunction fpFunction, uint8_t bExecute);
 void __fastcall QUEST_SetStateFlag(struct D2QuestDataStrc * pQuestData, int32_t nState, char * szSourceFile, uint32_t nSourceLine);
 void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint16_t nGossipIndex);
 int32_t __stdcall QUEST_GetQuestSpecificDataPtr(::SGAMEDATA * pGame);

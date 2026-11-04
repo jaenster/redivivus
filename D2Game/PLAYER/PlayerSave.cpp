@@ -1999,7 +1999,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
       uint8_t* pCorpseBytesRead;
       pCorpseBytesRead = &pClientLocal->nCharTemplate;
       D2Common::INVENTORY::Inventory::INVENTORY_AddCorpse(pUnit->pInventory, pCorpseUnit->nUnitGUID, 0, UNIT_MONSTER);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, 1);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, true);
       *pnBytesConsumed = (uint32_t)pCorpseBytesRead;
       nItemLoadResult = 0;
     }

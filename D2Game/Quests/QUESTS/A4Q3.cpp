@@ -180,7 +180,7 @@ void __fastcall Objects_InitFn48_HellForge(D2ObjectInitFnArg * pInitArg) {
       nUpdateFlag = pQuestData->nStateFlagPrev;
       if (nUpdateFlag != 0xd && nUpdateFlag != 2 && nUpdateFlag != 3) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
         return;
       }
     }
@@ -325,7 +325,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
                 pA4Q3Data->nForgeStage = 2;
                 pA4Q3Data->byForgeStageHigh = 0;
                 pForgeQuestData->nQuestPacketFlags = '\0';
-                QUEST_SetStateAndBroadcast(pForgeQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, true);
+                QUEST_SetStateAndBroadcast(pForgeQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
                 QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x2073736d);
                 return 0;
               }
@@ -386,7 +386,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
 
                     QUEST_SetStateFlag(pForgeQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q3.cpp", 0x125);
                     pForgeQuestData->nQuestPacketFlags = '\0';
-                    QUEST_SetStateAndBroadcast(pForgeQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, true);
+                    QUEST_SetStateAndBroadcast(pForgeQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
                     pGame = pOperation->sArg.pGame;
                     GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 7, (pObjectsTxt->FrameCnt[3] >> 8) + pGame->dwGameFrame, 0, 0);
                     UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q28_PartyMember_SetCannotComplete);
@@ -570,7 +570,7 @@ void __fastcall Q28_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          game, run the finalize block (broadcast 0xd, stateFlag 5, sequence filter) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
         if (bQuestState && pQuestData->nStateFlag != 5) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, false);
+          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 0);
           QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q3.cpp", 0x212);
           /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
           if (bQuestState) {
@@ -694,7 +694,7 @@ void __fastcall Q28_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
       nPrevStateFlag = 4;
     }
 
-    QUEST_SetStateAndBroadcast(pQuestData, nPrevStateFlag, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, true);
+    QUEST_SetStateAndBroadcast(pQuestData, nPrevStateFlag, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, 1);
     pQuestData->nQuestPacketFlags = '\0';
     pA4Q3Data->bForgeQuestAccepted = 0;
     ::SGAMEDATA* pGame = pQuestData->pGame;

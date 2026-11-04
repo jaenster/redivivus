@@ -195,7 +195,7 @@ void __fastcall Q26_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
               pQuestData->fpSequenceFilter(pQuestData);
               pQuestData->nQuestPacketFlags = '\0';
-              QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, false);
+              QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, 0);
             }
 
             eQuest = pQuestData->nQuestIdReal;
@@ -229,7 +229,7 @@ void __fastcall Q26_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          (msg 0x2a3); ActiveFilter then stops offering Izual gossip */ D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x05);
       if (pQuestData->nStateFlagPrev != 4) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, 1);
       }
     }
 }
@@ -384,7 +384,7 @@ uint8_t __fastcall Q26_QuestUpdate_SpawnIzual(::SGAMEDATA * pGame, D2QuestDataSt
     D2QuestDataA4Q1Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q1;
     if (pQuestData->nStateFlag == 4 && pQuestData->nStateFlagPrev != 4 && pQuestData->nStateFlagPrev != 0xd) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, 1);
     }
     if (pQuestSpecificData->bIzualLocationSet) {
       int32_t nY;
@@ -535,7 +535,7 @@ void __fastcall Q26_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, false);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, 0);
 }
 
 // Q26_Callback_02 — Jerhyn first-talk handler (handler[2]). When target is Jerhyn (0x16f) and the pending-intro flag (field_0x11) is set, broadcast stateflag 1 (quest introduced/log entry), clear the flag, and detach handler[2] so this fires once. Kicks off the quest after the player first speaks to Jerhyn.
@@ -550,7 +550,7 @@ void __fastcall Q26_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q26_PlayerNotifyCompleted, 1);
     pA2Q1Data->bTalkedToTyrael = 0;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }

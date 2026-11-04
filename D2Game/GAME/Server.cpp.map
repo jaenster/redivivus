@@ -686,8 +686,7 @@
         "D2CorpseStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ]
     },
     {

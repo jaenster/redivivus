@@ -360,7 +360,7 @@ void __fastcall Q22_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 1);
     pA2Q3Data->nTrackedCouncilByte0 = '\0';
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
@@ -401,7 +401,7 @@ void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
     if (pQuestData->nStateFlagPrev < 3) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, false);
+      QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 0);
     }
 
     int bLamEsenJustCompleted = QUEST_GetQuestRecordState(pQuestArgs->pGame, QUEST_LamEsensTome, 0xd);
@@ -480,7 +480,7 @@ void __fastcall Q22_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         /* SetQuestRecordState(Blackened Temple=0x15, JustCompleted=0xd): mark the
                          shared quest record fresh-complete before broadcasting */ QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 0);
         QUEST_SetStateFlag(pQuestData, 7, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x1ce);
       }
 
@@ -656,7 +656,7 @@ void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUn
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, _nBroadcastState, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, _nBroadcastState, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 1);
     set_state_by_lam_esen:
     /* GetQuestRecordState(Lam Esen's Tome=0x11, JustCompleted=0xd): pick nStateFlag
                          4 (Lam Esen done) vs 5 + dialog string */ _nBroadcastState = QUEST_GetQuestRecordState(pQuestData->pGame, QUEST_LamEsensTome, 0xd);
@@ -1055,7 +1055,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
             _byBroadcastState = 4;
           }
 
-          QUEST_SetStateAndBroadcast(pQuestData, _byBroadcastState, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, true);
+          QUEST_SetStateAndBroadcast(pQuestData, _byBroadcastState, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 1);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerCheckNearTravincal);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q22_PropagateCompletionToParty);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q22_PartyMember_SetCannotComplete);

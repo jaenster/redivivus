@@ -448,7 +448,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x82_PortalOwnership(::SGAMEDATA * pGame, s
 void __fastcall NET_D2GS_SERVER_Send_0x83_Unused(struct D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData);
 void __fastcall NET_D2GS_SERVER_Send_0x84_Unused(struct D2ClientStrc * pClient, uint8_t byFlag, uint16_t wDataLen, void * pData);
 void __fastcall NET_D2GS_SERVER_Send_0x88_Unused(struct D2ClientStrc * pClient, char * szText, uint16_t wDataLen, uint16_t wExtraFlag, uint16_t wParam, void * pData);
-void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(struct D2ClientStrc * pClient, uint32_t dwTargetArg, uint8_t byTypeArg);
+void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(struct D2ClientStrc * pClient, uint32_t dwTargetArg, bool byTypeArg);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x8C_PLAYERFLAGS_Argument(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x8C * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(::SGAMEDATA * pGame, uint32_t nUnitGUID, uint32_t nOtherUnitGUID, uint16_t wRelationFlags);
@@ -461,8 +461,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender(::SGAMEDATA
 void __fastcall NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x8E_LINKDEADBODY_Argument(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * pPacketBuf);
-void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(::SGAMEDATA * pGame, int32_t nUnitGUID, int32_t nCorpseGUID, uint8_t byCorpseFlagArg);
-void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign(struct D2ClientStrc * pClient, uint32_t dwUnitGUID_param, uint32_t dwCorpseGUIDArg, uint8_t byCorpseFlagArg);
+void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(::SGAMEDATA * pGame, int32_t nUnitGUID, int32_t nCorpseGUID, bool byCorpseFlagArg);
+void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign(struct D2ClientStrc * pClient, uint32_t dwUnitGUID_param, uint32_t dwCorpseGUIDArg, bool byCorpseFlagArg);
 void __fastcall NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(struct D2ClientStrc * pClient, struct D2GSPacketClt0x89 * pPacket0x89);
 void __fastcall NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x8A * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(struct D2ClientStrc * pClient);

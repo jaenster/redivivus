@@ -323,7 +323,7 @@ void __fastcall Q23_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, 1);
     pA1Q2Data->bAcceptedQuest = '\0';
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }
@@ -364,7 +364,7 @@ void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         }
         if (pQuestData->nStateFlagPrev < 3) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, false);
+          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, 0);
         }
 
         nLamEsenDone = QUEST_GetQuestRecordState(pQuestArgs->pGame, QUEST_LamEsensTome, 0xd);
@@ -388,7 +388,7 @@ void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       bBroadcastedState3 = false;
       if (pQuestData->nStateFlagPrev == 2 || !pQuestData->nStateFlagPrev) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, 1);
         bBroadcastedState3 = true;
       }
       if (pQuestData->nStateFlag != 1) {
@@ -413,7 +413,7 @@ void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
       if (pQuestData->nStateFlagPrev != 4) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, 1);
       }
       if (pQuestData->nStateFlag == 4 || pQuestData->nStateFlag == 5) {
         goto sync_player_steps;
@@ -486,7 +486,7 @@ void __fastcall Q23_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          broadcast state 0xd + flag7(str 0x1e7) */ _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_JustCompleted);
       if (_bQuestState) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, 0);
         QUEST_SetStateFlag(pQuestData, 7, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q6.cpp", 0x1e7);
       }
 
@@ -516,7 +516,7 @@ uint8_t __fastcall Q23_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
     D2QuestDataA3Q6Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q6;
     if (pQuestData->nStateFlagPrev != 4) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q23_PlayerNotifyCompleted, 1);
     }
 
     pQuestSpecificData->bQuestTimerActive = false;

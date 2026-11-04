@@ -90,7 +90,7 @@ void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame) {
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)A4Q1::Q26_PlayerNotifyCompleted, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)A4Q1::Q26_PlayerNotifyCompleted, 1);
 }
 
 // [A4Q1 Izual helper] Per-unit IterateAllUnits callback: if this unit is within collision-distance 5 of the tracked target (Izual), set the "near" flag in the iteration context.
@@ -689,7 +689,7 @@ void __fastcall Q27_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       }
       if (pQuestData->nStateFlagPrev < 1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, 0);
       }
 
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerUpdateTerrorsEndState);
@@ -702,7 +702,7 @@ void __fastcall Q27_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
     if (pQuestData->nStateFlagPrev < 1) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, 1);
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerUpdateTerrorsEndState);
@@ -717,7 +717,7 @@ void __fastcall Q27_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     D2QuestDataA4Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q2;
     if (pQuestSpecificData->bTyraelTalked == 1) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, 1);
       pQuestSpecificData->bTyraelTalked = 0;
     }
     if (!(pQuestData->pGame->bExpansion && pQuestSpecificData->bExpansionPortalCheck && !pQuestSpecificData->bPortalSpawned)) {
@@ -982,7 +982,7 @@ void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2Ques
         }
         if (pQuestData->bIsNotIntroduction != '\0') {
           pQuestSpecificData->nPlayerCompletionCount = 0;
-          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerNotifyCompleted, 1);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q27_PlayerCheckNearDiablo);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q27_PropagateCompletionToParty);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q27_PartyMember_SetCannotComplete);

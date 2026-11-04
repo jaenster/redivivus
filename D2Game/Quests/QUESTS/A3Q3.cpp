@@ -153,7 +153,7 @@ void __fastcall Q20_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     if (nTargetClassId == 0xfd) {
       if (pA3Q3Data->bDarknessTimerArmed == 1) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, true);
+        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, 1);
         pA3Q3Data->bDarknessTimerArmed = 0;
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerUpdateBladeState);
         return;
@@ -541,7 +541,7 @@ void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         }
 
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, false);
+        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, 0);
         if (pQuestData->bIsNotIntroduction == '\0') {
           return;
         }
@@ -664,7 +664,7 @@ void __fastcall Q20_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
     if (pQuestData->bIsNotIntroduction != '\0' && pDVar2->dwCode == 0x20333367) {
       ::SGAMEDATA* pSVar1;
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, 1);
       pSVar1 = pQuestArgs->pGame;
       pDVar3 = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
       pBitBuffer = pDVar3->pQuestRecord[pSVar1->nDifficulty];
@@ -678,7 +678,7 @@ void __fastcall Q20_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 
       QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q3.cpp", 0x2c6);
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerNotifyCompleted, 1);
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerUpdateBladeState);

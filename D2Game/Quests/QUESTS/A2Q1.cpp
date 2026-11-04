@@ -116,7 +116,7 @@ void __fastcall Q09_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, true);
+    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, 1);
     pQuestSpecificData->bSpokeToAtma = 0;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
 }
@@ -188,7 +188,7 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       if (bQuestState) {
         if (pQuestData->nStateFlag != 5) {
           pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, true);
+          QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, 1);
           pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
           QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q1.cpp", 0xfd);
           /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
@@ -397,7 +397,7 @@ uint8_t __fastcall Q09_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
     D2QuestDataA2Q1Strc* pA2Q1Data = pQuestData->pQuestSpecificData.pA2Q1;
     if (pQuestData->nStateFlag == 4) {
       pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, true);
+      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, 1);
     }
 
     pA2Q1Data->bEndCallbackScheduled = false;

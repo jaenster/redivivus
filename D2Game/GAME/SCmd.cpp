@@ -2045,11 +2045,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x88_Unused(D2ClientStrc * pClient, char * 
     SCMD_QueuePacketForClient(&sPacket.nPacketId, wDataLen + 0xb, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(D2ClientStrc * pClient, uint32_t dwTargetArg, uint8_t byTypeArg) {
+void __fastcall NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(D2ClientStrc * pClient, uint32_t dwTargetArg, bool byTypeArg) {
     D2GSPacketSrv0x8B byPacketId;
     byPacketId.nUnitGUID = dwTargetArg;
     byPacketId.nPacketId = 0x8b;
-    byPacketId.bInParty = (bool)byTypeArg;
+    byPacketId.bInParty = byTypeArg;
     SCMD_QueuePacketForClient(&byPacketId.nPacketId, 6, pClient);
 }
 
@@ -2130,21 +2130,21 @@ void __fastcall NET_D2GS_SERVER_Send_0x8E_LINKDEADBODY_Argument(::SGAMEDATA * pG
     SCMD_QueuePacketForClient(pPacketBuf, nSize, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(::SGAMEDATA * pGame, int32_t nUnitGUID, int32_t nCorpseGUID, uint8_t byCorpseFlagArg) {
+void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(::SGAMEDATA * pGame, int32_t nUnitGUID, int32_t nCorpseGUID, bool byCorpseFlagArg) {
     D2GSPacketSrv0x8E sPacket;
     sPacket.nOwnerGUID = nUnitGUID;
     sPacket.nCorpseGUID = nCorpseGUID;
-    sPacket.nAssign = (bool)byCorpseFlagArg;
+    sPacket.nAssign = byCorpseFlagArg;
     sPacket.nPacketId = 0x8e;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)NET_D2GS_SERVER_Send_0x8E_LINKDEADBODY_Argument, &sPacket);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign(D2ClientStrc * pClient, uint32_t dwUnitGUID_param, uint32_t dwCorpseGUIDArg, uint8_t byCorpseFlagArg) {
+void __fastcall NET_D2GS_SERVER_Send_0x8E_CorpseAssign(D2ClientStrc * pClient, uint32_t dwUnitGUID_param, uint32_t dwCorpseGUIDArg, bool byCorpseFlagArg) {
     D2GSPacketSrv0x8E aPacket;
     aPacket.nCorpseGUID = dwCorpseGUIDArg;
     aPacket.nOwnerGUID = dwUnitGUID_param;
     aPacket.nPacketId = 0x8e;
-    aPacket.nAssign = (bool)byCorpseFlagArg;
+    aPacket.nAssign = byCorpseFlagArg;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 10, pClient);
 }
 

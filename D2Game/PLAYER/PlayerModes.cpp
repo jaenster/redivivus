@@ -806,7 +806,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_gold, 0, 0);
               pGame_00 = pSavedGame;
               SERVERUNIT_GoldAmmountForDeadBody(pSavedGame, pUnit, pUnit_00, uVar2, 1);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame_00, pUnit->nUnitGUID, pUnit_00->nUnitGUID, 1);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame_00, pUnit->nUnitGUID, pUnit_00->nUnitGUID, true);
               return pUnit_00;
             }
           } while (true);
@@ -889,7 +889,7 @@ void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       nPendingExperience = pCorpseUnit->nUnitGUID;
       eCorpseUnitType = pCorpseUnit->eUnitType;
       D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pCorpseUnit), eCorpseUnitType, nPendingExperience);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, 0);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, false);
       D2Common::Units::RemoveCollision_Vector(pCorpseUnit);
       UNIT::SUnit::FreeServerUnit(pGame, pCorpseUnit);
       UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x5d, pUnit);

@@ -1447,7 +1447,7 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nResult = pCorpseUnit->nUnitGUID;
         byAssignFlag = 1;
         nClassId = D2Client::UNIT::GetGUID(pUnit);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, nClassId, nResult, byAssignFlag);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, nClassId, nResult, (bool)byAssignFlag);
         nCorpseIdx++;
       } while (nCorpseIdx < (int)(uint32_t)wCorpseCount);
     }
