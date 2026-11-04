@@ -2799,7 +2799,7 @@ void __stdcall RENDERER_GLIDE_InitPerspectiveTables() {
 }
 
 BOOL __fastcall RENDERER_GLIDE_DrawShadowTileSimple(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, uint8_t nAlpha, int32_t nSubtileIdx) {
-    bool _bDrawn;
+    int _bDrawn;
     int nScreenY;
     uint32_t dwAlphaWord;
     bool bDrawn;
@@ -3243,7 +3243,7 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     // Static local variables (originally global data)
     static void * gapGlideGroundQuadCornerPtrs[4] = { (void*)gaGlideGroundTileVertices, (void*)&gaGlideGroundTileVertices[5].fX, (void*)&gaGlideGroundTileVertices[35].fX, (void*)&gaGlideGroundTileVertices[30].fX }; D2_STATIC_GUARD(gapGlideGroundQuadCornerPtrs, "D2Glide::Renderer::Glide::DrawGroundTile::gapGlideGroundQuadCornerPtrs");
 
-    uint8_t _nAlpha;
+    int _nAlpha;
     uint8_t byIntensity;
     BOOL nTexHandle = glBlocks::GLBLOCKS_LoadFloorTileTexture(pTile);
     FxU32 bResult = 0;

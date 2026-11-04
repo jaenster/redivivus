@@ -766,7 +766,7 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, int32
 
 // Evaluates and returns the next combat action index for Baal's AI. When nCombatAiState==0 and no target (pUnit2 null): checks collision at Baal's current position and returns 4 if blocked, else 1 with 8% chance or 1. When a target is present: determines if the target's player-object is in the Throne Room within 75 units, measures distance to anchor point, tests melee range and wall collision, then delegates to AI_BAAL_CloneChooseAction (melee), AI_Baal_SelectActionWeighted (wall), or AI_BAAL_ThroneRoomChooseAction. Returns the chosen action index.
 static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2AiGeneralStrc * pAiGeneral, int32_t nBestScore, int32_t nCandidateCount, D2MonsterAiCmdStrc * pAnchorAiCmd, D2UnitStrc * pUnit2) {
-    bool _bInThroneRoom;
+    int _bInThroneRoom;
     uint32_t _bVeryFarFromAnchor;
     BOOL _bInMeleeRange;
     bool bInMeleeRange;

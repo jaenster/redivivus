@@ -1148,7 +1148,7 @@ BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2Uni
 // Checks whether an item (pUnit) can be placed at grid position (nGridX, nGridY) on page eInvPage in pInventory without colliding with existing items. Reads item dimensions via ITEM_GetItemsTxt_nWidthAndHeight, reinitializes the grid layout, then walks the item's footprint cells. Writes collision count to *pnParam; returns 1 if all cells are clear, 0 if any cell is occupied or inputs are invalid.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CheckGridCollisions(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, D2UnitStrc * * ppCollidedItemOut, int * pnCollidingItemCount, uint32_t nPage) {
-    bool _bResult;
+    int _bResult;
     bool bResult;
     int pInventorySaved;
     D2GridScreenCoordinates sGridDims;
@@ -4877,7 +4877,7 @@ static BOOL __stdcall INVENTORY_CanTransferMercItems(D2UnitStrc * pUnit, D2Inven
 // Determines whether two units can complete a merc-item trade by making temporary inventory copies. Allocates two scratch inventories from pMemory, copies each unit's inventory into them, then calls INVENTORY_CanTransferMercItems in both directions to find which unit is the buyer. Sets *pbMercIsBuyer accordingly (false = pUnit2 buys, true = pUnit buys). Frees both scratch inventories before returning. Returns 1 if a valid transfer direction was found, 0 otherwise.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall CreateCopyOfInventoryForTrading(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, BOOL * pbMercIsBuyer) {
-    bool _bSuccess;
+    int _bSuccess;
     bool bSuccess;
     D2InventoryStrc* pInventory2;
     D2PoolManagerStrc* pMemory_00 = pMemory;

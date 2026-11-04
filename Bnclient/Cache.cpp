@@ -282,7 +282,7 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_00881894 = {}; D2_STATIC_GUARD(lp
 namespace Bnclient::Cache {
 
 static uint32_t CACHE_ComputeCRC32(int32_t nByteLen, uint8_t * pbData) {
-    bool _bParamsValid;
+    int _bParamsValid;
     bool bParamsValid;
     if (pbData || (_bParamsValid = 0 , !nByteLen)) {
       _bParamsValid = -1;

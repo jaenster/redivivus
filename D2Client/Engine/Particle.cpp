@@ -237,7 +237,7 @@ void __fastcall PARTICLE_ClearLifetimeFlag(D2UnitStrc * pUnit) {
 }
 
 void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
-    uint8_t _bySpriteLayer;
+    int _bySpriteLayer;
     int* pX;
     int* pY;
     eD2UnitType eUnitType;

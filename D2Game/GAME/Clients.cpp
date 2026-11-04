@@ -1146,7 +1146,7 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
 }
 
 BOOL __fastcall NET_D2GS_SERVER_GetPlayerNameByClientId(int32_t nClientId, char * szPlayerName) {
-    bool _bNotFound;
+    int _bNotFound;
     bool bNotFound;
     if (!gQServerClientTablesInitialized) {
       return 1;
@@ -1191,7 +1191,7 @@ int32_t __fastcall GetClientId(char * szCharName) {
 }
 
 BOOL __fastcall SERVER_IsPlayerCharacterInGame(char * szCharName, char * szCharNameOut) {
-    bool _bNotFound;
+    int _bNotFound;
     bool bNotFound;
     _bNotFound = 1;
     uint16_t uVar1 = Fog::SMem::HashForName(szCharName);

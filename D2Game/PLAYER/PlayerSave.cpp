@@ -851,7 +851,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8196, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bLockResult;
+    int _bLockResult;
     bool bLockResult;
     size_t nExistingSize;
     int nCompareByteIdx;

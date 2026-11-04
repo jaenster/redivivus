@@ -263,7 +263,13 @@ __CxxFrameHandler3`) and each unwind funclet a FuncInfo's unwind map names
 (`audit.eh_starts`). VC8 writes them into `.text$x`, after all the code, where
 the carve makes them functions of their own, while our objects keep them beside
 the function they serve; they have no source of their own. Catch handlers stay
-in. The whole-binary figures follow it.
+in. It leaves out a prebuilt third-party library as well, listed in
+`evidence/prebuilt.tsv`: the 16 functions of the PKWARE Data Compression Library
+(006b01b0..006b1343, 4,397 bytes) are byte-identical, relocations masked, to the
+`explode.obj` and `implode.obj` of the 1997 `IMPLODE.LIB`, objects with no
+`@comp.id` (the Rich header's prodid 0 row). VC8 never compiled them, so no source
+or flag can match them; only linking that library can. The whole-binary figures
+follow it.
 
 The summary's `byte kinds` block splits the headline's total into six kinds,
 one line each (`  kind <key> <bytes> <percent>% <meaning>`), summing to the total

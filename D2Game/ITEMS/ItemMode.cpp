@@ -2928,7 +2928,7 @@ void __fastcall ITEMMODE_DeleteItemFromCorpse(::SGAMEDATA * pGame, D2UnitStrc * 
 // Compacts a single belt column (0-3) by sliding all items in that column toward the bottom row. For each item that is out of order it repositions it via INVENTORY_CanPlaceItemInBelt, sets ITEMFLAG_SORTED/RELOAD, clears ITEMFLAG_DISABLED, and queues a RefreshInventory + UpsertToUpdateList.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, uint8_t nColumn) {
-    uint8_t _nColumn;
+    int _nColumn;
     BOOL bIsDisabled;
     uint32_t nCurSlot = (uint32_t)nColumn;
     uint8_t byColumnMasked = nColumn & 3;

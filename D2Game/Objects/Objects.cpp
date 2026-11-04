@@ -1827,7 +1827,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, D
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 40, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint16_t _nChancePercent;
+    int _nChancePercent;
     BOOL BVar1;
     int nXRange;
     uint32_t nRandVal;
@@ -2095,8 +2095,8 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
 
 // Level-generation object populator (density-driven scatter spawner). For a given room, rolls nChancePercent against the object control seed to decide whether to populate at all, then derives a target spawn count from room area * nDensity. Repeatedly picks random tiles inside the room's DRLG coordinate bounds, checks placement via ROOM_CheckSpawnCollisionSimple using ObjectsTxt line 7's footprint, and CreateUnits UNIT_OBJECT clusters (base class ~0xb with a small random variant). Around each valid seed it grows a cluster (up to 8 objects) by stepping in 8 directions scaled by the object's XSpace/YSpace. Deterministic via GetObjectControlSeed so all clients generate identical object layout. Side effect: spawns objects into pRoom. (Cryptic — exact object set inferred from txt line 7.)
 D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
-    uint16_t _nChancePercent;
-    uint8_t _nDensity;
+    int _nChancePercent;
+    int _nDensity;
     BOOL nCollisionResult;
     uint32_t nRandVal;
     D2DrlgRoomCoordsStrc sRoomCoords;
@@ -2252,7 +2252,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pR
 // DRLG room object-population routine (server-side, seeded). Rolls nChancePercent against the object-control RNG to decide whether to populate pRoom at all, then computes a target spawn count from room area * nDensity. Repeatedly picks random in-room cells, validates placement via ROOM_CheckSpawnCollisionSimple, and creates UNIT_OBJECT units (nObjectClassId, or a random pick from gaObjectSpawnChanceTbl when class==0x2e) with CreateUnit. Supports growing chains of adjacent objects (offset by Objects.txt XSpace/YSpace via direction tables) up to 8 spawned per cycle. Uses the deterministic LCG seed (0x6ac690c5) so all clients agree. No return.
 D2UnitStrc * __fastcall Objects_PopulateFn5_Crate(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     int32_t _nDensity;
-    uint16_t _nChancePercent;
+    int _nChancePercent;
     BOOL nCollisionResult;
     uint32_t nRandDir;
     uint32_t nChainStopRoll;
@@ -2832,7 +2832,7 @@ void __fastcall OBJECT_CallPopulateFn(::SGAMEDATA * pGame, D2RoomStrc * pRoom, i
     // Static local variables (originally global data)
     static uint8_t gbObjectInitTableSetup = 0x40; D2_STATIC_GUARD(gbObjectInitTableSetup, "D2Game::Objects::OBJECT_CallPopulateFn::gbObjectInitTableSetup");
 
-    bool _bBadCodePtr;
+    int _bBadCodePtr;
     bool bBadCodePtr;
     eD2LevelId eRoomLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
     if (eRoomLevelId == LEVEL_None) {
@@ -2859,7 +2859,7 @@ void __fastcall OBJECT_CallPopulateFn(::SGAMEDATA * pGame, D2RoomStrc * pRoom, i
 
 // Spawns one object from an ObjGroup.txt group entry into pRoom during level population. Rolls the game control seed against a cumulative probability table (up to 8 entries); on a hit, looks up the Objects.txt PopulateFn index and dispatches to OBJECTSPOPULATEFN[fn](pGame, pRoom, density, classId, 100). Validates the fn index and code pointer; halts with a fatal error on invalid entries. Skips if the room has no valid level ID.
 void __fastcall OBJECT_PopulateFromObjGroup(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nObjGroupId) {
-    bool _bBadCodePtr;
+    int _bBadCodePtr;
     bool bBadCodePtr;
     uint32_t nProbRoll;
     D2ObjectsTxt* pObjectsTxt;

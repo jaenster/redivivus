@@ -1437,7 +1437,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
 
 // Client-side skill-action validator called before queuing a skill use. Checks town restrictions (plays sound 0x18 and returns 0 if skill disallowed in town), sets move/attack action-type codes on pUnderMouse (1/2 or 3/4 based on shift flag), clears any pending trade or interact queue state, then calls SKILL_ValidateTarget to resolve the final target and coordinates. Drops cursor item to ground if item-type is 6. Returns 1 if the action is valid, 0 otherwise.
 static uint32_t INPUT_ValidateSkillAction(D2UnderMouseStrc * pUnderMouse) {
-    bool _bNeedsTarget;
+    int _bNeedsTarget;
     bool bNeedsTarget;
     D2RoomStrc* pRoom;
     BOOL bRoomInTown;

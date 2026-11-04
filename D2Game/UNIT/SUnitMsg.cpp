@@ -677,7 +677,7 @@ void __fastcall SendRemoveObject(D2UnitStrc * pItem, D2ClientStrc * pClient) {
 
 // Sends a unit's hover-text (name tag) to a specific client. If the unit has a D2HoverTextStrc, checks whether the viewing player has hostile/party relationship flags; if allowed, formats a 0x26 chat packet with language code and copies the hover message string. If the unit has no hover text, falls back to sending a 0x76 unit-type/GUID packet to clear the hover display.
 void __fastcall PLAYER_SendHoverTextToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    uint8_t _byUnitTypeFallback;
+    int _byUnitTypeFallback;
     uint32_t nLangCodeOrFlags;
     uint32_t dwPlayerListFlags;
     int32_t nGUIDFallback;

@@ -1477,8 +1477,8 @@ void __fastcall GetTombStoneTileCoords(D2RoomExStrc * pRoomEx, D2CoordStrc * * p
 void __fastcall DRLGROOMEX_InitializePresetRoom(D2RoomExStrc * pRoomEx) {
     uint32_t _bKillEdgeX;
     uint32_t _bKillEdgeY;
-    bool _bIsFillBlanks;
-    bool _bFillBlanks;
+    int _bIsFillBlanks;
+    int _bFillBlanks;
     bool bFillBlanks;
     bool bIsFillBlanks;
     bool bKillEdgeX;

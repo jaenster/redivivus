@@ -4487,7 +4487,7 @@ void __stdcall RENDERER_D3D_InitPerspectiveVertexBuffer() {
 
 // NOTE: Register params: pTileLibraryEntryStrc (ECX): D2TileLibraryEntryStrc *, nTilePosX (EDX): int
 int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(D2TileLibraryEntryStrc * pTileLibraryEntryStrc, int nTilePosX, int32_t nTilePosY, uint8_t byLightRow, uint32_t dwAlpha, int32_t nScreenSplitIndex) {
-    bool _bRendered;
+    int _bRendered;
     int nSubtileY;
     bool bRendered;
     short int* pSubtileCoords;
@@ -4643,7 +4643,7 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nP
 }
 
 BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, int pTexColorTable, uint8_t nParam4) {
-    uint8_t _nParam4;
+    int _nParam4;
     short int* psSubtileCoords;
     int nSubtileScreenX;
     int nSubtileX;

@@ -80,6 +80,9 @@ the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summ
 - **Code the compiler generates for C++ exceptions is left out:** the `__ehhandler` stubs
   and the unwind funclets the binary's own exception tables name. No source line produces
   them on their own; they come with the function that has the `try` or the destructor.
+- **The PKWARE Data Compression Library is left out.** Its 16 functions are byte-identical
+  to the objects of the prebuilt 1997 `IMPLODE.LIB`, which no Visual C++ 2005 compile
+  produced: they match only by linking that library, so they are not in the headline.
 - **Original functions with no counterpart in the tree** count as not matching. They are
   real gaps.
 

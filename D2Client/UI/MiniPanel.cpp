@@ -210,7 +210,7 @@ void __stdcall MINIPANEL_DrawAllButtons(int32_t bVisible) {
 }
 
 BOOL __stdcall IsLeftScreenOpen() {
-    bool _bIsOpen;
+    int _bIsOpen;
     bool bIsOpen;
     _bIsOpen = 0;
     BOOL bFlagSet;
@@ -274,7 +274,7 @@ BOOL __stdcall IsLeftScreenOpen() {
 }
 
 BOOL __stdcall IsRightScreenOpen() {
-    bool _bIsOpen;
+    int _bIsOpen;
     bool bIsOpen;
     _bIsOpen = 0;
     BOOL bFlagSet;

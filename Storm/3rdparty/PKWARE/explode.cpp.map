@@ -1,0 +1,167 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/PKWARE/explode.cpp",
+  "functions": [
+    {
+      "name": "explode",
+      "address": "006b01b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b01b0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "explode",
+        "lmemcpy",
+        "GenAscTabs",
+        "GenDecodeTabs",
+        "Expand"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "pfnPkwareRead",
+        "pfnPkwareWrite",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Expand",
+      "address": "006b0330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0330"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "Expand",
+        "DecodeLit",
+        "DecodeDist",
+        "lmemcpy"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DecodeLit",
+      "address": "006b0430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0430"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "DecodeLit",
+        "WasteBits"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DecodeDist",
+      "address": "006b05e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b05e0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "DecodeDist",
+        "WasteBits"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WasteBits",
+      "address": "006b0660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0660"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "WasteBits"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GenDecodeTabs",
+      "address": "006b06f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b06f0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "GenDecodeTabs"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GenAscTabs",
+      "address": "006b0730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0730"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "GenAscTabs"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "lmemcpy",
+      "address": "006b0830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0830"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::explode",
+      "calledFunctions": [
+        "lmemcpy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -72,7 +72,7 @@ def svg(total, kinds, theme):
     out.append('<title>Bytes of the original game code by kind of match</title>')
     out.append('<rect width="%d" height="%d" rx="6" fill="%s"/>' % (w, h, t['bg']))
     out.append('<text x="%d" y="30" font-size="15" font-weight="600" fill="%s">'
-               'Original game code, C runtime and compiler EH stubs left out: %s bytes</text>' % (pad, t['text'], format(total, ',')))
+               'Original game code, C runtime, prebuilt PKWARE library and compiler EH stubs left out: %s bytes</text>' % (pad, t['text'], format(total, ',')))
     span = w - 2 * pad
     x = float(pad)
     for key, n, pct, _what in kinds:

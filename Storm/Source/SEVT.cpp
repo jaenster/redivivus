@@ -369,7 +369,7 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
 // @former-name SEVT_RemoveEventCallback (invented)
 // @note Ghidra types node[0]/node[2]/node[3] through a bogus FILE* (_ptr/_base/_flag); the record is {key, priority, pfnHandler, next}.
 BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
-    bool _bRemoved;
+    int _bRemoved;
     uint32_t nBucket;
     uint32_t* ppHandlerLink;
     bool bRemoved;
@@ -421,7 +421,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
 // @rename-basis Behaviour plus argument count, both confirmed against the PPC. Two arguments here, and .SEvtUnregisterType reads only r3 and r4 and then computes "xor r28, r26, r27" - the same eventId ^ subId bucket hash this function uses. With two arguments it cannot name a handler. It walks the event's whole stack of handler tables freeing each with SEVT_FreeEventHandlerTable, then unlinks and frees the event record from its hash bucket and decrements gnSevtRegisteredEventCount. Removing the (eventId, subId) entry itself is what "type" means here.
 // @former-name SEVT_UnregisterEvent (invented)
 BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
-    bool _bRemoved;
+    int _bRemoved;
     int* pEvent;
     bool bRemoved;
     int* ppEventLink;

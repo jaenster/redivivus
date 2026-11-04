@@ -1,0 +1,170 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/PKWARE/implode.cpp",
+  "functions": [
+    {
+      "name": "implode",
+      "address": "006b0870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0870"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "implode",
+        "lmemcpy",
+        "WriteCmpData"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "pfnPkwareRead",
+        "pfnPkwareWrite",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WriteCmpData",
+      "address": "006b0a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0a10"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "WriteCmpData",
+        "lmemset",
+        "OutputBits",
+        "SortBuffer",
+        "FindRep",
+        "lmemcpy"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FindRep",
+      "address": "006b0d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0d90"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "FindRep"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OutputBits",
+      "address": "006b10d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b10d0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "OutputBits",
+        "FlushBuf"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "lmemcpy",
+      "address": "006b1160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1160"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "lmemcpy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "lmemset",
+      "address": "006b11a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b11a0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "lmemset"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FlushBuf",
+      "address": "006b1210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1210"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "FlushBuf",
+        "lmemset"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SortBuffer",
+      "address": "006b1290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1290"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::PKWARE::implode",
+      "calledFunctions": [
+        "SortBuffer"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

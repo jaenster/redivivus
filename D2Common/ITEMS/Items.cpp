@@ -2264,8 +2264,8 @@ int __stdcall ITEM_CalcWeaponAttackSpeed(D2UnitStrc * pUnit, D2UnitStrc * pItem)
 
 // Checks whether all charged-skill stats (stat 0xCC) on pItem are at full charges. Returns true if the item has at least one charged stat and all are fully charged. Optionally writes a 4-byte result struct to pOutFullyCharged: byte[0]=hasChargedSkills, byte[1..3]=false if any charge is depleted.
 BOOL __stdcall ITEMS_CheckChargedSkillFullyCharged(D2UnitStrc * pItem, bool * pOutFullyCharged) {
-    bool _bResult;
-    bool _bHasCharged;
+    int _bResult;
+    int _bHasCharged;
     bool bHasCharged;
     bool bResult;
     D2StatStrc aChargeStatBuf[64];
@@ -5774,8 +5774,8 @@ void __stdcall ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(D2UnitStrc * pUnit, eD2B
 
 // Checks whether pCharUnit meets the strength/dexterity/level/class requirements to equip item pUnit. Reads Items.txt reqstr/reqdex, applies the item_req_percent stat modifier and the -10 ethereal reduction, compares against the character's strength/dexterity (optionally subtracting socketed-item contributions when bIncludeSocketedStats) and required level (ITEM_CalcRequiredLevel vs unit level). Optional out-params pnStrength/pnDexterity/pnLevel each receive the per-requirement pass flag (1/0). Also enforces class restriction (item type class vs char class, with Assassin/Druid hand-to-hand and Barbarian exceptions) and book-quantity. Returns 1 if fully equippable, else 0.
 BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCharUnit, int32_t bIncludeSocketedStats, int * pnStrength, int * pnDexterity, int * pnLevel) {
-    bool _bStrOk;
-    bool _bDexOk;
+    int _bStrOk;
+    int _bDexOk;
     eD2ItemTypes eItemType;
     eD2PlayerClassIDDWORD eVar1;
     int nAdjustedReq;

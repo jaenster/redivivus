@@ -8,7 +8,7 @@
 #include "Fog/Debug.h"
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
-#include "PKWARE/PKWARE.h"
+#include "Storm/3rdparty/PKWARE/explode.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/H/stpl.h"
@@ -164,7 +164,7 @@ int32_t __stdcall SFILE_DecompressLzw(int32_t pSrcData, int32_t pDstData, int32_
     bufState[1] = 0;
     bufState[3] = 0;
     bufState[4] = nDstSize;
-    PKWARE::PKWARE_explode(SFILE_DecompressLzw_BufferRead, SFILE_DecompressLzw_BufferWrite, (TDcmpStruct*)gpSFileExplodeWorkBuffer, bufState);
+    _3rdparty::PKWARE::explode::explode(SFILE_DecompressLzw_BufferRead, SFILE_DecompressLzw_BufferWrite, (TDcmpStruct*)gpSFileExplodeWorkBuffer, bufState);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779080);
     return 1;
 }

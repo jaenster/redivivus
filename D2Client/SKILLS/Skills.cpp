@@ -1273,7 +1273,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
     nullptr
 }; D2_STATIC_GUARD(SKILLCLTSTFUNCS, "D2Client::SKILLS::Skills::SKILLS_CastSkillClient::SKILLCLTSTFUNCS");
 
-    eCollisionFlags _eLoSCollisionType;
+    int _eLoSCollisionType;
     eCollisionFlags eLoSCollisionType;
     eD2Skills eActiveSkillId;
     D2UnitStrc* pLocalPlayerUnit;

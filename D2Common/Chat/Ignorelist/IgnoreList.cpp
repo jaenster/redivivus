@@ -103,7 +103,7 @@ int32_t __thiscall GetMappedValue(::IgnoreList * pThis, char * szKey, char * szO
 }
 
 int32_t __thiscall RemoveByPattern(::IgnoreList * pThis, char * szPattern) {
-    bool _bIsEnabled;
+    int _bIsEnabled;
     bool bIsEnabled;
     char szParsed[256];
     if (szPattern && *szPattern != '\0') {
@@ -128,7 +128,7 @@ int32_t __thiscall RemoveByPattern(::IgnoreList * pThis, char * szPattern) {
 }
 
 int32_t __thiscall RemoveByAccountName(::IgnoreList * pThis, char * szAccountName) {
-    bool _bIsEnabled;
+    int _bIsEnabled;
     bool bIsEnabled;
     if (!(szAccountName && *szAccountName != '\0')) {
       return 0;
@@ -152,7 +152,7 @@ int32_t __thiscall RemoveByAccountName(::IgnoreList * pThis, char * szAccountNam
 
 // Returns whether the account name is on the ignore list. It tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped every return value and callers tested an unassigned local.
 int32_t __thiscall CheckAccountNameIgnored(::IgnoreList * pThis, char * szAccountName) {
-    bool _bIsEnabled;
+    int _bIsEnabled;
     bool bIsEnabled;
     char* pcMatch;
     ::StringEntryNode* pCurEntry;
@@ -192,7 +192,7 @@ int32_t __thiscall CheckAccountNameIgnored(::IgnoreList * pThis, char * szAccoun
 }
 
 int32_t __thiscall CheckCharNameIgnored(::IgnoreList * pThis, char * szCharName) {
-    bool _bIsEnabled;
+    int _bIsEnabled;
     bool bIsEnabled;
     if (!(szCharName && *szCharName != '\0')) {
       return 0;

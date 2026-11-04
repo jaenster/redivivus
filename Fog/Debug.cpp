@@ -747,7 +747,7 @@ void __stdcall WriteCrashDumpViaThread() {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 24, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bDumpOk;
+    int _bDumpOk;
     bool bDumpOk;
     void* pExceptParam;
     MINIDUMP_EXCEPTION_INFORMATION sExceptionInfo;

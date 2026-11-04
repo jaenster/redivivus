@@ -242,6 +242,28 @@ def runtime_starts(model, librows, path=RUNTIME):
     return out, (lo or 0, hi or 0)
 
 
+PREBUILT = os.path.join(ORACLE, 'evidence', 'prebuilt.tsv')
+
+
+def prebuilt_starts(model, path=PREBUILT):
+    """The original functions linked from a prebuilt third-party library.
+
+    prebuilt.tsv lists each with the library object it is byte-identical to
+    (relocations masked). Code like this was never compiled by VC8: no
+    compiler, flags or source reproduces it, only linking the same object
+    does, so it is left out of the headline as the runtime is.
+    """
+    out = set()
+    if os.path.exists(path):
+        for line in open(path):
+            if line.startswith('start\t') or not line.strip():
+                continue
+            s = int(line.split('\t', 1)[0], 16)
+            if s in model:
+                out.add(s)
+    return out
+
+
 EH_MAGIC = (0x19930520, 0x19930521, 0x19930522)
 
 
@@ -362,8 +384,11 @@ def main():
         lines.append('  %-17s %6d' % (k, statuses.get(k, 0)))
     # The headline: the game without the statically linked runtime, which is
     # Microsoft's, linked rather than reconstructed, so it is out of both the
-    # matched and the total; the whole binary follows as the second figure.
+    # matched and the total; so is a prebuilt library linked as shipped
+    # (prebuilt.tsv). The whole binary follows as the second figure.
     runtime, (rlo, rhi) = runtime_starts(model, librows)
+    prebuilt = prebuilt_starts(model) - runtime
+    runtime = runtime | prebuilt
     eh = eh_starts(ref, model) - runtime
     game = [s for s in model if s not in runtime and s not in eh]
     game_bytes = sum(model[s][0].end - s for s in game)
@@ -374,11 +399,13 @@ def main():
         len(game_match), len(game), 100.0 * len(game_match) / max(1, len(game)),
         game_match_bytes, game_bytes, 100.0 * game_match_bytes / max(1, game_bytes)),
         '  runtime left out: %d functions (%d bytes): libmap pairs, the library run %08x..%08x, import thunks, %s' % (
-        len(runtime), sum(model[s][0].end - s for s in runtime), rlo, rhi, os.path.basename(RUNTIME)),
+        len(runtime - prebuilt), sum(model[s][0].end - s for s in runtime - prebuilt), rlo, rhi, os.path.basename(RUNTIME)),
+        '  prebuilt library left out: %d functions (%d bytes): byte-identical to the prebuilt library objects in %s' % (
+        len(prebuilt), sum(model[s][0].end - s for s in prebuilt), os.path.basename(PREBUILT)),
         '  compiler EH code left out: %d functions (%d bytes): __ehhandler stubs and the unwind funclets '
         'their FuncInfo names' % (len(eh), sum(model[s][0].end - s for s in eh)),
         'whole binary:']
-    lines[4:4] = byte_kinds(model, game, game_out)
+    lines[5:5] = byte_kinds(model, game, game_out)
     lines.append('matched code: %d bytes (%.2f%% of the original)' % (match_bytes, 100.0 * match_bytes / ref_bytes))
     libtus = {r[3] for r in librows}
     lib = [r for r in out if r[3] in libtus]

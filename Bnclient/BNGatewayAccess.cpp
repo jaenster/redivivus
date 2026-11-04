@@ -189,7 +189,7 @@ void __thiscall GetGatewayList(void * pThis, char * szText) {
     char* pDataCursor = szText;
     if (*(int*)((int)pThis + 0x10)) {
       dwRegDataSize = (uint32_t*)pThis;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x146);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int)(uintptr_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x146);
       exit(-1);
     }
 

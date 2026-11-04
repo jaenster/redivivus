@@ -1397,7 +1397,7 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 BOOL __fastcall Missiles_SrvHitFunc_BlockSelfHitByState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    bool _bResult;
+    int _bResult;
     eD2States eState;
     bool bResult;
     _bResult = 2;

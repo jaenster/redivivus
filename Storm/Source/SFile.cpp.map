@@ -84,9 +84,9 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "PKWARE_explode",
         "SFILE_DecompressLzw",
-        "SMemAlloc"
+        "SMemAlloc",
+        "explode"
       ],
       "usedTypes": [
         "int32_t"

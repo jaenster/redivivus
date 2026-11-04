@@ -454,7 +454,7 @@ void __fastcall MONSTER_BuildUniqueName(D2UnitStrc * pUnit, uint16_t * wszText, 
     0x0
 }; D2_STATIC_GUARD(gwMonsterSoundTableSize, "D2Client::UNIT::Monster::MONSTER_BuildUniqueName::gwMonsterSoundTableSize");
 
-    uint16_t _nSuffixId;
+    int _nSuffixId;
     uint16_t* pszLocaleStr;
     int32_t nWordWidth;
     int nTotalWideLen = 0;

@@ -2,7 +2,8 @@
 
 #include "Storm/Source/SComp.h"
 #include "Fog/3rdparty/crashy.h"
-#include "PKWARE/PKWARE.h"
+#include "Storm/3rdparty/PKWARE/explode.h"
+#include "Storm/3rdparty/PKWARE/implode.h"
 #include "Storm/3rdparty/zlib/deflate.h"
 #include "Storm/3rdparty/zlib/inflate.h"
 #include "Storm/Source/SErr.h"
@@ -641,7 +642,7 @@ void __fastcall SCOMP_PkwareCompress(void * pOutBuf, uint32_t * pdwOutLength, vo
     }
 
     Stream.pOutBuf = pOutBuf;
-    PKWARE::PKWARE_implode((pfnPkwareRead)SCOMP_PkwareBufferRead, (pfnPkwareWrite)SCOMP_PkwareBufferWrite, pWorkBuf, &Stream, &nCompType, &nDictSize);
+    _3rdparty::PKWARE::implode::implode((pfnPkwareRead)SCOMP_PkwareBufferRead, (pfnPkwareWrite)SCOMP_PkwareBufferWrite, pWorkBuf, &Stream, &nCompType, &nDictSize);
     SMem::SMemFree(pWorkBuf, ".\\SOURCE\\SCOMP.CPP", 0x467, 0);
     *pdwOutLength = Stream.nOutPos;
     *pnMode = 0;
@@ -658,7 +659,7 @@ void __fastcall SCOMP_PkwareDecompress(void * pOutBuf, uint32_t * pdwOutLength, 
     Stream.pInBuf = pInBuf;
     Stream.nInPos = 0;
     Stream.nInLen = nInLen;
-    PKWARE::PKWARE_explode((pfnPkwareRead)SCOMP_PkwareBufferRead, (pfnPkwareWrite)SCOMP_PkwareBufferWrite, pWorkBuf, &Stream);
+    _3rdparty::PKWARE::explode::explode((pfnPkwareRead)SCOMP_PkwareBufferRead, (pfnPkwareWrite)SCOMP_PkwareBufferWrite, pWorkBuf, &Stream);
     SMem::SMemFree(pWorkBuf, ".\\SOURCE\\SCOMP.CPP", 0x48d, 0);
     *pdwOutLength = Stream.nOutPos;
 }

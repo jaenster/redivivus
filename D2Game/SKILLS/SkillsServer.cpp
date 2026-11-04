@@ -2495,7 +2495,7 @@ void __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 
 // Enumerates all units within nDistance of the caster's current target/cursor position and invokes ppfnProc(unit, nSkillLevel) on each. Uses SKILLS_GetTargetOrCursorPos for the origin, finds the best nearby room, runs FindAllMatchingUnitsInNeighboredRooms with nUnitFindFlags, then iterates the result array. Validates ppfnProc with IsBadCodePtr and halts with an unrecoverable error if invalid. Frees the unit-find data after iteration.
 void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t nUnitFindFlags, D2UnitStrc * pUnit, int32_t nSkillLevel, int32_t nDistance, fnSkillUnitProc ppfnProc) {
-    bool _bIsBadCode;
+    int _bIsBadCode;
     bool bIsBadCode;
     int nUnitIdx;
     D2UnitFindArgStrc sUnitFindArg;
@@ -2545,7 +2545,7 @@ void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t n
 
 // Applies a Baal-wave skill callback to every unit within range of the wave origin. Resolves the AoE radius from the skill TXT if pBaalWaveParam->nDistance is 0, collects matching units via UnitFinds, then invokes fpFunction(pGame, pAttacker, foundUnit, nSkillLevel) for each. Halts with an internal error if pBaalWaveParam is null, fpFunction is null, or IsBadCodePtr returns true.
 void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamStrc * pBaalWaveParam) {
-    bool _bIsBadCode;
+    int _bIsBadCode;
     bool bIsBadCode;
     int32_t nX;
     D2RoomStrc* pRoom;

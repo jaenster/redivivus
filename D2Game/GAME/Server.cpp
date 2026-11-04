@@ -2501,7 +2501,7 @@ void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, int32_t pStatRoot,
 
 // Searches the game on nServerId for nCount specific units identified by (pClassIds[i], pOutBuffer[i]) pairs and exports their type+mode into pUnitTypes (stride 0xd). Uses FindUnitFromTable for each entry; non-player hits additionally call a PFN_UnitTypeToName_ARRAY dispatch. Returns the count of units found. Counterpart to QSERVER_ExportUnitListByServerId for targeted rather than bulk export.
 int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, eD2UnitType * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer) {
-    uint16_t _nServerId;
+    int _nServerId;
     BOOL bBadCodePtr;
     int nSearchIdx;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);

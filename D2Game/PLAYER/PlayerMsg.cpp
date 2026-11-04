@@ -899,7 +899,7 @@ void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitSt
 
 // Reads pUnit->eAnimMode.ePlayerMode and indexes gaPlayerModeNetMsgTable @0x007319e8 (D2PlayerModeNetMsgStrc, stride 12, 20 entries - one per eD2PlayerAnimMode value), then calls that mode's pfnSend to push the matching network message to nearby clients when a player's animation state changes.
 void __fastcall DispatchPlayerModeNetMsg(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    bool _bPtrInvalid;
+    int _bPtrInvalid;
     bool bPtrInvalid;
     eD2PlayerAnimMode ePlayerMode;
     uint32_t dwSecurityCookie;

@@ -180,7 +180,7 @@ BOOL __fastcall Q22_PlayerUpdateBlackenedTempleState(::SGAMEDATA * pGame, D2Unit
 // Q22_PlayerCheckNearTravincal (BLACKENED TEMPLE) — proximity-completion check run per player after the Travincal council is slain. Only acts if the player's record is not Completed and not yet at Step0x04, and the player is in Act III in the same or an adjacent room as the recorded council-quest unit (sQuestGUID.aPlayerGUID[0]). When near: if Khalim's Will is already done it sets the record straight to Completed, otherwise to Step0x04 (go assemble/use Khalim's Will), then marks JustCompleted to fire the log/notification.
 // State flow: requires !Completed && !Step0x04 -> set Completed|Step0x04, set JustCompleted.
 BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    bool _bSameOrAdjacentRoom;
+    int _bSameOrAdjacentRoom;
     uint32_t nUnitGUID;
     D2QuestDataStrc* pQuestDataBlackenedTemple;
     D2UnitStrc* pCouncilUnit;
@@ -975,7 +975,7 @@ void __fastcall Objects_InitFn60_CompellingOrb(D2ObjectInitFnArg * pInitArg) {
 // State flow: drop Khalim items per player; nStateFlag -> 6/7, broadcast state 4/0xd; SetQuestRecordState JustCompleted.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
 void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    uint8_t _byBroadcastState;
+    int _byBroadcastState;
     int32_t nCouncilKillsRemaining;
     uint8_t byBroadcastState;
     int32_t nRewardItemGUID;
