@@ -304,7 +304,7 @@
       ]
     },
     {
-      "name": "TSList_HANDLER_UnlinkAll",
+      "name": "UnlinkAll",
       "address": "0041c770",
       "lines": [
         {
@@ -312,12 +312,12 @@
           "address": "0041c770"
         }
       ],
-      "namespace": "Storm::Source::SErr",
+      "namespace": "TSList<HANDLER, TSGetLink<HANDLER>>",
       "calledFunctions": [
-        "TSList_HANDLER_UnlinkAll"
+        "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "TSList<HANDLER, TSGetLink<HANDLER>>",
         "uint32_t"
       ]
     },
@@ -333,7 +333,7 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "TSList_HANDLER_Destructor",
-        "TSList_HANDLER_UnlinkAll"
+        "UnlinkAll"
       ],
       "usedTypes": [
         "D2StormListHead",
@@ -600,7 +600,7 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "StaticFini_gStormErrorCallbackList",
-        "TSList_HANDLER_UnlinkAll"
+        "UnlinkAll"
       ]
     }
   ]

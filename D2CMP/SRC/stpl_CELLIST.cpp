@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -579,7 +580,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
     }
 }
 
-template<> TSHashTable<::CELLIST, HASHKEY_NONE>* TSHashTable<CELLIST, HASHKEY_NONE>::Constructor() {
+template<> __attribute__((noinline)) inline TSHashTable<::CELLIST, HASHKEY_NONE>* TSHashTable<CELLIST, HASHKEY_NONE>::Constructor() {
     this->pVtable = (TSHashTable<::CELLIST, HASHKEY_NONE>::Vtable*)(void*)TSHashTable<::CELLIST, HASHKEY_NONE>::vftable;
     TSExplicitList<::CELLIST, -572662307>* pBucketSlot = &this->tFullList;
     this->tFullList.m_terminator.m_next = 0;

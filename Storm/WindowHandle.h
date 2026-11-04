@@ -8,6 +8,7 @@
 #include <cstdarg>
 #include "d2_platform.h"
 #include "D2Hell/D2Hell.h"
+#include "Storm/H/stpl.h"
 
 // Forward declarations
 struct D2StormListHead;
@@ -39,7 +40,6 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
 uint32_t __thiscall WND_GetNodeMaskedOffset(int32_t pThis, int32_t pNode);
 void __thiscall WND_UnlinkListNode(int32_t pThis, int * pNode);
 uint32_t __thiscall WND_GetNodeData(int32_t pThis, int32_t pNode);
-void __fastcall WND_RemoveAllChildren(struct D2StormListHead * pWindow);
 void __fastcall WND_DetachAndClearChildren(struct D2StormListHead * pWindow);
 int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize, uint32_t dwFlags);
 int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags);

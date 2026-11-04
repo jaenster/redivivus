@@ -5,6 +5,7 @@
 #include "Fog/Engine/Application.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -656,12 +657,14 @@ uint32_t __thiscall LINKEDLIST_GetValueAtIndex(void * pListHead, int32_t nNode) 
     return *(uint32_t*)((int)pListHead + 8);
 }
 
-void __fastcall LINKEDLIST_GetTail(D2StormListHead * pList) {
+} // namespace Storm::Source::SEVT
+
+template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREAKCMD>>::UnlinkAll() {
     int* pLinkSlot;
     int* pNode;
     while (true) {
       int nNextNode;
-      pNode = (int)(int*)pList->terminator.pNext > 0 ? (int*)pList->terminator.pNext : 0;
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -677,9 +680,11 @@ void __fastcall LINKEDLIST_GetTail(D2StormListHead * pList) {
     }
 }
 
+namespace Storm::Source::SEVT {
+
 void __fastcall LINKEDLIST_InsertHead(D2StormListHead * pList) {
     int* pLinkSlot;
-    LINKEDLIST_GetTail(pList);
+    ((TSList<BREAKCMD, TSGetLink<BREAKCMD>>*)pList)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pList->terminator;
     StormLinkStrc* nNextNode = pSVar1->pPrevLink;
     if (!nNextNode) {
@@ -907,7 +912,7 @@ void StaticFini_CriticalSection_0077930c() {
 // Runs at exit: removes every element from the SEvt break command list, then unlinks the list head itself.
 void StaticFini_gSevtBreakCmdList() {
     uint32_t* pBackLink;
-    LINKEDLIST_GetTail(&gpSevtBreakCmdListHead);
+    ((TSList<BREAKCMD, TSGetLink<BREAKCMD>>*)&gpSevtBreakCmdListHead)->UnlinkAll();
     if (!gpSevtBreakCmdListHead.terminator.pPrevLink) {
       return;
     }

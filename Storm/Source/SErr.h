@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "Storm/H/stpl.h"
 
 // Forward declarations
 struct D2StormListHead;
@@ -103,9 +104,6 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
 uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode);
 void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode);
 uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode);
-// TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
-// Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
-void __fastcall TSList_HANDLER_UnlinkAll(struct D2StormListHead * pList);
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
 void __fastcall TSList_HANDLER_Destructor(struct D2StormListHead * pList);

@@ -4,8 +4,10 @@
 #include "D2Client/Message.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Hell/D2Hell.h"
+#include "Storm/H/stpl.h"
 #include "Storm/Source/SEVT.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -221,12 +223,14 @@ uint32_t __thiscall WND_GetNodeData(int32_t pThis, int32_t pNode) {
     return *(uint32_t*)(pThis + 8);
 }
 
-void __fastcall WND_RemoveAllChildren(D2StormListHead * pWindow) {
+} // namespace Storm::WindowHandle
+
+template<> __attribute__((noinline)) inline void TSList<WNDREC, TSGetLink<WNDREC>>::UnlinkAll() {
     int* pBacklink;
     int* pNode;
     while (true) {
       int nNext;
-      pNode = (int)(int*)pWindow->terminator.pNext > 0 ? (int*)pWindow->terminator.pNext : 0;
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -242,9 +246,11 @@ void __fastcall WND_RemoveAllChildren(D2StormListHead * pWindow) {
     }
 }
 
+namespace Storm::WindowHandle {
+
 void __fastcall WND_DetachAndClearChildren(D2StormListHead * pWindow) {
     int* pBacklink;
-    WND_RemoveAllChildren(pWindow);
+    ((TSList<WNDREC, TSGetLink<WNDREC>>*)pWindow)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pWindow->terminator;
     StormLinkStrc* nNext = pSVar1->pPrevLink;
     if (!nNext) {
@@ -560,7 +566,7 @@ void StaticInit_gWndTrackingList() {
 // Runs at exit: removes every element from the tracked window list, then unlinks the list head itself.
 void StaticFini_gWndTrackingList() {
     uint32_t* pNextLink;
-    WND_RemoveAllChildren(&gpWndTrackingListHead);
+    ((TSList<WNDREC, TSGetLink<WNDREC>>*)&gpWndTrackingListHead)->UnlinkAll();
     if (!gpWndTrackingListHead.terminator.pPrevLink) {
       return;
     }

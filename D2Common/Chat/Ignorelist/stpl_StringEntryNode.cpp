@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -115,7 +116,7 @@ void __thiscall Destructor_UnreferencedCopy(TSExplicitList<::StringEntryNode, -5
     pTVar1->m_next = 0;
 }
 
-template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::StringEntryNode, -572662307>* pBucket;
     int* pPrevLink;
     TSLink<::StringEntryNode>* pTVar2;
@@ -218,7 +219,7 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(u
     return pEntry;
 }
 
-template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Destructor() {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Destructor() {
     TSExplicitList<::StringEntryNode, -572662307>* pBucket;
     int* pPrevLink;
     TSLink<::StringEntryNode>* nHead;
@@ -293,7 +294,7 @@ void __thiscall thunk_Destructor(TSGrowableArray<TSExplicitList<StringEntryNode,
     pThis->Destructor();
 }
 
-template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::SetCount(uint32_t nCount) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::SetCount(uint32_t nCount) {
     TSLink<::StringEntryNode>* pTVar1;
     uint32_t uVar2;
     TSLink<::StringEntryNode>* pTVar3;
@@ -514,7 +515,7 @@ void __thiscall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<StringEntry
 }
 
 // [override: patch]
-template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::GrowListArray() {
+template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::GrowListArray() {
     TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis = this;
     TSLink<::StringEntryNode>* pBucket;
     TSLink<::StringEntryNode>* ppTempHead;
@@ -671,7 +672,7 @@ template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* TSHashTable<StringEnt
 }
 
 // Check load factor and rehash the string entry hash table if chain length exceeds threshold
-template<> int32_t TSHashTable<StringEntryNode, HASHKEY_STRI>::MonitorFullness(uint32_t nSlot) {
+template<> __attribute__((noinline)) inline int32_t TSHashTable<StringEntryNode, HASHKEY_STRI>::MonitorFullness(uint32_t nSlot) {
     TSLink<::StringEntryNode>* pTVar1;
     if (this->nSlotMask >= 0x3ff) {
       return 0;

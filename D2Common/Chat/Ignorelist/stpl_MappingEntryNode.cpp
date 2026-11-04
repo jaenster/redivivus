@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -242,7 +243,7 @@ void __thiscall Destructor_UnreferencedCopy(TSExplicitList<::MappingEntryNode, -
     pTVar1->m_next = 0;
 }
 
-template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::MappingEntryNode, -572662307>* pBucket;
     int* pPrevLink;
     TSLink<::MappingEntryNode>* pTVar2;
@@ -324,7 +325,7 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::R
     Storm::Source::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UMappingEnt_007436ac, -2, 0);
 }
 
-template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::Destructor() {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::Destructor() {
     TSExplicitList<::MappingEntryNode, -572662307>* pBucket;
     int* pPrevLink;
     TSLink<::MappingEntryNode>* nHead;
@@ -379,7 +380,7 @@ void __thiscall thunk_Destructor(TSGrowableArray<TSExplicitList<MappingEntryNode
     pThis->Destructor();
 }
 
-template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::SetCount(uint32_t nCount) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::SetCount(uint32_t nCount) {
     TSLink<::MappingEntryNode>* pTVar1;
     uint32_t uVar2;
     TSLink<::MappingEntryNode>* pTVar3;
@@ -607,7 +608,7 @@ void __thiscall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<MappingEntr
 }
 
 // [override: patch]
-template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::GrowListArray() {
+template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::GrowListArray() {
     TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis = this;
     TSLink<::MappingEntryNode>* pBucket;
     TSLink<::MappingEntryNode>* ppTempListHead;
@@ -764,7 +765,7 @@ template<> TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* TSHashTable<MappingE
 }
 
 // Check load factor and rehash the mapping entry hash table if chain length exceeds threshold
-template<> int32_t TSHashTable<MappingEntryNode, HASHKEY_STRI>::MonitorFullness(uint32_t nSlot) {
+template<> __attribute__((noinline)) inline int32_t TSHashTable<MappingEntryNode, HASHKEY_STRI>::MonitorFullness(uint32_t nSlot) {
     TSLink<::MappingEntryNode>* pTVar1;
     if (this->nSlotMask >= 0x3ff) {
       return 0;

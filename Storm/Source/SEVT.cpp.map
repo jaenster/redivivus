@@ -359,7 +359,7 @@
       ]
     },
     {
-      "name": "LINKEDLIST_GetTail",
+      "name": "UnlinkAll",
       "address": "00426cf0",
       "lines": [
         {
@@ -367,12 +367,12 @@
           "address": "00426cf0"
         }
       ],
-      "namespace": "Storm::Source::SEVT",
+      "namespace": "TSList<BREAKCMD, TSGetLink<BREAKCMD>>",
       "calledFunctions": [
-        "LINKEDLIST_GetTail"
+        "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "TSList<BREAKCMD, TSGetLink<BREAKCMD>>",
         "uint32_t"
       ]
     },
@@ -388,7 +388,7 @@
       "namespace": "Storm::Source::SEVT",
       "calledFunctions": [
         "LINKEDLIST_InsertHead",
-        "LINKEDLIST_GetTail"
+        "UnlinkAll"
       ],
       "usedTypes": [
         "D2StormListHead",
@@ -553,7 +553,7 @@
       "namespace": "Storm::Source::SEVT",
       "calledFunctions": [
         "StaticFini_gSevtBreakCmdList",
-        "LINKEDLIST_GetTail"
+        "UnlinkAll"
       ]
     }
   ]

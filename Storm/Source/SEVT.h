@@ -8,6 +8,7 @@
 #include <cstdarg>
 #include "d2_platform.h"
 #include "D2Hell/D2Hell.h"
+#include "Storm/H/stpl.h"
 
 // Forward declarations
 struct D2StormListHead;
@@ -104,7 +105,6 @@ uint32_t __thiscall LINKEDLIST_GetCountMasked(int32_t pThis, int32_t nNode);
 void __thiscall LINKEDLIST_GetHead(int32_t pThis, int * pListHead);
 // Gets the value stored at a specific index within a linked list. Returns the value field at offset+4 from the node pointer. Handles NULL input by defaulting to the list head at this+8.
 uint32_t __thiscall LINKEDLIST_GetValueAtIndex(void * pListHead, int32_t nNode);
-void __fastcall LINKEDLIST_GetTail(struct D2StormListHead * pList);
 void __fastcall LINKEDLIST_InsertHead(struct D2StormListHead * pList);
 // Allocates a new linked list node via SMemAlloc with 12 bytes overhead plus data size. Initializes next/prev pointers to NULL. Optionally links the node into an existing list via LINKEDLIST_IsEmpty call.
 int * * __thiscall LINKEDLIST_AllocNode(int * * pListHead, int32_t pList, int32_t nDataSize, uint32_t dwAllocFlags);

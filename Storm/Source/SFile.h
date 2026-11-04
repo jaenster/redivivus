@@ -8,6 +8,7 @@
 #include <cstdarg>
 #include "d2_platform.h"
 #include "D2Hell/D2Hell.h"
+#include "Storm/H/stpl.h"
 
 // Forward declarations
 struct D2ArchiveStrc;
@@ -427,10 +428,7 @@ void __thiscall SFILE_RemoveFileRecordFromList4(int32_t pThis, int * pLink);
 uint32_t __thiscall SFILE_CompareFileRecord5(int32_t pThis, int32_t pLink);
 uint32_t __thiscall SFILE_CompareFileRecord6(int32_t pThis, int32_t pRecord);
 void __thiscall SFILE_RemoveFileRecordFromList5(int32_t pThis, int * pNode);
-void __fastcall SFILE_CloseStreamHandle1(struct D2StormListHead * pThis);
 void __fastcall SFILE_CloseStreamHandle2(struct D2StormListHead * pThis);
-void __fastcall SFILE_CloseStreamHandle3(struct D2StormListHead * pThis);
-void __fastcall SFILE_CloseStreamHandle4(struct D2StormListHead * pThis);
 void __fastcall SFILE_CloseStreamHandle5(struct D2StormListHead * pThis);
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeArchiveRecord(struct D2ArchiveStrc * pArchive);

@@ -10,6 +10,7 @@
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/UNIT/sunitproxy.h"
 #include "D2Hell/D2Hell.h"
+#include "Storm/H/stpl.h"
 #include "Storm/SCMD.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
@@ -397,12 +398,14 @@ uint32_t __thiscall SCMD_GetHandler(::SCMD * pThis, int nNodeOffset) {
     return *(uint32_t*)(pThis + 8);
 }
 
-void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
+} // namespace Storm::Source
+
+template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll() {
     int* piPrevLink;
     int* piNode;
     while (true) {
       int pListHead;
-      piNode = (int)(int*)nListPtr->terminator.pNext > 0 ? (int*)nListPtr->terminator.pNext : 0;
+      piNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!piNode) {
         break;
       }
@@ -418,9 +421,11 @@ void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
     }
 }
 
+namespace Storm::Source {
+
 void __fastcall SCMD_ClearAll(D2StormListHead * nListPtr) {
     int* piPrevLink;
-    SCMD_ClearList(nListPtr);
+    ((TSList<CMDDEF, TSGetLink<CMDDEF>>*)nListPtr)->UnlinkAll();
     StormLinkStrc* pSVar1 = &nListPtr->terminator;
     StormLinkStrc* pListHead = pSVar1->pPrevLink;
     if (!pListHead) {
@@ -1138,7 +1143,7 @@ void StaticInit_gStormCmdListSlash() {
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadBackslash, then unlinks the list head itself.
 void StaticFini_gStormCmdListBackslash() {
     uint32_t* pBackLink;
-    SCMD_ClearList(&gStormCmdListHeadBackslash);
+    ((TSList<CMDDEF, TSGetLink<CMDDEF>>*)&gStormCmdListHeadBackslash)->UnlinkAll();
     if (!gStormCmdListHeadBackslash.terminator.pPrevLink) {
       return;
     }
@@ -1153,7 +1158,7 @@ void StaticFini_gStormCmdListBackslash() {
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadSlash, then unlinks the list head itself.
 void StaticFini_gStormCmdListSlash() {
     uint32_t* pBackLink;
-    SCMD_ClearList(&gStormCmdListHeadSlash);
+    ((TSList<CMDDEF, TSGetLink<CMDDEF>>*)&gStormCmdListHeadSlash)->UnlinkAll();
     if (!gStormCmdListHeadSlash.terminator.pPrevLink) {
       return;
     }

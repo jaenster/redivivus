@@ -188,7 +188,7 @@
       ]
     },
     {
-      "name": "WND_RemoveAllChildren",
+      "name": "UnlinkAll",
       "address": "00420750",
       "lines": [
         {
@@ -196,12 +196,12 @@
           "address": "00420750"
         }
       ],
-      "namespace": "Storm::WindowHandle",
+      "namespace": "TSList<WNDREC, TSGetLink<WNDREC>>",
       "calledFunctions": [
-        "WND_RemoveAllChildren"
+        "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "TSList<WNDREC, TSGetLink<WNDREC>>",
         "uint32_t"
       ]
     },
@@ -217,7 +217,7 @@
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
         "WND_DetachAndClearChildren",
-        "WND_RemoveAllChildren"
+        "UnlinkAll"
       ],
       "usedTypes": [
         "D2StormListHead",
@@ -683,7 +683,7 @@
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
         "StaticFini_gWndTrackingList",
-        "WND_RemoveAllChildren"
+        "UnlinkAll"
       ]
     }
   ]

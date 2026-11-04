@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -425,7 +426,7 @@ template<> void __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Interna
     Storm::Source::SMem::SMemFree(pNode, s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
-template<> void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
     ::SGAMEDATA* pGameEntry;
     int nByteOffset;
     uint32_t nCapacity = nAlloc;

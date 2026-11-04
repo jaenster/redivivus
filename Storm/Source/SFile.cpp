@@ -2778,12 +2778,14 @@ void __thiscall SFILE_RemoveFileRecordFromList5(int32_t pThis, int * pNode) {
     pNode[1] = 0;
 }
 
-void __fastcall SFILE_CloseStreamHandle1(D2StormListHead * pThis) {
+} // namespace Storm::Source::SFile
+
+template<> __attribute__((noinline)) inline void TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>::UnlinkAll() {
     int* ppPrevSlot;
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int)(int*)pThis->terminator.pNext > 0 ? (int*)pThis->terminator.pNext : 0;
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -2798,6 +2800,8 @@ void __fastcall SFILE_CloseStreamHandle1(D2StormListHead * pThis) {
       }
     }
 }
+
+namespace Storm::Source::SFile {
 
 void __fastcall SFILE_CloseStreamHandle2(D2StormListHead * pThis) {
     int* ppPrevSlot;
@@ -2820,12 +2824,14 @@ void __fastcall SFILE_CloseStreamHandle2(D2StormListHead * pThis) {
     }
 }
 
-void __fastcall SFILE_CloseStreamHandle3(D2StormListHead * pThis) {
+} // namespace Storm::Source::SFile
+
+template<> __attribute__((noinline)) inline void TSList<FILEREC, TSGetLink<FILEREC>>::UnlinkAll() {
     int* ppPrevSlot;
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int)(int*)pThis->terminator.pNext > 0 ? (int*)pThis->terminator.pNext : 0;
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -2841,12 +2847,16 @@ void __fastcall SFILE_CloseStreamHandle3(D2StormListHead * pThis) {
     }
 }
 
-void __fastcall SFILE_CloseStreamHandle4(D2StormListHead * pThis) {
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
+template<> __attribute__((noinline)) inline void TSList<EVENTREC, TSGetLink<EVENTREC>>::UnlinkAll() {
     int* ppPrevSlot;
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int)(int*)pThis->terminator.pNext > 0 ? (int*)pThis->terminator.pNext : 0;
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -2861,6 +2871,8 @@ void __fastcall SFILE_CloseStreamHandle4(D2StormListHead * pThis) {
       }
     }
 }
+
+namespace Storm::Source::SFile {
 
 void __fastcall SFILE_CloseStreamHandle5(D2StormListHead * pThis) {
     int* ppPrevSlot;
@@ -2978,7 +2990,7 @@ void __fastcall SFILE_CloseAllOpenFiles2(D2ArchiveStrc * pArchive) {
 
 void __fastcall SFILE_CloseStream1(D2StormListHead * pListHead) {
     int* ppPrevSlot;
-    SFILE_CloseStreamHandle1(pListHead);
+    ((TSList<::ARCHIVEREC, TSGetLink<::ARCHIVEREC>>*)pListHead)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pListHead->terminator;
     StormLinkStrc* pNextNode = pSVar1->pPrevLink;
     if (!pNextNode) {
@@ -3010,7 +3022,7 @@ void __fastcall SFILE_CloseStream2(D2StormListHead * pListHead) {
 
 void __fastcall SFILE_CloseStream3(D2StormListHead * pListHead) {
     int* ppPrevSlot;
-    SFILE_CloseStreamHandle3(pListHead);
+    ((TSList<::FILEREC, TSGetLink<::FILEREC>>*)pListHead)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pListHead->terminator;
     StormLinkStrc* pNextNode = pSVar1->pPrevLink;
     if (!pNextNode) {
@@ -3026,7 +3038,7 @@ void __fastcall SFILE_CloseStream3(D2StormListHead * pListHead) {
 
 void __fastcall SFILE_CloseStream4(D2StormListHead * pListHead) {
     int* ppPrevSlot;
-    SFILE_CloseStreamHandle4(pListHead);
+    ((TSList<::EVENTREC, TSGetLink<::EVENTREC>>*)pListHead)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pListHead->terminator;
     StormLinkStrc* pNextNode = pSVar1->pPrevLink;
     if (!pNextNode) {
@@ -7756,7 +7768,7 @@ void StaticFini_CriticalSection_00779080() {
 // Runs at exit: removes every element from the open MPQ archive list gMpqArchiveList, then unlinks the list head itself.
 void StaticFini_gMpqArchiveList() {
     uint32_t* pNextLink;
-    SFILE_CloseStreamHandle1(&gMpqArchiveList);
+    ((TSList<::ARCHIVEREC, TSGetLink<::ARCHIVEREC>>*)&gMpqArchiveList)->UnlinkAll();
     if (!gMpqArchiveList.terminator.pPrevLink) {
       return;
     }
@@ -7786,7 +7798,7 @@ void StaticFini_gSFileAsyncReqQueue() {
 // Runs at exit: removes every element from the open file list gSFileOpenFileList, then unlinks the list head itself.
 void StaticFini_gSFileOpenFileList() {
     uint32_t* pNextLink;
-    SFILE_CloseStreamHandle3(&gSFileOpenFileList);
+    ((TSList<::FILEREC, TSGetLink<::FILEREC>>*)&gSFileOpenFileList)->UnlinkAll();
     if (!gSFileOpenFileList.terminator.pPrevLink) {
       return;
     }
@@ -7801,7 +7813,7 @@ void StaticFini_gSFileOpenFileList() {
 // Runs at exit: removes every element from the audio stream list gSFileAudioStreamList, then unlinks the list head itself.
 void StaticFini_gSFileAudioStreamList() {
     uint32_t* pNextLink;
-    SFILE_CloseStreamHandle4(&gSFileAudioStreamList);
+    ((TSList<::EVENTREC, TSGetLink<::EVENTREC>>*)&gSFileAudioStreamList)->UnlinkAll();
     if (!gSFileAudioStreamList.terminator.pPrevLink) {
       return;
     }

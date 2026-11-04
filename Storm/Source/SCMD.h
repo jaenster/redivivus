@@ -8,6 +8,7 @@
 #include <cstdarg>
 #include "d2_platform.h"
 #include "D2Client/ClientModeInGame.h"
+#include "Storm/H/stpl.h"
 
 // Forward declarations
 struct D2GameNpcStrc;
@@ -60,7 +61,6 @@ void __thiscall SCMD_MoveToList(::SCMD * pThis, ::SCMD * pNode, int nInsertMode,
 uint32_t __thiscall SCMD_GetNextOffset(::SCMD * pThis, ::SCMD * pNode);
 void __thiscall SCMD_UnlinkNode(::SCMD * pThis, ::SCMD * pNode);
 uint32_t __thiscall SCMD_GetHandler(::SCMD * pThis, int nNodeOffset);
-void __fastcall SCMD_ClearList(struct D2StormListHead * nListPtr);
 void __fastcall SCMD_ClearAll(struct D2StormListHead * nListPtr);
 ::SCMD * __thiscall SCMD_AllocNode(::SCMD * pThis, int nInsertMode, int nExtraSize, uint32_t dwAllocFlags);
 ::SCMD * __thiscall SCMD_FreeNode(::SCMD * pThis, uint8_t bFreeMemory);

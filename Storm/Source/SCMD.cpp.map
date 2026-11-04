@@ -241,7 +241,7 @@
       ]
     },
     {
-      "name": "SCMD_ClearList",
+      "name": "UnlinkAll",
       "address": "006c43f0",
       "lines": [
         {
@@ -249,12 +249,12 @@
           "address": "006c43f0"
         }
       ],
-      "namespace": "Storm::Source::SCMD",
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
       "calledFunctions": [
-        "SCMD_ClearList"
+        "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
       ]
     },
@@ -270,7 +270,7 @@
       "namespace": "Storm::Source::SCMD",
       "calledFunctions": [
         "SCMD_ClearAll",
-        "SCMD_ClearList"
+        "UnlinkAll"
       ],
       "usedTypes": [
         "D2StormListHead",
@@ -692,7 +692,7 @@
       "namespace": "Storm::Source::SCMD",
       "calledFunctions": [
         "StaticFini_gStormCmdListBackslash",
-        "SCMD_ClearList"
+        "UnlinkAll"
       ]
     },
     {
@@ -707,7 +707,7 @@
       "namespace": "Storm::Source::SCMD",
       "calledFunctions": [
         "StaticFini_gStormCmdListSlash",
-        "SCMD_ClearList"
+        "UnlinkAll"
       ]
     }
   ]

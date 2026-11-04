@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -139,7 +140,7 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
     return this;
 }
 
-template<> void TSGrowableArray<SGAMEDATA>::Destructor() {
+template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::Destructor() {
     uint32_t nIndex;
     if (this->m_count > 0) {
       nIndex = 0;
@@ -174,7 +175,7 @@ void __thiscall Destructor_Unreferenced2(TSExplicitList<::SGAMEDATA, -572662307>
     pTVar1->m_next = 0;
 }
 
-template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocData(uint32_t nAlloc) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::SGAMEDATA, -572662307>* pNewBuf;
     int* pPrevLink;
     TSLink<::SGAMEDATA>* pTVar2;
@@ -256,7 +257,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocD
     Storm::Source::SMem::SMemFree(pBlock, s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0);
 }
 
-template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor() {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor() {
     TSExplicitList<::SGAMEDATA, -572662307>* pSlot;
     int* pPrevLink;
     TSLink<::SGAMEDATA>* pNext;
@@ -413,7 +414,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount
     this->m_count = nCount;
 }
 
-template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destructor() {
+template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destructor() {
     uint32_t encPrev;
     pfnEHHandlerRoutine pSehHandler = D2Client::GAME::Game::__GSHandlerCheck_EH_6ca026;
     void* pSehFrame = ExceptionList;
@@ -443,7 +444,7 @@ template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destructor() {
     ExceptionList = pSehFrame;
 }
 
-template<> void TSExplicitList<SGAMEDATA, -572662307>::LinkNode(::SGAMEDATA * pNode, uint32_t nLinkType, ::SGAMEDATA * pExisting) {
+template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::LinkNode(::SGAMEDATA * pNode, uint32_t nLinkType, ::SGAMEDATA * pExisting) {
     TSLink<::SGAMEDATA>* pTVar1;
     TSLink<::SGAMEDATA>* pNodeLink;
     int pTarget;

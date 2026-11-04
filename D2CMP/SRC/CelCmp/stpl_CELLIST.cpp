@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -205,7 +206,7 @@ void __thiscall Destructor_Unreferenced(::CELLIST * pThis) {
     pThis->Destructor();
 }
 
-template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocData(uint32_t nAlloc) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::CELLIST, -572662307>* pBucketSlot;
     int* pBackLink;
     TSLink<::CELLIST>* pTVar2;
@@ -287,7 +288,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocDat
     Storm::Source::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
 }
 
-template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor() {
+template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor() {
     TSExplicitList<::CELLIST, -572662307>* pBucketSlot;
     int* pBackLink;
     TSLink<::CELLIST>* nNext;
@@ -395,7 +396,7 @@ template<> ::CELLIST * TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Ptr(uint32_
     return pCVar1;
 }
 
-template<> uint32_t TSExportTableSimple<CELLIST, HCELLIST__*, 0>::GenerateUniqueHandle() {
+template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<CELLIST, HCELLIST__*, 0>::GenerateUniqueHandle() {
     uint32_t* pnCounter;
     while (true) {
       ::CELLIST* pCounterField;
@@ -512,7 +513,7 @@ template<> ::CELLIST * TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*
     return pFoundEntry;
 }
 
-template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Destructor() {
+template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NONE>::Destructor() {
     uint32_t uLinkOffset;
     pfnEHHandlerRoutine pExHandler = D2CMP::SRC::CelCmp::__GSHandlerCheck_EH_6ca286;
     void* pPrevSehFrame = ExceptionList;
@@ -724,7 +725,7 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
 }
 
 // Resize the pool block array to nNewCapacity slots; realloc or alloc+copy; re-init moved nodes
-template<> void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
+template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
     int* pBackLinkR;
     TSLink<::TCELENTRY>* pFreeListSlot;
     uint32_t nAllocPolicy;
@@ -950,7 +951,7 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
 }
 
 // Check load factor; if chain too long trigger a rehash of the CelList hash table
-template<> int32_t TSHashTable<CELLIST, HASHKEY_NONE>::MonitorFullness(uint32_t nSlot) {
+template<> __attribute__((noinline)) inline int32_t TSHashTable<CELLIST, HASHKEY_NONE>::MonitorFullness(uint32_t nSlot) {
     TSLink<::CELLIST>* pTVar1;
     if (this->nSlotMask >= 0x3ff) {
       return 0;
@@ -1060,7 +1061,7 @@ template<> TSExportTableSimple<::CELLIST, HCELLIST__*, 0>* TSExportTableSimple<C
 }
 
 // Allocates a CelList hash entry, links it into the bucket for nHashKey and returns it. The tail is MOV [EAX],ECX at 006047ed with EAX still holding the new node, and CELCMP_AllocateCelListKeyThreadSafe (006048c0) tail-returns it - nothing writes EAX after the call. CELCMP_AllocateCelListKey then writes six fields through the result (+0x18/+0x1c/+0x24/+0x28/+0x2c), so typing this void made every cel-list key allocation write through an uninitialised pointer.
-template<> ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags) {
+template<> __attribute__((noinline)) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::CELLIST>* ppBucketSlot;
     uint32_t nBucketIndex = dwHashVal & this->nSlotMask;
     int32_t bRehashed = this->MonitorFullness(nBucketIndex);

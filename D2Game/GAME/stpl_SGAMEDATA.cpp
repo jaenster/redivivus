@@ -15,6 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -31,7 +32,7 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 }
 
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
-template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode) {
+template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode) {
     int* pBackLink;
     uint32_t nHashLinkOffset;
     if (!pNode->m_linktoslot.m_next) {
@@ -200,7 +201,7 @@ template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATAL
 
 // QServer game-token hash-table resize/rehash. Grows the game-token bucket array (pGameTokenHashBuckets) to 2*(old mask+1) entries via TSExplicitListArray_EnsureCount, detaching all existing intrusive list nodes into a temporary pending list, re-initializing every new bucket as an empty self-linked intrusive list, updating nGameTokenHashMask, then re-inserting each pending node into its new bucket by (token & newMask). Operates on the QServer (game-gateway) token->game lookup map using the engine's TSIntrusiveList helpers; the heavy negated-pointer arithmetic is the intrusive-list back-link idiom. Internal hash-map maintenance; no network I/O.
 // [override: patch]
-template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
+template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis = this;
     TSLink<::SGAMEDATA>* pBackLink;
     TSLink<::SGAMEDATA>* pPendingHead2;
@@ -316,7 +317,7 @@ template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
     pendingList.m_terminator.m_prevlink->m_next = pendingList.m_terminator.m_next;
 }
 
-template<> int32_t TSHashTable<SGAMEDATA, HASHKEY_NONE>::MonitorFullness(uint32_t nSlot) {
+template<> __attribute__((noinline)) inline int32_t TSHashTable<SGAMEDATA, HASHKEY_NONE>::MonitorFullness(uint32_t nSlot) {
     TSLink<::SGAMEDATA>* ppBucket;
     /* Seems like 1024 is a hardcoded limit for sim games to be ran on the servers
                           */ if (this->nSlotMask >= 0x3ff) {

@@ -4,6 +4,8 @@
 #include "D2Hell/D2Hell.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
+#include "Storm/H/stpl.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
@@ -382,14 +384,16 @@ uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode) {
     return *(uint32_t*)(pList + 8);
 }
 
+} // namespace Storm::Source::SErr
+
 // TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
 // Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
-void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
+template<> __attribute__((noinline)) inline void TSList<HANDLER, TSGetLink<HANDLER>>::UnlinkAll() {
     int* pPrevLink;
     int* pNode;
     while (true) {
       int pNext;
-      pNode = (int)(int*)pList->terminator.pNext > 0 ? (int*)pList->terminator.pNext : 0;
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -405,11 +409,13 @@ void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
     }
 }
 
+namespace Storm::Source::SErr {
+
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
 void __fastcall TSList_HANDLER_Destructor(D2StormListHead * pList) {
     int* pPrevLink;
-    TSList_HANDLER_UnlinkAll(pList);
+    ((TSList<::HANDLER, TSGetLink<::HANDLER>>*)pList)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pList->terminator;
     StormLinkStrc* pNext = pSVar1->pPrevLink;
     if (!pNext) {
@@ -887,7 +893,7 @@ void StaticInit_gStormErrorCallbackList() {
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.
 void StaticFini_gStormErrorCallbackList() {
     uint32_t* pBackLink;
-    TSList_HANDLER_UnlinkAll(&gnStormErrorCallbackCount);
+    ((TSList<::HANDLER, TSGetLink<::HANDLER>>*)&gnStormErrorCallbackCount)->UnlinkAll();
     if (!gnStormErrorCallbackCount.terminator.pPrevLink) {
       return;
     }
