@@ -936,6 +936,9 @@
         "NET_MCP_CLIENT_Send_0x0D",
         "SetD2GSJoinResult",
         "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -952,6 +955,9 @@
         "NET_MCP_CLIENT_Send_0x0F",
         "SetD2GSJoinResult",
         "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -968,6 +974,9 @@
         "NET_MCP_CLIENT_Send_0x10",
         "SetD2GSJoinResult",
         "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -1004,6 +1013,9 @@
         "NET_MCP_CLIENT_Send_0x12_MOTD",
         "SetD2GSJoinResult",
         "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -1020,6 +1032,9 @@
         "NET_MCP_CLIENT_Send_0x13_CancelGameCreate",
         "SetD2GSJoinResult",
         "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

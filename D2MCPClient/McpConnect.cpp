@@ -663,24 +663,24 @@ void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText) {
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x0D() {
-    uint32_t dwPacketBuf;
+    uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
-    dwPacketBuf = (uint32_t)((uint32_t)(uint8_t)0xd << 24 | (uint32_t)((uint32_t)dwPacketBuf & 0xffffffu));
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)((uintptr_t)&dwPacketBuf + 3), 1);
+    dwPacketBuf[3] = 0xd;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x0F() {
-    uint32_t dwPacketBuf;
+    uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
-    dwPacketBuf = (uint32_t)((uint32_t)(uint8_t)0xf << 24 | (uint32_t)((uint32_t)dwPacketBuf & 0xffffffu));
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)((uintptr_t)&dwPacketBuf + 3), 1);
+    dwPacketBuf[3] = 0xf;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x10() {
-    uint32_t dwPacketBuf;
+    uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
-    dwPacketBuf = (uint32_t)((uint32_t)(uint8_t)0x10 << 24 | (uint32_t)((uint32_t)dwPacketBuf & 0xffffffu));
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)((uintptr_t)&dwPacketBuf + 3), 1);
+    dwPacketBuf[3] = 0x10;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilterMode, uint16_t wRequestId) {
@@ -695,17 +695,17 @@ void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilter
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x12_MOTD() {
-    uint32_t dwPacketBuf;
+    uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
-    dwPacketBuf = (uint32_t)((uint32_t)(uint8_t)0x12 << 24 | (uint32_t)((uint32_t)dwPacketBuf & 0xffffffu));
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)((uintptr_t)&dwPacketBuf + 3), 1);
+    dwPacketBuf[3] = 0x12;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x13_CancelGameCreate() {
-    uint32_t dwPacketBuf;
+    uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
-    dwPacketBuf = (uint32_t)((uint32_t)(uint8_t)0x13 << 24 | (uint32_t)((uint32_t)dwPacketBuf & 0xffffffu));
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)((uintptr_t)&dwPacketBuf + 3), 1);
+    dwPacketBuf[3] = 0x13;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 // Tail-calls NET_MCP_CLIENT_Send and returns that BOOL in EAX; its only caller tests EAX to decide whether the realm character-list request failed. Typed void, that decision came from an uninitialised local.
