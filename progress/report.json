@@ -1,10 +1,10 @@
 {
   "measures": {
     "total_code": "2602915",
-    "matched_code": "539810",
-    "matched_code_percent": 20.7387,
+    "matched_code": "545368",
+    "matched_code_percent": 20.9522,
     "total_functions": 14642,
-    "matched_functions": 6495,
-    "matched_functions_percent": 44.3587
+    "matched_functions": 6515,
+    "matched_functions_percent": 44.4953
   }
 }
