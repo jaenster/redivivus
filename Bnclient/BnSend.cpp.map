@@ -1000,6 +1000,15 @@
       ]
     },
     {
+      "name": "D2CheckExpansionGame",
+      "address": "0051bec0",
+      "lines": [],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "D2CheckExpansionGame"
+      ]
+    },
+    {
       "name": "GetDnsResults",
       "address": "0051bee0",
       "lines": [
@@ -1814,6 +1823,7 @@
         "BNNEWS_ReallocateNewsTable"
       ],
       "usedTypes": [
+        "D2BnNewsTableStrc",
         "uint32_t"
       ]
     },

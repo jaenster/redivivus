@@ -116,6 +116,16 @@ struct __attribute__((packed)) D2GSPacketSrv0x60 {
     /* 0x03 */ uint32_t dwUnitGUID;
 };
 
+struct D2GSPacketSrv0x61 {
+    D2GSPacketSrv0x61() = default;
+    D2GSPacketSrv0x61(uint16_t v) { *reinterpret_cast<uint16_t*>(this) = v; }
+    operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
+    D2GSPacketSrv0x61(uint8_t a0, uint8_t a1) : nId(a0), nAct(a1) {}
+
+    /* 0x00 */ uint8_t nId;
+    /* 0x01 */ uint8_t nAct;
+};
+
 struct __attribute__((packed)) D2GSPacketSrv0x63 {
     /* 0x00 */ uint8_t nPacketId; // 0x63
     /* 0x01 */ int32_t nUnitGUID;

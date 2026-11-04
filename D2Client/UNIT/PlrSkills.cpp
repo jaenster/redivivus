@@ -1202,8 +1202,8 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
       return;
     }
 
-    eD2States eCheckedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-    if (eCheckedState != STATE_none) {
+    BOOL eCheckedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
+    if (eCheckedState) {
       D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
       if (pStatList) {
@@ -1265,14 +1265,14 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       } else {
         nBaseStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eUnitStat, nLayer);
-        nBaseStatVal = (int)((uint32_t)nBaseStatVal & 0xffffff00u | (uint32_t)(uint8_t)(char)nBaseStatVal);
-        *(uint8_t*)(char*)&byOldAlignment = (char)nBaseStatVal;
+        nBaseStatVal = (int)((uint32_t)nBaseStatVal & 0xffffff00u | (uint32_t)(uint8_t)nBaseStatVal);
+        *(uint8_t*)(char*)&byOldAlignment = (uint8_t)nBaseStatVal;
       }
     }
 
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, eSkill, nLayer);
     if (eUnitStat == UNITSTAT_alignment) {
-      Player::CLIENT_UpdateMonsterAllegiance(pUnit, (char)byOldAlignment, (char)eSkill);
+      Player::CLIENT_UpdateMonsterAllegiance(pUnit, (uint8_t)byOldAlignment, (uint8_t)eSkill);
     } else if ((int)eUnitStat < 0) {
       return pStatList;
     }

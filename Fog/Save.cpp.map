@@ -38,6 +38,75 @@
         "int32_t",
         "uint8_t"
       ]
+    },
+    {
+      "name": "SAVEFILE_ReadEncodedInt14Bit",
+      "address": "006bbf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbf20"
+        }
+      ],
+      "namespace": "Fog::Save",
+      "calledFunctions": [
+        "SAVEFILE_ReadEncodedInt14Bit"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SAVEFILE_WriteEncodedInt14Bit",
+      "address": "006bbf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbf40"
+        }
+      ],
+      "namespace": "Fog::Save",
+      "calledFunctions": [
+        "SAVEFILE_WriteEncodedInt14Bit"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SAVEFILE_ReadEncodedInt32Bit",
+      "address": "006bbf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbf60"
+        }
+      ],
+      "namespace": "Fog::Save",
+      "calledFunctions": [
+        "SAVEFILE_ReadEncodedInt32Bit"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FOG_ParseStringValue",
+      "address": "006bbfa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbfa0"
+        }
+      ],
+      "namespace": "Fog::Save",
+      "calledFunctions": [
+        "FOG_ParseStringValue"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
     }
   ]
 }

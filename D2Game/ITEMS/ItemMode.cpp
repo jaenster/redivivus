@@ -73,6 +73,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -129,7 +130,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
     uint32_t nChargedSkillParam;
     bool bChargedCountActive;
     D2UnitStrc* pItemOwnerUnit;
-    eD2States eCurrentState;
+    BOOL eCurrentState;
     int32_t nHpScaled;
     int32_t nManaScaled;
     int32_t nStaminaScaled;
@@ -375,14 +376,14 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
       if (true && (int)eState < sgptDataTable->nTxtStatesSize) {
         eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
         if (nNewValue) {
-          if (eCurrentState != STATE_none) {
+          if (eCurrentState) {
             return;
           }
 
           SKILLS::SkillsServer::D2UpdateState(pUnit, eState, 0);
           bStateActive = 1;
         } else {
-          if (eCurrentState == STATE_none) {
+          if (!eCurrentState) {
             return;
           }
 
@@ -626,8 +627,8 @@ static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     D2ItemsTxt* pItemsTxt;
     D2GemsTxt* pGemTxt;
     int nItemQuality;
+    BOOL bDualWield;
     ::SGAMEDATA* pGame;
-    uint32_t bClearStat;
     int32_t nGemApplyIdx;
     D2UnitStrc* pUnit_00 = pUnit2;
     if (!pUnit2) {
@@ -640,9 +641,8 @@ static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUn
       return;
     }
     if (pUnit2->eUnitType == UNIT_PLAYER) {
-      eD2States eSocketedState;
-      eSocketedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_playerbody);
-      if (eSocketedState != STATE_none) {
+      bDualWield = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_playerbody);
+      if (bDualWield) {
         return;
       }
     }
@@ -667,6 +667,7 @@ static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUn
       _bIsGem = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bGemApplyType(pUnit2);
       D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(2, nullptr, pUnit, (D2MagicAffixTxt*)pGemTxt, _bIsGem, nGemApplyIdx);
     } else {
+      uint32_t bClearStat;
       _bIsGem = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Rune);
       if (_bIsGem) {
         /* Apply rune stats */ if (pUnit2->eUnitType != UNIT_ITEM) {
@@ -701,7 +702,7 @@ static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     }
 
     int32_t nUnit2 = 0x1;
-    BOOL bDualWield = D2Common::Units::CanDualWield(pUnit_00);
+    bDualWield = D2Common::Units::CanDualWield(pUnit_00);
     if (bDualWield) {
       if (pUnit != pEquippedWeapon) {
         _bIsGem = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon);
@@ -912,15 +913,14 @@ void __fastcall ITEMMODE_RemoveItemStates(D2UnitStrc * pOwner, D2UnitStrc * pIte
 // Removes all stat contributions of an item being unequipped from its owner unit. Fires the periodic-stats timer trigger, handles set-item dequip logic, removes the stat list from the owner (unless broken and nEquipState==0), conditionally re-activates the off-hand weapon's stat list when dual-wielding, removes item states, and optionally updates resource stats (if nParam != 0). No-ops if either pointer is NULL or the item unit type is wrong.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pUnit, int32_t nEquipState, int32_t bUpdateResourceStats) {
-    uint32_t bIsWeapon;
+    BOOL bIsBroken;
     D2UnitStrc* pOffhandOwner;
     if (!(pUnit && pItem && pItem->eUnitType == UNIT_ITEM)) {
       return;
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {
-      eD2States eState;
-      eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
-      if (eState != STATE_none) {
+      bIsBroken = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
+      if (bIsBroken) {
         return;
       }
     }
@@ -941,13 +941,14 @@ void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pIte
       pItemOwner = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
     }
 
-    BOOL bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_BROKEN, 0x3d8, ".\\ITEMS\\ItemMode.cpp");
+    bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_BROKEN, 0x3d8, ".\\ITEMS\\ItemMode.cpp");
     if (!bIsBroken || nEquipState) {
       D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pItem);
     }
 
     bIsBroken = D2Common::Units::CanDualWield(pUnit);
     if (bIsBroken && pItemOwner) {
+      uint32_t bIsWeapon;
       bIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon);
       if (bIsWeapon && pItemOwner != pItem) {
         bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pItemOwner, ITEMFLAG_BROKEN, 0x3e6, ".\\ITEMS\\ItemMode.cpp");
@@ -5271,11 +5272,11 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_ConsumeItemAndRemove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    ::SGAMEDATA* eItemFlags = pGame;
+    uint32_t eItemFlags = (uint32_t)pGame;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xf94);
     eItemFlags = 0;
-    D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&eItemFlags, 0x20, 1);
-    GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pUnit, pItem, (eD2ItemFlag)eItemFlags);
+    D2Common::ITEMS::Items::ITEM_SetServerSideFlag(&eItemFlags, 0x20, 1);
+    GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pUnit, pItem, eItemFlags);
     ITEMMODE_DeleteItemFromCorpse(pGame, pUnit, pItem);
 }
 

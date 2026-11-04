@@ -25,7 +25,7 @@
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
-#include "D2Game/Monster/AI/AI.h"
+#include "D2Client/UNIT/PlrSkills.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

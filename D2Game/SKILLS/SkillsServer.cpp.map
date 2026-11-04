@@ -40,7 +40,6 @@
         "POINT",
         "SGAMEDATA",
         "eD2PlayerAnimMode",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -167,7 +166,6 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -433,7 +431,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -457,7 +454,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -1367,7 +1363,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -1816,7 +1811,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -2660,7 +2654,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -2800,7 +2793,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2TimerTypeDWORD",
         "int32_t",
         "uint32_t"

@@ -77,6 +77,7 @@
 #include "Fog/Save.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Txt/Cube.h"
 #include "D2Common/Units/Missile.h"
@@ -172,8 +173,8 @@ static int32_t __stdcall DAMAGE_ApplyHealingToUnit(int32_t nHealAmount, D2UnitSt
       return 0;
     }
 
-    eD2States eFreezeState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_death_delay);
-    if (eFreezeState != STATE_none) {
+    _bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_death_delay);
+    if (_bIsDead) {
       return 0;
     }
 
@@ -553,7 +554,7 @@ void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2Stat
 
 // Server-side application of the Freeze effect to a target (pUnit2) from attacker pUnit for nParam frames. Players and bosses/special/uninterruptable/merc monsters fall back to DAMAGE_ApplyCold instead of being frozen. For eligible monsters: bails if a monster delay-by-difficulty check passes, divides duration by the difficulty's MonsterFreezeDivisor, and computes an expire game-frame. Creates+attaches a STATE_freeze statlist with expire callback SUNITDMG_StatExpireCallback_ResumeAI (or extends an existing freeze's timeout to the later expiry). Fires game events: event 0xc with the expire frame, an AITHINK timer trigger, and event 2 one frame after expiry to resume AI. Halts via Fog::ErrorManager on a zero freeze divisor or a non-monster reaching the event stage.
 static void __stdcall DAMAGE_ApplyFreeze(D2UnitStrc * pUnit, int32_t nFreezeFrames, D2UnitStrc * pUnit2) {
-    eD2States eFrozenState;
+    BOOL eFrozenState;
     uint32_t nCheckResult;
     int32_t nFreezeDelay;
     int32_t nMonStatsId;
@@ -577,7 +578,7 @@ static void __stdcall DAMAGE_ApplyFreeze(D2UnitStrc * pUnit, int32_t nFreezeFram
       case UNIT_MONSTER:
         {
           eFrozenState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable);
-          if (eFrozenState != STATE_none) {
+          if (eFrozenState) {
             return;
           }
           if (!pUnit2) {
@@ -1059,8 +1060,7 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
 // Computes the effective resistance value for one damage type given a resist-table entry and a damage context. Reads the defender's raw resistance stat, subtracts pierce from the attacker if applicable, applies the difficulty resistance penalty for players (hardcoded -20/-50 for classic, or DifficultyLevels.txt ResistPenalty for LoD). Clamps the result to [-100, maxResist] where maxResist is 75 (or stat-extended up to 95) for players. Special case: physical resistance (damageresist) against a Sanctuary-wielding attacker vs. undead defender is forced to 0. Returns the final clamped resist value.
 static int32_t DAMAGE_CalculateResistance(D2ResistTableEntry * pEntry, D2DamageContext * pCtx) {
     int nDifficulty;
-    eD2States eUnbreakableState;
-    BOOL nIsUndeadCheck;
+    BOOL eUnbreakableState;
     int32_t nClampedResist;
     int32_t nResistTotal = 0;
     if (pEntry->eResistStat != ~UNITSTAT_strength) {
@@ -1126,9 +1126,9 @@ static int32_t DAMAGE_CalculateResistance(D2ResistTableEntry * pEntry, D2DamageC
       }
       if (pEntry->eResistStat == UNITSTAT_damageresist) {
         eUnbreakableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCtx->pAttacker, STATE_sanctuary);
-        if (eUnbreakableState != STATE_none) {
-          nIsUndeadCheck = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pCtx->pDefender);
-          if (nIsUndeadCheck) {
+        if (eUnbreakableState) {
+          eUnbreakableState = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pCtx->pDefender);
+          if (eUnbreakableState) {
             nMaxResist = 0;
           }
         }
@@ -1278,7 +1278,7 @@ static int32_t DAMAGE_CalculateExperienceMultiplier(D2DamageContext * pCtx) {
 
 // Zeroes out cold/freeze lengths if defender has UNITSTAT_item_cannotbefrozen, or halves them if they have UNITSTAT_item_halffreezeduration. Also clears poison DoT duration if defender has STATE_shrine_resist_poison, and burn duration if they have STATE_shrine_resist_fire. Modifies pCtx->pDamage in place.
 static void DAMAGE_ProcessFreezeAndPoisonImmunity(D2DamageContext * pCtx) {
-    eD2States eStateResult;
+    BOOL eStateResult;
     if (pCtx->pDamage->dwColdLength > 0 || pCtx->pDamage->dwFrzLength > 0) {
       int32_t nCannotBeFrozen;
       nCannotBeFrozen = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pCtx->pDefender, UNITSTAT_item_cannotbefrozen, 0);
@@ -1295,7 +1295,7 @@ static void DAMAGE_ProcessFreezeAndPoisonImmunity(D2DamageContext * pCtx) {
     }
     if (pCtx->pDamage->dwPoisLength > 0) {
       eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCtx->pDefender, STATE_shrine_resist_poison);
-      if (eStateResult != STATE_none) {
+      if (eStateResult) {
         pCtx->pDamage->dwPoisLength = 0;
       }
     }
@@ -1304,7 +1304,7 @@ static void DAMAGE_ProcessFreezeAndPoisonImmunity(D2DamageContext * pCtx) {
     }
 
     eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCtx->pDefender, STATE_shrine_resist_fire);
-    if (eStateResult == STATE_none) {
+    if (!eStateResult) {
       return;
     }
 
@@ -1974,8 +1974,8 @@ BOOL __stdcall DAMAGE_CheckKnockbackThreshold(D2UnitStrc * pUnit, D2DamageStrc *
     uint32_t uRandRoll;
     uint32_t uRandRoll2;
     uint32_t nKbDivisor;
-    eD2States eImmovableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eImmovableState != STATE_none) {
+    BOOL eImmovableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
+    if (eImmovableState) {
       return 1;
     }
     if (pDamage1->dwPoisDamage && pDamage1->dwPoisDamage == pDamage1->dwDmgTotal) {
@@ -2215,6 +2215,7 @@ static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t dwHitClass, int32_t 
 void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUnit, D2UnitStrc * pVictim, D2DamageStrc * pDamage) {
     bool bIsInTown;
     uint32_t uMonFlag;
+    BOOL eImmovableState;
     eD2UnitType eVictimType;
     D2StatListExStrc* pStatList;
     int32_t nLastBlockFrame;
@@ -2228,7 +2229,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
     D2SkillsTxt* pSkillsTxt;
     int32_t nFasterBlockRate;
     D2MonsterKillStrc sMonsterKill;
-    BOOL BVar1;
+    eD2States eState;
     ::SGAMEDATA* pGameLocal;
     uint16_t wDmgResultFlags;
     D2UnitStrc* pAttacker = pUnit;
@@ -2237,8 +2238,8 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
     if (pRoom) {
       D2MonStatsTxt* pMonStats;
       pRoom = D2Common::Units::UNITS_GetRoom(pVictim);
-      BVar1 = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-      if (BVar1) {
+      eImmovableState = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+      if (eImmovableState) {
         if (!pUnit) {
           return;
         }
@@ -2264,8 +2265,8 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
       pVictim->dwLastHitClass = pDamage->dwHitClass;
     }
 
-    eD2States eImmovableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pVictim, STATE_uninterruptable);
-    if (eImmovableState != STATE_none) {
+    eImmovableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pVictim, STATE_uninterruptable);
+    if (eImmovableState) {
       if (pDamage->wResultFlags & 2) {
         D2Common::DATATBLS::ItemStats::SetState(pVictim, STATE_death_delay, 1);
         return;
@@ -2357,7 +2358,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
       } else {
         wDmgResultFlags = pDamage->wResultFlags;
         if ((char)wDmgResultFlags < '\0') {
-          eImmovableState = STATE_dodge;
+          eState = STATE_dodge;
         } else {
           if (!(wDmgResultFlags & 0x100)) {
             if (wDmgResultFlags & 0x200) {
@@ -2434,7 +2435,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
             }
             if (wDmgResultFlags & 4) {
               pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, STATE_stunned);
-              if (pStatList || (BVar1 = DAMAGE_CheckKnockbackThreshold(pVictim, pDamage, pDamage->dwHitClass) , !BVar1)) {
+              if (pStatList || (eImmovableState = DAMAGE_CheckKnockbackThreshold(pVictim, pDamage, pDamage->dwHitClass) , !eImmovableState)) {
                 PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGame, pVictim, nullptr, 4, pDamage->dwDmgTotal, 0, 0);
                 return;
               }
@@ -2453,10 +2454,10 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
             return;
           }
 
-          eImmovableState = STATE_avoid;
+          eState = STATE_avoid;
         }
 
-        pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, eImmovableState);
+        pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, eState);
         if (pStatList) {
           eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
           pEvadeSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pVictim, eSkill);
@@ -3825,9 +3826,8 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
       wHitFlags &= 0xfffe;
     }
     if (wHitFlags & 1) {
-      eD2States eUninterruptableState;
-      eUninterruptableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable);
-      if (eUninterruptableState == STATE_none) {
+      _bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable);
+      if (!_bInMeleeRange) {
         wHitFlags |= 4;
       }
     }

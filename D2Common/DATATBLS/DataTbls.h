@@ -24,7 +24,7 @@ typedef uint32_t eD2UnitType;
 namespace D2Common::DATATBLS::DataTbls {
 
 // Function declarations
-uint16_t __fastcall DATATBLS_LookupStringId(char * szKey);
+int32_t __fastcall DATATBLS_LookupStringId(char * szKey);
 uint32_t __stdcall DATATBLS_GetCompCodeByIndex(int32_t nIndex);
 DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel);
 // Returns experience.txt row 0 (the MaxLvl row) Class[ePlayerClass], falling back to Class[0] outside 0..6.

@@ -193,7 +193,6 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -228,7 +227,6 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t"
       ]
@@ -283,7 +281,6 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "eMissilesId",
         "int32_t",
         "uint32_t"

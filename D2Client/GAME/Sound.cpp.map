@@ -4,6 +4,51 @@
   "file": "D2Client/GAME/Sound.cpp",
   "functions": [
     {
+      "name": "SOUND_IsInitialized_ForSoundOptionsItem",
+      "address": "0047cd80",
+      "lines": [],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitializedDup"
+      ]
+    },
+    {
+      "name": "SOUND_IsInitialized_ForSoundVolumeItem",
+      "address": "0047cd90",
+      "lines": [],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitializedDup"
+      ]
+    },
+    {
+      "name": "SOUND_IsInitialized_ForMusicVolumeItem",
+      "address": "0047cde0",
+      "lines": [],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitializedDup"
+      ]
+    },
+    {
+      "name": "SOUND_Is3DMixerActive_For3DBiasItem",
+      "address": "0047ce60",
+      "lines": [],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_Is3DMixerActive"
+      ]
+    },
+    {
+      "name": "SOUND_IsInitialized_ForNpcSpeechItem",
+      "address": "0047cee0",
+      "lines": [],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitializedDup"
+      ]
+    },
+    {
       "name": "SOUND_ParseStreamWavHeader",
       "address": "004df630",
       "lines": [
@@ -415,6 +460,15 @@
         "SOUND_ShutdownAudio",
         "SOUND_InitStreamChannels",
         "SOUND_SetSoundMixer"
+      ]
+    },
+    {
+      "name": "SOUND_ShutdownAudio_Thunk",
+      "address": "004e00c0",
+      "lines": [],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_ShutdownAudio"
       ]
     },
     {

@@ -242,6 +242,45 @@
       ]
     },
     {
+      "name": "CUBE_SpecialOutput_CowPortalRecipe",
+      "address": "00565a80",
+      "lines": [],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_SpecialOutput_CowPortal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "CUBE_SpecialOutput_Unused2",
+      "address": "00565a90",
+      "lines": [],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_SpecialOutput_Quest_Unused2"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "CUBE_SpecialOutput_Unused3",
+      "address": "00565aa0",
+      "lines": [],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_SpecialOutput_Quest_Unused3"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "CUBE_GenerateOutput",
       "address": "00565ab0",
       "lines": [
@@ -1110,6 +1149,19 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_TRADE_CompleteTrade",
+      "address": "00568760",
+      "lines": [],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "TRADE_CompleteTrade"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
       ]
     },
     {

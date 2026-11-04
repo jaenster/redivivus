@@ -129,7 +129,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     int nMagicMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_magicmaxdam, 0);
     int nColdMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_coldmaxdam, 0);
     int nPoisonMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0);
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_cold);
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_cold);
     nLifePercent = D2Common::Units::GetCurrentLifePercentage(pTarget);
     int nLeftSkillLevel = 0;
     int nMeleeScore = 0;
@@ -178,7 +178,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
       }
     }
 
-    nPhysRes = (int)((nLifePercent >= 0x14 ? 0 : 0x64) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState != STATE_none ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
+    nPhysRes = (int)((nLifePercent >= 0x14 ? 0 : 0x64) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
     if (nPhysRes) {
       return nPhysRes;
     }
@@ -476,8 +476,8 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
 
     nLifePercent = D2Common::Units::GetCurrentLifePercentage(pUnit2);
     anWeights[1] = nBaseWeight + (100 - nLifePercent);
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_cold);
-    if (eUnitState != STATE_none) {
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_cold);
+    if (eUnitState) {
       anWeights[8] = 0;
       anWeights[0xd] = 0;
       anWeights[0xb] = 0;
@@ -1161,8 +1161,8 @@ void __fastcall BaalCrabAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, D2UnitSt
       storedCommandArg1 = pInfernoCommand->nCmdArg[1];
     }
 
-    eD2States currentInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (currentInfernoState != STATE_none) {
+    BOOL currentInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (currentInfernoState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);
     }
 

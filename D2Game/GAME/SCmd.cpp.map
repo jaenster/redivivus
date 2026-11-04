@@ -938,7 +938,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint8_t"
       ]
@@ -2195,6 +2194,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2GSPacketSrv0x",
         "uint8_t"
       ]
     },
@@ -3445,6 +3445,19 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "thunk_NET_D2GS_SERVER_Send_0x5A_EventMessages",
+      "address": "0054aa30",
+      "lines": [],
+      "namespace": "D2Game::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2Packet0x5aEventStructure"
       ]
     }
   ]

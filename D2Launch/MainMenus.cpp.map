@@ -367,6 +367,15 @@
       ]
     },
     {
+      "name": "FORMS_DestroyListJmp",
+      "address": "0042f880",
+      "lines": [],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_DestroyList"
+      ]
+    },
+    {
       "name": "UIMENU_DownloadingPatch",
       "address": "0042f890",
       "lines": [

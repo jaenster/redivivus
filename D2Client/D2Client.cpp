@@ -17,7 +17,6 @@
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/Message.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Sound/SoundHdr.h"
 #include "D2Client/Source/ClientEngine.h"
@@ -64,7 +63,6 @@
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
-#include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
@@ -76,7 +74,6 @@
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/Unicode/UNISYS.h"
 #include "D2Launch/MainMenus.h"
-#include "D2Sound/Src/D2SoundSmp.h"
 #include "D2Win/D2GFX.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -106,12 +103,11 @@
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Client/UI/UseItem.data.h"
 #include "D2Client/UI/npcmenu.data.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/GAME/Arena.h"
-#include "D2Game/Monster/AI/AI.h"
-#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -128,10 +124,6 @@
 #define RECON_FPTD_fpRequiredUserAction
 typedef BOOL (*fpRequiredUserAction)();
 #endif
-#ifndef RECON_FPTD_fnBinkFrameCallback
-#define RECON_FPTD_fnBinkFrameCallback
-typedef void (__stdcall *fnBinkFrameCallback)();
-#endif
 
 static eD2ArenaFlags CLIENT_ArenaFlags = ARENAFLAG_ClientUpdate; D2_STATIC_GUARD(CLIENT_ArenaFlags, "CLIENT_ArenaFlags");
 static eD2PlayerClassIDDWORD eD2PlayerClassIDDWORD_00712f00 = CLASS_SORCERESS; D2_STATIC_GUARD(eD2PlayerClassIDDWORD_00712f00, "eD2PlayerClassIDDWORD_00712f00");
@@ -142,11 +134,6 @@ static uint8_t geCutsceneCurrentSoundId = 0; D2_STATIC_GUARD(geCutsceneCurrentSo
 static uint8_t aQuestAvailabilityPacket[37] = {}; D2_STATIC_GUARD(aQuestAvailabilityPacket, "aQuestAvailabilityPacket");
 static BOOL bReceivedQuestAvailabilityPacket = 0; D2_STATIC_GUARD(bReceivedQuestAvailabilityPacket, "bReceivedQuestAvailabilityPacket");
 static uint32_t gdwWarpFadeExpireTime = 0; D2_STATIC_GUARD(gdwWarpFadeExpireTime, "gdwWarpFadeExpireTime");
-static uint32_t gnBinkDDrawYOffset = 0; D2_STATIC_GUARD(gnBinkDDrawYOffset, "gnBinkDDrawYOffset");
-static uint32_t gnBinkDDrawXOffset = 0; D2_STATIC_GUARD(gnBinkDDrawXOffset, "gnBinkDDrawXOffset");
-static void * gpBinkVideoDirectDraw = 0; D2_STATIC_GUARD(gpBinkVideoDirectDraw, "gpBinkVideoDirectDraw");
-static uint32_t gnBinkDDrawSurfaceType = 0; D2_STATIC_GUARD(gnBinkDDrawSurfaceType, "gnBinkDDrawSurfaceType");
-static uint32_t g_bBinkDDrawVideoQuitRequested = 0; D2_STATIC_GUARD(g_bBinkDDrawVideoQuitRequested, "g_bBinkDDrawVideoQuitRequested");
 
 namespace D2Client {
 
@@ -3927,160 +3914,6 @@ int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGa
 
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
-}
-
-void __stdcall BINK_RenderVideoFrame() {
-    DDSURFACEDESC nDDSurfDescSize;
-    if (!gnGlideWindowHandle) {
-      return;
-    }
-
-    BinkDoFrame(gpBinkVideoDirectDraw);
-    if (!RENDERER_SelectedRendererCore) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x42);
-      exit(-1);
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-    nDDSurfDescSize.dwSize = 0x6c;
-    memset(&nDDSurfDescSize.dwFlags, 0, 0x68);
-    HRESULT hLockResult = gpDDrawPrimarySurface->lpVtbl->Lock(gpDDrawPrimarySurface, nullptr, &nDDSurfDescSize, 0x21, (HANDLE)0x0);
-    if (!hLockResult) {
-      BinkCopyToBuffer(gpBinkVideoDirectDraw, nDDSurfDescSize.lpSurface, nDDSurfDescSize.lPitch, *(uint32_t*)((int)gpBinkVideoDirectDraw + 4), gnBinkDDrawXOffset, gnBinkDDrawYOffset, gnBinkDDrawSurfaceType);
-      gpDDrawPrimarySurface->lpVtbl->Unlock(gpDDrawPrimarySurface, (LPVOID)0x0);
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-    if (*(int*)((int)gpBinkVideoDirectDraw + 0xc) == *(int*)((int)gpBinkVideoDirectDraw + 8)) {
-      g_bBinkDDrawVideoQuitRequested = 1;
-      return;
-    }
-
-    BinkNextFrame(gpBinkVideoDirectDraw);
-}
-
-void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFrameCallback pfnFrameCallback) {
-    // Static local variables (originally global data)
-    static uint32_t gbBinkDDrawVideoExitRequested; D2_STATIC_GUARD_BSS(gbBinkDDrawVideoExitRequested, "D2Client::BINK_PlayVideoFile::gbBinkDDrawVideoExitRequested");
-    static unsigned int gdwBinkVideoLastClickTick; D2_STATIC_GUARD_BSS(gdwBinkVideoLastClickTick, "D2Client::BINK_PlayVideoFile::gdwBinkVideoLastClickTick");
-
-    DWORD dwCurrentTick;
-    int nBinkWaitResult;
-    uint32_t nOpenFlags;
-    tagMSG msgPeek;
-    HANDLE pFileHandle;
-    int bClickedToSkip;
-    bClickedToSkip = 0;
-    g_bBinkDDrawVideoQuitRequested = 0;
-    if (!(!gpBinkVideoDirectDraw && !gnRenderState)) {
-      return;
-    }
-
-    gnBinkDDrawSurfaceType = BinkDDSurfaceType(gpDDrawPrimarySurface);
-    BinkSetSoundSystem(BinkOpenDirectSound, 0);
-    uint32_t nFileOpenMode;
-    nFileOpenMode = 4;
-    BOOL bDirectCommand;
-    bDirectCommand = Fog::Source::SFile::GetUseDirectCommand();
-    if (bDirectCommand) {
-      nFileOpenMode = 5;
-    }
-
-    Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, nFileOpenMode, &pFileHandle);
-    if (pFileHandle) {
-      DWORD dwStartTick;
-      nOpenFlags = 0x800000;
-      switch (nParam) {
-        case 1:
-          {
-            nOpenFlags = 0x30800000;
-            break;
-          }
-        case 2:
-          {
-            nOpenFlags = 0x10800000;
-            break;
-          }
-        case 3:
-          {
-            nOpenFlags = 0x40800000;
-            break;
-          }
-      }
-
-      gpBinkVideoDirectDraw = (void*)BinkOpen(pFileHandle, nOpenFlags);
-      if (gpBinkVideoDirectDraw) {
-        gnBinkDDrawXOffset = (uint32_t)(RENDERER_nWindowWidth - *(int*)gpBinkVideoDirectDraw) >> 1;
-        if (gnBinkDDrawXOffset & 3) {
-          gnBinkDDrawXOffset = (gnBinkDDrawXOffset | 3) + 1;
-        }
-
-        gnBinkDDrawYOffset = (uint32_t)(RENDERER_nWindowHeight - *(int*)((int)gpBinkVideoDirectDraw + 4)) >> 1;
-        dwStartTick = GetTickCount();
-        while ((!g_bBinkDDrawVideoQuitRequested || (dwCurrentTick = GetTickCount() , dwCurrentTick < dwStartTick + 500)) && !gnRenderState) {
-          if (pfnFrameCallback) {
-            (*pfnFrameCallback)();
-          }
-          if (bClickedToSkip) {
-            break;
-          }
-
-          /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bDirectCommand = PeekMessageA(&msgPeek, (HWND)0x0, 0, 0, 1);
-          if (bDirectCommand) {
-            if (msgPeek.message <= 0x201) {
-              if (msgPeek.message == 0x201) {
-                goto request_skip;
-              }
-              if (msgPeek.message != 0x12) {
-                if (msgPeek.message == 0x102) {
-                  goto request_skip;
-                }
-              } else {
-                g_bBinkDDrawVideoQuitRequested = 1;
-                gbBinkDDrawVideoExitRequested = 1;
-              }
-            } else {
-              if (!(msgPeek.message != 0x204 && msgPeek.message != 0x207)) {
-                request_skip:
-                bClickedToSkip = 1;
-                gdwBinkVideoLastClickTick = GetTickCount();
-              }
-            }
-
-            /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msgPeek);
-            /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&msgPeek);
-          } else {
-            nBinkWaitResult = BinkWait(gpBinkVideoDirectDraw);
-            if (!nBinkWaitResult) {
-              BINK_RenderVideoFrame();
-            } else {
-              /* DWORD dwMilliseconds for Sleep */ Sleep(1);
-            }
-          }
-        }
-
-        if (gpBinkVideoDirectDraw) {
-          D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
-          BinkClose(gpBinkVideoDirectDraw);
-          /* HANDLE hObject for CloseHandle */ CloseHandle(pFileHandle);
-          D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
-          gpBinkVideoDirectDraw = 0;
-        }
-        if (!gbBinkDDrawVideoExitRequested) {
-          return;
-        }
-
-        exit(-1);
-      }
-
-      /* HANDLE hObject for CloseHandle */ CloseHandle(pFileHandle);
-    }
-    if (!gpBinkVideoDirectDraw) {
-      return;
-    }
-
-    BinkClose(gpBinkVideoDirectDraw);
-    gpBinkVideoDirectDraw = 0;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

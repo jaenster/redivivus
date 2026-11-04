@@ -8,7 +8,10 @@ derived from evidence, strongest first; each row records which tier made it:
 
   sourcemap the generator's own .cpp.map for its file names its address
             (ghidra-reconstruct writes one per .cpp; this repository ignores
-            them, but when a checkout has them they are exact)
+            them, but when a checkout has them they are exact). By qualified
+            name, else by a bare name unique in the TU on both sides; last of
+            all, a bare name left over once its namesakes are placed. No
+            inferred tier pairs a function away from the address its map names
   name      its generated name ends in the address Ghidra knew it by
             (FOO_00512340): taken from the database the tree came from
   export    the original exports it under this mangled name
@@ -116,6 +119,7 @@ class Matcher:
         self.by_symbol = collections.defaultdict(list)
         for f in fns:
             self.by_symbol[f.symbol].append(f)
+        self.sourcemap_addr = {}   # our key -> the address its .cpp.map names (by_sourcemaps)
         self.map = {}       # our key -> (start, method, detail)
         self.rmap = {}      # start -> our key
         self.r_strings, self.r_imports, self.r_calls = {}, {}, {}
@@ -140,6 +144,8 @@ class Matcher:
         for sc, k, s, d in pairs:
             if k in self.map or s in self.rmap:
                 continue
+            if method != 'sourcemap' and not self.sourcemap_allows(k, s):
+                continue
             if k not in best_k or sc > best_k[k][0]:
                 best_k[k] = (sc, s, d, 1)
             elif sc == best_k[k][0] and s != best_k[k][1]:
@@ -159,6 +165,14 @@ class Matcher:
             n += 1
         return n
 
+    def sourcemap_allows(self, k, s):
+        """An inferred pair may not contradict the generator's map: when the
+        map names an address for our function, the original function it is
+        paired with must contain it. The map's address can sit inside the carve
+        (a Ghidra entry a few bytes past the carved start) but never outside."""
+        a = self.sourcemap_addr.get(k)
+        return a is None or s <= a < self.model[s][0].end
+
     def resolve_callee(self, caller, symbol):
         cands = self.by_symbol.get(symbol, [])
         if len(cands) == 1:
@@ -167,31 +181,123 @@ class Matcher:
         return same[0] if len(same) == 1 else None
 
     # -- tiers ---------------------------------------------------------------
-    def by_sourcemaps(self, root):
-        """<tu>.cpp.map files next to the sources: {"functions": [{"name",
-        "namespace", "address"}, ...]} (ghidra-reconstruct codegen/sourcemap.ts)."""
+    @staticmethod
+    def bare_name(name):
+        """The last component of a qualified name, without a parameter list:
+        'TSList<>::Link' and the map's 'Link' in namespace
+        'TSList<TCELENTRY, TSGetLink<TCELENTRY>>' are both 'Link'."""
+        name = name.split('(', 1)[0]
+        depth, cut = 0, 0
+        for i, ch in enumerate(name):
+            if ch == '<':
+                depth += 1
+            elif ch == '>':
+                depth -= 1
+            elif ch == ':' and depth == 0 and name.startswith('::', i):
+                cut = i + 2
+        return name[cut:]
+
+    @staticmethod
+    def sourcemap_files(root):
+        """Every .cpp.map under root, by its TU path case-folded: the build's
+        TU spelling ('D2Client/Game/...') and the checkout's ('D2Client/GAME/...')
+        differ in case, and a case-sensitive file system would miss the file."""
+        out = {}
+        for d, dirs, files in os.walk(root):
+            dirs[:] = [x for x in dirs if not x.startswith('.') and x != 'asm_matching']
+            for n in files:
+                if n.endswith('.cpp.map'):
+                    p = os.path.join(d, n)
+                    out[os.path.relpath(p, root)[:-len('.cpp.map')].replace(os.sep, '/').lower()] = p
+        return out
+
+    def sourcemap_entries(self, root):
+        """(our functions of the TU, map path, the map's functions) per TU
+        that has a <tu>.cpp.map. Read once: both sourcemap tiers use it."""
         import json
-        pairs = []
-        by_tu = collections.defaultdict(dict)
+        if getattr(self, '_sourcemaps', None) is not None:
+            return self._sourcemaps
+        by_tu = collections.defaultdict(list)
         for f in self.fns:
-            by_tu[f.tu][f.name] = f
-        for tu, names in by_tu.items():
-            path = os.path.join(root, tu + '.cpp.map')
-            if not os.path.exists(path):
+            by_tu[f.tu].append(f)
+        maps = self.sourcemap_files(root)
+        out = []
+        for tu, ours in by_tu.items():
+            path = maps.get(tu.lower())
+            if path is None:
                 continue
             try:
                 sm = json.load(open(path))
             except ValueError:
                 continue
+            entries = []
             for fn in sm.get('functions', []):
-                q = (fn.get('namespace', '') + '::' if fn.get('namespace') else '') + fn.get('name', '')
-                f = names.get(q) or names.get(fn.get('name', ''))
                 try:
                     a = int(str(fn.get('address', '')), 16)
                 except ValueError:
                     continue
+                q = (fn.get('namespace', '') + '::' if fn.get('namespace') else '') + fn.get('name', '')
+                entries.append((q, fn.get('name', ''), a))
+            out.append((ours, path, entries))
+        self._sourcemaps = out
+        return out
+
+    def by_sourcemaps(self, root):
+        """<tu>.cpp.map files next to the sources: {"functions": [{"name",
+        "namespace", "address"}, ...]} (ghidra-reconstruct codegen/sourcemap.ts).
+
+        Ours is found by its qualified name, else by its bare name when that is
+        unique in the TU on both sides: our demangled name strips template
+        arguments ('TSList<>') and can lose a namespace level the map spells
+        ('Renderer::Direct3D::CheckCutScene' against ours 'Renderer::CheckCutScene'),
+        so the qualified lookup misses functions the map does name."""
+        pairs = []
+        for ours, path, entries in self.sourcemap_entries(root):
+            names = {f.name: f for f in ours}
+            ours_bare = collections.Counter(self.bare_name(f.name) for f in ours)
+            map_bare = collections.Counter(self.bare_name(n) for _q, n, _a in entries)
+            bare = {self.bare_name(f.name): f for f in ours}
+            for q, n, a in entries:
+                f = names.get(q) or names.get(n)
+                detail = 'sourcemap ' + os.path.basename(path)
+                if f is None:
+                    b = self.bare_name(n)
+                    if b and ours_bare[b] == 1 and map_bare[b] == 1:
+                        f, detail = bare[b], detail + ' (bare name)'
+                if f is not None:
+                    self.sourcemap_addr[f.key] = a
                 if f is not None and a in self.model:
-                    pairs.append((10.0, f.key, a, 'sourcemap ' + os.path.basename(path)))
+                    pairs.append((10.0, f.key, a, detail))
+        return self.assign(pairs, 'sourcemap')
+
+    def by_sourcemap_rest(self, root):
+        """Last: a map entry whose address nothing paired, and one of our
+        functions nothing paired, with the same bare name, each the only one of
+        that name left in the TU - provided every other entry of that name is
+        paired, at its own address, with one of ours of that name. The bare name
+        was ambiguous only because of functions already placed where the map
+        says ('Destructor' among a TU's template instantiations)."""
+        pairs = []
+        for ours, path, entries in self.sourcemap_entries(root):
+            by_bare = collections.defaultdict(list)
+            for f in ours:
+                by_bare[self.bare_name(f.name)].append(f)
+            map_by_bare = collections.defaultdict(list)
+            for _q, n, a in entries:
+                map_by_bare[self.bare_name(n)].append(a)
+            for b, addrs in map_by_bare.items():
+                fs = by_bare.get(b, [])
+                if not b or len(addrs) < 2 or len(set(addrs)) != len(addrs):
+                    continue
+                free_a = [a for a in addrs if a not in self.rmap]
+                free_f = [f for f in fs if f.key not in self.map]
+                if len(free_a) != 1 or len(free_f) != 1 or free_a[0] not in self.model:
+                    continue
+                keys = {f.key for f in fs}
+                if any(self.rmap[a] not in keys for a in addrs if a != free_a[0]):
+                    continue
+                pairs.append((10.0, free_f[0].key, free_a[0],
+                              'sourcemap %s (bare name, the last of %d)' % (os.path.basename(path), len(addrs))))
         return self.assign(pairs, 'sourcemap')
 
     def by_names(self):
@@ -751,6 +857,7 @@ class Matcher:
                ('of which moved', len(moved))]
         log += self.derive(pins)
         log.append(('dropped: callees disagree', -self.drop_contradicted()))
+        log.append(('sourcemap, the rest', self.by_sourcemap_rest(os.path.dirname(os.path.dirname(ORACLE)))))
         return log
 
     def keep_matches(self, pins):

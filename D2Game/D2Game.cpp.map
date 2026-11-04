@@ -37,6 +37,15 @@
       ]
     },
     {
+      "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20",
+      "address": "0052db80",
+      "lines": [],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QSERVER_CountClientsWithStatusFlag0x20"
+      ]
+    },
+    {
       "name": "GAME_SetNoSaveFlag",
       "address": "00530f30",
       "lines": [

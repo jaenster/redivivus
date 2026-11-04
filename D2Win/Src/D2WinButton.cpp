@@ -18,7 +18,6 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Win/Src/D2WinMain.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -118,28 +117,28 @@ void __fastcall D2WINBUTTON_SetBounds(::D2WinButton * pButton, int32_t nX, int32
 }
 
 // Invokes button click callback (field 9) and optional secondary callback (field 10). Sets active flag (field 0x13) before callback dispatch. Uses global recursion counter INT_007d55c4.
-void __fastcall D2WINBUTTON_InvokeClickCallback(::D2WinButton * * ppButton) {
+void __fastcall D2WINBUTTON_InvokeClickCallback(D2ControlMsg * ppButton) {
     D2ControlMsg sMsgBuf;
-    ::D2WinButton* pDVar1 = *ppButton;
-    if (pDVar1->sControl.neD2FormType != FORM_Button) {
+    D2ControlStrc* pDVar1 = ppButton->pControl;
+    if (pDVar1->neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbc);
       exit(-1);
     }
 
-    ::Push pPVar2 = pDVar1->sControl.fpPush;
+    ::Push pPVar2 = pDVar1->fpPush;
     if (!pPVar2) {
       return;
     }
 
-    pDVar1->nClickAnimState = 1;
-    (*pPVar2)((D2ControlMsg*)ppButton);
-    if (!pDVar1->sControl.fpMouse) {
+    pDVar1[1].dwPosX = 1;
+    (*pPVar2)(ppButton);
+    if (!pDVar1->fpMouse) {
       return;
     }
 
-    sMsgBuf.pControl = &(*ppButton)->sControl;
+    sMsgBuf.pControl = ppButton->pControl;
     gnFormControlCount++;
-    pDVar1->sControl.fpMouse(&sMsgBuf);
+    pDVar1->fpMouse(&sMsgBuf);
     gnFormControlCount--;
 }
 
@@ -189,9 +188,7 @@ void __fastcall D2WINBUTTON_SetCustomData(::D2WinButton * pButton, int32_t nCust
       exit(-1);
     }
 
-    pButton->nHotkeyStringId = (short int)nCustomData;
-    pButton->_pad626[0] = (char)((uint32_t)nCustomData >> 0x10);
-    pButton->_pad626[1] = (char)((uint32_t)nCustomData >> 0x18);
+    pButton->nHotkeyStringId = nCustomData;
 }
 
 // Hit test for button bounds accounting for vertical offset (field 0x18). Returns TRUE if (x,y) falls within button rectangle.
@@ -238,7 +235,7 @@ static void __stdcall D2WINBUTTON_DrawText(::D2WinButton * pButton, int nOffsetY
       nSizeY = pButton->sControl.dwSizeY;
       nPosY = pButton->sControl.dwPosY;
       nPrimaryXCenter = pButton->sControl.dwPosX + nSecondLabelY;
-      nSecondaryTextWidth = D2Lang::StrTable::strtable::GetLocaleString(pButton->nHotkeyStringId);
+      nSecondaryTextWidth = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)pButton->nHotkeyStringId);
       nDrawY = D2WinFont::DRAW_text0(nSecondaryTextWidth);
       nSecondaryXCenter = (pButton->sControl.dwSizeX - nDrawY) / 2;
       if (nSecondaryXCenter < 0) {
@@ -257,7 +254,7 @@ static void __stdcall D2WINBUTTON_DrawText(::D2WinButton * pButton, int nOffsetY
 
       eGlobalPalette = pButton->nTextColor;
       eDrawMode = DRAW_DARKTRANSPARENT;
-      D2WinFont::D2WINFONT_DrawTextWithOptionalBackground(D2Lang::StrTable::strtable::GetLocaleString(pButton->nHotkeyStringId), nSecondaryXCenter, nSecondLabelY, eGlobalPalette, 0, eDrawMode);
+      D2WinFont::D2WINFONT_DrawTextWithOptionalBackground(D2Lang::StrTable::strtable::GetLocaleString((uint16_t)pButton->nHotkeyStringId), nSecondaryXCenter, nSecondLabelY, eGlobalPalette, 0, eDrawMode);
     }
 
     D2WinFont::D2WINFONT_DrawTextWithOptionalBackground(wszText, nPrimaryXCenter, nDrawY, pButton->nTextColor, 0, DRAW_DARKTRANSPARENT);
@@ -574,8 +571,6 @@ BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
     pNewButton->fpHoverCallback = pMouse;
     pNewButton->bMouseOver = 0;
     pNewButton->nHotkeyStringId = 0;
-    pNewButton->_pad626[0] = '\0';
-    pNewButton->_pad626[1] = '\0';
     D2WinMain::FORMS_AddControlToGlobalList(&pNewButton->sControl);
     return pNewButton;
 }

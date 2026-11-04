@@ -585,6 +585,15 @@
       ]
     },
     {
+      "name": "thunk_Release",
+      "address": "00511cd0",
+      "lines": [],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "Release"
+      ]
+    },
+    {
       "name": "InitPerspective",
       "address": "00511ce0",
       "lines": [
@@ -1350,6 +1359,54 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "BINK_RenderVideoFrame",
+      "address": "005136f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005136f0"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "BINK_RenderVideoFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "DDSURFACEDESC",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BINK_PlayVideoFile",
+      "address": "005137e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005137e0"
+        }
+      ],
+      "namespace": "D2DDraw::Renderer::DirectDraw",
+      "calledFunctions": [
+        "BINK_PlayVideoFile",
+        "GetUseDirectCommand",
+        "SFileOpenFileEx",
+        "GetTickCount",
+        "BINK_RenderVideoFrame",
+        "SOUNDSMP_SetGlobalVolume",
+        "exit"
+      ],
+      "usedTypes": [
+        "fnBinkFrameCallback",
+        "int32_t",
+        "tagMSG",
+        "uint32_t"
       ]
     }
   ]

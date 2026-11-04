@@ -1518,7 +1518,7 @@ void __stdcall QUESTLOG_SetActiveActFromPlayerRoom() {
 void __stdcall QUESTLOG_ResetState() {
     gQuestLog.bQuestLogIconPressed = 0;
     gQuestLog.bQuestLogOpenBtnPressed = 0;
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     gQuestLog.nQuestLogSelectedIcon = -1;
     gQuestLog.bQuestLogCloseBtnPressed = 0;
     gQuestLog.bQuestLogLevelUpCinematicPlayed = 0;
@@ -1652,7 +1652,7 @@ static bool QUESTLOG_HitTestOpenButton(int32_t nPanelY, int32_t nPanelX) {
 int __stdcall CloseQuestLogWeird(DWORD bAdjustMouse) {
     if (gQuestLog.bQuestLogOpen == 2) {
       gQuestLog.bQuestLogOpen = 0;
-      gQuestLog.bQuestLogWindowOpen = 0;
+      gQuestLog.bQuestLogWindowOpen = '\0';
       gQuestLog.bQuestLogButtonDown = 0;
     }
 
@@ -1700,7 +1700,7 @@ static int32_t __stdcall QUESTLOG_HitTestActTab(uint32_t nY, uint32_t nX) {
     return -1;
 }
 
-void __stdcall QUESTLOG_AcknowledgeNewQuests() {
+void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct) {
     D2BitBufferStrc* pBitBuffer;
     int nIndex = 0;
     if (gQuestLog.nQuestLogQuestCount <= 0) {
@@ -1761,7 +1761,7 @@ void __stdcall QUESTLOG_OnCloseClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
     if (gQuestLog.bQuestLogOpen == 2) {
       gQuestLog.bQuestLogOpen = 0;
-      gQuestLog.bQuestLogWindowOpen = 0;
+      gQuestLog.bQuestLogWindowOpen = '\0';
       gQuestLog.bQuestLogButtonDown = 0;
     }
 
@@ -1784,10 +1784,10 @@ void __fastcall QUESTLOG_HandleSpecialPacket(D2GSPacketSrv0x50 * pPacket) {
 
 void __stdcall QUESTLOG_CloseAndFreeImages() {
     if (gQuestLog.nQuestLogActiveAct_b < 5) {
-      QUESTLOG_AcknowledgeNewQuests();
+      QUESTLOG_AcknowledgeNewQuests(gQuestLog.nQuestLogActiveAct_b);
     }
 
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     gQuestLog.bQuestLogOpen = 0;
     gQuestLog.bQuestLogButtonDown = 0;
     FreeQuestImages();
@@ -1822,7 +1822,7 @@ static uint32_t QUESTLOG_GetDrawPosition(int32_t nBorderType) {
     return 1;
 }
 
-int __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY) {
+bool __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY) {
     int nOffsetX;
     int nOffsetX2;
     uint32_t nBorderType = Path::DRAW_GetTypeOfBorder();
@@ -1838,16 +1838,16 @@ int __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY) {
       nOffsetX2 = 0;
     }
     if (nX > gaQuestLogPanelRects[nDrawPos].nLeft + nOffsetX && nX < gaQuestLogPanelRects[nDrawPos].nRight + nOffsetX2 && nY > gaQuestLogPanelRects[nDrawPos].nTop - 0x1e0 + ScreenSizeY && nY < gaQuestLogPanelRects[nDrawPos].nBottom - 0x1e0 + ScreenSizeY) {
-      return 1;
+      return true;
     }
 
-    return 0;
+    return false;
 }
 
 void __stdcall QUESTLOG_OnQuestLogMouseDown(D2UIMouseMsgStrc * pMsg) {
-    int bInQuestLog = QUESTLOG_IsPointInQuestLog((uint32_t)pMsg->uLParam.sMousePos.nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
-    if ((char)bInQuestLog != '\0') {
-      gQuestLog.bQuestLogWindowOpen = 1;
+    bool bVar1 = QUESTLOG_IsPointInQuestLog((uint32_t)pMsg->uLParam.sMousePos.nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
+    if (bVar1) {
+      gQuestLog.bQuestLogWindowOpen = '\x01';
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
@@ -1855,11 +1855,12 @@ void __stdcall QUESTLOG_OnQuestLogMouseDown(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     pMsg->bHandled = 0;
 }
 
 void __stdcall QUESTLOG_DrawQuestLogButton() {
+    int nMouseY;
     D2GfxDataStrc sGfxData;
     uint32_t nDrawPos;
     nDrawPos = UNIT::Player::IsPlayerDead();
@@ -1869,7 +1870,7 @@ void __stdcall QUESTLOG_DrawQuestLogButton() {
         return;
       }
 
-      gQuestLog.bQuestLogWindowOpen = 0;
+      gQuestLog.bQuestLogWindowOpen = '\0';
       gQuestLog.bQuestLogOpen = 0;
       return;
     }
@@ -1898,39 +1899,39 @@ void __stdcall QUESTLOG_DrawQuestLogButton() {
     pText = D2Lang::StrTable::strtable::GetLocaleString(0xf58);
     int32_t nTextWidth;
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pText);
-    int iVar1;
-    iVar1 = nImageWidth / 2 - nTextWidth / 2 + 1 + gaQuestLogPanelRects[nDrawPos].nLeft;
+    int iVar2;
+    iVar2 = nImageWidth / 2 - nTextWidth / 2 + 1 + gaQuestLogPanelRects[nDrawPos].nLeft;
     int nTextX;
     nTextX = gaQuestLogPanelRects[nDrawPos].nTextY - 0x1e0 + ScreenSizeY;
     uint32_t nBorderType;
     nBorderType = Path::DRAW_GetTypeOfBorder();
     if (nBorderType == 2) {
-      iVar1 += (ScreenSizeX - 0x280) / 2;
+      iVar2 += (ScreenSizeX - 0x280) / 2;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf58), iVar1, nTextX, 0, 0);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xf58), iVar2, nTextX, 0, 0);
     nTextX = gaQuestLogPanelRects[nDrawPos].nLeft;
-    iVar1 = gaQuestLogPanelRects[nDrawPos].nBottom - 0x1e0 + ScreenSizeY;
+    iVar2 = gaQuestLogPanelRects[nDrawPos].nBottom - 0x1e0 + ScreenSizeY;
     nDrawPos = Path::DRAW_GetTypeOfBorder();
     if (nDrawPos == 2) {
       nTextX += (ScreenSizeX - 0x280) / 2;
     }
 
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTextX, iVar1, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTextX, iVar2, -1, DRAW_SOLID, nullptr);
     sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
     if (gQuestLog.bQuestLogWindowOpen != '\0') {
-      int bInQuestLog;
-      bInQuestLog = Cursor::GetMouseY();
-      bInQuestLog = QUESTLOG_IsPointInQuestLog(Cursor::GetMouseX(), bInQuestLog);
+      bool bVar1;
+      nMouseY = Cursor::GetMouseY();
+      bVar1 = QUESTLOG_IsPointInQuestLog(Cursor::GetMouseX(), nMouseY);
       sGfxData.nFrameNumber = 1;
-      if ((char)bInQuestLog != '\0') {
+      if (bVar1) {
         goto draw_button_frame;
       }
     }
 
     sGfxData.nFrameNumber = 0;
     draw_button_frame:
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTextX + 3, iVar1 - 4, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTextX + 3, iVar2 - 4, -1, DRAW_SOLID, nullptr);
 }
 
 void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId) {
@@ -2399,7 +2400,7 @@ void __stdcall GameOverWtf() {
 
     gQuestLog.bQuestLogIconPressed = 0;
     gQuestLog.bQuestLogOpenBtnPressed = 0;
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     gQuestLog.bQuestLogCloseBtnPressed = 0;
     gQuestLog.bQuestLogLevelUpCinematicPlayed = 0;
     gQuestLog.bQuestLogBossCinematicPlayed = 0;
@@ -2452,7 +2453,7 @@ void __stdcall DRAW_UI_Quest() {
     if (bIsPlayerDead) {
       if (gQuestLog.bQuestLogOpen == 2) {
         gQuestLog.bQuestLogOpen = 0;
-        gQuestLog.bQuestLogWindowOpen = 0;
+        gQuestLog.bQuestLogWindowOpen = '\0';
         gQuestLog.bQuestLogButtonDown = '\0';
       }
 
@@ -2787,7 +2788,7 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
       nActTab = QUESTLOG_HitTestActTab(nPanelRelY, nPanelRelX);
       if (nActTab != -1) {
         if (nActTab < 5 && nActTab != gQuestLog.nQuestLogActiveAct_b && ((bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion && (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , bIsExpansion != 0)) || nActTab != 4)) {
-          QUESTLOG_AcknowledgeNewQuests();
+          QUESTLOG_AcknowledgeNewQuests(gQuestLog.nQuestLogActiveAct_b);
           QUESTLOG_SetActiveAct(nActTab);
           QUESTLOG_LoadQuestIconsForAct(gQuestLog.nQuestLogActiveAct_b, 1);
           QUESTLOG_ResetState();
@@ -2892,7 +2893,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes) {
     }
 
     *(uint16_t*)pQuestStateDst = *(uint16_t*)pBytes;
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     uint8_t bItemDescDirty = INV_GetItemDescDirtyFlag();
     if (bItemDescDirty != '\0') {
       return;
@@ -2905,18 +2906,18 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes) {
 }
 
 void __stdcall QUESTLOG_OnButtonMouseUp(D2UIMouseMsgStrc * pMsg) {
-    int bInQuestLog = QUESTLOG_IsPointInQuestLog((uint32_t)pMsg->uLParam.sMousePos.nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
-    if ((char)bInQuestLog != '\0' && gQuestLog.bQuestLogWindowOpen != '\0') {
+    bool bVar1 = QUESTLOG_IsPointInQuestLog((uint32_t)pMsg->uLParam.sMousePos.nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
+    if (bVar1 && gQuestLog.bQuestLogWindowOpen != '\0') {
       ui::SetUIFlag(UI_QUESTLOG, UI_RESET, 0);
       QUESTLOG_ToggleQuestScreen(0);
-      gQuestLog.bQuestLogWindowOpen = 0;
+      gQuestLog.bQuestLogWindowOpen = '\0';
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
       Storm::SMsgBreakHandlerChain(pMsg);
       return;
     }
 
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     pMsg->bHandled = 0;
 }
 
@@ -3023,7 +3024,7 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
 
     gQuestLog.bQuestLogIconPressed = 0;
     gQuestLog.bQuestLogOpenBtnPressed = 0;
-    gQuestLog.bQuestLogWindowOpen = 0;
+    gQuestLog.bQuestLogWindowOpen = '\0';
     gQuestLog.nQuestLogSelectedIcon = -1;
     gQuestLog.bQuestLogCloseBtnPressed = 0;
     gQuestLog.bQuestLogLevelUpCinematicPlayed = 0;

@@ -667,7 +667,6 @@ D2UnitStrc * __fastcall UNITS_FindPortalOwnerUnit(::SGAMEDATA * pGame, D2UnitStr
 
 // Walks the game's player (eUnitType=0) or monster (eUnitType=1) hash table (128 slots), skipping dead/body units (STATE_playerbody check), and calls pfnCallback(pCallbackArg) for each live unit. Returns the first unit for which the callback returns 1, or NULL if none found or the unit type is unsupported. Validates pfnCallback with IsBadCodePtr before iterating.
 D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUnitType, void * pCallbackArg, ::fpExecuteOnUnitFunction pfnCallback) {
-    eD2States eState;
     int nSlot;
     D2UnitStrc** ppUnitTable;
     int32_t nErrorLine;
@@ -689,8 +688,8 @@ D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUn
         nSlot = 0;
         do {
           for (pCurUnit = *ppUnitTable; pCurUnit; pCurUnit = pCurUnit->pListNext) {
-            eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCurUnit, STATE_playerbody);
-            if (eState == STATE_none) {
+            bBadCodePtr = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCurUnit, STATE_playerbody);
+            if (!bBadCodePtr) {
               bBadCodePtr = (*pfnCallback)(pGame, pCurUnit, pCallbackArg);
               if (bBadCodePtr == 1) {
                 return pCurUnit;
@@ -717,7 +716,7 @@ D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUn
 
 // 2022.01.09 - dzik
 void __fastcall IterateAllUnits(::SGAMEDATA * pGame, fpSUnitIterateCallback fpFunction, void * pArgs) {
-    eD2States eUnitState;
+    BOOL eUnitState;
     D2UnitStrc* pUnit;
     D2UnitStrc** ppUnitBucket = pGame->pUnitList[0];
     if (!pGame || !fpFunction) {
@@ -729,7 +728,7 @@ void __fastcall IterateAllUnits(::SGAMEDATA * pGame, fpSUnitIterateCallback fpFu
     do {
       for (pUnit = *ppUnitBucket; pUnit; pUnit = pUnit->pListNext) {
         eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
-        if (eUnitState == STATE_none) {
+        if (!eUnitState) {
           (*fpFunction)(pGame, pUnit, pArgs);
         }
         if (!pUnit) {
@@ -1309,7 +1308,7 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
 
 // Applies or removes STATE_uninterruptable on pUnit (nParam=1 to set, 0 to clear). When clearing: if STATE_death_delay is active, it removes that state and immediately kills the unit (via SERVER_KillMonster if no killer, or SERVER_GetHitCalculation with the KILL result flag if a killer exists). Additionally triggers AITHINK for monster units to resume AI after the uninterruptable window closes.
 void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
-    eD2States eDeathDelayState;
+    BOOL eDeathDelayState;
     D2UnitStrc* pKillerUnit;
     D2DamageStrc sDamage;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_uninterruptable, bSet);
@@ -1324,7 +1323,7 @@ void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
     }
     if (!bSet) {
       eDeathDelayState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_death_delay);
-      if (eDeathDelayState != STATE_none) {
+      if (eDeathDelayState) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_death_delay, 0);
         pKillerUnit = GetKillerUnit(pGame, pUnit);
         if (pKillerUnit) {

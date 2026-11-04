@@ -23,7 +23,6 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "uint32_t"
       ]
     },

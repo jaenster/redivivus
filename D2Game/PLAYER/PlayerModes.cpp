@@ -208,8 +208,8 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
     int32_t nConcPct;
     uint32_t nConcRandRoll;
     int32_t iVar1;
-    eD2States eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eStunState != STATE_none) {
+    BOOL eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+    if (eStunState) {
       return 0;
     }
     if (!pUnit) {
@@ -246,9 +246,9 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
     if (*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)gadwBitMasks[7]) {
       D2StatListExStrc* pConcStatList;
       eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration);
-      if (eStunState == STATE_none) {
+      if (!eStunState) {
         eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentrate);
-        if (eStunState == STATE_none) {
+        if (!eStunState) {
           return 1;
         }
       } else {
@@ -257,7 +257,7 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
         nConcRandRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         if ((int)nConcRandRoll >= nConcPct) {
           eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentrate);
-          if (eStunState == STATE_none) {
+          if (!eStunState) {
             return 1;
           }
         }
@@ -858,8 +858,8 @@ static uint32_t __stdcall PLRMODES_IsCorpseOwnedByPlayer(::SGAMEDATA * pGame, D2
 void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit) {
     int nPendingExperience;
     int32_t nCorpseExp;
-    eD2States eCorpseState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCorpseUnit, STATE_playerbody);
-    if (eCorpseState == STATE_none) {
+    BOOL eCorpseState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCorpseUnit, STATE_playerbody);
+    if (!eCorpseState) {
       return;
     }
 
@@ -1445,8 +1445,8 @@ static void PLRMODES_RegenMana(D2UnitStrc * pUnit) {
     int nManaRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     int32_t nMaxMana = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
     int32_t nBaseRegen = 0;
-    eD2States eManaPotState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
-    if (eManaPotState == STATE_none) {
+    BOOL eManaPotState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
+    if (!eManaPotState) {
       nCharClassId = pUnit->nClassId;
       if (nCharClassId < 0) {
         return;
@@ -1686,22 +1686,20 @@ void __fastcall PLRMODES_BroadcastAllyAndPartyInfo(::SGAMEDATA * pGame, D2UnitSt
 // Per-frame server mode tick for a player in Walk/Run mode. Refreshes target, runs Blaze trail if STATE_blaze is set, drains stamina (downgrading Run->Walk on empty), and advances movement via UNITS_ProcessUnitMovement. Maintains the anti-teleport-hack trail: every ~25ms it records the player's path coords into a ring of 20 slots and, if movement exceeded a distance threshold, advances the slot. When movement completes (mode==2) it resolves any pending interact/queued skill: with no queued skill -> idle + SERVER_InteractOrPick on the target unit; with a queued skill -> GetSkill/GetSkillMode then PLRMODES_StartModeID to begin the skill. Clears bHasPendingInteract. Returns the resulting mode code.
 int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     int nPosY;
-    int32_t nDistance;
     eD2UnitType eTargetUnitType;
     uint32_t uuid;
     int32_t nPosX;
     uint8_t byPrevSlot;
     uint8_t byHistoryIndex;
     UNIT::SUnit::GetTarget(pGame, pUnit);
-    eD2States eState;
+    BOOL eState;
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blaze);
-    if (eState != STATE_none) {
+    if (eState) {
       SKILLS::SkillSor::BlazePath(pGame, pUnit);
     }
     if (pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
-      BOOL nStaminaDrained;
-      nStaminaDrained = PLRMODES_DrainStamina(pUnit);
-      if (!nStaminaDrained) {
+      eState = PLRMODES_DrainStamina(pUnit);
+      if (!eState) {
         PLRMODES_StartPathAndChangeMode(pGame, Walk, pUnit);
       }
     }
@@ -1713,6 +1711,7 @@ int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2Uni
     D2UnitDataPlayerStrc* pPlayerData;
     pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (dwTickCount > pPlayerData->dwPosHistoryTick + 0x19) {
+      int32_t nDistance;
       byHistoryIndex = pPlayerData->nPosHistoryIndex;
       if (!byHistoryIndex) {
         byPrevSlot = 0x13;
@@ -1850,9 +1849,8 @@ void __fastcall PLRMODES_Death(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nM
     PLRMODES_ClearModeAndSetDead(pGame, pUnit);
     UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
     UNIT::SUnit::UNITS_SetupAnimTimerEvents(pGame, pUnit);
-    eD2States eBlazingState;
-    eBlazingState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
-    if (eBlazingState == STATE_none) {
+    bBadPtr = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
+    if (!bBadPtr) {
       if (pUnit) {
         pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
         goto check_pvp_ear_drop;

@@ -40,6 +40,12 @@
       ]
     },
     {
+      "name": "WSACleanup",
+      "address": "0040d8d0",
+      "lines": [],
+      "namespace": "Fog::Src::Safesock"
+    },
+    {
       "name": "Create",
       "address": "0040d8e0",
       "lines": [

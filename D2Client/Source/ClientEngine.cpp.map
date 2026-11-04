@@ -807,6 +807,15 @@
       ]
     },
     {
+      "name": "thunk_DRAW_Overlay_SecondsLeftToGame",
+      "address": "0046c130",
+      "lines": [],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "DRAW_Overlay_SecondsLeftToGame"
+      ]
+    },
+    {
       "name": "GetSomeMonsterStatFlag",
       "address": "0046c140",
       "lines": [

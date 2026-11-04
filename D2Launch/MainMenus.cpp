@@ -61,7 +61,6 @@
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/D2WinTimer.h"
-#include "D2Win/Src/D2WinMain.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -10,12 +10,12 @@
 #include "Storm/3rdparty/zlib/trees.h"
 
 // Forward declarations
-struct D2ZlibStaticDTreeDistCodeStrc;
 struct ct_data;
 
 extern D2ZlibExtraLBitsBlOrderStrc gZlibExtraLBitsBlOrder;
 extern int gaZlibExtraDBits[30];
 extern int gaZlibExtraBlBits[19];
 extern ct_data gaZlibStaticLTree[288];
-extern D2ZlibStaticDTreeDistCodeStrc gZlibStaticDTreeDistCode;
+extern ct_data gZlibStaticDTreeDistCode[30];
+extern uint8_t _dist_code[512];
 extern uint8_t gaZlibLengthCodeTable[256];

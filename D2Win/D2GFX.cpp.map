@@ -4,6 +4,43 @@
   "file": "D2Win/D2GFX.cpp",
   "functions": [
     {
+      "name": "CreateWindowWithChecks",
+      "address": "004f8f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8f10"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "CreateWindowWithChecks",
+        "D2GFX_CreateWindow",
+        "GFX_InitCelDataCache",
+        "GetHwnd"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INIT_SetWndProcBGlobalPointer",
+      "address": "004f8fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8fc0"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "INIT_SetWndProcBGlobalPointer"
+      ],
+      "usedTypes": [
+        "WndProcB"
+      ]
+    },
+    {
       "name": "UI_Init",
       "address": "004f8fe0",
       "lines": [
@@ -101,6 +138,15 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "thunk_D2GFX_ClearCaches",
+      "address": "004f9130",
+      "lines": [],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ClearCaches"
       ]
     }
   ]

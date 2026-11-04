@@ -303,7 +303,6 @@
         "D2InventoryStrc",
         "D2ItemsTxt",
         "D2UnitStrc",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

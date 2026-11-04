@@ -1217,8 +1217,7 @@
       "usedTypes": [
         "D2MonsterKillStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {
@@ -1867,8 +1866,7 @@
       ],
       "usedTypes": [
         "D2DamageStrc",
-        "D2UnitStrc",
-        "eD2States"
+        "D2UnitStrc"
       ]
     },
     {

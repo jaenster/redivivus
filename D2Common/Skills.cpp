@@ -60,6 +60,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
@@ -801,7 +802,7 @@ static BOOL __stdcall SKILLS_CheckWeaponRequirements(D2UnitStrc * pUnit, D2Skill
 
 // Checks whether a skill's use-restriction condition is satisfied for the caster. Reads the restrict field from the skill record: 0 = requires no active poison state (returns true if not poisoned); 1 = always allowed; 2 = requires a poison state AND at least one of the skill's three state[] entries active on the unit. Returns 1 if the restriction passes, 0 otherwise. Returns 0 immediately if unit or skill pointer is null.
 static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitStrc) {
-    eD2States eActiveState;
+    BOOL eActiveState;
     int32_t nHasPoisonState2;
     int32_t nStateIdx;
     short int* psReqState;
@@ -832,7 +833,7 @@ static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitSt
           }
 
           eActiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, (int)*psReqState);
-          if (eActiveState != STATE_none) {
+          if (eActiveState) {
             break;
           }
 
@@ -852,7 +853,7 @@ static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitSt
 
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*, pint (EDI): int*
 static BOOL SKILLS_CheckStartMana(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
-    eD2States eInfernoState;
+    BOOL eInfernoState;
     int32_t nManaCost;
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pSkill->pRecord->startmana > 0) {
       int32_t nCurrentMana;
@@ -860,7 +861,7 @@ static BOOL SKILLS_CheckStartMana(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       nManaCost = pSkill->pRecord->startmana * 0x100;
       if (nCurrentMana < nManaCost) {
         eInfernoState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-        if (eInfernoState == STATE_none) {
+        if (!eInfernoState) {
           return 0;
         }
       }
@@ -878,9 +879,9 @@ D2SkillsTxt * __fastcall GetSkillsTxt(D2SkillStrc * pSkill) {
 }
 
 int32_t __stdcall GetShrineBonus(D2UnitStrc * pUnit) {
-    eD2States eShrineSkillState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_shrine_skill);
+    BOOL eShrineSkillState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_shrine_skill);
     int32_t nBonus = 2;
-    if (eShrineSkillState != STATE_none) {
+    if (eShrineSkillState) {
       return nBonus;
     }
 
@@ -1717,7 +1718,7 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
 
 // Resolves the visual transform imposed on a unit by its active transformation state (flag 0x08 on eUnitFlagsEx). Iterates the global transform-state list; for each active state with gfxtype==1 (monster form) or gfxtype==2 (player form), writes the target unit type and gfx class to the out-params, and remaps *pAnimMode for cross-type animation compatibility. Returns without writing if no transform state is active or the unit lacks the transform flag.
 void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUnitType, int * pGfxClass, int * pAnimMode, char * szFile, int32_t nLine) {
-    eD2States eUnitState;
+    BOOL eUnitState;
     int nValidatedAnimMode;
     eD2States eTransformState;
     int32_t sGfxClass;
@@ -1735,7 +1736,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
       D2StatesTxt* pDVar1;
       eTransformState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx];
       eUnitState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eTransformState);
-      pDVar1 = eUnitState != STATE_none && (int)eTransformState >= 0 && (int)eTransformState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eTransformState : nullptr;
+      pDVar1 = eUnitState && (int)eTransformState >= 0 && (int)eTransformState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eTransformState : nullptr;
       if (pDVar1) {
         switch (pDVar1->gfxtype) {
           case '\x01':
@@ -2466,10 +2467,10 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
     }
 
     do {
-      eD2States eStateId;
+      BOOL eStateId;
       eState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x10[(int)pUnit];
       eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
-      if (eStateId != STATE_none) {
+      if (eStateId) {
         pStatList = Stats::StatsEx::GetStatsByState(i, eState);
         if (pStatList) {
           Stats::StatsEx::STATLIST_RemoveAndRecalc(i, pStatList);
@@ -2531,8 +2532,8 @@ int __stdcall SKILL_CalcAttackFrames(D2UnitStrc * pUnit) {
 }
 
 int32_t __stdcall SKILL_GetConcentrationDamageBonus(D2UnitStrc * pUnit, int32_t nSkillId) {
-    eD2States eConcentrationState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration);
-    if (eConcentrationState == STATE_none) {
+    BOOL eConcentrationState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration);
+    if (!eConcentrationState) {
       return 0;
     }
 
@@ -3058,6 +3059,7 @@ uint32_t __stdcall SKILLS_EvalDescCalcBytecode(D2UnitStrc * pUnit, uint32_t nCal
 
 // Recalculates and applies passive-skill stat bonuses for the given skill on pUnit. If the passive state is not yet set, allocates or retrieves the state stat list and writes all passivestat/passivecalc entries at the current skill level; if the level hasn't changed, returns early. If a conflicting passive aura state exists, removes and frees it instead.
 void __stdcall SKILLS_UpdatePassiveSkillStats(D2UnitStrc * pUnit, eD2Skills eSkill) {
+    int32_t nSkillLvl;
     D2StatListExStrc* pPassiveStatList;
     int32_t nStoredLevel;
     int32_t nCalcValue;
@@ -3079,8 +3081,8 @@ void __stdcall SKILLS_UpdatePassiveSkillStats(D2UnitStrc * pUnit, eD2Skills eSki
 
     D2SkillStrc* pSkill = GetSkill(pUnit, eSkill);
     if (pSkill) {
-      int32_t nSkillLvl;
-      if (pPassiveCalcPtr->aurastate <= 0 || (eState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pPassiveCalcPtr->aurastate) , eState == STATE_none)) {
+      BOOL nCurrentLevel;
+      if (pPassiveCalcPtr->aurastate <= 0 || (nCurrentLevel = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pPassiveCalcPtr->aurastate) , !nCurrentLevel)) {
         nSkillLvl = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
         pPassiveStatList = SKILLS_GetOrAllocStateStatList(nSkillLvl, pUnit, (int)pPassiveCalcPtr->passivestate);
         if (!pPassiveStatList) {
@@ -3135,7 +3137,7 @@ void __stdcall SKILLS_UpdatePassiveSkillStats(D2UnitStrc * pUnit, eD2Skills eSki
 
 void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
     D2SkillStrc* pSkillInst;
-    eD2States ePassiveState;
+    BOOL ePassiveState;
     eD2Skills eSkill;
     int32_t nPassiveSkillCount;
     int i = sgptDataTable->nPassiveSkillsCount;
@@ -3151,7 +3153,7 @@ void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
           if (pSkillInst) {
             ePassiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nSkillId);
             pDataTable = sgptDataTable;
-            if (ePassiveState != STATE_none) {
+            if (ePassiveState) {
               SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
               pDataTable = sgptDataTable;
             }
@@ -3672,8 +3674,8 @@ static uint32_t __stdcall SKILL_IsDelayExpired(D2SkillStrc * pSkill, D2UnitStrc 
       return 1;
     }
 
-    eD2States eDelayState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skilldelay);
-    if (eDelayState == STATE_none) {
+    BOOL eDelayState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skilldelay);
+    if (!eDelayState) {
       return 1;
     }
     if (!pSkill) {

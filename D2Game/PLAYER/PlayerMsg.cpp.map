@@ -1172,7 +1172,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t"
       ]
@@ -1656,6 +1655,19 @@
         "char *",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_Send_0x26_Chat",
+      "address": "0054a5c0",
+      "lines": [],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_0x26_CHATSTART"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x26"
       ]
     },
     {
@@ -3482,7 +3494,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -3573,7 +3584,6 @@
         "SGAMEDATA",
         "eD2PlayerAnimMode",
         "eD2ServerIncomingStatus",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

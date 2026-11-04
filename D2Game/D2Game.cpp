@@ -39,6 +39,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Game/GAME/Clients.data.h"
 #include "D2Game/GAME/Task.data.h"

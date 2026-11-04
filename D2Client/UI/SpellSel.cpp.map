@@ -754,8 +754,7 @@
         "UNIT_GetUnitState"
       ],
       "usedTypes": [
-        "D2UnitStrc",
-        "eD2States"
+        "D2UnitStrc"
       ]
     },
     {
@@ -1173,7 +1172,6 @@
         "GLOBALPALLETE",
         "WCHAR",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

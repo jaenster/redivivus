@@ -426,8 +426,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills",
-        "int32_t",
-        "uint8_t"
+        "eD2UnitType",
+        "int32_t"
       ]
     },
     {

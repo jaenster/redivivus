@@ -2609,7 +2609,7 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca286(EHExceptionRecord * pException
 
 void StaticInit_gCelCmpCacheHandler() {
     gCelCmpCacheHandler.TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::Constructor();
-    gCelCmpCacheHandler.nSequence = 0xf71733f;
+    gCelCmpCacheHandler.nSequence = ~(uint32_t)(uintptr_t)&gCelCmpCacheHandler & 0xfffffff;
     gCelCmpCacheHandler.bWrapped = 0;
     gCelCmpCacheHandler.pVtable = (TSHashTable<::CELLIST, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::vftable;
     InitializeCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);

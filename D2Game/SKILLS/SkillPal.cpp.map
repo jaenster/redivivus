@@ -107,7 +107,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -345,7 +344,6 @@
         "SGAMEDATA",
         "eD2MonsterAnimMode",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

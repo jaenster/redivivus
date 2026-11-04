@@ -485,7 +485,6 @@
         "D2TimerStrc *",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2TimerTypeDWORD",
         "fpTimerFunctionUnit",
         "int32_t",

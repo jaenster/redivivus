@@ -476,8 +476,7 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
     D2UnitStrc* pWeaponUnit;
     D2UnitStrc* pQuiverItem;
     D2ItemsTxt* pItemsTxt;
-    eD2States eHolyShieldState;
-    BOOL BVar1;
+    BOOL eHolyShieldState;
     D2InventoryStrc* pInventory;
     uint32_t nWeaponClass2;
     if (nBodyLoc >= 0x10) {
@@ -507,9 +506,9 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
         holy_shield_or_none:
         if (nBodyLoc == 7) {
           eHolyShieldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
-          if (eHolyShieldState != STATE_none) {
-            BVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pInventory, nullptr);
-            if (BVar1) {
+          if (eHolyShieldState) {
+            eHolyShieldState = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pInventory, nullptr);
+            if (eHolyShieldState) {
               return 0x20687368;
             }
           }

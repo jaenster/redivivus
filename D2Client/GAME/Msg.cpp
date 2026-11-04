@@ -101,10 +101,10 @@ void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName) {
     gnD2GSPacketsSentTotal++;
 }
 
-void __fastcall NET_D2GS_CLIENT_Send_0x6B(char * pBytes) {
+void __stdcall NET_D2GS_CLIENT_Send_0x6B() {
     uint8_t aPacketFrame[4];
-    d2_store24((char*)&aPacketFrame, (uint32_t)((uint32_t)(uintptr_t)pBytes & 0xffffffu));
     aPacketFrame[3] = 0x6b;
+    d2_store24((char*)&aPacketFrame, 0);
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(1, 0, (char*)(aPacketFrame + 3));
     gnD2GSBytesSentTotal++;
     gnD2GSPacketsSentTotal++;
@@ -235,7 +235,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash)
     gnD2GSPacketsSentTotal++;
 }
 
-void __fastcall NET_D2GS_CLIENT_Send_0x6A() {
+void __stdcall NET_D2GS_CLIENT_Send_0x6A() {
     uint8_t aPacketFrame[4];
     aPacketFrame[3] = 0x6a;
     d2_store24((char*)&aPacketFrame, 0);

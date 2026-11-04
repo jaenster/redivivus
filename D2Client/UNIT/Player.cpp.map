@@ -220,8 +220,7 @@
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
-        "D2UnitStrc",
-        "eD2States"
+        "D2UnitStrc"
       ]
     },
     {
@@ -1588,7 +1587,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc",
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "uint8_t"
       ]
     },
     {

@@ -343,7 +343,6 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId",
-        "eD2States",
         "eD2UnitType",
         "int16_t",
         "int32_t",
@@ -656,7 +655,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId",
-        "eD2States",
         "eD2UnitType",
         "int32_t"
       ]

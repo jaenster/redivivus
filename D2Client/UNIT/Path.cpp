@@ -40,6 +40,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 
@@ -241,13 +242,13 @@ uint32_t __fastcall PATH_StepAndCreateTrailEffects(D2UnitStrc * pUnit) {
       SKILLS::SkillsSor::SKILLSSOR_CltCreateBlazeMissile(pUnit);
     }
 
-    eD2States eStateSpiderLay = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_spiderlay);
-    if (eStateSpiderLay != STATE_none) {
+    BOOL bPathAdvanced = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_spiderlay);
+    if (bPathAdvanced) {
       SKILLS::SkillsMon::SKILLSMON_CltCreateSpiderLay(pUnit);
     }
 
     uint32_t pExternalPath = GAME::Game::GetStepsOfMissileMovement();
-    BOOL bPathAdvanced = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, pExternalPath);
+    bPathAdvanced = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, pExternalPath);
     return (uint32_t)!bPathAdvanced;
 }
 

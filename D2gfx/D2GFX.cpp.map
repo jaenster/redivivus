@@ -4,6 +4,33 @@
   "file": "D2gfx/D2GFX.cpp",
   "functions": [
     {
+      "name": "D2GFX_GetPerspectiveCapable_ForPerspectiveItem",
+      "address": "0047d120",
+      "lines": [],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetPerspectiveCapable"
+      ]
+    },
+    {
+      "name": "D2GFX_CheckGamma_ForGammaItem",
+      "address": "0047d1f0",
+      "lines": [],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CheckGamma"
+      ]
+    },
+    {
+      "name": "thunk_D2GFX_ResetViewport",
+      "address": "004f5030",
+      "lines": [],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ResetViewport"
+      ]
+    },
+    {
       "name": "D2GFX_Release",
       "address": "004f5050",
       "lines": [
@@ -1594,6 +1621,45 @@
       ]
     },
     {
+      "name": "D2GFX_DrawGroundTileBasic",
+      "address": "004f7580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7580"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawGroundTileBasic"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawGroundTileWithPerspective",
+      "address": "004f7850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7850"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawGroundTileWithPerspective"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t[32]"
+      ]
+    },
+    {
       "name": "D2GFX_InitializeLineBuffer",
       "address": "004f7cc0",
       "lines": [
@@ -1611,6 +1677,23 @@
       ],
       "usedTypes": [
         "uint8_t[32]"
+      ]
+    },
+    {
+      "name": "D2GFX_FillYBufferFast",
+      "address": "004f7da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7da0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_FillYBufferFast"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {
@@ -1649,26 +1732,6 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
-    },
-    {
-      "name": "CreateWindowWithChecks",
-      "address": "004f8f10",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004f8f10"
-        }
-      ],
-      "namespace": "D2gfx::D2GFX",
-      "calledFunctions": [
-        "CreateWindowWithChecks",
-        "D2GFX_CreateWindow",
-        "GFX_InitCelDataCache",
-        "GetHwnd"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {

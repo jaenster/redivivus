@@ -63,6 +63,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Inv.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -3691,7 +3692,7 @@ eD2PlayerClassIDDWORD __stdcall TXT_ItemTypes_GetClass(D2UnitStrc * pUnit) {
 // Resolves the display/transform color (palette index) of an item and writes the raw transform-color code to *pColor. Priority order: (1) owner-unit states whose itemtype matches the item (states.txt itemtrans) override the color; otherwise by quality: magic/rare scan the item's prefix/suffix and automagic affixes for the first MagicAffix with a valid transformcolor; set uses SetItems.txt chrtransform/invtransform; unique uses UniqueItems.txt chrtransform/invtransform; normal socketed items derive color from the first socketed gem (Gems.txt). nTransType selects char (0) vs inventory (nonzero) palette via PALETTE_GetItemPalette, combining the item's bTransform/bInvTrans base. Returns the palette pointer/index, or 0 if no color applies. __stdcall.
 uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * pColor, int32_t nTransType) {
     uint8_t cTransColor;
-    eD2States eUnitState;
+    BOOL eUnitState;
     uint32_t bIsType;
     D2ItemsTxt* pItemsTxt;
     eD2ItemQuality nQuality;
@@ -3716,7 +3717,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
         do {
           eStateId = (eD2States)(short int)sgptDataTable->pStatesItemTypesDataTbl[nStateOrAffixIdx];
           eUnitState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eStateId);
-          pDVar1 = eUnitState != STATE_none && (int)eStateId >= 0 && (int)eStateId < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eStateId : nullptr;
+          pDVar1 = eUnitState && (int)eStateId >= 0 && (int)eStateId < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eStateId : nullptr;
           if (pDVar1 && pDVar1->itemtrans < 0x15) {
             bIsType = ITEMS_IsA(pItem, (int)pDVar1->itemtype);
             if (bIsType) {
@@ -4830,7 +4831,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
             Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, nClassId, 0);
           }
           if (pItemsTxt->nMaxMisDam != '\0') {
-            nClassId = (int)((uint32_t)(uint8_t)pItemsTxt->nMinMisDam * 3) >> 2;
+            nClassId = (int)((uint32_t)pItemsTxt->nMinMisDam * 3) >> 2;
             if (!nClassId) {
               nClassId = 1;
             }
@@ -4849,7 +4850,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, (uint32_t)pItemsTxt->n2HandMaxDam, 0);
           Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, (uint32_t)pItemsTxt->n2HandMinDam, 0);
           if (pItemsTxt->nMaxMisDam != '\0') {
-            Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, (uint32_t)(uint8_t)pItemsTxt->nMinMisDam, 0);
+            Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, (uint32_t)pItemsTxt->nMinMisDam, 0);
             nTmpVal2 = (uint32_t)(uint8_t)pItemsTxt->nMaxMisDam;
             Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nTmpVal2, 0);
           }

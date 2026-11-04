@@ -239,6 +239,18 @@
       ]
     },
     {
+      "name": "thunk_Destructor",
+      "address": "0060f930",
+      "lines": [],
+      "namespace": "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>"
+      ]
+    },
+    {
       "name": "SetCount",
       "address": "0060f9d0",
       "lines": [

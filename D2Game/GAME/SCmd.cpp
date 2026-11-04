@@ -936,10 +936,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(D2ClientStrc * pClient
     D2UnitStrc* pUnit;
     pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), (eD2UnitType)eUnitType, nUnitGUID);
     if (pUnit) {
-      eD2States unitState;
+      BOOL unitState;
       unitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
       packet.bBody = 1;
-      if (unitState != STATE_none) {
+      if (unitState) {
         goto send_packet;
       }
     }
@@ -1867,11 +1867,9 @@ void __fastcall NET_D2GS_SERVER_Send_0x60_SETWARPDEST(D2ClientStrc * pClient, D2
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x61_CanGoToAct(D2ClientStrc * pClient, uint8_t nAct) {
-    uint8_t aPacketFrame[4];
-    *(uint16_t*)((char*)&aPacketFrame + 2) = (uint16_t)((uint32_t)pClient >> 0x10);
-    aPacketFrame[1] = nAct;
-    aPacketFrame[0] = 0x61;
-    SCMD_QueuePacketForClient(aPacketFrame, 2, pClient);
+    uint16_t uStack_6 = (uint16_t)((uint32_t)pClient >> 0x10);
+    D2GSPacketSrv0x61 aPacketFrame = (D2GSPacketSrv0x61)(uint16_t)((uint16_t)(uint8_t)nAct << 8 | (uint16_t)(uint8_t)0x61);
+    SCMD_QueuePacketForClient(&aPacketFrame.nId, 2, pClient);
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x63_WAYPOINTLIST(D2ClientStrc * pClient, D2GSPacketSrv0x63 * pWaypointData) {

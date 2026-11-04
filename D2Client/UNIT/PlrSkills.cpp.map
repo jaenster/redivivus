@@ -48,6 +48,19 @@
       ]
     },
     {
+      "name": "PLRSKILLS_DrawChargeTrailIfPrimary",
+      "address": "004d85b0",
+      "lines": [],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_CheckSkillWhipAndLeap"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "PLRSKILLS_DrawSkillTrail_Secondary",
       "address": "004d85c0",
       "lines": [
@@ -70,6 +83,19 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_DrawChargeTrailIfSecondary",
+      "address": "004d8650",
+      "lines": [],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_DrawSkillTrail_Secondary"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
         "uint32_t"
       ]
     },
@@ -621,6 +647,18 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn10_Pregnant",
+      "address": "004d93a0",
+      "lines": [],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "MONUNIQUE_PregnantCorpseBurst"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {

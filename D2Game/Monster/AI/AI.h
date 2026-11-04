@@ -21,6 +21,7 @@ struct D2UnitDataPlayerInteractedNPCStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
+typedef uint32_t eD2States;
 struct D2MonsterAiParameterStruct;
 #ifndef RECON_FPTD_AI_Init
 #define RECON_FPTD_AI_Init

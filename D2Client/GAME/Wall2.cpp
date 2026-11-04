@@ -67,7 +67,7 @@
 #include "D2Launch/MainMenus.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Win/Src/D2WinFont.h"
-#include "Fog/Engine/Application/Service.h"
+#include "Game/Main.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -255,7 +255,6 @@ static uint32_t __stdcall DRAW_WORLD_IsUnitInLineOfSight(D2UnitStrc * pOtherUnit
 // Client-side world-render entry for a single unit. Performs visibility culling first: skips drawing if the no-draw flag is set, a dead player whose body has no playerbody state, or a player/merc with attached/invis state; honors perspective bounds and a line-of-sight check. Computes screen X/Y (perspective-scaled with world offsets, or target X/Y otherwise) then dispatches by unit type to the gfx draw routine DRAW_WORLD_Unit_1: players run the whip/leap skill-trail pre/post hooks; monsters pass an IsMonsterGhostly palette-shift flag and run charge-trail hooks; missiles apply the MissilesTxt x/y/z offsets. On a successful draw sets UNITFLAG_AUTOMAP on the unit. Restores the default perspective factor on exit when perspective was active.
 void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nDrawLayer) {
     uint32_t bInViewBounds;
-    D2ObjectsTxt* pObjTxt;
     int32_t nAnimMode;
     D2MissilesTxt* pMissileTxt;
     int nMissileId;
@@ -274,19 +273,18 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
         goto cull_hidden_units;
       }
     } else {
-      eD2States eState;
       cull_hidden_units:
-      if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead && (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eState == STATE_none)) {
+      if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead && (bOrder = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , !bOrder)) {
         return;
       }
       if (!bPerspective && pUnit && (int)pUnit->eUnitType > 0 && (int)pUnit->eUnitType <= 2) {
-        eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
-        if (eState != STATE_none) {
+        bOrder = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
+        if (bOrder) {
           return;
         }
 
-        eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
-        if (eState != STATE_none) {
+        bOrder = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
+        if (bOrder) {
           return;
         }
       }
@@ -314,6 +312,7 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
       eLocalUnitType = pUnit->eUnitType;
     }
     if (bPerspective) {
+      D2ObjectsTxt* pObjTxt;
       bOrder = 0;
       if (pUnit && pUnit->eUnitType == UNIT_OBJECT) {
         pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
@@ -395,7 +394,7 @@ void __stdcall WALL2_ResetAmbientSound() {
     gdwAmbientMusicChangeTime = 0;
     gbSoundSequenceActive = 0;
     geLastAmbientMusicLevelId = 0;
-    void* pSoundHdrGlobal2 = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2();
+    int* pSoundHdrGlobal2 = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2();
     if (!pSoundHdrGlobal2) {
       return;
     }
@@ -409,7 +408,7 @@ void __stdcall WALL2_ResetAmbientSound() {
 void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
     int nTmpResult;
     D2UnitStrc* pUnit;
-    void* nSoundHdrIdx;
+    int* nSoundHdrIdx;
     BOOL BVar1;
     int32_t nVolume;
     bool bHasVolume;
@@ -489,7 +488,7 @@ void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
         eSongId = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0();
         eSongId = geCutsceneAmbientMusicSoundId - eSongId;
         nSoundHdrIdx = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2();
-        eSongId = *(int*)((int)nSoundHdrIdx + eSongId * 4);
+        eSongId = nSoundHdrIdx[eSongId];
         BVar1 = D2Client::Sound::SOUND_GetAmbientMusicState();
         if (!BVar1 && !eSongId) {
           nVolume = 2;
@@ -536,7 +535,7 @@ void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
     nTmpResult = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0();
     nTmpResult = geCutsceneAmbientMusicSoundId - nTmpResult;
     nSoundHdrIdx = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2();
-    *(int*)((int)nSoundHdrIdx + nTmpResult * 4) = eSongId;
+    nSoundHdrIdx[nTmpResult] = eSongId;
     gdwAmbientMusicChangeTime = nTickCount;
 }
 
@@ -545,7 +544,7 @@ void __fastcall WALL2_ScheduleSoundSequence(uint32_t dwSoundId, int32_t nResumeO
     int pStopHandle;
     uint32_t nActiveSoundId;
     int nSoundHdrOffset;
-    void* pSoundHdrTable;
+    int* pSoundHdrTable;
     if (geCutsceneAmbientMusicSoundId) {
       D2SoundsTxt* pSoundTxt;
       pSoundTxt = D2Client::Sound::SoundHdr::TXT_sounds_GetLineBySoundId(geCutsceneAmbientMusicSoundId);
@@ -562,7 +561,7 @@ void __fastcall WALL2_ScheduleSoundSequence(uint32_t dwSoundId, int32_t nResumeO
           nSoundHdrOffset = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0();
           nSoundHdrOffset = geCutsceneAmbientMusicSoundId - nSoundHdrOffset;
           pSoundHdrTable = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2();
-          *(int*)((int)pSoundHdrTable + nSoundHdrOffset * 4) = pStopHandle;
+          pSoundHdrTable[nSoundHdrOffset] = pStopHandle;
           gdwAmbientMusicChangeTime = D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal3();
         }
       }

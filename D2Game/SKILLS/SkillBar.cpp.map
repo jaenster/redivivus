@@ -67,7 +67,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -128,7 +127,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -324,7 +322,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -586,7 +583,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint16_t",
@@ -1118,7 +1114,6 @@
         "SGAMEDATA",
         "eD2CollisionShapeType",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

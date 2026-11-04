@@ -587,8 +587,8 @@ static void CLIENT_HandlePlayerDeath(D2UnitStrc * pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_CANBEATTACKED;
     }
 
-    eD2States ePlayerbodyState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
-    if (ePlayerbodyState == STATE_none && pUnit) {
+    BOOL ePlayerbodyState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
+    if (!ePlayerbodyState && pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
 
@@ -2953,7 +2953,7 @@ void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2UnitStrc
     D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
 }
 
-void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, char byOldAllegiance, char byNewAllegiance) {
+void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOldAllegiance, uint8_t byNewAllegiance) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && byOldAllegiance != byNewAllegiance)) {
       return;
     }

@@ -300,6 +300,19 @@
       ]
     },
     {
+      "name": "Q22_Callback10_PlayerLeavesGame",
+      "address": "005bb400",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A3Q5",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q22_SequenceFilter",
       "address": "005bb410",
       "lines": [

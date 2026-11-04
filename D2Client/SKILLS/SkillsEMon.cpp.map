@@ -394,7 +394,6 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },

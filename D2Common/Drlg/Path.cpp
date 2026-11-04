@@ -2611,11 +2611,11 @@ int32_t __stdcall DRLGPATH_GetSimpleDistancePacked2(uint32_t nPackedPos, uint32_
 }
 
 // Searches the open list hash table for a node matching the given packed position. Returns the node if found, NULL otherwise.
-short * __stdcall DRLGPATH_FindNodeInOpenList(int32_t nOpenListBase, uint32_t nPackedPos) {
-    D2DrlgPathNodeStrc* pNode = *(D2DrlgPathNodeStrc**)(nOpenListBase + (gnPathNodeMax[nPackedPos >> 0x10 & 0x7f] + gnPathSearchMax[nPackedPos & 0x7f] & 0x7fU) * 4);
+D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInOpenList(D2DrlgPathSearchCtxStrc * nOpenListBase, D2CoordsShort nPackedPos) {
+    D2DrlgPathNodeStrc* pNode = *(D2DrlgPathNodeStrc**)(nOpenListBase->abyOpenBuckets + (gnPathNodeMax[(uint32_t)d2_bits_of(nPackedPos) >> 0x10 & 0x7f] + gnPathSearchMax[(uint32_t)d2_bits_of(nPackedPos) & 0x7f] & 0x7fU) * 4);
     while (pNode) {
-      if ((short int)nPackedPos == pNode->nX && *(uint16_t*)((char*)&nPackedPos + 2) == pNode->nY) {
-        return &pNode->nX;
+      if (nPackedPos.nX == pNode->nX && nPackedPos.nY == pNode->nY) {
+        return pNode;
       }
 
       pNode = pNode->pHashNext;
@@ -2625,14 +2625,14 @@ short * __stdcall DRLGPATH_FindNodeInOpenList(int32_t nOpenListBase, uint32_t nP
 }
 
 // Searches the closed list hash table (offset 0x200 from the open list) for a node matching the given packed position. Returns the node if found, NULL otherwise.
-short * __stdcall DRLGPATH_FindNodeInClosedList(int32_t nOpenListBase, uint32_t nPackedPos) {
-    short int* pNode = *(short int**)(nOpenListBase + 0x200 + (gnPathNodeMax[nPackedPos >> 0x10 & 0x7f] + gnPathSearchMax[nPackedPos & 0x7f] & 0x7fU) * 4);
+D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInClosedList(D2DrlgPathSearchCtxStrc * nOpenListBase, D2CoordsShort nPackedPos) {
+    D2DrlgPathNodeStrc* pNode = *(D2DrlgPathNodeStrc**)(nOpenListBase->abyClosedBuckets + (gnPathNodeMax[(uint32_t)d2_bits_of(nPackedPos) >> 0x10 & 0x7f] + gnPathSearchMax[(uint32_t)d2_bits_of(nPackedPos) & 0x7f] & 0x7fU) * 4);
     while (pNode) {
-      if ((short int)nPackedPos == *pNode && *(uint16_t*)((char*)&nPackedPos + 2) == pNode[1]) {
+      if (nPackedPos.nX == pNode->nX && nPackedPos.nY == pNode->nY) {
         return pNode;
       }
 
-      pNode = *(short int**)(pNode + 0x18);
+      pNode = pNode->pHashNext;
     }
 
     return nullptr;
@@ -2827,7 +2827,7 @@ static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(int32_t nOpenList, uint32_t
     }
 
     nEdgeCost = pParentNode->nGCost + nEdgeCost;
-    D2DrlgPathNodeStrc* pExistingNode = (D2DrlgPathNodeStrc*)DRLGPATH_FindNodeInOpenList(nOpenList, nPackedNeighbor);
+    D2DrlgPathNodeStrc* pExistingNode = DRLGPATH_FindNodeInOpenList((D2DrlgPathSearchCtxStrc*)nOpenList, (D2CoordsShort)nPackedNeighbor);
     if (pExistingNode) {
       if (!pParentNode->pChildren[0]) {
         pParentNode->pChildren[0] = pExistingNode;
@@ -2854,7 +2854,7 @@ static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(int32_t nOpenList, uint32_t
       }
     } else {
       D2DrlgPathNodeStrc* pClosedNode;
-      pClosedNode = (D2DrlgPathNodeStrc*)DRLGPATH_FindNodeInClosedList(nOpenList, nPackedNeighbor);
+      pClosedNode = DRLGPATH_FindNodeInClosedList((D2DrlgPathSearchCtxStrc*)nOpenList, (D2CoordsShort)nPackedNeighbor);
       if (pClosedNode) {
         if (!pParentNode->pChildren[0]) {
           pParentNode->pChildren[0] = pClosedNode;

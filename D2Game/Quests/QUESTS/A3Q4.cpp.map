@@ -297,6 +297,19 @@
       ]
     },
     {
+      "name": "Q21_Callback10_PlayerLeavesGame",
+      "address": "005ba990",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A3Q4",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q21_Callback09_PlayerDroppedWithQuestItem",
       "address": "005ba9a0",
       "lines": [

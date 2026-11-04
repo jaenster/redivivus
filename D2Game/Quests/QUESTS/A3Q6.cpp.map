@@ -273,6 +273,19 @@
       ]
     },
     {
+      "name": "Q23_Callback10_PlayerLeavesGame",
+      "address": "005bc710",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A3Q6",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q23_QuestUpdate",
       "address": "005bc720",
       "lines": [

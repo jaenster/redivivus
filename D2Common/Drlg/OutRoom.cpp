@@ -9,6 +9,7 @@
 #include "D2Common/Drlg/DrlgGrid.h"
 #include "D2Common/Drlg/DrlgRoom.h"
 #include "D2Common/Drlg/DrlgVer.h"
+#include "D2Common/Drlg/Maze.h"
 #include "D2Common/Drlg/Preset.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"

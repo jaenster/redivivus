@@ -339,7 +339,6 @@
         "D2ItemsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -535,7 +534,6 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -2856,7 +2854,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc",
-        "SGAMEDATA"
+        "SGAMEDATA",
+        "uint32_t"
       ]
     },
     {

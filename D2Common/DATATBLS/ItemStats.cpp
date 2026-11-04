@@ -22,6 +22,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -39,7 +40,7 @@ void __stdcall SetState(D2UnitStrc * pUnit, eD2States eState, int32_t bSet) {
 }
 
 // No register arguments: ECX is loaded from pUnit [EBP+8] at 00639df3 before any use (1.14d asm).
-eD2States __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
+BOOL __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
     eD2UnitType eUnitType;
     if (pUnit) {
       eD2States eStateResult;
@@ -50,7 +51,7 @@ eD2States __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
       }
     }
 
-    return STATE_none;
+    return 0;
 }
 
 void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, int32_t nStateId, int32_t bSet) {

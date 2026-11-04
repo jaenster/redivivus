@@ -427,7 +427,7 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     bool bValidDest;
-    eD2Skills eCurrentSkillId;
+    BOOL eUnitState;
     uint32_t nSkillFlags;
     int32_t nCalcTmp;
     D2RoomStrc* pRoom;
@@ -435,7 +435,6 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
     POINT nFreeCoordTmp;
     int32_t nDestY;
     int32_t nDestX;
-    BOOL bGotCoords;
     POINT* pFreeCoord;
     D2SkillStrc* pSkill;
     pSkill = D2Common::Units::GetCurrentSkill(pUnit);
@@ -446,9 +445,9 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
     D2UnitStrc* pPlayerOrTarget;
     pPlayerOrTarget = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit == pPlayerOrTarget) {
-      eD2States eUnitState;
+      eD2Skills eCurrentSkillId;
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-      if (eUnitState != STATE_none) {
+      if (eUnitState) {
         return 0;
       }
 
@@ -472,8 +471,8 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
     if (bUnitIsMonster) {
       pPlayerOrTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
       if (!pPlayerOrTarget) {
-        bGotCoords = Skills::GetCooordinates(pUnit, &nDestX, &nDestY);
-        if (!bGotCoords) {
+        eUnitState = Skills::GetCooordinates(pUnit, &nDestX, &nDestY);
+        if (!eUnitState) {
           return 0;
         }
 
@@ -487,14 +486,14 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
         nDestY = nDestY * 2 - nCalcTmp;
       }
 
-      bGotCoords = 0;
+      eUnitState = 0;
       eCollisionFlag = 0x3c01;
       nFreeCoordTmp.x = nDestX;
       nFreeCoordTmp.y = nDestY;
       nCalcTmp = D2Common::Units::GetUnitSizeX(pUnit);
       pFreeCoord = &nFreeCoordTmp;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pFreeCoord, nCalcTmp, eCollisionFlag, bGotCoords);
+      pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pFreeCoord, nCalcTmp, eCollisionFlag, eUnitState);
       if (pRoom) {
         nDestX = nFreeCoordTmp.x;
         nDestY = nFreeCoordTmp.y;
@@ -518,12 +517,12 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
         return 1;
       }
     } else {
-      bGotCoords = Skills::GetCooordinates(pUnit, &nDestX, &nDestY);
-      if (bGotCoords) {
-        bGotCoords = SKILL_CanUseAtLocation(pUnit, nDestX, nDestY, eSkill);
-        if (bGotCoords) {
-          bGotCoords = SKILL_ValidateTeleportDestination(pUnit, nSkillLvl, &nDestX, &nDestY, eSkill);
-          if (bGotCoords) {
+      eUnitState = Skills::GetCooordinates(pUnit, &nDestX, &nDestY);
+      if (eUnitState) {
+        eUnitState = SKILL_CanUseAtLocation(pUnit, nDestX, nDestY, eSkill);
+        if (eUnitState) {
+          eUnitState = SKILL_ValidateTeleportDestination(pUnit, nSkillLvl, &nDestX, &nDestY, eSkill);
+          if (eUnitState) {
             goto commit_destination;
           }
         }
@@ -938,7 +937,6 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2DynamicPathStrc * pUnit,
 BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bFoundPos;
     bool bFoundPos;
-    eD2Skills eCurrentSkillId;
     uint32_t nSkillFlags;
     BOOL bInMeleeRange;
     D2RoomStrc* pRoom;
@@ -950,9 +948,9 @@ BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUni
 
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit == pPlayerUnit_lcl) {
-      eD2States eUnitState;
-      eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-      if (eUnitState != STATE_none) {
+      eD2Skills eCurrentSkillId;
+      bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+      if (bInMeleeRange) {
         return 0;
       }
 
@@ -1132,7 +1130,7 @@ BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2
     uint32_t _bPathFound;
     bool bPathFound;
     uint32_t nSkillFlags;
-    eD2States eUnitState;
+    BOOL bInMeleeRange;
     D2CharStatsTxt* pCharStatsTxt;
     D2MonStatsTxt* pMonStatsTxt;
     eD2CollisionShapeType nType;
@@ -1167,13 +1165,13 @@ BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2
         }
       }
 
-      eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-      if (eUnitState != STATE_none) {
+      bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+      if (bInMeleeRange) {
         return 0;
       }
     }
 
-    BOOL bInMeleeRange = Skills::GetCooordinates(pUnit, (int32_t*)&nSrcX, (int32_t*)&nSrcY);
+    bInMeleeRange = Skills::GetCooordinates(pUnit, (int32_t*)&nSrcX, (int32_t*)&nSrcY);
     if (!bInMeleeRange) {
       return 0;
     }

@@ -2255,12 +2255,13 @@ int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable) {
     return nNewCount * 0x408 + pNewsTable[2];
 }
 
-void __thiscall BNNEWS_EnsureCapacity(uint32_t * pNewsTable, int dwAdditionalCount) {
-    if (!(pNewsTable[1] + dwAdditionalCount > *pNewsTable)) {
+void __thiscall BNNEWS_EnsureCapacity(D2BnNewsTableStrc * pNewsTable, uint32_t dwAdditionalCount) {
+    uint32_t nRequired = pNewsTable->nCount + dwAdditionalCount;
+    if (nRequired <= pNewsTable->nCapacity) {
       return;
     }
 
-    BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, pNewsTable[1] + dwAdditionalCount);
+    BNNEWS_ReallocateNewsTable(pNewsTable, nRequired);
 }
 
 void __thiscall BNNEWS_SetNewsEntryCount(D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCount) {
@@ -3129,12 +3130,13 @@ int __fastcall BNSEND_SendString(char * szString) {
     return 1;
 }
 
-void __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwRequestId) {
+BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwRequestId) {
     SID_C2S_GetFileTime dwFileTimeParam;
     dwFileTimeParam.dwRequestId = dwRequestId;
     dwFileTimeParam.dwUnknown = 0;
     uint32_t nTextLen = Storm::Source::SSTR::SStrCopy(dwFileTimeParam.szFilename, szText, 0x104);
     NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, (uintptr_t)&dwFileTimeParam + (nTextLen - (uintptr_t)&dwFileTimeParam) + 9);
+    return 1;
 }
 
 void StaticInit_gpBNetNewsCache() {

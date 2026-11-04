@@ -61,6 +61,11 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2CharSelCompStrc) == 0x234, "D2_NEW_AT(D2CharSelCompStrc): the 32-bit layout must be the 0x234 bytes 1.14d allocates");
 
 
+#ifndef RECON_FPTD_CONTAINER_TypeInitialValue
+#define RECON_FPTD_CONTAINER_TypeInitialValue
+typedef void (__fastcall *CONTAINER_TypeInitialValue)(void * pBuffer);
+#endif
+
 uint32_t gnStringTruncateConstant = 0x2e2e2e; D2_GLOBAL_GUARD(gnStringTruncateConstant, "gnStringTruncateConstant");
 uint32_t gnPaletteLoadBufferSize = 0x7461642e; D2_GLOBAL_GUARD(gnPaletteLoadBufferSize, "gnPaletteLoadBufferSize");
 uint8_t gaPaletteLoadData = 0x0; D2_GLOBAL_GUARD(gaPaletteLoadData, "gaPaletteLoadData");
@@ -2794,13 +2799,15 @@ void __stdcall D2COMP_AddTextLineToLayout(uint16_t * wszText, uint8_t * pLayoutB
     (*pnLineCount)++;
 }
 
-void __fastcall D2COMP_ZeroBuffer512(void * pBuffer) {
+void * __fastcall D2COMP_ZeroBuffer512(void * pBuffer) {
     int32_t nRemaining;
     uint32_t* pCursor = (uint32_t*)pBuffer;
     for (nRemaining = 0x80; nRemaining; nRemaining--) {
       *pCursor = 0;
       pCursor++;
     }
+
+    return pBuffer;
 }
 
 static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
@@ -4058,7 +4065,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
       nIconAnchorY = *(int*)&pA3Q6Data->bMephistoSoulstoneDropped - 0x50;
       __frame0.nMaxLineWidth = 0;
       __frame0.nTotalWidth = 0;
-      Fog::File::CONTAINER_InitializeBuffer(aLineLayouts, 0x208, 7, D2COMP_ZeroBuffer512);
+      Fog::File::CONTAINER_InitializeBuffer(aLineLayouts, 0x208, 7, (CONTAINER_TypeInitialValue)D2COMP_ZeroBuffer512);
       __frame0.nLineCount = 0;
       nTitleColor = 0;
       D2WinFont::SetAndReturnLastFont(1);

@@ -176,6 +176,15 @@
         "SetCurrentThreadId",
         "GetCurrentThreadId"
       ]
+    },
+    {
+      "name": "StaticInit_6ca890",
+      "address": "006ca890",
+      "lines": [],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_Initialize"
+      ]
     }
   ]
 }

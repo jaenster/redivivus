@@ -4,6 +4,15 @@
   "file": "Bnclient/BnMessQueue.cpp",
   "functions": [
     {
+      "name": "thunk_BNMESSQUEUE_Shutdown",
+      "address": "00518c20",
+      "lines": [],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_Shutdown"
+      ]
+    },
+    {
       "name": "BNMESSQUEUE_Initialize",
       "address": "005201e0",
       "lines": [

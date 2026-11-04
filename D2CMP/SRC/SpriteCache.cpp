@@ -106,7 +106,7 @@ static char gszSrcFileSpriteCache[22] = {
     'p',
     '\x00'
 }; D2_STATIC_GUARD(gszSrcFileSpriteCache, "gszSrcFileSpriteCache");
-static uint32_t bUseCompressedData = 0x1; D2_STATIC_GUARD(bUseCompressedData, "bUseCompressedData");
+static BOOL bUseCompressedData = 0x1; D2_STATIC_GUARD(bUseCompressedData, "bUseCompressedData");
 static void* gpszExtDcc = (void*)&gszExtDcc; D2_STATIC_GUARD(gpszExtDcc, "gpszExtDcc");
 static void* gpszExtDc6 = (void*)&gszExtDc6; D2_STATIC_GUARD(gpszExtDc6, "gpszExtDc6");
 static D2LRUCacheStrc gSpriteCacheLru = {}; D2_STATIC_GUARD(gSpriteCacheLru, "gSpriteCacheLru");
@@ -531,7 +531,7 @@ static BOOL __stdcall SPRITECACHE_LoadDC6(char * szText, D2GfxDataStrc * pGfxDat
     uint8_t byTokenChar;
     int nClassId;
     char* szFormat;
-    int bUseCompressed;
+    BOOL bUseCompressed;
     bUseCompressed = bUseCompressedData;
     if (*szText == '\0') {
       *szText2 = '\0';

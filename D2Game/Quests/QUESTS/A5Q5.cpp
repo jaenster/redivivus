@@ -57,6 +57,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Text.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/Monster/AI/AI.h"

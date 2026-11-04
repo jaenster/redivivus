@@ -50,7 +50,7 @@ struct D2ClientGameDataStrc {
     /* 0x0C */ uint32_t uGlobalTickCountA;
     /* 0x10 */ uint32_t uGlobalElapsed;
     /* 0x14 */ int32_t gnFramesDrawnCounter;
-    /* 0x18 */ int32_t gnRecordEntryIndex;
+    /* 0x18 */ uint32_t gnRecordEntryIndex;
     /* 0x1C */ uint32_t TickToSendPingToServer;
     /* 0x20 */ uint32_t dwGlobalTickCountD;
     /* 0x24 */ uint32_t ping;

@@ -84,6 +84,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UI/npcmenu.data.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -764,7 +765,7 @@ BOOL __fastcall CheckIfPlayerCanAffordCost(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall SUNITNPC_ApplyScrollSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nQuantityUsed) {
     int nUnitGUID;
-    uint8_t eUnitType;
+    eD2UnitType eUnitType;
     if ((int)eSkill < 0) {
       return;
     }
@@ -789,13 +790,13 @@ void __fastcall SUNITNPC_ApplyScrollSkill(D2UnitStrc * pUnit, eD2Skills eSkill, 
     D2Common::Skills::SKILL_SetQuantity(pSkill, nQuantity);
     if (!pUnit) {
       nUnitGUID = -1;
-      eUnitType = 6;
+      *(uint8_t*)(char*)&eUnitType = UNIT_COUNT;
     } else {
       nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = (uint8_t)pUnit->eUnitType;
+      *(uint8_t*)(char*)&eUnitType = (uint8_t)pUnit->eUnitType;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x40b), eUnitType, nUnitGUID, eSkill, (uint8_t)nQuantity);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x40b), (uint8_t)eUnitType, nUnitGUID, eSkill, (uint8_t)nQuantity);
 }
 
 bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, D2UnitStrc * pNpcUnit, D2UnitStrc * pUnit) {
@@ -2274,11 +2275,11 @@ BOOL __fastcall SUNITNPC_HandleHireableAction(D2UnitStrc * pUnit) {
     BOOL bAnyStateRemoved = 0;
     BOOL bStateRemoved = 0;
     if (sgptDataTable->nTxtStatesSize > 0) {
-      eD2States eActiveState;
+      BOOL eActiveState;
       eState = STATE_none;
       do {
         eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-        if (eActiveState != STATE_none) {
+        if (eActiveState) {
           bHasStateFlag = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckStateFlagArray12(eState);
           if (bHasStateFlag) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);

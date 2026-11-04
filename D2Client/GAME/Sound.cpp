@@ -61,7 +61,7 @@ BOOL __stdcall SOUND_IsInitialized_ForNpcSpeechItem() {
     return ::D2Client::GAME::Sound::SOUND_IsInitializedDup();
 }
 
-void __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
+BOOL __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
     WAVEFORMATEX sWaveFormat;
     if (pSoundStream->nLoadState != 2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d);
@@ -74,10 +74,11 @@ void __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
       pSoundStream->aWavDataPtrAndSize[0] = (int32_t)pWavData;
       pSoundStream->Stereo = sWaveFormat.nChannels == 2;
       pSoundStream->aWavDataPtrAndSize[1] = nBufSize;
-      return;
+      return 1;
     }
 
     pSoundStream->bFileNotFound = 1;
+    return 0;
 }
 
 // Sets the EAX reverb environment for the current room if the active sound mixer supports 3D audio and the requested environment ID differs from the current one. Reads all EAX parameters (room volume, HF, decay, reflections, reverb, size, diffusion, air absorption, room rolloff) from the SoundEnvironTxt record for nEnvId, scales integer fields by /1000 to floats, and calls SOUND_ApplyEAXEnvironment. Updates gnCurrentEaxEnvironmentId.

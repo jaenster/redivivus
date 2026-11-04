@@ -666,6 +666,15 @@
       ]
     },
     {
+      "name": "thunk_WEATHER_FreeDC6Graphics",
+      "address": "0044c880",
+      "lines": [],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "WEATHER_FreeDC6Graphics"
+      ]
+    },
+    {
       "name": "GAME_FreeClientSideStructures",
       "address": "0044c890",
       "lines": [
@@ -2856,6 +2865,15 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "FreeLanguage"
+      ]
+    },
+    {
+      "name": "thunk_GAMEDATA_CheckAutomapCenterOnLoad",
+      "address": "004690a0",
+      "lines": [],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_CheckAutomapCenterOnLoad"
       ]
     },
     {

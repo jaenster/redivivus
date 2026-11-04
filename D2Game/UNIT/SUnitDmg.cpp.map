@@ -84,7 +84,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -399,7 +398,6 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -568,7 +566,6 @@
       "usedTypes": [
         "D2DamageContext",
         "D2ResistTableEntry",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -658,7 +655,6 @@
       ],
       "usedTypes": [
         "D2DamageContext",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -879,7 +875,6 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "eD2ElementalDamageTypeDWORD",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -1753,7 +1748,6 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint16_t"
       ]

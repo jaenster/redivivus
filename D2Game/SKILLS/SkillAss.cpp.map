@@ -335,8 +335,7 @@
         "D2SkillsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2Skills",
-        "eD2States"
+        "eD2Skills"
       ]
     },
     {
@@ -365,7 +364,6 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "uint8_t"
       ]
     },
@@ -806,7 +804,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -1302,7 +1299,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eMissilesId",
         "int32_t",
         "uint32_t"

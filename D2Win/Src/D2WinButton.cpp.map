@@ -154,7 +154,6 @@
       ],
       "usedTypes": [
         "D2ControlMsg",
-        "D2WinButton *",
         "int32_t"
       ]
     },

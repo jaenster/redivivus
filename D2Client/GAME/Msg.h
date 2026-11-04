@@ -130,14 +130,14 @@ namespace D2Client::GAME::Msg {
 void __stdcall NET_SendPacket0x3f_0x1a();
 // Client-side sender for opcode 0x67 (game join/create handshake). Fills D2GSPacketClt0x67 with game name, game type (SP/open-bnet/LAN/open), char class (or arena default), language code, arena flags (initialising to ClientUpdate|Expansion if zero), difficulty, and saved character name, then dispatches via NET_D2GS_CLIENT_SendPacketAfterChecks.
 void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName);
-void __fastcall NET_D2GS_CLIENT_Send_0x6B(char * pBytes);
+void __stdcall NET_D2GS_CLIENT_Send_0x6B();
 // Client-side keep-alive ping sender. Throttled to once per 5 seconds (gdwLastPingSentTick). Computes an anti-cheat/Warden checksum by reading 2 bytes each from two offsets in a named module via ReadProcessMemory; sends packet 0x6D containing the current tick, the computed checksum (obfuscated), and half the game data delay. Updates gnPacketSendCount_0x69 and _gbNetworkPacketSyncFlag after send.
 void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING();
 // Takes no parameter. Sends one byte, the constant 0x69 (00477eec MOV byte ptr [EBP-1],0x69).
 // The prologue's PUSH ECX only reserves the 4-byte frame slot; ECX is not an argument.
 void __stdcall NET_D2GS_CLIENT_Send_0x69();
 void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash);
-void __fastcall NET_D2GS_CLIENT_Send_0x6A();
+void __stdcall NET_D2GS_CLIENT_Send_0x6A();
 void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal);
 int __stdcall LOADING_GetProgressRatio();
 void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotalChunks);

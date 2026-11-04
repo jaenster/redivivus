@@ -28,10 +28,6 @@ typedef uint32_t eD2States;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct _CONTEXT;
 #endif // _WIN32
-#ifndef RECON_FPTD_fnBinkFrameCallback
-#define RECON_FPTD_fnBinkFrameCallback
-typedef void (__stdcall *fnBinkFrameCallback)();
-#endif
 
 namespace D2Client {
 
@@ -187,8 +183,6 @@ void __thiscall WARDEN_RC4Init(struct D2RC4StateStrc * pRc4State, uint8_t * pKey
 void __fastcall SKILLSSOR_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatListEx);
 int __fastcall SKILLSCLT_CheckSkillIsValid(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-void __stdcall BINK_RenderVideoFrame();
-void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFrameCallback pfnFrameCallback);
 _EXCEPTION_DISPOSITION SehHandler_6ca218(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca238(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 

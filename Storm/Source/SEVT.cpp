@@ -2,7 +2,7 @@
 
 #include "Storm/Source/SEVT.h"
 #include "D2Hell/D2Hell.h"
-#include "Fog/Engine/Application.h"
+#include "Game/Main.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SFile.h"
@@ -393,7 +393,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
                 p = (uint32_t*)*ppHandlerLink;
                 if (*p == dwKey && (!pfnHandler || (pfnSEvtHandler)p[2] == pfnHandler)) {
                   *ppHandlerLink = p[3];
-                  Fog::Engine::Application::MISC_OperatorDeleteShim(p);
+                  Game::Main::MISC_OperatorDeleteShim(p);
                   gnSevtSnapshotActive = 1;
                   _bRemoved = 1;
                   (*(int*)(pEvent[3] + 8))--;
@@ -457,7 +457,7 @@ BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
             pCurEvent = (int*)*ppEventLink;
             if (pCurEvent == pEvent) {
               *ppEventLink = pCurEvent[4];
-              Fog::Engine::Application::MISC_OperatorDeleteShim(pCurEvent);
+              Game::Main::MISC_OperatorDeleteShim(pCurEvent);
               gnSevtRegisteredEventCount--;
             } else {
               ppEventLink = pCurEvent + 4;

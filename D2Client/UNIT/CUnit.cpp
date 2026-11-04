@@ -913,8 +913,8 @@ uint32_t __fastcall DecrementGfxTimer(D2UnitStrc * pUnit) {
     }
 
     pUnit->pGfxDataCopy--;
-    eD2States eAttachedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
-    return (uint32_t)(eAttachedState == STATE_none);
+    BOOL eAttachedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
+    return (uint32_t)!eAttachedState;
 }
 
 void __fastcall CUNIT_SetUnitFlag3(D2UnitStrc * pUnit) {
@@ -2192,7 +2192,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     uint16_t* pNameStr = D2Lang::StrTable::strtable::GetLocaleString(pDVar2->NameStr);
     D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pNameStr);
     if (pMonUModList) {
-      MonUnique::SetNameSeed(pUnit, (short int)nNameSeed);
+      MonUnique::SetNameSeed(pUnit, (uint16_t)nNameSeed);
       pDstUModList = MonUnique::GetMonUModList(pUnit);
       *pDstUModList = *pMonUModList;
       pDstUModList[1] = pMonUModList[1];
@@ -2227,7 +2227,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     if (bResult) {
       bResult = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(iVar1, TXTMonStats2Field0x04DWORD_ns::noUniqueShift);
       if (!bResult) {
-        nPalShiftIdx = GAME::PalShift::PALSHIFT_GenerateShiftDuration(pUnit, nNameSeed);
+        nPalShiftIdx = GAME::PalShift::PALSHIFT_GenerateShiftDuration(pUnit, (uint16_t)nNameSeed);
       }
     }
     if (iVar1 < sgptDataTable->nTxtMonStatsSize) {

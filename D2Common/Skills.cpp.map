@@ -684,7 +684,6 @@
         "D2SkillStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -706,7 +705,6 @@
       "usedTypes": [
         "D2SkillStrc",
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -744,7 +742,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -2253,7 +2250,6 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -2512,7 +2508,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -2766,7 +2761,6 @@
         "D2SkillStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

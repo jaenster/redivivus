@@ -16,8 +16,8 @@
     (int)Fog::Memory::pGlobalPoolSystem.pManagers[0].nPoolId)
 
 #include "D2Lang/StrTable/strtable.data.h"
-#include "Fog/Engine/Application.h"
 #include "Fog/File.data.h"
+#include "Game/Main.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

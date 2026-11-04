@@ -1240,7 +1240,6 @@
         "D2MonSoundsTxt",
         "D2UnitStrc",
         "eD2Sounds",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"

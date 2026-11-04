@@ -4,6 +4,42 @@
   "file": "D2Client/UI/Panel.cpp",
   "functions": [
     {
+      "name": "thunk_CMD_UseBeltSlot1",
+      "address": "00468f40",
+      "lines": [],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "CMD_UseBeltSlot1"
+      ]
+    },
+    {
+      "name": "thunk_CMD_UseBeltSlot2",
+      "address": "00468f50",
+      "lines": [],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "CMD_UseBeltSlot2"
+      ]
+    },
+    {
+      "name": "thunk_CMD_UseBeltSlot3",
+      "address": "00468f60",
+      "lines": [],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "CMD_UseBeltSlot3"
+      ]
+    },
+    {
+      "name": "thunk_CMD_UseBeltSlot4",
+      "address": "00468f70",
+      "lines": [],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "CMD_UseBeltSlot4"
+      ]
+    },
+    {
       "name": "LoadPanelImages",
       "address": "004967f0",
       "lines": [
@@ -372,7 +408,6 @@
       "usedTypes": [
         "D2UnitStrc",
         "WCHAR",
-        "eD2States",
         "int32_t",
         "uint8_t"
       ]

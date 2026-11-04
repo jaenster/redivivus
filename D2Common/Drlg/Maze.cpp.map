@@ -443,6 +443,7 @@
         "DRLGMAZE_PickRoomPreset"
       ],
       "usedTypes": [
+        "D2DrlgOrthStrc",
         "D2LvlMazeTxt",
         "D2RoomExStrc",
         "eDrlgDirection"

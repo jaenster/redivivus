@@ -14,6 +14,17 @@ struct D2SkillsTxt;
 struct D2UnitStrc;
 struct SGAMEDATA;
 
+// Data types
+struct D2CoordUnsignedStrc {
+    D2CoordUnsignedStrc() = default;
+    D2CoordUnsignedStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2CoordUnsignedStrc(uint32_t a0, uint32_t a1) : nX(a0), nY(a1) {}
+
+    /* 0x00 */ uint32_t nX;
+    /* 0x04 */ uint32_t nY;
+};
+
 namespace D2Client::GAME::Select {
 
 // Function declarations

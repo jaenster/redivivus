@@ -290,6 +290,19 @@
       ]
     },
     {
+      "name": "Q18_Callback10_PlayerLeavesGame",
+      "address": "005b7610",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A3Q1",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q18_Callback03_ChangedLevel",
       "address": "005b7620",
       "lines": [

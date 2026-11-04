@@ -12,13 +12,18 @@
 struct D2ArchiveStrc;
 
 // Data types
-struct D2BnetDownloadStateStrc {
+struct __attribute__((packed)) D2BnetDownloadStateStrc {
     /* 0x000 */ uint16_t nSendSize; // size of packet to send (*pDownloadCtx)
-    /* 0x002 */ uint8_t undefined_0x02[18]; // unknown gap
+    /* 0x002 */ uint8_t nUnk0x02;
+    /* 0x003 */ uint8_t nUnk0x03;
+    /* 0x004 */ uint32_t dwPlatformId;
+    /* 0x008 */ uint32_t dwProductId;
+    /* 0x00C */ uint32_t nUnk0x0C;
+    /* 0x010 */ uint32_t nUnk0x10;
     /* 0x014 */ uint32_t nCachedFileSize; // cached file size (puVar1+10 as ushort* = byte 0x14)
-    /* 0x018 */ uint8_t undefined_0x18[268]; // unknown gap
-    /* 0x124 */ char szOutputPath[256]; // output file path buffer (puVar1+0x92 as ushort* = byte 0x124)
-    /* 0x224 */ uint8_t undefined_0x224[4]; // unknown gap
+    /* 0x018 */ FILETIME ftFileTime;
+    /* 0x020 */ char szFileName[260];
+    /* 0x124 */ char szOutputPath[260]; // output file path buffer (puVar1+0x92 as ushort* = byte 0x124)
     /* 0x228 */ int nConnMode; // connection/retry mode (-0x7ffffffe=retry; pDownloadCtx+0x114 as ushort* = byte 0x228)
     /* 0x22C */ int nFileType; // file transfer type (2=direct recv; pDownloadCtx+0x116 as ushort* = byte 0x22c)
 };

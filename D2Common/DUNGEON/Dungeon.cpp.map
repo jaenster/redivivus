@@ -2740,6 +2740,18 @@
       ]
     },
     {
+      "name": "thunk_DRLGROOMEX_ActivateRoomEx",
+      "address": "0061bb44",
+      "lines": [],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_ActivateRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
       "name": "DRLGROOM_SetArreatSummitColors",
       "address": "0061bb60",
       "lines": [

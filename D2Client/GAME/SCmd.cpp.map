@@ -213,6 +213,15 @@
       ]
     },
     {
+      "name": "NET_D2GS_CLIENT_Incoming0x02_LoadSuccess",
+      "address": "0045c910",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x6B"
+      ]
+    },
+    {
       "name": "CLIENT_GetCurrentRoomAct",
       "address": "0045c920",
       "lines": [
@@ -409,6 +418,15 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x51"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x52",
+      "address": "0045cc00",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS"
       ]
     },
     {
@@ -1855,6 +1873,24 @@
       ]
     },
     {
+      "name": "SCMD_Rcv0x54_Ignore",
+      "address": "0045e3b0",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "ENV_Rcv0x54_NoOp"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x4F",
+      "address": "0045e3c0",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST"
+      ]
+    },
+    {
       "name": "NET_D2GS_CLIENT_Incoming0x4E_ADDTOMERCENARYLIST",
       "address": "0045e3d0",
       "lines": [
@@ -1983,6 +2019,15 @@
       "usedTypes": [
         "D2GSPacketClt0x5D",
         "D2GSPacketSrv0x5D"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5E",
+      "address": "0045e570",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS"
       ]
     },
     {
@@ -2202,6 +2247,18 @@
       ]
     },
     {
+      "name": "NET_D2GS_CLIENT_Incoming0x77",
+      "address": "0045e800",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
       "name": "NET_D2GS_CLIENT_Incoming0x78_TRADENAME",
       "address": "0045e810",
       "lines": [
@@ -2417,6 +2474,15 @@
       ]
     },
     {
+      "name": "NET_D2GS_CLIENT_Incoming0x89",
+      "address": "0045ea30",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER"
+      ]
+    },
+    {
       "name": "NET_D2GS_CLIENT_Incoming0x8A",
       "address": "0045ea40",
       "lines": [
@@ -2544,6 +2610,15 @@
       ],
       "usedTypes": [
         "int32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8F",
+      "address": "0045eb00",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING"
       ]
     },
     {

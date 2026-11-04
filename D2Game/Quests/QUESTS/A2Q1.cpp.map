@@ -48,6 +48,19 @@
       ]
     },
     {
+      "name": "Q09_Callback10_PlayerLeavesGame",
+      "address": "00598980",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A2Q1",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q09_Callback02_NpcDeactivate",
       "address": "00598990",
       "lines": [

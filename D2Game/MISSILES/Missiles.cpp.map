@@ -168,7 +168,6 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "eMissilesId",
         "int32_t",

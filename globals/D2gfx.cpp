@@ -8,9 +8,89 @@
 
 
 // =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+int gaGroundTileRowOffsets[15] = {
+    0xe,
+    0xc,
+    0xa,
+    0x8,
+    0x6,
+    0x4,
+    0x2,
+    0x0,
+    0x2,
+    0x4,
+    0x6,
+    0x8,
+    0xa,
+    0xc,
+    0xe
+}; D2_GLOBAL_GUARD(gaGroundTileRowOffsets, "gaGroundTileRowOffsets");
+
+int gaGroundTileRowWidths[15] = {
+    0x4,
+    0x8,
+    0xc,
+    0x10,
+    0x14,
+    0x18,
+    0x1c,
+    0x20,
+    0x1c,
+    0x18,
+    0x14,
+    0x10,
+    0xc,
+    0x8,
+    0x4
+}; D2_GLOBAL_GUARD(gaGroundTileRowWidths, "gaGroundTileRowWidths");
+
+int gaGroundTileSrcPointers[15] = {
+    0x0,
+    0x4,
+    0xc,
+    0x18,
+    0x28,
+    0x3c,
+    0x54,
+    0x70,
+    0x90,
+    0xac,
+    0xc4,
+    0xd8,
+    0xe8,
+    0xf4,
+    0xfc
+}; D2_GLOBAL_GUARD(gaGroundTileSrcPointers, "gaGroundTileSrcPointers");
+
+uint8_t gpLineBufferTileArray[32][32][32] = {}; D2_GLOBAL_GUARD(gpLineBufferTileArray, "gpLineBufferTileArray");
+
+// =============================================================================
 // Initialized scalars
 // =============================================================================
 
+int gnTileInnerClipZMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipZMin, "gnTileInnerClipZMin");
+int gnTileClipXMax = 0; D2_GLOBAL_GUARD(gnTileClipXMax, "gnTileClipXMax");
+int gnTileClipXMin = 0; D2_GLOBAL_GUARD(gnTileClipXMin, "gnTileClipXMin");
+int gnTileClipYMin = 0; D2_GLOBAL_GUARD(gnTileClipYMin, "gnTileClipYMin");
+int gnTileInnerClipYMax = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMax, "gnTileInnerClipYMax");
+int gnTileInnerClipXMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMin, "gnTileInnerClipXMin");
+int gnTileInnerXMax = 0; D2_GLOBAL_GUARD(gnTileInnerXMax, "gnTileInnerXMax");
+int gnTileClipZMax = 0; D2_GLOBAL_GUARD(gnTileClipZMax, "gnTileClipZMax");
+int gnMinTileScreenY = 0; D2_GLOBAL_GUARD(gnMinTileScreenY, "gnMinTileScreenY");
+int gnTileViewportXOffset = 0; D2_GLOBAL_GUARD(gnTileViewportXOffset, "gnTileViewportXOffset");
+int gnTileInnerClipYMinRow = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMinRow, "gnTileInnerClipYMinRow");
+int gnTileInnerClipXMax = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMax, "gnTileInnerClipXMax");
+int gnTileInnerClipYMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMin, "gnTileInnerClipYMin");
+int gnTileInnerClipXMax_b = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMax_b, "gnTileInnerClipXMax_b");
+int gnMinTileDrawY = 0; D2_GLOBAL_GUARD(gnMinTileDrawY, "gnMinTileDrawY");
+int gnTileClipZMin = 0; D2_GLOBAL_GUARD(gnTileClipZMin, "gnTileClipZMin");
+int gnMinTileScreenY_b = 0; D2_GLOBAL_GUARD(gnMinTileScreenY_b, "gnMinTileScreenY_b");
+int gnTileClipBottom = 0; D2_GLOBAL_GUARD(gnTileClipBottom, "gnTileClipBottom");
+int gnTileClipRight = 0; D2_GLOBAL_GUARD(gnTileClipRight, "gnTileClipRight");
+BYTE * * gpPaletteBlendLookupTable = 0; D2_GLOBAL_GUARD(gpPaletteBlendLookupTable, "gpPaletteBlendLookupTable");
 
 namespace D2Common::Drlg::Maze {
 
@@ -295,3 +375,15 @@ namespace D2Client::UI::Dialog {
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
+
+namespace D2Client::Mouse {
+
+} // namespace D2Client::Mouse
+
+namespace D2Client::Forms {
+
+} // namespace D2Client::Forms
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record

@@ -259,6 +259,18 @@
       ]
     },
     {
+      "name": "Destructor_UnwindThunk",
+      "address": "00603240",
+      "lines": [],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ]
+    },
+    {
       "name": "Ptr",
       "address": "00603250",
       "lines": [

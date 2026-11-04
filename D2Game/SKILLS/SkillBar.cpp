@@ -68,6 +68,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -177,8 +178,8 @@ BOOL __fastcall SKILLBAR_SrvStFn33_TargetRevivableCorpse(::SGAMEDATA * pGame, D2
       return bCanRevive;
     }
 
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_corpse_noselect);
-    if (eUnitState != STATE_none) {
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_corpse_noselect);
+    if (eUnitState) {
       return 0;
     }
 
@@ -258,8 +259,8 @@ BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, D2UnitStrc 
       return 0;
     }
 
-    eD2States eNoSelectState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCorpse, STATE_corpse_noselect);
-    if (eNoSelectState != STATE_none) {
+    BOOL eNoSelectState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCorpse, STATE_corpse_noselect);
+    if (eNoSelectState) {
       return 0;
     }
 
@@ -509,8 +510,8 @@ BOOL __fastcall Skills_SrvDoFunc_072_FindItem(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_corpse_noselect);
-    if (eUnitState != STATE_none) {
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_corpse_noselect);
+    if (eUnitState) {
       return 0;
     }
 
@@ -839,8 +840,8 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eUnitState != STATE_none) {
+    bHasTargetPos = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (bHasTargetPos) {
       return 0;
     }
 
@@ -1757,9 +1758,8 @@ static D2UnitStrc * __stdcall SKILLBAR_AcquireNextTarget(::SGAMEDATA * pGame, D2
 BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bFoundTeleportPos;
     bool bFoundTeleportPos;
-    D2RoomStrc* pRoom;
+    BOOL bIsInMeleeRange;
     eD2CollisionShapeType nWidth;
-    eD2States eUnitState;
     uint32_t nDestY;
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (!pSkill) {
@@ -1769,7 +1769,6 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
     D2UnitStrc* pUnit_00 = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     _bFoundTeleportPos = D2Common::Skills::SKILL_FindTeleportPosition(pUnit, pUnit_00, &eSkill, &nDestY);
     if (!_bFoundTeleportPos) {
-      BOOL bIsInMeleeRange;
       if (pUnit_00) {
         bIsInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pUnit_00, 0);
         if (bIsInMeleeRange) {
@@ -1778,6 +1777,7 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
         }
       }
     } else {
+      D2RoomStrc* pRoom;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       if (pRoom) {
         nWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
@@ -1795,8 +1795,8 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
         D2Common::Skills::SKILL_SetFlags(pSkill, 0x1080);
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
         if (pUnit_00) {
-          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_uninterruptable);
-          if (eUnitState != STATE_none) {
+          bIsInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_uninterruptable);
+          if (bIsInMeleeRange) {
             SkillsServer::SKILL_ApplyStunState(pGame, pUnit_00, STATE_healthpot);
           }
         }

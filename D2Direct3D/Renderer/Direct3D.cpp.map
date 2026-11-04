@@ -717,6 +717,15 @@
       ]
     },
     {
+      "name": "thunk_Release",
+      "address": "006b5990",
+      "lines": [],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Release"
+      ]
+    },
+    {
       "name": "InitPerspective",
       "address": "006b59a0",
       "lines": [

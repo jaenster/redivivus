@@ -34,21 +34,20 @@
 namespace D2Game::MISSILES::MissilesMode::SrvDoFunc {
 
 static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
-    BOOL _bIsOwner;
     bool bIsOwner;
+    BOOL eState;
     if (!(pUnit2 && pUnit2->eUnitFlags >> 3 & 1 && pUnit2->eUnitFlags >> 2 & 1)) {
       return 0;
     }
     if (pMissileTxt->NextHit != '\0') {
-      eD2States eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit);
-      if (eState != STATE_none) {
+      if (eState) {
         return 0;
       }
     }
 
-    _bIsOwner = D2Common::Units::Missile::CheckUnitIfOwner(pUnit, pUnit2);
-    if (_bIsOwner) {
+    eState = D2Common::Units::Missile::CheckUnitIfOwner(pUnit, pUnit2);
+    if (eState) {
       return 0;
     }
     if (!pUnit1) {

@@ -280,6 +280,19 @@
       ]
     },
     {
+      "name": "Q10_Callback10_PlayerLeavesGame",
+      "address": "00599a10",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A2Q2",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q10_Callback08_MonsterKilled",
       "address": "00599a20",
       "lines": [

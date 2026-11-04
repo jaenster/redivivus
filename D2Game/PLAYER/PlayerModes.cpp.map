@@ -97,7 +97,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -594,7 +593,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -1063,7 +1061,6 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -1285,7 +1282,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint8_t"
@@ -1328,7 +1324,6 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t"
       ]
     },

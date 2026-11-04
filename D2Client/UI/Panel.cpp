@@ -66,6 +66,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Panel.data.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/ITEMS/ItemMode.h"
@@ -515,12 +516,12 @@ void __stdcall PANEL_DrawHealthOrb() {
     }
 
     memset(&sGfxData, 0, 0x48);
-    eD2States eState = STATE_healthpot;
+    eD2States eState2 = STATE_healthpot;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 0;
-    eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState);
-    if (eState != STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
+    if (eState) {
       int nRegenWidth;
       nLayer = 0;
       eUnitStat = UNITSTAT_hpregen;
@@ -541,9 +542,9 @@ void __stdcall PANEL_DrawHealthOrb() {
       }
     }
 
-    eState = STATE_poison;
-    eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState);
-    sGfxData.nFrameNumber = eState != STATE_none ? 2 : 0;
+    eState2 = STATE_poison;
+    eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
+    sGfxData.nFrameNumber = eState ? 2 : 0;
     if (nPercentHideFromBottom) {
       D2gfx::D2GFX::D2GFX_GetRendererMode();
       D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
@@ -571,12 +572,12 @@ void __stdcall PANEL_DrawManaOrb() {
 
     int nPercentHideFromBottom = nPositionX * 0x50 / nMaxValue;
     memset(&sGfxData, 0, 0x48);
-    eD2States eState = STATE_manapot;
+    eD2States eState2 = STATE_manapot;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 1;
-    eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState);
-    if (eState != STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
+    if (eState) {
       int nRegenWidth;
       nLayer = 0;
       eUnitStat = UNITSTAT_manarecovery;
@@ -693,7 +694,7 @@ void __stdcall PANEL_DrawRunButton() {
 }
 
 void __stdcall PANEL_DrawStaminaBar() {
-    BOOL nTmp;
+    BOOL eState;
     int nClearCount;
     uint16_t* pwszCursor;
     uint16_t wszTooltip[100];
@@ -711,7 +712,7 @@ void __stdcall PANEL_DrawStaminaBar() {
 
     uint8_t byBarColor;
     byBarColor = gbPanelGoldColorGreen;
-    if (nMaxStamina + 5 < nCurStamina || (nTmp = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x18) , nTmp != 0)) {
+    if (nMaxStamina + 5 < nCurStamina || (eState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x18) , eState != 0)) {
       nMaxStamina = nCurStamina;
       byBarColor = gbPanelStaminaColorRed;
     }
@@ -738,9 +739,8 @@ void __stdcall PANEL_DrawStaminaBar() {
     nMaxStaminaUnits = nMaxStamina / 256;
     nCurStamina = 0;
     if (nCurStaminaUnits <= nMaxStaminaUnits) {
-      eD2States eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_shrine_stamina);
-      if (eState == STATE_none) {
+      if (!eState) {
         goto show_stamina_tooltip;
       }
     }

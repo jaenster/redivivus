@@ -82,6 +82,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/Monster/Monster.data.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -1302,7 +1303,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemClassId;
     D2StatListExStrc* pStatList;
-    eD2States eStateCheck;
+    BOOL eStateCheck;
     if (!pItem) {
       nItemClassId = -1;
     } else {
@@ -1328,7 +1329,7 @@ BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         }
 
         eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-        if (eStateCheck != STATE_none) {
+        if (eStateCheck) {
           D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
         }
 

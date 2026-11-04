@@ -28,7 +28,6 @@
 #include "Fog/Src/DataArrays.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
-#include "Fog/d3dFloorCache.h"
 #include "Storm/Source/SBMP.h"
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
@@ -40,7 +39,7 @@
 #include "D2gfx/D2GFX.data.h"
 #include "Fog/Debug.h"
 #include "Fog/Engine/Application.data.h"
-#include "Fog/Engine/Application.h"
+#include "Game/Main.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2794,7 +2793,7 @@ void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame)
     }
 
     g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, dwFlags);
-    Fog::d3dFloorCache::D3D_PlayBinkVideo(szFile, nResolutionMode, (fnBinkFrameCallback)fpFrame);
+    d3dFloorCache::D3D_PlayBinkVideo(szFile, nResolutionMode, (fnBinkFrameCallback)fpFrame);
     g_bCutscenePlaying = 0;
 }
 

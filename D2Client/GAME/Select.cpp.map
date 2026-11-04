@@ -197,9 +197,9 @@
         "GetObjectTxtRecordFromObject"
       ],
       "usedTypes": [
+        "D2CoordUnsignedStrc",
         "D2ObjectsTxt",
         "D2UnitStrc",
-        "POINT",
         "uint32_t"
       ]
     },
@@ -526,7 +526,6 @@
         "D2RoomStrc",
         "D2RoomStrc *",
         "D2UnitStrc",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"

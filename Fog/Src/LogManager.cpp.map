@@ -611,6 +611,15 @@
       ]
     },
     {
+      "name": "ExitOrCrashCleanUpJmp",
+      "address": "0040f960",
+      "lines": [],
+      "namespace": "Fog::Src::LogManager",
+      "calledFunctions": [
+        "ExitOrCrashCleanup"
+      ]
+    },
+    {
       "name": "DeleteOldLogFiles",
       "address": "0040f970",
       "lines": [

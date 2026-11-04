@@ -238,11 +238,11 @@ BOOL __fastcall Skills_CltStFunc_CheckAuraStateInactive(D2UnitStrc * pUnit, eD2S
     short int sAuraState;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt) {
-      eD2States eState;
+      BOOL eState;
       sAuraState = pSkillsTxt->aurastate;
       if (sAuraState >= 0 && (int)sAuraState < sgptDataTable->nTxtStatesSize) {
         eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)sAuraState);
-        return (uint32_t)(eState == STATE_none);
+        return (uint32_t)!eState;
       }
     }
 
@@ -259,8 +259,8 @@ BOOL __fastcall SKILLSASS_CltSetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSki
       return 0;
     }
 
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eState == STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (!eState) {
       nPrgOverlay = pSkillTxt->prgoverlay;
       if (nPrgOverlay > 0 && (int)nPrgOverlay < sgptDataTable->nTxtOverlaySize) {
         Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)nPrgOverlay, 2, 0, 0, 0, 0, 0);
@@ -371,8 +371,8 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge(D2UnitStrc * p
     }
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nAuraCalcVal);
-    eD2States eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eInfernoState != STATE_none) {
+    bGotCoords = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (bGotCoords) {
       D2Common::Units::SetSequenceFrame(pUnit, pSkillTxt[eSkill].seqinput - 1);
       pUnit->nFrameCount = 0x800;
     }

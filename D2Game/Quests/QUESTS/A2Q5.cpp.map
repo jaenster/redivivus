@@ -155,6 +155,19 @@
       ]
     },
     {
+      "name": "Q13_Callback10_PlayerLeavesGame",
+      "address": "0059bf70",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A2Q5",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q13_PlayCompletionSound",
       "address": "0059bf80",
       "lines": [

@@ -51,7 +51,6 @@
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/SKILLS/SkillsServer.h"
-#include "D2Game/Save.h"
 #include "D2Game/UNIT/Item.h"
 #include "D2Game/UNIT/Party.h"
 #include "D2Game/UNIT/PlayerList.h"
@@ -1894,7 +1893,7 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
     char aHeadAppearance[16];
     char aBodyAppearance2[16];
     uint16_t wCharStatusOut;
-    Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer, 0xe);
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer, 0xe);
     D2UnitStrc* pUnit = CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit) {
       uint8_t bLevel;
@@ -1967,8 +1966,8 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
         nCharStatus = wCharStatusOut & 0xfff7;
       }
 
-      Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer + 0x1a, nCharStatus);
-      Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer + 0x1c, (uint32_t)(uint16_t)pClient->wGuildFlags);
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer + 0x1a, nCharStatus);
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer + 0x1c, (uint32_t)(uint16_t)pClient->wGuildFlags);
       bLevel = pClient->nGuildInfo[0];
       bGuildInfo1 = pClient->nGuildInfo[1];
       bGuildInfo2 = pClient->nGuildInfo[2];

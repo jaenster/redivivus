@@ -38,6 +38,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Panel.h"
 #include "D2Game/D2QuestDataStrc.h"
+#include "D2Win/D2GFX.data.h"
 #include "D2Win/D2WinAccountList.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImage.h"
@@ -250,30 +251,6 @@ D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
 static uint32_t gbMessageLoopActive = 0x1; D2_STATIC_GUARD(gbMessageLoopActive, "gbMessageLoopActive");
 eD2RendererMode D2GFX_eRendererMode = 0; D2_GLOBAL_GUARD(D2GFX_eRendererMode, "D2GFX_eRendererMode");
 static DC6 * gpCursorDC6 = 0; D2_STATIC_GUARD(gpCursorDC6, "gpCursorDC6");
-uint32_t gnCursorDC6FrameNumber = 0; D2_GLOBAL_GUARD(gnCursorDC6FrameNumber, "gnCursorDC6FrameNumber");
-namespace D2Client::Mouse {
-int nPosX = 0; D2_GLOBAL_GUARD(nPosX, "D2Client::Mouse::nPosX");
-int nPosY = 0; D2_GLOBAL_GUARD(nPosY, "D2Client::Mouse::nPosY");
-} // namespace D2Client::Mouse
-HWND ghwndD2GFX_CachedWindow = 0; D2_GLOBAL_GUARD(ghwndD2GFX_CachedWindow, "ghwndD2GFX_CachedWindow");
-uint32_t gnWindowInitState = 0; D2_GLOBAL_GUARD(gnWindowInitState, "gnWindowInitState");
-BOOL gbWindowed = 0; D2_GLOBAL_GUARD(gbWindowed, "gbWindowed");
-int gnResolutionMode = 0; D2_GLOBAL_GUARD(gnResolutionMode, "gnResolutionMode");
-namespace D2Client::Forms {
-D2ControlStrc * pFormsList = 0; D2_GLOBAL_GUARD(pFormsList, "D2Client::Forms::pFormsList");
-D2ControlStrc * pFormUnknown = 0; D2_GLOBAL_GUARD(pFormUnknown, "D2Client::Forms::pFormUnknown");
-} // namespace D2Client::Forms
-int gnFormControlCount = 0; D2_GLOBAL_GUARD(gnFormControlCount, "gnFormControlCount");
-namespace D2Client::Forms {
-D2ControlStrc * pFormSecond = 0; D2_GLOBAL_GUARD(pFormSecond, "D2Client::Forms::pFormSecond");
-D2WinEditBox * pFormTextAndEditBox = 0; D2_GLOBAL_GUARD(pFormTextAndEditBox, "D2Client::Forms::pFormTextAndEditBox");
-D2ControlStrc * pFormFourth = 0; D2_GLOBAL_GUARD(pFormFourth, "D2Client::Forms::pFormFourth");
-D2ControlStrc * pFormImage = 0; D2_GLOBAL_GUARD(pFormImage, "D2Client::Forms::pFormImage");
-} // namespace D2Client::Forms
-namespace D2Client::GAME::Record {
-WndProcB pWndProcB = (::WndProcB)0; D2_GLOBAL_GUARD(pWndProcB, "D2Client::GAME::Record::pWndProcB");
-} // namespace D2Client::GAME::Record
-uint32_t gbGfxWindowCreated = 0; D2_GLOBAL_GUARD(gbGfxWindowCreated, "gbGfxWindowCreated");
 static uint32_t gnWinMainState = 0; D2_STATIC_GUARD(gnWinMainState, "gnWinMainState");
 static uint32_t gbFormActivated = 0; D2_STATIC_GUARD(gbFormActivated, "gbFormActivated");
 uint32_t gnInitialFormState = 0; D2_GLOBAL_GUARD(gnInitialFormState, "gnInitialFormState");
@@ -1452,7 +1429,7 @@ void __stdcall INPUT_FormTabKey(D2UIMouseMsgStrc * pMsg) {
       if (!D2Client::Forms::pFormImage) {
         click_escape_button:
         pMsg->hWnd = (HWND)D2Client::Forms::pFormFourth;
-        D2WinButton::D2WINBUTTON_InvokeClickCallback((::D2WinButton**)pMsg);
+        D2WinButton::D2WINBUTTON_InvokeClickCallback((D2ControlMsg*)pMsg);
         Storm::SMsgBreakHandlerChain(pMsg);
         return;
       }

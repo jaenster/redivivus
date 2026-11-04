@@ -89,6 +89,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/QuestLog.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/PLAYER/PlayerMsg.data.h"
@@ -1999,7 +2000,6 @@ eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(D2UnitStrc * pUnit,
 // Server-side skill dispatch for player targeting an entity. Resolves dual-swing substitution, checks skill usability (SKILLS_CanUseSkill), and if a skill is blocked by a flags4 condition falls back to SKILL_Attack. On usability==0 with a valid mode, looks up the target unit, follows attached-unit ownership, validates melee/range weapon class against target proximity, then routes to StartModeID or PLRMODES_StartModeID. Returns 0 on success, 2 on failure.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, eD2UnitType eUnitType, DWORD nTargetGUID, int32_t bMoveToTarget, D2SkillStrc * pSkill) {
-    D2UnitStrc* pOwnerUnit;
     int32_t nSkillWeaponClass;
     eD2Skills eSkillId;
     BOOL bDualWieldOrMeleeCheck = D2Common::Units::CanDualWield(pUnit);
@@ -2027,9 +2027,9 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
 
     D2UnitStrc* pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, nTargetGUID);
     if (pTargetUnit) {
-      eD2States eTargetState;
-      eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_attached);
-      if (eTargetState != STATE_none) {
+      D2UnitStrc* pOwnerUnit;
+      bDualWieldOrMeleeCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_attached);
+      if (bDualWieldOrMeleeCheck) {
         pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pTargetUnit);
         if (pOwnerUnit) {
           eUnitType = pOwnerUnit->eUnitType;
@@ -4363,14 +4363,14 @@ static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    eD2States eState;
+    BOOL eState;
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eState != STATE_none) {
+    if (eState) {
       return 0;
     }
 
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_sync_warped);
-    if (eState != STATE_none) {
+    if (eState) {
       return 0;
     }
 
@@ -4497,7 +4497,6 @@ static BOOL __stdcall RelocateAndApplySyncWarp(::SGAMEDATA * pGame, D2UnitStrc *
 // @sourcefile .\PLAYER\PlrMsg.cpp
 eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pPacket, uint32_t nSize) {
     BOOL bDead;
-    eD2States eSyncWarpState;
     uint32_t bPathReachable;
     D2UnitStrc* pTarget;
     eD2PlayerAnimMode eAnimMode;
@@ -4530,8 +4529,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, D
       return SERVERSTATUS_OK;
     }
 
-    eSyncWarpState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_sync_warped);
-    if (eSyncWarpState == STATE_none && nErrLine >= 0xf && nErrLine <= 0x2d) {
+    bDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_sync_warped);
+    if (!bDead && nErrLine >= 0xf && nErrLine <= 0x2d) {
       bPathReachable = ValidateSyncWarpPath(pGame, pUnit, nY, nX);
       if (bPathReachable) {
         bDead = RelocateAndApplySyncWarp(pGame, pUnit, nX, nY);

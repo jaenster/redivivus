@@ -16,6 +16,16 @@ struct D2SeedStrc;
 struct D2UnitStrc;
 
 // Data types
+struct D2CoordsShort {
+    D2CoordsShort() = default;
+    D2CoordsShort(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    D2CoordsShort(short a0, short a1) : nX(a0), nY(a1) {}
+
+    /* 0x00 */ short nX;
+    /* 0x02 */ short nY;
+};
+
 struct D2DrlgPathNodeStrc {
     /* 0x00 */ short nX; // packed coord X (low half of node key)
     /* 0x02 */ short nY; // packed coord Y (high half of node key)
@@ -217,9 +227,9 @@ int32_t __fastcall PATH_FindPathAStar(struct D2PathTypeArg * pPathTypeArg);
 // Alternate simple distance heuristic between two packed coordinates. Same formula as DRLGPATH_GetSimpleDistancePacked but used by the secondary A* pathfinder (PathTypeFunc_01).
 int32_t __stdcall DRLGPATH_GetSimpleDistancePacked2(uint32_t nPackedPos, uint32_t nPackedTarget);
 // Searches the open list hash table for a node matching the given packed position. Returns the node if found, NULL otherwise.
-short * __stdcall DRLGPATH_FindNodeInOpenList(int32_t nOpenListBase, uint32_t nPackedPos);
+struct D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInOpenList(struct D2DrlgPathSearchCtxStrc * nOpenListBase, D2CoordsShort nPackedPos);
 // Searches the closed list hash table (offset 0x200 from the open list) for a node matching the given packed position. Returns the node if found, NULL otherwise.
-short * __stdcall DRLGPATH_FindNodeInClosedList(int32_t nOpenListBase, uint32_t nPackedPos);
+struct D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInClosedList(struct D2DrlgPathSearchCtxStrc * nOpenListBase, D2CoordsShort nPackedPos);
 // Allocates a new path node from the pre-allocated node pool (max 200 nodes). Returns NULL if the pool is exhausted. Each node is 0x38 bytes and is zero-initialized.
 struct D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(struct D2DrlgPathSearchCtxStrc * nPathCtx);
 // Fallback A* used when the greedy directional search does not reach the destination and the squared distance is under 0x145. The whole search state is ONE 0x32EC-byte frame object whose base is handed to every helper, which then reach the rest by byte offset: DRLGPATH_AllocPathNode takes the pool count at base+0x2FC4 and node n at base+0x404+n*0x38; DRLGPATH_InsertNodeSorted and PopBestNodeFromOpenList use the closed buckets at base+0x200 and the sorted head at base+0x400; DRLGPATH_PropagateNodeCosts uses the queue at base+0x2FC8 and its count at base+0x32E8. Split into separate locals the helpers wrote nodes over unrelated stack and read the list head out of garbage, which faulted on every player move long enough to need the A* fallback and on NPC paths.

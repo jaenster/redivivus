@@ -588,8 +588,8 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return 0;
     }
 
-    eD2States eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eStateCheck != STATE_none) {
+    BOOL eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
+    if (eStateCheck) {
       return 0;
     }
 
@@ -1041,8 +1041,8 @@ BOOL __fastcall SKILLMONST_SrvStFn53_MonInferno(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     D2Common::Skills::SKILL_SetParam1(pSkill, pGame->dwGameFrame + nDuration);
-    eD2States eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eStateCheck == STATE_none) {
+    BOOL eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (!eStateCheck) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
     }
 
@@ -1128,7 +1128,6 @@ void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitS
 // SrvDoFunc #95: server-side trap/sentry skill handler that spawns one missile from the caster unit toward the target cursor. Looks up srvmissilea from the skill's txt row, computes velocity from VelLev×level/8+Vel, builds a D2SkillArgStrc, and calls CreatingMissile. On success, applies trap health bonuses, checks the inferno state to optionally reschedule the next fire frame via SetEvent, otherwise triggers a mode-change. Returns 0 if the skill, missile id, or target position is invalid.
 BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nNextFireFrame;
-    eD2States eStateCheck;
     int32_t dwTmp;
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1156,8 +1155,8 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
     int nVelCalc = (uint32_t)(uint8_t)pMissileTxt->VelLev * nSkillLvl;
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
     sSkillArg.nMissileTxtNo = nMissileId;
-    BOOL BVar1 = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-    if (BVar1) {
+    BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
+    if (eStateCheck) {
       D2UnitStrc* pMissileUnit;
       pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pMissileUnit) {
@@ -1166,7 +1165,7 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
         nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
         if (pGame->dwGameFrame < nNextFireFrame) {
           eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eStateCheck != STATE_none) {
+          if (eStateCheck) {
             nNextFireFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
             if (nNextFireFrame < 1) {
               nNextFireFrame = 1;
@@ -1191,7 +1190,6 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
 // SrvDoFunc #152: alternate trap/sentry missile spawner, functionally identical to SrvDoFunc_095 (same body: srvmissilea lookup, velocity calculation, CreatingMissile, health bonus, inferno-state rescheduling, mode-change). Likely mapped to a different skill row that shares the same fire mechanics but differs in txt-table parameters (e.g. Lightning Sentry vs Death Sentry variant).
 BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nNextFireFrame;
-    eD2States eStateCheck;
     int32_t dwTmp;
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1219,8 +1217,8 @@ BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame
     int nVelCalc = (uint32_t)(uint8_t)pMissileTxt->VelLev * nSkillLvl;
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
     sSkillArg.nMissileTxtNo = nMissileId;
-    BOOL BVar1 = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-    if (BVar1) {
+    BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
+    if (eStateCheck) {
       D2UnitStrc* pMissileUnit;
       pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pMissileUnit) {
@@ -1229,7 +1227,7 @@ BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame
         nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
         if (pGame->dwGameFrame < nNextFireFrame) {
           eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eStateCheck != STATE_none) {
+          if (eStateCheck) {
             nNextFireFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
             if (nNextFireFrame < 1) {
               nNextFireFrame = 1;

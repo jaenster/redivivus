@@ -120,7 +120,7 @@ struct D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(struct D2UnitStrc * pUnit);
 uint32_t InsertIntoHashTable(struct D2UnitStrc * pUnit);
 void CLIENT_SendIdlePlayerMessage(struct D2UnitStrc * pUnit);
 void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit, int32_t nY);
-void __fastcall CLIENT_UpdateMonsterAllegiance(struct D2UnitStrc * pUnit, char byOldAllegiance, char byNewAllegiance);
+void __fastcall CLIENT_UpdateMonsterAllegiance(struct D2UnitStrc * pUnit, uint8_t byOldAllegiance, uint8_t byNewAllegiance);
 void __stdcall CLIENT_ClearServerAndClientUnitLists();
 void __stdcall CUNIT_IterateHashTableWithCallback(struct D2UnitStrc * * UnitHashTable, fnUnitIterCallback pfnCallback);
 // Iterates all 128 buckets of the server-side unit hash table. For each unit calls CLIENT_UpdateUnitFrame, then looks up the matching entry in the client-side hash table and dispatches CLIENT_DispatchMonsterAiBehavior (monsters) or OBJECT_ExecuteClientFunction (objects). Halts fatally on unit-type mismatch.

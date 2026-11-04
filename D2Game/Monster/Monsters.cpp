@@ -78,6 +78,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Units/Missile.h"
@@ -2343,8 +2344,8 @@ void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return;
     }
 
-    eD2States ePetDeathState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (ePetDeathState != STATE_none) {
+    _bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+    if (_bIsDead) {
       GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 3, 0, 0);
       return;
     }
@@ -3518,8 +3519,8 @@ void __stdcall MONSTER_CheckSpecialDeathFlag(D2UnitStrc * pUnit, D2DamageStrc * 
       return;
     }
 
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eState != STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
+    if (eState) {
       return;
     }
 

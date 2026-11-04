@@ -6,7 +6,6 @@
 #include "Bnclient/net_sid.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "D2Game/Save.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -800,7 +799,7 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
     }
 
     SAVEFILE.nTime32 = SAVEFILE.nCreateTime;
-    D2Game::Save::SAVEFILE_WriteEncodedInt14Bit(pAppearanceBuffer, 0xe);
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pAppearanceBuffer, 0xe);
     SAVEFILE.pAppearance1[0] = gaNewCharDefaultAppearance[0];
     SAVEFILE.pAppearance1[1] = gaNewCharDefaultAppearance[1];
     SAVEFILE.pAppearance1[2] = gaNewCharDefaultAppearance[2];
@@ -856,8 +855,8 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
     pbWritePtr[0xc] = 0xff;
     uint32_t wStatusLow = SAVEFILE.dwCharacterStatus & 0xffff;
     pbWritePtr[0xd] = 1;
-    D2Game::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xe, wStatusLow);
-    D2Game::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0x10, 0);
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xe, wStatusLow);
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0x10, 0);
     pbWritePtr[0x12] = 0xff;
     pbWritePtr[0x13] = 0xff;
     pbWritePtr[0x14] = 0xff;
@@ -997,7 +996,7 @@ uint32_t __fastcall LAUNCHER_LoadCharacterAppearanceFromD2s(char * szCharacterNa
         *(uint16_t*)((char*)&sSaveFile.sHeader.szCharacterName + 4) = (uint16_t)sSaveFile.sHeader.dwCharacterStatus;
       }
 
-      D2Game::Save::SAVEFILE_WriteEncodedInt14Bit(pOutputBuffer, 0xe);
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pOutputBuffer, 0xe);
       pbWritePtr = pOutputBuffer + 2;
       if (*pbEquipSrc == '\0') {
         i = 0;
@@ -1027,8 +1026,8 @@ uint32_t __fastcall LAUNCHER_LoadCharacterAppearanceFromD2s(char * szCharacterNa
       *(uint16_t*)(pbWritePtr + 9) = wCopyTmp;
       pbWritePtr[0xb] = cPlayerClass;
       pbWritePtr[0xc] = byOutPlayerClass;
-      D2Game::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xd, (uint32_t)(uint16_t)*(uint16_t*)((char*)&sSaveFile.sHeader.szCharacterName + 4));
-      D2Game::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xf, 0);
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xd, (uint32_t)(uint16_t)*(uint16_t*)((char*)&sSaveFile.sHeader.szCharacterName + 4));
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xf, 0);
       pbWritePtr[0x11] = 0xff;
       pbWritePtr[0x12] = 0xff;
       pbWritePtr[0x13] = 0xff;

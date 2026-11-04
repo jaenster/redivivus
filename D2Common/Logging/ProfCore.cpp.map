@@ -4,6 +4,15 @@
   "file": "D2Common/Logging/ProfCore.cpp",
   "functions": [
     {
+      "name": "CloseProfCore",
+      "address": "00611600",
+      "lines": [],
+      "namespace": "D2Common::Logging::ProfCore",
+      "calledFunctions": [
+        "CloseLogging"
+      ]
+    },
+    {
       "name": "PROFCORE_RegisterSlot",
       "address": "00611620",
       "lines": [

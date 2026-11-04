@@ -81,6 +81,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/MISSILES/MissilesMode.data.h"
@@ -1398,7 +1399,7 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
 
 BOOL __fastcall Missiles_SrvHitFunc_BlockSelfHitByState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int _bResult;
-    eD2States eState;
+    BOOL eState;
     bool bResult;
     _bResult = 2;
     if (pTarget) {
@@ -1406,7 +1407,7 @@ BOOL __fastcall Missiles_SrvHitFunc_BlockSelfHitByState(::SGAMEDATA * pGame, D2U
       pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       if (pOwnerUnit && pTarget == pOwnerUnit) {
         eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pOwnerUnit, STATE_blaze);
-        if (eState != STATE_none) {
+        if (eState) {
           _bResult = 0;
         }
       }
@@ -2035,8 +2036,8 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2
       return 1;
     }
 
-    eD2States eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, (int)nAuraState);
-    if (eAuraState == STATE_none) {
+    BOOL eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, (int)nAuraState);
+    if (!eAuraState) {
       int nCasterLevel;
       nCasterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwnerUnit, UNITSTAT_level, 0);
       nTerrorParam = D2Client::SKILLS::GetSkilParam1(eSkill);
@@ -3972,7 +3973,7 @@ void __fastcall Missiles_SrvDmgFunc_RollMonsterSizeKnockbackChance(::SGAMEDATA *
 
 // Applies missile hit result flags and damage to the target. Sets wResultFlags bit 0 (hit occurred). If target is not in STATE_uninterruptable, applies stun (flag 0x40->bit2) or knock-back (flag 0x80->bit14) from MissilesTxt flags, and rolls KnockBack chance. Calls DAMAGE_CheckBlockAndEvasion to determine block/evade/deflect and folds those into wResultFlags. Copies the missile's hit-class into pEvent->dwHitClass. Applies critical damage, pierce percent (from UNITSTAT_damage_framerate), and finally calls DAMAGE_ApplyDamageToUnit and SERVER_GetHitCalculation.
 void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pEvent) {
-    eD2States eState;
+    BOOL eState;
     uint32_t nFlags;
     uint32_t nHitClassHighNibble;
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
@@ -3992,7 +3993,7 @@ void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc *
 
     pEvent->wResultFlags |= 1;
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
-    if (eState == STATE_none) {
+    if (!eState) {
       uint32_t nSeedRoll;
       if (gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMissilesTxt + 0x4)) {
         pEvent->wResultFlags |= 4;
@@ -4420,7 +4421,6 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
     int32_t nToHitThenStat;
     uint32_t nHitFuncResult;
     D2RoomStrc* pRoom;
-    int32_t eCurrMode;
     D2DamageStrc tDamage;
     D2UnitStrc* pOwnerSaved;
     ::SGAMEDATA* pGameSaved;
@@ -4455,10 +4455,10 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
         }
       }
     } else {
-      eD2States eJustHitStateVal;
+      int32_t eCurrMode;
       if (pMissilesTxt->NextHit != '\0') {
-        eJustHitStateVal = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_justhit);
-        if (eJustHitStateVal != STATE_none) {
+        bIsOwner = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_justhit);
+        if (bIsOwner) {
           return 1;
         }
       }

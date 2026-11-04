@@ -35,7 +35,7 @@
         "MONSTERMODE_ConsumeStoredPosition"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2MonsterPathParamStrc"
       ]
     },
     {
@@ -518,7 +518,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -1107,7 +1106,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

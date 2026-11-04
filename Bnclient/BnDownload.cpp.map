@@ -534,6 +534,7 @@
         "_beginthreadex"
       ],
       "usedTypes": [
+        "D2BnetDownloadStateStrc",
         "FILETIME",
         "uint32_t",
         "uintptr_t"

@@ -1569,7 +1569,7 @@ static int * MONSTER_GetAnimModeDataEntry(D2UnitStrc * pUnit) {
 // Client-side per-frame animation driver for monster skill casting. Advances trail effects (PATH_StepAndCreateTrailEffects) when the skill has the movement flag set, and calls SKILLS_CltSetSkillFromCurrent at appropriate action frames (1-4) or on UNITFLAG_SKSRVDOFUNC clearance. Handles three special srvdofunc overrides (0x5F looping animation clamp, 0x7E frame wrap at 0xBFF, 0x98 inferno-state frame randomisation using MonStats2 frame bounds).
 static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     uint32_t bResult;
-    eD2States eState;
+    BOOL eState;
     int nCurrentFrame;
     short int nSrvDoFunc;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -1609,7 +1609,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
       nSrvDoFunc = pSkillTxt->srvdofunc;
       if (nSrvDoFunc != 0x5f) {
         if (nSrvDoFunc != 0x7e) {
-          if (nSrvDoFunc == 0x98 && (pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0) && (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno) , eState != STATE_none)) {
+          if (nSrvDoFunc == 0x98 && (pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0) && (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno) , eState != 0)) {
             nCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
             if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
               SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
@@ -1966,12 +1966,12 @@ static void MONSTER_SpawnDeathEffectMissiles(D2UnitStrc * pUnit) {
       return;
     }
 
-    eD2States eUberState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uberminion);
+    BOOL eUberState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uberminion);
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
-    if (eUberState != STATE_none) {
+    if (eUberState) {
       eUberState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-      if (eUberState == STATE_none) {
+      if (!eUberState) {
         memset(&sSkillArg, 0, 0x5c);
         sSkillArg.nFlags = 0x2020;
         sSkillArg.nSkillLevel = 1;
@@ -2120,7 +2120,6 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
     D2MonStatsTxt* pMonStats;
     D2UnitStrc* pConfirmedTarget;
     uint32_t bPathCalcResult;
-    eD2States eAttachedState;
     eD2MonsterAnimMode eDeathMode;
     D2SkillStrc* pCurrentSkill;
     eD2PlayerAnimMode eNewAnimMode;
@@ -2753,8 +2752,8 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
         if (!bPathCalcResult) {
           bPathCalcResult = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
           if (bPathCalcResult) {
-            eAttachedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
-            if (eAttachedState == STATE_none) {
+            bHasMaxState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
+            if (!bHasMaxState) {
               bPathCalcResult = Source::ClientEngine::GetSomeMonsterStatFlag(pUnit->nClassId, 2);
               if (bPathCalcResult) {
                 UnitMode::UNITMODE_SetAnimMode(pUnit, Walk);
@@ -3044,7 +3043,6 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     bool bHasDmgState;
     uint32_t nCheckResult;
     D2UnitStrc* pTargetUnit;
-    BOOL bIsCritter;
     uint32_t nDistResult;
     int32_t nClassId;
     int32_t nTargetGUID;
@@ -3059,9 +3057,9 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
       return;
     }
 
-    eD2States eUnitState;
-    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pDynamicPath, STATE_freeze);
-    if (eUnitState != STATE_none) {
+    BOOL bIsCritter;
+    bIsCritter = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pDynamicPath, STATE_freeze);
+    if (bIsCritter) {
       int nAnimMode;
       nAnimMode = CUnit::IsActive(pDynamicPath);
       if (!nAnimMode) {

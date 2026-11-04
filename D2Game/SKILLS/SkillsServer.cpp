@@ -88,6 +88,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/SKILLS/SkillAma.h"
 #include "D2Game/SKILLS/SkillBar.h"
@@ -440,7 +441,6 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
     ::SGAMEDATA* pGame;
     D2MonStatsTxt* pMonStats;
     uint32_t nCheckResult;
-    eD2States eState;
     D2RoomStrc* pRoom2;
     bool bFlagCheck;
     POINT ptSrc;
@@ -604,7 +604,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
           return 0;
         }
       }
-      if (!(nTargetFlags & 0x80000) || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , eState == STATE_none)) {
+      if (!(nTargetFlags & 0x80000) || (bInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , !bInTown)) {
         if (!(nTargetFlags & 0x200)) {
           return 1;
         }
@@ -775,7 +775,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 // Resolves and applies a skill hit to a target unit. Resolves missile owner if the attacker is a missile. Checks block/evasion (setting hit/block/evade/dodge flags in pDamage->wResultFlags). Sets interrupt flag if target lacks STATE_uninterruptable. Applies critical damage modifier, then calls DAMAGE_ApplyDamageToUnit if the hit flag is set, followed by SERVER_GetHitCalculation for post-hit effects.
 void __fastcall SKILLS_ApplyDamageToTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, D2DamageStrc * pDamage, uint32_t dwUnused) {
-    eD2States eUnitState;
+    BOOL eUnitState;
     if (!(pUnit && pTargetUnit)) {
       return;
     }
@@ -808,7 +808,7 @@ void __fastcall SKILLS_ApplyDamageToTarget(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
     if (pDamage->wResultFlags & 1) {
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_uninterruptable);
-      if (eUnitState == STATE_none) {
+      if (!eUnitState) {
         pDamage->wResultFlags |= 4;
       }
     }
@@ -1115,8 +1115,8 @@ void __fastcall CalculateManaUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Ski
       nManaCost = nMinManaCost;
     }
 
-    eD2States eBloodManaState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blood_mana);
-    if (eBloodManaState != STATE_none) {
+    BOOL eBloodManaState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blood_mana);
+    if (eBloodManaState) {
       SkillEMonst::SKILLEMONST_ProcessBloodMana(pUnit, nManaCost);
       return;
     }
@@ -1134,8 +1134,8 @@ void __fastcall SKILLS_DeductManaCost(D2UnitStrc * pUnit, int32_t nManaCost) {
       return;
     }
 
-    eD2States eBloodManaState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blood_mana);
-    if (eBloodManaState != STATE_none) {
+    BOOL eBloodManaState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blood_mana);
+    if (eBloodManaState) {
       SkillEMonst::SKILLEMONST_ProcessBloodMana(pUnit, nManaCost);
       return;
     }
@@ -1419,7 +1419,7 @@ uint32_t __fastcall IsSkillBoundToClass(D2UnitStrc * pUnit, int32_t nSkillId) {
 
 // Removes all active states on pUnit that share the same group as eState (from States.txt). For each matching state found active, calls SetState(0), removes its stat list via STATLIST_RemoveAndRecalc/FreeStatList, and sets bDidRemoveState. If bRemoveOnly is 0, the target state itself is exempt from removal. Returns 1 if any state was removed, 0 otherwise (or if eState has no group).
 BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRemoveOnly) {
-    eD2States nStateGroup;
+    BOOL nStateGroup;
     D2StatListExStrc* pStatList;
     D2DataTableTxtStrc* pDataTable;
     eD2States eState_00;
@@ -1449,7 +1449,7 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
                 if (*(short int*)(pStateTxtRaw + 0x1e) == sStateGroup) {
                   nStateGroup = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState_00);
                   pDataTable = sgptDataTable;
-                  if (nStateGroup != STATE_none) {
+                  if (nStateGroup) {
                     bDidRemoveState = 1;
                     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState_00, 0);
                     pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState_00);
@@ -2410,7 +2410,7 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
     D2UnitStrc* pMonster;
     pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGame, pRoom, nSpawnPosX, nTargetY, pPetCreation->classId, pPetCreation->nMode, -1, 0x42);
     if (pMonster) {
-      eD2States eUnitState;
+      BOOL eUnitState;
       init_summon:
       SKILLS_InitSummonedPet(pMonster, pGame, pPetCreation);
       if (pMonster) {
@@ -2428,7 +2428,7 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
 
       Ai::AiGeneral::AssignMinionOwner(pGame, pMonster, nOwnerUnitGUID, eUnitType, 0, 0);
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pMonster, STATE_uninterruptable);
-      if (eUnitState != STATE_none) {
+      if (eUnitState) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100c);
         exit(-1);
       }
@@ -2812,9 +2812,9 @@ BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 BOOL __fastcall D2CheckCorpseConsumed(D2UnitStrc * pUnit, int32_t eState) {
-    int nMonClassId;
+    BOOL bCanApply;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      eD2States eConsumedState;
+      int nMonClassId;
       nMonClassId = pUnit->nClassId;
       if (nMonClassId >= 0) {
         D2MonStatsTxt* pMonStatsTxt = nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
@@ -2822,15 +2822,15 @@ BOOL __fastcall D2CheckCorpseConsumed(D2UnitStrc * pUnit, int32_t eState) {
           nMonClassId = (int)pMonStatsTxt->BaseId;
         }
         if (nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize && nMonClassId == 0x1ec) {
-          eConsumedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
-          if (eConsumedState != STATE_none) {
+          bCanApply = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
+          if (bCanApply) {
             return 0;
           }
         }
       }
     }
 
-    BOOL bCanApply = Monster::AI::MONSTERAI_CanApplyDebuffState(pUnit, eState);
+    bCanApply = Monster::AI::MONSTERAI_CanApplyDebuffState(pUnit, eState);
     return (uint32_t)(bCanApply != 0);
 }
 
@@ -4144,7 +4144,6 @@ void __fastcall SKILLS_PeriodicSkillSpawnAndTimer(::SGAMEDATA * pGame, D2UnitStr
 void __fastcall SKILLS_PeriodicSkillsCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, int32_t nArg2) {
     D2SkillStrc* pSkill;
     BOOL bIsDead;
-    eD2States eAuraActiveState;
     D2StatListExStrc* pStatList;
     int nSkillLevel;
     int nAuraStatListSkillId;
@@ -4177,8 +4176,8 @@ void __fastcall SKILLS_PeriodicSkillsCallback(::SGAMEDATA * pGame, D2UnitStrc * 
     if (pSkillsTxt) {
       eAuraState = pSkillsTxt->aurastate;
       if (eAuraState >= 0 && (int)eAuraState < sgptDataTable->nTxtStatesSize) {
-        eAuraActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)eAuraState);
-        if (eAuraActiveState != STATE_none) {
+        bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)eAuraState);
+        if (bIsDead) {
           pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillsTxt->aurastate);
           if (pStatList) {
             nSkillLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
@@ -4373,9 +4372,9 @@ void __fastcall Server_SelectSkill(D2UnitStrc * pUnit, int32_t leftOrRight, eD2S
       return;
     }
     if (!leftOrRight) {
-      eD2States eStateNoManaRegen;
+      BOOL eStateNoManaRegen;
       eStateNoManaRegen = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
-      if (eStateNoManaRegen != STATE_none) {
+      if (eStateNoManaRegen) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_nomanaregen, 0);
       }
     }
@@ -4476,8 +4475,8 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
     int pExtendedExpiryFrame;
     D2MonsterKillStrc sMonsterKill;
     ::SGAMEDATA* pGameSaved = (::SGAMEDATA*)pThis;
-    eD2States eExistingStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (!(eExistingStunState == STATE_none && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
+    BOOL eExistingStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+    if (!(!eExistingStunState && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
 
@@ -4518,8 +4517,8 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
 
 void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eState, uint32_t pStatListEx) {
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    eD2States eUninterruptState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eUninterruptState != STATE_none) {
+    BOOL eUninterruptState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+    if (eUninterruptState) {
       return;
     }
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {

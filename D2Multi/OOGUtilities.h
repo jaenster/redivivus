@@ -117,8 +117,7 @@ struct __attribute__((packed)) D2WinButton {
     /* 0x264 */ int nTextColor; // Text color index for label rendering
     /* 0x268 */ BOOL (__stdcall *fpHoverCallback)(struct D2ControlMsg *); // Optional callback invoked each frame when mouse is over button
     /* 0x26C */ int bMouseOver; // Bool: 1 if mouse is currently over button, updated each Draw frame
-    /* 0x270 */ uint16_t nHotkeyStringId; // String table ID for hotkey label (rendered below main label when flag bit6 set)
-    /* 0x272 */ uint8_t _pad626[2];
+    /* 0x270 */ int32_t nHotkeyStringId; // String table ID for hotkey label (rendered below main label when flag bit6 set)
 };
 
 struct __attribute__((packed)) D2WinSmack {

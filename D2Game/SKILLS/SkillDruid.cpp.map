@@ -444,7 +444,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint16_t",
         "uint32_t"
@@ -728,7 +727,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -778,7 +776,6 @@
         "SGAMEDATA",
         "eCollisionFlags",
         "eD2Skills",
-        "eD2States",
         "eMissilesId",
         "int32_t",
         "uint32_t"

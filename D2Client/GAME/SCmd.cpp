@@ -156,7 +156,7 @@ static D2NET_CLIENT_D2GS_ServerToClient NET_D2GS_CLIENT_INCOMING[175] = {
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x02_LoadSuccess,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x02_LoadSuccess,
         /* .nExpectedSize = */ 0x1,
         /* .fpIncomingHandlerUnit = */ nullptr
     },
@@ -1270,8 +1270,8 @@ void __fastcall SCMD_Rcv_IgnoreShared(char * pBytes) {
 }
 
 // JMP thunk
-void __fastcall NET_D2GS_CLIENT_Incoming0x02_LoadSuccess(char * pBytes) {
-    ::D2Client::GAME::Msg::NET_D2GS_CLIENT_Send_0x6B(pBytes);
+void __stdcall NET_D2GS_CLIENT_Incoming0x02_LoadSuccess() {
+    ::D2Client::GAME::Msg::NET_D2GS_CLIENT_Send_0x6B();
 }
 
 // Returns the act of the level containing the player's current room; halts (line 1319) when there is no current room.

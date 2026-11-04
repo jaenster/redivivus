@@ -2,9 +2,13 @@
 
 #include "D2Win/D2GFX.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2Client/D2ControlStrc.h"
+#include "D2Client/Message.h"
 #include "D2Client/Renderer/Renderer.h"
+#include "D2Win/DC6.h"
 #include "D2Win/Forms.h"
 #include "D2Win/Src/D2Comp.h"
+#include "D2Win/Src/D2WinEditBox.h"
 #include "D2Win/Src/D2WinFont.h"
 #include "D2Win/Src/D2WinList.h"
 #include "D2Win/Src/D2WinPalette.h"
@@ -12,6 +16,7 @@
 #include "Fog/Src/LogManager.h"
 #include "globals/globals.h"
 #include "support/d2_trace.h"
+#include "D2Win/D2GFX.data.h"
 #include "D2Win/D2WinList.h"
 #include "D2Win/Src/D2WinMain.data.h"
 #include "D2gfx/D2GFX.data.h"
@@ -19,7 +24,43 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static HWND ghwndD2GFX_CachedWindow = 0; D2_STATIC_GUARD(ghwndD2GFX_CachedWindow, "ghwndD2GFX_CachedWindow");
+uint32_t gnWindowInitState = 0; D2_GLOBAL_GUARD(gnWindowInitState, "gnWindowInitState");
+BOOL gbWindowed = 0; D2_GLOBAL_GUARD(gbWindowed, "gbWindowed");
+static int gnResolutionMode = 0; D2_STATIC_GUARD(gnResolutionMode, "gnResolutionMode");
+
 namespace D2Win::D2GFX {
+
+BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
+    gbGfxWindowCreated = 1;
+    HWND hWnd = D2gfx::D2GFX::D2GFX_CreateWindow(bWindowed, nResolutionMode);
+    if (!hWnd) {
+      return 0;
+    }
+
+    D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(0, 0x800000, 0x7d000, 0);
+    ghwndD2GFX_CachedWindow = D2gfx::D2GFX::GetHwnd();
+    gnWindowInitState = 0;
+    D2Client::Forms::pFormsList = 0;
+    D2Client::Forms::pFormUnknown = 0;
+    gnFormControlCount = 0;
+    D2Client::Forms::pFormTextAndEditBox = 0;
+    D2Client::Forms::pFormFourth = 0;
+    D2Client::Forms::pFormSecond = 0;
+    D2Client::GAME::Record::pWndProcB = 0;
+    D2Client::Forms::pFormImage = 0;
+    gnInitialFormState = 0;
+    gnCursorDC6FrameNumber = 0;
+    gpfnExitCallback = 0;
+    gnResolutionMode = nResolutionMode;
+    gbWindowed = bWindowed;
+    return 1;
+}
+
+int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB) {
+    D2Client::GAME::Record::pWndProcB = pWndProcB;
+    return 1;
+}
 
 BOOL __stdcall UI_Init() {
     Src::D2WinFont::D2WINFONT_InitFontSystem();

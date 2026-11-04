@@ -704,7 +704,7 @@ void __stdcall ClientSideGameLoop() {
     D2Common::DUNGEON::Dungeon::DRLGROOMEX_UpdateClientRoomExActivation(pDrlgAct);
     UI::Automap::AUTOMAP_Update();
     gClientGameData.gnRecordEntryIndex++;
-    if (gClientGameData.gnRecordEntryIndex != (uint32_t)gClientGameData.gnRecordEntryIndex / 0xd * 0xd) {
+    if (gClientGameData.gnRecordEntryIndex % 0xd != 0) {
       return;
     }
 

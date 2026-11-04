@@ -2688,9 +2688,9 @@ int __stdcall SKILLDESC_AccumulateAuraBonusDmg(D2UnitStrc * pUnit, int * pnMinDm
     short int nAuraStat;
     D2SkillsTxt* pSkillsTxt;
     for (nStateIdx = 0; nStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
-      eD2States eState;
+      BOOL eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
-      if (eState != STATE_none) {
+      if (eState) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
         if (pStatList) {
           eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
@@ -3981,8 +3981,8 @@ static void __stdcall SKILLDESC_CalcAttackRateWithState(int * pnAttackRate, int3
     }
 
     nAttackRate = 0;
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_throwingmastery);
-    if (eUnitState != STATE_none) {
+    BOOL bHasArmorState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_throwingmastery);
+    if (bHasArmorState) {
       nAttackRate = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit2, pUnit, pSkill, 0);
     }
 
@@ -3990,7 +3990,7 @@ static void __stdcall SKILLDESC_CalcAttackRateWithState(int * pnAttackRate, int3
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit2, (int)pSkillsTxt->skill, nSkillLevel);
     *pnAttackRate = (int)(*pnAttackRate * (nAttackRate + nTotalToHitBonus + nSkillToHit)) / 100 + *pnAttackRate;
     *pnColor = 0;
-    BOOL bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasResistState(pUnit2);
+    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasResistState(pUnit2);
     if (bHasArmorState) {
       *pnColor = 3;
     }
@@ -4634,7 +4634,7 @@ void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pS
 void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pElemType, int32_t nAuraBonusPct, uint32_t dwParam1, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2) {
     int32_t nMaxDmgTmp;
     int nStatTmp;
-    eD2States eConcState;
+    BOOL eConcState;
     int nStrDexBonus;
     int nBonusDamage;
     int* pnMaxDamageAlias;
@@ -4686,7 +4686,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
       *pnMinDamage = (nStatTmp + nStrDexBonus) * *pnMinDamage / 100 + *pnMinDamage;
       *pnMaxDamage = (nBonusDamage + nStrDexBonus) * *pnMaxDamage / 100 + *pnMaxDamage;
       eConcState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_throwingmastery);
-      if (eConcState != STATE_none) {
+      if (eConcState) {
         nMinDmgTmp = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, pUnit2, pSkill, 1);
         nMinDmgTmp += nAuraBonusPct;
       }
@@ -4759,7 +4759,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
 void __fastcall SKILLDESC_DrawSkillDmgAura(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
     int nThrowMinDmg;
     int nDmgPercentMax;
-    eD2States eConcState;
+    BOOL eConcState;
     int32_t nDmgPercentResult;
     uint8_t byDmgShiftFactor;
     int32_t nSkillDescAddr;
@@ -4810,7 +4810,7 @@ void __fastcall SKILLDESC_DrawSkillDmgAura(D2UnitStrc * pUnit, D2SkillStrc * pSk
     nMaxDamage += (nDmgPercentMax + nDmgBonus) * nMaxDamage / 100;
     nBonusApplied = 0;
     eConcState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_throwingmastery);
-    if (eConcState != STATE_none) {
+    if (eConcState) {
       nBonusApplied = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, nMinDamage, pSkill, 1);
     }
 
@@ -5186,9 +5186,8 @@ void __fastcall SKILLDESC_DrawSkillDmgThrow(D2UnitStrc * pUnit, D2SkillStrc * pS
     uint32_t uMinDmgShield = (uint32_t)pShieldTxt->nMinDam;
     D2SkillStrc* pHolyShield = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_HolyShield, -1);
     if (pHolyShield) {
-      eD2States eHolyShieldActiveState;
-      eHolyShieldActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
-      if (eHolyShieldActiveState != STATE_none) {
+      bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
+      if (bHasAttackSpeedState) {
         nStrDexBonus = D2Common::Skills::GetSkillLevel(pUnit, pHolyShield, 1);
         nDmgBonusTotal = D2Common::Skills::SKILL_CalcMinDamage(pUnit, 0x75, nStrDexBonus, 1);
         uMinDmgShield += nDmgBonusTotal >> 8;

@@ -584,7 +584,6 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
-        "eD2States",
         "fpExecuteOnUnitFunction",
         "int32_t"
       ]
@@ -610,7 +609,6 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
-        "eD2States",
         "fpSUnitIterateCallback",
         "int32_t"
       ]
@@ -1127,7 +1125,6 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

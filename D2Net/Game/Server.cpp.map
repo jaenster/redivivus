@@ -648,6 +648,12 @@
       ]
     },
     {
+      "name": "WSAGetLastError",
+      "address": "0052b910",
+      "lines": [],
+      "namespace": "D2Net::Game::Server"
+    },
+    {
       "name": "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
       "address": "0052b920",
       "lines": [

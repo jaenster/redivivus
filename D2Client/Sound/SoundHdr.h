@@ -21,7 +21,7 @@ eD2LevelId __stdcall SOUND_GetCurrentLevelId();
 uint32_t __stdcall GetSoundEnv();
 int __stdcall SOUNDHDR_GetGlobal0();
 int __stdcall SOUNDHDR_GetGlobal1();
-void * __stdcall SOUNDHDR_GetGlobal2();
+int * __stdcall SOUNDHDR_GetGlobal2();
 int __stdcall SOUNDHDR_GetGlobal3();
 void __stdcall Cleanup();
 void __fastcall SOUNDHDR_SetGlobal4(uint32_t nMaxBytes);

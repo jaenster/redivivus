@@ -76,6 +76,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Units/Missile.h"
@@ -1048,8 +1049,8 @@ static void __stdcall SKILLNEC_RollSkeletonMastery(D2UnitStrc * pUnit, int * pSu
 
 static void __stdcall SKILLNEC_SpawnSkeletonsForRevive(int * pSummon, D2UnitStrc * pUnit) {
     int nMasteryLvl = 1;
-    eD2States eMasteryState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skel_mastery);
-    if (eMasteryState != STATE_none) {
+    BOOL eMasteryState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skel_mastery);
+    if (eMasteryState) {
       D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_skel_mastery);
       if (pStatList) {
@@ -2165,7 +2166,6 @@ static int32_t SKILLNEC_AddHitpoints(D2UnitStrc * pUnit, int32_t nHpAmount) {
 
 // Item/skill event handler (__fastcall) implementing a Thorns-style reflect aura with conditional life steal. Validates pTarget/pUnit (must be PLAYER or MONSTER, alive) and an incoming-damage param (>0). Looks up the skill's auratargetstate; only fires if pUnit carries that aura state. Computes reflected physical damage as a percent (D2ApplyPercent) of the incoming damage using a skill calc index chosen by whether owner is merc/player and target is player, then applies it to the target via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation. For a specific monster class (0x122, neutral alignment) it also steals a portion of dealt damage back as hitpoints to the owner and/or pUnit (SKILLNEC_AddHitpoints) and plays overlay 0x97. Returns TRUE if processed, FALSE on validation failure.
 BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2StatListExStrc* pStatList;
     D2UnitStrc* pOwnerUnit;
     uint32_t nMercTypeId;
     int32_t nThornsCalc;
@@ -2196,9 +2196,9 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
 
     short int wAuraTargetState = pSkillTxt->auratargetstate;
     if (wAuraTargetState >= 0 && (int)wAuraTargetState < sgptDataTable->nTxtStatesSize) {
-      eD2States eAuraState;
-      eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)wAuraTargetState);
-      if (eAuraState != STATE_none) {
+      D2StatListExStrc* pStatList;
+      bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)wAuraTargetState);
+      if (bIsDead) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->auratargetstate);
         if (pStatList) {
           nMercTypeId = D2Common::Stats::StatsEx::GetOwnerGUID(pStatList);
@@ -2310,8 +2310,8 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
       return 0;
     }
 
-    eD2States eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraTargetState);
-    if (eAuraState == STATE_none) {
+    bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraTargetState);
+    if (!bIsDead) {
       return 0;
     }
 

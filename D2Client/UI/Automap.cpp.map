@@ -1341,7 +1341,6 @@
         "D2UnitStrc",
         "WCHAR",
         "eD2PlayerAnimMode",
-        "eD2States",
         "int16_t",
         "int32_t",
         "uD2UnitMode",
@@ -1445,6 +1444,15 @@
         "D2UnitStrc",
         "eD2GSGameType",
         "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetParty_ForEscMenuItem",
+      "address": "0047d4b0",
+      "lines": [],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetParty"
       ]
     }
   ]

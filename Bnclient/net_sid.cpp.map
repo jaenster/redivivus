@@ -671,6 +671,15 @@
       ]
     },
     {
+      "name": "NET_SID_CLIENT_Incoming_NewsInfo",
+      "address": "00521210",
+      "lines": [],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Incoming0x46"
+      ]
+    },
+    {
       "name": "NET_SID_CLIENT_Incoming_AuthInfo",
       "address": "00521220",
       "lines": [

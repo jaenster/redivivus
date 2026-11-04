@@ -7,7 +7,6 @@
 #include "D2Common/Chat/Ignorelist.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "D2Game/D2QuestDataStrc.h"
-#include "D2Game/Save.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -23,6 +22,7 @@
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
+#include "Fog/Save.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
@@ -528,7 +528,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
           }
 
           *pszDst = '\0';
-          D2Game::Save::SAVEFILE_ReadEncodedInt14Bit(pbScan + 1);
+          Fog::Save::SAVEFILE_ReadEncodedInt14Bit(pbScan + 1);
           nIndex = 0;
           pbNextField = pbScan + 3;
           do {
@@ -559,7 +559,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
             }
 
             *(uint16_t*)(pUser->pad_0x87 + 1) = (uint16_t)pbFieldPtr[1];
-            dwProductTag = D2Game::Save::SAVEFILE_ReadEncodedInt14Bit(pbFieldPtr + 2);
+            dwProductTag = Fog::Save::SAVEFILE_ReadEncodedInt14Bit(pbFieldPtr + 2);
             pUser->nFlags = (uint16_t)dwProductTag;
             dwProductTag &= 0xffff;
             pUser->nExpansionFlag = dwProductTag >> 5 & 1;
@@ -589,7 +589,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
             }
 
             read_level_and_progress:
-            nIndex = D2Game::Save::SAVEFILE_ReadEncodedInt14Bit(pbFieldPtr + 4);
+            nIndex = Fog::Save::SAVEFILE_ReadEncodedInt14Bit(pbFieldPtr + 4);
             *(short int*)&pUser->nCharLevel = (short int)nIndex;
             bIsD2Product = (bool)pbFieldPtr[6];
             pUser->bIsLadder = bIsD2Product;

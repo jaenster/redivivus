@@ -56,6 +56,7 @@
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
 #include "D2Client/UNIT/Player.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Client/Warden/WardenClient.h"
 #include "D2Common/COMPOSIT/Composit.h"
@@ -104,7 +105,6 @@
 #include "Fog/D2MemoryManagerStrc.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/D2QServerStrc.h"
-#include "Fog/Engine/Application.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
 #include "Fog/Save.h"
@@ -112,7 +112,6 @@
 #include "Fog/Source/SSComp.h"
 #include "Fog/Src/LogManager.h"
 #include "Storm/3rdparty/zlib/deflate.h"
-#include "Storm/3rdparty/zlib/trees.h"
 #include "Storm/Source/SCMD.h"
 #include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
@@ -434,7 +433,6 @@ struct D2WinPopup;
 struct D2WinSmack;
 struct D2WinTextBox;
 struct D2WinTimer;
-struct D2ZlibStaticDTreeDistCodeStrc;
 struct D2ddDebugFont;
 struct D3DFloorCacheNodeStrc;
 struct D3DFloorCacheStrc;
@@ -452,7 +450,6 @@ struct GlFloorCacheStrc;
 struct GlSubtileCacheNodeStrc;
 struct GlSubtileCacheStrc;
 struct IDirect3DTexture2;
-struct IDirectDrawSurface1;
 struct IDirectDrawSurface7;
 struct IDirectSound3DBuffer;
 struct IDirectSound;
@@ -470,6 +467,7 @@ struct SpinnerWrapper;
 struct StormLinkedListStrc;
 struct WardenClient;
 struct WardenClientVtable;
+struct ct_data;
 struct deflate_state;
 struct static_tree_desc;
 typedef BOOL (__fastcall *D2CubeSpecialOutput)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
@@ -531,6 +529,7 @@ typedef FxU32 (__stdcall *grTexTextureMemRequired)(FxU32 evenOdd, GrTexInfo * in
 typedef FxU32 (__stdcall *pfnGlideGammaCorrectionRGB)(FxFloat red, FxFloat green, FxFloat blue);
 typedef GrContext_t (__stdcall *grSstWinOpen)(FxU32 hWnd, GrScreenResolution_t screen_resolution, GrScreenRefresh_t refresh_rate, GrColorFormat_t color_format, GrOriginLocation_t origin_location, int nColBuffers, int nAuxBuffers);
 typedef GrProc (__stdcall *grGetProcAddress)(char * procName);
+typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t param_3, LPARAM param_4);
 typedef bool (__fastcall *fnObjectClientFn)(D2UnitStrc * pUnit);
 typedef bool (__fastcall *pfnAiMapDirectionHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pAiParam, uint32_t nSeed);
 typedef char (__stdcall *fnGetProtocolVersionChar)();
@@ -635,6 +634,7 @@ typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, ch
 typedef void (__fastcall *pfnCelPixelDataFree)(int * pPixelData);
 typedef void (__fastcall *pfnEscMenuItemAction)(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg);
 typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+typedef void (__fastcall *pfnMCPPacketCallback)(uint16_t wPacketField, char * pPayload);
 typedef void (__fastcall *pfnMonUniqueModInit)(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply);
 typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMessage);
 typedef void (__fastcall *pfnPartyScreenAction)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwArg, uint32_t dwArg2);
@@ -695,8 +695,8 @@ struct CLIENT_ID {
 };
 
 struct D2AppModeBootstrapStrc {
-    /* 0x00 */ fnAppModeRun * (__fastcall *pfnInit)(HMODULE); // App-mode entry: receives the module handle, returns the app-mode function table.
-    /* 0x04 */ void (__stdcall *pfnShutdown)(); // App-mode teardown, called after the run loop returns.
+    /* 0x00 */ fnAppModeRun * (__fastcall *init)(HMODULE); // App-mode entry: receives the module handle, returns the app-mode function table.
+    /* 0x04 */ void (__stdcall *destroy)(); // App-mode teardown, called after the run loop returns.
 };
 
 struct D2BodyClickTable {
@@ -1109,11 +1109,6 @@ struct ZlibHuffCode {
     /* 0x02 */ short val; // offset in table or code value
 };
 
-struct __attribute__((packed)) D2ZlibStaticDTreeDistCodeStrc {
-    /* 0x00 */ ct_data static_dtree[30]; // zlib trees.h static_dtree[D_CODES]
-    /* 0x78 */ uint8_t _dist_code[512]; // zlib trees.h _dist_code[DIST_CODE_LEN]; _tr_tally/compress_block read it at base-1+dist folded
-};
-
 struct D2PickableStrc {
     /* 0x00 */ eD2Quests eQuestId; // Quest that must be completed for pickup restriction
     /* 0x04 */ uint8_t nQuestItemBit; // bQuest value from items.txt that triggers this restriction
@@ -1311,9 +1306,7 @@ extern uint8_t gszIniConfigKeywordGammaCorrection[96];
 extern uint8_t gszIniConfigKeywordVsyncOption[264];
 extern uint8_t gszIniConfigKeywordExperienceDisplay[96];
 extern uint8_t gszIniConfigKeywordVideoDriver[336];
-// lpServiceStatus parameter of SetServiceStatus
-extern _SERVICE_STATUS lpServiceStatus_007065fc;
-extern _SERVICE_STATUS gszCommandLineLocaleCode;
+extern char * gaLanguageNames_00705000[15];
 extern char * gaMonthAbbreviations[12];
 extern uint8_t gabHuffmanCodeLengths[256];
 extern uint32_t gnSFileDataChunkSize;
@@ -1512,9 +1505,6 @@ extern double DOUBLE_0074adb4;
 extern uint8_t gabyFxamClassOffset[16];
 extern unsigned int gaCRT_FPremData_3;
 extern int TokenHashMapBucketSize;
-extern eD2ApplicationMode geD2ApplicationMode;
-extern SERVICE_STATUS_HANDLE ghServiceCtrlHandler;
-extern uint32_t gnServiceRunning;
 extern uint32_t gaHuffmanFastDecodeTable[256];
 extern uint8_t gabHuffmanNextTable[256];
 extern void * gpEventHashBuckets;
@@ -1768,13 +1758,12 @@ extern int gnTileClipZMin;
 extern int gnMinTileScreenY_b;
 extern int gnTileClipBottom;
 extern int gnTileClipRight;
-extern uint32_t gbPerspectiveRenderEnabled;
 extern uint8_t gaPaletteColorLUT[49][256];
-extern uint32_t pRenderSurfaceBuffer;
-// Render buffer pitch (bytes per scanline) for tile drawing. Set by fpFillYBufferTable from nWidth parameter. Used by fpDrawVisTile, fpDrawBlendedVisTile, fpDrawRoofTile, fpDrawGroundTile to calculate Y-offsets when blitting tile data to framebuffer.
-extern int32_t gRenderBufferPitch;
 extern BYTE * * gpPaletteBlendLookupTable;
 extern eD2RendererMode D2GFX_eRendererMode;
+extern uint32_t gnCursorDC6FrameNumber;
+extern int gnFormControlCount;
+extern uint32_t gbGfxWindowCreated;
 extern D2FogArchiveStrc * MPQ_d2Xmusic;
 extern D2FogArchiveStrc * MPQ_d2sfx;
 extern D2FogArchiveStrc * MPQ_d2delta;
@@ -1873,7 +1862,6 @@ extern uint32_t gnGlideSmackTex1StartAddr;
 extern uint32_t gnGlideSmackTex2StartAddr;
 extern uint8_t (*gpGlideSmackerTexBuf2)[32768];
 extern uint32_t gnGlideTMUHandle;
-extern IDirectDrawSurface1 * gpDDrawPrimarySurface;
 extern IKsPropertySet * gpDirectSoundEAXInterface;
 extern uint32_t gbHasLegacyEMU10K1Driver;
 extern uint32_t gbHasLegacySoundDriverCrlds3d;
@@ -2527,6 +2515,12 @@ extern uint32_t gnAlwaysRun;
 
 } // namespace D2Game::GameData
 
+namespace D2Client::GAME::Record {
+
+extern WndProcB pWndProcB;
+
+} // namespace D2Client::GAME::Record
+
 namespace D2Client::UI::Dialog {
 
 extern D2DialogStrc * gpDialog;
@@ -2573,6 +2567,11 @@ extern int nPosY;
 namespace D2Client::Forms {
 
 extern D2ControlStrc * pFormsList;
+extern D2ControlStrc * pFormUnknown;
+extern D2ControlStrc * pFormSecond;
+extern D2WinEditBox * pFormTextAndEditBox;
+extern D2ControlStrc * pFormFourth;
+extern D2ControlStrc * pFormImage;
 
 } // namespace D2Client::Forms
 

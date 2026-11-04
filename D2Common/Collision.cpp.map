@@ -275,7 +275,6 @@
         "D2DrlgTileDataStrc",
         "D2RoomCollisionGridStrc",
         "D2TileLibraryEntryStrc *",
-        "eCollisionFlags",
         "int32_t",
         "uint32_t"
       ]

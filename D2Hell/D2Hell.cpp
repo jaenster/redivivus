@@ -4,13 +4,13 @@
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/OOGUtilities.h"
 #include "Fog/D2PoolManagerStrc.h"
-#include "Fog/Engine/Application.h"
 #include "Fog/File.h"
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
+#include "Game/Main.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
@@ -582,7 +582,7 @@ void * __thiscall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int
 FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree) {
     TSLink_TMESSAGESOURCE_Unlink((StormLinkStrc*)pFile);
     if (bFree & 1) {
-      Fog::Engine::Application::MISC_OperatorDeleteShim(pFile);
+      Game::Main::MISC_OperatorDeleteShim(pFile);
     }
 
     return pFile;
@@ -827,7 +827,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
     if (szText && *szText != '\0') {
       /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ nVerifyResult = MultiByteToWideChar(0, 0, szText, -1, (LPWSTR)0x0, 0);
       if ((int)nVerifyResult > 0) {
-        pWideStr = (LPWSTR)Fog::Engine::Application::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)nVerifyResult * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)nVerifyResult * 2));
+        pWideStr = (LPWSTR)Game::Main::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)nVerifyResult * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)nVerifyResult * 2));
         /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0, 0, szText, -1, pWideStr, nVerifyResult);
         memset(&sWvtFileInfo, 0, 0x10);
         sWvtFileInfo.cbStruct = 0x10;
@@ -871,7 +871,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
           nVerifyResult = dwLastError != 0x800b0100 ? 2 : 1;
         }
 
-        Fog::Engine::Application::MISC_OperatorDeleteShim(pWideStr);
+        Game::Main::MISC_OperatorDeleteShim(pWideStr);
         return nVerifyResult;
       }
     }
@@ -930,7 +930,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
       return false;
     }
 
-    LPWSTR pWideStr = (LPWSTR)Fog::Engine::Application::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)(uint32_t)nWideCharLen * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)(uint32_t)nWideCharLen * 2));
+    LPWSTR pWideStr = (LPWSTR)Game::Main::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)(uint32_t)nWideCharLen * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)(uint32_t)nWideCharLen * 2));
     /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0xfde9, 0, szFilePath, -1, pWideStr, nWideCharLen);
     bool bGotOrg = false;
     HCERTSTORE hCertStore = (HCERTSTORE)0x0;
@@ -954,7 +954,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
             /* DWORD cchNameString for CertGetNameStringW */ /* LPWSTR pszNameString for CertGetNameStringW */ /* void * pvTypePara for CertGetNameStringW */ /* DWORD dwFlags for CertGetNameStringW */ /* DWORD dwType for CertGetNameStringW */ /* PCCERT_CONTEXT pCertContext for CertGetNameStringW */ if (pCertContext) {
               pWideStr = (LPWSTR)CertGetNameStringW(pCertContext, 3, 0, (void*)"2.5.4.10", (LPWSTR)0x0, 0);
               if (pWideStr) {
-                nWideCharLen = (int)Fog::Engine::Application::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)(uint32_t)(uintptr_t)pWideStr * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)(uint32_t)(uintptr_t)pWideStr * 2));
+                nWideCharLen = (int)Game::Main::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)(uint32_t)(uintptr_t)pWideStr * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)(uint32_t)(uintptr_t)pWideStr * 2));
                 /* DWORD cchNameString for CertGetNameStringW */ /* LPWSTR pszNameString for CertGetNameStringW */ /* void * pvTypePara for CertGetNameStringW */ /* DWORD dwFlags for CertGetNameStringW */ /* DWORD dwType for CertGetNameStringW */ /* PCCERT_CONTEXT pCertContext for CertGetNameStringW */ nNameLen = CertGetNameStringW(pCertContext, 3, 0, (void*)"2.5.4.10", (LPWSTR)nWideCharLen, (DWORD)pWideStr);
                 /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ if (nNameLen) {
                   nAnsiLen = WideCharToMultiByte(0xfde9, 0, (LPCWSTR)nWideCharLen, -1, (LPSTR)0x0, 0, (LPCSTR)0x0, (LPBOOL)0x0);
@@ -964,7 +964,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
                   }
                 }
 
-                Fog::Engine::Application::MISC_OperatorDeleteShim((void*)nWideCharLen);
+                Game::Main::MISC_OperatorDeleteShim((void*)nWideCharLen);
               }
             }
           }

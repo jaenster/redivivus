@@ -6,7 +6,6 @@
 #include "globals/globals.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "Fog/Source/SFile.data.h"
-#include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Renderer/Glide.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
@@ -15,7 +14,6 @@
 #include "D2Common/Merc.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Win/D2WinAnimImage.h"
-#include "Fog/Engine/Application.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Storm.h"
 
@@ -2807,6 +2805,24 @@ uint8_t gszIniConfigKeywordVideoDriver[336] = {
     0x0
 }; D2_GLOBAL_GUARD(gszIniConfigKeywordVideoDriver, "gszIniConfigKeywordVideoDriver");
 
+char * gaLanguageNames_00705000[15] = {
+    s_English_006cc81c,
+    s_Spanish_006cc814,
+    s_German_006cc80c,
+    s_French_006cc804,
+    s_Portuguese_006cc7f8,
+    s_Italian_006cc7f0,
+    s_Japanese_006cc7e4,
+    s_Korean_006cc7dc,
+    s_Simplified_Chinese_006cc7c8,
+    s_Traditional_Chinese_006cc7b4,
+    s_Polish_006cc7ac,
+    s_Russian_006cc7a4,
+    s_English_with_Korean_Chat_006cc788,
+    s_Unknown_006cc780,
+    (char*)0x006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00705000, "gaLanguageNames_00705000");
+
 char * gaMonthAbbreviations[12] = {
     s_Jan_006ccb2c,
     s_Feb_006ccb28,
@@ -3612,60 +3628,6 @@ char * gaLanguageNames_0072da0c[15] = {
     s_Unknown_006cc780,
     (char*)0x006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072da0c, "gaLanguageNames_0072da0c");
-
-int gaGroundTileRowOffsets[15] = {
-    0xe,
-    0xc,
-    0xa,
-    0x8,
-    0x6,
-    0x4,
-    0x2,
-    0x0,
-    0x2,
-    0x4,
-    0x6,
-    0x8,
-    0xa,
-    0xc,
-    0xe
-}; D2_GLOBAL_GUARD(gaGroundTileRowOffsets, "gaGroundTileRowOffsets");
-
-int gaGroundTileRowWidths[15] = {
-    0x4,
-    0x8,
-    0xc,
-    0x10,
-    0x14,
-    0x18,
-    0x1c,
-    0x20,
-    0x1c,
-    0x18,
-    0x14,
-    0x10,
-    0xc,
-    0x8,
-    0x4
-}; D2_GLOBAL_GUARD(gaGroundTileRowWidths, "gaGroundTileRowWidths");
-
-int gaGroundTileSrcPointers[15] = {
-    0x0,
-    0x4,
-    0xc,
-    0x18,
-    0x28,
-    0x3c,
-    0x54,
-    0x70,
-    0x90,
-    0xac,
-    0xc4,
-    0xd8,
-    0xe8,
-    0xf4,
-    0xfc
-}; D2_GLOBAL_GUARD(gaGroundTileSrcPointers, "gaGroundTileSrcPointers");
 
 char * gaszLanguageNames[32] = {
     s_English_006cc81c,
@@ -10061,14 +10023,7 @@ uint8_t gabyFxamClassOffset[16] = {
     0x8
 }; D2_GLOBAL_GUARD(gabyFxamClassOffset, "gabyFxamClassOffset");
 
-eD2ApplicationMode geD2ApplicationMode = APPMODE_mode0; D2_GLOBAL_GUARD(geD2ApplicationMode, "geD2ApplicationMode");
-
 D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "gAncientsCloudSeed");
-
-uint8_t gpLineBufferTileArray[32][32][32] = {}; D2_GLOBAL_GUARD(gpLineBufferTileArray, "gpLineBufferTileArray");
-
-// also labelled: gPaletteBlendLookupTable
-uint8_t gaPaletteColorLUT[49][256] = {}; D2_GLOBAL_GUARD(gaPaletteColorLUT, "gaPaletteColorLUT");
 
 D2DataTableTxtStrc sgtDataTable = {}; D2_GLOBAL_GUARD(sgtDataTable, "sgtDataTable");
 
@@ -10897,21 +10852,9 @@ uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "DWORD_0074
 uint32_t DEFAULT_SECURITY_COOKIE = 0xbb40e64e; D2_GLOBAL_GUARD(DEFAULT_SECURITY_COOKIE, "DEFAULT_SECURITY_COOKIE");
 unsigned int gaCRT_FPremData_3 = 0x6a9a24; D2_GLOBAL_GUARD(gaCRT_FPremData_3, "gaCRT_FPremData_3");
 int TokenHashMapBucketSize = 0x10; D2_GLOBAL_GUARD(TokenHashMapBucketSize, "TokenHashMapBucketSize");
-uint32_t gnServiceRunning = 0x0; D2_GLOBAL_GUARD(gnServiceRunning, "gnServiceRunning");
 uint32_t gnEngineMode = 0; D2_GLOBAL_GUARD(gnEngineMode, "gnEngineMode");
 uint32_t gdwSpellSelThrottleTick = 0; D2_GLOBAL_GUARD(gdwSpellSelThrottleTick, "gdwSpellSelThrottleTick");
-int gnTileInnerClipZMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipZMin, "gnTileInnerClipZMin");
-int gnTileClipXMin = 0; D2_GLOBAL_GUARD(gnTileClipXMin, "gnTileClipXMin");
-int gnTileInnerXMax = 0; D2_GLOBAL_GUARD(gnTileInnerXMax, "gnTileInnerXMax");
-int gnTileClipZMax = 0; D2_GLOBAL_GUARD(gnTileClipZMax, "gnTileClipZMax");
-int gnTileViewportXOffset = 0; D2_GLOBAL_GUARD(gnTileViewportXOffset, "gnTileViewportXOffset");
-int gnTileInnerClipXMax = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMax, "gnTileInnerClipXMax");
-int gnTileClipZMin = 0; D2_GLOBAL_GUARD(gnTileClipZMin, "gnTileClipZMin");
-int gnTileClipBottom = 0; D2_GLOBAL_GUARD(gnTileClipBottom, "gnTileClipBottom");
-uint32_t gbPerspectiveRenderEnabled = 0; D2_GLOBAL_GUARD(gbPerspectiveRenderEnabled, "gbPerspectiveRenderEnabled");
-uint32_t pRenderSurfaceBuffer = 0; D2_GLOBAL_GUARD(pRenderSurfaceBuffer, "pRenderSurfaceBuffer");
-int32_t gRenderBufferPitch = 0; D2_GLOBAL_GUARD(gRenderBufferPitch, "gRenderBufferPitch");
-BYTE * * gpPaletteBlendLookupTable = 0; D2_GLOBAL_GUARD(gpPaletteBlendLookupTable, "gpPaletteBlendLookupTable");
+int gnTileClipLeft = 0; D2_GLOBAL_GUARD(gnTileClipLeft, "gnTileClipLeft");
 grDrawLine GLIDEDLL__grDrawLine_8 = (grDrawLine)0; D2_GLOBAL_GUARD(GLIDEDLL__grDrawLine_8, "GLIDEDLL__grDrawLine_8");
 grDepthMask GLIDEDLL_grDepthMask_4 = (grDepthMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grDepthMask_4, "GLIDEDLL_grDepthMask_4");
 grDrawPoint GLIDEDLL_grDrawPoint_4 = (grDrawPoint)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawPoint_4, "GLIDEDLL_grDrawPoint_4");
@@ -10934,7 +10877,6 @@ grTexMaxAddress GLIDEDLL_grTexMaxAddress_4 = (grTexMaxAddress)0; D2_GLOBAL_GUARD
 grBufferClear GLIDEDLL_grBufferClear_12 = (grBufferClear)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferClear_12, "GLIDEDLL_grBufferClear_12");
 grChromakeyMode GLIDEDLL_grChromakeyMode_4 = (grChromakeyMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grChromakeyMode_4, "GLIDEDLL_grChromakeyMode_4");
 grBufferSwap GLIDEDLL_grBufferSwap_4 = (grBufferSwap)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferSwap_4, "GLIDEDLL_grBufferSwap_4");
-IDirectDrawSurface1 * gpDDrawPrimarySurface = 0; D2_GLOBAL_GUARD(gpDDrawPrimarySurface, "gpDDrawPrimarySurface");
 uint32_t gnQServerListenSocket = 0; D2_GLOBAL_GUARD(gnQServerListenSocket, "gnQServerListenSocket");
 unsigned int gpfnProfCoreInitCallback = {}; D2_GLOBAL_GUARD(gpfnProfCoreInitCallback, "gpfnProfCoreInitCallback");
 unsigned int UINT_0096d6a8 = {}; D2_GLOBAL_GUARD(UINT_0096d6a8, "UINT_0096d6a8");
@@ -11735,3 +11677,15 @@ namespace D2Client::UI::Dialog {
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
+
+namespace D2Client::Mouse {
+
+} // namespace D2Client::Mouse
+
+namespace D2Client::Forms {
+
+} // namespace D2Client::Forms
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record

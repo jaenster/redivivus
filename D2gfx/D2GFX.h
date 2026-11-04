@@ -144,11 +144,13 @@ void __fastcall D2GFX_DrawTileSimple(uint8_t * pbSrcBase, uint8_t * pbDstBase, u
 void __fastcall D2GFX_DrawTileAdvanced(uint8_t * pbSrcBase, uint8_t * pbDstBase, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY);
 void __fastcall D2GFX_DrawWallTileBasic(uint8_t * pbTileData, uint8_t * pbDstRow, uint8_t * pbPaletteRow, int32_t nRowsLeft);
 void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t * pbDstRow, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowsLeft, uint8_t byShift);
+void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenYStart, uint8_t * pbTileData, uint8_t * pbDstRow, uint8_t * pbPaletteRow, int32_t nRowCount);
+void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_t nScreenYStart, uint8_t * pbTileData, uint8_t * nDstRowBase, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowCount, uint8_t byShift);
 void __stdcall D2GFX_InitializeLineBuffer();
+void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeight);
 // Initializes color lookup tables for palette blending. Populates gPaletteBlendLookupTable (256x256 entries) by blending all combinations of source and destination palette indices. Used by rendering functions for alpha blending and color effects.
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable);
 void __stdcall D2GFX_InitializeWindowSize();
-BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
 void StaticInit_gpszWindowClassName();
 void StaticInit_szWindowClassName();
 void StaticInit_gpszWindowTitle();

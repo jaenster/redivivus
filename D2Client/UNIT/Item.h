@@ -130,7 +130,7 @@ struct D2ItemsTxt {
     /* 0x0FD */ char nLevel;
     /* 0x0FE */ uint8_t nMinDam;
     /* 0x0FF */ uint8_t nMaxDam;
-    /* 0x100 */ char nMinMisDam;
+    /* 0x100 */ uint8_t nMinMisDam;
     /* 0x101 */ char nMaxMisDam;
     /* 0x102 */ uint8_t n2HandMinDam;
     /* 0x103 */ uint8_t n2HandMaxDam;

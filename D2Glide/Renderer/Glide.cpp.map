@@ -503,6 +503,15 @@
       ]
     },
     {
+      "name": "thunk_Release",
+      "address": "00509fd0",
+      "lines": [],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "Release"
+      ]
+    },
+    {
       "name": "BeginCutScene",
       "address": "00509fe0",
       "lines": [
@@ -1511,8 +1520,8 @@
       ],
       "usedTypes": [
         "D2TileLibraryEntryStrc",
-        "GrColor_t",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {

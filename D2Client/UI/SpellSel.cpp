@@ -55,7 +55,6 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/GAME/Game/Game.data.h"
-#include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Launch/MainMenus.h"
 
@@ -1283,8 +1282,8 @@ int __stdcall SPELLSEL_IsWaitingForSkill() {
       return BooleanWaitingForSkillingMaybe;
     }
 
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eState == STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+    if (!eState) {
       return BooleanWaitingForSkillingMaybe;
     }
 
@@ -2137,8 +2136,7 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
 }
 
 void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
-    eD2States eState;
-    BOOL BVar1;
+    BOOL eState;
     D2SkillStrc* pSkill;
     int nSkillDescIdx;
     int nSkillIconState;
@@ -2170,7 +2168,7 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNewSkillsBuf, "%i", nNewSkills);
     D2Lang::UTF8_ConvertToWideChar(wszNewSkillsBuf, szNewSkillsBuf, 9);
     D2UnitStrc* pUnit2 = UNIT::Player::GetPlayerUnit_UI();
-    if ((!pUnit2 || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable) , eState == STATE_none)) && !BooleanWaitingForSkillingMaybe) {
+    if ((!pUnit2 || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable) , !eState)) && !BooleanWaitingForSkillingMaybe) {
       nNewSkills = 0;
     } else {
       nNewSkills = 1;
@@ -2192,8 +2190,8 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
         nSkillDescIdx = (int)pSkillTxt->skilldesc;
         D2SkillDescTxt* pSkillDescTxt;
         if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
-          BVar1 = D2Common::Skills::SkillCalculateIfWeCanSkillThisSkill(pUnit, eSkill);
-          if (BVar1) {
+          eState = D2Common::Skills::SkillCalculateIfWeCanSkillThisSkill(pUnit, eSkill);
+          if (eState) {
             bCanSkill = 1;
             nCurLevel = 0;
             pCurSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);

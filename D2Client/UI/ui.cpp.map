@@ -3627,7 +3627,6 @@
         "D2GfxDataStrc",
         "D2UnitStrc",
         "WCHAR",
-        "eD2States",
         "eD2UnitStat",
         "int32_t",
         "uint16_t",
@@ -3921,6 +3920,15 @@
         "D2UnitStrc",
         "RECT",
         "int32_t"
+      ]
+    },
+    {
+      "name": "thunk_NPCSHOP_IsRepairTabActive",
+      "address": "004c0440",
+      "lines": [],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "NPCSHOP_IsRepairTabActive"
       ]
     },
     {

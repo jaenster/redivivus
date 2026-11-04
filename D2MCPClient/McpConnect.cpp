@@ -105,14 +105,15 @@ int32_t __stdcall HasPeerName() {
 }
 
 BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
+    uint16_t nSize;
     char szPacketBuf[1024];
     if (!D2Client::MCP::MCPD2QSSocket) {
       return 0;
     }
 
-    size_t nSize = Fog::Src::D2QSSocket::ReadBytesFromSocket(D2Client::MCP::MCPD2QSSocket, szPacketBuf, 0x400);
-    if ((short int)nSize) {
-      /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)nSize);
+    uint32_t uVar1 = Fog::Src::D2QSSocket::ReadBytesFromSocket(D2Client::MCP::MCPD2QSSocket, szPacketBuf, 0x400);
+    if ((short int)uVar1) {
+      /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)uVar1);
     }
 
     return 1;
@@ -852,10 +853,10 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, size_t nSize) {
     // Static local variables (originally global data)
-    static pfnVoidNoArgCallback g_pfnMCPCallback1; D2_STATIC_GUARD_BSS(g_pfnMCPCallback1, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x08::g_pfnMCPCallback1");
+    static pfnMCPPacketCallback g_pfnMCPCallback1; D2_STATIC_GUARD_BSS(g_pfnMCPCallback1, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x08::g_pfnMCPCallback1");
 
     if (g_pfnMCPCallback1) {
-      (*g_pfnMCPCallback1)();
+      (*g_pfnMCPCallback1)(*(uint16_t*)(pBytes + 1), pBytes + 3);
     }
 
     return 1;
@@ -863,10 +864,10 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, size_t nSize) {
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, size_t nSize) {
     // Static local variables (originally global data)
-    static pfnVoidNoArgCallback g_pfnMCPCallback2; D2_STATIC_GUARD_BSS(g_pfnMCPCallback2, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x09::g_pfnMCPCallback2");
+    static pfnMCPPacketCallback g_pfnMCPCallback2; D2_STATIC_GUARD_BSS(g_pfnMCPCallback2, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x09::g_pfnMCPCallback2");
 
     if (g_pfnMCPCallback2) {
-      (*g_pfnMCPCallback2)();
+      (*g_pfnMCPCallback2)(*(uint16_t*)(pBytes + 1), pBytes + 4);
     }
 
     return 1;

@@ -146,6 +146,21 @@
       ]
     },
     {
+      "name": "GetCurrentThreadId",
+      "address": "00401690",
+      "lines": [],
+      "namespace": "Fog::_3rdparty::crashy"
+    },
+    {
+      "name": "thunk_InitializeDebugSubsystem",
+      "address": "004016a0",
+      "lines": [],
+      "namespace": "Fog::_3rdparty::crashy",
+      "calledFunctions": [
+        "InitializeDebugSubsystem"
+      ]
+    },
+    {
       "name": "InternalCheckCorp",
       "address": "004016c0",
       "lines": [

@@ -81,16 +81,15 @@ void __fastcall AI_ClearSwitchAiTargetParamsCallback(::SGAMEDATA * pGame, D2Unit
 
 // Server-side monster timer-event dispatcher. Routes a fired timer event (eTimerType) to the appropriate handler in pTimerMethods.fpFunctionExByType[]. For freeze-sensitive event types (STATREGEN, TRAP, ACTIVESTATE, PERIODICSKILLS, REMOVESTATE), dispatches unconditionally. For all other types, first checks that the monster is not frozen (STATE_freeze) or is in mode-zero-death before dispatching. Events beyond UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN are silently ignored.
 void __fastcall MONSTEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2) {
-    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     if (eTimerType > UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN) {
       return;
     }
     if (false) {
-      eD2States eState;
+      BOOL eState;
       skip_if_frozen:
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-      if (!(eState == STATE_none || (_bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit) , _bIsModeZeroDeath != 0))) {
+      if (!(!eState || (eState = UNIT::SUnit::CheckForModeZeroDeath(pUnit) , eState != 0))) {
         return;
       }
 
@@ -150,11 +149,10 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
     0x1
 }; D2_STATIC_GUARD(UnknownModeValueArray, "D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch::UnknownModeValueArray");
 
-    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     int nBaseMonClassId;
     D2MonStatsTxt* pMonStats;
-    eD2States eUnitState;
+    BOOL eUnitState;
     int nResolvedBaseId;
     eD2MonsterAnimMode eAnimMode;
     if (!pUnit) {
@@ -192,9 +190,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
           {
             if (eAnimMode == eD2MonsterAnimMode_ns::Skill1) {
               eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-              if (eUnitState != STATE_none) {
-                _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                if (!_bIsModeZeroDeath) {
+              if (eUnitState) {
+                eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+                if (!eUnitState) {
                   return;
                 }
               }
@@ -209,9 +207,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
           {
             if (eAnimMode == eD2MonsterAnimMode_ns::Sequence) {
               eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-              if (eUnitState != STATE_none) {
-                _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                if (!_bIsModeZeroDeath) {
+              if (eUnitState) {
+                eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+                if (!eUnitState) {
                   return;
                 }
               }
@@ -226,9 +224,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
           {
             if (eAnimMode == eD2MonsterAnimMode_ns::Skill3 || eAnimMode == eD2MonsterAnimMode_ns::Skill4) {
               eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-              if (eUnitState != STATE_none) {
-                _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                if (!_bIsModeZeroDeath) {
+              if (eUnitState) {
+                eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+                if (!eUnitState) {
                   return;
                 }
               }
@@ -243,9 +241,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
           {
             if (nResolvedBaseId == 0xe6 || nResolvedBaseId == 0xe7) {
               eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-              if (eUnitState != STATE_none) {
-                _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                if (!_bIsModeZeroDeath) {
+              if (eUnitState) {
+                eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+                if (!eUnitState) {
                   return;
                 }
               }
@@ -256,9 +254,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
             if (nResolvedBaseId == 0x76) {
               if (eAnimMode == Walk) {
                 eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-                if (eUnitState != STATE_none) {
-                  _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                  if (!_bIsModeZeroDeath) {
+                if (eUnitState) {
+                  eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+                  if (!eUnitState) {
                     return;
                   }
                 }
@@ -268,9 +266,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
               }
             } else if (nResolvedBaseId == 0x193) {
               eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-              if (eUnitState != STATE_none) {
-                _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                if (!_bIsModeZeroDeath) {
+              if (eUnitState) {
+                eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+                if (!eUnitState) {
                   return;
                 }
               }
@@ -284,16 +282,16 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
     if (UnknownModeValueArray[eAnimMode]) {
       D2Common::Units::SetupUpdateFlag(pUnit, 1);
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-      if ((eUnitState == STATE_none || (_bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit) , _bIsModeZeroDeath != 0)) && true) {
+      if ((!eUnitState || (eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit) , eUnitState != 0)) && true) {
         D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
         return;
       }
     } else {
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-      if (eUnitState != STATE_none) {
+      if (eUnitState) {
         UNIT::SUnit::SetUninterruptableState(pUnit, 0);
-        _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-        if (_bIsModeZeroDeath) {
+        eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+        if (eUnitState) {
           return;
         }
       }
@@ -313,7 +311,6 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Kills a monster via a system-generated (non-player) kill. Clears the monster's current skill, builds a D2MonsterKillStrc (attacker from GetTargetEx, death anim mode 'e' for ghosts/non-solid else 'd'), and calls MONSTERAI_ExecuteLifecycleTransition. If the unit is frozen but not in mode-zero-death, returns early; otherwise triggers MONSTERAI_ExecuteAiFunction to process death AI.
 void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     D2MonsterKillStrc sMonsterKill = {0};
@@ -332,10 +329,10 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     sMonsterKill.nAnimatedMode2 = byAnimMode2;
     sMonsterKill.pAttacker = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eState != STATE_none) {
-      _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-      if (!_bIsModeZeroDeath) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
+    if (eState) {
+      eState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+      if (!eState) {
         return;
       }
     }
@@ -345,7 +342,6 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Handles a monster's death triggered by its attacker. Clears current skill, builds a D2MonsterKillStrc with victim/attacker (via GetTargetEx), selects death animation mode ('d' normal or 'e' for undead via MvFlags1), then calls MONSTERAI_ExecuteLifecycleTransition. If the monster is frozen and not in mode-0 death it returns early; otherwise drives the monster AI death function.
 void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     D2MonsterKillStrc killStrc = {0};
@@ -364,10 +360,10 @@ void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     killStrc.nAnimatedMode2 = byAnimMode2;
     killStrc.pAttacker = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killStrc, 1);
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eState != STATE_none) {
-      _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-      if (!_bIsModeZeroDeath) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
+    if (eState) {
+      eState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+      if (!eState) {
         return;
       }
     }
@@ -376,13 +372,13 @@ void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 BOOL __fastcall MONMODE_ProcessWalkWithTrails(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blaze);
-    if (eState != STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blaze);
+    if (eState) {
       SKILLS::SkillSor::BlazePath(pGame, pUnit);
     }
 
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_spiderlay);
-    if (eState != STATE_none) {
+    if (eState) {
       SKILLS::SkillMonst::SKILLMONST_SpiderLayTrail(pGame, pUnit);
     }
 
@@ -417,14 +413,14 @@ void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
     if (pUnit->eUnitType == UNIT_MONSTER && nMonClassId >= 0) {
-      eD2States eState;
+      BOOL eState;
       D2MonStatsTxt* pMonStatsTxt = nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
       if (pMonStatsTxt) {
         nMonClassId = (int32_t)pMonStatsTxt->BaseId;
       }
       if (nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize && nMonClassId == 0x4e) {
         eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_stunned);
-        if (eState != STATE_none) {
+        if (eState) {
           pDelayFrame = pGame->dwGameFrame + 0x2d;
         } else {
           pDelayFrame = pGame->dwGameFrame + 0xf;

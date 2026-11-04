@@ -55,6 +55,7 @@
 #include "Fog/Save.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units/Missile.h"

@@ -52,7 +52,6 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -204,7 +203,6 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t",
         "uint64_t"
@@ -431,8 +429,7 @@
         "D2AiParamStrc",
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {

@@ -71,6 +71,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Waypoints.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
@@ -3768,7 +3769,6 @@ void __stdcall AdvanceAnimFrame(D2UnitStrc * pUnit) {
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine) {
     int32_t nFastStat;
-    int32_t nAnimFrameTime;
     uint32_t bAnimatesAtFrameEnd;
     int nFrameTime;
     int nLeftAtkRate;
@@ -3822,6 +3822,7 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
       return;
     }
     if (pUnit) {
+      int32_t nAnimFrameTime;
       if (pUnit == (D2UnitStrc*)0x1) {
         bIsSpecialAnimMode = nAnimMode == TownWalk;
         goto block_speed;
@@ -3963,7 +3964,6 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
       }
       nVelocityPct = (uint32_t)(nBaseFrameTime * nFrameTime) / 100;
     } else {
-      eD2States nSpeedBonus;
       bIsSpecialAnimMode = nAnimMode == eD2PlayerAnimMode_ns::Block;
       block_speed:
       if (!bIsSpecialAnimMode) {
@@ -3971,8 +3971,8 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
       }
       nFastStat = GetDiminishedStat(pUnit_00, 3);
       nBaseFrameTime = 0x32;
-      nSpeedBonus = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_holyshield);
-      if (nSpeedBonus != STATE_none) {
+      bCanDualWield = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_holyshield);
+      if (bCanDualWield) {
         nBaseFrameTime = 100;
       }
 

@@ -241,7 +241,6 @@
       ],
       "usedTypes": [
         "WCHAR",
-        "int16_t",
         "int32_t",
         "uint16_t"
       ]

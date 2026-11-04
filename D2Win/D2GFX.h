@@ -8,9 +8,17 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
+// Forward declarations
+#ifndef RECON_FPTD_WndProcB
+#define RECON_FPTD_WndProcB
+typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t param_3, LPARAM param_4);
+#endif
+
 namespace D2Win::D2GFX {
 
 // Function declarations
+BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
+int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB);
 BOOL __stdcall UI_Init();
 BOOL __stdcall D2GFX_CheckVideoMode();
 // The whole body is two instructions - MOV dword ptr [gnResolutionMode],0x0 then

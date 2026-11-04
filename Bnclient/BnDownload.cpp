@@ -44,13 +44,13 @@ static LONG * lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAdden
 namespace Bnclient::BnDownload {
 
 static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID pData, DWORD nNumberOfBytesToWrite, FILETIME * pFileTime) {
-    LPCSTR szFilePathCopy = pThis;
+    DWORD szFilePathCopy = (DWORD)pThis;
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(pThis, 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
       return;
     }
 
-    Fog::Source::SFile::thunk_WriteFile(hFile, pData, nNumberOfBytesToWrite, (LPDWORD)&szFilePathCopy, (LPOVERLAPPED)0x0);
+    Fog::Source::SFile::thunk_WriteFile(hFile, pData, nNumberOfBytesToWrite, &szFilePathCopy, (LPOVERLAPPED)0x0);
     /* FILETIME * lpLastWriteTime for SetFileTime */ /* FILETIME * lpLastAccessTime for SetFileTime */ /* FILETIME * lpCreationTime for SetFileTime */ /* HANDLE hFile for SetFileTime */ SetFileTime(hFile, pFileTime, pFileTime, pFileTime);
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
 }
@@ -721,7 +721,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
           pcToken = szRequestBuf;
           for (nConnResult = 0x8c; nConnResult; nConnResult--) {
             *(uint32_t*)pcToken = *(uint32_t*)lpThreadParam;
-            lpThreadParam = (void*)(D2BnetDownloadStateStrc*)(((D2BnetDownloadStateStrc*)lpThreadParam)->undefined_0x02 + 2);
+            lpThreadParam = &((D2BnetDownloadStateStrc*)lpThreadParam)->dwPlatformId;
             pcToken += 4;
           }
 
@@ -1243,7 +1243,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t 
       Cache::CACHE_FreeMem(pCacheData, dwCachedSize);
     }
 
-    short int* pThreadCtx = (short int*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0x698, 0);
+    D2BnetDownloadStateStrc* pThreadCtx = (D2BnetDownloadStateStrc*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0x698, 0);
     if (!pThreadCtx) {
       return 0;
     }
@@ -1251,22 +1251,20 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t 
     memset(pThreadCtx, 0, 0x230);
     uint8_t* pbNameEnd = pPatchList;
     pbNameEnd = pbNameEnd + strlen((char*)pbNameEnd) + 1;
-    *pThreadCtx = (short int)(uintptr_t)pbNameEnd - ((short int)(uintptr_t)pPatchList + 1) + 0x21;
-    *(uint8_t*)(pThreadCtx + 1) = 0;
-    *(uint8_t*)((int)pThreadCtx + 3) = 1;
-    pThreadCtx[2] = 0x3836;
-    pThreadCtx[3] = 0x4958;
-    pThreadCtx[4] = 0x4456;
-    pThreadCtx[5] = 0x4432;
-    memset(pThreadCtx + 6, 0, 6 * sizeof(pThreadCtx[0]));
-    pThreadCtx[0x114] = 2;
-    pThreadCtx[0x115] = -0x8000;
-    pThreadCtx[0x116] = 2;
-    pThreadCtx[0x117] = 0;
-    *(DWORD*)(pThreadCtx + 0xc) = ftZero.dwLowDateTime;
-    *(DWORD*)(pThreadCtx + 0xe) = ftZero.dwHighDateTime;
-    Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x10), (char*)pPatchList, 0x104);
-    Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x92), "", 0x104);
+    pThreadCtx->nSendSize = (short int)(uintptr_t)pbNameEnd - ((short int)(uintptr_t)pPatchList + 1) + 0x21;
+    pThreadCtx->nUnk0x02 = '\0';
+    pThreadCtx->nUnk0x03 = '\x01';
+    pThreadCtx->dwPlatformId = 0x49583836;
+    pThreadCtx->dwProductId = 0x44324456;
+    pThreadCtx->nUnk0x0C = 0;
+    pThreadCtx->nUnk0x10 = 0;
+    pThreadCtx->nCachedFileSize = 0;
+    pThreadCtx->nConnMode = -0x7ffffffe;
+    pThreadCtx->nFileType = 2;
+    pThreadCtx->ftFileTime.dwLowDateTime = ftZero.dwLowDateTime;
+    pThreadCtx->ftFileTime.dwHighDateTime = ftZero.dwHighDateTime;
+    Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, (char*)pPatchList, 0x104);
+    Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, "", 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
     return nThreadHandle;

@@ -537,19 +537,19 @@ int __stdcall LIGHTMAP_GetQualityLevel() {
 }
 
 static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
+    BOOL bIsOwner;
     bool bIsValidTarget;
     if (!(pUnit1 && pUnit1->eUnitFlags >> 3 & 1 && pUnit1->eUnitFlags >> 2 & 1)) {
       return 0;
     }
     if (pMissileTxt->NextHit != '\0') {
-      eD2States eState;
-      eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit1, STATE_justhit);
-      if (eState != STATE_none) {
+      bIsOwner = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit1, STATE_justhit);
+      if (bIsOwner) {
         return 0;
       }
     }
 
-    BOOL bIsOwner = D2Common::Units::Missile::CheckUnitIfOwner(pUnit, pUnit1);
+    bIsOwner = D2Common::Units::Missile::CheckUnitIfOwner(pUnit, pUnit1);
     if (bIsOwner) {
       return 0;
     }
@@ -917,9 +917,9 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     uint32_t nVelForPath;
     nVelForPath = nVelocityRaw;
     if (pSkillArg->pOwner && *((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[3]) {
-      eD2States eSlowState;
+      BOOL eSlowState;
       eSlowState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pSkillArg->pOwner, STATE_slowmissiles);
-      if (eSlowState != STATE_none) {
+      if (eSlowState) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pSkillArg->pOwner, STATE_slowmissiles);
         if (pStatList) {
           nSlowPct = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_skill_handofathena, 0);
@@ -5557,7 +5557,6 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
     nullptr
 }; D2_STATIC_GUARD(MISSILESCLTHITFUNCS, "D2Client::UNIT::Missile::MISSILE_ClientHitExplode::MISSILESCLTHITFUNCS");
 
-    eD2States eState;
     BOOL bIsOwner;
     uint32_t nCanInteract;
     D2StatListExStrc* pStatsEx;
@@ -5585,8 +5584,8 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
     }
     if (pTarget) {
       if (pMissileTxt->NextHit != '\0') {
-        eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_justhit);
-        if (eState != STATE_none) {
+        bIsOwner = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_justhit);
+        if (bIsOwner) {
           return nullptr;
         }
       }
@@ -5620,8 +5619,8 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
       }
       if (pTarget) {
         if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[2] && pOwner->eUnitType <= UNIT_MONSTER) {
-          eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pOwner, STATE_pierce);
-          if (eState != STATE_none || (nMissileClassId = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_pierce, 0) , nMissileClassId != 0)) {
+          bIsOwner = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pOwner, STATE_pierce);
+          if (bIsOwner || (nMissileClassId = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_pierce, 0) , nMissileClassId != 0)) {
             nPierceResult = MISSILE_CheckAndDecrementPierce(pUnit);
           }
         }

@@ -310,3 +310,15 @@ namespace D2Client::Draw::LightMap {
 // globals were never emitted either. gnBnetAccountLoginFailCount starts at 1 in the image.
 int gnBnetAccountLoginFailCount = 1;
 char gszOogLastIniStringCache[16] = {};
+
+namespace D2Client::Mouse {
+
+} // namespace D2Client::Mouse
+
+namespace D2Client::Forms {
+
+} // namespace D2Client::Forms
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record

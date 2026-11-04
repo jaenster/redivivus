@@ -1,0 +1,523 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Game/Main.cpp",
+  "functions": [
+    {
+      "name": "MISC_OperatorDeleteShim",
+      "address": "004053f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004053f0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "MISC_OperatorDeleteShim",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "MISC_OperatorNewShim",
+      "address": "00405410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405410"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "MISC_OperatorNewShim",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISC_GetValueFromD2Ini",
+      "address": "00405450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405450"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "MISC_GetValueFromD2Ini",
+        "SFILE_GetExecutableDirectory",
+        "SStrPack",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INI_FindConfigValueIndex",
+      "address": "00405570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405570"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "INI_FindConfigValueIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INI_IsDelimiterChar",
+      "address": "004055d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004055d0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "INI_IsDelimiterChar"
+      ]
+    },
+    {
+      "name": "INI_StripDelimiters",
+      "address": "00405610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405610"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "INI_StripDelimiters",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INI_ParseCommandLineArg",
+      "address": "00405710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405710"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "INI_ParseCommandLineArg",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INI_FindConfigValueIndex",
+        "INI_StripDelimiters",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CloseDiablo",
+      "address": "0040576f",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040576f"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "CloseDiablo",
+        "exit"
+      ]
+    },
+    {
+      "name": "MISC_ParseCommandLineAndPutIntoD2IniData",
+      "address": "004058a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004058a0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "MISC_ParseCommandLineAndPutIntoD2IniData",
+        "INI_ParseCommandLineArg",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISC_InitD2IniAndIgnorelist",
+      "address": "004059a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004059a0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "MISC_InitD2IniAndIgnorelist",
+        "memset",
+        "MISC_GetValueFromD2Ini",
+        "MISC_InitIgnorelist",
+        "MISC_ParseCommandLineAndPutIntoD2IniData"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ApplicationRunCurrentMode",
+      "address": "004059d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004059d0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "ApplicationRunCurrentMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SystemSurvey_WriteProductLanugageToLocaleFile",
+      "address": "00405a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405a70"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "SystemSurvey_WriteProductLanugageToLocaleFile",
+        "TABLES_GetLangAbbreviation",
+        "SFILE_GetBlizzardAppDataPath",
+        "SStrPack",
+        "SStrLen",
+        "SStrCopy",
+        "SafeCreateDirectoryTree",
+        "fopen",
+        "fputc",
+        "fclose",
+        "D2CheckExpansionGame",
+        "SFILE_GetExecutableDirectory",
+        "D2FILE_VerifyFileSignature",
+        "D2FILE_CreateProcess",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "FILE",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ApplicationMain",
+      "address": "00405c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405c30"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "ApplicationMain",
+        "CrashGame",
+        "SFILE_InitializeFileSystem",
+        "STRUCT_AllocAsyncData",
+        "Return",
+        "NET_SERVER_SentPacketLog_Clear",
+        "MPQ_LoadAllDataMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "MPQ_UnloadAllDataMpqFiles",
+        "D2CheckExpansionGame",
+        "SystemSurvey_WriteProductLanugageToLocaleFile",
+        "MISC_GetLanguageCode",
+        "D2GFX_PreSetupBeforeCreatingWindow",
+        "D2GFX_SetPerspective",
+        "CreateWindowWithChecks",
+        "D2GFX_Release",
+        "GetHwnd",
+        "D2GFX_ToggleLowQuality",
+        "D2GFX_SetGamma",
+        "D2GFX_EnableVSync",
+        "SRegLoadValue",
+        "D2GFX_DisableFixAspect",
+        "SRegSaveValue",
+        "SOUND_Initialize",
+        "SOUND_ShutdownDirectSound",
+        "D2GFX_CheckVideoMode",
+        "ApplicationRunCurrentMode",
+        "STRUCT_FreeAsyncData",
+        "FreeMCP",
+        "IGNORELIST_Shutdown",
+        "FreeMemoryPool"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "FARPROC",
+        "eD2RendererMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReturnTrue",
+      "address": "00405ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405ef0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "ReturnTrue"
+      ]
+    },
+    {
+      "name": "D2INIT_CheckCommandLineOrLoadItFromRegistry",
+      "address": "00405f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405f00"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "D2INIT_CheckCommandLineOrLoadItFromRegistry",
+        "SRegLoadValue",
+        "SRegLoadString",
+        "sprintf",
+        "SRegSaveString",
+        "SRegSaveValue",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "char *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateRegedit",
+      "address": "00406040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406040"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "CreateRegedit",
+        "memset",
+        "SFILE_GetInstallPath",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "HKEY",
+        "LPDWORD",
+        "LSTATUS"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_TryGetProcAddress",
+      "address": "00406190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406190"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "ERRORMANAGER_TryGetProcAddress"
+      ],
+      "usedTypes": [
+        "FARPROC"
+      ]
+    },
+    {
+      "name": "LIB_LoadAdvapi32",
+      "address": "004061c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004061c0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "LIB_LoadAdvapi32",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "PSID",
+        "_SID_IDENTIFIER_AUTHORITY",
+        "pfnAddAccessDeniedAce",
+        "pfnAllocateAndInitializeSid",
+        "pfnInitializeAcl",
+        "pfnSetSecurityInfo",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument",
+      "address": "00406340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406340"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument",
+        "AllocClientMemory",
+        "SStrCopy",
+        "strtok",
+        "strncmp",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "eD2ApplicationMode"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_ServiceControlHandler",
+      "address": "00406410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406410"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "ERRORMANAGER_ServiceControlHandler"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PreInitApplication",
+      "address": "004064c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004064c0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "PreInitApplication",
+        "SStrPrintf",
+        "FILETOOLS_SetLogFilePathWithoutDateAndExtension2",
+        "ERRORMANAGER_InitErrorManager",
+        "SetEvent",
+        "D2INIT_CheckCommandLineOrLoadItFromRegistry",
+        "CreateRegedit",
+        "CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument",
+        "MISC_InitD2IniAndIgnorelist",
+        "ApplicationMain",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "char *",
+        "eD2ApplicationMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "main",
+      "address": "004065e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004065e0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "PreInitApplication",
+        "main"
+      ]
+    },
+    {
+      "name": "StartDiablo2ServerAsService",
+      "address": "00406650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406650"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "StartDiablo2ServerAsService"
+      ],
+      "usedTypes": [
+        "SC_HANDLE",
+        "SERVICE_TABLE_ENTRYA"
+      ]
+    },
+    {
+      "name": "WinMain",
+      "address": "004066e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004066e0"
+        }
+      ],
+      "namespace": "Game::Main",
+      "calledFunctions": [
+        "WinMain",
+        "StartDiablo2ServerAsService",
+        "LIB_LoadAdvapi32",
+        "PreInitApplication"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

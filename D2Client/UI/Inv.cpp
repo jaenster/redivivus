@@ -2210,7 +2210,7 @@ void __stdcall szPrintfBuffer(D2UnitStrc * pUnit, uint16_t * wszText) {
 
 static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt * pItemsTxt, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
-    eD2States eHolyShieldState;
+    BOOL eHolyShieldState;
     int nClassIdOrLevel;
     int32_t nHolyShieldBonus;
     uint16_t wszLineBuffer[256];
@@ -2233,7 +2233,7 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pPlayerUnit_lcl, SKILL_HolyShield);
       if (pSkill) {
         eHolyShieldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_holyshield);
-        if (eHolyShieldState != STATE_none) {
+        if (eHolyShieldState) {
           nClassIdOrLevel = D2Common::Skills::GetSkillLevel(pPlayerUnit_lcl, pSkill, 1);
           nHolyShieldBonus = D2Common::Skills::SKILLS_GetParam45WithDiminishing(nClassIdOrLevel, 0x75);
           nBlockChance += nHolyShieldBonus;
@@ -2274,7 +2274,7 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
 // Formats defense range text for shields and boots, displaying min-max defense values. For shields, checks if Holy Shield skill is active and adds its defense bonus to both min and max values before formatting the output string.
 static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt * pStatRecord, uint16_t * wszText) {
     D2SkillStrc* pSkill;
-    eD2States iStateCheck;
+    BOOL iStateCheck;
     int nSkillLevel;
     int32_t nSkillDmgCalc;
     uint16_t wszTempConversionBuffer[10];
@@ -2302,7 +2302,7 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pPlayerUnit_lcl, SKILL_HolyShield);
       if (pSkill) {
         iStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_holyshield);
-        if (iStateCheck != STATE_none) {
+        if (iStateCheck) {
           nSkillLevel = D2Common::Skills::GetSkillLevel(pPlayerUnit_lcl, pSkill, 1);
           nSkillDmgCalc = D2Common::Skills::SKILL_CalcMinDamage(pPlayerUnit_lcl, 0x75, nSkillLevel, 1);
           nStatRecord = (int)(nMinDefense->szFlippyFile + (nSkillDmgCalc >> 8));

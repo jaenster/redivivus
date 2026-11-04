@@ -91,6 +91,19 @@
       ]
     },
     {
+      "name": "Q14_Callback10_PlayerLeavesGame",
+      "address": "0059c6b0",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A2Q6",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q14_UpdateQuestRecordStep",
       "address": "0059c6c0",
       "lines": [

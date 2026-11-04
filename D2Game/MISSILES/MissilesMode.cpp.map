@@ -614,8 +614,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {
@@ -991,7 +990,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -2358,7 +2356,6 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -2706,7 +2703,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -3887,6 +3883,19 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_MISSILESMODE_SrvDoFn01_BasicMissile",
+      "address": "005b0bc0",
+      "lines": [],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
       ]
     }
   ]

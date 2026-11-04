@@ -3192,7 +3192,6 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "eD2PlayerAnimMode",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

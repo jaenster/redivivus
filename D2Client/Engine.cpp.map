@@ -599,7 +599,6 @@
         "D2RoomStrc",
         "D2RoomStrc *",
         "D2UnitStrc",
-        "eD2States",
         "uint32_t"
       ]
     },

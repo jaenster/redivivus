@@ -70,6 +70,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/D2Game.h"
@@ -233,8 +234,8 @@ BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    eD2States eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eInfernoState == STATE_none) {
+    BOOL bResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (!bResult) {
       int nMana;
       nMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
       if (nMana < pSkillTxt->startmana * 0x100) {
@@ -247,7 +248,7 @@ BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    BOOL bResult = INFERNO_BeginOrContinueChannel(pGame, pUnit, eSkill, nSkillLvl, eSrvMissileId);
+    bResult = INFERNO_BeginOrContinueChannel(pGame, pUnit, eSkill, nSkillLvl, eSrvMissileId);
     return bResult;
 }
 
@@ -1167,8 +1168,8 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    eD2States eThunderState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pDVar1->aurastate);
-    if (eThunderState == STATE_none || (nSkillParam2 = D2Common::Skills::SKILL_GetParam2(pSkill) , nSkillParam2 != 0)) {
+    BOOL eThunderState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pDVar1->aurastate);
+    if (!eThunderState || (nSkillParam2 = D2Common::Skills::SKILL_GetParam2(pSkill) , nSkillParam2 != 0)) {
       D2StateExArgStrc sStateArgs = {0};
       sStateArgs.eSkill = eSkill;
       sStateArgs.nSkillLvl = nSkillLvl;

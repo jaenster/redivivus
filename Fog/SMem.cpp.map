@@ -59,6 +59,12 @@
       ]
     },
     {
+      "name": "GetTickCount",
+      "address": "004112b0",
+      "lines": [],
+      "namespace": "Fog::SMem"
+    },
+    {
       "name": "HashForName",
       "address": "004112c0",
       "lines": [

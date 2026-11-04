@@ -2108,54 +2108,6 @@
       ]
     },
     {
-      "name": "BINK_RenderVideoFrame",
-      "address": "005136f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "005136f0"
-        }
-      ],
-      "namespace": "D2Client",
-      "calledFunctions": [
-        "BINK_RenderVideoFrame",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "memset"
-      ],
-      "usedTypes": [
-        "DDSURFACEDESC",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "BINK_PlayVideoFile",
-      "address": "005137e0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "005137e0"
-        }
-      ],
-      "namespace": "D2Client",
-      "calledFunctions": [
-        "BINK_PlayVideoFile",
-        "GetUseDirectCommand",
-        "SFileOpenFileEx",
-        "GetTickCount",
-        "BINK_RenderVideoFrame",
-        "SOUNDSMP_SetGlobalVolume",
-        "exit"
-      ],
-      "usedTypes": [
-        "fnBinkFrameCallback",
-        "int32_t",
-        "tagMSG",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "SehHandler_6ca218",
       "address": "006ca218",
       "lines": [

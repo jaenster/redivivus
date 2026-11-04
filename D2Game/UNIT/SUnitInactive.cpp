@@ -555,7 +555,7 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
 // Deactivates a monster when its area is unloaded/idled, serializing its full state into an InactiveMonsterRecord so it can be restored later. Strips all active states (removing/freeing their stat lists), fires the AITHINK timer trigger, then allocates a 0x5c record from the game memory pool and fills it: position (from static/dynamic path), classId, game frame, AI command type, name seed, saved monster state, type-flag bitmask (champion/unique/boss/minion/possessed/aligned/dead etc. via CheckMonsterType + alignment + anim mode), experience, max/current HP, level/area id, the 9-byte UMod list, owner/minion-list linkage, GUID and unit flags. Links the record into the per-act inactive list (SUNITINACTIVE_AllocOrFindInactiveList) keyed by room coords. No-op if unit or its room is null. Uses custom register args (pUnit in EAX).
 // @sourcefile .\UNIT\SUnitInactive.cpp
 static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    eD2States nAiCmdType;
+    BOOL nAiCmdType;
     D2StatListExStrc* pStateStatList;
     int nTmpVal;
     D2AiGeneralStrc* pAiGeneral;
@@ -574,7 +574,7 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
     for (nTmpVal = 0; nTmpVal < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize; nTmpVal++) {
       nStateId = sgptDataTable->pAllStatesDataTblFlag0x0B[nTmpVal].nStateId;
       nAiCmdType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nStateId);
-      if (nAiCmdType != STATE_none) {
+      if (nAiCmdType) {
         pStateStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nStateId);
         if (pStateStatList) {
           D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStateStatList);
@@ -1498,7 +1498,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
 // Server-side inactive/dead unit processor. Dispatches by unit type: monsters go to UNITS_ProcessDeadOrInactiveMonster; players in body state get saved and deleted; objects are conditionally saved based on Restore/RestoreVirgins txt flags and sparkly-chest state; items and warps are always saved. Fires UNITEVENTCALLBACK_ENDANIM timer trigger for players and objects, then frees non-item units via FreeServerUnit.
 void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectTxt;
-    eD2States eState;
+    BOOL eState;
     BOOL local_8;
     D2RoomStrc* pRoom;
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1543,7 +1543,7 @@ void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * p
           goto save_inactive;
         case UNIT_PLAYER:
           eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
-        if (eState != STATE_none) {
+        if (eState) {
           save_and_unlink:
           GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
           pUnit->eUnitFlagsEx |= UNITFLAGEX_HASBEENDELETED;

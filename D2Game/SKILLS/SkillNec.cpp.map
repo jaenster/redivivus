@@ -748,8 +748,7 @@
       ],
       "usedTypes": [
         "D2StatListExStrc",
-        "D2UnitStrc",
-        "eD2States"
+        "D2UnitStrc"
       ]
     },
     {
@@ -975,6 +974,21 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_CorpseExplosionDispatch",
+      "address": "005c50b0",
+      "lines": [],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_055_CorpseExplosion"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
       ]
     },
     {
@@ -1363,7 +1377,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t",
@@ -1403,7 +1416,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"

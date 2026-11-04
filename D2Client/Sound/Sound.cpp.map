@@ -4,6 +4,24 @@
   "file": "D2Client/Sound/Sound.cpp",
   "functions": [
     {
+      "name": "SOUND_IsDirectSoundAvailable_For3DSoundItem",
+      "address": "0047ce30",
+      "lines": [],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsDirectSoundAvailable"
+      ]
+    },
+    {
+      "name": "SOUND_IsEaxAvailable_ForEaxItem",
+      "address": "0047ceb0",
+      "lines": [],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsEaxAvailable"
+      ]
+    },
+    {
       "name": "SOUND_FileExists",
       "address": "00482e00",
       "lines": [

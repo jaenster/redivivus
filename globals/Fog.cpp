@@ -13,16 +13,6 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-_SERVICE_STATUS lpServiceStatus_007065fc = {
-    /* .dwServiceType = */ 0x10,
-    /* .dwCurrentState = */ 0x4,
-    /* .dwControlsAccepted = */ 0x5,
-    /* .dwWin32ExitCode = */ 0x0,
-    /* .dwServiceSpecificExitCode = */ 0x0,
-    /* .dwCheckPoint = */ 0x0,
-    /* .dwWaitHint = */ 0x0
-}; D2_GLOBAL_GUARD(lpServiceStatus_007065fc, "lpServiceStatus_007065fc");
-
 uint8_t gabHuffmanCodeLengths[256] = {
     0x1,
     0x4,
@@ -282,8 +272,6 @@ uint8_t gabHuffmanCodeLengths[256] = {
     0x6
 }; D2_GLOBAL_GUARD(gabHuffmanCodeLengths, "gabHuffmanCodeLengths");
 
-SERVICE_STATUS_HANDLE ghServiceCtrlHandler = nullptr; D2_GLOBAL_GUARD(ghServiceCtrlHandler, "ghServiceCtrlHandler");
-
 uint32_t gaHuffmanFastDecodeTable[256] = {}; D2_GLOBAL_GUARD(gaHuffmanFastDecodeTable, "gaHuffmanFastDecodeTable");
 
 uint8_t gabHuffmanNextTable[256] = {}; D2_GLOBAL_GUARD(gabHuffmanNextTable, "gabHuffmanNextTable");
@@ -292,7 +280,6 @@ uint8_t gabHuffmanNextTable[256] = {}; D2_GLOBAL_GUARD(gabHuffmanNextTable, "gab
 // Initialized scalars
 // =============================================================================
 
-_SERVICE_STATUS gszCommandLineLocaleCode = {}; D2_GLOBAL_GUARD(gszCommandLineLocaleCode, "gszCommandLineLocaleCode");
 
 namespace D2Common::Drlg::Maze {
 
@@ -583,3 +570,15 @@ namespace D2Client::UI::Dialog {
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
+
+namespace D2Client::Mouse {
+
+} // namespace D2Client::Mouse
+
+namespace D2Client::Forms {
+
+} // namespace D2Client::Forms
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record

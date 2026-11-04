@@ -267,6 +267,19 @@
       ]
     },
     {
+      "name": "QUEST_DispatchObjectActivation",
+      "address": "00581a10",
+      "lines": [],
+      "namespace": "D2Game::Objects::ObjectsMode",
+      "calledFunctions": [
+        "SetTimerByMonsterId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "OBJECT_SendStateToClient",
       "address": "00581a20",
       "lines": [

@@ -12,6 +12,9 @@
 // Initialized scalars
 // =============================================================================
 
+uint32_t gnCursorDC6FrameNumber = 0; D2_GLOBAL_GUARD(gnCursorDC6FrameNumber, "gnCursorDC6FrameNumber");
+int gnFormControlCount = 0; D2_GLOBAL_GUARD(gnFormControlCount, "gnFormControlCount");
+uint32_t gbGfxWindowCreated = 0; D2_GLOBAL_GUARD(gbGfxWindowCreated, "gbGfxWindowCreated");
 D2FogArchiveStrc * MPQ_d2Xmusic = 0; D2_GLOBAL_GUARD(MPQ_d2Xmusic, "MPQ_d2Xmusic");
 D2FogArchiveStrc * MPQ_d2sfx = 0; D2_GLOBAL_GUARD(MPQ_d2sfx, "MPQ_d2sfx");
 D2FogArchiveStrc * MPQ_d2delta = 0; D2_GLOBAL_GUARD(MPQ_d2delta, "MPQ_d2delta");
@@ -311,3 +314,39 @@ namespace D2Client::UI::Dialog {
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
+
+namespace D2Client::Mouse {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int nPosX = 0; D2_GLOBAL_GUARD(nPosX, "D2Client::Mouse::nPosX");
+int nPosY = 0; D2_GLOBAL_GUARD(nPosY, "D2Client::Mouse::nPosY");
+
+} // namespace D2Client::Mouse
+
+namespace D2Client::Forms {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+D2ControlStrc * pFormsList = 0; D2_GLOBAL_GUARD(pFormsList, "D2Client::Forms::pFormsList");
+D2ControlStrc * pFormUnknown = 0; D2_GLOBAL_GUARD(pFormUnknown, "D2Client::Forms::pFormUnknown");
+D2ControlStrc * pFormSecond = 0; D2_GLOBAL_GUARD(pFormSecond, "D2Client::Forms::pFormSecond");
+D2WinEditBox * pFormTextAndEditBox = 0; D2_GLOBAL_GUARD(pFormTextAndEditBox, "D2Client::Forms::pFormTextAndEditBox");
+D2ControlStrc * pFormFourth = 0; D2_GLOBAL_GUARD(pFormFourth, "D2Client::Forms::pFormFourth");
+D2ControlStrc * pFormImage = 0; D2_GLOBAL_GUARD(pFormImage, "D2Client::Forms::pFormImage");
+
+} // namespace D2Client::Forms
+
+namespace D2Client::GAME::Record {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+WndProcB pWndProcB = (::WndProcB)0; D2_GLOBAL_GUARD(pWndProcB, "D2Client::GAME::Record::pWndProcB");
+
+} // namespace D2Client::GAME::Record

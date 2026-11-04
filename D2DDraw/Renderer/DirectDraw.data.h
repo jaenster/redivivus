@@ -20,6 +20,7 @@ extern GUID gGlideOpenWindowConfig;
 extern uint32_t gnDDrawSurfaceHeight;
 extern uint32_t gnCutSceneActiveFlag;
 extern IDirectDraw1 * pWindowHandleBuffer;
+extern IDirectDrawSurface1 * gpDDrawPrimarySurface;
 extern IDirectDrawSurface1 * gpDDrawBackBuffer;
 extern IDirectDrawSurface1 * pDirectDrawSurface;
 extern IDirectDrawPalette * pDirectDrawPalette;
@@ -27,7 +28,8 @@ extern uint32_t gnDDrawFlipState;
 extern uint32_t gnDDrawPaletteSize;
 extern uint32_t gnDDrawSurfaceXMin;
 extern uint32_t gnDDrawRenderWidth;
-extern uint8_t gaSmackerPaletteRemap[260];
+extern uint8_t gaSmackerPaletteRemap[256];
+extern void * gpSmackerImageBuffer;
 // @data gbSmackerPaletteDirty
 // @wasnamed gnBinkDDrawYOffset
 // @evidence Set to 1 after a palette rebuild at 00513674, gates

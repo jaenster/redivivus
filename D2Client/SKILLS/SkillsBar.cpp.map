@@ -307,7 +307,6 @@
         "D2UnitStrc",
         "POINT",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -582,7 +581,6 @@
         "D2UnitStrc",
         "eD2CollisionShapeType",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -707,7 +705,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

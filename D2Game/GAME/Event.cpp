@@ -630,9 +630,9 @@ static void __stdcall SetEventInternal(eD2TimerTypeDWORD eTimerType, ::SGAMEDATA
       nFrame = pGame->dwGameFrame + 1;
     }
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && eTimerType == UNITEVENTCALLBACK_AITHINK) {
-      eD2States eState;
+      BOOL eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-      if (eState != STATE_none) {
+      if (eState) {
         UNIT::SUnit::SetUninterruptableState(pUnit, 0);
       }
     }

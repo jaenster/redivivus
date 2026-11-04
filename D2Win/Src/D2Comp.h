@@ -33,7 +33,7 @@ void __fastcall D2COMP_DrawUnitShadow(uint32_t * pCompUnit);
 void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColor);
 int32_t __stdcall D2COMP_TruncateStringToFitWidth(uint16_t * wszText, int32_t nMaxWidth);
 void __stdcall D2COMP_AddTextLineToLayout(uint16_t * wszText, uint8_t * pLayoutBase, int * pnLineCount, int * pnMaxWidth, int * pnTotalHeight);
-void __fastcall D2COMP_ZeroBuffer512(void * pBuffer);
+void * __fastcall D2COMP_ZeroBuffer512(void * pBuffer);
 void __fastcall D2COMP_UnlinkCompositeUnit(struct D2CharSelStrc * pCharSel);
 void __stdcall D2COMP_AllocSmallClientBlock();
 void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelStrc * pCharSel, int32_t bUnlink);

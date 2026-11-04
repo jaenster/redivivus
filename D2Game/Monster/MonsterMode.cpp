@@ -69,6 +69,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Chat.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
 
@@ -99,20 +100,20 @@ D2MonsterPathParamStrc * __fastcall GetAiParamFromUnit(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
-void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, int32_t pMonData) {
-    if (*(int*)(pMonData + 0x18)) {
-      *pX = *(int*)(pMonData + 0x18);
+void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, D2MonsterPathParamStrc * pMonData) {
+    if (pMonData->nPathTypeOverride) {
+      *pX = pMonData->nPathTypeOverride;
     }
-    if (*(int*)(pMonData + 0x1c)) {
-      *pY = *(int*)(pMonData + 0x1c);
+    if (pMonData->nVelocityOverride) {
+      *pY = pMonData->nVelocityOverride;
     }
-    if (*(char*)(pMonData + 0x20) != '\0') {
-      *szText = *(char*)(pMonData + 0x20);
+    if (pMonData->nStepsOverride != '\0') {
+      *szText = pMonData->nStepsOverride;
     }
 
-    *(uint32_t*)(pMonData + 0x18) = 0;
-    *(uint32_t*)(pMonData + 0x1c) = 0;
-    *(uint8_t*)(pMonData + 0x20) = 0;
+    pMonData->nPathTypeOverride = 0;
+    pMonData->nVelocityOverride = 0;
+    pMonData->nStepsOverride = '\0';
 }
 
 void __fastcall ResetEngagedCombatAndStats(D2UnitStrc * pUnit) {
@@ -515,15 +516,15 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
     eD2States aPoisonStateSearch[2];
     ::SGAMEDATA* pGameSaved = pGame;
     int32_t nHpRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hpregen, 0);
-    BOOL BVar1 = D2Common::DATATBLS::ItemStats::STATES_HasProgressiveState(pUnit);
-    if (BVar1) {
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::STATES_HasProgressiveState(pUnit);
+    if (eUnitState) {
       int32_t nCurrentHpRaw;
       nCurrentHpRaw = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_hpregen, 0);
       nHpRegen -= nCurrentHpRaw;
     }
 
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_preventheal);
-    if (!(eUnitState == STATE_none || nHpRegen < 0)) {
+    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_preventheal);
+    if (!(!eUnitState || nHpRegen < 0)) {
       return;
     }
 
@@ -535,7 +536,7 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
 
     int iPoisonSearch = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     aPoisonStateSearch[1] = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    if (!(nHpRegen >= 0 || iPoisonSearch >= 0x100 || (pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pUnitRoom && (BVar1 = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pUnitRoom) , !BVar1)))) {
+    if (!(nHpRegen >= 0 || iPoisonSearch >= 0x100 || (pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pUnitRoom && (eUnitState = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pUnitRoom) , !eUnitState)))) {
       return;
     }
 
@@ -589,7 +590,7 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
     }
 
     eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eUnitState != STATE_none) {
+    if (eUnitState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_death_delay, 1);
       return;
     }
@@ -826,7 +827,6 @@ static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pU
     bool bInRange;
     int32_t nDamage;
     int nTargetHp;
-    eD2States eUninterruptibleState;
     D2DamageStrc sDamage;
     D2UnitStrc* pTarget;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -840,8 +840,8 @@ static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pU
             nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
             sDamage.dwPhysDamage = nTargetHp >> 5;
             sDamage.wResultFlags = 1;
-            eUninterruptibleState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
-            if (eUninterruptibleState == STATE_none) {
+            _bInRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
+            if (!_bInRange) {
               sDamage.wResultFlags |= 4;
             }
 
@@ -1604,7 +1604,6 @@ void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
 int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill, int32_t bResetSkillOnSameMode) {
-    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     BOOL BVar1;
     D2AiDispatchCallbacksStrc* pCurrentModeHandler;
@@ -1617,23 +1616,23 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
 
     D2DynamicPathStrc* pDynPath = pUnit->pPath.pDynamicPath;
     eD2MonsterAnimMode eTargetMode = pMonsterKill->nUnitMode;
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eUnitState != STATE_none) {
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+    if (eUnitState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x753);
       exit(-1);
     }
 
     eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eUnitState != STATE_none) {
+    if (eUnitState) {
       UNIT::SUnit::SetUninterruptableState(pUnit, 0);
-      _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-      if (_bIsModeZeroDeath) {
+      eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+      if (eUnitState) {
         return 1;
       }
     }
 
-    _bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-    if (!_bIsModeZeroDeath) {
+    eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+    if (!eUnitState) {
       D2Common::PATH::DynamicPath::PATH_AddUnitCollision(pUnit);
     }
     if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
@@ -1662,8 +1661,8 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
 
     D2AiDispatchCallbacksStrc* pHandler = GetDropHandler(pUnit, eTargetMode);
     if (pHandler && pHandler->pFn1) {
-      _bIsModeZeroDeath = pHandler->pFn1(pGame, pMonsterKill);
-      if (!_bIsModeZeroDeath) {
+      eUnitState = pHandler->pFn1(pGame, pMonsterKill);
+      if (!eUnitState) {
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
         if (eTargetMode != Death && eTargetMode != eD2MonsterAnimMode_ns::Dead) {
           BVar1 = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
@@ -1703,7 +1702,7 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
           D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynPath, 0);
         }
 
-        return _bIsModeZeroDeath;
+        return eUnitState;
       }
     }
 

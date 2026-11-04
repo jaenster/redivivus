@@ -129,6 +129,7 @@
 #include "D2Client/UI/UseItem.data.h"
 #include "D2Client/UI/npcmenu.data.h"
 #include "D2Client/UI/ui.data.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
@@ -3971,10 +3972,10 @@ void __stdcall UI_DrawPlayerStateOverlays() {
 
     pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
     for (i = 0; i < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size; i++) {
-      eD2States nActiveState;
+      BOOL nActiveState;
       eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x04[i].nStateId;
       nActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, eState);
-      if (nActiveState != STATE_none) {
+      if (nActiveState) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pPlayerUnit_lcl, eState);
         if (pStatList) {
           pStateTxt = DataTbls::MonsterTbls::TXT_States_GetLine(eState);
@@ -9226,7 +9227,6 @@ void __stdcall DRAW_UI_StatWindow_I() {
     D2UnitStrc* pUnit;
     D2DifficultyLevelsTxt* pDifficultyLevelsTxt;
     uint32_t nResistClamped;
-    eD2States eShieldState;
     uint32_t nLangCode;
     uint16_t* pWszLine;
     uint32_t nDisplayVal;
@@ -9650,8 +9650,8 @@ void __stdcall DRAW_UI_StatWindow_I() {
           if (pPlayer->pInventory) {
             bExpansion = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pPlayer->pInventory, nullptr);
             if (bExpansion) {
-              eShieldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayer, STATE_holyshield);
-              if (eShieldState != STATE_none) {
+              bExpansion = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayer, STATE_holyshield);
+              if (bExpansion) {
                 nColorIdx = 3;
               }
             }

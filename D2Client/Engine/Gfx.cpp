@@ -7,7 +7,6 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/D2GfxInfoStrc.h"
 #include "D2Client/D2LightMapStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
@@ -73,6 +72,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -352,23 +352,23 @@ static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, 
     int* pCur;
     eD2States eState;
     eState = pOverlay->nStatePriorityValue;
-    eD2States eOldState;
+    BOOL eOldState;
     eOldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-    if (eOldState != STATE_none) {
+    if (eOldState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     }
 
     _bHasHideState = D2Common::DATATBLS::ItemStats::STATES_HasHideState(pUnit);
     if (!_bHasHideState) {
       pOverlay->nValue0 = 0;
-      if (eOldState != STATE_none) {
+      if (eOldState) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
-        if (eOldState != STATE_none) {
+        if (eOldState) {
           D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
         }
       }
     } else {
-      if (eOldState != STATE_none) {
+      if (eOldState) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
       }
     }
@@ -2617,12 +2617,12 @@ void __fastcall ANIM_ResetMonsterFrameCache(D2UnitStrc * pUnit) {
 
 void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
     uint32_t pEffectiveAnimMode;
-    eD2States eUnitState;
-    eD2States eActiveState;
+    BOOL eActiveState;
     DWORD nTickCount2;
     bool bKeepOverlay;
     eOverlayId eOverlayA;
     eOverlayId eOverlayB;
+    eD2States eState;
     uint32_t nOverlayAnimRate;
     D2GfxUnknown_0xa8* pOverlayCur;
     D2GfxInfoStrc* pGfxInfo;
@@ -2681,8 +2681,8 @@ void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
           pOverlayCur->nValue0 = 1;
           break;
           case 8:
-            eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, pOverlayCur->nStatePriorityValue);
-          if (eUnitState == STATE_none) {
+            eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, pOverlayCur->nStatePriorityValue);
+          if (!eActiveState) {
             GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
             continue;
           }
@@ -2724,15 +2724,15 @@ void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
           case 9:
             eOverlayA = pOverlayCur->nValue0;
           eOverlayB = pOverlayCur->nValue1;
-          eUnitState = pOverlayCur->nValue2;
+          eState = pOverlayCur->nValue2;
           GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
-          eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eUnitState);
-          if (eActiveState != STATE_none) {
+          eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
+          if (eActiveState) {
             if (eOverlayA != ~OVERLAY_null) {
-              GFX_AddOverlayToUnit(pUnit, eOverlayA, 8, 0, eUnitState, 0, 0, 0);
+              GFX_AddOverlayToUnit(pUnit, eOverlayA, 8, 0, eState, 0, 0, 0);
             }
             if (eOverlayB != ~OVERLAY_null) {
-              GFX_AddOverlayToUnit(pUnit, eOverlayB, 8, 0, eUnitState, 0, 0, 0);
+              GFX_AddOverlayToUnit(pUnit, eOverlayB, 8, 0, eState, 0, 0, 0);
             }
           }
 
@@ -2769,7 +2769,6 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
     uint8_t* pCofIdentityData;
     D2ObjectsTxt* pObjectsTxt;
     D2MonStats2Txt* pMonStats2;
-    eD2States eUnitStateDisguise;
     int32_t nPrecisionY;
     D2GamePalShiftGreenBloodStrc* pPalette;
     uint32_t nLayerComponentU;
@@ -3028,7 +3027,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
                     }
 
                     pUnitTmp = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
-                    if (pUnitTmp && (pUnitTmp->eUnitType == UNIT_MISSILE || (eUnitStateDisguise = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnitTmp, STATE_attached) , eUnitStateDisguise != STATE_none))) {
+                    if (pUnitTmp && (pUnitTmp->eUnitType == UNIT_MISSILE || (bPerspectiveCapable = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnitTmp, STATE_attached) , bPerspectiveCapable != 0))) {
                       GAME::Wall2::DRAW_WORLD_Unit(pUnitTmp, nLightColor, 1);
                     }
                   }
@@ -3067,8 +3066,8 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
-    if (eUnitState != STATE_none) {
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
+    if (eUnitState) {
       return 0;
     }
 
@@ -3132,8 +3131,8 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
       nShadowY += 0x10;
     }
 
-    BOOL pOnScreen = GFX_IsUnitOnScreen(pUnit, nDrawX, nShadowY, 0, 1);
-    if (!pOnScreen) {
+    eUnitState = GFX_IsUnitOnScreen(pUnit, nDrawX, nShadowY, 0, 1);
+    if (!eUnitState) {
       return 0;
     }
 
@@ -3158,7 +3157,6 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
     int32_t nCoordTmp;
     D2ObjectsTxt* pObjectsTxt;
     int nPrecisionX;
-    BOOL pGfxInfoUnk;
     D2InventoryStrc* pInventoryUsed;
     D2GfxInfoUnkStrc* pDVar1;
     uint8_t* pCofData;
@@ -3185,9 +3183,9 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    eD2States eUnitState;
+    BOOL eUnitState;
     eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
-    if (eUnitState != STATE_none) {
+    if (eUnitState) {
       return 0;
     }
 
@@ -3293,8 +3291,8 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
     }
 
     draw_shadow:
-    pGfxInfoUnk = GFX_IsUnitOnScreen(pUnit, nCoordTmp, nResult, 0, 1);
-    if (pGfxInfoUnk) {
+    eUnitState = GFX_IsUnitOnScreen(pUnit, nCoordTmp, nResult, 0, 1);
+    if (eUnitState) {
       int32_t byLayerComponent;
       eUnitTypeGfx = UNIT_COUNT;
       if (pUnit) {
@@ -3307,7 +3305,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
       D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitTypeGfx, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x926);
       D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&nFrameMetricX, aFrameMetrics);
-      if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (pGfxInfoUnk = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !pGfxInfoUnk) || (pPlayerOrOwner = UNIT::Player::MISSILE_GetOwnerUnit(pUnit) , !pPlayerOrOwner)) {
+      if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (eUnitState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !eUnitState) || (pPlayerOrOwner = UNIT::Player::MISSILE_GetOwnerUnit(pUnit) , !pPlayerOrOwner)) {
         pInventoryUsed = pUnit->pInventory;
       } else {
         pInventoryUsed = pPlayerOrOwner->pInventory;

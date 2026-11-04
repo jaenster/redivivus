@@ -3124,15 +3124,15 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
     exit(-1);
 }
 
-static BOOL __stdcall RENDERER_GLIDE_DrawTransparentWallTile(int32_t nPosX, int32_t nPosY, int32_t pLight, GrColor_t nColor, D2TileLibraryEntryStrc * pTileLibraryEntry, int32_t nScreenPanels) {
+static BOOL __stdcall RENDERER_GLIDE_DrawTransparentWallTile(int32_t nPosX, int32_t nPosY, int32_t pLight, uint8_t nColor, D2TileLibraryEntryStrc * pTileLibraryEntry, int32_t nScreenPanels) {
     BOOL bPerspective = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTileLibraryEntry, 1, 0);
     if (bPerspective) {
       RENDERER_GLIDE_SetColorCombine(1);
-      if ((char)nColor == -1) {
+      if (nColor == 0xff) {
         RENDERER_GLIDE_SetAlphaBlendMode(1);
       } else {
         RENDERER_GLIDE_SetAlphaBlendMode(4);
-        (*GLIDEDLL_grConstantColorValue_4)(nColor & 0xff);
+        (*GLIDEDLL_grConstantColorValue_4)((GrColor_t)nColor);
       }
 
       RENDERER_GLIDE_SetTextureFiltering(1);
@@ -3151,7 +3151,7 @@ static BOOL __stdcall RENDERER_GLIDE_DrawTransparentWallTile(int32_t nPosX, int3
 }
 
 BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc * pLight, int32_t nScreenPanels, int32_t nAlpha) {
-    BOOL bResult = RENDERER_GLIDE_DrawTransparentWallTile(nPosX, nPosY, (int32_t)pLight, nAlpha, pTile, nScreenPanels);
+    BOOL bResult = RENDERER_GLIDE_DrawTransparentWallTile(nPosX, nPosY, (int32_t)pLight, (uint8_t)nAlpha, pTile, nScreenPanels);
     return bResult;
 }
 

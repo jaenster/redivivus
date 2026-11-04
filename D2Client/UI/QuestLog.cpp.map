@@ -161,6 +161,15 @@
       ]
     },
     {
+      "name": "QUESTLOG_FreeQuestImages_Thunk",
+      "address": "004a2600",
+      "lines": [],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "FreeQuestImages"
+      ]
+    },
+    {
       "name": "QUESTLOG_HitTestCloseButton",
       "address": "004a2610",
       "lines": [

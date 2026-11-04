@@ -4,6 +4,8 @@
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
 #include "D2CMP/SRC/SubTile.h"
+#include "D2Client/Message.h"
+#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
@@ -17,14 +19,19 @@
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Glide/Renderer/Glide.h"
 #include "D2Glide/glFloorCache.h"
+#include "D2Sound/Src/D2SoundSmp.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
+#include "Fog/SMem.h"
+#include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
+#include "Storm/Source/SFile.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/UI/Automap.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Direct3D/Renderer/Direct3D.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -37,10 +44,20 @@
 #endif
 
 
+#ifndef RECON_FPTD_fnBinkFrameCallback
+#define RECON_FPTD_fnBinkFrameCallback
+typedef void (__stdcall *fnBinkFrameCallback)();
+#endif
+
 static IDirectDrawSurface7 * gpD3DFloorTileSystemSurface = 0; D2_STATIC_GUARD(gpD3DFloorTileSystemSurface, "gpD3DFloorTileSystemSurface");
 static IDirect3DTexture2 * gpD3DFloorTileMemoryTexture = 0; D2_STATIC_GUARD(gpD3DFloorTileMemoryTexture, "gpD3DFloorTileMemoryTexture");
 static IDirectDrawSurface7 * gpD3DSubtileSystemSurface = 0; D2_STATIC_GUARD(gpD3DSubtileSystemSurface, "gpD3DSubtileSystemSurface");
 static IDirect3DTexture2 * gpD3DSubtileMemoryTexture = 0; D2_STATIC_GUARD(gpD3DSubtileMemoryTexture, "gpD3DSubtileMemoryTexture");
+static uint32_t gnD3DBinkVideoYOffset = 0; D2_STATIC_GUARD(gnD3DBinkVideoYOffset, "gnD3DBinkVideoYOffset");
+static uint32_t gnD3DBinkVideoXOffset = 0; D2_STATIC_GUARD(gnD3DBinkVideoXOffset, "gnD3DBinkVideoXOffset");
+static void * gpBinkVideoD3D = 0; D2_STATIC_GUARD(gpBinkVideoD3D, "gpBinkVideoD3D");
+static uint32_t gnBinkDDSurfaceType = 0; D2_STATIC_GUARD(gnBinkDDSurfaceType, "gnBinkDDSurfaceType");
+static uint32_t gbBinkVideoShouldStop = 0; D2_STATIC_GUARD(gbBinkVideoShouldStop, "gbBinkVideoShouldStop");
 
 namespace D2Direct3D::d3dFloorCache {
 
@@ -752,6 +769,162 @@ void __fastcall D3D_InvalidateTileCachesForEntry(D2TileLibraryEntryStrc * pTile)
 
       nOpEntryIndex++;
     } while (nOpEntryIndex < pTile->nSubTiles);
+}
+
+void __stdcall D3D_RenderBinkVideoFrame() {
+    DDSURFACEDESC2 dwSurfDescSize;
+    if (!gnGlideWindowHandle) {
+      return;
+    }
+
+    dwSurfDescSize.dwSize = 0x7c;
+    memset(&dwSurfDescSize.dwFlags, 0, 0x78);
+    BinkDoFrame(gpBinkVideoD3D);
+    if (!RENDERER_SelectedRendererCore) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3d);
+      exit(-1);
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+    HRESULT dwHResult = g_pD3DSurfaceBackbuffer->lpVtbl->Lock(g_pD3DSurfaceBackbuffer, nullptr, &dwSurfDescSize, 0x21, nullptr);
+    if (!dwHResult) {
+      BinkCopyToBuffer(gpBinkVideoD3D, dwSurfDescSize.lpSurface, dwSurfDescSize.lPitch, *(uint32_t*)((int)gpBinkVideoD3D + 4), gnD3DBinkVideoXOffset, gnD3DBinkVideoYOffset, gnBinkDDSurfaceType);
+      g_pD3DSurfaceBackbuffer->lpVtbl->Unlock(g_pD3DSurfaceBackbuffer, nullptr);
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+    if (*(int*)((int)gpBinkVideoD3D + 0xc) == *(int*)((int)gpBinkVideoD3D + 8)) {
+      gbBinkVideoShouldStop = 1;
+      return;
+    }
+
+    BinkNextFrame(gpBinkVideoD3D);
+}
+
+void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFrameCallback pfnCallback) {
+    // Static local variables (originally global data)
+    static uint32_t gbBinkVideoExitProcess; D2_STATIC_GUARD_BSS(gbBinkVideoExitProcess, "D2Direct3D::d3dFloorCache::D3D_PlayBinkVideo::gbBinkVideoExitProcess");
+    static unsigned int gdwBinkVideoClickTime; D2_STATIC_GUARD_BSS(gdwBinkVideoClickTime, "D2Direct3D::d3dFloorCache::D3D_PlayBinkVideo::gdwBinkVideoClickTime");
+
+    uint32_t dwTickNow;
+    int nBinkWaitResult;
+    uint32_t dwBinkOpenFlags;
+    tagMSG sMsg;
+    HANDLE hVideoFile;
+    bool bSkipRequested;
+    bSkipRequested = false;
+    gbBinkVideoShouldStop = 0;
+    if (!(!gpBinkVideoD3D && !gnRenderState)) {
+      return;
+    }
+
+    gnBinkDDSurfaceType = BinkDDSurfaceType(g_pD3DSurfaceBackbuffer);
+    BinkSetSoundSystem(BinkOpenDirectSound, 0);
+    uint32_t nOpenFlags;
+    nOpenFlags = 4;
+    BOOL BVar1;
+    BVar1 = Fog::Source::SFile::GetUseDirectCommand();
+    if (BVar1) {
+      nOpenFlags = 5;
+    }
+
+    Storm::Source::SFile::SFileOpenFileEx(nullptr, szVideoPath, nOpenFlags, &hVideoFile);
+    if (hVideoFile) {
+      uint32_t dwTickStart;
+      dwBinkOpenFlags = 0x800000;
+      switch (nAudioMode) {
+        case 1:
+          {
+            dwBinkOpenFlags = 0x30800000;
+            break;
+          }
+        case 2:
+          {
+            dwBinkOpenFlags = 0x10800000;
+            break;
+          }
+        case 3:
+          {
+            dwBinkOpenFlags = 0x40800000;
+            break;
+          }
+      }
+
+      gpBinkVideoD3D = (void*)BinkOpen(hVideoFile, dwBinkOpenFlags);
+      if (gpBinkVideoD3D) {
+        gnD3DBinkVideoXOffset = (uint32_t)(RENDERER_nWindowWidth - *(int*)gpBinkVideoD3D) >> 1;
+        if (gnD3DBinkVideoXOffset & 3) {
+          gnD3DBinkVideoXOffset = (gnD3DBinkVideoXOffset | 3) + 1;
+        }
+
+        gnD3DBinkVideoYOffset = (uint32_t)(RENDERER_nWindowHeight - *(int*)((int)gpBinkVideoD3D + 4)) >> 1;
+        dwTickStart = GetTickCount();
+        do {
+          while (true) {
+            if (gbBinkVideoShouldStop && (dwTickNow = GetTickCount() , dwTickNow >= dwTickStart + 500) || gnRenderState || bSkipRequested) {
+              if (gpBinkVideoD3D) {
+                D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
+                BinkClose(gpBinkVideoD3D);
+                /* HANDLE hObject for CloseHandle */ CloseHandle(hVideoFile);
+                D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
+                gpBinkVideoD3D = 0;
+              }
+              if (!gbBinkVideoExitProcess) {
+                return;
+              }
+
+              exit(-1);
+            }
+            if (pfnCallback) {
+              (*pfnCallback)();
+            }
+
+            /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ BVar1 = PeekMessageA(&sMsg, (HWND)0x0, 0, 0, 1);
+            if (BVar1) {
+              break;
+            }
+
+            nBinkWaitResult = BinkWait(gpBinkVideoD3D);
+            if (!nBinkWaitResult) {
+              D3D_RenderBinkVideoFrame();
+            } else {
+              /* DWORD dwMilliseconds for Sleep */ Sleep(1);
+            }
+          }
+
+          if (sMsg.message <= 0x201) {
+            if (sMsg.message == 0x201) {
+              goto request_skip;
+            }
+            if (sMsg.message != 0x12) {
+              if (sMsg.message == 0x102) {
+                goto request_skip;
+              }
+            } else {
+              gbBinkVideoShouldStop = 1;
+              gbBinkVideoExitProcess = 1;
+            }
+          } else {
+            if (!(sMsg.message != 0x204 && sMsg.message != 0x207)) {
+              request_skip:
+              bSkipRequested = true;
+              gdwBinkVideoClickTime = GetTickCount();
+            }
+          }
+
+          /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&sMsg);
+          /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&sMsg);
+        } while (true);
+      }
+
+      /* HANDLE hObject for CloseHandle */ CloseHandle(hVideoFile);
+    }
+    if (!gpBinkVideoD3D) {
+      return;
+    }
+
+    BinkClose(gpBinkVideoD3D);
+    gpBinkVideoD3D = 0;
 }
 
 } // namespace D2Direct3D::d3dFloorCache

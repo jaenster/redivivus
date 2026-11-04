@@ -29,7 +29,7 @@
 #include "Fog/Save.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Game/Monster/AI/AI.h"
+#include "D2Client/UNIT/PlrSkills.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -93,8 +93,8 @@ void __fastcall PLAYERLIST_AddPlayerEntry(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return;
     }
 
-    eD2States eState2 = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit1, STATE_playerbody);
-    if (eState2 != STATE_none) {
+    BOOL eState2 = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit1, STATE_playerbody);
+    if (eState2) {
       return;
     }
 

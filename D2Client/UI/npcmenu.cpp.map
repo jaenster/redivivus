@@ -664,6 +664,15 @@
       ]
     },
     {
+      "name": "thunk_SetInventoryNeedsRefresh",
+      "address": "004b2640",
+      "lines": [],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "INV_SetRefreshFlag"
+      ]
+    },
+    {
       "name": "NPCMENU_ExecuteShopTransaction",
       "address": "004b2650",
       "lines": [

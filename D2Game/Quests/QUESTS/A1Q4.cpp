@@ -2242,13 +2242,13 @@ uint32_t __fastcall Q04_IsTristramActive(::SGAMEDATA * pGame) {
 // drop; subsequent calls drop one shield-type item per scheduled event until the
 // counter is exhausted. No quest record transition.
 void __fastcall Q04_DropShieldRewards(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
-    D2QuestDataStrc* pDroppedItemOut;
+    int32_t pDroppedItemOut;
     D2QuestDataA1Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA1Q4;
     if (!pQuestSpecificData->sSub.bShieldDropActive) {
       int32_t nShieldCount;
       pQuestSpecificData->sSub.bShieldDropActive = true;
       nShieldCount = 0x14;
-      pDroppedItemOut = pQuestData;
+      pDroppedItemOut = (int32_t)pQuestData;
       nShieldCount = D2Client::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), 10, nShieldCount);
       pQuestSpecificData->sSub.nShieldsRemaining = nShieldCount;
       pUnit->dwDropItemCode = 0x20646c67;
@@ -2258,7 +2258,7 @@ void __fastcall Q04_DropShieldRewards(D2QuestDataStrc * pQuestData, D2UnitStrc *
     }
 
     pDroppedItemOut = 0;
-    D2UnitStrc* pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pUnit, ITEMTYPE_Shield, (int32_t*)&pDroppedItemOut, nullptr, -1, 0);
+    D2UnitStrc* pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pUnit, ITEMTYPE_Shield, &pDroppedItemOut, nullptr, -1, 0);
     if (!pDroppedItem) {
       return;
     }

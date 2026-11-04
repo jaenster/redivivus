@@ -8,7 +8,6 @@
 #include "d2_platform.h"
 #include "globals/globals.h"
 
-extern char * gaLanguageNames_00705000[15];
 extern uint32_t gaEnumProcessModuleHandles[1028];
 extern uint8_t IMAGE_RESOURCE_DIRECTORY_00995000[16];
 // Rsrc_Icon_1_409 Size of resource: 0x2e8 bytes

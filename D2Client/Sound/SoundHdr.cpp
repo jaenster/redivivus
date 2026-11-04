@@ -182,8 +182,8 @@ int __stdcall SOUNDHDR_GetGlobal1() {
     return gnSoundIdRangeMax;
 }
 
-void * __stdcall SOUNDHDR_GetGlobal2() {
-    return pSoundChannelDataArray;
+int * __stdcall SOUNDHDR_GetGlobal2() {
+    return (int*)pSoundChannelDataArray;
 }
 
 int __stdcall SOUNDHDR_GetGlobal3() {

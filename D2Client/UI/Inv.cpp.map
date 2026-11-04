@@ -770,7 +770,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "WCHAR",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -803,7 +802,6 @@
         "D2ItemsTxt",
         "D2UnitStrc",
         "WCHAR",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

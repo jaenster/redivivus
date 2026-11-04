@@ -414,8 +414,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
     eD2Skills eCurrentSkillId;
     D2UnitStrc* pPlayerUnit_lcl;
     uint32_t nSkillFlags;
-    eD2States eUnitState;
-    D2CharStatsTxt* pCharStatsTxt;
+    BOOL bInMeleeRange;
     D2MonStatsTxt* pMonStatsTxt;
     int nVelocityPct;
     int32_t nClassId;
@@ -441,7 +440,6 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
 
     pPlayerUnit_lcl = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (pUnit->eUnitType == UNIT_PLAYER && pPlayerUnit_lcl) {
-      BOOL bInMeleeRange;
       bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pPlayerUnit_lcl, 0);
       if (bInMeleeRange) {
         bInMeleeRange = Skills::CLIENT_HandleUnitMessage0x16(pUnit, pPlayerUnit_lcl);
@@ -461,7 +459,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
 
     Sound::SOUND_PlaySound(nSoundId, pUnit, 0, 0, 0);
     setup_charge:
-    if (!pPlayerUnit_lcl || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_uninterruptable) , eUnitState != STATE_none)) {
+    if (!pPlayerUnit_lcl || (bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_uninterruptable) , bInMeleeRange != 0)) {
       D2Common::Skills::SKILL_SetParam1(pSkill, 6);
       nVelocityPct = 0;
     } else {
@@ -472,6 +470,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
     int32_t nBaseVelocity = 0x100;
     D2Common::Skills::SKILL_SetParam4(pSkill, 7);
     if (pUnit->eUnitType == UNIT_PLAYER) {
+      D2CharStatsTxt* pCharStatsTxt;
       pCharStatsTxt = DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
       if (pCharStatsTxt) {
         nBaseVelocity = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity << 8;
@@ -656,14 +655,15 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(D2UnitStrc * pU
 }
 
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
-void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, short * pDoFuncData, D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget) {
-    eD2States eTargetState;
+BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, short * pDoFuncData, D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget) {
+    BOOL eTargetState;
     int32_t bCastSucceeded;
+    uint32_t nClientDoFuncResult;
     bool bCorpseStateSet;
     D2SkillsTxt* pSkillTxt;
     pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
-      return;
+      return 0;
     }
 
     D2UnitStrc* pSavedTarget;
@@ -686,7 +686,7 @@ void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
         bTargetIsActive = UNIT::CUnit::IsActive(pTargetUnit);
         if (bTargetIsActive) {
           eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_corpse_noselect);
-          if (eTargetState != STATE_none) {
+          if (eTargetState) {
             bCorpseStateSet = true;
             D2Common::DATATBLS::ItemStats::SetState(pTargetUnit, STATE_corpse_noselect, 0);
           }
@@ -695,6 +695,7 @@ void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
 
       bCastSucceeded = Skills::SKILLS_CastSkillClientArgsReversed(pUnit, eSkill, pDoFuncData, -1);
       if (!bCastSucceeded) {
+        nClientDoFuncResult = 0;
         goto restore_caster_state;
       }
       if (bCorpseStateSet) {
@@ -711,7 +712,7 @@ void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
       Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)nOverlayId, 2, 0, 0, 0, 0, 0);
     }
 
-    Skills::SKILL_ExecuteClientDoFunc(pUnit, eSkill, (int32_t)pDoFuncData, (uint32_t)bHasTarget);
+    nClientDoFuncResult = Skills::SKILL_ExecuteClientDoFunc(pUnit, eSkill, (int32_t)pDoFuncData, (uint32_t)bHasTarget);
     restore_caster_state:
     if (!pSavedTarget) {
       D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nSavedSP1X, (int16_t)nSavedSP1Y);
@@ -720,19 +721,21 @@ void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
     }
     if (eSavedUnitFlags >> 6 & 1) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-      return;
+      return nClientDoFuncResult;
     }
 
     pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
-    return;
+    return nClientDoFuncResult;
 }
 
-void __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, D2UnitStrc * pTargetUnit, uint16_t bHasTarget) {
-    if (!(pUnit && pTargetUnit)) {
-      return;
+BOOL __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, D2UnitStrc * pTargetUnit, uint16_t bHasTarget) {
+    if (pUnit && pTargetUnit) {
+      BOOL nResult;
+      nResult = SKILL_ExecuteItemCast(pUnit, eSkill, pSkillLevelData, pTargetUnit, 0, 0, bHasTarget);
+      return nResult;
     }
 
-    SKILL_ExecuteItemCast(pUnit, eSkill, pSkillLevelData, pTargetUnit, 0, 0, bHasTarget);
+    return 0;
 }
 
 void __fastcall SKILL_ExecuteItemCastAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam) {

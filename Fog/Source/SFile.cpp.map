@@ -553,6 +553,15 @@
         "_SYSTEMTIME",
         "uint32_t"
       ]
+    },
+    {
+      "name": "FILETOOLS_SetLogFilePathWithoutDateAndExtension2",
+      "address": "00407960",
+      "lines": [],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "FILETOOLS_SetLogFilePathWithoutDateAndExtension2"
+      ]
     }
   ]
 }

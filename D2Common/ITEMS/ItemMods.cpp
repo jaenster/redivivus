@@ -439,7 +439,7 @@ static void __stdcall ITEMMOD_MaximizeStatForEnhanced(eD2UnitStat eEnhancedProp,
 
         nCurrentAC = Items::ITEM_GetTxtItemTypes_throwable(pUnit);
         if (nCurrentAC && pItemsTxt->nMinMisDam) {
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, (uint32_t)(uint8_t)pItemsTxt->nMinMisDam, 0);
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, (uint32_t)pItemsTxt->nMinMisDam, 0);
         }
       }
     }
@@ -2130,7 +2130,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, D2UnitStrc * pUni
 
           nStatIdSaved = Items::ITEM_GetTxtItemTypes_throwable(pItem);
           if (nStatIdSaved && pBaseTxtLine->nMinMisDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_mindamage, (uint32_t)(uint8_t)pBaseTxtLine->nMinMisDam, 0);
+            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_mindamage, (uint32_t)pBaseTxtLine->nMinMisDam, 0);
           }
         }
       }

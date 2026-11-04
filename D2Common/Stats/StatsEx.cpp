@@ -40,6 +40,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "globals/globals.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/Monster/AI/AI.h"

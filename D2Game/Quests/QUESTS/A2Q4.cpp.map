@@ -26,6 +26,19 @@
       ]
     },
     {
+      "name": "Q12_Callback10_PlayerLeavesGame",
+      "address": "0059ad40",
+      "lines": [],
+      "namespace": "D2Game::Quests::QUESTS::A2Q4",
+      "calledFunctions": [
+        "SetRewardAndFinishFlags"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q12_NotifyArcaneComplete",
       "address": "0059ad50",
       "lines": [

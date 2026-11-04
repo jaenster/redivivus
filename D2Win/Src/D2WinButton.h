@@ -38,7 +38,7 @@ void __fastcall D2WINBUTTON_SetLocalizedTextWithFont(::D2WinButton * pButton, in
 // Sets button bounding box: x, y, width, height (fields 3-6).
 void __fastcall D2WINBUTTON_SetBounds(::D2WinButton * pButton, int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight);
 // Invokes button click callback (field 9) and optional secondary callback (field 10). Sets active flag (field 0x13) before callback dispatch. Uses global recursion counter INT_007d55c4.
-void __fastcall D2WINBUTTON_InvokeClickCallback(::D2WinButton * * ppButton);
+void __fastcall D2WINBUTTON_InvokeClickCallback(struct D2ControlMsg * ppButton);
 // Sets the active image index (field 0x17) for multi-state button controls.
 void __fastcall D2WINBUTTON_SetImageIndex(::D2WinButton * pButton, int32_t nImageIndex);
 // Handles mouse wheel input for scrollable buttons. Checks scroll up/down flags (bits 3-4 of field 0x10), invokes wheel callback (field 0xd) if delta is non-zero. Uses global recursion counter.

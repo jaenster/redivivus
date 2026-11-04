@@ -235,6 +235,10 @@ typedef HRESULT (__stdcall *QueryInterface)(struct IDirectDraw * This, IID * rii
 #define RECON_FPTD_Release
 typedef ULONG (__stdcall *Release)(struct IDirectDraw * This);
 #endif
+#ifndef RECON_FPTD_fnBinkFrameCallback
+#define RECON_FPTD_fnBinkFrameCallback
+typedef void (__stdcall *fnBinkFrameCallback)();
+#endif
 
 struct IDirectDrawVtbl;
 struct IDirectDrawPaletteVtbl;
@@ -474,6 +478,8 @@ void __fastcall CloseSmacker(struct D2SmackerContextStrc * pContext);
 // @sourcefile .\Src\ddSmack.cpp
 void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int32_t nVersion);
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
+void __stdcall BINK_RenderVideoFrame();
+void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFrameCallback pfnFrameCallback);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2DDraw::Renderer::DirectDraw

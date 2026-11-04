@@ -98,5 +98,9 @@ namespace Fog::Save {
 DWORD __stdcall CalculateChecksum(uint8_t * pSaveFile, int32_t nSize);
 // Computes the .d2s save-file checksum-style accumulator over nSize bytes at pbData: sums gnGameSaveDataVersion[byte] for each input byte (the global is a 256-entry weight/lookup table indexed by byte value, not a literal version int). Returns the accumulated int. __stdcall. Used to validate/seed integrity of save data blocks.
 int32_t __stdcall SAVE_CalculateChecksum(uint8_t * pbData, int32_t nSize);
+int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pBuffer);
+void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nValue);
+int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pBuffer);
+uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nNumber);
 
 } // namespace Fog::Save

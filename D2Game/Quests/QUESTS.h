@@ -251,7 +251,7 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, struct
 struct D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique);
 void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MapAIStrc * pMapAI);
 void __fastcall AttachToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, BOOL bExpectedResult);
-void __stdcall QUEST_InitializeQuestDataStruct(uint32_t pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, struct D2QuestDataStrc * pQuestData);
+void __stdcall QUEST_InitializeQuestDataStruct(::SGAMEDATA * pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, struct D2QuestDataStrc * pQuestData);
 // Builds the game's quest-state object graph at game creation. Allocates one 0xF8-byte D2QuestDataStrc per entry in aQuestInitDataExtended (the real act quests) and per entry in QuestInitDataSimple (sub-quests/QUESTINT_SimpleQuest1+), linking them into a singly-linked list via pPrev, stamping nAct/nQuestNoInternal/pGame and calling each entry's fpQuestInit/fpQuestData callback (validated with IsBadCodePtr). Then allocates the 0x24-byte D2QuestControlStrc head (pQuestData=list, fresh seed derived from the game seed with nSeedHigh=0x29A, a quest-flag BitBuffer) and stores it in pGame->pQuestControl. Halts via ERROR_UnrecoverableInternalError on a bad callback pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall AllocQuestControl(::SGAMEDATA * pGame);

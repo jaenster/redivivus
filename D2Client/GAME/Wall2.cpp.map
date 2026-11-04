@@ -121,7 +121,6 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "DRAWMODE",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"

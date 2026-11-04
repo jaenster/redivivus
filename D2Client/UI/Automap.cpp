@@ -2708,7 +2708,7 @@ static void __stdcall AUTOMAP_DrawXMarker(int32_t nX, DWORD nColor, int32_t nY) 
 static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     int16_t nUnitPartyId;
     int nTemp;
-    eD2States eUnitState;
+    BOOL eUnitState;
     uint32_t bHasColor;
     int32_t nTargetX;
     int32_t nTargetY;
@@ -2723,7 +2723,6 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     int nTransformClassId;
     uint16_t* pUnitTypeOrName;
     uD2UnitMode uUnitColor;
-    BOOL bHasInteract;
     if (!pUnit) {
       pUnitTypeOrName = (uint16_t*)0x6;
     } else {
@@ -2731,7 +2730,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     }
 
     uUnitColor.ePlayerMode &= -256;
-    if (!(pUnitTypeOrName || (nTemp = UNIT::CUnit::IsActive(pUnit) , !nTemp) || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eUnitState != STATE_none))) {
+    if (!(pUnitTypeOrName || (nTemp = UNIT::CUnit::IsActive(pUnit) , !nTemp) || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eUnitState != 0))) {
       return;
     }
 
@@ -2758,9 +2757,9 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
           pUnitTypeOrName = (uint16_t*)D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
           wPortalLabel = D2Lang::StrTable::strtable::GetLocaleString(0xcf3);
           dwTextColor = uUnitColor.ePlayerMode & 0xff;
-          bHasInteract = 0;
+          eUnitState = 0;
           nTemp += -0x12;
-          D2Win::Src::D2WinFont::DRAW_text(wPortalLabel, xLocation - D2Win::Src::D2WinFont::DRAW_text0(wPortalLabel) / 2, nTemp, dwTextColor, bHasInteract);
+          D2Win::Src::D2WinFont::DRAW_text(wPortalLabel, xLocation - D2Win::Src::D2WinFont::DRAW_text0(wPortalLabel) / 2, nTemp, dwTextColor, eUnitState);
           D2Win::Src::D2WinFont::SetAndReturnLastFont((int32_t)pUnitTypeOrName);
           return;
         }
@@ -2779,14 +2778,14 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
         nClassId = pUnit->nClassId;
       }
 
-      bHasInteract = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nClassId, interact);
-      if (bHasInteract) {
+      eUnitState = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nClassId, interact);
+      if (eUnitState) {
         uUnitColor.ePlayerMode = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
         pUnitTypeOrName = UNIT::CUnit::GetName(pUnit);
-        bHasInteract = 0;
+        eUnitState = 0;
         nTargetY = 4;
         nTemp += -0x12;
-        D2Win::Src::D2WinFont::DRAW_text(pUnitTypeOrName, xLocation - D2Win::Src::D2WinFont::DRAW_text0(pUnitTypeOrName) / 2, nTemp, nTargetY, bHasInteract);
+        D2Win::Src::D2WinFont::DRAW_text(pUnitTypeOrName, xLocation - D2Win::Src::D2WinFont::DRAW_text0(pUnitTypeOrName) / 2, nTemp, nTargetY, eUnitState);
         D2Win::Src::D2WinFont::SetAndReturnLastFont(uUnitColor.ePlayerMode);
       }
       if (!AutoMapPartyNames) {
@@ -2811,8 +2810,8 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
         return;
       }
 
-      bHasInteract = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
-      if (!bHasInteract) {
+      eUnitState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
+      if (!eUnitState) {
         return;
       }
 

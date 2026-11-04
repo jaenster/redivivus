@@ -14,10 +14,19 @@ struct D2GroundSubTileStrc;
 namespace D2gfx {
 
 // Function declarations
+void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nScreenY);
+void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightLevel);
+// Stack-slot reuse: with perspective on, the low byte of the pCoords slot caches the first byte read through pCoords (tested against 0xf8).
+void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, uint8_t * pCoords);
+void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, int32_t nLightVal);
+void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, int * pCoords, int32_t nLightVal);
 void __fastcall D2GFXHELPER_DrawGroundTileDispatch1(struct D2GroundSubTileStrc * pSubTile, uint8_t * pDst, uint8_t byLightVal);
 void __fastcall D2GFXHELPER_DrawGroundTileDispatch2(int32_t nSubTilePtr, uint8_t * pDst, int * pLightCorners);
+void __fastcall D2GFXHELPER_DrawGroundTileWithLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint32_t nLightVal);
+void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, int * pLightCorners);
 // Renders a single ground tile at isometric coordinates with perspective lighting. Checks collision bounds and dispatches to perspective or flat-shaded path based on RenderMode and quality settings.
 BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightTablePtr);
 void __stdcall D2GFX_SetupRenderFunctions();
+void __fastcall fpFillYBufferTable(void * ppvBits, int32_t nWidth, int32_t nHeight, int32_t a4);
 
 } // namespace D2gfx

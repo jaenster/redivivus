@@ -30,7 +30,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]

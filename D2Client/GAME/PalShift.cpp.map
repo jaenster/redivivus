@@ -190,7 +190,7 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t",
-        "uint32_t"
+        "uint16_t"
       ]
     },
     {

@@ -67,6 +67,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Game/SKILLS/SkillSor.h"
 #include "Fog/Src/Safesock.h"
@@ -174,7 +175,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
     int16_t nY;
     int nVelTmp;
     D2UnitStrc* pUnit_00;
-    eD2States eCurrentState;
+    BOOL eCurrentState;
     D2SkillArgStrc sSkillArg;
     int32_t nCalcResult;
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -227,7 +228,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
       nCalcResult = D2Common::Skills::SKILL_GetParam1(pSkill);
       if (pGame->dwGameFrame < nCalcResult) {
         eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-        if (eCurrentState != STATE_none) {
+        if (eCurrentState) {
           GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
           GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + 3, 0, 0);
           return 1;
@@ -657,7 +658,6 @@ static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWOR
 // SrvDoFunc 131: on a living monster target with base id 0x1C5, rolls a random percent against calc[0] and, if the target lacks auratargetstate, calls SKILLEMONST_TransformMonsterClass; otherwise falls through to SKILLEMONST_ApplyAuraBuff. Returns FALSE if target is dead or skill record invalid.
 BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nRandPct;
-    eD2States eTargetState;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
@@ -682,8 +682,8 @@ BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pG
           nBaseId = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
           nRandPct = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
           if (nBaseId <= (int)nRandPct) {
-            eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, (int)pSkillRecord->auratargetstate);
-            if (eTargetState == STATE_none) {
+            bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, (int)pSkillRecord->auratargetstate);
+            if (!bIsDead) {
               SKILLEMONST_TransformMonsterClass(pUnit, nSkillLvl, pGame, pUnit_00, eSkill);
               return 1;
             }
@@ -723,7 +723,6 @@ BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGam
 }
 
 BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStrc * pUnit) {
-    eD2States eUnitState;
     int32_t nAlignment;
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return 0;
@@ -742,8 +741,8 @@ BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStr
     switch (nBaseId) {
       default:
         {
-          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_pregnant);
-          if (eUnitState == STATE_none) {
+          bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_pregnant);
+          if (!bIsDead) {
             nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
             return (uint32_t)(nAlignment != 2);
           }
@@ -1115,8 +1114,8 @@ BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, D2UnitSt
       return 0;
     }
 
-    eD2States eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_corpse_noselect);
-    if (eTargetState == STATE_none) {
+    BOOL eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_corpse_noselect);
+    if (!eTargetState) {
       D2SkillArgStrc sSkillArg;
       D2Common::DATATBLS::ItemStats::SetState(pTarget, STATE_corpse_noselect, 1);
       D2Common::Unit::ROOM_LinkUnitToUpdateList(pTarget);

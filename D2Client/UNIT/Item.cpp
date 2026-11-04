@@ -1203,8 +1203,8 @@ BOOL __fastcall PlayerIsUnInterruptable(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    eD2States eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_uninterruptable);
-    if (eStateResult == STATE_none) {
+    BOOL eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_uninterruptable);
+    if (!eStateResult) {
       return 0;
     }
 

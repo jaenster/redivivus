@@ -29,6 +29,7 @@
 #include "globals/globals.h"
 #include "D2Client/SKILLS/SkillsMon.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"

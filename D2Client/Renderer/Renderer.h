@@ -38,7 +38,7 @@ typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 #ifndef RECON_FPTD_fpActivateWindow
 #define RECON_FPTD_fpActivateWindow
-typedef BOOL (__fastcall *fpActivateWindow)();
+typedef BOOL (__fastcall *fpActivateWindow)(BOOL bActive);
 #endif
 #ifndef RECON_FPTD_fpAdjustPerspectivePosition
 #define RECON_FPTD_fpAdjustPerspectivePosition
@@ -262,7 +262,7 @@ struct D2RendererFunctionsStrc {
     /* 0x20 */ BOOL (__fastcall *fpEndScene2)();
     /* 0x24 */ BOOL (__fastcall *nfpResizeWindow)(HWND, BOOL);
     /* 0x28 */ BOOL (__fastcall *nfpGetBackBuffer)(BYTE *);
-    /* 0x2C */ BOOL (__fastcall *nfpActivateWindow)();
+    /* 0x2C */ BOOL (__fastcall *nfpActivateWindow)(BOOL);
     /* 0x30 */ BOOL (__fastcall *nfpSetOption)(int, int);
     /* 0x34 */ BOOL (__stdcall *nfpBeginCutScene)();
     /* 0x38 */ void (__fastcall *nfpPlayCutScene)(char *, int, fnBinkFrameCallback);

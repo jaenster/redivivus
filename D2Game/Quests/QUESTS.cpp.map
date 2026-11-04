@@ -1865,6 +1865,7 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc",
+        "SGAMEDATA",
         "uint32_t"
       ]
     },

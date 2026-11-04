@@ -35,9 +35,9 @@
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/Warden/WardenClient.h"
 #include "D2Common/INVENTORY/Inventory.h"
-#include "D2Game/Monster/AI/AI.h"
 
 
 // =============================================================================
@@ -331,18 +331,6 @@ int geSoundLastPlayerAnimMode = 0; D2_GLOBAL_GUARD(geSoundLastPlayerAnimMode, "g
 BOOL pAudioMixerInterface = 0; D2_GLOBAL_GUARD(pAudioMixerInterface, "pAudioMixerInterface");
 int32_t int32_t_007c8c7c = 0; D2_GLOBAL_GUARD(int32_t_007c8c7c, "int32_t_007c8c7c");
 uint32_t gnActiveSoundChannelCount = 0; D2_GLOBAL_GUARD(gnActiveSoundChannelCount, "gnActiveSoundChannelCount");
-int gnTileClipXMax = 0; D2_GLOBAL_GUARD(gnTileClipXMax, "gnTileClipXMax");
-int gnTileClipYMin = 0; D2_GLOBAL_GUARD(gnTileClipYMin, "gnTileClipYMin");
-int gnTileInnerClipYMax = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMax, "gnTileInnerClipYMax");
-int gnTileInnerClipXMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMin, "gnTileInnerClipXMin");
-int gnMinTileScreenY = 0; D2_GLOBAL_GUARD(gnMinTileScreenY, "gnMinTileScreenY");
-int gnTileClipLeft = 0; D2_GLOBAL_GUARD(gnTileClipLeft, "gnTileClipLeft");
-int gnTileInnerClipYMinRow = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMinRow, "gnTileInnerClipYMinRow");
-int gnTileInnerClipYMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMin, "gnTileInnerClipYMin");
-int gnTileInnerClipXMax_b = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMax_b, "gnTileInnerClipXMax_b");
-int gnMinTileDrawY = 0; D2_GLOBAL_GUARD(gnMinTileDrawY, "gnMinTileDrawY");
-int gnMinTileScreenY_b = 0; D2_GLOBAL_GUARD(gnMinTileScreenY_b, "gnMinTileScreenY_b");
-int gnTileClipRight = 0; D2_GLOBAL_GUARD(gnTileClipRight, "gnTileClipRight");
 
 namespace D2Common::Drlg::Maze {
 
@@ -851,3 +839,15 @@ namespace D2Client::Draw::LightMap {
 D2LightMapStrc * gpLightMap = 0; D2_GLOBAL_GUARD(gpLightMap, "D2Client::Draw::LightMap::gpLightMap");
 
 } // namespace D2Client::Draw::LightMap
+
+namespace D2Client::Mouse {
+
+} // namespace D2Client::Mouse
+
+namespace D2Client::Forms {
+
+} // namespace D2Client::Forms
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record

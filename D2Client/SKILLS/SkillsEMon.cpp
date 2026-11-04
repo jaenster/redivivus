@@ -55,6 +55,7 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/SKILLS/SkillsMon.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -636,8 +637,8 @@ BOOL __fastcall Skills_CltStFunc_SetTimedDurationAndInfernoState(D2UnitStrc * pU
 
     int32_t nGameTick = GAME::Game::GetEntryIndex();
     D2Common::Skills::SKILL_SetParam1(pSkill, nGameTick + nDuration);
-    eD2States eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eInfernoState == STATE_none) {
+    BOOL eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (!eInfernoState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
     }
 

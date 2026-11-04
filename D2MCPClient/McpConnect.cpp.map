@@ -53,6 +53,9 @@
         "NET_MCP_CLIENT_ReadAndParsePacket",
         "ReadBytesFromSocket",
         "HandleIncomingPacket"
+      ],
+      "usedTypes": [
+        "uint16_t"
       ]
     },
     {

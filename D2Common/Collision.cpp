@@ -853,7 +853,7 @@ static void __stdcall AddCollisionFlagToCoords(int32_t nY, int32_t nX, D2RoomCol
 
 // Stamps collision flags from a tile library array (pTileData, nTilesSize tiles) into pCollisionMap for tiles that fall inside the room bounds. Derives eCollisionFlags from per-tile nFlags bits (COLLIDE_ALTERNATE_FLOOR / BLOCK_PLAYER / WALL). bReplace selects between AddCollision and SetCollision (overwrite vs. OR). Called during room collision grid build.
 static void __stdcall TileLibrary_SetupCollision(D2DrlgTileDataStrc * pTileData, int32_t nTilesSize, D2RoomCollisionGridStrc * pCollisionMap, D2RoomCollisionGridStrc * pCollisionMapCurrent, BOOL bReplace) {
-    eCollisionFlags eCollisionFlag;
+    uint32_t eCollisionFlag;
     int nY;
     int nX;
     int nWorldY;
@@ -881,18 +881,18 @@ static void __stdcall TileLibrary_SetupCollision(D2DrlgTileDataStrc * pTileData,
         }
 
         nTileFlags = (uint32_t)pTileLibraryEntry[-1];
-        eCollisionFlag = COLLIDE_NONE;
+        eCollisionFlag = 0;
         if (nTileFlags & 2) {
-          eCollisionFlag = COLLIDE_ALTERNATE_FLOOR;
+          eCollisionFlag = 0x10;
         }
         if (nTileFlags & 0x40) {
-          eCollisionFlag |= COLLIDE_BLOCK_PLAYER;
+          eCollisionFlag |= 1;
         }
         if ((char)nTileFlags < '\0') {
-          eCollisionFlag |= COLLIDE_WALL;
+          eCollisionFlag |= 4;
         }
-        if (eCollisionFlag != COLLIDE_NONE) {
-          AddCollisionFlagToCoords(nY, nX, pCollisionMap, eCollisionFlag);
+        if (eCollisionFlag) {
+          AddCollisionFlagToCoords(nY, nX, pCollisionMap, (eCollisionFlags)eCollisionFlag);
         }
       }
 

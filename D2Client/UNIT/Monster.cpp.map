@@ -756,7 +756,6 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "uint32_t",
         "uint8_t"
       ]
@@ -896,7 +895,6 @@
         "D2MonStats2Txt",
         "D2SkillArgStrc",
         "D2UnitStrc",
-        "eD2States",
         "uint8_t"
       ]
     },
@@ -1046,7 +1044,6 @@
         "eD2MonsterAnimMode",
         "eD2PlayerAnimMode",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "eOverlayId",
         "int32_t",
@@ -1217,7 +1214,6 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "eD2PlayerAnimMode",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"

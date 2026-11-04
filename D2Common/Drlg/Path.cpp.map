@@ -977,9 +977,9 @@
         "DRLGPATH_FindNodeInOpenList"
       ],
       "usedTypes": [
+        "D2CoordsShort",
         "D2DrlgPathNodeStrc",
-        "int32_t",
-        "uint32_t"
+        "D2DrlgPathSearchCtxStrc"
       ]
     },
     {
@@ -996,8 +996,9 @@
         "DRLGPATH_FindNodeInClosedList"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "D2CoordsShort",
+        "D2DrlgPathNodeStrc",
+        "D2DrlgPathSearchCtxStrc"
       ]
     },
     {

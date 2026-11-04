@@ -221,9 +221,9 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       nVelocity <<= 8;
     }
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[3]) {
-      eD2States eSlowMissileState;
+      BOOL eSlowMissileState;
       eSlowMissileState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pArgs->pOwner, STATE_slowmissiles);
-      if (eSlowMissileState != STATE_none) {
+      if (eSlowMissileState) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pArgs->pOwner, STATE_slowmissiles);
         if (pStatList) {
           nTmpY = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_skill_handofathena, 0);

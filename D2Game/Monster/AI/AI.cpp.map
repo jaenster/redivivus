@@ -172,7 +172,6 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -252,8 +251,7 @@
       "usedTypes": [
         "D2AiParamStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {
@@ -662,7 +660,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -1398,7 +1395,6 @@
         "D2StateExArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -1953,7 +1949,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",
-        "eD2States",
         "int32_t",
         "uint8_t"
       ]
@@ -2479,7 +2474,6 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -2955,7 +2949,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -3366,7 +3359,6 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -3511,7 +3503,6 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -3624,7 +3615,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "uint32_t"
       ]
     },
@@ -4011,7 +4001,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "int64_t",
         "uint32_t",
@@ -4073,8 +4062,7 @@
         "D2AiGeneralStrc",
         "D2AiParamStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {
@@ -4128,7 +4116,6 @@
         "eD2CollisionShapeType",
         "eD2MonsterAnimMode",
         "eD2PlayerAnimMode",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -5192,7 +5179,6 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -5255,8 +5241,7 @@
         "D2AiParamStrc",
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {
@@ -5289,7 +5274,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -5341,7 +5325,6 @@
         "eD2CollisionShapeType",
         "eD2LevelId",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -5455,7 +5438,6 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -5505,7 +5487,6 @@
         "eD2CollisionShapeType",
         "eD2LevelId",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t",
@@ -5752,7 +5733,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -6307,7 +6287,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitStat",
         "eD2UnitType",
         "int32_t",
@@ -6366,7 +6345,6 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -6591,7 +6569,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2PlayerAnimMode",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -6970,7 +6947,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t",
         "int64_t",
         "uint32_t"
@@ -7068,7 +7044,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -7105,7 +7080,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "int32_t"
       ]
     },
@@ -7278,7 +7252,6 @@
         "D2SuperUniquesTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "int16_t",
         "int32_t",
@@ -8514,7 +8487,6 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -9514,7 +9486,6 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -9662,8 +9633,7 @@
         "D2AiGeneralStrc",
         "D2AiParamStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2States"
+        "SGAMEDATA"
       ]
     },
     {
@@ -9728,7 +9698,6 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int64_t",
         "uint32_t"
       ]
@@ -9892,7 +9861,6 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -10010,7 +9978,6 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -10074,7 +10041,6 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
         "int32_t",
         "int64_t",
         "uint32_t",
@@ -10534,7 +10500,6 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "eD2States",
         "eD2UnitType",
         "int32_t",
         "uint32_t"

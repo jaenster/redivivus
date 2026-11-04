@@ -78,6 +78,7 @@
 #include "D2Client/SKILLS/SkillsNec.h"
 #include "D2Client/SKILLS/SkillsSor.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -774,7 +775,6 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
     BOOL bInTown;
     uint32_t bTargetCheck;
     D2MonStatsTxt* pMonStats;
-    eD2States eState;
     D2RoomStrc* pTargetRoom;
     bool bShouldReturn;
     POINT ptCaster;
@@ -887,7 +887,7 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
           return 0;
         }
       }
-      if ((!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]))))) && (!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0)) && (!(nTargetFlags & 0x20000) || (bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0) , bInTown != 0)) && (!(nTargetFlags & 0x80000) || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , eState == STATE_none))) {
+      if ((!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]))))) && (!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0)) && (!(nTargetFlags & 0x20000) || (bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0) , bInTown != 0)) && (!(nTargetFlags & 0x80000) || (bInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , !bInTown))) {
         if (!(nTargetFlags & 0x200)) {
           return 1;
         }
@@ -1280,7 +1280,6 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
     uint32_t nSoundOrAllied;
     BOOL bInTown;
     eD2PlayerAnimMode eAnimMode;
-    eD2States eDeadUnitState;
     eD2Sounds eCastSound;
     int bHasOverlay;
     D2ServerMessageHandleStrc sCancelHandleMsg;
@@ -1418,8 +1417,8 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
       eAnimMode = PLAYER_ChooseAttackAnimation(pUnit);
     }
     if (eAnimMode == Death) {
-      eDeadUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-      if (eDeadUnitState != STATE_none && *((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)gadwBitMasks[3] || !pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+      bInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+      if (bInTown && *((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)gadwBitMasks[3] || !pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
         goto run_client_start;
       }
 
@@ -2106,7 +2105,6 @@ void __fastcall SKILLS_CreateMissileSpiralGrid(int32_t nSkillLevel, D2SkillArgSt
 void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
     D2StatListExStrc* pStateStatList;
     int nSkillLevel;
-    eD2States eState;
     eD2Skills eD2Skill;
     short int nActiveFuncIdx;
     D2StatesTxt* pStatesTxt;
@@ -2121,10 +2119,10 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
     }
 
     do {
-      eD2States eUnitState;
+      eD2States eState;
       eState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x05[nStateListIdx];
-      eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-      pStatesTxt = eUnitState != STATE_none && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+      bHasDmgState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
+      pStatesTxt = bHasDmgState && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
       if (pStatesTxt) {
         nActiveFuncIdx = pStatesTxt->cltactivefunc;
         if (nActiveFuncIdx >= 0 && nActiveFuncIdx < SKILLCLTDOFUNCS_SIZE && SKILLCLTDOFUNCS[nActiveFuncIdx]) {
@@ -2389,8 +2387,8 @@ void __fastcall SKILLS_CltProcessActiveSkill(D2UnitStrc * pUnit, eD2Skills eExpi
       return;
     }
 
-    eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skill_move);
-    if (eState != STATE_none) {
+    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skill_move);
+    if (eState) {
       return;
     }
 

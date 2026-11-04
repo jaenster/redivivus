@@ -484,7 +484,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x03_NEWACT(struct D2GSPacketSrv0x03 * p
 void __fastcall SCMD_Rcv_IgnoreShared(char * pBytes);
 // A 5-byte thunk whose entire body is a tail call to
 // D2Game::Game::Msg::NET_D2GS_CLIENT_Send_0x6B(pBytes).
-void __fastcall NET_D2GS_CLIENT_Incoming0x02_LoadSuccess(char * pBytes);
+void __stdcall NET_D2GS_CLIENT_Incoming0x02_LoadSuccess();
 // Returns the act of the level containing the player's current room; halts (line 1319) when there is no current room.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __stdcall CLIENT_GetCurrentRoomAct();

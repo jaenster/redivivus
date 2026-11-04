@@ -224,7 +224,6 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2Sounds",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ]
@@ -388,7 +387,6 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
-        "eD2States",
         "eD2UnitFlags",
         "int16_t",
         "int32_t",

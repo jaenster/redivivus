@@ -4399,7 +4399,7 @@ void __fastcall PlayUnitInitSound(D2UnitStrc * pUnit) {
 
 // Plays the sound effect(s) triggered when a unit (player or monster) changes animation mode (nMode). Skips for invisible monsters. Resolves and plays the base mode-change sound(s) via UNITSND_ResolveSoundFromFlags + SOUND_PlaySound, boosting channel priority to 0xFF for the local player. On mode 0 for monsters it stops/mutes combat sounds. Skips further sounds while frozen or when the unit's last-hit class nibble == 0xA0. For monsters, looks up the MonSounds.txt row and plays the Hit (modes 3/0xD) or Death sound with its delay (special-cases goatman hit chaining); for players it plays from the class base-sound table (modes 4/0x13 use entry[0] else entry[1]). Finally records the current client tick into the unit's dwSfxTicks and the global gdwSoundChannelIndex. Client-side audio; custom register args (pUnit@EAX, nMode on stack).
 static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pUnit) {
-    eD2States eUnitState;
+    BOOL eUnitState;
     D2MonSoundsTxt* pMonSoundsLine;
     DWORD nClassId;
     eD2Sounds* pBaseSoundTable;
@@ -4413,7 +4413,7 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
     nSfxTick = pUnit->dwLastHitClass;
     if (eUnitType == UNIT_MONSTER) {
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_invis);
-      if (eUnitState != STATE_none) {
+      if (eUnitState) {
         return;
       }
     }
@@ -4435,7 +4435,7 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
     }
 
     eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eUnitState != STATE_none) {
+    if (eUnitState) {
       return;
     }
     if (((uint8_t)nSfxTick & 0xf0) == 0xa0) {

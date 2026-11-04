@@ -327,34 +327,34 @@ static BOOL SELECT_HandleMouseInput(int * pnMouseX, int * pnMouseY) {
 }
 
 static uint32_t __stdcall SELECT_IsDoorBlockingUnit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    POINT ptDoorCoord;
-    POINT ptTargetCoord;
-    POINT ptPlayerCoord;
+    D2CoordUnsignedStrc ptDoorCoord;
+    D2CoordUnsignedStrc ptTargetCoord;
+    D2CoordUnsignedStrc ptPlayerCoord;
     if (!(!pUnit2 || pUnit2->eAnimMode.ePlayerMode == Death)) {
       return 0;
     }
 
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pPlayerUnit_lcl) {
-      D2Common::Units::GetCoords(pPlayerUnit_lcl, &ptPlayerCoord);
+      D2Common::Units::GetCoords(pPlayerUnit_lcl, (POINT*)&ptPlayerCoord);
     } else {
-      ptPlayerCoord.x = 0;
-      ptPlayerCoord.y = 0;
+      ptPlayerCoord.nX = 0;
+      ptPlayerCoord.nY = 0;
     }
 
-    D2Common::Units::GetCoords(pUnit, &ptDoorCoord);
-    D2Common::Units::GetCoords(pUnit2, &ptTargetCoord);
+    D2Common::Units::GetCoords(pUnit, (POINT*)&ptDoorCoord);
+    D2Common::Units::GetCoords(pUnit2, (POINT*)&ptTargetCoord);
     D2ObjectsTxt* pObjectsTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit2);
     if (pObjectsTxt->Orientation == '\x01') {
-      if ((uint32_t)ptTargetCoord.y <= (uint32_t)ptDoorCoord.y || (uint32_t)ptTargetCoord.y >= (uint32_t)ptPlayerCoord.y) {
-        if ((uint32_t)ptDoorCoord.y <= (uint32_t)ptTargetCoord.y) {
+      if (ptTargetCoord.nY <= ptDoorCoord.nY || ptTargetCoord.nY >= ptPlayerCoord.nY) {
+        if (ptDoorCoord.nY <= ptTargetCoord.nY) {
           return 1;
         }
-        if ((uint32_t)ptTargetCoord.y <= (uint32_t)ptPlayerCoord.y) {
+        if (ptTargetCoord.nY <= ptPlayerCoord.nY) {
           return 1;
         }
       }
-    } else if (((uint32_t)ptTargetCoord.x >= (uint32_t)ptDoorCoord.x || (uint32_t)ptTargetCoord.x <= (uint32_t)ptPlayerCoord.x) && ((uint32_t)ptTargetCoord.x <= (uint32_t)ptDoorCoord.x || (uint32_t)ptTargetCoord.x >= (uint32_t)ptPlayerCoord.x)) {
+    } else if ((ptTargetCoord.nX >= ptDoorCoord.nX || ptTargetCoord.nX <= ptPlayerCoord.nX) && (ptTargetCoord.nX <= ptDoorCoord.nX || ptTargetCoord.nX >= ptPlayerCoord.nX)) {
       return 1;
     }
 
@@ -780,7 +780,6 @@ void __stdcall SELECT_UpdateSelectedUnit() {
 
     uint32_t bHitTest;
     int nIsActive;
-    eD2States eUnitState;
     int32_t nBestDistSq;
     D2UnitStrc* pIterUnit;
     D2RoomStrc** ppRoomList;
@@ -895,9 +894,9 @@ void __stdcall SELECT_UpdateSelectedUnit() {
                       nPriority = -8;
                     }
 
-                    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pIterUnit, STATE_attached);
+                    bIsDeadOrDoor = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pIterUnit, STATE_attached);
                     pCandidate = pBestUnit;
-                    if (eUnitState != STATE_none) {
+                    if (bIsDeadOrDoor) {
                       goto next_unit;
                     }
                   }

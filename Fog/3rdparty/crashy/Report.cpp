@@ -2,8 +2,8 @@
 
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/3rdparty/crashy.h"
-#include "Fog/Engine/Application.h"
 #include "Fog/File.h"
+#include "Game/Main.h"
 #include "globals/globals.h"
 #include "Fog/Debug.data.h"
 
@@ -28,7 +28,7 @@ namespace Fog::_3rdparty::crashy {
       pThis->pFile = 0;
     }
     if (nFlags & 1) {
-      Engine::Application::MISC_OperatorDeleteShim(pThis);
+      Game::Main::MISC_OperatorDeleteShim(pThis);
     }
 
     return pThis;

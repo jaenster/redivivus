@@ -13,7 +13,6 @@ struct D2SkillStrc;
 struct D2StatListExStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
-typedef uint32_t eD2States;
 typedef uint32_t eD2UnitStat;
 union D2UnitDataUnion;
 

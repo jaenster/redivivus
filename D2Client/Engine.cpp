@@ -550,7 +550,7 @@ void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode
 }
 
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
-    eD2States eState;
+    BOOL eState;
     uint32_t nCount;
     D2RoomStrc** pAdjacentRooms;
     uint32_t nRoomCount;
@@ -569,7 +569,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
       for (pUnit = pAdjacentRooms[nCount]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
         if (pUnit->eUnitType == UNIT_MONSTER) {
           eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_dopplezon);
-          if (eState != STATE_none) {
+          if (eState) {
             Gfx::GFX_LoadUnitModeCof(pUnit, 0);
           }
         }

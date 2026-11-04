@@ -190,6 +190,18 @@
       ]
     },
     {
+      "name": "Destructor_UnwindThunk",
+      "address": "00450090",
+      "lines": [],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
+      ]
+    },
+    {
       "name": "ScalarDeletingDestructor",
       "address": "004500a0",
       "lines": [

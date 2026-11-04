@@ -49,6 +49,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units/Missile.h"
@@ -764,9 +765,9 @@ BOOL __fastcall SKILLDRUID_SrvStFn57_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     short int nAuraStateId = pSkillTxt->aurastate;
     if (nAuraStateId >= 0 && (int)nAuraStateId < sgptDataTable->nTxtStatesSize) {
-      eD2States eActiveState;
+      BOOL eActiveState;
       eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
-      if (eActiveState == STATE_none) {
+      if (!eActiveState) {
         return 0;
       }
     }
@@ -1098,7 +1099,6 @@ BOOL __fastcall Skills_SrvDoFunc_124_Armageddon(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Server Do handler for Hurricane (Druid skill 145). Each tick: if the aura state is active, checks whether the unit entered town (removes the aura statlist and clears the state if so); otherwise computes the aura range calc, spawns the next timer event, applies area damage via SKILLS_ApplyAreaDamage using the skill's ResultFlags/HitFlags, and returns TRUE. Returns FALSE if the skill or aura state is invalid.
 BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2RoomStrc* pRoom;
     BOOL bIsInTown;
     D2StatListExStrc* pStatList;
     int32_t nRadius;
@@ -1109,11 +1109,11 @@ BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc *
     int nCurFrame;
     pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillTxt && nSkillLvl > 0) {
-      eD2States eActiveAuraState;
+      D2RoomStrc* pRoom;
       nAuraStateId = pSkillTxt->aurastate;
       if (nAuraStateId >= 0 && (int)nAuraStateId < sgptDataTable->nTxtStatesSize) {
-        eActiveAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
-        if (eActiveAuraState != STATE_none) {
+        bIsInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
+        if (bIsInTown) {
           if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[0]) && (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
             if (pStatList) {
@@ -1158,7 +1158,6 @@ BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server-side skill DoFunc 146 (Druid Cyclone Armor, a chargeup/active-state skill). Validates the skill, its aurastate, and that the state is currently active on the unit. If skill flags2 bit0 is clear and the unit is in town, it tears down the active aura (remove stat list, clear state). Otherwise it (re)schedules the active-state timer event (GetSkilParam3 frames), seeds the unit RNG from skill Param1, and — when not in town — repeatedly rolls a random offset within aurarangecalc range, checking line-of-sight and player-missile collision, up to 5 retries, to find a valid spot to spawn the chargeup missile (SKILLS_CreateMissileAtTarget) and broadcast a unit message. Returns TRUE on a successful cast, FALSE otherwise; always fires the ACTIVESTATE timer trigger.
 BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2States eActiveAuraState;
     D2RoomStrc* pRoom;
     BOOL bIsInTown;
     D2StatListExStrc* pStatList;
@@ -1179,8 +1178,8 @@ BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitS
       eCollisionFlags eCollide;
       nAuraStateId = pSkillTxt->aurastate;
       if (nAuraStateId >= 0 && (int)nAuraStateId < sgptDataTable->nTxtStatesSize) {
-        eActiveAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
-        if (eActiveAuraState != STATE_none) {
+        bIsInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraStateId);
+        if (bIsInTown) {
           if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[0]) && (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
             if (pStatList) {

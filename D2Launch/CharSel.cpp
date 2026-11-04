@@ -5,7 +5,6 @@
 #include "D2Client/D2BNetGatewayAccessStr.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "D2Game/Save.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -30,6 +29,7 @@
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
+#include "Fog/Save.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SMem.h"
@@ -807,7 +807,7 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
     }
 
     int nEquipIndex;
-    nEquipIndex = D2Game::Save::SAVEFILE_ReadEncodedInt14Bit((uint8_t*)aSaveData);
+    nEquipIndex = Fog::Save::SAVEFILE_ReadEncodedInt14Bit((uint8_t*)aSaveData);
     pNewCharSel->nRealmCharCount = (uint16_t)nEquipIndex;
     uint32_t nTmp;
     nTmp = CHARSEL_IsBetaRealm((uint16_t*)pDestination);
@@ -849,9 +849,9 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
 
     pNewCharSel->pNext = 0;
     pNewCharSel->nLevel = (uint16_t)pbCur[1];
-    nEquipIndex = D2Game::Save::SAVEFILE_ReadEncodedInt14Bit(pbCur + 2);
+    nEquipIndex = Fog::Save::SAVEFILE_ReadEncodedInt14Bit(pbCur + 2);
     pNewCharSel->nCharacterFlags = (uint16_t)nEquipIndex;
-    nEquipIndex = D2Game::Save::SAVEFILE_ReadEncodedInt14Bit(pbCur + 4);
+    nEquipIndex = Fog::Save::SAVEFILE_ReadEncodedInt14Bit(pbCur + 4);
     pNewCharSel->wEncodedField9 = (uint16_t)nEquipIndex;
     uint8_t byActVal;
     byActVal = pbCur[6];
@@ -1956,11 +1956,11 @@ void __stdcall CHARSEL_AddCreateNewEntry() {
 }
 
 void __stdcall CHARSEL_AddRetrievingEntry() {
-    uint32_t wszEmptyCommand;
+    uint16_t wszEmptyCommand[2];
     uint16_t* pwszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x2b3b);
-    wszEmptyCommand = (uint32_t)*(uint16_t*)((char*)&wszEmptyCommand + 2) << 0x10;
+    *(uint32_t*)wszEmptyCommand = (uint32_t)(uint16_t)wszEmptyCommand[1] << 0x10;
     gnCharSelLoadingEntryIndex = D2Client::CharScreen::TotalCurrentChars;
-    CHARSEL_CreateCharEntry(pwszTitle, (uint16_t*)&wszEmptyCommand, 2, '\x12');
+    CHARSEL_CreateCharEntry(pwszTitle, wszEmptyCommand, 2, '\x12');
 }
 
 // @sourcefile .\Src\CharSel.cpp

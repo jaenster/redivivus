@@ -82,8 +82,8 @@ int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2Uni
 
     nTargetUnitType = nTargetPosX + nOffsetX;
     eD2MonsterAnimMode eMoveMode = eD2MonsterAnimMode_ns::Run;
-    eD2States eDecrepifyState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnitSaved, STATE_decrepify);
-    if (eDecrepifyState != STATE_none) {
+    BOOL eDecrepifyState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnitSaved, STATE_decrepify);
+    if (eDecrepifyState) {
       MonsterMode::ResetEngagedCombatAndStats(pSelf);
       eMoveMode = Walk;
     }

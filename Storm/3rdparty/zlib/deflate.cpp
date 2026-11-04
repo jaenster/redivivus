@@ -895,9 +895,9 @@ int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush) {
         pDeflateState->dyn_ltree[gaZlibLengthCodeTable[byCode] + 0x101].fc++;
         nDistIdx = nDist - 1;
         if (nDistIdx < 0x100) {
-          byCode = gZlibStaticDTreeDistCode._dist_code[nDistIdx];
+          byCode = _dist_code[nDistIdx];
         } else {
-          byCode = gZlibStaticDTreeDistCode._dist_code[(nDistIdx >> 7) + 0x100];
+          byCode = _dist_code[(nDistIdx >> 7) + 0x100];
         }
 
         pDeflateState->dyn_dtree[byCode].fc++;
@@ -1124,9 +1124,9 @@ int32_t __fastcall deflate_slow(deflate_state * pDeflateState, int32_t nFlush) {
         pDeflateState->dyn_ltree[gaZlibLengthCodeTable[byCode] + 0x101].fc++;
         nDistIdx = nDistShort - 2;
         if (nDistIdx < 0x100) {
-          byCode = gZlibStaticDTreeDistCode._dist_code[nDistIdx];
+          byCode = _dist_code[nDistIdx];
         } else {
-          byCode = gZlibStaticDTreeDistCode._dist_code[(nDistIdx >> 7) + 0x100];
+          byCode = _dist_code[(nDistIdx >> 7) + 0x100];
         }
 
         pDeflateState->dyn_dtree[byCode].fc++;

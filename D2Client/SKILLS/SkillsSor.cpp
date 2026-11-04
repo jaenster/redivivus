@@ -107,8 +107,8 @@ BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills
       return 0;
     }
 
-    eD2States eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eCurrentState == STATE_none) {
+    BOOL eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (!eCurrentState) {
       short int nOverlayId;
       nOverlayId = pSkillTxt->prgoverlay;
       if (nOverlayId > 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize) {
@@ -165,7 +165,6 @@ void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nTotalFra
 D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nTotalFrames;
     D2UnitStrc* pMissile;
-    eD2States eInfernoState;
     D2SkillArgStrc sSkillArg;
     int nTargetY;
     int nTargetX;
@@ -214,8 +213,8 @@ D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD
         SKILLSSOR_SetInfernoFrames(pMissile, nTotalFrames);
       }
 
-      eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-      if (eInfernoState == STATE_none) {
+      bGotCoords = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+      if (!bGotCoords) {
         return pMissile;
       }
       if (pUnit->pAnimSeq) {

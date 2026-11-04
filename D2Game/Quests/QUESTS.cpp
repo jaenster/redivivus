@@ -2224,10 +2224,10 @@ void __fastcall AttachToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc
     PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error attaching to unit", '\x04');
 }
 
-void __stdcall QUEST_InitializeQuestDataStruct(uint32_t pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, D2QuestDataStrc * pQuestData) {
+void __stdcall QUEST_InitializeQuestDataStruct(::SGAMEDATA * pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, D2QuestDataStrc * pQuestData) {
     memset(pQuestData, 0, 0xf8);
     pQuestData->nQuestNoInternal = nQuestNoInternal;
-    pQuestData->pGame = (::SGAMEDATA*)pGame;
+    pQuestData->pGame = pGame;
     pQuestData->bIsActive = '\0';
     pQuestData->nStateFlagPrev = 0;
     pQuestData->bIsNotIntroduction = '\x01';

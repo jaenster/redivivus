@@ -13,6 +13,10 @@ struct D2GroundSubTileStrc;
 struct D2TileLibraryEntryStrc;
 struct IDirect3DTexture2;
 struct IDirectDrawSurface7;
+#ifndef RECON_FPTD_fnBinkFrameCallback
+#define RECON_FPTD_fnBinkFrameCallback
+typedef void (__stdcall *fnBinkFrameCallback)();
+#endif
 
 // Data types
 struct D3DFloorCacheNodeStrc {
@@ -63,6 +67,8 @@ void __stdcall D3D_RenderTileComponentsToPixelBuffer(struct D2TileLibraryEntrySt
 BOOL __fastcall D3D_RenderFloorTileToTexture(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 void __fastcall D3D_RenderSubtileToTexture(struct D2GroundSubTileStrc * pSubTile);
 void __fastcall D3D_InvalidateTileCachesForEntry(struct D2TileLibraryEntryStrc * pTile);
+void __stdcall D3D_RenderBinkVideoFrame();
+void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFrameCallback pfnCallback);
 // 3 internal functions (defined in .cpp)
 
 } // namespace D2Direct3D::d3dFloorCache

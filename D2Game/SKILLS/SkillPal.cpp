@@ -60,6 +60,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -225,8 +226,8 @@ BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
       int nMinDamage = (uint32_t)pItemsTxt->nMinDam << 8;
       int nMaxDamage = (uint32_t)pItemsTxt->nMaxDam << 8;
-      eD2States eHolyShieldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
-      if (eHolyShieldState != STATE_none) {
+      bCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
+      if (bCheck) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_holyshield);
         if (pStatList) {
           eShieldSkill = D2Common::Stats::StatsEx::GetSkillId(pStatList);
@@ -262,8 +263,8 @@ BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 void __fastcall SKILLPAL_OnAuraExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwArg1) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
-    eD2States eNoManaRegenState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
-    if (eNoManaRegenState != STATE_none) {
+    BOOL eNoManaRegenState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
+    if (eNoManaRegenState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_nomanaregen, 0);
     }
 
@@ -283,8 +284,8 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
     int nCurseStateIdx;
     int nGameFrame;
     BOOL bReduced = 0;
-    eD2States ePoisonState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_poison);
-    if (ePoisonState != STATE_none) {
+    BOOL ePoisonState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_poison);
+    if (ePoisonState) {
       int32_t nPoisonExpire;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_poison);
       if (pStatList) {
@@ -301,7 +302,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
     for (nCurseStateIdx = 0; nCurseStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize; nCurseStateIdx++) {
       eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x0B[nCurseStateIdx].nStateId;
       ePoisonState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-      if (ePoisonState != STATE_none) {
+      if (ePoisonState) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
         if (pStatList) {
           bIsCurseState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckStateFlagArray12(eState);
@@ -695,7 +696,6 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
 // Server start-func 31 for a Paladin charge-style movement skill. Validates the skill row and the unit's current skill/static path. If a target is in melee range it just force-attacks (players) or switches the monster into its attack anim and dispatches a monster AI lifecycle transition. Otherwise it stores the target's unit type/GUID into skill Param1/Param2 (or 6/0 when none), computes a charge velocity from the unit's RunVelocity (CharStats) or monster Run (MonStats) scaled by the velocity-percent stat and the skill's mana-cost multiplier, writes it onto the dynamic path, calculates the path, sets skill flags 0x1001 and applies STATE_skill_move. Returns TRUE.
 BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nClassId;
-    eD2States eUninterruptState;
     D2CharStatsTxt* pCharStatsTxt;
     D2MonStatsTxt* pMonStatsTxt;
     int nVelocityPct;
@@ -749,8 +749,8 @@ BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         return nChargeCalc;
       }
 
-      eUninterruptState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
-      if (eUninterruptState == STATE_none) {
+      bInMeleeRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
+      if (!bInMeleeRange) {
         D2Common::Skills::SKILL_SetParam1(pSkill, pTarget->eUnitType);
         nVelocityPct = pTarget->nUnitGUID;
         goto start_charge;
