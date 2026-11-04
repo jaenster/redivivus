@@ -67,15 +67,15 @@ At this commit, generated from version 1895 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|6,592 of 14,642 (45.0%)|
-|Code|547,988 of 2,602,915 bytes (21.05%)|
-|Instructions|1,783,774 of 2,602,915 bytes (68.5%), counting identical instructions in functions that still differ|
+|Functions|6,593 of 14,642 (45.0%)|
+|Code|552,743 of 2,602,915 bytes (21.24%)|
+|Instructions|1,784,443 of 2,602,915 bytes (68.6%), counting identical instructions in functions that still differ|
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
 rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
 exceptions is left out as well. Over the whole binary, runtime
-included: 7,149 of 15,711 functions (45.5%), 646,693 of
-2,748,975 bytes (23.52%).
+included: 7,150 of 15,711 functions (45.5%), 651,448 of
+2,748,975 bytes (23.70%).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
