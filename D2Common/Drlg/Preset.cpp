@@ -2042,93 +2042,101 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(D2PoolManagerStrc * pMemory, D
     nWorldY = pDrlgMap->nRealOffsetY;
     Transform::CoordsRoomToWorld(&nWorldX, &nWorldY);
     for (; pPresetUnit; pPresetUnit = pPresetUnit->pPresetUnitNext) {
-      if (pPresetUnit->eType != UNIT_MONSTER) {
-        if (pPresetUnit->eType != UNIT_OBJECT) {
-          goto add_preset_copy;
-        }
+      switch (pPresetUnit->eType) {
+        case UNIT_MONSTER:
+          {
+            nTableSize = sgptDataTable->nTxtMonStatsSize;
+            nMonClassId = pPresetUnit->nClassId;
+            if (nMonClassId < nTableSize) {
+              if (nMonClassId < 0) {
+                nMonClassId = -1;
+              }
 
-        nTableSize = pPresetUnit->nClassId;
-        switch (nTableSize) {
-          case 0xc4:
-            case 0x105:
-              {
-                newSeed = D2_SEED_NEXT(*pSeed);
-                pSeed->nSeedHigh = newSeed.nSeedHigh;
-                pSeed->nSeedLow = newSeed.nSeedLow;
-                if (!(newSeed.nSeedLow & 1)) {
+              switch (nMonClassId) {
+                case 0xcc:
+
+                case 0xcd:
+
+                case 0x173:
+
+                case 0x174:
+                  newSeed = D2_SEED_NEXT(*pSeed);
+                *pSeed = newSeed;
+                if (newSeed.nSeedLow % 3 != 0) {
+                  continue;
+                }
+              }
+            } else {
+              nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
+              if (pPresetUnit->nClassId - nTableSize >= nMonExtraBase) {
+                nTableSize = sgptDataTable->nTxtMonStatsSize;
+                nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
+                nTableSize = pPresetUnit->nClassId - nTableSize - nMonExtraBase;
+                if (nTableSize == 0x21) {
+                  goto roll_quarter_skip;
+                }
+                if (nTableSize == 0x22) {
+                  nSeedLowProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
+                  newSeed = (D2SeedStrc)(nSeedLowProduct + (uint64_t)pSeed->nSeedHigh);
+                  bInclude2 = !((int)nSeedLowProduct + pSeed->nSeedHigh & 1);
+                  goto commit_roll;
+                }
+                if (nTableSize == 0x23) {
+                  newSeed = D2_SEED_NEXT(*pSeed);
+                  pSeed->nSeedHigh = newSeed.nSeedHigh;
+                  pSeed->nSeedLow = newSeed.nSeedLow;
+                  if (newSeed.nSeedLow & 3) {
+                    continue;
+                  }
+                }
+              }
+            }
+
+            add_preset_copy:
+            pCopiedUnit = CopyPresetUnit(pMemory, pPresetUnit, nWorldX, nWorldY);
+            pCopiedUnit->pPresetUnitNext = pDrlgMap->pPresetUnit;
+            pDrlgMap->pPresetUnit = pCopiedUnit;
+            break;
+          }
+        default:
+          {
+            goto add_preset_copy;
+          }
+        case UNIT_OBJECT:
+          {
+            nTableSize = pPresetUnit->nClassId;
+            switch (nTableSize) {
+              case 0xc4:
+                case 0x105:
+                  {
+                    newSeed = D2_SEED_NEXT(*pSeed);
+                    pSeed->nSeedHigh = newSeed.nSeedHigh;
+                    pSeed->nSeedLow = newSeed.nSeedLow;
+                    if (!(newSeed.nSeedLow & 1)) {
+                      goto add_preset_copy;
+                    }
+
+                    break;
+                  }
+              case 0x245:
+                {
+                  roll_quarter_skip:
+                  newSeed = D2_SEED_NEXT(*pSeed);
+                  bInclude2 = !(newSeed.nSeedLow & 3);
+                  commit_roll:
+                  *pSeed = newSeed;
+                  if (bInclude2) {
+                    continue;
+                  }
+                }
+              default:
+                {
                   goto add_preset_copy;
                 }
+            }
 
-                break;
-              }
-          case 0x245:
-            {
-              roll_quarter_skip:
-              newSeed = D2_SEED_NEXT(*pSeed);
-              bInclude2 = !(newSeed.nSeedLow & 3);
-              commit_roll:
-              *pSeed = newSeed;
-              if (bInclude2) {
-                continue;
-              }
-            }
-          default:
-            {
-              goto add_preset_copy;
-            }
-        }
-      } else {
-        nTableSize = sgptDataTable->nTxtMonStatsSize;
-        nMonClassId = pPresetUnit->nClassId;
-        if (nMonClassId < nTableSize) {
-          if (nMonClassId < 0) {
-            nMonClassId = -1;
+            break;
           }
-
-          switch (nMonClassId) {
-            case 0xcc:
-
-            case 0xcd:
-
-            case 0x173:
-
-            case 0x174:
-              newSeed = D2_SEED_NEXT(*pSeed);
-            *pSeed = newSeed;
-            if (newSeed.nSeedLow % 3 != 0) {
-              continue;
-            }
-          }
-        } else {
-          nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
-          if (pPresetUnit->nClassId - nTableSize >= nMonExtraBase) {
-            nTableSize = sgptDataTable->nTxtMonStatsSize;
-            nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
-            nTableSize = pPresetUnit->nClassId - nTableSize - nMonExtraBase;
-            if (nTableSize == 0x21) {
-              goto roll_quarter_skip;
-            }
-            if (nTableSize == 0x22) {
-              nSeedLowProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-              newSeed = (D2SeedStrc)(nSeedLowProduct + (uint64_t)pSeed->nSeedHigh);
-              bInclude2 = !((int)nSeedLowProduct + pSeed->nSeedHigh & 1);
-              goto commit_roll;
-            }
-            if (nTableSize == 0x23) {
-              newSeed = D2_SEED_NEXT(*pSeed);
-              pSeed->nSeedHigh = newSeed.nSeedHigh;
-              pSeed->nSeedLow = newSeed.nSeedLow;
-              if (newSeed.nSeedLow & 3) {
-                continue;
-              }
-            }
-          }
-        }
-
-        add_preset_copy:
-        pCopiedUnit = CopyPresetUnit(pMemory, pPresetUnit, nWorldX, nWorldY);
-        pCopiedUnit->pPresetUnitNext = pDrlgMap->pPresetUnit;
-        pDrlgMap->pPresetUnit = pCopiedUnit;
       }
     }
 }

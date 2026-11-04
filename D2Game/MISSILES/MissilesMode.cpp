@@ -1370,35 +1370,43 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
         return 1;
       }
     }
-    if (pTarget->eUnitType != UNIT_PLAYER) {
-      if (pTarget->eUnitType == UNIT_MONSTER) {
-        if (!pMissileTxt->sHitPar2) {
-          return 3;
-        }
 
-        switch (pMissileTxt->sHitPar2) {
-          case 2:
-            {
-              dwTmp = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
-              if (dwTmp) {
-                return 3;
-              }
+    switch (pTarget->eUnitType) {
+      case UNIT_PLAYER:
+        {
+          if (!pMissileTxt->sHitPar2) {
+            return 3;
+          }
 
-              break;
-            }
-          default:
-            {
-              nMissileClassId = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget);
-              if (nMissileClassId) {
-                return 3;
-              }
-            }
+          break;
         }
-      }
-    } else {
-      if (!pMissileTxt->sHitPar2) {
-        return 3;
-      }
+      case UNIT_MONSTER:
+        {
+          if (!pMissileTxt->sHitPar2) {
+            return 3;
+          }
+
+          switch (pMissileTxt->sHitPar2) {
+            case 2:
+              {
+                dwTmp = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
+                if (dwTmp) {
+                  return 3;
+                }
+
+                break;
+              }
+            default:
+              {
+                nMissileClassId = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget);
+                if (nMissileClassId) {
+                  return 3;
+                }
+              }
+          }
+
+          break;
+        }
     }
 
     return 4;

@@ -1771,13 +1771,15 @@ void __stdcall QUESTLOG_OnCloseClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __fastcall QUESTLOG_HandleSpecialPacket(D2GSPacketSrv0x50 * pPacket) {
-    if (pPacket->nMessageType != 1) {
-      return;
+    switch (pPacket->nMessageType) {
+      case 1:
+        {
+          gQuestLog.MonstersleftInDenOfEvil = (int)pPacket->aPayload[0];
+          gQuestLog.nQuestLogSpecialState = (int32_t)pPacket->aPayload[1];
+          gQuestLog.pQuestLogData = (uint32_t)pPacket->aPayload[2];
+          break;
+        }
     }
-
-    gQuestLog.MonstersleftInDenOfEvil = (int)pPacket->aPayload[0];
-    gQuestLog.nQuestLogSpecialState = (int32_t)pPacket->aPayload[1];
-    gQuestLog.pQuestLogData = (uint32_t)pPacket->aPayload[2];
 }
 
 void __stdcall QUESTLOG_CloseAndFreeImages() {

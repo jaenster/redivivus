@@ -1208,109 +1208,120 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
     eCurrentMode = pDynamicPath->eAnimMode.ePlayerMode;
     eD2PlayerAnimMode nAnimMode;
     nAnimMode = pUnit->eAnimMode.ePlayerMode;
-    if (eCurrentMode != nAnimMode) {
-      if (pDynamicPath->eUnitType != UNIT_PLAYER) {
-        if (pDynamicPath->eUnitType != UNIT_MONSTER) {
+    if (eCurrentMode == nAnimMode) {
+      goto clear_path_flag;
+    }
+
+    switch (pDynamicPath->eUnitType) {
+      default:
+        {
           goto clear_path_flag;
         }
-        if (nAnimMode != eD2PlayerAnimMode_ns::Neutral) {
-          if (nAnimMode != Walk) {
-            if (nAnimMode != eD2PlayerAnimMode_ns::Skill3 || eCurrentMode != eD2PlayerAnimMode_ns::Neutral) {
-              goto clear_path_flag;
-            }
+      case UNIT_MONSTER:
+        {
+          if (nAnimMode != eD2PlayerAnimMode_ns::Neutral) {
+            if (nAnimMode != Walk) {
+              if (nAnimMode != eD2PlayerAnimMode_ns::Skill3 || eCurrentMode != eD2PlayerAnimMode_ns::Neutral) {
+                goto clear_path_flag;
+              }
 
-            nAnimMode = eD2PlayerAnimMode_ns::Skill3;
+              nAnimMode = eD2PlayerAnimMode_ns::Skill3;
+            } else {
+              switch (eCurrentMode) {
+                default:
+                  {
+                    goto clear_path_flag;
+                  }
+                case eD2PlayerAnimMode_ns::Neutral:
+                  {
+                    LAB_004652d3:
+                    nAnimMode = Walk;
+                    break;
+                  }
+              }
+            }
           } else {
             switch (eCurrentMode) {
               default:
                 {
                   goto clear_path_flag;
                 }
-              case eD2PlayerAnimMode_ns::Neutral:
-                {
-                  LAB_004652d3:
-                  nAnimMode = Walk;
-                  break;
-                }
+              case Walk:
+                case eD2PlayerAnimMode_ns::Skill3:
+                  {
+                    LAB_004652e8:
+                    nAnimMode = eD2PlayerAnimMode_ns::Neutral;
+                    break;
+                  }
             }
           }
-        } else {
-          switch (eCurrentMode) {
-            default:
-              {
+
+          goto LAB_004653bb;
+        }
+      case UNIT_PLAYER:
+        {
+          switch (nAnimMode) {
+            case Walk:
+
+            case TownWalk:
+              if (eCurrentMode != eD2PlayerAnimMode_ns::Neutral && eCurrentMode != TownNeutral) {
                 goto clear_path_flag;
               }
-            case Walk:
-              case eD2PlayerAnimMode_ns::Skill3:
-                {
-                  LAB_004652e8:
-                  nAnimMode = eD2PlayerAnimMode_ns::Neutral;
-                  break;
-                }
-          }
-        }
-      } else {
-        switch (nAnimMode) {
-          case Walk:
-
-          case TownWalk:
-            if (eCurrentMode != eD2PlayerAnimMode_ns::Neutral && eCurrentMode != TownNeutral) {
-              goto clear_path_flag;
+            pRoom = D2Common::Units::UNITS_GetRoom(pDynamicPath);
+            bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+            if (!bIsInTown) {
+              goto LAB_004652d3;
             }
-          pRoom = D2Common::Units::UNITS_GetRoom(pDynamicPath);
-          bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-          if (!bIsInTown) {
-            goto LAB_004652d3;
-          }
 
-          nAnimMode = TownWalk;
-          break;
-          case eD2PlayerAnimMode_ns::Run:
-            if (eCurrentMode != eD2PlayerAnimMode_ns::Neutral && eCurrentMode != eD2PlayerAnimMode_ns::Run && eCurrentMode != TownNeutral) {
-              goto clear_path_flag;
-            }
-          nAnimMode = eD2PlayerAnimMode_ns::Run;
-          break;
-          case eD2PlayerAnimMode_ns::Neutral:
-
-          case TownNeutral:
-            if (eCurrentMode < Walk || eCurrentMode > eD2PlayerAnimMode_ns::Run && eCurrentMode != TownWalk) {
-              goto clear_path_flag;
-            }
-          pRoom = D2Common::Units::UNITS_GetRoom(pDynamicPath);
-          bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-          if (!bIsInTown) {
-            goto LAB_004652e8;
-          }
-
-          nAnimMode = TownNeutral;
-          break;
-          default:
-            if (eCurrentMode != KnockBack) {
-              pSkill = D2Common::Units::GetCurrentSkill(pDynamicPath);
-              pUnitSkill = D2Common::Units::GetCurrentSkill(pUnit);
-              if (pSkill && (!pUnitSkill || (nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pUnitSkill) , !(nSkillFlagsLocal & 1)) || (nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pUnitSkill) , (nSkillFlagsLocal & 2) != 0))) {
-                nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pSkill);
-                if (nSkillFlagsLocal & 1) {
-                  D2Common::Skills::SKILL_SetFlags(pSkill, nSkillFlagsLocal | 2);
-                  D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pDynamicPath, 0);
-                  return;
-                }
+            nAnimMode = TownWalk;
+            break;
+            case eD2PlayerAnimMode_ns::Run:
+              if (eCurrentMode != eD2PlayerAnimMode_ns::Neutral && eCurrentMode != eD2PlayerAnimMode_ns::Run && eCurrentMode != TownNeutral) {
+                goto clear_path_flag;
               }
+            nAnimMode = eD2PlayerAnimMode_ns::Run;
+            break;
+            case eD2PlayerAnimMode_ns::Neutral:
 
-              goto clear_path_flag;
+            case TownNeutral:
+              if (eCurrentMode < Walk || eCurrentMode > eD2PlayerAnimMode_ns::Run && eCurrentMode != TownWalk) {
+                goto clear_path_flag;
+              }
+            pRoom = D2Common::Units::UNITS_GetRoom(pDynamicPath);
+            bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+            if (!bIsInTown) {
+              goto LAB_004652e8;
             }
-          break;
-          case eD2PlayerAnimMode_ns::Sequence:
-            goto clear_path_flag;
+
+            nAnimMode = TownNeutral;
+            break;
+            default:
+              if (eCurrentMode != KnockBack) {
+                pSkill = D2Common::Units::GetCurrentSkill(pDynamicPath);
+                pUnitSkill = D2Common::Units::GetCurrentSkill(pUnit);
+                if (pSkill && (!pUnitSkill || (nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pUnitSkill) , !(nSkillFlagsLocal & 1)) || (nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pUnitSkill) , (nSkillFlagsLocal & 2) != 0))) {
+                  nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pSkill);
+                  if (nSkillFlagsLocal & 1) {
+                    D2Common::Skills::SKILL_SetFlags(pSkill, nSkillFlagsLocal | 2);
+                    D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pDynamicPath, 0);
+                    return;
+                  }
+                }
+
+                goto clear_path_flag;
+              }
+            break;
+            case eD2PlayerAnimMode_ns::Sequence:
+              goto clear_path_flag;
+          }
+
+          LAB_004653bb:
+          D2Common::Units::SetupUpdateFlag(pDynamicPath, nAnimMode);
+          clear_path_flag:
+          D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pDynamicPath, 0);
+          return;
         }
-      }
-
-      D2Common::Units::SetupUpdateFlag(pDynamicPath, nAnimMode);
     }
-
-    clear_path_flag:
-    D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pDynamicPath, 0);
 }
 
 int16_t __fastcall GetPlayerUnitPartyId(D2UnitStrc * pUnit) {
@@ -1385,23 +1396,31 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
       }
 
       eUnitAnimMode = pUnit->eAnimMode.ePlayerMode;
-      if (pUnit->eUnitType != UNIT_PLAYER) {
-        if (pUnit->eUnitType == UNIT_MONSTER) {
-          if (eUnitAnimMode == Death) {
+      switch (pUnit->eUnitType) {
+        case UNIT_PLAYER:
+          {
+            if (eUnitAnimMode == Death) {
+              return;
+            }
+            if (eUnitAnimMode == eD2PlayerAnimMode_ns::Dead) {
+              return;
+            }
+
+            break;
+          }
+        case UNIT_MONSTER:
+          {
+            if (eUnitAnimMode == Death) {
+              return;
+            }
+            if (eUnitAnimMode != Kick) {
+              break;
+            }
+
             return;
           }
-          if (eUnitAnimMode == Kick) {
-            return;
-          }
-        }
-      } else {
-        if (eUnitAnimMode == Death) {
-          return;
-        }
-        if (eUnitAnimMode == eD2PlayerAnimMode_ns::Dead) {
-          return;
-        }
       }
+
       if (pUnit == pPlayer) {
         pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         if (pCurrentRoom) {

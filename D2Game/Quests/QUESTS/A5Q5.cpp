@@ -571,13 +571,19 @@ static uint32_t __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData,
     int32_t ePlayerClassId;
     QUEST_SendQuestInfoToUnit(pQuestData, pUnit);
     uint32_t nExpRemaining = 1400000;
-    if (pQuestData->nDifficulty != 1) {
-      if (pQuestData->nDifficulty == 2) {
-        nExpRemaining = 40000000;
-      }
-    } else {
-      nExpRemaining = 20000000;
+    switch (pQuestData->nDifficulty) {
+      case 1:
+        {
+          nExpRemaining = 20000000;
+          break;
+        }
+      case 2:
+        {
+          nExpRemaining = 40000000;
+          break;
+        }
     }
+
     if (!pUnit) {
       ePlayerClassId = -1;
     } else {

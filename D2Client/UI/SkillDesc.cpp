@@ -6618,17 +6618,19 @@ static void __fastcall SKILLDESC_DescLineB_SignedFormat(int32_t nSkillLevel, int
     if (!nSynergy) {
       return;
     }
-    if (pSkillsTxt->EType != ELEMENTAL_COLD) {
-      if (pSkillsTxt->EType != ELEMENTAL_POISON) {
-        return;
-      }
 
-      SKILLDESC_FormatValueWithSign(nSynergy, 0x10aa, 0, wszText);
-      return;
+    switch (pSkillsTxt->EType) {
+      case ELEMENTAL_COLD:
+        {
+          SKILLDESC_FormatValueWithSign(nSynergy, 0x10a9, 0, wszText);
+          return;
+        }
+      case ELEMENTAL_POISON:
+        {
+          SKILLDESC_FormatValueWithSign(nSynergy, 0x10aa, 0, wszText);
+          return;
+        }
     }
-
-    SKILLDESC_FormatValueWithSign(nSynergy, 0x10a9, 0, wszText);
-    return;
 }
 
 static int __stdcall SKILLDESC_DescLineE_PerLevelBonus(int32_t nSkillId, D2UnitStrc * pUnit, uint16_t * wszText, int32_t nSkillLevel, D2SkillsTxt * pSkillsTxt) {

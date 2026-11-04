@@ -453,56 +453,64 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         }
 
         *pWriteCursor = '\0';
-        if (pGfxData->eUnitType != UNIT_MONSTER) {
-          if (pGfxData->eUnitType == UNIT_OBJECT) {
-            if (pGfxData->nClassId == 0x156) {
-              return 1;
-            }
-            if (pGfxData->nClassId == 0x233) {
-              return 1;
-            }
-          }
-        } else {
-          nSpriteCmpId = pGfxData->nClassId;
-          if (nSpriteCmpId <= 0x209) {
-            if (nSpriteCmpId == 0x209) {
-              return 1;
-            }
-
-            switch (nSpriteCmpId) {
-              case 0xf2:
-
-              case 0xfb:
-
-              case 0x16f:
-                return 1;
-              case 0xf3:
-
-              case 0x11c:
-
-              case 0x14d:
-                check_death_mode:
-                if (!pGfxData->nMode) {
+        switch (pGfxData->eUnitType) {
+          case UNIT_MONSTER:
+            {
+              nSpriteCmpId = pGfxData->nClassId;
+              if (nSpriteCmpId <= 0x209) {
+                if (nSpriteCmpId == 0x209) {
                   return 1;
                 }
+
+                switch (nSpriteCmpId) {
+                  case 0xf2:
+
+                  case 0xfb:
+
+                  case 0x16f:
+                    return 1;
+                  case 0xf3:
+
+                  case 0x11c:
+
+                  case 0x14d:
+                    check_death_mode:
+                    if (!pGfxData->nMode) {
+                      return 1;
+                    }
+                }
+              } else {
+                switch (nSpriteCmpId) {
+                  case 0x220:
+
+                  case 0x22f:
+
+                  case 0x23a:
+
+                  case 0x2c1:
+
+                  case 0x2c5:
+                    goto check_death_mode;
+                  case 0x2c0:
+                    return 1;
+                }
+              }
+
+              break;
             }
-          } else {
-            switch (nSpriteCmpId) {
-              case 0x220:
-
-              case 0x22f:
-
-              case 0x23a:
-
-              case 0x2c1:
-
-              case 0x2c5:
-                goto check_death_mode;
-              case 0x2c0:
+          case UNIT_OBJECT:
+            {
+              if (pGfxData->nClassId == 0x156) {
                 return 1;
+              }
+              if (pGfxData->nClassId == 0x233) {
+                return 1;
+              }
+
+              break;
             }
-          }
         }
+
         if (bUseCompressedData) {
           pGfxData->dwRenderFlags |= 1;
         }

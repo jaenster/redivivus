@@ -415,9 +415,9 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::StringEntryNode, -57266
 
     pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)nHeadEntry;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::ChangeLinkOffset(int32_t nLinkOffset) {

@@ -291,6 +291,7 @@ namespace D2Client::UNIT::Object {
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
 void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode) {
     uD2UnitMode uVar1;
+    eAct nAct;
     bool bAutoLightResult;
     eD2LevelId eLevelId;
     BOOL nAutoLightResult;
@@ -331,26 +332,32 @@ void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t 
     if (pTxtLine->OrderFlag[pUnit->eAnimMode.ePlayerMode] == '\x01') {
       pUnit->eUnitFlags |= UNITFLAG_PREDRAW;
     }
-    if (pUnit->nClassId != 0x3b) {
-      if (pUnit->nClassId == 0x3c) {
-        eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-        if (eLevelId == LEVEL_Tristram) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = LEVEL_StonyField;
-        } else if (eLevelId == LEVEL_StonyField) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = LEVEL_Tristram;
-        }
-      }
-    } else {
-      eAct nAct;
-      eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      nAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
-      eLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo(nAct);
-      if ((int)eLevelId > 0xff) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
-        exit(-1);
-      }
 
-      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eLevelId;
+    switch (pUnit->nClassId) {
+      case 0x3b:
+        {
+          eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+          nAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
+          eLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo(nAct);
+          if ((int)eLevelId > 0xff) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
+            exit(-1);
+          }
+
+          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eLevelId;
+          break;
+        }
+      case 0x3c:
+        {
+          eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+          if (eLevelId == LEVEL_Tristram) {
+            pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = LEVEL_StonyField;
+          } else if (eLevelId == LEVEL_StonyField) {
+            pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = LEVEL_Tristram;
+          }
+
+          break;
+        }
     }
 
     nAutoLightResult = OBJECT_CheckAutoLight(pUnit, 1);

@@ -2391,34 +2391,44 @@ int32_t __fastcall MISSILE_CltHitFn09_HolyBolt(D2UnitStrc * pUnit, D2UnitStrc * 
     D2UnitStrc* pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
     if (!pMissileTxt->cHitPar1 || !pOwner || (bIsAllied = CUnit::SKILL_IsTargetOwnedPet(pOwner, (int*)pTarget) , !bIsAllied && (bIsAllied = CUnit::SKILL_IsTargetAlliedUnit(pOwner, (int*)pTarget) , !bIsAllied))) {
       D2SkillArgStrc sSkillArg;
-      if (pTarget->eUnitType != UNIT_PLAYER) {
-        if (pTarget->eUnitType != UNIT_MONSTER) {
-          return 0;
-        }
-
-        switch (pMissileTxt->cHitPar2) {
-          case 2:
-            {
-              bIsAllied = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
-              if (!bIsAllied) {
-                return 0;
-              }
-
-              break;
+      switch (pTarget->eUnitType) {
+        case UNIT_PLAYER:
+          {
+            if (pMissileTxt->cHitPar2) {
+              return 0;
             }
-          default:
-            {
-              nClassId = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget);
-              if (!nClassId) {
-                return 0;
-              }
+
+            break;
+          }
+        default:
+          {
+            return 0;
+          }
+        case UNIT_MONSTER:
+          {
+            switch (pMissileTxt->cHitPar2) {
+              case 2:
+                {
+                  bIsAllied = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
+                  if (!bIsAllied) {
+                    return 0;
+                  }
+
+                  break;
+                }
+              default:
+                {
+                  nClassId = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget);
+                  if (!nClassId) {
+                    return 0;
+                  }
+                }
             }
-        }
-      } else {
-        if (pMissileTxt->cHitPar2) {
-          return 0;
-        }
+
+            break;
+          }
       }
+
       if (pMissileTxt->CltHitSubMissile1 >= 0) {
         memset(&sSkillArg, 0, 0x5c);
         sSkillArg.pOwner = pOwner;

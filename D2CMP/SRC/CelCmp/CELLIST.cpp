@@ -20,9 +20,9 @@ void __thiscall Destructor(::CELLIST * pThis) {
       int* pBackLink;
       pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
-      pTVar1->m_prevlink->m_next = pThis->m_frames.m_terminator.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
-      pThis->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     pThis->Destructor();
@@ -36,9 +36,9 @@ void __thiscall Destructor(::CELLIST * pThis) {
       int* pBackLink;
       pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
-      pTVar1->m_prevlink->m_next = pThis->m_frames.m_terminator.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
-      pThis->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     pThis->Destructor();

@@ -260,18 +260,24 @@ void __stdcall AUTOMAP_SetupPosition() {
 
     gnAutomapPanelOffsetX = gnAutomapCenterX;
     gnAutomapPanelOffsetY = nAutomapCenterY;
-    if (MiniMapType != 1) {
-      gnAutomapClipRight = ScreenSizeX;
-      gnAutomapClipLeft = -0x10;
-      gnAutomapClipTop = -0x10;
-      gnAutomapClipBottom = ScreenSizeY;
-      return;
+    switch (MiniMapType) {
+      case 1:
+        {
+          gnAutomapClipLeft = gnAutomapCenterX - 8;
+          gnAutomapClipRight = ScreenSizeX / 3 + gnAutomapCenterX;
+          gnAutomapClipTop = nAutomapCenterY;
+          gnAutomapClipBottom = ScreenSizeY / 3 + nAutomapCenterY;
+          return;
+        }
+      default:
+        {
+          gnAutomapClipRight = ScreenSizeX;
+          gnAutomapClipLeft = -0x10;
+          gnAutomapClipTop = -0x10;
+          gnAutomapClipBottom = ScreenSizeY;
+          return;
+        }
     }
-
-    gnAutomapClipLeft = gnAutomapCenterX - 8;
-    gnAutomapClipRight = ScreenSizeX / 3 + gnAutomapCenterX;
-    gnAutomapClipTop = nAutomapCenterY;
-    gnAutomapClipBottom = ScreenSizeY / 3 + nAutomapCenterY;
 }
 
 void __fastcall AUTOMAP_CenterOnPlayer(int32_t bForceCenter) {
@@ -280,14 +286,20 @@ void __fastcall AUTOMAP_CenterOnPlayer(int32_t bForceCenter) {
     }
 
     AUTOMAP_SetupPosition();
-    if (MiniMapType != 1) {
-      AutoMapMoveX = 0;
-      AutoMapMoveY = 0;
-      return;
+    switch (MiniMapType) {
+      case 1:
+        {
+          AutoMapMoveX = ScreenSizeX / 3 - gnAutomapCenterX - 0x10;
+          AutoMapMoveY = ScreenSizeY / 3 - nAutomapCenterY - 0x10;
+          break;
+        }
+      default:
+        {
+          AutoMapMoveX = 0;
+          AutoMapMoveY = 0;
+          return;
+        }
     }
-
-    AutoMapMoveX = ScreenSizeX / 3 - gnAutomapCenterX - 0x10;
-    AutoMapMoveY = ScreenSizeY / 3 - nAutomapCenterY - 0x10;
 }
 
 int32_t __stdcall AUTOMAP_GetFade() {
@@ -1702,6 +1714,7 @@ void __stdcall AUTOMAP_RevealTownCallback(eD2LevelId eLevel, uint32_t nCellNo, i
 
 // Recursively draws automap cell tree using AVL node traversal. Applies fade effects, draws tiles with alpha based on game state. Checks viewport clipping and player proximity for highlight.
 void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtxStrc * apDC6Layers) {
+    uint32_t eBorderType;
     int32_t eFade;
     D2UnitStrc* pPlayer;
     int nHalfWidth;
@@ -1715,7 +1728,6 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
     D2GfxTileRectStrc sClipRect;
     int32_t nDrawMode;
     do {
-      uint32_t eBorderType;
       if (!pCell) {
         return;
       }
@@ -1792,42 +1804,56 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
                 }
               case 2:
                 {
+                  LAB_0045957e:
                   nDrawMode = 1;
                   break;
                 }
               case 3:
                 {
                   pPlayer = UNIT::Player::GetPlayerUnit_UI();
-                  if (pPlayer->nAct == ACT_I || pPlayer->nAct == ACT_III) {
-                    if (MiniMapType == 1) {
-                      nDrawMode = 1;
-                      break;
-                    }
+                  switch (pPlayer->nAct) {
+                    case ACT_I:
+                      case ACT_III:
+                        {
+                          switch (MiniMapType) {
+                            case 1:
+                              {
+                                goto LAB_0045957e;
+                              }
+                          }
 
-                    nDrawMode = 2;
+                          nDrawMode = 2;
+                          break;
+                        }
                   }
 
                   break;
                 }
             }
 
-            if (MiniMapType != 1) {
-              sClipRect.nX1 = ScreenSizeX - 1;
-              sClipRect.nY1 = ScreenSizeY - 1;
-              sClipRect.nX0 = 0;
-              sClipRect.nY0 = 0;
-            } else {
-              if (AutoMapLeft) {
-                sClipRect.nX0 = 0;
-                eBorderType = Hireables::HIREABLE_IsNotInMercPurchaseMode();
-                sClipRect.nY0 = eBorderType ? 0x4b : -0x15;
-              } else {
-                sClipRect.nX0 = ScreenSizeX - 0x119;
-                sClipRect.nY0 = 0x39;
-              }
+            switch (MiniMapType) {
+              case 1:
+                {
+                  if (AutoMapLeft) {
+                    sClipRect.nX0 = 0;
+                    eBorderType = Hireables::HIREABLE_IsNotInMercPurchaseMode();
+                    sClipRect.nY0 = eBorderType ? 0x4b : -0x15;
+                  } else {
+                    sClipRect.nX0 = ScreenSizeX - 0x119;
+                    sClipRect.nY0 = 0x39;
+                  }
 
-              sClipRect.nX1 = sClipRect.nX0 + 0x117;
-              sClipRect.nY1 = sClipRect.nY0 + 0xe1;
+                  sClipRect.nX1 = sClipRect.nX0 + 0x117;
+                  sClipRect.nY1 = sClipRect.nY0 + 0xe1;
+                  break;
+                }
+              default:
+                {
+                  sClipRect.nX1 = ScreenSizeX - 1;
+                  sClipRect.nY1 = ScreenSizeY - 1;
+                  sClipRect.nX0 = 0;
+                  sClipRect.nY0 = 0;
+                }
             }
 
             /* Draws all non units (so walls and stuff) */ D2gfx::D2GFX::D2GFX_DrawSprite6(&sGfxData, nPosX, nScreenY, &sClipRect, nDrawMode);
@@ -1918,88 +1944,94 @@ void __stdcall AUTOMAP_DrawMap() {
     AUTOMAP_DrawCellTree(sgpAutomapLayerEx->pFloors, &pDC6);
     AUTOMAP_DrawCellTree(sgpAutomapLayerEx->pWalls, &pDC6);
     AUTOMAP_DrawCellTree(sgpAutomapLayerEx->pObjects, &pDC6);
-    if (MiniMapType != 1) {
-      fSavedFlag = (uint8_t*)sgpAutomapLayerEx->fSaved;
-      if (fSavedFlag != (uint8_t*)0x1) {
-        if (fSavedFlag != (unsigned char*)(void*)0x2) {
-          if (fSavedFlag != (uint8_t*)0x3) {
-            pDC6.nClipRight = WindowSizeX + 0x10;
-            pDC6.nClipLeft = -0x10;
-            pDC6.nClipTop = -0x20;
-            pDC6.nClipBottom = WindowSizeY + 0x20;
-            pDC6.nOffsetX = 8;
-            pDC6.nOffsetY = 0x10;
-            pDC6.pDC6 = pAutoMapDC6[0];
+    switch (MiniMapType) {
+      case 1:
+        {
+          fSavedFlag = (uint8_t*)sgpAutomapLayerEx->fSaved;
+          if (fSavedFlag != (uint8_t*)0x1) {
+            if (fSavedFlag != (unsigned char*)(void*)0x2) {
+              if (fSavedFlag != (uint8_t*)0x3) {
+                pDC6.pDC6 = pAutoMapDC6[0];
+                pDC6.nClipLeft = gnAutomapCenterX - 8;
+                pDC6.nClipTop = nAutomapCenterY - 0x10;
+                pDC6.nClipRight = WindowSizeX / 3 + 8 + gnAutomapCenterX;
+                pDC6.nClipBottom = WindowSizeY / 3 + 0x10 + nAutomapCenterY;
+                pDC6.nOffsetX = 4;
+                pDC6.nOffsetY = 8;
+              } else {
+                pDC6.pDC6 = pAutoMapDC6[3];
+                pDC6.nClipLeft = gnAutomapCenterX - 0xb4;
+                pDC6.nClipTop = nAutomapCenterY - 0xaa;
+                pDC6.nClipRight = WindowSizeX / 3 + 0xb4 + gnAutomapCenterX;
+                pDC6.nClipBottom = WindowSizeY / 3 + 0xaa + nAutomapCenterY;
+                pDC6.nOffsetX = 0x5a;
+                pDC6.nOffsetY = 0x55;
+              }
+            } else {
+              pDC6.pDC6 = pAutoMapDC6[2];
+              pDC6.nClipLeft = gnAutomapCenterX - 0x88;
+              pDC6.nClipTop = nAutomapCenterY - 0x5a;
+              pDC6.nClipRight = WindowSizeX / 3 + 0x88 + gnAutomapCenterX;
+              pDC6.nClipBottom = WindowSizeY / 3 + 0x5a + nAutomapCenterY;
+              pDC6.nOffsetX = 0x44;
+              pDC6.nOffsetY = 0x2d;
+            }
           } else {
-            pDC6.nClipRight = WindowSizeX + 0xb4;
-            pDC6.nClipLeft = -0xb4;
-            pDC6.nClipTop = -0xaa;
-            pDC6.nClipBottom = WindowSizeY + 0xaa;
-            pDC6.nOffsetX = 0x5a;
-            pDC6.nOffsetY = 0x55;
-            pDC6.pDC6 = pAutoMapDC6[3];
+            pDC6.pDC6 = pAutoMapDC6[1];
+            pDC6.nClipLeft = gnAutomapCenterX - 0xa0;
+            pDC6.nClipTop = nAutomapCenterY - 100;
+            pDC6.nClipRight = WindowSizeX / 3 + 0xa0 + gnAutomapCenterX;
+            pDC6.nClipBottom = WindowSizeY / 3 + 100 + nAutomapCenterY;
+            pDC6.nOffsetX = 0x50;
+            pDC6.nOffsetY = 0x32;
           }
-        } else {
-          pDC6.nClipRight = WindowSizeX + 0x88;
-          pDC6.nClipLeft = -0x88;
-          pDC6.nClipTop = -0x5a;
-          pDC6.nClipBottom = WindowSizeY + 0x5a;
-          pDC6.nOffsetX = 0x44;
-          pDC6.nOffsetY = 0x2d;
-          pDC6.pDC6 = pAutoMapDC6[2];
-        }
-      } else {
-        pDC6.nClipRight = WindowSizeX + 0xa0;
-        pDC6.nClipLeft = -0xa0;
-        pDC6.nClipTop = -100;
-        pDC6.nClipBottom = WindowSizeY + 100;
-        pDC6.nOffsetX = 0x50;
-        pDC6.nOffsetY = 0x32;
-        pDC6.pDC6 = pAutoMapDC6[1];
-      }
 
-      nAutoMapZoomDivisor = 10;
-    } else {
-      fSavedFlag = (uint8_t*)sgpAutomapLayerEx->fSaved;
-      if (fSavedFlag != (uint8_t*)0x1) {
-        if (fSavedFlag != (unsigned char*)(void*)0x2) {
-          if (fSavedFlag != (uint8_t*)0x3) {
-            pDC6.pDC6 = pAutoMapDC6[0];
-            pDC6.nClipLeft = gnAutomapCenterX - 8;
-            pDC6.nClipTop = nAutomapCenterY - 0x10;
-            pDC6.nClipRight = WindowSizeX / 3 + 8 + gnAutomapCenterX;
-            pDC6.nClipBottom = WindowSizeY / 3 + 0x10 + nAutomapCenterY;
-            pDC6.nOffsetX = 4;
-            pDC6.nOffsetY = 8;
+          nAutoMapZoomDivisor = 0x14;
+          break;
+        }
+      default:
+        {
+          fSavedFlag = (uint8_t*)sgpAutomapLayerEx->fSaved;
+          if (fSavedFlag != (uint8_t*)0x1) {
+            if (fSavedFlag != (unsigned char*)(void*)0x2) {
+              if (fSavedFlag != (uint8_t*)0x3) {
+                pDC6.nClipRight = WindowSizeX + 0x10;
+                pDC6.nClipLeft = -0x10;
+                pDC6.nClipTop = -0x20;
+                pDC6.nClipBottom = WindowSizeY + 0x20;
+                pDC6.nOffsetX = 8;
+                pDC6.nOffsetY = 0x10;
+                pDC6.pDC6 = pAutoMapDC6[0];
+              } else {
+                pDC6.nClipRight = WindowSizeX + 0xb4;
+                pDC6.nClipLeft = -0xb4;
+                pDC6.nClipTop = -0xaa;
+                pDC6.nClipBottom = WindowSizeY + 0xaa;
+                pDC6.nOffsetX = 0x5a;
+                pDC6.nOffsetY = 0x55;
+                pDC6.pDC6 = pAutoMapDC6[3];
+              }
+            } else {
+              pDC6.nClipRight = WindowSizeX + 0x88;
+              pDC6.nClipLeft = -0x88;
+              pDC6.nClipTop = -0x5a;
+              pDC6.nClipBottom = WindowSizeY + 0x5a;
+              pDC6.nOffsetX = 0x44;
+              pDC6.nOffsetY = 0x2d;
+              pDC6.pDC6 = pAutoMapDC6[2];
+            }
           } else {
-            pDC6.pDC6 = pAutoMapDC6[3];
-            pDC6.nClipLeft = gnAutomapCenterX - 0xb4;
-            pDC6.nClipTop = nAutomapCenterY - 0xaa;
-            pDC6.nClipRight = WindowSizeX / 3 + 0xb4 + gnAutomapCenterX;
-            pDC6.nClipBottom = WindowSizeY / 3 + 0xaa + nAutomapCenterY;
-            pDC6.nOffsetX = 0x5a;
-            pDC6.nOffsetY = 0x55;
+            pDC6.nClipRight = WindowSizeX + 0xa0;
+            pDC6.nClipLeft = -0xa0;
+            pDC6.nClipTop = -100;
+            pDC6.nClipBottom = WindowSizeY + 100;
+            pDC6.nOffsetX = 0x50;
+            pDC6.nOffsetY = 0x32;
+            pDC6.pDC6 = pAutoMapDC6[1];
           }
-        } else {
-          pDC6.pDC6 = pAutoMapDC6[2];
-          pDC6.nClipLeft = gnAutomapCenterX - 0x88;
-          pDC6.nClipTop = nAutomapCenterY - 0x5a;
-          pDC6.nClipRight = WindowSizeX / 3 + 0x88 + gnAutomapCenterX;
-          pDC6.nClipBottom = WindowSizeY / 3 + 0x5a + nAutomapCenterY;
-          pDC6.nOffsetX = 0x44;
-          pDC6.nOffsetY = 0x2d;
-        }
-      } else {
-        pDC6.pDC6 = pAutoMapDC6[1];
-        pDC6.nClipLeft = gnAutomapCenterX - 0xa0;
-        pDC6.nClipTop = nAutomapCenterY - 100;
-        pDC6.nClipRight = WindowSizeX / 3 + 0xa0 + gnAutomapCenterX;
-        pDC6.nClipBottom = WindowSizeY / 3 + 100 + nAutomapCenterY;
-        pDC6.nOffsetX = 0x50;
-        pDC6.nOffsetY = 0x32;
-      }
 
-      nAutoMapZoomDivisor = 0x14;
+          nAutoMapZoomDivisor = 10;
+        }
     }
 
     AUTOMAP_DrawCellTree(sgpAutomapLayerEx->pExtras, &pDC6);
@@ -2349,7 +2381,9 @@ void __stdcall AUTOMAP_DrawDifficulty() {
 }
 
 void __stdcall AUTOMAP_LoadDC6Sprites() {
+    BOOL bIsExpansion;
     char szPath[260];
+    char* szFmt;
     szPath[0] = '\0';
     memset(szPath + 1, 0, 0x103);
     DC6** ppDC6 = pAutoMapDC6;
@@ -2362,38 +2396,44 @@ void __stdcall AUTOMAP_LoadDC6Sprites() {
       ppDC6++;
     } while ((int)ppDC6 < (intptr_t)((char*)&pAutoMapDC6 + sizeof(pAutoMapDC6)));
 
-    if (MiniMapType != 1) {
-      BOOL bIsExpansion;
-      sprintf(szPath, "%s\\UI\\AutoMap\\MaxiMap", "DATA\\GLOBAL");
-      pAutoMapDC6[0] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      nAutoMapDC6FrameCount[0] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[0]);
-      sprintf(szPath, "%s\\UI\\AutoMap\\Act2Map", "DATA\\GLOBAL");
-      pAutoMapDC6[1] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      nAutoMapDC6FrameCount[1] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[1]);
-      sprintf(szPath, "%s\\UI\\AutoMap\\Act4Map", "DATA\\GLOBAL");
-      pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
-      bIsExpansion = Fog::D2CheckExpansionGame();
-      if (!bIsExpansion) {
-        pAutoMapDC6[3] = 0;
-        nAutoMapDC6FrameCount[3] = 0;
-        return;
-      }
+    switch (MiniMapType) {
+      case 1:
+        {
+          sprintf(szPath, "%s\\UI\\AutoMap\\MaxiMapS", "DATA\\GLOBAL");
+          pAutoMapDC6[0] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[0] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[0]);
+          sprintf(szPath, "%s\\UI\\AutoMap\\Act2MapS", "DATA\\GLOBAL");
+          pAutoMapDC6[1] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[1] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[1]);
+          sprintf(szPath, "%s\\UI\\AutoMap\\Act4MapS", "DATA\\GLOBAL");
+          pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
+          szFmt = "%s\\UI\\AutoMap\\ExTnMapS";
+          break;
+        }
+      default:
+        {
+          sprintf(szPath, "%s\\UI\\AutoMap\\MaxiMap", "DATA\\GLOBAL");
+          pAutoMapDC6[0] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[0] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[0]);
+          sprintf(szPath, "%s\\UI\\AutoMap\\Act2Map", "DATA\\GLOBAL");
+          pAutoMapDC6[1] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[1] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[1]);
+          sprintf(szPath, "%s\\UI\\AutoMap\\Act4Map", "DATA\\GLOBAL");
+          pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+          nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
+          bIsExpansion = Fog::D2CheckExpansionGame();
+          if (!bIsExpansion) {
+            pAutoMapDC6[3] = 0;
+            nAutoMapDC6FrameCount[3] = 0;
+            return;
+          }
 
-      sprintf(szPath, "%s\\UI\\AutoMap\\ExTnMap", "DATA\\GLOBAL");
-    } else {
-      sprintf(szPath, "%s\\UI\\AutoMap\\MaxiMapS", "DATA\\GLOBAL");
-      pAutoMapDC6[0] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      nAutoMapDC6FrameCount[0] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[0]);
-      sprintf(szPath, "%s\\UI\\AutoMap\\Act2MapS", "DATA\\GLOBAL");
-      pAutoMapDC6[1] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      nAutoMapDC6FrameCount[1] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[1]);
-      sprintf(szPath, "%s\\UI\\AutoMap\\Act4MapS", "DATA\\GLOBAL");
-      pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
-      sprintf(szPath, "%s\\UI\\AutoMap\\ExTnMapS", "DATA\\GLOBAL");
+          szFmt = "%s\\UI\\AutoMap\\ExTnMap";
+        }
     }
 
+    sprintf(szPath, szFmt, "DATA\\GLOBAL");
     pAutoMapDC6[3] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     nAutoMapDC6FrameCount[3] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[3]);
 }

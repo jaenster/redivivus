@@ -64,9 +64,9 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<TSHashObjectChunk<::CELLI
 
     pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pBackLink = (int)nNext;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
@@ -157,9 +157,9 @@ void __thiscall Destructor_Unreferenced2(TSExplicitList<::CELLIST, -572662307>* 
 
     pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pBackLink = (int)nNext;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST * pNode) {
@@ -178,9 +178,9 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST
       int* pBackLink;
       pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
-      pTVar1->m_prevlink->m_next = pNode->m_frames.m_terminator.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
-      pNode->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     pNode->Destructor();
@@ -197,9 +197,9 @@ void __thiscall Destructor_Unreferenced(::CELLIST * pThis) {
       int* pBackLink;
       pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
-      pTVar1->m_prevlink->m_next = pThis->m_frames.m_terminator.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
-      pThis->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     pThis->Destructor();
@@ -302,9 +302,9 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
         if (nNext) {
           pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pBackLink = (int)nNext;
-          pTVar1->m_prevlink->m_next = pBucketSlot->m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          pBucketSlot->m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nBucketIdx++;
@@ -349,9 +349,9 @@ template<> void TSGrowableArray<CELLIST>::Destructor() {
         if (nNext) {
           pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pBackLink = (int)nNext;
-          pTVar1->m_prevlink->m_next = nEntryAddr->m_frames.m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          nEntryAddr->m_frames.m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nEntryAddr->Destructor();
@@ -478,12 +478,12 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::SetCount(u
         pTVar3 = pFlushSlot->m_terminator.m_prevlink;
         pTVar1 = &pFlushSlot->m_terminator;
         if (pTVar3) {
-          uVar2 = pFlushSlot->m_terminator.m_next;
+          uVar2 = pTVar1->m_next;
           pBackLink2 = (int*)D2_StormNextLink(pTVar1, -1);
           *pBackLink2 = (int)pTVar3;
-          pTVar1->m_prevlink->m_next = pFlushSlot->m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          pFlushSlot->m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nShrinkIdx++;
@@ -626,9 +626,9 @@ template<> void __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalDelete(TS
       int* pBackLink;
       pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
-      pTVar1->m_prevlink->m_next = pNode->m_frames.m_terminator.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
-      pNode->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     pNode->Destructor();
@@ -714,9 +714,9 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
       int* pBackLink;
       pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNextEntry;
-      pTVar1->m_prevlink->m_next = pNode->m_frames.m_terminator.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
-      pNode->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     pNode->Destructor();

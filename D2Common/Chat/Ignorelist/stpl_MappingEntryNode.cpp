@@ -90,9 +90,9 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::MappingEntryNode, -5726
 
     pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)nHeadEntry;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> void TSExplicitList<MappingEntryNode, -572662307>::ChangeLinkOffset(int32_t nLinkOffset) {
@@ -237,9 +237,9 @@ void __thiscall Destructor_UnreferencedCopy(TSExplicitList<::MappingEntryNode, -
 
     pListHead = (int*)D2_StormNextLink(pTVar1, -1);
     *pListHead = (int)nHead;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
@@ -339,9 +339,9 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::D
         if (nHead) {
           pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pPrevLink = (int)nHead;
-          pTVar1->m_prevlink->m_next = pBucket->m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          pBucket->m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nBucketIdx++;
@@ -435,12 +435,12 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::S
         pTVar3 = pSrcBucket->m_terminator.m_prevlink;
         pTVar1 = &pSrcBucket->m_terminator;
         if (pTVar3) {
-          uVar2 = pSrcBucket->m_terminator.m_next;
+          uVar2 = pTVar1->m_next;
           pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pPrevLink = (int)pTVar3;
-          pTVar1->m_prevlink->m_next = pSrcBucket->m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          pSrcBucket->m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nBucketIdx++;

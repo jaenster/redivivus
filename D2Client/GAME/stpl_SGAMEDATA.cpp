@@ -376,9 +376,9 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
 
     pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)pNext;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 // Destructor: unlinks every chunk, then unlinks the terminator.

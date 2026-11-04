@@ -68,9 +68,9 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<TSHashObjectChunk<::SGAME
 
     pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)pNext;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
@@ -169,9 +169,9 @@ void __thiscall Destructor_Unreferenced2(TSExplicitList<::SGAMEDATA, -572662307>
 
     pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)pNext;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocData(uint32_t nAlloc) {
@@ -271,9 +271,9 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destruct
         if (pNext) {
           pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pPrevLink = (int)pNext;
-          pTVar1->m_prevlink->m_next = pSlot->m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          pSlot->m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nIndex++;
@@ -394,12 +394,12 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount
         pTVar3 = pSlotI->m_terminator.m_prevlink;
         pTVar1 = &pSlotI->m_terminator;
         if (pTVar3) {
-          uVar2 = pSlotI->m_terminator.m_next;
+          uVar2 = pTVar1->m_next;
           pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pPrevLink = (int)pTVar3;
-          pTVar1->m_prevlink->m_next = pSlotI->m_terminator.m_next;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
           pTVar1->m_prevlink = 0;
-          pSlotI->m_terminator.m_next = 0;
+          pTVar1->m_next = 0;
         }
 
         nIndex++;

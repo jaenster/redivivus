@@ -1143,22 +1143,31 @@ void __stdcall ClearInteractInfo(D2UnitStrc * pUnit) {
 BOOL __fastcall CheckForModeZeroDeath(D2UnitStrc * pUnit) {
     if (pUnit && !(pUnit->eUnitFlags & UNITFLAG_ISDEAD)) {
       bool bIsDeadMode;
-      if (pUnit->eUnitType != UNIT_PLAYER) {
-        if (pUnit->eUnitType != UNIT_MONSTER) {
-          return 1;
-        }
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          return 1;
-        }
+      switch (pUnit->eUnitType) {
+        case UNIT_PLAYER:
+          {
+            if (pUnit->eAnimMode.ePlayerMode == Death) {
+              return 1;
+            }
 
-        bIsDeadMode = pUnit->eAnimMode.ePlayerMode == Kick;
-      } else {
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          return 1;
-        }
+            bIsDeadMode = pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead;
+            break;
+          }
+        default:
+          {
+            return 1;
+          }
+        case UNIT_MONSTER:
+          {
+            if (pUnit->eAnimMode.ePlayerMode == Death) {
+              return 1;
+            }
 
-        bIsDeadMode = pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead;
+            bIsDeadMode = pUnit->eAnimMode.ePlayerMode == Kick;
+            break;
+          }
       }
+
       if (!bIsDeadMode) {
         return 0;
       }
@@ -2131,6 +2140,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
 }
 
 static void ClearInteractOnFreePlayer(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+    D2MonsterAiStrc* pMonsterAi;
     if (!pUnit->uSideData.pServerSide.bInteracting) {
       return;
     }
@@ -2139,23 +2149,27 @@ static void ClearInteractOnFreePlayer(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     if (!pInteractedUnit) {
       return;
     }
-    if (pInteractedUnit->eUnitType != UNIT_MONSTER) {
-      if (pInteractedUnit->eUnitType == UNIT_OBJECT) {
-        Objects::ObjectsMode::OBJMODE_OnWaypointFinish(pGame, pInteractedUnit);
-        pUnit->uSideData.pServerSide.dwInteractGUID = -1;
-        pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
-        pUnit->uSideData.pServerSide.bInteracting = 0;
-        return;
-      }
-    } else {
-      D2MonsterAiStrc* pMonsterAi;
-      pMonsterAi = 0;
-      if (pInteractedUnit->pUnitData.pUnitDataMonster) {
-        pMonsterAi = pInteractedUnit->pUnitData.pUnitDataMonster->pMonsterAi;
-      }
 
-      D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, pMonsterAi);
-      sunitproxy::SUNITPROXY_RemovePlayerFromNpc(pGame, pUnit, (D2PoolManagerStrc*)pInteractedUnit);
+    switch (pInteractedUnit->eUnitType) {
+      case UNIT_MONSTER:
+        {
+          pMonsterAi = 0;
+          if (pInteractedUnit->pUnitData.pUnitDataMonster) {
+            pMonsterAi = pInteractedUnit->pUnitData.pUnitDataMonster->pMonsterAi;
+          }
+
+          D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, pMonsterAi);
+          sunitproxy::SUNITPROXY_RemovePlayerFromNpc(pGame, pUnit, (D2PoolManagerStrc*)pInteractedUnit);
+          break;
+        }
+      case UNIT_OBJECT:
+        {
+          Objects::ObjectsMode::OBJMODE_OnWaypointFinish(pGame, pInteractedUnit);
+          pUnit->uSideData.pServerSide.dwInteractGUID = -1;
+          pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
+          pUnit->uSideData.pServerSide.bInteracting = 0;
+          return;
+        }
     }
 
     pUnit->uSideData.pServerSide.dwInteractGUID = -1;

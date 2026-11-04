@@ -271,17 +271,24 @@ void __stdcall InitializeSystemInfo() {
       }
 
       fGameVersion = fMajorVersionF + fMinorVersionFrac / 100.0;
-      if (osVersionInfo.dwPlatformId != 2) {
-        g_eOSType = 0;
-      } else {
-        g_eOSType = 1;
-        if (osVersionInfo.dwMajorVersion >= 5) {
-          if (osVersionInfo.dwMinorVersion >= 2) {
-            g_eOSType = 4;
-          } else {
-            g_eOSType = 3 - (uint32_t)!osVersionInfo.dwMinorVersion;
+      switch (osVersionInfo.dwPlatformId) {
+        case 2:
+          {
+            g_eOSType = 1;
+            if (osVersionInfo.dwMajorVersion >= 5) {
+              if (osVersionInfo.dwMinorVersion >= 2) {
+                g_eOSType = 4;
+              } else {
+                g_eOSType = 3 - (uint32_t)!osVersionInfo.dwMinorVersion;
+              }
+            }
+
+            break;
           }
-        }
+        default:
+          {
+            g_eOSType = 0;
+          }
       }
     }
 

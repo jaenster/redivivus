@@ -285,27 +285,32 @@ BOOL __stdcall DRLGROOM_AddUnitToRoomList(D2UnitStrc * pUnit, D2RoomStrc * pRoom
         exit(-1);
       } else {
         ppUnitList = DUNGEON::Dungeon::DRLGROOM_GetUnitListFromRoom(pRoom);
-        if (!ppUnitList) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x57);
-          exit(-1);
+        if (ppUnitList) {
+          pUnit->pRoomNext = *ppUnitList;
+          *ppUnitList = pUnit;
+          ROOM_LinkUnitToUpdateList(pUnit);
+          switch (pUnit->eUnitType) {
+            default:
+              {
+                return 1;
+              }
+            case UNIT_MONSTER:
+              {
+                nLine = Stats::StatsEx::STATSEX_GetAlignment(pUnit);
+                if (nLine != 2) {
+                  return 1;
+                }
+              }
+            case UNIT_PLAYER:
+              {
+                DUNGEON::Dungeon::DRLGROOM_IncreaseAlliedCount(pRoom);
+                return 1;
+              }
+          }
         }
 
-        pUnit->pRoomNext = *ppUnitList;
-        *ppUnitList = pUnit;
-        ROOM_LinkUnitToUpdateList(pUnit);
-        if (pUnit->eUnitType != UNIT_PLAYER) {
-          if (pUnit->eUnitType != UNIT_MONSTER) {
-            return 1;
-          }
-
-          nLine = Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-          if (nLine != 2) {
-            return 1;
-          }
-        }
-
-        DUNGEON::Dungeon::DRLGROOM_IncreaseAlliedCount(pRoom);
-        return 1;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x57);
+        exit(-1);
       }
     }
 }

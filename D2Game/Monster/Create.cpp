@@ -121,12 +121,17 @@ static void __fastcall MONSTER_EquipFromClassTable(D2UnitStrc * pUnit) {
       sEquipEntry.dwItemCode = *pEquipTableEntry;
       *(uint32_t*)((char*)&sEquipEntry + 4) = pEquipTableEntry[1];
       pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(sEquipEntry.dwItemCode, &bNormalCode);
-      if (pGame->nDifficulty != 1) {
-        if (pGame->nDifficulty == 2) {
-          sEquipEntry.dwItemCode = pItemsTxt->dwUltraCode;
-        }
-      } else {
-        sEquipEntry.dwItemCode = pItemsTxt->dwUberCode;
+      switch (pGame->nDifficulty) {
+        case 1:
+          {
+            sEquipEntry.dwItemCode = pItemsTxt->dwUberCode;
+            break;
+          }
+        case 2:
+          {
+            sEquipEntry.dwItemCode = pItemsTxt->dwUltraCode;
+            break;
+          }
       }
 
       MONSTER_CreateAndEquipItem(pGame, pUnit, &sEquipEntry, nMonsterLevel, QUALITY_MAGIC);

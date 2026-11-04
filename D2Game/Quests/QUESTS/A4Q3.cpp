@@ -963,12 +963,17 @@ void __fastcall Q28_TimerCallback_DropForgeRunes(D2QuestDataStrc * pQuestData, D
       pGame = pQuestData->pGame;
       if (pGame->bExpansion) {
         pRuneTable = aRunesListNomal;
-        if (pGame->nDifficulty != 1) {
-          if (pGame->nDifficulty == 2) {
-            pRuneTable = aRunesListHell;
-          }
-        } else {
-          pRuneTable = aRunesListNightmare;
+        switch (pGame->nDifficulty) {
+          case 1:
+            {
+              pRuneTable = aRunesListNightmare;
+              break;
+            }
+          case 2:
+            {
+              pRuneTable = aRunesListHell;
+              break;
+            }
         }
 
         pSeed = GetQuestControlSeed(pGame);

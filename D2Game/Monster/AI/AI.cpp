@@ -10982,12 +10982,17 @@ void __fastcall AITHINK_Fn1_Diablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     if (false) {
       default_case:
       nDecision = 0xc;
-      if (pGame->nDifficulty != 1) {
-        if (pGame->nDifficulty == 2) {
-          nDecision = 4;
-        }
-      } else {
-        nDecision = 8;
+      switch (pGame->nDifficulty) {
+        case 1:
+          {
+            nDecision = 8;
+            break;
+          }
+        case 2:
+          {
+            nDecision = 4;
+            break;
+          }
       }
 
       goto idle;

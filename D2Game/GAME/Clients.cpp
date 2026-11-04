@@ -480,15 +480,21 @@ static void __stdcall CLIENT_AddUnitToProximitySortedList(int32_t nX, D2UnitStrc
     }
     if (!nPrevSlot && pnManhattanDist < pNodes->nDistance) {
       uint32_t* pSlotEntry;
-      if (pClient->nPacketBuffer.nCount != 1) {
-        pSlotEntry = (uint32_t*)&pNodes[nFreeSlot].pUnit;
-        pSlotEntry[2] = pNodes->nNext;
-        *pSlotEntry = (uint32_t)(uintptr_t)pNodes->pUnit;
-        pSlotEntry[1] = pNodes->nDistance;
+      switch (pClient->nPacketBuffer.nCount) {
+        default:
+          {
+            pSlotEntry = (uint32_t*)&pNodes[nFreeSlot].pUnit;
+            pSlotEntry[2] = pNodes->nNext;
+            *pSlotEntry = (uint32_t)(uintptr_t)pNodes->pUnit;
+            pSlotEntry[1] = pNodes->nDistance;
+          }
+        case 1:
+          {
+            pNodes->nNext = nFreeSlot;
+            nFreeSlot = 0;
+            break;
+          }
       }
-
-      pNodes->nNext = nFreeSlot;
-      nFreeSlot = 0;
     } else {
       pNodes[nFreeSlot].nNext = pNodes[nPrevSlot].nNext;
       pNodes[nPrevSlot].nNext = nFreeSlot;

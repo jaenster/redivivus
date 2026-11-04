@@ -2792,15 +2792,19 @@ BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 1);
       D2Common::Units::SetCurrentSkill(pUnit, nullptr);
       pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
-      if (pUnit->eUnitType != UNIT_PLAYER) {
-        if (pUnit->eUnitType == UNIT_MONSTER) {
-          Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Attack1, &sKillData);
-          sKillData.pAttacker = pTarget;
-          Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillData, 1);
-          return 1;
-        }
-      } else {
-        PLAYER::PlayerModes::PLRMODES_StartModeID(pGame, pUnit, pSkill, 7, pTarget->eUnitType, pTarget->nUnitGUID, 1);
+      switch (pUnit->eUnitType) {
+        case UNIT_PLAYER:
+          {
+            PLAYER::PlayerModes::PLRMODES_StartModeID(pGame, pUnit, pSkill, 7, pTarget->eUnitType, pTarget->nUnitGUID, 1);
+            break;
+          }
+        case UNIT_MONSTER:
+          {
+            Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Attack1, &sKillData);
+            sKillData.pAttacker = pTarget;
+            Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillData, 1);
+            return 1;
+          }
       }
 
       return 1;

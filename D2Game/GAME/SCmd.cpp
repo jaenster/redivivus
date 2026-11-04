@@ -1330,21 +1330,27 @@ static BOOL __stdcall SCMD_DispatchUnitPartyData(D2UnitStrc * pUnit, int32_t nUn
       exit(-1);
     } else {
       int32_t nResult;
-      if (!pUnit2) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x713);
-        exit(-1);
-      }
-      if (pUnit2->eUnitType != UNIT_PLAYER) {
-        if (pUnit2->eUnitType != UNIT_MONSTER) {
-          return 0;
+      if (pUnit2) {
+        switch (pUnit2->eUnitType) {
+          case UNIT_PLAYER:
+            {
+              nPartyDataChanged = PLAYERDATA_AllocPartyData(pUnit2, nUnitLife, eLevel, pUnit);
+              return nPartyDataChanged;
+            }
+          case UNIT_MONSTER:
+            {
+              nResult = SCMD_CheckMonsterPositionDesync(pUnit, pUnit2, nUnitLife);
+              return nResult;
+            }
+          default:
+            {
+              return 0;
+            }
         }
-
-        nResult = SCMD_CheckMonsterPositionDesync(pUnit, pUnit2, nUnitLife);
-        return nResult;
       }
 
-      nPartyDataChanged = PLAYERDATA_AllocPartyData(pUnit2, nUnitLife, eLevel, pUnit);
-      return nPartyDataChanged;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x713);
+      exit(-1);
     }
 }
 

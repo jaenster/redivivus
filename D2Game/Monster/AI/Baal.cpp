@@ -1133,13 +1133,17 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
           break;
           case 1:
             nTeleportParam = 0x23;
-          if (pGame->nDifficulty != 1) {
-            if (pGame->nDifficulty == 2) {
-              PlanNextAiMove(pGame, pUnit, 5);
-              return;
-            }
-          } else {
-            nTeleportParam = 0xf;
+          switch (pGame->nDifficulty) {
+            case 1:
+              {
+                nTeleportParam = 0xf;
+                break;
+              }
+            case 2:
+              {
+                PlanNextAiMove(pGame, pUnit, 5);
+                return;
+              }
           }
 
           PlanNextAiMove(pGame, pUnit, nTeleportParam);

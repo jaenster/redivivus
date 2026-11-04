@@ -515,9 +515,9 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::CELLIST, -572662307>* p
 
     pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pBackLink = (int)nNext;
-    pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Destructor() {
@@ -569,9 +569,9 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
       if (nNext) {
         pBackLink = (uint32_t*)D2_StormNextLink(pTVar1, -1);
         *pBackLink = (uint32_t)(uintptr_t)nNext;
-        pTVar1->m_prevlink->m_next = pObject->m_link.m_next;
+        pTVar1->m_prevlink->m_next = pTVar1->m_next;
         pTVar1->m_prevlink = 0;
-        pObject->m_link.m_next = 0;
+        pTVar1->m_next = 0;
       }
 
       ((TSGrowableArray<::CELLIST>*)pObject)->Destructor();

@@ -369,17 +369,24 @@ static int gaAnimTableExpansion[80] = {
 namespace D2Common::Units {
 
 uint8_t __stdcall GetDirection(D2UnitStrc * pUnit) {
+    uint8_t byDirection;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3bb);
       exit(-1);
     }
-    if (pUnit->eUnitType != UNIT_OBJECT && pUnit->eUnitType != UNIT_ITEM) {
-      uint8_t byDirection;
-      byDirection = PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
-      return byDirection;
-    }
 
-    return pUnit->pPath.pStaticPath->nDirection;
+    switch (pUnit->eUnitType) {
+      case UNIT_OBJECT:
+        case UNIT_ITEM:
+          {
+            return pUnit->pPath.pStaticPath->nDirection;
+          }
+      default:
+        {
+          byDirection = PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
+          return byDirection;
+        }
+    }
 }
 
 D2SkillStrc * __stdcall GetFirstSkill(D2UnitStrc * pUnit) {
@@ -460,8 +467,12 @@ void __stdcall Free(D2UnitStrc * pUnit) {
 
     Stats::StatsEx::STATLIST_FreeStatListMemory(pUnit);
     Skills::SKILLS_FreeSkillList(pUnit);
-    if (pUnit->eUnitType == UNIT_MONSTER) {
-      D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataPlayer, ".\\UNITS\\Units.cpp", 0x69a);
+    switch (pUnit->eUnitType) {
+      case UNIT_MONSTER:
+        {
+          D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataPlayer, ".\\UNITS\\Units.cpp", 0x69a);
+          break;
+        }
     }
 
     pUnit->eUnitType = UNIT_COUNT;
@@ -1070,12 +1081,19 @@ uint32_t __stdcall NeedsRoomUpdate(D2UnitStrc * pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x9ec);
       exit(-1);
     }
-    if (pUnit->eUnitType != UNIT_OBJECT && pUnit->eUnitType != UNIT_ITEM) {
-      bNeedsUpdate = PATH::DynamicPath::Get0x02Flag(pUnit->pPath.pDynamicPath);
-      return bNeedsUpdate;
-    }
 
-    return (uint32_t)pUnit->pPath.pStaticPath->bRoomNeedsUpdate;
+    switch (pUnit->eUnitType) {
+      case UNIT_OBJECT:
+        case UNIT_ITEM:
+          {
+            return (uint32_t)pUnit->pPath.pStaticPath->bRoomNeedsUpdate;
+          }
+      default:
+        {
+          bNeedsUpdate = PATH::DynamicPath::Get0x02Flag(pUnit->pPath.pDynamicPath);
+          return bNeedsUpdate;
+        }
+    }
 }
 
 void __stdcall ChangeAnimMode(D2UnitStrc * pUnit, int32_t nMode) {
@@ -1176,15 +1194,18 @@ int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bL
         }
       case UNIT_OBJECT:
         {
-          /* Guild Vault */ if (pUnit->nClassId != 0x152) {
-            /* Trophy Case */ if (pUnit->nClassId != 0x153) {
-              return -1;
-            }
-
-            return 0xb;
+          /* Guild Vault */ switch (pUnit->nClassId) {
+            case 0x152:
+              {
+                return 10;
+              }
+            case 0x153:
+              {
+                return 0xb;
+              }
           }
 
-          return 10;
+          return -1;
         }
     }
 
