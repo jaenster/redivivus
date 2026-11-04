@@ -172,7 +172,7 @@ void __thiscall SetLinkOffset_Unreferenced(TSExplicitList<::SGAMEDATA, -57266230
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -572662307>::CopyConstructor(TSExplicitList<::SGAMEDATA, -572662307>* pSource) {
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
     int nListId = pSource->m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = nListId;
@@ -215,7 +215,7 @@ template<> void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
     *pPrevLink = (int)pNextNode;
     pTVar1->m_prevlink->m_next = this->m_linktoslot.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_linktoslot.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 // Unreferenced copy of UnlinkNode: unlinks pNode and clears its link.
@@ -403,7 +403,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     *pPrevLink = (int)pNext;
     pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 // Unreferenced copy of the copy constructor; returns this.
@@ -412,7 +412,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
 TSExplicitList<::SGAMEDATA, -572662307>* __thiscall CopyConstructor_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>* pThis, TSExplicitList<::SGAMEDATA, -572662307>* pSource) {
     TSLink<::SGAMEDATA>* pTVar1 = &pThis->m_terminator;
     pTVar1->m_prevlink = 0;
-    pThis->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
     int nListId = pSource->m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     pThis->m_linkoffset = nListId;
@@ -590,7 +590,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
     int pHeadOffset = pList->m_linkoffset;
     if ((int)pTailLink < 0) {
       *(TSLink<::SGAMEDATA>**)~pTailLink = (TSLink<::SGAMEDATA>*)ppSlot;
-      pList->m_terminator.m_next = (int)pGame;
+      pExisting->m_next = (int)pGame;
       return pGame;
     }
     if (pHeadOffset < 0) {
@@ -598,7 +598,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
     }
 
     *(TSLink<::SGAMEDATA>**)(pTailLink + pHeadOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
-    pList->m_terminator.m_next = (int)pGame;
+    pExisting->m_next = (int)pGame;
     return pGame;
 }
 

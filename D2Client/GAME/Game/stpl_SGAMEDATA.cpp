@@ -52,7 +52,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Destructor() {
     *pPrevLink = (int)pNext;
     pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 // Unreferenced copy of the destructor: unlinks every chunk, then the terminator.
@@ -131,7 +131,7 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
       *pPrevLink = (int)pNext;
       pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
@@ -328,7 +328,7 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSHashObjectChunk<SGAME
       *pPrevLink = (int)pNext;
       pTVar1->m_prevlink->m_next = this->m_link.m_next;
       pTVar1->m_prevlink = 0;
-      this->m_link.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     ((TSGrowableArray<::SGAMEDATA>*)this)->Destructor();
@@ -438,7 +438,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       *pPrevLink = pNext;
       pTVar1->m_prevlink->m_next = this->tFullList.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->tFullList.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     ExceptionList = pSehFrame;
@@ -562,7 +562,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Intern
     int nLinkOffset = pList->m_linkoffset;
     if ((int)dwNext < 0) {
       *(TSLink<::SGAMEDATA>**)~dwNext = (TSLink<::SGAMEDATA>*)ppSlot;
-      pList->m_terminator.m_next = (int)pNode;
+      pExisting->m_next = (int)pNode;
       return pNode;
     }
     if (nLinkOffset < 0) {
@@ -570,7 +570,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Intern
     }
 
     *(TSLink<::SGAMEDATA>**)(dwNext + nLinkOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
-    pList->m_terminator.m_next = (int)pNode;
+    pExisting->m_next = (int)pNode;
     return pNode;
 }
 
@@ -762,7 +762,7 @@ template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destructor() {
       *pPrevLink = (int)pNode;
       pTVar1->m_prevlink->m_next = this->tChunkList.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->tChunkList.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     this->tReuseList.UnlinkAll();
@@ -779,7 +779,7 @@ template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destructor() {
       *pPrevLink = (int)pTVar3;
       pTVar2->m_prevlink->m_next = this->tReuseList.m_terminator.m_next;
       pTVar2->m_prevlink = 0;
-      this->tReuseList.m_terminator.m_next = 0;
+      pTVar2->m_next = 0;
     }
 
     this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Destructor();

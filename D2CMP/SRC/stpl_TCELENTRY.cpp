@@ -160,13 +160,13 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Destructor() {
     *pBackLink = (int)nNext;
     pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* TSList<TCELENTRY, TSGetLink<TCELENTRY>>::CopyConstructor(TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* pSource) {
     TSLink<::TCELENTRY>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
     int uPrevHead = pSource->m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = uPrevHead;

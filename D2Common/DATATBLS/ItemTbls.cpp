@@ -1745,14 +1745,8 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
       nTxtGambleSize.pTable = 0;
     }
 
-    nIdx = 0;
-    if (nTxtGambleSize.nSize > 0) {
-      pGambleEntry = &pTxtGamble->nItemClassId;
-      do {
-        *(int*)((int)nTxtGambleSize.pTable + nIdx * 4) = *pGambleEntry;
-        nIdx++;
-        pGambleEntry += 3;
-      } while (nIdx < nTxtGambleSize.nSize);
+    for (nIdx = 0; nIdx < nTxtGambleSize.nSize; nIdx++) {
+      *(int*)((int)nTxtGambleSize.pTable + nIdx * 4) = pTxtGamble[nIdx].nItemClassId;
     }
 
     gnItemTblsCacheSize[0] = 2;

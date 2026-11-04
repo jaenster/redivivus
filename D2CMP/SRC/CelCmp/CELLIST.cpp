@@ -63,7 +63,7 @@ void __thiscall Destructor(::CELLIST * pThis) {
     pThis->nDirections = pSource->nDirections;
     TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
     pTVar1->m_prevlink = 0;
-    pThis->m_frames.m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
     int nAllocPolicy = pSource->m_frames.m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     pThis->m_frames.m_linkoffset = nAllocPolicy;

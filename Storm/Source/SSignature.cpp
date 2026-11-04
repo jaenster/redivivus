@@ -269,7 +269,7 @@ int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulu
 // Was SBIG_SHA1_Round1, filed under SBig. CONFIRMED CORRECT as to operation and ordering - one of the few Storm names in this database that survived checking. Body: E += rol(A,5) + ((~B & D) | (B & C)) + 0x5A827999 + W; B = rol(B,30). That is Ch with K1, i.e. SHA-1 rounds 0..19. No PPC counterpart: MWCC inlined every round into Sha1::Pump, so these four are MSVC out-of-line COMDAT copies with zero callers in this build. Kept the descriptive name (uppercase SHA1_, deliberately unlike the oracle-derived Sha1_ methods) and moved to the SSignature module.
 void __fastcall SHA1_Round1(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
     *pnE = *pnE + (nA << 5 | nA >> 0x1b) + (~*pnB & nD | *pnB & nC) + 0x5a827999 + *pnW;
-    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnB = _rotl(*pnB, 0x1e);
     *pnW = 0;
 }
 
@@ -277,7 +277,7 @@ void __fastcall SHA1_Round1(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
 // Was SBIG_SHA1_Round2. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0x6ED9EBA1 + W - Parity with K2, SHA-1 rounds 20..39. See SHA1_Round1's plate for provenance.
 void __fastcall SHA1_Round2(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
     *pnE = *pnE + (nA << 5 | nA >> 0x1b) + (*pnB ^ nC ^ nD) + 0x6ed9eba1 + *pnW;
-    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnB = _rotl(*pnB, 0x1e);
     *pnW = 0;
 }
 
@@ -285,7 +285,7 @@ void __fastcall SHA1_Round2(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
 // Was SBIG_SHA1_Round3. Confirmed: E += rol(A,5) + ((B & C) | (B & D) | (C & D)) + 0x8F1BBCDC + W - Maj with K3, SHA-1 rounds 40..59. See SHA1_Round1's plate.
 void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
     *pnE = *pnE + ((nC | nD) & *pnB | nC & nD) + 0x8f1bbcdc + (nA << 5 | nA >> 0x1b) + *pnW;
-    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnB = _rotl(*pnB, 0x1e);
     *pnW = 0;
 }
 
@@ -293,7 +293,7 @@ void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
 // Was SBIG_SHA1_Round4. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0xCA62C1D6 + W - Parity with K4, SHA-1 rounds 60..79. See SHA1_Round1's plate.
 void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
     *pnE = *pnE + (*pnB ^ nC ^ nD) + 0xca62c1d6 + (nA << 5 | nA >> 0x1b) + *pnW;
-    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnB = _rotl(*pnB, 0x1e);
     *pnW = 0;
 }
 
@@ -342,9 +342,9 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     nIndex = 0;
     do {
       uVar1 = dwE + 0x5a827999 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (~dwB & dwD | dwC & dwB) + aMsgSchedule[nIndex];
-      uVar2 = dwB << 0x1e | dwB >> 2;
+      uVar2 = _rotl(dwB, 0x1e);
       aMsgSchedule[nIndex] = 0;
-      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwTmp10 = _rotl(dwWorkA, 0x1e);
       dwB = dwD + 0x5a827999 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (~dwWorkA & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex + 1];
       aMsgSchedule[nIndex + 1] = 0;
       dwE = uVar1 * 0x40000000 | uVar1 >> 2;
@@ -361,10 +361,10 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     } while (nIndex < 0x14);
 
     do {
-      uVar2 = dwB << 0x1e | dwB >> 2;
+      uVar2 = _rotl(dwB, 0x1e);
       dwB = dwE + 0x6ed9eba1 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex];
       aMsgSchedule[nIndex] = 0;
-      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwTmp10 = _rotl(dwWorkA, 0x1e);
       dwWorkA = dwD + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex + 1];
       aMsgSchedule[nIndex + 1] = 0;
       nIndex2 = nIndex + 5;
@@ -382,10 +382,10 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     } while (nIndex2 < 0x28);
 
     do {
-      uVar2 = dwB << 0x1e | dwB >> 2;
+      uVar2 = _rotl(dwB, 0x1e);
       dwB = ((dwC | dwB) & dwD | dwC & dwB) + aMsgSchedule[nIndex2] + dwE - 0x70e44324 + (dwWorkA << 5 | dwWorkA >> 0x1b);
       aMsgSchedule[nIndex2] = 0;
-      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwTmp10 = _rotl(dwWorkA, 0x1e);
       dwWorkA = ((uVar2 | dwWorkA) & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex2 + 1] + dwD - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
       aMsgSchedule[nIndex2 + 1] = 0;
       dwE = dwB * 0x40000000 | dwB >> 2;
@@ -402,10 +402,10 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     } while (nIndex2 < 0x3c);
 
     do {
-      uVar2 = dwB << 0x1e | dwB >> 2;
+      uVar2 = _rotl(dwB, 0x1e);
       dwB = (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex2] + dwE - 0x359d3e2a + (dwWorkA << 5 | dwWorkA >> 0x1b);
       aMsgSchedule[nIndex2] = 0;
-      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwTmp10 = _rotl(dwWorkA, 0x1e);
       dwWorkA = (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex2 + 1] + dwD - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
       aMsgSchedule[nIndex2 + 1] = 0;
       dwE = dwB * 0x40000000 | dwB >> 2;

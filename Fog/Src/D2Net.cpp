@@ -40,22 +40,19 @@ void __stdcall NET_SERVER_SentPacketLog_Clear() {
 
 void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
     uint32_t nByteValue;
+    uint32_t nByteIndex;
     uint64_t* pByteCountEntry;
     int* pOverflowCount;
-    uint32_t nByteIndex = 0;
     int nBitCount = 0;
-    if (nSize > 0) {
+    for (nByteIndex = 0; nByteIndex < nSize; nByteIndex++) {
       uint64_t nOldByteCount;
-      do {
-        nByteValue = (uint32_t)(uint8_t)pBytes[nByteIndex];
-        pByteCountEntry = gaServerSentPacketByteCounts + nByteValue;
-        nOldByteCount = *pByteCountEntry;
-        *(uint32_t*)pByteCountEntry = (uint32_t)*pByteCountEntry + 1;
-        pOverflowCount = (int*)((int)gaServerSentPacketByteCounts + nByteValue * 8 + 4);
-        *pOverflowCount += (uint32_t)(-2 < (uint32_t)nOldByteCount);
-        nByteIndex++;
-        nBitCount += (uint32_t)gabHuffmanCodeLengths[nByteValue];
-      } while (nByteIndex < nSize);
+      nByteValue = (uint32_t)(uint8_t)pBytes[nByteIndex];
+      pByteCountEntry = gaServerSentPacketByteCounts + nByteValue;
+      nOldByteCount = *pByteCountEntry;
+      *(uint32_t*)pByteCountEntry = (uint32_t)*pByteCountEntry + 1;
+      pOverflowCount = (int*)((int)gaServerSentPacketByteCounts + nByteValue * 8 + 4);
+      *pOverflowCount += (uint32_t)(-2 < (uint32_t)nOldByteCount);
+      nBitCount += (uint32_t)gabHuffmanCodeLengths[nByteValue];
     }
 
     nByteIndex = nBitCount + 7U >> 3;

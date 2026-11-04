@@ -62,7 +62,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::Destructor() {
     *pPrevLink = (int)nHeadEntry;
     pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
@@ -82,7 +82,7 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
       *pPrevLink = (int)nHeadEntry;
       pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
@@ -393,7 +393,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor() {
       *pListHead = (int)pHead;
       pTVar1->m_prevlink->m_next = this->tFullList.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->tFullList.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     ExceptionList = pExSave;
@@ -454,7 +454,7 @@ template<> ::StringEntryNode * __thiscall TSHashTable<StringEntryNode, HASHKEY_S
     int pNext = pList->m_linkoffset;
     if ((int)dwNext < 0) {
       *(TSLink<::StringEntryNode>**)~dwNext = (TSLink<::StringEntryNode>*)pBucketHead;
-      pList->m_terminator.m_next = (int)pNode;
+      pHeadEntry->m_next = (int)pNode;
       return pNode;
     }
     if (pNext < 0) {
@@ -462,7 +462,7 @@ template<> ::StringEntryNode * __thiscall TSHashTable<StringEntryNode, HASHKEY_S
     }
 
     *(TSLink<::StringEntryNode>**)(dwNext + pNext) = (TSLink<::StringEntryNode>*)pBucketHead;
-    pList->m_terminator.m_next = (int)pNode;
+    pHeadEntry->m_next = (int)pNode;
     return pNode;
 }
 

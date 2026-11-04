@@ -242,7 +242,7 @@ template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor() {
     *pPrevLink = (int)nHeadEntry;
     pTVar1->m_prevlink->m_next = this->m_linktoslot.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_linktoslot.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Next(::MappingEntryNode * pNode) {
@@ -289,7 +289,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
 template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<MappingEntryNode, -572662307>::CopyConstructor(TSExplicitList<::MappingEntryNode, -572662307>* pSource) {
     uint32_t* pSentinelHead = (uint32_t*)&this->m_terminator;
     *pSentinelHead = 0;
-    this->m_terminator.m_next = 0;
+    pSentinelHead[1] = 0;
     uint32_t dwCapacity = pSource->m_linkoffset;
     *pSentinelHead = (uint32_t)pSentinelHead;
     this->m_linkoffset = dwCapacity;

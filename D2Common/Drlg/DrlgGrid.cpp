@@ -229,15 +229,11 @@ void __fastcall AlterAllGridFlags(D2DrlgGridStrc * pDrlgGrid, int32_t nFlag, int
     int32_t nRowWidth = pDrlgGrid->nWidth;
     do {
       eD2GridCellFlags* pCellFlag;
-      nXIdx = 0;
       pCellFlag = pDrlgGrid->pCellsFlags + pDrlgGrid->pCellsRowOffsets[nYIdx];
-      if (nRowWidth > 0) {
-        do {
-          (*apFlagOperations[eOperation])((int*)pCellFlag, nFlag);
-          nRowWidth = pDrlgGrid->nWidth;
-          nXIdx++;
-          pCellFlag++;
-        } while (nXIdx < nRowWidth);
+      for (nXIdx = 0; nXIdx < nRowWidth; nXIdx++) {
+        (*apFlagOperations[eOperation])((int*)pCellFlag, nFlag);
+        nRowWidth = pDrlgGrid->nWidth;
+        pCellFlag++;
       }
 
       nYIdx++;
@@ -497,19 +493,16 @@ void __fastcall FillGrid(D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHe
 // Allocates grid with row offset lookup table.
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_AllocGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pDrlgGrid, eD2GridCellFlags * pCellsFlags, int nWidth, int nHeight) {
+    int nRow;
     pDrlgGrid->nWidth = nWidth;
     pDrlgGrid->nHeight = nHeight;
     pDrlgGrid->pCellsFlags = pCellsFlags;
     int* pRowOffsets = (int*)D2_ALLOC_POOL_AT(pMemory, nHeight * 4, ".\\DRLG\\DrlgGrid.cpp", 0x1d0);
     pDrlgGrid->pCellsRowOffsets = pRowOffsets;
-    int nRow = 0;
-    if (nHeight > 0) {
-      int nOffset = 0;
-      do {
-        pDrlgGrid->pCellsRowOffsets[nRow] = nOffset;
-        nRow++;
-        nOffset += nWidth;
-      } while (nRow < nHeight);
+    int nOffset = 0;
+    for (nRow = 0; nRow < nHeight; nRow++) {
+      pDrlgGrid->pCellsRowOffsets[nRow] = nOffset;
+      nOffset += nWidth;
     }
 
     pDrlgGrid->bIsSubGrid = 1;
@@ -518,19 +511,16 @@ void __fastcall DRLGGRID_AllocGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc *
 // Initializes a sub-grid view into parent cell flags using the tile data window; allocates row offsets with the parent stride.
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_InitGridFromTileData(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pGrid, eD2GridCellFlags * pParentCells, D2DrlgCoordStrc * pTileData, int nParentRowStride) {
+    int nRow;
     pGrid->nWidth = pTileData->nWidth;
     pGrid->nHeight = pTileData->nHeight;
     pGrid->pCellsFlags = pParentCells + pTileData->nPosY * nParentRowStride + pTileData->nPosX;
     int* pRowOffsets = (int*)D2_ALLOC_POOL_AT(pMemory, pTileData->nHeight * 4, ".\\DRLG\\DrlgGrid.cpp", 0x1ec);
     pGrid->pCellsRowOffsets = pRowOffsets;
     int nOffset = 0;
-    if (pTileData->nHeight > 0) {
-      int nRow = 0;
-      do {
-        pGrid->pCellsRowOffsets[nRow] = nOffset;
-        nRow++;
-        nOffset += nParentRowStride;
-      } while (nRow < pTileData->nHeight);
+    for (nRow = 0; nRow < pTileData->nHeight; nRow++) {
+      pGrid->pCellsRowOffsets[nRow] = nOffset;
+      nOffset += nParentRowStride;
     }
 
     pGrid->bIsSubGrid = 1;
@@ -538,18 +528,15 @@ void __fastcall DRLGGRID_InitGridFromTileData(D2PoolManagerStrc * pMemory, D2Drl
 
 // Builds a sub-grid view into an external cell flag array using the provided coordinate window and row stride.
 void __fastcall FillExternalCellFlags(D2DrlgGridStrc * pDrlgGrid, D2DrlgMapStrc * pCellPos, D2DrlgCoordStrc * pDrlgCoord, int32_t nWidth, int * pCellFlags) {
+    int nRowIdx;
     pDrlgGrid->nWidth = pDrlgCoord->nWidth;
     pDrlgGrid->nHeight = pDrlgCoord->nHeight;
     pDrlgGrid->pCellsFlags = (eD2GridCellFlags*)(&pCellPos->nNumber + pDrlgCoord->nPosY * nWidth + pDrlgCoord->nPosX);
     pDrlgGrid->pCellsRowOffsets = pCellFlags;
     int nRowOffset = 0;
-    if (pDrlgCoord->nHeight > 0) {
-      int nRowIdx = 0;
-      do {
-        pDrlgGrid->pCellsRowOffsets[nRowIdx] = nRowOffset;
-        nRowIdx++;
-        nRowOffset += nWidth;
-      } while (nRowIdx < pDrlgCoord->nHeight);
+    for (nRowIdx = 0; nRowIdx < pDrlgCoord->nHeight; nRowIdx++) {
+      pDrlgGrid->pCellsRowOffsets[nRowIdx] = nRowOffset;
+      nRowOffset += nWidth;
     }
 
     pDrlgGrid->bIsSubGrid = 1;

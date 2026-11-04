@@ -1053,12 +1053,9 @@ static void __stdcall SKILLASSN_GetTrapHealthBonus(eD2Skills eSkill, D2UnitStrc 
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return;
     }
-    if (!pMissileUnit) {
-      return;
-    }
 
-    int nLifetime = pMissileUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nLifetime >= 0 && nLifetime < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nLifetime : nullptr;
+    int nLifetime;
+    D2MissilesTxt* pMissileTxt = pMissileUnit && (nLifetime = pMissileUnit->nClassId) >= 0 && nLifetime < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nLifetime : nullptr;
     if (!pMissileTxt) {
       return;
     }

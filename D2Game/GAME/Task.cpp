@@ -206,7 +206,7 @@ static void TASK_InsertTaskAtTimestamp(D2TaskQueueSlotStrc * pSlot, D2TaskNodeSt
 
       pDVar1->pNext = pInsertPos;
       pDVar2 = pInsertPos->pPrev;
-      pTaskNode->sLink.pPrev = pDVar2;
+      pDVar1->pPrev = pDVar2;
       pDVar2->pNext = pDVar1;
       pInsertPos->pPrev = pDVar1;
       return;
@@ -471,7 +471,7 @@ uint32_t __stdcall TASK_AllocateTaskQueue() {
       pNewSlot->nTaskCount = 0;
       pDVar1 = &pNewSlot->sTaskList;
       pDVar1->pNext = pDVar1;
-      pNewSlot->sTaskList.pPrev = pDVar1;
+      pDVar1->pPrev = pDVar1;
       gaTaskQueueHeadArray[nSlotIndex] = pNewSlot;
       TASK_MoveTasksToSlotAndLinkSlot(pNewSlot);
     }

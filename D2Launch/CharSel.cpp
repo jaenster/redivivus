@@ -487,7 +487,16 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
             wszLineBuf[nTextArg0] = L'\0';
           }
 
-          memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
+          wszLevelStr[0] = L'\0';
+          wszLevelStr[1] = L'\0';
+          wszLevelStr[2] = L'\0';
+          wszLevelStr[3] = L'\0';
+          wszLevelStr[4] = L'\0';
+          wszLevelStr[5] = L'\0';
+          wszLevelStr[6] = L'\0';
+          wszLevelStr[7] = L'\0';
+          wszLevelStr[8] = L'\0';
+          wszLevelStr[9] = L'\0';
           sprintf(szNameBuf, " %d ", (uint32_t)pCharSel->nLevel);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLevelStr, szNameBuf, 9);
           pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfd9);
@@ -718,7 +727,16 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
               pLineBufCursor = (D2CharSelLineBufStrc*)(pLineBufCursor->wszLineBuf + 2);
             }
 
-            memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
+            wszLevelStr[0] = L'\0';
+            wszLevelStr[1] = 0;
+            wszLevelStr[2] = 0;
+            wszLevelStr[3] = 0;
+            wszLevelStr[4] = 0;
+            wszLevelStr[5] = 0;
+            wszLevelStr[6] = 0;
+            wszLevelStr[7] = 0;
+            wszLevelStr[8] = 0;
+            wszLevelStr[9] = 0;
             sprintf(sLineBuf.szNameBuf, " %d ", (uint32_t)pCharSelIter->nLevel);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLevelStr, sLineBuf.szNameBuf, 9);
             pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfd9);

@@ -738,6 +738,7 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
 
     int32_t nAllocSize;
     int nVramStart;
+    int nTotalTexMem;
     uint32_t nSecondaryTMUFlag;
     uint32_t nSubtileTexSize;
     uint32_t nFloorTexSize;
@@ -759,18 +760,14 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
       nSmallTexSize = (nMaskTmp | 0x1000) + 1;
     }
 
-    int nTotalTexMem = 0;
-    if (gnGlideTextureMemoryUsed > 0) {
+    for (nTotalTexMem = 0; nTotalTexMem < gnGlideTextureMemoryUsed; nTotalTexMem++) {
       FxU32 nTexMemAddr;
-      do {
-        nTexMemAddr = (*GLIDEDLL_grTexMinAddress_4)(nTotalTexMem);
-        gnGlideTexMemBaseAddress[nTotalTexMem] = nTexMemAddr;
-        nTexMemAddr = (*GLIDEDLL_grTexMaxAddress_4)(nTotalTexMem);
-        gnGlideTextureMemoryMax[nTotalTexMem] = nTexMemAddr;
-        pnTexMemBase = gnGlideTexMemBaseAddress + nTotalTexMem;
-        nTotalTexMem++;
-        nCacheEnd += nTexMemAddr - *pnTexMemBase;
-      } while (nTotalTexMem < gnGlideTextureMemoryUsed);
+      nTexMemAddr = (*GLIDEDLL_grTexMinAddress_4)(nTotalTexMem);
+      gnGlideTexMemBaseAddress[nTotalTexMem] = nTexMemAddr;
+      nTexMemAddr = (*GLIDEDLL_grTexMaxAddress_4)(nTotalTexMem);
+      gnGlideTextureMemoryMax[nTotalTexMem] = nTexMemAddr;
+      pnTexMemBase = gnGlideTexMemBaseAddress + nTotalTexMem;
+      nCacheEnd += nTexMemAddr - *pnTexMemBase;
     }
 
     nMaskTmp = gnGlideTexMemBaseAddress[0];

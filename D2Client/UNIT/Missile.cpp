@@ -281,12 +281,8 @@ int32_t __fastcall MISSILE_CltHitFn10_ProgOverlay(D2UnitStrc * pUnit, D2UnitStrc
 // Configures a homing missile (pUnit2) to track pUnit or a fixed target coordinate. Computes range from missile txt data and skill level, sets total/current frames, then either sets a unit target (mode 5, collision distance) or a world-coordinate target (mode 6, distance to XY). If the computed distance is under 25 tiles, immediately triggers PATH_CalculatePath to begin pursuit.
 static void __stdcall MISSILE_SetupHoming(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     eD2UnitType eUnitType;
-    if (!pUnit2) {
-      return;
-    }
-
-    int nClassId = pUnit2->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit2 && (nClassId = pUnit2->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return;
     }
@@ -620,12 +616,8 @@ int32_t __fastcall Missiles_SrvDoFuncData_07(D2UnitStrc * pUnit, D2MissileCltCol
 
 void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nFlags) {
     int32_t eCollisionFlag;
-    if (!pUnit) {
-      return;
-    }
-
-    int nMissileClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nMissileClassId >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
+    int nMissileClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nMissileClassId = pUnit->nClassId) >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
     if (!pMissileTxt) {
       return;
     }
@@ -2375,12 +2367,8 @@ int32_t __fastcall MISSILE_CltHitFn03_PotionExplode(D2UnitStrc * pUnit, D2UnitSt
 int32_t __fastcall MISSILE_CltHitFn09_HolyBolt(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     uint32_t bIsAllied;
     BOOL nClassId;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nMissileClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nMissileClassId >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
+    int nMissileClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nMissileClassId = pUnit->nClassId) >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -2451,12 +2439,8 @@ int32_t __fastcall MISSILE_CltHitFn12_ImmolationArrow(D2UnitStrc * pUnit, D2Unit
     int32_t aSubMissileIds[4];
     int nMissileClassId;
     uint32_t nRangeCalc;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxtClassId = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxtClassId = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxtClassId) {
       return 1;
     }
@@ -2537,12 +2521,8 @@ int32_t __fastcall MISSILE_CltHitFn14_IceShatter(D2UnitStrc * pUnit, D2UnitStrc 
     uint32_t nDir;
     int nPosX;
     int nPosY;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -2604,12 +2584,8 @@ int32_t __fastcall MISSILE_CltHitFn16_ChainLightning(D2UnitStrc * pUnit, D2UnitS
     int32_t nSkillLvl;
     D2SkillsTxt* pSkillTxt;
     D2SkillArgStrc sSkillArg;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -2719,12 +2695,8 @@ int32_t __fastcall MISSILE_CltHitFn18_MeteorCenter(D2UnitStrc * pUnit, D2UnitStr
     D2SkillArgStrc sSkillArg;
     int nPosX;
     int nPosY = 0;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -3604,12 +3576,8 @@ int32_t __fastcall MISSILE_CltHitFn04_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
 }
 
 int32_t __fastcall MISSILE_CltHitFn32_FireHead(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -3976,12 +3944,8 @@ static void __stdcall MISSILE_CreateFlyingRockDebris(D2UnitStrc * pMissileUnit, 
 }
 
 int32_t __fastcall MISSILE_CltHitFn50_CatapultMeteorBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -3998,12 +3962,8 @@ int32_t __fastcall MISSILE_CltHitFn52_MoltenBoulder(D2UnitStrc * pUnit, D2UnitSt
     int32_t nPosX;
     D2UnitStrc* pOwner;
     short int nSubMissile;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -4111,12 +4071,8 @@ int32_t __fastcall MISSILE_CltHitFn54_VinesTrail(D2UnitStrc * pUnit, D2UnitStrc 
 // Client hit handler for missile 055. On impact, spawns up to three sub-missiles (CltHitSubMissile1/2/3) via MakeMissile, all inheriting the owner, skill, level, and parent missile reference. Requires a valid owner; bails if owner is null.
 int32_t __fastcall MISSILE_CltHitFn55_FallingRock(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -4204,12 +4160,8 @@ int32_t __fastcall MISSILE_CltHitFn57_BaalSpawnMonsters(D2UnitStrc * pUnit, D2Un
 // Client hit handler for missile 060. Spawns CltHitSubMissile1 at the impact point, then spawns CltHitSubMissile2 with a Z-position offset (SetPosVectorShifted) controlled by HitPar1. Both sub-missiles inherit the parent's owner, skill, and level.
 int32_t __fastcall MISSILE_CltHitFn60_Nihlithak(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pMissileTxt) {
       return 1;
     }
@@ -5792,12 +5744,8 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
     uint32_t nCollidePathSteps;
     D2DynamicPathStrc* pCurDynPath;
     uint8_t bySubStop;
-    if (!pUnit) {
-      return;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pDVar2 = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pDVar2 = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!pDVar2) {
       return;
     }

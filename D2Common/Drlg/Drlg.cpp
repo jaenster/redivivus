@@ -3718,29 +3718,21 @@ static void __stdcall DRLGOUTROOM_InitGridNeighborBuffer(int32_t nRow, eD2GridCe
 // Iterates outdoor vertex lists, calls SetLineFlagsWithWidth for room edges.
 static void DRLGGRID_SetOutRoomEdgeFlags(D2DrlgLevelStrc * pDrlgLevelData, D2RoomExStrc * pRoomEx) {
     D2DrlgCoordsStrc sCoords;
+    int nIndex;
     D2DrlgVertexStrc* pVertex;
     D2DrlgLevelDataWildernessLevel* nDrlgLevelBase = pDrlgLevelData->pDrlgLevelData.pDrlgLevelOutdoorsData;
     sCoords.WorldPosition.x = pRoomEx->sCoords.WorldPosition.x - 1;
     sCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y - 1;
     sCoords.WorldSize.x = pRoomEx->sCoords.WorldSize.x + 3;
     sCoords.WorldSize.y = pRoomEx->sCoords.WorldSize.y + 3;
-    int nIndex = 0;
-    if (nDrlgLevelBase->nExitCount <= 0) {
-      return;
-    }
-
-    D2DrlgVertexStrc** pVertexListPtr = nDrlgLevelBase->pAdjacentVertices;
-    do {
+    for (nIndex = 0; nIndex < nDrlgLevelBase->nExitCount; nIndex++) {
       D2DrlgRoomExDataMazeStrc* pRoomExDataVoid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
-      for (pVertex = *pVertexListPtr; pVertex; pVertex = pVertex->pNext) {
+      for (pVertex = nDrlgLevelBase->pAdjacentVertices[nIndex]; pVertex; pVertex = pVertex->pNext) {
         if (pVertex->pNext) {
           DrlgGrid::DRLGGRID_SetLineFlagsWithWidth(&pRoomExDataVoid->pCellGrid, pVertex, &sCoords, 1, 0, 2);
         }
       }
-
-      pVertexListPtr++;
-      nIndex++;
-    } while (nIndex < nDrlgLevelBase->nExitCount);
+    }
 }
 
 // Autotiling: computes 8-bit neighbor mask, looks up wall orientation from 256-entry table.
@@ -4201,26 +4193,18 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
 
 // Main exit linker: builds exits, computes targets, A* pathfinds, builds vertex paths.
 void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(D2DrlgLevelStrc * pLevel) {
+    int nIndex;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     DRLGOUTROOM_BuildExitPointArray(pLevel);
     DRLGOUTROOM_ComputeExitTargetPositions(pLevel);
-    int nIndex = 0;
-    if (pWildData->nExitCount <= 0) {
-      return;
-    }
-
-    D2DrlgVertexStrc** pPathPtr = pWildData->pAdjacentVertices;
-    do {
+    for (nIndex = 0; nIndex < pWildData->nExitCount; nIndex++) {
       BOOL bPathFound;
       bPathFound = DRLGOUTROOM_FindPathBetweenExits(pLevel, nIndex);
       if (bPathFound) {
-        DRLGGRID_OrFlagOnCellList(&pWildData->sGridOutdoor, &(*pPathPtr)->nPosX, 0x80);
+        DRLGGRID_OrFlagOnCellList(&pWildData->sGridOutdoor, &pWildData->pAdjacentVertices[nIndex]->nPosX, 0x80);
         DRLGOUTROOM_BuildVertexPathsWithJitter(pLevel, nIndex);
       }
-
-      pPathPtr++;
-      nIndex++;
-    } while (nIndex < pWildData->nExitCount);
+    }
 }
 
 // Estimates path distance between two grid positions (nX1,nY1) and (nX2,nY2 on stack). Uses a weighted Manhattan heuristic: min(dx,dy) + 2*max(dx,dy), which approximates diagonal+cardinal movement cost. Used by outdoor room pathfinding to rank exit connections.

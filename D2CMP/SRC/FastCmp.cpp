@@ -142,26 +142,22 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(DC6 * pDCC, DC6 * pDCCDest, p
       nPixelCount = *(int*)(pSrcFrame->nVersion + 8) * *(int*)(pSrcFrame->nVersion + 4);
       pbIndexedBuf = (uint8_t*)D2_ALLOC_AT(nPixelCount, ".\\SRC\\FastCmp.cpp", 0xd4);
       pbSrcPixel = (uint8_t*)(pSrcFrame->nVersion + 0x20);
-      nPixelIndex = 0;
       pbIndexOut = pbIndexedBuf;
-      if (nPixelCount > 0) {
-        do {
-          if (*pbSrcPixel == (uint8_t)dwColorKey && pbSrcPixel[1] == (uint8_t)(dwColorKey >> 8) && pbSrcPixel[2] == *(uint8_t*)((char*)&dwColorKey + 2)) {
-            *pbIndexOut = 0;
-          } else {
-            byPaletteIndex = (*pfnPaletteRemap)(*pbSrcPixel, pbSrcPixel[1], pbSrcPixel[2]);
-            if (!byPaletteIndex) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
-              exit(-1);
-            }
-
-            *pbIndexOut = byPaletteIndex;
+      for (nPixelIndex = 0; nPixelIndex < nPixelCount; nPixelIndex++) {
+        if (*pbSrcPixel == (uint8_t)dwColorKey && pbSrcPixel[1] == (uint8_t)(dwColorKey >> 8) && pbSrcPixel[2] == *(uint8_t*)((char*)&dwColorKey + 2)) {
+          *pbIndexOut = 0;
+        } else {
+          byPaletteIndex = (*pfnPaletteRemap)(*pbSrcPixel, pbSrcPixel[1], pbSrcPixel[2]);
+          if (!byPaletteIndex) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
+            exit(-1);
           }
 
-          pbIndexOut++;
-          nPixelIndex++;
-          pbSrcPixel += 3;
-        } while (nPixelIndex < nPixelCount);
+          *pbIndexOut = byPaletteIndex;
+        }
+
+        pbIndexOut++;
+        pbSrcPixel += 3;
       }
 
       pNewFrameData = (uint32_t*)pSrcFrame->nVersion;

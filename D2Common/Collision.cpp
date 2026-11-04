@@ -289,8 +289,8 @@ int32_t __stdcall GetCollisionDistance(D2UnitStrc * pUnit, D2UnitStrc * pTarget)
     }
 
     nSizeUnit = Units::GetUnitSizeX(pUnit);
-    nSizeTarget = Units::GetUnitSizeX(pTarget);
-    nHalfSizeSum = -(nSizeTarget / 2) - nSizeUnit / 2;
+    nSizeTarget = Units::GetUnitSizeX(pTarget) / 2;
+    nHalfSizeSum = -nSizeTarget - nSizeUnit / 2;
     nDx += nHalfSizeSum;
     nDy += nHalfSizeSum;
     if (nDx < 0) {

@@ -71,7 +71,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     *pBackLink = (int)nLinkValue;
     pTVar1->m_prevlink->m_next = pNode->m_linktofull.m_next;
     pTVar1->m_prevlink = 0;
-    pNode->m_linktofull.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMEDATA * pNode) {

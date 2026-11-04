@@ -835,7 +835,16 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
       pDVar1 = (D2UiLevelLineTextStrc*)(pDVar1->wszLevelLine + 2);
     }
 
-    memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
+    wszLevelStr[0] = L'\0';
+    wszLevelStr[1] = L'\0';
+    wszLevelStr[2] = L'\0';
+    wszLevelStr[3] = L'\0';
+    wszLevelStr[4] = L'\0';
+    wszLevelStr[5] = L'\0';
+    wszLevelStr[6] = L'\0';
+    wszLevelStr[7] = L'\0';
+    wszLevelStr[8] = L'\0';
+    wszLevelStr[9] = L'\0';
     uint32_t nCharLevel = (uint32_t)D2IniData_multiplayer->padding_0x35F[0x62];
     if (!D2IniData_multiplayer->padding_0x35F[0x62]) {
       nCharLevel = 1;

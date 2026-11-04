@@ -1669,7 +1669,16 @@ static void __stdcall INV_FormatEtherealSocketedText(D2UnitStrc * pUnit, uint16_
 
       pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd7d);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
-      memset(wszTmp + 16, 0, 10 * sizeof(wszTmp[0]));
+      wszTmp[0x10] = 0;
+      wszTmp[0x11] = 0;
+      wszTmp[0x12] = 0;
+      wszTmp[0x13] = 0;
+      wszTmp[0x14] = 0;
+      wszTmp[0x15] = 0;
+      wszTmp[0x16] = 0;
+      wszTmp[0x17] = 0;
+      wszTmp[0x18] = 0;
+      wszTmp[0x19] = 0;
       pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
       nSocketCount = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
       Storm::Source::SSTR::SStrPrintf(szSocketCount, 10, "(%i)", (uint8_t)nSocketCount);
@@ -1741,7 +1750,16 @@ static BOOL __stdcall INV_FormatPlayerNameWithBase(uint16_t * wszText1, uint16_t
 static void __stdcall INV_FormatQuantityText(D2ItemsTxt * pQualityRecord, uint16_t * wszText, D2UnitStrc * pUnit) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
-    memset(wszNumBuffer, 0, 10 * sizeof(wszNumBuffer[0]));
+    wszNumBuffer[0] = L'\0';
+    wszNumBuffer[1] = 0;
+    wszNumBuffer[2] = 0;
+    wszNumBuffer[3] = 0;
+    wszNumBuffer[4] = 0;
+    wszNumBuffer[5] = 0;
+    wszNumBuffer[6] = 0;
+    wszNumBuffer[7] = 0;
+    wszNumBuffer[8] = 0;
+    wszNumBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     int nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
@@ -1764,7 +1782,16 @@ static void __stdcall INV_FormatQuantityText(D2ItemsTxt * pQualityRecord, uint16
 static void INV_FormatDurabilityText(uint16_t * wszText, D2UnitStrc * pUnit) {
     uint16_t wszNumBuf[10];
     char szNumBuffer[12];
-    memset(wszNumBuf, 0, 10 * sizeof(wszNumBuf[0]));
+    wszNumBuf[0] = L'\0';
+    wszNumBuf[1] = 0;
+    wszNumBuf[2] = 0;
+    wszNumBuf[3] = 0;
+    wszNumBuf[4] = 0;
+    wszNumBuf[5] = 0;
+    wszNumBuf[6] = 0;
+    wszNumBuf[7] = 0;
+    wszNumBuf[8] = 0;
+    wszNumBuf[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwDurabilitySuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     uint32_t bHasDurability = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit);
@@ -1812,7 +1839,16 @@ static void INV_FormatDurabilityText(uint16_t * wszText, D2UnitStrc * pUnit) {
 static void __stdcall INV_FormatStackCountText(int32_t nStackCount, uint16_t * wszText) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
-    memset(wszNumBuffer, 0, 10 * sizeof(wszNumBuffer[0]));
+    wszNumBuffer[0] = L'\0';
+    wszNumBuffer[1] = 0;
+    wszNumBuffer[2] = 0;
+    wszNumBuffer[3] = 0;
+    wszNumBuffer[4] = 0;
+    wszNumBuffer[5] = 0;
+    wszNumBuffer[6] = 0;
+    wszNumBuffer[7] = 0;
+    wszNumBuffer[8] = 0;
+    wszNumBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     uint16_t* pwLabelStr = D2Lang::StrTable::strtable::GetLocaleString(0xd8d);
@@ -1828,7 +1864,16 @@ static void __stdcall INV_FormatStackCountText(int32_t nStackCount, uint16_t * w
 static void __stdcall INV_FormatReqStrText(D2ItemsTxt * pItemsTxt, int32_t nReqAdjust, uint16_t * wszText) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
-    memset(wszNumBuffer, 0, 10 * sizeof(wszNumBuffer[0]));
+    wszNumBuffer[0] = L'\0';
+    wszNumBuffer[1] = 0;
+    wszNumBuffer[2] = 0;
+    wszNumBuffer[3] = 0;
+    wszNumBuffer[4] = 0;
+    wszNumBuffer[5] = 0;
+    wszNumBuffer[6] = 0;
+    wszNumBuffer[7] = 0;
+    wszNumBuffer[8] = 0;
+    wszNumBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     int nReqStr = (uint32_t)(uint16_t)pItemsTxt->nReqStr + nReqAdjust;
@@ -1850,7 +1895,16 @@ static void __stdcall INV_FormatReqStrText(D2ItemsTxt * pItemsTxt, int32_t nReqA
 static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqAdjust, uint16_t * wszText) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
-    memset(wszNumBuffer, 0, 10 * sizeof(wszNumBuffer[0]));
+    wszNumBuffer[0] = L'\0';
+    wszNumBuffer[1] = 0;
+    wszNumBuffer[2] = 0;
+    wszNumBuffer[3] = 0;
+    wszNumBuffer[4] = 0;
+    wszNumBuffer[5] = 0;
+    wszNumBuffer[6] = 0;
+    wszNumBuffer[7] = 0;
+    wszNumBuffer[8] = 0;
+    wszNumBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     int nReqDex = (uint32_t)(uint16_t)pItemsTxt->wReqDex + nReqAdjust;
@@ -2225,7 +2279,16 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
     int32_t nSkillDmgCalc;
     uint16_t wszTempConversionBuffer[10];
     char szPrintfBuffer[12];
-    memset(wszTempConversionBuffer, 0, 10 * sizeof(wszTempConversionBuffer[0]));
+    wszTempConversionBuffer[0] = L'\0';
+    wszTempConversionBuffer[1] = 0;
+    wszTempConversionBuffer[2] = 0;
+    wszTempConversionBuffer[3] = 0;
+    wszTempConversionBuffer[4] = 0;
+    wszTempConversionBuffer[5] = 0;
+    wszTempConversionBuffer[6] = 0;
+    wszTempConversionBuffer[7] = 0;
+    wszTempConversionBuffer[8] = 0;
+    wszTempConversionBuffer[9] = 0;
     uint16_t* pwSeparator = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2ItemsTxt* nMinDefense = (D2ItemsTxt*)(uint32_t)pStatRecord->nMinDam;
@@ -2281,7 +2344,16 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
       return;
     }
 
-    memset(wszArmorValue, 0, 10 * sizeof(wszArmorValue[0]));
+    wszArmorValue[0] = L'\0';
+    wszArmorValue[1] = 0;
+    wszArmorValue[2] = 0;
+    wszArmorValue[3] = 0;
+    wszArmorValue[4] = 0;
+    wszArmorValue[5] = 0;
+    wszArmorValue[6] = 0;
+    wszArmorValue[7] = 0;
+    wszArmorValue[8] = 0;
+    wszArmorValue[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     uint32_t nPrevStatActive = 0;
@@ -2352,7 +2424,16 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
 static void AppendQuanity(uint16_t * wszText, D2UnitStrc * pUnit) {
     uint16_t wszTempBuffer[10];
     char szPrintfBuffer[12];
-    memset(wszTempBuffer, 0, 10 * sizeof(wszTempBuffer[0]));
+    wszTempBuffer[0] = L'\0';
+    wszTempBuffer[1] = 0;
+    wszTempBuffer[2] = 0;
+    wszTempBuffer[3] = 0;
+    wszTempBuffer[4] = 0;
+    wszTempBuffer[5] = 0;
+    wszTempBuffer[6] = 0;
+    wszTempBuffer[7] = 0;
+    wszTempBuffer[8] = 0;
+    wszTempBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* wszText2 = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     int nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
@@ -2740,7 +2821,12 @@ static void __stdcall INV_FormatRunewordName(uint16_t * wszText, D2UnitStrc * pI
       return;
     }
 
-    memset(wszRuneLetter, 0, 6 * sizeof(wszRuneLetter[0]));
+    wszRuneLetter[0] = L'\0';
+    wszRuneLetter[1] = 0;
+    wszRuneLetter[2] = 0;
+    wszRuneLetter[3] = 0;
+    wszRuneLetter[4] = 0;
+    wszRuneLetter[5] = 0;
     int bHeaderWritten = 0;
     uint16_t* pwszNewline = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2UnitStrc* pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
@@ -7868,31 +7954,25 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
       SkillDesc::SKILLDESC_AppendSetBonusTextByStateValue(pOwnerUnit, pItemToDescribe, wszItemBuffsAlt, 0x200);
     }
 
-    nSetItemLoopIdx = 0;
-    if (pSetsTxt->nTxtSetItemsCount > 0) {
-      ppSetItemsTxtEntry = pSetsTxt->pTxtSetItems;
-      do {
-        pSetItemsTxt = *ppSetItemsTxtEntry;
-        if (!pSetItemsTxt) {
-          break;
-        }
+    for (nSetItemLoopIdx = 0; nSetItemLoopIdx < pSetsTxt->nTxtSetItemsCount; nSetItemLoopIdx++) {
+      pSetItemsTxt = pSetsTxt->pTxtSetItems[nSetItemLoopIdx];
+      if (!pSetItemsTxt) {
+        break;
+      }
 
-        pOwnerUnit = GetSetItem((int)pSetItemsTxt->nId, pUnitInventory);
-        if (pSetItemsTxt->stringId) {
-          wsprintf(wszWorkBuf, D2Lang::StrTable::strtable::GetLocaleString(0x2769), D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId), 0);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszWorkBuf, pwSeparator);
-        }
+      pOwnerUnit = GetSetItem((int)pSetItemsTxt->nId, pUnitInventory);
+      if (pSetItemsTxt->stringId) {
+        wsprintf(wszWorkBuf, D2Lang::StrTable::strtable::GetLocaleString(0x2769), D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId), 0);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszWorkBuf, pwSeparator);
+      }
 
-        nColor = 2;
-        if (!pOwnerUnit) {
-          nColor = 1;
-        }
+      nColor = 2;
+      if (!pOwnerUnit) {
+        nColor = 1;
+      }
 
-        ui::AppendAsWideChar(wszWorkBuf, nColor);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszSetBonusList, wszWorkBuf);
-        ppSetItemsTxtEntry++;
-        nSetItemLoopIdx++;
-      } while (nSetItemLoopIdx < pSetsTxt->nTxtSetItemsCount);
+      ui::AppendAsWideChar(wszWorkBuf, nColor);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszSetBonusList, wszWorkBuf);
     }
 
     pwLocaleStr = ui::AppendAsWideChar(wszSetBonusList, 2);

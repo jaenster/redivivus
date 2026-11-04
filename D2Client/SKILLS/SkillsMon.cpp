@@ -623,12 +623,9 @@ static void __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2Unit
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return;
     }
-    if (!pUnit2) {
-      return;
-    }
 
-    int nTotalFrames = pUnit2->nClassId;
-    D2MissilesTxt* pMissileTxt = nTotalFrames >= 0 && nTotalFrames < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nTotalFrames : nullptr;
+    int nTotalFrames;
+    D2MissilesTxt* pMissileTxt = pUnit2 && (nTotalFrames = pUnit2->nClassId) >= 0 && nTotalFrames < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nTotalFrames : nullptr;
     if (!pMissileTxt) {
       return;
     }

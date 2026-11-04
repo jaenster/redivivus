@@ -859,12 +859,8 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     POINT ptSpawn;
     eCollisionFlags eCollisionFlag;
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!pOwner) {
-      return;
-    }
-
-    int nOwnerMonClassId = pOwner->nClassId;
-    D2MonStatsTxt* pMonStats = nOwnerMonClassId >= 0 && nOwnerMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nOwnerMonClassId : nullptr;
+    int nOwnerMonClassId;
+    D2MonStatsTxt* pMonStats = pOwner && (nOwnerMonClassId = pOwner->nClassId) >= 0 && nOwnerMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nOwnerMonClassId : nullptr;
     if (!pMonStats) {
       return;
     }

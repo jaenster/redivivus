@@ -2673,12 +2673,8 @@ void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, D2UnitS
     // Static local variables (originally global data)
     static int PropertiesFuncCount = 0x25; D2_STATIC_GUARD(PropertiesFuncCount, "D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion::PropertiesFuncCount");
 
-    if (!pSetsTxtF) {
-      return;
-    }
-
-    int nFuncCode = pSetsTxtF->fcode;
-    D2PropertiesTxt* pPropTxt = nFuncCode >= 0 && nFuncCode < sgptDataTable->nTxtPropertiesSize ? sgptDataTable->pTxtProperties + nFuncCode : nullptr;
+    int nFuncCode;
+    D2PropertiesTxt* pPropTxt = pSetsTxtF && (nFuncCode = pSetsTxtF->fcode) >= 0 && nFuncCode < sgptDataTable->nTxtPropertiesSize ? sgptDataTable->pTxtProperties + nFuncCode : nullptr;
     if (!pPropTxt) {
       return;
     }

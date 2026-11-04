@@ -2596,7 +2596,11 @@ void __fastcall Q04_InitData(D2QuestDataStrc * pQuestData) {
     pQuestSpecificData->sSub.nStonesUnitGUID = 0;
     pQuestSpecificData->sSub.nCairnAnimState = 0;
     pQuestSpecificData->sSub.bQuestObjectsActivated = '\0';
-    memset(pQuestSpecificData->sSub.bPortalSpawnPending, 0, 5 * sizeof(pQuestSpecificData->sSub.bPortalSpawnPending[0]));
+    pQuestSpecificData->sSub.bPortalSpawnPending[0] = 0;
+    pQuestSpecificData->sSub.bPortalSpawnPending[1] = 0;
+    pQuestSpecificData->sSub.bPortalSpawnPending[2] = 0;
+    pQuestSpecificData->sSub.bPortalSpawnPending[3] = 0;
+    pQuestSpecificData->sSub.bPortalSpawnPending[4] = 0;
     pQuestSpecificData->sSub.bCairnMonsterSaved = '\0';
     pQuestSpecificData->sSub.bPendingCairnActivation = '\0';
     pQuestSpecificData->sSub.bPortalArmed = '\0';

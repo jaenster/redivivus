@@ -1333,13 +1333,8 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
       exit(-1);
     }
 
-    nComponentIdx = 0;
     pCofEntry = pCofDataBase + 0x1c;
-    if (*pCofDataBase <= 0) {
-      return 0;
-    }
-
-    do {
+    for (nComponentIdx = 0; nComponentIdx < *pCofDataBase; nComponentIdx++) {
       if (*pCofEntry >= 0x10) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x3fb);
         exit(-1);
@@ -1392,9 +1387,8 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
         }
       }
 
-      nComponentIdx++;
       pCofEntry += 9;
-    } while (nComponentIdx < *pCofDataBase);
+    }
 
     return 0;
 }

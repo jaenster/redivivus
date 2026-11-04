@@ -1292,8 +1292,8 @@ int32_t __fastcall GAMEDATA_GetCenteredTextX(uint16_t nStringId, int32_t nCenter
 
     uint16_t* pSourceStr = D2Lang::StrTable::strtable::GetLocaleString(nStringId);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pSourceStr);
-    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText);
-    return nCenterX - nTextWidth / 2;
+    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText) / 2;
+    return nCenterX - nTextWidth;
 }
 
 void __stdcall GAMEDATA_DrawLoadingScreenText() {

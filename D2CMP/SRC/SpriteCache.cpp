@@ -726,7 +726,6 @@ static D2CelFileCacheEntryStrc * __stdcall SPRITECACHE_LoadDCC(char * szText, ch
     int iVar1;
     DWORD nLastPaletteEntry;
     uint32_t nFrameIdx;
-    uint32_t* pPaletteCursor;
     D2CelFileCacheEntryStrc* pCacheEntry;
     char cFilenameChar;
     *szText = '\0';
@@ -804,14 +803,8 @@ static D2CelFileCacheEntryStrc * __stdcall SPRITECACHE_LoadDCC(char * szText, ch
             exit(-1);
           }
 
-          nFrameIdx = 0;
-          if (pCacheEntry->nDirections > 0) {
-            pPaletteCursor = pCacheEntry->adwDirectionOffsets;
-            do {
-              *pPaletteCursor = gdwSpriteCacheThreshold[pCacheEntry->nFramesPerDirection * nFrameIdx];
-              nFrameIdx++;
-              pPaletteCursor++;
-            } while (nFrameIdx < pCacheEntry->nDirections);
+          for (nFrameIdx = 0; nFrameIdx < pCacheEntry->nDirections; nFrameIdx++) {
+            pCacheEntry->adwDirectionOffsets[nFrameIdx] = gdwSpriteCacheThreshold[pCacheEntry->nFramesPerDirection * nFrameIdx];
           }
 
           pCacheEntry->adwDirectionOffsets[pCacheEntry->nDirections] = nLastPaletteEntry;

@@ -125,7 +125,7 @@ template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::De
 TSExplicitList<::MappingEntryNode, -572662307>* __thiscall CopyConstructor_Unreferenced(TSExplicitList<::MappingEntryNode, -572662307>* pThis, TSExplicitList<::MappingEntryNode, -572662307>* pSource) {
     uint32_t* pHead = (uint32_t*)&pThis->m_terminator;
     *pHead = 0;
-    pThis->m_terminator.m_next = 0;
+    pHead[1] = 0;
     uint32_t dwInitCapacity = pSource->m_linkoffset;
     *pHead = (uint32_t)pHead;
     pThis->m_linkoffset = dwInitCapacity;
@@ -156,7 +156,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::Destructor() {
     *pListHead = (int)nHead;
     pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr(uint32_t dwHashVal, ::HASHKEY_STRI * pKey) {
@@ -197,7 +197,7 @@ template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<Mappin
       *pListHead = (int)nHead;
       pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
@@ -479,7 +479,7 @@ template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destructor() {
       *pListHead = (int)pHead;
       pTVar1->m_prevlink->m_next = this->tFullList.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->tFullList.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     ExceptionList = pExSave;
@@ -553,7 +553,7 @@ template<> ::MappingEntryNode * __thiscall TSHashTable<MappingEntryNode, HASHKEY
     int pNext = pList->m_linkoffset;
     if ((int)dwNext < 0) {
       *(TSLink<::MappingEntryNode>**)~dwNext = (TSLink<::MappingEntryNode>*)pBucketHead;
-      pList->m_terminator.m_next = (int)pNode;
+      pHeadEntry->m_next = (int)pNode;
       return pNode;
     }
     if (pNext < 0) {
@@ -561,7 +561,7 @@ template<> ::MappingEntryNode * __thiscall TSHashTable<MappingEntryNode, HASHKEY
     }
 
     *(TSLink<::MappingEntryNode>**)(dwNext + pNext) = (TSLink<::MappingEntryNode>*)pBucketHead;
-    pList->m_terminator.m_next = (int)pNode;
+    pHeadEntry->m_next = (int)pNode;
     return pNode;
 }
 

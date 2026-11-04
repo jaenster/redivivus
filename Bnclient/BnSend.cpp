@@ -802,15 +802,12 @@ void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, size_t nSize) {
 
 // @sourcefile .\BnSend.cpp
 uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys) {
+    uint32_t nIdx;
     uint32_t nLen = Storm::Source::SSTR::SStrLen(szAccount);
     int nStringsSize = nLen + 1;
-    if (nCount > 0) {
-      uint32_t nIdx = 0;
-      do {
-        nLen = Storm::Source::SSTR::SStrLen(pszKeys[nIdx]);
-        nIdx++;
-        nStringsSize = nStringsSize + 1 + nLen;
-      } while (nIdx < nCount);
+    for (nIdx = 0; nIdx < nCount; nIdx++) {
+      nLen = Storm::Source::SSTR::SStrLen(pszKeys[nIdx]);
+      nStringsSize = nStringsSize + 1 + nLen;
     }
 
     char* pPacketBuf = (char*)D2_ALLOC_AT(nStringsSize + 0xc, ".\\BnSend.cpp", 0x506);

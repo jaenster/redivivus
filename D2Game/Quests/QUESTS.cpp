@@ -1718,21 +1718,12 @@ BOOL __fastcall QUESTGUID_SearchForValueInIntArray32(D2QuestGUIDStrc * pQuestGUI
 }
 
 BOOL __fastcall QUEST_HasPlayerParticipated(D2QuestDataStrc * pQuestData, int32_t nPlayerGUID) {
-    int32_t nPlayerCount = (int32_t)pQuestData->sQuestGUID.nPlayerCount;
-    int nSearchIdx = 0;
-    if (!nPlayerCount) {
-      return 0;
-    }
-
-    int* pGuidIter = pQuestData->sQuestGUID.aPlayerGUID;
-    do {
-      if (*pGuidIter == nPlayerGUID) {
+    int nSearchIdx;
+    for (nSearchIdx = 0; nSearchIdx < (int32_t)pQuestData->sQuestGUID.nPlayerCount; nSearchIdx++) {
+      if (pQuestData->sQuestGUID.aPlayerGUID[nSearchIdx] == nPlayerGUID) {
         return 1;
       }
-
-      nSearchIdx++;
-      pGuidIter++;
-    } while (nSearchIdx < nPlayerCount);
+    }
 
     return 0;
 }

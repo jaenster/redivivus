@@ -108,12 +108,9 @@ void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
     if (nAct >= 5) {
       nAct = 4;
     }
-    if (!pUnit) {
-      return;
-    }
 
-    int nStatValue = pUnit->nClassId;
-    D2CharStatsTxt* pCharStats = nStatValue >= 0 && nStatValue < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nStatValue : nullptr;
+    int nStatValue;
+    D2CharStatsTxt* pCharStats = pUnit && (nStatValue = pUnit->nClassId) >= 0 && nStatValue < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nStatValue : nullptr;
     if (!pCharStats) {
       return;
     }

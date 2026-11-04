@@ -2276,21 +2276,18 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
             Storm::Source::SMem::SMemCopy(recDataScratch, &pRecordCur->nFrameIncrement, nFileSize);
             pRecordCur = (D2CharSelCompStrc*)(&pRecordCur->nFrameIncrement + nDwordCount);
             pOutEntry = (short int*)(pOutBufferLocal + 1);
-            nMatchIndex = 0;
-            if (nUniqueCount > 0) {
-              do {
-                if (*(D2CharSelCompFlags*)(pOutEntry + 1) == recHeader0 && *(int*)(pOutEntry + 3) == recHeader1 && *(uint32_t*)(pOutEntry + 5) == recHeader2 && (char)pOutEntry[7] == (char)nRecDwordCount) {
-                  nResult = Storm::Source::SMem::SMemCmp((uint8_t*)((int)pOutEntry + 0xf), recDataScratch, nFileSize);
-                  if (!nResult) {
-                    (*pOutEntry)++;
-                    break;
-                  }
+            for (nMatchIndex = 0; nMatchIndex < nUniqueCount; nMatchIndex++) {
+              if (*(D2CharSelCompFlags*)(pOutEntry + 1) == recHeader0 && *(int*)(pOutEntry + 3) == recHeader1 && *(uint32_t*)(pOutEntry + 5) == recHeader2 && (char)pOutEntry[7] == (char)nRecDwordCount) {
+                nResult = Storm::Source::SMem::SMemCmp((uint8_t*)((int)pOutEntry + 0xf), recDataScratch, nFileSize);
+                if (!nResult) {
+                  (*pOutEntry)++;
+                  break;
                 }
+              }
 
-                nMatchIndex++;
-                pOutEntry = (short int*)((int)pOutEntry + nFileSize + 0xf);
-              } while (nMatchIndex < nUniqueCount);
+              pOutEntry = (short int*)((int)pOutEntry + nFileSize + 0xf);
             }
+
             if (nMatchIndex == nUniqueCount) {
               if ((uint8_t*)((int)pOutEntry + 0x2fU) >= pOutLimit) {
                 break;

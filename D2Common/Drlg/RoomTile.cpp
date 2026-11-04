@@ -613,12 +613,7 @@ static void __stdcall DRLGROOMTILE_InitWarpCacheTiles(uint32_t nPackedTileFlags,
     } while ((int)nWarpSubIdx < 4);
 
     pTileData = pRoomEx->pRoomTiles->sRoomTiles.pFloorTiles;
-    nFloorTileIter = 0;
-    if (pRoomEx->pRoomTiles->nFloors <= 0) {
-      return;
-    }
-
-    do {
+    for (nFloorTileIter = 0; nFloorTileIter < pRoomEx->pRoomTiles->nFloors; nFloorTileIter++) {
       nWarpSubIdx = D2CMP::DUNGEON::Dungeon::GetIndex(pTileData->pTileLibraryEntry);
       if (nWarpSubIdx == nTileMainIndex) {
         nWarpSubIdx = D2CMP::DUNGEON::Dungeon::GetSubIndex(pTileData->pTileLibraryEntry);
@@ -628,9 +623,8 @@ static void __stdcall DRLGROOMTILE_InitWarpCacheTiles(uint32_t nPackedTileFlags,
         }
       }
 
-      nFloorTileIter++;
       pTileData++;
-    } while (nFloorTileIter < pRoomEx->pRoomTiles->nFloors);
+    }
 }
 
 // Searches a room's tile links for a tile at the given X/Y position matching the specified floor/wall type and orientation flags.

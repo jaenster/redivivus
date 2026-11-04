@@ -805,7 +805,16 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
       }
     } else {
       bool bIsPunct;
-      memset(wszScratch + 4, 0, 10 * sizeof(wszScratch[0]));
+      wszScratch[4] = L'\0';
+      wszScratch[5] = L'\0';
+      wszScratch[6] = L'\0';
+      wszScratch[7] = L'\0';
+      wszScratch[8] = L'\0';
+      wszScratch[9] = L'\0';
+      wszScratch[10] = L'\0';
+      wszScratch[0xb] = L'\0';
+      wszScratch[0xc] = L'\0';
+      wszScratch[0xd] = L'\0';
       if (false) {
         default_case:
         wszScratch[0] = L'\0';

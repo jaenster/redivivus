@@ -1923,32 +1923,29 @@ void __fastcall D2COMP_PopulateComponentFromCOF(int32_t pCOFData, D2GfxDataStrc 
         exit(-1);
       } else {
         pLayerEntry = pCOFLayerData + 0x1c;
-        nLayerIndex = 0;
-        if (*pCOFLayerData > 0) {
-          do {
-            if (0xf < (int32_t)nComponentType) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50e);
+        for (nLayerIndex = 0; nLayerIndex < *pCOFLayerData; nLayerIndex++) {
+          if (0xf < (int32_t)nComponentType) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50e);
+            exit(-1);
+          }
+          if (*pLayerEntry == nComponentType) {
+            pGfxData->eUnitType = (uint32_t)(pGfxData->nClassId >= 7);
+            pGfxData->nModeToken = gaCompAnimModeTokens[pGfxData->nMode];
+            if (!pGfxData->nArmorToken) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x51f);
               exit(-1);
             }
-            if (*pLayerEntry == nComponentType) {
-              pGfxData->eUnitType = (uint32_t)(pGfxData->nClassId >= 7);
-              pGfxData->nModeToken = gaCompAnimModeTokens[pGfxData->nMode];
-              if (!pGfxData->nArmorToken) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x51f);
-                exit(-1);
-              }
 
-              nWeaponClassToken = 0;
-              nArgSlot = 0x503841;
-              D2COMP_PadStringTo4Chars((char*)(pLayerEntry + 5), (char*)&nWeaponClassToken);
-              pGfxData->nWeaponClass = nWeaponClassToken;
-              break;
-            }
+            nWeaponClassToken = 0;
+            nArgSlot = 0x503841;
+            D2COMP_PadStringTo4Chars((char*)(pLayerEntry + 5), (char*)&nWeaponClassToken);
+            pGfxData->nWeaponClass = nWeaponClassToken;
+            break;
+          }
 
-            nLayerIndex++;
-            pLayerEntry += 9;
-          } while (nLayerIndex < *pCOFLayerData);
+          pLayerEntry += 9;
         }
+
         if (!pGfxData->nCompositToken) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52b);
           exit(-1);

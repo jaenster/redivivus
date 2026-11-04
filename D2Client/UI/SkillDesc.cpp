@@ -279,7 +279,16 @@ void __fastcall SKILLDESC_FormatItemStatLine(int32_t pUnit, uint16_t * wszText, 
       wString1[0] = L'\0';
       wStatNameStrId = SKILLDESC_GetStatNameString((uint32_t)wStatId, 0);
       wszStatName = D2Lang::StrTable::strtable::GetLocaleString(wStatNameStrId);
-      memset(wszStatValueStr, 0, 10 * sizeof(wszStatValueStr[0]));
+      wszStatValueStr[0] = L'\0';
+      wszStatValueStr[1] = 0;
+      wszStatValueStr[2] = 0;
+      wszStatValueStr[3] = 0;
+      wszStatValueStr[4] = 0;
+      wszStatValueStr[5] = 0;
+      wszStatValueStr[6] = 0;
+      wszStatValueStr[7] = 0;
+      wszStatValueStr[8] = 0;
+      wszStatValueStr[9] = 0;
       Storm::Source::SSTR::SStrPrintf(szTempBuf, 10, "%i", nStatValue);
       D2Lang::UTF8_ConvertToWideChar(wszStatValueStr, szTempBuf, 9);
       if (nStatValue > 0) {
@@ -334,7 +343,16 @@ void __fastcall DamageToUndeadText(D2UnitStrc * pUnit, short * pwszOutputBuffer,
     uint16_t* wszMinus = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     uint16_t* wszText2 = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* wszText2_00 = D2Lang::StrTable::strtable::GetLocaleString(0xfa1);
-    memset(wszPercentValue, 0, 10 * sizeof(wszPercentValue[0]));
+    wszPercentValue[0] = L'\0';
+    wszPercentValue[1] = 0;
+    wszPercentValue[2] = 0;
+    wszPercentValue[3] = 0;
+    wszPercentValue[4] = 0;
+    wszPercentValue[5] = 0;
+    wszPercentValue[6] = 0;
+    wszPercentValue[7] = 0;
+    wszPercentValue[8] = 0;
+    wszPercentValue[9] = 0;
     Storm::Source::SSTR::SStrPrintf(szPercentBuffer, 10, "%i", 0x32);
     D2Lang::UTF8_ConvertToWideChar(wszPercentValue, szPercentBuffer, 9);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipLine, wszPlus);
@@ -1176,7 +1194,16 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
 
     nStatId = (int32_t)D2Lang::StrTable::strtable::GetLocaleString(wStrId);
     Storm::Source::SSTR::SStrPrintf(szValueBuffer, 10, "%i", nGroupValue);
-    memset(wszValueFormatted, 0, 10 * sizeof(wszValueFormatted[0]));
+    wszValueFormatted[0] = L'\0';
+    wszValueFormatted[1] = L'\0';
+    wszValueFormatted[2] = L'\0';
+    wszValueFormatted[3] = L'\0';
+    wszValueFormatted[4] = L'\0';
+    wszValueFormatted[5] = L'\0';
+    wszValueFormatted[6] = L'\0';
+    wszValueFormatted[7] = L'\0';
+    wszValueFormatted[8] = L'\0';
+    wszValueFormatted[9] = L'\0';
     D2Lang::UTF8_ConvertToWideChar(wszValueFormatted, szValueBuffer, 9);
     uint16_t* pStatList2;
     pStatList2 = (uint16_t*)D2Lang::StrTable::strtable::GetLocaleString(0xfa1);
@@ -1861,7 +1888,16 @@ static void __stdcall SKILLDESC_BuildChargeSkillDesc(D2UnitStrc * pUnit, uint16_
           }
         }
         if (nStatValue) {
-          memset(wszValueStr, 0, 10 * sizeof(wszValueStr[0]));
+          wszValueStr[0] = L'\0';
+          wszValueStr[1] = 0;
+          wszValueStr[2] = 0;
+          wszValueStr[3] = 0;
+          wszValueStr[4] = 0;
+          wszValueStr[5] = 0;
+          wszValueStr[6] = 0;
+          wszValueStr[7] = 0;
+          wszValueStr[8] = 0;
+          wszValueStr[9] = 0;
           Storm::Source::SSTR::SStrPrintf(szValueBuffer, 10, "%i", nStatValue);
           D2Lang::UTF8_ConvertToWideChar(wszValueStr, szValueBuffer, 9);
           switch (pnStatData[nChargeSkillIndex].nDescFunc) {

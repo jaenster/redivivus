@@ -745,6 +745,8 @@ void __stdcall WEATHER_UpdateParticles(D2SeedStrc * pSeed) {
     // Static local variables (originally global data)
     static uint32_t gnWeatherParticleSinPhase; D2_STATIC_GUARD_BSS(gnWeatherParticleSinPhase, "D2Client::Draw::Weather::WEATHER_UpdateParticles::gnWeatherParticleSinPhase");
 
+    int nIndex;
+    int nXDrift;
     float fVar1;
     float fDepthFactor;
     float fSinOffset;
@@ -759,51 +761,46 @@ void __stdcall WEATHER_UpdateParticles(D2SeedStrc * pSeed) {
       fDepthFactor = gnWeatherTransitionInitialized * 0.15 + 0.85;
     }
 
-    int nIndex = 0;
     D2WeatherParticleStrc* pParticleData = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
-    if (pEnvironmentParticles->nHighestUsedIndex >= 0) {
-      int nXDrift;
-      do {
-        if (pParticleData->nFlags) {
-          fScaledSpeed = (float)(int)((float)pParticleData->nSpeed * fDepthFactor);
-          fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gnWeatherParticleOffsetYModulo);
-          nXDrift = (int)(fVar1 * fScaledSpeed);
-          fVar1 = Fog::MATH_sinTable_f32_Lookup(gnWeatherParticleOffsetYModulo);
-          pParticleData->nPosY += (int)(fVar1 * fScaledSpeed) - gnCameraWorldDeltaY;
-          if (pParticleData->nPosY > pParticleData->nMaxY) {
-            pParticleData->nDying = 1;
-          }
-          if (pParticleData->nDying) {
-            if (!pParticleData->nFadeCountdown) {
-              Fog::Src::DataArrays::FOG_ArrayFreeAtIndex(pEnvironmentParticles, nIndex << 0x10);
-              if (pEnvironmentParticles->nUsedCount < gnWeatherParticleState) {
-                WEATHER_SpawnParticle(pSeed);
-              }
-            } else {
-              nXDrift = 0;
-              pParticleData->nSpeed = 0;
-              pParticleData->nFadeCountdown--;
+    for (nIndex = 0; nIndex <= pEnvironmentParticles->nHighestUsedIndex; nIndex++) {
+      if (pParticleData->nFlags) {
+        fScaledSpeed = (float)(int)((float)pParticleData->nSpeed * fDepthFactor);
+        fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gnWeatherParticleOffsetYModulo);
+        nXDrift = (int)(fVar1 * fScaledSpeed);
+        fVar1 = Fog::MATH_sinTable_f32_Lookup(gnWeatherParticleOffsetYModulo);
+        pParticleData->nPosY += (int)(fVar1 * fScaledSpeed) - gnCameraWorldDeltaY;
+        if (pParticleData->nPosY > pParticleData->nMaxY) {
+          pParticleData->nDying = 1;
+        }
+        if (pParticleData->nDying) {
+          if (!pParticleData->nFadeCountdown) {
+            Fog::Src::DataArrays::FOG_ArrayFreeAtIndex(pEnvironmentParticles, nIndex << 0x10);
+            if (pEnvironmentParticles->nUsedCount < gnWeatherParticleState) {
+              WEATHER_SpawnParticle(pSeed);
             }
-          }
-          if (pParticleData->nFlags) {
-            if (nWeatherParticleCountAct5 && !pParticleData->nDying) {
-              fSinOffset = Fog::MATH_sinTable_f32_Lookup((uint32_t)(gnWeatherParticleSinPhase << 9) / 0x19 + pParticleData->nSinPhaseOffset & 0x1ff);
-              nXDrift += (int)(fSinOffset + fSinOffset);
-            }
-
-            pParticleData->nPosX += nXDrift - gnCameraWorldDeltaX;
-            if (pParticleData->nPosX >= ScreenSizeX) {
-              pParticleData->nPosX -= ScreenSizeX;
-            }
-            if (pParticleData->nPosX < 0) {
-              pParticleData->nPosX += ScreenSizeX;
-            }
+          } else {
+            nXDrift = 0;
+            pParticleData->nSpeed = 0;
+            pParticleData->nFadeCountdown--;
           }
         }
+        if (pParticleData->nFlags) {
+          if (nWeatherParticleCountAct5 && !pParticleData->nDying) {
+            fSinOffset = Fog::MATH_sinTable_f32_Lookup((uint32_t)(gnWeatherParticleSinPhase << 9) / 0x19 + pParticleData->nSinPhaseOffset & 0x1ff);
+            nXDrift += (int)(fSinOffset + fSinOffset);
+          }
 
-        nIndex++;
-        pParticleData++;
-      } while (nIndex <= pEnvironmentParticles->nHighestUsedIndex);
+          pParticleData->nPosX += nXDrift - gnCameraWorldDeltaX;
+          if (pParticleData->nPosX >= ScreenSizeX) {
+            pParticleData->nPosX -= ScreenSizeX;
+          }
+          if (pParticleData->nPosX < 0) {
+            pParticleData->nPosX += ScreenSizeX;
+          }
+        }
+      }
+
+      pParticleData++;
     }
 
     gnWeatherParticleSinPhase++;
@@ -873,6 +870,7 @@ void __stdcall WEATHER_DrawParticles() {
     int nYStart;
     int nCurX;
     float fVar1;
+    int nIndex;
     uint8_t byAlpha;
     uint8_t byColor;
     BOOL bLowQuality = D2gfx::D2GFX::D2GFX_GetLowQuality();
@@ -897,12 +895,7 @@ void __stdcall WEATHER_DrawParticles() {
     }
 
     D2WeatherParticleStrc* pParticleData = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
-    int nIndex = 0;
-    if (pEnvironmentParticles->nHighestUsedIndex < 0) {
-      return;
-    }
-
-    do {
+    for (nIndex = 0; nIndex <= pEnvironmentParticles->nHighestUsedIndex; nIndex++) {
       int nMaxY = ScreenSizeY - 0x2f;
       if (pParticleData->nFlags) {
         if (nWeatherParticleCountAct5) {
@@ -952,9 +945,8 @@ void __stdcall WEATHER_DrawParticles() {
         }
       }
 
-      nIndex++;
       pParticleData++;
-    } while (nIndex <= pEnvironmentParticles->nHighestUsedIndex);
+    }
 }
 
 uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags() {

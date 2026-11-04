@@ -415,7 +415,6 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D
     int nWallLayerIter;
     int dy;
     int dx;
-    D2DrlgGridStrc** ppWallGrid;
     for (dy = 0; dy < pnGroupEntry[3]; dy++) {
       int nWallLayerCount = pDrlgUnkn->nWallLayerCount;
       for (dx = 0; dx < pnGroupEntry[2]; dx++) {
@@ -426,20 +425,13 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D
             return 0;
           }
 
-          nWallLayerIter = 0;
-          if (nWallLayerCount > 0) {
-            ppWallGrid = pDrlgUnkn->apWallGrids;
-            do {
-              if (*ppWallGrid) {
-                uFlags = DrlgGrid::GetGridFlags(*ppWallGrid, dx + nRoomX, dy + nRoomY);
-                if (uFlags & 1) {
-                  return 0;
-                }
+          for (nWallLayerIter = 0; nWallLayerIter < nWallLayerCount; nWallLayerIter++) {
+            if (pDrlgUnkn->apWallGrids[nWallLayerIter]) {
+              uFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->apWallGrids[nWallLayerIter], dx + nRoomX, dy + nRoomY);
+              if (uFlags & 1) {
+                return 0;
               }
-
-              ppWallGrid++;
-              nWallLayerIter++;
-            } while (nWallLayerIter < nWallLayerCount);
+            }
           }
         }
       }

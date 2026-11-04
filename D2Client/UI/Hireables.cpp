@@ -228,8 +228,8 @@ static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, u
       nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(lwMessage);
     }
 
-    int32_t nFinalWidth = D2Win::Src::D2WinFont::DRAW_text0(lwMessage);
-    nX += 0x16 - nFinalWidth / 2;
+    int32_t nFinalWidth = D2Win::Src::D2WinFont::DRAW_text0(lwMessage) / 2;
+    nX += 0x16 - nFinalWidth;
     if (nX < 0) {
       nX = 0;
     }

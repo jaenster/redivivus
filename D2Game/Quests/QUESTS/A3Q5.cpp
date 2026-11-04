@@ -599,6 +599,7 @@ void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUnit) {
     int _nBroadcastState;
     uint8_t nBroadcastState;
+    int nKillerCount;
     int32_t nNewStateFlag;
     int nLoopIdx;
     uint32_t dwSrcLine;
@@ -624,19 +625,10 @@ void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUn
       nLoopIdx = pKillerUnit->nUnitGUID;
     }
 
-    int nKillerCount;
-    nKillerCount = 0;
-    if (0 < _nBroadcastState) {
-      int32_t* piGUIDSlot;
-      piGUIDSlot = pQuestSpecificData->anCouncilKillerGUIDs;
-      do {
-        if (*piGUIDSlot == nLoopIdx) {
-          return;
-        }
-
-        nKillerCount++;
-        piGUIDSlot++;
-      } while (nKillerCount < _nBroadcastState);
+    for (nKillerCount = 0; nKillerCount < _nBroadcastState; nKillerCount++) {
+      if (pQuestSpecificData->anCouncilKillerGUIDs[nKillerCount] == nLoopIdx) {
+        return;
+      }
     }
 
     pQuestSpecificData->anCouncilKillerGUIDs[_nBroadcastState] = nLoopIdx;

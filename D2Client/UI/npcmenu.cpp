@@ -6158,7 +6158,16 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
 
                 pnOptionCallback = D2Lang::StrTable::strtable::GetLocaleString(*pnOptionStringId);
                 D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOptionText, pnOptionCallback);
-                /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ memset(wGoldCostWChar, 0, 10 * sizeof(wGoldCostWChar[0]));
+                /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wGoldCostWChar[0] = 0;
+                wGoldCostWChar[1] = 0;
+                wGoldCostWChar[2] = 0;
+                wGoldCostWChar[3] = 0;
+                wGoldCostWChar[4] = 0;
+                wGoldCostWChar[5] = 0;
+                wGoldCostWChar[6] = 0;
+                wGoldCostWChar[7] = 0;
+                wGoldCostWChar[8] = 0;
+                wGoldCostWChar[9] = 0;
                 wsprintfA(szGoldCostAnsi, "%d", dwFontArg);
                 D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)wGoldCostWChar, szGoldCostAnsi, 9);
                 D2Lang::Unicode::UNISYS::AppendToBuffer(wszOptionText, (uint16_t*)wGoldCostWChar);
@@ -7051,7 +7060,16 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
           wszLabelBuf[iFill] = L'\0';
         }
 
-        memset(wNumCharBuf, 0, 10 * sizeof(wNumCharBuf[0]));
+        wNumCharBuf[0] = L'\0';
+        wNumCharBuf[1] = 0;
+        wNumCharBuf[2] = 0;
+        wNumCharBuf[3] = 0;
+        wNumCharBuf[4] = 0;
+        wNumCharBuf[5] = 0;
+        wNumCharBuf[6] = 0;
+        wNumCharBuf[7] = 0;
+        wNumCharBuf[8] = 0;
+        wNumCharBuf[9] = 0;
         D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd28), nLabelMaxLen);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, wszLabelBuf);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);

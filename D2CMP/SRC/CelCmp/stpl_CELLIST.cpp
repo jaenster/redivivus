@@ -50,7 +50,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::Destructor() {
     *pBackLink = (int)nNext;
     pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
-    this->m_terminator.m_next = 0;
+    pTVar1->m_next = 0;
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16> that no member owns
@@ -87,7 +87,7 @@ template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -57266
       *pBackLink = (int)nNext;
       pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
@@ -537,7 +537,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NO
       *pPrevLinkPtr = (uint32_t)(uintptr_t)pActiveHead;
       pTVar1->m_prevlink->m_next = this->tFullList.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->tFullList.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     ExceptionList = pPrevSehFrame;
@@ -552,7 +552,7 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLo
       pNewEntry->m_linktofull.m_prevlink = 0;
       pNewEntry->m_linktofull.m_next = 0;
       pTVar1 = &pNewEntry->m_frames.m_terminator;
-      pNewEntry->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
       pTVar1->m_prevlink = pTVar1;
       pNewEntry->m_frames.m_linkoffset = 0;
       pNewEntry->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
@@ -606,7 +606,7 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
     int pNextLink = pList->m_linkoffset;
     if ((int)pTailLink < 0) {
       *(TSLink<::CELLIST>**)~pTailLink = (TSLink<::CELLIST>*)pInsertPoint;
-      pList->m_terminator.m_next = (int)pNewEntry;
+      pActiveHead->m_next = (int)pNewEntry;
       return pNewEntry;
     }
     if (pNextLink < 0) {
@@ -614,7 +614,7 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
     }
 
     *(TSLink<::CELLIST>**)(pTailLink + pNextLink) = (TSLink<::CELLIST>*)pInsertPoint;
-    pList->m_terminator.m_next = (int)pNewEntry;
+    pActiveHead->m_next = (int)pNewEntry;
     return pNewEntry;
 }
 
@@ -689,7 +689,7 @@ template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSHashObjectChunk<CELLIST
       *pBackLink = (int)nNext;
       pTVar1->m_prevlink->m_next = this->m_link.m_next;
       pTVar1->m_prevlink = 0;
-      this->m_link.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     ((TSGrowableArray<::CELLIST>*)this)->Destructor();
@@ -857,7 +857,7 @@ template<> ::CELLIST * TSGrowableArray<CELLIST>::New() {
       pNewNode->m_linktofull.m_prevlink = 0;
       pNewNode->m_linktofull.m_next = 0;
       pTVar1 = &pNewNode->m_frames.m_terminator;
-      pNewNode->m_frames.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
       pTVar1->m_prevlink = pTVar1;
       pNewNode->m_frames.m_linkoffset = 0;
       pNewNode->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
@@ -938,7 +938,7 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
     int pListTail = pList->m_linkoffset;
     if ((int)pOldTail < 0) {
       *(TSLink<::CELLIST>**)~pOldTail = (TSLink<::CELLIST>*)ppInsertSlot;
-      pList->m_terminator.m_next = (int)pNewNode;
+      pFreeListHead->m_next = (int)pNewNode;
       return pNewNode;
     }
     if (pListTail < 0) {
@@ -946,7 +946,7 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
     }
 
     *(TSLink<::CELLIST>**)(pOldTail + pListTail) = (TSLink<::CELLIST>*)ppInsertSlot;
-    pList->m_terminator.m_next = (int)pNewNode;
+    pFreeListHead->m_next = (int)pNewNode;
     return pNewNode;
 }
 
@@ -1011,7 +1011,7 @@ template<> void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destructor() {
       *pBackLink = (int)pPoolNext;
       pTVar1->m_prevlink->m_next = this->tChunkList.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
-      this->tChunkList.m_terminator.m_next = 0;
+      pTVar1->m_next = 0;
     }
 
     this->tReuseList.UnlinkAll();
@@ -1028,7 +1028,7 @@ template<> void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destructor() {
       *pBackLink = (int)pCelListNext;
       pTVar2->m_prevlink->m_next = this->tReuseList.m_terminator.m_next;
       pTVar2->m_prevlink = 0;
-      this->tReuseList.m_terminator.m_next = 0;
+      pTVar2->m_next = 0;
     }
 
     this->TSHashTable<::CELLIST, HASHKEY_NONE>::Destructor();

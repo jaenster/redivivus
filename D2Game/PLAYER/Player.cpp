@@ -445,12 +445,8 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct) {
-    if (!pUnit) {
-      return;
-    }
-
-    int i = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = i >= 0 && i < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + i : nullptr;
+    int i;
+    D2CharStatsTxt* pCharStatsTxt = pUnit && (i = pUnit->nClassId) >= 0 && i < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + i : nullptr;
     if (!pCharStatsTxt) {
       return;
     }

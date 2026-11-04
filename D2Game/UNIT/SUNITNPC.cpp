@@ -2260,7 +2260,7 @@ void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
             SUNITNPC_InitNpcInventory(pGame, nNpcClassId, (uint32_t)pNpcData);
           }
 
-          pNpcData->sTrade.bHirelingsInitialized = 1;
+          pTradeState->bHirelingsInitialized = 1;
         }
       }
     }

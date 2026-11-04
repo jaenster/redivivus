@@ -34,7 +34,11 @@ void __stdcall LIB_LoadAdvapi32() {
     BOOL nResult;
     _SID_IDENTIFIER_AUTHORITY sSidAuthority;
     uint8_t aclBuf[512];
-    memset(sSidAuthority.Value, 0, 5 * sizeof(sSidAuthority.Value[0]));
+    sSidAuthority.Value[0] = '\0';
+    sSidAuthority.Value[1] = '\0';
+    sSidAuthority.Value[2] = '\0';
+    sSidAuthority.Value[3] = '\0';
+    sSidAuthority.Value[4] = '\0';
     sSidAuthority.Value[5] = '\x01';
     HANDLE hProcess = GetCurrentProcess();
     PSID pSid = (PSID)0x0;

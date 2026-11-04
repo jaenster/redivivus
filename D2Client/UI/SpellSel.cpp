@@ -1025,7 +1025,16 @@ void __fastcall SPELLSEL_DrawSkillRequirementTooltip(short * pwSkillId, int32_t 
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pWszStr);
     pWszStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pWszStr);
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ memset(wszNumBuf, 0, 10 * sizeof(wszNumBuf[0]));
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wszNumBuf[0] = L'\0';
+    wszNumBuf[1] = 0;
+    wszNumBuf[2] = 0;
+    wszNumBuf[3] = 0;
+    wszNumBuf[4] = 0;
+    wszNumBuf[5] = 0;
+    wszNumBuf[6] = 0;
+    wszNumBuf[7] = 0;
+    wszNumBuf[8] = 0;
+    wszNumBuf[9] = 0;
     wsprintfA(szNumBuf, "%i", nChargeCount);
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szNumBuf, 9);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszNumBuf);
@@ -2095,7 +2104,16 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
       return;
     }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ memset(wszLevelBuf, 0, 10 * sizeof(wszLevelBuf[0]));
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wszLevelBuf[0] = L'\0';
+    wszLevelBuf[1] = 0;
+    wszLevelBuf[2] = 0;
+    wszLevelBuf[3] = 0;
+    wszLevelBuf[4] = 0;
+    wszLevelBuf[5] = 0;
+    wszLevelBuf[6] = 0;
+    wszLevelBuf[7] = 0;
+    wszLevelBuf[8] = 0;
+    wszLevelBuf[9] = 0;
     wsprintfA(szLevelBuf, "%d", nDisplayLevel);
     D2Lang::UTF8_ConvertToWideChar(wszLevelBuf, szLevelBuf, 9);
     if (nDisplayLevel > 9) {
@@ -2137,7 +2155,16 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
     }
 
     uint32_t nClassId = pUnit->nClassId;
-    memset(wszNewSkillsBuf, 0, 10 * sizeof(wszNewSkillsBuf[0]));
+    wszNewSkillsBuf[0] = L'\0';
+    wszNewSkillsBuf[1] = 0;
+    wszNewSkillsBuf[2] = 0;
+    wszNewSkillsBuf[3] = 0;
+    wszNewSkillsBuf[4] = 0;
+    wszNewSkillsBuf[5] = 0;
+    wszNewSkillsBuf[6] = 0;
+    wszNewSkillsBuf[7] = 0;
+    wszNewSkillsBuf[8] = 0;
+    wszNewSkillsBuf[9] = 0;
     uint32_t nClassId2 = nClassId;
     int32_t nNewSkills = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNewSkillsBuf, "%i", nNewSkills);
@@ -2242,7 +2269,16 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
 
     D2UnitStrc* pUnitCopy = pUnit;
     if (!gnSpellSelSkillTreeOffsetY) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ memset(wszLevelBuf, 0, 10 * sizeof(wszLevelBuf[0]));
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wszLevelBuf[0] = L'\0';
+      wszLevelBuf[1] = 0;
+      wszLevelBuf[2] = 0;
+      wszLevelBuf[3] = 0;
+      wszLevelBuf[4] = 0;
+      wszLevelBuf[5] = 0;
+      wszLevelBuf[6] = 0;
+      wszLevelBuf[7] = 0;
+      wszLevelBuf[8] = 0;
+      wszLevelBuf[9] = 0;
       wsprintfA(szLevelBuf, "%d", 0);
       D2Lang::UTF8_ConvertToWideChar(wszLevelBuf, szLevelBuf, 9);
       ui::UI_DrawTextCentered(ScreenSizeX - gnPanelOffsetX - 0x41, gnPanelOffsetY - 400 + ScreenSizeY, ScreenSizeX - gnPanelOffsetX - 0x19, wszLevelBuf, 0);

@@ -16,11 +16,11 @@ static void SHA1_Transform(uint32_t * blockWords, uint32_t * stateWords) {
     uint32_t stateA = *stateWords;
     stateD = stateWords[4] + 0x5a827999 + ((stateWords[3] ^ stateWords[2]) & stateE ^ stateWords[3]) + (stateA << 5 | stateA >> 0x1b) + schedule0;
     uint32_t wordTemp = blockWords[1];
-    uint32_t stateB = stateE << 0x1e | stateE >> 2;
+    uint32_t stateB = _rotl(stateE, 0x1e);
     uint32_t schedule1 = wordTemp << 0x18 | wordTemp >> 8 & -16711936 | (wordTemp & 0xff00) << 8 | wordTemp >> 0x18;
     stateE = stateWords[3] + 0x5a827999 + ((stateWords[2] ^ stateB) & stateA ^ stateWords[2]) + (stateD * 0x20 | stateD >> 0x1b) + schedule1;
     wordTemp = blockWords[2];
-    uint32_t stateC = stateA << 0x1e | stateA >> 2;
+    uint32_t stateC = _rotl(stateA, 0x1e);
     uint32_t schedule2 = wordTemp << 0x18 | wordTemp >> 8 & -16711936 | (wordTemp & 0xff00) << 8 | wordTemp >> 0x18;
     stateA = stateWords[2] + 0x5a827999 + ((stateB ^ stateC) & stateD ^ stateB) + (stateE * 0x20 | stateE >> 0x1b) + schedule2;
     wordTemp = blockWords[3];

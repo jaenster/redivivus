@@ -1108,17 +1108,12 @@ uint32_t __fastcall Q35_AreAncientsReadyToFight(::SGAMEDATA * pGame) {
 // [A5Q5 = Rite of Passage] Q35_FindAncientByClassId: looks up a live spawned Ancient unit by classId among the tracked GUIDs. No quest-state writes.
 D2UnitStrc * __fastcall Q35_FindAncientByClassId(::SGAMEDATA * pGame, int32_t nClassId) {
     int nAncientClassId;
+    int i;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    int i = 0;
-    if (pQuestSpecificData->nSpawnedAncientCount <= 0) {
-      return nullptr;
-    }
-
-    int* pGUIDEntry = pQuestSpecificData->anAncientMonsterGUID;
-    do {
+    for (i = 0; i < pQuestSpecificData->nSpawnedAncientCount; i++) {
       D2UnitStrc* pAncient;
-      pAncient = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *pGUIDEntry);
+      pAncient = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pQuestSpecificData->anAncientMonsterGUID[i]);
       if (!pAncient) {
         nAncientClassId = -1;
       } else {
@@ -1127,10 +1122,7 @@ D2UnitStrc * __fastcall Q35_FindAncientByClassId(::SGAMEDATA * pGame, int32_t nC
       if (nAncientClassId == nClassId) {
         return pAncient;
       }
-
-      i++;
-      pGUIDEntry++;
-    } while (i < pQuestSpecificData->nSpawnedAncientCount);
+    }
 
     return nullptr;
 }
