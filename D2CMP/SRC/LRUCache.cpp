@@ -281,25 +281,27 @@ D2LRUCacheNodeStrc * __fastcall LRUCACHE_GetOrAlloc(D2LRUCacheStrc * pCache, uin
       exit(-1);
     }
 
-    D2LRUCacheNodeStrc* ppAllocEntry;
-    pCache->nMissCount++;
-    pCache->nHitCount++;
-    ppAllocEntry = LRUCACHE_AllocEntry(pCache, nEntrySize);
-    while (!ppAllocEntry) {
-      LRUCACHE_FreeEntry(pCache, nullptr);
+    {
+      D2LRUCacheNodeStrc* ppAllocEntry;
+      pCache->nMissCount++;
+      pCache->nHitCount++;
       ppAllocEntry = LRUCACHE_AllocEntry(pCache, nEntrySize);
-    }
+      while (!ppAllocEntry) {
+        LRUCACHE_FreeEntry(pCache, nullptr);
+        ppAllocEntry = LRUCACHE_AllocEntry(pCache, nEntrySize);
+      }
 
-    nAddress = D2_ALLOC_POOL_AT((D2PoolManagerStrc*)pCache->pAllocator, nEntrySize, ".\\SRC\\LRUCache.cpp", 0x84);
-    ppAllocEntry->pBuf = nAddress;
-    if (!nAddress) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x85);
-      exit(-1);
-    }
+      nAddress = D2_ALLOC_POOL_AT((D2PoolManagerStrc*)pCache->pAllocator, nEntrySize, ".\\SRC\\LRUCache.cpp", 0x84);
+      ppAllocEntry->pBuf = nAddress;
+      if (!nAddress) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x85);
+        exit(-1);
+      }
 
-    ppAllocEntry->nBufSize = nEntrySize;
-    ppAllocEntry->pUserData = pUserData;
-    return ppAllocEntry;
+      ppAllocEntry->nBufSize = nEntrySize;
+      ppAllocEntry->pUserData = pUserData;
+      return ppAllocEntry;
+    }
 }
 
 } // namespace D2CMP::SRC::LRUCache

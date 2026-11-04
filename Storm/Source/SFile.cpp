@@ -2782,8 +2782,8 @@ void __fastcall SFILE_CloseStreamHandle1(D2StormListHead * pThis) {
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int*)pThis->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pThis->pNext > 0 ? (int*)pThis->pNext : 0;
+      if (!pNode) {
         break;
       }
 
@@ -2803,8 +2803,8 @@ void __fastcall SFILE_CloseStreamHandle2(D2StormListHead * pThis) {
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int*)pThis->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pThis->pNext > 0 ? (int*)pThis->pNext : 0;
+      if (!pNode) {
         break;
       }
 
@@ -2824,8 +2824,8 @@ void __fastcall SFILE_CloseStreamHandle3(D2StormListHead * pThis) {
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int*)pThis->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pThis->pNext > 0 ? (int*)pThis->pNext : 0;
+      if (!pNode) {
         break;
       }
 
@@ -2845,8 +2845,8 @@ void __fastcall SFILE_CloseStreamHandle4(D2StormListHead * pThis) {
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int*)pThis->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pThis->pNext > 0 ? (int*)pThis->pNext : 0;
+      if (!pNode) {
         break;
       }
 
@@ -2866,8 +2866,8 @@ void __fastcall SFILE_CloseStreamHandle5(D2StormListHead * pThis) {
     int* pNode;
     while (true) {
       int pNextNode;
-      pNode = (int*)pThis->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pThis->pNext > 0 ? (int*)pThis->pNext : 0;
+      if (!pNode) {
         break;
       }
 

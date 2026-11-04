@@ -224,8 +224,8 @@ void __fastcall WND_RemoveAllChildren(D2StormListHead * pWindow) {
     int* pNode;
     while (true) {
       int nNext;
-      pNode = (int*)pWindow->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pWindow->pNext > 0 ? (int*)pWindow->pNext : 0;
+      if (!pNode) {
         break;
       }
 

@@ -914,7 +914,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * sz
 
     nLen1 = Storm::Source::SSTR::SStrLen(szText1);
     _Size_00 = nLen1 + 1;
-    if (_Size_00 > 0x100) {
+    if (!(_Size_00 <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x581);
       exit(-1);
     }
@@ -955,7 +955,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
 
     nLen1 = Storm::Source::SSTR::SStrLen(szText1);
     _Size = nLen1 + 1;
-    if (_Size > 0x100) {
+    if (!(_Size <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a4);
       exit(-1);
     }
@@ -963,7 +963,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
     memcpy(szPacketBuf, szText1, _Size);
     nLen2 = Storm::Source::SSTR::SStrLen(szText2);
     _Size_00 = nLen2 + 1;
-    if (_Size_00 > 0x100) {
+    if (!(_Size_00 <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ac);
       exit(-1);
     }

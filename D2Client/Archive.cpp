@@ -160,8 +160,8 @@ void __fastcall ARCHIVE_ClearList(int32_t nList) {
     int* pNode;
     while (true) {
       int nNext;
-      pNode = *(int**)(nList + 8);
-      if ((int)pNode <= 0) {
+      pNode = (int)*(int**)(nList + 8) > 0 ? *(int**)(nList + 8) : 0;
+      if (!pNode) {
         break;
       }
 

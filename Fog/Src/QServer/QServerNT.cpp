@@ -124,36 +124,38 @@ static BOOL __stdcall BeginAsyncReadForClient(D2QServerStrc * pQServer, D2QServe
       exit(-1);
     }
 
-    BOOL fReadResult;
-    hReadEvent = pClient->ovRead.hEvent;
-    pClient->dwReadFlags |= QSRV_READFLAG_PENDING_IO;
-    if (hReadEvent) {
-      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x3f8);
-      exit(-1);
-    }
-    if (pClient->socket == -1) {
-      nBytesRead = pClient->nClientToken;
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-      CloseRemoteConnection(pQServer, nBytesRead, ".\\Src\\QServer\\QServerNT.cpp", 0x408);
-      RemoveClientAndClearLog(pQServer, pClient);
-      return 0;
-    }
-
-    IncrementClientRefCount(pQServer, pClient);
-    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ fReadResult = ReadFile((HANDLE)pClient->socket, pClient->aRecvBuffer + nBytesRead, DVar1, (LPDWORD)&pClient->dwReadTransferSize, &pClient->ovRead);
-    if (!fReadResult) {
-      DVar1 = GetLastError();
-      if (DVar1 != 0x3e5) {
+    {
+      BOOL fReadResult;
+      hReadEvent = pClient->ovRead.hEvent;
+      pClient->dwReadFlags |= QSRV_READFLAG_PENDING_IO;
+      if (hReadEvent) {
+        ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x3f8);
+        exit(-1);
+      }
+      if (pClient->socket == -1) {
+        nBytesRead = pClient->nClientToken;
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+        CloseRemoteConnection(pQServer, nBytesRead, ".\\Src\\QServer\\QServerNT.cpp", 0x408);
         RemoveClientAndClearLog(pQServer, pClient);
-        CloseRemoteConnection(pQServer, pClient->nClientToken, ".\\Src\\QServer\\QServerNT.cpp", 0x430);
         return 0;
       }
 
-      fReadResult = 1;
-    }
+      IncrementClientRefCount(pQServer, pClient);
+      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ fReadResult = ReadFile((HANDLE)pClient->socket, pClient->aRecvBuffer + nBytesRead, DVar1, (LPDWORD)&pClient->dwReadTransferSize, &pClient->ovRead);
+      if (!fReadResult) {
+        DVar1 = GetLastError();
+        if (DVar1 != 0x3e5) {
+          RemoveClientAndClearLog(pQServer, pClient);
+          CloseRemoteConnection(pQServer, pClient->nClientToken, ".\\Src\\QServer\\QServerNT.cpp", 0x430);
+          return 0;
+        }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-    return fReadResult;
+        fReadResult = 1;
+      }
+
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+      return fReadResult;
+    }
 }
 
 static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, size_t nSize, char * pBytes) {

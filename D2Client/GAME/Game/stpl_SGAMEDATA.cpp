@@ -80,8 +80,8 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
     void* pObject;
     while (true) {
       int* pLink;
-      pObject = (void*)this->m_terminator.m_next;
-      if ((int)pObject <= 0) {
+      pObject = (int)(void*)this->m_terminator.m_next > 0 ? (void*)this->m_terminator.m_next : 0;
+      if (!pObject) {
         break;
       }
 
@@ -622,8 +622,8 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     char* pSlot;
     while (true) {
       uint32_t nIndex;
-      pChunk = (void*)this->m_terminator.m_next;
-      if ((int)pChunk <= 0) {
+      pChunk = (int)(void*)this->m_terminator.m_next > 0 ? (void*)this->m_terminator.m_next : 0;
+      if (!pChunk) {
         break;
       }
 

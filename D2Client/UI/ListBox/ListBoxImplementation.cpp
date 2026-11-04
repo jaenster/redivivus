@@ -506,7 +506,7 @@ uint32_t __thiscall GetItemUserData(::ListBoxImplementation * pThis, int nIndex)
     if (nIndex >= 0 && nIndex < (int)(uint32_t)pThis->nItemCount && nIndex < 0x80) {
       return pThis->aItems[nIndex].dwItemData;
     }
-    if (pThis->nItemCount >= 0x80) {
+    if (!(pThis->nItemCount < 0x80)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x46c);
       exit(-1);
     }

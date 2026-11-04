@@ -3763,43 +3763,45 @@ void __stdcall RENDERER_D3D_InitializeTexturePools() {
       exit(-1);
     }
 
-    DWORD dwHResult;
-    if (gpD3DTextureSpritePoolMemory1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x56);
-      exit(-1);
-    }
+    {
+      DWORD dwHResult;
+      if (gpD3DTextureSpritePoolMemory1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x56);
+        exit(-1);
+      }
 
-    gpD3DTextureSpritePoolMemory0 = D2_ALLOC_AT(0x10000, ".\\Src\\d3dSprite.cpp", 0x57);
-    gpD3DTextureSpritePoolMemory1 = D2_ALLOC_AT(0x10000, ".\\Src\\d3dSprite.cpp", 0x58);
-    nErrorLine = RENDERER_D3D_CreateSystemMemoryTexture(gD3DGenericTextureCache.apSpriteSurfaces, gD3DGenericTextureCache.apSpriteTextures, 0x100, 0x100);
-    if (!nErrorLine) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5e);
-      exit(-1);
-    } else {
-      nErrorLine = RENDERER_D3D_CreateSystemMemoryTexture(gD3DGenericTextureCache.apSpriteSurfaces + 1, gD3DGenericTextureCache.apSpriteTextures + 1, 0x80, 0x80);
+      gpD3DTextureSpritePoolMemory0 = D2_ALLOC_AT(0x10000, ".\\Src\\d3dSprite.cpp", 0x57);
+      gpD3DTextureSpritePoolMemory1 = D2_ALLOC_AT(0x10000, ".\\Src\\d3dSprite.cpp", 0x58);
+      nErrorLine = RENDERER_D3D_CreateSystemMemoryTexture(gD3DGenericTextureCache.apSpriteSurfaces, gD3DGenericTextureCache.apSpriteTextures, 0x100, 0x100);
       if (!nErrorLine) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x61);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5e);
         exit(-1);
       } else {
-        nErrorLine = RENDERER_D3D_CreateSystemMemoryTexture(gD3DGenericTextureCache.apSpriteSurfaces + 2, gD3DGenericTextureCache.apSpriteTextures + 2, 0x20, 0x20);
+        nErrorLine = RENDERER_D3D_CreateSystemMemoryTexture(gD3DGenericTextureCache.apSpriteSurfaces + 1, gD3DGenericTextureCache.apSpriteTextures + 1, 0x80, 0x80);
         if (!nErrorLine) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 100);
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x61);
           exit(-1);
-        }
+        } else {
+          nErrorLine = RENDERER_D3D_CreateSystemMemoryTexture(gD3DGenericTextureCache.apSpriteSurfaces + 2, gD3DGenericTextureCache.apSpriteTextures + 2, 0x20, 0x20);
+          if (!nErrorLine) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 100);
+            exit(-1);
+          }
 
-        sVBDesc.dwSize = 0x10;
-        sVBDesc.dwCaps = 0x10800;
-        sVBDesc.dwFVF = 0x1c4;
-        sVBDesc.dwNumVertices = 0x30;
-        dwHResult = g_pDirect3D7->lpVtbl->CreateVertexBuffer(g_pDirect3D7, &sVBDesc, &g_pD3DSpriteQuadVB, 4, nullptr);
-        if (dwHResult) {
-          RENDERER_DIRECT3D_ErrorLog("CreateVertexBuffer failed!", dwHResult);
+          sVBDesc.dwSize = 0x10;
+          sVBDesc.dwCaps = 0x10800;
+          sVBDesc.dwFVF = 0x1c4;
+          sVBDesc.dwNumVertices = 0x30;
+          dwHResult = g_pDirect3D7->lpVtbl->CreateVertexBuffer(g_pDirect3D7, &sVBDesc, &g_pD3DSpriteQuadVB, 4, nullptr);
+          if (dwHResult) {
+            RENDERER_DIRECT3D_ErrorLog("CreateVertexBuffer failed!", dwHResult);
+            return;
+          }
+
+          gd3dVertexBufferOffset = 0;
+          D2CMP::SRC::CelCmp::CELCMP_SetPixelDataFreeCallback(D3D_PixelDataFreeCallback_ClearCacheNodes);
           return;
         }
-
-        gd3dVertexBufferOffset = 0;
-        D2CMP::SRC::CelCmp::CELCMP_SetPixelDataFreeCallback(D3D_PixelDataFreeCallback_ClearCacheNodes);
-        return;
       }
     }
 }

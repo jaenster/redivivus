@@ -915,12 +915,7 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
 void __fastcall Q04_SetRescueTrigger(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     D2QuestDataA1Q4Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q4;
     pA1Q4Data->sSub.bRescueArmed = true;
-    if (!pUnit) {
-      pA1Q4Data->sSub.nUnitGUID = -1;
-      return;
-    }
-
-    pA1Q4Data->sSub.nUnitGUID = pUnit->nUnitGUID;
+    pA1Q4Data->sSub.nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
 }
 
 // A1Q4 — Q04_ActiveFilter (fpActiveFilter): decides whether an NPC shows the quest

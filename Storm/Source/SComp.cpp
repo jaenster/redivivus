@@ -1339,8 +1339,8 @@ void __fastcall LINKEDLIST_UnlinkAll(int32_t pList) {
     int* pNode;
     while (true) {
       int pNext;
-      pNode = *(int**)(pList + 8);
-      if ((int)pNode <= 0) {
+      pNode = (int)*(int**)(pList + 8) > 0 ? *(int**)(pList + 8) : 0;
+      if (!pNode) {
         break;
       }
 

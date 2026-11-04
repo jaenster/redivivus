@@ -248,8 +248,8 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
     int pNext;
     while (true) {
       int* pNode;
-      nHeadOffset = this->m_terminator.m_next;
-      if (nHeadOffset <= 0) {
+      nHeadOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nHeadOffset) {
         break;
       }
 
@@ -278,8 +278,8 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     int pNext;
     while (true) {
       int* pNode;
-      nHeadOffset = this->m_terminator.m_next;
-      if (nHeadOffset <= 0) {
+      nHeadOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nHeadOffset) {
         break;
       }
 

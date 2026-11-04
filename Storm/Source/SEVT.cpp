@@ -659,8 +659,8 @@ void __fastcall LINKEDLIST_GetTail(D2StormListHead * pList) {
     int* pNode;
     while (true) {
       int nNextNode;
-      pNode = (int*)pList->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pList->pNext > 0 ? (int*)pList->pNext : 0;
+      if (!pNode) {
         break;
       }
 

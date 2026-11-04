@@ -3469,53 +3469,55 @@ static BOOL SKILLS_HasEnoughManaForSkill(D2SkillStrc * pSkillStrc, D2UnitStrc * 
     uint8_t byManaShift;
     D2SkillsTxt* pSkillTxt2;
     if (pSkillStrc) {
-      int32_t nLevelBonusCalc;
-      if (pSkillStrc->nOwnerGUID != -1) {
-        return (uint32_t)(pSkillStrc->nCharges > 0);
-      }
-
-      pSkillTxt2 = pSkillStrc->pRecord;
-      if (pUnitStrc) {
-        iVar1 = pSkillStrc->nLevel;
-        nLevelBonusCalc = SKILL_GetLevelBonus(pSkillStrc, pUnitStrc);
-        nEffectiveLevel = iVar1 + nLevelBonusCalc;
-        pMaxLevelEntry = (int)nEffectiveLevel <= 0 ? 0 : nEffectiveLevel;
-        pSkillTxt = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-        if ((int)pMaxLevelEntry >= pSkillTxt) {
-          pMaxLevelEntry = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
+      {
+        int32_t nLevelBonusCalc;
+        if (pSkillStrc->nOwnerGUID != -1) {
+          return (uint32_t)(pSkillStrc->nCharges > 0);
         }
-      } else {
-        pMaxLevelEntry = 0;
-      }
 
-      nClampedLevel = pMaxLevelEntry - 1;
-      if (!pSkillTxt2) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6ee);
-        exit(-1);
-      }
-      if (nClampedLevel < 0) {
-        nClampedLevel = 0;
-      }
-
-      nManaCost = pSkillTxt2->lvlmana * nClampedLevel + (int)pSkillTxt2->mana << D2_SHIFT_COUNT(pSkillTxt2->manashift);
-      eVenomState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, STATE_blood_mana);
-      if (eVenomState != STATE_none) {
-        nCurrentStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_hitpoints, 0);
-        return (uint32_t)(nCurrentStatValue >= nManaCost);
-      }
-      if (pSkillTxt2->srvdofunc == 0x74) {
-        bIsBerserk = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnitStrc);
-        if (bIsBerserk) {
-          return 1;
+        pSkillTxt2 = pSkillStrc->pRecord;
+        if (pUnitStrc) {
+          iVar1 = pSkillStrc->nLevel;
+          nLevelBonusCalc = SKILL_GetLevelBonus(pSkillStrc, pUnitStrc);
+          nEffectiveLevel = iVar1 + nLevelBonusCalc;
+          pMaxLevelEntry = (int)nEffectiveLevel <= 0 ? 0 : nEffectiveLevel;
+          pSkillTxt = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
+          if ((int)pMaxLevelEntry >= pSkillTxt) {
+            pMaxLevelEntry = DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
+          }
+        } else {
+          pMaxLevelEntry = 0;
         }
-      }
 
-      iVar1 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_mana, 0);
-      return (uint32_t)(iVar1 >= nManaCost);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x637);
-      exit(-1);
+        nClampedLevel = pMaxLevelEntry - 1;
+        if (!pSkillTxt2) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6ee);
+          exit(-1);
+        }
+        if (nClampedLevel < 0) {
+          nClampedLevel = 0;
+        }
+
+        nManaCost = pSkillTxt2->lvlmana * nClampedLevel + (int)pSkillTxt2->mana << D2_SHIFT_COUNT(pSkillTxt2->manashift);
+        eVenomState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, STATE_blood_mana);
+        if (eVenomState != STATE_none) {
+          nCurrentStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_hitpoints, 0);
+          return (uint32_t)(nCurrentStatValue >= nManaCost);
+        }
+        if (pSkillTxt2->srvdofunc == 0x74) {
+          bIsBerserk = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnitStrc);
+          if (bIsBerserk) {
+            return 1;
+          }
+        }
+
+        iVar1 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_mana, 0);
+        return (uint32_t)(iVar1 >= nManaCost);
+      }
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x637);
+    exit(-1);
 }
 
 // Checks whether the unit satisfies a skill's weapon/ammo requirement before the skill can be used. If the skill record has flag 0x10 set it instead checks the skill's nQuantity (charge/ammo count > 0). Otherwise it branches on the skill record's weapon-requirement code: 2 and 4 require an equipped throwable weapon (or its item_throwable stat) in main/alt hand via INVENTORY_GetEquippedWeaponInfo + SKILLS_GetWeaponByHand; 5 requires a melee weapon of ITEMTYPE_Weapon and dual-wield capability. Any other code returns 1 (no requirement). Returns nonzero if the requirement is met, 0 otherwise.

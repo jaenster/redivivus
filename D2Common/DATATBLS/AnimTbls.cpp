@@ -81,7 +81,7 @@ void __fastcall ANIMDATA_FreeAnimDataRecord(D2AnimDataStrc * pAnimData) {
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwName2) {
     uint32_t nNameLen = Storm::Source::SSTR::SSTR_StringLength((char*)pdwName1);
-    if (nNameLen > 8) {
+    if (!(nNameLen <= 8)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd9);
       exit(-1);
     }

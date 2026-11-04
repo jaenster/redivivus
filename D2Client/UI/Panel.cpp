@@ -1814,12 +1814,7 @@ void __stdcall PANEL_DrawGoldAmount() {
     uint32_t nExpIntoLevel;
     int32_t nClassId;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    if (!pUnit) {
-      nClassId = -1;
-    } else {
-      nClassId = pUnit->nClassId;
-    }
-
+    nClassId = !pUnit ? -1 : pUnit->nClassId;
     int32_t ePlayerClass = nClassId;
     int32_t nCurrentLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     int32_t nCurrentExp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);

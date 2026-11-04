@@ -323,7 +323,12 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
 
     int32_t nErrorLine;
     eAct eDestAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eDestAct != pClient->nAct) {
+    if (eDestAct == pClient->nAct) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19f);
+      exit(-1);
+    }
+
+    {
       D2DynamicPathStrc* pDynamicPath;
       ppSpawnActOut = pGame->pAct + eDestAct;
       if (!pGame->pAct[eDestAct]) {
@@ -396,9 +401,6 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
       exit(-1);
       return;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19f);
-      exit(-1);
     }
 }
 

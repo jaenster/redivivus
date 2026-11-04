@@ -331,126 +331,128 @@ uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, size_t n
       exit(-1);
     }
 
-    uint8_t bySrcByte;
-    if (!pbSrc) {
-      Storm::Source::SSTR::SStrPrintf((char*)pbDst, nBufSize, "<NULL>");
-      return pbDst;
-    }
-
-    nRemaining = nBufSize - 1;
-    if (!nBufSize) {
-      return pbDst;
-    }
-
-    pbWrite = pbDst;
-    if (byQuoteChar) {
-      pbWrite2 = pbDst;
-      nRemaining2 = nRemaining;
-      if (nRemaining > 0) {
-        *pbDst = byQuoteChar;
-        pbWrite = pbDst + 1;
-        nRemaining = nBufSize - 2;
-        goto escape_chars;
+    {
+      uint8_t bySrcByte;
+      if (!pbSrc) {
+        Storm::Source::SSTR::SStrPrintf((char*)pbDst, nBufSize, "<NULL>");
+        return pbDst;
       }
-    } else {
-      escape_chars:
-      while (true) {
+
+      nRemaining = nBufSize - 1;
+      if (!nBufSize) {
+        return pbDst;
+      }
+
+      pbWrite = pbDst;
+      if (byQuoteChar) {
+        pbWrite2 = pbDst;
+        nRemaining2 = nRemaining;
+        if (nRemaining > 0) {
+          *pbDst = byQuoteChar;
+          pbWrite = pbDst + 1;
+          nRemaining = nBufSize - 2;
+          goto escape_chars;
+        }
+      } else {
+        escape_chars:
         while (true) {
           while (true) {
             while (true) {
               while (true) {
-                pbWrite2 = pbWrite;
-                nRemaining2 = nRemaining;
-                if (nRemaining <= 0 || (bySrcByte = *pbSrc , !bySrcByte)) {
+                while (true) {
+                  pbWrite2 = pbWrite;
+                  nRemaining2 = nRemaining;
+                  if (nRemaining <= 0 || (bySrcByte = *pbSrc , !bySrcByte)) {
+                    goto close_quote_and_terminate;
+                  }
+
+                  pbSrc++;
+                  nRemaining2 = nRemaining - 1;
+                  if ((char)bySrcByte < ' ') {
+                    break;
+                  }
+
+                  *pbWrite = bySrcByte;
+                  pbWrite++;
+                  nRemaining = nRemaining2;
+                }
+
+                *pbWrite = 0x5c;
+                pbWrite2 = pbWrite + 1;
+                if (!nRemaining2) {
                   goto close_quote_and_terminate;
                 }
 
-                pbSrc++;
-                nRemaining2 = nRemaining - 1;
-                if ((char)bySrcByte < ' ') {
+                nRemaining2 = nRemaining - 2;
+                if (bySrcByte != 0xd) {
                   break;
                 }
 
-                *pbWrite = bySrcByte;
-                pbWrite++;
+                *pbWrite2 = 0x72;
+                pbWrite += 2;
                 nRemaining = nRemaining2;
               }
 
-              *pbWrite = 0x5c;
-              pbWrite2 = pbWrite + 1;
-              if (!nRemaining2) {
-                goto close_quote_and_terminate;
-              }
-
-              nRemaining2 = nRemaining - 2;
-              if (bySrcByte != 0xd) {
+              if (bySrcByte != 10) {
                 break;
               }
 
-              *pbWrite2 = 0x72;
+              *pbWrite2 = 0x6e;
               pbWrite += 2;
               nRemaining = nRemaining2;
             }
 
-            if (bySrcByte != 10) {
+            if (bySrcByte != 9) {
               break;
             }
 
-            *pbWrite2 = 0x6e;
+            *pbWrite2 = 0x74;
             pbWrite += 2;
             nRemaining = nRemaining2;
           }
 
-          if (bySrcByte != 9) {
+          if (nRemaining2 < 2) {
             break;
           }
 
-          *pbWrite2 = 0x74;
-          pbWrite += 2;
-          nRemaining = nRemaining2;
-        }
+          *pbWrite2 = 0x78;
+          if ((bySrcByte & 0xf0) < 0xa0) {
+            byHexDigit = (bySrcByte >> 4) + 0x30;
+          } else {
+            byHexDigit = (bySrcByte >> 4) + 0x37;
+          }
 
-        if (nRemaining2 < 2) {
-          break;
-        }
+          pbWrite[2] = byHexDigit;
+          if ((bySrcByte & 0xf) < 10) {
+            bySrcByte = (bySrcByte & 0xf) + 0x30;
+          } else {
+            bySrcByte = (bySrcByte & 0xf) + 0x37;
+          }
 
-        *pbWrite2 = 0x78;
-        if ((bySrcByte & 0xf0) < 0xa0) {
-          byHexDigit = (bySrcByte >> 4) + 0x30;
-        } else {
-          byHexDigit = (bySrcByte >> 4) + 0x37;
+          pbWrite[3] = bySrcByte;
+          pbWrite += 4;
+          nRemaining += -4;
         }
-
-        pbWrite[2] = byHexDigit;
-        if ((bySrcByte & 0xf) < 10) {
-          bySrcByte = (bySrcByte & 0xf) + 0x30;
-        } else {
-          bySrcByte = (bySrcByte & 0xf) + 0x37;
-        }
-
-        pbWrite[3] = bySrcByte;
-        pbWrite += 4;
-        nRemaining += -4;
       }
-    }
 
-    close_quote_and_terminate:
-    if (byQuoteChar && nRemaining2 > 0) {
-      *pbWrite2 = byQuoteChar;
-      pbWrite2++;
-      nRemaining2--;
-    }
-    *pbWrite2 = 0;
-    if (nRemaining2 < 0) {
-      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x100);
-      exit(-1);
-    } else {
-      if (!((int)(pbWrite2 + (1 - (int)pbDst)) <= (int)nBufSize)) {
-        ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x101);
+      close_quote_and_terminate:
+      if (byQuoteChar && nRemaining2 > 0) {
+        *pbWrite2 = byQuoteChar;
+        pbWrite2++;
+        nRemaining2--;
+      }
+      *pbWrite2 = 0;
+      if (nRemaining2 < 0) {
+        ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x100);
         exit(-1);
-      }
+      } else {
+        if (!((int)(pbWrite2 + (1 - (int)pbDst)) <= (int)nBufSize)) {
+          ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x101);
+          exit(-1);
+        }
 
-      return pbDst;
+        return pbDst;
+      }
     }
 }
 

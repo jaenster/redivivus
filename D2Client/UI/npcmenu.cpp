@@ -6591,45 +6591,47 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
     }
 
     if (_Interaction::geNpcUiState == NPCUI_TRANSACTION_PENDING) {
-      D2UnitStrc* pTradeItem;
-      _Interaction::geNpcUiState = NPCUI_TRANSACTION_ACCEPTED;
-      Inv::INV_SetIdentifyMode();
-      if (Dialog::gpNpcTradeErrorDialog) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1399);
-        exit(-1);
-      }
-      if (gnNpcMenuTransactionType == 2) {
-        pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerInv);
-        if (gnNpcMenuPreviousGold == 1 && pPlayerUnit_lcl) {
-          pTradeItem = Cursor::GetCursorItem();
-          if (!pTradeItem) {
-            Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+      {
+        D2UnitStrc* pTradeItem;
+        _Interaction::geNpcUiState = NPCUI_TRANSACTION_ACCEPTED;
+        Inv::INV_SetIdentifyMode();
+        if (Dialog::gpNpcTradeErrorDialog) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1399);
+          exit(-1);
+        }
+        if (gnNpcMenuTransactionType == 2) {
+          pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerInv);
+          if (gnNpcMenuPreviousGold == 1 && pPlayerUnit_lcl) {
+            pTradeItem = Cursor::GetCursorItem();
+            if (!pTradeItem) {
+              Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+            }
           }
         }
-      }
 
-      dwScrollable = 1;
-      dwFontArg = 0;
-      nColorArg = 0;
-      nAlignArg = 0;
-      dwHighlight = 1;
-      dwBorder = 1;
-      dwErrorCode = 0;
-      dwCallbackArg = 0;
-      pfnDrawCallback = NPCMENU_GetCurrentMenuId;
-      nY = Cursor::GetMouseY();
-      nDialogX = Cursor::GetMouseX();
-      Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc(nDialogX, nY, pfnDrawCallback, dwCallbackArg, dwErrorCode, dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
-      Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTradeErrorDialog, 1);
-      Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(nErrorStringId), 0x15, 0, 1, 1, 0, 0);
-      dwBorder = 1;
-      pfnOnClick = NPCMENU_GetCurrentMenuId;
-      Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd4b), 0xf, 0, 0, 1, pfnOnClick, dwBorder);
-      return;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13ad);
-      exit(-1);
+        dwScrollable = 1;
+        dwFontArg = 0;
+        nColorArg = 0;
+        nAlignArg = 0;
+        dwHighlight = 1;
+        dwBorder = 1;
+        dwErrorCode = 0;
+        dwCallbackArg = 0;
+        pfnDrawCallback = NPCMENU_GetCurrentMenuId;
+        nY = Cursor::GetMouseY();
+        nDialogX = Cursor::GetMouseX();
+        Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc(nDialogX, nY, pfnDrawCallback, dwCallbackArg, dwErrorCode, dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
+        Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTradeErrorDialog, 1);
+        Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(nErrorStringId), 0x15, 0, 1, 1, 0, 0);
+        dwBorder = 1;
+        pfnOnClick = NPCMENU_GetCurrentMenuId;
+        Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd4b), 0xf, 0, 0, 1, pfnOnClick, dwBorder);
+        return;
+      }
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13ad);
+    exit(-1);
 }
 
 void __stdcall NPCMENU_HandleTradeRejected() {

@@ -519,7 +519,7 @@ void __fastcall HandleIncoming0x89(int32_t nEventId) {
 }; D2_STATIC_GUARD(CLIENT_QuestEventHandlers, "D2Client::Source::ClientEngine::HandleIncoming0x89::CLIENT_QuestEventHandlers");
     static uint32_t gdwDenOfEvilEventFlags; D2_STATIC_GUARD_BSS(gdwDenOfEvilEventFlags, "D2Client::Source::ClientEngine::HandleIncoming0x89::gdwDenOfEvilEventFlags");
 
-    if (nEventId >= 0x20) {
+    if (!(nEventId < 0x20)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d9);
       exit(-1);
     }
@@ -814,12 +814,7 @@ void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
 }
 
 void __fastcall CLIENT_StoreUnitGuidForQuestTracking(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      gnQuestMonsterUnitId = -1;
-      return;
-    }
-
-    gnQuestMonsterUnitId = pUnit->nUnitGUID;
+    gnQuestMonsterUnitId = !pUnit ? -1 : pUnit->nUnitGUID;
 }
 
 void __stdcall CLIENT_BossDeath_Baal() {

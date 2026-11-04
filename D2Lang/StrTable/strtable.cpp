@@ -452,27 +452,28 @@ static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc *
     }
 
     uint32_t nStringIdx = (uint32_t)(&pStrTable[1].wCRC)[_wRawIndex];
-    if ((int)nStringIdx < pStrTable->nNodeCount) {
+    if (!((int)nStringIdx < pStrTable->nNodeCount)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x102);
+      exit(-1);
+    }
+
+    {
       char* pcEntry;
       pcEntry = (char*)((uintptr_t)&pStrTable[1].wCRC + nStringIdx * 0x11 + (uint32_t)pStrTable->wIndexCount * 2);
-      if (pcEntry < (char*)((uintptr_t)&pStrTable->wCRC + pStrTable->dwFileSize)) {
-        if (*pcEntry != '\x01') {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107);
-          exit(-1);
-        }
-        if (!ppEntryTable[nStringIdx]) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x109);
-          exit(-1);
-        }
-
-        return ppEntryTable[nStringIdx];
-      } else {
+      if (!(pcEntry < (char*)((uintptr_t)&pStrTable->wCRC + pStrTable->dwFileSize))) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x106);
         exit(-1);
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x102);
-      exit(-1);
+      if (*pcEntry != '\x01') {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107);
+        exit(-1);
+      }
+      if (!ppEntryTable[nStringIdx]) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x109);
+        exit(-1);
+      }
+
+      return ppEntryTable[nStringIdx];
     }
 }
 
@@ -652,40 +653,42 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText
       exit(-1);
     }
 
-    uint16_t uVar1;
-    if (!gpStringTablePatchD2) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
-      exit(-1);
-    } else {
-      if (!pbKey) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c0);
+    {
+      uint16_t uVar1;
+      if (!gpStringTablePatchD2) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
         exit(-1);
-      }
-      if (!*pbKey) {
-        *ppwszText = (uint16_t*)&gwStrTableLanguageCode;
-        return (uint32_t)ppwszText & -65536;
-      }
-
-      uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbKey, (int*)ppwszText, gpStringTablePatchD2);
-      if (uVar1 != 0xffff) {
-        return uVar1 + 10000;
-      }
-      if (gpStringTableExpansion) {
-        uVar1 = STRTABLE_FindStringByKey(gpStringIndexExpansion, pbKey, (int*)ppwszText, gpStringTableExpansion);
-        if (uVar1 != 0xffff) {
-          return uVar1 + 20000;
+      } else {
+        if (!pbKey) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c0);
+          exit(-1);
         }
-      }
+        if (!*pbKey) {
+          *ppwszText = (uint16_t*)&gwStrTableLanguageCode;
+          return (uint32_t)ppwszText & -65536;
+        }
 
-      uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, (int*)ppwszText, gpStringTableBase);
-      nBaseResult = (uint32_t)uVar1;
-      if (uVar1 == 0xffff) {
-        pTranslated = STRTABLE_GetTranslatedString(pbKey);
-        *ppwszText = pTranslated;
-        nBaseResult = (uint32_t)pTranslated & -65536;
-      }
+        uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbKey, (int*)ppwszText, gpStringTablePatchD2);
+        if (uVar1 != 0xffff) {
+          return uVar1 + 10000;
+        }
+        if (gpStringTableExpansion) {
+          uVar1 = STRTABLE_FindStringByKey(gpStringIndexExpansion, pbKey, (int*)ppwszText, gpStringTableExpansion);
+          if (uVar1 != 0xffff) {
+            return uVar1 + 20000;
+          }
+        }
 
-      return nBaseResult;
+        uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, (int*)ppwszText, gpStringTableBase);
+        nBaseResult = (uint32_t)uVar1;
+        if (uVar1 == 0xffff) {
+          pTranslated = STRTABLE_GetTranslatedString(pbKey);
+          *ppwszText = pTranslated;
+          nBaseResult = (uint32_t)pTranslated & -65536;
+        }
+
+        return nBaseResult;
+      }
     }
 }
 

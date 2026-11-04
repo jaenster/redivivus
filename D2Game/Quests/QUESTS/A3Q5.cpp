@@ -85,12 +85,7 @@ void __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, 
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = A3Q4::Q21_Callback08_MonsterKilled;
     pQuestSpecificData->bCanDropBird = '\0';
     pQuestSpecificData->bBossKillTracking = true;
-    if (!pUnit) {
-      pQuestSpecificData->nBirdKillerGUID = -1;
-      return;
-    }
-
-    pQuestSpecificData->nBirdKillerGUID = pUnit->nUnitGUID;
+    pQuestSpecificData->nBirdKillerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
 }
 
 // Q22_OnCouncilMemberKilled (BLACKENED TEMPLE / Travincal council, internal Q22) — on-death notifier for a tracked Council member. Reads quest-specific data off the game (offset 0x18); if its byte[2] tracking flag is set and the killer's GUID (param2 unit field [0xc], -1 if none) matches the recorded killer GUID at [4], clears tracking byte[2] and sets the "kill confirmed" byte[1]. No quest-record state calls (operates on the in-memory D2QuestDataA3Q5Strc council-kill bookkeeping).

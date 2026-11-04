@@ -284,15 +284,15 @@ void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize) {
     D2Client::MCP::CharListPacket = D2_ALLOC_AT(nSize, ".\\Src\\McpConnect.cpp", 0x227);
     memcpy(D2Client::MCP::CharListPacket, pBytes, nSize);
     if (*pBytes == '\x17') {
-      if (*(uint16_t*)((int)D2Client::MCP::CharListPacket + 1) >= 0x100) {
+      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 1) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x233);
         exit(-1);
       }
-      if (*(uint16_t*)((int)D2Client::MCP::CharListPacket + 3) >= 0x100) {
+      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 3) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
         exit(-1);
       }
-      if (*(uint16_t*)((int)D2Client::MCP::CharListPacket + 5) >= 0x100) {
+      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 5) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x235);
         exit(-1);
       }
@@ -303,15 +303,15 @@ void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize) {
 
       return;
     } else if (*pBytes == '\x19') {
-      if (*(uint16_t*)((int)D2Client::MCP::CharListPacket + 1) >= 0x100) {
+      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 1) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x242);
         exit(-1);
       }
-      if (*(uint16_t*)((int)D2Client::MCP::CharListPacket + 3) >= 0x100) {
+      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 3) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x243);
         exit(-1);
       }
-      if (*(uint16_t*)((int)D2Client::MCP::CharListPacket + 5) >= 0x100) {
+      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 5) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x244);
         exit(-1);
       }

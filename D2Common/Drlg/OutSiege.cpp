@@ -330,7 +330,12 @@ int32_t __fastcall DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub(D2DrlgLevelStr
     0xfffffffb
 }; D2_STATIC_GUARD(gaAct5BorderPresetTable, "D2Common::Drlg::OutSiege::DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub::gaAct5BorderPresetTable");
 
-    if (nBorderType == 0x30 || nBorderType == 0x31) {
+    if (!(nBorderType == 0x30 || nBorderType == 0x31)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x184);
+      exit(-1);
+    }
+
+    {
       uint32_t* pLvlSubEntry;
       pLvlSubEntry = gaAct5BorderPresetTable;
       do {
@@ -346,9 +351,6 @@ int32_t __fastcall DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub(D2DrlgLevelStr
       } while ((int)pLvlSubEntry < (intptr_t)((char*)&gaAct5BorderPresetTable + sizeof(gaAct5BorderPresetTable)));
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a5);
-      exit(-1);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x184);
       exit(-1);
     }
 }
@@ -461,98 +463,100 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
 
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     if (pLevelData) {
-      D2SeedStrc DVar1;
-      nAttempts = 0;
-      nPlacedCount = 0;
-      do {
-        if (nPlacedCount >= 3) {
-          break;
-        }
+      {
+        D2SeedStrc DVar1;
+        nAttempts = 0;
+        nPlacedCount = 0;
+        do {
+          if (nPlacedCount >= 3) {
+            break;
+          }
 
-        nGridX = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsWidth / 2);
-        nGridY = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsHeight / 2);
-        nPresetCoord = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridX * 2, nGridY * 2);
-        if (nPresetCoord >= 0x393 && nPresetCoord <= 0x39a) {
-          Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridX * 2, nGridY * 2, nPresetCoord + 0x10, -1, 0);
-          nPlacedCount++;
-        }
+          nGridX = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsWidth / 2);
+          nGridY = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsHeight / 2);
+          nPresetCoord = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridX * 2, nGridY * 2);
+          if (nPresetCoord >= 0x393 && nPresetCoord <= 0x39a) {
+            Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridX * 2, nGridY * 2, nPresetCoord + 0x10, -1, 0);
+            nPlacedCount++;
+          }
 
-        nAttempts++;
-      } while (nAttempts < 0x5a);
+          nAttempts++;
+        } while (nAttempts < 0x5a);
 
-      nStartX = pLevelData->nGridCoordsWidth / 2;
-      if ((int)nStartX <= 0) {
-        nStartX = 0;
-      } else {
-        nSeedLowTmp = pLevel->sSeed.nSeedLow;
-        if (nStartX & nStartX - 1) {
-          DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-          pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-          pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-          nStartX = DVar1.nSeedLow % nStartX;
+        nStartX = pLevelData->nGridCoordsWidth / 2;
+        if ((int)nStartX <= 0) {
+          nStartX = 0;
         } else {
-          tNewSeed2 = D2_SEED_NEXT(pLevel->sSeed);
-          nStartX = nStartX - 1 & tNewSeed2.nSeedLow;
-          pLevel->sSeed.nSeedHigh = tNewSeed2.nSeedHigh;
-          pLevel->sSeed.nSeedLow = tNewSeed2.nSeedLow;
+          nSeedLowTmp = pLevel->sSeed.nSeedLow;
+          if (nStartX & nStartX - 1) {
+            DVar1 = D2_SEED_NEXT(pLevel->sSeed);
+            pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+            pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+            nStartX = DVar1.nSeedLow % nStartX;
+          } else {
+            tNewSeed2 = D2_SEED_NEXT(pLevel->sSeed);
+            nStartX = nStartX - 1 & tNewSeed2.nSeedLow;
+            pLevel->sSeed.nSeedHigh = tNewSeed2.nSeedHigh;
+            pLevel->sSeed.nSeedLow = tNewSeed2.nSeedLow;
+          }
         }
-      }
 
-      nStartY = pLevelData->nGridCoordsHeight / 2;
-      if ((int)nStartY <= 0) {
-        nStartY = 0;
-      } else {
-        nSeedLowTmp = pLevel->sSeed.nSeedLow;
-        if (nStartY & nStartY - 1) {
-          DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-          pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-          pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-          nStartY = DVar1.nSeedLow % nStartY;
+        nStartY = pLevelData->nGridCoordsHeight / 2;
+        if ((int)nStartY <= 0) {
+          nStartY = 0;
         } else {
-          DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-          nStartY = nStartY - 1 & DVar1.nSeedLow;
-          pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-          pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+          nSeedLowTmp = pLevel->sSeed.nSeedLow;
+          if (nStartY & nStartY - 1) {
+            DVar1 = D2_SEED_NEXT(pLevel->sSeed);
+            pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+            pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+            nStartY = DVar1.nSeedLow % nStartY;
+          } else {
+            DVar1 = D2_SEED_NEXT(pLevel->sSeed);
+            nStartY = nStartY - 1 & DVar1.nSeedLow;
+            pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+            pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+          }
         }
-      }
 
-      for (nAttempts = 0; nAttempts < pLevelData->nGridCoordsHeight; nAttempts++) {
-        if (nPlacedCount >= 3) {
-          return;
+        for (nAttempts = 0; nAttempts < pLevelData->nGridCoordsHeight; nAttempts++) {
+          if (nPlacedCount >= 3) {
+            return;
+          }
+
+          nGridWidth = pLevelData->nGridCoordsWidth;
+          nXIter = 0;
+          if (nGridWidth > 0) {
+            do {
+              if (nPlacedCount >= 3) {
+                break;
+              }
+
+              nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
+              nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
+              nGridPresetId = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
+              if (nGridPresetId >= 0x393 && nGridPresetId <= 0x39a) {
+                Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, nGridPresetId + 0x10, -1, 0);
+                nPlacedCount++;
+              }
+
+              nGridWidth = pLevelData->nGridCoordsWidth;
+              nXIter++;
+            } while (nXIter < nGridWidth);
+          }
         }
 
-        nGridWidth = pLevelData->nGridCoordsWidth;
-        nXIter = 0;
-        if (nGridWidth > 0) {
-          do {
-            if (nPlacedCount >= 3) {
-              break;
-            }
-
-            nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
-            nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
-            nGridPresetId = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
-            if (nGridPresetId >= 0x393 && nGridPresetId <= 0x39a) {
-              Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, nGridPresetId + 0x10, -1, 0);
-              nPlacedCount++;
-            }
-
-            nGridWidth = pLevelData->nGridCoordsWidth;
-            nXIter++;
-          } while (nXIter < nGridWidth);
+        if (!(nPlacedCount >= 3)) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
+          exit(-1);
         }
-      }
 
-      if (!(nPlacedCount >= 3)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
-        exit(-1);
+        return;
       }
-
-      return;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
+    exit(-1);
 }
 
 // Places the fortress wall presets at the far edge of Act 5 Bloody Foothills. Spawns LvlPrest 0x370 and 0x380 (siege wall segments) at the computed bottom-right position based on the level data dimensions.

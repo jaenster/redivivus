@@ -30,9 +30,6 @@ struct D2CursorDataStrc {
 namespace D2Client::Cursor {
 
 // Function declarations
-// Returns CursorData[nCursor].bAnimated. Halts (Cursor.cpp line 132, assert NUM_CURSORS == nCursorTableSize) unless gnCursorDataCount is 7, and (line 133) when nCursor >= 7.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-BOOL __stdcall CURSOR_IsAnimated(int nCursor);
 void __stdcall UI_HandleCursorMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall UI_HandleCursorMouseMove(struct D2UIMouseMsgStrc * pMsgEvent);
 void __stdcall UI_HandleCursorMouseUp(struct D2UIMouseMsgStrc * pMsg);
@@ -57,6 +54,6 @@ void __fastcall UI_SetMousePosition(int32_t nX, int32_t nY);
 void __fastcall SetMouseXY(int32_t x, int32_t y);
 int __stdcall GetItemType();
 void __stdcall UI_HandleMousePositionUpdate(struct D2UIMouseMsgStrc * pMsg);
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Client::Cursor

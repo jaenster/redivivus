@@ -1378,7 +1378,7 @@ void __fastcall ClientInit_StartingAct(D2IniConfigStrc * pIniConfig) {
     if (!nAct) {
       return;
     }
-    if (nAct >= 6) {
+    if (!(nAct < 6)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd26);
       exit(-1);
     }

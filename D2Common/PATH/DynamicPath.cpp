@@ -510,12 +510,7 @@ int32_t __stdcall GetPathPointsSize(D2DynamicPathStrc * pDynamicPath) {
 }
 
 void __stdcall SetPathPointsSize(D2DynamicPathStrc * pDynamicPath, int32_t nSize) {
-    if (nSize > 0x4d) {
-      pDynamicPath->dwPathPoints = 0x4d;
-      return;
-    }
-
-    pDynamicPath->dwPathPoints = nSize;
+    pDynamicPath->dwPathPoints = nSize > 0x4d ? 0x4d : nSize;
 }
 
 int32_t __stdcall PATH_GetPathPointIndex(D2DynamicPathStrc * pDynamicPath) {
@@ -851,7 +846,12 @@ void __stdcall PATH_SetPathType(D2DynamicPathStrc * pDynamicPath, int ePathType)
     0x0
 }; D2_STATIC_GUARD(PATHTYPEFLAGS, "D2Common::PATH::DynamicPath::PATH_SetPathType::PATHTYPEFLAGS");
 
-    if (!pDynamicPath->pOwner || pDynamicPath->pOwner->eUnitType != UNIT_PLAYER || ePathType != 2) {
+    if (!(!pDynamicPath->pOwner || pDynamicPath->pOwner->eUnitType != UNIT_PLAYER || ePathType != 2)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x861);
+      exit(-1);
+    }
+
+    {
       uint32_t ePathTypeFlags;
       ePathTypeFlags = PATHTYPEFLAGS[ePathType];
       if (ePathTypeFlags & 0x2000 && !(pDynamicPath->nFlags & 0x4000U)) {
@@ -878,9 +878,6 @@ void __stdcall PATH_SetPathType(D2DynamicPathStrc * pDynamicPath, int ePathType)
 
         return;
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x861);
-      exit(-1);
     }
 }
 
@@ -1753,35 +1750,35 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
         case UNIT_MONSTER:
           {
             pDynamicPath->nCollisionFlag = 0x100;
-            if (!pDynamicPath->pOwner || pDynamicPath->pOwner->eUnitType != UNIT_PLAYER) {
-              pDynamicPath->nFlags &= -524033;
-              pDynamicPath->ePathType = 2;
-              pDynamicPath->nDirOffset = 0;
-              if (pDynamicPath->dwPrevPathType == 0xb) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x871);
-                exit(-1);
-              } else {
-                if (pDynamicPath->dwPrevPathType == 8) {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x872);
-                  exit(-1);
-                }
-
-                nUnitWidth = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit_00);
-                if (nUnitWidth < 0 || nUnitWidth >= sgptDataTable->nTxtMonStatsSize || nUnitWidth != 0x26) {
-                  nUnitWidth = PATH_GetCollisionPatternFromMonStats(pUnit_00);
-                  pDynamicPath->nCollisionPattern = nUnitWidth;
-                  pDynamicPath->nDistMax = 0xe;
-                } else {
-                  pUnit_00->pPath.pDynamicPath->nUnitWidth = 5;
-                  pDynamicPath->nCollisionPattern = 0x804;
-                  pDynamicPath->nDistMax = 0xe;
-                }
-
-                goto place_and_set_screen_pos;
-              }
-            } else {
+            if (!(!pDynamicPath->pOwner || pDynamicPath->pOwner->eUnitType != UNIT_PLAYER)) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x861);
               exit(-1);
+            }
+
+            pDynamicPath->nFlags &= -524033;
+            pDynamicPath->ePathType = 2;
+            pDynamicPath->nDirOffset = 0;
+            if (pDynamicPath->dwPrevPathType == 0xb) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x871);
+              exit(-1);
+            } else {
+              if (pDynamicPath->dwPrevPathType == 8) {
+                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x872);
+                exit(-1);
+              }
+
+              nUnitWidth = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit_00);
+              if (nUnitWidth < 0 || nUnitWidth >= sgptDataTable->nTxtMonStatsSize || nUnitWidth != 0x26) {
+                nUnitWidth = PATH_GetCollisionPatternFromMonStats(pUnit_00);
+                pDynamicPath->nCollisionPattern = nUnitWidth;
+                pDynamicPath->nDistMax = 0xe;
+              } else {
+                pUnit_00->pPath.pDynamicPath->nUnitWidth = 5;
+                pDynamicPath->nCollisionPattern = 0x804;
+                pDynamicPath->nDistMax = 0xe;
+              }
+
+              goto place_and_set_screen_pos;
             }
           }
         case UNIT_MISSILE:

@@ -389,8 +389,8 @@ void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
     int* pNode;
     while (true) {
       int pNext;
-      pNode = (int*)pList->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pList->pNext > 0 ? (int*)pList->pNext : 0;
+      if (!pNode) {
         break;
       }
 
@@ -513,8 +513,8 @@ void __fastcall TSList_HANDLER_Clear(int32_t pList) {
     int* pNode;
     while (true) {
       int pNext;
-      pNode = *(int**)(pList + 8);
-      if ((int)pNode <= 0) {
+      pNode = (int)*(int**)(pList + 8) > 0 ? *(int**)(pList + 8) : 0;
+      if (!pNode) {
         break;
       }
 

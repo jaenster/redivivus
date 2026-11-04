@@ -1501,8 +1501,8 @@ void __fastcall RemoveAllListNodes(D2StormListHead * pListHead) {
     int* pNode;
     while (true) {
       int pNext;
-      pNode = (int*)pListHead->pNext;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)pListHead->pNext > 0 ? (int*)pListHead->pNext : 0;
+      if (!pNode) {
         break;
       }
 
@@ -1573,8 +1573,8 @@ void __fastcall DestroyAllListNodes(void * pListHead) {
     ExceptionList = &pPrevExceptionList;
     while (true) {
       uint32_t dwSEHTryLevel;
-      pObject = *(int**)((int)pListHead + 8);
-      if ((int)pObject <= 0) {
+      pObject = (int)*(int**)((int)pListHead + 8) > 0 ? *(int**)((int)pListHead + 8) : 0;
+      if (!pObject) {
         break;
       }
 

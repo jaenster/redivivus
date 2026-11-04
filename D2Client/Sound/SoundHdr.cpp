@@ -327,98 +327,100 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       exit(-1);
     }
 
-    size_t nAllocSize;
-    if (pTxtSoundEnviron) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfd);
-      exit(-1);
-    }
+    {
+      size_t nAllocSize;
+      if (pTxtSoundEnviron) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfd);
+        exit(-1);
+      }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\sounds.txt", "DATA\\GLOBAL\\EXCEL");
-    nLine = 0x101;
-    szSourceFile = ".\\Sound\\SoundHdr.cpp";
-    pFileSize = &nFileSize;
-    pD2File = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, szSourceFile, nLine);
-    pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
-    nTxtSoundsSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
-    pSounds = (D2SoundsTxt*)D2_ALLOC_AT(nTxtSoundsSize * 0x8e, ".\\Sound\\SoundHdr.cpp", 0x106);
-    pTxtSounds = pSounds;
-    memset(pSounds, 0, nTxtSoundsSize * 0x8e);
-    Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, sounds, pSounds->Filename, nTxtSoundsSize, 0x8e);
-    Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\soundenviron.txt", "DATA\\GLOBAL\\EXCEL");
-    nLine = 0x10d;
-    szSourceFile = ".\\Sound\\SoundHdr.cpp";
-    pFileSize = &nFileSize;
-    pD2File = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, szSourceFile, nLine);
-    pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
-    nTxtSoundEnvironSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
-    pSoundEnviron = (D2SoundEnvironTxt*)D2_ALLOC_AT(nTxtSoundEnvironSize * 0x58, ".\\Sound\\SoundHdr.cpp", 0x112);
-    pTxtSoundEnviron = pSoundEnviron;
-    memset(pSoundEnviron, 0, nTxtSoundEnvironSize * 0x58);
-    Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, soundenviron, (char*)pSoundEnviron, nTxtSoundEnvironSize, 0x58);
-    Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
-    nEnvRemaining = 1;
-    nMaxSong = 0;
-    nGroupSize = 1;
-    if (1 < nTxtSoundsSize) {
-      pSoundRow = &pTxtSounds[1].Group_Size;
-      do {
-        if (!nMaxSong || nEnvRemaining < nMaxSong || nEnvRemaining >= (int)(nGroupSize + nMaxSong)) {
-          *(int*)(pSoundRow + 0x23) = nEnvRemaining;
-        } else {
-          *(int*)(pSoundRow + 0x23) = nMaxSong;
-        }
-        if (*pSoundRow) {
-          nGroupSize = (uint32_t)*pSoundRow;
-          nMaxSong = nEnvRemaining;
-        } else {
-          *pSoundRow = 1;
-        }
-
-        nMatIdx = 0;
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\sounds.txt", "DATA\\GLOBAL\\EXCEL");
+      nLine = 0x101;
+      szSourceFile = ".\\Sound\\SoundHdr.cpp";
+      pFileSize = &nFileSize;
+      pD2File = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, szSourceFile, nLine);
+      pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
+      nTxtSoundsSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
+      pSounds = (D2SoundsTxt*)D2_ALLOC_AT(nTxtSoundsSize * 0x8e, ".\\Sound\\SoundHdr.cpp", 0x106);
+      pTxtSounds = pSounds;
+      memset(pSounds, 0, nTxtSoundsSize * 0x8e);
+      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, sounds, pSounds->Filename, nTxtSoundsSize, 0x8e);
+      Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\soundenviron.txt", "DATA\\GLOBAL\\EXCEL");
+      nLine = 0x10d;
+      szSourceFile = ".\\Sound\\SoundHdr.cpp";
+      pFileSize = &nFileSize;
+      pD2File = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, szSourceFile, nLine);
+      pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
+      nTxtSoundEnvironSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
+      pSoundEnviron = (D2SoundEnvironTxt*)D2_ALLOC_AT(nTxtSoundEnvironSize * 0x58, ".\\Sound\\SoundHdr.cpp", 0x112);
+      pTxtSoundEnviron = pSoundEnviron;
+      memset(pSoundEnviron, 0, nTxtSoundEnvironSize * 0x58);
+      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, soundenviron, (char*)pSoundEnviron, nTxtSoundEnvironSize, 0x58);
+      Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
+      nEnvRemaining = 1;
+      nMaxSong = 0;
+      nGroupSize = 1;
+      if (1 < nTxtSoundsSize) {
+        pSoundRow = &pTxtSounds[1].Group_Size;
         do {
-          byMatCount = (uint8_t)nMatIdx;
-          if (*(int*)(pSoundRow + nMatIdx * 4 + 0x17) == -1) {
-            break;
+          if (!nMaxSong || nEnvRemaining < nMaxSong || nEnvRemaining >= (int)(nGroupSize + nMaxSong)) {
+            *(int*)(pSoundRow + 0x23) = nEnvRemaining;
+          } else {
+            *(int*)(pSoundRow + 0x23) = nMaxSong;
+          }
+          if (*pSoundRow) {
+            nGroupSize = (uint32_t)*pSoundRow;
+            nMaxSong = nEnvRemaining;
+          } else {
+            *pSoundRow = 1;
           }
 
-          byMatCount++;
-          nMatIdx = (uint32_t)byMatCount;
-        } while (byMatCount < 3);
+          nMatIdx = 0;
+          do {
+            byMatCount = (uint8_t)nMatIdx;
+            if (*(int*)(pSoundRow + nMatIdx * 4 + 0x17) == -1) {
+              break;
+            }
 
-        pSoundRow[0x43] = byMatCount;
-        nEnvRemaining++;
-        pSoundRow += 0x8e;
-      } while (nEnvRemaining < nTxtSoundsSize);
+            byMatCount++;
+            nMatIdx = (uint32_t)byMatCount;
+          } while (byMatCount < 3);
+
+          pSoundRow[0x43] = byMatCount;
+          nEnvRemaining++;
+          pSoundRow += 0x8e;
+        } while (nEnvRemaining < nTxtSoundsSize);
+      }
+
+      nMaxSong = 0;
+      gnSoundIdRangeMax = 0;
+      pEnvironRow = pTxtSoundEnviron;
+      gpSoundHdrGlobal = nTxtSoundsSize;
+      nEnvRemaining = nTxtSoundEnvironSize;
+      if (nTxtSoundEnvironSize > 0) {
+        do {
+          nSong = pEnvironRow->Song;
+          if (nSong > 0) {
+            if (nSong < gpSoundHdrGlobal) {
+              gpSoundHdrGlobal = nSong;
+            }
+            if (nSong > nMaxSong) {
+              nMaxSong = nSong;
+            }
+          }
+
+          nEnvRemaining--;
+          pEnvironRow++;
+          gnSoundIdRangeMax = nMaxSong;
+        } while (nEnvRemaining);
+      }
+
+      nAllocSize = (gnSoundIdRangeMax - gpSoundHdrGlobal + 1) * 4;
+      pSoundChannelDataArray = D2_ALLOC_AT(nAllocSize, ".\\Sound\\SoundHdr.cpp", 0x147);
+      memset(pSoundChannelDataArray, 0, nAllocSize);
+      return;
     }
-
-    nMaxSong = 0;
-    gnSoundIdRangeMax = 0;
-    pEnvironRow = pTxtSoundEnviron;
-    gpSoundHdrGlobal = nTxtSoundsSize;
-    nEnvRemaining = nTxtSoundEnvironSize;
-    if (nTxtSoundEnvironSize > 0) {
-      do {
-        nSong = pEnvironRow->Song;
-        if (nSong > 0) {
-          if (nSong < gpSoundHdrGlobal) {
-            gpSoundHdrGlobal = nSong;
-          }
-          if (nSong > nMaxSong) {
-            nMaxSong = nSong;
-          }
-        }
-
-        nEnvRemaining--;
-        pEnvironRow++;
-        gnSoundIdRangeMax = nMaxSong;
-      } while (nEnvRemaining);
-    }
-
-    nAllocSize = (gnSoundIdRangeMax - gpSoundHdrGlobal + 1) * 4;
-    pSoundChannelDataArray = D2_ALLOC_AT(nAllocSize, ".\\Sound\\SoundHdr.cpp", 0x147);
-    memset(pSoundChannelDataArray, 0, nAllocSize);
-    return;
 }
 
 void __fastcall SOUNDHDR_Init(uint32_t bBackgroundActive) {

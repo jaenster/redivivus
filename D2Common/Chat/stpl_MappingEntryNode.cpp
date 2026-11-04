@@ -262,8 +262,8 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
     int nSlotOffset;
     while (true) {
       int* pSlot;
-      nSlotOffset = this->m_terminator.m_next;
-      if (nSlotOffset <= 0) {
+      nSlotOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nSlotOffset) {
         break;
       }
 

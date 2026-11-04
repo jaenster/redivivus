@@ -555,12 +555,7 @@ void __fastcall MONSTER_SetMonStatsTxtAndType(D2UnitStrc * pUnit, uint16_t wPara
 
     *(uint16_t*)&pDVar1->pAiGeneral = wParam;
     int nClassId = pUnit->nClassId;
-    if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize) {
-      pDVar1->pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
-      return;
-    }
-
-    pDVar1->pMonStatsTxt = 0;
+    pDVar1->pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : 0;
 }
 
 // Returns the address of the monster data's AI slot (+0x30). The client never allocates a server AI there; it uses the slot as an int think-delay in frames, decremented each update and reloaded with 5..0x20.

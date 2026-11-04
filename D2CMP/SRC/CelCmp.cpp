@@ -1159,28 +1159,30 @@ uint32_t __stdcall CELCMP_GetFrameDecodeHandlerForward(uint32_t nGameDirection, 
     uint32_t dwPopTmp1;
     uint32_t dwPopTmp2;
     int32_t nErrorLine;
-    if (nGameDirection >= 0x40) {
+    if (!(nGameDirection < 0x40)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1dd);
       exit(-1);
     }
 
-    uint32_t nDirLowestBit;
-    nDirLowestBit = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
-    if (nDirLowestBit >= 8) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1de);
-      exit(-1);
-    }
+    {
+      uint32_t nDirLowestBit;
+      nDirLowestBit = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
+      if (!(nDirLowestBit < 8)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1de);
+        exit(-1);
+      }
 
-    dwPopTmp2 = nLevelOfRotation >> 1 & 0x77777777;
-    dwPopTmp1 = nLevelOfRotation >> 2 & 0x33333333;
-    nDirLowestBit = nLevelOfRotation >> 3 & 0x11111111;
-    if (((nLevelOfRotation - dwPopTmp2 - dwPopTmp1 - nDirLowestBit >> 4) - dwPopTmp2 - dwPopTmp1 - nDirLowestBit + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1df);
-      exit(-1);
-    }
+      dwPopTmp2 = nLevelOfRotation >> 1 & 0x77777777;
+      dwPopTmp1 = nLevelOfRotation >> 2 & 0x33333333;
+      nDirLowestBit = nLevelOfRotation >> 3 & 0x11111111;
+      if (((nLevelOfRotation - dwPopTmp2 - dwPopTmp1 - nDirLowestBit >> 4) - dwPopTmp2 - dwPopTmp1 - nDirLowestBit + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1df);
+        exit(-1);
+      }
 
-    nErrorLine = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
-    return gdwCelCmpCacheSize[nErrorLine * 0x40 + nGameDirection];
+      nErrorLine = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
+      return gdwCelCmpCacheSize[nErrorLine * 0x40 + nGameDirection];
+    }
 }
 
 uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, uint32_t nLevelOfRotation) {
@@ -1703,28 +1705,30 @@ uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, 
     uint32_t dwPopTmp1;
     uint32_t dwPopTmp2;
     int32_t nErrorLine;
-    if (nGameDirection >= 0x40) {
+    if (!(nGameDirection < 0x40)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
       exit(-1);
     }
 
-    uint32_t nDirLowestBit;
-    nDirLowestBit = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
-    if (nDirLowestBit >= 8) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed);
-      exit(-1);
-    }
+    {
+      uint32_t nDirLowestBit;
+      nDirLowestBit = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
+      if (!(nDirLowestBit < 8)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed);
+        exit(-1);
+      }
 
-    dwPopTmp2 = nLevelOfRotation >> 1 & 0x77777777;
-    dwPopTmp1 = nLevelOfRotation >> 2 & 0x33333333;
-    nDirLowestBit = nLevelOfRotation >> 3 & 0x11111111;
-    if (((nLevelOfRotation - dwPopTmp2 - dwPopTmp1 - nDirLowestBit >> 4) - dwPopTmp2 - dwPopTmp1 - nDirLowestBit + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ee);
-      exit(-1);
-    }
+      dwPopTmp2 = nLevelOfRotation >> 1 & 0x77777777;
+      dwPopTmp1 = nLevelOfRotation >> 2 & 0x33333333;
+      nDirLowestBit = nLevelOfRotation >> 3 & 0x11111111;
+      if (((nLevelOfRotation - dwPopTmp2 - dwPopTmp1 - nDirLowestBit >> 4) - dwPopTmp2 - dwPopTmp1 - nDirLowestBit + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ee);
+        exit(-1);
+      }
 
-    nErrorLine = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
-    return gdwCelCmpCompressionBuffer[nErrorLine * 0x40 + nGameDirection];
+      nErrorLine = D2Hell::D2MEM_FindLowestSetBit(nLevelOfRotation);
+      return gdwCelCmpCompressionBuffer[nErrorLine * 0x40 + nGameDirection];
+    }
 }
 
 void __stdcall CELCMP_ValidateCelFilePointer(int32_t hFile, uint32_t dwParam) {
@@ -2096,16 +2100,18 @@ uint32_t __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, in
       exit(-1);
     }
 
-    uint32_t nDirFrameIndex;
-    if (!(pDC6->nFlags & 4)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a1);
-      exit(-1);
-    }
+    {
+      uint32_t nDirFrameIndex;
+      if (!(pDC6->nFlags & 4)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a1);
+        exit(-1);
+      }
 
-    nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6->nDirections);
-    pFrameBlock = *(int*)(pDC6[1].nTerm + (nDirFrameIndex * pDC6->nFrames + nFrame) * 4 - 0xc);
-    memcpy(pDstBuffer, (void*)(pFrameBlock + 0x20), *(int*)(pFrameBlock + 8) * *(int*)(pFrameBlock + 4) * 3);
-    return 1;
+      nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6->nDirections);
+      pFrameBlock = *(int*)(pDC6[1].nTerm + (nDirFrameIndex * pDC6->nFrames + nFrame) * 4 - 0xc);
+      memcpy(pDstBuffer, (void*)(pFrameBlock + 0x20), *(int*)(pFrameBlock + 8) * *(int*)(pFrameBlock + 4) * 3);
+      return 1;
+    }
 }
 
 void __stdcall CELCMP_DrawCelFrameFromGfxData(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, int32_t pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2) {
@@ -2319,41 +2325,43 @@ void __stdcall DeleteCellFile(DC6 * pDC6) {
       return;
     }
     if (pDC6->nVersion == 6) {
-      int* pPixelData;
-      nAddress = *(void**)(pDC6[1].nVersion + 0x18);
-      pBlockIter = pDC6 + 1;
-      if (!nAddress) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f5);
-        exit(-1);
-      }
+      {
+        int* pPixelData;
+        nAddress = *(void**)(pDC6[1].nVersion + 0x18);
+        pBlockIter = pDC6 + 1;
+        if (!nAddress) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f5);
+          exit(-1);
+        }
 
-      nFrameIndex = 0;
-      pfnFreeCallback = gpCelPixelDataFreeCallback;
-      if ((uint32_t)(pDC6->nFrames * pDC6->nDirections) > 0) {
-        do {
-          if (pBlockIter->nVersion) {
-            pPixelData = *(int**)(pBlockIter->nVersion + 0x18);
-            if (pPixelData) {
-              if (pfnFreeCallback) {
-                (*pfnFreeCallback)(pPixelData);
-                pfnFreeCallback = gpCelPixelDataFreeCallback;
+        nFrameIndex = 0;
+        pfnFreeCallback = gpCelPixelDataFreeCallback;
+        if ((uint32_t)(pDC6->nFrames * pDC6->nDirections) > 0) {
+          do {
+            if (pBlockIter->nVersion) {
+              pPixelData = *(int**)(pBlockIter->nVersion + 0x18);
+              if (pPixelData) {
+                if (pfnFreeCallback) {
+                  (*pfnFreeCallback)(pPixelData);
+                  pfnFreeCallback = gpCelPixelDataFreeCallback;
+                }
+
+                *(uint32_t*)(pBlockIter->nVersion + 0x18) = 0;
               }
-
-              *(uint32_t*)(pBlockIter->nVersion + 0x18) = 0;
             }
-          }
 
-          nFrameIndex++;
-          pBlockIter = (DC6*)&pBlockIter->nFlags;
-        } while (nFrameIndex < (uint32_t)(pDC6->nFrames * pDC6->nDirections));
+            nFrameIndex++;
+            pBlockIter = (DC6*)&pBlockIter->nFlags;
+          } while (nFrameIndex < (uint32_t)(pDC6->nFrames * pDC6->nDirections));
+        }
+
+        D2_FREE_AT(nAddress, ".\\SRC\\CelCmp.cpp", 0x61d);
+        return;
       }
-
-      D2_FREE_AT(nAddress, ".\\SRC\\CelCmp.cpp", 0x61d);
-      return;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f1);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f1);
+    exit(-1);
 }
 
 int __stdcall CELCMP_GetDC6BlockPixelData(DC6Block * pDC6Block) {

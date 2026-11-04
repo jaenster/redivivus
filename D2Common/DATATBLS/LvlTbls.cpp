@@ -794,26 +794,28 @@ D2LvlWarpTxt * __fastcall TXT_LvlWarp_Setup(int32_t nWarpId, uint8_t nDirection)
     int nWarpIdx;
     uint8_t byDirection;
     if (pTxtLvlWarp) {
-      D2LvlWarpTxt* pWarp;
-      nWarpIdx = 0;
-      pWarp = pTxtLvlWarp;
-      if (nTxtLvlWarpSize > 0) {
-        do {
-          if (pWarp->Id == nWarpId && (nDirection == 0x62 || (byDirection = (uint8_t)pWarp->Direction , byDirection == 0x62) || byDirection == nDirection)) {
-            return pWarp;
-          }
+      {
+        D2LvlWarpTxt* pWarp;
+        nWarpIdx = 0;
+        pWarp = pTxtLvlWarp;
+        if (nTxtLvlWarpSize > 0) {
+          do {
+            if (pWarp->Id == nWarpId && (nDirection == 0x62 || (byDirection = (uint8_t)pWarp->Direction , byDirection == 0x62) || byDirection == nDirection)) {
+              return pWarp;
+            }
 
-          nWarpIdx++;
-          pWarp++;
-        } while (nWarpIdx < nTxtLvlWarpSize);
+            nWarpIdx++;
+            pWarp++;
+          } while (nWarpIdx < nTxtLvlWarpSize);
+        }
+
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x33a);
+        exit(-1);
       }
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x33a);
-      exit(-1);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32b);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32b);
+    exit(-1);
 }
 
 // Compiles lvlmaze.txt into the global sgpTxtLvlMaze table. Defines 7 integer fields (Level, Rooms, Rooms(N), Rooms(H), SizeX, SizeY, Merge) plus an END sentinel, then calls CompileTxt to parse and store the maze generation parameters for each level.
@@ -838,26 +840,28 @@ void __stdcall TXT_FreeTxt_LvlMaze() {
 D2LvlMazeTxt * __fastcall TXT_LvlMaze_FindLineByLevelId(int32_t nLevelId) {
     D2LvlMazeTxt* pLvlMazeEntry;
     if (sgpTxtLvlMaze) {
-      int nLoopIdx;
-      nLoopIdx = 0;
-      pLvlMazeEntry = sgpTxtLvlMaze;
-      if (nTxtLvlMazeSize > 0) {
-        do {
-          if (pLvlMazeEntry->Level == nLevelId) {
-            return sgpTxtLvlMaze + nLoopIdx;
-          }
+      {
+        int nLoopIdx;
+        nLoopIdx = 0;
+        pLvlMazeEntry = sgpTxtLvlMaze;
+        if (nTxtLvlMazeSize > 0) {
+          do {
+            if (pLvlMazeEntry->Level == nLevelId) {
+              return sgpTxtLvlMaze + nLoopIdx;
+            }
 
-          nLoopIdx++;
-          pLvlMazeEntry++;
-        } while (nLoopIdx < nTxtLvlMazeSize);
+            nLoopIdx++;
+            pLvlMazeEntry++;
+          } while (nLoopIdx < nTxtLvlMazeSize);
+        }
+
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36c);
+        exit(-1);
       }
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36c);
-      exit(-1);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x363);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x363);
+    exit(-1);
 }
 
 // Loads and compiles the lvlsub.txt data table into sgpTxtLvlSub via CompileTxt, defining the column layout (Type, File, CheckAll, BordType, GridSize, Dt1Mask, and Prob/Trials/Max for sub-types 0-4, plus Expansion). Builds gpnLvlSubTypeToIndex, a Type->first-row-index lookup sized to the max Type id. When DRLG preset files are needed (nParam or bGametypeIsOBNetHost set), allocates gpaDrlgLvlSubPresetFiles and preloads each row's preset .ds1 file via AllocDrlgFile (fixing path slashes, skipping expansion-only rows in classic), halting on load failure. Called once during data-table init; no return value.

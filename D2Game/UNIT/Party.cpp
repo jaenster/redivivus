@@ -223,32 +223,34 @@ static void __stdcall PARTY_FreePartyMembers(D2UnitPartyControlSub * pPartyContr
     D2UnitPartyControlSubSub* pNextSubSub;
     D2UnitPartyControlSubSub* pSub;
     if (pPartyControlSub) {
-      D2UnitStrc* pMember;
-      pSub = pPartyControlSub->pSub;
-      while (true) {
-        if (!pSub) {
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pPartyControlSub, ".\\UNIT\\Party.cpp", 0xa5);
-          return;
+      {
+        D2UnitStrc* pMember;
+        pSub = pPartyControlSub->pSub;
+        while (true) {
+          if (!pSub) {
+            D2_FREE_POOL_AT(pGame->pMemoryPool, pPartyControlSub, ".\\UNIT\\Party.cpp", 0xa5);
+            return;
+          }
+
+          pMember = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pSub->nUnitGUID);
+          if (!pMember) {
+            break;
+          }
+
+          PLAYER::PlayerScreen::SendAllPlayersPartyInfo(pGame, pMember);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY(pMember, pMember);
+          pNextSubSub = pSub->pNext;
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pSub, ".\\UNIT\\Party.cpp", 0xa2);
+          pSub = pNextSubSub;
         }
 
-        pMember = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pSub->nUnitGUID);
-        if (!pMember) {
-          break;
-        }
-
-        PLAYER::PlayerScreen::SendAllPlayersPartyInfo(pGame, pMember);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY(pMember, pMember);
-        pNextSubSub = pSub->pNext;
-        D2_FREE_POOL_AT(pGame->pMemoryPool, pSub, ".\\UNIT\\Party.cpp", 0xa2);
-        pSub = pNextSubSub;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a);
+        exit(-1);
       }
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a);
-      exit(-1);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
+    exit(-1);
 }
 
 // Removes a party sub-record matching nPartyId from the game's party control linked list and frees its members. Walks the pSub chain, unlinks the matching entry by patching the predecessor's pPrev pointer (or updating pPartyControl->pSub for the head), then calls PARTY_FreePartyMembers. Halts with an internal error if pPartyControl is null.
@@ -570,24 +572,26 @@ int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    D2UnitPartyControlSub* pSub;
-    if (!pGame) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27c);
-      exit(-1);
-    }
-    if (!pGame->pPartyControl) {
-      return -1;
-    }
+    {
+      D2UnitPartyControlSub* pSub;
+      if (!pGame) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27c);
+        exit(-1);
+      }
+      if (!pGame->pPartyControl) {
+        return -1;
+      }
 
-    for (pSub = pGame->pPartyControl->pSub; pSub; pSub = pSub->pPrev) {
-      for (pSubSub = pSub->pSub; pSubSub; pSubSub = pSubSub->pNext) {
-        if (pSubSub->nUnitGUID == nSearchGUID) {
-          return pSub->nPartyId;
+      for (pSub = pGame->pPartyControl->pSub; pSub; pSub = pSub->pPrev) {
+        for (pSubSub = pSub->pSub; pSubSub; pSubSub = pSubSub->pNext) {
+          if (pSubSub->nUnitGUID == nSearchGUID) {
+            return pSub->nPartyId;
+          }
         }
       }
-    }
 
-    return -1;
+      return -1;
+    }
 }
 
 // Removes a player unit from its current party. Looks up the unit's party ID, finds the D2UnitPartyControlSub, then walks the linked list of D2UnitPartyControlSubSub entries to find and unlink the matching GUID node. Broadcasts updated party info to all players via SendAllPlayersPartyInfo and sends packet 0x8D (AssignPlayerToParty) to notify the client. Frees the node from the server memory pool. If the party drops below 2 members, calls PARTY_DisbandParty. Halts on null-unit or missing party sub (error lines 0x130/0x138).

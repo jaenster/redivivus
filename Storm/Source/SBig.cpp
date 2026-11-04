@@ -496,12 +496,7 @@ int32_t __stdcall SBIG_BigBuffer_FindLowestBit(BigBuffer * pBitSet) {
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 static void SBIG_BigBuffer_GetFirstWord(uint32_t * pOutWord, BigBuffer * pBitSet) {
     *pOutWord = 0;
-    if (pBitSet->nStartWord < pBitSet->nCount) {
-      *pOutWord = pBitSet->pData[pBitSet->nStartWord];
-      return;
-    }
-
-    *pOutWord = 0;
+    *pOutWord = pBitSet->nStartWord < pBitSet->nCount ? pBitSet->pData[pBitSet->nStartWord] : 0;
 }
 
 // @caution Its only two callers are Fog::SHA::SHA1_ApplyBigInt and Fog::SHA::SHA1_CompareBigInt, not SBig. It is a 9-byte thunk onto SBIG_BitSet_Compare, so it was moved with the rest, but it may in truth be a COMDAT of the Fog SHA translation unit. Unresolved.

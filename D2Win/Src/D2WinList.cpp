@@ -85,59 +85,61 @@ void __fastcall D2WINLIST_AddListItem(::D2WinList * pList, uint16_t * wszText, f
       exit(-1);
     }
 
-    D2WinListEntry* pNewEntry;
-    D2WinFont::SetAndReturnLastFont(pList->sEntriesControl.nFontId);
-    pNewEntry = D2_NEW_AT(D2WinListEntry, ".\\Src\\D2WinList.cpp", 0xa5);
-    nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    if (!(nLine < 0x100)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa6);
-      exit(-1);
-    }
-
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(pNewEntry->wszText, wszText);
-    D2WinFont::TEXT_CalcTextDimensions(wszText, &pTextWidth, &nTextHeight);
-    pTextWidth += 8;
-    if (pTextWidth > pList->sEntriesControl.nMaxTextWidth) {
-      pList->sEntriesControl.nMaxTextWidth = pTextWidth;
-    }
-
-    pNewEntry->nTextWidth = pTextWidth;
-    pNewEntry->pfnOnActivate = nItemData;
-    pNewEntry->nLeft = 0;
-    pNewEntry->nRight = 0;
-    pNewEntry->nTop = 0;
-    pNewEntry->nBottom = 0;
-    pNewEntry->bItemFlags = bItemFlags;
-    pNewEntry->nUserData = nUserData;
-    if (!bPrepend) {
-      pTailEntry = pList->sEntriesControl.pFirstEntry;
-      if (pTailEntry) {
-        nNextNode = pTailEntry->pNext;
-        while (nNextNode) {
-          pTailEntry = pTailEntry->pNext;
-          nNextNode = pTailEntry->pNext;
-        }
-
-        pTailEntry->pNext = pNewEntry;
-        pNewEntry->pNext = 0;
-      } else {
-        pList->sEntriesControl.pFirstEntry = pNewEntry;
-        pNewEntry->pNext = 0;
+    {
+      D2WinListEntry* pNewEntry;
+      D2WinFont::SetAndReturnLastFont(pList->sEntriesControl.nFontId);
+      pNewEntry = D2_NEW_AT(D2WinListEntry, ".\\Src\\D2WinList.cpp", 0xa5);
+      nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+      if (!(nLine < 0x100)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa6);
+        exit(-1);
       }
-    } else {
-      pNewEntry->pNext = pList->sEntriesControl.pFirstEntry;
-      pList->sEntriesControl.pFirstEntry = pNewEntry;
-    }
 
-    pList->sEntriesControl.nItemCount++;
-    D2WinFont::SetAndReturnLastFont(1);
-    if (!bSelect) {
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(pNewEntry->wszText, wszText);
+      D2WinFont::TEXT_CalcTextDimensions(wszText, &pTextWidth, &nTextHeight);
+      pTextWidth += 8;
+      if (pTextWidth > pList->sEntriesControl.nMaxTextWidth) {
+        pList->sEntriesControl.nMaxTextWidth = pTextWidth;
+      }
+
+      pNewEntry->nTextWidth = pTextWidth;
+      pNewEntry->pfnOnActivate = nItemData;
+      pNewEntry->nLeft = 0;
+      pNewEntry->nRight = 0;
+      pNewEntry->nTop = 0;
+      pNewEntry->nBottom = 0;
+      pNewEntry->bItemFlags = bItemFlags;
+      pNewEntry->nUserData = nUserData;
+      if (!bPrepend) {
+        pTailEntry = pList->sEntriesControl.pFirstEntry;
+        if (pTailEntry) {
+          nNextNode = pTailEntry->pNext;
+          while (nNextNode) {
+            pTailEntry = pTailEntry->pNext;
+            nNextNode = pTailEntry->pNext;
+          }
+
+          pTailEntry->pNext = pNewEntry;
+          pNewEntry->pNext = 0;
+        } else {
+          pList->sEntriesControl.pFirstEntry = pNewEntry;
+          pNewEntry->pNext = 0;
+        }
+      } else {
+        pNewEntry->pNext = pList->sEntriesControl.pFirstEntry;
+        pList->sEntriesControl.pFirstEntry = pNewEntry;
+      }
+
+      pList->sEntriesControl.nItemCount++;
+      D2WinFont::SetAndReturnLastFont(1);
+      if (!bSelect) {
+        return;
+      }
+
+      pList->sEntriesControl.pSelectedEntry = pNewEntry;
+      pList->sEntriesControl.nSelectedIndex = pList->sEntriesControl.nItemCount - 1;
       return;
     }
-
-    pList->sEntriesControl.pSelectedEntry = pNewEntry;
-    pList->sEntriesControl.nSelectedIndex = pList->sEntriesControl.nItemCount - 1;
-    return;
 }
 
 // Returns the position of pSelectedEntry in the entry chain (pNext), or -1 when nothing is selected; halts (D2WinList.cpp line 210, ptListData->eType == D2WIN_LIST) on a non-list control.

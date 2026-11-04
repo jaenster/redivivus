@@ -1022,33 +1022,35 @@ static void __stdcall GFX_FreeAllGfxInfoEntries(int32_t nComponentCount, D2UnitS
     int nComponent;
     D2GfxInfoUnkStrc* pMemoryToFree;
     D2GfxInfoUnkStrc* pNext;
-    if (nComponentCount >= 0x10) {
+    if (!(nComponentCount < 0x10)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65f);
       exit(-1);
     }
 
-    D2GfxInfoStrc* pGfxInfo;
-    nComponent = 0;
-    do {
-      GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, nComponent, '\0');
-      nComponent++;
-    } while (nComponent < 0x10);
+    {
+      D2GfxInfoStrc* pGfxInfo;
+      nComponent = 0;
+      do {
+        GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, nComponent, '\0');
+        nComponent++;
+      } while (nComponent < 0x10);
 
-    pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
-    if (!pGfxInfo) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x668);
-      exit(-1);
+      pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
+      if (!pGfxInfo) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x668);
+        exit(-1);
+      }
+
+      pMemoryToFree = pGfxInfo->pGfxInfoUnk;
+      while (pMemoryToFree) {
+        pNext = pMemoryToFree->pNext;
+        D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0x66d);
+        pMemoryToFree = pNext;
+      }
+
+      pGfxInfo->pGfxInfoUnk = 0;
+      return;
     }
-
-    pMemoryToFree = pGfxInfo->pGfxInfoUnk;
-    while (pMemoryToFree) {
-      pNext = pMemoryToFree->pNext;
-      D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0x66d);
-      pMemoryToFree = pNext;
-    }
-
-    pGfxInfo->pGfxInfoUnk = 0;
-    return;
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp

@@ -345,19 +345,21 @@ int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
       exit(-1);
     }
 
-    int* pAmbientEntry;
-    if (!(nIndex < gaAmbientSoundFlags)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
-      exit(-1);
-    }
+    {
+      int* pAmbientEntry;
+      if (!(nIndex < gaAmbientSoundFlags)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
+        exit(-1);
+      }
 
-    pAmbientEntry = gaAmbientSoundEntryTable + nIndex * 2;
-    if (gnAmbientSoundLanguageCode) {
+      pAmbientEntry = gaAmbientSoundEntryTable + nIndex * 2;
+      if (gnAmbientSoundLanguageCode) {
+        return pAmbientEntry;
+      }
+
+      pAmbientEntry = gAmbientSoundTable + nIndex * 2;
       return pAmbientEntry;
     }
-
-    pAmbientEntry = gAmbientSoundTable + nIndex * 2;
-    return pAmbientEntry;
 }
 
 void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {

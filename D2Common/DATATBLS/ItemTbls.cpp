@@ -855,148 +855,150 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     int nByteOffset = (int)pMemory;
     sgtDataTable.pTxtSetsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x3f2);
     sgtDataTable.pTxtSets = (D2SetsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "sets", sets, &sgtDataTable.nTxtSetsSize, 0x128);
-    if (sgtDataTable.nTxtSetsSize >= 0x7fff) {
+    if (!(sgtDataTable.nTxtSetsSize < 0x7fff)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3f4);
       exit(-1);
     }
 
-    uint32_t nStringId;
-    D2BinFieldInputStrc setitems[93] = {
-      {"index", FIELDTYPE_ASCII, 0x1f, 2, 0},
-      {"item", FIELDTYPE_RAW4, 0, 0x28, 0},
-      {"set", FIELDTYPE_NAME_SHORT, 0, 0x2c, &sgtDataTable.pTxtSetsLink},
-      {"lvl", FIELDTYPE_SHORT, 0, 0x30, 0},
-      {"lvl req", FIELDTYPE_SHORT, 0, 0x32, 0},
-      {"rarity", FIELDTYPE_INT, 0, 0x34, 0},
-      {"cost mult", FIELDTYPE_INT, 0, 0x38, 0},
-      {"cost add", FIELDTYPE_INT, 0, 0x3c, 0},
-      {"chrtransform", FIELDTYPE_CODE_CHAR, 0, 0x40, &sgtDataTable.pTxtColorsLink},
-      {"invtransform", FIELDTYPE_CODE_CHAR, 0, 0x41, &sgtDataTable.pTxtColorsLink},
-      {"flippyfile", FIELDTYPE_ASCII, 0x1f, 0x42, 0},
-      {"invfile", FIELDTYPE_ASCII, 0x1f, 0x62, 0},
-      {"dropsound", FIELDTYPE_NAME_SHORT, 0, 0x82, &sgtDataTable.pTxtSoundsLink},
-      {"dropsfxframe", FIELDTYPE_CHAR, 0, 0x86, 0},
-      {"usesound", FIELDTYPE_NAME_SHORT, 0, 0x84, &sgtDataTable.pTxtSoundsLink},
-      {"add func", FIELDTYPE_CHAR, 0, 0x87, 0},
-      {"prop1", FIELDTYPE_NAME_INT, 0, 0x88, &sgtDataTable.pTxtPropertiesLink},
-      {"par1", FIELDTYPE_LINKER_INT, 0, 0x8c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min1", FIELDTYPE_INT, 0, 0x90, 0},
-      {"max1", FIELDTYPE_INT, 0, 0x94, 0},
-      {"prop2", FIELDTYPE_NAME_INT, 0, 0x98, &sgtDataTable.pTxtPropertiesLink},
-      {"par2", FIELDTYPE_LINKER_INT, 0, 0x9c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min2", FIELDTYPE_INT, 0, 0xa0, 0},
-      {"max2", FIELDTYPE_INT, 0, 0xa4, 0},
-      {"prop3", FIELDTYPE_NAME_INT, 0, 0xa8, &sgtDataTable.pTxtPropertiesLink},
-      {"par3", FIELDTYPE_LINKER_INT, 0, 0xac, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min3", FIELDTYPE_INT, 0, 0xb0, 0},
-      {"max3", FIELDTYPE_INT, 0, 0xb4, 0},
-      {"prop4", FIELDTYPE_NAME_INT, 0, 0xb8, &sgtDataTable.pTxtPropertiesLink},
-      {"par4", FIELDTYPE_LINKER_INT, 0, 0xbc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min4", FIELDTYPE_INT, 0, 0xc0, 0},
-      {"max4", FIELDTYPE_INT, 0, 0xc4, 0},
-      {"prop5", FIELDTYPE_NAME_INT, 0, 200, &sgtDataTable.pTxtPropertiesLink},
-      {"par5", FIELDTYPE_LINKER_INT, 0, 0xcc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min5", FIELDTYPE_INT, 0, 0xd0, 0},
-      {"max5", FIELDTYPE_INT, 0, 0xd4, 0},
-      {"prop6", FIELDTYPE_NAME_INT, 0, 0xd8, &sgtDataTable.pTxtPropertiesLink},
-      {"par6", FIELDTYPE_LINKER_INT, 0, 0xdc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min6", FIELDTYPE_INT, 0, 0xe0, 0},
-      {"max6", FIELDTYPE_INT, 0, 0xe4, 0},
-      {"prop7", FIELDTYPE_NAME_INT, 0, 0xe8, &sgtDataTable.pTxtPropertiesLink},
-      {"par7", FIELDTYPE_LINKER_INT, 0, 0xec, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min7", FIELDTYPE_INT, 0, 0xf0, 0},
-      {"max7", FIELDTYPE_INT, 0, 0xf4, 0},
-      {"prop8", FIELDTYPE_NAME_INT, 0, 0xf8, &sgtDataTable.pTxtPropertiesLink},
-      {"par8", FIELDTYPE_LINKER_INT, 0, 0xfc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min8", FIELDTYPE_INT, 0, 0x100, 0},
-      {"max8", FIELDTYPE_INT, 0, 0x104, 0},
-      {"prop9", FIELDTYPE_NAME_INT, 0, 0x108, &sgtDataTable.pTxtPropertiesLink},
-      {"par9", FIELDTYPE_LINKER_INT, 0, 0x10c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"min9", FIELDTYPE_INT, 0, 0x110, 0},
-      {"max9", FIELDTYPE_INT, 0, 0x114, 0},
-      {"aprop1a", FIELDTYPE_NAME_INT, 0, 0x118, &sgtDataTable.pTxtPropertiesLink},
-      {"apar1a", FIELDTYPE_LINKER_INT, 0, 0x11c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin1a", FIELDTYPE_INT, 0, 0x120, 0},
-      {"amax1a", FIELDTYPE_INT, 0, 0x124, 0},
-      {"aprop1b", FIELDTYPE_NAME_INT, 0, 0x128, &sgtDataTable.pTxtPropertiesLink},
-      {"apar1b", FIELDTYPE_LINKER_INT, 0, 300, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin1b", FIELDTYPE_INT, 0, 0x130, 0},
-      {"amax1b", FIELDTYPE_INT, 0, 0x134, 0},
-      {"aprop2a", FIELDTYPE_NAME_INT, 0, 0x138, &sgtDataTable.pTxtPropertiesLink},
-      {"apar2a", FIELDTYPE_LINKER_INT, 0, 0x13c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin2a", FIELDTYPE_INT, 0, 0x140, 0},
-      {"amax2a", FIELDTYPE_INT, 0, 0x144, 0},
-      {"aprop2b", FIELDTYPE_NAME_INT, 0, 0x148, &sgtDataTable.pTxtPropertiesLink},
-      {"apar2b", FIELDTYPE_LINKER_INT, 0, 0x14c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin2b", FIELDTYPE_INT, 0, 0x150, 0},
-      {"amax2b", FIELDTYPE_INT, 0, 0x154, 0},
-      {"aprop3a", FIELDTYPE_NAME_INT, 0, 0x158, &sgtDataTable.pTxtPropertiesLink},
-      {"apar3a", FIELDTYPE_LINKER_INT, 0, 0x15c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin3a", FIELDTYPE_INT, 0, 0x160, 0},
-      {"amax3a", FIELDTYPE_INT, 0, 0x164, 0},
-      {"aprop3b", FIELDTYPE_NAME_INT, 0, 0x168, &sgtDataTable.pTxtPropertiesLink},
-      {"apar3b", FIELDTYPE_LINKER_INT, 0, 0x16c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin3b", FIELDTYPE_INT, 0, 0x170, 0},
-      {"amax3b", FIELDTYPE_INT, 0, 0x174, 0},
-      {"aprop4a", FIELDTYPE_NAME_INT, 0, 0x178, &sgtDataTable.pTxtPropertiesLink},
-      {"apar4a", FIELDTYPE_LINKER_INT, 0, 0x17c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin4a", FIELDTYPE_INT, 0, 0x180, 0},
-      {"amax4a", FIELDTYPE_INT, 0, 0x184, 0},
-      {"aprop4b", FIELDTYPE_NAME_INT, 0, 0x188, &sgtDataTable.pTxtPropertiesLink},
-      {"apar4b", FIELDTYPE_LINKER_INT, 0, 0x18c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin4b", FIELDTYPE_INT, 0, 400, 0},
-      {"amax4b", FIELDTYPE_INT, 0, 0x194, 0},
-      {"aprop5a", FIELDTYPE_NAME_INT, 0, 0x198, &sgtDataTable.pTxtPropertiesLink},
-      {"apar5a", FIELDTYPE_LINKER_INT, 0, 0x19c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin5a", FIELDTYPE_INT, 0, 0x1a0, 0},
-      {"amax5a", FIELDTYPE_INT, 0, 0x1a4, 0},
-      {"aprop5b", FIELDTYPE_NAME_INT, 0, 0x1a8, &sgtDataTable.pTxtPropertiesLink},
-      {"apar5b", FIELDTYPE_LINKER_INT, 0, 0x1ac, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
-      {"amin5b", FIELDTYPE_INT, 0, 0x1b0, 0},
-      {"amax5b", FIELDTYPE_INT, 0, 0x1b4, 0},
-      {"end", FIELDTYPE_END, 0, 0, 0}
-    };
-    sgtDataTable.pTxtSetItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x45d);
-    sgtDataTable.pTxtSetItems = (D2SetItemsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "setitems", setitems, &sgtDataTable.nTxtSetItemsSize, 0x1b8);
-    if (!(sgtDataTable.nTxtSetItemsSize < 0x7fff)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45f);
-      exit(-1);
-    }
+    {
+      uint32_t nStringId;
+      D2BinFieldInputStrc setitems[93] = {
+        {"index", FIELDTYPE_ASCII, 0x1f, 2, 0},
+        {"item", FIELDTYPE_RAW4, 0, 0x28, 0},
+        {"set", FIELDTYPE_NAME_SHORT, 0, 0x2c, &sgtDataTable.pTxtSetsLink},
+        {"lvl", FIELDTYPE_SHORT, 0, 0x30, 0},
+        {"lvl req", FIELDTYPE_SHORT, 0, 0x32, 0},
+        {"rarity", FIELDTYPE_INT, 0, 0x34, 0},
+        {"cost mult", FIELDTYPE_INT, 0, 0x38, 0},
+        {"cost add", FIELDTYPE_INT, 0, 0x3c, 0},
+        {"chrtransform", FIELDTYPE_CODE_CHAR, 0, 0x40, &sgtDataTable.pTxtColorsLink},
+        {"invtransform", FIELDTYPE_CODE_CHAR, 0, 0x41, &sgtDataTable.pTxtColorsLink},
+        {"flippyfile", FIELDTYPE_ASCII, 0x1f, 0x42, 0},
+        {"invfile", FIELDTYPE_ASCII, 0x1f, 0x62, 0},
+        {"dropsound", FIELDTYPE_NAME_SHORT, 0, 0x82, &sgtDataTable.pTxtSoundsLink},
+        {"dropsfxframe", FIELDTYPE_CHAR, 0, 0x86, 0},
+        {"usesound", FIELDTYPE_NAME_SHORT, 0, 0x84, &sgtDataTable.pTxtSoundsLink},
+        {"add func", FIELDTYPE_CHAR, 0, 0x87, 0},
+        {"prop1", FIELDTYPE_NAME_INT, 0, 0x88, &sgtDataTable.pTxtPropertiesLink},
+        {"par1", FIELDTYPE_LINKER_INT, 0, 0x8c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min1", FIELDTYPE_INT, 0, 0x90, 0},
+        {"max1", FIELDTYPE_INT, 0, 0x94, 0},
+        {"prop2", FIELDTYPE_NAME_INT, 0, 0x98, &sgtDataTable.pTxtPropertiesLink},
+        {"par2", FIELDTYPE_LINKER_INT, 0, 0x9c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min2", FIELDTYPE_INT, 0, 0xa0, 0},
+        {"max2", FIELDTYPE_INT, 0, 0xa4, 0},
+        {"prop3", FIELDTYPE_NAME_INT, 0, 0xa8, &sgtDataTable.pTxtPropertiesLink},
+        {"par3", FIELDTYPE_LINKER_INT, 0, 0xac, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min3", FIELDTYPE_INT, 0, 0xb0, 0},
+        {"max3", FIELDTYPE_INT, 0, 0xb4, 0},
+        {"prop4", FIELDTYPE_NAME_INT, 0, 0xb8, &sgtDataTable.pTxtPropertiesLink},
+        {"par4", FIELDTYPE_LINKER_INT, 0, 0xbc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min4", FIELDTYPE_INT, 0, 0xc0, 0},
+        {"max4", FIELDTYPE_INT, 0, 0xc4, 0},
+        {"prop5", FIELDTYPE_NAME_INT, 0, 200, &sgtDataTable.pTxtPropertiesLink},
+        {"par5", FIELDTYPE_LINKER_INT, 0, 0xcc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min5", FIELDTYPE_INT, 0, 0xd0, 0},
+        {"max5", FIELDTYPE_INT, 0, 0xd4, 0},
+        {"prop6", FIELDTYPE_NAME_INT, 0, 0xd8, &sgtDataTable.pTxtPropertiesLink},
+        {"par6", FIELDTYPE_LINKER_INT, 0, 0xdc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min6", FIELDTYPE_INT, 0, 0xe0, 0},
+        {"max6", FIELDTYPE_INT, 0, 0xe4, 0},
+        {"prop7", FIELDTYPE_NAME_INT, 0, 0xe8, &sgtDataTable.pTxtPropertiesLink},
+        {"par7", FIELDTYPE_LINKER_INT, 0, 0xec, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min7", FIELDTYPE_INT, 0, 0xf0, 0},
+        {"max7", FIELDTYPE_INT, 0, 0xf4, 0},
+        {"prop8", FIELDTYPE_NAME_INT, 0, 0xf8, &sgtDataTable.pTxtPropertiesLink},
+        {"par8", FIELDTYPE_LINKER_INT, 0, 0xfc, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min8", FIELDTYPE_INT, 0, 0x100, 0},
+        {"max8", FIELDTYPE_INT, 0, 0x104, 0},
+        {"prop9", FIELDTYPE_NAME_INT, 0, 0x108, &sgtDataTable.pTxtPropertiesLink},
+        {"par9", FIELDTYPE_LINKER_INT, 0, 0x10c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"min9", FIELDTYPE_INT, 0, 0x110, 0},
+        {"max9", FIELDTYPE_INT, 0, 0x114, 0},
+        {"aprop1a", FIELDTYPE_NAME_INT, 0, 0x118, &sgtDataTable.pTxtPropertiesLink},
+        {"apar1a", FIELDTYPE_LINKER_INT, 0, 0x11c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin1a", FIELDTYPE_INT, 0, 0x120, 0},
+        {"amax1a", FIELDTYPE_INT, 0, 0x124, 0},
+        {"aprop1b", FIELDTYPE_NAME_INT, 0, 0x128, &sgtDataTable.pTxtPropertiesLink},
+        {"apar1b", FIELDTYPE_LINKER_INT, 0, 300, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin1b", FIELDTYPE_INT, 0, 0x130, 0},
+        {"amax1b", FIELDTYPE_INT, 0, 0x134, 0},
+        {"aprop2a", FIELDTYPE_NAME_INT, 0, 0x138, &sgtDataTable.pTxtPropertiesLink},
+        {"apar2a", FIELDTYPE_LINKER_INT, 0, 0x13c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin2a", FIELDTYPE_INT, 0, 0x140, 0},
+        {"amax2a", FIELDTYPE_INT, 0, 0x144, 0},
+        {"aprop2b", FIELDTYPE_NAME_INT, 0, 0x148, &sgtDataTable.pTxtPropertiesLink},
+        {"apar2b", FIELDTYPE_LINKER_INT, 0, 0x14c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin2b", FIELDTYPE_INT, 0, 0x150, 0},
+        {"amax2b", FIELDTYPE_INT, 0, 0x154, 0},
+        {"aprop3a", FIELDTYPE_NAME_INT, 0, 0x158, &sgtDataTable.pTxtPropertiesLink},
+        {"apar3a", FIELDTYPE_LINKER_INT, 0, 0x15c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin3a", FIELDTYPE_INT, 0, 0x160, 0},
+        {"amax3a", FIELDTYPE_INT, 0, 0x164, 0},
+        {"aprop3b", FIELDTYPE_NAME_INT, 0, 0x168, &sgtDataTable.pTxtPropertiesLink},
+        {"apar3b", FIELDTYPE_LINKER_INT, 0, 0x16c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin3b", FIELDTYPE_INT, 0, 0x170, 0},
+        {"amax3b", FIELDTYPE_INT, 0, 0x174, 0},
+        {"aprop4a", FIELDTYPE_NAME_INT, 0, 0x178, &sgtDataTable.pTxtPropertiesLink},
+        {"apar4a", FIELDTYPE_LINKER_INT, 0, 0x17c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin4a", FIELDTYPE_INT, 0, 0x180, 0},
+        {"amax4a", FIELDTYPE_INT, 0, 0x184, 0},
+        {"aprop4b", FIELDTYPE_NAME_INT, 0, 0x188, &sgtDataTable.pTxtPropertiesLink},
+        {"apar4b", FIELDTYPE_LINKER_INT, 0, 0x18c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin4b", FIELDTYPE_INT, 0, 400, 0},
+        {"amax4b", FIELDTYPE_INT, 0, 0x194, 0},
+        {"aprop5a", FIELDTYPE_NAME_INT, 0, 0x198, &sgtDataTable.pTxtPropertiesLink},
+        {"apar5a", FIELDTYPE_LINKER_INT, 0, 0x19c, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin5a", FIELDTYPE_INT, 0, 0x1a0, 0},
+        {"amax5a", FIELDTYPE_INT, 0, 0x1a4, 0},
+        {"aprop5b", FIELDTYPE_NAME_INT, 0, 0x1a8, &sgtDataTable.pTxtPropertiesLink},
+        {"apar5b", FIELDTYPE_LINKER_INT, 0, 0x1ac, (void*)ITEMTBLS_ParseSkillMonTypeOrStateId},
+        {"amin5b", FIELDTYPE_INT, 0, 0x1b0, 0},
+        {"amax5b", FIELDTYPE_INT, 0, 0x1b4, 0},
+        {"end", FIELDTYPE_END, 0, 0, 0}
+      };
+      sgtDataTable.pTxtSetItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x45d);
+      sgtDataTable.pTxtSetItems = (D2SetItemsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "setitems", setitems, &sgtDataTable.nTxtSetItemsSize, 0x1b8);
+      if (!(sgtDataTable.nTxtSetItemsSize < 0x7fff)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45f);
+        exit(-1);
+      }
 
-    nIdx = 0;
-    if (sgtDataTable.nTxtSetItemsSize <= 0) {
+      nIdx = 0;
+      if (sgtDataTable.nTxtSetItemsSize <= 0) {
+        return;
+      }
+
+      nByteOffset = 0;
+      do {
+        pCurSetItem = &sgtDataTable.pTxtSetItems[nIdx];
+        pCurSetItem->nId = (short int)nIdx;
+        Fog::Src::Excel::FOG_ParseStringField(sgtDataTable.pTxtSetItemsLink, pCurSetItem->index);
+        pStringLookup = 0;
+        nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)pCurSetItem->index, &pStringLookup);
+        pCurSetItem->stringId = (uint16_t)nStringId;
+        if (!(uint16_t)nStringId) {
+          pCurSetItem->stringId = 0x1507;
+        }
+
+        pTxtSetsCached = sgtDataTable.pTxtSets;
+        if (pCurSetItem->set >= 0) {
+          nSetIdx = (int)pCurSetItem->set;
+          if (nSetIdx < sgtDataTable.nTxtSetsSize && sgtDataTable.pTxtSets[nSetIdx].nTxtSetItemsCount < 6) {
+            pCurSetItem->version = sgtDataTable.pTxtSets[nSetIdx].version;
+            nSetItemSlot = (short int)pTxtSetsCached[nSetIdx].nTxtSetItemsCount;
+            pCurSetItem->setIndex = nSetItemSlot;
+            pTxtSetsCached[nSetIdx].pTxtSetItems[nSetItemSlot] = pCurSetItem;
+            pTxtSetsCached[nSetIdx].nTxtSetItemsCount++;
+          }
+        }
+
+        nByteOffset += 0x1b8;
+        nIdx++;
+      } while (nIdx < sgtDataTable.nTxtSetItemsSize);
+
       return;
     }
-
-    nByteOffset = 0;
-    do {
-      pCurSetItem = &sgtDataTable.pTxtSetItems[nIdx];
-      pCurSetItem->nId = (short int)nIdx;
-      Fog::Src::Excel::FOG_ParseStringField(sgtDataTable.pTxtSetItemsLink, pCurSetItem->index);
-      pStringLookup = 0;
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)pCurSetItem->index, &pStringLookup);
-      pCurSetItem->stringId = (uint16_t)nStringId;
-      if (!(uint16_t)nStringId) {
-        pCurSetItem->stringId = 0x1507;
-      }
-
-      pTxtSetsCached = sgtDataTable.pTxtSets;
-      if (pCurSetItem->set >= 0) {
-        nSetIdx = (int)pCurSetItem->set;
-        if (nSetIdx < sgtDataTable.nTxtSetsSize && sgtDataTable.pTxtSets[nSetIdx].nTxtSetItemsCount < 6) {
-          pCurSetItem->version = sgtDataTable.pTxtSets[nSetIdx].version;
-          nSetItemSlot = (short int)pTxtSetsCached[nSetIdx].nTxtSetItemsCount;
-          pCurSetItem->setIndex = nSetItemSlot;
-          pTxtSetsCached[nSetIdx].pTxtSetItems[nSetItemSlot] = pCurSetItem;
-          pTxtSetsCached[nSetIdx].nTxtSetItemsCount++;
-        }
-      }
-
-      nByteOffset += 0x1b8;
-      nIdx++;
-    } while (nIdx < sgtDataTable.nTxtSetItemsSize);
-
-    return;
 }
 
 void __stdcall ITEMTBLS_FreeSetsAndSetItems() {
@@ -2008,32 +2010,34 @@ void __fastcall TXT_AllocTxt_runes(D2PoolManagerStrc * pMemory) {
       exit(-1);
     }
 
-    uint32_t nStringId;
-    bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".bin");
-    if (bSrvBinExists) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x908);
-      exit(-1);
-    }
+    {
+      uint32_t nStringId;
+      bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".bin");
+      if (bSrvBinExists) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x908);
+        exit(-1);
+      }
 
-    bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".xls");
-    if (bSrvBinExists) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x90c);
-      exit(-1);
-    }
+      bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".xls");
+      if (bSrvBinExists) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x90c);
+        exit(-1);
+      }
 
-    nTxtRunesSize.pTable = (D2RunesTxt*)DataTbls::CompileTxt(pMemory, "runes", aFieldDefs, &nTxtRunesSize.nSize, 0x120);
-    pStringOut = 0;
-    if (nTxtRunesSize.nSize <= 0) {
+      nTxtRunesSize.pTable = (D2RunesTxt*)DataTbls::CompileTxt(pMemory, "runes", aFieldDefs, &nTxtRunesSize.nSize, 0x120);
+      pStringOut = 0;
+      if (nTxtRunesSize.nSize <= 0) {
+        return;
+      }
+
+      do {
+        nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtRunesSize.pTable[nRuneIdx].name[0], &pStringOut);
+        *(short int*)(nTxtRunesSize.pTable[nRuneIdx].rune_name + 0x42) = (short int)nStringId;
+        nRuneIdx++;
+      } while (nRuneIdx < nTxtRunesSize.nSize);
+
       return;
     }
-
-    do {
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtRunesSize.pTable[nRuneIdx].name[0], &pStringOut);
-      *(short int*)(nTxtRunesSize.pTable[nRuneIdx].rune_name + 0x42) = (short int)nStringId;
-      nRuneIdx++;
-    } while (nRuneIdx < nTxtRunesSize.nSize);
-
-    return;
 }
 
 void __stdcall ITEMTBLS_FreeRunes() {

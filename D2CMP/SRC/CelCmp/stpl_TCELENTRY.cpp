@@ -27,8 +27,8 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Clear() {
     int* pObject;
     while (true) {
       int nNext;
-      pObject = (int*)this->m_terminator.m_next;
-      if ((int)pObject <= 0) {
+      pObject = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      if (!pObject) {
         break;
       }
 

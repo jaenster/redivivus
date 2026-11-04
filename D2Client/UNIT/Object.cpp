@@ -1424,24 +1424,24 @@ void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
       if (!pUnit) {
         return;
       }
-      if (pUnit->nClassId == 0x3b || pUnit->nClassId == 0x3c) {
-        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pMessage[2];
-        byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
-        if (pMessage[1] & 2) {
-          byPortalFlags |= 2;
-        }
-        if (pMessage[1] & 1) {
-          byPortalFlags |= 1;
-        }
-
-        D2Common::Units::SetObjectPortalFlags(pUnit, byPortalFlags);
-        return;
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x562);
-        exit(-1);
-      } else {
+      if (!(pUnit->nClassId == 0x3b || pUnit->nClassId == 0x3c)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x560);
         exit(-1);
       }
+
+      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pMessage[2];
+      byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
+      if (pMessage[1] & 2) {
+        byPortalFlags |= 2;
+      }
+      if (pMessage[1] & 1) {
+        byPortalFlags |= 1;
+      }
+
+      D2Common::Units::SetObjectPortalFlags(pUnit, byPortalFlags);
+      return;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x562);
+      exit(-1);
     }
 }
 

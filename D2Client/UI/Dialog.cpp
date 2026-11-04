@@ -1055,7 +1055,12 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
 
 void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex) {
     int32_t* piStringEntryPtr;
-    if (pDialog) {
+    if (!pDialog) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e7);
+      exit(-1);
+    }
+
+    {
       int iSubIndex;
       if (!(nSubIndex < pDialog->nSubCounter)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ed);
@@ -1086,9 +1091,6 @@ void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex
       }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x513);
-      exit(-1);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e7);
       exit(-1);
     }
 }
@@ -1226,53 +1228,55 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
     RECT nDialogX;
     int32_t nErrLine;
     int nIndex = pDialog->nSubCounter;
-    if (nIndex >= 10) {
+    if (!(nIndex < 10)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x552);
       exit(-1);
     }
 
-    size_t nStrLen;
-    pDialog->nSubCounter = nIndex + 1;
-    pDialog->aStringData[nIndex].nYPos = nYPos;
-    pDialog->aStringData[nIndex].nFont = nFont;
-    pDialog->aStringData[nIndex].nXOffset = 0;
-    pDialog->aStringData[nIndex].nColor = nColor;
-    if (!(nLineType != 3 || pDialog->nHighlightStyle != 1)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55e);
-      exit(-1);
-    }
+    {
+      size_t nStrLen;
+      pDialog->nSubCounter = nIndex + 1;
+      pDialog->aStringData[nIndex].nYPos = nYPos;
+      pDialog->aStringData[nIndex].nFont = nFont;
+      pDialog->aStringData[nIndex].nXOffset = 0;
+      pDialog->aStringData[nIndex].nColor = nColor;
+      if (!(nLineType != 3 || pDialog->nHighlightStyle != 1)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55e);
+        exit(-1);
+      }
 
-    pDialog->aStringData[nIndex].nLineType = nLineType;
-    pDialog->aStringData[nIndex].fpOnClick = pfnOnClick;
-    pDialog->aStringData[nIndex].nCallbackParam = nCallbackParam;
-    nErrLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szString);
-    nStrLen = nErrLine + 1;
-    if ((int)nStrLen > 0x77) {
-      nStrLen = 119;
-    }
+      pDialog->aStringData[nIndex].nLineType = nLineType;
+      pDialog->aStringData[nIndex].fpOnClick = pfnOnClick;
+      pDialog->aStringData[nIndex].nCallbackParam = nCallbackParam;
+      nErrLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szString);
+      nStrLen = nErrLine + 1;
+      if ((int)nStrLen > 0x77) {
+        nStrLen = 119;
+      }
 
-    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pDialog->aStringData[nIndex].szString, szString, nStrLen);
-    pDialog->aStringData[nIndex].szString[nStrLen] = L'\0';
-    if (nCallbackParam) {
-      pDialog->nClickableCount++;
-    }
-    if (pDialog->nAutoLayout) {
-      DIALOG_RecalculateLayout(pDialog);
-    } else {
-      DIALOG_CenterStringLine(pDialog, nIndex);
-    }
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pDialog->aStringData[nIndex].szString, szString, nStrLen);
+      pDialog->aStringData[nIndex].szString[nStrLen] = L'\0';
+      if (nCallbackParam) {
+        pDialog->nClickableCount++;
+      }
+      if (pDialog->nAutoLayout) {
+        DIALOG_RecalculateLayout(pDialog);
+      } else {
+        DIALOG_CenterStringLine(pDialog, nIndex);
+      }
 
-    nDialogX.top = pDialog->pCoords2.y;
-    nDialogX.left = pDialog->pCoords2.x;
-    nDialogX.bottom = pDialog->nBackgroundHeight + nDialogX.top;
-    nDialogX.right = pDialog->nBackgroundWidth + nDialogX.left;
-    GAME::Select::SELECT_SetExclusionRect(&nDialogX);
-    if (!(pDialog->nSelectedLine == -1 && nCallbackParam)) {
+      nDialogX.top = pDialog->pCoords2.y;
+      nDialogX.left = pDialog->pCoords2.x;
+      nDialogX.bottom = pDialog->nBackgroundHeight + nDialogX.top;
+      nDialogX.right = pDialog->nBackgroundWidth + nDialogX.left;
+      GAME::Select::SELECT_SetExclusionRect(&nDialogX);
+      if (!(pDialog->nSelectedLine == -1 && nCallbackParam)) {
+        return;
+      }
+
+      DIALOG_SetSelectedLine(pDialog, nIndex);
       return;
     }
-
-    DIALOG_SetSelectedLine(pDialog, nIndex);
-    return;
 }
 
 } // namespace D2Client::UI::Dialog

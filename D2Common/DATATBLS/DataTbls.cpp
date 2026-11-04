@@ -1639,128 +1639,130 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
 
     sgtDataTable.pTxtSkillsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x53c);
     sgtDataTable.pTxtSkills = (D2SkillsTxt*)CompileTxt(pMemory, "skills", skills, &sgtDataTable.nTxtSkillsCount, 0x23c);
-    if (sgtDataTable.nTxtSkillsCount >= 0x7fff) {
+    if (!(sgtDataTable.nTxtSkillsCount < 0x7fff)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53e);
       exit(-1);
     }
 
-    D2SkillsTxt* pDVar1;
-    sgtDataTable.nPassiveSkillsCount = 0;
-    sgtDataTable.pTxtSkillDescLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x542);
-    sgtDataTable.pTxtSkillDesc = (D2SkillDescTxt*)CompileTxt(pMemory, "skilldesc", pskilldesc, &sgtDataTable.nTxtSkillDescSize, 0x120);
-    if (!(sgtDataTable.nTxtSkillDescSize < 0x7fff)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x544);
-      exit(-1);
-    }
-    if (sgtDataTable.bUseTxt) {
-      Fog::Src::Excel::STRUCT_FreeTxtLink(__frame0.pSkillsLink);
-      Fog::Src::Excel::STRUCT_FreeTxtLink(__frame0.pMonStatsLink);
-      UnloadBin(pMonStatsTable);
-      Fog::Src::Excel::STRUCT_FreeTxtLink(__frame0.pSkillDescLink);
-      UnloadBin(pTxtTable);
-    }
-
-    TXT_SaveTableToBinFile(pMemory, "skillscode", (D2ArchiveStrc**)&sgtDataTable.pSkillsCode, (size_t*)&sgtDataTable.nSkillsCodeSize, (size_t*)&sgtDataTable.nSkillsCodeCapacity);
-    TXT_SaveTableToBinFile(pMemory, "skilldesccode", (D2ArchiveStrc**)&sgtDataTable.pSkillDescCode, (size_t*)&sgtDataTable.nSkillDescCodeSize, (size_t*)&sgtDataTable.nSkillDescCodeCapacity);
-    sgtDataTable.pSkillsPerClassCounter = D2_NEW_POOL_AT(nullptr, D2SkillsPerClassCounter, ".\\DATATBLS\\DataTbls.cpp", 0x556);
-    sgtDataTable.pSkillsPerClassCounter->Amazon = 0;
-    sgtDataTable.pSkillsPerClassCounter->Sorceress = 0;
-    sgtDataTable.pSkillsPerClassCounter->Necromancer = 0;
-    sgtDataTable.pSkillsPerClassCounter->Paladin = 0;
-    sgtDataTable.pSkillsPerClassCounter->Barbarian = 0;
-    sgtDataTable.pSkillsPerClassCounter->Druid = 0;
-    sgtDataTable.pSkillsPerClassCounter->Assassin = 0;
-    nCounter = 0;
-    if (sgtDataTable.nTxtSkillsCount > 0) {
-      do {
-        pDVar1 = sgtDataTable.pTxtSkills;
-        nPetType = sgtDataTable.pTxtSkills[nCounter].charclass;
-        if (nPetType >= 0 && nPetType < 7) {
-          (&sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]++;
-        }
-        if (pDVar1[nCounter].passivestate >= 0) {
-          sgtDataTable.nPassiveSkillsCount++;
-        }
-
-        nCounter++;
-      } while (nCounter < sgtDataTable.nTxtSkillsCount);
-    }
-
-    sgtDataTable.nSkillCountMaxPerClass = 0;
-    if (sgtDataTable.pSkillsPerClassCounter->Amazon > 0) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Amazon;
-    }
-    if (sgtDataTable.pSkillsPerClassCounter->Sorceress > sgtDataTable.nSkillCountMaxPerClass) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Sorceress;
-    }
-    if (sgtDataTable.pSkillsPerClassCounter->Necromancer > sgtDataTable.nSkillCountMaxPerClass) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Necromancer;
-    }
-    if (sgtDataTable.pSkillsPerClassCounter->Paladin > sgtDataTable.nSkillCountMaxPerClass) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Paladin;
-    }
-    if (sgtDataTable.pSkillsPerClassCounter->Barbarian > sgtDataTable.nSkillCountMaxPerClass) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Barbarian;
-    }
-    if (sgtDataTable.pSkillsPerClassCounter->Druid > sgtDataTable.nSkillCountMaxPerClass) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Druid;
-    }
-    if (sgtDataTable.pSkillsPerClassCounter->Assassin > sgtDataTable.nSkillCountMaxPerClass) {
-      sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Assassin;
-    }
-
-    sgtDataTable.pSkillsPerClassStrc = (int16_t*)D2_ALLOC_POOL_AT(nullptr, sgtDataTable.nSkillCountMaxPerClass * 0xe, ".\\DATATBLS\\DataTbls.cpp", 0x576);
-    memset(sgtDataTable.pSkillsPerClassStrc, 0, sgtDataTable.nSkillCountMaxPerClass * 0xe);
-    sgtDataTable.pSkillsPerClassCounter->Amazon = 0;
-    sgtDataTable.pSkillsPerClassCounter->Sorceress = 0;
-    sgtDataTable.pSkillsPerClassCounter->Necromancer = 0;
-    sgtDataTable.pSkillsPerClassCounter->Paladin = 0;
-    sgtDataTable.pSkillsPerClassCounter->Barbarian = 0;
-    sgtDataTable.pSkillsPerClassCounter->Druid = 0;
-    sgtDataTable.pSkillsPerClassCounter->Assassin = 0;
-    sgtDataTable.pPassiveSkillsPerClassStrc = (D2PassiveSkillsPerClassStrc*)D2_ALLOC_POOL_AT(nullptr, sgtDataTable.nPassiveSkillsCount * 2, ".\\DATATBLS\\DataTbls.cpp", 0x57a);
-    memset(sgtDataTable.pPassiveSkillsPerClassStrc, 0, sgtDataTable.nPassiveSkillsCount * 2);
-    nCounter = 0;
-    sgtDataTable.nPassiveSkillsCount = 0;
-    if (sgtDataTable.nTxtSkillsCount > 0) {
-      pMemory2 = 0;
-      do {
-        pSrvPrgFunc = sgtDataTable.pTxtSkills->srvprgfunc;
-        nPetType = *(char*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc - 0x22));
-        if (nPetType >= 0 && nPetType < '\a') {
-          sgtDataTable.pSkillsPerClassStrc[nPetType * sgtDataTable.nSkillCountMaxPerClass + (&sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]] = (int16_t)nCounter;
-          (&sgtDataTable.pSkillsPerClassCounter->Amazon)[*(char*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc - 0x22))]++;
-        }
-        if (*(short int*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc + 0x22)) >= 0) {
-          sgtDataTable.pPassiveSkillsPerClassStrc[sgtDataTable.nPassiveSkillsCount].nSkillId = (int16_t)nCounter;
-          sgtDataTable.nPassiveSkillsCount++;
-        }
-
-        pMemory2 = &((D2PoolManagerStrc*)pMemory2)->pPools[0xb].pSync.OwningThread;
-        nCounter++;
-      } while (nCounter < sgtDataTable.nTxtSkillsCount);
-    }
-
-    nCounter = 0;
-    if (sgtDataTable.nTxtSkillsCount <= 0) {
-      return;
-    }
-
-    do {
-      pSkillTxt = sgtDataTable.pTxtPetType;
-      nPetType = sgtDataTable.pTxtSkills[nCounter].pettype;
-      if (nPetType >= 0) {
-        nPetTypeIdx = (int)nPetType;
-        if (nPetTypeIdx < sgtDataTable.nTxtPetTypeSize && sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillIndexCounter < 0xf) {
-          sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillId[sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillIndexCounter] = (short int)nCounter;
-          pSkillTxt[nPetTypeIdx].nSkillIndexCounter++;
-        }
+    {
+      D2SkillsTxt* pDVar1;
+      sgtDataTable.nPassiveSkillsCount = 0;
+      sgtDataTable.pTxtSkillDescLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x542);
+      sgtDataTable.pTxtSkillDesc = (D2SkillDescTxt*)CompileTxt(pMemory, "skilldesc", pskilldesc, &sgtDataTable.nTxtSkillDescSize, 0x120);
+      if (!(sgtDataTable.nTxtSkillDescSize < 0x7fff)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x544);
+        exit(-1);
+      }
+      if (sgtDataTable.bUseTxt) {
+        Fog::Src::Excel::STRUCT_FreeTxtLink(__frame0.pSkillsLink);
+        Fog::Src::Excel::STRUCT_FreeTxtLink(__frame0.pMonStatsLink);
+        UnloadBin(pMonStatsTable);
+        Fog::Src::Excel::STRUCT_FreeTxtLink(__frame0.pSkillDescLink);
+        UnloadBin(pTxtTable);
       }
 
-      nCounter++;
-    } while (nCounter < sgtDataTable.nTxtSkillsCount);
+      TXT_SaveTableToBinFile(pMemory, "skillscode", (D2ArchiveStrc**)&sgtDataTable.pSkillsCode, (size_t*)&sgtDataTable.nSkillsCodeSize, (size_t*)&sgtDataTable.nSkillsCodeCapacity);
+      TXT_SaveTableToBinFile(pMemory, "skilldesccode", (D2ArchiveStrc**)&sgtDataTable.pSkillDescCode, (size_t*)&sgtDataTable.nSkillDescCodeSize, (size_t*)&sgtDataTable.nSkillDescCodeCapacity);
+      sgtDataTable.pSkillsPerClassCounter = D2_NEW_POOL_AT(nullptr, D2SkillsPerClassCounter, ".\\DATATBLS\\DataTbls.cpp", 0x556);
+      sgtDataTable.pSkillsPerClassCounter->Amazon = 0;
+      sgtDataTable.pSkillsPerClassCounter->Sorceress = 0;
+      sgtDataTable.pSkillsPerClassCounter->Necromancer = 0;
+      sgtDataTable.pSkillsPerClassCounter->Paladin = 0;
+      sgtDataTable.pSkillsPerClassCounter->Barbarian = 0;
+      sgtDataTable.pSkillsPerClassCounter->Druid = 0;
+      sgtDataTable.pSkillsPerClassCounter->Assassin = 0;
+      nCounter = 0;
+      if (sgtDataTable.nTxtSkillsCount > 0) {
+        do {
+          pDVar1 = sgtDataTable.pTxtSkills;
+          nPetType = sgtDataTable.pTxtSkills[nCounter].charclass;
+          if (nPetType >= 0 && nPetType < 7) {
+            (&sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]++;
+          }
+          if (pDVar1[nCounter].passivestate >= 0) {
+            sgtDataTable.nPassiveSkillsCount++;
+          }
 
-    return;
+          nCounter++;
+        } while (nCounter < sgtDataTable.nTxtSkillsCount);
+      }
+
+      sgtDataTable.nSkillCountMaxPerClass = 0;
+      if (sgtDataTable.pSkillsPerClassCounter->Amazon > 0) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Amazon;
+      }
+      if (sgtDataTable.pSkillsPerClassCounter->Sorceress > sgtDataTable.nSkillCountMaxPerClass) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Sorceress;
+      }
+      if (sgtDataTable.pSkillsPerClassCounter->Necromancer > sgtDataTable.nSkillCountMaxPerClass) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Necromancer;
+      }
+      if (sgtDataTable.pSkillsPerClassCounter->Paladin > sgtDataTable.nSkillCountMaxPerClass) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Paladin;
+      }
+      if (sgtDataTable.pSkillsPerClassCounter->Barbarian > sgtDataTable.nSkillCountMaxPerClass) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Barbarian;
+      }
+      if (sgtDataTable.pSkillsPerClassCounter->Druid > sgtDataTable.nSkillCountMaxPerClass) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Druid;
+      }
+      if (sgtDataTable.pSkillsPerClassCounter->Assassin > sgtDataTable.nSkillCountMaxPerClass) {
+        sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Assassin;
+      }
+
+      sgtDataTable.pSkillsPerClassStrc = (int16_t*)D2_ALLOC_POOL_AT(nullptr, sgtDataTable.nSkillCountMaxPerClass * 0xe, ".\\DATATBLS\\DataTbls.cpp", 0x576);
+      memset(sgtDataTable.pSkillsPerClassStrc, 0, sgtDataTable.nSkillCountMaxPerClass * 0xe);
+      sgtDataTable.pSkillsPerClassCounter->Amazon = 0;
+      sgtDataTable.pSkillsPerClassCounter->Sorceress = 0;
+      sgtDataTable.pSkillsPerClassCounter->Necromancer = 0;
+      sgtDataTable.pSkillsPerClassCounter->Paladin = 0;
+      sgtDataTable.pSkillsPerClassCounter->Barbarian = 0;
+      sgtDataTable.pSkillsPerClassCounter->Druid = 0;
+      sgtDataTable.pSkillsPerClassCounter->Assassin = 0;
+      sgtDataTable.pPassiveSkillsPerClassStrc = (D2PassiveSkillsPerClassStrc*)D2_ALLOC_POOL_AT(nullptr, sgtDataTable.nPassiveSkillsCount * 2, ".\\DATATBLS\\DataTbls.cpp", 0x57a);
+      memset(sgtDataTable.pPassiveSkillsPerClassStrc, 0, sgtDataTable.nPassiveSkillsCount * 2);
+      nCounter = 0;
+      sgtDataTable.nPassiveSkillsCount = 0;
+      if (sgtDataTable.nTxtSkillsCount > 0) {
+        pMemory2 = 0;
+        do {
+          pSrvPrgFunc = sgtDataTable.pTxtSkills->srvprgfunc;
+          nPetType = *(char*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc - 0x22));
+          if (nPetType >= 0 && nPetType < '\a') {
+            sgtDataTable.pSkillsPerClassStrc[nPetType * sgtDataTable.nSkillCountMaxPerClass + (&sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]] = (int16_t)nCounter;
+            (&sgtDataTable.pSkillsPerClassCounter->Amazon)[*(char*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc - 0x22))]++;
+          }
+          if (*(short int*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc + 0x22)) >= 0) {
+            sgtDataTable.pPassiveSkillsPerClassStrc[sgtDataTable.nPassiveSkillsCount].nSkillId = (int16_t)nCounter;
+            sgtDataTable.nPassiveSkillsCount++;
+          }
+
+          pMemory2 = &((D2PoolManagerStrc*)pMemory2)->pPools[0xb].pSync.OwningThread;
+          nCounter++;
+        } while (nCounter < sgtDataTable.nTxtSkillsCount);
+      }
+
+      nCounter = 0;
+      if (sgtDataTable.nTxtSkillsCount <= 0) {
+        return;
+      }
+
+      do {
+        pSkillTxt = sgtDataTable.pTxtPetType;
+        nPetType = sgtDataTable.pTxtSkills[nCounter].pettype;
+        if (nPetType >= 0) {
+          nPetTypeIdx = (int)nPetType;
+          if (nPetTypeIdx < sgtDataTable.nTxtPetTypeSize && sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillIndexCounter < 0xf) {
+            sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillId[sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillIndexCounter] = (short int)nCounter;
+            pSkillTxt[nPetTypeIdx].nSkillIndexCounter++;
+          }
+        }
+
+        nCounter++;
+      } while (nCounter < sgtDataTable.nTxtSkillsCount);
+
+      return;
+    }
 }
 
 // Frees all skills and skill-description txt table allocations from the global sgtDataTable. Releases pSkillsPerClassCounter, pSkillsPerClassStrc, pPassiveSkillsPerClassStrc, pSkillsCodeUnk1, pSkillsDescCodeUnk1, pTxtSkills (with a -1 entry offset when gpaMiscTxtTables is set), and pTxtSkillDesc. Also frees the txt link structures for skills and skill descriptions and resets all associated counts to zero.

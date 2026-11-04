@@ -803,7 +803,12 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
     D2PoolStrc* pPool = pMemory->pPools + nSizeClass;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pPool->pSync);
     uint32_t nSlotIndex = FindOrCreateBlockWithFreeSlots((D2PoolBlockStrc**)&Line, pMemory, pPool);
-    if ((int)nSlotIndex < (int)pPool->nBlocks) {
+    if (!((int)nSlotIndex < (int)pPool->nBlocks)) {
+      Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x4f3);
+      exit(-1);
+    }
+
+    {
       int nBitmapByteOff;
       if (!Line) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pPool->pSync);
@@ -847,9 +852,6 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pPool->pSync);
         return (void*)(nBlockSize * nSlotIndex + nBitmapByteOff);
       }
-    } else {
-      Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x4f3);
-      exit(-1);
     }
 }
 

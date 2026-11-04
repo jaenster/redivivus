@@ -158,12 +158,7 @@ BOOL __stdcall D2GFX_GetFixAspect() {
 }
 
 void __stdcall D2GFX_SetPerspectiveCapable(BOOL bResult) {
-    if ((int)eRendererMode < 4) {
-      D2GFXRenderedData.bPerspectiveCapable = 0;
-      return;
-    }
-
-    D2GFXRenderedData.bPerspectiveCapable = bResult;
+    D2GFXRenderedData.bPerspectiveCapable = (int)eRendererMode < 4 ? 0 : bResult;
 }
 
 uint32_t __stdcall IsWindowMode() {
@@ -1038,24 +1033,28 @@ void __stdcall D2GFX_SetDefaultScaleFactor() {
 }
 
 void __stdcall D2GFX_SetPerspectiveScale(int32_t nXScale, int32_t nYScale) {
-    if (eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D) {
-      if (!D2GFXRenderedData.bPerspectiveEnabled) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
-        exit(-1);
-      }
-
-      nD2GFX_PerspectiveScaleX = nXScale;
-      nD2GFX_PerspectiveScaleY = nYScale;
-      RENDERER_CurrentRenderedFunctions->nfpSetPerspectiveScale(nXScale, nYScale);
-      return;
-    } else {
+    if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x61);
       exit(-1);
     }
+    if (!D2GFXRenderedData.bPerspectiveEnabled) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
+      exit(-1);
+    }
+
+    nD2GFX_PerspectiveScaleX = nXScale;
+    nD2GFX_PerspectiveScaleY = nYScale;
+    RENDERER_CurrentRenderedFunctions->nfpSetPerspectiveScale(nXScale, nYScale);
+    return;
 }
 
 uint32_t __stdcall D2GFX_IsInPerspectiveBounds(int32_t nXpos, int32_t nYpos) {
-    if (eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D) {
+    if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x74);
+      exit(-1);
+    }
+
+    {
       int nDelta;
       if (!D2GFXRenderedData.bPerspectiveEnabled) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x75);
@@ -1076,9 +1075,6 @@ uint32_t __stdcall D2GFX_IsInPerspectiveBounds(int32_t nXpos, int32_t nYpos) {
       }
 
       return (uint32_t)(nDelta <= 0x320000);
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x74);
-      exit(-1);
     }
 }
 
@@ -1098,33 +1094,31 @@ void __stdcall D2GFX_AdjustPerspectivePosition(int32_t nXpos, int32_t nYpos, int
 }
 
 void __stdcall D2GFX_PerspecitveScalePosition(int32_t nXpos, int32_t nYpos, int32_t nAngle, int * pXpos, int * pYpos, BOOL bOrder) {
-    if (eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D) {
-      if (!D2GFXRenderedData.bPerspectiveEnabled) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x99);
-        exit(-1);
-      }
-
-      RENDERER_CurrentRenderedFunctions->nfpPerspectiveScalePosition(nXpos, nYpos, 0, pXpos, pYpos, bOrder);
-      return;
-    } else {
+    if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x98);
       exit(-1);
     }
+    if (!D2GFXRenderedData.bPerspectiveEnabled) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x99);
+      exit(-1);
+    }
+
+    RENDERER_CurrentRenderedFunctions->nfpPerspectiveScalePosition(nXpos, nYpos, 0, pXpos, pYpos, bOrder);
+    return;
 }
 
 void __stdcall D2GFX_SetDefaultPerspectiveFactor() {
-    if (eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D) {
-      if (!D2GFXRenderedData.bPerspectiveEnabled) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa9);
-        exit(-1);
-      }
-
-      RENDERER_CurrentRenderedFunctions->nfpSetDefaultPerspectiveFactor();
-      return;
-    } else {
+    if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa8);
       exit(-1);
     }
+    if (!D2GFXRenderedData.bPerspectiveEnabled) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa9);
+      exit(-1);
+    }
+
+    RENDERER_CurrentRenderedFunctions->nfpSetDefaultPerspectiveFactor();
+    return;
 }
 
 void D2GFX_DrawString(int32_t nProbablyX, int32_t nProbablyY, char * szFormatString, ...) {

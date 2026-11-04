@@ -971,49 +971,51 @@ void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(D2ClientStrc * pClient, D
     uint8_t* pSkillEntryBuf;
     size_t nAllocSize;
     D2SkillListStrc* pSkillsList;
-    if (pUnit) {
+    if (!pUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55a);
+      exit(-1);
+    }
+
+    {
       D2SkillStrc* pSkill;
       pSkillsList = pUnit->pSkillsList;
-      if (pSkillsList) {
-        pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
-        nSkillCountIter = 0;
-        while (pSkill) {
-          pSkill = D2Common::Skills::GetNext(pSkill);
-          nSkillCountIter++;
-        }
-
-        pGame = Clients::CLIENT_GetGame(pClient);
-        nAllocSize = nSkillCountIter * 3 + 6;
-        pPktBuf = (uint8_t*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nAllocSize, ".\\GAME\\SCmd.cpp", 0x568);
-        pSkillEntryBuf = pPktBuf + 6;
-        *pPktBuf = 0x94;
-        if (!(nSkillCountIter < 0x100)) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x56e);
-          exit(-1);
-        }
-
-        pPktBuf[1] = (uint8_t)nSkillCountIter;
-        *(int*)(pPktBuf + 2) = pUnit->nUnitGUID;
-        pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
-        while (pSkill) {
-          nSkillCountIter = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
-          pSkillEntryBuf[2] = (uint8_t)nSkillCountIter;
-          eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\GAME\\SCmd.cpp", 0x576);
-          *(short int*)pSkillEntryBuf = (short int)eSkillId;
-          pSkill = D2Common::Skills::GetNext(pSkill);
-          pSkillEntryBuf += 3;
-        }
-
-        SCMD_QueuePacketForClient(pPktBuf, nAllocSize, pClient);
-        D2_FREE_POOL_AT(pGame->pMemoryPool, pPktBuf, ".\\GAME\\SCmd.cpp", 0x57e);
-        return;
-      } else {
+      if (!pSkillsList) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55d);
         exit(-1);
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55a);
-      exit(-1);
+
+      pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
+      nSkillCountIter = 0;
+      while (pSkill) {
+        pSkill = D2Common::Skills::GetNext(pSkill);
+        nSkillCountIter++;
+      }
+
+      pGame = Clients::CLIENT_GetGame(pClient);
+      nAllocSize = nSkillCountIter * 3 + 6;
+      pPktBuf = (uint8_t*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nAllocSize, ".\\GAME\\SCmd.cpp", 0x568);
+      pSkillEntryBuf = pPktBuf + 6;
+      *pPktBuf = 0x94;
+      if (!(nSkillCountIter < 0x100)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x56e);
+        exit(-1);
+      }
+
+      pPktBuf[1] = (uint8_t)nSkillCountIter;
+      *(int*)(pPktBuf + 2) = pUnit->nUnitGUID;
+      pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
+      while (pSkill) {
+        nSkillCountIter = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
+        pSkillEntryBuf[2] = (uint8_t)nSkillCountIter;
+        eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\GAME\\SCmd.cpp", 0x576);
+        *(short int*)pSkillEntryBuf = (short int)eSkillId;
+        pSkill = D2Common::Skills::GetNext(pSkill);
+        pSkillEntryBuf += 3;
+      }
+
+      SCMD_QueuePacketForClient(pPktBuf, nAllocSize, pClient);
+      D2_FREE_POOL_AT(pGame->pMemoryPool, pPktBuf, ".\\GAME\\SCmd.cpp", 0x57e);
+      return;
     }
 }
 

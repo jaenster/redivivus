@@ -385,8 +385,8 @@ template<> void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
     uint32_t uLinkOffset;
     while (true) {
       int* pBackLink;
-      nBucketIdx = this->m_terminator.m_next;
-      if (nBucketIdx <= 0) {
+      nBucketIdx = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nBucketIdx) {
         break;
       }
 
@@ -415,8 +415,8 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Un
     uint32_t uLinkOffset;
     while (true) {
       int* pBackLink;
-      nBucketIdx = this->m_terminator.m_next;
-      if (nBucketIdx <= 0) {
+      nBucketIdx = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nBucketIdx) {
         break;
       }
 

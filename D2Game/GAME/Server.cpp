@@ -1519,19 +1519,21 @@ static void GAME_SendNearbyUnitPositions(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    uint32_t nMaxUnitsToSend;
-    nMaxUnitsToSend = (499 - pPacketList->nSize) / 9;
-    if ((int)nMaxUnitsToSend <= 0) {
+    {
+      uint32_t nMaxUnitsToSend;
+      nMaxUnitsToSend = (499 - pPacketList->nSize) / 9;
+      if ((int)nMaxUnitsToSend <= 0) {
+        return;
+      }
+      if (!(nMaxUnitsToSend <= 0x37)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf23);
+        exit(-1);
+      }
+
+      Clients::GAME_CollectNearbyUnitPositions(pClient, nMaxUnitsToSend);
+      SCmd::GAME_SendNearbyUnitPositionPacket(pClient);
       return;
     }
-    if (!(nMaxUnitsToSend <= 0x37)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf23);
-      exit(-1);
-    }
-
-    Clients::GAME_CollectNearbyUnitPositions(pClient, nMaxUnitsToSend);
-    SCmd::GAME_SendNearbyUnitPositionPacket(pClient);
-    return;
 }
 
 void __fastcall Unlock(::SGAMEDATA * pGame) {

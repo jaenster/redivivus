@@ -102,8 +102,8 @@ template<> void TSExplicitList<CELLIST, -572662307>::Clear() {
     uint32_t uLinkOffset;
     while (true) {
       int nNext;
-      pObject = (void*)this->m_terminator.m_next;
-      if ((int)pObject <= 0) {
+      pObject = (int)(void*)this->m_terminator.m_next > 0 ? (void*)this->m_terminator.m_next : 0;
+      if (!pObject) {
         break;
       }
 

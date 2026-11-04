@@ -58916,16 +58916,7 @@ void __fastcall ESCMENU_InitAutomapPartyItem(D2EscMenuItemStrc * pItem, D2UIMous
 
 void __fastcall UI_SLIDER_InitAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     BOOL bHasParty = Automap::AUTOMAP_GetParty();
-    if (bHasParty) {
-      int32_t bPartyNames;
-      bPartyNames = Automap::AUTOMAP_GetPartyNames();
-      if (bPartyNames) {
-        pItem->nImageIndex = 1;
-        return;
-      }
-    }
-
-    pItem->nImageIndex = 0;
+    pItem->nImageIndex = bHasParty && Automap::AUTOMAP_GetPartyNames() ? 1 : 0;
 }
 
 // Converts mouse Y coordinate to menu item index. Iterates visible items to find which contains the Y position, checking enable callbacks. Returns -1 if no valid item hit or if item is disabled.

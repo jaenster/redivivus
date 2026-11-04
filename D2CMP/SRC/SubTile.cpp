@@ -344,7 +344,7 @@ static void __stdcall SUBTILE_CompressIsometricShape(D2GroundSubTileStrc * pSubT
       } while (iRow < 0xf);
 
       nAllocSize = (int)pDst - (int)pWorkBuf;
-      if ((int)nAllocSize >= 0x10000) {
+      if (!((int)nAllocSize < 0x10000)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x166);
         exit(-1);
       }

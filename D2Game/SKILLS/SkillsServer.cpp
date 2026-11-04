@@ -1873,59 +1873,61 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
     D2UnitStrc* pPortal;
     POINT ptSpawnPos;
     if (pRoom) {
-      LONG nPosX;
-      if (ppPortal) {
-        *ppPortal = 0;
-      }
-      if (pUnit) {
-        bCasterInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-        if (bCasterInTown && (eLevel != LEVEL_MooMooFarm && eLevel != LEVEL_UberTristram && eLevel != LEVEL_MatronsDen && eLevel != LEVEL_FogottenSands && eLevel != LEVEL_FurnaceofPain || nClassId != 0x3c)) {
-          UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x18, pUnit);
+      {
+        LONG nPosX;
+        if (ppPortal) {
+          *ppPortal = 0;
+        }
+        if (pUnit) {
+          bCasterInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+          if (bCasterInTown && (eLevel != LEVEL_MooMooFarm && eLevel != LEVEL_UberTristram && eLevel != LEVEL_MatronsDen && eLevel != LEVEL_FogottenSands && eLevel != LEVEL_FurnaceofPain || nClassId != 0x3c)) {
+            UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x18, pUnit);
+            return 0;
+          }
+        }
+
+        eDestAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+        eLevel_00 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        eSrcAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel_00);
+        if (eDestAct != eSrcAct) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5c);
+          exit(-1);
+        }
+
+        ptSpawnPos.x = nX;
+        ptSpawnPos.y = nY;
+        if (!(bIgnoreFindSpawnLocationMaybe || (pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pRoom, &ptSpawnPos, &ptSpawnPos, 3, 0x3e01, 0xc01, 0) , pSpawnRoom != 0))) {
           return 0;
         }
-      }
 
-      eDestAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      eLevel_00 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      eSrcAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel_00);
-      if (eDestAct != eSrcAct) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5c);
-        exit(-1);
-      }
+        nPosY = ptSpawnPos.y;
+        nPosX = ptSpawnPos.x;
+        pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, ptSpawnPos.x, ptSpawnPos.y);
+        if (!pSpawnRoom) {
+          return 0;
+        }
 
-      ptSpawnPos.x = nX;
-      ptSpawnPos.y = nY;
-      if (!(bIgnoreFindSpawnLocationMaybe || (pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pRoom, &ptSpawnPos, &ptSpawnPos, 3, 0x3e01, 0xc01, 0) , pSpawnRoom != 0))) {
-        return 0;
-      }
+        pPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nClassId, nPosX, nPosY, pGame, pSpawnRoom, 1, 1, nullptr);
+        if (ppPortal) {
+          *ppPortal = pPortal;
+        }
 
-      nPosY = ptSpawnPos.y;
-      nPosX = ptSpawnPos.x;
-      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, ptSpawnPos.x, ptSpawnPos.y);
-      if (!pSpawnRoom) {
-        return 0;
-      }
+        D2Common::Units::SetupUpdateFlag(pPortal, 1);
+        pPortal = LinkPortal(pGame, pUnit, pPortal, (D2RoomStrc*)eLevel, eLevel_00);
+        if (!pPortal) {
+          return 0;
+        }
 
-      pPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nClassId, nPosX, nPosY, pGame, pSpawnRoom, 1, 1, nullptr);
-      if (ppPortal) {
-        *ppPortal = pPortal;
+        byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortal);
+        D2Common::Units::SetObjectPortalFlags(pPortal, byPortalFlags | 3);
+        D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pSpawnRoom, 0);
+        D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortal), 0);
+        return 1;
       }
-
-      D2Common::Units::SetupUpdateFlag(pPortal, 1);
-      pPortal = LinkPortal(pGame, pUnit, pPortal, (D2RoomStrc*)eLevel, eLevel_00);
-      if (!pPortal) {
-        return 0;
-      }
-
-      byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortal);
-      D2Common::Units::SetObjectPortalFlags(pPortal, byPortalFlags | 3);
-      D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pSpawnRoom, 0);
-      D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortal), 0);
-      return 1;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe42);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe42);
+    exit(-1);
 }
 
 // Resolves the skill aim position into tile coordinates written to *pnOutX/*pnOutY. If the unit has a locked target, reads its static or dynamic path position. If no target, falls back to the unit's own SP1 (cursor/destination) position. Returns 1 if both coordinates are nonzero, 0 otherwise.

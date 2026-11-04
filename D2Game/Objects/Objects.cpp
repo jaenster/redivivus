@@ -603,49 +603,51 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
     int nObjClassId = pUnit->nClassId;
     GAME::Event::EVENT_ClearTimerList(pGameCopy, pUnit);
-    if ((uint16_t)nObjClassId >= 0x23d) {
+    if (!((uint16_t)nObjClassId < 0x23d)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x260);
       exit(-1);
     }
 
-    D2SeedStrc* pSeed;
-    if (!(pObjectsTxt->InitFn < 0x50)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x262);
-      exit(-1);
-    }
-
-    pSeed = ObjectsRgn::GetObjectControlSeed(pGameCopy, pRoom);
-    if (pObjectsTxt->InitFn < 0x50 && OBJECTSINITFN[pObjectsTxt->InitFn]) {
-      /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)OBJECTSINITFN[pObjectsTxt->InitFn]);
-      if (bBadCodePtr) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26a);
+    {
+      D2SeedStrc* pSeed;
+      if (!(pObjectsTxt->InitFn < 0x50)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x262);
         exit(-1);
       }
 
-      s0x00.pGame = pGameCopy;
-      s0x00.nX = nX;
-      s0x00.pSeed = pSeed;
-      s0x00.nY = nY;
-      s0x00.pObject = pUnit;
-      s0x00.pRoom = pRoom;
-      s0x00.pObjectTxt = pObjectsTxt;
-      (*OBJECTSINITFN[pObjectsTxt->InitFn])(&s0x00);
-    }
-    if (pObjectsTxt->Selectable[nAnimModeOrGUID]) {
-      pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
-    } else {
-      pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-    }
-    if (pObjectsTxt->PreOperate && !(pUnit->eUnitFlags >> 7 & 1)) {
-      nPreOpSeedRoll = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 0xe);
-      if (!nPreOpSeedRoll) {
-        D2Common::Units::SetupUpdateFlag(pUnit, 2);
-      }
-    }
+      pSeed = ObjectsRgn::GetObjectControlSeed(pGameCopy, pRoom);
+      if (pObjectsTxt->InitFn < 0x50 && OBJECTSINITFN[pObjectsTxt->InitFn]) {
+        /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)OBJECTSINITFN[pObjectsTxt->InitFn]);
+        if (bBadCodePtr) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26a);
+          exit(-1);
+        }
 
-    pTimerArg = AllocTimer(pGameCopy);
-    D2Common::Units::SetTimerArg(pUnit, pTimerArg);
-    return;
+        s0x00.pGame = pGameCopy;
+        s0x00.nX = nX;
+        s0x00.pSeed = pSeed;
+        s0x00.nY = nY;
+        s0x00.pObject = pUnit;
+        s0x00.pRoom = pRoom;
+        s0x00.pObjectTxt = pObjectsTxt;
+        (*OBJECTSINITFN[pObjectsTxt->InitFn])(&s0x00);
+      }
+      if (pObjectsTxt->Selectable[nAnimModeOrGUID]) {
+        pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
+      } else {
+        pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+      }
+      if (pObjectsTxt->PreOperate && !(pUnit->eUnitFlags >> 7 & 1)) {
+        nPreOpSeedRoll = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 0xe);
+        if (!nPreOpSeedRoll) {
+          D2Common::Units::SetupUpdateFlag(pUnit, 2);
+        }
+      }
+
+      pTimerArg = AllocTimer(pGameCopy);
+      D2Common::Units::SetTimerArg(pUnit, pTimerArg);
+      return;
+    }
 }
 
 // Selects a random shrine type ID for a given shrine category (1–4; 0 or >4 clamped to 2) that satisfies the level's minimum level requirement. Draws from the pre-built shrine RNG pool (GetShrinesRng), retrying up to 8 times to find a shrine whose dwLevelMin <= nLevelId. Returns the chosen shrine type ID (never 0; remapped to 1). Halts if the shrine pool for the category is empty.
@@ -2887,7 +2889,7 @@ void __fastcall OBJECT_PopulateFromObjGroup(::SGAMEDATA * pGame, D2RoomStrc * pR
       nProbAccum += (uint32_t)pObjGroupTxt->nProbability[nGroupEntryIdx];
       if ((int)(nSeedRoll + (int)(sNewSeed.nSeedLow / 100) * -100) < nProbAccum) {
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjClassId);
-        if (pObjectsTxt->PopulateFn >= 10) {
+        if (!(pObjectsTxt->PopulateFn < 10)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca8);
           exit(-1);
         }

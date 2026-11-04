@@ -634,97 +634,99 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
       exit(-1);
     }
 
-    HRESULT HVar1;
-    if (!nResolutionMode) {
-      RENDERER_nWindowWidth = 0x280;
-      RENDERER_nWindowHeight = 0x1e0;
-    } else {
-      RENDERER_nWindowWidth = 800;
-      RENDERER_nWindowHeight = 600;
-    }
+    {
+      HRESULT HVar1;
+      if (!nResolutionMode) {
+        RENDERER_nWindowWidth = 0x280;
+        RENDERER_nWindowHeight = 0x1e0;
+      } else {
+        RENDERER_nWindowWidth = 800;
+        RENDERER_nWindowHeight = 600;
+      }
 
-    RENDERER_DDRAW_SetHorizontalBounds(nResolutionMode);
-    gnDDrawDisplayModeIndex = gdwDirectDrawPaletteSizes[nResolutionMode];
-    gnDDrawSurfaceWidth = gdwDirectDrawSurfaceWidths[nResolutionMode];
-    HVar1 = pWindowHandleBuffer->lpVtbl->SetCooperativeLevel(pWindowHandleBuffer, (HWND)gnGlideWindowHandle, 0x11);
-    if (HVar1 && HVar1 != -0x7789fdbb) {
-      DirectDrawErrorHandler("SetCooperativeLevel failed!", HVar1);
-      return 0;
-    }
-    if (!pWindowHandleBuffer) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1da);
-      exit(-1);
-    }
+      RENDERER_DDRAW_SetHorizontalBounds(nResolutionMode);
+      gnDDrawDisplayModeIndex = gdwDirectDrawPaletteSizes[nResolutionMode];
+      gnDDrawSurfaceWidth = gdwDirectDrawSurfaceWidths[nResolutionMode];
+      HVar1 = pWindowHandleBuffer->lpVtbl->SetCooperativeLevel(pWindowHandleBuffer, (HWND)gnGlideWindowHandle, 0x11);
+      if (HVar1 && HVar1 != -0x7789fdbb) {
+        DirectDrawErrorHandler("SetCooperativeLevel failed!", HVar1);
+        return 0;
+      }
+      if (!pWindowHandleBuffer) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1da);
+        exit(-1);
+      }
 
-    nLine = pWindowHandleBuffer->lpVtbl->SetDisplayMode(pWindowHandleBuffer, gnDDrawDisplayModeIndex, gnDDrawSurfaceWidth, 8);
-    if (nLine) {
-      szErrorMsg = "SetDisplayMode failed!";
-    } else {
-      memset(&ddSurfDesc, 0, 0x6c);
-      ddSurfDesc.dwBackBufferCount = 2;
-      gnDDrawFlipState = 2;
-      ddSurfDesc.dwSize = 0x6c;
-      ddSurfDesc.dwFlags = 0x21;
-      ddSurfDesc.ddsCaps = 0x4218;
-      HVar1 = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
-      if (HVar1) {
+      nLine = pWindowHandleBuffer->lpVtbl->SetDisplayMode(pWindowHandleBuffer, gnDDrawDisplayModeIndex, gnDDrawSurfaceWidth, 8);
+      if (nLine) {
+        szErrorMsg = "SetDisplayMode failed!";
+      } else {
         memset(&ddSurfDesc, 0, 0x6c);
-        ddSurfDesc.ddsCaps = 0x4218;
+        ddSurfDesc.dwBackBufferCount = 2;
+        gnDDrawFlipState = 2;
         ddSurfDesc.dwSize = 0x6c;
         ddSurfDesc.dwFlags = 0x21;
-        ddSurfDesc.dwBackBufferCount = 1;
-        gnDDrawFlipState = 1;
+        ddSurfDesc.ddsCaps = 0x4218;
         HVar1 = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
         if (HVar1) {
           memset(&ddSurfDesc, 0, 0x6c);
+          ddSurfDesc.ddsCaps = 0x4218;
           ddSurfDesc.dwSize = 0x6c;
-          ddSurfDesc.dwFlags = 1;
-          ddSurfDesc.ddsCaps = 0x4200;
-          gnDDrawFlipState = 0;
-          nLine = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
+          ddSurfDesc.dwFlags = 0x21;
+          ddSurfDesc.dwBackBufferCount = 1;
+          gnDDrawFlipState = 1;
+          HVar1 = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
+          if (HVar1) {
+            memset(&ddSurfDesc, 0, 0x6c);
+            ddSurfDesc.dwSize = 0x6c;
+            ddSurfDesc.dwFlags = 1;
+            ddSurfDesc.ddsCaps = 0x4200;
+            gnDDrawFlipState = 0;
+            nLine = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
+            if (nLine) {
+              szErrorMsg = "CreateSurface (primary single buffered) failed!";
+              goto report_ddraw_failure;
+            }
+          }
+        }
+        if (gnDDrawFlipState) {
+          dwDDSCapsBackBuffer = 4;
+          nLine = gpDDrawPrimarySurface->lpVtbl->GetAttachedSurface(gpDDrawPrimarySurface, (DDSCAPS*)&dwDDSCapsBackBuffer, &gpDDrawBackBuffer);
           if (nLine) {
-            szErrorMsg = "CreateSurface (primary single buffered) failed!";
+            szErrorMsg = "GetAttachedSurface (backbuffer) failed!";
             goto report_ddraw_failure;
           }
         }
-      }
-      if (gnDDrawFlipState) {
-        dwDDSCapsBackBuffer = 4;
-        nLine = gpDDrawPrimarySurface->lpVtbl->GetAttachedSurface(gpDDrawPrimarySurface, (DDSCAPS*)&dwDDSCapsBackBuffer, &gpDDrawBackBuffer);
-        if (nLine) {
-          szErrorMsg = "GetAttachedSurface (backbuffer) failed!";
-          goto report_ddraw_failure;
-        }
-      }
 
-      memset(&ddSurfDesc, 0, 0x6c);
-      ddSurfDesc.dwSize = 0x6c;
-      nLine = gpDDrawPrimarySurface->lpVtbl->GetSurfaceDesc(gpDDrawPrimarySurface, &ddSurfDesc);
-      if (nLine) {
-        szErrorMsg = "GetSurfaceDesc (primary) failed!";
-      } else {
-        ddSurfDesc.dwFlags = 7;
-        ddSurfDesc.ddsCaps = 0x840;
-        nLine = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&pDirectDrawSurface, nullptr);
+        memset(&ddSurfDesc, 0, 0x6c);
+        ddSurfDesc.dwSize = 0x6c;
+        nLine = gpDDrawPrimarySurface->lpVtbl->GetSurfaceDesc(gpDDrawPrimarySurface, &ddSurfDesc);
         if (nLine) {
-          szErrorMsg = "CreateSurface (render) failed!";
+          szErrorMsg = "GetSurfaceDesc (primary) failed!";
         } else {
-          nLine = gpDDrawPrimarySurface->lpVtbl->SetPalette(gpDDrawPrimarySurface, pDirectDrawPalette);
-          if (!nLine) {
-            gbDDrawWindowInitialized = 1;
-            gbDDrawPaletteSet = 0;
-            return 1;
-          }
+          ddSurfDesc.dwFlags = 7;
+          ddSurfDesc.ddsCaps = 0x840;
+          nLine = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&pDirectDrawSurface, nullptr);
+          if (nLine) {
+            szErrorMsg = "CreateSurface (render) failed!";
+          } else {
+            nLine = gpDDrawPrimarySurface->lpVtbl->SetPalette(gpDDrawPrimarySurface, pDirectDrawPalette);
+            if (!nLine) {
+              gbDDrawWindowInitialized = 1;
+              gbDDrawPaletteSet = 0;
+              return 1;
+            }
 
-          szErrorMsg = "SetPalette failed!";
+            szErrorMsg = "SetPalette failed!";
+          }
         }
       }
-    }
 
-    report_ddraw_failure:
-    DirectDrawErrorHandler(szErrorMsg, nLine);
-    Fog::Src::LogManager::LOGFILE_WriteStringToFile("Opening DirectDraw window failed!");
-    return 0;
+      report_ddraw_failure:
+      DirectDrawErrorHandler(szErrorMsg, nLine);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("Opening DirectDraw window failed!");
+      return 0;
+    }
 }
 
 BOOL __stdcall InternalCutsceneWindow() {
@@ -1900,50 +1902,52 @@ void __fastcall DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
     int nRectLeft = pRect->left;
     int nLeft = pRect->right;
     if (nRectLeft <= nLeft) {
-      uint8_t* pRowDst;
-      nTop = pRect->top;
-      nBottom = pRect->bottom;
-      if (!(nTop <= nBottom)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x166);
-        exit(-1);
-      }
-      if (!(nLeft >= 0 && nRectLeft < RENDERER_nWindowWidth && nBottom >= 0 && nTop < RENDERER_nWindowHeight)) {
-        return;
-      }
-      if (nRectLeft < 0) {
-        pRect->left = 0;
-      }
-      if (nLeft >= RENDERER_nWindowWidth) {
-        pRect->right = RENDERER_nWindowWidth - 1;
-      }
-      if (nTop < 0) {
-        pRect->top = 0;
-      }
-      if (nBottom >= RENDERER_nWindowHeight) {
-        pRect->bottom = RENDERER_nWindowHeight - 1;
-      }
-
-      nFillWidth = pRect->right - pRect->left;
-      nRowCount = pRect->bottom - pRect->top;
-      if (!(nFillWidth && nRowCount)) {
-        return;
-      }
-
-      pRowDst = gpRenderBackBufferBits + pRect->top * RENDERER_nWindowWidth + pRect->left;
-      do {
-        nRowCount--;
-        if (nFillWidth > 0) {
-          memset(pRowDst, (uint32_t)((uint32_t)((uint32_t)byPaletteHigh & 0xffffffu) << 8 | (uint32_t)(uint8_t)nPaletteIndex), nFillWidth);
+      {
+        uint8_t* pRowDst;
+        nTop = pRect->top;
+        nBottom = pRect->bottom;
+        if (!(nTop <= nBottom)) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x166);
+          exit(-1);
+        }
+        if (!(nLeft >= 0 && nRectLeft < RENDERER_nWindowWidth && nBottom >= 0 && nTop < RENDERER_nWindowHeight)) {
+          return;
+        }
+        if (nRectLeft < 0) {
+          pRect->left = 0;
+        }
+        if (nLeft >= RENDERER_nWindowWidth) {
+          pRect->right = RENDERER_nWindowWidth - 1;
+        }
+        if (nTop < 0) {
+          pRect->top = 0;
+        }
+        if (nBottom >= RENDERER_nWindowHeight) {
+          pRect->bottom = RENDERER_nWindowHeight - 1;
         }
 
-        pRowDst += RENDERER_nWindowWidth;
-      } while (nRowCount);
+        nFillWidth = pRect->right - pRect->left;
+        nRowCount = pRect->bottom - pRect->top;
+        if (!(nFillWidth && nRowCount)) {
+          return;
+        }
 
-      return;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);
-      exit(-1);
+        pRowDst = gpRenderBackBufferBits + pRect->top * RENDERER_nWindowWidth + pRect->left;
+        do {
+          nRowCount--;
+          if (nFillWidth > 0) {
+            memset(pRowDst, (uint32_t)((uint32_t)((uint32_t)byPaletteHigh & 0xffffffu) << 8 | (uint32_t)(uint8_t)nPaletteIndex), nFillWidth);
+          }
+
+          pRowDst += RENDERER_nWindowWidth;
+        } while (nRowCount);
+
+        return;
+      }
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);
+    exit(-1);
 }
 
 void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex) {

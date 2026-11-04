@@ -2028,28 +2028,30 @@ void __stdcall RENDERER_GLIDE_InitSpriteCache() {
       exit(-1);
     }
 
-    BOOL bIsPerspective;
-    if (gpGlideSpritePixelBuffer) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4b);
-      exit(-1);
-    }
+    {
+      BOOL bIsPerspective;
+      if (gpGlideSpritePixelBuffer) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4b);
+        exit(-1);
+      }
 
-    gpGlideSpriteBuffer = D2_ALLOC_AT(0x10000, ".\\Src\\glSprite.cpp", 0x4c);
-    gpGlideSpritePixelBuffer = D2_ALLOC_AT(0x10000, ".\\Src\\glSprite.cpp", 0x4d);
-    D2CMP::SRC::CelCmp::CELCMP_SetPixelDataFreeCallback(GLIDE_PixelDataFreeCallback_ClearCacheNodes);
-    gnGlideSpriteSecondaryTMUEnabled = 0;
-    gnGlideTMUIndex = (uint32_t)(gnGlideTextureMemoryUsed > 1);
-    if (gnGlideTextureMemoryUsed <= 1) {
+      gpGlideSpriteBuffer = D2_ALLOC_AT(0x10000, ".\\Src\\glSprite.cpp", 0x4c);
+      gpGlideSpritePixelBuffer = D2_ALLOC_AT(0x10000, ".\\Src\\glSprite.cpp", 0x4d);
+      D2CMP::SRC::CelCmp::CELCMP_SetPixelDataFreeCallback(GLIDE_PixelDataFreeCallback_ClearCacheNodes);
+      gnGlideSpriteSecondaryTMUEnabled = 0;
+      gnGlideTMUIndex = (uint32_t)(gnGlideTextureMemoryUsed > 1);
+      if (gnGlideTextureMemoryUsed <= 1) {
+        return;
+      }
+
+      bIsPerspective = RENDERER_GLIDE_IsPerspectiveMode();
+      if (bIsPerspective) {
+        return;
+      }
+
+      gnGlideSpriteSecondaryTMUEnabled = 1;
       return;
     }
-
-    bIsPerspective = RENDERER_GLIDE_IsPerspectiveMode();
-    if (bIsPerspective) {
-      return;
-    }
-
-    gnGlideSpriteSecondaryTMUEnabled = 1;
-    return;
 }
 
 int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTexMemAlignment) {

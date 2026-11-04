@@ -398,8 +398,8 @@ void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
     int* piNode;
     while (true) {
       int pListHead;
-      piNode = (int*)nListPtr->pNext;
-      if ((int)piNode <= 0) {
+      piNode = (int)(int*)nListPtr->pNext > 0 ? (int*)nListPtr->pNext : 0;
+      if (!piNode) {
         break;
       }
 
@@ -594,8 +594,8 @@ void __fastcall SCMD_FreeAllNodes(void * pListHead) {
     int pNextNode;
     while (true) {
       int* pObject;
-      pObject = *(int**)((int)pListHead + 8);
-      if ((int)pObject <= 0) {
+      pObject = (int)*(int**)((int)pListHead + 8) > 0 ? *(int**)((int)pListHead + 8) : 0;
+      if (!pObject) {
         break;
       }
 

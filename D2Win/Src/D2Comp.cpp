@@ -1761,49 +1761,51 @@ static void __stdcall D2COMP_BuildCOFFilePath(int32_t nAnimMode, uint32_t dwWeap
     char COFhitclass[4];
     uint32_t uAnimCode;
     uint32_t uHitclassCode;
-    if ((uint32_t)nPlayerClassId >= 0x19) {
+    if (!((uint32_t)nPlayerClassId < 0x19)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x488);
       exit(-1);
     }
 
-    uint8_t bHitclassByte3;
-    if (!((uint32_t)nAnimMode < gnD2CompCOFLayerCount)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
-      exit(-1);
-    }
+    {
+      uint8_t bHitclassByte3;
+      if (!((uint32_t)nAnimMode < gnD2CompCOFLayerCount)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
+        exit(-1);
+      }
 
-    uHitclassCode = gaCompCharClassTokens[nPlayerClassId];
-    uAnimCode = gaCompAnimModeTokens[nAnimMode];
-    COFhitclass[3] = '\0';
-    COFhitclass[0] = (uint8_t)dwWeaponClassToken == 0x20 ? 0 : (uint8_t)dwWeaponClassToken;
-    COFhitclass[1] = *(uint8_t*)((char*)&dwWeaponClassToken + 1) == 0x20 ? 0 : *(uint8_t*)((char*)&dwWeaponClassToken + 1);
-    COFhitclass[2] = *(uint8_t*)((char*)&dwWeaponClassToken + 2) == 0x20 ? 0 : *(uint8_t*)((char*)&dwWeaponClassToken + 2);
-    *(uint8_t*)(char*)&dwWeaponClassToken = (uint8_t)uHitclassCode == 0x20 ? 0 : (uint8_t)uHitclassCode;
-    bMaskedTokenByte = (uint8_t)(uHitclassCode >> 8);
-    *(uint8_t*)((char*)&dwWeaponClassToken + 1) = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-    bHitclassByte3 = (uint8_t)(uHitclassCode >> 0x10);
-    *(uint8_t*)((char*)&dwWeaponClassToken + 3) = 0;
-    COFanimation[3] = '\0';
-    *(uint8_t*)((char*)&dwWeaponClassToken + 2) = bHitclassByte3 == 0x20 ? 0 : bHitclassByte3;
-    COFanimation[0] = (uint8_t)uAnimCode == 0x20 ? 0 : (uint8_t)uAnimCode;
-    bMaskedTokenByte = (uint8_t)(uAnimCode >> 8);
-    COFanimation[1] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-    bMaskedTokenByte = (uint8_t)(uAnimCode >> 0x10);
-    COFanimation[2] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-    pszCOFPathBase = "DATA\\GLOBAL\\CHARS";
-    if ((uint32_t)nPlayerClassId >= 7) {
-      pszCOFPathBase = "DATA\\GLOBAL\\MONSTERS";
-    }
+      uHitclassCode = gaCompCharClassTokens[nPlayerClassId];
+      uAnimCode = gaCompAnimModeTokens[nAnimMode];
+      COFhitclass[3] = '\0';
+      COFhitclass[0] = (uint8_t)dwWeaponClassToken == 0x20 ? 0 : (uint8_t)dwWeaponClassToken;
+      COFhitclass[1] = *(uint8_t*)((char*)&dwWeaponClassToken + 1) == 0x20 ? 0 : *(uint8_t*)((char*)&dwWeaponClassToken + 1);
+      COFhitclass[2] = *(uint8_t*)((char*)&dwWeaponClassToken + 2) == 0x20 ? 0 : *(uint8_t*)((char*)&dwWeaponClassToken + 2);
+      *(uint8_t*)(char*)&dwWeaponClassToken = (uint8_t)uHitclassCode == 0x20 ? 0 : (uint8_t)uHitclassCode;
+      bMaskedTokenByte = (uint8_t)(uHitclassCode >> 8);
+      *(uint8_t*)((char*)&dwWeaponClassToken + 1) = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
+      bHitclassByte3 = (uint8_t)(uHitclassCode >> 0x10);
+      *(uint8_t*)((char*)&dwWeaponClassToken + 3) = 0;
+      COFanimation[3] = '\0';
+      *(uint8_t*)((char*)&dwWeaponClassToken + 2) = bHitclassByte3 == 0x20 ? 0 : bHitclassByte3;
+      COFanimation[0] = (uint8_t)uAnimCode == 0x20 ? 0 : (uint8_t)uAnimCode;
+      bMaskedTokenByte = (uint8_t)(uAnimCode >> 8);
+      COFanimation[1] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
+      bMaskedTokenByte = (uint8_t)(uAnimCode >> 0x10);
+      COFanimation[2] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
+      pszCOFPathBase = "DATA\\GLOBAL\\CHARS";
+      if ((uint32_t)nPlayerClassId >= 7) {
+        pszCOFPathBase = "DATA\\GLOBAL\\MONSTERS";
+      }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pszDestPath, "%s\\%s\\COF\\%s%s%s.COF", pszCOFPathBase, &dwWeaponClassToken, &dwWeaponClassToken, COFanimation, COFhitclass);
-    nOpenResult = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(pszDestPath, (D2MPQFileStrc**)&pArchiveHandle);
-    if (nOpenResult) {
-      Fog::Source::SFile::ERRORMANAGER_FCloseFile((D2MPQFileStrc*)pArchiveHandle);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pszDestPath, "%s\\%s\\COF\\%s%s%s.COF", pszCOFPathBase, &dwWeaponClassToken, &dwWeaponClassToken, COFanimation, COFhitclass);
+      nOpenResult = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(pszDestPath, (D2MPQFileStrc**)&pArchiveHandle);
+      if (nOpenResult) {
+        Fog::Source::SFile::ERRORMANAGER_FCloseFile((D2MPQFileStrc*)pArchiveHandle);
+        return;
+      }
+
+      *pszDestPath = '\0';
       return;
     }
-
-    *pszDestPath = '\0';
-    return;
 }
 
 static int * D2COMP_FindCOFEntryByModeAndWeapon(int * * ppCOFList, int32_t nAnimMode, uint32_t dwWeaponClassToken) {
@@ -1907,7 +1909,12 @@ void __fastcall D2COMP_PopulateComponentFromCOF(int32_t pCOFData, D2GfxDataStrc 
     }
 
     int32_t nWeaponClassToken = pCOFData;
-    if (*(int***)(pCOFData + 0xb8)) {
+    if (!*(int***)(pCOFData + 0xb8)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
+      exit(-1);
+    }
+
+    {
       uint8_t* pCOFLayerData;
       nArgSlot = *(int32_t*)(pCOFData + 0x20);
       pCOFLayerData = (uint8_t*)D2COMP_GetOrLoadCOF(*(int***)(pCOFData + 0xb8), *(int32_t*)(pCOFData + 0x1c), nArgSlot, gaCompWeaponClassTokens[*(int*)(pCOFData + 0x24)]);
@@ -1964,9 +1971,6 @@ void __fastcall D2COMP_PopulateComponentFromCOF(int32_t pCOFData, D2GfxDataStrc 
         pGfxData->nModeToken = 0x20787878;
         return;
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
-      exit(-1);
     }
 }
 
@@ -2449,7 +2453,7 @@ static uint8_t __stdcall D2COMP_ValidateComponentType(uint32_t dwComponentMask, 
 }; D2_STATIC_GUARD(gaComponentValidationData, "D2Win::Src::D2Comp::D2COMP_ValidateComponentType::gaComponentValidationData");
 
     int32_t nLine;
-    if (bComponentType >= 0x40) {
+    if (!(bComponentType < 0x40)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x576);
       exit(-1);
     }
@@ -2520,7 +2524,12 @@ void __fastcall D2COMP_DrawUnitShadow(uint32_t * pCompUnit) {
     uint8_t byComponent;
     uint32_t nPositionX;
     uint8_t* pCOFLayerData;
-    if (pCompUnit) {
+    if (!pCompUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5b3);
+      exit(-1);
+    }
+
+    {
       uint32_t nPositionY;
       if (!(gadwBitMasks[0] & *pCompUnit) || !(gadwBitMasks[2] & *pCompUnit)) {
         return;
@@ -2528,60 +2537,57 @@ void __fastcall D2COMP_DrawUnitShadow(uint32_t * pCompUnit) {
 
       nPositionX = pCompUnit[5];
       nPositionY = pCompUnit[6];
-      if ((int**)pCompUnit[0x2e]) {
-        pCOFEntry = D2COMP_FindCOFEntryByModeAndWeapon((int**)pCompUnit[0x2e], pCompUnit[8], gaCompWeaponClassTokens[pCompUnit[9]]);
-        if (!pCOFEntry) {
-          return;
-        }
-
-        pCOFLayerData = *(uint8_t**)(*pCOFEntry + 0x14);
-        if (!pCOFLayerData) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5cb);
-          exit(-1);
-        } else {
-          pShadowLayerFlags = (uint8_t*)D2COMP_AssertNotNull(pCOFLayerData);
-          nWeaponClass = (int)pCompUnit[2] >> 8;
-          nErrAddr = D2COMP_ValidateCOFLayerData((uint32_t)(uint8_t)pCompUnit[1], nWeaponClass, pCOFLayerData);
-          nLayerIndex = 0;
-          if (!nErrAddr) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d0);
-            exit(-1);
-          } else {
-            nMaxHeight = 0;
-            nLoadResult = D2COMP_LoadLayerSpritesAndCalcHeight(pShadowLayerFlags, (int32_t)nErrAddr, &nMaxHeight, (uint8_t)pCompUnit[1], nWeaponClass, (int32_t)pCompUnit);
-            if (nLoadResult <= 0) {
-              return;
-            }
-            if (*pShadowLayerFlags <= 0) {
-              return;
-            }
-
-            while (true) {
-              byComponent = *(uint8_t*)(nLayerIndex + (int)nErrAddr);
-              if (byComponent >= 0x10) {
-                break;
-              }
-
-              memset(&sGfxData, 0, 0x48);
-              D2COMP_InitComponentEntry((uint32_t)(uint8_t)pCompUnit[1], nWeaponClass, (int32_t)pCompUnit, byComponent, 0, &sGfxData);
-              D2gfx::D2GFX::D2GFX_DrawShadow(&sGfxData, nPositionX - 2, nPositionY);
-              nLayerIndex++;
-              if (nLayerIndex >= *pShadowLayerFlags) {
-                return;
-              }
-            }
-
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5da);
-            exit(-1);
-          }
-        }
-      } else {
+      if (!(int**)pCompUnit[0x2e]) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5c3);
         exit(-1);
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5b3);
-      exit(-1);
+
+      pCOFEntry = D2COMP_FindCOFEntryByModeAndWeapon((int**)pCompUnit[0x2e], pCompUnit[8], gaCompWeaponClassTokens[pCompUnit[9]]);
+      if (!pCOFEntry) {
+        return;
+      }
+
+      pCOFLayerData = *(uint8_t**)(*pCOFEntry + 0x14);
+      if (!pCOFLayerData) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5cb);
+        exit(-1);
+      } else {
+        pShadowLayerFlags = (uint8_t*)D2COMP_AssertNotNull(pCOFLayerData);
+        nWeaponClass = (int)pCompUnit[2] >> 8;
+        nErrAddr = D2COMP_ValidateCOFLayerData((uint32_t)(uint8_t)pCompUnit[1], nWeaponClass, pCOFLayerData);
+        nLayerIndex = 0;
+        if (!nErrAddr) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d0);
+          exit(-1);
+        } else {
+          nMaxHeight = 0;
+          nLoadResult = D2COMP_LoadLayerSpritesAndCalcHeight(pShadowLayerFlags, (int32_t)nErrAddr, &nMaxHeight, (uint8_t)pCompUnit[1], nWeaponClass, (int32_t)pCompUnit);
+          if (nLoadResult <= 0) {
+            return;
+          }
+          if (*pShadowLayerFlags <= 0) {
+            return;
+          }
+
+          while (true) {
+            byComponent = *(uint8_t*)(nLayerIndex + (int)nErrAddr);
+            if (byComponent >= 0x10) {
+              break;
+            }
+
+            memset(&sGfxData, 0, 0x48);
+            D2COMP_InitComponentEntry((uint32_t)(uint8_t)pCompUnit[1], nWeaponClass, (int32_t)pCompUnit, byComponent, 0, &sGfxData);
+            D2gfx::D2GFX::D2GFX_DrawShadow(&sGfxData, nPositionX - 2, nPositionY);
+            nLayerIndex++;
+            if (nLayerIndex >= *pShadowLayerFlags) {
+              return;
+            }
+          }
+
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5da);
+          exit(-1);
+        }
+      }
     }
 }
 
@@ -2607,7 +2613,12 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
     uint8_t* pCOFLayerData;
     DC6* pUniqueCursorDC6 = gpPentaSpinCursorDC6;
     int32_t nDrawColorSaved = nDrawColor;
-    if (pCompUnit) {
+    if (!pCompUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f3);
+      exit(-1);
+    }
+
+    {
       uint8_t bVar1;
       if (!(gadwBitMasks[0] & *pCompUnit)) {
         return;
@@ -2723,9 +2734,6 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
           return;
         }
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f3);
-      exit(-1);
     }
 }
 
@@ -2805,7 +2813,12 @@ static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
 
     int32_t nCOFResult;
     int32_t dwDefaultMode;
-    if (pCompUnit) {
+    if (!pCompUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81a);
+      exit(-1);
+    }
+
+    {
       int** ppCOFList;
       if (pCompUnit->nPlayerClassId >= gnD2CompLoadedSize0 || (uint32_t)pCompUnit->nAnimMode >= gnD2CompCOFLayerCount || (uint32_t)pCompUnit->nWeaponClass >= gnD2CompCOFBuffer0) {
         pCompUnit->nPlayerClassId = 7;
@@ -2832,9 +2845,6 @@ static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
       }
 
       return 1;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81a);
-      exit(-1);
     }
 }
 
@@ -2926,35 +2936,37 @@ void __stdcall D2COMP_SetUnitDisplayStrings(D2CharSelCompStrc * pCompUnit, uint1
 BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t nAnimMode) {
     int pCOFLayerData;
     if (pCompUnit) {
-      int* pCOFEntry;
-      pCOFEntry = *pCompUnit->ppCofCacheEntries;
-      while (true) {
-        if (!pCOFEntry) {
-          return 0;
+      {
+        int* pCOFEntry;
+        pCOFEntry = *pCompUnit->ppCofCacheEntries;
+        while (true) {
+          if (!pCOFEntry) {
+            return 0;
+          }
+          if (*(int*)(*pCOFEntry + 4) == nAnimMode) {
+            break;
+          }
+
+          pCOFEntry = (int*)pCOFEntry[1];
         }
-        if (*(int*)(*pCOFEntry + 4) == nAnimMode) {
-          break;
+
+        pCOFLayerData = *(int*)(*pCOFEntry + 0x14);
+        if (!pCOFLayerData) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3dd);
+          exit(-1);
         }
 
-        pCOFEntry = (int*)pCOFEntry[1];
+        pCompUnit->nAnimMode = nAnimMode;
+        pCompUnit->nNumFrames = (uint32_t)*(uint8_t*)(pCOFLayerData + 1);
+        pCompUnit->nCurrentFrameFixed = 0;
+        pCompUnit->nFrameIncrement = *(int*)(pCOFLayerData + 0x18);
+        pCompUnit->nNumDirections = *(uint8_t*)(pCOFLayerData + 2);
+        return 1;
       }
-
-      pCOFLayerData = *(int*)(*pCOFEntry + 0x14);
-      if (!pCOFLayerData) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3dd);
-        exit(-1);
-      }
-
-      pCompUnit->nAnimMode = nAnimMode;
-      pCompUnit->nNumFrames = (uint32_t)*(uint8_t*)(pCOFLayerData + 1);
-      pCompUnit->nCurrentFrameFixed = 0;
-      pCompUnit->nFrameIncrement = *(int*)(pCOFLayerData + 0x18);
-      pCompUnit->nNumDirections = *(uint8_t*)(pCOFLayerData + 2);
-      return 1;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8bf);
-      exit(-1);
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8bf);
+    exit(-1);
 }
 
 // Returns the code index (1..13) paired with the four-character weapon-class code nWeaponClassCode ('bow '..'ht2 ') in gaCompWeaponClassCodeMap, or 0 when the code is not in the map; the index selects gaCompWeaponClassByCodeIndex.
@@ -4028,197 +4040,199 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
       exit(-1);
     }
 
-    BOOL bMouseInRect;
-    for (nIconAnchorY = 0; nIconAnchorY < 0x100; nIconAnchorY++) {
-      wszLineText[nIconAnchorY] = L'\0';
-    }
+    {
+      BOOL bMouseInRect;
+      for (nIconAnchorY = 0; nIconAnchorY < 0x100; nIconAnchorY++) {
+        wszLineText[nIconAnchorY] = L'\0';
+      }
 
-    dwPlayerInfo = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
-    if (!(dwPlayerInfo & gadwBitMasks[3])) {
-      return;
-    }
+      dwPlayerInfo = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
+      if (!(dwPlayerInfo & gadwBitMasks[3])) {
+        return;
+      }
 
-    /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcHitTest, pA3Q6Data->nMephistoSoulstoneCount - 0x1e, *(int*)&pA3Q6Data->bMephistoSoulstoneDropped - 0x50, pA3Q6Data->nMephistoSoulstoneCount + 0x1e, *(int*)&pA3Q6Data->bMephistoSoulstoneDropped + 0x14);
-    bMouseInRect = D2WinMain::D2WINMAIN_TestMouseInRect(&rcHitTest);
-    if (!bMouseInRect) {
-      return;
-    }
+      /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcHitTest, pA3Q6Data->nMephistoSoulstoneCount - 0x1e, *(int*)&pA3Q6Data->bMephistoSoulstoneDropped - 0x50, pA3Q6Data->nMephistoSoulstoneCount + 0x1e, *(int*)&pA3Q6Data->bMephistoSoulstoneDropped + 0x14);
+      bMouseInRect = D2WinMain::D2WINMAIN_TestMouseInRect(&rcHitTest);
+      if (!bMouseInRect) {
+        return;
+      }
 
-    nXCenter = pA3Q6Data->nMephistoSoulstoneCount;
-    nIconAnchorY = *(int*)&pA3Q6Data->bMephistoSoulstoneDropped - 0x50;
-    __frame0.nMaxLineWidth = 0;
-    __frame0.nTotalWidth = 0;
-    Fog::File::CONTAINER_InitializeBuffer(aLineLayouts, 0x208, 7, D2COMP_ZeroBuffer512);
-    __frame0.nLineCount = 0;
-    nTitleColor = 0;
-    D2WinFont::SetAndReturnLastFont(1);
-    if (pA3Q6Data[10].nPrevStateFlagPrev == 0x44325850) {
-      D2Lang::UTF8_ConvertToWideChar(wszLineText, "Expansion", 0x100);
-      D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-    }
-
-    nPlayerFlags = pA3Q6Data->nPlayerCount;
-    if (nPlayerFlags == 0x13) {
-      D2Lang::UTF8_ConvertToWideChar(wszLineText, "Moderator", 0x100);
-      D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-      add_d2_character_lines:
-      nPingMs = pA3Q6Data[10].pDrlgMap;
-      if ((int)nPingMs > 0) {
-        memset(wszLineText, 0, 0x200);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, D2Lang::StrTable::strtable::GetLocaleString(0x1399), nPingMs);
+      nXCenter = pA3Q6Data->nMephistoSoulstoneCount;
+      nIconAnchorY = *(int*)&pA3Q6Data->bMephistoSoulstoneDropped - 0x50;
+      __frame0.nMaxLineWidth = 0;
+      __frame0.nTotalWidth = 0;
+      Fog::File::CONTAINER_InitializeBuffer(aLineLayouts, 0x208, 7, D2COMP_ZeroBuffer512);
+      __frame0.nLineCount = 0;
+      nTitleColor = 0;
+      D2WinFont::SetAndReturnLastFont(1);
+      if (pA3Q6Data[10].nPrevStateFlagPrev == 0x44325850) {
+        D2Lang::UTF8_ConvertToWideChar(wszLineText, "Expansion", 0x100);
         D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-        dwPlayerInfoCopy = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
-        if (dwPlayerInfoCopy & gadwBitMasks[5]) {
-          pnTotalWidthArg = &__frame0.nTotalWidth;
-          pnMaxWidthArg = &__frame0.nMaxLineWidth;
-          pnLineCountArg = &__frame0.nLineCount;
-          D2COMP_AddTextLineToLayout(D2Lang::StrTable::strtable::GetLocaleString(0x1398), *aLineLayouts, pnLineCountArg, pnMaxWidthArg, pnTotalWidthArg);
+      }
+
+      nPlayerFlags = pA3Q6Data->nPlayerCount;
+      if (nPlayerFlags == 0x13) {
+        D2Lang::UTF8_ConvertToWideChar(wszLineText, "Moderator", 0x100);
+        D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+        add_d2_character_lines:
+        nPingMs = pA3Q6Data[10].pDrlgMap;
+        if ((int)nPingMs > 0) {
+          memset(wszLineText, 0, 0x200);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, D2Lang::StrTable::strtable::GetLocaleString(0x1399), nPingMs);
+          D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+          dwPlayerInfoCopy = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
+          if (dwPlayerInfoCopy & gadwBitMasks[5]) {
+            pnTotalWidthArg = &__frame0.nTotalWidth;
+            pnMaxWidthArg = &__frame0.nMaxLineWidth;
+            pnLineCountArg = &__frame0.nLineCount;
+            D2COMP_AddTextLineToLayout(D2Lang::StrTable::strtable::GetLocaleString(0x1398), *aLineLayouts, pnLineCountArg, pnMaxWidthArg, pnTotalWidthArg);
+          }
+
+          D2Lang::UTF8_ConvertToWideChar(wszLineText, "Realm: ", 0x100);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(wszLineText, (uint16_t*)&pA3Q6Data[9].bMephistoSoulstoneDropped);
+          D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+        }
+      } else {
+        switch (nPlayerFlags) {
+          case 0x14:
+            {
+              D2Lang::UTF8_ConvertToWideChar(wszLineText, "Sysop", 0x100);
+              D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+              nTitleColor = 3;
+              break;
+            }
+          case 0x12:
+            {
+              D2Lang::UTF8_ConvertToWideChar(wszLineText, "Blizzard Rep", 0x100);
+              D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+              nTitleColor = 3;
+              break;
+            }
+          case 0x17:
+            {
+              D2Lang::UTF8_ConvertToWideChar(wszLineText, "Speaker", 0x100);
+              D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+              break;
+            }
+          default:
+            switch (nPlayerFlags) {
+              case 0x15:
+                {
+                  D2Lang::UTF8_ConvertToWideChar(wszLineText, "Referee", 0x100);
+                  D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+                  break;
+                }
+              case 0x16:
+                {
+                  D2Lang::UTF8_ConvertToWideChar(wszLineText, "Chat", 0x100);
+                  D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+                  break;
+                }
+              case 0x18:
+                {
+                  D2Lang::UTF8_ConvertToWideChar(wszLineText, "Open Character", 0x100);
+                  D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+                  break;
+                }
+              default:
+                {
+                  dwPlayerInfo = pA3Q6Data[10].nPrevStateFlagPrev;
+                  if (dwPlayerInfo == 0x44324456 || dwPlayerInfo == 0x44325850 || dwPlayerInfo == 0x44325354) {
+                    goto add_d2_character_lines;
+                  }
+                  if (dwPlayerInfo <= 0x53534852) {
+                    if (dwPlayerInfo != 0x53534852) {
+                      if (dwPlayerInfo <= 0x44545354) {
+                        if (dwPlayerInfo == 0x44545354 || dwPlayerInfo == 0x4452544c) {
+                          szGameTypeName = "Diablo";
+                        } else if (dwPlayerInfo == 0x44534852) {
+                          szGameTypeName = "Diablo Shareware";
+                        } else {
+                          unknown_product:
+                          szGameTypeName = "Unknown";
+                        }
+                      } else if (dwPlayerInfo == 0x4a535452) {
+                        szGameTypeName = "Starcraft";
+                      } else {
+                        if (dwPlayerInfo != 0x53455850) {
+                          goto unknown_product;
+                        }
+
+                        szGameTypeName = "Brood War";
+                      }
+                    } else {
+                      szGameTypeName = "Starcraft Shareware";
+                    }
+                  } else if (dwPlayerInfo <= 0x57335850) {
+                    if (dwPlayerInfo != 0x57335850) {
+                      if (dwPlayerInfo == 0x53544152) {
+                        szGameTypeName = "Starcraft";
+                      } else {
+                        if (dwPlayerInfo != 0x5732424e) {
+                          goto unknown_product;
+                        }
+
+                        szGameTypeName = "Warcraft II";
+                      }
+                    } else {
+                      szGameTypeName = "Frozen Throne";
+                    }
+                  } else {
+                    if (dwPlayerInfo != 0x57415233) {
+                      goto unknown_product;
+                    }
+
+                    szGameTypeName = "Warcraft III";
+                  }
+
+                  D2Lang::UTF8_ConvertToWideChar(wszLineText, szGameTypeName, 0x100);
+                  D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+                }
+            }
+        }
+      }
+
+      nLineIndex = 0;
+      D2Lang::UTF8_ConvertToWideChar(wszLineText, "Account Name: ", 0x100);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszLineText, (uint16_t*)&pA3Q6Data[3].bDrlgMapTaken);
+      D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
+      nPlayerFlags = nXCenter - (__frame0.nMaxLineWidth >> 1);
+      if (nPlayerFlags < 0) {
+        nLineIndex = -nPlayerFlags;
+        nPlayerFlags = 0;
+      } else if (nPlayerFlags + __frame0.nMaxLineWidth > 800) {
+        nLineIndex = 800 - nPlayerFlags - __frame0.nMaxLineWidth;
+        nPlayerFlags = 800 - __frame0.nMaxLineWidth;
+      }
+
+      nYPos = nIconAnchorY - (__frame0.nTotalWidth + 6);
+      D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nPlayerFlags, nYPos, nPlayerFlags + __frame0.nMaxLineWidth, nIconAnchorY, 0, DRAW_LESSTRANSPARENT);
+      nIconAnchorY = __frame0.nLineCount;
+      nXCenter += nLineIndex;
+      nYPos += 3;
+      if (!(__frame0.nLineCount <= 7)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x804);
+        exit(-1);
+      }
+
+      nPlayerFlags = 0;
+      if (__frame0.nLineCount <= 0) {
+        return;
+      }
+
+      do {
+        nYPos += *(int*)(aLineLayouts[nPlayerFlags] + 0x204);
+        nLineColor = 0;
+        if (!nPlayerFlags) {
+          nLineColor = nTitleColor;
         }
 
-        D2Lang::UTF8_ConvertToWideChar(wszLineText, "Realm: ", 0x100);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszLineText, (uint16_t*)&pA3Q6Data[9].bMephistoSoulstoneDropped);
-        D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-      }
-    } else {
-      switch (nPlayerFlags) {
-        case 0x14:
-          {
-            D2Lang::UTF8_ConvertToWideChar(wszLineText, "Sysop", 0x100);
-            D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-            nTitleColor = 3;
-            break;
-          }
-        case 0x12:
-          {
-            D2Lang::UTF8_ConvertToWideChar(wszLineText, "Blizzard Rep", 0x100);
-            D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-            nTitleColor = 3;
-            break;
-          }
-        case 0x17:
-          {
-            D2Lang::UTF8_ConvertToWideChar(wszLineText, "Speaker", 0x100);
-            D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-            break;
-          }
-        default:
-          switch (nPlayerFlags) {
-            case 0x15:
-              {
-                D2Lang::UTF8_ConvertToWideChar(wszLineText, "Referee", 0x100);
-                D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-                break;
-              }
-            case 0x16:
-              {
-                D2Lang::UTF8_ConvertToWideChar(wszLineText, "Chat", 0x100);
-                D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-                break;
-              }
-            case 0x18:
-              {
-                D2Lang::UTF8_ConvertToWideChar(wszLineText, "Open Character", 0x100);
-                D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-                break;
-              }
-            default:
-              {
-                dwPlayerInfo = pA3Q6Data[10].nPrevStateFlagPrev;
-                if (dwPlayerInfo == 0x44324456 || dwPlayerInfo == 0x44325850 || dwPlayerInfo == 0x44325354) {
-                  goto add_d2_character_lines;
-                }
-                if (dwPlayerInfo <= 0x53534852) {
-                  if (dwPlayerInfo != 0x53534852) {
-                    if (dwPlayerInfo <= 0x44545354) {
-                      if (dwPlayerInfo == 0x44545354 || dwPlayerInfo == 0x4452544c) {
-                        szGameTypeName = "Diablo";
-                      } else if (dwPlayerInfo == 0x44534852) {
-                        szGameTypeName = "Diablo Shareware";
-                      } else {
-                        unknown_product:
-                        szGameTypeName = "Unknown";
-                      }
-                    } else if (dwPlayerInfo == 0x4a535452) {
-                      szGameTypeName = "Starcraft";
-                    } else {
-                      if (dwPlayerInfo != 0x53455850) {
-                        goto unknown_product;
-                      }
+        D2WinFont::DRAW_text((uint16_t*)(aLineLayouts + nPlayerFlags), nXCenter - (*(int*)(aLineLayouts[nPlayerFlags] + 0x200) >> 1), nYPos, nLineColor, 0);
+        nPlayerFlags++;
+      } while (nPlayerFlags < nIconAnchorY);
 
-                      szGameTypeName = "Brood War";
-                    }
-                  } else {
-                    szGameTypeName = "Starcraft Shareware";
-                  }
-                } else if (dwPlayerInfo <= 0x57335850) {
-                  if (dwPlayerInfo != 0x57335850) {
-                    if (dwPlayerInfo == 0x53544152) {
-                      szGameTypeName = "Starcraft";
-                    } else {
-                      if (dwPlayerInfo != 0x5732424e) {
-                        goto unknown_product;
-                      }
-
-                      szGameTypeName = "Warcraft II";
-                    }
-                  } else {
-                    szGameTypeName = "Frozen Throne";
-                  }
-                } else {
-                  if (dwPlayerInfo != 0x57415233) {
-                    goto unknown_product;
-                  }
-
-                  szGameTypeName = "Warcraft III";
-                }
-
-                D2Lang::UTF8_ConvertToWideChar(wszLineText, szGameTypeName, 0x100);
-                D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-              }
-          }
-      }
-    }
-
-    nLineIndex = 0;
-    D2Lang::UTF8_ConvertToWideChar(wszLineText, "Account Name: ", 0x100);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszLineText, (uint16_t*)&pA3Q6Data[3].bDrlgMapTaken);
-    D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-    nPlayerFlags = nXCenter - (__frame0.nMaxLineWidth >> 1);
-    if (nPlayerFlags < 0) {
-      nLineIndex = -nPlayerFlags;
-      nPlayerFlags = 0;
-    } else if (nPlayerFlags + __frame0.nMaxLineWidth > 800) {
-      nLineIndex = 800 - nPlayerFlags - __frame0.nMaxLineWidth;
-      nPlayerFlags = 800 - __frame0.nMaxLineWidth;
-    }
-
-    nYPos = nIconAnchorY - (__frame0.nTotalWidth + 6);
-    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nPlayerFlags, nYPos, nPlayerFlags + __frame0.nMaxLineWidth, nIconAnchorY, 0, DRAW_LESSTRANSPARENT);
-    nIconAnchorY = __frame0.nLineCount;
-    nXCenter += nLineIndex;
-    nYPos += 3;
-    if (!(__frame0.nLineCount <= 7)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x804);
-      exit(-1);
-    }
-
-    nPlayerFlags = 0;
-    if (__frame0.nLineCount <= 0) {
       return;
     }
-
-    do {
-      nYPos += *(int*)(aLineLayouts[nPlayerFlags] + 0x204);
-      nLineColor = 0;
-      if (!nPlayerFlags) {
-        nLineColor = nTitleColor;
-      }
-
-      D2WinFont::DRAW_text((uint16_t*)(aLineLayouts + nPlayerFlags), nXCenter - (*(int*)(aLineLayouts[nPlayerFlags] + 0x200) >> 1), nYPos, nLineColor, 0);
-      nPlayerFlags++;
-    } while (nPlayerFlags < nIconAnchorY);
-
-    return;
 }
 
 void __stdcall D2COMP_AllocTxt_EverythingItems() {

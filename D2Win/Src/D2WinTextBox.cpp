@@ -461,7 +461,7 @@ uint16_t * __fastcall D2WINTEXTBOX_GetLineCellValue(::D2WinTextBox * pTextBox, i
     }
 
     int pCurLineNode;
-    if (nColIndex >= 5) {
+    if (!(nColIndex < 5)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c5);
       exit(-1);
     }
@@ -515,10 +515,10 @@ void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t n
         ppDVar1 = &pTextBox->sStyleControl.fpDraw;
         *ppDVar1 = (::Draw)((uint32_t)*ppDVar1 | 0x20);
         return;
-      } else {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e0);
-        exit(-1);
       }
+
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e0);
+      exit(-1);
     }
 }
 

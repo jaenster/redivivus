@@ -124,8 +124,8 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll() {
     int* pNode;
     while (true) {
       int nNext;
-      pNode = (int*)this->m_terminator.m_next;
-      if ((int)pNode <= 0) {
+      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      if (!pNode) {
         break;
       }
 
