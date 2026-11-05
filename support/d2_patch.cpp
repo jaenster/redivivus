@@ -36,7 +36,7 @@
 #include "support/d2_trace.h"
 
 #include "D2CMP/SRC/LRUCache.h"
-#include "D2Game/Game/CCmd.h"
+#include "D2Game/GAME/CCmd.h"
 
 #include <cstdio>
 
