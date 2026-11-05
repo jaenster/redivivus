@@ -63,20 +63,27 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 [`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
 compares the machine code of each function with 1.14d. It is a check on the decompilation:
 where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1931 of the Ghidra database:
+At this commit, generated from version 1936 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|7,317 of 14,626 (50.0%)|
-|Code|573,539 of 2,598,518 bytes (22.07%)|
-|Instructions|1,802,291 of 2,598,518 bytes (69.4%), counting identical instructions in functions that still differ|
+|Functions|7,506 of 14,626 (51.3%)|
+|Functions without placeholders|6,939 of 14,626 (47.4%), not counting the 567 identical functions that are placeholders (below)|
+|Code|600,380 of 2,598,518 bytes (23.10%)|
+|Instructions|1,805,435 of 2,598,518 bytes (69.5%), counting identical instructions in functions that still differ|
+
+Of the 7,506 identical functions, 567 are recovered unreferenced functions: code in
+1.14d that nothing calls by a direct reference and that Ghidra never defined as a function. They
+are in the tree as placeholders named `Unreferenced_<address>`, or `<twin>_Unref_<address>` where
+the bytes repeat a named function. They count among the original functions either way, so the
+second row leaves them out of the identical count only.
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
 rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
 exceptions is left out as well, and so is the PKWARE compression library, linked into the
 original as a prebuilt 1997 library that no Visual C++ 2005 compile produced. Over the whole binary, runtime
-included: 7,874 of 15,711 functions (50.1%), 672,244 of
-2,748,975 bytes (24.45%).
+included: 8,066 of 15,711 functions (51.3%), 699,355 of
+2,748,975 bytes (25.44%).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">

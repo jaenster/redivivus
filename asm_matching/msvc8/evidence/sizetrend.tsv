@@ -1,13 +1,4 @@
-# sizetrend before: evidence 5abf986d8
-bucket	functions	match_pct	bytes_pct	hunks_median	hunks_mean	sim_mean
-1	222	99.55	0.02	1	1.00	0.0000
-2-3	624	98.40	0.19	1	1.40	0.3796
-4-9	1109	90.53	0.86	2	1.90	0.5481
-10-29	3892	74.28	8.04	3	3.54	0.6451
-30-99	5211	34.87	31.79	8	8.25	0.6786
-100-299	2151	7.76	39.10	20	21.40	0.6162
-300+	301	6.31	20.00	55	59.74	0.5301
-# sizetrend after: this audit (Ghidra v1931, live-deploy-1119)
+# sizetrend before: evidence 4c1c343e3 (Ghidra v1931, live-deploy-1119)
 bucket	functions	match_pct	bytes_pct	hunks_median	hunks_mean	sim_mean
 1	357	97.48	0.03	1	1.00	0.1111
 2-3	836	97.01	0.25	1	1.44	0.3481
@@ -15,4 +6,13 @@ bucket	functions	match_pct	bytes_pct	hunks_median	hunks_mean	sim_mean
 10-29	4019	73.85	8.22	3	3.60	0.6405
 30-99	5211	35.06	31.65	8	8.27	0.6778
 100-299	2151	7.81	38.92	20	21.42	0.6160
+300+	301	5.98	19.91	54	59.48	0.5318
+# sizetrend after: this audit (Ghidra v1934, live-deploy-1120)
+bucket	functions	match_pct	bytes_pct	hunks_median	hunks_mean	sim_mean
+1	357	97.48	0.03	1	1.00	0.1111
+2-3	836	97.01	0.25	1	1.44	0.3481
+4-9	1327	88.70	1.01	2	2.06	0.5489
+10-29	4019	74.00	8.22	3	3.60	0.6400
+30-99	5211	35.14	31.65	8	8.27	0.6778
+100-299	2151	7.81	38.92	20	21.42	0.6161
 300+	301	5.98	19.91	54	59.48	0.5318
