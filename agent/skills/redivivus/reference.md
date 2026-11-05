@@ -26,6 +26,7 @@ Two rules apply to everything here:
 |Occurrence counts lie|A local once named `extraout_EAX` keeps that name after the callee is fixed. A real synthetic is only ever read, never assigned. A function that just sits near many such lines proves nothing.|
 |Check it does not already exist|Before proposing a new type or struct, search the data types. Duplicates make things worse.|
 |Mac pairing is by address|A Mac/Windows correspondence is (Windows address, Mac address, extents, evidence). Names and types are derived from a pair, never used as the key. Watch for a Windows helper that the Mac build inlined into its caller: the anchor then sits in the caller.|
+|A Mac data ref at 0x0061xxxx is not a callback table|Those refs sit in `__LINKEDIT`: they are the uleb128 `LC_FUNCTION_STARTS` entry every Mac function has. Only a pointer in `__DATA` (a table slot such as 0x003c7960) shows the function is called through a table.|
 |Outside reimplementations only corroborate|They can confirm an id or enum meaning. They never decide a name or a type.|
 
 A good proposal states: the address, the current state, the proposed change, the asm lines
