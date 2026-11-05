@@ -75,6 +75,25 @@ def _render(raw, addr, fields):
     return text, key
 
 
+# Mnemonics whose operand capstone prints relative to the instruction's own
+# address: a branch rendered at another address than it was decoded at
+# prints another target.
+_RELATIVE = frozenset(('call', 'jmp', 'xbegin', 'jo', 'jno', 'jb', 'jae', 'je', 'jne', 'jbe', 'ja', 'js', 'jns',
+                       'jp', 'jnp', 'jl', 'jge', 'jle', 'jg', 'jecxz', 'jcxz', 'loop', 'loope', 'loopne'))
+
+
+def _text(i, addr, fields):
+    """_render of decoded instruction i (funcdecode.DecodedInsn) at `addr`.
+    The decoder disassembled it already, so an instruction with no reference
+    field prints as it decoded - unless it is rendered at another address
+    than it was decoded at and its operand is relative to that address.
+    Only the rest is disassembled again."""
+    if not fields and (addr == i.addr or i.mnemonic not in _RELATIVE):
+        text = ('%s %s' % (i.mnemonic, i.op_str)).strip()
+        return text, text
+    return _render(i.bytes, addr, fields)
+
+
 def _neutral(tok):
     if tok[0] in ('fn', 'fn?'):
         return 'FN'
@@ -154,7 +173,7 @@ def our_view(f, sym_to_start, render=True):
         masked = bytearray(i.bytes)
         for off, size, _l, _b in fields:
             masked[off:off + size] = b'\0' * size
-        text, key = _render(i.bytes, i.addr, fields) if render else (None, None)
+        text, key = _text(i, i.addr, fields) if render else (None, None)
         at = f.line_at(i.addr) if render and hasattr(f, 'line_at') else None
         out.append(NInsn(i.addr, bytes(masked), i.mnemonic, text, key, toks, at[1] if at else None))
     return out
@@ -208,7 +227,7 @@ def ref_view(start, model_entry, render=True):
             masked[off:off + size] = b'\0' * size
         # Rendered at its offset in the function, as our side is, so an internal
         # jump reads the same on both sides.
-        text, key = _render(i.bytes, i.addr - start, fields) if render else (None, None)
+        text, key = _text(i, i.addr - start, fields) if render else (None, None)
         out.append(NInsn(i.addr - start, bytes(masked), i.mnemonic, text, key, [t for _o, _s, t, _b in fields]))
     return out
 
@@ -264,7 +283,7 @@ def ref_view_span(start, end, model):
             masked = bytearray(i.bytes)
             for off, size, _t, _b in fields:
                 masked[off:off + size] = b'\0' * size
-            text, key = _render(i.bytes, i.addr - start, fields)
+            text, key = _text(i, i.addr - start, fields)
             out.append(NInsn(i.addr - start, bytes(masked), i.mnemonic, text, key, [t for _o, _s, t, _b in fields]))
     return out
 

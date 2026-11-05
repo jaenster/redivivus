@@ -1,8 +1,8 @@
 """ours.py - every function in the compiled objects, with what it refers to.
 
-Loading decodes each object once and caches the result by the object's
-content (load_object), keyed also by DECODER, which a change to how objects
-are decoded must bump.
+Loading decodes each object once and caches the result by what decoding
+reads of the object (load_object, content_key), keyed also by DECODER,
+which a change to how objects are decoded must bump.
 """
 import os
 import pickle
@@ -68,16 +68,62 @@ class OurFunc:
         return self.tu + '|' + self.symbol
 
 
+def content_key(path):
+    """A hash of what decoding reads of the object at `path`: every section
+    but the debug ones (name, flags, bytes, relocations), the symbol table
+    without the debug sections' aux records, and the line tables of
+    .debug$S as decoded. A recompile of the same code changes the time stamp
+    in the header, and a rebuilt precompiled header the signatures in
+    .debug$S and .debug$T; neither changes this key."""
+    import hashlib
+    import coffobj
+    o = coffobj.CoffObject(open(path, 'rb').read(), path)
+    h = hashlib.sha256()
+    debug = set()
+    for s in o.sections[1:]:
+        if s.name.startswith('.debug'):
+            debug.add(s.number)
+            h.update(repr((s.number, s.name)).encode('latin1'))
+            continue
+        h.update(repr((s.number, s.name, s.flags, s.size,
+                       [(r.offset, r.symbol, r.type) for r in s.relocs])).encode('latin1'))
+        h.update(s.data)
+    for y in o.symbols:
+        if y is not None:
+            h.update(repr((y.index, y.name, y.value, y.section, y.type, y.storage,
+                           None if y.section in debug else y.aux)).encode('latin1'))
+    h.update(repr(sorted(objfuncs.line_tables(o).items())).encode('utf-8', 'surrogateescape'))
+    return h.hexdigest()
+
+
 def load_object(objdir, rel):
-    """Every function of one object, decoded. Cached by the object's content,
-    not its time: beside it (<obj>.fn.pkl) and in the shared cache
-    (objcache.py), so an object a build restored or recompiled to the same
-    bytes is not decoded again. ORACLE_NOCACHE=1 decodes afresh."""
+    """Every function of one object, decoded. Cached by what decoding reads
+    of the object (content_key), not by its time or its whole bytes: beside
+    it (<obj>.fn.pkl) and in the shared cache (objcache.py), so an object a
+    build restored or recompiled to the same code is not decoded again.
+    <obj>.fn.sum pairs the object's file hash with its content key, so an
+    object unchanged since the last load is not parsed for the key either.
+    ORACLE_NOCACHE=1 decodes afresh."""
     import objcache
     path = os.path.join(objdir, rel)
     tu = rel[:-4]
     cache = path[:-4] + '.fn.pkl'
-    key = objcache.sha_bytes('fn', str(DECODER), tu, objcache.sha_file(path))
+    sumfile = path[:-4] + '.fn.sum'
+    fast = objcache.sha_file(path)
+    key = None
+    try:
+        with open(sumfile) as fh:
+            was, k = fh.read().split()
+        if was == fast:
+            key = k
+    except (OSError, ValueError):
+        pass
+    if key is None:
+        key = objcache.sha_bytes('fn', str(DECODER), tu, content_key(path))
+        tmp = '%s.%d.tmp' % (sumfile, os.getpid())
+        with open(tmp, 'w') as fh:
+            fh.write('%s %s\n' % (fast, key))
+        os.replace(tmp, sumfile)
     if objcache.READ:
         for p in (cache, os.path.join(objcache.get('fn', key) or '', 'fn.pkl')):
             if os.path.exists(p):
