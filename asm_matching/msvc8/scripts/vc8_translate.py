@@ -51,14 +51,14 @@ What is rewritten, and why each is exact:
       int; the cast folds into a direct `call f`. A callee
       expression the walk back cannot delimit gets the unused int (`f(a, 0,
       b)`, one `xor edx, edx`) instead, and so does a call to a function
-      declared static or inline (thiscall_direct): through the cast VC8
+      declared static or inline (file_facts): through the cast VC8
       would neither inline it nor give a static one its own register
       convention, and for those the unused int costs nothing.
       (VC8 SP1 does take __thiscall on a static member function, and a
       caller compiles the same as through the cast; but it would need a
       class around every function, declared once across the headers, and
       would change every symbol, so the definitions stay __fastcall.)
-      Calls are rewritten by name (thiscall_names); a name also declared
+      Calls are rewritten by name (merge_facts); a name also declared
       without __thiscall with the same parameter count is left stripped, as
       __thiscall was before: compiled as __cdecl.
   constructors of a struct that is a union member  ->  (blanked)
@@ -70,7 +70,7 @@ What is rewritten, and why each is exact:
       needs it spelled. Function code is unchanged; a table so initialised is
       filled at startup instead of being static data, which the per-function
       comparison does not see.
-  Both sets come from a whole-tree pre-pass (ctor_struct_classes).
+  Both sets come from a whole-tree pre-pass (file_facts, merge_facts).
 
 Everything the tree spells that VC8 lacks but a macro can express lives in
 ../vc8_compat.h instead (nullptr, constexpr, static_assert, thread_local).
@@ -89,6 +89,7 @@ The vendored thirdparty/ and the build and tooling directories are not part
 of the reconstruction and are not mirrored; of the hand-written support/ tree
 only the headers are, because some game sources include them.
 """
+import hashlib
 import os
 import re
 import sys
@@ -264,26 +265,6 @@ def without_non_win32(s):
     return '\n'.join(out)
 
 
-def ctor_struct_classes(headers, sources):
-    """(strip, construct): structs that declare a constructor and are used
-    where C++03 wants an aggregate. A union member must lose its constructors
-    (C2620); a struct that is only list-initialised keeps them, and its braced
-    initialisers become constructor calls instead (C2552). Definitions VC8
-    does not compile (`#ifndef _WIN32`) do not count."""
-    with_ctor, in_union, list_init = set(), set(), set()
-    headers = [without_non_win32(h) for h in headers]
-    for s in headers:
-        for m, a, b in _bodies(s, STRUCT_HEAD):
-            if re.search(r'^\s*' + re.escape(m.group(2)) + r'\s*\(', s[a:b], re.M):
-                with_ctor.add(m.group(2))
-        for m, a, b in _bodies(s, UNION_HEAD):
-            in_union.update(mm.group(1) for mm in MEMBER.finditer(s[a:b]))
-    for s in list(headers) + list(sources):
-        list_init.update(m.group(1) for m in LIST_INIT.finditer(s))
-    strip = with_ctor & in_union
-    return strip, (with_ctor & list_init) - strip
-
-
 LIST_INIT_DECL = re.compile(r'^[ \t]*(?:static\s+|const\s+|extern\s+)*(?:struct\s+)?([A-Za-z_]\w*)\s+[A-Za-z_][\w:]*'
                             r'\s*((?:\[[^\]]*\]\s*)*)=\s*\{', re.M)
 
@@ -370,47 +351,92 @@ def _arg_count(s, open_idx, angle=False):
     return 0 if inner in ('', 'void') else len(commas) + 1
 
 
-def thiscall_names(texts):
-    """(functions, pointers): name -> parameter counts of the functions and
-    the pointer fields declared __thiscall, less any count the same name
-    also has declared otherwise - a call to that one cannot be told apart."""
+def file_facts(text, header):
+    """What the whole-tree pre-pass needs from one file, in the order the file
+    holds it. A function of the file's text alone, so it can be kept across
+    runs per content (mirror's `facts` cache) and merged (merge_facts).
+      fn, ptr, typedef  the __thiscall functions, pointer fields and pointer
+                        typedefs, with their parameter counts
+      other_fn, other_ptr  the same names declared otherwise
+      direct            __thiscall functions declared static or inline
+      ctor, union       (headers) structs that declare a constructor, and the
+                        types of union members
+      list_init         types of list-initialised declarations
+    Definitions VC8 does not compile (`#ifndef _WIN32`) do not count; the
+    list initialisations of a non-header are taken from its full text."""
+    s = without_non_win32(text)
+    f = {'fn': [], 'ptr': [], 'typedef': [], 'other_fn': [], 'other_ptr': [], 'direct': []}
+    for m in THISCALL_FN.finditer(s):
+        f['fn'].append((m.group(2), _arg_count(s, m.end() - 1, True)))
+        head = s[max(s.rfind('\n', 0, m.start()), s.rfind(';', 0, m.start()), s.rfind('}', 0, m.start())) + 1:m.start()]
+        if re.search(r'\b(?:static|inline|__inline|__forceinline)\b', head):
+            f['direct'].append(m.group(2))
+    for m in THISCALL_PTR.finditer(s):
+        n = _arg_count(s, m.end() - 1, True)
+        if m.group(2):
+            f['ptr'].append((m.group(2), n))
+    for m in THISCALL_TYPEDEF.finditer(s):
+        f['typedef'].append((m.group(1), _arg_count(s, s.index('(', m.end() - 1), True)))
+    for m in OTHER_FN.finditer(s):
+        if '__thiscall' not in m.group(0):
+            f['other_fn'].append((m.group(1), _arg_count(s, m.end() - 1, True)))
+    for m in OTHER_PTR.finditer(s):
+        f['other_ptr'].append((m.group(1), _arg_count(s, m.end() - 1, True)))
+    f['ctor'], f['union'] = [], []
+    if header:
+        for m, a, b in _bodies(s, STRUCT_HEAD):
+            if re.search(r'^\s*' + re.escape(m.group(2)) + r'\s*\(', s[a:b], re.M):
+                f['ctor'].append(m.group(2))
+        for m, a, b in _bodies(s, UNION_HEAD):
+            f['union'] += [mm.group(1) for mm in MEMBER.finditer(s[a:b])]
+    f['list_init'] = [m.group(1) for m in LIST_INIT.finditer(s if header else text)]
+    f['fields'] = None              # (typedef names, [(typedef, field)]): merge_facts fills it
+    return f
+
+
+def merge_facts(facts, stripped_text):
+    """The whole-tree pre-pass from every file's file_facts, in file order:
+    (thiscall functions, thiscall pointers, thiscall direct, strip, construct).
+      thiscall functions/pointers  name -> parameter counts of the functions
+          and the pointer fields declared __thiscall (a field typed by a
+          __thiscall pointer typedef too), less any count the same name also
+          has declared otherwise - a call to that one cannot be told apart
+      strip, construct  structs that declare a constructor and are used where
+          C++03 wants an aggregate. A union member must lose its constructors
+          (C2620); a struct that is only list-initialised keeps them, and its
+          braced initialisers become constructor calls instead (C2552).
+    stripped_text(k) -> file k's text without its non-_WIN32 blocks, asked
+    only for a file whose typedef-typed fields are not known yet."""
     funcs, ptrs, other_f, other_p, typedefs = {}, {}, {}, {}, {}
-    for s in texts:
-        for m in THISCALL_FN.finditer(s):
-            funcs.setdefault(m.group(2), set()).add(_arg_count(s, m.end() - 1, True))
-        for m in THISCALL_PTR.finditer(s):
-            n = _arg_count(s, m.end() - 1, True)
-            if m.group(2):
-                ptrs.setdefault(m.group(2), set()).add(n)
-        for m in THISCALL_TYPEDEF.finditer(s):
-            typedefs[m.group(1)] = _arg_count(s, s.index('(', m.end() - 1), True)
-        for m in OTHER_FN.finditer(s):
-            if '__thiscall' not in m.group(0):
-                other_f.setdefault(m.group(1), set()).add(_arg_count(s, m.end() - 1, True))
-        for m in OTHER_PTR.finditer(s):
-            other_p.setdefault(m.group(1), set()).add(_arg_count(s, m.end() - 1, True))
+    direct, with_ctor, in_union, list_init = set(), set(), set(), set()
+    for f in facts.values():
+        for n, c in f['fn']:
+            funcs.setdefault(n, set()).add(c)
+        for n, c in f['ptr']:
+            ptrs.setdefault(n, set()).add(c)
+        for n, c in f['typedef']:
+            typedefs[n] = c
+        for n, c in f['other_fn']:
+            other_f.setdefault(n, set()).add(c)
+        for n, c in f['other_ptr']:
+            other_p.setdefault(n, set()).add(c)
+        direct.update(f['direct'])
+        with_ctor.update(f['ctor'])
+        in_union.update(f['union'])
+        list_init.update(f['list_init'])
     if typedefs:
+        names = tuple(sorted(typedefs))
         field = re.compile(r'\b(' + '|'.join(map(re.escape, typedefs)) + r')\s+([A-Za-z_]\w*)\s*;')
-        for s in texts:
-            for m in field.finditer(s):
-                ptrs.setdefault(m.group(2), set()).add(typedefs[m.group(1)])
+        for k, f in facts.items():
+            if f['fields'] is None or f['fields'][0] != names:
+                f['fields'] = (names, [(m.group(1), m.group(2)) for m in field.finditer(stripped_text(k))])
+            for t, n in f['fields'][1]:
+                ptrs.setdefault(n, set()).add(typedefs[t])
     funcs = {k: v - other_f.get(k, set()) - {0, -1} for k, v in funcs.items()}
     ptrs = {k: v - other_p.get(k, set()) - other_f.get(k, set()) - {0, -1} for k, v in ptrs.items()}
-    return {k: v for k, v in funcs.items() if v}, {k: v for k, v in ptrs.items() if v}
-
-
-def thiscall_direct(texts):
-    """Names of the __thiscall functions declared static or inline. Their
-    calls stay direct calls by name: a call through a cast pointer is one VC8
-    neither inlines nor gives a static callee its own register convention
-    (TRANSTBL_UnicodeToSingleByte's callers show the original's)."""
-    out = set()
-    for s in texts:
-        for m in THISCALL_FN.finditer(s):
-            head = s[max(s.rfind('\n', 0, m.start()), s.rfind(';', 0, m.start()), s.rfind('}', 0, m.start())) + 1:m.start()]
-            if re.search(r'\b(?:static|inline|__inline|__forceinline)\b', head):
-                out.add(m.group(2))
-    return out
+    strip = with_ctor & in_union
+    return ({k: v for k, v in funcs.items() if v}, {k: v for k, v in ptrs.items() if v}, direct,
+            strip, (with_ctor & list_init) - strip)
 
 
 def _insert_second(s, open_idx, text, counts, angle):
@@ -421,6 +447,9 @@ def _insert_second(s, open_idx, text, counts, angle):
         return None
     at = commas[0] if commas else close
     return s[:at] + ', ' + text + s[at:]
+
+
+WORD = re.compile(r'\w+')
 
 
 def rewrite_thiscall(s):
@@ -443,9 +472,16 @@ def rewrite_thiscall(s):
                 continue
             s = new[:m.start()] + new[m.start():].replace('__thiscall', '__fastcall', 1)
             pos = m.end()
-    calls = [(r'(?<![\w.>])(' + '|'.join(map(re.escape, THISCALL_FUNCS)) + r')\s*\(', THISCALL_FUNCS)] if THISCALL_FUNCS else []
-    if THISCALL_PTRS:
-        ptrs = '|'.join(map(re.escape, THISCALL_PTRS))
+    # Only the names the text holds as a whole word go into the patterns:
+    # each pattern matches a name only between non-word characters, and the
+    # rewrites below insert no name of the tree (only vc8_thiscall, 0 and
+    # int). A pattern of every name in the tree is several times slower.
+    words = set(WORD.findall(s))
+    funcs = [n for n in THISCALL_FUNCS if n in words]
+    ptrs = [n for n in THISCALL_PTRS if n in words]
+    calls = [(r'(?<![\w.>])(' + '|'.join(map(re.escape, funcs)) + r')\s*\(', THISCALL_FUNCS)] if funcs else []
+    if ptrs:
+        ptrs = '|'.join(map(re.escape, ptrs))
         calls.append((r'(?:->|\.)\s*(' + ptrs + r')\s*\(', THISCALL_PTRS))
         calls.append((r'\(\s*\*\s*(' + ptrs + r')\s*\)\s*\(', THISCALL_PTRS))    # (*pfn)(...), pfn a local
     for pat, names in calls:
@@ -672,7 +708,7 @@ def translate(text, rel=''):
         s = TEMPLATE_STATIC_DECL.sub('', s)
     s = BINARY.sub(lambda m: hex(int(m.group(1), 2)) + m.group(2), s)
     s = CXX_ATTR.sub('', s)
-    if '__thiscall' in s or (THISCALL_FUNCS and any(n in s for n in THISCALL_FUNCS)) or THISCALL_PTRS:
+    if '__thiscall' in s or THISCALL_PTRS or (THISCALL_FUNCS and any(n in s for n in THISCALL_FUNCS)):
         s = rewrite_thiscall(s)
     s = THISCALL.sub('', s)
     s = CONV_FIRST.sub(lambda m: '%s %s %s(' % (m.group(2), m.group(1), m.group(3)), s)
@@ -717,11 +753,14 @@ def mirror_state():
     return (dict(THISCALL_FUNCS), dict(THISCALL_PTRS), set(STRIP_CTORS), set(CONSTRUCT), set(THISCALL_DIRECT))
 
 
-def mirror(root, out, quarantine=None, unchanged=None):
+def mirror(root, out, quarantine=None, unchanged=None, facts=None):
     """Translate every source of `root` into `out`. unchanged(rel, name, text)
     -> True skips a file whose translation is known to be in place already;
     it is asked only when the per-tree state came out as the caller expects
-    (the caller compares mirror_state() itself, through the callback)."""
+    (the caller compares mirror_state() itself, through the callback).
+    facts: a dict the caller keeps between runs, (content hash, is header) ->
+    file_facts; the pre-pass then reads only the files that changed. It is
+    updated in place to hold exactly this tree's files."""
     written = kept = 0
     load_quarantine(quarantine)
     files = list(sources(root))
@@ -729,15 +768,26 @@ def mirror(root, out, quarantine=None, unchanged=None):
     for rel, name in files:
         with open(os.path.join(root, rel, name), encoding='utf-8', errors='surrogateescape') as f:
             texts[(rel, name)] = f.read()
-    strip, construct = ctor_struct_classes([t for (r, n), t in texts.items() if n.endswith('.h')],
-                                           [t for (r, n), t in texts.items() if not n.endswith('.h')])
-    funcs, ptrs = thiscall_names([without_non_win32(t) for t in texts.values()])
+    known = facts if facts is not None else {}
+    tree = {}
+    for k, t in texts.items():
+        h = (hashlib.sha1(t.encode('utf-8', 'surrogateescape')).hexdigest(), k[1].endswith('.h'))
+        f = known.get(h)
+        if f is None:
+            f = file_facts(t, h[1])
+        tree[k] = f
+        known[h] = f
+    funcs, ptrs, direct, strip, construct = merge_facts(tree, lambda k: without_non_win32(texts[k]))
+    if facts is not None:
+        live = {id(f) for f in tree.values()}
+        for h in [h for h, f in facts.items() if id(f) not in live]:
+            del facts[h]
     THISCALL_FUNCS.clear()
     THISCALL_FUNCS.update(funcs)
     THISCALL_PTRS.clear()
     THISCALL_PTRS.update(ptrs)
     THISCALL_DIRECT.clear()
-    THISCALL_DIRECT.update(thiscall_direct([without_non_win32(t) for t in texts.values()]))
+    THISCALL_DIRECT.update(direct)
     STRIP_CTORS.clear()
     STRIP_CTORS.update(strip)
     CONSTRUCT.clear()

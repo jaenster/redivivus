@@ -177,7 +177,8 @@ def write_rsp():
 
 def build_pch(rsp, start_wine=lambda: None):
     """(Re)create the precompiled header when it is older than anything it
-    was made from. Returns an error string, or None."""
+    was made from. -> (an error string or None, what was done: 'current',
+    'from cache' or 'compiled')."""
     dep = os.path.join(PCHDIR, 'oracle.d')
     pobj = os.path.join(PCHDIR, 'oracle_pch.obj')
     sidecar = os.path.join(PCHDIR, 'oracle.key')
@@ -187,14 +188,14 @@ def build_pch(rsp, start_wine=lambda: None):
     key = objcache.lookup(base, hash_dep)
     if key is not None:
         if read_key(sidecar) == key and os.path.exists(PCH_FILE) and os.path.exists(pobj):
-            return None
+            return None, 'current'
         d = objcache.get('pch', key)
         if d is not None:
             objcache.install(os.path.join(d, 'pch'), PCH_FILE)
             objcache.install(os.path.join(d, 'obj'), pobj)
             write_text(dep, ''.join(os.path.join(REPO, r) + '\n' for r in objcache.meta(d)['deps']))
             write_text(sidecar, key)
-            return None
+            return None, 'from cache'
     for f in (PCH_FILE, dep, sidecar):
         if os.path.exists(f):
             os.remove(f)
@@ -205,7 +206,7 @@ def build_pch(rsp, start_wine=lambda: None):
     deps = [linux(m.group(1)) for m in map(INCLUDING.match, (p.stdout + p.stderr).splitlines()) if m]
     errors = [l for l in (p.stdout + p.stderr).splitlines() if ERROR.search(l)]
     if errors or not os.path.exists(PCH_FILE):
-        return errors[0] if errors else 'no precompiled header produced'
+        return (errors[0] if errors else 'no precompiled header produced'), 'compiled'
     with open(dep, 'w') as f:
         f.write('\n'.join(sorted(set(d for d in deps if d))) + '\n')
     sdeps = store_deps(deps_of(dep))
@@ -213,7 +214,7 @@ def build_pch(rsp, start_wine=lambda: None):
     objcache.put('pch', key, {'pch': PCH_FILE, 'obj': pobj}, {'deps': [r for r, _h in sdeps]})
     objcache.record(base, sdeps, key)
     write_text(sidecar, key)
-    return None
+    return None, 'compiled'
 
 
 _compiler_id = None
@@ -294,6 +295,16 @@ def quarantine_rows(rel):
     return [l.rstrip('\n') for l in open(QUARANTINE_TSV) if l.split('\t', 1)[0] == rel]
 
 
+def write_quarantine(lines):
+    """quarantine.tsv as `lines` (its header first), or no file when no row is
+    left: an incremental build then holds what a clean one would."""
+    if any(l.split('\t', 1)[0] != 'file' for l in lines):
+        with open(QUARANTINE_TSV, 'w') as f:
+            f.writelines(lines)
+    elif os.path.exists(QUARANTINE_TSV):
+        os.remove(QUARANTINE_TSV)
+
+
 def set_quarantine(t, rows):
     """Make the TU's rows in quarantine.tsv exactly `rows`, and its
     translation follow them."""
@@ -306,8 +317,7 @@ def set_quarantine(t, rows):
             keep = ['file\tline\tfunction_line\tfunction\terror\n']
         new = keep + [r + '\n' for r in rows]
         if new != lines:
-            with open(QUARANTINE_TSV, 'w') as f:
-                f.writelines(new)
+            write_quarantine(new)
         vc8_translate.load_quarantine(QUARANTINE_TSV)
         orig = open(os.path.join(REPO, t.rel), encoding='utf-8', errors='surrogateescape').read()
         out = vc8_translate.translate(orig, t.rel).encode('utf-8', errors='surrogateescape')
@@ -406,8 +416,7 @@ def unquarantine(t):
         keep = [l for l in lines if l.split('\t', 1)[0] != tu]
         if len(keep) == len(lines):
             return
-        with open(QUARANTINE_TSV, 'w') as f:
-            f.writelines(keep)
+        write_quarantine(keep)
         vc8_translate.load_quarantine(QUARANTINE_TSV)
         orig = open(os.path.join(REPO, tu), encoding='utf-8', errors='surrogateescape').read()
         with open(t.src, 'w', encoding='utf-8', errors='surrogateescape') as f:
@@ -747,6 +756,7 @@ def main():
         print('*** evidence from this build must not be committed', file=sys.stderr)
     # The translation is a function of the tree's sources, the translator and
     # the quarantine: skipped when none of them changed since it last ran.
+    t_start = time.time()
     files = list(vc8_translate.sources(REPO))
     mkey = objcache.sha_bytes(CACHE_VERSION, objcache.sha_file(os.path.join(HERE, 'vc8_translate.py')),
                               objcache.sha_file(QUARANTINE_TSV),
@@ -762,7 +772,7 @@ def main():
     if objcache.READ and os.path.exists(mstate):
         try:
             with open(mstate, 'rb') as fh:
-                prev = pickle.load(fh)          # (key, state, quarantine hash, {path: hash})
+                prev = pickle.load(fh)          # (key, state, translator hash, {path: (hash, quarantine)})
         except Exception:
             prev = None
     if prev is not None and read_key(mstamp) == mkey and prev[0] == mkey and \
@@ -772,31 +782,49 @@ def main():
             getattr(vc8_translate, name).clear()
             getattr(vc8_translate, name).update(value)
         hashes = prev[3]
-        print('translate: tree unchanged, %d kept' % len(files))
+        print('translate: tree unchanged, %d kept (%.1fs)' % (len(files), time.time() - t_start))
     else:
-        # The translator's own hash rides with the quarantine's: a changed
-        # translator retranslates every file, not only the changed sources.
-        qhash = objcache.sha_bytes(objcache.sha_file(QUARANTINE_TSV),
-                                   objcache.sha_file(os.path.join(HERE, 'vc8_translate.py')))
-        hashes = {os.path.join(r, n): objcache.sha_file(os.path.join(REPO, r, n)) for r, n in files}
+        # A file's translation is a function of the translator, the per-tree
+        # state, its source and its own quarantined lines: a changed
+        # translator retranslates every file, a changed quarantine only the
+        # files it names.
+        thash = objcache.sha_file(os.path.join(HERE, 'vc8_translate.py'))
+        sha = {os.path.join(r, n): objcache.sha_file(os.path.join(REPO, r, n)) for r, n in files}
+
+        def file_key(path):
+            return sha[path], tuple(sorted(vc8_translate.QUARANTINE.get(os.path.normpath(path), ())))
 
         def unchanged(r, n, _text):
             # Same state, same quarantine, same source: the same translation.
-            return prev[1] == state[0] and prev[2] == qhash and \
-                prev[3].get(os.path.join(r, n)) == hashes[os.path.join(r, n)]
+            return prev[1] == state[0] and prev[2] == thash and \
+                prev[3].get(os.path.join(r, n)) == file_key(os.path.join(r, n))
         state = []
         if prev is not None:
             def unchanged_once(r, n, text):
                 if not state:
                     state.append(vc8_translate.mirror_state())
                 return unchanged(r, n, text)
-        w, k = vc8_translate.mirror(REPO, SRC, QUARANTINE_TSV, unchanged_once if prev is not None else None)
-        tmp = '%s.%d.tmp' % (mstate, os.getpid())
-        with open(tmp, 'wb') as fh:
-            pickle.dump((mkey, vc8_translate.mirror_state(), qhash, hashes), fh)
-        os.replace(tmp, mstate)
+        # What the pre-pass found in each file, by content, kept for the
+        # next run: only the files that changed are read for it again.
+        mfacts = os.path.join(BUILD, 'mirror.facts.pkl')
+        facts = {}
+        if objcache.READ and os.path.exists(mfacts):
+            try:
+                with open(mfacts, 'rb') as fh:
+                    saved = pickle.load(fh)         # (translator hash, facts)
+                if saved[0] == thash:
+                    facts = saved[1]
+            except Exception:
+                facts = {}
+        w, k = vc8_translate.mirror(REPO, SRC, QUARANTINE_TSV, unchanged_once if prev is not None else None, facts)
+        hashes = {path: file_key(path) for path in sha}
+        for path, obj in ((mfacts, (thash, facts)), (mstate, (mkey, vc8_translate.mirror_state(), thash, hashes))):
+            tmp = '%s.%d.tmp' % (path, os.getpid())
+            with open(tmp, 'wb') as fh:
+                pickle.dump(obj, fh)
+            os.replace(tmp, path)
         write_text(mstamp, mkey)
-        print('translate: %d written, %d unchanged' % (w, k))
+        print('translate: %d written, %d unchanged (%.1fs)' % (w, k, time.time() - t_start))
     extra_src = extra_obj = None
     if args.extra:
         extra = os.path.abspath(args.extra)
@@ -824,10 +852,12 @@ def main():
 
     pch_id = ''
     if USE_PCH:
-        err = build_pch(rsp, start_wine)
+        t_pch = time.time()
+        err, how = build_pch(rsp, start_wine)
         if err:
             print('precompiled header failed: %s' % err, file=sys.stderr)
             return 1
+        print('precompiled header: %s (%.1fs)' % (how, time.time() - t_pch))
         pch_id = objcache.sha_file(PCH_FILE) + objcache.sha_file(os.path.join(PCHDIR, 'oracle_pch.obj'))
 
     expected_src = set()
@@ -859,15 +889,17 @@ def main():
 
     # Which TUs need a compile: none whose inputs a stored compile matches.
     t0 = time.time()
-    todo, restored, current = [], 0, 0
+    todo, ready, restored, current = [], [], 0, 0
     for t in tus:
         base = tu_base_key(t, rsp_text, pch_id)
         key = objcache.lookup(base, hash_dep)
         if key is not None and read_key(t.base + '.key') == key and os.path.exists(t.base + '.obj') \
                 and os.path.exists(t.base + '.d'):
             current += 1
+            ready.append(t)
         elif key is not None and restore(t, key):
             restored += 1
+            ready.append(t)
         else:
             todo.append((t, base))
     work = batches(todo, args.batch)
@@ -883,6 +915,10 @@ def main():
                 parts = line.rstrip('\n').split('\t')
                 if len(parts) >= 2 and parts[0] != 'tu':
                     status[parts[0]] = parts
+    # Only a compile that succeeded is stored, so an object in place or
+    # restored is one: a row a failed compile left for it is stale.
+    for t in ready:
+        status[t.rel] = [t.rel, 'ok', '0', '']
     failed = 0
     if todo:
         start_wine()
