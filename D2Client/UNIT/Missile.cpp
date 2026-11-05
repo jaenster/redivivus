@@ -8977,19 +8977,32 @@ void __fastcall MISSILE_CltDoFn35_QueenDeathCenter(D2UnitStrc * pUnit) {
 // Client-side per-frame tick for missile 036 (Exploding Arrow flight). At frame 0x145 triggers a screen shake. Each frame consults a spread-data table (gaMissile036ClientSpreadData) to decide spawn intervals, emitting MISSILE_Explodingarrowexp sparks and MISSILE_Durieldeathrock rocks at random offsets around the current position using a stepped RNG. Falls through to Missiles_CltDoFunc_001.
 void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
-    static uint32_t gaMissile036ClientSpreadData[12] = {
-    0x15e,
-    0x3,
-    0x5,
-    0x12c,
-    0x2,
-    0x3,
-    0xc8,
-    0x3,
-    0x2,
-    0xaf,
-    0x5,
-    0x1
+    static D2Missile036SpreadStrc gaMissile036ClientSpreadData[5] = {
+    {
+        /* .nFrameThreshold = */ 0x15e,
+        /* .nSparkInterval = */ 0x3,
+        /* .nRockInterval = */ 0x5
+    },
+    {
+        /* .nFrameThreshold = */ 0x12c,
+        /* .nSparkInterval = */ 0x2,
+        /* .nRockInterval = */ 0x3
+    },
+    {
+        /* .nFrameThreshold = */ 0xc8,
+        /* .nSparkInterval = */ 0x3,
+        /* .nRockInterval = */ 0x2
+    },
+    {
+        /* .nFrameThreshold = */ 0xaf,
+        /* .nSparkInterval = */ 0x5,
+        /* .nRockInterval = */ 0x1
+    },
+    {
+        /* .nFrameThreshold = */ 0x0,
+        /* .nSparkInterval = */ 0x64,
+        /* .nRockInterval = */ 0x5
+    }
 }; D2_STATIC_GUARD(gaMissile036ClientSpreadData, "D2Client::UNIT::Missile::MISSILE_CltDoFn36_DurielDeathControl::gaMissile036ClientSpreadData");
 
     D2SeedStrc DVar1;
@@ -9003,15 +9016,13 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
     }
 
     int nSpreadIdx = 0;
-    uint32_t* pSpreadEntry = gaMissile036ClientSpreadData;
     do {
-      if (nCurrentFrame > (int)*pSpreadEntry) {
+      if (nCurrentFrame > (int)(uint32_t)gaMissile036ClientSpreadData[nSpreadIdx].nFrameThreshold) {
         break;
       }
 
-      pSpreadEntry += 3;
       nSpreadIdx++;
-    } while ((int)pSpreadEntry < (intptr_t)((char*)&gaMissile036ClientSpreadData + sizeof(gaMissile036ClientSpreadData)));
+    } while ((int)(uint32_t*)&gaMissile036ClientSpreadData[nSpreadIdx].nFrameThreshold < (intptr_t)((char*)&gaMissile036ClientSpreadData + 48));
 
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -9030,7 +9041,7 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
     } else {
       nPosY = 0;
     }
-    if (!(nCurrentFrame % (int)gaMissile036ClientSpreadData[nSpreadIdx * 3 + 1])) {
+    if (!(nCurrentFrame % gaMissile036ClientSpreadData[nSpreadIdx].nSparkInterval)) {
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nFlags = 0x2001;
       sSkillArg.pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
@@ -9044,7 +9055,7 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
       sSkillArg.nY = DVar1.nSeedLow % 0x28 - 0x14 + nPosY;
       Missile::MakeMissile(&sSkillArg);
     }
-    if (!(nCurrentFrame % (int)gaMissile036ClientSpreadData[nSpreadIdx * 3 + 2])) {
+    if (!(nCurrentFrame % gaMissile036ClientSpreadData[nSpreadIdx].nRockInterval)) {
       D2UnitStrc* pNewMissile;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nFlags = 0x2001;

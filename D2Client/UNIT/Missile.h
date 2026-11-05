@@ -34,6 +34,12 @@ struct D2Missile032SpreadStrc {
     /* 0x08 */ int nTargetX;
 };
 
+struct D2Missile036SpreadStrc {
+    /* 0x00 */ int nFrameThreshold; // row applies once the missile frame exceeds this (CMP EBX,[EAX]; JG); rows 0-3 are scanned, row 4 is the fallback
+    /* 0x04 */ int nSparkInterval; // spawn an Explodingarrowexp spark when frame % nSparkInterval == 0 (IDIV [idx*12+0x6db8d0])
+    /* 0x08 */ int nRockInterval; // spawn a Durieldeathrock when frame % nRockInterval == 0 (IDIV [idx*12+0x6db8d4])
+};
+
 struct D2MissileCltCollideCtxStrc {
     /* 0x00 */ struct D2UnitStrc * pMissile;
     /* 0x04 */ struct D2UnitStrc * pOwner; // MISSILE_GetOwnerUnit(pMissile)

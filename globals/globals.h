@@ -286,6 +286,7 @@ struct D2MercWeaponAnimMapStrc;
 struct D2MissCalcTxt;
 struct D2Missile031SpreadStrc;
 struct D2Missile032SpreadStrc;
+struct D2Missile036SpreadStrc;
 struct D2MissileSrvDoFuncData;
 struct D2MissilesTxt;
 struct D2MonAiTxt;
