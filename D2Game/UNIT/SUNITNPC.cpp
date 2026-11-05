@@ -694,8 +694,9 @@ void __fastcall SUNITNPC_RepairAllItems(D2UnitStrc * pPlayer, D2InventoryStrc * 
 // Picks a random item code from the NPC's trade list 1. Finds the D2GameNpcStrc for pUnit (00535f10). If the list (sTrade +0xc, count +0x10) is non-empty it takes RANDOM_RandomNumberSelector(pSeed, nTradeList1), advances pSeed, resolves the 12-byte entry's code at +4 to its ItemsTxt line, writes the code to *pdwOutItemCode and returns 1. An empty list writes 0 to *pdwOutItemCode and returns 0. *pdwReservedOut is written back with its own entry value. No repair cost is computed.
 // Halts: line 0x389 if the NPC is not found, 0x383 if its trade block is null, 0x384 if trade byte +3 is 0.
 // Provenance: 1.14d asm 00576c90..00576d85.
-static int __stdcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SeedStrc * pSeed, uint32_t dwReserved, uint32_t * pdwOutItemCode, uint32_t * pdwReservedOut, uint32_t nErrorLine) {
+int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SeedStrc * pSeed, uint32_t dwReserved, uint32_t * pdwOutItemCode, uint32_t * pdwReservedOut) {
     uint32_t nModulo;
+    int32_t unaff_EDI;
     int nNpcIndex;
     uint8_t bHasStore;
     int nTradeOffset;
@@ -721,10 +722,10 @@ static int __stdcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitS
         }
       }
     } else {
-      nErrorLine = 0x389;
+      unaff_EDI = 0x389;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), unaff_EDI);
     exit(-1);
 }
 
@@ -2478,7 +2479,7 @@ BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, D2UnitStrc *
         return 0;
       }
 
-      bSuccess = SUNITNPC_RollTradeListItemCode(pGame, pUnit, pNpcControl, nLevel, &dwItemCode, &dwTradeEntryValue, (uint32_t)pUnit);
+      bSuccess = SUNITNPC_RollTradeListItemCode(pGame, pUnit, pNpcControl, nLevel, &dwItemCode, &dwTradeEntryValue);
       if (!bSuccess) {
         break;
       }

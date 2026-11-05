@@ -2911,7 +2911,7 @@ BOOL thunk_Release() {
 
 BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers) {
     DWORD DVar1;
-    DDDEVICEIDENTIFIER2 ddDeviceIdentifier;
+    uint8_t ddDeviceIdentifier[2128];
     IDirectDraw1* lpDD = 0;
     if (g_bD3DCoreInitialized) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x687);
@@ -2945,7 +2945,7 @@ BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc
       return 0;
     }
 
-    DVar1 = g_pDirectDraw7->lpVtbl->GetDeviceIdentifier(g_pDirectDraw7, &ddDeviceIdentifier, 0);
+    DVar1 = g_pDirectDraw7->lpVtbl->GetDeviceIdentifier(g_pDirectDraw7, ddDeviceIdentifier, 0);
     if (DVar1) {
       DIRECTD3D_LogError("Failed to get device identifier interface!", DVar1);
     }

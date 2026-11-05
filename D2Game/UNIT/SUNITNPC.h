@@ -67,6 +67,11 @@ eD2ItemQuality __thiscall SUNITNPC_RollStoreItemQuality(struct D2SeedStrc * pSee
 void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pNpcUnit, struct D2NpcTradeStateStrc * pTradeState);
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall SUNITNPC_RepairAllItems(struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);
+// Picks a random item code from the NPC's trade list 1. Finds the D2GameNpcStrc for pUnit (00535f10). If the list (sTrade +0xc, count +0x10) is non-empty it takes RANDOM_RandomNumberSelector(pSeed, nTradeList1), advances pSeed, resolves the 12-byte entry's code at +4 to its ItemsTxt line, writes the code to *pdwOutItemCode and returns 1. An empty list writes 0 to *pdwOutItemCode and returns 0. *pdwReservedOut is written back with its own entry value. No repair cost is computed.
+// Halts: line 0x389 if the NPC is not found, 0x383 if its trade block is null, 0x384 if trade byte +3 is 0.
+// Plain __fastcall: ECX/EDX pass straight through to GetGameNpcByUnit, RET 0x10 pops four stack args, and EDI is only saved (00576caf PUSH EDI) then overwritten (00576cb0), never read, so it is not a parameter. Storage fix prompted by Nugwa628 (redivivus issue #99).
+// Provenance: 1.14d asm 00576c90..00576d85.
+int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed, uint32_t dwReserved, uint32_t * pdwOutItemCode, uint32_t * pdwReservedOut);
 BOOL __fastcall CheckIfPlayerCanAffordCost(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nCost);
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall SUNITNPC_ApplyScrollSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nQuantityUsed);
