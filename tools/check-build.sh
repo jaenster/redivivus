@@ -43,6 +43,38 @@ git -C "$WORK/src" checkout -q "$REF"
 echo "source: $SRC @ $(git -C "$WORK/src" rev-parse --short HEAD)"
 echo "compiler: $(i686-w64-mingw32-g++ --version | head -1)"
 
+# An #include whose case differs from the tracked path builds on macOS and Windows
+# and fails on Linux, so check it here whatever the host's file system does.
+CASE_BAD=$(cd "$WORK/src" && {
+  git ls-files | sed 's/^/F\t/'
+  git ls-files '*.c' '*.cpp' '*.h' '*.hpp' '*.inl' | while IFS= read -r f; do
+    grep -E '^[[:space:]]*#[[:space:]]*include[[:space:]]*"' "$f" | sed -E 's/.*"([^"]+)".*/\1/' |
+      while IFS= read -r inc; do printf 'I\t%s\t%s\n' "$f" "$inc"; done
+  done
+} | awk -F'\t' '
+  function norm(p,   n, i, out, parts, k) {
+    n = split(p, parts, "/"); k = 0
+    for (i = 1; i <= n; i++) {
+      if (parts[i] == "." || parts[i] == "") continue
+      if (parts[i] == ".." && k > 0) { k--; continue }
+      out[++k] = parts[i]
+    }
+    p = ""; for (i = 1; i <= k; i++) p = p (i > 1 ? "/" : "") out[i]
+    return p
+  }
+  $1 == "F" { exact[$2] = 1; low[tolower($2)] = $2; next }
+  {
+    dir = $2; sub(/[^\/]*$/, "", dir)
+    a = norm($3); b = norm(dir $3)
+    if ((a in exact) || (b in exact)) next
+    if (tolower(a) in low) print $2 ": \"" $3 "\" is " low[tolower(a)]
+    else if (tolower(b) in low) print $2 ": \"" $3 "\" is " low[tolower(b)]
+  }')
+if [ -n "$CASE_BAD" ]; then
+  echo "$CASE_BAD" >&2
+  echo "FAIL: #include case differs from the tracked path" >&2; exit 1
+fi
+
 cmake -S "$WORK/src" -B "$WORK/build" -G "$GENERATOR" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   -DCMAKE_TOOLCHAIN_FILE="$WORK/src/cmake/mingw-i686.cmake" ${LAUNCHER[@]+"${LAUNCHER[@]}"} >"$WORK/configure.log" 2>&1 \
   || { cat "$WORK/configure.log"; exit 1; }
