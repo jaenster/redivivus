@@ -174,13 +174,11 @@ BOOL __fastcall SKILLBAR_SrvStFn33_TargetRevivableCorpse(::SGAMEDATA * pGame, D2
     }
 
     uint32_t bCanRevive = D2Common::Skills::SKILLS_IsCorpseValidForRevive(pUnit_00);
-    if (!bCanRevive) {
-      return bCanRevive;
-    }
-
-    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_corpse_noselect);
-    if (eUnitState) {
-      return 0;
+    if (bCanRevive) {
+      BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_corpse_noselect);
+      if (eUnitState) {
+        return 0;
+      }
     }
 
     return bCanRevive;

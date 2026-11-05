@@ -393,11 +393,11 @@ void __stdcall UI_DrawPlayerNameInParty() {
     if (nLenPlus1 > 0xb) {
       if (nLenPlus1 >= 0xe) {
         nLen = 6;
+        D2Win::Src::D2WinFont::SetAndReturnLastFont(nLen);
       } else {
         nLen = 0;
+        D2Win::Src::D2WinFont::SetAndReturnLastFont(nLen);
       }
-
-      D2Win::Src::D2WinFont::SetAndReturnLastFont(nLen);
     }
 
     uint16_t* wszMessage = (uint16_t*)D2_ALLOC_AT(nLenPlus1 * 2, ".\\UI\\Party.cpp", 0x211);

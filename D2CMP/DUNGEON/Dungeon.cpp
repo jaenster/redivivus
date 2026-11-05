@@ -60,9 +60,11 @@ void __stdcall TILEPROJECT_FreeSlot(int32_t pnProjectIds, int32_t pProject) {
     int nSlotIndex = 0;
     while (*(int*)(pnProjectIds + nSlotIndex * 4) != nProjectId) {
       nSlotIndex++;
-      if (nSlotIndex >= 0x20) {
-        return;
+      if (nSlotIndex < 0x20) {
+        continue;
       }
+
+      return;
     }
 
     *(uint32_t*)(pnProjectIds + nSlotIndex * 4) = 0;

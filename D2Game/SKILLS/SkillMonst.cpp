@@ -913,12 +913,12 @@ BOOL __fastcall SKILLMONST_SrvDoFunc092_MeleeHitThenMissile(::SGAMEDATA * pGame,
         return 0;
       }
     }
-    if ((int)nSrvMissle >= sgptDataTable->nTxtMissilesSize) {
+    if ((int)nSrvMissle < sgptDataTable->nTxtMissilesSize) {
+      SkillsServer::CreatingAMissile(pGame, nSrvMissle, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 1);
+      return 1;
+    } else {
       return 0;
     }
-
-    SkillsServer::CreatingAMissile(pGame, nSrvMissle, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 1);
-    return 1;
 }
 
 // Server do-function for monster skill 093. Fires a leading-aim missile (srvmissilea) that predicts target movement: computes the dominant axis of displacement, steps the target position 4 frames forward along that axis, then places the missile origin 1/6 of the delta behind the caster. Sets UNITFLAG_SKSRVDOFUNC on the caster and returns 1 on success.

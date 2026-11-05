@@ -299,9 +299,11 @@ char * __thiscall SkipEOL(D2BNetGatewayAccessStr * pGatewayAccess, char * szText
       }
 
       szText1++;
-      if (szText1 >= szText2) {
-        return szText1;
+      if (szText1 < szText2) {
+        continue;
       }
+
+      return szText1;
     }
 
     return szText1;

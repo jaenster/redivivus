@@ -141,7 +141,7 @@ int __thiscall OnMouseWheel(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * 
       pThis->bUpPressed = 1;
       pThis->bDownPressed = 0;
     } else {
-      if (-1 < nWheelDelta) {
+      if (nWheelDelta >= 0) {
         goto consume_wheel;
       }
 

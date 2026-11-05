@@ -16,7 +16,6 @@
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
-#include "support/d2_trace.h"
 #include "D2Launch/MainMenus.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -111,8 +110,7 @@ BOOL MessageBoxA_InsertExpansionDisc() {
     UINT uType = 0x31;
     char* lpCaption = "Diablo II";
     char* lpText = "Insert Expansion Disc";
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    int nMsgBoxResult = MessageBoxA(hWnd, lpText, lpCaption, uType);
+    int nMsgBoxResult = MessageBoxA(D2gfx::D2GFX::GetHwnd(), lpText, lpCaption, uType);
     return (uint32_t)(nMsgBoxResult == 1);
 }
 
@@ -120,8 +118,7 @@ BOOL __stdcall MessageBoxA_InsertPlayDisc() {
     UINT uType = 0x31;
     char* lpCaption = "Diablo II";
     char* lpText = "Insert Play Disc";
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    int nMsgBoxResult = MessageBoxA(hWnd, lpText, lpCaption, uType);
+    int nMsgBoxResult = MessageBoxA(D2gfx::D2GFX::GetHwnd(), lpText, lpCaption, uType);
     return (uint32_t)(nMsgBoxResult == 1);
 }
 
@@ -143,20 +140,21 @@ BOOL __stdcall MPQ_LoadAllDataMpqFiles() {
     MPQ_patch_d2 = D2Hell::ARCHIVE_LoadMPQ("patch_d2.mpq", 0, nullptr, 5000);
     MPQ_d2exp = D2Hell::ARCHIVE_LoadMPQ("d2exp.mpq", 0, nullptr, 3000);
     BOOL bDirectMode = Fog::Source::SFile::GetUseDirectCommand();
-    if (bDirectMode) {
+    if (!bDirectMode) {
+      if (MPQ_d2data && MPQ_d2sfx && MPQ_d2speech) {
+        bDirectMode = Fog::D2CheckExpansionGame();
+        if (!bDirectMode) {
+          return 1;
+        }
+        if (MPQ_d2exp) {
+          return 1;
+        }
+      }
+
+      return 0;
+    } else {
       return 1;
     }
-    if (MPQ_d2data && MPQ_d2sfx && MPQ_d2speech) {
-      bDirectMode = Fog::D2CheckExpansionGame();
-      if (!bDirectMode) {
-        return 1;
-      }
-      if (MPQ_d2exp) {
-        return 1;
-      }
-    }
-
-    return 0;
 }
 
 D2PoolManagerStrc * __stdcall ReturnZero() {

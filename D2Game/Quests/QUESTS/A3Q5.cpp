@@ -310,6 +310,7 @@ void __fastcall Q22_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       }
 
       nGossipLineIdx = 5;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, nGossipLineIdx);
     } else {
       int32_t nPlayerGUID;
       if (bAtStep04 == 1) {
@@ -343,9 +344,9 @@ void __fastcall Q22_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nGossipLineIdx >= 8) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, nGossipLineIdx);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, nGossipLineIdx);
+    }
 }
 
 // Q22_Callback_02 (BLACKENED TEMPLE) — quest-state[2] handler. When the target is the special 0xff actor and the in-memory bTaintedSunStartedFailed flag is set, broadcasts live state 2 (via QUEST_SetStateAndBroadcast + Q22_PlayerNotifyCompleted), clears the failed flag, detaches handler[2], and re-syncs all players' quest logs (IteratePlayerOrMonsterUnits -> Q22_PlayerUpdateBlackenedTempleState). No direct quest-record state calls.
@@ -696,11 +697,12 @@ void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
     BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
     if (BVar1) {
       eQuestState = QUESTSTATE_Completed;
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
     } else {
       eQuestState = QUESTSTATE_Step0x04;
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
     }
 
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
 }
 

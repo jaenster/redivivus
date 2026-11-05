@@ -776,7 +776,10 @@ void __stdcall TXT_LvlWarp_Free() {
 D2LvlWarpTxt * __fastcall TXT_LvlWarp_Setup(int32_t nWarpId, uint8_t nDirection) {
     int nWarpIdx;
     uint8_t byDirection;
-    if (pTxtLvlWarp) {
+    if (!pTxtLvlWarp) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32b);
+      exit(-1);
+    } else {
       {
         D2LvlWarpTxt* pWarp;
         nWarpIdx = 0;
@@ -796,9 +799,6 @@ D2LvlWarpTxt * __fastcall TXT_LvlWarp_Setup(int32_t nWarpId, uint8_t nDirection)
         exit(-1);
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32b);
-    exit(-1);
 }
 
 // Compiles lvlmaze.txt into the global sgpTxtLvlMaze table. Defines 7 integer fields (Level, Rooms, Rooms(N), Rooms(H), SizeX, SizeY, Merge) plus an END sentinel, then calls CompileTxt to parse and store the maze generation parameters for each level.

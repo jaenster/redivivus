@@ -1313,8 +1313,8 @@ void __stdcall D2WIN_HandleCursorHide(D2UIMouseMsgStrc * pMsg) {
       D2gfx::D2GFX::UpdateOSCursorVisibilty(0);
     }
 
-    pMsg->dwResult = 0;
     pMsg->bHandled = 0;
+    pMsg->dwResult = 0;
 }
 
 void __stdcall D2WIN_HandleMouseLeave(D2UIMouseMsgStrc * pMsg) {

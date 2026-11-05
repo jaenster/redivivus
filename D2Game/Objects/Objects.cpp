@@ -2003,7 +2003,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn9_TrappedSoul(::SGAMEDATA * pGame, D2R
       return nullptr;
     }
 
-    for (nSpawnTarget = (int)((sRoomCoords.dwYSize * sRoomCoords.dwXSize >> 7) * (uint32_t)nDensity) >> 8; nSpawnTarget > 0; nSpawnTarget--) {
+    for (nSpawnTarget = (int)((sRoomCoords.dwXSize * sRoomCoords.dwYSize >> 7) * (uint32_t)nDensity) >> 8; nSpawnTarget > 0; nSpawnTarget--) {
       pSpawnedUnit = OBJECT_PlaceAtRandomPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom);
       if (pSpawnedUnit) {
         if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {

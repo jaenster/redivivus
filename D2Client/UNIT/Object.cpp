@@ -701,8 +701,7 @@ void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(D2UnitStrc * pUnit, D2Un
     }
 
     size_t nMaxLen = 0x10;
-    char* szReversed = _strrev(pPlayerData->szCharName);
-    strncpy(pPlayerData->szCharName, szReversed, nMaxLen);
+    strncpy(pPlayerData->szCharName, _strrev(pPlayerData->szCharName), nMaxLen);
 }
 
 // Spawns a 5×5 grid of Fireball missiles (MISSILE_Fireball) centred on pUnit's position, toggling X/Y offsets from ±5 to ±20 in steps of 5. Missile level is clamped to 1–8 based on pPlayer's level/5. Called server-side for trap objects (e.g. fire towers).
@@ -1120,11 +1119,12 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
       pSeed->nSeedLow = DVar2.nSeedLow;
       if (DVar2.nSeedLow & 1) {
         iVar4 = 3;
+        D2Common::Units::SetupUpdateFlag(pUnit, iVar4);
       } else {
         iVar4 = 4;
+        D2Common::Units::SetupUpdateFlag(pUnit, iVar4);
       }
 
-      D2Common::Units::SetupUpdateFlag(pUnit, iVar4);
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
     }
 

@@ -999,7 +999,7 @@ eD2States __stdcall GetStateBitFlag(D2UnitStrc * pUnit, eD2States eState) {
     }
 
     D2StatListExStrc* pStatList = pUnit->pStatsEx;
-    if (!(pStatList && pStatList->sStatList.nFlags & 0x80000000U)) {
+    if ((pStatList && pStatList->sStatList.nFlags & 0x80000000U) == 0) {
       return STATE_none;
     }
 

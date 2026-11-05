@@ -914,7 +914,6 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
     0x0
 }; D2_STATIC_GUARD(gszFileSignerOrganizationAttribute, "D2Hell::D2FILE_GetSignerOrganization::gszFileSignerOrganizationAttribute");
 
-    DWORD nNameLen;
     int nAnsiLen;
     uint32_t dwSehUnused;
     _CERT_INFO sCertInfo;
@@ -940,6 +939,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
     local_8 = 0;
     BOOL bSuccess = CryptQueryObject(1, pWideStr, 0x400, 2, 0, nullptr, nullptr, nullptr, &hCertStore, &hCryptMsg, nullptr);
     /* DWORD * pcbData for CryptMsgGetParam */ /* void * pvData for CryptMsgGetParam */ /* DWORD dwIndex for CryptMsgGetParam */ /* DWORD dwParamType for CryptMsgGetParam */ /* HCRYPTMSG hCryptMsg for CryptMsgGetParam */ /* SIZE_T uBytes for LocalAlloc */ /* UINT uFlags for LocalAlloc */ /* DWORD * pcbData for CryptMsgGetParam */ /* void * pvData for CryptMsgGetParam */ /* DWORD dwIndex for CryptMsgGetParam */ /* DWORD dwParamType for CryptMsgGetParam */ /* HCRYPTMSG hCryptMsg for CryptMsgGetParam */ if (bSuccess) {
+      DWORD nNameLen;
       bSuccess = CryptMsgGetParam(hCryptMsg, 6, 0, nullptr, &nMsgInfoSize);
       if (bSuccess) {
         hMsgInfo = LocalAlloc(0x40, nMsgInfoSize);
@@ -973,21 +973,19 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
     }
 
     local_8 = (uint8_t*)-2;
-    // The original runs its __finally block (1.14d 00517df5) here, which frees the four handles
-    // through fixed offsets of this MSVC frame. Under another compiler those offsets hold other
-    // locals, so the handles are freed by name instead, in the original order.
-    // Retire-When: the generator emits an MSVC __finally block as code in its own function.
-    if (hMsgInfo) {
-      LocalFree(hMsgInfo);
-    }
-    if (pCertContext) {
-      CertFreeCertificateContext(pCertContext);
-    }
-    if (hCertStore) {
-      CertCloseStore(hCertStore, 0);
-    }
-    if (hCryptMsg) {
-      CryptMsgClose(hCryptMsg);
+    {
+      /* __finally block 00517df5 D2FILE_CleanupCryptHandles, on its parent locals */ if (*(DWORD*)&hMsgInfo) {
+        /* HLOCAL hMem for LocalFree */ LocalFree(hMsgInfo);
+      }
+      if (*(DWORD*)&pCertContext) {
+        /* PCCERT_CONTEXT pCertContext for CertFreeCertificateContext */ CertFreeCertificateContext(pCertContext);
+      }
+      if (*(DWORD*)&hCertStore) {
+        /* DWORD dwFlags for CertCloseStore */ /* HCERTSTORE hCertStore for CertCloseStore */ CertCloseStore(hCertStore, 0);
+      }
+      if (*(DWORD*)&hCryptMsg) {
+        /* HCRYPTMSG hCryptMsg for CryptMsgClose */ CryptMsgClose(hCryptMsg);
+      }
     }
     return bGotOrg;
 }

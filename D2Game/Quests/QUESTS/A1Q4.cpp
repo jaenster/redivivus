@@ -553,8 +553,8 @@ void __fastcall Q04_SendQuestStatePacket(D2UnitStrc * pUnit) {
     D2GSPacketSrv0x5D abyPacketBuf;
     memset(&abyPacketBuf, 0, sizeof(abyPacketBuf));
     abyPacketBuf.nPacketId = ']';
-    abyPacketBuf.nQuestId = '\x04';
     abyPacketBuf.nAlertFlags = '\x01';
+    abyPacketBuf.nQuestId = '\x04';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x265);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &abyPacketBuf);
 }

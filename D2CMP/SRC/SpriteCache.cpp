@@ -17,7 +17,6 @@
 #include "D2Win/DC6Block.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
-#include "support/d2_trace.h"
 #include "Fog/SMem.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/AsyncData.h"
@@ -1806,11 +1805,6 @@ void __stdcall GFX_InitCelDataCache(uint32_t nFlags, uint32_t dwCacheBytes, uint
     }
 
     gbSpriteCacheConversionEnabled = (uint32_t)(dwAvailMemOverride < 0x4000000);
-    {
-        static int s_nInitCalls = 0;
-        ++s_nInitCalls;
-        const unsigned* pw = (const unsigned*)&gCelDataCacheLru;
-    }
     CelDataHash::CELDATAHASH_InitHashTable(gaCelDataHashTable);
     LRUCache::LRUCACHE_FreeAll(&gCelDataCacheLru);
     memset(&gCelDataCacheLru, 0, 0x34);

@@ -58,9 +58,9 @@ namespace D2Game::Ai::AiGeneral {
 D2AiGeneralStrc * __fastcall AllocAiGeneral(::SGAMEDATA * pGame) {
     D2AiGeneralStrc* pAiGeneral = D2_NEW_POOL_AT(pGame->pMemoryPool, D2AiGeneralStrc, ".\\Ai\\AiGeneral.cpp", 0x1b);
     memset(pAiGeneral, 0, 0x40);
+    pAiGeneral->nOwnerGUIDEx = -1;
     pAiGeneral->eOwnerTypeEx = UNIT_MONSTER;
     pAiGeneral->eOwnerType = UNIT_MONSTER;
-    pAiGeneral->nOwnerGUIDEx = -1;
     pAiGeneral->nOwnerGUID = -1;
     return pAiGeneral;
 }

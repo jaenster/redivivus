@@ -404,7 +404,7 @@ void __stdcall GetInvDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2
       exit(-1);
     } else {
       D2InventoryTxt* pTxtEntry;
-      pTxtEntry = nTxtIndex <= (uint32_t)nTxtInventorySize ? pTxtInventory + nTxtIndex : nullptr;
+      pTxtEntry = nTxtIndex > (uint32_t)nTxtInventorySize ? nullptr : pTxtInventory + nTxtIndex;
       if (!pTxtEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c);
         exit(-1);

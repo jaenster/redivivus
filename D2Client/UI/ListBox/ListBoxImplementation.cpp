@@ -373,22 +373,22 @@ int __thiscall OnUpArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     if (!pThis->pfnOnItemActivated) {
       pThis->nSelectedIndex = pThis->nFirstVisibleIndex;
     }
-    if (pThis->nSelectedIndex <= 0) {
+    if (pThis->nSelectedIndex > 0) {
+      pThis->nSelectedIndex--;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+      int nSelIdx = pThis->nSelectedIndex;
+      if (nSelIdx < pThis->nFirstVisibleIndex) {
+        pThis->nFirstVisibleIndex = nSelIdx;
+      }
+      if (nSelIdx >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
+        pThis->nFirstVisibleIndex++;
+        return 1;
+      }
+
+      return 1;
+    } else {
       return 1;
     }
-
-    pThis->nSelectedIndex--;
-    Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    int nSelIdx = pThis->nSelectedIndex;
-    if (nSelIdx < pThis->nFirstVisibleIndex) {
-      pThis->nFirstVisibleIndex = nSelIdx;
-    }
-    if (nSelIdx >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
-      pThis->nFirstVisibleIndex++;
-      return 1;
-    }
-
-    return 1;
 }
 
 int __thiscall OnDownArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {

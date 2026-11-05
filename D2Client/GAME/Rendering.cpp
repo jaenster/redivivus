@@ -82,7 +82,7 @@ void __stdcall DrawRenderStats() {
     if (fValue.nValue) {
       fKilobytes = (float)fValue.nValue;
       if (fValue.nValue < 0) {
-        fKilobytes += 4.2949673e+09;
+        fKilobytes += 4294967296.0;
       }
 
       sprintf(szStatLine, "Floor Cache: (%.2fK) Misses: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[2]);
@@ -93,7 +93,7 @@ void __stdcall DrawRenderStats() {
     if (fValue.nValue) {
       fKilobytes = (float)fValue.nValue;
       if (fValue.nValue < 0) {
-        fKilobytes += 4.2949673e+09;
+        fKilobytes += 4294967296.0;
       }
 
       sprintf(szStatLine, "Subtile Cache: (%.2fK) Misses: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[5]);
@@ -104,7 +104,7 @@ void __stdcall DrawRenderStats() {
     if (fValue.nValue) {
       fKilobytes = (float)fValue.nValue;
       if (fValue.nValue < 0) {
-        fKilobytes += 4.2949673e+09;
+        fKilobytes += 4294967296.0;
       }
 
       sprintf(szStatLine, "Sprite Cache 1: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[0xc], pRenderStats[0x12]);
@@ -115,7 +115,7 @@ void __stdcall DrawRenderStats() {
     if (fValue.nValue) {
       fKilobytes = (float)fValue.nValue;
       if (fValue.nValue < 0) {
-        fKilobytes += 4.2949673e+09;
+        fKilobytes += 4294967296.0;
       }
 
       sprintf(szStatLine, "Sprite Cache 2: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[0xd], pRenderStats[0x13]);
@@ -129,7 +129,7 @@ void __stdcall DrawRenderStats() {
 
     fKilobytes = (float)fValue.nValue;
     if (fValue.nValue < 0) {
-      fKilobytes += 4.2949673e+09;
+      fKilobytes += 4294967296.0;
     }
 
     sprintf(szStatLine, "Sprite Cache 3: (%.2fK) Misses: %d, Accesses Per Frame: %d\n", (double)(fKilobytes * 0.0009765625), pRenderStats[0xe], pRenderStats[0x14]);

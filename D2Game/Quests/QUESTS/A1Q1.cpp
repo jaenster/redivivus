@@ -252,6 +252,7 @@ void __fastcall Q01_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     BOOL bRewardAwaits = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
     if (bRewardAwaits) {
       nMessageIndex = 3;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, iTargetClassId, nMessageIndex);
     } else {
       int32_t nPlayerId = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
       bRewardAwaits = QUEST_HasPlayerParticipated(pQuestData, nPlayerId);
@@ -276,9 +277,9 @@ void __fastcall Q01_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nMessageIndex >= 8) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, iTargetClassId, nMessageIndex);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, iTargetClassId, nMessageIndex);
+    }
 }
 
 // A1Q1 (Den of Evil) -- per-player "you missed the completion" marker (Q01_SetCannotCompleteInGame), an IteratePlayerOrMonsterUnits callback run when the Den is cleared. For each player whose QUEST_DenOfEvil record is neither Completed nor RewardAwaits (i.e. they were not present/credited for the kill), it sets QUESTSTATE_CannotCompleteQuestInGame so this player can no longer get the reward in this game, then pushes the updated quest state/info to that client.

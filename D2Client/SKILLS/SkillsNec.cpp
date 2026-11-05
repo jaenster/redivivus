@@ -102,10 +102,10 @@ BOOL __fastcall Skills_CltDoFunc_Nec_CurseCenter_StreamMissile(D2UnitStrc * pUni
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.pOwner = pCasterUnit;
-    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nFlags = 1;
     sSkillArg.nX = nTargetX;
     sSkillArg.nY = nTargetY;
+    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nMissileTxtNo = MISSILE_Cursecenter;
     pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);

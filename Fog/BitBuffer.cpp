@@ -369,8 +369,8 @@ int32_t __stdcall BITBUFFER_ReadHuffmanValue(D2BitBufferStrc * pBitBuffer, int32
       nBit = (gadwBitMasks[nBitsAtPos] & (uint32_t)*pBitBuffer->pBuffer) >> D2_SHIFT_COUNT(nBitsAtPos);
       pBitBuffer->nBitsAtPos = nBitsAtPos + 1;
       if (nBitsAtPos + 1 == 8) {
-        pBitBuffer->nCurrentPos++;
         pBitBuffer->pBuffer++;
+        pBitBuffer->nCurrentPos++;
         pBitBuffer->nBitsAtPos = 0;
       }
 

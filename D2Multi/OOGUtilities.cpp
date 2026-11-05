@@ -120,8 +120,7 @@ int __stdcall OOG_DisableControlCallback(uint32_t dwParam) {
 
 int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex) {
     DWORD DVar1 = 0;
-    HANDLE hHandle = McpConnect::GetMCPThread();
-    DVar1 = WaitForSingleObject(hHandle, DVar1);
+    DVar1 = WaitForSingleObject(McpConnect::GetMCPThread(), DVar1);
     if (!DVar1 || gnMCPConnectionRestoreResult) {
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }

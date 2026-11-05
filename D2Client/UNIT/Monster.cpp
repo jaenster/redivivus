@@ -112,7 +112,7 @@ char * gaLanguageNames_007251e0[15] = {
     s_Russian_006cc7a4,
     s_English_with_Korean_Chat_006cc788,
     s_Unknown_006cc780,
-    (char*)0x006cc77c
+    s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_007251e0, "gaLanguageNames_007251e0");
 
 namespace D2Client::UNIT::Monster {
@@ -1945,18 +1945,16 @@ static uint32_t MONSTER_IsModeMoveFlagSet(D2UnitStrc * pUnit, D2MonMsgAnimModeSt
     int nMode;
     if (pUnit && pModeEntry) {
       D2MonStats2Txt* pMonStats2;
-      if (!pModeEntry->bCheckMoveFlag) {
-        return 0;
-      }
+      if (pModeEntry->bCheckMoveFlag) {
+        nMode = pModeEntry->eMode;
+        if (nMode >= 0x10) {
+          return 0;
+        }
 
-      nMode = pModeEntry->eMode;
-      if (nMode >= 0x10) {
-        return 0;
-      }
-
-      pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-      if (pMonStats2) {
-        return (uint32_t)pMonStats2->A1mv[nMode >> 3] & gadwBitMasks[nMode & 7];
+        pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+        if (pMonStats2) {
+          return (uint32_t)pMonStats2->A1mv[nMode >> 3] & gadwBitMasks[nMode & 7];
+        }
       }
 
       return 0;

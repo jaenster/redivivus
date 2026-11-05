@@ -9,6 +9,8 @@
 #include "Fog/SMem.h"
 
 // Forward declarations
+struct D2SMemTablesStrc;
 struct SMemHeapStatsStrc;
 
+extern D2SMemTablesStrc g_SMemSizeClassTable;
 extern SMemHeapStatsStrc gaSMemHeapStats[4096];

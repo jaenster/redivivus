@@ -2955,7 +2955,7 @@ static char * gaLanguageNames_00724a80[15] = {
     s_Russian_006cc7a4,
     s_English_with_Korean_Chat_006cc788,
     s_Unknown_006cc780,
-    (char*)0x006cc77c
+    s_14_006cc77c
 }; D2_STATIC_GUARD(gaLanguageNames_00724a80, "gaLanguageNames_00724a80");
 static uint32_t gdwQuestResurrectDismissThrottle = 0; D2_STATIC_GUARD(gdwQuestResurrectDismissThrottle, "gdwQuestResurrectDismissThrottle");
 DC6 * DC6_EnteredAreaName = 0; D2_GLOBAL_GUARD(DC6_EnteredAreaName, "DC6_EnteredAreaName");
@@ -8311,8 +8311,8 @@ void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     uint32_t eBorderType;
-    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
     uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode == 2) {
       bEscMenuOpen = GetUIFlag(UI_ESCMENU);

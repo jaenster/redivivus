@@ -192,6 +192,6 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
 // the ORIGINAL image address. Address-relative, not a constant.
 void StaticInit_gFaultHandlerList();
 void StaticFini_gFaultHandlerList();
-// 3 internal functions (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Hell

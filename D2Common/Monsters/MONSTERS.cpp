@@ -422,7 +422,7 @@ BOOL __stdcall MONSTER_IsAndarielNormal(D2UnitStrc * pUnit, int32_t nParam) {
         nBaseId = (int)pMonStatsTxt->BaseId;
       }
     }
-    if (nBaseId == (sgptDataTable->nTxtMonStatsSize > 0x4e ? 0x4e : -1) && !nParam) {
+    if (nBaseId == (sgptDataTable->nTxtMonStatsSize <= 0x4e ? -1 : 0x4e) && !nParam) {
       return 1;
     }
 

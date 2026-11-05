@@ -62,17 +62,18 @@ int8_t __thiscall Open(::Report * pThis, char * szFileName) {
       }
     }
 
-    int nLen1 = File::STRING_FormatVarArgs("%s/%04d-%02d-%02d %02d.%02d.%02d", gszCrashLogTempDir, localTime.tm_year + 0x76c, localTime.tm_mon + 1, localTime.tm_mday, localTime.tm_hour, localTime.tm_min, localTime.tm_sec);
+    char* szDest = pThis->szReportDir;
+    int nLen1 = File::STRING_FormatVarArgs(szDest, 0x400, "%s/%04d-%02d-%02d %02d.%02d.%02d", gszCrashLogTempDir, localTime.tm_year + 0x76c, localTime.tm_mon + 1, localTime.tm_mday, localTime.tm_hour, localTime.tm_min, localTime.tm_sec);
     if (!(nLen1 + 1U < 0x401)) {
       return '\0';
     }
 
-    uint8_t Var1 = (uint8_t)File::FILETOOLS_CreateFolder_UTF8(pThis->szReportDir);
+    uint8_t Var1 = (uint8_t)File::FILETOOLS_CreateFolder_UTF8(szDest);
     if ((uint8_t)(uint32_t)Var1 == '\0') {
       return '\0';
     }
 
-    nLen1 = File::STRING_FormatVarArgs("%s/%s", pThis->szReportDir, (int32_t)szFileName);
+    nLen1 = File::STRING_FormatVarArgs(pThis->szFilePath, 0x400, "%s/%s", szDest, szFileName);
     if (!(nLen1 + 1U < 0x401)) {
       return '\0';
     }

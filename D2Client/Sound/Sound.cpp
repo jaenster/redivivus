@@ -115,11 +115,7 @@ float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2) {
 }
 
 float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2) {
-    if (fParam1 < fParam2) {
-      return fParam1;
-    }
-
-    return fParam2;
+    return fParam1 < fParam2 ? fParam1 : fParam2;
 }
 
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3) {
@@ -1055,12 +1051,12 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
           __frame0.fClosestDist.fValue = __frame0.fIndoorsSum / (float)__frame0.nUnitCount;
           fIndoorsSmoothed = pChanEntry->fUnitDistance;
           if (!(__frame0.fClosestDist.fValue <= pChanEntry->fUnitDistance)) {
-            if (fIndoorsSmoothed + 0.05 < __frame0.fClosestDist.fValue) {
-              __frame0.fClosestDist.fValue = fIndoorsSmoothed + 0.05;
+            if (fIndoorsSmoothed + 0.05000000074505806 < __frame0.fClosestDist.fValue) {
+              __frame0.fClosestDist.fValue = fIndoorsSmoothed + 0.05000000074505806;
             }
           } else {
-            if (__frame0.fClosestDist.fValue < fIndoorsSmoothed - 0.05) {
-              __frame0.fClosestDist.fValue = fIndoorsSmoothed - 0.05;
+            if (__frame0.fClosestDist.fValue < fIndoorsSmoothed - 0.05000000074505806) {
+              __frame0.fClosestDist.fValue = fIndoorsSmoothed - 0.05000000074505806;
             }
           }
 
@@ -1322,9 +1318,11 @@ void __fastcall SOUND_StopById(int32_t nChannelHandle) {
 
       pNextChanNode = &pChannel->pNext;
       pChannel = *pNextChanNode;
-      if (!*pNextChanNode) {
-        return;
+      if (*pNextChanNode) {
+        continue;
       }
+
+      return;
     }
 
     D2SoundsTxt* pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nChanDataPtr->nSoundId);
@@ -1428,13 +1426,11 @@ void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
 void __stdcall SOUND_DebugPrintChannels() {
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
-    int32_t nSoundId;
     for (pDVar1 = gpActiveSoundChannelsHead; pDVar1; pDVar1 = pDVar1->pNext) {
       D2SoundChannelStrc* nChanDataPtr;
       nChanDataPtr = pDVar1->pChannel;
-      nSoundId = nChanDataPtr->nSoundId;
-      if (nSoundId >= 0xb76 && nSoundId <= 0x1230) {
-        pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nSoundId);
+      if (nChanDataPtr->nSoundId >= 0xb76 && nChanDataPtr->nSoundId <= 0x1230) {
+        pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nChanDataPtr->nSoundId);
         nChanDataPtr->bStopFlag = 1;
         if (pSoundsTxtLine->Fade_Out && nChanDataPtr->nPlayMode == 1) {
           SOUND_StopChannelGracefully(nChanDataPtr->nChannelHandle, 0, 0, (uint32_t)pSoundsTxtLine->Fade_Out);

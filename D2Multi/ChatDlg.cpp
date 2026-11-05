@@ -681,13 +681,11 @@ void __stdcall LAUNCHER_DestroyLauncherForms() {
 }
 
 int __stdcall isServerDown() {
-    if (D2IniData_multiplayer->szCharacterRealm[0] == '\0') {
-      return 0;
-    }
-
-    int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
-    if (!bHasPeerName) {
-      return -1;
+    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+      int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
+      if (!bHasPeerName) {
+        return -1;
+      }
     }
 
     return 0;
@@ -1094,8 +1092,7 @@ static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t
     /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ nZeroCount = -1;
     DWORD dwFlags = 1;
     char* lpMultiByteStr = szText;
-    UINT CodePage = GetACP();
-    /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(CodePage, dwFlags, lpMultiByteStr, nZeroCount, (LPWSTR)pwszWide, cchWideChar);
+    /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(GetACP(), dwFlags, lpMultiByteStr, nZeroCount, (LPWSTR)pwszWide, cchWideChar);
     D2Lang::WideCharToUTF8(szText, wszWideBuf, nBufSize);
 }
 
@@ -1436,11 +1433,12 @@ int __stdcall CHATDLG_UpdateButtonVisibility() {
     }
     if (D2IniData_multiplayer->padding_0x35F[2]) {
       bConfirmJoinVisible = 1;
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, bConfirmJoinVisible);
     } else {
       bConfirmJoinVisible = (uint32_t)!gbLobbyInitialized;
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, bConfirmJoinVisible);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, bConfirmJoinVisible);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyLadderButton->sControl, (uint32_t)!gbIsChannelScreen);
     return 1;
 }
@@ -1488,8 +1486,8 @@ BOOL __stdcall CHATDLG_OnPressLadderPageDown(D2ControlMsg * pControlMsg) {
       nRank = gnLadderScrollPageSize + gnLadderBoardSelectedRank;
     }
 
-    gnLadderBoardSelectedRank = nRank;
     g_nLadderFilterMode = gnLadderCurrentFilterMode;
+    gnLadderBoardSelectedRank = nRank;
     return 1;
 }
 

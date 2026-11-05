@@ -21,7 +21,6 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "support/d2_trace.h"
 #include "globals/globals.h"
 #include "D2Client/ClientModeInGame.h"
 #include "D2Launch/D2Launch.h"
@@ -1038,8 +1037,6 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
     if (bSignatureValid != '\0') {
       D2Hell::D2FILE_CreateProcess(__frame0.szExePathBuf);
     }
-
-    D2TRACE("ApplicationMain returned");
 }
 
 // Main app init. Client path loads MPQ data/media, sets renderer/window, optional keyhook, sound/gamma/vsync, then loops ApplicationRunCurrentMode until exit. On exit unloads MPQs and cleans up.
@@ -1687,11 +1684,8 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
       szRawCommandLine = argv[argc - 1];
     }
 
-    D2TRACE("PreInitApplication enter");
     Storm::Source::SSTR::SStrPrintf(szVersionString, 0x104, "v%d.%02d", 1, 0xe);
-    D2TRACE("SetLogFilePath");
     Fog::Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2("D2");
-    D2TRACE("ERRORMANAGER_InitErrorManager");
     Fog::Src::ErrorManager::ERRORMANAGER_InitErrorManager("Diablo II", szVersionString, 1);
     HANDLE hDiabloOkEvent = OpenEventA(2, 1, "DIABLO_II_OK");
     if (hDiabloOkEvent) {
@@ -1699,15 +1693,11 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
       /* HANDLE hObject for CloseHandle */ CloseHandle(hDiabloOkEvent);
     }
 
-    D2TRACE("D2INIT_CheckCommandLine");
     D2INIT_CheckCommandLineOrLoadItFromRegistry(&szRawCommandLine);
-    D2TRACE("CreateRegedit");
     CreateRegedit();
     char* szCommandLine = szRawCommandLine;
     eD2ApplicationMode eAppMode = APPMODE_launcher;
-    D2TRACE("CheckApplicationMode");
     CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(&eAppMode, szRawCommandLine);
-    D2TRACE("MISC_InitD2IniAndIgnorelist");
     MISC_InitD2IniAndIgnorelist(&pD2IniData, szCommandLine);
     pD2IniData.pTrueFunction = ReturnTrue;
     pD2IniData.bOPENGL = false;
@@ -1715,7 +1705,6 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
       pD2IniData.bD3D = !pD2IniData.bWINDOW;
     }
 
-    D2TRACE("ApplicationMain");
     ApplicationMain(WinMain_hInstance, &pD2IniData, eAppMode);
 }
 
@@ -1771,9 +1760,7 @@ int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lp
 
     WinMain_hInstance = hInstance;
     WinMain_nShowCmd = nShowCmd;
-    D2TRACE("WinMain enter");
     BOOL bStartedAsService = StartDiablo2ServerAsService();
-    D2TRACE("StartDiablo2ServerAsService returned");
     if (!bStartedAsService) {
       char* aszArgv[2];
       aszArgv[0] = "d2server";

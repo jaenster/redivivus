@@ -76,13 +76,7 @@ void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
               exit(-1);
             }
 
-            // 0067ea64 is ADD EAX,[EDX*0x4 + 0x6f2240] with EDX the level id (76..78): the
-            // base folds 76*4 out of the real table, {0, 10, 20} at 0x6f2370, so the decompiler
-            // rebases it onto row 11 of gaAct5SceneryPresetTable_0 and reads past that array
-            // once relinked. Ghidra cannot express a folded base; retire with the generator's
-            // interior-address pass, as in Outdoors/Act4.cpp.
-            static const int aOutJungPresetOffsetByLevel[3] = {0, 10, 20};
-            nLevelPrestId += aOutJungPresetOffsetByLevel[(int)pLevel->eD2LevelId - 0x4c];
+            nLevelPrestId += gaOutJungPresetOffsetByLevel[pLevel->eD2LevelId - 76];
             nRand = gaOutJungSpecialPresetRandOffsets[nSeedModulo][nSpecialPresetCount];
             nSpecialPresetCount++;
           }

@@ -24,7 +24,7 @@ static double gdConst60 = 60; D2_STATIC_GUARD(gdConst60, "gdConst60");
 // also labelled: gdDrlgHueConst181
 double gdConst180 = 180; D2_GLOBAL_GUARD(gdConst180, "gdConst180");
 // also labelled: gMercenary_t_TownEnumValue2
-static double gdConst0_2 = 0.200000002980232; D2_STATIC_GUARD(gdConst0_2, "gdConst0_2");
+static double gdConst0_2 = 0.20000000298023224; D2_STATIC_GUARD(gdConst0_2, "gdConst0_2");
 static uint32_t gbTransparentColorEnabled = 0; D2_STATIC_GUARD(gbTransparentColorEnabled, "gbTransparentColorEnabled");
 static uint32_t gnPaletteMaxIndex = 0; D2_STATIC_GUARD(gnPaletteMaxIndex, "gnPaletteMaxIndex");
 static uint32_t gaColorDistanceLookupTable[512] = {}; D2_STATIC_GUARD(gaColorDistanceLookupTable, "gaColorDistanceLookupTable");
@@ -872,8 +872,8 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEEN
         pHSLLoopPtr->dSaturation = 0.5;
         dVar1 = pHSLLoopPtr->dLightness + 0.20000000298023224;
         pHSLLoopPtr->dLightness = dVar1;
-        if (1.0 < dVar1) {
-          pHSLLoopPtr->dLightness = 1.0;
+        if (1.2000000476837158 < dVar1) {
+          pHSLLoopPtr->dLightness = 1.2000000476837158;
         }
 
         pHSLLoopPtr++;
@@ -1047,7 +1047,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEEN
         *(uint32_t*)((uintptr_t)&pHSLEntry->dLightness + 4) = *(uint32_t*)(nHSLSrcOffset + 0x14 + (int)pHSLEntry);
         pHSLEntry->dHue = (double)(fHueFloat * 30.0);
         nEntryCount--;
-        pHSLEntry->dSaturation = 1.0;
+        pHSLEntry->dSaturation = 1.2000000476837158;
         pHSLEntry++;
       } while (nEntryCount);
 

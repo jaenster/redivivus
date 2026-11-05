@@ -1383,10 +1383,8 @@ void __fastcall STATES_DispatchRemFunc(D2UnitStrc * pUnit, eD2States eState) {
     if (!pDVar1) {
       return;
     }
-
-    short int nRemFunc = pDVar1->remfunc;
-    if (nRemFunc >= 0 && nRemFunc < 0x1e && STATESREMFUNC[nRemFunc]) {
-      (*STATESREMFUNC[nRemFunc])(pUnit, eState);
+    if (pDVar1->remfunc >= 0 && pDVar1->remfunc < 0x1e && STATESREMFUNC[pDVar1->remfunc]) {
+      (*STATESREMFUNC[pDVar1->remfunc])(pUnit, eState);
     }
     if (pDVar1->cltevent < 0) {
       return;

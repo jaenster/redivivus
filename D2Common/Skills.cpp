@@ -2122,8 +2122,8 @@ int32_t __stdcall SKILLS_GetItemBonusDamage(D2UnitStrc * pUnit, D2UnitStrc * pIt
 uint32_t __stdcall SKILLS_HasLineOfSight(LONG nSrcX, LONG nSrcY, LONG nDestX, LONG nDestY, D2RoomStrc * pRoom, int32_t eCollisionFlag) {
     POINT ptSrc;
     POINT ptDest;
-    ptSrc.y = nSrcY;
     ptSrc.x = nSrcX;
+    ptSrc.y = nSrcY;
     ptDest.x = nDestX;
     ptDest.y = nDestY;
     BOOL bCollisionResult = Collision::TestCollision(pRoom, &ptSrc, &ptDest, eCollisionFlag);
@@ -2173,11 +2173,10 @@ int32_t __stdcall SKILLS_CalculateManaCostShifted(int32_t eSkillId, int32_t nSki
     }
 
     nLine = (int)pSkillsTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillsTxt->mana << D2_SHIFT_COUNT(pSkillsTxt->manashift) >> 8;
-    if (nLine >= 0) {
-      return nLine;
+    if (nLine < 0) {
+      nLine = 0;
     }
 
-    nLine = 0;
     return nLine;
 }
 

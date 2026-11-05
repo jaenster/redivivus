@@ -889,12 +889,7 @@ int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus
     }
 
     check_hardcore_and_difficulty:
-    if (!(dwCharacterStatus & 4)) {
-      eArenaFlags = GAME::Arena::ARENA_GetFlags(pGame);
-      if (eArenaFlags & ARENAFLAG_Hardcore) {
-        return 0xc;
-      }
-    } else {
+    if (dwCharacterStatus & 4) {
       if (dwCharacterStatus & 8) {
         return 10;
       }
@@ -902,6 +897,11 @@ int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus
       eArenaFlags = GAME::Arena::ARENA_GetFlags(pGame);
       if (!(eArenaFlags & ARENAFLAG_Hardcore)) {
         return 0xb;
+      }
+    } else {
+      eArenaFlags = GAME::Arena::ARENA_GetFlags(pGame);
+      if (eArenaFlags & ARENAFLAG_Hardcore) {
+        return 0xc;
       }
     }
     uint32_t nTitleProgress = (dwCharacterStatus & 0x1f00) >> 8;

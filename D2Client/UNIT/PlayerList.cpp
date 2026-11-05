@@ -191,9 +191,11 @@ void __fastcall SetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag) 
 
     while (pEntry->nRosterGUID != nRosterGUID) {
       pEntry = pEntry->pNext;
-      if (!pEntry) {
-        return;
+      if (pEntry) {
+        continue;
       }
+
+      return;
     }
 
     *(uint16_t*)&pEntry->nFlags = 0;

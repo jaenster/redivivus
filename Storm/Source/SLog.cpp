@@ -137,10 +137,12 @@ static void SLOG_UnlockDeleteLog(LPVOID pTarget, int32_t nSlot) {
       while ((void*)pNode != pTarget) {
         ppPrevNext = &pNode->pNext;
         pNode = *ppPrevNext;
-        if (!pNode) {
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaSLogCritSect + nSlot);
-          return;
+        if (pNode) {
+          continue;
         }
+
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaSLogCritSect + nSlot);
+        return;
       }
 
       /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ *ppPrevNext = pNode->pNext;

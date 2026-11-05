@@ -1856,9 +1856,7 @@ int32_t __stdcall ITEM_CheckItemsTxt_bTransmogrify(D2UnitStrc * pUnit) {
 // Returns a FULL 32-bit value: the only two paths are MOV EAX,0x1 at 0062a113 and XOR EAX,EAX at 0062a11c.
 int32_t __stdcall ITEM_CheckItemData_ItemQualityIsMagicOrBetter(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
-      eD2ItemQuality nItemQuality;
-      nItemQuality = pUnit->pUnitData.pUnitDataItem->eQuality;
-      if (3 < (int)nItemQuality && (int)nItemQuality <= 9) {
+      if ((int)pUnit->pUnitData.pUnitDataItem->eQuality >= 4 && (int)pUnit->pUnitData.pUnitDataItem->eQuality <= 9) {
         return 1;
       }
     }

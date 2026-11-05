@@ -80,7 +80,7 @@ uint8_t TXT_ParseFieldTypeCaseIndex[26] = {
     0x1
 }; D2_GLOBAL_GUARD(TXT_ParseFieldTypeCaseIndex, "Fog::Src::Excel::TXT_ParseFieldTypeCaseIndex");
 } // namespace Fog::Src::Excel
-static char * gnExcelRecordFieldNotFound = (char *)0x006ccb30; D2_STATIC_GUARD(gnExcelRecordFieldNotFound, "gnExcelRecordFieldNotFound");
+static char * gnExcelRecordFieldNotFound = s_____006ccb30; D2_STATIC_GUARD(gnExcelRecordFieldNotFound, "gnExcelRecordFieldNotFound");
 
 namespace Fog::Src::Excel {
 
@@ -481,7 +481,7 @@ static uint8_t * __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey)
       if (nCmpResult < 0) {
         pbyte = pNode + 0x24;
       } else {
-        if (nCmpResult < 1) {
+        if (nCmpResult <= 0) {
           pNode = (uint8_t*)D2_FREE_POOL_AT(nullptr, pKey, ".\\Src\\Excel\\Excel.cpp", 0x4a7);
           return pNode;
         }

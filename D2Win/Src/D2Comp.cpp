@@ -2941,7 +2941,10 @@ void __stdcall D2COMP_SetUnitDisplayStrings(D2CharSelCompStrc * pCompUnit, uint1
 
 BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t nAnimMode) {
     int pCOFLayerData;
-    if (pCompUnit) {
+    if (!pCompUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8bf);
+      exit(-1);
+    } else {
       {
         int* pCOFEntry;
         pCOFEntry = *pCompUnit->ppCofCacheEntries;
@@ -2970,9 +2973,6 @@ BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t n
         return 1;
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8bf);
-    exit(-1);
 }
 
 // Returns the code index (1..13) paired with the four-character weapon-class code nWeaponClassCode ('bow '..'ht2 ') in gaCompWeaponClassCodeMap, or 0 when the code is not in the map; the index selects gaCompWeaponClassByCodeIndex.
@@ -3682,11 +3682,11 @@ void __stdcall D2COMP_LoadGuildEmblemIcon(D2CharSelCompStrc * pCompUnit, uint8_t
     uint8_t nGuildEmblemColor1Value;
     if ((uint8_t)(byPrimaryColor - 1) <= 9) {
       nGuildEmblemColor1Value = gaGlideEmblemPrimaryColorTableEntries[byPrimaryColor - 1];
+      pCompUnit->nGuildEmblemColor1 = nGuildEmblemColor1Value;
     } else {
       nGuildEmblemColor1Value = 0;
+      pCompUnit->nGuildEmblemColor1 = nGuildEmblemColor1Value;
     }
-
-    pCompUnit->nGuildEmblemColor1 = nGuildEmblemColor1Value;
     if ((uint8_t)(bySecondaryColor - 1) <= 9) {
       pCompUnit->nGuildEmblemColor2 = gaGlideEmblemSecondaryColorTableEntries[bySecondaryColor - 1];
       return;

@@ -1335,7 +1335,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x1,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char *)0x006e1664,
+        /* .nEventId = */ s_Dam_006e1664,
         0x8
     },
     {
@@ -1361,7 +1361,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char *)0x006e1654,
+        /* .nEventId = */ s_Ligt_006e1654,
         0x8
     },
     {
@@ -1387,7 +1387,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char *)0x006e1644,
+        /* .nEventId = */ s_Magc_006e1644,
         0x8
     },
     {
@@ -1439,7 +1439,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char *)0x006e1624,
+        /* .nEventId = */ s_Pois_006e1624,
         0x0
     },
     {
@@ -1452,7 +1452,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char *)0x006e161c,
+        /* .nEventId = */ s_Life_006e161c,
         0x8
     },
     {
@@ -1478,7 +1478,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char *)0x006e160c,
+        /* .nEventId = */ s_Stam_006e160c,
         0x8
     }
 }; D2_STATIC_GUARD(gaDefenseReductionTable, "D2Game::UNIT::SUnitDmg::DAMAGE_ApplyDefensiveReduction::gaDefenseReductionTable");
@@ -3135,8 +3135,7 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
       return uBlockResult;
     }
 
-    int bExpansion = pGame->bExpansion;
-    int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, bExpansion);
+    int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, pGame->bExpansion);
     if (nBlockRate <= 0) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;
@@ -3434,9 +3433,8 @@ static void __stdcall SERVER_PlayerUpdateExperience(::SGAMEDATA * pGame, int32_t
 
     int32_t nCurrentXp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_experience, 0);
     int32_t ePlayerClass_00 = pUnit->nClassId;
-    int32_t pExpTxtLine = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClass_00);
-    DWORD nMaxXp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass_00, pExpTxtLine - 1);
     uint32_t nValue = nCurrentXp + nXpGain;
+    DWORD nMaxXp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass_00, D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClass_00) - 1);
     if ((uint32_t)(nCurrentXp + nXpGain) > nMaxXp) {
       nValue = nMaxXp;
     }

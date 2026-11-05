@@ -20,7 +20,6 @@
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
-#include "support/d2_trace.h"
 #include "Fog/Engine/Application.data.h"
 #include "Storm/Source/SFile.data.h"
 
@@ -353,8 +352,8 @@ void __thiscall SFILE_ShiftSectorTable(int32_t pSectorTable, uint32_t nSectorCou
     void* pDst = (void*)(nSectorCount * 0x2c - 0x2c + pSectorTable);
     if (nSectorCount > 1) {
       uint32_t* pDstExtra;
-      nSectorsLeft = nSectorCount - 1;
       pDstExtra = (uint32_t*)((int)pDst + 0x24);
+      nSectorsLeft = nSectorCount - 1;
       do {
         memmove(pDst, pSrc, 0x10);
         pSrc = (void*)((int)pSrc - 0x10);
@@ -471,8 +470,7 @@ static void SFILE_HandleAsyncReadError(D2StormAsyncOpStrc * pAsyncOp) {
 void __stdcall SFILE_BuildDefaultBasePath() {
     DWORD nSize = 0x104;
     char* pLastSlash = szSFileBasePath;
-    HMODULE hModule = GetModuleHandleA((LPCSTR)0x0);
-    /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA(hModule, pLastSlash, nSize);
+    /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA(GetModuleHandleA((LPCSTR)0x0), pLastSlash, nSize);
     pLastSlash = SSTR::SStrChrR(szSFileBasePath, '\\');
     if (pLastSlash) {
       *pLastSlash = '\0';
@@ -4942,7 +4940,7 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
           return 1;
         }
 
-        /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(hAsyncIOEvent, INFINITE);
+        /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(hAsyncIOEvent, -1);
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
         /* HANDLE hObject for CloseHandle */ CloseHandle(hAsyncIOEvent);
         nSectorRemainder = pAsyncRequest->nChunkBytesRead;

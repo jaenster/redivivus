@@ -304,8 +304,8 @@ void __thiscall BITSTREAM_WriteLiteralByte(int32_t pHuffState, int32_t pBitStrea
     uint32_t nCode = 0;
     int nBits = 0;
     for (pParent = *(int*)(pNode + 0x10); pParent; pParent = *(int*)(pParent + 0x10)) {
-      nBits++;
       nCode = (uint32_t)(*(int*)(pParent + 0x14) != pNode) | nCode * 2;
+      nBits++;
       pNode = pParent;
     }
 

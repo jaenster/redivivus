@@ -72,12 +72,12 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_00420490(int * pList) {
 }
 
 // Calculates the next power of 2 greater than or equal to a given value passed in ECX. Used for sizing hash tables and event handler arrays. Returns the smallest power of 2 that can contain the input value times 2 plus 2.
-uint32_t __fastcall SEVT_NextPowerOf2(int nValue) {
+uint32_t __fastcall SEVT_NextPowerOf2(uint32_t nValue) {
     uint32_t nPowerOf2 = 1;
     if (nValue * 2 != -2) {
       do {
         nPowerOf2 *= 2;
-      } while (nPowerOf2 <= nValue * 2 + 2U);
+      } while (nPowerOf2 <= nValue * 2 + 2);
     }
 
     return nPowerOf2;

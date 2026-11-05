@@ -84,7 +84,7 @@ static uint8_t gaEAXPropertyGuid_ObstructionParams[9] = {
 }; D2_STATIC_GUARD(gaEAXPropertyGuid_ObstructionParams, "gaEAXPropertyGuid_ObstructionParams");
 static float gnSoundFrequency_22kHz = 2; D2_STATIC_GUARD(gnSoundFrequency_22kHz, "gnSoundFrequency_22kHz");
 static float gnSoundQuality_Low = 100; D2_STATIC_GUARD(gnSoundQuality_Low, "gnSoundQuality_Low");
-static double gnSoundAttenuation_Max = 0.0000999999974737875; D2_STATIC_GUARD(gnSoundAttenuation_Max, "gnSoundAttenuation_Max");
+static double gnSoundAttenuation_Max = 0.00009999999747378752; D2_STATIC_GUARD(gnSoundAttenuation_Max, "gnSoundAttenuation_Max");
 static uint32_t gnSoundGlobalVolume = 0xff; D2_STATIC_GUARD(gnSoundGlobalVolume, "gnSoundGlobalVolume");
 static uint32_t g_nSoundSampleParam = 0; D2_STATIC_GUARD(g_nSoundSampleParam, "g_nSoundSampleParam");
 static int * gpSoundSampleList = 0; D2_STATIC_GUARD(gpSoundSampleList, "gpSoundSampleList");
@@ -666,7 +666,13 @@ void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs) {
     }
 
     dwSpeakerFlag = SOUND_GetSpeakerConfigFlag();
-    uint32_t nCurrentVolume = dwSpeakerFlag ? gnSoundGlobalVolume : 0;
+    uint32_t nCurrentVolume;
+    if (dwSpeakerFlag) {
+      nCurrentVolume = gnSoundGlobalVolume;
+    } else {
+      nCurrentVolume = 0;
+    }
+
     uint32_t nVolumeStep = (uint32_t)(nCurrentVolume / (nFadeTimeMs / 0x14));
     while (nCurrentVolume) {
       /* DWORD dwMilliseconds for Sleep */ /* Patch self out */ Sleep(0x14);

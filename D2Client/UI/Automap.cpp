@@ -715,8 +715,8 @@ static void __stdcall AUTOMAP_RevealTile(D2RoomExStrc * pRoomEx, D2AutomapCellSt
     }
 
     pAutomapCell1 = AUTOMAP_AllocCell();
-    nX = pRoomEx->sCoords.WorldPosition.y + pTileData->nPosY;
     nY = pRoomEx->sCoords.WorldPosition.x + pTileData->nPosX;
+    nX = pRoomEx->sCoords.WorldPosition.y + pTileData->nPosY;
     D2Common::Drlg::Transform::CoordsMiniMapToScreen(&nY, &nX);
     nY /= 10;
     nX /= 10;
@@ -2592,8 +2592,8 @@ void __stdcall AUTOMAP_Init() {
       uint32_t nCellIndex;
       nCellIndex = *pCellEntry;
       pPriorityValue = pCellEntry + 1;
-      pCellEntry += 2;
       gnAutoMapCellPriority[nCellIndex] = *pPriorityValue;
+      pCellEntry += 2;
     } while ((int)pCellEntry < (intptr_t)&gnAutoMapInitialZoomLevel + 392);
 
     nRegValue = 0;

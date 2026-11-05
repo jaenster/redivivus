@@ -980,7 +980,7 @@ BOOL __fastcall AreXYInsideCoordinates(D2DrlgCoordsStrc * pDrlgCoords, int32_t n
     }
 
     int nPosY = pDrlgCoords->WorldPosition.y;
-    if (!(nY >= nPosY && nX < pDrlgCoords->WorldSize.x + nPosX)) {
+    if ((nY >= nPosY && nX < pDrlgCoords->WorldSize.x + nPosX) == 0) {
       return 0;
     }
 
@@ -994,7 +994,7 @@ uint32_t __fastcall DRLGCOORDS_IsPointInside(D2DrlgCoordsStrc * pDrlgCoords, int
     }
 
     int nPosY = pDrlgCoords->WorldPosition.y;
-    if (!(nY >= nPosY && nX <= pDrlgCoords->WorldSize.x + nPosX)) {
+    if ((nY >= nPosY && nX <= pDrlgCoords->WorldSize.x + nPosX) == 0) {
       return 0;
     }
 
@@ -1127,9 +1127,8 @@ static void ReorderNearRoomList(int nRoomCount, D2RoomStrc * * ppRoomList) {
     int nPassRemaining;
     D2RoomStrc* pRoomCurrent;
     D2RoomStrc* pRoomNext;
-    int nListCount = nRoomCount - 1;
-    for (nPassRemaining = nListCount; nPassRemaining > 0; nPassRemaining--) {
-      for (nIndex = 0; nIndex < nListCount; nIndex++) {
+    for (nPassRemaining = nRoomCount - 1; nPassRemaining > 0; nPassRemaining--) {
+      for (nIndex = 0; nIndex < nRoomCount - 1; nIndex++) {
         pRoomNext = ppRoomList[nIndex + 1];
         pRoomCurrent = ppRoomList[nIndex];
         if (pRoomCurrent->eFlags >= (int)(pRoomNext->nLastDeadGUIDs[1] + pRoomNext->eFlags) || (int)pRoomCurrent->nLastDeadGUIDs[0] >= (int)(pRoomNext->nLastDeadGUIDs[2] + pRoomNext->nLastDeadGUIDs[0])) {
@@ -1227,9 +1226,11 @@ static void DRLGROOM_FlagRoomExBorderingTown(D2RoomExStrc * pRoomEx) {
       }
 
       nIndex++;
-      if (nIndex >= pRoomEx->nDrlgRoomsExNearCount) {
-        return;
+      if (nIndex < pRoomEx->nDrlgRoomsExNearCount) {
+        continue;
       }
+
+      return;
     }
 
     pRoomEx->eRoomExFlags |= 0x800000;

@@ -1297,8 +1297,8 @@ int32_t __fastcall RENDERER_D3D_CreateSystemMemoryTexture(IDirectDrawSurface7 * 
     uint32_t* pSrcTemplate = gsD3DTextureDescTemplate;
     DWORD* pDstPixelFormat = ddSurfaceDesc.ddpfPixelFormat;
     memcpy(pDstPixelFormat, pSrcTemplate, 32);
-    ddSurfaceDesc.dwHeight = nHeight;
     ddSurfaceDesc.dwWidth = nWidth;
+    ddSurfaceDesc.dwHeight = nHeight;
     DWORD dwResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &ddSurfaceDesc, (void**)ppSurface, nullptr);
     if (dwResult) {
       DIRECTD3D_LogError("CreateSurface (memory surface)", dwResult);
@@ -1929,15 +1929,15 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
                       gD3DDeviceBlock0[nEnumDeviceIdx].nVideoMemTotal = nDDCapsSize.dwVidMemTotal;
                       gD3DDeviceBlock0[nEnumDeviceIdx].dwVideoMemFree = nDDCapsSize.dwVidMemFree;
                       if ((int)nDDCapsSize.dwVidMemFree < 0) {
-                        fFreeBytes += 4.2949673e+09;
+                        fFreeBytes += 4294967296.0;
                       }
 
                       fTotalBytes = (float)(int)nDDCapsSize.dwVidMemTotal;
                       if ((int)nDDCapsSize.dwVidMemTotal < 0) {
-                        fTotalBytes += 4.2949673e+09;
+                        fTotalBytes += 4294967296.0;
                       }
 
-                      Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\tVideo Memory Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.536743e-07), (double)(fFreeBytes * 9.536743e-07));
+                      Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\tVideo Memory Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.5367431640625e-7), (double)(fFreeBytes * 9.5367431640625e-7));
                       pdwTotalMemOut = &gD3DDeviceBlock0[nEnumDeviceIdx].dwTextureMemFree;
                       DDSCAPS2 dwMemCapsFlags = {0};
                       ppMemInterface = &gD3DDeviceBlock0[nEnumDeviceIdx].dwTextureMemTotal;
@@ -1948,15 +1948,15 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
                       } else {
                         fFreeBytes = (float)(int)*pdwTotalMemOut;
                         if ((int)*pdwTotalMemOut < 0) {
-                          fFreeBytes += 4.2949673e+09;
+                          fFreeBytes += 4294967296.0;
                         }
 
                         fTotalBytes = (float)(int)*ppMemInterface;
                         if ((int)*ppMemInterface < 0) {
-                          fTotalBytes += 4.2949673e+09;
+                          fTotalBytes += 4294967296.0;
                         }
 
-                        Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\tTexture Memory Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.536743e-07), (double)(fFreeBytes * 9.536743e-07));
+                        Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\tTexture Memory Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.5367431640625e-7), (double)(fFreeBytes * 9.5367431640625e-7));
                         pdwTotalMemOut = &gD3DDeviceBlock0[nEnumDeviceIdx].dwLocalMemFree;
                         dwMemCapsFlags.dwCaps2 = 0;
                         dwMemCapsFlags.dwCaps3 = 0;
@@ -1967,15 +1967,15 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
                         if (!hResult) {
                           fFreeBytes = (float)(int)*pdwTotalMemOut;
                           if ((int)*pdwTotalMemOut < 0) {
-                            fFreeBytes += 4.2949673e+09;
+                            fFreeBytes += 4294967296.0;
                           }
 
                           fTotalBytes = (float)(int)*ppMemInterface;
                           if ((int)*ppMemInterface < 0) {
-                            fTotalBytes += 4.2949673e+09;
+                            fTotalBytes += 4294967296.0;
                           }
 
-                          Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\t\tLocal Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.536743e-07), (double)(fFreeBytes * 9.536743e-07));
+                          Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\t\tLocal Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.5367431640625e-7), (double)(fFreeBytes * 9.5367431640625e-7));
                           if (!(nDDCapsSize.dwCaps2 & 0x200) || !(sD3DHalDevDesc.dwDevCaps & 0x1000)) {
                             Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\t\tDoes not support texturing from AGP memory.");
                           } else {
@@ -1992,15 +1992,15 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
                             } else {
                               fFreeBytes = (float)(int)*pdwTotalMemOut;
                               if ((int)*pdwTotalMemOut < 0) {
-                                fFreeBytes += 4.2949673e+09;
+                                fFreeBytes += 4294967296.0;
                               }
 
                               fTotalBytes = (float)(int)*ppMemInterface;
                               if ((int)*ppMemInterface < 0) {
-                                fTotalBytes += 4.2949673e+09;
+                                fTotalBytes += 4294967296.0;
                               }
 
-                              Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\t\tAGP Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.536743e-07), (double)(fFreeBytes * 9.536743e-07));
+                              Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\t\tAGP Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.5367431640625e-7), (double)(fFreeBytes * 9.5367431640625e-7));
                             }
                           }
 
@@ -2633,12 +2633,12 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, int hWn
           sViewport.dwWidth = RENDERER_nWindowWidth;
           sViewport.dwHeight = RENDERER_nWindowHeight;
           if (RENDERER_nWindowWidth < 0) {
-            sViewport.dvMaxX += 4.2949673e+09;
+            sViewport.dvMaxX += 4294967296.0;
           }
 
           sViewport.dvMaxY = (float)RENDERER_nWindowHeight;
           if (RENDERER_nWindowHeight < 0) {
-            sViewport.dvMaxY += 4.2949673e+09;
+            sViewport.dvMaxY += 4294967296.0;
           }
 
           sViewport.dvMinZ = 0.0;
@@ -2799,11 +2799,12 @@ void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame)
     RENDERER_D3D_ClearBackbuffer();
     if (pD2GFXRenderedDataStrc->bVSync) {
       dwFlags = 1;
+      g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, dwFlags);
     } else {
       dwFlags = 9;
+      g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, dwFlags);
     }
 
-    g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, dwFlags);
     d3dFloorCache::D3D_PlayBinkVideo(szFile, nResolutionMode, (fnBinkFrameCallback)fpFrame);
     g_bCutscenePlaying = 0;
 }
@@ -2881,8 +2882,8 @@ BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * pp
     uint32_t* pDstPixelFmt = gsD3DTextureDescTemplate;
     DWORD* pSrcTemplate = ddsdSize.ddpfPixelFormat;
     memcpy(pSrcTemplate, pDstPixelFmt, 32);
-    ddsdSize.dwHeight = nHeight;
     ddsdSize.dwWidth = nWidth;
+    ddsdSize.dwHeight = nHeight;
     ddsdSize.dwCaps = (g_bSupportsTextureCachingInternal ? -268435456 : 0) + 0x10005000;
     DWORD dwHResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &ddsdSize, (void**)ppSurface, nullptr);
     if (dwHResult) {
@@ -3043,7 +3044,7 @@ static BOOL __stdcall RENDERER_D3D_ExtractSpriteInfo(D2GfxDataStrc * pSprite, D2
 static void __stdcall RENDERER_D3D_CalculateTextureSize(D2D3DSpriteInfoStrc * pStruct) {
     int nWidth = pStruct->nWidth;
     int nTexDim = 0x20;
-    if (nWidth < 0x21 && pStruct->nHeight < 0x21 || (nTexDim = 0x80 , nWidth < 0x81 && pStruct->nHeight < 0x81) || (nTexDim = 0x100 , nWidth < 0x101 && pStruct->nHeight < 0x101)) {
+    if (nWidth <= 0x20 && pStruct->nHeight <= 0x20 || (nTexDim = 0x80 , nWidth <= 0x80 && pStruct->nHeight <= 0x80) || (nTexDim = 0x100 , nWidth <= 0x100 && pStruct->nHeight <= 0x100)) {
       pStruct->nTexWidth = nTexDim;
       pStruct->nTexHeight = nTexDim;
     }
@@ -3599,19 +3600,19 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
       nRemainingLines = spriteInfo.nTexHeight - nSkipLines;
       fV0Texels = (float)(nRemainingLines - nDrawLines);
       if (nRemainingLines - nDrawLines < 0) {
-        fV0Texels += 4.2949673e+09;
+        fV0Texels += 4294967296.0;
       }
 
       fV1Texels = (float)nRemainingLines;
       if (nRemainingLines < 0) {
-        fV1Texels += 4.2949673e+09;
+        fV1Texels += 4294967296.0;
       }
 
       spriteInfo.fV1 = fV1Texels * (1.0 / (float)spriteInfo.nTexHeight);
     } else {
       fV0Texels = (float)(spriteInfo.nTexHeight - nDrawLines);
       if (spriteInfo.nTexHeight - nDrawLines < 0) {
-        fV0Texels += 4.2949673e+09;
+        fV0Texels += 4294967296.0;
       }
     }
 

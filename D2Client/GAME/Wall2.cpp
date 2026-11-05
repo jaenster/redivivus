@@ -49,25 +49,11 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/GAME/PalShift.h"
-#include "D2Client/GAME/Sound.h"
-#include "D2Client/UNIT/Item.h"
-#include "D2Common/D2DynamicPathStrc.h"
-#include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "D2Common/Drlg/DrlgRoom.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Unit.h"
-#include "D2Common/Units/MissileStream.h"
-#include "D2Game/Objects/Objects.h"
-#include "D2Game/Objects/ObjectsRgn.h"
-#include "D2Game/UNIT/SUNITNPC.h"
-#include "D2Game/UNIT/SUnit.h"
-#include "D2Gdi/Renderer/Windowed.h"
-#include "D2Launch/MainMenus.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Win/Src/D2WinFont.h"
-#include "Game/Main.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -246,7 +232,6 @@ static uint32_t __stdcall DRAW_WORLD_IsUnitInLineOfSight(D2UnitStrc * pOtherUnit
       }
 
       pOtherUnit->eUnitFlagsEx |= UNITFLAGEX_ISINLOS;
-      return 1;
     }
 
     return 1;

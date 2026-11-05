@@ -24,8 +24,8 @@ void __stdcall DRLG_MapWorldToScreenCoords(int32_t * pX, int32_t * pY) {
 
 // Converts world coordinates to screen tile coordinates using the isometric transform. Computes pX = (2*Y + X) / 0xA0 and pY = (2*Y - X) / 0xA0. The 0xA0 (160) divisor corresponds to the tile dimension. From Drlg.cpp transform utilities.
 void __stdcall DRLG_CoordsWorldToScreenTile(int32_t * pX, int32_t * pY) {
-    int x = *pY;
     int nWorldX = *pX;
+    int x = *pY;
     *pX = (x * 2 + nWorldX) / 0xa0;
     *pY = (x * 2 - nWorldX) / 0xa0;
 }

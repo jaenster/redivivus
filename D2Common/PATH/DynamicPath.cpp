@@ -444,11 +444,10 @@ void __stdcall PATH_InterpolateDirection(D2DynamicPathStrc * pDynamicPath) {
       return;
     }
 
-    uint8_t bDiffDir = pDynamicPath->nDiffDirection;
-    uint8_t bCurDir = bDiffDir + pDynamicPath->nDirection & 0x3f;
+    uint8_t bCurDir = pDynamicPath->nDiffDirection + pDynamicPath->nDirection & 0x3f;
     pDynamicPath->nDirection = bCurDir;
     bCurDir = bCurDir - pDynamicPath->nNewDirection & 0x3f;
-    if (!(bCurDir > 0x1f && bDiffDir > 0x3f || bCurDir < 0x1f && bDiffDir < 0x3f)) {
+    if (!(bCurDir > 0x1f && pDynamicPath->nDiffDirection > 0x3f || bCurDir < 0x1f && pDynamicPath->nDiffDirection < 0x3f)) {
       return;
     }
 

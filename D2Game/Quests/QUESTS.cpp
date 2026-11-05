@@ -497,12 +497,6 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
 void __fastcall QUEST_OnPlayerEnteredArea(::SGAMEDATA * pGame, int32_t ePreviousLevelId, int32_t eEnteredLevelId, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
-    // Zeroed deliberately. Every one of these builders leaves part of the struct unwritten
-    // and QUEST_DispatchBroadcast dereferences pGame and pPlayer - it crashed in UNITS_GetRoom on a
-    // garbage pPlayer the first time an NPC gossip fired. Reading uninitialised stack is not a
-    // behaviour worth reproducing; a zero reaches the null guards and the broadcast is skipped.
-    // Retire-When: the writes the decompiler dropped are recovered per call site.
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
     questArg.nEvent = 3;
     questArg.sQuestArgs.sNpcActivate.nIndex = eEnteredLevelId;
@@ -584,7 +578,6 @@ void __fastcall QUEST_OnPlayerDisconnect(::SGAMEDATA * pGame, D2UnitStrc * pPlay
 
 void __fastcall QUEST_OnUnitInteraction_Unused(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
     questArg.nEvent = 0;
     questArg.pTarget = pUnit;
@@ -595,7 +588,6 @@ void __fastcall QUEST_OnUnitInteraction_Unused(::SGAMEDATA * pGame, D2UnitStrc *
 // NOTE: Register param types inferred (medium confidence): pClient (ECX): D2ClientStrc *, pUnitStrc (EDX): D2UnitStrc *
 void __fastcall QUEST_OnNpcInteraction(D2ClientStrc * pClient, D2UnitStrc * pUnitStrc, D2UnitStrc * pUnit, D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text) {
     D2QuestArgStrc questArg;
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = GAME::Clients::CLIENT_GetGame(pClient);
     questArg.nEvent = 0;
     questArg.pTarget = pUnit;
@@ -621,7 +613,6 @@ void __fastcall QUEST_OnNpcDeactivate(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
 
 void __fastcall QUEST_OnItemPickedUp(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
     questArg.nEvent = 4;
     questArg.pTarget = pUnit;
@@ -631,7 +622,6 @@ void __fastcall QUEST_OnItemPickedUp(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
 
 void __fastcall QUEST_OnItemDropped(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
     questArg.nEvent = 5;
     questArg.pTarget = pUnit;
@@ -641,7 +631,6 @@ void __fastcall QUEST_OnItemDropped(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D
 
 void __fastcall QUEST_OnItemEvent_Unused(::SGAMEDATA * pGame, D2UnitStrc * pTarget) {
     D2QuestArgStrc questArg;
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
     questArg.nEvent = 6;
     questArg.pTarget = pTarget;
@@ -933,7 +922,6 @@ void __fastcall QUEST_SetStateFlag(D2QuestDataStrc * pQuestData, int32_t nState,
 
 void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint16_t nGossipIndex) {
     D2QuestArgStrc questArg;
-    memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
     questArg.nEvent = 0xb;
     questArg.pPlayer = pPlayer;

@@ -1375,8 +1375,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x06_ENDGAME(char * pBytes) {
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x07_NEWROOM(char * pBytes) {
     D2RoomStrc* pRoomCache;
-    uint16_t nY = *(uint16_t*)(pBytes + 3);
     uint16_t nX = *(uint16_t*)(pBytes + 1);
+    uint16_t nY = *(uint16_t*)(pBytes + 3);
     if (!sgpDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58a);
       exit(-1);
@@ -1444,8 +1444,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0A_RemoveObject(D2GSPacketSrv0x0A * pB
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes) {
     D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
-    D2TraceFmt("HANDSHAKE id=%08X type=%u -> unit=%08X",
-               (unsigned)*(int32_t*)(pBytes + 2), (unsigned)(byte)pBytes[1], (unsigned)(uintptr_t)pUnit);
     if (pUnit) {
       UNIT::Player::HANDSHAKE_SetClientPlayerUnit(pUnit);
     }
@@ -2242,8 +2240,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS(D2GSPacketSrv0x22_
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x23_SETSKILL(D2GSPacketSrv0x23 * pBytes) {
-    uint32_t nItemGUID = pBytes->dwSkillOwnerGUID;
     uint16_t nSkill = pBytes->wSkillId;
+    uint32_t nItemGUID = pBytes->dwSkillOwnerGUID;
     D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;

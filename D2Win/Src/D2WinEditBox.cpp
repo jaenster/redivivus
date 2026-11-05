@@ -797,8 +797,7 @@ int __stdcall D2WINEDITBOX_FilterDigitChar(uint32_t dwUnused1, uint32_t dwUnused
 }
 
 uint32_t __stdcall D2WINEDITBOX_FilterLetterChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
-    char cFirstChar = *szText;
-    if (!((cFirstChar < 'a' || cFirstChar > 'z') && (cFirstChar < 'A' || cFirstChar > 'Z'))) {
+    if (!((*szText < 'a' || *szText > 'z') && (*szText < 'A' || *szText > 'Z'))) {
       return 1;
     }
 

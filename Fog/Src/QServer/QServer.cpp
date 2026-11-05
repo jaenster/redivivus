@@ -431,14 +431,14 @@ int __thiscall HACKL_CheckAndResetHacklistEntry(D2QServerStrc * pQServer, uint32
         return 0;
       }
       if (pDVar1->ipAddress.S_un.S_addr == nIpAddress) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pDVar1->nSecondaryTtlSec) {
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (!pDVar1->nSecondaryTtlSec) {
+          LeaveCriticalSection(lpCriticalSection);
+          return 0;
+        } else {
           pDVar1->nSecondaryTtlSec = 0x78;
           LeaveCriticalSection(lpCriticalSection);
           return 1;
         }
-
-        LeaveCriticalSection(lpCriticalSection);
-        return 0;
       }
 
       pDVar1 = pDVar1->pNext;
@@ -1680,8 +1680,7 @@ void __stdcall BanClient(D2QServerStrc * pQServer, int nClientId, char * szFile,
     _struct_1227 sClientIpAddr = pClientConn->ipAddress.S_un.S_un_b;
     char* szLogFile = szFile;
     int nLogLine = nLine;
-    char* szIpAddress = inet_ntoa((in_addr)sClientIpAddr);
-    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSHackList() from FILE:%s  LINE:%d", szIpAddress, szLogFile, nLogLine);
+    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSHackList() from FILE:%s  LINE:%d", inet_ntoa((in_addr)sClientIpAddr), szLogFile, nLogLine);
     CloseRemoteConnection(pQServer, nClientId, szFile, nLine);
     BanIpAddress(pQServer, szFile, (uint32_t)d2_bits_of(sClientIpAddr), nLine);
 }

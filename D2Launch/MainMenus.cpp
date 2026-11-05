@@ -8459,12 +8459,12 @@ void __stdcall UIMENU_CreateHeroSinglePlayer() {
       if (OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
         goto add_class_portraits;
       }
-      if (!nCharacterSelectionIndex) {
-        gpCtlCreateCharLadderLabel = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0xc1);
-        nTextAlign = 0xc2;
-      } else {
+      if (nCharacterSelectionIndex) {
         gpCtlCreateCharLadderLabel = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0xc3);
         nTextAlign = 0xc4;
+      } else {
+        gpCtlCreateCharLadderLabel = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0xc1);
+        nTextAlign = 0xc2;
       }
     } else {
       gpCtlCreateCharHardcoreLabel = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0xca);

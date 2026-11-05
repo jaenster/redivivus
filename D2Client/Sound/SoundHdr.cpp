@@ -533,8 +533,8 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
     }
 
     D2_FREE_AT(pSound->pSoundDataBuffer, ".\\Sound\\SoundHdr.cpp", 0x272);
-    pSound->pSoundDataBuffer = 0;
     pSound->nLoadState = 0;
+    pSound->pSoundDataBuffer = 0;
 }
 
 BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMultiPass, int32_t bRespectRecency) {

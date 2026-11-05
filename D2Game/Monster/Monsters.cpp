@@ -633,9 +633,11 @@ static void __stdcall MONSTER_AddEnchantmentToList(uint8_t byEnchantId, D2UnitSt
     int nSlot = 0;
     while (pMonData->MonUModList[nSlot]) {
       nSlot++;
-      if (nSlot >= 9) {
-        return;
+      if (nSlot < 9) {
+        continue;
       }
+
+      return;
     }
 
     if (nSlot >= 9) {
@@ -2968,9 +2970,11 @@ void __fastcall InitUmods(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nInde
     int nActiveUMods = 0;
     while (pUModList[nActiveUMods]) {
       nActiveUMods++;
-      if (nActiveUMods >= 9) {
-        return;
+      if (9 > nActiveUMods) {
+        continue;
       }
+
+      return;
     }
 
     if (nActiveUMods >= 9) {
@@ -3224,11 +3228,11 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
 }
 
 int32_t __fastcall MONSTER_IsMonsterUnit(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+      return 1;
+    } else {
       return 0;
     }
-
-    return 1;
 }
 
 void __fastcall SERVER_AwardKillExperience(D2UnitStrc * pUnit, D2UnitStrc * pVictim, ::SGAMEDATA * pGame) {

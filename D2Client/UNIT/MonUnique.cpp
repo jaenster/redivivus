@@ -576,23 +576,8 @@ void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
 
     int i = 0;
     do {
-      // GUARD, not a reproduction: pTmp is the unit's MonUMod list, decoded from the 0xAC
-      // packet's bit stream, and it indexes a 44-entry dispatch table. An id past the end
-      // calls through whatever follows the table. Retire it when the 0xAC bit decode is
-      // verified - NOT with the gaMonUniqueBaseModIds array fix, which is a different
-      // defect in the loop above.
-      //
-      // Measured, so the next reader does not have to guess: over two 220s runs the loop
-      // executes and this test rejects NOTHING (seen>=1, rejected=0). So it is a net, not
-      // a repair - it has never been observed to fire, and it should not be credited with
-      // fixing the jump to address 0x2 seen once before it was restored. That run also
-      // had PlayerMessage handing SKILLS_CltStartSkillCast an uninitialised pDVar1, which
-      // is the likelier cause; both were changed together and the evidence cannot
-      // separate them.
-      uint32_t nModId = (uint32_t)pTmp[i];
-      if (nModId >= (uint32_t)(sizeof(gapMonUniqueModInitFuncs) / sizeof(gapMonUniqueModInitFuncs[0]))) {
-      } else if (gapMonUniqueModInitFuncs[nModId]) {
-        (*gapMonUniqueModInitFuncs[nModId])(pUnit, nModId, bApply);
+      if (gapMonUniqueModInitFuncs[pTmp[i]]) {
+        (*gapMonUniqueModInitFuncs[pTmp[i]])(pUnit, (uint32_t)pTmp[i], bApply);
       }
 
       i++;

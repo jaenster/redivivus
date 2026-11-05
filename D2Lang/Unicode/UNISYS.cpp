@@ -35,9 +35,9 @@ uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * ws
     while (wCurChar != L'\0' && *wszText2 != L'\0' && wCurChar == *wszText2) {
       uint16_t* pWNext;
       pWNext = wszText1 + 1;
+      wCurChar = *pWNext;
       wszText1++;
       wszText2++;
-      wCurChar = *pWNext;
     }
 
     if ((uint16_t)*wszText2 > (uint16_t)*wszText1) {

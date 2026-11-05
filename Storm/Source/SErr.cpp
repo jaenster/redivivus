@@ -77,8 +77,7 @@ void __stdcall SERR_AddStormFacility(uint16_t wModuleId) {
 
     SIZE_T dwBytes = 0xc;
     DWORD dwFlags = 4;
-    HANDLE hHeap = GetProcessHeap();
-    uint16_t* pNewNode = (uint16_t*)HeapAlloc(hHeap, dwFlags, dwBytes);
+    uint16_t* pNewNode = (uint16_t*)HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
     *ppTailLink = (uint32_t)pNewNode;
     *pNewNode = wModuleId;
     HMODULE hModule = SSystem::StormGetInstance();
@@ -122,8 +121,7 @@ static LPSTR * SERR_GetString(int32_t nErrorIndex) {
     int nLen = 0x100;
     char* szErrorString = gszErrorStringBuffer;
     UINT uID = nErrorIndex + 0x5100;
-    HMODULE hInstance_lcl = SSystem::StormGetInstance();
-    /* HINSTANCE hInstance for LoadStringA */ nLen = LoadStringA(hInstance_lcl, uID, szErrorString, nLen);
+    /* HINSTANCE hInstance for LoadStringA */ nLen = LoadStringA(SSystem::StormGetInstance(), uID, szErrorString, nLen);
     szErrorString = gszErrorStringBuffer;
     if (nLen) {
       return (LPSTR*)szErrorString;
@@ -220,8 +218,7 @@ int __stdcall SErrRegisterMessageSource(uint16_t wModuleId, HMODULE dwModuleBase
     SERR_InternalEnterCriticalSection();
     SIZE_T dwBytes = 0xc;
     DWORD dwFlags = 4;
-    HANDLE hHeap = GetProcessHeap();
-    uint16_t* pNewModule = (uint16_t*)HeapAlloc(hHeap, dwFlags, dwBytes);
+    uint16_t* pNewModule = (uint16_t*)HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
     *pNewModule = wModuleId;
     *(HMODULE*)(pNewModule + 2) = dwModuleBase;
     *(void**)(pNewModule + 4) = (void*)gpErrorModuleList;

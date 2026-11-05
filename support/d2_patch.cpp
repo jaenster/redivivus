@@ -36,6 +36,7 @@
 #include "support/d2_trace.h"
 
 #include "D2CMP/SRC/LRUCache.h"
+#include "D2Game/Game/CCmd.h"
 
 #include <cstdio>
 
@@ -93,6 +94,32 @@ bool EachSection(unsigned i, unsigned char** ppStart, size_t* pnSize, unsigned* 
 }
 
 volatile long g_bInstalled = 0;
+
+// ---------------------------------------------------------------------------
+// Per-opcode counts of the client messages the server dispatches, for d2ctl's `pkt`
+// (support/d2_control.cpp). NET_D2GS_SERVER_HandleAnyIncomingPacket (0052cfe0) hands
+// each dequeued message to one of two dispatchers, GameSetup (mode 0) and InGame
+// (mode 1), each once; both messages are a 4-byte client id followed by the client's
+// packet, opcode first. The system queue (mode 2) carries no client packet. The
+// originals are reached through pointers so the redirect cannot rewrite these calls.
+using PfnClientMessageGameSetup = decltype(&D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup);
+using PfnClientMessageInGame = decltype(&D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_InGame);
+PfnClientMessageGameSetup g_pfnClientMessageGameSetup = &D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup;
+PfnClientMessageInGame g_pfnClientMessageInGame = &D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_InGame;
+
+void CountServerPacket(const void* pMessage, size_t nSize) {
+    if (pMessage && nSize > 4) g_anServerPktCount[((const unsigned char*)pMessage)[4]]++;
+}
+
+void __fastcall D2PATCH_ClientMessageGameSetup(D2GSClientMsgEnvelopeStrc* pPacket, int32_t nPacketSize) {
+    CountServerPacket(pPacket, nPacketSize > 0 ? (size_t)nPacketSize : 0);
+    g_pfnClientMessageGameSetup(pPacket, nPacketSize);
+}
+
+void __fastcall D2PATCH_ClientMessageInGame(char* pBytes, size_t nSize) {
+    CountServerPacket(pBytes, nSize);
+    g_pfnClientMessageInGame(pBytes, nSize);
+}
 
 // The original, reached INDIRECTLY so the redirect below cannot rewrite it and
 // turn the wrapper into infinite recursion. A `CALL [mem]` is not a `CALL rel32`.
@@ -255,6 +282,12 @@ void D2PATCH_InstallAll(void) {
     // does nothing.
     D2PATCH_RedirectAllCalls((void*)&D2CMP::SRC::LRUCache::LRUCACHE_Unlink,
                              (void*)&D2PATCH_LRUCACHE_Unlink, 2);
+
+    // One call each, from NET_D2GS_SERVER_HandleAnyIncomingPacket.
+    D2PATCH_RedirectAllCalls((void*)&D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup,
+                             (void*)&D2PATCH_ClientMessageGameSetup, 1);
+    D2PATCH_RedirectAllCalls((void*)&D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_InGame,
+                             (void*)&D2PATCH_ClientMessageInGame, 1);
 
     // Brand the build: the version line reads "R<Ghidra version>" (ghidra_version.cpp,
     // written by each regen) instead of "v 1.14d". This is a deliberate DIVERGENCE from

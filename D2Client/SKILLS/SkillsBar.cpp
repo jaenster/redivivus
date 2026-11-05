@@ -99,20 +99,16 @@ BOOL __fastcall Skills_CltStFunc_AllocStatListByCltCalc(D2UnitStrc * pUnit, eD2S
 
 // Client DoFunc for Barbarian Double Swing. Before nSeqFrame reaches 0x600: plays the hit-class swing sound and steers the unit's dynamic path toward the confirmed target. After 0x600: searches for the nearest valid target via SKILL_FindClosestTargetWithStats (range 3, excluding current target) and steers toward it, implementing the second-swing target redirect.
 BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2Sounds nSoundId;
     D2UnitStrc* pConfirmedTarget;
     int nExcludeGUID;
     int32_t nHitSound;
     int32_t nTargetX;
     int32_t nTargetY;
     if ((int)(pUnit->nSeqFrame & 0xffffff00U) < 0x600) {
-      uint32_t nHitClass;
       nTargetY = 0;
       nTargetX = 0;
       nHitSound = 4;
-      nHitClass = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
-      nSoundId = UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, nHitClass);
-      Sound::SOUND_PlaySound(nSoundId, pUnit, nHitSound, nTargetX, nTargetY);
+      Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, D2Common::Units::GetHitClassForPlayerOrMonster(pUnit)), pUnit, nHitSound, nTargetX, nTargetY);
       pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
       if (pConfirmedTarget && pUnit->pPath.pStaticPath) {
         D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);

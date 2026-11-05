@@ -222,7 +222,10 @@ int16_t __fastcall PARTY_CreateParty(::SGAMEDATA * pGame) {
 static void __stdcall PARTY_FreePartyMembers(D2UnitPartyControlSub * pPartyControlSub, ::SGAMEDATA * pGame) {
     D2UnitPartyControlSubSub* pNextSubSub;
     D2UnitPartyControlSubSub* pSub;
-    if (pPartyControlSub) {
+    if (!pPartyControlSub) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
+      exit(-1);
+    } else {
       {
         D2UnitStrc* pMember;
         pSub = pPartyControlSub->pSub;
@@ -248,9 +251,6 @@ static void __stdcall PARTY_FreePartyMembers(D2UnitPartyControlSub * pPartyContr
         exit(-1);
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
-    exit(-1);
 }
 
 // Removes a party sub-record matching nPartyId from the game's party control linked list and frees its members. Walks the pSub chain, unlinks the matching entry by patching the predecessor's pPrev pointer (or updating pPartyControl->pSub for the head), then calls PARTY_FreePartyMembers. Halts with an internal error if pPartyControl is null.

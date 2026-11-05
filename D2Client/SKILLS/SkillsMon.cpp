@@ -1179,6 +1179,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ChargeAnim(D2UnitStrc * pUnit, eD2Skills eS
       D2Common::Skills::SKILL_SetFlags(pSkill, 0);
       pUnit->nFrameCount = pSkillTxt->Param[0] << 8;
       nPercent = pSkillTxt->Param[1];
+      D2Common::Units::SetSequenceFrame(pUnit, nPercent);
     } else {
       int32_t nLine;
       if (nCurrentFrame == pSkillTxt->Param[2]) {
@@ -1203,9 +1204,9 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ChargeAnim(D2UnitStrc * pUnit, eD2Skills eS
 
       pUnit->nFrameCount = pSkillTxt->Param[4] << 8;
       nPercent = pSkillTxt->Param[5];
+      D2Common::Units::SetSequenceFrame(pUnit, nPercent);
     }
 
-    D2Common::Units::SetSequenceFrame(pUnit, nPercent);
     return 1;
 }
 
@@ -2022,8 +2023,7 @@ void __fastcall SKILLSMON_SetMissilePathLinear(D2UnitStrc * pUnit, int32_t nSeed
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    uint32_t nXSP1 = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nXSP1 + nSeedOffset);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nSeedOffset);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nTotalFrames);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);

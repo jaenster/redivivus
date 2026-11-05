@@ -390,8 +390,8 @@ int32_t __fastcall GetOwnersPetType(D2UnitStrc * pUnit, int32_t nUnitGUID) {
       return 0;
     }
 
-    int nPetTypeSize = sgptDataTable->nTxtPetTypeSize;
     int i = 1;
+    int nPetTypeSize = sgptDataTable->nTxtPetTypeSize;
     if (1 >= nPetTypeSize) {
       return 0;
     }

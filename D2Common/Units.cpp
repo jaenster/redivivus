@@ -2390,11 +2390,13 @@ D2UnitStrc * __stdcall GetEquippedWeapon(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return nullptr;
     }
-    if (!pUnit->pInventory) {
+
+    struct D2InventoryStrc* tmp1 = pUnit->pInventory;
+    if (!tmp1) {
       return nullptr;
     }
 
-    BOOL bHasWeapon = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pUnit->pInventory, &pUnit, &nBodyLoc, &bSwitch);
+    BOOL bHasWeapon = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(tmp1, &pUnit, &nBodyLoc, &bSwitch);
     return bHasWeapon ? (D2UnitStrc*)pUnit : nullptr;
 }
 

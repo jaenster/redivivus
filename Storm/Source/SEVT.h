@@ -46,7 +46,7 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041c4e0(int * pList);
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041eab0(int * pList);
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_00420490(int * pList);
 // Calculates the next power of 2 greater than or equal to a given value passed in ECX. Used for sizing hash tables and event handler arrays. Returns the smallest power of 2 that can contain the input value times 2 plus 2.
-uint32_t __fastcall SEVT_NextPowerOf2(int nValue);
+uint32_t __fastcall SEVT_NextPowerOf2(uint32_t nValue);
 // @sourcefile .\SOURCE\SEVT.CPP
 // @blizzard CopyIdHashTable (SEVT.CPP)
 void __stdcall SEVT_CopyIdHashTable(struct D2SevtHandlerTableStrc * pDstTable, struct D2SevtHandlerTableStrc * pSrcTable);

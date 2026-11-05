@@ -2266,7 +2266,7 @@ void __fastcall SKILLDESC_AppendItemBuffText(D2UnitStrc * pUnit, D2UnitStrc * pI
           do {
             nSetStateIndex = nItemQuality * 4;
             if (nItemQuality != iVar1) {
-              if (iVar1 < nItemQuality) {
+              if (nItemQuality > iVar1) {
                 nSetStateIndex += -4;
               }
               if (nEquippedSetMask & 1 << D2_SHIFT_COUNT(nItemQuality)) {
@@ -3674,8 +3674,8 @@ int __stdcall SKILLDESC_CalcElemDamageRange(D2UnitStrc * pUnit, int * pnMinDamag
         *pnColor = *pElemDmgTypeTable;
       }
 
-      pElemDmgTypeTable++;
       pElemStatTable += 3;
+      pElemDmgTypeTable++;
     } while ((int)pElemStatTable < (intptr_t)((char*)&gaSkillElemDamageStatTriples + sizeof(gaSkillElemDamageStatTriples) + 8));
 
     nElemMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);
@@ -3820,9 +3820,9 @@ static void AdjustDamageByType(D2UnitStrc * pUnit, int * pMinDamage, int * pMaxD
         nPoisonLength = nStatVal / nPoisonLength;
       }
 
-      nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);
+      int nStatVal2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);
       nPoisonMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmaxdam, 0);
-      *pMinDamage += nStatVal * nPoisonLength >> 8;
+      *pMinDamage += nStatVal2 * nPoisonLength >> 8;
       *pMaxDamage += nPoisonMaxDmg * nPoisonLength >> 8;
     }
 }

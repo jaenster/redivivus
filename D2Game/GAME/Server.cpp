@@ -353,8 +353,8 @@ int __stdcall FreeServer() {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&gQServerGameListCs);
     UNIT::sunitproxy::SUNITPROXY_FreeAllNpcItemTables();
     gpQServerGameState = 0;
-    StartingAct = 0;
     QServerNextToken = 1;
+    StartingAct = 0;
     return 1;
 }
 
@@ -1467,15 +1467,15 @@ static void UpdatePerformanceMetrics(::SGAMEDATA * pGame) {
 
 // Updates day/night environment cycle for all 5 acts. For each act, checks if cycle index changed via DRLGENV_UpdateCycleIndex. When cycle changes, extracts new cycle index/tick count/eclipse flag, refreshes all player item states (charges/durability based on light level), and broadcasts 0x53 Darkness packet to all clients in that act. Environment cycles affect visibility, light radius, and missile behavior.
 void __fastcall UpdateActEnvironments(::SGAMEDATA * pGame) {
+    D2GSPacketSrv0x53 packet0x53;
     BOOL bCycleChanged;
     D2UnitStrc* pPlayerUnit_lcl;
-    D2GSPacketSrv0x53 packet0x53;
     BOOL bEclipseOut;
     int nTicksOut;
     int nCycleOut;
     D2ClientStrc* pClient;
-    D2DrlgActStrc** ppActLoop = pGame->pAct;
     uint32_t nActIndex = 0;
+    D2DrlgActStrc** ppActLoop = pGame->pAct;
     do {
       D2DrlgActStrc** ppActCurrent;
       ppActCurrent = ppActLoop;

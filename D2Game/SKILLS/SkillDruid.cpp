@@ -423,7 +423,7 @@ BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc *
       int32_t nMissileIdx;
       SkillsServer::CreatingAMissile(pGame, nSrvMissle, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       nRemainingMissiles = nMissileCount - 1;
-      if (nRemainingMissiles <= 0) {
+      if (0 >= nRemainingMissiles) {
         return 1;
       }
 

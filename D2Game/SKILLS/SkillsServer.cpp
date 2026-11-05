@@ -3382,8 +3382,8 @@ D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMi
     }
 
     sSkillArg.nY = nOwnerCoord + nOffsetY;
-    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nMissileTxtNo = nSrvMissle;
     if (!nTargetX || !nTargetY) {
       BOOL BVar1;
@@ -3566,10 +3566,10 @@ BOOL __fastcall Skills_SrvDoFunc_001_ShootArrow(::SGAMEDATA * pGame, D2UnitStrc 
       nArrowMissileId = D2Common::Skills::SKILL_GetArrowModifierSkill(pUnit, &nSkillLvl);
       if (nArrowMissileId != MISSILE_Magicarrow) {
         CreatingAMissile(pGame, nArrowMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 1);
-        return 1;
+      } else {
+        CreatingAMissile(pGame, MISSILE_Magicarrow, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       }
 
-      CreatingAMissile(pGame, MISSILE_Magicarrow, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 
@@ -3720,11 +3720,11 @@ BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2
       if (!nActiveWeaponHand) {
         if (nActiveWeaponSlot == 5) {
           nThrowableStatVal = 4;
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStatVal);
         } else {
           nThrowableStatVal = 5;
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStatVal);
         }
-
-        pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStatVal);
       }
 
       nThrowableStatVal = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeaponItem);
@@ -3772,11 +3772,11 @@ BOOL __fastcall Skills_SrvDoFunc_005_ThrowWeaponRightHand(::SGAMEDATA * pGame, D
       if (nWeaponHand) {
         if (nWeaponSlot == 5) {
           nThrowableStat = 4;
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStat);
         } else {
           nThrowableStat = 5;
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStat);
         }
-
-        pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStat);
       }
 
       nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeaponItem);

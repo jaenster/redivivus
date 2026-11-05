@@ -401,7 +401,7 @@ void __fastcall Q13_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A2Q5 "The Summoner" - state-3 handler (sStateFunctions[3]). When the quest is introduced and the gossip args indicate a player-leave condition (nIndex > 0x27, pTextControl == 0x28 sentinel), removes the player from the quest participation GUID list (QUESTGUID_RemovePlayerFromList). Cleanup when a participant departs.
 void __fastcall Q13_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!(pQuestData->bIsNotIntroduction != '\0' && 0x27 < pQuestArgs->sQuestArgs.sNpcActivate.nIndex && pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x28)) {
+    if (!(pQuestData->bIsNotIntroduction != '\0' && pQuestArgs->sQuestArgs.sNpcActivate.nIndex >= 0x28 && pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x28)) {
       return;
     }
 

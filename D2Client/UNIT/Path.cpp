@@ -54,7 +54,10 @@ void __fastcall ConfirmTarget(D2UnitStrc * pUnit) {
     D2UnitStrc* pSetTargetUnit;
     int32_t nUnitGUID;
     eD2UnitType eUnitType;
-    if (pUnit) {
+    if (!pUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26);
+      exit(-1);
+    } else {
       {
         D2DynamicPathStrc* pDynamicPath;
         pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -79,9 +82,6 @@ void __fastcall ConfirmTarget(D2UnitStrc * pUnit) {
         return;
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26);
-    exit(-1);
 }
 
 void __fastcall thunk_PATH_SnapPositionToTile(D2UnitStrc * pUnit) {

@@ -505,14 +505,14 @@ eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGa
 }
 
 int __fastcall PARTYSCREEN_ClearHostileRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+    if ((pUnit && pUnit->eUnitType == UNIT_PLAYER) == 0) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15);
+      exit(-1);
+    } else {
       UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
       UNIT::PlayerList::SendRelationshipStatus(pGame, pUnit, pTarget, 8, 0);
       return 1;
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15);
-    exit(-1);
 }
 
 void __fastcall PARTYSCREEN_SetHostileRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {

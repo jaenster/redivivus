@@ -58565,18 +58565,18 @@ static int __stdcall UI_SLIDER_GetValueFromPosition(int32_t nCurrentPos, int32_t
     int nStepCount = pSliderItem->nSubImageCount - 1;
     float fStepCount = (float)nStepCount;
     if (nStepCount < 0) {
-      fStepCount += 4.2949673e+09;
+      fStepCount += 4294967296.0;
     }
 
     nStepCount = nMaxPos - nMinPos + 1;
     float fRange = (float)nStepCount;
     if (nStepCount < 0) {
-      fRange += 4.2949673e+09;
+      fRange += 4294967296.0;
     }
 
     float fOffset = (float)(nCurrentPos - nMinPos);
     if (nCurrentPos - nMinPos < 0) {
-      fOffset += 4.2949673e+09;
+      fOffset += 4294967296.0;
     }
 
     int32_t nResultValue = (int32_t)(int64_t)std::nearbyint(fRange * fStepCount / fOffset);
@@ -58586,23 +58586,23 @@ static int __stdcall UI_SLIDER_GetValueFromPosition(int32_t nCurrentPos, int32_t
 static int __fastcall UI_SLIDER_GetPositionFromValue(int32_t nMinPos, D2EscMenuItemStrc * pSliderItem, int32_t nMaxPos) {
     float fRange = (float)(nMaxPos - nMinPos);
     if (nMaxPos - nMinPos < 0) {
-      fRange += 4.2949673e+09;
+      fRange += 4294967296.0;
     }
 
     int nSteps = pSliderItem->nSubImageCount - 1;
     float fStepCount = (float)nSteps;
     if (nSteps < 0) {
-      fStepCount += 4.2949673e+09;
+      fStepCount += 4294967296.0;
     }
 
     float fCurrentValue = (float)pSliderItem->nImageIndex;
     if (pSliderItem->nImageIndex < 0) {
-      fCurrentValue += 4.2949673e+09;
+      fCurrentValue += 4294967296.0;
     }
 
     float fBasePos = (float)nMinPos;
     if (nMinPos < 0) {
-      fBasePos += 4.2949673e+09;
+      fBasePos += 4294967296.0;
     }
 
     int32_t nResultPos = (int32_t)(int64_t)std::nearbyint(fBasePos + fCurrentValue * (fRange / fStepCount));
@@ -59044,7 +59044,7 @@ static void ESCMENU_HandleSliderDrag(int32_t nMouseY, int32_t nMouseX) {
               nLastIndex = pDVar1->nSubImageCount - 1;
               fLastIndex = (float)nLastIndex;
               if (nLastIndex < 0) {
-                fLastIndex += 4.2949673e+09;
+                fLastIndex += 4294967296.0;
               }
 
               nImageIndex = (int)((float)(nMouseX - (nSliderTrackX + 0xc)) / (265.0 / fLastIndex * 0.5) + 1.0) / 2;
@@ -59336,13 +59336,14 @@ void __stdcall ESCMENU_Initialize() {
       ESCMENU_LoadLocalizedImages(&gaEscMenuHeaderDeleteChar.nItemCount, gaEscMenuDeleteCharTable);
       pSaveExitTable = gaEscMenuExpansionSaveExitTable;
       pSaveExitHeader = &gaEscMenuHeaderExpansionSaveExit;
+      ESCMENU_LoadLocalizedImages(&pSaveExitHeader->nItemCount, pSaveExitTable);
     } else {
       ESCMENU_LoadLocalizedImages(&gaEscMenuHeaderSwitchClass.nItemCount, gaEscMenuSwitchClassTable);
       pSaveExitTable = gaEscMenuClassicSaveExitTable;
       pSaveExitHeader = &gaEscMenuHeaderExpansionOptions;
+      ESCMENU_LoadLocalizedImages(&pSaveExitHeader->nItemCount, pSaveExitTable);
     }
 
-    ESCMENU_LoadLocalizedImages(&pSaveExitHeader->nItemCount, pSaveExitTable);
     gpEscMenuItemCount = &gEscMenuHeaderInitData;
     gpEscMenuCurrentTable = gaEscMenuMainTable;
     szWidgetPath[0] = '\0';
@@ -59578,12 +59579,12 @@ void __stdcall ESCMENU_DrawProgressBar(D2EscMenuItemStrc * pMenuItem, int32_t nB
     int bIsFilled = pMenuItem->nSubImageCount - 1;
     float fSubImageMax = (float)bIsFilled;
     if (bIsFilled < 0) {
-      fSubImageMax += 4.2949673e+09;
+      fSubImageMax += 4294967296.0;
     }
 
     float fImageIndex = (float)pMenuItem->nImageIndex;
     if (pMenuItem->nImageIndex < 0) {
-      fImageIndex += 4.2949673e+09;
+      fImageIndex += 4294967296.0;
     }
 
     int nBarLeftX = nCenterX - (int)(fImageIndex * (-265.0 / fSubImageMax));

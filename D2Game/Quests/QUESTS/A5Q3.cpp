@@ -177,8 +177,8 @@ void __fastcall Q33_SendQuestStatePacket(D2UnitStrc * pUnit) {
     D2GSPacketSrv0x5D aPacketBuf;
     memset(&aPacketBuf, 0, sizeof(aPacketBuf));
     aPacketBuf.nPacketId = ']';
-    aPacketBuf.nQuestId = '!';
     aPacketBuf.nAlertFlags = ' ';
+    aPacketBuf.nQuestId = '!';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x11e);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
 }

@@ -754,9 +754,6 @@ D2GfxInfoUnkStrc * __fastcall GFX_FindGfxInfoByModeAndWeapon(D2UnitStrc * pUnit,
       nAnimMode = Source::ClientEngine::CLIENT_GetEffectiveAnimMode(pUnit);
     }
 
-    if ((uintptr_t)pGfxInfo < 0x10000u || ((uintptr_t)pGfxInfo & 3u)) {
-      return nullptr;
-    }
     D2GfxInfoUnkStrc* pCur = pGfxInfo->pGfxInfoUnk;
     while (true) {
       if (!pCur) {
@@ -800,10 +797,10 @@ static BOOL GFX_FreeGfxInfoEntry(D2UnitStrc * pUnit, D2GfxInfoUnkStrc * pGfxInfo
     D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0x3d0);
     if (!pPrev) {
       pGfxInfo->pGfxInfoUnk = pCur;
-      return 1;
+    } else {
+      pPrev->pNext = pCur;
     }
 
-    pPrev->pNext = pCur;
     return 1;
 }
 

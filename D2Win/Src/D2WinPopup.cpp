@@ -127,7 +127,6 @@ BOOL __stdcall D2WINPOPUP_HandleClick(D2UIMouseMsgStrc * pMsg) {
 BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
     int nRelMouseX;
     int nRelX;
-    int nSizeY;
     if (pPopup->sControl.neD2FormType != FORM_Popup) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa6);
       exit(-1);
@@ -135,11 +134,10 @@ BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
 
     uint32_t uVar1 = pPopup->sControl.dwState;
     if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
-      nSizeY = pPopup->sControl.dwSizeY;
       pPopup->bCentered = -1;
       nRelMouseX = D2Client::Mouse::nPosX - pPopup->sControl.dwPosX;
-      nRelX = nSizeY - pPopup->sControl.dwPosY + D2Client::Mouse::nPosY;
-      if (nRelMouseX >= 0 && nRelMouseX <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= nSizeY) {
+      nRelX = pPopup->sControl.dwSizeY - pPopup->sControl.dwPosY + D2Client::Mouse::nPosY;
+      if (nRelMouseX >= 0 && nRelMouseX <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= pPopup->sControl.dwSizeY) {
         pPopup->bCentered = nRelX / 0x14;
       }
 

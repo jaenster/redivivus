@@ -773,7 +773,7 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
     nMaskTmp = gnGlideTexMemBaseAddress[0];
     float fTotalTexMemBytes = (float)nCacheEnd;
     if (nCacheEnd < 0) {
-      fTotalTexMemBytes += 4.2949673e+09;
+      fTotalTexMemBytes += 4294967296.0;
     }
     if (!(3670016.0 <= fTotalTexMemBytes)) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\tDoesn\'t have enough video memory (3.5 MB) to adequately run Diablo II!\n");
@@ -1804,13 +1804,13 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
         nSpriteResult = texSizeBuf.nHeight - nSkipLines - nDrawLines;
         fTmp = (float)nSpriteResult;
         if (nSpriteResult < 0) {
-          fTmp += 4.2949673e+09;
+          fTmp += 4294967296.0;
         }
 
         texSizeBuf.fTexT0 += fInvTexHeight * fTmp;
         fTmp = (float)nSkipLines;
         if (nSkipLines < 0) {
-          fTmp += 4.2949673e+09;
+          fTmp += 4294967296.0;
         }
 
         texSizeBuf.nHeight = nDrawLines;
@@ -1818,7 +1818,7 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
       } else {
         fTmp = (float)(texSizeBuf.nHeight - nDrawLines);
         if (texSizeBuf.nHeight - nDrawLines < 0) {
-          fTmp += 4.2949673e+09;
+          fTmp += 4294967296.0;
         }
 
         texSizeBuf.nHeight = nDrawLines;
@@ -1830,19 +1830,19 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
         nSpriteResult = texSizeBuf.nTexHeight - nSkipLines;
         texSizeBuf.fTexT0 = (float)(nSpriteResult - nDrawLines);
         if (nSpriteResult - nDrawLines < 0) {
-          texSizeBuf.fTexT0 += 4.2949673e+09;
+          texSizeBuf.fTexT0 += 4294967296.0;
         }
 
         texSizeBuf.fTexS1 = (float)nSpriteResult;
         if (nSpriteResult < 0) {
-          texSizeBuf.fTexS1 += 4.2949673e+09;
+          texSizeBuf.fTexS1 += 4294967296.0;
         }
 
         texSizeBuf.fTexS1 *= fInvTexHeight;
       } else {
         texSizeBuf.fTexT0 = (float)(texSizeBuf.nTexHeight - nDrawLines);
         if (texSizeBuf.nTexHeight - nDrawLines < 0) {
-          texSizeBuf.fTexT0 += 4.2949673e+09;
+          texSizeBuf.fTexT0 += 4294967296.0;
         }
       }
 

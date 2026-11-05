@@ -747,11 +747,11 @@ static void __stdcall Q35_FireAncientDeathMissile(D2QuestArgStrc * pQuestArg, D2
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.pOwner = pQuestArg->pTarget;
     sSkillArg.nFlags = 0x420;
     sSkillArg.nMissileTxtNo = MISSILE_AncientDeathCenter;
-    eD2UnitType eUnitType = pAncientUnit->eUnitType;
+    sSkillArg.pOwner = pQuestArg->pTarget;
     sSkillArg.pMissile = sSkillArg.pOwner;
+    eD2UnitType eUnitType = pAncientUnit->eUnitType;
     int nUnitXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nUnitXValue = pAncientUnit->pPath.pStaticPath->nPosX;

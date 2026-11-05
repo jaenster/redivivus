@@ -120,9 +120,11 @@ int32_t __stdcall DRLGPRESET_GetObjectTableActCount(uint8_t nActNo) {
       nStride += 6;
       pObjectEntry += 6;
       nCount += 6;
-      if (nStride >= 0x96) {
-        return nCount;
+      if (nStride < 0x96) {
+        continue;
       }
+
+      return nCount;
     }
 
     return nCount + 3;

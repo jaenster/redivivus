@@ -10,6 +10,18 @@ extern "C" void D2Trace(const char* pszWhere);
 // unwinding. Only the %-specifiers wsprintfA supports are safe here.
 extern "C" void D2TraceFmt(const char* pszFormat, ...);
 
+// A release build traces nothing (D2Trace returns at once), and it does not evaluate
+// the arguments either: a trace line is free to read state that is only safe to read
+// in a development build. DRLGACTMISC_AllocDrlgLevel's LVL-ALLOC line takes
+// __builtin_return_address(1) and (2), which walk the EBP chain; off a frame without one
+// that faults, and as a call the release build evaluated it on every level allocation.
+// The definitions in d2_trace.cpp spell the names in parentheses, which no
+// function-like macro expands.
+#if !defined(REDIVIVUS_DEV) && !defined(D2_TRACE_DEFINITIONS)
+#define D2Trace(...) ((void)0)
+#define D2TraceFmt(...) ((void)0)
+#endif
+
 // Write a crash report for a Fog halt (support/d2_crash.cpp): the line, the
 // call-site address and the halting thread's stack. Declared here because the
 // generated ErrorManager.cpp already includes this header.

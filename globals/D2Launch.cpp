@@ -308,11 +308,6 @@ namespace D2Client::UI::Dialog {
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
-// 0x0070cc4c and 0x0077abf4. Their only reader is ShowOogErrorDialog 0043b9f0, whose
-// OOG_ERROR_BNET_ACCOUNT_CHECK arm was one of the arms the generator dropped, so the
-// globals were never emitted either. gnBnetAccountLoginFailCount starts at 1 in the image.
-int gnBnetAccountLoginFailCount = 1;
-char gszOogLastIniStringCache[16] = {};
 
 namespace D2Client::Mouse {
 

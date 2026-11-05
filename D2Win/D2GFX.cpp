@@ -17,7 +17,6 @@
 #include "D2gfx/D2GFX.h"
 #include "Fog/Src/LogManager.h"
 #include "globals/globals.h"
-#include "support/d2_trace.h"
 #include "D2Win/D2GFX.data.h"
 #include "D2Win/D2WinList.h"
 #include "D2Win/Src/D2WinMain.data.h"

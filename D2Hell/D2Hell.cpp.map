@@ -931,23 +931,6 @@
       ]
     },
     {
-      "name": "D2FILE_CleanupCryptHandles",
-      "address": "00517df5",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00517df5"
-        }
-      ],
-      "namespace": "D2Hell",
-      "calledFunctions": [
-        "D2FILE_CleanupCryptHandles"
-      ],
-      "usedTypes": [
-        "int32_t"
-      ]
-    },
-    {
       "name": "StaticInit_gFaultHandlerList",
       "address": "006cae5f",
       "lines": [

@@ -987,8 +987,8 @@ static uint32_t __stdcall CUNIT_IsItemInAnyInventory(D2UnitStrc * pExcludeUnit, 
         nBucket++;
       } while (nBucket < 0x80);
 
-      nTable++;
       ppUnitTable = (D2UnitStrc* (*)[128])((char*)&ServerSideUnitHashTables + 512);
+      nTable++;
     } while (nTable < 2);
 
     return 0;
@@ -1646,8 +1646,8 @@ void __stdcall FreeAllUnits() {
           pNextUnit = pUnit->pListNext;
           FreeAny(pUnit);
           nTableOffset = *pFreeOrder * 0x80;
-          ServerSideUnitHashTables[*pFreeOrder][nBucket] = pNextUnit;
           pUnit = pNextUnit;
+          ServerSideUnitHashTables[*pFreeOrder][nBucket] = pNextUnit;
         }
 
         nBucket++;
@@ -1666,8 +1666,8 @@ void __stdcall FreeAllUnits() {
           pNextUnit = pUnit->pListNext;
           FreeAny(pUnit);
           nTableOffset = *pFreeOrder * 0x80;
-          ClientSideUnitHashTables[*pFreeOrder][nBucket] = pNextUnit;
           pUnit = pNextUnit;
+          ClientSideUnitHashTables[*pFreeOrder][nBucket] = pNextUnit;
         }
 
         nBucket++;

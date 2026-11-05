@@ -446,9 +446,11 @@ void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_
 
     while (pRosterPet->nRosterGUID != nRosterGUID) {
       pRosterPet = pRosterPet->pNext;
-      if (!pRosterPet) {
-        return;
+      if (pRosterPet) {
+        continue;
       }
+
+      return;
     }
 
     pRosterPet->nHpPercent = nHpPercent;

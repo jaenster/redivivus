@@ -8,8 +8,6 @@
 #include "Fog/Src/String/FogString.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
-#include "D2Hell/D2Hell.h"
-#include "support/d2_trace.h"
 #include "Fog/Memory.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -632,12 +630,7 @@ void FreeMemoryPool(D2PoolManagerStrc * pMemory) {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pMemory->pSync);
     memset(pMemory, 0, 0x17cc);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pGlobalPoolSystem.pSync);
-    // The slot index of pMemory in pManagers. The decompiler folded the 1.14d address of
-    // pManagers (0x74f104) into pMemory[-0x4eb].pOverflow + 0x3e5, which in the rebuild yields
-    // a garbage index; the next InitializePoolSystem then hands out a manager far outside the
-    // array and the second game entry crashes.
-    // Retire-When: the generator rewrites a negative struct index whose byte offset is minus a global's address.
-    pGlobalPoolSystem.nManagerIndex[pGlobalPoolSystem.nFreeManagerIndex] = (uint32_t)(pMemory - pGlobalPoolSystem.pManagers);
+    pGlobalPoolSystem.nManagerIndex[pGlobalPoolSystem.nFreeManagerIndex] = (uint32_t)((intptr_t)pMemory - (intptr_t)pGlobalPoolSystem.pManagers) / 0x17cc;
     pGlobalPoolSystem.nFreeManagerIndex++;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pGlobalPoolSystem.pSync);
     if (pMemory != pGlobalPoolSystem.pManagers) {

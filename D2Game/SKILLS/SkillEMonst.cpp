@@ -759,7 +759,6 @@ BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStr
 
 void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eState, int32_t nStatListParam) {
     D2SkillsTxt* pSkillRecord;
-    char cSummonMode;
     short int sSummonId;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     int nSummonMonStatsId = 0x227;
@@ -773,10 +772,8 @@ void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eSt
         if (sSummonId > 0 && (int)sSummonId < sgptDataTable->nTxtMonStatsSize) {
           nSummonMonStatsId = (int)sSummonId;
         }
-
-        cSummonMode = pSkillRecord->summode;
-        if (cSummonMode >= 0 && cSummonMode < '\x10') {
-          eSpawnAnimMode = (eD2MonsterAnimMode)cSummonMode;
+        if (pSkillRecord->summode >= 0 && pSkillRecord->summode < '\x10') {
+          eSpawnAnimMode = (eD2MonsterAnimMode)pSkillRecord->summode;
         }
       }
     }

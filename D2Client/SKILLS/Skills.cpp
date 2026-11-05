@@ -709,8 +709,8 @@ D2UnitStrc * __fastcall MakeMissile(eMissilesId neMissilesId, D2UnitStrc * pUnit
     }
 
     sSkillArg.nY = nOwnerPos + nOffsetY;
-    sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nMissileTxtNo = neMissilesId;
     if (!nX || !nY) {
       BOOL bGotCoords;
@@ -2154,11 +2154,11 @@ void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, uint8_t * pMissi
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nX;
-    sSkillArg.eSkillNo = eSkill;
     sSkillArg.nFlags = 1;
-    sSkillArg.nY = nY;
-    sSkillArg.nSkillLevel = nToHit;
     sSkillArg.pOwner = pUnit;
+    sSkillArg.nY = nY;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nToHit;
     sSkillArg.nMissileTxtNo = (eMissilesId)pMissileId;
     UNIT::Missile::MakeMissile(&sSkillArg);
 }

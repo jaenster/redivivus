@@ -326,8 +326,8 @@ uint32_t __stdcall BNDOWNLOAD_HasPatchFilename() {
 static BOOL __stdcall BnetDownloadFile(SOCKET hSocket, char * szText, FILETIME * pTimestamp, int32_t nProgressMode, uint8_t bWriteFlags, uint8_t * * ppOutBuffer, uint32_t nFileSize) {
     int nRecvResult;
     uint8_t* pRecvBuf = (uint8_t*)Storm::Source::SMem::SMemAlloc(nFileSize, ".\\BnDownload.cpp", 0x385, 8);
-    uint32_t nBytesReceived = 0;
     *ppOutBuffer = pRecvBuf;
+    uint32_t nBytesReceived = 0;
     if (nFileSize > 0) {
       uint32_t len;
       do {

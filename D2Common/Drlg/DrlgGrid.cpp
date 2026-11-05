@@ -558,8 +558,8 @@ void __fastcall FillGrid(D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHe
     pDrlgGrid->pCellsFlags = (eD2GridCellFlags*)pCellPos;
     memset(pCellPos, 0, nWidth * nHeight * 4);
     int nRowOffset = 0;
-    int nRowIdx = 0;
     pDrlgGrid->pCellsRowOffsets = pCellRowOffsets;
+    int nRowIdx = 0;
     if (nHeight > 0) {
       do {
         pDrlgGrid->pCellsRowOffsets[nRowIdx] = nRowOffset;
@@ -633,8 +633,8 @@ void __fastcall DRLGGRID_FreeGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * 
       D2_FREE_POOL_AT(pMemory, pGrid->pCellsRowOffsets, ".\\DRLG\\DrlgGrid.cpp", 0x218);
     }
 
-    pGrid->pCellsRowOffsets = 0;
     pGrid->pCellsFlags = 0;
+    pGrid->pCellsRowOffsets = 0;
 }
 
 // Clears grid metadata (flags/row offsets) and marks grid as unused.

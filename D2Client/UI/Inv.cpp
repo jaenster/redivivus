@@ -3136,29 +3136,29 @@ static void __stdcall INV_CalcGridCellFromMouse(D2UnitStrc * pUnit, int32_t nMou
 int __stdcall INV_CheckActionThrottle() {
     DWORD dwNow;
     eD2GSGameType eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-    if (eGameType == GAMETYPE_SINGLEPLAYER) {
-      return 1;
-    }
+    if (eGameType != GAMETYPE_SINGLEPLAYER) {
+      eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+      if (eGameType != GAMETYPE_SINGLEPLAYER_UNCAPPED) {
+        int bTradeThrottled;
+        bTradeThrottled = TRADE_IsTradeThrottled();
+        if (bTradeThrottled) {
+          Trade::CancelTrade();
+          return 0;
+        }
 
-    eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-    if (eGameType != GAMETYPE_SINGLEPLAYER_UNCAPPED) {
-      int bTradeThrottled;
-      bTradeThrottled = TRADE_IsTradeThrottled();
-      if (bTradeThrottled) {
-        Trade::CancelTrade();
+        dwNow = GetTickCount();
+        if (dwNow - gdwInvLastActionTickCount > 0xfa) {
+          gdwInvLastActionTickCount = GetTickCount();
+          return 1;
+        }
+
         return 0;
       }
 
-      dwNow = GetTickCount();
-      if (dwNow - gdwInvLastActionTickCount > 0xfa) {
-        gdwInvLastActionTickCount = GetTickCount();
-        return 1;
-      }
-
-      return 0;
+      return 1;
+    } else {
+      return 1;
     }
-
-    return 1;
 }
 
 int Unreferenced_00486d70() {
@@ -4334,22 +4334,22 @@ int Unreferenced_00488890() {
 }
 
 BOOL __stdcall INV_CanReturnToShop() {
-    if (!(g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3)) {
+    if (g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3) {
+      D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
+      pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
+      if (pCursorItem_lcl) {
+        return 0;
+      }
+
+      int nItemType = Cursor::GetItemType();
+      if (!(nItemType == 7 || nItemType == 1 || nItemType == 4)) {
+        return 0;
+      }
+
+      return 1;
+    } else {
       return 0;
     }
-
-    D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
-    pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    if (pCursorItem_lcl) {
-      return 0;
-    }
-
-    int nItemType = Cursor::GetItemType();
-    if (!(nItemType == 7 || nItemType == 1 || nItemType == 4)) {
-      return 0;
-    }
-
-    return 1;
 }
 
 void __stdcall INV_HandleShopEscapeKey(D2UIMouseMsgStrc * pMsg) {
@@ -5635,6 +5635,7 @@ void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId) {
       }
 
       nQuestId = QUEST_TheHoradricStaff;
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId, QUESTSTATE_Step0x11);
     } else {
       if (nMenuActionId != 0x20326671) {
         goto start_anim;
@@ -5649,9 +5650,9 @@ void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId) {
       }
 
       nQuestId = QUEST_KhalimsWill;
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId, QUESTSTATE_Step0x11);
     }
 
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId, QUESTSTATE_Step0x11);
     start_anim:
     gpInvCubeImage1 = 1;
     gpInvCubeImage2 = 0;

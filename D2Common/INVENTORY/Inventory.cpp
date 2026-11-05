@@ -4342,9 +4342,11 @@ static uint32_t INVENTORY_GetAlternateGfxIndex(int32_t dwItemCode, int32_t dwAlt
       }
 
       nTableIdx++;
-      if (nTableIdx >= 0xff) {
-        return 0;
+      if (nTableIdx < 0xff) {
+        continue;
       }
+
+      return 0;
     }
 
     return nTableIdx;

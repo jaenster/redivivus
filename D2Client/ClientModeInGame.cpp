@@ -231,15 +231,15 @@ BOOL __stdcall CmdLine_SaveDefaultCommandLine(CMDPARAMS * pParams, char * szCmdL
 // @provenance 1.14d asm 0044b600.
 BOOL __stdcall CmdLine_SetAppMode(CMDPARAMS * pParams, char * szCmdLine) {
     // Static local variables (originally global data)
-    static uint32_t gaClientModeHandlerTable[7] = { 0x0, 0x0, 0x6d5b14, 0x0, 0x0, 0x0, 0x0 }; D2_STATIC_GUARD(gaClientModeHandlerTable, "D2Client::ClientModeInGame::CmdLine_SetAppMode::gaClientModeHandlerTable");
+    static char * gaClientModeHandlerTable[7] = { nullptr, nullptr, s_Game_006d5b14, nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(gaClientModeHandlerTable, "D2Client::ClientModeInGame::CmdLine_SetAppMode::gaClientModeHandlerTable");
 
     int nNameCmp;
     char szUserName[16];
     CMDPARAMS* pEntry = pParams;
     eD2ClientAppMode eAppMode = 0;
     do {
-      if ((char*)gaClientModeHandlerTable[eAppMode]) {
-        nNameCmp = _stricmp((char*)gaClientModeHandlerTable[eAppMode], pEntry->uValue.szStringValue);
+      if (gaClientModeHandlerTable[eAppMode]) {
+        nNameCmp = _stricmp(gaClientModeHandlerTable[eAppMode], pEntry->uValue.szStringValue);
         if (!nNameCmp) {
           gdwAppMode = eAppMode;
           return 1;

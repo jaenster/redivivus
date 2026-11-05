@@ -244,7 +244,7 @@ static void CHARSEL_SelectRealmInDropdown(char * szText) {
     while (true) {
       int nRealmCount;
       nRealmCount = MainMenus::MAINMENU_GetRealmCount();
-      if (!(nIndex < nRealmCount && (pszRealmName = MainMenus::MAINMENU_GetRealmName(nIndex) , pszRealmName != 0))) {
+      if ((nIndex < nRealmCount && (pszRealmName = MainMenus::MAINMENU_GetRealmName(nIndex) , pszRealmName != 0)) == 0) {
         break;
       }
 
@@ -1467,9 +1467,11 @@ void __fastcall UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(D2ControlMsg * pCo
     while (D2Client::CharScreen::nSelectedCharIndex != nWalkIndex) {
       pSelectedChar = pSelectedChar->pNext;
       nWalkIndex++;
-      if (!pSelectedChar) {
-        return;
+      if (pSelectedChar) {
+        continue;
       }
+
+      return;
     }
 
     if (!pSelectedChar) {
@@ -1567,7 +1569,7 @@ BOOL __stdcall CHARSEL_OnPressScrollCharListUp(D2ControlMsg * pControlMsg) {
 }
 
 BOOL __stdcall CHARSEL_OnPressScrollCharListDown(D2ControlMsg * pControlMsg) {
-    if (gnCharSelScreenSlotCount + g_nCharSelNavigationIndex < D2Client::CharScreen::TotalCurrentChars) {
+    if (g_nCharSelNavigationIndex + gnCharSelScreenSlotCount < D2Client::CharScreen::TotalCurrentChars) {
       if (D2Client::CharScreen::nSelectedCharIndex < D2Client::CharScreen::TotalCurrentChars - 1) {
         D2Client::CharScreen::nSelectedCharIndex++;
       }
@@ -1601,8 +1603,7 @@ BOOL __stdcall MAINMENU_CharSelScrollbarCallback(D2ControlStrc * pControl) {
 }
 
 void __stdcall CHARSEL_ScrollCharList(int32_t nScrollDelta) {
-    int nCurrentScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, nCurrentScrollPos + nScrollDelta);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar) + nScrollDelta);
 }
 
 BOOL __stdcall CHARSEL_HandleKeyNavExpansion(int32_t pKeyMsg) {
@@ -2313,12 +2314,12 @@ static void CHARSEL_RequestRealmCharList(char * szRealmName) {
         break;
       }
       if (pCacheEntry->nHash == dwRealmHash && (int)dwNowTick <= pCacheEntry->nExpireTick) {
-        if (pCacheEntry->pData) {
+        if (!pCacheEntry->pData) {
+          break;
+        } else {
           CHARSEL_ParseRealmCharList(szRealmName, (char*)pCacheEntry->pData, 0);
           return;
         }
-
-        break;
       }
 
       pCacheEntry = pCacheEntry->pNext;

@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 
+#define D2_TRACE_DEFINITIONS
 #include "support/d2_trace.h"
 
 static FILE* g_pLog = 0;

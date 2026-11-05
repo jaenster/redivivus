@@ -810,7 +810,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
         /* .bAllowedInSinglePlayer = */ 0x1
     },
     {
-        /* .pszCommand = */ (char*)0x006d727c,
+        /* .pszCommand = */ s___006d727c,
         /* .nCommandType = */ 0x2,
         /* .bTakesParameter = */ 0x1,
         /* .bAllowedInSinglePlayer = */ 0x0

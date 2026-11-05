@@ -30,7 +30,7 @@
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/GAME/Msg.h"
 #include "D2Common/Units.h"
-#include "D2Common/Unit/D2UnitStrc.h"
+#include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2MonStatsTxt.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Skills.h"

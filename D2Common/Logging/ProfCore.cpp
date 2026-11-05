@@ -2587,7 +2587,7 @@ char * gaLanguageNames_0074430c[15] = {
     s_Russian_006cc7a4,
     s_English_with_Korean_Chat_006cc788,
     s_Unknown_006cc780,
-    (char*)0x006cc77c
+    s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_0074430c, "gaLanguageNames_0074430c");
 
 namespace D2Common::Logging::ProfCore {

@@ -8,7 +8,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
-#include "support/d2_trace.h"
 #include "Fog/File.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -354,14 +353,6 @@ static void CRASH_GetExceptionName(char * szText, DWORD dwExceptionCode) {
 // reconstruction. The parameter is _EXCEPTION_POINTERS *, which 00403ec3 MOV EAX,[EBX] / MOV ESI,[EAX]
 // walks as ExceptionRecord -> ExceptionCode.
 LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(_EXCEPTION_POINTERS * pExceptionPointers) {
-    if (pExceptionPointers && pExceptionPointers->ExceptionRecord && pExceptionPointers->ContextRecord) {
-      D2TraceFmt("TOPFILTER code=%08X addr=%p eip=%08X",
-                 (unsigned)pExceptionPointers->ExceptionRecord->ExceptionCode,
-                 (void*)pExceptionPointers->ExceptionRecord->ExceptionAddress,
-                 (unsigned)pExceptionPointers->ContextRecord->Eip);
-    } else {
-      D2Trace("TOPFILTER entered with no records");
-    }
     int nFilterResult;
     D2CrashReportStrc sCrashReport;
     char aMessageBuffer[512];
@@ -563,8 +554,11 @@ char * __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, c
     return pSrcScan + (nDestLen - (int)szSrc);
 }
 
-int STRING_FormatVarArgs(char * szFormat, char * szDest, int32_t nDestSize, ...) {
-    int nWritten = vsnprintf(szDest, nDestSize - 1, szFormat, (va_list)((uint8_t*)&szFormat + 4));
+// Convention __cdecl_ediesi: the destination and its size arrive in EDI/ESI, the format and its arguments on the stack. A model, not custom storage, because the decompiler drops custom register parameters at a varargs call site.
+int STRING_FormatVarArgs(char * szDest, int32_t nDestSize, char * szFormat, ...) {
+    va_list __va;
+    va_start(__va, szFormat);
+    int nWritten = vsnprintf(szDest, nDestSize - 1, szFormat, __va);
     szDest[nDestSize - 1] = '\0';
     return nWritten;
 }

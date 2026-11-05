@@ -54,7 +54,8 @@ char * __stdcall D2WINSMACK_GetTitlePrefixIndexFromClass(int pUnused, int32_t nC
         goto lookup_title_prefix;
       }
 
-      bSignedGreaterOrEqual = nClass >= 0xf;
+      bSignedGreaterOrEqual = 0xf <= nClass;
+      nTitleIndex = bSignedGreaterOrEqual + 2;
     } else {
       if (nClass < 4) {
         nTitleIndex = 0;
@@ -66,9 +67,9 @@ char * __stdcall D2WINSMACK_GetTitlePrefixIndexFromClass(int pUnused, int32_t nC
       }
 
       bSignedGreaterOrEqual = nClass >= 0xc;
+      nTitleIndex = bSignedGreaterOrEqual + 2;
     }
 
-    nTitleIndex = bSignedGreaterOrEqual + 2;
     lookup_title_prefix:
     if (bHasModifier && nTitleIndex) {
       nTitleIndex += 3;

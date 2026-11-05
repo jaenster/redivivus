@@ -441,8 +441,7 @@ void __thiscall SPELLSEL_DrawSkillLevel(int32_t pThis, int32_t nScreenX, int32_t
     }
 
     int32_t nTextWidth2 = 0x10;
-    char* pszLevel = _itoa(pThis, szLevelBuf, 10);
-    D2Lang::UTF8_ConvertToWideChar(wszLevelBuf, pszLevel, nTextWidth2);
+    D2Lang::UTF8_ConvertToWideChar(wszLevelBuf, _itoa(pThis, szLevelBuf, 10), nTextWidth2);
     nTextWidth2 = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszLevelBuf);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLevelBuf);
     if (nTextWidth > 0x28) {
