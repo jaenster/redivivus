@@ -212,7 +212,8 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, struct 
 void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t pNpcIdArray, struct D2UnitStrc * pUnit, int32_t nNpcIdCount);
 // Builds and sends packet 0x91 (NpcGossip) to the player's client for a given act, listing which intro NPCs the player has already spoken with. Selects the act-specific NPC list (Acts I/II/III/V), calls INTRONPC_FillInPacketWithIntroNpcIds to populate the packet, and sends it only if at least one NPC entry needs to be communicated.
 // @sourcefile .\QUESTS\QUESTS.CPP
-BOOL __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eAct nActNo);
+// @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
+void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eAct nActNo);
 void __fastcall QUESTGUID_AddPlayerToList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 uint32_t __fastcall QUESTGUID_RemovePlayerFromList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 // Returns 1 if iValue is one of the first nPlayerCount entries of

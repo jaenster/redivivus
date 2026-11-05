@@ -566,7 +566,8 @@ void __fastcall Q35_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A5Q5 (Rite of Passage) XP reward function. Grants 1,400,000 / 20,000,000 / 40,000,000 XP for Normal/Nightmare/Hell respectively, capped to one level's worth of experience. Loops awarding XP until the cap is exhausted or the level table is exceeded. Caller is responsible for setting Completed/JustCompleted quest states.
-static uint32_t __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData, D2UnitStrc * pUnit) {
+// @returns void: EAX at the epilogue is whatever the last stat call left; none of the three callers (0058c741, 0058c89d, 0058caab) reads it. Found by KierTaylor on the Mac twin (Redivivus proposal #1207).
+static void __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData, D2UnitStrc * pUnit) {
     int32_t nExpNeeded;
     uint32_t nValue;
     int32_t ePlayerClassId;
@@ -592,9 +593,9 @@ static uint32_t __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData,
     }
 
     int32_t pExpTxt = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClassId);
-    DWORD nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    if ((int)nLevel >= pExpTxt) {
-      return nLevel;
+    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+    if (nLevel >= pExpTxt) {
+      return;
     }
 
     DWORD dwExpCurrentLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClassId, nLevel + 1);
@@ -606,7 +607,7 @@ static uint32_t __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData,
     do {
       int32_t nCurrentExp;
       if (!nExpRemaining) {
-        return dwExpNextLevel;
+        return;
       }
 
       nCurrentExp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_nextexp, 0);
@@ -623,11 +624,7 @@ static uint32_t __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData,
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nExpRemaining + nCurrentExp, 0);
         nExpRemaining = 0;
       }
-
-      dwExpNextLevel = nLevel;
-    } while ((int)nLevel < pExpTxt);
-
-    return nLevel;
+    } while (nLevel < pExpTxt);
 }
 
 // [A5Q5 = Rite of Passage] Q35_SetCompleteForPartyMember: party-completion callback. If member not Completed, is level-gated (>=(diff+1)*20) and physically in Act V, sets RiteOfPassage Completed + JustCompleted and awards XP. Shares the kill credit with the whole party.

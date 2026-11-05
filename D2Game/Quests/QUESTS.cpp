@@ -1622,14 +1622,13 @@ static BOOL __stdcall INTRONPC_FillInPacketWithIntroNpcIds(D2UnitDataPlayerInter
 
 // Builds and sends packet 0x91 (NpcGossip) to the player's client for a given act, listing which intro NPCs the player has already spoken with. Selects the act-specific NPC list (Acts I/II/III/V), calls INTRONPC_FillInPacketWithIntroNpcIds to populate the packet, and sends it only if at least one NPC entry needs to be communicated.
 // @sourcefile .\QUESTS\QUESTS.CPP
-BOOL __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct nActNo) {
+// @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
+void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct nActNo) {
     bool bNeedSend;
-    D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCsAfterSend;
     int* aNpcList;
     D2GSPacketSrv0x91 pD2GSPacketSrv0x91;
     int32_t nListSize;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = pPlayerData->pInteractedNPCs[pGame->nDifficulty];
     switch (nActNo) {
       case ACT_I:
         nListSize = 6;
@@ -1645,25 +1644,21 @@ BOOL __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D
       break;
       default:
         {
-          return (BOOL)(uintptr_t)pInteractedNPCs;
+          return;
         }
       case ACT_V:
         nListSize = 7;
       aNpcList = NPCINTRO_ListAct5;
     }
 
-    BOOL bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pInteractedNPCs, aNpcList, nListSize, &pD2GSPacketSrv0x91);
-    pInteractedNPCs = 0;
+    BOOL bNeedToBeSent = INTRONPC_FillInPacketWithIntroNpcIds(pPlayerData->pInteractedNPCs[pGame->nDifficulty], aNpcList, nListSize, &pD2GSPacketSrv0x91);
     if (bNeedToBeSent) {
       D2ClientStrc* pClient;
       pD2GSPacketSrv0x91.nPacketId = 0x91;
       pD2GSPacketSrv0x91.nAct = nActNo;
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xab7);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(pClient, &pD2GSPacketSrv0x91);
-      pInteractedNPCs = pInteractedNPCsAfterSend;
     }
-
-    return (BOOL)(uintptr_t)pInteractedNPCs;
 }
 
 void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
