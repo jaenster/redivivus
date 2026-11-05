@@ -320,6 +320,59 @@ per tier and what stays unpaired: inside the run of library code, the import
 thunks the linker makes (`jmp [__imp_X]`, no code of ours to compare), and
 elsewhere - the game's own functions the funcmap does not pair.
 
+## How data is judged
+
+The function figure cannot see a table: a global is only "unverified" there.
+`scripts/datamatch.py` (`oracle data`, or `oracle audit --data` /
+`ORACLE_DATA=1` to run it after the function audit) compares every data symbol
+of our objects with the bytes 1.14d holds at that symbol's address, writing
+`evidence/data-audit.tsv`, its `.summary`, `evidence/datatrend.tsv` (MATCH rate
+by size) and `evidence/data-fixes.tsv` (the largest defects with a likely root
+cause and whether they look like runtime faults).
+
+Ghidra is the truth for an extent, so the denominator is
+`evidence/dataextent.tsv`: every item Ghidra has in `.rdata`/`.data`, read by
+`oracle data extents` from a ghidra-reconstruct codegen snapshot (the export a
+regen emits the tree from; `--snapshot DIR`, default the daemon's) and committed,
+so the audit needs neither Ghidra nor a daemon. A label inside another item
+(`gnHashHighTable` four bytes into `gaHashSeedTable`, `gaTable[3][0]`, which the
+generator writes `gaTable_3__0_`) is an `interior` row: its bytes are its
+container's, so it is judged (is ours laid out inside the container, or an object
+of its own?) but kept out of the byte totals.
+
+Our side is the objects: `build/obj` and the `globals/` objects the whole-image
+build compiles into `build-exe/obj/globals` with the same command line. A symbol
+pairs with an item by name (narrowed by an address the name carries, the owner
+function of a static local, or the namespace), else by the address
+`evidence/datamap.tsv` implies from aligned code, else by the address a generated
+name carries. Relocations are masked as the function compare masks them: a pointer
+compares by what it names (our target symbol's original address, through a jump
+thunk where the original's table names the thunk), a pointer to a literal of ours
+by the literal's content.
+
+| status | meaning |
+|-|-|
+| `MATCH` | every byte equal, every pointer names the same target |
+| `ZERO` | ours is all zero where the original has data: an initialiser never written, or one VC8 builds at run time (a constructor call; the note says so) |
+| `SPLIT` | an interior label emitted as an object of its own |
+| `SIZE_SMALL` / `SIZE_LARGE` | our extent shorter than Ghidra's / longer than it plus the padding the next symbol's alignment explains |
+| `RELOC` | a pointer names another target, or ours holds a number where the original relocates (`raw` in the notes when it is the original's own address) |
+| `STRING` | a string, or a literal a pointer names, differs in content |
+| `VALUE` | other bytes differ (`FLOAT` in the notes for a float or double) |
+| `BSS_INIT`, `ALIGN` | for an original `.bss` item only size and alignment compare: ours carries bytes / ours is less aligned than an 8-byte scalar needs |
+
+A floating-point constant of `.rdata` that our code reads as a compiler literal
+rather than by name is judged by the literals of its readers' objects (kind
+`const`): a miss means our code computes with another value. `fld1`/`fldz` serve
+1.0 and 0.0 without a literal, so those two never count as a miss. Each defect
+says whether code or data of ours references the symbol: a wrong copy nothing
+references is dead weight, not a fault.
+
+The headline counts the initialised game data: items no symbol of ours pairs with
+count as uncompared when a game function reads them; items only the runtime reads,
+import slots and compiler EH/RTTI data are left out, as the function figure leaves
+the runtime out. Never quote its counts in prose; read the file.
+
 ## Flags
 
 The default (`scripts/oracle_config.py`):
@@ -504,6 +557,7 @@ map (`bracket`, `align`) and `tulayout.py` order our functions by source line
 | `scripts/coffobj.py`, `objfuncs.py`, `ours.py` | our objects |
 | `scripts/funcmap.py` | which original function is which |
 | `scripts/compare.py`, `audit.py`, `asmdiff.py` | the judgement |
+| `scripts/datamatch.py` | the data judgement: `evidence/dataextent.tsv`, `data-audit.tsv`, `datatrend.tsv`, `data-fixes.tsv` |
 | `scripts/byte_match_svg.py` | the summary's byte kinds as a bar chart |
 | `scripts/check.py`, `snippet.py` | the inner loop: re-judge a TU, try a variant |
 | `scripts/diffgrams.py`, `classify.py`, `tulayout.py` | what differs, over all pairs |

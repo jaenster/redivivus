@@ -1,0 +1,51 @@
+tree ab25e7997-dirty; Ghidra v1934 extents (dataextent.tsv); 476 objects (build/obj/ + globals/)
+Initialised game data: 2021 of 2329 symbols MATCH (86.78%), 345707 of 350023 bytes (98.77%); bytes equal in place 346575 (99.01%)
+  uncompared: 285 game items (3228 bytes) that no data symbol of ours pairs with
+  left out: 586 runtime-only items (16788 bytes), 371 import slots, 336 compiler EH/RTTI items
+Uninitialised (.bss), size and alignment only: 2341 of 2341 symbols agree, 2371806 of 2371806 bytes
+Interior labels (a name inside a larger Ghidra item): 80 paired, 80 emitted as an object of their own (65 .bss, 15 initialised, 13 of those all zero)
+Compiler literals (__real@, ??_C@, ??_7) paired by datamap: 21 of 21 MATCH, 108 of 108 bytes
+status of the initialised game data compared (symbols, original bytes):
+  MATCH         2021    345707
+  ZERO             6        40
+  SIZE_SMALL       0         0
+  RELOC           16      1040
+  STRING           0         0
+  VALUE            1         8
+  SIZE_LARGE       0         0
+  BSS_INIT         0         0
+  ALIGN            0         0
+flags (a symbol may carry several): RELOC 16, VALUE 7, ZERO 6
+symbols holding a raw 1.14d address where the original relocates: 16
+pointer fields compared, by what ours names: data agree 2270; func agree 3513, thunk 2; none null 125, raw 47; unknown unverified 1
+by module (initialised; symbols MATCH/total, bytes MATCH/total):
+  Bnclient        18/18        2206/2206     100.00%
+  D2CMP           37/37       10033/10033    100.00%
+  D2Client       611/612     130185/130193    99.99%
+  D2Common       271/272      33138/33170     99.90%
+  D2DDraw          6/6           76/76       100.00%
+  D2Direct3D      15/15        1164/1164     100.00%
+  D2Game         263/263      70266/70266    100.00%
+  D2Gdi            2/2           36/36       100.00%
+  D2Glide         20/20        1161/1161     100.00%
+  D2Hell           4/4           44/44       100.00%
+  D2Lang          21/21         998/998      100.00%
+  D2Launch        33/33       16896/16896    100.00%
+  D2MCPClient      1/1          104/104      100.00%
+  D2Multi         48/48        7892/7892     100.00%
+  D2Net            3/3         1180/1180     100.00%
+  D2Sound         21/21         297/297      100.00%
+  D2Win           34/34        4985/4985     100.00%
+  D2gfx           13/13         288/288      100.00%
+  Fog             55/56       10233/10237     99.96%
+  Game            14/14        5732/5732     100.00%
+  Global         428/448      17451/18495     94.36%
+  Storm          101/101      31082/31082    100.00%
+  _unnamespaced     2/2          260/260      100.00%
+by section (symbols MATCH/total, bytes MATCH/total):
+  .rdata    873/894      87283/88363   
+  .data    1148/1150    258424/258432  
+  .bss     2341/2341   2371806/2371806 
+floating-point constants judged by the literals of their readers' objects: 33, 32 MATCH
+pairings: name 4199, name-address-noitem 150, datamap 68, tu-literal 33, name-address 33, datamap-noitem 3; data symbols of ours unpaired 5115 (4976 of them compiler literals); defined twice 514
+name pair disagrees with the datamap address: 36
