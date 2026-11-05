@@ -4046,6 +4046,16 @@ struct __attribute__((packed)) D2LvlTypesTxt {
     /* 0x784 */ int Expansion;
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+extern struct D2LvlTypesTxt * pTxtLvlTypes;
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
 namespace D2Common::DATATBLS::LvlTbls {
 
 // Function declarations

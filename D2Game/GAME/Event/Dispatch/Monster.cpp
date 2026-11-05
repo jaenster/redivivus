@@ -162,13 +162,13 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         nBaseMonClassId = pUnit->nClassId;
-        D2MonStatsTxt* pMonStatsTxt = nBaseMonClassId >= 0 && nBaseMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseMonClassId : nullptr;
+        D2MonStatsTxt* pMonStatsTxt = nBaseMonClassId >= 0 && nBaseMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nBaseMonClassId : nullptr;
         if (pMonStatsTxt) {
           nBaseMonClassId = (int)pMonStatsTxt->BaseId;
         }
         if (nBaseMonClassId >= 0) {
           nResolvedBaseId = nBaseMonClassId;
-          if (nBaseMonClassId < sgptDataTable->nTxtMonStatsSize) {
+          if (nBaseMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             goto dispatch_by_base_id;
           }
         }
@@ -179,10 +179,10 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 
     nResolvedBaseId = -1;
     dispatch_by_base_id:
-    if (nBaseMonClassId < 0 || nBaseMonClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nBaseMonClassId < 0 || nBaseMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStats = 0;
     } else {
-      pMonStats = sgptDataTable->pTxtMonStats + nBaseMonClassId;
+      pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nBaseMonClassId;
     }
     if (pMonStats->SplEndGeneric != '\0') {
       switch (nResolvedBaseId) {
@@ -321,7 +321,7 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       byAnimMode2 = 'd';
-      if (pMonStats2 && pMonStats2->A1mv[1] & gadwBitMasks[0]) {
+      if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         byAnimMode2 = 'e';
       }
     }
@@ -352,7 +352,7 @@ void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       byAnimMode2 = 'd';
-      if (pMonStats2 && pMonStats2->A1mv[1] & gadwBitMasks[0]) {
+      if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         byAnimMode2 = 'e';
       }
     }
@@ -414,11 +414,11 @@ void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, D2UnitStrc * 
     }
     if (pUnit->eUnitType == UNIT_MONSTER && nMonClassId >= 0) {
       BOOL eState;
-      D2MonStatsTxt* pMonStatsTxt = nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
+      D2MonStatsTxt* pMonStatsTxt = nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
       if (pMonStatsTxt) {
         nMonClassId = (int32_t)pMonStatsTxt->BaseId;
       }
-      if (nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize && nMonClassId == 0x4e) {
+      if (nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nMonClassId == 0x4e) {
         eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_stunned);
         if (eState) {
           pDelayFrame = pGame->dwGameFrame + 0x2d;

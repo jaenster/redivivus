@@ -101,6 +101,7 @@
 #include "D2Client/Source/ClientEngine.data.h"
 #include "D2Client/UI/Inv.h"
 #include "D2Game/Objects/Objects.data.h"
+#include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Launch/CharSel.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/OOGUtilities.h"
@@ -215,7 +216,6 @@ static D2UIFlagInitStrc g_UIFlagInitGameDataPanel3[2] = {
         /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandleScrollToEnd
     }
 }; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel3, "g_UIFlagInitGameDataPanel3");
-D2ClientGameDataStrc gClientGameData = {}; D2_GLOBAL_GUARD(gClientGameData, "gClientGameData");
 char RealmName[32] = {}; D2_GLOBAL_GUARD(RealmName, "RealmName");
 static short gnTcpIpJoinId = 0; D2_STATIC_GUARD(gnTcpIpJoinId, "gnTcpIpJoinId");
 eD2PlayerClassID nD2PlayerClassID = 0; D2_GLOBAL_GUARD(nD2PlayerClassID, "nD2PlayerClassID");
@@ -239,7 +239,9 @@ uint8_t gBetaScreenIndex = 0; D2_GLOBAL_GUARD(gBetaScreenIndex, "gBetaScreenInde
 static uint8_t gbActInitExpansionFlag = 0; D2_STATIC_GUARD(gbActInitExpansionFlag, "gbActInitExpansionFlag");
 eD2GSGameType eD2GSGameType_007a0610 = 0; D2_GLOBAL_GUARD(eD2GSGameType_007a0610, "eD2GSGameType_007a0610");
 int D2GS_Connected = 0; D2_GLOBAL_GUARD(D2GS_Connected, "D2GS_Connected");
-int ServerLoadingComplete = 0; D2_GLOBAL_GUARD(ServerLoadingComplete, "ServerLoadingComplete");
+namespace D2Client::GAME::Game {
+int ServerLoadingComplete = 0; D2_GLOBAL_GUARD(ServerLoadingComplete, "D2Client::GAME::Game::ServerLoadingComplete");
+} // namespace D2Client::GAME::Game
 BOOL D2CLIENT_ExitVar3 = 0; D2_GLOBAL_GUARD(D2CLIENT_ExitVar3, "D2CLIENT_ExitVar3");
 BOOL gLevelLoadInProgress = 0; D2_GLOBAL_GUARD(gLevelLoadInProgress, "gLevelLoadInProgress");
 static D2ExitCutsceneState gExitCutsceneState = {}; D2_STATIC_GUARD(gExitCutsceneState, "gExitCutsceneState");
@@ -250,9 +252,9 @@ static uint32_t gQueuedPrimaryClick = 0; D2_STATIC_GUARD(gQueuedPrimaryClick, "g
 static int gQueuedSecondaryClick = 0; D2_STATIC_GUARD(gQueuedSecondaryClick, "gQueuedSecondaryClick");
 static uint32_t gbMouseButtonEventPending = 0; D2_STATIC_GUARD(gbMouseButtonEventPending, "gbMouseButtonEventPending");
 static BOOL gRunKeyDown = 0; D2_STATIC_GUARD(gRunKeyDown, "gRunKeyDown");
-namespace D2Game::GameData {
-uint32_t gnAlwaysRun = 0; D2_GLOBAL_GUARD(gnAlwaysRun, "D2Game::GameData::gnAlwaysRun");
-} // namespace D2Game::GameData
+namespace D2Client::GAME::Game {
+uint32_t gnAlwaysRun = 0; D2_GLOBAL_GUARD(gnAlwaysRun, "D2Client::GAME::Game::gnAlwaysRun");
+} // namespace D2Client::GAME::Game
 static int gClickModifierDown = 0; D2_STATIC_GUARD(gClickModifierDown, "gClickModifierDown");
 static uint32_t gnQueuedPrimaryClickX = 0; D2_STATIC_GUARD(gnQueuedPrimaryClickX, "gnQueuedPrimaryClickX");
 static uint32_t gnQueuedSecondaryClickX = 0; D2_STATIC_GUARD(gnQueuedSecondaryClickX, "gnQueuedSecondaryClickX");
@@ -265,7 +267,7 @@ static D2ClientTimerStrc gLoadTimerDurationMs = {}; D2_STATIC_GUARD(gLoadTimerDu
 namespace D2Client::GAME::Game {
 
 uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_00402a80() {
-    return (uint32_t)(hDbgHelpDll != (HMODULE)0x0);
+    return (uint32_t)(Fog::Debug::hDbgHelpDll != (HMODULE)0x0);
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_0040f860(D2StormListHead * pListHead) {
@@ -318,7 +320,7 @@ void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(D2StormListHead * pListHead
 }
 
 void __stdcall GAME_SetMouseButtonEventPending_Unref_0044b870() {
-    gdwAppMode = APPMODE_CONTINUE;
+    ClientModeInGame::gdwAppMode = APPMODE_CONTINUE;
 }
 
 void __thiscall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, uint32_t dwDurationMs) {
@@ -345,11 +347,11 @@ BOOL __stdcall GetGlobalAlwaysRun_Unref_0044be70() {
 }
 
 void __fastcall SetGlobalAlwaysRun(int32_t nValue) {
-    D2Game::GameData::gnAlwaysRun = nValue;
+    gnAlwaysRun = nValue;
 }
 
 BOOL __stdcall GetGlobalAlwaysRun() {
-    return D2Game::GameData::gnAlwaysRun;
+    return gnAlwaysRun;
 }
 
 void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown) {
@@ -366,7 +368,7 @@ uint32_t __stdcall GetMouseClickFlags() {
     if (gRunKeyDown) {
       flags = 8;
     }
-    if (D2Game::GameData::gnAlwaysRun) {
+    if (gnAlwaysRun) {
       flags = 8;
     }
     if (gClickModifierDown) {
@@ -411,7 +413,7 @@ void __stdcall UnderMouse_PrimaryClick(D2UIMouseMsgStrc * pMsg) {
     if (gRunKeyDown) {
       mouseEventFlags = 8;
     }
-    if (D2Game::GameData::gnAlwaysRun) {
+    if (gnAlwaysRun) {
       mouseEventFlags = 8;
     }
     if (gClickModifierDown) {
@@ -473,7 +475,7 @@ void __stdcall ProcessPrimaryClickImmediate() {
     if (gRunKeyDown) {
       mouseEventFlags = 8;
     }
-    if (D2Game::GameData::gnAlwaysRun) {
+    if (gnAlwaysRun) {
       mouseEventFlags = 8;
     }
     if (gClickModifierDown) {
@@ -506,13 +508,13 @@ void __stdcall INPUT_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     bool bInLeftPanel = false;
     nBorderType = UI::Path::DRAW_GetTypeOfBorder();
-    if (nBorderType == 2 && nMouseX && nMouseX < ScreenSizeX / 2 && nMouseY && nMouseY < ScreenSizeY - 0x2f) {
+    if (nBorderType == 2 && nMouseX && nMouseX < UI::ui::ScreenSizeX / 2 && nMouseY && nMouseY < UI::Inv::ScreenSizeY - 0x2f) {
       bInLeftPanel = true;
     }
 
     bool bInRightPanel = false;
     nBorderType = UI::Path::DRAW_GetTypeOfBorder();
-    if (nBorderType == 1 && nMouseX > ScreenSizeX / 2 && nMouseX < ScreenSizeX && nMouseY && nMouseY < WindowSizeY) {
+    if (nBorderType == 1 && nMouseX > UI::ui::ScreenSizeX / 2 && nMouseX < UI::ui::ScreenSizeX && nMouseY && nMouseY < UI::ui::WindowSizeY) {
       bInRightPanel = true;
     }
     if (!bInLeftPanel && !bInRightPanel) {
@@ -546,7 +548,7 @@ void __stdcall ProcessQueuedSecondaryClick() {
     if (gRunKeyDown) {
       mouseEventFlags = 8;
     }
-    if (D2Game::GameData::gnAlwaysRun) {
+    if (gnAlwaysRun) {
       mouseEventFlags = 8;
     }
     if (gClickModifierDown) {
@@ -692,7 +694,7 @@ void __stdcall INPUT_HandlePassthrough(D2UIMouseMsgStrc * pMsg) {
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
 void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
     SHORT keyState;
-    gnLastMouseButtonEventType = pMouseEvent->nWParam;
+    _Message::gnLastMouseButtonEventType = pMouseEvent->nWParam;
     if (pMouseEvent->nWParam) {
       UI::ui::SetUIFlag(UI_HOLDALT, UI_RESET, 0);
       gClickModifierDown = 0;
@@ -1019,7 +1021,7 @@ void __stdcall DrawLoadingMessage() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(3);
     uint16_t* wMessage;
     wMessage = D2Lang::StrTable::strtable::GetLocaleString(gwLoadingMessageStringIds[gnConnectionRefusedReason]);
-    if (D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) {
+    if (ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) {
       if (gnConnectionRefusedReason == 0x14) {
         nStringId = 0x5522;
       } else {
@@ -1035,8 +1037,8 @@ void __stdcall DrawLoadingMessage() {
 
     draw_message:
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wMessage);
-    if (!(nTextWidth >= WindowSizeX - 0x28)) {
-      D2Win::Src::D2WinFont::DRAW_text(wMessage, WindowSizeX - nTextWidth >> 1, 200, 0, 0);
+    if (!(nTextWidth >= UI::SpellSel::WindowSizeX - 0x28)) {
+      D2Win::Src::D2WinFont::DRAW_text(wMessage, UI::SpellSel::WindowSizeX - nTextWidth >> 1, 200, 0, 0);
       D2Win::Src::D2WinMain::RENDERER_DrawOutOfGameScene();
       D2gfx::D2GFX::D2GFX_EndScene();
       return;
@@ -1051,7 +1053,7 @@ void __stdcall DrawLoadingMessage() {
       do {
         nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pLine->wszLine);
         bSceneBegun = 0;
-        nLineX = WindowSizeX - nTextWidth;
+        nLineX = UI::SpellSel::WindowSizeX - nTextWidth;
         D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX >> 1, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, 0, bSceneBegun);
         pLine = pLine->pNext;
         iLine++;
@@ -1150,6 +1152,10 @@ uint32_t __stdcall GetPing() {
 
 uint32_t __stdcall GAME_GetAveragePing() {
     return gClientGameData.gnAveragePing;
+}
+
+char * zlibVersion_Unref_0044ce80() {
+    return (char*)&gClientGameData.gdwWardenResponseTickPart4;
 }
 
 // Update mouse modifier key state by reading keybind for command id 0x24; sets INT_007a0664 while pressed.
@@ -1399,7 +1405,7 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
       wszText[iLoop] = L'\0';
     }
 
-    iLoop = ScreenSizeX / 2;
+    iLoop = UI::ui::ScreenSizeX / 2;
     uint16_t* pClearPtr = D2Lang::StrTable::strtable::GetLocaleString(0x13ea);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pClearPtr);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText);
@@ -1410,7 +1416,7 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
 
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ea), iLoop - nTextWidth / 2, nTextY, 4, 0);
     if (!gClientGameData.CLIENT_bExpansion) {
-      nTextWidth = GAMEDATA_GetCenteredTextX(0x13eb, ScreenSizeX / 2);
+      nTextWidth = GAMEDATA_GetCenteredTextX(0x13eb, UI::ui::ScreenSizeX / 2);
       D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13eb), nTextWidth, 0x6b, 4, 0);
     }
 
@@ -1423,7 +1429,7 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
       wszText[iLoop] = L'\0';
     }
 
-    iLoop = ScreenSizeX / 2;
+    iLoop = UI::ui::ScreenSizeX / 2;
     pClearPtr = D2Lang::StrTable::strtable::GetLocaleString(0x13ec);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pClearPtr);
     nTextY = D2Win::Src::D2WinFont::DRAW_text0(wszText);
@@ -2216,9 +2222,9 @@ uint32_t __stdcall LoadingScreen_TickOrCleanup(uint32_t dwArg1) {
 }
 
 void __stdcall INPUT_HandleMinimapClick(D2UIMouseMsgStrc * pMsg) {
-    int dwScreenY = ScreenSizeY;
-    int nCenterX = ScreenSizeX / 2;
-    int nBottomY = ScreenSizeY - 0x50;
+    int dwScreenY = UI::Inv::ScreenSizeY;
+    int nCenterX = UI::ui::ScreenSizeX / 2;
+    int nBottomY = UI::Inv::ScreenSizeY - 0x50;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX < nCenterX - 0x30 || nMouseX > nCenterX + 0x30 || nMouseY < dwScreenY - 0x70 || nMouseY > nBottomY) {
@@ -2238,10 +2244,10 @@ void __stdcall INPUT_HandleMinimapClick(D2UIMouseMsgStrc * pMsg) {
 
 // Handle congratz OK button hit-test; sets gCongratzOkClicked or clears click queues.
 void __stdcall Congratz_HandleOkButton(D2UIMouseMsgStrc * pMsg) {
-    int dwScreenY = ScreenSizeY;
-    int nCenterX = ScreenSizeX / 2;
+    int dwScreenY = UI::Inv::ScreenSizeY;
+    int nCenterX = UI::ui::ScreenSizeX / 2;
     gbMinimapClickValid = 0;
-    int nBottomY = ScreenSizeY - 0x50;
+    int nBottomY = UI::Inv::ScreenSizeY - 0x50;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nCenterX - 0x30 && nMouseX <= nCenterX + 0x30 && nMouseY >= dwScreenY - 0x70 && nMouseY <= nBottomY) {
@@ -2275,7 +2281,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
     strcpy(sText.szName, pIniData->szNAME);
     D2Lang::UTF8_ConvertToWideChar(awcName, sText.szName, 0x40);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(awcName);
-    D2Win::Src::D2WinFont::DRAW_text(awcName, ScreenSizeX / 2 - nTextWidth / 2, 0xbb, 4, 0);
+    D2Win::Src::D2WinFont::DRAW_text(awcName, UI::ui::ScreenSizeX / 2 - nTextWidth / 2, 0xbb, 4, 0);
     eD2PlayerStatus ePlayerStatus = pIniData->eCTEMP_eD2PlayerStatus;
     for (nTitleIndex = 0; nTitleIndex < 0x64; nTitleIndex++) {
       awcTitle[nTitleIndex] = L'\0';
@@ -2348,7 +2354,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
       nY = 0x165;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(awcTitle, ScreenSizeX / 2 - nTextWidth / 2, nY, 4, 0);
+    D2Win::Src::D2WinFont::DRAW_text(awcTitle, UI::ui::ScreenSizeX / 2 - nTextWidth / 2, nY, 4, 0);
 }
 
 // End-game congrats screen; caches images in `gD2QServer.congratsBgImage`/`congratsOkButton` and uses `gD2QServer.frameSkipLevel` to decide whether to skip frames.
@@ -2400,18 +2406,18 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
         sGfxData.nFrameNumber = 1;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, 0x100, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 2;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0, ScreenSizeY - 1, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0, UI::Inv::ScreenSizeY - 1, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 3;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, ScreenSizeY - 1, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, UI::Inv::ScreenSizeY - 1, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 4;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2, 0x100, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2, 0x100, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 5;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 + 0x100, 0x100, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2 + 0x100, 0x100, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 6;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2, ScreenSizeY, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2, UI::Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 7;
-        nY = ScreenSizeX / 2 + 0x100;
-        nFrameOffset = ScreenSizeY;
+        nY = UI::ui::ScreenSizeX / 2 + 0x100;
+        nFrameOffset = UI::Inv::ScreenSizeY;
       } else {
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0, 0x100, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 1;
@@ -2448,14 +2454,16 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
       sGfxData.nFrameNumber = (int)(gbMinimapClickValid != 0);
       sGfxData.pDC6 = gpCongratzOkButtonDC6;
       sGfxData.nDirection = 0;
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 - 0x30, ScreenSizeY - 0x50, -1, DRAW_SOLID, nullptr);
-      nQueryResult = GAMEDATA_GetCenteredTextX(0x13ee, ScreenSizeX / 2);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, UI::ui::ScreenSizeX / 2 - 0x30, UI::Inv::ScreenSizeY - 0x50, -1, DRAW_SOLID, nullptr);
+      nQueryResult = GAMEDATA_GetCenteredTextX(0x13ee, UI::ui::ScreenSizeX / 2);
       nFrameOffset = 0;
       if (gbMinimapClickValid) {
         nFrameOffset = 2;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ee), nQueryResult - nFrameOffset, ScreenSizeY - 0x58 + nFrameOffset, 0, 0);
+      bDrawFlag = 0;
+      nY = UI::Inv::ScreenSizeY - 0x58 + nFrameOffset;
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ee), nQueryResult - nFrameOffset, nY, 0, bDrawFlag);
       Cursor::DrawCursor();
       D2gfx::D2GFX::D2GFX_EndScene();
     }
@@ -2477,7 +2485,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
 
 void __stdcall GAMEDATA_ShowEndGameCutscene() {
     gEndGameUiState.showCutscene = 1;
-    D2IniData_client->eCTEMP_eD2PlayerStatus = (CLIENT_nDifficulty + 1) * 0x400 | D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
+    ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = (CLIENT_nDifficulty + 1) * 0x400 | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
 }
 
 void __fastcall TSIntrusiveList_Clear(D2StormListHead * pListHead) {
@@ -2906,7 +2914,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
       }
     }
 
-    D2Client::Sound::SoundHdr::SOUNDHDR_Init((uint32_t)D2IniData_client->bSOUNDBKG);
+    D2Client::Sound::SoundHdr::SOUNDHDR_Init((uint32_t)ClientModeInGame::D2IniData_client->bSOUNDBKG);
     GAME_InitClientSide();
     bResult = Record::IsNotRecording();
     if (bResult || (bResult = Record::IsRecording() , bResult != 0)) {
@@ -2970,7 +2978,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
 
     bool bPlayCongrats = true;
     if (gExitCutsceneState.cutscenePlayed) {
-      byPlayerStatus = *(uint8_t*)((uintptr_t)&D2IniData_client->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
+      byPlayerStatus = *(uint8_t*)((uintptr_t)&ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
       if (CLIENT_nDifficulty) {
         if (CLIENT_nDifficulty == 1 && byPlayerStatus == 0xc) {
           bPlayCongrats = false;
@@ -2985,7 +2993,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
         }
       }
 
-      D2IniData_client->eCTEMP_eD2PlayerStatus = (uint16_t)CLIENT_nDifficulty * 0x400 + 0x500 | D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
+      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = (uint16_t)CLIENT_nDifficulty * 0x400 + 0x500 | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
       if (bPlayCongrats) {
         _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsGameDataFlagInit, 10);
         ClearInGameUIFlags();
@@ -3035,17 +3043,17 @@ void __fastcall GAME_TryCopyFrom(::SGAMEDATA * pGame, ::SGAMEDATA * pGame2) {
 
 // Register -lng command-line option handler (language file) via SCMD::SCmdRegisterArgument.
 BOOL __stdcall RegisterCmdLineLngOption() {
-    Storm::Source::SCmdRegisterArgument(0x20000, -1, "lng", lpLibFileName_007a0710, 0x104, 0, 0, nullptr);
+    Storm::Source::SCmdRegisterArgument(0x20000, -1, "lng", Lng::lpLibFileName_007a0710, 0x104, 0, 0, nullptr);
     return 1;
 }
 
 void __stdcall FreeLanguage() {
-    if (ghLngLibrary) {
-      /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(ghLngLibrary);
+    if (Lng::ghLngLibrary) {
+      /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(Lng::ghLngLibrary);
     }
 
     gbLanguageDllLoaded = (HACCEL)0x0;
-    ghLngLibrary = (HMODULE)0x0;
+    Lng::ghLngLibrary = (HMODULE)0x0;
 }
 
 void __fastcall ClientInit_Noop16_Unref_00452160(D2IniConfigStrc * pIni) {
@@ -3107,5 +3115,17 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(D2StormListHea
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
 }
+
+} // namespace D2Client::GAME::Game
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Client::GAME::Game {
+
+// Initialized data
+
+D2ClientGameDataStrc gClientGameData = {}; D2_GLOBAL_GUARD(gClientGameData, "D2Client::GAME::Game::gClientGameData");
 
 } // namespace D2Client::GAME::Game

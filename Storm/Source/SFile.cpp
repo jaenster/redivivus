@@ -12,6 +12,7 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SComp.h"
+#include "Storm/Source/SEVT.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"

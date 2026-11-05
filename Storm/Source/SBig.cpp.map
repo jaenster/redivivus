@@ -3091,36 +3091,6 @@
       ]
     },
     {
-      "name": "TSFixedArray_Ui_Destructor_Unref_0051d570",
-      "address": "0051d570",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0051d570"
-        }
-      ],
-      "namespace": "Storm::Source::SBig",
-      "calledFunctions": [
-        "TSFixedArray_Ui_Destructor_Unref_0051d570",
-        "SMemFree"
-      ]
-    },
-    {
-      "name": "TSFixedArray_Ui_Destructor_Unref_0051d670",
-      "address": "0051d670",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0051d670"
-        }
-      ],
-      "namespace": "Storm::Source::SBig",
-      "calledFunctions": [
-        "TSFixedArray_Ui_Destructor_Unref_0051d670",
-        "SMemFree"
-      ]
-    },
-    {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00601e00",
       "address": "00601e00",
       "lines": [

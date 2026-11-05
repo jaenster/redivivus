@@ -4,6 +4,20 @@
   "file": "D2Common/Logging.cpp",
   "functions": [
     {
+      "name": "SPRITECACHE_SetMaxSize_Unref_00624700",
+      "address": "00624700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624700"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "SPRITECACHE_SetMaxSize_Unref_00624700"
+      ]
+    },
+    {
       "name": "MISC_SafeStrncpy",
       "address": "00624740",
       "lines": [

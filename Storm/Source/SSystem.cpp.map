@@ -163,21 +163,6 @@
       ]
     },
     {
-      "name": "SetCurrentThreadId",
-      "address": "006ca6f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006ca6f0"
-        }
-      ],
-      "namespace": "Storm::Source::SSystem",
-      "calledFunctions": [
-        "SetCurrentThreadId",
-        "GetCurrentThreadId"
-      ]
-    },
-    {
       "name": "StaticInit_6ca890",
       "address": "006ca890",
       "lines": [],

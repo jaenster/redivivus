@@ -321,8 +321,8 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     if (pUnit) {
       int nSuperUniqueId;
       nSuperUniqueId = pUnit->nClassId;
-      if (nSuperUniqueId >= 0 && nSuperUniqueId < sgptDataTable->nTxtMonStatsSize) {
-        pMonStats = sgptDataTable->pTxtMonStats + nSuperUniqueId;
+      if (nSuperUniqueId >= 0 && nSuperUniqueId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSuperUniqueId;
       }
     }
 
@@ -384,7 +384,7 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         nLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pDrlgRoom);
         D2Common::Drlg::GetActNoFromLevelNumber(nLevelId);
         nMonClassId = pUnit->nClassId;
-        pMonStats = nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
+        pMonStats = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
         if (!pMonStats) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x19a);
           exit(-1);
@@ -707,7 +707,7 @@ static uint32_t MONSTER_HasAnimModeSequence(D2UnitStrc * pUnit, eD2MonsterAnimMo
 
     D2MonStats2Txt* pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
     if (pMonStats2) {
-      return (uint32_t)pMonStats2->A1mv[(int)eAnimMode >> 3] & gadwBitMasks[eAnimMode & eD2MonsterAnimMode_ns::Cast];
+      return (uint32_t)pMonStats2->A1mv[(int)eAnimMode >> 3] & Fog::BitBuffer::gadwBitMasks[eAnimMode & eD2MonsterAnimMode_ns::Cast];
     }
 
     return 0;
@@ -730,11 +730,11 @@ void __stdcall MISSILE_SpawnFromMaggot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       return;
     }
 
-    D2MonStatsTxt* pMonStatsTxt = nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       nClassId = (int)pMonStatsTxt->BaseId;
     }
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && nClassId == 0x3f)) {
+    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId == 0x3f)) {
       return;
     }
 
@@ -773,10 +773,10 @@ void __stdcall MISSILE_SpawnFromMaggot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2Common::Seed::InitSeed_Param_666(&seedStrc, 0x53454953);
     int nMissileSpawnCount = pUnit->nClassId;
     seedStrc.nSeedHigh = pUnit->nUnitGUID;
-    if (nMissileSpawnCount < 0 || nMissileSpawnCount >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMissileSpawnCount < 0 || nMissileSpawnCount >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStats = 0;
     } else {
-      pMonStats = sgptDataTable->pTxtMonStats + nMissileSpawnCount;
+      pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMissileSpawnCount;
     }
 
     for (nMissileSpawnCount = (int)pMonStats->aip[2][pGame->nDifficulty]; nMissileSpawnCount > 0; nMissileSpawnCount--) {
@@ -865,7 +865,7 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eCollisionFlags eCollisionFlag;
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     int nOwnerMonClassId;
-    D2MonStatsTxt* pMonStats = pOwner && (nOwnerMonClassId = pOwner->nClassId) >= 0 && nOwnerMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nOwnerMonClassId : nullptr;
+    D2MonStatsTxt* pMonStats = pOwner && (nOwnerMonClassId = pOwner->nClassId) >= 0 && nOwnerMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nOwnerMonClassId : nullptr;
     if (!pMonStats) {
       return;
     }
@@ -951,14 +951,14 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
       return 1;
     }
 
-    int nMonStatsSize = sgptDataTable->nTxtMonStatsSize;
-    D2MonStatsTxt* pMonStats = nClassId < nMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
-    if (!(pMonStats && (uint8_t)*((uint8_t*)pMonStats + 0xe) & gadwBitMasks[4])) {
+    int nMonStatsSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
+    D2MonStatsTxt* pMonStats = nClassId < nMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    if (!(pMonStats && (uint8_t)*((uint8_t*)pMonStats + 0xe) & Fog::BitBuffer::gadwBitMasks[4])) {
       return 1;
     }
     if (pVictim->eUnitType == UNIT_MONSTER && nClassId >= 0) {
       D2MonStatsTxt* pMonStats2;
-      pMonStats2 = nClassId < nMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+      pMonStats2 = nClassId < nMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
       if (pMonStats2) {
         nClassId = (int)pMonStats2->BaseId;
       }
@@ -1035,7 +1035,7 @@ void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * 
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xc);
     UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 0xd, pUnit, nullptr, nullptr);
     int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStats = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStats = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStats) {
       return;
     }
@@ -1044,7 +1044,7 @@ void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * 
       case '\x01':
         {
           nMinionClassId = pMonStats->minion1;
-          if (nMinionClassId >= 0 && (int)nMinionClassId <= sgptDataTable->nTxtMonStatsSize) {
+          if (nMinionClassId >= 0 && (int)nMinionClassId <= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             MONSTER_TransformMonsterClass(pGame, pUnit, (int)nMinionClassId, 1);
             MONSTERAI_TriggerMageThink(pGame, pUnit);
             return;
@@ -1207,7 +1207,7 @@ BOOL __fastcall DropHandlerGeneric(::SGAMEDATA * pGame, D2MonsterKillStrc * pMon
       nPathPoints = D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
       if (!nPathPoints) {
         nBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-        if (nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize && nBaseId == 0x6e) {
+        if (nBaseId >= 0 && nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nBaseId == 0x6e) {
           D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
           UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, pMonsterKill->nUnitMode);
           return 1;
@@ -1334,7 +1334,7 @@ BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, D2MonsterKillStrc
       pDynamicPath = pUnit->pPath.pDynamicPath;
       D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
       nMonStatsRow = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-      if (nMonStatsRow < 0 || nMonStatsRow >= sgptDataTable->nTxtMonStatsSize || nMonStatsRow != 0x4e) {
+      if (nMonStatsRow < 0 || nMonStatsRow >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsRow != 0x4e) {
         D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 5);
       } else {
         D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 10);
@@ -1497,10 +1497,10 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
 
     eD2MonsterClassId nMonClassId;
     nMonClassId = pUnit->nClassId;
-    if ((int)nMonClassId < 0 || (int)nMonClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nMonClassId) || nAnimMode > 0xf) {
+    if ((int)nMonClassId < 0 || (int)nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId) || nAnimMode > 0xf) {
       return nullptr;
     }
-    if (sgptDataTable->pTxtMonStats[nMonClassId].SplGetModeChart == '\0') {
+    if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].SplGetModeChart == '\0') {
       return DropHandlerArray + nAnimMode;
     }
     if ((int)nMonClassId > 0x21f) {

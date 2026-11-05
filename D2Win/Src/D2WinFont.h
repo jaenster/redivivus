@@ -45,6 +45,16 @@ struct __attribute__((packed)) D2TooltipTextStrc {
     /* 0x810 */ int nLoadProgress;
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Win::Src::D2WinFont {
+
+extern D2TooltipTextStrc DisplayedTooltip;
+
+} // namespace D2Win::Src::D2WinFont
+
 namespace D2Win::Src::D2WinFont {
 
 // Function declarations

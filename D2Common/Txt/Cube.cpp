@@ -46,8 +46,9 @@ static uint8_t gaCubeRecipeItemTypeFlags_11 = 0x6c; D2_STATIC_GUARD(gaCubeRecipe
 static uint8_t gaCubeRecipeItemTypeFlags_10 = 0x71; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_10, "gaCubeRecipeItemTypeFlags_10");
 static char gaCubeRecipeItemTypeFlags_9[3] = { '=', ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_9, "gaCubeRecipeItemTypeFlags_9");
 static char gaCubeRecipeItemTypeFlags_7[2] = { ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_7, "gaCubeRecipeItemTypeFlags_7");
-D2CubeMainTxt * pTxtCubeMain = 0; D2_GLOBAL_GUARD(pTxtCubeMain, "pTxtCubeMain");
-int nTxtCubeMainSize = 0; D2_GLOBAL_GUARD(nTxtCubeMainSize, "nTxtCubeMainSize");
+namespace D2Common::Txt::Cube {
+int nTxtCubeMainSize = 0; D2_GLOBAL_GUARD(nTxtCubeMainSize, "D2Common::Txt::Cube::nTxtCubeMainSize");
+} // namespace D2Common::Txt::Cube
 
 namespace D2Common::Txt::Cube {
 
@@ -200,7 +201,7 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
     }
     if ((uint32_t)(int)strlen(pszField) <= 4) {
       CUBE_PadItemCodeString(pszField, (char*)&pszNextFlagsToken);
-      nClassId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtItemTypesLink, (uint32_t)pszNextFlagsToken, 0);
+      nClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, (uint32_t)pszNextFlagsToken, 0);
       if (nClassId >= 0) {
         pInput->wFlagsAndUpgrade |= 2;
         pInput->nItemClassId = (uint16_t)nClassId;
@@ -217,22 +218,22 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
       pInput->wFlagsAndUpgrade |= 1;
     } else {
       lookup_unique_or_set:
-      if (!sgtDataTable.pTxtUniqueItemsLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtUniqueItemsLink, pszField, 0) , nLinkIndex < 0)) {
-        if (!sgtDataTable.pTxtSetItemsLink) {
+      if (!DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItemsLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItemsLink, pszField, 0) , nLinkIndex < 0)) {
+        if (!DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItemsLink) {
           return;
         }
 
-        nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSetItemsLink, pszField, 0);
+        nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItemsLink, pszField, 0);
         if (nLinkIndex < 0) {
           return;
         }
 
-        DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(sgtDataTable.pTxtSetItems[nLinkIndex].dwItemCode, (int*)wClassId);
+        DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItems[nLinkIndex].dwItemCode, (int*)wClassId);
         pInput->wFlagsAndUpgrade |= 0x41;
         pInput->nQuality = 5;
         pInput->nUniqueItemId = (short int)nLinkIndex + 1;
       } else {
-        DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(sgtDataTable.pTxtUniqueItems[nLinkIndex].dwItemCode, (int*)wClassId);
+        DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItems[nLinkIndex].dwItemCode, (int*)wClassId);
         pInput->wFlagsAndUpgrade |= 0x41;
         pInput->nQuality = 7;
         pInput->nUniqueItemId = (short int)nLinkIndex + 1;
@@ -470,7 +471,7 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
               }
               if ((uint32_t)(int)strlen(pszItemCodeField) <= 4) {
                 CUBE_PadItemCodeString(pszItemCodeField, (char*)&pszPadded);
-                nItemTypeClassId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtItemTypesLink, (uint32_t)pszPadded, 0);
+                nItemTypeClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, (uint32_t)pszPadded, 0);
                 if (nItemTypeClassId >= 0) {
                   pOutputCopy->nType = 0xfd;
                   pOutputCopy->nItemClassId = (uint16_t)nItemTypeClassId;
@@ -478,33 +479,33 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
                   goto parse_modifiers;
                 }
               }
-              if (!sgtDataTable.pTxtUniqueItemsLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtUniqueItemsLink, pszItemCodeField, 0) , nLinkIndex < 0)) {
-                if (!sgtDataTable.pTxtSetItemsLink) {
+              if (!DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItemsLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItemsLink, pszItemCodeField, 0) , nLinkIndex < 0)) {
+                if (!DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItemsLink) {
                   return;
                 }
 
-                nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSetItemsLink, pszItemCodeField, 0);
+                nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItemsLink, pszItemCodeField, 0);
                 if (nLinkIndex < 0) {
                   return;
                 }
 
-                DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(sgtDataTable.pTxtSetItems[nLinkIndex].dwItemCode, (int*)&pOutput);
+                DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItems[nLinkIndex].dwItemCode, (int*)&pOutput);
                 pOutputCopy->wFlagsAndUpgrade |= 8;
                 pOutputCopy->nType = 0xfc;
                 pOutputCopy->nQuality = 5;
                 pOutputCopy->nUniqueItemId = (short int)nLinkIndex + 1;
                 pOutputCopy->nItemClassId = (uint16_t)(uintptr_t)pOutput;
-                pOutputCopy->nILvl = (uint8_t)sgtDataTable.pTxtSetItems[nLinkIndex].lvl;
+                pOutputCopy->nILvl = (uint8_t)DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItems[nLinkIndex].lvl;
                 return;
               }
 
-              DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(sgtDataTable.pTxtUniqueItems[nLinkIndex].dwItemCode, (int*)&pszPadded);
+              DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItems[nLinkIndex].dwItemCode, (int*)&pszPadded);
               pOutputCopy->wFlagsAndUpgrade |= 8;
               pOutputCopy->nType = 0xfc;
               pOutputCopy->nQuality = 7;
               pOutputCopy->nUniqueItemId = (short int)nLinkIndex + 1;
               pOutputCopy->nItemClassId = (uint16_t)(uintptr_t)pszPadded;
-              pOutputCopy->nILvl = (uint8_t)sgtDataTable.pTxtUniqueItems[nLinkIndex].lvl;
+              pOutputCopy->nILvl = (uint8_t)DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItems[nLinkIndex].lvl;
               pszCursor = szPaddedCode;
             }
           }
@@ -715,12 +716,12 @@ void __fastcall DATATBLS_LinkerItemStatCost(char * pszStatName, int32_t * pnStat
     if (cFirstChar == '-' || cFirstChar >= '0' && cFirstChar <= '9') {
       nStatIndex = atoi(pszStatName);
     } else {
-      if (!sgtDataTable.pTxtItemStatCostLink) {
+      if (!DATATBLS::MonsterTbls::sgtDataTable.pTxtItemStatCostLink) {
         *pnStatId = 0;
         return;
       }
 
-      nStatIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtItemStatCostLink, pszStatName, 0);
+      nStatIndex = Fog::Src::Excel::GetLinkNodeIndex(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemStatCostLink, pszStatName, 0);
       if (nStatIndex < 0) {
         *pnStatId = 0;
         return;
@@ -743,7 +744,7 @@ void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
       {"op", FIELDTYPE_CHAR, 0, 4, 0},
       {"param", FIELDTYPE_INT, 0, 8, (void*)DATATBLS_LinkerItemStatCost},
       {"value", FIELDTYPE_INT, 0, 0xc, 0},
-      {"class", FIELDTYPE_CODE_CHAR, 0, 3, &sgtDataTable.pTxtPlayerClassLink},
+      {"class", FIELDTYPE_CODE_CHAR, 0, 3, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPlayerClassLink},
       {"numinputs", FIELDTYPE_CHAR, 0, 0x10, 0},
       {"version", FIELDTYPE_SHORT, 0, 0x12, 0},
       {"input 1", FIELDTYPE_LINKER_BIT, 0, 0, (void*)CUBE_ParseInputItemField},
@@ -757,27 +758,27 @@ void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
       {"lvl", FIELDTYPE_CHAR, 0, 0x55, 0},
       {"plvl", FIELDTYPE_CHAR, 0, 0x56, 0},
       {"ilvl", FIELDTYPE_CHAR, 0, 0x57, 0},
-      {"mod 1", FIELDTYPE_NAME_INT, 0, 100, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 1", FIELDTYPE_NAME_INT, 0, 100, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"mod 1 chance", FIELDTYPE_CHAR, 0, 0x6e, 0},
       {"mod 1 param", FIELDTYPE_SHORT, 0, 0x68, 0},
       {"mod 1 min", FIELDTYPE_SHORT, 0, 0x6a, 0},
       {"mod 1 max", FIELDTYPE_SHORT, 0, 0x6c, 0},
-      {"mod 2", FIELDTYPE_NAME_INT, 0, 0x70, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 2", FIELDTYPE_NAME_INT, 0, 0x70, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"mod 2 chance", FIELDTYPE_CHAR, 0, 0x7a, 0},
       {"mod 2 param", FIELDTYPE_SHORT, 0, 0x74, 0},
       {"mod 2 min", FIELDTYPE_SHORT, 0, 0x76, 0},
       {"mod 2 max", FIELDTYPE_SHORT, 0, 0x78, 0},
-      {"mod 3", FIELDTYPE_NAME_INT, 0, 0x7c, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 3", FIELDTYPE_NAME_INT, 0, 0x7c, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"mod 3 chance", FIELDTYPE_CHAR, 0, 0x86, 0},
       {"mod 3 param", FIELDTYPE_SHORT, 0, 0x80, 0},
       {"mod 3 min", FIELDTYPE_SHORT, 0, 0x82, 0},
       {"mod 3 max", FIELDTYPE_SHORT, 0, 0x84, 0},
-      {"mod 4", FIELDTYPE_NAME_INT, 0, 0x88, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 4", FIELDTYPE_NAME_INT, 0, 0x88, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"mod 4 chance", FIELDTYPE_CHAR, 0, 0x92, 0},
       {"mod 4 param", FIELDTYPE_SHORT, 0, 0x8c, 0},
       {"mod 4 min", FIELDTYPE_SHORT, 0, 0x8e, 0},
       {"mod 4 max", FIELDTYPE_SHORT, 0, 0x90, 0},
-      {"mod 5", FIELDTYPE_NAME_INT, 0, 0x94, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 5", FIELDTYPE_NAME_INT, 0, 0x94, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"mod 5 chance", FIELDTYPE_CHAR, 0, 0x9e, 0},
       {"mod 5 param", FIELDTYPE_SHORT, 0, 0x98, 0},
       {"mod 5 min", FIELDTYPE_SHORT, 0, 0x9a, 0},
@@ -786,27 +787,27 @@ void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
       {"b lvl", FIELDTYPE_CHAR, 0, 0xa9, 0},
       {"b plvl", FIELDTYPE_CHAR, 0, 0xaa, 0},
       {"b ilvl", FIELDTYPE_CHAR, 0, 0xab, 0},
-      {"b mod 1", FIELDTYPE_NAME_INT, 0, 0xb8, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 1", FIELDTYPE_NAME_INT, 0, 0xb8, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"b mod 1 chance", FIELDTYPE_CHAR, 0, 0xc2, 0},
       {"b mod 1 param", FIELDTYPE_SHORT, 0, 0xbc, 0},
       {"b mod 1 min", FIELDTYPE_SHORT, 0, 0xbe, 0},
       {"b mod 1 max", FIELDTYPE_SHORT, 0, 0xc0, 0},
-      {"b mod 2", FIELDTYPE_NAME_INT, 0, 0xc4, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 2", FIELDTYPE_NAME_INT, 0, 0xc4, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"b mod 2 chance", FIELDTYPE_CHAR, 0, 0xce, 0},
       {"b mod 2 param", FIELDTYPE_SHORT, 0, 200, 0},
       {"b mod 2 min", FIELDTYPE_SHORT, 0, 0xca, 0},
       {"b mod 2 max", FIELDTYPE_SHORT, 0, 0xcc, 0},
-      {"b mod 3", FIELDTYPE_NAME_INT, 0, 0xd0, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 3", FIELDTYPE_NAME_INT, 0, 0xd0, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"b mod 3 chance", FIELDTYPE_CHAR, 0, 0xda, 0},
       {"b mod 3 param", FIELDTYPE_SHORT, 0, 0xd4, 0},
       {"b mod 3 min", FIELDTYPE_SHORT, 0, 0xd6, 0},
       {"b mod 3 max", FIELDTYPE_SHORT, 0, 0xd8, 0},
-      {"b mod 4", FIELDTYPE_NAME_INT, 0, 0xdc, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 4", FIELDTYPE_NAME_INT, 0, 0xdc, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"b mod 4 chance", FIELDTYPE_CHAR, 0, 0xe6, 0},
       {"b mod 4 param", FIELDTYPE_SHORT, 0, 0xe0, 0},
       {"b mod 4 min", FIELDTYPE_SHORT, 0, 0xe2, 0},
       {"b mod 4 max", FIELDTYPE_SHORT, 0, 0xe4, 0},
-      {"b mod 5", FIELDTYPE_NAME_INT, 0, 0xe8, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 5", FIELDTYPE_NAME_INT, 0, 0xe8, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"b mod 5 chance", FIELDTYPE_CHAR, 0, 0xf2, 0},
       {"b mod 5 param", FIELDTYPE_SHORT, 0, 0xec, 0},
       {"b mod 5 min", FIELDTYPE_SHORT, 0, 0xee, 0},
@@ -815,27 +816,27 @@ void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
       {"c lvl", FIELDTYPE_CHAR, 0, 0xfd, 0},
       {"c plvl", FIELDTYPE_CHAR, 0, 0xfe, 0},
       {"c ilvl", FIELDTYPE_CHAR, 0, 0xff, 0},
-      {"c mod 1", FIELDTYPE_NAME_INT, 0, 0x10c, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 1", FIELDTYPE_NAME_INT, 0, 0x10c, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"c mod 1 chance", FIELDTYPE_CHAR, 0, 0x116, 0},
       {"c mod 1 param", FIELDTYPE_SHORT, 0, 0x110, 0},
       {"c mod 1 min", FIELDTYPE_SHORT, 0, 0x112, 0},
       {"c mod 1 max", FIELDTYPE_SHORT, 0, 0x114, 0},
-      {"c mod 2", FIELDTYPE_NAME_INT, 0, 0x118, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 2", FIELDTYPE_NAME_INT, 0, 0x118, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"c mod 2 chance", FIELDTYPE_CHAR, 0, 0x122, 0},
       {"c mod 2 param", FIELDTYPE_SHORT, 0, 0x11c, 0},
       {"c mod 2 min", FIELDTYPE_SHORT, 0, 0x11e, 0},
       {"c mod 2 max", FIELDTYPE_SHORT, 0, 0x120, 0},
-      {"c mod 3", FIELDTYPE_NAME_INT, 0, 0x124, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 3", FIELDTYPE_NAME_INT, 0, 0x124, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"c mod 3 chance", FIELDTYPE_CHAR, 0, 0x12e, 0},
       {"c mod 3 param", FIELDTYPE_SHORT, 0, 0x128, 0},
       {"c mod 3 min", FIELDTYPE_SHORT, 0, 0x12a, 0},
       {"c mod 3 max", FIELDTYPE_SHORT, 0, 300, 0},
-      {"c mod 4", FIELDTYPE_NAME_INT, 0, 0x130, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 4", FIELDTYPE_NAME_INT, 0, 0x130, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"c mod 4 chance", FIELDTYPE_CHAR, 0, 0x13a, 0},
       {"c mod 4 param", FIELDTYPE_SHORT, 0, 0x134, 0},
       {"c mod 4 min", FIELDTYPE_SHORT, 0, 0x136, 0},
       {"c mod 4 max", FIELDTYPE_SHORT, 0, 0x138, 0},
-      {"c mod 5", FIELDTYPE_NAME_INT, 0, 0x13c, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 5", FIELDTYPE_NAME_INT, 0, 0x13c, &DATATBLS::MonsterTbls::sgtDataTable.pTxtPropertiesLink},
       {"c mod 5 chance", FIELDTYPE_CHAR, 0, 0x146, 0},
       {"c mod 5 param", FIELDTYPE_SHORT, 0, 0x140, 0},
       {"c mod 5 min", FIELDTYPE_SHORT, 0, 0x142, 0},
@@ -961,5 +962,17 @@ void CUBE_PadItemCodeString_Unref_006bcd50(char * szText1, char * szText2) {
 
     szText2[3] = cVar1;
 }
+
+} // namespace D2Common::Txt::Cube
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Common::Txt::Cube {
+
+// Initialized scalars
+
+D2CubeMainTxt * pTxtCubeMain = 0; D2_GLOBAL_GUARD(pTxtCubeMain, "D2Common::Txt::Cube::pTxtCubeMain");
 
 } // namespace D2Common::Txt::Cube

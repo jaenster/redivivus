@@ -248,7 +248,9 @@ D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
     }
 }; D2_GLOBAL_GUARD(gaUIWindowHandlers, "gaUIWindowHandlers");
 static uint32_t gbMessageLoopActive = 0x1; D2_STATIC_GUARD(gbMessageLoopActive, "gbMessageLoopActive");
-eD2RendererMode D2GFX_eRendererMode = 0; D2_GLOBAL_GUARD(D2GFX_eRendererMode, "D2GFX_eRendererMode");
+namespace D2Win::Src::D2WinMain {
+eD2RendererMode D2GFX_eRendererMode = 0; D2_GLOBAL_GUARD(D2GFX_eRendererMode, "D2Win::Src::D2WinMain::D2GFX_eRendererMode");
+} // namespace D2Win::Src::D2WinMain
 static DC6 * gpCursorDC6 = 0; D2_STATIC_GUARD(gpCursorDC6, "gpCursorDC6");
 static uint32_t gnWinMainState = 0; D2_STATIC_GUARD(gnWinMainState, "gnWinMainState");
 static uint32_t gbFormActivated = 0; D2_STATIC_GUARD(gbFormActivated, "gbFormActivated");
@@ -355,11 +357,11 @@ BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall D2WINMAIN_FreeLeadingFormControls() {
     D2ControlStrc* pDVar1;
-    if (!(gnFormControlCount <= 0 && pFormUnknown)) {
+    if (!(D2WinButton::gnFormControlCount <= 0 && pFormUnknown)) {
       return;
     }
 
-    while (!(pFormUnknown->dwState & gadwBitMasks[0])) {
+    while (!(pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[0])) {
       pDVar1 = pFormUnknown->pNext;
       D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
       pFormUnknown = pDVar1;
@@ -369,7 +371,7 @@ void __stdcall D2WINMAIN_FreeLeadingFormControls() {
     }
 
     do {
-      if (pFormUnknown->dwState & gadwBitMasks[1]) {
+      if (pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[1]) {
         return;
       }
 
@@ -553,11 +555,11 @@ void __fastcall D2WINMAIN_SetControlVisible(D2ControlStrc * pControl, BOOL bVisi
       return;
     }
     if (bVisible) {
-      pControl->dwState |= gadwBitMasks[0];
+      pControl->dwState |= Fog::BitBuffer::gadwBitMasks[0];
       return;
     }
 
-    pControl->dwState &= gadwInvBitMasks[0];
+    pControl->dwState &= Fog::BitBuffer::gadwInvBitMasks[0];
 }
 
 // Returns bit 0 of control flags (offset +8), checking visibility/enabled state. Halts on null pointer.
@@ -567,7 +569,7 @@ BOOL __fastcall D2WINMAIN_GetControlVisible(D2ControlStrc * pControl) {
       exit(-1);
     }
 
-    return pControl->dwState & gadwBitMasks[0];
+    return pControl->dwState & Fog::BitBuffer::gadwBitMasks[0];
 }
 
 // Sets (bActive != 0) or clears bit 2 (gadwBitMasks[2] = 4) of pControl->dwState (+0x8); halts (line 844) on NULL.
@@ -579,11 +581,11 @@ void __fastcall D2WINMAIN_SetControlActive(D2ControlStrc * pControl, BOOL bActiv
       exit(-1);
     }
     if (bActive) {
-      pControl->dwState |= gadwBitMasks[2];
+      pControl->dwState |= Fog::BitBuffer::gadwBitMasks[2];
       return;
     }
 
-    pControl->dwState &= gadwInvBitMasks[2];
+    pControl->dwState &= Fog::BitBuffer::gadwInvBitMasks[2];
 }
 
 // Returns pControl->dwState & gadwBitMasks[2], the active bit D2WINMAIN_SetControlActive sets; halts (line 858) on NULL.
@@ -594,7 +596,7 @@ BOOL __fastcall D2WINMAIN_IsControlActive(D2ControlStrc * pControl) {
       exit(-1);
     }
 
-    return pControl->dwState & gadwBitMasks[2];
+    return pControl->dwState & Fog::BitBuffer::gadwBitMasks[2];
 }
 
 // Tests if current mouse position (D2Client::Mouse::nPosX/Y) is inside the specified RECT using PtInRect
@@ -626,7 +628,7 @@ void __stdcall DrawCursorOOG() {
     gnCursorDrawPosX = nPosX;
     gnCursorDrawPosY = nPosY;
     memset(&sGfxData, 0, 0x48);
-    sGfxData.nFrameNumber = gnCursorDC6FrameNumber;
+    sGfxData.nFrameNumber = D2GFX::gnCursorDC6FrameNumber;
     sGfxData.pDC6 = pDVar1;
     sGfxData.nDirection = 0;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nMouseX <= 0 ? 0 : nMouseX, (nMouseY <= 0 ? 0 : nMouseY) - 1, -1, DRAW_SOLID, nullptr);
@@ -705,7 +707,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       }
 
       for (; pForm; pForm = pForm->pNext) {
-        if (pForm->fpDraw && !(pForm->dwState & gadwBitMasks[3])) {
+        if (pForm->fpDraw && !(pForm->dwState & Fog::BitBuffer::gadwBitMasks[3])) {
           pForm->fpDraw(pForm);
         }
       }
@@ -718,7 +720,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       }
 
       for (; pForm; pForm = pForm->pNext) {
-        if (pForm->fpDraw && pForm->dwState & gadwBitMasks[3]) {
+        if (pForm->fpDraw && pForm->dwState & Fog::BitBuffer::gadwBitMasks[3]) {
           pForm->fpDraw(pForm);
         }
       }
@@ -732,7 +734,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
 
 LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam) {
     int32_t lResult;
-    if (!gbGfxWindowCreated) {
+    if (!D2GFX::gbGfxWindowCreated) {
       return 0;
     }
     if (D2GFX::pWndProcB) {
@@ -812,9 +814,9 @@ void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {
       try_control_handler:
       if (pFormIter->fpListCheck) {
         pMsg->hWnd = (HWND)pFormIter;
-        gnFormControlCount++;
+        D2WinButton::gnFormControlCount++;
         bCallbackResult = pFormIter->fpListCheck((D2ControlMsg*)pMsg);
-        gnFormControlCount--;
+        D2WinButton::gnFormControlCount--;
         if (bCallbackResult) {
           break;
         }
@@ -863,9 +865,9 @@ void __stdcall INPUT_FormKeyUpHandler(D2UIMouseMsgStrc * pMsg) {
       try_control_handler:
       if (pFormIter->fpKey) {
         pMsg->hWnd = (HWND)pFormIter;
-        gnFormControlCount++;
+        D2WinButton::gnFormControlCount++;
         bCallbackResult = pFormIter->fpKey((D2ControlMsg*)pMsg);
-        gnFormControlCount--;
+        D2WinButton::gnFormControlCount--;
         if (bCallbackResult) {
           break;
         }
@@ -1129,11 +1131,12 @@ void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
     bMusicEnabled = D2Sound::Src::D2SoundFast::SOUND_GetOptionsMusic();
     if (bMusicEnabled) {
       D2Sound::Src::D2SoundFast::SOUND_FadeOutMusic();
+      D2Sound::Src::D2SoundFast::SOUND_SetOptionsMusic((uint32_t)!bMusicEnabled);
     } else {
       D2Sound::Src::D2SoundFast::SOUND_SetMusicEnabled(1);
+      D2Sound::Src::D2SoundFast::SOUND_SetOptionsMusic((uint32_t)!bMusicEnabled);
     }
 
-    D2Sound::Src::D2SoundFast::SOUND_SetOptionsMusic((uint32_t)!bMusicEnabled);
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
 }
@@ -1235,7 +1238,7 @@ void __stdcall INPUT_FormMouseWheel(D2UIMouseMsgStrc * pMsg) {
       do {
         if (pControl->sControl.neD2FormType == FORM_Scrollbar) {
           uVar1 = pControl->sControl.dwState;
-          if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+          if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
             nMaxValue = D2WinScrollbar::D2WINSCROLLBAR_GetMaxValue(pControl);
             if (nMaxValue > 0) {
               pClosestScrollbar = (::D2WinScrollbar*)D2WIN_FindClosestControlToMouse(&pClosestScrollbar->sControl, &pControl->sControl);
@@ -1269,11 +1272,11 @@ void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible) {
 
 void __stdcall SetUnsetFlag0x08(D2ControlStrc * pControl, int32_t bSet) {
     if (bSet) {
-      pControl->dwState |= gadwBitMasks[3];
+      pControl->dwState |= Fog::BitBuffer::gadwBitMasks[3];
       return;
     }
 
-    pControl->dwState &= gadwInvBitMasks[3];
+    pControl->dwState &= Fog::BitBuffer::gadwInvBitMasks[3];
 }
 
 // Sets pFormFourth global to the specified control
@@ -1335,7 +1338,7 @@ BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2Render
 }
 
 BOOL __stdcall FreeInGameGFX() {
-    gnFormControlCount = 0;
+    D2WinButton::gnFormControlCount = 0;
     D2WINMAIN_FreeLeadingFormControls();
     D2WinList::D2WINLIST_FreePentSpinCursor();
     D2WinFont::D2WINFONT_FreeFontCache();
@@ -1533,9 +1536,9 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
               pMsg->hWnd = (HWND)pControl;
               nMouseX = nPosX;
               if (pControl->fpPush) {
-                gnFormControlCount++;
+                D2WinButton::gnFormControlCount++;
                 bHandled = pControl->fpPush((D2ControlMsg*)pMsg);
-                gnFormControlCount--;
+                D2WinButton::gnFormControlCount--;
                 nMouseX = nPosX;
                 if (bHandled) {
                   break;
@@ -1564,9 +1567,9 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
       for (; pControl; pControl = pControl->pNext) {
         pMsg->hWnd = (HWND)pControl;
         if (pControl->fpMouse) {
-          gnFormControlCount++;
+          D2WinButton::gnFormControlCount++;
           pControl->fpMouse((D2ControlMsg*)pMsg);
-          gnFormControlCount--;
+          D2WinButton::gnFormControlCount--;
         }
       }
 

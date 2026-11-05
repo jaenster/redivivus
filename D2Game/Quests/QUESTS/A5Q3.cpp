@@ -426,31 +426,31 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     static D2Quest33RewardListStrc D2Quest33RewardListStrc_NIGHTMARE = {
     /* .sClassRewads = */ {
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_AmazonBowCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_AmazonBowCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_SorceressOrbCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_SorceressOrbCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_NecromancerWandCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_NecromancerWandCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_PaladinScepterCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_PaladinScepterCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_BarbarianAxeCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_BarbarianAxeCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_DruidHelmCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_DruidHelmCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Hell_AssassinClawCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_AssassinClawCodes,
             /* .nPriceCount = */ 0x7
         }
     }
@@ -458,31 +458,31 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     static D2Quest33RewardListStrc D2Quest33RewardListStrc_HELL = {
     /* .sClassRewads = */ {
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_AmazonBowCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_AmazonBowCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_SorceressOrbCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_SorceressOrbCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_NecromancerWandCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_NecromancerWandCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_PaladinScepterCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_PaladinScepterCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_BarbarianAxeCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_BarbarianAxeCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_DruidHelmCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_DruidHelmCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Nightmare_AssassinClawCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_AssassinClawCodes,
             /* .nPriceCount = */ 0x7
         }
     }
@@ -490,31 +490,31 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     static D2Quest33RewardListStrc D2Quest33RewardListStrc_NORMAL = {
     /* .sClassRewads = */ {
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_AmazonBowCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_AmazonBowCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_SorceressOrbCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_SorceressOrbCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_NecromancerWandCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_NecromancerWandCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_PaladinScepterCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_PaladinScepterCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_BarbarianAxeCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_BarbarianAxeCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_DruidHelmCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_DruidHelmCodes,
             /* .nPriceCount = */ 0x5
         },
         {
-            /* .szPriceList = */ (char*)&gaQ33_Normal_AssassinClawCodes,
+            /* .szPriceList = */ (char*)&D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_AssassinClawCodes,
             /* .nPriceCount = */ 0x7
         }
     }
@@ -1457,7 +1457,7 @@ void __fastcall Objects_InitFn69_SpawnFrozenstein(D2ObjectInitFnArg * pInitArg) 
       return;
     }
 
-    int32_t nMonsterClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetPresetActValue(2, (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x3c]);
+    int32_t nMonsterClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetPresetActValue(2, (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x3c]);
     D2UnitStrc* pSpawnedMonster = Monsters::Spawn::SpawnMonster(pInitArg->pGame, pInitArg->pRoom, nMonsterClassId, pInitArg->nX, pInitArg->nY, 1);
     if (!pSpawnedMonster) {
       return;

@@ -115,7 +115,7 @@ static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     }
 
     D2MissilesTxt* pMissileTxt = D2Client::GetMissleById(pUnit->nClassId);
-    if (!(*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[2])) {
+    if (!(*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return;
     }
 
@@ -164,7 +164,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     if ((int)eMissileId < 0) {
       return nullptr;
     }
-    if ((int)eMissileId >= sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return nullptr;
     }
 
@@ -218,7 +218,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       nVelocity = nTmpY / 8 + (uint32_t)pMissileTxt->Vel;
       nVelocity <<= 8;
     }
-    if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[3]) {
+    if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       BOOL eSlowMissileState;
       eSlowMissileState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pArgs->pOwner, STATE_slowmissiles);
       if (eSlowMissileState) {
@@ -326,7 +326,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     }
 
     D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[pMissileTxt->CollideType].nFlags);
-    if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[4]) {
+    if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     }
     if (nVelocity) {
@@ -388,7 +388,7 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
     }
 
     int nMissileClassId = pUnit->nClassId;
-    if (!(nMissileClassId >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + nMissileClassId && *((uint8_t*)&sgptDataTable->pTxtMissiles[nMissileClassId] + 0x4) & (uint8_t)gadwBitMasks[5])) {
+    if (!(nMissileClassId >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nMissileClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
       return;
     }
 

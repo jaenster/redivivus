@@ -113,6 +113,20 @@
       ]
     },
     {
+      "name": "D2GFX_EnableVSync_Unref_00506a80",
+      "address": "00506a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506a80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "D2GFX_EnableVSync_Unref_00506a80"
+      ]
+    },
+    {
       "name": "Draw",
       "address": "00506a90",
       "lines": [

@@ -24,6 +24,7 @@ namespace D2Launch {
 fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule);
 // Launcher app mode shutdown (no-op).
 void __stdcall AppModeLauncherShutdown();
+void thunk__strstr(char * szText1, char * szText2);
 uint32_t MAINMENU_ShowBnetConnectionError();
 BOOL __stdcall UIMENU_ToggleHardcoreMode(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall UIMENU_DisconnectAndReturnToMainMenu(struct D2ControlMsg * pControlMsg);

@@ -37,6 +37,9 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 char gpSmackerVideoBuffer[260] = {}; D2_GLOBAL_GUARD(gpSmackerVideoBuffer, "gpSmackerVideoBuffer");
 uint8_t gbSmackerVideoFlags = 0; D2_GLOBAL_GUARD(gbSmackerVideoFlags, "gbSmackerVideoFlags");
+namespace D2Win::Src::D2WinSmack {
+uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "D2Win::Src::D2WinSmack::gbSmackerKeepTempFile");
+} // namespace D2Win::Src::D2WinSmack
 
 namespace D2Win::Src::D2WinSmack {
 
@@ -132,6 +135,10 @@ void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack) {
     D2WinMain::FORMS_DestroyControl(&pSmack->sControl);
 }
 
+void __stdcall D2GFX_EnableVSync_Unref_00506a80() {
+    gbSmackerKeepTempFile = 1;
+}
+
 BOOL __fastcall Draw(::D2WinSmack * pSmack) {
     if (pSmack->sControl.neD2FormType != FORM_Smack) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
@@ -139,7 +146,7 @@ BOOL __fastcall Draw(::D2WinSmack * pSmack) {
     }
 
     uint32_t uVar1 = pSmack->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       if (gbSmackerKeepTempFile) {
         if (gpSmackerVideoBuffer[0] != '\0') {
           D2WINSMACK_LoadAndDecodeSmacker(pSmack, gpSmackerVideoBuffer, (uint32_t)gbSmackerVideoFlags);
@@ -164,7 +171,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     }
 
     uint32_t dwState = pSmack->sControl.dwState;
-    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
       OnPress pOVar1;
       pOVar1 = pSmack->sControl.fpOnPress;
       if (pOVar1) {
@@ -182,8 +189,8 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     ::D2WinSmack* pSmack = D2_NEW_AT(::D2WinSmack, ".\\Src\\D2WinSmack.cpp", 0x23);
     memset(pSmack, 0, 0x150);
     pSmack->sControl.neD2FormType = FORM_Smack;
-    pSmack->sControl.dwState |= gadwBitMasks[0];
-    dwState = pSmack->sControl.dwState | gadwBitMasks[2];
+    pSmack->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pSmack->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pSmack->sControl.dwSizeX = nWidth;
     pSmack->sControl.dwState = dwState;
     pSmack->sControl.pNext = 0;

@@ -35,6 +35,16 @@ typedef struct D2LinkNodeStrc * PD2TaskNodeLink;
 
 typedef struct D2LinkNodeStrc * PD2TaskQueueSlotLink;
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Game::GAME::Task {
+
+extern struct D2TaskQueueSlotStrc * gaTaskQueueHeadArray[32];
+
+} // namespace D2Game::GAME::Task
+
 namespace D2Game::GAME::Task {
 
 // Function declarations

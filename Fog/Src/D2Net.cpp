@@ -35,7 +35,7 @@ void __stdcall NET_SERVER_SentPacketLog_Clear() {
     *(uint32_t*)((char*)&gnSentPacketWireBytes + 4) = 0;
     *(uint32_t*)(char*)&gnSentPacketHeaderBytes = 0;
     *(uint32_t*)((char*)&gnSentPacketHeaderBytes + 4) = 0;
-    Source::SSComp::COMPRESS_BuildHuffmanDecodeTable(gabHuffmanCodeLengths);
+    Source::SSComp::COMPRESS_BuildHuffmanDecodeTable(Source::SSComp::gabHuffmanCodeLengths);
 }
 
 void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
@@ -52,7 +52,7 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
       *(uint32_t*)pByteCountEntry = (uint32_t)*pByteCountEntry + 1;
       pOverflowCount = (int*)((int)gaServerSentPacketByteCounts + nByteValue * 8 + 4);
       *pOverflowCount += (uint32_t)(-2 < (uint32_t)nOldByteCount);
-      nBitCount += (uint32_t)gabHuffmanCodeLengths[nByteValue];
+      nBitCount += (uint32_t)Source::SSComp::gabHuffmanCodeLengths[nByteValue];
     }
 
     nByteIndex = nBitCount + 7U >> 3;
@@ -91,8 +91,8 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
       bVar1 = *pBytes;
       nBytesSize--;
       pBytes++;
-      nNumBits = (uint32_t)gabHuffmanCodeLengths[bVar1];
-      bVar1 = gabHuffmanNextTable[bVar1];
+      nNumBits = (uint32_t)Source::SSComp::gabHuffmanCodeLengths[bVar1];
+      bVar1 = Source::SSComp::gabHuffmanNextTable[bVar1];
       pOutCur = pOut;
       if ((int)nNumBits >= nBitsFree) {
         do {
@@ -163,9 +163,9 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
         uBitBuffer |= (uint32_t)byEntryLen << D2_SHIFT_COUNT(nBitsAvail);
       }
 
-      byEntryLen = *(uint8_t*)gaHuffmanFastDecodeTable[uBitBuffer >> 0x18];
-      byEntryLen = ((uint8_t*)gaHuffmanFastDecodeTable[uBitBuffer >> 0x18])[(uBitBuffer >> D2_SHIFT_COUNT(0x18 - byEntryLen) & gadwHuffmanBitMasks[byEntryLen]) + 1];
-      byCodeLen = gabHuffmanCodeLengths[byEntryLen];
+      byEntryLen = *(uint8_t*)Source::SSComp::gaHuffmanFastDecodeTable[uBitBuffer >> 0x18];
+      byEntryLen = ((uint8_t*)Source::SSComp::gaHuffmanFastDecodeTable[uBitBuffer >> 0x18])[(uBitBuffer >> D2_SHIFT_COUNT(0x18 - byEntryLen) & gadwHuffmanBitMasks[byEntryLen]) + 1];
+      byCodeLen = Source::SSComp::gabHuffmanCodeLengths[byEntryLen];
       nBitsAvail += (uint32_t)byCodeLen;
       if (nBitsAvail > 0x20) {
         break;

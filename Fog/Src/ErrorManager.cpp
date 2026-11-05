@@ -168,20 +168,20 @@ uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, D
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     // Static local variables (originally global data)
     static char * gaLanguageNames[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c
 }; D2_STATIC_GUARD(gaLanguageNames, "Fog::Src::ErrorManager::WriteCrashReportProcessInfo::gaLanguageNames");
 
@@ -729,9 +729,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
 
 BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szReason) {
     if (g_dwErrorState) {
-      char* pszRelativeFile;
-      pszRelativeFile = StripPathPrefixToRelative(szText);
-      LogManager::LOGMANAGER_TraceToModuleLog("", "\n***** ENCOUNTERED ERROR DURING ERROR HANDLING!!!\n%s,%d\n%s\n*****", pszRelativeFile, nLine, szReason);
+      LogManager::LOGMANAGER_TraceToModuleLog("", "\n***** ENCOUNTERED ERROR DURING ERROR HANDLING!!!\n%s,%d\n%s\n*****", StripPathPrefixToRelative(szText), nLine, szReason);
       return 1;
     }
 
@@ -5024,14 +5022,14 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       iBitIdx = 0;
       do {
         uCookie = 1 << D2_SHIFT_COUNT(iBitIdx);
-        if (gadwBitMasks[iBitIdx] != uCookie) {
+        if (BitBuffer::gadwBitMasks[iBitIdx] != uCookie) {
           nBadAddr = GetInstructionPointer();
           Safesock::WSACleanup();
           FOG_ErrorHandler(ERROR_Halt, "", 0x576, "Unrecoverable internal error %08x", nBadAddr);
           LogManager::ExitOrCrashCleanUpJmp();
           exit(-1);
         }
-        if (gadwInvBitMasks[iBitIdx] != ~uCookie) {
+        if (BitBuffer::gadwInvBitMasks[iBitIdx] != ~uCookie) {
           nBadAddr = GetInstructionPointer();
           Safesock::WSACleanup();
           FOG_ErrorHandler(ERROR_Halt, "", 0x577, "Unrecoverable internal error %08x", nBadAddr);

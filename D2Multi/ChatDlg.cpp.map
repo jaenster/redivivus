@@ -421,6 +421,34 @@
       ]
     },
     {
+      "name": "SERR_InternalLeaveCriticalSection_Unref_0043e230",
+      "address": "0043e230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e230"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "SERR_InternalLeaveCriticalSection_Unref_0043e230"
+      ]
+    },
+    {
+      "name": "SERR_InternalLeaveCriticalSection_Unref_0043e240",
+      "address": "0043e240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e240"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "SERR_InternalLeaveCriticalSection_Unref_0043e240"
+      ]
+    },
+    {
       "name": "StoreChatMsg",
       "address": "0043e250",
       "lines": [
@@ -2081,6 +2109,36 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca960",
+      "address": "006ca960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca960"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "StaticInit_6ca960",
+        "SStrHash"
+      ]
+    },
+    {
+      "name": "StaticInit_gbChatLobbyInitialize",
+      "address": "006ca980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca980"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "StaticInit_gbChatLobbyInitialize",
+        "SStrHash"
       ]
     }
   ]

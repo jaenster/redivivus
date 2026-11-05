@@ -34,11 +34,93 @@
 #include "D2Client/UI/npcmenu/Merc.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT/Missile.h"
-#include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/Warden/WardenClient.h"
 #include "D2Common/INVENTORY/Inventory.h"
 
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+
+namespace D2Common::Drlg::Maze {
+
+} // namespace D2Common::Drlg::Maze
+
+namespace Fog::Src::LogManager {
+
+} // namespace Fog::Src::LogManager
+
+namespace Fog::Src::ErrorManager {
+
+} // namespace Fog::Src::ErrorManager
+
+namespace Storm::Source::SSignature {
+
+} // namespace Storm::Source::SSignature
+
+namespace Fog::Engine::Application {
+
+} // namespace Fog::Engine::Application
+
+namespace Fog::Source::SFile {
+
+} // namespace Fog::Source::SFile
+
+namespace Fog::Src::DataArrays {
+
+} // namespace Fog::Src::DataArrays
+
+namespace Storm::Source::SSTR {
+
+} // namespace Storm::Source::SSTR
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
+namespace Fog::BitBuffer {
+
+} // namespace Fog::BitBuffer
+
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
+namespace Storm::Source::SLog {
+
+} // namespace Storm::Source::SLog
+
+namespace Storm::_3rdparty::zlib::deflate {
+
+} // namespace Storm::_3rdparty::zlib::deflate
+
+namespace D2Launch::CharSel {
+
+} // namespace D2Launch::CharSel
+
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
+namespace D2Client::ClientModeInGame {
+
+} // namespace D2Client::ClientModeInGame
+
+namespace D2Client::UI::Draw {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
@@ -65,282 +147,38 @@ D2UIFlagInitStrc g_UIFlagInitDrawMouseDown[4] = {
         /* .nMessageOrKeyCode = */ 0x204,
         /* .pfHandler = */ &D2Client::UI::Panel::INPUT_PanelRightClick
     }
-}; D2_GLOBAL_GUARD(g_UIFlagInitDrawMouseDown, "g_UIFlagInitDrawMouseDown");
+}; D2_GLOBAL_GUARD(g_UIFlagInitDrawMouseDown, "D2Client::UI::Draw::g_UIFlagInitDrawMouseDown");
 
-char param_2_006d6454[3] = { '%', 'i', '\x00' }; D2_GLOBAL_GUARD(param_2_006d6454, "param_2_006d6454");
+D2UIFlagStrc GFX_bShowUIFlag = {}; D2_GLOBAL_GUARD(GFX_bShowUIFlag, "D2Client::UI::Draw::GFX_bShowUIFlag");
 
-char param_2_006d9be8[4] = { '%', 'l', 'd', '\x00' }; D2_GLOBAL_GUARD(param_2_006d9be8, "param_2_006d9be8");
+D2UIFlagDescStrc gaUIFlagDescsClient[3] = {}; D2_GLOBAL_GUARD(gaUIFlagDescsClient, "D2Client::UI::Draw::gaUIFlagDescsClient");
 
-char param_2_006da0cc[4] = { '%', '2', 'u', '\x00' }; D2_GLOBAL_GUARD(param_2_006da0cc, "param_2_006da0cc");
+} // namespace D2Client::UI::Draw
 
-D2MonMsgAnimModeStrc gaMonMsgAnimModeTable[30] = {
-    {
-        /* .eMode = */ Walk,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ Walk,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ 16,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ 16,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Cast,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Cast,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::GetHit,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Neutral,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ Death,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Dead,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Attack1,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Attack1,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill1,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill1,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill2,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill2,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Attack2,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Attack2,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Block,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ 16,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ Knockback,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Sequence,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Sequence,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Run,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Run,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill1,
-        /* .bCheckMoveFlag = */ 0x0
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill3,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill3,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill4,
-        /* .bCheckMoveFlag = */ 0x1
-    },
-    {
-        /* .eMode = */ eD2MonsterAnimMode_ns::Skill4,
-        /* .bCheckMoveFlag = */ 0x1
-    }
-}; D2_GLOBAL_GUARD(gaMonMsgAnimModeTable, "gaMonMsgAnimModeTable");
+namespace D2Client::UI::Inv {
 
-D2UIFlagInitStrc gUIFlagMapInit[8] = {
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x202,
-        /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x201,
-        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemClick
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x204,
-        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemClick
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x205,
-        /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x200,
-        /* .pfHandler = */ &D2Client::TEXT_SetUnknownFlag
-    },
-    {
-        /* .eEventType = */ 0x3,
-        /* .nMessageOrKeyCode = */ 0x1b,
-        /* .pfHandler = */ &D2Client::UI::ui::PACKET_SendUnitInteraction0x44
-    },
-    {
-        /* .eEventType = */ 0x3,
-        /* .nMessageOrKeyCode = */ 0x20,
-        /* .pfHandler = */ &D2Client::UI::ui::PACKET_SendUnitInteraction0x44
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x102,
-        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemPassthrough
-    }
-}; D2_GLOBAL_GUARD(gUIFlagMapInit, "gUIFlagMapInit");
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
 
-// also labelled: lpCriticalSection_QSERVERLoopRelated, lpCriticalSection_007a0468
-_RTL_CRITICAL_SECTION gHostGameStateCs = {}; D2_GLOBAL_GUARD(gHostGameStateCs, "gHostGameStateCs");
-
-HACCEL gbLanguageDllLoaded = nullptr; D2_GLOBAL_GUARD(gbLanguageDllLoaded, "gbLanguageDllLoaded");
-
-char lpLibFileName_007a0710[260] = {}; D2_GLOBAL_GUARD(lpLibFileName_007a0710, "lpLibFileName_007a0710");
-
-D2UIFlagStrc GFX_bShowUIFlag = {}; D2_GLOBAL_GUARD(GFX_bShowUIFlag, "GFX_bShowUIFlag");
-
-D2UIFlagDescStrc gaUIFlagDescsClient[3] = {}; D2_GLOBAL_GUARD(gaUIFlagDescsClient, "gaUIFlagDescsClient");
-
-uint16_t gU16ImmunityStringBuffer2[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer2, "gU16ImmunityStringBuffer2");
-
-D2UnitStrc * ClientSideUnitHashTables[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables, "ClientSideUnitHashTables");
-
-D2UnitStrc * ServerSideUnitHashTables[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables, "ServerSideUnitHashTables");
-
-D2ClientLightPulseStrc gRoomLightPulse = {}; D2_GLOBAL_GUARD(gRoomLightPulse, "gRoomLightPulse");
-
-uint16_t gnMonsterUniqueNameBuffer[2] = {}; D2_GLOBAL_GUARD(gnMonsterUniqueNameBuffer, "gnMonsterUniqueNameBuffer");
-
-int gaLevelAmbientMusicPlayedFlags[1024] = {}; D2_GLOBAL_GUARD(gaLevelAmbientMusicPlayedFlags, "gaLevelAmbientMusicPlayedFlags");
+char param_2_006d6454[3] = { '%', 'i', '\x00' }; D2_GLOBAL_GUARD(param_2_006d6454, "D2Client::UI::Inv::param_2_006d6454");
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-uint32_t gnLastMouseButtonEventType = 0x1; D2_GLOBAL_GUARD(gnLastMouseButtonEventType, "gnLastMouseButtonEventType");
-uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "gaScreenResolutionTableIndexArray");
-uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "gaScreenResolutionModeArray");
-int ScreenSizeX = 0x280; D2_GLOBAL_GUARD(ScreenSizeX, "ScreenSizeX");
-int ScreenSizeY = 0x1e0; D2_GLOBAL_GUARD(ScreenSizeY, "ScreenSizeY");
-int nSoundVolumeLeftChannel = 0x64; D2_GLOBAL_GUARD(nSoundVolumeLeftChannel, "nSoundVolumeLeftChannel");
-int nSoundVolumeRightChannel = 0x64; D2_GLOBAL_GUARD(nSoundVolumeRightChannel, "nSoundVolumeRightChannel");
-int nCashDisplayItemCount = 0x2; D2_GLOBAL_GUARD(nCashDisplayItemCount, "nCashDisplayItemCount");
-D2DrlgActStrc * sgpDrlgAct = 0; D2_GLOBAL_GUARD(sgpDrlgAct, "sgpDrlgAct");
-D2Game_Line0x546 * D2GameGame0x546 = 0; D2_GLOBAL_GUARD(D2GameGame0x546, "D2GameGame0x546");
-uint32_t gnWeatherOverlayActId = 0; D2_GLOBAL_GUARD(gnWeatherOverlayActId, "gnWeatherOverlayActId");
-D2GameViewStrc * D2GameView = 0; D2_GLOBAL_GUARD(D2GameView, "D2GameView");
-HMODULE ghLngLibrary = 0; D2_GLOBAL_GUARD(ghLngLibrary, "ghLngLibrary");
-::SpinnerWrapper * gpCurrentDialog = 0; D2_GLOBAL_GUARD(gpCurrentDialog, "gpCurrentDialog");
-::EditBoxWrapper * gpDialogDefaultActionCallback = 0; D2_GLOBAL_GUARD(gpDialogDefaultActionCallback, "gpDialogDefaultActionCallback");
-::ButtonWrapper * gpUiGoldTransactionDialog = 0; D2_GLOBAL_GUARD(gpUiGoldTransactionDialog, "gpUiGoldTransactionDialog");
-::ButtonWrapper * gpUiGoldDialogCancelButton = 0; D2_GLOBAL_GUARD(gpUiGoldDialogCancelButton, "gpUiGoldDialogCancelButton");
-uint32_t gbKeyConfigModeActiveInDialog = 0; D2_GLOBAL_GUARD(gbKeyConfigModeActiveInDialog, "gbKeyConfigModeActiveInDialog");
+int ScreenSizeY = 0x1e0; D2_GLOBAL_GUARD(ScreenSizeY, "D2Client::UI::Inv::ScreenSizeY");
 // also labelled: g_nMouseX
-int gnPanelOffsetX = 0; D2_GLOBAL_GUARD(gnPanelOffsetX, "gnPanelOffsetX");
+int gnPanelOffsetX = 0; D2_GLOBAL_GUARD(gnPanelOffsetX, "D2Client::UI::Inv::gnPanelOffsetX");
 // also labelled: g_nMouseY
-int gnPanelOffsetY = 0; D2_GLOBAL_GUARD(gnPanelOffsetY, "gnPanelOffsetY");
-uint32_t nScreenMode = 0; D2_GLOBAL_GUARD(nScreenMode, "nScreenMode");
-int WindowSizeY = 0; D2_GLOBAL_GUARD(WindowSizeY, "WindowSizeY");
-int WindowSizeX = 0; D2_GLOBAL_GUARD(WindowSizeX, "WindowSizeX");
-uint32_t gbCharScreenOkPressed = 0; D2_GLOBAL_GUARD(gbCharScreenOkPressed, "gbCharScreenOkPressed");
-uint32_t gbCharScreenOkButtonConfirmed = 0; D2_GLOBAL_GUARD(gbCharScreenOkButtonConfirmed, "gbCharScreenOkButtonConfirmed");
-uint32_t gbCharScreenCancelPressed = 0; D2_GLOBAL_GUARD(gbCharScreenCancelPressed, "gbCharScreenCancelPressed");
-D2UnitStrc * ClientSideUnitHashTables_1__0_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_1__0_, "ClientSideUnitHashTables_1__0_");
-D2UnitStrc * ClientSideUnitHashTables_1__1_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_1__1_, "ClientSideUnitHashTables_1__1_");
-D2UnitStrc * ClientSideUnitHashTables_2__0_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_2__0_, "ClientSideUnitHashTables_2__0_");
-D2UnitStrc * ClientSideUnitHashTables_3__0_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_3__0_, "ClientSideUnitHashTables_3__0_");
-D2UnitStrc * ServerSideUnitHashTables_0__1_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_0__1_, "ServerSideUnitHashTables_0__1_");
-D2UnitStrc * ServerSideUnitHashTables_1__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_1__0_, "ServerSideUnitHashTables_1__0_");
-D2UnitStrc * ServerSideUnitHashTables_1__1_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_1__1_, "ServerSideUnitHashTables_1__1_");
-D2UnitStrc * ServerSideUnitHashTables_2__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_2__0_, "ServerSideUnitHashTables_2__0_");
-D2UnitStrc * ServerSideUnitHashTables_3__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_3__0_, "ServerSideUnitHashTables_3__0_");
-D2UnitStrc * ServerSideUnitHashTables_4__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_4__0_, "ServerSideUnitHashTables_4__0_");
-D2UnitStrc * pPlayerUnit = 0; D2_GLOBAL_GUARD(pPlayerUnit, "pPlayerUnit");
-int gnCursorInitialized = 0; D2_GLOBAL_GUARD(gnCursorInitialized, "gnCursorInitialized");
-int gnGfxDirectionCountCache = 0; D2_GLOBAL_GUARD(gnGfxDirectionCountCache, "gnGfxDirectionCountCache");
-uint32_t gnCurrentEngineIndex = 0; D2_GLOBAL_GUARD(gnCurrentEngineIndex, "gnCurrentEngineIndex");
-uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "fps");
-uint32_t gnMonsterSpecialType = 0; D2_GLOBAL_GUARD(gnMonsterSpecialType, "gnMonsterSpecialType");
-uint32_t gnNpcMenuMercHireCost1 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost1, "gnNpcMenuMercHireCost1");
-uint32_t gnNpcMenuMercHireCost2 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost2, "gnNpcMenuMercHireCost2");
-uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "gbNpcMenuInitialized");
-uint8_t gnNpcMenuActiveMode = 0; D2_GLOBAL_GUARD(gnNpcMenuActiveMode, "gnNpcMenuActiveMode");
-uint32_t gnTradePlayerGoldAmount = 0; D2_GLOBAL_GUARD(gnTradePlayerGoldAmount, "gnTradePlayerGoldAmount");
-uint32_t gdwTradeThrottleTimestamp = 0; D2_GLOBAL_GUARD(gdwTradeThrottleTimestamp, "gdwTradeThrottleTimestamp");
-bool gbTradeResetFlag = 0; D2_GLOBAL_GUARD(gbTradeResetFlag, "gbTradeResetFlag");
-uint32_t gnTradeAcceptedFlags = 0; D2_GLOBAL_GUARD(gnTradeAcceptedFlags, "gnTradeAcceptedFlags");
-int32_t g_nTradeWindowState = 0; D2_GLOBAL_GUARD(g_nTradeWindowState, "g_nTradeWindowState");
-BOOL bReceivedQuestAvailabilityPacket = 0; D2_GLOBAL_GUARD(bReceivedQuestAvailabilityPacket, "bReceivedQuestAvailabilityPacket");
-DC6 * gpMessageLogDC6 = 0; D2_GLOBAL_GUARD(gpMessageLogDC6, "gpMessageLogDC6");
-uint32_t nHoradricCubeUIState = 0; D2_GLOBAL_GUARD(nHoradricCubeUIState, "nHoradricCubeUIState");
-int gnPlayerCashDisplay = 0; D2_GLOBAL_GUARD(gnPlayerCashDisplay, "gnPlayerCashDisplay");
-int gnNpcShopSecondActiveTab = 0; D2_GLOBAL_GUARD(gnNpcShopSecondActiveTab, "gnNpcShopSecondActiveTab");
-uint32_t gnNpcShopActiveTab = 0; D2_GLOBAL_GUARD(gnNpcShopActiveTab, "gnNpcShopActiveTab");
-uint32_t gnCursorItemUnitId = 0; D2_GLOBAL_GUARD(gnCursorItemUnitId, "gnCursorItemUnitId");
-uint32_t gnTextSystemInitFlag = 0; D2_GLOBAL_GUARD(gnTextSystemInitFlag, "gnTextSystemInitFlag");
-DC6 * gpUpgradeMenuDC6 = 0; D2_GLOBAL_GUARD(gpUpgradeMenuDC6, "gpUpgradeMenuDC6");
-DC6 * gpHoradricBackgroundDC6 = 0; D2_GLOBAL_GUARD(gpHoradricBackgroundDC6, "gpHoradricBackgroundDC6");
-int gnSoundLastInitTick = 0; D2_GLOBAL_GUARD(gnSoundLastInitTick, "gnSoundLastInitTick");
-uint32_t gdwSoundChannelIndex = 0; D2_GLOBAL_GUARD(gdwSoundChannelIndex, "gdwSoundChannelIndex");
-uint32_t gnSoundInitCooldown = 0; D2_GLOBAL_GUARD(gnSoundInitCooldown, "gnSoundInitCooldown");
-unsigned int gnSoundLastPlayerAnimModeTime = {}; D2_GLOBAL_GUARD(gnSoundLastPlayerAnimModeTime, "gnSoundLastPlayerAnimModeTime");
-int geSoundLastPlayerAnimMode = 0; D2_GLOBAL_GUARD(geSoundLastPlayerAnimMode, "geSoundLastPlayerAnimMode");
-BOOL pAudioMixerInterface = 0; D2_GLOBAL_GUARD(pAudioMixerInterface, "pAudioMixerInterface");
-int32_t int32_t_007c8c7c = 0; D2_GLOBAL_GUARD(int32_t_007c8c7c, "int32_t_007c8c7c");
-uint32_t gnActiveSoundChannelCount = 0; D2_GLOBAL_GUARD(gnActiveSoundChannelCount, "gnActiveSoundChannelCount");
+int gnPanelOffsetY = 0; D2_GLOBAL_GUARD(gnPanelOffsetY, "D2Client::UI::Inv::gnPanelOffsetY");
+uint32_t nScreenMode = 0; D2_GLOBAL_GUARD(nScreenMode, "D2Client::UI::Inv::nScreenMode");
 
-namespace D2Common::Drlg::Maze {
+} // namespace D2Client::UI::Inv
 
-} // namespace D2Common::Drlg::Maze
+namespace D2Common::DATATBLS::DataTbls {
+
+} // namespace D2Common::DATATBLS::DataTbls
 
 namespace D2Client::Warden::NWardenClient {
 
@@ -361,6 +199,66 @@ namespace D2Client::Warden {
 void * vftable[7] = { (void*)&D2Client::Warden::SendPacket, (void*)&D2Client::Warden::CheckModule, (void*)&D2Client::Warden::LoadModule, (void*)&D2Client::Warden::AllocateMemory, (void*)&D2Client::Warden::FreeMemory, (void*)&D2Client::Warden::SetRC4Data, (void*)&D2Client::Warden::GetRC4Data }; D2_GLOBAL_GUARD(vftable, "D2Client::Warden::vftable");
 
 } // namespace D2Client::Warden
+
+namespace D2Client::Sound::SoundHdr {
+
+} // namespace D2Client::Sound::SoundHdr
+
+namespace D2Client::UI::ui {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char param_2_006d9be8[4] = { '%', 'l', 'd', '\x00' }; D2_GLOBAL_GUARD(param_2_006d9be8, "D2Client::UI::ui::param_2_006d9be8");
+
+uint16_t gU16ImmunityStringBuffer2[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer2, "D2Client::UI::ui::gU16ImmunityStringBuffer2");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int ScreenSizeX = 0x280; D2_GLOBAL_GUARD(ScreenSizeX, "D2Client::UI::ui::ScreenSizeX");
+::SpinnerWrapper * gpCurrentDialog = 0; D2_GLOBAL_GUARD(gpCurrentDialog, "D2Client::UI::ui::gpCurrentDialog");
+::EditBoxWrapper * gpDialogDefaultActionCallback = 0; D2_GLOBAL_GUARD(gpDialogDefaultActionCallback, "D2Client::UI::ui::gpDialogDefaultActionCallback");
+::ButtonWrapper * gpUiGoldTransactionDialog = 0; D2_GLOBAL_GUARD(gpUiGoldTransactionDialog, "D2Client::UI::ui::gpUiGoldTransactionDialog");
+::ButtonWrapper * gpUiGoldDialogCancelButton = 0; D2_GLOBAL_GUARD(gpUiGoldDialogCancelButton, "D2Client::UI::ui::gpUiGoldDialogCancelButton");
+uint32_t gbKeyConfigModeActiveInDialog = 0; D2_GLOBAL_GUARD(gbKeyConfigModeActiveInDialog, "D2Client::UI::ui::gbKeyConfigModeActiveInDialog");
+int WindowSizeY = 0; D2_GLOBAL_GUARD(WindowSizeY, "D2Client::UI::ui::WindowSizeY");
+int gnPlayerCashDisplay = 0; D2_GLOBAL_GUARD(gnPlayerCashDisplay, "D2Client::UI::ui::gnPlayerCashDisplay");
+uint32_t gnNpcShopActiveTab = 0; D2_GLOBAL_GUARD(gnNpcShopActiveTab, "D2Client::UI::ui::gnNpcShopActiveTab");
+DC6 * gpUpgradeMenuDC6 = 0; D2_GLOBAL_GUARD(gpUpgradeMenuDC6, "D2Client::UI::ui::gpUpgradeMenuDC6");
+DC6 * gpHoradricBackgroundDC6 = 0; D2_GLOBAL_GUARD(gpHoradricBackgroundDC6, "D2Client::UI::ui::gpHoradricBackgroundDC6");
+
+} // namespace D2Client::UI::ui
+
+namespace D2Client::UI::npcmenu {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char param_2_006da0cc[4] = { '%', '2', 'u', '\x00' }; D2_GLOBAL_GUARD(param_2_006da0cc, "D2Client::UI::npcmenu::param_2_006da0cc");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gnMonsterSpecialType = 0; D2_GLOBAL_GUARD(gnMonsterSpecialType, "D2Client::UI::npcmenu::gnMonsterSpecialType");
+uint32_t gnNpcMenuMercHireCost1 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost1, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost1");
+uint32_t gnNpcMenuMercHireCost2 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost2, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost2");
+uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "D2Client::UI::npcmenu::gbNpcMenuInitialized");
+uint8_t gnNpcMenuActiveMode = 0; D2_GLOBAL_GUARD(gnNpcMenuActiveMode, "D2Client::UI::npcmenu::gnNpcMenuActiveMode");
+
+} // namespace D2Client::UI::npcmenu
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Sound::Src::D2SoundSmp {
+
+} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -595,13 +493,45 @@ void * vftable[16] = {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
 
+namespace D2gfx::D2GFX {
+
+} // namespace D2gfx::D2GFX
+
+namespace D2Sound::Sound {
+
+} // namespace D2Sound::Sound
+
+namespace Bnclient::BnSend {
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
+namespace Bnclient::_net_sid {
+
+} // namespace Bnclient::_net_sid
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
 
+namespace D2Game::UNIT::SUnitDmg {
+
+} // namespace D2Game::UNIT::SUnitDmg
+
+namespace D2Game::PLAYER::PlayerModes {
+
+} // namespace D2Game::PLAYER::PlayerModes
+
 namespace D2Game::GAME::Event::Dispatch::Player {
 
 } // namespace D2Game::GAME::Event::Dispatch::Player
+
+namespace D2Game::Objects::ObjectsMode {
+
+} // namespace D2Game::Objects::ObjectsMode
 
 namespace D2Game::GAME::Event::Dispatch::Object {
 
@@ -611,6 +541,14 @@ namespace D2Game::GAME::Event::Dispatch::Monster {
 
 } // namespace D2Game::GAME::Event::Dispatch::Monster
 
+namespace D2Game {
+
+} // namespace D2Game
+
+namespace D2CMP::SRC::CelCmp {
+
+} // namespace D2CMP::SRC::CelCmp
+
 namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
@@ -619,21 +557,61 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
+namespace D2Common {
+
+} // namespace D2Common
+
+namespace D2Common::Txt::Cube {
+
+} // namespace D2Common::Txt::Cube
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+} // namespace D2Common::DATATBLS::ItemTbls
+
+namespace D2Common::Drlg::Preset {
+
+} // namespace D2Common::Drlg::Preset
+
+namespace D2Common::Drlg::OutSiege {
+
+} // namespace D2Common::Drlg::OutSiege
+
 namespace D2Common::Drlg::Outdoors {
 
 } // namespace D2Common::Drlg::Outdoors
+
+namespace D2Common::Drlg::OutJung {
+
+} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common::Drlg {
+
+} // namespace D2Common::Drlg
 
 namespace Define_the_symbol__ATL_MIXED {
 
 } // namespace Define_the_symbol__ATL_MIXED
 
+namespace Storm::Source {
+
+} // namespace Storm::Source
+
+namespace Fog::File {
+
+} // namespace Fog::File
+
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::Source::SFile {
+namespace D2Hell {
 
-} // namespace Storm::Source::SFile
+} // namespace D2Hell
+
+namespace Fog::Source::SSComp {
+
+} // namespace Fog::Source::SSComp
 
 namespace Class::FILEREC {
 
@@ -655,31 +633,238 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Launch::CharSel {
+namespace D2Launch::MainMenus {
 
-} // namespace D2Launch::CharSel
+} // namespace D2Launch::MainMenus
 
-namespace D2Game::GAME::Rendering {
+namespace D2Multi::OOGUtilities {
+
+} // namespace D2Multi::OOGUtilities
+
+namespace D2Client::GAME::Game {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+// also labelled: lpCriticalSection_QSERVERLoopRelated, lpCriticalSection_007a0468
+_RTL_CRITICAL_SECTION gHostGameStateCs = {}; D2_GLOBAL_GUARD(gHostGameStateCs, "D2Client::GAME::Game::gHostGameStateCs");
+
+HACCEL gbLanguageDllLoaded = nullptr; D2_GLOBAL_GUARD(gbLanguageDllLoaded, "D2Client::GAME::Game::gbLanguageDllLoaded");
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::GAME::Rendering::CurrentRendingEngine");
+D2DrlgActStrc * sgpDrlgAct = 0; D2_GLOBAL_GUARD(sgpDrlgAct, "D2Client::GAME::Game::sgpDrlgAct");
+D2Game_Line0x546 * D2GameGame0x546 = 0; D2_GLOBAL_GUARD(D2GameGame0x546, "D2Client::GAME::Game::D2GameGame0x546");
+uint32_t gnWeatherOverlayActId = 0; D2_GLOBAL_GUARD(gnWeatherOverlayActId, "D2Client::GAME::Game::gnWeatherOverlayActId");
+D2GameViewStrc * D2GameView = 0; D2_GLOBAL_GUARD(D2GameView, "D2Client::GAME::Game::D2GameView");
 
-} // namespace D2Game::GAME::Rendering
+} // namespace D2Client::GAME::Game
 
-namespace D2Client::Renderer {
+namespace D2Client {
 
-} // namespace D2Client::Renderer
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2ClientLightPulseStrc gRoomLightPulse = {}; D2_GLOBAL_GUARD(gRoomLightPulse, "D2Client::gRoomLightPulse");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gnTradePlayerGoldAmount = 0; D2_GLOBAL_GUARD(gnTradePlayerGoldAmount, "D2Client::gnTradePlayerGoldAmount");
+uint32_t gnTradeAcceptedFlags = 0; D2_GLOBAL_GUARD(gnTradeAcceptedFlags, "D2Client::gnTradeAcceptedFlags");
+BOOL bReceivedQuestAvailabilityPacket = 0; D2_GLOBAL_GUARD(bReceivedQuestAvailabilityPacket, "D2Client::bReceivedQuestAvailabilityPacket");
+int gnNpcShopSecondActiveTab = 0; D2_GLOBAL_GUARD(gnNpcShopSecondActiveTab, "D2Client::gnNpcShopSecondActiveTab");
+
+} // namespace D2Client
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record
+
+namespace D2Client::_Message {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gnLastMouseButtonEventType = 0x1; D2_GLOBAL_GUARD(gnLastMouseButtonEventType, "D2Client::_Message::gnLastMouseButtonEventType");
+
+} // namespace D2Client::_Message
+
+namespace D2Client::Engine {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "D2Client::Engine::gaScreenResolutionTableIndexArray");
+uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "D2Client::Engine::gaScreenResolutionModeArray");
+uint32_t gbCharScreenOkPressed = 0; D2_GLOBAL_GUARD(gbCharScreenOkPressed, "D2Client::Engine::gbCharScreenOkPressed");
+uint32_t gbCharScreenOkButtonConfirmed = 0; D2_GLOBAL_GUARD(gbCharScreenOkButtonConfirmed, "D2Client::Engine::gbCharScreenOkButtonConfirmed");
+uint32_t gbCharScreenCancelPressed = 0; D2_GLOBAL_GUARD(gbCharScreenCancelPressed, "D2Client::Engine::gbCharScreenCancelPressed");
+
+} // namespace D2Client::Engine
+
+namespace D2Client::GAME::SCmd {
+
+} // namespace D2Client::GAME::SCmd
+
+namespace D2Client::Draw::LightMap {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "D2Client::Draw::LightMap::gbLightmapColorEnabled");
+D2LightMapStrc * gpLightMap = 0; D2_GLOBAL_GUARD(gpLightMap, "D2Client::Draw::LightMap::gpLightMap");
+
+} // namespace D2Client::Draw::LightMap
+
+namespace D2Client::GAME::Rendering {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Client::GAME::Rendering::CurrentRendingEngine");
+uint32_t gnCurrentEngineIndex = 0; D2_GLOBAL_GUARD(gnCurrentEngineIndex, "D2Client::GAME::Rendering::gnCurrentEngineIndex");
+uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "D2Client::GAME::Rendering::fps");
+
+} // namespace D2Client::GAME::Rendering
+
+namespace D2Client::UI::Panel {
+
+} // namespace D2Client::UI::Panel
+
+namespace D2Client::UI::Party {
+
+} // namespace D2Client::UI::Party
+
+namespace D2Client::Sound {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int nSoundVolumeLeftChannel = 0x64; D2_GLOBAL_GUARD(nSoundVolumeLeftChannel, "D2Client::Sound::nSoundVolumeLeftChannel");
+int nSoundVolumeRightChannel = 0x64; D2_GLOBAL_GUARD(nSoundVolumeRightChannel, "D2Client::Sound::nSoundVolumeRightChannel");
+int32_t int32_t_007c8c7c = 0; D2_GLOBAL_GUARD(int32_t_007c8c7c, "D2Client::Sound::int32_t_007c8c7c");
+uint32_t gnActiveSoundChannelCount = 0; D2_GLOBAL_GUARD(gnActiveSoundChannelCount, "D2Client::Sound::gnActiveSoundChannelCount");
+
+} // namespace D2Client::Sound
+
+namespace D2Client::UI::UseItem {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2UIFlagInitStrc gUIFlagMapInit[8] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::TEXT_SetUnknownFlag
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::ui::PACKET_SendUnitInteraction0x44
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::ui::PACKET_SendUnitInteraction0x44
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemPassthrough
+    }
+}; D2_GLOBAL_GUARD(gUIFlagMapInit, "D2Client::UI::UseItem::gUIFlagMapInit");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int nCashDisplayItemCount = 0x2; D2_GLOBAL_GUARD(nCashDisplayItemCount, "D2Client::UI::UseItem::nCashDisplayItemCount");
+uint32_t nHoradricCubeUIState = 0; D2_GLOBAL_GUARD(nHoradricCubeUIState, "D2Client::UI::UseItem::nHoradricCubeUIState");
+uint32_t gnCursorItemUnitId = 0; D2_GLOBAL_GUARD(gnCursorItemUnitId, "D2Client::UI::UseItem::gnCursorItemUnitId");
+uint32_t gnTextSystemInitFlag = 0; D2_GLOBAL_GUARD(gnTextSystemInitFlag, "D2Client::UI::UseItem::gnTextSystemInitFlag");
+
+} // namespace D2Client::UI::UseItem
+
+namespace D2Client::UNIT::UnitSnd {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+int gaLevelAmbientMusicPlayedFlags[1024] = {}; D2_GLOBAL_GUARD(gaLevelAmbientMusicPlayedFlags, "D2Client::UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int gnSoundLastInitTick = 0; D2_GLOBAL_GUARD(gnSoundLastInitTick, "D2Client::UNIT::UnitSnd::gnSoundLastInitTick");
+uint32_t gdwSoundChannelIndex = 0; D2_GLOBAL_GUARD(gdwSoundChannelIndex, "D2Client::UNIT::UnitSnd::gdwSoundChannelIndex");
+uint32_t gnSoundInitCooldown = 0; D2_GLOBAL_GUARD(gnSoundInitCooldown, "D2Client::UNIT::UnitSnd::gnSoundInitCooldown");
+unsigned int gnSoundLastPlayerAnimModeTime = {}; D2_GLOBAL_GUARD(gnSoundLastPlayerAnimModeTime, "D2Client::UNIT::UnitSnd::gnSoundLastPlayerAnimModeTime");
+int geSoundLastPlayerAnimMode = 0; D2_GLOBAL_GUARD(geSoundLastPlayerAnimMode, "D2Client::UNIT::UnitSnd::geSoundLastPlayerAnimMode");
+
+} // namespace D2Client::UNIT::UnitSnd
+
+namespace D2Client::UI::SkillDesc {
+
+} // namespace D2Client::UI::SkillDesc
+
+namespace D2Glide::Renderer::Glide {
+
+} // namespace D2Glide::Renderer::Glide
 
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
 
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
+
 namespace D2Lang::Unicode::UNISYS {
 
 } // namespace D2Lang::Unicode::UNISYS
+
+namespace D2Net::SRC::Client {
+
+} // namespace D2Net::SRC::Client
+
+namespace D2Game::PLAYER::PlayerSave {
+
+} // namespace D2Game::PLAYER::PlayerSave
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -785,6 +970,10 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
+namespace D2Game::Monster::Create {
+
+} // namespace D2Game::Monster::Create
+
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -837,9 +1026,97 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
+namespace D2Game::SKILLS::SkillNec {
+
+} // namespace D2Game::SKILLS::SkillNec
+
+namespace D2CMP::SRC::CelCmp::CELLIST {
+
+} // namespace D2CMP::SRC::CelCmp::CELLIST
+
+namespace D2CMP {
+
+} // namespace D2CMP
+
+namespace D2CMP::Draw {
+
+} // namespace D2CMP::Draw
+
+namespace D2Common::Chat::Ignorelist::MappingEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::MappingEntryNode
+
+namespace D2Common::Chat::Ignorelist::StringEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::StringEntryNode
+
+namespace D2Common::Chat::Ignorelist {
+
+} // namespace D2Common::Chat::Ignorelist
+
+namespace D2Common::Logging::ProfCore {
+
+} // namespace D2Common::Logging::ProfCore
+
+namespace D2Common::DUNGEON::Dungeon {
+
+} // namespace D2Common::DUNGEON::Dungeon
+
+namespace D2Common::Environment {
+
+} // namespace D2Common::Environment
+
+namespace D2Common::Units {
+
+} // namespace D2Common::Units
+
+namespace D2Common::Monsters::MONSTERS {
+
+} // namespace D2Common::Monsters::MONSTERS
+
+namespace D2Common::Merc {
+
+} // namespace D2Common::Merc
+
+namespace D2Common::DATATBLS::OverlayTbls {
+
+} // namespace D2Common::DATATBLS::OverlayTbls
+
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
+
+namespace D2Direct3D::Renderer {
+
+} // namespace D2Direct3D::Renderer
+
+namespace Fog::Src {
+
+} // namespace Fog::Src
+
+namespace D2Gdi::Renderer::Windowed {
+
+} // namespace D2Gdi::Renderer::Windowed
+
+namespace D2Launch::Launcher {
+
+} // namespace D2Launch::Launcher
+
+namespace D2Client::Lng {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char lpLibFileName_007a0710[260] = {}; D2_GLOBAL_GUARD(lpLibFileName_007a0710, "D2Client::Lng::lpLibFileName_007a0710");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+HMODULE ghLngLibrary = 0; D2_GLOBAL_GUARD(ghLngLibrary, "D2Client::Lng::ghLngLibrary");
+
+} // namespace D2Client::Lng
 
 namespace D2Client::UI::Dialog {
 
@@ -854,20 +1131,170 @@ D2DialogStrc * gpHoradricCubeDialog = 0; D2_GLOBAL_GUARD(gpHoradricCubeDialog, "
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::Draw::LightMap {
+namespace D2Client::UI::SpellSel {
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-D2LightMapStrc * gpLightMap = 0; D2_GLOBAL_GUARD(gpLightMap, "D2Client::Draw::LightMap::gpLightMap");
+int WindowSizeX = 0; D2_GLOBAL_GUARD(WindowSizeX, "D2Client::UI::SpellSel::WindowSizeX");
 
-} // namespace D2Client::Draw::LightMap
+} // namespace D2Client::UI::SpellSel
+
+namespace D2Client::UNIT::CUnit {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2UnitStrc * ClientSideUnitHashTables[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables, "D2Client::UNIT::CUnit::ClientSideUnitHashTables");
+
+D2UnitStrc * ServerSideUnitHashTables[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables, "D2Client::UNIT::CUnit::ServerSideUnitHashTables");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+D2UnitStrc * ClientSideUnitHashTables_1__0_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_1__0_, "D2Client::UNIT::CUnit::ClientSideUnitHashTables_1__0_");
+D2UnitStrc * ClientSideUnitHashTables_1__1_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_1__1_, "D2Client::UNIT::CUnit::ClientSideUnitHashTables_1__1_");
+D2UnitStrc * ClientSideUnitHashTables_2__0_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_2__0_, "D2Client::UNIT::CUnit::ClientSideUnitHashTables_2__0_");
+D2UnitStrc * ClientSideUnitHashTables_3__0_[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables_3__0_, "D2Client::UNIT::CUnit::ClientSideUnitHashTables_3__0_");
+D2UnitStrc * ServerSideUnitHashTables_0__1_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_0__1_, "D2Client::UNIT::CUnit::ServerSideUnitHashTables_0__1_");
+D2UnitStrc * ServerSideUnitHashTables_1__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_1__0_, "D2Client::UNIT::CUnit::ServerSideUnitHashTables_1__0_");
+D2UnitStrc * ServerSideUnitHashTables_1__1_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_1__1_, "D2Client::UNIT::CUnit::ServerSideUnitHashTables_1__1_");
+D2UnitStrc * ServerSideUnitHashTables_2__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_2__0_, "D2Client::UNIT::CUnit::ServerSideUnitHashTables_2__0_");
+D2UnitStrc * ServerSideUnitHashTables_3__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_3__0_, "D2Client::UNIT::CUnit::ServerSideUnitHashTables_3__0_");
+D2UnitStrc * ServerSideUnitHashTables_4__0_[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUnitHashTables_4__0_, "D2Client::UNIT::CUnit::ServerSideUnitHashTables_4__0_");
+D2UnitStrc * pPlayerUnit = 0; D2_GLOBAL_GUARD(pPlayerUnit, "D2Client::UNIT::CUnit::pPlayerUnit");
+
+} // namespace D2Client::UNIT::CUnit
+
+namespace D2Client::Cursor {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int gnCursorInitialized = 0; D2_GLOBAL_GUARD(gnCursorInitialized, "D2Client::Cursor::gnCursorInitialized");
+
+} // namespace D2Client::Cursor
+
+namespace D2Client::Engine::Gfx {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int gnGfxDirectionCountCache = 0; D2_GLOBAL_GUARD(gnGfxDirectionCountCache, "D2Client::Engine::Gfx::gnGfxDirectionCountCache");
+
+} // namespace D2Client::Engine::Gfx
+
+namespace D2Client::UNIT::Monster {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint16_t gnMonsterUniqueNameBuffer[2] = {}; D2_GLOBAL_GUARD(gnMonsterUniqueNameBuffer, "D2Client::UNIT::Monster::gnMonsterUniqueNameBuffer");
+
+} // namespace D2Client::UNIT::Monster
+
+namespace D2Client::UI::Trade {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gdwTradeThrottleTimestamp = 0; D2_GLOBAL_GUARD(gdwTradeThrottleTimestamp, "D2Client::UI::Trade::gdwTradeThrottleTimestamp");
+bool gbTradeResetFlag = 0; D2_GLOBAL_GUARD(gbTradeResetFlag, "D2Client::UI::Trade::gbTradeResetFlag");
+int32_t g_nTradeWindowState = 0; D2_GLOBAL_GUARD(g_nTradeWindowState, "D2Client::UI::Trade::g_nTradeWindowState");
+
+} // namespace D2Client::UI::Trade
+
+namespace D2Client::UNIT::Object {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+DC6 * gpMessageLogDC6 = 0; D2_GLOBAL_GUARD(gpMessageLogDC6, "D2Client::UNIT::Object::gpMessageLogDC6");
+
+} // namespace D2Client::UNIT::Object
+
+namespace D2Client::GAME::Sound {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+BOOL pAudioMixerInterface = 0; D2_GLOBAL_GUARD(pAudioMixerInterface, "D2Client::GAME::Sound::pAudioMixerInterface");
+
+} // namespace D2Client::GAME::Sound
+
+namespace D2gfx {
+
+} // namespace D2gfx
+
+namespace D2Win::D2GFX {
+
+} // namespace D2Win::D2GFX
 
 namespace D2Win::Src::D2WinMain {
 
 } // namespace D2Win::Src::D2WinMain
 
-namespace D2Win::D2GFX {
+namespace D2Win::Src::D2WinButton {
 
-} // namespace D2Win::D2GFX
+} // namespace D2Win::Src::D2WinButton
+
+namespace D2Win::Src::D2WinArchive {
+
+} // namespace D2Win::Src::D2WinArchive
+
+namespace D2Win::Src::D2WinTextBox {
+
+} // namespace D2Win::Src::D2WinTextBox
+
+namespace D2Sound {
+
+} // namespace D2Sound
+
+namespace Bnclient::Bnet {
+
+} // namespace Bnclient::Bnet
+
+namespace Bnclient {
+
+} // namespace Bnclient
+
+namespace D2Net::Game::Server {
+
+} // namespace D2Net::Game::Server
+
+namespace D2Game::UNIT::SUNITNPC {
+
+} // namespace D2Game::UNIT::SUNITNPC
+
+namespace D2Game::UNIT::sunitproxy {
+
+} // namespace D2Game::UNIT::sunitproxy
+
+namespace D2Game::GAME::Clients {
+
+} // namespace D2Game::GAME::Clients
+
+namespace D2Game::Quests::QUESTS {
+
+} // namespace D2Game::Quests::QUESTS
+
+namespace D2Common::DATATBLS::MonsterTbls {
+
+} // namespace D2Common::DATATBLS::MonsterTbls
+
+namespace D2Common::Logging {
+
+} // namespace D2Common::Logging
+
+namespace D2Common::DATATBLS::TokTbls {
+
+} // namespace D2Common::DATATBLS::TokTbls

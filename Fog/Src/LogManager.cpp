@@ -720,7 +720,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
 
 void __stdcall LogCpuInfo() {
     // Static local variables (originally global data)
-    static char * gaCpuVendorNames[5] = { s_Unknown_006cc780, s_Intel_006cdebc, s_AMD_006cdeb8, s_Cyrix_006cdeb0, nullptr }; D2_STATIC_GUARD(gaCpuVendorNames, "Fog::Src::LogManager::LogCpuInfo::gaCpuVendorNames");
+    static char * gaCpuVendorNames[5] = { (char*)&Fog::Src::LogManager::s_Unknown_006cc780, (char*)&Fog::Src::LogManager::s_Intel_006cdebc, (char*)&Fog::Src::LogManager::s_AMD_006cdeb8, (char*)&Fog::Src::LogManager::s_Cyrix_006cdeb0, nullptr }; D2_STATIC_GUARD(gaCpuVendorNames, "Fog::Src::LogManager::LogCpuInfo::gaCpuVendorNames");
 
     int nVendorIndex;
     uint32_t nVersionLow;
@@ -2110,14 +2110,6 @@ void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750() {
 
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760() {
 
-}
-
-void StaticFini_gLogMessageQueueCS_Unref_00665930() {
-    EnterCriticalSection(&lpCriticalSection_0096d610);
-}
-
-void StaticFini_gLogMessageQueueCS_Unref_00665940() {
-    LeaveCriticalSection(&lpCriticalSection_0096d610);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

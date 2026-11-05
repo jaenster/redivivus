@@ -368,7 +368,7 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
 }
 
 void __stdcall WALL2_ResetAmbientSound() {
-    if (D2IniData_client->bNOSOUND) {
+    if (ClientModeInGame::D2IniData_client->bNOSOUND) {
       return;
     }
 
@@ -896,7 +896,7 @@ static void __stdcall WALL2_AddLowerWallTile(D2Wall2DrawListStrc * pDrawList, D2
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
     pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
     pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
-    pDrawList->dwWall2PassMask |= gadwBitMasks[0];
+    pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[0];
     pLastNode = pWall2Cell->pUnderFloorList;
     if (!pLastNode) {
       pWall2Cell->pUnderFloorList = pDVar1;
@@ -954,7 +954,7 @@ static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
     pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
     pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
-    pDrawList->dwWall2PassMask |= gadwBitMasks[1];
+    pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[1];
     pDVar2 = pWall2Cell->pRoofPassList;
     if (!pDVar2) {
       pWall2Cell->pRoofPassList = pDVar1;
@@ -1002,7 +1002,7 @@ static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2Ro
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
     pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
     pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
-    pDrawList->dwWall2PassMask |= gadwBitMasks[3];
+    pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[3];
     pCurNode = pWall2Cell->pShadowPassList;
     if (!pCurNode) {
       pWall2Cell->pShadowPassList = pDVar1;
@@ -1051,7 +1051,7 @@ static void __stdcall WALL2_InsertUnitDraw(D2Wall2CellStrc * pWall2Cell, D2UnitS
     }
 
     pDVar1->nY = nUnitPos * 8;
-    pDrawList->dwWall2PassMask |= gadwBitMasks[3];
+    pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[3];
     pDVar2 = pWall2Cell->pShadowPassList;
     if (!pWall2Cell->pShadowPassList) {
       pWall2Cell->pShadowPassList = pDVar1;
@@ -1104,7 +1104,7 @@ static void __stdcall WALL2_InsertUnitShadowDraw(D2Wall2CellStrc * pWall2Cell, D
     }
 
     pDVar1->nY = nUnitPos * 8;
-    pDrawList->dwWall2PassMask |= gadwBitMasks[3];
+    pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[3];
     pDVar2 = pWall2Cell->pShadowPassList;
     if (!pDVar2) {
       pWall2Cell->pShadowPassList = pDVar1;

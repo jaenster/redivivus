@@ -87,7 +87,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_BloodParticlesOnTarget(D2UnitStrc * pUnit, 
 }
 
 BOOL __fastcall Skills_CltStFunc_AllocStatListByCltCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -148,7 +148,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_ThrowItem(D2UnitStrc * pUnit, eD2Skills eSk
     }
 
     eMissilesId eMissileId = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wMissileType(pWeapon);
-    if (!((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId > 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
@@ -196,7 +196,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_SoftMonster_BloodParticles(D2UnitStrc * pUn
 // Client do-function for the Barbarian Whirlwind/Corpse Explosion skill action. Confirms the current target is a soft (corpse-explodable) monster, finds a free nearby coordinate, selects the appropriate size-based cltmissile (small/normal/large from MonStats2), and spawns both the size missile and a MISSILE_Corpseexplosion at that location. Sets UNITFLAG_SKSRVDOFUNC on the player unit.
 BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     POINT nFreeCoordTmp;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -238,14 +238,14 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUni
     if (!pMonStats2) {
       return 0;
     }
-    if (gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+    if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
       eCorpseMissile = (eMissilesId)pSkillTxt->cltmissile[3];
     } else {
-      if (gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+      if (Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
         eCorpseMissile = (eMissilesId)pSkillTxt->cltmissile[2];
       }
     }
-    if ((int)eCorpseMissile >= 0 && (int)eCorpseMissile < sgptDataTable->nTxtMissilesSize) {
+    if ((int)eCorpseMissile >= 0 && (int)eCorpseMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.pOwner = pUnitArg;
@@ -275,7 +275,7 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
     LONG nCandidateX;
     LONG nCandidateY;
     int nClampedDestY;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -382,11 +382,11 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
 }
 
 static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int32_t nY, eD2Skills eSkill) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
+    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
     if (!(pSkillTxt + eSkill)) {
       return 0;
     }
@@ -400,7 +400,7 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
     if (!pRoom) {
       return 0;
     }
-    if (*((uint8_t*)&pSkillTxt[eSkill] + 0x5) & (uint8_t)gadwBitMasks[0]) {
+    if (*((uint8_t*)&pSkillTxt[eSkill] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
       return 1;
     }
 
@@ -732,11 +732,11 @@ static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t bAddDu
     if (bNotInAnimation || !pDynamicPath || pDynamicPath->Coords.tFixed.x != 1 || (nAnimMode = pDynamicPath->Coords.tFixed.y , nAnimMode < 0)) {
       nAnimMode = -1;
     } else {
-      D2MonStatsTxt* pMonStatsTxt = nAnimMode < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nAnimMode : nullptr;
+      D2MonStatsTxt* pMonStatsTxt = nAnimMode < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nAnimMode : nullptr;
       if (pMonStatsTxt) {
         nAnimMode = (int)pMonStatsTxt->BaseId;
       }
-      if (nAnimMode < 0 || nAnimMode >= sgptDataTable->nTxtMonStatsSize) {
+      if (nAnimMode < 0 || nAnimMode >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         nAnimMode = -1;
       }
     }

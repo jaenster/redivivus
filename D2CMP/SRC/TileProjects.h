@@ -291,6 +291,16 @@ struct D2TileProjectStrc {
     /* 0x10C */ struct D2TileProjectStrc * pNext; // next loaded tile project
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2CMP::SRC::TileProjects {
+
+extern struct D2TileProjectStrc * gpTileProjectListHead;
+
+} // namespace D2CMP::SRC::TileProjects
+
 namespace D2CMP::SRC::TileProjects {
 
 // Function declarations

@@ -85,6 +85,16 @@ struct D2ClientTimerStrc {
     /* 0x04 */ DWORD dwDurationMs; // 0 = timer idle
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Client::GAME::Game {
+
+extern D2ClientGameDataStrc gClientGameData;
+
+} // namespace D2Client::GAME::Game
+
 namespace D2Client::GAME::Game {
 
 // Function declarations
@@ -177,6 +187,7 @@ void __fastcall GAME_SetSkillDelayEndFrame(int32_t nValue);
 uint32_t __stdcall GAME_GetSkillDelayEndFrame();
 uint32_t __stdcall GetPing();
 uint32_t __stdcall GAME_GetAveragePing();
+char * zlibVersion_Unref_0044ce80();
 // Update mouse modifier key state by reading keybind for command id 0x24; sets INT_007a0664 while pressed.
 void __stdcall UpdateMouseModifierKeyState();
 // pfModes_Save: if hosting, queue EnterGame; otherwise return current client app mode.

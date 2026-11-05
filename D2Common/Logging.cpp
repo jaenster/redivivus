@@ -9,6 +9,13 @@
 
 namespace D2Common::Logging {
 
+void __fastcall SPRITECACHE_SetMaxSize_Unref_00624700(size_t nSize) {
+    // Static local variables (originally global data)
+    static unsigned long long gpItemTypeTableContext = 0; D2_STATIC_GUARD(gpItemTypeTableContext, "D2Common::Logging::SPRITECACHE_SetMaxSize_Unref_00624700::gpItemTypeTableContext");
+
+    *(uint32_t*)(char*)&gpItemTypeTableContext = nSize;
+}
+
 void __stdcall MISC_SafeStrncpy(char * szText, size_t nSize) {
     _SYSTEMTIME szLogBuf;
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&szLogBuf);

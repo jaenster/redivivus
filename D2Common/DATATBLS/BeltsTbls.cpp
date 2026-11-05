@@ -11,7 +11,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-D2BeltsTxt * pTxtBelts = 0; D2_GLOBAL_GUARD(pTxtBelts, "pTxtBelts");
+namespace D2Common::DATATBLS::BeltsTbls {
+D2BeltsTxt * pTxtBelts = 0; D2_GLOBAL_GUARD(pTxtBelts, "D2Common::DATATBLS::BeltsTbls::pTxtBelts");
+} // namespace D2Common::DATATBLS::BeltsTbls
 
 namespace D2Common::DATATBLS::BeltsTbls {
 

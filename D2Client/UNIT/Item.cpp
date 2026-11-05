@@ -635,7 +635,7 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnDropSfxFrame, D2UnitStrc * pUn
       eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
       if (eItemQuality >= 0) {
         eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        pUniqueItemsTxt = eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eItemQuality : nullptr;
+        pUniqueItemsTxt = eItemQuality >= 0 && eItemQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + eItemQuality : nullptr;
         if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
           if (pnDropSfxFrame && (uint8_t)pUniqueItemsTxt->dropsfxframe > 0) {
             *pnDropSfxFrame = (uint32_t)(uint8_t)pUniqueItemsTxt->dropsfxframe;
@@ -648,7 +648,7 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnDropSfxFrame, D2UnitStrc * pUn
       eItemQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
       if (eItemQuality == 5) {
         eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        pSetItemsTxt = eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + eItemQuality : nullptr;
+        pSetItemsTxt = eItemQuality >= 0 && eItemQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems + eItemQuality : nullptr;
         if (pSetItemsTxt && pSetItemsTxt->dropsound > 0) {
           if (pnDropSfxFrame && (uint8_t)pSetItemsTxt->dropsfxframe > 0) {
             *pnDropSfxFrame = (uint32_t)(uint8_t)pSetItemsTxt->dropsfxframe;
@@ -682,7 +682,7 @@ static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
     if (eQuality == 7) {
       D2UniqueItemsTxt* pUniqueItemsTxt;
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      pUniqueItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
+      pUniqueItemsTxt = eQuality >= 0 && eQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
       if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
         return (int)pUniqueItemsTxt->usesound;
       }
@@ -690,7 +690,7 @@ static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
       eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
       if (eQuality == 5) {
         eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        pSetItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + eQuality : nullptr;
+        pSetItemsTxt = eQuality >= 0 && eQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems + eQuality : nullptr;
         if (pSetItemsTxt && pSetItemsTxt->dropsound > 0) {
           nSoundId = (int32_t)pSetItemsTxt->usesound;
         }
@@ -783,7 +783,7 @@ void __fastcall ITEM_FreeItemUnit(D2UnitStrc * pUnit) {
       D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);
       pUnit->pInventory = 0;
     }
-    if (!sgpDrlgAct) {
+    if (!GAME::Game::sgpDrlgAct) {
       return;
     }
 
@@ -978,7 +978,7 @@ int32_t __fastcall SOUND_GetIdFromUnit(D2UnitStrc * pUnit) {
       }
 
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      D2UniqueItemsTxt* pUniqueItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
+      D2UniqueItemsTxt* pUniqueItemsTxt = eQuality >= 0 && eQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
       if (!pUniqueItemsTxt) {
         return nSoundId;
       }
@@ -991,7 +991,7 @@ int32_t __fastcall SOUND_GetIdFromUnit(D2UnitStrc * pUnit) {
       }
 
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      D2SetItemsTxt* pSetItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + eQuality : nullptr;
+      D2SetItemsTxt* pSetItemsTxt = eQuality >= 0 && eQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems + eQuality : nullptr;
       if (!pSetItemsTxt) {
         return nSoundId;
       }
@@ -1023,7 +1023,7 @@ BOOL __fastcall ITEM_UpdateChargedSkillStat(D2UnitStrc * pUnit, int32_t nSkillId
     BOOL nChargeValue;
     uint32_t nLevel;
     uint32_t nChargeCount;
-    uint32_t nStatParamPacked = (nSkillId << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + (sgptDataTable->dwChargedSkillLevelMask & nStatLevel);
+    uint32_t nStatParamPacked = (nSkillId << D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits)) + (D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & nStatLevel);
     for (pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 0x40); pStatList; pStatList = D2Common::Stats::StatsEx::STATLIST_FindStatListWithFlags(pStatList, 0x40)) {
       int nStatValue;
       nStatValue = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_item_charged_skill, nStatParamPacked);
@@ -1071,7 +1071,7 @@ void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2U
     if (eUnitStat == UNITSTAT_item_charged_skill) {
       pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
       if (pPlayerUnit_lcl) {
-        ITEM_UpdateChargedSkillStat(pItem, (uint32_t)(nStatParam >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)), sgptDataTable->dwChargedSkillLevelMask & (uint32_t)nStatParam, nValue & 0xff);
+        ITEM_UpdateChargedSkillStat(pItem, (uint32_t)(nStatParam >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits)), D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & (uint32_t)nStatParam, nValue & 0xff);
         return;
       }
     } else {

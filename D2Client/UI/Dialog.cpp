@@ -134,9 +134,7 @@ static D2UIFlagInitStrc gsUIDialogFlagInit[14] = {
 namespace D2Client::UI::Dialog {
 int32_t gnDialogCounter = 0; D2_GLOBAL_GUARD(gnDialogCounter, "D2Client::UI::Dialog::gnDialogCounter");
 D2DialogStrc * gpDialogActual = 0; D2_GLOBAL_GUARD(gpDialogActual, "D2Client::UI::Dialog::gpDialogActual");
-} // namespace D2Client::UI::Dialog
-int32_t gnDialogStructAllocCount = 0; D2_GLOBAL_GUARD(gnDialogStructAllocCount, "gnDialogStructAllocCount");
-namespace D2Client::UI::Dialog {
+int32_t gnDialogStructAllocCount = 0; D2_GLOBAL_GUARD(gnDialogStructAllocCount, "D2Client::UI::Dialog::gnDialogStructAllocCount");
 uint32_t gnDialogCounter_b = 0; D2_GLOBAL_GUARD(gnDialogCounter_b, "D2Client::UI::Dialog::gnDialogCounter_b");
 } // namespace D2Client::UI::Dialog
 
@@ -1192,19 +1190,19 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
       }
 
       pDialog->pCoords2.y = pDialog->pCoords.y - nNonClickableCount;
-      if (nBackgroundWidth > ScreenSizeX - 0x50) {
+      if (nBackgroundWidth > ui::ScreenSizeX - 0x50) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d2);
         exit(-1);
       } else {
-        if (!(nHeight <= ScreenSizeY - 0x62)) {
+        if (!(nHeight <= Inv::ScreenSizeY - 0x62)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d7);
           exit(-1);
         }
-        if (nXOrigin + nBackgroundWidth > ScreenSizeX - 10) {
-          pDialog->pCoords2.x = ScreenSizeX - nBackgroundWidth;
+        if (nXOrigin + nBackgroundWidth > ui::ScreenSizeX - 10) {
+          pDialog->pCoords2.x = ui::ScreenSizeX - nBackgroundWidth;
         }
-        if (pDialog->pCoords2.y + nHeight > ScreenSizeY - 0x3a) {
-          pDialog->pCoords2.y = ScreenSizeY - nHeight - 0x30;
+        if (pDialog->pCoords2.y + nHeight > Inv::ScreenSizeY - 0x3a) {
+          pDialog->pCoords2.y = Inv::ScreenSizeY - nHeight - 0x30;
         }
         if (pDialog->pCoords2.x < 0xb) {
           pDialog->pCoords2.x = 10;

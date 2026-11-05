@@ -975,7 +975,7 @@ static uint8_t GetMPRegen(D2UnitStrc * pUnit) {
     if (pStatListMana && nMaxMana && pUnit) {
       uint8_t byPct;
       nManaRegenBase = pUnit->nClassId;
-      D2CharStatsTxt* pCharStatsTxt = !(nManaRegenBase < 0 || nManaRegenBase >= sgptDataTable->nTxtCharStatsSize) ? sgptDataTable->pTxtCharStats + nManaRegenBase : nullptr;
+      D2CharStatsTxt* pCharStatsTxt = !(nManaRegenBase < 0 || nManaRegenBase >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nManaRegenBase : nullptr;
       if (pCharStatsTxt) {
         nManaRegenBase = (uint32_t)(uint8_t)pCharStatsTxt->ManaRegen * 0x19;
         if (!nManaRegenBase) {
@@ -1284,7 +1284,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
         nDist = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDist <= 0x32) {
           pMonTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pTargetUnit->nClassId);
-          if (pMonTxt && gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonTxt + 0xd) && gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonTxt + 0xd)) {
+          if (pMonTxt && Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonTxt + 0xd) && Fog::BitBuffer::gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonTxt + 0xd)) {
             D2Common::PATH::DynamicPath::ZeroPathPointsSize(pTargetUnit->pPath.pDynamicPath);
             Ai::AiGeneral::SetAiArgument(pTargetUnit, 1, 0x28);
             GAME::Event::EVENT_RemoveUnitTimersByType(pGameTmp, pTargetUnit, UNITEVENTCALLBACK_AITHINK, 0);
@@ -1630,7 +1630,7 @@ static int32_t CheckIfCanBeSkilled(D2UnitStrc * pUnit, eD2Skills eSkill) {
     BOOL _bCanSkill;
     bool bSkillBound;
     bool bCanSkill;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       _bSkillBound = SKILLS::SkillsServer::IsSkillBoundToClass(pUnit, eSkill);
       if (!_bSkillBound) {
         return 3;
@@ -1730,7 +1730,7 @@ static int32_t __stdcall PlayerCanInteractWithWaypoint(::SGAMEDATA * pGame, uint
     if (!nAreaId) {
       return 0;
     }
-    if ((int)(uint32_t)nAreaId < sgptDataTable->nTxtLevelsSize) {
+    if ((int)(uint32_t)nAreaId < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       D2UnitDataPlayerStrc* pPlayerData;
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
       if (!pPlayerData) {
@@ -1956,7 +1956,7 @@ static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit,
       if (!pSkillsTxt) {
         return SERVERSTATUS_BAD_DATA;
       }
-      if (nCanUseSkill > 0 && (nCanUseSkill <= 2 || nCanUseSkill == 4) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[4]) {
+      if (nCanUseSkill > 0 && (nCanUseSkill <= 2 || nCanUseSkill == 4) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
         nCanUseSkill = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
       }
@@ -2000,7 +2000,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
     if (!pSkillTxtEntry) {
       return;
     }
-    if (nSkillUsability > 0 && (nSkillUsability <= 2 || nSkillUsability == 4) && *((uint8_t*)pSkillTxtEntry + 0x7) & (uint8_t)gadwBitMasks[4]) {
+    if (nSkillUsability > 0 && (nSkillUsability <= 2 || nSkillUsability == 4) && *((uint8_t*)pSkillTxtEntry + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
       pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
       nSkillUsability = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
     }
@@ -2009,7 +2009,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
     }
 
     int nSkillModeIdx = D2Common::Skills::GetSkillMode(pUnit, pSkill);
-    if (!(nSkillModeIdx && (*((uint8_t*)pSkillTxtEntry + 0x7) & (uint8_t)gadwBitMasks[3] || (int)eUnitType >= 0 && ((int)eUnitType <= 1 || eUnitType == UNIT_MISSILE)))) {
+    if (!(nSkillModeIdx && (*((uint8_t*)pSkillTxtEntry + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] || (int)eUnitType >= 0 && ((int)eUnitType <= 1 || eUnitType == UNIT_MISSILE)))) {
       return;
     }
 
@@ -3763,7 +3763,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3C_SelectSkill(::SGAMEDATA * pGame, D2
     uint32_t dwSkillOwnerId = pPacket->dwOwnerId;
     int nHand = -((int)pPacket->dwSkillIdWithHand >> 0x1f);
     eD2Skills eSkill = pPacket->dwSkillIdWithHand & 0x7fffffff;
-    if (!(true && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if (!(true && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
@@ -4142,7 +4142,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4D_ResetNpcIntroFlag(::SGAMEDATA * pGa
     if (nSize != 3) {
       return eResult;
     }
-    if ((int)(uint32_t)pPacket->nNpcId >= sgptDataTable->nTxtMonStatsSize) {
+    if ((int)(uint32_t)pPacket->nNpcId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return SERVERSTATUS_BAD_DATA;
     }
 
@@ -4212,8 +4212,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x50_DropGold(::SGAMEDATA * pGame, D2Uni
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint32_t nGoldAmount = pPacket->nGoldAmount;
     DWORD dwUnitGUID = pPacket->nUnitId;
+    uint32_t nGoldAmount = pPacket->nGoldAmount;
     int32_t nTradeTick = Player::GetPlayerTradeTickOrBusy(pUnit);
     if (nTradeTick) {
       nDropResult = PlayerTrade::IsInteractingWithPlayer(pGame, pUnit, 1);
@@ -4238,9 +4238,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x51_SetHotkey(::SGAMEDATA * pGame, D2Un
     if (nRawSkillData >> 0x10 <= 0xf) {
       D2SkillStrc* pSkill;
       eSkill = nRawSkillData & 0x7fff;
-      if ((int)eSkill > sgptDataTable->nTxtSkillsCount) {
+      if ((int)eSkill > D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         eSkill = ~SKILL_Attack;
-      } else if (eSkill != ~SKILL_Attack && ((int)eSkill >= sgptDataTable->nTxtSkillsCount || (pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, dwSkillTxt) , !pSkill))) {
+      } else if (eSkill != ~SKILL_Attack && ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, dwSkillTxt) , !pSkill))) {
         return SERVERSTATUS_BAD_PARAMS;
       }
 
@@ -4325,7 +4325,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
     }
 
     D2MonStatsTxt* pMonStat = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pMonster->nClassId);
-    /* is NPC and interactable */ if (pMonStat && gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStat + 0xd) && gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonStat + 0xd)) {
+    /* is NPC and interactable */ if (pMonStat && Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStat + 0xd) && Fog::BitBuffer::gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonStat + 0xd)) {
       if (pMonster->pPath.pDynamicPath) {
         D2Common::PATH::DynamicPath::ZeroPathPointsSize(pMonster->pPath.pDynamicPath);
       }

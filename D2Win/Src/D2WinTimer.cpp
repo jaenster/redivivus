@@ -58,7 +58,7 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     }
 
     uint32_t uVar1 = pTimer->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       dwTickCount = GetTickCount();
       if (dwTickCount / 1000 - (uint32_t)pTimer->nCreationTickCount / 1000 > (uint32_t)pTimer->nTimeoutInSeconds) {
         pfnOnPress = pTimer->sControl.fpOnPress;
@@ -86,7 +86,7 @@ int __fastcall D2WINTIMER_GetElapsed(::D2WinTimer * pTimer) {
     }
 
     uint32_t dwState = pTimer->sControl.dwState;
-    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
       OnPress pOVar1;
       dwTickCount = GetTickCount();
       if (dwTickCount >= gnTimerNextFireTick) {
@@ -130,8 +130,8 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     ::D2WinTimer* pTimer = D2_NEW_AT(::D2WinTimer, ".\\Src\\D2WinTimer.cpp", 0x1c);
     memset(pTimer, 0, 0x48);
     pTimer->sControl.neD2FormType = FORM_Timer;
-    pTimer->sControl.dwState |= gadwBitMasks[0];
-    pTimer->sControl.dwState |= gadwBitMasks[2];
+    pTimer->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    pTimer->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];
     pTimer->nTimeoutInSeconds = nTimeoutInSeconds;
     dwCreationTick = GetTickCount();
     pTimer->nCreationTickCount = dwCreationTick;

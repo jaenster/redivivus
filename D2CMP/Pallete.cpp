@@ -28,7 +28,7 @@ namespace D2CMP::Pallete {
 int32_t __stdcall TILEPROJECT_ForEachTileEntry(pfnTileEntryEnum pfnCallback, void * pContext) {
     D2TileLibraryHeaderStrc* pLibrary;
     int nInvokeCount = 0;
-    D2TileProjectStrc* pProject = gpTileProjectListHead;
+    D2TileProjectStrc* pProject = SRC::TileProjects::gpTileProjectListHead;
     if (!pfnCallback) {
       return 0;
     }
@@ -53,7 +53,7 @@ int32_t __stdcall TILEPROJECT_ForEachTileEntry(pfnTileEntryEnum pfnCallback, voi
 D2TileLibraryHeaderStrc * __stdcall TILEPROJECT_FindLibraryOfTile(D2TileLibraryEntryStrc * pTargetEntry) {
     D2TileLibraryEntryStrc* pTileEntry;
     D2TileLibraryHeaderStrc* pTileBuffer;
-    D2TileProjectStrc* pCacheIter = gpTileProjectListHead;
+    D2TileProjectStrc* pCacheIter = SRC::TileProjects::gpTileProjectListHead;
     do {
       int iTileEntry;
       if (!pCacheIter) {

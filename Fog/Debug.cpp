@@ -2368,10 +2368,7 @@ void HandleExceptionWithStackDump(uint32_t dwUnused, _EXCEPTION_POINTERS * pExce
     BOOL bInheritHandle = 0;
     DWORD dwDesiredAccess = 0;
     HANDLE* lpTargetHandle = &hDupThread;
-    HANDLE hTargetProcessHandle = GetCurrentProcess();
-    HANDLE hSourceHandle = GetCurrentThread();
-    HANDLE hSourceProcessHandle = GetCurrentProcess();
-    /* HANDLE hSourceProcessHandle for DuplicateHandle */ DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions);
+    /* HANDLE hSourceProcessHandle for DuplicateHandle */ DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions);
     FullStackWalkWithAnnotations(hDupThread, pExceptionPointers->ContextRecord);
     /* HANDLE hObject for CloseHandle */ CloseHandle(hDupThread);
 }

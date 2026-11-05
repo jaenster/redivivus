@@ -1557,13 +1557,13 @@ uint32_t __stdcall TXT_ItemTypes_CheckEquivalence(uint32_t nItemClassId, eD2Item
     if (!((int)eType1 >= 0 && (int)eType1 < sgptDataTable->nTxtItemTypesSize)) {
       return 0;
     }
-    if (*(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eType1 + ((int)eItemType >> 5)) * 4) & gadwBitMasks[eItemType & ITEMTYPE_Hammer]) {
+    if (*(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eType1 + ((int)eItemType >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[eItemType & ITEMTYPE_Hammer]) {
       return 1;
     }
 
     eD2ItemTypes eSecondaryType = (eD2ItemTypes)pItemsTxt->wType2;
     if (eSecondaryType != ITEMTYPE_None1 && (int)eSecondaryType < sgptDataTable->nTxtItemTypesSize) {
-      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eSecondaryType + ((int)eItemType >> 5)) * 4) & gadwBitMasks[eItemType & ITEMTYPE_Hammer];
+      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eSecondaryType + ((int)eItemType >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[eItemType & ITEMTYPE_Hammer];
     }
 
     return 0;
@@ -1571,7 +1571,7 @@ uint32_t __stdcall TXT_ItemTypes_CheckEquivalence(uint32_t nItemClassId, eD2Item
 
 uint32_t __stdcall ITEMS_CheckItemTypeEquivalence(eD2ItemTypes eItemType1, eD2ItemTypes eItemType2) {
     if ((int)eItemType1 >= 0 && (int)eItemType1 < sgptDataTable->nTxtItemTypesSize && (int)eItemType2 >= 0 && (int)eItemType2 < sgptDataTable->nTxtItemTypesSize) {
-      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eItemType1 + ((int)eItemType2 >> 5)) * 4) & gadwBitMasks[eItemType2 & ITEMTYPE_Hammer];
+      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eItemType1 + ((int)eItemType2 >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[eItemType2 & ITEMTYPE_Hammer];
     }
 
     return 0;
@@ -1587,7 +1587,7 @@ uint32_t __stdcall ITEMS_IsA(D2UnitStrc * pUnit, eD2ItemTypes eItemType) {
     if ((int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize) {
       eD2ItemTypes eItemType1;
       eItemType1 = TXT_Items_GetType(pUnit->nClassId);
-      if (gadwBitMasks[eItemType & ITEMTYPE_Hammer] & *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eItemType1 + ((int)eItemType >> 5)) * 4)) {
+      if (Fog::BitBuffer::gadwBitMasks[eItemType & ITEMTYPE_Hammer] & *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eItemType1 + ((int)eItemType >> 5)) * 4)) {
         return 1;
       }
 
@@ -1595,7 +1595,7 @@ uint32_t __stdcall ITEMS_IsA(D2UnitStrc * pUnit, eD2ItemTypes eItemType) {
       if (pItemsTxt) {
         eType2 = pItemsTxt->wType2;
         if (eType2 > 0 && (int)eType2 < sgptDataTable->nTxtItemTypesSize) {
-          return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * (int)eType2 + ((int)eItemType >> 5)) * 4) & gadwBitMasks[eItemType & ITEMTYPE_Hammer];
+          return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * (int)eType2 + ((int)eItemType >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[eItemType & ITEMTYPE_Hammer];
         }
       }
 

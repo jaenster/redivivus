@@ -598,8 +598,8 @@ void __fastcall Q21_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Completed);
     /* GetQuestState RewardAwaits(1) -- reward pending: also deactivate intro */ if (bQuestState || (bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_RewardAwaits) , bQuestState != 0)) {
       pQuestData->bIsNotIntroduction = '\0';
-      pGoldenBirdItem->bBirdDropEnabled = false;
       pGoldenBirdItem->bCanDropBird = '\0';
+      pGoldenBirdItem->bBirdDropEnabled = false;
       return;
     }
 

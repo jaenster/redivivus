@@ -1768,7 +1768,7 @@ void __fastcall SERVER_GetPlayerClassName(char * szText, int32_t nId) {
 }
 
 void __fastcall MonsterIdToName(char * szText, int32_t nId) {
-    D2MonStatsTxt* pMonStatsTxt = nId >= 0 && nId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nId >= 0 && nId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nId : nullptr;
     if (pMonStatsTxt) {
       uint16_t* pwszSrc;
       pwszSrc = D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr);

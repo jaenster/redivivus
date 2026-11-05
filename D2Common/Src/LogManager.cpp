@@ -10,18 +10,18 @@
 namespace D2Common::Src::LogManager {
 
 void __fastcall LOGGING_EnableLogFile(BOOL bEnable) {
-    bLOGFILE_ENABLED = bEnable;
+    Logging::bLOGFILE_ENABLED = bEnable;
     if (bEnable) {
       Logging::LOGGING_OpenLogFile("d2log.txt");
       return;
     }
-    if (!pLOGFILE) {
+    if (!Logging::pLOGFILE) {
       return;
     }
 
-    fclose(pLOGFILE);
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&lpCriticalSection_0096ca30);
-    pLOGFILE = 0;
+    fclose(Logging::pLOGFILE);
+    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&Logging::lpCriticalSection_0096ca30);
+    Logging::pLOGFILE = 0;
 }
 
 } // namespace D2Common::Src::LogManager

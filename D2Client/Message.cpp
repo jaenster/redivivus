@@ -98,9 +98,9 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bHasMessage = PeekMessageA(&msg, (HWND)0x0, 0, 0, 0);
       if (bHasMessage) {
         /* UINT wMsgFilterMax for GetMessageA */ /* UINT wMsgFilterMin for GetMessageA */ /* HWND hWnd for GetMessageA */ /* LPMSG lpMsg for GetMessageA */ getMessageResult = GetMessageA(&msg, (HWND)0x0, 0, 0);
-        if (getMessageResult && gbLanguageDllLoaded) {
+        if (getMessageResult && GAME::Game::gbLanguageDllLoaded) {
           lpMsg = &msg;
-          hAccTable = gbLanguageDllLoaded;
+          hAccTable = GAME::Game::gbLanguageDllLoaded;
           /* LPMSG lpMsg for TranslateAcceleratorA */ /* HACCEL hAccTable for TranslateAcceleratorA */ hWnd = D2gfx::D2GFX::GetHwnd();
           /* HWND hWnd for TranslateAcceleratorA */ TranslateAcceleratorA(hWnd, hAccTable, lpMsg);
         }

@@ -1010,7 +1010,7 @@ void __stdcall SetAnimSpeedForMonster(D2UnitStrc * pUnit) {
     }
 
     int nClassId = pUnit->nClassId;
-    if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize || (pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId , !pMonStatsTxt)) {
+    if (nClassId < 0 || nClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId , !pMonStatsTxt)) {
       pUnit->nAnimSpeed = 0;
       return;
     }
@@ -1036,7 +1036,7 @@ void __stdcall SetAnimSpeedForMonster(D2UnitStrc * pUnit) {
 }
 
 void __stdcall GetRunAndWalkVelocityForPlayer(int32_t nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity) {
-    D2CharStatsTxt* pCharStatsTxt = ePlayerClassId < 0 || ePlayerClassId >= sgptDataTable->nTxtCharStatsSize ? 0 : sgptDataTable->pTxtCharStats + ePlayerClassId;
+    D2CharStatsTxt* pCharStatsTxt = ePlayerClassId < 0 || ePlayerClassId >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? 0 : ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId;
     *pWalkVelocity = (uint32_t)pCharStatsTxt->WalkVelocity;
     *pRunVelocity = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity;
 }
@@ -1057,10 +1057,10 @@ static void AddWalkVelocityStatIfExistToPlayer(D2UnitStrc * pUnit, int32_t ePlay
     }
 
     D2StatListExStrc* pStatEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(pMemory, 4, 0, eUnitType, nUnitGUID);
-    if (ePlayerClassId < 0 || ePlayerClassId >= sgptDataTable->nTxtCharStatsSize) {
+    if (ePlayerClassId < 0 || ePlayerClassId >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
       pCharStatsTxt = 0;
     } else {
-      pCharStatsTxt = sgptDataTable->pTxtCharStats + ePlayerClassId;
+      pCharStatsTxt = ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId;
     }
     if (!pCharStatsTxt->WalkVelocity) {
       return;
@@ -1316,16 +1316,16 @@ static int32_t UNITS_GetBaseWalkVelocity(eD2UnitType eUnitType, int32_t nClassId
     switch (eUnitType) {
       case UNIT_PLAYER:
         {
-          if (nClassId >= 0 && nClassId < sgptDataTable->nTxtCharStatsSize) {
-            return (uint32_t)sgptDataTable->pTxtCharStats[nClassId].WalkVelocity << 8;
+          if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
+            return (uint32_t)ITEMS::Items::sgptDataTable->pTxtCharStats[nClassId].WalkVelocity << 8;
           }
 
           return (uint32_t)*(volatile uint8_t*)0x40 << 8;
         }
       case UNIT_MONSTER:
         {
-          if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize) {
-            return (int)sgptDataTable->pTxtMonStats[nClassId].Velocity << 8;
+          if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+            return (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].Velocity << 8;
           }
 
           return (int)*(volatile uint8_t*)0x32 << 8;
@@ -1346,10 +1346,10 @@ static int32_t UNITS_GetAnimFrameTime(eD2UnitType eUnitType, int32_t nClassId, i
         }
       case UNIT_MONSTER:
         {
-          if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+          if (nClassId < 0 || nClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             pMonStatsTxt = 0;
           } else {
-            pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+            pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
           }
           if (nAnimMode != 0xf) {
             return (int)pMonStatsTxt->wWalkAnimSpeed;
@@ -1387,7 +1387,7 @@ static BOOL __stdcall CanPlayAnimMode(D2UnitStrc * pUnit, int32_t nClassId, eD2U
 
         return 0;
       }
-      if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xd) & gadwBitMasks[0]) {
+      if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[0]) {
         switch (nAnimMode) {
           case 2:
             {
@@ -1461,7 +1461,7 @@ uint32_t __fastcall UNITS_CheckAnimateAtFrameEnd(int32_t nAnimMode, eD2UnitType 
 
     eD2Skills eSkill = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0xbfa);
     D2SkillsTxt* pSkillsTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
-    return (uint8_t)*((uint8_t*)pSkillsTxt + 0x6) & gadwBitMasks[3];
+    return (uint8_t)*((uint8_t*)pSkillsTxt + 0x6) & Fog::BitBuffer::gadwBitMasks[3];
 }
 
 static int __stdcall UNITS_GetAnimFrameSkip(int32_t nAnimMode, int32_t nClassId, eD2UnitType eUnitType) {
@@ -1686,7 +1686,7 @@ BOOL __stdcall HasCollision(D2UnitStrc * pUnit) {
 
 D2SkillStrc * __stdcall GetSkillFromSkillId(D2UnitStrc * pUnit, eD2Skills eSkill) {
     D2SkillsTxt* pSkillsTxt;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills , !(pSkillsTxt + eSkill))) {
+    if ((int)eSkill < 0 || (int)eSkill >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills , !(pSkillsTxt + eSkill))) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdfb);
       exit(-1);
     } else {
@@ -1902,7 +1902,7 @@ int __stdcall GetDirectionToCoords(D2UnitStrc * pUnit, int32_t nNewX, int32_t nN
 void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer) {
     eD2UnitType eUnitType;
     int32_t nUnitGUID;
-    if (!((int)nOverlay >= 0 && (int)nOverlay < sgptDataTable->nTxtOverlaySize)) {
+    if (!((int)nOverlay >= 0 && (int)nOverlay < ITEMS::Items::sgptDataTable->nTxtOverlaySize)) {
       return;
     }
 
@@ -2263,7 +2263,7 @@ int32_t __stdcall GetAttackRate(D2UnitStrc * pUnit) {
     }
 
     nDexterity = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = nDexterity >= 0 && nDexterity < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nDexterity : nullptr;
+    D2CharStatsTxt* pCharStatsTxt = nDexterity >= 0 && nDexterity < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + nDexterity : nullptr;
     if (!pCharStatsTxt) {
       return nToHit;
     }
@@ -2281,7 +2281,7 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
     eD2MonsterClassId nClassId;
     uint32_t nComponentIdx;
     D2UnitStrc* pShieldItem;
-    if (!pUnit || (nClassId = pUnit->nClassId , (int)nClassId < 0) || (int)nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nClassId = pUnit->nClassId , (int)nClassId < 0) || (int)nClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nClassId = ~MonsterUnitSkeleton1;
     }
 
@@ -2348,10 +2348,10 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
 
           nToBlock = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_toblock, 0);
           nLevel = pUnit->nClassId;
-          if (nLevel < 0 || nLevel >= sgptDataTable->nTxtCharStatsSize) {
+          if (nLevel < 0 || nLevel >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
             pCharStats = 0;
           } else {
-            pCharStats = sgptDataTable->pTxtCharStats + nLevel;
+            pCharStats = ITEMS::Items::sgptDataTable->pTxtCharStats + nLevel;
           }
 
           nToBlock += (uint32_t)pCharStats->BlockFactor;
@@ -2373,7 +2373,7 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
         }
       case UNIT_MONSTER:
         {
-          if (!pUnit || (nUnitClassId = pUnit->nClassId , nUnitClassId < 0) || nUnitClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nUnitClassId) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nUnitClassId] + 0xf) & gadwBitMasks[2])) {
+          if (!pUnit || (nUnitClassId = pUnit->nClassId , nUnitClassId < 0) || nUnitClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(ITEMS::Items::sgptDataTable->pTxtMonStats + nUnitClassId) || !((uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[nUnitClassId] + 0xf) & Fog::BitBuffer::gadwBitMasks[2])) {
             nClassId = HasShield(pUnit);
             if (!nClassId) {
               return 0;
@@ -2635,7 +2635,7 @@ BOOL __stdcall IsInMeleeRange(D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t 
     if (pTarget->eUnitType == UNIT_MONSTER) {
       int nBaseId;
       nBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pTarget);
-      if (nBaseId < 0 || nBaseId >= sgptDataTable->nTxtMonStatsSize) {
+      if (nBaseId < 0 || nBaseId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         nBaseId = -1;
       }
 
@@ -3022,7 +3022,7 @@ uint32_t __stdcall GetStashGoldLimit(D2UnitStrc * pUnit) {
 }
 
 BOOL __fastcall CanSwitchAI(int32_t nMonsterId) {
-    D2MonStatsTxt* pMonStats = nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
+    D2MonStatsTxt* pMonStats = nMonsterId >= 0 && nMonsterId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
     if (!pMonStats) {
       return 0;
     }
@@ -3031,11 +3031,11 @@ BOOL __fastcall CanSwitchAI(int32_t nMonsterId) {
     if (!dwStatFlag) {
       return 0;
     }
-    if (*((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[6]) {
+    if (*((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
       return 0;
     }
 
-    return (uint32_t)((*((uint8_t*)pMonStats + 0xe) & (uint8_t)gadwBitMasks[0]) != 0);
+    return (uint32_t)((*((uint8_t*)pMonStats + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) != 0);
 }
 
 void __fastcall SetTimerArg(D2UnitStrc * pUnit, D2TimerArgStrc * pTimerArg) {
@@ -3097,7 +3097,7 @@ BOOL __stdcall CanDualWield(D2UnitStrc * pUnit) {
       nClassId = pUnit->nClassId;
     }
     if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && nClassId >= 0x1a1 && nClassId <= 0x1a2) {
+      if (eUnitType == UNIT_MONSTER && nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId >= 0x1a1 && nClassId <= 0x1a2) {
         return 1;
       }
     } else {
@@ -3130,10 +3130,10 @@ BOOL __stdcall IsCorpseUseable(D2UnitStrc * pUnit) {
     if (!pMonStats2) {
       return 0;
     }
-    if (*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[3]) {
+    if (*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       return 0;
     }
-    if (!(*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)gadwBitMasks[7])) {
+    if (!(*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
       return 0;
     }
 

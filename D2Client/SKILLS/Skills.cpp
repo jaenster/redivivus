@@ -613,7 +613,7 @@ void __stdcall MISSILE_SetSpeedByDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit
 }
 
 void __fastcall AssignProperLight(D2UnitStrc * pUnit, int32_t nMissileId) {
-    D2MissilesTxt* pMissileTxt = nMissileId < 0 || nMissileId >= sgptDataTable->nTxtMissilesSize ? 0 : sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId < 0 || nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId;
     if (pMissileTxt->Light == '\0') {
       return;
     }
@@ -732,12 +732,12 @@ static int32_t SKILL_CanTargetDeadMonster(D2UnitStrc * pUnit, eD2Skills eSkills)
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (pTarget) {
       D2SkillsTxt* pSkillTxt;
-      pSkillTxt = (int)eSkills >= 0 && (int)eSkills < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkills : nullptr;
+      pSkillTxt = (int)eSkills >= 0 && (int)eSkills < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkills : nullptr;
       if (!pSkillTxt) {
         return 0;
       }
-      if (*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)gadwBitMasks[5] && pTarget->eUnitType == UNIT_MONSTER && pTarget->eAnimMode.ePlayerMode == Kick) {
-        return (uint32_t)((*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)gadwBitMasks[0]) != 0);
+      if (*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5] && pTarget->eUnitType == UNIT_MONSTER && pTarget->eAnimMode.ePlayerMode == Kick) {
+        return (uint32_t)((*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) != 0);
       }
     }
 
@@ -861,7 +861,7 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
         return 0;
       }
 
-      bShouldReturn = !(*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[1]);
+      bShouldReturn = !(*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]);
       if (!bShouldReturn) {
         return 0;
       }
@@ -885,7 +885,7 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
           return 0;
         }
       }
-      if ((!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]))))) && (!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0)) && (!(nTargetFlags & 0x20000) || (bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0) , bInTown != 0)) && (!(nTargetFlags & 0x80000) || (bInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , !bInTown))) {
+      if ((!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]))))) && (!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0)) && (!(nTargetFlags & 0x20000) || (bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0) , bInTown != 0)) && (!(nTargetFlags & 0x80000) || (bInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , !bInTown))) {
         if (!(nTargetFlags & 0x200)) {
           return 1;
         }
@@ -1134,14 +1134,14 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsPetWithFlag(D2UnitStrc * pUnit, eD
     if (nPetTypeIdx < 0) {
       return 0;
     }
-    if (!(nPetTypeIdx < sgptDataTable->nTxtPetTypeSize)) {
+    if (!(nPetTypeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
       return 0;
     }
-    if (!(sgptDataTable->pTxtPetType + nPetTypeIdx)) {
+    if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetTypeIdx)) {
       return 0;
     }
 
-    return (uint32_t)((*((uint8_t*)&sgptDataTable->pTxtPetType[nPetTypeIdx] + 0x4) & (uint8_t)gadwBitMasks[3]) != 0);
+    return (uint32_t)((*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtPetType[nPetTypeIdx] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) != 0);
 }
 
 BOOL __fastcall Skills_CltStFunc_AlwaysAllow(D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl) {
@@ -1286,7 +1286,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
     LONG nTargetX;
     eD2Skills eSkillResult;
     D2SkillsTxt* pSkillTxt;
-    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1381,13 +1381,13 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
     }
 
     pLocalPlayerUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    if (pLocalPlayerUnit && !(*((uint8_t*)pSkillTxtOrig + 0x7) & (uint8_t)gadwBitMasks[2])) {
+    if (pLocalPlayerUnit && !(*((uint8_t*)pSkillTxtOrig + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       nSoundOrAllied = UNIT::CUnit::SKILL_IsTargetAlliedUnit(pUnit, (int*)pLocalPlayerUnit);
       if (nSoundOrAllied) {
         return 0;
       }
     }
-    if (!(*((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)gadwBitMasks[0])) {
+    if (!(*((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       D2RoomStrc* pCurRoom;
       pCurRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pCurRoom);
@@ -1417,7 +1417,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
     }
     if (eAnimMode == Death) {
       bInTown = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-      if (bInTown && *((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)gadwBitMasks[3] || !pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+      if (bInTown && *((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] || !pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
         goto run_client_start;
       }
 
@@ -1436,7 +1436,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
         if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER)) {
           UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Neutral);
         }
-        if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[4]) {
+        if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
           return eSkillResult;
         }
       }
@@ -1447,7 +1447,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
       nCltFuncIdx = pSkillTxt->ItemCastSound;
     }
     if (nCltFuncIdx > 0) {
-      if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[5]) {
+      if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
         nSoundOrAllied = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
         UNIT::UnitSnd::UNITSND_GetSkillStartSound(pUnit, nSoundOrAllied);
         nSoundOrAllied = UNIT::UnitSnd::UNITSND_GetSkillStartSound(pUnit, nSoundOrAllied);
@@ -1457,7 +1457,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
         Sound::SOUND_PlaySound((int)nCltFuncIdx, pUnit, 0, 0, 0);
       }
     }
-    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[6]) {
+    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
       nSoundOrAllied = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
       eCastSound = UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, nSoundOrAllied);
       if (eCastSound != SOUND_NONE) {
@@ -1470,7 +1470,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
 
     nCltFuncIdx = pSkillTxtOrig->stsoundclass;
     if ((nOwnerGUID == -1 || pSkillTxtOrig->ItemCastSound <= 0) && nCltFuncIdx > 0 && pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == (uint32_t)(uint8_t)pSkillTxtOrig->charclass) {
-      if (*((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)gadwBitMasks[5]) {
+      if (*((uint8_t*)pSkillTxtOrig + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
         nSoundOrAllied = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
         UNIT::UnitSnd::UNITSND_GetSkillStartSound(pUnit, nSoundOrAllied);
         nSoundOrAllied = UNIT::UnitSnd::UNITSND_GetSkillStartSound(pUnit, nSoundOrAllied);
@@ -1487,7 +1487,7 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
     if (nOwnerGUID != -1 && pSkillTxtOrig->ItemCastOverlay > 0) {
       eCastOverlayId = (eOverlayId)pSkillTxtOrig->ItemCastOverlay;
     }
-    if ((int)eCastOverlayId > 0 && (int)eCastOverlayId < sgptDataTable->nTxtOverlaySize) {
+    if ((int)eCastOverlayId > 0 && (int)eCastOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       bInTown = Engine::Gfx::GFX_HasOverlayOfType(pUnit, eCastOverlayId);
       if (!bInTown) {
         Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eCastOverlayId, 2, 0, 0, 0, 0, 0);
@@ -1522,12 +1522,12 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
     int32_t nTargetCoordY;
     uint32_t nOffsetX;
     uint32_t nOffsetY;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
     D2SkillsTxt* pSkillTxt;
-    pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1567,7 +1567,7 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
           nOffsetY += nTargetY;
         }
       }
-      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
+      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         pMissileUnit = UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitSaved, (int)pSkillTxt->cltmissile[0], nTargetX, nTargetY, nOffsetX, nOffsetY, eSkillId, nSkillLevel, 0);
       } else {
         pMissileUnit = Skills::MakeMissile((int)pSkillTxt->cltmissile[0], pUnitSaved, eSkillId, nSkillLevel, nTargetX, nTargetY, nOffsetX, nOffsetY);
@@ -1668,12 +1668,12 @@ void __fastcall SKILL_ExecuteClientProgressFunc(D2UnitStrc * pUnit, D2UnitStrc *
     if ((int)eSkill < 0) {
       return;
     }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return;
     }
 
     D2SkillsTxt* pSkillTxt;
-    pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillTxt) {
       return;
     }
@@ -1739,13 +1739,13 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     int nPrgStep;
     int16_t aSavedSP1X[2];
     int16_t aSavedSP1Y[2];
-    D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return;
     }
 
     short int nAuraState = pSkillTxt->aurastate;
-    if (!(nAuraState >= 0 && (int)nAuraState < sgptDataTable->nTxtStatesSize && pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize)) {
+    if (!(nAuraState >= 0 && (int)nAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize && pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return;
     }
 
@@ -1779,7 +1779,7 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     if (nTargetX && !nTargetY) {
       pUnit->nInitSeed = nTargetX;
     }
-    if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[7]) {
+    if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
       nPrgStep = 0;
       if (nProgressIndex - 1 > 0) {
         pUnitArg2Saved = (D2UnitStrc*)pSkillTxt->cltprgfunc;
@@ -1798,7 +1798,7 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     }
     if (pSkillTxt->cltprgfunc[nProgressIndex - 1] >= 0 && pSkillTxt->cltprgfunc[nProgressIndex - 1] < SKILLCLTDOFUNCS_SIZE) {
       if (pSkillTxt->cltmissile[0] > 0) {
-        if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
+        if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
           GetCooordinates(pUnit, (int32_t*)&pUnitArg2Saved, (int32_t*)&pAuraStatList);
           UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, (uint32_t)pUnitArg2Saved, (uint32_t)pAuraStatList, eSkill, nSkillLevel, 0);
         } else {
@@ -1926,7 +1926,7 @@ int32_t __fastcall SKILL_ProcessCastFromPacket(D2UnitStrc * pUnit, int * pnCastA
       uint8_t bNewDir;
       nMonClassId = pUnit->nClassId;
       D2MonStatsTxt* pMonStatsTxt;
-      if ((pMonStatsTxt = nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr) && *(int*)pMonStatsTxt->Code == 0x20204250) {
+      if ((pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr) && *(int*)pMonStatsTxt->Code == 0x20204250) {
         bNewDir = D2Common::PATH::DynamicPath::UpdateDirection(pUnit->pPath.pDynamicPath);
         bNewDir = bNewDir + 0x38 & 0x3f;
         D2Common::PATH::DynamicPath::PATH_SetNewDirection(pUnit->pPath.pDynamicPath, bNewDir);
@@ -2112,15 +2112,15 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
     }
 
     int nStateListIdx = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x05Size <= 0) {
+    if ((short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size <= 0) {
       return;
     }
 
     do {
       eD2States eState;
-      eState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x05[nStateListIdx];
+      eState = (eD2States)(short int)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x05[nStateListIdx];
       bHasDmgState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-      pStatesTxt = bHasDmgState && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+      pStatesTxt = bHasDmgState && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
       if (pStatesTxt) {
         nActiveFuncIdx = pStatesTxt->cltactivefunc;
         if (nActiveFuncIdx >= 0 && nActiveFuncIdx < SKILLCLTDOFUNCS_SIZE && SKILLCLTDOFUNCS[nActiveFuncIdx]) {
@@ -2137,7 +2137,7 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
       }
 
       nStateListIdx++;
-    } while (nStateListIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x05Size);
+    } while (nStateListIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size);
 }
 
 void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, uint8_t * pMissileId, eD2Skills eSkill, int32_t nToHit, uint32_t nX, uint32_t nY) {
@@ -2396,11 +2396,11 @@ void __fastcall SKILLS_CltProcessActiveSkill(D2UnitStrc * pUnit, eD2Skills eExpi
     }
 
     eD2Skills eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x93d);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
+    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return;
     }
 
-    switch (sgptDataTable->pTxtSkills[eSkill].srvdofunc) {
+    switch (D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].srvdofunc) {
       case 0x43:
         SkillsPal::SKILL_StopAndClearUninterruptable(pUnit, eSkill);
       return;
@@ -2473,11 +2473,11 @@ void __fastcall SKILLS_CltAdjustSkillTabBonuses(D2UnitStrc * pUnit, int32_t nBon
         pSkillAfter = D2Common::Skills::GetNext(pSkill);
         eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x974);
         pSkillNext = pSkillCur;
-        pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+        pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
         if (pSkillsTxt) {
           nSkillDescIdx = (int)pSkillsTxt->skilldesc;
-          if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize) {
-            pSkillDescTxt = sgptDataTable->pTxtSkillDesc;
+          if (nSkillDescIdx >= 0 && nSkillDescIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize) {
+            pSkillDescTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc;
             pSkill = pSkillCur;
             if (pSkillDescTxt + nSkillDescIdx) {
               nTotalLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkillCur, 1);
@@ -2511,10 +2511,10 @@ void __fastcall SKILLS_CltAdjustSkillTabBonuses(D2UnitStrc * pUnit, int32_t nBon
 
 uint32_t __fastcall SKILL_CheckMissileCollisionAtTarget(D2UnitStrc * pUnit, int32_t nMissileId) {
     D2MissilesTxt* pMissileTxt;
-    if (nMissileId < 0 || nMissileId >= sgptDataTable->nTxtMissilesSize) {
+    if (nMissileId < 0 || nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       pMissileTxt = 0;
     } else {
-      pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+      pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId;
     }
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);

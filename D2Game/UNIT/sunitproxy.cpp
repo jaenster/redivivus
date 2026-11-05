@@ -497,8 +497,8 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     pGame->pGameSeed.nSeedHigh = seedComputed.nSeedHigh;
     pGame->pGameSeed.nSeedLow = seedComputed.nSeedLow;
     D2Common::Seed::InitSeed_Param_666(&pNpcControl->sSeed, seedComputed.nSeedLow);
-    if (!gptItemCodeArmor) {
-      D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20767163, (int*)&gptItemCodeArmor);
+    if (!SUNITNPC::gptItemCodeArmor) {
+      D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20767163, (int*)&SUNITNPC::gptItemCodeArmor);
     }
     if (!gptItemCodeSwordType) {
       D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20767161, (int*)&gptItemCodeSwordType);
@@ -506,7 +506,7 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
 
     D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     int nMonStatsTotal;
-    nMonStatsTotal = sgptDataTable->nTxtMonStatsSize;
+    nMonStatsTotal = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     int nNpcCount;
     nNpcCount = 0;
     int nMonStatsIdx;
@@ -514,11 +514,11 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     if (nMonStatsTotal > 0) {
       char* pMonStatsTxtEntry;
       pNpcEntry = &pNpcArray->pNpc[0].pProxyQueue;
-      pDataTable = sgptDataTable;
+      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
       do {
         if (nMonStatsIdx >= 0 && nMonStatsIdx < pDataTable->nTxtMonStatsSize) {
           pMonStatsTxtEntry = (char*)&pDataTable->pTxtMonStats[nMonStatsIdx].Id;
-          if (pMonStatsTxtEntry && (uint8_t)pMonStatsTxtEntry[0xd] & gadwBitMasks[1]) {
+          if (pMonStatsTxtEntry && (uint8_t)pMonStatsTxtEntry[0xd] & Fog::BitBuffer::gadwBitMasks[1]) {
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->nMonStatsId = nMonStatsIdx;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->bTrading = 0;
             pNpcControl->nNpcCount2++;
@@ -651,7 +651,7 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
 
             nNpcCount++;
             pNpcEntry += 0x11;
-            pDataTable = sgptDataTable;
+            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           }
         }
 
@@ -1222,7 +1222,7 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
 void __stdcall SUNITPROXY_InitAllNpcItemTables() {
     int32_t nNpcTableIdx;
     int nMonStatsSize;
-    nMonStatsSize = sgptDataTable->nTxtMonStatsSize;
+    nMonStatsSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     eD2MonsterClassId nMonIdx;
     nMonIdx = MonsterUnitSkeleton1;
     if (nMonStatsSize <= 0) {
@@ -1230,7 +1230,7 @@ void __stdcall SUNITPROXY_InitAllNpcItemTables() {
     }
 
     do {
-      if (!((int)nMonIdx < 0 || (int)nMonIdx >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nMonIdx) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nMonIdx] + 0xd) & gadwBitMasks[1]))) {
+      if (!((int)nMonIdx < 0 || (int)nMonIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonIdx) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonIdx] + 0xd) & Fog::BitBuffer::gadwBitMasks[1]))) {
         if ((int)nMonIdx <= 0x195) {
           if (nMonIdx != MonsterUnitJamella) {
             switch (nMonIdx) {

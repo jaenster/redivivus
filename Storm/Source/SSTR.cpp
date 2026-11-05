@@ -1102,8 +1102,8 @@ char * __stdcall SStrChrR(char * szText, char cTarget) {
       }
 
       pNext = szText + 1;
-      szText++;
       cCur = *pNext;
+      szText++;
     }
 
     return pLastMatch;

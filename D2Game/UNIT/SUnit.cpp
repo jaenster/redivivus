@@ -1219,7 +1219,7 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
-    if (pUnit && pTarget && (pUnit->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1]) {
+    if (pUnit && pTarget && (pUnit->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       Ai::AiGeneral::GetMonsterNameAndAi(pTarget, &eSkill, (int*)&pTarget);
       if (!pTarget && eSkill == pUnit->nUnitGUID) {
         return 1;
@@ -1748,7 +1748,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 
     eD2UnitType eMonsterOwnerType = eTargetUnitType;
     D2SkillsTxt* pSkillsTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
-    if (!(pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[2])) {
+    if (!(pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;
     }
 
@@ -2005,7 +2005,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
     uint32_t dwSavedRetAddr;
     eD2UnitType eUnitTypeCopy;
     if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nClassId) || !(*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xf) & (uint8_t)gadwBitMasks[1]))) {
+      if (eUnitType == UNIT_MONSTER && (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]))) {
         return nullptr;
       }
     } else {

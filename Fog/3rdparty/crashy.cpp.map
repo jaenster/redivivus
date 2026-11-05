@@ -285,6 +285,21 @@
         "EH4_EXCEPTION_REGISTRATION",
         "THREADNAME_INFO"
       ]
+    },
+    {
+      "name": "SetCurrentThreadId",
+      "address": "006ca6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca6f0"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy",
+      "calledFunctions": [
+        "SetCurrentThreadId",
+        "GetCurrentThreadId"
+      ]
     }
   ]
 }

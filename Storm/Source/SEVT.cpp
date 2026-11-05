@@ -44,7 +44,9 @@ D2StormListHead gpSevtBreakCmdListHead = {
     }
 }; D2_GLOBAL_GUARD(gpSevtBreakCmdListHead, "gpSevtBreakCmdListHead");
 static uint32_t gnSevtSnapshotActive = 0; D2_STATIC_GUARD(gnSevtSnapshotActive, "gnSevtSnapshotActive");
-void * gpEventHashBuckets = 0; D2_GLOBAL_GUARD(gpEventHashBuckets, "gpEventHashBuckets");
+namespace Storm::Source::SEVT {
+void * gpEventHashBuckets = 0; D2_GLOBAL_GUARD(gpEventHashBuckets, "Storm::Source::SEVT::gpEventHashBuckets");
+} // namespace Storm::Source::SEVT
 static uint32_t gaEventRegistryHead = 0; D2_STATIC_GUARD(gaEventRegistryHead, "gaEventRegistryHead");
 static uint32_t gnSevtRegisteredEventCount = 0; D2_STATIC_GUARD(gnSevtRegisteredEventCount, "gnSevtRegisteredEventCount");
 static _RTL_CRITICAL_SECTION lpCriticalSection_0077930c = {}; D2_STATIC_GUARD(lpCriticalSection_0077930c, "lpCriticalSection_0077930c");

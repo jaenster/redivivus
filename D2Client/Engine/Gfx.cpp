@@ -128,7 +128,9 @@ static uint32_t gaMonsterModePrecacheEntries[15] = {
 static uint32_t gnMonsterModePrecacheCount = 0xf; D2_STATIC_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
 static D2ClientSpriteLoadStatusStrc gaSpriteLoadStatusTable[7] = {}; D2_STATIC_GUARD(gaSpriteLoadStatusTable, "gaSpriteLoadStatusTable");
 static D2CofCacheStrc gMonsterCofCache = {}; D2_STATIC_GUARD(gMonsterCofCache, "gMonsterCofCache");
-D2MonsterCofStatusEntryStrc * g_pMonsterSpriteCofStatusTable = 0; D2_GLOBAL_GUARD(g_pMonsterSpriteCofStatusTable, "g_pMonsterSpriteCofStatusTable");
+namespace D2Client::Engine::Gfx {
+D2MonsterCofStatusEntryStrc * g_pMonsterSpriteCofStatusTable = 0; D2_GLOBAL_GUARD(g_pMonsterSpriteCofStatusTable, "D2Client::Engine::Gfx::g_pMonsterSpriteCofStatusTable");
+} // namespace D2Client::Engine::Gfx
 static D2CofCacheStrc gPlayerCofCache = {}; D2_STATIC_GUARD(gPlayerCofCache, "gPlayerCofCache");
 static int gnGfxThrottleUpdateFrame = 0; D2_STATIC_GUARD(gnGfxThrottleUpdateFrame, "gnGfxThrottleUpdateFrame");
 static uint32_t gbCofCacheLRUEnabled = 0; D2_STATIC_GUARD(gbCofCacheLRUEnabled, "gbCofCacheLRUEnabled");
@@ -569,11 +571,11 @@ void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, in
           if (nThisOverlayId < 0) {
             return;
           }
-          if (nThisOverlayId >= sgptDataTable->nTxtOverlaySize) {
+          if (nThisOverlayId >= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
             return;
           }
 
-          pOverlayTxt = sgptDataTable->pTxtOverlay;
+          pOverlayTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay;
           if (!(pOverlayTxt + nThisOverlayId)) {
             return;
           }
@@ -654,12 +656,12 @@ void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t 
       switch (bPerspective) {
         case 1:
           {
-            nScreenX -= ScreenSizeX / 4;
+            nScreenX -= UI::ui::ScreenSizeX / 4;
             break;
           }
         case 2:
           {
-            nScreenX += ScreenSizeX / 4;
+            nScreenX += UI::ui::ScreenSizeX / 4;
             nDrawY = nScreenY + 0x10;
             nDrawX = nScreenX;
             goto draw_overlays;
@@ -690,7 +692,7 @@ void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t 
       if ((*pCur != 8 || pCur[0xf]) && bShow) {
         nFrameField = pCur[6];
         nThisOverlayId = pCur[1];
-        if (nThisOverlayId < 0 || nThisOverlayId >= sgptDataTable->nTxtOverlaySize || (pOverlayTxt = sgptDataTable->pTxtOverlay + nThisOverlayId , !pOverlayTxt)) {
+        if (nThisOverlayId < 0 || nThisOverlayId >= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize || (pOverlayTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nThisOverlayId , !pOverlayTxt)) {
           DRAW_UNIT_States_HaltTail(0x2d1);
         }
 
@@ -1185,12 +1187,12 @@ static uint8_t GFX_GetUnitHealthBarColor(D2UnitStrc * pUnit) {
     if (eUnitType != UNIT_MONSTER) {
       return gbHealthBarColorGreen;
     }
-    if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStats = 0;
     } else {
-      pMonStats = sgptDataTable->pTxtMonStats + nClassId;
+      pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     }
-    if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       return gbHealthBarColorBlue;
     }
 
@@ -1325,7 +1327,7 @@ void __fastcall GFX_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPreDraw, int3
     if (!pGfxInfo) {
       return;
     }
-    if (nOverlayId < 0 || nOverlayId >= sgptDataTable->nTxtOverlaySize || !(sgptDataTable->pTxtOverlay + nOverlayId)) {
+    if (nOverlayId < 0 || nOverlayId >= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca9);
       exit(-1);
     }
@@ -1527,13 +1529,13 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
     char szAnimToken[4];
     char szCompToken[4];
     char szMonCode[4];
-    D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
+    D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
     if (!pMonStats) {
       return;
     }
 
     int nMonStatsExId = (int)pMonStats->MonStatsEx;
-    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
     if (!pMonStatsEx) {
       return;
     }
@@ -1548,7 +1550,7 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
 
     uint32_t dwTokenChars = *(uint32_t*)pMonMode->token;
     if (!nModeId || nModeId == 0xc) {
-      if (*((uint8_t*)pMonStatsEx + 0x6) & (uint8_t)gadwBitMasks[0]) {
+      if (*((uint8_t*)pMonStatsEx + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         *pnComponentCode = pMonStatsEx->BaseW;
       } else {
         *pnComponentCode = 0x20687468;
@@ -1680,13 +1682,13 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
 
 void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFlags) {
     uint32_t nModeId;
-    D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
+    D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
     if (!pMonStats) {
       return;
     }
 
     int nIndex = (int)pMonStats->MonStatsEx;
-    D2MonStats2Txt* pMonStatsEx = nIndex >= 0 && nIndex < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nIndex : nullptr;
+    D2MonStats2Txt* pMonStatsEx = nIndex >= 0 && nIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nIndex : nullptr;
     if (!pMonStatsEx) {
       return;
     }
@@ -1703,7 +1705,7 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
     do {
       short int aCofBuffer[26];
       nModeId = gaMonsterModePrecacheEntries[nIndex];
-      if ((uint8_t)gadwBitMasks[nModeId & 7] & pMonStatsEx->mDT[(int)nModeId >> 3]) {
+      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[nModeId & 7] & pMonStatsEx->mDT[(int)nModeId >> 3]) {
         memset(aCofBuffer, 0, 0x34);
         aCofBuffer[0] = (short int)nSavedClassId;
         GFX_PrecacheMonsterCofSprites(pMonStats, nModeId, nSavedFlags, aCofBuffer);
@@ -1948,7 +1950,7 @@ static void __stdcall GFX_AsyncLoadMonsterSprites(int32_t nAsyncBlockId, int * n
 
     int32_t nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x70a);
-    if (!(nClassId < sgptDataTable->nTxtMonStatsSize && !g_pMonsterSpriteCofStatusTable->nModeLoadStatus[(int)(nModeIndex + nClassId * 10)])) {
+    if (!(nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && !g_pMonsterSpriteCofStatusTable->nModeLoadStatus[(int)(nModeIndex + nClassId * 10)])) {
       return;
     }
     if (!g_pMonsterSpriteCofStatusTable->nModePrecacheStatus[(int)(nModeIndex + nClassId * 10)]) {
@@ -1975,12 +1977,12 @@ static void __stdcall GFX_AsyncLoadMonsterSprites(int32_t nAsyncBlockId, int * n
 
 static void __stdcall GFX_PrecacheMonsterModeSprites(int32_t nAsyncBlockId, D2UnitStrc * pUnit) {
     DWORD nClassId = Source::ClientEngine::CLIENT_GetEffectiveClassId(pUnit);
-    if (!((int)nClassId >= 0 && (int)nClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!((int)nClassId >= 0 && (int)nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
-    int nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
-    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+    int nMonStatsExId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
+    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
     if (!pMonStatsEx) {
       return;
     }
@@ -1993,7 +1995,7 @@ static void __stdcall GFX_PrecacheMonsterModeSprites(int32_t nAsyncBlockId, D2Un
     do {
       int* pModeEntry;
       pModeEntry = (int*)gaMonsterModePrecacheEntries[nModeIdx];
-      if ((uint8_t)gadwBitMasks[(uint32_t)pModeEntry & 7] & pMonStatsEx->mDT[(uint32_t)pModeEntry >> 3]) {
+      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[(uint32_t)pModeEntry & 7] & pMonStatsEx->mDT[(uint32_t)pModeEntry >> 3]) {
         GFX_AsyncLoadMonsterSprites(nAsyncBlockId, pModeEntry, pUnit);
       }
 
@@ -2093,7 +2095,7 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
         nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
         D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x7aa);
         if (eUnitType == UNIT_MONSTER) {
-          if (nClassId < sgptDataTable->nTxtMonStatsSize && (nSeqMode != 0xc || !g_pMonsterSpriteCofStatusTable[nClassId].nModeLoadStatus[0xc])) {
+          if (nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && (nSeqMode != 0xc || !g_pMonsterSpriteCofStatusTable[nClassId].nModeLoadStatus[0xc])) {
             GFX_PrecacheMonsterModeSprites(bShowLoadingUi, pUnit);
           }
         } else if (eUnitType == UNIT_PLAYER) {
@@ -2124,7 +2126,7 @@ void __fastcall GFX_InitCofSystem(int nSystemFlags) {
     memset(&gPlayerCofCache, 0, 0x80c);
     memset(&gMonsterCofCache, 0, 0x80c);
     memset(gaSpriteLoadStatusTable, 0, 0x460);
-    size_t nMonSpriteTableSize = sgptDataTable->nTxtMonStatsSize * 0xa0;
+    size_t nMonSpriteTableSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * 0xa0;
     g_pMonsterSpriteCofStatusTable = (D2MonsterCofStatusEntryStrc*)D2_ALLOC_POOL_AT(nullptr, nMonSpriteTableSize, ".\\ENGINE\\Gfx.cpp", 0x7e1);
     memset(g_pMonsterSpriteCofStatusTable, 0, nMonSpriteTableSize);
     gnGfxDirectionCountCache = D2Win::Src::D2WinArchive::D2WINARCHIVE_GetArchiveHandle();
@@ -2183,7 +2185,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
     D2GfxInfoStrc* pGfxInfo;
     int nHeight;
     int32_t nErrLine;
-    D2OverlayTxt* pOverlayTxt = (int)eOverlay >= 0 && (int)eOverlay < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + eOverlay : nullptr;
+    D2OverlayTxt* pOverlayTxt = (int)eOverlay >= 0 && (int)eOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize ? D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + eOverlay : nullptr;
     if (!pOverlayTxt) {
       return;
     }
@@ -2553,11 +2555,11 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
     if (bCenterAdjust) {
       nWeaponClassOrFlag -= (*(int*)((int)pBounds + 0x14) - *(int*)((int)pBounds + 0x10)) / 2;
     }
-    if (!(nWeaponClassOrFlag < ScreenSizeX - 1 && -1 < *(int*)((int)pBounds + 0xc) + nOriginXAdj && -1 < *(int*)((int)pBounds + 0x14) + nOriginY)) {
+    if (!(nWeaponClassOrFlag < UI::ui::ScreenSizeX - 1 && -1 < *(int*)((int)pBounds + 0xc) + nOriginXAdj && -1 < *(int*)((int)pBounds + 0x14) + nOriginY)) {
       return 0;
     }
 
-    return (uint32_t)(*(int*)((int)pBounds + 0x10) + nOriginY < ScreenSizeY - 1);
+    return (uint32_t)(*(int*)((int)pBounds + 0x10) + nOriginY < UI::Inv::ScreenSizeY - 1);
 }
 
 // Registers: nAct (ECX) is passed by the caller but not read.
@@ -2594,7 +2596,7 @@ void __fastcall ANIM_ResetMonsterFrameCache(D2UnitStrc * pUnit) {
     int nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x1072);
     D2MonsterCofStatusEntryStrc* pCofStatusTable = g_pMonsterSpriteCofStatusTable;
-    if (!(eUnitType == UNIT_MONSTER && nClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(eUnitType == UNIT_MONSTER && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
@@ -2816,7 +2818,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
       switch (nBorderType) {
         case 1:
           {
-            nCallResult = -(ScreenSizeX / 4);
+            nCallResult = -(UI::ui::ScreenSizeX / 4);
             break;
           }
         default:
@@ -2825,7 +2827,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
           }
         case 2:
           {
-            nCallResult = ScreenSizeX / 4;
+            nCallResult = UI::ui::ScreenSizeX / 4;
             break;
           }
       }
@@ -3110,13 +3112,13 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
       switch (nBorderType) {
         case 1:
           {
-            nOffsetX = -(ScreenSizeX / 4);
+            nOffsetX = -(UI::ui::ScreenSizeX / 4);
             nDrawX += nOffsetX;
             break;
           }
         case 2:
           {
-            nOffsetX = ScreenSizeX / 4;
+            nOffsetX = UI::ui::ScreenSizeX / 4;
             nDrawX += nOffsetX;
             break;
           }
@@ -3266,7 +3268,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       switch (nCallResult2) {
         case 1:
           {
-            nPrecisionX = -(ScreenSizeX / 4);
+            nPrecisionX = -(UI::ui::ScreenSizeX / 4);
             break;
           }
         default:
@@ -3275,7 +3277,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
           }
         case 2:
           {
-            nPrecisionX = ScreenSizeX / 4;
+            nPrecisionX = UI::ui::ScreenSizeX / 4;
             break;
           }
       }
@@ -3434,7 +3436,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
       switch (nBorderType) {
         case 1:
           {
-            nBorderAdj = -(ScreenSizeX / 4);
+            nBorderAdj = -(UI::ui::ScreenSizeX / 4);
             break;
           }
         default:
@@ -3443,7 +3445,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
           }
         case 2:
           {
-            nBorderAdj = ScreenSizeX / 4;
+            nBorderAdj = UI::ui::ScreenSizeX / 4;
             break;
           }
       }
@@ -3524,13 +3526,13 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
       switch (nCallResult) {
         case 1:
           {
-            nParticleOffset = -(ScreenSizeX / 4);
+            nParticleOffset = -(UI::ui::ScreenSizeX / 4);
             __frame0.nScreenX += nParticleOffset;
             break;
           }
         case 2:
           {
-            nParticleOffset = ScreenSizeX / 4;
+            nParticleOffset = UI::ui::ScreenSizeX / 4;
             __frame0.nScreenX += nParticleOffset;
             break;
           }
@@ -3751,7 +3753,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
       switch (nGfxTimerOrBorder) {
         case 1:
           {
-            nPaletteOrFlag = -(ScreenSizeX / 4);
+            nPaletteOrFlag = -(UI::ui::ScreenSizeX / 4);
             break;
           }
         default:
@@ -3760,7 +3762,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
           }
         case 2:
           {
-            nPaletteOrFlag = ScreenSizeX / 4;
+            nPaletteOrFlag = UI::ui::ScreenSizeX / 4;
             break;
           }
       }

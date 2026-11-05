@@ -408,12 +408,13 @@ void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     if (bLamEsenJustCompleted == 1) {
       nSourceLine = 0x18b;
       nState = 4;
+      QUEST_SetStateFlag(pQuestData, nState, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", nSourceLine);
     } else {
       nSourceLine = 399;
       nState = 5;
+      QUEST_SetStateFlag(pQuestData, nState, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", nSourceLine);
     }
 
-    QUEST_SetStateFlag(pQuestData, nState, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", nSourceLine);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerUpdateBlackenedTempleState);
 }
 

@@ -236,6 +236,16 @@ struct D2MonsterUModHandlerRowStrc {
     /* 0x14 */ void (__fastcall *pfnHandlerInit)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Init handler (dispatch type 5), called by MONSTER_DispatchUniqueModifiers when param_3==5
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Client::UNIT::Monster {
+
+extern D2MonMsgAnimModeStrc gaMonMsgAnimModeTable[30];
+
+} // namespace D2Client::UNIT::Monster
+
 namespace D2Client::UNIT::Monster {
 
 // Function declarations

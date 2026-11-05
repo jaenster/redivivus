@@ -4498,22 +4498,6 @@ BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0051d2c0(BigBuffer * 
     return pBitSet;
 }
 
-void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray) {
-    if (!*(void**)((int)pArray + 8)) {
-      return;
-    }
-
-    SMem::SMemFree(*(void**)((int)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
-}
-
-void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray) {
-    if (!*(void**)((int)pArray + 8)) {
-      return;
-    }
-
-    SMem::SMemFree(*(void**)((int)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
-}
-
 BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00601e00(BigBuffer * pBitSet) {
     pBitSet->nCapacity = 0;
     pBitSet->nCount = 0;

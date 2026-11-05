@@ -12,7 +12,9 @@
 #include "globals/globals.h"
 #include "D2Glide/Renderer/Glide.data.h"
 #include "D2Win/D2WinAnimImage.h"
+#include "D2Win/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinPalette.data.h"
+#include "D2Win/Src/D2WinTextBox.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -273,7 +275,7 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
 }
 
 void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode) {
-    gbCompactLineSpacingMode = bCompactLineSpacingMode;
+    D2WinTextBox::gbCompactLineSpacingMode = bCompactLineSpacingMode;
 }
 
 void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode) {

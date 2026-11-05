@@ -499,27 +499,27 @@ static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
 namespace D2Game::Monsters {
 
 D2MonLvlTxt * __fastcall GetMonLvlTxt(int32_t nMonLvlId) {
-    if (nMonLvlId >= 0 && nMonLvlId < sgptDataTable->nTxtMonLvlSize) {
-      return sgptDataTable->pTxtMonLvl + nMonLvlId;
+    if (nMonLvlId >= 0 && nMonLvlId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nMonLvlId;
     }
 
     return nullptr;
 }
 
 int Unreferenced_005a0030() {
-    return sgptDataTable->nTxtMonLvlSize;
+    return D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize;
 }
 
 int __fastcall Unreferenced_005a0040(int param_1) {
-    if (param_1 >= sgptDataTable->nTxtMonUmodSize) {
+    if (param_1 >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize) {
       return 0;
     }
 
-    return (int)(sgptDataTable->pTxtMonUmod + param_1);
+    return (int)(D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + param_1);
 }
 
 int Unreferenced_005a0060() {
-    return sgptDataTable->nTxtMonUmodSize;
+    return D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
 }
 
 uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(D2UnitStrc * pUnit, int32_t nMonTypeFlag) {
@@ -529,16 +529,16 @@ uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(D2UnitStrc * pUnit, int32_t nMon
     }
 
     int nMonStatId = pUnit->nClassId;
-    pMonStatsTxt = nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatId : nullptr;
-    if (pMonStatsTxt && pMonStatsTxt->MonType >= 0 && (int)pMonStatsTxt->MonType < sgptDataTable->nTxtMonTypeSize && nMonTypeFlag >= 0 && nMonTypeFlag < sgptDataTable->nTxtMonTypeSize) {
-      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtMonTypeUnknown + (sgptDataTable->nMonTypeEquivRowDwords * nMonTypeFlag + ((int)pMonStatsTxt->MonType >> 5)) * 4) & gadwBitMasks[(int)pMonStatsTxt->MonType & 0x1f];
+    pMonStatsTxt = nMonStatId >= 0 && nMonStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatId : nullptr;
+    if (pMonStatsTxt && pMonStatsTxt->MonType >= 0 && (int)pMonStatsTxt->MonType < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && nMonTypeFlag >= 0 && nMonTypeFlag < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize) {
+      return *(uint32_t*)((uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonTypeUnknown + (D2Common::ITEMS::Items::sgptDataTable->nMonTypeEquivRowDwords * nMonTypeFlag + ((int)pMonStatsTxt->MonType >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[(int)pMonStatsTxt->MonType & 0x1f];
     }
 
     return 0;
 }
 
 int32_t __fastcall GetUmodConstant(int32_t nUmodId) {
-    D2MonUModTxt* pMonUmodTxt = nUmodId >= 0 && nUmodId < sgptDataTable->nTxtMonUmodSize ? sgptDataTable->pTxtMonUmod + nUmodId : nullptr;
+    D2MonUModTxt* pMonUmodTxt = nUmodId >= 0 && nUmodId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + nUmodId : nullptr;
     if (pMonUmodTxt) {
       return pMonUmodTxt->constants;
     }
@@ -740,10 +740,10 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
           if (pUnit) {
             nExcludeIdx = pUnit->nClassId;
             if (nExcludeIdx >= 0) {
-              if (nExcludeIdx < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nExcludeIdx && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nExcludeIdx] + 0xc) & gadwBitMasks[1]) {
+              if (nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nExcludeIdx] + 0xc) & Fog::BitBuffer::gadwBitMasks[1]) {
                 return 0;
               }
-              if (nExcludeIdx >= 0 && nExcludeIdx < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nExcludeIdx && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nExcludeIdx] + 0xe) & gadwBitMasks[1]) {
+              if (nExcludeIdx >= 0 && nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nExcludeIdx] + 0xe) & Fog::BitBuffer::gadwBitMasks[1]) {
                 return 0;
               }
             }
@@ -783,13 +783,13 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
     }
 
     BOOL nExpansion = pGame->bExpansion;
-    int nTxtSize = sgptDataTable->nTxtMonUmodSize;
+    int nTxtSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
     uint32_t nTotalWeight = 0;
     if (nTxtSize <= 0) {
       return 0;
     }
 
-    D2MonUModTxt* pUmodEntry = sgptDataTable->pTxtMonUmod;
+    D2MonUModTxt* pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod;
     if (!pUmodEntry) {
       return 0;
     }
@@ -862,14 +862,14 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
     if (byDifficulty < 3) {
       int nPickIdx;
       nExpansion = pGame->bExpansion;
-      nPickIdx = sgptDataTable->nTxtMonUmodSize;
+      nPickIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
       nCandidates = 0;
       nTotalWeight = 0;
       nTxtSizeSaved = nPickIdx;
       if (nPickIdx <= 0) {
         pUmodEntry = 0;
       } else {
-        pUmodEntry = sgptDataTable->pTxtMonUmod;
+        pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod;
       }
 
       nUmodIdx = 0;
@@ -958,8 +958,8 @@ void __thiscall MONSTER_RollAndAssignUMods(D2UnitStrc * pThis, ::SGAMEDATA * pGa
           if (pSeed != (D2SeedStrc*)0) {
             if (bResult != 0) {
               nConstantsThreshold = 0;
-              if (0 < sgptDataTable->nTxtMonUmodSize && sgptDataTable->pTxtMonUmod != (D2MonUModTxt*)0) {
-                nConstantsThreshold = sgptDataTable->pTxtMonUmod->constants;
+              if (0 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod != (D2MonUModTxt*)0) {
+                nConstantsThreshold = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod->constants;
               }
 
               nRoll = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
@@ -981,7 +981,7 @@ void __thiscall MONSTER_RollAndAssignUMods(D2UnitStrc * pThis, ::SGAMEDATA * pGa
               nNumRolls = 9 - nActiveUMods;
             }
 
-            memset(aUsedUmodTable, 0, sgptDataTable->nTxtMonUmodSize);
+            memset(aUsedUmodTable, 0, D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize);
             nSlotIdx = 0;
             if (0 < nActiveUMods) {
               do {
@@ -1050,12 +1050,12 @@ static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pDstUnit, BOOL b
 
     copy_xfer_umods:
     pDstSlot = (uint8_t*)((int)nDstOffset + nSlot);
-    D2DataTableTxtStrc* pDataTable = sgptDataTable;
+    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     for (; nSlot < 9 && (byUmodId = *pSrcEnchants , byUmodId != 0) && (int)(uint32_t)byUmodId < pDataTable->nTxtMonUmodSize && pDataTable->pTxtMonUmod + byUmodId; pSrcEnchants++) {
       if (pDataTable->pTxtMonUmod[byUmodId].xfer != '\0') {
         *pDstSlot = byUmodId;
         pDstSlot++;
-        pDataTable = sgptDataTable;
+        pDataTable = D2Common::ITEMS::Items::sgptDataTable;
       }
 
       nSlot++;
@@ -1134,11 +1134,11 @@ static int32_t MONSTER_GetMinion1MonstatId(D2UnitDataMonsterStrc * pMonData) {
     }
 
     int nClassId = *(int*)pMonData->Components;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       short int nMinion1Id;
       nMinion1Id = pMonStatsTxt->minion1;
-      if (nMinion1Id >= 0 && (int)nMinion1Id < sgptDataTable->nTxtMonStatsSize) {
+      if (nMinion1Id >= 0 && (int)nMinion1Id < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         nClassId = (int)nMinion1Id;
       }
     }
@@ -1157,7 +1157,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
     }
 
     int32_t nMinion1ClassId = MONSTER_GetMinion1MonstatId((D2UnitDataMonsterStrc*)pUnit);
-    if (!(nMinion1ClassId >= 0 && nMinion1ClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMinion1ClassId >= 0 && nMinion1ClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
@@ -1247,11 +1247,11 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
     uint32_t bIsMultiplayer;
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       nLvlDamage = pUnit->nClassId;
-      D2MissilesTxt* pMissilesTxt = nLvlDamage >= 0 && nLvlDamage < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nLvlDamage : nullptr;
+      D2MissilesTxt* pMissilesTxt = nLvlDamage >= 0 && nLvlDamage < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nLvlDamage : nullptr;
       if (!pMissilesTxt) {
         return;
       }
-      if (*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)gadwBitMasks[5]) {
+      if (*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
         return;
       }
     }
@@ -1282,35 +1282,35 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
       nMinDamConst = 1;
     }
 
-    int nMaxDamConst = sgptDataTable->nTxtMonLvlSize - 1;
+    int nMaxDamConst = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nMinDamConst < nMaxDamConst && (nMaxDamConst = nLevel , nLevel <= 1)) {
       nMaxDamConst = 1;
     } else if (nMaxDamConst < 0) {
       return;
     }
 
-    D2MonLvlTxt* pMonLvlTxt = nMaxDamConst < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nMaxDamConst : nullptr;
+    D2MonLvlTxt* pMonLvlTxt = nMaxDamConst < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nMaxDamConst : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
 
     nLvlDamage = pMonLvlTxt->DM[nLvlDamage * 3 + bIsMultiplayer];
-    if (sgptDataTable->nTxtMonUmodSize <= 0x1c) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize <= 0x1c) {
       nMinDamConst = 0;
     } else {
       nMinDamConst = 0;
-      if (sgptDataTable->pTxtMonUmod != (D2MonUModTxt*)-896) {
-        nMinDamConst = sgptDataTable->pTxtMonUmod[0x1c].constants;
+      if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod != (D2MonUModTxt*)-896) {
+        nMinDamConst = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0x1c].constants;
       }
     }
 
     nMinDamConst = nMinDamConst * nLvlDamage / 100;
-    if (sgptDataTable->nTxtMonUmodSize <= 0x1f) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize <= 0x1f) {
       nLevel = 0;
     } else {
       nLevel = 0;
-      if (sgptDataTable->pTxtMonUmod != (D2MonUModTxt*)-992) {
-        nLevel = sgptDataTable->pTxtMonUmod[0x1f].constants;
+      if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod != (D2MonUModTxt*)-992) {
+        nLevel = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0x1f].constants;
       }
     }
 
@@ -1341,12 +1341,12 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
 void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, int32_t nDuration) {
     int32_t nValue;
     uint32_t bCanAttackTarget = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pAttacker);
-    if (!(bCanAttackTarget && 0x42 < sgptDataTable->nTxtSkillsCount)) {
+    if (!(bCanAttackTarget && 0x42 < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return;
     }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxt != (D2SkillsTxt*)-37752 && pSkillsTxt[0x42].aurastat[0] >= -1 && (int)pSkillsTxt[0x42].aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt[0x42].auratargetstate >= 0 && (int)pSkillsTxt[0x42].auratargetstate < sgptDataTable->nTxtStatesSize)) {
+    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
+    if (!(pSkillsTxt != (D2SkillsTxt*)-37752 && pSkillsTxt[0x42].aurastat[0] >= -1 && (int)pSkillsTxt[0x42].aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt[0x42].auratargetstate >= 0 && (int)pSkillsTxt[0x42].auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
@@ -1372,7 +1372,7 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
       D2UnitStrc* pUnitSaved = pUnit;
       pAuraStat++;
       pAuraStatCalcPtr++;
-      if (*pAuraStat >= 0 && (int)*pAuraStat < sgptDataTable->nTxtItemStatCostSize) {
+      if (*pAuraStat >= 0 && (int)*pAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pAuraStatCalcPtr, SKILL_AmplifyDamage, nDuration);
         if (nValue) {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStateStats, (int)*pAuraStat, nValue, 0);
@@ -1399,11 +1399,11 @@ void __fastcall MONSTER_OnDeathAmplifyDamageAura(::SGAMEDATA * pGame, D2UnitStrc
     if (nAmplifySkillLvl < 1) {
       nAmplifySkillLvl = 1;
     }
-    if (!(sgptDataTable->nTxtSkillsCount > 0x42 && sgptDataTable->pTxtSkills != (D2SkillsTxt*)-37752)) {
+    if (!(D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount > 0x42 && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills != (D2SkillsTxt*)-37752)) {
       return;
     }
 
-    int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, sgptDataTable->pTxtSkills[0x42].aurarangecalc, SKILL_AmplifyDamage, nAmplifySkillLvl);
+    int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[0x42].aurarangecalc, SKILL_AmplifyDamage, nAmplifySkillLvl);
     if (nAuraRange > 1) {
       if (nAuraRange >= 0x28) {
         nAuraRange = 0x28;
@@ -2185,7 +2185,7 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     eMissilesId eMissileId = nMissileId;
     D2UnitStrc* pMissileUnit = pUnit;
     D2UnitStrc* pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!(pOwnerUnit && (int)nMissileId >= 0 && (int)nMissileId < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + nMissileId && !(*((uint8_t*)&sgptDataTable->pTxtMissiles[nMissileId] + 0x5) & (uint8_t)gadwBitMasks[4]))) {
+    if (!(pOwnerUnit && (int)nMissileId >= 0 && (int)nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nMissileId] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
       return;
     }
 
@@ -2271,10 +2271,10 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, D2UnitStrc
     if (nAlignment) {
       return;
     }
-    if (!pUnit || (nClassIdTmp = pUnit->nClassId , nClassIdTmp < 0) || nClassIdTmp >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nClassIdTmp = pUnit->nClassId , nClassIdTmp < 0) || nClassIdTmp >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassIdTmp;
+      pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassIdTmp;
     }
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, 0);
@@ -2292,7 +2292,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
     BOOL _bIsDead;
     bool bIsDead;
     int nClassId;
-    D2MonStatsTxt* pMonStatsTxt = !pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize ? 0 : sgptDataTable->pTxtMonStats + nClassId;
+    D2MonStatsTxt* pMonStatsTxt = !pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     _bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (!_bIsDead) {
@@ -2460,10 +2460,10 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2DamageStrc sDamage;
     int32_t nRadius;
     int nMonStatsId;
-    if (!pUnit || (nMonStatsId = pUnit->nClassId , nMonStatsId < 0) || nMonStatsId >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nMonStatsId = pUnit->nClassId , nMonStatsId < 0) || nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nMonStatsId;
+      pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsId;
     }
 
     uint32_t nDmgRange = (int)pMonStatsTxt->aEl1MaxD[0] - (int)pMonStatsTxt->aEl1MinD[0];
@@ -2545,10 +2545,10 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     eD2UnitType eUnitType;
     uint32_t nSeedLow;
     D2SeedStrc sSeedNext;
-    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+      pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     }
 
     int nDifficulty = (int)pGame->nDifficulty;
@@ -3058,7 +3058,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     }
 
     D2SuperUniquesTxt* pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine(nClassId);
-    if (!pSuperUniquesTxt || pSuperUniquesTxt->Class < 0 || pSuperUniquesTxt->Stacks == '\0' && (uint8_t)gadwBitMasks[nClassId & 7] & pGame->nBossFlagList[(int)nClassId >> 3]) {
+    if (!pSuperUniquesTxt || pSuperUniquesTxt->Class < 0 || pSuperUniquesTxt->Stacks == '\0' && (uint8_t)Fog::BitBuffer::gadwBitMasks[nClassId & 7] & pGame->nBossFlagList[(int)nClassId >> 3]) {
       return nullptr;
     }
     if (pSuperUniquesTxt->AutoPos != '\0') {
@@ -3076,7 +3076,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
       return pUnit;
     }
 
-    pGame->nBossFlagList[(int)nClassId >> 3] |= (uint8_t)gadwBitMasks[nClassId & 7];
+    pGame->nBossFlagList[(int)nClassId >> 3] |= (uint8_t)Fog::BitBuffer::gadwBitMasks[nClassId & 7];
     if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       uint16_t* pMonsterType;
       pMonsterType = &pUnit->pUnitData.pUnitDataMonster->eMonsterType;
@@ -3084,7 +3084,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     }
 
     MONSTER_SetMonsterDataField0x26(pUnit, (int16_t)nClassId);
-    memset(abUsedUMods, 0, sgptDataTable->nTxtMonUmodSize);
+    memset(abUsedUMods, 0, D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize);
     bHasAuraEnchant = false;
     nUModCount = CountActiveUMods(pUModList);
     if (nUModCount >= 5) {
@@ -3146,10 +3146,10 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     } else {
       pMonsterAiGeneral = 0;
     }
-    if ((int)nClassId < 0 || (int)nClassId >= sgptDataTable->nTxtSuperUniquesSize) {
+    if ((int)nClassId < 0 || (int)nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
       nGroupMin = -1;
     } else {
-      nGroupMin = sgptDataTable->pTxtSuperUniques[nClassId].hcIdx;
+      nGroupMin = D2Common::ITEMS::Items::sgptDataTable->pTxtSuperUniques[nClassId].hcIdx;
     }
 
     switch (nGroupMin) {
@@ -3528,11 +3528,11 @@ void __stdcall MONSTER_CheckSpecialDeathFlag(D2UnitStrc * pUnit, D2DamageStrc * 
       return;
     }
 
-    D2MonStatsTxt* pMonStatsTxt = nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       nClassId = (int)pMonStatsTxt->BaseId;
     }
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && nClassId == 0x4e)) {
+    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId == 0x4e)) {
       return;
     }
 
@@ -3552,7 +3552,7 @@ void __fastcall ApplyDamageCritical(D2UnitStrc * pAttacker, D2UnitStrc * pUnit, 
     }
 
     int nMonStatsId = pAttacker->nClassId;
-    D2MonStatsTxt* pMonStats = nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatsId : nullptr;
+    D2MonStatsTxt* pMonStats = nMonStatsId >= 0 && nMonStatsId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsId : nullptr;
     if (!(pMonStats && pMonStats->Crit != '\0')) {
       return;
     }

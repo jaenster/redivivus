@@ -91,17 +91,17 @@ void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName) {
 
     bIsArena = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     packet.nLanguageCode = (uint8_t)bIsArena;
-    if (!D2IniData_client->eArenaFlags) {
-      D2IniData_client->eArenaFlags = ARENAFLAG_ClientUpdate;
-      D2IniData_client->eArenaFlags |= ARENAFLAG_Expansion;
+    if (!ClientModeInGame::D2IniData_client->eArenaFlags) {
+      ClientModeInGame::D2IniData_client->eArenaFlags = ARENAFLAG_ClientUpdate;
+      ClientModeInGame::D2IniData_client->eArenaFlags |= ARENAFLAG_Expansion;
     }
 
-    packet.wUnused = D2IniData_client->wArenaReserved;
-    packet.ArenaFlags = D2IniData_client->eArenaFlags;
-    packet.nTemplate = D2IniData_client->nArenaTemplate;
-    packet.nUnused2B = D2IniData_client->nArenaReserved1;
-    packet.nUnused2C = D2IniData_client->nArenaReserved2;
-    packet.nDifficulty = D2IniData_client->nDifficulty;
+    packet.wUnused = ClientModeInGame::D2IniData_client->wArenaReserved;
+    packet.ArenaFlags = ClientModeInGame::D2IniData_client->eArenaFlags;
+    packet.nTemplate = ClientModeInGame::D2IniData_client->nArenaTemplate;
+    packet.nUnused2B = ClientModeInGame::D2IniData_client->nArenaReserved1;
+    packet.nUnused2C = ClientModeInGame::D2IniData_client->nArenaReserved2;
+    packet.nDifficulty = ClientModeInGame::D2IniData_client->nDifficulty;
     Storm::Source::SSTR::SStrCopy(packet.szCharName, D2Game::Save::szSaveCharacterName, 0x7fffffff);
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(0x2e, 0, (char*)&packet);
     gnD2GSBytesSentTotal += 0x2e;
@@ -134,9 +134,9 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     SIZE_T* pBytesRead;
     LPCVOID pReadAddr;
     uint16_t* pReadBuffer;
-    *(uint32_t*)(char*)&szModuleName = gClientGameData.gnWardenChecksumModuleName * 0x470e31c1;
-    *(uint32_t*)((char*)&szModuleName + 4) = gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
-    int nModuleOffset = gClientGameData.gnWardenChecksumModuleOffset * 0x470e31c1;
+    *(uint32_t*)(char*)&szModuleName = Game::gClientGameData.gnWardenChecksumModuleName * 0x470e31c1;
+    *(uint32_t*)((char*)&szModuleName + 4) = Game::gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
+    int nModuleOffset = Game::gClientGameData.gnWardenChecksumModuleOffset * 0x470e31c1;
     szModuleName[8] = '\0';
     if ((char)*(uint32_t*)(char*)&szModuleName != '\0') {
       HMODULE hModule;
@@ -198,7 +198,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x69() {
       }
       if (eD2GSGameType_007a0610 != GAMETYPE_OBNET_JOIN && eD2GSGameType_007a0610 != GAMETYPE_LAN_HOST && eD2GSGameType_007a0610 != GAMETYPE_LAN_JOIN) {
         D2CLIENT_ExitVar3 = 1;
-        ServerLoadingComplete = 0;
+        Game::ServerLoadingComplete = 0;
         D2GS_Connected = 0;
       }
     }

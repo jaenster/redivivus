@@ -120,8 +120,6 @@ uint32_t LOGMGR_GetHighResolutionTime();
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740();
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750();
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760();
-void StaticFini_gLogMessageQueueCS_Unref_00665930();
-void StaticFini_gLogMessageQueueCS_Unref_00665940();
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9d08(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9d3b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9d98(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

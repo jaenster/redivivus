@@ -126,6 +126,21 @@ struct __attribute__((packed)) D2WinSmack {
     /* 0x140 */ D2SmackerContextStrc sSmackerCtx; // embedded smacker context buffer (hSmack+eMode+nX+nY)
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Multi::OOGUtilities {
+
+extern ::D2WinButton * gUIGameListMaxPlayersDownButton;
+extern ::D2WinButton * gUIGameListLevelRestrictionDownButton;
+extern ::D2WinButton * gUIGameListLevelRestrictionCheckbox;
+extern ::D2WinButton * gUIGameListDifficultyNormalButton;
+extern ::D2WinButton * gUIGameListDifficultyNightmareButton;
+extern ::D2WinButton * gUIGameListDifficultyHellButton;
+
+} // namespace D2Multi::OOGUtilities
+
 namespace D2Multi::OOGUtilities {
 
 // Function declarations

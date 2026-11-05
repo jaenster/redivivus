@@ -19,44 +19,44 @@
 namespace D2Client::DataTbls {
 
 D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId) {
-    if (nClassId >= 0 && nClassId < sgptDataTable->nTxtCharStatsSize) {
-      return sgptDataTable->pTxtCharStats + nClassId;
+    if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassId;
     }
 
     return nullptr;
 }
 
 D2SetsTxt * __fastcall GetSetsLine(int32_t nSetId) {
-    if (nSetId >= 0 && nSetId < sgptDataTable->nTxtSetsSize) {
-      return sgptDataTable->pTxtSets + nSetId;
+    if (nSetId >= 0 && nSetId < D2Common::ITEMS::Items::sgptDataTable->nTxtSetsSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtSets + nSetId;
     }
 
     return nullptr;
 }
 
 D2SetItemsTxt * __fastcall GetSetItemsLine(int32_t nSetItemId) {
-    if (nSetItemId >= 0 && nSetItemId < sgptDataTable->nTxtSetItemsSize) {
-      return sgptDataTable->pTxtSetItems + nSetItemId;
+    if (nSetItemId >= 0 && nSetItemId < D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems + nSetItemId;
     }
 
     return nullptr;
 }
 
 D2UniqueItemsTxt * __fastcall INV_GetUniqueItemsTxtLine(int32_t nFileIndex) {
-    if (nFileIndex >= 0 && nFileIndex < sgptDataTable->nTxtUniqueItemsSize) {
-      return sgptDataTable->pTxtUniqueItems + nFileIndex;
+    if (nFileIndex >= 0 && nFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nFileIndex;
     }
 
     return nullptr;
 }
 
 D2SkillDescTxt * __fastcall GetSkillDescription(eD2Skills eSkillId) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (pSkillsTxt) {
       int nSkillDescIdx;
       nSkillDescIdx = (int)pSkillsTxt->skilldesc;
-      if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize) {
-        return sgptDataTable->pTxtSkillDesc + nSkillDescIdx;
+      if (nSkillDescIdx >= 0 && nSkillDescIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize) {
+        return D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescIdx;
       }
     }
 
@@ -65,7 +65,7 @@ D2SkillDescTxt * __fastcall GetSkillDescription(eD2Skills eSkillId) {
 
 int32_t __fastcall SKILL_GetMaxLevelForSkill(int32_t skillId) {
     int32_t nMaxLevel;
-    if (!(skillId < 0 || skillId >= sgptDataTable->nTxtSkillsCount || (nMaxLevel = (int32_t)sgptDataTable->pTxtSkills[skillId].maxlvl , nMaxLevel <= 0))) {
+    if (!(skillId < 0 || skillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || (nMaxLevel = (int32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[skillId].maxlvl , nMaxLevel <= 0))) {
       return nMaxLevel;
     }
 
@@ -74,7 +74,7 @@ int32_t __fastcall SKILL_GetMaxLevelForSkill(int32_t skillId) {
 }
 
 int32_t __fastcall CheckMonStatId(int32_t nMonStatsId) {
-    if (!(nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonStatsId < 0 || nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return nMonStatsId;
     }
 
@@ -86,11 +86,11 @@ int32_t __fastcall TXT_Skills_GetSkillRange(eD2Skills eSkill, int32_t pnSkillLev
     if ((int)eSkill < 0) {
       return 0;
     }
-    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxtLine = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxtLine = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillsTxtLine) {
       return 0;
     }

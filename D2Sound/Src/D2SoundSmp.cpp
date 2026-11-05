@@ -217,7 +217,7 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
     }
     if (u3DFlag) {
       DWORD dw3DFlag;
-      nHResult = pSoundSmp->pDSBuffer->lpVtbl->QueryInterface(pSoundSmp->pDSBuffer, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&pSoundSmp->pDS3DBuffer);
+      nHResult = pSoundSmp->pDSBuffer->lpVtbl->QueryInterface(pSoundSmp->pDSBuffer, (GUID*)&Sound::gIID_IDirectSound3DBuffer, (void**)&pSoundSmp->pDS3DBuffer);
       if (nHResult < 0) {
         pSoundSmp->pDSBuffer->lpVtbl->Release(pSoundSmp->pDSBuffer);
         return 0;
@@ -226,7 +226,7 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
         dw3DFlag = SOUND_GetSound3DFlag();
         if (dw3DFlag) {
           ppEaxInterface2 = &pSoundSmp->pEaxInterface;
-          nHResult = pSoundSmp->pDS3DBuffer->lpVtbl->QueryInterface(pSoundSmp->pDS3DBuffer, (GUID*)&gIID_IKsPropertySet, (void**)ppEaxInterface2);
+          nHResult = pSoundSmp->pDS3DBuffer->lpVtbl->QueryInterface(pSoundSmp->pDS3DBuffer, (GUID*)&Sound::gIID_IKsPropertySet, (void**)ppEaxInterface2);
           if (nHResult >= 0) {
             dwEaxCapabilities = 0;
             dw3DFlag = SOUND_GetSoundQualityFlag();

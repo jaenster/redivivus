@@ -1225,20 +1225,18 @@ void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitSt
 // the prisoner-escape town portal created by Q32_OnBarricadeDestroyed.
 BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppPortalOut) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
-    if (!pQuestData) {
-      return 0;
-    }
+    if (pQuestData) {
+      D2QuestDataA5Q2Strc* pA5Q2Data = (D2QuestDataA5Q2Strc*)pQuestData->pQuestSpecificData.pA5Q2;
+      int32_t nGroupIndex = Q32_FindBarricadeGroup(pQuestData, pUnit);
+      if (!(nGroupIndex >= 0 && pA5Q2Data->abBarricadePortalSpawned[nGroupIndex])) {
+        return 0;
+      }
 
-    D2QuestDataA5Q2Strc* pA5Q2Data = (D2QuestDataA5Q2Strc*)pQuestData->pQuestSpecificData.pA5Q2;
-    int32_t nGroupIndex = Q32_FindBarricadeGroup(pQuestData, pUnit);
-    if (!(nGroupIndex >= 0 && pA5Q2Data->abBarricadePortalSpawned[nGroupIndex])) {
-      return 0;
-    }
-
-    D2UnitStrc* pPortalUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA5Q2Data->anBarricadePortalGUID[nGroupIndex]);
-    if (pPortalUnit) {
-      *ppPortalOut = pPortalUnit;
-      return 1;
+      D2UnitStrc* pPortalUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA5Q2Data->anBarricadePortalGUID[nGroupIndex]);
+      if (pPortalUnit) {
+        *ppPortalOut = pPortalUnit;
+        return 1;
+      }
     }
 
     return 0;

@@ -19,3 +19,14 @@ extern char s_POR_006e027c[4];
 extern char s_FRA_006e0280[4];
 extern char s_DEU_006e0284[4];
 extern char gaLangNameFormat_Nominative[4];
+
+namespace D2Lang::StrTable::strtable {
+extern void * gpUntranslatedStringCacheHead;
+extern uint16_t * * gpStringIndexBase;
+extern uint16_t * * gpStringIndexPatchD2;
+extern uint16_t * * gpStringIndexExpansion;
+extern uint16_t * gpStringBufferBase;
+extern uint16_t * gpStringBufferPatchD2;
+extern uint16_t * gpStringBufferExpansion;
+extern int gnStringTableRefCount;
+} // namespace D2Lang::StrTable::strtable

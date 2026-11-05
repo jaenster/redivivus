@@ -181,10 +181,10 @@ BOOL __stdcall Push(D2ControlMsg * pScrollbar) {
 
     uint32_t dwState;
     dwState = pCtrl->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState)) {
       return 1;
     }
-    if (!(gadwBitMasks[0] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
       return 1;
     }
 
@@ -309,7 +309,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
       }
 
       dwState = pScrollbar->sControl.dwState;
-      if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+      if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
         pDC6 = pScrollbar->sControl.pDC6;
         nLine = pScrollbar->sControl.dwPosX;
         nDrawY = pScrollbar->sControl.dwPosY - 1;
@@ -358,8 +358,8 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
     ::D2WinScrollbar* pNewScrollbar = D2_NEW_AT(::D2WinScrollbar, ".\\Src\\D2WinScrollbar.cpp", 0x1c);
     memset(pNewScrollbar, 0, 0x60);
     pNewScrollbar->sControl.neD2FormType = FORM_Scrollbar;
-    pNewScrollbar->sControl.dwState |= gadwBitMasks[0];
-    pNewScrollbar->sControl.dwState |= gadwBitMasks[2];
+    pNewScrollbar->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    pNewScrollbar->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];
     pNewScrollbar->sControl.pDC6 = pDC6;
     pNewScrollbar->sControl.dwPosX = nPosX;
     pNewScrollbar->sControl.dwPosY = nPosY;

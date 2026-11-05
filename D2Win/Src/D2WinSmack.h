@@ -28,6 +28,7 @@ BOOL __stdcall D2WINSMACK_CloseAndDeleteFile(::D2WinSmack * pSmack);
 // Sets smacker playback bounds. Updates fields 3,4 (current bounds) and 0x52,0x53 (original bounds). Validates form type is FORM_Smack.
 BOOL __stdcall D2WINSMACK_SetBounds(::D2WinSmack * pSmack, int32_t nWidth, int32_t nHeight);
 void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack);
+void __stdcall D2GFX_EnableVSync_Unref_00506a80();
 BOOL __fastcall Draw(::D2WinSmack * pSmack);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // @sourcefile .\Src\D2WinSmack.cpp

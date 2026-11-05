@@ -87,7 +87,7 @@ static void __stdcall TXT_BuildCharTemplateLevelIndex(D2CharTemplateTxt * pCharT
 void __fastcall TXT_LoadCharTemplateTxt(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc chartemplate[79] = {
       {"Name", FIELDTYPE_ASCII, 0x1d, 0, 0},
-      {"class", FIELDTYPE_CODE_CHAR, 0, 0x1e, &sgptDataTable->pTxtPlayerClassLink},
+      {"class", FIELDTYPE_CODE_CHAR, 0, 0x1e, &ITEMS::Items::sgptDataTable->pTxtPlayerClassLink},
       {"act", FIELDTYPE_CHAR, 0, 0x20, 0},
       {"level", FIELDTYPE_CHAR, 0, 0x1f, 0},
       {"str", FIELDTYPE_CHAR, 0, 0x21, 0},

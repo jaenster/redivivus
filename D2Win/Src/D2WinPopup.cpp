@@ -62,7 +62,7 @@ BOOL __stdcall D2WINPOPUP_IsActiveAndVisible() {
       }
 
       uVar1 = gpD2WinPopupControl->sControl.dwState;
-      if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+      if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
         return 1;
       }
     }
@@ -113,7 +113,7 @@ BOOL __stdcall D2WINPOPUP_HandleClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     uint32_t uVar1 = gpD2WinPopupControl->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1 && gpD2WinPopupControl->bCentered != -1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1 && gpD2WinPopupControl->bCentered != -1) {
       pfnCallback = gpD2WinPopupControl->wszMessages[gpD2WinPopupControl->bCentered].pfnOnClick;
       if (pfnCallback) {
         (*pfnCallback)();
@@ -133,7 +133,7 @@ BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
     }
 
     uint32_t uVar1 = pPopup->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       pPopup->bCentered = -1;
       nRelMouseX = D2WinMain::nPosX - pPopup->sControl.dwPosX;
       nRelX = pPopup->sControl.dwSizeY - pPopup->sControl.dwPosY + D2WinMain::nPosY;
@@ -159,7 +159,7 @@ BOOL __fastcall Draw(::D2WinPopup * pPopup) {
     }
 
     uint32_t uVar1 = pPopup->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       uint8_t bVar2;
       bVar2 = D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x3f, 0x3f, 0x3f);
       dwFillColor = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwFillColor + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)bVar2);
@@ -202,10 +202,10 @@ void __stdcall D2WinPopup() {
     ::D2WinPopup* pNewPopup = D2_NEW_AT(::D2WinPopup, ".\\Src\\D2WinPopup.cpp", 0x29);
     memset(pNewPopup, 0, 0x468);
     pNewPopup->sControl.neD2FormType = FORM_Popup;
-    pNewPopup->sControl.dwState |= gadwBitMasks[0];
-    uVar1 = pNewPopup->sControl.dwState | gadwBitMasks[2];
+    pNewPopup->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    uVar1 = pNewPopup->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewPopup->sControl.dwState = uVar1;
-    pNewPopup->sControl.dwState = uVar1 | gadwBitMasks[3];
+    pNewPopup->sControl.dwState = uVar1 | Fog::BitBuffer::gadwBitMasks[3];
     pNewPopup->sControl.dwPosX = D2WinMain::nPosX;
     pNewPopup->sControl.dwPosY = D2WinMain::nPosY;
     pNewPopup->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinPopup*))D2WinPopup::Draw;

@@ -17,7 +17,9 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Multi/OOGUtilities.h"
 #include "D2Win/D2WinEditBox.h"
+#include "D2Win/Src/D2WinButton.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -626,7 +628,7 @@ BOOL __stdcall D2WINEDITBOX_CreateControl(D2ControlMsg * pControl, int eFormType
 
     uint32_t dwState;
     dwState = pEditBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwState) || !(gadwBitMasks[0] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState) || !(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
       return 0;
     }
 
@@ -1056,7 +1058,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
     }
 
     uint32_t dwFlags = pEditBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwFlags) || !(gadwBitMasks[0] & dwFlags)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwFlags) || !(Fog::BitBuffer::gadwBitMasks[0] & dwFlags)) {
       return 0;
     }
     if (byKeyChar == 9 && pEditBox->nFlags & 4) {
@@ -1064,9 +1066,9 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         return 0;
       }
 
-      gnFormControlCount++;
+      D2WinButton::gnFormControlCount++;
       pEditBox->fpFilterCallback(pEditBox, pEditBox->nCursorIndex, (char*)__frame0.abKeyBuffer);
-      gnFormControlCount--;
+      D2WinButton::gnFormControlCount--;
       return 0;
     }
 
@@ -1289,7 +1291,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
 
     uint32_t bShiftHeld;
     bShiftHeld = pEditBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & bShiftHeld) || !(gadwBitMasks[0] & bShiftHeld)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & bShiftHeld) || !(Fog::BitBuffer::gadwBitMasks[0] & bShiftHeld)) {
       return 0;
     }
 
@@ -1368,7 +1370,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
           }
 
           bShiftHeld = pNextControl->sControl.dwState;
-          if (!(!(gadwBitMasks[2] & bShiftHeld) || !(gadwBitMasks[0] & bShiftHeld))) {
+          if (!(!(Fog::BitBuffer::gadwBitMasks[2] & bShiftHeld) || !(Fog::BitBuffer::gadwBitMasks[0] & bShiftHeld))) {
             break;
           }
 
@@ -1391,7 +1393,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
           }
 
           bShiftHeld = pNextControl->sControl.dwState;
-          if (gadwBitMasks[2] & bShiftHeld && gadwBitMasks[0] & bShiftHeld) {
+          if (Fog::BitBuffer::gadwBitMasks[2] & bShiftHeld && Fog::BitBuffer::gadwBitMasks[0] & bShiftHeld) {
             break;
           }
 
@@ -1405,9 +1407,9 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
       case '\r':
         if (pEditBox->pfnSubmit) {
           bShiftHeld = pEditBox->nFlags;
-          gnFormControlCount++;
+          D2WinButton::gnFormControlCount++;
           pEditBox->pfnSubmit(pEditBox->wszText);
-          gnFormControlCount--;
+          D2WinButton::gnFormControlCount--;
           if (!(bShiftHeld & 2)) {
             return 1;
           }
@@ -1419,9 +1421,9 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
         if (!pEditBox->pfnSubmit) {
           return 1;
         }
-      gnFormControlCount++;
+      D2WinButton::gnFormControlCount++;
       pEditBox->pfnSubmit(nullptr);
-      gnFormControlCount--;
+      D2WinButton::gnFormControlCount--;
       return 1;
       case '#':
         wChar = *pwszCursor;
@@ -1602,10 +1604,10 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
 
     uint32_t dwState;
     dwState = pEditBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState)) {
       return 1;
     }
-    if (!(gadwBitMasks[0] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
       return 1;
     }
 
@@ -1862,10 +1864,10 @@ BOOL __stdcall PushFlag0x8(D2ControlMsg * pControlMsg) {
 
     uint32_t nNewTextLen;
     nNewTextLen = pEditBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & nNewTextLen)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & nNewTextLen)) {
       return 0;
     }
-    if (!(gadwBitMasks[0] & nNewTextLen)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[0] & nNewTextLen)) {
       return 0;
     }
 
@@ -2030,7 +2032,7 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
       }
 
       nVisibleLen = pEditBox->sControl.dwState;
-      if (!(gadwBitMasks[2] & nVisibleLen && gadwBitMasks[0] & nVisibleLen)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[2] & nVisibleLen && Fog::BitBuffer::gadwBitMasks[0] & nVisibleLen)) {
         return 1;
       }
 
@@ -2166,8 +2168,8 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
     ::D2WinEditBox* pNewEditBox = D2_NEW_AT(::D2WinEditBox, ".\\Src\\D2WinEditBox.cpp", 0x39);
     memset(pNewEditBox, 0, 0x284);
     pNewEditBox->sControl.neD2FormType = FORM_EditBox;
-    pNewEditBox->sControl.dwState |= gadwBitMasks[0];
-    dwState = pNewEditBox->sControl.dwState | gadwBitMasks[2];
+    pNewEditBox->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pNewEditBox->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewEditBox->sControl.pDC6 = pDC6;
     pNewEditBox->sControl.dwState = dwState;
     pNewEditBox->sControl.dwSizeX = nSizeX;

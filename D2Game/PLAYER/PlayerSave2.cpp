@@ -89,7 +89,7 @@ __time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime) {
 }
 
 int Unreferenced_00568d70() {
-    return sgptDataTable->nSkillCountMaxPerClass;
+    return D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass;
 }
 
 int32_t __fastcall FindEndOfString(char * szString, int32_t nMaxSize) {
@@ -274,7 +274,7 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * p
           sSaveHeader.nTimeEx = GAME::Clients::ReturnFFFFFFFF();
           sSaveHeader.nInitSeed = pGame->pInitSeed.nSeedLow;
           sSaveHeader.nConst16 = 0x10;
-          sSaveHeader.nMaxSkillsCount = (uint8_t)sgptDataTable->nSkillCountMaxPerClass;
+          sSaveHeader.nMaxSkillsCount = (uint8_t)D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass;
           pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x1dd);
           bWeaponSwapped = GAME::Clients::HasWeaponSwapped(pClient);
           if (bWeaponSwapped != '\0') {
@@ -518,7 +518,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStar
       nBitStreamLen = D2Common::Stats::StatsEx::CopyStatsToBuffer(pUnit->pStatsEx, statsBuf, 0x200);
       if (nBitStreamLen > 0) {
         iStat = 0;
-        pDataTable = sgptDataTable;
+        pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nBitStreamLen > 0) {
           do {
             nStatId = (uint32_t)(uint16_t)statsBuf[iStat].wStatIndex;
@@ -530,7 +530,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStar
               if (byCsvBitWidth > 0) {
                 nClampedValue = nRawStatValue;
                 if (byCsvBitWidth < 0x20) {
-                  if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[5]) {
+                  if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
                     nClampMask = -1 << byCsvBitWidth - 1;
                     nClamped = nRawStatValue;
                     if ((int)nRawStatValue <= (int)nClampMask) {
@@ -559,7 +559,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStar
                 }
 
                 Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nClampedValue, (uint32_t)(uint8_t)pStatCostTxt->csvbits);
-                pDataTable = sgptDataTable;
+                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               }
             }
 
@@ -580,7 +580,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStar
 int __fastcall SaveSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStartAddress, DWORD pEndAddress) {
     int nHardPoints;
     uint16_t* pWriteCursor = (uint16_t*)*pStartAddress;
-    if ((uint32_t)(sgptDataTable->nSkillCountMaxPerClass + 2 + (int)pWriteCursor) > pEndAddress) {
+    if ((uint32_t)(D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2 + (int)pWriteCursor) > pEndAddress) {
       return 1;
     }
 
@@ -971,8 +971,8 @@ static int32_t __stdcall PLAYERSAVE_CreateNewCharacter(D2ClientStrc * pSaveConte
     if (!byAct && pUnit) {
       D2CharStatsTxt* pCharStatsTxt;
       nClassIdx = pUnit->nClassId;
-      if (nClassIdx >= 0 && nClassIdx < sgptDataTable->nTxtCharStatsSize) {
-        pCharStatsTxt = sgptDataTable->pTxtCharStats + nClassIdx;
+      if (nClassIdx >= 0 && nClassIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
+        pCharStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdx;
         if (pCharStatsTxt && pCharStatsTxt->StartSkill) {
           pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pCharStatsTxt->StartSkill);
           if (pDVar1) {
@@ -1210,11 +1210,11 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
       if ((int)eUnitStat < 0) {
         break;
       }
-      if ((int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         break;
       }
 
-      pStatCostTxt = sgptDataTable->pTxtItemStatCost + eUnitStat;
+      pStatCostTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (!pStatCostTxt) {
         break;
       }
@@ -1229,7 +1229,7 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
       }
 
       byCsvBitWidth = pStatCostTxt->csvbits;
-      if (byCsvBitWidth < 0x20 && *(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[5]) {
+      if (byCsvBitWidth < 0x20 && *(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
         nValue = Fog::BitBuffer::ReadSigned(&bitBuf, (uint32_t)byCsvBitWidth);
       } else {
         nValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, (uint32_t)byCsvBitWidth);
@@ -1271,7 +1271,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
     eD2UnitStat eUnitStat = UNITSTAT_strength;
     if ((int)nStatCount > 0) {
       do {
-        if ((uint8_t)gadwBitMasks[eUnitStat & UNITSTAT_maxhp] & pBitmaskBase[(int)eUnitStat >> 3]) {
+        if ((uint8_t)Fog::BitBuffer::gadwBitMasks[eUnitStat & UNITSTAT_maxhp] & pBitmaskBase[(int)eUnitStat >> 3]) {
           nValue = *(int32_t*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
           nPresentStats++;
         } else {

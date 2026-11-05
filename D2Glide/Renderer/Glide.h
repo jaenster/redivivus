@@ -14,7 +14,6 @@ struct D2GfxHelperStrc;
 struct D2GfxLightExStrc;
 struct D2GfxLightStrc;
 struct D2GfxSettingsStrc;
-struct D2GlideVertexStrc;
 struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
 
@@ -27,6 +26,22 @@ struct D2GlideGroundVertexCursorStrc {
     /* 0x10 */ float fT;
     /* 0x14 */ float fW;
     /* 0x18 */ float fXNext; // fX of the following D2GlideVertexStrc
+};
+
+struct D2GlideVertexStrc {
+    /* 0x00 */ float fX;
+    /* 0x04 */ float fY;
+    /* 0x08 */ uint32_t dwColor;
+    /* 0x0C */ float fOOW;
+    /* 0x10 */ float fS;
+    /* 0x14 */ float fT;
+    /* 0x18 */ float fW;
+};
+
+struct D2GlideWallCornerStrc {
+    /* 0x00 */ int32_t nX;
+    /* 0x04 */ int32_t nY;
+    /* 0x08 */ int32_t nZ;
 };
 
 struct D2RenderClipOutStrc {
@@ -53,9 +68,41 @@ struct GlideTexInfoStrc {
     /* 0x34 */ int32_t nAspect; // Aspect ratio index into gnGlideCacheSizeA/B
 };
 
+struct GlTextureCacheStrc {
+    /* 0x00 */ uint32_t dwEntrySize; // Size of each node in bytes (0x1C)
+    /* 0x04 */ uint32_t nMaxEntries; // Total cache capacity
+    /* 0x08 */ uint32_t nUsedCount; // Number of active entries
+    /* 0x0C */ uint8_t * pActiveHead; // Head of LRU active list
+    /* 0x10 */ uint8_t * pActiveTail; // Tail of LRU active list (MRU position)
+    /* 0x14 */ uint8_t * pFreeHead; // Head of free node list
+    /* 0x18 */ uint8_t * pFreeTail; // Tail of free node list
+    /* 0x1C */ uint8_t * pNodes; // Allocated node array base
+};
+
+struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
+    /* 0x00 */ D2GlideVertexStrc aVertex[4]; // fan block submitted by DrawShadowQuad/DrawPalettedQuad/DrawPerspectiveImage
+    /* 0x70 */ GlTextureCacheStrc aTextureCache[3]; // indexed 1-based from &aVertex[2].fT (= aTextureCache - 0x20) by UploadTextureToCache
+};
+
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Glide::Renderer::Glide {
+
+extern D2GlideVertexStrc gaGlidePerspectiveVertices[15];
+extern D2GlideVertexStrc gGlidePerspectiveVertexBuffer[4];
+extern D2GlideVertexStrc gaGlideGroundTileVertices[36];
+extern D2GlideVertexStrc gaGlideSmackerVertices[4];
+
+} // namespace D2Glide::Renderer::Glide
+
 namespace D2Glide::Renderer::Glide {
 
 // Function declarations
+BOOL __stdcall RENDERER_GLIDE_LoadLibrarySymbols();
+void __stdcall RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(int nLine);
+BOOL __fastcall Initialize(HINSTANCE hInstance);
 void __fastcall ClearCaches();
 BOOL __fastcall CheckCutScene();
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);

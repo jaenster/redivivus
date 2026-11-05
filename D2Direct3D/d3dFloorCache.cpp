@@ -656,7 +656,7 @@ BOOL __fastcall D3D_RenderFloorTileToTexture(D2TileLibraryEntryStrc * pTileLibra
         if (dwSurfaceOpResult) {
           Renderer::DIRECTD3D_LogError("Failed to unlock memory surface", dwSurfaceOpResult);
         }
-        if (Renderer::gnD3DTextureCapFlags & gadwBitMasks[10]) {
+        if (Renderer::gnD3DTextureCapFlags & Fog::BitBuffer::gadwBitMasks[10]) {
           Renderer::RENDERER_D3D_CopySurfacePixels(pFloorCacheNodes[nNodeIndex - 1].pSurface, gpD3DFloorTileSystemSurface, gnD3DTextureCacheCount);
           pTexture = pFloorCacheNodes[nNodeIndex - 1].pTexture;
         } else {
@@ -719,7 +719,7 @@ void __fastcall D3D_RenderSubtileToTexture(D2GroundSubTileStrc * pSubTile) {
           if (dwSurfaceResult) {
             Renderer::DIRECTD3D_LogError("Failed to unlock memory surface", dwSurfaceResult);
           }
-          if (Renderer::gnD3DTextureCapFlags & gadwBitMasks[10]) {
+          if (Renderer::gnD3DTextureCapFlags & Fog::BitBuffer::gadwBitMasks[10]) {
             Renderer::RENDERER_D3D_CopySurfacePixels(pSubtileNodeBuffer[nNodeIndex - 1].pSurface, gpD3DSubtileSystemSurface, 0x20);
           } else {
             pSubtileNodeBuffer[nNodeIndex - 1].pTexture->lpVtbl->Load(pSubtileNodeBuffer[nNodeIndex - 1].pTexture, gpD3DSubtileMemoryTexture);

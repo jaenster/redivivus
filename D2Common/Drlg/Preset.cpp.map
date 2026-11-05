@@ -4,6 +4,34 @@
   "file": "D2Common/Drlg/Preset.cpp",
   "functions": [
     {
+      "name": "StaticFini_gLogMessageQueueCS_Unref_00665930",
+      "address": "00665930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665930"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "StaticFini_gLogMessageQueueCS_Unref_00665930"
+      ]
+    },
+    {
+      "name": "StaticFini_gLogMessageQueueCS_Unref_00665940",
+      "address": "00665940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665940"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "StaticFini_gLogMessageQueueCS_Unref_00665940"
+      ]
+    },
+    {
       "name": "ParsePresetsOfDrlgFile",
       "address": "00665950",
       "lines": [

@@ -212,7 +212,7 @@ BOOL __fastcall GLBLOCKS_LoadFloorTileTexture(D2TileLibraryEntryStrc * pTileLibr
 
         gGlideFloorTextureCache.pNodes[nCacheSlot - 1].pTile = pTileLibraryEntry;
         startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
-        (*GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
+        (*Renderer::Glide::GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
       } else {
         glFloorCache::GLFLOOR_PromoteNodeToMRU(&gGlideFloorTextureCache, (int)nCacheSlot);
         startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
@@ -251,7 +251,7 @@ void __fastcall GLBLOCKS_LoadWallSubtileTexture(D2GroundSubTileStrc * pSubTile) 
 
           gGlideSubtileTextureCache.pNodes[nTexCacheIdx - 1].pSubTile = pSubTile;
           startAddress = gGlideSubtileTextureCache.pNodes[pSubTile->nTextureCacheIndex - 1].dwAddress;
-          (*GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &g_GrTexInfoGlBlocks);
+          (*Renderer::Glide::GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &g_GrTexInfoGlBlocks);
           (*GLIDEDLL_grTexSource_16)(gnGlideTMUId, startAddress, 3, &g_GrTexInfoGlBlocks);
           Renderer::Glide::RENDERER_GLIDE_SetTextureMode(gnGlideTMUId);
           return;
@@ -305,10 +305,10 @@ void __stdcall GLBLOCKS_RenderBinkVideoFrame() {
     lfbInfo.strideInBytes = 0;
     lfbInfo.writeMode = 0;
     lfbInfo.origin = 0;
-    FxBool bLfbLocked = (*GLIDEDLL_grLfbLock_24)(1, 0, 5, 0, 0, &lfbInfo);
+    FxBool bLfbLocked = (*Renderer::Glide::GLIDEDLL_grLfbLock_24)(1, 0, 5, 0, 0, &lfbInfo);
     if (bLfbLocked) {
       BinkCopyToBuffer(gpBinkVideoGlide, lfbInfo.lfbPtr, lfbInfo.strideInBytes, *(uint32_t*)((int)gpBinkVideoGlide + 4), gnBinkGlideXOffset, gnBinkGlideYOffset, gnGlideBinkSurfaceType);
-      (*GLIDEDLL_grLfbUnlock_8)(1, 0);
+      (*Renderer::Glide::GLIDEDLL_grLfbUnlock_8)(1, 0);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);

@@ -83,16 +83,16 @@ D2NpcCashTabStrc gaNpcCashTabs[2] = {
 namespace D2Client::UI::UseItem {
 
 static void ITEM_ToggleHandState(D2UnitStrc * pUnit) {
-    if (gnPlayerCashDisplay == 1) {
-      gnPlayerCashDisplay = 2;
+    if (ui::gnPlayerCashDisplay == 1) {
+      ui::gnPlayerCashDisplay = 2;
       Cursor::ITEM_SetItemOnHand(nullptr);
       if (pUnit) {
         gnCursorItemUnitId = pUnit->nUnitGUID;
         Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pUnit), nullptr, 0, 0, 0);
         return;
       }
-    } else if (gnPlayerCashDisplay == 2) {
-      gnPlayerCashDisplay = 1;
+    } else if (ui::gnPlayerCashDisplay == 2) {
+      ui::gnPlayerCashDisplay = 1;
       gnCursorItemUnitId = 0;
       if (pUnit) {
         Cursor::ITEM_SetItemOnHand(pUnit);
@@ -104,7 +104,7 @@ static void ITEM_ToggleHandState(D2UnitStrc * pUnit) {
 
 void __stdcall TEXT_HandleMouseMove() {
     int nPlayerGUID;
-    if (gnPlayerCashDisplay != 2) {
+    if (ui::gnPlayerCashDisplay != 2) {
       return;
     }
 
@@ -112,7 +112,7 @@ void __stdcall TEXT_HandleMouseMove() {
     Dialog::gpHoradricCubeDialog = Dialog::AllocDialogStrc(0x96, 0x82, TEXT_EmptyCallback, nullptr, 1, 0, 1, 0, 0, 0, 1);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpHoradricCubeDialog, 0);
     Dialog::AddStringData(Dialog::gpHoradricCubeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd19), 0xf, 0, 0, 1, 0, 0);
-    gnPlayerCashDisplay = 3;
+    ui::gnPlayerCashDisplay = 3;
     if (!nHoradricCubeUIState) {
       D2UnitStrc* pPlayerUnit_lcl;
       pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -122,7 +122,7 @@ void __stdcall TEXT_HandleMouseMove() {
         nPlayerGUID = pPlayerUnit_lcl->nUnitGUID;
       }
 
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nPlayerGUID, gnNpcShopActiveTab, gnCursorItemUnitId, 3);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nPlayerGUID, ui::gnNpcShopActiveTab, gnCursorItemUnitId, 3);
       return;
     }
 
@@ -176,14 +176,14 @@ void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     gnTextSystemInitFlag = GetTickCount();
-    if (gnPlayerCashDisplay == 1) {
+    if (ui::gnPlayerCashDisplay == 1) {
       nHandled = Inv::INPUT_InventoryMouseMove(pMsg);
       if (nHandled) {
         return;
       }
 
       TEXT_HandleItemUse(nMouseX, uMouseY);
-    } else if (gnPlayerCashDisplay == 2) {
+    } else if (ui::gnPlayerCashDisplay == 2) {
       nHandled = Inv::INV_HandleInventoryLeftDown(pMsg);
       if (nHandled) {
         return;
@@ -255,9 +255,9 @@ void __stdcall TEXT_DrawCashDisplay() {
       memset(&sGfxData, 0, 0x48);
       sGfxData.nDirection = 0;
       if (!uFontHeight) {
-        sGfxData.pDC6 = gpHoradricBackgroundDC6;
+        sGfxData.pDC6 = ui::gpHoradricBackgroundDC6;
       } else {
-        sGfxData.pDC6 = gpUpgradeMenuDC6;
+        sGfxData.pDC6 = ui::gpUpgradeMenuDC6;
       }
 
       sGfxData.nFrameNumber = 0;
@@ -278,7 +278,7 @@ void __stdcall TEXT_DrawCashDisplay() {
       nWrappedWidth = nMouseX;
       nTabIdx = Cursor::GetMouseY();
       nMouseY = nTabIdx;
-      if (nMouseX < 0x140 && nTabIdx < ScreenSizeY - 0x30) {
+      if (nMouseX < 0x140 && nTabIdx < Inv::ScreenSizeY - 0x30) {
         nTabIdx2 = 0;
         if (nCashDisplayItemCount > 0) {
           do {
@@ -355,7 +355,7 @@ void __stdcall TEXT_DrawCashDisplay() {
 }
 
 void __stdcall UI_CloseHoradricCubeWindow() {
-    gnPlayerCashDisplay = 0;
+    ui::gnPlayerCashDisplay = 0;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pCursorItem_lcl) {
       pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);

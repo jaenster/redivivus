@@ -11,6 +11,7 @@
 namespace D2Common::Logging {
 
 // Function declarations
+void __fastcall SPRITECACHE_SetMaxSize_Unref_00624700(size_t nSize);
 void __stdcall MISC_SafeStrncpy(char * szText, size_t nSize);
 void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_t dwClient, uint32_t dwLogType, char * szFilename, uint32_t nLine, char * szFormatString, ...);
 void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, char * szFilename, int32_t nLine, char * szFormatString, ...);

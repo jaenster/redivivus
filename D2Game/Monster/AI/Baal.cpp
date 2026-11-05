@@ -138,10 +138,10 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
       D2SkillsTxt* pSkillTxt;
       nLeftSkillLevel = D2Common::Skills::GetSkillLevel(pTarget, pSkill, 1);
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x75);
-      if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+      if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pSkillTxt = 0;
       } else {
-        pSkillTxt = sgptDataTable->pTxtSkills + eSkillId;
+        pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
       }
 
       nLeftAttackRank = (uint32_t)pSkillTxt->attackrank;
@@ -151,10 +151,10 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     if (pSkill) {
       nMeleeScore = D2Common::Skills::GetSkillLevel(pTarget, pSkill, 1);
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x7b);
-      if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+      if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         nRightAttackRank = (uint32_t)*(volatile uint8_t*)0x18e;
       } else {
-        nRightAttackRank = (uint32_t)sgptDataTable->pTxtSkills[eSkillId].attackrank;
+        nRightAttackRank = (uint32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].attackrank;
       }
     } else {
       nRightAttackRank = 0;
@@ -172,7 +172,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     }
     if (pTarget && pTarget->eUnitType == UNIT_MONSTER) {
       nMonClassId = pTarget->nClassId;
-      if (nMonClassId < 0 || nMonClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nMonClassId) || sgptDataTable->pTxtMonStats[nMonClassId].threat <= 1) {
+      if (nMonClassId < 0 || nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId) || D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].threat <= 1) {
         return 0;
       }
     }
@@ -911,7 +911,7 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
 
     eD2MonsterAnimMode eSpawnAnimMode;
     eSpawnAnimMode = eD2MonsterAnimMode_ns::Neutral;
-    __frame0.nCloneClassId = sgptDataTable->nTxtMonStatsSize <= 0x23a ? -1 : 0x23a;
+    __frame0.nCloneClassId = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x23a ? -1 : 0x23a;
     D2Common::Monsters::MONSTERS::MONSTER_GetSpawnParameters(pUnit, (int*)&__frame0.nCloneClassId, &__frame1.pMemoryTmp, &__frame1.nSpawnYOut, &eSpawnAnimMode, (uint32_t)pGame->nDifficulty, nullptr);
     pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (pTargetUnit) {
@@ -1025,7 +1025,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     int* pnY;
     while (true) {
       D2MonStatsTxt* pMonStats;
-      pMonStats = pUnit && (nMonClassId = pUnit->nClassId) >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
+      pMonStats = pUnit && (nMonClassId = pUnit->nClassId) >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
       if (!pMonStats) {
         return;
       }

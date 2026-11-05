@@ -1461,8 +1461,7 @@ void __fastcall Send0x9DRemoveItemFromContainer(D2ClientStrc * pClient, D2UnitSt
     }
 
     eInventoryPage ePage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-    eInventoryPage ePrevPage = D2Common::ITEMS::Items::ITEM_GetItemData_ePreviousPage(pItem);
-    D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, ePrevPage);
+    D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, D2Common::ITEMS::Items::ITEM_GetItemData_ePreviousPage(pItem));
     NET_D2GS_SERVER_Send_0x9D_ITEMUNITEX(pClient, pUnit, pItem, 5, eItemFlag, 0);
     D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, ePage);
 }
@@ -2436,7 +2435,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
       } else {
         nScratch = D2Common::Stats::StatsEx::CopyStatsToBuffer(pStatListEx, aStatBuf, 0x10);
         nStatCount = nScratch;
-        if (nScratch <= 0 || (nIndex = 0 , pDataTable = sgptDataTable , nScratch <= 0)) {
+        if (nScratch <= 0 || (nIndex = 0 , pDataTable = D2Common::ITEMS::Items::sgptDataTable , nScratch <= 0)) {
           Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, 0, 1);
           nSizeInBits = 1;
           nScratch = 0;
@@ -2446,7 +2445,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
             pComponentBytes = (char*)(uint32_t)(uint16_t)aStatBuf[nIndex].wSubIndex;
             nStatValue = aStatBuf[nIndex].nStatValue;
             pStatCostTxt = (int)nStatIndex < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatIndex : nullptr;
-            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)gadwBitMasks[0] && pStatCostTxt->sendBits > '\0') {
+            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] && pStatCostTxt->sendBits > '\0') {
               if (!bHasStats) {
                 bHasStats = 1;
                 Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, 1, 1);
@@ -2459,7 +2458,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
 
               Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatValue, (uint32_t)pStatCostTxt->sendBits);
               nScratch = nStatCount;
-              pDataTable = sgptDataTable;
+              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             }
 
             nIndex++;

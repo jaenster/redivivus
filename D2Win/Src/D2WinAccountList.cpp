@@ -145,7 +145,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     }
 
     uint32_t dwState = pAccountList->sControl.dwState;
-    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
       pCurEntry = pAccountList->pFirstEntry;
       if (!pCurEntry) {
         return 0;
@@ -196,7 +196,7 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     }
 
     uint32_t dwControlState = pAccountList->sControl.dwState;
-    if (gadwBitMasks[2] & dwControlState && gadwBitMasks[0] & dwControlState && pAccountList->pFirstEntry) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & dwControlState && Fog::BitBuffer::gadwBitMasks[0] & dwControlState && pAccountList->pFirstEntry) {
       D2WinFont::SetAndReturnLastFont(pAccountList->nFontId);
       Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       nPosX = pAccountList->sControl.dwPosX;
@@ -236,13 +236,13 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     ::D2WinAccountList* pNewList = D2_NEW_AT(::D2WinAccountList, ".\\Src\\D2WinAccountList.cpp", 0x24);
     memset(pNewList, 0, 0x58);
     pNewList->sControl.neD2FormType = FORM_AccountList;
-    pNewList->sControl.dwState |= gadwBitMasks[0];
-    dwControlState = pNewList->sControl.dwState | gadwBitMasks[2];
+    pNewList->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwControlState = pNewList->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewList->nUserData = nUserData;
     pNewList->sControl.dwState = dwControlState;
-    pNewList->sControl.dwSizeX = nSizeX;
     pNewList->sControl.dwPosX = nPosX;
     pNewList->sControl.dwPosY = nPosY;
+    pNewList->sControl.dwSizeX = nSizeX;
     pNewList->sControl.dwSizeY = nSizeY;
     pNewList->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinAccountList*))D2WinAccountList::Draw;
     pNewList->sControl.fpPush = D2WinAccountList::Push;

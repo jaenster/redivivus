@@ -67,6 +67,7 @@ char * ILT_strrchr(char * _Str, int32_t _Ch);
 void __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void __stdcall LeaveCriticalSection_System();
 void __stdcall DebugThread();
+void __stdcall SetCurrentThreadId();
 // 1 internal function (defined in .cpp)
 
 } // namespace Fog::_3rdparty::crashy

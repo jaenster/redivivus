@@ -13,7 +13,13 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+#ifndef RECON_FPTD_pfnBlizzardError
+#define RECON_FPTD_pfnBlizzardError
+typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, char * * ppszButtonText, uint32_t dwFlags, uint32_t dwErrorCode, bool bIsFatal);
+#endif
+
 namespace Fog::Memory {
+uint32_t gpServerMemHeap = 0x1; D2_GLOBAL_GUARD(gpServerMemHeap, "Fog::Memory::gpServerMemHeap");
 D2MemoryManagerStrc pGlobalPoolSystem = {}; D2_GLOBAL_GUARD(pGlobalPoolSystem, "Fog::Memory::pGlobalPoolSystem");
 } // namespace Fog::Memory
 
@@ -507,8 +513,8 @@ void __fastcall Free(D2PoolManagerStrc * pMemory, void * * pStruct, char * szFil
 
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pPool->pSync);
         pBitmapWord = (uint32_t*)(pBlock->pUsage + ((int)nSlotIndex >> 5));
-        if (pBlock->pUsage[(int)nSlotIndex >> 5] & gadwBitMasks[nSlotIndex & 0x1f]) {
-          *pBitmapWord &= gadwInvBitMasks[nSlotIndex & 0x1f];
+        if (pBlock->pUsage[(int)nSlotIndex >> 5] & BitBuffer::gadwBitMasks[nSlotIndex & 0x1f]) {
+          *pBitmapWord &= BitBuffer::gadwInvBitMasks[nSlotIndex & 0x1f];
           pBlock->nBlocks--;
           PromoteBlockToFreeListHead(pPool, pBlock);
         }
@@ -809,13 +815,13 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
       } else {
         (*(int*)(Line + 8))++;
         nBitmapByteOff = ((int)nSlotIndex >> 5) * 4;
-        if (*(uint32_t*)(nBitmapByteOff + *(int*)(Line + 4)) & gadwBitMasks[nSlotIndex & 0x1f]) {
+        if (*(uint32_t*)(nBitmapByteOff + *(int*)(Line + 4)) & BitBuffer::gadwBitMasks[nSlotIndex & 0x1f]) {
           Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x4ff);
           exit(-1);
         }
 
         pBitmapWord = (uint32_t*)(nBitmapByteOff + *(int*)(Line + 4));
-        *pBitmapWord |= gadwBitMasks[nSlotIndex & 0x1f];
+        *pBitmapWord |= BitBuffer::gadwBitMasks[nSlotIndex & 0x1f];
         if (*(int*)(Line + 8) >= (int)pPool->nBlocks && *(int*)(Line + 0x10)) {
           pNextBlock = *(D2PoolBlockStrc**)(Line + 0x10);
           if ((int)pNextBlock->nBlocks < (int)pPool->nBlocks) {
@@ -880,7 +886,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
             return nErrAddress;
           } else {
             /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection->pSync);
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (gadwBitMasks[nSlotIndex & 0x1f] & *(uint32_t*)(pFoundBlock[1] + ((int)nSlotIndex >> 5) * 4)) {
+            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (BitBuffer::gadwBitMasks[nSlotIndex & 0x1f] & *(uint32_t*)(pFoundBlock[1] + ((int)nSlotIndex >> 5) * 4)) {
               pFoundBlock = (uint32_t*)lpCriticalSection->nBlockSize;
               if ((int)pFoundBlock >= (int)nAllocSize) {
                 LeaveCriticalSection(&lpCriticalSection->pSync);
@@ -914,6 +920,10 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
     }
 
     return nErrAddress;
+}
+
+void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc) {
+    gpServerMemHeap = (uint32_t)(uintptr_t)pfnFunc;
 }
 
 void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nLine, int32_t nNull) {

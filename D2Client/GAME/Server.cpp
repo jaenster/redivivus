@@ -24,17 +24,17 @@ DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
     nLastGameCount = 0;
     int32_t bHasActiveGames;
     bHasActiveGames = 0;
-    EnterCriticalSection(&gHostGameStateCs);
+    EnterCriticalSection(&Game::gHostGameStateCs);
     int bEnteringGame;
     bEnteringGame = EnteringGame;
     int bExitingGame;
     bExitingGame = ExitingGame;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gHostGameStateCs);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&Game::gHostGameStateCs);
     do {
       if (bExitingGame) {
         D2Game::GAME::Server::QSERVER_ShutdownAllGames();
         D2Game::GAME::Server::QSERVER_DispatchAndCleanup(nullptr, 1);
-        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&gHostGameStateCs);
+        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&Game::gHostGameStateCs);
         /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Open server thread shut down\n");
         return 1;
       }
@@ -66,28 +66,28 @@ DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
             } else {
               nLastGameCount = nCurrentGameCount;
               if (nCurrentGameCount < _StaticFour) {
-                nFlags = (uint32_t)(D2IniData_client->nDifficulty == 1);
-                if (D2IniData_client->nDifficulty == 2) {
+                nFlags = (uint32_t)(ClientModeInGame::D2IniData_client->nDifficulty == 1);
+                if (ClientModeInGame::D2IniData_client->nDifficulty == 2) {
                   nFlags = 2;
                 }
-                if (D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
+                if (ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
                   nFlags |= 4;
                 }
-                if (D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) {
+                if (ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) {
                   nFlags |= 8;
                 }
 
-                pGameVersionInfo->pfnSendStartAdvEx3(D2IniData_client->szGAMENAME, D2IniData_client->szGamePassword, D2IniData_client->szGameDescription, nFlags);
+                pGameVersionInfo->pfnSendStartAdvEx3(ClientModeInGame::D2IniData_client->szGAMENAME, ClientModeInGame::D2IniData_client->szGamePassword, ClientModeInGame::D2IniData_client->szGameDescription, nFlags);
               }
             }
           }
         }
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gHostGameStateCs);
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&Game::gHostGameStateCs);
       bEnteringGame = EnteringGame;
       bExitingGame = ExitingGame;
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gHostGameStateCs);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&Game::gHostGameStateCs);
     } while (true);
 }
 

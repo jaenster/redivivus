@@ -51,7 +51,7 @@ void __fastcall NET_CLIENT_SetConnectionTimeout(int32_t nTimeoutMs) {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-    gnNetConnectionTimeoutMs = nTimeoutMs;
+    ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = nTimeoutMs;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882ce8);
 }
 
@@ -66,7 +66,7 @@ int32_t __stdcall NET_CLIENT_GetConnectionTimeout() {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-    int nTimeoutMs = gnNetConnectionTimeoutMs;
+    int nTimeoutMs = ::D2Net::SRC::Client::gnNetConnectionTimeoutMs;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882ce8);
     return nTimeoutMs;
 }
@@ -83,8 +83,8 @@ static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC:
 
     /* LPWSADATA lpWSAData for WSAStartup */ /* WORD wVersionRequired for WSAStartup */ gbClientConnectionShutdown = 0;
     WSAStartup(0x101, &gWSAData);
-    /* int protocol for socket */ /* int type for socket */ /* int af for socket */ CLIENT_SocketToServer = socket(2, 1, 0);
-    if (CLIENT_SocketToServer == -1) {
+    /* int protocol for socket */ /* int type for socket */ /* int af for socket */ ::D2Net::SRC::Client::CLIENT_SocketToServer = socket(2, 1, 0);
+    if (::D2Net::SRC::Client::CLIENT_SocketToServer == -1) {
       WSAGetLastError();
     }
 
@@ -96,9 +96,9 @@ static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC:
     name_00882b38 = (sockaddr*)(uint32_t)((uint32_t)(uint16_t)wPortNetOrder << 16 | (uint32_t)(uint16_t)*(uint16_t*)(char*)&name_00882b38);
     char* szResolvedIp = Fog::Src::Safesock::inet_nameToIp((char*)lpThreadParam);
     /* char * cp for inet_addr */ nClientSockAddrIn = inet_addr(szResolvedIp);
-    int nConnectResult = connect(CLIENT_SocketToServer, (sockaddr*)&name_00882b38, 0x10);
+    int nConnectResult = connect(::D2Net::SRC::Client::CLIENT_SocketToServer, (sockaddr*)&name_00882b38, 0x10);
     if (nConnectResult == -1) {
-      CLIENT_SocketToServer = -1;
+      ::D2Net::SRC::Client::CLIENT_SocketToServer = -1;
     }
 
     return 1;
@@ -106,7 +106,7 @@ static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC:
 
 // Creates server connection thread. Spawns thread via CreateThread with CLIENT_ServerConnectionThread_lpStartAddress entry point, stores handle in SERVER_THREAD.
 HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadParam) {
-    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, pThreadParam, 0, (LPDWORD)&lpThreadId_00882b30);
+    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, pThreadParam, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30);
     return SERVER_THREAD;
 }
 
@@ -124,7 +124,7 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
       return;
     }
 
-    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, szIpAddress, 0, (LPDWORD)&lpThreadId_00882b30);
+    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, szIpAddress, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30);
 }
 
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.
@@ -147,8 +147,8 @@ void __stdcall NET_CLIENT_ShutdownConnection() {
       return;
     }
 
-    int nCloseSocketResult = Fog::Src::Safesock::closeSocket(CLIENT_SocketToServer);
-    CLIENT_SocketToServer = -1;
+    int nCloseSocketResult = Fog::Src::Safesock::closeSocket(::D2Net::SRC::Client::CLIENT_SocketToServer);
+    ::D2Net::SRC::Client::CLIENT_SocketToServer = -1;
     if (nCloseSocketResult != -1) {
       return;
     }
@@ -257,7 +257,7 @@ int Unreferenced_0052aaa0() {
     if (!iVar1) {
       int extraout_EAX;
       EnterCriticalSection(&lpCriticalSection_00882ce8);
-      gnNetConnectionTimeoutMs = 0;
+      ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
       LeaveCriticalSection(&lpCriticalSection_00882ce8);
       iVar1 = extraout_EAX;
     }
@@ -270,7 +270,7 @@ int Unreferenced_0052aad0() {
     if (!iVar1) {
       int extraout_EAX;
       EnterCriticalSection(&lpCriticalSection_00882ce8);
-      gnNetConnectionTimeoutMs = 0;
+      ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
       LeaveCriticalSection(&lpCriticalSection_00882ce8);
       iVar1 = extraout_EAX;
     }
@@ -307,7 +307,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
             /* timeval * timeout for select */ /* fd_set * exceptfds for select */ /* fd_set * writefds for select */ /* fd_set * readfds for select */ /* int nfds for select */ fdSetRead.fd_count = 1;
             tvSelectTimeout.tv_sec = 0;
             tvSelectTimeout.tv_usec = 100000;
-            fdSetRead.fd_array[0] = CLIENT_SocketToServer;
+            fdSetRead.fd_array[0] = ::D2Net::SRC::Client::CLIENT_SocketToServer;
             nSelectResult = select(0x40, &fdSetRead, nullptr, nullptr, &tvSelectTimeout);
           } while (!nSelectResult);
 
@@ -319,12 +319,12 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
           BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
           if (!BVar1) {
             /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 0;
+            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
             LeaveCriticalSection(&lpCriticalSection_00882ce8);
           }
         }
 
-        /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ nSelectResult = __WSAFDIsSet(CLIENT_SocketToServer, &fdSetRead);
+        /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ nSelectResult = __WSAFDIsSet(::D2Net::SRC::Client::CLIENT_SocketToServer, &fdSetRead);
       } while (!nSelectResult);
 
       if (gbClientConnectionShutdown) {
@@ -334,7 +334,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
 
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
       /* int flags for recv */ /* int len for recv */ if (bCompressedMode) {
-        /* char * buf for recv */ /* SOCKET s for recv */ nSelectResult = recv(CLIENT_SocketToServer, (char*)(aCompressedBuf + (int)pCompressedRead), 0x5b4, 0);
+        /* char * buf for recv */ /* SOCKET s for recv */ nSelectResult = recv(::D2Net::SRC::Client::CLIENT_SocketToServer, (char*)(aCompressedBuf + (int)pCompressedRead), 0x5b4, 0);
         if (nSelectResult > 0) {
           pCompressedRead += nSelectResult;
           while (true) {
@@ -370,7 +370,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
           }
         }
       } else {
-        /* char * buf for recv */ /* SOCKET s for recv */ nSelectResult = recv(CLIENT_SocketToServer, pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x5b4, 0);
+        /* char * buf for recv */ /* SOCKET s for recv */ nSelectResult = recv(::D2Net::SRC::Client::CLIENT_SocketToServer, pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x5b4, 0);
         if (nSelectResult > 0) {
           pD2PacketsClientBuffer->nCount += nSelectResult;
           bCompressedMode = NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
@@ -383,7 +383,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 0;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
@@ -394,7 +394,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 0;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
@@ -417,14 +417,14 @@ void __fastcall NET_CLIENT_SendPacketToServer(void * pUnused, uint16_t nPacketSi
 }
 
 static int32_t NET_SendPacketToD2GSOnline(char * pBytes, size_t * nSize) {
-    int32_t nSendResult = send(CLIENT_SocketToServer, pBytes, (int)nSize, 0);
+    int32_t nSendResult = send(::D2Net::SRC::Client::CLIENT_SocketToServer, pBytes, (int)nSize, 0);
     if (nSendResult == -1) {
       BOOL BVar1;
       WSAGetLastError();
       BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
       if (!BVar1) {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 0;
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
         LeaveCriticalSection(&lpCriticalSection_00882ce8);
       }
 

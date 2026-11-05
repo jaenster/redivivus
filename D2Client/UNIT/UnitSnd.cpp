@@ -2357,7 +2357,7 @@ int gaUnitSoundIdsDruid[11] = {
     0xd65,
     0xaa0
 }; D2_GLOBAL_GUARD(gaUnitSoundIdsDruid, "gaUnitSoundIdsDruid");
-static int * gaUnitSoundTableByClassId[7] = { gaUnitSoundIdsAmazon, gaUnitSoundIdsSorceress, gaUnitSoundIdsNecromancer, gaUnitSoundIdsPaladin, gaUnitSoundIdsBarbarian, gaUnitSoundIdsDruid, gaUnitSoundIdsAssassin }; D2_STATIC_GUARD(gaUnitSoundTableByClassId, "gaUnitSoundTableByClassId");
+static int * gaUnitSoundTableByClassId[7] = { (int*)&D2Client::UNIT::UnitSnd::gaUnitSoundIdsAmazon, gaUnitSoundIdsSorceress, gaUnitSoundIdsNecromancer, gaUnitSoundIdsPaladin, gaUnitSoundIdsBarbarian, gaUnitSoundIdsDruid, gaUnitSoundIdsAssassin }; D2_STATIC_GUARD(gaUnitSoundTableByClassId, "gaUnitSoundTableByClassId");
 int gaAmbientMusicLevelSetTable[168] = {
     0x11,
     0x0,
@@ -2608,7 +2608,7 @@ static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
     }
 
     DWORD nMonStatsId = GetSndUnitClassId(pUnit);
-    if ((int)nMonStatsId < sgptDataTable->nTxtMonStatsSize) {
+    if ((int)nMonStatsId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       int16_t nBossId;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         BVar1 = Monster::IsMonsterSuperUnique(pUnit);
@@ -3230,7 +3230,7 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     if (eUnitType == UNIT_MONSTER) {
       DWORD nMonClassIdOrSounds;
       nMonClassIdOrSounds = GetSndUnitClassId(pUnit);
-      if ((int)nMonClassIdOrSounds < 0 || (int)nMonClassIdOrSounds >= sgptDataTable->nTxtMonStatsSize) {
+      if ((int)nMonClassIdOrSounds < 0 || (int)nMonClassIdOrSounds >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         nMonClassIdOrSounds = -1;
       }
 
@@ -3582,7 +3582,7 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
 
     int nBaseId;
     nBaseId = Player::TXT_MonStats_GetBaseId(pUnit);
-    if (nBaseId < 0 || nBaseId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nBaseId < 0 || nBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nBaseId = -1;
     }
 
@@ -4305,7 +4305,7 @@ void __stdcall SOUND_UpdateAmbientMusic() {
 
     eD2LevelId eCurrentLevelId;
     eCurrentLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if ((int)eCurrentLevelId >= sgptDataTable->nTxtLevelsSize) {
+    if ((int)eCurrentLevelId >= D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       return;
     }
     if (eCurrentLevelId == geLastProcessedAmbientMusicLevelId) {

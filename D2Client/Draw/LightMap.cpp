@@ -58,12 +58,13 @@ static uint32_t gnLightmapInterpSubdivRatio = 0; D2_STATIC_GUARD(gnLightmapInter
 uint32_t gLightMapBuffer[4096] = {}; D2_GLOBAL_GUARD(gLightMapBuffer, "gLightMapBuffer");
 static uint32_t gaLightmapInterpBuffer[4096] = {}; D2_STATIC_GUARD(gaLightmapInterpBuffer, "gaLightmapInterpBuffer");
 static unsigned int gnLightmapInterpDirX = {}; D2_STATIC_GUARD(gnLightmapInterpDirX, "gnLightmapInterpDirX");
-int gnLightmapWorldRefreshFlag = 0; D2_GLOBAL_GUARD(gnLightmapWorldRefreshFlag, "gnLightmapWorldRefreshFlag");
-int gnLightmapBufferState = 0; D2_GLOBAL_GUARD(gnLightmapBufferState, "gnLightmapBufferState");
+namespace D2Client::Draw::LightMap {
+int gnLightmapWorldRefreshFlag = 0; D2_GLOBAL_GUARD(gnLightmapWorldRefreshFlag, "D2Client::Draw::LightMap::gnLightmapWorldRefreshFlag");
+int gnLightmapBufferState = 0; D2_GLOBAL_GUARD(gnLightmapBufferState, "D2Client::Draw::LightMap::gnLightmapBufferState");
+} // namespace D2Client::Draw::LightMap
 static int gnLightmapWorldMaxX = 0; D2_STATIC_GUARD(gnLightmapWorldMaxX, "gnLightmapWorldMaxX");
 static int gnLightmapWorldMaxY = 0; D2_STATIC_GUARD(gnLightmapWorldMaxY, "gnLightmapWorldMaxY");
 uint32_t gnLightmapInterpolationState[257] = {}; D2_GLOBAL_GUARD(gnLightmapInterpolationState, "gnLightmapInterpolationState");
-D2LightMapCellStrc gaLightMapCells[2304] = {}; D2_GLOBAL_GUARD(gaLightMapCells, "gaLightMapCells");
 D2LightMapCellStrc gLightmapCellData[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellData, "gLightmapCellData");
 D2LightMapCellStrc gLightmapCellDataRed[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellDataRed, "gLightmapCellDataRed");
 D2LightMapCellStrc gLightmapCellDataGreen[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellDataGreen, "gLightmapCellDataGreen");
@@ -80,6 +81,10 @@ static uint32_t __stdcall WEATHER_ApproximateDistanceCustomCC(uint32_t nDeltaX, 
     }
 
     return (uint32_t)(nAbsY * 0x3d7 + nAbsX * 0x197) >> 10;
+}
+
+void __stdcall RENDERER_TogglePerspective_Unref_00474140() {
+    gbLightmapColorEnabled = (uint32_t)!gbLightmapColorEnabled;
 }
 
 D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType, int32_t nDiameter, uint8_t nGamma, uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
@@ -318,8 +323,8 @@ void __fastcall ROOM_GetAmbientLightColor(D2RoomStrc * pRoom, uint32_t * pIntens
     D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, (char*)((uintptr_t)&bUseLevel + 3), &colorInfo.nRed, &colorInfo.nGreen, &colorInfo.nBlue);
     nIntensity = bUseLevel >> 0x18;
     if (colorInfo.nRed == '\0' && colorInfo.nGreen == '\0' && colorInfo.nBlue == '\0') {
-      D2Common::Environment::DRLGENV_GetLightColorFromAct(sgpDrlgAct, (uint8_t*)&colorInfo.nRed, (uint8_t*)&colorInfo.nGreen, (uint8_t*)&colorInfo.nBlue);
-      nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(sgpDrlgAct);
+      D2Common::Environment::DRLGENV_GetLightColorFromAct(GAME::Game::sgpDrlgAct, (uint8_t*)&colorInfo.nRed, (uint8_t*)&colorInfo.nGreen, (uint8_t*)&colorInfo.nBlue);
+      nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(GAME::Game::sgpDrlgAct);
     }
 
     store_color:
@@ -1372,5 +1377,17 @@ void __fastcall ACTCALLBACKFN(D2RoomStrc * pRoom) {
       pLightMap = pLightMap->pPrev;
     } while (true);
 }
+
+} // namespace D2Client::Draw::LightMap
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Client::Draw::LightMap {
+
+// Initialized data
+
+D2LightMapCellStrc gaLightMapCells[2304] = {}; D2_GLOBAL_GUARD(gaLightMapCells, "D2Client::Draw::LightMap::gaLightMapCells");
 
 } // namespace D2Client::Draw::LightMap

@@ -416,7 +416,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                 switch (pRecipe->nOp) {
                                   case 0xf:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -433,7 +433,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x10:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -450,7 +450,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x11:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -466,7 +466,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x12:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -483,7 +483,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x13:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -500,7 +500,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x14:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -517,7 +517,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x15:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -533,7 +533,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x16:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -550,7 +550,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x17:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -567,7 +567,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x18:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -584,7 +584,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x19:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -600,7 +600,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   break;
                                   case 0x1a:
                                     eStatId = pRecipe->nParam;
-                                  if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+                                  if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
                                     pItemStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
                                     if (!pItemStatCostTxt) {
                                       continue;
@@ -643,7 +643,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   if ((char)wInputFlags < '\0') {
                                     nItemCode = pCubeItemTxt->dwUberCode;
                                     if (nItemCode != 0x20202020) {
-                                      pTxtLink = sgptDataTable->sTxtItemsLink;
+                                      pTxtLink = D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink;
                                       resolve_uber_upgrade:
                                       pUpgradeClassId = (D2UnitStrc*)Fog::Src::Excel::GetClassIdFromName(pTxtLink, nItemCode, 0);
                                       if ((int)pUpgradeClassId >= 0) {
@@ -656,7 +656,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                     }
                                   } else {
                                     try_ultra_upgrade:
-                                    if (wInputFlags & 0x100 && pCubeItemTxt->dwUltraCode != 0x20202020 && (pUpgradeClassId = (D2UnitStrc*)Fog::Src::Excel::GetClassIdFromName(sgptDataTable->sTxtItemsLink, pCubeItemTxt->dwUltraCode, 0) , (int)pUpgradeClassId >= 0) && (pUpgradeItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine((uint32_t)pUpgradeClassId) , pUpgradeItemTxt != 0)) {
+                                    if (wInputFlags & 0x100 && pCubeItemTxt->dwUltraCode != 0x20202020 && (pUpgradeClassId = (D2UnitStrc*)Fog::Src::Excel::GetClassIdFromName(D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink, pCubeItemTxt->dwUltraCode, 0) , (int)pUpgradeClassId >= 0) && (pUpgradeItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine((uint32_t)pUpgradeClassId) , pUpgradeItemTxt != 0)) {
                                       nFileIndex = pGame->bExpansion;
                                       store_upgrade_class:
                                       if (nFileIndex || (uint16_t)pUpgradeItemTxt->wVersion < 100) {
@@ -674,7 +674,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
 
                                   nItemCode = pCubeItemTxt->dwUberCode;
                                   if (nItemCode != 0x20202020) {
-                                    pTxtLink = sgptDataTable->sTxtItemsLink;
+                                    pTxtLink = D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink;
                                     goto resolve_uber_upgrade;
                                   }
                                 }
@@ -1048,7 +1048,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
                 uSourceFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pDVar2);
                 aOutputMeta[3] = (uint16_t)(uSourceFileIndex + 1);
                 nOutItemLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pDVar2);
-                if ((char)eSourceQuality == '\a' && !(gadwBitMasks[uSourceFileIndex & 0x1f] & pGameLocal->fUniqueSpawn[(int)uSourceFileIndex >> 5])) {
+                if ((char)eSourceQuality == '\a' && !(Fog::BitBuffer::gadwBitMasks[uSourceFileIndex & 0x1f] & pGameLocal->fUniqueSpawn[(int)uSourceFileIndex >> 5])) {
                   nTmp = uSourceFileIndex;
                 }
               }
@@ -1108,7 +1108,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           pDVar2 = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGameLocal, &sItemGenContext, 0);
           apDStack_c8[nOutputSlotIndex] = pDVar2;
           if ((int)nTmp >= 0) {
-            pGameTmp->fUniqueSpawn[(int)nTmp >> 5] &= gadwInvBitMasks[nTmp & 0x1f];
+            pGameTmp->fUniqueSpawn[(int)nTmp >> 5] &= Fog::BitBuffer::gadwInvBitMasks[nTmp & 0x1f];
           }
         }
       }
@@ -1375,7 +1375,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 3:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1392,7 +1392,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 4:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1409,7 +1409,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 5:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1426,7 +1426,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 6:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1446,7 +1446,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 7:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1463,7 +1463,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 8:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1480,7 +1480,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 9:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1497,7 +1497,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 10:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (pStatCostTxt) {
               nThreshold = pRecipe->nValue >> D2_SHIFT_COUNT(pStatCostTxt->valshift);
@@ -1511,7 +1511,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 0xb:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1528,7 +1528,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 0xc:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1545,7 +1545,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 0xd:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (!pStatCostTxt) {
               continue;
@@ -1562,7 +1562,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
           break;
           case 0xe:
             eStatId = pRecipe->nParam;
-          if ((int)eStatId >= 0 && (int)eStatId <= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eStatId >= 0 && (int)eStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eStatId);
             if (pStatCostTxt) {
               nThreshold = pRecipe->nValue >> D2_SHIFT_COUNT(pStatCostTxt->valshift);
@@ -1857,11 +1857,9 @@ static void __stdcall SetStatsOnEar(BOOL bHardcore, D2UnitStrc * pUnit, D2UnitSt
     char* szPlayerName;
     eD2ItemTypes eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pOther);
     if (eItemType == ITEMTYPE_PlayerBodyPart) {
-      uint8_t nEarLevel;
       szPlayerName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
       D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pOther, szPlayerName);
-      nEarLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit);
-      D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pOther, nEarLevel);
+      D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pOther, D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit));
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pOther, ITEMFLAG_HARDCORE, bHardcore);
       return;
     }

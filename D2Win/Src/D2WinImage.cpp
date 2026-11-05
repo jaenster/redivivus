@@ -147,7 +147,7 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
     }
 
     uint32_t uVar1 = pImage->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       if (!pImage->sControl.pDC6) {
         return 1;
       }
@@ -327,7 +327,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     }
 
     uint32_t dwState = pImage->sControl.dwState;
-    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
       nRelMouseY = pImage->sControl.dwSizeY - pImage->sControl.dwPosY + D2WinMain::nPosY;
       nRelMouseX = D2WinMain::nPosX - pImage->sControl.dwPosX;
       pHitAreaTable = pImage->pHitAreas;
@@ -365,8 +365,8 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     ::D2WinImage* pNewImage = D2_NEW_AT(::D2WinImage, ".\\Src\\D2WinImage.cpp", 0x1d);
     memset(pNewImage, 0, 0x4c);
     pNewImage->sControl.neD2FormType = FORM_Image;
-    pNewImage->sControl.dwState |= gadwBitMasks[0];
-    dwState = pNewImage->sControl.dwState | gadwBitMasks[2];
+    pNewImage->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pNewImage->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewImage->sControl.pDC6 = pDC6;
     pNewImage->sControl.dwState = dwState;
     pNewImage->sControl.dwSizeX = nSizeX;
@@ -392,8 +392,8 @@ D2WinImageEx * __fastcall D2WINIMAGE_CreateImageEx(int32_t nPosX, int32_t nPosY,
     D2WinImageEx* pNewImageEx = D2_NEW_AT(D2WinImageEx, ".\\Src\\D2WinImage.cpp", 0x3b);
     memset(pNewImageEx, 0, 0x54);
     pNewImageEx->sImage.sControl.neD2FormType = FORM_Image;
-    pNewImageEx->sImage.sControl.dwState |= gadwBitMasks[0];
-    pNewImageEx->sImage.sControl.dwState |= gadwBitMasks[2];
+    pNewImageEx->sImage.sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    pNewImageEx->sImage.sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];
     pNewImageEx->sImage.sControl.pDC6 = pDC6;
     pNewImageEx->sImage.sControl.dwPosX = nPosX;
     pNewImageEx->sImage.sControl.dwSizeX = nSizeX;

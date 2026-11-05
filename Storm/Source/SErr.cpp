@@ -5,6 +5,7 @@
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
 #include "Storm/H/stpl.h"
+#include "Storm/Source/SEVT.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
@@ -38,10 +39,6 @@ uint32_t dwLastErrorCode = 0; D2_GLOBAL_GUARD(dwLastErrorCode, "dwLastErrorCode"
 static pfnBlizzardError pfnBlizzardErrorCallback = (pfnBlizzardError)0; D2_STATIC_GUARD(pfnBlizzardErrorCallback, "pfnBlizzardErrorCallback");
 
 namespace Storm::Source::SErr {
-
-void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc) {
-    gpServerMemHeap = (uint32_t)(uintptr_t)pfnFunc;
-}
 
 // Stores the caller's function pointer into pfnBlizzardErrorCallback, which SErrDisplayError 0041caf0 invokes via CALL dword ptr [0x007790f8].
 // @name-authority CONFIRMED FROM THIS BINARY, not from the oracle. Game.exe has its own (24-entry) export table and this is ordinal 17 at RVA 0x1c0e0, mangled ?SErrSetBlizzardErrorFunction@@YIXP6IXPBD0QAPBDII_N@Z@Z (the literal lives at 007048b4). That decodes to __fastcall void (*)(void (__fastcall*)(const char*, const char*, const char* const*, unsigned, unsigned, bool)) - one function-pointer argument, matching the body exactly. This name is as authoritative as a name can get.
@@ -110,11 +107,11 @@ static LPSTR * SERR_GetString(int32_t nErrorIndex) {
     s_Function___s__006cf274,
     s_Object___s__006cf268,
     s_Handle___s__006cf25c,
-    s_Expr___s_006cf250,
-    s__s_006cf248,
+    (char*)&Storm::Source::SErr::s_Expr___s_006cf250,
+    (char*)&Storm::Source::SErr::s__s_006cf248,
     s_Press_OK_to_terminate_the_applica_006cf220,
     s_Do_you_wish_to_terminate_the_appl_006cf1f4,
-    s_File___s_006cf1e8
+    (char*)&Storm::Source::SErr::s_File___s_006cf1e8
 }; D2_STATIC_GUARD(gaSErrMessageStrings, "Storm::Source::SErr::SERR_GetString::gaSErrMessageStrings");
     static char gszErrorStringBuffer[256] = {}; D2_STATIC_GUARD(gszErrorStringBuffer, "Storm::Source::SErr::SERR_GetString::gszErrorStringBuffer");
 
@@ -903,14 +900,6 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
 // @oracle-basis Instruction-for-instruction the same forwarder. The oracle body is li r4,0x0 ; bl 0x100156d0 (= SErrReportNamedResourceLeak) and nothing else; this one is DebugMemoryHandleError(szMessage, NULL). Same argument passed through in slot 1, same NULL in slot 2, same sole callee, one parameter against the target's two.
 void __stdcall SErrReportResourceLeak(char * szMessage) {
     SErrReportNamedResourceLeak(szMessage, nullptr);
-}
-
-void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230() {
-    InitializeCriticalSection(&lpCriticalSection_0077ae28);
-}
-
-void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240() {
-    DeleteCriticalSection(&lpCriticalSection_0077ae28);
 }
 
 void StaticInit_gStormErrorCallbackList() {

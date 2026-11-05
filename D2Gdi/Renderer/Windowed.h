@@ -136,6 +136,8 @@ BOOL __fastcall DrawGroundTile(struct D2TileLibraryEntryStrc * pTile, struct D2G
 void __fastcall CloseSmacker(struct D2SmackerContextStrc * pContext);
 void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int nVersion);
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
+uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut);
+char * __fastcall FOG_FindCharInString(char * szText, char cSearchChar);
 // 3 internal functions (defined in .cpp)
 
 } // namespace D2Gdi::Renderer::Windowed

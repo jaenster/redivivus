@@ -189,7 +189,7 @@ static void __stdcall GFXUTIL_SetMissileCelFile(D2GfxDataStrc * pGfxData, D2Unit
     }
 
     int nMissileTxtIdx = pMissile->nClassId;
-    D2MissilesTxt* pMissilesTxt = nMissileTxtIdx >= 0 && nMissileTxtIdx < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileTxtIdx : nullptr;
+    D2MissilesTxt* pMissilesTxt = nMissileTxtIdx >= 0 && nMissileTxtIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileTxtIdx : nullptr;
     if (!pMissilesTxt) {
       return;
     }
@@ -258,11 +258,11 @@ int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUni
           if ((int)nId < 0) {
             return 0;
           }
-          if ((int)nId >= sgptDataTable->nTxtMonStatsSize) {
+          if ((int)nId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             return 0;
           }
-          if (sgptDataTable->pTxtMonStats + nId) {
-            return *(int32_t*)sgptDataTable->pTxtMonStats[nId].Code;
+          if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nId) {
+            return *(int32_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nId].Code;
           }
 
           return 0;
@@ -349,13 +349,13 @@ uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(DC6Block * pDC6Block, int32_t nDr
       nScreenX -= nHeight;
       nWidth += nHeight;
     }
-    if (!(nScreenX <= ScreenSizeX)) {
+    if (!(nScreenX <= UI::ui::ScreenSizeX)) {
       return 0;
     }
     if (-1 >= nWidth + nScreenX) {
       return 0;
     }
-    if (!(nOffsetY + nScreenY - nHeight <= ScreenSizeY)) {
+    if (!(nOffsetY + nScreenY - nHeight <= UI::Inv::ScreenSizeY)) {
       return 0;
     }
 
@@ -461,7 +461,7 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
 }
 
 static int32_t GFXUTIL_GetOverlayNumDirections(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize ? D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 1;
     }
@@ -574,7 +574,7 @@ BOOL __fastcall GFXUTIL_UnitHasAnimMode(D2UnitStrc * pUnit, uint32_t nMode) {
       break;
       case UNIT_MONSTER:
         pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
-      if (pMonStats2 && (uint8_t)gadwBitMasks[nMode & 7] & pMonStats2->HD[(int)nMode >> 3]) {
+      if (pMonStats2 && (uint8_t)Fog::BitBuffer::gadwBitMasks[nMode & 7] & pMonStats2->HD[(int)nMode >> 3]) {
         return 1;
       }
 
@@ -608,7 +608,7 @@ static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2
     uint32_t nNumDirections = 1;
     switch (eUnitType) {
       case UNIT_PLAYER:
-        if (!gnGfxDirectionCountCache && (pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI() , pUnit == pPlayerUnit_lcl)) {
+        if (!Gfx::gnGfxDirectionCountCache && (pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI() , pUnit == pPlayerUnit_lcl)) {
           return 0x10;
         }
       return 8;
@@ -1025,12 +1025,12 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
       switch (nResult) {
         case 1:
           {
-            __frame0.nScreenX -= ScreenSizeX / 4;
+            __frame0.nScreenX -= UI::ui::ScreenSizeX / 4;
             break;
           }
         case 2:
           {
-            __frame0.nScreenX += ScreenSizeX / 4;
+            __frame0.nScreenX += UI::ui::ScreenSizeX / 4;
             break;
           }
       }
@@ -1273,7 +1273,7 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
       default:
         nOverlayId = pGfxData->nOverlayId;
       pGfxData->dwFlags |= 2;
-      D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+      D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize ? D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
       if (pOverlayTxt) {
         pGfxData->szFilename = pOverlayTxt->Filename;
       }

@@ -975,7 +975,7 @@ void __fastcall Objects_InitFn79_Zoo(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    int nMonStatsSize = sgptDataTable->nTxtMonStatsSize;
+    int nMonStatsSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     int nAttempt = 0;
     do {
       int32_t nRolledMonId;
@@ -986,7 +986,7 @@ void __fastcall Objects_InitFn79_Zoo(D2ObjectInitFnArg * pInitArg) {
       nRolledMonId = D2Client::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), 1, nMonStatsSize);
       nAttempt++;
       pQuestSpecificA1Q4->nQuestFlags = nRolledMonId;
-      if (nRolledMonId >= 0 && nRolledMonId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nRolledMonId && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nRolledMonId] + 0xe) & gadwBitMasks[6]) {
+      if (nRolledMonId >= 0 && nRolledMonId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRolledMonId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nRolledMonId] + 0xe) & Fog::BitBuffer::gadwBitMasks[6]) {
         pQuestSpecificA1Q4->field_0xA0 = '\x01';
       }
     } while (pQuestSpecificA1Q4->field_0xA0 == '\0');

@@ -680,7 +680,7 @@ void __stdcall LAUNCHER_DestroyLauncherForms() {
 }
 
 int __stdcall isServerDown() {
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
       if (!bHasPeerName) {
         return -1;
@@ -788,15 +788,15 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     gpLobbyForm0.pCtlLobbyUserListNextLineButton = 0;
     gpLobbyForm0.pCtlLobbyUnknownPanel = 0;
     gpLobbyForm0.pCtlLobbyLadderMode = 0;
-    gpLobbyForm0.pCtlLobbyCreateButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 6);
-    gpLobbyForm0.pCtlLobbyChannelButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 7);
-    gpLobbyForm0.pCtlLobbyJoinButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 8);
-    gpLobbyForm0.pCtlLobbyLadderButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 9);
-    gpLobbyForm0.pCtlLobbyGameModePanel = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 10);
-    gpLobbyForm0.pCtlLobbyUnknownPanel = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0xf);
-    gpLobbyForm0.pCtlLobbyLadderMode = (::D2WinSmack*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x10);
+    gpLobbyForm0.pCtlLobbyCreateButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 6);
+    gpLobbyForm0.pCtlLobbyChannelButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 7);
+    gpLobbyForm0.pCtlLobbyJoinButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 8);
+    gpLobbyForm0.pCtlLobbyLadderButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 9);
+    gpLobbyForm0.pCtlLobbyGameModePanel = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 10);
+    gpLobbyForm0.pCtlLobbyUnknownPanel = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xf);
+    gpLobbyForm0.pCtlLobbyLadderMode = (::D2WinSmack*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x10);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, 0);
-    FORMS_PredefinedFormStrc* pFormDef = gaPredefinedForms_b + 0x11;
+    FORMS_PredefinedFormStrc* pFormDef = OOGUtilities::gaPredefinedForms_b + 0x11;
     D2ControlStrc** ppCtlSlot = gpCtlLobbyChat;
     do {
       D2ControlStrc* pCtl;
@@ -806,14 +806,14 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
       pFormDef++;
     } while ((int)ppCtlSlot <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
 
-    gpCtlConfirmDialog = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x13);
+    gpCtlConfirmDialog = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x13);
     for (nDifficultyDone = 0; nDifficultyDone < 0x64; nDifficultyDone++) {
       wszClassName[nDifficultyDone] = L'\0';
     }
 
     sLevelLineText.szNameAndTitle[0] = '\0';
-    eD2PlayerStatus ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
-    char* pszTitlePrefix = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, ePlayerStatus >> 8 & 0x1f, ePlayerStatus & 4, ePlayerStatus & 0x20);
+    eD2PlayerStatus ePlayerStatus = OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
+    char* pszTitlePrefix = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, ePlayerStatus >> 8 & 0x1f, ePlayerStatus & 4, ePlayerStatus & 0x20);
     char* pszDst = pszTitlePrefix;
     if (pszTitlePrefix) {
       pszDst = pszDst + strlen(pszDst) + 1;
@@ -837,10 +837,10 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
       }
     }
 
-    pszDst = D2IniData_multiplayer->szNAME;
-    strcat(sLevelLineText.szNameAndTitle, D2IniData_multiplayer->szNAME);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpCtlConfirmDialog, sLevelLineText.szNameAndTitle, (uint8_t)(char)D2IniData_multiplayer->neD2PlayerStatus >> 2 & 1);
-    LAUNCHER_GetDifficultyNameStringId((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, wszClassName);
+    pszDst = OOGUtilities::D2IniData_multiplayer->szNAME;
+    strcat(sLevelLineText.szNameAndTitle, pszDst);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpCtlConfirmDialog, sLevelLineText.szNameAndTitle, (uint8_t)(char)OOGUtilities::D2IniData_multiplayer->neD2PlayerStatus >> 2 & 1);
+    LAUNCHER_GetDifficultyNameStringId((uint32_t)OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, wszClassName);
     D2UiLevelLineTextStrc* pDVar1 = &sLevelLineText;
     for (nDifficultyDone = 0x32; nDifficultyDone; nDifficultyDone--) {
       pDVar1->wszLevelLine[0] = L'\0';
@@ -858,8 +858,8 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     wszLevelStr[7] = L'\0';
     wszLevelStr[8] = L'\0';
     wszLevelStr[9] = L'\0';
-    uint32_t nCharLevel = (uint32_t)D2IniData_multiplayer->padding_0x35F[0x62];
-    if (!D2IniData_multiplayer->padding_0x35F[0x62]) {
+    uint32_t nCharLevel = (uint32_t)OOGUtilities::D2IniData_multiplayer->padding_0x35F[0x62];
+    if (!OOGUtilities::D2IniData_multiplayer->padding_0x35F[0x62]) {
       nCharLevel = 1;
     }
 
@@ -871,7 +871,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     D2Lang::Unicode::UNISYS::AppendToBuffer(sLevelLineText.wszLevelLine, wszClassName);
     D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, sLevelLineText.wszLevelLine, 0, false, 0);
     /* Last Difficulty Setting Completed: */ D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0x2b74), 0, false, 0);
-    nDifficultyDone = (int)((D2IniData_multiplayer->eCTEMP_eD2PlayerStatus >> 8 & 0x1f) / (int)((D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20 | 0x80) >> 5));
+    nDifficultyDone = (int)((OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus >> 8 & 0x1f) / (int)((OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20 | 0x80) >> 5));
     int nVertAlign = 0;
     bool bCentered = false;
     int32_t dwTextColor = 0;
@@ -899,7 +899,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
 
     pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wDifficultyStrId);
     D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, pwszLocaleStr, dwTextColor, bCentered, nVertAlign);
-    BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x17);
+    BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x17);
     if (!BattleNetNews) {
       return;
     }
@@ -972,6 +972,14 @@ static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_
         }
       } while (true);
     }
+}
+
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230() {
+    InitializeCriticalSection(&lpCriticalSection_0077ae28);
+}
+
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240() {
+    DeleteCriticalSection(&lpCriticalSection_0077ae28);
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
@@ -1355,7 +1363,7 @@ static D2ControlStrc * FORMS_CreateAnyFormFromListEx(int32_t nFormIndex) {
       exit(-1);
     }
 
-    D2ControlStrc* pForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + nFormIndex);
+    D2ControlStrc* pForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + nFormIndex);
     FORMS_pListEx[FORMS_nListExCount] = pForm;
     FORMS_nListExCount++;
     return pForm;
@@ -1427,11 +1435,11 @@ int __stdcall CHATDLG_UpdateButtonVisibility() {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyLadderButton, 0);
-    if (!(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Died) || !(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore)) {
+    if (!(OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Died) || !(OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore)) {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyCreateButton->sControl, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyJoinButton->sControl, 1);
     }
-    if (D2IniData_multiplayer->padding_0x35F[2]) {
+    if (OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
       bConfirmJoinVisible = 1;
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, bConfirmJoinVisible);
     } else {
@@ -1928,11 +1936,11 @@ void __stdcall CHATDLG_DestroyAllForms() {
     g_pLadderBoardTextBox = 0;
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpControlJoinGameError);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpChatDlgMainControl);
-    if (gnGameListFilterState == 1) {
+    if (OOGUtilities::gnGameListFilterState == 1) {
       OOGUtilities::OOGUTIL_DestroyChatCommandsDialog();
     }
-    if (gpChatFormList == (void*)0x3) {
-      gpChatFormList = 0;
+    if (OOGUtilities::gpChatFormList == (void*)0x3) {
+      OOGUtilities::gpChatFormList = 0;
     }
     if (!pGameListCache) {
       return;
@@ -2011,7 +2019,7 @@ int __fastcall UIMENU_DrawSpecificJoinGameError(uint16_t * wszText, ChatDlgCallb
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyLadderButton, 0);
-    gpControlJoinGameError = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x1d);
+    gpControlJoinGameError = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x1d);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpControlJoinGameError, wszText);
     gpfnChatDlgCallback = pfnCallback;
     return 1;
@@ -2023,7 +2031,7 @@ void __stdcall CHATDLG_ResetButtonsAndForms() {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyLadderButton, 0);
-    gpChatFormList = 0;
+    OOGUtilities::gpChatFormList = 0;
 }
 
 void __stdcall CHATDLG_CreateAllForms() {
@@ -2033,7 +2041,7 @@ void __stdcall CHATDLG_CreateAllForms() {
     }
 
     gbLobbyInitialized = 0;
-    sprintf(szRealmCharName, "%s,%s", D2IniData_multiplayer->szCharacterRealm, D2IniData_multiplayer->szNAME);
+    sprintf(szRealmCharName, "%s,%s", OOGUtilities::D2IniData_multiplayer->szCharacterRealm, OOGUtilities::D2IniData_multiplayer->szNAME);
     CHATDLG_DestroyLobbyChatForms();
     if (gpChatDlgCharSelCompositeUnit) {
       D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpChatDlgCharSelCompositeUnit, 1);
@@ -2041,18 +2049,18 @@ void __stdcall CHATDLG_CreateAllForms() {
 
     gpChatDlgCharSelCompositeUnit = 0;
     D2Win::Src::D2WinMain::D2WINMAIN_SetBackgroundDC6(gpDC6BnetBackground);
-    gpLobbyForm0.pLobbyForm0 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b);
-    gpLobbyForm0.pLobbyForm1 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 1);
-    gpLobbyForm0.pLobbyForm2 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 2);
-    gpLobbyForm0.pLobbyForm3 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 3);
-    gpLobbyForm0.pLobbyForm4 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 4);
-    gpLobbyForm0.pLobbyForm5 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 5);
-    gpLobbyForm0.pCtlLobbyUserListPrevPageButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0xb);
-    gpLobbyForm0.pCtlLobbyUserListNextPageButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0xc);
-    gpLobbyForm0.pCtlLobbyUserListPrevLineButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0xd);
-    gpLobbyForm0.pCtlLobbyUserListNextLineButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0xe);
+    gpLobbyForm0.pLobbyForm0 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b);
+    gpLobbyForm0.pLobbyForm1 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 1);
+    gpLobbyForm0.pLobbyForm2 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 2);
+    gpLobbyForm0.pLobbyForm3 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 3);
+    gpLobbyForm0.pLobbyForm4 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 4);
+    gpLobbyForm0.pLobbyForm5 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 5);
+    gpLobbyForm0.pCtlLobbyUserListPrevPageButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xb);
+    gpLobbyForm0.pCtlLobbyUserListNextPageButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xc);
+    gpLobbyForm0.pCtlLobbyUserListPrevLineButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xd);
+    gpLobbyForm0.pCtlLobbyUserListNextLineButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0xe);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, 1);
-    gpChatDlgInputEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x16);
+    gpChatDlgInputEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x16);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpChatDlgInputEditBox, (fpD2WinEditBoxFilter)CHATDLG_HandleTabCompletion);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpChatDlgInputEditBox, ComCallback::EDITBOX_Cb_COMCALLBACK_ClearChannelUserList);
     D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
@@ -2072,9 +2080,9 @@ void __stdcall CHATDLG_CreateAllForms() {
       ppButtonSlot++;
     } while (nYPos < 700);
 
-    gpCtlLobbyAccountList = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x14);
+    gpCtlLobbyAccountList = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x14);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpCtlLobbyAccountList, 0);
-    gpCtlLobbyLadderNewsToggle = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x1c);
+    gpCtlLobbyLadderNewsToggle = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x1c);
     if (!gbLadderNewsExpanded) {
       return;
     }
@@ -2091,7 +2099,7 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
     char cCur;
     CHATDLG_DestroyAllForms();
     gpfnChatDlgCallback = OOGUtilities::OOG_DisableControlCallback;
-    char* pcSrc = D2IniData_multiplayer->szGAMENAME;
+    char* pcSrc = OOGUtilities::D2IniData_multiplayer->szGAMENAME;
     mcp0x03data* pSrcName = pMcpData;
     do {
       cCur = pSrcName->szGameName[0];
@@ -2101,7 +2109,7 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
     } while (cCur != '\0');
 
     pcSrc = pMcpData->szGamePassword;
-    char* pcDst = D2IniData_multiplayer->szGamePassword;
+    char* pcDst = OOGUtilities::D2IniData_multiplayer->szGamePassword;
     do {
       cCur = *pcSrc;
       *pcDst = cCur;
@@ -2110,7 +2118,7 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
     } while (cCur != '\0');
 
     pcSrc = pMcpData->szGameDescription;
-    pcDst = D2IniData_multiplayer->szGameDescription;
+    pcDst = OOGUtilities::D2IniData_multiplayer->szGameDescription;
     do {
       cCur = *pcSrc;
       *pcDst = cCur;
@@ -2118,12 +2126,12 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
       pcDst++;
     } while (cCur != '\0');
 
-    gpChatFormList = (void*)0x1;
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    OOGUtilities::gpChatFormList = (void*)0x1;
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       short int nNextReqId;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (nHasPeer) {
-        D2IniData_multiplayer->nGAMETYPE = GAMETYPE_BNET_BETA;
+        OOGUtilities::D2IniData_multiplayer->nGAMETYPE = GAMETYPE_BNET_BETA;
         nReqId = CreateJoinGameRequestId;
         do {
           nNextReqId = nReqId + 1;
@@ -2133,18 +2141,18 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
         CreateJoinGameRequestId = (uint16_t)nNextReqId;
         D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
         D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x03_CreateGame(pMcpData, (int16_t)CreateJoinGameRequestId);
-        LastGameRequestId = CreateJoinGameRequestId;
+        OOGUtilities::LastGameRequestId = CreateJoinGameRequestId;
         return 1;
       }
 
-      gpChatFormList = 0;
+      OOGUtilities::gpChatFormList = 0;
       /* No new games can be created right now, Please Join a game or try later. */ pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x2b0c);
       UIMENU_DrawSpecificJoinGameError(pwszError, OOGUtilities::OOG_DisableControlCallback);
       return 0;
     }
 
-    D2IniData_multiplayer->nGAMETYPE = GAMETYPE_OBNET_HOST;
-    pcSrc = D2IniData_multiplayer->szSERVERIP;
+    OOGUtilities::D2IniData_multiplayer->nGAMETYPE = GAMETYPE_OBNET_HOST;
+    pcSrc = OOGUtilities::D2IniData_multiplayer->szSERVERIP;
     do {
       cCur = *szServerIp;
       *pcSrc = cCur;
@@ -2164,11 +2172,11 @@ void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPa
     int32_t nHasPeer;
     uint16_t* pwszError;
     char cCur;
-    gpChatFormList = (void*)0x2;
+    OOGUtilities::gpChatFormList = (void*)0x2;
     CHATDLG_DestroyAllForms();
     gpfnChatDlgCallback = OOGUtilities::OOG_DisableControlCallback;
-    D2IniData_multiplayer->nJOINID = nJoinId;
-    char* pcDst = D2IniData_multiplayer->szGAMENAME;
+    OOGUtilities::D2IniData_multiplayer->nJOINID = nJoinId;
+    char* pcDst = OOGUtilities::D2IniData_multiplayer->szGAMENAME;
     char* pcSrc = szGameName;
     do {
       cCur = *pcSrc;
@@ -2177,7 +2185,7 @@ void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPa
       pcDst++;
     } while (cCur != '\0');
 
-    pcDst = D2IniData_multiplayer->szGamePassword;
+    pcDst = OOGUtilities::D2IniData_multiplayer->szGamePassword;
     pcSrc = szPassword;
     do {
       cCur = *pcSrc;
@@ -2186,11 +2194,11 @@ void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPa
       pcDst++;
     } while (cCur != '\0');
 
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       uint16_t uVar1;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (nHasPeer) {
-        D2IniData_multiplayer->nGAMETYPE = GAMETYPE_BNET;
+        OOGUtilities::D2IniData_multiplayer->nGAMETYPE = GAMETYPE_BNET;
         uVar1 = CreateJoinGameRequestId;
         do {
           CreateJoinGameRequestId = uVar1 + 1;
@@ -2198,19 +2206,19 @@ void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPa
         } while (!CreateJoinGameRequestId);
 
         D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x04_JoinGame(szGameName, szPassword, CreateJoinGameRequestId);
-        LastGameRequestId = CreateJoinGameRequestId;
+        OOGUtilities::LastGameRequestId = CreateJoinGameRequestId;
         D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, 1);
         return;
       }
 
-      gpChatFormList = 0;
+      OOGUtilities::gpChatFormList = 0;
       pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x1413);
       UIMENU_DrawSpecificJoinGameError(pwszError, OOGUtilities::OOG_DisableControlCallback);
       return;
     }
 
-    D2IniData_multiplayer->nGAMETYPE = GAMETYPE_OBNET_JOIN;
-    pcSrc = D2IniData_multiplayer->szSERVERIP;
+    OOGUtilities::D2IniData_multiplayer->nGAMETYPE = GAMETYPE_OBNET_JOIN;
+    pcSrc = OOGUtilities::D2IniData_multiplayer->szSERVERIP;
     do {
       cCur = *szServerIp;
       *pcSrc = cCur;
@@ -2347,7 +2355,7 @@ BOOL __stdcall CHATDLG_OnTimerRequestLadderData(D2ControlMsg * pControlMsg) {
 // Updates ladder board display after player click - renders rank cells with class colors and experience
 void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCount, int32_t nEntryIndex, char nFilterMode, int32_t nLadderData) {
     // Static local variables (originally global data)
-    static char * gaszPlayerClassTokens[7] = { s_ama_006d5564, s_sor_006d5568, s_nec_006d556c, s_pal_006d5570, s_bar_006d5574, s_dru_006d5578, s_asn_006d557c }; D2_STATIC_GUARD(gaszPlayerClassTokens, "D2Multi::ChatDlg::CHATDLG_HandleChatListClick::gaszPlayerClassTokens");
+    static char * gaszPlayerClassTokens[7] = { (char*)&D2Multi::ChatDlg::s_ama_006d5564, (char*)&D2Multi::ChatDlg::s_sor_006d5568, (char*)&D2Multi::ChatDlg::s_nec_006d556c, (char*)&D2Multi::ChatDlg::s_pal_006d5570, (char*)&D2Multi::ChatDlg::s_bar_006d5574, (char*)&D2Multi::ChatDlg::s_dru_006d5578, (char*)&D2Multi::ChatDlg::s_asn_006d557c }; D2_STATIC_GUARD(gaszPlayerClassTokens, "D2Multi::ChatDlg::CHATDLG_HandleChatListClick::gaszPlayerClassTokens");
 
     int nCmp;
     char* pbCopySrc;
@@ -2507,7 +2515,7 @@ void __stdcall CHATDLG_OpenLadderClassicSoftcore() {
     gpCtlLadderBtnAssassin = 0;
     g_pLadderBoardTextBox = 0;
     gnLadderListRowCount = 1000;
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       int32_t nHasPeer;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (!nHasPeer) {
@@ -2542,7 +2550,7 @@ void __stdcall CHATDLG_OpenLadderClassicHardcore() {
     gpCtlLadderBtnAssassin = 0;
     g_pLadderBoardTextBox = 0;
     gnLadderListRowCount = 1000;
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       int32_t nHasPeer;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (!nHasPeer) {
@@ -2577,7 +2585,7 @@ void __stdcall CHATDLG_OpenLadderExpansionSoftcore() {
     gpCtlLadderBtnAssassin = 0;
     g_pLadderBoardTextBox = 0;
     gnLadderListRowCount = 1000;
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       int32_t nHasPeer;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (!nHasPeer) {
@@ -2612,7 +2620,7 @@ void __stdcall CHATDLG_OpenLadderExpansionHardcore() {
     gpCtlLadderBtnAssassin = 0;
     g_pLadderBoardTextBox = 0;
     gnLadderListRowCount = 1000;
-    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+    if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       int32_t nHasPeer;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (!nHasPeer) {
@@ -2735,6 +2743,20 @@ BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(D2ControlMsg * pControlMsg) 
     g_nLadderFilterMode = 0;
     gnLadderBoardSelectedRank = 0;
     return 1;
+}
+
+void StaticInit_6ca960() {
+    // Static local variables (originally global data)
+    static unsigned int gbChatMultiplayerUIActive; D2_STATIC_GUARD_BSS(gbChatMultiplayerUIActive, "D2Multi::ChatDlg::StaticInit_6ca960::gbChatMultiplayerUIActive");
+
+    gbChatMultiplayerUIActive = Storm::Source::SSTR::SStrHash("Header", 0, 0);
+}
+
+void StaticInit_gbChatLobbyInitialize() {
+    // Static local variables (originally global data)
+    static unsigned int gbChatLobbyInitialize; D2_STATIC_GUARD_BSS(gbChatLobbyInitialize, "D2Multi::ChatDlg::StaticInit_gbChatLobbyInitialize::gbChatLobbyInitialize");
+
+    gbChatLobbyInitialize = Storm::Source::SSTR::SStrHash("Game Time", 0, 0);
 }
 
 } // namespace D2Multi::ChatDlg

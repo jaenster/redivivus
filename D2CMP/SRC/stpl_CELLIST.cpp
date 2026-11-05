@@ -17,7 +17,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/Source/SErr.h"
+#include "Storm/Source/SEVT.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -569,7 +569,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
       }
 
       ((TSGrowableArray<::CELLIST>*)pObject)->Destructor();
-      Storm::Source::SMem::SMemFree(pObject, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, 0);
+      Storm::Source::SMem::SMemFree(pObject, D2CMP::Draw::s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, 0);
     }
 }
 

@@ -142,7 +142,7 @@ BOOL __fastcall Skills_SrvStFunc_16_ApplyHitAndDamage(::SGAMEDATA * pGame, D2Uni
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -370,7 +370,7 @@ uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, D2Uni
 
 void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, D2NecroSkillArgStrc * pNecroSkillArg) {
     uint32_t nFunctionId;
-    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -503,7 +503,7 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
       eD2UnitStat eUnitStat;
       peCurStat++;
       eUnitStat = *peCurStat;
-      if ((int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nAlignment = SKILLNEC_ClampResistPenalty(pUnit, eUnitStat, peCurStat[6]);
         if (nAlignment) {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListEx, *peCurStat, nAlignment, 0);
@@ -555,8 +555,8 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
     D2NecroSkillArgStrc sNecroArg;
     int* pAuraStatCalc;
     short int nAuraStatId;
-    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       uint32_t bIsReviveOrSkel;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -582,7 +582,7 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
       pAuraStatCalc = pSkillsTxt->aurastatcalc;
       do {
         nAuraStatId = *psAuraStatPtr;
-        if (nAuraStatId < 0 || (int)nAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
+        if (nAuraStatId < 0 || (int)nAuraStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
           sNecroArg.eStat[iStatIdx] = ~UNITSTAT_strength;
           break;
         }
@@ -591,7 +591,7 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
         if (!pStatCostTxt) {
           break;
         }
-        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
           sNecroArg.bUpdateAnimSpeed = 1;
         }
 
@@ -621,12 +621,12 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
 void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nSkillLvl) {
     eD2UnitStat eUnitStat;
     D2NecroSkillArgStrc sNecroArg;
-    if (sgptDataTable->nTxtSkillsCount <= 0x47) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount <= 0x47) {
       return;
     }
 
     D2SkillsTxt* pSkillsTxtBase;
-    pSkillsTxtBase = sgptDataTable->pTxtSkills;
+    pSkillsTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
     if (pSkillsTxtBase == (D2SkillsTxt*)-40612) {
       return;
     }
@@ -659,13 +659,13 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       }
 
       eUnitStat = (eD2UnitStat)*psAuraStatCursor;
-      if ((int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         break;
       }
-      if ((int)eUnitStat < 0 || !(sgptDataTable->pTxtItemStatCost + eUnitStat)) {
+      if ((int)eUnitStat < 0 || !(D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat)) {
         goto apply_curse;
       }
-      if (*(uint8_t*)((uintptr_t)&sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+      if (*(uint8_t*)((uintptr_t)&D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         sNecroArg.bUpdateAnimSpeed = 1;
       }
 
@@ -733,7 +733,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
     int32_t nCbDuration;
     int32_t nStateDuration;
     int32_t nAuraRange;
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -742,7 +742,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
     ::SGAMEDATA* pGameSaved = pGame;
     D2UnitStrc* pCorpse = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     uint32_t bValidCorpse = SKILLNEC_ValidateCorpseTarget(pGameSaved, pUnit, pCorpse);
-    if (bValidCorpse && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
+    if (bValidCorpse && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       int32_t nAuraLen;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -848,7 +848,7 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
     do {
       pStatIdCursor++;
       eStatId = *pStatIdCursor;
-      if ((int)eStatId >= 0 && (int)eStatId < sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eStatId >= 0 && (int)eStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nClampedStatCalc = SKILLNEC_ClampResistPenalty(pUnit, eStatId, pStatIdCursor[6]);
         if (nClampedStatCalc) {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListEx, *pStatIdCursor, nClampedStatCalc, 0);
@@ -880,8 +880,8 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
     int* pAuraStatCalc;
     short int wCurAuraStatId;
     eD2Skills eSkillSaved = eSkill;
-    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       int32_t nRadius;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -904,7 +904,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
         pAuraStatCalc++;
         eSkill += 2;
         wCurAuraStatId = *(short int*)eSkill;
-        if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
+        if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
           pGameArg.anStatIds[iAuraStatIdx] = -1;
           break;
         }
@@ -913,7 +913,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
         if (!pStatCostTxt) {
           break;
         }
-        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
           pGameArg.bUpdateAnimRate = 1;
         }
 
@@ -1054,10 +1054,10 @@ static void __stdcall SKILLNEC_RollSkeletonMastery(D2UnitStrc * pUnit, int * pSu
 
     int32_t bHasExtraVariant = 0;
     if (nSkillLvl > 2) {
-      if (eSkillMastery < 0 || eSkillMastery >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkillMastery)) {
+      if (eSkillMastery < 0 || eSkillMastery >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillMastery)) {
         nExtraVariantChance = 0;
       } else {
-        nExtraVariantChance = sgptDataTable->pTxtSkills[eSkillMastery].Param[0];
+        nExtraVariantChance = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillMastery].Param[0];
       }
 
       sSeedNew = D2_SEED_NEXT(pUnit->sSeed);
@@ -1117,10 +1117,10 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     short int nTxtValue;
     D2SkillsTxt* pSkillsTxtTbl;
     D2UnitStrc* pSummon = pSummonStatList;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = 0;
     } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
     if (eSkill == SKILL_Attack) {
       return 0;
@@ -1129,7 +1129,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     int* pPassiveCalcCursor = pSkillsTxt->passivecalc;
     int* pPassiveStatCursor = (int*)pSkillsTxt->passivestat;
     int iStatLoop = 5;
-    D2DataTableTxtStrc* pDataTable = sgptDataTable;
+    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
       if ((short int)*pPassiveStatCursor >= 0) {
         eStatId = (eD2UnitStat)(short int)*pPassiveStatCursor;
@@ -1138,19 +1138,19 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
           if (pStatCostTxt) {
             nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pPassiveCalcCursor, eSkill, nSkillLvl);
             D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pSummonStatList, eStatId, nStatCalc, 0);
-            pDataTable = sgptDataTable;
+            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (pStatCostTxt->itemevent1 > 0) {
               fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummonStatList, 2, D2Client::UNIT::GetGUID(pSummonStatList), eStatId);
-              pDataTable = sgptDataTable;
+              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               if (!fEventSearchResult) {
                 nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
                 SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
                 nTxtValue = pStatCostTxt->itemevent2;
-                pDataTable = sgptDataTable;
+                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (nTxtValue > 0) {
                   nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
                   SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)nTxtValue, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
-                  pDataTable = sgptDataTable;
+                  pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 }
               }
             }
@@ -1174,7 +1174,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
           pStatCostTxt = pDataTable->pTxtItemStatCost + eStatId;
           if (pStatCostTxt) {
             nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pPassiveStatCursor, eSkill, nSkillLvl);
-            pDataTable = sgptDataTable;
+            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (nStatCalc) {
               if (!pSummonStatList) {
                 nSummonGUID = D2Client::UNIT::GetGUID(pSummon);
@@ -1187,19 +1187,19 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
               }
 
               D2Common::Stats::StatsEx::D2AddStatToStatsListEx((D2StatListExStrc*)pSummonStatList, eStatId, nStatCalc, 0);
-              pDataTable = sgptDataTable;
+              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               if (pStatCostTxt->itemevent1 > 0) {
                 fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummon, 2, D2Client::UNIT::GetGUID(pSummon), eStatId);
-                pDataTable = sgptDataTable;
+                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (!fEventSearchResult) {
                   nStatCalc = D2Client::UNIT::GetGUID(pSummon);
                   SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
                   nTxtValue = pStatCostTxt->itemevent2;
-                  pDataTable = sgptDataTable;
+                  pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                   if (nTxtValue > 0) {
                     nStatCalc = D2Client::UNIT::GetGUID(pSummon);
                     SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)nTxtValue, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
-                    pDataTable = sgptDataTable;
+                    pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                   }
                 }
               }
@@ -1249,15 +1249,15 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     pSummonStatList = (D2UnitStrc*)pSkillsTxt->sumskcalc;
     iStatLoop = 5;
     do {
-      if (*pSumSkillCursor > 0 && (int)*pSumSkillCursor < sgptDataTable->nTxtSkillsCount) {
+      if (*pSumSkillCursor > 0 && (int)*pSumSkillCursor < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSummonStatList->eUnitType, eSkill, nSkillLvl);
         if (nStatCalc > 0) {
           eSummonSkill = (eD2Skills)*pSumSkillCursor;
-          if ((int)eSummonSkill >= 0 && (int)eSummonSkill < sgptDataTable->nTxtSkillsCount) {
-            pSkillsTxtTbl = sgptDataTable->pTxtSkills;
+          if ((int)eSummonSkill >= 0 && (int)eSummonSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+            pSkillsTxtTbl = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
             if (pSkillsTxtTbl + eSummonSkill) {
               SkillsServer::SetSkill(pSummon, eSummonSkill, nStatCalc, 0);
-              if (*((uint8_t*)&pSkillsTxtTbl[eSummonSkill] + 0x4) & (uint8_t)gadwBitMasks[5]) {
+              if (*((uint8_t*)&pSkillsTxtTbl[eSummonSkill] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
                 SkillsServer::Server_SelectSkill(pSummon, 0, (int)*pSumSkillCursor, -1);
               }
             }
@@ -1291,7 +1291,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     nTxtValue = pSkillsTxt->sumoverlay;
-    if (nTxtValue > 0 && (int)nTxtValue < sgptDataTable->nTxtOverlaySize) {
+    if (nTxtValue > 0 && (int)nTxtValue < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       D2Common::Units::SetOverlay(pSummon, (int)nTxtValue, 0);
     }
     if (!nItemLevel) {
@@ -1341,13 +1341,13 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCorpseUnit, UNITSTAT_level, nLevel, 0);
     }
 
-    nLevelClamped = sgptDataTable->nTxtMonLvlSize - 1;
+    nLevelClamped = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLevel >= nLevelClamped) {
       nLevel = nLevelClamped;
     }
 
     D2MonLvlTxt* pDVar1;
-    pDVar1 = nLevel >= 0 && nLevel < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevel : nullptr;
+    pDVar1 = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -1391,7 +1391,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     }
 
     SKILLNEC_ApplyBloodCost(pGame, pUnit, eSkill, nSkillLvl);
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1402,7 +1402,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     }
 
     sPet.nPetType = (int32_t)pSkillsTxt->pettype;
-    if (!(sPet.nPetType >= 0 && sPet.nPetType < sgptDataTable->nTxtPetTypeSize)) {
+    if (!(sPet.nPetType >= 0 && sPet.nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
       return 0;
     }
 
@@ -1521,10 +1521,10 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
 
     D2Common::DATATBLS::ItemStats::SetState(pCorpseTarget, STATE_corpse_nodraw, 1);
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pCorpseTarget);
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillData = 0;
     } else {
-      pSkillData = sgptDataTable->pTxtSkills + eSkill;
+      pSkillData = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
     if (eSkill == SKILL_Attack) {
       return 0;
@@ -1613,17 +1613,17 @@ BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = 0;
     } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
-    if (!(eSkill != SKILL_Attack && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(eSkill != SKILL_Attack && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 
     eSkill = (uint32_t)(uint8_t)pSkillsTxt->pettype << 0x18;
-    if ((int)(uint32_t)(uint8_t)pSkillsTxt->pettype >= sgptDataTable->nTxtPetTypeSize) {
+    if ((int)(uint32_t)(uint8_t)pSkillsTxt->pettype >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
       eSkill = SKILL_Attack;
     }
 
@@ -1668,10 +1668,10 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = 0;
     } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
     if (eSkill == SKILL_Attack) {
       return 0;
@@ -1684,7 +1684,7 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
 
     eD2BodyLoc byBodyLoc2Out = pSkillsTxt->pettype;
     eD2BodyLoc byPetTypeIdx = byBodyLoc2Out;
-    if ((int)(uint32_t)byBodyLoc2Out >= sgptDataTable->nTxtPetTypeSize) {
+    if ((int)(uint32_t)byBodyLoc2Out >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
       byPetTypeIdx = BODYLOC_NONE;
     }
 
@@ -1818,7 +1818,7 @@ void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
     int32_t nOwnerGUID;
     eD2UnitType eOwnerUnitType;
-    D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount ? 0 : sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (eSkill == SKILL_Attack) {
       return;
     }
@@ -1896,10 +1896,10 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     }
 
     D2SkillsTxt* pSkillTxtValue;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillTxtValue = 0;
     } else {
-      pSkillTxtValue = sgptDataTable->pTxtSkills + eSkill;
+      pSkillTxtValue = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
 
     sCastPetArgs.pSkillTxt = pSkillTxtValue;
@@ -1915,7 +1915,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
 
     uint8_t byPetType = pSkillsTxt->pettype;
     uint8_t byPetTypeIdx = byPetType;
-    if ((int)(uint32_t)byPetType >= sgptDataTable->nTxtPetTypeSize) {
+    if ((int)(uint32_t)byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
       byPetTypeIdx = 0;
     }
 
@@ -1957,7 +1957,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
       }
 
       nSrvMissileId = pSkillsTxt->srvmissile[1];
-      if (!(nSrvMissileId >= 0 && (int)nSrvMissileId < sgptDataTable->nTxtMissilesSize)) {
+      if (!(nSrvMissileId >= 0 && (int)nSrvMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
         return 1;
       }
 
@@ -2003,10 +2003,10 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
 static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGame, int32_t nSpawnX, int32_t nSpawnY, int32_t nSkillLvl, eD2Skills eSkill, D2UnitStrc * pUnit) {
     D2SkillsTxt* pSkillsTxt;
     D2MonsterCastPetStrc sSummonParams;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = 0;
     } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
     if (eSkill == SKILL_Attack) {
       return nullptr;
@@ -2018,7 +2018,7 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
     }
 
     uint8_t byPetTypeIdx = pSkillsTxt->pettype;
-    if ((int)(uint32_t)byPetTypeIdx >= sgptDataTable->nTxtPetTypeSize) {
+    if ((int)(uint32_t)byPetTypeIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
       byPetTypeIdx = 0;
     }
 
@@ -2146,11 +2146,11 @@ BOOL __fastcall Skills_SrvDoFunc_062_BonePrison(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 BOOL __fastcall Skills_SrvDoFunc_063_PoisonExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount ? 0 : sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (eSkill == SKILL_Attack) {
       return 0;
     }
-    if (pSkillsTxt->srvmissile[1] < 0 || (int)pSkillsTxt->srvmissile[1] >= sgptDataTable->nTxtMissilesSize) {
+    if (pSkillsTxt->srvmissile[1] < 0 || (int)pSkillsTxt->srvmissile[1] >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 1;
     }
 
@@ -2218,7 +2218,7 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
     }
 
     short int wAuraTargetState = pSkillTxt->auratargetstate;
-    if (wAuraTargetState >= 0 && (int)wAuraTargetState < sgptDataTable->nTxtStatesSize) {
+    if (wAuraTargetState >= 0 && (int)wAuraTargetState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       D2StatListExStrc* pStatList;
       bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)wAuraTargetState);
       if (bIsDead) {
@@ -2329,7 +2329,7 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
     }
 
     short int nAuraTargetState = pSkillTxt->auratargetstate;
-    if (!(nAuraTargetState >= 0 && (int)nAuraTargetState < sgptDataTable->nTxtStatesSize)) {
+    if (!(nAuraTargetState >= 0 && (int)nAuraTargetState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return 0;
     }
 
@@ -2365,7 +2365,7 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, nMaxHp, 0);
       nAuraTargetState = pSkillTxt->prgoverlay;
-      if (nAuraTargetState > 0 && (int)nAuraTargetState < sgptDataTable->nTxtOverlaySize) {
+      if (nAuraTargetState > 0 && (int)nAuraTargetState < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
         D2Common::Units::SetOverlay(pTargetUnit, (int)nAuraTargetState, 0);
       }
 
@@ -2390,25 +2390,25 @@ BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnit
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillTxt) {
       D2StatListExStrc* pStatList;
       nAuraStateId = pSkillTxt->aurastate;
-      if (nAuraStateId >= 0 && (int)nAuraStateId < sgptDataTable->nTxtStatesSize) {
+      if (nAuraStateId >= 0 && (int)nAuraStateId < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nAuraStateId);
         if (!pStatList) {
           return 0;
         }
 
         eAuraStat = (eD2UnitStat)pSkillTxt->aurastat[1];
-        if (!((int)eAuraStat >= 0 && (int)eAuraStat < sgptDataTable->nTxtItemStatCostSize)) {
+        if (!((int)eAuraStat >= 0 && (int)eAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
           return 0;
         }
 
         nMaxAbsorbCapacity = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
         if ((int)nMaxAbsorbCapacity > 0) {
           eAuraStat = (eD2UnitStat)pSkillTxt->aurastat[0];
-          if ((int)eAuraStat < 0 || (int)eAuraStat >= sgptDataTable->nTxtItemStatCostSize) {
+          if ((int)eAuraStat < 0 || (int)eAuraStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             return 0;
           }
 

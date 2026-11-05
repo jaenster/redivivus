@@ -176,9 +176,9 @@ static void __fastcall FillYTrampoline(void* ppvBits, int nWidth, int nHeight, i
     void* pRet = __builtin_return_address(0);
     D2TraceFmt("FILLY caller=%08X bits=%08X w=%d h=%d a4=%d  clipYMin=%d clipBottom=%d",
                (unsigned)(uintptr_t)pRet, (unsigned)(uintptr_t)ppvBits, nWidth, nHeight, a4,
-               gnTileClipYMin, gnTileClipBottom);
+               D2gfx::gnTileClipYMin, D2gfx::D2GFX::gnTileClipBottom);
     if (g_pfnRealFillY) g_pfnRealFillY(ppvBits, nWidth, nHeight, a4);
-    D2TraceFmt("FILLY done  clipYMin=%d clipBottom=%d", gnTileClipYMin, gnTileClipBottom);
+    D2TraceFmt("FILLY done  clipYMin=%d clipBottom=%d", D2gfx::gnTileClipYMin, D2gfx::D2GFX::gnTileClipBottom);
 }
 
 static void HandleLine(char* line, char* reply, int replyMax) {
@@ -250,10 +250,10 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         sscanf(line, "mon %d %d", &nStart, &nCount);
         static char monOut[8192];
         int u = wsprintfA(monOut, "{\"size\":%d,\"rows\":[",
-                          sgptDataTable ? (int)sgptDataTable->nTxtMonStatsSize : -1);
-        for (int i = nStart; sgptDataTable && i < nStart + nCount &&
-             i < (int)sgptDataTable->nTxtMonStatsSize && u < (int)sizeof(monOut) - 200; i++) {
-            const D2MonStatsTxt* pRow = &sgptDataTable->pTxtMonStats[i];
+                          D2Common::ITEMS::Items::sgptDataTable ? (int)D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize : -1);
+        for (int i = nStart; D2Common::ITEMS::Items::sgptDataTable && i < nStart + nCount &&
+             i < (int)D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && u < (int)sizeof(monOut) - 200; i++) {
+            const D2MonStatsTxt* pRow = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[i];
             char szName[40]; szName[0] = 0;
             const uint16_t* pwsz = D2Lang::StrTable::strtable::GetLocaleString(pRow->NameStr);
             if (pwsz) { int k = 0; for (; k < 32 && pwsz[k]; k++) szName[k] = (char)(pwsz[k] & 0x7f); szName[k] = 0; }
@@ -273,7 +273,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "pos", 3)) {
         static char posOut[2048];
         D2UnitStrc* apPlayers[2] = { nullptr, nullptr };
-        void* apTables[2] = { (void*)ClientSideUnitHashTables, (void*)ServerSideUnitHashTables };
+        void* apTables[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
         for (int nTable = 0; nTable < 2; nTable++) {
             D2UnitStrc** ppTable = (D2UnitStrc**)((char*)apTables[nTable] + UNIT_PLAYER * 0x200);
             for (int nBucket = 0; nBucket < 128 && !apPlayers[nTable]; nBucket++)
@@ -309,10 +309,10 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "walkstat", 8)) {
         static char wOut[1024];
         int nX = 0, nY = 0, nMode = -1;
-        if (pPlayerUnit && pPlayerUnit->pPath.pDynamicPath) {
-            nX = pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosX;
-            nY = pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosY;
-            nMode = (int)pPlayerUnit->eAnimMode.field_1c;
+        if (D2Client::UNIT::CUnit::pPlayerUnit && D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath) {
+            nX = D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosX;
+            nY = D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosY;
+            nMode = (int)D2Client::UNIT::CUnit::pPlayerUnit->eAnimMode.field_1c;
         }
         wsprintfA(wOut,
             "{\"on\":%d,\"x\":%d,\"y\":%d,\"tx\":%d,\"ty\":%d,\"mode\":%d,\"steps\":%d,"
@@ -335,9 +335,9 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         }
         g_walkTX = nTX; g_walkTY = nTY;
         g_walkSteps = 0; g_walkStuck = 0; g_walkFrames = 0; g_walkJog = 0;
-        if (pPlayerUnit && pPlayerUnit->pPath.pDynamicPath) {
-            g_walkStartX = g_walkX = pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosX;
-            g_walkStartY = g_walkY = pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosY;
+        if (D2Client::UNIT::CUnit::pPlayerUnit && D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath) {
+            g_walkStartX = g_walkX = D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosX;
+            g_walkStartY = g_walkY = D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath->Coords.tSubtile.nPosY;
         }
         InterlockedExchange(&g_walkOn, 1);
         lstrcpynA(reply, "{\"ok\":\"walk\"}", replyMax);
@@ -361,7 +361,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         // flag can be read, so print the raw array too - index is the eD2UIvars value.
         u += wsprintfA(uiOut + u, "},\"raw\":\"");
         for (int i = 0; i <= (int)UI_RECIPESCROLL && u < (int)sizeof(uiOut) - 8; i++)
-            u += wsprintfA(uiOut + u, "%d", (&GFX_bShowUIFlag.Game)[i] ? 1 : 0);
+            u += wsprintfA(uiOut + u, "%d", (&D2Client::UI::Draw::GFX_bShowUIFlag.Game)[i] ? 1 : 0);
         wsprintfA(uiOut + u, "\"}");
         lstrcpynA(reply, uiOut, replyMax);
         return;
@@ -435,12 +435,12 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "npctbl", 6)) {
         static char ntOut[2048];
         int u = wsprintfA(ntOut, "{\"size\":%d,\"ptr\":\"0x%X\",\"npc\":[",
-                          sgptDataTable ? (int)sgptDataTable->nTxtNpcSize : -1,
-                          sgptDataTable ? (unsigned)(uintptr_t)sgptDataTable->pTxtNpc : 0);
+                          D2Common::ITEMS::Items::sgptDataTable ? (int)D2Common::ITEMS::Items::sgptDataTable->nTxtNpcSize : -1,
+                          D2Common::ITEMS::Items::sgptDataTable ? (unsigned)(uintptr_t)D2Common::ITEMS::Items::sgptDataTable->pTxtNpc : 0);
         int n = 0;
-        if (sgptDataTable && sgptDataTable->pTxtNpc) {
-            for (int i = 0; i < sgptDataTable->nTxtNpcSize && i < 48 && u < (int)sizeof(ntOut) - 40; i++)
-                u += wsprintfA(ntOut + u, "%s%d", n++ ? "," : "", (int)sgptDataTable->pTxtNpc[i].npc);
+        if (D2Common::ITEMS::Items::sgptDataTable && D2Common::ITEMS::Items::sgptDataTable->pTxtNpc) {
+            for (int i = 0; i < D2Common::ITEMS::Items::sgptDataTable->nTxtNpcSize && i < 48 && u < (int)sizeof(ntOut) - 40; i++)
+                u += wsprintfA(ntOut + u, "%s%d", n++ ? "," : "", (int)D2Common::ITEMS::Items::sgptDataTable->pTxtNpc[i].npc);
         }
         u += wsprintfA(ntOut + u, "],\"lookup178\":\"0x%X\"}",
             (unsigned)(uintptr_t)D2Common::DATATBLS::MonsterTbls::TXT_npc_GetLine(178));
@@ -460,7 +460,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         } else {
             sscanf(line, "dt %d %d", &off, &len);
             if (len <= 0) len = 64;
-            addr = (unsigned long)(uintptr_t)&sgtDataTable + off;
+            addr = (unsigned long)(uintptr_t)&D2Common::DATATBLS::MonsterTbls::sgtDataTable + off;
         }
         if (len < 1) len = 1;
         if (len > 1024) len = 1024;
@@ -479,7 +479,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     // here as a count of 0 or 1 where the original has hundreds.
     if (!strncmp(line, "sizes", 5)) {
         static char szOut[4096];
-        int u = wsprintfA(szOut, "{\"base\":\"0x%X\",\"sizes\":{", (unsigned)(uintptr_t)&sgtDataTable);
+        int u = wsprintfA(szOut, "{\"base\":\"0x%X\",\"sizes\":{", (unsigned)(uintptr_t)&D2Common::DATATBLS::MonsterTbls::sgtDataTable);
         struct { const char* name; int off; } kSizes[] = {
             {"CompCode",0x084},{"MonAi",0x090},{"Properties",0x0AC},{"States",0x0C4},
             {"Sounds",0x19C},{"Hireling",0x1A4},{"Npc",0x9AC},{"TreasureClass",0x9C0},
@@ -491,7 +491,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             {"MonUmod",0xC54},{"Levels",0xC5C},{"LvlPrest",0xC68},{"DifficultyLevels",0xC80},
         };
         for (int i = 0; i < (int)(sizeof(kSizes)/sizeof(kSizes[0])); i++) {
-            int v = *(int*)((char*)&sgtDataTable + kSizes[i].off);
+            int v = *(int*)((char*)&D2Common::DATATBLS::MonsterTbls::sgtDataTable + kSizes[i].off);
             u += wsprintfA(szOut + u, "%s\"%s\":%d", i ? "," : "", kSizes[i].name, v);
         }
         u += wsprintfA(szOut + u, "}}");
@@ -516,8 +516,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             "\"head\":\"0x%X\",\"cur\":\"0x%X\",\"fade\":%d,\"zoom\":%d,\"scrollx\":%d,\"scrolly\":%d}",
             nLayers, nFloors, nWalls, nObjects, nExtras, nMaxDepth,
             (unsigned)(uintptr_t)D2Client::UI::Automap::sgpAutomapLayer, (unsigned)(uintptr_t)D2Client::UI::Automap::sgpAutomapLayerEx,
-            (int)D2Client::UI::Automap::AUTOMAP_GetFade(), (int)nAutoMapZoomDivisor,
-            (int)nAutoMapScrollX, (int)nAutoMapScrollY);
+            (int)D2Client::UI::Automap::AUTOMAP_GetFade(), (int)D2Client::UI::Automap::nAutoMapZoomDivisor,
+            (int)D2Client::UI::Automap::nAutoMapScrollX, (int)D2Client::UI::Automap::nAutoMapScrollY);
         lstrcpynA(reply, amOut, replyMax);
         return;
     }
@@ -531,7 +531,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         static char aiOut[8192];
         int u = wsprintfA(aiOut, "{\"mon\":[");
         int nSeen = 0, nEmitted = 0, nMoving = 0, nWithPath = 0, nWithTarget = 0;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)ServerSideUnitHashTables + UNIT_MONSTER * 0x200);
+        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)D2Client::UNIT::CUnit::ServerSideUnitHashTables + UNIT_MONSTER * 0x200);
         for (int nBucket = 0; nBucket < 128; nBucket++) {
             for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext) {
                 const D2DynamicPathStrc* pPath = pUnit->pPath.pDynamicPath;
@@ -543,10 +543,10 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                 nSeen++;
                 if (nSeen <= nStart || nEmitted >= nCount || u > (int)sizeof(aiOut) - 220) continue;
                 char szName[34]; szName[0] = 0;
-                if (sgptDataTable && pUnit->nClassId >= 0 &&
-                    pUnit->nClassId < sgptDataTable->nTxtMonStatsSize) {
+                if (D2Common::ITEMS::Items::sgptDataTable && pUnit->nClassId >= 0 &&
+                    pUnit->nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
                     const uint16_t* pwsz = D2Lang::StrTable::strtable::GetLocaleString(
-                        sgptDataTable->pTxtMonStats[pUnit->nClassId].NameStr);
+                        D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[pUnit->nClassId].NameStr);
                     if (pwsz) { int k = 0; for (; k < 26 && pwsz[k]; k++) szName[k] = (char)(pwsz[k] & 0x7f); szName[k] = 0; }
                 }
                 // fpFunction is the whole question: if it is null, AttachCorrectAiFunctionToMonster
@@ -582,7 +582,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     // looked exactly like a broken renderer. Count the grid instead of guessing.
     if (!strncmp(line, "wall2", 5)) {
         static char wOut[1024];
-        D2GameViewStrc* pView = D2GameView;
+        D2GameViewStrc* pView = D2Client::GAME::Game::D2GameView;
         if (!pView) { lstrcpynA(reply, "{\"err\":\"no game view\"}", replyMax); return; }
         int nCells = (int)pView->sWall2.nWall2GridDim * (int)pView->sWall2.nWall2GridDim;
         if (nCells < 0 || nCells > 65536) nCells = 0;
@@ -615,7 +615,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     // tiles are absent from the loaded DT1 set rather than mis-lit.
     if (!strncmp(line, "walldir", 7)) {
         static char dOut[1024];
-        D2GameViewStrc* pView = D2GameView;
+        D2GameViewStrc* pView = D2Client::GAME::Game::D2GameView;
         if (!pView) { lstrcpynA(reply, "{\"err\":\"no game view\"}", replyMax); return; }
         int nCells = (int)pView->sWall2.nWall2GridDim * (int)pView->sWall2.nWall2GridDim;
         if (nCells < 0 || nCells > 65536) nCells = 0;
@@ -679,7 +679,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     // if they come back lit, the samples are fine and the defect is inside the blitter.
     if (!strncmp(line, "wlight", 6)) {
         static char lo[1024];
-        D2GameViewStrc* pView = D2GameView;
+        D2GameViewStrc* pView = D2Client::GAME::Game::D2GameView;
         if (!pView) { lstrcpynA(reply, "{\"err\":\"no game view\"}", replyMax); return; }
         int nCells = (int)pView->sWall2.nWall2GridDim * (int)pView->sWall2.nWall2GridDim;
         if (nCells < 0 || nCells > 65536) nCells = 0;
@@ -707,8 +707,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             }
         }
         wsprintfA(lo + u, "],\"n\":%d,\"lit\":%d,\"zero\":%d,\"colorEnabled\":%u,\"biasX\":%d,\"biasY\":%d}", n, nLit, nZero,
-                  (unsigned)gbLightmapColorEnabled,
-                  (int)gnLightmapWorldRefreshFlag, (int)gnLightmapBufferState);
+                  (unsigned)D2Client::Draw::LightMap::gbLightmapColorEnabled,
+                  (int)D2Client::Draw::LightMap::gnLightmapWorldRefreshFlag, (int)D2Client::Draw::LightMap::gnLightmapBufferState);
         lstrcpynA(reply, lo, replyMax);
         return;
     }
@@ -737,7 +737,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                 int c = *(const int*)((char*)pU + 4);
                 nTotal++;
                 if (t >= 0 && t < 8 && c > aMax[t]) aMax[t] = c;
-                if (t == 2 && (c < 0 || c >= nTxtObjectsSize)) {
+                if (t == 2 && (c < 0 || c >= D2Common::DATATBLS::ObjectTbls::nTxtObjectsSize)) {
                     nBad++; if (badType < 0) { badType = t; badCls = c; }
                 }
                 pU = *(D2UnitStrc**)((char*)pU + 0xE8);
@@ -746,7 +746,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         wsprintfA(ro,
             "{\"rooms\":%d,\"units\":%d,\"badobjects\":%d,\"badcls\":%d,\"objtblsize\":%d,"
             "\"maxcls\":[%d,%d,%d,%d,%d,%d,%d,%d]}",
-            nRooms, nTotal, nBad, badCls, nTxtObjectsSize,
+            nRooms, nTotal, nBad, badCls, D2Common::DATATBLS::ObjectTbls::nTxtObjectsSize,
             aMax[0], aMax[1], aMax[2], aMax[3], aMax[4], aMax[5], aMax[6], aMax[7]);
         lstrcpynA(reply, ro, replyMax);
         return;
@@ -760,7 +760,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         sscanf(line, "ds1ori %63s", szWant);
         int u = wsprintfA(oo, "{\"file\":\"%s\",\"layers\":[", szWant);
         int nEmitted = 0;
-        for (D2DrlgFileCacheNodeStrc* pN = gpDrlgFileCache;
+        for (D2DrlgFileCacheNodeStrc* pN = D2Common::Drlg::Preset::gpDrlgFileCache;
              pN && !IsBadReadPtr(pN, 0x110); pN = pN->pNext) {
             const char* nm = pN->szName; const char* base = nm;
             for (const char* q = nm; *q; q++) if (*q == '\\' || *q == '/') base = q + 1;
@@ -804,7 +804,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int u = wsprintfA(og, "{\"objs\":[");
         int n = 0;
         for (int tbl = 0; tbl < 2 && u < (int)sizeof(og) - 120; tbl++) {
-            void* pBase = tbl ? (void*)ServerSideUnitHashTables : (void*)ClientSideUnitHashTables;
+            void* pBase = tbl ? (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables : (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables;
             // rows are type-major with a 0x200 stride, as UnitsReply does it
             D2UnitStrc** pT = (D2UnitStrc**)((char*)pBase + UNIT_OBJECT * 0x200);
             for (int b = 0; b < 128 && u < (int)sizeof(og) - 120; b++) {
@@ -855,7 +855,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         D2UnitStrc* pPl = D2Client::UNIT::Player::GetPlayerUnit_UI();
         D2RoomStrc* pRoom = pPl ? D2Common::Units::UNITS_GetRoom(pPl) : nullptr;
         if (!pRoom) { lstrcpynA(reply, "{\"err\":\"no room\"}", replyMax); return; }
-        D2GameViewStrc* pGV = D2GameView;
+        D2GameViewStrc* pGV = D2Client::GAME::Game::D2GameView;
         int L = pGV ? pGV->nCenterX : 0, T = pGV ? pGV->nCenterY : 0;
         int R = pGV ? (pGV->pView.right - pGV->pView.left + pGV->nCenterX) : 0;
         int B = pGV ? (pGV->pView.bottom - pGV->pView.top + pGV->nCenterY) : 0;
@@ -895,7 +895,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                     const unsigned char* pMap = *(const unsigned char**)(pData + 0x08);
                     if (pMap && !IsBadReadPtr(pMap, 0x20)) {
                         const void* pDF = *(const void**)(pMap + 0x0C);
-                        for (D2DrlgFileCacheNodeStrc* pC = gpDrlgFileCache;
+                        for (D2DrlgFileCacheNodeStrc* pC = D2Common::Drlg::Preset::gpDrlgFileCache;
                              pC && !IsBadReadPtr(pC, 0x110); pC = pC->pNext)
                             if ((const void*)pC->pDrlgFile == pDF) {
                                 nm = pC->szName;
@@ -974,7 +974,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int aRejX[24] = { 0 }, aRejY[24] = { 0 }, aRejG[24] = { 0 }, aPass[24] = { 0 };
         int aMinR[24], aMaxR[24];
         for (int z = 0; z < 24; z++) { aMinR[z] = 1<<28; aMaxR[z] = -(1<<28); }
-        D2GameViewStrc* pGV = D2GameView;
+        D2GameViewStrc* pGV = D2Client::GAME::Game::D2GameView;
         int nCullL = pGV ? pGV->nCenterX : 0, nCullT = pGV ? pGV->nCenterY : 0;
         int nCullR = pGV ? (pGV->pView.right - pGV->pView.left + pGV->nCenterX) : 0;
         int nCullB = pGV ? (pGV->pView.bottom - pGV->pView.top + pGV->nCenterY) : 0;
@@ -1114,7 +1114,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         static char do_[2048];
         int u = wsprintfA(do_, "{\"files\":[");
         int n = 0, nOneLayer = 0;
-        for (D2DrlgFileCacheNodeStrc* pN = gpDrlgFileCache;
+        for (D2DrlgFileCacheNodeStrc* pN = D2Common::Drlg::Preset::gpDrlgFileCache;
              pN && n < 40 && !IsBadReadPtr(pN, 0x110); pN = pN->pNext) {
             D2DrlgFileStrc* pF = pN->pDrlgFile;
             if (!pF || IsBadReadPtr(pF, 0x5c)) continue;
@@ -1138,7 +1138,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     // wall samples come back at intensity ~140, i.e. row 17.
     if (!strncmp(line, "pal", 3)) {
         static char po[768];
-        const uint8_t* base = (const uint8_t*)gaPaletteColorLUT;
+        const uint8_t* base = (const uint8_t*)D2gfx::D2GFX::gaPaletteColorLUT;
         int u = wsprintfA(po, "{\"base\":\"0x%X\",\"rows\":{", (unsigned)(uintptr_t)base);
         int rows[4] = { 0, 1, 17, 31 };
         int nNonZeroRows = 0;
@@ -1161,11 +1161,11 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     // Direct test of the clip diagnosis: force gnTileClipYMin to the value the original
     // holds (553 = screenHeight - 0x2f) and see whether the missing geometry appears.
     if (!strncmp(line, "setclip", 7)) {
-        int v = gnTileClipBottom;
+        int v = D2gfx::D2GFX::gnTileClipBottom;
         sscanf(line, "setclip %d", &v);
-        int nOld = gnTileClipYMin;
-        gnTileClipYMin = v;
-        wsprintfA(reply, "{\"was\":%d,\"now\":%d,\"clipBottom\":%d}", nOld, gnTileClipYMin, gnTileClipBottom);
+        int nOld = D2gfx::gnTileClipYMin;
+        D2gfx::gnTileClipYMin = v;
+        wsprintfA(reply, "{\"was\":%d,\"now\":%d,\"clipBottom\":%d}", nOld, D2gfx::gnTileClipYMin, D2gfx::D2GFX::gnTileClipBottom);
         return;
     }
     // Re-arm the page guard. Each arm catches exactly one write (the handler logs it and
@@ -1185,7 +1185,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         return;
     }
     if (!strncmp(line, "hwbp", 4)) {
-        uintptr_t nAddr = (uintptr_t)&gnTileClipYMin;
+        uintptr_t nAddr = (uintptr_t)&D2gfx::gnTileClipYMin;
         HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
         THREADENTRY32 te; te.dwSize = sizeof(te);
         DWORD dwPid = GetCurrentProcessId(), dwSelf = GetCurrentThreadId();
@@ -1217,7 +1217,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         if (hSnap != INVALID_HANDLE_VALUE) CloseHandle(hSnap);
         D2TraceFmt("HWBP armed addr=%08X threads=%d/%d", (unsigned)nAddr, nSet, nSeen);
         wsprintfA(reply, "{\"hwbp\":\"0x%X\",\"armed\":%d,\"threads\":%d,\"value\":%d}",
-                  (unsigned)nAddr, nSet, nSeen, gnTileClipYMin);
+                  (unsigned)nAddr, nSet, nSeen, D2gfx::gnTileClipYMin);
         return;
     }
     if (!strncmp(line, "watch", 5)) {
@@ -1238,9 +1238,9 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     }
     if (!strncmp(line, "gaddr", 5)) {
         wsprintfA(reply, "{\"cofStatusTable\":\"0x%X\",\"value\":\"0x%X\",\"gameView\":\"0x%X\"}",
-                  (unsigned)(uintptr_t)&g_pMonsterSpriteCofStatusTable,
-                  (unsigned)(uintptr_t)g_pMonsterSpriteCofStatusTable,
-                  (unsigned)(uintptr_t)D2GameView);
+                  (unsigned)(uintptr_t)&D2Client::Engine::Gfx::g_pMonsterSpriteCofStatusTable,
+                  (unsigned)(uintptr_t)D2Client::Engine::Gfx::g_pMonsterSpriteCofStatusTable,
+                  (unsigned)(uintptr_t)D2Client::GAME::Game::D2GameView);
         return;
     }
     if (!strncmp(line, "guard", 5)) {
@@ -1262,9 +1262,9 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         static char lOut[512];
         int nZero = 0, nNonZero = 0, nMax = 0, nColl = 0, nSum = 0;
         for (int i = 0; i < 2304; i++) {
-            int v = gaLightMapCells[i].nCellIntensity;
+            int v = D2Client::Draw::LightMap::gaLightMapCells[i].nCellIntensity;
             if (v) { nNonZero++; nSum += v; if (v > nMax) nMax = v; } else nZero++;
-            if (gaLightMapCells[i].nCollisionGrid) nColl++;
+            if (D2Client::Draw::LightMap::gaLightMapCells[i].nCollisionGrid) nColl++;
         }
         // The active blitter is reached through a function-pointer table the client hands
         // the renderer. A null entry here draws nothing at all, silently.
@@ -1289,15 +1289,15 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             "\"clip\":\"minY=%d clipYMin=%d innerXMin=%d innerYMin=%d innerYMinRow=%d\","
             "\"clip2\":\"clipBottom=%d minTileScreenY=%d overlayMode=%d clipZMax=%d innerYMax=%d\"}",
             nZero, nNonZero, nMax, nNonZero ? nSum / nNonZero : 0, nColl,
-            (unsigned)gnLastLightmapUpdateFrame,
+            (unsigned)D2Client::GAME::View::gnLastLightmapUpdateFrame,
             (int)D2Client::GAME::Game::gnRecordingIndex(),
             RENDERER_nWindowWidth, RENDERER_nWindowHeight,
             RENDERER_nWindowHeight + 0x20,
-            (int)D2GFX_eRendererMode, (int)eRendererMode, szFns,
-            gnMinTileDrawY, gnTileClipYMin, gnTileInnerClipXMin,
-            gnTileInnerClipYMin, gnTileInnerClipYMinRow,
-            gnTileClipBottom, gnMinTileScreenY, gnGfxOverlayMode,
-            gnTileClipZMax, gnTileInnerClipYMax);
+            (int)D2Win::Src::D2WinMain::D2GFX_eRendererMode, (int)D2gfx::D2GFX::eRendererMode, szFns,
+            D2gfx::gnMinTileDrawY, D2gfx::gnTileClipYMin, D2gfx::gnTileInnerClipXMin,
+            D2gfx::gnTileInnerClipYMin, D2gfx::gnTileInnerClipYMinRow,
+            D2gfx::D2GFX::gnTileClipBottom, D2gfx::gnMinTileScreenY, D2gfx::D2GFX::gnGfxOverlayMode,
+            D2gfx::D2GFX::gnTileClipZMax, D2gfx::gnTileInnerClipYMax);
         lstrcpynA(reply, lOut, replyMax);
         return;
     }
@@ -1399,13 +1399,13 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                 int cls = *(int*)(p + 0x1c), mode = *(int*)(p + 0x20), wc = *(int*)(p + 0x24);
                 u += wsprintfA(cfOut + u, ",\"cls\":%d,\"mode\":%d,\"wc\":%d,\"cof\":\"%08X\",\"tok\":\"%08X\"",
                                cls, mode, wc, (unsigned)*(uint32_t*)(p + 0xb8),
-                               (wc >= 0 && wc < 15) ? (unsigned)gaCompWeaponClassTokens[wc] : 0xDEADBEEF);
+                               (wc >= 0 && wc < 15) ? (unsigned)D2Win::Src::D2Comp::gaCompWeaponClassTokens[wc] : 0xDEADBEEF);
             }
             u += wsprintfA(cfOut + u, "}");
         }
         u += wsprintfA(cfOut + u, "],\"tbl1\":\"%08X\",\"tbladdr\":\"%08X\"}",
-                       (unsigned)gaCompWeaponClassTokens[1],
-                       (unsigned)(uintptr_t)&gaCompWeaponClassTokens[0]);
+                       (unsigned)D2Win::Src::D2Comp::gaCompWeaponClassTokens[1],
+                       (unsigned)(uintptr_t)&D2Win::Src::D2Comp::gaCompWeaponClassTokens[0]);
         lstrcpynA(reply, cfOut, replyMax);
         return;
     }
@@ -1454,7 +1454,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "srv", 3) && line[3] != 'c') {
         static char svOut[640];
         D2UnitStrc* pSrv = nullptr;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
+        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)D2Client::UNIT::CUnit::ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
         for (int nBucket = 0; nBucket < 128 && !pSrv; nBucket++)
             for (D2UnitStrc* pU = ppTable[nBucket]; pU; pU = pU->pListNext) { pSrv = pU; break; }
         if (!pSrv) { lstrcpynA(reply, "{\"err\":\"no server player\"}", replyMax); return; }
@@ -1486,7 +1486,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         }
         static char scOut[640];
         D2UnitStrc* pSrv = nullptr;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
+        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)D2Client::UNIT::CUnit::ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
         for (int nBucket = 0; nBucket < 128 && !pSrv; nBucket++)
             for (D2UnitStrc* pU = ppTable[nBucket]; pU; pU = pU->pListNext) { pSrv = pU; break; }
         ::SGAMEDATA* pGame = D2Game::GAME::Server::QSERVER_GetFirstActiveGame();
@@ -1548,9 +1548,9 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             wsprintfA(cdOut + u - 1, ",\"validate\":%d,\"vcode\":%d,\"castclient\":%d,"
                                      "\"los\":%d,\"txtid\":%d}",
                       nValid, nCode, nCast,
-                      (int)(sgptDataTable && sgptDataTable->pTxtSkills
-                            && (int)msg.nSkillId < sgptDataTable->nTxtSkillsCount
-                            ? sgptDataTable->pTxtSkills[msg.nSkillId].lineofsight : -1),
+                      (int)(D2Common::ITEMS::Items::sgptDataTable && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills
+                            && (int)msg.nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount
+                            ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[msg.nSkillId].lineofsight : -1),
                       (int)msg.nSkillId);
         }
         lstrcpynA(reply, cdOut, replyMax);
@@ -1776,7 +1776,7 @@ static LONG CALLBACK GuardVeh(EXCEPTION_POINTERS* pEx) {
 
 // The address the hardware write-watch covers. Settable from the control channel
 // (`watch <hex>`) so a new "who zeroes this global?" question does not need a rebuild.
-volatile void* g_pHwbpTarget = (void*)&gnTileClipYMin;
+volatile void* g_pHwbpTarget = (void*)&D2gfx::gnTileClipYMin;
 
 static LONG CALLBACK HwbpVeh(EXCEPTION_POINTERS* pEx) {
     // Debug registers cannot be installed on a running thread with SetThreadContext, but a
@@ -1836,10 +1836,10 @@ extern "C" void D2ProbeArmClipHwbp(void) {
     RaiseException(D2_ARM_HWBP_EXCEPTION, 0, 0, 0);
     // Control experiment: a store this thread is known to make. If this one does not trap,
     // the watch is not installed and any silence from it proves nothing about the real writer.
-    int nSaved = gnTileClipYMin;
-    *(volatile int*)&gnTileClipYMin = 12345;
-    *(volatile int*)&gnTileClipYMin = nSaved;
-    D2TraceFmt("HWBPSELFTEST done value=%d", gnTileClipYMin);
+    int nSaved = D2gfx::gnTileClipYMin;
+    *(volatile int*)&D2gfx::gnTileClipYMin = 12345;
+    *(volatile int*)&D2gfx::gnTileClipYMin = nSaved;
+    D2TraceFmt("HWBPSELFTEST done value=%d", D2gfx::gnTileClipYMin);
 }
 
 // Debug registers are per-thread, so a watch on the observing thread proves nothing about a
@@ -1857,7 +1857,7 @@ extern "C" void D2ProbeArmClipHwbpAllThreads(void) {
     if (hSnap == INVALID_HANDLE_VALUE) return;
     THREADENTRY32 te; te.dwSize = sizeof(te);
     DWORD dwPid = GetCurrentProcessId(), dwSelf = GetCurrentThreadId();
-    uintptr_t nAddr = (uintptr_t)&gnTileClipYMin;
+    uintptr_t nAddr = (uintptr_t)&D2gfx::gnTileClipYMin;
     if (Thread32First(hSnap, &te)) {
         do {
             if (te.th32OwnerProcessID != dwPid) continue;
@@ -1933,7 +1933,7 @@ static PFN_WSARecv  g_pfnWSARecv  = 0;
 static PFN_ReadFile g_pfnReadFile = 0;
 
 static void ReportIfCovers(const char* pszApi, const void* pBuf, size_t nLen, void* pRet) {
-    uintptr_t nTgt = (uintptr_t)&gnTileClipYMin;
+    uintptr_t nTgt = (uintptr_t)&D2gfx::gnTileClipYMin;
     uintptr_t nLo  = (uintptr_t)pBuf;
     if (!nLo) return;
     if (nTgt >= nLo && nTgt < nLo + nLen)
@@ -2112,10 +2112,10 @@ static DWORD WINAPI ClipArmerThread(LPVOID) {
 // Separate from the armer so the detection loop stays tight. Suspending through handles held
 // open in advance freezes the writer within microseconds of the store instead of milliseconds.
 static DWORD WINAPI ClipWatchThread(LPVOID) {
-    int nLast = *(volatile int*)&gnTileClipYMin;
+    int nLast = *(volatile int*)&D2gfx::gnTileClipYMin;
     int nDumped = 0;
     for (;;) {
-        int nNow = *(volatile int*)&gnTileClipYMin;
+        int nNow = *(volatile int*)&D2gfx::gnTileClipYMin;
         if (nNow != nLast) {
             if (nNow == 0 && !nDumped) {
                 nDumped = 1;
@@ -2227,7 +2227,7 @@ static void D2CONTROL_StepEnter(void) {
 
     case 1:
         if (--g_enterWait > 0) return;
-        OogCurrentCharSelectionMode = 0;                       // single player
+        D2Launch::MainMenus::OogCurrentCharSelectionMode = 0;                       // single player
         D2Launch::MainMenus::MAINMENU_CloseAndLaunchCharSelect();
         g_enterWait = 300;
         InterlockedExchange(&g_enterStep, 2);
@@ -2352,7 +2352,7 @@ static int UnitsReply(char* out, int outMax, int nWantType) {
     // ServerSideUnitHashTables and `UNITS_FindServerSideUnit` reads the Client one, so one
     // pair of names is wrong in Ghidra and guessing which would put the NPC list on the
     // wrong side. Report the table each unit came from and let the caller see it.
-    void* apTables[2] = { (void*)ClientSideUnitHashTables, (void*)ServerSideUnitHashTables };
+    void* apTables[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
     int used = wsprintfA(out, "{\"persp\":%d,\"units\":[", bPersp);
     int nFound = 0;
     for (int nTable = 0; nTable < 2; nTable++) {
@@ -2387,9 +2387,9 @@ static int UnitsReply(char* out, int outMax, int nWantType) {
                     bShrine = D2Common::Units::IsShrine(pUnit) ? 1 : 0;
                 if (pUnit->eUnitType == UNIT_ITEM)
                     nPage = (int)D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pUnit);
-                if (pUnit->eUnitType == UNIT_MONSTER && sgptDataTable &&
-                    pUnit->nClassId >= 0 && pUnit->nClassId < sgptDataTable->nTxtMonStatsSize) {
-                    const D2MonStatsTxt* pRow = &sgptDataTable->pTxtMonStats[pUnit->nClassId];
+                if (pUnit->eUnitType == UNIT_MONSTER && D2Common::ITEMS::Items::sgptDataTable &&
+                    pUnit->nClassId >= 0 && pUnit->nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+                    const D2MonStatsTxt* pRow = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[pUnit->nClassId];
                     bNpc = pRow->npc; bInteract = pRow->interact; bInTown = pRow->inTown;
                     const D2MonStats2Txt* p2 =
                         D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
@@ -2440,14 +2440,14 @@ static DWORD WINAPI D2CONTROL_HangWatchdog(LPVOID) {
 static void WalkerScanForShop(void) {
     // interact=1 in MonStats is the bit that decides whether a click opens a menu at all,
     // so it is the only test that answers "can I trade with this".
-    if (!sgptDataTable) return;
-    void* apTables[2] = { (void*)ClientSideUnitHashTables, (void*)ServerSideUnitHashTables };
+    if (!D2Common::ITEMS::Items::sgptDataTable) return;
+    void* apTables[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
     for (int nTable = 0; nTable < 2; nTable++) {
         D2UnitStrc** ppTable = (D2UnitStrc**)((char*)apTables[nTable] + UNIT_MONSTER * 0x200);
         for (int nBucket = 0; nBucket < 128; nBucket++) {
             for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext) {
-                if (pUnit->nClassId < 0 || pUnit->nClassId >= (int)sgptDataTable->nTxtMonStatsSize) continue;
-                const D2MonStatsTxt* pRow = &sgptDataTable->pTxtMonStats[pUnit->nClassId];
+                if (pUnit->nClassId < 0 || pUnit->nClassId >= (int)D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) continue;
+                const D2MonStatsTxt* pRow = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[pUnit->nClassId];
                 if (!pRow->interact) continue;
                 if (pUnit->nClassId == 175) continue;          // Warriv: interactable, sells nothing
                 // Remember every class already reported, not just the last one: with several
@@ -2474,8 +2474,8 @@ static void WalkerScanForShop(void) {
 }
 
 static void WalkerStep(void) {
-    if (!g_walkOn || !pPlayerUnit) return;
-    D2DynamicPathStrc* pPath = pPlayerUnit->pPath.pDynamicPath;
+    if (!g_walkOn || !D2Client::UNIT::CUnit::pPlayerUnit) return;
+    D2DynamicPathStrc* pPath = D2Client::UNIT::CUnit::pPlayerUnit->pPath.pDynamicPath;
     if (!pPath) return;
     int nX = pPath->Coords.tSubtile.nPosX, nY = pPath->Coords.tSubtile.nPosY;
 
@@ -2516,7 +2516,7 @@ static void WalkerStep(void) {
     }
 
     g_walkSteps++;
-    D2Client::UNIT::Player::CLIENT_MovePlayerToPosition_Extern(pPlayerUnit, (int16_t)nStepX, (int16_t)nStepY, 1);
+    D2Client::UNIT::Player::CLIENT_MovePlayerToPosition_Extern(D2Client::UNIT::CUnit::pPlayerUnit, (int16_t)nStepX, (int16_t)nStepY, 1);
 }
 
 extern "C" void D2CONTROL_Pump(void) {
@@ -2534,12 +2534,12 @@ extern "C" void D2CONTROL_Pump(void) {
     // the first frame a game view exists, on this thread (the writer's). One-shot.
     {
         static bool bViewWatchTried = false;
-        if (!bViewWatchTried && D2GameView != nullptr &&
+        if (!bViewWatchTried && D2Client::GAME::Game::D2GameView != nullptr &&
             GetFileAttributesA("test\\watchview") != INVALID_FILE_ATTRIBUTES) {
             bViewWatchTried = true;
-            g_pHwbpTarget = (void*)((char*)D2GameView + 0x10);
+            g_pHwbpTarget = (void*)((char*)D2Client::GAME::Game::D2GameView + 0x10);
             D2TraceFmt("VIEWWATCH arming on %08X (D2GameView=%08X)", (unsigned)(uintptr_t)g_pHwbpTarget,
-                       (unsigned)(uintptr_t)D2GameView);
+                       (unsigned)(uintptr_t)D2Client::GAME::Game::D2GameView);
             D2ProbeArmClipHwbpSelf();
         }
     }
@@ -2553,9 +2553,9 @@ extern "C" void D2CONTROL_Pump(void) {
     // Which level the player is standing in. "the town looks wrong" and "the town IS the
     // wrong town" are different bugs and the level id is what separates them.
     int nPlayerLevelId = -1, nPlayerAct = -1;
-    if (pPlayerUnit) {
-        nPlayerAct = (int)pPlayerUnit->nAct;
-        D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit);
+    if (D2Client::UNIT::CUnit::pPlayerUnit) {
+        nPlayerAct = (int)D2Client::UNIT::CUnit::pPlayerUnit->nAct;
+        D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(D2Client::UNIT::CUnit::pPlayerUnit);
         if (pRoom) nPlayerLevelId = (int)D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     }
 
@@ -2565,10 +2565,10 @@ extern "C" void D2CONTROL_Pump(void) {
     wsprintfA(g_state,
         "{\"frame\":%ld,\"hwnd\":\"0x%X\",\"appmode\":%d,"
         "\"player\":\"0x%X\",\"ingame\":%d,\"enter\":%ld,\"chars\":%u,\"lvl\":%d,\"act\":%d,\"loaded\":%d,\"note\":\"%s\"}",
-        frame, (unsigned)(UINT_PTR)hWnd, (int)gdwAppMode,
-        (unsigned)(UINT_PTR)pPlayerUnit, pPlayerUnit ? 1 : 0,
+        frame, (unsigned)(UINT_PTR)hWnd, (int)D2Client::ClientModeInGame::gdwAppMode,
+        (unsigned)(UINT_PTR)D2Client::UNIT::CUnit::pPlayerUnit, D2Client::UNIT::CUnit::pPlayerUnit ? 1 : 0,
         g_enterStep, (unsigned)D2Launch::CharSel::TotalCurrentChars,
-        nPlayerLevelId, nPlayerAct, (int)ServerLoadingComplete, g_enterNote);
+        nPlayerLevelId, nPlayerAct, (int)D2Client::GAME::Game::ServerLoadingComplete, g_enterNote);
     LeaveCriticalSection(&g_cs);
 
     D2CONTROL_StepEnter();
@@ -2592,7 +2592,7 @@ extern "C" void D2CONTROL_Pump(void) {
             D2ProbeArmClipHwbpSelf();
         } else if (a.kind == 2) {
             D2UnitStrc* pTarget = nullptr;
-            void* apT[2] = { (void*)ClientSideUnitHashTables, (void*)ServerSideUnitHashTables };
+            void* apT[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
             for (int t = 0; t < 2 && !pTarget; t++) {
                 D2UnitStrc** ppT = (D2UnitStrc**)((char*)apT[t] + (int)a.wp * 0x200);
                 for (int b = 0; b < 128 && !pTarget; b++)
@@ -2643,10 +2643,10 @@ extern "C" void D2CONTROL_Pump(void) {
     // flip name the subsystem responsible, which is what the watchpoint could not deliver.
     {
         static int nLastClip = 0x7FFFFFFF;
-        if (gnTileClipYMin != nLastClip) {
+        if (D2gfx::gnTileClipYMin != nLastClip) {
             D2TraceFmt("CLIPFLIP frame=%d %d -> %d (clipBottom=%d)",
-                       (int)g_frames, nLastClip, gnTileClipYMin, gnTileClipBottom);
-            nLastClip = gnTileClipYMin;
+                       (int)g_frames, nLastClip, D2gfx::gnTileClipYMin, D2gfx::D2GFX::gnTileClipBottom);
+            nLastClip = D2gfx::gnTileClipYMin;
         }
     }
     if (InterlockedExchange(&g_reqShopList, 0)) {
@@ -2702,9 +2702,9 @@ extern "C" void D2CONTROL_Pump(void) {
         // Exactly what the shop panel's click handler would set before calling the game's
         // own transaction function. The purchase itself is entirely the game's code: it
         // sends 0x32 NpcBuyConfirm and the server moves the item and the gold.
-        gnNpcMenuTransactionType = (uint32_t)g_reqTxType;   // 1 buy, 2 sell, 3 gamble
-        gnNpcMenuTransactionItemGUID = (uint32_t)nBuy;
-        gbNpcMenuTransactionPending = 1;
+        D2Client::UI::npcmenu::gnNpcMenuTransactionType = (uint32_t)g_reqTxType;   // 1 buy, 2 sell, 3 gamble
+        D2Client::UI::npcmenu::gnNpcMenuTransactionItemGUID = (uint32_t)nBuy;
+        D2Client::UI::npcmenu::gbNpcMenuTransactionPending = 1;
         D2Client::UI::npcmenu::NPCMENU_ExecuteShopTransaction(0, 0);
     }
 }

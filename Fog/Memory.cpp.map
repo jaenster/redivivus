@@ -477,6 +477,23 @@
       ]
     },
     {
+      "name": "SErrSetBlizzardErrorFunction_Unref_0040b370",
+      "address": "0040b370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b370"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "SErrSetBlizzardErrorFunction_Unref_0040b370"
+      ],
+      "usedTypes": [
+        "pfnBlizzardError"
+      ]
+    },
+    {
       "name": "AllocClientMemory",
       "address": "0040b380",
       "lines": [

@@ -16,5 +16,6 @@ struct D2PoolBlockEntryStrc;
 struct D2PoolBlockStrc;
 
 namespace Fog::Memory {
+extern uint32_t gpServerMemHeap;
 extern D2MemoryManagerStrc pGlobalPoolSystem;
 } // namespace Fog::Memory

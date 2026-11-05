@@ -355,17 +355,15 @@ static void SMemGetBlockDataAndSize(int * pnOutHeaderSize, int32_t nBlockAddr, i
 }
 
 static BOOL SMemCommitMorePages(int32_t nTargetOffset, D2FogHeapDescStrc * pHeap) {
-    uint32_t nCommitted = pHeap->nCommitted;
-    SIZE_T dwSize = nTargetOffset - nCommitted;
-    uint32_t nAlignRemainder = pHeap->nPageAlignMask - 1 & dwSize;
-    if (nAlignRemainder) {
-      dwSize += pHeap->nPageAlignMask - nAlignRemainder;
+    SIZE_T dwSize = nTargetOffset - pHeap->nCommitted;
+    if (pHeap->nPageAlignMask - 1 & dwSize) {
+      dwSize += pHeap->nPageAlignMask - (pHeap->nPageAlignMask - 1 & dwSize);
     }
-    if (nCommitted + dwSize > pHeap->nReserved) {
-      dwSize = pHeap->nReserved - nCommitted;
+    if (pHeap->nCommitted + dwSize > pHeap->nReserved) {
+      dwSize = pHeap->nReserved - pHeap->nCommitted;
     }
 
-    LPVOID pAlloc = VirtualAlloc((LPVOID)((int)pHeap->aFreeBins + (nCommitted - 0x38)), dwSize, 0x1000, 4);
+    LPVOID pAlloc = VirtualAlloc((LPVOID)((int)pHeap->aFreeBins + (pHeap->nCommitted - 0x38)), dwSize, 0x1000, 4);
     if (!pAlloc) {
       return 0;
     }

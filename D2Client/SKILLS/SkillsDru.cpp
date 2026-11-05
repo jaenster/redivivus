@@ -40,20 +40,20 @@
 namespace D2Client::SKILLS::SkillsDru {
 
 BOOL __fastcall Skills_CltStFunc_AddAuraToggleOverlay(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillTxt && pSkillTxt->aurastate >= 0)) {
       return 0;
     }
 
     int nAuraStateIdx = (int)pSkillTxt->aurastate;
-    if (!(nAuraStateIdx < sgptDataTable->nTxtStatesSize && pSkillTxt->cltoverlaya >= 0)) {
+    if (!(nAuraStateIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize && pSkillTxt->cltoverlaya >= 0)) {
       return 0;
     }
 
     eOverlayId eOverlay = (eOverlayId)pSkillTxt->cltoverlaya;
-    if ((int)eOverlay < sgptDataTable->nTxtOverlaySize) {
+    if ((int)eOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       eD2States eAuraState;
-      if (pSkillTxt->cltoverlayb >= 0 && (int)pSkillTxt->cltoverlayb < sgptDataTable->nTxtOverlaySize) {
+      if (pSkillTxt->cltoverlayb >= 0 && (int)pSkillTxt->cltoverlayb < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
         eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nAuraStateIdx);
         if (eAuraState != STATE_none) {
           eOverlay = (eOverlayId)pSkillTxt->cltoverlayb;
@@ -148,13 +148,13 @@ BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t
 }
 
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
-    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {
@@ -172,13 +172,13 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Sk
 }
 
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
-    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {
@@ -196,13 +196,13 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2S
 }
 
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_BackArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
-    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {

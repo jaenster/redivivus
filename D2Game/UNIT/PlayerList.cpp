@@ -143,9 +143,11 @@ void __fastcall PLAYERLIST_RemoveFromList(::SGAMEDATA * pGame, D2UnitStrc * pUni
       ppNextEntry = &pMemoryToFree->pNext;
       pPrevEntry = pMemoryToFree;
       pMemoryToFree = *ppNextEntry;
-      if (!*ppNextEntry) {
-        return;
+      if (*ppNextEntry) {
+        continue;
       }
+
+      return;
     }
 
     if (pPrevEntry) {

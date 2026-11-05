@@ -2156,13 +2156,6 @@ BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(D2GfxDataStrc * pGfxData) {
     return 0;
 }
 
-void __fastcall SPRITECACHE_SetMaxSize_Unref_00624700(size_t nSize) {
-    // Static local variables (originally global data)
-    static unsigned long long gpItemTypeTableContext = 0; D2_STATIC_GUARD(gpItemTypeTableContext, "D2CMP::SRC::SpriteCache::SPRITECACHE_SetMaxSize_Unref_00624700::gpItemTypeTableContext");
-
-    *(uint32_t*)(char*)&gpItemTypeTableContext = nSize;
-}
-
 void __fastcall SPRITECACHE_SetMaxSize_Unref_006b2f30(size_t nSize) {
     g_bPerspectiveMode = nSize;
 }

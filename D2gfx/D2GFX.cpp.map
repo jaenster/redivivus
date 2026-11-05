@@ -18,20 +18,6 @@
       ]
     },
     {
-      "name": "RENDERER_TogglePerspective_Unref_00474140",
-      "address": "00474140",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00474140"
-        }
-      ],
-      "namespace": "D2gfx::D2GFX",
-      "calledFunctions": [
-        "RENDERER_TogglePerspective_Unref_00474140"
-      ]
-    },
-    {
       "name": "RENDERER_TogglePerspective_Unref_004769b0",
       "address": "004769b0",
       "lines": [
@@ -1876,34 +1862,6 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
-    },
-    {
-      "name": "D2GFX_EnableVSync_Unref_00506a80",
-      "address": "00506a80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00506a80"
-        }
-      ],
-      "namespace": "D2gfx::D2GFX",
-      "calledFunctions": [
-        "D2GFX_EnableVSync_Unref_00506a80"
-      ]
-    },
-    {
-      "name": "D2GFX_ToggleLowQuality_Unref_00608520",
-      "address": "00608520",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00608520"
-        }
-      ],
-      "namespace": "D2gfx::D2GFX",
-      "calledFunctions": [
-        "D2GFX_ToggleLowQuality_Unref_00608520"
       ]
     },
     {

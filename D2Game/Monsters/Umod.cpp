@@ -143,7 +143,7 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
     }
 
     int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!(pMonStatsTxt && bUnique)) {
       return;
     }
@@ -153,19 +153,19 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nDamageBonus, 0);
     uint32_t nExp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_experience, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nExp + nExp / 5 * -2, 0);
-    if (sgptDataTable->nTxtMonUmodSize <= 0xb) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize <= 0xb) {
       nDamageBonus = 0;
-    } else if (sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-352) {
+    } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-352) {
       nDamageBonus = 0;
     } else {
-      nDamageBonus = sgptDataTable->pTxtMonUmod[0xb].constants;
+      nDamageBonus = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xb].constants;
     }
-    if (sgptDataTable->nTxtMonUmodSize <= 0xa) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize <= 0xa) {
       nToHitBonus = 0;
-    } else if (sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-320) {
+    } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-320) {
       nToHitBonus = 0;
     } else {
-      nToHitBonus = sgptDataTable->pTxtMonUmod[10].constants;
+      nToHitBonus = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[10].constants;
     }
 
     D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
@@ -267,7 +267,7 @@ void __fastcall MONUMOD_ApplyColdEnchant(D2UnitStrc * pUnit, int32_t nIndex, BOO
       nLevelIdx = 1;
     }
 
-    int nLvlTableIdx = sgptDataTable->nTxtMonLvlSize - 1;
+    int nLvlTableIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLevelIdx < nLvlTableIdx) {
       nLvlTableIdx = nLevel;
       if (nLevel <= 1) {
@@ -616,35 +616,35 @@ void __fastcall ExtraStrong(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     }
 
     int nToHitConst;
-    nToHitConst = sgptDataTable->nTxtMonUmodSize;
+    nToHitConst = D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
     if (bUnique) {
       if (nToHitConst <= 0xf) {
         nValue = 0;
-      } else if (sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-480) {
+      } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-480) {
         nValue = 0;
       } else {
-        nValue = sgptDataTable->pTxtMonUmod[0xf].constants;
+        nValue = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xf].constants;
       }
       if (nToHitConst <= 0xd) {
         nToHitConst = 0;
         goto scale_and_add_bonus;
       }
 
-      pUmodEntry = sgptDataTable->pTxtMonUmod + 0xd;
+      pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xd;
     } else {
       if (nToHitConst <= 0xe) {
         nValue = 0;
-      } else if (sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-448) {
+      } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-448) {
         nValue = 0;
       } else {
-        nValue = sgptDataTable->pTxtMonUmod[0xe].constants;
+        nValue = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xe].constants;
       }
       if (nToHitConst <= 0xc) {
         nToHitConst = 0;
         goto scale_and_add_bonus;
       }
 
-      pUmodEntry = sgptDataTable->pTxtMonUmod + 0xc;
+      pUmodEntry = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + 0xc;
     }
     if (!pUmodEntry) {
       nToHitConst = 0;
@@ -659,7 +659,7 @@ void __fastcall ExtraStrong(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
       nValue = pDiffLevels->ChampionDamageBonus * nValue / 100;
       nToHitConst = pDiffLevels->ChampionDamageBonus * nToHitConst / 100;
       nBaseClassId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-      if (nBaseClassId >= 0 && nBaseClassId < sgptDataTable->nTxtMonStatsSize && nBaseClassId == 0x76) {
+      if (nBaseClassId >= 0 && nBaseClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nBaseClassId == 0x76) {
         nValue /= 2;
       }
     }
@@ -674,7 +674,7 @@ void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     }
 
     int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return;
     }
@@ -740,14 +740,14 @@ void __fastcall FireEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
       nLevelClamped = 1;
     }
 
-    int nLevelIdx = sgptDataTable->nTxtMonLvlSize - 1;
+    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLevelClamped < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
       nLevelIdx = 1;
     } else if (nLevelIdx < 0) {
       return;
     }
 
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
@@ -811,14 +811,14 @@ void __fastcall LightningEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUni
       nLevelClamped = 1;
     }
 
-    int nLevelIdx = sgptDataTable->nTxtMonLvlSize - 1;
+    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLevelClamped < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
       nLevelIdx = 1;
     } else if (nLevelIdx < 0) {
       return;
     }
 
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
@@ -883,14 +883,14 @@ void __fastcall ColdEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
       nLvlDamage = 1;
     }
 
-    int nLevelIdx = sgptDataTable->nTxtMonLvlSize - 1;
+    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLvlDamage < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
       nLevelIdx = 1;
     } else if (nLevelIdx < 0) {
       return;
     }
 
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
@@ -956,14 +956,14 @@ void __fastcall PoisonEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique
       nLvlDamage = 1;
     }
 
-    int nLevelIdx = sgptDataTable->nTxtMonLvlSize - 1;
+    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLvlDamage < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
       nLevelIdx = 1;
     } else if (nLevelIdx < 0) {
       return;
     }
 
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
@@ -1028,14 +1028,14 @@ void __fastcall ManaBurn(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
       nLvlDamage = 1;
     }
 
-    int nLevelIdx = sgptDataTable->nTxtMonLvlSize - 1;
+    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
     if (nLvlDamage < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
       nLevelIdx = 1;
     } else if (nLevelIdx < 0) {
       return;
     }
 
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
     if (!pMonLvlTxt) {
       return;
     }

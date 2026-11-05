@@ -115,7 +115,7 @@ void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nGa
     }
 
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\PlrSkills.cpp", 0x26);
-    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -155,7 +155,7 @@ void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t 
     }
 
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\PlrSkills.cpp", 0x4f);
-    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -193,8 +193,8 @@ static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOver
 }
 
 void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && *((uint8_t*)pDVar1 + 0x10) & (uint8_t)gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= sgptDataTable->nTxtItemStatCostSize)) {
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!(pDVar1 && *((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return;
     }
 
@@ -213,8 +213,8 @@ void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2
 }
 
 void __fastcall PLRSKILLS_StateRemFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && *((uint8_t*)pDVar1 + 0x10) & (uint8_t)gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= sgptDataTable->nTxtItemStatCostSize)) {
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!(pDVar1 && *((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return;
     }
 
@@ -238,7 +238,7 @@ void __fastcall PLRSKILLS_StateSetFn02_CloakOfShadows(D2UnitStrc * pUnit, eD2Sta
 
     eD2Skills eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
     int nSkillLvl = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -352,7 +352,7 @@ void __fastcall PLRSKILLS_StateRemFn03_BoneArmor(D2UnitStrc * pUnit, eD2States e
     int nOverlay3;
     int nOverlay4;
     int nOverlay1;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -414,7 +414,7 @@ void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States e
     eOverlayId eOverlay3;
     int nOverlay2;
     eOverlayId eOverlay1;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -501,7 +501,7 @@ void __fastcall PLRSKILLS_StateRemFn05_CycloneArmor(D2UnitStrc * pUnit, eD2State
     int32_t nOverlay1;
     int nOverlay3;
     int nOverlay2;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -541,7 +541,7 @@ void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2State
     eOverlayId eOverlay3;
     eOverlayId eOverlay1;
     eOverlayId eOverlay2;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -617,7 +617,7 @@ void __fastcall PLRSKILLS_StateSetFn07_Hurricane(D2UnitStrc * pUnit, eD2States e
     }
 
     eD2Skills eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -637,7 +637,7 @@ void __fastcall PLRSKILLS_StateRemFn04_Hurricane(D2UnitStrc * pUnit, eD2States e
     }
 
     eD2Skills eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -665,14 +665,14 @@ void __fastcall PLRSKILLS_StateRemFn06_ShrineSkill(D2UnitStrc * pUnit, eD2States
 
 void __fastcall PLRSKILLS_StateSetFn10_Redeemed(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!(pDVar1 && pDVar1->skill >= 0)) {
       return;
     }
 
     eD2Skills eSkill = (eD2Skills)pDVar1->skill;
-    D2SkillsTxt* pSkillTxt = (int)eSkill < sgptDataTable->nTxtSkillsCount && (int)eSkill >= 0 ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxt && pSkillTxt->cltmissile[1] >= 0 && (int)pSkillTxt->cltmissile[1] < sgptDataTable->nTxtMissilesSize)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (int)eSkill >= 0 ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!(pSkillTxt && pSkillTxt->cltmissile[1] >= 0 && (int)pSkillTxt->cltmissile[1] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
     }
 
@@ -804,7 +804,7 @@ void __fastcall PLRSKILLS_StateSetFn15_Revive(D2UnitStrc * pUnit, eD2States eSta
 void __fastcall PLRSKILLS_StateSetFn16_StackOverlay(D2UnitStrc * pUnit, eD2States eState) {
     int bHasOverlay;
     int nOverlayIdx;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -817,7 +817,7 @@ void __fastcall PLRSKILLS_StateSetFn16_StackOverlay(D2UnitStrc * pUnit, eD2State
     int nStackCount = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_skill_frenzy, 0);
     eD2Skills eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
     int nSkillLvl = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -882,7 +882,7 @@ void __fastcall PLRSKILLS_StateSetFn16_StackOverlay(D2UnitStrc * pUnit, eD2State
 }
 
 void __fastcall PLRSKILLS_StateRemFn11_StackOverlay(D2UnitStrc * pUnit, eD2States eState) {
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -908,8 +908,8 @@ void __fastcall PLRSKILLS_StateRemFn11_StackOverlay(D2UnitStrc * pUnit, eD2State
 
 void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && pDVar1->missile >= 0 && (int)pDVar1->missile < sgptDataTable->nTxtMissilesSize)) {
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!(pDVar1 && pDVar1->missile >= 0 && (int)pDVar1->missile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
     }
 
@@ -932,8 +932,8 @@ void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States
 void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
     Monster::MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x5, 0);
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && pDVar1->missile >= 0 && (int)pDVar1->missile < sgptDataTable->nTxtMissilesSize)) {
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!(pDVar1 && pDVar1->missile >= 0 && (int)pDVar1->missile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
     }
 
@@ -968,20 +968,20 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
     int nStateColorOffset;
     int nTxtOffset;
     uint8_t byColorPriority;
-    int nTxtSize = sgptDataTable->nTxtStatesSize;
+    int nTxtSize = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize;
     int nBestStateIdx = -1;
     int nStateIdx = 0;
     uint8_t byBestPriority = 0;
     if (nTxtSize > 0) {
       D2StatesTxt* pDVar1;
       nTxtOffset = 0;
-      pDataTable = sgptDataTable;
+      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
       do {
         if (nStateIdx >= 0 && nStateIdx < nTxtSize) {
           nStateColorOffset = (int)pDataTable->pTxtStates->overlay + nTxtOffset - 2;
           if (nStateColorOffset) {
             eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nStateIdx);
-            pDataTable = sgptDataTable;
+            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (eUnitState != STATE_none) {
               byColorPriority = *(uint8_t*)(nStateColorOffset + 0x20);
               if (byColorPriority > byBestPriority) {
@@ -1045,8 +1045,8 @@ void __fastcall STATES_AddStateOverlays(D2UnitStrc * pUnit, eD2States eState) {
     eOverlayId eCastOverlay;
     eOverlayId eOverlay2;
     eD2States eLinkedState;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && !(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)gadwBitMasks[3]))) {
+    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!(pDVar1 && !(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]))) {
       return;
     }
     if (pDVar1->castoverlay >= 0) {
@@ -1144,11 +1144,11 @@ static void STATES_ResetUnitGfxAndMode(D2UnitStrc * pUnit) {
 // Applies eState to pUnit: validates bounds, skips dead units if notondead is set, plays onsound, clears/reuses existing stat-list if noclear=0, sets the state bit, updates color-shift/light, adds overlays, and if the unit is active with a light-state sets NODRAW+DRAWSHADOW flags. If transform!=0, resets gfx/anim mode.
 void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
     int bActive;
-    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
-    if (*((uint8_t*)pDVar1 + 0x14) & (uint8_t)gadwBitMasks[7] && (pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick || pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
+    if (*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7] && (pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick || pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
       return;
     }
@@ -1157,7 +1157,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
     if (eStateLinked != STATE_none) {
       D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
-      if (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)gadwBitMasks[4])) {
+      if (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
         D2Common::Stats::StatsEx::STATLIST_FreeChildStatLists(pStatList);
       }
     } else {
@@ -1180,7 +1180,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
         pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_TARGETABLE | UNITFLAG_DRAWSHADOW;
       }
     }
-    if (!(*((uint8_t*)pDVar1 + 0x10) & (uint8_t)gadwBitMasks[3])) {
+    if (!(*((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       return;
     }
 
@@ -1194,7 +1194,7 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
     uint32_t nRandom1ofN;
     uint32_t nRand1ofN;
     eOverlayId eOverlay;
-    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -1235,7 +1235,7 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
     if (pDVar1->overlay[1] >= 0) {
       STATES_RemoveOverlayById(pUnit, (int)pDVar1->overlay[1]);
     }
-    if (*((uint8_t*)pDVar1 + 0x10) & (uint8_t)gadwBitMasks[3]) {
+    if (*((uint8_t*)pDVar1 + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       STATES_ResetUnitGfxAndMode(pUnit);
     }
 
@@ -1273,7 +1273,7 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     } else if ((int)eUnitStat < 0) {
       return pStatList;
     }
-    if ((int)eUnitStat < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((uintptr_t)&sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+    if ((int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((uintptr_t)&D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x5d2);
     }
 
@@ -1318,8 +1318,8 @@ void __fastcall STATES_DispatchSetFunc(D2UnitStrc * pUnit, eD2States eState) {
     nullptr
 }; D2_STATIC_GUARD(STATESSETFUNC, "D2Client::UNIT::PlrSkills::STATES_DispatchSetFunc::STATESSETFUNC");
 
-    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
-    if (!(pDVar1 && (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)gadwBitMasks[7]) || (pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != Kick) && (pUnit->eUnitType != UNIT_PLAYER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead)))) {
+    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!(pDVar1 && (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) || (pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != Kick) && (pUnit->eUnitType != UNIT_PLAYER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead)))) {
       return;
     }
     if (pDVar1->setfunc >= 0 && pDVar1->setfunc < 0x1f && STATESSETFUNC[pDVar1->setfunc]) {
@@ -1375,7 +1375,7 @@ void __fastcall STATES_DispatchRemFunc(D2UnitStrc * pUnit, eD2States eState) {
     nullptr
 }; D2_STATIC_GUARD(STATESREMFUNC, "D2Client::UNIT::PlrSkills::STATES_DispatchRemFunc::STATESREMFUNC");
 
-    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
+    D2StatesTxt* pDVar1 = pUnit && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
       return;
     }

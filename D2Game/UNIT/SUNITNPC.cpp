@@ -1522,7 +1522,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
               if (__frame0.pScrollSocketItem == gptItemCodeArmor && __frame0.pEquippedWeapon && uVar10 != 7) {
                 nNpcId &= 0xffffff;
               }
-              if (__frame0.pScrollSocketItem == gptItemCodeSwordType) {
+              if (__frame0.pScrollSocketItem == sunitproxy::gptItemCodeSwordType) {
                 if (__frame0.pEquippedWeapon) {
                   if (uVar10 != 1) {
                     nNpcId &= 0xffffff;
@@ -1532,7 +1532,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
                 }
 
                 no_weapon_equipped:
-                if (__frame0.pScrollSocketItem != gptItemCodeArmor && __frame0.pScrollSocketItem != gptItemCodeSwordType) {
+                if (__frame0.pScrollSocketItem != gptItemCodeArmor && __frame0.pScrollSocketItem != sunitproxy::gptItemCodeSwordType) {
                   try_auto_equip:
                   if (*(uint8_t*)((char*)&nNpcId + 3) != '\0' && (nNpcId = ITEMS::ItemMode::ITEMMODE_TryPutItemInInventory(pGame, pPlayer, pClonedItem, 0) , nNpcId != 0)) {
                     goto charge_for_item;
@@ -2275,7 +2275,7 @@ BOOL __fastcall SUNITNPC_HandleHireableAction(D2UnitStrc * pUnit) {
     eD2States eState;
     BOOL bAnyStateRemoved = 0;
     BOOL bStateRemoved = 0;
-    if (sgptDataTable->nTxtStatesSize > 0) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize > 0) {
       BOOL eActiveState;
       eState = STATE_none;
       do {
@@ -2294,7 +2294,7 @@ BOOL __fastcall SUNITNPC_HandleHireableAction(D2UnitStrc * pUnit) {
 
         eState += STATE_freeze;
         bAnyStateRemoved = bStateRemoved;
-      } while ((int)eState < sgptDataTable->nTxtStatesSize);
+      } while ((int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize);
     }
 
     return bAnyStateRemoved;
@@ -3168,7 +3168,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     eD2QuestState eQuestState;
     D2UnitStrc* pClonedItem;
     pClonedItem = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, guid);
-    if (!pClonedItem || !pUnit || (sUseMenuPkt.y = pClonedItem->nClassId , sUseMenuPkt.y < 0) || sUseMenuPkt.y >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + sUseMenuPkt.y) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[sUseMenuPkt.y] + 0xd) & gadwBitMasks[1]) || pClonedItem->eUnitType != UNIT_MONSTER || !pClonedItem->pUnitData.pUnitDataMonster || (pMonsterAI = pClonedItem->pUnitData.pUnitDataMonster->pMonsterAi , !pMonsterAI)) {
+    if (!pClonedItem || !pUnit || (sUseMenuPkt.y = pClonedItem->nClassId , sUseMenuPkt.y < 0) || sUseMenuPkt.y >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + sUseMenuPkt.y) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[sUseMenuPkt.y] + 0xd) & Fog::BitBuffer::gadwBitMasks[1]) || pClonedItem->eUnitType != UNIT_MONSTER || !pClonedItem->pUnitData.pUnitDataMonster || (pMonsterAI = pClonedItem->pUnitData.pUnitDataMonster->pMonsterAi , !pMonsterAI)) {
       return 0;
     }
 

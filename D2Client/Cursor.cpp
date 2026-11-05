@@ -115,8 +115,10 @@ static D2CursorDataStrc CursorData[7] = {
     }
 }; D2_STATIC_GUARD(CursorData, "CursorData");
 static int gnCursorDataCount = 0x7; D2_STATIC_GUARD(gnCursorDataCount, "gnCursorDataCount");
-int MouseY = 0; D2_GLOBAL_GUARD(MouseY, "MouseY");
-int MouseX = 0; D2_GLOBAL_GUARD(MouseX, "MouseX");
+namespace D2Client::Cursor {
+int MouseY = 0; D2_GLOBAL_GUARD(MouseY, "D2Client::Cursor::MouseY");
+int MouseX = 0; D2_GLOBAL_GUARD(MouseX, "D2Client::Cursor::MouseX");
+} // namespace D2Client::Cursor
 static uint32_t gnCursorType = 0; D2_STATIC_GUARD(gnCursorType, "gnCursorType");
 static D2UnitStrc * pCursorItem = 0; D2_STATIC_GUARD(pCursorItem, "pCursorItem");
 namespace D2Client::Cursor {
@@ -125,7 +127,9 @@ int nCursorDataIndex = 0; D2_GLOBAL_GUARD(nCursorDataIndex, "D2Client::Cursor::n
 } // namespace D2Client::Cursor
 static int32_t gCursorAnimationFrame = 0; D2_STATIC_GUARD(gCursorAnimationFrame, "gCursorAnimationFrame");
 static uint32_t gnCursorAnimStartTick = 0; D2_STATIC_GUARD(gnCursorAnimStartTick, "gnCursorAnimStartTick");
-int ItemTypeOnHand = 0; D2_GLOBAL_GUARD(ItemTypeOnHand, "ItemTypeOnHand");
+namespace D2Client::Cursor {
+int ItemTypeOnHand = 0; D2_GLOBAL_GUARD(ItemTypeOnHand, "D2Client::Cursor::ItemTypeOnHand");
+} // namespace D2Client::Cursor
 
 namespace D2Client::Cursor {
 
@@ -273,8 +277,8 @@ void __fastcall UI_InitializeCursor(int32_t nCursorType) {
     gCursorAnimationFrame = 0;
     gwCursorAnimUnknownField = 0;
     gnCursorAnimStartTick = GetTickCount();
-    MouseX = ScreenSizeX / 2;
-    MouseY = ScreenSizeY / 2;
+    MouseX = UI::ui::ScreenSizeX / 2;
+    MouseY = UI::Inv::ScreenSizeY / 2;
 }
 
 void __stdcall UI_FreeCursor() {
@@ -388,15 +392,15 @@ void __stdcall MOUSE_DrawCursorSprite() {
       nPositionY = 0;
     } else {
       nPositionY = MouseY;
-      if (MouseY > ScreenSizeY - 1) {
-        nPositionY = ScreenSizeY - 1;
+      if (MouseY > UI::Inv::ScreenSizeY - 1) {
+        nPositionY = UI::Inv::ScreenSizeY - 1;
       }
     }
 
     int nPositionX = gnCursorType;
     if (nMouseX >= gnCursorType) {
       int nMaxX;
-      nMaxX = ScreenSizeX - gnCursorType - 1;
+      nMaxX = UI::ui::ScreenSizeX - gnCursorType - 1;
       nPositionX = nMouseX;
       if (nMouseX > nMaxX) {
         nPositionX = nMaxX;
@@ -587,14 +591,14 @@ void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
       bWindowActive = Fog::Src::ErrorManager::GetErrorState();
       nClampedX = MouseX;
       if (!bWindowActive) {
-        nMaxX = ScreenSizeX - 1;
+        nMaxX = UI::ui::ScreenSizeX - 1;
         if (MouseX > nMaxX) {
           MouseX = nMaxX;
         }
 
         nSavedMouseX = MouseX;
-        nClampedY = ScreenSizeY - 1;
-        if (MouseY > ScreenSizeY - 1 || (nClampedY = MouseY , nMaxX < nClampedX)) {
+        nClampedY = UI::Inv::ScreenSizeY - 1;
+        if (MouseY > UI::Inv::ScreenSizeY - 1 || (nClampedY = MouseY , nMaxX < nClampedX)) {
           /* int Y for SetCursorPos */ MouseY = nClampedY;
           nClampedX = MouseY;
           /* int X for SetCursorPos */ SetCursorPos(MouseX, MouseY);

@@ -1156,8 +1156,6 @@ uint32_t __stdcall CELCMP_GetFrameDecodeHandlerForward(uint32_t nGameDirection, 
     0x0
 }; D2_STATIC_GUARD(gdwCelCmpCacheSize, "D2CMP::SRC::CelCmp::CELCMP_GetFrameDecodeHandlerForward::gdwCelCmpCacheSize");
 
-    uint32_t dwPopTmp1;
-    uint32_t dwPopTmp2;
     int32_t nErrorLine;
     if (!(nGameDirection < 0x40)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1dd);
@@ -1172,10 +1170,8 @@ uint32_t __stdcall CELCMP_GetFrameDecodeHandlerForward(uint32_t nGameDirection, 
         exit(-1);
       }
 
-      dwPopTmp2 = nLevelOfRotation >> 1 & 0x77777777;
-      dwPopTmp1 = nLevelOfRotation >> 2 & 0x33333333;
-      nDirLowestBit = nLevelOfRotation >> 3 & 0x11111111;
-      if (((nLevelOfRotation - dwPopTmp2 - dwPopTmp1 - nDirLowestBit >> 4) - dwPopTmp2 - dwPopTmp1 - nDirLowestBit + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
+      uint32_t nDirLowestBit2 = nLevelOfRotation >> 3 & 0x11111111;
+      if (((nLevelOfRotation - (nLevelOfRotation >> 1 & 0x77777777) - (nLevelOfRotation >> 2 & 0x33333333) - nDirLowestBit2 >> 4) - (nLevelOfRotation >> 1 & 0x77777777) - (nLevelOfRotation >> 2 & 0x33333333) - nDirLowestBit2 + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1df);
         exit(-1);
       }
@@ -1702,8 +1698,6 @@ uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, 
     0x3f
 }; D2_STATIC_GUARD(gdwCelCmpCompressionBuffer, "D2CMP::SRC::CelCmp::CELCMP_GetFrameDecodeHandlerReverse::gdwCelCmpCompressionBuffer");
 
-    uint32_t dwPopTmp1;
-    uint32_t dwPopTmp2;
     int32_t nErrorLine;
     if (!(nGameDirection < 0x40)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
@@ -1718,10 +1712,8 @@ uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, 
         exit(-1);
       }
 
-      dwPopTmp2 = nLevelOfRotation >> 1 & 0x77777777;
-      dwPopTmp1 = nLevelOfRotation >> 2 & 0x33333333;
-      nDirLowestBit = nLevelOfRotation >> 3 & 0x11111111;
-      if (((nLevelOfRotation - dwPopTmp2 - dwPopTmp1 - nDirLowestBit >> 4) - dwPopTmp2 - dwPopTmp1 - nDirLowestBit + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
+      uint32_t nDirLowestBit2 = nLevelOfRotation >> 3 & 0x11111111;
+      if (((nLevelOfRotation - (nLevelOfRotation >> 1 & 0x77777777) - (nLevelOfRotation >> 2 & 0x33333333) - nDirLowestBit2 >> 4) - (nLevelOfRotation >> 1 & 0x77777777) - (nLevelOfRotation >> 2 & 0x33333333) - nDirLowestBit2 + nLevelOfRotation & 0xf0f0f0f) % 0xff != 1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ee);
         exit(-1);
       }

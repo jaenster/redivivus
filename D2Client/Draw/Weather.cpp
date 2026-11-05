@@ -625,7 +625,7 @@ static void __stdcall WEATHER_GetLightingTint(uint8_t * pOutAlpha, int nIntensit
 
     D2RoomStrc* pCurrentRoom = UNIT::CUnit::GetCurrentRoom();
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pCurrentRoom);
-    uint32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(sgpDrlgAct, nullptr);
+    uint32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, nullptr);
     if (nPeriodOfDay <= 3) {
       if (pOutTint) {
         *pOutTint = gaWeatherLightTintData[nPeriodOfDay * 2];
@@ -680,9 +680,9 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     D2WeatherParticleStrc* pParticleArray = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
     int nParticleSlotIndex = (short int)(nSlot >> 0x10);
     pParticleArray[nParticleSlotIndex].nDying = 0;
-    int32_t nTemp = Seed::RollBetweenMinAndMax(pSeed, 0, ScreenSizeX);
+    int32_t nTemp = Seed::RollBetweenMinAndMax(pSeed, 0, UI::ui::ScreenSizeX);
     pParticleArray[nParticleSlotIndex].nPosX = nTemp;
-    nTemp = Seed::RollBetweenMinAndMax(pSeed, 0x28, ScreenSizeY - 0x57);
+    nTemp = Seed::RollBetweenMinAndMax(pSeed, 0x28, UI::Inv::ScreenSizeY - 0x57);
     pParticleArray[nParticleSlotIndex].nMaxY = nTemp;
     nTemp = Seed::RollBetweenMinAndMax(pSeed, -0x14, nTemp + 0x14);
     pParticleArray[nParticleSlotIndex].nPosY = nTemp;
@@ -690,14 +690,14 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     *pSeed = sNextSeed;
     int nLineIndex = pParticleArray[nParticleSlotIndex].nMaxY;
     pParticleArray[nParticleSlotIndex].nSinPhaseOffset = sNextSeed.nSeedLow & 0x1ff;
-    float fDepthFactor = (float)(nLineIndex - 0x28) / (float)(ScreenSizeY - 0x57);
+    float fDepthFactor = (float)(nLineIndex - 0x28) / (float)(UI::Inv::ScreenSizeY - 0x57);
     if (nWeatherParticleCountAct5) {
       pParticleArray[nParticleSlotIndex].nAlpha = 0xff;
       *pSeed = D2_SEED_NEXT(*pSeed);
       pParticleArray[nParticleSlotIndex].nFadeCountdown = 1;
       nLineIndex = pParticleArray[nParticleSlotIndex].nMaxY;
       pParticleArray[nParticleSlotIndex].nSpeed = 8 - (int)(fDepthFactor * -28.0);
-      nLineIndex = (nLineIndex - 0x28) * 7 / (ScreenSizeY - 0x57);
+      nLineIndex = (nLineIndex - 0x28) * 7 / (UI::Inv::ScreenSizeY - 0x57);
       bIsBlizzard = gnWeatherAct5ParticleCount != 0;
       pParticleArray[nParticleSlotIndex].nLineIndex = nLineIndex;
       if (bIsBlizzard) {
@@ -717,7 +717,7 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     sNextSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNextSeed;
     nLineIndex = sNextSeed.nSeedLow % 0xc;
-    nTemp = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(sgpDrlgAct, nullptr);
+    nTemp = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, nullptr);
     switch (nTemp) {
       case 2:
         pParticleArray[nParticleSlotIndex].nColor = gWeatherPaletteMudDuskColors[nLineIndex];
@@ -790,11 +790,11 @@ void __stdcall WEATHER_UpdateParticles(D2SeedStrc * pSeed) {
           }
 
           pParticleData->nPosX += nXDrift - gnCameraWorldDeltaX;
-          if (pParticleData->nPosX >= ScreenSizeX) {
-            pParticleData->nPosX -= ScreenSizeX;
+          if (pParticleData->nPosX >= UI::ui::ScreenSizeX) {
+            pParticleData->nPosX -= UI::ui::ScreenSizeX;
           }
           if (pParticleData->nPosX < 0) {
-            pParticleData->nPosX += ScreenSizeX;
+            pParticleData->nPosX += UI::ui::ScreenSizeX;
           }
         }
       }
@@ -873,7 +873,7 @@ void __stdcall WEATHER_DrawParticles() {
     uint8_t byAlpha;
     uint8_t byColor;
     BOOL bLowQuality = D2gfx::D2GFX::D2GFX_GetLowQuality();
-    int nClipRight = ScreenSizeX;
+    int nClipRight = UI::ui::ScreenSizeX;
     if (bLowQuality) {
       return;
     }
@@ -883,19 +883,19 @@ void __stdcall WEATHER_DrawParticles() {
     switch (eBorderType) {
       case 1:
         {
-          nClipRight += ScreenSizeX / 4 * -2;
+          nClipRight += UI::ui::ScreenSizeX / 4 * -2;
           break;
         }
       case 2:
         {
-          nClipLeft = ScreenSizeX / 4 * 2;
+          nClipLeft = UI::ui::ScreenSizeX / 4 * 2;
           break;
         }
     }
 
     D2WeatherParticleStrc* pParticleData = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
     for (nIndex = 0; nIndex <= pEnvironmentParticles->nHighestUsedIndex; nIndex++) {
-      int nMaxY = ScreenSizeY - 0x2f;
+      int nMaxY = UI::Inv::ScreenSizeY - 0x2f;
       if (pParticleData->nFlags) {
         if (nWeatherParticleCountAct5) {
           if (pParticleData->nPosX >= nClipLeft && pParticleData->nPosX < nClipRight && pParticleData->nPosY >= 0 && pParticleData->nPosY < nMaxY && (nEndX = pParticleData->nLineIndex , nEndX < 8) && nEndX >= 0) {
@@ -1087,20 +1087,20 @@ void __stdcall DRAW_Overlay_Weather() {
         }
       }
 
-      nClipLeft = ScreenSizeX;
-      if (fps >= 10) {
+      nClipLeft = UI::ui::ScreenSizeX;
+      if (GAME::Rendering::fps >= 10) {
         nXStart = 0;
-        nYEnd = ScreenSizeY - 0x2f;
+        nYEnd = UI::Inv::ScreenSizeY - 0x2f;
         eBorderType = UI::Path::DRAW_GetTypeOfBorder();
         switch (eBorderType) {
           case 1:
             {
-              nClipLeft += ScreenSizeX / 4 * -2;
+              nClipLeft += UI::ui::ScreenSizeX / 4 * -2;
               break;
             }
           case 2:
             {
-              nXStart = ScreenSizeX / 4 * 2;
+              nXStart = UI::ui::ScreenSizeX / 4 * 2;
               break;
             }
         }
@@ -1124,22 +1124,22 @@ void __fastcall WEATHER_DrawBubbles(D2DataArrayStrc * pBubbleArray, DC6 * * pDC6
     int nScreenX;
     D2DataArrayStrc* pBubbleArraySaved = pBubbleArray;
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    int nScreenWidth = ScreenSizeX;
+    int nScreenWidth = UI::ui::ScreenSizeX;
     int nXOffset = 0;
     int nMinX = 0;
-    int nMaxX = ScreenSizeX;
+    int nMaxX = UI::ui::ScreenSizeX;
     uint32_t eBorderType = UI::Path::DRAW_GetTypeOfBorder();
     switch (eBorderType) {
       case 1:
         {
-          nPositionX = ScreenSizeX / 4;
+          nPositionX = UI::ui::ScreenSizeX / 4;
           nXOffset = -nPositionX;
           nMaxX = nScreenWidth + nPositionX * -2;
           break;
         }
       case 2:
         {
-          nXOffset = ScreenSizeX / 4;
+          nXOffset = UI::ui::ScreenSizeX / 4;
           nMinX = nXOffset * 2;
           break;
         }
@@ -1153,7 +1153,7 @@ void __fastcall WEATHER_DrawBubbles(D2DataArrayStrc * pBubbleArray, DC6 * * pDC6
     }
 
     for (; nIndex <= pBubbleArraySaved->nHighestUsedIndex; nIndex++ , pEntry++) {
-      int nMaxY = ScreenSizeY - 0x2f;
+      int nMaxY = UI::Inv::ScreenSizeY - 0x2f;
       if (pEntry->nFlags) {
         if (bPerspective) {
           eBorderType = D2gfx::D2GFX::D2GFX_IsInPerspectiveBounds(pEntry->nPosX, pEntry->nPosY);

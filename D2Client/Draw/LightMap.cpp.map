@@ -21,6 +21,20 @@
       ]
     },
     {
+      "name": "RENDERER_TogglePerspective_Unref_00474140",
+      "address": "00474140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474140"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective_Unref_00474140"
+      ]
+    },
+    {
       "name": "AllocLightMap",
       "address": "00474160",
       "lines": [

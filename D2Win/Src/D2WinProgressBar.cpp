@@ -47,7 +47,7 @@ BOOL __fastcall Draw(::D2WinProgressBar * pProgressBar) {
     }
 
     uint32_t uVar1 = pProgressBar->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[2] & uVar1 && Fog::BitBuffer::gadwBitMasks[0] & uVar1) {
       int nYStart;
       bVar2 = D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
       nYStart = pProgressBar->sControl.dwPosY;
@@ -65,8 +65,8 @@ BOOL __fastcall Draw(::D2WinProgressBar * pProgressBar) {
     ::D2WinProgressBar* pNewBar = D2_NEW_AT(::D2WinProgressBar, ".\\Src\\D2WinProgressBar.cpp", 0x1a);
     memset(pNewBar, 0, 0x44);
     pNewBar->sControl.neD2FormType = FORM_ProgressBar;
-    pNewBar->sControl.dwState |= gadwBitMasks[0];
-    uVar1 = pNewBar->sControl.dwState | gadwBitMasks[2];
+    pNewBar->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    uVar1 = pNewBar->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewBar->fCurrentProgress = 0.0;
     pNewBar->sControl.dwState = uVar1;
     pNewBar->sControl.pDC6 = 0;

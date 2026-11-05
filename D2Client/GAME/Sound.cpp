@@ -438,14 +438,14 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
     nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetMasterVolume();
     float fEaxObstruction;
     fEaxObstruction = (float)(nMixerMode * nTmpCalc / 100);
-    if (nSoundVolumeLeftChannel != 100) {
+    if (D2Client::Sound::nSoundVolumeLeftChannel != 100) {
       nTmpCalc = *(int*)(nSoundDescOffset + 4);
       if ((nTmpCalc < 0x1231 || nTmpCalc > 0x125a) && (nTmpCalc < 0x34 || nTmpCalc > 0x47) && (nTmpCalc < 1 || nTmpCalc > 0xf)) {
-        fEaxObstruction = (float)(nSoundVolumeLeftChannel * (int)fEaxObstruction / 100);
+        fEaxObstruction = (float)(D2Client::Sound::nSoundVolumeLeftChannel * (int)fEaxObstruction / 100);
       }
     }
-    if (nSoundVolumeRightChannel != 100 && !pSoundsTxtLine->Solo) {
-      fEaxObstruction = (float)(nSoundVolumeRightChannel * (int)fEaxObstruction / 100);
+    if (D2Client::Sound::nSoundVolumeRightChannel != 100 && !pSoundsTxtLine->Solo) {
+      fEaxObstruction = (float)(D2Client::Sound::nSoundVolumeRightChannel * (int)fEaxObstruction / 100);
     }
 
     float fVolume;
@@ -1070,7 +1070,7 @@ int32_t __fastcall SOUND_SelectNpcGreetingSound(D2UnitStrc * pUnit, int32_t nMod
         }
       }
       if (pGreetingSounds->nTimeOfDaySoundId && (!nSoundId || (nCycleIdx = _Utils::RollRandomNumerUpToArgument(3) , !nCycleIdx))) {
-        nCycleIdx = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(sgpDrlgAct);
+        nCycleIdx = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(Game::sgpDrlgAct);
         nSoundId = pGreetingSounds->nTimeOfDaySoundId;
         if (nCycleIdx != 1) {
           if (nCycleIdx >= 0x2 && nCycleIdx <= 0x3) {

@@ -31,7 +31,7 @@
 namespace D2Common::DATATBLS::ItemStats {
 
 void __stdcall SetState(D2UnitStrc * pUnit, eD2States eState, int32_t bSet) {
-    if (!((int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize)) {
+    if (!((int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
@@ -45,7 +45,7 @@ BOOL __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
     if (pUnit) {
       eD2States eStateResult;
       eUnitType = pUnit->eUnitType;
-      if ((int)eUnitType >= 0 && ((int)eUnitType <= 1 || eUnitType == UNIT_MISSILE) && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize) {
+      if ((int)eUnitType >= 0 && ((int)eUnitType <= 1 || eUnitType == UNIT_MISSILE) && (int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         eStateResult = Stats::StatsEx::GetStateBitFlag(pUnit, eState);
         return eStateResult;
       }
@@ -56,28 +56,28 @@ BOOL __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
 
 void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, int32_t nStateId, int32_t bSet) {
     int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
-    if (!(pGfxFlags && nStateId >= 0 && nStateId < sgptDataTable->nTxtStatesSize)) {
+    if (!(pGfxFlags && nStateId >= 0 && nStateId < ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
     uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + (nStateId >> 5));
     if (bSet) {
-      *pFlagWord |= gadwBitMasks[nStateId & 0x1fU];
+      *pFlagWord |= Fog::BitBuffer::gadwBitMasks[nStateId & 0x1fU];
     } else {
-      *pFlagWord &= gadwInvBitMasks[nStateId & 0x1fU];
+      *pFlagWord &= Fog::BitBuffer::gadwInvBitMasks[nStateId & 0x1fU];
     }
 
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 
 uint32_t __stdcall GetStateGfxFlag(D2UnitStrc * pUnit, eD2States eState) {
-    if (!((int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize)) {
+    if (!((int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return 0;
     }
 
     int* nStateFlagsPtr = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (nStateFlagsPtr) {
-      return nStateFlagsPtr[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
+      return nStateFlagsPtr[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
     }
 
     return 0;
@@ -89,7 +89,7 @@ void __stdcall STATES_ClearGfxFlags(D2UnitStrc * pUnit) {
       return;
     }
 
-    int nBufSize = sgptDataTable->nTxtStatesSize + 0x1f;
+    int nBufSize = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     memset(pGfxFlags, 0, nBufSize / 32 * 4);
 }
 
@@ -100,7 +100,7 @@ BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    int nDwordCount = sgptDataTable->nTxtStatesSize + 0x1f;
+    int nDwordCount = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     nDwordCount = nDwordCount / 32;
     for (i = 0; i < nDwordCount; i++) {
       if (*(int*)(pGfxFlags + i * 4)) {
@@ -133,7 +133,7 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
       return;
     }
 
-    int nDwordCount = sgptDataTable->nTxtStatesSize + 0x1f;
+    int nDwordCount = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     nDwordCount = nDwordCount / 32;
     if (bIsBoss) {
       if (nDwordCount > 0) {
@@ -142,8 +142,8 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
         do {
           i = j + 1;
           pGfxWord = (uint32_t*)(nGfxOffset + (int)pStateFlags);
-          *pGfxWord |= ~sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j] & *pStateFlags;
-          *pStateFlags &= sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j];
+          *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j] & *pStateFlags;
+          *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j];
           pStateFlags++;
           j = i;
         } while (i < nDwordCount);
@@ -159,8 +159,8 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
           do {
             i = j + 1;
             pGfxWord = (uint32_t*)((int)pStateFlags + nGfxOffset);
-            *pGfxWord |= ~sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j] & *pStateFlags;
-            *pStateFlags &= sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j];
+            *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j] & *pStateFlags;
+            *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j];
             pStateFlags++;
             j = i;
           } while (i < nDwordCount);
@@ -171,8 +171,8 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
         do {
           i = j + 1;
           pGfxWord = (uint32_t*)((int)pStateFlags + nGfxOffset);
-          *pGfxWord |= ~sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j] & *pStateFlags;
-          *pStateFlags &= sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j];
+          *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j] & *pStateFlags;
+          *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j];
           pStateFlags++;
           j = i;
         } while (i < nDwordCount);
@@ -197,7 +197,7 @@ static BOOL STATES_HasMatchingStateFlag(D2UnitStrc * pUnit, D2StatesDataTbls * p
       return 0;
     }
 
-    for (i = 0; i < (sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
+    for (i = 0; i < (ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
       if (pStatesData->nStateBitmask[i] & ((uint32_t*)nStateFlags)[i]) {
         return 1;
       }
@@ -214,7 +214,7 @@ void __stdcall STATES_MoveToGfxFlags(D2UnitStrc * pUnit, uint32_t * pMaskWords) 
       return;
     }
 
-    for (i = 0; i < (sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
+    for (i = 0; i < (ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
       ((uint32_t*)pGfxFlags)[i] |= pMaskWords[i] & ((uint32_t*)nStateOffset)[i];
       ((uint32_t*)nStateOffset)[i] &= ~pMaskWords[i];
     }
@@ -223,71 +223,71 @@ void __stdcall STATES_MoveToGfxFlags(D2UnitStrc * pUnit, uint32_t * pMaskWords) 
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray1(eD2States eState) {
-    if ((int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[1]->nStateBitmask[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
+    if ((int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[1]->nStateBitmask[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
     }
 
     return 0;
 }
 
 BOOL __stdcall STATES_HasHideState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[1]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[1]);
     return BVar1;
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray4(eD2States eState) {
-    if ((int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[4]->nStateBitmask[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
+    if ((int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[4]->nStateBitmask[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
     }
 
     return 0;
 }
 
 BOOL __stdcall STATES_HasTransformState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[4]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[4]);
     return BVar1;
 }
 
 void __stdcall STATES_MoveTransformToGfx(D2UnitStrc * pUnit) {
-    STATES_MoveToGfxFlags(pUnit, sgptDataTable->pSingleStateDataTbl[4]->nStateBitmask);
+    STATES_MoveToGfxFlags(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[4]->nStateBitmask);
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray2(eD2States eState) {
-    return sgptDataTable->pSingleStateDataTbl[2]->nStateBitmask[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
+    return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[2]->nStateBitmask[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
 }
 
 int __stdcall STATES_HasLightState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[2]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[2]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasDamageState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[5]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[5]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasBlueState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[6]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[6]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasAttackSpeedState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[7]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[7]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasAuraState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[8]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[8]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasResistState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[9]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[9]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasArmorState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[10]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[10]);
     return BVar1;
 }
 
@@ -301,137 +301,137 @@ BOOL __stdcall UNITS_IsShapeshifted(D2UnitStrc * pUnit) {
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray11(eD2States eState) {
-    if ((int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0xb]->nStateBitmask[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
+    if ((int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xb]->nStateBitmask[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
     }
 
     return 0;
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId) {
-    if ((int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0xc]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
+    if ((int)nStateId >= 0 && (int)nStateId < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xc]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
     }
 
     return 0;
 }
 
 uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, uint32_t nStateId) {
-    if ((int)nStateId < 0 || (int)nStateId >= sgptDataTable->nTxtStatesSize) {
+    if ((int)nStateId < 0 || (int)nStateId >= ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      return sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
     }
 
-    return sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
+    return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
 }
 
 BOOL __fastcall STATES_HasPoisonState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x11]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x11]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasColdState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x12]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x12]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasFireState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x13]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x13]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasLifeState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x14]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x14]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasManaState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x15]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x15]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasStaminaState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x16]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x16]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasDefenseState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x17]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x17]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasExpState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x19]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x19]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasGoldState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x1a]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1a]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasMagicFindState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x1b]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1b]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasSkillState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x1c]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1c]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasAbsorbState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x1d]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1d]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasCurseState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x1e]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1e]);
     return BVar1;
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray30(uint32_t nStateId) {
-    if ((int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0x1e]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
+    if ((int)nStateId >= 0 && (int)nStateId < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1e]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
     }
 
     return 0;
 }
 
 BOOL __stdcall STATES_HasMaxState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x1f]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1f]);
     return BVar1;
 }
 
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray31(uint32_t nStateId) {
-    if ((int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0x1f]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
+    if ((int)nStateId >= 0 && (int)nStateId < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1f]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
     }
 
     return 0;
 }
 
 BOOL __stdcall STATES_HasProgressiveState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x20]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x20]);
     return BVar1;
 }
 
 int __stdcall STATES_HasPassiveState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x21]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x21]);
     return BVar1;
 }
 
 BOOL __stdcall STATES_HasDisguiseState(D2UnitStrc * pUnit) {
-    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[0x22]);
+    BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x22]);
     return BVar1;
 }
 
 BOOL __stdcall ITEMSTATS_CheckUnitHasStateFlagIndex(D2UnitStrc * pUnit, uint32_t nFlagArrayIdx) {
     if (pUnit && nFlagArrayIdx <= 0x27) {
       uint32_t fHasStateFlagCheck;
-      fHasStateFlagCheck = STATES_HasMatchingStateFlag(pUnit, sgptDataTable->pSingleStateDataTbl[nFlagArrayIdx]);
+      fHasStateFlagCheck = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[nFlagArrayIdx]);
       return fHasStateFlagCheck;
     }
 

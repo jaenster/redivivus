@@ -293,13 +293,13 @@ void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc *
     switch (nClassId) {
       case 0x1da:
         {
-          nSuperUniqueId = (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x2d];
+          nSuperUniqueId = (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x2d];
           nAncientSlot = 1;
           break;
         }
       case 0x1db:
         {
-          nSuperUniqueId = (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x2b];
+          nSuperUniqueId = (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x2b];
           nAncientSlot = 0;
           break;
         }
@@ -309,7 +309,7 @@ void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc *
         }
       case 0x1dc:
         {
-          nSuperUniqueId = (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x2c];
+          nSuperUniqueId = (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x2c];
           nAncientSlot = 2;
           break;
         }

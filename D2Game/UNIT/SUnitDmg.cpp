@@ -119,8 +119,8 @@ typedef void (__fastcall *pfnPartyMemberFilter)(::SGAMEDATA * pGame, D2UnitStrc 
 namespace D2Game::UNIT::SUnitDmg {
 
 uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int32_t nMonTypeB) {
-    if ((int)nMonTypeA > 0 && (int)nMonTypeA < sgptDataTable->nTxtMonTypeSize && nMonTypeB > 0 && nMonTypeB < sgptDataTable->nTxtMonTypeSize) {
-      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtMonTypeUnknown + (sgptDataTable->nMonTypeEquivRowDwords * nMonTypeB + ((int)nMonTypeA >> 5)) * 4) & gadwBitMasks[nMonTypeA & 0x1f];
+    if ((int)nMonTypeA > 0 && (int)nMonTypeA < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && nMonTypeB > 0 && nMonTypeB < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize) {
+      return *(uint32_t*)((uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonTypeUnknown + (D2Common::ITEMS::Items::sgptDataTable->nMonTypeEquivRowDwords * nMonTypeB + ((int)nMonTypeA >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[nMonTypeA & 0x1f];
     }
 
     return 0;
@@ -427,7 +427,7 @@ int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(D2UnitStrc * pUnit, D2Unit
     if (pMonster && pMonster->eUnitType == UNIT_MONSTER) {
       int nVictimClassId;
       nVictimClassId = pMonster->nClassId;
-      D2MonStatsTxt* pMonStatsTxt = nVictimClassId >= 0 && nVictimClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nVictimClassId : nullptr;
+      D2MonStatsTxt* pMonStatsTxt = nVictimClassId >= 0 && nVictimClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nVictimClassId : nullptr;
       if (pMonStatsTxt) {
         return (int)pMonStatsTxt->aColdEffect[*(uint8_t*)((uintptr_t)&pUnit->uSideData + 9)];
       }
@@ -452,10 +452,10 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
 
     D2StatListExStrc* pColdStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_cold);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER || (nMonClassId = pUnit2->nClassId , nMonClassId < 0) || nMonClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nMonClassId)) {
+    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER || (nMonClassId = pUnit2->nClassId , nMonClassId < 0) || nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId)) {
       nColdEffectPct = -0x32;
     } else {
-      nColdEffectPct = (int)sgptDataTable->pTxtMonStats[nMonClassId].aColdEffect[pGame->nDifficulty];
+      nColdEffectPct = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].aColdEffect[pGame->nDifficulty];
       if (!nColdEffectPct) {
         return;
       }
@@ -797,7 +797,7 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
     }
 
     int nMonTypeCount = pTarget->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nMonTypeCount >= 0 && nMonTypeCount < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonTypeCount : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nMonTypeCount >= 0 && nMonTypeCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonTypeCount : nullptr;
     if (!pMonStatsTxt) {
       return;
     }
@@ -809,13 +809,13 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
 
     nMonTypeCount = (int)nMonTypeCountShort;
     int32_t nBonusCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, anBonusValues, 0x80);
-    D2DataTableTxtStrc* pDataTbl = sgptDataTable;
+    D2DataTableTxtStrc* pDataTbl = D2Common::ITEMS::Items::sgptDataTable;
     for (i = 0; i < nBonusCount; i++) {
       uint32_t nMonTypeId;
       nMonTypeId = (uint32_t)(uint16_t)anBonusValues[i].wSubIndex;
-      if (nMonTypeId && (int)nMonTypeId < pDataTbl->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < pDataTbl->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)pDataTbl->pTxtMonTypeUnknown + (pDataTbl->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & gadwBitMasks[nMonTypeId & 0x1f]) {
+      if (nMonTypeId && (int)nMonTypeId < pDataTbl->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < pDataTbl->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)pDataTbl->pTxtMonTypeUnknown + (pDataTbl->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[nMonTypeId & 0x1f]) {
         pDamage->dwEnDmgPct += anBonusValues[i].nStatValue;
-        pDataTbl = sgptDataTable;
+        pDataTbl = D2Common::ITEMS::Items::sgptDataTable;
       }
     }
 }
@@ -1336,7 +1336,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x1,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Dam_006e1664,
+        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Dam_006e1664,
         0x8
     },
     {
@@ -1362,7 +1362,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Ligt_006e1654,
+        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Ligt_006e1654,
         0x8
     },
     {
@@ -1388,7 +1388,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Magc_006e1644,
+        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Magc_006e1644,
         0x8
     },
     {
@@ -1440,7 +1440,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Pois_006e1624,
+        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Pois_006e1624,
         0x0
     },
     {
@@ -1453,7 +1453,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Life_006e161c,
+        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Life_006e161c,
         0x8
     },
     {
@@ -1479,7 +1479,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Stam_006e160c,
+        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Stam_006e160c,
         0x8
     }
 }; D2_STATIC_GUARD(gaDefenseReductionTable, "D2Game::UNIT::SUnitDmg::DAMAGE_ApplyDefensiveReduction::gaDefenseReductionTable");
@@ -1784,7 +1784,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     pRoom = D2Common::Units::UNITS_GetRoom(pVictim);
     BOOL bIsInTownOrKillable;
     bIsInTownOrKillable = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (bIsInTownOrKillable && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (pMonStats = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId) , !pMonStats || !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[2])))) {
+    if (bIsInTownOrKillable && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (pMonStats = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId) , !pMonStats || !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])))) {
       pDamage->wResultFlags &= 0xfffd;
       return;
     }
@@ -2111,7 +2111,7 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
     if (pAttacker) {
       Monsters::SERVER_AwardKillExperience(pAttacker, pUnit, pGame);
       GAME::Arena::SERVER_ARENA_KillHandler(pGame, pAttacker, pUnit);
-      if ((uint32_t)pUnit->nClassId < (uint32_t)sgptDataTable->nTxtMonStatsSize && pAttacker->eUnitType == UNIT_PLAYER) {
+      if ((uint32_t)pUnit->nClassId < (uint32_t)D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && pAttacker->eUnitType == UNIT_PLAYER) {
         D2Common::Txt::Cube::nullsub(pAttacker, pUnit->nClassId);
       }
     }
@@ -2251,7 +2251,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
         if (!pMonStats) {
           return;
         }
-        if (!(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[2])) {
+        if (!(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
           return;
         }
       }
@@ -3243,7 +3243,7 @@ void __fastcall DAMAGE_AddSkillBonusDamage(D2UnitStrc * pUnit, eD2Skills eSkill,
 }
 
 void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, D2DamageStrc * pDamage) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
+    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return;
     }
 
@@ -3431,10 +3431,8 @@ static void __stdcall SERVER_PlayerUpdateExperience(::SGAMEDATA * pGame, int32_t
 
     int32_t nCurrentXp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_experience, 0);
     int32_t ePlayerClass_00 = pUnit->nClassId;
-    int32_t pExpTxtLine = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClass_00);
-    pExpTxtLine -= 1;
     uint32_t nValue = nCurrentXp + nXpGain;
-    DWORD nMaxXp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass_00, pExpTxtLine);
+    DWORD nMaxXp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass_00, D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClass_00) - 1);
     if ((uint32_t)(nCurrentXp + nXpGain) > nMaxXp) {
       nValue = nMaxXp;
     }

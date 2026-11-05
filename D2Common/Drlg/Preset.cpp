@@ -595,15 +595,26 @@ D2DrlgPresetTypeTablesStrc gPresetTypeTables = {
         }
     }
 }; D2_GLOBAL_GUARD(gPresetTypeTables, "gPresetTypeTables");
-D2DrlgFileCacheNodeStrc * gpDrlgFileCache = 0; D2_GLOBAL_GUARD(gpDrlgFileCache, "gpDrlgFileCache");
+namespace D2Common::Drlg::Preset {
+D2DrlgFileCacheNodeStrc * gpDrlgFileCache = 0; D2_GLOBAL_GUARD(gpDrlgFileCache, "D2Common::Drlg::Preset::gpDrlgFileCache");
+_RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096d610, "D2Common::Drlg::Preset::lpCriticalSection_0096d610");
+} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::Preset {
+
+void StaticFini_gLogMessageQueueCS_Unref_00665930() {
+    EnterCriticalSection(&lpCriticalSection_0096d610);
+}
+
+void StaticFini_gLogMessageQueueCS_Unref_00665940() {
+    LeaveCriticalSection(&lpCriticalSection_0096d610);
+}
 
 // Parses DS1/preset file into D2DrlgFileStrc: loads DS1 blob, reads header/version, sets layer pointers, converts tile orientation for old versions, builds preset-unit list (monsters/objects/items), optional subst-groups and paths, and populates substitution group data when present.
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc * pMemory, char * pBuffer) {
     // Static local variables (originally global data)
-    static char * gpD2DrlgFileBuffer = (char *)&s_HDM_006ee7c0; D2_STATIC_GUARD(gpD2DrlgFileBuffer, "D2Common::Drlg::Preset::ParsePresetsOfDrlgFile::gpD2DrlgFileBuffer");
+    static char * gpD2DrlgFileBuffer = (char *)&D2Common::Drlg::Preset::s_HDM_006ee7c0; D2_STATIC_GUARD(gpD2DrlgFileBuffer, "D2Common::Drlg::Preset::ParsePresetsOfDrlgFile::gpD2DrlgFileBuffer");
 
     // Frame slots -16..-4 are ONE object: &szItemCode is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -769,12 +780,12 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                       case 0:
                         {
                           nClassId = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
-                          pBuffer = pBuffer + sgptDataTable->nTxtMonStatsSize + nClassId;
+                          pBuffer = pBuffer + ITEMS::Items::sgptDataTable->nTxtMonStatsSize + nClassId;
                           break;
                         }
                       case 2:
                         {
-                          pBuffer += sgptDataTable->nTxtMonStatsSize;
+                          pBuffer += ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
                           break;
                         }
                       default:
@@ -791,7 +802,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
 
                   pClassId = pBuffer;
                   if (nActId == 2) {
-                    if ((int)pBuffer < sgptDataTable->nTxtMonStatsSize) {
+                    if ((int)pBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
                       pDataCursor = (char*)D2Client::DataTbls::CheckMonStatId(0x129);
                       if (pClassId == pDataCursor) {
                         pClassId = (char*)0x17e;
@@ -810,7 +821,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                       pBuffer = pClassId;
                       break;
                     }
-                  } else if (nActId == 4 && (int)pBuffer < sgptDataTable->nTxtMonStatsSize && (int)pBuffer >= 0) {
+                  } else if (nActId == 4 && (int)pBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && (int)pBuffer >= 0) {
                     if (pBuffer != (char*)0x202) {
                       if ((int)pBuffer <= 0x218 || (int)pBuffer > 0x21b) {
                         goto add_preset_unit;
@@ -1189,7 +1200,7 @@ static void __stdcall CreateMonsterPreset(D2PoolManagerStrc * pMemory, D2DrlgMap
     int32_t nX = pDrlgMap->nSizeX / 2 + pDrlgMap->nRealOffsetX;
     int32_t nY = pDrlgMap->nSizeY / 2 + pDrlgMap->nRealOffsetY;
     Transform::CoordsRoomToWorld(&nX, &nY);
-    D2PresetUnitStrc* pPreset = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_MONSTER, sgptDataTable->nTxtMonStatsSize <= 0x10a ? -1 : 0x10a, 1, nX, nY);
+    D2PresetUnitStrc* pPreset = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_MONSTER, ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x10a ? -1 : 0x10a, 1, nX, nY);
     pPreset->pPresetUnitNext = pDrlgMap->pPresetUnit;
     pDrlgMap->pPresetUnit = pPreset;
 }
@@ -2046,7 +2057,7 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(D2PoolManagerStrc * pMemory, D
       switch (pPresetUnit->eType) {
         case UNIT_MONSTER:
           {
-            nTableSize = sgptDataTable->nTxtMonStatsSize;
+            nTableSize = ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
             nMonClassId = pPresetUnit->nClassId;
             if (nMonClassId < nTableSize) {
               if (nMonClassId < 0) {
@@ -2070,7 +2081,7 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(D2PoolManagerStrc * pMemory, D
             } else {
               nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
               if (pPresetUnit->nClassId - nTableSize >= nMonExtraBase) {
-                nTableSize = sgptDataTable->nTxtMonStatsSize;
+                nTableSize = ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
                 nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
                 nTableSize = pPresetUnit->nClassId - nTableSize - nMonExtraBase;
                 if (nTableSize == 0x21) {

@@ -234,7 +234,7 @@ void __stdcall SetOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)gadwBitMasks[0])) {
+    if (!(nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize && ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       return;
     }
 
@@ -256,7 +256,7 @@ BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     if (pMissile && pUnit && pMissile->eUnitType == UNIT_MISSILE) {
       D2UnitDataPlayerStrc* pDVar1;
       nClassId = pMissile->nClassId;
-      if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)gadwBitMasks[0]) {
+      if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize && ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         pDVar1 = pMissile->pUnitData.pUnitDataPlayer;
         if (pDVar1 && pDVar1->pQuestRecord[2] == (D2BitBufferStrc*)pUnit->eUnitType && pDVar1->pWaypoint[0] == (D2WaypointStrc*)pUnit->nUnitGUID) {
           return 1;
@@ -303,7 +303,7 @@ int32_t __stdcall GetHitClass(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       int nMissileClassId;
       nMissileClassId = pUnit->nClassId;
-      D2MissilesTxt* pMissilesTxt = nMissileClassId >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
+      D2MissilesTxt* pMissilesTxt = nMissileClassId >= 0 && nMissileClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
       if (pMissilesTxt) {
         return (uint32_t)(uint8_t)pMissilesTxt->HitClass;
       }
@@ -709,7 +709,7 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       }
     }
 
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -743,7 +743,7 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       }
     }
 
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -762,7 +762,7 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
 }
 
 uint8_t __stdcall GetElemTypeFromMissileId(int32_t nMissileId) {
-    D2MissilesTxt* pMissilesTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissilesTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissilesTxt) {
       return 0;
     }
@@ -786,7 +786,7 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
       }
     }
 
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -820,7 +820,7 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
       }
     }
 
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -840,7 +840,7 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
 
 int32_t __stdcall GetElementalLength(int32_t nUnused, D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel) {
     int nLevLenBonus;
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -867,7 +867,7 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
       return 0;
     }
 
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -1067,10 +1067,10 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
         }
       }
     }
-    if (!sgptDataTable->pMissCode) {
+    if (!ITEMS::Items::sgptDataTable->pMissCode) {
       return 0;
     }
-    if (!(nCalcExpression < (uint32_t)sgptDataTable->nMissCodeSize)) {
+    if (!(nCalcExpression < (uint32_t)ITEMS::Items::sgptDataTable->nMissCodeSize)) {
       return 0;
     }
 
@@ -1078,7 +1078,7 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
     sCalcCtx.pMissile = pMissile;
     sCalcCtx.pOwner = pOwner;
     sCalcCtx.nMissileId = nMissileId;
-    uint32_t nResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)sgptDataTable->pMissCode + nCalcExpression), sgptDataTable->nMissCodeSize - nCalcExpression, (fnSkillCalcMethod)MISSILE_CalcVMCallback_GetSpecialParam, gaMissileCalcMethods, gnMissileCalcMethodCount, &sCalcCtx);
+    uint32_t nResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pMissCode + nCalcExpression), ITEMS::Items::sgptDataTable->nMissCodeSize - nCalcExpression, (fnSkillCalcMethod)MISSILE_CalcVMCallback_GetSpecialParam, gaMissileCalcMethods, gnMissileCalcMethodCount, &sCalcCtx);
     return nResult;
 }
 
@@ -1110,13 +1110,13 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
     }
 
     int nMissileId = pMissile->nClassId;
-    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return;
     }
 
     short int nMissileSkillId = pMissileTxt->Skill;
-    if (nMissileSkillId <= 0 && !(*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[7])) {
+    if (nMissileSkillId <= 0 && !(*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
       nSourceDamage = (uint32_t)pMissileTxt->SrcDamage;
       nSrcMissDmgPct = (uint32_t)pMissileTxt->SrcMissDmg;
       nCalcMinDmg = GetMinDamage(pMissile, pUnit, nMissileId, nLevel);
@@ -1126,7 +1126,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       nElemMaxDmg = GetMaxElemDamage(pMissile, pUnit, nMissileId, nLevel);
       nElemLength = GetElementalLength((int32_t)pMissile, pUnit, nMissileId, nLevel);
       nFinalElemMinDmg = (D2UnitStrc*)nElemMinDmg;
-      if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[0]) {
+      if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         nMasteryElemMin = CalculateMasteryBonus(pUnit, nElemType, nElemMinDmg);
         nMasteryElemMax = CalculateMasteryBonus(pUnit, nElemType, nElemMaxDmg);
         nElemMaxDmg += nMasteryElemMax;
@@ -1134,7 +1134,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       }
     } else {
       nSkillId = (int)nMissileSkillId;
-      if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[7]) {
+      if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
         nSkillId = Missile::GetSkillId(pMissile);
         if (nSkillId <= 0) {
           nSkillId = (int)nMissileSkillId;
@@ -1205,7 +1205,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_maxdamage, 0);
         nLevel = nStatVal << 8;
       } else {
-        if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[6]) {
+        if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
           _bHasBonusStats = ITEMS::Items::IsTwoHanded((D2UnitStrc*)nSkillId);
           if (_bHasBonusStats) {
             nSourceDamage /= 2;

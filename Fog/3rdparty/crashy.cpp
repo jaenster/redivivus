@@ -363,4 +363,8 @@ void __stdcall DebugThread() {
     ExceptionList = tSehFrame.Next;
 }
 
+void __stdcall SetCurrentThreadId() {
+    dwCurrentThreadId = GetCurrentThreadId();
+}
+
 } // namespace Fog::_3rdparty::crashy

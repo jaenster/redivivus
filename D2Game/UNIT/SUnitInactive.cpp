@@ -377,15 +377,15 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
     char byAiArgByte;
     int nMonStatsIdx;
     nMonStatsIdx = pUnit->nClassId;
-    if (nMonStatsIdx < 0 || nMonStatsIdx >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMonStatsIdx < 0 || nMonStatsIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pAiCmd = 0;
     } else {
-      pAiCmd = sgptDataTable->pTxtMonStats + nMonStatsIdx;
+      pAiCmd = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsIdx;
     }
 
     uint32_t dwMonStatsFlags;
     dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)pAiCmd + 0xd);
-    if (gadwBitMasks[1] & dwMonStatsFlags || gadwBitMasks[0] & dwMonStatsFlags || gadwBitMasks[2] & dwMonStatsFlags) {
+    if (Fog::BitBuffer::gadwBitMasks[1] & dwMonStatsFlags || Fog::BitBuffer::gadwBitMasks[0] & dwMonStatsFlags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStatsFlags) {
       D2MapAIStrc** ppMapAi;
       pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
       if (pAiCmdNpc) {
@@ -409,11 +409,11 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
     if (pUnit->eUnitType == UNIT_MONSTER) {
       nBaseId = pUnit->nClassId;
       if (nBaseId >= 0) {
-        D2MonStatsTxt* pMonStatsTxt = nBaseId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseId : nullptr;
+        D2MonStatsTxt* pMonStatsTxt = nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nBaseId : nullptr;
         if (pMonStatsTxt) {
           nBaseId = (int)pMonStatsTxt->BaseId;
         }
-        if (nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize) {
+        if (nBaseId >= 0 && nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
           if (nBaseId == 0x44) {
             nBaseId = pInactiveMonRec->nAiArgument;
             nArgNumber = 3;
@@ -469,10 +469,10 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
     pDeadMarker = gpInactiveMonsterStateFlagSentinel;
     int nMonStatsIdx;
     nMonStatsIdx = pUnit->nClassId;
-    if (nMonStatsIdx < 0 || nMonStatsIdx >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMonStatsIdx < 0 || nMonStatsIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pAiCmd = 0;
     } else {
-      pAiCmd = sgptDataTable->pTxtMonStats + nMonStatsIdx;
+      pAiCmd = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsIdx;
     }
     if (pUnit->eUnitFlags >> 0x1a & 1) {
       pInactiveMonsterRecord->nAiArgument2 |= gnMonsterStateFlagMask1;
@@ -485,7 +485,7 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
 
     uint32_t uVar1;
     uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pAiCmd + 0xd);
-    if (gadwBitMasks[1] & uVar1 || gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) {
+    if (Fog::BitBuffer::gadwBitMasks[1] & uVar1 || Fog::BitBuffer::gadwBitMasks[0] & uVar1 || Fog::BitBuffer::gadwBitMasks[2] & uVar1) {
       D2MapAIStrc** ppMapAi;
       pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
       if (pAiCmdNpc && pAiCmdNpc->nCmdArg[1]) {
@@ -508,11 +508,11 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
     if (pUnit->eUnitType == UNIT_MONSTER) {
       nBaseId = pUnit->nClassId;
       if (nBaseId >= 0) {
-        D2MonStatsTxt* pMonStatsTxt = nBaseId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseId : nullptr;
+        D2MonStatsTxt* pMonStatsTxt = nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nBaseId : nullptr;
         if (pMonStatsTxt) {
           nBaseId = (int)pMonStatsTxt->BaseId;
         }
-        if (nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize) {
+        if (nBaseId >= 0 && nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
           if (nBaseId == 0x44) {
             nArgNumber = 3;
           } else {
@@ -569,8 +569,8 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
       return;
     }
 
-    for (nTmpVal = 0; nTmpVal < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize; nTmpVal++) {
-      nStateId = sgptDataTable->pAllStatesDataTblFlag0x0B[nTmpVal].nStateId;
+    for (nTmpVal = 0; nTmpVal < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x0BSize; nTmpVal++) {
+      nStateId = D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x0B[nTmpVal].nStateId;
       nAiCmdType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nStateId);
       if (nAiCmdType) {
         pStateStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nStateId);
@@ -803,12 +803,12 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
             nSpawnFlags = 0x6a;
           }
           if ((eInactiveFlags & 0x400) == LEVEL_None || (eInactiveFlags & 0x100) == LEVEL_None && (char)eInactiveFlags >= 0) {
-            if ((int)pbyClassId < 0 || (int)pbyClassId >= sgptDataTable->nTxtMonStatsSize) {
+            if ((int)pbyClassId < 0 || (int)pbyClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
               pMonStatsTxt = 0;
             } else {
-              pMonStatsTxt = sgptDataTable->pTxtMonStats + (int)pbyClassId;
+              pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + (int)pbyClassId;
             }
-            if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)gadwBitMasks[6]) {
+            if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
               nSpawnFlags |= 0x80;
             }
 
@@ -1483,7 +1483,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
     }
 
     nMonStatsExIdx = pUnit->nClassId;
-    if (nMonStatsExIdx < 0 || nMonStatsExIdx >= sgptDataTable->nTxtMonStatsSize || (nMonStatsExIdx = (int)sgptDataTable->pTxtMonStats[nMonStatsExIdx].MonStatsEx , nMonStatsExIdx < 0) || nMonStatsExIdx >= sgptDataTable->nTxtMonStatsExSize || !(sgptDataTable->pTxtMonStatsEx + nMonStatsExIdx) || (cMonStatsExField = sgptDataTable->pTxtMonStatsEx[nMonStatsExIdx].byRestore , !cMonStatsExField)) {
+    if (nMonStatsExIdx < 0 || nMonStatsExIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (nMonStatsExIdx = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsExIdx].MonStatsEx , nMonStatsExIdx < 0) || nMonStatsExIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExIdx) || (cMonStatsExField = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx[nMonStatsExIdx].byRestore , !cMonStatsExField)) {
       bShouldSave = false;
     } else if (cMonStatsExField == 2) {
       bShouldSave = true;

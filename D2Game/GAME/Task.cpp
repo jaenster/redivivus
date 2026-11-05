@@ -615,3 +615,15 @@ void StaticFini_aTaskQueueCriticalSections() {
 }
 
 } // namespace D2Game::GAME::Task
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Game::GAME::Task {
+
+// Initialized data
+
+D2TaskQueueSlotStrc * gaTaskQueueHeadArray[32] = {}; D2_GLOBAL_GUARD(gaTaskQueueHeadArray, "D2Game::GAME::Task::gaTaskQueueHeadArray");
+
+} // namespace D2Game::GAME::Task

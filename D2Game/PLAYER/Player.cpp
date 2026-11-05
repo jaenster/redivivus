@@ -314,7 +314,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
         D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pCreatedItem, pStatList);
         D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
       }
-      if (!bNoSkill && *(short int*)(pTemplateTxt + 0xac) >= 0 && (int)*(short int*)(pTemplateTxt + 0xac) < sgptDataTable->nTxtSkillsCount) {
+      if (!bNoSkill && *(short int*)(pTemplateTxt + 0xac) >= 0 && (int)*(short int*)(pTemplateTxt + 0xac) < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
         if (!pStatList) {
           pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pCreatedItem->pMemory, 0x40, 0, UNIT_ITEM, pCreatedItem->nUnitGUID);
@@ -439,7 +439,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct) {
     int i;
-    D2CharStatsTxt* pCharStatsTxt = pUnit && (i = pUnit->nClassId) >= 0 && i < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + i : nullptr;
+    D2CharStatsTxt* pCharStatsTxt = pUnit && (i = pUnit->nClassId) >= 0 && i < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + i : nullptr;
     if (!pCharStatsTxt) {
       return;
     }

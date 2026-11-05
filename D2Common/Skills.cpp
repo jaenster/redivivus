@@ -150,11 +150,11 @@ int32_t __fastcall SKILLS_CalcSkillParam(eD2Skills eSkill, int32_t nSkillLevel) 
     if ((int)eSkill < 0) {
       return 0;
     }
-    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if (!((int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -166,15 +166,15 @@ int32_t __fastcall SKILLS_CalcSkillParam(eD2Skills eSkill, int32_t nSkillLevel) 
 }
 
 int Unreferenced_006435c0() {
-    return sgptDataTable->nPassiveSkillsCount;
+    return ITEMS::Items::sgptDataTable->nPassiveSkillsCount;
 }
 
 int __fastcall Unreferenced_006435d0(int param_1) {
     D2DataTableTxtStrc* in_EAX;
     if (param_1 >= 0) {
-      in_EAX = sgptDataTable;
-      if (param_1 < sgptDataTable->nPassiveSkillsCount) {
-        return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)sgptDataTable->pPassiveSkillsPerClassStrc >> 0x10) << 16 | (uint32_t)(uint16_t)sgptDataTable->pPassiveSkillsPerClassStrc[param_1].nSkillId);
+      in_EAX = ITEMS::Items::sgptDataTable;
+      if (param_1 < ITEMS::Items::sgptDataTable->nPassiveSkillsCount) {
+        return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)ITEMS::Items::sgptDataTable->pPassiveSkillsPerClassStrc >> 0x10) << 16 | (uint32_t)(uint16_t)ITEMS::Items::sgptDataTable->pPassiveSkillsPerClassStrc[param_1].nSkillId);
       }
     }
 
@@ -216,7 +216,7 @@ static D2StatListExStrc * __stdcall SKILLS_GetOrAllocStateStatList(int32_t bAllo
 
 // Returns the passivestate field from D2SkillsTxt for the given skill ID. Returns 0 if invalid or no passive state.
 int __stdcall TXT_Skills_GetPassiveState(int nSkillId) {
-    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -276,7 +276,7 @@ int32_t __fastcall SKILLS_GetUnitStatValue(eD2UnitStat eUnitStat, int32_t nShift
     }
 
     D2UnitStrc* pUnit = *ppContext;
-    if (!(pUnit && (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize)) {
+    if (!(pUnit && (int)eUnitStat >= 0 && (int)eUnitStat < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return 0;
     }
     if (eUnitStat == UNITSTAT_tohit) {
@@ -530,7 +530,7 @@ uint32_t __stdcall SKILLS_SetTimerFlag(D2SkillStrc * pSkill, int32_t nTimerValue
 
 void __stdcall SelectSkillLeft(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOwnerGUID) {
     D2SkillsTxt* pSkillsTxt;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills , !(pSkillsTxt + eSkill))) {
+    if ((int)eSkill < 0 || (int)eSkill >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills , !(pSkillsTxt + eSkill))) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x668);
       exit(-1);
     }
@@ -564,7 +564,7 @@ void __stdcall SelectSkillLeft(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOw
 
 void __stdcall SelectSkillRight(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nOwnerGUID) {
     D2SkillsTxt* pSkillsTxt;
-    if (nSkillId < 0 || nSkillId >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills , !(pSkillsTxt + nSkillId))) {
+    if (nSkillId < 0 || nSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills , !(pSkillsTxt + nSkillId))) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67f);
       exit(-1);
     }
@@ -728,7 +728,7 @@ static int32_t __stdcall SKILLS_CheckItemTypeRequirement(D2UnitStrc * pUnit, D2U
       _bItemFlagSet = ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x811, ".\\SKILLS\\Skills.cpp");
       if (!_bItemFlagSet) {
         nShootsType = ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pUnit);
-        if (nShootsType && !(*(uint8_t*)(psSkillFields + 3) & (uint8_t)gadwBitMasks[0])) {
+        if (nShootsType && !(*(uint8_t*)(psSkillFields + 3) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
           if (!*psSkillFields) {
             nMagicArrowStat = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_magicarrow, 0);
             if (nMagicArrowStat) {
@@ -921,7 +921,7 @@ static int32_t __stdcall SKILL_GetLevelBonus(D2SkillStrc * pSkill, D2UnitStrc * 
     nSkillLayer = pSkillsTxt->skill;
     eD2Skills eSkillId;
     eSkillId = (eD2Skills)(short int)nSkillLayer;
-    if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkillId < 0 || (int)eSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -1179,7 +1179,7 @@ static int32_t UNIT_GetSkillBySkillId(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUn
 }
 
 int32_t __stdcall TXT_Skills_GetReqLevel(eD2Skills eSkill) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0x7fffffff;
     }
@@ -1188,7 +1188,7 @@ int32_t __stdcall TXT_Skills_GetReqLevel(eD2Skills eSkill) {
 }
 
 int32_t __stdcall SKILL_GetRequiredLevel(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0x7fffffff;
     }
@@ -1219,7 +1219,7 @@ int32_t __fastcall GetSkillLevelById(D2UnitStrc * pUnit, eD2Skills eSkill) {
 BOOL __stdcall SkillCalculateIfWeCanSkillThisSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
     bool bHasSkill;
     D2SkillsTxt* pReqSkillTxt;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1240,14 +1240,14 @@ BOOL __stdcall SkillCalculateIfWeCanSkillThisSkill(D2UnitStrc * pUnit, eD2Skills
       if (nUnitLevel < 0) {
         return 0;
       }
-      if (nUnitLevel >= sgptDataTable->nTxtSkillsCount) {
+      if (nUnitLevel >= ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         return 0;
       }
-      if (!(sgptDataTable->pTxtSkills + nUnitLevel)) {
+      if (!(ITEMS::Items::sgptDataTable->pTxtSkills + nUnitLevel)) {
         return 0;
       }
 
-      nReqLevel = UNIT_GetSkillBySkillId(sgptDataTable->pTxtSkills + nUnitLevel, pUnit);
+      nReqLevel = UNIT_GetSkillBySkillId(ITEMS::Items::sgptDataTable->pTxtSkills + nUnitLevel, pUnit);
       if (!nReqLevel) {
         return 0;
       }
@@ -1302,12 +1302,12 @@ BOOL __stdcall SkillCalculateIfWeCanSkillThisSkill(D2UnitStrc * pUnit, eD2Skills
 }
 
 uint32_t __stdcall SpendSkillPointOnSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if (!((int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[2])) {
+    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;
     }
 
@@ -1338,7 +1338,7 @@ uint32_t __stdcall SpendSkillPointOnSkill(D2UnitStrc * pUnit, eD2Skills eSkill) 
 
 uint32_t __stdcall SKILLS_CalcToHit(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel) {
     D2SkillCalcContextStrc sCalcCtx;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1348,17 +1348,17 @@ uint32_t __stdcall SKILLS_CalcToHit(D2UnitStrc * pUnit, eD2Skills eSkill, int32_
 
     uint32_t nToHitCalcIdx = pSkillTxt->ToHitCalc;
     if (nToHitCalcIdx != -1) {
-      if (!sgptDataTable->pSkillsCode) {
+      if (!ITEMS::Items::sgptDataTable->pSkillsCode) {
         return 0;
       }
-      if (!(nToHitCalcIdx < (uint32_t)sgptDataTable->nSkillsCodeSize)) {
+      if (!(nToHitCalcIdx < (uint32_t)ITEMS::Items::sgptDataTable->nSkillsCodeSize)) {
         return 0;
       }
 
       sCalcCtx.pUnit = pUnit;
       sCalcCtx.nSkillId = eSkill;
       sCalcCtx.nSkillLevel = nSkillLevel;
-      uint32_t uFormulaResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)sgptDataTable->pSkillsCode + nToHitCalcIdx), sgptDataTable->nSkillsCodeSize - nToHitCalcIdx, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+      uint32_t uFormulaResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillsCode + nToHitCalcIdx), ITEMS::Items::sgptDataTable->nSkillsCodeSize - nToHitCalcIdx, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
       return uFormulaResult;
     }
 
@@ -1402,7 +1402,7 @@ int32_t __stdcall SKILLS_GetTotalSkillLevel(D2UnitStrc * pUnit, eD2Skills eSkill
 // Output feeds into missile spawn and damage calculation.
 // Heart of skill scaling system.
 int32_t __stdcall SKILLS_CalculateManaCost(eD2Skills eSkillId, int32_t nSkillLevel) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1496,15 +1496,15 @@ static int32_t SKILLS_ApplyElementalMasteryBonus(eD2ElementalDamageTypeDWORD eEl
 // Calculates the minimum elemental damage for a skill at a given level. Looks up the skill in sgptDataTable, computes base min damage from EMinLev breakpoints and EMin, then optionally evaluates the EDmgSymPerCalc formula via SKILLS_CompileSkillFormula, and if bApplyMastery is set, further scales by the caster's elemental mastery passive stat. Returns 0 if skill ID or level is invalid.
 int32_t __stdcall SERVER_MinDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, BOOL bApplyMastery) {
     int32_t nElemMasteryBonus;
-    D2DataTableTxtStrc* pDataTable = sgptDataTable;
+    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
     if (eSkillId < 0) {
       return 0;
     }
-    if (!(eSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (!(eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkillId;
+    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1536,15 +1536,15 @@ int32_t __stdcall SERVER_MinDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
 
 int32_t __stdcall SERVER_MaxDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t bApplyElemBonus) {
     int32_t nElemMasteryBonus;
-    D2DataTableTxtStrc* pDataTable = sgptDataTable;
+    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
     if (eSkillId < 0) {
       return 0;
     }
-    if (!(eSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (!(eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkillId;
+    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1581,11 +1581,11 @@ int32_t __stdcall SKILLS_GetElementalLength(D2UnitStrc * pUnit, int32_t eSkillId
     if (eSkillId < 0) {
       return 0;
     }
-    if (!(eSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (!(eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkillId;
+    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1604,12 +1604,12 @@ int32_t __stdcall SKILLS_GetElementalLength(D2UnitStrc * pUnit, int32_t eSkillId
 
     uint32_t uCalcResult = pSkillTxt->ELenSymPerCalc;
     int32_t nSynergyLen = pSkillTxt->ELen + nLevelLenOffset;
-    if (uCalcResult != -1 && sgptDataTable->pSkillsCode && uCalcResult < (uint32_t)sgptDataTable->nSkillsCodeSize) {
+    if (uCalcResult != -1 && ITEMS::Items::sgptDataTable->pSkillsCode && uCalcResult < (uint32_t)ITEMS::Items::sgptDataTable->nSkillsCodeSize) {
       int32_t nPercentBonus;
       sCalcCtx.nSkillLevel = nSkillLevel;
       sCalcCtx.pUnit = pUnit;
       sCalcCtx.nSkillId = eSkillId;
-      uCalcResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)sgptDataTable->pSkillsCode + uCalcResult), sgptDataTable->nSkillsCodeSize - uCalcResult, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+      uCalcResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillsCode + uCalcResult), ITEMS::Items::sgptDataTable->nSkillsCodeSize - uCalcResult, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
       if (uCalcResult) {
         nPercentBonus = D2Client::Stats::D2ApplyPercent(nSynergyLen, uCalcResult, 100);
         nSynergyLen += nPercentBonus;
@@ -1622,7 +1622,7 @@ int32_t __stdcall SKILLS_GetElementalLength(D2UnitStrc * pUnit, int32_t eSkillId
 int32_t __stdcall SKILLS_GetCharClassFromSkillId(int32_t eSkillId) {
     int32_t nCharClass;
     char cCharClass;
-    if (!(eSkillId < 0 || eSkillId >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int32_t)cCharClass , cCharClass < '\0'))) {
+    if (!(eSkillId < 0 || eSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int32_t)cCharClass , cCharClass < '\0'))) {
       return nCharClass;
     }
 
@@ -1637,7 +1637,7 @@ uint32_t __stdcall SKILLS_GetCharClassFromSkillId_Validated(int32_t eSkillId, in
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd79);
       exit(-1);
     }
-    if (eSkillId < 0 || eSkillId >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int)cCharClass , cCharClass < '\0')) {
+    if (eSkillId < 0 || eSkillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int)cCharClass , cCharClass < '\0')) {
       nCharClass = 7;
     }
 
@@ -1699,7 +1699,7 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
 
     int nMonStats2Id;
     uint32_t uAnimFlag = gdwAnimModeValidFlagsTable[eAnimMode];
-    while (nMonId < 0 || nMonId >= sgptDataTable->nTxtMonStatsSize || (nMonStats2Id = (int)sgptDataTable->pTxtMonStats[nMonId].MonStatsEx , nMonStats2Id < 0) || nMonStats2Id >= sgptDataTable->nTxtMonStatsExSize || !(sgptDataTable->pTxtMonStatsEx + nMonStats2Id) || !((uint32_t)sgptDataTable->pTxtMonStatsEx[nMonStats2Id].mDT[(int)uAnimFlag >> 3] & gadwBitMasks[uAnimFlag & 7])) {
+    while (nMonId < 0 || nMonId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (nMonStats2Id = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonId].MonStatsEx , nMonStats2Id < 0) || nMonStats2Id >= ITEMS::Items::sgptDataTable->nTxtMonStatsExSize || !(ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Id) || !((uint32_t)ITEMS::Items::sgptDataTable->pTxtMonStatsEx[nMonStats2Id].mDT[(int)uAnimFlag >> 3] & Fog::BitBuffer::gadwBitMasks[uAnimFlag & 7])) {
       switch (uAnimFlag) {
         case 1:
           return uAnimFlag;
@@ -1741,15 +1741,15 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
     }
 
     int32_t nStateIdx = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
+    if ((short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
       return;
     }
 
     do {
       D2StatesTxt* pDVar1;
-      eTransformState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx];
+      eTransformState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx];
       eUnitState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eTransformState);
-      pDVar1 = eUnitState && (int)eTransformState >= 0 && (int)eTransformState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eTransformState : nullptr;
+      pDVar1 = eUnitState && (int)eTransformState >= 0 && (int)eTransformState < ITEMS::Items::sgptDataTable->nTxtStatesSize ? ITEMS::Items::sgptDataTable->pTxtStates + eTransformState : nullptr;
       if (pDVar1) {
         switch (pDVar1->gfxtype) {
           case '\x01':
@@ -1785,7 +1785,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
       }
 
       nStateIdx++;
-      if (nStateIdx >= (short int)sgptDataTable->nAllStatesDataTblFlag0x10Size) {
+      if (nStateIdx >= (short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size) {
         return;
       }
     } while (true);
@@ -1896,8 +1896,8 @@ uint32_t __stdcall D2CheckIfCorpseIsConsumable(D2UnitStrc * pUnit, int32_t bChec
     if (!bCorpseSelFlag) {
       return 0;
     }
-    if (nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize) {
-      return (uint32_t)(sgptDataTable->pTxtMonStats[nMonStatsId].Velocity != 0);
+    if (nMonStatsId >= 0 && nMonStatsId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      return (uint32_t)(ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsId].Velocity != 0);
     }
 
     return (uint32_t)(*(volatile uint8_t*)0x32 != 0);
@@ -2163,7 +2163,7 @@ uint32_t __stdcall SKILLS_HasLineOfSightToUnit(LONG nSrcX, LONG nSrcY, D2UnitStr
 int32_t __stdcall SKILLS_CalculateManaCostShifted(int32_t eSkillId, int32_t nSkillLevel) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nLine;
-    pSkillsTxt = eSkillId >= 0 && eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    pSkillsTxt = eSkillId >= 0 && eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100c);
       exit(-1);
@@ -2209,11 +2209,11 @@ int32_t __stdcall SKILLS_GetParam01WithDiminishing(int32_t nLevel, int32_t nSkil
     if (nSkillId < 0) {
       return 0;
     }
-    if (!(nSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (!(nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + nSkillId;
+    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2229,11 +2229,11 @@ int32_t __stdcall SKILLS_GetParam23WithDiminishing(int32_t nLevel, int32_t nSkil
     if (nSkillId < 0) {
       return 0;
     }
-    if (!(nSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (!(nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + nSkillId;
+    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2249,11 +2249,11 @@ int32_t __stdcall SKILLS_GetParam45WithDiminishing(int32_t nLevel, int32_t nSkil
     if (nSkillId < 0) {
       return 0;
     }
-    if (!(nSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (!(nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + nSkillId;
+    D2SkillsTxt* pSkillsTxt = ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2462,11 +2462,11 @@ int __stdcall SKILL_GetArrowModifierSkill(D2UnitStrc * pUnit, int * pnStatLevel)
 }
 
 uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId) {
-    if (!(nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + nSkillId)) {
+    if (!(nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount && ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId)) {
       return 0;
     }
 
-    return (uint8_t)*((uint8_t*)&sgptDataTable->pTxtSkills[nSkillId] + 0x6) & gadwBitMasks[1];
+    return (uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtSkills[nSkillId] + 0x6) & Fog::BitBuffer::gadwBitMasks[1];
 }
 
 // Strips all progressive (stackable/timed) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (states with flag 0x10 set), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
@@ -2481,13 +2481,13 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
     }
 
     pUnit = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
+    if ((short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
       return 1;
     }
 
     do {
       BOOL eStateId;
-      eState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x10[(int)pUnit];
+      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[(int)pUnit];
       eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
       if (eStateId) {
         pStatList = Stats::StatsEx::GetStatsByState(i, eState);
@@ -2499,7 +2499,7 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
         DATATBLS::ItemStats::SetState(i, eState, 0);
       }
 
-      nStateCount = (int32_t)(short int)sgptDataTable->nAllStatesDataTblFlag0x10Size;
+      nStateCount = (int32_t)(short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
       pUnit = (D2UnitStrc*)((uintptr_t)&pUnit->eUnitType + 1);
     } while ((int)pUnit < nStateCount);
 
@@ -2508,8 +2508,8 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
 
 eD2Skills __stdcall SKILLS_GetClassSkillByIndex(uint32_t nClassId, int32_t nSkillIndex) {
     if (nClassId <= 6) {
-      if (nSkillIndex >= 0 && nSkillIndex < (&sgptDataTable->pSkillsPerClassCounter->Amazon)[nClassId]) {
-        return (int)sgptDataTable->pSkillsPerClassStrc[sgptDataTable->nSkillCountMaxPerClass * nClassId + nSkillIndex];
+      if (nSkillIndex >= 0 && nSkillIndex < (&ITEMS::Items::sgptDataTable->pSkillsPerClassCounter->Amazon)[nClassId]) {
+        return (int)ITEMS::Items::sgptDataTable->pSkillsPerClassStrc[ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass * nClassId + nSkillIndex];
       }
 
       return ~SKILL_Attack;
@@ -2520,7 +2520,7 @@ eD2Skills __stdcall SKILLS_GetClassSkillByIndex(uint32_t nClassId, int32_t nSkil
 
 int32_t __stdcall AmountOfSkillsByClassId(uint32_t nClassId) {
     if (nClassId <= 6) {
-      return (&sgptDataTable->pSkillsPerClassCounter->Amazon)[nClassId];
+      return (&ITEMS::Items::sgptDataTable->pSkillsPerClassCounter->Amazon)[nClassId];
     }
 
     return 0;
@@ -2562,7 +2562,7 @@ int32_t __stdcall SKILL_GetConcentrationDamageBonus(D2UnitStrc * pUnit, int32_t 
     }
 
     int32_t nDamagePct = Stats::StatsEx::STATLIST_GetBaseStatValue(pConcentrationStatList, UNITSTAT_damagepercent, 0);
-    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2682,7 +2682,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
     int32_t bApplyMastery;
     short int nMissileId;
     short int sMissileId;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -2995,14 +2995,14 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
         return 0;
     }
 
-    if (!(sgptDataTable->pSkillsCode && nCalcOffset < (uint32_t)sgptDataTable->nSkillsCodeSize)) {
+    if (!(ITEMS::Items::sgptDataTable->pSkillsCode && nCalcOffset < (uint32_t)ITEMS::Items::sgptDataTable->nSkillsCodeSize)) {
       return 0;
     }
 
     sCalcCtx.nSkillId = eSkill;
     sCalcCtx.pUnit = pUnit;
     sCalcCtx.nSkillLevel = nSkillLevel;
-    nCalcOffset = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)sgptDataTable->pSkillsCode + nCalcOffset), sgptDataTable->nSkillsCodeSize - nCalcOffset, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+    nCalcOffset = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillsCode + nCalcOffset), ITEMS::Items::sgptDataTable->nSkillsCodeSize - nCalcOffset, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
     return nCalcOffset;
 }
 
@@ -3046,33 +3046,33 @@ uint32_t __fastcall SKILLS_EvalSkillDescCalc_Chained(eD2Skills eSkill, uint8_t b
 
 int32_t __stdcall D2GetSkillCalc(D2UnitStrc * pUnit, int32_t calc, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillCalcContextStrc sCalcCtx;
-    if (!sgptDataTable->pSkillsCode) {
+    if (!ITEMS::Items::sgptDataTable->pSkillsCode) {
       return 0;
     }
-    if (!((uint32_t)calc < (uint32_t)sgptDataTable->nSkillsCodeSize)) {
+    if (!((uint32_t)calc < (uint32_t)ITEMS::Items::sgptDataTable->nSkillsCodeSize)) {
       return 0;
     }
 
     sCalcCtx.pUnit = pUnit;
     sCalcCtx.nSkillId = eSkill;
     sCalcCtx.nSkillLevel = nSkillLvl;
-    uint32_t nCalcResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)sgptDataTable->pSkillsCode + calc), sgptDataTable->nSkillsCodeSize - calc, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+    uint32_t nCalcResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillsCode + calc), ITEMS::Items::sgptDataTable->nSkillsCodeSize - calc, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
     return nCalcResult;
 }
 
 uint32_t __stdcall SKILLS_EvalDescCalcBytecode(D2UnitStrc * pUnit, uint32_t nCalcOffset, eD2Skills eSkillId, int32_t nSkillLevel) {
     D2SkillCalcContextStrc sCalcCtx;
-    if (!sgptDataTable->pSkillDescCode) {
+    if (!ITEMS::Items::sgptDataTable->pSkillDescCode) {
       return 0;
     }
-    if (!(nCalcOffset < (uint32_t)sgptDataTable->nSkillDescCodeSize)) {
+    if (!(nCalcOffset < (uint32_t)ITEMS::Items::sgptDataTable->nSkillDescCodeSize)) {
       return 0;
     }
 
     sCalcCtx.pUnit = pUnit;
     sCalcCtx.nSkillId = eSkillId;
     sCalcCtx.nSkillLevel = nSkillLevel;
-    uint32_t uResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)sgptDataTable->pSkillDescCode + nCalcOffset), sgptDataTable->nSkillDescCodeSize - nCalcOffset, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+    uint32_t uResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillDescCode + nCalcOffset), ITEMS::Items::sgptDataTable->nSkillDescCodeSize - nCalcOffset, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
     return uResult;
 }
 
@@ -3088,13 +3088,13 @@ void __stdcall SKILLS_UpdatePassiveSkillStats(D2UnitStrc * pUnit, eD2Skills eSki
     short int nStatId;
     int* pUnit2;
     D2UnitStrc* pCaster = pUnit;
-    D2SkillsTxt* pPassiveCalcPtr = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pPassiveCalcPtr = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pPassiveCalcPtr && pPassiveCalcPtr->passivestate > 0)) {
       return;
     }
 
     eD2States eState = (eD2States)pPassiveCalcPtr->passivestate;
-    if ((int)eState >= sgptDataTable->nTxtStatesSize) {
+    if ((int)eState >= ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return;
     }
 
@@ -3117,7 +3117,7 @@ void __stdcall SKILLS_UpdatePassiveSkillStats(D2UnitStrc * pUnit, eD2Skills eSki
         pUnit2 = pPassiveCalcPtr->passivecalc;
         nStatIdx = 0;
         do {
-          if (*pPassiveStat < 0 || (int)*pPassiveStat >= sgptDataTable->nTxtItemStatCostSize) {
+          if (*pPassiveStat < 0 || (int)*pPassiveStat >= ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             break;
           }
 
@@ -3159,8 +3159,8 @@ void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
     BOOL ePassiveState;
     eD2Skills eSkill;
     int32_t nPassiveSkillCount;
-    int i = sgptDataTable->nPassiveSkillsCount;
-    D2DataTableTxtStrc* pDataTable = sgptDataTable;
+    int i = ITEMS::Items::sgptDataTable->nPassiveSkillsCount;
+    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
     for (nPassiveSkillCount = 0; nPassiveSkillCount < i; nPassiveSkillCount++) {
       short int nSkillId = nPassiveSkillCount < 0 || nPassiveSkillCount >= pDataTable->nPassiveSkillsCount ? -1 : pDataTable->pPassiveSkillsPerClassStrc[nPassiveSkillCount].nSkillId;
       eSkill = (eD2Skills)nSkillId;
@@ -3171,10 +3171,10 @@ void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
           pSkillInst = GetSkill(pUnit, eSkill);
           if (pSkillInst) {
             ePassiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nSkillId);
-            pDataTable = sgptDataTable;
+            pDataTable = ITEMS::Items::sgptDataTable;
             if (ePassiveState) {
               SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-              pDataTable = sgptDataTable;
+              pDataTable = ITEMS::Items::sgptDataTable;
             }
           }
         }
@@ -3258,7 +3258,7 @@ D2SkillStrc * __stdcall AllocSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
       return nullptr;
     }
 
-    D2SkillsTxt* pSkillListStrc = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillListStrc = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillListStrc) {
       return nullptr;
     }
@@ -3368,7 +3368,7 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
     }
 
     D2SkillsTxt* pSkillTxt;
-    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return;
     }
@@ -3552,7 +3552,7 @@ uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(D2SkillStrc * pSkill, D2U
 
     D2SkillsTxt* pDVar1 = pSkill->pRecord;
     D2InventoryStrc* pInventory = pUnit->pInventory;
-    if (!pDVar1 || !(*((uint8_t*)pDVar1 + 0x8) & (uint8_t)gadwBitMasks[4])) {
+    if (!pDVar1 || !(*((uint8_t*)pDVar1 + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
       BOOL bGotWeaponInfo;
       nWeaponReqType = pDVar1->skill;
       if (nWeaponReqType != 2) {
@@ -3715,7 +3715,7 @@ int32_t __stdcall SKILLS_CanUseSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8e9);
       exit(-1);
     }
-    if (!pSkill->pRecord || !(*((uint8_t*)pSkill->pRecord + 0x5) & (uint8_t)gadwBitMasks[2])) {
+    if (!pSkill->pRecord || !(*((uint8_t*)pSkill->pRecord + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 3;
     }
 
@@ -3725,10 +3725,10 @@ int32_t __stdcall SKILLS_CanUseSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     }
 
     uint32_t dwSkillFlags = (uint32_t)(uint8_t)*((uint8_t*)pSkill->pRecord + 0x4);
-    if (gadwBitMasks[5] & dwSkillFlags) {
+    if (Fog::BitBuffer::gadwBitMasks[5] & dwSkillFlags) {
       return 6;
     }
-    if (gadwBitMasks[4] & dwSkillFlags) {
+    if (Fog::BitBuffer::gadwBitMasks[4] & dwSkillFlags) {
       return 5;
     }
 
@@ -3856,11 +3856,11 @@ void __stdcall SKILL_AdjustSkillLevelBonus(D2UnitStrc * pUnit, eD2Skills eSkill,
 int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseWeaponDamage) {
     int nMinDmg;
     D2UnitStrc* pWeapon;
-    D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillTxt) {
       return 1;
     }
-    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       int nDexterity;
       if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
         nMinDmg = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
@@ -3906,13 +3906,13 @@ int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
 // Calculates the maximum damage for a skill at a given level. If the skill's flags2 bit 1 is set, delegates to SKILLS_CalculateBaseDamageFromStats. Otherwise, optionally scales weapon max damage by SrcDam (handling two-handed weapons), adds MaxLev breakpoint bonus and MaxDam base, optionally applies DmgSymPerCalc formula percent modifier, and finally left-shifts by HitShift. bUseWeaponDamage controls whether weapon damage contributes.
 int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseWeaponDamage) {
     int32_t nLevDamBonus;
-    D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillTxt) {
       return 2;
     }
 
     int nMaxDmg = 0;
-    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       nLevDamBonus = SKILLS_CalculateBaseDamageFromStats(0, pUnit);
       return nLevDamBonus;
     }
@@ -3945,11 +3945,11 @@ int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
 // Evaluates a passive skill's elemental calc value for a specific element type (0=min fire/0x156, 1=min cold/0x157, 2=min lightning/0x158). Searches the skill's passivestat array for the matching stat ID, then calls D2GetSkillCalc on the corresponding passivecalc slot. Returns 0 if the skill/level is invalid or the element type is not found in passivestat.
 uint32_t __stdcall SKILL_GetPassiveElementCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nElementType) {
     int nMinStatId;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillTxt) {
       return 0;
     }
@@ -4013,12 +4013,12 @@ void __stdcall STRUCT_FillSkillsList(D2UnitStrc * pUnit) {
 
     int nUnitClassId;
     nUnitClassId = pUnit->nClassId;
-    if (!(nUnitClassId >= 0 && nUnitClassId < sgptDataTable->nTxtCharStatsSize)) {
+    if (!(nUnitClassId >= 0 && nUnitClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize)) {
       return;
     }
 
     D2CharStatsTxt* pCharStatsTxt;
-    pCharStatsTxt = sgptDataTable->pTxtCharStats;
+    pCharStatsTxt = ITEMS::Items::sgptDataTable->pTxtCharStats;
     if (!(pCharStatsTxt + nUnitClassId)) {
       return;
     }
@@ -4030,7 +4030,7 @@ void __stdcall STRUCT_FillSkillsList(D2UnitStrc * pUnit) {
     do {
       short int nClassSkillId;
       nClassSkillId = *pClassSkillEntry;
-      if (nClassSkillId >= 0 && (int)nClassSkillId < sgptDataTable->nTxtSkillsCount) {
+      if (nClassSkillId >= 0 && (int)nClassSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         AllocSkill(pUnit, (int)nClassSkillId);
       }
 

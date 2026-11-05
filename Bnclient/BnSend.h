@@ -256,8 +256,10 @@ void __fastcall Unreferenced_0051d350(int param_1, int param_2);
 void __stdcall BNNEWS_SaveToCache();
 // Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
 void __stdcall BNNEWS_InvokeCallbacks();
+void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray);
 void * __thiscall BNNEWS_DestroyNewsTable(void * pNewsTable, uint8_t bFreeMemory);
 void __thiscall BNNEWS_ReallocateNewsTable(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCapacity);
+void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray);
 int __fastcall Unreferenced_0051d690(int param_1);
 void __fastcall BNNEWS_ClearNewsTable(uint32_t * pNewsTable);
 void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int dwAdditionalCount, int bGrow);

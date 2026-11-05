@@ -3,6 +3,7 @@
 
 #define D2_TRACE_DEFINITIONS
 #include "support/d2_trace.h"
+#include "globals/globals.h"
 
 static FILE* g_pLog = 0;
 
@@ -219,16 +220,15 @@ __attribute__((init_priority(150))) static struct TraceInit {
 
 // Reads the wall-tile clip global through its real linkage so the probe cannot be
 // folded to a constant, letting any trace point report the live value.
-extern int gnTileClipYMin;
 extern "C" int D2ProbeReadTileClipYMin(void) {
-    return *(volatile int*)&gnTileClipYMin;
+    return *(volatile int*)&D2gfx::gnTileClipYMin;
 }
 
 // Reports any buffer handed to a file read whose range covers the wall-clip global. The read
 // is filled by the kernel, so the store never trips a CPU watchpoint and only the destination
 // range can reveal it.
 extern "C" void D2ProbeCheckBuffer(const char* pszWho, const void* pBuf, unsigned nLen, void* pRet) {
-    uintptr_t nTgt = (uintptr_t)&gnTileClipYMin;
+    uintptr_t nTgt = (uintptr_t)&D2gfx::gnTileClipYMin;
     uintptr_t nLo = (uintptr_t)pBuf;
     if (!nLo) return;
     if (nTgt >= nLo && nTgt < nLo + (uintptr_t)nLen)

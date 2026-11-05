@@ -150,3 +150,16 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
 }
 
 } // namespace D2CMP::SRC::TileProjects
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2CMP::SRC::TileProjects {
+
+// Initialized scalars
+
+// also labelled: gpPaletteCacheHead
+D2TileProjectStrc * gpTileProjectListHead = 0; D2_GLOBAL_GUARD(gpTileProjectListHead, "D2CMP::SRC::TileProjects::gpTileProjectListHead");
+
+} // namespace D2CMP::SRC::TileProjects

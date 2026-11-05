@@ -363,9 +363,9 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ClientId(char * pBytes, size_t nSize) {
     int32_t nRegAuthority;
     if (pBytes && nSize >= 0x10) {
       int32_t nClientId;
-      nClientToken = *(int32_t*)(pBytes + 0xc);
       nRegAuthority = *(int32_t*)(pBytes + 4);
       nClientId = *(int32_t*)(pBytes + 8);
+      nClientToken = *(int32_t*)(pBytes + 0xc);
       Storm::Source::SReg::SRegSaveValue("Configuration", "Registration Version", 2, *(int32_t*)pBytes);
       Storm::Source::SReg::SRegSaveValue("Configuration", "Registration Authority", 2, nRegAuthority);
       Storm::Source::SReg::SRegSaveValue("Configuration", "Client ID", 2, nClientId);
@@ -374,10 +374,10 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ClientId(char * pBytes, size_t nSize) {
       Bnet::BnetLog_WriteLine("client acknowledged");
       Bnet::BNET_LogIndent(2, -4);
       return 1;
+    } else {
+      Bnet::BnetLog_WriteLine("ERROR BDClientId: invalid response");
+      return 0;
     }
-
-    Bnet::BnetLog_WriteLine("ERROR BDClientId: invalid response");
-    return 0;
 }
 
 // SID_LOGONCHALLENGE (0x28) response handler. Legacy simple logon challenge. Receives (DWORD)ServerToken which is used for password hash computation. Stores token via BNSEND_SetServerToken for subsequent SID_LOGONRESPONSE (0x29) request.

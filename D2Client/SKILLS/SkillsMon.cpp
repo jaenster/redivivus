@@ -70,7 +70,7 @@ BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, e
     eD2LevelId eLevelId;
     POINT ptSpawnPos;
     short int sMissileB;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -82,14 +82,14 @@ BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, e
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileId > 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       eAct neAct;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
       if (neAct == ACT_II) {
         sMissileB = pSkillTxt->cltmissile[2];
-        if (sMissileB > 0 && (int)sMissileB < sgptDataTable->nTxtMissilesSize) {
+        if (sMissileB > 0 && (int)sMissileB < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
           eMissileId = (int)sMissileB;
         }
       }
@@ -258,12 +258,12 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2
     int nOffsetY;
     int nOffsetX;
     uint32_t nAdjFrame;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
-    eMissilesId eMissileId = (eMissilesId)sgptDataTable->pTxtSkills[eSkill].cltmissile[1];
-    if ((int)eMissileId < 0 || (int)eMissileId >= sgptDataTable->nTxtMissilesSize) {
+    eMissilesId eMissileId = (eMissilesId)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].cltmissile[1];
+    if ((int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
@@ -339,7 +339,7 @@ BOOL __fastcall Skills_CltStFunc_CalcPathToTargetSetFlag(D2UnitStrc * pUnit, eD2
 
 BOOL __fastcall Skills_CltDoFunc_Mon_SetSequenceFromCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nCalcIdx;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -366,7 +366,7 @@ BOOL __fastcall Skills_CltStFunc_MonSummonSpawnSetCollision(D2UnitStrc * pUnit, 
     int nSpawnMode;
     int32_t nSpawnY;
     int32_t nSpawnX;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
+    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -483,12 +483,12 @@ BOOL __fastcall Skills_CltDoFunc_Mon_JumpMissileTowardTarget(D2UnitStrc * pUnit,
 }; D2_STATIC_GUARD(gaSkillJumpMissileData1, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_JumpMissileTowardTarget::gaSkillJumpMissileData1");
 
     D2SkillArgStrc sSkillArg;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
-    eMissilesId eCltMissileId = (eMissilesId)sgptDataTable->pTxtSkills[eSkill].cltmissile[1];
-    if ((int)eCltMissileId < 0 || (int)eCltMissileId >= sgptDataTable->nTxtMissilesSize) {
+    eMissilesId eCltMissileId = (eMissilesId)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].cltmissile[1];
+    if ((int)eCltMissileId < 0 || (int)eCltMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (pUnit) {
@@ -583,13 +583,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_SpawnMissilesInArea(D2UnitStrc * pUnit, eD2
     int32_t nTargetX;
     int32_t nTargetY;
     D2UnitStrc* pUnitForCalc;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {
@@ -617,17 +617,17 @@ BOOL __fastcall Skills_CltDoFunc_Mon_SpawnMissilesInArea(D2UnitStrc * pUnit, eD2
 
 // Configures the total frame count and animation speed of an existing missile unit (pUnit2). Frame count comes from skill calc[0], falling back to MissileTxt.Param2-1+nSkillLvl, clamped to [1, 255]. Sets path distance, animation speed (AnimLen&lt;&lt;8 / frames), total frames, and current frame on the missile. Used to synchronize missile travel time with skill level.
 static void __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nSkillLvl, D2UnitStrc * pUnit2) {
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return;
     }
 
     int nTotalFrames;
-    D2MissilesTxt* pMissileTxt = pUnit2 && (nTotalFrames = pUnit2->nClassId) >= 0 && nTotalFrames < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nTotalFrames : nullptr;
+    D2MissilesTxt* pMissileTxt = pUnit2 && (nTotalFrames = pUnit2->nClassId) >= 0 && nTotalFrames < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nTotalFrames : nullptr;
     if (!pMissileTxt) {
       return;
     }
 
-    nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, sgptDataTable->pTxtSkills[eSkill].calc[0], eSkill, nSkillLvl);
+    nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].calc[0], eSkill, nSkillLvl);
     if (nTotalFrames <= 0) {
       nTotalFrames = pMissileTxt->Param2 - 1 + nSkillLvl;
     }
@@ -685,7 +685,7 @@ static D2UnitStrc * __stdcall SKILLSMON_CreateMissileWithSeed(int32_t * pVelocit
     sSkillArg.nUnitY = nUnitY;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
-    D2MissilesTxt* pMissileTxtBase = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxtBase = nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxtBase) {
       return nullptr;
     }
@@ -737,13 +737,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
     int32_t nTargetX;
     int32_t nTargetY;
     D2SeedStrc sNewSeed;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     int nMissileA = (int)pSkillTxt->cltmissile[1];
-    if (!(nMissileA >= 0 && nMissileA < sgptDataTable->nTxtMissilesSize)) {
+    if (!(nMissileA >= 0 && nMissileA < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
@@ -839,13 +839,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
     D2MissilesTxt* pMissileTxt;
     int nSpreadOffset;
     D2SkillArgStrc sSkillArg;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    pMissileTxt = (int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + eMissileId : nullptr;
+    pMissileTxt = (int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId : nullptr;
     if (pMissileTxt) {
       int32_t nNumRings;
       if (pUnit) {
@@ -895,7 +895,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
 }
 
 BOOL __fastcall Skills_CltStFunc_SetParam1FromCltCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -915,12 +915,12 @@ void __fastcall SKILLSMON_SetMonsterDeathFrame(D2SkillsTxt * pSkillsTxt, D2UnitS
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nMonStatsEx;
       nMonStatsEx = pUnit->nClassId;
-      if (!(nMonStatsEx >= 0 && nMonStatsEx < sgptDataTable->nTxtMonStatsSize)) {
+      if (!(nMonStatsEx >= 0 && nMonStatsEx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
         return;
       }
 
-      nMonStatsEx = (int)sgptDataTable->pTxtMonStats[nMonStatsEx].MonStatsEx;
-      pMonStats2Txt = nMonStatsEx >= 0 && nMonStatsEx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsEx : nullptr;
+      nMonStatsEx = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsEx].MonStatsEx;
+      pMonStats2Txt = nMonStatsEx >= 0 && nMonStatsEx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsEx : nullptr;
       if (!pMonStats2Txt) {
         return;
       }
@@ -966,13 +966,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_PeriodicMissile(D2UnitStrc * pUnit, eD2Skil
 
     int32_t nTargetX;
     int32_t nTargetY;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     int nMissileId = (int)pSkillTxt->cltmissile[1];
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!(nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
@@ -1006,13 +1006,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
     int32_t nTargetX;
     uint32_t nSP1Coord;
     D2SkillArgStrc sSkillArg;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + eMissileId) {
+    if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId) {
       D2UnitStrc* pTarget;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -1085,13 +1085,13 @@ void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, int32_t nSeed
 // Client do-func that spawns N randomly-directed missiles (N = calc[0]) from the caster's position toward the target area. Fills a shared D2SkillArgStrc with flag 0x21, owner, position, skill level, and SKILLSMON_SetMissilePathRandom callback, then calls MakeMissile once per missile index. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {
@@ -1139,7 +1139,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ChargeAnim(D2UnitStrc * pUnit, eD2Skills eS
     int nTotalFrames;
     int nCurrentFrame;
     char* szFile;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1217,19 +1217,19 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
     int nRelY;
     int nRelX;
     int nStepY;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
     D2SkillsTxt* pSkillTxt;
-    pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileId;
     eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if ((int)eMissileId < 0 || (int)eMissileId >= sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (pUnit) {
@@ -1466,12 +1466,12 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RadialMissileExplosion(D2UnitStrc * pUnit, 
 
     int nSpreadOffset;
     D2SkillArgStrc sSkillArg;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
-    eMissilesId eMissileId = (eMissilesId)sgptDataTable->pTxtSkills[eSkill].cltmissile[1];
-    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    eMissilesId eMissileId = (eMissilesId)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].cltmissile[1];
+    if (!((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {
@@ -1518,7 +1518,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RadialMissileExplosion(D2UnitStrc * pUnit, 
 BOOL __fastcall Skills_CltStFunc_SetRandomParamFromCalcRange(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nUnitGUID;
     D2SeedStrc sSeed;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1559,7 +1559,7 @@ BOOL __fastcall Skills_CltStFunc_SetRandomParamFromCalcRange(D2UnitStrc * pUnit,
 }
 
 BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxtBase) {
       return 0;
     }
@@ -1592,11 +1592,11 @@ BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(D2UnitStrc * pUnit, eD2Skills e
 }
 
 BOOL __fastcall Skills_CltStFunc_SpawnCltMissileA(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt) {
       eMissilesId eMissileId;
       eMissileId = (eMissilesId)pSkillsTxt->cltmissile[1];
-      if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
+      if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nSkillLvl);
         return 1;
       }
@@ -1607,13 +1607,13 @@ BOOL __fastcall Skills_CltStFunc_SpawnCltMissileA(D2UnitStrc * pUnit, eD2Skills 
 
 // Client do-func that fires two overlapping scatter-missile waves: 2 missiles of type cltmissilea (SKILLS_CreateMissileScatter count=2, spread=1) and then 4 missiles of type cltmissileb (count=4, spread=5), if cltmissileb is valid. Uses flag 0x2021 with pUnit as both owner and missile reference. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     eMissilesId eMissileIdA = (eMissilesId)pSkillTxt->cltmissile[1];
-    if ((int)eMissileIdA >= 0 && (int)eMissileIdA < sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileIdA >= 0 && (int)eMissileIdA < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       D2SkillArgStrc sSkillArg;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -1630,7 +1630,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD
       sSkillArg.eSkillNo = eSkill;
       Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 2, 1);
       sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-      if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+      if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 4, 5);
       }
 
@@ -1678,13 +1678,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit,
     D2SkillArgStrc sSkillArg;
     int nTargetY;
     int nTargetX;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     int nStreamMissile = (int)pSkillTxt->cltmissile[2];
-    if (!(nStreamMissile >= 0 && nStreamMissile < sgptDataTable->nTxtMissilesSize)) {
+    if (!(nStreamMissile >= 0 && nStreamMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
@@ -1822,13 +1822,13 @@ BOOL __fastcall Skills_CltStFunc_CastHellMeteorMissiles(D2UnitStrc * pUnit, eD2S
 // Client do-func that selects a missile ID as (cltmissilea + monster Components[10]) to vary the projectile by the monster's visual component variant (index A). Validates the offset stays within missile table bounds. If skill flag bit 1 is set uses MISSILE_CreateFromUnitWithOffset, otherwise MakeMissile. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint8_t byComponentIdx;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     int nBaseMissileId = (int)pSkillTxt->cltmissile[1];
-    if (!(nBaseMissileId >= 0 && nBaseMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!(nBaseMissileId >= 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
@@ -1838,7 +1838,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
     }
 
     eMissilesId eMissileIdOffset = nBaseMissileId + (uint32_t)byComponentIdx;
-    if ((int)eMissileIdOffset >= sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileIdOffset >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
@@ -1847,7 +1847,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
+      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileIdOffset, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
       } else {
         Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
@@ -1862,13 +1862,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
 // Identical in structure to Skills_CltDoFunc_Mon_ComponentOffset_Missile_A but uses monster Components[11] (index B) as the offset into the missile table. Allows a second independent component-driven missile variant for the same skill. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint8_t byComponentIdx;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     int nBaseMissileId = (int)pSkillTxt->cltmissile[1];
-    if (!(nBaseMissileId >= 0 && nBaseMissileId < sgptDataTable->nTxtMissilesSize)) {
+    if (!(nBaseMissileId >= 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
@@ -1878,7 +1878,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
     }
 
     eMissilesId eMissileIdOffset = nBaseMissileId + (uint32_t)byComponentIdx;
-    if ((int)eMissileIdOffset >= sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileIdOffset >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
@@ -1887,7 +1887,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
+      if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileIdOffset, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
       } else {
         Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
@@ -1900,7 +1900,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
 }
 
 BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1912,10 +1912,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUni
     if (eMissileId == MISSILE_Arrow || eMissileId == MISSILE_Bolt) {
       D2MissilesTxt* pMissileTxt;
       eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-      if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
+      if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         pMissileTxt = GetMissleById(eMissileId);
         if (pMissileTxt) {
-          if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
+          if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileId, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
             return 1;
           }
@@ -1924,7 +1924,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUni
           return 1;
         }
       }
-    } else if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + eMissileId) {
+    } else if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId) {
       Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nSkillLvl);
       return 1;
     }

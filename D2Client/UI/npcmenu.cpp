@@ -68,6 +68,7 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Client/UI/npcmenu.data.h"
@@ -87,6 +88,10 @@ typedef int (__stdcall *D2NpcMenuOptionFunc)();
 #ifndef RECON_FPTD_fpDialogFunc
 #define RECON_FPTD_fpDialogFunc
 typedef int (__stdcall *fpDialogFunc)();
+#endif
+#ifndef RECON_FPTD_pfnItemTransactionCb
+#define RECON_FPTD_pfnItemTransactionCb
+typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pPlayer);
 #endif
 #ifndef RECON_FPTD_pfnTextScrollComplete
 #define RECON_FPTD_pfnTextScrollComplete
@@ -3651,11 +3656,15 @@ int nCurrentInteractedNpcGUID = 0; D2_GLOBAL_GUARD(nCurrentInteractedNpcGUID, "D
 BOOL bInteractingWithNpc = 0; D2_GLOBAL_GUARD(bInteractingWithNpc, "D2Client::_Interaction::bInteractingWithNpc");
 int nCurrentInteractedNpcClassId = 0; D2_GLOBAL_GUARD(nCurrentInteractedNpcClassId, "D2Client::_Interaction::nCurrentInteractedNpcClassId");
 } // namespace D2Client::_Interaction
-uint32_t gnNpcMenuTransactionType = 0; D2_GLOBAL_GUARD(gnNpcMenuTransactionType, "gnNpcMenuTransactionType");
+namespace D2Client::UI::npcmenu {
+uint32_t gnNpcMenuTransactionType = 0; D2_GLOBAL_GUARD(gnNpcMenuTransactionType, "D2Client::UI::npcmenu::gnNpcMenuTransactionType");
+} // namespace D2Client::UI::npcmenu
 static BOOL gbNpcMenuTransactionMode1 = 0; D2_STATIC_GUARD(gbNpcMenuTransactionMode1, "gbNpcMenuTransactionMode1");
 static short gbNpcMenuTransactionMode2 = 0; D2_STATIC_GUARD(gbNpcMenuTransactionMode2, "gbNpcMenuTransactionMode2");
 static uint32_t gnNpcMenuPreviousGold = 0; D2_STATIC_GUARD(gnNpcMenuPreviousGold, "gnNpcMenuPreviousGold");
-D2BitBufferStrc * gpNpcMenuBitBuffer = 0; D2_GLOBAL_GUARD(gpNpcMenuBitBuffer, "gpNpcMenuBitBuffer");
+namespace D2Client::UI::npcmenu {
+D2BitBufferStrc * gpNpcMenuBitBuffer = 0; D2_GLOBAL_GUARD(gpNpcMenuBitBuffer, "D2Client::UI::npcmenu::gpNpcMenuBitBuffer");
+} // namespace D2Client::UI::npcmenu
 D2BitBufferStrc * gpNpcMenuDialogOptions = 0; D2_GLOBAL_GUARD(gpNpcMenuDialogOptions, "gpNpcMenuDialogOptions");
 static int gnNpcMenuPendingUnk = 0; D2_STATIC_GUARD(gnNpcMenuPendingUnk, "gnNpcMenuPendingUnk");
 static int gnNpcMenuPendingItemCost = 0; D2_STATIC_GUARD(gnNpcMenuPendingItemCost, "gnNpcMenuPendingItemCost");
@@ -3693,9 +3702,13 @@ int nMercReviveCost = 0; D2_GLOBAL_GUARD(nMercReviveCost, "D2Client::Merc::nMerc
 } // namespace D2Client::Merc
 static D2UnitStrc * gpNpcShopOwnerUnit = 0; D2_STATIC_GUARD(gpNpcShopOwnerUnit, "gpNpcShopOwnerUnit");
 static short gbNpcMenuShopOpened = 0; D2_STATIC_GUARD(gbNpcMenuShopOpened, "gbNpcMenuShopOpened");
-uint8_t gbNpcMenuTransactionPending = 0; D2_GLOBAL_GUARD(gbNpcMenuTransactionPending, "gbNpcMenuTransactionPending");
+namespace D2Client::UI::npcmenu {
+uint8_t gbNpcMenuTransactionPending = 0; D2_GLOBAL_GUARD(gbNpcMenuTransactionPending, "D2Client::UI::npcmenu::gbNpcMenuTransactionPending");
+} // namespace D2Client::UI::npcmenu
 static BOOL gbNpcMenuTransactionConfirmed = 0; D2_STATIC_GUARD(gbNpcMenuTransactionConfirmed, "gbNpcMenuTransactionConfirmed");
-uint32_t gnNpcMenuTransactionItemGUID = 0; D2_GLOBAL_GUARD(gnNpcMenuTransactionItemGUID, "gnNpcMenuTransactionItemGUID");
+namespace D2Client::UI::npcmenu {
+uint32_t gnNpcMenuTransactionItemGUID = 0; D2_GLOBAL_GUARD(gnNpcMenuTransactionItemGUID, "D2Client::UI::npcmenu::gnNpcMenuTransactionItemGUID");
+} // namespace D2Client::UI::npcmenu
 static unsigned int gbNpcMenuShopTransactionActive = {}; D2_STATIC_GUARD(gbNpcMenuShopTransactionActive, "gbNpcMenuShopTransactionActive");
 static uint32_t gnNpcMenuShopTransactionCost = 0; D2_STATIC_GUARD(gnNpcMenuShopTransactionCost, "gnNpcMenuShopTransactionCost");
 static unsigned int gdwNpcMenuLastClickTimestamp = {}; D2_STATIC_GUARD(gdwNpcMenuLastClickTimestamp, "gdwNpcMenuLastClickTimestamp");
@@ -4061,8 +4074,8 @@ static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
       }
 
       D2Common::Units::GetTargetCoords(pNpcUnit, pPoint);
-      GAME::View::VIEW_GetViewRect(D2GameView, &nViewOriginX, &nViewOriginY, &nViewWidth, &nViewHeight);
-      GAME::View::GetCenterXY(D2GameView, &nViewCenterY, &nViewCenterX);
+      GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, &nViewOriginX, &nViewOriginY, &nViewWidth, &nViewHeight);
+      GAME::View::GetCenterXY(GAME::Game::D2GameView, &nViewCenterY, &nViewCenterX);
       /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcViewport, nViewCenterY, nViewCenterX, nViewWidth - nViewOriginX + nViewCenterY, nViewHeight - nViewOriginY + nViewCenterX);
       pPoint->x -= rcViewport.left;
       pPoint->y += -0x96 - rcViewport.top;
@@ -4364,7 +4377,7 @@ void __fastcall NPCMENU_ValidateNpcForShop(D2UnitStrc * pUnit) {
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xd) & gadwBitMasks[0])) {
+    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[0])) {
       return;
     }
 
@@ -5205,7 +5218,7 @@ void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
     do {
       uint16_t* nNpcID;
       nNpcID = pBytes->nNpcID;
-      if ((int)(uint32_t)*nNpcID < sgptDataTable->nTxtMonStatsSize && D2NPCSpeechCount_lcl > 0) {
+      if ((int)(uint32_t)*nNpcID < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2NPCSpeechCount_lcl > 0) {
         pSpeech = &D2NPCSpeech[0].bUpdated;
         nSpeechCounter = D2NPCSpeechCount_lcl;
         do {
@@ -5316,6 +5329,7 @@ int __fastcall ShopAction(D2UnitStrc * pUnit, D2UnitStrc * pItem, DWORD dwSell, 
     uint32_t nDifficultyId;
     int32_t nTransactionMode;
     D2BitBufferStrc* pBitBuffer;
+    pfnItemTransactionCb pOutputBitBuffer;
     if (!_Interaction::bInteractingWithNpc) {
       return 0;
     }
@@ -5352,7 +5366,9 @@ int __fastcall ShopAction(D2UnitStrc * pUnit, D2UnitStrc * pItem, DWORD dwSell, 
         return 1;
       }
 
-      nTransactionCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcId, (uint32_t)GAME::Game::GetDificulity(), gpNpcMenuBitBuffer, 0);
+      pOutputBitBuffer = 0;
+      pBitBuffer = gpNpcMenuBitBuffer;
+      nTransactionCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcId, (uint32_t)GAME::Game::GetDificulity(), pBitBuffer, pOutputBitBuffer);
       gnNpcMenuTransactionType = 3;
       gbNpcMenuTransactionPending = 1;
       gnNpcMenuTransactionItemGUID = 0;
@@ -5584,15 +5600,15 @@ int __stdcall NPCMENU_OpenNpcShop() {
     }
 
     D2UnitStrc* pNpc = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    if (pNpc && pNpc->pInventory) {
+    if ((pNpc && pNpc->pInventory) == 0) {
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+    } else {
       _Interaction::geNpcUiState = NPCUI_SHOP;
       gnNpcMenuShopMode = 1;
       ui::SetUIFlag(UI_NPCSHOP, UI_SET, 0);
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x38, 2, _Interaction::nCurrentInteractedNpcGUID, 0);
       gpNpcShopOwnerUnit = UNIT::Player::GetPlayerUnit_UI();
       gbNpcMenuShopOpened = 0;
-    } else {
-      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
     }
 
     return 1;
@@ -7000,7 +7016,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
       return 0;
     }
 
-    Dialog::gpNpcMercListDialog = Dialog::AllocDialogStrc((ScreenSizeX - 0x1ea) / 2, WindowSizeY / 2 - 0xc3, NPCMENU_MercListDrawCallback, nullptr, 0, 0, 0, 0x1ea, 0x15e, 0, 1);
+    Dialog::gpNpcMercListDialog = Dialog::AllocDialogStrc((ui::ScreenSizeX - 0x1ea) / 2, ui::WindowSizeY / 2 - 0xc3, NPCMENU_MercListDrawCallback, nullptr, 0, 0, 0, 0x1ea, 0x15e, 0, 1);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcMercListDialog, 1);
     uint16_t nNameStringId = 0;
     eD2UnitStat eStatId = UNITSTAT_goldbank;
@@ -7020,7 +7036,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     ::ListBoxWrapper* ppListBox = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
     nEHState = 0;
     if (ppListBox) {
-      gpNpcMenuMercListBox = ListBox::ListBoxWrapper::Constructor(ppListBox, (ScreenSizeX - 0x1ea) / 2, WindowSizeY / 2 - 0xa0, 0x1ea, 0x118, 6, 0, 1, (fpListBoxItemActivated)Merc::NPCMENU_ShowMercResurrectDialog, false);
+      gpNpcMenuMercListBox = ListBox::ListBoxWrapper::Constructor(ppListBox, (ui::ScreenSizeX - 0x1ea) / 2, ui::WindowSizeY / 2 - 0xa0, 0x1ea, 0x118, 6, 0, 1, (fpListBoxItemActivated)Merc::NPCMENU_ShowMercResurrectDialog, false);
     } else {
       gpNpcMenuMercListBox = 0;
     }

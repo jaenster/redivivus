@@ -109,13 +109,13 @@ D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue() {
 }
 
 void * __stdcall BNCLIENT_GetBnetLogFilestream() {
-    if (!(gbBnetLogInitialized & 1)) {
-      gbBnetLogInitialized |= 1;
-      Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+    if (!(Bnet::gbBnetLogInitialized & 1)) {
+      Bnet::gbBnetLogInitialized |= 1;
+      Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &Bnet::gnBnetLogFileHandle);
       atexit(Bnet::StaticFini_gnBnetLogFileHandle);
     }
 
-    return &gnBnetLogFileHandle;
+    return &Bnet::gnBnetLogFileHandle;
 }
 
 // @sourcefile .\BnSend.cpp

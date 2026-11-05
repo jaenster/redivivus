@@ -62,6 +62,16 @@ struct __attribute__((packed)) D2CubeMainTxt {
     /* 0x4C */ D2CubeOutputStrc pOutputItem[3];
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Common::Txt::Cube {
+
+extern struct D2CubeMainTxt * pTxtCubeMain;
+
+} // namespace D2Common::Txt::Cube
+
 namespace D2Common::Txt::Cube {
 
 // Function declarations

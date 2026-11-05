@@ -4,68 +4,102 @@
  */
 
 #include "globals/globals.h"
-#include "D2Client/Renderer/Glide.h"
-#include "D2Glide/glFloorCache.h"
-#include "D2Glide/glSubtileCache.h"
+#include "D2Glide/Renderer/Glide.h"
+#include "D2gfx/D2GFX.h"
 
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-GlSubtileCacheStrc gGlideSubtileTextureCache = {}; D2_GLOBAL_GUARD(gGlideSubtileTextureCache, "gGlideSubtileTextureCache");
-
-GlFloorCacheStrc gGlideFloorTextureCache = {}; D2_GLOBAL_GUARD(gGlideFloorTextureCache, "gGlideFloorTextureCache");
-
-uint32_t gaGlideDebugFontTexStartAddrs[96] = {}; D2_GLOBAL_GUARD(gaGlideDebugFontTexStartAddrs, "gaGlideDebugFontTexStartAddrs");
-
-void * lpBuffer_008802c8[96] = {}; D2_GLOBAL_GUARD(lpBuffer_008802c8, "lpBuffer_008802c8");
-
-D2GlideVertexStrc gaGlidePerspectiveVertices[15] = {}; D2_GLOBAL_GUARD(gaGlidePerspectiveVertices, "gaGlidePerspectiveVertices");
-
-D2GlideVertexStrc gGlidePerspectiveVertexBuffer[4] = {}; D2_GLOBAL_GUARD(gGlidePerspectiveVertexBuffer, "gGlidePerspectiveVertexBuffer");
-
-D2GlideVertexStrc gaGlideGroundTileVertices[36] = {}; D2_GLOBAL_GUARD(gaGlideGroundTileVertices, "gaGlideGroundTileVertices");
-
-void * gapGlideGroundStripVertexPtrs[60] = {}; D2_GLOBAL_GUARD(gapGlideGroundStripVertexPtrs, "gapGlideGroundStripVertexPtrs");
-
-D2GlideVertexStrc gaGlideSmackerVertices[4] = {}; D2_GLOBAL_GUARD(gaGlideSmackerVertices, "gaGlideSmackerVertices");
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-float gfGlideDebugFontVertex0X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0X, "gfGlideDebugFontVertex0X");
-float gfGlideDebugFontVertex0Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0Y, "gfGlideDebugFontVertex0Y");
-float gfGlideDebugFontVertex1X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1X, "gfGlideDebugFontVertex1X");
-float gfGlideDebugFontVertex1Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1Y, "gfGlideDebugFontVertex1Y");
-float gfGlideDebugFontVertex3S = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3S, "gfGlideDebugFontVertex3S");
-float gfGlideDebugFontVertex2T = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex2T, "gfGlideDebugFontVertex2T");
-float gfGlideDebugFontVertex3X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3X, "gfGlideDebugFontVertex3X");
-float gfGlideDebugFontVertex3T = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3T, "gfGlideDebugFontVertex3T");
-void * gpGlideDebugFontTexture = 0; D2_GLOBAL_GUARD(gpGlideDebugFontTexture, "gpGlideDebugFontTexture");
-uint32_t gnGlideDebugFontTMU = 0; D2_GLOBAL_GUARD(gnGlideDebugFontTMU, "gnGlideDebugFontTMU");
-int * gpnLightmapRowPointers = 0; D2_GLOBAL_GUARD(gpnLightmapRowPointers, "gpnLightmapRowPointers");
-uint8_t gbGlideGlobalLightGreen = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightGreen, "gbGlideGlobalLightGreen");
-uint8_t gbGlideGlobalLightBlue = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightBlue, "gbGlideGlobalLightBlue");
-uint8_t gbGlideGlobalLightRed = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightRed, "gbGlideGlobalLightRed");
-// also labelled: glVertex
-uint8_t * gpGlideLightingTable = 0; D2_GLOBAL_GUARD(gpGlideLightingTable, "gpGlideLightingTable");
-int gnGlidePerspectiveOriginX = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginX, "gnGlidePerspectiveOriginX");
-// also labelled: gpGlideTexturePalette
-int32_t gnGlidePerspectiveScale = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveScale, "gnGlidePerspectiveScale");
-int gnGlidePerspectiveOriginY = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginY, "gnGlidePerspectiveOriginY");
-void * gpPerspectiveLookupTable = 0; D2_GLOBAL_GUARD(gpPerspectiveLookupTable, "gpPerspectiveLookupTable");
-uint8_t (*gpGlideSmackerTexBuf0)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf0, "gpGlideSmackerTexBuf0");
-uint8_t (*gpGlideSmackerTexBuf1)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf1, "gpGlideSmackerTexBuf1");
-uint32_t gnGlideSmackTex1StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex1StartAddr, "gnGlideSmackTex1StartAddr");
-uint32_t gnGlideSmackTex2StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex2StartAddr, "gnGlideSmackTex2StartAddr");
-uint8_t (*gpGlideSmackerTexBuf2)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf2, "gpGlideSmackerTexBuf2");
-uint32_t gnGlideTMUHandle = 0; D2_GLOBAL_GUARD(gnGlideTMUHandle, "gnGlideTMUHandle");
 
 namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
+
+namespace Fog::Src::LogManager {
+
+} // namespace Fog::Src::LogManager
+
+namespace Fog::Src::ErrorManager {
+
+} // namespace Fog::Src::ErrorManager
+
+namespace Storm::Source::SSignature {
+
+} // namespace Storm::Source::SSignature
+
+namespace Fog::Engine::Application {
+
+} // namespace Fog::Engine::Application
+
+namespace Fog::Source::SFile {
+
+} // namespace Fog::Source::SFile
+
+namespace Fog::Src::DataArrays {
+
+} // namespace Fog::Src::DataArrays
+
+namespace Storm::Source::SSTR {
+
+} // namespace Storm::Source::SSTR
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
+namespace Fog::BitBuffer {
+
+} // namespace Fog::BitBuffer
+
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
+namespace Storm::Source::SLog {
+
+} // namespace Storm::Source::SLog
+
+namespace Storm::_3rdparty::zlib::deflate {
+
+} // namespace Storm::_3rdparty::zlib::deflate
+
+namespace D2Launch::CharSel {
+
+} // namespace D2Launch::CharSel
+
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
+namespace D2Client::ClientModeInGame {
+
+} // namespace D2Client::ClientModeInGame
+
+namespace D2Client::UI::Draw {
+
+} // namespace D2Client::UI::Draw
+
+namespace D2Client::UI::Inv {
+
+} // namespace D2Client::UI::Inv
+
+namespace D2Common::DATATBLS::DataTbls {
+
+} // namespace D2Common::DATATBLS::DataTbls
 
 namespace D2Client::Warden::NWardenClient {
 
@@ -74,6 +108,26 @@ namespace D2Client::Warden::NWardenClient {
 namespace D2Client::Warden {
 
 } // namespace D2Client::Warden
+
+namespace D2Client::Sound::SoundHdr {
+
+} // namespace D2Client::Sound::SoundHdr
+
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Sound::Src::D2SoundSmp {
+
+} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -111,13 +165,45 @@ namespace D2Client::UI::ListBox::ListBoxImplementation {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
 
+namespace D2gfx::D2GFX {
+
+} // namespace D2gfx::D2GFX
+
+namespace D2Sound::Sound {
+
+} // namespace D2Sound::Sound
+
+namespace Bnclient::BnSend {
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
+namespace Bnclient::_net_sid {
+
+} // namespace Bnclient::_net_sid
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
 
+namespace D2Game::UNIT::SUnitDmg {
+
+} // namespace D2Game::UNIT::SUnitDmg
+
+namespace D2Game::PLAYER::PlayerModes {
+
+} // namespace D2Game::PLAYER::PlayerModes
+
 namespace D2Game::GAME::Event::Dispatch::Player {
 
 } // namespace D2Game::GAME::Event::Dispatch::Player
+
+namespace D2Game::Objects::ObjectsMode {
+
+} // namespace D2Game::Objects::ObjectsMode
 
 namespace D2Game::GAME::Event::Dispatch::Object {
 
@@ -127,6 +213,14 @@ namespace D2Game::GAME::Event::Dispatch::Monster {
 
 } // namespace D2Game::GAME::Event::Dispatch::Monster
 
+namespace D2Game {
+
+} // namespace D2Game
+
+namespace D2CMP::SRC::CelCmp {
+
+} // namespace D2CMP::SRC::CelCmp
+
 namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
@@ -135,21 +229,61 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
+namespace D2Common {
+
+} // namespace D2Common
+
+namespace D2Common::Txt::Cube {
+
+} // namespace D2Common::Txt::Cube
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+} // namespace D2Common::DATATBLS::ItemTbls
+
+namespace D2Common::Drlg::Preset {
+
+} // namespace D2Common::Drlg::Preset
+
+namespace D2Common::Drlg::OutSiege {
+
+} // namespace D2Common::Drlg::OutSiege
+
 namespace D2Common::Drlg::Outdoors {
 
 } // namespace D2Common::Drlg::Outdoors
+
+namespace D2Common::Drlg::OutJung {
+
+} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common::Drlg {
+
+} // namespace D2Common::Drlg
 
 namespace Define_the_symbol__ATL_MIXED {
 
 } // namespace Define_the_symbol__ATL_MIXED
 
+namespace Storm::Source {
+
+} // namespace Storm::Source
+
+namespace Fog::File {
+
+} // namespace Fog::File
+
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::Source::SFile {
+namespace D2Hell {
 
-} // namespace Storm::Source::SFile
+} // namespace D2Hell
+
+namespace Fog::Source::SSComp {
+
+} // namespace Fog::Source::SSComp
 
 namespace Class::FILEREC {
 
@@ -171,25 +305,192 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Launch::CharSel {
+namespace D2Launch::MainMenus {
 
-} // namespace D2Launch::CharSel
+} // namespace D2Launch::MainMenus
 
-namespace D2Game::GAME::Rendering {
+namespace D2Multi::OOGUtilities {
 
-} // namespace D2Game::GAME::Rendering
+} // namespace D2Multi::OOGUtilities
 
-namespace D2Client::Renderer {
+namespace D2Client::GAME::Game {
 
-} // namespace D2Client::Renderer
+} // namespace D2Client::GAME::Game
+
+namespace D2Client {
+
+} // namespace D2Client
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record
+
+namespace D2Client::_Message {
+
+} // namespace D2Client::_Message
+
+namespace D2Client::Engine {
+
+} // namespace D2Client::Engine
+
+namespace D2Client::GAME::SCmd {
+
+} // namespace D2Client::GAME::SCmd
+
+namespace D2Client::Draw::LightMap {
+
+} // namespace D2Client::Draw::LightMap
+
+namespace D2Client::GAME::Rendering {
+
+} // namespace D2Client::GAME::Rendering
+
+namespace D2Client::UI::Panel {
+
+} // namespace D2Client::UI::Panel
+
+namespace D2Client::UI::Party {
+
+} // namespace D2Client::UI::Party
+
+namespace D2Client::Sound {
+
+} // namespace D2Client::Sound
+
+namespace D2Client::UI::UseItem {
+
+} // namespace D2Client::UI::UseItem
+
+namespace D2Client::UNIT::UnitSnd {
+
+} // namespace D2Client::UNIT::UnitSnd
+
+namespace D2Client::UI::SkillDesc {
+
+} // namespace D2Client::UI::SkillDesc
+
+namespace D2Glide::Renderer::Glide {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2RendererFunctionsStrc GlideFunctionTable = {
+    /* .nfpInitialize = */ &D2Glide::Renderer::Glide::Initialize,
+    /* .nfpInitPerspective = */ &D2Glide::Renderer::Glide::InitPerspective,
+    /* .nfpRelease = */ (fpRelease)&D2Glide::Renderer::Glide::Release,
+    /* .nfpCreateWindow = */ (fpCreateWindow)&D2Glide::Renderer::Glide::CreateWindow,
+    /* .nfpDestroyWindow = */ &D2Glide::Renderer::Glide::RENDERER_GLIDE_DestroyWindow,
+    /* .nfpEndCutScene = */ (fpEndCutScene)&D2Glide::Renderer::Glide::EndCutScene,
+    /* .nfpBeginScene = */ &D2Glide::Renderer::Glide::BeginScene,
+    /* .fpEndScene1 = */ &D2Glide::Renderer::Glide::EndScene1,
+    /* .fpEndScene2 = */ &D2Glide::Renderer::Glide::EndScene2,
+    /* .nfpResizeWindow = */ &D2Glide::Renderer::Glide::ResizeWindow,
+    /* .nfpGetBackBuffer = */ &D2Glide::Renderer::Glide::GetBackBuffer,
+    /* .nfpActivateWindow = */ (fpActivateWindow)&D2Glide::Renderer::Glide::ActivateWindow,
+    /* .nfpSetOption = */ (fpSetOption)&D2Glide::Renderer::Glide::SetOption,
+    /* .nfpBeginCutScene = */ &D2Glide::Renderer::Glide::BeginCutScene,
+    /* .nfpPlayCutScene = */ (fpPlayCutScene)&D2Glide::Renderer::Glide::PlayCutScene,
+    /* .nfpCheckCutScene = */ &D2Glide::Renderer::Glide::CheckCutScene,
+    /* .nfpDecodeSmacker = */ (fpDecodeSmacker)&D2Glide::Renderer::Glide::DecodeSmacker,
+    /* .nfpPlayerSmacker = */ &D2Glide::Renderer::Glide::PlayerSmacker,
+    /* .nfpCloseSmacker = */ &D2Glide::Renderer::Glide::CloseSmacker,
+    /* .nfpGetRenderStatistics = */ &D2Glide::Renderer::Glide::GetRenderStatistics,
+    /* .nfpGetScreenSize = */ (fpGetScreenSize)&D2Glide::Renderer::Glide::GetScreenSize,
+    /* .nfpUpdateScaleFactor = */ (fpUpdateScaleFactor)&D2Glide::Renderer::Glide::UpdateScaleFactor,
+    /* .nfpSetGamma = */ (fpSetGamma)&D2Glide::Renderer::Glide::SetGamma,
+    /* .nfpCheckGamma = */ (fpCheckGamma)&D2Glide::Renderer::Glide::CheckGamma,
+    /* .nfpSetPerspectiveScale = */ (fpSetPerspectiveScale)&D2Glide::Renderer::Glide::SetPerspectiveScale,
+    /* .nfpAdjustPerspectivePosition = */ (fpAdjustPerspectivePosition)&D2Glide::Renderer::Glide::AdjustPerspectivePosition,
+    /* .nfpPerspectiveScalePosition = */ (fpPerspectiveScalePosition)&D2Glide::Renderer::Glide::PerspectiveScalePosition,
+    /* .nfpSetDefaultPerspectiveFactor = */ &D2Glide::Renderer::Glide::SetDefaultPerspectiveFactor,
+    /* .nfpSetPalette = */ &D2Glide::Renderer::Glide::SetPalette,
+    /* .nfpSetPaletteTable = */ &D2Glide::Renderer::Glide::SetPaletteTable,
+    /* .nfpSetGlobalLight = */ &D2Glide::Renderer::Glide::SetGlobalLight,
+    /* .nfpDrawGroundTile = */ (D2RendererFunctionsStrc_fpDrawGroundTile)&D2Glide::Renderer::Glide::DrawGroundTile,
+    /* .nfpDrawPerspectiveImage = */ (fpDrawPerspectiveImage)&D2Glide::Renderer::Glide::DrawPerspectiveImage,
+    /* .nfpDrawImage = */ (fpDrawImage)&D2Glide::Renderer::Glide::DrawImage,
+    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2Glide::Renderer::Glide::DrawShiftedImage,
+    /* .nfpDrawVerticalCropImage = */ (fpDrawVerticalCropImage)&D2Glide::Renderer::Glide::DrawVerticalCropImage,
+    /* .nfpDrawShadow = */ (fpDrawShadow)&D2Glide::Renderer::Glide::DrawShadow,
+    /* .nfpDrawImageFast = */ (fpDrawImageFast)&D2Glide::Renderer::Glide::DrawImageFast,
+    /* .nfpDrawClippedImage = */ (fpDrawClippedImage)&D2Glide::Renderer::Glide::DrawClippedImage,
+    /* .nfpDrawWallTile = */ (D2RendererFunctionsStrc_fpDrawWallTile)&D2Glide::Renderer::Glide::DrawWallTile,
+    /* .nfpDrawTransWallTile = */ (fpDrawTransWallTile)&D2Glide::Renderer::Glide::DrawTransWallTile,
+    /* .nfpDrawShadowTile = */ (fpDrawShadowTile)&D2Glide::Renderer::Glide::DrawShadowTile,
+    /* .nfpDrawRect = */ (fpDrawRect)&D2Glide::Renderer::Glide::DrawRect,
+    /* .nfpDrawRectEx = */ (fpDrawRectEx)&D2Glide::Renderer::Glide::DrawRectEx,
+    /* .nfpDrawSolidRect = */ &D2Glide::Renderer::Glide::DrawSolidRect,
+    /* .nfpDrawSolidSquare = */ (fpDrawSolidSquare)&D2Glide::Renderer::Glide::DrawSolidSquare,
+    /* .nfpDrawSolidRectEx = */ (fpDrawSolidRectEx)&D2Glide::Renderer::Glide::DrawSolidRectEx,
+    /* .nfpDrawSolidRectAlpha = */ (fpDrawSolidRectAlpha)&D2Glide::Renderer::Glide::DrawSolidRectAlpha,
+    /* .nfpDrawLine = */ (fpDrawLine)&D2Glide::Renderer::Glide::DrawLine,
+    /* .nfpClearScreen = */ &D2Glide::Renderer::Glide::ClearScreen,
+    /* .nfpDrawString = */ (fpDrawString)&D2Glide::Renderer::Glide::DrawString,
+    /* .nfpDrawLight = */ (fpDrawLight)&D2Glide::Renderer::Glide::DrawLight,
+    /* .nfpDebugFillBackBuffer = */ (fpDebugFillBackBuffer)&D2Glide::Renderer::Glide::DebugFillBackBuffer,
+    /* .nfpClearCaches = */ &D2Glide::Renderer::Glide::ClearCaches
+}; D2_GLOBAL_GUARD(GlideFunctionTable, "D2Glide::Renderer::Glide::GlideFunctionTable");
+
+uint32_t gaGlideDebugFontTexStartAddrs[96] = {}; D2_GLOBAL_GUARD(gaGlideDebugFontTexStartAddrs, "D2Glide::Renderer::Glide::gaGlideDebugFontTexStartAddrs");
+
+void * lpBuffer_008802c8[96] = {}; D2_GLOBAL_GUARD(lpBuffer_008802c8, "D2Glide::Renderer::Glide::lpBuffer_008802c8");
+
+void * gapGlideGroundStripVertexPtrs[60] = {}; D2_GLOBAL_GUARD(gapGlideGroundStripVertexPtrs, "D2Glide::Renderer::Glide::gapGlideGroundStripVertexPtrs");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+float gfGlideDebugFontVertex0X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0X, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex0X");
+float gfGlideDebugFontVertex0Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0Y, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex0Y");
+float gfGlideDebugFontVertex1X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1X, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex1X");
+float gfGlideDebugFontVertex1Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1Y, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex1Y");
+float gfGlideDebugFontVertex3S = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3S, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex3S");
+float gfGlideDebugFontVertex2T = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex2T, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex2T");
+float gfGlideDebugFontVertex3X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3X, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex3X");
+float gfGlideDebugFontVertex3T = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3T, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex3T");
+void * gpGlideDebugFontTexture = 0; D2_GLOBAL_GUARD(gpGlideDebugFontTexture, "D2Glide::Renderer::Glide::gpGlideDebugFontTexture");
+uint32_t gnGlideDebugFontTMU = 0; D2_GLOBAL_GUARD(gnGlideDebugFontTMU, "D2Glide::Renderer::Glide::gnGlideDebugFontTMU");
+int * gpnLightmapRowPointers = 0; D2_GLOBAL_GUARD(gpnLightmapRowPointers, "D2Glide::Renderer::Glide::gpnLightmapRowPointers");
+uint8_t gbGlideGlobalLightGreen = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightGreen, "D2Glide::Renderer::Glide::gbGlideGlobalLightGreen");
+uint8_t gbGlideGlobalLightBlue = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightBlue, "D2Glide::Renderer::Glide::gbGlideGlobalLightBlue");
+uint8_t gbGlideGlobalLightRed = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightRed, "D2Glide::Renderer::Glide::gbGlideGlobalLightRed");
+// also labelled: glVertex
+uint8_t * gpGlideLightingTable = 0; D2_GLOBAL_GUARD(gpGlideLightingTable, "D2Glide::Renderer::Glide::gpGlideLightingTable");
+int gnGlidePerspectiveOriginX = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginX, "D2Glide::Renderer::Glide::gnGlidePerspectiveOriginX");
+// also labelled: gpGlideTexturePalette
+int32_t gnGlidePerspectiveScale = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveScale, "D2Glide::Renderer::Glide::gnGlidePerspectiveScale");
+int gnGlidePerspectiveOriginY = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginY, "D2Glide::Renderer::Glide::gnGlidePerspectiveOriginY");
+void * gpPerspectiveLookupTable = 0; D2_GLOBAL_GUARD(gpPerspectiveLookupTable, "D2Glide::Renderer::Glide::gpPerspectiveLookupTable");
+uint8_t (*gpGlideSmackerTexBuf0)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf0, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf0");
+uint8_t (*gpGlideSmackerTexBuf1)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf1, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf1");
+uint32_t gnGlideSmackTex1StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex1StartAddr, "D2Glide::Renderer::Glide::gnGlideSmackTex1StartAddr");
+uint32_t gnGlideSmackTex2StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex2StartAddr, "D2Glide::Renderer::Glide::gnGlideSmackTex2StartAddr");
+uint8_t (*gpGlideSmackerTexBuf2)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf2, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf2");
+uint32_t gnGlideTMUHandle = 0; D2_GLOBAL_GUARD(gnGlideTMUHandle, "D2Glide::Renderer::Glide::gnGlideTMUHandle");
+
+} // namespace D2Glide::Renderer::Glide
 
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
 
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
+
 namespace D2Lang::Unicode::UNISYS {
 
 } // namespace D2Lang::Unicode::UNISYS
+
+namespace D2Net::SRC::Client {
+
+} // namespace D2Net::SRC::Client
+
+namespace D2Game::PLAYER::PlayerSave {
+
+} // namespace D2Game::PLAYER::PlayerSave
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -295,6 +596,10 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
+namespace D2Game::Monster::Create {
+
+} // namespace D2Game::Monster::Create
+
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -347,22 +652,186 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
+namespace D2Game::SKILLS::SkillNec {
+
+} // namespace D2Game::SKILLS::SkillNec
+
+namespace D2CMP::SRC::CelCmp::CELLIST {
+
+} // namespace D2CMP::SRC::CelCmp::CELLIST
+
+namespace D2CMP {
+
+} // namespace D2CMP
+
+namespace D2CMP::Draw {
+
+} // namespace D2CMP::Draw
+
+namespace D2Common::Chat::Ignorelist::MappingEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::MappingEntryNode
+
+namespace D2Common::Chat::Ignorelist::StringEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::StringEntryNode
+
+namespace D2Common::Chat::Ignorelist {
+
+} // namespace D2Common::Chat::Ignorelist
+
+namespace D2Common::Logging::ProfCore {
+
+} // namespace D2Common::Logging::ProfCore
+
+namespace D2Common::DUNGEON::Dungeon {
+
+} // namespace D2Common::DUNGEON::Dungeon
+
+namespace D2Common::Environment {
+
+} // namespace D2Common::Environment
+
+namespace D2Common::Units {
+
+} // namespace D2Common::Units
+
+namespace D2Common::Monsters::MONSTERS {
+
+} // namespace D2Common::Monsters::MONSTERS
+
+namespace D2Common::Merc {
+
+} // namespace D2Common::Merc
+
+namespace D2Common::DATATBLS::OverlayTbls {
+
+} // namespace D2Common::DATATBLS::OverlayTbls
+
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
+
+namespace D2Direct3D::Renderer {
+
+} // namespace D2Direct3D::Renderer
+
+namespace Fog::Src {
+
+} // namespace Fog::Src
+
+namespace D2Gdi::Renderer::Windowed {
+
+} // namespace D2Gdi::Renderer::Windowed
+
+namespace D2Launch::Launcher {
+
+} // namespace D2Launch::Launcher
+
+namespace D2Client::Lng {
+
+} // namespace D2Client::Lng
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::Draw::LightMap {
+namespace D2Client::UI::SpellSel {
 
-} // namespace D2Client::Draw::LightMap
+} // namespace D2Client::UI::SpellSel
+
+namespace D2Client::UNIT::CUnit {
+
+} // namespace D2Client::UNIT::CUnit
+
+namespace D2Client::Cursor {
+
+} // namespace D2Client::Cursor
+
+namespace D2Client::Engine::Gfx {
+
+} // namespace D2Client::Engine::Gfx
+
+namespace D2Client::UNIT::Monster {
+
+} // namespace D2Client::UNIT::Monster
+
+namespace D2Client::UI::Trade {
+
+} // namespace D2Client::UI::Trade
+
+namespace D2Client::UNIT::Object {
+
+} // namespace D2Client::UNIT::Object
+
+namespace D2Client::GAME::Sound {
+
+} // namespace D2Client::GAME::Sound
+
+namespace D2gfx {
+
+} // namespace D2gfx
+
+namespace D2Win::D2GFX {
+
+} // namespace D2Win::D2GFX
 
 namespace D2Win::Src::D2WinMain {
 
 } // namespace D2Win::Src::D2WinMain
 
-namespace D2Win::D2GFX {
+namespace D2Win::Src::D2WinButton {
 
-} // namespace D2Win::D2GFX
+} // namespace D2Win::Src::D2WinButton
+
+namespace D2Win::Src::D2WinArchive {
+
+} // namespace D2Win::Src::D2WinArchive
+
+namespace D2Win::Src::D2WinTextBox {
+
+} // namespace D2Win::Src::D2WinTextBox
+
+namespace D2Sound {
+
+} // namespace D2Sound
+
+namespace Bnclient::Bnet {
+
+} // namespace Bnclient::Bnet
+
+namespace Bnclient {
+
+} // namespace Bnclient
+
+namespace D2Net::Game::Server {
+
+} // namespace D2Net::Game::Server
+
+namespace D2Game::UNIT::SUNITNPC {
+
+} // namespace D2Game::UNIT::SUNITNPC
+
+namespace D2Game::UNIT::sunitproxy {
+
+} // namespace D2Game::UNIT::sunitproxy
+
+namespace D2Game::GAME::Clients {
+
+} // namespace D2Game::GAME::Clients
+
+namespace D2Game::Quests::QUESTS {
+
+} // namespace D2Game::Quests::QUESTS
+
+namespace D2Common::DATATBLS::MonsterTbls {
+
+} // namespace D2Common::DATATBLS::MonsterTbls
+
+namespace D2Common::Logging {
+
+} // namespace D2Common::Logging
+
+namespace D2Common::DATATBLS::TokTbls {
+
+} // namespace D2Common::DATATBLS::TokTbls

@@ -61,23 +61,21 @@ namespace D2Game::Quests::QUESTS::A4Q1 {
 
 // Q26_ActiveFilter (Fallen Angel / kill-Izual quest) — decides if a target NPC should show the quest as "active" / offer quest gossip. Only while quest not yet Completed. Jerhyn (classId 0x16f): active when RewardAwaits OR introduction stateflag==1. Izual (classId 0x196): active until Step0x05 (talked-to-Izual-spirit) is set. Returns false otherwise / before introduction.
 bool __fastcall Q26_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (pQuestData->bIsNotIntroduction == '\0') {
-      return false;
-    }
-
-    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
-    if (BVar1) {
-      return false;
-    }
-    if (nTargetClassId == 0x16f) {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
-      if (BVar1 == 1 || pQuestData->nStateFlag == 1) {
-        return true;
+    if (pQuestData->bIsNotIntroduction != '\0') {
+      BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
+      if (BVar1) {
+        return false;
       }
-    } else if (nTargetClassId == 0x196) {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Step0x05);
-      if (!BVar1) {
-        return true;
+      if (nTargetClassId == 0x16f) {
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
+        if (BVar1 == 1 || pQuestData->nStateFlag == 1) {
+          return true;
+        }
+      } else if (nTargetClassId == 0x196) {
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Step0x05);
+        if (!BVar1) {
+          return true;
+        }
       }
     }
 

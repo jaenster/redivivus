@@ -107,12 +107,12 @@ static uint32_t PlayerMultiplyer2[9] = {
 namespace D2Game::Monster {
 
 D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nClassId) {
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       short int nMonPropIndex;
       nMonPropIndex = pMonStatsTxt->MonProp;
-      if (nMonPropIndex >= 0 && (int)nMonPropIndex < sgptDataTable->nTxtMonPropSize) {
-        return sgptDataTable->pTxtMonProp + nMonPropIndex;
+      if (nMonPropIndex >= 0 && (int)nMonPropIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtMonPropSize) {
+        return D2Common::ITEMS::Items::sgptDataTable->pTxtMonProp + nMonPropIndex;
       }
     }
 
@@ -187,8 +187,8 @@ void __fastcall MONSTER_SetVelocityAndTransition(::SGAMEDATA * pGame, D2UnitStrc
       int32_t nClassId;
       nClassId = pUnit->nClassId;
       nUnitMode = pUnit->eAnimMode.eMonsterMode;
-      if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize) {
-        pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+      if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
         goto set_velocity_and_transition;
       }
     }
@@ -225,7 +225,7 @@ void __fastcall FreeMonsters(::SGAMEDATA * pGame) {
 void __fastcall MONSTER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nClassId;
     UNIT::SUnitDmg::FreeCombat(pGame, pUnit);
-    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xd) & gadwBitMasks[1])) {
+    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
       UNIT::SUnit::UNITS_FreeInventoryItems(pGame, pUnit);
       D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);
     }
@@ -275,7 +275,7 @@ void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     eD2MonsterClassId nMonBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-    if ((int)nMonBaseId < 0 || (int)nMonBaseId >= sgptDataTable->nTxtMonStatsSize) {
+    if ((int)nMonBaseId < 0 || (int)nMonBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nMonBaseId = ~MonsterUnitSkeleton1;
     }
 
@@ -550,20 +550,20 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     if (nTmpInt < 0) {
       return;
     }
-    if (nTmpInt >= sgptDataTable->nTxtMonStatsSize) {
+    if (nTmpInt >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return;
     }
 
     int nMonStatsExId;
-    nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nTmpInt].MonStatsEx;
+    nMonStatsExId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nTmpInt].MonStatsEx;
     if (nMonStatsExId < 0) {
       return;
     }
-    if (nMonStatsExId >= sgptDataTable->nTxtMonStatsExSize) {
+    if (nMonStatsExId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize) {
       return;
     }
 
-    uMonTxt.pMonStats2Txt = sgptDataTable->pTxtMonStatsEx + nMonStatsExId;
+    uMonTxt.pMonStats2Txt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId;
     /* uMonTxt (Stack[-0x14]) holds a D2MonStats2Txt* here (IMUL 0x134 off
                          sgptDataTable+0xa90) until the isAtt test at 00574146;
                          it is reused for a D2MonPropTxt* from 00574174 on, hence union
@@ -574,7 +574,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     int nMonClassId;
     nMonClassId = nTmpInt;
     MONSTER_RollComponentAppearance(nParam, pUnit);
-    if (nTmpInt >= sgptDataTable->nTxtMonStatsSize) {
+    if (nTmpInt >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nTmpInt = -1;
     }
     if (nTmpInt != 0x137) {
@@ -621,7 +621,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
     int nMonLevel = (int)pMonStatsTxt->aLevel[nParam];
     nTmpInt = pGame->bExpansion;
-    if (nTmpInt && nParam && !(gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
+    if (nTmpInt && nParam && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(Fog::BitBuffer::gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
       nTmpVal = nParam;
       nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (eD2Difficulty)nTmpVal, nTmpInt);
     }
@@ -684,8 +684,8 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       D2Common::Monsters::MONSTERS::MONSTER_ApplyDifficultyScaling(pUnit, pGame->bExpansion, pGame->nDifficulty);
       pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 1, 0, UNIT_MONSTER, pUnit->nUnitGUID);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
-      if (*((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)gadwBitMasks[0]) {
-        if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)gadwBitMasks[1]) {
+      if (*((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+        if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
           nScaledStat = D2Client::UNIT::Player::ValidateClassId(nMonClassId);
           pNpcInventory = UNIT::sunitproxy::SUNITPROXY_GetNpcInventory(pGame, nScaledStat);
           pUnit->pInventory = pNpcInventory;
@@ -712,10 +712,10 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       } while (nTmpInt < 8);
 
       D2Common::Monsters::MONSTERS::MONSTERS_OnInitMonster_NoOp(pUnit, monLevelData.nMonsterSkillBonus);
-      if (*((uint8_t*)uMonTxt.pMonStats2Txt + 0x5) & (uint8_t)gadwBitMasks[1]) {
+      if (*((uint8_t*)uMonTxt.pMonStats2Txt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
       }
-      if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)gadwBitMasks[3]) {
+      if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
         pUnit->eUnitFlags |= UNITFLAG_PETIGNORE;
       }
 
@@ -773,10 +773,10 @@ void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, 
     pUnitDataMonster->pPathParamOrName.pPathParam = pMonsterAiParam;
     D2MonsterAiStrc* pMonsterAi = MonsterAI::AllocMonsterAI(pGame);
     pUnitDataMonster->pMonsterAi = pMonsterAi;
-    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+      pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     }
 
     pUnitDataMonster->pMonStatsTxt = pMonStatsTxt;
@@ -813,7 +813,7 @@ void __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * 
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
-    if (!((int)nMonStatId >= 0 && (int)nMonStatId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonStatId && *((uint8_t*)&sgptDataTable->pTxtMonStats[nMonStatId] + 0xf) & (uint8_t)gadwBitMasks[1])) {
+    if (!((int)nMonStatId >= 0 && (int)nMonStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatId] + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
       return;
     }
 

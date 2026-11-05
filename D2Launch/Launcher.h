@@ -34,6 +34,7 @@ BOOL __stdcall CHARSEL_HandleRealmChange(struct D2ControlMsg * pMsg);
 BOOL __stdcall HandleUpdateToExpansion(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(struct D2ControlMsg * pControlMsg);
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(struct D2IniConfigStrc * pIniConfig);
+DWORD __stdcall BeginCutSceneAtResolutionMode0_Unref_0043b800();
 void __stdcall LAUNCHER_SetBusyFlag();
 void __stdcall LAUNCHER_ClearBusyFlag();
 BOOL __stdcall LAUNCHER_GetBusyFlag();

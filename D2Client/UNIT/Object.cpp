@@ -426,7 +426,7 @@ void __fastcall OBJECT_AddVisualOverlay(D2UnitStrc * pUnit) {
 
 void __fastcall FreeObjectData(D2UnitStrc * pUnit) {
     Engine::Gfx::FreeGfxInfo(pUnit);
-    if (sgpDrlgAct) {
+    if (GAME::Game::sgpDrlgAct) {
       D2Common::Units::RemoveCollision_Vector(pUnit);
       D2Common::Unit::RemoveUnitFromRoom(pUnit);
       CUnit::FreeLightMap(pUnit);

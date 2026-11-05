@@ -67,30 +67,45 @@ typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t para
 typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 #endif
 
-char * gpszCmdLineHelpText = s_Available_command_line_options____006d5b20; D2_GLOBAL_GUARD(gpszCmdLineHelpText, "gpszCmdLineHelpText");
+namespace D2Client::ClientModeInGame {
+// also labelled: lpText_006d5b20
+char gCmdLineHelpText[154] = { "Available command line options:\n  -set[default command line]\t\tSet new default command line string\n  -lng[lngfile]\t\t\tUse \"lngfile\" for language resources\n" }; D2_GLOBAL_GUARD(gCmdLineHelpText, "D2Client::ClientModeInGame::gCmdLineHelpText");
+char gszCmdLineSwitchP[2] = { "p" }; D2_GLOBAL_GUARD(gszCmdLineSwitchP, "D2Client::ClientModeInGame::gszCmdLineSwitchP");
+char gszCmdLineSwitchC[2] = { "c" }; D2_GLOBAL_GUARD(gszCmdLineSwitchC, "D2Client::ClientModeInGame::gszCmdLineSwitchC");
+} // namespace D2Client::ClientModeInGame
+namespace D2Common::Txt::Cube {
+char gpCubeRecipeItemTypeFlags_7[4] = { "set" }; D2_GLOBAL_GUARD(gpCubeRecipeItemTypeFlags_7, "D2Common::Txt::Cube::gpCubeRecipeItemTypeFlags_7");
+} // namespace D2Common::Txt::Cube
+namespace D2Client::ClientModeInGame {
+// also labelled: CRT_StrLen
+char gszCmdLineSwitchHelp[5] = { "help" }; D2_GLOBAL_GUARD(gszCmdLineSwitchHelp, "D2Client::ClientModeInGame::gszCmdLineSwitchHelp");
+char gszCmdLineSwitchH[2] = { "h" }; D2_GLOBAL_GUARD(gszCmdLineSwitchH, "D2Client::ClientModeInGame::gszCmdLineSwitchH");
+char gszCmdLineSwitchQuestionMark[2] = { "?" }; D2_GLOBAL_GUARD(gszCmdLineSwitchQuestionMark, "D2Client::ClientModeInGame::gszCmdLineSwitchQuestionMark");
+} // namespace D2Client::ClientModeInGame
+char * gpszCmdLineHelpText = (char *)&D2Client::ClientModeInGame::gCmdLineHelpText; D2_GLOBAL_GUARD(gpszCmdLineHelpText, "gpszCmdLineHelpText");
 static ARGLIST gaClientCmdLineArgs[8] = {
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ gszCmdLineSwitchQuestionMark,
+        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchQuestionMark,
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ gszCmdLineSwitchH,
+        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchH,
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ gszCmdLineSwitchHelp,
+        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchHelp,
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
     },
     {
         /* .dwFlags = */ 0x20000,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char *)&gpCubeRecipeItemTypeFlags_7,
+        /* .szName = */ (char *)&D2Common::Txt::Cube::gpCubeRecipeItemTypeFlags_7,
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_SaveDefaultCommandLine
     },
     {
@@ -102,7 +117,7 @@ static ARGLIST gaClientCmdLineArgs[8] = {
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ gszCmdLineSwitchC,
+        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchC,
         /* .pfnCallback = */ &D2Client::WINMAIN_TestMemoryAccess
     },
     {
@@ -114,15 +129,19 @@ static ARGLIST gaClientCmdLineArgs[8] = {
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ gszCmdLineSwitchP,
+        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchP,
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_EnableRecording
     }
 }; D2_STATIC_GUARD(gaClientCmdLineArgs, "gaClientCmdLineArgs");
-eD2ClientAppMode gdwAppMode = APPMODE_SAVE; D2_GLOBAL_GUARD(gdwAppMode, "gdwAppMode");
+namespace D2Client::ClientModeInGame {
+eD2ClientAppMode gdwAppMode = APPMODE_SAVE; D2_GLOBAL_GUARD(gdwAppMode, "D2Client::ClientModeInGame::gdwAppMode");
+} // namespace D2Client::ClientModeInGame
 static char * gpszDiabloIICaption = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(gpszDiabloIICaption, "gpszDiabloIICaption");
 static BOOL gbQuitGame = 0x1; D2_STATIC_GUARD(gbQuitGame, "gbQuitGame");
 static eD2ClientAppMode gClientAppModeQueue[5] = {}; D2_STATIC_GUARD(gClientAppModeQueue, "gClientAppModeQueue");
-D2IniConfigStrc * D2IniData_client = 0; D2_GLOBAL_GUARD(D2IniData_client, "D2IniData_client");
+namespace D2Client::ClientModeInGame {
+D2IniConfigStrc * D2IniData_client = 0; D2_GLOBAL_GUARD(D2IniData_client, "D2Client::ClientModeInGame::D2IniData_client");
+} // namespace D2Client::ClientModeInGame
 static uint32_t gnClientAppModeQueueState = 0; D2_STATIC_GUARD(gnClientAppModeQueueState, "gnClientAppModeQueueState");
 static int gClientAppModeQueueCounter = 0; D2_STATIC_GUARD(gClientAppModeQueueCounter, "gClientAppModeQueueCounter");
 static LPCSTR gpszCmdLineCaptionStr = 0; D2_STATIC_GUARD(gpszCmdLineCaptionStr, "gpszCmdLineCaptionStr");
@@ -476,23 +495,23 @@ void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe) {
     switch (RequestedScreenModeMaybe) {
       case 0:
         {
-          ScreenSizeX = 0x280;
-          ScreenSizeY = 0x1e0;
-          nScreenMode = 0;
+          UI::ui::ScreenSizeX = 0x280;
+          UI::Inv::ScreenSizeY = 0x1e0;
+          UI::Inv::nScreenMode = 0;
           break;
         }
       case 2:
         {
-          ScreenSizeX = 800;
-          ScreenSizeY = 600;
-          nScreenMode = 1;
+          UI::ui::ScreenSizeX = 800;
+          UI::Inv::ScreenSizeY = 600;
+          UI::Inv::nScreenMode = 1;
           break;
         }
     }
 
-    WindowSizeX = ScreenSizeX;
-    WindowSizeY = ScreenSizeY - 0x28;
-    gbScreenResolutionChangeInitInProgress = ScreenSizeX;
+    UI::SpellSel::WindowSizeX = UI::ui::ScreenSizeX;
+    UI::ui::WindowSizeY = UI::Inv::ScreenSizeY - 0x28;
+    gbScreenResolutionChangeInitInProgress = UI::ui::ScreenSizeX;
     D2Win::D2GFX::D2GFX_SetVideoMode(RequestedScreenModeMaybe);
     uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
     UI::Path::TypeOfUiOverlayOverWorld(nBorderType);

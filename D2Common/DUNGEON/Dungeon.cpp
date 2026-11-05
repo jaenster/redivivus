@@ -2007,11 +2007,11 @@ D2RoomStrc * __fastcall DRLGROOMEX_GetSubA0ForRoom(D2DrlgStrc * pDrlg, D2RoomExS
 
 // Reads cached DrlgActMisc state from the static data table (sgtDataTable). Outputs field_0x8 and field_0x468 values for both client-side (A) and server-side (B) actmisc instances.
 void __fastcall DRLGROOM_GetActMiscCacheInfo(int32_t * pnCacheA, int32_t * pnCacheB, int32_t * pnCacheC, int32_t * pnCacheD) {
-    *pnCacheA = sgtDataTable.nRoomDataGenerationB;
-    int nCacheC = sgtDataTable.nRoomDataGenerationA;
-    *pnCacheB = sgtDataTable.nRoomDataFreeGenerationB;
+    *pnCacheA = DATATBLS::MonsterTbls::sgtDataTable.nRoomDataGenerationB;
+    int nCacheC = DATATBLS::MonsterTbls::sgtDataTable.nRoomDataGenerationA;
+    *pnCacheB = DATATBLS::MonsterTbls::sgtDataTable.nRoomDataFreeGenerationB;
     *pnCacheC = nCacheC;
-    *pnCacheD = sgtDataTable.nRoomDataFreeGenerationA;
+    *pnCacheD = DATATBLS::MonsterTbls::sgtDataTable.nRoomDataFreeGenerationA;
 }
 
 // Client-side RoomEx activation loop. Called each frame from ClientSideGameLoop. Caches actmisc state, then iterates RoomEx linked list activating rooms that need initialization (no pRoom, not flagged 0x100000). Throttled by a countdown timer and activation counter field_0x98.
@@ -2020,11 +2020,11 @@ void __stdcall DRLGROOMEX_UpdateClientRoomExActivation(D2DrlgStrc * pDrlg) {
     D2RoomExStrc* pIteratorStart;
     BOOL bIsClientSide = Drlg::DRLGACTMISC_CheckFlag0x1(pDrlg);
     if (bIsClientSide) {
-      sgtDataTable.nRoomDataGenerationB = pDrlg->nRoomDataGeneration;
-      sgtDataTable.nRoomDataFreeGenerationB = pDrlg->nRoomDataFreeGeneration;
+      DATATBLS::MonsterTbls::sgtDataTable.nRoomDataGenerationB = pDrlg->nRoomDataGeneration;
+      DATATBLS::MonsterTbls::sgtDataTable.nRoomDataFreeGenerationB = pDrlg->nRoomDataFreeGeneration;
     } else {
-      sgtDataTable.nRoomDataGenerationA = pDrlg->nRoomDataGeneration;
-      sgtDataTable.nRoomDataFreeGenerationA = pDrlg->nRoomDataFreeGeneration;
+      DATATBLS::MonsterTbls::sgtDataTable.nRoomDataGenerationA = pDrlg->nRoomDataGeneration;
+      DATATBLS::MonsterTbls::sgtDataTable.nRoomDataFreeGenerationA = pDrlg->nRoomDataFreeGeneration;
     }
     if (pDrlg->nRoomInitBatchCount > 1) {
       pDrlg->nRoomInitBatchCount = 0;

@@ -755,7 +755,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
       }
 
       dwState = pTextBox->sControl.dwState;
-      if (!(gadwBitMasks[2] & dwState) || !(gadwBitMasks[0] & dwState)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState) || !(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
         return 0;
       }
 
@@ -942,7 +942,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
       }
 
       dwState = pTextBox->sControl.dwState;
-      if (!(gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState && 0 < pTextBox->sStyleControl.dwSizeX)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState && 0 < pTextBox->sStyleControl.dwSizeX)) {
         return 0;
       }
       if ((uint32_t)pTextBox->sStyleControl.fpDraw & 1) {
@@ -992,10 +992,10 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
     uint32_t dwState;
     dwState = pTextBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState)) {
       return 0;
     }
-    if (!(gadwBitMasks[0] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
       return 0;
     }
     if (pTextBox->sStyleControl.dwSizeX < 1) {
@@ -1254,8 +1254,8 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
     }
 
     pNew->sControl.neD2FormType = FORM_TextBox;
-    pNew->sControl.dwState |= gadwBitMasks[0];
-    dwState = pNew->sControl.dwState | gadwBitMasks[2];
+    pNew->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pNew->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNew->sControl.dwPosX = nPosX;
     pNew->sControl.dwSizeY = nHeight;
     pNew->sControl.dwState = dwState;

@@ -162,7 +162,7 @@ void TriggerEndGameCongratsExit() {
 }
 
 uint32_t __stdcall LOADER_RunInsertDiscPopup() {
-    gbCharScreenOkPressed = 0;
+    Engine::gbCharScreenOkPressed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
     IMG_popupok_DiscPrompt = (D2ArchiveStrc*)Core::Archive::IMAGE_LoadDC6Ex("Data\\Global\\UI\\Bigmenu\\popupok", 0);
     IMG_popupok_ConnLost = (D2ArchiveStrc*)Core::Archive::IMAGE_LoadDC6Ex("Data\\Global\\UI\\Bigmenu\\popupok", 0);
@@ -185,7 +185,7 @@ uint32_t __stdcall LOADER_PopupGameLoopCallback(uint32_t dwArg1) {
     GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING();
     Engine::LOADER_DrawConnectionLostScreen(1);
     Sound::SoundHdr::DRAW_AfterDraw();
-    if (!gbCharScreenOkButtonConfirmed && !gbCharScreenCancelPressed) {
+    if (!Engine::gbCharScreenOkButtonConfirmed && !Engine::gbCharScreenCancelPressed) {
       return 0;
     }
 
@@ -224,7 +224,7 @@ int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitSt
     }
 
     int32_t nMonStatsId = UNIT::Player::TXT_MonStats_GetBaseId(pTargetUnit);
-    if (!(nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
+    if (!(nMonStatsId < 0 || nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
       return 0;
     }
 
@@ -802,8 +802,8 @@ void __stdcall CMD_ReleaseHoldAltAndClearSelection() {
 }
 
 D2MissilesTxt * __fastcall GetMissleById(int32_t nMissileId) {
-    if (nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize) {
-      return sgptDataTable->pTxtMissiles + nMissileId;
+    if (nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId;
     }
 
     return nullptr;
@@ -956,16 +956,16 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
         *(uint32_t*)((char*)&wszWide + 60) &= 0xffff;
         nNewLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszWide);
         nCompLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwcImeCompositionBuffer);
-        nResultLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText);
+        nResultLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(UI::Chat::gwszChatInputText);
         if (nCompLen + nResultLen < 0x7f) {
-          D2Lang::Unicode::UNISYS::AppendToBuffer(gwszChatInputText, gwcImeCompositionBuffer);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(UI::Chat::gwszChatInputText, gwcImeCompositionBuffer);
           nCompLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwcImeCompositionBuffer);
           gnChatInputTextCursorPosition += nCompLen;
         }
 
-        nCompLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText);
+        nCompLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(UI::Chat::gwszChatInputText);
         if (nCompLen + nNewLen < 0x7f) {
-          D2Lang::Unicode::UNISYS::AppendToBuffer(gwszChatInputText, wszWide);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(UI::Chat::gwszChatInputText, wszWide);
           gnChatInputTextCursorPosition += nNewLen;
         }
 
@@ -1017,10 +1017,10 @@ void __stdcall INPUT_HandleIMEStartComposition(D2UIMouseMsgStrc * pMsg) {
     gaChatInputBuffer = '\x01';
     gwcIMECompositionString[0] = L'\0';
     gwcImeCompositionBuffer[0] = L'\0';
-    if (gaIMECompositionBuffer == 9) {
+    if (UI::Chat::gaIMECompositionBuffer == 9) {
       gnIMEInputMode = 4;
     } else {
-      if (gaIMECompositionBuffer == 8) {
+      if (UI::Chat::gaIMECompositionBuffer == 8) {
         gnIMEInputMode = 5;
       }
     }
@@ -1034,7 +1034,7 @@ void __stdcall INPUT_HandleIMEEndComposition(D2UIMouseMsgStrc * pMsg) {
     gwcIMECompositionString[0] = L'\0';
     gwcImeCompositionBuffer[0] = L'\0';
     gnChatInputTextLength = -2;
-    if (gaIMECompositionBuffer == 6) {
+    if (UI::Chat::gaIMECompositionBuffer == 6) {
       gaChatInputBuffer = '\0';
     }
 
@@ -1245,7 +1245,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     GAME::Game::D2CLIENT_ExitGame(nErrorLine);
     reload_media_mpqs:
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, D2IniData_client);
+    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, ClientModeInGame::D2IniData_client);
     gbItemDescDirtyFlag = 0;
 }
 
@@ -1396,7 +1396,7 @@ int __stdcall NPCMENU_GetCurrentMenuId() {
     UI::Dialog::FreeDialogStrc(UI::Dialog::gpNpcTradeErrorDialog);
     UI::Dialog::gpNpcTradeErrorDialog = 0;
     if (_Interaction::geNpcUiState == NPCUI_TRADE_REJECTED) {
-      if (gnNpcMenuTransactionType == 5) {
+      if (UI::npcmenu::gnNpcMenuTransactionType == 5) {
         UI::npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
         UI::ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
         return 1;
@@ -1405,7 +1405,7 @@ int __stdcall NPCMENU_GetCurrentMenuId() {
       UI::npcmenu::NPCMENU_OpenInteractionDialog();
       return 1;
     }
-    if (gnNpcMenuTransactionType == 6) {
+    if (UI::npcmenu::gnNpcMenuTransactionType == 6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd55);
       exit(-1);
     } else {
@@ -1439,7 +1439,7 @@ int __stdcall D2CLIENT_GetTradePlayerGoldAmount() {
 
 void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
     uint16_t nLayer;
-    if (g_nTradeWindowState != 4 && g_nTradeWindowState != 5 && g_nTradeWindowState != 6) {
+    if (UI::Trade::g_nTradeWindowState != 4 && UI::Trade::g_nTradeWindowState != 5 && UI::Trade::g_nTradeWindowState != 6) {
       eD2UnitStat eUnitStat;
       nLayer = 0;
       eUnitStat = UNITSTAT_gold;
@@ -1455,17 +1455,17 @@ void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
     }
 
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 7, 0, 0);
-    g_nTradeWindowState = 3;
+    UI::Trade::g_nTradeWindowState = 3;
 }
 
 int __stdcall TRADE_IsTradeThrottled() {
-    if (g_nTradeWindowState == 7) {
+    if (UI::Trade::g_nTradeWindowState == 7) {
       DWORD dwTickCount;
-      if (gdwTradeThrottleTimestamp != -1) {
+      if (UI::Trade::gdwTradeThrottleTimestamp != -1) {
         dwTickCount = GetTickCount();
-        if (dwTickCount > gdwTradeThrottleTimestamp + 30000U) {
+        if (dwTickCount > UI::Trade::gdwTradeThrottleTimestamp + 30000U) {
           UI::Inv::INV_ResetShopState();
-          g_nTradeWindowState = 0;
+          UI::Trade::g_nTradeWindowState = 0;
           UI::ui::UI_CloseTradeWindow(0);
           GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
           ClientModeInGame::D2CLIENT_SetExitVar1(0);
@@ -1601,7 +1601,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) 
       return 0;
     }
 
-    int32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(sgpDrlgAct, nullptr);
+    int32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, nullptr);
     if (nPeriodOfDay) {
       if (nPeriodOfDay >= 0x1 && nPeriodOfDay <= 0x3) {
         if (pUnit->eAnimMode.ePlayerMode == Death) {
@@ -1646,18 +1646,18 @@ int __stdcall TEXT_EmptyCallback() {
 }
 
 void __stdcall TEXT_InitializeTextSystem() {
-    gnPlayerCashDisplay = 0;
-    gnNpcShopActiveTab = 0;
+    UI::ui::gnPlayerCashDisplay = 0;
+    UI::ui::gnNpcShopActiveTab = 0;
     gnNpcShopSecondActiveTab = 0;
-    gnTextSystemInitFlag = 0;
-    gpUpgradeMenuDC6 = UI::ui::ARCHIVE_LoadOverlayImageUsedInGame("menu\\upgrade");
-    gpHoradricBackgroundDC6 = UI::ui::ARCHIVE_LoadOverlayImageUsedInGame("menu\\horadricback");
-    if (nCashDisplayItemCount <= 0) {
+    UI::UseItem::gnTextSystemInitFlag = 0;
+    UI::ui::gpUpgradeMenuDC6 = UI::ui::ARCHIVE_LoadOverlayImageUsedInGame("menu\\upgrade");
+    UI::ui::gpHoradricBackgroundDC6 = UI::ui::ARCHIVE_LoadOverlayImageUsedInGame("menu\\horadricback");
+    if (UI::UseItem::nCashDisplayItemCount <= 0) {
       return;
     }
 
     uint8_t* pHitTestEntry = &gaNpcCashTabs[0].nHitTestState;
-    int nCount = nCashDisplayItemCount;
+    int nCount = UI::UseItem::nCashDisplayItemCount;
     do {
       pHitTestEntry[1] = 0;
       *pHitTestEntry = 0;
@@ -1669,7 +1669,7 @@ void __stdcall TEXT_InitializeTextSystem() {
 void __stdcall TEXT_SetUnknownFlag(D2UIMouseMsgStrc * pMsg) {
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, -1, -1, 0, 0);
     UI::Panel::PANEL_CalculateBeltSlotIndex(pMsg);
-    if (gnPlayerCashDisplay != 1) {
+    if (UI::ui::gnPlayerCashDisplay != 1) {
       return;
     }
 
@@ -1681,12 +1681,12 @@ int __stdcall TEXT_EmptyCallback_Unref_004c2530() {
 }
 
 void __stdcall SOUND_ClearGlobalState() {
-    gnSoundLastInitTick = 0;
-    gdwSoundChannelIndex = 0;
-    gnSoundInitCooldown = 0x5a;
-    gnSoundLastPlayerAnimModeTime = 0;
-    geSoundLastPlayerAnimMode = 0;
-    memset(gaLevelAmbientMusicPlayedFlags, 0, 0x1000);
+    UNIT::UnitSnd::gnSoundLastInitTick = 0;
+    UNIT::UnitSnd::gdwSoundChannelIndex = 0;
+    UNIT::UnitSnd::gnSoundInitCooldown = 0x5a;
+    UNIT::UnitSnd::gnSoundLastPlayerAnimModeTime = 0;
+    UNIT::UnitSnd::geSoundLastPlayerAnimMode = 0;
+    memset(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags, 0, 0x1000);
 }
 
 void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
@@ -1713,24 +1713,24 @@ void __stdcall dSceneTransitionDraw() {
     }
 
     DWORD dwTickCount = GetTickCount();
-    int nXEnd = ScreenSizeX;
+    int nXEnd = UI::ui::ScreenSizeX;
     if (dwTickCount > gdwWarpFadeExpireTime) {
       gdwWarpFadeExpireTime = 0;
       return;
     }
 
     int nTimeRemaining = gdwWarpFadeExpireTime - dwTickCount;
-    int nYEnd = ScreenSizeY - 0x2f;
+    int nYEnd = UI::Inv::ScreenSizeY - 0x2f;
     uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
     switch (nBorderType) {
       case 1:
         {
-          nXEnd -= ScreenSizeX / 2;
+          nXEnd -= UI::ui::ScreenSizeX / 2;
           break;
         }
       case 2:
         {
-          nXStart = ScreenSizeX / 2;
+          nXStart = UI::ui::ScreenSizeX / 2;
           break;
         }
     }

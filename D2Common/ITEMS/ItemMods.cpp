@@ -186,12 +186,12 @@ int __stdcall ITEMMOD_FindChargedSkill(D2UnitStrc * pUnit, int32_t nSkillId, int
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
-    if (nSkillId < 0 || nSkillId >= sgptDataTable->nTxtSkillsCount || nSkillLevel - 1U > 0x3e) {
+    if (nSkillId < 0 || nSkillId >= Items::sgptDataTable->nTxtSkillsCount || nSkillLevel - 1U > 0x3e) {
       return 0;
     }
 
-    int nStatCostShift = sgptDataTable->nChargedSkillLevelBits;
-    uint32_t uStatCostMask = sgptDataTable->dwChargedSkillLevelMask;
+    int nStatCostShift = Items::sgptDataTable->nChargedSkillLevelBits;
+    uint32_t uStatCostMask = Items::sgptDataTable->dwChargedSkillLevelMask;
     D2StatListExStrc* pStatList = Stats::StatsEx::GetStatsByFlags(pUnit, 0x40);
     while (true) {
       if (!pStatList) {
@@ -241,7 +241,7 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
       return 0;
     }
 
-    uint32_t nStatKey = (nSkillId << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + (sgptDataTable->dwChargedSkillLevelMask & nChargeSlot);
+    uint32_t nStatKey = (nSkillId << D2_SHIFT_COUNT(Items::sgptDataTable->nChargedSkillLevelBits)) + (Items::sgptDataTable->dwChargedSkillLevelMask & nChargeSlot);
     for (pStatList = Stats::StatsEx::GetStatsByFlags(pUnit, 0x40); pStatList; pStatList = Stats::StatsEx::STATLIST_FindStatListWithFlags(pStatList, 0x40)) {
       int nChargedSkillVal;
       nChargedSkillVal = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_item_charged_skill, nStatKey);
@@ -1140,7 +1140,7 @@ int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2Uni
 
     int32_t eSkill;
     eSkill = (int32_t)pProperty->fparam;
-    if (eSkill < 0 || eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
+    if (eSkill < 0 || eSkill >= Items::sgptDataTable->nTxtSkillsCount || !(Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -1211,8 +1211,8 @@ int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2Uni
     D2SeedStrc* pSeed = Items::GetItemSeed(pItemUnit);
     uint32_t nRandChargeOffset = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nSkillLevel - nChargesDiv8);
     D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pItemUnit, nState, dwStatListFlags, pUnit);
-    nClampedSkillLevel = eSkill << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
-    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, (nRandChargeOffset + 1 + nChargesDiv8 & 0xff) + nSkillLevel * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nClampedSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nClampedSkillLevel + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nChargeSkillLevel))));
+    nClampedSkillLevel = eSkill << D2_SHIFT_COUNT(Items::sgptDataTable->nChargedSkillLevelBits);
+    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, (nRandChargeOffset + 1 + nChargesDiv8 & 0xff) + nSkillLevel * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nClampedSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nClampedSkillLevel + ((uint16_t)Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nChargeSkillLevel))));
     return 1;
 }
 
@@ -1428,7 +1428,7 @@ int32_t __fastcall PropertyFunc_SingleSkillBonus(int32_t nType, D2UnitStrc * pUn
     }
 
     int32_t nParam_00 = (int32_t)pProperty->fparam;
-    if (nParam_00 >= 0 && nParam_00 < sgptDataTable->nTxtSkillsCount) {
+    if (nParam_00 >= 0 && nParam_00 < Items::sgptDataTable->nTxtSkillsCount) {
       pStatsEx = ITEMMOD_GetOrCreateStatList(pItemUnit, nState, dwStatListFlags, pUnit);
       if (pStatsEx) {
         if (bClearStat) {
@@ -1638,7 +1638,7 @@ BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, D2MagicAffixTxt * pMa
     iVar1 = Items::ITEM_GetItemsTxt_bHasInv(pUnit);
     if (!iVar1 || (nMaxSock = Items::ITEM_GetMaxSockCount(pUnit) , nMaxSock <= 0)) {
       nLoopIdx = pMagicAffixTxt->mod[0].code;
-      if (nLoopIdx >= 0 && (nLoopIdx >= sgptDataTable->nTxtPropertiesSize || !(sgptDataTable->pTxtProperties + nLoopIdx) || sgptDataTable->pTxtProperties[nLoopIdx].stat[0] == 0xc2)) {
+      if (nLoopIdx >= 0 && (nLoopIdx >= Items::sgptDataTable->nTxtPropertiesSize || !(Items::sgptDataTable->pTxtProperties + nLoopIdx) || Items::sgptDataTable->pTxtProperties[nLoopIdx].stat[0] == 0xc2)) {
         return 0;
       }
     }
@@ -1880,7 +1880,7 @@ int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t dwFlags, 
     }
 
     eD2UnitStat eTargetStat = (eD2UnitStat)nStatId;
-    D2ItemStatCostTxt* pItemStatCost = (int)eTargetStat >= 0 && (int)eTargetStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eTargetStat : nullptr;
+    D2ItemStatCostTxt* pItemStatCost = (int)eTargetStat >= 0 && (int)eTargetStat < Items::sgptDataTable->nTxtItemStatCostSize ? Items::sgptDataTable->pTxtItemStatCost + eTargetStat : nullptr;
     if (!pItemStatCost) {
       return 0;
     }
@@ -2231,7 +2231,7 @@ uint32_t __fastcall ITEMPROP_AddSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D
     }
 
     uint8_t* nSubIndex = (uint8_t*)pProperty->fparam;
-    if (!((int)nSubIndex >= 0 && (int)nSubIndex < sgptDataTable->nTxtSkillsCount)) {
+    if (!((int)nSubIndex >= 0 && (int)nSubIndex < Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -2280,7 +2280,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
     }
 
     eD2Skills eSkill = pProperty[1];
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -2411,7 +2411,7 @@ uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit,
 
     eD2Skills eSkill;
     eSkill = pProperty[1];
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -2489,8 +2489,8 @@ uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit,
     D2SeedStrc* pItemSeed = Items::GetItemSeed(pUnit2);
     uint32_t nRolledInitCharges = D2Client::Archive::RANDOM_RandomNumberSelector(pItemSeed, nMaxChargeCount - nSkillLvlClamped);
     D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pUnit2, nState, dwFlags, pUnit);
-    nSkillLevel = eSkill << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
-    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)(short int)nStatId, (nRolledInitCharges + 1 + nSkillLvlClamped & 0xff) + nMaxChargeCount * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nSkillLevel + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nComputedSkillLevel))));
+    nSkillLevel = eSkill << D2_SHIFT_COUNT(Items::sgptDataTable->nChargedSkillLevelBits);
+    Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)(short int)nStatId, (nRolledInitCharges + 1 + nSkillLvlClamped & 0xff) + nMaxChargeCount * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nSkillLevel >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nSkillLevel + ((uint16_t)Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nComputedSkillLevel))));
     return nMaxChargeCount;
 }
 
@@ -2501,7 +2501,7 @@ uint32_t __fastcall ITEMPROP_AddTimedStat(uint32_t nType, D2UnitStrc * pUnit, D2
     }
 
     int nStatId = (int)(short int)nStatCode;
-    if (!(nStatId >= 0 && nStatId < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + nStatId)) {
+    if (!(nStatId >= 0 && nStatId < Items::sgptDataTable->nTxtItemStatCostSize && Items::sgptDataTable->pTxtItemStatCost + nStatId)) {
       return 0;
     }
 
@@ -2589,10 +2589,10 @@ uint32_t __fastcall ITEMPROP_SetIndestructible(uint32_t nType, D2UnitStrc * pUni
     if (!pProperty) {
       return 0;
     }
-    if (sgptDataTable->nTxtItemStatCostSize <= 0x98) {
+    if (Items::sgptDataTable->nTxtItemStatCostSize <= 0x98) {
       return 0;
     }
-    if (sgptDataTable->pTxtItemStatCost == (D2ItemStatCostTxt*)-49248) {
+    if (Items::sgptDataTable->pTxtItemStatCost == (D2ItemStatCostTxt*)-49248) {
       return 0;
     }
 
@@ -2692,7 +2692,7 @@ void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, D2UnitS
     static int PropertiesFuncCount = 0x25; D2_STATIC_GUARD(PropertiesFuncCount, "D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion::PropertiesFuncCount");
 
     int nFuncCode;
-    D2PropertiesTxt* pPropTxt = pSetsTxtF && (nFuncCode = pSetsTxtF->fcode) >= 0 && nFuncCode < sgptDataTable->nTxtPropertiesSize ? sgptDataTable->pTxtProperties + nFuncCode : nullptr;
+    D2PropertiesTxt* pPropTxt = pSetsTxtF && (nFuncCode = pSetsTxtF->fcode) >= 0 && nFuncCode < Items::sgptDataTable->nTxtPropertiesSize ? Items::sgptDataTable->pTxtProperties + nFuncCode : nullptr;
     if (!pPropTxt) {
       return;
     }
@@ -3711,7 +3711,7 @@ static void __stdcall ITEMMOD_ApplyPropertyToUnitStats(uint32_t nType, D2UnitStr
 
     int nPropFuncCode;
     nPropFuncCode = pSetsTxtF->fcode;
-    if (!(nPropFuncCode != -1 && nPropFuncCode >= 0 && nPropFuncCode < sgptDataTable->nTxtPropertiesSize && gaPropertyFuncTable[nPropFuncCode].pfnHandler)) {
+    if (!(nPropFuncCode != -1 && nPropFuncCode >= 0 && nPropFuncCode < Items::sgptDataTable->nTxtPropertiesSize && gaPropertyFuncTable[nPropFuncCode].pfnHandler)) {
       return;
     }
 

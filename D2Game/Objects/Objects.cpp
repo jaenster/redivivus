@@ -2708,7 +2708,7 @@ static BOOL __stdcall OBJECT_PopulateRoomSpecialObjects(::SGAMEDATA * pGame, D2L
     }
 
     bResult = D2Common::DUNGEON::Dungeon::DRLGROOM_HasOutdoorBorder(pRoom);
-    if (!(!bResult && (int)eLevelId < sgptDataTable->nTxtLevelsSize)) {
+    if (!(!bResult && (int)eLevelId < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize)) {
       return 0;
     }
 

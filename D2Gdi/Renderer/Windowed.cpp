@@ -1564,4 +1564,110 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
     }
 }
 
+uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut) {
+    // Static local variables (originally global data)
+    static int gaCharTypeFlags[64] = {
+    0x0,
+    0x0,
+    0x1010101,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x2020202,
+    0x2020202,
+    0x202,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0
+}; D2_STATIC_GUARD(gaCharTypeFlags, "D2Gdi::Renderer::Windowed::FOG_ParseFieldValue::gaCharTypeFlags");
+
+    bool uResult;
+    uint32_t bParsed;
+    char cCur = *szText;
+    if (!(*(uint8_t*)((int)gaCharTypeFlags + (int)cCur) & 2)) {
+      bParsed = 0;
+    } else {
+      int iAccum;
+      iAccum = 0;
+      while (cCur != '\0' && *(uint8_t*)((int)gaCharTypeFlags + (int)cCur) & 2) {
+        szText++;
+        iAccum = iAccum * 10 - 0x30 + (int)cCur;
+        cCur = *szText;
+      }
+
+      *pnOut = iAccum;
+      bParsed = 1;
+    }
+
+    *ppszCursor = szText;
+    return bParsed;
+}
+
+char * __fastcall FOG_FindCharInString(char * szText, char cSearchChar) {
+    char* pLastMatch = 0;
+    char cChar = *szText;
+    while (cChar != '\0') {
+      if (cChar == cSearchChar) {
+        pLastMatch = szText;
+      }
+
+      szText++;
+      cChar = *szText;
+    }
+
+    return pLastMatch;
+}
+
 } // namespace D2Gdi::Renderer::Windowed

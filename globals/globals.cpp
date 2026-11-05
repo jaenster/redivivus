@@ -6,18 +6,14 @@
 #include "globals/globals.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "Fog/Source/SFile.data.h"
-#include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Sound.h"
-#include "D2Client/Renderer/Glide.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Common/D2SeedStrc.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Merc.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Glide/Renderer/Glide.h"
 #include "D2Win/D2WinAnimImage.h"
-#include "D2gfx/D2GFX.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Storm.h"
 
@@ -34,7 +30,6 @@ char s_14_006cc77c[] = "14"; D2_GLOBAL_GUARD(s_14_006cc77c, "s_14_006cc77c");
 char s_207_82_87_133_0070f130[] = "207.82.87.133"; D2_GLOBAL_GUARD(s_207_82_87_133_0070f130, "s_207_82_87_133_0070f130");
 char s_AppID_006fad8c[] = "AppID"; D2_GLOBAL_GUARD(s_AppID_006fad8c, "s_AppID_006fad8c");
 char s_Assertion_Failure_006ccb6c[] = "Assertion Failure"; D2_GLOBAL_GUARD(s_Assertion_Failure_006ccb6c, "s_Assertion_Failure_006ccb6c");
-char s_Available_command_line_options____006d5b20[] = "Available command line options:\012  -set[default command line]\011\011Set new default command line string\012  -lng[lngfile]\011\011\011Use \"lngfile\" for language resources\012"; D2_GLOBAL_GUARD(s_Available_command_line_options____006d5b20, "s_Available_command_line_options____006d5b20");
 char s_BLIZZARDKEY_006cef6c[] = "BLIZZARDKEY"; D2_GLOBAL_GUARD(s_BLIZZARDKEY_006cef6c, "s_BLIZZARDKEY_006cef6c");
 char s_BNNews_D2DV_006df210[] = "BNNews-D2DV"; D2_GLOBAL_GUARD(s_BNNews_D2DV_006df210, "s_BNNews_D2DV_006df210");
 char s_Blizzard_Entertainment__Inc__006deb80[] = "Blizzard Entertainment, Inc."; D2_GLOBAL_GUARD(s_Blizzard_Entertainment__Inc__006deb80, "s_Blizzard_Entertainment__Inc__006deb80");
@@ -187,1519 +182,20 @@ char s_stream_error_006d3810[] = "stream error"; D2_GLOBAL_GUARD(s_stream_error_
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char s_Unknown_006cc780[8] = { 'U', 'n', 'k', 'n', 'o', 'w', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Unknown_006cc780, "s_Unknown_006cc780");
-
-char s_English_with_Korean_Chat_006cc788[28] = {
-    'E',
-    'n',
-    'g',
-    'l',
-    'i',
-    's',
-    'h',
-    ' ',
-    'w',
-    'i',
-    't',
-    'h',
-    ' ',
-    'K',
-    'o',
-    'r',
-    'e',
-    'a',
-    'n',
-    ' ',
-    'C',
-    'h',
-    'a',
-    't',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_English_with_Korean_Chat_006cc788, "s_English_with_Korean_Chat_006cc788");
-
-char s_Russian_006cc7a4[8] = { 'R', 'u', 's', 's', 'i', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Russian_006cc7a4, "s_Russian_006cc7a4");
-
-char s_Polish_006cc7ac[8] = { 'P', 'o', 'l', 'i', 's', 'h', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Polish_006cc7ac, "s_Polish_006cc7ac");
-
-char s_Traditional_Chinese_006cc7b4[20] = {
-    'T',
-    'r',
-    'a',
-    'd',
-    'i',
-    't',
-    'i',
-    'o',
-    'n',
-    'a',
-    'l',
-    ' ',
-    'C',
-    'h',
-    'i',
-    'n',
-    'e',
-    's',
-    'e',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Traditional_Chinese_006cc7b4, "s_Traditional_Chinese_006cc7b4");
-
-char s_Simplified_Chinese_006cc7c8[20] = {
-    'S',
-    'i',
-    'm',
-    'p',
-    'l',
-    'i',
-    'f',
-    'i',
-    'e',
-    'd',
-    ' ',
-    'C',
-    'h',
-    'i',
-    'n',
-    'e',
-    's',
-    'e',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Simplified_Chinese_006cc7c8, "s_Simplified_Chinese_006cc7c8");
-
-char s_Korean_006cc7dc[8] = { 'K', 'o', 'r', 'e', 'a', 'n', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Korean_006cc7dc, "s_Korean_006cc7dc");
-
-char s_Japanese_006cc7e4[12] = {
-    'J',
-    'a',
-    'p',
-    'a',
-    'n',
-    'e',
-    's',
-    'e',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Japanese_006cc7e4, "s_Japanese_006cc7e4");
-
-char s_Italian_006cc7f0[8] = { 'I', 't', 'a', 'l', 'i', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Italian_006cc7f0, "s_Italian_006cc7f0");
-
-char s_Portuguese_006cc7f8[12] = {
-    'P',
-    'o',
-    'r',
-    't',
-    'u',
-    'g',
-    'u',
-    'e',
-    's',
-    'e',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Portuguese_006cc7f8, "s_Portuguese_006cc7f8");
-
-char s_French_006cc804[8] = { 'F', 'r', 'e', 'n', 'c', 'h', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_French_006cc804, "s_French_006cc804");
-
-char s_German_006cc80c[8] = { 'G', 'e', 'r', 'm', 'a', 'n', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_German_006cc80c, "s_German_006cc80c");
-
-char s_Spanish_006cc814[8] = { 'S', 'p', 'a', 'n', 'i', 's', 'h', '\x00' }; D2_GLOBAL_GUARD(s_Spanish_006cc814, "s_Spanish_006cc814");
-
-char s_English_006cc81c[8] = { 'E', 'n', 'g', 'l', 'i', 's', 'h', '\x00' }; D2_GLOBAL_GUARD(s_English_006cc81c, "s_English_006cc81c");
-
-char gszHeapTagOperatorNew[4] = { "new" }; D2_GLOBAL_GUARD(gszHeapTagOperatorNew, "gszHeapTagOperatorNew");
-
 char lpDefault_006cc837[1] = { '\x00' }; D2_GLOBAL_GUARD(lpDefault_006cc837, "lpDefault_006cc837");
 
-double gdConst0_25 = 0.25; D2_GLOBAL_GUARD(gdConst0_25, "gdConst0_25");
-
-double gdBytesToMegabytes = 9.5367431640625E-7; D2_GLOBAL_GUARD(gdBytesToMegabytes, "gdBytesToMegabytes");
-
-double gfFloatGammaCorrectionInit = 100; D2_GLOBAL_GUARD(gfFloatGammaCorrectionInit, "gfFloatGammaCorrectionInit");
-
-double gdblConstantTen = 10; D2_GLOBAL_GUARD(gdblConstantTen, "gdblConstantTen");
-
-char gbSaveFileReadMarker[3] = { 'r', 'b', '\x00' }; D2_GLOBAL_GUARD(gbSaveFileReadMarker, "gbSaveFileReadMarker");
-
-char s_Cyrix_006cdeb0[6] = { 'C', 'y', 'r', 'i', 'x', '\x00' }; D2_GLOBAL_GUARD(s_Cyrix_006cdeb0, "s_Cyrix_006cdeb0");
-
-char s_AMD_006cdeb8[4] = { 'A', 'M', 'D', '\x00' }; D2_GLOBAL_GUARD(s_AMD_006cdeb8, "s_AMD_006cdeb8");
-
-char s_Intel_006cdebc[8] = { 'I', 'n', 't', 'e', 'l', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Intel_006cdebc, "s_Intel_006cdebc");
-
-char param_2_006ce200[5] = { "%s%s" }; D2_GLOBAL_GUARD(param_2_006ce200, "param_2_006ce200");
-
-// also labelled: BitMaskAnd
-uint32_t gadwBitMasks[32] = {
-    0x1,
-    0x2,
-    0x4,
-    0x8,
-    0x10,
-    0x20,
-    0x40,
-    0x80,
-    0x100,
-    0x200,
-    0x400,
-    0x800,
-    0x1000,
-    0x2000,
-    0x4000,
-    0x8000,
-    0x10000,
-    0x20000,
-    0x40000,
-    0x80000,
-    0x100000,
-    0x200000,
-    0x400000,
-    0x800000,
-    0x1000000,
-    0x2000000,
-    0x4000000,
-    0x8000000,
-    0x10000000,
-    0x20000000,
-    0x40000000,
-    0x80000000
-}; D2_GLOBAL_GUARD(gadwBitMasks, "gadwBitMasks");
-
-// also labelled: BitMaskOr
-uint32_t gadwInvBitMasks[32] = {
-    0xfffffffe,
-    0xfffffffd,
-    0xfffffffb,
-    0xfffffff7,
-    0xffffffef,
-    0xffffffdf,
-    0xffffffbf,
-    0xffffff7f,
-    0xfffffeff,
-    0xfffffdff,
-    0xfffffbff,
-    0xfffff7ff,
-    0xffffefff,
-    0xffffdfff,
-    0xffffbfff,
-    0xffff7fff,
-    0xfffeffff,
-    0xfffdffff,
-    0xfffbffff,
-    0xfff7ffff,
-    0xffefffff,
-    0xffdfffff,
-    0xffbfffff,
-    0xff7fffff,
-    0xfeffffff,
-    0xfdffffff,
-    0xfbffffff,
-    0xf7ffffff,
-    0xefffffff,
-    0xdfffffff,
-    0xbfffffff,
-    0x7fffffff
-}; D2_GLOBAL_GUARD(gadwInvBitMasks, "gadwInvBitMasks");
-
-char s_File___s_006cf1e8[10] = {
-    'F',
-    'i',
-    'l',
-    'e',
-    ':',
-    '\x09',
-    '%',
-    's',
-    '\x0a',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_File___s_006cf1e8, "s_File___s_006cf1e8");
-
-char s__s_006cf248[6] = { '\x0a', '%', 's', '\x0a', '\x0a', '\x00' }; D2_GLOBAL_GUARD(s__s_006cf248, "s__s_006cf248");
-
-char s_Expr___s_006cf250[11] = {
-    'E',
-    'x',
-    'p',
-    'r',
-    ':',
-    '\x09',
-    '%',
-    's',
-    '\x0a',
-    '\x0a',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Expr___s_006cf250, "s_Expr___s_006cf250");
-
-char * z_errmsg[10] = {
-    s_need_dictionary_006d3838,
-    s_stream_end_006d382c,
-    lpDefault_006cc837,
-    s_file_error_006d3820,
-    s_stream_error_006d3810,
-    s_data_error_006d3804,
-    s_insufficient_memory_006d37f0,
-    s_buffer_error_006d37e0,
-    s_incompatible_version_006d37c8,
-    lpDefault_006cc837
-}; D2_GLOBAL_GUARD(z_errmsg, "z_errmsg");
-
-char * gaFrontEndPaletteFiles[4] = { s_palette_fechar_pal_dat_006d39e8, s_palette_fechar_pal_pl2_006d39d0, s_palette_sky_pal_dat_006d39bc, s_palette_sky_pal_pl2_006d39a8 }; D2_GLOBAL_GUARD(gaFrontEndPaletteFiles, "gaFrontEndPaletteFiles");
-
-char gaLanguageCodeFallback[4] = { 'C', 'H', 'I', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeFallback, "gaLanguageCodeFallback");
-
-char gaLanguageCodeAbbrevTable[4] = { 'E', 'N', 'G', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeAbbrevTable, "gaLanguageCodeAbbrevTable");
-
 char gpCutsceneVideoFrameBuffer[8] = { "640x146" }; D2_GLOBAL_GUARD(gpCutsceneVideoFrameBuffer, "gpCutsceneVideoFrameBuffer");
-
-char s_ama_006d5564[4] = { 'a', 'm', 'a', '\x00' }; D2_GLOBAL_GUARD(s_ama_006d5564, "s_ama_006d5564");
-
-char s_sor_006d5568[4] = { 's', 'o', 'r', '\x00' }; D2_GLOBAL_GUARD(s_sor_006d5568, "s_sor_006d5568");
-
-char s_nec_006d556c[4] = { 'n', 'e', 'c', '\x00' }; D2_GLOBAL_GUARD(s_nec_006d556c, "s_nec_006d556c");
-
-char s_pal_006d5570[4] = { 'p', 'a', 'l', '\x00' }; D2_GLOBAL_GUARD(s_pal_006d5570, "s_pal_006d5570");
-
-char s_bar_006d5574[4] = { 'b', 'a', 'r', '\x00' }; D2_GLOBAL_GUARD(s_bar_006d5574, "s_bar_006d5574");
-
-char s_dru_006d5578[4] = { 'd', 'r', 'u', '\x00' }; D2_GLOBAL_GUARD(s_dru_006d5578, "s_dru_006d5578");
-
-char s_asn_006d557c[4] = { 'a', 's', 'n', '\x00' }; D2_GLOBAL_GUARD(s_asn_006d557c, "s_asn_006d557c");
 
 char param_2_006d57bc[3] = { '%', 'd', '\x00' }; D2_GLOBAL_GUARD(param_2_006d57bc, "param_2_006d57bc");
 
 char gsCharSelContext[4] = { '*', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(gsCharSelContext, "gsCharSelContext");
 
-char gszCmdLineSwitchP[2] = { "p" }; D2_GLOBAL_GUARD(gszCmdLineSwitchP, "gszCmdLineSwitchP");
-
-char gszCmdLineSwitchC[2] = { "c" }; D2_GLOBAL_GUARD(gszCmdLineSwitchC, "gszCmdLineSwitchC");
-
-// also labelled: CRT_StrLen
-char gszCmdLineSwitchHelp[5] = { "help" }; D2_GLOBAL_GUARD(gszCmdLineSwitchHelp, "gszCmdLineSwitchHelp");
-
-char gszCmdLineSwitchH[2] = { "h" }; D2_GLOBAL_GUARD(gszCmdLineSwitchH, "gszCmdLineSwitchH");
-
-char gszCmdLineSwitchQuestionMark[2] = { "?" }; D2_GLOBAL_GUARD(gszCmdLineSwitchQuestionMark, "gszCmdLineSwitchQuestionMark");
-
-char gaFreeUnitsOrderData[3] = { 'w', 'b', '\x00' }; D2_GLOBAL_GUARD(gaFreeUnitsOrderData, "gaFreeUnitsOrderData");
-
 char gTxtCompilationMemPool[4] = { 'e', 'n', 'd', '\x00' }; D2_GLOBAL_GUARD(gTxtCompilationMemPool, "gTxtCompilationMemPool");
-
-char s_D2X_OUT__s_BIK_006d912c[15] = {
-    'D',
-    '2',
-    'X',
-    '_',
-    'O',
-    'U',
-    'T',
-    '_',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_D2X_OUT__s_BIK_006d912c, "s_D2X_OUT__s_BIK_006d912c");
-
-char s_ACT04END_s_BIK_006d9150[15] = {
-    'A',
-    'C',
-    'T',
-    '0',
-    '4',
-    'E',
-    'N',
-    'D',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT04END_s_BIK_006d9150, "s_ACT04END_s_BIK_006d9150");
-
-char s_ACT04START_s_BIK_006d9160[17] = {
-    'A',
-    'C',
-    'T',
-    '0',
-    '4',
-    'S',
-    'T',
-    'A',
-    'R',
-    'T',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT04START_s_BIK_006d9160, "s_ACT04START_s_BIK_006d9160");
-
-char s_ACT03START_s_BIK_006d9174[17] = {
-    'A',
-    'C',
-    'T',
-    '0',
-    '3',
-    'S',
-    'T',
-    'A',
-    'R',
-    'T',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT03START_s_BIK_006d9174, "s_ACT03START_s_BIK_006d9174");
-
-char s_ACT02START_s_BIK_006d9188[17] = {
-    'A',
-    'C',
-    'T',
-    '0',
-    '2',
-    'S',
-    'T',
-    'A',
-    'R',
-    'T',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT02START_s_BIK_006d9188, "s_ACT02START_s_BIK_006d9188");
-
-char s_d2intro_s_bik_006d919c[14] = {
-    'd',
-    '2',
-    'i',
-    'n',
-    't',
-    'r',
-    'o',
-    '%',
-    's',
-    '.',
-    'b',
-    'i',
-    'k',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_d2intro_s_bik_006d919c, "s_d2intro_s_bik_006d919c");
-
-char s_a5q6_006da1ec[5] = { 'a', '5', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a5q6_006da1ec, "s_a5q6_006da1ec");
-
-char s_a5q5_006da1f4[5] = { 'a', '5', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a5q5_006da1f4, "s_a5q5_006da1f4");
-
-char s_a5q4_006da1fc[5] = { 'a', '5', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a5q4_006da1fc, "s_a5q4_006da1fc");
-
-char s_a5q3_006da204[5] = { 'a', '5', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a5q3_006da204, "s_a5q3_006da204");
-
-char s_a5q2_006da20c[5] = { 'a', '5', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a5q2_006da20c, "s_a5q2_006da20c");
-
-char s_a5q1_006da214[5] = { 'a', '5', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a5q1_006da214, "s_a5q1_006da214");
-
-char s_a4q3_006da21c[5] = { 'a', '4', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a4q3_006da21c, "s_a4q3_006da21c");
-
-char s_a4q2_006da224[5] = { 'a', '4', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a4q2_006da224, "s_a4q2_006da224");
-
-char s_a4q1_006da22c[5] = { 'a', '4', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a4q1_006da22c, "s_a4q1_006da22c");
-
-char s_a3q6_006da234[5] = { 'a', '3', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a3q6_006da234, "s_a3q6_006da234");
-
-char s_a3q5_006da23c[5] = { 'a', '3', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a3q5_006da23c, "s_a3q5_006da23c");
-
-char s_a3q4_006da244[5] = { 'a', '3', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a3q4_006da244, "s_a3q4_006da244");
-
-char s_a3q3_006da24c[5] = { 'a', '3', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a3q3_006da24c, "s_a3q3_006da24c");
-
-char s_a3q2_006da254[5] = { 'a', '3', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a3q2_006da254, "s_a3q2_006da254");
-
-char s_a3q1_006da25c[5] = { 'a', '3', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a3q1_006da25c, "s_a3q1_006da25c");
-
-char s_a2q6_006da264[5] = { 'a', '2', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a2q6_006da264, "s_a2q6_006da264");
-
-char s_a2q5_006da26c[5] = { 'a', '2', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a2q5_006da26c, "s_a2q5_006da26c");
-
-char s_a2q4_006da274[5] = { 'a', '2', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a2q4_006da274, "s_a2q4_006da274");
-
-char s_a2q3_006da27c[5] = { 'a', '2', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a2q3_006da27c, "s_a2q3_006da27c");
-
-char s_a2q2_006da284[5] = { 'a', '2', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a2q2_006da284, "s_a2q2_006da284");
-
-char s_a2q1_006da28c[5] = { 'a', '2', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a2q1_006da28c, "s_a2q1_006da28c");
-
-char s_a1q6_006da294[5] = { 'a', '1', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a1q6_006da294, "s_a1q6_006da294");
-
-char s_a1q5_006da29c[5] = { 'a', '1', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a1q5_006da29c, "s_a1q5_006da29c");
-
-char s_a1q4_006da2a4[5] = { 'a', '1', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a1q4_006da2a4, "s_a1q4_006da2a4");
-
-char s_a1q3_006da2ac[5] = { 'a', '1', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a1q3_006da2ac, "s_a1q3_006da2ac");
-
-char s_a1q2_006da2b4[5] = { 'a', '1', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a1q2_006da2b4, "s_a1q2_006da2b4");
-
-char s_a1q1_006da2bc[5] = { 'a', '1', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a1q1_006da2bc, "s_a1q1_006da2bc");
-
-uint64_t gaIntensityTableConstant = 0x408f400000000000; D2_GLOBAL_GUARD(gaIntensityTableConstant, "gaIntensityTableConstant");
 
 // also labelled: gaAudioPaletteConvertData
 double gdConst255 = 255; D2_GLOBAL_GUARD(gdConst255, "gdConst255");
 
-char gaLanguageCodeLookup[4] = { 'E', 'N', 'U', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeLookup, "gaLanguageCodeLookup");
-
-uint8_t gaNetSidSubstitutionBox[480] = {
-    0x9,
-    0x4,
-    0x7,
-    0xf,
-    0xd,
-    0xa,
-    0x3,
-    0xb,
-    0x1,
-    0x2,
-    0xc,
-    0x8,
-    0x6,
-    0xe,
-    0x5,
-    0x0,
-    0x9,
-    0xb,
-    0x5,
-    0x4,
-    0x8,
-    0xf,
-    0x1,
-    0xe,
-    0x7,
-    0x0,
-    0x3,
-    0x2,
-    0xa,
-    0x6,
-    0xd,
-    0xc,
-    0xc,
-    0xe,
-    0x1,
-    0x4,
-    0x9,
-    0xf,
-    0xa,
-    0xb,
-    0xd,
-    0x6,
-    0x0,
-    0x8,
-    0x7,
-    0x2,
-    0x5,
-    0x3,
-    0xb,
-    0x2,
-    0x5,
-    0xe,
-    0xd,
-    0x3,
-    0x9,
-    0x0,
-    0x1,
-    0xf,
-    0x7,
-    0xc,
-    0xa,
-    0x6,
-    0x4,
-    0x8,
-    0x6,
-    0x2,
-    0x4,
-    0x5,
-    0xb,
-    0x8,
-    0xc,
-    0xe,
-    0xd,
-    0xf,
-    0x7,
-    0x1,
-    0xa,
-    0x0,
-    0x3,
-    0x9,
-    0x5,
-    0x4,
-    0xe,
-    0xc,
-    0x7,
-    0x6,
-    0xd,
-    0xa,
-    0xf,
-    0x2,
-    0x9,
-    0x1,
-    0x0,
-    0xb,
-    0x8,
-    0x3,
-    0xc,
-    0x7,
-    0x8,
-    0xf,
-    0xb,
-    0x0,
-    0x5,
-    0x9,
-    0xd,
-    0xa,
-    0x6,
-    0xe,
-    0x2,
-    0x4,
-    0x3,
-    0x1,
-    0x3,
-    0xa,
-    0xe,
-    0x8,
-    0x1,
-    0xb,
-    0x5,
-    0x4,
-    0x2,
-    0xf,
-    0xd,
-    0xc,
-    0x6,
-    0x7,
-    0x9,
-    0x0,
-    0xc,
-    0xd,
-    0x1,
-    0xf,
-    0x8,
-    0xe,
-    0x5,
-    0xb,
-    0x3,
-    0xa,
-    0x9,
-    0x0,
-    0x7,
-    0x2,
-    0x4,
-    0x6,
-    0xd,
-    0xa,
-    0x7,
-    0xe,
-    0x1,
-    0x6,
-    0xb,
-    0x8,
-    0xf,
-    0xc,
-    0x5,
-    0x2,
-    0x3,
-    0x0,
-    0x4,
-    0x9,
-    0x3,
-    0xe,
-    0x7,
-    0x5,
-    0xb,
-    0xf,
-    0x8,
-    0xc,
-    0x1,
-    0xa,
-    0x4,
-    0xd,
-    0x0,
-    0x6,
-    0x9,
-    0x2,
-    0xb,
-    0x6,
-    0x9,
-    0x4,
-    0x1,
-    0x8,
-    0xa,
-    0xd,
-    0x7,
-    0xe,
-    0x0,
-    0xc,
-    0xf,
-    0x2,
-    0x3,
-    0x5,
-    0xc,
-    0x7,
-    0x8,
-    0xd,
-    0x3,
-    0xb,
-    0x0,
-    0xe,
-    0x6,
-    0xf,
-    0x9,
-    0x4,
-    0xa,
-    0x1,
-    0x5,
-    0x2,
-    0xc,
-    0x6,
-    0xd,
-    0x9,
-    0xb,
-    0x0,
-    0x1,
-    0x2,
-    0xf,
-    0x7,
-    0x3,
-    0x4,
-    0xa,
-    0xe,
-    0x8,
-    0x5,
-    0x3,
-    0x6,
-    0x1,
-    0x5,
-    0xb,
-    0xc,
-    0x8,
-    0x0,
-    0xf,
-    0xe,
-    0x9,
-    0x4,
-    0x7,
-    0xa,
-    0xd,
-    0x2,
-    0xa,
-    0x7,
-    0xb,
-    0xf,
-    0x2,
-    0x8,
-    0x0,
-    0xd,
-    0xe,
-    0xc,
-    0x1,
-    0x6,
-    0x9,
-    0x3,
-    0x5,
-    0x4,
-    0xa,
-    0xb,
-    0xd,
-    0x4,
-    0x3,
-    0x8,
-    0x5,
-    0x9,
-    0x1,
-    0x0,
-    0xf,
-    0xc,
-    0x7,
-    0xe,
-    0x2,
-    0x6,
-    0xb,
-    0x4,
-    0xd,
-    0xf,
-    0x1,
-    0x6,
-    0x3,
-    0xe,
-    0x7,
-    0xa,
-    0xc,
-    0x8,
-    0x9,
-    0x2,
-    0x5,
-    0x0,
-    0x9,
-    0x6,
-    0x7,
-    0x0,
-    0x1,
-    0xa,
-    0xd,
-    0x2,
-    0x3,
-    0xe,
-    0xf,
-    0xc,
-    0x5,
-    0xb,
-    0x4,
-    0x8,
-    0xd,
-    0xe,
-    0x5,
-    0x6,
-    0x1,
-    0x9,
-    0x8,
-    0xc,
-    0x2,
-    0xf,
-    0x3,
-    0x7,
-    0xb,
-    0x4,
-    0x0,
-    0xa,
-    0x9,
-    0xf,
-    0x4,
-    0x0,
-    0x1,
-    0x6,
-    0xa,
-    0xe,
-    0x2,
-    0x3,
-    0x7,
-    0xd,
-    0x5,
-    0xb,
-    0x8,
-    0xc,
-    0x3,
-    0xe,
-    0x1,
-    0xa,
-    0x2,
-    0xc,
-    0x8,
-    0x4,
-    0xb,
-    0x7,
-    0xd,
-    0x0,
-    0xf,
-    0x6,
-    0x9,
-    0x5,
-    0x7,
-    0x2,
-    0xc,
-    0x6,
-    0xa,
-    0x8,
-    0xb,
-    0x0,
-    0xf,
-    0x4,
-    0x3,
-    0xe,
-    0x9,
-    0x1,
-    0xd,
-    0x5,
-    0xc,
-    0x4,
-    0x5,
-    0x9,
-    0xa,
-    0x2,
-    0x8,
-    0xd,
-    0x3,
-    0xf,
-    0x1,
-    0xe,
-    0x6,
-    0x7,
-    0xb,
-    0x0,
-    0xa,
-    0x8,
-    0xe,
-    0xd,
-    0x9,
-    0xf,
-    0x3,
-    0x0,
-    0x4,
-    0x6,
-    0x1,
-    0xc,
-    0x7,
-    0xb,
-    0x2,
-    0x5,
-    0x3,
-    0xc,
-    0x4,
-    0xa,
-    0x2,
-    0xf,
-    0xd,
-    0xe,
-    0x7,
-    0x0,
-    0x5,
-    0x8,
-    0x1,
-    0x6,
-    0xb,
-    0x9,
-    0xa,
-    0xc,
-    0x1,
-    0x0,
-    0x9,
-    0xe,
-    0xd,
-    0xb,
-    0x3,
-    0x7,
-    0xf,
-    0x8,
-    0x5,
-    0x2,
-    0x4,
-    0x6,
-    0xe,
-    0xa,
-    0x1,
-    0x8,
-    0x7,
-    0x6,
-    0x5,
-    0xc,
-    0x2,
-    0xf,
-    0x0,
-    0xd,
-    0x3,
-    0xb,
-    0x4,
-    0x9,
-    0x3,
-    0x8,
-    0xe,
-    0x0,
-    0x7,
-    0x9,
-    0xf,
-    0xc,
-    0x1,
-    0x6,
-    0xd,
-    0x2,
-    0x5,
-    0xa,
-    0xb,
-    0x4,
-    0x3,
-    0xa,
-    0xc,
-    0x4,
-    0xd,
-    0xb,
-    0x9,
-    0xe,
-    0xf,
-    0x6,
-    0x1,
-    0x7,
-    0x2,
-    0x0,
-    0x5,
-    0x8
-}; D2_GLOBAL_GUARD(gaNetSidSubstitutionBox, "gaNetSidSubstitutionBox");
-
-char s_Stam_006e160c[5] = { 'S', 't', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Stam_006e160c, "s_Stam_006e160c");
-
-char s_Life_006e161c[5] = { 'L', 'i', 'f', 'e', '\x00' }; D2_GLOBAL_GUARD(s_Life_006e161c, "s_Life_006e161c");
-
-char s_Pois_006e1624[5] = { 'P', 'o', 'i', 's', '\x00' }; D2_GLOBAL_GUARD(s_Pois_006e1624, "s_Pois_006e1624");
-
-char s_Magc_006e1644[5] = { 'M', 'a', 'g', 'c', '\x00' }; D2_GLOBAL_GUARD(s_Magc_006e1644, "s_Magc_006e1644");
-
-char s_Ligt_006e1654[5] = { 'L', 'i', 'g', 't', '\x00' }; D2_GLOBAL_GUARD(s_Ligt_006e1654, "s_Ligt_006e1654");
-
-char s_Dam_006e1664[4] = { 'D', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Dam_006e1664, "s_Dam_006e1664");
-
-D2MonsterEquipEntryStrc gaMonsterEquipTable[12] = {
-    {
-        /* .szItemCode = */ { 'b', 's', 'd', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x104
-    },
-    {
-        /* .szItemCode = */ { 't', 'a', 'x', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x104
-    },
-    {
-        /* .szItemCode = */ { 'v', 'o', 'u', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x104
-    },
-    {
-        /* .szItemCode = */ { 't', 'o', 'w', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x105
-    },
-    {
-        /* .szItemCode = */ { 't', 'a', 'x', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x105
-    },
-    {
-        /* .szItemCode = */ { 'r', 'i', 'n', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x106
-    },
-    {
-        /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x103
-    },
-    {
-        /* .szItemCode = */ { 'h', 'g', 'l', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x10a
-    },
-    {
-        /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x103
-    },
-    {
-        /* .szItemCode = */ { 'h', 'b', 't', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x109
-    },
-    {
-        /* .szItemCode = */ { 'h', 'b', 't', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x109
-    },
-    {
-        /* .szItemCode = */ { 'c', 'r', 'n', ' ' },
-        /* .dwBodyLocAndFlag = */ 0x101
-    }
-}; D2_GLOBAL_GUARD(gaMonsterEquipTable, "gaMonsterEquipTable");
-
-uint32_t gaCelCmpDataBlock_006e36a0[224] = {
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x1,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x2,
-    0x1,
-    0x3,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x4,
-    0x2,
-    0x5,
-    0x1,
-    0x6,
-    0x3,
-    0x7,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x8,
-    0x4,
-    0x9,
-    0x2,
-    0xa,
-    0x5,
-    0xb,
-    0x1,
-    0xc,
-    0x6,
-    0xd,
-    0x3,
-    0xe,
-    0x7,
-    0xf,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x10,
-    0x8,
-    0x11,
-    0x4,
-    0x12,
-    0x9,
-    0x13,
-    0x2,
-    0x14,
-    0xa,
-    0x15,
-    0x5,
-    0x16,
-    0xb,
-    0x17,
-    0x1,
-    0x18,
-    0xc,
-    0x19,
-    0x6,
-    0x1a,
-    0xd,
-    0x1b,
-    0x3,
-    0x1c,
-    0xe,
-    0x1d,
-    0x7,
-    0x1e,
-    0xf,
-    0x1f
-}; D2_GLOBAL_GUARD(gaCelCmpDataBlock_006e36a0, "gaCelCmpDataBlock_006e36a0");
-
 char s_C_006ed5b4[2] = { 'C', '\x00' }; D2_GLOBAL_GUARD(s_C_006ed5b4, "s_C_006ed5b4");
-
-char s_HDM_006ee7c0[4] = { 'H', 'D', 'M', '\x00' }; D2_GLOBAL_GUARD(s_HDM_006ee7c0, "s_HDM_006ee7c0");
-
-int gaOutJungPresetOffsetByLevel[3] = { 0x0, 0xa, 0x14 }; D2_GLOBAL_GUARD(gaOutJungPresetOffsetByLevel, "gaOutJungPresetOffsetByLevel");
-
-uint8_t gaWallNeighborOrientTable[256] = {
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xf,
-    0xf,
-    0x5,
-    0x5,
-    0xf,
-    0xf,
-    0x15,
-    0x15,
-    0x8,
-    0x8,
-    0xa,
-    0x26,
-    0x8,
-    0x8,
-    0x28,
-    0x14,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xf,
-    0xf,
-    0x5,
-    0x5,
-    0xf,
-    0xf,
-    0x15,
-    0x15,
-    0x8,
-    0x8,
-    0xa,
-    0x26,
-    0x8,
-    0x8,
-    0x28,
-    0x14,
-    0xd,
-    0xd,
-    0x7,
-    0x7,
-    0xd,
-    0xd,
-    0xd,
-    0x7,
-    0x4,
-    0x4,
-    0xb,
-    0x25,
-    0x4,
-    0x4,
-    0xb,
-    0x2b,
-    0x3,
-    0x3,
-    0xc,
-    0xc,
-    0x3,
-    0x3,
-    0x27,
-    0x27,
-    0x9,
-    0x9,
-    0x2,
-    0x2b,
-    0x9,
-    0x9,
-    0x2c,
-    0x1a,
-    0xd,
-    0xd,
-    0x7,
-    0x7,
-    0xd,
-    0xd,
-    0xd,
-    0x7,
-    0x17,
-    0x17,
-    0x29,
-    0x11,
-    0x17,
-    0x17,
-    0x29,
-    0x11,
-    0x3,
-    0x3,
-    0xc,
-    0xc,
-    0x3,
-    0x3,
-    0x27,
-    0x27,
-    0x2a,
-    0x2a,
-    0x2e,
-    0x2a,
-    0x2a,
-    0x2a,
-    0x21,
-    0x1f,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xf,
-    0xf,
-    0x5,
-    0x5,
-    0xf,
-    0xf,
-    0x15,
-    0x15,
-    0x8,
-    0x8,
-    0xa,
-    0x26,
-    0x8,
-    0x8,
-    0x23,
-    0x14,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0x0,
-    0x0,
-    0x10,
-    0x10,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xe,
-    0xe,
-    0x6,
-    0x13,
-    0xf,
-    0xf,
-    0x5,
-    0x5,
-    0xf,
-    0xf,
-    0x15,
-    0x15,
-    0x8,
-    0x8,
-    0xa,
-    0x26,
-    0x8,
-    0x8,
-    0x28,
-    0x14,
-    0xd,
-    0xd,
-    0x7,
-    0x7,
-    0xd,
-    0xd,
-    0xd,
-    0x7,
-    0x4,
-    0x4,
-    0xb,
-    0x25,
-    0x4,
-    0x4,
-    0xb,
-    0x25,
-    0x12,
-    0x12,
-    0x23,
-    0x23,
-    0x12,
-    0x12,
-    0x16,
-    0x16,
-    0x24,
-    0x24,
-    0x2d,
-    0x22,
-    0x24,
-    0x24,
-    0x1c,
-    0x1d,
-    0xd,
-    0xd,
-    0x7,
-    0x7,
-    0xd,
-    0xd,
-    0xd,
-    0x7,
-    0x17,
-    0x17,
-    0x29,
-    0x11,
-    0x17,
-    0x17,
-    0x29,
-    0x11,
-    0x12,
-    0x12,
-    0x23,
-    0x23,
-    0x12,
-    0x12,
-    0x16,
-    0x16,
-    0x18,
-    0x18,
-    0x19,
-    0x20,
-    0x18,
-    0x18,
-    0x1e,
-    0x1
-}; D2_GLOBAL_GUARD(gaWallNeighborOrientTable, "gaWallNeighborOrientTable");
 
 char s_SAM_006fad3c[4] = { 'S', 'A', 'M', '\x00' }; D2_GLOBAL_GUARD(s_SAM_006fad3c, "s_SAM_006fad3c");
 
@@ -1717,76 +213,6 @@ char * gaAtlRegistryRootKeys[12] = {
     s_Software_006d71ec,
     s_TypeLib_006fad20
 }; D2_GLOBAL_GUARD(gaAtlRegistryRootKeys, "gaAtlRegistryRootKeys");
-
-char s_Unable_to_open_response_file___s_006fcbc0[33] = {
-    'U',
-    'n',
-    'a',
-    'b',
-    'l',
-    'e',
-    ' ',
-    't',
-    'o',
-    ' ',
-    'o',
-    'p',
-    'e',
-    'n',
-    ' ',
-    'r',
-    'e',
-    's',
-    'p',
-    'o',
-    'n',
-    's',
-    'e',
-    ' ',
-    'f',
-    'i',
-    'l',
-    'e',
-    ':',
-    ' ',
-    '%',
-    's',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Unable_to_open_response_file___s_006fcbc0, "s_Unable_to_open_response_file___s_006fcbc0");
-
-char s_Invalid_argument___s_006fcc0c[21] = {
-    'I',
-    'n',
-    'v',
-    'a',
-    'l',
-    'i',
-    'd',
-    ' ',
-    'a',
-    'r',
-    'g',
-    'u',
-    'm',
-    'e',
-    'n',
-    't',
-    ':',
-    ' ',
-    '%',
-    's',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Invalid_argument___s_006fcc0c, "s_Invalid_argument___s_006fcc0c");
-
-char * gaSCMD_FallbackMessages[3] = { s_Invalid_argument___s_006fcc0c, s_The_syntax_of_the_command_is_inco_006fcbe4, s_Unable_to_open_response_file___s_006fcbc0 }; D2_GLOBAL_GUARD(gaSCMD_FallbackMessages, "gaSCMD_FallbackMessages");
-
-char lpMultiByteStr_006ff97c[2] = { "w" }; D2_GLOBAL_GUARD(lpMultiByteStr_006ff97c, "lpMultiByteStr_006ff97c");
-
-char lpSubBlock_006ff9b8[2] = { "\\" }; D2_GLOBAL_GUARD(lpSubBlock_006ff9b8, "lpSubBlock_006ff9b8");
-
-char param_2_006ffc58[3] = { '%', 's', '\x00' }; D2_GLOBAL_GUARD(param_2_006ffc58, "param_2_006ffc58");
-
-char lpOutputString_006ffcb0[2] = { "\n" }; D2_GLOBAL_GUARD(lpOutputString_006ffcb0, "lpOutputString_006ffcb0");
 
 uint8_t gszIniConfigKeywordCharacterAutoSave[32] = {
     0xfe,
@@ -2828,20 +1254,20 @@ uint8_t gszIniConfigKeywordVideoDriver[336] = {
 }; D2_GLOBAL_GUARD(gszIniConfigKeywordVideoDriver, "gszIniConfigKeywordVideoDriver");
 
 char * gaLanguageNames_00705000[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_00705000, "gaLanguageNames_00705000");
 
@@ -2860,7212 +1286,94 @@ char * gaMonthAbbreviations[12] = {
     s_Dec_006ccb00
 }; D2_GLOBAL_GUARD(gaMonthAbbreviations, "gaMonthAbbreviations");
 
-int32_t gaMenuFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont3, "gaMenuFormFontParamsFont3");
-
-int32_t gaMenuFormFontParamsFont2[2] = { 0x2, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont2, "gaMenuFormFontParamsFont2");
-
-int32_t gaMenuFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont7, "gaMenuFormFontParamsFont7");
-
-int32_t gaMultiFormFontParamsFont4[2] = { 0x4, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont4, "gaMultiFormFontParamsFont4");
-
-int32_t gaMultiFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont3, "gaMultiFormFontParamsFont3");
-
-int32_t gaMultiFormFontParamsFont2[2] = { 0x2, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont2, "gaMultiFormFontParamsFont2");
-
-int32_t gaMultiFormFontParamsFont1[2] = { 0x1, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont1, "gaMultiFormFontParamsFont1");
-
-int32_t gaMultiFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont7, "gaMultiFormFontParamsFont7");
-
-int32_t gaMultiTextBoxScrollbarGeom0[3] = { 0x190, 0x186, 0x13a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom0, "gaMultiTextBoxScrollbarGeom0");
-
-int32_t gaMultiTextBoxScrollbarGeom1[3] = { 0x250, 0x189, 0xad }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom1, "gaMultiTextBoxScrollbarGeom1");
-
-int32_t gaMultiTextBoxScrollbarGeom2[3] = { 0x2f1, 0x18a, 0xc4 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom2, "gaMultiTextBoxScrollbarGeom2");
-
-int32_t gaMultiTextBoxScrollbarGeom3[3] = { 0x2f1, 0x189, 0xc5 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom3, "gaMultiTextBoxScrollbarGeom3");
-
-int32_t gaMultiTextBoxScrollbarGeom4[3] = { 0x2f4, 0x187, 0xee }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom4, "gaMultiTextBoxScrollbarGeom4");
-
-int32_t gaMultiTextBoxScrollbarGeom5[3] = { 0x2f4, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom5, "gaMultiTextBoxScrollbarGeom5");
-
-int32_t gaMultiTextBoxScrollbarGeom6[3] = { 0x2f1, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom6, "gaMultiTextBoxScrollbarGeom6");
-
-FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5] = {
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    }
-}; D2_GLOBAL_GUARD(gaMultiLogoAnimFrames, "gaMultiLogoAnimFrames");
-
-char s___AUSGAMEDATA___0070f56c[16] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUSGAMEDATA___0070f56c, "s___AUSGAMEDATA___0070f56c");
-
-char s___AV__TSExplicitList_USGAMEDATA__0070f584[48] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'E',
-    'x',
-    'p',
-    'l',
-    'i',
-    'c',
-    'i',
-    't',
-    'L',
-    'i',
-    's',
-    't',
-    '@',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    '$',
-    '0',
-    '?',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'D',
-    '@',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_USGAMEDATA__0070f584, "s___AV__TSExplicitList_USGAMEDATA__0070f584");
-
-char s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4[56] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'H',
-    'a',
-    's',
-    'h',
-    'O',
-    'b',
-    'j',
-    'e',
-    'c',
-    't',
-    'C',
-    'h',
-    'u',
-    'n',
-    'k',
-    '@',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    'V',
-    'H',
-    'A',
-    'S',
-    'H',
-    'K',
-    'E',
-    'Y',
-    '_',
-    'N',
-    'O',
-    'N',
-    'E',
-    '@',
-    '@',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, "s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4");
-
-char * gaLanguageNames_00711d04[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00711d04, "gaLanguageNames_00711d04");
-
-char * gaLanguageNames_00722414[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00722414, "gaLanguageNames_00722414");
-
-char * gaLanguageNames_00722470[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00722470, "gaLanguageNames_00722470");
-
-uint16_t gaQuestDescData_DenOfEvil[32] = {
-    0xe82,
-    0x4c,
-    0x4,
-    0xe97,
-    0x40,
-    0xe98,
-    0x40,
-    0xe99,
-    0x40,
-    0xe9a,
-    0x40,
-    0xe9c,
-    0x40,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe9c,
-    0x40,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x40,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_DenOfEvil, "gaQuestDescData_DenOfEvil");
-
-uint16_t gaQuestDescData_SistersBurialGrounds[32] = {
-    0xe83,
-    0x5c,
-    0x2,
-    0xe9d,
-    0x51,
-    0xe9e,
-    0x51,
-    0xe9f,
-    0x51,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe9f,
-    0x51,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x51,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_SistersBurialGrounds, "gaQuestDescData_SistersBurialGrounds");
-
-uint16_t gaQuestDescData_ToolsOfTheTrade[32] = {
-    0xe84,
-    0xa3,
-    0xffff,
-    0xeab,
-    0x92,
-    0xeac,
-    0x92,
-    0xe95,
-    0x92,
-    0xe94,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xead,
-    0xa3,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x92,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_ToolsOfTheTrade, "gaQuestDescData_ToolsOfTheTrade");
-
-uint16_t gaQuestDescData_SearchForCain[32] = {
-    0xe85,
-    0x7b,
-    0xffff,
-    0xea0,
-    0x61,
-    0xea1,
-    0x61,
-    0xea2,
-    0x61,
-    0xea3,
-    0x61,
-    0xea4,
-    0x61,
-    0xea5,
-    0x61,
-    0xe96,
-    0x61,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xea6,
-    0x61,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x61,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_SearchForCain, "gaQuestDescData_SearchForCain");
-
-uint16_t gaQuestDescData_ForgottenTower[32] = {
-    0xe86,
-    0x7f,
-    0xffff,
-    0xea7,
-    0x7f,
-    0xeaa,
-    0x7f,
-    0xea8,
-    0x7f,
-    0xea9,
-    0x7f,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x7f,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_ForgottenTower, "gaQuestDescData_ForgottenTower");
-
-uint16_t gaQuestDescData_SistersToTheSlaughter[32] = {
-    0xe87,
-    0xb8,
-    0x9,
-    0xeae,
-    0xa6,
-    0xeaf,
-    0xa6,
-    0xeb1,
-    0xa6,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xeb0,
-    0xa6,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0xb8,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_SistersToTheSlaughter, "gaQuestDescData_SistersToTheSlaughter");
-
-uint16_t gaQuestDescData_RadamentsLair[32] = {
-    0x39b,
-    0x14e,
-    0x2,
-    0x3ad,
-    0x130,
-    0x3ae,
-    0x130,
-    0x3af,
-    0x130,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0x3af,
-    0xe8d,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x130,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_RadamentsLair, "gaQuestDescData_RadamentsLair");
-
-uint16_t gaQuestDescData_HoradricStaff[32] = {
-    0x39c,
-    0x153,
-    0xffff,
-    0x3b0,
-    0xe8d,
-    0x3b1,
-    0x14f,
-    0x3b2,
-    0x152,
-    0x3b4,
-    0xe8d,
-    0x3b3,
-    0x153,
-    0x3b3,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe92,
-    0xe8d,
-    0x3b3,
-    0xe8d,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x153,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_HoradricStaff, "gaQuestDescData_HoradricStaff");
-
-uint16_t gaQuestDescData_TaintedSun[32] = {
-    0x39d,
-    0xe8d,
-    0xffff,
-    0x3b6,
-    0xe8d,
-    0x3b7,
-    0xe8d,
-    0x3b8,
-    0x15c,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0x3b8,
-    0xe8d,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0xe8d,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_TaintedSun, "gaQuestDescData_TaintedSun");
-
-uint16_t gaQuestDescData_ArcaneSanctuary[32] = {
-    0x39e,
-    0xe8d,
-    0xffff,
-    0x3ba,
-    0xe8d,
-    0x3b9,
-    0x175,
-    0x3b9,
-    0x179,
-    0x3bb,
-    0x179,
-    0x3bc,
-    0x18c,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0x3bc,
-    0x18c,
-    0xe90,
-    0x18c,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0x18c,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_ArcaneSanctuary, "gaQuestDescData_ArcaneSanctuary");
-
-uint16_t gaQuestDescData_TheSummoner[32] = {
-    0x39f,
-    0xe8d,
-    0xffff,
-    0x3bd,
-    0xe8d,
-    0x3be,
-    0xe8d,
-    0xe8e,
-    0xe8d,
-    0x3bf,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0xe8d,
-    0x3bf,
-    0xe8d,
-    0xe90,
-    0xe8d,
-    0xe8f,
-    0xe8d,
-    0xe8e,
-    0xe8d,
-    0x0,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gaQuestDescData_TheSummoner, "gaQuestDescData_TheSummoner");
-
-char * gaLanguageNames_007273a8[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007273a8, "gaLanguageNames_007273a8");
-
-int gaUnitSoundIdsAmazon[11] = {
-    0xb3e,
-    0xb43,
-    0xb89,
-    0xb8d,
-    0xb8b,
-    0xb76,
-    0xb78,
-    0xb8f,
-    0xb79,
-    0xb91,
-    0xad0
-}; D2_GLOBAL_GUARD(gaUnitSoundIdsAmazon, "gaUnitSoundIdsAmazon");
-
-char * gaLanguageNames_0072a300[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_0072a300, "gaLanguageNames_0072a300");
-
-char * gaLanguageNames_0072d8d8[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_0072d8d8, "gaLanguageNames_0072d8d8");
-
-char * gaLanguageNames_0072d914[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_0072d914, "gaLanguageNames_0072d914");
-
-char * gaLanguageNames_0072d950[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_0072d950, "gaLanguageNames_0072d950");
-
 char * gaLanguageNames_0072d994[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d994, "gaLanguageNames_0072d994");
 
 char * gaLanguageNames_0072d9d0[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d9d0, "gaLanguageNames_0072d9d0");
 
 char * gaLanguageNames_0072da0c[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072da0c, "gaLanguageNames_0072da0c");
 
 char * gaszLanguageNames[32] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c,
     nullptr,
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c,
     nullptr
 }; D2_GLOBAL_GUARD(gaszLanguageNames, "gaszLanguageNames");
-
-char s___AUItem_NewsTable___0072ff8c[24] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'I',
-    't',
-    'e',
-    'm',
-    '@',
-    'N',
-    'e',
-    'w',
-    's',
-    'T',
-    'a',
-    'b',
-    'l',
-    'e',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUItem_NewsTable___0072ff8c, "s___AUItem_NewsTable___0072ff8c");
-
-char gaQ33_Normal_AmazonBowCodes[5][4] = {
-    { 'a', 'm', '1', ' ' },
-    { 'a', 'm', '2', ' ' },
-    { 'a', 'm', '3', ' ' },
-    { 'a', 'm', '4', ' ' },
-    { 'a', 'm', '5', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_AmazonBowCodes, "gaQ33_Normal_AmazonBowCodes");
-
-char gaQ33_Normal_SorceressOrbCodes[5][4] = {
-    { 'o', 'b', '1', ' ' },
-    { 'o', 'b', '2', ' ' },
-    { 'o', 'b', '3', ' ' },
-    { 'o', 'b', '4', ' ' },
-    { 'o', 'b', '5', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_SorceressOrbCodes, "gaQ33_Normal_SorceressOrbCodes");
-
-char gaQ33_Normal_NecromancerWandCodes[5][4] = {
-    { 'n', 'e', '1', ' ' },
-    { 'n', 'e', '2', ' ' },
-    { 'n', 'e', '3', ' ' },
-    { 'n', 'e', '4', ' ' },
-    { 'n', 'e', '5', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_NecromancerWandCodes, "gaQ33_Normal_NecromancerWandCodes");
-
-char gaQ33_Normal_PaladinScepterCodes[5][4] = {
-    { 'p', 'a', '1', ' ' },
-    { 'p', 'a', '2', ' ' },
-    { 'p', 'a', '3', ' ' },
-    { 'p', 'a', '4', ' ' },
-    { 'p', 'a', '5', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_PaladinScepterCodes, "gaQ33_Normal_PaladinScepterCodes");
-
-char gaQ33_Normal_BarbarianAxeCodes[5][4] = {
-    { 'b', 'a', '1', ' ' },
-    { 'b', 'a', '2', ' ' },
-    { 'b', 'a', '3', ' ' },
-    { 'b', 'a', '4', ' ' },
-    { 'b', 'a', '5', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_BarbarianAxeCodes, "gaQ33_Normal_BarbarianAxeCodes");
-
-char gaQ33_Normal_DruidHelmCodes[5][4] = {
-    { 'd', 'r', '1', ' ' },
-    { 'd', 'r', '2', ' ' },
-    { 'd', 'r', '3', ' ' },
-    { 'd', 'r', '4', ' ' },
-    { 'd', 'r', '5', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_DruidHelmCodes, "gaQ33_Normal_DruidHelmCodes");
-
-char gaQ33_Normal_AssassinClawCodes[7][4] = {
-    { 'k', 't', 'r', ' ' },
-    { 'w', 'r', 'b', ' ' },
-    { 'a', 'x', 'f', ' ' },
-    { 'c', 'e', 's', ' ' },
-    { 'c', 'l', 'w', ' ' },
-    { 'b', 't', 'l', ' ' },
-    { 's', 'k', 'r', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Normal_AssassinClawCodes, "gaQ33_Normal_AssassinClawCodes");
-
-char gaQ33_Nightmare_AmazonBowCodes[5][4] = {
-    { 'a', 'm', 'b', ' ' },
-    { 'a', 'm', 'c', ' ' },
-    { 'a', 'm', 'd', ' ' },
-    { 'a', 'm', 'e', ' ' },
-    { 'a', 'm', 'f', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_AmazonBowCodes, "gaQ33_Nightmare_AmazonBowCodes");
-
-char gaQ33_Nightmare_SorceressOrbCodes[5][4] = {
-    { 'o', 'b', 'b', ' ' },
-    { 'o', 'b', 'c', ' ' },
-    { 'o', 'b', 'd', ' ' },
-    { 'o', 'b', 'e', ' ' },
-    { 'o', 'b', 'f', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_SorceressOrbCodes, "gaQ33_Nightmare_SorceressOrbCodes");
-
-char gaQ33_Nightmare_NecromancerWandCodes[5][4] = {
-    { 'n', 'e', 'b', ' ' },
-    { 'n', 'e', 'c', ' ' },
-    { 'n', 'e', 'd', ' ' },
-    { 'n', 'e', 'e', ' ' },
-    { 'n', 'e', 'f', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_NecromancerWandCodes, "gaQ33_Nightmare_NecromancerWandCodes");
-
-char gaQ33_Nightmare_PaladinScepterCodes[5][4] = {
-    { 'p', 'a', 'b', ' ' },
-    { 'p', 'a', 'c', ' ' },
-    { 'p', 'a', 'd', ' ' },
-    { 'p', 'a', 'e', ' ' },
-    { 'p', 'a', 'f', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_PaladinScepterCodes, "gaQ33_Nightmare_PaladinScepterCodes");
-
-char gaQ33_Nightmare_BarbarianAxeCodes[5][4] = {
-    { 'b', 'a', 'b', ' ' },
-    { 'b', 'a', 'c', ' ' },
-    { 'b', 'a', 'd', ' ' },
-    { 'b', 'a', 'e', ' ' },
-    { 'b', 'a', 'f', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_BarbarianAxeCodes, "gaQ33_Nightmare_BarbarianAxeCodes");
-
-char gaQ33_Nightmare_DruidHelmCodes[5][4] = {
-    { 'd', 'r', 'b', ' ' },
-    { 'd', 'r', 'c', ' ' },
-    { 'd', 'r', 'd', ' ' },
-    { 'd', 'r', 'e', ' ' },
-    { 'd', 'r', 'f', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_DruidHelmCodes, "gaQ33_Nightmare_DruidHelmCodes");
-
-char gaQ33_Nightmare_AssassinClawCodes[7][4] = {
-    { '7', 'a', 'r', ' ' },
-    { '7', 'w', 'b', ' ' },
-    { '7', 'x', 'f', ' ' },
-    { '7', 'c', 's', ' ' },
-    { '7', 'l', 'w', ' ' },
-    { '7', 't', 'w', ' ' },
-    { '7', 'q', 'r', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Nightmare_AssassinClawCodes, "gaQ33_Nightmare_AssassinClawCodes");
-
-char gaQ33_Hell_AmazonBowCodes[5][4] = {
-    { 'a', 'm', '6', ' ' },
-    { 'a', 'm', '7', ' ' },
-    { 'a', 'm', '8', ' ' },
-    { 'a', 'm', '9', ' ' },
-    { 'a', 'm', 'a', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_AmazonBowCodes, "gaQ33_Hell_AmazonBowCodes");
-
-char gaQ33_Hell_SorceressOrbCodes[5][4] = {
-    { 'o', 'b', '6', ' ' },
-    { 'o', 'b', '7', ' ' },
-    { 'o', 'b', '8', ' ' },
-    { 'o', 'b', '9', ' ' },
-    { 'o', 'b', 'a', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_SorceressOrbCodes, "gaQ33_Hell_SorceressOrbCodes");
-
-char gaQ33_Hell_NecromancerWandCodes[5][4] = {
-    { 'n', 'e', '6', ' ' },
-    { 'n', 'e', '7', ' ' },
-    { 'n', 'e', '8', ' ' },
-    { 'n', 'e', '9', ' ' },
-    { 'n', 'e', 'a', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_NecromancerWandCodes, "gaQ33_Hell_NecromancerWandCodes");
-
-char gaQ33_Hell_PaladinScepterCodes[5][4] = {
-    { 'p', 'a', '6', ' ' },
-    { 'p', 'a', '7', ' ' },
-    { 'p', 'a', '8', ' ' },
-    { 'p', 'a', '9', ' ' },
-    { 'p', 'a', 'a', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_PaladinScepterCodes, "gaQ33_Hell_PaladinScepterCodes");
-
-char gaQ33_Hell_BarbarianAxeCodes[5][4] = {
-    { 'b', 'a', '6', ' ' },
-    { 'b', 'a', '7', ' ' },
-    { 'b', 'a', '8', ' ' },
-    { 'b', 'a', '9', ' ' },
-    { 'b', 'a', 'a', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_BarbarianAxeCodes, "gaQ33_Hell_BarbarianAxeCodes");
-
-char gaQ33_Hell_DruidHelmCodes[5][4] = {
-    { 'd', 'r', '6', ' ' },
-    { 'd', 'r', '7', ' ' },
-    { 'd', 'r', '8', ' ' },
-    { 'd', 'r', '9', ' ' },
-    { 'd', 'r', 'a', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_DruidHelmCodes, "gaQ33_Hell_DruidHelmCodes");
-
-char gaQ33_Hell_AssassinClawCodes[7][4] = {
-    { '9', 'a', 'r', ' ' },
-    { '9', 'w', 'b', ' ' },
-    { '9', 'x', 'f', ' ' },
-    { '9', 'c', 's', ' ' },
-    { '9', 'l', 'w', ' ' },
-    { '9', 't', 'w', ' ' },
-    { '9', 'q', 'r', ' ' }
-}; D2_GLOBAL_GUARD(gaQ33_Hell_AssassinClawCodes, "gaQ33_Hell_AssassinClawCodes");
-
-char * gaLanguageNames_0073c6e0[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_0073c6e0, "gaLanguageNames_0073c6e0");
-
-char * gaLanguageNames_0073d530[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_0073d530, "gaLanguageNames_0073d530");
-
-uint8_t gaSkeletonComponentsByMasteryLvl[11][9] = {
-    {},
-    {},
-    {
-        0x0,
-        0x1,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x1
-    },
-    {
-        0x0,
-        0x1,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x1,
-        0x1
-    },
-    {
-        0x1,
-        0x1,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x1,
-        0x1,
-        0x2
-    },
-    {
-        0x1,
-        0x1,
-        0x0,
-        0x0,
-        0x0,
-        0x0,
-        0x1,
-        0x1,
-        0x2
-    },
-    {
-        0x1,
-        0x1,
-        0x1,
-        0x0,
-        0x0,
-        0x1,
-        0x1,
-        0x1,
-        0x3
-    },
-    {
-        0x2,
-        0x2,
-        0x1,
-        0x0,
-        0x0,
-        0x1,
-        0x1,
-        0x1,
-        0x3
-    },
-    {
-        0x2,
-        0x2,
-        0x1,
-        0x0,
-        0x0,
-        0x1,
-        0x1,
-        0x2,
-        0x4
-    },
-    {
-        0x2,
-        0x3,
-        0x1,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        0x2,
-        0x4
-    },
-    {
-        0x2,
-        0x3,
-        0x1,
-        0x0,
-        0x0,
-        0x1,
-        0x2,
-        0x2,
-        0x4
-    }
-}; D2_GLOBAL_GUARD(gaSkeletonComponentsByMasteryLvl, "gaSkeletonComponentsByMasteryLvl");
-
-char s___AUTCELENTRY___00741f14[16] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'T',
-    'C',
-    'E',
-    'L',
-    'E',
-    'N',
-    'T',
-    'R',
-    'Y',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUTCELENTRY___00741f14, "s___AUTCELENTRY___00741f14");
-
-char s___AUCELLIST___00741f2c[16] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'C',
-    'E',
-    'L',
-    'L',
-    'I',
-    'S',
-    'T',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUCELLIST___00741f2c, "s___AUCELLIST___00741f2c");
-
-char s___AV__TSExplicitList_UCELLIST____00741f44[48] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'E',
-    'x',
-    'p',
-    'l',
-    'i',
-    'c',
-    'i',
-    't',
-    'L',
-    'i',
-    's',
-    't',
-    '@',
-    'U',
-    'C',
-    'E',
-    'L',
-    'L',
-    'I',
-    'S',
-    'T',
-    '@',
-    '@',
-    '$',
-    '0',
-    '?',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'D',
-    '@',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UCELLIST____00741f44, "s___AV__TSExplicitList_UCELLIST____00741f44");
-
-char s___AV__TSHashObjectChunk_UCELLIST_00741fb4[52] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'H',
-    'a',
-    's',
-    'h',
-    'O',
-    'b',
-    'j',
-    'e',
-    'c',
-    't',
-    'C',
-    'h',
-    'u',
-    'n',
-    'k',
-    '@',
-    'U',
-    'C',
-    'E',
-    'L',
-    'L',
-    'I',
-    'S',
-    'T',
-    '@',
-    '@',
-    'V',
-    'H',
-    'A',
-    'S',
-    'H',
-    'K',
-    'E',
-    'Y',
-    '_',
-    'N',
-    'O',
-    'N',
-    'E',
-    '@',
-    '@',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_UCELLIST_00741fb4, "s___AV__TSHashObjectChunk_UCELLIST_00741fb4");
-
-char s___AUMappingEntryNode___0074362c[24] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'M',
-    'a',
-    'p',
-    'p',
-    'i',
-    'n',
-    'g',
-    'E',
-    'n',
-    't',
-    'r',
-    'y',
-    'N',
-    'o',
-    'd',
-    'e',
-    '@',
-    '@',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUMappingEntryNode___0074362c, "s___AUMappingEntryNode___0074362c");
-
-char s___AUStringEntryNode___0074364c[24] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'S',
-    't',
-    'r',
-    'i',
-    'n',
-    'g',
-    'E',
-    'n',
-    't',
-    'r',
-    'y',
-    'N',
-    'o',
-    'd',
-    'e',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUStringEntryNode___0074364c, "s___AUStringEntryNode___0074364c");
-
-char s___AV__TSExplicitList_UStringEntr_0074366c[56] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'E',
-    'x',
-    'p',
-    'l',
-    'i',
-    'c',
-    'i',
-    't',
-    'L',
-    'i',
-    's',
-    't',
-    '@',
-    'U',
-    'S',
-    't',
-    'r',
-    'i',
-    'n',
-    'g',
-    'E',
-    'n',
-    't',
-    'r',
-    'y',
-    'N',
-    'o',
-    'd',
-    'e',
-    '@',
-    '@',
-    '$',
-    '0',
-    '?',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'D',
-    '@',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UStringEntr_0074366c, "s___AV__TSExplicitList_UStringEntr_0074366c");
-
-char s___AV__TSExplicitList_UMappingEnt_007436ac[56] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'E',
-    'x',
-    'p',
-    'l',
-    'i',
-    'c',
-    'i',
-    't',
-    'L',
-    'i',
-    's',
-    't',
-    '@',
-    'U',
-    'M',
-    'a',
-    'p',
-    'p',
-    'i',
-    'n',
-    'g',
-    'E',
-    'n',
-    't',
-    'r',
-    'y',
-    'N',
-    'o',
-    'd',
-    'e',
-    '@',
-    '@',
-    '$',
-    '0',
-    '?',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'D',
-    '@',
-    '@',
-    '@',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UMappingEnt_007436ac, "s___AV__TSExplicitList_UMappingEnt_007436ac");
-
-char * gaLanguageNames_007443a8[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007443a8, "gaLanguageNames_007443a8");
-
-char * gaLanguageNames_007444c8[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007444c8, "gaLanguageNames_007444c8");
-
-char * gaLanguageNames_00744508[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00744508, "gaLanguageNames_00744508");
-
-char * gaLanguageNames_00744588[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00744588, "gaLanguageNames_00744588");
-
-char * gaLanguageNames_007445c4[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007445c4, "gaLanguageNames_007445c4");
-
-char * gaLanguageNames_00744600[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00744600, "gaLanguageNames_00744600");
-
-char * gaLanguageNames_00745648[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00745648, "gaLanguageNames_00745648");
-
-char * gaLanguageNames_00745684[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00745684, "gaLanguageNames_00745684");
-
-char * gaLanguageNames_007456c0[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007456c0, "gaLanguageNames_007456c0");
-
-char * gaLanguageNames_007456fc[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007456fc, "gaLanguageNames_007456fc");
-
-char * gaLanguageNames_00745738[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00745738, "gaLanguageNames_00745738");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_007466dc[7] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007466dc, "D2MonSeqTxt_ARRAY_007466dc");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746820[21] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746820, "D2MonSeqTxt_ARRAY_00746820");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007468a0[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqMonsterTblData_Unknown,
-        /* .nCounter1 = */ 0xd,
-        /* .nCounter2 = */ 0xd
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&DWORD_007467b0,
-        /* .nCounter1 = */ 0x12,
-        /* .nCounter2 = */ 0x12
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746820,
-        /* .nCounter1 = */ 0x15,
-        /* .nCounter2 = */ 0x15
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007468a0, "D2MonSeqMonsterTbls_ARRAY_007468a0");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746948[8] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746948, "D2MonSeqTxt_ARRAY_00746948");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746978[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqAnimData,
-        /* .nCounter1 = */ 0xe,
-        /* .nCounter2 = */ 0xe
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007466dc,
-        /* .nCounter1 = */ 0x7,
-        /* .nCounter2 = */ 0x7
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746948,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746978, "D2MonSeqMonsterTbls_ARRAY_00746978");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746a20[16] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746a20, "D2MonSeqTxt_ARRAY_00746a20");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746a80[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqAnimData,
-        /* .nCounter1 = */ 0xe,
-        /* .nCounter2 = */ 0xe
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746a20,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746a80, "D2MonSeqMonsterTbls_ARRAY_00746a80");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746b28[16] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x3,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746b28, "D2MonSeqTxt_ARRAY_00746b28");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746b88[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746b28,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746b28,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746b28,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746b28,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746b28,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746b28,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746b88, "D2MonSeqMonsterTbls_ARRAY_00746b88");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746c30[6] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746c30, "D2MonSeqTxt_ARRAY_00746c30");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746c58[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqAnimData,
-        /* .nCounter1 = */ 0xe,
-        /* .nCounter2 = */ 0xe
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746c30,
-        /* .nCounter1 = */ 0x6,
-        /* .nCounter2 = */ 0x6
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746c58, "D2MonSeqMonsterTbls_ARRAY_00746c58");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746d00[16] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746d00, "D2MonSeqTxt_ARRAY_00746d00");
-
-D2MonSeqMonsterTbls gaMonSeqMonsterTblData[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746d00,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    }
-}; D2_GLOBAL_GUARD(gaMonSeqMonsterTblData, "gaMonSeqMonsterTblData");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746e08[33] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x2
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x4
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x5
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x6
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x7
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x8
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x9
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xa
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xb
-    },
-    {
-        /* .sequence = */ 0x100,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xc
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xd
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xe
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xf
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x10
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x11
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x12
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x13
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746e08, "D2MonSeqTxt_ARRAY_00746e08");
-
-D2MonSeqMonsterTbls gaMonSeqMonsterTblsExtra[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqMonsterTblData_Unknown,
-        /* .nCounter1 = */ 0xd,
-        /* .nCounter2 = */ 0xd
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746e08,
-        /* .nCounter1 = */ 0xd,
-        /* .nCounter2 = */ 0xd
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_00746e08[13].mode,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(gaMonSeqMonsterTblsExtra, "gaMonSeqMonsterTblsExtra");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00746f78[45] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x2
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x2
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x2
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x3
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x4
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x4
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x5
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x6
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x7
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x8
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x9
-    },
-    {
-        /* .sequence = */ 0x100,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xa
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xb
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xc
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xd
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xe
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0xf
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x10
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x7,
-        /* .event = */ 0x11
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746f78, "D2MonSeqTxt_ARRAY_00746f78");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747088[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqMonsterTblData_Unknown,
-        /* .nCounter1 = */ 0xd,
-        /* .nCounter2 = */ 0xd
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00746f78,
-        /* .nCounter1 = */ 0x15,
-        /* .nCounter2 = */ 0x15
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_00746f78[21].mode,
-        /* .nCounter1 = */ 0x18,
-        /* .nCounter2 = */ 0x18
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747088, "D2MonSeqMonsterTbls_ARRAY_00747088");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747130[32] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x10,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x11,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747130, "D2MonSeqTxt_ARRAY_00747130");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007471f0[14] = {
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&gaMonSeqMonsterTblData_Unknown,
-        /* .nCounter1 = */ 0xd,
-        /* .nCounter2 = */ 0xd
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747130,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_00747130[16].sequence,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007471f0, "D2MonSeqMonsterTbls_ARRAY_007471f0");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747298[8] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747298, "D2MonSeqTxt_ARRAY_00747298");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007472c8[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747298,
-        /* .nCounter1 = */ 0x8,
-        /* .nCounter2 = */ 0x8
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007472c8, "D2MonSeqMonsterTbls_ARRAY_007472c8");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747370[17] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747370, "D2MonSeqTxt_ARRAY_00747370");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007473d8[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747370,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007473d8, "D2MonSeqMonsterTbls_ARRAY_007473d8");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747480[20] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747480, "D2MonSeqTxt_ARRAY_00747480");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007474f8[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747480,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007474f8, "D2MonSeqMonsterTbls_ARRAY_007474f8");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_007475a0[16] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007475a0, "D2MonSeqTxt_ARRAY_007475a0");
-
-D2MonSeqMonsterTbls gaMonSeqMonsterTbls[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007475a0,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    }
-}; D2_GLOBAL_GUARD(gaMonSeqMonsterTbls, "gaMonSeqMonsterTbls");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_007476a8[104] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {},
-    {
-        /* .sequence = */ 0xd,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x10d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x20d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x30d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x40d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x50d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x60d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x70d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x80d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x90d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xa0d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xb0d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xc0d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xd0d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xe0d,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x607,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x707,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x807,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x907,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xa07,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xb07,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xc07,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xd07,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xe07,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0xf07,
-        /* .mode = */ 0x0,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x10,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x11,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x12,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x10,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x7,
-        /* .frame = */ 0x11,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007476a8, "D2MonSeqTxt_ARRAY_007476a8");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747918[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_007476a8[22].dir,
-        /* .nCounter1 = */ 0x19,
-        /* .nCounter2 = */ 0x19
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_007476a8[48].sequence,
-        /* .nCounter1 = */ 0x1c,
-        /* .nCounter2 = */ 0x1c
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_007476a8[22].dir,
-        /* .nCounter1 = */ 0x19,
-        /* .nCounter2 = */ 0x19
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_007476a8[76].sequence,
-        /* .nCounter1 = */ 0x1b,
-        /* .nCounter2 = */ 0x1b
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_007476a8[48].sequence,
-        /* .nCounter1 = */ 0x1c,
-        /* .nCounter2 = */ 0x1c
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007476a8,
-        /* .nCounter1 = */ 0x16,
-        /* .nCounter2 = */ 0x16
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747918, "D2MonSeqMonsterTbls_ARRAY_00747918");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_007479c0[12] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xb,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xb,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xb,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xb,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xb,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xb,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xf,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007479c0, "D2MonSeqTxt_ARRAY_007479c0");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747a08[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_007479c0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747a08, "D2MonSeqMonsterTbls_ARRAY_00747a08");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747ab0[28] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x8,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0x10,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747ab0, "D2MonSeqTxt_ARRAY_00747ab0");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747b58[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747ab0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747ab0,
-        /* .nCounter1 = */ 0xc,
-        /* .nCounter2 = */ 0xc
-    },
-    {
-        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2MonSeqTxt_ARRAY_00747ab0[12].sequence,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747b58, "D2MonSeqMonsterTbls_ARRAY_00747b58");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747c00[20] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x10,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x11,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x12,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {},
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747c00, "D2MonSeqTxt_ARRAY_00747c00");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747c78[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747c00,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747c78, "D2MonSeqMonsterTbls_ARRAY_00747c78");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747d20[20] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747d20, "D2MonSeqTxt_ARRAY_00747d20");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747d98[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747d20,
-        /* .nCounter1 = */ 0x14,
-        /* .nCounter2 = */ 0x14
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747d98, "D2MonSeqMonsterTbls_ARRAY_00747d98");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747e40[16] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747e40, "D2MonSeqTxt_ARRAY_00747e40");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747ea0[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747e40,
-        /* .nCounter1 = */ 0xf,
-        /* .nCounter2 = */ 0xf
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747ea0, "D2MonSeqMonsterTbls_ARRAY_00747ea0");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00747f48[17] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747f48, "D2MonSeqTxt_ARRAY_00747f48");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747fb0[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ nullptr,
-        /* .nCounter1 = */ 0x0,
-        /* .nCounter2 = */ 0x0
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00747f48,
-        /* .nCounter1 = */ 0x11,
-        /* .nCounter2 = */ 0x11
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747fb0, "D2MonSeqMonsterTbls_ARRAY_00747fb0");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00748058[24] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xc,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00748058, "D2MonSeqTxt_ARRAY_00748058");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007480e8[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748058,
-        /* .nCounter1 = */ 0x17,
-        /* .nCounter2 = */ 0x17
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007480e8, "D2MonSeqMonsterTbls_ARRAY_007480e8");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00748190[16] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xd,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00748190, "D2MonSeqTxt_ARRAY_00748190");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007481f0[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748190,
-        /* .nCounter1 = */ 0x10,
-        /* .nCounter2 = */ 0x10
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007481f0, "D2MonSeqMonsterTbls_ARRAY_007481f0");
-
-D2MonSeqTxt D2MonSeqTxt_ARRAY_00748298[20] = {
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x0,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x1,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x2,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x3,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x4,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x5,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x6,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x7,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x8,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x9,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xa,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x1
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xb,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xc,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xd,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xe,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0xf,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {
-        /* .sequence = */ 0x0,
-        /* .mode = */ 0xa,
-        /* .frame = */ 0x10,
-        /* .dir = */ 0x0,
-        /* .event = */ 0x0
-    },
-    {}
-}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00748298, "D2MonSeqTxt_ARRAY_00748298");
-
-D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00748310[14] = {
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    },
-    {
-        /* .pMonSeqTxt = */ D2MonSeqTxt_ARRAY_00748298,
-        /* .nCounter1 = */ 0x13,
-        /* .nCounter2 = */ 0x13
-    }
-}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00748310, "D2MonSeqMonsterTbls_ARRAY_00748310");
-
-uint32_t gaOverlayVariantCodes[43] = {
-    0x2074696c,
-    0x2074696c,
-    0x20736564,
-    0x20736564,
-    0x20797668,
-    0x20797668,
-    0x20797668,
-    0x2074696c,
-    0x20736564,
-    0x20797668,
-    0x20657861,
-    0x20657861,
-    0x20616c66,
-    0x20616c66,
-    0x20786168,
-    0x20786168,
-    0x2063616d,
-    0x2063616d,
-    0x206d6373,
-    0x206d6373,
-    0x0,
-    0x20637562,
-    0x2067726c,
-    0x2074696b,
-    0x206c6d73,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
-    0x2074696c,
-    0x20736564,
-    0x20797668,
-    0x2074696c,
-    0x2064656d,
-    0x20797668,
-    0x2074696c,
-    0x20736564,
-    0x20797668
-}; D2_GLOBAL_GUARD(gaOverlayVariantCodes, "gaOverlayVariantCodes");
-
-char * gaLanguageNames_00748a58[16] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c,
-    nullptr
-}; D2_GLOBAL_GUARD(gaLanguageNames_00748a58, "gaLanguageNames_00748a58");
-
-char * gaLanguageNames_00748a98[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00748a98, "gaLanguageNames_00748a98");
 
 double DOUBLE_0074adb4 = 1; D2_GLOBAL_GUARD(DOUBLE_0074adb4, "DOUBLE_0074adb4");
 
@@ -10087,14 +1395,6 @@ uint8_t gabyFxamClassOffset[16] = {
     0xc,
     0x8
 }; D2_GLOBAL_GUARD(gabyFxamClassOffset, "gabyFxamClassOffset");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "lpCriticalSection_0077ae28");
-
-D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "gAncientsCloudSeed");
-
-D2DataTableTxtStrc sgtDataTable = {}; D2_GLOBAL_GUARD(sgtDataTable, "sgtDataTable");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096d610, "lpCriticalSection_0096d610");
 
 uint32_t User32Reserved[26] = {}; D2_GLOBAL_GUARD(User32Reserved, "User32Reserved");
 
@@ -10887,65 +2187,18 @@ GUID ActivityId = {0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x00, 0x00, 0x00, 0x
 
 uint8_t IMAGE_DOS_HEADER__00400000[128] = {}; D2_GLOBAL_GUARD(IMAGE_DOS_HEADER__00400000, "IMAGE_DOS_HEADER__00400000");
 uint8_t gbChatDlgUpdateMarker = 0x2d; D2_GLOBAL_GUARD(gbChatDlgUpdateMarker, "gbChatDlgUpdateMarker");
-float gfTwoPow32 = 4294967296.0; D2_GLOBAL_GUARD(gfTwoPow32, "gfTwoPow32");
 uint8_t gbFloatConstantBase = 0x0; D2_GLOBAL_GUARD(gbFloatConstantBase, "gbFloatConstantBase");
-char szOOGPasswordDialogTimeFmt = '\x0d'; D2_GLOBAL_GUARD(szOOGPasswordDialogTimeFmt, "szOOGPasswordDialogTimeFmt");
-uint8_t gbExpansionInitialized = 0x30; D2_GLOBAL_GUARD(gbExpansionInitialized, "gbExpansionInitialized");
-char * gpszD2LngFileName = s_D2_LNG_006d5ee0; D2_GLOBAL_GUARD(gpszD2LngFileName, "gpszD2LngFileName");
-char * gpszLngManagerStartError = s_Unable_to_start_LNG_manager__006d5ec0; D2_GLOBAL_GUARD(gpszLngManagerStartError, "gpszLngManagerStartError");
-char * gpszLngCppError = s_Stupid_Lng_cpp_error__006d5ea8; D2_GLOBAL_GUARD(gpszLngCppError, "gpszLngCppError");
 uint8_t gaMonsterDenEnvironmentData = 0x0; D2_GLOBAL_GUARD(gaMonsterDenEnvironmentData, "gaMonsterDenEnvironmentData");
 uint8_t gaWeatherTransitionConstant = 0x0; D2_GLOBAL_GUARD(gaWeatherTransitionConstant, "gaWeatherTransitionConstant");
-float FLOAT_006da6b8 = -1; D2_GLOBAL_GUARD(FLOAT_006da6b8, "FLOAT_006da6b8");
 char * gpszPaletteAct1Dat = s_palette_act1_pal_dat_006dc7fc; D2_GLOBAL_GUARD(gpszPaletteAct1Dat, "gpszPaletteAct1Dat");
 char * gpszPaletteAct1Pl2 = s_palette_act1_pal_pl2_006dc7e4; D2_GLOBAL_GUARD(gpszPaletteAct1Pl2, "gpszPaletteAct1Pl2");
 char * gpszPaletteActPathFormat = s__s_palette_act_d__s_006dc7d0; D2_GLOBAL_GUARD(gpszPaletteActPathFormat, "gpszPaletteActPathFormat");
 char * gpszPalDatName = s_pal_dat_006dc7c8; D2_GLOBAL_GUARD(gpszPalDatName, "gpszPalDatName");
 char * gpszPalPl2Name = s_pal_pl2_006dc7c0; D2_GLOBAL_GUARD(gpszPalPl2Name, "gpszPalPl2Name");
 unsigned int gaItemTypeTxtIndexData = 0x6d6567; D2_GLOBAL_GUARD(gaItemTypeTxtIndexData, "gaItemTypeTxtIndexData");
-char * gpszStringTblPathFormat = s_data_local_lng__s_string_tbl_006e02f8; D2_GLOBAL_GUARD(gpszStringTblPathFormat, "gpszStringTblPathFormat");
-char * gpszFontMapPathFormat = s_data_local_font__s_default_map_006e02d8; D2_GLOBAL_GUARD(gpszFontMapPathFormat, "gpszFontMapPathFormat");
-char * gpszPatchStringTblPathFormat = s_data_local_lng__s_patchstring_tbl_006e02b4; D2_GLOBAL_GUARD(gpszPatchStringTblPathFormat, "gpszPatchStringTblPathFormat");
-char * gpszExpansionStringTblPathFormat = s_data_local_lng__s_expansionstring_006e028c; D2_GLOBAL_GUARD(gpszExpansionStringTblPathFormat, "gpszExpansionStringTblPathFormat");
-char * gpszD2DataMpqName = s_d2data_mpq_006dc770; D2_GLOBAL_GUARD(gpszD2DataMpqName, "gpszD2DataMpqName");
-char * gpszPatchD2MpqName = s_patch_d2_mpq_006dc728; D2_GLOBAL_GUARD(gpszPatchD2MpqName, "gpszPatchD2MpqName");
-char * gpszD2ExpMpqName = s_d2exp_mpq_006cd3a0; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "gpszD2ExpMpqName");
-uint32_t gpServerMemHeap = 0x1; D2_GLOBAL_GUARD(gpServerMemHeap, "gpServerMemHeap");
-uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "gbLightmapColorEnabled");
-D2NPCMessageTableStrc gbQuestA5Q2Unknown[6] = {}; D2_GLOBAL_GUARD(gbQuestA5Q2Unknown, "gbQuestA5Q2Unknown");
-char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "gaLanguageNames_0074430c_11");
-uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "DWORD_007467b0");
 uint32_t DEFAULT_SECURITY_COOKIE = 0xbb40e64e; D2_GLOBAL_GUARD(DEFAULT_SECURITY_COOKIE, "DEFAULT_SECURITY_COOKIE");
 unsigned int gaCRT_FPremData_3 = 0x6a9a24; D2_GLOBAL_GUARD(gaCRT_FPremData_3, "gaCRT_FPremData_3");
-int TokenHashMapBucketSize = 0x10; D2_GLOBAL_GUARD(TokenHashMapBucketSize, "TokenHashMapBucketSize");
-D2BNetClientCallbacksStrc * gpBNetCallbacks = 0; D2_GLOBAL_GUARD(gpBNetCallbacks, "gpBNetCallbacks");
-uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "gbSmackerKeepTempFile");
-grDrawLine GLIDEDLL__grDrawLine_8 = (grDrawLine)0; D2_GLOBAL_GUARD(GLIDEDLL__grDrawLine_8, "GLIDEDLL__grDrawLine_8");
-grDepthMask GLIDEDLL_grDepthMask_4 = (grDepthMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grDepthMask_4, "GLIDEDLL_grDepthMask_4");
-grDrawPoint GLIDEDLL_grDrawPoint_4 = (grDrawPoint)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawPoint_4, "GLIDEDLL_grDrawPoint_4");
-grGlideShutdown GLIDEDLL_grGlideShutdown_0 = (grGlideShutdown)0; D2_GLOBAL_GUARD(GLIDEDLL_grGlideShutdown_0, "GLIDEDLL_grGlideShutdown_0");
-grDitherMode GLIDEDLL_grDitherMode_4 = (grDitherMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grDitherMode_4, "GLIDEDLL_grDitherMode_4");
-grTexDownloadMipMap GLIDEDLL_grTexDownloadMipMap_16 = (grTexDownloadMipMap)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexDownloadMipMap_16, "GLIDEDLL_grTexDownloadMipMap_16");
-pfnGlideGammaCorrectionRGB GLIDEDLL_guGammaCorrectionRGB_12 = (pfnGlideGammaCorrectionRGB)0; D2_GLOBAL_GUARD(GLIDEDLL_guGammaCorrectionRGB_12, "GLIDEDLL_guGammaCorrectionRGB_12");
-grLfbUnlock GLIDEDLL_grLfbUnlock_8 = (grLfbUnlock)0; D2_GLOBAL_GUARD(GLIDEDLL_grLfbUnlock_8, "GLIDEDLL_grLfbUnlock_8");
-grLfbLock GLIDEDLL_grLfbLock_24 = (grLfbLock)0; D2_GLOBAL_GUARD(GLIDEDLL_grLfbLock_24, "GLIDEDLL_grLfbLock_24");
-grLoadGammaTable GLIDEDLL_grLoadGammaTable_16 = (grLoadGammaTable)0; D2_GLOBAL_GUARD(GLIDEDLL_grLoadGammaTable_16, "GLIDEDLL_grLoadGammaTable_16");
-grAlphaCombine GLIDEDLL_grAlphaCombine_20 = (grAlphaCombine)0; D2_GLOBAL_GUARD(GLIDEDLL_grAlphaCombine_20, "GLIDEDLL_grAlphaCombine_20");
-grSstWinOpen GLIDEDLL_grSstWinOpen_28 = (grSstWinOpen)0; D2_GLOBAL_GUARD(GLIDEDLL_grSstWinOpen_28, "GLIDEDLL_grSstWinOpen_28");
-grColorCombine GLIDEDLL_grColorCombine_20 = (grColorCombine)0; D2_GLOBAL_GUARD(GLIDEDLL_grColorCombine_20, "GLIDEDLL_grColorCombine_20");
-grColorMask GLIDEDLL_grColorMask_8 = (grColorMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grColorMask_8, "GLIDEDLL_grColorMask_8");
-grChromakeyValue GLIDEDLL_grChromakeyValue_4 = (grChromakeyValue)0; D2_GLOBAL_GUARD(GLIDEDLL_grChromakeyValue_4, "GLIDEDLL_grChromakeyValue_4");
-grCoordinateSpace GLIDEDLL_grCoordinateSpace_4 = (grCoordinateSpace)0; D2_GLOBAL_GUARD(GLIDEDLL_grCoordinateSpace_4, "GLIDEDLL_grCoordinateSpace_4");
-grSstSelect GLIDEDLL_grSstSelect_4 = (grSstSelect)0; D2_GLOBAL_GUARD(GLIDEDLL_grSstSelect_4, "GLIDEDLL_grSstSelect_4");
-grTexDownloadTable GLIDEDLL_grTexDownloadTable_8 = (grTexDownloadTable)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexDownloadTable_8, "GLIDEDLL_grTexDownloadTable_8");
-grTexMaxAddress GLIDEDLL_grTexMaxAddress_4 = (grTexMaxAddress)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexMaxAddress_4, "GLIDEDLL_grTexMaxAddress_4");
-grBufferClear GLIDEDLL_grBufferClear_12 = (grBufferClear)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferClear_12, "GLIDEDLL_grBufferClear_12");
-grChromakeyMode GLIDEDLL_grChromakeyMode_4 = (grChromakeyMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grChromakeyMode_4, "GLIDEDLL_grChromakeyMode_4");
-grBufferSwap GLIDEDLL_grBufferSwap_4 = (grBufferSwap)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferSwap_4, "GLIDEDLL_grBufferSwap_4");
-BOOL gbCodecUseFallbackDecompressor = 0; D2_GLOBAL_GUARD(gbCodecUseFallbackDecompressor, "gbCodecUseFallbackDecompressor");
 unsigned int UINT_0096d6a8 = {}; D2_GLOBAL_GUARD(UINT_0096d6a8, "UINT_0096d6a8");
-HMODULE hDbgHelpDll = 0; D2_GLOBAL_GUARD(hDbgHelpDll, "hDbgHelpDll");
-uint32_t dwCurrentThreadId = 0; D2_GLOBAL_GUARD(dwCurrentThreadId, "dwCurrentThreadId");
 uint32_t LastErrorValue = 0x0; D2_GLOBAL_GUARD(LastErrorValue, "LastErrorValue");
 uint32_t CountOfOwnedCriticalSections = 0x0; D2_GLOBAL_GUARD(CountOfOwnedCriticalSections, "CountOfOwnedCriticalSections");
 void * CsrClientThread = (void *)0x00000000; D2_GLOBAL_GUARD(CsrClientThread, "CsrClientThread");
@@ -11008,13 +2261,6 @@ void * TxnScopeContext = (void *)0x00000000; D2_GLOBAL_GUARD(TxnScopeContext, "T
 uint32_t LockCount = 0x0; D2_GLOBAL_GUARD(LockCount, "LockCount");
 void * ResourceRetValue = (void *)0x00000000; D2_GLOBAL_GUARD(ResourceRetValue, "ResourceRetValue");
 
-// =============================================================================
-// Uninitialized data (BSS)
-// =============================================================================
-
-uint8_t gaMonSeqMonsterTblData_Unknown; D2_GLOBAL_GUARD_BSS(gaMonSeqMonsterTblData_Unknown, "gaMonSeqMonsterTblData_Unknown");
-uint8_t gaMonSeqAnimData; D2_GLOBAL_GUARD_BSS(gaMonSeqAnimData, "gaMonSeqAnimData");
-
 namespace D2Common::Drlg::Maze {
 
 // =============================================================================
@@ -11066,6 +2312,554 @@ uint8_t gaMazeLevelTypeCaseTable[40] = {
 
 } // namespace D2Common::Drlg::Maze
 
+namespace Fog::Src::LogManager {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_Unknown_006cc780[8] = { 'U', 'n', 'k', 'n', 'o', 'w', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Unknown_006cc780, "Fog::Src::LogManager::s_Unknown_006cc780");
+
+char s_Cyrix_006cdeb0[6] = { 'C', 'y', 'r', 'i', 'x', '\x00' }; D2_GLOBAL_GUARD(s_Cyrix_006cdeb0, "Fog::Src::LogManager::s_Cyrix_006cdeb0");
+
+char s_AMD_006cdeb8[4] = { 'A', 'M', 'D', '\x00' }; D2_GLOBAL_GUARD(s_AMD_006cdeb8, "Fog::Src::LogManager::s_AMD_006cdeb8");
+
+char s_Intel_006cdebc[8] = { 'I', 'n', 't', 'e', 'l', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Intel_006cdebc, "Fog::Src::LogManager::s_Intel_006cdebc");
+
+} // namespace Fog::Src::LogManager
+
+namespace Fog::Src::ErrorManager {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_English_with_Korean_Chat_006cc788[28] = {
+    'E',
+    'n',
+    'g',
+    'l',
+    'i',
+    's',
+    'h',
+    ' ',
+    'w',
+    'i',
+    't',
+    'h',
+    ' ',
+    'K',
+    'o',
+    'r',
+    'e',
+    'a',
+    'n',
+    ' ',
+    'C',
+    'h',
+    'a',
+    't',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_English_with_Korean_Chat_006cc788, "Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788");
+
+char s_Russian_006cc7a4[8] = { 'R', 'u', 's', 's', 'i', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Russian_006cc7a4, "Fog::Src::ErrorManager::s_Russian_006cc7a4");
+
+char s_Polish_006cc7ac[8] = { 'P', 'o', 'l', 'i', 's', 'h', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Polish_006cc7ac, "Fog::Src::ErrorManager::s_Polish_006cc7ac");
+
+char s_Traditional_Chinese_006cc7b4[20] = {
+    'T',
+    'r',
+    'a',
+    'd',
+    'i',
+    't',
+    'i',
+    'o',
+    'n',
+    'a',
+    'l',
+    ' ',
+    'C',
+    'h',
+    'i',
+    'n',
+    'e',
+    's',
+    'e',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Traditional_Chinese_006cc7b4, "Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4");
+
+char s_Simplified_Chinese_006cc7c8[20] = {
+    'S',
+    'i',
+    'm',
+    'p',
+    'l',
+    'i',
+    'f',
+    'i',
+    'e',
+    'd',
+    ' ',
+    'C',
+    'h',
+    'i',
+    'n',
+    'e',
+    's',
+    'e',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Simplified_Chinese_006cc7c8, "Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8");
+
+char s_Korean_006cc7dc[8] = { 'K', 'o', 'r', 'e', 'a', 'n', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Korean_006cc7dc, "Fog::Src::ErrorManager::s_Korean_006cc7dc");
+
+char s_Japanese_006cc7e4[12] = {
+    'J',
+    'a',
+    'p',
+    'a',
+    'n',
+    'e',
+    's',
+    'e',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Japanese_006cc7e4, "Fog::Src::ErrorManager::s_Japanese_006cc7e4");
+
+char s_Italian_006cc7f0[8] = { 'I', 't', 'a', 'l', 'i', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Italian_006cc7f0, "Fog::Src::ErrorManager::s_Italian_006cc7f0");
+
+char s_Portuguese_006cc7f8[12] = {
+    'P',
+    'o',
+    'r',
+    't',
+    'u',
+    'g',
+    'u',
+    'e',
+    's',
+    'e',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Portuguese_006cc7f8, "Fog::Src::ErrorManager::s_Portuguese_006cc7f8");
+
+char s_French_006cc804[8] = { 'F', 'r', 'e', 'n', 'c', 'h', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_French_006cc804, "Fog::Src::ErrorManager::s_French_006cc804");
+
+char s_German_006cc80c[8] = { 'G', 'e', 'r', 'm', 'a', 'n', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_German_006cc80c, "Fog::Src::ErrorManager::s_German_006cc80c");
+
+char s_Spanish_006cc814[8] = { 'S', 'p', 'a', 'n', 'i', 's', 'h', '\x00' }; D2_GLOBAL_GUARD(s_Spanish_006cc814, "Fog::Src::ErrorManager::s_Spanish_006cc814");
+
+char s_English_006cc81c[8] = { 'E', 'n', 'g', 'l', 'i', 's', 'h', '\x00' }; D2_GLOBAL_GUARD(s_English_006cc81c, "Fog::Src::ErrorManager::s_English_006cc81c");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+float gfTwoPow32 = 4294967296.0; D2_GLOBAL_GUARD(gfTwoPow32, "Fog::Src::ErrorManager::gfTwoPow32");
+
+} // namespace Fog::Src::ErrorManager
+
+namespace Storm::Source::SSignature {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gszHeapTagOperatorNew[4] = { "new" }; D2_GLOBAL_GUARD(gszHeapTagOperatorNew, "Storm::Source::SSignature::gszHeapTagOperatorNew");
+
+} // namespace Storm::Source::SSignature
+
+namespace Fog::Engine::Application {
+
+} // namespace Fog::Engine::Application
+
+namespace Fog::Source::SFile {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+double gdConst0_25 = 0.25; D2_GLOBAL_GUARD(gdConst0_25, "Fog::Source::SFile::gdConst0_25");
+
+double gdBytesToMegabytes = 9.5367431640625E-7; D2_GLOBAL_GUARD(gdBytesToMegabytes, "Fog::Source::SFile::gdBytesToMegabytes");
+
+} // namespace Fog::Source::SFile
+
+namespace Fog::Src::DataArrays {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+double gfFloatGammaCorrectionInit = 100; D2_GLOBAL_GUARD(gfFloatGammaCorrectionInit, "Fog::Src::DataArrays::gfFloatGammaCorrectionInit");
+
+} // namespace Fog::Src::DataArrays
+
+namespace Storm::Source::SSTR {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+double gdblConstantTen = 10; D2_GLOBAL_GUARD(gdblConstantTen, "Storm::Source::SSTR::gdblConstantTen");
+
+} // namespace Storm::Source::SSTR
+
+namespace Fog::Debug {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gbSaveFileReadMarker[3] = { 'r', 'b', '\x00' }; D2_GLOBAL_GUARD(gbSaveFileReadMarker, "Fog::Debug::gbSaveFileReadMarker");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+HMODULE hDbgHelpDll = 0; D2_GLOBAL_GUARD(hDbgHelpDll, "Fog::Debug::hDbgHelpDll");
+
+} // namespace Fog::Debug
+
+namespace Storm::Source::SFile {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char param_2_006ce200[5] = { "%s%s" }; D2_GLOBAL_GUARD(param_2_006ce200, "Storm::Source::SFile::param_2_006ce200");
+
+// =============================================================================
+// Uninitialized data (BSS)
+// =============================================================================
+
+uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Storm::Source::SFile::RTTI_Type_Descriptor");
+
+} // namespace Storm::Source::SFile
+
+namespace Fog::BitBuffer {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+// also labelled: BitMaskAnd
+uint32_t gadwBitMasks[32] = {
+    0x1,
+    0x2,
+    0x4,
+    0x8,
+    0x10,
+    0x20,
+    0x40,
+    0x80,
+    0x100,
+    0x200,
+    0x400,
+    0x800,
+    0x1000,
+    0x2000,
+    0x4000,
+    0x8000,
+    0x10000,
+    0x20000,
+    0x40000,
+    0x80000,
+    0x100000,
+    0x200000,
+    0x400000,
+    0x800000,
+    0x1000000,
+    0x2000000,
+    0x4000000,
+    0x8000000,
+    0x10000000,
+    0x20000000,
+    0x40000000,
+    0x80000000
+}; D2_GLOBAL_GUARD(gadwBitMasks, "Fog::BitBuffer::gadwBitMasks");
+
+// also labelled: BitMaskOr
+uint32_t gadwInvBitMasks[32] = {
+    0xfffffffe,
+    0xfffffffd,
+    0xfffffffb,
+    0xfffffff7,
+    0xffffffef,
+    0xffffffdf,
+    0xffffffbf,
+    0xffffff7f,
+    0xfffffeff,
+    0xfffffdff,
+    0xfffffbff,
+    0xfffff7ff,
+    0xffffefff,
+    0xffffdfff,
+    0xffffbfff,
+    0xffff7fff,
+    0xfffeffff,
+    0xfffdffff,
+    0xfffbffff,
+    0xfff7ffff,
+    0xffefffff,
+    0xffdfffff,
+    0xffbfffff,
+    0xff7fffff,
+    0xfeffffff,
+    0xfdffffff,
+    0xfbffffff,
+    0xf7ffffff,
+    0xefffffff,
+    0xdfffffff,
+    0xbfffffff,
+    0x7fffffff
+}; D2_GLOBAL_GUARD(gadwInvBitMasks, "Fog::BitBuffer::gadwInvBitMasks");
+
+} // namespace Fog::BitBuffer
+
+namespace Storm::Source::SErr {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_File___s_006cf1e8[10] = {
+    'F',
+    'i',
+    'l',
+    'e',
+    ':',
+    '\x09',
+    '%',
+    's',
+    '\x0a',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_File___s_006cf1e8, "Storm::Source::SErr::s_File___s_006cf1e8");
+
+char s__s_006cf248[6] = { '\x0a', '%', 's', '\x0a', '\x0a', '\x00' }; D2_GLOBAL_GUARD(s__s_006cf248, "Storm::Source::SErr::s__s_006cf248");
+
+char s_Expr___s_006cf250[11] = {
+    'E',
+    'x',
+    'p',
+    'r',
+    ':',
+    '\x09',
+    '%',
+    's',
+    '\x0a',
+    '\x0a',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Expr___s_006cf250, "Storm::Source::SErr::s_Expr___s_006cf250");
+
+} // namespace Storm::Source::SErr
+
+namespace Storm::Source::SLog {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+char szOOGPasswordDialogTimeFmt = '\x0d'; D2_GLOBAL_GUARD(szOOGPasswordDialogTimeFmt, "Storm::Source::SLog::szOOGPasswordDialogTimeFmt");
+
+} // namespace Storm::Source::SLog
+
+namespace Storm::_3rdparty::zlib::deflate {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * z_errmsg[10] = {
+    s_need_dictionary_006d3838,
+    s_stream_end_006d382c,
+    lpDefault_006cc837,
+    s_file_error_006d3820,
+    s_stream_error_006d3810,
+    s_data_error_006d3804,
+    s_insufficient_memory_006d37f0,
+    s_buffer_error_006d37e0,
+    s_incompatible_version_006d37c8,
+    lpDefault_006cc837
+}; D2_GLOBAL_GUARD(z_errmsg, "Storm::_3rdparty::zlib::deflate::z_errmsg");
+
+} // namespace Storm::_3rdparty::zlib::deflate
+
+namespace D2Launch::CharSel {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaFrontEndPaletteFiles[4] = { s_palette_fechar_pal_dat_006d39e8, s_palette_fechar_pal_pl2_006d39d0, s_palette_sky_pal_dat_006d39bc, s_palette_sky_pal_pl2_006d39a8 }; D2_GLOBAL_GUARD(gaFrontEndPaletteFiles, "D2Launch::CharSel::gaFrontEndPaletteFiles");
+
+} // namespace D2Launch::CharSel
+
+namespace D2Lang::StrTable::strtable {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gaLanguageCodeFallback[4] = { 'C', 'H', 'I', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeFallback, "D2Lang::StrTable::strtable::gaLanguageCodeFallback");
+
+char gaLanguageCodeAbbrevTable[4] = { 'E', 'N', 'G', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeAbbrevTable, "D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable");
+
+char gaLanguageCodeLookup[4] = { 'E', 'N', 'U', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeLookup, "D2Lang::StrTable::strtable::gaLanguageCodeLookup");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+char * gpszStringTblPathFormat = s_data_local_lng__s_string_tbl_006e02f8; D2_GLOBAL_GUARD(gpszStringTblPathFormat, "D2Lang::StrTable::strtable::gpszStringTblPathFormat");
+char * gpszFontMapPathFormat = s_data_local_font__s_default_map_006e02d8; D2_GLOBAL_GUARD(gpszFontMapPathFormat, "D2Lang::StrTable::strtable::gpszFontMapPathFormat");
+char * gpszPatchStringTblPathFormat = s_data_local_lng__s_patchstring_tbl_006e02b4; D2_GLOBAL_GUARD(gpszPatchStringTblPathFormat, "D2Lang::StrTable::strtable::gpszPatchStringTblPathFormat");
+char * gpszExpansionStringTblPathFormat = s_data_local_lng__s_expansionstring_006e028c; D2_GLOBAL_GUARD(gpszExpansionStringTblPathFormat, "D2Lang::StrTable::strtable::gpszExpansionStringTblPathFormat");
+char * gpszD2DataMpqName = s_d2data_mpq_006dc770; D2_GLOBAL_GUARD(gpszD2DataMpqName, "D2Lang::StrTable::strtable::gpszD2DataMpqName");
+char * gpszPatchD2MpqName = s_patch_d2_mpq_006dc728; D2_GLOBAL_GUARD(gpszPatchD2MpqName, "D2Lang::StrTable::strtable::gpszPatchD2MpqName");
+char * gpszD2ExpMpqName = s_d2exp_mpq_006cd3a0; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "D2Lang::StrTable::strtable::gpszD2ExpMpqName");
+
+} // namespace D2Lang::StrTable::strtable
+
+namespace D2Multi::ChatDlg {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_ama_006d5564[4] = { 'a', 'm', 'a', '\x00' }; D2_GLOBAL_GUARD(s_ama_006d5564, "D2Multi::ChatDlg::s_ama_006d5564");
+
+char s_sor_006d5568[4] = { 's', 'o', 'r', '\x00' }; D2_GLOBAL_GUARD(s_sor_006d5568, "D2Multi::ChatDlg::s_sor_006d5568");
+
+char s_nec_006d556c[4] = { 'n', 'e', 'c', '\x00' }; D2_GLOBAL_GUARD(s_nec_006d556c, "D2Multi::ChatDlg::s_nec_006d556c");
+
+char s_pal_006d5570[4] = { 'p', 'a', 'l', '\x00' }; D2_GLOBAL_GUARD(s_pal_006d5570, "D2Multi::ChatDlg::s_pal_006d5570");
+
+char s_bar_006d5574[4] = { 'b', 'a', 'r', '\x00' }; D2_GLOBAL_GUARD(s_bar_006d5574, "D2Multi::ChatDlg::s_bar_006d5574");
+
+char s_dru_006d5578[4] = { 'd', 'r', 'u', '\x00' }; D2_GLOBAL_GUARD(s_dru_006d5578, "D2Multi::ChatDlg::s_dru_006d5578");
+
+char s_asn_006d557c[4] = { 'a', 's', 'n', '\x00' }; D2_GLOBAL_GUARD(s_asn_006d557c, "D2Multi::ChatDlg::s_asn_006d557c");
+
+int32_t gaMultiFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont3, "D2Multi::ChatDlg::gaMultiFormFontParamsFont3");
+
+int32_t gaMultiFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont7, "D2Multi::ChatDlg::gaMultiFormFontParamsFont7");
+
+int32_t gaMultiTextBoxScrollbarGeom0[3] = { 0x190, 0x186, 0x13a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom0, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom0");
+
+int32_t gaMultiTextBoxScrollbarGeom1[3] = { 0x250, 0x189, 0xad }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom1, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom1");
+
+int32_t gaMultiTextBoxScrollbarGeom2[3] = { 0x2f1, 0x18a, 0xc4 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom2, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom2");
+
+int32_t gaMultiTextBoxScrollbarGeom3[3] = { 0x2f1, 0x189, 0xc5 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom3, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom3");
+
+int32_t gaMultiTextBoxScrollbarGeom4[3] = { 0x2f4, 0x187, 0xee }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom4, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom4");
+
+int32_t gaMultiTextBoxScrollbarGeom5[3] = { 0x2f4, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom5, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom5");
+
+FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5] = {
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaMultiLogoAnimFrames, "D2Multi::ChatDlg::gaMultiLogoAnimFrames");
+
+} // namespace D2Multi::ChatDlg
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00744508[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00744508, "D2Common::DATATBLS::LvlTbls::gaLanguageNames_00744508");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint8_t gbExpansionInitialized = 0x30; D2_GLOBAL_GUARD(gbExpansionInitialized, "D2Common::DATATBLS::LvlTbls::gbExpansionInitialized");
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
+namespace D2Client::ClientModeInGame {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+char * gpszD2LngFileName = s_D2_LNG_006d5ee0; D2_GLOBAL_GUARD(gpszD2LngFileName, "D2Client::ClientModeInGame::gpszD2LngFileName");
+char * gpszLngManagerStartError = s_Unable_to_start_LNG_manager__006d5ec0; D2_GLOBAL_GUARD(gpszLngManagerStartError, "D2Client::ClientModeInGame::gpszLngManagerStartError");
+char * gpszLngCppError = s_Stupid_Lng_cpp_error__006d5ea8; D2_GLOBAL_GUARD(gpszLngCppError, "D2Client::ClientModeInGame::gpszLngCppError");
+
+} // namespace D2Client::ClientModeInGame
+
+namespace D2Client::UI::Draw {
+
+} // namespace D2Client::UI::Draw
+
+namespace D2Client::UI::Inv {
+
+} // namespace D2Client::UI::Inv
+
+namespace D2Common::DATATBLS::DataTbls {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gaFreeUnitsOrderData[3] = { 'w', 'b', '\x00' }; D2_GLOBAL_GUARD(gaFreeUnitsOrderData, "D2Common::DATATBLS::DataTbls::gaFreeUnitsOrderData");
+
+} // namespace D2Common::DATATBLS::DataTbls
+
 namespace D2Client::Warden::NWardenClient {
 
 // =============================================================================
@@ -11085,6 +2879,614 @@ namespace D2Client::Warden {
 void* vftable_meta_ptr = (void*)0x00700140; D2_GLOBAL_GUARD(vftable_meta_ptr, "D2Client::Warden::vftable_meta_ptr");
 
 } // namespace D2Client::Warden
+
+namespace D2Client::Sound::SoundHdr {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_D2X_OUT__s_BIK_006d912c[15] = {
+    'D',
+    '2',
+    'X',
+    '_',
+    'O',
+    'U',
+    'T',
+    '_',
+    '%',
+    's',
+    '.',
+    'B',
+    'I',
+    'K',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_D2X_OUT__s_BIK_006d912c, "D2Client::Sound::SoundHdr::s_D2X_OUT__s_BIK_006d912c");
+
+char s_ACT04END_s_BIK_006d9150[15] = {
+    'A',
+    'C',
+    'T',
+    '0',
+    '4',
+    'E',
+    'N',
+    'D',
+    '%',
+    's',
+    '.',
+    'B',
+    'I',
+    'K',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_ACT04END_s_BIK_006d9150, "D2Client::Sound::SoundHdr::s_ACT04END_s_BIK_006d9150");
+
+char s_ACT04START_s_BIK_006d9160[17] = {
+    'A',
+    'C',
+    'T',
+    '0',
+    '4',
+    'S',
+    'T',
+    'A',
+    'R',
+    'T',
+    '%',
+    's',
+    '.',
+    'B',
+    'I',
+    'K',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_ACT04START_s_BIK_006d9160, "D2Client::Sound::SoundHdr::s_ACT04START_s_BIK_006d9160");
+
+char s_ACT03START_s_BIK_006d9174[17] = {
+    'A',
+    'C',
+    'T',
+    '0',
+    '3',
+    'S',
+    'T',
+    'A',
+    'R',
+    'T',
+    '%',
+    's',
+    '.',
+    'B',
+    'I',
+    'K',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_ACT03START_s_BIK_006d9174, "D2Client::Sound::SoundHdr::s_ACT03START_s_BIK_006d9174");
+
+char s_ACT02START_s_BIK_006d9188[17] = {
+    'A',
+    'C',
+    'T',
+    '0',
+    '2',
+    'S',
+    'T',
+    'A',
+    'R',
+    'T',
+    '%',
+    's',
+    '.',
+    'B',
+    'I',
+    'K',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_ACT02START_s_BIK_006d9188, "D2Client::Sound::SoundHdr::s_ACT02START_s_BIK_006d9188");
+
+char s_d2intro_s_bik_006d919c[14] = {
+    'd',
+    '2',
+    'i',
+    'n',
+    't',
+    'r',
+    'o',
+    '%',
+    's',
+    '.',
+    'b',
+    'i',
+    'k',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_d2intro_s_bik_006d919c, "D2Client::Sound::SoundHdr::s_d2intro_s_bik_006d919c");
+
+} // namespace D2Client::Sound::SoundHdr
+
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
+namespace D2Client::UI::npcmenu {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_007273a8[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007273a8, "D2Client::UI::npcmenu::gaLanguageNames_007273a8");
+
+} // namespace D2Client::UI::npcmenu
+
+namespace D2Client::UI::QuestLog {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_a5q6_006da1ec[5] = { 'a', '5', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a5q6_006da1ec, "D2Client::UI::QuestLog::s_a5q6_006da1ec");
+
+char s_a5q5_006da1f4[5] = { 'a', '5', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a5q5_006da1f4, "D2Client::UI::QuestLog::s_a5q5_006da1f4");
+
+char s_a5q4_006da1fc[5] = { 'a', '5', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a5q4_006da1fc, "D2Client::UI::QuestLog::s_a5q4_006da1fc");
+
+char s_a5q3_006da204[5] = { 'a', '5', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a5q3_006da204, "D2Client::UI::QuestLog::s_a5q3_006da204");
+
+char s_a5q2_006da20c[5] = { 'a', '5', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a5q2_006da20c, "D2Client::UI::QuestLog::s_a5q2_006da20c");
+
+char s_a5q1_006da214[5] = { 'a', '5', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a5q1_006da214, "D2Client::UI::QuestLog::s_a5q1_006da214");
+
+char s_a4q3_006da21c[5] = { 'a', '4', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a4q3_006da21c, "D2Client::UI::QuestLog::s_a4q3_006da21c");
+
+char s_a4q2_006da224[5] = { 'a', '4', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a4q2_006da224, "D2Client::UI::QuestLog::s_a4q2_006da224");
+
+char s_a4q1_006da22c[5] = { 'a', '4', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a4q1_006da22c, "D2Client::UI::QuestLog::s_a4q1_006da22c");
+
+char s_a3q6_006da234[5] = { 'a', '3', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a3q6_006da234, "D2Client::UI::QuestLog::s_a3q6_006da234");
+
+char s_a3q5_006da23c[5] = { 'a', '3', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a3q5_006da23c, "D2Client::UI::QuestLog::s_a3q5_006da23c");
+
+char s_a3q4_006da244[5] = { 'a', '3', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a3q4_006da244, "D2Client::UI::QuestLog::s_a3q4_006da244");
+
+char s_a3q3_006da24c[5] = { 'a', '3', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a3q3_006da24c, "D2Client::UI::QuestLog::s_a3q3_006da24c");
+
+char s_a3q2_006da254[5] = { 'a', '3', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a3q2_006da254, "D2Client::UI::QuestLog::s_a3q2_006da254");
+
+char s_a3q1_006da25c[5] = { 'a', '3', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a3q1_006da25c, "D2Client::UI::QuestLog::s_a3q1_006da25c");
+
+char s_a2q6_006da264[5] = { 'a', '2', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a2q6_006da264, "D2Client::UI::QuestLog::s_a2q6_006da264");
+
+char s_a2q5_006da26c[5] = { 'a', '2', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a2q5_006da26c, "D2Client::UI::QuestLog::s_a2q5_006da26c");
+
+char s_a2q4_006da274[5] = { 'a', '2', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a2q4_006da274, "D2Client::UI::QuestLog::s_a2q4_006da274");
+
+char s_a2q3_006da27c[5] = { 'a', '2', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a2q3_006da27c, "D2Client::UI::QuestLog::s_a2q3_006da27c");
+
+char s_a2q2_006da284[5] = { 'a', '2', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a2q2_006da284, "D2Client::UI::QuestLog::s_a2q2_006da284");
+
+char s_a2q1_006da28c[5] = { 'a', '2', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a2q1_006da28c, "D2Client::UI::QuestLog::s_a2q1_006da28c");
+
+char s_a1q6_006da294[5] = { 'a', '1', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a1q6_006da294, "D2Client::UI::QuestLog::s_a1q6_006da294");
+
+char s_a1q5_006da29c[5] = { 'a', '1', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a1q5_006da29c, "D2Client::UI::QuestLog::s_a1q5_006da29c");
+
+char s_a1q4_006da2a4[5] = { 'a', '1', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a1q4_006da2a4, "D2Client::UI::QuestLog::s_a1q4_006da2a4");
+
+char s_a1q3_006da2ac[5] = { 'a', '1', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a1q3_006da2ac, "D2Client::UI::QuestLog::s_a1q3_006da2ac");
+
+char s_a1q2_006da2b4[5] = { 'a', '1', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a1q2_006da2b4, "D2Client::UI::QuestLog::s_a1q2_006da2b4");
+
+char s_a1q1_006da2bc[5] = { 'a', '1', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a1q1_006da2bc, "D2Client::UI::QuestLog::s_a1q1_006da2bc");
+
+uint16_t gaQuestDescData_DenOfEvil[32] = {
+    0xe82,
+    0x4c,
+    0x4,
+    0xe97,
+    0x40,
+    0xe98,
+    0x40,
+    0xe99,
+    0x40,
+    0xe9a,
+    0x40,
+    0xe9c,
+    0x40,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe9c,
+    0x40,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x40,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_DenOfEvil, "D2Client::UI::QuestLog::gaQuestDescData_DenOfEvil");
+
+uint16_t gaQuestDescData_SistersBurialGrounds[32] = {
+    0xe83,
+    0x5c,
+    0x2,
+    0xe9d,
+    0x51,
+    0xe9e,
+    0x51,
+    0xe9f,
+    0x51,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe9f,
+    0x51,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x51,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_SistersBurialGrounds, "D2Client::UI::QuestLog::gaQuestDescData_SistersBurialGrounds");
+
+uint16_t gaQuestDescData_ToolsOfTheTrade[32] = {
+    0xe84,
+    0xa3,
+    0xffff,
+    0xeab,
+    0x92,
+    0xeac,
+    0x92,
+    0xe95,
+    0x92,
+    0xe94,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xead,
+    0xa3,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x92,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_ToolsOfTheTrade, "D2Client::UI::QuestLog::gaQuestDescData_ToolsOfTheTrade");
+
+uint16_t gaQuestDescData_SearchForCain[32] = {
+    0xe85,
+    0x7b,
+    0xffff,
+    0xea0,
+    0x61,
+    0xea1,
+    0x61,
+    0xea2,
+    0x61,
+    0xea3,
+    0x61,
+    0xea4,
+    0x61,
+    0xea5,
+    0x61,
+    0xe96,
+    0x61,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xea6,
+    0x61,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x61,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_SearchForCain, "D2Client::UI::QuestLog::gaQuestDescData_SearchForCain");
+
+uint16_t gaQuestDescData_ForgottenTower[32] = {
+    0xe86,
+    0x7f,
+    0xffff,
+    0xea7,
+    0x7f,
+    0xeaa,
+    0x7f,
+    0xea8,
+    0x7f,
+    0xea9,
+    0x7f,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x7f,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_ForgottenTower, "D2Client::UI::QuestLog::gaQuestDescData_ForgottenTower");
+
+uint16_t gaQuestDescData_SistersToTheSlaughter[32] = {
+    0xe87,
+    0xb8,
+    0x9,
+    0xeae,
+    0xa6,
+    0xeaf,
+    0xa6,
+    0xeb1,
+    0xa6,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xeb0,
+    0xa6,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0xb8,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_SistersToTheSlaughter, "D2Client::UI::QuestLog::gaQuestDescData_SistersToTheSlaughter");
+
+uint16_t gaQuestDescData_RadamentsLair[32] = {
+    0x39b,
+    0x14e,
+    0x2,
+    0x3ad,
+    0x130,
+    0x3ae,
+    0x130,
+    0x3af,
+    0x130,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0x3af,
+    0xe8d,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x130,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_RadamentsLair, "D2Client::UI::QuestLog::gaQuestDescData_RadamentsLair");
+
+uint16_t gaQuestDescData_HoradricStaff[32] = {
+    0x39c,
+    0x153,
+    0xffff,
+    0x3b0,
+    0xe8d,
+    0x3b1,
+    0x14f,
+    0x3b2,
+    0x152,
+    0x3b4,
+    0xe8d,
+    0x3b3,
+    0x153,
+    0x3b3,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe92,
+    0xe8d,
+    0x3b3,
+    0xe8d,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x153,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_HoradricStaff, "D2Client::UI::QuestLog::gaQuestDescData_HoradricStaff");
+
+uint16_t gaQuestDescData_TaintedSun[32] = {
+    0x39d,
+    0xe8d,
+    0xffff,
+    0x3b6,
+    0xe8d,
+    0x3b7,
+    0xe8d,
+    0x3b8,
+    0x15c,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0x3b8,
+    0xe8d,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0xe8d,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_TaintedSun, "D2Client::UI::QuestLog::gaQuestDescData_TaintedSun");
+
+uint16_t gaQuestDescData_ArcaneSanctuary[32] = {
+    0x39e,
+    0xe8d,
+    0xffff,
+    0x3ba,
+    0xe8d,
+    0x3b9,
+    0x175,
+    0x3b9,
+    0x179,
+    0x3bb,
+    0x179,
+    0x3bc,
+    0x18c,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0x3bc,
+    0x18c,
+    0xe90,
+    0x18c,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0x18c,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_ArcaneSanctuary, "D2Client::UI::QuestLog::gaQuestDescData_ArcaneSanctuary");
+
+uint16_t gaQuestDescData_TheSummoner[32] = {
+    0x39f,
+    0xe8d,
+    0xffff,
+    0x3bd,
+    0xe8d,
+    0x3be,
+    0xe8d,
+    0xe8e,
+    0xe8d,
+    0x3bf,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0xe8d,
+    0x3bf,
+    0xe8d,
+    0xe90,
+    0xe8d,
+    0xe8f,
+    0xe8d,
+    0xe8e,
+    0xe8d,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaQuestDescData_TheSummoner, "D2Client::UI::QuestLog::gaQuestDescData_TheSummoner");
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Sound::Src::D2SoundSmp {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+float FLOAT_006da6b8 = -1; D2_GLOBAL_GUARD(FLOAT_006da6b8, "D2Sound::Src::D2SoundSmp::FLOAT_006da6b8");
+
+} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -11176,13 +3578,554 @@ void* vftable_meta_ptr = (void*)0x007003e8; D2_GLOBAL_GUARD(vftable_meta_ptr, "D
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
 
+namespace D2gfx::D2GFX {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint64_t gaIntensityTableConstant = 0x408f400000000000; D2_GLOBAL_GUARD(gaIntensityTableConstant, "D2gfx::D2GFX::gaIntensityTableConstant");
+
+} // namespace D2gfx::D2GFX
+
+namespace D2Sound::Sound {
+
+} // namespace D2Sound::Sound
+
+namespace Bnclient::BnSend {
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
+namespace Bnclient::_net_sid {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint8_t gaNetSidSubstitutionBox[480] = {
+    0x9,
+    0x4,
+    0x7,
+    0xf,
+    0xd,
+    0xa,
+    0x3,
+    0xb,
+    0x1,
+    0x2,
+    0xc,
+    0x8,
+    0x6,
+    0xe,
+    0x5,
+    0x0,
+    0x9,
+    0xb,
+    0x5,
+    0x4,
+    0x8,
+    0xf,
+    0x1,
+    0xe,
+    0x7,
+    0x0,
+    0x3,
+    0x2,
+    0xa,
+    0x6,
+    0xd,
+    0xc,
+    0xc,
+    0xe,
+    0x1,
+    0x4,
+    0x9,
+    0xf,
+    0xa,
+    0xb,
+    0xd,
+    0x6,
+    0x0,
+    0x8,
+    0x7,
+    0x2,
+    0x5,
+    0x3,
+    0xb,
+    0x2,
+    0x5,
+    0xe,
+    0xd,
+    0x3,
+    0x9,
+    0x0,
+    0x1,
+    0xf,
+    0x7,
+    0xc,
+    0xa,
+    0x6,
+    0x4,
+    0x8,
+    0x6,
+    0x2,
+    0x4,
+    0x5,
+    0xb,
+    0x8,
+    0xc,
+    0xe,
+    0xd,
+    0xf,
+    0x7,
+    0x1,
+    0xa,
+    0x0,
+    0x3,
+    0x9,
+    0x5,
+    0x4,
+    0xe,
+    0xc,
+    0x7,
+    0x6,
+    0xd,
+    0xa,
+    0xf,
+    0x2,
+    0x9,
+    0x1,
+    0x0,
+    0xb,
+    0x8,
+    0x3,
+    0xc,
+    0x7,
+    0x8,
+    0xf,
+    0xb,
+    0x0,
+    0x5,
+    0x9,
+    0xd,
+    0xa,
+    0x6,
+    0xe,
+    0x2,
+    0x4,
+    0x3,
+    0x1,
+    0x3,
+    0xa,
+    0xe,
+    0x8,
+    0x1,
+    0xb,
+    0x5,
+    0x4,
+    0x2,
+    0xf,
+    0xd,
+    0xc,
+    0x6,
+    0x7,
+    0x9,
+    0x0,
+    0xc,
+    0xd,
+    0x1,
+    0xf,
+    0x8,
+    0xe,
+    0x5,
+    0xb,
+    0x3,
+    0xa,
+    0x9,
+    0x0,
+    0x7,
+    0x2,
+    0x4,
+    0x6,
+    0xd,
+    0xa,
+    0x7,
+    0xe,
+    0x1,
+    0x6,
+    0xb,
+    0x8,
+    0xf,
+    0xc,
+    0x5,
+    0x2,
+    0x3,
+    0x0,
+    0x4,
+    0x9,
+    0x3,
+    0xe,
+    0x7,
+    0x5,
+    0xb,
+    0xf,
+    0x8,
+    0xc,
+    0x1,
+    0xa,
+    0x4,
+    0xd,
+    0x0,
+    0x6,
+    0x9,
+    0x2,
+    0xb,
+    0x6,
+    0x9,
+    0x4,
+    0x1,
+    0x8,
+    0xa,
+    0xd,
+    0x7,
+    0xe,
+    0x0,
+    0xc,
+    0xf,
+    0x2,
+    0x3,
+    0x5,
+    0xc,
+    0x7,
+    0x8,
+    0xd,
+    0x3,
+    0xb,
+    0x0,
+    0xe,
+    0x6,
+    0xf,
+    0x9,
+    0x4,
+    0xa,
+    0x1,
+    0x5,
+    0x2,
+    0xc,
+    0x6,
+    0xd,
+    0x9,
+    0xb,
+    0x0,
+    0x1,
+    0x2,
+    0xf,
+    0x7,
+    0x3,
+    0x4,
+    0xa,
+    0xe,
+    0x8,
+    0x5,
+    0x3,
+    0x6,
+    0x1,
+    0x5,
+    0xb,
+    0xc,
+    0x8,
+    0x0,
+    0xf,
+    0xe,
+    0x9,
+    0x4,
+    0x7,
+    0xa,
+    0xd,
+    0x2,
+    0xa,
+    0x7,
+    0xb,
+    0xf,
+    0x2,
+    0x8,
+    0x0,
+    0xd,
+    0xe,
+    0xc,
+    0x1,
+    0x6,
+    0x9,
+    0x3,
+    0x5,
+    0x4,
+    0xa,
+    0xb,
+    0xd,
+    0x4,
+    0x3,
+    0x8,
+    0x5,
+    0x9,
+    0x1,
+    0x0,
+    0xf,
+    0xc,
+    0x7,
+    0xe,
+    0x2,
+    0x6,
+    0xb,
+    0x4,
+    0xd,
+    0xf,
+    0x1,
+    0x6,
+    0x3,
+    0xe,
+    0x7,
+    0xa,
+    0xc,
+    0x8,
+    0x9,
+    0x2,
+    0x5,
+    0x0,
+    0x9,
+    0x6,
+    0x7,
+    0x0,
+    0x1,
+    0xa,
+    0xd,
+    0x2,
+    0x3,
+    0xe,
+    0xf,
+    0xc,
+    0x5,
+    0xb,
+    0x4,
+    0x8,
+    0xd,
+    0xe,
+    0x5,
+    0x6,
+    0x1,
+    0x9,
+    0x8,
+    0xc,
+    0x2,
+    0xf,
+    0x3,
+    0x7,
+    0xb,
+    0x4,
+    0x0,
+    0xa,
+    0x9,
+    0xf,
+    0x4,
+    0x0,
+    0x1,
+    0x6,
+    0xa,
+    0xe,
+    0x2,
+    0x3,
+    0x7,
+    0xd,
+    0x5,
+    0xb,
+    0x8,
+    0xc,
+    0x3,
+    0xe,
+    0x1,
+    0xa,
+    0x2,
+    0xc,
+    0x8,
+    0x4,
+    0xb,
+    0x7,
+    0xd,
+    0x0,
+    0xf,
+    0x6,
+    0x9,
+    0x5,
+    0x7,
+    0x2,
+    0xc,
+    0x6,
+    0xa,
+    0x8,
+    0xb,
+    0x0,
+    0xf,
+    0x4,
+    0x3,
+    0xe,
+    0x9,
+    0x1,
+    0xd,
+    0x5,
+    0xc,
+    0x4,
+    0x5,
+    0x9,
+    0xa,
+    0x2,
+    0x8,
+    0xd,
+    0x3,
+    0xf,
+    0x1,
+    0xe,
+    0x6,
+    0x7,
+    0xb,
+    0x0,
+    0xa,
+    0x8,
+    0xe,
+    0xd,
+    0x9,
+    0xf,
+    0x3,
+    0x0,
+    0x4,
+    0x6,
+    0x1,
+    0xc,
+    0x7,
+    0xb,
+    0x2,
+    0x5,
+    0x3,
+    0xc,
+    0x4,
+    0xa,
+    0x2,
+    0xf,
+    0xd,
+    0xe,
+    0x7,
+    0x0,
+    0x5,
+    0x8,
+    0x1,
+    0x6,
+    0xb,
+    0x9,
+    0xa,
+    0xc,
+    0x1,
+    0x0,
+    0x9,
+    0xe,
+    0xd,
+    0xb,
+    0x3,
+    0x7,
+    0xf,
+    0x8,
+    0x5,
+    0x2,
+    0x4,
+    0x6,
+    0xe,
+    0xa,
+    0x1,
+    0x8,
+    0x7,
+    0x6,
+    0x5,
+    0xc,
+    0x2,
+    0xf,
+    0x0,
+    0xd,
+    0x3,
+    0xb,
+    0x4,
+    0x9,
+    0x3,
+    0x8,
+    0xe,
+    0x0,
+    0x7,
+    0x9,
+    0xf,
+    0xc,
+    0x1,
+    0x6,
+    0xd,
+    0x2,
+    0x5,
+    0xa,
+    0xb,
+    0x4,
+    0x3,
+    0xa,
+    0xc,
+    0x4,
+    0xd,
+    0xb,
+    0x9,
+    0xe,
+    0xf,
+    0x6,
+    0x1,
+    0x7,
+    0x2,
+    0x0,
+    0x5,
+    0x8
+}; D2_GLOBAL_GUARD(gaNetSidSubstitutionBox, "Bnclient::_net_sid::gaNetSidSubstitutionBox");
+
+} // namespace Bnclient::_net_sid
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
 
+namespace D2Game::UNIT::SUnitDmg {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_Stam_006e160c[5] = { 'S', 't', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Stam_006e160c, "D2Game::UNIT::SUnitDmg::s_Stam_006e160c");
+
+char s_Life_006e161c[5] = { 'L', 'i', 'f', 'e', '\x00' }; D2_GLOBAL_GUARD(s_Life_006e161c, "D2Game::UNIT::SUnitDmg::s_Life_006e161c");
+
+char s_Pois_006e1624[5] = { 'P', 'o', 'i', 's', '\x00' }; D2_GLOBAL_GUARD(s_Pois_006e1624, "D2Game::UNIT::SUnitDmg::s_Pois_006e1624");
+
+char s_Magc_006e1644[5] = { 'M', 'a', 'g', 'c', '\x00' }; D2_GLOBAL_GUARD(s_Magc_006e1644, "D2Game::UNIT::SUnitDmg::s_Magc_006e1644");
+
+char s_Ligt_006e1654[5] = { 'L', 'i', 'g', 't', '\x00' }; D2_GLOBAL_GUARD(s_Ligt_006e1654, "D2Game::UNIT::SUnitDmg::s_Ligt_006e1654");
+
+char s_Dam_006e1664[4] = { 'D', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Dam_006e1664, "D2Game::UNIT::SUnitDmg::s_Dam_006e1664");
+
+} // namespace D2Game::UNIT::SUnitDmg
+
+namespace D2Game::PLAYER::PlayerModes {
+
+} // namespace D2Game::PLAYER::PlayerModes
+
 namespace D2Game::GAME::Event::Dispatch::Player {
 
 } // namespace D2Game::GAME::Event::Dispatch::Player
+
+namespace D2Game::Objects::ObjectsMode {
+
+} // namespace D2Game::Objects::ObjectsMode
 
 namespace D2Game::GAME::Event::Dispatch::Object {
 
@@ -11190,7 +4133,342 @@ namespace D2Game::GAME::Event::Dispatch::Object {
 
 namespace D2Game::GAME::Event::Dispatch::Monster {
 
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_0073c6e0[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0073c6e0, "D2Game::GAME::Event::Dispatch::Monster::gaLanguageNames_0073c6e0");
+
 } // namespace D2Game::GAME::Event::Dispatch::Monster
+
+namespace D2Game {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2MonsterEquipEntryStrc gaMonsterEquipTable[12] = {
+    {
+        /* .szItemCode = */ { 'b', 's', 'd', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x104
+    },
+    {
+        /* .szItemCode = */ { 't', 'a', 'x', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x104
+    },
+    {
+        /* .szItemCode = */ { 'v', 'o', 'u', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x104
+    },
+    {
+        /* .szItemCode = */ { 't', 'o', 'w', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x105
+    },
+    {
+        /* .szItemCode = */ { 't', 'a', 'x', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x105
+    },
+    {
+        /* .szItemCode = */ { 'r', 'i', 'n', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x106
+    },
+    {
+        /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x103
+    },
+    {
+        /* .szItemCode = */ { 'h', 'g', 'l', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x10a
+    },
+    {
+        /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x103
+    },
+    {
+        /* .szItemCode = */ { 'h', 'b', 't', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x109
+    },
+    {
+        /* .szItemCode = */ { 'h', 'b', 't', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x109
+    },
+    {
+        /* .szItemCode = */ { 'c', 'r', 'n', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x101
+    }
+}; D2_GLOBAL_GUARD(gaMonsterEquipTable, "D2Game::gaMonsterEquipTable");
+
+} // namespace D2Game
+
+namespace D2CMP::SRC::CelCmp {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint32_t gaCelCmpDataBlock_006e36a0[224] = {
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x2,
+    0x1,
+    0x3,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x4,
+    0x2,
+    0x5,
+    0x1,
+    0x6,
+    0x3,
+    0x7,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x8,
+    0x4,
+    0x9,
+    0x2,
+    0xa,
+    0x5,
+    0xb,
+    0x1,
+    0xc,
+    0x6,
+    0xd,
+    0x3,
+    0xe,
+    0x7,
+    0xf,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x10,
+    0x8,
+    0x11,
+    0x4,
+    0x12,
+    0x9,
+    0x13,
+    0x2,
+    0x14,
+    0xa,
+    0x15,
+    0x5,
+    0x16,
+    0xb,
+    0x17,
+    0x1,
+    0x18,
+    0xc,
+    0x19,
+    0x6,
+    0x1a,
+    0xd,
+    0x1b,
+    0x3,
+    0x1c,
+    0xe,
+    0x1d,
+    0x7,
+    0x1e,
+    0xf,
+    0x1f
+}; D2_GLOBAL_GUARD(gaCelCmpDataBlock_006e36a0, "D2CMP::SRC::CelCmp::gaCelCmpDataBlock_006e36a0");
+
+char s___AUTCELENTRY___00741f14[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'T',
+    'C',
+    'E',
+    'L',
+    'E',
+    'N',
+    'T',
+    'R',
+    'Y',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUTCELENTRY___00741f14, "D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14");
+
+} // namespace D2CMP::SRC::CelCmp
 
 namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
 
@@ -11212,6 +4490,95 @@ void* vftable_meta_ptr = (void*)0x00700644; D2_GLOBAL_GUARD(vftable_meta_ptr, "D
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
+namespace D2Common {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSExplicitList_UStringEntr_0074366c[56] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'E',
+    'x',
+    'p',
+    'l',
+    'i',
+    'c',
+    'i',
+    't',
+    'L',
+    'i',
+    's',
+    't',
+    '@',
+    'U',
+    'S',
+    't',
+    'r',
+    'i',
+    'n',
+    'g',
+    'E',
+    'n',
+    't',
+    'r',
+    'y',
+    'N',
+    'o',
+    'd',
+    'e',
+    '@',
+    '@',
+    '$',
+    '0',
+    '?',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'D',
+    '@',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UStringEntr_0074366c, "D2Common::s___AV__TSExplicitList_UStringEntr_0074366c");
+
+} // namespace D2Common
+
+namespace D2Common::Txt::Cube {
+
+} // namespace D2Common::Txt::Cube
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+} // namespace D2Common::DATATBLS::ItemTbls
+
+namespace D2Common::Drlg::Preset {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_HDM_006ee7c0[4] = { 'H', 'D', 'M', '\x00' }; D2_GLOBAL_GUARD(s_HDM_006ee7c0, "D2Common::Drlg::Preset::s_HDM_006ee7c0");
+
+} // namespace D2Common::Drlg::Preset
+
+namespace D2Common::Drlg::OutSiege {
+
+} // namespace D2Common::Drlg::OutSiege
+
 namespace D2Common::Drlg::Outdoors {
 
 // =============================================================================
@@ -11224,6 +4591,283 @@ int aAct4OutdoorPresetBaseByLevel[3] = { 0x32c, 0x331, 0x337 }; D2_GLOBAL_GUARD(
 
 } // namespace D2Common::Drlg::Outdoors
 
+namespace D2Common::Drlg::OutJung {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+int gaOutJungPresetOffsetByLevel[3] = { 0x0, 0xa, 0x14 }; D2_GLOBAL_GUARD(gaOutJungPresetOffsetByLevel, "D2Common::Drlg::OutJung::gaOutJungPresetOffsetByLevel");
+
+} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common::Drlg {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint8_t gaWallNeighborOrientTable[256] = {
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xf,
+    0xf,
+    0x5,
+    0x5,
+    0xf,
+    0xf,
+    0x15,
+    0x15,
+    0x8,
+    0x8,
+    0xa,
+    0x26,
+    0x8,
+    0x8,
+    0x28,
+    0x14,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xf,
+    0xf,
+    0x5,
+    0x5,
+    0xf,
+    0xf,
+    0x15,
+    0x15,
+    0x8,
+    0x8,
+    0xa,
+    0x26,
+    0x8,
+    0x8,
+    0x28,
+    0x14,
+    0xd,
+    0xd,
+    0x7,
+    0x7,
+    0xd,
+    0xd,
+    0xd,
+    0x7,
+    0x4,
+    0x4,
+    0xb,
+    0x25,
+    0x4,
+    0x4,
+    0xb,
+    0x2b,
+    0x3,
+    0x3,
+    0xc,
+    0xc,
+    0x3,
+    0x3,
+    0x27,
+    0x27,
+    0x9,
+    0x9,
+    0x2,
+    0x2b,
+    0x9,
+    0x9,
+    0x2c,
+    0x1a,
+    0xd,
+    0xd,
+    0x7,
+    0x7,
+    0xd,
+    0xd,
+    0xd,
+    0x7,
+    0x17,
+    0x17,
+    0x29,
+    0x11,
+    0x17,
+    0x17,
+    0x29,
+    0x11,
+    0x3,
+    0x3,
+    0xc,
+    0xc,
+    0x3,
+    0x3,
+    0x27,
+    0x27,
+    0x2a,
+    0x2a,
+    0x2e,
+    0x2a,
+    0x2a,
+    0x2a,
+    0x21,
+    0x1f,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xf,
+    0xf,
+    0x5,
+    0x5,
+    0xf,
+    0xf,
+    0x15,
+    0x15,
+    0x8,
+    0x8,
+    0xa,
+    0x26,
+    0x8,
+    0x8,
+    0x23,
+    0x14,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0x0,
+    0x0,
+    0x10,
+    0x10,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xe,
+    0xe,
+    0x6,
+    0x13,
+    0xf,
+    0xf,
+    0x5,
+    0x5,
+    0xf,
+    0xf,
+    0x15,
+    0x15,
+    0x8,
+    0x8,
+    0xa,
+    0x26,
+    0x8,
+    0x8,
+    0x28,
+    0x14,
+    0xd,
+    0xd,
+    0x7,
+    0x7,
+    0xd,
+    0xd,
+    0xd,
+    0x7,
+    0x4,
+    0x4,
+    0xb,
+    0x25,
+    0x4,
+    0x4,
+    0xb,
+    0x25,
+    0x12,
+    0x12,
+    0x23,
+    0x23,
+    0x12,
+    0x12,
+    0x16,
+    0x16,
+    0x24,
+    0x24,
+    0x2d,
+    0x22,
+    0x24,
+    0x24,
+    0x1c,
+    0x1d,
+    0xd,
+    0xd,
+    0x7,
+    0x7,
+    0xd,
+    0xd,
+    0xd,
+    0x7,
+    0x17,
+    0x17,
+    0x29,
+    0x11,
+    0x17,
+    0x17,
+    0x29,
+    0x11,
+    0x12,
+    0x12,
+    0x23,
+    0x23,
+    0x12,
+    0x12,
+    0x16,
+    0x16,
+    0x18,
+    0x18,
+    0x19,
+    0x20,
+    0x18,
+    0x18,
+    0x1e,
+    0x1
+}; D2_GLOBAL_GUARD(gaWallNeighborOrientTable, "D2Common::Drlg::gaWallNeighborOrientTable");
+
+} // namespace D2Common::Drlg
+
 namespace Define_the_symbol__ATL_MIXED {
 
 // =============================================================================
@@ -11233,6 +4877,90 @@ namespace Define_the_symbol__ATL_MIXED {
 void* vftable_meta_ptr = (void*)0x007009cc; D2_GLOBAL_GUARD(vftable_meta_ptr, "Define_the_symbol__ATL_MIXED::vftable_meta_ptr");
 
 } // namespace Define_the_symbol__ATL_MIXED
+
+namespace Storm::Source {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_Unable_to_open_response_file___s_006fcbc0[33] = {
+    'U',
+    'n',
+    'a',
+    'b',
+    'l',
+    'e',
+    ' ',
+    't',
+    'o',
+    ' ',
+    'o',
+    'p',
+    'e',
+    'n',
+    ' ',
+    'r',
+    'e',
+    's',
+    'p',
+    'o',
+    'n',
+    's',
+    'e',
+    ' ',
+    'f',
+    'i',
+    'l',
+    'e',
+    ':',
+    ' ',
+    '%',
+    's',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Unable_to_open_response_file___s_006fcbc0, "Storm::Source::s_Unable_to_open_response_file___s_006fcbc0");
+
+char s_Invalid_argument___s_006fcc0c[21] = {
+    'I',
+    'n',
+    'v',
+    'a',
+    'l',
+    'i',
+    'd',
+    ' ',
+    'a',
+    'r',
+    'g',
+    'u',
+    'm',
+    'e',
+    'n',
+    't',
+    ':',
+    ' ',
+    '%',
+    's',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Invalid_argument___s_006fcc0c, "Storm::Source::s_Invalid_argument___s_006fcc0c");
+
+char * gaSCMD_FallbackMessages[3] = { (char*)&Storm::Source::s_Invalid_argument___s_006fcc0c, s_The_syntax_of_the_command_is_inco_006fcbe4, (char*)&Storm::Source::s_Unable_to_open_response_file___s_006fcbc0 }; D2_GLOBAL_GUARD(gaSCMD_FallbackMessages, "Storm::Source::gaSCMD_FallbackMessages");
+
+char param_2_006ffc58[3] = { '%', 's', '\x00' }; D2_GLOBAL_GUARD(param_2_006ffc58, "Storm::Source::param_2_006ffc58");
+
+char lpOutputString_006ffcb0[2] = { "\n" }; D2_GLOBAL_GUARD(lpOutputString_006ffcb0, "Storm::Source::lpOutputString_006ffcb0");
+
+} // namespace Storm::Source
+
+namespace Fog::File {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char lpMultiByteStr_006ff97c[2] = { "w" }; D2_GLOBAL_GUARD(lpMultiByteStr_006ff97c, "Fog::File::lpMultiByteStr_006ff97c");
+
+} // namespace Fog::File
 
 namespace Fog::_3rdparty::crashy {
 
@@ -11244,15 +4972,19 @@ void* vftable_meta_ptr = (void*)0x00700a14; D2_GLOBAL_GUARD(vftable_meta_ptr, "F
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::Source::SFile {
+namespace D2Hell {
 
 // =============================================================================
-// Uninitialized data (BSS)
+// Initialized data (arrays, structs, tables)
 // =============================================================================
 
-uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Storm::Source::SFile::RTTI_Type_Descriptor");
+char lpSubBlock_006ff9b8[2] = { "\\" }; D2_GLOBAL_GUARD(lpSubBlock_006ff9b8, "D2Hell::lpSubBlock_006ff9b8");
 
-} // namespace Storm::Source::SFile
+} // namespace D2Hell
+
+namespace Fog::Source::SSComp {
+
+} // namespace Fog::Source::SSComp
 
 namespace Class::FILEREC {
 
@@ -11304,82 +5036,404 @@ uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Class::
 
 } // namespace Class::HANDLER
 
-namespace D2Launch::CharSel {
-
-} // namespace D2Launch::CharSel
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::Renderer {
+namespace D2Launch::MainMenus {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-D2RendererFunctionsStrc GlideFunctionTable = {
-    /* .nfpInitialize = */ &D2Client::Renderer::Glide::Initialize,
-    /* .nfpInitPerspective = */ &D2Glide::Renderer::Glide::InitPerspective,
-    /* .nfpRelease = */ (fpRelease)&D2Glide::Renderer::Glide::Release,
-    /* .nfpCreateWindow = */ (fpCreateWindow)&D2Glide::Renderer::Glide::CreateWindow,
-    /* .nfpDestroyWindow = */ &D2Glide::Renderer::Glide::RENDERER_GLIDE_DestroyWindow,
-    /* .nfpEndCutScene = */ (fpEndCutScene)&D2Glide::Renderer::Glide::EndCutScene,
-    /* .nfpBeginScene = */ &D2Glide::Renderer::Glide::BeginScene,
-    /* .fpEndScene1 = */ &D2Glide::Renderer::Glide::EndScene1,
-    /* .fpEndScene2 = */ &D2Glide::Renderer::Glide::EndScene2,
-    /* .nfpResizeWindow = */ &D2Glide::Renderer::Glide::ResizeWindow,
-    /* .nfpGetBackBuffer = */ &D2Glide::Renderer::Glide::GetBackBuffer,
-    /* .nfpActivateWindow = */ (fpActivateWindow)&D2Glide::Renderer::Glide::ActivateWindow,
-    /* .nfpSetOption = */ (fpSetOption)&D2Glide::Renderer::Glide::SetOption,
-    /* .nfpBeginCutScene = */ &D2Glide::Renderer::Glide::BeginCutScene,
-    /* .nfpPlayCutScene = */ (fpPlayCutScene)&D2Glide::Renderer::Glide::PlayCutScene,
-    /* .nfpCheckCutScene = */ &D2Glide::Renderer::Glide::CheckCutScene,
-    /* .nfpDecodeSmacker = */ (fpDecodeSmacker)&D2Glide::Renderer::Glide::DecodeSmacker,
-    /* .nfpPlayerSmacker = */ &D2Glide::Renderer::Glide::PlayerSmacker,
-    /* .nfpCloseSmacker = */ &D2Glide::Renderer::Glide::CloseSmacker,
-    /* .nfpGetRenderStatistics = */ &D2Glide::Renderer::Glide::GetRenderStatistics,
-    /* .nfpGetScreenSize = */ (fpGetScreenSize)&D2Glide::Renderer::Glide::GetScreenSize,
-    /* .nfpUpdateScaleFactor = */ (fpUpdateScaleFactor)&D2Glide::Renderer::Glide::UpdateScaleFactor,
-    /* .nfpSetGamma = */ (fpSetGamma)&D2Glide::Renderer::Glide::SetGamma,
-    /* .nfpCheckGamma = */ (fpCheckGamma)&D2Glide::Renderer::Glide::CheckGamma,
-    /* .nfpSetPerspectiveScale = */ (fpSetPerspectiveScale)&D2Glide::Renderer::Glide::SetPerspectiveScale,
-    /* .nfpAdjustPerspectivePosition = */ (fpAdjustPerspectivePosition)&D2Glide::Renderer::Glide::AdjustPerspectivePosition,
-    /* .nfpPerspectiveScalePosition = */ (fpPerspectiveScalePosition)&D2Glide::Renderer::Glide::PerspectiveScalePosition,
-    /* .nfpSetDefaultPerspectiveFactor = */ &D2Glide::Renderer::Glide::SetDefaultPerspectiveFactor,
-    /* .nfpSetPalette = */ &D2Glide::Renderer::Glide::SetPalette,
-    /* .nfpSetPaletteTable = */ &D2Glide::Renderer::Glide::SetPaletteTable,
-    /* .nfpSetGlobalLight = */ &D2Glide::Renderer::Glide::SetGlobalLight,
-    /* .nfpDrawGroundTile = */ (D2RendererFunctionsStrc_fpDrawGroundTile)&D2Glide::Renderer::Glide::DrawGroundTile,
-    /* .nfpDrawPerspectiveImage = */ (fpDrawPerspectiveImage)&D2Glide::Renderer::Glide::DrawPerspectiveImage,
-    /* .nfpDrawImage = */ (fpDrawImage)&D2Glide::Renderer::Glide::DrawImage,
-    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2Glide::Renderer::Glide::DrawShiftedImage,
-    /* .nfpDrawVerticalCropImage = */ (fpDrawVerticalCropImage)&D2Glide::Renderer::Glide::DrawVerticalCropImage,
-    /* .nfpDrawShadow = */ (fpDrawShadow)&D2Glide::Renderer::Glide::DrawShadow,
-    /* .nfpDrawImageFast = */ (fpDrawImageFast)&D2Glide::Renderer::Glide::DrawImageFast,
-    /* .nfpDrawClippedImage = */ (fpDrawClippedImage)&D2Glide::Renderer::Glide::DrawClippedImage,
-    /* .nfpDrawWallTile = */ (D2RendererFunctionsStrc_fpDrawWallTile)&D2Glide::Renderer::Glide::DrawWallTile,
-    /* .nfpDrawTransWallTile = */ (fpDrawTransWallTile)&D2Glide::Renderer::Glide::DrawTransWallTile,
-    /* .nfpDrawShadowTile = */ (fpDrawShadowTile)&D2Glide::Renderer::Glide::DrawShadowTile,
-    /* .nfpDrawRect = */ (fpDrawRect)&D2Glide::Renderer::Glide::DrawRect,
-    /* .nfpDrawRectEx = */ (fpDrawRectEx)&D2Glide::Renderer::Glide::DrawRectEx,
-    /* .nfpDrawSolidRect = */ &D2Glide::Renderer::Glide::DrawSolidRect,
-    /* .nfpDrawSolidSquare = */ (fpDrawSolidSquare)&D2Glide::Renderer::Glide::DrawSolidSquare,
-    /* .nfpDrawSolidRectEx = */ (fpDrawSolidRectEx)&D2Glide::Renderer::Glide::DrawSolidRectEx,
-    /* .nfpDrawSolidRectAlpha = */ (fpDrawSolidRectAlpha)&D2Glide::Renderer::Glide::DrawSolidRectAlpha,
-    /* .nfpDrawLine = */ (fpDrawLine)&D2Glide::Renderer::Glide::DrawLine,
-    /* .nfpClearScreen = */ &D2Glide::Renderer::Glide::ClearScreen,
-    /* .nfpDrawString = */ (fpDrawString)&D2Glide::Renderer::Glide::DrawString,
-    /* .nfpDrawLight = */ (fpDrawLight)&D2Glide::Renderer::Glide::DrawLight,
-    /* .nfpDebugFillBackBuffer = */ (fpDebugFillBackBuffer)&D2Glide::Renderer::Glide::DebugFillBackBuffer,
-    /* .nfpClearCaches = */ &D2Glide::Renderer::Glide::ClearCaches
-}; D2_GLOBAL_GUARD(GlideFunctionTable, "D2Client::Renderer::GlideFunctionTable");
+int32_t gaMenuFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont3, "D2Launch::MainMenus::gaMenuFormFontParamsFont3");
 
-} // namespace D2Client::Renderer
+int32_t gaMenuFormFontParamsFont2[2] = { 0x2, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont2, "D2Launch::MainMenus::gaMenuFormFontParamsFont2");
+
+int32_t gaMenuFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont7, "D2Launch::MainMenus::gaMenuFormFontParamsFont7");
+
+} // namespace D2Launch::MainMenus
+
+namespace D2Multi::OOGUtilities {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+int32_t gaMultiFormFontParamsFont4[2] = { 0x4, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont4, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont4");
+
+int32_t gaMultiFormFontParamsFont2[2] = { 0x2, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont2, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont2");
+
+int32_t gaMultiFormFontParamsFont1[2] = { 0x1, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont1, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont1");
+
+int32_t gaMultiTextBoxScrollbarGeom6[3] = { 0x2f1, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom6, "D2Multi::OOGUtilities::gaMultiTextBoxScrollbarGeom6");
+
+} // namespace D2Multi::OOGUtilities
+
+namespace D2Client::GAME::Game {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUSGAMEDATA___0070f56c[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'S',
+    'G',
+    'A',
+    'M',
+    'E',
+    'D',
+    'A',
+    'T',
+    'A',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUSGAMEDATA___0070f56c, "D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c");
+
+} // namespace D2Client::GAME::Game
+
+namespace D2Client {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSExplicitList_USGAMEDATA__0070f584[48] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'E',
+    'x',
+    'p',
+    'l',
+    'i',
+    'c',
+    'i',
+    't',
+    'L',
+    'i',
+    's',
+    't',
+    '@',
+    'U',
+    'S',
+    'G',
+    'A',
+    'M',
+    'E',
+    'D',
+    'A',
+    'T',
+    'A',
+    '@',
+    '@',
+    '$',
+    '0',
+    '?',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'D',
+    '@',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_USGAMEDATA__0070f584, "D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584");
+
+} // namespace D2Client
+
+namespace D2Client::GAME::Record {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4[56] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'H',
+    'a',
+    's',
+    'h',
+    'O',
+    'b',
+    'j',
+    'e',
+    'c',
+    't',
+    'C',
+    'h',
+    'u',
+    'n',
+    'k',
+    '@',
+    'U',
+    'S',
+    'G',
+    'A',
+    'M',
+    'E',
+    'D',
+    'A',
+    'T',
+    'A',
+    '@',
+    '@',
+    'V',
+    'H',
+    'A',
+    'S',
+    'H',
+    'K',
+    'E',
+    'Y',
+    '_',
+    'N',
+    'O',
+    'N',
+    'E',
+    '@',
+    '@',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, "D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4");
+
+} // namespace D2Client::GAME::Record
+
+namespace D2Client::_Message {
+
+} // namespace D2Client::_Message
+
+namespace D2Client::Engine {
+
+} // namespace D2Client::Engine
+
+namespace D2Client::GAME::SCmd {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00711d04[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00711d04, "D2Client::GAME::SCmd::gaLanguageNames_00711d04");
+
+} // namespace D2Client::GAME::SCmd
+
+namespace D2Client::Draw::LightMap {
+
+} // namespace D2Client::Draw::LightMap
+
+namespace D2Client::GAME::Rendering {
+
+} // namespace D2Client::GAME::Rendering
+
+namespace D2Client::UI::Panel {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00722414[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00722414, "D2Client::UI::Panel::gaLanguageNames_00722414");
+
+} // namespace D2Client::UI::Panel
+
+namespace D2Client::UI::Party {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00722470[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00722470, "D2Client::UI::Party::gaLanguageNames_00722470");
+
+} // namespace D2Client::UI::Party
+
+namespace D2Client::Sound {
+
+} // namespace D2Client::Sound
+
+namespace D2Client::UI::UseItem {
+
+} // namespace D2Client::UI::UseItem
+
+namespace D2Client::UNIT::UnitSnd {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+int gaUnitSoundIdsAmazon[11] = {
+    0xb3e,
+    0xb43,
+    0xb89,
+    0xb8d,
+    0xb8b,
+    0xb76,
+    0xb78,
+    0xb8f,
+    0xb79,
+    0xb91,
+    0xad0
+}; D2_GLOBAL_GUARD(gaUnitSoundIdsAmazon, "D2Client::UNIT::UnitSnd::gaUnitSoundIdsAmazon");
+
+char * gaLanguageNames_0072a300[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0072a300, "D2Client::UNIT::UnitSnd::gaLanguageNames_0072a300");
+
+} // namespace D2Client::UNIT::UnitSnd
+
+namespace D2Client::UI::SkillDesc {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_0072d8d8[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0072d8d8, "D2Client::UI::SkillDesc::gaLanguageNames_0072d8d8");
+
+char * gaLanguageNames_0072d914[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0072d914, "D2Client::UI::SkillDesc::gaLanguageNames_0072d914");
+
+char * gaLanguageNames_0072d950[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0072d950, "D2Client::UI::SkillDesc::gaLanguageNames_0072d950");
+
+} // namespace D2Client::UI::SkillDesc
+
+namespace D2Glide::Renderer::Glide {
+
+} // namespace D2Glide::Renderer::Glide
 
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
 
 namespace D2Lang::Unicode::UNISYS {
 
@@ -11648,6 +5702,14 @@ uint16_t CharacterLookupTable[256] = {
 
 } // namespace D2Lang::Unicode::UNISYS
 
+namespace D2Net::SRC::Client {
+
+} // namespace D2Net::SRC::Client
+
+namespace D2Game::PLAYER::PlayerSave {
+
+} // namespace D2Game::PLAYER::PlayerSave
+
 namespace D2Game::Quests::QUESTS::Quest40 {
 
 } // namespace D2Game::Quests::QUESTS::Quest40
@@ -11661,6 +5723,184 @@ namespace D2Game::Quests::QUESTS::A5Q2 {
 } // namespace D2Game::Quests::QUESTS::A5Q2
 
 namespace D2Game::Quests::QUESTS::A5Q3 {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gaQ33_Normal_AmazonBowCodes[5][4] = {
+    { 'a', 'm', '1', ' ' },
+    { 'a', 'm', '2', ' ' },
+    { 'a', 'm', '3', ' ' },
+    { 'a', 'm', '4', ' ' },
+    { 'a', 'm', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_AmazonBowCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_AmazonBowCodes");
+
+char gaQ33_Normal_SorceressOrbCodes[5][4] = {
+    { 'o', 'b', '1', ' ' },
+    { 'o', 'b', '2', ' ' },
+    { 'o', 'b', '3', ' ' },
+    { 'o', 'b', '4', ' ' },
+    { 'o', 'b', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_SorceressOrbCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_SorceressOrbCodes");
+
+char gaQ33_Normal_NecromancerWandCodes[5][4] = {
+    { 'n', 'e', '1', ' ' },
+    { 'n', 'e', '2', ' ' },
+    { 'n', 'e', '3', ' ' },
+    { 'n', 'e', '4', ' ' },
+    { 'n', 'e', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_NecromancerWandCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_NecromancerWandCodes");
+
+char gaQ33_Normal_PaladinScepterCodes[5][4] = {
+    { 'p', 'a', '1', ' ' },
+    { 'p', 'a', '2', ' ' },
+    { 'p', 'a', '3', ' ' },
+    { 'p', 'a', '4', ' ' },
+    { 'p', 'a', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_PaladinScepterCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_PaladinScepterCodes");
+
+char gaQ33_Normal_BarbarianAxeCodes[5][4] = {
+    { 'b', 'a', '1', ' ' },
+    { 'b', 'a', '2', ' ' },
+    { 'b', 'a', '3', ' ' },
+    { 'b', 'a', '4', ' ' },
+    { 'b', 'a', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_BarbarianAxeCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_BarbarianAxeCodes");
+
+char gaQ33_Normal_DruidHelmCodes[5][4] = {
+    { 'd', 'r', '1', ' ' },
+    { 'd', 'r', '2', ' ' },
+    { 'd', 'r', '3', ' ' },
+    { 'd', 'r', '4', ' ' },
+    { 'd', 'r', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_DruidHelmCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_DruidHelmCodes");
+
+char gaQ33_Normal_AssassinClawCodes[7][4] = {
+    { 'k', 't', 'r', ' ' },
+    { 'w', 'r', 'b', ' ' },
+    { 'a', 'x', 'f', ' ' },
+    { 'c', 'e', 's', ' ' },
+    { 'c', 'l', 'w', ' ' },
+    { 'b', 't', 'l', ' ' },
+    { 's', 'k', 'r', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_AssassinClawCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_AssassinClawCodes");
+
+char gaQ33_Nightmare_AmazonBowCodes[5][4] = {
+    { 'a', 'm', 'b', ' ' },
+    { 'a', 'm', 'c', ' ' },
+    { 'a', 'm', 'd', ' ' },
+    { 'a', 'm', 'e', ' ' },
+    { 'a', 'm', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_AmazonBowCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_AmazonBowCodes");
+
+char gaQ33_Nightmare_SorceressOrbCodes[5][4] = {
+    { 'o', 'b', 'b', ' ' },
+    { 'o', 'b', 'c', ' ' },
+    { 'o', 'b', 'd', ' ' },
+    { 'o', 'b', 'e', ' ' },
+    { 'o', 'b', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_SorceressOrbCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_SorceressOrbCodes");
+
+char gaQ33_Nightmare_NecromancerWandCodes[5][4] = {
+    { 'n', 'e', 'b', ' ' },
+    { 'n', 'e', 'c', ' ' },
+    { 'n', 'e', 'd', ' ' },
+    { 'n', 'e', 'e', ' ' },
+    { 'n', 'e', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_NecromancerWandCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_NecromancerWandCodes");
+
+char gaQ33_Nightmare_PaladinScepterCodes[5][4] = {
+    { 'p', 'a', 'b', ' ' },
+    { 'p', 'a', 'c', ' ' },
+    { 'p', 'a', 'd', ' ' },
+    { 'p', 'a', 'e', ' ' },
+    { 'p', 'a', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_PaladinScepterCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_PaladinScepterCodes");
+
+char gaQ33_Nightmare_BarbarianAxeCodes[5][4] = {
+    { 'b', 'a', 'b', ' ' },
+    { 'b', 'a', 'c', ' ' },
+    { 'b', 'a', 'd', ' ' },
+    { 'b', 'a', 'e', ' ' },
+    { 'b', 'a', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_BarbarianAxeCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_BarbarianAxeCodes");
+
+char gaQ33_Nightmare_DruidHelmCodes[5][4] = {
+    { 'd', 'r', 'b', ' ' },
+    { 'd', 'r', 'c', ' ' },
+    { 'd', 'r', 'd', ' ' },
+    { 'd', 'r', 'e', ' ' },
+    { 'd', 'r', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_DruidHelmCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_DruidHelmCodes");
+
+char gaQ33_Nightmare_AssassinClawCodes[7][4] = {
+    { '7', 'a', 'r', ' ' },
+    { '7', 'w', 'b', ' ' },
+    { '7', 'x', 'f', ' ' },
+    { '7', 'c', 's', ' ' },
+    { '7', 'l', 'w', ' ' },
+    { '7', 't', 'w', ' ' },
+    { '7', 'q', 'r', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_AssassinClawCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_AssassinClawCodes");
+
+char gaQ33_Hell_AmazonBowCodes[5][4] = {
+    { 'a', 'm', '6', ' ' },
+    { 'a', 'm', '7', ' ' },
+    { 'a', 'm', '8', ' ' },
+    { 'a', 'm', '9', ' ' },
+    { 'a', 'm', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_AmazonBowCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_AmazonBowCodes");
+
+char gaQ33_Hell_SorceressOrbCodes[5][4] = {
+    { 'o', 'b', '6', ' ' },
+    { 'o', 'b', '7', ' ' },
+    { 'o', 'b', '8', ' ' },
+    { 'o', 'b', '9', ' ' },
+    { 'o', 'b', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_SorceressOrbCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_SorceressOrbCodes");
+
+char gaQ33_Hell_NecromancerWandCodes[5][4] = {
+    { 'n', 'e', '6', ' ' },
+    { 'n', 'e', '7', ' ' },
+    { 'n', 'e', '8', ' ' },
+    { 'n', 'e', '9', ' ' },
+    { 'n', 'e', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_NecromancerWandCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_NecromancerWandCodes");
+
+char gaQ33_Hell_PaladinScepterCodes[5][4] = {
+    { 'p', 'a', '6', ' ' },
+    { 'p', 'a', '7', ' ' },
+    { 'p', 'a', '8', ' ' },
+    { 'p', 'a', '9', ' ' },
+    { 'p', 'a', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_PaladinScepterCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_PaladinScepterCodes");
+
+char gaQ33_Hell_BarbarianAxeCodes[5][4] = {
+    { 'b', 'a', '6', ' ' },
+    { 'b', 'a', '7', ' ' },
+    { 'b', 'a', '8', ' ' },
+    { 'b', 'a', '9', ' ' },
+    { 'b', 'a', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_BarbarianAxeCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_BarbarianAxeCodes");
+
+char gaQ33_Hell_DruidHelmCodes[5][4] = {
+    { 'd', 'r', '6', ' ' },
+    { 'd', 'r', '7', ' ' },
+    { 'd', 'r', '8', ' ' },
+    { 'd', 'r', '9', ' ' },
+    { 'd', 'r', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_DruidHelmCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_DruidHelmCodes");
+
+char gaQ33_Hell_AssassinClawCodes[7][4] = {
+    { '9', 'a', 'r', ' ' },
+    { '9', 'w', 'b', ' ' },
+    { '9', 'x', 'f', ' ' },
+    { '9', 'c', 's', ' ' },
+    { '9', 'l', 'w', ' ' },
+    { '9', 't', 'w', ' ' },
+    { '9', 'q', 'r', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_AssassinClawCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_AssassinClawCodes");
 
 } // namespace D2Game::Quests::QUESTS::A5Q3
 
@@ -11693,6 +5933,12 @@ namespace D2Game::Quests::QUESTS::A1Q2 {
 } // namespace D2Game::Quests::QUESTS::A1Q2
 
 namespace D2Game::Quests::QUESTS::A1Q3 {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+D2NPCMessageTableStrc gbQuestA5Q2Unknown[6] = {}; D2_GLOBAL_GUARD(gbQuestA5Q2Unknown, "D2Game::Quests::QUESTS::A1Q3::gbQuestA5Q2Unknown");
 
 } // namespace D2Game::Quests::QUESTS::A1Q3
 
@@ -11752,6 +5998,32 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
+namespace D2Game::Monster::Create {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_0073d530[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0073d530, "D2Game::Monster::Create::gaLanguageNames_0073d530");
+
+} // namespace D2Game::Monster::Create
+
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -11804,22 +6076,2553 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
+namespace D2Game::SKILLS::SkillNec {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint8_t gaSkeletonComponentsByMasteryLvl[11][9] = {
+    {},
+    {},
+    {
+        0x0,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1
+    },
+    {
+        0x0,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x1
+    },
+    {
+        0x1,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x2
+    },
+    {
+        0x1,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x2
+    },
+    {
+        0x1,
+        0x1,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x1,
+        0x3
+    },
+    {
+        0x2,
+        0x2,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x1,
+        0x3
+    },
+    {
+        0x2,
+        0x2,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x2,
+        0x4
+    },
+    {
+        0x2,
+        0x3,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x2,
+        0x2,
+        0x4
+    },
+    {
+        0x2,
+        0x3,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x2,
+        0x2,
+        0x4
+    }
+}; D2_GLOBAL_GUARD(gaSkeletonComponentsByMasteryLvl, "D2Game::SKILLS::SkillNec::gaSkeletonComponentsByMasteryLvl");
+
+} // namespace D2Game::SKILLS::SkillNec
+
+namespace D2CMP::SRC::CelCmp::CELLIST {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUCELLIST___00741f2c[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'C',
+    'E',
+    'L',
+    'L',
+    'I',
+    'S',
+    'T',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUCELLIST___00741f2c, "D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c");
+
+} // namespace D2CMP::SRC::CelCmp::CELLIST
+
+namespace D2CMP {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSExplicitList_UCELLIST____00741f44[48] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'E',
+    'x',
+    'p',
+    'l',
+    'i',
+    'c',
+    'i',
+    't',
+    'L',
+    'i',
+    's',
+    't',
+    '@',
+    'U',
+    'C',
+    'E',
+    'L',
+    'L',
+    'I',
+    'S',
+    'T',
+    '@',
+    '@',
+    '$',
+    '0',
+    '?',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'D',
+    '@',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UCELLIST____00741f44, "D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44");
+
+} // namespace D2CMP
+
+namespace D2CMP::Draw {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSHashObjectChunk_UCELLIST_00741fb4[52] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'H',
+    'a',
+    's',
+    'h',
+    'O',
+    'b',
+    'j',
+    'e',
+    'c',
+    't',
+    'C',
+    'h',
+    'u',
+    'n',
+    'k',
+    '@',
+    'U',
+    'C',
+    'E',
+    'L',
+    'L',
+    'I',
+    'S',
+    'T',
+    '@',
+    '@',
+    'V',
+    'H',
+    'A',
+    'S',
+    'H',
+    'K',
+    'E',
+    'Y',
+    '_',
+    'N',
+    'O',
+    'N',
+    'E',
+    '@',
+    '@',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_UCELLIST_00741fb4, "D2CMP::Draw::s___AV__TSHashObjectChunk_UCELLIST_00741fb4");
+
+} // namespace D2CMP::Draw
+
+namespace D2Common::Chat::Ignorelist::MappingEntryNode {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUMappingEntryNode___0074362c[24] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'M',
+    'a',
+    'p',
+    'p',
+    'i',
+    'n',
+    'g',
+    'E',
+    'n',
+    't',
+    'r',
+    'y',
+    'N',
+    'o',
+    'd',
+    'e',
+    '@',
+    '@',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUMappingEntryNode___0074362c, "D2Common::Chat::Ignorelist::MappingEntryNode::s___AUMappingEntryNode___0074362c");
+
+} // namespace D2Common::Chat::Ignorelist::MappingEntryNode
+
+namespace D2Common::Chat::Ignorelist::StringEntryNode {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUStringEntryNode___0074364c[24] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'S',
+    't',
+    'r',
+    'i',
+    'n',
+    'g',
+    'E',
+    'n',
+    't',
+    'r',
+    'y',
+    'N',
+    'o',
+    'd',
+    'e',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUStringEntryNode___0074364c, "D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c");
+
+} // namespace D2Common::Chat::Ignorelist::StringEntryNode
+
+namespace D2Common::Chat::Ignorelist {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSExplicitList_UMappingEnt_007436ac[56] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'E',
+    'x',
+    'p',
+    'l',
+    'i',
+    'c',
+    'i',
+    't',
+    'L',
+    'i',
+    's',
+    't',
+    '@',
+    'U',
+    'M',
+    'a',
+    'p',
+    'p',
+    'i',
+    'n',
+    'g',
+    'E',
+    'n',
+    't',
+    'r',
+    'y',
+    'N',
+    'o',
+    'd',
+    'e',
+    '@',
+    '@',
+    '$',
+    '0',
+    '?',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'D',
+    '@',
+    '@',
+    '@',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UMappingEnt_007436ac, "D2Common::Chat::Ignorelist::s___AV__TSExplicitList_UMappingEnt_007436ac");
+
+} // namespace D2Common::Chat::Ignorelist
+
+namespace D2Common::Logging::ProfCore {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "D2Common::Logging::ProfCore::gaLanguageNames_0074430c_11");
+
+} // namespace D2Common::Logging::ProfCore
+
+namespace D2Common::DUNGEON::Dungeon {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_007443a8[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007443a8, "D2Common::DUNGEON::Dungeon::gaLanguageNames_007443a8");
+
+} // namespace D2Common::DUNGEON::Dungeon
+
+namespace D2Common::Environment {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_007444c8[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007444c8, "D2Common::Environment::gaLanguageNames_007444c8");
+
+} // namespace D2Common::Environment
+
+namespace D2Common::Units {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00744588[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00744588, "D2Common::Units::gaLanguageNames_00744588");
+
+char * gaLanguageNames_007445c4[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007445c4, "D2Common::Units::gaLanguageNames_007445c4");
+
+char * gaLanguageNames_00744600[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00744600, "D2Common::Units::gaLanguageNames_00744600");
+
+} // namespace D2Common::Units
+
+namespace D2Common::Monsters::MONSTERS {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00745648[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00745648, "D2Common::Monsters::MONSTERS::gaLanguageNames_00745648");
+
+char * gaLanguageNames_00745684[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00745684, "D2Common::Monsters::MONSTERS::gaLanguageNames_00745684");
+
+char * gaLanguageNames_007456c0[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007456c0, "D2Common::Monsters::MONSTERS::gaLanguageNames_007456c0");
+
+char * gaLanguageNames_007456fc[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007456fc, "D2Common::Monsters::MONSTERS::gaLanguageNames_007456fc");
+
+char * gaLanguageNames_00745738[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00745738, "D2Common::Monsters::MONSTERS::gaLanguageNames_00745738");
+
+} // namespace D2Common::Monsters::MONSTERS
+
+namespace D2Common::Merc {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007468a0[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqMonsterTblData_Unknown,
+        /* .nCounter1 = */ 0xd,
+        /* .nCounter2 = */ 0xd
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::DWORD_007467b0,
+        /* .nCounter1 = */ 0x12,
+        /* .nCounter2 = */ 0x12
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746820,
+        /* .nCounter1 = */ 0x15,
+        /* .nCounter2 = */ 0x15
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007468a0, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007468a0");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746978[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqAnimData,
+        /* .nCounter1 = */ 0xe,
+        /* .nCounter2 = */ 0xe
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007466dc,
+        /* .nCounter1 = */ 0x7,
+        /* .nCounter2 = */ 0x7
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746948,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746978, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746978");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746a80[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqAnimData,
+        /* .nCounter1 = */ 0xe,
+        /* .nCounter2 = */ 0xe
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746a20,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746a80, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746a80");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746b88[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746b88, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746b88");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746c58[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqAnimData,
+        /* .nCounter1 = */ 0xe,
+        /* .nCounter2 = */ 0xe
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746c30,
+        /* .nCounter1 = */ 0x6,
+        /* .nCounter2 = */ 0x6
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00746c58, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746c58");
+
+D2MonSeqMonsterTbls gaMonSeqMonsterTblData[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    }
+}; D2_GLOBAL_GUARD(gaMonSeqMonsterTblData, "D2Common::Merc::gaMonSeqMonsterTblData");
+
+D2MonSeqMonsterTbls gaMonSeqMonsterTblsExtra[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqMonsterTblData_Unknown,
+        /* .nCounter1 = */ 0xd,
+        /* .nCounter2 = */ 0xd
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746e08,
+        /* .nCounter1 = */ 0xd,
+        /* .nCounter2 = */ 0xd
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746e08[13].mode,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(gaMonSeqMonsterTblsExtra, "D2Common::Merc::gaMonSeqMonsterTblsExtra");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747088[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqMonsterTblData_Unknown,
+        /* .nCounter1 = */ 0xd,
+        /* .nCounter2 = */ 0xd
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746f78,
+        /* .nCounter1 = */ 0x15,
+        /* .nCounter2 = */ 0x15
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00746f78[21].mode,
+        /* .nCounter1 = */ 0x18,
+        /* .nCounter2 = */ 0x18
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747088, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747088");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007471f0[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::gaMonSeqMonsterTblData_Unknown,
+        /* .nCounter1 = */ 0xd,
+        /* .nCounter2 = */ 0xd
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747130,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747130[16].sequence,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007471f0, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007471f0");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007472c8[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747298,
+        /* .nCounter1 = */ 0x8,
+        /* .nCounter2 = */ 0x8
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007472c8, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007472c8");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007473d8[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747370,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007473d8, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007473d8");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007474f8[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747480,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007474f8, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007474f8");
+
+D2MonSeqMonsterTbls gaMonSeqMonsterTbls[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    }
+}; D2_GLOBAL_GUARD(gaMonSeqMonsterTbls, "D2Common::Merc::gaMonSeqMonsterTbls");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747918[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8[22].dir,
+        /* .nCounter1 = */ 0x19,
+        /* .nCounter2 = */ 0x19
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8[48].sequence,
+        /* .nCounter1 = */ 0x1c,
+        /* .nCounter2 = */ 0x1c
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8[22].dir,
+        /* .nCounter1 = */ 0x19,
+        /* .nCounter2 = */ 0x19
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8[76].sequence,
+        /* .nCounter1 = */ 0x1b,
+        /* .nCounter2 = */ 0x1b
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8[48].sequence,
+        /* .nCounter1 = */ 0x1c,
+        /* .nCounter2 = */ 0x1c
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8,
+        /* .nCounter1 = */ 0x16,
+        /* .nCounter2 = */ 0x16
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747918, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747918");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747a08[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747a08, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747a08");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747b58[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747ab0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747ab0,
+        /* .nCounter1 = */ 0xc,
+        /* .nCounter2 = */ 0xc
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747ab0[12].sequence,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747b58, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747b58");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747c78[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747c78, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747c78");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747d98[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20,
+        /* .nCounter1 = */ 0x14,
+        /* .nCounter2 = */ 0x14
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747d98, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747d98");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747ea0[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40,
+        /* .nCounter1 = */ 0xf,
+        /* .nCounter2 = */ 0xf
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747ea0, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747ea0");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00747fb0[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ nullptr,
+        /* .nCounter1 = */ 0x0,
+        /* .nCounter2 = */ 0x0
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48,
+        /* .nCounter1 = */ 0x11,
+        /* .nCounter2 = */ 0x11
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00747fb0, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747fb0");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007480e8[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748058,
+        /* .nCounter1 = */ 0x17,
+        /* .nCounter2 = */ 0x17
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007480e8, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007480e8");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007481f0[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748190,
+        /* .nCounter1 = */ 0x10,
+        /* .nCounter2 = */ 0x10
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_007481f0, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007481f0");
+
+D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00748310[14] = {
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    },
+    {
+        /* .pMonSeqTxt = */ (D2MonSeqTxt*)&D2Common::Merc::D2MonSeqTxt_ARRAY_00748298,
+        /* .nCounter1 = */ 0x13,
+        /* .nCounter2 = */ 0x13
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00748310, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00748310");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "D2Common::Merc::DWORD_007467b0");
+
+// =============================================================================
+// Uninitialized data (BSS)
+// =============================================================================
+
+uint8_t gaMonSeqMonsterTblData_Unknown; D2_GLOBAL_GUARD_BSS(gaMonSeqMonsterTblData_Unknown, "D2Common::Merc::gaMonSeqMonsterTblData_Unknown");
+uint8_t gaMonSeqAnimData; D2_GLOBAL_GUARD_BSS(gaMonSeqAnimData, "D2Common::Merc::gaMonSeqAnimData");
+
+} // namespace D2Common::Merc
+
+namespace D2Common::DATATBLS::OverlayTbls {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint32_t gaOverlayVariantCodes[43] = {
+    0x2074696c,
+    0x2074696c,
+    0x20736564,
+    0x20736564,
+    0x20797668,
+    0x20797668,
+    0x20797668,
+    0x2074696c,
+    0x20736564,
+    0x20797668,
+    0x20657861,
+    0x20657861,
+    0x20616c66,
+    0x20616c66,
+    0x20786168,
+    0x20786168,
+    0x2063616d,
+    0x2063616d,
+    0x206d6373,
+    0x206d6373,
+    0x0,
+    0x20637562,
+    0x2067726c,
+    0x2074696b,
+    0x206c6d73,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x2074696c,
+    0x20736564,
+    0x20797668,
+    0x2074696c,
+    0x2064656d,
+    0x20797668,
+    0x2074696c,
+    0x20736564,
+    0x20797668
+}; D2_GLOBAL_GUARD(gaOverlayVariantCodes, "D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes");
+
+char * gaLanguageNames_00748a58[16] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c,
+    nullptr
+}; D2_GLOBAL_GUARD(gaLanguageNames_00748a58, "D2Common::DATATBLS::OverlayTbls::gaLanguageNames_00748a58");
+
+char * gaLanguageNames_00748a98[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00748a98, "D2Common::DATATBLS::OverlayTbls::gaLanguageNames_00748a98");
+
+} // namespace D2Common::DATATBLS::OverlayTbls
+
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
+
+namespace D2Direct3D::Renderer {
+
+} // namespace D2Direct3D::Renderer
+
+namespace Fog::Src {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int TokenHashMapBucketSize = 0x10; D2_GLOBAL_GUARD(TokenHashMapBucketSize, "Fog::Src::TokenHashMapBucketSize");
+
+} // namespace Fog::Src
+
+namespace D2Gdi::Renderer::Windowed {
+
+} // namespace D2Gdi::Renderer::Windowed
+
+namespace D2Launch::Launcher {
+
+} // namespace D2Launch::Launcher
+
+namespace D2Client::Lng {
+
+} // namespace D2Client::Lng
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::Draw::LightMap {
+namespace D2Client::UI::SpellSel {
 
-} // namespace D2Client::Draw::LightMap
+} // namespace D2Client::UI::SpellSel
+
+namespace D2Client::UNIT::CUnit {
+
+} // namespace D2Client::UNIT::CUnit
+
+namespace D2Client::Cursor {
+
+} // namespace D2Client::Cursor
+
+namespace D2Client::Engine::Gfx {
+
+} // namespace D2Client::Engine::Gfx
+
+namespace D2Client::UNIT::Monster {
+
+} // namespace D2Client::UNIT::Monster
+
+namespace D2Client::UI::Trade {
+
+} // namespace D2Client::UI::Trade
+
+namespace D2Client::UNIT::Object {
+
+} // namespace D2Client::UNIT::Object
+
+namespace D2Client::GAME::Sound {
+
+} // namespace D2Client::GAME::Sound
+
+namespace D2gfx {
+
+} // namespace D2gfx
+
+namespace D2Win::D2GFX {
+
+} // namespace D2Win::D2GFX
 
 namespace D2Win::Src::D2WinMain {
 
 } // namespace D2Win::Src::D2WinMain
 
-namespace D2Win::D2GFX {
+namespace D2Win::Src::D2WinButton {
 
-} // namespace D2Win::D2GFX
+} // namespace D2Win::Src::D2WinButton
+
+namespace D2Win::Src::D2WinArchive {
+
+} // namespace D2Win::Src::D2WinArchive
+
+namespace D2Win::Src::D2WinTextBox {
+
+} // namespace D2Win::Src::D2WinTextBox
+
+namespace D2Sound {
+
+} // namespace D2Sound
+
+namespace Bnclient::Bnet {
+
+} // namespace Bnclient::Bnet
+
+namespace Bnclient {
+
+} // namespace Bnclient
+
+namespace D2Net::Game::Server {
+
+} // namespace D2Net::Game::Server
+
+namespace D2Game::UNIT::SUNITNPC {
+
+} // namespace D2Game::UNIT::SUNITNPC
+
+namespace D2Game::UNIT::sunitproxy {
+
+} // namespace D2Game::UNIT::sunitproxy
+
+namespace D2Game::GAME::Clients {
+
+} // namespace D2Game::GAME::Clients
+
+namespace D2Game::Quests::QUESTS {
+
+} // namespace D2Game::Quests::QUESTS
+
+namespace D2Common::DATATBLS::MonsterTbls {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2DataTableTxtStrc sgtDataTable = {}; D2_GLOBAL_GUARD(sgtDataTable, "D2Common::DATATBLS::MonsterTbls::sgtDataTable");
+
+} // namespace D2Common::DATATBLS::MonsterTbls
+
+namespace D2Common::Logging {
+
+} // namespace D2Common::Logging
+
+namespace D2Common::DATATBLS::TokTbls {
+
+} // namespace D2Common::DATATBLS::TokTbls

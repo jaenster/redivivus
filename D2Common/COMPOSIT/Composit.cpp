@@ -167,10 +167,10 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
           }
 
           pick_weapon_class:
-          if (nClassIndex < 0 || nClassIndex >= sgptDataTable->nTxtCharStatsSize) {
+          if (nClassIndex < 0 || nClassIndex >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
             pCharStatsTxt = 0;
           } else {
-            pCharStatsTxt = sgptDataTable->pTxtCharStats + nClassIndex;
+            pCharStatsTxt = ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIndex;
           }
           if (!nMode || nMode == 0x11 || !pEquippedItem || bHasComponent != '\x05' && bHasComponent != '\x06') {
             nHandedness = COMPOSIT_GetItemTypeIndex(*(int32_t*)pCharStatsTxt->basewclass);
@@ -257,7 +257,7 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
             *pnWeaponClassIndex = nHandedness;
             return 0x20687468;
           }
-          if (nMode && nMode != 0xc || *((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[0]) {
+          if (nMode && nMode != 0xc || *((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
             nHandedness = COMPOSIT_GetItemTypeIndex(pMonStats2->BaseW);
             *pnWeaponClassIndex = nHandedness;
             return pMonStats2->BaseW;
@@ -474,14 +474,14 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           if ((int)nPlrClass < 0) {
             return;
           }
-          if ((int)nPlrClass >= sgptDataTable->nTxtMonStatsSize) {
+          if ((int)nPlrClass >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             return;
           }
-          if (!(sgptDataTable->pTxtMonStats + nPlrClass)) {
+          if (!(ITEMS::Items::sgptDataTable->pTxtMonStats + nPlrClass)) {
             return;
           }
 
-          nPlrClassCopy = *(uint32_t*)sgptDataTable->pTxtMonStats[nPlrClass].Code;
+          nPlrClassCopy = *(uint32_t*)ITEMS::Items::sgptDataTable->pTxtMonStats[nPlrClass].Code;
           pMonModeLine = DATATBLS::TokTbls::TxtGetMonModeLine(nItemCode, 1);
           dwModeToken = *(uint32_t*)pMonModeLine->token;
           if ((!nResolvedClass || nResolvedClass == 0xc) && (bHasCompositeDeath = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nItemCodeCopy, compositeDeath) , !bHasCompositeDeath)) {

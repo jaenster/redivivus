@@ -17,7 +17,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/Source/SErr.h"
+#include "Storm/Source/SEVT.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -428,7 +428,7 @@ TSExplicitList<::SGAMEDATA, -572662307>* __thiscall CopyConstructor_Unreferenced
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, ::SGAMEDATA * pNode) {
     pNode->Destructor();
-    Storm::Source::SMem::SMemFree(pNode, s___AUSGAMEDATA___0070f56c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
@@ -446,13 +446,13 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::Rea
     }
 
     this->m_alloc = nCapacity;
-    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity * 0x1df4, s___AUSGAMEDATA___0070f56c, -2, 0x10);
+    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0x10);
     this->m_data = pGameEntry;
     if (pGameEntry) {
       return;
     }
 
-    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nCapacity * 0x1df4, s___AUSGAMEDATA___0070f56c, -2, 0);
+    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nCapacity * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
     this->m_data = pGameEntry;
     if (!pOldBuffer) {
       return;
@@ -479,7 +479,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::Rea
       } while (nAlloc);
     }
 
-    Storm::Source::SMem::SMemFree(pOldBuffer, s___AUSGAMEDATA___0070f56c, -2, 0);
+    Storm::Source::SMem::SMemFree(pOldBuffer, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
 template<> void TSGrowableArray<SGAMEDATA>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -545,7 +545,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destruct
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
+    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
     TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk;
     if (pChunkNew) {
       pChunkNew->nArrayAlloc = 0;
@@ -569,7 +569,7 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashOb
 template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::SGAMEDATA>* ppSlot;
     uint32_t pTailLink;
-    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
     if (pGame) {
       pGame->m_linktoslot.m_prevlink = 0;
       pGame->m_linktoslot.m_next = 0;

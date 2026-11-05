@@ -173,8 +173,8 @@ D2WinListEntry * __fastcall D2WINLIST_GetEntryByIndex(::D2WinList * pList, int n
       exit(-1);
     }
 
-    D2WinListEntry* pDVar1 = pList->sEntriesControl.pFirstEntry;
     int nCurIndex = 0;
+    D2WinListEntry* pDVar1 = pList->sEntriesControl.pFirstEntry;
     while (pDVar1) {
       if (nCurIndex == nIndex) {
         break;
@@ -493,8 +493,8 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     memset(pList, 0, 0x6c);
     pList->sControl.neD2FormType = FORM_List;
     int* pItemCountPtr = &pList->sControl.dwState;
-    *pItemCountPtr |= gadwBitMasks[0];
-    dwState = pList->sControl.dwState | gadwBitMasks[2];
+    *pItemCountPtr |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pList->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pList->sControl.dwSizeX = (int)nSizeX;
     pList->sControl.dwState = dwState;
     pList->sControl.dwPosX = nPosX;

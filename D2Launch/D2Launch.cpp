@@ -39,6 +39,10 @@ void __stdcall AppModeLauncherShutdown() {
 
 }
 
+void thunk__strstr(char * szText1, char * szText2) {
+    strstr(szText1, szText2);
+}
+
 uint32_t MAINMENU_ShowBnetConnectionError() {
     D2ControlStrc* pDVar1 = MainMenus::FORMS_CreateAnyFormFromList(0xde);
     D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pDVar1, 1);
@@ -52,7 +56,7 @@ uint32_t MAINMENU_ShowBnetConnectionError() {
 }
 
 BOOL __stdcall UIMENU_ToggleHardcoreMode(D2ControlMsg * pControlMsg) {
-    D2IniData_launcher->eCTEMP_eD2PlayerStatus ^= PLAYERSTATUS_Hardcore;
+    MainMenus::D2IniData_launcher->eCTEMP_eD2PlayerStatus ^= PLAYERSTATUS_Hardcore;
     return 1;
 }
 
@@ -64,9 +68,9 @@ BOOL __stdcall UIMENU_DisconnectAndReturnToMainMenu(D2ControlMsg * pControlMsg) 
 
 BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(D2ControlMsg * pControlMsg) {
     char cCurChar;
-    D2IniData_launcher->nGAMETYPE = GAMETYPE_LAN_HOST;
+    MainMenus::D2IniData_launcher->nGAMETYPE = GAMETYPE_LAN_HOST;
     char* pszLocalIp = Fog::Src::Safesock::NET_GetLocalIp();
-    char* pszServerIp = D2IniData_launcher->szSERVERIP;
+    char* pszServerIp = MainMenus::D2IniData_launcher->szSERVERIP;
     do {
       cCurChar = *pszLocalIp;
       *pszServerIp = cCurChar;
@@ -74,8 +78,8 @@ BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(D2ControlMsg * pControlMsg)
       pszServerIp++;
     } while (cCurChar != '\0');
 
-    OogCurrentCharSelectionMode = CHAR_SELECTION_TCP_IP;
-    D2IniData_launcher->eArenaFlags = ARENAFLAG_ClientUpdate;
+    MainMenus::OogCurrentCharSelectionMode = CHAR_SELECTION_TCP_IP;
+    MainMenus::D2IniData_launcher->eArenaFlags = ARENAFLAG_ClientUpdate;
     BOOL bHasSaveFiles = MainMenus::SAVEFILE_FindAllSaveFiles();
     if (!bHasSaveFiles) {
       MainMenus::UIMENU_CreateHeroSinglePlayer();
@@ -89,7 +93,7 @@ BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(D2ControlMsg * pControlMsg)
 }
 
 BOOL __stdcall MAINMENU_OnPressSkipEmailAddress(D2ControlStrc * pControl) {
-    gpBNetCallbacks->pfnSendSetEmail("");
+    Launcher::gpBNetCallbacks->pfnSendSetEmail("");
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }

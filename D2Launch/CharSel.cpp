@@ -442,7 +442,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
     if (gpCharSelStatusTextBox) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelStatusTextBox);
     }
-    if (!(OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelBNetLoadState)) {
+    if (!(MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelBNetLoadState)) {
       return;
     }
 
@@ -456,14 +456,14 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
         D2Win::Src::D2Comp::D2COMP_SetScreenY(pCharSel->pCharSelCompStrc, nSlotBoxY);
         wCharFlags = pCharSel->nCharacterFlags;
         if (wCharFlags & 8) {
-          dwCompFlags = gadwBitMasks[4] | 1;
+          dwCompFlags = Fog::BitBuffer::gadwBitMasks[4] | 1;
         } else {
-          dwCompFlags = gadwInvBitMasks[4] & 1;
+          dwCompFlags = Fog::BitBuffer::gadwInvBitMasks[4] & 1;
         }
         if (wCharFlags & 4) {
-          nLanguageCode = dwCompFlags | gadwBitMasks[5];
+          nLanguageCode = dwCompFlags | Fog::BitBuffer::gadwBitMasks[5];
         } else {
-          nLanguageCode = dwCompFlags & gadwInvBitMasks[5];
+          nLanguageCode = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[5];
         }
 
         D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharSel->pCharSelCompStrc, nLanguageCode);
@@ -532,7 +532,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           } else {
             nDaysUntilExpire = (dwCompFlags - nCopyDwords) / 0x15180;
           }
-          if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && nDaysUntilExpire <= 0x3c) {
+          if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && nDaysUntilExpire <= 0x3c) {
             nTextLine = 1;
             if (!nDaysUntilExpire) {
               wExpireStrIndex = 0x2b7e;
@@ -609,7 +609,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
     if (gpCharSelStatusTextBox) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelStatusTextBox);
     }
-    if (!((OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelBNetLoadState) && pCharEntry)) {
+    if (!((MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelBNetLoadState) && pCharEntry)) {
       return;
     }
 
@@ -630,7 +630,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
           nHaltLine = 1;
           ppSlotTextBox = gaCharSelScreenSlotControls + nCharIndex;
           D2Win::Src::D2WinTextBox::SetText(*ppSlotTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1419), nHaltLine, (bool)byTextColor, nLoopIdx);
-          if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && gnCharSelLoadedCharCount) {
+          if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && gnCharSelLoadedCharCount) {
             D2Win::Src::D2WinTextBox::SetText(*ppSlotTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1416), 0, false, 0);
             D2Win::Src::D2WinTextBox::SetText(*ppSlotTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1417), 0, false, 0);
             nSlotBoxY += 0x5d;
@@ -644,14 +644,14 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
         } else {
           wCharFlags = pCharEntry->nCharacterFlags;
           if (wCharFlags & 8) {
-            dwCompFlags = gadwBitMasks[4] | 1;
+            dwCompFlags = Fog::BitBuffer::gadwBitMasks[4] | 1;
           } else {
-            dwCompFlags = gadwInvBitMasks[4] & 1;
+            dwCompFlags = Fog::BitBuffer::gadwInvBitMasks[4] & 1;
           }
           if (wCharFlags & 4) {
-            nLanguageCode = dwCompFlags | gadwBitMasks[5];
+            nLanguageCode = dwCompFlags | Fog::BitBuffer::gadwBitMasks[5];
           } else {
-            nLanguageCode = dwCompFlags & gadwInvBitMasks[5];
+            nLanguageCode = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[5];
           }
 
           D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharEntry->pCharSelCompStrc, nLanguageCode);
@@ -766,7 +766,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
             }
 
             nLanguageCode = CHARSEL_GetDaysUntilExpiry(pCharEntry->dwRealmParam);
-            if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && nLanguageCode <= 0x3c) {
+            if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && nLanguageCode <= 0x3c) {
               nHaltLine = 1;
               if (!nLanguageCode) {
                 wExpireStrIndex = 0x2b7e;
@@ -1122,7 +1122,7 @@ int __stdcall CHARSEL_UpdateSelectionExpansion() {
       }
 
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, (uint32_t)!gbCharSelArrowsHidden);
-      if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && gnCharSelLoadedCharCount) {
+      if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && gnCharSelLoadedCharCount) {
         D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
       }
 
@@ -1273,19 +1273,19 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
         D2Win::Src::D2Comp::D2COMP_SetScreenY(gpCharSelPendingEntry->pCharSelCompStrc, 0x172);
         wCharFlags = gpCharSelPendingEntry->nCharacterFlags;
         if (wCharFlags & 8) {
-          dwCompFlags = gadwBitMasks[4] | 5;
+          dwCompFlags = Fog::BitBuffer::gadwBitMasks[4] | 5;
         } else {
-          dwCompFlags = gadwInvBitMasks[4] & 5;
+          dwCompFlags = Fog::BitBuffer::gadwInvBitMasks[4] & 5;
         }
         if (wCharFlags & 4) {
-          dwCompFlags |= gadwBitMasks[5];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[5];
         } else {
-          dwCompFlags &= gadwInvBitMasks[5];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[5];
         }
         if (wCharFlags & 0x20) {
-          dwFlags = dwCompFlags | gadwBitMasks[0xc];
+          dwFlags = dwCompFlags | Fog::BitBuffer::gadwBitMasks[0xc];
         } else {
-          dwFlags = dwCompFlags & gadwInvBitMasks[0xc];
+          dwFlags = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[0xc];
         }
 
         D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, dwFlags);
@@ -1375,10 +1375,10 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
     }
 
     bool bIsCreateNewSlot = nSelectedCharIndex == gnCharSelLoadMoreEntryIndex;
-    D2IniData_launcher->nDifficulty = 0;
-    D2IniConfigStrc* pIniLauncher = D2IniData_launcher;
+    MainMenus::D2IniData_launcher->nDifficulty = 0;
+    D2IniConfigStrc* pIniLauncher = MainMenus::D2IniData_launcher;
     if (bIsCreateNewSlot) {
-      if (OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelLoadedCharCount) {
+      if (MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelLoadedCharCount) {
         MainMenus::thunk_UIMENU_CreateHeroSinglePlayer(pControlMsg);
         gnCharSelCreateNewButtonClickCount--;
         if ((int32_t)gnCharSelCreateNewButtonClickCount <= 0) {
@@ -1407,19 +1407,19 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
           }
 
           if (pSelectedChar) {
-            if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET || OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure) {
-              *(uint32_t*)(D2IniData_launcher->padding_0x35F + 0x42) = *(uint32_t*)pSelectedChar->abEquipSlot1;
+            if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure) {
+              *(uint32_t*)(MainMenus::D2IniData_launcher->padding_0x35F + 0x42) = *(uint32_t*)pSelectedChar->abEquipSlot1;
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x46) = *(uint32_t*)(pSelectedChar->abEquipSlot1 + 4);
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x4a) = *(uint32_t*)(pSelectedChar->abEquipSlot1 + 8);
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x4e) = *(uint32_t*)(pSelectedChar->abEquipSlot1 + 0xc);
-              pIniLauncher = D2IniData_launcher;
-              *(uint32_t*)(D2IniData_launcher->padding_0x35F + 0x52) = *(uint32_t*)pSelectedChar->abEquipSlot2;
+              pIniLauncher = MainMenus::D2IniData_launcher;
+              *(uint32_t*)(MainMenus::D2IniData_launcher->padding_0x35F + 0x52) = *(uint32_t*)pSelectedChar->abEquipSlot2;
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x56) = *(uint32_t*)(pSelectedChar->abEquipSlot2 + 4);
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x5a) = *(uint32_t*)(pSelectedChar->abEquipSlot2 + 8);
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x5e) = *(uint32_t*)(pSelectedChar->abEquipSlot2 + 0xc);
-              D2IniData_launcher->padding_0x35F[0x62] = (uint8_t)pSelectedChar->nLevel;
-              D2IniData_launcher->isLadder = (bool)pSelectedChar->bAct;
-              D2IniData_launcher->neD2PlayerStatus = pSelectedChar->nCharacterFlags;
+              MainMenus::D2IniData_launcher->padding_0x35F[0x62] = (uint8_t)pSelectedChar->nLevel;
+              MainMenus::D2IniData_launcher->isLadder = (bool)pSelectedChar->bAct;
+              MainMenus::D2IniData_launcher->neD2PlayerStatus = pSelectedChar->nCharacterFlags;
             }
             if (pSelectedChar->nCharacterFlags & 0x20) {
               bIsExpansion = Fog::D2CheckExpansionGame();
@@ -1429,12 +1429,12 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
             }
 
             wCharFlags = pSelectedChar->nCharacterFlags;
-            if (wCharFlags & 4 && wCharFlags & 8 && (OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP)) {
+            if (wCharFlags & 4 && wCharFlags & 8 && (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_SP || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP)) {
               pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x14b8);
               MainMenus::MAINMENU_ShowPopupWithCancel(pwszLocaleStr, MainMenus::FORMS_DestroyList);
               return 1;
             }
-            if ((OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP && D2IniData_launcher->nGAMETYPE == GAMETYPE_LAN_HOST) && ((nDifficultyUnlocked = pSelectedChar->nCharacterFlags >> 8 & 0x1f , !(pSelectedChar->nCharacterFlags & 0x20) && 3 < (int32_t)nDifficultyUnlocked) || 4 < (int32_t)nDifficultyUnlocked)) {
+            if ((MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_SP || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP && MainMenus::D2IniData_launcher->nGAMETYPE == GAMETYPE_LAN_HOST) && ((nDifficultyUnlocked = pSelectedChar->nCharacterFlags >> 8 & 0x1f , !(pSelectedChar->nCharacterFlags & 0x20) && 3 < (int32_t)nDifficultyUnlocked) || 4 < (int32_t)nDifficultyUnlocked)) {
               UIMENU_SelectDifficultySinglePlayerOrTcpip(nDifficultyUnlocked, wCharFlags & 0x20);
               return 1;
             }
@@ -1470,7 +1470,7 @@ void __fastcall UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(D2ControlMsg * pCo
       return;
     }
 
-    D2IniData_launcher->nDifficulty = (uint8_t)byDifficulty;
+    MainMenus::D2IniData_launcher->nDifficulty = (uint8_t)byDifficulty;
     MainMenus::FORMS_DestroyList();
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szRealmName, (uint16_t*)pSelectedChar->szCommandStringTable, 0xff);
     MainMenus::SelectedCharBnetSingleTcpIp(pSelectedChar, pSelectedChar->nCharacterFlags, pSelectedChar->ePlayerClassID, szRealmName);
@@ -1595,9 +1595,7 @@ BOOL __stdcall MAINMENU_CharSelScrollbarCallback(D2ControlStrc * pControl) {
 }
 
 void __stdcall CHARSEL_ScrollCharList(int32_t nScrollDelta) {
-    int nCurrentScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar);
-    nCurrentScrollPos += nScrollDelta;
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, nCurrentScrollPos);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar) + nScrollDelta);
 }
 
 BOOL __stdcall CHARSEL_HandleKeyNavExpansion(int32_t pKeyMsg) {
@@ -1845,7 +1843,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
     uint16_t wErrorStrId;
     uint8_t nTextArg8;
     gnCharSelBNetLoadState = 0;
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::MAINMENU_QueryAndBuildRealmList();
       int nRealmCount = MainMenus::MAINMENU_GetRealmCount();
       if (nRealmCount != -1) {
@@ -1873,7 +1871,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
             }
           }
 
-          pBNetGateway = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+          pBNetGateway = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
           Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pBNetGateway, pBNetGateway->nCurGatewayIdx), 0x7fffffff);
           Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
           nTextLine = CHARSEL_FindRealmByName(PreferredClosedRealm);
@@ -1968,7 +1966,7 @@ int __stdcall CHARSEL_CreateCharEntry(uint16_t * wszCharName, uint16_t * wszComm
 void __stdcall CHARSEL_AddCreateNewEntry() {
     uint16_t* pwszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x1419);
     uint16_t wCommandStrId = 0x141b;
-    if (OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
       wCommandStrId = 0x141a;
     }
 
@@ -2034,7 +2032,7 @@ void __stdcall CHARSEL_ResetCharListUI() {
 
 int Unreferenced_0043a7e0() {
     int in_EAX;
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       int extraout_EAX;
       MainMenus::FORMS_DestroyList();
       CHARSEL_ResetCharListUI();
@@ -2050,7 +2048,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
     char* szRealmName;
     int32_t nNameCmpResult;
     int nRealmIndex;
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       BOOL bIsExpansion;
       bIsExpansion = Fog::D2CheckExpansionGame();
       if (bIsExpansion) {
@@ -2103,7 +2101,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
 BOOL __stdcall ChangeClosedRealmChoice(D2ControlMsg * pControlMsg) {
     Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, PreferedClosedRealm2, 0x7fffffff);
     Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::FORMS_DestroyList();
       CHARSEL_ResetCharListUI();
     }
@@ -2176,7 +2174,7 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
       uint16_t* pwszSubHeader;
       pwszHeader = D2Lang::StrTable::strtable::GetLocaleString(0x1419);
       nSubHeaderStrId = 0x141b;
-      if (OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
+      if (MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
         nSubHeaderStrId = 0x141a;
       }
 
@@ -2319,7 +2317,7 @@ static void CHARSEL_RequestRealmCharList(char * szRealmName) {
       pCacheEntry = pCacheEntry->pNext;
     } while (true);
 
-    BOOL bIsConnected = gpBNetCallbacks->pfnIsSocketConnected();
+    BOOL bIsConnected = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
     if (!bIsConnected) {
       uint16_t* pwszErrorMsg;
       pwszErrorMsg = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
@@ -2333,12 +2331,12 @@ static void CHARSEL_RequestRealmCharList(char * szRealmName) {
 
 void __fastcall CHARSEL_LoadCharList(char * szText) {
     gnCharSelLoadedCharCount = 0;
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpControlCharSelList);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpControlCharSelList, szText, 0);
       CHARSEL_RequestRealmCharList(szText);
     } else {
-      if (OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP) {
+      if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_SP || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP) {
         BOOL bIsExpansion;
         CHARSEL_DestroyAllCharEntries();
         bIsExpansion = Fog::D2CheckExpansionGame();
@@ -2368,7 +2366,7 @@ void __stdcall CHARSEL_InitCharSelScreen() {
     gnCharSelScrollOffset = 0;
     gpCharSelStatusTextBox = 0;
     gpCharSelScrollbar = 0;
-    D2IniData_launcher->nDifficulty = 0;
+    MainMenus::D2IniData_launcher->nDifficulty = 0;
     MainMenus::FORMS_CreateAnyFormFromListExEx(0xa1);
     gpCtlCharSelDeleteButton = MainMenus::FORMS_CreateAnyFormFromListExEx(0xa2);
     gpCharSelExitButton = MainMenus::FORMS_CreateAnyFormFromListExEx(0xa3);
@@ -2443,7 +2441,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     MainMenus::FORMS_DestroyLists();
     D2Win::Src::D2WinMain::D2WINMAIN_SetBackgroundDC6(DC6_CharSelect_charselectbckg);
     MainMenus::D2GFX_SetPaletteForDraw(gaFrontEndPaletteFiles[2], gaFrontEndPaletteFiles[3]);
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::MAINMENU_QueryAndBuildRealmList();
       nSlotIndex = MainMenus::MAINMENU_GetRealmCount();
       switch (nSlotIndex) {
@@ -2476,7 +2474,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     pTimerControl = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerControl);
     D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)pTimerControl);
-    D2IniData_launcher->nDifficulty = 0;
+    MainMenus::D2IniData_launcher->nDifficulty = 0;
     gpCharSelExitButton = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7c);
     gpCtlCharSelDownArrow = (::D2WinButton*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7d);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible((D2ControlStrc*)gpCtlCharSelDownArrow, 0);
@@ -2491,7 +2489,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     gpControlCharSelArrows = MainMenus::FORMS_CreateAnyFormFromListExEx(0x9f);
     nSlotIndex = 0;
     memset(gaCharSelScreenSlotControls, 0, 8 * sizeof(gaCharSelScreenSlotControls[0]));
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       int32_t nRegResult;
       gnCharSelScreenSlotCount = 4;
       nSlotY = 0xf6;
@@ -2525,7 +2523,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
         }
       }
 
-      pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+      pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
       Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pGatewayAccess, pGatewayAccess->nCurGatewayIdx), 0x7fffffff);
       Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
       nFoundRealmIndex = CHARSEL_FindRealmByName(PreferredClosedRealm);

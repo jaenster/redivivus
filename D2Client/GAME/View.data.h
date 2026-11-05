@@ -6,13 +6,17 @@
 #pragma once
 
 #include "d2_platform.h"
+#include "D2Common/D2SeedStrc.h"
+
+// Forward declarations
+struct D2SeedStrc;
 
 extern uint32_t gaSpriteArcaneStarYOffset;
-extern uint32_t gaSpriteArcaneStarXOffset;
 extern int nScaleFactor;
 extern uint32_t gnFrameDrawCounter;
 
 namespace D2Client::GAME::View {
+extern D2SeedStrc gAncientsCloudSeed;
 extern uint32_t SHAKE_StartTickcount;
 extern uint32_t SHAKE_Arg3;
 extern uint32_t SHAKE_Arg1;

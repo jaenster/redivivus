@@ -448,8 +448,6 @@ struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0044df10(struc
 struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00450870(struct BigBuffer * pBitSet);
 struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0047f930(struct BigBuffer * pBitSet);
 struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0051d2c0(struct BigBuffer * pBitSet);
-void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray);
-void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray);
 struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00601e00(struct BigBuffer * pBitSet);
 struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_00603f40(struct BigBuffer * pBitSet);
 struct BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0060e200(struct BigBuffer * pBitSet);

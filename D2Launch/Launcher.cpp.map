@@ -132,6 +132,21 @@
       ]
     },
     {
+      "name": "BeginCutSceneAtResolutionMode0_Unref_0043b800",
+      "address": "0043b800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b800"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "BeginCutSceneAtResolutionMode0_Unref_0043b800",
+        "thunk_BNMESSQUEUE_Shutdown"
+      ]
+    },
+    {
       "name": "LAUNCHER_SetBusyFlag",
       "address": "0043b810",
       "lines": [

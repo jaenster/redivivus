@@ -35,6 +35,21 @@
       ]
     },
     {
+      "name": "thunk__strstr",
+      "address": "0042e5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e5b0"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "thunk__strstr",
+        "strstr"
+      ]
+    },
+    {
       "name": "MAINMENU_ShowBnetConnectionError",
       "address": "0042f7a0",
       "lines": [

@@ -99,11 +99,11 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
     if (nAST == 1) {
       int nLinkIdx;
       if (nKeywordNumber == 3) {
-        if (sgtDataTable.pTxtSkillsHeaderLink) {
-          nLinkIdx = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSkillsHeaderLink, szText, 0);
+        if (MonsterTbls::sgtDataTable.pTxtSkillsHeaderLink) {
+          nLinkIdx = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtSkillsHeaderLink, szText, 0);
           if (nLinkIdx < 0) {
             MISSILETBLS_PadCodeTo4Chars(szText, (char*)&nAST);
-            nCalcId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtSkillCalcLink, nAST, 1);
+            nCalcId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtSkillCalcLink, nAST, 1);
             *pOutHasResolvedToConstant = 0;
             return nCalcId;
           }
@@ -112,8 +112,8 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
           return nLinkIdx;
         }
       } else if (nKeywordNumber == 4) {
-        if (sgtDataTable.pTxtMissilesLink) {
-          nLinkIdx = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMissilesLink, szText, 0);
+        if (MonsterTbls::sgtDataTable.pTxtMissilesLink) {
+          nLinkIdx = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtMissilesLink, szText, 0);
           if (nLinkIdx >= 0) {
             *pOutHasResolvedToConstant = 1;
             return nLinkIdx;
@@ -121,7 +121,7 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
         }
 
         MISSILETBLS_PadCodeTo4Chars(szText, (char*)&nAST);
-        nCalcId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
+        nCalcId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtMissCalcLink, nAST, 1);
         *pOutHasResolvedToConstant = 0;
         return nCalcId;
       }
@@ -155,7 +155,7 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
 
     nAST = (uint32_t)((uint32_t)(uint8_t)cFourthChar << 24 | (uint32_t)((uint32_t)nAST & 0xffffffu));
     lookup_miss_calc:
-    nCalcId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
+    nCalcId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtMissCalcLink, nAST, 1);
     *pOutHasResolvedToConstant = 0;
     return nCalcId;
 }
@@ -170,7 +170,7 @@ void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, 
     if (pSrc) {
       nCalcCodeSize = Fog::Skills::SKILLS_ParseCalcExpression(pSrc, byCalcBuf, 0x400, (CalcGetKeyWordToNumber_t)MapMissilesTxtKeywordToNumber, nullptr, MISSILETBLS_ValidateCalcCode);
       if ((int)nCalcCodeSize > 0) {
-        nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&sgtDataTable.pMissCode, &sgtDataTable.nMissCodeSize, &sgtDataTable.nMissCodeCapacity, byCalcBuf, nCalcCodeSize);
+        nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pMissCode, &MonsterTbls::sgtDataTable.nMissCodeSize, &MonsterTbls::sgtDataTable.nMissCodeCapacity, byCalcBuf, nCalcCodeSize);
         *(int32_t*)(nOffset + (int)pRecord) = nParsedLen;
         return;
       }
@@ -181,7 +181,7 @@ void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, 
 
 // Validates a single field of a D2MissilesTxt row (indexed by nMissileIdx) against [nMinVal, nMaxVal] and clamps it in-place if out of range. Reads the field via eFieldType (0=signed byte, 1=unsigned byte, 2=signed short, 3=unsigned short, 4=uint32) at nFieldOffset into the Missile sub-struct. On violation, walks pFieldDescArray to find the matching descriptor, then writes back the clamped value at the same offset and width.
 void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nMinVal, uint32_t nMaxVal, int32_t nFieldOffset, int32_t pFieldDescArray, int32_t nMissileIdx) {
-    D2MissilesTxt* pMissileTxt = nMissileIdx < 0 || nMissileIdx >= sgptDataTable->nTxtMissilesSize ? 0 : sgptDataTable->pTxtMissiles + nMissileIdx;
+    D2MissilesTxt* pMissileTxt = nMissileIdx < 0 || nMissileIdx >= ITEMS::Items::sgptDataTable->nTxtMissilesSize ? 0 : ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileIdx;
     uint32_t nRawVal = 0;
     switch (eFieldType) {
       case 0:
@@ -248,7 +248,7 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
     uint8_t byCollideType;
     D2MissilesTxt* pMissileTxt;
     D2BinFieldInputStrc missiles[147] = {
-      {"Missile", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMissilesLink},
+      {"Missile", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
       {"LastCollide", FIELDTYPE_BIT, 0, 4, 0},
       {"Explosion", FIELDTYPE_BIT, 1, 4, 0},
       {"Pierce", FIELDTYPE_BIT, 2, 4, 0},
@@ -291,25 +291,25 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
       {"dParam1", FIELDTYPE_INT, 0, 0x78, 0},
       {"dParam2", FIELDTYPE_INT, 0, 0x7c, 0},
       {"DmgCalc1", FIELDTYPE_LINKER_INT, 0, 0x90, (void*)MissileCalcLinker},
-      {"TravelSound", FIELDTYPE_NAME_SHORT, 0, 0x12, &sgtDataTable.pTxtSoundsLink},
-      {"HitSound", FIELDTYPE_NAME_SHORT, 0, 0x14, &sgtDataTable.pTxtSoundsLink},
-      {"ProgSound", FIELDTYPE_NAME_SHORT, 0, 0x34, &sgtDataTable.pTxtSoundsLink},
-      {"ProgOverlay", FIELDTYPE_NAME_SHORT, 0, 0x36, &sgtDataTable.pTxtOverlayLink},
-      {"ExplosionMissile", FIELDTYPE_NAME_SHORT, 0, 0x16, &sgtDataTable.pTxtMissilesLink},
-      {"SubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x18, &sgtDataTable.pTxtMissilesLink},
-      {"SubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x1a, &sgtDataTable.pTxtMissilesLink},
-      {"SubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x1c, &sgtDataTable.pTxtMissilesLink},
-      {"HitSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x24, &sgtDataTable.pTxtMissilesLink},
-      {"HitSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x26, &sgtDataTable.pTxtMissilesLink},
-      {"HitSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x28, &sgtDataTable.pTxtMissilesLink},
-      {"HitSubMissile4", FIELDTYPE_NAME_SHORT, 0, 0x2a, &sgtDataTable.pTxtMissilesLink},
-      {"CltSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x1e, &sgtDataTable.pTxtMissilesLink},
-      {"CltSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x20, &sgtDataTable.pTxtMissilesLink},
-      {"CltSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x22, &sgtDataTable.pTxtMissilesLink},
-      {"CltHitSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x2c, &sgtDataTable.pTxtMissilesLink},
-      {"CltHitSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x2e, &sgtDataTable.pTxtMissilesLink},
-      {"CltHitSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x30, &sgtDataTable.pTxtMissilesLink},
-      {"CltHitSubMissile4", FIELDTYPE_NAME_SHORT, 0, 0x32, &sgtDataTable.pTxtMissilesLink},
+      {"TravelSound", FIELDTYPE_NAME_SHORT, 0, 0x12, &MonsterTbls::sgtDataTable.pTxtSoundsLink},
+      {"HitSound", FIELDTYPE_NAME_SHORT, 0, 0x14, &MonsterTbls::sgtDataTable.pTxtSoundsLink},
+      {"ProgSound", FIELDTYPE_NAME_SHORT, 0, 0x34, &MonsterTbls::sgtDataTable.pTxtSoundsLink},
+      {"ProgOverlay", FIELDTYPE_NAME_SHORT, 0, 0x36, &MonsterTbls::sgtDataTable.pTxtOverlayLink},
+      {"ExplosionMissile", FIELDTYPE_NAME_SHORT, 0, 0x16, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"SubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x18, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"SubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x1a, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"SubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x1c, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x24, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x26, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x28, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile4", FIELDTYPE_NAME_SHORT, 0, 0x2a, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x1e, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x20, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x22, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x2c, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x2e, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x30, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile4", FIELDTYPE_NAME_SHORT, 0, 0x32, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
       {"ResultFlags", FIELDTYPE_SHORT, 0, 0xac, 0},
       {"HitFlags", FIELDTYPE_UINT, 0, 0xa8, 0},
       {"HitClass", FIELDTYPE_CHAR, 0, 0x94, 0},
@@ -321,7 +321,7 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
       {"yoffset", FIELDTYPE_SHORT, 0, 0xa4, 0},
       {"zoffset", FIELDTYPE_SHORT, 0, 0xa6, 0},
       {"MissileSkill", FIELDTYPE_BIT, 0xf, 4, 0},
-      {"Skill", FIELDTYPE_NAME_SHORT, 0, 0x194, &sgtDataTable.pTxtSkillsHeaderLink},
+      {"Skill", FIELDTYPE_NAME_SHORT, 0, 0x194, &MonsterTbls::sgtDataTable.pTxtSkillsHeaderLink},
       {"MinDamage", FIELDTYPE_INT, 0, 0xb0, 0},
       {"MinLevDam1", FIELDTYPE_INT, 0, 0xb8, 0},
       {"MinLevDam2", FIELDTYPE_INT, 0, 0xbc, 0},
@@ -335,7 +335,7 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
       {"MaxLevDam4", FIELDTYPE_INT, 0, 0xd8, 0},
       {"MaxLevDam5", FIELDTYPE_INT, 0, 0xdc, 0},
       {"DmgSymPerCalc", FIELDTYPE_LINKER_INT, 0, 0xe0, (void*)MissileCalcLinker},
-      {"EType", FIELDTYPE_CODE_CHAR, 0, 0xe4, &sgtDataTable.pTxtElemTypesLink},
+      {"EType", FIELDTYPE_CODE_CHAR, 0, 0xe4, &MonsterTbls::sgtDataTable.pTxtElemTypesLink},
       {"EMin", FIELDTYPE_INT, 0, 0xe8, 0},
       {"MinELev1", FIELDTYPE_INT, 0, 0xf0, 0},
       {"MinELev2", FIELDTYPE_INT, 0, 0xf4, 0},
@@ -396,12 +396,12 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
       {"DamageRate", FIELDTYPE_INT, 0, 0x19c, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    sgtDataTable.pTxtMissilesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MissileTbls.cpp", 0x189);
-    sgtDataTable.pTxtMissiles = (D2MissilesTxt*)DataTbls::CompileTxt(pMemory, "missiles", missiles, &sgtDataTable.nTxtMissilesSize, 0x1a4);
+    MonsterTbls::sgtDataTable.pTxtMissilesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MissileTbls.cpp", 0x189);
+    MonsterTbls::sgtDataTable.pTxtMissiles = (D2MissilesTxt*)DataTbls::CompileTxt(pMemory, "missiles", missiles, &MonsterTbls::sgtDataTable.nTxtMissilesSize, 0x1a4);
     int iMissileIdx = 0;
-    if (sgtDataTable.nTxtMissilesSize > 0) {
+    if (MonsterTbls::sgtDataTable.nTxtMissilesSize > 0) {
       int iFieldIdx;
-      sgptDataTable_lcl = sgptDataTable;
+      sgptDataTable_lcl = ITEMS::Items::sgptDataTable;
       do {
         if (iMissileIdx < 0 || iMissileIdx >= sgptDataTable_lcl->nTxtMissilesSize) {
           pMissileTxt = 0;
@@ -432,38 +432,38 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
           }
 
           pMissileTxt->CollideType = byCollideType;
-          sgptDataTable_lcl = sgptDataTable;
+          sgptDataTable_lcl = ITEMS::Items::sgptDataTable;
         }
 
         iMissileIdx++;
-      } while (iMissileIdx < sgtDataTable.nTxtMissilesSize);
+      } while (iMissileIdx < MonsterTbls::sgtDataTable.nTxtMissilesSize);
     }
 
-    DataTbls::TXT_SaveTableToBinFile(pMemory, "misscode", (D2ArchiveStrc**)&sgtDataTable.pMissCode, (size_t*)&sgtDataTable.nMissCodeSize, (size_t*)&sgtDataTable.nMissCodeCapacity);
+    DataTbls::TXT_SaveTableToBinFile(pMemory, "misscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pMissCode, (size_t*)&MonsterTbls::sgtDataTable.nMissCodeSize, (size_t*)&MonsterTbls::sgtDataTable.nMissCodeCapacity);
 }
 
 // @sourcefile .\DATATBLS\MissileTbls.cpp
 void __stdcall MISSILETBLS_FreeTxt() {
-    if (sgtDataTable.pMissCode) {
-      D2_FREE_POOL_AT(nullptr, sgtDataTable.pMissCode, ".\\DATATBLS\\MissileTbls.cpp", 0x19e);
-      sgtDataTable.pMissCode = 0;
+    if (MonsterTbls::sgtDataTable.pMissCode) {
+      D2_FREE_POOL_AT(nullptr, MonsterTbls::sgtDataTable.pMissCode, ".\\DATATBLS\\MissileTbls.cpp", 0x19e);
+      MonsterTbls::sgtDataTable.pMissCode = 0;
     }
 
-    sgtDataTable.nMissCodeSize = 0;
-    sgtDataTable.nMissCodeCapacity = 0;
-    if (sgtDataTable.pTxtMissiles) {
-      DataTbls::UnloadBin(sgtDataTable.pTxtMissiles);
+    MonsterTbls::sgtDataTable.nMissCodeSize = 0;
+    MonsterTbls::sgtDataTable.nMissCodeCapacity = 0;
+    if (MonsterTbls::sgtDataTable.pTxtMissiles) {
+      DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtMissiles);
     }
-    if (sgtDataTable.pTxtMissilesLink) {
-      Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMissilesLink);
+    if (MonsterTbls::sgtDataTable.pTxtMissilesLink) {
+      Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtMissilesLink);
     }
 
-    sgtDataTable.nTxtMissilesSize = 0;
+    MonsterTbls::sgtDataTable.nTxtMissilesSize = 0;
 }
 
 int32_t __stdcall MISSILETBLS_CalculateVelocity(int32_t nMissileId, int32_t nLevel) {
     D2MissilesTxt* pMissileTxt;
-    pMissileTxt = nMissileId >= 0 && nMissileId < sgtDataTable.nTxtMissilesSize ? sgtDataTable.pTxtMissiles + nMissileId : nullptr;
+    pMissileTxt = nMissileId >= 0 && nMissileId < MonsterTbls::sgtDataTable.nTxtMissilesSize ? MonsterTbls::sgtDataTable.pTxtMissiles + nMissileId : nullptr;
     if (pMissileTxt) {
       int nVelLevProduct;
       nVelLevProduct = (uint32_t)(uint8_t)pMissileTxt->VelLev * nLevel;

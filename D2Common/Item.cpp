@@ -206,7 +206,7 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     }
 
     nSetId = (int)pSetItemTxt->set;
-    if (!(nSetId >= 0 && nSetId < sgptDataTable->nTxtSetsSize)) {
+    if (!(nSetId >= 0 && nSetId < ITEMS::Items::sgptDataTable->nTxtSetsSize)) {
       return;
     }
 

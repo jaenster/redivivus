@@ -341,8 +341,8 @@ BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAn
     ::D2WinAnimImage* pNewAnimImage = D2_NEW_AT(::D2WinAnimImage, ".\\D2WinAnimImage.cpp", 0x1c);
     memset(pNewAnimImage, 0, 0x60);
     pNewAnimImage->sControl.neD2FormType = FORM_Image;
-    pNewAnimImage->sControl.dwState |= gadwBitMasks[0];
-    dwState = pNewAnimImage->sControl.dwState | gadwBitMasks[2];
+    pNewAnimImage->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pNewAnimImage->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewAnimImage->sControl.pDC6 = pDC6;
     pNewAnimImage->sControl.dwState = dwState;
     pNewAnimImage->sControl.dwPosX = nPosX;

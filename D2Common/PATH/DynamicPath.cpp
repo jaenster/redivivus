@@ -329,29 +329,29 @@ void __stdcall STRUCT_FreePath(D2PoolManagerStrc * pMemory, void * pPath) {
 static int32_t PATH_GetCollisionPatternFromMonStats(D2UnitStrc * pUnit) {
     D2MonStatsTxt* pMonStatsTxt;
     int nMonStatsIdx;
-    if (!pUnit || (nMonStatsIdx = pUnit->nClassId , nMonStatsIdx < 0) || nMonStatsIdx >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nMonStatsIdx = pUnit->nClassId , nMonStatsIdx < 0) || nMonStatsIdx >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nMonStatsIdx;
+      pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsIdx;
     }
-    if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)gadwBitMasks[6]) {
+    if (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
       return 0x1804;
     }
 
-    return *((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)gadwBitMasks[3] ? 0x3401 : 0x3c01;
+    return *((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3] ? 0x3401 : 0x3c01;
 }
 
 int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
     D2MonStats2Txt* pMonStatsEx;
     uint32_t dwMonStats2Flags;
-    if (nMonStatsIdx >= 0 && nMonStatsIdx < sgptDataTable->nTxtMonStatsSize) {
+    if (nMonStatsIdx >= 0 && nMonStatsIdx < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       int nMonStatsExId;
-      nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
-      pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+      nMonStatsExId = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
+      pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
       if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
         dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
         nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
-        if (!((gadwBitMasks[0] & dwMonStats2Flags || gadwBitMasks[2] & dwMonStats2Flags) && !(gadwBitMasks[1] & dwMonStats2Flags))) {
+        if (!((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags))) {
           return nMonStatsExId;
         }
         if (nMonStatsExId != 1) {
@@ -1774,7 +1774,7 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
               }
 
               nUnitWidth = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit_00);
-              if (nUnitWidth < 0 || nUnitWidth >= sgptDataTable->nTxtMonStatsSize || nUnitWidth != 0x26) {
+              if (nUnitWidth < 0 || nUnitWidth >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nUnitWidth != 0x26) {
                 nUnitWidth = PATH_GetCollisionPatternFromMonStats(pUnit_00);
                 pDynamicPath->nCollisionPattern = nUnitWidth;
                 pDynamicPath->nDistMax = 0xe;
@@ -1889,7 +1889,7 @@ void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t bSkip) {
     nMonStatId = GetInteractSize(pUnit, nMonStatId);
     int32_t nMonBaseId;
     nMonBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-    if (nMonBaseId >= 0 && nMonBaseId < sgptDataTable->nTxtMonStatsSize) {
+    if (nMonBaseId >= 0 && nMonBaseId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       if (nMonBaseId <= 0x9e) {
         if (nMonBaseId < 0x9d && nMonBaseId != 0x26) {
           goto restore_collision;

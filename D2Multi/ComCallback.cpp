@@ -895,7 +895,7 @@ void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, ch
       if (!nUserCmp) {
         if (pUserListNode) {
           dwFlags = D2Win::Src::D2Comp::D2COMP_GetFlags((D2CharSelCompStrc*)pUserListNode->aBarricadePos[2].x);
-          if (gadwBitMasks[6] & dwFlags || gadwBitMasks[7] & dwFlags) {
+          if (Fog::BitBuffer::gadwBitMasks[6] & dwFlags || Fog::BitBuffer::gadwBitMasks[7] & dwFlags) {
             Storm::Source::SSTR::SStrCopy(szText2, D2Win::Src::D2Comp::D2COMP_GetTitlePrefix((uint32_t)pUserListNode->abGroupAllFreed[0], (dwFlags >> 5 & 1) * 3 + (dwFlags >> 7 & 1) * 2 + (dwFlags >> 6 & 1), dwFlags >> 0xc & 1), 0x7fffffff);
           }
         }
@@ -970,7 +970,7 @@ void __stdcall COMCALLBACK_ClearChannelUserList() {
     if (gpCurrentChatRoomContext) {
       if (*(int*)((int)gpCurrentChatRoomContext + 0x9c)) {
         dwCompFlags = D2Win::Src::D2Comp::D2COMP_GetFlags(*(D2CharSelCompStrc**)((int)gpCurrentChatRoomContext + 0x9c));
-        dwFlags = gadwBitMasks[9] & dwCompFlags;
+        dwFlags = Fog::BitBuffer::gadwBitMasks[9] & dwCompFlags;
       }
       if (gpCurrentChatRoomContext && !dwFlags) {
         bVisible = 1;
@@ -1189,25 +1189,25 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
         return;
       }
       if ((int)nUserIndex < gnChannelUserListScrollOffset || (int)nUserIndex >= gnChannelUserListScrollOffset + 0xb) {
-        dwCompFlags = pCurUser->nStatusFlags & 9 ? gadwBitMasks[0xb] : 0;
+        dwCompFlags = pCurUser->nStatusFlags & 9 ? Fog::BitBuffer::gadwBitMasks[0xb] : 0;
         nUserFlags = pCurUser->nFlags;
         if (nUserFlags & 8) {
-          dwCompFlags |= gadwBitMasks[4];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[4];
         } else {
-          dwCompFlags &= gadwInvBitMasks[4];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[4];
         }
         if (nUserFlags & 4) {
-          dwCompFlags |= gadwBitMasks[5];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[5];
         } else {
-          dwCompFlags &= gadwInvBitMasks[5];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[5];
         }
         if (nUserFlags & 0x20) {
-          dwCompFlags |= gadwBitMasks[0xc];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[0xc];
         } else {
-          dwCompFlags &= gadwInvBitMasks[0xc];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[0xc];
         }
 
-        ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
+        ePlayerStatus = OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
         if (!(ePlayerStatus & PLAYERSTATUS_Hardcore) || pCurUser->nHardcoreFlag) {
           bInserted = false;
         } else {
@@ -1228,10 +1228,10 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
         } else {
           bUserExpansionWeClassic = false;
         }
-        if (bUserExpansionWeClassic || D2IniData_multiplayer->isLadder != pCurUser->bIsLadder || bInserted || bUserHardcoreWeSoftcore || bWeExpansionUserClassic) {
-          dwCompFlags |= gadwBitMasks[0xd];
+        if (bUserExpansionWeClassic || OOGUtilities::D2IniData_multiplayer->isLadder != pCurUser->bIsLadder || bInserted || bUserHardcoreWeSoftcore || bWeExpansionUserClassic) {
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[0xd];
         } else {
-          dwCompFlags &= gadwInvBitMasks[0xd];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[0xd];
         }
 
         nTitleBits = pCurUser->nFlags >> 8 & 0x1f;
@@ -1265,48 +1265,48 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
           }
         }
         if (bInserted) {
-          dwCompFlags |= gadwBitMasks[6];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[6];
         } else {
-          dwCompFlags &= gadwInvBitMasks[6];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[6];
         }
         if (byTitleTier & 2) {
-          dwCompFlags |= gadwBitMasks[7];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[7];
         } else {
-          dwCompFlags &= gadwInvBitMasks[7];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[7];
         }
         if (pCurUser->nStatusFlags & 0x20) {
-          dwCompFlags |= gadwBitMasks[9];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[9];
         } else {
-          dwCompFlags &= gadwInvBitMasks[9];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[9];
         }
         if ((void*)pCurUser == gpCurrentChatRoomContext) {
-          dwFlags = dwCompFlags | gadwBitMasks[10];
+          dwFlags = dwCompFlags | Fog::BitBuffer::gadwBitMasks[10];
         } else {
-          dwFlags = dwCompFlags & gadwInvBitMasks[10];
+          dwFlags = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[10];
         }
       } else {
         D2Win::Src::D2Comp::D2COMP_SetScreenX(pCurUser->pComposite, nScreenY);
         if (pCurUser->nStatusFlags & 9) {
-          dwCompFlags = gadwBitMasks[0xb] | 0xf;
+          dwCompFlags = Fog::BitBuffer::gadwBitMasks[0xb] | 0xf;
         } else {
-          dwCompFlags = gadwInvBitMasks[0xb] & 0xf;
+          dwCompFlags = Fog::BitBuffer::gadwInvBitMasks[0xb] & 0xf;
         }
 
         nUserFlags = pCurUser->nFlags;
         if (nUserFlags & 8) {
-          dwCompFlags |= gadwBitMasks[4];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[4];
         } else {
-          dwCompFlags &= gadwInvBitMasks[4];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[4];
         }
         if (nUserFlags & 4) {
-          dwCompFlags |= gadwBitMasks[5];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[5];
         } else {
-          dwCompFlags &= gadwInvBitMasks[5];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[5];
         }
         if (nUserFlags & 0x20) {
-          dwCompFlags |= gadwBitMasks[0xc];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[0xc];
         } else {
-          dwCompFlags &= gadwInvBitMasks[0xc];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[0xc];
         }
 
         nClassId = pCurUser->nFlags >> 8 & 0x1f;
@@ -1340,28 +1340,28 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
           }
         }
         if (bInserted) {
-          dwCompFlags |= gadwBitMasks[6];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[6];
         } else {
-          dwCompFlags &= gadwInvBitMasks[6];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[6];
         }
         if (byTitleLevel & 2) {
-          dwCompFlags |= gadwBitMasks[7];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[7];
         } else {
-          dwCompFlags &= gadwInvBitMasks[7];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[7];
         }
         if (nUserIndex & 1) {
-          dwCompFlags |= gadwBitMasks[8];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[8];
         }
         if (pCurUser->nStatusFlags & 0x20) {
-          dwCompFlags |= gadwBitMasks[9];
+          dwCompFlags |= Fog::BitBuffer::gadwBitMasks[9];
         } else {
-          dwCompFlags &= gadwInvBitMasks[9];
+          dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[9];
         }
         if ((void*)pCurUser == gpCurrentChatRoomContext) {
-          dwFlags = dwCompFlags | gadwBitMasks[10];
+          dwFlags = dwCompFlags | Fog::BitBuffer::gadwBitMasks[10];
           nScreenY += 0x3c;
         } else {
-          dwFlags = dwCompFlags & gadwInvBitMasks[10];
+          dwFlags = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[10];
           nScreenY += 0x3c;
         }
       }
@@ -1450,7 +1450,7 @@ void __stdcall COMCALLBACK_ClearChannelListView() {
       }
 
       dwFlags = D2Win::Src::D2Comp::D2COMP_GetFlags(*(D2CharSelCompStrc**)((int)gpCurrentChatRoomContext + 0x9c));
-      D2Win::Src::D2Comp::D2COMP_SetFlags(*(D2CharSelStrc**)((int)gpCurrentChatRoomContext + 0x9c), gadwInvBitMasks[10] & dwFlags);
+      D2Win::Src::D2Comp::D2COMP_SetFlags(*(D2CharSelStrc**)((int)gpCurrentChatRoomContext + 0x9c), Fog::BitBuffer::gadwInvBitMasks[10] & dwFlags);
       gpCurrentChatRoomContext = 0;
       gnCurrentChannelContextId = -1;
     }
@@ -1972,7 +1972,7 @@ BOOL __stdcall COMCALLBACK_HandleUserListClick(int * pnClickMsg) {
           pbScanName = szText;
         }
 
-        nUserIndex = strcmp(pbScanName, D2IniData_multiplayer->szLastBnetAccount);
+        nUserIndex = strcmp(pbScanName, OOGUtilities::D2IniData_multiplayer->szLastBnetAccount);
         if (!nUserIndex) {
           OOGUtilities::OOGUTIL_CreateEditProfileDialog(pClickedUser->szFormattedName, pClickedUser->nHardcoreFlag, pClickedUser->nExpansionFlag);
           return 1;
@@ -1998,7 +1998,7 @@ BOOL __stdcall COMCALLBACK_HandleUserListClick(int * pnClickMsg) {
             }
 
             dwCompFlags = D2Win::Src::D2Comp::D2COMP_GetFlags(pUser->pComposite);
-            D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pUser->pComposite, gadwBitMasks[10] | dwCompFlags);
+            D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pUser->pComposite, Fog::BitBuffer::gadwBitMasks[10] | dwCompFlags);
             gpCurrentChatRoomContext = pUser;
             gnCurrentChannelContextId = nUserIndex;
             gbLastChatSendTickPadding = dwTick;
@@ -2051,7 +2051,7 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) 
       pchScan = szUsername;
     }
 
-    int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(pchScan, D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff);
+    int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(pchScan, OOGUtilities::D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff);
     if (nCmpResult) {
       pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
       pIgnoreList->_vfptr->AddByPattern(pIgnoreList, szUsername);
@@ -2400,7 +2400,7 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
     OOGUtilities::OOGUTIL_AppendChatText(wszChannelMsg);
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(wszChannelMsg, 5);
     strcpy((char*)gszCurrentChannelName, szChannelName);
-    uint8_t* pbLastChannelDst = D2IniData_multiplayer->padding_0x35F + 2;
+    uint8_t* pbLastChannelDst = OOGUtilities::D2IniData_multiplayer->padding_0x35F + 2;
     char* pszSrc = gszCurrentChannelName;
     do {
       ch2 = *pszSrc;
@@ -2409,7 +2409,7 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
       pbLastChannelDst++;
     } while (ch2);
 
-    pbLastChannelDst = D2IniData_multiplayer->padding_0x35F + 0x22;
+    pbLastChannelDst = OOGUtilities::D2IniData_multiplayer->padding_0x35F + 0x22;
     if (!*pbLastChannelDst) {
       pszSrc = gszCurrentChannelName;
       do {

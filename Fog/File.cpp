@@ -92,7 +92,7 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
     LPCVOID pThreadEsp;
     if (bIncludeStackInfo != '\0') {
       char cTmp;
-      if (dwCurrentThreadId == dwThreadId) {
+      if (_3rdparty::crashy::dwCurrentThreadId == dwThreadId) {
         strncpy_s(__frame0.szThreadName, 0x80, "Main Thread", -1);
       } else {
         __frame0.szThreadName[0] = '\0';

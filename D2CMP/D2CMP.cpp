@@ -59,7 +59,7 @@ uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDir
       exit(-1);
     }
 
-    pCelEntry = gCelCmpCacheHandler.NewLock(&nFormat, (int32_t*)&dwNumDirections);
+    pCelEntry = SRC::CelCmp::gCelCmpCacheHandler.NewLock(&nFormat, (int32_t*)&dwNumDirections);
     pCelEntry->m_frames.Clear();
     pCelEntry->nFormat = nAllocatedKey;
     pCelEntry->nDirections = nFrameCount;
@@ -72,7 +72,7 @@ uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDir
       }
     }
     if (dwNumDirections) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&SRC::CelCmp::gCelCmpCacheHandler.tSync.m_critsect);
     }
 
     return nFormat;

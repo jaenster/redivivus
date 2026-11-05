@@ -113,6 +113,16 @@ struct D2RunesTxtTableStrc {
     /* 0x04 */ struct D2RunesTxt * pTable;
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+extern D2RunesTxtTableStrc nTxtRunesSize;
+
+} // namespace D2Common::DATATBLS::ItemTbls
+
 namespace D2Common::DATATBLS::ItemTbls {
 
 // Function declarations

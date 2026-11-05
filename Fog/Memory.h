@@ -10,6 +10,10 @@
 
 // Forward declarations
 struct D2PoolManagerStrc;
+#ifndef RECON_FPTD_pfnBlizzardError
+#define RECON_FPTD_pfnBlizzardError
+typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, char * * ppszButtonText, uint32_t dwFlags, uint32_t dwErrorCode, bool bIsFatal);
+#endif
 
 struct D2PoolStrc;
 
@@ -49,6 +53,7 @@ void SetPoolIdForMemoryManager(struct D2PoolManagerStrc * pMemory, int32_t nPool
 DWORD getDwMemory(struct D2PoolManagerStrc * pMemory);
 void * __fastcall Alloc(struct D2PoolManagerStrc * pMemory, size_t MemSize, char * szFile, int32_t Line);
 void * __fastcall ReAlloc(struct D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, size_t nAllocSize, char * szFile, int32_t nLine);
+void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc);
 void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nLine, int32_t nNull);
 BOOL __fastcall FreeClientMemory(void * pMemoryToFree, char * szFile, int32_t nLine, int32_t nNull);
 void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFile, size_t nLine, uint32_t nUnused);

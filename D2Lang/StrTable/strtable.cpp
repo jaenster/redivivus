@@ -297,9 +297,9 @@ static uint16_t gwStrTableDefaultEncoding[256] = {
 }; D2_STATIC_GUARD(gwStrTableDefaultEncoding, "gwStrTableDefaultEncoding");
 static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
-        /* .pszLangCode = */ gaLanguageCodeLookup,
-        /* .pszLangCodeNormalized = */ gaLanguageCodeAbbrevTable,
-        /* .pszLangNameEng = */ gaLanguageCodeAbbrevTable,
+        /* .pszLangCode = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeLookup,
+        /* .pszLangCodeNormalized = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
         /* .pszLangAbbrev = */ gaLangNameFormat_Nominative,
         /* .szLangTag = */ { 'S', 'U', 'n', 'e' },
         /* .dwLangId = */ 0x0
@@ -347,7 +347,7 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
         /* .pszLangCode = */ gaLangAbbreviation_Cyrillic,
         /* .pszLangCodeNormalized = */ gaLangAbbreviation_Cyrillic,
-        /* .pszLangNameEng = */ gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
         /* .pszLangAbbrev = */ gaLangAbbreviation_Cyrillic,
         /* .szLangTag = */ { 'A', 'J', 'a', 'j' },
         /* .dwLangId = */ 0x6
@@ -355,7 +355,7 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
         /* .pszLangCode = */ gaLangAbbreviation_Korean,
         /* .pszLangCodeNormalized = */ gaLangAbbreviation_Korean,
-        /* .pszLangNameEng = */ gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
         /* .pszLangAbbrev = */ s_HAN_006e0268,
         /* .szLangTag = */ { 'R', 'K', 'o', 'k' },
         /* .dwLangId = */ 0x7
@@ -363,16 +363,16 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
         /* .pszLangCode = */ s_SIN_006e0264,
         /* .pszLangCodeNormalized = */ s_SIN_006e0264,
-        /* .pszLangNameEng = */ gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
         /* .pszLangAbbrev = */ s_SIN_006e0264,
         /* .szLangTag = */ { 'N', 'C', 'h', 'z' },
         /* .dwLangId = */ 0x8
     },
     {
-        /* .pszLangCode = */ gaLanguageCodeFallback,
-        /* .pszLangCodeNormalized = */ gaLanguageCodeFallback,
-        /* .pszLangNameEng = */ gaLanguageCodeAbbrevTable,
-        /* .pszLangAbbrev = */ gaLanguageCodeFallback,
+        /* .pszLangCode = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeFallback,
+        /* .pszLangCodeNormalized = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeFallback,
+        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangAbbrev = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeFallback,
         /* .szLangTag = */ { 'W', 'T', 'h', 'z' },
         /* .dwLangId = */ 0x9
     },
@@ -393,9 +393,9 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
         /* .dwLangId = */ 0xb
     },
     {
-        /* .pszLangCode = */ gaLanguageCodeLookup,
-        /* .pszLangCodeNormalized = */ gaLanguageCodeAbbrevTable,
-        /* .pszLangNameEng = */ gaLanguageCodeAbbrevTable,
+        /* .pszLangCode = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeLookup,
+        /* .pszLangCodeNormalized = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
         /* .pszLangAbbrev = */ s_HAN_006e0268,
         /* .szLangTag = */ { 'R', 'K', 'o', 'k' },
         /* .dwLangId = */ 0xc
@@ -405,6 +405,19 @@ static uint16_t gcAbbrevKilSymbol = 0x4b; D2_STATIC_GUARD(gcAbbrevKilSymbol, "gc
 static uint16_t gcAbbrevMilSymbol = 0x4d; D2_STATIC_GUARD(gcAbbrevMilSymbol, "gcAbbrevMilSymbol");
 static uint16_t gcAbbrevBilSymbol = 0x42; D2_STATIC_GUARD(gcAbbrevBilSymbol, "gcAbbrevBilSymbol");
 static uint16_t gcAbbrevTrilSymbol = 0x54; D2_STATIC_GUARD(gcAbbrevTrilSymbol, "gcAbbrevTrilSymbol");
+namespace D2Lang::StrTable::strtable {
+void * gpUntranslatedStringCacheHead = 0; D2_GLOBAL_GUARD(gpUntranslatedStringCacheHead, "D2Lang::StrTable::strtable::gpUntranslatedStringCacheHead");
+uint16_t * * gpStringIndexBase = 0; D2_GLOBAL_GUARD(gpStringIndexBase, "D2Lang::StrTable::strtable::gpStringIndexBase");
+uint16_t * * gpStringIndexPatchD2 = 0; D2_GLOBAL_GUARD(gpStringIndexPatchD2, "D2Lang::StrTable::strtable::gpStringIndexPatchD2");
+uint16_t * * gpStringIndexExpansion = 0; D2_GLOBAL_GUARD(gpStringIndexExpansion, "D2Lang::StrTable::strtable::gpStringIndexExpansion");
+uint16_t * gpStringBufferBase = 0; D2_GLOBAL_GUARD(gpStringBufferBase, "D2Lang::StrTable::strtable::gpStringBufferBase");
+uint16_t * gpStringBufferPatchD2 = 0; D2_GLOBAL_GUARD(gpStringBufferPatchD2, "D2Lang::StrTable::strtable::gpStringBufferPatchD2");
+uint16_t * gpStringBufferExpansion = 0; D2_GLOBAL_GUARD(gpStringBufferExpansion, "D2Lang::StrTable::strtable::gpStringBufferExpansion");
+int gnStringTableRefCount = 0; D2_GLOBAL_GUARD(gnStringTableRefCount, "D2Lang::StrTable::strtable::gnStringTableRefCount");
+} // namespace D2Lang::StrTable::strtable
+static D2FogArchiveStrc * MPQ_d2data = 0; D2_STATIC_GUARD(MPQ_d2data, "MPQ_d2data");
+static D2FogArchiveStrc * MPQ_patch_d2 = 0; D2_STATIC_GUARD(MPQ_patch_d2, "MPQ_patch_d2");
+static D2FogArchiveStrc * MPQ_d2exp = 0; D2_STATIC_GUARD(MPQ_d2exp, "MPQ_d2exp");
 
 namespace D2Lang::StrTable::strtable {
 
@@ -1446,5 +1459,19 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
       return 1;
     }
 }
+
+} // namespace D2Lang::StrTable::strtable
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Lang::StrTable::strtable {
+
+// Initialized scalars
+
+D2StringTableTblFileStrc * gpStringTableBase = 0; D2_GLOBAL_GUARD(gpStringTableBase, "D2Lang::StrTable::strtable::gpStringTableBase");
+D2StringTableTblFileStrc * gpStringTablePatchD2 = 0; D2_GLOBAL_GUARD(gpStringTablePatchD2, "D2Lang::StrTable::strtable::gpStringTablePatchD2");
+D2StringTableTblFileStrc * gpStringTableExpansion = 0; D2_GLOBAL_GUARD(gpStringTableExpansion, "D2Lang::StrTable::strtable::gpStringTableExpansion");
 
 } // namespace D2Lang::StrTable::strtable

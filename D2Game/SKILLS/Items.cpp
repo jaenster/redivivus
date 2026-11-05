@@ -272,7 +272,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
         nSkillLevel = 1;
         *pItemSeed = sNewSeed;
         nLayer = sNewSeed.nSeedLow + (nSkillId - (int)(sNewSeed.nSeedLow / 5) - 1) * 5 + nSkillBaseOffset;
-        if (((int)nLayer < 0 || (int)nLayer >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + nLayer) || (wITypeA1 = sgptDataTable->pTxtSkills[nLayer].itypea1 , wITypeA1 <= 0 || (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, (int)wITypeA1) , bIsOfType != 0))) && nLayer != anSkillIds[0] && nLayer != anSkillIds[1] && nLayer != anSkillIds[2]) {
+        if (((int)nLayer < 0 || (int)nLayer >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nLayer) || (wITypeA1 = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[nLayer].itypea1 , wITypeA1 <= 0 || (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, (int)wITypeA1) , bIsOfType != 0))) && nLayer != anSkillIds[0] && nLayer != anSkillIds[1] && nLayer != anSkillIds[2]) {
           anSkillIds[iSkillSlot] = nLayer;
           break;
         }
@@ -1489,7 +1489,7 @@ static BOOL __stdcall ITEMMOD_GenerateSetItem(D2ItemGenContextStrc * pItemGenCon
     int32_t nItemLvl;
     nItemLvl = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pUnit);
     int nSetItemsCount;
-    nSetItemsCount = sgptDataTable->nTxtSetItemsSize;
+    nSetItemsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize;
     DWORD nSetItemIdx;
     nSetItemIdx = 0;
     if (nSetItemsCount <= 0) {
@@ -1497,7 +1497,7 @@ static BOOL __stdcall ITEMMOD_GenerateSetItem(D2ItemGenContextStrc * pItemGenCon
     }
 
     short int* pSetItemLvl;
-    pSetItemLvl = &sgptDataTable->pTxtSetItems->lvl;
+    pSetItemLvl = &D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems->lvl;
     do {
       if (((uint16_t)pSetItemLvl[-7] < 100 || (uint16_t)nItemVersionCached >= 100) && *pSetItemLvl <= nItemLvl && nItemCode == *(uint32_t*)(pSetItemLvl - 4) && (pSetItemLvl[-2] != 0x1d || (pItemGenContext->nFlags & ITEMFLAG_RELOAD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
         if (pItemGenContext->dwFileIndex > 0 && pItemGenContext->dwFileIndex - 1 == nSetItemIdx) {
@@ -1601,9 +1601,9 @@ BOOL __stdcall ITEMMOD_GenerateUniqueItem(D2UnitStrc * pItem) {
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_maxdurability, nNewMaxDurability, 0);
-    D2SetsTxt* pDVar2 = sgptDataTable->pTxtSets;
+    D2SetsTxt* pDVar2 = D2Common::ITEMS::Items::sgptDataTable->pTxtSets;
     uint32_t nSetCount = 0;
-    if (sgptDataTable->nTxtSetsSize > 0) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtSetsSize > 0) {
       short int* pSetVersion;
       pSetVersion = &pDVar2->version;
       do {
@@ -1613,7 +1613,7 @@ BOOL __stdcall ITEMMOD_GenerateUniqueItem(D2UnitStrc * pItem) {
 
         nSetCount++;
         pSetVersion += 0x94;
-      } while ((int)nSetCount < sgptDataTable->nTxtSetsSize);
+      } while ((int)nSetCount < D2Common::ITEMS::Items::sgptDataTable->nTxtSetsSize);
     }
 
     pDVar4 = D2Common::ITEMS::Items::GetItemSeed(pItem);

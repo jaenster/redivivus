@@ -843,10 +843,12 @@ void __fastcall RemoveUnitForClient(D2ClientStrc * pClient, D2UnitStrc * pUnit) 
           }
 
           nRoomIdx++;
-          if (nRoomIdx >= nAdjacentRoomCount) {
-            UNIT::SUnitMsg::SendRemoveObject(pUnit, pClient);
-            return;
+          if (nRoomIdx < nAdjacentRoomCount) {
+            continue;
           }
+
+          UNIT::SUnitMsg::SendRemoveObject(pUnit, pClient);
+          return;
         }
 
         if (nRoomIdx < nAdjacentRoomCount) {
@@ -1781,7 +1783,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
       pHotKey = pClient->pHotKeys;
       do {
         wSkillId = pHotKey->wSkillId;
-        if (wSkillId >= 0 && (int)wSkillId < sgptDataTable->nTxtSkillsCount) {
+        if (wSkillId >= 0 && (int)wSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
           SCmd::NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS(pClient, (uint8_t)nHotkeyIdx, (int)wSkillId, (uint32_t)pHotKey->byHand, pHotKey->nItemGUID);
         }
 

@@ -9,3 +9,7 @@
 
 extern void * g_pBNetGameListData;
 extern void * gpBNetWriteUserData;
+
+namespace Bnclient::BnSend {
+extern char s___AUItem_NewsTable___0072ff8c[24];
+} // namespace Bnclient::BnSend

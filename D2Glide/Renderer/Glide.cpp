@@ -9,7 +9,6 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
-#include "D2Client/Renderer/Glide.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
@@ -31,7 +30,6 @@
 #include "globals/globals.h"
 #include "D2CMP/tagPALETTEENTRY.h"
 #include "D2Client/GAME/View.data.h"
-#include "D2Client/Renderer/Glide.data.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Glide/Renderer/Glide.data.h"
 #include "D2gfx/D2GFX.data.h"
@@ -53,6 +51,186 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NEW_AT(D2RendererCoreStrc): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 
+#ifndef RECON_FPTD_pfnGlideGammaCorrectionRGB
+#define RECON_FPTD_pfnGlideGammaCorrectionRGB
+typedef FxU32 (__stdcall *pfnGlideGammaCorrectionRGB)(FxFloat red, FxFloat green, FxFloat blue);
+#endif
+#ifndef RECON_FPTD_grDrawPoint
+#define RECON_FPTD_grDrawPoint
+typedef void (__stdcall *grDrawPoint)(void * pt);
+#endif
+#ifndef RECON_FPTD_grDrawLine
+#define RECON_FPTD_grDrawLine
+typedef void (__stdcall *grDrawLine)(void * v1, void * v2);
+#endif
+#ifndef RECON_FPTD_grDrawTriangle
+#define RECON_FPTD_grDrawTriangle
+typedef void (__stdcall *grDrawTriangle)(void * a, void * b, void * c);
+#endif
+#ifndef RECON_FPTD_grVertexLayout
+#define RECON_FPTD_grVertexLayout
+typedef void (__stdcall *grVertexLayout)(FxU32 param, FxI32 offset, FxU32 mode);
+#endif
+#ifndef RECON_FPTD_pfnGlideDrawVertexArray
+#define RECON_FPTD_pfnGlideDrawVertexArray
+typedef FxU32 (__stdcall *pfnGlideDrawVertexArray)(FxU32 mode, FxU32 Count, void * pointers);
+#endif
+#ifndef RECON_FPTD_grDrawVertexArrayContiguous
+#define RECON_FPTD_grDrawVertexArrayContiguous
+typedef void (__stdcall *grDrawVertexArrayContiguous)(FxU32 mode, FxU32 Count, void * pointers, FxU32 stride);
+#endif
+#ifndef RECON_FPTD_grBufferClear
+#define RECON_FPTD_grBufferClear
+typedef void (__stdcall *grBufferClear)(GrColor_t color, GrAlpha_t alpha, FxU32 depth);
+#endif
+#ifndef RECON_FPTD_grBufferSwap
+#define RECON_FPTD_grBufferSwap
+typedef void (__stdcall *grBufferSwap)(FxU32 swap_interval);
+#endif
+#ifndef RECON_FPTD_grFinish
+#define RECON_FPTD_grFinish
+typedef void (__stdcall *grFinish)();
+#endif
+#ifndef RECON_FPTD_grSstWinOpen
+#define RECON_FPTD_grSstWinOpen
+typedef GrContext_t (__stdcall *grSstWinOpen)(FxU32 hWnd, GrScreenResolution_t screen_resolution, GrScreenRefresh_t refresh_rate, GrColorFormat_t color_format, GrOriginLocation_t origin_location, int nColBuffers, int nAuxBuffers);
+#endif
+#ifndef RECON_FPTD_grSstWinClose
+#define RECON_FPTD_grSstWinClose
+typedef FxBool (__stdcall *grSstWinClose)(GrContext_t context);
+#endif
+#ifndef RECON_FPTD_grSstSelect
+#define RECON_FPTD_grSstSelect
+typedef void (__stdcall *grSstSelect)(int which_sst);
+#endif
+#ifndef RECON_FPTD_grAlphaBlendFunction
+#define RECON_FPTD_grAlphaBlendFunction
+typedef void (__stdcall *grAlphaBlendFunction)(GrAlphaBlendFnc_t rgb_sf, GrAlphaBlendFnc_t rgb_df, GrAlphaBlendFnc_t alpha_sf, GrAlphaBlendFnc_t alpha_df);
+#endif
+#ifndef RECON_FPTD_grAlphaCombine
+#define RECON_FPTD_grAlphaCombine
+typedef void (__stdcall *grAlphaCombine)(GrCombineFunction_t function, GrCombineFactor_t factor, GrCombineLocal_t local, GrCombineOther_t other, FxBool invert);
+#endif
+#ifndef RECON_FPTD_grChromakeyMode
+#define RECON_FPTD_grChromakeyMode
+typedef void (__stdcall *grChromakeyMode)(GrChromakeyMode_t mode);
+#endif
+#ifndef RECON_FPTD_grChromakeyValue
+#define RECON_FPTD_grChromakeyValue
+typedef void (__stdcall *grChromakeyValue)(GrColor_t value);
+#endif
+#ifndef RECON_FPTD_grClipWindow
+#define RECON_FPTD_grClipWindow
+typedef void (__stdcall *grClipWindow)(FxU32 minx, FxU32 miny, FxU32 maxx, FxU32 maxy);
+#endif
+#ifndef RECON_FPTD_grColorCombine
+#define RECON_FPTD_grColorCombine
+typedef void (__stdcall *grColorCombine)(GrCombineFunction_t function, GrCombineFactor_t factor, GrCombineLocal_t local, GrCombineOther_t other, FxBool invert);
+#endif
+#ifndef RECON_FPTD_grColorMask
+#define RECON_FPTD_grColorMask
+typedef void (__stdcall *grColorMask)(FxBool rgb, FxBool a);
+#endif
+#ifndef RECON_FPTD_grConstantColorValue
+#define RECON_FPTD_grConstantColorValue
+typedef void (__stdcall *grConstantColorValue)(GrColor_t value);
+#endif
+#ifndef RECON_FPTD_grDepthBufferFunction
+#define RECON_FPTD_grDepthBufferFunction
+typedef void (__stdcall *grDepthBufferFunction)(GrCmpFnc_t function);
+#endif
+#ifndef RECON_FPTD_grDepthBufferMode
+#define RECON_FPTD_grDepthBufferMode
+typedef void (__stdcall *grDepthBufferMode)(GrDepthBufferMode_t mode);
+#endif
+#ifndef RECON_FPTD_grDepthMask
+#define RECON_FPTD_grDepthMask
+typedef void (__stdcall *grDepthMask)(FxBool mask);
+#endif
+#ifndef RECON_FPTD_grDitherMode
+#define RECON_FPTD_grDitherMode
+typedef void (__stdcall *grDitherMode)(GrDitherMode_t mode);
+#endif
+#ifndef RECON_FPTD_grLoadGammaTable
+#define RECON_FPTD_grLoadGammaTable
+typedef void (__stdcall *grLoadGammaTable)(FxU32 nentries, FxU32 * red, FxU32 * green, FxU32 * blue);
+#endif
+#ifndef RECON_FPTD_grGet
+#define RECON_FPTD_grGet
+typedef FxU32 (__stdcall *grGet)(FxU32 pname, FxU32 plength, FxI32 * params);
+#endif
+#ifndef RECON_FPTD_grGetString
+#define RECON_FPTD_grGetString
+typedef char * (__stdcall *grGetString)(FxU32 pname);
+#endif
+#ifndef RECON_FPTD_grGetProcAddress
+#define RECON_FPTD_grGetProcAddress
+typedef GrProc (__stdcall *grGetProcAddress)(char * procName);
+#endif
+#ifndef RECON_FPTD_grEnable
+#define RECON_FPTD_grEnable
+typedef void (__stdcall *grEnable)(GrEnableMode_t mode);
+#endif
+#ifndef RECON_FPTD_grDisable
+#define RECON_FPTD_grDisable
+typedef void (__stdcall *grDisable)(GrEnableMode_t mode);
+#endif
+#ifndef RECON_FPTD_grCoordinateSpace
+#define RECON_FPTD_grCoordinateSpace
+typedef void (__stdcall *grCoordinateSpace)(GrCoordinateSpaceMode_t mode);
+#endif
+#ifndef RECON_FPTD_grTexTextureMemRequired
+#define RECON_FPTD_grTexTextureMemRequired
+typedef FxU32 (__stdcall *grTexTextureMemRequired)(FxU32 evenOdd, GrTexInfo * info);
+#endif
+#ifndef RECON_FPTD_grTexMinAddress
+#define RECON_FPTD_grTexMinAddress
+typedef FxU32 (__stdcall *grTexMinAddress)(GrChipID_t tmu);
+#endif
+#ifndef RECON_FPTD_grTexMaxAddress
+#define RECON_FPTD_grTexMaxAddress
+typedef FxU32 (__stdcall *grTexMaxAddress)(GrChipID_t tmu);
+#endif
+#ifndef RECON_FPTD_grTexSource
+#define RECON_FPTD_grTexSource
+typedef void (__stdcall *grTexSource)(GrChipID_t tmu, FxU32 startAddress, FxU32 evenOdd, GrTexInfo * info);
+#endif
+#ifndef RECON_FPTD_grTexCombine
+#define RECON_FPTD_grTexCombine
+typedef void (__stdcall *grTexCombine)(GrChipID_t tmu, GrCombineFunction_t rgb_function, GrCombineFactor_t rgb_factor, GrCombineFunction_t alpha_function, GrCombineFactor_t alpha_factor, FxBool rgb_invert, FxBool alpha_invert);
+#endif
+#ifndef RECON_FPTD_grTexFilterMode
+#define RECON_FPTD_grTexFilterMode
+typedef void (__stdcall *grTexFilterMode)(GrChipID_t tmu, GrTextureFilterMode_t minfilter_mode, GrTextureFilterMode_t magfilter_mode);
+#endif
+#ifndef RECON_FPTD_grTexDownloadMipMap
+#define RECON_FPTD_grTexDownloadMipMap
+typedef void (__stdcall *grTexDownloadMipMap)(GrChipID_t tmu, FxU32 startAddress, FxU32 evenOdd, GrTexInfo * info);
+#endif
+#ifndef RECON_FPTD_grTexDownloadTable
+#define RECON_FPTD_grTexDownloadTable
+typedef void (__stdcall *grTexDownloadTable)(GrTexTable_t type, void * data);
+#endif
+#ifndef RECON_FPTD_grTexMipMapMode
+#define RECON_FPTD_grTexMipMapMode
+typedef void (__stdcall *grTexMipMapMode)(GrChipID_t tmu, GrMipMapMode_t mode, FxBool lodBlend);
+#endif
+#ifndef RECON_FPTD_grLfbLock
+#define RECON_FPTD_grLfbLock
+typedef FxBool (__stdcall *grLfbLock)(GrLock_t type, GrBuffer_t buffer, GrLfbWriteMode_t writeMode, GrOriginLocation_t origin, FxBool pixelPipeline, GrLfbInfo_t * info);
+#endif
+#ifndef RECON_FPTD_grLfbUnlock
+#define RECON_FPTD_grLfbUnlock
+typedef FxBool (__stdcall *grLfbUnlock)(GrLock_t type, GrBuffer_t buffer);
+#endif
+#ifndef RECON_FPTD_grGlideInit
+#define RECON_FPTD_grGlideInit
+typedef void (__stdcall *grGlideInit)();
+#endif
+#ifndef RECON_FPTD_grGlideShutdown
+#define RECON_FPTD_grGlideShutdown
+typedef void (__stdcall *grGlideShutdown)();
+#endif
 #ifndef RECON_FPTD_fnBinkFrameCallback
 #define RECON_FPTD_fnBinkFrameCallback
 typedef void (__stdcall *fnBinkFrameCallback)();
@@ -85,28 +263,28 @@ static GrTexInfo gTexInfoDebugFontGlide = {
     /* .data = */ nullptr
 }; D2_STATIC_GUARD(gTexInfoDebugFontGlide, "gTexInfoDebugFontGlide");
 static void * gapGlideStripVertexPtrsA[10] = {
-    (void*)gaGlidePerspectiveVertices,
-    (void*)&gaGlidePerspectiveVertices[1].fX,
-    (void*)&gaGlidePerspectiveVertices[3].fX,
-    (void*)&gaGlidePerspectiveVertices[4].fX,
-    (void*)&gaGlidePerspectiveVertices[6].fX,
-    (void*)&gaGlidePerspectiveVertices[7].fX,
-    (void*)&gaGlidePerspectiveVertices[9].fX,
-    (void*)&gaGlidePerspectiveVertices[10].fX,
-    (void*)&gaGlidePerspectiveVertices[12].fX,
-    (void*)&gaGlidePerspectiveVertices[13].fX
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[1].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[3].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[4].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[6].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[7].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[9].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[10].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[12].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[13].fX
 }; D2_STATIC_GUARD(gapGlideStripVertexPtrsA, "gapGlideStripVertexPtrsA");
 static void * gapGlideStripVertexPtrsB[10] = {
-    (void*)&gaGlidePerspectiveVertices[1].fX,
-    (void*)&gaGlidePerspectiveVertices[2].fX,
-    (void*)&gaGlidePerspectiveVertices[4].fX,
-    (void*)&gaGlidePerspectiveVertices[5].fX,
-    (void*)&gaGlidePerspectiveVertices[7].fX,
-    (void*)&gaGlidePerspectiveVertices[8].fX,
-    (void*)&gaGlidePerspectiveVertices[10].fX,
-    (void*)&gaGlidePerspectiveVertices[11].fX,
-    (void*)&gaGlidePerspectiveVertices[13].fX,
-    (void*)&gaGlidePerspectiveVertices[14].fX
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[1].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[2].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[4].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[5].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[7].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[8].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[10].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[11].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[13].fX,
+    (void*)&D2Glide::Renderer::Glide::gaGlidePerspectiveVertices[14].fX
 }; D2_STATIC_GUARD(gapGlideStripVertexPtrsB, "gapGlideStripVertexPtrsB");
 static D2GlideWallCornerStrc gaGlideWallCornerTable[60] = {
     {},
@@ -400,12 +578,55 @@ static GrTexInfo gTexInfoBlocks1Glide = {
     /* .format = */ 0xa,
     /* .data = */ nullptr
 }; D2_STATIC_GUARD(gTexInfoBlocks1Glide, "gTexInfoBlocks1Glide");
+namespace D2Glide::Renderer::Glide {
+grDrawLine GLIDEDLL__grDrawLine_8 = (grDrawLine)0; D2_GLOBAL_GUARD(GLIDEDLL__grDrawLine_8, "D2Glide::Renderer::Glide::GLIDEDLL__grDrawLine_8");
+grDepthMask GLIDEDLL_grDepthMask_4 = (grDepthMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grDepthMask_4, "D2Glide::Renderer::Glide::GLIDEDLL_grDepthMask_4");
+grDrawPoint GLIDEDLL_grDrawPoint_4 = (grDrawPoint)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawPoint_4, "D2Glide::Renderer::Glide::GLIDEDLL_grDrawPoint_4");
+grGlideShutdown GLIDEDLL_grGlideShutdown_0 = (grGlideShutdown)0; D2_GLOBAL_GUARD(GLIDEDLL_grGlideShutdown_0, "D2Glide::Renderer::Glide::GLIDEDLL_grGlideShutdown_0");
+grDitherMode GLIDEDLL_grDitherMode_4 = (grDitherMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grDitherMode_4, "D2Glide::Renderer::Glide::GLIDEDLL_grDitherMode_4");
+grTexDownloadMipMap GLIDEDLL_grTexDownloadMipMap_16 = (grTexDownloadMipMap)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexDownloadMipMap_16, "D2Glide::Renderer::Glide::GLIDEDLL_grTexDownloadMipMap_16");
+pfnGlideGammaCorrectionRGB GLIDEDLL_guGammaCorrectionRGB_12 = (pfnGlideGammaCorrectionRGB)0; D2_GLOBAL_GUARD(GLIDEDLL_guGammaCorrectionRGB_12, "D2Glide::Renderer::Glide::GLIDEDLL_guGammaCorrectionRGB_12");
+} // namespace D2Glide::Renderer::Glide
+grDrawVertexArrayContiguous GLIDEDLL_grDrawVertexArrayContiguous_16 = (grDrawVertexArrayContiguous)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawVertexArrayContiguous_16, "GLIDEDLL_grDrawVertexArrayContiguous_16");
+static grAlphaBlendFunction GLIDEDLL_grAlphaBlendFunction_16 = (grAlphaBlendFunction)0; D2_STATIC_GUARD(GLIDEDLL_grAlphaBlendFunction_16, "GLIDEDLL_grAlphaBlendFunction_16");
+static grTexCombine GLIDEDLL_grTexCombine_28 = (grTexCombine)0; D2_STATIC_GUARD(GLIDEDLL_grTexCombine_28, "GLIDEDLL_grTexCombine_28");
+namespace D2Glide::Renderer::Glide {
+grLfbUnlock GLIDEDLL_grLfbUnlock_8 = (grLfbUnlock)0; D2_GLOBAL_GUARD(GLIDEDLL_grLfbUnlock_8, "D2Glide::Renderer::Glide::GLIDEDLL_grLfbUnlock_8");
+grLfbLock GLIDEDLL_grLfbLock_24 = (grLfbLock)0; D2_GLOBAL_GUARD(GLIDEDLL_grLfbLock_24, "D2Glide::Renderer::Glide::GLIDEDLL_grLfbLock_24");
+grLoadGammaTable GLIDEDLL_grLoadGammaTable_16 = (grLoadGammaTable)0; D2_GLOBAL_GUARD(GLIDEDLL_grLoadGammaTable_16, "D2Glide::Renderer::Glide::GLIDEDLL_grLoadGammaTable_16");
+grAlphaCombine GLIDEDLL_grAlphaCombine_20 = (grAlphaCombine)0; D2_GLOBAL_GUARD(GLIDEDLL_grAlphaCombine_20, "D2Glide::Renderer::Glide::GLIDEDLL_grAlphaCombine_20");
+grSstWinOpen GLIDEDLL_grSstWinOpen_28 = (grSstWinOpen)0; D2_GLOBAL_GUARD(GLIDEDLL_grSstWinOpen_28, "D2Glide::Renderer::Glide::GLIDEDLL_grSstWinOpen_28");
+} // namespace D2Glide::Renderer::Glide
+static grTexFilterMode GLIDEDLL_grTexFilterMode_12 = (grTexFilterMode)0; D2_STATIC_GUARD(GLIDEDLL_grTexFilterMode_12, "GLIDEDLL_grTexFilterMode_12");
+grGlideInit GLIDEDLL_grGlideInit_0 = (grGlideInit)0; D2_GLOBAL_GUARD(GLIDEDLL_grGlideInit_0, "GLIDEDLL_grGlideInit_0");
+static grFinish GLIDEDLL_grFinish_0 = (grFinish)0; D2_STATIC_GUARD(GLIDEDLL_grFinish_0, "GLIDEDLL_grFinish_0");
+pfnGlideDrawVertexArray GLIDEDLL_grDrawVertexArray_12 = (pfnGlideDrawVertexArray)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawVertexArray_12, "GLIDEDLL_grDrawVertexArray_12");
+grGet GLIDEDLL_grGet_12 = (grGet)0; D2_GLOBAL_GUARD(GLIDEDLL_grGet_12, "GLIDEDLL_grGet_12");
+static grTexMinAddress GLIDEDLL_grTexMinAddress_4 = (grTexMinAddress)0; D2_STATIC_GUARD(GLIDEDLL_grTexMinAddress_4, "GLIDEDLL_grTexMinAddress_4");
+namespace D2Glide::Renderer::Glide {
+grColorCombine GLIDEDLL_grColorCombine_20 = (grColorCombine)0; D2_GLOBAL_GUARD(GLIDEDLL_grColorCombine_20, "D2Glide::Renderer::Glide::GLIDEDLL_grColorCombine_20");
+grColorMask GLIDEDLL_grColorMask_8 = (grColorMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grColorMask_8, "D2Glide::Renderer::Glide::GLIDEDLL_grColorMask_8");
+grChromakeyValue GLIDEDLL_grChromakeyValue_4 = (grChromakeyValue)0; D2_GLOBAL_GUARD(GLIDEDLL_grChromakeyValue_4, "D2Glide::Renderer::Glide::GLIDEDLL_grChromakeyValue_4");
+grCoordinateSpace GLIDEDLL_grCoordinateSpace_4 = (grCoordinateSpace)0; D2_GLOBAL_GUARD(GLIDEDLL_grCoordinateSpace_4, "D2Glide::Renderer::Glide::GLIDEDLL_grCoordinateSpace_4");
+grSstSelect GLIDEDLL_grSstSelect_4 = (grSstSelect)0; D2_GLOBAL_GUARD(GLIDEDLL_grSstSelect_4, "D2Glide::Renderer::Glide::GLIDEDLL_grSstSelect_4");
+grTexDownloadTable GLIDEDLL_grTexDownloadTable_8 = (grTexDownloadTable)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexDownloadTable_8, "D2Glide::Renderer::Glide::GLIDEDLL_grTexDownloadTable_8");
+grTexMaxAddress GLIDEDLL_grTexMaxAddress_4 = (grTexMaxAddress)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexMaxAddress_4, "D2Glide::Renderer::Glide::GLIDEDLL_grTexMaxAddress_4");
+} // namespace D2Glide::Renderer::Glide
+namespace D2Glide::glBlocks {
+GlSubtileCacheStrc gGlideSubtileTextureCache = {}; D2_GLOBAL_GUARD(gGlideSubtileTextureCache, "D2Glide::glBlocks::gGlideSubtileTextureCache");
+GlFloorCacheStrc gGlideFloorTextureCache = {}; D2_GLOBAL_GUARD(gGlideFloorTextureCache, "D2Glide::glBlocks::gGlideFloorTextureCache");
+} // namespace D2Glide::glBlocks
+namespace D2Glide::Renderer::Glide {
+grBufferClear GLIDEDLL_grBufferClear_12 = (grBufferClear)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferClear_12, "D2Glide::Renderer::Glide::GLIDEDLL_grBufferClear_12");
+grChromakeyMode GLIDEDLL_grChromakeyMode_4 = (grChromakeyMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grChromakeyMode_4, "D2Glide::Renderer::Glide::GLIDEDLL_grChromakeyMode_4");
+grBufferSwap GLIDEDLL_grBufferSwap_4 = (grBufferSwap)0; D2_GLOBAL_GUARD(GLIDEDLL_grBufferSwap_4, "D2Glide::Renderer::Glide::GLIDEDLL_grBufferSwap_4");
+} // namespace D2Glide::Renderer::Glide
 static uint32_t ghGlideSstWindow = 0; D2_STATIC_GUARD(ghGlideSstWindow, "ghGlideSstWindow");
 grTexSource GLIDEDLL_grTexSource_16 = (grTexSource)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexSource_16, "GLIDEDLL_grTexSource_16");
-grVertexLayout GLIDEDLL_grVertexLayout_12 = (grVertexLayout)0; D2_GLOBAL_GUARD(GLIDEDLL_grVertexLayout_12, "GLIDEDLL_grVertexLayout_12");
+static grVertexLayout GLIDEDLL_grVertexLayout_12 = (grVertexLayout)0; D2_STATIC_GUARD(GLIDEDLL_grVertexLayout_12, "GLIDEDLL_grVertexLayout_12");
 uint32_t gGlidePaletteEntry0[256] = {}; D2_GLOBAL_GUARD(gGlidePaletteEntry0, "gGlidePaletteEntry0");
 grConstantColorValue GLIDEDLL_grConstantColorValue_4 = (grConstantColorValue)0; D2_GLOBAL_GUARD(GLIDEDLL_grConstantColorValue_4, "GLIDEDLL_grConstantColorValue_4");
-grSstWinClose _GLIDEDLL_grSstWinClose_4 = (grSstWinClose)0; D2_GLOBAL_GUARD(_GLIDEDLL_grSstWinClose_4, "_GLIDEDLL_grSstWinClose_4");
+static grSstWinClose _GLIDEDLL_grSstWinClose_4 = (grSstWinClose)0; D2_STATIC_GUARD(_GLIDEDLL_grSstWinClose_4, "_GLIDEDLL_grSstWinClose_4");
 HMODULE lpGLIDE3x_dll = 0; D2_GLOBAL_GUARD(lpGLIDE3x_dll, "lpGLIDE3x_dll");
 static int gnGlideTextureMemoryUsed = 0; D2_STATIC_GUARD(gnGlideTextureMemoryUsed, "gnGlideTextureMemoryUsed");
 uint32_t gbGlideIsDebugBuild = 0; D2_GLOBAL_GUARD(gbGlideIsDebugBuild, "gbGlideIsDebugBuild");
@@ -429,9 +650,271 @@ uint32_t gaGlideColorDebugGradientIndices[1024] = {}; D2_GLOBAL_GUARD(gaGlideCol
 
 namespace D2Glide::Renderer::Glide {
 
+BOOL __stdcall RENDERER_GLIDE_LoadLibrarySymbols() {
+    // Static local variables (originally global data)
+    static grEnable GLIDEDLL_grEnable_4; D2_STATIC_GUARD_BSS(GLIDEDLL_grEnable_4, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grEnable_4");
+    static grGetString GLIDEDLL_grGetString_4; D2_STATIC_GUARD_BSS(GLIDEDLL_grGetString_4, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grGetString_4");
+    static grTexMipMapMode GLIDEDLL_grTexMipMapMode_12; D2_STATIC_GUARD_BSS(GLIDEDLL_grTexMipMapMode_12, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grTexMipMapMode_12");
+    static grDisable GLIDEDLL_grDisable_4; D2_STATIC_GUARD_BSS(GLIDEDLL_grDisable_4, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grDisable_4");
+    static grTexTextureMemRequired GLIDEDLL_grTexTextureMemRequired_8; D2_STATIC_GUARD_BSS(GLIDEDLL_grTexTextureMemRequired_8, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grTexTextureMemRequired_8");
+    static grGetProcAddress GLIDEDLL_grGetProcAddress_4; D2_STATIC_GUARD_BSS(GLIDEDLL_grGetProcAddress_4, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grGetProcAddress_4");
+    static grDrawTriangle GLIDEDLL_grDrawTriangle_12; D2_STATIC_GUARD_BSS(GLIDEDLL_grDrawTriangle_12, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grDrawTriangle_12");
+    static grClipWindow GLIDEDLL_grClipWindow_16; D2_STATIC_GUARD_BSS(GLIDEDLL_grClipWindow_16, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grClipWindow_16");
+    static grDepthBufferMode GLIDEDLL_grDepthBufferMode_4; D2_STATIC_GUARD_BSS(GLIDEDLL_grDepthBufferMode_4, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grDepthBufferMode_4");
+    static grDepthBufferFunction GLIDEDLL_grDepthBufferFunction_4; D2_STATIC_GUARD_BSS(GLIDEDLL_grDepthBufferFunction_4, "D2Glide::Renderer::Glide::RENDERER_GLIDE_LoadLibrarySymbols::GLIDEDLL_grDepthBufferFunction_4");
+
+    /* LPCSTR lpLibFileName for LoadLibraryA */ lpGLIDE3x_dll = LoadLibraryA("glide3x.dll");
+    if (!lpGLIDE3x_dll) {
+      return 0;
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_guGammaCorrectionRGB_12 = (pfnGlideGammaCorrectionRGB)GetProcAddress(lpGLIDE3x_dll, "_guGammaCorrectionRGB@12");
+    if (!GLIDEDLL_guGammaCorrectionRGB_12) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9e);
+      exit(-1);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawPoint_4 = (grDrawPoint)GetProcAddress(lpGLIDE3x_dll, "_grDrawPoint@4");
+    if (!GLIDEDLL_grDrawPoint_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa1);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL__grDrawLine_8 = (grDrawLine)GetProcAddress(lpGLIDE3x_dll, "_grDrawLine@8");
+    if (!GLIDEDLL__grDrawLine_8) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa2);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawTriangle_12 = (grDrawTriangle)GetProcAddress(lpGLIDE3x_dll, "_grDrawTriangle@12");
+    if (!GLIDEDLL_grDrawTriangle_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa3);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grVertexLayout_12 = (grVertexLayout)GetProcAddress(lpGLIDE3x_dll, "_grVertexLayout@12");
+    if (!GLIDEDLL_grVertexLayout_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa4);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawVertexArray_12 = (pfnGlideDrawVertexArray)GetProcAddress(lpGLIDE3x_dll, "_grDrawVertexArray@12");
+    if (!GLIDEDLL_grDrawVertexArray_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa5);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDrawVertexArrayContiguous_16 = (grDrawVertexArrayContiguous)GetProcAddress(lpGLIDE3x_dll, "_grDrawVertexArrayContiguous@16");
+    if (!GLIDEDLL_grDrawVertexArrayContiguous_16) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa6);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grBufferClear_12 = (grBufferClear)GetProcAddress(lpGLIDE3x_dll, "_grBufferClear@12");
+    if (!GLIDEDLL_grBufferClear_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa8);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grBufferSwap_4 = (grBufferSwap)GetProcAddress(lpGLIDE3x_dll, "_grBufferSwap@4");
+    if (!GLIDEDLL_grBufferSwap_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xa9);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grFinish_0 = (grFinish)GetProcAddress(lpGLIDE3x_dll, "_grFinish@0");
+    if (!GLIDEDLL_grFinish_0) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xaa);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grSstWinOpen_28 = (grSstWinOpen)GetProcAddress(lpGLIDE3x_dll, "_grSstWinOpen@28");
+    if (!GLIDEDLL_grSstWinOpen_28) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xab);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ _GLIDEDLL_grSstWinClose_4 = (grSstWinClose)GetProcAddress(lpGLIDE3x_dll, "_grSstWinClose@4");
+    if (!_GLIDEDLL_grSstWinClose_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xac);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grSstSelect_4 = (grSstSelect)GetProcAddress(lpGLIDE3x_dll, "_grSstSelect@4");
+    if (!GLIDEDLL_grSstSelect_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xad);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grAlphaBlendFunction_16 = (grAlphaBlendFunction)GetProcAddress(lpGLIDE3x_dll, "_grAlphaBlendFunction@16");
+    if (!GLIDEDLL_grAlphaBlendFunction_16) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xae);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grAlphaCombine_20 = (grAlphaCombine)GetProcAddress(lpGLIDE3x_dll, "_grAlphaCombine@20");
+    if (!GLIDEDLL_grAlphaCombine_20) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xaf);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grChromakeyMode_4 = (grChromakeyMode)GetProcAddress(lpGLIDE3x_dll, "_grChromakeyMode@4");
+    if (!GLIDEDLL_grChromakeyMode_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb0);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grChromakeyValue_4 = (grChromakeyValue)GetProcAddress(lpGLIDE3x_dll, "_grChromakeyValue@4");
+    if (!GLIDEDLL_grChromakeyValue_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb1);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grClipWindow_16 = (grClipWindow)GetProcAddress(lpGLIDE3x_dll, "_grClipWindow@16");
+    if (!GLIDEDLL_grClipWindow_16) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb2);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grColorCombine_20 = (grColorCombine)GetProcAddress(lpGLIDE3x_dll, "_grColorCombine@20");
+    if (!GLIDEDLL_grColorCombine_20) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb3);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grColorMask_8 = (grColorMask)GetProcAddress(lpGLIDE3x_dll, "_grColorMask@8");
+    if (!GLIDEDLL_grColorMask_8) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb4);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grConstantColorValue_4 = (grConstantColorValue)GetProcAddress(lpGLIDE3x_dll, "_grConstantColorValue@4");
+    if (!GLIDEDLL_grConstantColorValue_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb5);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDepthBufferFunction_4 = (grDepthBufferFunction)GetProcAddress(lpGLIDE3x_dll, "_grDepthBufferFunction@4");
+    if (!GLIDEDLL_grDepthBufferFunction_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb6);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDepthBufferMode_4 = (grDepthBufferMode)GetProcAddress(lpGLIDE3x_dll, "_grDepthBufferMode@4");
+    if (!GLIDEDLL_grDepthBufferMode_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb7);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDepthMask_4 = (grDepthMask)GetProcAddress(lpGLIDE3x_dll, "_grDepthMask@4");
+    if (!GLIDEDLL_grDepthMask_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb8);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDitherMode_4 = (grDitherMode)GetProcAddress(lpGLIDE3x_dll, "_grDitherMode@4");
+    if (!GLIDEDLL_grDitherMode_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xb9);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grLoadGammaTable_16 = (grLoadGammaTable)GetProcAddress(lpGLIDE3x_dll, "_grLoadGammaTable@16");
+    if (!GLIDEDLL_grLoadGammaTable_16) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xba);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGet_12 = (grGet)GetProcAddress(lpGLIDE3x_dll, "_grGet@12");
+    if (!GLIDEDLL_grGet_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbb);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGetString_4 = (grGetString)GetProcAddress(lpGLIDE3x_dll, "_grGetString@4");
+    if (!GLIDEDLL_grGetString_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbc);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGetProcAddress_4 = (grGetProcAddress)GetProcAddress(lpGLIDE3x_dll, "_grGetProcAddress@4");
+    if (!GLIDEDLL_grGetProcAddress_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbd);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grEnable_4 = (grEnable)GetProcAddress(lpGLIDE3x_dll, "_grEnable@4");
+    if (!GLIDEDLL_grEnable_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbe);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grDisable_4 = (grDisable)GetProcAddress(lpGLIDE3x_dll, "_grDisable@4");
+    if (!GLIDEDLL_grDisable_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xbf);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grCoordinateSpace_4 = (grCoordinateSpace)GetProcAddress(lpGLIDE3x_dll, "_grCoordinateSpace@4");
+    if (!GLIDEDLL_grCoordinateSpace_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc0);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexTextureMemRequired_8 = (grTexTextureMemRequired)GetProcAddress(lpGLIDE3x_dll, "_grTexTextureMemRequired@8");
+    if (!GLIDEDLL_grTexTextureMemRequired_8) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc1);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexMinAddress_4 = (grTexMinAddress)GetProcAddress(lpGLIDE3x_dll, "_grTexMinAddress@4");
+    if (!GLIDEDLL_grTexMinAddress_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc2);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexMaxAddress_4 = (grTexMaxAddress)GetProcAddress(lpGLIDE3x_dll, "_grTexMaxAddress@4");
+    if (!GLIDEDLL_grTexMaxAddress_4) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc3);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexSource_16 = (grTexSource)GetProcAddress(lpGLIDE3x_dll, "_grTexSource@16");
+    if (!GLIDEDLL_grTexSource_16) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc4);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexCombine_28 = (grTexCombine)GetProcAddress(lpGLIDE3x_dll, "_grTexCombine@28");
+    if (!GLIDEDLL_grTexCombine_28) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc5);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexFilterMode_12 = (grTexFilterMode)GetProcAddress(lpGLIDE3x_dll, "_grTexFilterMode@12");
+    if (!GLIDEDLL_grTexFilterMode_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc6);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexDownloadMipMap_16 = (grTexDownloadMipMap)GetProcAddress(lpGLIDE3x_dll, "_grTexDownloadMipMap@16");
+    if (!GLIDEDLL_grTexDownloadMipMap_16) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(199);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexDownloadTable_8 = (grTexDownloadTable)GetProcAddress(lpGLIDE3x_dll, "_grTexDownloadTable@8");
+    if (!GLIDEDLL_grTexDownloadTable_8) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(200);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grTexMipMapMode_12 = (grTexMipMapMode)GetProcAddress(lpGLIDE3x_dll, "_grTexMipMapMode@12");
+    if (!GLIDEDLL_grTexMipMapMode_12) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xc9);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grLfbLock_24 = (grLfbLock)GetProcAddress(lpGLIDE3x_dll, "_grLfbLock@24");
+    if (!GLIDEDLL_grLfbLock_24) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xca);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grLfbUnlock_8 = (grLfbUnlock)GetProcAddress(lpGLIDE3x_dll, "_grLfbUnlock@8");
+    if (!GLIDEDLL_grLfbUnlock_8) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcb);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGlideInit_0 = (grGlideInit)GetProcAddress(lpGLIDE3x_dll, "_grGlideInit@0");
+    if (!GLIDEDLL_grGlideInit_0) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcc);
+    }
+
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGlideShutdown_0 = (grGlideShutdown)GetProcAddress(lpGLIDE3x_dll, "_grGlideShutdown@0");
+    if (!GLIDEDLL_grGlideShutdown_0) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcd);
+    }
+
+    return 1;
+}
+
+void __stdcall RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(int nLine) {
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
+    exit(-1);
+}
+
+BOOL __fastcall Initialize(HINSTANCE hInstance) {
+    BOOL nLoadResult = RENDERER_GLIDE_LoadLibrarySymbols();
+    if (!nLoadResult) {
+      return 0;
+    }
+
+    (*GLIDEDLL_grGet_12)(0xf, 4, (FxI32*)((char*)&gnGlideSecondaryTMUCount + 4));
+    return (uint32_t)(gnGlideSecondaryTMUCount[1] > 0);
+}
+
 void __fastcall ClearCaches() {
-    glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, nullptr);
-    glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, nullptr);
+    glFloorCache::GLFLOOR_Destroy(&glBlocks::gGlideFloorTextureCache.dwEntrySize, nullptr);
+    glSubtileCache::GLSUBTILE_Destroy(&glBlocks::gGlideSubtileTextureCache.dwEntrySize, nullptr);
     glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache, nullptr);
     glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 1, nullptr);
     glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 2, nullptr);
@@ -808,9 +1291,9 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
           gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes = 0x1ccccc;
         }
 
-        nCacheEnd = glFloorCache::GLFLOOR_Initialize(&gGlideFloorTextureCache, nCacheEnd, gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes + nCacheEnd, nFloorTexSize);
+        nCacheEnd = glFloorCache::GLFLOOR_Initialize(&glBlocks::gGlideFloorTextureCache, nCacheEnd, gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes + nCacheEnd, nFloorTexSize);
         gnTextureMemoryUsageBytes.nGlideSubtileCacheMemBytes = gnGlideTextureMemoryMax[0] - nCacheEnd;
-        nMaskTmp = glSubtileCache::GLSUBTILE_Initialize(&gGlideSubtileTextureCache, nCacheEnd, gnGlideTextureMemoryMax[0], nSubtileTexSize);
+        nMaskTmp = glSubtileCache::GLSUBTILE_Initialize(&glBlocks::gGlideSubtileTextureCache, nCacheEnd, gnGlideTextureMemoryMax[0], nSubtileTexSize);
       } else {
         gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes = nMaskTmp >> 1;
         if ((uint32_t)gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes >= 0x300000) {
@@ -822,9 +1305,9 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
           nMaskTmp = 0x100000;
         }
 
-        nCacheEnd = glFloorCache::GLFLOOR_Initialize(&gGlideFloorTextureCache, nCacheEnd, gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes + nCacheEnd, nFloorTexSize);
+        nCacheEnd = glFloorCache::GLFLOOR_Initialize(&glBlocks::gGlideFloorTextureCache, nCacheEnd, gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes + nCacheEnd, nFloorTexSize);
         gnTextureMemoryUsageBytes.nGlideSubtileCacheMemBytes = nMaskTmp;
-        nMaskTmp = glSubtileCache::GLSUBTILE_Initialize(&gGlideSubtileTextureCache, nCacheEnd, nMaskTmp + nCacheEnd, nSubtileTexSize);
+        nMaskTmp = glSubtileCache::GLSUBTILE_Initialize(&glBlocks::gGlideSubtileTextureCache, nCacheEnd, nMaskTmp + nCacheEnd, nSubtileTexSize);
       }
       if (1 < gnGlideTextureMemoryUsed) {
         nMaskTmp = gnGlideTexMemBaseAddress[1];
@@ -885,8 +1368,8 @@ BOOL __stdcall RENDERER_GLIDE_DestroyWindow() {
     ghGlideWindow = 0;
     (*GLIDEDLL_grFinish_0)();
     if (gbGlidePerspectiveMode) {
-      glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, (GlFloorCacheStrc*)0x1);
-      glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, (GlSubtileCacheStrc*)0x1);
+      glFloorCache::GLFLOOR_Destroy(&glBlocks::gGlideFloorTextureCache.dwEntrySize, (GlFloorCacheStrc*)0x1);
+      glSubtileCache::GLSUBTILE_Destroy(&glBlocks::gGlideSubtileTextureCache.dwEntrySize, (GlSubtileCacheStrc*)0x1);
     } else {
       GLSMACK_DestroyNoop();
     }
@@ -914,12 +1397,7 @@ void __fastcall PlayCutScene(char * szFile, int32_t nResolutionMode, void * fpFr
     }
 
     (*GLIDEDLL_grBufferClear_12)(0, '\0', 0);
-    if (pD2GFXRenderedDataStrc->bVSync) {
-      (*GLIDEDLL_grBufferSwap_4)(1);
-    } else {
-      (*GLIDEDLL_grBufferSwap_4)(0);
-    }
-
+    (*GLIDEDLL_grBufferSwap_4)((uint32_t)(uint8_t)(pD2GFXRenderedDataStrc->bVSync != 0));
     gbPlayingCutScene = 1;
     glBlocks::GLBLOCKS_PlayBinkVideo(szFile, nResolutionMode, (fnBinkFrameCallback)fpFrame);
     gbPlayingCutScene = 0;
@@ -2077,6 +2555,7 @@ int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTe
     // Static local variables (originally global data)
     static unsigned int gfGlideDebugFontVertex0ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex0ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0ARGB");
     static float gfGlideDebugFontVertex0OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex0OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0OOW");
+    static float gfGlideDebugFontVertex0Y; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex0Y, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0Y");
     static double gfGlideDebugFontVertex0T = 0; D2_STATIC_GUARD(gfGlideDebugFontVertex0T, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0T");
     static unsigned int gfGlideDebugFontVertex1ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex1ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex1ARGB");
     static float gfGlideDebugFontVertex1OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex1OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex1OOW");
@@ -2085,8 +2564,10 @@ int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTe
     static unsigned int gfGlideDebugFontVertex2ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex2ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2ARGB");
     static float gfGlideDebugFontVertex2OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex2OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2OOW");
     static float gfGlideDebugFontVertex2X; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex2X, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2X");
+    static double gfGlideDebugFontVertex2T = 0; D2_STATIC_GUARD(gfGlideDebugFontVertex2T, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2T");
     static unsigned int gfGlideDebugFontVertex3ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex3ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3ARGB");
     static float gfGlideDebugFontVertex3OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex3OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3OOW");
+    static float gfGlideDebugFontVertex3X; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex3X, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3X");
     static double gfGlideDebugFontVertex3Y = 0; D2_STATIC_GUARD(gfGlideDebugFontVertex3Y, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3Y");
 
     int nCopyCount;
@@ -3262,7 +3743,7 @@ void RENDERER_GLIDE_InitGroundTileVertices() {
 
 BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, BYTE nAlpha, int32_t nScreenPanels, void * pTileData) {
     // Static local variables (originally global data)
-    static void * gapGlideGroundQuadCornerPtrs[4] = { (void*)gaGlideGroundTileVertices, (void*)&gaGlideGroundTileVertices[5].fX, (void*)&gaGlideGroundTileVertices[35].fX, (void*)&gaGlideGroundTileVertices[30].fX }; D2_STATIC_GUARD(gapGlideGroundQuadCornerPtrs, "D2Glide::Renderer::Glide::DrawGroundTile::gapGlideGroundQuadCornerPtrs");
+    static void * gapGlideGroundQuadCornerPtrs[4] = { (void*)&D2Glide::Renderer::Glide::gaGlideGroundTileVertices, (void*)&D2Glide::Renderer::Glide::gaGlideGroundTileVertices[5].fX, (void*)&D2Glide::Renderer::Glide::gaGlideGroundTileVertices[35].fX, (void*)&D2Glide::Renderer::Glide::gaGlideGroundTileVertices[30].fX }; D2_STATIC_GUARD(gapGlideGroundQuadCornerPtrs, "D2Glide::Renderer::Glide::DrawGroundTile::gapGlideGroundQuadCornerPtrs");
 
     int _nAlpha;
     uint8_t byIntensity;
@@ -3799,5 +4280,23 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
         }
     }
 }
+
+} // namespace D2Glide::Renderer::Glide
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Glide::Renderer::Glide {
+
+// Initialized data
+
+D2GlideVertexStrc gaGlidePerspectiveVertices[15] = {}; D2_GLOBAL_GUARD(gaGlidePerspectiveVertices, "D2Glide::Renderer::Glide::gaGlidePerspectiveVertices");
+
+D2GlideVertexStrc gGlidePerspectiveVertexBuffer[4] = {}; D2_GLOBAL_GUARD(gGlidePerspectiveVertexBuffer, "D2Glide::Renderer::Glide::gGlidePerspectiveVertexBuffer");
+
+D2GlideVertexStrc gaGlideGroundTileVertices[36] = {}; D2_GLOBAL_GUARD(gaGlideGroundTileVertices, "D2Glide::Renderer::Glide::gaGlideGroundTileVertices");
+
+D2GlideVertexStrc gaGlideSmackerVertices[4] = {}; D2_GLOBAL_GUARD(gaGlideSmackerVertices, "D2Glide::Renderer::Glide::gaGlideSmackerVertices");
 
 } // namespace D2Glide::Renderer::Glide

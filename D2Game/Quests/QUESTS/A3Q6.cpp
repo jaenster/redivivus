@@ -196,8 +196,7 @@ BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2Unit
     BOOL _bQuestState;
     bool bQuestState;
     D2QuestDataStrc* pGuardianQuestData;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pRoom) {
       eD2LevelId eLevelId;
@@ -285,6 +284,7 @@ void __fastcall Q23_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       }
 
       nGossipLineIdx = 6;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipLineIdx);
     } else {
       if (pQuestData->nStateFlag >= 6) {
         if (_bCompleted != 1) {
@@ -302,9 +302,9 @@ void __fastcall Q23_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nGossipLineIdx >= 8) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipLineIdx);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipLineIdx);
+    }
 }
 
 // [The Guardian (Q23)] Quest-state handler slot[2] (armed dynamically once the player has accepted via

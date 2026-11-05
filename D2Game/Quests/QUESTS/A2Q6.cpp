@@ -1474,10 +1474,10 @@ void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     NotifyPlayersAboutEvent(pGame, 3);
-    if (sgptDataTable->nTxtMissilesSize <= 0x152) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize <= 0x152) {
       pMissileTxt = 0;
     } else {
-      pMissileTxt = sgptDataTable->pTxtMissiles + 0x152;
+      pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + 0x152;
     }
 
     short int nMissileRange = pMissileTxt->Range;

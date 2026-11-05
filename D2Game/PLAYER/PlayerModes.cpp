@@ -257,7 +257,7 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
           }
       }
     }
-    if (*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)gadwBitMasks[7]) {
+    if (*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
       D2StatListExStrc* pConcStatList;
       eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration);
       if (!eStunState) {
@@ -415,7 +415,7 @@ static BOOL PLRMODES_DrainStamina(D2UnitStrc * pUnit) {
     }
 
     int nStaminaDrain = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = nStaminaDrain >= 0 && nStaminaDrain < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nStaminaDrain : nullptr;
+    D2CharStatsTxt* pCharStatsTxt = nStaminaDrain >= 0 && nStaminaDrain < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nStaminaDrain : nullptr;
     if (!pCharStatsTxt) {
       return 0;
     }
@@ -1463,14 +1463,14 @@ static void PLRMODES_RegenMana(D2UnitStrc * pUnit) {
       if (nCharClassId < 0) {
         return;
       }
-      if (nCharClassId >= sgptDataTable->nTxtCharStatsSize) {
+      if (nCharClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
         return;
       }
-      if (!(sgptDataTable->pTxtCharStats + nCharClassId)) {
+      if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nCharClassId)) {
         return;
       }
 
-      nCharClassId = (uint32_t)(uint8_t)sgptDataTable->pTxtCharStats[nCharClassId].ManaRegen * 0x19;
+      nCharClassId = (uint32_t)(uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats[nCharClassId].ManaRegen * 0x19;
       if (!nCharClassId) {
         nCharClassId = 0x1d4c;
       }
@@ -1904,7 +1904,7 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pSkill = D2Common::Units::GetCurrentSkill(pUnit);
       if (pSkill) {
         eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrModes.cpp", 0x779);
-        if ((int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkillId && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkillId] + 0x6) & (uint8_t)gadwBitMasks[2]) {
+        if ((int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId] + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
           PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
           PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
         }

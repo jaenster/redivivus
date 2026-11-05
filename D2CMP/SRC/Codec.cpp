@@ -377,10 +377,10 @@ void __fastcall CODEC_BuildInversePaletteFromBitmask(uint8_t * pInversePalette, 
     uint32_t nIdx3 = 3;
     uint32_t nIdx2 = 2;
     do {
-      aUsedFlags[nIdx1 - 1] = (gadwBitMasks[nBitIdx & 0x1f] & pUsedColourBits[(int)nBitIdx >> 5]) != 0;
-      aUsedFlags[nIdx1] = (gadwBitMasks[nIdx1 & 0x1f] & pUsedColourBits[(int)nIdx1 >> 5]) != 0;
-      aUsedFlags[nIdx2] = (gadwBitMasks[nIdx2 & 0x1f] & pUsedColourBits[(int)nIdx2 >> 5]) != 0;
-      aUsedFlags[nIdx3] = (gadwBitMasks[nIdx3 & 0x1f] & pUsedColourBits[(int)nIdx3 >> 5]) != 0;
+      aUsedFlags[nIdx1 - 1] = (Fog::BitBuffer::gadwBitMasks[nBitIdx & 0x1f] & pUsedColourBits[(int)nBitIdx >> 5]) != 0;
+      aUsedFlags[nIdx1] = (Fog::BitBuffer::gadwBitMasks[nIdx1 & 0x1f] & pUsedColourBits[(int)nIdx1 >> 5]) != 0;
+      aUsedFlags[nIdx2] = (Fog::BitBuffer::gadwBitMasks[nIdx2 & 0x1f] & pUsedColourBits[(int)nIdx2 >> 5]) != 0;
+      aUsedFlags[nIdx3] = (Fog::BitBuffer::gadwBitMasks[nIdx3 & 0x1f] & pUsedColourBits[(int)nIdx3 >> 5]) != 0;
       nBitIdx += 4;
       nIdx1 += 4;
       nIdx2 += 4;
@@ -584,7 +584,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
           while (true) {
             nPixelSlot--;
             pPixelSlotPtr--;
-            if ((&nPixelMask)[(int)nPixelSlot >> 5] & gadwBitMasks[nPixelSlot & 0x1f]) {
+            if ((&nPixelMask)[(int)nPixelSlot >> 5] & Fog::BitBuffer::gadwBitMasks[nPixelSlot & 0x1f]) {
               break;
             }
 
@@ -657,10 +657,10 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
           nBitsRead = nPixelSlot;
           while (true) {
             nBitsRead++;
-            nBitMaskCheck = (&nPixelMask)[(int)nBitsRead >> 5] & gadwBitMasks[nBitsRead & 0x1f];
+            nBitMaskCheck = (&nPixelMask)[(int)nBitsRead >> 5] & Fog::BitBuffer::gadwBitMasks[nBitsRead & 0x1f];
             while (!nBitMaskCheck) {
               nBitsRead++;
-              nBitMaskCheck = (&nPixelMask)[(int)nBitsRead >> 5] & gadwBitMasks[nBitsRead & 0x1f];
+              nBitMaskCheck = (&nPixelMask)[(int)nBitsRead >> 5] & Fog::BitBuffer::gadwBitMasks[nBitsRead & 0x1f];
             }
 
             if ((int)nBitsRead >= 4) {
@@ -668,10 +668,10 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
             }
 
             nLookupVal++;
-            nBitMaskCheck = (&nPixelMask)[(int)nLookupVal >> 5] & gadwBitMasks[nLookupVal & 0x1f];
+            nBitMaskCheck = (&nPixelMask)[(int)nLookupVal >> 5] & Fog::BitBuffer::gadwBitMasks[nLookupVal & 0x1f];
             while (!nBitMaskCheck) {
               nLookupVal++;
-              nBitMaskCheck = (&nPixelMask)[(int)nLookupVal >> 5] & gadwBitMasks[nLookupVal & 0x1f];
+              nBitMaskCheck = (&nPixelMask)[(int)nLookupVal >> 5] & Fog::BitBuffer::gadwBitMasks[nLookupVal & 0x1f];
             }
 
             pOutPixel[nLookupVal] = pOutPixel[nBitsRead];
@@ -679,10 +679,10 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
 
           while (true) {
             nLookupVal++;
-            nBitsRead = (&nPixelMask)[(int)nLookupVal >> 5] & gadwBitMasks[nLookupVal & 0x1f];
+            nBitsRead = (&nPixelMask)[(int)nLookupVal >> 5] & Fog::BitBuffer::gadwBitMasks[nLookupVal & 0x1f];
             while (!nBitsRead) {
               nLookupVal++;
-              nBitsRead = (&nPixelMask)[(int)nLookupVal >> 5] & gadwBitMasks[nLookupVal & 0x1f];
+              nBitsRead = (&nPixelMask)[(int)nLookupVal >> 5] & Fog::BitBuffer::gadwBitMasks[nLookupVal & 0x1f];
             }
 
             if ((int)nLookupVal >= 4) {
@@ -698,7 +698,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
             do {
               nBitsRead--;
               pOutPixelCursor--;
-              if (!((&nPixelMask)[(int)nBitsRead >> 5] & gadwBitMasks[nBitsRead & 0x1f])) {
+              if (!((&nPixelMask)[(int)nBitsRead >> 5] & Fog::BitBuffer::gadwBitMasks[nBitsRead & 0x1f])) {
                 *pOutPixelCursor = pOutPixelCursor[(int)nPrevPixelOffset];
               }
             } while (nBitsRead);
@@ -907,7 +907,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
     uint32_t nEncSize;
     __frame0.local_334 = (uint32_t)pDecodeState;
     __frame0.local_330 = pMemory;
-    EnterCriticalSection(&lpCriticalSection_008f03cc);
+    EnterCriticalSection(&CelCmp::lpCriticalSection_008f03cc);
     aFrameHeaderInfo[0] = *(uint32_t*)(pCelHeader + 4);
     aFrameHeaderInfo[2] = *(uint32_t*)(pCelHeader + 0x14);
     aFrameHeaderInfo[3] = *(uint32_t*)(pCelHeader + 0x18);
@@ -1334,7 +1334,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       } while ((int)__frame0.local_338 < __frame0.nEndFrame);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_008f03cc);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&CelCmp::lpCriticalSection_008f03cc);
     return pOutBuffer;
 }
 

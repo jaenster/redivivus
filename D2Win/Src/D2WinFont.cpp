@@ -71,7 +71,6 @@ static DC6 * gpMonsterIndicatorDC6 = 0; D2_STATIC_GUARD(gpMonsterIndicatorDC6, "
 static D2FontCacheEntryStrc gaFontCache[14] = {}; D2_STATIC_GUARD(gaFontCache, "gaFontCache");
 static uint8_t gcTooltipBarColor = 0; D2_STATIC_GUARD(gcTooltipBarColor, "gcTooltipBarColor");
 static uint8_t gbFontIsKoreanChatMode = 0; D2_STATIC_GUARD(gbFontIsKoreanChatMode, "gbFontIsKoreanChatMode");
-D2TooltipTextStrc DisplayedTooltip = {}; D2_GLOBAL_GUARD(DisplayedTooltip, "DisplayedTooltip");
 static uint16_t gnFontTableCharWidthCache[2] = {}; D2_STATIC_GUARD(gnFontTableCharWidthCache, "gnFontTableCharWidthCache");
 static uint16_t gwFontHeightDefault[2] = {}; D2_STATIC_GUARD(gwFontHeightDefault, "gwFontHeightDefault");
 
@@ -1494,5 +1493,17 @@ void StaticInit_gnFontTableCharWidthCache() {
     gnFontTableCharWidthCache[0] = 0;
     gnFontTableCharWidthCache[1] = 0;
 }
+
+} // namespace D2Win::Src::D2WinFont
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Win::Src::D2WinFont {
+
+// Initialized data
+
+D2TooltipTextStrc DisplayedTooltip = {}; D2_GLOBAL_GUARD(DisplayedTooltip, "D2Win::Src::D2WinFont::DisplayedTooltip");
 
 } // namespace D2Win::Src::D2WinFont

@@ -23,7 +23,8 @@
 #include "D2Net/SRP.h"
 #include "Fog/Src/LogManager.h"
 #include "Storm/Source/SSystem.h"
-#include "_unnamespaced.h"
+#include "Fog/3rdparty/crashy.h"
+#include "D2Multi/ChatDlg.h"
 #include "D2Hell/D2Hell.h"
 #include "Bnclient/BnDownload.h"
 #include "Bnclient/BnSend.h"
@@ -103,9 +104,9 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     D2Trace("staticinit[16] 006ca940");
     D2Launch::CharSel::StaticInit_pBetaRealmNames();
     D2Trace("staticinit[17] 006ca960");
-    StaticInit_6ca960();
+    D2Multi::ChatDlg::StaticInit_6ca960();
     D2Trace("staticinit[18] 006ca980");
-    StaticInit_gbChatLobbyInitialize();
+    D2Multi::ChatDlg::StaticInit_gbChatLobbyInitialize();
     D2Trace("staticinit[19] 006ca9a0");
     D2Client::ClientModeInGame::StaticInit_gpszCmdLineCaptionStr();
     D2Trace("staticinit[20] 006ca9b0");
@@ -125,7 +126,7 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     D2Trace("staticinit[27] 006caaa0");
     D2Client::UI::ui::StaticInit_WindowSizeY();
     D2Trace("staticinit[28] 006caab0");
-    StaticInit_6caab0();
+    D2Client::UI::CmdTbl::StaticInit_6caab0();
     D2Trace("staticinit[29] 006caad0");
     D2Client::UI::CmdTbl::StaticInit_gwKeyNameBuffer();
     D2Trace("staticinit[30] 006caaf0");
@@ -202,6 +203,6 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     D2Trace("staticinit[64] 006cb050");
     Storm::Source::StaticInit_gStormCmdListSlash();
     D2Trace("staticinit[65] 006ca6f0");
-    Storm::Source::SSystem::SetCurrentThreadId();
+    Fog::_3rdparty::crashy::SetCurrentThreadId();
     D2Trace("staticinit all done");
 }

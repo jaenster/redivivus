@@ -979,7 +979,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
           pChanEntry->nPlayMode = 0;
         }
       } else {
-        if (ServerLoadingComplete && __frame0.pSoundsTxtLocal->Tracking && pChanEntry->pGlobal3Ref) {
+        if (GAME::Game::ServerLoadingComplete && __frame0.pSoundsTxtLocal->Tracking && pChanEntry->pGlobal3Ref) {
           __frame0.fDir1 = 0.0;
           __frame0.pClosestUnit = 0;
           __frame0.fDirX2 = 0.0;
@@ -1517,7 +1517,7 @@ void __stdcall SoundChaosDebug() {
 }
 
 BOOL __stdcall SOUND_IsDirectSoundAvailable() {
-    if (!pAudioMixerInterface) {
+    if (!GAME::Sound::pAudioMixerInterface) {
       return 0;
     }
 
@@ -1526,7 +1526,7 @@ BOOL __stdcall SOUND_IsDirectSoundAvailable() {
 }
 
 BOOL __stdcall SOUND_IsEaxAvailable() {
-    if (!pAudioMixerInterface) {
+    if (!GAME::Sound::pAudioMixerInterface) {
       return 0;
     }
 
@@ -1535,7 +1535,7 @@ BOOL __stdcall SOUND_IsEaxAvailable() {
 }
 
 void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    if (!(pAudioMixerInterface && !lpAddend_007c8a74)) {
+    if (!(GAME::Sound::pAudioMixerInterface && !lpAddend_007c8a74)) {
       return;
     }
 
@@ -1552,7 +1552,7 @@ void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMous
 }
 
 void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    if (!(pAudioMixerInterface && !lpAddend_007c8a74)) {
+    if (!(GAME::Sound::pAudioMixerInterface && !lpAddend_007c8a74)) {
       return;
     }
 
@@ -1612,7 +1612,7 @@ int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFr
 }
 
 int Unreferenced_004e41e0() {
-    int32_t iVar1 = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(sgpDrlgAct);
+    int32_t iVar1 = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(GAME::Game::sgpDrlgAct);
     return (uint32_t)(2 < iVar1 - 1U);
 }
 
@@ -1695,7 +1695,7 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
     int nRainVolume;
     nRainVolume = 0;
     int32_t nDayCycleIndex;
-    nDayCycleIndex = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(sgpDrlgAct);
+    nDayCycleIndex = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(GAME::Game::sgpDrlgAct);
     uint32_t nSoundEnvIndex;
     nSoundEnvIndex = SoundHdr::GetSoundEnv();
     D2SoundEnvironTxt* pSoundEnvLine;

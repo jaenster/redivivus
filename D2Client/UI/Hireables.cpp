@@ -166,7 +166,7 @@ void __stdcall LoadClassIcons() {
       } while (nClassCount < 7);
     }
 
-    size_t nAllocSize = sgptDataTable->nTxtPetTypeSize * 0x14;
+    size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize * 0x14;
     gpHireablesList = (D2HireablesListStrc*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\UI\\Hireables.cpp", 0x96);
     memset(gpHireablesList, 0, nAllocSize);
 }
@@ -187,7 +187,7 @@ void __stdcall FreeHireablesList() {
       return;
     }
 
-    int nIconCount = sgptDataTable->nTxtPetTypeSize * 5;
+    int nIconCount = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize * 5;
     D2HireablesListStrc* pMemoryToFree = gpHireablesList;
     for (nIconIdx = 0; nIconIdx < nIconCount; nIconIdx++) {
       if ((&pMemoryToFree->pIcon)[nIconIdx]) {
@@ -240,7 +240,7 @@ static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, u
 
 static void __stdcall GetAndDrawHirelingName(int32_t nX, int32_t nY, int32_t nPetType) {
     uint16_t wszName[32];
-    D2PetTypeTxt* pPetTypeTxt = nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nPetType : nullptr;
+    D2PetTypeTxt* pPetTypeTxt = nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetType : nullptr;
     if (!(pPetTypeTxt && pPetTypeTxt->name > 0 && pPetTypeTxt->name != 0x1506)) {
       return;
     }
@@ -298,12 +298,12 @@ void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX) {
 DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut) {
     int nIconIndex;
     DC6* pIcon;
-    D2PetTypeTxt* pPetType = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nSkillId : nullptr;
+    D2PetTypeTxt* pPetType = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nSkillId : nullptr;
     if (!pPetType) {
       return nullptr;
     }
     if (pFlagOut) {
-      *pFlagOut = (uint8_t)*((uint8_t*)pPetType + 0x4) & gadwBitMasks[5];
+      *pFlagOut = (uint8_t)*((uint8_t*)pPetType + 0x4) & Fog::BitBuffer::gadwBitMasks[5];
     }
 
     int32_t nSkillIdSaved = nSkillId;
@@ -1010,12 +1010,12 @@ void __stdcall UI_DrawHireableIcons() {
     uint32_t bAnyIconDrawn = UI_DrawPartyMembersHirelingIcons(aCursorState + 2, aCursorState, aCursorState + 1, pPlayer);
     aCursorState[3] = HIRELING_DrawPortraitIcon(pPlayer, aCursorState, aCursorState + 2, aCursorState + 1);
     aCursorState[3] = bAnyIconDrawn | aCursorState[3];
-    int nPetTypeCount = sgptDataTable->nTxtPetTypeSize;
+    int nPetTypeCount = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize;
     nPetTypeIdx = 0;
     if (nPetTypeCount > 0) {
-      for (nPetTypeTxtOffset = 0; (int)nPetTypeIdx < nPetTypeCount; nPetTypeCount = sgptDataTable->nTxtPetTypeSize , nPetTypeTxtOffset += 0xe0 , nPetTypeIdx++) {
+      for (nPetTypeTxtOffset = 0; (int)nPetTypeIdx < nPetTypeCount; nPetTypeCount = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize , nPetTypeTxtOffset += 0xe0 , nPetTypeIdx++) {
         if ((int)nPetTypeIdx >= 0 && (int)nPetTypeIdx < nPetTypeCount) {
-          pPetTypeRow = sgptDataTable->pTxtPetType->baseicon + nPetTypeTxtOffset - 0xf;
+          pPetTypeRow = D2Common::ITEMS::Items::sgptDataTable->pTxtPetType->baseicon + nPetTypeTxtOffset - 0xf;
           if (pPetTypeRow) {
             nPetIconKind = pPetTypeRow[0xe];
             switch (nPetIconKind) {

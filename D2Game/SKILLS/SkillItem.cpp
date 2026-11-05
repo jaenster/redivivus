@@ -547,8 +547,8 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
 
       nClassId = pMonData->nClassId;
       nRarityBucket = (int)(short int)nClassId;
-      pMonStatsTxt = nRarityBucket >= 0 && nRarityBucket < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nRarityBucket : nullptr;
-      if (pMonStatsTxt && pMonStatsTxt->spawn >= 0 && *((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)gadwBitMasks[7]) {
+      pMonStatsTxt = nRarityBucket >= 0 && nRarityBucket < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRarityBucket : nullptr;
+      if (pMonStatsTxt && pMonStatsTxt->spawn >= 0 && *((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
         DVar1 = D2_SEED_NEXT(*pSeed);
         *pSeed = DVar1;
         if ((int)(DVar1.nSeedLow % 100) > (int)(uint32_t)byBaseClassChance) {
@@ -567,8 +567,8 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
     }
 
     nRarityBucket = (int)(short int)nClassId;
-    if (nRarityBucket >= 0 && nRarityBucket < sgptDataTable->nTxtMonStatsSize) {
-      *ppMonStatLine = sgptDataTable->pTxtMonStats + nRarityBucket;
+    if (nRarityBucket >= 0 && nRarityBucket < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      *ppMonStatLine = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRarityBucket;
       return nRarityBucket;
     }
 
@@ -816,7 +816,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
       if ((int)eState <= 0) {
         return 0;
       }
-      if ((int)eState >= sgptDataTable->nTxtStatesSize) {
+      if ((int)eState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         return 0;
       }
 
@@ -833,11 +833,11 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
     bHpModified = false;
     for (iStatEntry = 0; iStatEntry < 3; iStatEntry++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatEntry * 2 + 0x3e);
-      if ((int)eUnitStat < 0 || (int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eUnitStat < 0 || (int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         break;
       }
 
-      pStatCost = sgptDataTable->pTxtItemStatCost + eUnitStat;
+      pStatCost = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (pStatCost) {
         nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
         switch (eUnitStat) {
@@ -888,7 +888,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
 
           if ((int)nItemClassId <= 0) {
             nPotionDelay = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
-            if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < sgptDataTable->nTxtItemStatCostSize) {
+            if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
               nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
               if (nPotionDelay + nStatScaled > nCurStatVal) {
                 nStatScaled = nCurStatVal - nPotionDelay;
@@ -985,7 +985,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
       if ((int)eState <= 0) {
         return 0;
       }
-      if ((int)eState >= sgptDataTable->nTxtStatesSize) {
+      if ((int)eState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         return 0;
       }
 
@@ -1002,11 +1002,11 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
     bHpModified = false;
     for (iStatEntry = 0; iStatEntry < 3; iStatEntry++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatEntry * 2 + 0x3e);
-      if ((int)eUnitStat < 0 || (int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eUnitStat < 0 || (int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         break;
       }
 
-      pStatCost = sgptDataTable->pTxtItemStatCost + eUnitStat;
+      pStatCost = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (pStatCost) {
         nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
         if (eUnitStat == UNITSTAT_manarecovery || eUnitStat == UNITSTAT_hpregen) {
@@ -1035,7 +1035,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 
           if ((int)nItemClassId <= 0) {
             nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
-            if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < sgptDataTable->nTxtItemStatCostSize) {
+            if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
               nCurrentStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
               if (nCurStatVal + nStatScaled > nCurrentStatVal) {
                 nStatScaled = nCurrentStatVal - nCurStatVal;
@@ -1127,7 +1127,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
       if ((int)eState <= 0) {
         return 0;
       }
-      if ((int)eState >= sgptDataTable->nTxtStatesSize) {
+      if ((int)eState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         return 0;
       }
 
@@ -1142,8 +1142,8 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
     bool bHpModified = false;
     for (iStatSlot = 0; iStatSlot < 3; iStatSlot++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatSlot * 2 + 0x3e);
-      pStatCost = (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
-      if (pStatCost && (int)(uint32_t)(uint16_t)pStatCost->maxstat < sgptDataTable->nTxtItemStatCostSize) {
+      pStatCost = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      if (pStatCost && (int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nPercent = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatSlot * 4 + 0x44));
         if ((int)nPercent > 0) {
           pExpireFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
@@ -1238,7 +1238,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     eD2States eState = (eD2States)pItemTxt->wState;
-    if ((int)eState <= 0 || (int)eState >= sgptDataTable->nTxtStatesSize) {
+    if ((int)eState <= 0 || (int)eState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
 
@@ -1286,7 +1286,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     nPrevBuffFrames = 3;
     do {
       eUnitStat = (eD2UnitStat)*pStatIdPtr;
-      if ((int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize) {
+      if ((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         pStatCost = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(eUnitStat);
         if (pStatCost) {
           nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *pCalcPtr);
@@ -1333,7 +1333,7 @@ BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     do {
       eD2States eState;
       eState = (eD2States)*pClearStatePtr;
-      if ((int)eState > 0 && (int)eState < sgptDataTable->nTxtStatesSize) {
+      if ((int)eState > 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
         if (pStatList) {
           D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
@@ -1362,7 +1362,7 @@ BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 BOOL __fastcall SKILLITEM_ApplyRejuvenationPotionEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     eD2UnitStat eUnitStat = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pItem);
-    if (!((int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize)) {
+    if (!((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return 0;
     }
 
@@ -1627,15 +1627,15 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
 }
 
 void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[5] && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < sgptDataTable->nTxtStatesSize)) {
+    D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5] && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
     int32_t pNextFrame = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pUnit, pSkillTxt, eSkill, nSkillLvl);
     GAME::Event::SetEvent(pGame, pUnit, 9, pNextFrame, nOwnerGUID, eSkill);
-    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[7])) {
+    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7])) {
       return;
     }
 
@@ -1643,13 +1643,13 @@ void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 void __fastcall SKILL_DeactivateAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill) {
-    D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[5])) {
+    D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!(pSkillTxt && *((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
       return;
     }
 
     short int eAuraState = pSkillTxt->aurastate;
-    if (!(eAuraState >= 0 && (int)eAuraState < sgptDataTable->nTxtStatesSize)) {
+    if (!(eAuraState >= 0 && (int)eAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
@@ -1767,10 +1767,10 @@ BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnit
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pTarget->nClassId);
       if (pMonStats2) {
-        if (gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+        if (Fog::BitBuffer::gadwBitMasks[3] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
           nSizeThreshMask = 0x20;
         } else {
-          if (gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
+          if (Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStats2 + 0x5)) {
             nSizeThreshMask = 0x80;
           }
         }
@@ -2270,8 +2270,8 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
+    uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
     if (!(!pDamage || pDamage->dwHitFlags & 0x20)) {
       return 0;
     }
@@ -2286,7 +2286,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     if (!pSkillsTxt) {
       return 0;
     }
-    if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[5]) {
+    if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
       if (pTarget) {
         Monster::AI::SKILL_CastOnTargetUnit(pTarget, eProcSkill, eSkillLevel, pTarget, 0);
         return 1;
@@ -2318,8 +2318,8 @@ BOOL __fastcall ITEMEVENT_CastOnStriking(::SGAMEDATA * pGame, uint32_t nUnitEven
       return 0;
     }
 
-    uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
+    uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
     if (!(pDamage && pDamage->wResultFlags & 4)) {
       return 0;
     }
@@ -2358,11 +2358,11 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       return 0;
     }
 
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
-    uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
+    uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
     D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = DVar1;
-    if (!((int)(DVar1.nSeedLow % 100) < nProcChance && (int)eProcSkill >= 0 && (int)eProcSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eProcSkill)) {
+    if (!((int)(DVar1.nSeedLow % 100) < nProcChance && (int)eProcSkill >= 0 && (int)eProcSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eProcSkill)) {
       return 0;
     }
 
@@ -2408,7 +2408,7 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
     if ((int)eSkill < 0) {
       return 0;
     }
-    if (!((int)eSkill < sgptDataTable->nTxtMonStatsSize)) {
+    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 
@@ -2525,7 +2525,7 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
     }
 
     eMissilesId eMissileIdA = (eMissilesId)pSkillTxt->srvmissile[1];
-    if (!((int)eMissileIdA >= 0 && (int)eMissileIdA < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileIdA >= 0 && (int)eMissileIdA < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (nSkillLvl < 0) {
@@ -2533,7 +2533,7 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
     }
 
     D2MissilesTxt* pMissileTxt = D2Client::GetMissleById(pTarget->nClassId);
-    if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nSkillLevel = nUnit;
@@ -2556,7 +2556,7 @@ BOOL __fastcall ITEMEVENT_ApplyFreezeDamage(::SGAMEDATA * pGame, uint32_t nUnitE
     short int sCltOverlay;
     D2SkillsTxt* pSkillTxt = nullptr;
     if (!(!pUnit || !pTarget || pTarget->eUnitType != UNIT_PLAYER && pTarget->eUnitType != UNIT_MONSTER || pDamage && pDamage->dwPhysDamage <= 0)) {
-      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     }
     if (!pSkillTxt) {
       return 0;
@@ -2570,7 +2570,7 @@ BOOL __fastcall ITEMEVENT_ApplyFreezeDamage(::SGAMEDATA * pGame, uint32_t nUnitE
     sDamage.dwFrzLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
     sCltOverlay = pSkillTxt->cltoverlaya;
-    if (sCltOverlay >= 0 && (int)sCltOverlay < sgptDataTable->nTxtOverlaySize) {
+    if (sCltOverlay >= 0 && (int)sCltOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       D2Common::Units::SetOverlay(pTarget, (int)sCltOverlay, 0);
     }
 
@@ -2589,7 +2589,7 @@ BOOL __fastcall ITEMEVENT_ApplyHitDamage(::SGAMEDATA * pGame, uint32_t nUnitEven
     }
 
     int32_t nUnit = nSkillLvl;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -2605,7 +2605,7 @@ BOOL __fastcall ITEMEVENT_ApplyHitDamage(::SGAMEDATA * pGame, uint32_t nUnitEven
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pCaster, pTarget, 1, &sDamage);
     UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pCaster, pTarget, &sDamage);
     sCltOverlay = pSkillTxt->cltoverlaya;
-    if (sCltOverlay >= 0 && (int)sCltOverlay < sgptDataTable->nTxtOverlaySize) {
+    if (sCltOverlay >= 0 && (int)sCltOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
       D2Common::Units::SetOverlay(pTarget, (int)sCltOverlay, 0);
     }
 

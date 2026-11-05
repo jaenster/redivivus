@@ -30,7 +30,7 @@ namespace D2Common {
 
 // Sets eRoomExFlags from a lookup table indexed by nDrlgRoomsExNearCount. Appears to set initialization flags based on the number of neighboring RoomEx entries.
 void __stdcall DRLGROOMEX_SetFlagsFromNearCount(D2RoomExStrc * pRoomEx) {
-    pRoomEx->eRoomExFlags = gnTimeRates[pRoomEx->nDrlgRoomsExNearCount];
+    pRoomEx->eRoomExFlags = Environment::gnTimeRates[pRoomEx->nDrlgRoomsExNearCount];
 }
 
 int __fastcall ITEMTBLS_CalcExpr_ParseTokenType(char * szKey) {

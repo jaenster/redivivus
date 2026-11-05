@@ -336,8 +336,8 @@ static void __stdcall GetIntensityFlagsForTile(int32_t nTileX, int32_t nTileY, i
     int nWorldX;
     if (nIndoorFlag) {
       int32_t nIntensity;
-      nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(sgpDrlgAct);
-      D2Common::Environment::DRLGENV_GetLightColorFromAct(sgpDrlgAct, (uint8_t*)((uintptr_t)&nTileX + 3), (uint8_t*)((uintptr_t)&nTileY + 3), (uint8_t*)((uintptr_t)&nIndoorFlag + 3));
+      nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
+      D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, (uint8_t*)((uintptr_t)&nTileX + 3), (uint8_t*)((uintptr_t)&nTileY + 3), (uint8_t*)((uintptr_t)&nIndoorFlag + 3));
       nRow = 8;
       do {
         nCol = 8;
@@ -380,7 +380,7 @@ static void __stdcall DRAW_CalcRoofLightGridOrtho(D2GfxLightExStrc * pLightEntry
     switch (nSplitSide) {
       case 1:
         {
-          nHalfWidthAdj = -(ScreenSizeX / 4);
+          nHalfWidthAdj = -(UI::ui::ScreenSizeX / 4);
           break;
         }
       default:
@@ -389,7 +389,7 @@ static void __stdcall DRAW_CalcRoofLightGridOrtho(D2GfxLightExStrc * pLightEntry
         }
       case 2:
         {
-          nHalfWidthAdj = ScreenSizeX / 4;
+          nHalfWidthAdj = UI::ui::ScreenSizeX / 4;
           break;
         }
     }
@@ -424,12 +424,12 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
     D2GfxLightExStrc* pCurLight;
     uint32_t dwLightColor;
     int32_t nIntensity;
-    nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(sgpDrlgAct);
+    nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
     dwLightColor = (uint32_t)((uint32_t)(uint8_t)(char)nIntensity << 24 | (uint32_t)((uint32_t)dwLightColor & 0xffffffu));
     switch (nSplitSide) {
       case 1:
         {
-          nHalfWidthAdj = -(ScreenSizeX / 4);
+          nHalfWidthAdj = -(UI::ui::ScreenSizeX / 4);
           break;
         }
       default:
@@ -438,14 +438,14 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
         }
       case 2:
         {
-          nHalfWidthAdj = ScreenSizeX / 4;
+          nHalfWidthAdj = UI::ui::ScreenSizeX / 4;
           break;
         }
     }
 
     nScreenX += nHalfWidthAdj;
     fill_light_grid:
-    D2Common::Environment::DRLGENV_GetLightColorFromAct(sgpDrlgAct, (uint8_t*)((uintptr_t)&dwLightColor + 2), (uint8_t*)&dwLightColor, (uint8_t*)((uintptr_t)&dwLightColor + 1));
+    D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, (uint8_t*)((uintptr_t)&dwLightColor + 2), (uint8_t*)&dwLightColor, (uint8_t*)((uintptr_t)&dwLightColor + 1));
     nHalfWidthAdj = 0;
     pCurLight = pLightGrid;
     pLightGrid = (D2GfxLightExStrc*)(nTileY * 8);
@@ -481,12 +481,12 @@ static void __stdcall DRAW_CalcRoofLightGridPerspective(D2GfxLightExStrc * pLigh
     switch (nSplitSide) {
       case 1:
         {
-          nScreenHalfAdj = -(ScreenSizeX / 4);
+          nScreenHalfAdj = -(UI::ui::ScreenSizeX / 4);
           break;
         }
       case 2:
         {
-          nScreenHalfAdj = ScreenSizeX / 4;
+          nScreenHalfAdj = UI::ui::ScreenSizeX / 4;
           break;
         }
     }
@@ -522,23 +522,23 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
     uint8_t byGreen;
     uint8_t* pScreenX;
     D2GfxLightExStrc* pLightEntry = (D2GfxLightExStrc*)nRow;
-    int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(sgpDrlgAct);
+    int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
     uint8_t byIntensity = (uint8_t)nIntensity;
     int nScreenHalfAdj = 0;
     switch (nSplitSide) {
       case 1:
         {
-          nScreenHalfAdj = -(ScreenSizeX / 4);
+          nScreenHalfAdj = -(UI::ui::ScreenSizeX / 4);
           break;
         }
       case 2:
         {
-          nScreenHalfAdj = ScreenSizeX / 4;
+          nScreenHalfAdj = UI::ui::ScreenSizeX / 4;
           break;
         }
     }
 
-    D2Common::Environment::DRLGENV_GetLightColorFromAct(sgpDrlgAct, &byGreen, &byRed, &byBlue);
+    D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, &byGreen, &byRed, &byBlue);
     nRow = 0;
     if (nDepth) {
       int* pXAdjust;
@@ -679,14 +679,14 @@ void __thiscall DRAW_DrawEdgeFloorTile(D2DrawFloorStrc * pDrawFloor, int32_t nWo
     nWorldX = nParam + 5;
     D2Common::Drlg::Transform::CoordsMapToScreen(&nScreenX, &nWorldX);
     nWorldX += 0x28;
-    if (!sgpDrlgAct) {
+    if (!Game::sgpDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdf);
       exit(-1);
     }
 
     nScreenX += pDrawFloor->nX;
     nWorldX += pDrawFloor->nY;
-    pTileData = D2Common::DUNGEON::Dungeon::GetTileDataFromAct(sgpDrlgAct);
+    pTileData = D2Common::DUNGEON::Dungeon::GetTileDataFromAct(Game::sgpDrlgAct);
     if (!pTileData) {
       return;
     }
@@ -994,8 +994,8 @@ void __stdcall dInitWallDraw() {
     static uint8_t gLightRed; D2_STATIC_GUARD_BSS(gLightRed, "D2Client::GAME::Draw::dInitWallDraw::gLightRed");
 
     D2ColorInfo roomColor;
-    D2Common::Environment::DRLGENV_GetLightColorFromAct(sgpDrlgAct, &gLightRed, &gLightGreen, &gLightBlue);
-    int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(sgpDrlgAct);
+    D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, &gLightRed, &gLightGreen, &gLightBlue);
+    int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
     gLightIntensity = (uint8_t)nIntensity;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (!pUnit) {

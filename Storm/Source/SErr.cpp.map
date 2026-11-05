@@ -4,23 +4,6 @@
   "file": "Storm/Source/SErr.cpp",
   "functions": [
     {
-      "name": "SErrSetBlizzardErrorFunction_Unref_0040b370",
-      "address": "0040b370",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0040b370"
-        }
-      ],
-      "namespace": "Storm::Source::SErr",
-      "calledFunctions": [
-        "SErrSetBlizzardErrorFunction_Unref_0040b370"
-      ],
-      "usedTypes": [
-        "pfnBlizzardError"
-      ]
-    },
-    {
       "name": "SErrSetBlizzardErrorFunction",
       "address": "0041c0e0",
       "lines": [
@@ -630,34 +613,6 @@
       "calledFunctions": [
         "SErrReportResourceLeak",
         "SErrReportNamedResourceLeak"
-      ]
-    },
-    {
-      "name": "SERR_InternalLeaveCriticalSection_Unref_0043e230",
-      "address": "0043e230",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0043e230"
-        }
-      ],
-      "namespace": "Storm::Source::SErr",
-      "calledFunctions": [
-        "SERR_InternalLeaveCriticalSection_Unref_0043e230"
-      ]
-    },
-    {
-      "name": "SERR_InternalLeaveCriticalSection_Unref_0043e240",
-      "address": "0043e240",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0043e240"
-        }
-      ],
-      "namespace": "Storm::Source::SErr",
-      "calledFunctions": [
-        "SERR_InternalLeaveCriticalSection_Unref_0043e240"
       ]
     },
     {

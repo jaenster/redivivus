@@ -113,29 +113,29 @@ static D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTable(D2UnitStrc * pUni
     // Static local variables (originally global data)
     static D2MonSeqMonsterTbls * apFixedSequenceTable[24] = {
     nullptr,
-    D2MonSeqMonsterTbls_ARRAY_007468a0,
-    D2MonSeqMonsterTbls_ARRAY_00746978,
-    D2MonSeqMonsterTbls_ARRAY_00746a80,
-    D2MonSeqMonsterTbls_ARRAY_00746b88,
-    D2MonSeqMonsterTbls_ARRAY_00746c58,
-    gaMonSeqMonsterTblData,
-    gaMonSeqMonsterTblsExtra,
-    D2MonSeqMonsterTbls_ARRAY_00747088,
-    D2MonSeqMonsterTbls_ARRAY_007471f0,
-    D2MonSeqMonsterTbls_ARRAY_007472c8,
-    D2MonSeqMonsterTbls_ARRAY_007473d8,
-    D2MonSeqMonsterTbls_ARRAY_007474f8,
-    gaMonSeqMonsterTbls,
-    D2MonSeqMonsterTbls_ARRAY_00747918,
-    D2MonSeqMonsterTbls_ARRAY_00747a08,
-    D2MonSeqMonsterTbls_ARRAY_00747b58,
-    D2MonSeqMonsterTbls_ARRAY_00747c78,
-    D2MonSeqMonsterTbls_ARRAY_00747ea0,
-    D2MonSeqMonsterTbls_ARRAY_00747d98,
-    D2MonSeqMonsterTbls_ARRAY_00747fb0,
-    D2MonSeqMonsterTbls_ARRAY_007480e8,
-    D2MonSeqMonsterTbls_ARRAY_007481f0,
-    D2MonSeqMonsterTbls_ARRAY_00748310
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007468a0,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746978,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746a80,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746b88,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00746c58,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::gaMonSeqMonsterTblData,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::gaMonSeqMonsterTblsExtra,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747088,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007471f0,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007472c8,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007473d8,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007474f8,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::gaMonSeqMonsterTbls,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747918,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747a08,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747b58,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747c78,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747ea0,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747d98,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00747fb0,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007480e8,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_007481f0,
+    (D2MonSeqMonsterTbls*)&D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00748310
 }; D2_STATIC_GUARD(apFixedSequenceTable, "D2Common::Merc::GetMonsterSequenceTable::apFixedSequenceTable");
 
     int32_t nWeaponClass;
@@ -744,5 +744,3781 @@ BOOL __fastcall RollMercStats(int32_t nVersion, D2UnitStrc * pUnit, int32_t nMer
     pHireData->field14_0x38 = 0;
     return 1;
 }
+
+} // namespace D2Common::Merc
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Common::Merc {
+
+// Initialized data
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_007466dc[7] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007466dc, "D2Common::Merc::D2MonSeqTxt_ARRAY_007466dc");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746820[21] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746820, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746820");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746948[8] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746948, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746948");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746a20[16] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746a20, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746a20");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746b28[16] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x3,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746b28, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746b28");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746c30[6] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746c30, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746c30");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746d00[16] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746d00, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746d00");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746e08[33] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x2
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x4
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x5
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x6
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x7
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x8
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x9
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xa
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xb
+    },
+    {
+        /* .sequence = */ 0x100,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xc
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xd
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xe
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xf
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x10
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x11
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x12
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x13
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746e08, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746e08");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00746f78[45] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x2
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x2
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x2
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x3
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x4
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x4
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x5
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x6
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x7
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x8
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x9
+    },
+    {
+        /* .sequence = */ 0x100,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xa
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xb
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xc
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xd
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xe
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0xf
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x10
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x7,
+        /* .event = */ 0x11
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00746f78, "D2Common::Merc::D2MonSeqTxt_ARRAY_00746f78");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747130[32] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x10,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x11,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747130, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747130");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747298[8] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747298, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747298");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747370[17] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747370, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747370");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747480[20] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747480, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747480");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_007475a0[16] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007475a0, "D2Common::Merc::D2MonSeqTxt_ARRAY_007475a0");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_007476a8[104] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {},
+    {
+        /* .sequence = */ 0xd,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x10d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x20d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x30d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x40d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x50d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x60d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x70d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x80d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x90d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xa0d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xb0d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xc0d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xd0d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xe0d,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x607,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x707,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x807,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x907,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xa07,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xb07,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xc07,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xd07,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xe07,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0xf07,
+        /* .mode = */ 0x0,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x10,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x11,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x12,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x10,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x7,
+        /* .frame = */ 0x11,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007476a8, "D2Common::Merc::D2MonSeqTxt_ARRAY_007476a8");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_007479c0[12] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xb,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xb,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xb,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xb,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xb,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xb,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xf,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_007479c0, "D2Common::Merc::D2MonSeqTxt_ARRAY_007479c0");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747ab0[28] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x8,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0x10,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747ab0, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747ab0");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747c00[20] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x10,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x11,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x12,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {},
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747c00, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747c00");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747d20[20] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747d20, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747d20");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747e40[16] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747e40, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747e40");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00747f48[17] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00747f48, "D2Common::Merc::D2MonSeqTxt_ARRAY_00747f48");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00748058[24] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xc,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00748058, "D2Common::Merc::D2MonSeqTxt_ARRAY_00748058");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00748190[16] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xd,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00748190, "D2Common::Merc::D2MonSeqTxt_ARRAY_00748190");
+
+D2MonSeqTxt D2MonSeqTxt_ARRAY_00748298[20] = {
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x0,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x1,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x2,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x3,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x4,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x5,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x6,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x7,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x8,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x9,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xa,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x1
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xb,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xc,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xd,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xe,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0xf,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {
+        /* .sequence = */ 0x0,
+        /* .mode = */ 0xa,
+        /* .frame = */ 0x10,
+        /* .dir = */ 0x0,
+        /* .event = */ 0x0
+    },
+    {}
+}; D2_GLOBAL_GUARD(D2MonSeqTxt_ARRAY_00748298, "D2Common::Merc::D2MonSeqTxt_ARRAY_00748298");
 
 } // namespace D2Common::Merc

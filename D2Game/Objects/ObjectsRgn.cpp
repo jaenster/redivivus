@@ -110,7 +110,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     pObjectControl->aLevelsRng[0] = 0;
     pObjectControl->pSub0x1110 = 0;
     eD2LevelId eLevel = LEVEL_RogueEncampment;
-    if (1 < sgptDataTable->nTxtLevelsSize) {
+    if (1 < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       pShrinesRngIter = (D2ObjectRngShrines*)(pObjectControl->aLevelsRng + 1);
       do {
         pLevelObjRng = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ObjectRngStrc, ".\\OBJECTS\\objrgn.cpp", 0x36);
@@ -123,7 +123,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
         pShrinesRngIter = (D2ObjectRngShrines*)(pShrinesRngIter->nShrinesCount + 1);
         eLevel += LEVEL_RogueEncampment;
         pGame = (::SGAMEDATA*)nShrineClassIdxLoop;
-      } while ((int)eLevel < sgptDataTable->nTxtLevelsSize);
+      } while ((int)eLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize);
     }
 
     nShrinesTxtCount = D2Common::DATATBLS::ObjectTbls::GetShrinesSize();
@@ -200,13 +200,13 @@ void __fastcall FreeObjectControl(::SGAMEDATA * pGame) {
 
     pObjectControl->pSub0x1110 = 0;
     int iLevelIdx = 1;
-    if (1 < sgptDataTable->nTxtLevelsSize) {
+    if (1 < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       ppLevelRng = pObjectControl->aLevelsRng;
       do {
         ppLevelRng++;
         D2_FREE_POOL_AT(pGame->pMemoryPool, *ppLevelRng, ".\\OBJECTS\\objrgn.cpp", 0xe2);
         iLevelIdx++;
-      } while (iLevelIdx < sgptDataTable->nTxtLevelsSize);
+      } while (iLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize);
     }
 
     uint8_t** ppShrineRng = (uint8_t**)pObjectControl->sShrinesRng.aShrinesRng;
@@ -518,7 +518,7 @@ int32_t __fastcall OBJECT_HandleObjectMode(D2ObjectModeArg * pObjectModeArg) {
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
     __frame0.pLevelRng = pObjectModeArg->pGame->pObjectControl->aLevelsRng[eLevel];
-    if (!(__frame0.pLevelRng->nMonClassId < 0 || __frame0.pLevelRng->nMonClassId >= sgptDataTable->nTxtMonStatsSize)) {
+    if (!(__frame0.pLevelRng->nMonClassId < 0 || __frame0.pLevelRng->nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return __frame0.pLevelRng->nMonClassId;
     }
 

@@ -79,11 +79,11 @@ void __stdcall InitPal() {
     int i;
     D2MPQFileStrc* pGreenBloodFile;
     D2MPQFileStrc* pRandTransformFile;
-    size_t nAllocSize = sgptDataTable->nTxtMonStatsSize * 8;
+    size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * 8;
     void* pPalShiftList = D2_ALLOC_AT(nAllocSize, ".\\GAME\\PalShift.cpp", 99);
     gpMonsterPalShiftList = pPalShiftList;
     memset(pPalShiftList, 0, nAllocSize);
-    int nMonStatsCount = sgptDataTable->nTxtMonStatsSize;
+    int nMonStatsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     for (i = 0; i < nMonStatsCount; i++) {
       *(int*)((int)pPalShiftList + i * 8) = i;
     }
@@ -147,13 +147,13 @@ int * __fastcall PALSHIFT_FindPalShiftByToken(int32_t nToken) {
 // Remaps the blood-color entries in a monster's palette table to green if the monster uses local blood (MonStats2.byLocalBlood == 2). Copies the base 512-byte palette block to an offset within pPaletteData, then applies the PalShift_GreenBlood lookup table across 8 rows of 256 entries, replacing non-zero mapped indices. No-ops for monsters outside the valid MonStats/MonStatsEx range or without local blood.
 static void PALSHIFT_ApplyGreenBloodPalette(uint8_t * pPaletteData, int32_t nMonsterId) {
     D2GamePalShiftGreenBloodStrc* pGreenBlood;
-    if (!(nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterId >= 0 && nMonsterId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
-    int nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nMonsterId].MonStatsEx;
+    int nMonStatsExId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonsterId].MonStatsEx;
     D2MonStats2Txt* pMonStatsExTxt;
-    if (!((pMonStatsExTxt = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr) && pMonStatsExTxt->byLocalBlood == 2)) {
+    if (!((pMonStatsExTxt = nMonStatsExId >= 0 && nMonStatsExId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr) && pMonStatsExTxt->byLocalBlood == 2)) {
       return;
     }
 
@@ -270,7 +270,7 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
       gpPalShiftEntryListHead = pPalShiftList;
     }
 
-    int nTxtMonStatsCount = sgptDataTable->nTxtMonStatsSize;
+    int nTxtMonStatsCount = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     if (!gpMonsterPalShiftList) {
       gpMonsterPalShiftList = D2_ALLOC_AT(nTxtMonStatsCount * 8, ".\\GAME\\PalShift.cpp", 0x11f);
     }

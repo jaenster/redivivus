@@ -369,8 +369,8 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
       break;
       case UNITSTAT_item_charged_skill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
-          nChargeMax = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex);
+          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
+          nChargeMax = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex);
           if (pItem) {
             nItemGUID = pItem->nUnitGUID;
             nChargeCount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eUnitStat, (uint16_t)dwStatIdAndSubIndex);
@@ -449,7 +449,7 @@ void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX
 void __fastcall CLIENT_FreePlayerUnit(D2UnitStrc * pUnit) {
     Source::ClientEngine::CLIENT_UnregisterActiveUnitFromSlot((int32_t)pUnit);
     Engine::Gfx::FreeGfxInfo(pUnit);
-    if (sgpDrlgAct) {
+    if (GAME::Game::sgpDrlgAct) {
       D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
       D2Common::Unit::RemoveUnitFromRoom(pUnit);
     }
@@ -509,7 +509,7 @@ static void CLIENT_OnPlayerEnterRoom(D2UnitStrc * pUnit) {
     uint32_t nLevelPortalFlag = D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eLevel);
     D2Common::Units::SetPlayerPortalFlags(pUnit, nPortalFlags | nLevelPortalFlag);
     D2RoomStrc* pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2Common::DUNGEON::Dungeon::InitRoomTileAnimation(sgpDrlgAct, D2Common::PATH::DynamicPath::GetNextRoom(pUnit->pPath.pDynamicPath), pCurrentRoom);
+    D2Common::DUNGEON::Dungeon::InitRoomTileAnimation(GAME::Game::sgpDrlgAct, D2Common::PATH::DynamicPath::GetNextRoom(pUnit->pPath.pDynamicPath), pCurrentRoom);
     BOOL bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
     uint32_t bInTownUint = (uint32_t)(bIsInTown != 0);
     if (BOOL_007a5260 != bInTownUint && !bInTownUint) {
@@ -637,7 +637,7 @@ static uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, D2Un
       if (!pSkillsTxt) {
         return 0;
       }
-      if (nUsabilityCode > 0 && (nUsabilityCode <= 2 || nUsabilityCode == 4) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[4]) {
+      if (nUsabilityCode > 0 && (nUsabilityCode <= 2 || nUsabilityCode == 4) && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_Attack);
         *ppSkill = pSkill;
         nUsabilityCode = PlrSkills::PLRSKILLS_CanUseSkillCheck(pUnit, pSkill);
@@ -1271,7 +1271,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
       use_default_range:
       nInteractRange = 5;
       approach_or_interact:
-      if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit && (nClassId = pTargetUnit->nClassId , nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize) && sgptDataTable->pTxtMonStats + nClassId && (uVar2 = (uint32_t)(uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xd) , gadwBitMasks[1] & uVar2 && gadwBitMasks[0] & uVar2)) {
+      if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit && (nClassId = pTargetUnit->nClassId , nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uVar2 = (uint32_t)(uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) , Fog::BitBuffer::gadwBitMasks[1] & uVar2 && Fog::BitBuffer::gadwBitMasks[0] & uVar2)) {
         if (pTargetUnit->pPath.pDynamicPath) {
           D2Common::PATH::DynamicPath::ZeroPathPointsSize(pTargetUnit->pPath.pDynamicPath);
         }
@@ -1422,7 +1422,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
         }
 
         nInteractRange = 2;
-        if (!(*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)gadwBitMasks[1])) {
+        if (!(*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
           goto use_default_range;
         }
 
@@ -1448,14 +1448,14 @@ static uint32_t INPUT_ValidateSkillAction(D2UnderMouseStrc * pUnderMouse) {
       }
 
       pRoom = D2Common::Units::UNITS_GetRoom(pUnderMouse->pPlayer);
-      if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)gadwBitMasks[0])) {
+      if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
         bRoomInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
         if (bRoomInTown) {
           UnitSnd::UNITSND_PlayPlayerSound(pUnderMouse->pPlayer, 0x18);
           return 0;
         }
       }
-      if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[4]) {
+      if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         return 0;
       }
     }
@@ -1650,12 +1650,12 @@ static uint32_t SKILL_IsPassiveSkill(D2SkillStrc * pSkill) {
     if (pSkill) {
       eD2Skills eSkillId;
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Player.cpp", 0x75a);
-      if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+      if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pSkillsTxt = 0;
       } else {
-        pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
+        pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
       }
-      if (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)gadwBitMasks[0]) {
+      if (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         return 1;
       }
     }
@@ -1702,7 +1702,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
       eD2Skills eSkillId;
       if (!(*(uint8_t*)&pUnderMouse->flags & 2) || nWeaponClass == 1) {
         choose_unit_or_ground:
-        if (pUnit->eUnitType != UNIT_MONSTER || (iVar1 = CUnit::IsActive(pUnit) , !iVar1) || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[0]) {
+        if (pUnit->eUnitType != UNIT_MONSTER || (iVar1 = CUnit::IsActive(pUnit) , !iVar1) || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
           goto use_on_target_unit;
         }
       } else {
@@ -1711,7 +1711,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
           case UNIT_OBJECT:
             case UNIT_ITEM:
               {
-                if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[3]) {
+                if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
                   bForceInteract = true;
                   goto choose_unit_or_ground;
                 }
@@ -1760,7 +1760,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
         if (iVar1) {
           if (*ppSkill) {
             pSkillsTxt2 = D2Common::Skills::GetSkillsTxt(*ppSkill);
-            if (pSkillsTxt2 && *((uint8_t*)pSkillsTxt2 + 0x7) & (uint8_t)gadwBitMasks[3]) {
+            if (pSkillsTxt2 && *((uint8_t*)pSkillsTxt2 + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
               bValid = PLAYER_CheckSkillUsability(nullptr, pUnderMouse->pPlayer, ppSkill);
               if (!bValid) {
                 return;
@@ -1773,7 +1773,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
 
           bIsInteractable = pUnit->eUnitFlags >> 2 & 1;
           if (bIsInteractable) {
-            if (!(gadwBitMasks[1] & (uint8_t)*((uint8_t*)pSkillsTxt + 0x7)) && !(gadwBitMasks[2] & (uint8_t)*((uint8_t*)pSkillsTxt + 0x7))) {
+            if (!(Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pSkillsTxt + 0x7)) && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pSkillsTxt + 0x7))) {
               bIsInteractable = CUnit::CanInteractWith(pPlayerUnit_lcl, pUnit);
             }
             if (bIsInteractable) {
@@ -1837,7 +1837,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
         }
         if ((uint8_t)dwFlags & 4) {
           pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
-          if (pMonStatsTxt && *((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)gadwBitMasks[1]) {
+          if (pMonStatsTxt && *((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             PLAYER_InteractWithUnitByType(UNIT_MONSTER, nTargetUnitGUID, pUnderMouse);
             return;
           }
@@ -2011,10 +2011,10 @@ static BOOL ClickMapRightSkill(D2UnderMouseStrc * pUnderMouse) {
       bCanAct = CUnit::PlayerCanBeInterrupted(pUnderMouse->pPlayer, pRightSkill);
       if (bCanAct) {
         eSkillId = D2Common::Skills::GetSkillId(pUnderMouse->pSkill, ".\\UNIT\\Player.cpp", 0x9dd);
-        if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+        if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
           pSkillsTxt = 0;
         } else {
-          pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
+          pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
         }
         if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
           pUnderMouse->flags |= 0x80;
@@ -2039,10 +2039,10 @@ static BOOL INPUT_HandleRightClickRepeat(D2UnderMouseStrc * pUnderMouse) {
       bCanAct = CUnit::PlayerCanBeInterrupted(pUnderMouse->pPlayer, pRightSkill);
       if (bCanAct) {
         eSkillId = D2Common::Skills::GetSkillId(pUnderMouse->pSkill, ".\\UNIT\\Player.cpp", 0x9fd);
-        if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+        if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
           pSkillsTxt = 0;
         } else {
-          pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
+          pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
         }
         if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
           pUnderMouse->flags |= 0x80;
@@ -2742,7 +2742,7 @@ int32_t __fastcall TXT_MonStats_GetBaseId(D2UnitStrc * pUnit) {
     }
 
     int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return nClassId;
     }
@@ -2753,19 +2753,19 @@ int32_t __fastcall TXT_MonStats_GetBaseId(D2UnitStrc * pUnit) {
 // The parameter arrives in a whole register; typing it from the single byte the body reads made the decompiler splice the indeterminate upper bytes back in as an uninitialised local, which then indexed an array with garbage in its high bits.
 BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, TXTMonStats2Field0x04DWORD nBitOffset) {
     D2MonStats2Txt* pMonStatsExTxt = nullptr;
-    if (nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize) {
-      int nMonStats2Id = (int)sgptDataTable->pTxtMonStats[nMonStatsId].MonStatsEx;
-      pMonStatsExTxt = nMonStats2Id >= 0 && nMonStats2Id < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Id : nullptr;
+    if (nMonStatsId >= 0 && nMonStatsId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      int nMonStats2Id = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsId].MonStatsEx;
+      pMonStatsExTxt = nMonStats2Id >= 0 && nMonStats2Id < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Id : nullptr;
     }
     if (!pMonStatsExTxt) {
       return 0;
     }
 
-    return (uint32_t)pMonStatsExTxt->aComponents[((int)nBitOffset >> 3) - 0x11] & gadwBitMasks[nBitOffset & corpseSel];
+    return (uint32_t)pMonStatsExTxt->aComponents[((int)nBitOffset >> 3) - 0x11] & Fog::BitBuffer::gadwBitMasks[nBitOffset & corpseSel];
 }
 
 int32_t __fastcall ValidateClassId(int32_t nClassId) {
-    if (!(nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return nClassId;
     }
 
@@ -2795,12 +2795,12 @@ D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTabl
 }
 
 D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+    D2UnitStrc* pUnit = FindUnit(nUnitGUID, CUnit::ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
     return pUnit;
 }
 
 D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, ClientSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+    D2UnitStrc* pUnit = FindUnit(nUnitGUID, CUnit::ClientSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
     return pUnit;
 }
 
@@ -2817,11 +2817,11 @@ D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
       eUnitType = pUnit->eOwnerType;
       nUnitGUID = pUnit->nOwnerGUID;
       if (eUnitType == UNIT_MISSILE) {
-        pOwnerUnit = FindUnit(nUnitGUID, ClientSideUnitHashTables[3], UNIT_MISSILE, nUnitGUID & 0x7f);
+        pOwnerUnit = FindUnit(nUnitGUID, CUnit::ClientSideUnitHashTables[3], UNIT_MISSILE, nUnitGUID & 0x7f);
         return pOwnerUnit;
       }
 
-      pOwnerUnit = FindUnit(nUnitGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+      pOwnerUnit = FindUnit(nUnitGUID, CUnit::ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
       return pOwnerUnit;
     }
 
@@ -2835,9 +2835,9 @@ uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
     D2UnitStrc* pCurUnit;
     D2UnitStrc* pNextUnit;
     if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+      pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
       if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+        pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
         if (pPrevUnit) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
           exit(-1);
@@ -2847,17 +2847,17 @@ uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
       }
     } else {
       D2UnitStrc* (*papDVar1)[128];
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+      pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
       if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+        pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
         if (!pPrevUnit) {
           insert_sorted:
           UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
           nHashBucket = pUnit->nUnitGUID & 0x7f;
           if (pUnit->eUnitFlags >> 0x15 & 1) {
-            papDVar1 = ClientSideUnitHashTables;
+            papDVar1 = CUnit::ClientSideUnitHashTables;
           } else {
-            papDVar1 = ServerSideUnitHashTables;
+            papDVar1 = CUnit::ServerSideUnitHashTables;
           }
 
           pNextUnit = papDVar1[pUnit->eUnitType][nHashBucket];
@@ -2936,14 +2936,14 @@ void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOld
 
 void __stdcall CLIENT_ClearServerAndClientUnitLists() {
     int nSize = 0x300;
-    D2UnitStrc** ppUnit = ServerSideUnitHashTables[0];
+    D2UnitStrc** ppUnit = CUnit::ServerSideUnitHashTables[0];
     for (; nSize; nSize--) {
       *ppUnit = 0;
       ppUnit++;
     }
 
     nSize = 0x300;
-    ppUnit = ClientSideUnitHashTables[0];
+    ppUnit = CUnit::ClientSideUnitHashTables[0];
     for (; nSize; nSize--) {
       *ppUnit = 0;
       ppUnit++;
@@ -2985,7 +2985,7 @@ void __stdcall CUNIT_UpdateClientFramesAndAI(D2UnitStrc * * pUnitHashTable) {
         nUnitGUID = pCurPath->nUnitGUID;
         eCurUnitType = pCurPath->eUnitType;
         Path::CLIENT_UpdateUnitFrame(pCurPath);
-        for (pUnit = ClientSideUnitHashTables[eCurUnitType][nUnitGUID & 0x7f]; pCurPath = pNextUnit , pUnit != 0; pUnit = pUnit->pListNext) {
+        for (pUnit = CUnit::ClientSideUnitHashTables[eCurUnitType][nUnitGUID & 0x7f]; pCurPath = pNextUnit , pUnit != 0; pUnit = pUnit->pListNext) {
           if (pUnit->nUnitGUID == nUnitGUID) {
             eMatchedUnitType = pUnit->eUnitType;
             if (eMatchedUnitType != eCurUnitType) {
@@ -3012,7 +3012,7 @@ void __stdcall CUNIT_UpdateClientFramesAndAI(D2UnitStrc * * pUnitHashTable) {
 }
 
 void __fastcall HANDSHAKE_SetClientPlayerUnit(D2UnitStrc * pUnit) {
-    if (pPlayerUnit) {
+    if (CUnit::pPlayerUnit) {
       UI::ui::UI_FreeAllPanelAssets();
     }
     if (pUnit) {
@@ -3022,23 +3022,23 @@ void __fastcall HANDSHAKE_SetClientPlayerUnit(D2UnitStrc * pUnit) {
       UI::ui::UI_LoadAllPanelAssets();
     }
 
-    pPlayerUnit = pUnit;
+    CUnit::pPlayerUnit = pUnit;
 }
 
 D2UnitStrc * __stdcall GetPlayerUnit_UI() {
-    return pPlayerUnit;
+    return CUnit::pPlayerUnit;
 }
 
 D2UnitStrc * __stdcall GetPlayerUnit_Net() {
-    return pPlayerUnit;
+    return CUnit::pPlayerUnit;
 }
 
 uint32_t __stdcall IsPlayerDead() {
-    if (!pPlayerUnit) {
+    if (!CUnit::pPlayerUnit) {
       return 1;
     }
 
-    return (uint32_t)(pPlayerUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead);
+    return (uint32_t)(CUnit::pPlayerUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead);
 }
 
 } // namespace D2Client::UNIT::Player

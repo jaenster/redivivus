@@ -336,28 +336,28 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
 }
 
 int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
-    if (!gbAmbientSoundLangInitialized) {
-      gbAmbientSoundLangInitialized = 1;
-      gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
+    if (!Src::D2SoundFast::gbAmbientSoundLangInitialized) {
+      Src::D2SoundFast::gbAmbientSoundLangInitialized = 1;
+      Src::D2SoundFast::gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
     }
-    if (gaAmbientSoundFlags != gnAmbientSoundCount) {
+    if (Src::D2SoundFast::gaAmbientSoundFlags != Src::D2SoundFast::gnAmbientSoundCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
       exit(-1);
     }
 
     {
       int* pAmbientEntry;
-      if (!(nIndex < gaAmbientSoundFlags)) {
+      if (!(nIndex < Src::D2SoundFast::gaAmbientSoundFlags)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
         exit(-1);
       }
 
-      pAmbientEntry = gaAmbientSoundEntryTable + nIndex * 2;
-      if (gnAmbientSoundLanguageCode) {
+      pAmbientEntry = Src::D2SoundFast::gaAmbientSoundEntryTable + nIndex * 2;
+      if (Src::D2SoundFast::gnAmbientSoundLanguageCode) {
         return pAmbientEntry;
       }
 
-      pAmbientEntry = gAmbientSoundTable + nIndex * 2;
+      pAmbientEntry = Src::D2SoundFast::gAmbientSoundTable + nIndex * 2;
       return pAmbientEntry;
     }
 }
@@ -369,13 +369,13 @@ void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     gnMusicBufferSize = bSoundInBackground;
     IDirectSound* pArchive = SOUND_GetSpeakerConfigFlag();
     Storm::Source::SFile::SFileDdaInitialize(pArchive);
-    gpMusicStreamBuffer = Src::D2SoundSmp::CallSounds(1, gnMusicBufferSize);
+    Src::D2SoundFast::gpMusicStreamBuffer = Src::D2SoundSmp::CallSounds(1, gnMusicBufferSize);
 }
 
 void __stdcall SOUND_FreeMusicBuffer() {
-    if (gpMusicStreamBuffer) {
-      Src::D2SoundSmp::SOUNDSMP_Destroy(gpMusicStreamBuffer);
-      gpMusicStreamBuffer = 0;
+    if (Src::D2SoundFast::gpMusicStreamBuffer) {
+      Src::D2SoundSmp::SOUNDSMP_Destroy(Src::D2SoundFast::gpMusicStreamBuffer);
+      Src::D2SoundFast::gpMusicStreamBuffer = 0;
     }
 
     Storm::Source::SFile::SFileDdaDestroy();

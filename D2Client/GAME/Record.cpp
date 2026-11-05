@@ -141,7 +141,7 @@ void __stdcall SaveGameRecordToFile() {
 
     sHeader.nLastBlockEntries = pBlock->nEntrySize - 500 + sHeader.nBlockCount * 500;
     sHeader.nStepCount = Game::GetEntryIndex();
-    sHeader.dwSeed = D2Common::DUNGEON::Dungeon::GetInitSeedFromAct(sgpDrlgAct);
+    sHeader.dwSeed = D2Common::DUNGEON::Dungeon::GetInitSeedFromAct(Game::sgpDrlgAct);
     uint32_t dwHeaderSize = 0x14;
     WriteFile(hFile, (LPCVOID)&dwHeaderSize, 4, &dwBytesWritten, (LPOVERLAPPED)0x0);
     /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&sHeader, 0x14, &dwBytesWritten, (LPOVERLAPPED)0x0);

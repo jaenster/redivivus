@@ -39,6 +39,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbSrcStream, uint8
 void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable);
 void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pBlendTable);
 void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pBlendTable);
+BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520();
 // Decompress RLE image data - dispatcher to choose optimal decompression path
 void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, int32_t pBlendTable, int32_t pLookupTable2);
 // Decompresses RLE-compressed image data with radial effect mapping for circular/radial patterns

@@ -476,8 +476,7 @@ void __fastcall OBJMODE_UpdateTrapObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pUnit->eAnimMode.ePlayerMode = Walk;
     }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2SeedStrc* pControlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
+    D2SeedStrc* pControlSeed = ObjectsRgn::GetObjectControlSeed(pGame, D2Common::Units::UNITS_GetRoom(pUnit));
     OBJMODE_TriggerProximityEffect(pGame, pUnit);
     D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
     uint32_t uRandLow = seedNext.nSeedLow;
@@ -1059,7 +1058,7 @@ static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_
 
 static void OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode eMonsterAnimMode, int32_t nMonsterId, D2ObjectModeArg * pObjectModeArg) {
     eD2LevelId eLevel;
-    if (!(nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterId >= 0 && nMonsterId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
@@ -1096,7 +1095,7 @@ void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pU
     sOperation.sArg.pVictim = pUnit;
     sOperation.sArg.pGame = pGame;
     int32_t nMonClassId = ObjectsRgn::OBJECT_HandleObjectMode(&sOperation.sArg);
-    if (!(nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
@@ -2025,7 +2024,7 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitS
     }
 
     int nCharClassId = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = nCharClassId >= 0 && nCharClassId < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nCharClassId : nullptr;
+    D2CharStatsTxt* pCharStatsTxt = nCharClassId >= 0 && nCharClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nCharClassId : nullptr;
     if (!pCharStatsTxt) {
       return;
     }

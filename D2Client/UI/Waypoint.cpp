@@ -104,8 +104,10 @@ static int gaWaypointRowLayout[55] = {
     0x15d
 }; D2_STATIC_GUARD(gaWaypointRowLayout, "gaWaypointRowLayout");
 static D2WaypointListEntryStrc gaWaypointListEntries[9] = {}; D2_STATIC_GUARD(gaWaypointListEntries, "gaWaypointListEntries");
-uint8_t gbWaypointButtonPressed = 0; D2_GLOBAL_GUARD(gbWaypointButtonPressed, "gbWaypointButtonPressed");
-uint32_t ClickingDownOnWaypointEntry = 0; D2_GLOBAL_GUARD(ClickingDownOnWaypointEntry, "ClickingDownOnWaypointEntry");
+namespace D2Client::UI::Waypoint {
+uint8_t gbWaypointButtonPressed = 0; D2_GLOBAL_GUARD(gbWaypointButtonPressed, "D2Client::UI::Waypoint::gbWaypointButtonPressed");
+uint32_t ClickingDownOnWaypointEntry = 0; D2_GLOBAL_GUARD(ClickingDownOnWaypointEntry, "D2Client::UI::Waypoint::ClickingDownOnWaypointEntry");
+} // namespace D2Client::UI::Waypoint
 static DC6 * WaypointWayGateBackGround = 0; D2_STATIC_GUARD(WaypointWayGateBackGround, "WaypointWayGateBackGround");
 static DC6 * WaypointWayGateTabs = 0; D2_STATIC_GUARD(WaypointWayGateTabs, "WaypointWayGateTabs");
 static DC6 * WaypointWaygateIcons = 0; D2_STATIC_GUARD(WaypointWaygateIcons, "WaypointWaygateIcons");
@@ -540,19 +542,19 @@ void __stdcall DRAW_UI_Waypoint() {
     sDrawImageArgs.pDC6 = WaypointWayGateBackGround;
     sDrawImageArgs.nDirection = 0;
     sDrawImageArgs.nFrameNumber = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, gnPanelOffsetX, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, Inv::gnPanelOffsetX, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sDrawImageArgs.nFrameNumber = 1;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, Inv::gnPanelOffsetX + 0x100, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sDrawImageArgs.nFrameNumber = 2;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, gnPanelOffsetX, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, Inv::gnPanelOffsetX, Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sDrawImageArgs.nFrameNumber = 3;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, Inv::gnPanelOffsetX + 0x100, Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     int nMouseX;
     nMouseX = Cursor::GetMouseX();
     int nMouseY;
     nMouseY = Cursor::GetMouseY();
-    nMouseX -= gnPanelOffsetX;
-    nMouseY += gnPanelOffsetY;
+    nMouseX -= Inv::gnPanelOffsetX;
+    nMouseY += Inv::gnPanelOffsetY;
     sDrawImageArgs.pDC6 = WaypointWayGateTabs;
     /* Figure out if game got 4 or 5 acts for spacing (classic/xpac) */ ActsInGame = (D2WaypointListEntryStrc*)0x5;
     _bIsExpansionCheck = Fog::D2CheckExpansionGame();
@@ -576,7 +578,7 @@ void __stdcall DRAW_UI_Waypoint() {
       do {
         if (nActIndex == WaypointCurrentSelectedAct) {
           sDrawImageArgs.nFrameNumber = nActIndex * 2;
-          D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, anTabX[nActIndex] + gnPanelOffsetX, nTabYOffset - gnPanelOffsetY + 0x21, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, anTabX[nActIndex] + Inv::gnPanelOffsetX, nTabYOffset - Inv::gnPanelOffsetY + 0x21, -1, DRAW_SOLID, nullptr);
         } else {
           switch (nActIndex) {
             case 1:
@@ -612,7 +614,7 @@ void __stdcall DRAW_UI_Waypoint() {
           if (nWaypointIndex) {
             draw_unlocked_tab:
             sDrawImageArgs.nFrameNumber = nActIndex * 2 + 1;
-            D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, anTabX[nActIndex] + gnPanelOffsetX, nTabYOffset - gnPanelOffsetY + 0x21, -1, DRAW_SOLID, nullptr);
+            D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, anTabX[nActIndex] + Inv::gnPanelOffsetX, nTabYOffset - Inv::gnPanelOffsetY + 0x21, -1, DRAW_SOLID, nullptr);
           }
         }
 
@@ -623,7 +625,7 @@ void __stdcall DRAW_UI_Waypoint() {
 
     sDrawImageArgs.pDC6 = ui::GetBuySellBtnDC6();
     sDrawImageArgs.nFrameNumber = gbWaypointButtonPressed != '\0' ? 11 : 10;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, gnPanelOffsetX + 0x111, 0x1a1 - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, Inv::gnPanelOffsetX + 0x111, 0x1a1 - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
     pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
     eCurrentLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -640,7 +642,7 @@ void __stdcall DRAW_UI_Waypoint() {
             sDrawImageArgs.nFrameNumber = ClickingDownOnWaypointEntry == nWaypointIndex ? 4 : 3;
           }
 
-          D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, *pDrawOffsets + gnPanelOffsetX, pDrawOffsets[1] - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, *pDrawOffsets + Inv::gnPanelOffsetX, pDrawOffsets[1] - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
           dwColor = 0;
         } else {
           /* Gray = we dont have the waypoint */ dwColor = 5;
@@ -652,12 +654,12 @@ void __stdcall DRAW_UI_Waypoint() {
         if (gaWaypointListEntries[nWaypointIndex].eLevelId == eCurrentLevel) {
           dwColor = 3;
           sDrawImageArgs.nFrameNumber = 0;
-          D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, *pDrawOffsets + gnPanelOffsetX, pDrawOffsets[1] - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, *pDrawOffsets + Inv::gnPanelOffsetX, pDrawOffsets[1] - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
         }
 
-        nY = pDrawOffsets[3] - gnPanelOffsetY;
+        nY = pDrawOffsets[3] - Inv::gnPanelOffsetY;
         _bIsExpansionCheck = 0;
-        nTextX = pDrawOffsets[2] + gnPanelOffsetX;
+        nTextX = pDrawOffsets[2] + Inv::gnPanelOffsetX;
         D2Win::Src::D2WinFont::DRAW_text(ui::CLIENT_GetLevelNameByLevelId(gaWaypointListEntries[nWaypointIndex].eLevelId), nTextX, nY, dwColor, _bIsExpansionCheck);
         ActsInGame++;
         nWaypointIndex++;
@@ -668,8 +670,8 @@ void __stdcall DRAW_UI_Waypoint() {
       /* Draw cancel hoover */ pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x1022);
       nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pwszText);
       nMouseX = nTextWidth / 2;
-      D2gfx::D2GFX::D2GFX_DrawSolidRectEx(gnPanelOffsetX - nMouseX + 0x11f, 0x172 - gnPanelOffsetY, nMouseX + 0x126 + gnPanelOffsetX, 0x183 - gnPanelOffsetY, 0, DRAW_LESSTRANSPARENT);
-      D2Win::Src::D2WinFont::DRAW_text(pwszText, gnPanelOffsetX - nMouseX + 0x124, 0x181 - gnPanelOffsetY, 0, 0);
+      D2gfx::D2GFX::D2GFX_DrawSolidRectEx(Inv::gnPanelOffsetX - nMouseX + 0x11f, 0x172 - Inv::gnPanelOffsetY, nMouseX + 0x126 + Inv::gnPanelOffsetX, 0x183 - Inv::gnPanelOffsetY, 0, DRAW_LESSTRANSPARENT);
+      D2Win::Src::D2WinFont::DRAW_text(pwszText, Inv::gnPanelOffsetX - nMouseX + 0x124, 0x181 - Inv::gnPanelOffsetY, 0, 0);
     }
     if (!NoOtherWaypointAvailableBool) {
       /* No wraps */ pwszText = D2Lang::StrTable::strtable::GetLocaleString(0xf97);
@@ -679,7 +681,7 @@ void __stdcall DRAW_UI_Waypoint() {
       nMouseX = D2Win::Src::D2WinFont::DRAW_text0(pwszText);
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(pwszText, gnPanelOffsetX - nMouseX / 2 + 0xa0, 0x30 - gnPanelOffsetY, 0, 0);
+    D2Win::Src::D2WinFont::DRAW_text(pwszText, Inv::gnPanelOffsetX - nMouseX / 2 + 0xa0, 0x30 - Inv::gnPanelOffsetY, 0, 0);
 }
 
 void __stdcall INPUT_WaypointTravel(D2UIMouseMsgStrc * pMsg) {
@@ -769,10 +771,10 @@ void __stdcall INPUT_WaypointMouseUp(D2UIMouseMsgStrc * pMsg) {
     if (nRelMouseX) {
       return;
     }
-    if ((int)nRawMouseX <= ScreenSizeX && nMouseY <= ScreenSizeY - 0x31) {
+    if ((int)nRawMouseX <= ui::ScreenSizeX && nMouseY <= Inv::ScreenSizeY - 0x31) {
       int32_t nWaypointIndex;
-      nMouseX = nRawMouseX - gnPanelOffsetX;
-      nRelMouseY = nMouseY + gnPanelOffsetY;
+      nMouseX = nRawMouseX - Inv::gnPanelOffsetX;
+      nRelMouseY = nMouseY + Inv::gnPanelOffsetY;
       if (gbWaypointButtonPressed != '\0') {
         if (nMouseX >= 0x111 && nMouseX <= 0x134 && nRelMouseY >= 0x183 && nRelMouseY <= 0x1a4) {
           ui::SetUIFlag(UI_WAYPOINT, UI_RESET, 0);
@@ -823,7 +825,7 @@ void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
     if (nRelMouseX) {
       return;
     }
-    if (nMouseX > ScreenSizeX / 2 || nMouseY > ScreenSizeY - 0x31) {
+    if (nMouseX > ui::ScreenSizeX / 2 || nMouseY > Inv::ScreenSizeY - 0x31) {
       if (!D2Client::Waypoint::bNeedAllocation) {
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
         if (pPlayerUnit_lcl) {
@@ -839,8 +841,8 @@ void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
       ui::SetUIFlag(UI_WAYPOINT, UI_RESET, 1);
     } else {
       int32_t nAct;
-      nWaypointMouseX = nMouseX - gnPanelOffsetX;
-      nRelMouseY = nMouseY + gnPanelOffsetY;
+      nWaypointMouseX = nMouseX - Inv::gnPanelOffsetX;
+      nRelMouseY = nMouseY + Inv::gnPanelOffsetY;
       nAct = WAYPOINT_GetActIndexFromMouse(nWaypointMouseX, nRelMouseY);
       if (nAct != -1) {
         if (nAct != WaypointCurrentSelectedAct) {
@@ -864,7 +866,7 @@ void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
           Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
         }
       }
-      if ((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX <= ScreenSizeX && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY <= ScreenSizeY - 0x31) {
+      if ((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX <= ui::ScreenSizeX && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY <= Inv::ScreenSizeY - 0x31) {
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
         Storm::SMsgBreakHandlerChain(pMsg);

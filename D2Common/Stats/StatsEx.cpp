@@ -226,11 +226,11 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
         return;
     }
 
-    D2ItemStatCostTxt* pItemStatCostTxt = (int)nUnitStatId < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + nUnitStatId : nullptr;
+    D2ItemStatCostTxt* pItemStatCostTxt = (int)nUnitStatId < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + nUnitStatId : nullptr;
     if (!pItemStatCostTxt) {
       return;
     }
-    if (!(*(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[4])) {
+    if (!(*(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
       return;
     }
 
@@ -269,7 +269,7 @@ static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * 
     }
 
     int nLo = pDVar1->nStatValue;
-    if (pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U) {
+    if (pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U) {
       D2UnitStrc* pOwner;
       pOwner = pStatList->pOwner;
       if (pOwner && (pOwner->eUnitType == UNIT_PLAYER || pOwner && pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
@@ -303,7 +303,7 @@ static int32_t __stdcall TXT_ItemStatCost_GetMinimumStatValueShifted(D2ItemStatC
     }
 
     int nLo = pStatInfoRecord->nStatValue;
-    if (pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[2] && bIsFullList) {
+    if (pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && bIsFullList) {
       D2UnitStrc* pUnit;
       pUnit = pStatEx->pOwner;
       if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit && pUnit->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
@@ -337,7 +337,7 @@ static int32_t __stdcall STATLIST_CalcFullStatFromChildren(int32_t nStatId, D2It
     }
 
     for (pChildStatEntry = pStatListEx->pActiveHead; pChildStatEntry; pChildStatEntry = pChildStatEntry->sStatList.pPrevLink) {
-      if (!((uint8_t)(char)pTxtItemStatCostLine->dwItemStatFlags & gadwBitMasks[2]) || !(pChildStatEntry->sStatList.nFlags & 0x40000000U)) {
+      if (!((uint8_t)(char)pTxtItemStatCostLine->dwItemStatFlags & Fog::BitBuffer::gadwBitMasks[2]) || !(pChildStatEntry->sStatList.nFlags & 0x40000000U)) {
         pChildStatArray = &pChildStatEntry->sFullStats;
         if (!(pChildStatEntry->sStatList.nFlags & 0x80000000U)) {
           pChildStatArray = &pChildStatEntry->sStatList.sBaseStats;
@@ -400,7 +400,7 @@ static int32_t __stdcall STATLIST_PropagateStatDelta(int32_t nShiftedStat, int32
       pPoolManager1 = pSkillsTxt->sStatList.pMemory;
       STATLIST_RemoveStatFromArray(pPoolManager1, pStatEntry, pPoolManager1, (void**)&pStatInfo->pStatInfo);
     }
-    if (pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[3]) {
+    if (pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       pSkillsTxt->fpCallback(pSkillsTxt->pGame, pSkillsTxt->pOwner, nCallbackArg, nShiftedStat, nOldValue, nNewValue);
     }
 
@@ -432,7 +432,7 @@ static void __stdcall STATLIST_SetFullStatValue(int32_t nStatKey, int32_t nNewVa
         pSkillsTxt->sStatList.nFlags |= 0x20000000;
       }
     }
-    if (!(nOldValue != nNewValue && pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[3])) {
+    if (!(nOldValue != nNewValue && pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       return;
     }
 
@@ -445,9 +445,9 @@ D2StatListStrc * __stdcall AllocStatList(D2PoolManagerStrc * pMemory, int32_t nF
     memset(pNewStatList, 0, 0x3c);
     pNewStatList->eOwnerType = eUnitType;
     pNewStatList->pMemory = pMemory;
-    pNewStatList->nTimeout = nFrame;
     pNewStatList->nOwnerGUID = dwUnitGUID;
     pNewStatList->nFlags = nFlags;
+    pNewStatList->nTimeout = nFrame;
     return pNewStatList;
 }
 
@@ -526,7 +526,7 @@ int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD
       return 0;
     }
 
-    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
     if (!pItemStatCostTxt) {
       return 0;
     }
@@ -540,7 +540,7 @@ int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
       return 0;
     }
 
-    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
     if (!pItemStatCostTxt) {
       return 0;
     }
@@ -557,7 +557,7 @@ int32_t __stdcall STATLIST_GetMinimalStatValueShifted(D2StatListExStrc * pStatsE
       return 0;
     }
 
-    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
     if (!pItemStatCostTxt) {
       return 0;
     }
@@ -576,7 +576,7 @@ int __stdcall STATSEX_GetCurrentStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
       return 0;
     }
 
-    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+    D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
     if (!pItemStatCostTxt) {
       return 0;
     }
@@ -955,13 +955,13 @@ void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32
     }
 
     eD2States eStateBit = eState & STATE_venomclaws;
-    uint32_t dwBitMaskSet = gadwBitMasks[eStateBit];
+    uint32_t dwBitMaskSet = Fog::BitBuffer::gadwBitMasks[eStateBit];
     int nFlagsWordIdx = (int)eState >> 5;
     uint32_t dwPrevFlags = pStatsEx->pStateFlags[nFlagsWordIdx];
     if (bSet) {
       pStatsEx->pStateFlags[nFlagsWordIdx] |= dwBitMaskSet;
     } else {
-      pStatsEx->pStateFlags[nFlagsWordIdx] &= gadwInvBitMasks[eStateBit];
+      pStatsEx->pStateFlags[nFlagsWordIdx] &= Fog::BitBuffer::gadwInvBitMasks[eStateBit];
     }
     if (!(dwPrevFlags & dwBitMaskSet)) {
       if (!bSet) {
@@ -971,20 +971,20 @@ void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32
       return;
     }
 
-    int nStatesSize = sgptDataTable->nTxtStatesSize + 0x1f;
-    pStatsEx->pStateFlags[nStatesSize / 32 + nFlagsWordIdx] |= gadwBitMasks[eStateBit];
+    int nStatesSize = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
+    pStatsEx->pStateFlags[nStatesSize / 32 + nFlagsWordIdx] |= Fog::BitBuffer::gadwBitMasks[eStateBit];
     pStatesTxtLine = D2Client::DataTbls::MonsterTbls::TXT_States_GetLine(eState);
     if (!pStatesTxtLine) {
       return;
     }
     if (bSet) {
-      if (*((uint8_t*)pStatesTxtLine + 0x12) & (uint8_t)gadwBitMasks[0]) {
+      if (*((uint8_t*)pStatesTxtLine + 0x12) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_ISSHAPESHIFTED;
         return;
       }
     } else {
       BOOL BVar1;
-      if (*((uint8_t*)pStatesTxtLine + 0x12) & (uint8_t)gadwBitMasks[0]) {
+      if (*((uint8_t*)pStatesTxtLine + 0x12) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         BVar1 = DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x10);
         if (!BVar1) {
           pUnit->eUnitFlagsEx &= ~UNITFLAGEX_ISSHAPESHIFTED;
@@ -1003,7 +1003,7 @@ eD2States __stdcall GetStateBitFlag(D2UnitStrc * pUnit, eD2States eState) {
       return STATE_none;
     }
 
-    return pStatList->pStateFlags[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
+    return pStatList->pStateFlags[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
 }
 
 int * __stdcall GetStateFlags(D2UnitStrc * pUnit) {
@@ -1035,7 +1035,7 @@ int * __stdcall STATLIST_GetUnitGfxFlags(D2UnitStrc * pUnit) {
       return nullptr;
     }
 
-    int nStatesSize = sgptDataTable->nTxtStatesSize + 0x1f;
+    int nStatesSize = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     return pStatsEx->pStateFlags + nStatesSize / 32;
 }
 
@@ -1112,11 +1112,11 @@ int32_t __stdcall GetTxtMaxHp(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 7 = maxhp */ if (!(pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 7 && sgptDataTable->pTxtItemStatCost + 7)) {
+    /* ID 7 = maxhp */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 7 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 7)) {
       return 0;
     }
 
-    int32_t nMaxHp = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 7, pUnit->pStatsEx, 0x70000);
+    int32_t nMaxHp = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 7, pUnit->pStatsEx, 0x70000);
     return nMaxHp;
 }
 
@@ -1124,11 +1124,11 @@ int32_t __stdcall GetTxtMaxMana(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 9 = maxmana */ if (!(pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 9 && sgptDataTable->pTxtItemStatCost + 9)) {
+    /* ID 9 = maxmana */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 9 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 9)) {
       return 0;
     }
 
-    int32_t nMaxMana = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 9, pUnit->pStatsEx, 0x90000);
+    int32_t nMaxMana = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 9, pUnit->pStatsEx, 0x90000);
     return nMaxMana;
 }
 
@@ -1136,18 +1136,18 @@ int32_t __stdcall GetTxtMaxStamina(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 11 = maxstamina */ if (!(pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0xb && sgptDataTable->pTxtItemStatCost + 0xb)) {
+    /* ID 11 = maxstamina */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0xb && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xb)) {
       return 0;
     }
 
-    int32_t nMaxStamina = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0xb, pUnit->pStatsEx, 0xb0000);
+    int32_t nMaxStamina = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xb, pUnit->pStatsEx, 0xb0000);
     return nMaxStamina;
 }
 
 int32_t __stdcall GetTxtMaxDurability(D2UnitStrc * pUnit) {
     D2ItemStatCostTxt* pItemStatCostLine = nullptr;
-    if (pUnit && sgptDataTable->nTxtItemStatCostSize > 0x49) {
-      pItemStatCostLine = sgptDataTable->pTxtItemStatCost + 0x49;
+    if (pUnit && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x49) {
+      pItemStatCostLine = ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x49;
     }
     if (!pItemStatCostLine) {
       return 0;
@@ -1176,13 +1176,13 @@ int32_t __stdcall GetTxtMaxDurability(D2UnitStrc * pUnit) {
 int32_t __stdcall GetTxtMaxDamage(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
     int32_t nDamage;
     if (bCheckSecondaryDamage) {
-      /* ID 24 = secondary_maxdamage */ if (pUnit && pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0x18 && sgptDataTable->pTxtItemStatCost + 0x18) {
-        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0x18, pUnit->pStatsEx, 0x180000);
+      /* ID 24 = secondary_maxdamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x18 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x18) {
+        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x18, pUnit->pStatsEx, 0x180000);
         return nDamage;
       }
     } else {
-      /* ID 22 = maxdamage */ if (pUnit && pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0x16 && sgptDataTable->pTxtItemStatCost + 0x16) {
-        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0x16, pUnit->pStatsEx, 0x160000);
+      /* ID 22 = maxdamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x16 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x16) {
+        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x16, pUnit->pStatsEx, 0x160000);
         return nDamage;
       }
     }
@@ -1193,13 +1193,13 @@ int32_t __stdcall GetTxtMaxDamage(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage
 int32_t __stdcall GetTxtMinDamage(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
     int32_t nDamage;
     if (bCheckSecondaryDamage) {
-      /* ID 23 = secondary_mindamage */ if (pUnit && pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0x17 && sgptDataTable->pTxtItemStatCost + 0x17) {
-        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0x17, pUnit->pStatsEx, 0x170000);
+      /* ID 23 = secondary_mindamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x17 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x17) {
+        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x17, pUnit->pStatsEx, 0x170000);
         return nDamage;
       }
     } else {
-      /* ID 21 = mindamage */ if (pUnit && pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0x15 && sgptDataTable->pTxtItemStatCost + 0x15) {
-        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0x15, pUnit->pStatsEx, 0x150000);
+      /* ID 21 = mindamage */ if (pUnit && pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x15 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x15) {
+        nDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x15, pUnit->pStatsEx, 0x150000);
         return nDamage;
       }
     }
@@ -1211,11 +1211,11 @@ int32_t __stdcall GetTxtThrowMaxDamage(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 160 = item_throw_maxdamage */ if (!(pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0xa0 && sgptDataTable->pTxtItemStatCost + 0xa0)) {
+    /* ID 160 = item_throw_maxdamage */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0xa0 && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xa0)) {
       return 0;
     }
 
-    int32_t nThrowMaxDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0xa0, pUnit->pStatsEx, 0xa00000);
+    int32_t nThrowMaxDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0xa0, pUnit->pStatsEx, 0xa00000);
     return nThrowMaxDamage;
 }
 
@@ -1223,11 +1223,11 @@ int32_t __stdcall GetTxtThrowMinDamage(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 159 = item_throw_mindamage */ if (!(pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0x9f && sgptDataTable->pTxtItemStatCost + 0x9f)) {
+    /* ID 159 = item_throw_mindamage */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x9f && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x9f)) {
       return 0;
     }
 
-    int32_t nThrowMinDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0x9f, pUnit->pStatsEx, 0x9f0000);
+    int32_t nThrowMinDamage = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x9f, pUnit->pStatsEx, 0x9f0000);
     return nThrowMinDamage;
 }
 
@@ -1235,11 +1235,11 @@ int32_t __stdcall GetTxtArmorClass(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    /* ID 31 = armorclass */ if (!(pUnit->pStatsEx && sgptDataTable->nTxtItemStatCostSize > 0x1f && sgptDataTable->pTxtItemStatCost + 0x1f)) {
+    /* ID 31 = armorclass */ if (!(pUnit->pStatsEx && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x1f && ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x1f)) {
       return 0;
     }
 
-    int32_t nArmorClass = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 0x1f, pUnit->pStatsEx, 0x1f0000);
+    int32_t nArmorClass = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 0x1f, pUnit->pStatsEx, 0x1f0000);
     return nArmorClass;
 }
 
@@ -1371,7 +1371,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
     eD2UnitStat eStatType;
     eStatType = nStatShifted >> 0x10 & 0xffff;
     D2ItemStatCostTxt* pItemStatCostLine;
-    pItemStatCostLine = !false && (int)eStatType < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eStatType : nullptr;
+    pItemStatCostLine = !false && (int)eStatType < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatType : nullptr;
     if (!pItemStatCostLine) {
       return 0;
     }
@@ -1621,10 +1621,10 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
       }
 
       nRelatedStatIdx = (uint32_t)*pOpStatCur;
-      if (false || (int)nRelatedStatIdx >= sgptDataTable->nTxtItemStatCostSize) {
+      if (false || (int)nRelatedStatIdx >= ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         pItemStatCostLine = 0;
       } else {
-        pItemStatCostLine = sgptDataTable->pTxtItemStatCost + nRelatedStatIdx;
+        pItemStatCostLine = ITEMS::Items::sgptDataTable->pTxtItemStatCost + nRelatedStatIdx;
       }
 
       nRelatedVal = STATLIST_ApplyComplexStatFormula(pStatList, nRelatedStatIdx << 0x10, &pItemStatCostLine->stat, pUnitOwner);
@@ -1705,10 +1705,10 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
       }
 
       nRelatedStatIdx = (uint32_t)*(uint16_t*)pItemStatCostStat2;
-      if (false || (int)nRelatedStatIdx >= sgptDataTable->nTxtItemStatCostSize) {
+      if (false || (int)nRelatedStatIdx >= ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         pItemStatCostLine = 0;
       } else {
-        pItemStatCostLine = sgptDataTable->pTxtItemStatCost + nRelatedStatIdx;
+        pItemStatCostLine = ITEMS::Items::sgptDataTable->pTxtItemStatCost + nRelatedStatIdx;
       }
 
       nRelatedVal = STATLIST_ApplyComplexStatFormula(pStatList, nRelatedStatIdx << 0x10, &pItemStatCostLine->stat, pUnitOwner);
@@ -1727,7 +1727,7 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
     }
 
     uint32_t dwFlags = nShiftedStat >> 0x10 & 0xffff;
-    D2ItemStatCostTxt* pItemStatCostLine = (int)dwFlags < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + dwFlags : nullptr;
+    D2ItemStatCostTxt* pItemStatCostLine = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr;
     if (!pItemStatCostLine) {
       return;
     }
@@ -1737,7 +1737,7 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
       return;
     }
 
-    uint32_t uVar1 = (uint8_t)(char)pItemStatCostLine->dwItemStatFlags & gadwBitMasks[2];
+    uint32_t uVar1 = (uint8_t)(char)pItemStatCostLine->dwItemStatFlags & Fog::BitBuffer::gadwBitMasks[2];
     if ((int)eStatIdx >= 0) {
       pStatsEx = pStatsEx->sStatList.pParent;
     }
@@ -1820,7 +1820,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
           nPackedStat = (int)((uint32_t)(uint16_t)nOp45StatCount->wSubIndex | (uint32_t)(uint16_t)nOp45StatCount->wStatIndex << 16);
           dwFlags = nPackedStat >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt;
-          if (true && (pItemStatCostTxt = (int)dwFlags < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
+          if (true && (pItemStatCostTxt = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
             anOp45Stats[(int)pStatListEx] = nPackedStat;
             pStatListEx = (D2StatListExStrc*)((uintptr_t)&pStatListEx->sStatList.pMemory + 1);
           }
@@ -1828,8 +1828,8 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
 
         for (nOp45Count = 0; nOp45Count < (int)pStatListEx; nOp45Count++) {
           eStatIdx = anOp45Stats[nOp45Count] >> 0x10 & 0xffff;
-          if (true && (int)eStatIdx < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eStatIdx) {
-            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &sgptDataTable->pTxtItemStatCost[eStatIdx].stat, nullptr);
+          if (true && (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx) {
+            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &ITEMS::Items::sgptDataTable->pTxtItemStatCost[eStatIdx].stat, nullptr);
           }
         }
       }
@@ -1847,7 +1847,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
         for (; nOp45StatCount < pStatEntryEnd; nOp45StatCount++) {
           nShiftedStatToAdd = (int)((uint32_t)(uint16_t)nOp45StatCount->wSubIndex | (uint32_t)(uint16_t)nOp45StatCount->wStatIndex << 16);
           eStatIdx = nShiftedStatToAdd >> 0x10 & 0xffff;
-          if (true && (int)eStatIdx < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eStatIdx && !((char)sgptDataTable->pTxtItemStatCost[eStatIdx].dwItemStatFlags & (uint8_t)gadwBitMasks[2])) {
+          if (true && (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx && !((char)ITEMS::Items::sgptDataTable->pTxtItemStatCost[eStatIdx].dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
             STATLIST_PropagateStatChange(pParent, nShiftedStatToAdd, -nOp45StatCount->nStatValue, pOwner);
           }
         }
@@ -1964,7 +1964,7 @@ D2StatListExStrc * __stdcall AllocStatListEx(D2UnitStrc * pUnit, uint32_t dwFlag
     pStatsEx->pGame = pGame;
     pStatsEx->sStatList.nFlags = dwFlags & 1 | 0x80000000;
     pStatsEx->pOwner = pUnit;
-    int nStatesSizePadded = sgptDataTable->nTxtStatesSize + 0x1f;
+    int nStatesSizePadded = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     size_t nStateFlagsAllocSize = nStatesSizePadded / 32 * 8;
     int* pStateFlags = (int*)D2_ALLOC_POOL_AT(pUnit->pMemory, nStateFlagsAllocSize, ".\\Stats\\StatsEx.cpp", 0x593);
     pStatsEx->pStateFlags = pStateFlags;
@@ -2040,7 +2040,7 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
         for (; pStatPackedCur < pEffectiveStatsRaw; pStatPackedCur += 2) {
           dwFlags = *pStatPackedCur >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt;
-          if (true && (pItemStatCostTxt = (int)dwFlags < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
+          if (true && (pItemStatCostTxt = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
             anOp45Stats[(int)pOp45Owner] = *pStatPackedCur;
             pOp45Owner = (D2UnitStrc*)((uintptr_t)&pOp45Owner->eUnitType + 1);
           }
@@ -2077,14 +2077,14 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
       }
     } else {
       pChildStatsEx->sStatList.nFlags = eOwnerType | 0x40000000;
-      pDataTable = sgptDataTable;
+      pDataTable = ITEMS::Items::sgptDataTable;
       for (; pStatCur < pStatEntryEnd; pStatCur++) {
         nShiftedStatNoDmg = (int)((uint32_t)(uint16_t)pStatCur->wSubIndex | (uint32_t)(uint16_t)pStatCur->wStatIndex << 16);
         eOwnerType = nShiftedStatNoDmg >> 0x10 & 0xffff;
         D2ItemStatCostTxt* pItemStatCostTxt2;
-        if (true && (pItemStatCostTxt2 = (int)eOwnerType < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + eOwnerType : nullptr) && !((char)pItemStatCostTxt2->dwItemStatFlags & (uint8_t)gadwBitMasks[2])) {
+        if (true && (pItemStatCostTxt2 = (int)eOwnerType < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + eOwnerType : nullptr) && !((char)pItemStatCostTxt2->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
           STATLIST_PropagateStatChange(pParent, nShiftedStatNoDmg, pStatCur->nStatValue, pUnit);
-          pDataTable = sgptDataTable;
+          pDataTable = ITEMS::Items::sgptDataTable;
         }
       }
     }
@@ -2463,10 +2463,10 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     if (!pStatsEx) {
       return;
     }
-    if (sgptDataTable->nTxtItemStatCostSize <= 0xa || !(sgptDataTable->pTxtItemStatCost + 10)) {
+    if (ITEMS::Items::sgptDataTable->nTxtItemStatCostSize <= 0xa || !(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 10)) {
       nMinShiftedStatVal = 0;
     } else {
-      /* ID 10 = stamina */ nMinShiftedStatVal = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 10, pStatsEx, 0xa0000);
+      /* ID 10 = stamina */ nMinShiftedStatVal = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 10, pStatsEx, 0xa0000);
     }
 
     int32_t nTxtMaxResource = GetTxtMaxStamina(pUnit);
@@ -2477,10 +2477,10 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     pStatsEx = pUnit->pStatsEx;
     if (!pStatsEx) {
       nMinShiftedStatVal = 0;
-    } else if (sgptDataTable->nTxtItemStatCostSize <= 8 || !(sgptDataTable->pTxtItemStatCost + 8)) {
+    } else if (ITEMS::Items::sgptDataTable->nTxtItemStatCostSize <= 8 || !(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 8)) {
       nMinShiftedStatVal = 0;
     } else {
-      /* ID 8 = mana */ nMinShiftedStatVal = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 8, pStatsEx, 0x80000);
+      /* ID 8 = mana */ nMinShiftedStatVal = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 8, pStatsEx, 0x80000);
     }
 
     nTxtMaxResource = GetTxtMaxMana(pUnit);
@@ -2491,10 +2491,10 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     pStatsEx = pUnit->pStatsEx;
     if (!pStatsEx) {
       nMinShiftedStatVal = 0;
-    } else if (sgptDataTable->nTxtItemStatCostSize <= 6 || !(sgptDataTable->pTxtItemStatCost + 6)) {
+    } else if (ITEMS::Items::sgptDataTable->nTxtItemStatCostSize <= 6 || !(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 6)) {
       nMinShiftedStatVal = 0;
     } else {
-      /* ID 6 = hitpoints */ nMinShiftedStatVal = TXT_ItemStatCost_GetMinimumStatValueShifted(sgptDataTable->pTxtItemStatCost + 6, pStatsEx, 0x60000);
+      /* ID 6 = hitpoints */ nMinShiftedStatVal = TXT_ItemStatCost_GetMinimumStatValueShifted(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 6, pStatsEx, 0x60000);
     }
 
     nTxtMaxResource = GetTxtMaxHp(pUnit);
@@ -2522,7 +2522,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
 
     D2StatStrc* pStatCur = pItemStatsEx->sFullStats.pStatInfo;
     D2StatStrc* pStatEnd = pStatCur + pItemStatsEx->sFullStats.wStatCount;
-    D2DataTableTxtStrc* pDataTable = sgptDataTable;
+    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
     for (; pStatCur < pStatEnd; pStatCur++) {
       D2ItemStatCostTxt* pStatCostTxt = false || (int)(uint32_t)(uint16_t)pStatCur->wStatIndex >= pDataTable->nTxtItemStatCostSize ? 0 : pDataTable->pTxtItemStatCost + (uint16_t)pStatCur->wStatIndex;
       if ((uint8_t)(pStatCostTxt->op - 6) <= 1) {
@@ -2545,7 +2545,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
           STATLIST_SetFullStatValue(nOpStatIndex << 0x10, nCombinedStatVal, pStatCostTxt, pOwnerUnit, pOwnerUnit->pStatsEx);
           pUnit = (D2UnitStrc*)((uintptr_t)&pUnit->eUnitType + 2);
           pUnit2 = (D2UnitStrc*)((uintptr_t)&pUnit2->eUnitType + 1);
-          pDataTable = sgptDataTable;
+          pDataTable = ITEMS::Items::sgptDataTable;
         } while ((int)pUnit2 < 3);
       }
     }
@@ -2610,7 +2610,7 @@ void __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem
           for (; pStatEntry < pEffectiveStats; pStatEntry += 2) {
             nShiftedStat = *pStatEntry;
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(nShiftedStat >> 0x10 & 0xffff);
-            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)gadwBitMasks[2]) {
+            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
               STATLIST_PropagateStatChange(pStatsEx, nShiftedStat, pStatEntry[1], pItem);
             }
           }
@@ -2717,7 +2717,7 @@ void __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pIt
           for (; pStatEntry < pEffectiveStats; pStatEntry += 2) {
             nShiftedStat = *pStatEntry;
             pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(nShiftedStat >> 0x10 & 0xffff);
-            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)gadwBitMasks[2]) {
+            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
               STATLIST_PropagateStatChange(pStatsEx, nShiftedStat, -pStatEntry[1], pItem);
             }
           }
@@ -2729,11 +2729,11 @@ void __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pIt
 }
 
 BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId) {
-    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (pSkillsTxt) {
       int nSkillDescIndex;
       nSkillDescIndex = (int)pSkillsTxt->skilldesc;
-      if (nSkillDescIndex >= 0 && nSkillDescIndex < sgptDataTable->nTxtSkillDescSize) {
+      if (nSkillDescIndex >= 0 && nSkillDescIndex < ITEMS::Items::sgptDataTable->nTxtSkillDescSize) {
         return 1;
       }
     }
@@ -2742,7 +2742,7 @@ BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId) {
 }
 
 int Unreferenced_00627b30() {
-    return sgptDataTable->nTxtItemTypesSize;
+    return ITEMS::Items::sgptDataTable->nTxtItemTypesSize;
 }
 
 // Always-zero stub used as the fnSkillCalcMethod callback where a formula context has no
@@ -2796,7 +2796,7 @@ int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQuer
     }
 
     D2UnitStrc* pUnitDeref = *ppUnit;
-    if (!(pUnitDeref && (int)eUnitStat >= 0 && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize)) {
+    if (!(pUnitDeref && (int)eUnitStat >= 0 && (int)eUnitStat < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return 0;
     }
     if (eUnitStat == UNITSTAT_tohit) {

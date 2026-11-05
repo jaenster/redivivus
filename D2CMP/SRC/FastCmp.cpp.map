@@ -357,6 +357,20 @@
       ]
     },
     {
+      "name": "D2GFX_ToggleLowQuality_Unref_00608520",
+      "address": "00608520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608520"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "D2GFX_ToggleLowQuality_Unref_00608520"
+      ]
+    },
+    {
       "name": "FASTCMP_DecompressRLEDispatcher",
       "address": "00608540",
       "lines": [

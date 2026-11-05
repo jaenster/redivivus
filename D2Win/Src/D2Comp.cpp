@@ -119,6 +119,7 @@ static uint32_t gaCompAnimModeTokens[20] = {
     0x20204847,
     0x20204847
 }; D2_STATIC_GUARD(gaCompAnimModeTokens, "gaCompAnimModeTokens");
+namespace D2Win::Src::D2Comp {
 uint32_t gaCompWeaponClassTokens[15] = {
     0x0,
     0x20687468,
@@ -135,7 +136,8 @@ uint32_t gaCompWeaponClassTokens[15] = {
     0x20747331,
     0x20317468,
     0x20327468
-}; D2_GLOBAL_GUARD(gaCompWeaponClassTokens, "gaCompWeaponClassTokens");
+}; D2_GLOBAL_GUARD(gaCompWeaponClassTokens, "D2Win::Src::D2Comp::gaCompWeaponClassTokens");
+} // namespace D2Win::Src::D2Comp
 static D2CompCharacterCompositeItemStrc gaCompDefaultCompositeItems[283] = {
     {
         /* .nItemCode = */ 0x0,
@@ -1601,8 +1603,10 @@ static int gaCompWeaponClassCodeMap[26] = {
 }; D2_STATIC_GUARD(gaCompWeaponClassCodeMap, "gaCompWeaponClassCodeMap");
 // also labelled: gnD2CompItemColorMappingCount
 static unsigned int gnCompWeaponClassCodeMapCount = 0xd; D2_STATIC_GUARD(gnCompWeaponClassCodeMapCount, "gnCompWeaponClassCodeMapCount");
-int nD2CompItemsSize = 0; D2_GLOBAL_GUARD(nD2CompItemsSize, "nD2CompItemsSize");
-void * pD2CompItems = 0; D2_GLOBAL_GUARD(pD2CompItems, "pD2CompItems");
+namespace D2Win::Src::D2Comp {
+int nD2CompItemsSize = 0; D2_GLOBAL_GUARD(nD2CompItemsSize, "D2Win::Src::D2Comp::nD2CompItemsSize");
+void * pD2CompItems = 0; D2_GLOBAL_GUARD(pD2CompItems, "D2Win::Src::D2Comp::pD2CompItems");
+} // namespace D2Win::Src::D2Comp
 uint8_t gaItemPaletteTransformData[241920] = {}; D2_GLOBAL_GUARD(gaItemPaletteTransformData, "gaItemPaletteTransformData");
 static uint8_t gaGlideEmblemPrimaryColorTableEntries[12] = {}; D2_STATIC_GUARD(gaGlideEmblemPrimaryColorTableEntries, "gaGlideEmblemPrimaryColorTableEntries");
 static D2TxtLinkStrc * gnHitClassTxtLinkHandle = 0; D2_STATIC_GUARD(gnHitClassTxtLinkHandle, "gnHitClassTxtLinkHandle");
@@ -2532,7 +2536,7 @@ void __fastcall D2COMP_DrawUnitShadow(uint32_t * pCompUnit) {
 
     {
       uint32_t nPositionY;
-      if (!(gadwBitMasks[0] & *pCompUnit) || !(gadwBitMasks[2] & *pCompUnit)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[0] & *pCompUnit) || !(Fog::BitBuffer::gadwBitMasks[2] & *pCompUnit)) {
         return;
       }
 
@@ -2621,10 +2625,10 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
 
     {
       uint8_t bVar1;
-      if (!(gadwBitMasks[0] & *pCompUnit)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[0] & *pCompUnit)) {
         return;
       }
-      if (gadwBitMasks[10] & *pCompUnit) {
+      if (Fog::BitBuffer::gadwBitMasks[10] & *pCompUnit) {
         if (!gpPentaSpinCursorDC6) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5fe);
           exit(-1);
@@ -2672,7 +2676,7 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
           }
 
           nUnitFlags = *pCompUnit;
-          if (gadwBitMasks[5] & nUnitFlags && gadwBitMasks[4] & nUnitFlags || (eDrawMode = DRAW_SOLID , (gadwBitMasks[0xd] & nUnitFlags) != 0)) {
+          if (Fog::BitBuffer::gadwBitMasks[5] & nUnitFlags && Fog::BitBuffer::gadwBitMasks[4] & nUnitFlags || (eDrawMode = DRAW_SOLID , (Fog::BitBuffer::gadwBitMasks[0xd] & nUnitFlags) != 0)) {
             eDrawMode = DRAW_TRANSPARENT;
           }
 
@@ -2719,7 +2723,7 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
               gnPentaSpinCursorFrame = 0;
             }
           }
-          if (!(*pCompUnit & gadwBitMasks[9])) {
+          if (!(*pCompUnit & Fog::BitBuffer::gadwBitMasks[9])) {
             return;
           }
           if (!gpUniqueCursorDC6) {
@@ -3481,12 +3485,12 @@ void __stdcall D2COMP_CreateCompositeUnit(uint32_t * pCompUnit, uint32_t nPlayer
       }
 
       pCompUnit[8] = nAnimMode;
-      *pCompUnit |= gadwBitMasks[0];
-      nWeaponClass = *pCompUnit | gadwBitMasks[1];
+      *pCompUnit |= Fog::BitBuffer::gadwBitMasks[0];
+      nWeaponClass = *pCompUnit | Fog::BitBuffer::gadwBitMasks[1];
       nSlot = 0;
       *pCompUnit = nWeaponClass;
       pSlotCode = pCompUnit + 0xe;
-      *pCompUnit = nWeaponClass | gadwBitMasks[2];
+      *pCompUnit = nWeaponClass | Fog::BitBuffer::gadwBitMasks[2];
       do {
         pSlotCode[0x10] = 1;
         if (*pbyEquipSlots <= 0 || *pbyEquipSlots == 0xff) {
@@ -3959,7 +3963,7 @@ int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pCompUnit) {
 
     uint32_t dwUnitFlags = *pCompUnit;
     int bDrawn = 0;
-    if (gadwBitMasks[1] & dwUnitFlags) {
+    if (Fog::BitBuffer::gadwBitMasks[1] & dwUnitFlags) {
       nCharClass = pCompUnit[6];
       pWCharClear = wszTitleText;
       for (bDrawn = 0x80; bDrawn; bDrawn--) {
@@ -3978,13 +3982,13 @@ int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pCompUnit) {
       } else if (dwGameType == 0x12) {
         nDrawColor = 3;
         bDrawShadow = 1;
-      } else if (gadwBitMasks[5] & dwUnitFlags) {
+      } else if (Fog::BitBuffer::gadwBitMasks[5] & dwUnitFlags) {
         nDrawColor = 1;
       }
-      if (gadwBitMasks[8] & dwUnitFlags) {
+      if (Fog::BitBuffer::gadwBitMasks[8] & dwUnitFlags) {
         bDrawn = nCharClass + 0x15;
       }
-      if (!(gadwBitMasks[6] & dwUnitFlags) && !(gadwBitMasks[7] & dwUnitFlags)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[6] & dwUnitFlags) && !(Fog::BitBuffer::gadwBitMasks[7] & dwUnitFlags)) {
         dwProductCode = pCompUnit[0x8c];
         if (dwProductCode == 0x44324456 || dwProductCode == 0x44325354 || dwProductCode == 0x44325850) {
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, (uint16_t*)(pCompUnit + 0x53));
@@ -4070,7 +4074,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
       }
 
       dwPlayerInfo = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
-      if (!(dwPlayerInfo & gadwBitMasks[3])) {
+      if (!(dwPlayerInfo & Fog::BitBuffer::gadwBitMasks[3])) {
         return;
       }
 
@@ -4104,7 +4108,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, D2Lang::StrTable::strtable::GetLocaleString(0x1399), nPingMs);
           D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
           dwPlayerInfoCopy = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
-          if (dwPlayerInfoCopy & gadwBitMasks[5]) {
+          if (dwPlayerInfoCopy & Fog::BitBuffer::gadwBitMasks[5]) {
             pnTotalWidthArg = &__frame0.nTotalWidth;
             pnMaxWidthArg = &__frame0.nMaxLineWidth;
             pnLineCountArg = &__frame0.nLineCount;
@@ -4455,12 +4459,12 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
         }
 
         pCharSelComp->nAnimMode = nClassicExpansion;
-        pCharSelComp->nFlags |= gadwBitMasks[0];
-        DVar1 = pCharSelComp->nFlags | gadwBitMasks[1];
+        pCharSelComp->nFlags |= Fog::BitBuffer::gadwBitMasks[0];
+        DVar1 = pCharSelComp->nFlags | Fog::BitBuffer::gadwBitMasks[1];
         nComponentSlot = 0;
         pCharSelComp->nFlags = DVar1;
         pComponentCode = pCharSelComp->dwComponentCodes;
-        pCharSelComp->nFlags = DVar1 | gadwBitMasks[2];
+        pCharSelComp->nFlags = DVar1 | Fog::BitBuffer::gadwBitMasks[2];
         do {
           pComponentCode[0x10] = 1;
           bComponentIndex = *pbyEquipSlots;

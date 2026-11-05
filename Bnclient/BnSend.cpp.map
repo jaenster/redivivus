@@ -1786,6 +1786,21 @@
       ]
     },
     {
+      "name": "TSFixedArray_Ui_Destructor_Unref_0051d570",
+      "address": "0051d570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d570"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_0051d570",
+        "SMemFree"
+      ]
+    },
+    {
       "name": "BNNEWS_DestroyNewsTable",
       "address": "0051d590",
       "lines": [
@@ -1822,6 +1837,21 @@
       "usedTypes": [
         "D2BnNewsTableStrc",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_0051d670",
+      "address": "0051d670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d670"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_0051d670",
+        "SMemFree"
       ]
     },
     {

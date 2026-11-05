@@ -84,7 +84,9 @@ static int gnSelectExclusionRectBottom = 0; D2_STATIC_GUARD(gnSelectExclusionRec
 namespace D2Client::_Selection {
 eD2UnitType eSelectedUnitType = 0; D2_GLOBAL_GUARD(eSelectedUnitType, "D2Client::_Selection::eSelectedUnitType");
 } // namespace D2Client::_Selection
-uint32_t gbSuppressItemSelection = 0; D2_GLOBAL_GUARD(gbSuppressItemSelection, "gbSuppressItemSelection");
+namespace D2Client::GAME::Select {
+uint32_t gbSuppressItemSelection = 0; D2_GLOBAL_GUARD(gbSuppressItemSelection, "D2Client::GAME::Select::gbSuppressItemSelection");
+} // namespace D2Client::GAME::Select
 namespace D2Client::_Selection {
 BOOL bHasSelectedUnit = 0; D2_GLOBAL_GUARD(bHasSelectedUnit, "D2Client::_Selection::bHasSelectedUnit");
 BOOL bCanSelectUnit = 0; D2_GLOBAL_GUARD(bCanSelectUnit, "D2Client::_Selection::bCanSelectUnit");
@@ -148,7 +150,7 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
       if (pLookupUnit) {
         nWarpClassId = pLookupUnit->nClassId;
         D2Common::DUNGEON::Dungeon::UpdateWarpRoomDeselect(D2Common::Units::UNITS_GetRoom(pLookupUnit), nWarpClassId);
-        View::SetFlag0x1(D2GameView);
+        View::SetFlag0x1(Game::D2GameView);
       }
     }
 
@@ -165,7 +167,7 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
         if (_Selection::eSelectedUnitType == UNIT_WARP && !bSameUnitAsLast) {
           nWarpClassId = pUnit->nClassId;
           D2Common::DUNGEON::Dungeon::UpdateWarpRoomSelect(D2Common::Units::UNITS_GetRoom(pUnit), nWarpClassId);
-          View::SetFlag0x1(D2GameView);
+          View::SetFlag0x1(Game::D2GameView);
           return;
         }
       } else {
@@ -188,9 +190,9 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
         pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(nErrorLine);
         if (pMonStats) {
           pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nErrorLine);
-          if (pMonStats2 && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]) && pMonStats->Align != '\x01' && *((uint8_t*)pMonStats2 + 0x5) & (uint8_t)gadwBitMasks[1]) {
+          if (pMonStats2 && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && pMonStats->Align != '\x01' && *((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             gnSelectConstant13_X = nErrorLine;
-            if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[1])) {
+            if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
               gnSelectConstant13_Y = nErrorLine;
             }
           }
@@ -259,7 +261,7 @@ static void __stdcall SELECT_ScreenToWorldCoords(int * pnX, int * pnY) {
       int nAdjustedY;
       nAdjustedY = *pnY - *pnY / 0x28;
       *pnY = nAdjustedY;
-      *pnX = (0x28 - nAdjustedY / 4) * (*pnX - ScreenSizeX / 2) / (ScreenSizeX / 2) + *pnX;
+      *pnX = (0x28 - nAdjustedY / 4) * (*pnX - UI::ui::ScreenSizeX / 2) / (UI::ui::ScreenSizeX / 2) + *pnX;
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
       *pnX += nWorldOffset;
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
@@ -299,7 +301,7 @@ static BOOL SELECT_HandleMouseInput(int * pnMouseX, int * pnMouseY) {
         if (pUnit) {
           eLevel = pUnit->nClassId;
           D2Common::DUNGEON::Dungeon::UpdateWarpRoomDeselect(D2Common::Units::UNITS_GetRoom(pUnit), eLevel);
-          View::SetFlag0x1(D2GameView);
+          View::SetFlag0x1(Game::D2GameView);
         }
       }
 
@@ -311,14 +313,14 @@ static BOOL SELECT_HandleMouseInput(int * pnMouseX, int * pnMouseY) {
     *pnMouseX = nMouseY;
     nMouseY = Cursor::GetMouseY();
     *pnMouseY = nMouseY;
-    if (nMouseY <= ScreenSizeY - 0x31 && (!gbSelectExclusionActive || *pnMouseX <= gnSelectExclusionRectLeft || *pnMouseX >= gnSelectExclusionRectRight || nMouseY <= gnSelectExclusionRectTop || nMouseY >= gnSelectExclusionRectBottom)) {
+    if (nMouseY <= UI::Inv::ScreenSizeY - 0x31 && (!gbSelectExclusionActive || *pnMouseX <= gnSelectExclusionRectLeft || *pnMouseX >= gnSelectExclusionRectRight || nMouseY <= gnSelectExclusionRectTop || nMouseY >= gnSelectExclusionRectBottom)) {
       if (nBorderType != 1) {
-        if (nBorderType != 2 || *pnMouseX >= ScreenSizeX / 2) {
+        if (nBorderType != 2 || *pnMouseX >= UI::ui::ScreenSizeX / 2) {
           SELECT_ScreenToWorldCoords(pnMouseX, pnMouseY);
           return 0;
         }
       } else {
-        if (*pnMouseX < ScreenSizeX / 2) {
+        if (*pnMouseX < UI::ui::ScreenSizeX / 2) {
           SELECT_ScreenToWorldCoords(pnMouseX, pnMouseY);
           return 0;
         }
@@ -450,7 +452,7 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
     int32_t nRadius;
     D2UnitStrc* pFoundUnit;
     if (pUnit) {
-      if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[0]) {
+      if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         nFindFlags = UNIT::CUnit::IsActive(pUnit);
         if (nFindFlags) {
           return pUnit;
@@ -479,7 +481,7 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
       *pY = nRadius;
     }
 
-    nFindFlags = *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[0] ? 0x3002 : 0x2003;
+    nFindFlags = *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] ? 0x3002 : 0x2003;
     UNITFINDTEST nfpUnitTest = 0;
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\GAME\\Select.cpp", 0x301);
     if (eSkillId == SKILL_IronGolem) {
@@ -577,7 +579,7 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
       if (eCollision != COLLIDE_NONE) {
         pTargetUnit = D2Common::Collision::CallCollisionFunction(pRoom, nOffsetX + nUnitX, nOffsetY + nUnitY, (fpMissileSrvDoFuncData)UnitIsOfTypeMonster, nullptr, 1);
         if (pTargetUnit && pTargetUnit->eUnitFlags >> 2 & 1) {
-          if (!(*((uint8_t*)pSkillsTxt + 0x6) & (uint8_t)gadwBitMasks[4])) {
+          if (!(*((uint8_t*)pSkillsTxt + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
             break;
           }
           if (pTargetUnit->eUnitType == UNIT_MONSTER) {
@@ -674,7 +676,7 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
           return pUnit;
         }
       }
-      if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[0] || (nUnitCoord = UNIT::CUnit::IsActive(pUnit) , !nUnitCoord)) {
+      if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] || (nUnitCoord = UNIT::CUnit::IsActive(pUnit) , !nUnitCoord)) {
         goto resolve_target;
       }
 
@@ -719,15 +721,15 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
     }
 
     uint32_t dwSkillFlags = (uint32_t)(uint8_t)*((uint8_t*)pSkillsTxt + 0x6);
-    if (gadwBitMasks[6] & dwSkillFlags) {
+    if (Fog::BitBuffer::gadwBitMasks[6] & dwSkillFlags) {
       pPlayerUnit_lcl = SKILL_FindTargetInRange(pSkill, pUnit, pX, pY, pSkillsTxt);
       return pPlayerUnit_lcl;
     }
-    if (!pUnit && gadwBitMasks[5] & dwSkillFlags && bAllowDirectional) {
+    if (!pUnit && Fog::BitBuffer::gadwBitMasks[5] & dwSkillFlags && bAllowDirectional) {
       pPlayerUnit_lcl = SELECT_FindTargetInFacingDirection(pPlayerUnit_lcl, pSkillsTxt);
       return pPlayerUnit_lcl;
     }
-    if (!(gadwBitMasks[7] & dwSkillFlags)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[7] & dwSkillFlags)) {
       return pUnit;
     }
 

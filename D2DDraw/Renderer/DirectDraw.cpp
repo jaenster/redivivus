@@ -124,7 +124,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
     if (nLine) {
       bRegFlagsOk = Storm::Source::SReg::SRegLoadValue(szRegKey, "dwFlags", 0, (int32_t*)&gdwDDrawInitFlags);
       if (bRegFlagsOk) {
-        if (gdwDDrawInitFlags & gadwBitMasks[0]) {
+        if (gdwDDrawInitFlags & Fog::BitBuffer::gadwBitMasks[0]) {
           return 1;
         }
 
@@ -136,7 +136,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
       }
     }
 
-    gdwDDrawInitFlags = gadwBitMasks[0];
+    gdwDDrawInitFlags = Fog::BitBuffer::gadwBitMasks[0];
     char* pSrc = "Fallback DirectDraw Device";
     char* pDst = gszRendererDeviceName;
     for (bRegFlagsOk = 6; bRegFlagsOk; bRegFlagsOk--) {
@@ -756,10 +756,10 @@ BOOL __stdcall InternalCutsceneWindow() {
     RENDERER_nWindowHeight = 0x1e0;
     gnDDrawSurfaceWidth = 0x1e0;
     DWORD nBitDepth = 0x10;
-    if (gadwBitMasks[1] & gdwDDrawInitFlags) {
+    if (Fog::BitBuffer::gadwBitMasks[1] & gdwDDrawInitFlags) {
       nBitDepth = 0x20;
     } else {
-      if (gadwBitMasks[2] & gdwDDrawInitFlags) {
+      if (Fog::BitBuffer::gadwBitMasks[2] & gdwDDrawInitFlags) {
         nBitDepth = 0x18;
       }
     }
@@ -1107,7 +1107,7 @@ BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc
     pD2GFXRenderedDataStrc = pSettings;
     D2GfxRendereInitFunctionsStrc = pHelpers;
     D2ddDebugFont_Alloc();
-    if (gdwDDrawInitFlags & gadwBitMasks[0]) {
+    if (gdwDDrawInitFlags & Fog::BitBuffer::gadwBitMasks[0]) {
       nResult = DirectDrawCreate(0, &pWindowHandleBuffer, nullptr);
     } else {
       nResult = DirectDrawCreate(&gGlideOpenWindowConfig, &pWindowHandleBuffer, nullptr);

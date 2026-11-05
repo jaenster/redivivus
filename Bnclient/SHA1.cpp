@@ -456,7 +456,7 @@ void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx) {
     SHA1_Update(pShaCtx, gaSHA1FinalData, 1);
     uVar1 = pShaCtx[5];
     while ((uVar1 & 0x1f8) != 0x1c0) {
-      SHA1_Update(pShaCtx, gaBnSendRawBytesHeader, 1);
+      SHA1_Update(pShaCtx, BnSend::gaBnSendRawBytesHeader, 1);
       uVar1 = pShaCtx[5];
     }
 

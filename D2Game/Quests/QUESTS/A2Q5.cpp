@@ -212,8 +212,7 @@ BOOL __fastcall Q13_CheckSummonerKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nAdjacentRoomCount;
     int bPlayerNearSummoner;
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pDVar3 = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pDVar3) {
       D2QuestDataA2Q5Strc* pDVar1;

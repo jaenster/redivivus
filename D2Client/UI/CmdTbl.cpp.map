@@ -795,6 +795,20 @@
       ]
     },
     {
+      "name": "StaticInit_6caab0",
+      "address": "006caab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caab0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "StaticInit_6caab0"
+      ]
+    },
+    {
       "name": "StaticInit_gwKeyNameBuffer",
       "address": "006caad0",
       "lines": [

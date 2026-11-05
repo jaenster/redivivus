@@ -53,12 +53,16 @@ static char * gpszDiabloIIClassNameSource = s_Diablo_II_006cc8b8; D2_STATIC_GUAR
 static uint32_t gnD2GFX_RequestedScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_RequestedScaleFactor, "gnD2GFX_RequestedScaleFactor");
 static uint32_t gnD2GFX_ActiveScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_ActiveScaleFactor, "gnD2GFX_ActiveScaleFactor");
 HINSTANCE hInstance = 0; D2_GLOBAL_GUARD(hInstance, "hInstance");
-eD2RendererMode eRendererMode = 0; D2_GLOBAL_GUARD(eRendererMode, "eRendererMode");
+namespace D2gfx::D2GFX {
+eD2RendererMode eRendererMode = 0; D2_GLOBAL_GUARD(eRendererMode, "D2gfx::D2GFX::eRendererMode");
+} // namespace D2gfx::D2GFX
 static BOOL bD2GFX_Windowed = 0; D2_STATIC_GUARD(bD2GFX_Windowed, "bD2GFX_Windowed");
 uint32_t nResolutionMode = 0; D2_GLOBAL_GUARD(nResolutionMode, "nResolutionMode");
 static HWND hwndD2GFX_Window = 0; D2_STATIC_GUARD(hwndD2GFX_Window, "hwndD2GFX_Window");
 D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions = 0; D2_GLOBAL_GUARD(RENDERER_CurrentRenderedFunctions, "RENDERER_CurrentRenderedFunctions");
-uint32_t gnGfxOverlayMode = 0; D2_GLOBAL_GUARD(gnGfxOverlayMode, "gnGfxOverlayMode");
+namespace D2gfx::D2GFX {
+uint32_t gnGfxOverlayMode = 0; D2_GLOBAL_GUARD(gnGfxOverlayMode, "D2gfx::D2GFX::gnGfxOverlayMode");
+} // namespace D2gfx::D2GFX
 uint8_t gaDirectDrawDitherPaletteRemap[1024] = {}; D2_GLOBAL_GUARD(gaDirectDrawDitherPaletteRemap, "gaDirectDrawDitherPaletteRemap");
 D2RenderStatisticsStrc gnTextureMemoryUsageBytes = {}; D2_GLOBAL_GUARD(gnTextureMemoryUsageBytes, "gnTextureMemoryUsageBytes");
 D2RendererCoreStrc * RENDERER_SelectedRendererCore = 0; D2_GLOBAL_GUARD(RENDERER_SelectedRendererCore, "RENDERER_SelectedRendererCore");
@@ -89,10 +93,6 @@ namespace D2gfx::D2GFX {
 
 void __stdcall RENDERER_TogglePerspective_Unref_0044dc40() {
     gbBloodFlag = (uint32_t)!gbBloodFlag;
-}
-
-void __stdcall RENDERER_TogglePerspective_Unref_00474140() {
-    gbLightmapColorEnabled = (uint32_t)!gbLightmapColorEnabled;
 }
 
 void __stdcall RENDERER_TogglePerspective_Unref_004769b0() {
@@ -261,7 +261,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     /* .nfpDrawBlendedVisTile = */ (::fpDrawBlendedVisTile)&D2gfx::fpDrawBlendedVisTile,
     /* .nfpDrawRoofTile = */ (::fpDrawRoofTile)&D2gfx::fpDrawRoofTile
 }; D2_STATIC_GUARD(D2GfxHelperStrc_0072da60, "D2gfx::D2GFX::D2GFX_Initialize::D2GfxHelperStrc_0072da60");
-    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Client::Renderer::GlideFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Gdi::Renderer::Windowed::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Glide::Renderer::Glide::GlideFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Direct3D::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
     static WNDPROC gpfnWndProc; D2_STATIC_GUARD_BSS(gpfnWndProc, "D2gfx::D2GFX::D2GFX_Initialize::gpfnWndProc");
 
     WNDCLASSA wndClass;
@@ -1903,16 +1903,6 @@ void __stdcall D2GFX_InitializeWindowSize() {
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Gamma", 0, (int32_t*)&__frame0.dwGamma);
     D2GFXRenderedData.nGamma = __frame0.dwGamma;
     D2GFX_SetGamma(__frame0.dwGamma);
-}
-
-void __stdcall D2GFX_EnableVSync_Unref_00506a80() {
-    gbSmackerKeepTempFile = 1;
-}
-
-BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520() {
-    bool bVar1 = !gbCodecUseFallbackDecompressor;
-    gbCodecUseFallbackDecompressor = (uint32_t)bVar1;
-    return (uint32_t)bVar1;
 }
 
 void StaticInit_gpszWindowClassName() {

@@ -8,7 +8,6 @@
 #include "D2Common/Chat/Ignorelist.h"
 #include "D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
-#include "D2Common/D2SeedStrc.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Drlg/Drlg.h"
@@ -20,63 +19,273 @@
 
 
 // =============================================================================
+// Initialized scalars
+// =============================================================================
+
+
+namespace D2Common::Drlg::Maze {
+
+} // namespace D2Common::Drlg::Maze
+
+namespace Fog::Src::LogManager {
+
+} // namespace Fog::Src::LogManager
+
+namespace Fog::Src::ErrorManager {
+
+} // namespace Fog::Src::ErrorManager
+
+namespace Storm::Source::SSignature {
+
+} // namespace Storm::Source::SSignature
+
+namespace Fog::Engine::Application {
+
+} // namespace Fog::Engine::Application
+
+namespace Fog::Source::SFile {
+
+} // namespace Fog::Source::SFile
+
+namespace Fog::Src::DataArrays {
+
+} // namespace Fog::Src::DataArrays
+
+namespace Storm::Source::SSTR {
+
+} // namespace Storm::Source::SSTR
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
+namespace Fog::BitBuffer {
+
+} // namespace Fog::BitBuffer
+
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
+namespace Storm::Source::SLog {
+
+} // namespace Storm::Source::SLog
+
+namespace Storm::_3rdparty::zlib::deflate {
+
+} // namespace Storm::_3rdparty::zlib::deflate
+
+namespace D2Launch::CharSel {
+
+} // namespace D2Launch::CharSel
+
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
+namespace D2Client::ClientModeInGame {
+
+} // namespace D2Client::ClientModeInGame
+
+namespace D2Client::UI::Draw {
+
+} // namespace D2Client::UI::Draw
+
+namespace D2Client::UI::Inv {
+
+} // namespace D2Client::UI::Inv
+
+namespace D2Common::DATATBLS::DataTbls {
+
+} // namespace D2Common::DATATBLS::DataTbls
+
+namespace D2Client::Warden::NWardenClient {
+
+} // namespace D2Client::Warden::NWardenClient
+
+namespace D2Client::Warden {
+
+} // namespace D2Client::Warden
+
+namespace D2Client::Sound::SoundHdr {
+
+} // namespace D2Client::Sound::SoundHdr
+
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Sound::Src::D2SoundSmp {
+
+} // namespace D2Sound::Src::D2SoundSmp
+
+namespace D2Client::UI {
+
+} // namespace D2Client::UI
+
+namespace D2Client::UI::Button::ButtonImplementation {
+
+} // namespace D2Client::UI::Button::ButtonImplementation
+
+namespace D2Client::UI::Button::ButtonWrapper {
+
+} // namespace D2Client::UI::Button::ButtonWrapper
+
+namespace D2Client::UI::Editbox::EditBoxImplementation {
+
+} // namespace D2Client::UI::Editbox::EditBoxImplementation
+
+namespace D2Client::UI::Editbox::EditBoxWrapper {
+
+} // namespace D2Client::UI::Editbox::EditBoxWrapper
+
+namespace D2Client::UI::Spinner::SpinnerImplementation {
+
+} // namespace D2Client::UI::Spinner::SpinnerImplementation
+
+namespace D2Client::UI::Spinner::SpinnerWrapper {
+
+} // namespace D2Client::UI::Spinner::SpinnerWrapper
+
+namespace D2Client::UI::ListBox::ListBoxWrapper {
+
+} // namespace D2Client::UI::ListBox::ListBoxWrapper
+
+namespace D2Client::UI::ListBox::ListBoxImplementation {
+
+} // namespace D2Client::UI::ListBox::ListBoxImplementation
+
+namespace D2gfx::D2GFX {
+
+} // namespace D2gfx::D2GFX
+
+namespace D2Sound::Sound {
+
+} // namespace D2Sound::Sound
+
+namespace Bnclient::BnSend {
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
+namespace Bnclient::_net_sid {
+
+} // namespace Bnclient::_net_sid
+
+namespace D2Game::GAME::Event::Dispatch {
+
+} // namespace D2Game::GAME::Event::Dispatch
+
+namespace D2Game::UNIT::SUnitDmg {
+
+} // namespace D2Game::UNIT::SUnitDmg
+
+namespace D2Game::PLAYER::PlayerModes {
+
+} // namespace D2Game::PLAYER::PlayerModes
+
+namespace D2Game::GAME::Event::Dispatch::Player {
+
+} // namespace D2Game::GAME::Event::Dispatch::Player
+
+namespace D2Game::Objects::ObjectsMode {
+
+} // namespace D2Game::Objects::ObjectsMode
+
+namespace D2Game::GAME::Event::Dispatch::Object {
+
+} // namespace D2Game::GAME::Event::Dispatch::Object
+
+namespace D2Game::GAME::Event::Dispatch::Monster {
+
+} // namespace D2Game::GAME::Event::Dispatch::Monster
+
+namespace D2Game {
+
+} // namespace D2Game
+
+namespace D2CMP::SRC::CelCmp {
+
+} // namespace D2CMP::SRC::CelCmp
+
+namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
+
+// =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char gpCubeRecipeItemTypeFlags_7[4] = { "set" }; D2_GLOBAL_GUARD(gpCubeRecipeItemTypeFlags_7, "gpCubeRecipeItemTypeFlags_7");
+void * vftable[12] = {
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&D2Common::Chat::Ignorelist::ChatIgnoreList::ScalarDeletingDestructor
+}; D2_GLOBAL_GUARD(vftable, "D2Common::Chat::Ignorelist::ChatIgnoreList::vftable");
 
-char gsGameMonsterSpawnContext[4] = { 'm', 'a', 'x', '\x00' }; D2_GLOBAL_GUARD(gsGameMonsterSpawnContext, "gsGameMonsterSpawnContext");
+} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
 
-char gsGameMissileTblsContext[4] = { 'm', 'i', 'n', '\x00' }; D2_GLOBAL_GUARD(gsGameMissileTblsContext, "gsGameMissileTblsContext");
+namespace D2Common::Chat::Ignorelist::IgnoreList {
 
-char gsGameDataTblsContext[4] = { 'm', 'o', 'd', '\x00' }; D2_GLOBAL_GUARD(gsGameDataTblsContext, "gsGameDataTblsContext");
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
 
-int gnAct5OuterWallGridOffsetByType[24] = {
-    -0x1,
-    0x0,
-    0x0,
-    -0x1,
-    0x1,
-    0x0,
-    0x0,
-    0x1,
-    0x0,
-    -0x1,
-    0x1,
-    0x0,
-    0x0,
-    0x1,
-    -0x1,
-    0x0,
-    -0x1,
-    0x0,
-    0x0,
-    -0x1,
-    0x1,
-    0x0,
-    0x0,
-    0x1
-}; D2_GLOBAL_GUARD(gnAct5OuterWallGridOffsetByType, "gnAct5OuterWallGridOffsetByType");
+void * vftable[12] = {
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::AddByPattern,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::RemoveByPattern,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::CheckIgnored,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::AddByAccountName,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::RemoveByAccountName,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::CheckAccountNameIgnored,
+    (void*)&D2Common::Chat::Ignorelist::AddAccountMapping,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::GetMappedValue,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::GetPersistentSetting,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::SavePersistentSetting,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::ClearAccountMappings,
+    (void*)&D2Common::Chat::Ignorelist::IgnoreList::ScalarDeletingDestructor
+}; D2_GLOBAL_GUARD(vftable, "D2Common::Chat::Ignorelist::IgnoreList::vftable");
 
-int gaAct5SceneryPresetTable_0[15][7] = {
-    { 0x6f, 0x3bb, 0x3bc, 0x0, 0x19, 0x1, 0x1 },
-    { 0x70, 0x3bb, 0x3bc, 0x0, 0x19, 0x1, 0x1 },
-    { 0x75, 0x3bb, 0x3bc, 0x1, 0x19, 0x1, 0x1 },
-    { 0x70, 0x3b9, 0x3b9, -0x1, 0x19, 0x1, 0x1 },
-    { 0x75, 0x3ba, 0x3ba, -0x1, 0x19, 0x1, 0x1 },
-    { 0x6f, 0x3b0, 0x3b3, -0x1, 0xa, 0x1, 0x0 },
-    { 0x6f, 0x3ae, 0x3b1, -0x1, 0x14, 0x4, 0x0 },
-    { 0x6f, 0x3af, 0x3b2, -0x1, 0x14, 0x4, 0x0 },
-    { 0x70, 0x3ad, 0x3ad, -0x1, 0xa, 0x1, 0x0 },
-    { 0x70, 0x3ab, 0x3ab, -0x1, 0x8, 0x1, 0x0 },
-    { 0x70, 0x3ac, 0x3ac, -0x1, 0xf, 0x5, 0x0 },
-    { 0x75, 0x3b4, 0x3b4, -0x1, 0x9, 0x4, 0x0 },
-    { 0x75, 0x3b5, 0x3b5, -0x1, 0x9, 0x4, 0x0 },
-    { 0x75, 0x3b6, 0x3b6, -0x1, 0x9, 0x4, 0x0 },
-    { 0x75, 0x3b7, 0x3b7, -0x1, 0x5, 0x3, 0x0 }
-}; D2_GLOBAL_GUARD(gaAct5SceneryPresetTable_0, "gaAct5SceneryPresetTable_0");
+} // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-uint32_t gnTimeRates[3] = { 0x80, 0x4, 0x8 }; D2_GLOBAL_GUARD(gnTimeRates, "gnTimeRates");
+namespace D2Common {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gsGameMonsterSpawnContext[4] = { 'm', 'a', 'x', '\x00' }; D2_GLOBAL_GUARD(gsGameMonsterSpawnContext, "D2Common::gsGameMonsterSpawnContext");
+
+char gsGameMissileTblsContext[4] = { 'm', 'i', 'n', '\x00' }; D2_GLOBAL_GUARD(gsGameMissileTblsContext, "D2Common::gsGameMissileTblsContext");
 
 int gpsPresetObjectTable[750] = {
     0xc,
@@ -829,149 +1038,134 @@ int gpsPresetObjectTable[750] = {
     0x233,
     0x23a,
     0x18d
-}; D2_GLOBAL_GUARD(gpsPresetObjectTable, "gpsPresetObjectTable");
+}; D2_GLOBAL_GUARD(gpsPresetObjectTable, "D2Common::gpsPresetObjectTable");
 
-D2SeedStrc gsAutoMapSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gsAutoMapSeed, "gsAutoMapSeed");
+} // namespace D2Common
 
-_RTL_CRITICAL_SECTION lpCriticalSection_0096ca30 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096ca30, "lpCriticalSection_0096ca30");
+namespace D2Common::Txt::Cube {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gsGameDataTblsContext[4] = { 'm', 'o', 'd', '\x00' }; D2_GLOBAL_GUARD(gsGameDataTblsContext, "D2Common::Txt::Cube::gsGameDataTblsContext");
+
+} // namespace D2Common::Txt::Cube
+
+namespace D2Common::DATATBLS::ItemTbls {
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-unsigned int gszTxtColName_op = 0x706f; D2_GLOBAL_GUARD(gszTxtColName_op, "gszTxtColName_op");
-int gaAct5SceneryPresetTable_0_0__1_[15][7] = {}; D2_GLOBAL_GUARD(gaAct5SceneryPresetTable_0_0__1_, "gaAct5SceneryPresetTable_0_0__1_");
-FILE * pLOGFILE = 0; D2_GLOBAL_GUARD(pLOGFILE, "pLOGFILE");
-BOOL bLOGFILE_ENABLED = 0; D2_GLOBAL_GUARD(bLOGFILE_ENABLED, "bLOGFILE_ENABLED");
-unsigned int gnTreasureClassArraySize = {}; D2_GLOBAL_GUARD(gnTreasureClassArraySize, "gnTreasureClassArraySize");
-unsigned int nTxtMonModeSize = {}; D2_GLOBAL_GUARD(nTxtMonModeSize, "nTxtMonModeSize");
-unsigned int gdwDrlgLevelPlacementFlags = {}; D2_GLOBAL_GUARD(gdwDrlgLevelPlacementFlags, "gdwDrlgLevelPlacementFlags");
+unsigned int gszTxtColName_op = 0x706f; D2_GLOBAL_GUARD(gszTxtColName_op, "D2Common::DATATBLS::ItemTbls::gszTxtColName_op");
 
-namespace D2Common::Drlg::Maze {
+} // namespace D2Common::DATATBLS::ItemTbls
 
-} // namespace D2Common::Drlg::Maze
+namespace D2Common::Drlg::Preset {
 
-namespace D2Client::Warden::NWardenClient {
+} // namespace D2Common::Drlg::Preset
 
-} // namespace D2Client::Warden::NWardenClient
-
-namespace D2Client::Warden {
-
-} // namespace D2Client::Warden
-
-namespace D2Client::UI {
-
-} // namespace D2Client::UI
-
-namespace D2Client::UI::Button::ButtonImplementation {
-
-} // namespace D2Client::UI::Button::ButtonImplementation
-
-namespace D2Client::UI::Button::ButtonWrapper {
-
-} // namespace D2Client::UI::Button::ButtonWrapper
-
-namespace D2Client::UI::Editbox::EditBoxImplementation {
-
-} // namespace D2Client::UI::Editbox::EditBoxImplementation
-
-namespace D2Client::UI::Editbox::EditBoxWrapper {
-
-} // namespace D2Client::UI::Editbox::EditBoxWrapper
-
-namespace D2Client::UI::Spinner::SpinnerImplementation {
-
-} // namespace D2Client::UI::Spinner::SpinnerImplementation
-
-namespace D2Client::UI::Spinner::SpinnerWrapper {
-
-} // namespace D2Client::UI::Spinner::SpinnerWrapper
-
-namespace D2Client::UI::ListBox::ListBoxWrapper {
-
-} // namespace D2Client::UI::ListBox::ListBoxWrapper
-
-namespace D2Client::UI::ListBox::ListBoxImplementation {
-
-} // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2Game::GAME::Event::Dispatch {
-
-} // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::GAME::Event::Dispatch::Player {
-
-} // namespace D2Game::GAME::Event::Dispatch::Player
-
-namespace D2Game::GAME::Event::Dispatch::Object {
-
-} // namespace D2Game::GAME::Event::Dispatch::Object
-
-namespace D2Game::GAME::Event::Dispatch::Monster {
-
-} // namespace D2Game::GAME::Event::Dispatch::Monster
-
-namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
+namespace D2Common::Drlg::OutSiege {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-void * vftable[12] = {
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&D2Common::Chat::Ignorelist::ChatIgnoreList::ScalarDeletingDestructor
-}; D2_GLOBAL_GUARD(vftable, "D2Common::Chat::Ignorelist::ChatIgnoreList::vftable");
+int gnAct5OuterWallGridOffsetByType[24] = {
+    -0x1,
+    0x0,
+    0x0,
+    -0x1,
+    0x1,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    -0x1,
+    0x1,
+    0x0,
+    0x0,
+    0x1,
+    -0x1,
+    0x0,
+    -0x1,
+    0x0,
+    0x0,
+    -0x1,
+    0x1,
+    0x0,
+    0x0,
+    0x1
+}; D2_GLOBAL_GUARD(gnAct5OuterWallGridOffsetByType, "D2Common::Drlg::OutSiege::gnAct5OuterWallGridOffsetByType");
 
-} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
-
-namespace D2Common::Chat::Ignorelist::IgnoreList {
+int gaAct5SceneryPresetTable_0[15][7] = {
+    { 0x6f, 0x3bb, 0x3bc, 0x0, 0x19, 0x1, 0x1 },
+    { 0x70, 0x3bb, 0x3bc, 0x0, 0x19, 0x1, 0x1 },
+    { 0x75, 0x3bb, 0x3bc, 0x1, 0x19, 0x1, 0x1 },
+    { 0x70, 0x3b9, 0x3b9, -0x1, 0x19, 0x1, 0x1 },
+    { 0x75, 0x3ba, 0x3ba, -0x1, 0x19, 0x1, 0x1 },
+    { 0x6f, 0x3b0, 0x3b3, -0x1, 0xa, 0x1, 0x0 },
+    { 0x6f, 0x3ae, 0x3b1, -0x1, 0x14, 0x4, 0x0 },
+    { 0x6f, 0x3af, 0x3b2, -0x1, 0x14, 0x4, 0x0 },
+    { 0x70, 0x3ad, 0x3ad, -0x1, 0xa, 0x1, 0x0 },
+    { 0x70, 0x3ab, 0x3ab, -0x1, 0x8, 0x1, 0x0 },
+    { 0x70, 0x3ac, 0x3ac, -0x1, 0xf, 0x5, 0x0 },
+    { 0x75, 0x3b4, 0x3b4, -0x1, 0x9, 0x4, 0x0 },
+    { 0x75, 0x3b5, 0x3b5, -0x1, 0x9, 0x4, 0x0 },
+    { 0x75, 0x3b6, 0x3b6, -0x1, 0x9, 0x4, 0x0 },
+    { 0x75, 0x3b7, 0x3b7, -0x1, 0x5, 0x3, 0x0 }
+}; D2_GLOBAL_GUARD(gaAct5SceneryPresetTable_0, "D2Common::Drlg::OutSiege::gaAct5SceneryPresetTable_0");
 
 // =============================================================================
-// Initialized data (arrays, structs, tables)
+// Initialized scalars
 // =============================================================================
 
-void * vftable[12] = {
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::AddByPattern,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::RemoveByPattern,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::CheckIgnored,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::AddByAccountName,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::RemoveByAccountName,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::CheckAccountNameIgnored,
-    (void*)&D2Common::Chat::Ignorelist::AddAccountMapping,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::GetMappedValue,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::GetPersistentSetting,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::SavePersistentSetting,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::ClearAccountMappings,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::ScalarDeletingDestructor
-}; D2_GLOBAL_GUARD(vftable, "D2Common::Chat::Ignorelist::IgnoreList::vftable");
+int gaAct5SceneryPresetTable_0_0__1_[15][7] = {}; D2_GLOBAL_GUARD(gaAct5SceneryPresetTable_0_0__1_, "D2Common::Drlg::OutSiege::gaAct5SceneryPresetTable_0_0__1_");
 
-} // namespace D2Common::Chat::Ignorelist::IgnoreList
+} // namespace D2Common::Drlg::OutSiege
 
 namespace D2Common::Drlg::Outdoors {
 
 } // namespace D2Common::Drlg::Outdoors
 
+namespace D2Common::Drlg::OutJung {
+
+} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common::Drlg {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+unsigned int gdwDrlgLevelPlacementFlags = {}; D2_GLOBAL_GUARD(gdwDrlgLevelPlacementFlags, "D2Common::Drlg::gdwDrlgLevelPlacementFlags");
+
+} // namespace D2Common::Drlg
+
 namespace Define_the_symbol__ATL_MIXED {
 
 } // namespace Define_the_symbol__ATL_MIXED
+
+namespace Storm::Source {
+
+} // namespace Storm::Source
+
+namespace Fog::File {
+
+} // namespace Fog::File
 
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::Source::SFile {
+namespace D2Hell {
 
-} // namespace Storm::Source::SFile
+} // namespace D2Hell
+
+namespace Fog::Source::SSComp {
+
+} // namespace Fog::Source::SSComp
 
 namespace Class::FILEREC {
 
@@ -993,25 +1187,93 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Launch::CharSel {
+namespace D2Launch::MainMenus {
 
-} // namespace D2Launch::CharSel
+} // namespace D2Launch::MainMenus
 
-namespace D2Game::GAME::Rendering {
+namespace D2Multi::OOGUtilities {
 
-} // namespace D2Game::GAME::Rendering
+} // namespace D2Multi::OOGUtilities
 
-namespace D2Client::Renderer {
+namespace D2Client::GAME::Game {
 
-} // namespace D2Client::Renderer
+} // namespace D2Client::GAME::Game
+
+namespace D2Client {
+
+} // namespace D2Client
+
+namespace D2Client::GAME::Record {
+
+} // namespace D2Client::GAME::Record
+
+namespace D2Client::_Message {
+
+} // namespace D2Client::_Message
+
+namespace D2Client::Engine {
+
+} // namespace D2Client::Engine
+
+namespace D2Client::GAME::SCmd {
+
+} // namespace D2Client::GAME::SCmd
+
+namespace D2Client::Draw::LightMap {
+
+} // namespace D2Client::Draw::LightMap
+
+namespace D2Client::GAME::Rendering {
+
+} // namespace D2Client::GAME::Rendering
+
+namespace D2Client::UI::Panel {
+
+} // namespace D2Client::UI::Panel
+
+namespace D2Client::UI::Party {
+
+} // namespace D2Client::UI::Party
+
+namespace D2Client::Sound {
+
+} // namespace D2Client::Sound
+
+namespace D2Client::UI::UseItem {
+
+} // namespace D2Client::UI::UseItem
+
+namespace D2Client::UNIT::UnitSnd {
+
+} // namespace D2Client::UNIT::UnitSnd
+
+namespace D2Client::UI::SkillDesc {
+
+} // namespace D2Client::UI::SkillDesc
+
+namespace D2Glide::Renderer::Glide {
+
+} // namespace D2Glide::Renderer::Glide
 
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
 
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
+
 namespace D2Lang::Unicode::UNISYS {
 
 } // namespace D2Lang::Unicode::UNISYS
+
+namespace D2Net::SRC::Client {
+
+} // namespace D2Net::SRC::Client
+
+namespace D2Game::PLAYER::PlayerSave {
+
+} // namespace D2Game::PLAYER::PlayerSave
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -1117,6 +1379,10 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
+namespace D2Game::Monster::Create {
+
+} // namespace D2Game::Monster::Create
+
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -1169,6 +1435,68 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
+namespace D2Game::SKILLS::SkillNec {
+
+} // namespace D2Game::SKILLS::SkillNec
+
+namespace D2CMP::SRC::CelCmp::CELLIST {
+
+} // namespace D2CMP::SRC::CelCmp::CELLIST
+
+namespace D2CMP {
+
+} // namespace D2CMP
+
+namespace D2CMP::Draw {
+
+} // namespace D2CMP::Draw
+
+namespace D2Common::Chat::Ignorelist::MappingEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::MappingEntryNode
+
+namespace D2Common::Chat::Ignorelist::StringEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::StringEntryNode
+
+namespace D2Common::Chat::Ignorelist {
+
+} // namespace D2Common::Chat::Ignorelist
+
+namespace D2Common::Logging::ProfCore {
+
+} // namespace D2Common::Logging::ProfCore
+
+namespace D2Common::DUNGEON::Dungeon {
+
+} // namespace D2Common::DUNGEON::Dungeon
+
+namespace D2Common::Environment {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint32_t gnTimeRates[3] = { 0x80, 0x4, 0x8 }; D2_GLOBAL_GUARD(gnTimeRates, "D2Common::Environment::gnTimeRates");
+
+} // namespace D2Common::Environment
+
+namespace D2Common::Units {
+
+} // namespace D2Common::Units
+
+namespace D2Common::Monsters::MONSTERS {
+
+} // namespace D2Common::Monsters::MONSTERS
+
+namespace D2Common::Merc {
+
+} // namespace D2Common::Merc
+
+namespace D2Common::DATATBLS::OverlayTbls {
+
+} // namespace D2Common::DATATBLS::OverlayTbls
+
 namespace D2Common::Drlg::DrlgGrid {
 
 // =============================================================================
@@ -1179,18 +1507,151 @@ fpFlagOperations apFlagOperations[6] = { (fpFlagOperations)&D2Common::Drlg::Drlg
 
 } // namespace D2Common::Drlg::DrlgGrid
 
+namespace D2Direct3D::Renderer {
+
+} // namespace D2Direct3D::Renderer
+
+namespace Fog::Src {
+
+} // namespace Fog::Src
+
+namespace D2Gdi::Renderer::Windowed {
+
+} // namespace D2Gdi::Renderer::Windowed
+
+namespace D2Launch::Launcher {
+
+} // namespace D2Launch::Launcher
+
+namespace D2Client::Lng {
+
+} // namespace D2Client::Lng
+
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::Draw::LightMap {
+namespace D2Client::UI::SpellSel {
 
-} // namespace D2Client::Draw::LightMap
+} // namespace D2Client::UI::SpellSel
+
+namespace D2Client::UNIT::CUnit {
+
+} // namespace D2Client::UNIT::CUnit
+
+namespace D2Client::Cursor {
+
+} // namespace D2Client::Cursor
+
+namespace D2Client::Engine::Gfx {
+
+} // namespace D2Client::Engine::Gfx
+
+namespace D2Client::UNIT::Monster {
+
+} // namespace D2Client::UNIT::Monster
+
+namespace D2Client::UI::Trade {
+
+} // namespace D2Client::UI::Trade
+
+namespace D2Client::UNIT::Object {
+
+} // namespace D2Client::UNIT::Object
+
+namespace D2Client::GAME::Sound {
+
+} // namespace D2Client::GAME::Sound
+
+namespace D2gfx {
+
+} // namespace D2gfx
+
+namespace D2Win::D2GFX {
+
+} // namespace D2Win::D2GFX
 
 namespace D2Win::Src::D2WinMain {
 
 } // namespace D2Win::Src::D2WinMain
 
-namespace D2Win::D2GFX {
+namespace D2Win::Src::D2WinButton {
 
-} // namespace D2Win::D2GFX
+} // namespace D2Win::Src::D2WinButton
+
+namespace D2Win::Src::D2WinArchive {
+
+} // namespace D2Win::Src::D2WinArchive
+
+namespace D2Win::Src::D2WinTextBox {
+
+} // namespace D2Win::Src::D2WinTextBox
+
+namespace D2Sound {
+
+} // namespace D2Sound
+
+namespace Bnclient::Bnet {
+
+} // namespace Bnclient::Bnet
+
+namespace Bnclient {
+
+} // namespace Bnclient
+
+namespace D2Net::Game::Server {
+
+} // namespace D2Net::Game::Server
+
+namespace D2Game::UNIT::SUNITNPC {
+
+} // namespace D2Game::UNIT::SUNITNPC
+
+namespace D2Game::UNIT::sunitproxy {
+
+} // namespace D2Game::UNIT::sunitproxy
+
+namespace D2Game::GAME::Clients {
+
+} // namespace D2Game::GAME::Clients
+
+namespace D2Game::Quests::QUESTS {
+
+} // namespace D2Game::Quests::QUESTS
+
+namespace D2Common::DATATBLS::MonsterTbls {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+unsigned int gnTreasureClassArraySize = {}; D2_GLOBAL_GUARD(gnTreasureClassArraySize, "D2Common::DATATBLS::MonsterTbls::gnTreasureClassArraySize");
+
+} // namespace D2Common::DATATBLS::MonsterTbls
+
+namespace D2Common::Logging {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+_RTL_CRITICAL_SECTION lpCriticalSection_0096ca30 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096ca30, "D2Common::Logging::lpCriticalSection_0096ca30");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+FILE * pLOGFILE = 0; D2_GLOBAL_GUARD(pLOGFILE, "D2Common::Logging::pLOGFILE");
+BOOL bLOGFILE_ENABLED = 0; D2_GLOBAL_GUARD(bLOGFILE_ENABLED, "D2Common::Logging::bLOGFILE_ENABLED");
+
+} // namespace D2Common::Logging
+
+namespace D2Common::DATATBLS::TokTbls {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+unsigned int nTxtMonModeSize = {}; D2_GLOBAL_GUARD(nTxtMonModeSize, "D2Common::DATATBLS::TokTbls::nTxtMonModeSize");
+
+} // namespace D2Common::DATATBLS::TokTbls

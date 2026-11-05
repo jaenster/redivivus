@@ -89,11 +89,11 @@ void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataA4Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q2;
     POINT* pPoint = &pQuestSpecificData->sInfectorCoords;
     if (sUnitCoords.x == pQuestSpecificData->sInfectorCoords.x && sUnitCoords.y == pQuestSpecificData->sInfectorCoords.y) {
-      /* Infector of Souls */ nSuperUnique = (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x24];
+      /* Infector of Souls */ nSuperUnique = (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x24];
     } else {
       pPoint = &pQuestSpecificData->sSeisCoords;
       if (sUnitCoords.x == pQuestSpecificData->sSeisCoords.x && sUnitCoords.y == pQuestSpecificData->sSeisCoords.y) {
-        /* Lord De Seis */ nSuperUnique = (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x25];
+        /* Lord De Seis */ nSuperUnique = (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x25];
       } else {
         pPoint = &pQuestSpecificData->sVisierCoords;
         if (sUnitCoords.x != pQuestSpecificData->sVisierCoords.x) {
@@ -103,7 +103,7 @@ void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           return;
         }
 
-        /* Grand Vizier of Chaos */ nSuperUnique = (uint32_t)(uint16_t)sgptDataTable->aTxtSuperUniquesHardcoded[0x26];
+        /* Grand Vizier of Chaos */ nSuperUnique = (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x26];
       }
     }
 

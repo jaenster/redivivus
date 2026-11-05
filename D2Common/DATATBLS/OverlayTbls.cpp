@@ -55,7 +55,7 @@ namespace D2Common::DATATBLS::OverlayTbls {
 // Compiles Overlay.txt into the in-memory overlay table during data-table init. Declares the column schema (overlay name, filename, version, Frames, PreDraw, 1ofN, Dir, animrate, Beta, X/Yoffset, height/range/light fields, Trans, RGB color, NumDirections, LocalBlood) with field types and struct offsets, creates the overlay TxtLink lookup (STRUCT_CreateTxtLinkStrc) into sgtDataTable.pTxtOverlayLink, then calls DataTbls::CompileTxt (record size 0x84) storing the result in sgtDataTable.pTxtOverlay / nTxtOverlaySize. Allocates from pMemory. (Several column-name string literals decompile as raw global addresses; they are the in-binary .rdata column names.)
 void __fastcall TXT_AllocTxt_overlay(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[26] = {
-      {"overlay", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtOverlayLink},
+      {"overlay", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtOverlayLink},
       {"Filename", FIELDTYPE_ASCII, 0x40, 2, 0},
       {"version", FIELDTYPE_SHORT, 0, 0x42, 0},
       {"Frames", FIELDTYPE_INT, 0, 0x44, 0},
@@ -82,18 +82,18 @@ void __fastcall TXT_AllocTxt_overlay(D2PoolManagerStrc * pMemory) {
       {"LocalBlood", FIELDTYPE_CHAR, 0, 0x81, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    sgtDataTable.pTxtOverlayLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\OverlayTbls.cpp", 0x38);
-    sgtDataTable.pTxtOverlay = (D2OverlayTxt*)DataTbls::CompileTxt(pMemory, "overlay", aFieldDefs, &sgtDataTable.nTxtOverlaySize, 0x84);
+    MonsterTbls::sgtDataTable.pTxtOverlayLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\OverlayTbls.cpp", 0x38);
+    MonsterTbls::sgtDataTable.pTxtOverlay = (D2OverlayTxt*)DataTbls::CompileTxt(pMemory, "overlay", aFieldDefs, &MonsterTbls::sgtDataTable.nTxtOverlaySize, 0x84);
 }
 
 void __stdcall OVERLAYTBLS_FreeOverlayTables() {
-    Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtOverlayLink);
-    DataTbls::UnloadBin(sgtDataTable.pTxtOverlay);
-    sgtDataTable.pTxtOverlay = 0;
+    Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtOverlayLink);
+    DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtOverlay);
+    MonsterTbls::sgtDataTable.pTxtOverlay = 0;
 }
 
 int32_t __stdcall OVERLAYTBLS_GetFrames(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -102,7 +102,7 @@ int32_t __stdcall OVERLAYTBLS_GetFrames(int32_t nOverlayId) {
 }
 
 uint32_t __stdcall OVERLAYTBLS_GetPreDraw(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -111,7 +111,7 @@ uint32_t __stdcall OVERLAYTBLS_GetPreDraw(int32_t nOverlayId) {
 }
 
 int32_t __stdcall OVERLAYTBLS_GetXOffset(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -120,7 +120,7 @@ int32_t __stdcall OVERLAYTBLS_GetXOffset(int32_t nOverlayId) {
 }
 
 int32_t __stdcall OVERLAYTBLS_GetYOffset(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -129,7 +129,7 @@ int32_t __stdcall OVERLAYTBLS_GetYOffset(int32_t nOverlayId) {
 }
 
 uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -139,7 +139,7 @@ uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nOverlayId) {
 
 uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pnInitRadius, int * pnRadius, char * pbyRed, char * pbyGreen, char * pbyBlue) {
     D2OverlayTxt* pOverlay;
-    pOverlay = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    pOverlay = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlay) {
       *pnInitRadius = 0;
       *pnRadius = 0;
@@ -162,7 +162,7 @@ uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pn
 }
 
 int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -171,7 +171,7 @@ int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nOverlayId) {
 }
 
 uint32_t __stdcall OVERLAYTBLS_GetDir(int32_t nOverlayId) {
-    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }
@@ -204,9 +204,9 @@ int __fastcall Unreferenced_00664800(int param_1, int param_2) {
     }
 
     D2MonStats2Txt* pMonStatsExTxt = nullptr;
-    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtMonStatsSize) {
-      int iVar1 = (int)sgptDataTable->pTxtMonStats[param_1].MonStatsEx;
-      pMonStatsExTxt = iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + iVar1 : nullptr;
+    if (param_1 >= 0 && param_1 < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      int iVar1 = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[param_1].MonStatsEx;
+      pMonStatsExTxt = iVar1 >= 0 && iVar1 < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + iVar1 : nullptr;
     }
     if (!pMonStatsExTxt) {
       return 0;
@@ -219,16 +219,16 @@ int __fastcall Unreferenced_00664800(int param_1, int param_2) {
 uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nComponentIdx, uint32_t nVariantIdx) {
     // Static local variables (originally global data)
     static uint32_t * gnOverlayTblsCount[16] = {
-    gaOverlayVariantCodes,
-    (uint32_t*)&gaOverlayVariantCodes[37],
-    (uint32_t*)&gaOverlayVariantCodes[7],
-    (uint32_t*)&gaOverlayVariantCodes[7],
-    (uint32_t*)&gaOverlayVariantCodes[7],
-    (uint32_t*)&gaOverlayVariantCodes[10],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes,
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[37],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[7],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[7],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[7],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[10],
     nullptr,
-    (uint32_t*)&gaOverlayVariantCodes[20],
-    (uint32_t*)&gaOverlayVariantCodes[25],
-    (uint32_t*)&gaOverlayVariantCodes[25],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[20],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[25],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[25],
     nullptr,
     nullptr,
     nullptr,
@@ -237,11 +237,11 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
     nullptr
 }; D2_STATIC_GUARD(gnOverlayTblsCount, "D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay::gnOverlayTblsCount");
     static uint32_t * gnOverlayTblsMaxId[16] = {
-    (uint32_t*)&gaOverlayVariantCodes[40],
-    (uint32_t*)&gaOverlayVariantCodes[37],
-    (uint32_t*)&gaOverlayVariantCodes[40],
-    (uint32_t*)&gaOverlayVariantCodes[40],
-    (uint32_t*)&gaOverlayVariantCodes[40],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[40],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[37],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[40],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[40],
+    (uint32_t*)&D2Common::DATATBLS::OverlayTbls::gaOverlayVariantCodes[40],
     nullptr,
     (uint32_t*)&gaOverlayVariantCodes2[11],
     nullptr,
@@ -302,12 +302,12 @@ uint32_t __stdcall OVERLAYTBLS_GetMonsterComponentOverlay(int32_t nMonStatId, ui
     if (nComponentIdx >= 0x10) {
       return 0;
     }
-    if (!(nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonStatId >= 0 && nMonStatId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 
-    int nMonStats2Idx = (int)sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
-    D2MonStats2Txt* pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
+    int nMonStats2Idx = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
+    D2MonStats2Txt* pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
     if (!(pMonStats2 && pMonStats2->aComponents[nComponentIdx] > nVariantIdx)) {
       return 0;
     }

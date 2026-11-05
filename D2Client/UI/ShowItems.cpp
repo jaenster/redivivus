@@ -43,7 +43,7 @@ BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, in
     int nOverlapDelta;
     bool bOverlapX;
     bool bOverlapY;
-    int nScreenBottom = ScreenSizeY - 0x30;
+    int nScreenBottom = Inv::ScreenSizeY - 0x30;
     if (*pnX < nMinX) {
       *pnRight += nMinX - *pnX;
       *pnX = 6;
@@ -199,12 +199,12 @@ void __stdcall DRAW_AltItems() {
               switch (uBorderType) {
                 case 1:
                   {
-                    nItemPosX -= ScreenSizeX / 4;
+                    nItemPosX -= ui::ScreenSizeX / 4;
                     break;
                   }
                 case 2:
                   {
-                    nItemPosX += ScreenSizeX / 4;
+                    nItemPosX += ui::ScreenSizeX / 4;
                     nItemX = nItemPosX;
                     goto layout_label;
                   }
@@ -224,23 +224,23 @@ void __stdcall DRAW_AltItems() {
             layout_label:
             nItemPosY = 0;
             nItemVisY = nColorIdx;
-            nMaxX = ScreenSizeX;
+            nMaxX = ui::ScreenSizeX;
             uBorderType = Path::DRAW_GetTypeOfBorder();
             switch (uBorderType) {
               case 1:
                 {
-                  nMaxX = ScreenSizeX / 2 - 0x20;
+                  nMaxX = ui::ScreenSizeX / 2 - 0x20;
                   break;
                 }
               case 2:
                 {
-                  nItemPosY = ScreenSizeX / 2;
+                  nItemPosY = ui::ScreenSizeX / 2;
                   break;
                 }
             }
 
             nDrawCount = gItemDrawFlags;
-            if (nItemX >= nItemPosY && nItemX <= nMaxX && nColorIdx >= -8 && nColorIdx <= ScreenSizeY - 0x10) {
+            if (nItemX >= nItemPosY && nItemX <= nMaxX && nColorIdx >= -8 && nColorIdx <= Inv::ScreenSizeY - 0x10) {
               wszText = gaGroundItemLabels[nItemSlotIdx].wszName;
               *wszText = L'\0';
               ui::UI_FormatItemNameWithQuality(pCurrentItem, wszText, 0x100);

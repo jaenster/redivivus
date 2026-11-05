@@ -8,6 +8,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2CMP/SRC/FastCmp.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -28,6 +29,9 @@ typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, 
 static int32_t gnFastCmpEffectMapMaxRow[80] = {}; D2_STATIC_GUARD(gnFastCmpEffectMapMaxRow, "gnFastCmpEffectMapMaxRow");
 static int32_t gnFastCmpEffectMapMinRow[80] = {}; D2_STATIC_GUARD(gnFastCmpEffectMapMinRow, "gnFastCmpEffectMapMinRow");
 static uint32_t gaFastCmpEffectPixelOffsetTable[6400] = {}; D2_STATIC_GUARD(gaFastCmpEffectPixelOffsetTable, "gaFastCmpEffectPixelOffsetTable");
+namespace D2CMP::SRC::FastCmp {
+BOOL gbCodecUseFallbackDecompressor = 0; D2_GLOBAL_GUARD(gbCodecUseFallbackDecompressor, "D2CMP::SRC::FastCmp::gbCodecUseFallbackDecompressor");
+} // namespace D2CMP::SRC::FastCmp
 
 namespace D2CMP::SRC::FastCmp {
 
@@ -1294,6 +1298,12 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, ui
         return;
       }
     }
+}
+
+BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520() {
+    bool bVar1 = !gbCodecUseFallbackDecompressor;
+    gbCodecUseFallbackDecompressor = (uint32_t)bVar1;
+    return (uint32_t)bVar1;
 }
 
 // Decompress RLE image data - dispatcher to choose optimal decompression path

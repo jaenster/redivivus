@@ -337,6 +337,8 @@ struct __attribute__((packed)) D2DrlgGridTileDataStrc {
 namespace D2Common::Drlg::Preset {
 
 // Function declarations
+void StaticFini_gLogMessageQueueCS_Unref_00665930();
+void StaticFini_gLogMessageQueueCS_Unref_00665940();
 // Parses DS1/preset file into D2DrlgFileStrc: loads DS1 blob, reads header/version, sets layer pointers, converts tile orientation for old versions, builds preset-unit list (monsters/objects/items), optional subst-groups and paths, and populates substitution group data when present.
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall ParsePresetsOfDrlgFile(struct D2DrlgFileStrc * pFile, struct D2PoolManagerStrc * pMemory, char * pBuffer);

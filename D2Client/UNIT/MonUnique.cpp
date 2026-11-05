@@ -200,7 +200,7 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
 
     szSpace[0] = ' ';
     szSpace[1] = '\0';
-    D2Lang::UTF8_ConvertToWideChar(gnMonsterUniqueNameBuffer, szSpace, 2);
+    D2Lang::UTF8_ConvertToWideChar(Monster::gnMonsterUniqueNameBuffer, szSpace, 2);
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
       nNameSeed = 0;
     } else {
@@ -250,10 +250,10 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
         nChampTitleIdx++;
       } while (nChampTitleIdx < 4);
 
-      if (nMonClassId < 0 || nMonClassId >= sgptDataTable->nTxtMonStatsSize) {
+      if (nMonClassId < 0 || nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         pMonStatsTxt = 0;
       } else {
-        pMonStatsTxt = sgptDataTable->pTxtMonStats + nMonClassId;
+        pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId;
       }
 
       UI::Inv::wsprintf(wszName, D2Lang::StrTable::strtable::GetLocaleString(0x2b40), D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gaChampionModifierTitles[nChampTitleIdx * 2 + 1]), D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr), 0);
@@ -844,7 +844,7 @@ void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUM
     eMissilesId eMissileId = eMissileClass;
     D2UnitStrc* pMissileSelf = pUnit;
     D2UnitStrc* pOwnerUnit = Player::MISSILE_GetOwnerUnit(pUnit);
-    if (!(pOwnerUnit && (int)eMissileClass >= 0 && (int)eMissileClass < sgptDataTable->nTxtMissilesSize && sgptDataTable->pTxtMissiles + eMissileClass && !(*((uint8_t*)&sgptDataTable->pTxtMissiles[eMissileClass] + 0x5) & (uint8_t)gadwBitMasks[4]))) {
+    if (!(pOwnerUnit && (int)eMissileClass >= 0 && (int)eMissileClass < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileClass && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[eMissileClass] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
       return;
     }
 
@@ -943,10 +943,10 @@ void __fastcall MONUNIQUE_SpawnSuicideExplosion(D2UnitStrc * pUnit, int32_t nUMo
     int nCurrentFrame;
     eD2Skills eSkill;
     eD2UnitType eUnitType;
-    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+      pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     }
 
     uint8_t bVar1;

@@ -1129,8 +1129,8 @@ static BOOL __stdcall SERVER_CreatePlayerUnit(::SGAMEDATA * pGameStrc, D2ClientS
     if (!byAct && pUnit) {
       D2CharStatsTxt* pCharStatsTxt;
       nClassIdCheck = pUnit->nClassId;
-      if (nClassIdCheck >= 0 && nClassIdCheck < sgptDataTable->nTxtCharStatsSize) {
-        pCharStatsTxt = sgptDataTable->pTxtCharStats + nClassIdCheck;
+      if (nClassIdCheck >= 0 && nClassIdCheck < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
+        pCharStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdCheck;
         if (pCharStatsTxt && pCharStatsTxt->StartSkill) {
           pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pCharStatsTxt->StartSkill);
           if (pDVar1) {
@@ -1295,14 +1295,14 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
       pClient_00 = pClient;
       UNIT::SUnitMsg::SERVER_SendInitUnitPacket(GAME::Clients::CLIENT_GetGame(pClient), *ppUnitOut, pClient_00);
       *pnSkillTabCount = 0x10;
-      *pnSkillCount = sgptDataTable->nTxtSkillsCount;
+      *pnSkillCount = D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount;
       if (sOldSaveHeader.wSkillTabCount <= 0x10) {
         nSkillId = (uint32_t)sOldSaveHeader.wTxtSkillsCount;
-        if ((int)nSkillId <= sgptDataTable->nTxtSkillsCount) {
+        if ((int)nSkillId <= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
           if (sOldSaveHeader.wSkillTabCount != 0x10) {
             *pnSkillTabCount = (uint32_t)sOldSaveHeader.wSkillTabCount;
           }
-          if (nSkillId != sgptDataTable->nTxtSkillsCount) {
+          if (nSkillId != D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
             *pnSkillCount = nSkillId;
           }
 

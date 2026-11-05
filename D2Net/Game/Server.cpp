@@ -217,15 +217,15 @@ int __stdcall CreateThreadClientSocketOrSingleplayer() {
 
     DWORD dwWaitResult = WaitForSingleObject(SERVER_THREAD, 100);
     if (!dwWaitResult) {
-      if (CLIENT_SocketToServer != -1) {
+      if (SRC::Client::CLIENT_SocketToServer != -1) {
         BVar1 = NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 1;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ SRC::Client::gnNetConnectionTimeoutMs = 1;
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
-        /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ hClientConnectionThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SRC::Client::ThreadClientToServer, (LPVOID)0x0, 0, (LPDWORD)&lpThreadId_00882b30);
+        /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ hClientConnectionThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SRC::Client::ThreadClientToServer, (LPVOID)0x0, 0, (LPDWORD)&SRC::Client::lpThreadId_00882b30);
         /* int nPriority for SetThreadPriority */ /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(hClientConnectionThread, 1);
         return 2;
       }

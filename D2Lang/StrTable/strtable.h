@@ -31,6 +31,18 @@ struct __attribute__((packed)) D2StringTableTblFileStrc {
     /* 0x11 */ uint32_t dwFileSize; // Unaligned. CRC end offset (4th arg, 0052593e MOV EAX,[ESI+0x11]) and the buffer bound every node offset is checked against (00525990/00525995, 00524930).
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Lang::StrTable::strtable {
+
+extern struct D2StringTableTblFileStrc * gpStringTableBase;
+extern struct D2StringTableTblFileStrc * gpStringTablePatchD2;
+extern struct D2StringTableTblFileStrc * gpStringTableExpansion;
+
+} // namespace D2Lang::StrTable::strtable
+
 namespace D2Lang::StrTable::strtable {
 
 // Function declarations

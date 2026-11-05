@@ -9,3 +9,7 @@
 
 extern char gpSmackerVideoBuffer[260];
 extern uint8_t gbSmackerVideoFlags;
+
+namespace D2Win::Src::D2WinSmack {
+extern uint32_t gbSmackerKeepTempFile;
+} // namespace D2Win::Src::D2WinSmack

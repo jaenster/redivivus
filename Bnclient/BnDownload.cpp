@@ -615,7 +615,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     }
 
     *szSourceFileName = '\0';
-    BNGatewayAccess::SaveAndUnload(&ActualRealmInfo);
+    BNGatewayAccess::SaveAndUnload(&BnSend::ActualRealmInfo);
     bIsExpansion = BNDOWNLOAD_LaunchVerifiedExecutables(szModulePath, cArchiveListBuf);
     if (bIsExpansion) {
       *__frame0.pOpenFileOut = 2;
@@ -1181,9 +1181,9 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       nIniLen = Storm::Source::SSTR::SStrLen((char*)nSize);
       pDestPtr = (char*)Storm::Source::SMem::SMemAlloc(nIniLen + 1, ".\\BnDownload.cpp", 0x23f, 0);
       Storm::Source::SSTR::SStrCopy(pDestPtr, (char*)__frame1.archiveFileCtx, nIniLen + 1);
-      BNGatewayAccess::UpdateGatewaysFromIni(&ActualRealmInfo, pDestPtr);
+      BNGatewayAccess::UpdateGatewaysFromIni(&BnSend::ActualRealmInfo, pDestPtr);
       Storm::Source::SMem::SMemFree(pDestPtr, ".\\BnDownload.cpp", 0x245, 0);
-      BNGatewayAccess::SaveAndUnload(&ActualRealmInfo);
+      BNGatewayAccess::SaveAndUnload(&BnSend::ActualRealmInfo);
       return;
     }
 

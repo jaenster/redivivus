@@ -162,7 +162,7 @@ BOOL __fastcall D2WINBUTTON_HandleMouseWheel(::D2WinButton * pButton, int32_t nW
 
     D2ControlMsg sMsg;
     dwControlState = pButton->sControl.dwState;
-    if (gadwBitMasks[0] & dwControlState && gadwBitMasks[2] & dwControlState && !pButton->bPressed && !pButton->bPressedInside && (nWheelDelta > 0 && pButton->nButtonFlags & 8 || nWheelDelta < 0 && pButton->nButtonFlags & 0x10)) {
+    if (Fog::BitBuffer::gadwBitMasks[0] & dwControlState && Fog::BitBuffer::gadwBitMasks[2] & dwControlState && !pButton->bPressed && !pButton->bPressedInside && (nWheelDelta > 0 && pButton->nButtonFlags & 8 || nWheelDelta < 0 && pButton->nButtonFlags & 0x10)) {
       sMsg.uMsg = 0;
       sMsg.wParam = 0;
       sMsg.uLParam.nLParam = 0;
@@ -284,7 +284,7 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
     dwState = pButton->sControl.dwState;
     int nFrameBase;
     nFrameBase = pButton->nCurrentImageIndex;
-    if (!(gadwBitMasks[2] & dwState) || !(gadwBitMasks[0] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState) || !(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
       nFrameOffset = pButton->nFrameOffsetDisabled;
     } else {
       nFrameOffset = pButton->bPressed;
@@ -312,8 +312,8 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
 
     nFrameBase += nFrameOffset;
     draw_button:
-    if (pButton->sControl.pDC6 && gadwBitMasks[2] & dwState) {
-      if (gadwBitMasks[0] & dwState || (eDrawMode = DRAW_TRANSPARENT , (pButton->nButtonFlags & 0x20) != 0)) {
+    if (pButton->sControl.pDC6 && Fog::BitBuffer::gadwBitMasks[2] & dwState) {
+      if (Fog::BitBuffer::gadwBitMasks[0] & dwState || (eDrawMode = DRAW_TRANSPARENT , (pButton->nButtonFlags & 0x20) != 0)) {
         eDrawMode = DRAW_SOLID;
       }
 
@@ -418,7 +418,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     }
 
     uint32_t dwState = pButton->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwState) || !(gadwBitMasks[0] & dwState)) {
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState) || !(Fog::BitBuffer::gadwBitMasks[0] & dwState)) {
       return 0;
     }
     if (pButton->nButtonFlags & 2U) {
@@ -454,7 +454,6 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
 BOOL __stdcall Mouse(D2ControlMsg * pControlMsg) {
     BOOL bCallbackResult;
-    uint32_t dwControlState;
     ::D2WinButton* pButton = (::D2WinButton*)pControlMsg->pControl;
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x232);
@@ -462,11 +461,10 @@ BOOL __stdcall Mouse(D2ControlMsg * pControlMsg) {
     }
 
     int* pdwState = &pButton->sControl.dwState;
-    *pdwState |= gadwBitMasks[1];
-    dwControlState = pButton->sControl.dwState;
     bCallbackResult = 0;
-    if (!(gadwBitMasks[2] & dwControlState) || !(gadwBitMasks[0] & dwControlState)) {
-      pButton->sControl.dwState = dwControlState & gadwInvBitMasks[1];
+    *pdwState |= Fog::BitBuffer::gadwBitMasks[1];
+    if (!(Fog::BitBuffer::gadwBitMasks[2] & pButton->sControl.dwState) || !(Fog::BitBuffer::gadwBitMasks[0] & pButton->sControl.dwState)) {
+      pButton->sControl.dwState = pButton->sControl.dwState & Fog::BitBuffer::gadwInvBitMasks[1];
       return 0;
     }
     if (!(pButton->nButtonFlags & 3)) {
@@ -488,7 +486,7 @@ BOOL __stdcall Mouse(D2ControlMsg * pControlMsg) {
     }
 
     pdwState = &pButton->sControl.dwState;
-    *pdwState &= gadwInvBitMasks[1];
+    *pdwState &= Fog::BitBuffer::gadwInvBitMasks[1];
     return bCallbackResult;
 }
 
@@ -533,8 +531,8 @@ BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
     ::D2WinButton* pNewButton = D2_NEW_AT(::D2WinButton, ".\\Src\\D2WinButton.cpp", 0x24);
     memset(pNewButton, 0, 0x274);
     pNewButton->sControl.neD2FormType = FORM_Button;
-    pNewButton->sControl.dwState |= gadwBitMasks[0];
-    dwState = pNewButton->sControl.dwState | gadwBitMasks[2];
+    pNewButton->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
+    dwState = pNewButton->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
     pNewButton->sControl.pDC6 = pDC6;
     pNewButton->sControl.dwState = dwState;
     pNewButton->sControl.dwPosY = nPosY;

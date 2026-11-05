@@ -520,13 +520,13 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
     D2GfxDataStrc sGfxData;
     D2InventoryStrc* pInventory;
     int nMouseXCheck = (int)*pSkillId;
-    D2SkillsTxt* pSkillsTxt = nMouseXCheck >= 0 && nMouseXCheck < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nMouseXCheck : nullptr;
+    D2SkillsTxt* pSkillsTxt = nMouseXCheck >= 0 && nMouseXCheck < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nMouseXCheck : nullptr;
     if (!pSkillsTxt) {
       return;
     }
 
     nMouseXCheck = (int)pSkillsTxt->skilldesc;
-    D2SkillDescTxt* pSkillDescTxt = nMouseXCheck >= 0 && nMouseXCheck < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nMouseXCheck : nullptr;
+    D2SkillDescTxt* pSkillDescTxt = nMouseXCheck >= 0 && nMouseXCheck < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nMouseXCheck : nullptr;
     if (!pSkillDescTxt) {
       return;
     }
@@ -614,13 +614,13 @@ void __fastcall SPELLSEL_DrawSkillIcon(short * pSkillId, int32_t nSlotIndex, int
     }
 
     int nMouseX = (int)*pSkillId;
-    D2SkillsTxt* pSkillsTxt = nMouseX >= 0 && nMouseX < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nMouseX : nullptr;
+    D2SkillsTxt* pSkillsTxt = nMouseX >= 0 && nMouseX < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nMouseX : nullptr;
     if (!pSkillsTxt) {
       return;
     }
 
     nMouseX = (int)pSkillsTxt->skilldesc;
-    D2SkillDescTxt* pSkillDescTxt = nMouseX >= 0 && nMouseX < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nMouseX : nullptr;
+    D2SkillDescTxt* pSkillDescTxt = nMouseX >= 0 && nMouseX < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nMouseX : nullptr;
     if (!pSkillDescTxt) {
       return;
     }
@@ -776,7 +776,7 @@ void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
 
       pSlotSkillIdPtr++;
       if ((int)pSlotSkillIdPtr >= (intptr_t)((char*)&gSpellSelGridRegion + 960)) {
-        if (nInitialMouseY <= ScreenSizeY - 0x31 && !bHandled) {
+        if (nInitialMouseY <= Inv::ScreenSizeY - 0x31 && !bHandled) {
           bHasCharges = ui::GetUIFlag(UI_SKILLSELECT);
           if (bHasCharges) {
             ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
@@ -829,7 +829,7 @@ void __stdcall SPELLSEL_ClearChargedSkillBindings() {
 
     do {
       pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-      if (*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)gadwBitMasks[4]) {
+      if (*((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         nLine = D2Common::Skills::SKILL_GetQuantity(pSkill);
         SPELLSEL_ClearSkillBinding(&pSkillsTxt->skill, nLine);
       }
@@ -980,8 +980,8 @@ void __stdcall SPELLSEL_AutoBindNonChargedSkills() {
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, gSpellSelGridRegion.aLeftHandSlots[nGridIdx]);
       if (pSkill) {
         pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-        if (pSkillsTxt && !(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[4]) && nFreeSlot <= 0xf) {
-          SPELLSEL_AssignSkillToSlot((uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)_unused_ECX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)gadwBitMasks[4]), nFreeSlot, nGridIdx);
+        if (pSkillsTxt && !(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) && nFreeSlot <= 0xf) {
+          SPELLSEL_AssignSkillToSlot((uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)_unused_ECX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)Fog::BitBuffer::gadwBitMasks[4]), nFreeSlot, nGridIdx);
           nFreeSlot++;
         }
       }
@@ -1066,7 +1066,7 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
     int32_t nCanUse;
     int nTooltipX;
     int nCurY;
-    nCurY = ScreenSizeY - 0x56;
+    nCurY = Inv::ScreenSizeY - 0x56;
     int nLastRow;
     nLastRow = 0;
     int nStartX;
@@ -1091,11 +1091,11 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
         if (pSkillsTxt) {
           nSkillId = (int)pSkillsTxt->skill;
           D2SkillsTxt* pSkillsTxt2;
-          pSkillsTxt2 = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+          pSkillsTxt2 = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
           if (pSkillsTxt2) {
             nSkillId = (int)pSkillsTxt2->skilldesc;
-            pSkillDescTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillId : nullptr;
-            if (pSkillDescTxt && (!bWeaponSwap || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[6]) && !(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[4])) {
+            pSkillDescTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillId : nullptr;
+            if (pSkillDescTxt && (!bWeaponSwap || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) && !(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
               dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pCurSkill);
               if (!(dwSkillFlags & 8)) {
                 nOwnerGUID = -1;
@@ -1104,7 +1104,7 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
                 bIsChargedOrValid = D2Common::Skills::SKILLS_GetSkillData(pCurSkill, &nOwnerGUID, nullptr, nullptr, &nChargesLeft);
                 if (!bWeaponSwap && !bIsChargedOrValid) {
                   nChargeQty = D2Common::Skills::SKILL_GetQuantity(pCurSkill);
-                  if (nChargeQty > 0 && *((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)gadwBitMasks[4]) {
+                  if (nChargeQty > 0 && *((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
                     bIsChargedOrValid = 1;
                   }
                 }
@@ -1189,14 +1189,16 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
 
 int __fastcall Unreferenced_004aa6b0(int param_1) {
     int in_EAX;
+    int extraout_EAX;
     BOOL bWeaponSwap;
     BOOL bShowTooltips;
     if (!gbSpellSelMouseHandFlag) {
-      int extraout_EAX;
+      int nGridStartX;
       bShowTooltips = 0;
       bWeaponSwap = 0;
       gSpellSelGridRegion.sGridIndex[0] = 0;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ScreenSizeX - 0x80, bWeaponSwap, bShowTooltips, param_1);
+      nGridStartX = ui::ScreenSizeX - 0x80;
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, param_1);
       in_EAX = extraout_EAX;
     }
 
@@ -1216,9 +1218,17 @@ int Unreferenced_004aa6e0() {
 
 int Unreferenced_004aa710() {
     int in_EAX;
+    int extraout_EAX;
+    BOOL bWeaponSwap;
+    BOOL bShowTooltips;
+    BOOL bChargedOnly;
     if (!gbSpellSelMouseHandFlag) {
-      int extraout_EAX;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ScreenSizeX - 0x80, 0, 1, 0);
+      int nGridStartX;
+      bChargedOnly = 0;
+      bShowTooltips = 1;
+      bWeaponSwap = 0;
+      nGridStartX = ui::ScreenSizeX - 0x80;
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
       in_EAX = extraout_EAX;
     }
 
@@ -1290,7 +1300,8 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
       bShowTooltips = 0;
       bIsWeaponSwap = 0;
       gSpellSelGridRegion.sGridIndex[0] = 0;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ScreenSizeX - 0x80, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
+      nStartX = ui::ScreenSizeX - 0x80;
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nStartX, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
       if (!gbSpellSelMouseHandFlag) {
         goto draw_right_grid_tooltips;
       }
@@ -1303,7 +1314,10 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
 
     draw_right_grid_tooltips:
     bIsLeftHand = 0;
-    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ScreenSizeX - 0x80, 0, 1, bIsLeftHand);
+    bShowTooltips = 1;
+    bIsWeaponSwap = 0;
+    nStartX = ui::ScreenSizeX - 0x80;
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nStartX, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
 }
 
 void __stdcall SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0() {
@@ -1349,22 +1363,22 @@ void __stdcall SPELLSEL_FreeSkilltreeGraphic() {
 
 static int32_t SPELLSEL_GetSkillTreeRowOffset(char cSkillRow) {
     if (cSkillRow == '\x01') {
-      return gnPanelOffsetY - 0x1a2 + ScreenSizeY;
+      return Inv::gnPanelOffsetY - 0x1a2 + Inv::ScreenSizeY;
     }
     if (cSkillRow == '\x02') {
-      return gnPanelOffsetY - 0x15e + ScreenSizeY;
+      return Inv::gnPanelOffsetY - 0x15e + Inv::ScreenSizeY;
     }
     if (cSkillRow == '\x03') {
-      return gnPanelOffsetY - 0x11a + ScreenSizeY;
+      return Inv::gnPanelOffsetY - 0x11a + Inv::ScreenSizeY;
     }
     if (cSkillRow == '\x04') {
-      return gnPanelOffsetY - 0xd6 + ScreenSizeY;
+      return Inv::gnPanelOffsetY - 0xd6 + Inv::ScreenSizeY;
     }
     if (cSkillRow == '\x05') {
-      return gnPanelOffsetY - 0x91 + ScreenSizeY;
+      return Inv::gnPanelOffsetY - 0x91 + Inv::ScreenSizeY;
     }
     if (cSkillRow == '\x06') {
-      return gnPanelOffsetY - 0x4d + ScreenSizeY;
+      return Inv::gnPanelOffsetY - 0x4d + Inv::ScreenSizeY;
     }
 
     return 0;
@@ -1372,20 +1386,20 @@ static int32_t SPELLSEL_GetSkillTreeRowOffset(char cSkillRow) {
 
 static int32_t SPELLSEL_GetSkillTreeColumnOffset(char cSkillColumn) {
     if (cSkillColumn == '\x01') {
-      return ScreenSizeX - gnPanelOffsetX - 0x131;
+      return ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
     }
     if (cSkillColumn == '\x02') {
-      return ScreenSizeX - gnPanelOffsetX - 0xec;
+      return ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xec;
     }
     if (cSkillColumn == '\x03') {
-      return ScreenSizeX - gnPanelOffsetX - 0xa7;
+      return ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xa7;
     }
 
     return 0;
 }
 
 void __thiscall SPELLSEL_DrawTabHeader(void * pThis, int32_t nYOffset) {
-    ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY + ScreenSizeY - 0x1e0 + nYOffset, WindowSizeX - gnPanelOffsetX, (uint16_t*)pThis, 0);
+    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY + Inv::ScreenSizeY - 0x1e0 + nYOffset, WindowSizeX - Inv::gnPanelOffsetX, (uint16_t*)pThis, 0);
 }
 
 void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nSkillTreeTab) {
@@ -1394,65 +1408,65 @@ void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nSkillTreeTa
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x140, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 1;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x40, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 2;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x140, Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 3;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x40, Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     int nBaseFrame = nSkillTreeTab * 4;
     sGfxData.nFrameNumber = nBaseFrame;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x140, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = nBaseFrame + 1;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x40, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = nBaseFrame + 2;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x140, Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = nBaseFrame + 3;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x40, Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
 }
 
 void __stdcall DRAW_UI_SkillsWindow_II() {
     uint16_t* pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1083);
-    ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x1c7 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x1c7 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
     pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1084);
-    ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x1bb + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x1bb + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
     pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1085);
-    ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x1af + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x1af + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
     if (nD2PlayerClassID == CLASS_AMAZON) {
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1088);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x14a + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x14a + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1089);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x13e + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x13e + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1086);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x132 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x132 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108a);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0xde + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0xde + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108b);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0xd2 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0xd2 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1086);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0xc6 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0xc6 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108c);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x79 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x79 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108d);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x6d + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x6d + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1086);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x61 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x61 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       return;
     }
     if (nD2PlayerClassID == CLASS_PALADIN) {
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108e);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x144 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x144 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108f);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x138 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x138 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1090);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0xd8 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0xd8 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x108f);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0xcc + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0xcc + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1091);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x6e + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x6e + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1086);
-      ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY - 0x62 + ScreenSizeY, WindowSizeX - gnPanelOffsetX, pwszTabLabel, 0);
+      ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY, WindowSizeX - Inv::gnPanelOffsetX, pwszTabLabel, 0);
       return;
     }
     if (nD2PlayerClassID == CLASS_NECROMANCER) {
@@ -1519,11 +1533,11 @@ void __stdcall SPELLSEL_DrawTabHighlight(int32_t nCurrentTab) {
     bool bAnyTabHovered;
     bAnyTabHovered = false;
     gnSpellSelTabHighlightColor = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
-    if (!(nCurMouseX < ScreenSizeX - gnPanelOffsetX - 0x59 || nCurMouseX > ScreenSizeX - gnPanelOffsetX + 1)) {
+    if (!(nCurMouseX < ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x59 || nCurMouseX > ui::ScreenSizeX - Inv::gnPanelOffsetX + 1)) {
       int nTabBoundY;
       if (nCurrentTab == 1) {
-        if (nCurMouseY <= gnPanelOffsetY - 0x9c + ScreenSizeY) {
-          nCurMouseX = gnPanelOffsetY - 0x108 + ScreenSizeY;
+        if (nCurMouseY <= Inv::gnPanelOffsetY - 0x9c + Inv::ScreenSizeY) {
+          nCurMouseX = Inv::gnPanelOffsetY - 0x108 + Inv::ScreenSizeY;
           if (nCurMouseY >= nCurMouseX) {
             bMiddleTabHovered = true;
             bTopTabHovered = true;
@@ -1531,15 +1545,15 @@ void __stdcall SPELLSEL_DrawTabHighlight(int32_t nCurrentTab) {
             goto draw_highlight;
           }
         }
-        if (nCurMouseY > gnPanelOffsetY - 0x108 + ScreenSizeY || (nCurMouseX = gnPanelOffsetY - 0x174 + ScreenSizeY , nCurMouseY < nCurMouseX)) {
+        if (nCurMouseY > Inv::gnPanelOffsetY - 0x108 + Inv::ScreenSizeY || (nCurMouseX = Inv::gnPanelOffsetY - 0x174 + Inv::ScreenSizeY , nCurMouseY < nCurMouseX)) {
           goto draw_highlight;
         }
       } else {
         if (nCurrentTab != 2) {
           if (nCurrentTab == 3) {
-            nCurMouseX = gnPanelOffsetY - 0x9c + ScreenSizeY;
-            if (nCurMouseY > nCurMouseX || (nTabBoundY = gnPanelOffsetY - 0x108 + ScreenSizeY , nCurMouseY < nTabBoundY)) {
-              if (nCurMouseY <= gnPanelOffsetY - 0x30 + ScreenSizeY && nCurMouseY >= nCurMouseX) {
+            nCurMouseX = Inv::gnPanelOffsetY - 0x9c + Inv::ScreenSizeY;
+            if (nCurMouseY > nCurMouseX || (nTabBoundY = Inv::gnPanelOffsetY - 0x108 + Inv::ScreenSizeY , nCurMouseY < nTabBoundY)) {
+              if (nCurMouseY <= Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY && nCurMouseY >= nCurMouseX) {
                 bBottomTabHovered = true;
                 bTopTabHovered = true;
                 nHighlightY = nCurMouseX;
@@ -1553,9 +1567,9 @@ void __stdcall SPELLSEL_DrawTabHighlight(int32_t nCurrentTab) {
 
           goto draw_highlight;
         }
-        if (nCurMouseY > gnPanelOffsetY - 0x108 + ScreenSizeY || (nCurMouseX = gnPanelOffsetY - 0x174 + ScreenSizeY , nCurMouseY < nCurMouseX)) {
-          if (nCurMouseY <= gnPanelOffsetY - 0x30 + ScreenSizeY) {
-            nCurMouseX = gnPanelOffsetY - 0x9c + ScreenSizeY;
+        if (nCurMouseY > Inv::gnPanelOffsetY - 0x108 + Inv::ScreenSizeY || (nCurMouseX = Inv::gnPanelOffsetY - 0x174 + Inv::ScreenSizeY , nCurMouseY < nCurMouseX)) {
+          if (nCurMouseY <= Inv::gnPanelOffsetY - 0x30 + Inv::ScreenSizeY) {
+            nCurMouseX = Inv::gnPanelOffsetY - 0x9c + Inv::ScreenSizeY;
             if (nCurMouseY >= nCurMouseX) {
               bBottomTabHovered = true;
               bTopTabHovered = true;
@@ -1578,18 +1592,18 @@ void __stdcall SPELLSEL_DrawTabHighlight(int32_t nCurrentTab) {
       return;
     }
 
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(ScreenSizeX - gnPanelOffsetX - 0x59, nHighlightY + 5, 0x5a, 0x14, (uint32_t)gnSpellSelTabHighlightColor, DRAW_DARKERSOLID);
+    Engine::Gfx::D2GFX_DrawSolidRectExBySize(ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x59, nHighlightY + 5, 0x5a, 0x14, (uint32_t)gnSpellSelTabHighlightColor, DRAW_DARKERSOLID);
     if (bBottomTabHovered) {
-      ui::UI_DrawTextCentered(ScreenSizeX - gnPanelOffsetX - 0x59, nHighlightY + 0x14, 0x5a, D2Lang::StrTable::strtable::GetLocaleString(0x1082), 0);
+      ui::UI_DrawTextCentered(ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x59, nHighlightY + 0x14, 0x5a, D2Lang::StrTable::strtable::GetLocaleString(0x1082), 0);
     }
     if (bMiddleTabHovered) {
-      ui::UI_DrawTextCentered(ScreenSizeX - gnPanelOffsetX - 0x59, nHighlightY + 0x14, 0x5a, D2Lang::StrTable::strtable::GetLocaleString(0x1081), 0);
+      ui::UI_DrawTextCentered(ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x59, nHighlightY + 0x14, 0x5a, D2Lang::StrTable::strtable::GetLocaleString(0x1081), 0);
     }
     if (!bAnyTabHovered) {
       return;
     }
 
-    ui::UI_DrawTextCentered(ScreenSizeX - gnPanelOffsetX - 0x59, nHighlightY + 0x14, 0x5a, D2Lang::StrTable::strtable::GetLocaleString(0x1080), 0);
+    ui::UI_DrawTextCentered(ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x59, nHighlightY + 0x14, 0x5a, D2Lang::StrTable::strtable::GetLocaleString(0x1080), 0);
 }
 
 void __stdcall SKILLTREE_DrawBackground() {
@@ -1638,12 +1652,12 @@ void __stdcall SKILLTREE_DrawBackground() {
         }
     }
 
-    int nScreenX = ScreenSizeX - gnPanelOffsetX;
+    int nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = gbSpellSelSkillTreeBackground != 0 ? 11 : 10;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTabHighlightX + nScreenX, gnPanelOffsetY - 0x3f + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTabHighlightX + nScreenX, Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
 }
 
 static BOOL __stdcall SKILLTREE_IsMouseOnSkillNode(int32_t nHitWidth, int32_t nHitHeight, int32_t nNodeScreenY, int32_t nNodeScreenX) {
@@ -1664,8 +1678,8 @@ void __stdcall SKILLTREE_RenderSkillTree() {
     int32_t nTooltipX;
     int nTooltipY;
     if (gnSkillTreeHighlightIndex == 1) {
-      nScreenX = ScreenSizeX - gnPanelOffsetX;
-      nTooltipY = gnPanelOffsetY - 0x3f + ScreenSizeY;
+      nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX;
+      nTooltipY = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
       nMouseX = Cursor::GetMouseX();
       nMouseY = Cursor::GetMouseY();
       if (nMouseX < nScreenX - 0x95) {
@@ -1681,11 +1695,11 @@ void __stdcall SKILLTREE_RenderSkillTree() {
         return;
       }
 
-      nTooltipY = gnPanelOffsetY - 0x62 + ScreenSizeY;
-      nTooltipX = ScreenSizeX - gnPanelOffsetX - 0x86;
+      nTooltipY = Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY;
+      nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x86;
     } else if (gnSkillTreeHighlightIndex == 2) {
-      nScreenX = ScreenSizeX - gnPanelOffsetX;
-      nTooltipY = gnPanelOffsetY - 0x3f + ScreenSizeY;
+      nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX;
+      nTooltipY = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
       nMouseX = Cursor::GetMouseX();
       nMouseY = Cursor::GetMouseY();
       if (nMouseX < nScreenX - 0xdc) {
@@ -1701,20 +1715,20 @@ void __stdcall SKILLTREE_RenderSkillTree() {
         return;
       }
 
-      nTooltipY = gnPanelOffsetY - 0x62 + ScreenSizeY;
-      nTooltipX = ScreenSizeX - gnPanelOffsetX - 0xcd;
+      nTooltipY = Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY;
+      nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xcd;
     } else {
       if (gnSkillTreeHighlightIndex != 3) {
         return;
       }
 
-      nScreenY = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, gnPanelOffsetY - 0x3f + ScreenSizeY, ScreenSizeX - gnPanelOffsetX - 0x131);
+      nScreenY = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131);
       if (!nScreenY) {
         return;
       }
 
-      nTooltipY = gnPanelOffsetY - 0x62 + ScreenSizeY;
-      nTooltipX = ScreenSizeX - gnPanelOffsetX - 0x122;
+      nTooltipY = Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY;
+      nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x122;
     }
 
     int32_t nShowTooltip = 1;
@@ -1760,7 +1774,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
 
     uint32_t nClassId;
     nClassId = pUnit->nClassId;
-    if ((int)nClickY > ScreenSizeY - 0x30) {
+    if ((int)nClickY > Inv::ScreenSizeY - 0x30) {
       return;
     }
     if (!gnSpellSelSkillTreeClickY) {
@@ -1770,7 +1784,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
       Storm::SMsgBreakHandlerChain(pMsg);
       return;
     }
-    if ((int)nClickX > ScreenSizeX - gnPanelOffsetX - 0x140 && (int)nClickX < ScreenSizeX - gnPanelOffsetX - 0x58) {
+    if ((int)nClickX > ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x140 && (int)nClickX < ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x58) {
       nTmpResult = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0);
       if (nTmpResult <= 0) {
         nPrevActiveTab = 0;
@@ -1782,7 +1796,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
             if (pSkillTxt) {
               pSkillDesc = DataTbls::GetSkillDescription(eSkill);
               if (pSkillDesc) {
-                if (nSkillTreeActiveTab == pSkillDesc->skillpage && (nTmpResult = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow) , (int)nClickY > nTmpResult - 0x30 && (int)nClickY < nTmpResult) && (nTmpResult = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn) , (int)nClickX > nTmpResult && (int)nClickX < nTmpResult + 0x30 && !gaSpellSelSkillTreeState[nPrevActiveTab] && !(*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[4]))) {
+                if (nSkillTreeActiveTab == pSkillDesc->skillpage && (nTmpResult = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow) , (int)nClickY > nTmpResult - 0x30 && (int)nClickY < nTmpResult) && (nTmpResult = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn) , (int)nClickX > nTmpResult && (int)nClickX < nTmpResult + 0x30 && !gaSpellSelSkillTreeState[nPrevActiveTab] && !(*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
                   GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (int)pSkillTxt->skill, -1);
                   ui::SetUIFlag(UI_SKILLTREE, UI_RESET, 0);
                 } else {
@@ -1805,15 +1819,15 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     nPrevActiveTab = nSkillTreeActiveTab;
-    if ((int)nClickX >= ScreenSizeX - gnPanelOffsetX - 0x58) {
-      if ((int)nClickX <= ScreenSizeX - gnPanelOffsetX) {
-        if ((int)nClickY > gnPanelOffsetY - 0x174 + ScreenSizeY && (int)nClickY < gnPanelOffsetY - 0x109 + ScreenSizeY) {
+    if ((int)nClickX >= ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x58) {
+      if ((int)nClickX <= ui::ScreenSizeX - Inv::gnPanelOffsetX) {
+        if ((int)nClickY > Inv::gnPanelOffsetY - 0x174 + Inv::ScreenSizeY && (int)nClickY < Inv::gnPanelOffsetY - 0x109 + Inv::ScreenSizeY) {
           nSkillTreeActiveTab = 3;
         }
-        if ((int)nClickY > gnPanelOffsetY - 0x108 + ScreenSizeY && (int)nClickY < gnPanelOffsetY - 0x9d + ScreenSizeY) {
+        if ((int)nClickY > Inv::gnPanelOffsetY - 0x108 + Inv::ScreenSizeY && (int)nClickY < Inv::gnPanelOffsetY - 0x9d + Inv::ScreenSizeY) {
           nSkillTreeActiveTab = 2;
         }
-        if ((int)nClickY > gnPanelOffsetY - 0x9c + ScreenSizeY && (int)nClickY < ScreenSizeY - 0x31) {
+        if ((int)nClickY > Inv::gnPanelOffsetY - 0x9c + Inv::ScreenSizeY && (int)nClickY < Inv::ScreenSizeY - 0x31) {
           nSkillTreeActiveTab = 1;
         }
         if (nSkillTreeActiveTab != nPrevActiveTab) {
@@ -1826,18 +1840,18 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
       Storm::SMsgBreakHandlerChain(pMsg);
     }
     if (gnSkillTreeHighlightIndex == 1) {
-      nPrevActiveTab = gnPanelOffsetY - 0x3f + ScreenSizeY;
-      nTmpResult = ScreenSizeX - gnPanelOffsetX - 0x95;
+      nPrevActiveTab = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nTmpResult = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x95;
     } else if (gnSkillTreeHighlightIndex == 2) {
-      nPrevActiveTab = gnPanelOffsetY - 0x3f + ScreenSizeY;
-      nTmpResult = ScreenSizeX - gnPanelOffsetX - 0xdc;
+      nPrevActiveTab = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nTmpResult = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xdc;
     } else {
       if (gnSkillTreeHighlightIndex != 3) {
         goto hit_test_skill_nodes;
       }
 
-      nPrevActiveTab = gnPanelOffsetY - 0x3f + ScreenSizeY;
-      nTmpResult = ScreenSizeX - gnPanelOffsetX - 0x131;
+      nPrevActiveTab = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nTmpResult = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
     }
 
     nSkillListIdx = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, nPrevActiveTab, nTmpResult);
@@ -1847,7 +1861,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     hit_test_skill_nodes:
-    if ((int)nClickX <= ScreenSizeX - gnPanelOffsetX - 0x140 || (int)nClickX >= ScreenSizeX - gnPanelOffsetX - 0x58) {
+    if ((int)nClickX <= ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x140 || (int)nClickX >= ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x58) {
       pMsg->bHandled = 0;
       return;
     }
@@ -1937,7 +1951,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
     }
     if (!gbSpellSelSkillTreeBackground) {
       eD2Skills eSkill;
-      if ((int)nClickX <= ScreenSizeX / 2) {
+      if ((int)nClickX <= ui::ScreenSizeX / 2) {
         pMsg->bHandled = 0;
         return;
       }
@@ -2016,18 +2030,18 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
 
     gbSpellSelSkillTreeBackground = 0;
     if (gnSkillTreeHighlightIndex == 1) {
-      skillIdOfClass = gnPanelOffsetY - 0x3f + ScreenSizeY;
-      nNewSkills = ScreenSizeX - gnPanelOffsetX - 0x95;
+      skillIdOfClass = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nNewSkills = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x95;
     } else if (gnSkillTreeHighlightIndex == 2) {
-      skillIdOfClass = gnPanelOffsetY - 0x3f + ScreenSizeY;
-      nNewSkills = ScreenSizeX - gnPanelOffsetX - 0xdc;
+      skillIdOfClass = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nNewSkills = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xdc;
     } else {
       if (gnSkillTreeHighlightIndex != 3) {
         goto consume_click;
       }
 
-      skillIdOfClass = gnPanelOffsetY - 0x3f + ScreenSizeY;
-      nNewSkills = ScreenSizeX - gnPanelOffsetX - 0x131;
+      skillIdOfClass = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nNewSkills = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
     }
 
     nSkillIdx = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, skillIdOfClass, nNewSkills);
@@ -2070,13 +2084,13 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
     D2GfxDataStrc sGfxData;
     uint16_t wszLevelBuf[10];
     char szLevelBuf[12];
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
 
     int nColumnX = (int)pSkillsTxt->skilldesc;
-    D2SkillDescTxt* pSkillDesc = nColumnX >= 0 && nColumnX < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nColumnX : nullptr;
+    D2SkillDescTxt* pSkillDesc = nColumnX >= 0 && nColumnX < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nColumnX : nullptr;
     if (!pSkillDesc) {
       return;
     }
@@ -2086,17 +2100,17 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
     switch (bySkillColumn) {
       case 1:
         {
-          nColumnX = ScreenSizeX - gnPanelOffsetX - 0x131;
+          nColumnX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
           break;
         }
       case 2:
         {
-          nColumnX = ScreenSizeX - gnPanelOffsetX - 0xec;
+          nColumnX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xec;
           break;
         }
       case 3:
         {
-          nColumnX = ScreenSizeX - gnPanelOffsetX - 0xa7;
+          nColumnX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xa7;
           break;
         }
       default:
@@ -2115,7 +2129,7 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
     if (nMouseX > nColumnX && nMouseX < nColumnX + 0x30 && nMouseY > nRowY - 0x30 && nMouseY < nRowY) {
       nGlobalPaletteShift = PALETTE_BLUE;
     }
-    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[2])) {
+    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       nGlobalPaletteShift = PALETTE_RED;
     }
 
@@ -2225,7 +2239,7 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
       nNewSkills = 1;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(wszNewSkillsBuf, ScreenSizeX - gnPanelOffsetX - 0x34, gnPanelOffsetY - 400 + ScreenSizeY, nNewSkills, 0);
+    D2Win::Src::D2WinFont::DRAW_text(wszNewSkillsBuf, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x34, Inv::gnPanelOffsetY - 400 + Inv::ScreenSizeY, nNewSkills, 0);
     int32_t nNewSkillPts = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0);
     int32_t nSkillIdx = 0;
     nNewSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
@@ -2236,11 +2250,11 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
     do {
       eD2Skills eSkill;
       eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIdx);
-      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
       if (pSkillTxt) {
         nSkillDescIdx = (int)pSkillTxt->skilldesc;
         D2SkillDescTxt* pSkillDescTxt;
-        if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
+        if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
           eState = D2Common::Skills::SkillCalculateIfWeCanSkillThisSkill(pUnit, eSkill);
           if (eState) {
             bCanSkill = 1;
@@ -2330,7 +2344,7 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
       wszLevelBuf[9] = 0;
       wsprintfA(szLevelBuf, "%d", 0);
       D2Lang::UTF8_ConvertToWideChar(wszLevelBuf, szLevelBuf, 9);
-      ui::UI_DrawTextCentered(ScreenSizeX - gnPanelOffsetX - 0x41, gnPanelOffsetY - 400 + ScreenSizeY, ScreenSizeX - gnPanelOffsetX - 0x19, wszLevelBuf, 0);
+      ui::UI_DrawTextCentered(ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x41, Inv::gnPanelOffsetY - 400 + Inv::ScreenSizeY, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x19, wszLevelBuf, 0);
     }
 
     int nSkillIdx = 0;
@@ -2344,11 +2358,11 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
       eD2Skills eSkill;
       nSkillLevel = 0;
       eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(UNIT::GetClassId(pUnit), nSkillIdx);
-      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
       if (pSkillTxt) {
         nSkillDescIdx = (int)pSkillTxt->skilldesc;
         D2SkillDescTxt* pSkillDescTxt;
-        if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
+        if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
           gaSpellSelSkillTreeState[nSkillIdx] = -1;
           gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
           pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnitCopy, eSkill, -1);

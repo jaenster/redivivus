@@ -495,7 +495,7 @@ static uint32_t ITEM_CheckUniqueBitmask(uint32_t nUniqueFileIndex, ::SGAMEDATA *
       return 0;
     }
     if (nUniqueFileIndex <= 0x1000) {
-      return pGame->fUniqueSpawn[(int)nUniqueFileIndex >> 5] & gadwBitMasks[nUniqueFileIndex & 0x1f];
+      return pGame->fUniqueSpawn[(int)nUniqueFileIndex >> 5] & Fog::BitBuffer::gadwBitMasks[nUniqueFileIndex & 0x1f];
     }
 
     return 1;
@@ -512,7 +512,7 @@ uint32_t __fastcall ITEM_IsUniqueAlreadyDropped(::SGAMEDATA * pGame, D2UnitStrc 
       return 0;
     }
     if (nFileIndex <= 0x1000) {
-      return pGame->fUniqueSpawn[(int)nFileIndex >> 5] & gadwBitMasks[nFileIndex & 0x1f];
+      return pGame->fUniqueSpawn[(int)nFileIndex >> 5] & Fog::BitBuffer::gadwBitMasks[nFileIndex & 0x1f];
     }
 
     return 1;
@@ -526,10 +526,10 @@ static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     uint32_t nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-    if (!((int)nFileIndex >= 0 && (int)nFileIndex < sgptDataTable->nTxtUniqueItemsSize && sgptDataTable->pTxtUniqueItems + nFileIndex)) {
+    if (!((int)nFileIndex >= 0 && (int)nFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nFileIndex)) {
       return 0;
     }
-    if (*((uint8_t*)&sgptDataTable->pTxtUniqueItems[nFileIndex] + 0x2c) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems[nFileIndex] + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       return 1;
     }
     if (pItemsTxt->bQuest == '\0') {
@@ -542,7 +542,7 @@ static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    pGame->fUniqueSpawn[(int)nFileIndex >> 5] |= gadwBitMasks[nFileIndex & 0x1f];
+    pGame->fUniqueSpawn[(int)nFileIndex >> 5] |= Fog::BitBuffer::gadwBitMasks[nFileIndex & 0x1f];
     return 1;
 }
 
@@ -631,7 +631,7 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
     }
     if (pItemGenContext->bFromCustomData) {
       dwFileIndex = pItemGenContext->dwFileIndex;
-      pUniqueItemsTxt = (int)dwFileIndex >= 0 && (int)dwFileIndex < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + dwFileIndex : nullptr;
+      pUniqueItemsTxt = (int)dwFileIndex >= 0 && (int)dwFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + dwFileIndex : nullptr;
       if (!pUniqueItemsTxt) {
         return 0;
       }
@@ -646,13 +646,13 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
         nRarityWeight = 0;
         nTotalRarityWeight = 0;
         nChosenUniqueIdx = -1;
-        if (sgptDataTable->nTxtUniqueItemsSize > 0) {
-          pUniqueEntryPtr = (uint8_t*)sgptDataTable->pTxtUniqueItems + 0x2c;
-          pDataTable = sgptDataTable;
+        if (D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize > 0) {
+          pUniqueEntryPtr = (uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + 0x2c;
+          pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           do {
-            if ((*(uint16_t*)(pUniqueEntryPtr - 8) < 100 || 99 < wItemVersion) && gadwBitMasks[0] & *pUniqueEntryPtr && pItemsTxt->dwCode == *(int*)(pUniqueEntryPtr - 4) && (pGame->nGameType != SGAMETYPE_BNET_HOST || pGame->eGameType != GAMETYPE_SINGLEPLAYER || !(gadwBitMasks[3] & *pUniqueEntryPtr))) {
+            if ((*(uint16_t*)(pUniqueEntryPtr - 8) < 100 || 99 < wItemVersion) && Fog::BitBuffer::gadwBitMasks[0] & *pUniqueEntryPtr && pItemsTxt->dwCode == *(int*)(pUniqueEntryPtr - 4) && (pGame->nGameType != SGAMETYPE_BNET_HOST || pGame->eGameType != GAMETYPE_SINGLEPLAYER || !(Fog::BitBuffer::gadwBitMasks[3] & *pUniqueEntryPtr))) {
               nRollResult = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pUnit);
-              pDataTable = sgptDataTable;
+              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               if (*(short int*)(pUniqueEntryPtr + 8) <= nRollResult) {
                 if (pItemGenContext->dwFileIndex > 0 && pItemGenContext->dwFileIndex - 1 == nUniqueIdx) {
                   nChosenUniqueIdx = nUniqueIdx;
@@ -667,7 +667,7 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
                 }
 
                 nTotalRarityWeight += nCandidateCount;
-                pDataTable = sgptDataTable;
+                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               }
             }
 
@@ -685,9 +685,9 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
               }
 
               nChosenUniqueIdx = gUniqueCandidatePool.aCandidates[nWeightAccum - 1].nUniqueIdx;
-              pDataTable = sgptDataTable;
+              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             }
-            if (pItemsTxt->bQuest != '\0' || !pGame || nChosenUniqueIdx <= 0x1000 && !(pGame->fUniqueSpawn[(int)nChosenUniqueIdx >> 5] & gadwBitMasks[nChosenUniqueIdx & 0x1f])) {
+            if (pItemsTxt->bQuest != '\0' || !pGame || nChosenUniqueIdx <= 0x1000 && !(pGame->fUniqueSpawn[(int)nChosenUniqueIdx >> 5] & Fog::BitBuffer::gadwBitMasks[nChosenUniqueIdx & 0x1f])) {
               D2UniqueItemsTxt* pUniqueItemsTxt2 = (int)nChosenUniqueIdx >= 0 && (int)nChosenUniqueIdx < pDataTable->nTxtUniqueItemsSize ? pDataTable->pTxtUniqueItems + nChosenUniqueIdx : nullptr;
               if (!pUniqueItemsTxt2) {
                 return 0;
@@ -719,14 +719,14 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
         return 0;
       }
 
-      nRarityWeight = sgptDataTable->nTxtUniqueItemsSize;
+      nRarityWeight = D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize;
       bDurabilityCheck = 0;
       if (nRarityWeight <= 0) {
         return 0;
       }
 
-      pUniqueEntryPtr = (uint8_t*)sgptDataTable->pTxtUniqueItems + 0x2c;
-      while (*(uint16_t*)(pUniqueEntryPtr - 8) >= 100 || !(gadwBitMasks[0] & *pUniqueEntryPtr) || pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER && gadwBitMasks[3] & *pUniqueEntryPtr || pItemsTxt->dwCode != *(int*)(pUniqueEntryPtr - 4) || (bHasDurability = ITEM_CheckUniqueBitmask(bDurabilityCheck, pGame) , bHasDurability && pItemsTxt->bQuest == '\0')) {
+      pUniqueEntryPtr = (uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + 0x2c;
+      while (*(uint16_t*)(pUniqueEntryPtr - 8) >= 100 || !(Fog::BitBuffer::gadwBitMasks[0] & *pUniqueEntryPtr) || pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER && Fog::BitBuffer::gadwBitMasks[3] & *pUniqueEntryPtr || pItemsTxt->dwCode != *(int*)(pUniqueEntryPtr - 4) || (bHasDurability = ITEM_CheckUniqueBitmask(bDurabilityCheck, pGame) , bHasDurability && pItemsTxt->bQuest == '\0')) {
         bDurabilityCheck++;
         pUniqueEntryPtr += 0x14c;
         if ((int)bDurabilityCheck >= nRarityWeight) {
@@ -2247,12 +2247,12 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     if ((int)eItemType < 0) {
       return 0;
     }
-    if ((int)eItemType >= sgptDataTable->nTxtItemTypesSize) {
+    if ((int)eItemType >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemTypesSize) {
       return 0;
     }
 
     D2ItemTypesTxt* pItemTypeTxt;
-    pItemTypeTxt = sgptDataTable->pTxtItemTypes + eItemType;
+    pItemTypeTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtItemTypes + eItemType;
     if (!pItemTypeTxt) {
       return 0;
     }
@@ -4071,7 +4071,7 @@ void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, D2U
     if (pGame->bExpansion && pGame->nDifficulty > 0 && pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       D2MonStatsTxt* pMonStatsTxt;
       pMonStatsTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
-      if (pMonStatsTxt && !(gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
+      if (pMonStatsTxt && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(Fog::BitBuffer::gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
         pnMonsterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
       }
     }

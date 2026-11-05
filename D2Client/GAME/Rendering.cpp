@@ -24,28 +24,28 @@ void __fastcall SetupGamma(DWORD dwGamma) {
 }
 
 void __stdcall SetCurrentEngineToOne() {
-    D2Game::GAME::Rendering::CurrentRendingEngine = 1;
+    CurrentRendingEngine = 1;
     gnCurrentEngineIndex = 1;
 }
 
 void __stdcall RENDERER_Set3DFX() {
-    D2Game::GAME::Rendering::CurrentRendingEngine = 4;
+    CurrentRendingEngine = 4;
 }
 
 void __stdcall RENDERER_SetOpenGL() {
-    D2Game::GAME::Rendering::CurrentRendingEngine = 5;
+    CurrentRendingEngine = 5;
 }
 
 void __stdcall RENDERER_SetMode6() {
-    D2Game::GAME::Rendering::CurrentRendingEngine = 6;
+    CurrentRendingEngine = 6;
 }
 
 void __stdcall RENDERER_SetMode7() {
-    D2Game::GAME::Rendering::CurrentRendingEngine = 7;
+    CurrentRendingEngine = 7;
 }
 
 int __stdcall GetCurrentEngine() {
-    return D2Game::GAME::Rendering::CurrentRendingEngine;
+    return CurrentRendingEngine;
 }
 
 int __stdcall GetCurrentEngine_Unref_00477740() {
@@ -53,7 +53,7 @@ int __stdcall GetCurrentEngine_Unref_00477740() {
 }
 
 uint32_t __stdcall IsWindowMode() {
-    return (uint32_t)(D2Game::GAME::Rendering::CurrentRendingEngine >= 4);
+    return (uint32_t)(CurrentRendingEngine >= 4);
 }
 
 // Debug overlay that queries sprite-cache and floor/subtile/sprite-cache render statistics and prints them as formatted strings to the screen via D2GFX_DrawString. Displays tile cache KB size, miss rate, and percent utilization; floor cache, subtile cache, and three sprite cache tiers if their sizes are nonzero.

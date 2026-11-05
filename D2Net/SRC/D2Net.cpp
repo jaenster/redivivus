@@ -23,7 +23,7 @@ namespace D2Net::SRC::D2Net {
 void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut) {
     sockaddr_in sSockAddr = {0};
     int nAddrLen = 0x10;
-    getsockname(CLIENT_SocketToServer, (sockaddr*)&sSockAddr, &nAddrLen);
+    getsockname(::D2Net::SRC::Client::CLIENT_SocketToServer, (sockaddr*)&sSockAddr, &nAddrLen);
     char* szInetNtoaResult = inet_ntoa((in_addr)sSockAddr.sin_addr);
     Storm::Source::SSTR::SStrCopy(szIpAddressOut, szInetNtoaResult, 0x7fffffff);
 }
@@ -34,7 +34,7 @@ size_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriti
     size_t nPacketSize;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)lpCriticalSection);
     D2OnePacketClientStrc* pPacket = *pD2OnePacketClient;
-    if (!pPacket || nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYERUNCAPPED && (dwTick = GetTickCount() , dwTick - pPacket->nTickCount < 500)) {
+    if (!pPacket || ::D2Net::Game::Server::nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYERUNCAPPED && (dwTick = GetTickCount() , dwTick - pPacket->nTickCount < 500)) {
       nPacketSize = -1;
     } else {
       if (nSize >= 0x204) {

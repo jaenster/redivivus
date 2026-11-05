@@ -235,7 +235,7 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
           if ((int)eSkill <= 0) {
             return;
           }
-          if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+          if ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
             return;
           }
           if ((char)pHirelingTxt->nSkillMode[nLevelDiff] >= 16) {
@@ -558,7 +558,7 @@ static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
     }
 
     int32_t nClassId = pMonster->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xe) & gadwBitMasks[0])) {
+    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xe) & Fog::BitBuffer::gadwBitMasks[0])) {
       return 0;
     }
 

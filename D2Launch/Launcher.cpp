@@ -2,6 +2,7 @@
 
 #include "D2Launch/Launcher.h"
 #include "Bnclient/BNGatewayAccess.h"
+#include "Bnclient/BnMessQueue.h"
 #include "Bnclient/Bnclient.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/D2ControlStrc.h"
@@ -65,7 +66,7 @@ namespace D2Launch::Launcher {
 
 BOOL __stdcall CHARSEL_OnPressLoadCharListForPreferredRealm(D2ControlMsg * pControlMsg) {
     CharSel::CHARSEL_LoadCharList(PreferredClosedRealm);
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+    if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::FORMS_DestroyList();
       CharSel::CHARSEL_ResetCharListUI();
     }
@@ -75,7 +76,7 @@ BOOL __stdcall CHARSEL_OnPressLoadCharListForPreferredRealm(D2ControlMsg * pCont
 }
 
 BOOL __stdcall CHARSEL_HandleRealmChange(D2ControlMsg * pMsg) {
-    uint16_t* pwszSelectedRealm = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLineText(gpWinTextBoxRealmSelect);
+    uint16_t* pwszSelectedRealm = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLineText(CharSel::gpWinTextBoxRealmSelect);
     D2Lang::WideCharToUTF8(PreferedClosedRealm2, pwszSelectedRealm, 0x100);
     CharSel::CHARSEL_LoadCharList(PreferedClosedRealm2);
     CharSel::CHARSEL_ClearCharDetailUI();
@@ -216,6 +217,13 @@ int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {
     return 1;
 }
 
+DWORD __stdcall BeginCutSceneAtResolutionMode0_Unref_0043b800() {
+    DWORD extraout_EAX;
+    gpBNetCallbacks = 0;
+    Bnclient::thunk_BNMESSQUEUE_Shutdown();
+    return extraout_EAX;
+}
+
 void __stdcall LAUNCHER_SetBusyFlag() {
     gnBusyFlag = 1;
 }
@@ -295,8 +303,8 @@ void __stdcall LAUNCHER_DisconnectFromBnet() {
     }
 
     nCharacterSelectionIndex = 1;
-    D2IniData_launcher->padding_0x35F[2] = 0;
-    /* LPCSTR lpOutputString for OutputDebugStringA */ D2IniData_launcher->padding_0x35F[0x22] = 0;
+    MainMenus::D2IniData_launcher->padding_0x35F[2] = 0;
+    /* LPCSTR lpOutputString for OutputDebugStringA */ MainMenus::D2IniData_launcher->padding_0x35F[0x22] = 0;
     OutputDebugStringA("Disconnect from BNET\n");
     D2MCPClient::McpConnect::FreeMCP();
     gpBNetCallbacks->pfnDisconnect();
@@ -458,12 +466,12 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
       pfnOnClose = MainMenus::UIMENU_MainMenuAgain;
       break;
       case OOG_ERROR_BNET_ACCOUNT_CHECK:
-        nErrorAddress = Storm::Source::SSTR::SStrCmp(gszOogLastIniStringCache, D2IniData_launcher->szLastBnetAccount, 0x7fffffff);
+        nErrorAddress = Storm::Source::SSTR::SStrCmp(gszOogLastIniStringCache, MainMenus::D2IniData_launcher->szLastBnetAccount, 0x7fffffff);
       if (!nErrorAddress) {
         gnBnetAccountLoginFailCount++;
       } else {
         gnBnetAccountLoginFailCount = 1;
-        Storm::Source::SSTR::SStrCopy(gszOogLastIniStringCache, D2IniData_launcher->szLastBnetAccount, 0x10);
+        Storm::Source::SSTR::SStrCopy(gszOogLastIniStringCache, MainMenus::D2IniData_launcher->szLastBnetAccount, 0x10);
       }
 
       nTitleStrId = 0x147c;
@@ -602,7 +610,7 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
       sOogError.pCustomData = 0;
       nResult = gpBNetCallbacks->pfnApplyPrepatch((int*)&sOogError.pCustomData);
       if (sOogError.pCustomData) {
-        bSkipToOpen = OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure;
+        bSkipToOpen = MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure;
         Storm::Source::SReg::SRegSaveValue("Diablo II", "UseCmdLine", 0, 1);
         Storm::Source::SReg::SRegSaveValue("Diablo II", "Skip To Open", 0, (uint32_t)bSkipToOpen);
         D2Win::D2GFX::D2GFX_CheckVideoMode();
@@ -770,7 +778,7 @@ void __stdcall UIMENU_MainMenuWithoutMenuButWithDiabloLogo() {
     MainMenus::FORMS_CreateAnyFormFromListExEx(8);
     MainMenus::FORMS_CreateAnyFormFromListExEx(6);
     MainMenus::FORMS_CreateAnyFormFromListExEx(7);
-    MainMenus::D2GFX_SetPaletteForDraw(gaFrontEndPaletteFiles[2], gaFrontEndPaletteFiles[3]);
+    MainMenus::D2GFX_SetPaletteForDraw(CharSel::gaFrontEndPaletteFiles[2], CharSel::gaFrontEndPaletteFiles[3]);
     MainMenus::MAINMENU_AdjustFormsForKorean();
 }
 

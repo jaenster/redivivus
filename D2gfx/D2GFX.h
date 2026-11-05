@@ -325,7 +325,6 @@ namespace D2gfx::D2GFX {
 
 // Function declarations
 void __stdcall RENDERER_TogglePerspective_Unref_0044dc40();
-void __stdcall RENDERER_TogglePerspective_Unref_00474140();
 void __stdcall RENDERER_TogglePerspective_Unref_004769b0();
 void __stdcall RENDERER_TogglePerspective_Unref_00477be0();
 BOOL __stdcall D2GFX_GetPerspectiveCapable_ForPerspectiveItem();
@@ -439,8 +438,6 @@ void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeigh
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable);
 int Unreferenced_004f8e90();
 void __stdcall D2GFX_InitializeWindowSize();
-void __stdcall D2GFX_EnableVSync_Unref_00506a80();
-BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520();
 void StaticInit_gpszWindowClassName();
 void StaticInit_szWindowClassName();
 void StaticInit_gpszWindowTitle();

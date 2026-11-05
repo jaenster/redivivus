@@ -385,9 +385,11 @@ D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZer
       }
 
       /* DWORD dwMilliseconds for Sleep */ Sleep(100);
-      if (pFogArchive->hArchive) {
-        return pFogArchive;
+      if (!pFogArchive->hArchive) {
+        continue;
       }
+
+      return pFogArchive;
     }
 
     D2_FREE_AT(pFogArchive, ".\\SRC\\Archive.cpp", 0x21a);

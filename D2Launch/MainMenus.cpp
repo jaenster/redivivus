@@ -645,7 +645,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x22
     },
     {
@@ -766,7 +766,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -788,7 +788,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -986,7 +986,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1107,7 +1107,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1217,7 +1217,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1316,7 +1316,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1470,7 +1470,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1569,7 +1569,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1613,7 +1613,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1635,7 +1635,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1701,7 +1701,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2053,7 +2053,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2097,7 +2097,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2130,7 +2130,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x22
     },
     {
@@ -2141,7 +2141,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x22
     },
     {
@@ -2152,7 +2152,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2163,7 +2163,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2306,7 +2306,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2339,7 +2339,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2592,7 +2592,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2889,7 +2889,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2933,7 +2933,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2944,7 +2944,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2988,7 +2988,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -2999,7 +2999,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3032,7 +3032,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3043,7 +3043,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3054,7 +3054,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3098,7 +3098,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3109,7 +3109,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3120,7 +3120,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3164,7 +3164,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3219,7 +3219,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3274,7 +3274,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont3,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3439,7 +3439,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3450,7 +3450,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x10
     },
     {
@@ -3461,7 +3461,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3560,7 +3560,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3571,7 +3571,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3582,7 +3582,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -3714,7 +3714,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3824,7 +3824,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -3912,7 +3912,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::gaMenuFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -4123,13 +4123,17 @@ static D2ControlStrc * gpCtlCreateCharHardcoreCheckbox = 0; D2_STATIC_GUARD(gpCt
 // also labelled: gnClassCreateClassIndex
 static ::D2WinButton * gpCtlCreateCharExpansionCheckbox = 0; D2_STATIC_GUARD(gpCtlCreateCharExpansionCheckbox, "gpCtlCreateCharExpansionCheckbox");
 static ::D2WinTextBox * gpCtlCreateCharOKButton = 0; D2_STATIC_GUARD(gpCtlCreateCharOKButton, "gpCtlCreateCharOKButton");
-D2IniConfigStrc * D2IniData_launcher = 0; D2_GLOBAL_GUARD(D2IniData_launcher, "D2IniData_launcher");
+namespace D2Launch::MainMenus {
+D2IniConfigStrc * D2IniData_launcher = 0; D2_GLOBAL_GUARD(D2IniData_launcher, "D2Launch::MainMenus::D2IniData_launcher");
+} // namespace D2Launch::MainMenus
 static ::D2WinTextBox * gpCtlClassDescriptionTooltipPrimary = 0; D2_STATIC_GUARD(gpCtlClassDescriptionTooltipPrimary, "gpCtlClassDescriptionTooltipPrimary");
 static ::D2WinTextBox * gpCtlClassDescriptionTooltipSecondary = 0; D2_STATIC_GUARD(gpCtlClassDescriptionTooltipSecondary, "gpCtlClassDescriptionTooltipSecondary");
 static ::D2WinTextBox * gpCtlTcpIpAddress = 0; D2_STATIC_GUARD(gpCtlTcpIpAddress, "gpCtlTcpIpAddress");
 static ::D2WinTextBox * gpCtlTcpIpPort = 0; D2_STATIC_GUARD(gpCtlTcpIpPort, "gpCtlTcpIpPort");
 static uint32_t gnSelectedCharGameState = 0; D2_STATIC_GUARD(gnSelectedCharGameState, "gnSelectedCharGameState");
-eOogCurrentCharSelectionMode OogCurrentCharSelectionMode = 0; D2_GLOBAL_GUARD(OogCurrentCharSelectionMode, "OogCurrentCharSelectionMode");
+namespace D2Launch::MainMenus {
+eOogCurrentCharSelectionMode OogCurrentCharSelectionMode = 0; D2_GLOBAL_GUARD(OogCurrentCharSelectionMode, "D2Launch::MainMenus::OogCurrentCharSelectionMode");
+} // namespace D2Launch::MainMenus
 static uint32_t gnIsFecharPalette = 0; D2_STATIC_GUARD(gnIsFecharPalette, "gnIsFecharPalette");
 uint32_t gnBNetBusyFlag = 0; D2_GLOBAL_GUARD(gnBNetBusyFlag, "gnBNetBusyFlag");
 static char gszLastTcpIpAddress[256] = {}; D2_STATIC_GUARD(gszLastTcpIpAddress, "gszLastTcpIpAddress");
@@ -4862,7 +4866,7 @@ void __stdcall UIMENU_DownloadingPatch() {
     gpCtlPatchProgressAnimImage = (::D2WinImage*)FORMS_CreateAnyFormFromListExEx(0x117);
     D2Win::Src::D2WinImage::D2WINIMAGE_SetDrawModeSolid(gpCtlPatchProgressAnimImage, DRAW_LIGHTTRANSPARENT);
     gpPatchProgressTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x113);
-    int nProgressPercent = gpBNetCallbacks->pfnGetDownloadProgress();
+    int nProgressPercent = Launcher::gpBNetCallbacks->pfnGetDownloadProgress();
     if (nProgressPercent > 100) {
       nProgressPercent = 100;
     }
@@ -4882,7 +4886,7 @@ void __stdcall UIMENU_DownloadingPatch() {
 void __stdcall MAINMENU_UpdateProgressBar() {
     char szPercentBuffer[100];
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpPatchProgressTextBox);
-    int nProgressPercent = gpBNetCallbacks->pfnGetDownloadProgress();
+    int nProgressPercent = Launcher::gpBNetCallbacks->pfnGetDownloadProgress();
     if (nProgressPercent > 100) {
       nProgressPercent = 100;
     }
@@ -5281,7 +5285,7 @@ int16_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar) {
 }
 
 int __stdcall MAINMENU_PollRevisionCheckPump(int nFrameIndex) {
-    int nDownloadProgress = gpBNetCallbacks->pfnGetDownloadProgress();
+    int nDownloadProgress = Launcher::gpBNetCallbacks->pfnGetDownloadProgress();
     if (nDownloadProgress == 0x65 || gbTermsOfServiceCancelled) {
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
@@ -6256,7 +6260,7 @@ void __stdcall UIMENU_ShowRealmNameOnButton() {
     uint16_t awGatewayW[256];
     char szGateway[256];
     uint16_t awButtonText[256];
-    D2BNetGatewayAccessStr* pGateway = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+    D2BNetGatewayAccessStr* pGateway = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
     Storm::Source::SSTR::SStrCopy(szGateway, Bnclient::BNGatewayAccess::Name(pGateway, pGateway->nCurGatewayIdx), 0x100);
     for (i = 0; i < 0x100; i++) {
       awGatewayW[i] = L'\0';
@@ -6671,8 +6675,8 @@ uint32_t __fastcall MAINMENU_ConnectToRealm(uint8_t * pszRealmName, int32_t bSil
 
       return 0;
     }
-    if (gpBNetCallbacks) {
-      pnLogonResult = (int*)gpBNetCallbacks->pfnSendLogonRealmEx((char*)pszRealmName, "password");
+    if (Launcher::gpBNetCallbacks) {
+      pnLogonResult = (int*)Launcher::gpBNetCallbacks->pfnSendLogonRealmEx((char*)pszRealmName, "password");
       if (pnLogonResult && *pnLogonResult != 8) {
         Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szCharacterRealm, (char*)pszRealmName, 0x100);
         Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szREALM, (char*)pszRealmName, 0x100);
@@ -7207,7 +7211,7 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
     Storm::Source::SSTR::SStrPack(szTosFileName, ".txt", 0x80);
     int nLen;
     nLen = (int)strlen(szTosFileName);
-    gpBNetCallbacks->pfnInitiatePatchDownload((uint8_t*)szTosFileName, nLen);
+    Launcher::gpBNetCallbacks->pfnInitiatePatchDownload((uint8_t*)szTosFileName, nLen);
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollRevisionCheckPump);
     if (gbTermsOfServiceCancelled) {
       FORMS_DestroyList();
@@ -7215,7 +7219,7 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
     }
 
     BOOL bConnected;
-    bConnected = gpBNetCallbacks->pfnIsSocketConnected();
+    bConnected = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
     if (!bConnected) {
       pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
       MAINMENU_ShowPopupDialog(pwszText, UIMENU_MainMenu, 1);
@@ -7573,8 +7577,8 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
     size_t nAllocSize;
     UIMENU_PleaseWaitWithCancelButton();
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_ClearLoopFlagPump);
-    if (gpBNetCallbacks) {
-      gpRealmQueryResultBuffer = (int)gpBNetCallbacks->pfnSendQueryRealms2();
+    if (Launcher::gpBNetCallbacks) {
+      gpRealmQueryResultBuffer = (int)Launcher::gpBNetCallbacks->pfnSendQueryRealms2();
     }
 
     FORMS_DestroyList();
@@ -7779,7 +7783,7 @@ BOOL __stdcall MAINMENU_OnPressShowGatewaySelect(D2ControlMsg * pControlMsg) {
     gpMainMenuGatewayListTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x4a);
     FORMS_CreateAnyFormFromListExEx(0x4b);
     FORMS_CreateAnyFormFromListExEx(0x4c);
-    D2BNetGatewayAccessStr* pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+    D2BNetGatewayAccessStr* pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
     int nSelectedLine = pGatewayAccess->nCurGatewayIdx;
     int nGatewayIdx = 1;
     if (0 < pGatewayAccess->nGatewayCount) {
@@ -7805,7 +7809,7 @@ BOOL __stdcall MAINMENU_OnPressShowGatewaySelect(D2ControlMsg * pControlMsg) {
 }
 
 BOOL __stdcall StorePreferedRealmAgain(D2ControlMsg * pControlMsg) {
-    D2BNetGatewayAccessStr* pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+    D2BNetGatewayAccessStr* pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
     int32_t nSelectedLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLine(gpMainMenuGatewayListTextBox);
     if (nSelectedLine != -1) {
       char* pszRealmName;
@@ -7831,6 +7835,7 @@ BOOL __stdcall MAINMENU_OnPressDestroyListsAndReturnToMainMenu(D2ControlMsg * pC
 }
 
 BOOL __stdcall UIMENU_ConnectToServerCallback(D2ControlStrc * pUnusedArg) {
+    char* pszResolvedIp;
     char acStack_414[1024];
     int nOctet3;
     int nOctet1;
@@ -7847,7 +7852,6 @@ BOOL __stdcall UIMENU_ConnectToServerCallback(D2ControlStrc * pUnusedArg) {
     Storm::Source::SReg::SRegSaveString("Diablo II", "LastTcpIp", 0, gszLastTcpIpAddress);
     int nParsed = sscanf(acStack_414, "%d.%d.%d.%d", &nOctet1, &nOctet2, &nOctet3, &nOctet4);
     if (nParsed != 4) {
-      char* pszResolvedIp;
       pszResolvedIp = Fog::Src::Safesock::inet_nameToIp(acStack_414);
       if (!pszResolvedIp) {
         D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpMainMenuFormPtrs, "");
@@ -7857,7 +7861,9 @@ BOOL __stdcall UIMENU_ConnectToServerCallback(D2ControlStrc * pUnusedArg) {
       strcpy(acStack_414, pszResolvedIp);
     }
 
-    strcpy(D2IniData_launcher->szSERVERIP, acStack_414);
+    pszResolvedIp = acStack_414;
+    char* pszServerIpDst = D2IniData_launcher->szSERVERIP;
+    strcpy(pszServerIpDst, acStack_414);
     UIMENU_PleaseWaitWithCancelButton();
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_ClearLoopFlagPump);
     gnTcpIpConnectionSuccessFlag = 0;
@@ -7959,7 +7965,7 @@ int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerSt
     MAINMENU_SetSelectedClassInINI(nClassId);
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET || OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure) {
       BOOL bConnected;
-      bConnected = gpBNetCallbacks->pfnIsSocketConnected();
+      bConnected = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
       if (!bConnected) {
         Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
         nResult = Launcher::CLIENT_ConnectToBattleNet();
@@ -8268,7 +8274,7 @@ void __fastcall UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection(ui
 }
 
 BOOL __stdcall MAINMENU_OnPressCancelTermsOfServiceDownload(D2ControlMsg * pControlMsg) {
-    gpBNetCallbacks->pfnSetDownloadCancelFlag();
+    Launcher::gpBNetCallbacks->pfnSetDownloadCancelFlag();
     gbTermsOfServiceCancelled = 1;
     UIMENU_MainMenu();
     return 1;
@@ -8332,7 +8338,7 @@ void __stdcall UIMENU_MainMenuAgain() {
     char szLastBnetAccount[1024];
     gbMainMenuUIActive = 1;
     BOOL bResult;
-    bResult = gpBNetCallbacks->pfnIsSocketConnected();
+    bResult = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
     if (bResult) {
       bResult = Launcher::LAUNCHER_IsBnetConnectInProgress();
       if (!bResult) {
@@ -8567,11 +8573,11 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
       D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\assassin deselect.wav");
     }
 
-    gpBNetCallbacks = pD2IniData->pBNetClientCallbacks;
+    Launcher::gpBNetCallbacks = pD2IniData->pBNetClientCallbacks;
     uint8_t nScreenToShow;
     nScreenToShow = D2IniData_launcher->nScreenToShow;
     if (nScreenToShow == 2) {
-      bIsExpansion = gpBNetCallbacks->pfnIsSocketConnected();
+      bIsExpansion = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
       OogCurrentCharSelectionMode = CHAR_SELECTION_BNET;
       if (bIsExpansion) {
         D2Win::D2GFX::D2GFX_SetVideoMode(1);
@@ -8613,7 +8619,7 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
         goto run_menu_loop;
       }
 
-      bIsExpansion = gpBNetCallbacks->pfnIsSocketConnected();
+      bIsExpansion = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
       OogCurrentCharSelectionMode = CHAR_SELECTION_BNET_OPEN_Unsure;
       if (bIsExpansion) {
         D2Win::D2GFX::D2GFX_SetVideoMode(1);
@@ -9120,7 +9126,7 @@ void __stdcall MAINMENU_BnetConnectionProgress() {
       return;
     }
 
-    gpBNetCallbacks->pfnGetConnectionState(&nConnectionState);
+    Launcher::gpBNetCallbacks->pfnGetConnectionState(&nConnectionState);
     switch (nConnectionState) {
       case 0:
         gbBnetProgressActive = 0x1433;
@@ -9267,7 +9273,7 @@ int __stdcall EDITBOX_Cb_MAINMENU_ShowDisconnectMessage(void * pUnknown) {
 
 void __stdcall UIMENU_YouWereDisconnectedFromBattleNet() {
     uint16_t* pwszText;
-    BOOL bConnected = gpBNetCallbacks->pfnIsSocketConnected();
+    BOOL bConnected = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
     if (!bConnected) {
       pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
       MAINMENU_ShowPopupWithCancel(pwszText, UIMENU_MainMenu);
@@ -9303,7 +9309,7 @@ void __stdcall UIMENU_YouWereDisconnectedFromBattleNet() {
 }
 
 void __stdcall UIMENU_YouWereDisconnectedFromBattleNet2() {
-    BOOL bConnected = gpBNetCallbacks->pfnIsSocketConnected();
+    BOOL bConnected = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
     if (!bConnected) {
       uint16_t* pwszText;
       pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
@@ -9379,7 +9385,7 @@ int __stdcall EDITBOX_Cb_MAINMENU_ShowDisconnectMessage2(void * pUnknown) {
 
 void __stdcall UIMENU_YouWereDisconnectedFromBattleNet3() {
     uint16_t* pwszText;
-    BOOL bConnected = gpBNetCallbacks->pfnIsSocketConnected();
+    BOOL bConnected = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
     if (!bConnected) {
       pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
       MAINMENU_ShowPopupWithCancel(pwszText, UIMENU_MainMenu);
@@ -9437,7 +9443,7 @@ int __stdcall LAUNCHER_BnetConnectionPollCallback(int nFrameIndex) {
     MAINMENU_BnetConnectionProgress();
     if (!ghBnetConnectHandle) {
       Launcher::LAUNCHER_ClearBusyFlag();
-      ghBnetConnectHandle = (HANDLE)gpBNetCallbacks->pfnConnectToBattleNet();
+      ghBnetConnectHandle = (HANDLE)Launcher::gpBNetCallbacks->pfnConnectToBattleNet();
       if (!ghBnetConnectHandle) {
         goto stop_message_loop;
       }
@@ -9455,7 +9461,7 @@ int __stdcall LAUNCHER_BnetConnectionPollCallback(int nFrameIndex) {
       return 1;
     }
 
-    gpBNetCallbacks->pfnDisconnect();
+    Launcher::gpBNetCallbacks->pfnDisconnect();
     stop_message_loop:
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
@@ -9517,7 +9523,7 @@ BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(D2ControlMsg * pControlMsg) {
         return 1;
       }
 
-      gpBNetCallbacks->pfnSendSetEmail(szEmail);
+      Launcher::gpBNetCallbacks->pfnSendSetEmail(szEmail);
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
       return 1;
     }
@@ -9576,9 +9582,9 @@ BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit) {
             D2Lang::WideCharToUTF8(szOldEmail, pwszOldEmail, 0x100);
             D2Lang::WideCharToUTF8(szNewEmail1, pwszNewEmail1, 0x100);
             D2Lang::WideCharToUTF8(szNewEmail2, pwszNewEmail1, 0x100);
-            bResult = gpBNetCallbacks->pfnIsSocketConnected();
+            bResult = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
             if (bResult) {
-              bResult = gpBNetCallbacks->pfnSendChangeEmail(szAccount, szOldEmail, szNewEmail1);
+              bResult = Launcher::gpBNetCallbacks->pfnSendChangeEmail(szAccount, szOldEmail, szNewEmail1);
               if (bResult) {
                 UIMENU_MainMenuAgain();
                 return 1;
@@ -9632,9 +9638,9 @@ BOOL __stdcall MAINMENU_OnSubmitResetPassword(int32_t bSubmit) {
         pwszPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlDisconnectDialog->sControl);
         D2Lang::WideCharToUTF8(szAccount, pwszAccount, 0x100);
         D2Lang::WideCharToUTF8(szPassword, pwszPassword, 0x100);
-        bResult = gpBNetCallbacks->pfnIsSocketConnected();
+        bResult = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
         if (bResult) {
-          bResult = gpBNetCallbacks->pfnSendResetPassword(szAccount, szPassword);
+          bResult = Launcher::gpBNetCallbacks->pfnSendResetPassword(szAccount, szPassword);
           if (bResult) {
             nMsgBoxArg8 = 0;
             nMsgBoxArg7 = 1;
@@ -9689,12 +9695,12 @@ char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex) {
 }
 
 int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex) {
-    BOOL BVar1 = gpBNetCallbacks->pfnWaitForLogonResponse();
+    BOOL BVar1 = Launcher::gpBNetCallbacks->pfnWaitForLogonResponse();
     if (BVar1) {
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
     if (!gnBusyFlag) {
-      BVar1 = gpBNetCallbacks->pfnIsSocketConnected();
+      BVar1 = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
       if (BVar1) {
         BVar1 = MAINMENU_GetGlobalValue2();
         if (!BVar1) {

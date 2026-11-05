@@ -1227,6 +1227,20 @@
       ]
     },
     {
+      "name": "zlibVersion_Unref_0044ce80",
+      "address": "0044ce80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "zlibVersion_Unref_0044ce80"
+      ]
+    },
+    {
       "name": "UpdateMouseModifierKeyState",
       "address": "0044ce90",
       "lines": [

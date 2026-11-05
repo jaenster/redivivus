@@ -1340,34 +1340,6 @@
       ]
     },
     {
-      "name": "StaticFini_gLogMessageQueueCS_Unref_00665930",
-      "address": "00665930",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00665930"
-        }
-      ],
-      "namespace": "Fog::Src::LogManager",
-      "calledFunctions": [
-        "StaticFini_gLogMessageQueueCS_Unref_00665930"
-      ]
-    },
-    {
-      "name": "StaticFini_gLogMessageQueueCS_Unref_00665940",
-      "address": "00665940",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00665940"
-        }
-      ],
-      "namespace": "Fog::Src::LogManager",
-      "calledFunctions": [
-        "StaticFini_gLogMessageQueueCS_Unref_00665940"
-      ]
-    },
-    {
       "name": "__GSHandlerCheck_EH_6c9d08",
       "address": "006c9d08",
       "lines": [

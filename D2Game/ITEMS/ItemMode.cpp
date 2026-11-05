@@ -156,7 +156,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
     eD2UnitStat eStat;
     eStat = eSkill >> 0x10;
     D2ItemStatCostTxt* pStatCostTxt;
-    pStatCostTxt = (int)eStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eStat : nullptr;
+    pStatCostTxt = (int)eStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStat : nullptr;
     if (!pStatCostTxt) {
       return;
     }
@@ -357,8 +357,8 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
       case UNITSTAT_item_charged_skill:
         if (pItemOwner) {
           nChargedSkillParam = (uint16_t)fOldMaxStat;
-          nChargedSkillId = sgptDataTable->dwChargedSkillLevelMask & nChargedSkillParam;
-          nSkillLevel = (int)nChargedSkillParam >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
+          nChargedSkillId = D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & nChargedSkillParam;
+          nSkillLevel = (int)nChargedSkillParam >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
           _bChargedCountActive = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItemOwner, eStat, (uint16_t)fOldMaxStat);
           nNewValue = _bChargedCountActive & 0xff;
           if (nNewValue) {
@@ -376,7 +376,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
       break;
       case UNITSTAT_state:
         eState = (uint16_t)fOldMaxStat;
-      if (true && (int)eState < sgptDataTable->nTxtStatesSize) {
+      if (true && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
         if (nNewValue) {
           if (eCurrentState) {
@@ -1100,8 +1100,8 @@ static BOOL __stdcall ITEMMODE_CheckDuplicateQuestItem(D2UnitStrc * pUnit, D2Uni
         nCheckResult = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
         if (nCheckResult >= 0) {
           nItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          pUniqueTxt = nItemQuality >= 0 && nItemQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + nItemQuality : nullptr;
-          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)gadwBitMasks[2]) {
+          pUniqueTxt = nItemQuality >= 0 && nItemQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nItemQuality : nullptr;
+          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
             nUniqueIdx = (int)(short int)pUniqueTxt->wId;
           }
         }
@@ -1260,7 +1260,7 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         if (nCheckResult >= 0) {
           nCheckResult = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pItem);
           pUniqueTxt = D2Client::DataTbls::INV_GetUniqueItemsTxtLine(nCheckResult);
-          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)gadwBitMasks[2]) {
+          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
             bQuestState = ITEMMODE_CheckDuplicateQuestItem(pItem, pInvItemHead, pItemsTxt);
             if (bQuestState) {
               return 0;
@@ -3468,11 +3468,8 @@ D2UnitStrc * __fastcall ITEMMODE_ValidateSocketedItems(::SGAMEDATA * pGameStrc, 
 void __fastcall ITEMMODE_CheckItemEthereal(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t bForce) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pItem, UNITSTAT_quantity, bForce, 0);
     uint16_t wStatLayer = 0;
-    uint32_t nNewQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
-    eD2UnitStat eStatId = UNITSTAT_quantity;
     bool bUpdateFlag = true;
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x18e0);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, bUpdateFlag, eStatId, nNewQty, wStatLayer);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x18e0), pItem, bUpdateFlag, UNITSTAT_quantity, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0), wStatLayer);
     ITEMMODE_UpdateBookSkillQuantity(bForce, pUnit, pItem);
 }
 
@@ -3859,13 +3856,13 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
     int32_t nStatCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0xcc, aStatBonusData, 0x40);
     for (nChargedStatIdx = 0; nChargedStatIdx < nStatCount; nChargedStatIdx++) {
       uint32_t nMaxCharges;
-      nSkillId = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex;
+      nSkillId = D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex;
       nMaxCharges = aStatBonusData[nChargedStatIdx].nStatValue >> 8;
-      nLevel = (int)(uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
+      nLevel = (int)(uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
       if ((int)(aStatBonusData[nChargedStatIdx].nStatValue & 0xffU) < (int)nMaxCharges) {
         D2Common::ITEMS::ItemMods::ITEMMOD_SetChargedSkillCharges(pItem, nLevel, nSkillId, nMaxCharges);
         if (pClient) {
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (uint8_t)nMaxCharges + nMaxCharges * 0x100, (short int)(nLevel << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (uint8_t)nMaxCharges + nMaxCharges * 0x100, (short int)(nLevel << D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits)) + ((uint16_t)D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
         }
       }
     }

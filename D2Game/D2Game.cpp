@@ -76,7 +76,7 @@ int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20() {
 
 // Sets the global DontNoSafeGameBool flag. When true, suppresses game-save on exit; used to mark games that should not persist (e.g. aborted/error states).
 void __fastcall GAME_SetNoSaveFlag(BOOL bResult) {
-    DontNoSafeGameBool = bResult;
+    PLAYER::PlayerSave::DontNoSafeGameBool = bResult;
 }
 
 D2UnitStrc * __stdcall QSERVER_FindUnitInFirstActiveGame(eD2UnitType eUnitType, DWORD dwUnitId) {
@@ -176,7 +176,7 @@ void __stdcall nullsub_B(D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam
 int __stdcall QSERVER_CountClientsWithStatusFlag0x20() {
     D2ClientStrc* pClient;
     int nMatchCount = 0;
-    if (!gQServerClientTablesInitialized) {
+    if (!GAME::Clients::gQServerClientTablesInitialized) {
       return 0;
     }
 
@@ -197,7 +197,7 @@ int __stdcall QSERVER_CountClientsWithStatusFlag0x20() {
 }
 
 void __fastcall GAME_SetNoSaveFlag_Unref_00544090(BOOL bResult) {
-    DEBUGPRINT = bResult;
+    Quests::QUESTS::DEBUGPRINT = bResult;
 }
 
 // Clears the global gbQuestReconnectMode flag (sets to 0), disabling quest-reconnect mode. Called during game teardown or after reconnect handling is complete.
@@ -213,7 +213,7 @@ void __stdcall TASK_InitializeClock() {
 int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
     int nTimeDelta = 100;
     EnterCriticalSection(aTaskQueueCriticalSections + (nQueueSlot & 0x1f));
-    D2TaskQueueSlotStrc* pTaskSlot = gaTaskQueueHeadArray[nQueueSlot & 0x1f];
+    D2TaskQueueSlotStrc* pTaskSlot = GAME::Task::gaTaskQueueHeadArray[nQueueSlot & 0x1f];
     if (!pTaskSlot) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (nQueueSlot & 0x1f));
       return 100;

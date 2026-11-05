@@ -57,6 +57,34 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 #endif
 
 static char * szBnNewsChannelName = s_BNNews_D2DV_006df210; D2_STATIC_GUARD(szBnNewsChannelName, "szBnNewsChannelName");
+namespace Bnclient::BnSend {
+char s___AUItem_NewsTable___0072ff8c[24] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'I',
+    't',
+    'e',
+    'm',
+    '@',
+    'N',
+    'e',
+    'w',
+    's',
+    'T',
+    'a',
+    'b',
+    'l',
+    'e',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUItem_NewsTable___0072ff8c, "Bnclient::BnSend::s___AUItem_NewsTable___0072ff8c");
+} // namespace Bnclient::BnSend
 static uint32_t g_nBNetServerToken = 0; D2_STATIC_GUARD(g_nBNetServerToken, "g_nBNetServerToken");
 static uint32_t g_nBNetClientToken = 0; D2_STATIC_GUARD(g_nBNetClientToken, "g_nBNetClientToken");
 static void * g_pBNetChannelListData = 0; D2_STATIC_GUARD(g_pBNetChannelListData, "g_pBNetChannelListData");
@@ -2148,6 +2176,14 @@ void __stdcall BNNEWS_InvokeCallbacks() {
     } while (nUnreadCount);
 }
 
+void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    Storm::Source::SMem::SMemFree(*(void**)((int)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
+}
+
 void * __thiscall BNNEWS_DestroyNewsTable(void * pNewsTable, uint8_t bFreeMemory) {
     if (*(void**)((int)pNewsTable + 8)) {
       Storm::Source::SMem::SMemFree(*(void**)((int)pNewsTable + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
@@ -2202,6 +2238,14 @@ void __thiscall BNNEWS_ReallocateNewsTable(D2BnNewsTableStrc * pNewsTable, uint3
     }
 
     Storm::Source::SMem::SMemFree(pObject, s___AUItem_NewsTable___0072ff8c, -2, 0);
+}
+
+void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray) {
+    if (!*(void**)((int)pArray + 8)) {
+      return;
+    }
+
+    Storm::Source::SMem::SMemFree(*(void**)((int)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
 int __fastcall Unreferenced_0051d690(int param_1) {
@@ -3164,15 +3208,15 @@ void __fastcall BNSEND_HashCDKeyByType(D2CDKeyHashStrc * pOutHash, uint32_t nTok
 }
 
 int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
-    Storm::Source::SMem::SMemCopy(gbBnetFtpFileTransferActive, pBytes, nSize);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetworkSendState = 0;
-    LeaveCriticalSection(&lpCriticalSection_00881f64);
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&BnDownload::lpCriticalSection_00881f64);
+    Storm::Source::SMem::SMemCopy(BnDownload::gbBnetFtpFileTransferActive, pBytes, nSize);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ BnDownload::gnNetworkSendState = 0;
+    LeaveCriticalSection(&BnDownload::lpCriticalSection_00881f64);
     return 1;
 }
 
 int __fastcall BNSEND_SendString(char * szString) {
-    Storm::Source::SSTR::SStrCopy(gszBNetChatInputBuffer, szString, 0x104);
+    Storm::Source::SSTR::SStrCopy(BnDownload::gszBNetChatInputBuffer, szString, 0x104);
     return 1;
 }
 

@@ -106,7 +106,9 @@ static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e980 = {
 static char gszOogLevelRestrictionText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogLevelRestrictionText, "gszOogLevelRestrictionText");
 static char gszOogMaxPlayersText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogMaxPlayersText, "gszOogMaxPlayersText");
 static int32_t gnPendingGameInfoCharIndex = -0x1; D2_STATIC_GUARD(gnPendingGameInfoCharIndex, "gnPendingGameInfoCharIndex");
-char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "gszOogChatInputBuffer");
+namespace D2Multi::OOGUtilities {
+char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "D2Multi::OOGUtilities::gszOogChatInputBuffer");
+} // namespace D2Multi::OOGUtilities
 char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffer, "gszOogReplyCommandBuffer");
 static uint16_t gwLastGameInfoRequestId = 0; D2_STATIC_GUARD(gwLastGameInfoRequestId, "gwLastGameInfoRequestId");
 
@@ -660,8 +662,8 @@ int __stdcall JoinOrCreateGame(DWORD dwUnused) {
       }
       if (gpChatFormList == (void*)0x3) {
         dwTickNow = (*pfnGetTickCount)();
-        if (dwTickNow - gdwLastGameListRefreshTick >= 15000) {
-          gdwLastGameListRefreshTick += dwTickNow - gdwLastGameListRefreshTick;
+        if (dwTickNow - OOGUtilities::gdwLastGameListRefreshTick >= 15000) {
+          OOGUtilities::gdwLastGameListRefreshTick += dwTickNow - OOGUtilities::gdwLastGameListRefreshTick;
           bPolled = true;
           OOGMENU_RequestGameList();
         }
@@ -870,7 +872,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
     bSocketConnected = pNetworkUnknown->pfnIsSocketConnected();
     if (bSocketConnected) {
       D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
-      /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&lpCriticalSection_0077ae28);
+      /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&ChatDlg::lpCriticalSection_0077ae28);
       if (!D2IniData_multiplayer->padding_0x35F[2]) {
         pNetworkUnknown->pfnSendNewsInfo((uint32_t)(uintptr_t)ChatDlg::CHATDLG_DisplayTimestampedMessage, (uint32_t)(uintptr_t)ChatDlg::CHATDLG_EnqueueClearMessage);
       }
@@ -885,7 +887,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
         pNetworkUnknown->pfnNewsShutdown();
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&lpCriticalSection_0077ae28);
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&ChatDlg::lpCriticalSection_0077ae28);
       pNetworkUnknown->pfnSendLeaveChat();
       if (gnOpenBNetMode != 4) {
         D2MCPClient::McpConnect::FreeMCP();
@@ -2130,7 +2132,7 @@ void __stdcall UIMENU_PlayerProfileLabels() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e860, "D2Multi::OOGUtilities::UIMENU_PlayerProfileLabels::FORMS_PredefinedFormStrc_0070e860");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e890 = {
@@ -2141,7 +2143,7 @@ void __stdcall UIMENU_PlayerProfileLabels() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e890, "D2Multi::OOGUtilities::UIMENU_PlayerProfileLabels::FORMS_PredefinedFormStrc_0070e890");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e8c0 = {
@@ -2152,7 +2154,7 @@ void __stdcall UIMENU_PlayerProfileLabels() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e8c0, "D2Multi::OOGUtilities::UIMENU_PlayerProfileLabels::FORMS_PredefinedFormStrc_0070e8c0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e8f0 = {
@@ -2163,7 +2165,7 @@ void __stdcall UIMENU_PlayerProfileLabels() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e8f0, "D2Multi::OOGUtilities::UIMENU_PlayerProfileLabels::FORMS_PredefinedFormStrc_0070e8f0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e9b0 = {
@@ -2174,7 +2176,7 @@ void __stdcall UIMENU_PlayerProfileLabels() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
     /* .nFlagsOrType = */ 0x2
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e9b0, "D2Multi::OOGUtilities::UIMENU_PlayerProfileLabels::FORMS_PredefinedFormStrc_0070e9b0");
 
@@ -2311,7 +2313,7 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
     /* .nFlagsOrType = */ 0x2
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070ea10, "D2Multi::OOGUtilities::UIMENU_DialogWindowChatCommands::FORMS_PredefinedFormStrc_0070ea10");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070ea40 = {
@@ -2321,8 +2323,8 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
     /* .nLabelAsLocaleStringId = */ 0x0,
     /* .pDC6 = */ &gpDC6JoinGameScrollbar,
     /* .fpOnPressCallback = */ nullptr,
-    /* .pTypeArg1 = */ (void*)gaMultiTextBoxScrollbarGeom6,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::gaMultiTextBoxScrollbarGeom6,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x4
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070ea40, "D2Multi::OOGUtilities::UIMENU_DialogWindowChatCommands::FORMS_PredefinedFormStrc_0070ea40");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070ea70 = {
@@ -2918,7 +2920,7 @@ void __stdcall UIMENU_WaitInLine() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
     /* .nFlagsOrType = */ 0x2
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070eaa0, "D2Multi::OOGUtilities::UIMENU_WaitInLine::FORMS_PredefinedFormStrc_0070eaa0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070ead0 = {
@@ -2929,7 +2931,7 @@ void __stdcall UIMENU_WaitInLine() {
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070ead0, "D2Multi::OOGUtilities::UIMENU_WaitInLine::FORMS_PredefinedFormStrc_0070ead0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070eb30 = {
@@ -3228,7 +3230,7 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e6b0, "D2Multi::OOGUtilities::OOGUTIL_CreateEditProfileDialog::FORMS_PredefinedFormStrc_0070e6b0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e6e0 = {
@@ -3239,7 +3241,7 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e6e0, "D2Multi::OOGUtilities::OOGUTIL_CreateEditProfileDialog::FORMS_PredefinedFormStrc_0070e6e0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e710 = {
@@ -3250,7 +3252,7 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e710, "D2Multi::OOGUtilities::OOGUTIL_CreateEditProfileDialog::FORMS_PredefinedFormStrc_0070e710");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e740 = {
@@ -3261,7 +3263,7 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x8
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e740, "D2Multi::OOGUtilities::OOGUTIL_CreateEditProfileDialog::FORMS_PredefinedFormStrc_0070e740");
 
@@ -3336,7 +3338,7 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e7a0, "D2Multi::OOGUtilities::OOGUTIL_CreateViewProfileDialog::FORMS_PredefinedFormStrc_0070e7a0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e7d0 = {
@@ -3347,7 +3349,7 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x22
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e7d0, "D2Multi::OOGUtilities::OOGUTIL_CreateViewProfileDialog::FORMS_PredefinedFormStrc_0070e7d0");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e800 = {
@@ -3358,7 +3360,7 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x20
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e800, "D2Multi::OOGUtilities::OOGUTIL_CreateViewProfileDialog::FORMS_PredefinedFormStrc_0070e800");
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e830 = {
@@ -3369,7 +3371,7 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     /* .pDC6 = */ nullptr,
     /* .fpOnPressCallback = */ nullptr,
     /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+    /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
     /* .nFlagsOrType = */ 0x0
 }; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e830, "D2Multi::OOGUtilities::OOGUTIL_CreateViewProfileDialog::FORMS_PredefinedFormStrc_0070e830");
 
@@ -3797,5 +3799,28 @@ int __fastcall OOGUTIL_ValidateStringFilter(DWORD dwUnused, char * szText) {
     ChatDlg::FORMS_DisplayBattleNetNews(wszNewsText);
     return 1;
 }
+
+} // namespace D2Multi::OOGUtilities
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Multi::OOGUtilities {
+
+// Initialized scalars
+
+// also labelled: gUIGameListPlayerCountLabel
+::D2WinButton * gUIGameListMaxPlayersDownButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersDownButton, "D2Multi::OOGUtilities::gUIGameListMaxPlayersDownButton");
+// also labelled: gUIGameListLevelRestrictionMaxEditBox
+::D2WinButton * gUIGameListLevelRestrictionDownButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionDownButton, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionDownButton");
+// also labelled: gUIGameListJoinButton
+::D2WinButton * gUIGameListLevelRestrictionCheckbox = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionCheckbox, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionCheckbox");
+// also labelled: gUIGameListGameListBox
+::D2WinButton * gUIGameListDifficultyNormalButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNormalButton, "D2Multi::OOGUtilities::gUIGameListDifficultyNormalButton");
+// also labelled: gUIGameListScrollbar
+::D2WinButton * gUIGameListDifficultyNightmareButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNightmareButton, "D2Multi::OOGUtilities::gUIGameListDifficultyNightmareButton");
+// also labelled: gUIGameListExpandedDetailsText
+::D2WinButton * gUIGameListDifficultyHellButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyHellButton, "D2Multi::OOGUtilities::gUIGameListDifficultyHellButton");
 
 } // namespace D2Multi::OOGUtilities

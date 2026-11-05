@@ -118,19 +118,17 @@ void __fastcall Q14_CheckUnitDistanceToTyrael(::SGAMEDATA * pGame, D2UnitStrc * 
 // pNpc (EDX) is stored as D2QuestDataA2Q6Strc.pTyraelSpawnAnchor (+0x40) before the unit scan; the only caller passes its own unit.
 BOOL __fastcall Q14_IsNpcStationary(::SGAMEDATA * pGame, D2UnitStrc * pNpc) {
     D2QuestDataStrc* pSevenTombsData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
-    if (!pSevenTombsData) {
-      return 0;
-    }
-
-    D2QuestDataA2Q6Strc* pA2Q6Data = pSevenTombsData->pQuestSpecificData.pA2Q6;
-    if (pA2Q6Data->bCompletedPlayerJoined) {
-      return 1;
-    }
-    if (pA2Q6Data->bTyraelPortalSpawnLock) {
-      pA2Q6Data->bTyraelSpawnSpotOccupied = false;
-      pA2Q6Data->pTyraelSpawnAnchor = pNpc;
-      UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Q14_CheckUnitDistanceToTyrael, pA2Q6Data);
-      return (uint32_t)!pA2Q6Data->bTyraelSpawnSpotOccupied;
+    if (pSevenTombsData) {
+      D2QuestDataA2Q6Strc* pA2Q6Data = pSevenTombsData->pQuestSpecificData.pA2Q6;
+      if (pA2Q6Data->bCompletedPlayerJoined) {
+        return 1;
+      }
+      if (pA2Q6Data->bTyraelPortalSpawnLock) {
+        pA2Q6Data->bTyraelSpawnSpotOccupied = false;
+        pA2Q6Data->pTyraelSpawnAnchor = pNpc;
+        UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Q14_CheckUnitDistanceToTyrael, pA2Q6Data);
+        return (uint32_t)!pA2Q6Data->bTyraelSpawnSpotOccupied;
+      }
     }
 
     return 0;
@@ -151,22 +149,20 @@ BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2
     LONG nSpawnY;
     LONG nSpawnX;
     D2QuestDataStrc* pSevenTombsData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
-    if (!(pSevenTombsData && pSevenTombsData->pQuestSpecificData.pA2Q6->bPortalSpawnInProgress == 1)) {
-      return 0;
-    }
+    if ((pSevenTombsData && pSevenTombsData->pQuestSpecificData.pA2Q6->bPortalSpawnInProgress == 1) != 0) {
+      D2RoomStrc* pSpawnRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[1], LEVEL_LutGholein, 0xc, (int*)&nSpawnX, (int*)&nSpawnY, 3);
+      if (!pSpawnRoom) {
+        return 0;
+      }
 
-    D2RoomStrc* pSpawnRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[1], LEVEL_LutGholein, 0xc, (int*)&nSpawnX, (int*)&nSpawnY, 3);
-    if (!pSpawnRoom) {
-      return 0;
-    }
-
-    GAME::Server::SetSomeRoomFlags(pGame, pSpawnRoom);
-    pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithIncrementValue(pSpawnRoom, pPoint, 3, 0xbe11, 7);
-    if (pSpawnRoom) {
-      pPoint->x = nSpawnX;
-      pPoint->y = nSpawnY;
-      *ppSpawnRoom = pSpawnRoom;
-      return 1;
+      GAME::Server::SetSomeRoomFlags(pGame, pSpawnRoom);
+      pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithIncrementValue(pSpawnRoom, pPoint, 3, 0xbe11, 7);
+      if (pSpawnRoom) {
+        pPoint->x = nSpawnX;
+        pPoint->y = nSpawnY;
+        *ppSpawnRoom = pSpawnRoom;
+        return 1;
+      }
     }
 
     return 0;

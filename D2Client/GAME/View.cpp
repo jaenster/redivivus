@@ -66,9 +66,12 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GameViewStrc) == 0xeabc, "D2_NEW_
 
 
 static D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gaSpriteArcaneStarYOffset; D2_STATIC_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
+namespace D2Client::GAME::View {
+D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "D2Client::GAME::View::gAncientsCloudSeed");
+} // namespace D2Client::GAME::View
 static uint8_t gaArcaneStarColors[256] = {}; D2_STATIC_GUARD(gaArcaneStarColors, "gaArcaneStarColors");
 uint32_t gaSpriteArcaneStarYOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarYOffset, "gaSpriteArcaneStarYOffset");
-uint32_t gaSpriteArcaneStarXOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarXOffset, "gaSpriteArcaneStarXOffset");
+static uint32_t gaSpriteArcaneStarXOffset = 0; D2_STATIC_GUARD(gaSpriteArcaneStarXOffset, "gaSpriteArcaneStarXOffset");
 int nScaleFactor = 0; D2_GLOBAL_GUARD(nScaleFactor, "nScaleFactor");
 static int32_t gaArcaneStarYPos[256] = {}; D2_STATIC_GUARD(gaArcaneStarYPos, "gaArcaneStarYPos");
 static uint8_t gPaletteTransitionTable[12544] = {}; D2_STATIC_GUARD(gPaletteTransitionTable, "gPaletteTransitionTable");
@@ -85,8 +88,8 @@ int gnSoundShakeVolume = 0; D2_GLOBAL_GUARD(gnSoundShakeVolume, "D2Client::GAME:
 } // namespace D2Client::GAME::View
 static int32_t gaArcaneStarXPos[256] = {}; D2_STATIC_GUARD(gaArcaneStarXPos, "gaArcaneStarXPos");
 static int32_t gaArcaneStarXVelocity[256] = {}; D2_STATIC_GUARD(gaArcaneStarXVelocity, "gaArcaneStarXVelocity");
-uint32_t gnLastLightmapUpdateFrame = 0; D2_GLOBAL_GUARD(gnLastLightmapUpdateFrame, "gnLastLightmapUpdateFrame");
 namespace D2Client::GAME::View {
+uint32_t gnLastLightmapUpdateFrame = 0; D2_GLOBAL_GUARD(gnLastLightmapUpdateFrame, "D2Client::GAME::View::gnLastLightmapUpdateFrame");
 uint32_t SHAKE_Amplitude = 0; D2_GLOBAL_GUARD(SHAKE_Amplitude, "D2Client::GAME::View::SHAKE_Amplitude");
 uint32_t SHAKE_OFFSET_X = 0; D2_GLOBAL_GUARD(SHAKE_OFFSET_X, "D2Client::GAME::View::SHAKE_OFFSET_X");
 uint8_t * * gpViewPalPointerTable32x8 = 0; D2_GLOBAL_GUARD(gpViewPalPointerTable32x8, "D2Client::GAME::View::gpViewPalPointerTable32x8");
@@ -102,8 +105,8 @@ uint32_t gnFrameDrawCounter = 0; D2_GLOBAL_GUARD(gnFrameDrawCounter, "gnFrameDra
 namespace D2Client::GAME::View {
 
 void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * pOutIntensity, uint8_t * pOutRed, uint8_t * pOutGreen, uint8_t * pOutBlue) {
-    int nCellX = (nWorldX >> 3) - gnLightmapWorldRefreshFlag;
-    int nCellY = (nWorldY >> 3) - gnLightmapBufferState;
+    int nCellX = (nWorldX >> 3) - D2Client::Draw::LightMap::gnLightmapWorldRefreshFlag;
+    int nCellY = (nWorldY >> 3) - D2Client::Draw::LightMap::gnLightmapBufferState;
     if (nCellX < 0) {
       nCellX = 0;
     } else if (nCellX > 0x2f) {
@@ -116,22 +119,22 @@ void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * 
     }
 
     nCellX = nCellY * 0x30 + nCellX;
-    *pOutIntensity = gaLightMapCells[nCellX].nCellIntensity;
-    if (!gbLightmapColorEnabled) {
+    *pOutIntensity = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nCellIntensity;
+    if (!D2Client::Draw::LightMap::gbLightmapColorEnabled) {
       return;
     }
 
-    *pOutRed = gaLightMapCells[nCellX].nRed;
-    *pOutGreen = gaLightMapCells[nCellX].nGreen;
-    *pOutBlue = gaLightMapCells[nCellX].nBlue;
+    *pOutRed = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nRed;
+    *pOutGreen = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nGreen;
+    *pOutBlue = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nBlue;
 }
 
 void __stdcall DrawLight() {
-    D2gfx::D2GFX::D2GFX_DrawLight((DWORD*)gLightMapBuffer, (DWORD*)gaLightMapCells, D2Client::Draw::LightMap::gpLightMap->nGridX, D2Client::Draw::LightMap::gpLightMap->nGridY);
+    D2gfx::D2GFX::D2GFX_DrawLight((DWORD*)gLightMapBuffer, (DWORD*)D2Client::Draw::LightMap::gaLightMapCells, D2Client::Draw::LightMap::gpLightMap->nGridX, D2Client::Draw::LightMap::gpLightMap->nGridY);
 }
 
 void __stdcall VIEW_Init() {
-    D2Common::DUNGEON::Dungeon::SetActCallbackFunc(sgpDrlgAct, (::ACTCALLBACKFN)D2Client::Draw::LightMap::ACTCALLBACKFN);
+    D2Common::DUNGEON::Dungeon::SetActCallbackFunc(Game::sgpDrlgAct, (::ACTCALLBACKFN)D2Client::Draw::LightMap::ACTCALLBACKFN);
     gnLightmapInterpolationState[1] = 0;
     int nLoopIdx = 1;
     do {
@@ -390,7 +393,7 @@ void __fastcall SetViewRectangleSize(D2GameViewStrc * pGameView, int32_t xLeft, 
     /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&pGameView->pView, xLeft, yTop, xRight, yBottom);
     _bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     tagRECT* lprc = &pGameView->rcExtendedView;
-    /* LPRECT lprc for SetRect */ SetRect(lprc, -0x50, -0x50, ScreenSizeX + 0x50, ScreenSizeY - 0x2f);
+    /* LPRECT lprc for SetRect */ SetRect(lprc, -0x50, -0x50, UI::ui::ScreenSizeX + 0x50, UI::Inv::ScreenSizeY - 0x2f);
     if (_bPerspective) {
       pGameView->rcExtendedView.top += -0x1e;
       lprc->left += -0x2d;
@@ -466,12 +469,12 @@ void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespaw
     if (bRespawn) {
       seed = D2_SEED_NEXT(*gpArcaneStarsSeed);
       *gpArcaneStarsSeed = seed;
-      nStarXPos = (seed.nSeedLow & 7) - 1 + WindowSizeX;
+      nStarXPos = (seed.nSeedLow & 7) - 1 + UI::SpellSel::WindowSizeX;
     } else {
-      nStarXPos = Archive::UNIT_GetModuloFromSeed(gpArcaneStarsSeed, WindowSizeX);
+      nStarXPos = Archive::UNIT_GetModuloFromSeed(gpArcaneStarsSeed, UI::SpellSel::WindowSizeX);
     }
 
-    int nWindowHeight = WindowSizeY;
+    int nWindowHeight = UI::ui::WindowSizeY;
     gaArcaneStarXPos[nStarIndex] = nStarXPos;
     if (nWindowHeight <= 0) {
       nYPos = 0;
@@ -587,7 +590,7 @@ void __stdcall DRAW_Overlay_ArcaneStars() {
 // Draws Ancients arena background with parallax scrolling summit (summit01.dc6, 4-tile wrap) and animated clouds (cloud01.dc6, 10 instances with RNG positions/velocities). Cloud positions stored in gAncientsBackgroundCellPtrs array. Scroll offset calculated from player X position delta divided by 8. Supports 800x600 and higher resolutions.
 static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     // Static local variables (originally global data)
-    static D2SeedStrc * gpAncientsCloudSeed = (D2SeedStrc *)&gAncientsCloudSeed; D2_STATIC_GUARD(gpAncientsCloudSeed, "D2Client::GAME::View::DRAW_Background_Ancients::gpAncientsCloudSeed");
+    static D2SeedStrc * gpAncientsCloudSeed = (D2SeedStrc *)&D2Client::GAME::View::gAncientsCloudSeed; D2_STATIC_GUARD(gpAncientsCloudSeed, "D2Client::GAME::View::DRAW_Background_Ancients::gpAncientsCloudSeed");
     static int gaAncientsCloudYPos[10] = {}; D2_STATIC_GUARD(gaAncientsCloudYPos, "D2Client::GAME::View::DRAW_Background_Ancients::gaAncientsCloudYPos");
     static int gaAncientsCloudVelocities[10] = {}; D2_STATIC_GUARD(gaAncientsCloudVelocities, "D2Client::GAME::View::DRAW_Background_Ancients::gaAncientsCloudVelocities");
     static int gaAncientsCloudXPos[10] = {}; D2_STATIC_GUARD(gaAncientsCloudXPos, "D2Client::GAME::View::DRAW_Background_Ancients::gaAncientsCloudXPos");
@@ -715,7 +718,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       pAncientsCloudSeed = gpAncientsCloudSeed;
       nScrollOffset = 0;
       do {
-        nCloudSeedVal = Archive::UNIT_GetModuloFromSeed(pAncientsCloudSeed, WindowSizeX << 4);
+        nCloudSeedVal = Archive::UNIT_GetModuloFromSeed(pAncientsCloudSeed, UI::SpellSel::WindowSizeX << 4);
         *(uint32_t*)((int)gaAncientsCloudXPos + nScrollOffset) = nCloudSeedVal;
         ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
         *pAncientsCloudSeed = ullSeedValue;
@@ -731,7 +734,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
 
     nScrollOffset = 0;
     do {
-      nCloudIdx = WindowSizeX;
+      nCloudIdx = UI::SpellSel::WindowSizeX;
       *(int*)((int)gaAncientsCloudXPos + nScrollOffset) += *(int*)((int)gaAncientsCloudVelocities + nScrollOffset);
       if (*(int*)((int)gaAncientsCloudXPos + nScrollOffset) > (nCloudIdx + 0x170) * 0x10) {
         *(uint32_t*)((int)gaAncientsCloudXPos + nScrollOffset) = -5888;
@@ -941,18 +944,18 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
         gnDrawBackgroundRenderOffset = 0;
       }
     }
-    if (pGameView->sWall2.dwWall2PassMask & gadwBitMasks[0]) {
+    if (pGameView->sWall2.dwWall2PassMask & Fog::BitBuffer::gadwBitMasks[0]) {
       Draw::DRAW_WORLD_UnderFloor(pGameView);
     }
 
     Draw::dFloorDraw(pGameView);
     D2Client::Draw::Weather::DRAW_WORLD_RainEffectOnFloor();
-    if (pGameView->sWall2.dwWall2PassMask & gadwBitMasks[3]) {
+    if (pGameView->sWall2.dwWall2PassMask & Fog::BitBuffer::gadwBitMasks[3]) {
       Draw::dShadowPass(pGameView);
     }
 
     Draw::dWallPass(pGameView);
-    if (pGameView->sWall2.dwWall2PassMask & gadwBitMasks[1]) {
+    if (pGameView->sWall2.dwWall2PassMask & Fog::BitBuffer::gadwBitMasks[1]) {
       Draw::dRoofDraw(pGameView);
     }
     if (gnFrameDrawCounter) {

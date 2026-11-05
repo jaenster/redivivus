@@ -42,6 +42,39 @@ struct D2MonSeqTxt {
     /* 0x05 */ uint8_t event;
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Common::Merc {
+
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_007466dc[7];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746820[21];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746948[8];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746a20[16];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746b28[16];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746c30[6];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746d00[16];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746e08[33];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00746f78[45];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747130[32];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747298[8];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747370[17];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747480[20];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_007475a0[16];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_007476a8[104];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_007479c0[12];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747ab0[28];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747c00[20];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747d20[20];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747e40[16];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00747f48[17];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00748058[24];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00748190[16];
+extern D2MonSeqTxt D2MonSeqTxt_ARRAY_00748298[20];
+
+} // namespace D2Common::Merc
+
 namespace D2Common::Merc {
 
 // Function declarations

@@ -52,7 +52,7 @@ BOOL __stdcall CHATDLG_DestroyFormsAndOpenChannelDialog(D2ControlMsg * pControlM
 
 BOOL __stdcall CHATDLG_DestroyFormsAndJoinGame(D2ControlMsg * pControlMsg) {
     ChatDlg::CHATDLG_DestroyAllForms();
-    gpChatFormList = (void*)0x3;
+    OOGUtilities::gpChatFormList = (void*)0x3;
     OOGUtilities::UIMENU_JoinGame();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);

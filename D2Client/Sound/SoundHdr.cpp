@@ -67,35 +67,35 @@ D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8] = {
     },
     {
         /* .nCutsceneId = */ 0x1,
-        /* .pszVideoPath = */ s_d2intro_s_bik_006d919c,
+        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_d2intro_s_bik_006d919c,
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x2,
-        /* .pszVideoPath = */ s_ACT02START_s_BIK_006d9188,
+        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT02START_s_BIK_006d9188,
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x3,
-        /* .pszVideoPath = */ s_ACT03START_s_BIK_006d9174,
+        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT03START_s_BIK_006d9174,
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x4,
-        /* .pszVideoPath = */ s_ACT04START_s_BIK_006d9160,
+        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT04START_s_BIK_006d9160,
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x5,
-        /* .pszVideoPath = */ s_ACT04END_s_BIK_006d9150,
+        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT04END_s_BIK_006d9150,
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
@@ -109,7 +109,7 @@ D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8] = {
     },
     {
         /* .nCutsceneId = */ 0x7,
-        /* .pszVideoPath = */ s_D2X_OUT__s_BIK_006d912c,
+        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_D2X_OUT__s_BIK_006d912c,
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
@@ -531,8 +531,8 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
       D2_FREE_AT(pSound->pSoundDataBuffer, ".\\Sound\\SoundHdr.cpp", 0x272);
     }
 
-    pSound->nLoadState = 0;
     pSound->pSoundDataBuffer = 0;
+    pSound->nLoadState = 0;
 }
 
 BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMultiPass, int32_t bRespectRecency) {

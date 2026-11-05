@@ -142,7 +142,6 @@ void __stdcall SPRITECACHE_Shutdown(int32_t bReleaseMemory);
 int __stdcall SPRITECACHE_GetOrLoadSprite(struct D2GfxDataStrc * pGfxData, int32_t bCheckOnly, int32_t bLoadAsCel);
 // Server sprite precache sync. GuardStack tail confirms BOOL return: GuardStack(1) on two early-out success paths, GuardStack(nLoadResult) on the cache-and-load path, GuardStack(0) on failure.
 BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(struct D2GfxDataStrc * pGfxData);
-void __fastcall SPRITECACHE_SetMaxSize_Unref_00624700(size_t nSize);
 void __fastcall SPRITECACHE_SetMaxSize_Unref_006b2f30(size_t nSize);
 // 15 internal functions (defined in .cpp)
 

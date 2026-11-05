@@ -57,7 +57,7 @@ namespace D2Game::Monsters::Spawn {
 
 int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nDifficulty) {
     int nDiffStep;
-    D2MonStatsTxt* pMonStatLine = nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
+    D2MonStatsTxt* pMonStatLine = nMonstatId >= 0 && nMonstatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
     if (!pMonStatLine) {
       return -1;
     }
@@ -65,7 +65,7 @@ int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32
     int32_t nClassId = (int32_t)pMonStatLine->BaseId;
     for (nDiffStep = 0; nDiffStep < nDifficulty; nDiffStep++) {
       nClassId = (int32_t)pMonStatLine->NextInClass;
-      pMonStatLine = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+      pMonStatLine = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
       if (!pMonStatLine) {
         return nClassId;
       }
@@ -386,10 +386,10 @@ static D2UnitStrc * __stdcall MONSTER_SpawnMonsterGroup(::SGAMEDATA * pGame, D2R
     D2UnitStrc* pUnit;
     uint32_t nMinionCount;
     int32_t nMinionIdx;
-    if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatLine = 0;
     } else {
-      pMonStatLine = sgptDataTable->pTxtMonStats + nClassId;
+      pMonStatLine = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     }
 
     uint8_t byMinGrp = pMonStatLine->MinGrp;
@@ -470,7 +470,7 @@ uint32_t __stdcall MONSTER_SpawnUniquePackInRoom(D2RoomStrc * pRoom, ::SGAMEDATA
 // Resolves the effective monster class ID for spawning in a given level, handling variant substitution. For Fallen (baseId=0x13) and Zombie (baseId=0x3a), remaps to level-appropriate variants based on eLevelId (BlackMarsh, TamoeHighland, PitLevel1/2). Returns the original nClassId unchanged if no substitution applies or if out of MonStats bounds.
 static int32_t MONSTER_ValidateSpawnForLevel(int32_t nClassId, eD2LevelId eLevelId) {
     int32_t nBaseId = nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       nBaseId = (int32_t)pMonStatsTxt->BaseId;
     }
@@ -478,7 +478,7 @@ static int32_t MONSTER_ValidateSpawnForLevel(int32_t nClassId, eD2LevelId eLevel
       return nClassId;
     }
 
-    int32_t nMonStatsSize = sgptDataTable->nTxtMonStatsSize;
+    int32_t nMonStatsSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     if (nBaseId >= nMonStatsSize) {
       return nClassId;
     }
@@ -512,7 +512,7 @@ static int32_t MONSTER_ValidateSpawnForLevel(int32_t nClassId, eD2LevelId eLevel
 }
 
 static BOOL SPAWN_IsExcludedMonsterClass(int32_t nClassId) {
-    if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nClassId = -1;
     }
 
@@ -544,7 +544,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     BOOL _bObjColFlag;
     bool bRescueQuestDone;
     bool bObjColFlag;
-    D2MonStatsTxt* pMonStats = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStats = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStats) {
       return nullptr;
     }
@@ -562,7 +562,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     }
 
     int16_t nSpawnFlags = 0;
-    if (*((uint8_t*)pMonStats + 0xe) & (uint8_t)gadwBitMasks[2]) {
+    if (*((uint8_t*)pMonStats + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       nSpawnFlags = 8;
     }
 
@@ -583,7 +583,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     if (!_bObjColFlag) {
       return pMonster;
     }
-    if (nClassId < sgptDataTable->nTxtMonStatsSize && nClassId == 0x1b0) {
+    if (nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId == 0x1b0) {
       UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23b, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
       return pMonster;
     }
@@ -618,8 +618,8 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
     D2UnitStrc* pMonster = 0;
     D2MonStatsTxt* pMonStatCheck = (D2MonStatsTxt*)0x1;
     ::SGAMEDATA* pGameLocal = pGame;
-    if (nMonCode >= sgptDataTable->nTxtMonStatsSize) {
-      nSuperUniqueId = nMonCode - sgptDataTable->nTxtMonStatsSize;
+    if (nMonCode >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      nSuperUniqueId = nMonCode - D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
       nResolvedClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
       if ((int)nSuperUniqueId < nResolvedClassId) {
         pMonster = SPAWN_UniqueMonster(pGameLocal, pRoom, nX, nY, nSuperUniqueId);
@@ -633,24 +633,24 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (pMonStatCheck == (D2MonStatsTxt*)0x1) {
       eD2LevelId eLevelId2;
-      if (nMonCode < 0 || (nValidClassId = nMonCode , nMonCode >= sgptDataTable->nTxtMonStatsSize)) {
+      if (nMonCode < 0 || (nValidClassId = nMonCode , nMonCode >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
         nValidClassId = -1;
       }
       if (nValidClassId != 0x1f2) {
         if (nValidClassId == 0x205 && (bSiegeIntroDone = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath) , bSiegeIntroDone != 0) && (eLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom) , eLevelId2 == LEVEL_BloodyFoothills)) {
-          nMonCode = sgptDataTable->nTxtMonStatsSize <= 0x206 ? -1 : 0x206;
+          nMonCode = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x206 ? -1 : 0x206;
         }
       } else {
         bSiegeIntroDone2 = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath);
         if (bSiegeIntroDone2) {
           eRoomLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
           if (eRoomLevelId == LEVEL_BloodyFoothills) {
-            nMonCode = sgptDataTable->nTxtMonStatsSize <= 499 ? -1 : 499;
+            nMonCode = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 499 ? -1 : 499;
           }
         }
       }
       if (pGameLocal->nDifficulty > 0) {
-        if (nMonCode < 0 || (nValidClassId = nMonCode , nMonCode >= sgptDataTable->nTxtMonStatsSize)) {
+        if (nMonCode < 0 || (nValidClassId = nMonCode , nMonCode >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
           nValidClassId = -1;
         }
         if ((nValidClassId == 0x1c5 || nValidClassId == 0x211) && eLevelId == LEVEL_BloodyFoothills) {
@@ -695,7 +695,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
         pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, 0x10a, nAnimMode, -1, 0);
       return pMonster;
       case 5:
-        pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, sgptDataTable->nTxtMonStatsSize <= 0x10b ? -1 : 0x10b, nAnimMode, -1, 0);
+        pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x10b ? -1 : 0x10b, nAnimMode, -1, 0);
       return pMonster;
       default:
         return pMonster;
@@ -739,7 +739,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
         break;
       }
 
-      nDiffClassId = MONSTER_GetMonsterClassByDifficulty(sgptDataTable->nTxtMonStatsSize <= 0x105 ? -1 : 0x105, nResolvedClassId);
+      nDiffClassId = MONSTER_GetMonsterClassByDifficulty(D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x105 ? -1 : 0x105, nResolvedClassId);
       pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, nDiffClassId, nAnimMode, -1, nSpawnFlags);
       return pMonster;
       case 0x11:
@@ -834,7 +834,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
     uint32_t nSpawnClassId = MONSTER_ValidateSpawnForLevel(nResolvedClassId, eLevelId);
     *(uint16_t*)(char*)&nMonCode = 0;
     D2MonStatsTxt* pMonStatEntry = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(nSpawnClassId);
-    if (*((uint8_t*)pMonStatEntry + 0xe) & (uint8_t)gadwBitMasks[2]) {
+    if (*((uint8_t*)pMonStatEntry + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       *(uint16_t*)(char*)&nMonCode = 8;
     }
 
@@ -896,11 +896,11 @@ static BOOL MONSTER_CanSpawnInRoom(D2RoomStrc * pRoom, ::SGAMEDATA * pGame) {
 
 BOOL __fastcall CheckIfBaseIsFallenOrScarabAndSet(int32_t nMonstatId) {
     if (nMonstatId >= 0) {
-      D2MonStatsTxt* pMonStatsTxt = nMonstatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
+      D2MonStatsTxt* pMonStatsTxt = nMonstatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
       if (pMonStatsTxt) {
         nMonstatId = (int32_t)pMonStatsTxt->BaseId;
       }
-      if (nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize && (nMonstatId == 19 || nMonstatId == 91)) {
+      if (nMonstatId >= 0 && nMonstatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && (nMonstatId == 19 || nMonstatId == 91)) {
         return 1;
       }
     }

@@ -98,20 +98,20 @@ typedef int32_t (__fastcall *fnRoomUnitScanCallback)(D2UnitStrc * pSourceUnit, D
 #endif
 
 char * gaLanguageNames_007251e0[15] = {
-    s_English_006cc81c,
-    s_Spanish_006cc814,
-    s_German_006cc80c,
-    s_French_006cc804,
-    s_Portuguese_006cc7f8,
-    s_Italian_006cc7f0,
-    s_Japanese_006cc7e4,
-    s_Korean_006cc7dc,
-    s_Simplified_Chinese_006cc7c8,
-    s_Traditional_Chinese_006cc7b4,
-    s_Polish_006cc7ac,
-    s_Russian_006cc7a4,
-    s_English_with_Korean_Chat_006cc788,
-    s_Unknown_006cc780,
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
     s_14_006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_007251e0, "gaLanguageNames_007251e0");
 
@@ -556,7 +556,7 @@ void __fastcall MONSTER_SetMonStatsTxtAndType(D2UnitStrc * pUnit, uint16_t wPara
 
     *(uint16_t*)&pDVar1->pAiGeneral = wParam;
     int nClassId = pUnit->nClassId;
-    pDVar1->pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : 0;
+    pDVar1->pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : 0;
 }
 
 // Returns the address of the monster data's AI slot (+0x30). The client never allocates a server AI there; it uses the slot as an int think-delay in frames, decremented each update and reloaded with 5..0x20.
@@ -625,7 +625,7 @@ void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
     }
 
     int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return;
     }
@@ -806,7 +806,7 @@ static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
         D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0);
         return;
         case 0x96:
-          gnMonsterSpecialType = (uint32_t)(uintptr_t)pUnit;
+          UI::npcmenu::gnMonsterSpecialType = (uint32_t)(uintptr_t)pUnit;
         return;
       }
     } else {
@@ -854,14 +854,14 @@ uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2Un
       return 0;
     }
 
-    D2MonStatsTxt* pMonStatsTxt = nBaseClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nBaseClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nBaseClassId : nullptr;
     if (pMonStatsTxt) {
       nBaseClassId = (int)pMonStatsTxt->BaseId;
     }
     if (nBaseClassId < 0) {
       return 0;
     }
-    if (!(nBaseClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nBaseClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
     if (nBaseClassId != 0x12a) {
@@ -911,7 +911,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     int i;
     int32_t nErrLine;
     D2MonStatsTxt* pMonStatsTxt;
-    pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return;
     }
@@ -919,7 +919,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     int nMonStats2Idx;
     nMonStats2Idx = (int)pMonStatsTxt->MonStatsEx;
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
+    pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -953,7 +953,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     D2DynamicPathStrc* pDynamicPath;
     pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, (int)pMonStatsTxt->Velocity << 8, ".\\UNIT\\Monster.cpp", 0x208);
-    if (!pUnit->pInventory && (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)gadwBitMasks[1] || nClassId == 0x123 || nClassId == 0x165 || nClassId == 0x1a1 || nClassId == 0x1a2)) {
+    if (!pUnit->pInventory && (*((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1] || nClassId == 0x123 || nClassId == 0x165 || nClassId == 0x1a1 || nClassId == 0x1a2)) {
       pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
       pUnit->pInventory = pInventory;
     }
@@ -961,7 +961,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     D2Common::Units::SetupUpdateFlag(pUnit, nAnimMode);
     BOOL bResult;
     bResult = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
-    if (bResult && !(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[3])) {
+    if (bResult && !(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pUnit, 1);
       D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 5);
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x8000);
@@ -970,19 +970,19 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     uint32_t nRandStartFrame;
     nRandStartFrame = Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount);
     pUnit->nGfxCurrentFrame = nRandStartFrame;
-    if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)gadwBitMasks[3]) {
+    if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
-    if (!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)gadwBitMasks[6])) {
+    if (!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
       pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_DRAWSHADOW;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET;
-    if (*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       eUpdatedFlags = pUnit->eUnitFlags | UNITFLAG_CANBEATTACKED;
     } else {
       eUpdatedFlags = pUnit->eUnitFlags & ~UNITFLAG_CANBEATTACKED;
@@ -1012,17 +1012,17 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
 
     D2Common::Monsters::MONSTERS::MONSTERS_OnInitMonster_NoOp(pUnit, nMonStats2Idx);
     nMonStats2Idx = pUnit->nClassId;
-    if (nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonStats2Idx && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nMonStats2Idx] + 0xd) & gadwBitMasks[0]) {
+    if (nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStats2Idx] + 0xd) & Fog::BitBuffer::gadwBitMasks[0]) {
       return;
     }
 
     *(uint8_t*)(char*)&pSkillIdPtr = 0;
     if (pUnit->eUnitType == UNIT_MONSTER) {
       i = nMonStats2Idx;
-      if (nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonStats2Idx) {
-        i = (int)sgptDataTable->pTxtMonStats[nMonStats2Idx].BaseId;
+      if (nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx) {
+        i = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStats2Idx].BaseId;
       }
-      if (i < 0 || i >= sgptDataTable->nTxtMonStatsSize) {
+      if (i < 0 || i >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         i = -1;
       }
     } else {
@@ -1070,7 +1070,7 @@ void __fastcall FreeMonster(D2UnitStrc * pUnit) {
     CUnit::CleanupInventory(pUnit, 1);
     D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);
     pUnit->pInventory = 0;
-    if (sgpDrlgAct) {
+    if (GAME::Game::sgpDrlgAct) {
       D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
       D2Common::Unit::RemoveUnitFromRoom(pUnit);
       CUnit::FreeLightMap(pUnit);
@@ -1105,7 +1105,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     short int* pSkillIdPtr;
     D2UnitDataMonsterStrc* pMonData;
     D2MonStatsTxt* pMonStatsTxtNew;
-    pMonStatsTxtNew = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    pMonStatsTxtNew = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxtNew) {
       return;
     }
@@ -1113,7 +1113,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     int nMonStats2Idx;
     nMonStats2Idx = (int)pMonStatsTxtNew->MonStatsEx;
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
+    pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -1146,7 +1146,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
 
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, (int)pMonStatsTxtNew->Velocity << 8, ".\\UNIT\\Monster.cpp", 0x2b8);
     D2Common::PATH::DynamicPath::PATH_RestoreMonsterCollision(pUnit, 0);
-    if (*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)gadwBitMasks[1] && !pUnit->pInventory) {
+    if (*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1] && !pUnit->pInventory) {
       pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
       pUnit->pInventory = pInventory;
     }
@@ -1169,21 +1169,21 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     uint32_t nRandStartFrame;
     nRandStartFrame = Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount);
     pUnit->nGfxCurrentFrame = nRandStartFrame;
-    if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)gadwBitMasks[3]) {
+    if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
 
     pUnit->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
-    if (!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)gadwBitMasks[6])) {
+    if (!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
       pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW;
     } else {
       pUnit->eUnitFlags &= ~UNITFLAG_DRAWSHADOW;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET;
-    if (*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       eUpdatedFlags = pUnit->eUnitFlags | UNITFLAG_CANBEATTACKED;
     } else {
       eUpdatedFlags = pUnit->eUnitFlags & ~UNITFLAG_CANBEATTACKED;
@@ -1207,7 +1207,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
       nMonStats2Idx++;
     } while (nMonStats2Idx < 8);
 
-    if (!(*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)gadwBitMasks[0])) {
+    if (!(*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       D2SeedStrc DVar1;
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
@@ -1221,7 +1221,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     }
 
     nMonStats2Idx = pUnit->nClassId;
-    if (nMonStats2Idx < 0 || nMonStats2Idx >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMonStats2Idx < 0 || nMonStats2Idx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nMonStats2Idx = -1;
       check_andariel_duriel:
       if (nMonStats2Idx != 0x9c && nMonStats2Idx != 0xd3) {
@@ -1293,15 +1293,15 @@ void __stdcall MONSTER_SpawnFetishMissileSpread(D2UnitStrc * pUnit, eMissilesId 
 
     int nClassId = pUnit->nClassId;
     int nFetishBaseId = nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       nFetishBaseId = (int)pMonStatsTxt->BaseId;
     }
-    if (!(nFetishBaseId >= 0 && nFetishBaseId < sgptDataTable->nTxtMonStatsSize && nFetishBaseId == 0x3f && nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nFetishBaseId >= 0 && nFetishBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nFetishBaseId == 0x3f && nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats;
+    D2MonStatsTxt* pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats;
     if (!(pMonStats + nClassId)) {
       return;
     }
@@ -1563,7 +1563,7 @@ static int * MONSTER_GetAnimModeDataEntry(D2UnitStrc * pUnit) {
     if (!pMonStats2) {
       return nullptr;
     }
-    if ((uint8_t)gadwBitMasks[eAnimMode & eD2MonsterAnimMode_ns::Cast] & pMonStats2->A1mv[(int)eAnimMode >> 3]) {
+    if ((uint8_t)Fog::BitBuffer::gadwBitMasks[eAnimMode & eD2MonsterAnimMode_ns::Cast] & pMonStats2->A1mv[(int)eAnimMode >> 3]) {
       return &gaMonsterAnimModeData[eAnimMode].nField0;
     }
     if (eAnimMode != Death) {
@@ -1594,7 +1594,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     }
 
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Monster.cpp", 0x3b5);
-    D2SkillsTxt* pSkillTxt = (int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillTxt) {
       return;
     }
@@ -1671,7 +1671,7 @@ static void MONSTER_HandleSkillAnimEnd(D2UnitStrc * pUnit) {
 
     int32_t nMonBaseClassId;
     nMonBaseClassId = Player::TXT_MonStats_GetBaseId(pUnit);
-    if (nMonBaseClassId < 0 || nMonBaseClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMonBaseClassId < 0 || nMonBaseClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nMonBaseClassId = -1;
     }
     if (eAnimMode == eD2PlayerAnimMode_ns::Skill1 && nMonBaseClassId != 0x4e) {
@@ -1821,16 +1821,16 @@ D2MonStats2Txt * __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, D2Mo
     }
 
     nMonStats2Idx = pUnit->nClassId;
-    if (!(nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return (D2MonStats2Txt*)nMonStats2Idx;
     }
 
-    nMonStats2Idx = (int)sgptDataTable->pTxtMonStats[nMonStats2Idx].MonStatsEx;
-    if (!(nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize)) {
+    nMonStats2Idx = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStats2Idx].MonStatsEx;
+    if (!(nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize)) {
       return (D2MonStats2Txt*)nMonStats2Idx;
     }
 
-    D2MonStats2Txt* pMonStats2 = sgptDataTable->pTxtMonStatsEx + nMonStats2Idx;
+    D2MonStats2Txt* pMonStats2 = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Idx;
     nMonStats2Idx = (int)pMonStats2;
     if (!(pMonStats2 && pMonStats2->byBleed > 0)) {
       return (D2MonStats2Txt*)nMonStats2Idx;
@@ -1959,7 +1959,7 @@ static uint32_t MONSTER_IsModeMoveFlagSet(D2UnitStrc * pUnit, D2MonMsgAnimModeSt
 
         pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
         if (pMonStats2) {
-          return (uint32_t)pMonStats2->A1mv[nMode >> 3] & gadwBitMasks[nMode & 7];
+          return (uint32_t)pMonStats2->A1mv[nMode >> 3] & Fog::BitBuffer::gadwBitMasks[nMode & 7];
         }
       }
 
@@ -2185,11 +2185,11 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
     }
 
     int nMonStatsTxtCount;
-    nMonStatsTxtCount = sgptDataTable->nTxtMonStatsSize;
+    nMonStatsTxtCount = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
     if (nClassId >= nMonStatsTxtCount) {
       return;
     }
-    if (!(sgptDataTable->pTxtMonStats + nClassId)) {
+    if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId)) {
       return;
     }
     if (nClassId < 0) {
@@ -2199,9 +2199,9 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       return;
     }
 
-    nClassId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
+    nClassId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nClassId : nullptr;
+    pMonStats2 = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nClassId : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -2472,7 +2472,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
         MONSTER_SpawnDeathEffectMissiles(pUnit);
         pUnit->dwLastHitClass = pUnit->dwLastHitClass & 0xf | 0xa0;
       }
-      if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[3])) {
+      if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
         D2Common::PATH::DynamicPath::PATH_SetCorpseCollision(pUnit, 0);
       }
 
@@ -2481,7 +2481,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       if (!pMonStats) {
         return;
       }
-      if (pMonStats->SplEndDeath == '\x01' && pMonStats->minion1 >= 0 && (int)pMonStats->minion1 < sgptDataTable->nTxtMonStatsSize) {
+      if (pMonStats->SplEndDeath == '\x01' && pMonStats->minion1 >= 0 && (int)pMonStats->minion1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         nZero = 0;
         eUnitType = UNIT_MONSTER;
         pPlayerUnit_lcl = CUnit::CreateMissileOrMonster(nBaseId, Units::GetXPosFromDynamicPathUnit(pUnit), Units::GetYPosFromDynamicPathUnit(pUnit), eUnitType, nZero);
@@ -2678,7 +2678,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       case 9:
         D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
       pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
-      if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[3])) {
+      if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
         D2Common::PATH::DynamicPath::PATH_SetCorpseCollision(pUnit, 0);
       }
 
@@ -2735,10 +2735,10 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       if (bPathCalcResult) {
         pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
       } else {
-        SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, (uint8_t)*((uint8_t*)pMonStats2 + 0x4) & gadwBitMasks[3]);
+        SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, (uint8_t)*((uint8_t*)pMonStats2 + 0x4) & Fog::BitBuffer::gadwBitMasks[3]);
       }
 
-      SetMonsterFlags(pUnit, UNITFLAG_DRAWSHADOW, (uint32_t)!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)gadwBitMasks[6]));
+      SetMonsterFlags(pUnit, UNITFLAG_DRAWSHADOW, (uint32_t)!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]));
       CUnit::IsAttackable(pUnit);
       if (pMessage) {
         Path::PATH_MoveUnitToPoint(pUnit, *(uint16_t*)&pMessage->nSkillId, (uint32_t)*(uint16_t*)&pMessage->nItemId, 0, 0, 0);
@@ -2926,7 +2926,7 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
     do {
       eD2Skills eSkill;
       eSkill = *pSkillIdPtr;
-      if ((int)eSkill <= 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+      if ((int)eSkill <= 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         break;
       }
 
@@ -3009,13 +3009,13 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2DynamicPathStrc * pDynamicP
       if (nClassId < 0) {
         return 0;
       }
-      if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
+      if (nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         return 0;
       }
-      if (!(sgptDataTable->pTxtMonStats + nClassId)) {
+      if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId)) {
         return 0;
       }
-      if (sgptDataTable->pTxtMonStats[nClassId].SplEndDeath == '\x01') {
+      if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].SplEndDeath == '\x01') {
         nClassId = (int)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
         if (!nClassId) {
           nResult = D2Common::Units::IsAtEndOfFrameCycle((D2UnitStrc*)pDynamicPath);
@@ -3135,7 +3135,7 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     if (!pMonStats) {
       return;
     }
-    if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[1]) {
+    if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       bIsCritter = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, TXTMonStats2Field0x04DWORD_ns::critter);
       if (!bIsCritter && pDynamicPath->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
         nCheckResult = CheckFlags(pDynamicPath, UNITFLAG_ISMERC);
@@ -3205,5 +3205,138 @@ void StaticInit_gnMonsterUniqueNameBuffer() {
     gnMonsterUniqueNameBuffer[0] = L'\0';
     gnMonsterUniqueNameBuffer[1] = L'\0';
 }
+
+} // namespace D2Client::UNIT::Monster
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Client::UNIT::Monster {
+
+// Initialized data
+
+D2MonMsgAnimModeStrc gaMonMsgAnimModeTable[30] = {
+    {
+        /* .eMode = */ Walk,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ Walk,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ 16,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ 16,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Cast,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Cast,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::GetHit,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Neutral,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ Death,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Dead,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Attack1,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Attack1,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill1,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill1,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill2,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill2,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Attack2,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Attack2,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Block,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ 16,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ Knockback,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Sequence,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Sequence,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Run,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Run,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill1,
+        /* .bCheckMoveFlag = */ 0x0
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill3,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill3,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill4,
+        /* .bCheckMoveFlag = */ 0x1
+    },
+    {
+        /* .eMode = */ eD2MonsterAnimMode_ns::Skill4,
+        /* .bCheckMoveFlag = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaMonMsgAnimModeTable, "D2Client::UNIT::Monster::gaMonMsgAnimModeTable");
 
 } // namespace D2Client::UNIT::Monster

@@ -13,6 +13,316 @@
 
 
 // =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gdwLastGameListRefreshTick = 0; D2_GLOBAL_GUARD(gdwLastGameListRefreshTick, "gdwLastGameListRefreshTick");
+
+namespace D2Common::Drlg::Maze {
+
+} // namespace D2Common::Drlg::Maze
+
+namespace Fog::Src::LogManager {
+
+} // namespace Fog::Src::LogManager
+
+namespace Fog::Src::ErrorManager {
+
+} // namespace Fog::Src::ErrorManager
+
+namespace Storm::Source::SSignature {
+
+} // namespace Storm::Source::SSignature
+
+namespace Fog::Engine::Application {
+
+} // namespace Fog::Engine::Application
+
+namespace Fog::Source::SFile {
+
+} // namespace Fog::Source::SFile
+
+namespace Fog::Src::DataArrays {
+
+} // namespace Fog::Src::DataArrays
+
+namespace Storm::Source::SSTR {
+
+} // namespace Storm::Source::SSTR
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
+namespace Fog::BitBuffer {
+
+} // namespace Fog::BitBuffer
+
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
+namespace Storm::Source::SLog {
+
+} // namespace Storm::Source::SLog
+
+namespace Storm::_3rdparty::zlib::deflate {
+
+} // namespace Storm::_3rdparty::zlib::deflate
+
+namespace D2Launch::CharSel {
+
+} // namespace D2Launch::CharSel
+
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
+namespace D2Multi::ChatDlg {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+_RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "D2Multi::ChatDlg::lpCriticalSection_0077ae28");
+
+} // namespace D2Multi::ChatDlg
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
+namespace D2Client::ClientModeInGame {
+
+} // namespace D2Client::ClientModeInGame
+
+namespace D2Client::UI::Draw {
+
+} // namespace D2Client::UI::Draw
+
+namespace D2Client::UI::Inv {
+
+} // namespace D2Client::UI::Inv
+
+namespace D2Common::DATATBLS::DataTbls {
+
+} // namespace D2Common::DATATBLS::DataTbls
+
+namespace D2Client::Warden::NWardenClient {
+
+} // namespace D2Client::Warden::NWardenClient
+
+namespace D2Client::Warden {
+
+} // namespace D2Client::Warden
+
+namespace D2Client::Sound::SoundHdr {
+
+} // namespace D2Client::Sound::SoundHdr
+
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Sound::Src::D2SoundSmp {
+
+} // namespace D2Sound::Src::D2SoundSmp
+
+namespace D2Client::UI {
+
+} // namespace D2Client::UI
+
+namespace D2Client::UI::Button::ButtonImplementation {
+
+} // namespace D2Client::UI::Button::ButtonImplementation
+
+namespace D2Client::UI::Button::ButtonWrapper {
+
+} // namespace D2Client::UI::Button::ButtonWrapper
+
+namespace D2Client::UI::Editbox::EditBoxImplementation {
+
+} // namespace D2Client::UI::Editbox::EditBoxImplementation
+
+namespace D2Client::UI::Editbox::EditBoxWrapper {
+
+} // namespace D2Client::UI::Editbox::EditBoxWrapper
+
+namespace D2Client::UI::Spinner::SpinnerImplementation {
+
+} // namespace D2Client::UI::Spinner::SpinnerImplementation
+
+namespace D2Client::UI::Spinner::SpinnerWrapper {
+
+} // namespace D2Client::UI::Spinner::SpinnerWrapper
+
+namespace D2Client::UI::ListBox::ListBoxWrapper {
+
+} // namespace D2Client::UI::ListBox::ListBoxWrapper
+
+namespace D2Client::UI::ListBox::ListBoxImplementation {
+
+} // namespace D2Client::UI::ListBox::ListBoxImplementation
+
+namespace D2gfx::D2GFX {
+
+} // namespace D2gfx::D2GFX
+
+namespace D2Sound::Sound {
+
+} // namespace D2Sound::Sound
+
+namespace Bnclient::BnSend {
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
+namespace Bnclient::_net_sid {
+
+} // namespace Bnclient::_net_sid
+
+namespace D2Game::GAME::Event::Dispatch {
+
+} // namespace D2Game::GAME::Event::Dispatch
+
+namespace D2Game::UNIT::SUnitDmg {
+
+} // namespace D2Game::UNIT::SUnitDmg
+
+namespace D2Game::PLAYER::PlayerModes {
+
+} // namespace D2Game::PLAYER::PlayerModes
+
+namespace D2Game::GAME::Event::Dispatch::Player {
+
+} // namespace D2Game::GAME::Event::Dispatch::Player
+
+namespace D2Game::Objects::ObjectsMode {
+
+} // namespace D2Game::Objects::ObjectsMode
+
+namespace D2Game::GAME::Event::Dispatch::Object {
+
+} // namespace D2Game::GAME::Event::Dispatch::Object
+
+namespace D2Game::GAME::Event::Dispatch::Monster {
+
+} // namespace D2Game::GAME::Event::Dispatch::Monster
+
+namespace D2Game {
+
+} // namespace D2Game
+
+namespace D2CMP::SRC::CelCmp {
+
+} // namespace D2CMP::SRC::CelCmp
+
+namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
+
+} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
+
+namespace D2Common::Chat::Ignorelist::IgnoreList {
+
+} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+namespace D2Common {
+
+} // namespace D2Common
+
+namespace D2Common::Txt::Cube {
+
+} // namespace D2Common::Txt::Cube
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+} // namespace D2Common::DATATBLS::ItemTbls
+
+namespace D2Common::Drlg::Preset {
+
+} // namespace D2Common::Drlg::Preset
+
+namespace D2Common::Drlg::OutSiege {
+
+} // namespace D2Common::Drlg::OutSiege
+
+namespace D2Common::Drlg::Outdoors {
+
+} // namespace D2Common::Drlg::Outdoors
+
+namespace D2Common::Drlg::OutJung {
+
+} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common::Drlg {
+
+} // namespace D2Common::Drlg
+
+namespace Define_the_symbol__ATL_MIXED {
+
+} // namespace Define_the_symbol__ATL_MIXED
+
+namespace Storm::Source {
+
+} // namespace Storm::Source
+
+namespace Fog::File {
+
+} // namespace Fog::File
+
+namespace Fog::_3rdparty::crashy {
+
+} // namespace Fog::_3rdparty::crashy
+
+namespace D2Hell {
+
+} // namespace D2Hell
+
+namespace Fog::Source::SSComp {
+
+} // namespace Fog::Source::SSComp
+
+namespace Class::FILEREC {
+
+} // namespace Class::FILEREC
+
+namespace Class::EVENTREC {
+
+} // namespace Class::EVENTREC
+
+namespace Class::REQUEST {
+
+} // namespace Class::REQUEST
+
+namespace Class::AUDIOSTREAM {
+
+} // namespace Class::AUDIOSTREAM
+
+namespace Class::HANDLER {
+
+} // namespace Class::HANDLER
+
+namespace D2Launch::MainMenus {
+
+} // namespace D2Launch::MainMenus
+
+namespace D2Multi::OOGUtilities {
+
+// =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
@@ -234,7 +544,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -255,8 +565,8 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ &gpDC6ChatScrollbar,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)gaMultiTextBoxScrollbarGeom0,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom0,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x4
     },
     {
@@ -267,7 +577,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_SendChatMessageWide,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x16
     },
     {
@@ -278,7 +588,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -288,7 +598,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)gaMultiLogoAnimFrames,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiLogoAnimFrames,
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x0
     },
@@ -311,7 +621,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -321,7 +631,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)gaMultiLogoAnimFrames,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiLogoAnimFrames,
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x0
     },
@@ -344,7 +654,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -355,7 +665,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)gaFormList30InitialItems,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -366,7 +676,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -377,7 +687,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)gaFormList32InitialItems,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -421,7 +731,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Multi::ChatDlg::gaMultiFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -465,7 +775,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -476,7 +786,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Multi::ChatDlg::gaMultiFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -498,7 +808,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -509,7 +819,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -520,7 +830,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -531,7 +841,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -542,7 +852,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_ProcessGameListEntry,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -553,7 +863,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_ProcessGameListEntry,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x1
     },
     {
@@ -563,8 +873,8 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ &gpDC6JoinGameScrollbar,
         /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_HandleGameCreation,
-        /* .pTypeArg1 = */ (void*)gaMultiTextBoxScrollbarGeom1,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x5
     },
     {
@@ -629,7 +939,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ &gpDC6JoinGameScrollbar,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)gaMultiTextBoxScrollbarGeom2,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom2,
         /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
         /* .nFlagsOrType = */ 0x6
     },
@@ -652,7 +962,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -663,7 +973,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -674,7 +984,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -685,7 +995,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_JoinChannelFromInput,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -696,7 +1006,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -706,8 +1016,8 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ &gpDC6JoinGameScrollbar,
         /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_HandleChannelListDoubleClick,
-        /* .pTypeArg1 = */ (void*)gaMultiTextBoxScrollbarGeom3,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom3,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x5
     },
     {
@@ -740,7 +1050,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -751,7 +1061,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -762,7 +1072,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -773,7 +1083,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -784,7 +1094,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x10
     },
     {
@@ -795,7 +1105,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x10
     },
     {
@@ -806,7 +1116,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -817,7 +1127,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -828,7 +1138,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x1
     },
     {
@@ -839,7 +1149,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -850,7 +1160,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -861,7 +1171,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -938,7 +1248,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -949,7 +1259,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -960,7 +1270,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -1059,7 +1369,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont2,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1147,7 +1457,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont7,
+        /* .pTypeArg2 = */ (void*)&D2Multi::ChatDlg::gaMultiFormFontParamsFont7,
         /* .nFlagsOrType = */ 0x2
     },
     {
@@ -1158,7 +1468,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -1169,7 +1479,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -1180,7 +1490,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -1191,7 +1501,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -1202,7 +1512,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pDC6 = */ nullptr,
         /* .fpOnPressCallback = */ nullptr,
         /* .pTypeArg1 = */ nullptr,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x0
     },
     {
@@ -1212,8 +1522,8 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nLabelAsLocaleStringId = */ 0x0,
         /* .pDC6 = */ &gpDC6JoinGameScrollbar,
         /* .fpOnPressCallback = */ nullptr,
-        /* .pTypeArg1 = */ (void*)gaMultiTextBoxScrollbarGeom4,
-        /* .pTypeArg2 = */ (void*)gaMultiFormFontParamsFont4,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
         /* .nFlagsOrType = */ 0x4
     },
     {
@@ -1436,264 +1746,206 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x0
     }
-}; D2_GLOBAL_GUARD(gaPredefinedForms_b, "gaPredefinedForms_b");
+}; D2_GLOBAL_GUARD(gaPredefinedForms_b, "D2Multi::OOGUtilities::gaPredefinedForms_b");
 
-D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "gbLanGameListEntryNamePadding2");
+D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "D2Multi::OOGUtilities::gbLanGameListEntryNamePadding2");
 
-D2GameListEntryStrc gbLanGameListEntryNamePadding[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding, "gbLanGameListEntryNamePadding");
+D2GameListEntryStrc gbLanGameListEntryNamePadding[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding, "D2Multi::OOGUtilities::gbLanGameListEntryNamePadding");
 
-char gszOOGRequestedGameName[256] = {}; D2_GLOBAL_GUARD(gszOOGRequestedGameName, "gszOOGRequestedGameName");
+char gszOOGRequestedGameName[256] = {}; D2_GLOBAL_GUARD(gszOOGRequestedGameName, "D2Multi::OOGUtilities::gszOOGRequestedGameName");
 
 // also labelled: gszOOGJoinGamePassword
-char gszProfileCharacterName[16] = {}; D2_GLOBAL_GUARD(gszProfileCharacterName, "gszProfileCharacterName");
+char gszProfileCharacterName[16] = {}; D2_GLOBAL_GUARD(gszProfileCharacterName, "D2Multi::OOGUtilities::gszProfileCharacterName");
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-D2IniConfigStrc * D2IniData_multiplayer = 0; D2_GLOBAL_GUARD(D2IniData_multiplayer, "D2IniData_multiplayer");
-uint16_t LastGameRequestId = 0; D2_GLOBAL_GUARD(LastGameRequestId, "LastGameRequestId");
-void * gpChatFormList = 0; D2_GLOBAL_GUARD(gpChatFormList, "gpChatFormList");
-unsigned int gdwLastGameListRefreshTick = {}; D2_GLOBAL_GUARD(gdwLastGameListRefreshTick, "gdwLastGameListRefreshTick");
-::D2WinTextBox * gpOOGGameListTextBox = 0; D2_GLOBAL_GUARD(gpOOGGameListTextBox, "gpOOGGameListTextBox");
-::D2WinTextBox * gpOogGameListDetailsPanelControl = 0; D2_GLOBAL_GUARD(gpOogGameListDetailsPanelControl, "gpOogGameListDetailsPanelControl");
-D2ControlStrc * gpOOGJoinGameButton = 0; D2_GLOBAL_GUARD(gpOOGJoinGameButton, "gpOOGJoinGameButton");
-D2ControlStrc * gpCtlGameListStatus = 0; D2_GLOBAL_GUARD(gpCtlGameListStatus, "gpCtlGameListStatus");
-D2ControlStrc * gpOOGLobbyControl2 = 0; D2_GLOBAL_GUARD(gpOOGLobbyControl2, "gpOOGLobbyControl2");
-::D2WinEditBox * gpOogGamePasswordEditControl = 0; D2_GLOBAL_GUARD(gpOogGamePasswordEditControl, "gpOogGamePasswordEditControl");
-::D2WinEditBox * gpCtlGameListTop = 0; D2_GLOBAL_GUARD(gpCtlGameListTop, "gpCtlGameListTop");
-::D2WinTextBox * gpCtlJoinGameLabel = 0; D2_GLOBAL_GUARD(gpCtlJoinGameLabel, "gpCtlJoinGameLabel");
-::D2WinTextBox * pUIGameUsername = 0; D2_GLOBAL_GUARD(pUIGameUsername, "pUIGameUsername");
-::D2WinTextBox * pUIGamePassword = 0; D2_GLOBAL_GUARD(pUIGamePassword, "pUIGamePassword");
-::D2WinTextBox * pUIGamePlayers = 0; D2_GLOBAL_GUARD(pUIGamePlayers, "pUIGamePlayers");
+D2IniConfigStrc * D2IniData_multiplayer = 0; D2_GLOBAL_GUARD(D2IniData_multiplayer, "D2Multi::OOGUtilities::D2IniData_multiplayer");
+uint16_t LastGameRequestId = 0; D2_GLOBAL_GUARD(LastGameRequestId, "D2Multi::OOGUtilities::LastGameRequestId");
+void * gpChatFormList = 0; D2_GLOBAL_GUARD(gpChatFormList, "D2Multi::OOGUtilities::gpChatFormList");
+unsigned int gdwLastGameListRefreshTick = {}; D2_GLOBAL_GUARD(gdwLastGameListRefreshTick, "D2Multi::OOGUtilities::gdwLastGameListRefreshTick");
+::D2WinTextBox * gpOOGGameListTextBox = 0; D2_GLOBAL_GUARD(gpOOGGameListTextBox, "D2Multi::OOGUtilities::gpOOGGameListTextBox");
+::D2WinTextBox * gpOogGameListDetailsPanelControl = 0; D2_GLOBAL_GUARD(gpOogGameListDetailsPanelControl, "D2Multi::OOGUtilities::gpOogGameListDetailsPanelControl");
+D2ControlStrc * gpOOGJoinGameButton = 0; D2_GLOBAL_GUARD(gpOOGJoinGameButton, "D2Multi::OOGUtilities::gpOOGJoinGameButton");
+D2ControlStrc * gpCtlGameListStatus = 0; D2_GLOBAL_GUARD(gpCtlGameListStatus, "D2Multi::OOGUtilities::gpCtlGameListStatus");
+D2ControlStrc * gpOOGLobbyControl2 = 0; D2_GLOBAL_GUARD(gpOOGLobbyControl2, "D2Multi::OOGUtilities::gpOOGLobbyControl2");
+::D2WinEditBox * gpOogGamePasswordEditControl = 0; D2_GLOBAL_GUARD(gpOogGamePasswordEditControl, "D2Multi::OOGUtilities::gpOogGamePasswordEditControl");
+::D2WinEditBox * gpCtlGameListTop = 0; D2_GLOBAL_GUARD(gpCtlGameListTop, "D2Multi::OOGUtilities::gpCtlGameListTop");
+::D2WinTextBox * gpCtlJoinGameLabel = 0; D2_GLOBAL_GUARD(gpCtlJoinGameLabel, "D2Multi::OOGUtilities::gpCtlJoinGameLabel");
+::D2WinTextBox * pUIGameUsername = 0; D2_GLOBAL_GUARD(pUIGameUsername, "D2Multi::OOGUtilities::pUIGameUsername");
+::D2WinTextBox * pUIGamePassword = 0; D2_GLOBAL_GUARD(pUIGamePassword, "D2Multi::OOGUtilities::pUIGamePassword");
+::D2WinTextBox * pUIGamePlayers = 0; D2_GLOBAL_GUARD(pUIGamePlayers, "D2Multi::OOGUtilities::pUIGamePlayers");
 // also labelled: gpOOGLobbyControl3
-D2ControlStrc * gpCtlCreateGameDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgBackground, "gpCtlCreateGameDlgBackground");
+D2ControlStrc * gpCtlCreateGameDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgBackground, "D2Multi::OOGUtilities::gpCtlCreateGameDlgBackground");
 // also labelled: gpCtlGameListBottom
-::D2WinTextBox * gpCtlCreateGameDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgTitle, "gpCtlCreateGameDlgTitle");
+::D2WinTextBox * gpCtlCreateGameDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgTitle, "D2Multi::OOGUtilities::gpCtlCreateGameDlgTitle");
 // also labelled: gpCtlWaitInLineStatus
-::D2WinTextBox * gpCtlGameNameLabelOrQueueStatus = 0; D2_GLOBAL_GUARD(gpCtlGameNameLabelOrQueueStatus, "gpCtlGameNameLabelOrQueueStatus");
+::D2WinTextBox * gpCtlGameNameLabelOrQueueStatus = 0; D2_GLOBAL_GUARD(gpCtlGameNameLabelOrQueueStatus, "D2Multi::OOGUtilities::gpCtlGameNameLabelOrQueueStatus");
 // also labelled: gpCtlGameListError
-::D2WinTextBox * gpCtlCreateGamePasswordLabel = 0; D2_GLOBAL_GUARD(gpCtlCreateGamePasswordLabel, "gpCtlCreateGamePasswordLabel");
-::D2WinTextBox * gUIGameListServerMessageText = 0; D2_GLOBAL_GUARD(gUIGameListServerMessageText, "gUIGameListServerMessageText");
+::D2WinTextBox * gpCtlCreateGamePasswordLabel = 0; D2_GLOBAL_GUARD(gpCtlCreateGamePasswordLabel, "D2Multi::OOGUtilities::gpCtlCreateGamePasswordLabel");
+::D2WinTextBox * gUIGameListServerMessageText = 0; D2_GLOBAL_GUARD(gUIGameListServerMessageText, "D2Multi::OOGUtilities::gUIGameListServerMessageText");
 // also labelled: gUIGameListExpansionCheckbox
-::D2WinTextBox * gUIGameListMaxPlayersLabel = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersLabel, "gUIGameListMaxPlayersLabel");
+::D2WinTextBox * gUIGameListMaxPlayersLabel = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersLabel, "D2Multi::OOGUtilities::gUIGameListMaxPlayersLabel");
 // also labelled: gUIGameListPasswordEditBox
-::D2WinTextBox * gUIGameListLevelRestrictionLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLabel, "gUIGameListLevelRestrictionLabel");
+::D2WinTextBox * gUIGameListLevelRestrictionLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLabel, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionLabel");
 // also labelled: gUIGameListDifficultyLabel
-::D2WinTextBox * gUIGameListLevelRestrictionLevelsLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLevelsLabel, "gUIGameListLevelRestrictionLevelsLabel");
+::D2WinTextBox * gUIGameListLevelRestrictionLevelsLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLevelsLabel, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionLevelsLabel");
 // also labelled: gpOOGLobbyControl1
-D2ControlStrc * gUIGameListMaxPlayersInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersInactiveImage, "gUIGameListMaxPlayersInactiveImage");
+D2ControlStrc * gUIGameListMaxPlayersInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersInactiveImage, "D2Multi::OOGUtilities::gUIGameListMaxPlayersInactiveImage");
 // also labelled: gUIGameListGameTypeLabel
-D2ControlStrc * gUIGameListMaxPlayersInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersInactiveArrowButton, "gUIGameListMaxPlayersInactiveArrowButton");
+D2ControlStrc * gUIGameListMaxPlayersInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersInactiveArrowButton, "D2Multi::OOGUtilities::gUIGameListMaxPlayersInactiveArrowButton");
 // also labelled: gpOOGLobbyControl4
-D2ControlStrc * gUIGameListMaxPlayersUpButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersUpButton, "gUIGameListMaxPlayersUpButton");
-// also labelled: gUIGameListPlayerCountLabel
-::D2WinButton * gUIGameListMaxPlayersDownButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersDownButton, "gUIGameListMaxPlayersDownButton");
+D2ControlStrc * gUIGameListMaxPlayersUpButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersUpButton, "D2Multi::OOGUtilities::gUIGameListMaxPlayersUpButton");
 // also labelled: gUIGameListLevelRestrictionMinEditBox
-D2ControlStrc * gUIGameListLevelRestrictionUpButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionUpButton, "gUIGameListLevelRestrictionUpButton");
-// also labelled: gUIGameListLevelRestrictionMaxEditBox
-::D2WinButton * gUIGameListLevelRestrictionDownButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionDownButton, "gUIGameListLevelRestrictionDownButton");
+D2ControlStrc * gUIGameListLevelRestrictionUpButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionUpButton, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionUpButton");
 // also labelled: gUIGameListRefreshButton
-D2ControlStrc * gUIGameListLevelRestrictionInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveArrowButton, "gUIGameListLevelRestrictionInactiveArrowButton");
-D2ControlStrc * gUIGameListCreateButton = 0; D2_GLOBAL_GUARD(gUIGameListCreateButton, "gUIGameListCreateButton");
-::D2WinEditBox * gpOogGameNameEditControl = 0; D2_GLOBAL_GUARD(gpOogGameNameEditControl, "gpOogGameNameEditControl");
-::D2WinEditBox * gUIGameListGameNameEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGameNameEditBox, "gUIGameListGameNameEditBox");
-::D2WinEditBox * gUIGameListGamePasswordEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGamePasswordEditBox, "gUIGameListGamePasswordEditBox");
+D2ControlStrc * gUIGameListLevelRestrictionInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveArrowButton, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionInactiveArrowButton");
+D2ControlStrc * gUIGameListCreateButton = 0; D2_GLOBAL_GUARD(gUIGameListCreateButton, "D2Multi::OOGUtilities::gUIGameListCreateButton");
+::D2WinEditBox * gpOogGameNameEditControl = 0; D2_GLOBAL_GUARD(gpOogGameNameEditControl, "D2Multi::OOGUtilities::gpOogGameNameEditControl");
+::D2WinEditBox * gUIGameListGameNameEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGameNameEditBox, "D2Multi::OOGUtilities::gUIGameListGameNameEditBox");
+::D2WinEditBox * gUIGameListGamePasswordEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGamePasswordEditBox, "D2Multi::OOGUtilities::gUIGameListGamePasswordEditBox");
 // also labelled: gpOogSelectedGameListControl
-::D2WinEditBox * gUIGameListMaxPlayersEditBox = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersEditBox, "gUIGameListMaxPlayersEditBox");
-::D2WinEditBox * gUILevelRestrictionEditBox = 0; D2_GLOBAL_GUARD(gUILevelRestrictionEditBox, "gUILevelRestrictionEditBox");
-// also labelled: gUIGameListJoinButton
-::D2WinButton * gUIGameListLevelRestrictionCheckbox = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionCheckbox, "gUIGameListLevelRestrictionCheckbox");
+::D2WinEditBox * gUIGameListMaxPlayersEditBox = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersEditBox, "D2Multi::OOGUtilities::gUIGameListMaxPlayersEditBox");
+::D2WinEditBox * gUILevelRestrictionEditBox = 0; D2_GLOBAL_GUARD(gUILevelRestrictionEditBox, "D2Multi::OOGUtilities::gUILevelRestrictionEditBox");
 // also labelled: gUIGameListCancelButton
-D2ControlStrc * gUIGameListLevelRestrictionInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveImage, "gUIGameListLevelRestrictionInactiveImage");
+D2ControlStrc * gUIGameListLevelRestrictionInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveImage, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionInactiveImage");
 // also labelled: gpOOGLobbyControl6
-D2ControlStrc * gpCtlCreateGameDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgCancelButton, "gpCtlCreateGameDlgCancelButton");
-// also labelled: gUIGameListGameListBox
-::D2WinButton * gUIGameListDifficultyNormalButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNormalButton, "gUIGameListDifficultyNormalButton");
-// also labelled: gUIGameListScrollbar
-::D2WinButton * gUIGameListDifficultyNightmareButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNightmareButton, "gUIGameListDifficultyNightmareButton");
-// also labelled: gUIGameListExpandedDetailsText
-::D2WinButton * gUIGameListDifficultyHellButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyHellButton, "gUIGameListDifficultyHellButton");
-::D2WinTextBox * gUIGameListStatusLabel = 0; D2_GLOBAL_GUARD(gUIGameListStatusLabel, "gUIGameListStatusLabel");
-::D2WinTextBox * gUIGameListPlayerListText = 0; D2_GLOBAL_GUARD(gUIGameListPlayerListText, "gUIGameListPlayerListText");
-::D2WinTextBox * gUIGameListActLabel = 0; D2_GLOBAL_GUARD(gUIGameListActLabel, "gUIGameListActLabel");
+D2ControlStrc * gpCtlCreateGameDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgCancelButton, "D2Multi::OOGUtilities::gpCtlCreateGameDlgCancelButton");
+::D2WinTextBox * gUIGameListStatusLabel = 0; D2_GLOBAL_GUARD(gUIGameListStatusLabel, "D2Multi::OOGUtilities::gUIGameListStatusLabel");
+::D2WinTextBox * gUIGameListPlayerListText = 0; D2_GLOBAL_GUARD(gUIGameListPlayerListText, "D2Multi::OOGUtilities::gUIGameListPlayerListText");
+::D2WinTextBox * gUIGameListActLabel = 0; D2_GLOBAL_GUARD(gUIGameListActLabel, "D2Multi::OOGUtilities::gUIGameListActLabel");
 // also labelled: gpOOGLobbyControl7
-D2ControlStrc * gpProfileViewBackground = 0; D2_GLOBAL_GUARD(gpProfileViewBackground, "gpProfileViewBackground");
+D2ControlStrc * gpProfileViewBackground = 0; D2_GLOBAL_GUARD(gpProfileViewBackground, "D2Multi::OOGUtilities::gpProfileViewBackground");
 // also labelled: gpOOGLobbyControl8
-::D2WinTextBox * gpProfileViewAccountName = 0; D2_GLOBAL_GUARD(gpProfileViewAccountName, "gpProfileViewAccountName");
+::D2WinTextBox * gpProfileViewAccountName = 0; D2_GLOBAL_GUARD(gpProfileViewAccountName, "D2Multi::OOGUtilities::gpProfileViewAccountName");
 // also labelled: gpOOGPasswordEditChName
-::D2WinTextBox * gpProfileViewSex = 0; D2_GLOBAL_GUARD(gpProfileViewSex, "gpProfileViewSex");
+::D2WinTextBox * gpProfileViewSex = 0; D2_GLOBAL_GUARD(gpProfileViewSex, "D2Multi::OOGUtilities::gpProfileViewSex");
 // also labelled: gpOOGPasswordEditCharacterName
-::D2WinTextBox * gpProfileViewLocation = 0; D2_GLOBAL_GUARD(gpProfileViewLocation, "gpProfileViewLocation");
+::D2WinTextBox * gpProfileViewLocation = 0; D2_GLOBAL_GUARD(gpProfileViewLocation, "D2Multi::OOGUtilities::gpProfileViewLocation");
 // also labelled: gUIPasswordDialogInputEditBox
-::D2WinTextBox * gpProfileViewDescription = 0; D2_GLOBAL_GUARD(gpProfileViewDescription, "gpProfileViewDescription");
+::D2WinTextBox * gpProfileViewDescription = 0; D2_GLOBAL_GUARD(gpProfileViewDescription, "D2Multi::OOGUtilities::gpProfileViewDescription");
 // also labelled: gpOOGPasswordEditChPass
-D2ControlStrc * gpProfileEditBackground = 0; D2_GLOBAL_GUARD(gpProfileEditBackground, "gpProfileEditBackground");
+D2ControlStrc * gpProfileEditBackground = 0; D2_GLOBAL_GUARD(gpProfileEditBackground, "D2Multi::OOGUtilities::gpProfileEditBackground");
 // also labelled: gpOOGPasswordEditCharacterPass
-::D2WinTextBox * gpProfileEditAccountName = 0; D2_GLOBAL_GUARD(gpProfileEditAccountName, "gpProfileEditAccountName");
+::D2WinTextBox * gpProfileEditAccountName = 0; D2_GLOBAL_GUARD(gpProfileEditAccountName, "D2Multi::OOGUtilities::gpProfileEditAccountName");
 // also labelled: gpOogBnetLoginAccountNameControl
-::D2WinEditBox * gpProfileEditSex = 0; D2_GLOBAL_GUARD(gpProfileEditSex, "gpProfileEditSex");
+::D2WinEditBox * gpProfileEditSex = 0; D2_GLOBAL_GUARD(gpProfileEditSex, "D2Multi::OOGUtilities::gpProfileEditSex");
 // also labelled: gpOogBnetLoginGameSelectControl
-::D2WinEditBox * gpProfileEditLocation = 0; D2_GLOBAL_GUARD(gpProfileEditLocation, "gpProfileEditLocation");
+::D2WinEditBox * gpProfileEditLocation = 0; D2_GLOBAL_GUARD(gpProfileEditLocation, "D2Multi::OOGUtilities::gpProfileEditLocation");
 // also labelled: gpOogBnetLoginPasswordControl
-::D2WinEditBox * gpProfileEditDescription = 0; D2_GLOBAL_GUARD(gpProfileEditDescription, "gpProfileEditDescription");
+::D2WinEditBox * gpProfileEditDescription = 0; D2_GLOBAL_GUARD(gpProfileEditDescription, "D2Multi::OOGUtilities::gpProfileEditDescription");
 // also labelled: gpOOGPasswordEditChGammaCode
-D2ControlStrc * gpProfileCloseButton = 0; D2_GLOBAL_GUARD(gpProfileCloseButton, "gpProfileCloseButton");
-::D2WinTextBox * gUIPlayerProfileCharacterNameLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterNameLabel, "gUIPlayerProfileCharacterNameLabel");
-::D2WinTextBox * gUIPlayerProfileCharacterLevelLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterLevelLabel, "gUIPlayerProfileCharacterLevelLabel");
-::D2WinTextBox * gUIPlayerProfileCharacterClassLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterClassLabel, "gUIPlayerProfileCharacterClassLabel");
-::D2WinTextBox * gUIPlayerProfileExperienceLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileExperienceLabel, "gUIPlayerProfileExperienceLabel");
+D2ControlStrc * gpProfileCloseButton = 0; D2_GLOBAL_GUARD(gpProfileCloseButton, "D2Multi::OOGUtilities::gpProfileCloseButton");
+::D2WinTextBox * gUIPlayerProfileCharacterNameLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterNameLabel, "D2Multi::OOGUtilities::gUIPlayerProfileCharacterNameLabel");
+::D2WinTextBox * gUIPlayerProfileCharacterLevelLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterLevelLabel, "D2Multi::OOGUtilities::gUIPlayerProfileCharacterLevelLabel");
+::D2WinTextBox * gUIPlayerProfileCharacterClassLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterClassLabel, "D2Multi::OOGUtilities::gUIPlayerProfileCharacterClassLabel");
+::D2WinTextBox * gUIPlayerProfileExperienceLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileExperienceLabel, "D2Multi::OOGUtilities::gUIPlayerProfileExperienceLabel");
 // also labelled: gpOOGPasswordButtonOK
-D2ControlStrc * gpProfileOKButton = 0; D2_GLOBAL_GUARD(gpProfileOKButton, "gpProfileOKButton");
+D2ControlStrc * gpProfileOKButton = 0; D2_GLOBAL_GUARD(gpProfileOKButton, "D2Multi::OOGUtilities::gpProfileOKButton");
 // also labelled: gpOOGPasswordButtonCancel
-D2ControlStrc * gpProfileLadderButton = 0; D2_GLOBAL_GUARD(gpProfileLadderButton, "gpProfileLadderButton");
-::D2WinTextBox * gUIPlayerProfilePlaytimeLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfilePlaytimeLabel, "gUIPlayerProfilePlaytimeLabel");
+D2ControlStrc * gpProfileLadderButton = 0; D2_GLOBAL_GUARD(gpProfileLadderButton, "D2Multi::OOGUtilities::gpProfileLadderButton");
+::D2WinTextBox * gUIPlayerProfilePlaytimeLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfilePlaytimeLabel, "D2Multi::OOGUtilities::gUIPlayerProfilePlaytimeLabel");
 // also labelled: gnGameListSortMode
-int32_t gnProfileDialogMode = 0; D2_GLOBAL_GUARD(gnProfileDialogMode, "gnProfileDialogMode");
+int32_t gnProfileDialogMode = 0; D2_GLOBAL_GUARD(gnProfileDialogMode, "D2Multi::OOGUtilities::gnProfileDialogMode");
 // also labelled: gUIChatCommandsScrollOutput
-::D2WinTextBox * gpChatCommandsTitle = 0; D2_GLOBAL_GUARD(gpChatCommandsTitle, "gpChatCommandsTitle");
-::D2WinTextBox * gpChatCommandsTextBox = 0; D2_GLOBAL_GUARD(gpChatCommandsTextBox, "gpChatCommandsTextBox");
+::D2WinTextBox * gpChatCommandsTitle = 0; D2_GLOBAL_GUARD(gpChatCommandsTitle, "D2Multi::OOGUtilities::gpChatCommandsTitle");
+::D2WinTextBox * gpChatCommandsTextBox = 0; D2_GLOBAL_GUARD(gpChatCommandsTextBox, "D2Multi::OOGUtilities::gpChatCommandsTextBox");
 // also labelled: gpOOGPasswordEditChAccount
-D2ControlStrc * gpChatCommandsOKButton = 0; D2_GLOBAL_GUARD(gpChatCommandsOKButton, "gpChatCommandsOKButton");
+D2ControlStrc * gpChatCommandsOKButton = 0; D2_GLOBAL_GUARD(gpChatCommandsOKButton, "D2Multi::OOGUtilities::gpChatCommandsOKButton");
 // also labelled: gpOOGLoginEditConnection
-D2ControlStrc * gpChatCommandsBackground = 0; D2_GLOBAL_GUARD(gpChatCommandsBackground, "gpChatCommandsBackground");
-uint32_t gnGameListFilterState = 0; D2_GLOBAL_GUARD(gnGameListFilterState, "gnGameListFilterState");
-uint32_t gnMCPCreateGamePendingFlag = 0; D2_GLOBAL_GUARD(gnMCPCreateGamePendingFlag, "gnMCPCreateGamePendingFlag");
-int gnFilteredGameListCount = 0; D2_GLOBAL_GUARD(gnFilteredGameListCount, "gnFilteredGameListCount");
-int nGameListDifficultyFilter = 0; D2_GLOBAL_GUARD(nGameListDifficultyFilter, "nGameListDifficultyFilter");
-uint32_t CreateGameDifflevel = 0; D2_GLOBAL_GUARD(CreateGameDifflevel, "CreateGameDifflevel");
+D2ControlStrc * gpChatCommandsBackground = 0; D2_GLOBAL_GUARD(gpChatCommandsBackground, "D2Multi::OOGUtilities::gpChatCommandsBackground");
+uint32_t gnGameListFilterState = 0; D2_GLOBAL_GUARD(gnGameListFilterState, "D2Multi::OOGUtilities::gnGameListFilterState");
+uint32_t gnMCPCreateGamePendingFlag = 0; D2_GLOBAL_GUARD(gnMCPCreateGamePendingFlag, "D2Multi::OOGUtilities::gnMCPCreateGamePendingFlag");
+int gnFilteredGameListCount = 0; D2_GLOBAL_GUARD(gnFilteredGameListCount, "D2Multi::OOGUtilities::gnFilteredGameListCount");
+int nGameListDifficultyFilter = 0; D2_GLOBAL_GUARD(nGameListDifficultyFilter, "D2Multi::OOGUtilities::nGameListDifficultyFilter");
+uint32_t CreateGameDifflevel = 0; D2_GLOBAL_GUARD(CreateGameDifflevel, "D2Multi::OOGUtilities::CreateGameDifflevel");
 // also labelled: gdwPasswordControlsPadding2
-int gnProfileUserHardcoreFlag = 0; D2_GLOBAL_GUARD(gnProfileUserHardcoreFlag, "gnProfileUserHardcoreFlag");
+int gnProfileUserHardcoreFlag = 0; D2_GLOBAL_GUARD(gnProfileUserHardcoreFlag, "D2Multi::OOGUtilities::gnProfileUserHardcoreFlag");
 // also labelled: gdwPasswordControlsPadding1
-int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, "gnProfileUserExpansionFlag");
+int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, "D2Multi::OOGUtilities::gnProfileUserExpansionFlag");
 
-namespace D2Common::Drlg::Maze {
+} // namespace D2Multi::OOGUtilities
 
-} // namespace D2Common::Drlg::Maze
+namespace D2Client::GAME::Game {
 
-namespace D2Client::Warden::NWardenClient {
+} // namespace D2Client::GAME::Game
 
-} // namespace D2Client::Warden::NWardenClient
+namespace D2Client {
 
-namespace D2Client::Warden {
+} // namespace D2Client
 
-} // namespace D2Client::Warden
+namespace D2Client::GAME::Record {
 
-namespace D2Client::UI {
+} // namespace D2Client::GAME::Record
 
-} // namespace D2Client::UI
+namespace D2Client::_Message {
 
-namespace D2Client::UI::Button::ButtonImplementation {
+} // namespace D2Client::_Message
 
-} // namespace D2Client::UI::Button::ButtonImplementation
+namespace D2Client::Engine {
 
-namespace D2Client::UI::Button::ButtonWrapper {
+} // namespace D2Client::Engine
 
-} // namespace D2Client::UI::Button::ButtonWrapper
+namespace D2Client::GAME::SCmd {
 
-namespace D2Client::UI::Editbox::EditBoxImplementation {
+} // namespace D2Client::GAME::SCmd
 
-} // namespace D2Client::UI::Editbox::EditBoxImplementation
+namespace D2Client::Draw::LightMap {
 
-namespace D2Client::UI::Editbox::EditBoxWrapper {
+} // namespace D2Client::Draw::LightMap
 
-} // namespace D2Client::UI::Editbox::EditBoxWrapper
+namespace D2Client::GAME::Rendering {
 
-namespace D2Client::UI::Spinner::SpinnerImplementation {
+} // namespace D2Client::GAME::Rendering
 
-} // namespace D2Client::UI::Spinner::SpinnerImplementation
+namespace D2Client::UI::Panel {
 
-namespace D2Client::UI::Spinner::SpinnerWrapper {
+} // namespace D2Client::UI::Panel
 
-} // namespace D2Client::UI::Spinner::SpinnerWrapper
+namespace D2Client::UI::Party {
 
-namespace D2Client::UI::ListBox::ListBoxWrapper {
+} // namespace D2Client::UI::Party
 
-} // namespace D2Client::UI::ListBox::ListBoxWrapper
+namespace D2Client::Sound {
 
-namespace D2Client::UI::ListBox::ListBoxImplementation {
+} // namespace D2Client::Sound
 
-} // namespace D2Client::UI::ListBox::ListBoxImplementation
+namespace D2Client::UI::UseItem {
 
-namespace D2Game::GAME::Event::Dispatch {
+} // namespace D2Client::UI::UseItem
 
-} // namespace D2Game::GAME::Event::Dispatch
+namespace D2Client::UNIT::UnitSnd {
 
-namespace D2Game::GAME::Event::Dispatch::Player {
+} // namespace D2Client::UNIT::UnitSnd
 
-} // namespace D2Game::GAME::Event::Dispatch::Player
+namespace D2Client::UI::SkillDesc {
 
-namespace D2Game::GAME::Event::Dispatch::Object {
+} // namespace D2Client::UI::SkillDesc
 
-} // namespace D2Game::GAME::Event::Dispatch::Object
+namespace D2Glide::Renderer::Glide {
 
-namespace D2Game::GAME::Event::Dispatch::Monster {
-
-} // namespace D2Game::GAME::Event::Dispatch::Monster
-
-namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
-
-} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
-
-namespace D2Common::Chat::Ignorelist::IgnoreList {
-
-} // namespace D2Common::Chat::Ignorelist::IgnoreList
-
-namespace D2Common::Drlg::Outdoors {
-
-} // namespace D2Common::Drlg::Outdoors
-
-namespace Define_the_symbol__ATL_MIXED {
-
-} // namespace Define_the_symbol__ATL_MIXED
-
-namespace Fog::_3rdparty::crashy {
-
-} // namespace Fog::_3rdparty::crashy
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
-namespace Class::FILEREC {
-
-} // namespace Class::FILEREC
-
-namespace Class::EVENTREC {
-
-} // namespace Class::EVENTREC
-
-namespace Class::REQUEST {
-
-} // namespace Class::REQUEST
-
-namespace Class::AUDIOSTREAM {
-
-} // namespace Class::AUDIOSTREAM
-
-namespace Class::HANDLER {
-
-} // namespace Class::HANDLER
-
-namespace D2Launch::CharSel {
-
-} // namespace D2Launch::CharSel
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::Renderer {
-
-} // namespace D2Client::Renderer
+} // namespace D2Glide::Renderer::Glide
 
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
 
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
+
 namespace D2Lang::Unicode::UNISYS {
 
 } // namespace D2Lang::Unicode::UNISYS
+
+namespace D2Net::SRC::Client {
+
+} // namespace D2Net::SRC::Client
+
+namespace D2Game::PLAYER::PlayerSave {
+
+} // namespace D2Game::PLAYER::PlayerSave
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -1799,6 +2051,10 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
+namespace D2Game::Monster::Create {
+
+} // namespace D2Game::Monster::Create
+
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -1851,22 +2107,186 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
+namespace D2Game::SKILLS::SkillNec {
+
+} // namespace D2Game::SKILLS::SkillNec
+
+namespace D2CMP::SRC::CelCmp::CELLIST {
+
+} // namespace D2CMP::SRC::CelCmp::CELLIST
+
+namespace D2CMP {
+
+} // namespace D2CMP
+
+namespace D2CMP::Draw {
+
+} // namespace D2CMP::Draw
+
+namespace D2Common::Chat::Ignorelist::MappingEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::MappingEntryNode
+
+namespace D2Common::Chat::Ignorelist::StringEntryNode {
+
+} // namespace D2Common::Chat::Ignorelist::StringEntryNode
+
+namespace D2Common::Chat::Ignorelist {
+
+} // namespace D2Common::Chat::Ignorelist
+
+namespace D2Common::Logging::ProfCore {
+
+} // namespace D2Common::Logging::ProfCore
+
+namespace D2Common::DUNGEON::Dungeon {
+
+} // namespace D2Common::DUNGEON::Dungeon
+
+namespace D2Common::Environment {
+
+} // namespace D2Common::Environment
+
+namespace D2Common::Units {
+
+} // namespace D2Common::Units
+
+namespace D2Common::Monsters::MONSTERS {
+
+} // namespace D2Common::Monsters::MONSTERS
+
+namespace D2Common::Merc {
+
+} // namespace D2Common::Merc
+
+namespace D2Common::DATATBLS::OverlayTbls {
+
+} // namespace D2Common::DATATBLS::OverlayTbls
+
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
+
+namespace D2Direct3D::Renderer {
+
+} // namespace D2Direct3D::Renderer
+
+namespace Fog::Src {
+
+} // namespace Fog::Src
+
+namespace D2Gdi::Renderer::Windowed {
+
+} // namespace D2Gdi::Renderer::Windowed
+
+namespace D2Launch::Launcher {
+
+} // namespace D2Launch::Launcher
+
+namespace D2Client::Lng {
+
+} // namespace D2Client::Lng
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::Draw::LightMap {
+namespace D2Client::UI::SpellSel {
 
-} // namespace D2Client::Draw::LightMap
+} // namespace D2Client::UI::SpellSel
+
+namespace D2Client::UNIT::CUnit {
+
+} // namespace D2Client::UNIT::CUnit
+
+namespace D2Client::Cursor {
+
+} // namespace D2Client::Cursor
+
+namespace D2Client::Engine::Gfx {
+
+} // namespace D2Client::Engine::Gfx
+
+namespace D2Client::UNIT::Monster {
+
+} // namespace D2Client::UNIT::Monster
+
+namespace D2Client::UI::Trade {
+
+} // namespace D2Client::UI::Trade
+
+namespace D2Client::UNIT::Object {
+
+} // namespace D2Client::UNIT::Object
+
+namespace D2Client::GAME::Sound {
+
+} // namespace D2Client::GAME::Sound
+
+namespace D2gfx {
+
+} // namespace D2gfx
+
+namespace D2Win::D2GFX {
+
+} // namespace D2Win::D2GFX
 
 namespace D2Win::Src::D2WinMain {
 
 } // namespace D2Win::Src::D2WinMain
 
-namespace D2Win::D2GFX {
+namespace D2Win::Src::D2WinButton {
 
-} // namespace D2Win::D2GFX
+} // namespace D2Win::Src::D2WinButton
+
+namespace D2Win::Src::D2WinArchive {
+
+} // namespace D2Win::Src::D2WinArchive
+
+namespace D2Win::Src::D2WinTextBox {
+
+} // namespace D2Win::Src::D2WinTextBox
+
+namespace D2Sound {
+
+} // namespace D2Sound
+
+namespace Bnclient::Bnet {
+
+} // namespace Bnclient::Bnet
+
+namespace Bnclient {
+
+} // namespace Bnclient
+
+namespace D2Net::Game::Server {
+
+} // namespace D2Net::Game::Server
+
+namespace D2Game::UNIT::SUNITNPC {
+
+} // namespace D2Game::UNIT::SUNITNPC
+
+namespace D2Game::UNIT::sunitproxy {
+
+} // namespace D2Game::UNIT::sunitproxy
+
+namespace D2Game::GAME::Clients {
+
+} // namespace D2Game::GAME::Clients
+
+namespace D2Game::Quests::QUESTS {
+
+} // namespace D2Game::Quests::QUESTS
+
+namespace D2Common::DATATBLS::MonsterTbls {
+
+} // namespace D2Common::DATATBLS::MonsterTbls
+
+namespace D2Common::Logging {
+
+} // namespace D2Common::Logging
+
+namespace D2Common::DATATBLS::TokTbls {
+
+} // namespace D2Common::DATATBLS::TokTbls

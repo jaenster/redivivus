@@ -83,6 +83,7 @@ void __stdcall CMD_LoadUserKeyBindings();
 void __stdcall CMD_InitKeyBindings();
 void __stdcall CMD_ExitKeyConfigMode();
 void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDuration, int32_t nFadeOutDuration, eD2LevelId eLevelId, int32_t bForce);
+void StaticInit_6caab0();
 void StaticInit_gwKeyNameBuffer();
 // 2 internal functions (defined in .cpp)
 

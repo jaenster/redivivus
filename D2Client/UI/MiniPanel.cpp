@@ -82,7 +82,7 @@ void MINIPANEL_DrawBackground(int32_t nPanelSection) {
     switch (nPanelSection) {
       case 1:
         {
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 - 0xcd, ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 - 0xcd, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
           break;
         }
       case 2:
@@ -93,18 +93,18 @@ void MINIPANEL_DrawBackground(int32_t nPanelSection) {
             nXOffset = -0x54;
           }
 
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 + nXOffset - 3, ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 + nXOffset - 3, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
           return;
         }
       case 3:
         {
           if (gbMiniPanelSinglePlayer) {
-            nXOffset = ScreenSizeX / 2 + 0x38;
+            nXOffset = ui::ScreenSizeX / 2 + 0x38;
           } else {
-            nXOffset = ScreenSizeX / 2 + 0x23;
+            nXOffset = ui::ScreenSizeX / 2 + 0x23;
           }
 
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nXOffset - 2, ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nXOffset - 2, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
           return;
         }
     }
@@ -131,13 +131,13 @@ static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
       return;
     }
 
-    int nButtonIndex = ScreenSizeX / 2;
+    int nButtonIndex = ui::ScreenSizeX / 2;
     int nButtonX = nButtonIndex - 0x54;
     if (gbMiniPanelSinglePlayer) {
       nButtonX = nButtonIndex - 0x4a;
     }
 
-    uint32_t nButtonY = ScreenSizeY - 0x32;
+    uint32_t nButtonY = Inv::ScreenSizeY - 0x32;
     if (bIsExpansion == 1) {
       nButtonX = nButtonIndex - 0xca;
     } else if (bIsExpansion == 3 && (nButtonX = nButtonIndex + 0x39 , !gbMiniPanelSinglePlayer)) {
@@ -494,8 +494,8 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
         nCenterX += 0x77;
       }
 
-      nCenterX = ScreenSizeX / 2 + nCenterX;
-      if (nMouseX > nCenterX - 0x54 && nMouseX < nCenterX + 0x59 && nMouseY > ScreenSizeY - 0x45 && nMouseY < ScreenSizeY - 0x2f) {
+      nCenterX = ui::ScreenSizeX / 2 + nCenterX;
+      if (nMouseX > nCenterX - 0x54 && nMouseX < nCenterX + 0x59 && nMouseY > Inv::ScreenSizeY - 0x45 && nMouseY < Inv::ScreenSizeY - 0x2f) {
         nCenterX = 0;
         if (nButtonCount) {
           do {
@@ -578,17 +578,17 @@ void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
       nButtonIndex += 0x77;
     }
 
-    nButtonIndex = ScreenSizeX / 2 + nButtonIndex;
+    nButtonIndex = ui::ScreenSizeX / 2 + nButtonIndex;
     if (nMouseX <= nButtonIndex - 0x54) {
       return;
     }
     if (nMouseX >= nButtonIndex + 0x59) {
       return;
     }
-    if (nMouseY <= ScreenSizeY - 0x45) {
+    if (nMouseY <= Inv::ScreenSizeY - 0x45) {
       return;
     }
-    if (nMouseY >= ScreenSizeY - 0x2f) {
+    if (nMouseY >= Inv::ScreenSizeY - 0x2f) {
       return;
     }
 
@@ -672,7 +672,7 @@ void __stdcall MINIPANEL_Shutdown() {
 }
 
 BOOL __fastcall MINIPANEL_IsMouseInArea(int32_t nMouseX, int32_t nMouseY) {
-    if (nMouseX > ScreenSizeX / 2 - 0x4a && nMouseX < ScreenSizeX / 2 + 0x47 && nMouseY < ScreenSizeY - 0x32 && nMouseY > ScreenSizeY - 0x45) {
+    if (nMouseX > ui::ScreenSizeX / 2 - 0x4a && nMouseX < ui::ScreenSizeX / 2 + 0x47 && nMouseY < Inv::ScreenSizeY - 0x32 && nMouseY > Inv::ScreenSizeY - 0x45) {
       return 1;
     }
 
@@ -704,16 +704,16 @@ BOOL __stdcall WAYPOINT_IsMouseInMiniPanel() {
       bFlagSet = ui::GetUIFlag(UI_MINIPANEL);
       if (bFlagSet) {
         if (gbMiniPanelSinglePlayer) {
-          nPanelX = ScreenSizeX / 2 + 0x38;
+          nPanelX = ui::ScreenSizeX / 2 + 0x38;
         } else {
-          nPanelX = ScreenSizeX / 2 + 0x23;
+          nPanelX = ui::ScreenSizeX / 2 + 0x23;
         }
 
         nButtonCount = 8;
         if (gbMiniPanelSinglePlayer) {
           nButtonCount = 7;
         }
-        if (nMouseX > nPanelX && nMouseX < nPanelX + nButtonCount * 0x14 && nMouseY > ScreenSizeY - 0x4c && nMouseY < ScreenSizeY - 0x32) {
+        if (nMouseX > nPanelX && nMouseX < nPanelX + nButtonCount * 0x14 && nMouseY > Inv::ScreenSizeY - 0x4c && nMouseY < Inv::ScreenSizeY - 0x32) {
           return 1;
         }
       }
@@ -817,8 +817,8 @@ static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
       nButtonIndex = 0x77;
     }
 
-    nButtonIndex = ScreenSizeX / 2 + nButtonIndex;
-    if (!(nMouseX > nButtonIndex - 0x54 && nMouseX < nButtonIndex + 0x59 && nMouseY > ScreenSizeY - 0x45 && nMouseY < ScreenSizeY - 0x2f)) {
+    nButtonIndex = ui::ScreenSizeX / 2 + nButtonIndex;
+    if (!(nMouseX > nButtonIndex - 0x54 && nMouseX < nButtonIndex + 0x59 && nMouseY > Inv::ScreenSizeY - 0x45 && nMouseY < Inv::ScreenSizeY - 0x2f)) {
       return;
     }
 
@@ -847,12 +847,12 @@ void __stdcall DRAW_UI_MiniPanel() {
         memset(&sGfxData, 0, 0x48);
         sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
         if (gbMiniPanelSinglePlayer) {
-          nButtonX = ScreenSizeX / 2 + 0x38;
+          nButtonX = ui::ScreenSizeX / 2 + 0x38;
         } else {
-          nButtonX = ScreenSizeX / 2 + 0x23;
+          nButtonX = ui::ScreenSizeX / 2 + 0x23;
         }
 
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nButtonX - 2, ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nButtonX - 2, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
         MINIPANEL_CalculateButtonPositions(3);
         MINIPANEL_DrawAllButtons(1);
         MINIPANEL_HandleMouseHover(3);
@@ -876,7 +876,7 @@ void __stdcall DRAW_UI_MiniPanel() {
         nOffsetX = -0x54;
       }
 
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 + nOffsetX - 3, ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 + nOffsetX - 3, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
       MINIPANEL_CalculateButtonPositions(2);
       MINIPANEL_DrawAllButtons(1);
       MINIPANEL_HandleMouseHover(2);
@@ -886,7 +886,7 @@ void __stdcall DRAW_UI_MiniPanel() {
 
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = gpMiniPanelBackgroundDC6;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 - 0xcd, ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 - 0xcd, Inv::ScreenSizeY - 0x2f, -1, DRAW_SOLID, nullptr);
     MINIPANEL_CalculateButtonPositions(1);
     MINIPANEL_DrawAllButtons(1);
     MINIPANEL_HandleMouseHover(1);

@@ -67,7 +67,7 @@
 namespace D2Game::Monster::Create {
 
 int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId) {
-    D2MonStatsTxt* pMonStatsTxt = nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nMonsterId >= 0 && nMonsterId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
     if (pMonStatsTxt) {
       nMonsterId = (int32_t)pMonStatsTxt->BaseId;
     }
@@ -157,10 +157,10 @@ static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc *
     pGame = pQuestEventArg->pGame;
     int nBaseId;
     nBaseId = nUmodId;
-    if (nUmodId >= 0 && nUmodId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nUmodId) {
-      nBaseId = (int)sgptDataTable->pTxtMonStats[nUmodId].BaseId;
+    if (nUmodId >= 0 && nUmodId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nUmodId) {
+      nBaseId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nUmodId].BaseId;
     }
-    if (nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize) {
+    if (nBaseId >= 0 && nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       if (nBaseId <= 0x1b2) {
         if (nBaseId != 0x1b2) {
           goto dispatch_by_base_id;
@@ -217,7 +217,7 @@ static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc *
       Monsters::InitUmods(pGame, pMonster, 0x12, 1);
       return;
       case 0xaf:
-        nUmodId = sgptDataTable->nTxtMonStatsSize <= 0xaf ? -1 : 0xaf;
+        nUmodId = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0xaf ? -1 : 0xaf;
       Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), nUmodId);
       return;
       case 0xfa:
@@ -324,13 +324,13 @@ static void MONSTER_ApplySpecialUmods(D2UnitStrc * pUnit, D2UnknownCreateMonster
     nClassId = pCreateData->nClassId;
     ::SGAMEDATA* pGame;
     pGame = pCreateData->pGame;
-    if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId) {
-      nClassId = (int32_t)sgptDataTable->pTxtMonStats[nClassId].BaseId;
+    if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) {
+      nClassId = (int32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].BaseId;
     }
     if (nClassId < 0) {
       return;
     }
-    if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return;
     }
     if (nClassId <= 0x157) {
@@ -684,7 +684,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
     BOOL bMinionIsLeader;
     int32_t nTmp;
     int32_t nPartySize = pGame->nClassId;
-    D2MonStatsTxt* pMonStats = nPartySize >= 0 && nPartySize < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nPartySize : nullptr;
+    D2MonStatsTxt* pMonStats = nPartySize >= 0 && nPartySize < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nPartySize : nullptr;
     if (!pMonStats) {
       return;
     }
@@ -692,36 +692,36 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
     D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nPartySize, nullptr, &eUpgradeSkill);
     ::SGAMEDATA* pGameInst = pGame->pGame;
     uint16_t wMinionType = pGame->nFlags;
-    if (!(pMonStats->minion1 >= 0 && (int)pMonStats->minion1 < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(pMonStats->minion1 >= 0 && (int)pMonStats->minion1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
     int32_t nMinionClassId = TXT_MonStats_GetBaseId_NoChecks(nPartySize);
-    if (nMinionClassId >= 0 && nMinionClassId < sgptDataTable->nTxtMonStatsSize && nMinionClassId == 0x105) {
+    if (nMinionClassId >= 0 && nMinionClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nMinionClassId == 0x105) {
       if (!pUnit) {
         nMinionClassId = -1;
       } else {
         nMinionClassId = pUnit->nUnitGUID;
       }
 
-      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & gadwBitMasks[5]);
+      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & Fog::BitBuffer::gadwBitMasks[5]);
       nMinionClassId = D2Client::UNIT::Missile::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
       SpawnMinions_ByPattern(pGameInst, pUnit, (int)pMonStats->minion1, eD2MonsterAnimMode_ns::Neutral, nMinionClassId, ~(uint32_t)(wMinionType >> 2) & 1, 0x40);
       return;
     }
-    if (gadwBitMasks[4] & (uint8_t)*((uint8_t*)pMonStats + 0xc)) {
+    if (Fog::BitBuffer::gadwBitMasks[4] & (uint8_t)*((uint8_t*)pMonStats + 0xc)) {
       if (!pUnit) {
         nMinionClassId = -1;
       } else {
         nMinionClassId = pUnit->nUnitGUID;
       }
 
-      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & gadwBitMasks[5]);
+      Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & Fog::BitBuffer::gadwBitMasks[5]);
     }
 
     int nMinionTypeSlot = 0;
     int bHasSecondMinionType = 0;
-    if (pMonStats->minion2 >= 0 && (int)pMonStats->minion2 < sgptDataTable->nTxtMonStatsSize) {
+    if (pMonStats->minion2 >= 0 && (int)pMonStats->minion2 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       bHasSecondMinionType = 1;
     }
 
@@ -733,7 +733,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
     do {
       D2UnitStrc* pSpawnedMinion;
       pSpawnedMinion = SpawnMonsterAtUnit(pGameInst, pUnit, (int)*(short int*)(pMonStats->Code + nMinionTypeSlot * 2 + 0x16), eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
-      if (pSpawnedMinion && *((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[4]) {
+      if (pSpawnedMinion && *((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         bMinionIsLeader = 0;
         nTmp = 0;
         eUnitType = UNIT_MONSTER;
@@ -787,32 +787,32 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     if (nClassId < 0) {
       return nullptr;
     }
-    if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return nullptr;
     }
 
     D2MonStatsTxt* pMonStatsTxt;
-    pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+    pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId;
     if (!pMonStatsTxt) {
       return nullptr;
     }
     if (nClassId < 0) {
       return nullptr;
     }
-    if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
+    if (nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return nullptr;
     }
 
-    nClassId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
+    nClassId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
     if (nClassId < 0) {
       return nullptr;
     }
-    if (nClassId >= sgptDataTable->nTxtMonStatsExSize) {
+    if (nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize) {
       return nullptr;
     }
 
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = sgptDataTable->pTxtMonStatsEx + nClassId;
+    pMonStats2 = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nClassId;
     if (!pMonStats2) {
       return nullptr;
     }
@@ -1000,7 +1000,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
       D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MONSTER, pMonsterSpawnData->nClassId, nSpawnX, nSpawnY, pMonsterSpawnData->pGame, pRoom, bPlaceInRoom, pMonsterSpawnData->eMode, (void*)pMonsterSpawnData->nGUID);
       if (pUnit) {
         nFlagsFiltered = nSpawnFlags & 8;
-        if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)gadwBitMasks[2]) {
+        if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
           nFlagsFiltered = 1;
         }
 
@@ -1140,13 +1140,13 @@ D2UnitStrc * __fastcall SpawnMonsterAtRoomPosGuid(::SGAMEDATA * pGame, D2RoomStr
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     sMonsterSpawnData.nGUID = nGUID;
     sMonsterSpawnData.nClassId = nClassId;
-    sMonsterSpawnData.pRoom = pRoom;
-    sMonsterSpawnData.pGame = pGame;
     sMonsterSpawnData.eMode = eMode;
-    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
-    sMonsterSpawnData.nX = nX;
+    sMonsterSpawnData.pRoom = pRoom;
     sMonsterSpawnData.pCoordList = 0;
+    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+    sMonsterSpawnData.pGame = pGame;
     sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nX = nX;
     sMonsterSpawnData.nY = nY;
     D2UnitStrc* pMonster = CreateMonster(&sMonsterSpawnData);
     return pMonster;
@@ -1409,12 +1409,12 @@ BOOL __fastcall SpawnRandomMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int3
       }
 
       sCreateParams.nClassId = (int32_t)pLevelTxt->mon[nMonTypeIdx];
-      if (sCreateParams.nClassId < 0 || sCreateParams.nClassId >= sgptDataTable->nTxtMonStatsSize) {
+      if (sCreateParams.nClassId < 0 || sCreateParams.nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         pMonStats = 0;
       } else {
-        pMonStats = sgptDataTable->pTxtMonStats + sCreateParams.nClassId;
+        pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + sCreateParams.nClassId;
       }
-    } while (!(*((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[0]) && (nMonSearchAttempts++ , nMonSearchAttempts < (int)nLevelMonCount));
+    } while (!(*((uint8_t*)pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (nMonSearchAttempts++ , nMonSearchAttempts < (int)nLevelMonCount));
 
     if (sCreateParams.nClassId == -1) {
       return 0;

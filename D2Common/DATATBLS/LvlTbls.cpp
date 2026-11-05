@@ -73,18 +73,22 @@ static char gaAutomapTileNames[20][8] = {
 }; D2_STATIC_GUARD(gaAutomapTileNames, "gaAutomapTileNames");
 uint32_t gszTxtCol_Act = 0x746341; D2_GLOBAL_GUARD(gszTxtCol_Act, "gszTxtCol_Act");
 unsigned int gszTxtCol_Red = 0x646552; D2_GLOBAL_GUARD(gszTxtCol_Red, "gszTxtCol_Red");
-static D2SeedStrc * psDataTableSeed = (D2SeedStrc *)&gsAutoMapSeed; D2_STATIC_GUARD(psDataTableSeed, "psDataTableSeed");
+static D2SeedStrc * psDataTableSeed = (D2SeedStrc *)&D2Common::DATATBLS::LvlTbls::gsAutoMapSeed; D2_STATIC_GUARD(psDataTableSeed, "psDataTableSeed");
+namespace D2Common::DATATBLS::LvlTbls {
+D2SeedStrc gsAutoMapSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gsAutoMapSeed, "D2Common::DATATBLS::LvlTbls::gsAutoMapSeed");
+} // namespace D2Common::DATATBLS::LvlTbls
 static D2AutomapRelatedTxt gpaAutoMapRelated[36] = {}; D2_STATIC_GUARD(gpaAutoMapRelated, "gpaAutoMapRelated");
-D2LvlTypesTxt * pTxtLvlTypes = 0; D2_GLOBAL_GUARD(pTxtLvlTypes, "pTxtLvlTypes");
 static void * gpPortalLevelArray = 0; D2_STATIC_GUARD(gpPortalLevelArray, "gpPortalLevelArray");
 static unsigned int nPortalLevelCount = {}; D2_STATIC_GUARD(nPortalLevelCount, "nPortalLevelCount");
-int nTxtLvlTypesSize = 0; D2_GLOBAL_GUARD(nTxtLvlTypesSize, "nTxtLvlTypesSize");
-D2LvlWarpTxt * pTxtLvlWarp = 0; D2_GLOBAL_GUARD(pTxtLvlWarp, "pTxtLvlWarp");
-int nTxtLvlWarpSize = 0; D2_GLOBAL_GUARD(nTxtLvlWarpSize, "nTxtLvlWarpSize");
-D2LvlMazeTxt * sgpTxtLvlMaze = 0; D2_GLOBAL_GUARD(sgpTxtLvlMaze, "sgpTxtLvlMaze");
-int nTxtLvlMazeSize = 0; D2_GLOBAL_GUARD(nTxtLvlMazeSize, "nTxtLvlMazeSize");
-D2LvlSubTxt * sgpTxtLvlSub = 0; D2_GLOBAL_GUARD(sgpTxtLvlSub, "sgpTxtLvlSub");
-int nTxtLvlSubSize = 0; D2_GLOBAL_GUARD(nTxtLvlSubSize, "nTxtLvlSubSize");
+namespace D2Common::DATATBLS::LvlTbls {
+int nTxtLvlTypesSize = 0; D2_GLOBAL_GUARD(nTxtLvlTypesSize, "D2Common::DATATBLS::LvlTbls::nTxtLvlTypesSize");
+D2LvlWarpTxt * pTxtLvlWarp = 0; D2_GLOBAL_GUARD(pTxtLvlWarp, "D2Common::DATATBLS::LvlTbls::pTxtLvlWarp");
+int nTxtLvlWarpSize = 0; D2_GLOBAL_GUARD(nTxtLvlWarpSize, "D2Common::DATATBLS::LvlTbls::nTxtLvlWarpSize");
+D2LvlMazeTxt * sgpTxtLvlMaze = 0; D2_GLOBAL_GUARD(sgpTxtLvlMaze, "D2Common::DATATBLS::LvlTbls::sgpTxtLvlMaze");
+int nTxtLvlMazeSize = 0; D2_GLOBAL_GUARD(nTxtLvlMazeSize, "D2Common::DATATBLS::LvlTbls::nTxtLvlMazeSize");
+D2LvlSubTxt * sgpTxtLvlSub = 0; D2_GLOBAL_GUARD(sgpTxtLvlSub, "D2Common::DATATBLS::LvlTbls::sgpTxtLvlSub");
+int nTxtLvlSubSize = 0; D2_GLOBAL_GUARD(nTxtLvlSubSize, "D2Common::DATATBLS::LvlTbls::nTxtLvlSubSize");
+} // namespace D2Common::DATATBLS::LvlTbls
 static int * gpnLvlSubTypeToIndex = 0; D2_STATIC_GUARD(gpnLvlSubTypeToIndex, "gpnLvlSubTypeToIndex");
 static D2ExpansionLvlTblsTxt * pExpansionLvlTbls = 0; D2_STATIC_GUARD(pExpansionLvlTbls, "pExpansionLvlTbls");
 static D2DrlgFileStrc * * pTxtLvlTbls = 0; D2_STATIC_GUARD(pTxtLvlTbls, "pTxtLvlTbls");
@@ -146,86 +150,86 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       {"ObjPrb7", FIELDTYPE_CHAR, 0, 0xf4, 0},
       {"Quest", FIELDTYPE_CHAR, 0, 0x30, 0},
       {"NumMon", FIELDTYPE_CHAR, 0, 0x32, 0},
-      {"mon1", FIELDTYPE_NAME_SHORT, 0, 0x36, &sgtDataTable.pTxtMonStatsLink},
-      {"mon2", FIELDTYPE_NAME_SHORT, 0, 0x38, &sgtDataTable.pTxtMonStatsLink},
-      {"mon3", FIELDTYPE_NAME_SHORT, 0, 0x3a, &sgtDataTable.pTxtMonStatsLink},
-      {"mon4", FIELDTYPE_NAME_SHORT, 0, 0x3c, &sgtDataTable.pTxtMonStatsLink},
-      {"mon5", FIELDTYPE_NAME_SHORT, 0, 0x3e, &sgtDataTable.pTxtMonStatsLink},
-      {"mon6", FIELDTYPE_NAME_SHORT, 0, 0x40, &sgtDataTable.pTxtMonStatsLink},
-      {"mon7", FIELDTYPE_NAME_SHORT, 0, 0x42, &sgtDataTable.pTxtMonStatsLink},
-      {"mon8", FIELDTYPE_NAME_SHORT, 0, 0x44, &sgtDataTable.pTxtMonStatsLink},
-      {"mon9", FIELDTYPE_NAME_SHORT, 0, 0x46, &sgtDataTable.pTxtMonStatsLink},
-      {"mon10", FIELDTYPE_NAME_SHORT, 0, 0x48, &sgtDataTable.pTxtMonStatsLink},
-      {"mon11", FIELDTYPE_NAME_SHORT, 0, 0x4a, &sgtDataTable.pTxtMonStatsLink},
-      {"mon12", FIELDTYPE_NAME_SHORT, 0, 0x4c, &sgtDataTable.pTxtMonStatsLink},
-      {"mon13", FIELDTYPE_NAME_SHORT, 0, 0x4e, &sgtDataTable.pTxtMonStatsLink},
-      {"mon14", FIELDTYPE_NAME_SHORT, 0, 0x50, &sgtDataTable.pTxtMonStatsLink},
-      {"mon15", FIELDTYPE_NAME_SHORT, 0, 0x52, &sgtDataTable.pTxtMonStatsLink},
-      {"mon16", FIELDTYPE_NAME_SHORT, 0, 0x54, &sgtDataTable.pTxtMonStatsLink},
-      {"mon17", FIELDTYPE_NAME_SHORT, 0, 0x56, &sgtDataTable.pTxtMonStatsLink},
-      {"mon18", FIELDTYPE_NAME_SHORT, 0, 0x58, &sgtDataTable.pTxtMonStatsLink},
-      {"mon19", FIELDTYPE_NAME_SHORT, 0, 0x5a, &sgtDataTable.pTxtMonStatsLink},
-      {"mon20", FIELDTYPE_NAME_SHORT, 0, 0x5c, &sgtDataTable.pTxtMonStatsLink},
-      {"mon21", FIELDTYPE_NAME_SHORT, 0, 0x5e, &sgtDataTable.pTxtMonStatsLink},
-      {"mon22", FIELDTYPE_NAME_SHORT, 0, 0x60, &sgtDataTable.pTxtMonStatsLink},
-      {"mon23", FIELDTYPE_NAME_SHORT, 0, 0x62, &sgtDataTable.pTxtMonStatsLink},
-      {"mon24", FIELDTYPE_NAME_SHORT, 0, 100, &sgtDataTable.pTxtMonStatsLink},
-      {"mon25", FIELDTYPE_NAME_SHORT, 0, 0x66, &sgtDataTable.pTxtMonStatsLink},
+      {"mon1", FIELDTYPE_NAME_SHORT, 0, 0x36, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon2", FIELDTYPE_NAME_SHORT, 0, 0x38, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon3", FIELDTYPE_NAME_SHORT, 0, 0x3a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon4", FIELDTYPE_NAME_SHORT, 0, 0x3c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon5", FIELDTYPE_NAME_SHORT, 0, 0x3e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon6", FIELDTYPE_NAME_SHORT, 0, 0x40, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon7", FIELDTYPE_NAME_SHORT, 0, 0x42, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon8", FIELDTYPE_NAME_SHORT, 0, 0x44, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon9", FIELDTYPE_NAME_SHORT, 0, 0x46, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon10", FIELDTYPE_NAME_SHORT, 0, 0x48, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon11", FIELDTYPE_NAME_SHORT, 0, 0x4a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon12", FIELDTYPE_NAME_SHORT, 0, 0x4c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon13", FIELDTYPE_NAME_SHORT, 0, 0x4e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon14", FIELDTYPE_NAME_SHORT, 0, 0x50, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon15", FIELDTYPE_NAME_SHORT, 0, 0x52, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon16", FIELDTYPE_NAME_SHORT, 0, 0x54, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon17", FIELDTYPE_NAME_SHORT, 0, 0x56, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon18", FIELDTYPE_NAME_SHORT, 0, 0x58, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon19", FIELDTYPE_NAME_SHORT, 0, 0x5a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon20", FIELDTYPE_NAME_SHORT, 0, 0x5c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon21", FIELDTYPE_NAME_SHORT, 0, 0x5e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon22", FIELDTYPE_NAME_SHORT, 0, 0x60, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon23", FIELDTYPE_NAME_SHORT, 0, 0x62, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon24", FIELDTYPE_NAME_SHORT, 0, 100, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"mon25", FIELDTYPE_NAME_SHORT, 0, 0x66, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
       {"rangedspawn", FIELDTYPE_CHAR, 0, 0x31, 0},
-      {"nmon1", FIELDTYPE_NAME_SHORT, 0, 0x68, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon2", FIELDTYPE_NAME_SHORT, 0, 0x6a, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon3", FIELDTYPE_NAME_SHORT, 0, 0x6c, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon4", FIELDTYPE_NAME_SHORT, 0, 0x6e, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon5", FIELDTYPE_NAME_SHORT, 0, 0x70, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon6", FIELDTYPE_NAME_SHORT, 0, 0x72, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon7", FIELDTYPE_NAME_SHORT, 0, 0x74, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon8", FIELDTYPE_NAME_SHORT, 0, 0x76, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon9", FIELDTYPE_NAME_SHORT, 0, 0x78, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon10", FIELDTYPE_NAME_SHORT, 0, 0x7a, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon11", FIELDTYPE_NAME_SHORT, 0, 0x7c, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon12", FIELDTYPE_NAME_SHORT, 0, 0x7e, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon13", FIELDTYPE_NAME_SHORT, 0, 0x80, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon14", FIELDTYPE_NAME_SHORT, 0, 0x82, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon15", FIELDTYPE_NAME_SHORT, 0, 0x84, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon16", FIELDTYPE_NAME_SHORT, 0, 0x86, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon17", FIELDTYPE_NAME_SHORT, 0, 0x88, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon18", FIELDTYPE_NAME_SHORT, 0, 0x8a, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon19", FIELDTYPE_NAME_SHORT, 0, 0x8c, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon20", FIELDTYPE_NAME_SHORT, 0, 0x8e, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon21", FIELDTYPE_NAME_SHORT, 0, 0x90, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon22", FIELDTYPE_NAME_SHORT, 0, 0x92, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon23", FIELDTYPE_NAME_SHORT, 0, 0x94, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon24", FIELDTYPE_NAME_SHORT, 0, 0x96, &sgtDataTable.pTxtMonStatsLink},
-      {"nmon25", FIELDTYPE_NAME_SHORT, 0, 0x98, &sgtDataTable.pTxtMonStatsLink},
-      {"umon1", FIELDTYPE_NAME_SHORT, 0, 0x9a, &sgtDataTable.pTxtMonStatsLink},
-      {"umon2", FIELDTYPE_NAME_SHORT, 0, 0x9c, &sgtDataTable.pTxtMonStatsLink},
-      {"umon3", FIELDTYPE_NAME_SHORT, 0, 0x9e, &sgtDataTable.pTxtMonStatsLink},
-      {"umon4", FIELDTYPE_NAME_SHORT, 0, 0xa0, &sgtDataTable.pTxtMonStatsLink},
-      {"umon5", FIELDTYPE_NAME_SHORT, 0, 0xa2, &sgtDataTable.pTxtMonStatsLink},
-      {"umon6", FIELDTYPE_NAME_SHORT, 0, 0xa4, &sgtDataTable.pTxtMonStatsLink},
-      {"umon7", FIELDTYPE_NAME_SHORT, 0, 0xa6, &sgtDataTable.pTxtMonStatsLink},
-      {"umon8", FIELDTYPE_NAME_SHORT, 0, 0xa8, &sgtDataTable.pTxtMonStatsLink},
-      {"umon9", FIELDTYPE_NAME_SHORT, 0, 0xaa, &sgtDataTable.pTxtMonStatsLink},
-      {"umon10", FIELDTYPE_NAME_SHORT, 0, 0xac, &sgtDataTable.pTxtMonStatsLink},
-      {"umon11", FIELDTYPE_NAME_SHORT, 0, 0xae, &sgtDataTable.pTxtMonStatsLink},
-      {"umon12", FIELDTYPE_NAME_SHORT, 0, 0xb0, &sgtDataTable.pTxtMonStatsLink},
-      {"umon13", FIELDTYPE_NAME_SHORT, 0, 0xb2, &sgtDataTable.pTxtMonStatsLink},
-      {"umon14", FIELDTYPE_NAME_SHORT, 0, 0xb4, &sgtDataTable.pTxtMonStatsLink},
-      {"umon15", FIELDTYPE_NAME_SHORT, 0, 0xb6, &sgtDataTable.pTxtMonStatsLink},
-      {"umon16", FIELDTYPE_NAME_SHORT, 0, 0xb8, &sgtDataTable.pTxtMonStatsLink},
-      {"umon17", FIELDTYPE_NAME_SHORT, 0, 0xba, &sgtDataTable.pTxtMonStatsLink},
-      {"umon18", FIELDTYPE_NAME_SHORT, 0, 0xbc, &sgtDataTable.pTxtMonStatsLink},
-      {"umon19", FIELDTYPE_NAME_SHORT, 0, 0xbe, &sgtDataTable.pTxtMonStatsLink},
-      {"umon20", FIELDTYPE_NAME_SHORT, 0, 0xc0, &sgtDataTable.pTxtMonStatsLink},
-      {"umon21", FIELDTYPE_NAME_SHORT, 0, 0xc2, &sgtDataTable.pTxtMonStatsLink},
-      {"umon22", FIELDTYPE_NAME_SHORT, 0, 0xc4, &sgtDataTable.pTxtMonStatsLink},
-      {"umon23", FIELDTYPE_NAME_SHORT, 0, 0xc6, &sgtDataTable.pTxtMonStatsLink},
-      {"umon24", FIELDTYPE_NAME_SHORT, 0, 200, &sgtDataTable.pTxtMonStatsLink},
-      {"umon25", FIELDTYPE_NAME_SHORT, 0, 0xca, &sgtDataTable.pTxtMonStatsLink},
-      {"cmon1", FIELDTYPE_NAME_SHORT, 0, 0xcc, &sgtDataTable.pTxtMonStatsLink},
-      {"cmon2", FIELDTYPE_NAME_SHORT, 0, 0xce, &sgtDataTable.pTxtMonStatsLink},
-      {"cmon3", FIELDTYPE_NAME_SHORT, 0, 0xd0, &sgtDataTable.pTxtMonStatsLink},
-      {"cmon4", FIELDTYPE_NAME_SHORT, 0, 0xd2, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon1", FIELDTYPE_NAME_SHORT, 0, 0x68, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon2", FIELDTYPE_NAME_SHORT, 0, 0x6a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon3", FIELDTYPE_NAME_SHORT, 0, 0x6c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon4", FIELDTYPE_NAME_SHORT, 0, 0x6e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon5", FIELDTYPE_NAME_SHORT, 0, 0x70, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon6", FIELDTYPE_NAME_SHORT, 0, 0x72, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon7", FIELDTYPE_NAME_SHORT, 0, 0x74, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon8", FIELDTYPE_NAME_SHORT, 0, 0x76, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon9", FIELDTYPE_NAME_SHORT, 0, 0x78, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon10", FIELDTYPE_NAME_SHORT, 0, 0x7a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon11", FIELDTYPE_NAME_SHORT, 0, 0x7c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon12", FIELDTYPE_NAME_SHORT, 0, 0x7e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon13", FIELDTYPE_NAME_SHORT, 0, 0x80, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon14", FIELDTYPE_NAME_SHORT, 0, 0x82, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon15", FIELDTYPE_NAME_SHORT, 0, 0x84, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon16", FIELDTYPE_NAME_SHORT, 0, 0x86, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon17", FIELDTYPE_NAME_SHORT, 0, 0x88, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon18", FIELDTYPE_NAME_SHORT, 0, 0x8a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon19", FIELDTYPE_NAME_SHORT, 0, 0x8c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon20", FIELDTYPE_NAME_SHORT, 0, 0x8e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon21", FIELDTYPE_NAME_SHORT, 0, 0x90, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon22", FIELDTYPE_NAME_SHORT, 0, 0x92, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon23", FIELDTYPE_NAME_SHORT, 0, 0x94, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon24", FIELDTYPE_NAME_SHORT, 0, 0x96, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"nmon25", FIELDTYPE_NAME_SHORT, 0, 0x98, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon1", FIELDTYPE_NAME_SHORT, 0, 0x9a, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon2", FIELDTYPE_NAME_SHORT, 0, 0x9c, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon3", FIELDTYPE_NAME_SHORT, 0, 0x9e, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon4", FIELDTYPE_NAME_SHORT, 0, 0xa0, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon5", FIELDTYPE_NAME_SHORT, 0, 0xa2, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon6", FIELDTYPE_NAME_SHORT, 0, 0xa4, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon7", FIELDTYPE_NAME_SHORT, 0, 0xa6, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon8", FIELDTYPE_NAME_SHORT, 0, 0xa8, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon9", FIELDTYPE_NAME_SHORT, 0, 0xaa, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon10", FIELDTYPE_NAME_SHORT, 0, 0xac, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon11", FIELDTYPE_NAME_SHORT, 0, 0xae, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon12", FIELDTYPE_NAME_SHORT, 0, 0xb0, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon13", FIELDTYPE_NAME_SHORT, 0, 0xb2, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon14", FIELDTYPE_NAME_SHORT, 0, 0xb4, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon15", FIELDTYPE_NAME_SHORT, 0, 0xb6, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon16", FIELDTYPE_NAME_SHORT, 0, 0xb8, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon17", FIELDTYPE_NAME_SHORT, 0, 0xba, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon18", FIELDTYPE_NAME_SHORT, 0, 0xbc, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon19", FIELDTYPE_NAME_SHORT, 0, 0xbe, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon20", FIELDTYPE_NAME_SHORT, 0, 0xc0, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon21", FIELDTYPE_NAME_SHORT, 0, 0xc2, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon22", FIELDTYPE_NAME_SHORT, 0, 0xc4, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon23", FIELDTYPE_NAME_SHORT, 0, 0xc6, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon24", FIELDTYPE_NAME_SHORT, 0, 200, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"umon25", FIELDTYPE_NAME_SHORT, 0, 0xca, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"cmon1", FIELDTYPE_NAME_SHORT, 0, 0xcc, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"cmon2", FIELDTYPE_NAME_SHORT, 0, 0xce, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"cmon3", FIELDTYPE_NAME_SHORT, 0, 0xd0, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
+      {"cmon4", FIELDTYPE_NAME_SHORT, 0, 0xd2, &MonsterTbls::sgtDataTable.pTxtMonStatsLink},
       {"cpct1", FIELDTYPE_SHORT, 0, 0xd4, 0},
       {"cpct2", FIELDTYPE_SHORT, 0, 0xd6, 0},
       {"cpct3", FIELDTYPE_SHORT, 0, 0xd8, 0},
@@ -244,21 +248,21 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       {"EntryFile", FIELDTYPE_ASCII, 0x27, 0x145, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    sgtDataTable.pTxtLevels = (D2LevelsTxt*)DataTbls::CompileTxt(pMemory, "levels", levels, &sgtDataTable.nTxtLevelsSize, 0x220);
-    if (sgtDataTable.nTxtLevelsSize >= 0x400) {
+    MonsterTbls::sgtDataTable.pTxtLevels = (D2LevelsTxt*)DataTbls::CompileTxt(pMemory, "levels", levels, &MonsterTbls::sgtDataTable.nTxtLevelsSize, 0x220);
+    if (MonsterTbls::sgtDataTable.nTxtLevelsSize >= 0x400) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 199);
       exit(-1);
     }
 
     int i = 0;
-    if (sgtDataTable.nTxtLevelsSize <= 0) {
+    if (MonsterTbls::sgtDataTable.nTxtLevelsSize <= 0) {
       return;
     }
 
     do {
       D2LevelsTxt* pDVar1;
-      pDVar1 = sgtDataTable.pTxtLevels;
-      /* Convert string to widestring */ pWVar2 = (uint16_t*)&sgtDataTable.pTxtLevels[i].wszLevelName[0];
+      pDVar1 = MonsterTbls::sgtDataTable.pTxtLevels;
+      /* Convert string to widestring */ pWVar2 = (uint16_t*)&MonsterTbls::sgtDataTable.pTxtLevels[i].wszLevelName[0];
       memset(pWVar2, 0, 0x50);
       memset((void*)&pDVar1[i].wszLevelWarp[0], 0, 0x50);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pWVar2, D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelName[0]), 0x28);
@@ -268,7 +272,7 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)&pDVar1[i].wszLevelWarp[0], pWVar2, nWideCharBufLen);
       pDVar1[i].wszLevelWarp[39] = 0;
       iLevelIdx = 0;
-      /* Count mon, nmon, umon entries */ if (sgtDataTable.nTxtLevelsSize > 0) {
+      /* Count mon, nmon, umon entries */ if (MonsterTbls::sgtDataTable.nTxtLevelsSize > 0) {
         do {
           nMonCount = 0;
           pMonEntry = pDVar1[i].mon;
@@ -307,53 +311,53 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
 
           pDVar1[i].nValidUMonCount = (char)nMonCount;
           iLevelIdx++;
-        } while (iLevelIdx < sgtDataTable.nTxtLevelsSize);
+        } while (iLevelIdx < MonsterTbls::sgtDataTable.nTxtLevelsSize);
       }
 
       i++;
-    } while (i < sgtDataTable.nTxtLevelsSize);
+    } while (i < MonsterTbls::sgtDataTable.nTxtLevelsSize);
 }
 
 D2LevelsTxt * __stdcall TXT_Levels_GetLine(eD2LevelId eLevel) {
-    if ((int)eLevel > 0 && (int)eLevel < sgptDataTable->nTxtLevelsSize) {
-      return sgptDataTable->pTxtLevels + eLevel;
+    if ((int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
+      return ITEMS::Items::sgptDataTable->pTxtLevels + eLevel;
     }
 
     return nullptr;
 }
 
 uint8_t __stdcall LEVEL_CanHaveRain(eD2LevelId eLevel) {
-    if ((int)eLevel > 0 && (int)eLevel < sgptDataTable->nTxtLevelsSize) {
-      return sgptDataTable->pTxtLevels[eLevel].Rain;
+    if ((int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
+      return ITEMS::Items::sgptDataTable->pTxtLevels[eLevel].Rain;
     }
 
     return '\0';
 }
 
 uint8_t __stdcall LVLTBLS_GetNoPer(uint32_t nLevelId) {
-    if ((int)nLevelId > 0 && (int)nLevelId < sgptDataTable->nTxtLevelsSize) {
-      return sgptDataTable->pTxtLevels[nLevelId].NoPer;
+    if ((int)nLevelId > 0 && (int)nLevelId < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
+      return ITEMS::Items::sgptDataTable->pTxtLevels[nLevelId].NoPer;
     }
 
     return 0;
 }
 
 uint8_t __stdcall LEVEL_CanHaveMud(eD2LevelId eLevel) {
-    if ((int)eLevel > 0 && (int)eLevel < sgptDataTable->nTxtLevelsSize) {
-      return sgptDataTable->pTxtLevels[eLevel].Mud;
+    if ((int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
+      return ITEMS::Items::sgptDataTable->pTxtLevels[eLevel].Mud;
     }
 
     return '\0';
 }
 
 void __stdcall LVLTBLS_FreeLevelsTxt() {
-    if (sgptDataTable->pTxtLevels) {
-      DataTbls::UnloadBin(sgptDataTable->pTxtLevels);
-      sgptDataTable->nTxtLevelsSize = 0;
+    if (ITEMS::Items::sgptDataTable->pTxtLevels) {
+      DataTbls::UnloadBin(ITEMS::Items::sgptDataTable->pTxtLevels);
+      ITEMS::Items::sgptDataTable->nTxtLevelsSize = 0;
       return;
     }
 
-    sgptDataTable->nTxtLevelsSize = 0;
+    ITEMS::Items::sgptDataTable->nTxtLevelsSize = 0;
 }
 
 int32_t __stdcall TXT_Levels_GetMonLvlForDifficulty(eD2LevelId eLevel, eD2Difficulty nDifficulty, BOOL bIsExpansion) {
@@ -363,11 +367,11 @@ int32_t __stdcall TXT_Levels_GetMonLvlForDifficulty(eD2LevelId eLevel, eD2Diffic
     if ((int)eLevel <= 0) {
       return 1;
     }
-    if (!((int)eLevel < sgptDataTable->nTxtLevelsSize)) {
+    if (!((int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize)) {
       return 1;
     }
 
-    D2LevelsTxt* pLevelsTxt = sgptDataTable->pTxtLevels + eLevel;
+    D2LevelsTxt* pLevelsTxt = ITEMS::Items::sgptDataTable->pTxtLevels + eLevel;
     if (!pLevelsTxt) {
       return 1;
     }
@@ -381,7 +385,7 @@ int32_t __stdcall TXT_Levels_GetMonLvlForDifficulty(eD2LevelId eLevel, eD2Diffic
 // Scans the LevelDefs table for levels with the Portal flag set, counts them, allocates a server array (gpPortalLevelArray) of that size, and fills it with the level indices. Used at startup to build the list of portal-accessible levels. Halts if write index exceeds the counted portal level count.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 static void LVLTBLS_BuildPortalLevelArray(D2LevelDefsTxt * pTxtLevelDefs) {
-    int nLevelsRemaining = sgptDataTable->nTxtLevelsSize;
+    int nLevelsRemaining = ITEMS::Items::sgptDataTable->nTxtLevelsSize;
     nPortalLevelCount = 0;
     void* pPortalLevelIds = gpPortalLevelArray;
     uint32_t nPortalLevels = nPortalLevelCount;
@@ -408,7 +412,7 @@ static void LVLTBLS_BuildPortalLevelArray(D2LevelDefsTxt * pTxtLevelDefs) {
     }
 
     int nPortalWriteIdx = 0;
-    for (nLevelsRemaining = 0; nLevelsRemaining < sgptDataTable->nTxtLevelsSize; nLevelsRemaining++) {
+    for (nLevelsRemaining = 0; nLevelsRemaining < ITEMS::Items::sgptDataTable->nTxtLevelsSize; nLevelsRemaining++) {
       if (pTxtLevelDefs[nLevelsRemaining].Portal) {
         if (nPortalWriteIdx >= (int)nPortalLevels) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x177);
@@ -473,14 +477,14 @@ void __fastcall TXT_AllocTxt_leveldefs(D2PoolManagerStrc * pMemory) {
       {"LOSDraw", FIELDTYPE_INT, 0, 0x98, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    sgtDataTable.pTxtLevelDefs = (D2LevelDefsTxt*)DataTbls::CompileTxt(pMemory, "leveldefs", leveldefs, nullptr, 0x9c);
-    LVLTBLS_BuildPortalLevelArray(sgtDataTable.pTxtLevelDefs);
+    MonsterTbls::sgtDataTable.pTxtLevelDefs = (D2LevelDefsTxt*)DataTbls::CompileTxt(pMemory, "leveldefs", leveldefs, nullptr, 0x9c);
+    LVLTBLS_BuildPortalLevelArray(MonsterTbls::sgtDataTable.pTxtLevelDefs);
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __stdcall LVLTBLS_FreeLevelDefsTxt() {
-    if (sgtDataTable.pTxtLevelDefs) {
-      DataTbls::UnloadBin(sgtDataTable.pTxtLevelDefs);
+    if (MonsterTbls::sgtDataTable.pTxtLevelDefs) {
+      DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtLevelDefs);
     }
     if (!gpPortalLevelArray) {
       return;
@@ -490,8 +494,8 @@ void __stdcall LVLTBLS_FreeLevelDefsTxt() {
 }
 
 D2LevelDefsTxt * __fastcall TXT_LevelDefs_GetLine(eD2LevelId eLevel) {
-    if ((int)eLevel >= 0 && (int)eLevel < sgptDataTable->nTxtLevelsSize) {
-      return sgtDataTable.pTxtLevelDefs + eLevel;
+    if ((int)eLevel >= 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
+      return MonsterTbls::sgtDataTable.pTxtLevelDefs + eLevel;
     }
 
     return nullptr;
@@ -659,18 +663,18 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
       {"Expansion", FIELDTYPE_INT, 0, 0x20, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    sgtDataTable.pTxtLvlPrest = (D2LvlPrestTxt*)DataTbls::CompileTxt(pMemory, "lvlprest", lvlprest, &sgtDataTable.nTxtLvlPrestSize, 0x1b0);
+    MonsterTbls::sgtDataTable.pTxtLvlPrest = (D2LvlPrestTxt*)DataTbls::CompileTxt(pMemory, "lvlprest", lvlprest, &MonsterTbls::sgtDataTable.nTxtLvlPrestSize, 0x1b0);
     if (bLoadDrlgFiles) {
       size_t nAllocSize;
-      nAllocSize = sgptDataTable->nTxtLvlPrestSize * 0x18;
+      nAllocSize = ITEMS::Items::sgptDataTable->nTxtLvlPrestSize * 0x18;
       pTxtLvlTbls = (D2DrlgFileStrc**)D2_ALLOC_AT(nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x2a7);
       memset(pTxtLvlTbls, 0, nAllocSize);
     }
 
-    D2LvlPrestTxt* pLvlPrestTxt = sgtDataTable.pTxtLvlPrest;
+    D2LvlPrestTxt* pLvlPrestTxt = MonsterTbls::sgtDataTable.pTxtLvlPrest;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     int nRowCount = 0;
-    if (sgptDataTable->nTxtLvlPrestSize <= 0) {
+    if (ITEMS::Items::sgptDataTable->nTxtLvlPrestSize <= 0) {
       return;
     }
 
@@ -702,7 +706,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
       nRowByteOffset += 6;
       nRowCount++;
       pFirstFile = (char (*)[60])((int)(pFirstFile + 7) + 0xc);
-    } while (nRowCount < sgptDataTable->nTxtLvlPrestSize);
+    } while (nRowCount < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize);
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
@@ -711,7 +715,7 @@ void __stdcall TXT_LvlTbls_Free() {
     if (pTxtLvlTbls) {
       D2DrlgFileStrc** pMemoryToFree;
       pMemoryToFree = pTxtLvlTbls;
-      for (i = 0; i < sgptDataTable->nTxtLvlPrestSize * 6; i++) {
+      for (i = 0; i < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize * 6; i++) {
         if (pMemoryToFree[i]) {
           Drlg::Preset::DRLGPRESET_ReleaseDrlgFile(pMemoryToFree + i);
           pMemoryToFree = pTxtLvlTbls;
@@ -721,28 +725,36 @@ void __stdcall TXT_LvlTbls_Free() {
       D2_FREE_AT(pMemoryToFree, ".\\DATATBLS\\LvlTbls.cpp", 0x2d2);
       pTxtLvlTbls = 0;
     }
-    if (!sgtDataTable.pTxtLvlPrest) {
+    if (!MonsterTbls::sgtDataTable.pTxtLvlPrest) {
       return;
     }
 
-    DataTbls::UnloadBin(sgtDataTable.pTxtLvlPrest);
+    DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtLvlPrest);
 }
 
 D2LvlPrestTxt * __stdcall TXT_LvlPrest_GetLine(int32_t nLvlPrestId) {
-    if (nLvlPrestId >= 0 && nLvlPrestId < sgptDataTable->nTxtLvlPrestSize) {
-      return sgtDataTable.pTxtLvlPrest + nLvlPrestId;
+    if (nLvlPrestId >= 0 && nLvlPrestId < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize) {
+      return MonsterTbls::sgtDataTable.pTxtLvlPrest + nLvlPrestId;
     }
 
     return nullptr;
 }
 
 D2LvlPrestTxt * __fastcall TXT_LvlPrest_FindLineByLevelId(eD2LevelId eLevel) {
-    int i;
-    for (i = 0; i < sgptDataTable->nTxtLvlPrestSize; i++) {
-      if (sgtDataTable.pTxtLvlPrest[i].LevelId == eLevel) {
-        return sgtDataTable.pTxtLvlPrest + i;
-      }
+    int i = 0;
+    if (ITEMS::Items::sgptDataTable->nTxtLvlPrestSize <= 0) {
+      return nullptr;
     }
+
+    eD2LevelId* pLevelIdField = &MonsterTbls::sgtDataTable.pTxtLvlPrest->LevelId;
+    do {
+      if (*pLevelIdField == eLevel) {
+        return MonsterTbls::sgtDataTable.pTxtLvlPrest + i;
+      }
+
+      i++;
+      pLevelIdField += 0x6c;
+    } while (i < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize);
 
     return nullptr;
 }
@@ -1912,5 +1924,17 @@ void __stdcall FreeAutoMapLvlTbls() {
 
     pAutoMapLvlTbls = 0;
 }
+
+} // namespace D2Common::DATATBLS::LvlTbls
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace D2Common::DATATBLS::LvlTbls {
+
+// Initialized scalars
+
+D2LvlTypesTxt * pTxtLvlTypes = 0; D2_GLOBAL_GUARD(pTxtLvlTypes, "D2Common::DATATBLS::LvlTbls::pTxtLvlTypes");
 
 } // namespace D2Common::DATATBLS::LvlTbls

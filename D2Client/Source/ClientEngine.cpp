@@ -105,10 +105,10 @@ void __stdcall CLIENT_QuestEvent_CairnStonesPortal() {
     int32_t nX = Units::GetXPosFromDynamicPathUnit(pUnit_00);
     int32_t nY = Units::GetYPosFromDynamicPathUnit(pUnit_00);
     UNIT::Missile::CastAttack(pUnit, MISSILE_Cairnstones, nX, nY, SKILL_Attack, 1);
-    if (sgptDataTable->nTxtMissilesSize <= 0x120) {
+    if (D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize <= 0x120) {
       pDVar1 = 0;
     } else {
-      pDVar1 = sgptDataTable->pTxtMissiles + 0x120;
+      pDVar1 = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + 0x120;
     }
 
     int32_t nMissileParam1 = pDVar1->Param1;
@@ -199,7 +199,7 @@ void __stdcall CLIENT_QuestEvent_DenOfEvilLightReset() {
 // Iterate act rooms and apply DenOfEvil-specific lighting to matching rooms.
 void __stdcall ClientLight_ApplyDenOfEvilLighting() {
     D2RoomStrc* pRoom;
-    for (pRoom = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomFromAct(sgpDrlgAct); pRoom; pRoom = pRoom->pDrlgRoomNext) {
+    for (pRoom = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomFromAct(GAME::Game::sgpDrlgAct); pRoom; pRoom = pRoom->pDrlgRoomNext) {
       eD2LevelId eLevelId;
       eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       if (eLevelId == LEVEL_DenOfEvil) {
@@ -1024,7 +1024,7 @@ void DRAW_Overlay_SecondsLeftToGame() {
     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszText, D2Lang::StrTable::strtable::GetLocaleString(0x13e9), nSecondsLeft);
     int32_t nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText);
-    D2Win::Src::D2WinFont::DRAW_text(wszText, ScreenSizeX / 2 - nTextWidth / 2, 0x177, 9, 1);
+    D2Win::Src::D2WinFont::DRAW_text(wszText, UI::ui::ScreenSizeX / 2 - nTextWidth / 2, 0x177, 9, 1);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);
 }
 
@@ -1035,15 +1035,15 @@ void thunk_DRAW_Overlay_SecondsLeftToGame() {
 
 uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex) {
     D2MonStats2Txt* pMonStatsExTxt = nullptr;
-    if (nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize) {
-      int nMonStatsExIndex = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
-      pMonStatsExTxt = nMonStatsExIndex >= 0 && nMonStatsExIndex < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExIndex : nullptr;
+    if (nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      int nMonStatsExIndex = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
+      pMonStatsExTxt = nMonStatsExIndex >= 0 && nMonStatsExIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExIndex : nullptr;
     }
     if (!pMonStatsExTxt) {
       return 0;
     }
 
-    return (uint32_t)pMonStatsExTxt->mDT[(int)nStatBitIndex >> 3] & gadwBitMasks[nStatBitIndex & 7];
+    return (uint32_t)pMonStatsExTxt->mDT[(int)nStatBitIndex >> 3] & Fog::BitBuffer::gadwBitMasks[nStatBitIndex & 7];
 }
 
 static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32_t nMonsterClassId, uint32_t * pSeed) {
@@ -1057,12 +1057,12 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
     int nYStart = sRoomCoords.dwYStart;
     uint32_t nXRange = sRoomCoords.dwXSize - 1;
     uint32_t nYRange = sRoomCoords.dwYSize - 1;
-    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
-    int nSpawnX = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
-    D2MonStats2Txt* pMonStatsExTxt = nSpawnX >= 0 && nSpawnX < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nSpawnX : nullptr;
+    int nSpawnX = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
+    D2MonStats2Txt* pMonStatsExTxt = nSpawnX >= 0 && nSpawnX < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nSpawnX : nullptr;
     if (!pMonStatsExTxt) {
       return;
     }
@@ -1122,12 +1122,12 @@ void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMons
     int nY;
     int32_t nClassIdSaved = nMonsterClassId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
-    int nSpawnX = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
-    D2MonStats2Txt* pMonStats2 = nSpawnX >= 0 && nSpawnX < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nSpawnX : nullptr;
+    int nSpawnX = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
+    D2MonStats2Txt* pMonStats2 = nSpawnX >= 0 && nSpawnX < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nSpawnX : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -1179,10 +1179,10 @@ void __fastcall DRLGROOM_SpawnRandomMonsters(D2RoomStrc * pRoom) {
       *pSeed = newSeed;
       if (newSeed.nSeedLow % 100 < (uint32_t)(int)pMonsterPtr[4]) {
         nSpawnCount = (int)*pMonsterPtr;
-        if (nSpawnCount < 0 || nSpawnCount >= sgptDataTable->nTxtMonStatsSize) {
+        if (nSpawnCount < 0 || nSpawnCount >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
           pMonStats = 0;
         } else {
-          pMonStats = sgptDataTable->pTxtMonStats + nSpawnCount;
+          pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSpawnCount;
         }
 
         nGroupSize = Archive::RANDOM_RandomNumberSelector(pSeed, (uint32_t)(uint8_t)pMonStats->MaxGrp - (uint32_t)pMonStats->MinGrp);
@@ -2238,8 +2238,8 @@ void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
 }
 
 int __fastcall Unreferenced_0046d9c0(int param_1) {
-    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtOverlaySize) {
-      return (int)(sgptDataTable->pTxtOverlay + param_1);
+    if (param_1 >= 0 && param_1 < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+      return (int)(D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + param_1);
     }
 
     return 0;

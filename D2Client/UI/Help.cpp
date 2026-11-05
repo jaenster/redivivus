@@ -102,17 +102,17 @@ void __stdcall DrawBorderClassic() {
     sGfxData.nFrameNumber = 1;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, 0x100, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 2;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0, ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0, Inv::ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 3;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x100, Inv::ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 4;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x140, 0x100, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 5;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x240, 0x100, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 6;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x140, ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x140, Inv::ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 7;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x240, ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x240, Inv::ScreenSizeY - 0x30, -1, DRAW_SOLID, nullptr);
 }
 
 void __stdcall DrawBorderXpac() {
@@ -143,7 +143,7 @@ void __stdcall DrawBorderXpac() {
 // the copy DRAW_UI calls. The _B suffix is a disambiguator, not a claim about behaviour.
 void __stdcall HELP_DrawDarkOverlay_B() {
     Party::SetRedToBlack();
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(0, 0, ScreenSizeX, ScreenSizeY - 0x31, (uint32_t)nColor.rgbBlue, DRAW_TRANSPARENT);
+    Engine::Gfx::D2GFX_DrawSolidRectExBySize(0, 0, ui::ScreenSizeX, Inv::ScreenSizeY - 0x31, (uint32_t)nColor.rgbBlue, DRAW_TRANSPARENT);
 }
 
 void __stdcall DrawYellowBullet() {
@@ -254,7 +254,7 @@ void __stdcall DrawSellBtn() {
 
 void __stdcall HELP_DrawDarkOverlay() {
     Party::SetRedToBlack();
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(0, 0, ScreenSizeX, ScreenSizeY - 0x31, (uint32_t)nColor.rgbBlue, DRAW_TRANSPARENT);
+    Engine::Gfx::D2GFX_DrawSolidRectExBySize(0, 0, ui::ScreenSizeX, Inv::ScreenSizeY - 0x31, (uint32_t)nColor.rgbBlue, DRAW_TRANSPARENT);
 }
 
 void __stdcall FreeHelpBorder() {
@@ -348,7 +348,7 @@ void __stdcall HELP_DrawHelpButtonTooltip() {
     }
 
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszTooltip);
-    D2Win::Src::D2WinFont::DRAW_text(wszTooltip, ScreenSizeX - nTextWidth / 2 - 0x3a, ScreenSizeY - 0xc5, 0, 0);
+    D2Win::Src::D2WinFont::DRAW_text(wszTooltip, ui::ScreenSizeX - nTextWidth / 2 - 0x3a, Inv::ScreenSizeY - 0xc5, 0, 0);
 }
 
 void __stdcall HELP_DrawHelpButton() {
@@ -373,10 +373,10 @@ void __stdcall HELP_DrawHelpButton() {
                   sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
                   sGfxData.nDirection = 0;
                   sGfxData.nFrameNumber = 0;
-                  D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x4b, ScreenSizeY - 0xa0, -1, DRAW_SOLID, nullptr);
+                  D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x4b, Inv::ScreenSizeY - 0xa0, -1, DRAW_SOLID, nullptr);
                   sGfxData.nFrameNumber = (int)(gpHelpScrollButtonDown != 0);
                   sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
-                  D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x48, ScreenSizeY - 0xa4, -1, DRAW_SOLID, nullptr);
+                  D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x48, Inv::ScreenSizeY - 0xa4, -1, DRAW_SOLID, nullptr);
                   return;
                 }
 
@@ -393,14 +393,14 @@ void __stdcall HELP_DrawHelpButton() {
 }
 
 void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
-    int nScreenY = ScreenSizeY;
-    int nScreenX = ScreenSizeX;
+    int nScreenY = Inv::ScreenSizeY;
+    int nScreenX = ui::ScreenSizeX;
     if (gpHelpScrollButtonUp) {
       return;
     }
 
-    int nBottomY = ScreenSizeY - 0xa0;
-    int nLeftX = ScreenSizeX - 0x4b;
+    int nBottomY = Inv::ScreenSizeY - 0xa0;
+    int nLeftX = ui::ScreenSizeX - 0x4b;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= nLeftX && nMouseX <= nScreenX - 0x28 && nMouseY >= nScreenY - 0xc4 && nMouseY <= nBottomY)) {
@@ -414,14 +414,14 @@ void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_HelpScrollButtonUp(D2UIMouseMsgStrc * pMsg) {
-    int nScreenY = ScreenSizeY;
-    int nScreenX = ScreenSizeX;
+    int nScreenY = Inv::ScreenSizeY;
+    int nScreenX = ui::ScreenSizeX;
     if (gpHelpScrollButtonUp) {
       return;
     }
 
-    int nBottomY = ScreenSizeY - 0xa0;
-    int nLeftX = ScreenSizeX - 0x4b;
+    int nBottomY = Inv::ScreenSizeY - 0xa0;
+    int nLeftX = ui::ScreenSizeX - 0x4b;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= nLeftX && nMouseX <= nScreenX - 0x28 && nMouseY >= nScreenY - 0xc4 && nMouseY <= nBottomY)) {

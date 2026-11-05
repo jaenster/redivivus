@@ -116,7 +116,9 @@ static int gaInventoryItemSlots = -0x1; D2_STATIC_GUARD(gaInventoryItemSlots, "g
 static int gaInventoryState = -0x1; D2_STATIC_GUARD(gaInventoryState, "gaInventoryState");
 static int nInventoryContextMode = -0x1; D2_STATIC_GUARD(nInventoryContextMode, "nInventoryContextMode");
 static int32_t pInventoryContextUi = -0x1; D2_STATIC_GUARD(pInventoryContextUi, "pInventoryContextUi");
-int32_t gpInventoryContextUi = -0x1; D2_GLOBAL_GUARD(gpInventoryContextUi, "gpInventoryContextUi");
+namespace D2Client::UI::Inv {
+int32_t gpInventoryContextUi = -0x1; D2_GLOBAL_GUARD(gpInventoryContextUi, "D2Client::UI::Inv::gpInventoryContextUi");
+} // namespace D2Client::UI::Inv
 static int gaInventorySelectState = -0x1; D2_STATIC_GUARD(gaInventorySelectState, "gaInventorySelectState");
 static uint32_t gnStashNpcGuid = -0x1; D2_STATIC_GUARD(gnStashNpcGuid, "gnStashNpcGuid");
 static uint32_t gnHirelingLArmSlotImageOffsetY = 0x2; D2_STATIC_GUARD(gnHirelingLArmSlotImageOffsetY, "gnHirelingLArmSlotImageOffsetY");
@@ -217,10 +219,14 @@ D2GridScreenCoordinates pHirelingGridScreenCoordinates = {}; D2_GLOBAL_GUARD(pHi
 int gpInvCursorItem = 0; D2_GLOBAL_GUARD(gpInvCursorItem, "gpInvCursorItem");
 static int gbInvNpcScreenCoordsInitialized = 0; D2_STATIC_GUARD(gbInvNpcScreenCoordsInitialized, "gbInvNpcScreenCoordsInitialized");
 static uint32_t gpInvItemUnderCursor = 0; D2_STATIC_GUARD(gpInvItemUnderCursor, "gpInvItemUnderCursor");
-uint32_t gbInvBodySlotUnderCursorExists = 0; D2_GLOBAL_GUARD(gbInvBodySlotUnderCursorExists, "gbInvBodySlotUnderCursorExists");
+namespace D2Client::UI::Inv {
+uint32_t gbInvBodySlotUnderCursorExists = 0; D2_GLOBAL_GUARD(gbInvBodySlotUnderCursorExists, "D2Client::UI::Inv::gbInvBodySlotUnderCursorExists");
+} // namespace D2Client::UI::Inv
 static BOOL DrawShopRelated = 0; D2_STATIC_GUARD(DrawShopRelated, "DrawShopRelated");
-int g_nCurrentInventoryPage = 0; D2_GLOBAL_GUARD(g_nCurrentInventoryPage, "g_nCurrentInventoryPage");
-D2UnitStrc * pItemToDescribe = 0; D2_GLOBAL_GUARD(pItemToDescribe, "pItemToDescribe");
+namespace D2Client::UI::Inv {
+int g_nCurrentInventoryPage = 0; D2_GLOBAL_GUARD(g_nCurrentInventoryPage, "D2Client::UI::Inv::g_nCurrentInventoryPage");
+D2UnitStrc * pItemToDescribe = 0; D2_GLOBAL_GUARD(pItemToDescribe, "D2Client::UI::Inv::pItemToDescribe");
+} // namespace D2Client::UI::Inv
 static D2UnitStrc * gpInvHoveredItem = 0; D2_STATIC_GUARD(gpInvHoveredItem, "gpInvHoveredItem");
 static uint8_t CurrentInventoryPage = 0; D2_STATIC_GUARD(CurrentInventoryPage, "CurrentInventoryPage");
 static uint8_t TypeOfShopMaybe = 0; D2_STATIC_GUARD(TypeOfShopMaybe, "TypeOfShopMaybe");
@@ -241,18 +247,24 @@ static DC6 * gpInvStashImage2 = 0; D2_STATIC_GUARD(gpInvStashImage2, "gpInvStash
 static int gnInvShopButton = 0; D2_STATIC_GUARD(gnInvShopButton, "gnInvShopButton");
 static uint32_t gnInvShopButton2 = 0; D2_STATIC_GUARD(gnInvShopButton2, "gnInvShopButton2");
 static uint32_t gbInvGambleMode = 0; D2_STATIC_GUARD(gbInvGambleMode, "gbInvGambleMode");
-uint32_t gbInvExpansionTabVisible = 0; D2_GLOBAL_GUARD(gbInvExpansionTabVisible, "gbInvExpansionTabVisible");
+namespace D2Client::UI::Inv {
+uint32_t gbInvExpansionTabVisible = 0; D2_GLOBAL_GUARD(gbInvExpansionTabVisible, "D2Client::UI::Inv::gbInvExpansionTabVisible");
+} // namespace D2Client::UI::Inv
 static uint32_t gnInvCubeCloseClickState = 0; D2_STATIC_GUARD(gnInvCubeCloseClickState, "gnInvCubeCloseClickState");
 static uint32_t gnInvCubeTransmuteClickState = 0; D2_STATIC_GUARD(gnInvCubeTransmuteClickState, "gnInvCubeTransmuteClickState");
 static D2InventoryEntryStrc gaPlayerBodySlotScreenCoords[11] = {}; D2_STATIC_GUARD(gaPlayerBodySlotScreenCoords, "gaPlayerBodySlotScreenCoords");
 static uint32_t gbInvTradeWindowOpen = 0; D2_STATIC_GUARD(gbInvTradeWindowOpen, "gbInvTradeWindowOpen");
 static D2InventoryEntryStrc gaHirelingBodySlotScreenCoords[11] = {}; D2_STATIC_GUARD(gaHirelingBodySlotScreenCoords, "gaHirelingBodySlotScreenCoords");
 static uint32_t gbInvTradeWindowOpen2 = 0; D2_STATIC_GUARD(gbInvTradeWindowOpen2, "gbInvTradeWindowOpen2");
-uint32_t gbTradeConfirmationPending = 0; D2_GLOBAL_GUARD(gbTradeConfirmationPending, "gbTradeConfirmationPending");
+namespace D2Client::UI::Inv {
+uint32_t gbTradeConfirmationPending = 0; D2_GLOBAL_GUARD(gbTradeConfirmationPending, "D2Client::UI::Inv::gbTradeConfirmationPending");
+} // namespace D2Client::UI::Inv
 static uint32_t gbInvTradeAcceptClicked = 0; D2_STATIC_GUARD(gbInvTradeAcceptClicked, "gbInvTradeAcceptClicked");
 static uint32_t gbInventoryDragInProgress = 0; D2_STATIC_GUARD(gbInventoryDragInProgress, "gbInventoryDragInProgress");
 static uint32_t gbInvTradeCancelClicked = 0; D2_STATIC_GUARD(gbInvTradeCancelClicked, "gbInvTradeCancelClicked");
-uint32_t gpInvItemDescPending = 0; D2_GLOBAL_GUARD(gpInvItemDescPending, "gpInvItemDescPending");
+namespace D2Client::UI::Inv {
+uint32_t gpInvItemDescPending = 0; D2_GLOBAL_GUARD(gpInvItemDescPending, "D2Client::UI::Inv::gpInvItemDescPending");
+} // namespace D2Client::UI::Inv
 static uint32_t gbInvGoldDialogOpen = 0; D2_STATIC_GUARD(gbInvGoldDialogOpen, "gbInvGoldDialogOpen");
 static uint32_t gnInvInventoryGold = 0; D2_STATIC_GUARD(gnInvInventoryGold, "gnInvInventoryGold");
 static uint32_t gnInvStashGold = 0; D2_STATIC_GUARD(gnInvStashGold, "gnInvStashGold");
@@ -386,7 +398,7 @@ static void __stdcall DrawItemSolidBackground(uint8_t nGridX, uint8_t nGridY, in
       for (; iRow < (int)((uint32_t)nGridY + nCellX); iRow++) {
         nStartX = (uint32_t)pCoords->nCellWidth * iRow + pCoords->nPixelLeft;
         nStartY = (uint32_t)pCoords->nCellHeight * nCellY + pCoords->nTop;
-        if (nStartX >= 0 && nStartX < WindowSizeX && nStartY >= 0 && nStartY < WindowSizeY) {
+        if (nStartX >= 0 && nStartX < SpellSel::WindowSizeX && nStartY >= 0 && nStartY < ui::WindowSizeY) {
           Engine::Gfx::D2GFX_DrawSolidRectExBySize(nStartX, nStartY, (uint32_t)pCoords->nCellWidth, (uint32_t)pCoords->nCellHeight, (uint32_t)gaInvHighlightColors[nColorIndex], DRAW_VERYTRANSPARENT);
         }
       }
@@ -403,7 +415,7 @@ static void INV_DrawBodySlotHighlight(int * pSlotRect, int32_t nColorIndex) {
 
     int nStartX = *pSlotRect;
     int nStartY = pSlotRect[2];
-    if (!(nStartX >= 0 && nStartX < WindowSizeX && nStartY >= 0 && nStartY < WindowSizeY)) {
+    if (!(nStartX >= 0 && nStartX < SpellSel::WindowSizeX && nStartY >= 0 && nStartY < ui::WindowSizeY)) {
       return;
     }
 
@@ -501,7 +513,7 @@ static void __stdcall INV_DrawGridPlacementHighlight(D2InventoryStrc * pInventor
     }
     if (g_nCurrentInventoryPage == 1) {
       nCheckResult = Cursor::GetMouseX();
-      if (nCheckResult < ScreenSizeX / 2) {
+      if (nCheckResult < ui::ScreenSizeX / 2) {
         return;
       }
     }
@@ -512,7 +524,7 @@ static void __stdcall INV_DrawGridPlacementHighlight(D2InventoryStrc * pInventor
     }
     if (g_nCurrentInventoryPage == 0x13) {
       nCheckResult = Cursor::GetMouseX();
-      if (nCheckResult < ScreenSizeX / 2) {
+      if (nCheckResult < ui::ScreenSizeX / 2) {
         return;
       }
     }
@@ -1406,7 +1418,7 @@ static void INV_DrawBodySlotCursorHighlight(D2InventoryStrc * pInventory) {
     char nItemHeight;
     if (g_nCurrentInventoryPage == 1) {
       nResult = Cursor::GetMouseX();
-      if (nResult < ScreenSizeX / 2) {
+      if (nResult < ui::ScreenSizeX / 2) {
         return;
       }
     }
@@ -1417,7 +1429,7 @@ static void INV_DrawBodySlotCursorHighlight(D2InventoryStrc * pInventory) {
     }
 
     nResult = Cursor::GetMouseX();
-    if (nResult < ScreenSizeX / 2) {
+    if (nResult < ui::ScreenSizeX / 2) {
       gnInvBodySlotUnderCursor = 0;
       return;
     }
@@ -1495,7 +1507,7 @@ void __fastcall InitInventory() {
         D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pSlotItem, (char*)&nItemWidth, (char*)&nItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
         nHandedness = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pInventory);
         if (nBodySlot != 4) {
-          if (nBodySlot == 5 && (pPairedArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4) , nHandedness == 2) && (nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pPairedArmItem) , !nSlotDrawY && (nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem) , !nSlotDrawY && (Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[4].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[4].nTop + nXpacOffsetY) , gaPlayerBodySlotScreenCoords[4].nLeft >= 0)) && gaPlayerBodySlotScreenCoords[4].nLeft < WindowSizeX) && gaPlayerBodySlotScreenCoords[4].nTop >= 0 && (nHandedness = gaPlayerBodySlotScreenCoords[4].nLeft , nSlotScreenY = gaPlayerBodySlotScreenCoords[4].nTop , nMaxSockets = gaPlayerBodySlotScreenCoords[4].nWidth , bySlotRectHeight = gaPlayerBodySlotScreenCoords[4].nHeight , gaPlayerBodySlotScreenCoords[4].nTop < WindowSizeY)) {
+          if (nBodySlot == 5 && (pPairedArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4) , nHandedness == 2) && (nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pPairedArmItem) , !nSlotDrawY && (nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem) , !nSlotDrawY && (Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[4].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[4].nTop + nXpacOffsetY) , gaPlayerBodySlotScreenCoords[4].nLeft >= 0)) && gaPlayerBodySlotScreenCoords[4].nLeft < SpellSel::WindowSizeX) && gaPlayerBodySlotScreenCoords[4].nTop >= 0 && (nHandedness = gaPlayerBodySlotScreenCoords[4].nLeft , nSlotScreenY = gaPlayerBodySlotScreenCoords[4].nTop , nMaxSockets = gaPlayerBodySlotScreenCoords[4].nWidth , bySlotRectHeight = gaPlayerBodySlotScreenCoords[4].nHeight , gaPlayerBodySlotScreenCoords[4].nTop < ui::WindowSizeY)) {
             Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)nMaxSockets, (uint32_t)bySlotRectHeight, (uint32_t)gaInvHighlightColors[0], DRAW_VERYTRANSPARENT);
           }
         } else {
@@ -1506,12 +1518,12 @@ void __fastcall InitInventory() {
               nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem);
               if (!nSlotDrawY) {
                 Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[4].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[5].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[4].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[5].nTop + nXpacOffsetY);
-                if (gaPlayerBodySlotScreenCoords[5].nLeft >= 0 && gaPlayerBodySlotScreenCoords[5].nLeft < WindowSizeX && gaPlayerBodySlotScreenCoords[5].nTop >= 0) {
+                if (gaPlayerBodySlotScreenCoords[5].nLeft >= 0 && gaPlayerBodySlotScreenCoords[5].nLeft < SpellSel::WindowSizeX && gaPlayerBodySlotScreenCoords[5].nTop >= 0) {
                   nHandedness = gaPlayerBodySlotScreenCoords[5].nLeft;
                   nSlotScreenY = gaPlayerBodySlotScreenCoords[5].nTop;
                   nMaxSockets = gaPlayerBodySlotScreenCoords[5].nWidth;
                   bySlotRectHeight = gaPlayerBodySlotScreenCoords[5].nHeight;
-                  if (gaPlayerBodySlotScreenCoords[5].nTop < WindowSizeY) {
+                  if (gaPlayerBodySlotScreenCoords[5].nTop < ui::WindowSizeY) {
                     Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)nMaxSockets, (uint32_t)bySlotRectHeight, (uint32_t)gaInvHighlightColors[0], DRAW_VERYTRANSPARENT);
                   }
                 }
@@ -1557,7 +1569,7 @@ void __fastcall InitInventory() {
           if (nCursorItemType == 8) {
             nMaxSockets = gaInvHighlightColors[0];
           }
-          if (nHandedness >= 0 && nHandedness < WindowSizeX && nSlotScreenY >= 0 && nSlotScreenY < WindowSizeY) {
+          if (nHandedness >= 0 && nHandedness < SpellSel::WindowSizeX && nSlotScreenY >= 0 && nSlotScreenY < ui::WindowSizeY) {
             Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)gaPlayerBodySlotScreenCoords[nBodySlot].nWidth, (uint32_t)gaPlayerBodySlotScreenCoords[nBodySlot].nHeight, (uint32_t)nMaxSockets, DRAW_VERYTRANSPARENT);
           }
 
@@ -1576,9 +1588,9 @@ void __fastcall InitInventory() {
           if (!pPairedArmItem && (bIsRangedOrQuiver = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pSlotItem) , bIsRangedOrQuiver || (bIsRangedOrQuiver = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem) , bIsRangedOrQuiver != 0)) || (bFlagResult = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pSlotItem, pUnit, 0, nullptr, nullptr, nullptr) , !bFlagResult) || (bFlagResult = UNIT::PlayerIsUnInterruptable(pSlotItem) , bFlagResult || (bFlagResult = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pSlotItem) , !bFlagResult))) {
             nHandedness = gaPlayerBodySlotScreenCoords[nBodySlot].nLeft;
             nSlotScreenY = gaPlayerBodySlotScreenCoords[nBodySlot].nTop;
-            if (nHandedness >= 0 && nHandedness < WindowSizeX && nSlotScreenY >= 0) {
+            if (nHandedness >= 0 && nHandedness < SpellSel::WindowSizeX && nSlotScreenY >= 0) {
               nMaxSockets = gaInvHighlightColors[0];
-              if (nSlotScreenY < WindowSizeY) {
+              if (nSlotScreenY < ui::WindowSizeY) {
                 draw_slot_tint:
                 Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)gaPlayerBodySlotScreenCoords[nBodySlot].nWidth, (uint32_t)gaPlayerBodySlotScreenCoords[nBodySlot].nHeight, (uint32_t)nMaxSockets, DRAW_VERYTRANSPARENT);
               }
@@ -1588,9 +1600,9 @@ void __fastcall InitInventory() {
             if (!bFlagResult) {
               nHandedness = gaPlayerBodySlotScreenCoords[nBodySlot].nLeft;
               nSlotScreenY = gaPlayerBodySlotScreenCoords[nBodySlot].nTop;
-              if (nHandedness >= 0 && nHandedness < WindowSizeX && nSlotScreenY >= 0) {
+              if (nHandedness >= 0 && nHandedness < SpellSel::WindowSizeX && nSlotScreenY >= 0) {
                 nMaxSockets = gaInvHighlightColors[4];
-                if (nSlotScreenY < WindowSizeY) {
+                if (nSlotScreenY < ui::WindowSizeY) {
                   goto draw_slot_tint;
                 }
               }
@@ -1956,7 +1968,7 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
     }
 
     uint32_t nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
-    if (nByTimeBonus && sgptDataTable->nTxtItemStatCostSize > 0x110 && sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88128 && pUnit->pDrlgAct) {
+    if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x110 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88128 && pUnit->pDrlgAct) {
       eMinDmgStat = UNITSTAT_strength;
       nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&eMinDmgStat);
       nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nByTimeBonus, nServerMin, eMinDmgStat, nullptr, nullptr, nullptr);
@@ -1967,7 +1979,7 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
     }
 
     nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_percent_bytime, 0);
-    if (nByTimeBonus && sgptDataTable->nTxtItemStatCostSize > 0x111 && sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88452) {
+    if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x111 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88452) {
       D2DrlgActStrc** ppDVar1;
       ppDVar1 = &pUnit->pDrlgAct;
       if (*ppDVar1) {
@@ -2223,10 +2235,10 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
     if (pPlayerUnit_lcl) {
       D2CharStatsTxt* pCharStats;
       nClassIdOrLevel = pPlayerUnit_lcl->nClassId;
-      if (nClassIdOrLevel < 0 || nClassIdOrLevel >= sgptDataTable->nTxtCharStatsSize) {
+      if (nClassIdOrLevel < 0 || nClassIdOrLevel >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
         pCharStats = 0;
       } else {
-        pCharStats = sgptDataTable->pTxtCharStats + nClassIdOrLevel;
+        pCharStats = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nClassIdOrLevel;
       }
 
       nBlockChance += (uint32_t)pCharStats->BlockFactor;
@@ -2380,7 +2392,7 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     }
 
     uint32_t nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pEffectiveUnit, UNITSTAT_item_armor_bytime, 0);
-    if (nByTimeMod && sgptDataTable->nTxtItemStatCostSize > 0x10c && sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-86832 && pUnit->pDrlgAct) {
+    if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10c && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-86832 && pUnit->pDrlgAct) {
       nPeriodOfDay = 0;
       nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&nPeriodOfDay);
       nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nByTimeMod, nServerOrMod, nPeriodOfDay, nullptr, nullptr, nullptr);
@@ -2391,7 +2403,7 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     }
 
     nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armorpercent_bytime, 0);
-    if (nByTimeMod && sgptDataTable->nTxtItemStatCostSize > 0x10d && sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-87156) {
+    if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10d && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-87156) {
       D2DrlgActStrc** ppDVar1;
       ppDVar1 = &pUnit->pDrlgAct;
       if (*ppDVar1) {
@@ -2894,7 +2906,7 @@ static D2UnitStrc * GetSetItem(int32_t nId, D2InventoryStrc * pInventory) {
           if ((eInvPage == INVPAGE_INVENTORY || eInvPage == INVPAGE_CUBE || eInvPage == INVPAGE_STASH || eInvPage == INVPAGE_None) && ((nGridType = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pUnit) , nGridType == 1 || nGridType == 3) || nGridType == 4)) {
             nQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pCarriedItem);
             D2SetItemsTxt* pSetItemsTxt;
-            if ((pSetItemsTxt = nQuality >= 0 && nQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + nQuality : nullptr) && pSetItemsTxt->nId == nId) {
+            if ((pSetItemsTxt = nQuality >= 0 && nQuality < D2Common::ITEMS::Items::sgptDataTable->nTxtSetItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSetItems + nQuality : nullptr) && pSetItemsTxt->nId == nId) {
               break;
             }
           }
@@ -3169,7 +3181,7 @@ int Unreferenced_00486d70() {
 static BOOL INV_IsMouseOverGoldButton(int32_t nX, int32_t nY) {
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    if (!pCursorItem_lcl && nY >= gnPanelOffsetY - 0x57 + ScreenSizeY && nY <= gnPanelOffsetY - 0x45 + ScreenSizeY && nX >= ScreenSizeX - gnPanelOffsetX - 0xed && nX <= ScreenSizeX - gnPanelOffsetX - 0xd9) {
+    if (!pCursorItem_lcl && nY >= gnPanelOffsetY - 0x57 + ScreenSizeY && nY <= gnPanelOffsetY - 0x45 + ScreenSizeY && nX >= ui::ScreenSizeX - gnPanelOffsetX - 0xed && nX <= ui::ScreenSizeX - gnPanelOffsetX - 0xd9) {
       return 1;
     }
 
@@ -3177,7 +3189,7 @@ static BOOL INV_IsMouseOverGoldButton(int32_t nX, int32_t nY) {
 }
 
 BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY) {
-    if (nMouseX >= ScreenSizeX - gnPanelOffsetX - 0x12e && nMouseX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
+    if (nMouseX >= ui::ScreenSizeX - gnPanelOffsetX - 0x12e && nMouseX <= ui::ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
       return 1;
     }
 
@@ -3196,7 +3208,7 @@ static void __stdcall INV_HandleHighResDropClick(int32_t nMouseY, D2UIMouseMsgSt
     }
 
     uint32_t eBorderType = Path::DRAW_GetTypeOfBorder();
-    if (!(eBorderType != 1 || nMouseX >= ScreenSizeX / 2)) {
+    if (!(eBorderType != 1 || nMouseX >= ui::ScreenSizeX / 2)) {
       return;
     }
 
@@ -3206,7 +3218,7 @@ static void __stdcall INV_HandleHighResDropClick(int32_t nMouseY, D2UIMouseMsgSt
     }
 
     eBorderType = Path::DRAW_GetTypeOfBorder();
-    if (!(eBorderType != 3 || g_nCurrentInventoryPage || nMouseX >= ScreenSizeX / 2)) {
+    if (!(eBorderType != 3 || g_nCurrentInventoryPage || nMouseX >= ui::ScreenSizeX / 2)) {
       return;
     }
 
@@ -3225,7 +3237,7 @@ void __stdcall INV_HandleInventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     D2InventoryStrc* pInventory = pPlayer->pInventory;
     BOOL nResult = Panel::PANEL_CalculateBeltSlotIndex(pMsg);
     if (!nResult) {
-      if (nX >= ScreenSizeX - gnPanelOffsetX - 0x12e && nX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
+      if (nX >= ui::ScreenSizeX - gnPanelOffsetX - 0x12e && nX <= ui::ScreenSizeX - gnPanelOffsetX - 0x10e && nY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
         ui::SetUIFlag(UI_INVENTORY, UI_RESET, 0);
         return;
       }
@@ -4058,6 +4070,7 @@ void __stdcall INV_InitNpcButtonsByClass() {
 void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     D2UnitStrc* pPlayerUnit_lcl;
     uint16_t* pwString;
+    BOOL bIsExpansionGfx;
     int32_t iTmp;
     int nCoinY;
     char szGoldAmountBuffer[20];
@@ -4070,9 +4083,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     int nButtonX;
     int nGoldY;
     int nCoinX;
-    int nTooltipY;
     eD2UnitStat eStatType;
     int32_t nColorFlag;
+    int nTooltipXPos;
     int32_t nPrevFont;
     nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     int nTextY;
@@ -4102,13 +4115,13 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
         nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
         nCoinY = gnPanelOffsetY - 0x48 + ScreenSizeY;
-        nGoldY = ScreenSizeX - gnPanelOffsetX - 0xd4;
-        nButtonX = ScreenSizeX - gnPanelOffsetX - 0xed;
+        nGoldY = ui::ScreenSizeX - gnPanelOffsetX - 0xd4;
+        nButtonX = ui::ScreenSizeX - gnPanelOffsetX - 0xed;
         nCoinFrame = (uint32_t)(gnInvInventoryGold != 0);
         nTextY = gnPanelOffsetY - 0x45 + ScreenSizeY;
       }
     } else {
-      BOOL bIsExpansionGfx;
+      int nTooltipY;
       eStatType = UNITSTAT_goldbank;
       pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
@@ -4133,7 +4146,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
           nTooltipY = gnPanelOffsetY - 0x1ca + ScreenSizeY;
           show_gold_button_tooltip:
           nColorFlag = 0;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), gnPanelOffsetX + 0x35, nTooltipY, 0, nColorFlag);
+          iTmp = 0;
+          nTooltipXPos = gnPanelOffsetX + 0x35;
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), nTooltipXPos, nTooltipY, iTmp, nColorFlag);
         }
       } else {
         bIsExpansionGfx = INV_IsMouseInRect(0x14, 0x12, gnPanelOffsetY - 0xf2 + ScreenSizeY, gnPanelOffsetX + 0x49);
@@ -4167,7 +4182,10 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
       iTmp = nCoinX + 2;
     } else {
       if (nGoldPanelMode != 1) {
-        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), gnPanelOffsetX + 0x15, nCoinY, 0, 0);
+        bIsExpansionGfx = 0;
+        iTmp = 0;
+        nTextY = gnPanelOffsetX + 0x15;
+        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), nTextY, nCoinY, iTmp, bIsExpansionGfx);
         D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
         return;
       }
@@ -4666,7 +4684,7 @@ BOOL __stdcall INV_HandleInventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
     if (nMouseX >= pInventoryScreenCoordinates.nLeft && nMouseX < pInventoryScreenCoordinates.nRight && nMouseY >= pInventoryScreenCoordinates.nTop && nMouseY <= pInventoryScreenCoordinates.nBottom) {
-      if (nMouseX >= ScreenSizeX - gnPanelOffsetX - 0x12e && nMouseX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY && gbInvPanelButtonPressed) {
+      if (nMouseX >= ui::ScreenSizeX - gnPanelOffsetX - 0x12e && nMouseX <= ui::ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY && gbInvPanelButtonPressed) {
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
         Storm::SMsgBreakHandlerChain(pMsg);
@@ -4687,7 +4705,7 @@ BOOL __fastcall INV_HandleInventoryLeftDown(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
-    if ((int)nCursorX >= ScreenSizeX - gnPanelOffsetX - 0x12e && (int)nCursorX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
+    if ((int)nCursorX >= ui::ScreenSizeX - gnPanelOffsetX - 0x12e && (int)nCursorX <= ui::ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
       gbInvPanelButtonPressed = 1;
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
@@ -6547,18 +6565,18 @@ void __fastcall INV_DrawHirelingCursorHighlight(D2UnitStrc * pUnit) {
           if (!bCanEquip || (bCanEquip = INV_CanHirelingEquipItem(pMercUnit, pPlayerOrCursorItem, (bool*)&nSlotBottom) , !bCanEquip) || (BVar1 = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pPlayerOrCursorItem, pMercUnit, 0, nullptr, nullptr, nullptr) , !BVar1)) {
             nEntryLeft = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nLeft;
             nMouseX = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nTop;
-            if (nEntryLeft >= 0 && nEntryLeft < WindowSizeX && nMouseX >= 0) {
+            if (nEntryLeft >= 0 && nEntryLeft < SpellSel::WindowSizeX && nMouseX >= 0) {
               byHighlightColor = gaInvHighlightColors[0];
-              if (nMouseX < WindowSizeY) {
+              if (nMouseX < ui::WindowSizeY) {
                 goto draw_slot_tint;
               }
             }
           } else {
             nEntryLeft = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nLeft;
             nMouseX = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nTop;
-            if (nEntryLeft >= 0 && nEntryLeft < WindowSizeX && nMouseX >= 0) {
+            if (nEntryLeft >= 0 && nEntryLeft < SpellSel::WindowSizeX && nMouseX >= 0) {
               byHighlightColor = gaInvHighlightColors[1];
-              if (nMouseX < WindowSizeY) {
+              if (nMouseX < ui::WindowSizeY) {
                 draw_slot_tint:
                 Engine::Gfx::D2GFX_DrawSolidRectExBySize(nEntryLeft, nMouseX, (uint32_t)gaHirelingBodySlotScreenCoords[nBodySlotIdx].nWidth, (uint32_t)gaHirelingBodySlotScreenCoords[nBodySlotIdx].nHeight, (uint32_t)byHighlightColor, DRAW_VERYTRANSPARENT);
               }
@@ -6639,7 +6657,7 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
       if (pUnit) {
         pMsg->bHandled = 0;
         nScreenBottom = ScreenSizeY - 0x31;
-        nScreenHalfWidth = ScreenSizeX / 2;
+        nScreenHalfWidth = ui::ScreenSizeX / 2;
         nMouseX = Cursor::GetMouseX();
         nMouseY = Cursor::GetMouseY();
         if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
@@ -6695,7 +6713,7 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
         Cursor::UI_HandleCursorMouseUp(pMsg);
         gnInvMercBodySlot2 = 0;
         iScreenBottom = ScreenSizeY - 0x31;
-        iScreenHalfWidth = ScreenSizeX / 2;
+        iScreenHalfWidth = ui::ScreenSizeX / 2;
         iMouseX = Cursor::GetMouseX();
         iMouseY = Cursor::GetMouseY();
         if (!(iMouseX >= 0 && iMouseX <= iScreenHalfWidth && iMouseY >= 0 && iMouseY <= iScreenBottom)) {
@@ -6798,7 +6816,7 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
       if (pUnit) {
         pMsg->bHandled = 0;
         nScreenBottom = ScreenSizeY - 0x31;
-        nScreenHalfWidth = ScreenSizeX / 2;
+        nScreenHalfWidth = ui::ScreenSizeX / 2;
         nMouseX = Cursor::GetMouseX();
         nMouseY = Cursor::GetMouseY();
         if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
@@ -6890,7 +6908,7 @@ void __stdcall INV_DrawRecipeScroll() {
 
 void __stdcall INV_HandleRecipeScrollClick(D2UIMouseMsgStrc * pMsg) {
     int nBottomBound = ScreenSizeY - 0x31;
-    int nRightBound = ScreenSizeX / 2;
+    int nRightBound = ui::ScreenSizeX / 2;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= 0 && nMouseX <= nRightBound && nMouseY >= 0 && nMouseY <= nBottomBound)) {
@@ -8325,19 +8343,19 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
 
       bFlagCheck = ui::GetUIFlag(UI_INVENTORY);
       if (bFlagCheck || (bFlagCheck = ui::GetUIFlag(UI_MPTRADE) , bFlagCheck != 0) || (bFlagCheck = ui::GetUIFlag(UI_STASH) , bFlagCheck || (bFlagCheck = ui::GetUIFlag(UI_NPCSHOP) , bFlagCheck || (bFlagCheck = ui::GetUIFlag(UI_ANVIL) , bFlagCheck != 0))) || (bFlagCheck = ui::GetUIFlag(UI_CUBE) , bFlagCheck != 0)) {
-        nMouseY = ScreenSizeX - gnPanelOffsetX;
+        nMouseY = ui::ScreenSizeX - gnPanelOffsetX;
         nTmp = gnPanelOffsetY - 0x40 + ScreenSizeY;
         nBound = Cursor::GetMouseX();
         nMouseX = Cursor::GetMouseY();
         if (nBound >= nMouseY - 0x12e && nBound <= nMouseY - 0x10e && nMouseX >= nTmp - 0x20 && nMouseX <= nTmp) {
-          nBound = ScreenSizeX - gnPanelOffsetX;
+          nBound = ui::ScreenSizeX - gnPanelOffsetX;
           nTooltipFlag = 1;
           nTmp = gnPanelOffsetY - 99 + ScreenSizeY;
           nTmpResult = 0;
           D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), nBound - 0x11f, nTmp, nTmpResult, nTooltipFlag);
         }
 
-        nMouseY = ScreenSizeX - gnPanelOffsetX;
+        nMouseY = ui::ScreenSizeX - gnPanelOffsetX;
         nTmp = gnPanelOffsetY - 0x45 + ScreenSizeY;
         nBound = Cursor::GetMouseX();
         nMouseX = Cursor::GetMouseY();
@@ -8361,7 +8379,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
               break;
             }
 
-            nBound = ScreenSizeX - gnPanelOffsetX;
+            nBound = ui::ScreenSizeX - gnPanelOffsetX;
             nTooltipFlag = 1;
             nTmpResult = 0;
             nTmp = gnPanelOffsetY - 0x59 + ScreenSizeY;
@@ -8909,7 +8927,7 @@ void __stdcall DRAW_UI_Inventory() {
             if (dwTickCount - gpInvCubeImage3 <= 0x46 || (gpInvCubeImage2++ , gpInvCubeImage3 = dwTickCount , gpInvCubeImage2 < 0x1e)) {
               sGfxData.nFrameNumber = gpInvCubeImage2;
               sGfxData.pDC6 = gpInvCubeImage4;
-              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2, ScreenSizeY / 2 - 1, -1, DRAW_LIGHTTRANSPARENT, nullptr);
+              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2, ScreenSizeY / 2 - 1, -1, DRAW_LIGHTTRANSPARENT, nullptr);
             } else {
               gpInvCubeImage1 = 0;
               if (gpInvCubeImage4) {
@@ -9028,13 +9046,13 @@ void __stdcall DRAW_UI_Inventory() {
     draw_inventory_panel:
     sGfxData.pDC6 = Panel::InvChar;
     sGfxData.nFrameNumber = 4;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 5;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 6;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 7;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     InitializeiInventoryPages();
     if (gbInvExpansionTabVisible) {
       bIsExpansion = Fog::D2CheckExpansionGame();
@@ -9273,7 +9291,9 @@ void __stdcall DRAW_UI_Inventory() {
       bIsTwoHandedEquipped = D2CLIENT_GetTradeAcceptedFlags();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, 0x1b - gnPanelOffsetY, 0, 0);
+      bIsExpansion = 0;
+      bIsTwoHandedEquipped = 0x1b - gnPanelOffsetY;
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
       bIsExpansion = 0;
       bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
       nDrawY = 0;
@@ -9285,7 +9305,9 @@ void __stdcall DRAW_UI_Inventory() {
       bIsTwoHandedEquipped = D2CLIENT_GetTradePlayerGoldAmount();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, 0xf2 - gnPanelOffsetY, 0, 0);
+      bIsExpansion = 0;
+      bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
     }
 
     byPrevInvPage = CurrentInventoryPage;
@@ -9301,10 +9323,10 @@ void __stdcall DRAW_UI_Inventory() {
     DRAW_UI_INVENTORY_Gold(1);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nFrameNumber = gbInvPanelButtonPressed != 0 ? 11 : 10;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x12e, gnPanelOffsetY - 0x40 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - gnPanelOffsetX - 0x12e, gnPanelOffsetY - 0x40 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     pSlotItem = UNIT::Player::GetPlayerUnit_UI();
     nDrawTextWidth = 0;
-    if (g_nCurrentInventoryPage - 1U <= 8 && nMouseX < ScreenSizeX / 2) {
+    if (g_nCurrentInventoryPage - 1U <= 8 && nMouseX < ui::ScreenSizeX / 2) {
       bIsExpansion = npcmenu::GetInteractedUnitGuid(&nMouseX);
       if (bIsExpansion) {
         pMonsterUnit = UNIT::Player::UNITS_FindClientSideUnit(nMouseX, UNIT_MONSTER);
@@ -10408,7 +10430,7 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
     nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     int32_t nMouseX;
     nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
-    if (nMouseX > ScreenSizeX) {
+    if (nMouseX > ui::ScreenSizeX) {
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
       Storm::SMsgBreakHandlerChain(pMsg);
@@ -11047,7 +11069,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     pUnderMouse2->bHandled = 0;
-    if (x < gnPanelOffsetX || x > ScreenSizeX / 2 - 1 || y < gnPanelOffsetY - 0x1df + ScreenSizeY || y > gnPanelOffsetY - 0x1c1 + ScreenSizeY) {
+    if (x < gnPanelOffsetX || x > ui::ScreenSizeX / 2 - 1 || y < gnPanelOffsetY - 0x1df + ScreenSizeY || y > gnPanelOffsetY - 0x1c1 + ScreenSizeY) {
       if (x >= pNpcInventoryScreenCoordinates.nLeft && x <= pNpcInventoryScreenCoordinates.nRight) {
         __frame0.nNpcTopY = gnPanelOffsetY - 0x6d + ScreenSizeY;
         if (y >= __frame0.nNpcTopY && y <= pNpcInventoryScreenCoordinates.nBottom) {
@@ -11302,7 +11324,7 @@ void __stdcall INPUT_StashLeftClick(D2UIMouseMsgStrc * pMsg) {
     gnInvMouseX = nX;
     gpInvCursorItem = nY;
     uint32_t bBeltHover = Panel::PANEL_GetBeltSlotHoverFlag();
-    if ((!bBeltHover || (bInRange = Panel::PANEL_CalculateBeltSlotIndex(pMsg) , !bInRange)) && nX >= ScreenSizeX - gnPanelOffsetX - 0x12e && nX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
+    if ((!bBeltHover || (bInRange = Panel::PANEL_CalculateBeltSlotIndex(pMsg) , !bInRange)) && nX >= ui::ScreenSizeX - gnPanelOffsetX - 0x12e && nX <= ui::ScreenSizeX - gnPanelOffsetX - 0x10e && nY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
       gbInvPanelButtonPressed = 1;
     } else {
       bInRange = INV_IsMouseOverStashCloseBtn(nX, nY);

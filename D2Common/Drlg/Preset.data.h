@@ -12,3 +12,9 @@
 struct D2DrlgPresetTypeTablesStrc;
 
 extern D2DrlgPresetTypeTablesStrc gPresetTypeTables;
+
+namespace D2Common::Drlg::Preset {
+// lpCriticalSection parameter of LeaveCriticalSection
+// lpCriticalSection parameter of EnterCriticalSection
+extern _RTL_CRITICAL_SECTION lpCriticalSection_0096d610;
+} // namespace D2Common::Drlg::Preset

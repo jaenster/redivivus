@@ -17,7 +17,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/Source/SErr.h"
+#include "Storm/Source/SEVT.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
@@ -144,7 +144,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::Clear() {
         *(uint32_t*)((int)pObject + 8) = 0;
       }
 
-      Storm::Source::SMem::SMemFree(pObject, s___AUCELLIST___00741f2c, -2, 0);
+      Storm::Source::SMem::SMemFree(pObject, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
     }
 }
 
@@ -187,7 +187,7 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST
     }
 
     pNode->Destructor();
-    Storm::Source::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
     return (::CELLIST*)((int)uReturnLink <= 0 ? 0 : uReturnLink);
 }
 
@@ -239,13 +239,13 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
     }
 
     this->m_alloc = nSavedNewCount;
-    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nSavedNewCount * 0xc, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0x10);
+    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nSavedNewCount * 0xc, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0x10);
     this->m_data = pBucketSlot;
     if (pBucketSlot) {
       return;
     }
 
-    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemAlloc(nSavedNewCount * 0xc, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemAlloc(nSavedNewCount * 0xc, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
     this->m_data = pBucketSlot;
     if (!pBlock) {
       return;
@@ -287,7 +287,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       } while (nAlloc);
     }
 
-    Storm::Source::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    Storm::Source::SMem::SMemFree(pBlock, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
 }
 
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor() {
@@ -317,7 +317,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       return;
     }
 
-    Storm::Source::SMem::SMemFree(this->m_data, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    Storm::Source::SMem::SMemFree(this->m_data, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
 }
 
 template<> ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
@@ -365,7 +365,7 @@ template<> void TSGrowableArray<CELLIST>::Destructor() {
       return;
     }
 
-    Storm::Source::SMem::SMemFree(this->m_data, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(this->m_data, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -550,7 +550,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NO
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewEntry) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewEntry->m_linktoslot.m_prevlink = 0;
@@ -577,7 +577,7 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
     TSLink<::CELLIST>* pInsertPoint;
     int* pPrevLink;
     uint32_t pTailLink;
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewEntry) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewEntry->m_linktoslot.m_prevlink = 0;
@@ -639,7 +639,7 @@ template<> void __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalDelete(TS
     }
 
     pNode->Destructor();
-    Storm::Source::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
 template<> TSGrowableArray<TSExplicitList<CELLIST, -572662307>> * TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
@@ -727,7 +727,7 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
     }
 
     pNode->Destructor();
-    Storm::Source::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
 // Resize the pool block array to nNewCapacity slots; realloc or alloc+copy; re-init moved nodes
@@ -761,13 +761,13 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
     }
 
     this->m_alloc = nNewCapacityValue;
-    ::CELLIST* pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBlock, nNewCapacityValue * 0x38, s___AUCELLIST___00741f2c, -2, 0x10);
+    ::CELLIST* pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBlock, nNewCapacityValue * 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0x10);
     this->m_data = pFallbackBlock;
     if (pFallbackBlock) {
       return;
     }
 
-    pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nNewCapacityValue * 0x38, s___AUCELLIST___00741f2c, -2, 0);
+    pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nNewCapacityValue * 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
     this->m_data = pFallbackBlock;
     if (!pOldBlock) {
       return;
@@ -818,7 +818,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
       } while (nAlloc);
     }
 
-    Storm::Source::SMem::SMemFree(pOldBlock, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pOldBlock, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
 template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -888,7 +888,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
 }
 
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
+    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2CMP::Draw::s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
     TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunk;
     if (pNewChunkNew) {
       pNewChunkNew->nArrayAlloc = 0;
@@ -913,7 +913,7 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
     TSLink<::CELLIST>* ppInsertSlot;
     int* pBackLink;
     uint32_t pOldTail;
-    ::CELLIST* pNewNode = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewNode = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewNode) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewNode->m_linktoslot.m_prevlink = 0;

@@ -2212,6 +2212,14 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
     gRoomLightPulse.nHoldDuration = nHoldDuration;
 }
 
+void StaticInit_6caab0() {
+    // Static local variables (originally global data)
+    static int gaKeyBindingDefaultArray = 0x1; D2_STATIC_GUARD(gaKeyBindingDefaultArray, "D2Client::UI::CmdTbl::StaticInit_6caab0::gaKeyBindingDefaultArray");
+    static int INT_007a6b0c; D2_STATIC_GUARD_BSS(INT_007a6b0c, "D2Client::UI::CmdTbl::StaticInit_6caab0::INT_007a6b0c");
+
+    INT_007a6b0c = (int)(1000 / gaKeyBindingDefaultArray);
+}
+
 void StaticInit_gwKeyNameBuffer() {
     gwKeyNameBuffer[0] = L'\0';
     gwKeyNameBuffer[1] = L'\0';

@@ -78,6 +78,8 @@ void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo);
 int Unreferenced_0043dce0();
 void __stdcall UIMENU_CantTestItBeacuseItCrash();
 void __stdcall CHATDLG_DestroyLobbyChatForms();
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230();
+void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240();
 // @sourcefile .\Src\ChatDlg.cpp
 void CHATDLG_FreeChatMsgNode(void * * pChatNode);
 int Unreferenced_0043e370();
@@ -217,6 +219,8 @@ void __fastcall CHATDLG_StorePlayerName(uint32_t nPlayerId, uint32_t nDataLength
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e020 (string 0x14c6) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(struct D2ControlMsg * pControlMsg);
+void StaticInit_6ca960();
+void StaticInit_gbChatLobbyInitialize();
 // 7 internal functions (defined in .cpp)
 
 } // namespace D2Multi::ChatDlg

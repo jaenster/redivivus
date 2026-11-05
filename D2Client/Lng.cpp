@@ -48,7 +48,7 @@ BOOL __stdcall CLIENT_LoadLNG() {
       }
     }
 
-    /* LPCSTR lpTableName for LoadAcceleratorsA */ /* HINSTANCE hInstance for LoadAcceleratorsA */ gbLanguageDllLoaded = LoadAcceleratorsA(ghLngLibrary, (LPCSTR)0x64);
+    /* LPCSTR lpTableName for LoadAcceleratorsA */ /* HINSTANCE hInstance for LoadAcceleratorsA */ GAME::Game::gbLanguageDllLoaded = LoadAcceleratorsA(ghLngLibrary, (LPCSTR)0x64);
     Storm::Source::SErr::SErrRegisterMessageSource(0xfff, ghLngLibrary, 0);
     D2Hell::FAULT_RegisterErrorHandler(LNG_FormatErrorMessageWithFallback);
     return 1;

@@ -156,7 +156,7 @@ int __fastcall BNMESSQUEUE_SetStateWithString(int32_t nState, char * szMessage) 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     if (!g_nBattleNetConnectionState) {
       g_nBattleNetConnectionState = nState;
-      Storm::Source::SSTR::SStrCopy(g_szBnetConnectionStateString, szMessage, 0x80);
+      Storm::Source::SSTR::SStrCopy(_net_sid::g_szBnetConnectionStateString, szMessage, 0x80);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
@@ -172,7 +172,7 @@ uint32_t __fastcall SID_SetStateFlag1(uint32_t nState) {
 
 int __fastcall SID_SetStateFlag2(uint32_t nData) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
-    g_nBattleNetConnectionData = nData;
+    _net_sid::g_nBattleNetConnectionData = nData;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
     return 1;
 }

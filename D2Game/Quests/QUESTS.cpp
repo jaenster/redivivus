@@ -181,8 +181,8 @@ int __fastcall Unreferenced_00543540(int param_1, int param_2) {
 }
 
 int __fastcall Unreferenced_00543560(int param_1) {
-    if (param_1 >= 0 && param_1 < sgptDataTable->nTxtSuperUniquesSize) {
-      return sgptDataTable->pTxtSuperUniques[param_1].hcIdx;
+    if (param_1 >= 0 && param_1 < D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtSuperUniques[param_1].hcIdx;
     }
 
     return -1;
@@ -446,10 +446,10 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       int16_t nBossNo;
       nBossNo = Monsters::GetBossNo(pUnit);
       nSuperUniqueHcIdx = (int)nBossNo;
-      if (nSuperUniqueHcIdx < 0 || nSuperUniqueHcIdx >= sgptDataTable->nTxtSuperUniquesSize) {
+      if (nSuperUniqueHcIdx < 0 || nSuperUniqueHcIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
         nSuperUniqueHcIdx = -1;
       } else {
-        nSuperUniqueHcIdx = sgptDataTable->pTxtSuperUniques[nSuperUniqueHcIdx].hcIdx;
+        nSuperUniqueHcIdx = D2Common::ITEMS::Items::sgptDataTable->pTxtSuperUniques[nSuperUniqueHcIdx].hcIdx;
       }
 
       switch (nSuperUniqueHcIdx) {
@@ -499,9 +499,9 @@ void __fastcall QUEST_OnPlayerEnteredArea(::SGAMEDATA * pGame, int32_t ePrevious
     D2QuestArgStrc questArg;
     questArg.pGame = pGame;
     questArg.nEvent = 3;
+    questArg.sQuestArgs.sLevelChange.nOldLevel = ePreviousLevelId;
     questArg.sQuestArgs.sNpcActivate.nIndex = eEnteredLevelId;
     questArg.pPlayer = pUnit;
-    questArg.sQuestArgs.sLevelChange.nOldLevel = ePreviousLevelId;
     QUEST_DispatchBroadcast(true, '\0', &questArg);
 }
 
@@ -774,7 +774,6 @@ void __fastcall QUEST_DebugPrint(::SGAMEDATA * pGame, char * szMessage, char * s
 
 // @sourcefile .\QUESTS\QUESTS.CPP
 static void __stdcall QUEST_RemoveItemFromInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pItem) {
-    eInventoryPage eContainerPage;
     eD2ItemAnimMode eItemMode;
     int32_t dwXPos;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0x534);
@@ -789,8 +788,7 @@ static void __stdcall QUEST_RemoveItemFromInventory(D2InventoryStrc * pInventory
     switch (eItemMode) {
       case Container:
         {
-          eContainerPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-          D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pItem, eContainerPage);
+          D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pItem, D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem));
           GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pUnit, pItem, eItemFlags);
           ITEMS::ItemMode::ITEMMODE_DeleteItemFromInventory(pGame, pUnit, pItem, 0);
           break;
@@ -1027,7 +1025,7 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && (nNpcClassId ? nNpcClassId->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nTargetClassId;
       nTargetClassId = nNpcClassId->nClassId;
-      if (nTargetClassId < 0 || nTargetClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nTargetClassId) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nTargetClassId] + 0xd) & gadwBitMasks[1])) {
+      if (nTargetClassId < 0 || nTargetClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nTargetClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
         return 0;
       }
 
@@ -1107,7 +1105,7 @@ int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId
 }
 
 void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId) {
-    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
@@ -1506,7 +1504,7 @@ void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     pQuestData = 0;
     check_drop_conditions:
-    if (pUnit && (nMonClassId = pUnit->nClassId , nMonClassId >= 0) && nMonClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonClassId && pQuestData && pQuestData->bIsNotIntroduction == '\x01' && nMonClassId != 0x197 && !(*((uint8_t*)&sgptDataTable->pTxtMonStats[nMonClassId] + 0xd) & (uint8_t)gadwBitMasks[6])) {
+    if (pUnit && (nMonClassId = pUnit->nClassId , nMonClassId >= 0) && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId && pQuestData && pQuestData->bIsNotIntroduction == '\x01' && nMonClassId != 0x197 && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId] + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
       A3Q5::Q21_CheckGoldenBirdDropConditions(pQuestData, pUnit);
       return;
     }

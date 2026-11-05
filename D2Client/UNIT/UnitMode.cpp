@@ -198,7 +198,7 @@ static uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
     if (pSkill) {
       eD2Skills eSkillId;
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\UnitMode.cpp", 0x2cc);
-      if ((int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkillId && !(*((uint8_t*)&sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)gadwBitMasks[7]) && (!pUnit || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral && pUnit->eAnimMode.ePlayerMode != TownNeutral)) {
+      if ((int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) && (!pUnit || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral && pUnit->eAnimMode.ePlayerMode != TownNeutral)) {
         return 0;
       }
     }
@@ -742,7 +742,7 @@ static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nA
           goto clear_selection;
       }
 
-      if (!pSkill || (eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\UnitMode.cpp", 0x44f) , (int)eSkillId < 0) || (int)eSkillId >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkillId) || !(*((uint8_t*)&sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)gadwBitMasks[0])) {
+      if (!pSkill || (eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\UnitMode.cpp", 0x44f) , (int)eSkillId < 0) || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
         clear_selection:
         GAME::Select::SELECT_UpdateUnitSelection(nullptr);
         return 0;
