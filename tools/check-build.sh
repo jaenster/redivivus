@@ -30,7 +30,7 @@ for tool in git cmake i686-w64-mingw32-g++ i686-w64-mingw32-objdump; do
 done
 GENERATOR="Unix Makefiles"; KEEP_GOING=-k
 command -v ninja >/dev/null && { GENERATOR=Ninja; KEEP_GOING="-k 0"; }
-JOBS=$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)
+JOBS=${CHECK_BUILD_JOBS:-$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)}
 LAUNCHER=()
 if command -v ccache >/dev/null; then
   export CCACHE_BASEDIR=$WORK CCACHE_NOHASHDIR=true
