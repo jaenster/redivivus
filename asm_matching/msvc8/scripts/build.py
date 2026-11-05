@@ -17,6 +17,14 @@ compiles every TU regardless: a full build.
 Sources the tree no longer has are removed from build/src and their objects
 from build/obj, so an incremental build holds what a clean one would.
 
+Several TUs of one object directory go through one cl.exe (--batch, at most
+16 by default): starting the compiler under wine costs as much as compiling
+a small TU. Each TU's object, log and status come out exactly as from a
+compile of its own; a TU that fails goes on through the quarantine alone.
+Each object the compile finishes is decoded (ours.load_object) in a few
+processes while the rest compile (--decode-jobs), so the map and the audit
+that follow find it decoded.
+
 Per TU it leaves <path>.log (the compiler's own output) and appends a row to
 build/compile_status.tsv: path, status (ok / FAIL), error count, first error.
 
@@ -78,6 +86,11 @@ MAX_QUARANTINE_ROUNDS = 40   # an ICE is fatal, so each round finds one; every r
 COMPILE_TIMEOUT = 300       # seconds; the largest TU takes well under a minute
 _qlock = threading.Lock()
 CACHE_VERSION = 'build-1'   # bump when what a cached compile holds, or how it is keyed, changes
+BATCH = 16                  # TUs per cl.exe at most (compile_batch)
+# cl.exe processes at a time. With batches, more than about six only contend:
+# 448 TUs compiled in 107s at -j6 against 123s at -j8, 143s at -j12 and 165s
+# at -j16 (batch 16, a 16-core M3 Max under load).
+JOBS = min(os.cpu_count() or 4, 6)
 
 
 class TU:
@@ -401,10 +414,18 @@ def unquarantine(t):
             f.write(vc8_translate.translate(orig, tu))
 
 
-def compile_one(t, rsp, base_key):
-    unquarantine(t)
+def compile_one(t, rsp, base_key, first=None):
+    """Compile TU t, quarantining what VC8 cannot compile, round by round.
+    first: the result of a compile already made (compile_batch), as
+    compile_once returns it; the rounds then go on from there."""
+    if first is None:
+        unquarantine(t)
     for _round in range(MAX_QUARANTINE_ROUNDS + 1):
-        _t, ok, errors, secs, log = compile_once(t, rsp)
+        if first is not None:
+            _t, ok, errors, secs, log = first
+            first = None
+        else:
+            _t, ok, errors, secs, log = compile_once(t, rsp)
         if ok or not quarantine(t, log):
             break
     if ok:
@@ -412,16 +433,24 @@ def compile_one(t, rsp, base_key):
     return t, ok, errors, secs
 
 
-def compile_once(t, rsp):
-    tu, base = t.rel, t.base
-    os.makedirs(os.path.dirname(base), exist_ok=True)
+def clear_outputs(t):
+    os.makedirs(os.path.dirname(t.base), exist_ok=True)
     for ext in ('.obj', '.d', '.key'):
-        if os.path.exists(base + ext):
-            os.remove(base + ext)
-    cmd = [os.path.join(HERE, 'vc8.sh'), 'cl', '@' + win(rsp), '/showIncludes'] + \
+        if os.path.exists(t.base + ext):
+            os.remove(t.base + ext)
+
+
+def cl_command(rsp, tu, out, sources):
+    return [os.path.join(HERE, 'vc8.sh'), 'cl', '@' + win(rsp), '/showIncludes'] + \
         extra_flags(tu).split() + \
         (['/Yu' + PCH_HEADER] if USE_PCH else []) + \
-        ['/Fo' + win(base + '.obj'), win(t.src)]
+        ['/Fo' + out] + [win(s) for s in sources]
+
+
+def compile_once(t, rsp):
+    tu = t.rel
+    clear_outputs(t)
+    cmd = cl_command(rsp, tu, win(t.base + '.obj'), [t.src])
     t0 = time.time()
     for attempt in (1, 2):
         try:
@@ -432,7 +461,13 @@ def compile_once(t, rsp):
             # processes of a fresh wineserver); one retry, then give up.
             if attempt == 2:
                 return tu, False, ['timed out twice after %ds' % COMPILE_TIMEOUT], time.time() - t0, []
-    out = p.stdout + p.stderr
+    return finish(t, p.stdout + p.stderr, p.returncode, time.time() - t0)
+
+
+def finish(t, out, returncode, secs):
+    """Judge one TU's compile from the compiler's output for it: write its
+    log, and on success its dependencies. -> as compile_once."""
+    tu, base = t.rel, t.base
     deps, log = [], []
     for line in out.splitlines():
         m = INCLUDING.match(line)
@@ -451,15 +486,123 @@ def compile_once(t, rsp):
     # finish exiting. cl.exe deletes the object on any real error, so success
     # is: an object that parses completely as COFF, and no error in the log.
     ok = not errors and valid_object(base + '.obj')
-    if p.returncode not in (0, 137, -9) and ok:
+    if returncode not in (0, 137, -9) and ok:
         ok = False
-        errors = ['cl.exe exit status %d' % p.returncode]
+        errors = ['cl.exe exit status %d' % returncode]
     if ok:
         with open(base + '.d', 'w') as f:
             f.write('\n'.join(sorted(set(deps))) + '\n')
         with open(base + '.flags', 'w') as f:
             f.write(extra_flags(tu))
-    return tu, ok, errors, time.time() - t0, log
+    return tu, ok, errors, secs, log
+
+
+def batches(todo, size):
+    """Split the TUs to compile, (TU, base key) pairs, into lists that one
+    cl.exe can compile together: one object directory - an object's path is
+    written into its .debug$S (S_OBJNAME), so it must come out exactly where
+    a compile of its own would put it, and one /Fo directory serves every
+    source - and one set of flags. Each group goes into batches of at most
+    `size`, of near-equal length; the largest batches (by source size) come
+    first, so the longest compiles start early."""
+    groups = {}
+    for t, base in todo:
+        groups.setdefault((os.path.dirname(t.base), extra_flags(t.rel)), []).append((t, base))
+    out = []
+    for _k, items in sorted(groups.items()):
+        items.sort(key=lambda x: (-os.path.getsize(x[0].src), x[0].rel))
+        n = -(-len(items) // max(1, size))
+        parts = [items[k::n] for k in range(n)]
+        for part in parts:
+            # Two sources one case apart would write the same object on a
+            # case-insensitive drive: each gets a batch of its own.
+            names = [os.path.basename(t.src).lower() for t, _b in part]
+            if len(set(names)) == len(names):
+                out.append(part)
+            else:
+                out += [[x] for x in part]
+    out.sort(key=lambda b: (-sum(os.path.getsize(t.src) for t, _b in b), b[0][0].rel))
+    return out
+
+
+BACKEND = 'Generating Code...'
+MESSAGE_FILE = re.compile(r'^(\S.*?)(?:\(\d+\))? : ')
+
+
+def split_output(stdout, stderr, sources):
+    """The compiler's output for several sources, cut into what a compile of
+    each alone prints, or None where it cannot be. On stdout the front end
+    goes through the sources in the order given, each starting with a line
+    holding its file name alone, followed by its /showIncludes notes,
+    warnings and errors. Then, after 'Generating Code...', the back end's
+    messages (C4700, an internal error) for all of them, in an order of its
+    own, each naming its source; an indented line continues the one above.
+    stderr has the driver's command-line warnings (D9025), once for the run:
+    each source's own compile would print them, last."""
+    names = [os.path.basename(s) for s in sources]
+    paths = {win(s).lower(): k for k, s in enumerate(sources)}
+    parts, k, backend = [[] for _ in names], -1, False
+    for line in stdout.splitlines():
+        if backend:
+            m = MESSAGE_FILE.match(line)
+            if m:
+                k = paths.get(m.group(1).lower())
+                if k is None:
+                    return None         # a message about no source of the batch
+            elif line.strip() and (k is None or not line[:1].isspace()):
+                return None
+            if line.strip():
+                parts[k].append(line)
+            continue
+        if k == len(names) - 1 and line == BACKEND:
+            backend, k = True, None
+            continue
+        if k + 1 < len(names) and line.strip() == names[k + 1]:
+            k += 1
+        if k < 0:
+            if line.strip():
+                return None             # output before the first source: whose is it?
+            continue
+        parts[k].append(line)
+    if not backend and k != len(names) - 1:
+        return None
+    return ['\n'.join(p + stderr.splitlines()) + '\n' for p in parts]
+
+
+def compile_batch(batch, rsp):
+    """Compile a batch (batches()) in one cl.exe: starting the compiler under
+    wine costs as much as compiling a small TU. Each TU is then judged on its
+    own output exactly as compile_once judges it, and one that failed goes on
+    through compile_one's quarantine rounds alone. When the output cannot be
+    attributed to its sources, or the compiler failed without saying where,
+    every TU of the batch is compiled again on its own. -> compile_one's
+    result for each TU."""
+    if len(batch) == 1:
+        t, base = batch[0]
+        return [compile_one(t, rsp, base)]
+    for t, _b in batch:
+        unquarantine(t)
+        clear_outputs(t)
+    first = batch[0][0]
+    cmd = cl_command(rsp, first.rel, win(os.path.dirname(first.base)) + '\\', [t.src for t, _b in batch])
+    t0 = time.time()
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True, encoding='latin1',
+                           timeout=COMPILE_TIMEOUT * len(batch))
+    except subprocess.TimeoutExpired:
+        p = None
+    secs = time.time() - t0
+    parts = split_output(p.stdout, p.stderr, [t.src for t, _b in batch]) if p is not None else None
+    if parts is not None:
+        results = [finish(t, part, 0, secs / len(batch)) for (t, _b), part in zip(batch, parts)]
+        if p.returncode not in (0, 137, -9) and all(r[1] for r in results):
+            parts = None                # it failed, and no source says why
+    if parts is None:
+        return [compile_one(t, rsp, base) for t, base in batch]
+    # A TU with no object and no error of its own may have been cut short by
+    # another's: it is compiled again alone.
+    return [compile_one(t, rsp, base, first=r) if r[1] or r[2] else compile_one(t, rsp, base)
+            for (t, base), r in zip(batch, results)]
 
 
 def sweep_box64_cache():
@@ -503,7 +646,7 @@ def translate_support(extra_src, names):
     return n
 
 
-OBJ_EXTS = ('.obj', '.d', '.log', '.flags', '.key', '.fn.pkl')
+OBJ_EXTS = ('.obj', '.d', '.log', '.flags', '.key', '.fn.pkl', '.fn.sum')
 
 
 def prune(expected_src, keep_obj):
@@ -530,6 +673,43 @@ def prune(expected_src, keep_obj):
     return removed
 
 
+def _decode(objdir, rel):
+    import ours
+    ours.load_object(objdir, rel)
+
+
+class Decoder:
+    """Decode each object the compile finishes (ours.load_object) in a pool
+    of processes while the next batches compile, so funcmap.py, libmap.py and
+    audit.py find every object decoded. It warms a cache keyed by content
+    and changes no result: a decode that fails here is redone by the reader.
+    jobs 0 decodes nothing here."""
+
+    def __init__(self, jobs):
+        self.pool = None
+        self.futs = []
+        if jobs > 0:
+            import multiprocessing
+            self.pool = cf.ProcessPoolExecutor(jobs, mp_context=multiprocessing.get_context('spawn'))
+
+    def submit(self, t):
+        if self.pool is not None:
+            self.futs.append(self.pool.submit(_decode, t.objdir, t.rel[:-4] + '.obj'))
+
+    def finish(self):
+        if self.pool is None:
+            return 0
+        done = 0
+        for f in self.futs:
+            try:
+                f.result()
+                done += 1
+            except Exception:
+                pass
+        self.pool.shutdown()
+        return done
+
+
 def write_status(statusdir, tus, status):
     path = os.path.join(statusdir, 'compile_status.tsv')
     with open(path, 'w') as f:
@@ -541,7 +721,12 @@ def write_status(statusdir, tus, status):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('-j', '--jobs', type=int, default=os.cpu_count() or 4)
+    ap.add_argument('-j', '--jobs', type=int, default=JOBS, help='cl.exe processes at a time (default %d)' % JOBS)
+    ap.add_argument('--batch', type=int, default=int(os.environ.get('ORACLE_BATCH', BATCH)),
+                    help='TUs one cl.exe compiles at most (default %d, or ORACLE_BATCH); 1: one each' % BATCH)
+    ap.add_argument('--decode-jobs', type=int, default=int(os.environ.get('ORACLE_DECODE_JOBS', '2')),
+                    help='processes decoding finished objects during the compile (default 2, or '
+                         'ORACLE_DECODE_JOBS); 0: leave decoding to the readers')
     ap.add_argument('--force', action='store_true', help='recompile every TU, reading nothing from the cache')
     ap.add_argument('--with-data', action='store_true', help='also compile globals/ (data only)')
     ap.add_argument('--extra', metavar='DIR', help='compile globals/ and --support TUs into DIR/obj (build-vc8.sh)')
@@ -685,8 +870,9 @@ def main():
             restored += 1
         else:
             todo.append((t, base))
-    print('%d TUs: %d unchanged, %d from cache, %d to compile, %d jobs%s (%.1fs)' % (
-        len(tus), current, restored, len(todo), args.jobs,
+    work = batches(todo, args.batch)
+    print('%d TUs: %d unchanged, %d from cache, %d to compile in %d cl.exe, %d jobs%s (%.1fs)' % (
+        len(tus), current, restored, len(todo), len(work), args.jobs,
         ', %d stale files removed' % pruned if pruned else '', time.time() - t0))
 
     status = {}
@@ -700,15 +886,24 @@ def main():
     failed = 0
     if todo:
         start_wine()
+    decoder = Decoder(args.decode_jobs)
     with cf.ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        futs = [pool.submit(compile_one, t, rsp, base) for t, base in todo]
-        for n, fut in enumerate(cf.as_completed(futs), 1):
-            t, ok, errors, secs = fut.result()
-            failed += not ok
-            first = errors[0].strip() if errors else ''
-            status[t.rel] = [t.rel, 'ok' if ok else 'FAIL', str(len(errors)), first[:300]]
-            print('[%d/%d] %-4s %5.1fs %s%s' % (n, len(todo), 'ok' if ok else 'FAIL', secs, t.rel,
-                                                '' if ok else '  ' + first[:160]))
+        futs = [pool.submit(compile_batch, b, rsp) for b in work]
+        n = 0
+        for fut in cf.as_completed(futs):
+            for t, ok, errors, secs in fut.result():
+                n += 1
+                failed += not ok
+                first = errors[0].strip() if errors else ''
+                status[t.rel] = [t.rel, 'ok' if ok else 'FAIL', str(len(errors)), first[:300]]
+                print('[%d/%d] %-4s %5.1fs %s%s' % (n, len(todo), 'ok' if ok else 'FAIL', secs, t.rel,
+                                                    '' if ok else '  ' + first[:160]))
+                if ok and t.objdir == OBJ:
+                    decoder.submit(t)
+    t1 = time.time()
+    decoded = decoder.finish()
+    if decoded:
+        print('decoded %d objects alongside the compile (%.1fs after it)' % (decoded, time.time() - t1))
     for t in tus:
         if t.rel not in status and os.path.exists(t.base + '.obj'):
             status[t.rel] = [t.rel, 'ok', '0', '']
