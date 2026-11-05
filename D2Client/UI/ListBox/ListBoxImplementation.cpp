@@ -872,11 +872,10 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     DWORD dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (dwResMode == 2) {
       pThis->nScrollTrackSegments = bTallRows ? 0x1c : 0x12;
-      ExceptionList = pPrevExceptionList;
-      return pThis;
+    } else {
+      pThis->nScrollTrackSegments = 0x12;
     }
 
-    pThis->nScrollTrackSegments = 0x12;
     ExceptionList = pPrevExceptionList;
     return pThis;
 }

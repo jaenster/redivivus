@@ -104,13 +104,13 @@ static void D2WINTEXTBOX_ComputeLineSpacingForLanguage(int32_t nFontIndex) {
 
     nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (nLangCode == 6) {
-      gnTextBoxLineSpacing = (gbCompactLineSpacingMode ? -4 : 0) + 4;
+      gnTextBoxLineSpacing = gbCompactLineSpacingMode ? 0 : 4;
       return;
     }
 
     nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (nLangCode == 10) {
-      gnTextBoxLineSpacing = (gbCompactLineSpacingMode ? -4 : 0) + 4;
+      gnTextBoxLineSpacing = gbCompactLineSpacingMode ? 0 : 4;
       return;
     }
 
@@ -1312,11 +1312,10 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
       }
 
       D2WinScrollbar::D2WINSCROLLBAR_SetStyle(pNew->pScrollbar, nScrollPageSize);
-      D2WinMain::FORMS_AddControlToGlobalList(&pNew->sControl);
-      return pNew;
+    } else {
+      pNew->pScrollbar = 0;
     }
 
-    pNew->pScrollbar = 0;
     D2WinMain::FORMS_AddControlToGlobalList(&pNew->sControl);
     return pNew;
 }

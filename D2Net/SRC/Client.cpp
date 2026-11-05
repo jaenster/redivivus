@@ -461,7 +461,6 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
     DWORD nErrorLine;
     D2OnePacketClientStrc* pTailPacket;
     uint8_t byFirstByte;
-    D2OnePacketClientStrc* pWalkPacket;
     char* nPacketSize = pBytes;
     while (true) {
       D2OnePacketClientStrc* pNewPacket;
@@ -507,10 +506,8 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
           }
         }
       } else {
-        pWalkPacket = pTailPacket->pD2PacketClientNext;
-        while (pWalkPacket) {
+        while (pTailPacket->pD2PacketClientNext) {
           pTailPacket = pTailPacket->pD2PacketClientNext;
-          pWalkPacket = pTailPacket->pD2PacketClientNext;
         }
 
         pTailPacket->pD2PacketClientNext = pNewPacket;

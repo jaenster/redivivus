@@ -341,8 +341,7 @@ char * __thiscall FindSection(D2BNetGatewayAccessStr * pThis, char * szText1, ch
 
       nCmp = _strnicmp(szText1 + 1, szText2, nSectionNameLen);
       if (!nCmp) {
-        pIniCursor = SkipToEOL(pThis, szText1 + nSectionNameLen + 2, szText2_00);
-        pIniCursor = SkipEOL(pThis, pIniCursor, szText2_00);
+        pIniCursor = SkipEOL(pThis, SkipToEOL(pThis, szText1 + nSectionNameLen + 2, szText2_00), szText2_00);
         return pIniCursor;
       }
 

@@ -517,10 +517,10 @@ BOOL __fastcall EndScene1() {
 BOOL __fastcall EndScene2() {
     if (pD2GFXRenderedDataStrc->bVSync) {
       (*GLIDEDLL_grBufferSwap_4)(1);
-      return 1;
+    } else {
+      (*GLIDEDLL_grBufferSwap_4)(0);
     }
 
-    (*GLIDEDLL_grBufferSwap_4)(0);
     return 1;
 }
 
@@ -914,7 +914,12 @@ void __fastcall PlayCutScene(char * szFile, int32_t nResolutionMode, void * fpFr
     }
 
     (*GLIDEDLL_grBufferClear_12)(0, '\0', 0);
-    (*GLIDEDLL_grBufferSwap_4)((uint32_t)(uint8_t)(pD2GFXRenderedDataStrc->bVSync != 0));
+    if (pD2GFXRenderedDataStrc->bVSync) {
+      (*GLIDEDLL_grBufferSwap_4)(1);
+    } else {
+      (*GLIDEDLL_grBufferSwap_4)(0);
+    }
+
     gbPlayingCutScene = 1;
     glBlocks::GLBLOCKS_PlayBinkVideo(szFile, nResolutionMode, (fnBinkFrameCallback)fpFrame);
     gbPlayingCutScene = 0;
@@ -1084,12 +1089,11 @@ void __fastcall EndCutScene(HWND hWnd, int32_t nResolutionMode, int32_t nWindowS
     if (nWindowState) {
       RENDERER_GLIDE_DestroyWindow();
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnRenderState = 1;
-      LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-      return;
+    } else {
+      Glide::CreateWindow(hWnd, nResolutionMode);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnRenderState = 0;
     }
 
-    Glide::CreateWindow(hWnd, nResolutionMode);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnRenderState = 0;
     LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
 }
 
@@ -1106,10 +1110,10 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize) {
     (*GLIDEDLL_grBufferClear_12)(0, '\0', 0);
     if (pD2GFXRenderedDataStrc->bVSync) {
       (*GLIDEDLL_grBufferSwap_4)(1);
-      return 1;
+    } else {
+      (*GLIDEDLL_grBufferSwap_4)(0);
     }
 
-    (*GLIDEDLL_grBufferSwap_4)(0);
     return 1;
 }
 
@@ -2557,21 +2561,20 @@ void __fastcall DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_
       fV0X[1].fS = 0.0;
       fV0X[1].fT = 0.0;
       (*GLIDEDLL_grDrawPoint_4)(fV0X + 1);
-      (*GLIDEDLL_grChromakeyMode_4)(1);
-      return;
+    } else {
+      fV0X[0].fX = (float)nXStart;
+      fV0X[0].fY = (float)nYStart;
+      fV0X[0].fOOW = 1.0;
+      fV0X[0].fS = 0.0;
+      fV0X[0].fT = 0.0;
+      fV0X[1].fX = (float)nXEnd;
+      fV0X[1].fY = (float)nYEnd;
+      fV0X[1].fOOW = 1.0;
+      fV0X[1].fS = 0.0;
+      fV0X[1].fT = 0.0;
+      (*GLIDEDLL__grDrawLine_8)(fV0X, fV0X + 1);
     }
 
-    fV0X[0].fX = (float)nXStart;
-    fV0X[0].fY = (float)nYStart;
-    fV0X[0].fOOW = 1.0;
-    fV0X[0].fS = 0.0;
-    fV0X[0].fT = 0.0;
-    fV0X[1].fX = (float)nXEnd;
-    fV0X[1].fY = (float)nYEnd;
-    fV0X[1].fOOW = 1.0;
-    fV0X[1].fS = 0.0;
-    fV0X[1].fT = 0.0;
-    (*GLIDEDLL__grDrawLine_8)(fV0X, fV0X + 1);
     (*GLIDEDLL_grChromakeyMode_4)(1);
 }
 
@@ -3746,48 +3749,55 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
 }
 
 void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
+    int bWaiting;
     void* hSmack;
-    if (pContext->eMode != 'p') {
-      int bWaiting;
-      if (pContext->eMode != 's') {
-        return;
-      }
-
-      hSmack = pContext->hSmack;
-      if (!hSmack) {
-        return;
-      }
-
-      bWaiting = SmackWait(hSmack);
-      if (!bWaiting) {
-        if (!gnGlideWindowHandle) {
+    switch (pContext->eMode) {
+      default:
+        {
           return;
         }
+      case 's':
+        {
+          hSmack = pContext->hSmack;
+          if (!hSmack) {
+            return;
+          }
 
-        SmackDoFrame(hSmack);
-        if (*(int*)((int)hSmack + 0x374) == *(int*)((int)hSmack + 0xc)) {
-          Glide::CloseSmacker(pContext);
-        } else {
-          SmackNextFrame(hSmack);
+          bWaiting = SmackWait(hSmack);
+          if (!bWaiting) {
+            if (!gnGlideWindowHandle) {
+              return;
+            }
+
+            SmackDoFrame(hSmack);
+            if (*(int*)((int)hSmack + 0x374) == *(int*)((int)hSmack + 0xc)) {
+              Glide::CloseSmacker(pContext);
+            } else {
+              SmackNextFrame(hSmack);
+            }
+            if (gnRenderState) {
+              return;
+            }
+
+            GLSMACK_ConvertPaletteToRGB565((uint8_t*)((int)hSmack + 0x6c));
+            GLSMACK_UploadTextures();
+          }
+          if (gnRenderState) {
+            return;
+          }
+
+          GLSMACK_DrawSmackerQuad(pContext, *(int32_t*)((int)hSmack + 8), *(int32_t*)((int)hSmack + 4));
         }
-        if (gnRenderState) {
+      case 'p':
+        {
+          if (gnRenderState) {
+            return;
+          }
+
+          GLSMACK_DrawSmackerQuad(pContext, 0x3c, 0x1d4);
           return;
         }
-
-        GLSMACK_ConvertPaletteToRGB565((uint8_t*)((int)hSmack + 0x6c));
-        GLSMACK_UploadTextures();
-      }
-      if (gnRenderState) {
-        return;
-      }
-
-      GLSMACK_DrawSmackerQuad(pContext, *(int32_t*)((int)hSmack + 8), *(int32_t*)((int)hSmack + 4));
     }
-    if (gnRenderState) {
-      return;
-    }
-
-    GLSMACK_DrawSmackerQuad(pContext, 0x3c, 0x1d4);
 }
 
 } // namespace D2Glide::Renderer::Glide

@@ -217,10 +217,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
 
 D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine) {
     D2TxtLinkStrc* structTxtLink = (D2TxtLinkStrc*)Memory::AllocServerMemory(nullptr, 0x10, szFile, nLine, 0);
-    structTxtLink->nRecords = 0;
-    structTxtLink->nCapacity = 0;
-    structTxtLink->pTxtLinkSub0x08 = 0;
-    structTxtLink->pTxtLinkNode = 0;
+    memset(structTxtLink, 0, sizeof(*structTxtLink));
     return structTxtLink;
 }
 
@@ -323,11 +320,10 @@ BOOL __stdcall FOG_GetTxtLinkRecord(D2TxtLinkStrc * pTxtLink, int nRecordId, voi
         *(char*)((int)pResult + 2) = cCode;
         if (pSubRecord[nSearchIdx].szItemCode[3] == ' ') {
           *(uint8_t*)((int)pResult + 3) = 0;
-          *(uint8_t*)((int)pResult + 4) = 0;
-          return 1;
+        } else {
+          *(char*)((int)pResult + 3) = pSubRecord[nSearchIdx].szItemCode[3];
         }
 
-        *(char*)((int)pResult + 3) = pSubRecord[nSearchIdx].szItemCode[3];
         *(uint8_t*)((int)pResult + 4) = 0;
         return 1;
       }

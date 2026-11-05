@@ -487,8 +487,8 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
     }
 
     int nStartTime = gaPanelImageLoadFlags[nSlotOffset * 4 + 1];
-    nNow = GAME::Game::GetEntryIndex();
-    nAbsDiff = nNow - nStartTime;
+    nAbsDiff = GAME::Game::GetEntryIndex();
+    nAbsDiff -= nStartTime;
     int nDuration = nStartTime - gaPanelImageLoadFlags[nSlotOffset * 4 + 3];
     if (nDuration < 7) {
       nDuration = 7;
@@ -1718,7 +1718,8 @@ void __stdcall CMD_UseBeltSlot1() {
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     uint16_t wShiftKeyState = GetKeyState(0x10);
-    ClickBeltRight(0, pUnit, pUnit->pInventory, wShiftKeyState & 0x8000);
+    wShiftKeyState &= 0x8000;
+    ClickBeltRight(0, pUnit, pUnit->pInventory, wShiftKeyState);
 }
 
 // Key-command handler for belt slot 2. If not exiting and the player is alive and
@@ -1738,7 +1739,8 @@ void __stdcall CMD_UseBeltSlot2() {
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     uint16_t wShiftKeyState = GetKeyState(0x10);
-    ClickBeltRight(1, pUnit, pUnit->pInventory, wShiftKeyState & 0x8000);
+    wShiftKeyState &= 0x8000;
+    ClickBeltRight(1, pUnit, pUnit->pInventory, wShiftKeyState);
 }
 
 // Key-command handler for belt slot 3. If not exiting and the player is alive and
@@ -1758,7 +1760,8 @@ void __stdcall CMD_UseBeltSlot3() {
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     uint16_t wShiftKeyState = GetKeyState(0x10);
-    ClickBeltRight(2, pUnit, pUnit->pInventory, wShiftKeyState & 0x8000);
+    wShiftKeyState &= 0x8000;
+    ClickBeltRight(2, pUnit, pUnit->pInventory, wShiftKeyState);
 }
 
 // Key-command handler for belt slot 4. If not exiting and the player is alive and
@@ -1778,7 +1781,8 @@ void __stdcall CMD_UseBeltSlot4() {
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     uint16_t wShiftKeyState = GetKeyState(0x10);
-    ClickBeltRight(3, pUnit, pUnit->pInventory, wShiftKeyState & 0x8000);
+    wShiftKeyState &= 0x8000;
+    ClickBeltRight(3, pUnit, pUnit->pInventory, wShiftKeyState);
 }
 
 void __fastcall PANEL_SetBeltSlotHoverFlag(uint32_t nIndex, int byValue) {

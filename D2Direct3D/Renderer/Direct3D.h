@@ -18,9 +18,15 @@ struct D2RenderClipOutStrc;
 struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
 struct DDSURFACEDESC;
+struct EHExceptionRecord;
+struct EHRegistrationNode;
 struct IDirectDraw;
 struct IDirectDrawPalette;
 struct IDirectDrawSurface1;
+typedef int _EXCEPTION_DISPOSITION;
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+struct _CONTEXT;
+#endif // _WIN32
 struct DDSURFACEDESC2;
 struct IDirect3DDevice;
 struct IDirect3DInterface7;

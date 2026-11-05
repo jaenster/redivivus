@@ -1258,12 +1258,18 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
 
         goto pick_difficulty_palette;
       }
-      if (nMonStats2Idx == 0x14d) {
-        nPalShiftIdx = 5;
-        goto apply_pal_shift;
-      }
-      if (nMonStats2Idx == 0x20f) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_catapult_death_e, 5, 0, 0, 0, 0, 0);
+
+      switch (nMonStats2Idx) {
+        case 0x14d:
+          {
+            nPalShiftIdx = 5;
+            goto apply_pal_shift;
+          }
+        case 0x20f:
+          {
+            Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_catapult_death_e, 5, 0, 0, 0, 0, 0);
+            break;
+          }
       }
 
       clamp_pal_shift:

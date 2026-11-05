@@ -546,6 +546,7 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
       bDecryptOk = WARDEN_DecryptModule((uint32_t**)&ppModule->pLibrary, dwUnusedEDX, pDecompressed, nDecompressedSize);
       if ((char)bDecryptOk == '\0') {
         nErrLine = 0x1a0;
+        Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1a0, 0);
       } else {
         pLoadedLib = (pfnWardenCreateInterface)WARDEN_DecryptBuffer((int*)ppModule, 1);
         ppModule->pfnCreateInterface = pLoadedLib;
@@ -557,9 +558,9 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
 
         WARDEN_FreeModuleLibraries(&ppModule->pLibrary);
         nErrLine = 0x1aa;
+        Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1aa, 0);
       }
 
-      Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", nErrLine, 0);
       WARDEN_FreeModuleLibraries(&ppModule->pLibrary);
       Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       return 0;
@@ -867,11 +868,11 @@ void __thiscall SetRC4Data(::WardenClient * pThis, void * pData, uint32_t nSize)
 
 // @sourcefile .\WARDEN\WardenClient.cpp
 bool __thiscall GetRC4Data(::WardenClient * pThis, void * pDest, uint32_t * pnSize) {
-    void* pSrc = gpWardenResponseData;
     if (!gpWardenResponseData) {
       return false;
     }
 
+    void* pSrc = gpWardenResponseData;
     uint32_t nCopySize = *pnSize;
     if (*pnSize >= gnWardenResponseSize) {
       nCopySize = gnWardenResponseSize;
@@ -912,7 +913,7 @@ void __stdcall WARDEN_UnloadActiveModule() {
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam) {
     // Static local variables (originally global data)
-    static WardenClient gWardenClient = {
+    static ::WardenClient gWardenClient = {
     /* ._vfptr = */ (WardenClientVtable*)&D2Client::Warden::vftable
 }; D2_STATIC_GUARD(gWardenClient, "D2Client::Warden::WARDEN_ActivatePendingModule::gWardenClient");
 

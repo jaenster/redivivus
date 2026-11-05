@@ -103,16 +103,13 @@ int __fastcall deflateResetKeep(z_stream * pStream) {
           pDeflateState->wrap = -pDeflateState->wrap;
         }
 
-        pDeflateState->status = (pDeflateState->wrap ? -71 : 0) + 0x71;
+        pDeflateState->status = pDeflateState->wrap ? 0x2a : 0x71;
         if (pDeflateState->wrap == 2) {
           uChecksum = crc32::crc32(0, nullptr, 0);
-          pStream->adler = uChecksum;
-          pDeflateState->last_flush = 0;
-          trees::_tr_init(pDeflateState);
-          return 0;
+        } else {
+          uChecksum = adler32::ZLIB_Adler32(0, nullptr, 0);
         }
 
-        uChecksum = adler32::ZLIB_Adler32(0, nullptr, 0);
         pStream->adler = uChecksum;
         pDeflateState->last_flush = 0;
         trees::_tr_init(pDeflateState);
@@ -336,7 +333,7 @@ uint32_t __fastcall deflateEnd(z_stream * pStream) {
 
         pStream->zfree(pStream->opaque, pStream->state);
         pStream->state = 0;
-        return nStatus != 0x71 ? 0 : -3;
+        return nStatus == 0x71 ? -3 : 0;
       }
     }
 
@@ -1821,7 +1818,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
         return 0;
       }
     } else {
-      if (!pStream->avail_in && (int)(nFlush * 2 - (nFlush <= 4 ? 0 : 0x9)) <= (int)(nOldFlush * 2 - (nOldFlush <= 4 ? 0 : 0x9)) && nFlush != 4) {
+      if (!pStream->avail_in && (int)(nFlush * 2 - (nFlush > 4 ? 0x9 : 0)) <= (int)(nOldFlush * 2 - (nOldFlush > 4 ? 0x9 : 0)) && nFlush != 4) {
         pStream->msg = z_errmsg[7];
         return -5;
       }

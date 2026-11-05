@@ -60,8 +60,7 @@ void __fastcall TARGETS_AddTargetToTrackingList(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
-    pTrackingNode->pPrev = 0;
-    pTrackingNode->pNext = 0;
+    memset(pTrackingNode, 0, sizeof(*pTrackingNode));
     pTrackingNode->pUnit = pUnit;
     pTrackingNode->pUnknown = pNodeUnknown;
     *pFreeSlot = pTrackingNode;
@@ -84,8 +83,7 @@ void __fastcall CreateUnitNode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUn
       return;
     }
 
-    pNode->pPrev = 0;
-    pNode->pNext = 0;
+    memset(pNode, 0, sizeof(*pNode));
     pNode->pUnit = pUnit;
     pNode->pUnknown = pUnknown;
     pNode->pPrev = pHeadNode->pPrev;
@@ -110,8 +108,7 @@ void __fastcall AddNodeToTable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUn
       return;
     }
 
-    pNode->pPrev = 0;
-    pNode->pNext = 0;
+    memset(pNode, 0, sizeof(*pNode));
     pNode->pUnit = pUnit;
     pNode->pUnknown = pNodeUnknown;
     pGame->pUnitNodes[nNodeTableIndex] = pNode;

@@ -632,93 +632,101 @@ int32_t __stdcall CACHE_Open() {
         nErrorCode = 2;
         goto warn_invalid_cache;
       }
-      if (gpCacheFileHeader->dwSignature == 0x1a324e42) {
-        goto recreate_cache;
-      }
-      if (gpCacheFileHeader->dwSignature != 0x1a334e42) {
-        nErrorCode = 3;
-        goto warn_invalid_cache;
-      }
 
-      nTableByteSize = gpCacheFileHeader->dwHeaderCrc32;
-      gpCacheFileHeader->dwHeaderCrc32 = 0;
-      nCrc32 = -1;
-      nInitCounter = 0x2c;
-      pHashEntryInit = pHeaderBuf;
-      do {
-        nErrorCode = nInitCounter;
-        nCrc32 = nCrc32 >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pHashEntryInit->dwSignature ^ nCrc32) & 0xff];
-        nInitCounter = nErrorCode - 1;
-        pHashEntryInit = (D2BnCacheFileHeaderStrc*)((uintptr_t)&pHashEntryInit->dwSignature + 1);
-      } while (nInitCounter);
+      switch (gpCacheFileHeader->dwSignature) {
+        case 0x1a324e42:
+          {
+            goto recreate_cache;
+          }
+        default:
+          {
+            nErrorCode = 3;
+            goto warn_invalid_cache;
+          }
+        case 0x1a334e42:
+          {
+            nTableByteSize = gpCacheFileHeader->dwHeaderCrc32;
+            gpCacheFileHeader->dwHeaderCrc32 = 0;
+            nCrc32 = -1;
+            nInitCounter = 0x2c;
+            pHashEntryInit = pHeaderBuf;
+            do {
+              nErrorCode = nInitCounter;
+              nCrc32 = nCrc32 >> 8 ^ gaBnCacheCrc32Table[((uint8_t)pHashEntryInit->dwSignature ^ nCrc32) & 0xff];
+              nInitCounter = nErrorCode - 1;
+              pHashEntryInit = (D2BnCacheFileHeaderStrc*)((uintptr_t)&pHashEntryInit->dwSignature + 1);
+            } while (nInitCounter);
 
-      if (nTableByteSize != ~nCrc32) {
-        nErrorCode += 3;
-        goto warn_invalid_cache;
-      }
+            if (nTableByteSize != ~nCrc32) {
+              nErrorCode += 3;
+              goto warn_invalid_cache;
+            }
 
-      pHeaderBuf->dwHeaderCrc32 = nTableByteSize;
-      if (!pHeaderBuf->dwHashTableOffset || (nCrc32 = pHeaderBuf->nHashTableSize , !nCrc32)) {
-        nErrorCode = 5;
-        goto warn_invalid_cache;
-      }
-      if (!pHeaderBuf->dwBlockTableOffset || !pHeaderBuf->nBlockTableSize) {
-        nErrorCode = 6;
-        goto warn_invalid_cache;
-      }
-      if (nCrc32 < 0x400) {
-        nCrc32 = 0x400;
-      }
+            pHeaderBuf->dwHeaderCrc32 = nTableByteSize;
+            if (!pHeaderBuf->dwHashTableOffset || (nCrc32 = pHeaderBuf->nHashTableSize , !nCrc32)) {
+              nErrorCode = 5;
+              goto warn_invalid_cache;
+            }
+            if (!pHeaderBuf->dwBlockTableOffset || !pHeaderBuf->nBlockTableSize) {
+              nErrorCode = 6;
+              goto warn_invalid_cache;
+            }
+            if (nCrc32 < 0x400) {
+              nCrc32 = 0x400;
+            }
 
-      nTableByteSize = nCrc32 * 0x10;
-      if (pHeaderBuf->dwHashTableOffset + nTableByteSize > nFileSize) {
-        nErrorCode = 7;
-        goto warn_invalid_cache;
-      }
+            nTableByteSize = nCrc32 * 0x10;
+            if (pHeaderBuf->dwHashTableOffset + nTableByteSize > nFileSize) {
+              nErrorCode = 7;
+              goto warn_invalid_cache;
+            }
 
-      gpCacheBufferPoolFirst = (uint8_t*)Storm::Source::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1cc, 8);
-      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwHashTableOffset, (PLONG)0x0, 0);
-      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, gpCacheBufferPoolFirst, nTableByteSize, &nBytesRead2, (LPOVERLAPPED)0x0);
-      if (nBytesRead2 != nTableByteSize) {
-        nErrorCode = 8;
-        goto warn_invalid_cache;
-      }
+            gpCacheBufferPoolFirst = (uint8_t*)Storm::Source::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1cc, 8);
+            /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwHashTableOffset, (PLONG)0x0, 0);
+            /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, gpCacheBufferPoolFirst, nTableByteSize, &nBytesRead2, (LPOVERLAPPED)0x0);
+            if (nBytesRead2 != nTableByteSize) {
+              nErrorCode = 8;
+              goto warn_invalid_cache;
+            }
 
-      nTableSize = CACHE_ComputeCRC32(nTableByteSize, gpCacheBufferPoolFirst);
-      if (gpCacheFileHeader->dwHashTableCrc32 != nTableSize) {
-        nErrorCode = 9;
-        goto warn_invalid_cache;
-      }
+            nTableSize = CACHE_ComputeCRC32(nTableByteSize, gpCacheBufferPoolFirst);
+            if (gpCacheFileHeader->dwHashTableCrc32 != nTableSize) {
+              nErrorCode = 9;
+              goto warn_invalid_cache;
+            }
 
-      nTableSize = CACHE_HashString(3, "(hash table)");
-      CACHE_DecryptBlock(nTableSize, (uint32_t*)gpCacheBufferPoolFirst, nTableByteSize);
-      nCrc32 = gpCacheFileHeader->nBlockTableSize;
-      if (nCrc32 < 0x400) {
-        nCrc32 = 0x400;
-      }
+            nTableSize = CACHE_HashString(3, "(hash table)");
+            CACHE_DecryptBlock(nTableSize, (uint32_t*)gpCacheBufferPoolFirst, nTableByteSize);
+            nCrc32 = gpCacheFileHeader->nBlockTableSize;
+            if (nCrc32 < 0x400) {
+              nCrc32 = 0x400;
+            }
 
-      nTableByteSize = nCrc32 * 0x10;
-      if (gpCacheFileHeader->dwBlockTableOffset + nTableByteSize > nFileSize) {
-        nErrorCode = 10;
-        goto warn_invalid_cache;
-      }
+            nTableByteSize = nCrc32 * 0x10;
+            if (gpCacheFileHeader->dwBlockTableOffset + nTableByteSize > nFileSize) {
+              nErrorCode = 10;
+              goto warn_invalid_cache;
+            }
 
-      gpCacheBlockTable = Storm::Source::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1e2, 8);
-      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwBlockTableOffset, (PLONG)0x0, 0);
-      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, gpCacheBlockTable, nTableByteSize, &nBytesRead2, (LPOVERLAPPED)0x0);
-      if (nBytesRead2 != nTableByteSize) {
-        nErrorCode = 0xb;
-        goto warn_invalid_cache;
-      }
+            gpCacheBlockTable = Storm::Source::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1e2, 8);
+            /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwBlockTableOffset, (PLONG)0x0, 0);
+            /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, gpCacheBlockTable, nTableByteSize, &nBytesRead2, (LPOVERLAPPED)0x0);
+            if (nBytesRead2 != nTableByteSize) {
+              nErrorCode = 0xb;
+              goto warn_invalid_cache;
+            }
 
-      nTableSize = CACHE_ComputeCRC32(nTableByteSize, (uint8_t*)gpCacheBlockTable);
-      if (gpCacheFileHeader->dwBlockTableCrc32 != nTableSize) {
-        nErrorCode = 0xc;
-        goto warn_invalid_cache;
-      }
+            nTableSize = CACHE_ComputeCRC32(nTableByteSize, (uint8_t*)gpCacheBlockTable);
+            if (gpCacheFileHeader->dwBlockTableCrc32 != nTableSize) {
+              nErrorCode = 0xc;
+              goto warn_invalid_cache;
+            }
 
-      nTableSize = CACHE_HashString(3, "(block table)");
-      CACHE_DecryptBlock(nTableSize, (uint32_t*)gpCacheBlockTable, nTableByteSize);
+            nTableSize = CACHE_HashString(3, "(block table)");
+            CACHE_DecryptBlock(nTableSize, (uint32_t*)gpCacheBlockTable, nTableByteSize);
+            break;
+          }
+      }
     }
 
     gbCacheIsOpen = 1;

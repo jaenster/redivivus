@@ -81,18 +81,9 @@ TSLink<::CELLIST>* __thiscall NextLink_Unreferenced2(TSLink<::CELLIST>* pThis, i
 }
 
 template<> uint32_t TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::CalcChunkSize(uint32_t nCount) {
-    uint32_t nStripped;
     if (nCount < 0x15) {
-      uint32_t nPrevSize;
-      nStripped = nCount - 1 & nCount;
-      while (true) {
-        nPrevSize = nStripped;
-        if (!nPrevSize) {
-          break;
-        }
-
-        nCount = nPrevSize;
-        nStripped = nPrevSize - 1 & nPrevSize;
+      while (nCount & nCount - 1) {
+        nCount &= nCount - 1;
       }
 
       if (nCount < 1) {
@@ -223,10 +214,10 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::Next(::CELLIST * pNo
     uint32_t nOffsetOrRef;
     if (pNode) {
       nOffsetOrRef = *(uint32_t*)((uintptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-      return (::CELLIST*)((int)nOffsetOrRef <= 0 ? 0 : nOffsetOrRef);
+    } else {
+      nOffsetOrRef = this->m_terminator.m_next;
     }
 
-    nOffsetOrRef = this->m_terminator.m_next;
     return (::CELLIST*)((int)nOffsetOrRef <= 0 ? 0 : nOffsetOrRef);
 }
 
@@ -732,11 +723,10 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     }
     if (nTempSentinel.m_terminator.m_next < 0) {
       *(TSLink<::CELLIST>**)~nTempSentinel.m_terminator.m_next = nTempSentinel.m_terminator.m_prevlink;
-      nTempSentinel.m_terminator.m_prevlink->m_next = nTempSentinel.m_terminator.m_next;
-      return;
+    } else {
+      *(TSLink<::CELLIST>**)(nTempSentinel.m_terminator.m_next + (uintptr_t)&nTempSentinel + (4 - nTempSentinel.m_terminator.m_prevlink->m_next)) = nTempSentinel.m_terminator.m_prevlink;
     }
 
-    *(TSLink<::CELLIST>**)(nTempSentinel.m_terminator.m_next + (uintptr_t)&nTempSentinel + (4 - nTempSentinel.m_terminator.m_prevlink->m_next)) = nTempSentinel.m_terminator.m_prevlink;
     nTempSentinel.m_terminator.m_prevlink->m_next = nTempSentinel.m_terminator.m_next;
 }
 
@@ -772,18 +762,9 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* TSHashTableReuse<CELLIS
 }
 
 template<> uint32_t TSGrowableArray<CELLIST>::CalcChunkSize(uint32_t nCount) {
-    uint32_t nPrev;
     if (nCount < 8) {
-      uint32_t nMasked;
-      nPrev = nCount - 1 & nCount;
-      while (true) {
-        nMasked = nPrev;
-        if (!nMasked) {
-          break;
-        }
-
-        nCount = nMasked;
-        nPrev = nMasked - 1 & nMasked;
+      while (nCount & nCount - 1) {
+        nCount &= nCount - 1;
       }
 
       if (nCount < 1) {

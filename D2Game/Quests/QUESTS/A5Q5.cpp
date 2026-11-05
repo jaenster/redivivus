@@ -665,12 +665,7 @@ void __fastcall Q35_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 // Quest event 10 (player leaves game) for Q35: removes the leaving player's GUID (pQuestArgs->pPlayer->dwUnitId, or -1 with no player) from pQuestData->sQuestGUID via a tail jump to QUESTGUID_RemovePlayerFromList.
 // Evidence: Q35_InitData stores it at sStateFunctions slot 10 (+0xc8); the slot is a QUESTCALLBACK (fastcall ECX=pQuestData, EDX=pQuestArgs). Was the label SERVER_QUEST_Q35_Callback_10 (kept as a secondary label).
 void __fastcall Q35_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // [A5Q5 = Rite of Passage] Q35_SetCannotComplete: per-player callback run after the Ancients die. If a player is NOT Completed and NOT JustCompleted (e.g. under the level gate, so they missed credit), marks RiteOfPassage CannotCompleteQuestInGame and sends packet 0x23 — they must re-fight in a new game.
@@ -1170,13 +1165,7 @@ static void Q35_SetStatueAnimMode(D2QuestDataA5Q5Strc * pQuestData, D2ObjectInit
 void __fastcall Objects_InitFn65_AncientStatue2(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    if (!pInitArg->pObject) {
-      pQuestSpecificData->anStatueObjectGUID[0] = -1;
-      Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
-      return;
-    }
-
-    pQuestSpecificData->anStatueObjectGUID[0] = pInitArg->pObject->nUnitGUID;
+    pQuestSpecificData->anStatueObjectGUID[0] = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
     Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
 }
 
@@ -1184,13 +1173,7 @@ void __fastcall Objects_InitFn65_AncientStatue2(D2ObjectInitFnArg * pInitArg) {
 void __fastcall Objects_InitFn63_AncientStatue3(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    if (!pInitArg->pObject) {
-      pQuestSpecificData->anStatueObjectGUID[1] = -1;
-      Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
-      return;
-    }
-
-    pQuestSpecificData->anStatueObjectGUID[1] = pInitArg->pObject->nUnitGUID;
+    pQuestSpecificData->anStatueObjectGUID[1] = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
     Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
 }
 
@@ -1198,13 +1181,7 @@ void __fastcall Objects_InitFn63_AncientStatue3(D2ObjectInitFnArg * pInitArg) {
 void __fastcall Objects_InitFn64_AncientStatue1(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    if (!pInitArg->pObject) {
-      pQuestSpecificData->anStatueObjectGUID[2] = -1;
-      Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
-      return;
-    }
-
-    pQuestSpecificData->anStatueObjectGUID[2] = pInitArg->pObject->nUnitGUID;
+    pQuestSpecificData->anStatueObjectGUID[2] = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
     Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
 }
 

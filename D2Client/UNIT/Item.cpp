@@ -1711,12 +1711,7 @@ void __fastcall HandleItemPutInContainer(uint8_t * pBytes) {
 
     UI::ui::UI_SendMouseMoveMessage();
     ITEM_RemoveUninterruptableState(pItem);
-    if (!pItem) {
-      UI::npcmenu::NPCMENU_OnItemPutInContainer(-1);
-      return;
-    }
-
-    UI::npcmenu::NPCMENU_OnItemPutInContainer(pItem->nUnitGUID);
+    UI::npcmenu::NPCMENU_OnItemPutInContainer(!pItem ? -1 : pItem->nUnitGUID);
 }
 
 // Client-side handler that processes a server packet removing an item from a container/inventory. Parses item details (ExtractItemDetails), resolves the owner unit and the item by GUID; verifies the item belongs to the owner's inventory (halts with ERROR_UnrecoverableInternalError on mismatch). Removes the item's stat list (unless broken), then either drops it to the ground, or on RELOAD recreates it from the body packet and places it on the cursor (ITEM_SetItemOnHand); on REMOVED it deletes the server-object-table entry and clears the cursor/plays a sound for corpse/merc pages. Notifies the NPC menu when the owner is the local player.

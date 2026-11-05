@@ -1132,12 +1132,11 @@ static void DIALOG_CenterStringLine(D2DialogStrc * pDialog, int32_t nIndex) {
     if (nTextWidth >= nBgWidth) {
       pDialog->aStringData[nIndex].nTextWidth = nTextWidth;
       pDialog->aStringData[nIndex].nXOffset = 0;
-      D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
-      return;
+    } else {
+      pDialog->aStringData[nIndex].nTextWidth = nTextWidth;
+      pDialog->aStringData[nIndex].nXOffset = (nBgWidth - nTextWidth + 1) / 2 + 1;
     }
 
-    pDialog->aStringData[nIndex].nTextWidth = nTextWidth;
-    pDialog->aStringData[nIndex].nXOffset = (nBgWidth - nTextWidth + 1) / 2 + 1;
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 

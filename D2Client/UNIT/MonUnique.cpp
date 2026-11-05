@@ -853,9 +853,9 @@ void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUM
       return;
     }
 
+    D2DynamicPathStrc* pMissilePath = pUnit->pPath.pDynamicPath;
     D2UnitStrc* pTargetUnit = CUnit::GetConfirmedTargetUnit(pOwnerUnit);
     if (!pTargetUnit) {
-      D2DynamicPathStrc* pMissilePath = pUnit->pPath.pDynamicPath;
       nMissileTargetX = D2Common::PATH::DynamicPath::GetXSP1(pMissilePath);
       nMissileTargetY = D2Common::PATH::DynamicPath::GetYSP1(pMissilePath);
     } else {

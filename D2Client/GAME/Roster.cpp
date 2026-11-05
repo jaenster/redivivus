@@ -352,8 +352,7 @@ void AllocRosterPartyList(uint16_t nPartyId) {
     while (true) {
       if (!pPartyIter) {
         pNewParty = D2_NEW_AT(D2RosterPartyListStrc, ".\\GAME\\Roster.cpp", 0x1fc);
-        *(uint32_t*)pNewParty = 0;
-        pNewParty->pOwner = 0;
+        memset(pNewParty, 0, sizeof(*pNewParty));
         pNewParty->nPartyId = nPartyId;
         pNewParty->pNext = pRosterPartyList;
         pRosterPartyList = pNewParty;
@@ -554,8 +553,6 @@ void __stdcall ROSTER_SortAllParties() {
 
 void __stdcall ROSTER_FlattenPartyListsIntoSingleRosterChain() {
     D2RosterPartyListStrc* pPartyList;
-    D2RosterStrc* pWalkCurrent;
-    D2RosterStrc* pWalkNext;
     D2RosterStrc* pChainTail = 0;
     for (pPartyList = pRosterPartyList; pPartyList; pPartyList = pPartyList->pNext) {
       if (pChainTail) {
@@ -567,15 +564,8 @@ void __stdcall ROSTER_FlattenPartyListsIntoSingleRosterChain() {
 
       pPartyList->pOwner = 0;
       if (pChainTail) {
-        pWalkNext = pChainTail->pNext;
-        while (true) {
-          pWalkCurrent = pWalkNext;
-          if (!pWalkCurrent) {
-            break;
-          }
-
-          pChainTail = pWalkCurrent;
-          pWalkNext = pWalkCurrent->pNext;
+        while (pChainTail->pNext) {
+          pChainTail = pChainTail->pNext;
         }
       }
     }
@@ -632,12 +622,10 @@ void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore) 
     }
     if (nArenaScore & 0x8000) {
       pRoster->nArenaScore = nArenaScore - 0x10000;
-      ROSTER_RebuildPlayerParty();
-      UI::Party::ResetPartyUi();
-      return;
+    } else {
+      pRoster->nArenaScore = (uint32_t)nArenaScore;
     }
 
-    pRoster->nArenaScore = (uint32_t)nArenaScore;
     ROSTER_RebuildPlayerParty();
     UI::Party::ResetPartyUi();
 }
@@ -1267,7 +1255,7 @@ void __fastcall AllocRosterOther(int32_t nOwnerGUID, int32_t nRosterGUID) {
       exit(-1);
     }
 
-    pRosterLinkList->pNext = 0;
+    memset(pRosterLinkList, 0, sizeof(*pRosterLinkList));
     pRosterLinkList->nRosterGUID = nRosterGUID;
     pRosterLinkList->pNext = pRoster->pRosterLinkList;
     pRoster->pRosterLinkList = pRosterLinkList;
@@ -1303,11 +1291,10 @@ void __fastcall FreeAllRosterPlayer(int32_t nOwnerGUID, int32_t nRosterGUID) {
 
     if (pPrevLink) {
       pPrevLink->pNext = pMemoryToFree->pNext;
-      D2_FREE_AT(pMemoryToFree, ".\\GAME\\Roster.cpp", 0x6bd);
-      return;
+    } else {
+      pRoster->pRosterLinkList = pMemoryToFree->pNext;
     }
 
-    pRoster->pRosterLinkList = pMemoryToFree->pNext;
     D2_FREE_AT(pMemoryToFree, ".\\GAME\\Roster.cpp", 0x6bd);
 }
 
@@ -1469,33 +1456,31 @@ void __fastcall ROSTER_AllocOrUpdatePlayer(int nPlayerGUID, int nCharType, char 
     D2RosterStrc* pNewRoster = GetRosterByGuidOrName(szPlayerName, nPlayerGUID);
     if (pNewRoster) {
       ROSTER_InitializeFields(pNewRoster, szPlayerName, szGuildTag, nPlayerGUID, nCharType, nUnitLevel, nPartyId, bInParty, nGuildFlags, szGuildName);
-      ROSTER_RebuildPlayerParty();
-      UI::Party::ResetPartyUi();
-      return;
-    }
-
-    for (; pNewRoster = 0 , pDVar1 && (pNewRoster = pDVar1 , pDVar1->nRosterGUID != nPlayerGUID); pDVar1 = pDVar1->pNext) {
-      pPrev = pDVar1;
-    }
-
-    if (pNewRoster) {
-      if (pPrev) {
-        pPrev->pNext = pNewRoster->pNext;
-        pNewRoster->pNext = 0;
-      } else {
-        gpRosterOther = pNewRoster->pNext;
-        pNewRoster->pNext = 0;
-      }
     } else {
-      pNewRoster = D2_NEW_AT(D2RosterStrc, ".\\GAME\\Roster.cpp", 0xd8);
-      memset(pNewRoster, 0, 0x84);
+      for (; pNewRoster = 0 , pDVar1 && (pNewRoster = pDVar1 , pDVar1->nRosterGUID != nPlayerGUID); pDVar1 = pDVar1->pNext) {
+        pPrev = pDVar1;
+      }
+
+      if (pNewRoster) {
+        if (pPrev) {
+          pPrev->pNext = pNewRoster->pNext;
+          pNewRoster->pNext = 0;
+        } else {
+          gpRosterOther = pNewRoster->pNext;
+          pNewRoster->pNext = 0;
+        }
+      } else {
+        pNewRoster = D2_NEW_AT(D2RosterStrc, ".\\GAME\\Roster.cpp", 0xd8);
+        memset(pNewRoster, 0, 0x84);
+      }
+
+      pPlayerList = UNIT::PlayerList::AllocPlayerList();
+      pNewRoster->pPlayerList = pPlayerList;
+      ROSTER_InitializeFields(pNewRoster, szPlayerName, szGuildTag, nPlayerGUID, nCharType, nUnitLevel, nPartyId, bInParty, nGuildFlags, szGuildName);
+      pNewRoster->pNext = gpRosterPlayers;
+      gpRosterPlayers = pNewRoster;
     }
 
-    pPlayerList = UNIT::PlayerList::AllocPlayerList();
-    pNewRoster->pPlayerList = pPlayerList;
-    ROSTER_InitializeFields(pNewRoster, szPlayerName, szGuildTag, nPlayerGUID, nCharType, nUnitLevel, nPartyId, bInParty, nGuildFlags, szGuildName);
-    pNewRoster->pNext = gpRosterPlayers;
-    gpRosterPlayers = pNewRoster;
     ROSTER_RebuildPlayerParty();
     UI::Party::ResetPartyUi();
     return;

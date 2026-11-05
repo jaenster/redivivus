@@ -13,7 +13,7 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0> gCelCmpCacheHandler; D2_GLOBAL_GUARD(gCelCmpCacheHandler, "gCelCmpCacheHandler");
+TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0> gCelCmpCacheHandler; D2_GLOBAL_GUARD(gCelCmpCacheHandler, "gCelCmpCacheHandler");
 
 _RTL_CRITICAL_SECTION lpCriticalSection_008f03cc = {}; D2_GLOBAL_GUARD(lpCriticalSection_008f03cc, "lpCriticalSection_008f03cc");
 
@@ -132,17 +132,25 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
 
-} // namespace D2Client::UI::ui
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -312,14 +320,10 @@ namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
 
-namespace D2Client::Mouse {
+namespace D2Win::Src::D2WinMain {
 
-} // namespace D2Client::Mouse
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::Forms {
+namespace D2Win::D2GFX {
 
-} // namespace D2Client::Forms
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

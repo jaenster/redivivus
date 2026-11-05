@@ -2263,7 +2263,7 @@ static uint32_t gdwTextPopupExpireTime = 0; D2_STATIC_GUARD(gdwTextPopupExpireTi
 namespace D2Client::UI::Dialog {
 D2DialogStrc * DialogHandle = 0; D2_GLOBAL_GUARD(DialogHandle, "D2Client::UI::Dialog::DialogHandle");
 } // namespace D2Client::UI::Dialog
-static ListBoxWrapper * gpTextMessageLogHead = 0; D2_STATIC_GUARD(gpTextMessageLogHead, "gpTextMessageLogHead");
+static ::ListBoxWrapper * gpTextMessageLogHead = 0; D2_STATIC_GUARD(gpTextMessageLogHead, "gpTextMessageLogHead");
 static uint32_t gbTextScrollBoxAnimating = 0; D2_STATIC_GUARD(gbTextScrollBoxAnimating, "gbTextScrollBoxAnimating");
 static uint32_t gbTextScrollBoxActive = 0; D2_STATIC_GUARD(gbTextScrollBoxActive, "gbTextScrollBoxActive");
 static uint32_t gbTextStaticPopupActive = 0; D2_STATIC_GUARD(gbTextStaticPopupActive, "gbTextStaticPopupActive");
@@ -2765,11 +2765,7 @@ int __fastcall Unreferenced_0049dae0(int param_1, int param_2) {
 ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(uint16_t * * ppwszText) {
     uint16_t** ppwszSrcLine;
     ScreenMessage_t* pMessage = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0x9d0);
-    memset(pMessage->apwszLines, 0, 6 * sizeof(pMessage->apwszLines[0]));
-    *(uint32_t*)&pMessage->nLineCount = 0;
-    *(uint32_t*)((uintptr_t)&pMessage->color + 2) = 0;
-    *(uint32_t*)((uintptr_t)&pMessage->dwMessageExpiration + 2) = 0;
-    *(uint16_t*)((uintptr_t)&pMessage->pNext + 2) = 0;
+    memset(pMessage, 0, sizeof(*pMessage));
     int i = 0;
     if ((uint16_t)*(short int*)(ppwszText + 6) > 0) {
       uint16_t* pwszCopy;
@@ -2988,7 +2984,8 @@ void __stdcall TEXT_DrawPartyMessages() {
             nRectH = 0x10;
             nPixelWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pMessage->apwszLines[0]);
             nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pMessage->apwszLines[0], nPixelWidth);
-            Engine::Gfx::D2GFX_DrawSolidRectExBySize(nScreenX - 5, nRowY - nLineY / 2 - 0x81 + ScreenSizeY, nPixelWidth + 10, nRectH, nRectColor, eDrawMode);
+            nPixelWidth += 10;
+            Engine::Gfx::D2GFX_DrawSolidRectExBySize(nScreenX - 5, nRowY - nLineY / 2 - 0x81 + ScreenSizeY, nPixelWidth, nRectH, nRectColor, eDrawMode);
             D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[0], nScreenX, (int)pPrevMessage - nLineY / 2 - 0x73 + ScreenSizeY, pMessageHead->color, 0);
           }
 
@@ -3164,11 +3161,11 @@ static uint8_t TEXT_ConvertCharToWideWithLanguage(uint32_t dwUnused, char * szTe
 }
 
 void __stdcall TEXT_FreeStaticTextBox() {
-    D2TextBoxStrc* pPopup = gpStaticTextPopup;
     if (!gpStaticTextPopup) {
       return;
     }
 
+    D2TextBoxStrc* pPopup = gpStaticTextPopup;
     TEXT_FreeTextLineList(gpStaticTextPopup->pLineList);
     D2_FREE_AT(pPopup, ".\\UI\\text.cpp", 0x68e);
     gpStaticTextPopup = 0;
@@ -3543,8 +3540,7 @@ static BOOL TEXT_FormatEventMessage(int32_t pEventData, uint16_t * wszText) {
 
     if (pPlayerUnit_lcl) {
       nPlayerGUID = pPlayerUnit_lcl->nUnitGUID;
-      nIgnoreFlag = 4;
-      nIgnoreFlag = UNIT::PlayerList::GetFlag(nPlayerGUID, GAME::Roster::GetRosterGUID(pRoster), nIgnoreFlag);
+      nIgnoreFlag = UNIT::PlayerList::GetFlag(nPlayerGUID, GAME::Roster::GetRosterGUID(pRoster), 4);
       if (nIgnoreFlag) {
         return 0;
       }
@@ -6498,7 +6494,6 @@ int __stdcall TEXT_CloseMessageLogDialog() {
 
 void __stdcall TEXT_OpenMessageLogDialog() {
     fpDialogFunc pfnCloseCallback;
-    uint32_t nEnabled;
     int32_t nEntryIdx;
     uint32_t nSehTryLevel = -1;
     pfnEHHandlerRoutine puStack12 = __GSHandlerCheck_EH_6ca07b;
@@ -6803,21 +6798,20 @@ D2TextBoxStrc * __fastcall TEXT_AllocTextBox(uint16_t * wszText, int32_t nWrapMo
     if (nWrapMode == 3) {
       pParsedLines = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wszText, &pTextBox->nLineCount, 0xb4);
       pTextBox->pLineList = pParsedLines;
-      TEXT_RecalcTextBoxDimensions(pTextBox);
-      return pTextBox;
+    } else {
+      int32_t nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(8);
+      pParsedLines = TEXT_ParseMultilineString(wszText, &pTextBox->nLineCount, &pTextBox->nScrollRate);
+      pTextBox->pLineList = pParsedLines;
+      pTextBox->nWidth = 0x145;
+      pTextBox->nHeight = 0x70;
+      pTextBox->dwUnused1A = 0;
+      pTextBox->dwUnused1E = 0;
+      pTextBox->dwUnused22 = 0;
+      pTextBox->dwUnused26 = 0;
+      pTextBox->wUnused2A = 0;
+      D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);
     }
 
-    int32_t nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(8);
-    pParsedLines = TEXT_ParseMultilineString(wszText, &pTextBox->nLineCount, &pTextBox->nScrollRate);
-    pTextBox->pLineList = pParsedLines;
-    pTextBox->nWidth = 0x145;
-    pTextBox->nHeight = 0x70;
-    pTextBox->dwUnused1A = 0;
-    pTextBox->dwUnused1E = 0;
-    pTextBox->dwUnused22 = 0;
-    pTextBox->dwUnused26 = 0;
-    pTextBox->wUnused2A = 0;
-    D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);
     TEXT_RecalcTextBoxDimensions(pTextBox);
     return pTextBox;
 }
@@ -6914,12 +6908,10 @@ static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, void * pTextBox) {
 void __stdcall TEXT_CloseNpcInteraction() {
     if (gnTextNpcInteractGuid) {
       npcmenu::NPCMENU_CloseScrollAndInteraction(gnTextNpcGuid);
-      ui::UI_UpdateCursorAnimationTimer();
-      gnTextNpcInteractGuid = 0;
-      return;
+    } else {
+      TEXT_CloseScrollingText();
     }
 
-    TEXT_CloseScrollingText();
     ui::UI_UpdateCursorAnimationTimer();
     gnTextNpcInteractGuid = 0;
 }

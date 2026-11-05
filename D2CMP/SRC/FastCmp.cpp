@@ -1569,9 +1569,9 @@ void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride) {
         iVar2 = nDeltaX * nDeltaX + nDeltaY * nDeltaY;
         *pMaskBase = (uint32_t)(iVar2 < 0x640);
         if (iVar2 < 0x640) {
-          fSqrtResult = __CIsqrt((long double)iVar2);
+          fSqrtResult = sqrt((double)iVar2);
           iVar3 = (int)fSqrtResult;
-          fSqrtResult = __CIsqrt((long double)(iVar2 * iVar2 / 0x640));
+          fSqrtResult = sqrt((double)(iVar2 * iVar2 / 0x640));
           iVar2 = (int)fSqrtResult;
           if ((int)fSqrtResult < iVar3 / 2) {
             iVar2 = iVar3 / 2;

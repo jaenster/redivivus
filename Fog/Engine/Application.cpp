@@ -95,7 +95,7 @@ static uint32_t DEBUG_GetPEImageType(short * nMagic) {
       return 1;
     }
 
-    return *nMagic != 0x20b ? 0 : 0x2;
+    return *nMagic == 0x20b ? 0x2 : 0;
 }
 
 static uint32_t DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, short * pOptHeader) {

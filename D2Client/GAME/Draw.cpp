@@ -478,12 +478,17 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nS
 static void __stdcall DRAW_CalcRoofLightGridPerspective(D2GfxLightExStrc * pLightEntry, int32_t nTileX, int32_t nTileY, int32_t nDepth, int32_t bBorderOnly, int32_t nSplitSide) {
     int* pXAdjust;
     int nScreenHalfAdj = 0;
-    if (nSplitSide != 1) {
-      if (nSplitSide == 2) {
-        nScreenHalfAdj = ScreenSizeX / 4;
-      }
-    } else {
-      nScreenHalfAdj = -(ScreenSizeX / 4);
+    switch (nSplitSide) {
+      case 1:
+        {
+          nScreenHalfAdj = -(ScreenSizeX / 4);
+          break;
+        }
+      case 2:
+        {
+          nScreenHalfAdj = ScreenSizeX / 4;
+          break;
+        }
     }
 
     int nRowY = 0;

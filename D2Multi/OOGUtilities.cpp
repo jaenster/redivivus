@@ -327,19 +327,19 @@ int __stdcall OOGUTIL_JoinDefaultChannel(D2ControlMsg * pControlMsg) {
       uint16_t* wszTitle;
       wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
       ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
-      return 1;
+    } else {
+      pNetworkUnknown->pfnNewsShutdown();
+      ChatDlg::CHATDLG_EnqueueClearMessage();
+      ChatDlg::CHATDLG_CreateAllForms();
+      int32_t bRegLoaded = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szDefaultChannel, 0x20);
+      char* szChannelName = szDefaultChannel;
+      if (!bRegLoaded) {
+        szChannelName = "";
+      }
+
+      OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
     }
 
-    pNetworkUnknown->pfnNewsShutdown();
-    ChatDlg::CHATDLG_EnqueueClearMessage();
-    ChatDlg::CHATDLG_CreateAllForms();
-    int32_t bRegLoaded = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szDefaultChannel, 0x20);
-    char* szChannelName = szDefaultChannel;
-    if (!bRegLoaded) {
-      szChannelName = "";
-    }
-
-    OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
     return 1;
 }
 
@@ -1762,8 +1762,7 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionDown(D2ControlMsg * pControlMsg) {
 }
 
 BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char * szText) {
-    char cVar1 = *szText;
-    switch (cVar1) {
+    switch (*szText) {
       case ' ':
 
       case '\'':
@@ -1774,13 +1773,13 @@ BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char *
         return 1;
     }
 
-    if (cVar1 >= '0' && cVar1 <= '9') {
+    if (*szText >= '0' && *szText <= '9') {
       return 1;
     }
-    if (cVar1 >= 'A' && cVar1 <= 'Z') {
+    if (*szText >= 'A' && *szText <= 'Z') {
       return 1;
     }
-    if (cVar1 >= 'a' && cVar1 <= 'z') {
+    if (*szText >= 'a' && *szText <= 'z') {
       return 1;
     }
 
@@ -2899,13 +2898,12 @@ void __stdcall OOGUTIL_LoadLevelRestrictionSetting() {
     szLevelBuf[3] = '\0';
     if (nLevelRestriction == 0x29a) {
       D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListLevelRestrictionCheckbox, 0);
-      OOGUTIL_UpdateLevelRestrictionControls();
-      return;
+    } else {
+      Storm::Source::SSTR::SStrPrintf(szLevelBuf, 4, "%d", nLevelRestriction);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUILevelRestrictionEditBox, szLevelBuf);
+      D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListLevelRestrictionCheckbox, 1);
     }
 
-    Storm::Source::SSTR::SStrPrintf(szLevelBuf, 4, "%d", nLevelRestriction);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUILevelRestrictionEditBox, szLevelBuf);
-    D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListLevelRestrictionCheckbox, 1);
     OOGUTIL_UpdateLevelRestrictionControls();
 }
 

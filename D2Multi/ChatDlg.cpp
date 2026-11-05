@@ -95,7 +95,7 @@ static uint32_t gnLadderRequestedCharIndex = -0x1; D2_STATIC_GUARD(gnLadderReque
 static int32_t gnLadderEntryTotal = 0; D2_STATIC_GUARD(gnLadderEntryTotal, "gnLadderEntryTotal");
 // also labelled: gnChatRoomListScrollPos
 static int32_t gnLadderListRowCount = 0; D2_STATIC_GUARD(gnLadderListRowCount, "gnLadderListRowCount");
-D2WinButton * gaChatUserListButtonArray[11] = {}; D2_GLOBAL_GUARD(gaChatUserListButtonArray, "gaChatUserListButtonArray");
+::D2WinButton * gaChatUserListButtonArray[11] = {}; D2_GLOBAL_GUARD(gaChatUserListButtonArray, "gaChatUserListButtonArray");
 uint32_t gbChatOptionButtonState = 0; D2_GLOBAL_GUARD(gbChatOptionButtonState, "gbChatOptionButtonState");
 static D2ControlStrc * FORMS_pListEx[32] = {}; D2_STATIC_GUARD(FORMS_pListEx, "FORMS_pListEx");
 static char gszLadderCharNameFilter[16] = {}; D2_STATIC_GUARD(gszLadderCharNameFilter, "gszLadderCharNameFilter");
@@ -128,11 +128,11 @@ DC6 * gpDC6ChatLeftButtons3 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons3, "gpDC6Ch
 DC6 * gpDC6ChatRightTopButtonsAlt = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtonsAlt, "gpDC6ChatRightTopButtonsAlt");
 DC6 * gpDC6ChatRightTopButtons = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtons, "gpDC6ChatRightTopButtons");
 DC6 * gpDC6ChatArrows = 0; D2_GLOBAL_GUARD(gpDC6ChatArrows, "gpDC6ChatArrows");
-D2WinTextBox * gpCtlConfirmDialog = 0; D2_GLOBAL_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
+::D2WinTextBox * gpCtlConfirmDialog = 0; D2_GLOBAL_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
 // also labelled: gpCtlLobbyChannelListBtn
 D2ControlStrc * gpCtlLobbyAccountList = 0; D2_GLOBAL_GUARD(gpCtlLobbyAccountList, "gpCtlLobbyAccountList");
-D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_GLOBAL_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
-D2WinTextBox * pGameListCache = 0; D2_GLOBAL_GUARD(pGameListCache, "pGameListCache");
+::D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_GLOBAL_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
+::D2WinTextBox * pGameListCache = 0; D2_GLOBAL_GUARD(pGameListCache, "pGameListCache");
 DC6 * DCC_JoinGame = 0; D2_GLOBAL_GUARD(DCC_JoinGame, "DCC_JoinGame");
 DC6 * gpDC6BlankBckg2 = 0; D2_GLOBAL_GUARD(gpDC6BlankBckg2, "gpDC6BlankBckg2");
 DC6 * gpDC6GemButton = 0; D2_GLOBAL_GUARD(gpDC6GemButton, "gpDC6GemButton");
@@ -151,14 +151,14 @@ DC6 * gpDC6PaladinTab = 0; D2_GLOBAL_GUARD(gpDC6PaladinTab, "gpDC6PaladinTab");
 DC6 * gpDC6BarbarianTab = 0; D2_GLOBAL_GUARD(gpDC6BarbarianTab, "gpDC6BarbarianTab");
 DC6 * gpDC6DruidTab = 0; D2_GLOBAL_GUARD(gpDC6DruidTab, "gpDC6DruidTab");
 DC6 * gpDC6AssassinTab = 0; D2_GLOBAL_GUARD(gpDC6AssassinTab, "gpDC6AssassinTab");
-static D2WinButton * gpCtlLadderBtnOverall = 0; D2_STATIC_GUARD(gpCtlLadderBtnOverall, "gpCtlLadderBtnOverall");
-static D2WinButton * gpCtlLadderBtnAmazon = 0; D2_STATIC_GUARD(gpCtlLadderBtnAmazon, "gpCtlLadderBtnAmazon");
-static D2WinButton * gpCtlLadderBtnSorceress = 0; D2_STATIC_GUARD(gpCtlLadderBtnSorceress, "gpCtlLadderBtnSorceress");
-static D2WinButton * gpCtlLadderBtnNecromancer = 0; D2_STATIC_GUARD(gpCtlLadderBtnNecromancer, "gpCtlLadderBtnNecromancer");
-static D2WinButton * gpCtlLadderBtnPaladin = 0; D2_STATIC_GUARD(gpCtlLadderBtnPaladin, "gpCtlLadderBtnPaladin");
-static D2WinButton * gpCtlLadderBtnBarbarian = 0; D2_STATIC_GUARD(gpCtlLadderBtnBarbarian, "gpCtlLadderBtnBarbarian");
-static D2WinButton * gpCtlLadderBtnDruid = 0; D2_STATIC_GUARD(gpCtlLadderBtnDruid, "gpCtlLadderBtnDruid");
-static D2WinButton * gpCtlLadderBtnAssassin = 0; D2_STATIC_GUARD(gpCtlLadderBtnAssassin, "gpCtlLadderBtnAssassin");
+static ::D2WinButton * gpCtlLadderBtnOverall = 0; D2_STATIC_GUARD(gpCtlLadderBtnOverall, "gpCtlLadderBtnOverall");
+static ::D2WinButton * gpCtlLadderBtnAmazon = 0; D2_STATIC_GUARD(gpCtlLadderBtnAmazon, "gpCtlLadderBtnAmazon");
+static ::D2WinButton * gpCtlLadderBtnSorceress = 0; D2_STATIC_GUARD(gpCtlLadderBtnSorceress, "gpCtlLadderBtnSorceress");
+static ::D2WinButton * gpCtlLadderBtnNecromancer = 0; D2_STATIC_GUARD(gpCtlLadderBtnNecromancer, "gpCtlLadderBtnNecromancer");
+static ::D2WinButton * gpCtlLadderBtnPaladin = 0; D2_STATIC_GUARD(gpCtlLadderBtnPaladin, "gpCtlLadderBtnPaladin");
+static ::D2WinButton * gpCtlLadderBtnBarbarian = 0; D2_STATIC_GUARD(gpCtlLadderBtnBarbarian, "gpCtlLadderBtnBarbarian");
+static ::D2WinButton * gpCtlLadderBtnDruid = 0; D2_STATIC_GUARD(gpCtlLadderBtnDruid, "gpCtlLadderBtnDruid");
+static ::D2WinButton * gpCtlLadderBtnAssassin = 0; D2_STATIC_GUARD(gpCtlLadderBtnAssassin, "gpCtlLadderBtnAssassin");
 static DC6 * gpDC6SquelchAura = 0; D2_STATIC_GUARD(gpDC6SquelchAura, "gpDC6SquelchAura");
 static DC6 * gpDC6SelectAura = 0; D2_STATIC_GUARD(gpDC6SelectAura, "gpDC6SelectAura");
 DC6 * gpDC6NumberArrows1 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows1, "gpDC6NumberArrows1");
@@ -171,19 +171,19 @@ static DC6 * gpDC6OkayButton = 0; D2_STATIC_GUARD(gpDC6OkayButton, "gpDC6OkayBut
 // also labelled: gpLauncherMainWindow
 D2ControlStrc * gpCtlChannelDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgBackground, "gpCtlChannelDlgBackground");
 // also labelled: gpControlTcpIpGameListScroll
-D2WinTextBox * gpCtlChannelDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgTitle, "gpCtlChannelDlgTitle");
+::D2WinTextBox * gpCtlChannelDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgTitle, "gpCtlChannelDlgTitle");
 // also labelled: gpControlTcpIpGameListText
-D2WinTextBox * gpCtlChannelNameLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelNameLabel, "gpCtlChannelNameLabel");
+::D2WinTextBox * gpCtlChannelNameLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelNameLabel, "gpCtlChannelNameLabel");
 // also labelled: gpControlTcpIpGameListCancel
-D2WinTextBox * gpCtlChannelListLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelListLabel, "gpCtlChannelListLabel");
+::D2WinTextBox * gpCtlChannelListLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelListLabel, "gpCtlChannelListLabel");
 // also labelled: gpControlChannelInput
 D2ControlStrc * gpCtlChannelOkButton = 0; D2_GLOBAL_GUARD(gpCtlChannelOkButton, "gpCtlChannelOkButton");
 // also labelled: gpLauncherLogoWindow
 D2ControlStrc * gpCtlChannelDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgCancelButton, "gpCtlChannelDlgCancelButton");
 // also labelled: gpChatDlgSendButtonControl
-D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
-D2WinTextBox * gpCtlChannelList = 0; D2_GLOBAL_GUARD(gpCtlChannelList, "gpCtlChannelList");
-static D2WinTextBox * g_pLadderBoardTextBox = 0; D2_STATIC_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
+::D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
+::D2WinTextBox * gpCtlChannelList = 0; D2_GLOBAL_GUARD(gpCtlChannelList, "gpCtlChannelList");
+static ::D2WinTextBox * g_pLadderBoardTextBox = 0; D2_STATIC_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
 D2ControlStrc * ghWndGameNameEditBox = 0; D2_GLOBAL_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
 DC6 * gpDC6CreateGameBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateGameBckg, "gpDC6CreateGameBckg");
 static DC6 * gpDC6CreateGameButton = 0; D2_STATIC_GUARD(gpDC6CreateGameButton, "gpDC6CreateGameButton");
@@ -206,11 +206,11 @@ int gaFormList30InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList30InitialItems, 
 int gaFormList32InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList32InitialItems, "gaFormList32InitialItems");
 int32_t gaChatTextBoxFontParams[2] = {}; D2_GLOBAL_GUARD(gaChatTextBoxFontParams, "gaChatTextBoxFontParams");
 // also labelled: gpnChatMessages
-D2WinTextBox * gpChatMessagesTextBox = 0; D2_GLOBAL_GUARD(gpChatMessagesTextBox, "gpChatMessagesTextBox");
+::D2WinTextBox * gpChatMessagesTextBox = 0; D2_GLOBAL_GUARD(gpChatMessagesTextBox, "gpChatMessagesTextBox");
 // also labelled: gnChatDlgTabCompletionList
-D2WinEditBox * gpChatDlgInputEditBox = 0; D2_GLOBAL_GUARD(gpChatDlgInputEditBox, "gpChatDlgInputEditBox");
-D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews");
-D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
+::D2WinEditBox * gpChatDlgInputEditBox = 0; D2_GLOBAL_GUARD(gpChatDlgInputEditBox, "gpChatDlgInputEditBox");
+::D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews");
+::D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
 uint32_t gnOpenBNetMode = 0; D2_GLOBAL_GUARD(gnOpenBNetMode, "gnOpenBNetMode");
 static ChatDlgCallback gpfnChatDlgCallback = (ChatDlgCallback)0; D2_STATIC_GUARD(gpfnChatDlgCallback, "gpfnChatDlgCallback");
 static void * gpChatMessageQueueHead = 0; D2_STATIC_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
@@ -992,7 +992,8 @@ static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(LPRECT pRect, int32_t nLen
     }
 
     uint32_t pszCopy = Storm::Source::SSTR::SStrLen(pString);
-    char* szBufferOutput = (char*)D2_ALLOC_AT(pszCopy + 1, ".\\Src\\ChatDlg.cpp", 0xc28);
+    pszCopy += 1;
+    char* szBufferOutput = (char*)D2_ALLOC_AT(pszCopy, ".\\Src\\ChatDlg.cpp", 0xc28);
     pNode->pszText = szBufferOutput;
     if (szBufferOutput) {
       Storm::Source::SSTR::SStrCopy(szBufferOutput, pString, 0x7fffffff);
@@ -1456,9 +1457,9 @@ void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t bHardcore, int3
 
     Storm::Source::SSTR::SStrCopy(gszLadderCharNameFilter, szText, 0x7fffffff);
     if (nLadderRequestMode) {
-      g_nLadderFilterMode = !bHardcore * '\b' + 0x13;
+      g_nLadderFilterMode = bHardcore ? 0x13 : 0x1b;
     } else {
-      g_nLadderFilterMode = bHardcore ? 0 : 0x9;
+      g_nLadderFilterMode = !bHardcore ? 0x9 : 0;
     }
 
     gnLadderCurrentFilterMode = g_nLadderFilterMode;

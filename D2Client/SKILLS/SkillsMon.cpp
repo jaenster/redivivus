@@ -685,7 +685,7 @@ static D2UnitStrc * __stdcall SKILLSMON_CreateMissileWithSeed(int32_t * pVelocit
     sSkillArg.nUnitY = nUnitY;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
-    D2MissilesTxt* pMissileTxtBase = -1 < nMissileId && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    D2MissilesTxt* pMissileTxtBase = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxtBase) {
       return nullptr;
     }
@@ -1286,7 +1286,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
           goto spawn_missile_line;
         }
       }
-      if (-1 < nRelX) {
+      if (nRelX >= 0) {
         goto spawn_missile_line;
       }
       if (nRelY > 0) {
@@ -1644,25 +1644,30 @@ BOOL __fastcall Skills_CltDoFunc_Mon_BaalTaunt_AnimCycle(D2UnitStrc * pUnit, eD2
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     int32_t nRepeatCount = D2Common::Skills::SKILL_GetParam1(pSkill);
     int nFrame = pUnit->nGfxCurrentFrame >> 8;
-    if (nFrame != 6) {
-      if (nFrame == 0x16) {
-        if (nRepeatCount >= 4) {
-          D2Common::Units::SetSequenceFrame(pUnit, 0x28);
-          pUnit->nFrameCount = 0x1100;
+    switch (nFrame) {
+      case 6:
+        {
+          D2Common::Units::SetSequenceFrame(pUnit, 7);
+          pUnit->nFrameCount = 0x3200;
+          break;
+        }
+      case 0x16:
+        {
+          if (nRepeatCount >= 4) {
+            D2Common::Units::SetSequenceFrame(pUnit, 0x28);
+            pUnit->nFrameCount = 0x1100;
+            return 1;
+          }
+
+          D2Common::Skills::SKILL_SetParam1(pSkill, nRepeatCount + 1);
           return 1;
         }
-
-        D2Common::Skills::SKILL_SetParam1(pSkill, nRepeatCount + 1);
-        return 1;
-      }
-      if (nFrame == 0x1e) {
-        UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, Kick);
-        UNIT::CUnit::SetDeadFlag(pUnit);
-        return 1;
-      }
-    } else {
-      D2Common::Units::SetSequenceFrame(pUnit, 7);
-      pUnit->nFrameCount = 0x3200;
+      case 0x1e:
+        {
+          UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, Kick);
+          UNIT::CUnit::SetDeadFlag(pUnit);
+          return 1;
+        }
     }
 
     return 1;
@@ -1844,10 +1849,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
       }
       if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
         UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileIdOffset, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
-        return 1;
+      } else {
+        Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
       }
 
-      Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
       return 1;
     }
 
@@ -1884,10 +1889,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
       }
       if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
         UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, eMissileIdOffset, 0, 0, 0, 0, eSkill, nSkillLvl, 0);
-        return 1;
+      } else {
+        Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
       }
 
-      Skills::MakeMissileAtSkillTarget(pUnit, eMissileIdOffset, eSkill, nSkillLvl);
       return 1;
     }
 

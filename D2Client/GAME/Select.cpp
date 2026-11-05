@@ -238,12 +238,14 @@ static BOOL __stdcall SELECT_IsWarpDoubleClicked(uint32_t dwUnused, int32_t nCli
     uint32_t uDeadline = Game::GAME_GetSyncTickCount();
     if (uTickCount < uDeadline) {
       uTickCount = Game::GAMEDATA_GetGlobalTickCount();
-      Game::GAME_SetSyncTickCount(uTickCount + 500);
+      uTickCount += 500;
+      Game::GAME_SetSyncTickCount(uTickCount);
       return 1;
     }
     if (!*pnDoubleClickState) {
       uTickCount = Game::GAMEDATA_GetGlobalTickCount();
-      Game::GAME_SetSyncTickCount(uTickCount + 500);
+      uTickCount += 500;
+      Game::GAME_SetSyncTickCount(uTickCount);
       *pnDoubleClickState = 1;
     }
 
@@ -257,7 +259,7 @@ static void __stdcall SELECT_ScreenToWorldCoords(int * pnX, int * pnY) {
       int nAdjustedY;
       nAdjustedY = *pnY - *pnY / 0x28;
       *pnY = nAdjustedY;
-      *pnX = (0x28 - ((int)((nAdjustedY >> 0x1f & 3U) + nAdjustedY) >> 2)) * (*pnX - ScreenSizeX / 2) / (ScreenSizeX / 2) + *pnX;
+      *pnX = (0x28 - nAdjustedY / 4) * (*pnX - ScreenSizeX / 2) / (ScreenSizeX / 2) + *pnX;
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
       *pnX += nWorldOffset;
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();

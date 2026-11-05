@@ -31,6 +31,7 @@ typedef int (__fastcall *fnSkillCalcMethod)(int32_t nCalcCode, void * pContext);
 namespace Fog::Skills {
 
 // Function declarations
+int __fastcall SKILLS_PopValue(int * pValueStack);
 // Stack-based bytecode evaluator for compiled skill and missile calc formulas. The 64-entry value stack keeps its count in the 65th slot, at byte offset 0x100 from the base, which is why it is one int[65] local and not a head plus a separate counter. Consecutive SKILLS_PopValue calls reuse the stack pointer in ECX without reloading it, so that callee is typed __fastcall_ecxsafe.
 uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, struct D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext);
 // *pTokenType out is eD2SkillCalcToken:
@@ -43,6 +44,6 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaS
 char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLookup, CalcGetLinkerIndex_t pfnSkillLookup, int nParserContext, char * szToken, uint8_t * pTokenType, int * pnTokenValue);
 // Parse calc expression from skill desc into bytecode formula
 int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pbByteCodeOutput, int nMaxOutputSize, CalcGetKeyWordToNumber_t pDescTable, CalcGetFunctionParameterCount_t pOpcodeInfo, CalcGetLinkerIndex_t pfnGetLinkerIndex);
-// 6 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace Fog::Skills

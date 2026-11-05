@@ -21,7 +21,7 @@
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
-static IgnoreList * gpIgnoreList = 0; D2_STATIC_GUARD(gpIgnoreList, "gpIgnoreList");
+static ::IgnoreList * gpIgnoreList = 0; D2_STATIC_GUARD(gpIgnoreList, "gpIgnoreList");
 
 namespace D2Common::Chat::Ignorelist {
 
@@ -214,13 +214,7 @@ void __stdcall MISC_InitIgnorelist() {
     ExceptionList = &pPrevExceptionList;
     ::IgnoreList* ppIgnoreListVTable = (::IgnoreList*)Storm::Source::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x41, 0);
     nSehState = 0;
-    if (ppIgnoreListVTable) {
-      gpIgnoreList = IgnoreList::Constructor(ppIgnoreListVTable);
-      ExceptionList = pPrevExceptionList;
-      return;
-    }
-
-    gpIgnoreList = 0;
+    gpIgnoreList = ppIgnoreListVTable ? IgnoreList::Constructor(ppIgnoreListVTable) : 0;
     ExceptionList = pPrevExceptionList;
 }
 

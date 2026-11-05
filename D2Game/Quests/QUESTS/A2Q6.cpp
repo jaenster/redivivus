@@ -1178,7 +1178,6 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
     int32_t nOrificeY;
     D2RoomStrc* pNearbyRoom;
     D2UnitStrc* pUnit;
-    int nSpawnY;
     D2QuestDataA2Q6Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA2Q6;
     int nObjectsReady = 0;
     if (pQuestSpecific->field_0xD == 1) {

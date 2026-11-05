@@ -684,10 +684,7 @@ static int32_t DRLGOUTDOOR_AllocPresetFileTracker(int32_t nLevelPrestId, D2DrlgL
     D2LvlPrestTxt* pLvlPrest;
     pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLevelPrestId);
     pNode = D2_NEW_POOL_AT(pMemory, D2DrlgLevelLinkNodeStrc, ".\\DRLG\\Outdoors.cpp", 0xf9);
-    pNode->dwData0 = 0;
-    pNode->dwData1 = 0;
-    pNode->dwData2 = 0;
-    pNode->pNext = 0;
+    memset(pNode, 0, sizeof(*pNode));
     pNode->dwData0 = pLvlPrest->Def;
     pNode->dwData1 = pLvlPrest->Files;
     uint32_t nFileIndex;

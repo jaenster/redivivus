@@ -879,15 +879,22 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
               D2Game::Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pSpawnedMonster, pAiGeneral, pInactiveMonRec->nAiCmdType);
               SUNITINACTIVE_RestoreMonsterStateFromInactive(pGame, pInactiveMonRec, pSpawnedMonster);
               if (pInactiveMonRec->nTypeFlags & 0x400) {
-                if (nAlignmentVal == 2) {
-                  nNodeTableIdx = 8;
-                } else {
-                  if (nAlignmentVal != 1) {
-                    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x691);
-                    exit(-1);
-                  }
-
-                  nNodeTableIdx = 9;
+                switch (nAlignmentVal) {
+                  case 2:
+                    {
+                      nNodeTableIdx = 8;
+                      break;
+                    }
+                  default:
+                    {
+                      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x691);
+                      exit(-1);
+                    }
+                  case 1:
+                    {
+                      nNodeTableIdx = 9;
+                      break;
+                    }
                 }
 
                 GAME::Targets::AddNodeToTable(pGame, pSpawnedMonster, nullptr, nNodeTableIdx);
@@ -1147,7 +1154,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
           } else {
             wShrineTimerHi = (short int)pCurUnitRecord->nUnitGUID;
             pRespawnFrame = (::SGAMEDATA*)(uint32_t)((uint32_t)(uint16_t)wShrineTimerHi << 16 | (uint32_t)(uint16_t)(short int)pCurUnitRecord->nDropItemCode);
-            if (pRespawnFrame && -1 < wShrineTimerHi) {
+            if (pRespawnFrame && wShrineTimerHi >= 0) {
               if ((int)pRespawnFrame <= pGame->dwGameFrame) {
                 pRespawnFrame = (::SGAMEDATA*)(pGame->dwGameFrame + 1);
               }
@@ -1173,11 +1180,13 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
 // @sourcefile .\UNIT\SUnitInactive.cpp
 static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2InactiveUnitListStrc* pDVar1;
+    D2InactiveUnitRecordStrc* _Dst;
     int iVar5;
     D2ObjectsTxt* pDVar6;
     BOOL BVar7;
     uint32_t uVar8;
     D2DrlgRoomCoordsStrc DStack_28;
+    eD2UnitType eUnitType;
     if (pUnit->eUnitType == UNIT_MONSTER) {
       SUNITINACTIVE_DeactivateMonster(pGame, pUnit);
       return;
@@ -1201,12 +1210,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
       if (!pDVar1) {
         insert_new_list_node:
         pDVar4 = D2_NEW_POOL_AT(pGame->pMemoryPool, D2InactiveUnitListStrc, ".\\UNIT\\SUnitInactive.cpp", 0x22e);
-        pDVar4->nX = 0;
-        pDVar4->nY = 0;
-        pDVar4->pInactiveItems = 0;
-        pDVar4->pInactiveMonsters = 0;
-        pDVar4->pInactiveUnits = 0;
-        pDVar4->pNext = 0;
+        memset(pDVar4, 0, sizeof(*pDVar4));
         pDVar4->nX = DStack_28.dwXStart;
         pDVar4->nY = DStack_28.dwYStart;
         pDVar4->pNext = pDVar1;
@@ -1299,7 +1303,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
       if (DStack_28.dwXStart == iVar5 && DStack_28.dwYStart == pDVar1->nY || iVar5 < DStack_28.dwXStart) {
         pDVar4 = pDVar1;
         if (DStack_28.dwXStart <= iVar5) {
-          break;
+          goto LAB_00542ee9;
         }
 
         goto insert_new_list_node;

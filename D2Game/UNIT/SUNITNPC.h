@@ -149,6 +149,6 @@ void __fastcall SUNITNPC_HandleSellAction(::SGAMEDATA * pGame, struct D2UnitStrc
 // Server-side NPC "use/talk" dispatcher: given the interacted NPC monster GUID and quest-state selector, performs the right NPC menu action and replies with a 0x58 OpenUI packet. Validates the monster (monstats interact flag, UNIT_MONSTER, has AI) then branches: trade-reward states route to NpcState_MoveState1To2 + SUNITNPC_HandleTradeAction for the appropriate vendor set; mercenary state sends the for-hire list. Handles act-specific quest actions by NPC class: Charsi imbue (A1Q3 ToolsOfTheTrade), Akara respec/skill-clear (A1Q1 Respec), Larzuk socketing (A5Q1), Anya personalize (A5Q4), and travel NPCs (Warriv/Meshif/Tyrael/Cain) loading the destination act level and enabling its waypoint. The imbue/socket/personalize branches create the reward item, place it in inventory or drop it at FindBestSpotToSpawnItem, and send OpenUI menu code 6 (success) or 7 (fail/drop). __fastcall: pGame(ECX), pUnit(EDX); pQState, item GUID, target-item GUID on stack.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 int __fastcall UseMenu(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2QuestState pQState, DWORD guid, DWORD nGuid);
-// 3 internal functions (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT::SUNITNPC

@@ -1115,12 +1115,11 @@ int __fastcall DRLGPATH_CalcDirectionVector(POINT * pPoint, uint32_t * pnDirecti
     }
     if (!bSwappedX) {
       nDirIndex = (-nDirIndex - 1 & 0x3f) + 8 & 0x3f;
-      *pnDirection = nDirIndex;
-      return nDirIndex;
+    } else {
+      pPoint->x = -pPoint->x;
+      nDirIndex = nDirIndex + 8 & 0x3f;
     }
 
-    pPoint->x = -pPoint->x;
-    nDirIndex = nDirIndex + 8 & 0x3f;
     *pnDirection = nDirIndex;
     return nDirIndex;
 }

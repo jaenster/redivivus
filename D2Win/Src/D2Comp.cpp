@@ -1635,18 +1635,15 @@ static void D2COMP_PadStringTo4Chars(char * szInput, char * szOutput) {
     if (szInput[1] == '\0') {
       szOutput[1] = ' ';
       szOutput[2] = ' ';
-      szOutput[3] = ' ';
-      return;
+    } else {
+      szOutput[1] = szInput[1];
+      if (szInput[2] == '\0') {
+        szOutput[2] = ' ';
+      } else {
+        szOutput[2] = szInput[2];
+      }
     }
 
-    szOutput[1] = szInput[1];
-    if (szInput[2] == '\0') {
-      szOutput[2] = ' ';
-      szOutput[3] = ' ';
-      return;
-    }
-
-    szOutput[2] = szInput[2];
     szOutput[3] = ' ';
 }
 
@@ -1996,7 +1993,7 @@ uint8_t * __fastcall D2COMP_GetPaletteTransformTable(uint32_t nPaletteShift) {
     if (!nTransformGroup) {
       return gaItemPaletteTransformData + (nColorIndex + 0x348) * 0x100;
     }
-    if (-1 < nTransformGroup && nTransformGroup < 9 && (nTransformGroup <= 2 || nTransformGroup > 4)) {
+    if (nTransformGroup >= 0 && nTransformGroup < 9 && (nTransformGroup <= 2 || nTransformGroup > 4)) {
       return gaItemPaletteTransformData + (nTransformGroup * 0x69 + nColorIndex) * 0x100;
     }
 
@@ -2500,8 +2497,8 @@ static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerC
         sGfxData.dwRenderFlags |= 2;
         nLoadedCount = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
         if (nLoadedCount && sGfxData.pDC6Block) {
-          nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
-          nLoadedCount = nOffsetY + *(int*)(nCOFContext + 0x14);
+          nLoadedCount = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
+          nLoadedCount += *(int*)(nCOFContext + 0x14);
           if (nLoadedCount > *pnMaxHeight) {
             *pnMaxHeight = nLoadedCount;
           }

@@ -3675,7 +3675,7 @@ D2DialogStrc * gpNpcMercListDialog = 0; D2_GLOBAL_GUARD(gpNpcMercListDialog, "D2
 D2DialogStrc * gpNpcMainMenuDialog = 0; D2_GLOBAL_GUARD(gpNpcMainMenuDialog, "D2Client::UI::Dialog::gpNpcMainMenuDialog");
 } // namespace D2Client::UI::Dialog
 static uint32_t nTransactionCost = 0; D2_STATIC_GUARD(nTransactionCost, "nTransactionCost");
-ListBoxWrapper * gpNpcMenuMercListBox = 0; D2_GLOBAL_GUARD(gpNpcMenuMercListBox, "gpNpcMenuMercListBox");
+::ListBoxWrapper * gpNpcMenuMercListBox = 0; D2_GLOBAL_GUARD(gpNpcMenuMercListBox, "gpNpcMenuMercListBox");
 static D2GSPacketSrv0x2A D2GSPacketSrv0x2A_007c0d87 = {}; D2_STATIC_GUARD(D2GSPacketSrv0x2A_007c0d87, "D2GSPacketSrv0x2A_007c0d87");
 static uint32_t gnNpcMenuActiveContainer = 0; D2_STATIC_GUARD(gnNpcMenuActiveContainer, "gnNpcMenuActiveContainer");
 static short gaNpcMenuHandledMessageIds[9] = {}; D2_STATIC_GUARD(gaNpcMenuHandledMessageIds, "gaNpcMenuHandledMessageIds");
@@ -4860,7 +4860,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
           }
 
           bIsIdentified = D2Common::QuestRecord::GetQuestState(gpNpcMenuBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
-          *pInventory = (bIsIdentified ? -100 : 0) + 100;
+          *pInventory = bIsIdentified ? 0 : 100;
           nStrTableId = 0xd04;
           goto format_cost;
         }
@@ -5002,12 +5002,12 @@ int __stdcall NPCMENU_ConfirmTransactionReturn() {
     Dialog::gpNpcTransactionConfirmDialog = 0;
     if (gnNpcMenuTransactionType == 5) {
       NPCMENU_BuildMercHireMenu();
-      return 1;
+    } else {
+      Inv::INV_ReturnToShopFromRepair();
+      _Interaction::geNpcUiState = NPCUI_SHOP;
+      GAME::Select::ClearSelectedUnit();
     }
 
-    Inv::INV_ReturnToShopFromRepair();
-    _Interaction::geNpcUiState = NPCUI_SHOP;
-    GAME::Select::ClearSelectedUnit();
     return 1;
 }
 
@@ -5584,18 +5584,18 @@ int __stdcall NPCMENU_OpenNpcShop() {
     }
 
     D2UnitStrc* pNpc = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    if ((pNpc && pNpc->pInventory) == 0) {
-      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-      return 1;
-    } else {
+    if (pNpc && pNpc->pInventory) {
       _Interaction::geNpcUiState = NPCUI_SHOP;
       gnNpcMenuShopMode = 1;
       ui::SetUIFlag(UI_NPCSHOP, UI_SET, 0);
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x38, 2, _Interaction::nCurrentInteractedNpcGUID, 0);
       gpNpcShopOwnerUnit = UNIT::Player::GetPlayerUnit_UI();
       gbNpcMenuShopOpened = 0;
-      return 1;
+    } else {
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
     }
+
+    return 1;
 }
 
 void __stdcall NPCMENU_CloseAndResetAll() {
@@ -5663,26 +5663,20 @@ void __fastcall CloseNPCInteract() {
       Inv::INV_ResetHoverAndContextState();
       NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
       ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-      NPCMENU_CloseAllDialogs();
-      _Interaction::geNpcUiState = NPCUI_NONE;
-      return;
-    }
-    if ((uint32_t)(_Interaction::geNpcUiState - NPCUI_SHOP) <= 3) {
-      NPCMENU_CloseShopUI();
-      Inv::INV_ResetShopState();
-      NPCMENU_CloseAllDialogs();
-      _Interaction::geNpcUiState = NPCUI_NONE;
-      return;
-    }
-    if (_Interaction::geNpcUiState == NPCUI_ITEM_SERVICE) {
-      ui::thunk_NPCSHOP_IsRepairTabActive();
-      NPCMENU_CloseAllDialogs();
-      _Interaction::geNpcUiState = NPCUI_NONE;
-      return;
-    }
-    if (gnNpcMenuActiveMode != '\0') {
-      gnNpcMenuActiveMode = '\0';
-      NPCMENU_CloseAndResetAll();
+    } else {
+      if ((uint32_t)(_Interaction::geNpcUiState - NPCUI_SHOP) <= 3) {
+        NPCMENU_CloseShopUI();
+        Inv::INV_ResetShopState();
+      } else {
+        if (_Interaction::geNpcUiState == NPCUI_ITEM_SERVICE) {
+          ui::thunk_NPCSHOP_IsRepairTabActive();
+        } else {
+          if (gnNpcMenuActiveMode != '\0') {
+            gnNpcMenuActiveMode = '\0';
+            NPCMENU_CloseAndResetAll();
+          }
+        }
+      }
     }
 
     NPCMENU_CloseAllDialogs();
@@ -5856,13 +5850,13 @@ int __stdcall NPCMENU_TradeOptionCallback() {
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x38, 1, _Interaction::nCurrentInteractedNpcGUID, 0);
       gpNpcShopOwnerUnit = UNIT::Player::GetPlayerUnit_UI();
       gbNpcMenuShopOpened = 0;
-      return 1;
+    } else {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     }
 
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     return 1;
 }
 
@@ -7018,8 +7012,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     nNameStringId = 0;
     eStatId = UNITSTAT_gold;
     int nGoldOnBody = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStatId, nNameStringId);
-    int32_t nTotalGold = nLoopCounter + nGoldOnBody;
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd24), nTotalGold);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd24), nLoopCounter + nGoldOnBody);
     Dialog::AddStringData(Dialog::gpNpcMercListDialog, wszGoldFmtBuf, 0x15, 0, 4, 1, nullptr, 0);
     int32_t nMercSeed = 1;
     fpDialogFunc pfnCloseCallback = NPCMENU_MercListDrawCallback;

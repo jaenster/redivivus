@@ -121,15 +121,15 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
@@ -370,14 +370,10 @@ namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
 
-namespace D2Client::Mouse {
+namespace D2Win::Src::D2WinMain {
 
-} // namespace D2Client::Mouse
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::Forms {
+namespace D2Win::D2GFX {
 
-} // namespace D2Client::Forms
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

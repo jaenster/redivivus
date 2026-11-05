@@ -631,8 +631,8 @@ int32_t __stdcall STATLIST_CalcStatWithPercentBonus(D2StatListExStrc * pStatList
     int nBonusPart = 0;
     if (bIncludeBonus) {
       int32_t nFullStatValue;
-      nFullStatValue = STATLIST_GetMinimalStatValueShifted(pStatList, eUnitStat, 0);
-      nBonusPart = nFullStatValue - nValue;
+      nBonusPart = STATLIST_GetMinimalStatValueShifted(pStatList, eUnitStat, 0);
+      nBonusPart -= nValue;
     }
 
     nPercentStatValue = D2Client::Stats::D2ApplyPercent(nValue, nPercentStatValue, 100);

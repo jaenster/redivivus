@@ -217,8 +217,8 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
       sSkillArg.nUnitY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
       pUnit_00 = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pUnit_00) {
-        nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
-        nVelTmp = nCalcResult + pMissileRecord->Param2;
+        nVelTmp = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
+        nVelTmp += pMissileRecord->Param2;
         D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pUnit_00->pPath.pDynamicPath, (uint8_t)nVelTmp);
         D2Common::Units::Missile::SetTotalFrames(pUnit_00, nVelTmp);
         D2Common::Units::Missile::SetCurrentFrame(pUnit_00, nVelTmp);
@@ -288,7 +288,6 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
     int nDmgHp;
     int32_t nHealAmount;
     D2UnitStrc* pOwner;
-    uint32_t nDivisor;
     D2SkillsTxt* pSkillTable = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTable) {
       return 0;
@@ -324,9 +323,7 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
         nDmgHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
       }
 
-      nDivisor = 100;
-      nHealAmount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTable->calc[0], eSkill, nSkillLvl);
-      nHealAmount = D2Client::Stats::D2ApplyPercent(nDmgHp, nHealAmount, nDivisor);
+      nHealAmount = D2Client::Stats::D2ApplyPercent(nDmgHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTable->calc[0], eSkill, nSkillLvl), 100);
       nCurHp += nHealAmount;
       nDmgHp = 1;
       if (nCurHp >= 1) {

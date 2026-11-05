@@ -117,8 +117,7 @@ void __fastcall AllocPartyControl(::SGAMEDATA * pGame) {
         exit(-1);
       }
 
-      *(uint32_t*)pPartyControl = 0;
-      pPartyControl->pSub = 0;
+      memset(pPartyControl, 0, sizeof(*pPartyControl));
       pPartyControl->nPartyId = 3;
       pGame->pPartyControl = pPartyControl;
       return;
@@ -207,9 +206,7 @@ int16_t __fastcall PARTY_CreateParty(::SGAMEDATA * pGame) {
         exit(-1);
       }
 
-      *(uint32_t*)pNewSub = 0;
-      pNewSub->pSub = 0;
-      pNewSub->pPrev = 0;
+      memset(pNewSub, 0, sizeof(*pNewSub));
       nNewPartyId = PARTY_UpdateNextPartyId(pGame);
       pNewSub->nPartyId = nNewPartyId;
       pNewSub->pPrev = pPartyCtrl->pSub;
@@ -283,11 +280,10 @@ void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId) {
 
     if (pPrevSub) {
       pPrevSub->pPrev = pFoundSub->pPrev;
-      PARTY_FreePartyMembers(pFoundSub, pGame);
-      return;
+    } else {
+      pPartyControl->pSub = pFoundSub->pPrev;
     }
 
-    pPartyControl->pSub = pFoundSub->pPrev;
     PARTY_FreePartyMembers(pFoundSub, pGame);
 }
 
@@ -375,7 +371,7 @@ int __stdcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, D2Unit
             exit(-1);
           }
 
-          pNewSubSub->pNext = 0;
+          memset(pNewSubSub, 0, sizeof(*pNewSubSub));
           pNewSubSub->nUnitGUID = nUnitGUID;
           pNewSubSub->pNext = pFoundSub->pSub;
           pFoundSub->pSub = pNewSubSub;

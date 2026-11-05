@@ -372,7 +372,7 @@ int __stdcall DetectCpuVendor() {
     }
 
     bMatch = !strcmp(szCpuVendor, "CyrixInstead");
-    return !bMatch ? 0 : 0x3;
+    return bMatch ? 0x3 : 0;
 }
 
 static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char * pOutName, int32_t nVendor, int32_t nFamily, int32_t nType) {
@@ -810,7 +810,7 @@ FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSy
     FILE* pFile;
     char szLogFilePath[260];
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(pSystemTime);
-    Storm::Source::SSTR::SStrPrintf(szLogFilePath, 0x104, "%s%s%02d%02d%02d.txt", gszLogFilePath, szFilePrefix, (uint32_t)pSystemTime->wYear % 100, (uint32_t)pSystemTime->wMonth, (uint32_t)pSystemTime->wDay);
+    Storm::Source::SSTR::SStrPrintf(szLogFilePath, 0x104, "%s%s%02d%02d%02d.txt", gszLogFilePath, szFilePrefix, (uint32_t)(pSystemTime->wYear % 100), (uint32_t)pSystemTime->wMonth, (uint32_t)pSystemTime->wDay);
     if (szOutPath) {
       Storm::Source::SSTR::SStrCopy(szOutPath, szLogFilePath, nOutPathLen);
     }
@@ -1345,8 +1345,8 @@ void __stdcall ExitOrCrashCleanup() {
       }
 
       /* DWORD dwMilliseconds for Sleep */ Sleep(10);
-      dwTickCountC = GetTickCount();
-      uElapsed = dwTickCountC - dwTickCountA;
+      uElapsed = GetTickCount();
+      uElapsed -= dwTickCountA;
     }
 
     FILE** openFileHandleArray = globalOpenFileHandleArray;
@@ -2040,13 +2040,7 @@ void __stdcall GetFreeDiskSpaceForSavePath() {
 }
 
 void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {
-    pMemoryStatus->dwMemoryLoad = 0;
-    pMemoryStatus->dwTotalPhys = 0;
-    pMemoryStatus->dwAvailPhys = 0;
-    pMemoryStatus->dwTotalPageFile = 0;
-    pMemoryStatus->dwAvailPageFile = 0;
-    pMemoryStatus->dwTotalVirtual = 0;
-    pMemoryStatus->dwAvailVirtual = 0;
+    memset(pMemoryStatus, 0, sizeof(*pMemoryStatus));
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ pMemoryStatus->dwLength = 0x20;
     GlobalMemoryStatus(pMemoryStatus);
 }

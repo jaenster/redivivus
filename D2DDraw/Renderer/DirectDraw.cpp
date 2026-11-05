@@ -2011,12 +2011,17 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
     int iVar1 = RENDERER_nWindowHeight + 0x20;
     int nClipLeft = -0x20;
     int nClipRight = RENDERER_nWindowWidth;
-    if (nScreenPanels != 1) {
-      if (nScreenPanels == 2) {
-        nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    switch (nScreenPanels) {
+      case 1:
+        {
+          nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+          break;
+        }
+      case 2:
+        {
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
+        }
     }
 
     int nSubtileIndex = 0;
@@ -2059,12 +2064,17 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX,
       iVar1 = RENDERER_nWindowHeight + 0x20;
       nClipLeft = -0x20;
       nClipRight = RENDERER_nWindowWidth;
-      if (nScreenPanels != 1) {
-        if (nScreenPanels == 2) {
-          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-        }
-      } else {
-        nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+      switch (nScreenPanels) {
+        case 1:
+          {
+            nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+            break;
+          }
+        case 2:
+          {
+            nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+            break;
+          }
       }
 
       nScreenPanels = 0;
@@ -2105,12 +2115,17 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int3
     int iVar1 = RENDERER_nWindowHeight + 0x20;
     int nClipLeft = -0x20;
     int nClipRight = RENDERER_nWindowWidth;
-    if (nScreenPanels != 1) {
-      if (nScreenPanels == 2) {
-        nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    switch (nScreenPanels) {
+      case 1:
+        {
+          nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+          break;
+        }
+      case 2:
+        {
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
+        }
     }
 
     nScreenPanels = 0;

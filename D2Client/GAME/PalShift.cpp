@@ -110,16 +110,12 @@ void __stdcall InitPal() {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall FreeGamePalShift() {
-    if (gpPalShiftEntryListHead) {
-      void* pNextEntry;
-      do {
-        pNextEntry = *(void**)((int)gpPalShiftEntryListHead + 0x1004);
-        D2_FREE_AT(gpPalShiftEntryListHead, ".\\GAME\\PalShift.cpp", 0x84);
-        gpPalShiftEntryListHead = pNextEntry;
-      } while (pNextEntry);
-
-      gpPalShiftEntryListHead = 0;
+    while (gpPalShiftEntryListHead) {
+      void* pNextEntry = *(void**)((int)gpPalShiftEntryListHead + 0x1004);
+      D2_FREE_AT(gpPalShiftEntryListHead, ".\\GAME\\PalShift.cpp", 0x84);
+      gpPalShiftEntryListHead = pNextEntry;
     }
+
     if (gpMonsterPalShiftList) {
       D2_FREE_AT(gpMonsterPalShiftList, ".\\GAME\\PalShift.cpp", 0x8a);
       gpMonsterPalShiftList = 0;

@@ -349,8 +349,6 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2UnitStrc* pNewItem;
     uint32_t bIsQuiver;
     BOOL nBeltResult;
-    eD2UnitStat eUnitStat;
-    eD2UnitStat eStatId;
     eD2UnitType eItemUnitType;
     int32_t nLine;
     ::SGAMEDATA* pGameLocal;
@@ -409,27 +407,24 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
             nLine = 0xfa;
             set_quiver_quantity:
             wLayer = 0;
-            eStatId = UNITSTAT_quantity;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_quantity, nLine, wLayer);
           } else {
             nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
-            eStatId = UNITSTAT_durability;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_durability, nLine, wLayer);
           }
-
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, wLayer);
         } else {
           PLAYER_PlaceItemInInventory(__frame0.pGameSaved, 1, pUnit, pNewItem);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
           wLayer = 0;
           if (bIsQuiver) {
             nLine = 0xfa;
-            eUnitStat = UNITSTAT_quantity;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_quantity, nLine, wLayer);
           } else {
             wLayer = 0;
             nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
-            eUnitStat = UNITSTAT_durability;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_durability, nLine, wLayer);
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nLine, wLayer);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
           if (bIsQuiver) {
             nLine = 100;

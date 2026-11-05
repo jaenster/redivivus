@@ -283,7 +283,7 @@ bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (BVar1) {
       /* GetQuestState JustCompleted(0xd) -> out = 0xb + 2*set (0xd if just-completed
                          cinematic) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_JustCompleted);
-      *pbyStatusCode = BVar1 != 0 ? 13 : 11;
+      *pbyStatusCode = !BVar1 ? 0xb : 0xd;
       return true;
     }
 
@@ -733,8 +733,7 @@ void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
     QUESTGUID_SetPlayerCountToZero(&pQuestData->sQuestGUID);
     D2QuestDataA3Q4Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestData->pGame->pMemoryPool, D2QuestDataA3Q4Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q4.cpp", 0x340);
     pQuestData->pQuestSpecificData.pA3Q4 = pQuestSpecificData;
-    /* Should use here memset */ pQuestSpecificData->bBirdDropped = '\0';
-    pQuestSpecificData->bCanDropBird = '\0';
+    /* Should use here memset */ memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->bBossKillTracking = false;
     pQuestSpecificData->field_0x3 = 0;
     pQuestSpecificData->nBirdKillerGUID = 0;

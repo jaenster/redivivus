@@ -1455,32 +1455,32 @@ D2IniConfigStrc * D2IniData_multiplayer = 0; D2_GLOBAL_GUARD(D2IniData_multiplay
 uint16_t LastGameRequestId = 0; D2_GLOBAL_GUARD(LastGameRequestId, "LastGameRequestId");
 void * gpChatFormList = 0; D2_GLOBAL_GUARD(gpChatFormList, "gpChatFormList");
 unsigned int gdwLastGameListRefreshTick = {}; D2_GLOBAL_GUARD(gdwLastGameListRefreshTick, "gdwLastGameListRefreshTick");
-D2WinTextBox * gpOOGGameListTextBox = 0; D2_GLOBAL_GUARD(gpOOGGameListTextBox, "gpOOGGameListTextBox");
-D2WinTextBox * gpOogGameListDetailsPanelControl = 0; D2_GLOBAL_GUARD(gpOogGameListDetailsPanelControl, "gpOogGameListDetailsPanelControl");
+::D2WinTextBox * gpOOGGameListTextBox = 0; D2_GLOBAL_GUARD(gpOOGGameListTextBox, "gpOOGGameListTextBox");
+::D2WinTextBox * gpOogGameListDetailsPanelControl = 0; D2_GLOBAL_GUARD(gpOogGameListDetailsPanelControl, "gpOogGameListDetailsPanelControl");
 D2ControlStrc * gpOOGJoinGameButton = 0; D2_GLOBAL_GUARD(gpOOGJoinGameButton, "gpOOGJoinGameButton");
 D2ControlStrc * gpCtlGameListStatus = 0; D2_GLOBAL_GUARD(gpCtlGameListStatus, "gpCtlGameListStatus");
 D2ControlStrc * gpOOGLobbyControl2 = 0; D2_GLOBAL_GUARD(gpOOGLobbyControl2, "gpOOGLobbyControl2");
-D2WinEditBox * gpOogGamePasswordEditControl = 0; D2_GLOBAL_GUARD(gpOogGamePasswordEditControl, "gpOogGamePasswordEditControl");
-D2WinEditBox * gpCtlGameListTop = 0; D2_GLOBAL_GUARD(gpCtlGameListTop, "gpCtlGameListTop");
-D2WinTextBox * gpCtlJoinGameLabel = 0; D2_GLOBAL_GUARD(gpCtlJoinGameLabel, "gpCtlJoinGameLabel");
-D2WinTextBox * pUIGameUsername = 0; D2_GLOBAL_GUARD(pUIGameUsername, "pUIGameUsername");
-D2WinTextBox * pUIGamePassword = 0; D2_GLOBAL_GUARD(pUIGamePassword, "pUIGamePassword");
-D2WinTextBox * pUIGamePlayers = 0; D2_GLOBAL_GUARD(pUIGamePlayers, "pUIGamePlayers");
+::D2WinEditBox * gpOogGamePasswordEditControl = 0; D2_GLOBAL_GUARD(gpOogGamePasswordEditControl, "gpOogGamePasswordEditControl");
+::D2WinEditBox * gpCtlGameListTop = 0; D2_GLOBAL_GUARD(gpCtlGameListTop, "gpCtlGameListTop");
+::D2WinTextBox * gpCtlJoinGameLabel = 0; D2_GLOBAL_GUARD(gpCtlJoinGameLabel, "gpCtlJoinGameLabel");
+::D2WinTextBox * pUIGameUsername = 0; D2_GLOBAL_GUARD(pUIGameUsername, "pUIGameUsername");
+::D2WinTextBox * pUIGamePassword = 0; D2_GLOBAL_GUARD(pUIGamePassword, "pUIGamePassword");
+::D2WinTextBox * pUIGamePlayers = 0; D2_GLOBAL_GUARD(pUIGamePlayers, "pUIGamePlayers");
 // also labelled: gpOOGLobbyControl3
 D2ControlStrc * gpCtlCreateGameDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgBackground, "gpCtlCreateGameDlgBackground");
 // also labelled: gpCtlGameListBottom
-D2WinTextBox * gpCtlCreateGameDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgTitle, "gpCtlCreateGameDlgTitle");
+::D2WinTextBox * gpCtlCreateGameDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgTitle, "gpCtlCreateGameDlgTitle");
 // also labelled: gpCtlWaitInLineStatus
-D2WinTextBox * gpCtlGameNameLabelOrQueueStatus = 0; D2_GLOBAL_GUARD(gpCtlGameNameLabelOrQueueStatus, "gpCtlGameNameLabelOrQueueStatus");
+::D2WinTextBox * gpCtlGameNameLabelOrQueueStatus = 0; D2_GLOBAL_GUARD(gpCtlGameNameLabelOrQueueStatus, "gpCtlGameNameLabelOrQueueStatus");
 // also labelled: gpCtlGameListError
-D2WinTextBox * gpCtlCreateGamePasswordLabel = 0; D2_GLOBAL_GUARD(gpCtlCreateGamePasswordLabel, "gpCtlCreateGamePasswordLabel");
-D2WinTextBox * gUIGameListServerMessageText = 0; D2_GLOBAL_GUARD(gUIGameListServerMessageText, "gUIGameListServerMessageText");
+::D2WinTextBox * gpCtlCreateGamePasswordLabel = 0; D2_GLOBAL_GUARD(gpCtlCreateGamePasswordLabel, "gpCtlCreateGamePasswordLabel");
+::D2WinTextBox * gUIGameListServerMessageText = 0; D2_GLOBAL_GUARD(gUIGameListServerMessageText, "gUIGameListServerMessageText");
 // also labelled: gUIGameListExpansionCheckbox
-D2WinTextBox * gUIGameListMaxPlayersLabel = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersLabel, "gUIGameListMaxPlayersLabel");
+::D2WinTextBox * gUIGameListMaxPlayersLabel = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersLabel, "gUIGameListMaxPlayersLabel");
 // also labelled: gUIGameListPasswordEditBox
-D2WinTextBox * gUIGameListLevelRestrictionLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLabel, "gUIGameListLevelRestrictionLabel");
+::D2WinTextBox * gUIGameListLevelRestrictionLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLabel, "gUIGameListLevelRestrictionLabel");
 // also labelled: gUIGameListDifficultyLabel
-D2WinTextBox * gUIGameListLevelRestrictionLevelsLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLevelsLabel, "gUIGameListLevelRestrictionLevelsLabel");
+::D2WinTextBox * gUIGameListLevelRestrictionLevelsLabel = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionLevelsLabel, "gUIGameListLevelRestrictionLevelsLabel");
 // also labelled: gpOOGLobbyControl1
 D2ControlStrc * gUIGameListMaxPlayersInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersInactiveImage, "gUIGameListMaxPlayersInactiveImage");
 // also labelled: gUIGameListGameTypeLabel
@@ -1488,71 +1488,71 @@ D2ControlStrc * gUIGameListMaxPlayersInactiveArrowButton = 0; D2_GLOBAL_GUARD(gU
 // also labelled: gpOOGLobbyControl4
 D2ControlStrc * gUIGameListMaxPlayersUpButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersUpButton, "gUIGameListMaxPlayersUpButton");
 // also labelled: gUIGameListPlayerCountLabel
-D2WinButton * gUIGameListMaxPlayersDownButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersDownButton, "gUIGameListMaxPlayersDownButton");
+::D2WinButton * gUIGameListMaxPlayersDownButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersDownButton, "gUIGameListMaxPlayersDownButton");
 // also labelled: gUIGameListLevelRestrictionMinEditBox
 D2ControlStrc * gUIGameListLevelRestrictionUpButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionUpButton, "gUIGameListLevelRestrictionUpButton");
 // also labelled: gUIGameListLevelRestrictionMaxEditBox
-D2WinButton * gUIGameListLevelRestrictionDownButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionDownButton, "gUIGameListLevelRestrictionDownButton");
+::D2WinButton * gUIGameListLevelRestrictionDownButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionDownButton, "gUIGameListLevelRestrictionDownButton");
 // also labelled: gUIGameListRefreshButton
 D2ControlStrc * gUIGameListLevelRestrictionInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveArrowButton, "gUIGameListLevelRestrictionInactiveArrowButton");
 D2ControlStrc * gUIGameListCreateButton = 0; D2_GLOBAL_GUARD(gUIGameListCreateButton, "gUIGameListCreateButton");
-D2WinEditBox * gpOogGameNameEditControl = 0; D2_GLOBAL_GUARD(gpOogGameNameEditControl, "gpOogGameNameEditControl");
-D2WinEditBox * gUIGameListGameNameEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGameNameEditBox, "gUIGameListGameNameEditBox");
-D2WinEditBox * gUIGameListGamePasswordEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGamePasswordEditBox, "gUIGameListGamePasswordEditBox");
+::D2WinEditBox * gpOogGameNameEditControl = 0; D2_GLOBAL_GUARD(gpOogGameNameEditControl, "gpOogGameNameEditControl");
+::D2WinEditBox * gUIGameListGameNameEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGameNameEditBox, "gUIGameListGameNameEditBox");
+::D2WinEditBox * gUIGameListGamePasswordEditBox = 0; D2_GLOBAL_GUARD(gUIGameListGamePasswordEditBox, "gUIGameListGamePasswordEditBox");
 // also labelled: gpOogSelectedGameListControl
-D2WinEditBox * gUIGameListMaxPlayersEditBox = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersEditBox, "gUIGameListMaxPlayersEditBox");
-D2WinEditBox * gUILevelRestrictionEditBox = 0; D2_GLOBAL_GUARD(gUILevelRestrictionEditBox, "gUILevelRestrictionEditBox");
+::D2WinEditBox * gUIGameListMaxPlayersEditBox = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersEditBox, "gUIGameListMaxPlayersEditBox");
+::D2WinEditBox * gUILevelRestrictionEditBox = 0; D2_GLOBAL_GUARD(gUILevelRestrictionEditBox, "gUILevelRestrictionEditBox");
 // also labelled: gUIGameListJoinButton
-D2WinButton * gUIGameListLevelRestrictionCheckbox = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionCheckbox, "gUIGameListLevelRestrictionCheckbox");
+::D2WinButton * gUIGameListLevelRestrictionCheckbox = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionCheckbox, "gUIGameListLevelRestrictionCheckbox");
 // also labelled: gUIGameListCancelButton
 D2ControlStrc * gUIGameListLevelRestrictionInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveImage, "gUIGameListLevelRestrictionInactiveImage");
 // also labelled: gpOOGLobbyControl6
 D2ControlStrc * gpCtlCreateGameDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgCancelButton, "gpCtlCreateGameDlgCancelButton");
 // also labelled: gUIGameListGameListBox
-D2WinButton * gUIGameListDifficultyNormalButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNormalButton, "gUIGameListDifficultyNormalButton");
+::D2WinButton * gUIGameListDifficultyNormalButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNormalButton, "gUIGameListDifficultyNormalButton");
 // also labelled: gUIGameListScrollbar
-D2WinButton * gUIGameListDifficultyNightmareButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNightmareButton, "gUIGameListDifficultyNightmareButton");
+::D2WinButton * gUIGameListDifficultyNightmareButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNightmareButton, "gUIGameListDifficultyNightmareButton");
 // also labelled: gUIGameListExpandedDetailsText
-D2WinButton * gUIGameListDifficultyHellButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyHellButton, "gUIGameListDifficultyHellButton");
-D2WinTextBox * gUIGameListStatusLabel = 0; D2_GLOBAL_GUARD(gUIGameListStatusLabel, "gUIGameListStatusLabel");
-D2WinTextBox * gUIGameListPlayerListText = 0; D2_GLOBAL_GUARD(gUIGameListPlayerListText, "gUIGameListPlayerListText");
-D2WinTextBox * gUIGameListActLabel = 0; D2_GLOBAL_GUARD(gUIGameListActLabel, "gUIGameListActLabel");
+::D2WinButton * gUIGameListDifficultyHellButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyHellButton, "gUIGameListDifficultyHellButton");
+::D2WinTextBox * gUIGameListStatusLabel = 0; D2_GLOBAL_GUARD(gUIGameListStatusLabel, "gUIGameListStatusLabel");
+::D2WinTextBox * gUIGameListPlayerListText = 0; D2_GLOBAL_GUARD(gUIGameListPlayerListText, "gUIGameListPlayerListText");
+::D2WinTextBox * gUIGameListActLabel = 0; D2_GLOBAL_GUARD(gUIGameListActLabel, "gUIGameListActLabel");
 // also labelled: gpOOGLobbyControl7
 D2ControlStrc * gpProfileViewBackground = 0; D2_GLOBAL_GUARD(gpProfileViewBackground, "gpProfileViewBackground");
 // also labelled: gpOOGLobbyControl8
-D2WinTextBox * gpProfileViewAccountName = 0; D2_GLOBAL_GUARD(gpProfileViewAccountName, "gpProfileViewAccountName");
+::D2WinTextBox * gpProfileViewAccountName = 0; D2_GLOBAL_GUARD(gpProfileViewAccountName, "gpProfileViewAccountName");
 // also labelled: gpOOGPasswordEditChName
-D2WinTextBox * gpProfileViewSex = 0; D2_GLOBAL_GUARD(gpProfileViewSex, "gpProfileViewSex");
+::D2WinTextBox * gpProfileViewSex = 0; D2_GLOBAL_GUARD(gpProfileViewSex, "gpProfileViewSex");
 // also labelled: gpOOGPasswordEditCharacterName
-D2WinTextBox * gpProfileViewLocation = 0; D2_GLOBAL_GUARD(gpProfileViewLocation, "gpProfileViewLocation");
+::D2WinTextBox * gpProfileViewLocation = 0; D2_GLOBAL_GUARD(gpProfileViewLocation, "gpProfileViewLocation");
 // also labelled: gUIPasswordDialogInputEditBox
-D2WinTextBox * gpProfileViewDescription = 0; D2_GLOBAL_GUARD(gpProfileViewDescription, "gpProfileViewDescription");
+::D2WinTextBox * gpProfileViewDescription = 0; D2_GLOBAL_GUARD(gpProfileViewDescription, "gpProfileViewDescription");
 // also labelled: gpOOGPasswordEditChPass
 D2ControlStrc * gpProfileEditBackground = 0; D2_GLOBAL_GUARD(gpProfileEditBackground, "gpProfileEditBackground");
 // also labelled: gpOOGPasswordEditCharacterPass
-D2WinTextBox * gpProfileEditAccountName = 0; D2_GLOBAL_GUARD(gpProfileEditAccountName, "gpProfileEditAccountName");
+::D2WinTextBox * gpProfileEditAccountName = 0; D2_GLOBAL_GUARD(gpProfileEditAccountName, "gpProfileEditAccountName");
 // also labelled: gpOogBnetLoginAccountNameControl
-D2WinEditBox * gpProfileEditSex = 0; D2_GLOBAL_GUARD(gpProfileEditSex, "gpProfileEditSex");
+::D2WinEditBox * gpProfileEditSex = 0; D2_GLOBAL_GUARD(gpProfileEditSex, "gpProfileEditSex");
 // also labelled: gpOogBnetLoginGameSelectControl
-D2WinEditBox * gpProfileEditLocation = 0; D2_GLOBAL_GUARD(gpProfileEditLocation, "gpProfileEditLocation");
+::D2WinEditBox * gpProfileEditLocation = 0; D2_GLOBAL_GUARD(gpProfileEditLocation, "gpProfileEditLocation");
 // also labelled: gpOogBnetLoginPasswordControl
-D2WinEditBox * gpProfileEditDescription = 0; D2_GLOBAL_GUARD(gpProfileEditDescription, "gpProfileEditDescription");
+::D2WinEditBox * gpProfileEditDescription = 0; D2_GLOBAL_GUARD(gpProfileEditDescription, "gpProfileEditDescription");
 // also labelled: gpOOGPasswordEditChGammaCode
 D2ControlStrc * gpProfileCloseButton = 0; D2_GLOBAL_GUARD(gpProfileCloseButton, "gpProfileCloseButton");
-D2WinTextBox * gUIPlayerProfileCharacterNameLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterNameLabel, "gUIPlayerProfileCharacterNameLabel");
-D2WinTextBox * gUIPlayerProfileCharacterLevelLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterLevelLabel, "gUIPlayerProfileCharacterLevelLabel");
-D2WinTextBox * gUIPlayerProfileCharacterClassLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterClassLabel, "gUIPlayerProfileCharacterClassLabel");
-D2WinTextBox * gUIPlayerProfileExperienceLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileExperienceLabel, "gUIPlayerProfileExperienceLabel");
+::D2WinTextBox * gUIPlayerProfileCharacterNameLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterNameLabel, "gUIPlayerProfileCharacterNameLabel");
+::D2WinTextBox * gUIPlayerProfileCharacterLevelLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterLevelLabel, "gUIPlayerProfileCharacterLevelLabel");
+::D2WinTextBox * gUIPlayerProfileCharacterClassLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileCharacterClassLabel, "gUIPlayerProfileCharacterClassLabel");
+::D2WinTextBox * gUIPlayerProfileExperienceLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfileExperienceLabel, "gUIPlayerProfileExperienceLabel");
 // also labelled: gpOOGPasswordButtonOK
 D2ControlStrc * gpProfileOKButton = 0; D2_GLOBAL_GUARD(gpProfileOKButton, "gpProfileOKButton");
 // also labelled: gpOOGPasswordButtonCancel
 D2ControlStrc * gpProfileLadderButton = 0; D2_GLOBAL_GUARD(gpProfileLadderButton, "gpProfileLadderButton");
-D2WinTextBox * gUIPlayerProfilePlaytimeLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfilePlaytimeLabel, "gUIPlayerProfilePlaytimeLabel");
+::D2WinTextBox * gUIPlayerProfilePlaytimeLabel = 0; D2_GLOBAL_GUARD(gUIPlayerProfilePlaytimeLabel, "gUIPlayerProfilePlaytimeLabel");
 // also labelled: gnGameListSortMode
 int32_t gnProfileDialogMode = 0; D2_GLOBAL_GUARD(gnProfileDialogMode, "gnProfileDialogMode");
 // also labelled: gUIChatCommandsScrollOutput
-D2WinTextBox * gpChatCommandsTitle = 0; D2_GLOBAL_GUARD(gpChatCommandsTitle, "gpChatCommandsTitle");
-D2WinTextBox * gpChatCommandsTextBox = 0; D2_GLOBAL_GUARD(gpChatCommandsTextBox, "gpChatCommandsTextBox");
+::D2WinTextBox * gpChatCommandsTitle = 0; D2_GLOBAL_GUARD(gpChatCommandsTitle, "gpChatCommandsTitle");
+::D2WinTextBox * gpChatCommandsTextBox = 0; D2_GLOBAL_GUARD(gpChatCommandsTextBox, "gpChatCommandsTextBox");
 // also labelled: gpOOGPasswordEditChAccount
 D2ControlStrc * gpChatCommandsOKButton = 0; D2_GLOBAL_GUARD(gpChatCommandsOKButton, "gpChatCommandsOKButton");
 // also labelled: gpOOGLoginEditConnection
@@ -1675,17 +1675,25 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
 
-} // namespace D2Client::UI::ui
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -1855,14 +1863,10 @@ namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
 
-namespace D2Client::Mouse {
+namespace D2Win::Src::D2WinMain {
 
-} // namespace D2Client::Mouse
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::Forms {
+namespace D2Win::D2GFX {
 
-} // namespace D2Client::Forms
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

@@ -2993,13 +2993,11 @@ void bi_windup(deflate_state * pDeflateState) {
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = byBitBufHi;
       pDeflateState->pending++;
-      pDeflateState->bi_buf = 0;
-      pDeflateState->bi_valid = 0;
-      return;
-    }
-    if (pDeflateState->bi_valid > 0) {
-      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-      pDeflateState->pending++;
+    } else {
+      if (pDeflateState->bi_valid > 0) {
+        pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
+        pDeflateState->pending++;
+      }
     }
 
     pDeflateState->bi_buf = 0;
@@ -3244,12 +3242,11 @@ void __fastcall _tr_stored_block(deflate_state * pDeflateState, char * pbBuf, ui
       pDeflateState->pending++;
       pDeflateState->bi_valid = nBitCount - 0xd;
       pDeflateState->bi_buf = (uint16_t)nLast >> D2_SHIFT_COUNT(0x10U - nBitCount);
-      copy_block(nStoredLen, (uint8_t*)pbBuf, 1, pDeflateState);
-      return;
+    } else {
+      pDeflateState->bi_valid = nBitCount + 3;
+      pDeflateState->bi_buf |= (uint16_t)(nLast << D2_SHIFT_COUNT(nBitCount));
     }
 
-    pDeflateState->bi_valid = nBitCount + 3;
-    pDeflateState->bi_buf |= (uint16_t)(nLast << D2_SHIFT_COUNT(nBitCount));
     copy_block(nStoredLen, (uint8_t*)pbBuf, 1, pDeflateState);
 }
 
@@ -3282,11 +3279,10 @@ void __fastcall _tr_align(deflate_state * pDeflateState) {
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->bi_valid = nBitCount - 9;
       pDeflateState->bi_buf = 0 >> D2_SHIFT_COUNT(0x10U - nBitCount);
-      bi_flush(pDeflateState);
-      return;
+    } else {
+      pDeflateState->bi_valid = nBitCount + 7;
     }
 
-    pDeflateState->bi_valid = nBitCount + 7;
     bi_flush(pDeflateState);
 }
 

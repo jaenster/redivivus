@@ -338,7 +338,7 @@ static int32_t PATH_GetCollisionPatternFromMonStats(D2UnitStrc * pUnit) {
       return 0x1804;
     }
 
-    return (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)gadwBitMasks[3] ? -2048 : 0) + 0x3c01;
+    return *((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)gadwBitMasks[3] ? 0x3401 : 0x3c01;
 }
 
 int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
@@ -1071,11 +1071,10 @@ void __stdcall PATH_SetOrClearFlag0x2000(D2DynamicPathStrc * pDynamicPath, int32
     }
     if (bSet) {
       pDynamicPath->PathPoints[0xb] = (D2PathPointStrc)((uint32_t)d2_bits_of(pDynamicPath->PathPoints[0xb]) | 0x2000);
-      pServerPath->nSavedPathPoints = 0;
-      return;
+    } else {
+      pDynamicPath->PathPoints[0xb] = (D2PathPointStrc)((uint32_t)d2_bits_of(pDynamicPath->PathPoints[0xb]) & -8193);
     }
 
-    pDynamicPath->PathPoints[0xb] = (D2PathPointStrc)((uint32_t)d2_bits_of(pDynamicPath->PathPoints[0xb]) & -8193);
     pServerPath->nSavedPathPoints = 0;
 }
 
@@ -1403,25 +1402,33 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t bForce) {
 static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32_t pUnit) {
     uint32_t nPathPoints;
     int ePathType = pDynamicPath->ePathType;
-    if (ePathType != 4) {
-      if (ePathType != 10) {
-        if (ePathType != 0xe) {
+    switch (ePathType) {
+      case 4:
+        {
+          nPathPoints = PATH_BuildDirectPathToTarget(pDynamicPath);
+          if (!nPathPoints) {
+            pDynamicPath->nFlags &= -33;
+            return 0;
+          }
+
+          break;
+        }
+      case 10:
+        {
+          Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(pUnit + 0x20));
+          break;
+        }
+      case 0xe:
+        {
+          Drlg::Path::DRLGPATH_BuildCircularPathPoints(pDynamicPath);
+          pDynamicPath->nFlags |= 0x20;
+          return pDynamicPath->dwPathPoints;
+        }
+      default:
+        {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x207);
           exit(-1);
         }
-
-        Drlg::Path::DRLGPATH_BuildCircularPathPoints(pDynamicPath);
-        pDynamicPath->nFlags |= 0x20;
-        return pDynamicPath->dwPathPoints;
-      }
-
-      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(pUnit + 0x20));
-    } else {
-      nPathPoints = PATH_BuildDirectPathToTarget(pDynamicPath);
-      if (!nPathPoints) {
-        pDynamicPath->nFlags &= -33;
-        return 0;
-      }
     }
 
     pDynamicPath->nFlags |= 0x20;

@@ -63,11 +63,10 @@ void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, int32_t nStateId, int32_t b
     uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + (nStateId >> 5));
     if (bSet) {
       *pFlagWord |= gadwBitMasks[nStateId & 0x1fU];
-      Unit::ROOM_LinkUnitToUpdateList(pUnit);
-      return;
+    } else {
+      *pFlagWord &= gadwInvBitMasks[nStateId & 0x1fU];
     }
 
-    *pFlagWord &= gadwInvBitMasks[nStateId & 0x1fU];
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 

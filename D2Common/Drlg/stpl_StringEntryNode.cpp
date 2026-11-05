@@ -26,18 +26,9 @@
 
 
 template<> uint32_t TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::CalcChunkSize(uint32_t nCount) {
-    uint32_t nCapacityStripped;
     if (nCount < 0x15) {
-      uint32_t nCapacityMask;
-      nCapacityStripped = nCount - 1 & nCount;
-      while (true) {
-        nCapacityMask = nCapacityStripped;
-        if (!nCapacityMask) {
-          break;
-        }
-
-        nCount = nCapacityMask;
-        nCapacityStripped = nCapacityMask - 1 & nCapacityMask;
+      while (nCount & nCount - 1) {
+        nCount &= nCount - 1;
       }
 
       if (nCount < 1) {
@@ -174,10 +165,10 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next
     uint32_t nAbsOffset;
     if (pNode) {
       nAbsOffset = *(uint32_t*)((uintptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-      return (::StringEntryNode*)((int)nAbsOffset <= 0 ? 0 : nAbsOffset);
+    } else {
+      nAbsOffset = this->m_terminator.m_next;
     }
 
-    nAbsOffset = this->m_terminator.m_next;
     return (::StringEntryNode*)((int)nAbsOffset <= 0 ? 0 : nAbsOffset);
 }
 
@@ -285,10 +276,10 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Next(
     uint32_t uAbsOffset;
     if (pNode) {
       uAbsOffset = *(uint32_t*)((uintptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset);
-      return (::StringEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
+    } else {
+      uAbsOffset = this->tFullList.m_terminator.m_next;
     }
 
-    uAbsOffset = this->tFullList.m_terminator.m_next;
     return (::StringEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
 }
 

@@ -86,8 +86,7 @@ void __fastcall FreeArenaControl(::SGAMEDATA * pGame) {
 // @sourcefile .\GAME\Arena.cpp
 void __fastcall AllocPlayerArena(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerArenaStrc* pArena = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitDataPlayerArenaStrc, ".\\GAME\\Arena.cpp", 0x47);
-    pArena->nScore = 0;
-    pArena->bScoreDirty = 0;
+    memset(pArena, 0, sizeof(*pArena));
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a);
@@ -419,12 +418,8 @@ static void __stdcall UpdatePlayerKillCount(D2ClientStrc * pClient, D2UnitStrc *
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5);
       exit(-1);
     }
-    if (!pUnit) {
-      SCmd::NET_D2GS_SERVER_Send_0x65_SCORE_UPDATE(pClient, -1, (uint16_t)pArenaData->nScore);
-      return;
-    }
 
-    SCmd::NET_D2GS_SERVER_Send_0x65_SCORE_UPDATE(pClient, pUnit->nUnitGUID, (uint16_t)pArenaData->nScore);
+    SCmd::NET_D2GS_SERVER_Send_0x65_SCORE_UPDATE(pClient, !pUnit ? -1 : pUnit->nUnitGUID, (uint16_t)pArenaData->nScore);
 }
 
 static void __stdcall ARENA_BroadcastKillToPlayers(::SGAMEDATA * pGame, int32_t nBroadcastMode, D2ClientStrc * pClient) {

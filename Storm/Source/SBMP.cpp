@@ -437,7 +437,7 @@ static int __thiscall SBMP_WriteTGA(void * pPixels, void * hFile, uint8_t * nPal
     __frame0.wTgaYOrigin = 0;
     __frame0.wTgaWidth = (uint16_t)width;
     __frame0.wTgaHeight = (uint16_t)height;
-    __frame0.nTgaDescriptor = (bpp != 0x20 ? 0 : 0x8) | 0x20;
+    __frame0.nTgaDescriptor = (bpp == 0x20 ? 0x8 : 0) | 0x20;
     /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&__frame0.tgaIdLen, 0x12, &dwBytesWritten, (LPOVERLAPPED)0x0);
     if (bpp == 8) {
       uint8_t* pSrcPalEntry;
@@ -1199,7 +1199,7 @@ static int __fastcall SBMP_DecodePcxFile(D2MPQFileStrc * hFile, uint8_t * pixels
       DWORD dwCurPos;
       dwCurPos = SFile::SFileGetFileSize(hFile, (LPDWORD)0x0);
       dwFileSize = SFile::SFileSetFilePointer(hFile, 0, nullptr, 1);
-      nSize = dwCurPos - (iResult != 8 ? 0 : 0x300) - dwFileSize;
+      nSize = dwCurPos - (iResult == 8 ? 0x300 : 0) - dwFileSize;
       src = (uint8_t*)SMem::SMemAlloc(nSize, ".\\SOURCE\\SBMP.CPP", 0x46b, 0);
       SFile::SFileReadFile(hFile, src, nSize, nullptr, 0);
       SBMP_UncompressPcxImage(nPixelBufferSize, pixels, nSize - (iResult == 8), src, width, (uint32_t)sPcxHeader.wBytesPerLine, (uint32_t)sPcxHeader.byPlanes);
@@ -1251,7 +1251,7 @@ static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, void * gifData, int d
         dstSize_00 = dstSize;
       }
 
-      SBMP_UncompressPcxImage(dstSize_00, pixels, dataSize - (nBpp != 8 ? 0 : 0x301) - 0x80, (uint8_t*)((int)gifData + 0x80), width, (uint32_t)*(uint16_t*)((int)gifData + 0x42), (uint32_t)*(uint8_t*)((int)gifData + 0x41));
+      SBMP_UncompressPcxImage(dstSize_00, pixels, dataSize - (nBpp == 8 ? 0x301 : 0) - 0x80, (uint8_t*)((int)gifData + 0x80), width, (uint32_t)*(uint16_t*)((int)gifData + 0x42), (uint32_t)*(uint8_t*)((int)gifData + 0x41));
     }
     if (!(palette && nBpp == 8)) {
       return 1;

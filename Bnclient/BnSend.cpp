@@ -144,7 +144,8 @@ int __fastcall NET_SID_CLIENT_Send_0x29_LogonResponse(char * szText1, char * szT
     dwClientToken.dwServerToken = dwTickCount.dwServerToken;
     _net_sid::XSHA1(&dwClientToken.sPasswordHash, (char*)&dwTickCount, 0x1c);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(dwClientToken.szUsername, szText1, 0x100);
-    NET_SID_CLIENT_Send(0x29, (char*)&dwClientToken, nUsernameLen + 0x1d);
+    nUsernameLen += 0x1d;
+    NET_SID_CLIENT_Send(0x29, (char*)&dwClientToken, nUsernameLen);
     return 1;
 }
 
@@ -163,7 +164,8 @@ int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * sz
     dwClientToken.dwServerToken = dwTickCount.dwServerToken;
     _net_sid::XSHA1(&dwClientToken.sPasswordHash, (char*)&dwTickCount, 0x1c);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(dwClientToken.szUsername, szText1, 0x100);
-    NET_SID_CLIENT_Send(0x3a, (char*)&dwClientToken, nUsernameLen + 0x1d);
+    nUsernameLen += 0x1d;
+    NET_SID_CLIENT_Send(0x3a, (char*)&dwClientToken, nUsernameLen);
     return 1;
 }
 
@@ -176,7 +178,8 @@ int __fastcall NET_SID_CLIENT_Send_0x3D_CreateAccount2(char * szText1, char * sz
     /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(szPasswordLower, nLen);
     _net_sid::XSHA1(&sha1Password, szPasswordLower, nLen);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(szUsername, szText1, 0x100);
-    NET_SID_CLIENT_Send(0x3d, (char*)&sha1Password, nUsernameLen + 0x15);
+    nUsernameLen += 0x15;
+    NET_SID_CLIENT_Send(0x3d, (char*)&sha1Password, nUsernameLen);
     return 1;
 }
 
@@ -208,7 +211,8 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
     _net_sid::XSHA1(&__frame0.sha1OldCombined, (char*)&__frame0.dwTickCount, 0x1c);
     _net_sid::XSHA1(&__frame0.sha1NewPassword, __frame0.szPasswordLower, nStrLen);
     nStrLen = Storm::Source::SSTR::SStrCopy(__frame0.szUsername, szText1, 0x100);
-    NET_SID_CLIENT_Send(0x31, (char*)&__frame0.dwClientToken, nStrLen + 0x31);
+    nStrLen += 0x31;
+    NET_SID_CLIENT_Send(0x31, (char*)&__frame0.dwClientToken, nStrLen);
     return 1;
 }
 
@@ -891,8 +895,8 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * sz
     }
 
     memcpy(szPacketBuf, szText1, _Size_00);
-    nLen2 = Storm::Source::SSTR::SStrLen(szText2);
-    _Size = nLen2 + 1;
+    _Size = Storm::Source::SSTR::SStrLen(szText2);
+    _Size += 1;
     if (!(_Size <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x588);
       exit(-1);
@@ -932,16 +936,16 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
     }
 
     memcpy(szPacketBuf, szText1, _Size);
-    nLen2 = Storm::Source::SSTR::SStrLen(szText2);
-    _Size_00 = nLen2 + 1;
+    _Size_00 = Storm::Source::SSTR::SStrLen(szText2);
+    _Size_00 += 1;
     if (!(_Size_00 <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ac);
       exit(-1);
     }
 
     memcpy(szPacketBuf + nLen1 + 1, szText2, _Size_00);
-    nLen2 = Storm::Source::SSTR::SStrLen(szNewEmail);
-    _Size_01 = nLen2 + 1;
+    _Size_01 = Storm::Source::SSTR::SStrLen(szNewEmail);
+    _Size_01 += 1;
     if (!(_Size_01 <= 0x100)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5b4);
       exit(-1);
@@ -1333,10 +1337,10 @@ int __fastcall BNCLIENT_EnterChatAndJoinChannel(char * szUsername, char * szStat
     BOOL bReadyFlag = _net_sid::SID_GetReadyFlag();
     if (bReadyFlag) {
       BNMESSQUEUE_SetStateIfZero(0xe);
-      return 1;
+    } else {
+      SID_SetStateFlag1(0);
     }
 
-    SID_SetStateFlag1(0);
     return 1;
 }
 
@@ -2003,18 +2007,9 @@ int __thiscall BNNEWS_GetNewsEntryByIndex(int * pNewsTable, int nIndex) {
 }
 
 uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(D2BnNewsTableStrc * pNewsTable, uint32_t dwSize) {
-    uint32_t uStripped;
     if (dwSize < 8) {
-      uint32_t uHighBit;
-      uStripped = dwSize - 1 & dwSize;
-      while (true) {
-        uHighBit = uStripped;
-        if (!uHighBit) {
-          break;
-        }
-
-        dwSize = uHighBit;
-        uStripped = uHighBit - 1 & uHighBit;
+      while (dwSize & dwSize - 1) {
+        dwSize &= dwSize - 1;
       }
 
       if (dwSize < 1) {
@@ -2989,42 +2984,49 @@ BOOL __fastcall BNNEWS_DecodeCDKey26Char(char * szCDKey, uint32_t * pOutValue1, 
 
 // Prepares CD key hash structure for authentication. Supports both 16-char (classic) and 26-char (expansion) CD keys. Output structure contains: key length, public value, product value, and 20-byte SHA-1 hash.
 static int32_t __stdcall BNSEND_PrepareCDKeyHash(uint32_t nToken, uint32_t nServerToken, char * szCDKey, D2CDKeyHashStrc * pOutHash) {
+    int bDecodeOk;
     uint32_t aCDKeyHashInput[6];
     uint32_t nPublic2;
     BnCDKeyHashInput26 sHashInput26;
     uint32_t pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
-    if (pKeyLenPtr != 0x10) {
-      if (pKeyLenPtr == 0x1a) {
-        sHashInput26.dwClientToken = nToken;
-        sHashInput26.dwServerToken = nServerToken;
-        if (szCDKey) {
-          _net_sid::NET_SID_CLIENT_TransformCdKeyToken(szCDKey, &sHashInput26.dwProductId, &nPublic2, (uint16_t*)sHashInput26.abPrivateValue);
-          sHashInput26.dwPublicValue = nPublic2;
+    switch (pKeyLenPtr) {
+      case 0x10:
+        {
+          aCDKeyHashInput[0] = nToken;
+          aCDKeyHashInput[1] = nServerToken;
+          bDecodeOk = BNSEND_DecodeCDKeyString(aCDKeyHashInput + 2, &nPublic2, szCDKey, aCDKeyHashInput + 5);
+          if (!bDecodeOk) {
+            break;
+          }
+
+          aCDKeyHashInput[3] = nPublic2;
+          aCDKeyHashInput[4] = 0;
           pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
-          pOutHash->nPublic = sHashInput26.dwProductId;
-          pOutHash->nProduct = sHashInput26.dwPublicValue;
           pOutHash->nKeyLength = pKeyLenPtr;
-          pOutHash->nUnused = 0;
-          BNSEND_HashCDKeyData(pOutHash->abHash, &sHashInput26, 0x1a);
+          pOutHash->nProduct = aCDKeyHashInput[3];
+          pOutHash->nUnused = aCDKeyHashInput[4];
+          pOutHash->nPublic = aCDKeyHashInput[2];
+          _net_sid::XSHA1((D2XSHA1Strc*)pOutHash->abHash, (char*)aCDKeyHashInput, 0x18);
           return 1;
         }
-      }
-    } else {
-      int bDecodeOk;
-      aCDKeyHashInput[0] = nToken;
-      aCDKeyHashInput[1] = nServerToken;
-      bDecodeOk = BNSEND_DecodeCDKeyString(aCDKeyHashInput + 2, &nPublic2, szCDKey, aCDKeyHashInput + 5);
-      if (bDecodeOk) {
-        aCDKeyHashInput[3] = nPublic2;
-        aCDKeyHashInput[4] = 0;
-        pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
-        pOutHash->nKeyLength = pKeyLenPtr;
-        pOutHash->nProduct = aCDKeyHashInput[3];
-        pOutHash->nUnused = aCDKeyHashInput[4];
-        pOutHash->nPublic = aCDKeyHashInput[2];
-        _net_sid::XSHA1((D2XSHA1Strc*)pOutHash->abHash, (char*)aCDKeyHashInput, 0x18);
-        return 1;
-      }
+      case 0x1a:
+        {
+          sHashInput26.dwClientToken = nToken;
+          sHashInput26.dwServerToken = nServerToken;
+          if (szCDKey) {
+            _net_sid::NET_SID_CLIENT_TransformCdKeyToken(szCDKey, &sHashInput26.dwProductId, &nPublic2, (uint16_t*)sHashInput26.abPrivateValue);
+            sHashInput26.dwPublicValue = nPublic2;
+            pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
+            pOutHash->nPublic = sHashInput26.dwProductId;
+            pOutHash->nProduct = sHashInput26.dwPublicValue;
+            pOutHash->nKeyLength = pKeyLenPtr;
+            pOutHash->nUnused = 0;
+            BNSEND_HashCDKeyData(pOutHash->abHash, &sHashInput26, 0x1a);
+            return 1;
+          }
+
+          break;
+        }
     }
 
     return 0;

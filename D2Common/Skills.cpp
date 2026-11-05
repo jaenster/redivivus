@@ -343,11 +343,7 @@ int32_t __stdcall SKILLS_GetSkillsTxtField0x14(int * pSkill) {
 // @sourcefile .\SKILLS\Skills.cpp
 D2SkillListStrc * __stdcall STRUCT_CreateSkillsList(D2PoolManagerStrc * pMemory) {
     D2SkillListStrc* pPlayerSkills = D2_NEW_POOL_AT(pMemory, D2SkillListStrc, ".\\SKILLS\\Skills.cpp", 0x37f);
-    pPlayerSkills->pFirstSkill = 0;
-    pPlayerSkills->pLeftSkill = 0;
-    pPlayerSkills->pRightSkill = 0;
-    pPlayerSkills->pCurrentSkill = 0;
-    pPlayerSkills->pLight = 0;
+    memset(pPlayerSkills, 0, sizeof(*pPlayerSkills));
     pPlayerSkills->pMemory = pMemory;
     return pPlayerSkills;
 }
@@ -2409,30 +2405,37 @@ int __stdcall SKILL_GetArrowModifierSkill(D2UnitStrc * pUnit, int * pnStatLevel)
     if (pUnit->eUnitType == UNIT_PLAYER) {
       uint32_t nWeaponClass;
       nWeaponClass = Units::GetWeaponClass(pUnit);
-      if (nWeaponClass != 1) {
-        if (nWeaponClass == 7) {
-          nStatLevel = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_magicarrow, 0);
-          if (nStatLevel <= 0) {
-            nExplosiveArrowLevel = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_explosivearrow, 0);
-            if (nExplosiveArrowLevel <= 0) {
-              return 0x1f;
-            }
-            if (!pnStatLevel) {
+      switch (nWeaponClass) {
+        default:
+          {
+            return -1;
+          }
+        case 7:
+          {
+            nStatLevel = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_magicarrow, 0);
+            if (nStatLevel <= 0) {
+              nExplosiveArrowLevel = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_explosivearrow, 0);
+              if (nExplosiveArrowLevel <= 0) {
+                return 0x1f;
+              }
+              if (!pnStatLevel) {
+                return 0x29;
+              }
+
+              *pnStatLevel = nExplosiveArrowLevel;
               return 0x29;
             }
+            if (!pnStatLevel) {
+              return 0x1b;
+            }
 
-            *pnStatLevel = nExplosiveArrowLevel;
-            return 0x29;
-          }
-          if (!pnStatLevel) {
+            *pnStatLevel = nStatLevel;
             return 0x1b;
           }
-
-          *pnStatLevel = nStatLevel;
-          return 0x1b;
-        }
-
-        return -1;
+        case 1:
+          {
+            break;
+          }
       }
     }
 
@@ -3301,18 +3304,15 @@ D2SkillStrc * __stdcall AllocSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
     pNewSkill->pNext = 0;
     D2SkillStrc* pLastSkill = pSkillsList->pFirstSkill;
     if (pLastSkill) {
-      D2SkillStrc* pNextSkill = pLastSkill->pNext;
-      while (pNextSkill) {
+      while (pLastSkill->pNext) {
         pLastSkill = pLastSkill->pNext;
-        pNextSkill = pLastSkill->pNext;
       }
 
       pLastSkill->pNext = pNewSkill;
-      SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
-      return pNewSkill;
+    } else {
+      pSkillsList->pFirstSkill = pNewSkill;
     }
 
-    pSkillsList->pFirstSkill = pNewSkill;
     SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
     return pNewSkill;
 }
@@ -3763,7 +3763,7 @@ int32_t __stdcall SKILLS_CanUseSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     }
 
     bCheckFlag = SKILL_IsDelayExpired(pSkill, pUnit);
-    return (bCheckFlag ? -8 : 0) + 8;
+    return bCheckFlag ? 0 : 8;
 }
 
 // Sets the nLevelBonus field on a unit's skill entry for item-granted skill bonuses (nOwnerGUID == -1). If the skill doesn't exist yet and the bonus is positive, allocates it via AllocSkill and initialises its level to 0. Ignores non-item-owned skills (nOwnerGUID != -1). Calls SKILLS_UpdatePassiveSkillStats after any change to propagate passive stat recalculations.

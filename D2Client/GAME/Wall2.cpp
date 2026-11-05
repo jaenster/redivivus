@@ -694,10 +694,8 @@ static void WALL2_InsertUnitDrawBelow(D2Wall2DrawListStrc * pDrawList, D2UnitStr
       return;
     }
 
-    D2Wall2DrawEntryStrc* pNextDrawNode = pDVar2->pNext;
-    while (pNextDrawNode) {
+    while (pDVar2->pNext) {
       pDVar2 = pDVar2->pNext;
-      pNextDrawNode = pDVar2->pNext;
     }
 
     pDVar2->pNext = pDVar1;
@@ -991,7 +989,6 @@ static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2
 static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData, D2Wall2DrawListStrc * pDrawList) {
     D2DrlgRoomCoordsStrc roomCoords;
     D2Wall2DrawEntryStrc* pCurNode;
-    D2Wall2DrawEntryStrc* pNextNode;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
     pDrawList->nWall2EntryCount = nEntryIdx + 1;
     if (nEntryIdx >= 3000) {
@@ -1012,10 +1009,8 @@ static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2Ro
       return;
     }
 
-    pNextNode = pCurNode->pNext;
-    while (pNextNode) {
+    while (pCurNode->pNext) {
       pCurNode = pCurNode->pNext;
-      pNextNode = pCurNode->pNext;
     }
 
     pCurNode->pNext = pDVar1;
@@ -1079,7 +1074,6 @@ static void __stdcall WALL2_InsertUnitDraw(D2Wall2CellStrc * pWall2Cell, D2UnitS
 static void __stdcall WALL2_InsertUnitShadowDraw(D2Wall2CellStrc * pWall2Cell, D2UnitStrc * pUnit, D2Wall2DrawListStrc * pDrawList) {
     D2Wall2DrawEntryStrc* pDVar2;
     int nUnitPos;
-    D2Wall2DrawEntryStrc* pNextNode;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
     pDrawList->nWall2EntryCount = nEntryIdx + 1;
     if (nEntryIdx >= 3000) {
@@ -1117,10 +1111,8 @@ static void __stdcall WALL2_InsertUnitShadowDraw(D2Wall2CellStrc * pWall2Cell, D
       return;
     }
 
-    pNextNode = pDVar2->pNext;
-    while (pNextNode) {
+    while (pDVar2->pNext) {
       pDVar2 = pDVar2->pNext;
-      pNextNode = pDVar2->pNext;
     }
 
     pDVar2->pNext = pDVar1;

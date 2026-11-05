@@ -141,6 +141,10 @@ typedef void (__fastcall *pfnSkillRangeCb)(D2UnitStrc * pUnit, void * pCtx);
 #define RECON_FPTD_PFN_StatExpireCallback
 typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
 #endif
+#ifndef RECON_FPTD_pfnUIMenuInstance
+#define RECON_FPTD_pfnUIMenuInstance
+typedef void (__stdcall *pfnUIMenuInstance)();
+#endif
 
 static D2SkillSrvStFunc SKILLSRVSTFUNCS[91] = {
     nullptr,
@@ -947,14 +951,15 @@ uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(D2SkillCallbackConte
       pNextGUIDCtx->nCount++;
       pNextGUIDCtx->nNextGUID = nUnitId;
       pNextGUIDCtx->pNext = pTargetUnit;
-      return 1;
-    }
-    if (nUnitId <= pNextGUIDCtx->nLowestGUID) {
-      pNextGUIDCtx->nLowestGUID = nUnitId;
-      pNextGUIDCtx->pLowest = pTargetUnit;
+    } else {
+      if (nUnitId <= pNextGUIDCtx->nLowestGUID) {
+        pNextGUIDCtx->nLowestGUID = nUnitId;
+        pNextGUIDCtx->pLowest = pTargetUnit;
+      }
+
+      pNextGUIDCtx->nCount++;
     }
 
-    pNextGUIDCtx->nCount++;
     return 1;
 }
 
@@ -1743,7 +1748,6 @@ void __fastcall SKILLS_SetPeriodicSkillTimer(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nStatId, eD2Skills eSkill, int32_t nSkillLvl, int32_t bPeriodicSkill) {
-    int nEventType;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return;
     }
@@ -1763,13 +1767,11 @@ void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitSt
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
       eSkill = SKILL_Attack;
       nStatId = -1;
-      nEventType = 8;
+      GAME::Event::SetEvent(pGame, pUnit, 8, (nGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1, nStatId, eSkill);
     } else {
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nStatId);
-      nEventType = 9;
+      GAME::Event::SetEvent(pGame, pUnit, 9, (nGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1, nStatId, eSkill);
     }
-
-    GAME::Event::SetEvent(pGame, pUnit, nEventType, (nGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1, nStatId, eSkill);
 }
 
 // Server-side: spawns and links a Town Portal object for pUnit. Finds a free spawn coordinate in eSrcLevel, checks for the special Duriel portal, creates an OBJECT unit of pUnit's class, stores the source level ID in the portal's char name buffer, sets portal flags, and bidirectionally links owner/portal via StoreOwner and LinkPortalCoords. Frees the placeholder pUnit on spawn failure. Returns the new portal unit or NULL on error.
@@ -1850,7 +1852,8 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
 
       pNewPortal->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eSrcLevelId;
       byPortalFlags = D2Common::Units::GetObjectPortalFlags(pNewPortal);
-      D2Common::Units::SetObjectPortalFlags(pNewPortal, byPortalFlags | 3);
+      byPortalFlags |= 3;
+      D2Common::Units::SetObjectPortalFlags(pNewPortal, byPortalFlags);
       D2Common::Units::SetupUpdateFlag(pNewPortal, 2);
       UNIT::SUnit::LinkPortalCoords(pUnit, pNewPortal);
       D2Common::Units::StoreOwner(pUnit, pNewPortal);
@@ -1917,7 +1920,8 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
         }
 
         byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortal);
-        D2Common::Units::SetObjectPortalFlags(pPortal, byPortalFlags | 3);
+        byPortalFlags |= 3;
+        D2Common::Units::SetObjectPortalFlags(pPortal, byPortalFlags);
         D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pSpawnRoom, 0);
         D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortal), 0);
         return 1;
@@ -2469,8 +2473,7 @@ void __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       bSearchNeighbors = 1;
       nMinDistance = 1;
       pNewPosition = &ptSpawnPos;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptOrigPos, pNewPosition, nMinDistance, bSearchNeighbors);
+      pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptOrigPos, pNewPosition, nMinDistance, bSearchNeighbors);
       if (pRoom) {
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
@@ -2763,7 +2766,7 @@ void __fastcall SKILLS_AddRandomSkillDamage(D2UnitStrc * pUnit, int32_t * pDamag
 uint32_t __fastcall SKILLS_GetWeaponClassBitfield(D2UnitStrc * pUnit) {
     int32_t nWeaponClass = 0;
     D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pUnit->pInventory, (uint32_t*)&nWeaponClass, -1, 1);
-    return nWeaponClass != 7 ? 0 : 0x1f;
+    return nWeaponClass == 7 ? 0x1f : 0;
 }
 
 void __fastcall SKILLS_SetupAnimTimerPercent(D2UnitStrc * pUnit, int32_t nPercent) {
@@ -3715,10 +3718,10 @@ BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2
       if (!nActiveWeaponHand) {
         if (nActiveWeaponSlot == 5) {
           nThrowableStatVal = 4;
-          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStatVal);
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
         } else {
           nThrowableStatVal = 5;
-          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStatVal);
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
         }
       }
 
@@ -3767,10 +3770,10 @@ BOOL __fastcall Skills_SrvDoFunc_005_ThrowWeaponRightHand(::SGAMEDATA * pGame, D
       if (nWeaponHand) {
         if (nWeaponSlot == 5) {
           nThrowableStat = 4;
-          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStat);
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
         } else {
           nThrowableStat = 5;
-          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nThrowableStat);
+          pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
         }
       }
 

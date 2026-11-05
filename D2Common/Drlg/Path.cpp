@@ -1401,7 +1401,7 @@ static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, uint32_
           return 0;
         }
       } else {
-        nDstY = (uint16_t)(-1 < nDeltaX) * 2 - 1;
+        nDstY = (uint16_t)(nDeltaX >= 0) * 2 - 1;
         *(uint16_t*)(char*)&nPackedSrc = (uint16_t)(nDeltaY >= 0) * 2 - 1;
         nDeltaX = nStepsY;
         if (nCurX != sDst.nX) {
@@ -1763,8 +1763,8 @@ int32_t __fastcall PATH_FindPathSmoothed(D2PathTypeArg * pPathTypeArg) {
     int nCountDelta = nSmoothedCount2 - nSmoothedCount1;
     if (!nCountDelta) {
       pDynamicPath->nDirOffset = 2;
-      nSmoothedCount2 = DRLGPATH_SmoothPathPoints(pPathTypeArg);
-      nCountDelta = nSmoothedCount2 - nSmoothedCount1;
+      nCountDelta = DRLGPATH_SmoothPathPoints(pPathTypeArg);
+      nCountDelta -= nSmoothedCount1;
     }
 
     pDynamicPath->nDirOffset = -4;
@@ -2360,16 +2360,7 @@ static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AStarExpandNode(int32_t nMax
         } else {
           ppGridCell = pAStarCtx->aNodes + (int)pNewNode;
           pAStarCtx->nNodeCount = (int32_t)((uintptr_t)&pNewNode->nFCost + 1);
-          ppGridCell->nFCost = 0;
-          ppGridCell->nHCost = 0;
-          ppGridCell->nGCost = 0;
-          ppGridCell->nFlags = 0;
-          ppGridCell->nX = 0;
-          ppGridCell->nY = 0;
-          ppGridCell->pSeedPtr = 0;
-          ppGridCell->nDirection = 0;
-          ppGridCell->pParent = 0;
-          ppGridCell->pNext = 0;
+          memset(ppGridCell, 0, sizeof(*ppGridCell));
         }
 
         pCurNode->pNext = ppGridCell;
@@ -3221,7 +3212,7 @@ static int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, u
         return nPointCount;
       }
 
-      *pnInitDir = nStepY <= 0 ? 0 : 0x2;
+      *pnInitDir = nStepY > 0 ? 0x2 : 0;
       if ((int)nDeltaY <= nMaxStepsM1) {
         do {
           nSrcY += nStepY;
@@ -3275,7 +3266,7 @@ static int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, u
           return nPointCount;
         }
       } else {
-        *pnInitDir = nStepY <= 0 ? 0 : 0x2;
+        *pnInitDir = nStepY > 0 ? 0x2 : 0;
         if ((int)nDeltaY <= nMaxStepsM1) {
           nMaxSteps = 0;
           nSrcPacked = nDeltaY;

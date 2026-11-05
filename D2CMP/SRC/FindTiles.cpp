@@ -103,7 +103,7 @@ static void FINDTILE_AddTileToChain(D2TileLibraryHashNodeStrc * pHashNode, D2Til
       exit(-1);
     }
 
-    pNewEntry->pNext = 0;
+    memset(pNewEntry, 0, sizeof(*pNewEntry));
     pNewEntry->pTile = pTileData;
     pNewEntry->pNext = pHashNode->pRef;
     pHashNode->pRef = pNewEntry;
@@ -119,11 +119,7 @@ static void FINDTILE_AllocHashEntry(D2TileLibraryEntryStrc * pTileData, D2TileLi
       exit(-1);
     } else {
       D2TileLibraryHashRefStrc* pChainEntry;
-      pHashEntry->nIndex = 0;
-      pHashEntry->nSubIndex = 0;
-      pHashEntry->nOrientation = 0;
-      pHashEntry->pRef = 0;
-      pHashEntry->pNext = 0;
+      memset(pHashEntry, 0, sizeof(*pHashEntry));
       pHashEntry->nSubIndex = pTileData->nSubIndex;
       pHashEntry->nIndex = pTileData->nIndex;
       pHashEntry->nOrientation = pTileData->nOrientation;
@@ -135,7 +131,7 @@ static void FINDTILE_AllocHashEntry(D2TileLibraryEntryStrc * pTileData, D2TileLi
         exit(-1);
       }
 
-      pChainEntry->pNext = 0;
+      memset(pChainEntry, 0, sizeof(*pChainEntry));
       pChainEntry->pTile = pTileData;
       pHashEntry->pRef = pChainEntry;
       return;

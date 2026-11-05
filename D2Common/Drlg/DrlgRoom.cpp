@@ -921,6 +921,7 @@ BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(D2DrlgCoordsStrc * pDrlgCoord
         return 0;
       }
 
+      nDistY = nDistX - nMaxDist;
       bSignedGreater = nDistX > nMaxDist;
     }
     if (!bSignedGreater) {
@@ -1255,11 +1256,7 @@ static void __stdcall DRLGROOMEX_ResizeArrayAndAddNewNearRoom(D2RoomExStrc * pDr
 // @sourcefile .\DRLG\DrlgRoom.cpp
 static void __stdcall DRLGROOMEX_AllocRoomTile(D2RoomExStrc * pLinkedRoomEx, uint8_t visSlot, D2RoomExStrc * pSrcRoomEx) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = D2_NEW_POOL_AT(pSrcRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgRoomExRoomTileNodeStrc, ".\\DRLG\\DrlgRoom.cpp", 0x322);
-    pTileGrid->pRoomTileNext = 0;
-    pTileGrid->bEnabled = 0;
-    pTileGrid->pTileListSetOnSelect = 0;
-    pTileGrid->pLvlWarpTxt = 0;
-    pTileGrid->pTileListClearedOnSelect = 0;
+    memset(pTileGrid, 0, sizeof(*pTileGrid));
     pTileGrid->pRoomEx = pLinkedRoomEx;
     D2LvlWarpTxt* pLvlWarpTxt = DRLGLEVEL_GetWarpsIdIfExistsAndSetup(pSrcRoomEx->pLevel, visSlot, 0x62);
     pTileGrid->pLvlWarpTxt = pLvlWarpTxt;
@@ -1314,9 +1311,7 @@ static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2R
 // @sourcefile .\DRLG\DrlgRoom.cpp
 D2PresetUnitStrc * __fastcall AllocPresetUnit(D2RoomExStrc * pRoomEx, D2PoolManagerStrc * pMemory, eD2UnitType eUnitType, int32_t nMonStatsId, BOOL bUseMonStatsMaybe, int32_t nPosX, int32_t nPosY) {
     D2PresetUnitStrc* pPresetUnit = D2_NEW_POOL_AT(pMemory, D2PresetUnitStrc, ".\\DRLG\\DrlgRoom.cpp", 0x3b6);
-    pPresetUnit->pPresetUnitNext = 0;
-    pPresetUnit->pMapAI = 0;
-    pPresetUnit->nFlags = 0;
+    memset(pPresetUnit, 0, sizeof(*pPresetUnit));
     pPresetUnit->eType = eUnitType;
     pPresetUnit->nClassId = nMonStatsId;
     pPresetUnit->nMode = bUseMonStatsMaybe;

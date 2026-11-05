@@ -734,7 +734,7 @@ void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint
       }
       if (pQuestData->nQuestNoInternal != QUESTINT_TheSearchForCain || !bCannotComplete) {
         if (pQuestData->nQuestNoInternal == QUESTINT_TheTaintedSun) {
-          *pQuestData2 = pQuestData->nStateFlagPrev != 4 ? 12 : 4;
+          *pQuestData2 = pQuestData->nStateFlagPrev == 4 ? 0x4 : 0xc;
           return;
         }
 
@@ -1110,13 +1110,18 @@ void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, D2RoomStrc 
     if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
-    if (nMonsterClassId != 0xc9) {
-      if (nMonsterClassId == 0x14b) {
-        A2Q4::A2Q4_OnMonsterDeathClass331_NoOp(nX, nY);
-        return;
-      }
-    } else {
-      A2Q4::A2Q4_OnMonsterDeathClass201_NoOp(nX, nY);
+
+    switch (nMonsterClassId) {
+      case 0xc9:
+        {
+          A2Q4::A2Q4_OnMonsterDeathClass201_NoOp(nX, nY);
+          break;
+        }
+      case 0x14b:
+        {
+          A2Q4::A2Q4_OnMonsterDeathClass331_NoOp(nX, nY);
+          return;
+        }
     }
 }
 
@@ -1279,13 +1284,17 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
                 }
 
                 eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-                if (eLevelId == LEVEL_SpiderForest) {
-                  Monster::Create::SpawnMonsterAtUnit(pGame, pUnit, 0x12d, eD2MonsterAnimMode_ns::Neutral, -1, 0);
-                  return;
-                }
-                if (eLevelId == LEVEL_ChaosSanctuary) {
-                  A4Q3::Q35_SpawnAncientsWave(pGame, pUnit);
-                  return;
+                switch (eLevelId) {
+                  case LEVEL_SpiderForest:
+                    {
+                      Monster::Create::SpawnMonsterAtUnit(pGame, pUnit, 0x12d, eD2MonsterAnimMode_ns::Neutral, -1, 0);
+                      return;
+                    }
+                  case LEVEL_ChaosSanctuary:
+                    {
+                      A4Q3::Q35_SpawnAncientsWave(pGame, pUnit);
+                      return;
+                    }
                 }
               }
             } else {
@@ -1750,12 +1759,8 @@ void __fastcall QUESTGUID_RemovePlayerFromQuest(D2QuestDataStrc * pQuestData, D2
     if (pQuestData->sQuestGUID.nPlayerCount <= 0) {
       return;
     }
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, -1);
-      return;
-    }
 
-    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Searches outward from a candidate POINT in expanding rings (up to nSearchIterations passes, stride 2) for a map tile that passes a collision-vector check (eCollisionFlags) within nScanRadius. Steps across nearby rooms via DRLGROOM_FindBetterNearbyRoom when the search position leaves the current room. On success writes the adjusted tile coordinates back into pPoint and the containing room into *pRoomsNear; on failure sets *pRoomsNear to NULL.
@@ -1875,12 +1880,8 @@ void __fastcall SetRewardAndFinishFlags(D2QuestDataStrc * pQuestData, D2QuestArg
     if (!(bRewardAwaits && pQuestData->sQuestGUID.nPlayerCount > 0)) {
       return;
     }
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, -1);
-      return;
-    }
 
-    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Sends quest state information to a specific unit (player). Retrieves quest control by difficulty, constructs a quest info packet, and sends to the player client.

@@ -3410,7 +3410,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             nFrom = 0x100;
           }
 
-          pInflateStream->data_type = (nHeadHave != 0xb ? 0 : 0x80) + (pState->last ? 0x40 : 0) + nFrom + pState->bits;
+          pInflateStream->data_type = (nHeadHave == 0xb ? 0x80 : 0) + (pState->last ? 0x40 : 0) + nFrom + pState->bits;
           if ((nInConsumed || nAvailOutStart) && nFlush != 4) {
             return nRet;
           }
@@ -4233,7 +4233,7 @@ static uint32_t __stdcall syncsearch(uint32_t * pnMatchState, uint32_t nLen, uin
         if (nGot >= 4) {
           break;
         }
-        if ((uint32_t)pBuf[i] == (nGot < 2 ? -255 : 0) + 0xff) {
+        if ((uint32_t)pBuf[i] == (nGot < 2 ? 0 : 0xff)) {
           nGot++;
         } else if (pBuf[i]) {
           nGot = 0;

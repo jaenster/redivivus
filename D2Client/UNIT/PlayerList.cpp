@@ -76,8 +76,7 @@ void __fastcall AllocPlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID) {
     }
 
     pNewEntry = D2_NEW_AT(D2PlayerListSubStrc, ".\\UNIT\\PlayerList.cpp", 0x74);
-    pNewEntry->nFlags = 0;
-    pNewEntry->pNext = 0;
+    memset(pNewEntry, 0, sizeof(*pNewEntry));
     pNewEntry->nRosterGUID = nRosterGUID;
     pNewEntry->pNext = pPlayerList->pEntry;
     pPlayerList->pEntry = pNewEntry;
@@ -112,11 +111,10 @@ void __fastcall FreePlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID) {
 
     if (pCurEntry) {
       pCurEntry->pNext = pMemoryToFree->pNext;
-      D2_FREE_AT(pMemoryToFree, ".\\UNIT\\PlayerList.cpp", 0x97);
-      return;
+    } else {
+      pPlayerList->pEntry = pMemoryToFree->pNext;
     }
 
-    pPlayerList->pEntry = pMemoryToFree->pNext;
     D2_FREE_AT(pMemoryToFree, ".\\UNIT\\PlayerList.cpp", 0x97);
 }
 

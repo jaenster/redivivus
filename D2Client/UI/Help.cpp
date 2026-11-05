@@ -285,13 +285,10 @@ void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     }
     if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
       gpHelpCloseButton = 1;
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
+    } else {
+      GAME::Game::GAMEDATA_ClearQueuedClicks();
     }
 
-    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);

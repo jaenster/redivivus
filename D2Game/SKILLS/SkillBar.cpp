@@ -782,17 +782,16 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
       PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
       PLAYER::PlayerModes::PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
       SKILLBAR_ApplyFrenzyStack(pGame, pUnit, eSkill, nSkillLvl);
-      bHitResult = SKILLBAR_SkillMeleeAttack(pGame, pUnit, pTarget, eSkill, nSkillLvl);
-      return bHitResult;
+    } else {
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
+      PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
+      PLAYER::PlayerModes::PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
+      SKILLBAR_ApplyFrenzyStack(pGame, pUnit, eSkill, nSkillLvl);
+      nMeleeRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
+      pTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeRange, 0x20003, pTarget->nUnitGUID, nullptr);
     }
 
-    pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-    PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
-    PLAYER::PlayerModes::PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
-    SKILLBAR_ApplyFrenzyStack(pGame, pUnit, eSkill, nSkillLvl);
-    nMeleeRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
-    pTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeRange, 0x20003, pTarget->nUnitGUID, nullptr);
     bHitResult = SKILLBAR_SkillMeleeAttack(pGame, pUnit, pTarget, eSkill, nSkillLvl);
     return bHitResult;
 }
@@ -864,7 +863,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    pNearbyTarget = (D2UnitStrc*)((eUnitType == UNIT_PLAYER ? -8184 : 0) + 0x3c01);
+    pNearbyTarget = (D2UnitStrc*)(eUnitType == UNIT_PLAYER ? 0x1c09 : 0x3c01);
     D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, 0xc01);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 7);
     uint32_t bPathOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
@@ -887,7 +886,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
 
     nTargetX = (uint32_t)pPathPoints[nCalcResult - 1].nX;
     nTargetY = (uint32_t)pPathPoints[nCalcResult - 1].nY;
-    int eCollisionFlag = (eUnitType == UNIT_PLAYER ? -128 : 0) + 0x100;
+    int eCollisionFlag = eUnitType == UNIT_PLAYER ? 0x80 : 0x100;
     eD2CollisionShapeType nType = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
     uint32_t nCollideX = nTargetX;
     uint32_t nCollideY = nTargetY;
@@ -1034,13 +1033,13 @@ void __fastcall SKILL_DeactivateAndRestoreCollision(::SGAMEDATA * pGameStrc, D2U
     }
 
     bool bIsPlayerUnit = pUnit->eUnitType == UNIT_PLAYER;
-    int eCollisionFlag = (bIsPlayerUnit ? -128 : 0) + 0x100;
+    int eCollisionFlag = bIsPlayerUnit ? 0x80 : 0x100;
     if (nCollideX && nCollideY) {
       D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nCollideX, nCollideY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), eCollisionFlag);
     }
 
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, eCollisionFlag);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, (bIsPlayerUnit ? -8184 : 0) + 0x3c01);
+    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, bIsPlayerUnit ? 0x1c09 : 0x3c01);
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
@@ -1313,8 +1312,7 @@ static BOOL __stdcall SKILLBAR_FindValidLeapTarget(D2UnitStrc * pUnit, int32_t n
       nY = sCandidatePos.y;
       LVar1 = sCandidatePos.x;
       if (pRoom) {
-        nRange = 0x1c09;
-        nRange = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, LVar1, nY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), nRange);
+        nRange = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, LVar1, nY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x1c09);
         if (!nRange) {
           bHasLOS = D2Common::Skills::SKILLS_HasLineOfSight(nSrcX, nSrcY, LVar1, nY, pRoom, 0x804);
           if (bHasLOS) {

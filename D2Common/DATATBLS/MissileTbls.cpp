@@ -89,7 +89,7 @@ int32_t __fastcall MapMissilesTxtKeywordToNumber(char * szKey) {
     }
 
     nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "miss", 0x20);
-    return (nCmpResult ? -5 : 0) + 4;
+    return nCmpResult ? -1 : 4;
 }
 
 // Validates and resolves a calc-code string (szText) for a missile table column. For nCalcType==1: looks up the code in the skills link table (nLinkType==3) or missiles link table (nLinkType==4); sets *pdwParam=1 on a successful lookup, 0 on fallback via GetClassIdFromName on the misc-calc link. For other nCalcType values: packs the up-to-4-char string into a uint32 and calls GetClassIdFromName on the miss-calc link, always setting *pdwParam=0.

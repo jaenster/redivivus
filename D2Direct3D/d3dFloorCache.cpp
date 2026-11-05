@@ -143,12 +143,11 @@ void __fastcall D3DFLOOR_SetPalette(D3DFloorCacheStrc * pCache, void * pPalette)
 static void __fastcall D3DFLOOR_InsertNodeAtTail(D3DFloorCacheNodeStrc * pNode, D3DFloorCacheStrc * pCache) {
     if (!pCache->pUsedHead) {
       pCache->pUsedHead = pNode;
-      pCache->pUsedTail = pNode;
-      return;
+    } else {
+      pCache->pUsedTail->pNext = pNode;
+      pNode->pPrev = pCache->pUsedTail;
     }
 
-    pCache->pUsedTail->pNext = pNode;
-    pNode->pPrev = pCache->pUsedTail;
     pCache->pUsedTail = pNode;
 }
 
@@ -165,12 +164,10 @@ D3DFloorCacheNodeStrc * __fastcall D3DFLOOR_RemoveNodeByIndex(D3DFloorCacheStrc 
       pCache->pUsedHead = (D3DFloorCacheNodeStrc*)pNextNode;
       if (pNextNode) {
         pNextNode->pUnitData.pUnitDataPlayer = 0;
-        pUsedHead->pRightArmItem = 0;
-        pUsedHead->pLeftArmItem = 0;
-        return (D3DFloorCacheNodeStrc*)pUsedHead;
+      } else {
+        pCache->pUsedTail = 0;
       }
 
-      pCache->pUsedTail = 0;
       pUsedHead->pRightArmItem = 0;
       pUsedHead->pLeftArmItem = 0;
       return (D3DFloorCacheNodeStrc*)pUsedHead;
@@ -179,13 +176,11 @@ D3DFloorCacheNodeStrc * __fastcall D3DFLOOR_RemoveNodeByIndex(D3DFloorCacheStrc 
       pNextNode = ((D2InventoryGridStrc*)pCache->pUsedTail)->pLeftArmItem;
       pCache->pUsedTail = (D3DFloorCacheNodeStrc*)pNextNode;
       pNextNode->eAnimMode.ePlayerMode = Death;
-      pTargetNode->pRightArmItem = 0;
-      pTargetNode->pLeftArmItem = 0;
-      return (D3DFloorCacheNodeStrc*)pTargetNode;
+    } else {
+      pTargetNode->pLeftArmItem->eAnimMode = d2_bits_as<uD2UnitMode>(pTargetNode->pRightArmItem);
+      pTargetNode->pRightArmItem->pUnitData = d2_bits_as<D2UnitDataUnion>(pTargetNode->pLeftArmItem);
     }
 
-    pTargetNode->pLeftArmItem->eAnimMode = d2_bits_as<uD2UnitMode>(pTargetNode->pRightArmItem);
-    pTargetNode->pRightArmItem->pUnitData = d2_bits_as<D2UnitDataUnion>(pTargetNode->pLeftArmItem);
     pTargetNode->pRightArmItem = 0;
     pTargetNode->pLeftArmItem = 0;
     return (D3DFloorCacheNodeStrc*)pTargetNode;
@@ -215,13 +210,12 @@ static int __stdcall D3DFLOOR_AllocateNodeFromFreeList(D3DFloorCacheStrc * pCach
     if (!pCache->pUsedHead) {
       pCache->nUsedCount++;
       pCache->pUsedHead = pNode;
-      pCache->pUsedTail = pNode;
-      return pNode->nIndex + 1;
+    } else {
+      pCache->pUsedTail->pNext = pNode;
+      pNode->pPrev = pCache->pUsedTail;
+      pCache->nUsedCount++;
     }
 
-    pCache->pUsedTail->pNext = pNode;
-    pNode->pPrev = pCache->pUsedTail;
-    pCache->nUsedCount++;
     pCache->pUsedTail = pNode;
     return pNode->nIndex + 1;
 }
@@ -400,13 +394,7 @@ void __fastcall D3DFLOOR_Free(D3DFloorCacheStrc * pCache, BOOL bInvalidateAll) {
         pCache->pNodeBuffer = 0;
       }
 
-      pCache->nMaxNodes = 0;
-      pCache->nUsedCount = 0;
-      pCache->pUsedHead = 0;
-      pCache->pUsedTail = 0;
-      pCache->pFreeHead = 0;
-      pCache->pFreeTail = 0;
-      pCache->pNodeBuffer = 0;
+      memset(pCache, 0, sizeof(*pCache));
     }
 }
 

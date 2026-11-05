@@ -973,19 +973,23 @@ void __stdcall GenerateWolrdstoneAndTombs(D2DrlgLevelStrc * pLevel) {
       nLoopCount--;
     } while (nLoopCount);
 
-    if (pLevel->nLevelType != 0x11) {
-      if (pLevel->nLevelType == 0x22) {
-        pDVar1 = pRoomExStrc->pRoomExData.pRoomExDataPreset;
-        pDVar1->nLevelPrest = gnMazeRoomCountX[nRollValue].nY;
-        pDVar1->nFlags |= 2;
-        pDVar1->nPickedFile = -1;
-        return;
-      }
-    } else {
-      pDVar1 = pRoomExStrc->pRoomExData.pRoomExDataPreset;
-      pDVar1->nLevelPrest = gnMazeRoomCountX[nRollValue].nX;
-      pDVar1->nFlags |= 2;
-      pDVar1->nPickedFile = -1;
+    switch (pLevel->nLevelType) {
+      case 0x11:
+        {
+          pDVar1 = pRoomExStrc->pRoomExData.pRoomExDataPreset;
+          pDVar1->nLevelPrest = gnMazeRoomCountX[nRollValue].nX;
+          pDVar1->nFlags |= 2;
+          pDVar1->nPickedFile = -1;
+          break;
+        }
+      case 0x22:
+        {
+          pDVar1 = pRoomExStrc->pRoomExData.pRoomExDataPreset;
+          pDVar1->nLevelPrest = gnMazeRoomCountX[nRollValue].nY;
+          pDVar1->nFlags |= 2;
+          pDVar1->nPickedFile = -1;
+          return;
+        }
     }
 }
 
@@ -3282,8 +3286,7 @@ static int __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLeve
     }
 
     pNode = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgLevelLinkNodeStrc, ".\\DRLG\\Maze.cpp", 0x780);
-    pNode->dwData2 = 0;
-    pNode->pNext = 0;
+    memset(pNode, 0, sizeof(*pNode));
     pNode->dwData0 = nFirstFile;
     pNode->dwData1 = nFileCount;
     nFileCount = D2Client::Archive::RANDOM_RandomNumberSelector(&pLevel->sSeed, nFileCount);

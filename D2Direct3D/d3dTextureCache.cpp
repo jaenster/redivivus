@@ -103,12 +103,11 @@ void __fastcall D3DTEXCACHE_SetPalette(D3DTextureCacheStrc * pCache, void * pPal
 static void __fastcall D3DTEXCACHE_InsertNodeAtTail(D3DTextureCacheNodeStrc * pNode, D3DTextureCacheStrc * pCache) {
     if (!pCache->pUsedHead) {
       pCache->pUsedHead = pNode;
-      pCache->pUsedTail = pNode;
-      return;
+    } else {
+      pCache->pUsedTail->pNext = pNode;
+      pNode->pPrev = pCache->pUsedTail;
     }
 
-    pCache->pUsedTail->pNext = pNode;
-    pNode->pPrev = pCache->pUsedTail;
     pCache->pUsedTail = pNode;
 }
 
@@ -125,12 +124,10 @@ D3DTextureCacheNodeStrc * __fastcall D3DTEXCACHE_RemoveNodeByIndex(D3DTextureCac
       pCache->pUsedHead = pNextNode;
       if (pNextNode) {
         pNextNode->pPrev = 0;
-        pUsedHead->pNext = 0;
-        pUsedHead->pPrev = 0;
-        return pUsedHead;
+      } else {
+        pCache->pUsedTail = 0;
       }
 
-      pCache->pUsedTail = 0;
       pUsedHead->pNext = 0;
       pUsedHead->pPrev = 0;
       return pUsedHead;
@@ -140,13 +137,11 @@ D3DTextureCacheNodeStrc * __fastcall D3DTEXCACHE_RemoveNodeByIndex(D3DTextureCac
       pDVar1 = pCache->pUsedTail->pPrev;
       pCache->pUsedTail = pDVar1;
       pDVar1->pNext = 0;
-      pTargetNode->pNext = 0;
-      pTargetNode->pPrev = 0;
-      return pTargetNode;
+    } else {
+      pTargetNode->pPrev->pNext = pTargetNode->pNext;
+      pTargetNode->pNext->pPrev = pTargetNode->pPrev;
     }
 
-    pTargetNode->pPrev->pNext = pTargetNode->pNext;
-    pTargetNode->pNext->pPrev = pTargetNode->pPrev;
     pTargetNode->pNext = 0;
     pTargetNode->pPrev = 0;
     return pTargetNode;
@@ -177,13 +172,12 @@ static int __stdcall D3DTEXCACHE_AllocateNodeFromFreeList(D3DTextureCacheStrc * 
       if (!pCache->pUsedHead) {
         pCache->nUsedCount++;
         pCache->pUsedHead = pDVar1;
-        pCache->pUsedTail = pDVar1;
-        return pDVar1->nIndex + 1;
+      } else {
+        pCache->pUsedTail->pNext = pDVar1;
+        pDVar1->pPrev = pCache->pUsedTail;
+        pCache->nUsedCount++;
       }
 
-      pCache->pUsedTail->pNext = pDVar1;
-      pDVar1->pPrev = pCache->pUsedTail;
-      pCache->nUsedCount++;
       pCache->pUsedTail = pDVar1;
       return pDVar1->nIndex + 1;
     } else {
@@ -302,13 +296,7 @@ void __fastcall D3DTEXCACHE_Free(D3DTextureCacheStrc * pCache, BOOL bInvalidateA
         pCache->pNodeBuffer = 0;
       }
 
-      pCache->nMaxNodes = 0;
-      pCache->nUsedCount = 0;
-      pCache->pUsedHead = 0;
-      pCache->pUsedTail = 0;
-      pCache->pFreeHead = 0;
-      pCache->pFreeTail = 0;
-      pCache->pNodeBuffer = 0;
+      memset(pCache, 0, sizeof(*pCache));
     }
 }
 

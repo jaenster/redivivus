@@ -1398,8 +1398,8 @@ void __stdcall Draw_UnitNameUnderCursor() {
     }
 
     while (true) {
-      nStrLen = TEXT_CalculateTextWidth(DisplayedTooltip.wszString);
-      nWidth = nStrLen + 8;
+      nWidth = TEXT_CalculateTextWidth(DisplayedTooltip.wszString);
+      nWidth += 8;
       nCalcTextHeight = TEXT_CalculateTextHeight(DisplayedTooltip.wszString);
       nDrawX = DisplayedTooltip.nX;
       if (DisplayedTooltip.nCenterFlag == 1) {

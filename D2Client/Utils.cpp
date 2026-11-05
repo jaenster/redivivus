@@ -31,12 +31,12 @@ void __stdcall ANIM_OnSkillCastStub() {
 }
 
 float __stdcall UTILS_SqrtFloat(float fInput) {
-    long double fVar1 = __CIsqrt((long double)fInput);
+    long double fVar1 = sqrt((double)fInput);
     return (float)fVar1;
 }
 
 float thunk___CIsqrt(float fValue) {
-    long double fVar1 = __CIsqrt((long double)fValue);
+    long double fVar1 = sqrt((double)fValue);
     return (float)fVar1;
 }
 
@@ -72,7 +72,7 @@ int32_t __fastcall RollRandomNumberTimesTwo(int32_t nRange) {
 }
 
 float __stdcall CalculateHypotenuse(float a, float b) {
-    long double fVar1 = __CIsqrt((long double)(b * b + a * a));
+    long double fVar1 = sqrt((double)(b * b + a * a));
     return (float)fVar1;
 }
 

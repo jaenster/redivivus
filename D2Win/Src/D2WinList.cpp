@@ -78,7 +78,6 @@ void __fastcall D2WINLIST_AddListItem(::D2WinList * pList, uint16_t * wszText, f
     int nTextHeight;
     int pTextWidth;
     int32_t nLine;
-    D2WinListEntry* nNextNode;
     D2WinListEntry* pTailEntry;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa1);
@@ -113,10 +112,8 @@ void __fastcall D2WINLIST_AddListItem(::D2WinList * pList, uint16_t * wszText, f
       if (!bPrepend) {
         pTailEntry = pList->sEntriesControl.pFirstEntry;
         if (pTailEntry) {
-          nNextNode = pTailEntry->pNext;
-          while (nNextNode) {
+          while (pTailEntry->pNext) {
             pTailEntry = pTailEntry->pNext;
-            nNextNode = pTailEntry->pNext;
           }
 
           pTailEntry->pNext = pNewEntry;
@@ -525,7 +522,6 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     pList->sEntriesControl.nMaxVisibleIndex = nSizeY / (pList->sEntriesControl.nFontHeight + (eFontType >> 2) * 2) - 1;
     D2WinFont::SetAndReturnLastFont(*pnFontType);
     if (*pnItemArray) {
-      D2WinListEntry* pDVar1;
       nSizeX = pnItemArray + 1;
       do {
         pNewEntry = D2_NEW_AT(D2WinListEntry, ".\\Src\\D2WinList.cpp", 0x56);
@@ -554,10 +550,8 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         pNewEntry->pNext = 0;
         pTailEntry = pList->sEntriesControl.pFirstEntry;
         if (pTailEntry) {
-          pDVar1 = pTailEntry->pNext;
-          while (pDVar1) {
+          while (pTailEntry->pNext) {
             pTailEntry = pTailEntry->pNext;
-            pDVar1 = pTailEntry->pNext;
           }
 
           pTailEntry->pNext = pNewEntry;

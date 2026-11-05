@@ -810,7 +810,7 @@ bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
           return true;
         }
 
-        *pbyStatusCode = !BVar2 * '\x02' + '\x02';
+        *pbyStatusCode = BVar2 ? 0x2 : 0x4;
         return true;
       }
       if (pItemTsh) {
@@ -847,7 +847,7 @@ bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       }
 
       BVar2 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheHoradricStaff, QUESTSTATE_JustCompleted);
-      *pbyStatusCode = BVar2 != 0 ? 13 : 11;
+      *pbyStatusCode = !BVar2 ? 0xb : 0xd;
     }
 
     return true;

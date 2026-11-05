@@ -93,12 +93,12 @@ bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
     memset(&processInfo.lpReserved, 0, 0x40);
     BOOL bCreated = CreateProcessA(szText, (LPSTR)0x0, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCSTR)0x0, &processInfo, &startupInfo);
     if (!bCreated) {
-      return bCreated != 0;
+      return false;
     }
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(startupInfo.hProcess);
     /* HANDLE hObject for CloseHandle */ CloseHandle(startupInfo.hThread);
-    return bCreated != 0;
+    return true;
 }
 
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
@@ -713,23 +713,30 @@ void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint32_t * pSrc, int32_t nDs
       uint32_t nRemainder;
       nRemainder = nBytesPerRow & 3;
       if (nRemainder) {
-        if (nRemainder != 1) {
-          if (nRemainder != 2) {
-            *pCharSelComp = *(char*)pSrc;
-            pCharSelComp[1] = *(char*)((int)pSrc + 1);
-            pCharSelComp[2] = *(char*)((int)pSrc + 2);
-            pCharSelComp += 3;
-            pSrc = (uint32_t*)((int)pSrc + 3);
-          } else {
-            *pCharSelComp = *(char*)pSrc;
-            pCharSelComp[1] = *(char*)((int)pSrc + 1);
-            pCharSelComp += 2;
-            pSrc = (uint32_t*)((int)pSrc + 2);
-          }
-        } else {
-          *pCharSelComp = *(char*)pSrc;
-          pCharSelComp++;
-          pSrc = (uint32_t*)((int)pSrc + 1);
+        switch (nRemainder) {
+          case 1:
+            {
+              *pCharSelComp = *(char*)pSrc;
+              pCharSelComp++;
+              pSrc = (uint32_t*)((int)pSrc + 1);
+              break;
+            }
+          case 2:
+            {
+              *pCharSelComp = *(char*)pSrc;
+              pCharSelComp[1] = *(char*)((int)pSrc + 1);
+              pCharSelComp += 2;
+              pSrc = (uint32_t*)((int)pSrc + 2);
+              break;
+            }
+          default:
+            {
+              *pCharSelComp = *(char*)pSrc;
+              pCharSelComp[1] = *(char*)((int)pSrc + 1);
+              pCharSelComp[2] = *(char*)((int)pSrc + 2);
+              pCharSelComp += 3;
+              pSrc = (uint32_t*)((int)pSrc + 3);
+            }
         }
       }
 
@@ -748,38 +755,45 @@ void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint32_t * pSrc, int32_t nDs
 uint32_t __fastcall D2MEM_CompareBytes(int * pBuf1, int * pBuf2, uint32_t nByteCount) {
     uint32_t nRemainder = nByteCount & 3;
     if (nRemainder) {
-      if (nRemainder != 1) {
-        if (nRemainder != 2) {
-          if ((char)*pBuf2 != (char)*pBuf1) {
-            return 0;
-          }
-          if (*(char*)((int)pBuf2 + 1) != *(char*)((int)pBuf1 + 1)) {
-            return 0;
-          }
-          if (*(char*)((int)pBuf2 + 2) != *(char*)((int)pBuf1 + 2)) {
-            return 0;
-          }
+      switch (nRemainder) {
+        case 1:
+          {
+            if ((char)*pBuf2 != (char)*pBuf1) {
+              return 0;
+            }
 
-          pBuf1 = (int*)((int)pBuf1 + 3);
-          pBuf2 = (int*)((int)pBuf2 + 3);
-        } else {
-          if ((char)*pBuf2 != (char)*pBuf1) {
-            return 0;
+            pBuf1 = (int*)((int)pBuf1 + 1);
+            pBuf2 = (int*)((int)pBuf2 + 1);
+            break;
           }
-          if (*(char*)((int)pBuf2 + 1) != *(char*)((int)pBuf1 + 1)) {
-            return 0;
+        case 2:
+          {
+            if ((char)*pBuf2 != (char)*pBuf1) {
+              return 0;
+            }
+            if (*(char*)((int)pBuf2 + 1) != *(char*)((int)pBuf1 + 1)) {
+              return 0;
+            }
+
+            pBuf1 = (int*)((int)pBuf1 + 2);
+            pBuf2 = (int*)((int)pBuf2 + 2);
+            break;
           }
+        default:
+          {
+            if ((char)*pBuf2 != (char)*pBuf1) {
+              return 0;
+            }
+            if (*(char*)((int)pBuf2 + 1) != *(char*)((int)pBuf1 + 1)) {
+              return 0;
+            }
+            if (*(char*)((int)pBuf2 + 2) != *(char*)((int)pBuf1 + 2)) {
+              return 0;
+            }
 
-          pBuf1 = (int*)((int)pBuf1 + 2);
-          pBuf2 = (int*)((int)pBuf2 + 2);
-        }
-      } else {
-        if ((char)*pBuf2 != (char)*pBuf1) {
-          return 0;
-        }
-
-        pBuf1 = (int*)((int)pBuf1 + 1);
-        pBuf2 = (int*)((int)pBuf2 + 1);
+            pBuf1 = (int*)((int)pBuf1 + 3);
+            pBuf2 = (int*)((int)pBuf2 + 3);
+          }
       }
     }
 

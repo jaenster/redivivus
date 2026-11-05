@@ -139,12 +139,12 @@ BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills
       D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatList, SKILLSSOR_StatExpireCallback_ClearState);
       D2Common::Stats::StatsEx::SetState(pStatList, STATE_inferno);
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
-      return 1;
+    } else {
+      D2Common::Units::SetSequenceFrame(pUnit, 8);
+      pUnit->nFrameCount = 0x500;
+      D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, 7);
     }
 
-    D2Common::Units::SetSequenceFrame(pUnit, 8);
-    pUnit->nFrameCount = 0x500;
-    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, 7);
     return 1;
 }
 

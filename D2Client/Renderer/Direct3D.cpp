@@ -7,11 +7,6 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-#ifndef RECON_FPTD_DDS_Flip
-#define RECON_FPTD_DDS_Flip
-typedef HRESULT (__stdcall *DDS_Flip)(void * This, void * lpDDSurfaceTargetOverride, DWORD dwFlags);
-#endif
-
 namespace D2Client::Renderer {
 
 void __fastcall RENDERER_D3D_CopyPixelsWithStride(void * pSrc, void * pDest, size_t nWidthBytes, int nHeight, int nDestPitch, uint32_t dwParam6) {

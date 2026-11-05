@@ -130,7 +130,7 @@ static uint32_t gbQServerRunning = 0; D2_STATIC_GUARD(gbQServerRunning, "gbQServ
 static unsigned int gdwLastPacketActivityTick = {}; D2_STATIC_GUARD(gdwLastPacketActivityTick, "gdwLastPacketActivityTick");
 static uint32_t gnClientModeInitValue = 0; D2_STATIC_GUARD(gnClientModeInitValue, "gnClientModeInitValue");
 static unsigned int gdwQServerStartTime = {}; D2_STATIC_GUARD(gdwQServerStartTime, "gdwQServerStartTime");
-static TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_STATIC_GUARD(gQServerGameState, "gQServerGameState");
+static TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_STATIC_GUARD(gQServerGameState, "gQServerGameState");
 
 namespace D2Client::ClientModeInGame {
 

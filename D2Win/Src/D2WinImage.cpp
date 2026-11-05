@@ -180,7 +180,7 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
           nTileRowCount--;
         } while (nTileRowCount);
       }
-      if (!(-1 < nTilesY && nTilesX > 0)) {
+      if (!(nTilesY >= 0 && nTilesX > 0)) {
         return 1;
       }
 

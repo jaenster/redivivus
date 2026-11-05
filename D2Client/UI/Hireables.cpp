@@ -601,8 +601,7 @@ void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (!pPlayer || (pPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayer->pInventory) , !pPlayer)) {
       DWORD dwNow;
-      nMercGUID = 0;
-      nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGUID);
+      nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
       if (nMercGUID != -1) {
         gnHireIconHoverY = 1;
         dwNow = GetTickCount();
@@ -694,8 +693,7 @@ void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
           return;
         }
 
-        nMercGUID = 0;
-        nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGUID);
+        nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
         if (nMercGUID == -1) {
           return;
         }

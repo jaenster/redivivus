@@ -1225,10 +1225,10 @@ D2UnitStrc * __stdcall OBJECT_PlaceWithCallback(::SGAMEDATA * pGame, int32_t nOb
     do {
       uint32_t nCallbackResult;
       pSeed = pSeedInit;
-      nCallbackResult = D2Client::Archive::RANDOM_RandomNumberSelector(pSeedInit, sRoomCoords.dwXSize - nSizeX - 1);
-      nX = nCallbackResult + sRoomCoords.dwXStart;
-      nCallbackResult = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, sRoomCoords.dwYSize - nSizeY - 1);
-      nY = nCallbackResult + nYStart;
+      nX = D2Client::Archive::RANDOM_RandomNumberSelector(pSeedInit, sRoomCoords.dwXSize - nSizeX - 1);
+      nX += sRoomCoords.dwXStart;
+      nY = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, sRoomCoords.dwYSize - nSizeY - 1);
+      nY += nYStart;
       if (nX && nY && (int)(uint16_t)nX >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nY >= nYStart + 1 && (int)(uint16_t)nX < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nY < nYStart - 1 + sRoomCoords.dwYSize) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
         if (bBadCodePtr) {
@@ -1457,8 +1457,8 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtBiasedPosition(::SGAMEDATA * pGame, int32_t
             nCandidateX = sRoomCoords.dwXSize >> 0x1f;
             nCallbackResult = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, sRoomCoords.dwXSize / 2);
             nCandidateX = ((int)(nRoomWidth + (nCandidateX & 3)) >> 2) + nCallbackResult + sRoomCoords.dwXStart;
-            nCallbackResult = D2Client::SEED_RollRange(pSeed, 1, 2);
-            nCandidateY = nCallbackResult + sRoomCoords.dwYStart;
+            nCandidateY = D2Client::SEED_RollRange(pSeed, 1, 2);
+            nCandidateY += sRoomCoords.dwYStart;
             break;
           }
         case 2:
@@ -1471,10 +1471,10 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtBiasedPosition(::SGAMEDATA * pGame, int32_t
           }
         default:
           {
-            nCallbackResult = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, sRoomCoords.dwXSize - nSizeX - 1);
-            nCandidateX = nCallbackResult + sRoomCoords.dwXStart;
-            nCallbackResult = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nYSize - nSizeY - 1);
-            nCandidateY = nCallbackResult + sRoomCoords.dwYStart;
+            nCandidateX = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, sRoomCoords.dwXSize - nSizeX - 1);
+            nCandidateX += sRoomCoords.dwXStart;
+            nCandidateY = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nYSize - nSizeY - 1);
+            nCandidateY += sRoomCoords.dwYStart;
             break;
           }
       }
@@ -2182,7 +2182,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pR
           exit(-1);
         }
 
-        pLastSpawned = UNIT::SUnit::CreateUnit(UNIT_OBJECT, (sSeedRoll.nSeedLow % 3 ? -4 : 0) + 0xb, nCurX, nCurY, pGame, pRoom, 1, 0, nullptr);
+        pLastSpawned = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xb + (sSeedRoll.nSeedLow % 3 ? -4 : 0), nCurX, nCurY, pGame, pRoom, 1, 0, nullptr);
         nTotalSpawned++;
         _nChancePercent = 1;
         if (nTotalSpawned < 8) {
@@ -2234,7 +2234,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pR
 
           sSeedRoll = D2_SEED_NEXT(*pCtrlSeed);
           *pCtrlSeed = sSeedRoll;
-          pLastSpawned = UNIT::SUnit::CreateUnit(UNIT_OBJECT, (sSeedRoll.nSeedLow & 3 ? -4 : 0) + 0xb, nCurX, nCurY, pGame, pRoom, 1, 0, nullptr);
+          pLastSpawned = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xb + (sSeedRoll.nSeedLow & 3 ? -4 : 0), nCurX, nCurY, pGame, pRoom, 1, 0, nullptr);
           _nChancePercent++;
           nTotalSpawned++;
           if (nTotalSpawned >= 8) {

@@ -1411,9 +1411,7 @@ static uint32_t __stdcall MONSTER_TryMoveTowardTarget(D2UnitStrc * pUnit, uint8_
     D2DynamicPathStrc* pServerPath = pUnit->pPath.pDynamicPath;
     int32_t eCollisionFlag = D2Common::PATH::DynamicPath::GetCollisionType(pServerPath);
     eD2CollisionUnitSize nWidth = COLLISION_UNIT_SIZE_POINT;
-    int nY = nStepY + nUnitY;
-    int nX = nStepX + nMonsterY;
-    eCollisionFlags eCollisionResult = D2Common::Collision::CheckCollision_BlockAll_Width(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY, nWidth, eCollisionFlag);
+    eCollisionFlags eCollisionResult = D2Common::Collision::CheckCollision_BlockAll_Width(D2Common::Units::UNITS_GetRoom(pUnit), nStepX + nMonsterY, nStepY + nUnitY, nWidth, eCollisionFlag);
     if (eCollisionResult != COLLIDE_NONE) {
       return 0;
     }

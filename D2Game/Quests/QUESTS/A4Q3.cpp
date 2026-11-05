@@ -491,12 +491,7 @@ BOOL __fastcall Q28_PlayerUpdateForgeState(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // A4Q3 Hell's Forge — Q28_Callback_10 (state-handler slot 10/0xa): on player-leave bookkeeping. Removes the player (by nUnitGUID, or -1 for "all") from the quest's participant GUID list. No QuestRecord writes.
 void __fastcall Q28_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_03 (state-handler slot 3): handles the gossip event id 0x67. Removes player from participant list, then if internal stateFlag==2 and the player has not Completed/RewardAwaits Hell's Forge, advances internal stateFlag to 3 (soulstone-on-anvil acknowledged) and re-syncs all players via IteratePlayerOrMonsterUnits(Q28_PlayerUpdateForgeState).

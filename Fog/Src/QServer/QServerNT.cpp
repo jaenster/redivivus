@@ -169,10 +169,8 @@ static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStruc
       return nullptr;
     }
 
-    D2QServerClientPacketStrc* pNextPacket = pTailPacket->pQServerClientPacketNext;
-    while (pNextPacket) {
+    while (pTailPacket->pQServerClientPacketNext) {
       pTailPacket = pTailPacket->pQServerClientPacketNext;
-      pNextPacket = pTailPacket->pQServerClientPacketNext;
     }
 
     pTailPacket->pQServerClientPacketNext = pNewPacket;
@@ -185,8 +183,7 @@ static int32_t __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * p
     memset(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampStart, 0, 0x48);
     /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampStart);
     *pSockAddrLen = 0x10;
-    pSockAddr->sa_family = 0;
-    memset(pSockAddr->sa_data, 0, 14 * sizeof(pSockAddr->sa_data[0]));
+    memset(pSockAddr, 0, sizeof(*pSockAddr));
     LPCRITICAL_SECTION pCsTelemetry = &pQServer->csWorkerTelemetry;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pCsTelemetry);
     int* pnTelemetryCounter = &pQServer->aWorkerTelemetry[nWorkerIndex].nAcceptAttempts;

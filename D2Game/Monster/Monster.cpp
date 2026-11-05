@@ -320,11 +320,7 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
       return;
     }
 
-    pMonsterLevelData->nPlayerMultiplyer = 0;
-    pMonsterLevelData->nPlayerMultiplyer2 = 0;
-    pMonsterLevelData->nMonsterSkillBonus = 0;
-    pMonsterLevelData->nDifficulty = 0;
-    pMonsterLevelData->nPlayerMultiplyer3 = 0;
+    memset(pMonsterLevelData, 0, sizeof(*pMonsterLevelData));
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }

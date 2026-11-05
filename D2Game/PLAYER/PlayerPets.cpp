@@ -1339,12 +1339,7 @@ static BOOL __stdcall KillPetOnRecast(D2UnitStrc * pUnit, D2UnitStrc * pMinion, 
       PETS_RecalculateAllPetLimits(pGame, pUnit);
       nMax = pPetList->nMax;
       if (!nMax) {
-        if (!pMinion) {
-          KillHandlerPet(-1, pGame);
-          return 0;
-        }
-
-        KillHandlerPet(pMinion->nUnitGUID, pGame);
+        KillHandlerPet(!pMinion ? -1 : pMinion->nUnitGUID, pGame);
         return 0;
       }
     }
@@ -1464,9 +1459,7 @@ void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2
       return;
     }
 
-    sPetData.nSeed = pPetArgs->nSeed;
-    sPetData.nNameId = pPetArgs->nNameId;
-    sPetData.nType = pPetArgs->nType;
+    sPetData = *pPetArgs;
     bRecastOk = KillPetOnRecast(pPlayer, pPet, (D2PetArguments*)&sPetData, pPetList, pGame);
     if (!bRecastOk) {
       return;

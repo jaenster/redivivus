@@ -102,7 +102,7 @@ typedef void (__fastcall *fnSkillUnitProc)(::SGAMEDATA * pGame, D2UnitStrc * pUn
 #endif
 
 static int gaMissileOffsets_LightningUniqueY[4] = { -0x1, 0x0, 0x1, 0x0 }; D2_STATIC_GUARD(gaMissileOffsets_LightningUniqueY, "gaMissileOffsets_LightningUniqueY");
-namespace D2Common::Monsters::MONSTERS::Umod {
+namespace D2Game::Monsters::Umod {
 fpUmodInit aUmodInitTable[43] = {
     nullptr,
     &D2Game::Monsters::Umod::MONUMOD_RollNameSeed,
@@ -2194,9 +2194,9 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return;
     }
 
+    D2DynamicPathStrc* pMissileDynPath = pUnit->pPath.pDynamicPath;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGameLocal, pOwnerUnit);
     if (!pTarget) {
-      D2DynamicPathStrc* pMissileDynPath = pUnit->pPath.pDynamicPath;
       nTargetX = D2Common::PATH::DynamicPath::GetXSP1(pMissileDynPath);
       nTargetY = D2Common::PATH::DynamicPath::GetYSP1(pMissileDynPath);
     } else {
@@ -2230,10 +2230,7 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
       *pMonType |= 0x80;
     }
 
-    int32_t nMissileFlags = 0;
-    int nSpawn1Y = nTargetY + nOwnerDirSignX;
-    int nSpawn1X = nTargetX - nDirSignX;
-    SKILLS::SkillsServer::CreatingAMissile(pGameLocal, eMissileId, pOwnerUnit, D2Common::Units::Missile::GetSkillId(pMissileUnit), D2Common::Units::Missile::GetLevel(pMissileUnit), 0, 0, nSpawn1X, nSpawn1Y, nMissileFlags);
+    SKILLS::SkillsServer::CreatingAMissile(pGameLocal, eMissileId, pOwnerUnit, D2Common::Units::Missile::GetSkillId(pMissileUnit), D2Common::Units::Missile::GetLevel(pMissileUnit), 0, 0, nTargetX - nDirSignX, nTargetY + nOwnerDirSignX, 0);
     pTarget = pMissileUnit;
     int32_t bConsumeAmmo = 0;
     nOwnerDirSignX = nTargetY - nOwnerDirSignX;
@@ -2339,7 +2336,8 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
     }
 
     nClassId = Ai::AiGeneral::GetAiArgument(pUnit, 1);
-    Ai::AiGeneral::SetAiArgument(pUnit, 1, nClassId + 1);
+    nClassId += 1;
+    Ai::AiGeneral::SetAiArgument(pUnit, 1, nClassId);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 0x33, 0, 0);
 }
@@ -3208,8 +3206,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
       break;
       case 0x3c:
         Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, pUnit->nUnitGUID, UNIT_MONSTER, 1, 0);
-      nUModCount = 0x1c5;
-      nUModCount = D2Common::Monsters::MONSTERS::GetMonsterBaseId(D2Common::Units::UNITS_GetRoom(pUnit), nUModCount);
+      nUModCount = D2Common::Monsters::MONSTERS::GetMonsterBaseId(D2Common::Units::UNITS_GetRoom(pUnit), 0x1c5);
       Monster::Create::SpawnMinions_BySlot(pGame, pUnit, nUModCount, eD2MonsterAnimMode_ns::Neutral, 10, 0x14, 0x40);
       Quests::QUESTS::QUEST_AttachToUnitByQuestId(pGame, pUnit, QUESTINT_BetrayalOfHaggorath);
       InitUmods(pGame, pUnit, 0x16, 1);

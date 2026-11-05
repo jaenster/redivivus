@@ -482,18 +482,23 @@ BYTE * __fastcall RENDERER_WINDOWED_GetPalettePointer(int nDrawMode, uint32_t * 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
 void __fastcall RENDERER_WINDOWED_UpdateScaleFactor(int nParam) {
     RENDERER_WINDOWED_nScaleOffsetY = 0;
-    if (nParam) {
-      if (nParam != 3) {
-        RENDERER_WINDOWED_nScaleWidth = 800;
-        return;
-      }
-
-      RENDERER_WINDOWED_nScaleWidth = 0x540;
-      return;
+    switch (nParam) {
+      case 0:
+        {
+          RENDERER_WINDOWED_nScaleWidth = 0x280;
+          return;
+        }
+      case 3:
+        {
+          RENDERER_WINDOWED_nScaleWidth = 0x540;
+          return;
+        }
+      default:
+        {
+          RENDERER_WINDOWED_nScaleWidth = 800;
+          return;
+        }
     }
-
-    RENDERER_WINDOWED_nScaleWidth = 0x280;
-    return;
 }
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
@@ -1237,12 +1242,17 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
     int iVar1 = RENDERER_nWindowHeight + 0x20;
     int nClipLeft = -0x20;
     int nClipRight = RENDERER_nWindowWidth;
-    if (nScreenPanels != 1) {
-      if (nScreenPanels == 2) {
-        nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    switch (nScreenPanels) {
+      case 1:
+        {
+          nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+          break;
+        }
+      case 2:
+        {
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
+        }
     }
 
     int nTileIndex = 0;
@@ -1285,12 +1295,17 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int
       iVar1 = RENDERER_nWindowHeight + 0x20;
       nClipLeft = -0x20;
       nClipRight = RENDERER_nWindowWidth;
-      if (nScreenPanels != 1) {
-        if (nScreenPanels == 2) {
-          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-        }
-      } else {
-        nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+      switch (nScreenPanels) {
+        case 1:
+          {
+            nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+            break;
+          }
+        case 2:
+          {
+            nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+            break;
+          }
       }
 
       nScreenPanels = 0;
@@ -1331,12 +1346,17 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
     int iVar1 = RENDERER_nWindowHeight + 0x20;
     int nClipLeft = -0x20;
     int nClipRight = RENDERER_nWindowWidth;
-    if (nScreenPanels != 1) {
-      if (nScreenPanels == 2) {
-        nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    switch (nScreenPanels) {
+      case 1:
+        {
+          nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+          break;
+        }
+      case 2:
+        {
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
+        }
     }
 
     nScreenPanels = 0;

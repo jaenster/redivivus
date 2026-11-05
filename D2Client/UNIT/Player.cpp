@@ -1510,12 +1510,11 @@ static uint32_t INPUT_ValidateSkillAction(D2UnderMouseStrc * pUnderMouse) {
     nQueuedSkill = Cursor::GetItemType();
     if (nQueuedSkill == 6) {
       UI::ui::UI_DropCursorItemOnGround();
-      return 1;
-    }
-
-    nQueuedSkill = Cursor::GetItemType();
-    if (nQueuedSkill == 8) {
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
+    } else {
+      nQueuedSkill = Cursor::GetItemType();
+      if (nQueuedSkill == 8) {
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
+      }
     }
 
     return 1;
@@ -1708,17 +1707,26 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
         }
       } else {
         eTargetType = pUnit->eUnitType;
-        if (eTargetType == UNIT_OBJECT || eTargetType == UNIT_ITEM) {
-          if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[3]) {
-            bForceInteract = true;
-            goto choose_unit_or_ground;
-          }
-        } else {
-          if (eTargetType != UNIT_WARP) {
-            goto choose_unit_or_ground;
-          }
+        switch (eTargetType) {
+          case UNIT_OBJECT:
+            case UNIT_ITEM:
+              {
+                if (*((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[3]) {
+                  bForceInteract = true;
+                  goto choose_unit_or_ground;
+                }
 
-          dwFlags |= 0x100;
+                break;
+              }
+          default:
+            {
+              goto choose_unit_or_ground;
+            }
+          case UNIT_WARP:
+            {
+              dwFlags |= 0x100;
+              break;
+            }
         }
       }
 
@@ -2342,13 +2350,13 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc 
     if (pTargetUnit) {
       sMoveMessage.nItemId = pTargetUnit->nUnitGUID;
       sMoveMessage.nSkillId = pTargetUnit->eUnitType;
-      PlayerMessage(eAnimMode != eD2PlayerAnimMode_ns::Run ? 0 : 0x18, pUnit, &sMoveMessage, 0);
+      PlayerMessage(eAnimMode == eD2PlayerAnimMode_ns::Run ? 0x18 : 0, pUnit, &sMoveMessage, 0);
       return;
     }
 
     sMoveMessage.nItemId = nDestY;
     sMoveMessage.nSkillId = nDestX;
-    PlayerMessage((eAnimMode != eD2PlayerAnimMode_ns::Run ? -22 : 0) + 0x17, pUnit, &sMoveMessage, 0);
+    PlayerMessage(eAnimMode != eD2PlayerAnimMode_ns::Run ? 0x1 : 0x17, pUnit, &sMoveMessage, 0);
 }
 
 // Client-side stamina-depletion handler for the local player. When the player's stamina hits 0, cancels any active run/walk: if chasing a unit target, re-issues a follow message; otherwise captures the current destination, frees any pending light map, resets the current skill, and transitions the unit to Walk or TownWalk mode (or falls back to CLIENT_SetAnimModeAndMoveToCurrentPos if no valid path target). No-ops for non-local or non-zero stamina units.
@@ -2917,11 +2925,10 @@ void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOld
     }
     if (byNewAllegiance == '\x02') {
       D2Common::DUNGEON::Dungeon::DRLGROOM_IncreaseAlliedCount(pRoom);
-      D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pUnit);
-      return;
-    }
-    if (byOldAllegiance == '\x02') {
-      D2Common::DUNGEON::Dungeon::DRLGROOM_DecreaseAlliedCount(pRoom);
+    } else {
+      if (byOldAllegiance == '\x02') {
+        D2Common::DUNGEON::Dungeon::DRLGROOM_DecreaseAlliedCount(pRoom);
+      }
     }
 
     D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pUnit);

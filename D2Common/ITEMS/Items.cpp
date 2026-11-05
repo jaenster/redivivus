@@ -999,9 +999,9 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
           nCostTmp = nSkillLevel * nMultiplier;
           if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
             nSkillLevel = pSkillsTxt->costmult * nSkillLevel * nMultiplier;
-            nSkillLevel = (int)((nSkillLevel >> 0x1f & 0x3ffU) + nSkillLevel) >> 10;
+            nSkillLevel = nSkillLevel / 1024;
           } else {
-            nSkillLevel = ((int)((nCostTmp >> 0x1f & 0x3ffU) + nCostTmp) >> 10) * pSkillsTxt->costmult;
+            nSkillLevel = nCostTmp / 1024 * pSkillsTxt->costmult;
           }
 
           nTotalModifier += (int)((nMaxCharges - uVar1) * (nSkillLevel + pSkillsTxt->costadd)) / nMaxCharges;
@@ -2371,7 +2371,6 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
     D2PoolManagerStrc* pMemory_00;
     uint32_t dwUnitGUID;
     char* pcItemCodeOrName;
-    int32_t nSize;
     uint16_t nLayer;
     D2ItemStatCostTxt* pStatCostTxt;
     int32_t* pnItemSaveAdd;
@@ -2437,12 +2436,11 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
         uCoordOrBits = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 1);
         nLayer = 0;
         if (uCoordOrBits) {
-          nSize = 0x20;
+          uCoordOrBits = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x20);
         } else {
-          nSize = 0xc;
+          uCoordOrBits = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0xc);
         }
 
-        uCoordOrBits = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nSize);
         Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_gold, uCoordOrBits, nLayer);
       }
 
@@ -2760,6 +2758,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       }
 
       nErrLine = 0x10;
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, uVal, 0x10);
     } else {
       eInventoryPage eVar1;
       no_body_loc:
@@ -2819,9 +2818,8 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       }
 
       nErrLine = 3;
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, uVal, 3);
     }
-
-    Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, uVal, nErrLine);
     if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataMissile) {
       eUnitType = UNIT_PLAYER;
     } else {
@@ -2871,7 +2869,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       if (nClassId) {
         nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_gold, 0);
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (uint32_t)((int)nClassId >= 0x1000), 1);
-        ITEMS_WriteClampedValueToBitBuffer((int)nClassId < 0x1000 ? 0xc : 0x20, nClassId, pBitBuffer);
+        ITEMS_WriteClampedValueToBitBuffer((int)nClassId >= 0x1000 ? 0x20 : 0xc, nClassId, pBitBuffer);
         txtLine = pItemsTxtLine;
       }
     }
@@ -4184,8 +4182,8 @@ static void __stdcall ITEM_ResolvePercentStatToBaseValue(eD2UnitStat nRecipeType
       case UNITSTAT_armorclass:
         bIsType = ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
       if (bIsType && pItemsTxt->dwMaxAc) {
-        nCurStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
-        nValue = nCurStat + 1;
+        nValue = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
+        nValue += 1;
         if (nValue <= pItemsTxt->dwMaxAc) {
           nValue = pItemsTxt->dwMaxAc + 1;
         }
@@ -4904,11 +4902,12 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           nLayer = 0;
           if (nBitVal) {
             nClassId = 0x20;
+            nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x20);
           } else {
             nClassId = 0xc;
+            nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0xc);
           }
 
-          nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nClassId);
           eStatId = UNITSTAT_gold;
           goto store_gold_or_durability;
         }
@@ -6649,7 +6648,6 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     D2StatStrc aStat[511];
     int anStatSeenValues[511];
     int i;
-    int nSetListIdx;
     char cCurChar;
     eD2States eState;
     eD2UnitType eUnitType;
@@ -6720,6 +6718,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       }
 
       nErrLine = 0x10;
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 0x10);
     } else {
       eInventoryPage eVar1;
       if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
@@ -6808,9 +6807,8 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       }
 
       nErrLine = 3;
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 3);
     }
-
-    Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, nErrLine);
     if (bIncludeNorm) {
       nErrLine = IITEM_GetItemsTxt_dwNormCode(pItemUnit);
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nErrLine, 0x20);
@@ -7344,7 +7342,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
         uTmpBits = Stats::StatsEx::STATSEX_GetCurrentStat(pItemUnit, UNITSTAT_gold, 0);
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (uint32_t)((int)uTmpBits >= 0x1000), 1);
-        nBitValue = (int)uTmpBits < 0x1000 ? 0xc : 0x20;
+        nBitValue = (int)uTmpBits >= 0x1000 ? 0x20 : 0xc;
       }
 
       ITEMS_WriteClampedValueToBitBuffer(nBitValue, uTmpBits, pBitBuffer);
@@ -7425,7 +7423,13 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       nRunewordFlag = 1;
     }
 
-    for (nSetListIdx = -1; nSetListIdx < (int)bIncludeNorm; nSetListIdx++) {
+    int nSetListIdx;
+    nSetListIdx = -1;
+    if ((int)bIncludeNorm < 0) {
+      return;
+    }
+
+    do {
       if (nSetListIdx < 0) {
         eState = STATE_none;
         get_plain_stat_list:
@@ -7615,7 +7619,9 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       if (nSetListIdx < 0 || pStatListEx || nRunewordFlag) {
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0x1ff, 9);
       }
-    }
+
+      nSetListIdx++;
+    } while (nSetListIdx < (int)bIncludeNorm);
 }
 
 // Serializes a single item unit to a bit buffer for network/save transmission. Writes the 0x4d4a item header (if pStatListEx present), item flags word, then delegates to SerializeComplexItem or SerializeSimpleItem based on COMPACT flag. Recursively serializes socketed child items when bAllItems is set. bIsCrude forces the CRUDE flag.

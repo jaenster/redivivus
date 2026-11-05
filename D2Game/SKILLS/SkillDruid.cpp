@@ -654,10 +654,10 @@ BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitSt
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, (uint8_t)nSkillLvl);
     if (sDamage.wResultFlags & 1U) {
       D2Common::Skills::SKILL_SetParam1(pSkill, 1);
-      return 1;
+    } else {
+      D2Common::Skills::SKILL_SetParam1(pSkill, 0);
     }
 
-    D2Common::Skills::SKILL_SetParam1(pSkill, 0);
     return 1;
 }
 
@@ -723,8 +723,8 @@ BOOL __fastcall Skills_SrvDoFunc_120_FeralRage(::SGAMEDATA * pGame, D2UnitStrc *
           nUnitGUID = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
           nFrenzyStacks = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_skill_frenzy, 0);
           if (nUnitGUID >= nFrenzyStacks + 1) {
-            nCurFrenzyStacks = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_skill_frenzy, 0);
-            nUnitGUID = nCurFrenzyStacks + 1;
+            nUnitGUID = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_skill_frenzy, 0);
+            nUnitGUID += 1;
           }
 
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_skill_frenzy, nUnitGUID, 0);
@@ -885,12 +885,7 @@ static void __stdcall SKILLDRUID_CreateAuraMissile(::SGAMEDATA * pGame, D2UnitSt
     }
 
     D2Common::Units::Missile::SetTargetX(pMissile, eOwnerType);
-    if (!pUnit) {
-      D2Common::Units::Missile::SetTargetY(pMissile, -1);
-      return;
-    }
-
-    D2Common::Units::Missile::SetTargetY(pMissile, pUnit->nUnitGUID);
+    D2Common::Units::Missile::SetTargetY(pMissile, !pUnit ? -1 : pUnit->nUnitGUID);
 }
 
 void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl) {

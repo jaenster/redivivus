@@ -291,8 +291,8 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
       if (pStatList) {
         nGameFrame = pGame->dwGameFrame;
         nPoisonExpire = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-        nGameFrame2 = D2Client::Stats::D2ApplyPercent(nPoisonExpire - nGameFrame, nPercent, 100);
-        nNewPoisonExpire = nGameFrame2 + nGameFrame;
+        nNewPoisonExpire = D2Client::Stats::D2ApplyPercent(nPoisonExpire - nGameFrame, nPercent, 100);
+        nNewPoisonExpire += nGameFrame;
         D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nNewPoisonExpire);
         GAME::Event::SetEvent(pGame, pUnit, 0xc, nNewPoisonExpire, 0, 0);
         bReduced = 1;
@@ -309,8 +309,8 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
           if (bIsCurseState) {
             nGameFrame = pGame->dwGameFrame;
             nCurseExpire = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-            nGameFrame2 = D2Client::Stats::D2ApplyPercent(nCurseExpire - nGameFrame, nPercent, 100);
-            nNewCurseExpire = nGameFrame2 + nGameFrame;
+            nNewCurseExpire = D2Client::Stats::D2ApplyPercent(nCurseExpire - nGameFrame, nPercent, 100);
+            nNewCurseExpire += nGameFrame;
             D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nNewCurseExpire);
             GAME::Event::SetEvent(pGame, pUnit, 0xc, nNewCurseExpire, 0, 0);
           }
@@ -603,8 +603,8 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
       int32_t nManaCost;
       nManaCost = D2Common::Skills::SKILLS_CalculateManaCost(eSkill, nSkillLvl);
       nMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCaster, UNITSTAT_mana, 0);
-      nCalcVal = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pCaster, pSkillsTxt, eSkill, nSkillLvl);
-      nStatIdx = nCalcVal + (1 - pGame->dwGameFrame);
+      nStatIdx = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pCaster, pSkillsTxt, eSkill, nSkillLvl);
+      nStatIdx += 1 - pGame->dwGameFrame;
       memset(&nAuraStateId, 0, 0x50);
       nAuraStateId.nSkillLvl = nSkillLvl;
       nAuraStateId.eSkill = eSkill;
@@ -1126,7 +1126,6 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, D2DynamicPathStrc * nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetY;
-    uint32_t nPctBase;
     eD2Skills eSkillSaved = eSkill;
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
@@ -1166,9 +1165,7 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
     int32_t nConcentrationBonusPct = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, eSkillSaved);
     if (nConcentrationBonusPct) {
       int32_t nConcentrationBonus;
-      nPctBase = 100;
-      nConcentrationBonus = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0);
-      nConcentrationBonus = D2Client::Stats::D2ApplyPercent(nConcentrationBonus, nConcentrationBonusPct + 100, nPctBase);
+      nConcentrationBonus = D2Client::Stats::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0), nConcentrationBonusPct + 100, 100);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmindam, nConcentrationBonus, 0);
       nConcentrationBonusPct = D2Client::Stats::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, 0), nConcentrationBonusPct + 100, 100);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, nConcentrationBonusPct, 0);
@@ -1290,8 +1287,8 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
     if (pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize && nConvertCheckOrFrame) {
       int32_t nDuration;
       nConvertCheckOrFrame = pGame->dwGameFrame;
-      nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-      nExpiryFrame = nDuration + nConvertCheckOrFrame;
+      nExpiryFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
+      nExpiryFrame += nConvertCheckOrFrame;
       nMinExpiryFrame = nConvertCheckOrFrame + 1;
       if (nExpiryFrame <= nMinExpiryFrame) {
         nExpiryFrame = nMinExpiryFrame;
@@ -1500,10 +1497,10 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
     pUnit->sSeed = sSeed;
     if ((int)(sSeed.nSeedLow % 100) < 0x14) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_shatter, 1);
-      return 1;
+    } else {
+      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_shatter, 0);
     }
 
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_shatter, 0);
     return 1;
 }
 
@@ -1527,8 +1524,8 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
       int32_t nManaCost;
       nManaCost = D2Common::Skills::SKILLS_CalculateManaCost(eSkill, nSkillLvl);
       nMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-      nTmp = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pUnit, pSkillRecord, eSkill, nSkillLvl);
-      nStateDelayFrame = nTmp + (1 - pGame->dwGameFrame);
+      nStateDelayFrame = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pUnit, pSkillRecord, eSkill, nSkillLvl);
+      nStateDelayFrame += 1 - pGame->dwGameFrame;
       memset(&nAuraSelfState, 0, 0x50);
       nAuraSelfState.nSkillLvl = nSkillLvl;
       nAuraSelfState.eSkill = eSkill;

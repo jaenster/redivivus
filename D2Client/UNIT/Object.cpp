@@ -1119,10 +1119,10 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
       pSeed->nSeedLow = DVar2.nSeedLow;
       if (DVar2.nSeedLow & 1) {
         iVar4 = 3;
-        D2Common::Units::SetupUpdateFlag(pUnit, iVar4);
+        D2Common::Units::SetupUpdateFlag(pUnit, 3);
       } else {
         iVar4 = 4;
-        D2Common::Units::SetupUpdateFlag(pUnit, iVar4);
+        D2Common::Units::SetupUpdateFlag(pUnit, 4);
       }
 
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);

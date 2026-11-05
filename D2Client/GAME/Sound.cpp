@@ -321,7 +321,7 @@ static BOOL SOUND_InitStreamChannels(int32_t nMixerMode) {
       } else if (nMixerMode == 1) {
         gaSoundChannels[nChannelIdx].nChannelType = 2;
       } else {
-        gaSoundChannels[nChannelIdx].nChannelType = nMixerMode != 2 ? 0 : 0x6;
+        gaSoundChannels[nChannelIdx].nChannelType = nMixerMode == 2 ? 0x6 : 0;
       }
 
       pNewSampleInst = D2Sound::Src::D2SoundSmp::CallSounds(gaSoundChannels[nChannelIdx].nChannelType, BackgroundSoundsActive);

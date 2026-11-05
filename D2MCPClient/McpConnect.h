@@ -13,6 +13,18 @@ struct D2CharSelStrc;
 struct D2McpGameInfoStrc;
 struct MCPPacketSrv0x04;
 struct mcp0x03data;
+#ifndef RECON_FPTD_pfnMCPGameListEntry
+#define RECON_FPTD_pfnMCPGameListEntry
+typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
+#endif
+#ifndef RECON_FPTD_pfnMCPMessage
+#define RECON_FPTD_pfnMCPMessage
+typedef void (__fastcall *pfnMCPMessage)(uint32_t nMessageId, uint32_t nDataLength, void * pMessageData);
+#endif
+#ifndef RECON_FPTD_pfnVoidNoArgCallback
+#define RECON_FPTD_pfnVoidNoArgCallback
+typedef void (__stdcall *pfnVoidNoArgCallback)();
+#endif
 
 // Data types
 struct __attribute__((packed)) MCP_CHARCREATE {

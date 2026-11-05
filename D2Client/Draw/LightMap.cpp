@@ -134,11 +134,10 @@ D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType
         nPixelMapDim = nDiameter * 2 + 1;
         pPixelMap = (int*)D2_ALLOC_AT(nPixelMapDim * nPixelMapDim * 4, ".\\DRAW\\dLightMap.cpp", 0x116);
         pLightMap->pPixelMap = pPixelMap;
-        gpLightMap = pLightMap;
-        return pLightMap;
+      } else {
+        pLightMap->pPixelMap = 0;
       }
 
-      pLightMap->pPixelMap = 0;
       gpLightMap = pLightMap;
       return pLightMap;
     }

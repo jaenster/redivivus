@@ -9,7 +9,6 @@
 #include "d2_platform.h"
 
 // Forward declarations
-struct D2PetTypeTxt;
 struct D2RosterMercArg;
 struct D2RosterPetSeedStrc;
 struct D2UnitStrc;

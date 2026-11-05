@@ -56,7 +56,7 @@ int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int 
       return (&gaTombCanyonPresetOffsets.aTombEntries[7].nVariant)[nPresetType * 2];
     }
 
-    return (nGridFlags & 0x100 ? -3 : 0) + 3;
+    return nGridFlags & 0x100 ? 0 : 3;
 }
 
 // Finds and places a river crossing preset pair in an outdoor wilderness level. Uses the level seed to pick a random starting row among usable grid rows (excluding top/bottom edge), then iterates rows looking for two horizontally adjacent cells whose grid flags both have bits 0x30000 set (river tile markers). On match, spawns preset 0x1c at both X positions; the second spawn variant depends on whether the road flag (dwFlags&4) is set.
@@ -148,7 +148,7 @@ void __stdcall DRLGOUTROOM_SpawnVerticalBorderPresets(D2DrlgLevelStrc * pLevel, 
             nVariant = (&gaTombCanyonPresetOffsets.aTombEntries[7].nPresetId)[nVariant * 2];
           }
         } else {
-          nVariant = (nGridFlags & 0x100 ? -3 : 0) + 3;
+          nVariant = nGridFlags & 0x100 ? 0 : 3;
         }
 
         Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nColumn, nY, 0x1a, nVariant, 0);
@@ -161,7 +161,7 @@ void __stdcall DRLGOUTROOM_SpawnVerticalBorderPresets(D2DrlgLevelStrc * pLevel, 
             nVariant = (&gaTombCanyonPresetOffsets.aTombEntries[7].nVariant)[nVariant * 2];
           }
         } else {
-          nVariant = (nGridFlags & 0x100 ? -3 : 0) + 3;
+          nVariant = nGridFlags & 0x100 ? 0 : 3;
         }
 
         Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x1b, nVariant, 0);

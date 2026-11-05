@@ -1046,8 +1046,7 @@ void __fastcall AllocDrlgFile(D2DrlgFileStrc * * ppDrlgFile, D2PoolManagerStrc *
 // Deep-copies a preset unit's D2MapAIStrc path (8-byte header + nSize*12-byte D2PathPosStrc).
 D2MapAIStrc * __fastcall DRLGPRESET_CopyMapAI(D2PoolManagerStrc * pMemory, D2MapAIStrc * pSrcMapAI) {
     D2MapAIStrc* pNewMapAI = D2_NEW_POOL_AT(pMemory, D2MapAIStrc, ".\\DRLG\\Preset.cpp", 0x574);
-    pNewMapAI->nSize = 0;
-    pNewMapAI->pPosition = 0;
+    memset(pNewMapAI, 0, sizeof(*pNewMapAI));
     int nMode = pSrcMapAI->nSize;
     pNewMapAI->nSize = nMode;
     D2PathPosStrc* pData = (D2PathPosStrc*)D2_ALLOC_POOL_AT(pMemory, nMode * 0xc, ".\\DRLG\\Preset.cpp", 0x579);
@@ -1177,8 +1176,9 @@ static void CreateObjectPresetsForMap(D2DrlgMapStrc * pMapStrc, D2PoolManagerStr
             xIndex += 4;
           }
 
-        xIndex++;
-      } while ((int)xIndex < mapCoords.nWidth);
+          xIndex++;
+        } while ((int)xIndex < mapCoords.nWidth);
+      }
     }
 
     DrlgGrid::ResetGrid(&floorGrid);
@@ -1189,7 +1189,7 @@ static void __stdcall CreateMonsterPreset(D2PoolManagerStrc * pMemory, D2DrlgMap
     int32_t nX = pDrlgMap->nSizeX / 2 + pDrlgMap->nRealOffsetX;
     int32_t nY = pDrlgMap->nSizeY / 2 + pDrlgMap->nRealOffsetY;
     Transform::CoordsRoomToWorld(&nX, &nY);
-    D2PresetUnitStrc* pPreset = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_MONSTER, sgptDataTable->nTxtMonStatsSize > 0x10a ? 0x10a : -1, 1, nX, nY);
+    D2PresetUnitStrc* pPreset = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_MONSTER, sgptDataTable->nTxtMonStatsSize <= 0x10a ? -1 : 0x10a, 1, nX, nY);
     pPreset->pPresetUnitNext = pDrlgMap->pPresetUnit;
     pDrlgMap->pPresetUnit = pPreset;
 }
@@ -1958,16 +1958,14 @@ void __fastcall DRLGLEVEL_InitializeWithPresetArea(D2DrlgLevelStrc * pLevel) {
     }
 
     pLevel->pDrlgLevelData.pDrlgLevelPresetData = pDrlgLevelPresetData;
-    pDrlgLevelPresetData->pDrlgMap = 0;
-    pDrlgLevelPresetData->nPickedFile = 0;
+    memset(pDrlgLevelPresetData, 0, sizeof(*pDrlgLevelPresetData));
     if (pLvlPrest->Files) {
       nRandomFile = D2Client::Archive::RANDOM_RandomNumberSelector(&pLevel->sSeed, pLvlPrest->Files);
       pDrlgLevelPresetData->nPickedFile = nRandomFile;
-      DRLGLEVEL_SetLevelSizeAndAlignVsDependentLevel(pLevel->pDrlg, pLevel);
-      return;
+    } else {
+      pDrlgLevelPresetData->nPickedFile = -1;
     }
 
-    pDrlgLevelPresetData->nPickedFile = -1;
     DRLGLEVEL_SetLevelSizeAndAlignVsDependentLevel(pLevel->pDrlg, pLevel);
 }
 

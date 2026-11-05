@@ -447,8 +447,16 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
                 return;
               }
 
-          nWalkMsgId = 0x17;
-        }
+              nWalkMsgId = 0x17;
+            }
+
+            break;
+          }
+        case UNIT_MONSTER:
+          {
+            msg.nTargetUnitId = 1;
+            break;
+          }
       }
 
       msg.nSkillLvl = 100;

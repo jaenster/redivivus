@@ -343,7 +343,8 @@ void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     if (pPortalUnit) {
       uint8_t byPortalFlags;
       byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortalUnit);
-      D2Common::Units::SetObjectPortalFlags(pPortalUnit, byPortalFlags | 3);
+      byPortalFlags |= 3;
+      D2Common::Units::SetObjectPortalFlags(pPortalUnit, byPortalFlags);
     }
 
     D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pUnit), 0);
@@ -1120,8 +1121,7 @@ void __fastcall OBJMODE_SpawnCompanionChests(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    pNewChest = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xa0, nChestPosX, ptCoords.y, pGame, D2Common::Units::UNITS_GetRoom(pUnit), 1, 1, 0);
-    UNIT::SUnit::SetSparklyChestFlag(pNewChest, '\x02');
+    UNIT::SUnit::SetSparklyChestFlag(UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xa0, nChestPosX, ptCoords.y, pGame, D2Common::Units::UNITS_GetRoom(pUnit), 1, 1, 0), '\x02');
 }
 
 static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nClassId) {
@@ -1432,8 +1432,7 @@ void __fastcall Shrines_PortalShrineFunction(D2ObjectOperateFnArg * pArguments, 
     int32_t eCollisionFlag = 0x1c09;
     int32_t nUnitSize = 3;
     POINT* pSpawnPoint = &ptAttackerCoords;
-    D2RoomStrc* pFreeSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
-    pFreeSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pFreeSpawnRoom, pSpawnPoint, nUnitSize, eCollisionFlag, bAllowNeighborRooms);
+    D2RoomStrc* pFreeSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(D2Common::Units::UNITS_GetRoom(pArguments->pAttacker), pSpawnPoint, nUnitSize, eCollisionFlag, bAllowNeighborRooms);
     if (!pFreeSpawnRoom) {
       return;
     }
@@ -1606,7 +1605,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
       nPosY = 0;
     }
 
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     sUnitFindArg.nDistance = pTxtShrinesLocal->dwArg1;
     sUnitFindArg.nFlags = 0x583;
     sUnitFindArg.nX = nUnitIdx;
@@ -1774,8 +1773,7 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
       bSearchNeighbors = 1;
       nCollisionMask = 1;
       pNewPosition = &ptSpawnPos;
-      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
-      pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
+      pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pArguments->pAttacker), &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
       if (pSpawnRoom) {
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.pGame = pArguments->sArg.pGame;
@@ -1909,8 +1907,7 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
       bSearchNeighbors = 1;
       nCollisionMask = 1;
       pNewPosition = &ptSpawnPos;
-      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
-      pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
+      pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pArguments->pAttacker), &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
       if (pSpawnRoom) {
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.pGame = pArguments->sArg.pGame;
@@ -2996,12 +2993,17 @@ BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
       pVictim = pOperation->sArg.pVictim;
       eLevel = LEVEL_None;
       if (pVictim) {
-        if (pVictim->nClassId != 100) {
-          if (pVictim->nClassId == 0x179) {
-            eLevel = (eD2LevelId)pVictim->pUnitData.pUnitDataMonster->Components[0];
-          }
-        } else {
-          eLevel = LEVEL_DurielsLair;
+        switch (pVictim->nClassId) {
+          case 100:
+            {
+              eLevel = LEVEL_DurielsLair;
+              break;
+            }
+          case 0x179:
+            {
+              eLevel = (eD2LevelId)pVictim->pUnitData.pUnitDataMonster->Components[0];
+              break;
+            }
         }
       }
 
@@ -3062,32 +3064,32 @@ BOOL __fastcall OBJOP_ActivateWaypoint(D2ObjectOperateFnArg * pOperation) {
       pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
       pGame = pOperation->sArg.pGame;
       GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
-      return 1;
-    }
-    if (pUnit && (pUnit->eAnimMode.ePlayerMode == Walk || pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
-      bPlayerBusy = PLAYER::Player::GetPlayerTradeTickOrBusy(pOperation->pAttacker);
-      if (!bPlayerBusy) {
-        pUnit = pOperation->sArg.pVictim;
-        sPacket.nPacketId = 'c';
-        int32_t nUnitGUIDValue;
-        if (!pUnit) {
-          nUnitGUIDValue = -1;
-        } else {
-          nUnitGUIDValue = pUnit->nUnitGUID;
-        }
+    } else {
+      if (pUnit && (pUnit->eAnimMode.ePlayerMode == Walk || pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+        bPlayerBusy = PLAYER::Player::GetPlayerTradeTickOrBusy(pOperation->pAttacker);
+        if (!bPlayerBusy) {
+          pUnit = pOperation->sArg.pVictim;
+          sPacket.nPacketId = 'c';
+          int32_t nUnitGUIDValue;
+          if (!pUnit) {
+            nUnitGUIDValue = -1;
+          } else {
+            nUnitGUIDValue = pUnit->nUnitGUID;
+          }
 
-        sPacket.nUnitGUID = nUnitGUIDValue;
-        D2Common::Waypoints::CopyWaypoint(pWaypoint, &sPacket.sWaypoints);
-        pClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, ".\\OBJECTS\\ObjMode.cpp", 0x101e);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x63_WAYPOINTLIST(pClient, &sPacket);
-        pUnit = pOperation->sArg.pVictim;
-        if (!pUnit) {
-          nObjectGUID = -1;
-        } else {
-          nObjectGUID = pUnit->nUnitGUID;
-        }
+          sPacket.nUnitGUID = nUnitGUIDValue;
+          D2Common::Waypoints::CopyWaypoint(pWaypoint, &sPacket.sWaypoints);
+          pClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, ".\\OBJECTS\\ObjMode.cpp", 0x101e);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x63_WAYPOINTLIST(pClient, &sPacket);
+          pUnit = pOperation->sArg.pVictim;
+          if (!pUnit) {
+            nObjectGUID = -1;
+          } else {
+            nObjectGUID = pUnit->nUnitGUID;
+          }
 
-        UNIT::SUnit::SetInteractInfo(pOperation->pAttacker, UNIT_OBJECT, nObjectGUID);
+          UNIT::SUnit::SetInteractInfo(pOperation->pAttacker, UNIT_OBJECT, nObjectGUID);
+        }
       }
     }
 
@@ -3365,59 +3367,64 @@ int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwPlayerGUID, DWORD 
         pClient = UNIT::SUnit::SUNIT_GetClient(pPlayer, ".\\OBJECTS\\ObjMode.cpp", 0x1135);
         sPacket.nUnitGUID = dwObjectGUID;
         sPacket.nPacketId = 'X';
-        if (nParam == 2) {
-          sPacket.nUIType = '\x01';
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
-          D2Common::Units::SetupUpdateFlag(pObject, 0);
-          UNIT::SUnit::ClearInteractInfo(pPlayer);
-          return 1;
-        }
-        if (nParam == 3) {
-          if (!pItem) {
-            nItemClassId = -1;
-          } else {
-            nItemClassId = pItem->nClassId;
-          }
-
-          pTxtItem = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
-          if (pObject->nClassId == 0x98) {
-            if (pTxtItem->dwCode == 0x20747368) {
-              accept_item_and_operate:
-              sPacket.nUIType = '\x05';
-              UNIT::SUnit::ClearInteractInfo(pPlayer);
-              if (pObject->nClassId == 0x98) {
-                sPacket.nUIState = '\x01';
-              } else {
-                dwDispatchResult = OBJMODE_DispatchOperateFunction(pGame, (uint8_t)pTxtItem->bSubType, (int32_t)pPlayer);
-                sPacket.nUIState = (uint8_t)dwDispatchResult;
-              }
-
+        switch (nParam) {
+          case 2:
+            {
+              sPacket.nUIType = '\x01';
               GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
-              if (sPacket.nUIState == '\x01') {
-                D2Common::Units::SetupUpdateFlag(pObject, 1);
-                pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pObject->nClassId);
-                if (pObject->nClassId == 0x98) {
-                  D2Common::Units::SetupUpdateFlag(pObject, 2);
-                  Quests::QUESTS::A2Q6::Q14_OnStaffUsedInOrifice(pGame, pPlayer, pObject);
-                  return 1;
-                }
-
-                GAME::Event::SetEvent(pGame, pObject, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
-                return 1;
-              }
-
               D2Common::Units::SetupUpdateFlag(pObject, 0);
+              UNIT::SUnit::ClearInteractInfo(pPlayer);
               return 1;
             }
-          } else {
-            bToCursor = ITEMS::ItemMode::ToCursorItem(pGame, pPlayer, pItem);
-            if (bToCursor) {
-              goto accept_item_and_operate;
-            }
-          }
+          case 3:
+            {
+              if (!pItem) {
+                nItemClassId = -1;
+              } else {
+                nItemClassId = pItem->nClassId;
+              }
 
-          sPacket.nUIType = '\x04';
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
+              pTxtItem = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
+              if (pObject->nClassId == 0x98) {
+                if (pTxtItem->dwCode == 0x20747368) {
+                  accept_item_and_operate:
+                  sPacket.nUIType = '\x05';
+                  UNIT::SUnit::ClearInteractInfo(pPlayer);
+                  if (pObject->nClassId == 0x98) {
+                    sPacket.nUIState = '\x01';
+                  } else {
+                    dwDispatchResult = OBJMODE_DispatchOperateFunction(pGame, (uint8_t)pTxtItem->bSubType, (int32_t)pPlayer);
+                    sPacket.nUIState = (uint8_t)dwDispatchResult;
+                  }
+
+                  GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
+                  if (sPacket.nUIState == '\x01') {
+                    D2Common::Units::SetupUpdateFlag(pObject, 1);
+                    pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pObject->nClassId);
+                    if (pObject->nClassId == 0x98) {
+                      D2Common::Units::SetupUpdateFlag(pObject, 2);
+                      Quests::QUESTS::A2Q6::Q14_OnStaffUsedInOrifice(pGame, pPlayer, pObject);
+                      return 1;
+                    }
+
+                    GAME::Event::SetEvent(pGame, pObject, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
+                    return 1;
+                  }
+
+                  D2Common::Units::SetupUpdateFlag(pObject, 0);
+                  return 1;
+                }
+              } else {
+                bToCursor = ITEMS::ItemMode::ToCursorItem(pGame, pPlayer, pItem);
+                if (bToCursor) {
+                  goto accept_item_and_operate;
+                }
+              }
+
+              sPacket.nUIType = '\x04';
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
+              break;
+            }
         }
       }
     } else {
@@ -3502,7 +3509,8 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
 
     pBluePortal->pUnitData.pUnitDataMonster->Components[0] = (uint8_t)eLevel;
     uint8_t byPortalFlags = D2Common::Units::GetObjectPortalFlags(pBluePortal);
-    D2Common::Units::SetObjectPortalFlags(pBluePortal, byPortalFlags | 1);
+    byPortalFlags |= 1;
+    D2Common::Units::SetObjectPortalFlags(pBluePortal, byPortalFlags);
     D2Common::Units::SetupUpdateFlag(pBluePortal, 3);
     int nUnitGUID = pUnit->nUnitGUID;
     eD2UnitType eUnitType = UNIT_OBJECT;
@@ -3516,7 +3524,8 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
     }
 
     byPortalFlags = D2Common::Units::GetObjectPortalFlags(pBluePortal);
-    D2Common::Units::SetObjectPortalFlags(pBluePortal, byPortalFlags | 3);
+    byPortalFlags |= 3;
+    D2Common::Units::SetObjectPortalFlags(pBluePortal, byPortalFlags);
 }
 
 void __stdcall OBJMODE_FinalizePortalLink_HaltTail(int nLine) {
@@ -3661,8 +3670,7 @@ void __fastcall SpawnDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t sCod
       bCheckNeighbors = 1;
       nSearchRadius = 1;
       pNewPosition = &ptSpawnPos;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptUnitPos, pNewPosition, nSearchRadius, bCheckNeighbors);
+      pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pNewPosition, nSearchRadius, bCheckNeighbors);
       if (pRoom) {
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
@@ -3773,8 +3781,8 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
         __frame0.nMonLvl = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevel, pGame->nDifficulty, pGame->bExpansion);
         nAct = (uint32_t)neAct;
         nActMonLvlMin = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId_ActLevels[nAct][0], pGame->nDifficulty, pGame->bExpansion);
-        nActMonLvlMax = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId_ActLevels[nAct][1], pGame->nDifficulty, pGame->bExpansion);
-        nVictimLevel = nActMonLvlMax - nActMonLvlMin;
+        nVictimLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId_ActLevels[nAct][1], pGame->nDifficulty, pGame->bExpansion);
+        nVictimLevel -= nActMonLvlMin;
         if (nVictimLevel < 0) {
           nVictimLevel = -nVictimLevel;
         }

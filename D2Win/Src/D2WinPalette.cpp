@@ -107,12 +107,11 @@ void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift) {
       gdwPaletteShiftStartTick = GetTickCount();
       gnPaletteGammaShiftState = 2;
       gbPaletteGammaShiftEnabled = 1;
-      D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
-      return;
+    } else {
+      gbGammaShiftActive = 0;
+      gbPaletteGammaShiftEnabled = 0;
     }
 
-    gbGammaShiftActive = 0;
-    gbPaletteGammaShiftEnabled = 0;
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
 }
 
@@ -265,11 +264,10 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPl2FullPath, "%s\\%s", "DATA\\GLOBAL", "palette\\act1\\pal.dat");
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDatFullPath, "%s\\%s", "DATA\\GLOBAL", "palette\\act1\\pal.pl2");
       D2WINPAL_LoadPaletteFiles(szPl2FullPath, szDatFullPath);
-      D2Comp::D2COMP_InitEmblemColorTables();
-      return 1;
+    } else {
+      D2WINPAL_LoadPaletteFiles(szDatFile, szPl2File);
     }
 
-    D2WINPAL_LoadPaletteFiles(szDatFile, szPl2File);
     D2Comp::D2COMP_InitEmblemColorTables();
     return 1;
 }

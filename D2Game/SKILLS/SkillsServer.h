@@ -63,6 +63,10 @@ typedef int (__fastcall *pfnSkillNoTargetCb)(struct D2SkillCallbackContextStrc *
 #define RECON_FPTD_pfnSkillRangeCb
 typedef void (__fastcall *pfnSkillRangeCb)(struct D2UnitStrc * pUnit, void * pCtx);
 #endif
+#ifndef RECON_FPTD_pfnUIMenuInstance
+#define RECON_FPTD_pfnUIMenuInstance
+typedef void (__stdcall *pfnUIMenuInstance)();
+#endif
 
 // Data types
 struct D2AreaHitNearestCtx {

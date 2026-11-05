@@ -1775,9 +1775,15 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
             unpack_sector:
             if (nChunkSize > nSectorSize) {
               nFileSizeBits = pMPQFileSaved->pBlockEntry->dwFlags & 0xff00;
-              if (nFileSizeBits != 0x100) {
-                if (nFileSizeBits == 0x200) {
-                  /* Parameter SLOT REUSE: [EBP+0x8] (param pArchive) is reused as an INTEGER BYTE
+              switch (nFileSizeBits) {
+                case 0x100:
+                  {
+                    SFILE_DecompressLzw(__frame0.nBaseOffset + (int)pDstBuf, (int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8), nSectorSize);
+                    break;
+                  }
+                case 0x200:
+                  {
+                    /* Parameter SLOT REUSE: [EBP+0x8] (param pArchive) is reused as an INTEGER BYTE
                          OFFSET into
                          pReadBuffer for the whole decrypt/decompress loop; the real D2MPQFileStrc*
                          lives in ESI
@@ -1794,11 +1800,11 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          turns into a load.
                          Cannot be fixed here without retyping the parameter, i.e. a signature change.
                           */ if (pMPQFileSaved->bChecksumEnabled && pMPQFileSaved->nChecksumState != 1 && *(uint8_t*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)) & 0xc0) {
-                    pMPQFileSaved->nChecksumState = 1;
-                  }
+                      pMPQFileSaved->nChecksumState = 1;
+                    }
 
-                  nDestSize = nChunkSize;
-                  /* SCompDecompress argument evidence (pushes are right-to-left, RET 0x14 == 5
+                    nDestSize = nChunkSize;
+                    /* SCompDecompress argument evidence (pushes are right-to-left, RET 0x14 == 5
                          args):
                            arg1 pDst    = [EBP-0x8] + [EBP+0x10] = nBaseOffset + pDstBuf
                          (00416f04/f09/f10)
@@ -1817,12 +1823,12 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          to whole
                          sectors; SFILE_ReadSectors cannot itself walk pDstBuf out of the caller's
                          buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (int)pDstBuf), &nDestSize, (uint32_t*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)), nSectorSize, (uint32_t)pMpqArchive->szArchivePath);
-                  if (!BVar1) {
-                    SErr::SErrDisplayError(0x85100083, (uint32_t*)pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
+                    if (!BVar1) {
+                      SErr::SErrDisplayError(0x85100083, (uint32_t*)pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
+                    }
+
+                    break;
                   }
-                }
-              } else {
-                SFILE_DecompressLzw(__frame0.nBaseOffset + (int)pDstBuf, (int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8), nSectorSize);
               }
             } else if (__frame0.pReadBuffer != pDstBuf) {
               SMem::SMemCopy((void*)(__frame0.nBaseOffset + (int)pDstBuf), (void*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)), nChunkSize);
@@ -5304,7 +5310,7 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
               pAudioStreamRec->pStream = lpDSB;
               pAudioStreamRec->bAllocatedStream = dwInitialPos;
               pAudioStreamRec->nRefCount = 1;
-              pAudioStreamRec->bIs16Bit = wFormatTag.wBitsPerSample != 8 ? 0 : 0x80;
+              pAudioStreamRec->bIs16Bit = wFormatTag.wBitsPerSample == 8 ? 0x80 : 0;
               hFile->nRefCount++;
               lpDSB->lpVtbl->SetCurrentPosition(lpDSB, 0);
               /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pFile->bStreamActive = 1;
@@ -5327,9 +5333,7 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
 uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, int32_t nReadCtx) {
-    int nReadFlags = 0;
-    uint32_t nOpenFlags = SFILE_GetOpenFlags();
-    nOpenFlags = SFileLoadFileEx2(nullptr, pArchive, ppOutBuffer, pdwOutSize, nSize, nOpenFlags, nReadCtx, nReadFlags);
+    uint32_t nOpenFlags = SFileLoadFileEx2(nullptr, pArchive, ppOutBuffer, pdwOutSize, nSize, SFILE_GetOpenFlags(), nReadCtx, 0);
     return nOpenFlags;
 }
 
@@ -5624,12 +5628,11 @@ void __stdcall SFileOpenFileAsArchive(int32_t nParentArchive, char * szFileName,
       pArchive->nArchiveOffset = pOpenedFile->pBlockEntry->dwFilePos;
       pArchive->nArchiveFileSize = pOpenedFile->pBlockEntry->dwFileSize + pOpenedFile->pBlockEntry->dwFilePos;
       SFILE_s_OpenArchive(pArchive, nFlags, pArchive->nArchiveType, ppArchive);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      return;
+    } else {
+      SFileCloseFile(pMPQFile);
+      SErr::SErrSetLastError(0x3ee);
     }
 
-    SFileCloseFile(pMPQFile);
-    SErr::SErrSetLastError(0x3ee);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
 }
 

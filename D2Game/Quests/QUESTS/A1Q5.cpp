@@ -628,10 +628,10 @@ int __fastcall Q05_OnTowerComplete(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
     D2QuestDataA1Q5Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q5;
     if (!pQuestData->pQuestSpecificData.pA1Q5->nPlayersForRewardCount) {
       pQuestData->bIsActive = '\0';
-      return (int)pDVar1;
+    } else {
+      pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q05_Callback10_PlayerLeavesGame;
     }
 
-    pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q05_Callback10_PlayerLeavesGame;
     return (int)pDVar1;
 }
 
@@ -770,11 +770,15 @@ bool __fastcall Q05_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     int32_t* pBufferElement = pQuestData->pQuestSpecificData.pA1Q5->aPlayersForRewardGUIDs;
     do {
       /* If the character GUID is in the buffer at offset 52 (0x34) */ if (*pBufferElement == iCharacterGuid) {
-        /* If target is Wariv; inactive */ if (nTargetClassId == 0x9b) {
-          return false;
-        }
-        /* If target is Gheed: inactive */ if (nTargetClassId == 0x93) {
-          return false;
+        /* If target is Wariv; inactive */ switch (nTargetClassId) {
+          case 0x9b:
+            {
+              return false;
+            }
+          case 0x93:
+            {
+              return false;
+            }
         }
 
         /* Otherwise active */ return true;

@@ -38,7 +38,7 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 typedef BOOL (__fastcall *DrawEx)(D2ControlStrc * pControl);
 #endif
 
-static D2WinPopup * gpD2WinPopupControl = 0; D2_STATIC_GUARD(gpD2WinPopupControl, "gpD2WinPopupControl");
+static ::D2WinPopup * gpD2WinPopupControl = 0; D2_STATIC_GUARD(gpD2WinPopupControl, "gpD2WinPopupControl");
 
 namespace D2Win::Src::D2WinPopup {
 
@@ -180,7 +180,7 @@ BOOL __fastcall Draw(::D2WinPopup * pPopup) {
       wMessage = pPopup->wszMessages;
       nMsgCount = 0;
       do {
-        D2WinFont::DRAW_text(wMessage->wszText, pPopup->sControl.dwPosX, pPopup->sControl.dwPosY + (nMsgCount - nMsgIdx + 1) * 0x14, nMsgCount != pPopup->bCentered ? 0 : 0x3, 0);
+        D2WinFont::DRAW_text(wMessage->wszText, pPopup->sControl.dwPosX, pPopup->sControl.dwPosY + (nMsgCount - nMsgIdx + 1) * 0x14, nMsgCount == pPopup->bCentered ? 0x3 : 0, 0);
         nMsgIdx = pPopup->nMessageCount;
         nMsgCount++;
         wMessage++;

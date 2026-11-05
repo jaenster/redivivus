@@ -443,13 +443,11 @@ BOOL __fastcall Skills_SrvDoFunc_087_SpawnBehindTarget(::SGAMEDATA * pGame, D2Un
       return 0;
     }
 
-    int32_t nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-    int nSpawnX = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nTargetY);
-    uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nSpawnX);
+    uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTargetUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pTargetUnit)));
     uint32_t nGfxDirMasked = (int)bVar1 % 8;
     D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[(uint8_t)nGfxDirMasked], &nSkillLvl, &nOffsetY);
-    nTargetY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-    nSpawnX = nTargetY + nSkillLvl;
+    int32_t nTargetY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+    int nSpawnX = nTargetY + nSkillLvl;
     nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
     pUnit->nActionFrame = 0;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1976,7 +1974,7 @@ BOOL __fastcall Skills_SrvDoFunc_105_FireParallelMissileVolley(::SGAMEDATA * pGa
           goto fire_volley;
         }
       }
-      if (-1 < iVar1) {
+      if (iVar1 >= 0) {
         goto fire_volley;
       }
       if (nDeltaY > 0) {
@@ -2358,10 +2356,10 @@ BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, 
       }
       if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
         SkillsServer::SKILLS_CreateMissileFromUnit(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
-        return 1;
+      } else {
+        SkillsServer::CreatingAMissile(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       }
 
-      SkillsServer::CreatingAMissile(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 
@@ -2403,10 +2401,10 @@ BOOL __fastcall Skills_SrvDoFunc_149_FireMissileBodyPart11(::SGAMEDATA * pGame, 
       }
       if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[1]) {
         SkillsServer::SKILLS_CreateMissileFromUnit(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
-        return 1;
+      } else {
+        SkillsServer::CreatingAMissile(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       }
 
-      SkillsServer::CreatingAMissile(pGame, eFinalMissileId, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 

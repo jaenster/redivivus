@@ -10,7 +10,6 @@
 #include "D2Direct3D/d3dSubtileCache.h"
 
 // Forward declarations
-struct D2D3DDeviceSlotStrc;
 struct D3DFloorCacheNodeStrc;
 struct D3DFloorCacheStrc;
 struct D3DSubtileCacheNodeStrc;
@@ -18,15 +17,12 @@ struct D3DSubtileCacheStrc;
 struct IDirect3DDevice;
 struct IDirectDrawSurface7;
 
-extern BOOL BOOL_0074c020;
-extern GUID gsD3DAdapterGuid;
 extern unsigned int gnD3DTextureCacheBlockSize;
 extern uint16_t g_Palette16Bit[256];
 extern D3DSubtileCacheStrc gD3DSubtileTextureCache;
 extern D3DFloorCacheStrc gD3DFloorTextureCache;
 extern int gnD3DTextureCacheCount;
 extern uint32_t g_Palette32Bit[256];
-extern D2D3DDeviceSlotStrc gD3DDeviceBlock0[2];
 extern IDirectDrawSurface7 * g_pD3DSurfaceBackbuffer;
 extern IDirect3DDevice * g_pD3DDevice;
 extern unsigned int g_nBytesPerPixel;

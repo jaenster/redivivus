@@ -215,7 +215,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
           ErrorManager::StubHook2(0);
           /* DWORD dwExitCode for ExitThread */ ExitThread(0);
         }
-      } else if (nSelectResult != -1 && (__frame0.nSocketIdx = -1 , -1 < __frame0.nClientCount)) {
+      } else if (nSelectResult != -1 && (__frame0.nSocketIdx = -1 , __frame0.nClientCount >= 0)) {
         do {
           if (__frame0.nSocketIdx == -1) {
             socketCur = ((D2QServerStrc*)lpThreadParam)->aListenSockets[0];

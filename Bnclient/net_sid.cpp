@@ -1502,7 +1502,8 @@ int __fastcall NET_SID_CLIENT_Send_0x53_AuthAccountLogon(char * pUsername, char 
     SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, passwordUpper);
     Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
-    BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen + 0x21);
+    nUsernameLen += 0x21;
+    BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen);
     return 1;
 }
 
@@ -1510,7 +1511,8 @@ int32_t __stdcall NET_SID_CLIENT_Resend_0x53_AuthAccountLogon() {
     SID_C2S_AuthAccountLogon packet;
     Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, g_szStoredUsername, 0x100);
-    BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen + 0x21);
+    nUsernameLen += 0x21;
+    BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen);
     return 1;
 }
 
@@ -1539,7 +1541,8 @@ int __fastcall NET_SID_CLIENT_Send_0x52_AuthAccountCreate(char * pUsername, char
     Storm::Source::SSTR::SStrUpper(passwordUpper);
     SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)passwordUpper, (uint32_t*)&packet, packet.aVerifier);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x7fffffff);
-    BnSend::NET_SID_CLIENT_Send(0x52, (char*)&packet, nUsernameLen + 0x41);
+    nUsernameLen += 0x41;
+    BnSend::NET_SID_CLIENT_Send(0x52, (char*)&packet, nUsernameLen);
     return 1;
 }
 
@@ -1561,7 +1564,8 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, oldPasswordUpper);
     Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
-    BnSend::NET_SID_CLIENT_Send(0x55, (char*)&packet, nUsernameLen + 0x21);
+    nUsernameLen += 0x21;
+    BnSend::NET_SID_CLIENT_Send(0x55, (char*)&packet, nUsernameLen);
     return 0;
 }
 

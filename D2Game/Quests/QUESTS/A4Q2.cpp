@@ -129,7 +129,6 @@ void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame) {
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).
 bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL BVar1;
-    eD2QuestState eQuestState;
     if (nTargetClassId == 0x16f) {
       BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
       if (!BVar1) {
@@ -156,7 +155,7 @@ bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
         return false;
       }
 
-      eQuestState = QUESTSTATE_Step0x09;
+      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x09);
     } else {
       if (nTargetClassId != 0xf6) {
         return false;
@@ -179,10 +178,8 @@ bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
         return false;
       }
 
-      eQuestState = QUESTSTATE_Step0x08;
+      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Step0x08);
     }
-
-    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, eQuestState);
     if (!BVar1) {
       return true;
     }
@@ -499,13 +496,13 @@ BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
       sPacket5D.nQuestId = '\x17';
       sPacket5D.nAlertFlags = '\x01';
       GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &sPacket5D);
-      return 0;
+    } else {
+      sPacket50.nPacketId = 'P';
+      sPacket50.nMessageType = 0x17;
+      pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1da);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x50_QuestSpecial(pClient, &sPacket50);
     }
 
-    sPacket50.nPacketId = 'P';
-    sPacket50.nMessageType = 0x17;
-    pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1da);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x50_QuestSpecial(pClient, &sPacket50);
     return 0;
 }
 

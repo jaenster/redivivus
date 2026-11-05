@@ -1697,7 +1697,7 @@ void __fastcall DRLGROOMEX_ActivateRoomEx(D2RoomExStrc * pRoomEx) {
       pDrlg = pRoomEx->pLevel->pDrlg;
       DRLGROOMEX_InitRoomExData(pDrlg->pMemoryPool, pRoomEx);
       bIsClientSide = Drlg::DRLGACTMISC_CheckFlag0x1(pDrlg);
-      pDrlg->nActivationCountdown = !bIsClientSide * '\x02' + 5;
+      pDrlg->nActivationCountdown = bIsClientSide ? 0x5 : 0x7;
     }
     if (1 >= pRoomEx->fRoomStatus) {
       return;
@@ -2039,7 +2039,7 @@ void __stdcall DRLGROOMEX_UpdateClientRoomExActivation(D2DrlgStrc * pDrlg) {
     }
 
     bIsClientSide = Drlg::DRLGACTMISC_CheckFlag0x1(pDrlg);
-    pDrlg->nActivationCountdown = !bIsClientSide * '\x02' + 5;
+    pDrlg->nActivationCountdown = bIsClientSide ? 0x5 : 0x7;
     if (!pDrlg->pActivationIterator || pDrlg->pActivationIterator->fRoomStatus != '\x02') {
       pDrlg->pActivationIterator = pDrlg->aSubA0[2].pStatusNext;
     }

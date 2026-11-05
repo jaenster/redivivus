@@ -1094,9 +1094,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x27_NpcInfo(D2ClientStrc * pClient, D2GSPa
 
 void __fastcall NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY(D2ClientStrc * pClient, D2GSPacketSrv0x53 * pPacketData) {
     D2GSPacketSrv0x53 aPacket;
-    *(uint32_t*)(char*)&aPacket = *(uint32_t*)pPacketData;
-    *(uint32_t*)((char*)&aPacket + 4) = *(uint32_t*)((uintptr_t)&pPacketData->nCycleIndex + 3);
-    *(uint16_t*)((char*)&aPacket + 8) = *(uint16_t*)((uintptr_t)&pPacketData->nTicks + 3);
+    aPacket = *pPacketData;
     SCMD_QueuePacketForClient(&aPacket.nHeader, 10, pClient);
 }
 
@@ -1770,11 +1768,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD(D2ClientStrc * pClient
 
 void __fastcall NET_D2GS_SERVER_Send_0x5D_QuestState(D2ClientStrc * pClient, D2GSPacketSrv0x5D * pPacket) {
     D2GSPacketSrv0x5D aPacket;
-    aPacket.nPacketId = pPacket->nPacketId;
-    aPacket.nQuestId = pPacket->nQuestId;
-    aPacket.nAlertFlags = pPacket->nAlertFlags;
-    aPacket.nFilterStatus = pPacket->nFilterStatus;
-    aPacket.nExtra = pPacket->nExtra;
+    aPacket = *pPacket;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 6, pClient);
 }
 
@@ -1790,16 +1784,13 @@ void __fastcall NET_D2GS_SERVER_Send_0x2A_NpcTransaction(D2ClientStrc * pClient,
 
 void __fastcall NET_D2GS_SERVER_Send_0x2C_PlaySound(D2ClientStrc * pClient, D2GSPacketSrv0x2C * pPacket) {
     D2GSPacketSrv0x2C aPacket;
-    *(uint32_t*)(char*)&aPacket = *(uint32_t*)pPacket;
-    *(uint32_t*)((char*)&aPacket + 4) = *(uint32_t*)((uintptr_t)&pPacket->nUnitGUID + 2);
+    aPacket = *pPacket;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 8, pClient);
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x4E_ADDTOMERCENARYLIST(D2ClientStrc * pClient, D2GSPacketSrv0x4E * pPacket) {
     D2GSPacketSrv0x4E abPacketTail;
-    *(uint32_t*)(char*)&abPacketTail = *(uint32_t*)pPacket;
-    *(uint16_t*)((char*)&abPacketTail.nSeed + 1) = *(uint16_t*)((uintptr_t)&pPacket->nSeed + 1);
-    *(uint8_t*)((char*)&abPacketTail.nSeed + 3) = *(uint8_t*)((uintptr_t)&pPacket->nSeed + 3);
+    abPacketTail = *pPacket;
     SCMD_QueuePacketForClient(&abPacketTail.nPacketId, 7, pClient);
 }
 
@@ -1851,9 +1842,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(D2ClientStrc * pClie
 
 void __fastcall NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(D2ClientStrc * pClient, D2GSPacketSrv0x58 * pPacket) {
     D2GSPacketSrv0x58 aPacket;
-    *(uint32_t*)(char*)&aPacket = *(uint32_t*)pPacket;
-    *(uint16_t*)((char*)&aPacket + 4) = *(uint16_t*)((uintptr_t)&pPacket->nUnitGUID + 3);
-    aPacket.nUIState = pPacket->nUIState;
+    aPacket = *pPacket;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 7, pClient);
 }
 
@@ -2152,8 +2141,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(D2ClientStrc * pClie
 
 void __fastcall NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract(D2ClientStrc * pClient, D2GSPacketSrv0x8A * pPacket) {
     D2GSPacketSrv0x8A aPacket;
-    *(uint32_t*)(char*)&aPacket = *(uint32_t*)pPacket;
-    *(uint16_t*)((char*)&aPacket.nUnitGUID + 2) = *(uint16_t*)((uintptr_t)&pPacket->nUnitGUID + 2);
+    aPacket = *pPacket;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 6, pClient);
 }
 

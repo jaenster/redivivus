@@ -436,12 +436,11 @@ void __fastcall SOUND_PlayEnvironmentSound(int32_t nSoundId, int32_t nPosX, int3
     if (!nSoundId) {
       return;
     }
-
-    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
     if (!gpActiveSoundChannelsHead) {
       return;
     }
 
+    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
     while (pChannel->pChannel->nChannelHandle != nSoundId) {
       D2SoundChannelNodeStrc** pNextNode;
       pNextNode = &pChannel->pNext;
@@ -535,12 +534,11 @@ void __fastcall SOUND_SetChannelPriority(int32_t nSoundId, int32_t nPriority) {
     if (!nSoundId) {
       return;
     }
-
-    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
     if (!gpActiveSoundChannelsHead) {
       return;
     }
 
+    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
     while (pChannel->pChannel->nChannelHandle != nSoundId) {
       D2SoundChannelNodeStrc** pNextNode;
       pNextNode = &pChannel->pNext;
@@ -586,15 +584,13 @@ int __fastcall SOUND_GetSoundChannel(int32_t nSoundId) {
 }
 
 int __stdcall SOUND_IsMusicPlaying() {
-    int nSoundId;
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     while (true) {
       if (!pDVar1) {
         return 0;
       }
       if (pDVar1->pChannel->nPlayMode != 2) {
-        nSoundId = pDVar1->pChannel->nSoundId;
-        if (nSoundId >= 0xb76 && nSoundId <= 0x1230) {
+        if (pDVar1->pChannel->nSoundId >= 0xb76 && pDVar1->pChannel->nSoundId <= 0x1230) {
           break;
         }
       }
@@ -606,15 +602,13 @@ int __stdcall SOUND_IsMusicPlaying() {
 }
 
 BOOL __stdcall SOUND_GetAmbientMusicState() {
-    int nSoundId;
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     while (true) {
       if (!pDVar1) {
         return 0;
       }
       if (pDVar1->pChannel->nPlayMode != 2) {
-        nSoundId = pDVar1->pChannel->nSoundId;
-        if (nSoundId >= 0x1231 && nSoundId <= 0x125a) {
+        if (pDVar1->pChannel->nSoundId >= 0x1231 && pDVar1->pChannel->nSoundId <= 0x125a) {
           break;
         }
       }
@@ -1303,12 +1297,11 @@ void __fastcall SOUND_StopById(int32_t nChannelHandle) {
     if (!nChannelHandle) {
       return;
     }
-
-    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
     if (!gpActiveSoundChannelsHead) {
       return;
     }
 
+    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
     while (true) {
       D2SoundChannelNodeStrc** pNextChanNode;
       nChanDataPtr = pChannel->pChannel;
@@ -1374,7 +1367,6 @@ void __stdcall SOUND_StopMusic() {
 }
 
 void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
-    int32_t nSoundId;
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
     D2SoundChannelStrc* nChanDataPtr;
@@ -1385,9 +1377,8 @@ void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
       if (nSoundGroup != nKeepGroup1) {
         nSoundGroup = SoundHdr::SOUNDHDR_GetSoundField0x60(nChanDataPtr->nSoundId);
         if (nSoundGroup != nKeepGroup2) {
-          nSoundId = nChanDataPtr->nSoundId;
-          if (nSoundId >= 0x34 && nSoundId <= 0x47) {
-            pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nSoundId);
+          if (nChanDataPtr->nSoundId >= 0x34 && nChanDataPtr->nSoundId <= 0x47) {
+            pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nChanDataPtr->nSoundId);
             nChanDataPtr->bStopFlag = 1;
             if (pSoundsTxtLine->Fade_Out && nChanDataPtr->nPlayMode == 1) {
               SOUND_StopChannelGracefully(nChanDataPtr->nChannelHandle, 0, 0, (uint32_t)pSoundsTxtLine->Fade_Out);
@@ -1399,7 +1390,6 @@ void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
 }
 
 void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
-    int32_t nSoundId;
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
     D2SoundChannelStrc* nChanDataPtr;
@@ -1410,9 +1400,8 @@ void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
       if (nSoundGroup != nKeepGroup1) {
         nSoundGroup = SoundHdr::SOUNDHDR_GetSoundField0x60(nChanDataPtr->nSoundId);
         if (nSoundGroup != nKeepGroup2) {
-          nSoundId = nChanDataPtr->nSoundId;
-          if (nSoundId >= 0x48 && nSoundId <= 0xc9) {
-            pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nSoundId);
+          if (nChanDataPtr->nSoundId >= 0x48 && nChanDataPtr->nSoundId <= 0xc9) {
+            pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nChanDataPtr->nSoundId);
             nChanDataPtr->bStopFlag = 1;
             if (pSoundsTxtLine->Fade_Out && nChanDataPtr->nPlayMode == 1) {
               SOUND_StopChannelGracefully(nChanDataPtr->nChannelHandle, 0, 0, (uint32_t)pSoundsTxtLine->Fade_Out);

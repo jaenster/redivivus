@@ -525,12 +525,10 @@ void __stdcall INPUT_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
       }
 
       pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
+    } else {
+      pMsg->bHandled = 0;
     }
 
-    pMsg->bHandled = 0;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
@@ -600,7 +598,7 @@ void __stdcall INPUT_HandleMouseWheel(D2UIMouseMsgStrc * pMsg) {
     }
 
     gnMouseWheelScrollAccumulator += *(short int*)((uintptr_t)&pMsg->nWParam + 2);
-    if ((gnMouseWheelScrollAccumulator ^ gnMouseWheelScrollAccumulator >> 0x1f) - (gnMouseWheelScrollAccumulator >> 0x1f) >= 0x78) {
+    if (abs(gnMouseWheelScrollAccumulator) >= 0x78) {
       UI::CmdTbl::CMD_InvokeCallbackByParam(gnMouseWheelScrollAccumulator / 0x78);
       gnMouseWheelScrollAccumulator = 0;
     }
@@ -700,28 +698,26 @@ void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
       gClickModifierDown = 0;
       Select::ClearSelectedUnit();
       D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
-      pMouseEvent->bHandled = 0;
-      return;
-    }
-
-    uint32_t vKey = UI::CmdTbl::CMD_IsCommandBound(0x22, 1);
-    if (vKey) {
-      uint16_t wVirtualKey;
-      wVirtualKey = UI::CmdTbl::CMD_GetKeyForCommand(0x22, 1);
-      /* int vKey for GetAsyncKeyState */ keyState = GetAsyncKeyState((uint32_t)wVirtualKey);
-      if (keyState >= 0) {
-        gRunKeyDown = 0;
+    } else {
+      uint32_t vKey = UI::CmdTbl::CMD_IsCommandBound(0x22, 1);
+      if (vKey) {
+        uint16_t wVirtualKey;
+        wVirtualKey = UI::CmdTbl::CMD_GetKeyForCommand(0x22, 1);
+        /* int vKey for GetAsyncKeyState */ keyState = GetAsyncKeyState((uint32_t)wVirtualKey);
+        if (keyState >= 0) {
+          gRunKeyDown = 0;
+        }
       }
-    }
-    if (gnPrimaryClickState != 0x10) {
-      ProcessPrimaryClickImmediate();
-    }
-    if (gnMouseButtonEventState != 0x10) {
-      gnMouseButtonEventState = 0x10;
-      gQueuedSecondaryClick = 0;
-      gnQueuedSecondaryClickX = 1;
-      gbMouseButtonEventPending = 0;
-      Select::SetCanBeSelectedToFalse();
+      if (gnPrimaryClickState != 0x10) {
+        ProcessPrimaryClickImmediate();
+      }
+      if (gnMouseButtonEventState != 0x10) {
+        gnMouseButtonEventState = 0x10;
+        gQueuedSecondaryClick = 0;
+        gnQueuedSecondaryClickX = 1;
+        gbMouseButtonEventPending = 0;
+        Select::SetCanBeSelectedToFalse();
+      }
     }
 
     pMouseEvent->bHandled = 0;
@@ -2250,16 +2246,13 @@ void __stdcall Congratz_HandleOkButton(D2UIMouseMsgStrc * pMsg) {
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nCenterX - 0x30 && nMouseX <= nCenterX + 0x30 && nMouseY >= dwScreenY - 0x70 && nMouseY <= nBottomY) {
       gEndGameUiState.congratzOkClicked = 1;
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
+    } else {
+      gQueuedPrimaryClick = 0;
+      gQueuedSecondaryClick = 0;
+      gnQueuedPrimaryClickX = 0;
+      gnQueuedSecondaryClickX = 0;
     }
 
-    gQueuedPrimaryClick = 0;
-    gQueuedSecondaryClick = 0;
-    gnQueuedPrimaryClickX = 0;
-    gnQueuedSecondaryClickX = 0;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
@@ -2462,9 +2455,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
         nFrameOffset = 2;
       }
 
-      bDrawFlag = 0;
-      nY = ScreenSizeY - 0x58 + nFrameOffset;
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ee), nQueryResult - nFrameOffset, nY, 0, bDrawFlag);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13ee), nQueryResult - nFrameOffset, ScreenSizeY - 0x58 + nFrameOffset, 0, 0);
       Cursor::DrawCursor();
       D2gfx::D2GFX::D2GFX_EndScene();
     }

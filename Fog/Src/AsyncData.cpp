@@ -214,6 +214,7 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
     int32_t nErrorLine = Source::SFile::ARCHIVE_OpenD2FileWrap(szText1, &pAsyncData->pFile);
     if (!nErrorLine) {
       nErrorLine = 0x135;
+      D2_FREE_POOL_AT(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", 0x135);
     } else {
       D2MPQFileStrc* pFileHandle;
       pAsyncData->pMemory = pMemory;
@@ -277,9 +278,9 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
       }
 
       nErrorLine = 0x186;
+      D2_FREE_POOL_AT(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", 0x186);
     }
 
-    Memory::FreeServerMemory(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", nErrorLine, 0);
     return nullptr;
 }
 

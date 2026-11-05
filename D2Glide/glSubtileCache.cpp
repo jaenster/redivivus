@@ -99,12 +99,11 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
 static void GLSUBTILE_AppendNodeToTail(GlSubtileCacheStrc * pCache, GlSubtileCacheNodeStrc * pNode) {
     if (!pCache->pActiveHead) {
       pCache->pActiveHead = pNode;
-      pCache->pActiveTail = pNode;
-      return;
+    } else {
+      pCache->pActiveTail->pNext = pNode;
+      pNode->pPrev = pCache->pActiveTail;
     }
 
-    pCache->pActiveTail->pNext = pNode;
-    pNode->pPrev = pCache->pActiveTail;
     pCache->pActiveTail = pNode;
 }
 
@@ -119,12 +118,10 @@ GlSubtileCacheNodeStrc * __fastcall GLSUBTILE_RemoveNodeFromHead(uint32_t dwPara
     pCache->pActiveHead = (GlSubtileCacheNodeStrc*)pNext;
     if (pNext) {
       memset(pNext + 16, 0, 4 * sizeof(pNext[0]));
-      pHeadNode->pNext = 0;
-      pHeadNode->pPrev = 0;
-      return pHeadNode;
+    } else {
+      pCache->pActiveTail = 0;
     }
 
-    pCache->pActiveTail = 0;
     pHeadNode->pNext = 0;
     pHeadNode->pPrev = 0;
     return pHeadNode;
@@ -151,13 +148,11 @@ static GlSubtileCacheNodeStrc * GLSUBTILE_RemoveNodeByIndex(GlSubtileCacheStrc *
       pPrevTail = (uint8_t*)pCache->pActiveTail->pPrev;
       pCache->pActiveTail = (GlSubtileCacheNodeStrc*)pPrevTail;
       memset(pPrevTail + 12, 0, 4 * sizeof(pPrevTail[0]));
-      pTargetNode->pNext = 0;
-      pTargetNode->pPrev = 0;
-      return pTargetNode;
+    } else {
+      pTargetNode->pPrev->pNext = pTargetNode->pNext;
+      pTargetNode->pNext->pPrev = pTargetNode->pPrev;
     }
 
-    pTargetNode->pPrev->pNext = pTargetNode->pNext;
-    pTargetNode->pNext->pPrev = pTargetNode->pPrev;
     pTargetNode->pNext = 0;
     pTargetNode->pPrev = 0;
     return pTargetNode;
@@ -185,13 +180,12 @@ static int GLSUBTILE_AllocateNode(GlSubtileCacheStrc * pCache) {
       if (!pCache->pActiveHead) {
         pCache->nUsedCount++;
         pCache->pActiveHead = pGVar1;
-        pCache->pActiveTail = pGVar1;
-        return pGVar1->nIndex + 1;
+      } else {
+        pCache->pActiveTail->pNext = pGVar1;
+        pGVar1->pPrev = pCache->pActiveTail;
+        pCache->nUsedCount++;
       }
 
-      pCache->pActiveTail->pNext = pGVar1;
-      pGVar1->pPrev = pCache->pActiveTail;
-      pCache->nUsedCount++;
       pCache->pActiveTail = pGVar1;
       return pGVar1->nIndex + 1;
     }

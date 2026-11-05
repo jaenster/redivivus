@@ -148,6 +148,7 @@ static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pArgs) {
     int nPosY;
     D2StatListExStrc* pStatList;
+    int nTmpY;
     int32_t nOwnerX;
     int32_t nTargetUnitX;
     int nDeltaX;
@@ -318,11 +319,12 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     }
     if (pMissileTxt->Collision != '\0') {
       nOwnerX = 0x40;
+      D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x40);
     } else {
       nOwnerX = 0;
+      D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
     }
 
-    D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, nOwnerX);
     D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[pMissileTxt->CollideType].nFlags);
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
@@ -365,7 +367,8 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     }
     if (pArgs->nFlags & 0x10000U) {
       dwFlags = D2Common::Units::Missile::GetFlags(pUnit);
-      D2Common::Units::Missile::SetFlags(pUnit, dwFlags | 2);
+      dwFlags |= 2;
+      D2Common::Units::Missile::SetFlags(pUnit, dwFlags);
     }
 
     Monsters::MONSTER_DispatchUModOnSkill(pGame, pArgs->pOwner, pUnit);

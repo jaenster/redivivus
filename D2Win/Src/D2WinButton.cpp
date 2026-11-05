@@ -346,7 +346,7 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
           nTileRows--;
         } while (nTileRows);
       }
-      if (-1 < nLastTileRow) {
+      if (nLastTileRow >= 0) {
         nFrameOffset = 0;
         if (nTileCols > 0) {
           nRowFrame = nTileRowCount;

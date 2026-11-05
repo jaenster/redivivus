@@ -2043,7 +2043,7 @@ int __fastcall Unreferenced_00533a60(int param_1, int param_2) {
 }
 
 // Lookup table function: given a character class index (wParam, 0x00–0x1b) and a character level (nParam), returns the base experience-point threshold (or similar save-load scalar) for that class/level bracket. All paths return a constant or one of two bracket constants selected by level comparison. Part of the old save-game loading path (PlayerSave), used when reconstructing character progression data from .d2s files.
-static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, int32_t nLevel) {
+int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, int32_t nLevel) {
     switch (wHirelingId) {
       case 0:
 
@@ -2052,7 +2052,7 @@ static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelin
       case 2:
 
       case 3:
-        return nLevel < 0x31 ? 0xdc : 0x1b8;
+        return nLevel >= 0x31 ? 0x1b8 : 0xdc;
       case 4:
 
       case 5:
@@ -2073,7 +2073,7 @@ static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelin
 
       case 8:
         if (nLevel < 0x37) {
-          return nLevel < 0x1f ? 0x69 : 0xd2;
+          return nLevel >= 0x1f ? 0xd2 : 0x69;
         }
       return 0x1a4;
       case 9:
@@ -2081,38 +2081,38 @@ static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelin
       case 10:
 
       case 0xb:
-        return nLevel < 0x37 ? 0xe6 : 0x1cc;
+        return nLevel >= 0x37 ? 0x1cc : 0xe6;
       case 0xf:
 
       case 0x11:
         if (nLevel < 0x3d) {
-          return nLevel < 0x25 ? 0x6e : 0xdc;
+          return nLevel >= 0x25 ? 0xdc : 0x6e;
         }
       return 0x1b8;
       case 0x10:
         if (nLevel < 0x3d) {
-          return nLevel < 0x25 ? 0x73 : 0xe6;
+          return nLevel >= 0x25 ? 0xe6 : 0x73;
         }
       return 0x104;
       case 0x12:
 
       case 0x14:
-        return nLevel < 0x3d ? 0xe6 : 0x1cc;
+        return nLevel >= 0x3d ? 0x1cc : 0xe6;
       case 0x13:
-        return nLevel < 0x3d ? 0xf0 : 0x1e0;
+        return nLevel >= 0x3d ? 0x1e0 : 0xf0;
       case 0x16:
         return 500;
       case 0x18:
 
       case 0x19:
         if (nLevel < 0x4b) {
-          return nLevel < 0x2a ? 0xdc : 0x1b8;
+          return nLevel >= 0x2a ? 0x1b8 : 0xdc;
         }
       return 0x370;
       case 0x1a:
 
       case 0x1b:
-        return nLevel < 0x4b ? 0x1cc : 0x398;
+        return nLevel >= 0x4b ? 0x398 : 0x1cc;
       default:
         return 0x3c0;
     }
@@ -2121,7 +2121,7 @@ static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelin
       return 400;
     }
 
-    return nLevel < 0x19 ? 100 : 0xc8;
+    return nLevel >= 0x19 ? 0xc8 : 100;
 }
 
 uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t wHirelingId, uint32_t dwExperience) {

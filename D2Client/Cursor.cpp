@@ -559,12 +559,10 @@ void __fastcall SetMouseXY(int32_t x, int32_t y) {
         /* int nIndex for GetSystemMetrics */ iCaptionAreaHeight = GetSystemMetrics(4);
         /* int nIndex for GetSystemMetrics */ iFixedFrameWidth = GetSystemMetrics(7);
         /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(iFixedFrameWidth + WindowRect_lcl.left + x, iCaptionAreaHeight + WindowRect_lcl.top + y);
-        MouseY = y;
-        MouseX = x;
-        return;
+      } else {
+        /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(x, y);
       }
 
-      /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(x, y);
       MouseY = y;
       MouseX = x;
       return;

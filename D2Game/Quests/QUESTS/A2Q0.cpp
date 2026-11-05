@@ -58,12 +58,7 @@ void __fastcall Q08_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          — broadcast just-completed -> opens Warriv->Act3 travel */ QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_SpokeToJerhyn, QUESTSTATE_JustCompleted);
       }
     } else if (nNPCNo == 0xf4 && nMessageIndex == 0x7d) {
-      if (!pQuestArgs->pPlayer) {
-        QUESTGUID_AddPlayerToList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, -1);
-        return;
-      }
-
-      QUESTGUID_AddPlayerToList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+      QUESTGUID_AddPlayerToList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
       return;
     }
 }
@@ -131,12 +126,7 @@ bool __fastcall Q08_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0a (player leave/cleanup). Removes the player's GUID (or -1) from the A2Q0 quest-GUID player list (counterpart to Callback_11's add-to-list).
 void __fastcall Q08_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0d (re-sync on join/refresh). If SpokeToJerhyn is already Completed for this difficulty, re-broadcast JustCompleted so the Warriv->Act3 travel option is (re)opened for the player.

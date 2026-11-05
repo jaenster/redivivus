@@ -1004,11 +1004,10 @@ static void D2WINEDITBOX_HandleDelete(::D2WinEditBox * pEditBox) {
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pWideZeroIter);
       if (nDelStart <= nLine) {
         pEditBox->nCursorIndex = nDelStart;
-        D2WINEDITBOX_ClearSelection(pEditBox);
-        return;
+      } else {
+        pEditBox->nCursorIndex = nLine;
       }
 
-      pEditBox->nCursorIndex = nLine;
       D2WINEDITBOX_ClearSelection(pEditBox);
       return;
     }

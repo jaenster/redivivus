@@ -182,7 +182,7 @@ bool __fastcall Q20_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (bQuestState) {
       /* GetQuestState JustCompleted(0xd): if fresh, +2 -> display code 0x0d
                          (completion glow) else 0x0b */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_BladeOfTheOldReligion, QUESTSTATE_JustCompleted);
-      *pbyStatusCode = bQuestState != 0 ? 13 : 11;
+      *pbyStatusCode = !bQuestState ? 0xb : 0xd;
       return true;
     }
 
@@ -250,7 +250,6 @@ bool __fastcall Q20_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
         return true;
       }
     } else {
-      eD2QuestState eQuestState;
       if (nTargetClassId == 0xff) {
         pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367);
         if (pQuestItem) {
@@ -262,7 +261,7 @@ bool __fastcall Q20_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
           return false;
         }
 
-        eQuestState = QUESTSTATE_Step0x08;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
       } else {
         if (nTargetClassId != 0xfc) {
           return false;
@@ -273,10 +272,8 @@ bool __fastcall Q20_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
           return false;
         }
 
-        eQuestState = QUESTSTATE_Step0x07;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
       }
-
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, eQuestState);
       if (!bQuestState) {
         return true;
       }

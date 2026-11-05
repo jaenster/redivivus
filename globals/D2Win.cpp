@@ -139,17 +139,25 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
 
-} // namespace D2Client::UI::ui
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -334,9 +342,9 @@ D2ControlStrc * pFormSecond = 0; D2_GLOBAL_GUARD(pFormSecond, "D2Win::Src::D2Win
 D2ControlStrc * pFormFourth = 0; D2_GLOBAL_GUARD(pFormFourth, "D2Win::Src::D2WinMain::pFormFourth");
 D2ControlStrc * pFormImage = 0; D2_GLOBAL_GUARD(pFormImage, "D2Win::Src::D2WinMain::pFormImage");
 
-} // namespace D2Client::Forms
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::GAME::Record {
+namespace D2Win::D2GFX {
 
 // =============================================================================
 // Initialized scalars
@@ -344,4 +352,4 @@ namespace D2Client::GAME::Record {
 
 ::WndProcB pWndProcB = (::WndProcB)0; D2_GLOBAL_GUARD(pWndProcB, "D2Win::D2GFX::pWndProcB");
 
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

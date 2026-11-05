@@ -36,7 +36,7 @@ static void __fastcall SKILLS_PushValue(int * pStack, int value) {
     pStack[0x40]++;
 }
 
-static int __fastcall SKILLS_PopValue(int * pValueStack) {
+int __fastcall SKILLS_PopValue(int * pValueStack) {
     if (pValueStack[0x40] <= 0) {
       return 0;
     }

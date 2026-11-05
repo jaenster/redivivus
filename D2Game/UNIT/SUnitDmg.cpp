@@ -1270,7 +1270,7 @@ static int32_t DAMAGE_CalculateExperienceMultiplier(D2DamageContext * pCtx) {
       uMercType = D2Client::UNIT::CheckFlags(pAttackerSave, UNITFLAG_ISREVIVE);
       if (uMercType) {
         uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
-        return (uMercType ? -200 : 0) + 400;
+        return uMercType ? 0xc8 : 400;
       }
     }
 
@@ -2132,7 +2132,7 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
     pMonsterKill.pAttacker = pAttacker;
     pMonsterKill.nAnimatedMode1 = (uint8_t)nDirection;
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &pMonsterKill, 1);
-    if (-1 < (int)pUnit->eUnitFlags) {
+    if ((int)pUnit->eUnitFlags >= 0) {
       Quests::QUESTS::QUEST_OnMonsterKilled(pGame, pUnit, pAttacker);
     }
 
@@ -2230,7 +2230,6 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
     D2SkillsTxt* pSkillsTxt;
     int32_t nFasterBlockRate;
     D2MonsterKillStrc sMonsterKill;
-    eD2States eState;
     ::SGAMEDATA* pGameLocal;
     uint16_t wDmgResultFlags;
     D2UnitStrc* pAttacker = pUnit;
@@ -2359,7 +2358,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
       } else {
         wDmgResultFlags = pDamage->wResultFlags;
         if ((char)wDmgResultFlags < '\0') {
-          eState = STATE_dodge;
+          pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, STATE_dodge);
         } else {
           if (!(wDmgResultFlags & 0x100)) {
             if (wDmgResultFlags & 0x200) {
@@ -2455,16 +2454,15 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
             return;
           }
 
-          eState = STATE_avoid;
+          pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, STATE_avoid);
         }
-
-        pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, eState);
         if (pStatList) {
           eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
           pEvadeSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pVictim, eSkill);
           if (pEvadeSkill) {
             dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pEvadeSkill);
-            D2Common::Skills::SKILL_SetFlags(pEvadeSkill, dwSkillFlags | 4);
+            dwSkillFlags |= 4;
+            D2Common::Skills::SKILL_SetFlags(pEvadeSkill, dwSkillFlags);
             if (!pUnit) {
               nAttackerGUID = -1;
               eVictimType = UNIT_COUNT;
@@ -2830,6 +2828,7 @@ static void __stdcall DAMAGE_ApplyIgnoreAndFractionalAC(int * pnHitChance, int *
 // Always 5% minimum, 95% maximum hit chance.
 // Checked BEFORE block/dodge/avoid/evade (all independent rolls).
 BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t bIsRangedAttack) {
+    int nAcTotal;
     D2UnitStrc* pActiveWeapon;
     uint32_t nToHitStat;
     int nToHitBonusStat;
@@ -2839,7 +2838,6 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
     int32_t nAttackerLevel;
     int32_t nDefenderLevel;
     int32_t nBaseAR;
-    eD2UnitStat eAcStatType;
     short int nMonType;
     D2SeedStrc sSeedResult;
     if (!pUnit2 || !pUnit) {
@@ -2850,12 +2848,11 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
     int iVar1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_level, 0);
     int32_t nAR = D2Common::Units::GetDefense(pUnit2);
     if (bIsRangedAttack) {
-      eAcStatType = UNITSTAT_armorclass_vs_missile;
+      nAcTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_armorclass_vs_missile, 0);
     } else {
-      eAcStatType = UNITSTAT_armorclass_vs_hth;
+      nAcTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_armorclass_vs_hth, 0);
     }
 
-    int nAcTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, eAcStatType, 0);
     int32_t nTotalAC = nAR + nAcTotal;
     int iVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     int32_t nToHitBonus = 0;
@@ -3434,8 +3431,10 @@ static void __stdcall SERVER_PlayerUpdateExperience(::SGAMEDATA * pGame, int32_t
 
     int32_t nCurrentXp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_experience, 0);
     int32_t ePlayerClass_00 = pUnit->nClassId;
+    int32_t pExpTxtLine = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClass_00);
+    pExpTxtLine -= 1;
     uint32_t nValue = nCurrentXp + nXpGain;
-    DWORD nMaxXp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass_00, D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(ePlayerClass_00) - 1);
+    DWORD nMaxXp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass_00, pExpTxtLine);
     if ((uint32_t)(nCurrentXp + nXpGain) > nMaxXp) {
       nValue = nMaxXp;
     }

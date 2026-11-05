@@ -676,12 +676,7 @@ BOOL __fastcall Q14_CheckDurielProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     uint32_t nDist = Monster::AI::MONSTERAI_GetDistanceToCoords(pUnit, pA2Q4Data->nHaremBlockerX, pA2Q4Data->nHaremBlockerY);
     if (nDist <= 0x1e) {
       pA2Q4Data->bDurielProximity = 1;
-      if (!pUnit) {
-        pA2Q4Data->nDurielProximityPlayerGUID = -1;
-        return 1;
-      }
-
-      pA2Q4Data->nDurielProximityPlayerGUID = pUnit->nUnitGUID;
+      pA2Q4Data->nDurielProximityPlayerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
       return 1;
     }
 

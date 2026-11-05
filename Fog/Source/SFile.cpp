@@ -273,7 +273,6 @@ BOOL __stdcall GetUseDirectCommand() {
 static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
     int nResult;
     char szAppDataPath[260];
-    char* pszSubPath;
     if (!nMaxLen) {
       return false;
     }
@@ -285,8 +284,7 @@ static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
     uint32_t bKnownFolderOk = Engine::Application::PATH_GetKnownFolderPath(szOutPath, nMaxLen);
     if ((char)bKnownFolderOk != '\0') {
       SFILE_EnsurePathEndsWithBackslash(szOutPath, nMaxLen);
-      pszSubPath = "Diablo II";
-      Storm::Source::SSTR::SStrPack(szOutPath, pszSubPath, nMaxLen);
+      Storm::Source::SSTR::SStrPack(szOutPath, "Diablo II", nMaxLen);
     } else {
       nResult = SHGetFolderPathA(0, 5, 0, 0, szAppDataPath);
       if (nResult) {
@@ -294,8 +292,7 @@ static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
       }
 
       SFILE_EnsurePathEndsWithBackslash(szOutPath, nMaxLen);
-      pszSubPath = "Diablo II\\Save";
-      Storm::Source::SSTR::SStrPack(szOutPath, pszSubPath, nMaxLen);
+      Storm::Source::SSTR::SStrPack(szOutPath, "Diablo II\\Save", nMaxLen);
     }
 
     return true;

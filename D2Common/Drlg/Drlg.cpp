@@ -2498,7 +2498,7 @@ BOOL __fastcall fpLDE3(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     nNextDir = pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] % 2;
     pLevelUnknown->aCoordsAndSize[pLevelUnknown->nCurrentNode].WorldSize.x = nNextDir ? 0x60 : 0x38;
     nNextDir = pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] % 2;
-    pLevelUnknown->aCoordsAndSize[pLevelUnknown->nCurrentNode].WorldSize.y = (nNextDir ? -40 : 0) + 0x60;
+    pLevelUnknown->aCoordsAndSize[pLevelUnknown->nCurrentNode].WorldSize.y = nNextDir ? 0x38 : 0x60;
     nCurrentNode = pLevelUnknown->nCurrentNode;
     D2DrlgCoordsStrc* pPrevCoordsEntry = pLevelUnknown->aCoordsAndSize + pLevelUnknown->pLevelData->aEntry[nCurrentNode].nNodeLevelEntryIdPrev;
     if (pLevelUnknown->aStepCounter[nCurrentNode] == 1) {
@@ -3316,7 +3316,7 @@ void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(D2RoomExStrc * pRoomEx) {
 
     RoomTile::DRLGROOMTILE_AllocRoomTileGrid(pRoomEx);
     nColX = 0;
-    memset(&sUnkn, 0, 0x3c);
+    memset(&sUnkn, 0, sizeof(sUnkn));
     sUnkn.pRoomEx = pRoomEx;
     sUnkn.nUnk_0x28 = 0;
     sUnkn.nWallLayerCount = 1;
@@ -3357,7 +3357,7 @@ void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(D2RoomExStrc * pRoomEx) {
         nGridFlag = 0x1600000;
       break;
       case 0x1f:
-        nGridFlag = pLevel->eD2LevelId != 0x75 ? 0 : 0x600000;
+        nGridFlag = pLevel->eD2LevelId == 0x75 ? 0x600000 : 0;
     }
 
     if (nHeight > 0) {

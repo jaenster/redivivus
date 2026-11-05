@@ -112,11 +112,11 @@ BOOL __fastcall Skills_CltStFunc_SetParam1FromCalc(D2UnitStrc * pUnit, eD2Skills
     }
     if (!pTarget) {
       D2Common::Skills::SKILL_SetParam1(pSkill, 0);
-      return 1;
+    } else {
+      int32_t nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+      D2Common::Skills::SKILL_SetParam1(pSkill, nSkillCalc);
     }
 
-    int32_t nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nSkillCalc);
     return 1;
 }
 
@@ -296,12 +296,12 @@ BOOL __fastcall SKILLSASS_CltSetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSki
       D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatListEx, SKILLSASS_StatExpireCallback_ClearState);
       D2Common::Stats::StatsEx::SetState(pStatListEx, STATE_inferno);
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
-      return 1;
+    } else {
+      D2Common::Units::SetSequenceFrame(pUnit, pSkillTxt->seqinput - 1);
+      pUnit->nFrameCount = 0x800;
+      D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatListEx, 7);
     }
 
-    D2Common::Units::SetSequenceFrame(pUnit, pSkillTxt->seqinput - 1);
-    pUnit->nFrameCount = 0x800;
-    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatListEx, 7);
     return 1;
 }
 
@@ -384,10 +384,10 @@ BOOL __fastcall Skills_CltStFunc_AllocStatListByParam3(D2UnitStrc * pUnit, eD2Sk
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       Skills::SKILLS_CltAllocStatListForSkill(pUnit, 0);
-      return 1;
+    } else {
+      Skills::SKILLS_CltAllocStatListForSkill(pUnit, pSkillsTxt->Param[3]);
     }
 
-    Skills::SKILLS_CltAllocStatListForSkill(pUnit, pSkillsTxt->Param[3]);
     return 1;
 }
 

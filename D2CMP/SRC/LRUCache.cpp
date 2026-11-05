@@ -79,12 +79,10 @@ static D2LRUCacheNodeStrc * LRUCACHE_PopOldest(D2LRUCacheStrc * pCache) {
     pCache->pLRUHead = pNextEntry;
     if (pNextEntry) {
       pNextEntry->pPrev = 0;
-      pOldestEntry->pNext = 0;
-      pOldestEntry->pPrev = 0;
-      return pOldestEntry;
+    } else {
+      pCache->pLRUTail = 0;
     }
 
-    pCache->pLRUTail = 0;
     pOldestEntry->pNext = 0;
     pOldestEntry->pPrev = 0;
     return pOldestEntry;
@@ -108,13 +106,11 @@ void LRUCACHE_Unlink(D2LRUCacheNodeStrc * pNode, D2LRUCacheStrc * pCache) {
       pDVar1 = pCache->pLRUTail->pPrev;
       pCache->pLRUTail = pDVar1;
       pDVar1->pNext = 0;
-      pNode->pNext = 0;
-      pNode->pPrev = 0;
-      return;
+    } else {
+      pNode->pPrev->pNext = pNode->pNext;
+      pNode->pNext->pPrev = pNode->pPrev;
     }
 
-    pNode->pPrev->pNext = pNode->pNext;
-    pNode->pNext->pPrev = pNode->pPrev;
     pNode->pNext = 0;
     pNode->pPrev = 0;
 }
@@ -248,12 +244,11 @@ void __fastcall LRUCACHE_MoveToFront(D2LRUCacheStrc * pCache, D2LRUCacheNodeStrc
     LRUCACHE_Unlink(pNode, pCache);
     if (!pCache->pLRUTail) {
       pCache->pLRUHead = pNode;
-      pCache->pLRUTail = pNode;
-      return;
+    } else {
+      pCache->pLRUTail->pNext = pNode;
+      pNode->pPrev = pCache->pLRUTail;
     }
 
-    pCache->pLRUTail->pNext = pNode;
-    pNode->pPrev = pCache->pLRUTail;
     pCache->pLRUTail = pNode;
 }
 

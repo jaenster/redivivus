@@ -425,12 +425,7 @@ void __fastcall Q32_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 void __fastcall Q32_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q2->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q2->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q2->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q32_SetCannotComplete (A5Q2 Rescue on Mount Arreat) -- per-player marker, iterated over players.
@@ -1083,12 +1078,21 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
             /* SetQuestState(JustCompleted=0xd): enough barbarians freed (field_0x08 > 0xb)
                          -> quest just completed self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
             /* SetQuestState(RewardAwaits=1): mark reward claimable from Qual-Kehk */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_RewardAwaits);
-            if (pQuestSpecificData->nPrisonersFreed == 0xf) {
-              eSurvivalTierState = QUESTSTATE_Step0x05;
-            } else if (pQuestSpecificData->nPrisonersFreed == 0xe) {
-              eSurvivalTierState = QUESTSTATE_Step0x06;
-            } else {
-              eSurvivalTierState = QUESTSTATE_Step0x07;
+            switch (pQuestSpecificData->nPrisonersFreed) {
+              case 0xf:
+                {
+                  eSurvivalTierState = QUESTSTATE_Step0x05;
+                  break;
+                }
+              case 0xe:
+                {
+                  eSurvivalTierState = QUESTSTATE_Step0x06;
+                  break;
+                }
+              default:
+                {
+                  eSurvivalTierState = QUESTSTATE_Step0x07;
+                }
             }
 
             /* SetQuestState(Step0x05/0x06/0x07): records survival reward tier from
@@ -1136,11 +1140,10 @@ int32_t __fastcall Q32_GetRemainingPrisonersCount(D2QuestDataStrc * pQuestData) 
     }
 
     int32_t nRemainingTotal = nCount + (pSpecificData->nTotalPrisonersToFree - pSpecificData->nPrisonersFreed - pSpecificData->nPrisonersKilledByMonsters);
-    if (nRemainingTotal >= 0) {
-      return nRemainingTotal;
+    if (nRemainingTotal < 0) {
+      nRemainingTotal = 0;
     }
 
-    nRemainingTotal = 0;
     return nRemainingTotal;
 }
 

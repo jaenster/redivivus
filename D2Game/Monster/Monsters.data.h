@@ -11,6 +11,6 @@
 struct D2UnitStrc;
 typedef void (__fastcall *fpUmodInit)(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);
 
-namespace D2Common::Monsters::MONSTERS::Umod {
+namespace D2Game::Monsters::Umod {
 extern fpUmodInit aUmodInitTable[43];
-} // namespace D2Common::Monsters::MONSTERS::Umod
+} // namespace D2Game::Monsters::Umod

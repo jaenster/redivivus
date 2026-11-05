@@ -84,18 +84,15 @@ static void GFXUTIL_PadTokenString(char * szText1, char * szText2) {
     if (szText1[1] == '\0') {
       szText2[1] = ' ';
       szText2[2] = ' ';
-      szText2[3] = ' ';
-      return;
+    } else {
+      szText2[1] = szText1[1];
+      if (szText1[2] == '\0') {
+        szText2[2] = ' ';
+      } else {
+        szText2[2] = szText1[2];
+      }
     }
 
-    szText2[1] = szText1[1];
-    if (szText1[2] == '\0') {
-      szText2[2] = ' ';
-      szText2[3] = ' ';
-      return;
-    }
-
-    szText2[2] = szText1[2];
     szText2[3] = ' ';
 }
 
@@ -1434,8 +1431,8 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
           if (nSpriteLoaded && sGfxData.pDC6Block) {
             nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
             nDrawWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
-            nWorldOffsetY = D2Common::Units::GetTargetY(pUnit);
-            nSpriteY = nWorldOffsetY + (nOffsetY - nDrawWorldOffsetY);
+            nSpriteY = D2Common::Units::GetTargetY(pUnit);
+            nSpriteY += nOffsetY - nDrawWorldOffsetY;
             if (nSpriteY > *pOutMaxY) {
               *pOutMaxY = nSpriteY;
             }

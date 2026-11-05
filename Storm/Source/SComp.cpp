@@ -399,7 +399,7 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
       nDelta = (nStepSize ^ nDelta) - nDelta;
       nStepSize = gdwADPCMCoefficient[aChannelState[nChannel + 2]];
       nBitCount = (uint32_t)nBitsPerSample;
-      bySignBit = (int)nSample >= aChannelState[nChannel] ? 0 : 0x40;
+      bySignBit = (int)nSample < aChannelState[nChannel] ? 0x40 : 0;
       nChannel = nChannelIdx;
       if (nDelta < nStepSize >> D2_SHIFT_COUNT(nBitsPerSample)) {
         if (aChannelState[nChannelIdx + 2]) {
@@ -666,7 +666,7 @@ void __fastcall SCOMP_PkwareCompress(void * pOutBuf, uint32_t * pdwOutLength, vo
     if (nInLen >= 0xc00) {
       nDictSize = 0x1000;
     } else {
-      nDictSize = (nInLen < 0x600 ? -1024 : 0) + 0x800;
+      nDictSize = nInLen < 0x600 ? 0x400 : 0x800;
     }
 
     Stream.pOutBuf = pOutBuf;

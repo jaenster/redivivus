@@ -55,12 +55,8 @@ void __fastcall Q25_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     if (bQuestState) {
       return;
     }
-    if (!pQuestArgs->pTarget) {
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, -1, 0);
-      return;
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, pQuestArgs->pTarget->nClassId, 0);
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId, 0);
 }
 
 // Q25_StatusFilter — stub: always returns false. QUEST_SpokeToTyrael has no status-bar/visibility logic of its own.

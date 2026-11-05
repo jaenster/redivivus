@@ -368,12 +368,7 @@ uint32_t __fastcall GetDenMonstersLeftToKillCount(D2QuestDataStrc * pQuestData) 
 void __fastcall Q01_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q1->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q1->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q1->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A1Q1 (Den of Evil) -- deferred-completion timer callback (Q01_TimerNotifyCompletion), armed by Q01_Callback_08 after the Den is cleared. When it fires, if the server quest flag is still 4 ("just cleared"), it broadcasts the final completion state 5 via QUEST_SetStateAndBroadcast(MarkCompleteQuest). Clears bNotifiedCompletion and returns 1 (timer done).

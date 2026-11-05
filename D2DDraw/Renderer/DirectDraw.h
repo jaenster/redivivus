@@ -256,6 +256,10 @@ struct D2ddDebugFont {
     /* 0x0001 */ uint8_t _pad_0x0001[12287];
 };
 
+struct D2RendererCoreStrc {
+    /* 0x00 */ CRITICAL_SECTION sLock; // The renderer's lock; each renderer (gdi/dd/d3d/gl Core.cpp) allocates exactly 0x18 bytes for it and only Enter/LeaveCriticalSection touch it
+};
+
 struct DDCOLORKEY {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 

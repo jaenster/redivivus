@@ -358,16 +358,14 @@ static uint32_t SKILL_CheckActiveSkillSelectProc(D2UnitStrc * pUnit, D2UnitStrc 
 
     int32_t nErrorLine = 0x68a;
     char* szSrcFile = ".\\UNIT\\CUnit.cpp";
-    eD2Skills eSkillId = D2Common::Skills::GetSkillId(D2Common::Units::GetLeftSkill(pUnit), szSrcFile, nErrorLine);
-    uint32_t nProcResult = SKILL_ExecuteSelectProc(pUnit, eSkillId, pTargetUnit);
+    uint32_t nProcResult = SKILL_ExecuteSelectProc(pUnit, D2Common::Skills::GetSkillId(D2Common::Units::GetLeftSkill(pUnit), szSrcFile, nErrorLine), pTargetUnit);
     if (nProcResult) {
       return 1;
     }
 
     int32_t nRightSkillLine = 0x68e;
     szSrcFile = ".\\UNIT\\CUnit.cpp";
-    eSkillId = D2Common::Skills::GetSkillId(D2Common::Units::GetRightSkill(pUnit), szSrcFile, nRightSkillLine);
-    uint32_t nRightProcResult = SKILL_ExecuteSelectProc(pUnit, eSkillId, pTargetUnit);
+    uint32_t nRightProcResult = SKILL_ExecuteSelectProc(pUnit, D2Common::Skills::GetSkillId(D2Common::Units::GetRightSkill(pUnit), szSrcFile, nRightSkillLine), pTargetUnit);
     return (uint32_t)(nRightProcResult != 0);
 }
 
@@ -549,14 +547,19 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
 
       case eD2PlayerAnimMode_ns::Skill4:
         nClassId = pUnit->nClassId;
-      if (nClassId == CLASS_BARBARIAN) {
-        return 0;
-      }
-      if (nClassId == CLASS_ASSASSIN) {
-        return 0;
-      }
-      if (nClassId == CLASS_DRUID) {
-        return 0;
+      switch (nClassId) {
+        case CLASS_BARBARIAN:
+          {
+            return 0;
+          }
+        case CLASS_ASSASSIN:
+          {
+            return 0;
+          }
+        case CLASS_DRUID:
+          {
+            return 0;
+          }
       }
 
       return 1;
@@ -1842,11 +1845,15 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
         }
       }
       if (eUnitType1 == UNIT_PLAYER) {
-        if (eUnitType2 == UNIT_ITEM) {
-          return 1;
-        }
-        if (eUnitType2 == UNIT_OBJECT) {
-          return 1;
+        switch (eUnitType2) {
+          case UNIT_ITEM:
+            {
+              return 1;
+            }
+          case UNIT_OBJECT:
+            {
+              return 1;
+            }
         }
       }
 

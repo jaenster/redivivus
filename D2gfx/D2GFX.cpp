@@ -67,7 +67,7 @@ int RENDERER_nWindowHeight = 0; D2_GLOBAL_GUARD(RENDERER_nWindowHeight, "RENDERE
 int gnGlideWindowHandle = 0; D2_GLOBAL_GUARD(gnGlideWindowHandle, "gnGlideWindowHandle");
 int gnRenderState = 0; D2_GLOBAL_GUARD(gnRenderState, "gnRenderState");
 D2GfxSettingsStrc * pD2GFXRenderedDataStrc = 0; D2_GLOBAL_GUARD(pD2GFXRenderedDataStrc, "pD2GFXRenderedDataStrc");
-D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc = 0; D2_GLOBAL_GUARD(D2GfxRendereInitFunctionsStrc, "D2GfxRendereInitFunctionsStrc");
+::D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc = 0; D2_GLOBAL_GUARD(D2GfxRendereInitFunctionsStrc, "D2GfxRendereInitFunctionsStrc");
 BYTE * * gpPaletteTable = 0; D2_GLOBAL_GUARD(gpPaletteTable, "gpPaletteTable");
 // also labelled: ppvBits_007c9154
 BYTE * gpRenderBackBufferBits = 0; D2_GLOBAL_GUARD(gpRenderBackBufferBits, "gpRenderBackBufferBits");
@@ -252,7 +252,7 @@ BOOL __fastcall D2GFX_SetOption(int32_t nOption, int32_t nValue) {
 
 BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2RendererMode eRenderedMode, BOOL bWindowed) {
     // Static local variables (originally global data)
-    static D2GfxHelperStrc D2GfxHelperStrc_0072da60 = {
+    static ::D2GfxHelperStrc D2GfxHelperStrc_0072da60 = {
     /* .nfpFillYBufferTable = */ (::fpFillYBufferTable)&D2gfx::fpFillYBufferTable,
     /* .nfpDrawVisTile = */ &D2gfx::fpDrawVisTile,
     /* .nfpDrawVisTileLit = */ (fpUnknown)&D2gfx::DRAW_DrawWallTileWithLighting,
@@ -269,7 +269,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     gpfnWndProc = pfWndProc;
     wndClass.lpfnWndProc = pfWndProc;
     wndClass.cbClsExtra = 0;
-    wndClass.style = eRenderedMode != RENDERED_Unused5 ? 0 : 0x20;
+    wndClass.style = eRenderedMode == RENDERED_Unused5 ? 0x20 : 0;
     wndClass.cbWndExtra = 0;
     wndClass.hInstance = hInstance;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();

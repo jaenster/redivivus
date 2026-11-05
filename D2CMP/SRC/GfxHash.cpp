@@ -121,7 +121,7 @@ uint32_t __fastcall GFXHASH_CalcDirectionIndex(D2GfxDataStrc * pGfxData, uint32_
               return 0;
             }
 
-            *pnDirectionDivisor = (pCelEntry->nDirections != 8 ? -3 : 0) + 4;
+            *pnDirectionDivisor = 4 + (pCelEntry->nDirections != 8 ? -3 : 0);
             dwDirectionMask = pCelEntry->nDirections;
             nDirFrameTable = pGfxData->nDirection;
             break;
@@ -183,8 +183,8 @@ static uint32_t GFXHASH_CalcHashKey(D2GfxDataStrc * pGfxData, uint32_t * pnDirec
         exit(-1);
       }
 
-      nDirIdx = Storm::Source::SSTR::SStrHash(pGfxData->szFilename, 1, 0);
-      nHashAccum = nDirIdx + *pnDirectionIndex;
+      nHashAccum = Storm::Source::SSTR::SStrHash(pGfxData->szFilename, 1, 0);
+      nHashAccum += *pnDirectionIndex;
     } else {
       nHashAccum = pGfxData->nWeaponClass + pGfxData->nModeToken + pGfxData->nArmorToken + pGfxData->nCompositToken + pGfxData->nUnitToken + nDirIdx;
     }

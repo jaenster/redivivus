@@ -143,11 +143,10 @@ void __stdcall SERR_InternalEnterCriticalSection() {
     LONG nRefCount = InterlockedIncrement((LONG*)&gnSErrCriticalSectionInitGuard);
     if (!nRefCount) {
       /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&lpCriticalSection_007790cc);
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_007790cc);
-      return;
+    } else {
+      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&gnSErrCriticalSectionInitGuard);
     }
 
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&gnSErrCriticalSectionInitGuard);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_007790cc);
 }
 
@@ -288,7 +287,7 @@ uint32_t __stdcall SErrGetErrorStr(DWORD dwMessageId, LPSTR szText, DWORD nBuffe
 
     SERR_InternalLeaveCriticalSection();
     /* va_list * Arguments for FormatMessageA */ /* DWORD nSize for FormatMessageA */ /* LPSTR lpBuffer for FormatMessageA */ /* DWORD dwLanguageId for FormatMessageA */ /* DWORD dwMessageId for FormatMessageA */ /* LPCVOID lpSource for FormatMessageA */ /* DWORD dwFlags for FormatMessageA */ *szText = '\0';
-    DWORD dwResult = FormatMessageA((lpSource ? -2048 : 0) + 0x1000, lpSource, dwMessageId, 0x400, szText, nBufferSize, nullptr);
+    DWORD dwResult = FormatMessageA(lpSource ? 0x800 : 0x1000, lpSource, dwMessageId, 0x400, szText, nBufferSize, nullptr);
     return (uint32_t)(dwResult != 0);
 }
 

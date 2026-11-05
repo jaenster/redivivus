@@ -50,7 +50,7 @@ int __fastcall ITEMTBLS_CalcExpr_ParseTokenType(char * szKey) {
     }
 
     nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "stat", 0x20);
-    return (nCmpResult ? -4 : 0) + 3;
+    return nCmpResult ? -1 : 3;
 }
 
 int __fastcall ITEMTBLS_CalcExpr_GetConstTwo(int nFunctionIndex) {

@@ -66,7 +66,7 @@ int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * w
       wszFirst++;
       wszSecond++;
       if (wChar1 != wChar2) {
-        return (wChar1 < wChar2 ? -2 : 0) + 1;
+        return wChar1 < wChar2 ? -1 : 1;
       }
 
       wChar1 = *wszFirst;
@@ -99,7 +99,7 @@ int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16
         wChar2 = CharacterLookupTable[(uint16_t)wChar2];
       }
       if (wChar1 != wChar2) {
-        return ((uint16_t)wChar1 < (uint16_t)wChar2 ? -2 : 0) + 1;
+        return (uint16_t)wChar1 < (uint16_t)wChar2 ? -1 : 1;
       }
 
       wChar1 = pwszText1[1];

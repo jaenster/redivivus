@@ -915,8 +915,8 @@
       "usedTypes": [
         "D2GfxHelperStrc",
         "D2GfxSettingsStrc",
-        "DDDEVICEIDENTIFIER",
-        "IDirectDraw1"
+        "IDirectDraw1",
+        "uint8_t"
       ]
     },
     {

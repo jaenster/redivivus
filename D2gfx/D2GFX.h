@@ -11,8 +11,10 @@
 // Forward declarations
 struct D2GamePalShiftGreenBloodStrc;
 struct D2GfxDataStrc;
+struct D2GfxHelperStrc;
 struct D2GfxLightExStrc;
 struct D2GfxLightStrc;
+struct D2GfxSettingsStrc;
 struct D2GfxTileRectStrc;
 struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
@@ -260,6 +262,63 @@ struct __attribute__((packed)) _AppBarData {
 struct __attribute__((packed)) D2GFXWindowPlacementStrc {
     /* 0x00 */ HWND pHWND;
     /* 0x04 */ WINDOWPLACEMENT pWindowPLacement;
+};
+
+struct D2RendererFunctionsStrc {
+    /* 0x00 */ BOOL (__fastcall *nfpInitialize)(HINSTANCE);
+    /* 0x04 */ BOOL (__fastcall *nfpInitPerspective)(struct D2GfxSettingsStrc *, ::D2GfxHelperStrc *);
+    /* 0x08 */ BOOL (__fastcall *nfpRelease)();
+    /* 0x0C */ BOOL (__fastcall *nfpCreateWindow)(HWND, int);
+    /* 0x10 */ BOOL (__stdcall *nfpDestroyWindow)();
+    /* 0x14 */ void (__fastcall *nfpEndCutScene)(HWND, int, int);
+    /* 0x18 */ BOOL (__fastcall *nfpBeginScene)(BOOL, BYTE, BYTE, BYTE);
+    /* 0x1C */ BOOL (__fastcall *fpEndScene1)();
+    /* 0x20 */ BOOL (__fastcall *fpEndScene2)();
+    /* 0x24 */ BOOL (__fastcall *nfpResizeWindow)(HWND, BOOL);
+    /* 0x28 */ BOOL (__fastcall *nfpGetBackBuffer)(BYTE *);
+    /* 0x2C */ BOOL (__fastcall *nfpActivateWindow)(BOOL);
+    /* 0x30 */ BOOL (__fastcall *nfpSetOption)(int, int);
+    /* 0x34 */ BOOL (__stdcall *nfpBeginCutScene)();
+    /* 0x38 */ void (__fastcall *nfpPlayCutScene)(char *, int, fnBinkFrameCallback);
+    /* 0x3C */ BOOL (__fastcall *nfpCheckCutScene)();
+    /* 0x40 */ void (__fastcall *nfpDecodeSmacker)(char *, struct D2SmackerContextStrc *, int);
+    /* 0x44 */ void (__fastcall *nfpPlayerSmacker)(struct D2SmackerContextStrc *);
+    /* 0x48 */ void (__fastcall *nfpCloseSmacker)(struct D2SmackerContextStrc *);
+    /* 0x4C */ int * (__fastcall *nfpGetRenderStatistics)();
+    /* 0x50 */ int (__fastcall *nfpGetScreenSize)(int *, int *);
+    /* 0x54 */ void (__fastcall *nfpUpdateScaleFactor)(int);
+    /* 0x58 */ void (__fastcall *nfpSetGamma)(int);
+    /* 0x5C */ int (__fastcall *nfpCheckGamma)();
+    /* 0x60 */ void (__fastcall *nfpSetPerspectiveScale)(int, int);
+    /* 0x64 */ void (__fastcall *nfpAdjustPerspectivePosition)(int, int, int, int *, int *);
+    /* 0x68 */ void (__fastcall *nfpPerspectiveScalePosition)(int, int, int, int *, int *, BOOL);
+    /* 0x6C */ void (__fastcall *nfpSetDefaultPerspectiveFactor)();
+    /* 0x70 */ void (__fastcall *nfpSetPalette)(LPPALETTEENTRY);
+    /* 0x74 */ void (__fastcall *nfpSetPaletteTable)(BYTE * *);
+    /* 0x78 */ void (__fastcall *nfpSetGlobalLight)(int, int, int);
+    /* 0x7C */ void (__fastcall *nfpDrawGroundTile)(struct D2TileLibraryEntryStrc *, struct D2GfxLightExStrc *, int, int, int, int, BYTE, int, void *);
+    /* 0x80 */ void (__fastcall *nfpDrawPerspectiveImage)(struct D2GfxDataStrc *, int, int, DWORD, int, int, BYTE *);
+    /* 0x84 */ BOOL (__fastcall *nfpDrawImage)(struct D2GfxDataStrc *, int, int, DWORD, int, BYTE *);
+    /* 0x88 */ void (__fastcall *nfpDrawShiftedImage)(struct D2GfxDataStrc *, int, int, DWORD, DRAWMODE, GLOBALPALLETE);
+    /* 0x8C */ void (__fastcall *nfpDrawVerticalCropImage)(struct D2GfxDataStrc *, int, int, int, int, int);
+    /* 0x90 */ void (__fastcall *nfpDrawShadow)(struct D2GfxDataStrc *, int, int);
+    /* 0x94 */ void (__fastcall *nfpDrawImageFast)(struct D2GfxDataStrc *, int, int, BYTE);
+    /* 0x98 */ void (__fastcall *nfpDrawClippedImage)(struct D2GfxDataStrc *, int, int, void *, int);
+    /* 0x9C */ BOOL (__fastcall *nfpDrawWallTile)(struct D2TileLibraryEntryStrc *, int, int, struct D2GfxLightStrc *, int);
+    /* 0xA0 */ BOOL (__fastcall *nfpDrawTransWallTile)(struct D2TileLibraryEntryStrc *, int, int, struct D2GfxLightStrc *, int, BYTE);
+    /* 0xA4 */ BOOL (__fastcall *nfpDrawShadowTile)(struct D2TileLibraryEntryStrc *, int, int, int, int);
+    /* 0xA8 */ void (__fastcall *nfpDrawRect)(RECT *, BYTE);
+    /* 0xAC */ void (__fastcall *nfpDrawRectEx)(RECT *, BYTE);
+    /* 0xB0 */ void (__fastcall *nfpDrawSolidRect)(RECT *, BYTE);
+    /* 0xB4 */ void (__fastcall *nfpDrawSolidSquare)(POINT *, BYTE, BYTE);
+    /* 0xB8 */ void (__fastcall *nfpDrawSolidRectEx)(int, int, int, int, DWORD, DRAWMODE);
+    /* 0xBC */ void (__fastcall *nfpDrawSolidRectAlpha)(int, int, int, int, DWORD, BYTE);
+    /* 0xC0 */ void (__fastcall *nfpDrawLine)(int, int, int, int, DWORD, BYTE);
+    /* 0xC4 */ void (__fastcall *nfpClearScreen)(BOOL);
+    /* 0xC8 */ void (__fastcall *nfpDrawString)(int, int, char *, va_list);
+    /* 0xCC */ void (__fastcall *nfpDrawLight)(DWORD *, DWORD *, int, int);
+    /* 0xD0 */ void (__fastcall *nfpDebugFillBackBuffer)(int, int);
+    /* 0xD4 */ void (__fastcall *nfpClearCaches)();
 };
 
 namespace D2gfx::D2GFX {

@@ -1322,10 +1322,8 @@ void __fastcall STATES_DispatchSetFunc(D2UnitStrc * pUnit, eD2States eState) {
     if (!(pDVar1 && (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)gadwBitMasks[7]) || (pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != Kick) && (pUnit->eUnitType != UNIT_PLAYER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead)))) {
       return;
     }
-
-    short int nSetFunc = pDVar1->setfunc;
-    if (nSetFunc >= 0 && nSetFunc < 0x1f && STATESSETFUNC[nSetFunc]) {
-      (*STATESSETFUNC[nSetFunc])(pUnit, eState);
+    if (pDVar1->setfunc >= 0 && pDVar1->setfunc < 0x1f && STATESSETFUNC[pDVar1->setfunc]) {
+      (*STATESSETFUNC[pDVar1->setfunc])(pUnit, eState);
     }
     if (pDVar1->cltevent < 0) {
       return;

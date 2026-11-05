@@ -225,7 +225,7 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
                 fLinearClamped = fLinearCandidate;
               }
 
-              fTmp = CRT_CIPow(fTmp / fCountMinus1, (long double)(double)(fHundredF10 / (long double)nArrayOffset));
+              fTmp = pow((double)(fTmp / fCountMinus1), (double)(fHundredF10 / (long double)nArrayOffset));
               nOutValue = (int)(((long double)(double)fLinearClamped * (long double)fParam + fTmp * (long double)nMaxValue * (long double)(double)(fHundredF10 - fParamF10)) / (long double)100.0);
               if (pElemSize != (uint32_t*)0x1) {
                 if (pElemSize != (uint32_t*)0x2) {

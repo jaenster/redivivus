@@ -1301,6 +1301,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
+        "IterateNpcIntroUnits",
         "INTRONPC_FillInPacketWithIntroNpcIdsInAct",
         "GetPlayerData",
         "INTRONPC_FillInPacketWithIntroNpcIds",
@@ -1311,7 +1312,6 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2GSPacketSrv0x",
-        "D2UnitDataPlayerInteractedNPCStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA",

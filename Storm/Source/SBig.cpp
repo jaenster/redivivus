@@ -180,18 +180,9 @@ int __fastcall Unreferenced_00421090(int param_1, int param_2) {
 // @oracle-method CONFIRMED, and verified by hand this pass against the oracle's .CalcChunkSize__34TSGrowableArray<3RGN,10TSCD<3RGN>>FUi @10041a10, which is: when n is at least K, store K into this[0xc] and return K; otherwise repeatedly clear the lowest set bit of n while any bit remains, and return 1 if n reached zero. This function is that, with K = 0x40. The store of the cap into this[0xc] is the decisive tell and is present in both. Note the old name was wrong in DIRECTION as well as module: the loop that clears the lowest set bit rounds DOWN to a power of two, it does not round up. K = 256/sizeof(T) - 0x40 here for 4-byte elements, 8 in the oracle's RGN instantiation whose elements are 32 bytes.
 // @struct The container header is +0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk. BigBuffer extends it with +0x10 m_offset, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __thiscall TSGrowableArray_Ui_CalcChunkSize(BigBuffer * pThis, uint32_t nValue) {
-    uint32_t uClearedNext;
     if (nValue < 0x40) {
-      uint32_t uCleared;
-      uClearedNext = nValue - 1 & nValue;
-      while (true) {
-        uCleared = uClearedNext;
-        if (!uCleared) {
-          break;
-        }
-
-        nValue = uCleared;
-        uClearedNext = uCleared - 1 & uCleared;
+      while (nValue & nValue - 1) {
+        nValue &= nValue - 1;
       }
 
       if (nValue < 1) {
@@ -239,18 +230,9 @@ uint32_t * __fastcall SBIG_BigBuffer_GetDataPtr_Unref_00421150(BigBuffer * pBitS
 // @oracle-method CONFIRMED. Same structure as TSGrowableArray_Ui_CalcChunkSize 004210a0 with K = 0x100, i.e. 256/1 for byte elements. This is the instantiation using SMem tag 0x708880.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __thiscall TSGrowableArray_Uc_CalcChunkSize(BigBuffer * pThis, uint32_t nValue) {
-    uint32_t uClearedNext;
     if (nValue < 0x100) {
-      uint32_t uCleared;
-      uClearedNext = nValue - 1 & nValue;
-      while (true) {
-        uCleared = uClearedNext;
-        if (!uCleared) {
-          break;
-        }
-
-        nValue = uCleared;
-        uClearedNext = uCleared - 1 & uCleared;
+      while (nValue & nValue - 1) {
+        nValue &= nValue - 1;
       }
 
       if (nValue < 1) {
@@ -311,18 +293,9 @@ void __thiscall TSFixedArray_Uc_ReallocData(TSGrowableArray_Uc * pBuffer, uint32
 // @oracle-method CONFIRMED. Identical to TSGrowableArray_Uc_CalcChunkSize 00421160, K = 0x100. Distinguished only by its SMem tag, 0x70888c - the second byte-array instantiation. The Alt infix marks that second instantiation, it is not an oracle token.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __thiscall TSGrowableArray_UcAlt_CalcChunkSize(BigBuffer * pThis, uint32_t nValue) {
-    uint32_t uClearedNext;
     if (nValue < 0x100) {
-      uint32_t uCleared;
-      uClearedNext = nValue - 1 & nValue;
-      while (true) {
-        uCleared = uClearedNext;
-        if (!uCleared) {
-          break;
-        }
-
-        nValue = uCleared;
-        uClearedNext = uCleared - 1 & uCleared;
+      while (nValue & nValue - 1) {
+        nValue &= nValue - 1;
       }
 
       if (nValue < 1) {
@@ -2793,11 +2766,10 @@ void __stdcall SBigNew(BigData * * ppBigData) {
     if (pBigNum) {
       pBigNum = SBIG_Constructor(pBigNum);
       *ppBigData = pBigNum;
-      ExceptionList = pSehPrev;
-      return;
+    } else {
+      *ppBigData = 0;
     }
 
-    *ppBigData = 0;
     ExceptionList = pSehPrev;
 }
 
@@ -3952,6 +3924,7 @@ static void __stdcall BigBuffer_InvMod(BigBuffer * pnResult, BigBuffer * pnModul
     BigBuffer* pResult = pStack->aBuffers + nStackBase;
     BigBuffer* pDividend = pStack->aBuffers + nStackBase + 1;
     BigBuffer* pBignum = pStack->aBuffers + nStackBase + 2;
+    BigBuffer* pQuotient = pStack->aBuffers + nStackBase + 3;
     BigBuffer* pnT1 = pStack->aBuffers + nStackBase + 4;
     pStack->nUsed = nStackBase + 5;
     if (pDividend != pnInput) {
@@ -3968,10 +3941,9 @@ static void __stdcall BigBuffer_InvMod(BigBuffer * pnResult, BigBuffer * pnModul
     pBignum->nStartWord = pnModulus->nStartWord;
     BigBuffer_SetOne(pnResult);
     BigBuffer_SetZero(pResult);
-    int nSign = 1;
     uint32_t bIsZero = BigBuffer_IsZero(pBignum);
     if (!bIsZero) {
-      BigBuffer* pQuotient = pStack->aBuffers + nStackBase + 3;
+      int nSign = 1;
       do {
         BigBuffer_Div(pQuotient, pnT1, pBignum, pStack, pDividend);
         BigBuffer_Mul(pQuotient, pQuotient, pResult, pStack);

@@ -565,12 +565,7 @@ void __fastcall Q18_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
     pQuestData->nQuestPacketFlags = '\0';
     QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
     QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 0x26c);
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_AddPlayerToList(&pA3Q1Data->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_AddPlayerToList(&pA3Q1Data->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_AddPlayerToList(&pA3Q1Data->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q18_Callback_05 — Lam Esen's Tome, state-5 handler (counterpart to _04). Removes the player from the quest GUID sub-list (e.g. tome dropped/left) and, if active, sets live state flag back to 3 (a3q1.cpp:0x281) and broadcasts state 1. No record-bit writes.
@@ -769,7 +764,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (bQuestState) {
       /* GetQuestState(LamEsensTome, state 0xd=JustCompleted) — adds 2 to log byte
                          (0xb -> 0xd) when freshly done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_LamEsensTome, QUESTSTATE_JustCompleted);
-      *pbyStatusCode = bQuestState != 0 ? 13 : 11;
+      *pbyStatusCode = !bQuestState ? 0xb : 0xd;
       return true;
     }
 

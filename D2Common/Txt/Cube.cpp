@@ -131,11 +131,10 @@ static int32_t CUBE_TokenizeAndParseInt(char * szText, char * * ppszText) {
     if (**ppszText != '\0') {
       **ppszText = '\0';
       (*ppszText)++;
-      nParsedValue = atoi(_Str);
-      return nParsedValue;
+    } else {
+      *ppszText = 0;
     }
 
-    *ppszText = 0;
     nParsedValue = atoi(_Str);
     return nParsedValue;
 }

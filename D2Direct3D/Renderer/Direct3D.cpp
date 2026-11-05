@@ -57,13 +57,13 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NEW_AT(D2RendererCoreStrc): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 
-#ifndef RECON_FPTD_pfnEHHandlerRoutine
-#define RECON_FPTD_pfnEHHandlerRoutine
-typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
-#endif
 #ifndef RECON_FPTD_DDS_Flip
 #define RECON_FPTD_DDS_Flip
 typedef HRESULT (__stdcall *DDS_Flip)(void * This, void * lpDDSurfaceTargetOverride, DWORD dwFlags);
+#endif
+#ifndef RECON_FPTD_pfnEHHandlerRoutine
+#define RECON_FPTD_pfnEHHandlerRoutine
+typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 #ifndef RECON_FPTD_fnBinkFrameCallback
 #define RECON_FPTD_fnBinkFrameCallback
@@ -102,7 +102,7 @@ static GUID IID_IDirectDraw7 = {
     /* .Data3 = */ 0x11d1,
     /* .Data4 = */ { 0x8c, 'J', '\x00', 0xc0, 'O', 0xd9, '0', 0xc5 }
 }; D2_STATIC_GUARD(IID_IDirectDraw7, "IID_IDirectDraw7");
-BOOL BOOL_0074c020 = 0x64; D2_GLOBAL_GUARD(BOOL_0074c020, "BOOL_0074c020");
+static BOOL BOOL_0074c020 = 0x64; D2_STATIC_GUARD(BOOL_0074c020, "BOOL_0074c020");
 static uint32_t gsD3DTextureDescTemplate[8] = { 0x20, 0x41, 0x0, 0x10, 0x7c00, 0x3e0, 0x1f, 0x8000 }; D2_STATIC_GUARD(gsD3DTextureDescTemplate, "gsD3DTextureDescTemplate");
 static uint16_t gaD3DPerspectiveStripIndices[22] = {
     0x0,
@@ -409,7 +409,7 @@ static D2D3DTileCornerStrc gaD3DWallCornerTable[60] = {
 namespace D2Direct3D::Renderer {
 unsigned int gnD3DTextureCapFlags = {}; D2_GLOBAL_GUARD(gnD3DTextureCapFlags, "D2Direct3D::Renderer::gnD3DTextureCapFlags");
 } // namespace D2Direct3D::Renderer
-GUID gsD3DAdapterGuid = {}; D2_GLOBAL_GUARD(gsD3DAdapterGuid, "gsD3DAdapterGuid");
+static GUID gsD3DAdapterGuid = {}; D2_STATIC_GUARD(gsD3DAdapterGuid, "gsD3DAdapterGuid");
 static unsigned int g_nVideoMemoryTotal = {}; D2_STATIC_GUARD(g_nVideoMemoryTotal, "g_nVideoMemoryTotal");
 static unsigned int g_nVideoMemoryFree = {}; D2_STATIC_GUARD(g_nVideoMemoryFree, "g_nVideoMemoryFree");
 unsigned int gnD3DTextureCacheBlockSize = {}; D2_GLOBAL_GUARD(gnD3DTextureCacheBlockSize, "gnD3DTextureCacheBlockSize");
@@ -420,7 +420,7 @@ D3DFloorCacheStrc gD3DFloorTextureCache = {}; D2_GLOBAL_GUARD(gD3DFloorTextureCa
 static uint16_t g_OriginalGammaRamp[3][256] = {}; D2_STATIC_GUARD(g_OriginalGammaRamp, "g_OriginalGammaRamp");
 int gnD3DTextureCacheCount = 0; D2_GLOBAL_GUARD(gnD3DTextureCacheCount, "gnD3DTextureCacheCount");
 uint32_t g_Palette32Bit[256] = {}; D2_GLOBAL_GUARD(g_Palette32Bit, "g_Palette32Bit");
-D2D3DDeviceSlotStrc gD3DDeviceBlock0[2] = {}; D2_GLOBAL_GUARD(gD3DDeviceBlock0, "gD3DDeviceBlock0");
+static D2D3DDeviceSlotStrc gD3DDeviceBlock0[2] = {}; D2_STATIC_GUARD(gD3DDeviceBlock0, "gD3DDeviceBlock0");
 static unsigned int g_bDeviceInitialized = {}; D2_STATIC_GUARD(g_bDeviceInitialized, "g_bDeviceInitialized");
 static int g_bCutsceneModeActive = 0; D2_STATIC_GUARD(g_bCutsceneModeActive, "g_bCutsceneModeActive");
 // also labelled: g_pD3DPerspectiveSurface
@@ -1104,7 +1104,8 @@ void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, in
     }
 
     int nNameLen = lstrlenA(lpData);
-    /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ RegSetValueExA(hKey, szDeviceNameKey, 0, 1, (uint8_t*)lpData, nNameLen + 1);
+    nNameLen += 1;
+    /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ RegSetValueExA(hKey, szDeviceNameKey, 0, 1, (uint8_t*)lpData, nNameLen);
     dwRegValue = gdwD3DDeviceFlags[nDeviceIndex].dwFlags;
     /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ RegSetValueExA(hKey, szFlagsKey, 0, 4, (uint8_t*)&dwRegValue, 4);
     /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ RegSetValueExA(hKey, szGuidKey, 0, 3, (uint8_t*)&gdwD3DDeviceFlags[nDeviceIndex].guid, 0x10);
@@ -2208,10 +2209,10 @@ void * __stdcall Catch_All_006b4c42() {
     Fog::Src::LogManager::LOGFILE_WriteStringToFile(" ** Caught a failure in sEnumerateD3DDevices ** ");
     if (!gnDirect3DDeviceCount) {
       gdwD3DDeviceFlags[2].nBytesPerPixel = 0;
-      return (void*)0x6b43ef;
-    }
-    if (gnDirect3DDeviceCount == 1) {
-      gdwD3DDeviceFlags[3].nBytesPerPixel = 0;
+    } else {
+      if (gnDirect3DDeviceCount == 1) {
+        gdwD3DDeviceFlags[3].nBytesPerPixel = 0;
+      }
     }
 
     return (void*)0x6b43ef;
@@ -2751,27 +2752,21 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, int hWn
           } else {
             nResult = g_pD3DDevice->lpVtbl->SetCurrentViewport(g_pD3DDevice, g_pD3DViewport);
             if (!nResult) {
-              iidData2.dwCaps2 = 0;
-              iidData2.dwCaps3 = 0;
-              iidData2.dwCaps4 = 0;
+              memset(&iidData2, 0, sizeof(iidData2));
               iidData2.dwCaps = 0x5000;
               nResult = g_pDirectDraw7->lpVtbl->GetAvailableVidMem(g_pDirectDraw7, &iidData2, (DWORD*)&gdwD3DTextureAvailableMemory, (DWORD*)&bD3DDeviceInitialized);
               if (nResult) {
                 DIRECTD3D_LogError("Failed to get available texture memory", nResult);
               }
 
-              iidData2.dwCaps2 = 0;
-              iidData2.dwCaps3 = 0;
-              iidData2.dwCaps4 = 0;
+              memset(&iidData2, 0, sizeof(iidData2));
               iidData2.dwCaps = 0x10005000;
               nResult = g_pDirectDraw7->lpVtbl->GetAvailableVidMem(g_pDirectDraw7, &iidData2, (DWORD*)&gdwD3DLocalTextureAvailableMemory, (DWORD*)&g_nVideoMemoryTotal);
               if (nResult) {
                 DIRECTD3D_LogError("Failed to get available local texture memory", nResult);
               }
               if (gnD3DTextureCapFlags & gadwBitMasks[1]) {
-                iidData2.dwCaps2 = 0;
-                iidData2.dwCaps3 = 0;
-                iidData2.dwCaps4 = 0;
+                memset(&iidData2, 0, sizeof(iidData2));
                 iidData2.dwCaps = 0x20005000;
                 nResult = g_pDirectDraw7->lpVtbl->GetAvailableVidMem(g_pDirectDraw7, &iidData2, (DWORD*)&gdwD3DAgpTextureAvailableMemory, (DWORD*)&g_nVideoMemoryFree);
                 if (nResult) {
@@ -2986,7 +2981,7 @@ BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * pp
     memcpy(pSrcTemplate, pDstPixelFmt, 32);
     ddsdSize.dwWidth = nWidth;
     ddsdSize.dwHeight = nHeight;
-    ddsdSize.dwCaps = (g_bSupportsTextureCachingInternal ? -268435456 : 0) + 0x10005000;
+    ddsdSize.dwCaps = g_bSupportsTextureCachingInternal ? 0x5000 : 0x10005000;
     DWORD dwHResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &ddsdSize, (void**)ppSurface, nullptr);
     if (dwHResult) {
       if (dwHResult != 0x8876017c) {
@@ -4226,8 +4221,8 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
     fV0x[2].fY = fV0x[1].fY;
     fV0x[3].fX = fV0x[2].fX;
     fV0x[3].fY = fV0x[0].fY;
-    uint32_t dwPaletteColor = PALETTE_GetColorByIndex((uint32_t)dwColor);
-    nClampedRight = dwPaletteColor & 0xffffff;
+    nClampedRight = PALETTE_GetColorByIndex((uint32_t)dwColor);
+    nClampedRight &= 0xffffff;
     switch (nDrawMode) {
       case 0:
         {
@@ -4639,12 +4634,17 @@ int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(D2TileLibraryEntryStrc *
     _bRendered = 0;
     int nPanelWidth = RENDERER_nWindowWidth;
     int nPanelXOffset = -0x20;
-    if (nScreenSplitIndex != 1) {
-      if (nScreenSplitIndex == 2) {
-        nPanelXOffset = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nPanelWidth = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    switch (nScreenSplitIndex) {
+      case 1:
+        {
+          nPanelWidth = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+          break;
+        }
+      case 2:
+        {
+          nPanelXOffset = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
+        }
     }
 
     nScreenSplitIndex = 0;
@@ -5144,8 +5144,6 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     static uint16_t gdwRendererMode[4] = { 0x0, 0x5, 0x23, 0x1e }; D2_STATIC_GUARD(gdwRendererMode, "D2Direct3D::Renderer::DrawGroundTile::gdwRendererMode");
 
     DWORD DVar2;
-    uint16_t* lpwIndices;
-    DWORD dwIndexCount;
     uint8_t byLightIntensity;
     BOOL BVar1;
     BVar1 = d3dFloorCache::D3D_RenderFloorTileToTexture(pTile);
@@ -5202,9 +5200,8 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
         return;
       }
 
-      dwIndexCount = 4;
-      lpwIndices = gdwRendererMode;
       DVar2 = 6;
+      g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, 6, g_pD3DGroundTileVB, gdwRendererMode, 4, 0x1c);
     } else {
       uint8_t* pLightCursor;
       DVar2 = (*pVBLockFn)(g_pD3DGroundTileVB, 0x21, (void**)&nAlpha, nullptr);
@@ -5261,12 +5258,9 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
         goto unlock_failed;
       }
 
-      dwIndexCount = 0x41;
-      lpwIndices = gpD3DGroundTileVertexBuffer;
       DVar2 = 5;
+      g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, 5, g_pD3DGroundTileVB, gpD3DGroundTileVertexBuffer, 0x41, 0x1c);
     }
-
-    g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, DVar2, g_pD3DGroundTileVB, lpwIndices, dwIndexCount, 0x1c);
 }
 
 // Builds 256x256 lighting lookup table at 0x00971740 for color modulation. Each entry[row][col] = clamp((row+col) / 255, 0, 255). Used by RENDERER_D3D_ApplyShadowTextureCoords and RENDERER_D3D_SetTextureStageColor to apply dynamic lighting to vertices. Total table size: 64KB.

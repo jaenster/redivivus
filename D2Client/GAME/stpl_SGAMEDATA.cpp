@@ -61,18 +61,9 @@ TSLink<::SGAMEDATA>* __thiscall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis
 }
 
 template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::CalcChunkSize(uint32_t nCount) {
-    uint32_t nPrev;
     if (nCount < 0x15) {
-      uint32_t nCleared;
-      nCleared = nCount - 1 & nCount;
-      while (true) {
-        nPrev = nCleared;
-        if (!nPrev) {
-          break;
-        }
-
-        nCount = nPrev;
-        nCleared = nPrev - 1 & nPrev;
+      while (nCount & nCount - 1) {
+        nCount &= nCount - 1;
       }
 
       if (nCount < 1) {
@@ -608,14 +599,14 @@ template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
     int pHeadOffset = pList->m_linkoffset;
     if ((int)pTailLink < 0) {
       *(TSLink<::SGAMEDATA>**)~pTailLink = (TSLink<::SGAMEDATA>*)ppSlot;
-      pExisting->m_next = (int)pGame;
-      return pGame;
-    }
-    if (pHeadOffset < 0) {
-      pHeadOffset = (int)pExisting - pExisting->m_prevlink->m_next;
+    } else {
+      if (pHeadOffset < 0) {
+        pHeadOffset = (int)pExisting - pExisting->m_prevlink->m_next;
+      }
+
+      *(TSLink<::SGAMEDATA>**)(pTailLink + pHeadOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
     }
 
-    *(TSLink<::SGAMEDATA>**)(pTailLink + pHeadOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
     pExisting->m_next = (int)pGame;
     return pGame;
 }

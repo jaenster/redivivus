@@ -23,10 +23,10 @@ int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSiz
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (byFlags & 2) {
       SSTR::SStrCopy(szText, "Software\\Battle.net\\", nBufSize);
-      return 1;
+    } else {
+      SSTR::SStrCopy(szText, "Software\\Blizzard Entertainment\\", nBufSize);
     }
 
-    SSTR::SStrCopy(szText, "Software\\Blizzard Entertainment\\", nBufSize);
     return 1;
 }
 
@@ -342,7 +342,8 @@ int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t n
     }
 
     uint32_t pStrEnd = SSTR::SStrLen(pszValue);
-    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, pStrEnd + 1, (uint8_t)nFlags);
+    pStrEnd += 1;
+    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, pStrEnd, (uint8_t)nFlags);
     return nResult;
 }
 

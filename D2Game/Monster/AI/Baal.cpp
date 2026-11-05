@@ -177,7 +177,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
       }
     }
 
-    nPhysRes = (int)((nLifePercent >= 0x14 ? 0 : 0x64) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
+    nPhysRes = (int)((nLifePercent < 0x14 ? 0x64 : 0) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
     if (nPhysRes) {
       return nPhysRes;
     }
@@ -911,7 +911,7 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
 
     eD2MonsterAnimMode eSpawnAnimMode;
     eSpawnAnimMode = eD2MonsterAnimMode_ns::Neutral;
-    __frame0.nCloneClassId = sgptDataTable->nTxtMonStatsSize > 0x23a ? 0x23a : -1;
+    __frame0.nCloneClassId = sgptDataTable->nTxtMonStatsSize <= 0x23a ? -1 : 0x23a;
     D2Common::Monsters::MONSTERS::MONSTER_GetSpawnParameters(pUnit, (int*)&__frame0.nCloneClassId, &__frame1.pMemoryTmp, &__frame1.nSpawnYOut, &eSpawnAnimMode, (uint32_t)pGame->nDifficulty, nullptr);
     pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (pTargetUnit) {
@@ -1262,8 +1262,7 @@ void __fastcall AI_Baal_SpawnTentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     aeAnimModes[0] = eD2MonsterAnimMode_ns::Neutral;
     aeAnimModes[1] = 7;
     aeAnimModes[2] = 8;
-    D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, pSpawnPoint, nUnitSize, eCollisionFlag, bAllowNeighboorRooms);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(D2Common::Units::UNITS_GetRoom(pUnit), pSpawnPoint, nUnitSize, eCollisionFlag, bAllowNeighboorRooms);
     if (!pSpawnRoom) {
       return;
     }

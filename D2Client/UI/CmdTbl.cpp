@@ -783,8 +783,7 @@ void __stdcall CMD_ToggleMercInventory() {
       return;
     }
 
-    int32_t nMercGUID = 0;
-    nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGUID);
+    int32_t nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGUID == -1) {
       return;
     }
@@ -897,7 +896,7 @@ void __fastcall CMD_InvokeCallbackByParam(int32_t nScrollDirection) {
       (*gpfnScrollUpButtonHandler)();
       return;
     } else {
-      if (-1 < nScrollDirection) {
+      if (nScrollDirection >= 0) {
         return;
       }
       if (!gpfnScrollDownButtonHandler) {

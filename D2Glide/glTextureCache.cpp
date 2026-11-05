@@ -97,12 +97,11 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
 static void GLTEXCACHE_AppendNodeToTail(GlTextureCacheStrc * pCache, GlTextureCacheNodeStrc * pNode) {
     if (!pCache->pActiveHead) {
       pCache->pActiveHead = (uint8_t*)pNode;
-      pCache->pActiveTail = (uint8_t*)pNode;
-      return;
+    } else {
+      *(GlTextureCacheNodeStrc**)(pCache->pActiveTail + 0x14) = (GlTextureCacheNodeStrc*)pNode;
+      pNode->pPrev = pCache->pActiveTail;
     }
 
-    *(GlTextureCacheNodeStrc**)(pCache->pActiveTail + 0x14) = (GlTextureCacheNodeStrc*)pNode;
-    pNode->pPrev = pCache->pActiveTail;
     pCache->pActiveTail = (uint8_t*)pNode;
 }
 
@@ -120,12 +119,10 @@ GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheS
       pCache->pActiveHead = pNeighbourNode;
       if (pNeighbourNode) {
         *(uint32_t*)(pNeighbourNode + 0x18) = 0;
-        pHead->pNext = 0;
-        pHead->pPrev = 0;
-        return pHead;
+      } else {
+        pCache->pActiveTail = 0;
       }
 
-      pCache->pActiveTail = 0;
       pHead->pNext = 0;
       pHead->pPrev = 0;
       return pHead;
@@ -134,13 +131,11 @@ GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheS
       pNeighbourNode = ((GlTextureCacheNodeStrc*)pCache->pActiveTail)->pPrev;
       pCache->pActiveTail = pNeighbourNode;
       *(uint32_t*)(pNeighbourNode + 0x14) = 0;
-      pTargetNode->pNext = 0;
-      pTargetNode->pPrev = 0;
-      return pTargetNode;
+    } else {
+      *(uint8_t**)(pTargetNode->pPrev + 0x14) = pTargetNode->pNext;
+      *(uint8_t**)(pTargetNode->pNext + 0x18) = pTargetNode->pPrev;
     }
 
-    *(uint8_t**)(pTargetNode->pPrev + 0x14) = pTargetNode->pNext;
-    *(uint8_t**)(pTargetNode->pNext + 0x18) = pTargetNode->pPrev;
     pTargetNode->pNext = 0;
     pTargetNode->pPrev = 0;
     return pTargetNode;
@@ -168,13 +163,12 @@ static int GLTEXCACHE_AllocateNode(GlTextureCacheStrc * pCache) {
       if (!pCache->pActiveHead) {
         pCache->nUsedCount++;
         pCache->pActiveHead = (uint8_t*)pAllocNode;
-        pCache->pActiveTail = (uint8_t*)pAllocNode;
-        return *pAllocNode + 1;
+      } else {
+        *(int**)(pCache->pActiveTail + 0x14) = (int*)pAllocNode;
+        pAllocNode[6] = (int)pCache->pActiveTail;
+        pCache->nUsedCount++;
       }
 
-      *(int**)(pCache->pActiveTail + 0x14) = (int*)pAllocNode;
-      pAllocNode[6] = (int)pCache->pActiveTail;
-      pCache->nUsedCount++;
       pCache->pActiveTail = (uint8_t*)pAllocNode;
       return *pAllocNode + 1;
     }
@@ -262,14 +256,7 @@ void __fastcall GLTEXCACHE_Destroy(GlTextureCacheStrc * pCacheData, GlTextureCac
       pCacheData->pNodes = 0;
     }
 
-    pCacheData->dwEntrySize = 0;
-    pCacheData->nMaxEntries = 0;
-    pCacheData->nUsedCount = 0;
-    pCacheData->pActiveHead = 0;
-    pCacheData->pActiveTail = 0;
-    pCacheData->pFreeHead = 0;
-    pCacheData->pFreeTail = 0;
-    pCacheData->pNodes = 0;
+    memset(pCacheData, 0, sizeof(*pCacheData));
 }
 
 // Ensures cache has free capacity by allocating a node. If cache is full, evicts LRU entry first.

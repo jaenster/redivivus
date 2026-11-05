@@ -311,11 +311,10 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     }
     if (pendingList.m_terminator.m_next < 0) {
       *(TSLink<::SGAMEDATA>**)~pendingList.m_terminator.m_next = pendingList.m_terminator.m_prevlink;
-      pendingList.m_terminator.m_prevlink->m_next = pendingList.m_terminator.m_next;
-      return;
+    } else {
+      *(TSLink<::SGAMEDATA>**)(pendingList.m_terminator.m_next + (uintptr_t)&pendingList + (4 - pendingList.m_terminator.m_prevlink->m_next)) = pendingList.m_terminator.m_prevlink;
     }
 
-    *(TSLink<::SGAMEDATA>**)(pendingList.m_terminator.m_next + (uintptr_t)&pendingList + (4 - pendingList.m_terminator.m_prevlink->m_next)) = pendingList.m_terminator.m_prevlink;
     pendingList.m_terminator.m_prevlink->m_next = pendingList.m_terminator.m_next;
 }
 

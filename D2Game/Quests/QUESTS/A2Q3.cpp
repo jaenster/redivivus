@@ -96,12 +96,7 @@ BOOL __fastcall Q11_NotifyTaintedSunComplete(::SGAMEDATA * pGame, D2UnitStrc * p
 // (or removes all, GUID -1, when pPlayer is null). No quest-record GetQuestState/SetQuestState here.
 void __fastcall Q11_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     SetRewardAndFinishFlags(pQuestData, pQuestArgs);
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q3->sPlayerGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q3->sPlayerGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q3->sPlayerGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A2Q3 - per-unit iterator cb (Q11_SetCannotComplete): if a player has NOT finished the Tainted Sun

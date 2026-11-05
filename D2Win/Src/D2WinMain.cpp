@@ -329,7 +329,6 @@ BOOL __stdcall FORMS_AddControlToGlobalList(D2ControlStrc * pControl) {
       pTail->pNext = pControl;
     }
 
-    pTail->pNext = pControl;
     return 1;
 }
 
@@ -350,7 +349,6 @@ BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
       pTail->pNext = pControl;
     }
 
-    pTail->pNext = pControl;
     return 1;
 }
 
@@ -1365,8 +1363,8 @@ void __stdcall MessagePump(pfnFramePump pfnFrameCallback) {
         /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&windowMsg);
         /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&windowMsg);
       } else {
-        TickCountA = GetTickCount();
-        dwSleepMs = TickCountA - TickCountB;
+        dwSleepMs = GetTickCount();
+        dwSleepMs -= TickCountB;
         TickCountB = GetTickCount();
         nFrameIndex = nFrameArg;
         if (dwSleepMs > 1000) {

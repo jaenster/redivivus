@@ -269,12 +269,7 @@ uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
 // Removes the player's GUID from this quest's participant list
 // (QUESTGUID_RemovePlayerFromList); uses -1 when no player unit is present.
 void __fastcall Q02_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A1Q2 reward-eligibility setter (Sisters' Burial Grounds), iterated over players

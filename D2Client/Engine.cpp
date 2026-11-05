@@ -208,13 +208,10 @@ void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
       gnCharScreenOkButtonPressed = 1;
       gnCharScreenInputState = 1;
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
+    } else {
+      GAME::Game::GAMEDATA_ClearQueuedClicks();
     }
 
-    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
@@ -381,14 +378,10 @@ void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
         gbCharScreenCancelPressed = 1;
         gnCharScreenInputState = 0;
       }
-
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
+    } else {
+      GAME::Game::GAMEDATA_ClearQueuedClicks();
     }
 
-    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);

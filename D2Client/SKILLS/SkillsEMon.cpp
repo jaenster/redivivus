@@ -173,8 +173,8 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
       nTmp = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[0], eSkill, nSkillLvl);
       nInitPosZ = Engine::Particle::PARTICLE_GetPosZShifted(pUnit);
       pTargetUnit = (D2UnitStrc*)(nTmp + nInitPosZ);
-      nExtraFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[1], eSkill, nSkillLvl);
-      nAnimTotalFrames = nExtraFrames + pMissileTxt->Param2;
+      nAnimTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[1], eSkill, nSkillLvl);
+      nAnimTotalFrames += pMissileTxt->Param2;
       nSkillLvl = (uint32_t)(uint8_t)pMissileTxt->AnimLen << 8;
       nZStepPerFrame = (nTmp + nInitPosZ) * -2;
       if (nAnimTotalFrames) {

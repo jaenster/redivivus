@@ -26,18 +26,9 @@
 
 
 template<> uint32_t TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::CalcChunkSize(uint32_t nCount) {
-    uint32_t nCapacityStripped;
     if (nCount < 0x15) {
-      uint32_t nCapacityMask;
-      nCapacityStripped = nCount - 1 & nCount;
-      while (true) {
-        nCapacityMask = nCapacityStripped;
-        if (!nCapacityMask) {
-          break;
-        }
-
-        nCount = nCapacityMask;
-        nCapacityStripped = nCapacityMask - 1 & nCapacityMask;
+      while (nCount & nCount - 1) {
+        nCount &= nCount - 1;
       }
 
       if (nCount < 1) {
@@ -86,10 +77,10 @@ template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::Ne
     uint32_t uAbsOffset;
     if (pNode) {
       uAbsOffset = *(uint32_t*)((uintptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-      return (::MappingEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
+    } else {
+      uAbsOffset = this->m_terminator.m_next;
     }
 
-    uAbsOffset = this->m_terminator.m_next;
     return (::MappingEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
 }
 
@@ -228,10 +219,10 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Nex
     uint32_t uAbsOffset;
     if (pNode) {
       uAbsOffset = *(uint32_t*)((uintptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset);
-      return (::MappingEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
+    } else {
+      uAbsOffset = this->tFullList.m_terminator.m_next;
     }
 
-    uAbsOffset = this->tFullList.m_terminator.m_next;
     return (::MappingEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
 }
 

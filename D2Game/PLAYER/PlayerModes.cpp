@@ -192,14 +192,19 @@ static BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * p
     if (iVar1) {
       return 1;
     }
-    if (nNewMode == 4) {
-      return 1;
-    }
-    if (nNewMode != 9) {
-      return 0;
+
+    switch (nNewMode) {
+      case 4:
+        {
+          return 1;
+        }
+      case 9:
+        {
+          return 1;
+        }
     }
 
-    return 1;
+    return 0;
 }
 
 // Extern entry for hand-written callers: PLRMODES_CanInterruptCurrentMode itself keeps its unit's linkage.
@@ -241,11 +246,15 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
       return 1;
     }
     if (pSkill == pActiveSkill) {
-      if (pSkillTxt->srvdofunc == 0x43) {
-        return 1;
-      }
-      if (pSkillTxt->srvdofunc == 0x4c) {
-        return 1;
+      switch (pSkillTxt->srvdofunc) {
+        case 0x43:
+          {
+            return 1;
+          }
+        case 0x4c:
+          {
+            return 1;
+          }
       }
     }
     if (*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)gadwBitMasks[7]) {
@@ -586,8 +595,7 @@ static void __stdcall PLRMODES_DropAllEquipmentAndGold(::SGAMEDATA * pGame, D2Un
         bAllowOnGround = 1;
         nGoldAmount = 1;
         pSpawnPos = &ptBestSpot;
-        pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptUnitPos, pSpawnPos, nGoldAmount, bAllowOnGround);
+        pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pSpawnPos, nGoldAmount, bAllowOnGround);
         ITEMS::Items::Drop::DropItem(pGame, pUnit, pBodyLocItem, pSpawnRoom, ptBestSpot.x, ptBestSpot.y);
         nBodyLoc_00 = nBodyLoc;
       }
@@ -794,8 +802,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
               nMaxSearchRadius = 1;
               uVar2 = 1;
               pNewPosition = &sDropCoords;
-              pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-              pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &sUnitCoords, pNewPosition, uVar2, nMaxSearchRadius);
+              pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &sUnitCoords, pNewPosition, uVar2, nMaxSearchRadius);
               ITEMS::Items::Drop::DropItem(pSavedGame, pUnit, pItemUnit, pSpawnRoom, sDropCoords.x, sDropCoords.y);
               iVar4 = nBodyLocIndex;
             }

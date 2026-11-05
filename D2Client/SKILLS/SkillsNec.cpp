@@ -629,13 +629,19 @@ BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(D2UnitStrc * p
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if (pMonStats2->overlayHeight != '\x01') {
-      if (pMonStats2->overlayHeight == '\x03') {
-        eMissileId = (eMissilesId)pSkillTxt->cltmissile[3];
-      }
-    } else {
-      eMissileId = (eMissilesId)pSkillTxt->cltmissile[2];
+    switch (pMonStats2->overlayHeight) {
+      case '\x01':
+        {
+          eMissileId = (eMissilesId)pSkillTxt->cltmissile[2];
+          break;
+        }
+      case '\x03':
+        {
+          eMissileId = (eMissilesId)pSkillTxt->cltmissile[3];
+          break;
+        }
     }
+
     if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
       D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);

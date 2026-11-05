@@ -434,12 +434,7 @@ void __fastcall Q36_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 void __fastcall Q36_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q6->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q6->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q6->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A5Q6 Eve of Destruction. Marks one player's quest fully complete: set record JustCompleted(0xd) + Completed(0), push client status 5 (act-V complete), and bump a counter on the quest-specific data. Called from Q36_CheckWorldstoneChamber when a player is present in the Worldstone Chamber as Baal dies.
@@ -558,7 +553,6 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
     BOOL _bQuestCompleted;
     bool bQuestCompleted;
     int nBaseGold;
-    int32_t nGoldAmount;
     uint32_t nPosY;
     uint32_t nPosX;
     int i;
@@ -602,8 +596,7 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
 
           for (i = 0; i < pA5Q6Data->nPlayersInWorldstone; i++) {
             QUEST_StubEmpty(pQuestData, pQuestArgs, 0x5f);
-            nGoldAmount = D2Client::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), nBaseGold + 0x5dc, nGoldCap);
-            ITEMS::Items::Drop::DROP_SpawnGoldOnGround(pQuestData->pGame, pQuestArgs->pTarget, nGoldAmount);
+            ITEMS::Items::Drop::DROP_SpawnGoldOnGround(pQuestData->pGame, pQuestArgs->pTarget, D2Client::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), nBaseGold + 0x5dc, nGoldCap));
           }
         }
 

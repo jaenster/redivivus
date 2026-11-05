@@ -400,12 +400,7 @@ void __fastcall Q03_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 
 // Q03_Callback_10 (A1Q3) — player-leaves-game hook (handler slot 10). Removes the leaving player (by nUnitGUID, or -1 if none) from the quest's participant GUID list (sQuestGUID +5). No quest-record writes.
 void __fastcall Q03_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!pQuestArgs->pPlayer) {
-      QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q3->sQuestGUID, -1);
-      return;
-    }
-
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q3->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q3->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q03_Callback_06 (A1Q3) — handler slot 6; another Malus-count decrement path. If in-progress: decrement nQuestItemCount; when it reaches 0 and nMalusMode==2, call MallusHandler (which advances nStateFlag to 3 and broadcasts RewardAwaits). No direct quest-record writes.
@@ -601,7 +596,7 @@ bool __fastcall Q03_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
         nRecordState = QUEST_GetQuestRecordState(pQuestData->pGame, QUEST_ToolsOfTheTrade, 0xd);
         if (nRecordState) {
           nCompletionState = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
-          *pbyStatusCode = nCompletionState >= 8 ? 12 : 4;
+          *pbyStatusCode = nCompletionState < 8 ? 0x4 : 0xc;
         }
       }
     }

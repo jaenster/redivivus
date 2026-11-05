@@ -279,10 +279,10 @@ D2Game_Line0x546 * D2GameGame0x546 = 0; D2_GLOBAL_GUARD(D2GameGame0x546, "D2Game
 uint32_t gnWeatherOverlayActId = 0; D2_GLOBAL_GUARD(gnWeatherOverlayActId, "gnWeatherOverlayActId");
 D2GameViewStrc * D2GameView = 0; D2_GLOBAL_GUARD(D2GameView, "D2GameView");
 HMODULE ghLngLibrary = 0; D2_GLOBAL_GUARD(ghLngLibrary, "ghLngLibrary");
-SpinnerWrapper * gpCurrentDialog = 0; D2_GLOBAL_GUARD(gpCurrentDialog, "gpCurrentDialog");
-EditBoxWrapper * gpDialogDefaultActionCallback = 0; D2_GLOBAL_GUARD(gpDialogDefaultActionCallback, "gpDialogDefaultActionCallback");
-ButtonWrapper * gpUiGoldTransactionDialog = 0; D2_GLOBAL_GUARD(gpUiGoldTransactionDialog, "gpUiGoldTransactionDialog");
-ButtonWrapper * gpUiGoldDialogCancelButton = 0; D2_GLOBAL_GUARD(gpUiGoldDialogCancelButton, "gpUiGoldDialogCancelButton");
+::SpinnerWrapper * gpCurrentDialog = 0; D2_GLOBAL_GUARD(gpCurrentDialog, "gpCurrentDialog");
+::EditBoxWrapper * gpDialogDefaultActionCallback = 0; D2_GLOBAL_GUARD(gpDialogDefaultActionCallback, "gpDialogDefaultActionCallback");
+::ButtonWrapper * gpUiGoldTransactionDialog = 0; D2_GLOBAL_GUARD(gpUiGoldTransactionDialog, "gpUiGoldTransactionDialog");
+::ButtonWrapper * gpUiGoldDialogCancelButton = 0; D2_GLOBAL_GUARD(gpUiGoldDialogCancelButton, "gpUiGoldDialogCancelButton");
 uint32_t gbKeyConfigModeActiveInDialog = 0; D2_GLOBAL_GUARD(gbKeyConfigModeActiveInDialog, "gbKeyConfigModeActiveInDialog");
 // also labelled: g_nMouseX
 int gnPanelOffsetX = 0; D2_GLOBAL_GUARD(gnPanelOffsetX, "gnPanelOffsetX");
@@ -655,9 +655,9 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
@@ -669,9 +669,17 @@ int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::G
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
 
-} // namespace D2Client::UI::ui
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -856,14 +864,10 @@ D2LightMapStrc * gpLightMap = 0; D2_GLOBAL_GUARD(gpLightMap, "D2Client::Draw::Li
 
 } // namespace D2Client::Draw::LightMap
 
-namespace D2Client::Mouse {
+namespace D2Win::Src::D2WinMain {
 
-} // namespace D2Client::Mouse
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::Forms {
+namespace D2Win::D2GFX {
 
-} // namespace D2Client::Forms
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

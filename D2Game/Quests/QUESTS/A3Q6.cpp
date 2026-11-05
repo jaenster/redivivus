@@ -778,13 +778,7 @@ void __fastcall Objects_InitFn44_HellGatePortal(D2ObjectInitFnArg * pInitArg) {
 
     D2QuestDataA3Q6Strc* pDVar1 = pDVar2->pQuestSpecificData.pA3Q6;
     pDVar1->bBridgeObjectValid = true;
-    if (!pInitArg->pObject) {
-      pDVar1->nBridgeObjectGUID = -1;
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nMephistoApproachMode);
-      return;
-    }
-
-    pDVar1->nBridgeObjectGUID = pInitArg->pObject->nUnitGUID;
+    pDVar1->nBridgeObjectGUID = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nMephistoApproachMode);
 }
 

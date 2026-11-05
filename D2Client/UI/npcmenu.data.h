@@ -55,7 +55,7 @@ extern D2NPCSpeechStrc D2NPCSpeech[46];
 extern uint16_t gnNpcMenuRepairCostGold;
 extern int16_t gnNpcMenuTradeActionGold;
 extern D2BitBufferStrc * gpNpcMenuDialogOptions;
-extern ListBoxWrapper * gpNpcMenuMercListBox;
+extern ::ListBoxWrapper * gpNpcMenuMercListBox;
 extern uint16_t gnNpcMenuScrollMessageHead;
 extern uint32_t gnNpcMenuShopMode;
 extern DC6 * gpNpcMenuShopInventoryDC6;

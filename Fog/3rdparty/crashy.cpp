@@ -172,10 +172,10 @@ char __stdcall SYSTEM_CaptureThreadContext(int * pnStackTop, DWORD dwThreadId, i
 bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer) {
     if (dwCurrentThreadId == wThreadId) {
       strncpy_s(pBuffer, 0x80, "Main Thread", -1);
-      return true;
+    } else {
+      *pBuffer = '\0';
     }
 
-    *pBuffer = '\0';
     return true;
 }
 

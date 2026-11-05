@@ -50,14 +50,7 @@ D2TileCmpTileNodeStrc * __stdcall TILECMP_AllocTileNode() {
       exit(-1);
     }
 
-    pTileNode->wOffsetX = 0;
-    pTileNode->wOffsetY = 0;
-    pTileNode->wUnk_04 = 0;
-    pTileNode->wFlags = 0;
-    pTileNode->wPixelSize = 0;
-    pTileNode->wUnk_0A = 0;
-    pTileNode->pPixelBuf = 0;
-    pTileNode->pNext = 0;
+    memset(pTileNode, 0, sizeof(*pTileNode));
     return pTileNode;
 }
 

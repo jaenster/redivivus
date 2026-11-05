@@ -918,7 +918,6 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
     D2TileLibraryEntryStrc* nTileLibEntry;
     BOOL bIsInside;
     eD2GridCellFlags nGridFlags;
-    uint32_t nBlankTileFlags;
     uint8_t nMainIndex;
     nMainIndex = (uint8_t)(nFlags >> 0x14) & 0x3f;
     if ((nOtherFlags == (CELLFLAGS_0x08 | CELLFLAGS_0x02 | CELLFLAGS_0x01) || nOtherFlags == (CELLFLAGS_0x08 | CELLFLAGS_0x02)) && nMainIndex >= 8) {
@@ -982,12 +981,10 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
 
       nGridFlags = nFlags & ~CELLFLAGS_0x80 | CELLFLAGS_0x80000000;
       if (pRoom->pLevel->eD2LevelId != 0x4a) {
-        nBlankTileFlags = 0x1e00000;
+        nTileLibEntry = DRLG_FindHTile(pRoom, 0, 0x1e00000);
       } else {
-        nBlankTileFlags = 0x1e00100;
+        nTileLibEntry = DRLG_FindHTile(pRoom, 0, 0x1e00100);
       }
-
-      nTileLibEntry = DRLG_FindHTile(pRoom, 0, nBlankTileFlags);
     }
 
     D2DrlgTileGridStrc* pTileGrid;

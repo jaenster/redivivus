@@ -12,6 +12,7 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static int32_t gaYBufferRowOffsets[732] = {}; D2_STATIC_GUARD(gaYBufferRowOffsets, "gaYBufferRowOffsets");
 static uint32_t gbPerspectiveRenderEnabled = 0; D2_STATIC_GUARD(gbPerspectiveRenderEnabled, "gbPerspectiveRenderEnabled");
 // also labelled: gPaletteBlendLookupTable
 uint8_t gaPaletteColorLUT[49][256] = {}; D2_GLOBAL_GUARD(gaPaletteColorLUT, "gaPaletteColorLUT");

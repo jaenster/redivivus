@@ -70,32 +70,32 @@ static int gnCharSelLoadMoreEntryIndex = -0x3e7; D2_STATIC_GUARD(gnCharSelLoadMo
 static int gnCharSelLoadingEntryIndex = -0x3e7; D2_STATIC_GUARD(gnCharSelLoadingEntryIndex, "gnCharSelLoadingEntryIndex");
 static int gnCharSelScreenSlotCount = 0x5; D2_STATIC_GUARD(gnCharSelScreenSlotCount, "gnCharSelScreenSlotCount");
 static D2ControlStrc * gpCtlRealmSelectionPanel = 0; D2_STATIC_GUARD(gpCtlRealmSelectionPanel, "gpCtlRealmSelectionPanel");
-static D2WinTextBox * gpCharSelDeleteButton = 0; D2_STATIC_GUARD(gpCharSelDeleteButton, "gpCharSelDeleteButton");
-static D2WinButton * gpCtlCharSelDownArrow = 0; D2_STATIC_GUARD(gpCtlCharSelDownArrow, "gpCtlCharSelDownArrow");
+static ::D2WinTextBox * gpCharSelDeleteButton = 0; D2_STATIC_GUARD(gpCharSelDeleteButton, "gpCharSelDeleteButton");
+static ::D2WinButton * gpCtlCharSelDownArrow = 0; D2_STATIC_GUARD(gpCtlCharSelDownArrow, "gpCtlCharSelDownArrow");
 static D2ControlStrc * gpCharSelExitButton = 0; D2_STATIC_GUARD(gpCharSelExitButton, "gpCharSelExitButton");
 static int gnCharSlotYPositions[8] = {}; D2_STATIC_GUARD(gnCharSlotYPositions, "gnCharSlotYPositions");
-static D2WinButton * gpCtlCharSelOKButton = 0; D2_STATIC_GUARD(gpCtlCharSelOKButton, "gpCtlCharSelOKButton");
-static D2WinTextBox * gaCharSelScreenSlotControls[8] = {}; D2_STATIC_GUARD(gaCharSelScreenSlotControls, "gaCharSelScreenSlotControls");
+static ::D2WinButton * gpCtlCharSelOKButton = 0; D2_STATIC_GUARD(gpCtlCharSelOKButton, "gpCtlCharSelOKButton");
+static ::D2WinTextBox * gaCharSelScreenSlotControls[8] = {}; D2_STATIC_GUARD(gaCharSelScreenSlotControls, "gaCharSelScreenSlotControls");
 char PreferredClosedRealm[256] = {}; D2_GLOBAL_GUARD(PreferredClosedRealm, "PreferredClosedRealm");
 static D2ControlStrc * gaCharSelExpansionIconControls[8] = {}; D2_STATIC_GUARD(gaCharSelExpansionIconControls, "gaCharSelExpansionIconControls");
-static D2WinTextBox * gpaCharSelectDisplay = 0; D2_STATIC_GUARD(gpaCharSelectDisplay, "gpaCharSelectDisplay");
+static ::D2WinTextBox * gpaCharSelectDisplay = 0; D2_STATIC_GUARD(gpaCharSelectDisplay, "gpaCharSelectDisplay");
 static D2ControlStrc * gpCtlCharSelectGameTypeBtn = 0; D2_STATIC_GUARD(gpCtlCharSelectGameTypeBtn, "gpCtlCharSelectGameTypeBtn");
 static char gszLocalSaveFilenameBuffer[256] = {}; D2_STATIC_GUARD(gszLocalSaveFilenameBuffer, "gszLocalSaveFilenameBuffer");
 static D2ControlStrc * gpCtlCharSelDeleteButton = 0; D2_STATIC_GUARD(gpCtlCharSelDeleteButton, "gpCtlCharSelDeleteButton");
 uint32_t gnCharSelSelectedIndex = 0; D2_GLOBAL_GUARD(gnCharSelSelectedIndex, "gnCharSelSelectedIndex");
-static D2WinTextBox * gpCharSelExpansionToggle = 0; D2_STATIC_GUARD(gpCharSelExpansionToggle, "gpCharSelExpansionToggle");
+static ::D2WinTextBox * gpCharSelExpansionToggle = 0; D2_STATIC_GUARD(gpCharSelExpansionToggle, "gpCharSelExpansionToggle");
 static D2ControlStrc * gnCharSelImageOffset = 0; D2_STATIC_GUARD(gnCharSelImageOffset, "gnCharSelImageOffset");
-static D2WinImage * gpControlCharSelImage = 0; D2_STATIC_GUARD(gpControlCharSelImage, "gpControlCharSelImage");
-static D2WinTextBox * gpCtlRealmSelectionLabel = 0; D2_STATIC_GUARD(gpCtlRealmSelectionLabel, "gpCtlRealmSelectionLabel");
-D2WinButton * gpCharSelScreenControl = 0; D2_GLOBAL_GUARD(gpCharSelScreenControl, "gpCharSelScreenControl");
-static D2WinTextBox * gpCtlCharSelScrollbar = 0; D2_STATIC_GUARD(gpCtlCharSelScrollbar, "gpCtlCharSelScrollbar");
+static ::D2WinImage * gpControlCharSelImage = 0; D2_STATIC_GUARD(gpControlCharSelImage, "gpControlCharSelImage");
+static ::D2WinTextBox * gpCtlRealmSelectionLabel = 0; D2_STATIC_GUARD(gpCtlRealmSelectionLabel, "gpCtlRealmSelectionLabel");
+::D2WinButton * gpCharSelScreenControl = 0; D2_GLOBAL_GUARD(gpCharSelScreenControl, "gpCharSelScreenControl");
+static ::D2WinTextBox * gpCtlCharSelScrollbar = 0; D2_STATIC_GUARD(gpCtlCharSelScrollbar, "gpCtlCharSelScrollbar");
 char PreferedClosedRealm2[256] = {}; D2_GLOBAL_GUARD(PreferedClosedRealm2, "PreferedClosedRealm2");
 static D2ControlStrc * gnRealmSelectionOffset = 0; D2_STATIC_GUARD(gnRealmSelectionOffset, "gnRealmSelectionOffset");
-static D2WinTextBox * gpControlCharSelList = 0; D2_STATIC_GUARD(gpControlCharSelList, "gpControlCharSelList");
+static ::D2WinTextBox * gpControlCharSelList = 0; D2_STATIC_GUARD(gpControlCharSelList, "gpControlCharSelList");
 static D2ControlStrc * gpControlCharSelArrows = 0; D2_STATIC_GUARD(gpControlCharSelArrows, "gpControlCharSelArrows");
-static D2WinImage * gpaCharSelCharacterList = 0; D2_STATIC_GUARD(gpaCharSelCharacterList, "gpaCharSelCharacterList");
+static ::D2WinImage * gpaCharSelCharacterList = 0; D2_STATIC_GUARD(gpaCharSelCharacterList, "gpaCharSelCharacterList");
 static D2ControlStrc * gpControlRealmSelectDropdown = 0; D2_STATIC_GUARD(gpControlRealmSelectDropdown, "gpControlRealmSelectDropdown");
-static D2WinTextBox * gpControlRealmSelect = 0; D2_STATIC_GUARD(gpControlRealmSelect, "gpControlRealmSelect");
+static ::D2WinTextBox * gpControlRealmSelect = 0; D2_STATIC_GUARD(gpControlRealmSelect, "gpControlRealmSelect");
 uint32_t gbCharSelectInProgress = 0; D2_GLOBAL_GUARD(gbCharSelectInProgress, "gbCharSelectInProgress");
 int nCharacterSelectionIndex = 0; D2_GLOBAL_GUARD(nCharacterSelectionIndex, "nCharacterSelectionIndex");
 static uint32_t gnCharSelBNetLoadState = 0; D2_STATIC_GUARD(gnCharSelBNetLoadState, "gnCharSelBNetLoadState");
@@ -109,8 +109,8 @@ int TotalCurrentChars = 0; D2_GLOBAL_GUARD(TotalCurrentChars, "D2Launch::CharSel
 } // namespace D2Launch::CharSel
 static int32_t g_nCharSelNavigationIndex = 0; D2_STATIC_GUARD(g_nCharSelNavigationIndex, "g_nCharSelNavigationIndex");
 static uint32_t gpCharSelScrollbar = 0; D2_STATIC_GUARD(gpCharSelScrollbar, "gpCharSelScrollbar");
-static D2WinTextBox * gpCharSelStatusTextBox = 0; D2_STATIC_GUARD(gpCharSelStatusTextBox, "gpCharSelStatusTextBox");
-static D2WinTextBox * gnCharSelScrollOffset = 0; D2_STATIC_GUARD(gnCharSelScrollOffset, "gnCharSelScrollOffset");
+static ::D2WinTextBox * gpCharSelStatusTextBox = 0; D2_STATIC_GUARD(gpCharSelStatusTextBox, "gpCharSelStatusTextBox");
+static ::D2WinTextBox * gnCharSelScrollOffset = 0; D2_STATIC_GUARD(gnCharSelScrollOffset, "gnCharSelScrollOffset");
 uint32_t gnCharSelLoadedCharCount = 0; D2_GLOBAL_GUARD(gnCharSelLoadedCharCount, "gnCharSelLoadedCharCount");
 uint32_t gnCharSelCreateNewButtonClickCount = 0; D2_GLOBAL_GUARD(gnCharSelCreateNewButtonClickCount, "gnCharSelCreateNewButtonClickCount");
 static D2RealmCharListCacheEntryStrc * gpRealmCharListCache = 0; D2_STATIC_GUARD(gpRealmCharListCache, "gpRealmCharListCache");
@@ -482,7 +482,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           pcSrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)ePlayerClass, pCharSel->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharSel->nCharacterFlags & 0x20);
           pDVar1 = pCharSel;
           if (pcSrc) {
-            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, (wCharFlags & 4 ? -3 : 0) + 4);
+            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, 4 + (wCharFlags & 4 ? -3 : 0));
           }
 
           strcat(szNameBuf, pCharSel->szCharname);
@@ -495,7 +495,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
             sprintf(pcDst, " {%s}", pCharSel->szGuildTag);
           }
 
-          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, 4 + (wCharFlags & 4 ? -3 : 0));
           CHARSEL_GetClassNameString((uint32_t)pCharSel->ePlayerClassID, wszClassName);
           for (nTextArg0 = 0; nTextArg0 < 0x64; nTextArg0++) {
             wszLineBuf[nTextArg0] = L'\0';
@@ -732,7 +732,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
               sprintf(pcCopySrc, " {%s}", pCharSelIter->szGuildTag);
             }
 
-            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharIndex], sLineBuf.szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
+            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharIndex], sLineBuf.szNameBuf, 4 + (wCharFlags & 4 ? -3 : 0));
             CHARSEL_GetClassNameString((uint32_t)pCharEntry->ePlayerClassID, wszClassName);
             pLineBufCursor = &sLineBuf;
             for (nLoopIdx = 0x32; pCharEntry = pCharSelIter , nLoopIdx != 0; nLoopIdx--) {
@@ -1115,21 +1115,21 @@ int __stdcall CHARSEL_UpdateSelectionExpansion() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelDownArrow->sControl, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelDeleteButton, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpaCharSelCharacterList->sControl, 0);
-      return 1;
+    } else {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 1);
+      if (pCharSel->nCharacterFlags & 0x20) {
+        D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
+      }
+
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, (uint32_t)!gbCharSelArrowsHidden);
+      if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && gnCharSelLoadedCharCount) {
+        D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
+      }
+
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSel->szCharname, 0);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 1);
-    if (pCharSel->nCharacterFlags & 0x20) {
-      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
-    }
-
-    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, (uint32_t)!gbCharSelArrowsHidden);
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET && gnCharSelLoadedCharCount) {
-      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
-    }
-
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSel->szCharname, 0);
     return 1;
 }
 
@@ -1464,11 +1464,6 @@ void __fastcall UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(D2ControlMsg * pCo
 
       pSelectedChar = pSelectedChar->pNext;
       nWalkIndex++;
-      if (pSelectedChar) {
-        continue;
-      }
-
-      return;
     }
 
     if (!pSelectedChar) {
@@ -1600,7 +1595,9 @@ BOOL __stdcall MAINMENU_CharSelScrollbarCallback(D2ControlStrc * pControl) {
 }
 
 void __stdcall CHARSEL_ScrollCharList(int32_t nScrollDelta) {
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar) + nScrollDelta);
+    int nCurrentScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar);
+    nCurrentScrollPos += nScrollDelta;
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, nCurrentScrollPos);
 }
 
 BOOL __stdcall CHARSEL_HandleKeyNavExpansion(int32_t pKeyMsg) {
@@ -2340,19 +2337,17 @@ void __fastcall CHARSEL_LoadCharList(char * szText) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpControlCharSelList);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpControlCharSelList, szText, 0);
       CHARSEL_RequestRealmCharList(szText);
-      CHARSEL_UpdateSelectedCharDisplay();
-      DRAW_LocalCharsInSelectionScreen0();
-      return;
-    }
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP) {
-      BOOL bIsExpansion;
-      CHARSEL_DestroyAllCharEntries();
-      bIsExpansion = Fog::D2CheckExpansionGame();
-      if (!bIsExpansion) {
-        CHARSEL_AddCreateNewEntry();
-      }
+    } else {
+      if (OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP) {
+        BOOL bIsExpansion;
+        CHARSEL_DestroyAllCharEntries();
+        bIsExpansion = Fog::D2CheckExpansionGame();
+        if (!bIsExpansion) {
+          CHARSEL_AddCreateNewEntry();
+        }
 
-      CHARSEL_EnumerateLocalSaves();
+        CHARSEL_EnumerateLocalSaves();
+      }
     }
 
     CHARSEL_UpdateSelectedCharDisplay();
@@ -2451,17 +2446,21 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::MAINMENU_QueryAndBuildRealmList();
       nSlotIndex = MainMenus::MAINMENU_GetRealmCount();
-      if (nSlotIndex == -1) {
-        Launcher::LAUNCHER_DisconnectFromBnet();
-        pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
-        MainMenus::MAINMENU_ShowPopupWithCancel(pwszLabel, MainMenus::UIMENU_MainMenu);
-        return;
-      }
-      if (!nSlotIndex) {
-        Launcher::LAUNCHER_DisconnectFromBnet();
-        pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x14aa);
-        MainMenus::MAINMENU_ShowPopupWithCancel(pwszLabel, MainMenus::UIMENU_MainMenu);
-        return;
+      switch (nSlotIndex) {
+        case -1:
+          {
+            Launcher::LAUNCHER_DisconnectFromBnet();
+            pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x14e3);
+            MainMenus::MAINMENU_ShowPopupWithCancel(pwszLabel, MainMenus::UIMENU_MainMenu);
+            return;
+          }
+        case 0:
+          {
+            Launcher::LAUNCHER_DisconnectFromBnet();
+            pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x14aa);
+            MainMenus::MAINMENU_ShowPopupWithCancel(pwszLabel, MainMenus::UIMENU_MainMenu);
+            return;
+          }
       }
     }
 

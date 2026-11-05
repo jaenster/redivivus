@@ -11,22 +11,16 @@
 // Forward declarations
 struct D2McpGameInfoStrc;
 struct D2QSSocketStrc;
-typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
-typedef void (__fastcall *pfnMCPMessage)(uint32_t nMessageId, uint32_t nDataLength, void * pMessageData);
 typedef void (__fastcall *pfnMCPPacketCallback)(uint16_t wPacketField, char * pPayload);
-typedef void (__stdcall *pfnVoidNoArgCallback)();
 
 extern D2McpGameInfoStrc g_CharSelectBuffer;
 extern HANDLE MCPThread;
 extern pfnMCPPacketCallback g_pfnMCPCallback1;
 extern pfnMCPPacketCallback g_pfnMCPCallback2;
-extern pfnMCPGameListEntry g_pfnMCPGameListCallback;
-extern pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback;
-extern pfnMCPMessage g_pfnMCPMessageCallback;
 // Former interior labels: gInterfaceConfig6=+0x4 gInterfaceConfig5=+0x8 gInterfaceConfig4=+0xc gInterfaceConfig3=+0x10 gInterfaceConfig2=+0x14
 extern uint8_t gMCPGameListBuffer[28680];
 
-namespace D2Client::MCP {
+namespace D2MCPClient::McpConnect {
 extern uint16_t D2GSRequestId;
 extern uint32_t D2GSGameHash;
 extern uint32_t D2GSGameToken;

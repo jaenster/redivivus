@@ -217,14 +217,14 @@ BOOL __fastcall INFERNO_BeginOrContinueChannel(::SGAMEDATA * pGame, D2UnitStrc *
       D2Common::Stats::StatsEx::SetState(pStatList, STATE_inferno);
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
       D2Common::Skills::SKILL_SetParam1(D2Common::Units::GetCurrentSkill(pUnit), 0);
-      return 1;
+    } else {
+      UNIT::SUnit::UNITS_SetupAnimTimerEventsWithDelay(pGame, pUnit, 1);
+      nCalcDuration = pGame->dwGameFrame + 6;
+      D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nCalcDuration);
+      GAME::Event::SetEvent(pGame, pUnit, 0xc, nCalcDuration, 0, 0);
+      INFERNO_CastInfernoTick(pGame, pUnit, eSkill, nSkillLvl2, eMissileId);
     }
 
-    UNIT::SUnit::UNITS_SetupAnimTimerEventsWithDelay(pGame, pUnit, 1);
-    nCalcDuration = pGame->dwGameFrame + 6;
-    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nCalcDuration);
-    GAME::Event::SetEvent(pGame, pUnit, 0xc, nCalcDuration, 0, 0);
-    INFERNO_CastInfernoTick(pGame, pUnit, eSkill, nSkillLvl2, eMissileId);
     return 1;
 }
 
@@ -1251,7 +1251,6 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
     int32_t* pnDamageField;
     int32_t nAbsorbAmt;
     int32_t nManaCap;
-    int nDirection;
     D2SkillsTxt* pSkillTxt;
     uint32_t* pAbsorbEntry;
     bool bNotMonsterOnly;
@@ -1310,9 +1309,7 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
             nCurMana = (int)nCurMana <= 0 ? 0 : nCurMana;
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurMana, 0);
             if (pTarget && (int)eSkill > 0 && pSkillTxt->prgoverlay >= 0 && (int)pSkillTxt->prgoverlay <= sgptDataTable->nTxtOverlaySize) {
-              nAbsorbPct = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
-              nDirection = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTarget), nAbsorbPct);
-              bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nDirection);
+              bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTarget), D2Client::Units::GetYPosFromDynamicPathUnit(pTarget)));
               D2Common::Units::SetOverlay(pUnit, (int)pSkillTxt->prgoverlay + (uint32_t)bVar1, 0);
             }
             if ((int)nCurMana > 0) {

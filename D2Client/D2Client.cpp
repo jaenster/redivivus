@@ -1019,13 +1019,10 @@ void __stdcall INPUT_HandleIMEStartComposition(D2UIMouseMsgStrc * pMsg) {
     gwcImeCompositionBuffer[0] = L'\0';
     if (gaIMECompositionBuffer == 9) {
       gnIMEInputMode = 4;
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
-    }
-    if (gaIMECompositionBuffer == 8) {
-      gnIMEInputMode = 5;
+    } else {
+      if (gaIMECompositionBuffer == 8) {
+        gnIMEInputMode = 5;
+      }
     }
 
     pMsg->bHandled = 1;

@@ -131,8 +131,8 @@ static int32_t Frames_PerSecond = 0x19; D2_STATIC_GUARD(Frames_PerSecond, "Frame
 static D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_STATIC_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
 // also labelled: lpCritical_GenerateToken, lpCriticalSection_00882d18
 static _RTL_CRITICAL_SECTION gQServerGameListCs = {}; D2_STATIC_GUARD(gQServerGameListCs, "gQServerGameListCs");
-static SGAMEDATA * gaQServerGameByToken[1025] = {}; D2_STATIC_GUARD(gaQServerGameByToken, "gaQServerGameByToken");
-static TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> * gpQServerGameState = 0; D2_STATIC_GUARD(gpQServerGameState, "gpQServerGameState");
+static ::SGAMEDATA * gaQServerGameByToken[1025] = {}; D2_STATIC_GUARD(gaQServerGameByToken, "gaQServerGameByToken");
+static TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* gpQServerGameState = 0; D2_STATIC_GUARD(gpQServerGameState, "gpQServerGameState");
 static int g_nMemoryCounter = 0; D2_STATIC_GUARD(g_nMemoryCounter, "g_nMemoryCounter");
 static int StartingAct = 0; D2_STATIC_GUARD(StartingAct, "StartingAct");
 static uint32_t maxMemoryUsage = 0; D2_STATIC_GUARD(maxMemoryUsage, "maxMemoryUsage");
@@ -865,8 +865,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
       return;
     }
 
-    BOOL bSaveSuccess = 1;
-    bSaveSuccess = PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, Clients::GetCharName(pClient), bSaveSuccess);
+    BOOL bSaveSuccess = PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, Clients::GetCharName(pClient), 1);
     if (!bSaveSuccess) {
       return;
     }
@@ -1949,6 +1948,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
       return;
     }
 
+    char* pReadCursor = pClient->pSaveGame->szCharacterName + pClient->nFileSize - 0x14;
     int nSendSize = pClient->nSaveOpenSize - pClient->nFileSize;
     if (nSendSize >= 0xff) {
       nSendSize = 0xff;
@@ -1957,12 +1957,11 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
     char* pBytes = (char*)D2_ALLOC_POOL_AT(pClient->pGame->pMemoryPool, 0x107, ".\\GAME\\Game.cpp", 0x904);
     *pBytes = -0x4d;
     pBytes[1] = (char)nSendSize;
-    char* pWriteCursor = pBytes + 7;
     pBytes[2] = !pClient->nFileSize;
     *(int*)(pBytes + 3) = pClient->nSaveOpenSize;
     int nBytesLeft = nSendSize;
     if (nSendSize > 0) {
-      char* pReadCursor = pClient->pSaveGame->szCharacterName + pClient->nFileSize - 0x14;
+      char* pWriteCursor = pBytes + 7;
       do {
         *pWriteCursor = *pReadCursor;
         pReadCursor++;
@@ -2095,11 +2094,11 @@ void __fastcall FlushAllClientPackets(::SGAMEDATA * pGame) {
 
 // Destroys a game by token using lock escalation. Locks csGameHash, looks up game, optionally notifies BattleNet service (fpCloseGame callback with player count and game time in seconds), acquires per-game lock, calls GAME_DestroyGame to tear down all units/rooms/quests, then frees game from hash-map and releases all locks.
 void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
-    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState = gpQServerGameState;
     if (!gpQServerGameState) {
       return;
     }
 
+    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState = gpQServerGameState;
     CCritSect* lpCriticalSection = &gpQServerGameState->tSync;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection->m_critsect);
     ::SGAMEDATA* pGame = pQServerState->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Ptr(nToken, &pQServerState->tKey);
@@ -2129,11 +2128,11 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
 
 // Locks global csGameHash, looks up game by token in hash-map, acquires per-game critical section, then releases global lock. Returns locked SGAMEDATA pointer or NULL if not found. Lock escalation pattern: global -> per-game -> release global, ensuring deadlock-free access to individual game state.
 ::SGAMEDATA * __fastcall QSERVER_FindAndLockGame(uint32_t nToken) {
-    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState = gpQServerGameState;
     if (!gpQServerGameState) {
       return nullptr;
     }
 
+    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState = gpQServerGameState;
     CCritSect* lpCriticalSection = &gpQServerGameState->tSync;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection->m_critsect);
     ::SGAMEDATA* pGame = pQServerState->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Ptr(nToken, &pQServerState->tKey);
@@ -3591,11 +3590,11 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
 // Already-documented — existing description accurately covers SP/LAN game creation: allocates SGAMEDATA in hash map with generated token, initializes critical section and five unit-type lists, rolls seed, allocates Event/Arena/Party/MonsterRegion/ObjectControl/NpcControl/QuestControl subsystems, creates local D2ClientStrc, sends 0x01 GameFlags and state packets, and enqueues the game-loop task.
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12) {
-    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* self = gpQServerGameState;
     if (!gpQServerGameState) {
       return;
     }
 
+    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* self = gpQServerGameState;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gpQServerGameState->tSync.m_critsect);
     uint32_t dwGameToken = self->GenerateUniqueHandle();
     ::SGAMEDATA* pGame = self->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::New(dwGameToken, &self->tKey, 0, 0);

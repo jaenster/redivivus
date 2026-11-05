@@ -133,9 +133,7 @@ D2MonsterAiCmdStrc * __fastcall CreateAiCmdStrc(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     D2MonsterAiCmdStrc* pAiCmd = D2_NEW_POOL_AT(pGame->pMemoryPool, D2MonsterAiCmdStrc, ".\\Ai\\AiGeneral.cpp", 0x65);
-    pAiCmd->pNext = 0;
-    pAiCmd->pPrev = 0;
-    memset(pAiCmd->nCmdArg, 0, 5 * sizeof(pAiCmd->nCmdArg[0]));
+    memset(pAiCmd, 0, sizeof(*pAiCmd));
     if (!pGeneralStrc->pCmdLast) {
       pGeneralStrc->pCmdLast = pAiCmd;
       pGeneralStrc->pCmdCurrent = pAiCmd;
@@ -450,8 +448,7 @@ void __fastcall AddMinionToList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitS
     }
 
     D2MonsterDataMinionList* pNewNode = D2_NEW_POOL_AT(pGame->pMemoryPool, D2MonsterDataMinionList, ".\\Ai\\AiGeneral.cpp", 499);
-    pNewNode->nMinionGUID = 0;
-    pNewNode->pNext = 0;
+    memset(pNewNode, 0, sizeof(*pNewNode));
     if (!pMinion) {
       nMinionGUID = -1;
     } else {

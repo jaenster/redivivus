@@ -734,8 +734,10 @@ uint32_t implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TCmpStruct * pW
 }; D2_STATIC_GUARD(gaPKWARE_DistCodeTable, "Storm::_3rdparty::PKWARE::implode::implode::gaPKWARE_DistCodeTable");
 
     uint16_t* psCodeTable;
+    uint32_t nLenCodeGroup;
     uint32_t nGroupCodeIndex;
     uint32_t nNextGroupCodeIndex;
+    uint16_t sCodeValue;
     short int* pDistCodeEntry;
     short int* pNextDistCodeEntry;
     pWorkBuf->read_buf = pfnRead;
@@ -746,71 +748,76 @@ uint32_t implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TCmpStruct * pW
     pWorkBuf->dsize_bits = 4;
     pWorkBuf->dsize_mask = 0xf;
     uint32_t nCodeIndex = *pnDictSize;
-    if (nCodeIndex != 0x400) {
-      if (nCodeIndex != 0x800) {
-        if (nCodeIndex != 0x1000) {
+    switch (nCodeIndex) {
+      case 0x1000:
+        {
+          pWorkBuf->dsize_bits++;
+          pWorkBuf->dsize_mask |= 0x20;
+        }
+      case 0x800:
+        {
+          pWorkBuf->dsize_bits++;
+          pWorkBuf->dsize_mask |= 0x10;
+        }
+      case 0x400:
+        {
+          if (*pnType) {
+            if (*pnType != 1) {
+              return 2;
+            }
+
+            nCodeIndex = 0;
+            psCodeTable = pWorkBuf->nChCodes;
+            pDistCodeEntry = gaPKWARE_DistCodeTable;
+            do {
+              pNextDistCodeEntry = pDistCodeEntry + 1;
+              pWorkBuf->nChBits[nCodeIndex] = gaCRT_PKWareLenBitsTable[nCodeIndex] + 1;
+              nCodeIndex++;
+              *psCodeTable = *pDistCodeEntry * 2;
+              psCodeTable++;
+              pDistCodeEntry = pNextDistCodeEntry;
+            } while (pNextDistCodeEntry < (short*)s_PKWARE_Data_Compression_Library_f_0074be60);
+          } else {
+            sCodeValue = 0;
+            nCodeIndex = 0;
+            psCodeTable = pWorkBuf->nChCodes;
+            do {
+              pWorkBuf->nChBits[nCodeIndex] = '\t';
+              *psCodeTable = sCodeValue;
+              nCodeIndex++;
+              sCodeValue += 2;
+              psCodeTable++;
+            } while (nCodeIndex < 0x100);
+          }
+
+          nLenCodeGroup = 0;
+          do {
+            if (1 << D2_SHIFT_COUNT(gbCRT_BitwiseOpState[nLenCodeGroup])) {
+              nGroupCodeIndex = 0;
+              psCodeTable = pWorkBuf->nChCodes + nCodeIndex;
+              do {
+                nNextGroupCodeIndex = nGroupCodeIndex + 1;
+                pWorkBuf->nChBits[nCodeIndex] = gbCRT_BitwiseOpState[nLenCodeGroup] + gaPKWARE_ExtraLenBitsTable[nLenCodeGroup] + '\x01';
+                nCodeIndex++;
+                *psCodeTable = (short int)nGroupCodeIndex << D2_SHIFT_COUNT(gaPKWARE_ExtraLenBitsTable[nLenCodeGroup] + 1) | (uint16_t)gaCRT_PKWareLenBaseTable[nLenCodeGroup] * 2 | 1;
+                nGroupCodeIndex = nNextGroupCodeIndex;
+                psCodeTable++;
+              } while ((uint32_t)(1 << D2_SHIFT_COUNT(gbCRT_BitwiseOpState[nLenCodeGroup])) > nNextGroupCodeIndex);
+            }
+
+            nLenCodeGroup++;
+          } while (nLenCodeGroup < 0x10);
+
+          implode::lmemcpy((uint32_t*)pWorkBuf->dist_codes, (uint32_t*)gaCRT_PKWareDistDecodeTable, 0x40);
+          implode::lmemcpy((uint32_t*)pWorkBuf->dist_bits, (uint32_t*)gaCRT_PKWareLitDecodeTable, 0x40);
+          WriteCmpData(pWorkBuf);
+          return 0;
+        }
+      default:
+        {
           return 1;
         }
-
-        pWorkBuf->dsize_bits++;
-        pWorkBuf->dsize_mask |= 0x20;
-      }
-
-      pWorkBuf->dsize_bits++;
-      pWorkBuf->dsize_mask |= 0x10;
     }
-    if (*pnType) {
-      if (*pnType != 1) {
-        return 2;
-      }
-
-      nCodeIndex = 0;
-      psCodeTable = pWorkBuf->nChCodes;
-      pDistCodeEntry = gaPKWARE_DistCodeTable;
-      do {
-        pNextDistCodeEntry = pDistCodeEntry + 1;
-        pWorkBuf->nChBits[nCodeIndex] = gaCRT_PKWareLenBitsTable[nCodeIndex] + 1;
-        nCodeIndex++;
-        *psCodeTable = *pDistCodeEntry * 2;
-        psCodeTable++;
-        pDistCodeEntry = pNextDistCodeEntry;
-      } while (pNextDistCodeEntry < (short*)s_PKWARE_Data_Compression_Library_f_0074be60);
-    } else {
-      uint16_t sCodeValue;
-      sCodeValue = 0;
-      nCodeIndex = 0;
-      psCodeTable = pWorkBuf->nChCodes;
-      do {
-        pWorkBuf->nChBits[nCodeIndex] = '\t';
-        *psCodeTable = sCodeValue;
-        nCodeIndex++;
-        sCodeValue += 2;
-        psCodeTable++;
-      } while (nCodeIndex < 0x100);
-    }
-
-    uint32_t nLenCodeGroup = 0;
-    do {
-      if (1 << D2_SHIFT_COUNT(gbCRT_BitwiseOpState[nLenCodeGroup])) {
-        nGroupCodeIndex = 0;
-        psCodeTable = pWorkBuf->nChCodes + nCodeIndex;
-        do {
-          nNextGroupCodeIndex = nGroupCodeIndex + 1;
-          pWorkBuf->nChBits[nCodeIndex] = gbCRT_BitwiseOpState[nLenCodeGroup] + gaPKWARE_ExtraLenBitsTable[nLenCodeGroup] + '\x01';
-          nCodeIndex++;
-          *psCodeTable = (short int)nGroupCodeIndex << D2_SHIFT_COUNT(gaPKWARE_ExtraLenBitsTable[nLenCodeGroup] + 1) | (uint16_t)gaCRT_PKWareLenBaseTable[nLenCodeGroup] * 2 | 1;
-          nGroupCodeIndex = nNextGroupCodeIndex;
-          psCodeTable++;
-        } while ((uint32_t)(1 << D2_SHIFT_COUNT(gbCRT_BitwiseOpState[nLenCodeGroup])) > nNextGroupCodeIndex);
-      }
-
-      nLenCodeGroup++;
-    } while (nLenCodeGroup < 0x10);
-
-    implode::lmemcpy((uint32_t*)pWorkBuf->dist_codes, (uint32_t*)gaCRT_PKWareDistDecodeTable, 0x40);
-    implode::lmemcpy((uint32_t*)pWorkBuf->dist_bits, (uint32_t*)gaCRT_PKWareLitDecodeTable, 0x40);
-    WriteCmpData(pWorkBuf);
-    return 0;
 }
 
 void WriteCmpData(TCmpStruct * pCmp) {
@@ -1198,11 +1205,11 @@ void FlushBuf(TCmpStruct * pCmp) {
     uint32_t dwBlockSize = 0x800;
     uint8_t* pDst = pCmp->out_buff;
     pCmp->write_buf(pDst, &dwBlockSize, pCmp->param);
+    uint8_t byCarryByte = pCmp->out_buff[0x800];
     uint8_t byPartialByte = pCmp->out_buff[pCmp->out_bytes];
     pCmp->out_bytes -= 0x800;
     lmemset((uint32_t*)pDst, 0, 0x802);
     if (pCmp->out_bytes) {
-      uint8_t byCarryByte = pCmp->out_buff[0x800];
       *pDst = byCarryByte;
     }
     if (!pCmp->out_bits) {

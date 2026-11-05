@@ -79,12 +79,12 @@ BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(D2ControlMsg * pControlMsg)
     BOOL bHasSaveFiles = MainMenus::SAVEFILE_FindAllSaveFiles();
     if (!bHasSaveFiles) {
       MainMenus::UIMENU_CreateHeroSinglePlayer();
-      return 1;
+    } else {
+      D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
+      MainMenus::FORMS_DestroyLists();
+      CharSel::UIMENU_CharacterSelectAllGameTypes();
     }
 
-    D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
-    MainMenus::FORMS_DestroyLists();
-    CharSel::UIMENU_CharacterSelectAllGameTypes();
     return 1;
 }
 

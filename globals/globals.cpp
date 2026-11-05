@@ -10919,7 +10919,6 @@ uint32_t DEFAULT_SECURITY_COOKIE = 0xbb40e64e; D2_GLOBAL_GUARD(DEFAULT_SECURITY_
 unsigned int gaCRT_FPremData_3 = 0x6a9a24; D2_GLOBAL_GUARD(gaCRT_FPremData_3, "gaCRT_FPremData_3");
 int TokenHashMapBucketSize = 0x10; D2_GLOBAL_GUARD(TokenHashMapBucketSize, "TokenHashMapBucketSize");
 D2BNetClientCallbacksStrc * gpBNetCallbacks = 0; D2_GLOBAL_GUARD(gpBNetCallbacks, "gpBNetCallbacks");
-int gnTileClipLeft = 0; D2_GLOBAL_GUARD(gnTileClipLeft, "gnTileClipLeft");
 uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "gbSmackerKeepTempFile");
 grDrawLine GLIDEDLL__grDrawLine_8 = (grDrawLine)0; D2_GLOBAL_GUARD(GLIDEDLL__grDrawLine_8, "GLIDEDLL__grDrawLine_8");
 grDepthMask GLIDEDLL_grDepthMask_4 = (grDepthMask)0; D2_GLOBAL_GUARD(GLIDEDLL_grDepthMask_4, "GLIDEDLL_grDepthMask_4");
@@ -11305,9 +11304,9 @@ uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Class::
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
@@ -11647,7 +11646,7 @@ uint16_t CharacterLookupTable[256] = {
     0x9f
 }; D2_GLOBAL_GUARD(CharacterLookupTable, "D2Lang::Unicode::UNISYS::CharacterLookupTable");
 
-} // namespace D2Client::UI::ui
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -11817,14 +11816,10 @@ namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
 
-namespace D2Client::Mouse {
+namespace D2Win::Src::D2WinMain {
 
-} // namespace D2Client::Mouse
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::Forms {
+namespace D2Win::D2GFX {
 
-} // namespace D2Client::Forms
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

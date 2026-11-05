@@ -189,7 +189,6 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
     D2RoomStrc** pAdjRoomList;
     uint32_t nAdjRoomCount;
     bool bSameOrAdjacentRoom;
-    eD2QuestState eQuestState;
     D2UnitStrc* pPlayerUnit_lcl = pUnit;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pQuestBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -246,13 +245,13 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
             /* GetQuestState(Khalim's Will=0x12, Completed=0): if Khalim's Will already
                          done, jump straight to Completed; else only to Step0x04 */ bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
             if (bQuestState) {
-              eQuestState = QUESTSTATE_Completed;
+              /* SetQuestState(Blackened Temple=0x15, => Completed=0 if Khalim's Will done,
+                         else Step0x04=4): record council kill */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
             } else {
-              eQuestState = QUESTSTATE_Step0x04;
+              /* SetQuestState(Blackened Temple=0x15, => Completed=0 if Khalim's Will done,
+                         else Step0x04=4): record council kill */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
             }
 
-            /* SetQuestState(Blackened Temple=0x15, => Completed=0 if Khalim's Will done,
-                         else Step0x04=4): record council kill */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
             /* SetQuestState(Blackened Temple=0x15, JustCompleted=0xd): trigger the in-game
                          completion/log notification */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
           }
@@ -666,7 +665,6 @@ void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUn
 }
 
 void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    eD2QuestState eQuestState;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
@@ -696,11 +694,9 @@ void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
 
     BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
     if (BVar1) {
-      eQuestState = QUESTSTATE_Completed;
-      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
     } else {
-      eQuestState = QUESTSTATE_Step0x04;
-      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
     }
 
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
@@ -1078,7 +1074,7 @@ bool __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBufferStr
     if (bQuestState) {
       /* GetQuestState(Blackened Temple=0x15, JustCompleted=0xd): bumps completed
                          status byte 0xb -> 0xd */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-      *szText = bQuestState != 0 ? 13 : 11;
+      *szText = !bQuestState ? 0xb : 0xd;
       return true;
     }
 

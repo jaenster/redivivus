@@ -899,11 +899,7 @@ static int __stdcall GFX_LoadCompositCof(int * pnOutCofData, uint32_t nAnimMode,
         exit(-1);
       }
 
-      pNewEntry->nAnimMode = 0;
-      pNewEntry->nWeaponParam = 0;
-      pNewEntry->pCofDataArray = 0;
-      pNewEntry->nCofDataCount = 0;
-      pNewEntry->pNext = 0;
+      memset(pNewEntry, 0, sizeof(*pNewEntry));
       eUnitType = Source::ClientEngine::CLIENT_GetEffectiveUnitType(pUnit);
       pTextureCache = &gPlayerCofCache;
       if (eUnitType != UNIT_PLAYER) {
@@ -3105,8 +3101,8 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
     nDrawX = nDrawX + nTargetX + (nOffsetX - nWorldOffsetX);
     int32_t nWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
     nOffsetX = nOffsetY - nWorldOffsetY;
-    int32_t nTargetY = D2Common::Units::GetTargetY(pUnit);
-    nOffsetY = nTargetY + nOffsetX;
+    nOffsetY = D2Common::Units::GetTargetY(pUnit);
+    nOffsetY += nOffsetX;
     int32_t nParticleY = Particle::PARTICLE_GetPosYShifted(pUnit);
     int32_t nShadowY = nParticleY + nOffsetY;
     if (bPerspective) {

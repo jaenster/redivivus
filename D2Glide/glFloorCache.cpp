@@ -101,12 +101,11 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
 static void GLFLOOR_AppendNodeToTail(GlFloorCacheStrc * pCache, GlFloorCacheNodeStrc * pNode) {
     if (!pCache->pActiveHead) {
       pCache->pActiveHead = pNode;
-      pCache->pActiveTail = pNode;
-      return;
+    } else {
+      pCache->pActiveTail->pNext = pNode;
+      pNode->pPrev = pCache->pActiveTail;
     }
 
-    pCache->pActiveTail->pNext = pNode;
-    pNode->pPrev = pCache->pActiveTail;
     pCache->pActiveTail = pNode;
 }
 
@@ -123,12 +122,10 @@ GlFloorCacheNodeStrc * __fastcall GLFLOOR_RemoveNodeByIndex(GlFloorCacheStrc * p
       pCache->pActiveHead = pNode;
       if (pNode) {
         pNode->pPrev = 0;
-        pActiveHead->pNext = 0;
-        pActiveHead->pPrev = 0;
-        return pActiveHead;
+      } else {
+        pCache->pActiveTail = 0;
       }
 
-      pCache->pActiveTail = 0;
       pActiveHead->pNext = 0;
       pActiveHead->pPrev = 0;
       return pActiveHead;
@@ -137,13 +134,11 @@ GlFloorCacheNodeStrc * __fastcall GLFLOOR_RemoveNodeByIndex(GlFloorCacheStrc * p
       pActiveHead = pCache->pActiveTail->pPrev;
       pCache->pActiveTail = pActiveHead;
       pActiveHead->pNext = 0;
-      pNode->pNext = 0;
-      pNode->pPrev = 0;
-      return pNode;
+    } else {
+      pNode->pPrev->pNext = pNode->pNext;
+      pNode->pNext->pPrev = pNode->pPrev;
     }
 
-    pNode->pPrev->pNext = pNode->pNext;
-    pNode->pNext->pPrev = pNode->pPrev;
     pNode->pNext = 0;
     pNode->pPrev = 0;
     return pNode;
@@ -171,13 +166,12 @@ static int GLFLOOR_AllocateNode(GlFloorCacheStrc * pCache) {
       if (!pCache->pActiveHead) {
         pCache->nUsedCount++;
         pCache->pActiveHead = pGVar1;
-        pCache->pActiveTail = pGVar1;
-        return pGVar1->nIndex + 1;
+      } else {
+        pCache->pActiveTail->pNext = pGVar1;
+        pGVar1->pPrev = pCache->pActiveTail;
+        pCache->nUsedCount++;
       }
 
-      pCache->pActiveTail->pNext = pGVar1;
-      pGVar1->pPrev = pCache->pActiveTail;
-      pCache->nUsedCount++;
       pCache->pActiveTail = pGVar1;
       return pGVar1->nIndex + 1;
     }

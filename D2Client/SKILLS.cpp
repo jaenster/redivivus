@@ -787,7 +787,8 @@ static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32
       sSkillArg.nFunctionParam = ullSeedPair.nSeedLow;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
       nSkillParam1 = GetSkilParam1(nCount);
-      D2Common::Units::Missile::SetTargetX(pMissileUnit, nSkillParam1 + 1);
+      nSkillParam1 += 1;
+      D2Common::Units::Missile::SetTargetX(pMissileUnit, nSkillParam1);
       nSpreadTableOffset += nSkillLevel * 4;
     } while (nSpreadTableOffset < 0x100);
 }
@@ -1028,7 +1029,8 @@ static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_
       sSkillArg.nFunctionParam = ullSeedPair.nSeedLow;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
       nSkillParam1 = GetSkilParam1(nCount);
-      D2Common::Units::Missile::SetTargetX(pMissileUnit, nSkillParam1 + 1);
+      nSkillParam1 += 1;
+      D2Common::Units::Missile::SetTargetX(pMissileUnit, nSkillParam1);
       nSpreadTableOffset += nSkillLevel * 4;
     } while (nSpreadTableOffset < 0x100);
 }

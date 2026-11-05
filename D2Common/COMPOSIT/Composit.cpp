@@ -136,36 +136,6 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
     uint8_t bHasComponent;
     bHasComponent = '\0';
     switch (nUnitType) {
-      default:
-        {
-          switch (nUnitType) {
-            case 1:
-              {
-                pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassIndex);
-                if (!pMonStats2) {
-                  nHandedness = COMPOSIT_GetItemTypeIndex(0x20687468);
-                  *pnWeaponClassIndex = nHandedness;
-                  return 0x20687468;
-                }
-                if (nMode && nMode != 0xc || *((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[0]) {
-                  nHandedness = COMPOSIT_GetItemTypeIndex(pMonStats2->BaseW);
-                  *pnWeaponClassIndex = nHandedness;
-                  return pMonStats2->BaseW;
-                }
-              }
-            case 2:
-              {
-                nHandedness = COMPOSIT_GetItemTypeIndex(0x20687468);
-                *pnWeaponClassIndex = nHandedness;
-                return 0x20687468;
-              }
-            default:
-              {
-                *pnWeaponClassIndex = 0;
-                return 0;
-              }
-          }
-        }
       case 0:
         {
           pEquippedItem = 0;
@@ -278,6 +248,31 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
           nHandedness = COMPOSIT_GetItemTypeIndex(bIsWeapon);
           *pnWeaponClassIndex = nHandedness;
           return bIsWeapon;
+        }
+      case 1:
+        {
+          pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassIndex);
+          if (!pMonStats2) {
+            nHandedness = COMPOSIT_GetItemTypeIndex(0x20687468);
+            *pnWeaponClassIndex = nHandedness;
+            return 0x20687468;
+          }
+          if (nMode && nMode != 0xc || *((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[0]) {
+            nHandedness = COMPOSIT_GetItemTypeIndex(pMonStats2->BaseW);
+            *pnWeaponClassIndex = nHandedness;
+            return pMonStats2->BaseW;
+          }
+        }
+      case 2:
+        {
+          nHandedness = COMPOSIT_GetItemTypeIndex(0x20687468);
+          *pnWeaponClassIndex = nHandedness;
+          return 0x20687468;
+        }
+      default:
+        {
+          *pnWeaponClassIndex = 0;
+          return 0;
         }
     }
 }

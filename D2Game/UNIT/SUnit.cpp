@@ -112,7 +112,7 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 #endif
 
 static int ganUnitHashTableBaseOffsets[6] = { 0x1120, 0x1320, 0x1520, 0x1920, 0x1720, 0x0 }; D2_STATIC_GUARD(ganUnitHashTableBaseOffsets, "ganUnitHashTableBaseOffsets");
-uint32_t gnSeedCounter = 0; D2_GLOBAL_GUARD(gnSeedCounter, "gnSeedCounter");
+static uint32_t gnSeedCounter = 0; D2_STATIC_GUARD(gnSeedCounter, "gnSeedCounter");
 
 namespace D2Game::UNIT::SUnit {
 
@@ -490,11 +490,10 @@ void __fastcall InitAnimFrame(D2UnitStrc * pUnit) {
     pUnit->nGfxCurrentFrame = 0;
     if (pUnit->pPath.pStaticPath) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\SUnit.cpp", 0x578);
-      pUnit->nFrameCount = pUnit->pAnimData->nFrames << 8;
-      return;
+    } else {
+      D2Common::Units::SetAnimData(pUnit, pUnit->eUnitType, pUnit->nClassId, pUnit->eAnimMode.ePlayerMode);
     }
 
-    D2Common::Units::SetAnimData(pUnit, pUnit->eUnitType, pUnit->nClassId, pUnit->eAnimMode.ePlayerMode);
     pUnit->nFrameCount = pUnit->pAnimData->nFrames << 8;
 }
 
@@ -1902,17 +1901,17 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 
         GAME::Event::SetEventMapReveal(pGameLocal, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, pGameLocal->dwGameFrame + 0x32, PLAYER_CancelMapReveal, 0, 0);
         PLAYER::PlayerPets::PETS_ManagePetsByType(pGameSave, pUnit, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
-        return 1;
-      }
-
-      D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-      if (nRelocMode) {
-        pUnit->eUnitFlagsEx |= 0x800;
       } else {
-        pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
+        D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
+        if (nRelocMode) {
+          pUnit->eUnitFlagsEx |= 0x800;
+        } else {
+          pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
+        }
+
+        UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
       }
 
-      UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
       return 1;
     }
 }
@@ -2005,21 +2004,14 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
     uint32_t dwSavedESI;
     uint32_t dwSavedRetAddr;
     eD2UnitType eUnitTypeCopy;
-    switch (eUnitType) {
-      case UNIT_PLAYER:
-        {
-          if ((uint32_t)nClassId >= 7) {
-            return nullptr;
-          }
-
-          break;
-        }
-      default:
-        {
-          if (eUnitType == UNIT_MONSTER && (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nClassId) || !(*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xf) & (uint8_t)gadwBitMasks[1]))) {
-            return nullptr;
-          }
-        }
+    if (eUnitType != UNIT_PLAYER) {
+      if (eUnitType == UNIT_MONSTER && (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nClassId) || !(*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xf) & (uint8_t)gadwBitMasks[1]))) {
+        return nullptr;
+      }
+    } else {
+      if ((uint32_t)nClassId >= 7) {
+        return nullptr;
+      }
     }
 
     D2UnitStrc* pAllocUnit = D2Common::Units::AllocUnit(pGame->pMemoryPool, eUnitType);
@@ -2301,36 +2293,42 @@ D2UnitStrc * __fastcall SpawnUnitByType(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2ItemGenContextStrc sItemGenCtx;
     D2UnitStrc* pCreatedUnit;
     pCreatedUnit = 0;
-    if (eUnitType != UNIT_MONSTER) {
-      if (eUnitType == UNIT_OBJECT) {
-        if (nClassId > 0x23d) {
-          pCreatedUnit = Objects::SERVER_InitUnitObject(pGame, pRoom, nClassId, nX, nY, bInitItem);
-          goto flag_created_unit;
+    switch (eUnitType) {
+      case UNIT_MONSTER:
+        {
+          pCreatedUnit = Monsters::Spawn::SpawnMonster(pGame, pRoom, nClassId, nX, nY, bInitItem);
+          break;
         }
-        if (nClassId == 0x23d) {
-          return nullptr;
+      case UNIT_OBJECT:
+        {
+          if (nClassId > 0x23d) {
+            pCreatedUnit = Objects::SERVER_InitUnitObject(pGame, pRoom, nClassId, nX, nY, bInitItem);
+            goto flag_created_unit;
+          }
+          if (nClassId == 0x23d) {
+            return nullptr;
+          }
         }
-      }
-
-      pDVar1 = CreateUnit(eUnitType, nClassId, nX, nY, pGame, pRoom, 1, bInitItem, nullptr);
-      pCreatedUnit = pDVar1;
-      if (eUnitType == UNIT_ITEM) {
-        if (!pDVar1) {
+      default:
+        {
+          pDVar1 = CreateUnit(eUnitType, nClassId, nX, nY, pGame, pRoom, 1, bInitItem, nullptr);
           pCreatedUnit = pDVar1;
-          return pDVar1;
-        }
+          if (eUnitType == UNIT_ITEM) {
+            if (!pDVar1) {
+              pCreatedUnit = pDVar1;
+              return pDVar1;
+            }
 
-        memset(&sItemGenCtx, 0, 0x84);
-        sItemGenCtx.eQuality = QUALITY_NORMAL;
-        sItemGenCtx.nItemLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-        bItemInitOk = ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGame, &pCreatedUnit, &sItemGenCtx, 1);
-        if (!bItemInitOk) {
-          FreeServerUnit(pGame, pCreatedUnit);
-          return nullptr;
+            memset(&sItemGenCtx, 0, 0x84);
+            sItemGenCtx.eQuality = QUALITY_NORMAL;
+            sItemGenCtx.nItemLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+            bItemInitOk = ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGame, &pCreatedUnit, &sItemGenCtx, 1);
+            if (!bItemInitOk) {
+              FreeServerUnit(pGame, pCreatedUnit);
+              return nullptr;
+            }
+          }
         }
-      }
-    } else {
-      pCreatedUnit = Monsters::Spawn::SpawnMonster(pGame, pRoom, nClassId, nX, nY, bInitItem);
     }
 
     flag_created_unit:

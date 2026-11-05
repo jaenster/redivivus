@@ -88,11 +88,11 @@ int __fastcall Unreferenced_00478a90(int param_1) {
 // @sourcefile .\GAME\RosterPets.cpp
 static void __fastcall ROSTERPETS_RemoveRosterPetsBySkillID(int32_t nRosterGUID) {
     D2RosterPetStrc* pPrev = 0;
-    D2RosterPetStrc* pMemoryToFree = pRosterPet;
     if (!pRosterPet) {
       return;
     }
 
+    D2RosterPetStrc* pMemoryToFree = pRosterPet;
     while (pMemoryToFree->nSkillID != 7 || pMemoryToFree->nRosterGUID != nRosterGUID) {
       D2RosterPetStrc** ppNext;
       ppNext = &pMemoryToFree->pNext;
@@ -105,11 +105,10 @@ static void __fastcall ROSTERPETS_RemoveRosterPetsBySkillID(int32_t nRosterGUID)
 
     if (pPrev) {
       pPrev->pNext = pMemoryToFree->pNext;
-      D2_FREE_AT(pMemoryToFree, ".\\GAME\\RosterPets.cpp", 0x59);
-      return;
+    } else {
+      pRosterPet = pMemoryToFree->pNext;
     }
 
-    pRosterPet = pMemoryToFree->pNext;
     D2_FREE_AT(pMemoryToFree, ".\\GAME\\RosterPets.cpp", 0x59);
 }
 
@@ -432,16 +431,15 @@ void __stdcall ROSTER_UpdateHostileColors() {
 void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_t eLevel) {
     D2RosterPetStrc* pRosterPet;
     pRosterPet = RosterPets::pRosterPet;
-    if (!RosterPets::pRosterPet) {
-      return;
-    }
-
-    while (pRosterPet->nRosterGUID != nRosterGUID) {
-      pRosterPet = pRosterPet->pNext;
-      if (pRosterPet) {
-        continue;
+    while (pRosterPet) {
+      if (pRosterPet->nRosterGUID == nRosterGUID) {
+        break;
       }
 
+      pRosterPet = pRosterPet->pNext;
+    }
+
+    if (!pRosterPet) {
       return;
     }
 

@@ -868,20 +868,24 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
         apply_stat_value:
         nStatScaled = nStatValue << D2_SHIFT_COUNT(pStatCost->valshift);
         if (nStatScaled > 0) {
-          if (eUnitStat != UNITSTAT_hitpoints) {
-            if (eUnitStat == UNITSTAT_hpregen) {
-              eUnitType = D2Client::Units::GetType(pUnit);
-              if (eUnitType == UNIT_PLAYER) {
-                nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+          switch (eUnitStat) {
+            case UNITSTAT_hitpoints:
+              {
+                bHpModified = true;
+                LAB_005be567:
+                eUnitType = D2Client::Units::GetType(pUnit);
+                if (eUnitType == UNIT_PLAYER) {
+                  nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+                }
+
+                break;
               }
-            }
-          } else {
-            bHpModified = true;
-            eUnitType = D2Client::Units::GetType(pUnit);
-            if (eUnitType == UNIT_PLAYER) {
-              nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
-            }
+            case UNITSTAT_hpregen:
+              {
+                goto LAB_005be567;
+              }
           }
+
           if ((int)nItemClassId <= 0) {
             nPotionDelay = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
             if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < sgptDataTable->nTxtItemStatCostSize) {
@@ -964,15 +968,19 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
       nItemClassId = pItem->nClassId;
     }
 
-    D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
+    D2ItemsTxt* pItemTxt;
+    pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemTxt) {
       return 0;
     }
 
     nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, pItemTxt->dwLen);
-    eD2States eState = (eD2States)pItemTxt->wState;
-    D2StatListExStrc* pActiveStatList = 0;
-    int nBuffRemainingFrames = 0;
+    eD2States eState;
+    eState = (eD2States)pItemTxt->wState;
+    D2StatListExStrc* pActiveStatList;
+    pActiveStatList = 0;
+    int nBuffRemainingFrames;
+    nBuffRemainingFrames = 0;
     if ((int)nItemClassId > 0) {
       if ((int)eState <= 0) {
         return 0;
@@ -988,8 +996,10 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
       }
     }
 
-    BOOL bApplied = 0;
-    bool bHpModified = false;
+    BOOL bApplied;
+    bApplied = 0;
+    bool bHpModified;
+    bHpModified = false;
     for (iStatEntry = 0; iStatEntry < 3; iStatEntry++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatEntry * 2 + 0x3e);
       if ((int)eUnitStat < 0 || (int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
@@ -1005,20 +1015,24 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 
         nStatScaled = nStatValue << D2_SHIFT_COUNT(pStatCost->valshift);
         if (nStatScaled > 0) {
-          if (eUnitStat != UNITSTAT_hitpoints) {
-            if (eUnitStat == UNITSTAT_hpregen) {
-              eUnitType = D2Client::Units::GetType(pUnit);
-              if (eUnitType == UNIT_PLAYER) {
-                nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+          switch (eUnitStat) {
+            case UNITSTAT_hitpoints:
+              {
+                bHpModified = true;
+                LAB_005be8d3:
+                eUnitType = D2Client::Units::GetType(pUnit);
+                if (eUnitType == UNIT_PLAYER) {
+                  nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+                }
+
+                break;
               }
-            }
-          } else {
-            bHpModified = true;
-            eUnitType = D2Client::Units::GetType(pUnit);
-            if (eUnitType == UNIT_PLAYER) {
-              nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
-            }
+            case UNITSTAT_hpregen:
+              {
+                goto LAB_005be8d3;
+              }
           }
+
           if ((int)nItemClassId <= 0) {
             nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
             if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < sgptDataTable->nTxtItemStatCostSize) {
@@ -2326,10 +2340,10 @@ BOOL __fastcall ITEMEVENT_CastOnStriking(::SGAMEDATA * pGame, uint32_t nUnitEven
       nRandRoll = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
       nCastX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
       Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, eSkillLevel, nCastX, nRandRoll, nProcChance);
-      return 1;
+    } else {
+      Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, eSkillLevel, pTarget, 0);
     }
 
-    Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, eSkillLevel, pTarget, 0);
     return 1;
 }
 
@@ -2358,10 +2372,10 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       nCastY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
       nCastX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
       Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, eSkillLevel, nCastX, nCastY, nProcChance);
-      return 1;
+    } else {
+      Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, eSkillLevel, pTarget, 0);
     }
 
-    Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, eSkillLevel, pTarget, 0);
     return 1;
 }
 

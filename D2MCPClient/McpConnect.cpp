@@ -33,6 +33,19 @@
 #endif
 
 
+#ifndef RECON_FPTD_pfnMCPGameListEntry
+#define RECON_FPTD_pfnMCPGameListEntry
+typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
+#endif
+#ifndef RECON_FPTD_pfnVoidNoArgCallback
+#define RECON_FPTD_pfnVoidNoArgCallback
+typedef void (__stdcall *pfnVoidNoArgCallback)();
+#endif
+#ifndef RECON_FPTD_pfnMCPMessage
+#define RECON_FPTD_pfnMCPMessage
+typedef void (__fastcall *pfnMCPMessage)(uint32_t nMessageId, uint32_t nDataLength, void * pMessageData);
+#endif
+
 static uint32_t g_nMCPGameDifficulty = 0; D2_STATIC_GUARD(g_nMCPGameDifficulty, "g_nMCPGameDifficulty");
 static uint32_t g_bMCPCharCreateSuccess = 0; D2_STATIC_GUARD(g_bMCPCharCreateSuccess, "g_bMCPCharCreateSuccess");
 static char g_szMCPGamePassword[28] = {}; D2_STATIC_GUARD(g_szMCPGamePassword, "g_szMCPGamePassword");
@@ -73,9 +86,9 @@ void * CharListPacket = 0; D2_GLOBAL_GUARD(CharListPacket, "D2MCPClient::McpConn
 } // namespace D2MCPClient::McpConnect
 pfnMCPPacketCallback g_pfnMCPCallback1 = (pfnMCPPacketCallback)0; D2_GLOBAL_GUARD(g_pfnMCPCallback1, "g_pfnMCPCallback1");
 pfnMCPPacketCallback g_pfnMCPCallback2 = (pfnMCPPacketCallback)0; D2_GLOBAL_GUARD(g_pfnMCPCallback2, "g_pfnMCPCallback2");
-pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
-pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCompleteCallback, "g_pfnMCPGameListCompleteCallback");
-pfnMCPMessage g_pfnMCPMessageCallback = (pfnMCPMessage)0; D2_GLOBAL_GUARD(g_pfnMCPMessageCallback, "g_pfnMCPMessageCallback");
+static pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_STATIC_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
+static pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(g_pfnMCPGameListCompleteCallback, "g_pfnMCPGameListCompleteCallback");
+static pfnMCPMessage g_pfnMCPMessageCallback = (pfnMCPMessage)0; D2_STATIC_GUARD(g_pfnMCPMessageCallback, "g_pfnMCPMessageCallback");
 uint8_t gMCPGameListBuffer[28680] = {}; D2_GLOBAL_GUARD(gMCPGameListBuffer, "gMCPGameListBuffer");
 
 namespace D2MCPClient::McpConnect {

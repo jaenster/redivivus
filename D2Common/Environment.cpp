@@ -166,13 +166,13 @@ static void DRLGENV_UpdateLightIntensity(eD2LevelId eLevel, D2DrlgEnvironmentStr
 
         fVar1 = (long double)pDrlgEnvironment->nTicks / (long double)pDrlgEnvironment->nTimeRate / (long double)180.0 * (long double)3.1415927410125732;
         if (pDrlgEnvironment->nTicks < pDrlgEnvironment->nTimeRate * 0xb4) {
-          fFloatResult = CRT_CICos(fVar1);
+          fFloatResult = cos((double)fVar1);
           pDrlgEnvironment->fCos = (float)-fFloatResult;
-          fVar1 = CRT_CISin((long double)(double)fVar1);
+          fVar1 = sin((double)fVar1);
         } else {
-          fFloatResult = CRT_CICos(fVar1);
+          fFloatResult = cos((double)fVar1);
           pDrlgEnvironment->fCos = (float)-fFloatResult;
-          fVar1 = CRT_CISin((long double)(double)fVar1);
+          fVar1 = sin((double)fVar1);
           fVar1 *= (long double)0.5;
         }
 

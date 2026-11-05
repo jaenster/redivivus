@@ -1481,14 +1481,14 @@ void __fastcall InitInventory() {
 
     D2UnitStrc* pUnit;
     pUnit = UNIT::Player::GetPlayerUnit_UI();
+    D2InventoryStrc* pInventory;
+    pInventory = pUnit->pInventory;
     bFlagResult = GAME::Game::CLIENT_CheckExpansion();
     D2Common::Units::GetInventoryPage(pUnit, '\0', bFlagResult);
     InitializeiInventoryPages();
     int nBodySlot;
     nBodySlot = 0;
     do {
-      D2InventoryStrc* pInventory;
-      pInventory = pUnit->pInventory;
       pPairedArmItem = 0;
       pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodySlot);
       if (pSlotItem) {
@@ -3222,9 +3222,9 @@ void __stdcall INV_HandleInventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     gbInvPanelButtonPressed = 0;
     gnInvMouseY = 0;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+    D2InventoryStrc* pInventory = pPlayer->pInventory;
     BOOL nResult = Panel::PANEL_CalculateBeltSlotIndex(pMsg);
     if (!nResult) {
-      D2InventoryStrc* pInventory = pPlayer->pInventory;
       if (nX >= ScreenSizeX - gnPanelOffsetX - 0x12e && nX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
         ui::SetUIFlag(UI_INVENTORY, UI_RESET, 0);
         return;
@@ -4058,7 +4058,6 @@ void __stdcall INV_InitNpcButtonsByClass() {
 void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     D2UnitStrc* pPlayerUnit_lcl;
     uint16_t* pwString;
-    BOOL bIsExpansionGfx;
     int32_t iTmp;
     int nCoinY;
     char szGoldAmountBuffer[20];
@@ -4071,9 +4070,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     int nButtonX;
     int nGoldY;
     int nCoinX;
+    int nTooltipY;
     eD2UnitStat eStatType;
     int32_t nColorFlag;
-    int nTooltipXPos;
     int32_t nPrevFont;
     nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     int nTextY;
@@ -4109,7 +4108,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
         nTextY = gnPanelOffsetY - 0x45 + ScreenSizeY;
       }
     } else {
-      int nTooltipY;
+      BOOL bIsExpansionGfx;
       eStatType = UNITSTAT_goldbank;
       pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
@@ -4134,9 +4133,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
           nTooltipY = gnPanelOffsetY - 0x1ca + ScreenSizeY;
           show_gold_button_tooltip:
           nColorFlag = 0;
-          iTmp = 0;
-          nTooltipXPos = gnPanelOffsetX + 0x35;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), nTooltipXPos, nTooltipY, iTmp, nColorFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), gnPanelOffsetX + 0x35, nTooltipY, 0, nColorFlag);
         }
       } else {
         bIsExpansionGfx = INV_IsMouseInRect(0x14, 0x12, gnPanelOffsetY - 0xf2 + ScreenSizeY, gnPanelOffsetX + 0x49);
@@ -4170,10 +4167,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
       iTmp = nCoinX + 2;
     } else {
       if (nGoldPanelMode != 1) {
-        bIsExpansionGfx = 0;
-        iTmp = 0;
-        nTextY = gnPanelOffsetX + 0x15;
-        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), nTextY, nCoinY, iTmp, bIsExpansionGfx);
+        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), gnPanelOffsetX + 0x15, nCoinY, 0, 0);
         D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
         return;
       }
@@ -4835,10 +4829,11 @@ void __stdcall INV_HandleTradeLeftClick(D2UIMouseMsgStrc * pMsg) {
     gnInvMouseY = 0;
     D2UnitStrc* pCursorItem_lcl;
     pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
+    D2InventoryStrc* pTradeInventory;
+    pTradeInventory = pCursorItem_lcl->pInventory;
     BOOL nBodyLoc;
     nBodyLoc = Panel::PANEL_CalculateBeltSlotIndex(pMsg);
     if (!nBodyLoc) {
-      D2InventoryStrc* pTradeInventory = pCursorItem_lcl->pInventory;
       pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pTradeInventory);
       if (!pCursorItem_lcl) {
         nBodyLoc = INV_IsMouseOverCloseButton(nMouseX, nMouseY);
@@ -5445,10 +5440,11 @@ void __stdcall INV_HandleCubeLeftClick(D2UIMouseMsgStrc * pMsg) {
     gpInvCursorItem = uMouseY;
     D2UnitStrc* pPlayerOrCursorItem;
     pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
+    D2InventoryStrc* pInventory;
+    pInventory = pPlayerOrCursorItem->pInventory;
     uint32_t bHoverFlag;
     bHoverFlag = Panel::PANEL_GetBeltSlotHoverFlag();
     if (!bHoverFlag) {
-      D2InventoryStrc* pInventory = pPlayerOrCursorItem->pInventory;
       pPlayerOrCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
       if (!pPlayerOrCursorItem) {
         nHitTest = INV_IsMouseOverCloseButton(uMouseX, uMouseY);
@@ -5622,7 +5618,6 @@ void __stdcall INV_FreeCubeImages() {
 void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId) {
     BOOL bAlreadyDone;
     char szPathBuffer[260];
-    eD2Quests nQuestId;
     D2BitBufferStrc* pBitBuffer;
     pBitBuffer = npcmenu::GetQuestInfo();
     if (nMenuActionId == 0x20747368) {
@@ -5635,8 +5630,7 @@ void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId) {
         return;
       }
 
-      nQuestId = QUEST_TheHoradricStaff;
-      D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId, QUESTSTATE_Step0x11);
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x11);
     } else {
       if (nMenuActionId != 0x20326671) {
         goto start_anim;
@@ -5650,8 +5644,7 @@ void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId) {
         return;
       }
 
-      nQuestId = QUEST_KhalimsWill;
-      D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId, QUESTSTATE_Step0x11);
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x11);
     }
 
     start_anim:
@@ -6118,11 +6111,12 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
           iServerStat = UNIT::GetClassId(pUnit);
           if (iServerStat == 0x10f) {
             eStatId = UNITSTAT_dexterity;
+            iDamageValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
           } else {
             eStatId = UNITSTAT_strength;
+            iDamageValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
           }
 
-          iDamageValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStatId, 0);
           iStatRaw += iDamageValue;
         }
         if (iStatRaw <= -0x5a) {
@@ -6618,8 +6612,7 @@ static void INV_DrawHirelingEquippedItems(D2UnitStrc * pMercUnit) {
 }
 
 int Unreferenced_0048b640() {
-    int32_t iVar2 = 0;
-    iVar2 = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, iVar2);
+    int32_t iVar2 = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (iVar2 != -1) {
       D2UnitStrc* pDVar1;
       pDVar1 = UNIT::Player::UNITS_FindClientSideUnit(iVar2, UNIT_MONSTER);
@@ -6639,8 +6632,7 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
     int nCurMouseX;
     int nCurMouseY;
     int nScreenHalfWidth;
-    int32_t nMercGuid = 0;
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
+    int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid != -1) {
       D2UnitStrc* pUnit;
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
@@ -6694,8 +6686,7 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
     uint32_t nSlotLeft;
     uint32_t nSlotTop;
     int32_t nMercGuid;
-    nMercGuid = 0;
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
+    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid != -1) {
       D2UnitStrc* pPlayerUnit_lcl;
       pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
@@ -6800,8 +6791,7 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
     int nScreenBottom;
     int nScreenHalfWidth;
     D2InventoryStrc* pInventory;
-    int32_t nMercGuid = 0;
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
+    int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid != -1) {
       D2UnitStrc* pUnit;
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
@@ -9283,9 +9273,7 @@ void __stdcall DRAW_UI_Inventory() {
       bIsTwoHandedEquipped = D2CLIENT_GetTradeAcceptedFlags();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
-      bIsExpansion = 0;
-      bIsTwoHandedEquipped = 0x1b - gnPanelOffsetY;
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, 0x1b - gnPanelOffsetY, 0, 0);
       bIsExpansion = 0;
       bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
       nDrawY = 0;
@@ -9297,9 +9285,7 @@ void __stdcall DRAW_UI_Inventory() {
       bIsTwoHandedEquipped = D2CLIENT_GetTradePlayerGoldAmount();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
-      bIsExpansion = 0;
-      bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, 0xf2 - gnPanelOffsetY, 0, 0);
     }
 
     byPrevInvPage = CurrentInventoryPage;
@@ -9422,11 +9408,16 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
       if (pUnit != pTargetItem) {
         return 0;
       }
-      if (cPage == '\x01') {
-        return 0;
-      }
-      if (cPage == '\x02') {
-        return 0;
+
+      switch (cPage) {
+        case '\x01':
+          {
+            return 0;
+          }
+        case '\x02':
+          {
+            return 0;
+          }
       }
 
       nCallResult = INV_CheckActionThrottle();
@@ -11536,8 +11527,7 @@ void __stdcall DrawMercInventory() {
       return;
     }
 
-    int32_t nMercGuid = 0;
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
+    int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid == -1) {
       ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
       return;

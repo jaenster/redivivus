@@ -401,13 +401,7 @@ void __fastcall Q24_StartDarkWandererPortalTimer(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     pA3Q7QuestData->bTimerStarted = true;
-    if (!pUnit) {
-      pA3Q7QuestData->nDarkWandererGUID = -1;
-      AddQuestTimer(pQuestData, Q24_TimerCallback_SpawnPortals, 2);
-      return;
-    }
-
-    pA3Q7QuestData->nDarkWandererGUID = pUnit->nUnitGUID;
+    pA3Q7QuestData->nDarkWandererGUID = !pUnit ? -1 : pUnit->nUnitGUID;
     AddQuestTimer(pQuestData, Q24_TimerCallback_SpawnPortals, 2);
 }
 

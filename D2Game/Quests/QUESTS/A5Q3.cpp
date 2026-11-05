@@ -201,14 +201,13 @@ BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     BOOL bHasAiSub = Monster::MonsterAI::HasAiSub(pMonsterAi);
     if (bHasAiSub) {
       Monster::MonsterAI::ClearAISub(pGame, pUnit, Q33_SendQuestStatePacket, false);
-      return 1;
-    }
-
-    Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
-    Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillInfo, 1);
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
-    if (pQuestData) {
-      pQuestData->pQuestSpecificData.pA5Q3->bFrozenAnyaDespawned = 1;
+    } else {
+      Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
+      Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillInfo, 1);
+      D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
+      if (pQuestData) {
+        pQuestData->pQuestSpecificData.pA5Q3->bFrozenAnyaDespawned = 1;
+      }
     }
 
     return 1;
@@ -792,19 +791,26 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     int nTargetClassId;
     eD2QuestState eQuestState;
     uint32_t nGossipIndex;
-    ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bIsJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-    BOOL bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-    D2UnitStrc* pTargetUnit = pQuestArgs->pTarget;
+    ::SGAMEDATA* pGame;
+    pGame = pQuestData->pGame;
+    D2UnitDataPlayerStrc* pPlayerData;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer;
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL bIsJustCompleted;
+    bIsJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+    BOOL bIsCompleted;
+    bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
+    D2UnitStrc* pTargetUnit;
+    pTargetUnit = pQuestArgs->pTarget;
     if (!pTargetUnit) {
       nTargetClassId = -1;
     } else {
       nTargetClassId = pTargetUnit->nClassId;
     }
 
-    D2QuestDataA5Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q3;
+    D2QuestDataA5Q3Strc* pQuestSpecificData;
+    pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q3;
     if (nTargetClassId == 0x20f) {
       if (pQuestData->nStateFlag != 6) {
         return;
@@ -848,18 +854,23 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
     bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
     if (bQuestStateResult) {
-      if (nTargetClassId == 0x200) {
-        eQuestState = QUESTSTATE_Step0x09;
-        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, eQuestState);
-        if (bQuestStateResult) {
-          return;
-        }
-      } else if (nTargetClassId == 0x201) {
-        eQuestState = QUESTSTATE_Step0x08;
-        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, eQuestState);
-        if (bQuestStateResult) {
-          return;
-        }
+      switch (nTargetClassId) {
+        case 0x200:
+          {
+            eQuestState = QUESTSTATE_Step0x09;
+            LAB_00589c8f:
+            bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, eQuestState);
+            if (bQuestStateResult) {
+              return;
+            }
+
+            break;
+          }
+        case 0x201:
+          {
+            eQuestState = QUESTSTATE_Step0x08;
+            goto LAB_00589c8f;
+          }
       }
 
       nGossipIndex = 5;
@@ -1016,14 +1027,22 @@ bool __fastcall Q33_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       if (bQuestStateResult) {
         return false;
       }
-      if (pQuestData->nStateFlag == 1) {
-        return true;
-      }
-      if (pQuestData->nStateFlag != 4) {
-        return false;
-      }
 
-      nScrollCountOrStepState = pQuestData->pQuestSpecificData.pA5Q3->nIceItemCount;
+      switch (pQuestData->nStateFlag) {
+        case 1:
+          {
+            return true;
+          }
+        default:
+          {
+            return false;
+          }
+        case 4:
+          {
+            nScrollCountOrStepState = pQuestData->pQuestSpecificData.pA5Q3->nIceItemCount;
+            break;
+          }
+      }
     } else {
       D2UnitStrc* pScrollItem;
       if (nTargetClassId == 0x20f) {
@@ -1577,11 +1596,11 @@ BOOL __fastcall Q33_GetAnyaOrPortalCoords(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
     if (!pA5Q3Data->bAnyaPositionStored) {
       D2Common::Units::GetCoords(pUnit, pPoint);
-      return 1;
+    } else {
+      pPoint->x = pA5Q3Data->sAnyaPosition.x;
+      pPoint->y = pA5Q3Data->sAnyaPosition.y;
     }
 
-    pPoint->x = pA5Q3Data->sAnyaPosition.x;
-    pPoint->y = pA5Q3Data->sAnyaPosition.y;
     return 1;
 }
 

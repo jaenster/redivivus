@@ -105,6 +105,8 @@ void __fastcall ITEMMODE_RemoveExpiredStatLists(::SGAMEDATA * pGame, struct D2Un
 // Server-side: scans the unit's inventory for a key (ITEMTYPE_Key) in INVPAGE_INVENTORY. If found and quantity &gt; 1, decrements quantity by 1 and sends a 0x3E stat-update packet. If quantity reaches 1, destroys the key via ITEMMODE_ConsumeItem. Returns 1 if a key was consumed, 0 otherwise. Halts on null pGame/pUnit.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEMMODE_CheckEquipRestrictions(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+// Maps a body location to its alternate (weapon-swap) slot. Fifty-four bytes: a pure ECX jump table writing only EAX, so EDX survives. ITEMMODE_EquipCorpseItems holds the main body item in EDX across this call and reads it back afterwards; with EDX declared killed the pointer was lost and corpse reclaim resolved the wrong item. The parameter arrives in a whole register - typing it from the single byte the body reads made the decompiler splice the indeterminate upper bytes back in as an uninitialised local.
+int __fastcall ITEMMODE_GetAlternateBodyLoc(eD2BodyLocDWORD eBodyLoc);
 struct D2UnitStrc * __fastcall ITEMMODE_CanEquipOnBodyLoc(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pDefault, eD2BodyLocDWORD eBodyLoc);
 // Decides whether item pUnit2 can be equipped to body-loc *pdwParam on unit pUnit given up-to-two items (*ppConflict1/*ppConflict2) already occupying the slot/alt-slot. Normalizes which conflict is "the other hand" (swapping to the alternate body-loc via ITEMMODE_GetAlternateBodyLoc when needed). For arm slots (R/L/swapped R/L) it enforces missile-weapon rules: bow/xbow ("shoots") needs a matching-ammo conflict, quiver/arrows must match the other hand's shoots type, and two one-handed weapons may coexist only for dual-wield-capable units (monster, class 4 = Barbarian, or class 6 with two hand-to-hand weapons), rejecting illegal two-handed combos via IsTwoHanded/BARBARIAN_CheckItemData. Returns 1 if the equip is allowed, 0 otherwise. Note: pSwappedConflict is read before assignment (likely intended NULL) — minor decompiler artifact.
 uint32_t __fastcall ITEMMODE_ResolveEquipConflict(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitStrc * * ppConflict1, struct D2UnitStrc * * ppConflict2, eD2BodyLocDWORD * peBodyLoc);
@@ -218,6 +220,6 @@ BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, str
 void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam);
 BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2);
-// 30 internal functions (defined in .cpp)
+// 29 internal functions (defined in .cpp)
 
 } // namespace D2Game::ITEMS::ItemMode

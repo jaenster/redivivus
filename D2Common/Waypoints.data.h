@@ -7,7 +7,7 @@
 
 #include "d2_platform.h"
 
-namespace D2Client::Waypoint {
+namespace D2Common::Waypoints {
 extern int32_t nWaypointsBitMasksSize;
 extern uint16_t aaWaypointsBitMasks[112][2];
-} // namespace D2Client::Waypoint
+} // namespace D2Common::Waypoints

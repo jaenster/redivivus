@@ -239,7 +239,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
       D2LinkNodeStrc* pReadyTask;
       do {
         nRemainingSlots--;
-        nStepsRemaining = (int)pSlotNode[-2].pPrev - (uint32_t)!((-1 < nRemainingSlots) + nTailCycleCount);
+        nStepsRemaining = (int)pSlotNode[-2].pPrev - (uint32_t)!((nRemainingSlots >= 0) + nTailCycleCount);
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (int)pSlotNode[-2].pNext);
         pInsertBefore = pSlotNode - 1;
         pSortCur = pSlotNode[-1].pNext;

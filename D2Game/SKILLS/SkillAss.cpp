@@ -963,7 +963,8 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, D2UnitStrc * pUnit,
       sSkillArg.nFunctionParam = (int32_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       nRoyalStrikeParam = D2Client::SKILLS::GetSkilParam1(SKILL_RoyalStrike);
-      D2Common::Units::Missile::SetTargetX(pMissile, nRoyalStrikeParam + 1);
+      nRoyalStrikeParam += 1;
+      D2Common::Units::Missile::SetTargetX(pMissile, nRoyalStrikeParam);
       nByteOffset += nMissileStride * 4;
     } while (nByteOffset < 0x100);
 }
@@ -1200,7 +1201,8 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, D2UnitStrc * p
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pMissile && eMissileId == MISSILE_Royalstrikechainlightning) {
         nRoyalStrikeParam = D2Client::SKILLS::GetSkilParam1(SKILL_RoyalStrike);
-        D2Common::Units::Missile::SetTargetX(pMissile, nRoyalStrikeParam + 1);
+        nRoyalStrikeParam += 1;
+        D2Common::Units::Missile::SetTargetX(pMissile, nRoyalStrikeParam);
       }
 
       nByteOffset += nMissileStride * 4;
@@ -2160,17 +2162,17 @@ BOOL __fastcall Skills_SrvDoFunc_046_DragonClaw(::SGAMEDATA * pGame, D2UnitStrc 
 
       UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
-      return 1;
+    } else {
+      SKILLASS_SkillMeleeAttack(pGame, pTarget, nSkillLvl, eSkill, pUnit);
+      D2DamageStrc* pDamage = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
+      if (pDamage) {
+        SKILLASS_ReleaseChargeUpAttack(pGame, pUnit, pDamage);
+      }
+
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    SKILLASS_SkillMeleeAttack(pGame, pTarget, nSkillLvl, eSkill, pUnit);
-    D2DamageStrc* pDamage = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
-    if (pDamage) {
-      SKILLASS_ReleaseChargeUpAttack(pGame, pUnit, pDamage);
-    }
-
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-    pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     return 1;
 }
 
@@ -3146,29 +3148,29 @@ BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStr
       }
 
       UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, nullptr, eSkill, nSkillLvl, 0, 0);
-      return 1;
+    } else {
+      uint32_t nSkillToHit;
+      memset(&sDamage, 0, 0x70);
+      nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillCopy, nSkillLvl);
+      nSkillToHit += (uint32_t)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
+      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nSkillToHit, 0);
+      if (sDamage.wResultFlags & 1U) {
+        sDamage.dwEnDmgPct = D2Client::DataTbls::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
+        SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, (D2UnitStrc*)nSkillLvl, pUnit);
+      }
+
+      bySrcDamFinal = pDVar1->SrcDam;
+      *(uint8_t*)(char*)&nSkillLvl = bySrcDamFinal;
+      if (!bySrcDamFinal) {
+        *(uint8_t*)(char*)&nSkillLvl = 0x80;
+      }
+
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, (uint8_t)nSkillLvl);
+      pCombatEntry = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
+      SKILLASS_ReleaseChargeUpAttack(pGame, pUnit, (D2DamageStrc*)pCombatEntry);
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     }
 
-    uint32_t nSkillToHit;
-    memset(&sDamage, 0, 0x70);
-    nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillCopy, nSkillLvl);
-    nSkillToHit += (uint32_t)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nSkillToHit, 0);
-    if (sDamage.wResultFlags & 1U) {
-      sDamage.dwEnDmgPct = D2Client::DataTbls::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
-      SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, (D2UnitStrc*)nSkillLvl, pUnit);
-    }
-
-    bySrcDamFinal = pDVar1->SrcDam;
-    *(uint8_t*)(char*)&nSkillLvl = bySrcDamFinal;
-    if (!bySrcDamFinal) {
-      *(uint8_t*)(char*)&nSkillLvl = 0x80;
-    }
-
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, (uint8_t)nSkillLvl);
-    pCombatEntry = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
-    SKILLASS_ReleaseChargeUpAttack(pGame, pUnit, (D2DamageStrc*)pCombatEntry);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     return 1;
 }
 

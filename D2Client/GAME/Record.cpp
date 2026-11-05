@@ -167,33 +167,32 @@ void __stdcall LoadGameRecordFromFile() {
     if (lpBuffer_007a2768.nVersion != 1) {
       /* HANDLE hObject for CloseHandle */ gbIsRecording = 0;
       gbIsPlaybackActive = 0;
-      CloseHandle(hFile);
-      return;
-    }
-
-    for (nBlockIndex = 0; nBlockIndex < lpBuffer_007a2768.nBlockCount; nBlockIndex++) {
-      if (nBlockIndex) {
-        pBlock = D2_NEW_AT(D2GameRecordStrc, ".\\GAME\\Record.cpp", 0x35);
-        pBlock->nEntrySize = 0;
-        pBlock->nPlaybackIndex = 0;
-        gpCurrentGameRecord->pNext = pBlock;
-        pBlock->pNext = 0;
-        gpCurrentGameRecord = pBlock;
-      }
-      if (lpBuffer_007a2768.nLastBlockEntries <= 0x1f4) {
-        gsGameRecordContext.nEntrySize = lpBuffer_007a2768.nLastBlockEntries;
-        if (nBlockIndex + 1 != lpBuffer_007a2768.nBlockCount) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
-          exit(-1);
+    } else {
+      for (nBlockIndex = 0; nBlockIndex < lpBuffer_007a2768.nBlockCount; nBlockIndex++) {
+        if (nBlockIndex) {
+          pBlock = D2_NEW_AT(D2GameRecordStrc, ".\\GAME\\Record.cpp", 0x35);
+          pBlock->nEntrySize = 0;
+          pBlock->nPlaybackIndex = 0;
+          gpCurrentGameRecord->pNext = pBlock;
+          pBlock->pNext = 0;
+          gpCurrentGameRecord = pBlock;
         }
-      } else {
-        gsGameRecordContext.nEntrySize = 500;
+        if (lpBuffer_007a2768.nLastBlockEntries <= 0x1f4) {
+          gsGameRecordContext.nEntrySize = lpBuffer_007a2768.nLastBlockEntries;
+          if (nBlockIndex + 1 != lpBuffer_007a2768.nBlockCount) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
+            exit(-1);
+          }
+        } else {
+          gsGameRecordContext.nEntrySize = 500;
+        }
+
+        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
       }
 
-      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
+      /* HANDLE hObject for CloseHandle */ gpCurrentGameRecord = &gsGameRecordContext;
     }
 
-    /* HANDLE hObject for CloseHandle */ gpCurrentGameRecord = &gsGameRecordContext;
     CloseHandle(hFile);
 }
 

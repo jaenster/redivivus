@@ -71,10 +71,7 @@ D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * 
     }
 
     D2CUnitEventStrc* pNewEvent = D2_NEW_POOL_AT(pUnit->pMemory, D2CUnitEventStrc, ".\\UNIT\\CUnitEvent.cpp", 0x48);
-    pNewEvent->nEventType = 0;
-    pNewEvent->nEventState = 0;
-    pNewEvent->pNext = 0;
-    pNewEvent->pPrev = 0;
+    memset(pNewEvent, 0, sizeof(*pNewEvent));
     pNewEvent->dwEventData1 = dwEventData1;
     pNewEvent->dwEventData2 = dwEventData2;
     pNewEvent->pfnCallback = pfnCallback;

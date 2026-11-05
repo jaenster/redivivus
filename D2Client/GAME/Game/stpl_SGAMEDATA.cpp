@@ -605,14 +605,14 @@ template<> ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Intern
     int nLinkOffset = pList->m_linkoffset;
     if ((int)dwNext < 0) {
       *(TSLink<::SGAMEDATA>**)~dwNext = (TSLink<::SGAMEDATA>*)ppSlot;
-      pExisting->m_next = (int)pNode;
-      return pNode;
-    }
-    if (nLinkOffset < 0) {
-      nLinkOffset = (int)pExisting - pExisting->m_prevlink->m_next;
+    } else {
+      if (nLinkOffset < 0) {
+        nLinkOffset = (int)pExisting - pExisting->m_prevlink->m_next;
+      }
+
+      *(TSLink<::SGAMEDATA>**)(dwNext + nLinkOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
     }
 
-    *(TSLink<::SGAMEDATA>**)(dwNext + nLinkOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
     pExisting->m_next = (int)pNode;
     return pNode;
 }
@@ -829,18 +829,9 @@ template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destructor() {
 }
 
 template<> uint32_t TSGrowableArray<SGAMEDATA>::CalcChunkSize(uint32_t nCount) {
-    uint32_t nCleared2;
     if (nCount < 8) {
-      uint32_t nCleared;
-      nCleared2 = nCount - 1 & nCount;
-      while (true) {
-        nCleared = nCleared2;
-        if (!nCleared) {
-          break;
-        }
-
-        nCount = nCleared;
-        nCleared2 = nCleared - 1 & nCleared;
+      while (nCount & nCount - 1) {
+        nCount &= nCount - 1;
       }
 
       if (nCount < 1) {

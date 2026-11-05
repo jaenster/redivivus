@@ -116,11 +116,11 @@ BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, 
       D2Common::Skills::SKILL_SetParam2(pSkill, pConfirmedTarget->eUnitType);
       D2Common::Skills::SKILL_SetParam3(pSkill, pConfirmedTarget->nUnitGUID);
       D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);
-      return 1;
+    } else {
+      D2Common::Skills::SKILL_SetParam2(pSkill, 1);
+      D2Common::Skills::SKILL_SetParam3(pSkill, -1);
     }
 
-    D2Common::Skills::SKILL_SetParam2(pSkill, 1);
-    D2Common::Skills::SKILL_SetParam3(pSkill, -1);
     return 1;
 }
 
@@ -361,11 +361,12 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
       if (pMissileUnit) {
         if (pTarget) {
           nTargetMode = 1;
+          D2Common::Units::Missile::SetTargetX(pMissileUnit, 1);
         } else {
           nTargetMode = 2;
+          D2Common::Units::Missile::SetTargetX(pMissileUnit, 2);
         }
 
-        D2Common::Units::Missile::SetTargetX(pMissileUnit, nTargetMode);
         nTargetMode = Units::GetXPosFromDynamicPathUnit(pUnit);
         nUnitPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
         D2Common::Units::Missile::SetTargetY(pMissileUnit, (short int)((short int)nTargetY - (short int)nUnitPosY) * 0x10000 + (int)(short int)((short int)nTargetX - (short int)nTargetMode));

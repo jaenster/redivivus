@@ -923,7 +923,7 @@ bool __fastcall Q19_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     }
     if (nPartsCount == '\x04') {
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
-      *pbyStatusCode = !bQuestState * '\x02' + '\x05';
+      *pbyStatusCode = bQuestState ? 0x5 : 0x7;
       return true;
     }
     if (nPartsCount != '\0') {

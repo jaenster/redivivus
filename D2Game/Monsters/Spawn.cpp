@@ -488,23 +488,23 @@ static int32_t MONSTER_ValidateSpawnForLevel(int32_t nClassId, eD2LevelId eLevel
           case LEVEL_BlackMarsh:
 
           case LEVEL_TamoeHighland:
-            return nMonStatsSize > 0x3b ? 0x3b : -1;
+            return nMonStatsSize <= 0x3b ? -1 : 0x3b;
           case LEVEL_PitLevel1:
 
           case LEVEL_PitLevel2:
-            return nMonStatsSize > 0x3c ? 0x3c : -1;
+            return nMonStatsSize <= 0x3c ? -1 : 0x3c;
         }
       }
     } else {
       switch (eLevelId) {
         case LEVEL_BlackMarsh:
-          return nMonStatsSize > 0x14 ? 0x14 : -1;
+          return nMonStatsSize <= 0x14 ? -1 : 0x14;
         case LEVEL_TamoeHighland:
 
         case LEVEL_PitLevel1:
 
         case LEVEL_PitLevel2:
-          nClassId = nMonStatsSize > 0x15 ? 0x15 : -1;
+          nClassId = nMonStatsSize <= 0x15 ? -1 : 0x15;
       }
     }
 
@@ -638,14 +638,14 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
       }
       if (nValidClassId != 0x1f2) {
         if (nValidClassId == 0x205 && (bSiegeIntroDone = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath) , bSiegeIntroDone != 0) && (eLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom) , eLevelId2 == LEVEL_BloodyFoothills)) {
-          nMonCode = sgptDataTable->nTxtMonStatsSize > 0x206 ? 0x206 : -1;
+          nMonCode = sgptDataTable->nTxtMonStatsSize <= 0x206 ? -1 : 0x206;
         }
       } else {
         bSiegeIntroDone2 = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath);
         if (bSiegeIntroDone2) {
           eRoomLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
           if (eRoomLevelId == LEVEL_BloodyFoothills) {
-            nMonCode = sgptDataTable->nTxtMonStatsSize > 499 ? 499 : -1;
+            nMonCode = sgptDataTable->nTxtMonStatsSize <= 499 ? -1 : 499;
           }
         }
       }
@@ -695,7 +695,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
         pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, 0x10a, nAnimMode, -1, 0);
       return pMonster;
       case 5:
-        pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, sgptDataTable->nTxtMonStatsSize > 0x10b ? 0x10b : -1, nAnimMode, -1, 0);
+        pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, sgptDataTable->nTxtMonStatsSize <= 0x10b ? -1 : 0x10b, nAnimMode, -1, 0);
       return pMonster;
       default:
         return pMonster;
@@ -739,7 +739,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
         break;
       }
 
-      nDiffClassId = MONSTER_GetMonsterClassByDifficulty(sgptDataTable->nTxtMonStatsSize > 0x105 ? 0x105 : -1, nResolvedClassId);
+      nDiffClassId = MONSTER_GetMonsterClassByDifficulty(sgptDataTable->nTxtMonStatsSize <= 0x105 ? -1 : 0x105, nResolvedClassId);
       pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pRoom, nX, nY, nDiffClassId, nAnimMode, -1, nSpawnFlags);
       return pMonster;
       case 0x11:
@@ -772,7 +772,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
           switch (nMonCode) {
             case 0x18:
               {
-                nValidClassId = (eLevelId != LEVEL_BloodyFoothills ? -37 : 0) + 0x211;
+                nValidClassId = eLevelId != LEVEL_BloodyFoothills ? 0x1ec : 0x211;
                 break;
               }
             case 0x1a:
@@ -816,7 +816,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
         nAnimMode = 0xc;
         break;
         case 0x1e:
-          nResolvedClassId = (eLevelId != LEVEL_BloodyFoothills ? -37 : 0) + 0x211;
+          nResolvedClassId = eLevelId != LEVEL_BloodyFoothills ? 0x1ec : 0x211;
         nAnimMode = 0xc;
         break;
         case 0x1f:

@@ -527,12 +527,10 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
     if (pSound->pAsyncData) {
       Fog::Src::AsyncData::ASYNCDATA_Free((D2AsyncData_Line0x128*)pSound->pAsyncData);
       pSound->pAsyncData = 0;
-      pSound->pSoundDataBuffer = 0;
-      pSound->nLoadState = 0;
-      return;
+    } else {
+      D2_FREE_AT(pSound->pSoundDataBuffer, ".\\Sound\\SoundHdr.cpp", 0x272);
     }
 
-    D2_FREE_AT(pSound->pSoundDataBuffer, ".\\Sound\\SoundHdr.cpp", 0x272);
     pSound->nLoadState = 0;
     pSound->pSoundDataBuffer = 0;
 }
@@ -651,8 +649,8 @@ int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
 
     do {
       int nPickedId;
-      nRoll = _Utils::RollRandomNumerUpToArgument((uint32_t)pSound->Group_Size);
-      nPickedId = nRoll + nSoundId;
+      nPickedId = _Utils::RollRandomNumerUpToArgument((uint32_t)pSound->Group_Size);
+      nPickedId += nSoundId;
       nHistIdx = 0;
       if (nHistDepth <= 0) {
         return nPickedId;

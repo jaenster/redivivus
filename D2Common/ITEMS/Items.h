@@ -13,7 +13,7 @@
 struct D2BitBufferStrc;
 struct D2InventoryStrc;
 struct D2ItemStatCostTxt;
-struct D2MagicAffixTxt;
+struct D2ItemTypesTxt;
 struct D2PoolManagerStrc;
 struct D2SeedStrc;
 struct D2SetItemsTxt;
@@ -31,10 +31,47 @@ typedef uint8_t eInventoryPage;
 typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, struct D2UnitStrc * pItem, struct D2UnitStrc * pPlayer);
 #endif
 
+struct D2MagicAffixTxt;
+
 // Data types
 struct D2ItemCalcContextStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ int32_t nContext;
+};
+
+struct D2MagicAffixTableStrc {
+    /* 0x00 */ int nSize; // total row count across all three sub-tables
+    /* 0x04 */ struct D2MagicAffixTxt * pTable; // base of the 0x90-byte row array
+    /* 0x08 */ struct D2MagicAffixTxt * pSuffixStart; // magicsuffix rows; the suffix range runs from here to pPrefixStart
+    /* 0x0C */ struct D2MagicAffixTxt * pPrefixStart; // magicprefix rows; the prefix range runs from here to pAutoMagicStart
+    /* 0x10 */ struct D2MagicAffixTxt * pAutoMagicStart; // automagic rows; that range runs from here to pTable + nSize*0x90
+};
+
+struct __attribute__((packed)) D2MagicAffixTxt {
+    /* 0x00 */ char name[32];
+    /* 0x20 */ uint16_t wNameStr; // string table ID for affix name (GetLocaleString index)
+    /* 0x22 */ short version;
+    /* 0x24 */ D2MagixAffixModStrc mod[3];
+    /* 0x54 */ bool spawnable;
+    /* 0x55 */ uint8_t pad0x55; // alignment padding after spawnable
+    /* 0x56 */ uint8_t transformcolor;
+    /* 0x57 */ uint8_t pad0x57; // alignment padding after transformcolor
+    /* 0x58 */ int level;
+    /* 0x5C */ int group;
+    /* 0x60 */ int maxlevel;
+    /* 0x64 */ bool rare;
+    /* 0x65 */ uint8_t levelreq;
+    /* 0x66 */ char classspecific;
+    /* 0x67 */ uint8_t class_;
+    /* 0x68 */ char classlevelreq;
+    /* 0x69 */ uint8_t pad0x69; // alignment padding after classlevelreq
+    /* 0x6A */ short include_type[7];
+    /* 0x78 */ short exclude_type[5];
+    /* 0x82 */ char frequency;
+    /* 0x83 */ uint8_t pad0x83; // alignment padding after frequency
+    /* 0x84 */ int divide;
+    /* 0x88 */ int multiply;
+    /* 0x8C */ int add;
 };
 
 struct __attribute__((packed)) D2RuneTableStrc {

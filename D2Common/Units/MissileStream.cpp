@@ -78,8 +78,7 @@ void __stdcall AllocMissileStream(D2UnitStrc * pUnit) {
     }
 
     pStream = D2_NEW_POOL_AT(pMemory, D2MissileStreamStrc, ".\\UNITS\\MisStream.cpp", 0x2e);
-    pStream->pStream = 0;
-    pStream->nStreamSize = 0;
+    memset(pStream, 0, sizeof(*pStream));
     Missile::SetStream(pUnit, pStream);
 }
 

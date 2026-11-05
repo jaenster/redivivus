@@ -81,6 +81,7 @@ int gnTileInnerXMax = 0; D2_GLOBAL_GUARD(gnTileInnerXMax, "gnTileInnerXMax");
 int gnTileClipZMax = 0; D2_GLOBAL_GUARD(gnTileClipZMax, "gnTileClipZMax");
 int gnMinTileScreenY = 0; D2_GLOBAL_GUARD(gnMinTileScreenY, "gnMinTileScreenY");
 int gnTileViewportXOffset = 0; D2_GLOBAL_GUARD(gnTileViewportXOffset, "gnTileViewportXOffset");
+int gnTileClipLeft = 0; D2_GLOBAL_GUARD(gnTileClipLeft, "gnTileClipLeft");
 int gnTileInnerClipYMinRow = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMinRow, "gnTileInnerClipYMinRow");
 int gnTileInnerClipXMax = 0; D2_GLOBAL_GUARD(gnTileInnerClipXMax, "gnTileInnerClipXMax");
 int gnTileInnerClipYMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipYMin, "gnTileInnerClipYMin");
@@ -200,17 +201,25 @@ namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
 
-namespace D2Client::CharScreen {
+namespace D2Launch::CharSel {
 
-} // namespace D2Client::CharScreen
+} // namespace D2Launch::CharSel
 
 namespace D2Game::GAME::Rendering {
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
 
-} // namespace D2Client::UI::ui
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
@@ -380,14 +389,10 @@ namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
 
-namespace D2Client::Mouse {
+namespace D2Win::Src::D2WinMain {
 
-} // namespace D2Client::Mouse
+} // namespace D2Win::Src::D2WinMain
 
-namespace D2Client::Forms {
+namespace D2Win::D2GFX {
 
-} // namespace D2Client::Forms
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
+} // namespace D2Win::D2GFX

@@ -10,7 +10,6 @@
 
 // Forward declarations
 struct D2InventoryStrc;
-struct D2ItemTypesTxt;
 struct D2ItemsTxt;
 struct D2ParsedTreasureClassStrc;
 struct D2RoomStrc;

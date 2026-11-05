@@ -1495,29 +1495,37 @@ static BOOL HasSequenceTransition(D2UnitStrc * pUnit, int32_t nAnimMode, eD2Unit
       }
     } else {
       D2SkillStrc* pSkill;
-      if (nAnimMode != 10) {
-        if (nAnimMode != 0x12) {
-          return 0;
-        }
-        if (!pUnit) {
-          return 0;
-        }
+      switch (nAnimMode) {
+        default:
+          {
+            return 0;
+          }
+        case 0x12:
+          {
+            if (!pUnit) {
+              return 0;
+            }
 
-        pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-        if (!pSkill) {
-          return 0;
-        }
+            pSkill = D2Common::Units::GetCurrentSkill(pUnit);
+            if (!pSkill) {
+              return 0;
+            }
 
-        eSkill = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0xc48);
-        pSkillsTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
-        if (!pSkillsTxt) {
-          return 0;
-        }
-        if (pSkillsTxt->seqtrans == '\n') {
-          return 1;
-        }
+            eSkill = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0xc48);
+            pSkillsTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
+            if (!pSkillsTxt) {
+              return 0;
+            }
+            if (pSkillsTxt->seqtrans == '\n') {
+              return 1;
+            }
 
-        return 0;
+            return 0;
+          }
+        case 10:
+          {
+            break;
+          }
       }
     }
 
@@ -2415,7 +2423,7 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
       if (pUnit->eUnitType == UNIT_MONSTER && (pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0)) {
         if (pMonStats2->MeleeRng == 0xff) {
           COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
-          return pUnit != (D2UnitStrc*)0x6 ? 0 : 0x2;
+          return pUnit == (D2UnitStrc*)0x6 ? 0x2 : 0;
         }
 
         return (uint32_t)pMonStats2->MeleeRng;
@@ -4068,8 +4076,8 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
               return;
             }
 
-            dwStatFlag = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit_00->sSeed, (int)wFrameDelta >> 3);
-            nRandomSpeed = dwStatFlag + ((int)wFrameDelta - (int)(wFrameDelta >> 4));
+            nRandomSpeed = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit_00->sSeed, (int)wFrameDelta >> 3);
+            nRandomSpeed += (int)wFrameDelta - (int)(wFrameDelta >> 4);
             nRandomSpeed = (int)nRandomSpeed <= 0 ? 0 : nRandomSpeed;
             if ((int)nRandomSpeed >= 0x7fff) {
               nRandomSpeed = 0x7fff;

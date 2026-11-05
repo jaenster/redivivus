@@ -933,12 +933,8 @@ void __fastcall SendAttributeUpdate(D2UnitStrc * pUnit, uint16_t nStatId, uint32
       GAME::SCmd::NET_D2GS_SERVER_Send_0x1D_0x1E_0x1F_SetAttribute(pClient, nStatId, dwStatValue);
       return;
     }
-    if (!pUnit) {
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER(pClient, ' ', -1, nStatId, dwStatValue);
-      return;
-    }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER(pClient, ' ', pUnit->nUnitGUID, nStatId, dwStatValue);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER(pClient, ' ', !pUnit ? -1 : pUnit->nUnitGUID, nStatId, dwStatValue);
 }
 
 static uint8_t GetHPRegen(D2UnitStrc * pUnit) {
@@ -1350,7 +1346,7 @@ static inline uint8_t __stdcall PLAYERMSG_GetMessageType(int32_t nParam1, int32_
 }
 
 int32_t __stdcall PLAYERMSG_GetMessagePriority(uint32_t nParam) {
-    return (nParam < 6 ? -2 : 0) + 2;
+    return nParam < 6 ? 0 : 2;
 }
 
 // Validates that tile coordinates (nX, nY) are within a Chebyshev (max-norm) distance of nRange from the unit's current position. Returns a non-zero eD2ServerIncomingStatus if both axis deltas are within range. Used by movement packet handlers to guard against teleport/warp exploits.
@@ -1646,7 +1642,7 @@ static int32_t CheckIfCanBeSkilled(D2UnitStrc * pUnit, eD2Skills eSkill) {
       }
 
       _bSkillBound = D2Common::Skills::SpendSkillPointOnSkill(pUnit, eSkill);
-      return (_bSkillBound ? -3 : 0) + 3;
+      return _bSkillBound ? 0 : 3;
     }
 
     return 2;
@@ -1745,7 +1741,7 @@ static int32_t __stdcall PlayerCanInteractWithWaypoint(::SGAMEDATA * pGame, uint
       bFound = D2Common::Waypoints::FindWaypointIdByLevelId((eD2LevelId)nAreaId, &eWaypointId);
       if (bFound) {
         nWaypointCheck = D2Common::Waypoints::CheckWaypoint(GetWaypointsForCurrentDifficulty(pGame, pUnit), eWaypointId);
-        return (nWaypointCheck ? -2 : 0) + 2;
+        return nWaypointCheck ? 0 : 2;
       }
     }
 
@@ -1934,9 +1930,7 @@ static D2SkillStrc * __stdcall GetDualSwingSkill(D2SkillStrc * pSkill, D2UnitStr
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall PLAYER_SendInventoryFullMessage(D2UnitStrc * pUnit) {
     D2Packet0x5aEventStructure sEventPacket;
-    sEventPacket.nArgTypes = '\0';
-    memset(sEventPacket.szName1, 0, 16 * sizeof(sEventPacket.szName1[0]));
-    memset(sEventPacket.szName2, 0, 16 * sizeof(sEventPacket.szName2[0]));
+    memset(&sEventPacket, 0, sizeof(sEventPacket));
     sEventPacket.nPacketId = 'Z';
     sEventPacket.nColor = '\x01';
     sEventPacket.nArg = 0;
@@ -2512,7 +2506,6 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
     D2GSPacketSrv0x26 sPacket;
     D2ChatMessage pBuffer;
     D2Packet0x5aEventStructure sEventPacket;
-    int32_t nErrorLine;
     memset(&pBuffer, 0, 0x113);
     pBuffer.nMessageId = pPacket->nCmd;
     pBuffer.nMessageType = pPacket->nMsgId;
@@ -2581,7 +2574,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
             sEventPacket.nArg = 0;
             Storm::Source::SSTR::SStrCopy(sEventPacket.szName1, pBuffer.szTarget, 0x7fffffff);
             sEventPacket.nMessageType = '\r';
-            nErrorLine = 0xa2c;
+            *(uint32_t*)((char*)&sEventPacket.szName1 + 12) &= 0xffffff;
+            pSenderClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", 0xa2c);
           } else {
             if (g_bWhisperDelivered) {
               sWhisperEchoPacket.nPacketId = '&';
@@ -2609,11 +2603,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
             sEventPacket.nArg = 0;
             Storm::Source::SSTR::SStrCopy(sEventPacket.szName1, pBuffer.szTarget, 0x7fffffff);
             sEventPacket.nMessageType = '\x04';
-            nErrorLine = 0xa38;
+            *(uint32_t*)((char*)&sEventPacket.szName1 + 12) &= 0xffffff;
+            pSenderClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", 0xa38);
           }
 
-          *(uint32_t*)((char*)&sEventPacket.szName1 + 12) &= 0xffffff;
-          pSenderClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", nErrorLine);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(pSenderClient, &sEventPacket);
           return SERVERSTATUS_OK;
         }
@@ -3671,11 +3664,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x38_NpcMenuSelect(::SGAMEDATA * pGame, 
       return SERVERSTATUS_BAD_PARAMS;
     }
 
+    uint32_t nNpcGUID = pPacket->eNpcGUID;
     uint32_t dwMenuId = pPacket->dwMenuId;
     uint32_t dwMenuParams = pPacket->dwParams;
     eD2ServerIncomingStatus nRangeResult = CloseEnoughToInteract(pGame, UNIT_MONSTER, pUnit, dwMenuId, 0x32);
     if (nRangeResult == SERVERSTATUS_OK) {
-      uint32_t nNpcGUID = pPacket->eNpcGUID;
       nRangeResult = UNIT::SUNITNPC::UseMenu(pGame, pUnit, nNpcGUID, dwMenuId, dwMenuParams);
     }
 
@@ -3787,10 +3780,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3C_SelectSkill(::SGAMEDATA * pGame, D2
     SKILLS::SkillsServer::Server_SelectSkill(pUnit, nHand, eSkill, dwSkillOwnerId);
     if (nHand) {
       D2Common::Units::InitLeftSkill(pUnit);
-      return SERVERSTATUS_OK;
+    } else {
+      D2Common::Units::InitRightSkill(pUnit);
     }
 
-    D2Common::Units::InitRightSkill(pUnit);
     return SERVERSTATUS_OK;
 }
 
@@ -4064,6 +4057,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x46_NpcInteractMerc(::SGAMEDATA * pGame
       return SERVERSTATUS_BAD_PARAMS;
     }
 
+    uint32_t dwNpcGUID = pPacket->nNpcGUID;
     eD2UnitType eUnitType = pPacket->eUnitType;
     uint32_t dwMercGUID = pPacket->nMercGUID;
     if (eUnitType >= UNIT_COUNT) {
@@ -4072,7 +4066,6 @@ eD2ServerIncomingStatus __fastcall SCMD_0x46_NpcInteractMerc(::SGAMEDATA * pGame
 
     eD2ServerIncomingStatus eStatus = CloseEnoughToInteract(pGame, eUnitType, pUnit, dwMercGUID, 0x32);
     if (eStatus == SERVERSTATUS_OK) {
-      uint32_t dwNpcGUID = pPacket->nNpcGUID;
       eStatus = CanInteractWithMerc(dwMercGUID, eUnitType, 0xc, pUnit, pGame, dwNpcGUID);
     }
 
@@ -4085,11 +4078,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x47_CommandMercenary(::SGAMEDATA * pGam
       return SERVERSTATUS_BAD_PARAMS;
     }
 
+    uint32_t dwMercGUID = pPacket->nMercGUID;
     uint16_t nX = pPacket->nTargetX;
     uint16_t nY = pPacket->nTargetY;
     eD2ServerIncomingStatus nResult = CheckIfCoordsAreInRange(pUnit, 0x32, nX, nY);
     if (nResult == SERVERSTATUS_OK) {
-      uint32_t dwMercGUID = pPacket->nMercGUID;
       CanInteractWithMerc((uint32_t)nX, (uint32_t)nY, 0xd, pUnit, pGame, dwMercGUID);
       nResult = SERVERSTATUS_OK;
     }
@@ -4315,6 +4308,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
       return SERVERSTATUS_BAD_PARAMS;
     }
 
+    uint32_t nTargetY = pPacket->nY;
     uint32_t nTargetX = pPacket->nX;
     if (pPacket->nUnitType >= UNIT_COUNT) {
       return SERVERSTATUS_BAD_DATA;
@@ -4332,7 +4326,6 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
 
     D2MonStatsTxt* pMonStat = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pMonster->nClassId);
     /* is NPC and interactable */ if (pMonStat && gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStat + 0xd) && gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonStat + 0xd)) {
-      uint32_t nTargetY = pPacket->nY;
       if (pMonster->pPath.pDynamicPath) {
         D2Common::PATH::DynamicPath::ZeroPathPointsSize(pMonster->pPath.pDynamicPath);
       }
@@ -4719,6 +4712,8 @@ static void __stdcall MERC_CanEquipItem(D2UnitStrc * pUnit, ::SGAMEDATA * pGame,
     bool bTwoHandedAllowed;
     uint32_t nMercClassId;
     eD2ItemTypes eItemType;
+    D2InventoryStrc* pPlayerInv;
+    pPlayerInv = pUnit1->pInventory;
     if (!pGame->bExpansion) {
       return;
     }
@@ -4737,7 +4732,6 @@ static void __stdcall MERC_CanEquipItem(D2UnitStrc * pUnit, ::SGAMEDATA * pGame,
     uint32_t bTypeCheck;
     bTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_HealingPotion);
     if (bTypeCheck || (bTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_ThawingPotion) , bTypeCheck != 0) || (bTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_AntidotePotion) , bTypeCheck != 0)) {
-      D2InventoryStrc* pPlayerInv = pUnit1->pInventory;
       SKILLS::SkillItem::SKILLITEM_DispatchItemSpell(pGame, pUnit, pUnit2, pUnit2, 0, 0);
       ITEMS::ItemMode::ToCursorItem(pGame, pUnit1, pUnit2);
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInv, nullptr);

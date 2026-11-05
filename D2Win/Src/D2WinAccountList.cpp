@@ -257,12 +257,11 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     if (pdwFontData) {
       pNewList->nFontId = *pdwFontData;
       pNewList->nFontData1 = pdwFontData[1];
-      D2WinMain::FORMS_AddControlToGlobalList(&pNewList->sControl);
-      return pNewList;
+    } else {
+      pNewList->nFontId = 1;
+      pNewList->nFontData1 = 0;
     }
 
-    pNewList->nFontId = 1;
-    pNewList->nFontData1 = 0;
     D2WinMain::FORMS_AddControlToGlobalList(&pNewList->sControl);
     return pNewList;
 }

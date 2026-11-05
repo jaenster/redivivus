@@ -191,9 +191,9 @@ int __stdcall ITEMMOD_FindChargedSkill(D2UnitStrc * pUnit, int32_t nSkillId, int
     }
 
     int nStatCostShift = sgptDataTable->nChargedSkillLevelBits;
+    uint32_t uStatCostMask = sgptDataTable->dwChargedSkillLevelMask;
     D2StatListExStrc* pStatList = Stats::StatsEx::GetStatsByFlags(pUnit, 0x40);
     while (true) {
-      uint32_t uStatCostMask = sgptDataTable->dwChargedSkillLevelMask;
       if (!pStatList) {
         if (!pUnit->pInventory) {
           return 0;
@@ -395,8 +395,8 @@ static void __stdcall ITEMMOD_MaximizeStatForEnhanced(eD2UnitStat eEnhancedProp,
       case UNITSTAT_armorclass:
         bIsType = Items::ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
       if (bIsType && pItemsTxt->dwMaxAc) {
-        nCurrentAC = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
-        nNewAC = nCurrentAC + 1;
+        nNewAC = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
+        nNewAC += 1;
         if (nNewAC <= pItemsTxt->dwMaxAc) {
           nNewAC = pItemsTxt->dwMaxAc + 1;
         }
@@ -568,10 +568,10 @@ static int32_t __stdcall PropertyFunc_SimpleStat(int32_t nType, D2UnitStrc * pUn
     if (bClearStat) {
       nBaseValue = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, eUnitStat, 0);
       Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eUnitStat, -nBaseValue, 0);
-      return 1;
+    } else {
+      Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eUnitStat, nStatValue, 0);
     }
 
-    Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eUnitStat, nStatValue, 0);
     return 1;
 }
 
@@ -2293,8 +2293,8 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
     if (!nSkillLevel) {
       nReqLevel = Skills::TXT_Skills_GetReqLevel(eSkill);
       nItemLevel = Items::ITEM_GetItemData_nItemLevel(pUnit2);
-      nComputedLevel = (nItemLevel - nReqLevel) / 4;
-      nSkillLevel = nComputedLevel + 1;
+      nSkillLevel = (nItemLevel - nReqLevel) / 4;
+      nSkillLevel += 1;
       nProperty = nSkillLevel;
       if (nSkillLevel <= 1) {
         nProperty = 0x1;
@@ -2310,7 +2310,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
       bSignedLessOrEqual = nSkillLevel <= 1;
     } else {
       int nScaleDivisor;
-      if (-1 < nSkillLevel) {
+      if (nSkillLevel >= 0) {
         nPropPtr = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, (D2SetsTxtFStrc*)pProperty_00, nSet, (int16_t)nStatId, eSkill * 0x40 + (nSkillLevel & 0x3fU), nMaxCharges, nState);
         return nPropPtr;
       }
@@ -2328,6 +2328,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
 
       nItemLevel = Items::ITEM_GetItemData_nItemLevel(pUnit2);
       nSkillLevel = (nItemLevel - nReqLevel) / nScaleDivisor;
+      nComputedLevel = nSkillLevel;
       bSignedLessOrEqual = nComputedLevel <= 0;
     }
     if (bSignedLessOrEqual) {
@@ -2574,10 +2575,10 @@ uint32_t __fastcall ITEMPROP_AddStat_FixedOrRolledMaxDamageAware(uint32_t nType,
     }
     if ((short int)nStatId == 0x16) {
       ITEMPROP_AddMaxDamage(nType, pUnit, pUnit2, pProperty, nSet, 0x16, 0, (uint32_t)nRolledValue_00, nState, dwFlags, pContextUnit);
-      return (uint32_t)nRolledValue_00;
+    } else {
+      ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (short int)nStatId, 0, (int32_t)nRolledValue_00, nState);
     }
 
-    ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (short int)nStatId, 0, (int32_t)nRolledValue_00, nState);
     return (uint32_t)nRolledValue_00;
 }
 

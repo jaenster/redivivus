@@ -2791,8 +2791,7 @@ void __fastcall DROP_SpawnRandomItemInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRo
     }
 
     int32_t nRolledClassId = ITEMDROP_RollItemClassByLevel(pGame, pRoomSeed, -1, 0, 0, nItemLevel);
-    ptCandidatePos.x = pCoordsIn->x;
-    ptCandidatePos.y = pCoordsIn->y;
+    ptCandidatePos = *pCoordsIn;
     pCoordsIn = (POINT*)(ptCandidatePos.x + 2);
     int nOffsetY = ptCandidatePos.y + 3;
     D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
@@ -2858,8 +2857,7 @@ void __fastcall DROP_SpawnGoldInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
       D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20646c67, (int*)&gnGoldItemClassId);
     }
 
-    ptCandidatePos.x = pCoordsIn->x;
-    ptCandidatePos.y = pCoordsIn->y;
+    ptCandidatePos = *pCoordsIn;
     pCoordsIn = (POINT*)(ptCandidatePos.x + 2);
     int nOffsetY = ptCandidatePos.y + 3;
     D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
@@ -2918,8 +2916,7 @@ void __fastcall DROP_SpawnExceptionalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoo
     int32_t nRolledClassId = ITEMDROP_RollExceptionalItemClass(pGame, pRoomSeed, nEffectiveItemLevel, nTCFilter, nMonsterLevel);
     if (nRolledClassId >= 0) {
       D2RoomStrc* pSpawnRoom;
-      ptCandidatePos.x = pCoordsIn->x;
-      ptCandidatePos.y = pCoordsIn->y;
+      ptCandidatePos = *pCoordsIn;
       pSpawnRoom = FindBestSpotToSpawnItem(pRoom, &ptCandidatePos, &ptSpawnPos, 1, 1);
       if (pSpawnRoom) {
         memset(&sItemGenCtx, 0, 0x84);
@@ -3054,8 +3051,7 @@ void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POI
     }
 
     int32_t nRolledClassId = ITEMDROP_RollEliteItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nTCFilter, nMonsterLevel, bIsMonsterFlag);
-    ptCandidatePos.x = pCoordsIn->x;
-    ptCandidatePos.y = pCoordsIn->y;
+    ptCandidatePos = *pCoordsIn;
     int nOffsetX = ptCandidatePos.x + 2;
     pCoordsIn = (POINT*)(ptCandidatePos.y + 3);
     D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nOffsetX, (int32_t)pCoordsIn);
@@ -3158,8 +3154,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * 
     bool bCheckPassable = true;
     uint32_t bUseBestSpot = 1;
     POINT* pSpawnPos = &pPosition;
-    pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pSpawnRoom = FindBestSpotToSpawnItem(pSpawnRoom, &pointPosition, pSpawnPos, bUseBestSpot, bCheckPassable);
+    pSpawnRoom = FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &pointPosition, pSpawnPos, bUseBestSpot, bCheckPassable);
     if (pSpawnRoom) {
       memset(&sItemGenCtx, 0, 0x84);
       sItemGenCtx.wItemFormat = pGame->wItemFormat;
@@ -3454,8 +3449,7 @@ void __fastcall ITEM_DropEarOnPvpDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) 
     bool bCheckPassable = true;
     uint32_t bUseBestSpot = 1;
     POINT* pNewPosition = &ptSpawnPos;
-    D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pSpawnRoom = FindBestSpotToSpawnItem(pSpawnRoom, &ptUnitPos, pNewPosition, bUseBestSpot, bCheckPassable);
+    D2RoomStrc* pSpawnRoom = FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pNewPosition, bUseBestSpot, bCheckPassable);
     if (!pSpawnRoom) {
       return;
     }

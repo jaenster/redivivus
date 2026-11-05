@@ -104,11 +104,7 @@ void __fastcall PLAYERLIST_AddPlayerEntry(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     D2UnitPlayerListStrc* pNewEntry = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitPlayerListStrc, ".\\UNIT\\PlayerList.cpp", 0x6d);
-    pNewEntry->nUnitGUID = 0;
-    pNewEntry->nRelationshipFlags = 0;
-    pNewEntry->nHostileDelay = 0;
-    pNewEntry->bIsPartied = 0;
-    pNewEntry->pNext = 0;
+    memset(pNewEntry, 0, sizeof(*pNewEntry));
     if (!pUnit2) {
       nTargetGUID = -1;
     } else {
@@ -392,12 +388,8 @@ void __fastcall PARTY_SendRelationshipForPlayer(::SGAMEDATA * pGame, D2UnitStrc 
     } else {
       nOtherUnitGUID = pOtherUnit->nUnitGUID;
     }
-    if (!pUnit) {
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(pGame, -1, nOtherUnitGUID, (uint16_t)pListEntry->nRelationshipFlags);
-      return;
-    }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(pGame, pUnit->nUnitGUID, nOtherUnitGUID, (uint16_t)pListEntry->nRelationshipFlags);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender(pGame, !pUnit ? -1 : pUnit->nUnitGUID, nOtherUnitGUID, (uint16_t)pListEntry->nRelationshipFlags);
 }
 
 // Establishes a bidirectional player-list relationship between pUnit and pOtherPlayer: allocates entries for both directions, sends packet 0x8D (AssignPlayerToParty), clears bIsPartied flags, updates party membership based on current party ID, and broadcasts the full relationship table of pUnit to pOtherPlayer via 0x8C packets.
@@ -430,7 +422,12 @@ void __fastcall PLAYERLIST_AddBothWays(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       pListEntry->bIsPartied = 0;
     }
     uint16_t sPartyId = SUnit::GetPartyId(pUnit);
-    SetPlayerRelationship(pOtherPlayer, pUnit, (uint32_t)(sPartyId != 0xffff));
+    if (sPartyId == 0xffff) {
+      SetPlayerRelationship(pOtherPlayer, pUnit, 0);
+    } else {
+      SetPlayerRelationship(pOtherPlayer, pUnit, 1);
+    }
+
     Send0x8bRelationshipStatus(pOtherPlayer, pUnit);
     Send0x8bRelationshipStatus(pUnit, pOtherPlayer);
     pPlayerData = D2Common::Units::GetPlayerData(pUnit);
