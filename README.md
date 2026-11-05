@@ -31,8 +31,9 @@ Battle.net is outside its scope: it is not designed, tested or supported for it.
   and the executable links with no undefined symbol.
 - It starts, reaches the menus, and plays single player: create a character, enter the
   game, walk, fight, change areas.
-- It is not finished. Some areas and features still crash. See
-  [Known issues](#known-issues).
+- A full playthrough has been completed on the build made with Visual C++ 2005, the
+  compiler of the original (November 2026). Quests, bosses and act changes all work.
+- It is not finished. See [Known issues](#known-issues).
 
 ## Build and run
 
@@ -52,11 +53,15 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 
 ## Known issues
 
-- **It crashes.** Not constantly, but a session of any length will probably hit one. Every
+- **When an NPC has quest news, the scrolling text box does not appear.** The quest itself
+  advances normally; only the dialog is missing.
+- **It can still crash.** Rarely now, but it is not ruled out. Every
   crash so far has been a single wrong type or a lost value somewhere in the
   reconstruction, and each one fixed takes a class of others with it. A crash writes a
   report with a symbolised stack trace to `d2crash-<date>-<time>.txt` next to the
-  executable; please attach it to an [issue](https://github.com/jaenster/redivivus/issues).
+  executable (the Visual C++ build writes `Crash.txt` and a minidump to
+  `BlizzardError/<date time>/`); please attach it to an
+  [issue](https://github.com/jaenster/redivivus/issues).
 
 ## Verification
 
