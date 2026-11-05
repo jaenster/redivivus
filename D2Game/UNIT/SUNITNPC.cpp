@@ -7,7 +7,6 @@
 #include "D2Client/D2GSPacketSrv0x4E.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/npcmenu/Merc.h"
 #include "D2Client/UNIT/Item.h"

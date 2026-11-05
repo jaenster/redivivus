@@ -6,7 +6,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/DataTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2MissilesTxt.h"
 #include "D2Common/D2MonStatsTxt.h"
@@ -46,6 +45,7 @@
 #include "D2Game/GAME/Level.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Hell/D2Hell.h"
@@ -1166,19 +1166,16 @@ static void CreateObjectPresetsForMap(D2DrlgMapStrc * pMapStrc, D2PoolManagerStr
     if (pMapStrc->pTxtLevelPrest->Def == 0x1b) {
       CreateObjectPresets(mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
       CreateObjectPresets2(-1, &floorGrid, pMemory, pMapStrc);
-      DrlgGrid::ResetGrid(&floorGrid);
-      return;
-    }
-
-    uint32_t cellFlags;
-    if (mapCoords.nWidth > 0) {
-      do {
-        cellFlags = DrlgGrid::GetGridFlags(&floorGrid, xIndex, 0);
-        if (((uint8_t)(cellFlags >> 0x14) & 0x3f) == 2 && (char)(cellFlags >> 8) == '\x18') {
-          CreateObjectPresets(xIndex + 1 + mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
-          CreateObjectPresets2(xIndex, &floorGrid, pMemory, pMapStrc);
-          xIndex += 4;
-        }
+    } else {
+      uint32_t cellFlags;
+      if (mapCoords.nWidth > 0) {
+        do {
+          cellFlags = DrlgGrid::GetGridFlags(&floorGrid, xIndex, 0);
+          if (((uint8_t)(cellFlags >> 0x14) & 0x3f) == 2 && (char)(cellFlags >> 8) == '\x18') {
+            CreateObjectPresets(xIndex + 1 + mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
+            CreateObjectPresets2(xIndex, &floorGrid, pMemory, pMapStrc);
+            xIndex += 4;
+          }
 
         xIndex++;
       } while ((int)xIndex < mapCoords.nWidth);
@@ -1991,11 +1988,7 @@ D2PresetUnitStrc * __fastcall CopyPresetUnit(D2PoolManagerStrc * pMemory, D2Pres
     uint32_t pathIndex;
     int* pCoordField;
     D2PresetUnitStrc* pNewPreset = D2_NEW_POOL_AT(pMemory, D2PresetUnitStrc, ".\\DRLG\\Preset.cpp", 0x54a);
-    pNewPreset->nMode = 0;
-    pNewPreset->nClassId = 0;
-    pNewPreset->nPosX = 0;
-    pNewPreset->pPresetUnitNext = 0;
-    pNewPreset->pMapAI = 0;
+    memset(pNewPreset, 0, sizeof(*pNewPreset));
     pNewPreset->eType = UNIT_PLAYER;
     pNewPreset->nPosY = 0;
     pNewPreset->nFlags = 0;

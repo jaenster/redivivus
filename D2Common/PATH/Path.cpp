@@ -3,7 +3,6 @@
 #include "D2Common/PATH/Path.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/UI/Path.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -333,8 +332,8 @@ uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
       uint16_t nMidX;
       nMidX = pPathData[2];
       nMidY = pPathData[3];
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(*(D2RoomStrc**)(pPathData + 4), (int)((uint32_t)nMidX - (uint32_t)*pPathData) / 2 + (uint32_t)*pPathData, (int)((uint32_t)nMidY - (uint32_t)pPathData[1]) / 2 + (uint32_t)pPathData[1]);
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nMidX, (uint32_t)nMidY);
+      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(*(D2RoomStrc**)(pPathData + 4), (int)((uint32_t)nMidX - (uint32_t)*pPathData) / 2 + (uint32_t)*pPathData, (int)((uint32_t)nMidY - (uint32_t)pPathData[1]) / 2 + (uint32_t)pPathData[1]);
+      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nMidX, (uint32_t)nMidY);
     }
 
     BOOL bIsTown = DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
@@ -357,8 +356,8 @@ static void __stdcall DRLGPATH_UpdateUnitRoom(D2RoomStrc * pRoom, D2DynamicPathS
       }
     }
 
-    pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pBetterRoom, (uint32_t)nPosX, (uint32_t)nPosY);
-    if (!pBetterRoom && (!pRoom || (pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nPosX, (uint32_t)nPosY) , !pBetterRoom)) && pDynamicPath->nFlags & 0x40000U) {
+    pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pBetterRoom, (uint32_t)nPosX, (uint32_t)nPosY);
+    if (!pBetterRoom && (!pRoom || (pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nPosX, (uint32_t)nPosY) , !pBetterRoom)) && pDynamicPath->nFlags & 0x40000U) {
       pDynamicPath->dwPathPoints = 0;
       return;
     }
@@ -384,7 +383,7 @@ static void __stdcall DRLGPATH_SetPathPosition(uint32_t nOffsetX, uint32_t nOffs
     uint32_t nOffsetYCopy = nOffsetY;
     if (pDynamicPath->nFlags & 0x40000U) {
       D2RoomStrc* pValidRoom;
-      pValidRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pDynamicPath->pRoom, nOffsetX >> 0x10, nOffsetY >> 0x10);
+      pValidRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pDynamicPath->pRoom, nOffsetX >> 0x10, nOffsetY >> 0x10);
       if (!pValidRoom) {
         pDynamicPath->dwPathPoints = 0;
         return;
@@ -1727,7 +1726,7 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTarg
     DRLGPATH_SetPathPosition(nTargetPos * 0x10000 + 0x8000, (uint32_t)nTargetY * 0x10000 + 0x8000, pRoom, pPath);
     if (nTargetPos || false) {
       D2RoomStrc* pBetterRoom;
-      pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)nTargetY);
+      pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)nTargetY);
       if (!pBetterRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
         exit(-1);
@@ -1759,7 +1758,7 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTar
     DRLGPATH_SetPathPosition(nTargetPos * 0x10000 + 0x8000, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2) * 0x10000 + 0x8000, pRoom, pPath);
     if (nTargetPos || false) {
       D2RoomStrc* pBetterRoom;
-      pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2));
+      pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2));
       if (!pBetterRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4cc);
         exit(-1);
@@ -1813,7 +1812,7 @@ uint32_t __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * 
       }
 
       DRLGPATH_SetPathPosition(nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000, pRoom, pDynamicPath);
-      pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
+      pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
       if (pBetterRoom) {
         PATH_ResetPathState(pDynamicPath);
         return 1;

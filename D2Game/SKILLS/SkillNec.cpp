@@ -1870,7 +1870,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     }
 
     uint32_t nTargetY = nCursorYRaw;
-    D2RoomStrc* pTargetRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nTargetX, nTargetY);
+    D2RoomStrc* pTargetRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nTargetX, nTargetY);
     if (!pTargetRoom) {
       return 0;
     }
@@ -2011,8 +2011,7 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
     }
 
     int32_t nSpawnYSaved = nSpawnY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nSpawnYSaved);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnX, nSpawnYSaved);
     sSummonParams.nFunctionId = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
     if (sSummonParams.nFunctionId) {
       return nullptr;

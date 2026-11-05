@@ -4,6 +4,24 @@
   "file": "D2Common/ITEMS/Items.cpp",
   "functions": [
     {
+      "name": "ItemTypes_GetLine",
+      "address": "00555c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555c90"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ItemTypes_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemTypesTxt",
+        "int32_t"
+      ]
+    },
+    {
       "name": "ITEMS_SearchItemCodeTable",
       "address": "00627c20",
       "lines": [

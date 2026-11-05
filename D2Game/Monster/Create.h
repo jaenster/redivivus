@@ -19,6 +19,7 @@ typedef uint32_t eD2MonsterAnimMode;
 namespace D2Game::Monster::Create {
 
 // Function declarations
+int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId);
 int * * __fastcall MONSTER_FindUnitInPartySlot(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __fastcall MONSTER_SetClearPartyFlags(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet);
 // Convenience wrapper that spawns a monster of nClassId at the position of an existing unit pUnit. Fills a D2UnknownCreateMonsterStrc (class, anim mode, flags nParam2, spawn radius nParam, owning room/game) and resolves pUnit's X/Y from its static path (objects/unit types 4-5) or dynamic path (otherwise 0 if none), then calls CreateMonster. Returns the newly created D2UnitStrc*.

@@ -20,7 +20,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/MonUnique.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/Units.h"

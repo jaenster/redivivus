@@ -10,7 +10,6 @@
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/SKILLS/SkillsAss.h"
 #include "D2Client/Sound/Sound.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
@@ -40,6 +39,7 @@
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -524,7 +524,7 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(D2UnitStrc * pUnit,
       return 0;
     }
 
-    pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
     if (!pRoom) {
       return 0;
     }

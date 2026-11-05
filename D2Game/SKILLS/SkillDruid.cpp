@@ -8,9 +8,7 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -39,6 +37,7 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/MISSILES/Missiles.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Game/SKILLS/SkillNec.h"
 #include "D2Game/SKILLS/SkillsServer.h"
@@ -1226,7 +1225,7 @@ BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitS
                     nRandY = nRandX - nAuraRange + nTimer;
                     nRandX = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nX, nRandY, pUnit, 0x805);
                     if (nRandX) {
-                      pRoomLocal = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoomLocal, nX, nRandY);
+                      pRoomLocal = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoomLocal, nX, nRandY);
                       if (pRoomLocal) {
                         eCollide = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoomLocal, nX, nRandY, COLLIDE_BLOCK_PLAYER);
                         if (eCollide == COLLIDE_NONE) {

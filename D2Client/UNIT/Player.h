@@ -105,10 +105,8 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(struct D2UnitStrc * pUnit, stru
 // @blizzard UnitProcessPlayerModeSimulation
 void __fastcall PLAYER_ProcessPlayerModeSimulation(struct D2UnitStrc * pUnit);
 uint32_t __fastcall CheckFlagWithMask(struct D2UnitStrc * pUnit, uint32_t dwMask);
-struct D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 int __fastcall Unreferenced_004637f0(int param_1);
 int __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pUnit);
-int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId);
 int32_t __fastcall TXT_MonStats_GetBaseId(struct D2UnitStrc * pUnit);
 // The parameter arrives in a whole register; typing it from the single byte the body reads made the decompiler splice the indeterminate upper bytes back in as an uninitialised local, which then indexed an array with garbage in its high bits.
 BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, TXTMonStats2Field0x04DWORD nBitOffset);

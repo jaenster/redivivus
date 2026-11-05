@@ -8,7 +8,6 @@
 #include "D2Client/D2IniConfigStrc.h"
 #include "D2Client/Message.h"
 #include "D2Client/Sound/Sound.h"
-#include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -55,8 +54,6 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Help.data.h"
-#include "D2Client/UNIT/PlrSkills.h"
-#include "D2Common/D2UnitStrc.h"
 #include "D2Launch/CharSel.data.h"
 #include "D2Launch/D2Launch.h"
 #include "D2Launch/Launcher.data.h"
@@ -4293,7 +4290,7 @@ int __fastcall Unreferenced_0042e630(int param_1) {
 void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut) {
     uint16_t wValue = *pwIn;
     if (wValue < 0x100) {
-      *pwOut = D2Client::UI::ui::CharacterLookupTable[wValue];
+      *pwOut = D2Lang::Unicode::UNISYS::CharacterLookupTable[wValue];
       return;
     }
 
@@ -6285,7 +6282,7 @@ void __stdcall UIMENU_ShowRealmNameOnButton() {
       do {
         wCh = awButtonText[i];
         if ((uint16_t)wCh < 0x100) {
-          wCh = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wCh];
+          wCh = D2Lang::Unicode::UNISYS::CharacterLookupTable[(uint16_t)wCh];
         }
 
         awButtonText[i] = wCh;
@@ -9709,10 +9706,6 @@ int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex) {
 
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
-}
-
-void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance) {
-    D2Game::SKILLS::SkillsServer::D2UpdateState((D2UnitStrc*)wszText, (eD2States)pfnMenuInstance, 1);
 }
 
 } // namespace D2Launch::MainMenus

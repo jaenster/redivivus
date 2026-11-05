@@ -358,6 +358,7 @@ void __stdcall NET_SID_CLIENT_ClearSHAContexts();
 void __fastcall NET_SID_CLIENT_GetSHAState(int32_t nCtxIndex, uint32_t * pdwStateOut);
 void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlock, uint32_t * pdwOutHash);
 void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex);
+uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value);
 void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pExpandedSubkeys);
 void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * pDecryptKey);
 void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphertext, uint16_t * pSubkeys);

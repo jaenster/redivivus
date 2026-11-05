@@ -15,6 +15,5 @@ void __stdcall NET_SID_CLIENT_SHA1Init(uint32_t * pSha1Context);
 // SHA-0 update: adds to the bit count with signed carry, copies each 64-byte block to ctx+0x1c and calls SHA0_Transform.
 // Name per redivivus issue #36 (asm-verified hash variant).
 void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnContext);
-uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value);
 
 } // namespace D2Client::_net_sid

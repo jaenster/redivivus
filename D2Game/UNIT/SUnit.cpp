@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
@@ -89,7 +88,6 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
-#include "D2Game/UNIT/SUnit.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1857,9 +1855,9 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
       ptTarget.x = nX;
       ptTarget.y = nY;
       if (!pRoom) {
-        pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nY);
+        pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nY);
         if (!pRoom) {
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, ptTarget.x, ptTarget.y);
+          pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, ptTarget.x, ptTarget.y);
           if (!pRoom) {
             return 0;
           }

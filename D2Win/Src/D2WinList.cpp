@@ -298,8 +298,8 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
     BOOL bCallbackResult;
     D2WinListEntry* pEntry;
-    int nMouseY = D2Client::Mouse::nPosY;
-    int nMouseX = D2Client::Mouse::nPosX;
+    int nMouseY = D2WinMain::nPosY;
+    int nMouseX = D2WinMain::nPosX;
     ::D2WinList* pList = (::D2WinList*)pControlMsg->pControl;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x154);

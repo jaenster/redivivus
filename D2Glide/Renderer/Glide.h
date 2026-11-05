@@ -57,7 +57,9 @@ namespace D2Glide::Renderer::Glide {
 
 // Function declarations
 void __fastcall ClearCaches();
+BOOL __fastcall CheckCutScene();
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
+void __fastcall UpdateScaleFactor(int32_t nScaleFactor);
 BOOL __fastcall SetGamma(int32_t nGamma);
 int32_t __fastcall CheckGamma();
 BOOL __fastcall EndScene1();

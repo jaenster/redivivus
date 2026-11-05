@@ -12,7 +12,6 @@
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
 #include "D2Client/Message.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Multi/OOGUtilities.h"

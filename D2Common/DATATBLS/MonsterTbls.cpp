@@ -23,7 +23,7 @@
 #include "D2Common/Txt/D2TxtLinkNodeStrc.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/ITEMS/Items/Drop.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -934,7 +934,7 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
                     if (pItemsTxt && pItemsTxt->bQuest == '\0' && pItemsTxt->bSpawnable != '\0') {
                       bTypeMatch = ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nItemClassIdx, nRecordId);
                       if (bTypeMatch && (nItemTypeStride == 38 || (bIsMissilePotion = ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nItemClassIdx, ITEMTYPE_MissilePotion) , !bIsMissilePotion)) && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel > nLevelStep - 3 && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= nLevelStep) {
-                        pItemTypesTxt = D2Game::ITEMS::Items::Drop::ItemTypes_GetLine((int)pItemsTxt->wType);
+                        pItemTypesTxt = ITEMS::Items::ItemTypes_GetLine((int)pItemsTxt->wType);
                         if (pItemTypesTxt) {
                           if ((uint8_t)pItemTypesTxt->rarity > 1) {
                             nRarity = (uint32_t)(uint8_t)pItemTypesTxt->rarity;

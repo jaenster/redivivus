@@ -5,10 +5,8 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -44,6 +42,7 @@
 #include "D2Game/Monsters/Spawn.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS/A2Q6.h"
 #include "D2Game/UNIT/PlayerList.h"
@@ -742,7 +741,7 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
       *pDVar1 = DVar2;
       nRandOffX2 = DVar2.nSeedLow & 3;
       nOffsetX = nRandOffX;
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pInitArg->pRoom, ptSpawnPos.x + nRandOffX, nRandOffX2 + ptSpawnPos.y);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pInitArg->pRoom, ptSpawnPos.x + nRandOffX, nRandOffX2 + ptSpawnPos.y);
       if (pRoom == pInitArg->pRoom) {
         ptSpawnPos.y = pInitArg->nY + nRandOffX2;
         ptSpawnPos.x = pInitArg->nX + nRandOffX;
@@ -2489,7 +2488,7 @@ int32_t __fastcall OBJECT_PopulateGridObjects(::SGAMEDATA * pGame, D2RoomStrc * 
             exit(-1);
           }
 
-          UNIT::SUnit::CreateUnit(UNIT_OBJECT, (sNewSeed.nSeedLow & 3 ? -4 : 0) + 0xb, nPosX, nPosY, pGame, pRoom, 1, 0, nullptr);
+          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xb + (sNewSeed.nSeedLow & 3 ? -4 : 0), nPosX, nPosY, pGame, pRoom, 1, 0, nullptr);
           nSpawnedCount++;
           if (nSpawnedCount >= 0x20) {
             return 1;

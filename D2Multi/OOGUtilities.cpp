@@ -3,7 +3,6 @@
 #include "D2Multi/OOGUtilities.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "D2Client/McpConnect.h"
 #include "D2Client/mcp0x03data.h"
 #include "D2Common/Chat/Ignorelist.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
@@ -833,7 +832,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
     D2ControlStrc* pGameListForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x18);
     ghWndGameNameEditBox = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x19);
     pGameListCache = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x1a);
-    D2Client::McpConnect::MCPCONNECT_SetMessageCallback(ChatDlg::CHATDLG_StorePlayerName);
+    D2MCPClient::McpConnect::MCPCONNECT_SetMessageCallback(ChatDlg::CHATDLG_StorePlayerName);
     D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x12_MOTD();
     ChatDlg::CHATDLG_RefreshGameNameDisplay();
     D2ControlStrc* pGameInfoForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x1b);

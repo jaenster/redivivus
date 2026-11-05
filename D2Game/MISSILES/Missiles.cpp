@@ -5,11 +5,9 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacketSrv0x73.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
@@ -43,6 +41,7 @@
 #include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -189,9 +188,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       nPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pArgs->pMissile);
     }
 
-    int nTmpY = nPosY;
-    D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArgs->pOwner);
-    pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nPosX, nTmpY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pArgs->pOwner), nPosX, nPosY);
     if (!pSpawnRoom) {
       return nullptr;
     }

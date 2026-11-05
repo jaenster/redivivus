@@ -8,7 +8,6 @@
 #include "Bnclient/Bnet.h"
 #include "Bnclient/Debug.h"
 #include "Bnclient/SRP.h"
-#include "D2Client/net_sid.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "Fog/Fog.h"
 #include "Fog/SMem.h"
@@ -43,11 +42,11 @@ static char g_szStoredUsername[256] = {}; D2_STATIC_GUARD(g_szStoredUsername, "g
 static D2SrpSaltVerifierStrc g_srpSaltVerifier = {}; D2_STATIC_GUARD(g_srpSaltVerifier, "g_srpSaltVerifier");
 static D2SrpCredentialsStrc g_srpCredentials = {}; D2_STATIC_GUARD(g_srpCredentials, "g_srpCredentials");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
-namespace D2Client::_CdKey {
-char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "D2Client::_CdKey::KeyClassic");
-char * KeyExpansion = 0; D2_GLOBAL_GUARD(KeyExpansion, "D2Client::_CdKey::KeyExpansion");
-char * KeyOwner = 0; D2_GLOBAL_GUARD(KeyOwner, "D2Client::_CdKey::KeyOwner");
-} // namespace D2Client::_CdKey
+namespace Bnclient::_net_sid {
+char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "Bnclient::_net_sid::KeyClassic");
+char * KeyExpansion = 0; D2_GLOBAL_GUARD(KeyExpansion, "Bnclient::_net_sid::KeyExpansion");
+char * KeyOwner = 0; D2_GLOBAL_GUARD(KeyOwner, "Bnclient::_net_sid::KeyOwner");
+} // namespace Bnclient::_net_sid
 static uint8_t g_SHA1Contexts[276] = {}; D2_STATIC_GUARD(g_SHA1Contexts, "g_SHA1Contexts");
 
 namespace Bnclient::_net_sid {
@@ -2506,16 +2505,16 @@ void __stdcall DecodeAndLoadKeys() {
     uint32_t aKeyPathTable[7];
     uint8_t abPermuteIdx[38];
     int nPermuteOffset;
-    if (D2Client::_CdKey::KeyClassic || D2Client::_CdKey::KeyOwner) {
+    if (KeyClassic || KeyOwner) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x213);
       exit(-1);
     }
 
     sprintf(szFileName, "%s\\%s.gid", "font", "font");
-    D2Client::_CdKey::KeyClassic = (char*)NET_SID_CLIENT_LoadAndDecodeCDKeyFile((uint32_t*)szFileName, (DWORD*)&g_dwCdKeyClassicSize);
+    KeyClassic = (char*)NET_SID_CLIENT_LoadAndDecodeCDKeyFile((uint32_t*)szFileName, (DWORD*)&g_dwCdKeyClassicSize);
     uint32_t* pKeyClassicBuf;
-    pKeyClassicBuf = (uint32_t*)D2Client::_CdKey::KeyClassic;
-    if (!(uint32_t*)D2Client::_CdKey::KeyClassic) {
+    pKeyClassicBuf = (uint32_t*)KeyClassic;
+    if (!(uint32_t*)KeyClassic) {
       aKeyPathTable[1] = 0x78617776;
       aKeyPathTable[2] = 0x72696e64;
       aKeyPathTable[3] = 0x6375736f;
@@ -2552,7 +2551,7 @@ void __stdcall DecodeAndLoadKeys() {
     }
 
     store_classic_key:
-    D2Client::_CdKey::KeyClassic = (char*)pKeyClassicBuf;
+    KeyClassic = (char*)pKeyClassicBuf;
     sprintf(szFileName, "%s\\%s.clh", "font", "font");
     g_dwCdKeyOwnerSize = 0x400;
     Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, 0);
@@ -2589,7 +2588,7 @@ void __stdcall DecodeAndLoadKeys() {
 
       szFileName[nXorByteIdx + 1] = '\0';
       g_dwCdKeyOwnerSize = 0x400;
-      D2Client::_CdKey::KeyOwner = (char*)pKeyBuf;
+      KeyOwner = (char*)pKeyBuf;
       Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, 0);
       if (pFileBuf && g_dwCdKeyOwnerSize) {
         bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyOwnerSize);
@@ -2606,10 +2605,10 @@ void __stdcall DecodeAndLoadKeys() {
     }
 
     store_owner_key:
-    D2Client::_CdKey::KeyOwner = (char*)pKeyBuf;
+    KeyOwner = (char*)pKeyBuf;
     BOOL bIsExpansion;
     bIsExpansion = BnSend::D2CheckExpansionGame();
-    pKeyBuf = (int*)D2Client::_CdKey::KeyExpansion;
+    pKeyBuf = (int*)KeyExpansion;
     if (bIsExpansion) {
       pExpKeyPathSrc = (uint32_t*)"vwaxdnirosucflbgt\\.mpyeh8";
       pExpKeyBuf = aKeyPathTable;
@@ -2648,7 +2647,7 @@ void __stdcall DecodeAndLoadKeys() {
     }
 
     store_expansion_key:
-    D2Client::_CdKey::KeyExpansion = (char*)pKeyBuf;
+    KeyExpansion = (char*)pKeyBuf;
     g_dwProductId = 0;
     if (szFileName[0] != '\0') {
       char* pLoadedKeyBuf;
@@ -2661,16 +2660,16 @@ void __stdcall DecodeAndLoadKeys() {
 }
 
 void __stdcall FreeKeys() {
-    if (D2Client::_CdKey::KeyClassic) {
-      Storm::Source::SFile::SFileUnloadFile(D2Client::_CdKey::KeyClassic);
-      D2Client::_CdKey::KeyClassic = 0;
+    if (KeyClassic) {
+      Storm::Source::SFile::SFileUnloadFile(KeyClassic);
+      KeyClassic = 0;
     }
-    if (!D2Client::_CdKey::KeyOwner) {
+    if (!KeyOwner) {
       return;
     }
 
-    Storm::Source::SFile::SFileUnloadFile(D2Client::_CdKey::KeyOwner);
-    D2Client::_CdKey::KeyOwner = 0;
+    Storm::Source::SFile::SFileUnloadFile(KeyOwner);
+    KeyOwner = 0;
 }
 
 uint32_t __stdcall NET_SID_CLIENT_GetProductId() {
@@ -2678,16 +2677,16 @@ uint32_t __stdcall NET_SID_CLIENT_GetProductId() {
 }
 
 char * __stdcall NET_SID_CLIENT_GetCdKeyOwner() {
-    return D2Client::_CdKey::KeyOwner;
+    return KeyOwner;
 }
 
 char * __fastcall NET_SID_CLIENT_GetCdKeyByType(int32_t nProductType) {
-    char* pKey = D2Client::_CdKey::KeyExpansion;
+    char* pKey = KeyExpansion;
     if (nProductType) {
       return pKey;
     }
 
-    pKey = D2Client::_CdKey::KeyClassic;
+    pKey = KeyClassic;
     return pKey;
 }
 
@@ -2933,6 +2932,38 @@ void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
     memset(pSHAContextField, 0, 4 * sizeof(pSHAContextField[0]));
 }
 
+uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {
+    uint64_t modResult;
+    uint32_t tempDividend;
+    if (value <= 1) {
+      return value;
+    }
+
+    int x = (int)(0x10001 / value);
+    uint32_t remainder = (uint32_t)(0x10001 % value);
+    if (remainder == 1) {
+      return 1U - x & 0xffff;
+    }
+
+    uint32_t y = 1;
+    do {
+      uint32_t quotient;
+      quotient = value / remainder;
+      modResult = (uint64_t)(value % remainder);
+      value = (uint32_t)modResult;
+      y += quotient * x;
+      if (value == 1) {
+        return y;
+      }
+
+      tempDividend = remainder;
+      remainder = (uint32_t)((uint64_t)tempDividend % modResult);
+      x += (int)((uint64_t)tempDividend / modResult) * y;
+    } while (remainder != 1);
+
+    return 1U - x & 0xffff;
+}
+
 void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pExpandedSubkeys) {
     *pExpandedSubkeys = *pUserKey;
     pExpandedSubkeys[1] = pUserKey[1];
@@ -2961,11 +2992,11 @@ void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * 
     uint16_t subkey0 = *pEncryptKey;
     uint16_t subkey1 = pEncryptKey[2];
     uint16_t subkey2 = pEncryptKey[1];
-    uint32_t invResult = D2Client::_net_sid::NET_SID_CLIENT_IDEAMultInverse((uint32_t)pEncryptKey[3]);
+    uint32_t invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)pEncryptKey[3]);
     aInvKey[0x33] = (uint16_t)invResult;
     aInvKey[0x31] = -subkey2;
     aInvKey[0x32] = -subkey1;
-    invResult = D2Client::_net_sid::NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey0);
+    invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey0);
     aInvKey[0x30] = (uint16_t)invResult;
     int roundCounter = 7;
     uint16_t* pSrcKey = pEncryptKey + 4;
@@ -2980,11 +3011,11 @@ void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * 
       pTempWrite2[-1] = pReadKey[1];
       pTempWrite2[-2] = subkey0;
       negAddKey = -pReadKey[4];
-      invResult = D2Client::_net_sid::NET_SID_CLIENT_IDEAMultInverse((uint32_t)pReadKey[5]);
+      invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)pReadKey[5]);
       pTempWrite2[-3] = (uint16_t)invResult;
       pTempWrite2[-4] = -subkey2;
       pTempWrite2[-5] = negAddKey;
-      invResult = D2Client::_net_sid::NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey1);
+      invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey1);
       roundCounter--;
       pTempWrite2[-6] = (uint16_t)invResult;
       pSrcKey = pReadKey + 6;
@@ -2997,11 +3028,11 @@ void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * 
     pTempWrite2[-7] = pReadKey[7];
     uint16_t subkey3 = pReadKey[0xb];
     pTempWrite2[-8] = subkey0;
-    invResult = D2Client::_net_sid::NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey3);
+    invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey3);
     pTempWrite2[-9] = (uint16_t)invResult;
     pTempWrite2[-10] = -pReadKey[10];
     pTempWrite2[-0xb] = -subkey2;
-    invResult = D2Client::_net_sid::NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey1);
+    invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey1);
     pTempWrite2[-0xc] = (uint16_t)invResult;
     pWrite = aInvKey;
     int copyCounter = 0x34;

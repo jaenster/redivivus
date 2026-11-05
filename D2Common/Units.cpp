@@ -11,7 +11,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnitEvent.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -58,6 +57,7 @@
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
@@ -771,12 +771,12 @@ short __stdcall GetCoords(D2UnitStrc * pUnit, POINT * pPoint) {
 
       pPoint->x = 0;
       pPoint->y = 0;
-      return (short int)(uintptr_t)pPoint;
+    } else {
+      D2StaticPathStrc* pDVar1 = pUnit->pPath.pStaticPath;
+      pPoint->x = pDVar1->nPosX;
+      pPoint->y = pDVar1->nPosY;
     }
 
-    D2StaticPathStrc* pDVar1 = pUnit->pPath.pStaticPath;
-    pPoint->x = pDVar1->nPosX;
-    pPoint->y = pDVar1->nPosY;
     return (short int)(uintptr_t)pPoint;
 }
 

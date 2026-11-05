@@ -10,9 +10,7 @@
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/COMPOSIT/Composit.h"
 #include "D2Common/Collision.h"
@@ -997,7 +995,7 @@ void __fastcall SKILLS_UpdatePetMax(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
       return;
     }
 
-    D2PetTypeTxt* pPetTypeTxt = D2Client::GAME::RosterPets::GetPetTypeTxtById((int)(char)byPetType);
+    D2PetTypeTxt* pPetTypeTxt = PLAYER::PlayerPets::GetPetTypeTxtById((int)(char)byPetType);
     if (!pPetTypeTxt) {
       return;
     }
@@ -1651,7 +1649,7 @@ BOOL __fastcall SKILLS_SrvStFn03_Unsummon(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     int32_t nPetId = PLAYER::PlayerPets::GetOwnersPetType(pUnit, pTarget->nUnitGUID);
-    D2PetTypeTxt* pPetTypeTxt = D2Client::GAME::RosterPets::GetPetTypeTxtById(nPetId);
+    D2PetTypeTxt* pPetTypeTxt = PLAYER::PlayerPets::GetPetTypeTxtById(nPetId);
     if (!pPetTypeTxt) {
       return 0;
     }
@@ -1807,7 +1805,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
     ptPortalPos.y = nSpawnY;
     BOOL BVar1 = Quests::QUESTS::IsPortalFromDuriel(pGame, &ptPortalPos, nLevelId2, &eLevel);
     if (BVar1) {
-      eLevel = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(eLevel, ptPortalPos.x, ptPortalPos.y);
+      eLevel = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(eLevel, ptPortalPos.x, ptPortalPos.y);
     }
     if (!eLevel) {
       eLevel = pSpawnRoom;
@@ -1902,7 +1900,7 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 
         nPosY = ptSpawnPos.y;
         nPosX = ptSpawnPos.x;
-        pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, ptSpawnPos.x, ptSpawnPos.y);
+        pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, ptSpawnPos.x, ptSpawnPos.y);
         if (!pSpawnRoom) {
           return 0;
         }
@@ -2402,7 +2400,7 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
     nSpawnPosX = nTargetX;
     D2RoomStrc* pRoom;
     pRoom = D2Common::Units::UNITS_GetRoom(pPetCreation->pPlayer);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnPosX, nTargetY);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnPosX, nTargetY);
     if (!pRoom) {
       return nullptr;
     }
@@ -2521,8 +2519,7 @@ void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t n
     sUnitFindArg.nDistance = nDistance;
     uint32_t nTargetY = nCursorYPos;
     sUnitFindArg.nFlags = nUnitFindFlags;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pTargetX, nTargetY);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit_00), (int32_t)pTargetX, nTargetY);
     if (!pRoom) {
       return;
     }
@@ -2576,8 +2573,7 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
       sSkillParam.nX = nX_00;
       sSkillParam.nY = iUnit;
       sSkillParam.nDistance = nDistance;
-      pRoom = D2Common::Units::UNITS_GetRoom(sSkillParam.pAttacker);
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX_00, iUnit);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(sSkillParam.pAttacker), nX_00, iUnit);
       if (!pRoom) {
         return;
       }
@@ -3102,8 +3098,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
     }
 
     uint32_t nTargetYCopy = nTargetY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetYCopy);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nTargetX, nTargetYCopy);
     if (!pRoom) {
       return 0;
     }
@@ -4558,6 +4553,10 @@ D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2Uni
     GAME::Event::SetEvent(pGame, pTargetUnit, 0xc, pGame->dwGameFrame + nAuraDuration, 0, 0);
     SkillDruid::D2SetAurastatsFromSkills(pUnit, pStatListEx, pSkillsTxt, eSkill, nSkillLvl);
     return (D2UnitStrc*)pStatListEx;
+}
+
+void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance) {
+    D2UpdateState((D2UnitStrc*)wszText, (eD2States)pfnMenuInstance, 1);
 }
 
 } // namespace D2Game::SKILLS::SkillsServer

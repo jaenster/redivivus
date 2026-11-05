@@ -1890,6 +1890,24 @@
       ]
     },
     {
+      "name": "NET_SID_CLIENT_IDEAMultInverse",
+      "address": "005242f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005242f0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAMultInverse"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
       "name": "NET_SID_CLIENT_IDEAExpandKey",
       "address": "00524360",
       "lines": [

@@ -4,7 +4,6 @@
 #include "D2Client/D2RosterStrc.h"
 #include "D2Client/GAME/Roster.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -23,6 +22,7 @@
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -55,14 +55,6 @@ D2RosterPetStrc * pRosterPet = 0; D2_GLOBAL_GUARD(pRosterPet, "D2Client::GAME::R
 } // namespace D2Client::GAME::RosterPets
 
 namespace D2Client::GAME::RosterPets {
-
-D2PetTypeTxt * __fastcall GetPetTypeTxtById(int32_t nPetId) {
-    if (nPetId >= 0 && nPetId < sgptDataTable->nTxtPetTypeSize) {
-      return sgptDataTable->pTxtPetType + nPetId;
-    }
-
-    return nullptr;
-}
 
 // @sourcefile .\GAME\RosterPets.cpp
 void __stdcall FreeRosterPet() {

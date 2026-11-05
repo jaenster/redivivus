@@ -13,6 +13,7 @@
 #include "D2Common/Merc.h"
 #include "D2Game/D2GambleTxt.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/SUNITNPC.h"
 #include "D2Game/UNIT/SUnitDmg.h"

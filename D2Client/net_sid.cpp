@@ -53,36 +53,4 @@ void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnCon
     } while (nBlocksRemaining);
 }
 
-uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {
-    uint64_t modResult;
-    uint32_t tempDividend;
-    if (value <= 1) {
-      return value;
-    }
-
-    int x = (int)(0x10001 / value);
-    uint32_t remainder = (uint32_t)(0x10001 % value);
-    if (remainder == 1) {
-      return 1U - x & 0xffff;
-    }
-
-    uint32_t y = 1;
-    do {
-      uint32_t quotient;
-      quotient = value / remainder;
-      modResult = (uint64_t)(value % remainder);
-      value = (uint32_t)modResult;
-      y += quotient * x;
-      if (value == 1) {
-        return y;
-      }
-
-      tempDividend = remainder;
-      remainder = (uint32_t)((uint64_t)tempDividend % modResult);
-      x += (int)((uint64_t)tempDividend / modResult) * y;
-    } while (remainder != 1);
-
-    return 1U - x & 0xffff;
-}
-
 } // namespace D2Client::_net_sid

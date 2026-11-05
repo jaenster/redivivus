@@ -135,8 +135,8 @@ BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
     uint32_t uVar1 = pPopup->sControl.dwState;
     if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
       pPopup->bCentered = -1;
-      nRelMouseX = D2Client::Mouse::nPosX - pPopup->sControl.dwPosX;
-      nRelX = pPopup->sControl.dwSizeY - pPopup->sControl.dwPosY + D2Client::Mouse::nPosY;
+      nRelMouseX = D2WinMain::nPosX - pPopup->sControl.dwPosX;
+      nRelX = pPopup->sControl.dwSizeY - pPopup->sControl.dwPosY + D2WinMain::nPosY;
       if (nRelMouseX >= 0 && nRelMouseX <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= pPopup->sControl.dwSizeY) {
         pPopup->bCentered = nRelX / 0x14;
       }
@@ -206,8 +206,8 @@ void __stdcall D2WinPopup() {
     uVar1 = pNewPopup->sControl.dwState | gadwBitMasks[2];
     pNewPopup->sControl.dwState = uVar1;
     pNewPopup->sControl.dwState = uVar1 | gadwBitMasks[3];
-    pNewPopup->sControl.dwPosX = D2Client::Mouse::nPosX;
-    pNewPopup->sControl.dwPosY = D2Client::Mouse::nPosY;
+    pNewPopup->sControl.dwPosX = D2WinMain::nPosX;
+    pNewPopup->sControl.dwPosY = D2WinMain::nPosY;
     pNewPopup->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinPopup*))D2WinPopup::Draw;
     pNewPopup->sControl.fpDrawEx = (::DrawEx)(BOOL (__fastcall *)(::D2WinPopup*))D2WinPopup::DrawEx;
     pNewPopup->sControl.pNext = 0;

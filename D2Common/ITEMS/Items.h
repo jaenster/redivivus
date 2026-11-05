@@ -66,6 +66,7 @@ struct __attribute__((packed)) D2RuneTableStrc {
 namespace D2Common::ITEMS::Items {
 
 // Function declarations
+struct D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType);
 uint32_t __stdcall ITEMS_SearchItemCodeTable(struct D2UnitStrc * pUnit, int32_t dwContext, uint32_t nOffset);
 // @sourcefile .\ITEMS\Items.cpp
 void __stdcall STRUCT_CreateDataItem(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit);

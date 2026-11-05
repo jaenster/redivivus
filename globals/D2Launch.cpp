@@ -129,7 +129,7 @@ namespace D2Client::CharScreen {
 // Initialized scalars
 // =============================================================================
 
-int nSelectedCharIndex = -0x1; D2_GLOBAL_GUARD(nSelectedCharIndex, "D2Client::CharScreen::nSelectedCharIndex");
+int nSelectedCharIndex = -0x1; D2_GLOBAL_GUARD(nSelectedCharIndex, "D2Launch::CharSel::nSelectedCharIndex");
 
 } // namespace D2Client::CharScreen
 

@@ -4,6 +4,24 @@
   "file": "D2Game/PLAYER/PlayerPets.cpp",
   "functions": [
     {
+      "name": "GetPetTypeTxtById",
+      "address": "00478a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478a20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetPetTypeTxtById"
+      ],
+      "usedTypes": [
+        "D2PetTypeTxt",
+        "int32_t"
+      ]
+    },
+    {
       "name": "Send0x7aSummonLog",
       "address": "00574410",
       "lines": [

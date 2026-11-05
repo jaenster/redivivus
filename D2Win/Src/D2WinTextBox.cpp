@@ -946,7 +946,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
         return 0;
       }
       if ((uint32_t)pTextBox->sStyleControl.fpDraw & 1) {
-        nMouseYOffset = pTextBox->sControl.dwSizeY - pTextBox->sControl.dwPosY + D2Client::Mouse::nPosY;
+        nMouseYOffset = pTextBox->sControl.dwSizeY - pTextBox->sControl.dwPosY + D2WinMain::nPosY;
         D2WinFont::SetAndReturnLastFont(pTextBox->nScrollWidth);
         D2WINTEXTBOX_ComputeLineSpacingForLanguage(pTextBox->nScrollWidth);
         uFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();

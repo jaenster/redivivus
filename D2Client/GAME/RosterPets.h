@@ -17,7 +17,6 @@ struct D2UnitStrc;
 namespace D2Client::GAME::RosterPets {
 
 // Function declarations
-struct D2PetTypeTxt * __fastcall GetPetTypeTxtById(int32_t nPetId);
 // @sourcefile .\GAME\RosterPets.cpp
 void __stdcall FreeRosterPet();
 int __fastcall Unreferenced_00478a90(int param_1);

@@ -5,6 +5,7 @@
 
 #include "globals/globals.h"
 #include "D2Gdi/Renderer/Windowed.h"
+#include "D2gfx/D2GFX.h"
 
 
 // =============================================================================
@@ -130,7 +131,76 @@ namespace D2Game::GAME::Rendering {
 
 namespace D2Client::UI::ui {
 
-} // namespace D2Client::UI::ui
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2RendererFunctionsStrc WindowedFunctionTable = {
+    /* .nfpInitialize = */ &D2Gdi::Renderer::Windowed::Initialize,
+    /* .nfpInitPerspective = */ &D2Gdi::Renderer::Windowed::InitPerspective,
+    /* .nfpRelease = */ &D2Gdi::Renderer::Windowed::Release,
+    /* .nfpCreateWindow = */ &D2Gdi::Renderer::Windowed::CreateWindow,
+    /* .nfpDestroyWindow = */ &D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_DestroyWindow,
+    /* .nfpEndCutScene = */ &D2Gdi::Renderer::Windowed::EndCutScene,
+    /* .nfpBeginScene = */ &D2Gdi::Renderer::Windowed::BeginScene,
+    /* .fpEndScene1 = */ &D2Gdi::Renderer::Windowed::EndScene1,
+    /* .fpEndScene2 = */ &D2Gdi::Renderer::Windowed::EndScene2,
+    /* .nfpResizeWindow = */ &D2Gdi::Renderer::Windowed::ResizeWindow,
+    /* .nfpGetBackBuffer = */ &D2Gdi::Renderer::Windowed::GetBackBuffer,
+    /* .nfpActivateWindow = */ (fpActivateWindow)&D2Gdi::Renderer::Windowed::ActivateWindow,
+    /* .nfpSetOption = */ &D2Gdi::Renderer::Windowed::SetOption,
+    /* .nfpBeginCutScene = */ &D2Gdi::Renderer::Windowed::BeginCutScene,
+    /* .nfpPlayCutScene = */ (fpPlayCutScene)&D2Gdi::Renderer::Windowed::PlayCutScene,
+    /* .nfpCheckCutScene = */ &D2Gdi::Renderer::Windowed::CheckCutScene,
+    /* .nfpDecodeSmacker = */ &D2Gdi::Renderer::Windowed::DecodeSmacker,
+    /* .nfpPlayerSmacker = */ &D2Gdi::Renderer::Windowed::PlayerSmacker,
+    /* .nfpCloseSmacker = */ &D2Gdi::Renderer::Windowed::CloseSmacker,
+    /* .nfpGetRenderStatistics = */ &D2Gdi::Renderer::Windowed::GetRendererStatistics,
+    /* .nfpGetScreenSize = */ &D2Gdi::Renderer::Windowed::GetScreenSize,
+    /* .nfpUpdateScaleFactor = */ &D2Gdi::Renderer::Windowed::UpdateScaleFactor,
+    /* .nfpSetGamma = */ &D2Gdi::Renderer::Windowed::SetGamma,
+    /* .nfpCheckGamma = */ &D2Gdi::Renderer::Windowed::CheckGamma,
+    /* .nfpSetPerspectiveScale = */ &D2Gdi::Renderer::Windowed::SetPerspectiveScale,
+    /* .nfpAdjustPerspectivePosition = */ &D2Gdi::Renderer::Windowed::AdjustPerspectivePosition,
+    /* .nfpPerspectiveScalePosition = */ &D2Gdi::Renderer::Windowed::PerspecitveScalePosition,
+    /* .nfpSetDefaultPerspectiveFactor = */ &D2Gdi::Renderer::Windowed::SetDefaultPerspectiveFactor,
+    /* .nfpSetPalette = */ &D2Gdi::Renderer::Windowed::SetPalette,
+    /* .nfpSetPaletteTable = */ &D2Gdi::Renderer::Windowed::SetPaletteTable,
+    /* .nfpSetGlobalLight = */ &D2Gdi::Renderer::Windowed::SetGlobalLight,
+    /* .nfpDrawGroundTile = */ (D2RendererFunctionsStrc_fpDrawGroundTile)&D2Gdi::Renderer::Windowed::DrawGroundTile,
+    /* .nfpDrawPerspectiveImage = */ &D2Gdi::Renderer::Windowed::DrawPerspectiveImage,
+    /* .nfpDrawImage = */ &D2Gdi::Renderer::Windowed::DrawImage,
+    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2Gdi::Renderer::Windowed::DrawShiftedImage,
+    /* .nfpDrawVerticalCropImage = */ &D2Gdi::Renderer::Windowed::DrawVerticalCropImage,
+    /* .nfpDrawShadow = */ &D2Gdi::Renderer::Windowed::DrawShadow,
+    /* .nfpDrawImageFast = */ &D2Gdi::Renderer::Windowed::DrawImageFast,
+    /* .nfpDrawClippedImage = */ (fpDrawClippedImage)&D2Gdi::Renderer::Windowed::DrawClippedImage,
+    /* .nfpDrawWallTile = */ &D2Gdi::Renderer::Windowed::DrawWallTile,
+    /* .nfpDrawTransWallTile = */ &D2Gdi::Renderer::Windowed::DrawTransWallTile,
+    /* .nfpDrawShadowTile = */ (fpDrawShadowTile)&D2Gdi::Renderer::Windowed::DrawShadowTile,
+    /* .nfpDrawRect = */ (fpDrawRect)&D2Gdi::Renderer::Windowed::DrawRect,
+    /* .nfpDrawRectEx = */ (fpDrawRectEx)&D2Gdi::Renderer::Windowed::DrawRectEx,
+    /* .nfpDrawSolidRect = */ (fpDrawSolidRect)&D2Gdi::Renderer::Windowed::DrawSolidRect,
+    /* .nfpDrawSolidSquare = */ &D2Gdi::Renderer::Windowed::DrawSolidSquare,
+    /* .nfpDrawSolidRectEx = */ (fpDrawSolidRectEx)&D2Gdi::Renderer::Windowed::DrawSolidRectEx,
+    /* .nfpDrawSolidRectAlpha = */ &D2Gdi::Renderer::Windowed::DrawSolidRectAlpha,
+    /* .nfpDrawLine = */ (fpDrawLine)&D2Gdi::Renderer::Windowed::DrawLine,
+    /* .nfpClearScreen = */ &D2Gdi::Renderer::Windowed::ClearScreen,
+    /* .nfpDrawString = */ &D2Gdi::Renderer::Windowed::DrawString,
+    /* .nfpDrawLight = */ &D2Gdi::Renderer::Windowed::DrawLight,
+    /* .nfpDebugFillBackBuffer = */ &D2Gdi::Renderer::Windowed::DebugFillBackBuffer,
+    /* .nfpClearCaches = */ &D2Gdi::Renderer::Windowed::ClearCaches
+}; D2_GLOBAL_GUARD(WindowedFunctionTable, "D2Client::Renderer::WindowedFunctionTable");
+
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 

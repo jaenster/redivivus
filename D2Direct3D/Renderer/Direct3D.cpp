@@ -9,7 +9,6 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Direct3D/d3dFloorCache.h"
@@ -20,6 +19,7 @@
 #include "D2Multi/OOGUtilities.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
+#include "Fog/Debug.h"
 #include "Fog/Memory.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/DataArrays.h"
@@ -31,11 +31,12 @@
 #include "Storm/Source/SReg.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
+#include "D2CMP/tagPALETTEENTRY.h"
+#include "D2Client/GAME/View.data.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Direct3D/Renderer/Direct3D.data.h"
 #include "D2gfx/D2GFX.data.h"
 #include "D2gfx/D2GFX.h"
-#include "Fog/Debug.h"
 #include "Fog/Engine/Application.data.h"
 #include "Game/Main.h"
 
@@ -492,8 +493,92 @@ void __fastcall ClearCaches() {
     d3dTextureCache::D3DTEXCACHE_Free(gD3DGenericTextureCache.aCaches + 2, 0);
 }
 
+BOOL __fastcall CheckCutScene() {
+    return g_bCutscenePlaying;
+}
+
+void __fastcall UpdateScaleFactor(int nScaleFactor) {
+    nScaleFactor = nScaleFactor;
+}
+
+int __fastcall CheckGamma() {
+    return gadwBitMasks[4] & gnD3DTextureCapFlags;
+}
+
+BOOL __fastcall EndScene2() {
+    DDS_Flip pDVar1 = g_pD3DSurfaceBackbuffer->lpVtbl->Flip;
+    if (pD2GFXRenderedDataStrc->bVSync) {
+      (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 1);
+    } else {
+      (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 9);
+    }
+
+    return 1;
+}
+
+int __fastcall GetScreenSize(int * pWidth, int * pHeight) {
+    int nWidth = RENDERER_nWindowWidth;
+    *pWidth = RENDERER_nWindowWidth;
+    *pHeight = RENDERER_nWindowHeight;
+    return nWidth;
+}
+
+void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
+    uint16_t wGreen5;
+    uint16_t uVar1;
+    uint8_t byBlue5;
+    uint8_t byRed5;
+    uint16_t* pPal16Bit = g_Palette16Bit;
+    uint32_t* pDst32 = g_Palette32Bit;
+    uint8_t* pSrcEntry = &pPalette->peBlue;
+    do {
+      uint16_t wRed5;
+      *pDst32 = ((((tagPALETTEENTRY*)(pSrcEntry - 2))->peRed | -256) << 8 | (uint32_t)pSrcEntry[-1]) << 8 | (uint32_t)*pSrcEntry;
+      byRed5 = ((tagPALETTEENTRY*)(pSrcEntry - 2))->peRed >> 3;
+      wRed5 = (uint16_t)byRed5;
+      byBlue5 = *pSrcEntry >> 3;
+      uVar1 = (uint16_t)byBlue5;
+      wGreen5 = (uint16_t)(pSrcEntry[-1] >> 3);
+      if (byRed5 < 0x1f && (((tagPALETTEENTRY*)(pSrcEntry - 2))->peRed & 7) >= 4) {
+        wRed5++;
+      }
+      if (byBlue5 < 0x1f && (*pSrcEntry & 7) >= 4) {
+        uVar1 = byBlue5 + 1;
+      }
+      if (pSrcEntry[-1] >> 3 < 0x1f && (pSrcEntry[-1] & 7) >= 4) {
+        wGreen5++;
+      }
+
+      *pPal16Bit = ((wRed5 | 0xffe0) << 5 | wGreen5) << 5 | uVar1;
+      if (!((tagPALETTEENTRY*)(pSrcEntry - 2))->peRed && !pSrcEntry[-1] && !*pSrcEntry) {
+        *pDst32 = 0;
+        *pPal16Bit = 0;
+      }
+
+      pDst32++;
+      pPal16Bit++;
+      pSrcEntry += 4;
+    } while ((int)pDst32 < (intptr_t)((char*)&g_Palette32Bit + sizeof(g_Palette32Bit)));
+}
+
 uint32_t __fastcall PALETTE_GetColorByIndex(int nPaletteIndex) {
     return g_Palette32Bit[nPaletteIndex];
+}
+
+void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
+    // Static local variables (originally global data)
+    // also labelled: gpGlidePaletteTable
+static BYTE * gaGlidePaletteTable[72] = {}; D2_STATIC_GUARD(gaGlidePaletteTable, "D2Direct3D::Renderer::SetPaletteTable::gaGlidePaletteTable");
+
+    int nEntriesRemaining;
+    uint8_t** pDestPaletteEntry = gaGlidePaletteTable;
+    for (nEntriesRemaining = 0x48; nEntriesRemaining; nEntriesRemaining--) {
+      *pDestPaletteEntry = *ppPaletteTable;
+      ppPaletteTable++;
+      pDestPaletteEntry++;
+    }
+
+    gpPaletteTable = gaGlidePaletteTable;
 }
 
 void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused) {
@@ -624,6 +709,23 @@ void __fastcall RENDERER_D3D_SetTextureFilterMode(int nFilterMode) {
 
     g_pD3DDevice->lpVtbl->SetTextureStageState(g_pD3DDevice, 0, 0x11, dwValue);
     g_nCurrentFilterMode = nFilterMode;
+}
+
+int * __fastcall GetRenderStatistics() {
+    return &gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes;
+}
+
+BOOL __fastcall ActivateWindow() {
+    return 0;
+}
+
+BOOL __fastcall SetOption(int nOption, int nValue) {
+    if (nOption != 0xb) {
+      return 0;
+    }
+
+    BOOL_0074c020 = nValue;
+    return 1;
 }
 
 void __fastcall DIRECTD3D_LogError(char * szErrorMessage, DWORD nResult) {
@@ -1731,7 +1833,7 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
     uint32_t nExceptionState;
     nExceptionState = -1;
     pfnEHHandlerRoutine pfnSehHandler;
-    pfnSehHandler = D2Client::Renderer::SehHandler_6ca520;
+    pfnSehHandler = SehHandler_6ca520;
     __frame0.pPrevExceptionRecord = ExceptionList;
     __frame0.pDirectDraw1 = 0;
     nDDCapsSize.dwSize = 0x17c;
@@ -2122,7 +2224,7 @@ void * __stdcall Catch_All_006b4c73() {
 
 int __stdcall BootDirect3d(HINSTANCE hInstance) {
     DWORD dwLastError;
-    pfnEHHandlerRoutine pfnSehHandler = D2Client::Renderer::SehHandler_6ca530;
+    pfnEHHandlerRoutine pfnSehHandler = SehHandler_6ca530;
     void* pPrevExceptionRegistration = ExceptionList;
     uint8_t* pExceptHandlerFrame;
     uint32_t nSehState = 0;
@@ -5633,6 +5735,16 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
         return;
       }
     }
+}
+
+// compiler-generated C++ EH handler; its frame is never registered with the OS
+_EXCEPTION_DISPOSITION SehHandler_6ca520(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
+    return ExceptionContinueSearch;
+}
+
+// compiler-generated C++ EH handler; its frame is never registered with the OS
+_EXCEPTION_DISPOSITION SehHandler_6ca530(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
+    return ExceptionContinueSearch;
 }
 
 } // namespace D2Direct3D::Renderer

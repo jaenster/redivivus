@@ -69,10 +69,10 @@ struct __attribute__((packed)) D2QuestLogStrc {
     /* 0x049 */ struct DC6 * pQuestLogActImages[27];
     /* 0x0B5 */ struct DC6 * questlast;
     /* 0x0B9 */ struct DC6 * invps;
-    /* 0x0BD */ uint8_t aQuestLogStateBuffer; // 0x52 QUESTSTATUS copies the whole 42-byte packet here: this opcode byte plus abQuestUnknownArray1
-    /* 0x0BE */ bool abQuestUnknownArray1[41];
+    /* 0x0BD */ uint8_t aQuestLogStateBuffer; // 0x52 QUESTSTATUS copies the whole 42-byte packet here: this opcode byte plus anQuestStepArray1
+    /* 0x0BE */ uint8_t anQuestStepArray1[41]; // per-quest step index (0..13) from packet 0x52, not a flag; QUESTLOG_PopulateQuestEntry compares it against 0xd
     /* 0x0E7 */ uint8_t byUnused0E7; // no references
-    /* 0x0E8 */ bool abQuestUnknownArray2[41];
+    /* 0x0E8 */ uint8_t anQuestStepArray2[41]; // per-quest last-shown step index; QUESTLOG_PopulateQuestEntry stores 5/6/10/13 here and compares to detect a step change
     /* 0x111 */ D2QuestLogEntryStrc aQuestLogEntries[6];
     /* 0xF8D */ int aQuestLogIconFrame[6];
     /* 0xFA5 */ int aQuestLogIconLastTick[6];

@@ -7,7 +7,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
@@ -53,6 +52,7 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Monster/MonsterRegion.h"
 #include "D2Game/Monster/Monsters.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/SkillBar.h"
 #include "D2Game/SKILLS/SkillNec.h"
@@ -608,9 +608,7 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
       nLeapY = nTargetYPos * 2 - nCalcTmp;
     }
 
-    uint32_t nToHit = nLeapY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nLeapX, nToHit);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nLeapX, nLeapY);
     if (!pRoom) {
       return 0;
     }
@@ -828,8 +826,7 @@ BOOL __fastcall SKILLMONST_SrvStFn49_NestSpawn(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::Skills::SKILL_SetParam3(pSkill, eSkill);
     D2Common::Skills::SKILL_SetParam4(pSkill, eAnimMode);
     eSkillOrig = eSkill;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnY, eSkillOrig);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnY, eSkillOrig);
     D2Common::Collision::AddCollision_Type(pRoom, nSpawnY, eSkill, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
@@ -854,9 +851,7 @@ BOOL __fastcall Skills_SrvDoFunc_091_SpawnMinionAtCoords(::SGAMEDATA * pGame, D2
     int32_t nX = D2Common::Skills::SKILL_GetParam2(pSkill);
     int32_t nY = D2Common::Skills::SKILL_GetParam3(pSkill);
     eD2MonsterAnimMode eAnimMode = D2Common::Skills::SKILL_GetParam4(pSkill);
-    int32_t nYForRoom = nY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nYForRoom);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
     if (!(pRoom && nX && nY)) {
       return 0;
     }
@@ -1446,7 +1441,7 @@ BOOL __fastcall Skills_SrvDoFunc_098_TeleportToStoredPosition(::SGAMEDATA * pGam
     uint32_t nX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
     uint32_t nY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom) {
       D2UnitStrc* pUnit_00;
       pUnit_00 = Ai::AiGeneral::GetOwnerUnit(pUnit);
@@ -2594,7 +2589,7 @@ void __fastcall SKILLMONST_SpiderLayTrail(::SGAMEDATA * pGame, D2UnitStrc * pUni
         nPosX += nOffsetX;
         nPosY += nOffsetY;
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX, nPosY);
+        D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX, nPosY);
         memset(&sSkillArg, 0, 0x5c);
         sSkillArg.nUnitX = nPosX + nOffsetX * 2;
         sSkillArg.nUnitY = nPosY + nOffsetY * 2;

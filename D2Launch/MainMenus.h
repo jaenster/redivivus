@@ -397,7 +397,6 @@ uint32_t __fastcall MAINMENU_GetFlagBits8To12(uint32_t dwFlags);
 // Provenance: asm 00437a00..00437a12; unreferenced in 1.14d.
 char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex);
 int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex);
-void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance);
 // 7 internal functions (defined in .cpp)
 
 } // namespace D2Launch::MainMenus

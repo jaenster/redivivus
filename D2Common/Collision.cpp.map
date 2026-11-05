@@ -4,6 +4,27 @@
   "file": "D2Common/Collision.cpp",
   "functions": [
     {
+      "name": "DRLGROOM_FindBetterNearbyRoom",
+      "address": "00463740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463740"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetAdjacentRoomsList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "GetDistanceBetweenUnits",
       "address": "00641530",
       "lines": [

@@ -5,6 +5,7 @@
 
 #include "globals/globals.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
+#include "D2gfx/D2GFX.h"
 
 
 // =============================================================================
@@ -130,7 +131,76 @@ namespace D2Game::GAME::Rendering {
 
 namespace D2Client::UI::ui {
 
-} // namespace D2Client::UI::ui
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2RendererFunctionsStrc Direct3DFunctionTable = {
+    /* .nfpInitialize = */ &D2Direct3D::Renderer::Initialize,
+    /* .nfpInitPerspective = */ &D2Direct3D::Renderer::InitPerspective,
+    /* .nfpRelease = */ (fpRelease)&D2Direct3D::Renderer::Release,
+    /* .nfpCreateWindow = */ &D2Direct3D::Renderer::CreateWindow,
+    /* .nfpDestroyWindow = */ &D2Direct3D::Renderer::RENDERER_D3D_DestroyWindow,
+    /* .nfpEndCutScene = */ &D2Direct3D::Renderer::EndCutScene,
+    /* .nfpBeginScene = */ &D2Direct3D::Renderer::BeginScene,
+    /* .fpEndScene1 = */ &D2Direct3D::Renderer::EndScene1,
+    /* .fpEndScene2 = */ &D2Direct3D::Renderer::EndScene2,
+    /* .nfpResizeWindow = */ &D2Direct3D::Renderer::ResizeWindow,
+    /* .nfpGetBackBuffer = */ &D2Direct3D::Renderer::GetBackBuffer,
+    /* .nfpActivateWindow = */ (fpActivateWindow)&D2Direct3D::Renderer::ActivateWindow,
+    /* .nfpSetOption = */ &D2Direct3D::Renderer::SetOption,
+    /* .nfpBeginCutScene = */ &D2Direct3D::Renderer::BeginCutScene,
+    /* .nfpPlayCutScene = */ (fpPlayCutScene)&D2Direct3D::Renderer::PlayCutScene,
+    /* .nfpCheckCutScene = */ &D2Direct3D::Renderer::CheckCutScene,
+    /* .nfpDecodeSmacker = */ &D2Direct3D::Renderer::DecodeSmacker,
+    /* .nfpPlayerSmacker = */ &D2Direct3D::Renderer::PlayerSmacker,
+    /* .nfpCloseSmacker = */ &D2Direct3D::Renderer::CloseSmacker,
+    /* .nfpGetRenderStatistics = */ &D2Direct3D::Renderer::GetRenderStatistics,
+    /* .nfpGetScreenSize = */ &D2Direct3D::Renderer::GetScreenSize,
+    /* .nfpUpdateScaleFactor = */ &D2Direct3D::Renderer::UpdateScaleFactor,
+    /* .nfpSetGamma = */ &D2Direct3D::Renderer::SetGamma,
+    /* .nfpCheckGamma = */ &D2Direct3D::Renderer::CheckGamma,
+    /* .nfpSetPerspectiveScale = */ &D2Direct3D::Renderer::SetPerspectiveScale,
+    /* .nfpAdjustPerspectivePosition = */ &D2Direct3D::Renderer::AdjustPerspectivePosition,
+    /* .nfpPerspectiveScalePosition = */ &D2Direct3D::Renderer::PerspectiveScalePosition,
+    /* .nfpSetDefaultPerspectiveFactor = */ &D2Direct3D::Renderer::SetDefaultPerspectiveFactor,
+    /* .nfpSetPalette = */ &D2Direct3D::Renderer::SetPalette,
+    /* .nfpSetPaletteTable = */ &D2Direct3D::Renderer::SetPaletteTable,
+    /* .nfpSetGlobalLight = */ &D2Direct3D::Renderer::SetGlobalLight,
+    /* .nfpDrawGroundTile = */ (D2RendererFunctionsStrc_fpDrawGroundTile)&D2Direct3D::Renderer::DrawGroundTile,
+    /* .nfpDrawPerspectiveImage = */ &D2Direct3D::Renderer::DrawPerspectiveImage,
+    /* .nfpDrawImage = */ &D2Direct3D::Renderer::DrawImage,
+    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2Direct3D::Renderer::DrawShiftedImage,
+    /* .nfpDrawVerticalCropImage = */ &D2Direct3D::Renderer::DrawVerticalCropImage,
+    /* .nfpDrawShadow = */ &D2Direct3D::Renderer::DrawShadow,
+    /* .nfpDrawImageFast = */ &D2Direct3D::Renderer::DrawImageFast,
+    /* .nfpDrawClippedImage = */ &D2Direct3D::Renderer::DrawClippedImage,
+    /* .nfpDrawWallTile = */ &D2Direct3D::Renderer::DrawWallTile,
+    /* .nfpDrawTransWallTile = */ &D2Direct3D::Renderer::DrawTransWallTile,
+    /* .nfpDrawShadowTile = */ &D2Direct3D::Renderer::DrawShadowTile,
+    /* .nfpDrawRect = */ (fpDrawRect)&D2Direct3D::Renderer::DrawRect,
+    /* .nfpDrawRectEx = */ (fpDrawRectEx)&D2Direct3D::Renderer::DrawRectEx,
+    /* .nfpDrawSolidRect = */ &D2Direct3D::Renderer::DrawSolidRect,
+    /* .nfpDrawSolidSquare = */ &D2Direct3D::Renderer::DrawSolidSquare,
+    /* .nfpDrawSolidRectEx = */ (fpDrawSolidRectEx)&D2Direct3D::Renderer::DrawSolidRectEx,
+    /* .nfpDrawSolidRectAlpha = */ &D2Direct3D::Renderer::DrawSolidRectAlpha,
+    /* .nfpDrawLine = */ (fpDrawLine)&D2Direct3D::Renderer::DrawLine,
+    /* .nfpClearScreen = */ &D2Direct3D::Renderer::ClearScreen,
+    /* .nfpDrawString = */ &D2Direct3D::Renderer::DrawString,
+    /* .nfpDrawLight = */ &D2Direct3D::Renderer::DrawLight,
+    /* .nfpDebugFillBackBuffer = */ &D2Direct3D::Renderer::DebugFillBackBuffer,
+    /* .nfpClearCaches = */ &D2Direct3D::Renderer::ClearCaches
+}; D2_GLOBAL_GUARD(Direct3DFunctionTable, "D2Client::Renderer::Direct3DFunctionTable");
+
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
+
+} // namespace D2Lang::Unicode::UNISYS
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 

@@ -9,13 +9,12 @@
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/SKILLS/SkillsAss.h"
 #include "D2Client/Sound/Sound.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Client/Units.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -46,6 +45,7 @@
 #include "D2Common/Units/UnitFinds.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -559,7 +559,7 @@ void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSee
       if (nDeltaX * nDeltaX + nDeltaY * nDeltaY <= nMaxDistSq) {
         sSkillArg.nX = nCenterX + nDeltaY;
         sSkillArg.nY = nDeltaX + nCenterY;
-        pNearbyRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
+        pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
         ullSeed = ullSeedPair;
         if (pNearbyRoom) {
           UNIT::Missile::MakeMissile(&sSkillArg);

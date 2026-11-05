@@ -53,6 +53,7 @@
 #include "D2Game/Monster/Monster.h"
 #include "D2Game/Monster/MonsterRegion.h"
 #include "D2Game/Monster/Monsters.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"

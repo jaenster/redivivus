@@ -3,7 +3,6 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
@@ -31,6 +30,7 @@
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/D2PathTypeArg.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -1611,7 +1611,7 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
           bCanPath = ((uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10) - (uint32_t)(uint16_t)sPathTypeArg.pCoords.nPosX;
           if (nDeltaX <= 0x64 && (nDeltaX == -100 || -nDeltaX < 100 && bCanPath <= 0x64) && (bCanPath == -100 || -bCanPath < 100)) {
             sPathTypeArg.pRoom = pDynamicPath_00->pRoom;
-            sPathTypeArg.pRoomNext = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4), (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
+            sPathTypeArg.pRoomNext = Collision::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4), (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
             if (sPathTypeArg.pRoom && sPathTypeArg.pRoomNext) {
               nResult = Path::PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
               if (nResult || bIgnoreAreaCheck) {
@@ -1845,14 +1845,14 @@ void __stdcall PATH_SetCorpseCollision(D2UnitStrc * pUnit, int32_t bServer) {
       pUnit->pPath.pDynamicPath->nUnitWidth = 5;
       PATH_ChangeCollisionType(pDynamicPath, 0x8000);
       PATH_AddUnitCollision(pUnit);
-      Path::PATH_SnapPositionToTile(pDynamicPath);
-      return;
-    }
-    if (pDynamicPath) {
-      PATH_RemoveUnitCollision(pUnit, 1);
+    } else {
+      if (pDynamicPath) {
+        PATH_RemoveUnitCollision(pUnit, 1);
+      }
+
+      Collision::AddCollision_Vector(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, 3, 3, 0x8000);
     }
 
-    Collision::AddCollision_Vector(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, 3, 3, 0x8000);
     Path::PATH_SnapPositionToTile(pDynamicPath);
 }
 

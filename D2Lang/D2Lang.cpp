@@ -374,10 +374,10 @@ void __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars) {
 // Compares two characters using UI character lookup table for case-insensitive comparison. If char < 0x100, maps via CharacterLookupTable, else uses raw value. Returns 1 if equal, 0 otherwise.
 BOOL __stdcall UI_CompareCharsUsingLookupTable(uint16_t wChar1, uint16_t wChar2) {
     if (wChar1 < 0x100) {
-      wChar1 = D2Client::UI::ui::CharacterLookupTable[wChar1];
+      wChar1 = Unicode::UNISYS::CharacterLookupTable[wChar1];
     }
     if (wChar2 < 0x100) {
-      return (uint32_t)(wChar1 == D2Client::UI::ui::CharacterLookupTable[wChar2]);
+      return (uint32_t)(wChar1 == Unicode::UNISYS::CharacterLookupTable[wChar2]);
     }
 
     return (uint32_t)(wChar1 == wChar2);

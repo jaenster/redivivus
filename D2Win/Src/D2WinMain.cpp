@@ -5,7 +5,6 @@
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/Message.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Launch/MainMenus.h"
@@ -297,36 +296,37 @@ BOOL __stdcall D2WINMAIN_SetControlField4(D2ControlStrc * pControl, uint32_t dwV
 
 // Sets pFormSecond to the specified control, defocusing previous control if different
 BOOL __stdcall D2WINMAIN_SetFocusedControl(D2ControlStrc * pControl) {
-    if (D2Client::Forms::pFormSecond) {
-      if (pControl != D2Client::Forms::pFormSecond) {
-        D2WinEditBox::D2WINEDITBOX_ClearSelection((::D2WinEditBox*)D2Client::Forms::pFormSecond);
+    if (pFormSecond) {
+      if (pControl != pFormSecond) {
+        D2WinEditBox::D2WINEDITBOX_ClearSelection((::D2WinEditBox*)pFormSecond);
       }
 
-      D2Client::Forms::pFormSecond = pControl;
+      pFormSecond = pControl;
       return 1;
     }
 
-    D2Client::Forms::pFormSecond = pControl;
+    pFormSecond = pControl;
     return 1;
 }
 
 ::D2WinEditBox * __stdcall FORMS_GetFormTextAndEditBox() {
-    return D2Client::Forms::pFormTextAndEditBox;
+    return pFormTextAndEditBox;
 }
 
 BOOL __stdcall FORMS_AddControlToGlobalList(D2ControlStrc * pControl) {
     D2ControlStrc* pTail;
-    if (!D2Client::Forms::pFormsList) {
-      D2Client::Forms::pFormsList = pControl;
-      return 1;
-    }
+    if (!pFormsList) {
+      pFormsList = pControl;
+    } else {
+      D2ControlStrc* pNext;
+      pNext = pFormsList->pNext;
+      pTail = pFormsList;
+      while (pNext) {
+        pTail = pTail->pNext;
+        pNext = pTail->pNext;
+      }
 
-    D2ControlStrc* pNext;
-    pNext = D2Client::Forms::pFormsList->pNext;
-    pTail = D2Client::Forms::pFormsList;
-    while (pNext) {
-      pTail = pTail->pNext;
-      pNext = pTail->pNext;
+      pTail->pNext = pControl;
     }
 
     pTail->pNext = pControl;
@@ -336,17 +336,18 @@ BOOL __stdcall FORMS_AddControlToGlobalList(D2ControlStrc * pControl) {
 BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
     D2ControlStrc* pNext;
     pControl->pNext = 0;
-    if (!D2Client::Forms::pFormUnknown) {
-      D2Client::Forms::pFormUnknown = pControl;
-      return 1;
-    }
+    if (!pFormUnknown) {
+      pFormUnknown = pControl;
+    } else {
+      D2ControlStrc* pTail;
+      pNext = pFormUnknown->pNext;
+      pTail = pFormUnknown;
+      while (pNext) {
+        pTail = pTail->pNext;
+        pNext = pTail->pNext;
+      }
 
-    D2ControlStrc* pTail;
-    pNext = D2Client::Forms::pFormUnknown->pNext;
-    pTail = D2Client::Forms::pFormUnknown;
-    while (pNext) {
-      pTail = pTail->pNext;
-      pNext = pTail->pNext;
+      pTail->pNext = pControl;
     }
 
     pTail->pNext = pControl;
@@ -356,57 +357,57 @@ BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall D2WINMAIN_FreeLeadingFormControls() {
     D2ControlStrc* pDVar1;
-    if (!(gnFormControlCount <= 0 && D2Client::Forms::pFormUnknown)) {
+    if (!(gnFormControlCount <= 0 && pFormUnknown)) {
       return;
     }
 
-    while (!(D2Client::Forms::pFormUnknown->dwState & gadwBitMasks[0])) {
-      pDVar1 = D2Client::Forms::pFormUnknown->pNext;
-      D2_FREE_AT(D2Client::Forms::pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
-      D2Client::Forms::pFormUnknown = pDVar1;
+    while (!(pFormUnknown->dwState & gadwBitMasks[0])) {
+      pDVar1 = pFormUnknown->pNext;
+      D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
+      pFormUnknown = pDVar1;
       if (!pDVar1) {
         return;
       }
     }
 
     do {
-      if (D2Client::Forms::pFormUnknown->dwState & gadwBitMasks[1]) {
+      if (pFormUnknown->dwState & gadwBitMasks[1]) {
         return;
       }
 
-      pDVar1 = D2Client::Forms::pFormUnknown->pNext;
-      D2_FREE_AT(D2Client::Forms::pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x263);
-      D2Client::Forms::pFormUnknown = pDVar1;
+      pDVar1 = pFormUnknown->pNext;
+      D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x263);
+      pFormUnknown = pDVar1;
     } while (pDVar1);
 }
 
 void __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
     D2ControlStrc* pCurrent;
-    if (D2Client::Forms::pFormTextAndEditBox == (::D2WinEditBox*)pControl) {
-      D2Client::Forms::pFormTextAndEditBox = 0;
+    if (pFormTextAndEditBox == (::D2WinEditBox*)pControl) {
+      pFormTextAndEditBox = 0;
     }
-    if (D2Client::Forms::pFormSecond == pControl) {
-      D2Client::Forms::pFormSecond = 0;
+    if (pFormSecond == pControl) {
+      pFormSecond = 0;
     }
-    if (D2Client::Forms::pFormImage == pControl) {
-      D2Client::Forms::pFormImage = 0;
+    if (pFormImage == pControl) {
+      pFormImage = 0;
       gnInitialFormState = 0;
     }
-    if (D2Client::Forms::pFormFourth == pControl) {
-      D2Client::Forms::pFormFourth = 0;
+    if (pFormFourth == pControl) {
+      pFormFourth = 0;
     }
-    if (!D2Client::Forms::pFormsList) {
+    if (!pFormsList) {
       return;
     }
-    if (D2Client::Forms::pFormsList == pControl) {
-      D2Client::Forms::pFormsList = pControl->pNext;
+    if (pFormsList == pControl) {
+      pFormsList = pControl->pNext;
       FORMS_AppendFormToDestroyQueue(pControl);
       return;
     }
 
-    D2ControlStrc* pIter = D2Client::Forms::pFormsList->pNext;
-    D2ControlStrc* pPrev = D2Client::Forms::pFormsList;
-    if (!D2Client::Forms::pFormsList->pNext) {
+    D2ControlStrc* pIter = pFormsList->pNext;
+    D2ControlStrc* pPrev = pFormsList;
+    if (!pFormsList->pNext) {
       return;
     }
 
@@ -601,8 +602,8 @@ BOOL __fastcall D2WINMAIN_IsControlActive(D2ControlStrc * pControl) {
 // Tests if current mouse position (D2Client::Mouse::nPosX/Y) is inside the specified RECT using PtInRect
 BOOL __stdcall D2WINMAIN_TestMouseInRect(RECT * pRect) {
     POINT pt;
-    pt.y = D2Client::Mouse::nPosY;
-    pt.x = D2Client::Mouse::nPosX;
+    pt.y = nPosY;
+    pt.x = nPosX;
     BOOL BVar1 = PtInRect(pRect, pt);
     return BVar1;
 }
@@ -617,15 +618,15 @@ void __stdcall DrawCursorOOG() {
     static uint32_t gnCursorDrawPosY; D2_STATIC_GUARD_BSS(gnCursorDrawPosY, "D2Win::Src::D2WinMain::DrawCursorOOG::gnCursorDrawPosY");
 
     D2GfxDataStrc sGfxData;
-    int nMouseY = D2Client::Mouse::nPosY;
-    int nMouseX = D2Client::Mouse::nPosX;
+    int nMouseY = nPosY;
+    int nMouseX = nPosX;
     DC6* pDVar1 = gpCursorDC6;
     if (!(gpCursorDC6 && gbCursorVisible)) {
       return;
     }
 
-    gnCursorDrawPosX = D2Client::Mouse::nPosX;
-    gnCursorDrawPosY = D2Client::Mouse::nPosY;
+    gnCursorDrawPosX = nPosX;
+    gnCursorDrawPosY = nPosY;
     memset(&sGfxData, 0, 0x48);
     sGfxData.nFrameNumber = gnCursorDC6FrameNumber;
     sGfxData.pDC6 = pDVar1;
@@ -657,7 +658,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
     int nScreenHeight;
     DC6* pBackgroundDC6;
     int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
-    D2ControlStrc* pForm = D2Client::Forms::pFormsList;
+    D2ControlStrc* pForm = pFormsList;
     if (nSceneState) {
       return;
     }
@@ -668,7 +669,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       }
     }
 
-    if (D2Client::GAME::Record::pWndProcB) {
+    if (D2GFX::pWndProcB) {
       return;
     }
 
@@ -678,7 +679,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       int nPositionX;
       D2gfx::D2GFX::D2GFX_ClearScreen(0);
       pBackgroundDC6 = (DC6*)gnWindowInitState;
-      pForm = D2Client::Forms::pFormsList;
+      pForm = pFormsList;
       if (gnWindowInitState) {
         memset(&sGfxData, 0, 0x48);
         sGfxData.pDC6 = pBackgroundDC6;
@@ -701,7 +702,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
           D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPosition, nScreenHeight - 1, -1, DRAW_SOLID, nullptr);
           sGfxData.nFrameNumber++;
           nPosition += 0x100;
-          pForm = D2Client::Forms::pFormsList;
+          pForm = pFormsList;
         } while (nPosition < 0x400);
       }
 
@@ -712,10 +713,10 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       }
 
       DRAW_UI_Sprites();
-      pForm = D2Client::Forms::pFormsList;
+      pForm = pFormsList;
       if (gnInitialFormState) {
         D2gfx::D2GFX::D2GFX_DrawSolidRectAlpha(0, 0, nScreenWidth, nScreenHeight, 0, 0x7f);
-        pForm = D2Client::Forms::pFormsList;
+        pForm = pFormsList;
       }
 
       for (; pForm; pForm = pForm->pNext) {
@@ -736,8 +737,8 @@ LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lPa
     if (!gbGfxWindowCreated) {
       return 0;
     }
-    if (D2Client::GAME::Record::pWndProcB) {
-      lResult = (*D2Client::GAME::Record::pWndProcB)(hWnd, uMsg, nWParam, lParam);
+    if (D2GFX::pWndProcB) {
+      lResult = (*D2GFX::pWndProcB)(hWnd, uMsg, nWParam, lParam);
       return lResult;
     }
 
@@ -759,11 +760,11 @@ LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lPa
 }
 
 int __fastcall Unreferenced_004f9b30(int param_1) {
-    D2ControlStrc* pDVar2 = D2Client::Forms::pFormImage;
-    if (!D2Client::Forms::pFormImage) {
+    if (!pFormImage) {
       return 1;
     }
 
+    D2ControlStrc* pDVar2 = pFormImage;
     while (pDVar2 != (D2ControlStrc*)param_1) {
       D2ControlStrc** ppDVar1;
       ppDVar1 = &pDVar2->pNext;
@@ -778,29 +779,29 @@ int __fastcall Unreferenced_004f9b30(int param_1) {
 
 void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {
     BOOL bCallbackResult;
-    if (D2Client::Forms::pFormTextAndEditBox) {
+    if (pFormTextAndEditBox) {
       ::D2WinEditBox* pEditBoxScan;
-      pEditBoxScan = (::D2WinEditBox*)D2Client::Forms::pFormImage;
-      if (D2Client::Forms::pFormImage) {
-        for (; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
-          if (pEditBoxScan == D2Client::Forms::pFormTextAndEditBox) {
-            goto send_to_focused_editbox;
-          }
-        }
-      } else {
+      pEditBoxScan = (::D2WinEditBox*)pFormImage;
+      if (!pFormImage) {
         send_to_focused_editbox:
-        bCallbackResult = D2WinEditBox::D2WINEDITBOX_HandleKeyPress(D2Client::Forms::pFormTextAndEditBox, (uint8_t)pMsg->nWParam);
+        bCallbackResult = D2WinEditBox::D2WINEDITBOX_HandleKeyPress(pFormTextAndEditBox, (uint8_t)pMsg->nWParam);
         if (bCallbackResult) {
           goto consume_message;
+        }
+      } else {
+        for (; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
+          if (pEditBoxScan == pFormTextAndEditBox) {
+            goto send_to_focused_editbox;
+          }
         }
       }
     }
 
     D2ControlStrc* pFormIter;
-    pFormIter = D2Client::Forms::pFormImage;
+    pFormIter = pFormImage;
     D2ControlStrc* pFormHead;
-    pFormHead = D2Client::Forms::pFormsList;
-    if (D2Client::Forms::pFormImage) {
+    pFormHead = pFormsList;
+    if (pFormImage) {
       goto try_control_handler;
     }
 
@@ -829,29 +830,29 @@ void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall INPUT_FormKeyUpHandler(D2UIMouseMsgStrc * pMsg) {
     BOOL bCallbackResult;
-    if (D2Client::Forms::pFormTextAndEditBox) {
+    if (pFormTextAndEditBox) {
       ::D2WinEditBox* pEditBoxScan;
-      pEditBoxScan = (::D2WinEditBox*)D2Client::Forms::pFormImage;
-      if (D2Client::Forms::pFormImage) {
-        for (; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
-          if (pEditBoxScan == D2Client::Forms::pFormTextAndEditBox) {
-            goto send_to_focused_editbox;
-          }
-        }
-      } else {
+      pEditBoxScan = (::D2WinEditBox*)pFormImage;
+      if (!pFormImage) {
         send_to_focused_editbox:
-        bCallbackResult = D2WinEditBox::D2WINEDITBOX_HandleKeyRelease(D2Client::Forms::pFormTextAndEditBox, (char)pMsg->nWParam);
+        bCallbackResult = D2WinEditBox::D2WINEDITBOX_HandleKeyRelease(pFormTextAndEditBox, (char)pMsg->nWParam);
         if (bCallbackResult) {
           goto consume_message;
+        }
+      } else {
+        for (; pEditBoxScan; pEditBoxScan = (::D2WinEditBox*)pEditBoxScan->sControl.pNext) {
+          if (pEditBoxScan == pFormTextAndEditBox) {
+            goto send_to_focused_editbox;
+          }
         }
       }
     }
 
     D2ControlStrc* pFormIter;
-    pFormIter = D2Client::Forms::pFormImage;
+    pFormIter = pFormImage;
     D2ControlStrc* pFormHead;
-    pFormHead = D2Client::Forms::pFormsList;
-    if (D2Client::Forms::pFormImage) {
+    pFormHead = pFormsList;
+    if (pFormImage) {
       goto try_control_handler;
     }
 
@@ -1152,37 +1153,37 @@ int32_t __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pControl1, D2C
     }
 
     int nDistX1 = pControl1->dwPosX;
-    if (D2Client::Mouse::nPosX < nDistX1) {
-      nDistX1 = D2Client::Mouse::nPosX - nDistX1;
-    } else if (D2Client::Mouse::nPosX > pControl1->dwSizeX + nDistX1) {
-      nDistX1 = D2Client::Mouse::nPosX - pControl1->dwSizeX - nDistX1;
+    if (nPosX < nDistX1) {
+      nDistX1 = nPosX - nDistX1;
+    } else if (nPosX > pControl1->dwSizeX + nDistX1) {
+      nDistX1 = nPosX - pControl1->dwSizeX - nDistX1;
     } else {
       nDistX1 = 0;
     }
 
     int nDistY1 = pControl1->dwPosY;
-    if (D2Client::Mouse::nPosY < nDistY1 - pControl1->dwSizeY) {
-      nDistY1 = pControl1->dwSizeY - nDistY1 + D2Client::Mouse::nPosY;
-    } else if (D2Client::Mouse::nPosY > nDistY1) {
-      nDistY1 = D2Client::Mouse::nPosY - nDistY1;
+    if (nPosY < nDistY1 - pControl1->dwSizeY) {
+      nDistY1 = pControl1->dwSizeY - nDistY1 + nPosY;
+    } else if (nPosY > nDistY1) {
+      nDistY1 = nPosY - nDistY1;
     } else {
       nDistY1 = 0;
     }
 
     int nDistX2 = pControl2->dwPosX;
-    if (D2Client::Mouse::nPosX < nDistX2) {
-      nDistX2 = D2Client::Mouse::nPosX - nDistX2;
-    } else if (D2Client::Mouse::nPosX > pControl2->dwSizeX + nDistX2) {
-      nDistX2 = D2Client::Mouse::nPosX - pControl2->dwSizeX - nDistX2;
+    if (nPosX < nDistX2) {
+      nDistX2 = nPosX - nDistX2;
+    } else if (nPosX > pControl2->dwSizeX + nDistX2) {
+      nDistX2 = nPosX - pControl2->dwSizeX - nDistX2;
     } else {
       nDistX2 = 0;
     }
 
     int nDistY2 = pControl2->dwPosY;
-    if (D2Client::Mouse::nPosY < nDistY2 - pControl2->dwSizeY) {
-      nDistY2 = pControl2->dwSizeY - nDistY2 + D2Client::Mouse::nPosY;
-    } else if (D2Client::Mouse::nPosY > nDistY2) {
-      nDistY2 = D2Client::Mouse::nPosY - nDistY2;
+    if (nPosY < nDistY2 - pControl2->dwSizeY) {
+      nDistY2 = pControl2->dwSizeY - nDistY2 + nPosY;
+    } else if (nPosY > nDistY2) {
+      nDistY2 = nPosY - nDistY2;
     } else {
       nDistY2 = 0;
     }
@@ -1224,10 +1225,10 @@ void __stdcall INPUT_FormMouseWheel(D2UIMouseMsgStrc * pMsg) {
     if (bHandled) {
       return;
     }
-    if (D2Client::Forms::pFormImage) {
-      pActiveForm = D2Client::Forms::pFormImage;
+    if (pFormImage) {
+      pActiveForm = pFormImage;
     } else {
-      pActiveForm = D2Client::Forms::pFormsList;
+      pActiveForm = pFormsList;
     }
     if (pActiveForm) {
       uint32_t uVar1;
@@ -1279,7 +1280,7 @@ void __stdcall SetUnsetFlag0x08(D2ControlStrc * pControl, int32_t bSet) {
 
 // Sets pFormFourth global to the specified control
 void __stdcall D2WINMAIN_SetFormFourth(D2ControlStrc * pControl) {
-    D2Client::Forms::pFormFourth = pControl;
+    pFormFourth = pControl;
 }
 
 // Returns gnWinMainState global value
@@ -1288,7 +1289,7 @@ uint32_t __stdcall D2WINMAIN_GetWinMainState() {
 }
 
 BOOL __stdcall FORMS_SetGlobalFormImage(D2ControlStrc * pControl, int32_t nInitialFormState) {
-    D2Client::Forms::pFormImage = pControl;
+    pFormImage = pControl;
     gnInitialFormState = nInitialFormState;
     return 1;
 }
@@ -1304,7 +1305,7 @@ void * __stdcall D2WINMAIN_GetFirstElement(void * * ppHead) {
 
 // Returns pFormImage global control pointer
 D2ControlStrc * __stdcall D2WINMAIN_GetFormImage() {
-    return D2Client::Forms::pFormImage;
+    return pFormImage;
 }
 
 void __stdcall D2WIN_HandleCursorHide(D2UIMouseMsgStrc * pMsg) {
@@ -1386,7 +1387,7 @@ void __stdcall MessagePump(pfnFramePump pfnFrameCallback) {
           RENDERER_DrawOutOfGameScene();
         }
 
-        D2Client::Forms::pFormTextAndEditBox = (::D2WinEditBox*)D2Client::Forms::pFormSecond;
+        pFormTextAndEditBox = (::D2WinEditBox*)pFormSecond;
         dwSleepMs = nBudgetAccum;
         if (nBudgetAccum > 0x14) {
           dwSleepMs = 0x14;
@@ -1445,24 +1446,24 @@ void __stdcall MOUSE_CaptureMousePosition(HWND * phWnd) {
       }
     }
 
-    D2Client::Mouse::nPosY = nRawY;
-    D2Client::Mouse::nPosX = nRawX;
+    nPosY = nRawY;
+    nPosX = nRawX;
 }
 
 void __stdcall INPUT_FormTabKey(D2UIMouseMsgStrc * pMsg) {
-    if (D2Client::Forms::pFormFourth) {
+    if (pFormFourth) {
       D2ControlStrc* pControl;
-      pControl = D2Client::Forms::pFormImage;
-      if (!D2Client::Forms::pFormImage) {
+      pControl = pFormImage;
+      if (!pFormImage) {
         click_escape_button:
-        pMsg->hWnd = (HWND)D2Client::Forms::pFormFourth;
+        pMsg->hWnd = (HWND)pFormFourth;
         D2WinButton::D2WINBUTTON_InvokeClickCallback((D2ControlMsg*)pMsg);
         Storm::SMsgBreakHandlerChain(pMsg);
         return;
       }
 
       do {
-        if (pControl == D2Client::Forms::pFormFourth) {
+        if (pControl == pFormFourth) {
           goto click_escape_button;
         }
 
@@ -1513,9 +1514,9 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
     }
 
     D2ControlStrc* pControl;
-    pControl = D2Client::Forms::pFormImage;
-    if (!D2Client::Forms::pFormImage) {
-      pControl = D2Client::Forms::pFormsList;
+    pControl = pFormImage;
+    if (!pFormImage) {
+      pControl = pFormsList;
     }
 
     switch (pMsg->uMsg) {
@@ -1523,28 +1524,28 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
 
       case 0x204:
         gnWinMainState = 1;
-      nMouseX = D2Client::Mouse::nPosX;
+      nMouseX = nPosX;
       if (pControl) {
         do {
           if (pControl->fpDrawAnim) {
             bHandled = pControl->fpDrawAnim(pControl);
-            nMouseX = D2Client::Mouse::nPosX;
+            nMouseX = nPosX;
             if (bHandled) {
               push_hit_control:
               pMsg->hWnd = (HWND)pControl;
-              nMouseX = D2Client::Mouse::nPosX;
+              nMouseX = nPosX;
               if (pControl->fpPush) {
                 gnFormControlCount++;
                 bHandled = pControl->fpPush((D2ControlMsg*)pMsg);
                 gnFormControlCount--;
-                nMouseX = D2Client::Mouse::nPosX;
+                nMouseX = nPosX;
                 if (bHandled) {
                   break;
                 }
               }
             }
           } else {
-            if (nMouseX >= pControl->dwPosX && D2Client::Mouse::nPosY >= pControl->dwPosY - pControl->dwSizeY && nMouseX < pControl->dwSizeX + pControl->dwPosX && D2Client::Mouse::nPosY < pControl->dwPosY) {
+            if (nMouseX >= pControl->dwPosX && nPosY >= pControl->dwPosY - pControl->dwSizeY && nMouseX < pControl->dwSizeX + pControl->dwPosX && nPosY < pControl->dwPosY) {
               goto push_hit_control;
             }
           }

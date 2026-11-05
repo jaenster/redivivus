@@ -83,6 +83,16 @@ struct D2RealmCharListCacheEntryStrc {
     /* 0x0C */ struct D2RealmCharListCacheEntryStrc * pNext;
 };
 
+// =============================================================================
+// Global data (co-located with struct definitions)
+// =============================================================================
+
+namespace D2Launch::CharSel {
+
+extern struct D2CharSelStrc * D2CharSelStrcFirst;
+
+} // namespace D2Launch::CharSel
+
 namespace D2Launch::CharSel {
 
 // Function declarations

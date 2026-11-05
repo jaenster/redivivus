@@ -4,6 +4,23 @@
   "file": "D2Game/Monster/Create.cpp",
   "functions": [
     {
+      "name": "TXT_MonStats_GetBaseId_NoChecks",
+      "address": "00463830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463830"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "TXT_MonStats_GetBaseId_NoChecks"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "MONSTER_FindUnitInPartySlot",
       "address": "005b1bc0",
       "lines": [

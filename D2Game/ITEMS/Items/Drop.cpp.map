@@ -4,24 +4,6 @@
   "file": "D2Game/ITEMS/Items/Drop.cpp",
   "functions": [
     {
-      "name": "ItemTypes_GetLine",
-      "address": "00555c90",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00555c90"
-        }
-      ],
-      "namespace": "D2Game::ITEMS::Items::Drop",
-      "calledFunctions": [
-        "ItemTypes_GetLine"
-      ],
-      "usedTypes": [
-        "D2ItemTypesTxt",
-        "int32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_00555cc0",
       "address": "00555cc0",
       "lines": [

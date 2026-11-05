@@ -27,7 +27,6 @@
 #include "D2Client/UI/Inv.h"
 #include "D2Client/UI/ListBox/ListBoxWrapper.h"
 #include "D2Client/UI/Path.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT/CUnit.h"
@@ -56,6 +55,7 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Server.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
@@ -6500,9 +6500,6 @@ void __stdcall TEXT_OpenMessageLogDialog() {
     fpDialogFunc pfnCloseCallback;
     uint32_t nEnabled;
     int32_t nEntryIdx;
-    int32_t nField;
-    uint32_t nPosX;
-    uint32_t nPosY;
     uint32_t nSehTryLevel = -1;
     pfnEHHandlerRoutine puStack12 = __GSHandlerCheck_EH_6ca07b;
     void* pSavedExceptionList = ExceptionList;
@@ -6514,11 +6511,7 @@ void __stdcall TEXT_OpenMessageLogDialog() {
       Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0xfc3), 0x15, 0, 4, 1, 0, 0);
       nEntryIdx = 1;
       pfnCloseCallback = TEXT_CloseMessageLogDialog;
-      nEnabled = 1;
-      nField = 0;
-      nPosY = 0;
-      nPosX = ScreenSizeY - 0xa5;
-      Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0x1030), nPosX, nPosY, nField, nEnabled, pfnCloseCallback, nEntryIdx);
+      Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0x1030), ScreenSizeY - 0xa5, 0, 0, 1, pfnCloseCallback, nEntryIdx);
       pLogListAlloc = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
       nSehTryLevel = 0;
       if (pLogListAlloc) {

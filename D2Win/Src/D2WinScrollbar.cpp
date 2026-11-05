@@ -197,9 +197,9 @@ BOOL __stdcall Push(D2ControlMsg * pScrollbar) {
     int nPosY;
     nPosY = pCtrl->sControl.dwSizeY;
     int nMaxValue;
-    nMaxValue = D2Client::Mouse::nPosX - pCtrl->sControl.dwPosX;
+    nMaxValue = D2WinMain::nPosX - pCtrl->sControl.dwPosX;
     int nMouseRelY;
-    nMouseRelY = nPosY - pCtrl->sControl.dwPosY + D2Client::Mouse::nPosY;
+    nMouseRelY = nPosY - pCtrl->sControl.dwPosY + D2WinMain::nPosY;
     if (nMaxValue < 0 || nMaxValue > pCtrl->sControl.dwSizeX) {
       return 0;
     }

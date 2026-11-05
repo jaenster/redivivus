@@ -47,7 +47,5 @@ namespace D2Client::Renderer::Glide {
 BOOL __stdcall RENDERER_GLIDE_LoadLibrarySymbols();
 void __stdcall RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(int nLine);
 BOOL __fastcall Initialize(HINSTANCE hInstance);
-BOOL __fastcall CheckCutScene();
-void __fastcall UpdateScaleFactor(int32_t nScaleFactor);
 
 } // namespace D2Client::Renderer::Glide

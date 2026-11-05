@@ -3575,27 +3575,6 @@
       ]
     },
     {
-      "name": "CRC32_Calculate",
-      "address": "006c99f6",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c99f6"
-        }
-      ],
-      "namespace": "Storm::Source::SFile",
-      "calledFunctions": [
-        "CRC32_Calculate",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "uint32_t",
-        "uint8_t"
-      ]
-    },
-    {
       "name": "__GSHandlerCheck_EH_6c9e98",
       "address": "006c9e98",
       "lines": [

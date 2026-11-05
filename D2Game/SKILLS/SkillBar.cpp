@@ -10,7 +10,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
@@ -56,6 +55,7 @@
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerModes.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Game/SKILLS/SkillDruid.h"
 #include "D2Game/SKILLS/SkillNec.h"
@@ -603,7 +603,7 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, sTargetPos.x, sTargetPos.y);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sTargetPos.x, sTargetPos.y);
     if (!pRoom) {
       return 0;
     }
@@ -1308,8 +1308,7 @@ static BOOL __stdcall SKILLBAR_FindValidLeapTarget(D2UnitStrc * pUnit, int32_t n
     do {
       LONG nY;
       LVar1 = sCandidatePos.y;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, sCandidatePos.x, LVar1);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), sCandidatePos.x, LVar1);
       pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sCandidatePos, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 1);
       nY = sCandidatePos.y;
       LVar1 = sCandidatePos.x;
@@ -1378,7 +1377,7 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nX,
       return 0;
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom) {
       return 0;
     }
@@ -1484,8 +1483,7 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     }
 
     uint32_t nDestYSaved = nDestY;
-    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, eSkill, nDestYSaved);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), eSkill, nDestYSaved);
     D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
@@ -1569,9 +1567,7 @@ static BOOL __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
     int nX = nPosX * 3 + nTargetUnitCoord * -2;
     nTargetUnitCoord = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
     int nOvershootY = nPosY * 3 + nTargetUnitCoord * -2;
-    int nY = nOvershootY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nOvershootY);
     if (pRoom) {
       BOOL bIsInTown;
       bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);

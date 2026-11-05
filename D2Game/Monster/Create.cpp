@@ -5,12 +5,10 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -49,6 +47,7 @@
 #include "D2Game/Monster/MonsterRegion.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -66,6 +65,15 @@
 
 
 namespace D2Game::Monster::Create {
+
+int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId) {
+    D2MonStatsTxt* pMonStatsTxt = nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
+    if (pMonStatsTxt) {
+      nMonsterId = (int32_t)pMonStatsTxt->BaseId;
+    }
+
+    return nMonsterId;
+}
 
 int * * __fastcall MONSTER_FindUnitInPartySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     D2UnitNodeStrc* pPartyNode;
@@ -412,11 +420,10 @@ D2UnitStrc * __fastcall SpawnMonsterAtUnit(::SGAMEDATA * pGame, D2UnitStrc * pUn
       }
 
       sCreateParams.nY = 0;
-      pSpawnedAlt = CreateMonster(&sCreateParams);
-      return pSpawnedAlt;
+    } else {
+      sCreateParams.nY = pUnit->pPath.pStaticPath->nPosY;
     }
 
-    sCreateParams.nY = pUnit->pPath.pStaticPath->nPosY;
     pSpawnedAlt = CreateMonster(&sCreateParams);
     return pSpawnedAlt;
 }
@@ -689,7 +696,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
       return;
     }
 
-    int32_t nMinionClassId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId_NoChecks(nPartySize);
+    int32_t nMinionClassId = TXT_MonStats_GetBaseId_NoChecks(nPartySize);
     if (nMinionClassId >= 0 && nMinionClassId < sgptDataTable->nTxtMonStatsSize && nMinionClassId == 0x105) {
       if (!pUnit) {
         nMinionClassId = -1;
@@ -867,7 +874,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     nSpawnX = 0;
     if (pMonStats2->spawnCol == '\x01' && (nWalkY = pMonsterSpawnData->nClassId , nWalkY < 0x102 || nWalkY > 0x107) && nWalkY != 0x99) {
       FindDiagonalNonCollisionCoords(pWorkingRoom, &nSpawnX, &nSpawnY);
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pWorkingRoom, nSpawnX, nSpawnY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pWorkingRoom, nSpawnX, nSpawnY);
     } else {
       POINT pt;
       if (nClassId > (int)nMaxWalkRadius) {

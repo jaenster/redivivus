@@ -49,6 +49,7 @@
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -2274,7 +2275,7 @@ static BOOL __stdcall SKILLS_IsCoordInTown(int32_t nX, int32_t nY, D2UnitStrc * 
       return 0;
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom) {
       return 0;
     }

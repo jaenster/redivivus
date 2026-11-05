@@ -153,7 +153,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
       nEntryIdx = 0;
       do {
-        if (nEntryIdx == (D2Client::Mouse::nPosX - pAccountList->sControl.dwPosX) / 0x78 + (pAccountList->sControl.dwSizeY - pAccountList->sControl.dwPosY + 4 + D2Client::Mouse::nPosY) / 0x14 * 6) {
+        if (nEntryIdx == (D2WinMain::nPosX - pAccountList->sControl.dwPosX) / 0x78 + (pAccountList->sControl.dwSizeY - pAccountList->sControl.dwPosY + 4 + D2WinMain::nPosY) / 0x14 * 6) {
           pAccountList->pSelectedEntry = pCurEntry;
           return 1;
         }

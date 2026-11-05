@@ -4847,25 +4847,6 @@
         "D2WINMAIN_ClearMessageLoopFlag",
         "MAINMENU_GetGlobalValue2"
       ]
-    },
-    {
-      "name": "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
-      "address": "005c6cb0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "005c6cb0"
-        }
-      ],
-      "namespace": "D2Launch::MainMenus",
-      "calledFunctions": [
-        "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
-        "D2UpdateState"
-      ],
-      "usedTypes": [
-        "WCHAR",
-        "pfnUIMenuInstance"
-      ]
     }
   ]
 }

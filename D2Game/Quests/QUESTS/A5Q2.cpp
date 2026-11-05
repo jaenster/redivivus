@@ -3,7 +3,6 @@
 #include "D2Game/Quests/QUESTS/A5Q2.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -1033,7 +1032,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     *pGroupBarricadeFlag = 1;
-    pIterUnit = (D2UnitStrc*)D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pPrisonerRoom, sPortalCoords.x, sPortalCoords.y);
+    pIterUnit = (D2UnitStrc*)D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pPrisonerRoom, sPortalCoords.x, sPortalCoords.y);
     D2UnitStrc* pPortalUnit;
     pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, nullptr);
     if (!pPortalUnit) {

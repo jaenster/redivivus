@@ -4,6 +4,24 @@
   "file": "D2gfx/D2GfxHelperStrc.cpp",
   "functions": [
     {
+      "name": "D2GFX_ClearYBuffer",
+      "address": "004f7e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7e70"
+        }
+      ],
+      "namespace": "D2gfx::D2GfxHelperStrc",
+      "calledFunctions": [
+        "D2GFX_ClearYBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "fpDrawVisTile",
       "address": "004f7ea0",
       "lines": [

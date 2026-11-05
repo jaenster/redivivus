@@ -7,6 +7,9 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Common/ITEMS/ItemMods.h"
+#include "D2Game/PLAYER/Player.h"
+#include "D2Game/UNIT/SUnit.h"
 
 // Forward declarations
 struct D2ClientStrc;
@@ -55,6 +58,7 @@ struct D2PetStrc {
 namespace D2Game::PLAYER::PlayerPets {
 
 // Function declarations
+struct D2PetTypeTxt * __fastcall GetPetTypeTxtById(int32_t nPetId);
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PetArgStrc * pPetArgs);
 // Releases all pet tracking memory for a player unit. Iterates every pet type list (skipping index 0), calling PETS_FreeOrKillPetList for each (type 7 = merc gets special kill flag). Frees the pet list array and the D2UnitDataPlayerPetsStrc itself from the game memory pool, then nulls pPets. Halts on missing player data.

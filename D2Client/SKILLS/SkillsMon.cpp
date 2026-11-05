@@ -8,7 +8,6 @@
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
@@ -45,6 +44,7 @@
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -383,8 +383,7 @@ BOOL __fastcall Skills_CltStFunc_MonSummonSpawnSetCollision(D2UnitStrc * pUnit, 
     D2Common::Skills::SKILL_SetParam2(pSkill, nSpawnY);
     D2Common::Skills::SKILL_SetParam3(pSkill, nSpawnX);
     nSummonResult = nSpawnX;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnY, nSummonResult);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnY, nSummonResult);
     D2Common::Collision::AddCollision_Type(pRoom, nSpawnY, nSpawnX, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);
     return 1;
 }
@@ -403,9 +402,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RemoveCollisionAtParam(D2UnitStrc * pUnit, 
 
     D2Common::Skills::SKILL_SetParam2(pSkill, 0);
     D2Common::Skills::SKILL_SetParam3(pSkill, 0);
-    int32_t nXForRoom = nY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nXForRoom);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
     if (pRoom) {
       D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);
       return 1;
@@ -1986,7 +1983,7 @@ D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(D2UnitStrc * pUnit) {
       D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(nDirOffset[byDir], &nOffsetX, &nOffsetY);
       nUnitX += nOffsetX;
       nUnitY += nOffsetY;
-      pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pStartRoom, nUnitX, nUnitY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pStartRoom, nUnitX, nUnitY);
       bHasRoom = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
       if (!bHasRoom) {
         memset(&sSkillArg, 0, 0x5c);

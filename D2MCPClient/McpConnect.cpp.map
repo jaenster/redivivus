@@ -1597,6 +1597,58 @@
       ]
     },
     {
+      "name": "MCPCONNECT_SocketCallback_Dispatch",
+      "address": "0044b1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b1c0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SocketCallback_Dispatch"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SetGameListCallbacks",
+      "address": "0044b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b210"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetGameListCallbacks"
+      ],
+      "usedTypes": [
+        "pfnMCPGameListEntry",
+        "pfnVoidNoArgCallback"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SetMessageCallback",
+      "address": "0044b220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b220"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetMessageCallback"
+      ],
+      "usedTypes": [
+        "pfnMCPMessage"
+      ]
+    },
+    {
       "name": "MCPCONNECT_SanitizeWideString",
       "address": "0044b230",
       "lines": [

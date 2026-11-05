@@ -18,7 +18,6 @@
 #include "Fog/Src/Safesock.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
-#include "D2Client/Net/MCP.h"
 #include "D2Launch/MainMenus.h"
 #include "D2MCPClient/McpConnect.data.h"
 #include "Storm/Source/SFile.data.h"
@@ -38,40 +37,40 @@ static uint32_t g_nMCPGameDifficulty = 0; D2_STATIC_GUARD(g_nMCPGameDifficulty, 
 static uint32_t g_bMCPCharCreateSuccess = 0; D2_STATIC_GUARD(g_bMCPCharCreateSuccess, "g_bMCPCharCreateSuccess");
 static char g_szMCPGamePassword[28] = {}; D2_STATIC_GUARD(g_szMCPGamePassword, "g_szMCPGamePassword");
 static uint32_t IsMcpGameJoinSuccesful = 0; D2_STATIC_GUARD(IsMcpGameJoinSuccesful, "IsMcpGameJoinSuccesful");
-namespace D2Client::MCP {
-uint16_t D2GSRequestId = 0; D2_GLOBAL_GUARD(D2GSRequestId, "D2Client::MCP::D2GSRequestId");
-} // namespace D2Client::MCP
+namespace D2MCPClient::McpConnect {
+uint16_t D2GSRequestId = 0; D2_GLOBAL_GUARD(D2GSRequestId, "D2MCPClient::McpConnect::D2GSRequestId");
+} // namespace D2MCPClient::McpConnect
 static uint32_t g_bMCPD2GSConnectReady = 0; D2_STATIC_GUARD(g_bMCPD2GSConnectReady, "g_bMCPD2GSConnectReady");
-namespace D2Client::Bnet {
-uint32_t D2GSGameHash = 0; D2_GLOBAL_GUARD(D2GSGameHash, "D2Client::Bnet::D2GSGameHash");
-} // namespace D2Client::Bnet
+namespace D2MCPClient::McpConnect {
+uint32_t D2GSGameHash = 0; D2_GLOBAL_GUARD(D2GSGameHash, "D2MCPClient::McpConnect::D2GSGameHash");
+} // namespace D2MCPClient::McpConnect
 static uint16_t nMcpPacketSequence = 0; D2_STATIC_GUARD(nMcpPacketSequence, "nMcpPacketSequence");
-namespace D2Client::MCP {
-uint32_t D2GSGameToken = 0; D2_GLOBAL_GUARD(D2GSGameToken, "D2Client::MCP::D2GSGameToken");
-D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2Client::MCP::MCPD2QSSocket");
-} // namespace D2Client::MCP
+namespace D2MCPClient::McpConnect {
+uint32_t D2GSGameToken = 0; D2_GLOBAL_GUARD(D2GSGameToken, "D2MCPClient::McpConnect::D2GSGameToken");
+D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2MCPClient::McpConnect::MCPD2QSSocket");
+} // namespace D2MCPClient::McpConnect
 static uint8_t gMCPConnectionState[328] = {}; D2_STATIC_GUARD(gMCPConnectionState, "gMCPConnectionState");
 static uint32_t g_bMCPListGameSuccess = 0; D2_STATIC_GUARD(g_bMCPListGameSuccess, "g_bMCPListGameSuccess");
 static uint32_t g_nMCPJoinTimestamp = 0; D2_STATIC_GUARD(g_nMCPJoinTimestamp, "g_nMCPJoinTimestamp");
 D2McpGameInfoStrc g_CharSelectBuffer = {}; D2_GLOBAL_GUARD(g_CharSelectBuffer, "g_CharSelectBuffer");
 static char g_szMCPGameName[4] = {}; D2_STATIC_GUARD(g_szMCPGameName, "g_szMCPGameName");
 static uint32_t g_bMCPJoinGameSuccess = 0; D2_STATIC_GUARD(g_bMCPJoinGameSuccess, "g_bMCPJoinGameSuccess");
-namespace D2Client::MCP {
-uint32_t D2GSJoinResult = 0; D2_GLOBAL_GUARD(D2GSJoinResult, "D2Client::MCP::D2GSJoinResult");
-} // namespace D2Client::MCP
+namespace D2MCPClient::McpConnect {
+uint32_t D2GSJoinResult = 0; D2_GLOBAL_GUARD(D2GSJoinResult, "D2MCPClient::McpConnect::D2GSJoinResult");
+} // namespace D2MCPClient::McpConnect
 static uint32_t g_bMCPCharDeleteSuccess = 0; D2_STATIC_GUARD(g_bMCPCharDeleteSuccess, "g_bMCPCharDeleteSuccess");
 HANDLE MCPThread = 0; D2_GLOBAL_GUARD(MCPThread, "MCPThread");
 static uint32_t g_bMCPCharUpgradeSuccess = 0; D2_STATIC_GUARD(g_bMCPCharUpgradeSuccess, "g_bMCPCharUpgradeSuccess");
-namespace D2Client::MCP {
-char D2GSConnectIp[18] = {}; D2_GLOBAL_GUARD(D2GSConnectIp, "D2Client::MCP::D2GSConnectIp");
-} // namespace D2Client::MCP
+namespace D2MCPClient::McpConnect {
+char D2GSConnectIp[18] = {}; D2_GLOBAL_GUARD(D2GSConnectIp, "D2MCPClient::McpConnect::D2GSConnectIp");
+} // namespace D2MCPClient::McpConnect
 static uint32_t g_bMCPCharLogonSuccess = 0; D2_STATIC_GUARD(g_bMCPCharLogonSuccess, "g_bMCPCharLogonSuccess");
 static uint32_t g_bMCPConnectionEstablished = 0; D2_STATIC_GUARD(g_bMCPConnectionEstablished, "g_bMCPConnectionEstablished");
 static HANDLE pMCPEventHandle = 0; D2_STATIC_GUARD(pMCPEventHandle, "pMCPEventHandle");
 static uint32_t g_bMCPCreateGameSuccess = 0; D2_STATIC_GUARD(g_bMCPCreateGameSuccess, "g_bMCPCreateGameSuccess");
-namespace D2Client::MCP {
-void * CharListPacket = 0; D2_GLOBAL_GUARD(CharListPacket, "D2Client::MCP::CharListPacket");
-} // namespace D2Client::MCP
+namespace D2MCPClient::McpConnect {
+void * CharListPacket = 0; D2_GLOBAL_GUARD(CharListPacket, "D2MCPClient::McpConnect::CharListPacket");
+} // namespace D2MCPClient::McpConnect
 pfnMCPPacketCallback g_pfnMCPCallback1 = (pfnMCPPacketCallback)0; D2_GLOBAL_GUARD(g_pfnMCPCallback1, "g_pfnMCPCallback1");
 pfnMCPPacketCallback g_pfnMCPCallback2 = (pfnMCPPacketCallback)0; D2_GLOBAL_GUARD(g_pfnMCPCallback2, "g_pfnMCPCallback2");
 pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
@@ -98,9 +97,9 @@ BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004476f0(char * pBytes, size
 }
 
 void __stdcall FreeMCP() {
-    if (D2Client::MCP::MCPD2QSSocket) {
-      Fog::Src::D2QSSocket::FreeD2QSSocket(D2Client::MCP::MCPD2QSSocket);
-      D2Client::MCP::MCPD2QSSocket = 0;
+    if (MCPD2QSSocket) {
+      Fog::Src::D2QSSocket::FreeD2QSSocket(MCPD2QSSocket);
+      MCPD2QSSocket = 0;
     }
     if (MCPThread) {
       /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(MCPThread, -1);
@@ -117,7 +116,7 @@ void __stdcall FreeMCP() {
 
 int32_t __stdcall HasPeerName() {
     sockaddr sPeerAddr;
-    D2NetDataStrc* pNetData = Fog::Src::D2QSSocket::NET_D2QSocket_GetSafesock(D2Client::MCP::MCPD2QSSocket);
+    D2NetDataStrc* pNetData = Fog::Src::D2QSSocket::NET_D2QSocket_GetSafesock(MCPD2QSSocket);
     if (!pNetData) {
       return 0;
     }
@@ -130,11 +129,11 @@ int32_t __stdcall HasPeerName() {
 BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
     uint16_t nSize;
     char szPacketBuf[1024];
-    if (!D2Client::MCP::MCPD2QSSocket) {
+    if (!MCPD2QSSocket) {
       return 0;
     }
 
-    uint32_t uVar1 = Fog::Src::D2QSSocket::ReadBytesFromSocket(D2Client::MCP::MCPD2QSSocket, szPacketBuf, 0x400);
+    uint32_t uVar1 = Fog::Src::D2QSSocket::ReadBytesFromSocket(MCPD2QSSocket, szPacketBuf, 0x400);
     if ((short int)uVar1) {
       /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)uVar1);
     }
@@ -143,23 +142,23 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
 }
 
 char * __stdcall GetD2GSConnectIp() {
-    return D2Client::MCP::D2GSConnectIp;
+    return D2GSConnectIp;
 }
 
 int16_t __stdcall GetD2GSRequestId() {
-    return D2Client::MCP::D2GSRequestId;
+    return D2GSRequestId;
 }
 
 int32_t __stdcall GetD2GSGameToken() {
-    return D2Client::MCP::D2GSGameToken;
+    return D2GSGameToken;
 }
 
 void __stdcall SetD2GSJoinResult(int32_t nResult) {
-    D2Client::MCP::D2GSJoinResult = nResult;
+    D2GSJoinResult = nResult;
 }
 
 int32_t __stdcall GetD2GSJoinResult() {
-    return D2Client::MCP::D2GSJoinResult;
+    return D2GSJoinResult;
 }
 
 BOOL __stdcall MCPSTATE_GetConnectionEstablished() {
@@ -270,7 +269,7 @@ void __stdcall MCPSTATE_SetD2GSConnectReady(uint32_t bReady) {
 }
 
 uint32_t __stdcall MCPCONNECT_GetD2GSGameHash() {
-    return D2Client::Bnet::D2GSGameHash;
+    return D2GSGameHash;
 }
 
 void __stdcall MCPCONNECT_SendCharCreate(char * szCharName, uint32_t dwArg1, uint32_t dwArg2) {
@@ -298,62 +297,62 @@ void __stdcall SetIsMPCJoinSuccesfull(uint32_t bSuccess) {
 }
 
 void * __stdcall MCPCONNECT_GetCharListPacket() {
-    return D2Client::MCP::CharListPacket;
+    return CharListPacket;
 }
 
 void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize) {
     char* pszCursor;
     uint32_t nCharCount;
     char byChar;
-    if (D2Client::MCP::CharListPacket) {
-      D2_FREE_AT(D2Client::MCP::CharListPacket, ".\\Src\\McpConnect.cpp", 0x21e);
-      D2Client::MCP::CharListPacket = 0;
+    if (CharListPacket) {
+      D2_FREE_AT(CharListPacket, ".\\Src\\McpConnect.cpp", 0x21e);
+      CharListPacket = 0;
     }
     if (!nSize) {
       return;
     }
 
-    D2Client::MCP::CharListPacket = D2_ALLOC_AT(nSize, ".\\Src\\McpConnect.cpp", 0x227);
-    memcpy(D2Client::MCP::CharListPacket, pBytes, nSize);
+    CharListPacket = D2_ALLOC_AT(nSize, ".\\Src\\McpConnect.cpp", 0x227);
+    memcpy(CharListPacket, pBytes, nSize);
     if (*pBytes == '\x17') {
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 1) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 1) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x233);
         exit(-1);
       }
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 3) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 3) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
         exit(-1);
       }
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 5) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 5) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x235);
         exit(-1);
       }
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 7) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 7) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x236);
         exit(-1);
       }
 
       return;
     } else if (*pBytes == '\x19') {
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 1) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 1) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x242);
         exit(-1);
       }
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 3) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 3) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x243);
         exit(-1);
       }
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 5) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 5) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x244);
         exit(-1);
       }
-      if (!(*(uint16_t*)((int)D2Client::MCP::CharListPacket + 7) < 0x100)) {
+      if (!(*(uint16_t*)((int)CharListPacket + 7) < 0x100)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x245);
         exit(-1);
       }
 
-      pszCursor = (char*)((int)D2Client::MCP::CharListPacket + 9);
-      for (nCharCount = (uint32_t)*(uint16_t*)((int)D2Client::MCP::CharListPacket + 7); nCharCount; nCharCount--) {
+      pszCursor = (char*)((int)CharListPacket + 9);
+      for (nCharCount = (uint32_t)*(uint16_t*)((int)CharListPacket + 7); nCharCount; nCharCount--) {
         pszCursor += 4;
         pszCursor = pszCursor + strlen(pszCursor) + 1;
         pszCursor = pszCursor + strlen(pszCursor) + 1;
@@ -375,29 +374,29 @@ void __stdcall McpConnectionLoop(int * pnParam) {
 
     int32_t bGotPeerName = NET_MCP_CLIENT_Send_0x01_StartUp(pnParam);
     if (bGotPeerName == -1) {
-      D2Client::MCP::D2GSJoinResult = 0xb;
+      D2GSJoinResult = 0xb;
       return;
     }
 
     DWORD dwStartTick = GetTickCount();
     while (true) {
       D2NetDataStrc* pNetData;
-      pNetData = Fog::Src::D2QSSocket::NET_D2QSocket_GetSafesock(D2Client::MCP::MCPD2QSSocket);
+      pNetData = Fog::Src::D2QSSocket::NET_D2QSocket_GetSafesock(MCPD2QSSocket);
       if (!pNetData) {
-        D2Client::MCP::D2GSJoinResult = 2;
+        D2GSJoinResult = 2;
         return;
       }
 
       pnParam = (int*)0x10;
       bGotPeerName = Fog::Src::Safesock::GetPeerNameDoesReturn(pNetData, &peerAddr, (int*)&pnParam);
       if (!bGotPeerName) {
-        D2Client::MCP::D2GSJoinResult = 2;
+        D2GSJoinResult = 2;
         return;
       }
 
       dwWaitResult = GetTickCount();
       if (dwWaitResult >= dwStartTick + 60000) {
-        D2Client::MCP::D2GSJoinResult = 2;
+        D2GSJoinResult = 2;
         return;
       }
 
@@ -406,7 +405,7 @@ void __stdcall McpConnectionLoop(int * pnParam) {
         break;
       }
       if (dwWaitResult != 0x102) {
-        D2Client::MCP::D2GSJoinResult = 2;
+        D2GSJoinResult = 2;
         return;
       }
 
@@ -418,10 +417,10 @@ void __stdcall McpConnectionLoop(int * pnParam) {
 uint32_t __stdcall ThreadHandler() {
     char bySendByte;
     char* szIpAddress = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(*(uint32_t*)((char*)&gMCPConnectionState + 16));
-    D2Client::MCP::D2GSJoinResult = 0;
+    D2GSJoinResult = 0;
     D2QSSocketStrc* NET_MCP_CLIENT_D2QSSocket = Fog::Src::D2QSSocket::STRUCT_D2QSSocket_Init(szIpAddress, *(uint32_t*)((char*)&gMCPConnectionState + 20), "clt->mcp");
-    D2Client::MCP::MCPD2QSSocket = NET_MCP_CLIENT_D2QSSocket;
-    Fog::Src::D2QSSocket::QSSOCKET_SetCallbackHandler1(NET_MCP_CLIENT_D2QSSocket, (void*)D2Client::Net::MCP::MCPCONNECT_SocketCallback_Dispatch, nullptr);
+    MCPD2QSSocket = NET_MCP_CLIENT_D2QSSocket;
+    Fog::Src::D2QSSocket::QSSOCKET_SetCallbackHandler1(NET_MCP_CLIENT_D2QSSocket, (void*)MCPCONNECT_SocketCallback_Dispatch, nullptr);
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_CreateConnectionThread(NET_MCP_CLIENT_D2QSSocket);
     int nSocketStatus = 0;
     D2NetDataStrc* pNetData = Fog::Src::D2QSSocket::NET_D2QSocket_GetSafesock(NET_MCP_CLIENT_D2QSSocket);
@@ -429,7 +428,7 @@ uint32_t __stdcall ThreadHandler() {
       int nWsaResult;
       Fog::Src::Safesock::GetSocketStatusAndWsaResultToArguments(pNetData, &nSocketStatus, &nWsaResult);
       if (!nSocketStatus) {
-        if (NET_MCP_CLIENT_D2QSSocket != D2Client::MCP::MCPD2QSSocket) {
+        if (NET_MCP_CLIENT_D2QSSocket != MCPD2QSSocket) {
           Fog::Src::D2QSSocket::D2QSSOCKET_BlockSocketIfValid(NET_MCP_CLIENT_D2QSSocket);
           return 0;
         }
@@ -437,11 +436,11 @@ uint32_t __stdcall ThreadHandler() {
         bySendByte = '\x01';
         Fog::Src::D2QSSocket::QSSOCKET_SendWithTimeout(NET_MCP_CLIENT_D2QSSocket, &bySendByte, 1);
         McpConnectionLoop((int*)gMCPConnectionState);
-        return (uint32_t)!D2Client::MCP::D2GSJoinResult;
+        return (uint32_t)!D2GSJoinResult;
       }
     }
 
-    D2Client::MCP::D2GSJoinResult = 2;
+    D2GSJoinResult = 2;
     return 0;
 }
 
@@ -507,7 +506,7 @@ int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
       exit(-1);
     }
 
-    nLine = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &mcp0x01.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 0x41));
+    nLine = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x01.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 0x41));
     return nLine;
 }
 
@@ -525,7 +524,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwC
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &mcp0x02.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 7));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x02.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 7));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
@@ -539,7 +538,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int16_t nRequestId) {
@@ -561,8 +560,8 @@ void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int1
       exit(-1);
     }
 
-    D2Client::MCP::D2GSGameToken = 0;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &sPacket.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 10));
+    D2GSGameToken = 0;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &sPacket.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 10));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGamePassword, uint16_t nRequestId) {
@@ -579,7 +578,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGa
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wRequestIdArg) {
@@ -591,7 +590,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wReque
     nMcpPacketSequence = wRequestIdArg;
     sPacket.wRequestId = wRequestIdArg;
     STRING_GetStringLength(szText, &pStrLen, (char*)0x400, sPacket.szData);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&sPacket, (short int)(uintptr_t)pStrLen + 7);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)(uintptr_t)pStrLen + 7);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wRequestIdArg) {
@@ -602,7 +601,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wReque
     nMcpPacketSequence = wRequestIdArg;
     byPacketId.wRequestId = wRequestIdArg;
     STRING_GetStringLength(szText, &pStrLen, (char*)0x400, byPacketId.szData);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&byPacketId, (short int)(uintptr_t)pStrLen + 3);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)(uintptr_t)pStrLen + 3);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x08(char * szText, uint16_t wRequestIdArg) {
@@ -618,7 +617,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x08(char * szText, uint16_t wRequestIdArg) 
     }
 
     nMcpPacketSequence = wRequestIdArg;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x09(char * szText, uint16_t wRequestIdArg) {
@@ -634,7 +633,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x09(char * szText, uint16_t wRequestIdArg) 
     }
 
     nMcpPacketSequence = wRequestIdArg;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(D2CharSelStrc * pCharSel, uint16_t wRequestIdArg) {
@@ -645,7 +644,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(D2CharSelStrc * pCharSel, ui
     byPacketId.wRequestId = wRequestIdArg;
     Storm::Source::SSTR::SStrCopy(byPacketId.szData, pCharSel->szCharname, 0x400);
     uint32_t pStrLen = Storm::Source::SSTR::SStrLen(byPacketId.szData);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&byPacketId, (short int)pStrLen + 4);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)pStrLen + 4);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x18_CharUpgrade(D2CharSelStrc * pCharSel) {
@@ -654,7 +653,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x18_CharUpgrade(D2CharSelStrc * pCharSel) {
     byPacketId[0] = '\x18';
     Storm::Source::SSTR::SStrCopy(byPacketId + 1, pCharSel->szCharname, 0x400);
     uint32_t pStrLen = Storm::Source::SSTR::SStrLen(byPacketId + 1);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, byPacketId, (short int)pStrLen + 2);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (short int)pStrLen + 2);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0B(char * szText1, char * szText2) {
@@ -669,7 +668,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x0B(char * szText1, char * szText2) {
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText) {
@@ -691,28 +690,28 @@ void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText) {
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &__frame0.byPacketId, (uint16_t)(uintptr_t)(__frame0.pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &__frame0.byPacketId, (uint16_t)(uintptr_t)(__frame0.pStrLen + 1));
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x0D() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
     dwPacketBuf[3] = 0xd;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x0F() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
     dwPacketBuf[3] = 0xf;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x10() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
     dwPacketBuf[3] = 0x10;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilterMode, uint16_t wRequestId) {
@@ -723,21 +722,21 @@ void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilter
     aPacketFrame[1] = nLadderFilterMode;
     aPacketFrame[0] = 0x11;
     *(uint16_t*)((char*)&aPacketFrame + 2) = wRequestId;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)aPacketFrame, 4);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)aPacketFrame, 4);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x12_MOTD() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
     dwPacketBuf[3] = 0x12;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x13_CancelGameCreate() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
     dwPacketBuf[3] = 0x13;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
 // Tail-calls NET_MCP_CLIENT_Send and returns that BOOL in EAX; its only caller tests EAX to decide whether the realm character-list request failed. Typed void, that decision came from an uninitialised local.
@@ -749,7 +748,7 @@ int __stdcall NET_MCP_CLIENT_Send_0x19_CharList2() {
     szPacketBuf[2] = '\0';
     szPacketBuf[3] = '\0';
     szPacketBuf[4] = '\0';
-    int32_t nSendResult = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, szPacketBuf, 5);
+    int32_t nSendResult = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, szPacketBuf, 5);
     return nSendResult;
 }
 
@@ -766,7 +765,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x16_CharRank(char * szText, uint32_t dwFiel
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, (char*)&sPacket, (uint16_t)(nTextLength + 9));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (uint16_t)(nTextLength + 9));
 }
 
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, size_t nSize) {
@@ -795,8 +794,8 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize) {
     uint32_t dwGameToken = *(uint32_t*)(pBytes + 3);
     if (*(uint16_t*)(pBytes + 1) == nMcpPacketSequence) {
       SetD2GSJoinResult(*(int32_t*)(pBytes + 7));
-      D2Client::MCP::D2GSRequestId = nMcpPacketSequence;
-      D2Client::MCP::D2GSGameToken = dwGameToken;
+      D2GSRequestId = nMcpPacketSequence;
+      D2GSGameToken = dwGameToken;
     }
 
     return 1;
@@ -809,9 +808,9 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nS
       return 1;
     }
 
-    D2Client::MCP::D2GSRequestId = nMcpPacketSequence;
-    D2Client::MCP::D2GSGameToken = nGameTokenUnused;
-    D2Client::Bnet::D2GSGameHash = nGameHashValue;
+    D2GSRequestId = nMcpPacketSequence;
+    D2GSGameToken = nGameTokenUnused;
+    D2GSGameHash = nGameHashValue;
     if (!pBytes->nGameIp) {
       if (pBytes->nResult) {
         SetD2GSJoinResult(pBytes->nResult);
@@ -822,7 +821,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nS
       return 1;
     }
 
-    Storm::Source::SSTR::SStrCopy(D2Client::MCP::D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(pBytes->nGameIp), 0x12);
+    Storm::Source::SSTR::SStrCopy(D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(pBytes->nGameIp), 0x12);
     return 1;
 }
 
@@ -953,8 +952,8 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, size_t nSize) {
     int nResult = *(int*)(pBytes + 0xd);
     uint32_t sAddr = *(uint32_t*)(pBytes + 9);
     SetD2GSJoinResult(nResult);
-    D2Client::MCP::D2GSGameToken = dwGameToken;
-    D2Client::Bnet::D2GSGameHash = dwGameHash;
+    D2GSGameToken = dwGameToken;
+    D2GSGameHash = dwGameHash;
     if (!sAddr) {
       if (nResult) {
         SetD2GSJoinResult(nResult);
@@ -967,7 +966,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, size_t nSize) {
       return 1;
     }
 
-    Storm::Source::SSTR::SStrCopy(D2Client::MCP::D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sAddr), 0x12);
+    Storm::Source::SSTR::SStrCopy(D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sAddr), 0x12);
     MCPSTATE_SetD2GSConnectReady(1);
     return 1;
 }
@@ -1113,6 +1112,60 @@ BOOL __fastcall HandleIncomingPacket(char * pBytes, size_t nSize) {
     }
 
     return bResult;
+}
+
+BOOL __fastcall MCPCONNECT_SocketCallback_Dispatch(uint8_t * pPacketBuf, int nPacketSize, void * pContext) {
+    // Static local variables (originally global data)
+    static D2NET_CLIENT_MCPtoCLT gaMcpSocketCallbackHandlers[26] = {
+    nullptr,
+    (D2NET_CLIENT_MCPtoCLT)&D2MCPClient::McpConnect::MCP_INCOMING_SetD2GSJoinResultAndSignal,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+}; D2_STATIC_GUARD(gaMcpSocketCallbackHandlers, "D2MCPClient::McpConnect::MCPCONNECT_SocketCallback_Dispatch::gaMcpSocketCallbackHandlers");
+
+    BOOL BVar1 = 0;
+    if ((uint32_t)nPacketSize <= 0) {
+      return BVar1;
+    }
+    if (*pPacketBuf >= 0x1a) {
+      return 0;
+    }
+    if (gaMcpSocketCallbackHandlers[*pPacketBuf]) {
+      BVar1 = (*gaMcpSocketCallbackHandlers[*pPacketBuf])((char*)pPacketBuf, nPacketSize);
+    }
+
+    return BVar1;
+}
+
+void __fastcall MCPCONNECT_SetGameListCallbacks(pfnMCPGameListEntry pfnEntryCallback, pfnVoidNoArgCallback pfnCompleteCallback) {
+    g_pfnMCPGameListCallback = pfnEntryCallback;
+    g_pfnMCPGameListCompleteCallback = pfnCompleteCallback;
+}
+
+void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback) {
+    g_pfnMCPMessageCallback = pfnCallback;
 }
 
 void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText) {

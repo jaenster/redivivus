@@ -69,6 +69,7 @@
 #include "D2Common/Drlg/OutSiege.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Merc.h"
 #include "D2Common/Unit.h"
@@ -84,6 +85,7 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -483,6 +485,7 @@ typedef BOOL (__fastcall *D2MissileSrvHitFunc)(::SGAMEDATA * pGame, D2UnitStrc *
 typedef BOOL (__fastcall *D2NET_CLIENT_MCPtoCLT)(char * pBytes, size_t nSize);
 typedef BOOL (__fastcall *D2NET_CLIENT_SIDtoCLT)(char * pBytes, size_t nSize);
 typedef BOOL (__fastcall *D2ObjectOperateFnFunc)(D2ObjectOperateFnArg * pOperation);
+typedef BOOL (__fastcall *D2RendererFunctionsStrc_fpDrawWallTile)(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels);
 typedef BOOL (__fastcall *D2SkillCltDoFunc)(D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl);
 typedef BOOL (__fastcall *D2SkillCltStFunc)(D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl);
 typedef BOOL (__fastcall *D2SkillSrvStFunc)(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
@@ -495,6 +498,14 @@ typedef BOOL (__fastcall *fnSendResetPassword)(char * szAcct, char * szEmail);
 typedef BOOL (__fastcall *fnWaitForChangePassword)(uint32_t * pOut);
 typedef BOOL (__fastcall *fnWaitForCreateAccount)(uint32_t * pOut);
 typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, int a4);
+typedef BOOL (__fastcall *fpDrawImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette);
+typedef BOOL (__fastcall *fpDrawShadowTile)(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, int nDrawMode, int nScreenPanels);
+typedef BOOL (__fastcall *fpDrawTransWallTile)(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha);
+typedef BOOL (__fastcall *fpEndScene1)();
+typedef BOOL (__fastcall *fpEndScene2)();
+typedef BOOL (__fastcall *fpGetBackBuffer)(BYTE * pBuffer);
+typedef BOOL (__fastcall *fpInitPerspective)(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers);
+typedef BOOL (__fastcall *fpInitialize)(HINSTANCE hInstance);
 typedef BOOL (__fastcall *fpLevelDataEntry)(D2DrlgLevelPlacementStrc * pLevelUnknown);
 typedef BOOL (__fastcall *pfnComCallback)(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText1, char * szText2);
 typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
@@ -597,6 +608,7 @@ typedef void (__fastcall *D2MissileSrvDmgFunc)(::SGAMEDATA * pGame, D2UnitStrc *
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT)(char * pBytes);
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT_Unit)(D2UnitStrc * pUnit, char * pBytes);
 typedef void (__fastcall *D2ObjectsInitFnFunc)(D2ObjectInitFnArg * pInitArg);
+typedef void (__fastcall *D2RendererFunctionsStrc_fpDrawGroundTile)(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, BYTE nAlpha, int nScreenPanels, void * pTileData);
 typedef void (__fastcall *D2SkillDescAttackFunc)(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 typedef void (__fastcall *D2StatesRemFunc)(D2UnitStrc * pUnit, eD2States eState);
 typedef void (__fastcall *D2StatesSetFunc)(D2UnitStrc * pUnit, eD2States eState);
@@ -619,17 +631,37 @@ typedef void (__fastcall *fnSetLoggingFlag)(uint32_t dwParam);
 typedef void (__fastcall *fnShrineClientOverlayUpdate)(D2UnitStrc * pUnit, D2ShrinesTxt * pShrinesTxt);
 typedef void (__fastcall *fnShrineServerActivate)(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t dwParam);
 typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
+typedef void (__fastcall *fpAdjustPerspectivePosition)(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 typedef void (__fastcall *fpCelAllocDecodedByFormat)(DC6 * pDCC, DC6 * pDCCDest, uint8_t * pPaletteRemapFunc, uint32_t dwColorKey);
 typedef void (__fastcall *fpCelDrawFrameByFormat)(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, int32_t pBlendTable, int32_t pLookupTable2);
 typedef void (__fastcall *fpCelRemapFrameByFormat)(DC6Block * pFrame, BYTE * pPaletteRemap);
 typedef void (__fastcall *fpD2ShrineTableHandler)(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines);
+typedef void (__fastcall *fpDebugFillBackBuffer)(int nPosX, int nPosY);
+typedef void (__fastcall *fpDecodeSmacker)(char * szSmacker, D2SmackerContextStrc * pBuffer, int nVersion);
 typedef void (__fastcall *fpDrawBlendedVisTile)(int a1, int a2, int a3, int a4);
+typedef void (__fastcall *fpDrawClippedImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, void * pCropRect, int nDrawMode);
+typedef void (__fastcall *fpDrawImageFast)(D2GfxDataStrc * pData, int nPosX, int nPosY, BYTE nPaletteIndex);
+typedef void (__fastcall *fpDrawLight)(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int nPosY);
+typedef void (__fastcall *fpDrawLine)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
+typedef void (__fastcall *fpDrawPerspectiveImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nScreenMode, BYTE * pPalette);
+typedef void (__fastcall *fpDrawRect)(RECT * pRect, BYTE nPaletteIndex);
+typedef void (__fastcall *fpDrawRectEx)(RECT * pRect, BYTE nPaletteIndex);
 typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, int a4, BYTE a5);
+typedef void (__fastcall *fpDrawShadow)(D2GfxDataStrc * pData, int nPosX, int nPosY);
+typedef void (__fastcall *fpDrawShiftedImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, DRAWMODE nDrawMode, GLOBALPALLETE nGlobalPaletteShift);
+typedef void (__fastcall *fpDrawSolidRect)(RECT * pRect, BYTE nPaletteIndex);
+typedef void (__fastcall *fpDrawSolidRectAlpha)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
+typedef void (__fastcall *fpDrawSolidRectEx)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, DRAWMODE nDrawMode);
+typedef void (__fastcall *fpDrawSolidSquare)(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex);
+typedef void (__fastcall *fpDrawString)(int nPosX, int nPosY, char * szFormat, va_list va);
+typedef void (__fastcall *fpDrawVerticalCropImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode);
 typedef void (__fastcall *fpDrawVisTile)(uint8_t * pbTileData, int32_t nScreenX, int32_t nScreenY);
 typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, int a4);
 typedef void (__fastcall *fpFillYBufferTable)(void * ppvBits, int nWidth, int nHeight, int a4);
 typedef void (__fastcall *fpFlagOperations)(int * pFlag, int nFlag);
 typedef void (__fastcall *fpMonsterUModHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+typedef void (__fastcall *fpPerspectiveScalePosition)(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);
+typedef void (__fastcall *fpPlayerSmacker)(D2SmackerContextStrc * pContext);
 typedef void (__fastcall *fpServerInitFunctions)(D2IniConfigStrc * pIni);
 typedef void (__fastcall *fpTimerFunction)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
 typedef void (__fastcall *fpTimerFunctionEx)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nArg1, int nArg2);
@@ -2254,7 +2286,6 @@ extern uint8_t RTTI_Type_Descriptor;
 namespace D2Client::CharScreen {
 
 extern int nSelectedCharIndex;
-extern D2CharSelStrc * D2CharSelStrcFirst;
 extern int TotalCurrentChars;
 
 } // namespace D2Client::CharScreen
@@ -2279,7 +2310,21 @@ extern struct D2NpcMenuOptions D2NpcMenuOptions[48];
 
 } // namespace D2Client::NPC
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
+
+extern D2RendererFunctionsStrc GlideFunctionTable;
+extern D2RendererFunctionsStrc Direct3DFunctionTable;
+extern D2RendererFunctionsStrc WindowedFunctionTable;
+
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+extern D2RendererFunctionsStrc DirectDrawFunctionTable;
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
 
 extern uint16_t CharacterLookupTable[256];
 
@@ -2539,12 +2584,6 @@ extern uint32_t gnAlwaysRun;
 
 } // namespace D2Game::GameData
 
-namespace D2Client::GAME::Record {
-
-extern WndProcB pWndProcB;
-
-} // namespace D2Client::GAME::Record
-
 namespace D2Client::UI::Dialog {
 
 extern D2DialogStrc * gpDialog;
@@ -2593,11 +2632,17 @@ namespace D2Client::Forms {
 extern D2ControlStrc * pFormsList;
 extern D2ControlStrc * pFormUnknown;
 extern D2ControlStrc * pFormSecond;
-extern D2WinEditBox * pFormTextAndEditBox;
+extern ::D2WinEditBox * pFormTextAndEditBox;
 extern D2ControlStrc * pFormFourth;
 extern D2ControlStrc * pFormImage;
 
-} // namespace D2Client::Forms
+} // namespace D2Win::Src::D2WinMain
+
+namespace D2Win::D2GFX {
+
+extern ::WndProcB pWndProcB;
+
+} // namespace D2Win::D2GFX
 
 namespace D2Client::_CdKey {
 

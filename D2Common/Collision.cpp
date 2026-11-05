@@ -5,7 +5,6 @@
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SubTile.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomCoordListStrc.h"
@@ -58,6 +57,34 @@ typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pCon
 #endif
 
 namespace D2Common::Collision {
+
+D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
+    uint32_t nRoomIdx;
+    D2RoomStrc* pTestRoom;
+    if (!pRoom) {
+      return nullptr;
+    }
+
+    int nCoord = pRoom->sCoords.dwXStart;
+    if (!(nX < nCoord || nX >= pRoom->sCoords.dwXSize + nCoord || (nCoord = pRoom->sCoords.dwYStart , nY < nCoord) || nY >= pRoom->sCoords.dwYSize + nCoord)) {
+      return pRoom;
+    }
+
+    D2RoomStrc** ppRoomList = 0;
+    DWORD nRoomCount = 0;
+    DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, (int*)&nRoomCount);
+    for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
+      if (ppRoomList[nRoomIdx]) {
+        pTestRoom = ppRoomList[nRoomIdx];
+        if (nX >= pTestRoom->sCoords.dwXStart && nX < pTestRoom->sCoords.dwXSize + pTestRoom->sCoords.dwXStart && nY >= pTestRoom->sCoords.dwYStart && nY < pTestRoom->sCoords.dwYSize + pTestRoom->sCoords.dwYStart) {
+          return pTestRoom;
+        }
+      }
+    }
+
+    pRoom = 0;
+    return pRoom;
+}
 
 // Computes the tile distance between two units, accounting for unit collision sizes. Reads each unit's X/Y position from its static path (objects/tiles) or dynamic path (movers). For small, close units (dx,dy<8 and both sizes<4) it indexes a precomputed table gnCollisionGridMaxNodes for an exact short-range distance (with a -1 adjustment when a size==3). Otherwise it falls back to an edge-to-edge estimate: subtracts half-sizes from the axis deltas and combines them (diagonal-weighted: larger axis + 2*smaller). Returns the distance in tiles; 0 when the table entry is negative.
 int32_t __stdcall GetDistanceBetweenUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
@@ -914,7 +941,7 @@ void __fastcall TileLibrary_UpdateCollision(D2RoomStrc * pRoom, D2DrlgTileDataSt
     int32_t nWorldX = pCollision->sCoords.sTileRect.left + pTileData->nPosX;
     int32_t nWorldY = pCollision->sCoords.sTileRect.top + pTileData->nPosY;
     Drlg::Transform::CoordsRoomToWorld(&nWorldX, &nWorldY);
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nWorldX, nWorldY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nWorldX, nWorldY);
     if (!pBetterRoom) {
       return;
     }
@@ -992,7 +1019,7 @@ void __fastcall FreeRoomCollisionGrid(D2PoolManagerStrc * pMemory, D2RoomStrc * 
 }
 
 static eCollisionFlags __stdcall COLLISN_CheckCellMask_RegArgs(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pBetterRoom) {
       return COLLISION_INVALID;
     }
@@ -1006,7 +1033,7 @@ static eCollisionFlags __stdcall COLLISN_CheckCellMask_RegArgs(D2RoomStrc * pRoo
 }
 
 static void __stdcall RemoveCollision_Vector1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pNearbyRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pNearbyRoom) {
       return;
     }
@@ -1021,7 +1048,7 @@ static void __stdcall RemoveCollision_Vector1(D2RoomStrc * pRoom, int32_t nX, in
 }
 
 static void __stdcall AddCollision_Vector1(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pNearbyRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pNearbyRoom) {
       return;
     }
@@ -1036,7 +1063,7 @@ static void __stdcall AddCollision_Vector1(D2RoomStrc * pRoom, int32_t nX, int32
 }
 
 eCollisionFlags __stdcall CheckCollision_BlockPlayerMissile(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pBetterRoom) {
       return COLLISION_INVALID;
     }
@@ -1050,7 +1077,7 @@ eCollisionFlags __stdcall CheckCollision_BlockPlayerMissile(D2RoomStrc * pRoom, 
 }
 
 void __stdcall AddCollision(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pNearbyRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pNearbyRoom) {
       return;
     }
@@ -1065,7 +1092,7 @@ void __stdcall AddCollision(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisi
 }
 
 void __stdcall RemoveCollision(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
-    D2RoomStrc* pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pNearbyRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pNearbyRoom) {
       return;
     }
@@ -1216,7 +1243,7 @@ int16_t __fastcall CheckCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxS
     D2BoundingBoxStrc* pBoundingBox_00;
     int nBboxRemaining;
     D2BoundingBoxStrc aBboxSplit[3];
-    D2RoomStrc* pRoom_00 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
+    D2RoomStrc* pRoom_00 = DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
     if (!pRoom_00) {
       return 0x27;
     }
@@ -1251,7 +1278,7 @@ int16_t __fastcall CheckCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxS
 // The stack locals at -0x38 and -0x28 are ONE D2BoundingBoxStrc[3], the same frame group as CheckCollision_BoundingBox (0064ceb0). BoundnigBox_AdaptBoundingBoxToGrid writes up to 3 sub-boxes through the pointer it is handed; naming them separately lets a write land on an unrelated local.
 int32_t __fastcall CheckCollision_BlockPlayer_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStrc * pBoundingBox, int32_t eCollisionFlag) {
     D2BoundingBoxStrc aBboxSplit[3];
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
     if (!pBetterRoom) {
       return 1;
     }
@@ -1294,7 +1321,7 @@ int32_t __fastcall CheckCollision_BlockPlayer_BoundingBox(D2RoomStrc * pRoom, D2
 void __fastcall RemoveCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStrc * pBoundingBox, int32_t eCollisionFlag) {
     D2BoundingBoxStrc aBboxSplit[3];
     D2RoomCollisionGridStrc* pCollisionMap;
-    D2RoomStrc* pNewRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
+    D2RoomStrc* pNewRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
     if (!pNewRoom) {
       return;
     }
@@ -1325,7 +1352,7 @@ void __fastcall RemoveCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStr
 
 void __fastcall AddCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStrc * pBoundingBox, int32_t eCollisionFlag) {
     D2BoundingBoxStrc aBboxSplit[3];
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
     if (!pBetterRoom) {
       return;
     }
@@ -1378,7 +1405,7 @@ static eCollisionFlags __stdcall CheckCollision_Cross(D2RoomStrc * pRoom, int32_
     int nXp1;
     int nYStart;
     eCollisionFlags* pCellBase;
-    D2RoomStrc* pRoom_00 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pRoom_00 = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     eCollisionFlags eFlagMask = (eCollisionFlags)eCollisionFlag;
     if (pRoom_00) {
       eCollisionFlags eAdjacentResult;
@@ -1445,7 +1472,7 @@ static eCollisionFlags __stdcall CheckCollision_Cross(D2RoomStrc * pRoom, int32_
 
 // Both early-outs share the epilogue at 0064d48f (MOV EAX,0x27 / POP ESI / POP EBP / RET 4); the success path reaches 0064d488 (MOVZX EAX,AX). The return really is EAX:4, and 0x27 is COLLISION_INVALID - the "no room, no collision grid" answer. Without explicit return storage the decompiler dropped the constant and fabricated a never-assigned local for both early exits.
 static int32_t __stdcall COLLISN_CheckCellMaskOrBlocked(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pBetterRoom) {
       return 0b00100111;
     }
@@ -1473,7 +1500,7 @@ static int32_t __stdcall CheckCollision_BlockPlayer_Cross(D2RoomStrc * pRoom, in
     eCollisionFlags eNeighborCollision;
     eCollisionFlags eAdjacentResult;
     D2RoomStrc* pRoom_00;
-    pRoom_00 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    pRoom_00 = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom_00) {
       return 1;
     }
@@ -1778,7 +1805,7 @@ eCollisionFlags __stdcall CheckCollision_BlockAll_Width(D2RoomStrc * pRoom, int3
 static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
     D2RoomCollisionGridStrc* pBetterRoom;
     eCollisionFlags* pCollisionCell;
-    D2RoomStrc* pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom1, nX - 1, nY);
+    D2RoomStrc* pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX - 1, nY);
     uint16_t wCollisionFlag = (uint16_t)eCollisionFlag;
     if (pRoom) {
       D2RoomCollisionGridStrc* pCollisionMap;
@@ -1789,7 +1816,7 @@ static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int
       }
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY);
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY);
     if (pRoom) {
       pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
       if (pBetterRoom && pBetterRoom->pMapStart) {
@@ -1798,7 +1825,7 @@ static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int
       }
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom1, nX + 1, nY);
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX + 1, nY);
     if (pRoom) {
       pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
       if (pBetterRoom && pBetterRoom->pMapStart) {
@@ -1807,7 +1834,7 @@ static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int
       }
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY - 1);
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY - 1);
     if (pRoom) {
       pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
       if (pBetterRoom && pBetterRoom->pMapStart) {
@@ -1816,7 +1843,7 @@ static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int
       }
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY + 1);
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY + 1);
     if (!pRoom) {
       return;
     }
@@ -1831,7 +1858,7 @@ static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int
 }
 
 static void __stdcall COLLISN_ClearCellMask(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pBetterRoom) {
       return;
     }
@@ -1877,7 +1904,7 @@ void __stdcall RemoveCollision_Vector(D2RoomStrc * pRoom, int32_t nX, int32_t nY
 static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
     D2RoomCollisionGridStrc* pCollisionGrid;
     eCollisionFlags* peTargetCell;
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX - 1, nY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX - 1, nY);
     if (pBetterRoom) {
       pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
       if (pCollisionGrid && pCollisionGrid->pMapStart) {
@@ -1886,7 +1913,7 @@ static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t
       }
     }
 
-    pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (pBetterRoom) {
       pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
       if (pCollisionGrid && pCollisionGrid->pMapStart) {
@@ -1895,7 +1922,7 @@ static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t
       }
     }
 
-    pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX + 1, nY);
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX + 1, nY);
     if (pBetterRoom) {
       pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
       if (pCollisionGrid && pCollisionGrid->pMapStart) {
@@ -1904,7 +1931,7 @@ static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t
       }
     }
 
-    pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY - 1);
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY - 1);
     if (pBetterRoom) {
       pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
       if (pCollisionGrid && pCollisionGrid->pMapStart) {
@@ -1913,7 +1940,7 @@ static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t
       }
     }
 
-    pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY + 1);
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY + 1);
     if (!pBetterRoom) {
       return;
     }
@@ -1928,7 +1955,7 @@ static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t
 }
 
 static void __stdcall COLLISN_SetCellMask(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomStrc* pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pBetterRoom) {
       return;
     }
@@ -2003,7 +2030,7 @@ D2RoomStrc * __stdcall GetFreeCoordinates(D2RoomStrc * pRoom, POINT * pPoint, PO
       DATATBLS::FieldTbls::SetXY(pFieldPath, pFieldCoords->x, pFieldCoords->y);
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
     if (pRoom) {
       eCollisionFlags eCollisionResult;
       eCollisionResult = CheckCollision_BlockAll_Width(pRoom, pPoint->x, pPoint->y, nUnitSize, eCollisionFlag);
@@ -2037,7 +2064,7 @@ D2RoomStrc * __stdcall GetFreeCoordinates(D2RoomStrc * pRoom, POINT * pPoint, PO
               nDeltaX = nIterX - nStartX;
               nDeltaXMirror = nStartX - nIterX;
               do {
-                pFoundRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nIterX, nIterY);
+                pFoundRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nIterX, nIterY);
                 if (pFoundRoom) {
                   eCollisionCheck = CheckCollision_BlockAll_Width(pFoundRoom, nIterX, nIterY, nUnitSize, eCollisionFlag);
                   pRoom = pFoundRoom;
@@ -2080,7 +2107,7 @@ D2RoomStrc * __stdcall GetFreeCoordinates(D2RoomStrc * pRoom, POINT * pPoint, PO
               nDeltaYMirror = nStartY - nYLow;
               nIterX = nYLow;
               do {
-                pFoundRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nIterY, nIterX);
+                pFoundRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nIterY, nIterX);
                 if (pFoundRoom) {
                   eCollisionCheck = CheckCollision_BlockAll_Width(pFoundRoom, nIterY, nIterX, nUnitSize, eCollisionFlag);
                   pRoom = pFoundRoom;
@@ -2130,11 +2157,11 @@ D2RoomStrc * __stdcall GetFreeCoordinates(D2RoomStrc * pRoom, POINT * pPoint, PO
       DATATBLS::FieldTbls::FIELDTBLS_FreePoint(pFieldPath);
     }
     if (nBestDist != -1) {
-      pFoundRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
+      pFoundRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
       return pFoundRoom;
     }
     if (bAllowNeighboorRooms) {
-      pFoundRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
+      pFoundRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
       return pFoundRoom;
     }
 
@@ -2186,7 +2213,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
       nRoomYEnd = (int)nRoomYStart->nLastDeadGUIDs + pRoom->sCoords.dwYSize - 0x38;
       nRoomXEnd = pRoom->sCoords.dwXSize + nRoomXStart;
       if (nX1 < nRoomXStart || nX1 >= nRoomXEnd || (int)nY1 < (int)nRoomYStart || (pCurrentRoom = pRoom , (int)nY1 >= nRoomYEnd)) {
-        pCurrentRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX1, (int32_t)nY1);
+        pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX1, (int32_t)nY1);
         if (!pCurrentRoom) {
           goto report_blocked;
         }
@@ -2240,7 +2267,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               return 0;
             }
 
-            pCurrentRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
             if (!pCurrentRoom) {
               break;
             }
@@ -2289,7 +2316,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               return 0;
             }
 
-            pCurrentRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nY1);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nY1);
             if (!pCurrentRoom) {
               goto report_blocked;
             }
@@ -2348,7 +2375,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               return 0;
             }
 
-            pCurrentRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
             if (!pCurrentRoom) {
               break;
             }
@@ -2404,7 +2431,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               return 0;
             }
 
-            pCurrentRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
+            pCurrentRoom = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX1, (int32_t)nIterY);
             if (!pCurrentRoom) {
               break;
             }
@@ -2481,7 +2508,7 @@ void __fastcall COLLISION_FindFreeCoordSpiral(D2RoomStrc * pRoom, POINT * pPoint
           pPoint->y = nCheckX;
           nTestY = nCheckX;
           if (nCheckX < sRoomCoords.dwYStart || nCheckX >= sRoomCoords.dwYSize + sRoomCoords.dwYStart) {
-            pRoomForY = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, pPoint->x, nCheckX);
+            pRoomForY = DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, pPoint->x, nCheckX);
             nCheckY = nRadiusNeg;
           }
           if (pRoomForY) {
@@ -2493,14 +2520,14 @@ void __fastcall COLLISION_FindFreeCoordSpiral(D2RoomStrc * pRoom, POINT * pPoint
               DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoomForY, &sRoomCoords);
               pPoint->x = nCandidateX;
               if (nCandidateX < sRoomCoords.dwXStart || nCandidateX >= sRoomCoords.dwXSize + sRoomCoords.dwXStart) {
-                pRoomForX = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoomForY, nCandidateX, pPoint->y);
+                pRoomForX = DRLGROOM_FindBetterNearbyRoom(pRoomForY, nCandidateX, pPoint->y);
               }
               if (pRoomForX) {
                 nCheckY = pPoint->y;
                 nCheckX = pPoint->x;
                 nCheckSize = nUnitSize + 2;
                 if ((int)nCheckSize <= 1) {
-                  pCollisionRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoomForX, nCheckX, nCheckY);
+                  pCollisionRoom = DRLGROOM_FindBetterNearbyRoom(pRoomForX, nCheckX, nCheckY);
                   if (!pCollisionRoom || (pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pCollisionRoom) , !pCollisionGrid) || !pCollisionGrid->pMapStart) {
                     eCollisionResult = COLBIT_BLANK | COLBIT_MISSILE_BARRIER | COLBIT_VISIBLE | COLBIT_WALL;
                   } else {

@@ -7,11 +7,9 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/Seed.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
@@ -51,6 +49,7 @@
 #include "D2Game/ITEMS/ItemMode.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerModes.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/Items.h"
@@ -79,14 +78,6 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 static D2UniqueCandidatePoolStrc gUniqueCandidatePool = {}; D2_STATIC_GUARD(gUniqueCandidatePool, "gUniqueCandidatePool");
 
 namespace D2Game::ITEMS::Items::Drop {
-
-D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType) {
-    if (nItemType >= 0 && nItemType < sgptDataTable->nTxtItemTypesSize) {
-      return sgptDataTable->pTxtItemTypes + nItemType;
-    }
-
-    return nullptr;
-}
 
 int Unreferenced_00555cc0() {
     D2ItemsTableStrc* pDVar1 = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
@@ -143,7 +134,7 @@ void __fastcall ITEM_InitializeDroppedItem(D2UnitStrc * pUnit, ::SGAMEDATA * pGa
 D2RoomStrc * __fastcall FindBestSpotToSpawnItem(D2RoomStrc * pRoom, POINT * pPoint, POINT * pNewPosition, uint32_t nCollisionMask, uint8_t nMaxSearchRadius) {
     int nX = pPoint->x + 2;
     int nY = pPoint->y + 3;
-    D2RoomStrc* pFoundRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pFoundRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (pFoundRoom) {
       pNewPosition->x = nX;
       pNewPosition->y = nY;
@@ -2804,7 +2795,7 @@ void __fastcall DROP_SpawnRandomItemInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRo
     ptCandidatePos.y = pCoordsIn->y;
     pCoordsIn = (POINT*)(ptCandidatePos.x + 2);
     int nOffsetY = ptCandidatePos.y + 3;
-    D2RoomStrc* pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
     if (pSpawnRoom) {
       ptSpawnPos.x = (LONG)pCoordsIn;
       ptSpawnPos.y = nOffsetY;
@@ -2871,7 +2862,7 @@ void __fastcall DROP_SpawnGoldInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
     ptCandidatePos.y = pCoordsIn->y;
     pCoordsIn = (POINT*)(ptCandidatePos.x + 2);
     int nOffsetY = ptCandidatePos.y + 3;
-    D2RoomStrc* pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
     if (pSpawnRoom) {
       ptSpawnPos.x = (LONG)pCoordsIn;
       ptSpawnPos.y = nOffsetY;
@@ -2992,7 +2983,7 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
       ptCandidatePos.y = pCoordsIn->nClientsMax;
       pCoordsIn = (D2RoomStrc*)(ptCandidatePos.x + 2);
       nRollRetry = ptCandidatePos.y + 3;
-      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoomSaved, (int32_t)pCoordsIn, nRollRetry);
+      pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoomSaved, (int32_t)pCoordsIn, nRollRetry);
       if (pSpawnRoom) {
         ptSpawnPos.x = (LONG)pCoordsIn;
         ptSpawnPos.y = nRollRetry;
@@ -3067,7 +3058,7 @@ void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POI
     ptCandidatePos.y = pCoordsIn->y;
     int nOffsetX = ptCandidatePos.x + 2;
     pCoordsIn = (POINT*)(ptCandidatePos.y + 3);
-    D2RoomStrc* pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nOffsetX, (int32_t)pCoordsIn);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nOffsetX, (int32_t)pCoordsIn);
     if (pSpawnRoom) {
       ptSpawnPos.x = nOffsetX;
       ptSpawnPos.y = (LONG)pCoordsIn;
@@ -3415,7 +3406,7 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
       D2Common::Units::GetCoords(pUnit, &ptUnitCoords);
       nX = ptUnitCoords.x + 2;
       nY = ptUnitCoords.y + 3;
-      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX, nY);
+      pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, nX, nY);
       ptSpawnPos.x = nX;
       ptSpawnPos.y = nY;
       if (!pSpawnRoom) {

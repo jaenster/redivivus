@@ -93,10 +93,10 @@ int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16
         return 1;
       }
       if ((uint16_t)wChar1 < 0x100) {
-        wChar1 = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wChar1];
+        wChar1 = CharacterLookupTable[(uint16_t)wChar1];
       }
       if ((uint16_t)wChar2 < 0x100) {
-        wChar2 = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wChar2];
+        wChar2 = CharacterLookupTable[(uint16_t)wChar2];
       }
       if (wChar1 != wChar2) {
         return ((uint16_t)wChar1 < (uint16_t)wChar2 ? -2 : 0) + 1;
@@ -112,12 +112,12 @@ uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint
     uint16_t wChar1Raw = *pwszText1;
     uint16_t wChar1Mapped = wChar1Raw;
     if ((uint16_t)wChar1Raw < 0x100) {
-      wChar1Mapped = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wChar1Raw];
+      wChar1Mapped = CharacterLookupTable[(uint16_t)wChar1Raw];
     }
 
     uint32_t uChar2Mapped = (uint32_t)*pwszText2;
     if (*pwszText2 < 0x100) {
-      uChar2Mapped = (uint32_t)(uint16_t)D2Client::UI::ui::CharacterLookupTable[uChar2Mapped];
+      uChar2Mapped = (uint32_t)(uint16_t)CharacterLookupTable[uChar2Mapped];
     }
 
     uint16_t wChar2Mapped = (uint16_t)uChar2Mapped;
@@ -141,14 +141,14 @@ uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint
       wChar1Mapped = *pwszText1;
       pwszText1++;
       if ((uint16_t)wChar1Mapped < 0x100) {
-        wChar1Mapped = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wChar1Mapped];
+        wChar1Mapped = CharacterLookupTable[(uint16_t)wChar1Mapped];
       }
 
       wChar2Raw = *pwszText2;
       pwszText2++;
       uChar2Mapped = (uint32_t)wChar2Raw;
       if (wChar2Raw < 0x100) {
-        uChar2Mapped = (uint32_t)(uint16_t)D2Client::UI::ui::CharacterLookupTable[uChar2Mapped];
+        uChar2Mapped = (uint32_t)(uint16_t)CharacterLookupTable[uChar2Mapped];
       }
 
       wChar2Mapped = (uint16_t)uChar2Mapped;
@@ -298,12 +298,12 @@ uint16_t * __fastcall UNICODE_FindSubstringNoCase(uint16_t * pwszHaystack, uint1
       while (true) {
         wHayMapped = wHayCur;
         if ((uint16_t)wHayCur < 0x100) {
-          wHayMapped = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wHayCur];
+          wHayMapped = CharacterLookupTable[(uint16_t)wHayCur];
         }
 
         wNeedleMapped = wNeedleCur;
         if ((uint16_t)wNeedleCur < 0x100) {
-          wNeedleMapped = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wNeedleCur];
+          wNeedleMapped = CharacterLookupTable[(uint16_t)wNeedleCur];
         }
         if (wHayMapped == wNeedleMapped) {
           break;
@@ -322,12 +322,12 @@ uint16_t * __fastcall UNICODE_FindSubstringNoCase(uint16_t * pwszHaystack, uint1
         wHayMapped = *pNeedleCur;
         wNeedleMapped = wNeedleCur;
         if ((uint16_t)wNeedleCur < 0x100) {
-          wNeedleMapped = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wNeedleCur];
+          wNeedleMapped = CharacterLookupTable[(uint16_t)wNeedleCur];
         }
 
         wNeedleMapped2 = wHayMapped;
         if ((uint16_t)wHayMapped < 0x100) {
-          wNeedleMapped2 = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wHayMapped];
+          wNeedleMapped2 = CharacterLookupTable[(uint16_t)wHayMapped];
         }
         if (wNeedleMapped != wNeedleMapped2 || wNeedleCur == L'\0') {
           break;

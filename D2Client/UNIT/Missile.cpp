@@ -18,7 +18,6 @@
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/Path.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Monster.h"
@@ -64,6 +63,7 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Monster/AI/Baal.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -863,9 +863,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
       nY = Units::GetYPosFromDynamicPathUnit(pSkillArg->pMissile);
     }
     if (pSkillArg->pOwner) {
-      nPosY = nY;
-      pRoom = D2Common::Units::UNITS_GetRoom(pSkillArg->pOwner);
-      pRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nMissileX, nPosY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pSkillArg->pOwner), nMissileX, nY);
       if (!pRoom) {
         pRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(sgpDrlgAct, nMissileX, nY);
         if (!pRoom) {
@@ -875,9 +873,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     } else {
       pDVar6 = Player::GetPlayerUnit_UI();
       if (pDVar6) {
-        nPosY = nY;
-        pRoom = D2Common::Units::UNITS_GetRoom(pDVar6);
-        pRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nMissileX, nPosY);
+        pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pDVar6), nMissileX, nY);
         if (!pRoom) {
           pRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(sgpDrlgAct, nMissileX, nY);
           if (!pRoom) {
@@ -1324,9 +1320,7 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
             sSourcePos.y = nTileY;
             bCollides = D2Common::Collision::TestCollision(pRoom, &sSourcePos, &sTargetPos, 4);
             if (!bCollides) {
-              iOffsetYInner = nTileY;
-              pRoom = D2Common::Units::UNITS_GetRoom(pUnitOrig);
-              pRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, iOffsetXInner, iOffsetYInner);
+              pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnitOrig), iOffsetXInner, nTileY);
               if (pRoom) {
                 bCollides = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
                 if (!bCollides) {
@@ -1971,9 +1965,7 @@ void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc *
         }
 
         iOffsetY += nPosX;
-        nPosX = iOffsetY;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
-        pRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, iOffsetX, nPosX);
+        pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit2), iOffsetX, iOffsetY);
         if (pRoom) {
           iVar1 = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, iOffsetX, iOffsetY, COLLISION_PATTERN_NONE, 1);
           if (!iVar1) {
@@ -2106,7 +2098,7 @@ void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX
           }
 
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
+          pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
           if (pRoom) {
             Missile::MakeMissile(&sSkillArg);
           }
@@ -4320,9 +4312,7 @@ int32_t __fastcall MISSILE_CltHitFn31_IceBreak(D2UnitStrc * pUnit, D2UnitStrc * 
     }
 
     int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-    eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-    D2UnitStrc* pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
-    pOwner = CastAttack(pOwner, eMeltMissileId, nX, nPosY, eSkill, nSkillLevel);
+    D2UnitStrc* pOwner = CastAttack(Player::MISSILE_GetOwnerUnit(pUnit), eMeltMissileId, nX, nPosY, D2Common::Units::Missile::GetSkillId(pUnit), nSkillLevel);
     if (pOwner) {
       uint8_t nDirection;
       pDynamicPath = pOwner->pPath.pDynamicPath;
@@ -5447,7 +5437,7 @@ void __fastcall MISSILE_ClientFrameUpdate(D2UnitStrc * pUnit) {
         nX = 0;
       }
 
-      pRoom = Player::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nPosY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nPosY);
     }
     if (!(*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[2])) {
       bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);

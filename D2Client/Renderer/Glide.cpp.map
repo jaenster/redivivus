@@ -52,37 +52,6 @@
         "Initialize",
         "RENDERER_GLIDE_LoadLibrarySymbols"
       ]
-    },
-    {
-      "name": "CheckCutScene",
-      "address": "00508fd0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00508fd0"
-        }
-      ],
-      "namespace": "D2Client::Renderer::Glide",
-      "calledFunctions": [
-        "CheckCutScene"
-      ]
-    },
-    {
-      "name": "UpdateScaleFactor",
-      "address": "005090a0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "005090a0"
-        }
-      ],
-      "namespace": "D2Client::Renderer::Glide",
-      "calledFunctions": [
-        "UpdateScaleFactor"
-      ],
-      "usedTypes": [
-        "int32_t"
-      ]
     }
   ]
 }

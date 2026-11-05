@@ -103,9 +103,9 @@ BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
     }
 
     int nCharIndex = 0;
-    for (pSelectedCharacter = D2Client::CharScreen::D2CharSelStrcFirst; pSelectedCharacter; pSelectedCharacter = pSelectedCharacter->pNext) {
+    for (pSelectedCharacter = CharSel::D2CharSelStrcFirst; pSelectedCharacter; pSelectedCharacter = pSelectedCharacter->pNext) {
       uint16_t awszFormattedMsg[256];
-      if (D2Client::CharScreen::nSelectedCharIndex == nCharIndex) {
+      if (CharSel::nSelectedCharIndex == nCharIndex) {
         if (!pSelectedCharacter) {
           break;
         }
@@ -158,12 +158,12 @@ BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMs
     uint16_t* pwszErrorMsg;
     uint8_t aszCommandAnsi[256];
     int nCharIndex = 0;
-    D2CharSelStrc* pCharSel = D2Client::CharScreen::D2CharSelStrcFirst;
+    D2CharSelStrc* pCharSel = CharSel::D2CharSelStrcFirst;
     while (true) {
       if (!pCharSel) {
         return 0;
       }
-      if (D2Client::CharScreen::nSelectedCharIndex == nCharIndex) {
+      if (CharSel::nSelectedCharIndex == nCharIndex) {
         break;
       }
 

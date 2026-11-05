@@ -5,15 +5,14 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -59,6 +58,7 @@
 #include "D2Game/Monster/Monster.h"
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Monster/Monsters.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/SKILLS/SkillDruid.h"
 #include "D2Game/SKILLS/SkillNec.h"
@@ -779,7 +779,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
       if (nOffsetY * nOffsetY + nOffsetX * nOffsetX <= iVar1) {
         sSkillArg.nY = nTargetY + nOffsetY;
         sSkillArg.nX = nTargetX + nOffsetX;
-        pNearRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
+        pNearRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
         if (pNearRoom) {
           MISSILES::Missiles::CreatingMissile(pGameCopy, &sSkillArg);
         }
@@ -2002,8 +2002,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
       spawn_summon:
       if (nX && nSpawnY || (_bHasPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nX, &nSpawnY) , _bHasPos != 0)) {
         nY = nSpawnY;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+        pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
         if (pRoom && (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)gadwBitMasks[0] || (_bHasPos = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !_bHasPos))) {
           D2MonsterCastPetHeadStrc sSummonArgs = {0};
           sSummonArgs.nMode = eAnimMode;

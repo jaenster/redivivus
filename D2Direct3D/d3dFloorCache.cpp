@@ -5,7 +5,6 @@
 #include "D2CMP/SRC/SpriteCache.h"
 #include "D2CMP/SRC/SubTile.h"
 #include "D2Client/Message.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"

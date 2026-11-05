@@ -3,7 +3,6 @@
 #include "D2Multi/ChatDlg.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "D2Client/McpConnect.h"
 #include "D2Client/mcp0x03data.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
@@ -2526,7 +2525,7 @@ void __stdcall CHATDLG_OpenLadderClassicSoftcore() {
     gnLadderCurrentFilterMode = 0x23;
     gnLadderScrollPageSize = 0x10;
     gnLadderEntryTotal = 1000;
-    D2Client::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
+    D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
 void __stdcall CHATDLG_OpenLadderClassicHardcore() {
@@ -2561,7 +2560,7 @@ void __stdcall CHATDLG_OpenLadderClassicHardcore() {
     gnLadderCurrentFilterMode = 0x23;
     gnLadderScrollPageSize = 0x10;
     gnLadderEntryTotal = 1000;
-    D2Client::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
+    D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
 void __stdcall CHATDLG_OpenLadderExpansionSoftcore() {
@@ -2596,7 +2595,7 @@ void __stdcall CHATDLG_OpenLadderExpansionSoftcore() {
     gnLadderCurrentFilterMode = 0x23;
     gnLadderScrollPageSize = 0x10;
     gnLadderEntryTotal = 1000;
-    D2Client::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
+    D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
 void __stdcall CHATDLG_OpenLadderExpansionHardcore() {
@@ -2631,7 +2630,7 @@ void __stdcall CHATDLG_OpenLadderExpansionHardcore() {
     gnLadderCurrentFilterMode = 0x23;
     gnLadderScrollPageSize = 0x10;
     gnLadderEntryTotal = 1000;
-    D2Client::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
+    D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicSoftcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 9 and gnLadderBoardSelectedRank = 0; returns 1.

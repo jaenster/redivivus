@@ -593,7 +593,6 @@ void __stdcall SFileOpenFileAsArchive(int32_t nParentArchive, char * szFileName,
 // CRC-32 over a buffer, chained through a running value.
 // Name from the PowerPC 1.13c Storm traceback table (CrcBuffer @100a2330).
 void __fastcall CrcBuffer(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, uint8_t byFlags);
-uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9e98(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ec8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_gMpqArchiveList();

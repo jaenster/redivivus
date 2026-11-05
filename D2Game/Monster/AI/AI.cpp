@@ -10,7 +10,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/Seed.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
@@ -50,6 +49,7 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/QuestRecord.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Unit.h"
@@ -209,11 +209,10 @@ int32_t __fastcall GetDistanceBetween(D2UnitStrc * pUnit, D2UnitStrc * pOther) {
         nDistanceSq = D2Common::PATH::DynamicPath::GetYPos(pOther->pPath.pDynamicPath);
         return (nY - nDistanceSq) * (nY - nDistanceSq) + nX * nX;
       }
-
-      return nY * nY + nX * nX;
+    } else {
+      nY -= pOther->pPath.pStaticPath->nPosY;
     }
 
-    nY -= pOther->pPath.pStaticPath->nPosY;
     return nY * nY + nX * nX;
 }
 
@@ -541,7 +540,7 @@ BOOL __fastcall CheckIfBossNeedsToTeleport(::SGAMEDATA * pGame, D2UnitStrc * pUn
     bIsDead = Monsters::Spawn::SPAWN_FindRandomPositionForMonster(pGame, pRoom, pRoomCoordList, nBaseMonId, &nSpawnX, (int*)&pAiGeneral, 0);
     if (bIsDead) {
       eD2States eState;
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, (int32_t)pAiGeneral);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, (int32_t)pAiGeneral);
       if (pRoom) {
         bIsDead = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
         if (!bIsDead) {
@@ -2861,7 +2860,7 @@ D2UnitStrc * __fastcall AI_FindUnitAtPositionByBaseId(uint32_t nUnused, D2RoomSt
       exit(-1);
     } else {
       D2RoomStrc* pBestRoom;
-      pBestRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
+      pBestRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
       if (pBestRoom) {
         pUnitIter = pBestRoom->pUnitList;
         do {
@@ -3044,7 +3043,7 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(D2UnitStrc * pSwitchParam, in
       case 3:
         nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
       nSavedAlignment = nAlignment;
-      nDistance = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+      nDistance = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
       if (nAlignment == 1) {
         if (nDistance) {
           nAlignment_00 = '\x02';
@@ -5151,7 +5150,7 @@ void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
       if (pMonStats->aSkill[0] >= 0 && pGame->dwGameFrame > pAiGeneral->dwArg1 && (int)nDistToTarget < (int)pMonStats->aip[7][pGame->nDifficulty]) {
         uRandPct = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
         if ((int)uRandPct < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-          nDistToTarget = D2Client::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 4);
+          nDistToTarget = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 4);
           nTargetX = D2Client::Units::GetXPosFromDynamicPathUnit(pTarget);
           nOffsetX = gItemPower_t_PropertyTypeId2[nDistToTarget * 2];
           nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
@@ -7104,7 +7103,7 @@ int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, D2UnitStrc * p
         return 0;
       }
 
-      pTargetRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom((D2RoomStrc*)bWalked2, nWalkRadius, bRun);
+      pTargetRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom((D2RoomStrc*)bWalked2, nWalkRadius, bRun);
       if (!pTargetRoom) {
         return 0;
       }
@@ -7416,7 +7415,7 @@ int32_t __fastcall AI_Pet_ExecuteMovementBehavior(::SGAMEDATA * pGame, D2UnitStr
         return 0;
       }
 
-      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nVelocity, nWalkRadius);
+      pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nVelocity, nWalkRadius);
       if (!pSpawnRoom) {
         return 0;
       }
@@ -8178,7 +8177,7 @@ void __fastcall AITHINK_Fn1_Hireable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
           nMaxFollowDist = 0xc;
         }
 
-        nRandVal = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 0x80);
+        nRandVal = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 0x80);
         if ((int)nRandVal < (int)nMaxFollowDist) {
           WalkRandomOffset(pGame, pUnit, 5);
           return;
@@ -8374,7 +8373,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
         pAiParam = (D2AiParamStrc*)D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
         nCircleRandOffset = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 10);
         if (__frame0.nCirclePhase < 0x19) {
-          bFlipSign = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+          bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
           if (bFlipSign) {
             nCircleRandOffset = -nCircleRandOffset;
           }
@@ -8391,7 +8390,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
           }
         } else {
           if (__frame0.nCirclePhase < 0x32) {
-            bFlipSign = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+            bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
             if (bFlipSign) {
               nCircleRandOffset = -nCircleRandOffset;
             }
@@ -8403,7 +8402,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
           apply_segment_3:
           if (__frame0.nCirclePhase < 0x4b) {
-            bFlipSign = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+            bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
             if (bFlipSign) {
               nCircleRandOffset = -nCircleRandOffset;
             }
@@ -8414,7 +8413,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
           }
         }
 
-        bFlipSign = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+        bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
         if (bFlipSign) {
           nCircleRandOffset = -nCircleRandOffset;
         }
@@ -8886,7 +8885,7 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       if ((int)nRandRoll < pMonsterAiGeneral->dwArg0) {
         nDistToTarget = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 0xf);
         nDistToTarget += 5;
-        nRandRoll = D2Client::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
+        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
         if (nRandRoll) {
           nWeightedDistToHome = nDistToTarget;
           nDistToTarget = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nDistToTarget);
@@ -8894,12 +8893,12 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           nWeightedDistToHome = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nDistToTarget);
         }
 
-        nRandRoll = D2Client::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
+        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
         if (nRandRoll) {
           nWeightedDistToHome = -nWeightedDistToHome;
         }
 
-        nRandRoll = D2Client::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
+        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
         pFindTarget = pTarget;
         if (nRandRoll) {
           nDistToTarget = -nDistToTarget;
@@ -17361,7 +17360,7 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
         nRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         if ((int)nRoll < 0x3c) {
           ClearCollisionAndResetPath(pGame, pUnit);
-          nRoll = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 8);
+          nRoll = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 8);
           pAiGeneral->dwArg0 = nRoll + 0x18;
           MoveAndCastSkill(pGame, pUnit, pTarget, 8, 8, 8);
           RestartAiThink(pGame, pUnit, 0xc);
@@ -21015,8 +21014,7 @@ void __fastcall AI_Fn1_SandMaggotQueen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     D2Common::Monsters::MONSTERS::MONSTER_GetSpawnParameters(pUnit, (int*)&nClassId, &nSpawnOffset, (uint32_t*)&pAiParam, &eAnimMode, 0, Ai::AiGeneral::MONSTER_GetUnitData_AiGeneral_Offset0x3C);
     int32_t nSpawnY = (int32_t)pAiParam;
-    D2RoomStrc* pDVar4 = D2Common::Units::UNITS_GetRoom(pUnit);
-    pDVar4 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pDVar4, nSpawnOffset, nSpawnY);
+    D2RoomStrc* pDVar4 = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnOffset, nSpawnY);
     if (pDVar4) {
       D2UnitStrc* pSpawnedUnit;
       pSpawnedUnit = Create::SpawnMonsterAtRoomPos(pGame, pDVar4, nSpawnOffset, (int32_t)pAiParam, nClassId, eAnimMode, 2, 0x42);
@@ -21847,8 +21845,7 @@ void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
             pAiGeneral->dwArg0 = (int)pMonStats->aip[1][pGame->nDifficulty] + pGame->dwGameFrame;
             D2Common::Monsters::MONSTERS::MONSTER_GetSpawnParameters(pUnit, (int*)&nClassId, &nSpawnOffset, (uint32_t*)&pAiParam, &eSpawnAnimMode, 0, nullptr);
             nDistToTarget = (int32_t)pAiParam;
-            pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-            pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nSpawnOffset, nDistToTarget);
+            pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nSpawnOffset, nDistToTarget);
             if (pSpawnRoom) {
               pSpawnedUnit = Create::SpawnMonsterAtRoomPos(pGame, pSpawnRoom, nSpawnOffset, (int32_t)pAiParam, nClassId, eSpawnAnimMode, 2, 0x42);
               if (pSpawnedUnit) {
@@ -22084,7 +22081,7 @@ BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc 
         goto find_room_at_pos;
       }
       nY += 3;
-      pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+      pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
       if (!pNearbyRoom) {
         return 0;
       }
@@ -22097,7 +22094,7 @@ BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc 
 
           nX += 2;
           nY += 4;
-          pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+          pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
           if (!pNearbyRoom) {
             return 0;
           }
@@ -22106,7 +22103,7 @@ BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc 
         } else {
           nX += -2;
           nY += -2;
-          pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+          pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
           if (!pNearbyRoom) {
             return 0;
           }
@@ -22124,7 +22121,7 @@ BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc 
       }
 
       find_room_at_pos:
-      pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+      pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
       if (!pNearbyRoom) {
         return 0;
       }
@@ -22225,8 +22222,7 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
       if (nSkillId == 0xb8) {
         if (pUnit) {
           nUnitY = nCastY;
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCastX, nUnitY);
+          pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nCastX, nUnitY);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {
@@ -22244,8 +22240,7 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
       } else if (nSrvDoFunc == 0x43) {
         if (pUnit) {
           nUnitY = nCastY;
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCastX, nUnitY);
+          pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nCastX, nUnitY);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {
@@ -22262,8 +22257,7 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
         }
         if (pUnit) {
           nUnitY = nCastY;
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCastX, nUnitY);
+          pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nCastX, nUnitY);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {

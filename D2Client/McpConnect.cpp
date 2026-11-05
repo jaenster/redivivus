@@ -34,13 +34,4 @@ void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b200(pfnMCPMessage pfnCa
     g_pfnMCPCallback2 = (pfnMCPPacketCallback)pfnCallback;
 }
 
-void __fastcall MCPCONNECT_SetGameListCallbacks(pfnMCPGameListEntry pfnEntryCallback, pfnVoidNoArgCallback pfnCompleteCallback) {
-    g_pfnMCPGameListCallback = pfnEntryCallback;
-    g_pfnMCPGameListCompleteCallback = pfnCompleteCallback;
-}
-
-void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback) {
-    g_pfnMCPMessageCallback = pfnCallback;
-}
-
 } // namespace D2Client::McpConnect

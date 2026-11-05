@@ -21,6 +21,20 @@
       ]
     },
     {
+      "name": "CheckCutScene",
+      "address": "00508fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508fd0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "CheckCutScene"
+      ]
+    },
+    {
       "name": "BeginScene",
       "address": "00508fe0",
       "lines": [
@@ -36,6 +50,23 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "SetGlobalLight"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateScaleFactor",
+      "address": "005090a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005090a0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "UpdateScaleFactor"
       ],
       "usedTypes": [
         "int32_t"

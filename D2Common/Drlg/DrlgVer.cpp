@@ -31,11 +31,7 @@ namespace D2Common::Drlg::DrlgVer {
 // @sourcefile .\DRLG\DrlgVer.cpp
 D2DrlgVertexStrc * __fastcall DRLGVER_AllocVertex(D2PoolManagerStrc * pMemory, uint8_t nDirection) {
     D2DrlgVertexStrc* pVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-    pVertex->nPosX = 0;
-    pVertex->nPosY = 0;
-    *(uint32_t*)&pVertex->nDirection = 0;
-    pVertex->dwFlags = 0;
-    pVertex->pNext = 0;
+    memset(pVertex, 0, sizeof(*pVertex));
     pVertex->nDirection = nDirection;
     return pVertex;
 }
@@ -133,11 +129,7 @@ D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(D2PoolManagerStrc *
           }
           if (nCoordMax * nEdgeVtxPos < nAnchorPos * nEdgeVtxPos) {
             pNewVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-            pNewVertex->nPosX = 0;
-            pNewVertex->nPosY = 0;
-            *(uint32_t*)&pNewVertex->nDirection = 0;
-            pNewVertex->dwFlags = 0;
-            pNewVertex->pNext = 0;
+            memset(pNewVertex, 0, sizeof(*pNewVertex));
             pNewVertex->nDirection = nDirection;
             if (bHasGap) {
               pNewVertex->nPosX = pEdgeVertex->nPosX;
@@ -153,11 +145,7 @@ D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(D2PoolManagerStrc *
         }
       } else if (!(nEdgeMax - nAnchorPos * nEdgeVtxPos) || nAnchorPos * nEdgeVtxPos > nEdgeMax) {
         pNewVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-        pNewVertex->nPosX = 0;
-        pNewVertex->nPosY = 0;
-        *(uint32_t*)&pNewVertex->nDirection = 0;
-        pNewVertex->dwFlags = 0;
-        pNewVertex->pNext = 0;
+        memset(pNewVertex, 0, sizeof(*pNewVertex));
         pNewVertex->nDirection = nDirection;
         if (bHasGap) {
           pNewVertex->nPosX = pEdgeVertex->nPosX;
@@ -195,41 +183,25 @@ void __fastcall DRLGVER_CreateRoomVertices(D2PoolManagerStrc * pMemory, D2DrlgVe
     }
 
     D2DrlgVertexStrc* pVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-    pVertex->nPosX = 0;
-    pVertex->nPosY = 0;
-    *(uint32_t*)&pVertex->nDirection = 0;
-    pVertex->dwFlags = 0;
-    pVertex->pNext = 0;
+    memset(pVertex, 0, sizeof(*pVertex));
     pVertex->nDirection = nDirection;
     *ppVertices = pVertex;
     pVertex->nPosX = pDrlgCoord->nPosX;
     pVertex->nPosY = pDrlgCoord->nPosY + pDrlgCoord->nHeight;
     D2DrlgVertexStrc* pVertexNext = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-    pVertexNext->nPosX = 0;
-    pVertexNext->nPosY = 0;
-    *(uint32_t*)&pVertexNext->nDirection = 0;
-    pVertexNext->dwFlags = 0;
-    pVertexNext->pNext = 0;
+    memset(pVertexNext, 0, sizeof(*pVertexNext));
     pVertexNext->nDirection = nDirection;
     pVertex->pNext = pVertexNext;
     pVertexNext->nPosX = pDrlgCoord->nPosX;
     pVertexNext->nPosY = pDrlgCoord->nPosY;
     pVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-    pVertex->nPosX = 0;
-    pVertex->nPosY = 0;
-    *(uint32_t*)&pVertex->nDirection = 0;
-    pVertex->dwFlags = 0;
-    pVertex->pNext = 0;
+    memset(pVertex, 0, sizeof(*pVertex));
     pVertex->nDirection = nDirection;
     pVertexNext->pNext = pVertex;
     pVertex->nPosX = pDrlgCoord->nPosX + pDrlgCoord->nWidth;
     pVertex->nPosY = pDrlgCoord->nPosY;
     pVertexNext = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
-    pVertexNext->nPosX = 0;
-    pVertexNext->nPosY = 0;
-    *(uint32_t*)&pVertexNext->nDirection = 0;
-    pVertexNext->dwFlags = 0;
-    pVertexNext->pNext = 0;
+    memset(pVertexNext, 0, sizeof(*pVertexNext));
     pVertexNext->nDirection = nDirection;
     pVertex->pNext = pVertexNext;
     pVertexNext->nPosX = pDrlgCoord->nPosX + pDrlgCoord->nWidth;

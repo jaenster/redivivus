@@ -6,7 +6,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
@@ -53,6 +52,7 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/Monsters/Spawn.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Game/SKILLS/SkillDruid.h"
@@ -880,9 +880,7 @@ BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, 
     int32_t nX = D2Common::Skills::SKILL_GetParam2(pSkill);
     int32_t nY = D2Common::Skills::SKILL_GetParam3(pSkill);
     eD2MonsterAnimMode eSpawnAnimMode = D2Common::Skills::SKILL_GetParam4(pSkill);
-    int32_t nYCopy = nY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nYCopy);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom) {
       return 0;
     }
@@ -1270,11 +1268,10 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
       pUnit->sSeed = sNewSeed;
       nSpawnYOffset = sNewSeed.nSeedLow % 0x12 - 9 + nSpawnY;
       nOffsetY = nSpawnYOffset;
-      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nOffsetX, nSpawnYOffset);
+      pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
       if (pSpawnRoom) {
         nSpawnYOffset = nOffsetY;
-        D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
+        D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
         pSpawnedMinion = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pSpawnRoom, nOffsetX, nOffsetY, nMonStatsId, eSpawnAnimMode, -1, 0);
         if (pSpawnedMinion) {
           pSpawnedMinion->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;

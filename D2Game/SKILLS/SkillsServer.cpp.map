@@ -2921,6 +2921,25 @@
         "eD2UnitType",
         "int32_t"
       ]
+    },
+    {
+      "name": "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
+      "address": "005c6cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6cb0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillsServer",
+      "calledFunctions": [
+        "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
+        "D2UpdateState"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "pfnUIMenuInstance"
+      ]
     }
   ]
 }

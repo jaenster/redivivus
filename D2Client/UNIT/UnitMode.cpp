@@ -11,7 +11,6 @@
 #include "D2Client/GAME/Select.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Source/ClientEngine.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
@@ -46,6 +45,7 @@
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
@@ -437,17 +437,15 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
       msg.nItemId = nTargetY;
       msg.nSkillId = nPosX;
       nWalkMsgId = 1;
-      if (eUnitType != UNIT_PLAYER) {
-        if (eUnitType == UNIT_MONSTER) {
-          msg.nTargetUnitId = 1;
-        }
-      } else {
-        pPlayerUnit_lcl = Player::GetPlayerUnit_Net();
-        if (pUnit != pPlayerUnit_lcl) {
-          if (bUsePathMove) {
-            Path::PATH_MoveUnitToPoint(pUnit, (uint16_t)nPosX, nTargetY, 2, 0, 0);
-            return;
-          }
+      switch (eUnitType) {
+        case UNIT_PLAYER:
+          {
+            pPlayerUnit_lcl = Player::GetPlayerUnit_Net();
+            if (pUnit != pPlayerUnit_lcl) {
+              if (bUsePathMove) {
+                Path::PATH_MoveUnitToPoint(pUnit, (uint16_t)nPosX, nTargetY, 2, 0, 0);
+                return;
+              }
 
           nWalkMsgId = 0x17;
         }

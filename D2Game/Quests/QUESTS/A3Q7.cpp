@@ -3,7 +3,7 @@
 #include "D2Game/Quests/QUESTS/A3Q7.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UNIT/Player.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -265,7 +265,7 @@ void __fastcall Objects_InitFn43_DarkWanderer(D2ObjectInitFnArg * pInitArg) {
       pA3Q7Data->nDarkWandererX = pInitArg->nX + 7;
       nSpawnY = pInitArg->nY;
       pA3Q7Data->nDarkWandererY = nSpawnY;
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pInitArg->pRoom, pA3Q7Data->nDarkWandererX, nSpawnY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pInitArg->pRoom, pA3Q7Data->nDarkWandererX, nSpawnY);
       pSpawnedMonster = Monster::Create::SpawnMonsterAtRoomPos(pInitArg->pGame, pRoom, pA3Q7Data->nDarkWandererX, pA3Q7Data->nDarkWandererY, 0x170, eD2MonsterAnimMode_ns::Neutral, -1, 0);
       if (pSpawnedMonster) {
         pA3Q7Data->bQuestCompleted = false;

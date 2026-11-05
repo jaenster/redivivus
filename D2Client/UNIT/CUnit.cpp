@@ -27,7 +27,6 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Inv.h"
 #include "D2Client/UI/Path.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/Text.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT.h"
@@ -87,6 +86,7 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -1139,7 +1139,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
     uint32_t nSkillFlagsLocal;
     nSkillFlagsLocal = (uint32_t)(uint16_t)pLocalPath->Coords.tSubtile.nPosY;
     if (nX != (uint16_t)pCurPath->Coords.tSubtile.nPosX || nSkillFlagsLocal != (uint16_t)pCurPath->Coords.tSubtile.nPosY) {
-      pBetterRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nSkillFlagsLocal);
+      pBetterRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nSkillFlagsLocal);
       if (!pBetterRoom) {
         return;
       }
@@ -1345,7 +1345,7 @@ D2RoomStrc * __fastcall FindRoom(int32_t nX, int32_t nY) {
       D2RoomStrc* pBetterRoom;
       if (pPlayerUnit) {
         pUnitRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit);
-        pBetterRoom = Player::DRLGROOM_FindBetterNearbyRoom(pUnitRoom, nX, nY);
+        pBetterRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pUnitRoom, nX, nY);
         if (pBetterRoom) {
           return pBetterRoom;
         }

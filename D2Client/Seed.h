@@ -14,7 +14,6 @@ struct D2SeedStrc;
 namespace D2Client::Seed {
 
 // Function declarations
-uint32_t __fastcall RNG_GetRandomInRange(uint32_t * pSeed, int32_t nMax);
 int32_t __fastcall RollBetweenMinAndMax(struct D2SeedStrc * pSeed, int32_t nMin, uint32_t nMax);
 
 } // namespace D2Client::Seed

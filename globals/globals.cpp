@@ -9,13 +9,15 @@
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Sound.h"
 #include "D2Client/Renderer/Glide.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Merc.h"
 #include "D2Game/D2QuestDataStrc.h"
+#include "D2Game/PLAYER/PlayerPets.h"
+#include "D2Glide/Renderer/Glide.h"
 #include "D2Win/D2WinAnimImage.h"
+#include "D2gfx/D2GFX.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Storm.h"
 
@@ -11311,7 +11313,76 @@ namespace D2Game::GAME::Rendering {
 
 } // namespace D2Game::GAME::Rendering
 
-namespace D2Client::UI::ui {
+namespace D2Client::Renderer {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2RendererFunctionsStrc GlideFunctionTable = {
+    /* .nfpInitialize = */ &D2Client::Renderer::Glide::Initialize,
+    /* .nfpInitPerspective = */ &D2Glide::Renderer::Glide::InitPerspective,
+    /* .nfpRelease = */ (fpRelease)&D2Glide::Renderer::Glide::Release,
+    /* .nfpCreateWindow = */ (fpCreateWindow)&D2Glide::Renderer::Glide::CreateWindow,
+    /* .nfpDestroyWindow = */ &D2Glide::Renderer::Glide::RENDERER_GLIDE_DestroyWindow,
+    /* .nfpEndCutScene = */ (fpEndCutScene)&D2Glide::Renderer::Glide::EndCutScene,
+    /* .nfpBeginScene = */ &D2Glide::Renderer::Glide::BeginScene,
+    /* .fpEndScene1 = */ &D2Glide::Renderer::Glide::EndScene1,
+    /* .fpEndScene2 = */ &D2Glide::Renderer::Glide::EndScene2,
+    /* .nfpResizeWindow = */ &D2Glide::Renderer::Glide::ResizeWindow,
+    /* .nfpGetBackBuffer = */ &D2Glide::Renderer::Glide::GetBackBuffer,
+    /* .nfpActivateWindow = */ (fpActivateWindow)&D2Glide::Renderer::Glide::ActivateWindow,
+    /* .nfpSetOption = */ (fpSetOption)&D2Glide::Renderer::Glide::SetOption,
+    /* .nfpBeginCutScene = */ &D2Glide::Renderer::Glide::BeginCutScene,
+    /* .nfpPlayCutScene = */ (fpPlayCutScene)&D2Glide::Renderer::Glide::PlayCutScene,
+    /* .nfpCheckCutScene = */ &D2Glide::Renderer::Glide::CheckCutScene,
+    /* .nfpDecodeSmacker = */ (fpDecodeSmacker)&D2Glide::Renderer::Glide::DecodeSmacker,
+    /* .nfpPlayerSmacker = */ &D2Glide::Renderer::Glide::PlayerSmacker,
+    /* .nfpCloseSmacker = */ &D2Glide::Renderer::Glide::CloseSmacker,
+    /* .nfpGetRenderStatistics = */ &D2Glide::Renderer::Glide::GetRenderStatistics,
+    /* .nfpGetScreenSize = */ (fpGetScreenSize)&D2Glide::Renderer::Glide::GetScreenSize,
+    /* .nfpUpdateScaleFactor = */ (fpUpdateScaleFactor)&D2Glide::Renderer::Glide::UpdateScaleFactor,
+    /* .nfpSetGamma = */ (fpSetGamma)&D2Glide::Renderer::Glide::SetGamma,
+    /* .nfpCheckGamma = */ (fpCheckGamma)&D2Glide::Renderer::Glide::CheckGamma,
+    /* .nfpSetPerspectiveScale = */ (fpSetPerspectiveScale)&D2Glide::Renderer::Glide::SetPerspectiveScale,
+    /* .nfpAdjustPerspectivePosition = */ (fpAdjustPerspectivePosition)&D2Glide::Renderer::Glide::AdjustPerspectivePosition,
+    /* .nfpPerspectiveScalePosition = */ (fpPerspectiveScalePosition)&D2Glide::Renderer::Glide::PerspectiveScalePosition,
+    /* .nfpSetDefaultPerspectiveFactor = */ &D2Glide::Renderer::Glide::SetDefaultPerspectiveFactor,
+    /* .nfpSetPalette = */ &D2Glide::Renderer::Glide::SetPalette,
+    /* .nfpSetPaletteTable = */ &D2Glide::Renderer::Glide::SetPaletteTable,
+    /* .nfpSetGlobalLight = */ &D2Glide::Renderer::Glide::SetGlobalLight,
+    /* .nfpDrawGroundTile = */ (D2RendererFunctionsStrc_fpDrawGroundTile)&D2Glide::Renderer::Glide::DrawGroundTile,
+    /* .nfpDrawPerspectiveImage = */ (fpDrawPerspectiveImage)&D2Glide::Renderer::Glide::DrawPerspectiveImage,
+    /* .nfpDrawImage = */ (fpDrawImage)&D2Glide::Renderer::Glide::DrawImage,
+    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2Glide::Renderer::Glide::DrawShiftedImage,
+    /* .nfpDrawVerticalCropImage = */ (fpDrawVerticalCropImage)&D2Glide::Renderer::Glide::DrawVerticalCropImage,
+    /* .nfpDrawShadow = */ (fpDrawShadow)&D2Glide::Renderer::Glide::DrawShadow,
+    /* .nfpDrawImageFast = */ (fpDrawImageFast)&D2Glide::Renderer::Glide::DrawImageFast,
+    /* .nfpDrawClippedImage = */ (fpDrawClippedImage)&D2Glide::Renderer::Glide::DrawClippedImage,
+    /* .nfpDrawWallTile = */ (D2RendererFunctionsStrc_fpDrawWallTile)&D2Glide::Renderer::Glide::DrawWallTile,
+    /* .nfpDrawTransWallTile = */ (fpDrawTransWallTile)&D2Glide::Renderer::Glide::DrawTransWallTile,
+    /* .nfpDrawShadowTile = */ (fpDrawShadowTile)&D2Glide::Renderer::Glide::DrawShadowTile,
+    /* .nfpDrawRect = */ (fpDrawRect)&D2Glide::Renderer::Glide::DrawRect,
+    /* .nfpDrawRectEx = */ (fpDrawRectEx)&D2Glide::Renderer::Glide::DrawRectEx,
+    /* .nfpDrawSolidRect = */ &D2Glide::Renderer::Glide::DrawSolidRect,
+    /* .nfpDrawSolidSquare = */ (fpDrawSolidSquare)&D2Glide::Renderer::Glide::DrawSolidSquare,
+    /* .nfpDrawSolidRectEx = */ (fpDrawSolidRectEx)&D2Glide::Renderer::Glide::DrawSolidRectEx,
+    /* .nfpDrawSolidRectAlpha = */ (fpDrawSolidRectAlpha)&D2Glide::Renderer::Glide::DrawSolidRectAlpha,
+    /* .nfpDrawLine = */ (fpDrawLine)&D2Glide::Renderer::Glide::DrawLine,
+    /* .nfpClearScreen = */ &D2Glide::Renderer::Glide::ClearScreen,
+    /* .nfpDrawString = */ (fpDrawString)&D2Glide::Renderer::Glide::DrawString,
+    /* .nfpDrawLight = */ (fpDrawLight)&D2Glide::Renderer::Glide::DrawLight,
+    /* .nfpDebugFillBackBuffer = */ (fpDebugFillBackBuffer)&D2Glide::Renderer::Glide::DebugFillBackBuffer,
+    /* .nfpClearCaches = */ &D2Glide::Renderer::Glide::ClearCaches
+}; D2_GLOBAL_GUARD(GlideFunctionTable, "D2Client::Renderer::GlideFunctionTable");
+
+} // namespace D2Client::Renderer
+
+namespace D2DDraw::Renderer::DirectDraw {
+
+} // namespace D2DDraw::Renderer::DirectDraw
+
+namespace D2Lang::Unicode::UNISYS {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
@@ -11574,7 +11645,7 @@ uint16_t CharacterLookupTable[256] = {
     0xdd,
     0xde,
     0x9f
-}; D2_GLOBAL_GUARD(CharacterLookupTable, "D2Client::UI::ui::CharacterLookupTable");
+}; D2_GLOBAL_GUARD(CharacterLookupTable, "D2Lang::Unicode::UNISYS::CharacterLookupTable");
 
 } // namespace D2Client::UI::ui
 

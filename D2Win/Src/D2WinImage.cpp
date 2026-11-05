@@ -328,8 +328,8 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
     uint32_t dwState = pImage->sControl.dwState;
     if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
-      nRelMouseY = pImage->sControl.dwSizeY - pImage->sControl.dwPosY + D2Client::Mouse::nPosY;
-      nRelMouseX = D2Client::Mouse::nPosX - pImage->sControl.dwPosX;
+      nRelMouseY = pImage->sControl.dwSizeY - pImage->sControl.dwPosY + D2WinMain::nPosY;
+      nRelMouseX = D2WinMain::nPosX - pImage->sControl.dwPosX;
       pHitAreaTable = pImage->pHitAreas;
       if (pHitAreaTable) {
         nHitAreaIdx = 0;

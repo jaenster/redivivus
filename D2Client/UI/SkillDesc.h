@@ -8,8 +8,6 @@
 #include <cstdarg>
 #include "d2_platform.h"
 #include "D2Common/ITEMS/ItemMods.h"
-#include "D2Game/PLAYER/Player.h"
-#include "D2Game/UNIT/SUnit.h"
 
 // Forward declarations
 struct D2DifficultyLevelsTxt;

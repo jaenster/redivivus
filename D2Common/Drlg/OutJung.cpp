@@ -2,7 +2,6 @@
 
 #include "D2Common/Drlg/OutJung.h"
 #include "D2Client/Archive.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
@@ -11,6 +10,7 @@
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Outdoors.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"

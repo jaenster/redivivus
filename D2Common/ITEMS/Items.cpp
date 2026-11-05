@@ -8,7 +8,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnitEvent.h"
 #include "D2Client/UNIT/Item.h"
@@ -46,10 +45,9 @@
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
-#include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
-#include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -63,6 +61,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Inv.h"
+#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/GAME/SCmd.h"
@@ -93,6 +92,14 @@ typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc 
 static eD2States aSetItemsStateList[5] = { STATE_itemset1, STATE_itemset2, STATE_itemset3, STATE_itemset4, STATE_itemset5 }; D2_STATIC_GUARD(aSetItemsStateList, "aSetItemsStateList");
 
 namespace D2Common::ITEMS::Items {
+
+D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType) {
+    if (nItemType >= 0 && nItemType < sgptDataTable->nTxtItemTypesSize) {
+      return sgptDataTable->pTxtItemTypes + nItemType;
+    }
+
+    return nullptr;
+}
 
 uint32_t __stdcall ITEMS_SearchItemCodeTable(D2UnitStrc * pUnit, int32_t dwContext, uint32_t nOffset) {
     // Static local variables (originally global data)
@@ -5562,7 +5569,7 @@ uint32_t __stdcall ITEM_CanBeRepaired(D2UnitStrc * pUnit) {
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pItemUnit);
-    D2ItemTypesTxt* pItemTypesTxt = D2Game::ITEMS::Items::Drop::ItemTypes_GetLine(eItemType);
+    D2ItemTypesTxt* pItemTypesTxt = ItemTypes_GetLine(eItemType);
     if (!pItemTypesTxt) {
       return 0;
     }

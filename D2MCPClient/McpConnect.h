@@ -161,6 +161,9 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x19(char * pBytes, size_t nSize);
 // Packet format: Size(2, LE) | Data(...) - first byte of data is packet type
 // Validates *pBytes <= 0x19, calls handler from pointer table.
 BOOL __fastcall HandleIncomingPacket(char * pBytes, size_t nSize);
+BOOL __fastcall MCPCONNECT_SocketCallback_Dispatch(uint8_t * pPacketBuf, int nPacketSize, void * pContext);
+void __fastcall MCPCONNECT_SetGameListCallbacks(pfnMCPGameListEntry pfnEntryCallback, pfnVoidNoArgCallback pfnCompleteCallback);
+void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback);
 void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText);
 // MCP 0x05 reply handler = REALM GAMELIST entry (one game per packet) AND join-info.
 // Stores into g_CharSelectBuffer struct (base 0x799108); JoinOrCreateGame polls it and

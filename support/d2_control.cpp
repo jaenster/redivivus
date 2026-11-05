@@ -2235,7 +2235,7 @@ static void D2CONTROL_StepEnter(void) {
 
     case 2:
         // The saves are enumerated over the following frames, not synchronously.
-        if (D2Client::CharScreen::TotalCurrentChars == 0) {
+        if (D2Launch::CharSel::TotalCurrentChars == 0) {
             if (--g_enterWait > 0) return;
             lstrcpynA(g_enterNote, "no characters found", sizeof(g_enterNote));
             InterlockedExchange(&g_enterStep, -1);
@@ -2245,7 +2245,7 @@ static void D2CONTROL_StepEnter(void) {
         return;
 
     case 3: {
-        D2CharSelStrc* pChar = D2Client::CharScreen::D2CharSelStrcFirst;
+        D2CharSelStrc* pChar = D2Launch::CharSel::D2CharSelStrcFirst;
         while (pChar && lstrcmpiA(pChar->szCharname, g_enterName) != 0) pChar = pChar->pNext;
         if (!pChar) {
             lstrcpynA(g_enterNote, "character not found", sizeof(g_enterNote));
@@ -2567,7 +2567,7 @@ extern "C" void D2CONTROL_Pump(void) {
         "\"player\":\"0x%X\",\"ingame\":%d,\"enter\":%ld,\"chars\":%u,\"lvl\":%d,\"act\":%d,\"loaded\":%d,\"note\":\"%s\"}",
         frame, (unsigned)(UINT_PTR)hWnd, (int)gdwAppMode,
         (unsigned)(UINT_PTR)pPlayerUnit, pPlayerUnit ? 1 : 0,
-        g_enterStep, (unsigned)D2Client::CharScreen::TotalCurrentChars,
+        g_enterStep, (unsigned)D2Launch::CharSel::TotalCurrentChars,
         nPlayerLevelId, nPlayerAct, (int)ServerLoadingComplete, g_enterNote);
     LeaveCriticalSection(&g_cs);
 

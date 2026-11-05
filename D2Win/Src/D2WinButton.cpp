@@ -297,7 +297,7 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
         if (pButton->nButtonFlags & 3) {
           pButton->bPressedInside = 1;
         } else {
-          bIsPointInside = D2WINBUTTON_IsPointInside(pButton, D2Client::Mouse::nPosX, D2Client::Mouse::nPosY);
+          bIsPointInside = D2WINBUTTON_IsPointInside(pButton, D2WinMain::nPosX, D2WinMain::nPosY);
           nFrameOffset = pButton->bPressed;
           dwState = pButton->sControl.dwState;
           pButton->bPressedInside = bIsPointInside;
@@ -391,7 +391,7 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
       } else {
         nFrameOffset = pButton->sControl.dwPosX;
         nPosY = pButton->sControl.dwPosY;
-        if (D2Client::Mouse::nPosX < nFrameOffset || D2Client::Mouse::nPosY < nPosY - pButton->sControl.dwSizeY || D2Client::Mouse::nPosX >= pButton->sControl.dwSizeX + nFrameOffset || D2Client::Mouse::nPosY >= nPosY) {
+        if (D2WinMain::nPosX < nFrameOffset || D2WinMain::nPosY < nPosY - pButton->sControl.dwSizeY || D2WinMain::nPosX >= pButton->sControl.dwSizeX + nFrameOffset || D2WinMain::nPosY >= nPosY) {
           nFrameOffset = 0;
         } else {
           nFrameOffset = 1;

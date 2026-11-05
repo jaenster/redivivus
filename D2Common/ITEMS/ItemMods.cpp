@@ -28,6 +28,7 @@
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"

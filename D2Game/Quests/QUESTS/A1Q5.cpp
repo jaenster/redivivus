@@ -3,7 +3,7 @@
 #include "D2Game/Quests/QUESTS/A1Q5.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UNIT/Player.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -917,15 +917,13 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2Ques
         nY = pA1Q5Data->ptCountessDeath.y;
         sCountessKillPos.y = nY;
         if (!pCountessDeathActor) {
-          pNearbyRoom = D2Common::Units::UNITS_GetRoom(pChestUnit);
-          pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pNearbyRoom, sCountessKillPos.x, nY);
+          pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pChestUnit), sCountessKillPos.x, nY);
           if (!pNearbyRoom || (pCountessDeathActor = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, pNearbyRoom, sCountessKillPos.x, sCountessKillPos.y, 0x146, eD2MonsterAnimMode_ns::Dead, -1, 8) , !pCountessDeathActor)) {
             D2Common::Units::GetCoords(pChestUnit, &sCountessKillPos);
             sCountessKillPos.x += 5;
             nFallbackPosY = sCountessKillPos.y + 5;
             sCountessKillPos.y = nFallbackPosY;
-            pNearbyRoom = D2Common::Units::UNITS_GetRoom(pChestUnit);
-            pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pNearbyRoom, sCountessKillPos.x, nFallbackPosY);
+            pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pChestUnit), sCountessKillPos.x, nFallbackPosY);
             pCountessDeathActor = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, pNearbyRoom, sCountessKillPos.x, sCountessKillPos.y, 0x146, eD2MonsterAnimMode_ns::Dead, -1, 8);
             if (!pCountessDeathActor) {
               goto next_chest;

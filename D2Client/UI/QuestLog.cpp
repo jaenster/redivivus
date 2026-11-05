@@ -1109,7 +1109,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     D2BitBufferStrc* pBitBuffer_00;
     pBitBuffer_00 = npcmenu::Merc::NPCMENU_GetMercHireCost();
     uint8_t bQuestActive;
-    bQuestActive = gQuestLog.abQuestUnknownArray1[nActIndex];
+    bQuestActive = gQuestLog.anQuestStepArray1[nActIndex];
     pEntry->bQuestActive = bQuestActive;
     if (!gaQuestInfoTable[nActIndex].pQuestDescData) {
       pEntry->nDisplayState = 2;
@@ -1139,7 +1139,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
               D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, D2Lang::StrTable::strtable::GetLocaleString(gaQuestDescData_SevenTombs[0xb]), 300);
               pEntry->wszDescription[299] = L'\0';
               byQuestState = '\x05';
-              gQuestLog.abQuestUnknownArray2[nActIndex] = true;
+              gQuestLog.anQuestStepArray2[nActIndex] = 5;
               pEntry->wDescStringId = gaQuestDescData_SevenTombs[0xc];
               goto finish_seven_tombs_entry;
             }
@@ -1153,14 +1153,14 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
             D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, D2Lang::StrTable::strtable::GetLocaleString(gaQuestDescData_SevenTombs[0xd]), 300);
             pEntry->wszDescription[299] = L'\0';
             byQuestState = '\x06';
-            gQuestLog.abQuestUnknownArray2[nActIndex] = true;
+            gQuestLog.anQuestStepArray2[nActIndex] = 6;
             wQuestStep = gaQuestDescData_SevenTombs[0xe];
           } else {
             pEntry->wTitleStringId = gaQuestDescData_SevenTombs[0];
             D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, D2Lang::StrTable::strtable::GetLocaleString(gaQuestDescData_SevenTombs[0xf]), 300);
             pEntry->wszDescription[299] = L'\0';
             byQuestState = '\a';
-            gQuestLog.abQuestUnknownArray2[nActIndex] = true;
+            gQuestLog.anQuestStepArray2[nActIndex] = 7;
             wQuestStep = gaQuestDescData_SevenTombs[0x10];
           }
 
@@ -1182,9 +1182,9 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
             pEntry->wTitleStringId = *pQuestDataTbl;
             D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, D2Lang::StrTable::strtable::GetLocaleString(pQuestDataTbl[(uint32_t)bNextStep * 2 + 1]), 300);
             pEntry->wszDescription[299] = L'\0';
-            pEntry->bStepAdvanced = bNextStep != gQuestLog.abQuestUnknownArray2[nActIndex];
+            pEntry->bStepAdvanced = bNextStep != gQuestLog.anQuestStepArray2[nActIndex];
             wQuestStep = pQuestDataTbl[(uint32_t)bNextStep * 2 + 2];
-            gQuestLog.abQuestUnknownArray2[nActIndex] = bNextStep;
+            gQuestLog.anQuestStepArray2[nActIndex] = bNextStep;
             pEntry->bQuestActive = bNextStep;
             pEntry->wDescStringId = wQuestStep;
             pEntry->nDisplayState = 3;
@@ -1215,7 +1215,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
             D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, D2Lang::StrTable::strtable::GetLocaleString(wQuestStep), nDescLen);
             pEntry->wszDescription[299] = L'\0';
             pEntry->wDescStringId = pQuestDataTbl[1];
-            gQuestLog.abQuestUnknownArray2[nActIndex] = (bool)bQuestActive;
+            gQuestLog.anQuestStepArray2[nActIndex] = bQuestActive;
             pEntry->bHasDescription = '\x01';
             nQuestIdLookup = gaQuestInfoTable[nActIndex].nQuestId;
             goto apply_box_grayed;
@@ -1252,7 +1252,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
               D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, D2Lang::StrTable::strtable::GetLocaleString(pQuestDataTbl[nQuestStepIdx * 2 + 1]), 300);
               pEntry->wszDescription[299] = L'\0';
               pEntry->wDescStringId = pQuestDataTbl[nQuestStepIdx * 2 + 2];
-              gQuestLog.abQuestUnknownArray2[nActIndex] = (bool)bQuestDone;
+              gQuestLog.anQuestStepArray2[nActIndex] = bNextStep;
               pEntry->bHasDescription = '\x01';
               pEntry->nDisplayState = pEntry->eQuestId != 0x1b ? 0x3U : 0x1U;
               return;
@@ -1348,12 +1348,12 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
 
       pEntry->wszDescription[299] = L'\0';
       pEntry->bStepAdvanced = '\0';
-      if ((bool)bQuestActive != gQuestLog.abQuestUnknownArray2[nActIndex] && gaQuestInfoTable[nActIndex].pQuestDescData) {
+      if (bQuestActive != gQuestLog.anQuestStepArray2[nActIndex] && gaQuestInfoTable[nActIndex].pQuestDescData) {
         pEntry->bStepAdvanced = '\x01';
       }
 
       wQuestStep = pQuestDataTbl[(uint32_t)bQuestActive * 2 + 2];
-      gQuestLog.abQuestUnknownArray2[nActIndex] = (bool)bQuestActive;
+      gQuestLog.anQuestStepArray2[nActIndex] = bQuestActive;
       pEntry->wDescStringId = wQuestStep;
       pEntry->nDisplayState = 3;
       pEntry->bHasDescription = '\x01';
@@ -1393,11 +1393,11 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
 
     pEntry->wTitleStringId = *pQuestDataTbl;
     pEntry->bStepAdvanced = '\0';
-    if ((bool)bQuestActive != gQuestLog.abQuestUnknownArray2[nActIndex]) {
+    if (bQuestActive != gQuestLog.anQuestStepArray2[nActIndex]) {
       pEntry->bStepAdvanced = '\x01';
     }
 
-    gQuestLog.abQuestUnknownArray2[nActIndex] = (bool)bQuestActive;
+    gQuestLog.anQuestStepArray2[nActIndex] = bQuestActive;
     pEntry->wDescStringId = pQuestDataTbl[nQuestStepIdx * 2 + 2];
     pEntry->nDisplayState = 3;
     pEntry->bHasDescription = '\x01';
@@ -2114,7 +2114,7 @@ void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, D2GSPacketClt
           }
 
           nQuestIndex = QUESTLOG_FindQuestIndexById(1);
-          gQuestLog.abQuestUnknownArray1[nQuestIndex] = (uint8_t)(uint32_t)pPacket->nPlayerGUID;
+          gQuestLog.anQuestStepArray1[nQuestIndex] = (uint8_t)pPacket->nPlayerGUID;
           return;
         }
 
@@ -2136,7 +2136,7 @@ void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, D2GSPacketClt
       if (bQuestState) {
         nQuestIndex = QUESTLOG_FindQuestIndexById((uint32_t)pPacket->nActionType);
         if (nQuestIndex != -1) {
-          gQuestLog.abQuestUnknownArray1[nQuestIndex] = (uint8_t)(uint32_t)pPacket->nPlayerGUID;
+          gQuestLog.anQuestStepArray1[nQuestIndex] = (uint8_t)pPacket->nPlayerGUID;
           if (gQuestLog.bQuestLogButtonDown == '\0' && (uint32_t)gaQuestInfoTable[nQuestIndex].nAct == gQuestLog.nQuestLogActiveAct_b) {
             gQuestLog.nQuestLogActiveAct = (uint32_t)gaQuestInfoTable[nQuestIndex].nQuestIndexInAct;
           }
@@ -2156,8 +2156,8 @@ void __stdcall QUESTLOG_ResetNpcDialogState() {
 void __stdcall QUESTLOG_ResetQuestFilterArrays() {
     int i = 0;
     do {
-      gQuestLog.abQuestUnknownArray1[i] = false;
-      gQuestLog.abQuestUnknownArray2[i] = false;
+      gQuestLog.anQuestStepArray1[i] = 0;
+      gQuestLog.anQuestStepArray2[i] = 0;
       i++;
     } while (i < 0x29);
 }
@@ -2412,8 +2412,8 @@ void __stdcall GameOverWtf() {
     gQuestLog.bQuestLogScreenOpen = 0;
     int i = 0;
     do {
-      gQuestLog.abQuestUnknownArray1[i] = false;
-      gQuestLog.abQuestUnknownArray2[i] = false;
+      gQuestLog.anQuestStepArray1[i] = 0;
+      gQuestLog.anQuestStepArray2[i] = 0;
       i++;
     } while (i < 0x29);
 

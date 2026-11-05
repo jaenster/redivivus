@@ -46,6 +46,7 @@ void __fastcall AdjustPerspectivePosition_Unref_006460d0(int nPosX, int nPosY, i
 void __fastcall ClearScreen_Unref_0065a3f0(BOOL bPartial);
 HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20();
 void __fastcall AdjustPerspectivePosition_Unref_006bf250(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
+BOOL __fastcall Initialize(HINSTANCE hInstance);
 // @sourcefile .\Src\gdiCore.cpp
 BOOL __fastcall InitPerspective(struct D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers);
 // @sourcefile .\Src\gdiCore.cpp

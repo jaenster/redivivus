@@ -19,7 +19,6 @@
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/Path.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT/CUnit.h"
@@ -58,6 +57,7 @@
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Unit.h"
@@ -67,6 +67,7 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
@@ -79,7 +80,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2UnitDataItemStrc.h"
-#include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -2712,34 +2712,6 @@ uint32_t __fastcall CheckFlagWithMask(D2UnitStrc * pUnit, uint32_t dwMask) {
     return (uint32_t)((pUnit->eUnitFlagsEx & dwMask) != 0);
 }
 
-D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
-    uint32_t nRoomIdx;
-    D2RoomStrc* pTestRoom;
-    if (!pRoom) {
-      return nullptr;
-    }
-
-    int nCoord = pRoom->sCoords.dwXStart;
-    if (!(nX < nCoord || nX >= pRoom->sCoords.dwXSize + nCoord || (nCoord = pRoom->sCoords.dwYStart , nY < nCoord) || nY >= pRoom->sCoords.dwYSize + nCoord)) {
-      return pRoom;
-    }
-
-    D2RoomStrc** ppRoomList = 0;
-    DWORD nRoomCount = 0;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, (int*)&nRoomCount);
-    for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
-      if (ppRoomList[nRoomIdx]) {
-        pTestRoom = ppRoomList[nRoomIdx];
-        if (nX >= pTestRoom->sCoords.dwXStart && nX < pTestRoom->sCoords.dwXSize + pTestRoom->sCoords.dwXStart && nY >= pTestRoom->sCoords.dwYStart && nY < pTestRoom->sCoords.dwYSize + pTestRoom->sCoords.dwYStart) {
-          return pTestRoom;
-        }
-      }
-    }
-
-    pRoom = 0;
-    return pRoom;
-}
-
 int __fastcall Unreferenced_004637f0(int param_1) {
     if (param_1 && *(int*)param_1 == 1 && *(int*)(param_1 + 0x14)) {
       return *(int*)(param_1 + 0x14) + 4;
@@ -2754,15 +2726,6 @@ int __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
     }
 
     return 0;
-}
-
-int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId) {
-    D2MonStatsTxt* pMonStatsTxt = nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
-    if (pMonStatsTxt) {
-      nMonsterId = (int32_t)pMonStatsTxt->BaseId;
-    }
-
-    return nMonsterId;
 }
 
 int32_t __fastcall TXT_MonStats_GetBaseId(D2UnitStrc * pUnit) {

@@ -5,7 +5,6 @@
 
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Common/Chat/Ignorelist.h"
 #include "D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
@@ -15,6 +14,7 @@
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/DrlgGrid.h"
 #include "D2Common/Logging/ProfCore.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/SUNITNPC.h"
 

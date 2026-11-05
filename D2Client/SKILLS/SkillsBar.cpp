@@ -10,7 +10,6 @@
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Path.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
@@ -44,6 +43,7 @@
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -229,7 +229,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUni
       return 0;
     }
 
-    pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nFreeCoordTmp.x, nFreeCoordTmp.y);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nFreeCoordTmp.x, nFreeCoordTmp.y);
     if (!pRoom) {
       return 0;
     }
@@ -342,8 +342,7 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
     do {
       D2RoomStrc* pRoom;
       nCandidateX = ptCandidatePos.y;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, ptCandidatePos.x, nCandidateX);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), ptCandidatePos.x, nCandidateX);
       pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptCandidatePos, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 1);
       nCandidateY = ptCandidatePos.y;
       nCandidateX = ptCandidatePos.x;
@@ -403,7 +402,7 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
       return 0;
     }
 
-    pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom) {
       return 0;
     }
@@ -495,8 +494,7 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
         nDestY = nFreeCoordTmp.y;
         commit_destination:
         nCalcTmp = nDestY;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nDestX, nCalcTmp);
+        pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nDestX, nCalcTmp);
         D2Common::Collision::AddCollision_Type(pRoom, nDestX, nDestY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
         D2Common::Skills::SKILL_SetParam1(pSkill, nDestX);
         D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
@@ -670,9 +668,7 @@ static void __stdcall CLIENT_UpdateSkillMissilePosition(D2SkillStrc * pSkill, in
     }
 
     int nTargetY = nDestY * 3 + nTargetYPos * -2;
-    nTargetYPos = nTargetY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom((D2UnitStrc*)pDynamicPath);
-    pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetXPos, nTargetYPos);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom((D2UnitStrc*)pDynamicPath), nTargetXPos, nTargetY);
     if (pRoom) {
       BOOL bIsTown;
       bIsTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);

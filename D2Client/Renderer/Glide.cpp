@@ -4,7 +4,6 @@
 #include "D2DDraw/Renderer/DirectDraw.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Client/GAME/View.data.h"
 #include "D2Client/Renderer/Glide.data.h"
 #include "D2Glide/Renderer/Glide.data.h"
 #include "D2gfx/D2GFX.data.h"
@@ -465,14 +464,6 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
 
     (*GLIDEDLL_grGet_12)(0xf, 4, (FxI32*)((char*)&gnGlideSecondaryTMUCount + 4));
     return (uint32_t)(gnGlideSecondaryTMUCount[1] > 0);
-}
-
-BOOL __fastcall CheckCutScene() {
-    return gbPlayingCutScene;
-}
-
-void __fastcall UpdateScaleFactor(int32_t nScaleFactor) {
-    nScaleFactor = nScaleFactor;
 }
 
 } // namespace D2Client::Renderer::Glide

@@ -9,8 +9,8 @@
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
 #include "D2Client/GAME/PalShift.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
+#include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Hell/D2Hell.h"
 #include "D2Multi/OOGUtilities.h"
 #include "D2Win/DC6.h"
@@ -261,7 +261,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     /* .nfpDrawBlendedVisTile = */ (::fpDrawBlendedVisTile)&D2gfx::fpDrawBlendedVisTile,
     /* .nfpDrawRoofTile = */ (::fpDrawRoofTile)&D2gfx::fpDrawRoofTile
 }; D2_STATIC_GUARD(D2GfxHelperStrc_0072da60, "D2gfx::D2GFX::D2GFX_Initialize::D2GfxHelperStrc_0072da60");
-    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Client::Renderer::GlideFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Client::Renderer::GlideFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Client::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
     static WNDPROC gpfnWndProc; D2_STATIC_GUARD_BSS(gpfnWndProc, "D2gfx::D2GFX::D2GFX_Initialize::gpfnWndProc");
 
     WNDCLASSA wndClass;

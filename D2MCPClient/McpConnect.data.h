@@ -28,13 +28,10 @@ extern uint8_t gMCPGameListBuffer[28680];
 
 namespace D2Client::MCP {
 extern uint16_t D2GSRequestId;
+extern uint32_t D2GSGameHash;
 extern uint32_t D2GSGameToken;
 extern D2QSSocketStrc * MCPD2QSSocket;
 extern uint32_t D2GSJoinResult;
 extern char D2GSConnectIp[18];
 extern void * CharListPacket;
-} // namespace D2Client::MCP
-
-namespace D2Client::Bnet {
-extern uint32_t D2GSGameHash;
-} // namespace D2Client::Bnet
+} // namespace D2MCPClient::McpConnect

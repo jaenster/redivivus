@@ -147,8 +147,8 @@ fpUmodInit aUmodInitTable[43] = {
     nullptr,
     &D2Game::Monsters::Umod::MONUMOD_SetEventTimer,
     nullptr
-}; D2_GLOBAL_GUARD(aUmodInitTable, "D2Common::Monsters::MONSTERS::Umod::aUmodInitTable");
-} // namespace D2Common::Monsters::MONSTERS::Umod
+}; D2_GLOBAL_GUARD(aUmodInitTable, "D2Game::Monsters::Umod::aUmodInitTable");
+} // namespace D2Game::Monsters::Umod
 static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     {
         /* .pfnHandler0 = */ nullptr,
@@ -1188,11 +1188,11 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
 }
 
 void __fastcall UMOD_DispatchInitFunction(D2UnitStrc * pUnit, int32_t nUModId, BOOL bApply) {
-    if (!D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[nUModId]) {
+    if (!Umod::aUmodInitTable[nUModId]) {
       return;
     }
 
-    (*D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[nUModId])(pUnit, nUModId, bApply);
+    (*Umod::aUmodInitTable[nUModId])(pUnit, nUModId, bApply);
 }
 
 // Applies all active MonUMod enchantment init functions to a monster unit. First, if nParam2 is nonzero, spawns minions via MONSTER_SpawnMinionsForBoss. Then iterates the global gnEnchantmentEffectOffset table, calling each non-null aUmodInitTable entry and dispatching to minions via UMOD_DispatchInitFunction. Finally, iterates the unit's own MonUModList (up to 9 slots) repeating the same init + dispatch for each assigned enchantment ID.
@@ -1209,8 +1209,8 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nMinionCountMin, D
     do {
       void* pContext;
       pContext = (void*)*pEnchantEntry;
-      if (D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[(int)pContext]) {
-        (*D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[(int)pContext])(pUnit, (int32_t)pContext, 1);
+      if (Umod::aUmodInitTable[(int)pContext]) {
+        (*Umod::aUmodInitTable[(int)pContext])(pUnit, (int32_t)pContext, 1);
       }
 
       Ai::AiGeneral::CallForEachMinion(pUnit, pContext, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
@@ -1232,8 +1232,8 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nMinionCountMin, D
       if (!nUmodIdUnsigned) {
         return;
       }
-      if (D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[nUmodIdUnsigned]) {
-        (*D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[nUmodIdUnsigned])(pUnit, nUmodIdUnsigned, 1);
+      if (Umod::aUmodInitTable[nUmodIdUnsigned]) {
+        (*Umod::aUmodInitTable[nUmodIdUnsigned])(pUnit, nUmodIdUnsigned, 1);
       }
 
       Ai::AiGeneral::CallForEachMinion(pUnit, (void*)nUmodIdUnsigned, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
@@ -2935,8 +2935,8 @@ int * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2RoomStr
     anBaseUModIds[3] = 4;
     int nUModIdx = 0;
     do {
-      if (D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[anBaseUModIds[nUModIdx]]) {
-        (*D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[anBaseUModIds[nUModIdx]])(pSpawnedUnit, anBaseUModIds[nUModIdx], 0);
+      if (Umod::aUmodInitTable[anBaseUModIds[nUModIdx]]) {
+        (*Umod::aUmodInitTable[anBaseUModIds[nUModIdx]])(pSpawnedUnit, anBaseUModIds[nUModIdx], 0);
       }
 
       nUModIdx++;
@@ -2944,8 +2944,8 @@ int * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2RoomStr
 
     nUModIdx = 0;
     do {
-      if (D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[pUModList[nUModIdx]]) {
-        (*D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[pUModList[nUModIdx]])(pSpawnedUnit, (uint32_t)pUModList[nUModIdx], 0);
+      if (Umod::aUmodInitTable[pUModList[nUModIdx]]) {
+        (*Umod::aUmodInitTable[pUModList[nUModIdx]])(pSpawnedUnit, (uint32_t)pUModList[nUModIdx], 0);
       }
 
       nUModIdx++;
@@ -2982,11 +2982,11 @@ void __fastcall InitUmods(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nInde
     }
 
     pUModList[nActiveUMods] = (uint8_t)nIndex;
-    if (!D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[nIndex]) {
+    if (!Umod::aUmodInitTable[nIndex]) {
       return;
     }
 
-    (*D2Common::Monsters::MONSTERS::Umod::aUmodInitTable[nIndex])(pUnit, nIndex, bInitType);
+    (*Umod::aUmodInitTable[nIndex])(pUnit, nIndex, bInitType);
 }
 
 void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char uMod) {

@@ -88,13 +88,13 @@ BOOL __fastcall DrawAnim(::D2WinAnimImage * pAnimImage) {
     D2GfxDataStrc sGfxData;
     int nPosX;
     int nPosY;
-    int nMouseX = D2Client::Mouse::nPosX;
+    int nMouseX = Src::D2WinMain::nPosX;
     if (pAnimImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
       exit(-1);
     }
 
-    int nMouseY = D2Client::Mouse::nPosY;
+    int nMouseY = Src::D2WinMain::nPosY;
     uint32_t* pFrameEntry = (uint32_t*)pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage;
     DC6* pDC6 = 0;
     if (pFrameEntry) {

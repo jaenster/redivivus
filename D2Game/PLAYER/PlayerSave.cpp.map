@@ -1268,6 +1268,27 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ]
+    },
+    {
+      "name": "CRC32_Calculate",
+      "address": "006c99f6",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c99f6"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave",
+      "calledFunctions": [
+        "CRC32_Calculate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
     }
   ]
 }

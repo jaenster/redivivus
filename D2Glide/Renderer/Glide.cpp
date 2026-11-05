@@ -10,7 +10,6 @@
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
 #include "D2Client/Renderer/Glide.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
@@ -31,6 +30,7 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2CMP/tagPALETTEENTRY.h"
+#include "D2Client/GAME/View.data.h"
 #include "D2Client/Renderer/Glide.data.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Glide/Renderer/Glide.data.h"
@@ -437,6 +437,10 @@ void __fastcall ClearCaches() {
     glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 2, nullptr);
 }
 
+BOOL __fastcall CheckCutScene() {
+    return gbPlayingCutScene;
+}
+
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     if (gnRenderState) {
       return 0;
@@ -459,6 +463,10 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     (*GLIDEDLL_grChromakeyMode_4)(1);
     Glide::SetGlobalLight(0xff, 0xff, 0xff);
     return 1;
+}
+
+void __fastcall UpdateScaleFactor(int32_t nScaleFactor) {
+    nScaleFactor = nScaleFactor;
 }
 
 BOOL __fastcall SetGamma(int32_t nGamma) {

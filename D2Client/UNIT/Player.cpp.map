@@ -1307,27 +1307,6 @@
       ]
     },
     {
-      "name": "DRLGROOM_FindBetterNearbyRoom",
-      "address": "00463740",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463740"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "DRLGROOM_FindBetterNearbyRoom",
-        "DRLGROOM_GetAdjacentRoomsList"
-      ],
-      "usedTypes": [
-        "D2RoomStrc",
-        "D2RoomStrc *",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_004637f0",
       "address": "004637f0",
       "lines": [
@@ -1356,23 +1335,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
-    },
-    {
-      "name": "TXT_MonStats_GetBaseId_NoChecks",
-      "address": "00463830",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463830"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "TXT_MonStats_GetBaseId_NoChecks"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {

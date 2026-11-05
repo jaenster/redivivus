@@ -5,8 +5,8 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -56,7 +56,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Client/UI/QuestLog.h"
 #include "D2Game/D2QuestGUIDStrc.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Monster/Monsters.h"
@@ -641,7 +640,7 @@ static void __stdcall Q04_SpawnDeckardCainNpc(D2RoomStrc * pRoom, ::SGAMEDATA * 
       do {
         ptCainSpawnPos.y++;
         ptCainSpawnPos.x++;
-        pSpawnRoomOut = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoomOut, ptCainSpawnPos.x, ptCainSpawnPos.y);
+        pSpawnRoomOut = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pSpawnRoomOut, ptCainSpawnPos.x, ptCainSpawnPos.y);
         if (!pSpawnRoomOut) {
           ptCainSpawnPos.x = nX;
           ptCainSpawnPos.y = nY;
@@ -2105,8 +2104,7 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     LONG nY = pDVar2->ptCainPos.y;
-    D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, pDVar2->ptCainPos.x, nY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pDVar2->ptCainPos.x, nY);
     if (!pSpawnRoom) {
       pDVar2->ptCainPos.x += 3;
       pDVar2->ptCainPos.y += 3;
@@ -2200,8 +2198,7 @@ void __fastcall Q04_InitializeTristramObjects(::SGAMEDATA * pGame, D2UnitStrc * 
 
     D2Common::Units::GetCoords(pFoundUnit, &sCairnPos);
     LONG nCairnPosY = sCairnPos.y;
-    D2RoomStrc* pCageRoom = D2Common::Units::UNITS_GetRoom(pFoundUnit);
-    pCageRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCageRoom, sCairnPos.x, nCairnPosY);
+    D2RoomStrc* pCageRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pFoundUnit), sCairnPos.x, nCairnPosY);
     if (!pCageRoom) {
       return;
     }

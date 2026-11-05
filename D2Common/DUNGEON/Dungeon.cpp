@@ -5,9 +5,7 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/Draw/LightMap.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -47,6 +45,7 @@
 #include "D2Game/GAME/Server.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -1610,7 +1609,7 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
 
           *pnSpawnX = ptSpawnCoord.x;
           *pnSpawnY = ptSpawnCoord.y;
-          pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, *pnSpawnX, ptSpawnCoord.y);
+          pSpawnRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, *pnSpawnX, ptSpawnCoord.y);
           return pSpawnRoom;
         }
 
@@ -1623,7 +1622,7 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
 }
 
 int32_t __stdcall GetGridIndex(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
-    D2RoomStrc* pNearRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
+    D2RoomStrc* pNearRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pNearRoom) {
       return 0;
     }

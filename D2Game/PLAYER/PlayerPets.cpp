@@ -6,7 +6,6 @@
 #include "D2Client/DataTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2BitBufferStrc.h"
@@ -26,6 +25,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
@@ -33,6 +33,7 @@
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/D2TxtLinkNodeStrc.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -88,6 +89,14 @@ typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pC
 #endif
 
 namespace D2Game::PLAYER::PlayerPets {
+
+D2PetTypeTxt * __fastcall GetPetTypeTxtById(int32_t nPetId) {
+    if (nPetId >= 0 && nPetId < sgptDataTable->nTxtPetTypeSize) {
+      return sgptDataTable->pTxtPetType + nPetId;
+    }
+
+    return nullptr;
+}
 
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetArgStrc * pPetArgs) {
@@ -1229,7 +1238,7 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
 
     for (nPetId = 0; nPetId < sgptDataTable->nTxtPetTypeSize; nPetId++) {
       if (nPetMaxByType[nPetId] <= 0) {
-        pTxtPetType = D2Client::GAME::RosterPets::GetPetTypeTxtById(nPetId);
+        pTxtPetType = GetPetTypeTxtById(nPetId);
         if (pTxtPetType) {
           PETS_SetMaxAndTrimExcess(pGameSaved, pUnit, nPetId, (int)pTxtPetType->basemax);
         }

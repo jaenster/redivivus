@@ -6,7 +6,6 @@
 #pragma once
 
 #include "d2_platform.h"
-#include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Direct3D/d3dFloorCache.h"
 #include "D2Direct3D/d3dSubtileCache.h"
 

@@ -7,13 +7,10 @@
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/Seed.h"
 #include "D2Client/Stats.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -40,6 +37,7 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
@@ -65,6 +63,7 @@
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerModes.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/Quests/QUESTS/A5Q5.h"
@@ -1791,7 +1790,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    _bIsUndead = D2Client::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 0x80);
+    _bIsUndead = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 0x80);
     if ((int)_bIsUndead >= nChance) {
       return 0;
     }
@@ -2403,7 +2402,7 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
     int32_t nCorpseSpawnX = nCollY;
     int32_t nCorpseY = D2Client::Units::GetYPosFromDynamicPathUnit(pAttacker);
     D2RoomStrc* pTargetRoom = D2Common::Units::UNITS_GetRoom(pAttacker);
-    pTargetRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pTargetRoom, nCollY, nCorpseY);
+    pTargetRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pTargetRoom, nCollY, nCorpseY);
     if (!pTargetRoom) {
       return 0;
     }

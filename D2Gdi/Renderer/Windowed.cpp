@@ -12,7 +12,6 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
@@ -79,6 +78,10 @@ HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20() {
 
 void __fastcall AdjustPerspectivePosition_Unref_006bf250(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust) {
 
+}
+
+BOOL __fastcall Initialize(HINSTANCE hInstance) {
+    return 1;
 }
 
 // @sourcefile .\Src\gdiCore.cpp

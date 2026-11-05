@@ -6,7 +6,6 @@
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2IniConfigStrc.h"
 #include "D2Client/Message.h"
-#include "D2Client/Renderer/Renderer.h"
 #include "D2Win/DC6.h"
 #include "D2Win/Forms.h"
 #include "D2Win/Src/D2Comp.h"
@@ -49,14 +48,14 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(0, 0x800000, 0x7d000, 0);
     ghwndD2GFX_CachedWindow = D2gfx::D2GFX::GetHwnd();
     gnWindowInitState = 0;
-    D2Client::Forms::pFormsList = 0;
-    D2Client::Forms::pFormUnknown = 0;
+    Src::D2WinMain::pFormsList = 0;
+    Src::D2WinMain::pFormUnknown = 0;
     gnFormControlCount = 0;
-    D2Client::Forms::pFormTextAndEditBox = 0;
-    D2Client::Forms::pFormFourth = 0;
-    D2Client::Forms::pFormSecond = 0;
-    D2Client::GAME::Record::pWndProcB = 0;
-    D2Client::Forms::pFormImage = 0;
+    Src::D2WinMain::pFormTextAndEditBox = 0;
+    Src::D2WinMain::pFormFourth = 0;
+    Src::D2WinMain::pFormSecond = 0;
+    pWndProcB = 0;
+    Src::D2WinMain::pFormImage = 0;
     gnInitialFormState = 0;
     gnCursorDC6FrameNumber = 0;
     gpfnExitCallback = 0;
@@ -66,7 +65,7 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
 }
 
 int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB) {
-    D2Client::GAME::Record::pWndProcB = pWndProcB;
+    D2GFX::pWndProcB = pWndProcB;
     return 1;
 }
 
@@ -76,7 +75,7 @@ BOOL __stdcall UI_Init() {
     Src::D2WinList::D2WINLIST_LoadPentSpinCursor();
     Src::D2Comp::D2COMP_LoadAllItemPalettes();
     int32_t nMsgCount = 0x21;
-    D2Client::GAME::Record::pWndProcB = 0;
+    pWndProcB = 0;
     Forms::D2WIN_RegisterWindowHandlerArray((int32_t)D2gfx::D2GFX::GetHwnd(), gaUIWindowHandlers, nMsgCount);
     Src::D2WinPalette::D2WINPAL_LoadActPalette(0);
     gpfnExitCallback = 0;

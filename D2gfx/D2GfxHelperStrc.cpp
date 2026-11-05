@@ -2,12 +2,10 @@
 
 #include "D2gfx/D2GfxHelperStrc.h"
 #include "D2CMP/SRC/SubTile.h"
-#include "D2Client/D2GFX.h"
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Client/D2GFX.data.h"
 #include "D2gfx/D2GFX.data.h"
 #include "D2gfx/D2GfxHelperStrc.data.h"
 
@@ -21,6 +19,17 @@ static uint32_t pRenderSurfaceBuffer = 0; D2_STATIC_GUARD(pRenderSurfaceBuffer, 
 int32_t gRenderBufferPitch = 0; D2_GLOBAL_GUARD(gRenderBufferPitch, "gRenderBufferPitch");
 
 namespace D2gfx {
+
+void __stdcall D2GFX_ClearYBuffer() {
+    uint32_t nRowOffset = gRenderBufferPitch * -0x20;
+    uint32_t* pRow = (uint32_t*)gaYBufferRowOffsets;
+    do {
+      int32_t nPitch = gRenderBufferPitch;
+      *pRow = nRowOffset;
+      pRow++;
+      nRowOffset += nPitch;
+    } while ((int)pRow < (intptr_t)((char*)&gaYBufferRowOffsets + sizeof(gaYBufferRowOffsets)));
+}
 
 void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nScreenY) {
     void* nErrorAddr;
@@ -660,7 +669,7 @@ void __fastcall fpFillYBufferTable(void * ppvBits, int32_t nWidth, int32_t nHeig
     gRenderBufferPitch = nWidth;
     if (nWidth != gnLastRenderBufferWidth) {
       gnLastRenderBufferWidth = nWidth;
-      D2Client::D2GFX::D2GFX_ClearYBuffer();
+      D2GFX_ClearYBuffer();
     }
     if (gnGfxOverlayMode == fnFillYTableCookie) {
       return;

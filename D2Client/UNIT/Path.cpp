@@ -17,6 +17,7 @@
 #include "D2Client/UNIT/Object.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -207,7 +208,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
       }
     }
 
-    pRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSendX, nClickY);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nSendX, nClickY);
     if (!(pRoom || (pRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(sgpDrlgAct, nSendX, nClickY) , pRoom != 0))) {
       return;
     }

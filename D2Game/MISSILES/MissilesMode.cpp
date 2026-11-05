@@ -63,6 +63,7 @@
 #include "D2Game/Monsters/Spawn.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/Objects/ObjectsMode.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A5Q6.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -907,9 +908,7 @@ void __fastcall MISSILES_SpawnAreaPattern(::SGAMEDATA * pGame, D2UnitStrc * pUni
             ptPos.y = nCurY;
             _bCollides = D2Common::Collision::TestCollision(pCollisionRoom, &ptPos, &ptOffset, 4);
             if (!_bCollides) {
-              nRowY = nCurY;
-              pRoom = D2Common::Units::UNITS_GetRoom(pOwnerUnit);
-              pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCenterX, nRowY);
+              pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pOwnerUnit), nCenterX, nCurY);
               if (pRoom) {
                 _bCollides = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
                 if (!_bCollides) {
@@ -4262,7 +4261,7 @@ static void __stdcall MissileSrvDo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pRoom) {
       int32_t nPosY;
       nPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-      pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(nullptr, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), nPosY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(nullptr, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), nPosY);
     }
 
     D2UnitStrc* pOwner;

@@ -12,7 +12,6 @@
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/CmdTbl.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
@@ -47,6 +46,7 @@
 #include "D2Common/Units/UnitFinds.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -1141,7 +1141,7 @@ void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMons
       DVar1 = D2_SEED_NEXT_VAL(nRngProduct);
       pUnit->sSeed = DVar1;
       nY = DVar1.nSeedLow % 5 - 2 + ptCenter.y;
-      pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nY);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nY);
       eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nSpawnX, nY, (int)pMonStats2->SizeX, 0x3f11);
       if (eCollision == COLLIDE_NONE) {
         UNIT::CUnit::CreateMissileOrMonster(nClassIdSaved, nSpawnX, nY, UNIT_MONSTER, 0);

@@ -18,6 +18,226 @@ struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
 typedef uint32_t DRAWMODE;
 typedef uint32_t GLOBALPALLETE;
+#ifndef RECON_FPTD_D2RendererFunctionsStrc_fpDrawGroundTile
+#define RECON_FPTD_D2RendererFunctionsStrc_fpDrawGroundTile
+typedef void (__fastcall *D2RendererFunctionsStrc_fpDrawGroundTile)(struct D2TileLibraryEntryStrc * pTile, struct D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, BYTE nAlpha, int nScreenPanels, void * pTileData);
+#endif
+#ifndef RECON_FPTD_D2RendererFunctionsStrc_fpDrawWallTile
+#define RECON_FPTD_D2RendererFunctionsStrc_fpDrawWallTile
+typedef BOOL (__fastcall *D2RendererFunctionsStrc_fpDrawWallTile)(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels);
+#endif
+#ifndef RECON_FPTD_fnBinkFrameCallback
+#define RECON_FPTD_fnBinkFrameCallback
+typedef void (__stdcall *fnBinkFrameCallback)();
+#endif
+#ifndef RECON_FPTD_fpActivateWindow
+#define RECON_FPTD_fpActivateWindow
+typedef BOOL (__fastcall *fpActivateWindow)(BOOL bActive);
+#endif
+#ifndef RECON_FPTD_fpAdjustPerspectivePosition
+#define RECON_FPTD_fpAdjustPerspectivePosition
+typedef void (__fastcall *fpAdjustPerspectivePosition)(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
+#endif
+#ifndef RECON_FPTD_fpBeginCutScene
+#define RECON_FPTD_fpBeginCutScene
+typedef BOOL (__stdcall *fpBeginCutScene)();
+#endif
+#ifndef RECON_FPTD_fpBeginScene
+#define RECON_FPTD_fpBeginScene
+typedef BOOL (__fastcall *fpBeginScene)(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
+#endif
+#ifndef RECON_FPTD_fpCheckCutScene
+#define RECON_FPTD_fpCheckCutScene
+typedef BOOL (__fastcall *fpCheckCutScene)();
+#endif
+#ifndef RECON_FPTD_fpCheckGamma
+#define RECON_FPTD_fpCheckGamma
+typedef int (__fastcall *fpCheckGamma)();
+#endif
+#ifndef RECON_FPTD_fpClearCaches
+#define RECON_FPTD_fpClearCaches
+typedef void (__fastcall *fpClearCaches)();
+#endif
+#ifndef RECON_FPTD_fpClearScreen
+#define RECON_FPTD_fpClearScreen
+typedef void (__fastcall *fpClearScreen)(BOOL bPartial);
+#endif
+#ifndef RECON_FPTD_fpCloseSmacker
+#define RECON_FPTD_fpCloseSmacker
+typedef void (__fastcall *fpCloseSmacker)(struct D2SmackerContextStrc * pContext);
+#endif
+#ifndef RECON_FPTD_fpCreateWindow
+#define RECON_FPTD_fpCreateWindow
+typedef BOOL (__fastcall *fpCreateWindow)(HWND hWnd, int nResolutionMode);
+#endif
+#ifndef RECON_FPTD_fpDebugFillBackBuffer
+#define RECON_FPTD_fpDebugFillBackBuffer
+typedef void (__fastcall *fpDebugFillBackBuffer)(int nPosX, int nPosY);
+#endif
+#ifndef RECON_FPTD_fpDecodeSmacker
+#define RECON_FPTD_fpDecodeSmacker
+typedef void (__fastcall *fpDecodeSmacker)(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int nVersion);
+#endif
+#ifndef RECON_FPTD_fpDestroyWindow
+#define RECON_FPTD_fpDestroyWindow
+typedef BOOL (__stdcall *fpDestroyWindow)();
+#endif
+#ifndef RECON_FPTD_fpDrawClippedImage
+#define RECON_FPTD_fpDrawClippedImage
+typedef void (__fastcall *fpDrawClippedImage)(struct D2GfxDataStrc * pData, int nPosX, int nPosY, void * pCropRect, int nDrawMode);
+#endif
+#ifndef RECON_FPTD_fpDrawImage
+#define RECON_FPTD_fpDrawImage
+typedef BOOL (__fastcall *fpDrawImage)(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette);
+#endif
+#ifndef RECON_FPTD_fpDrawImageFast
+#define RECON_FPTD_fpDrawImageFast
+typedef void (__fastcall *fpDrawImageFast)(struct D2GfxDataStrc * pData, int nPosX, int nPosY, BYTE nPaletteIndex);
+#endif
+#ifndef RECON_FPTD_fpDrawLight
+#define RECON_FPTD_fpDrawLight
+typedef void (__fastcall *fpDrawLight)(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int nPosY);
+#endif
+#ifndef RECON_FPTD_fpDrawLine
+#define RECON_FPTD_fpDrawLine
+typedef void (__fastcall *fpDrawLine)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
+#endif
+#ifndef RECON_FPTD_fpDrawPerspectiveImage
+#define RECON_FPTD_fpDrawPerspectiveImage
+typedef void (__fastcall *fpDrawPerspectiveImage)(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nScreenMode, BYTE * pPalette);
+#endif
+#ifndef RECON_FPTD_fpDrawRect
+#define RECON_FPTD_fpDrawRect
+typedef void (__fastcall *fpDrawRect)(RECT * pRect, BYTE nPaletteIndex);
+#endif
+#ifndef RECON_FPTD_fpDrawRectEx
+#define RECON_FPTD_fpDrawRectEx
+typedef void (__fastcall *fpDrawRectEx)(RECT * pRect, BYTE nPaletteIndex);
+#endif
+#ifndef RECON_FPTD_fpDrawShadow
+#define RECON_FPTD_fpDrawShadow
+typedef void (__fastcall *fpDrawShadow)(struct D2GfxDataStrc * pData, int nPosX, int nPosY);
+#endif
+#ifndef RECON_FPTD_fpDrawShadowTile
+#define RECON_FPTD_fpDrawShadowTile
+typedef BOOL (__fastcall *fpDrawShadowTile)(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, int nDrawMode, int nScreenPanels);
+#endif
+#ifndef RECON_FPTD_fpDrawShiftedImage
+#define RECON_FPTD_fpDrawShiftedImage
+typedef void (__fastcall *fpDrawShiftedImage)(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, DRAWMODE nDrawMode, GLOBALPALLETE nGlobalPaletteShift);
+#endif
+#ifndef RECON_FPTD_fpDrawSolidRect
+#define RECON_FPTD_fpDrawSolidRect
+typedef void (__fastcall *fpDrawSolidRect)(RECT * pRect, BYTE nPaletteIndex);
+#endif
+#ifndef RECON_FPTD_fpDrawSolidRectAlpha
+#define RECON_FPTD_fpDrawSolidRectAlpha
+typedef void (__fastcall *fpDrawSolidRectAlpha)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
+#endif
+#ifndef RECON_FPTD_fpDrawSolidRectEx
+#define RECON_FPTD_fpDrawSolidRectEx
+typedef void (__fastcall *fpDrawSolidRectEx)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, DRAWMODE nDrawMode);
+#endif
+#ifndef RECON_FPTD_fpDrawSolidSquare
+#define RECON_FPTD_fpDrawSolidSquare
+typedef void (__fastcall *fpDrawSolidSquare)(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex);
+#endif
+#ifndef RECON_FPTD_fpDrawString
+#define RECON_FPTD_fpDrawString
+typedef void (__fastcall *fpDrawString)(int nPosX, int nPosY, char * szFormat, va_list va);
+#endif
+#ifndef RECON_FPTD_fpDrawTransWallTile
+#define RECON_FPTD_fpDrawTransWallTile
+typedef BOOL (__fastcall *fpDrawTransWallTile)(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha);
+#endif
+#ifndef RECON_FPTD_fpDrawVerticalCropImage
+#define RECON_FPTD_fpDrawVerticalCropImage
+typedef void (__fastcall *fpDrawVerticalCropImage)(struct D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode);
+#endif
+#ifndef RECON_FPTD_fpEndCutScene
+#define RECON_FPTD_fpEndCutScene
+typedef void (__fastcall *fpEndCutScene)(HWND hWnd, int nResolutionMode, int nWindowState);
+#endif
+#ifndef RECON_FPTD_fpEndScene1
+#define RECON_FPTD_fpEndScene1
+typedef BOOL (__fastcall *fpEndScene1)();
+#endif
+#ifndef RECON_FPTD_fpEndScene2
+#define RECON_FPTD_fpEndScene2
+typedef BOOL (__fastcall *fpEndScene2)();
+#endif
+#ifndef RECON_FPTD_fpGetBackBuffer
+#define RECON_FPTD_fpGetBackBuffer
+typedef BOOL (__fastcall *fpGetBackBuffer)(BYTE * pBuffer);
+#endif
+#ifndef RECON_FPTD_fpGetRenderStatistics
+#define RECON_FPTD_fpGetRenderStatistics
+typedef int * (__fastcall *fpGetRenderStatistics)();
+#endif
+#ifndef RECON_FPTD_fpGetScreenSize
+#define RECON_FPTD_fpGetScreenSize
+typedef int (__fastcall *fpGetScreenSize)(int * pWidth, int * pHeight);
+#endif
+#ifndef RECON_FPTD_fpInitPerspective
+#define RECON_FPTD_fpInitPerspective
+typedef BOOL (__fastcall *fpInitPerspective)(struct D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers);
+#endif
+#ifndef RECON_FPTD_fpInitialize
+#define RECON_FPTD_fpInitialize
+typedef BOOL (__fastcall *fpInitialize)(HINSTANCE hInstance);
+#endif
+#ifndef RECON_FPTD_fpPerspectiveScalePosition
+#define RECON_FPTD_fpPerspectiveScalePosition
+typedef void (__fastcall *fpPerspectiveScalePosition)(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);
+#endif
+#ifndef RECON_FPTD_fpPlayCutScene
+#define RECON_FPTD_fpPlayCutScene
+typedef void (__fastcall *fpPlayCutScene)(char * szFile, int nResolutionMode, fnBinkFrameCallback fpFrame);
+#endif
+#ifndef RECON_FPTD_fpPlayerSmacker
+#define RECON_FPTD_fpPlayerSmacker
+typedef void (__fastcall *fpPlayerSmacker)(struct D2SmackerContextStrc * pContext);
+#endif
+#ifndef RECON_FPTD_fpRelease
+#define RECON_FPTD_fpRelease
+typedef BOOL (__fastcall *fpRelease)();
+#endif
+#ifndef RECON_FPTD_fpResizeWindow
+#define RECON_FPTD_fpResizeWindow
+typedef BOOL (__fastcall *fpResizeWindow)(HWND hWnd, BOOL bForceResize);
+#endif
+#ifndef RECON_FPTD_fpSetDefaultPerspectiveFactor
+#define RECON_FPTD_fpSetDefaultPerspectiveFactor
+typedef void (__fastcall *fpSetDefaultPerspectiveFactor)();
+#endif
+#ifndef RECON_FPTD_fpSetGamma
+#define RECON_FPTD_fpSetGamma
+typedef void (__fastcall *fpSetGamma)(int nGamma);
+#endif
+#ifndef RECON_FPTD_fpSetGlobalLight
+#define RECON_FPTD_fpSetGlobalLight
+typedef void (__fastcall *fpSetGlobalLight)(int nRed, int nGreen, int nBlue);
+#endif
+#ifndef RECON_FPTD_fpSetOption
+#define RECON_FPTD_fpSetOption
+typedef BOOL (__fastcall *fpSetOption)(int nOption, int nValue);
+#endif
+#ifndef RECON_FPTD_fpSetPalette
+#define RECON_FPTD_fpSetPalette
+typedef void (__fastcall *fpSetPalette)(LPPALETTEENTRY pPalette);
+#endif
+#ifndef RECON_FPTD_fpSetPaletteTable
+#define RECON_FPTD_fpSetPaletteTable
+typedef void (__fastcall *fpSetPaletteTable)(BYTE * * ppPaletteTable);
+#endif
+#ifndef RECON_FPTD_fpSetPerspectiveScale
+#define RECON_FPTD_fpSetPerspectiveScale
+typedef void (__fastcall *fpSetPerspectiveScale)(int nScaleX, int nScaleY);
+#endif
+#ifndef RECON_FPTD_fpUpdateScaleFactor
+#define RECON_FPTD_fpUpdateScaleFactor
+typedef void (__fastcall *fpUpdateScaleFactor)(int nScaleFactor);
+#endif
 
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows

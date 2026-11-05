@@ -35,6 +35,96 @@
       ]
     },
     {
+      "name": "CheckCutScene",
+      "address": "006b1c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c00"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "CheckCutScene"
+      ]
+    },
+    {
+      "name": "UpdateScaleFactor",
+      "address": "006b1c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c10"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "UpdateScaleFactor"
+      ]
+    },
+    {
+      "name": "CheckGamma",
+      "address": "006b1c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c20"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "CheckGamma"
+      ]
+    },
+    {
+      "name": "EndScene2",
+      "address": "006b1c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c30"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "EndScene2"
+      ]
+    },
+    {
+      "name": "GetScreenSize",
+      "address": "006b1c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c60"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "GetScreenSize"
+      ]
+    },
+    {
+      "name": "SetPalette",
+      "address": "006b1c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c70"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "LPPALETTEENTRY",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "PALETTE_GetColorByIndex",
       "address": "006b1d50",
       "lines": [
@@ -49,6 +139,23 @@
       ],
       "usedTypes": [
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SetPaletteTable",
+      "address": "006b1d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1d60"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetPaletteTable"
+      ],
+      "usedTypes": [
+        "BYTE *"
       ]
     },
     {
@@ -112,6 +219,48 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_SetTextureFilterMode"
+      ]
+    },
+    {
+      "name": "GetRenderStatistics",
+      "address": "006b20a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b20a0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "GetRenderStatistics"
+      ]
+    },
+    {
+      "name": "ActivateWindow",
+      "address": "006b20b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b20b0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "ActivateWindow"
+      ]
+    },
+    {
+      "name": "SetOption",
+      "address": "006b20c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b20c0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetOption"
       ]
     },
     {
@@ -2156,6 +2305,46 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
+      ]
+    },
+    {
+      "name": "SehHandler_6ca520",
+      "address": "006ca520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca520"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SehHandler_6ca520"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "SehHandler_6ca530",
+      "address": "006ca530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca530"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SehHandler_6ca530"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
       ]
     }
   ]

@@ -4,9 +4,7 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
@@ -42,6 +40,7 @@
 #include "D2Game/Monster/Monster.h"
 #include "D2Game/Monsters/Spawn.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -960,14 +959,13 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     pUnit->sSeed = sNewSeed;
     uint32_t nSpawnYJitter = sNewSeed.nSeedLow % 0x18 - 0xc + nPosY;
     __frame1.nSpawnYOut = nSpawnYJitter;
-    D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, __frame1.pMemoryTmp, nSpawnYJitter);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), __frame1.pMemoryTmp, nSpawnYJitter);
     if (!pSpawnRoom) {
       return false;
     }
 
     nSpawnYJitter = __frame1.nSpawnYOut;
-    D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), __frame1.pMemoryTmp, nSpawnYJitter);
+    D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), __frame1.pMemoryTmp, nSpawnYJitter);
     pTargetUnit = Create::SpawnMonsterAtRoomPos(pGame, pSpawnRoom, __frame1.pMemoryTmp, __frame1.nSpawnYOut, __frame0.nCloneClassId, eSpawnAnimMode, -1, 0);
     if (!pTargetUnit) {
       return false;

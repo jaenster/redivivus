@@ -36,6 +36,7 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"

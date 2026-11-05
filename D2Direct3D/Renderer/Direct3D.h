@@ -1109,12 +1109,22 @@ namespace D2Direct3D::Renderer {
 // it sets is the one Direct3DCallBack tests for "Supports 1555 textures".
 HRESULT __stdcall D3D_EnumTextureFormatsCallback(void * lpDDPixFmt, DWORD * pnDeviceFlags);
 void __fastcall ClearCaches();
+BOOL __fastcall CheckCutScene();
+void __fastcall UpdateScaleFactor(int nScaleFactor);
+int __fastcall CheckGamma();
+BOOL __fastcall EndScene2();
+int __fastcall GetScreenSize(int * pWidth, int * pHeight);
+void __fastcall SetPalette(LPPALETTEENTRY pPalette);
 uint32_t __fastcall PALETTE_GetColorByIndex(int nPaletteIndex);
+void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused);
 void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode);
 // Sets Direct3D alpha blending mode. Mode 1=opaque, 2=additive, 3=modulate, 4=alpha blend. Caches current mode to avoid redundant state changes.
 void __fastcall SetBlendMode(int nBlendMode);
 void __fastcall RENDERER_D3D_SetTextureFilterMode(int nFilterMode);
+int * __fastcall GetRenderStatistics();
+BOOL __fastcall ActivateWindow();
+BOOL __fastcall SetOption(int nOption, int nValue);
 void __fastcall DIRECTD3D_LogError(char * szErrorMessage, DWORD nResult);
 void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, int nDeviceIndex);
 void __stdcall RENDERER_D3D_AllocateTextureCaches();
@@ -1214,6 +1224,8 @@ void __stdcall RENDERER_D3D_ResetSmackerSurfaces();
 void __stdcall RENDERER_D3D_PresentSmackerFrame();
 void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int nVersion);
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
+_EXCEPTION_DISPOSITION SehHandler_6ca520(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+_EXCEPTION_DISPOSITION SehHandler_6ca530(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 // 14 internal functions (defined in .cpp)
 
 } // namespace D2Direct3D::Renderer

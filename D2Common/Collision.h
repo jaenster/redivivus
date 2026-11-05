@@ -36,6 +36,7 @@ struct D2BoundingBoxStrc {
 namespace D2Common::Collision {
 
 // Function declarations
+struct D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // Computes the tile distance between two units, accounting for unit collision sizes. Reads each unit's X/Y position from its static path (objects/tiles) or dynamic path (movers). For small, close units (dx,dy<8 and both sizes<4) it indexes a precomputed table gnCollisionGridMaxNodes for an exact short-range distance (with a -1 adjustment when a size==3). Otherwise it falls back to an edge-to-edge estimate: subtracts half-sizes from the axis deltas and combines them (diagonal-weighted: larger axis + 2*smaller). Returns the distance in tiles; 0 when the table entry is negative.
 int32_t __stdcall GetDistanceBetweenUnits(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Returns an isometric-style distance between two units suitable for collision/range checks. Fetches X and Y world positions for both units (handling static-path objects vs dynamic-path units), subtracts half the sum of their X-sizes to get edge-to-edge gaps, clamps negatives to zero, then applies the D2 diagonal approximation (shorter_axis + 2*longer_axis) / 2.

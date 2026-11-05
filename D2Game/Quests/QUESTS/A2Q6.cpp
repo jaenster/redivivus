@@ -4,10 +4,9 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -43,6 +42,7 @@
 #include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/SkillsServer.h"
@@ -1203,9 +1203,7 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
         if (pDVar1) {
           nOrificeX = D2Client::Units::GetXPosFromDynamicPathUnit(pDVar1);
           nOrificeY = D2Client::Units::GetYPosFromDynamicPathUnit(pDVar1);
-          nSpawnY = nOrificeY + 3;
-          pNearbyRoom = D2Common::Units::UNITS_GetRoom(pDVar1);
-          pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pNearbyRoom, nOrificeX - 0xd, nSpawnY);
+          pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pDVar1), nOrificeX - 0xd, nOrificeY + 3);
           if (pNearbyRoom) {
             pUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 100, nOrificeX - 0xd, nOrificeY + 3, pGame, pNearbyRoom, 1, 1, nullptr);
             if (pUnit) {
@@ -1518,7 +1516,7 @@ void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       nPosX = 0;
     }
 
-    D2RoomStrc* pRoom_00 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX - 0xd, nPosY + 3);
+    D2RoomStrc* pRoom_00 = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX - 0xd, nPosY + 3);
     D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pRoom, 0);
     if (!pRoom_00) {
       return;

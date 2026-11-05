@@ -6,10 +6,8 @@
 #include "D2Client/D2GSPacketSrv0x91.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -64,6 +62,7 @@
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerIntro.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS/A1Q1.h"
 #include "D2Game/Quests/QUESTS/A1Q2.h"
@@ -93,6 +92,7 @@
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
+#include "D2Game/UNIT/sunitproxy.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Save.h"
@@ -1791,7 +1791,7 @@ void __fastcall FindSpawnableLocation(D2RoomStrc * pRoom, POINT * pPoint, uint32
             nY = nYInner + nScanOriginY;
             pRowRoom = pRoom;
             if ((int)nY < (int)nRoomYStart || (int)nY >= (int)(sRoomCoords.dwYSize + nRoomYStart)) {
-              pRowRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCurX, nY);
+              pRowRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nCurX, nY);
               nYStep = nNegRadius;
               nRoomYStart = sRoomCoords.dwYStart;
             }
@@ -1804,7 +1804,7 @@ void __fastcall FindSpawnableLocation(D2RoomStrc * pRoom, POINT * pPoint, uint32
                   D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRowRoom, &sRoomCoords);
                   nCurX = nX;
                   if ((int)nX < sRoomCoords.dwXStart || (int)nY >= sRoomCoords.dwXSize + sRoomCoords.dwXStart) {
-                    pCandidateRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRowRoom, nX, nY);
+                    pCandidateRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRowRoom, nX, nY);
                   }
                   if (pCandidateRoom) {
                     nVectorX = nScanRadius * 2 + 1;
@@ -1812,7 +1812,7 @@ void __fastcall FindSpawnableLocation(D2RoomStrc * pRoom, POINT * pPoint, uint32
                     if (wCollisionResult == COLBIT_NONE && nX >= (uint32_t)sRoomCoords.dwXStart && nX < (uint32_t)(sRoomCoords.dwXSize + sRoomCoords.dwXStart) && nY >= (uint32_t)sRoomCoords.dwYStart && nY < (uint32_t)(sRoomCoords.dwYSize + sRoomCoords.dwYStart)) {
                       pOutPoint->x = nX + nHalfRadius;
                       pOutPoint->y = nY + nHalfRadius;
-                      pCandidateRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pOrigRoom, nX + nHalfRadius, nY + nHalfRadius);
+                      pCandidateRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pOrigRoom, nX + nHalfRadius, nY + nHalfRadius);
                       *pRoomsNear = pCandidateRoom;
                       return;
                     }
@@ -2117,7 +2117,7 @@ D2UnitStrc * __fastcall QUEST_SpawnMonsterNearCoords(::SGAMEDATA * pGame, int32_
         do {
           sSpawnPoint.x = nX + 1;
           sSpawnPoint.y = nY + 1;
-          pBestRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom_00, sSpawnPoint.x, sSpawnPoint.y);
+          pBestRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom_00, sSpawnPoint.x, sSpawnPoint.y);
           if (!pBestRoom) {
             sSpawnPoint.x = nOrigSpawnX;
             sSpawnPoint.y = nSpawnY;
@@ -2195,8 +2195,7 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2Unit
 D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique) {
     int32_t nMonstatClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetPresetActValue(nAct, nSuperUnique);
     LONG nY = pPoint->y;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, nY);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pPoint->x, nY);
     if (pRoom) {
       D2UnitStrc* pSpawnedMonster;
       pSpawnedMonster = Monsters::Spawn::SpawnMonster(pGame, pRoom, nMonstatClassId, pPoint->x, pPoint->y, 1);
@@ -3100,7 +3099,7 @@ static void __stdcall ReplaceJerhyn(D2RoomStrc * pRoom, D2QuestDataStrc * pQuest
     }
 
     pPoint->y += -3;
-    pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
+    pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, pPoint->x, pPoint->y);
     FindSpawnableLocation(pRoom, pPoint, 3, 0x100, &pNearbyRoom, 9, 100);
     pSevenTombsData = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, pNearbyRoom, pPoint->x, pPoint->y, 0xc9, eD2MonsterAnimMode_ns::Neutral, -1, 0);
     if (!(pSevenTombsData || (pSevenTombsData = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, pNearbyRoom, pPoint->x, pPoint->y, 0xc9, eD2MonsterAnimMode_ns::Neutral, 2, 0) , pSevenTombsData != 0))) {
@@ -3437,8 +3436,7 @@ void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 static void CreateSealGlow(D2ObjectOperateFnArg * pOperateArg, POINT * pPoint, int32_t nSealIndex) {
     int32_t nCollisionMask;
     LONG nY = pPoint->y;
-    D2RoomStrc* pVictimRoom = D2Common::Units::UNITS_GetRoom(pOperateArg->sArg.pVictim);
-    pVictimRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pVictimRoom, pPoint->x, nY);
+    D2RoomStrc* pVictimRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pOperateArg->sArg.pVictim), pPoint->x, nY);
     if (!pVictimRoom) {
       return;
     }

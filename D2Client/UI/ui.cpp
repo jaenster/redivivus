@@ -87,12 +87,14 @@
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Text.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -3130,7 +3132,7 @@ void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
       uint16_t wChar;
       wChar = wszText[i];
       if ((uint16_t)wChar < 0x100) {
-        wChar = CharacterLookupTable[(uint16_t)wChar];
+        wChar = D2Lang::Unicode::UNISYS::CharacterLookupTable[(uint16_t)wChar];
       }
 
       wszText[i] = wChar;

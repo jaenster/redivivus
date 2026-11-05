@@ -4,11 +4,10 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
+#include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -52,6 +51,7 @@
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
+#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A4Q2.h"
@@ -295,8 +295,7 @@ static void __stdcall Q33_SpawnAnyaAndPortal(D2QuestDataStrc * pQuestData, D2Que
 
     D2Common::Units::GetCoords(pAnyaMonster, &sAnyaCoords);
     LONG nAnyaY = sAnyaCoords.y;
-    pAnyaRoom = D2Common::Units::UNITS_GetRoom(pAnyaMonster);
-    pAnyaRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pAnyaRoom, sAnyaCoords.x, nAnyaY);
+    pAnyaRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pAnyaMonster), sAnyaCoords.x, nAnyaY);
     if (pAnyaRoom) {
       pAnyaMonster = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sAnyaCoords.x, sAnyaCoords.y, pQuestData->pGame, pAnyaRoom, 1, 1, nullptr);
       if (pAnyaMonster) {
@@ -1548,8 +1547,7 @@ BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     }
 
     int nPortalY = pDVar2->sAnyaPosition.y;
-    D2RoomStrc* pNearbyRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pNearbyRoom, pDVar2->sAnyaPosition.x, nPortalY);
+    D2RoomStrc* pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pDVar2->sAnyaPosition.x, nPortalY);
     if (!pNearbyRoom) {
       pDVar2->sAnyaPosition.x += 3;
       pDVar2->sAnyaPosition.y += 3;
