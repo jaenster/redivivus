@@ -68,16 +68,16 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 [`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
 compares the machine code of each function with 1.14d. It is a check on the decompilation:
 where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1969 of the Ghidra database:
+At this commit, generated from version 1970 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|7,690 of 14,626 (52.6%)|
-|Functions without placeholders|7,123 of 14,626 (48.7%), not counting the 567 identical functions that are placeholders (below)|
-|Code|625,144 of 2,598,518 bytes (24.06%)|
-|Instructions|1,814,727 of 2,598,518 bytes (69.8%), counting identical instructions in functions that still differ|
+|Functions|7,695 of 14,626 (52.6%)|
+|Functions without placeholders|7,128 of 14,626 (48.7%), not counting the 567 identical functions that are placeholders (below)|
+|Code|629,865 of 2,598,518 bytes (24.24%)|
+|Instructions|1,815,425 of 2,598,518 bytes (69.9%), counting identical instructions in functions that still differ|
 
-Of the 7,690 identical functions, 567 are recovered unreferenced functions: code in
+Of the 7,695 identical functions, 567 are recovered unreferenced functions: code in
 1.14d that nothing calls by a direct reference and that Ghidra never defined as a function. They
 are in the tree as placeholders named `Unreferenced_<address>`, or `<twin>_Unref_<address>` where
 the bytes repeat a named function. They count among the original functions either way, so the
@@ -87,8 +87,8 @@ These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt)
 rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
 exceptions is left out as well, and so is the PKWARE compression library, linked into the
 original as a prebuilt 1997 library that no Visual C++ 2005 compile produced. Over the whole binary, runtime
-included: 8,250 of 15,711 functions (52.5%), 724,119 of
-2,748,975 bytes (26.34%).
+included: 8,255 of 15,711 functions (52.5%), 728,840 of
+2,748,975 bytes (26.51%).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
