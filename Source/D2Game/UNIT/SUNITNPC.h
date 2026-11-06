@@ -13,6 +13,7 @@
 
 // Forward declarations
 struct D2ClientStrc;
+struct D2GameNpcStrc;
 struct D2InventoryStrc;
 struct D2NpcTradeStateStrc;
 struct D2SeedStrc;
@@ -115,7 +116,7 @@ void __fastcall SUNITNPC_CheckCanIdentify(::SGAMEDATA * pGame, struct D2UnitStrc
 // Server-side: builds the randomized gamble-screen inventory offered by a gambling NPC to a player. Allocates a gamble record (new player inventory + player GUID) onto the NPC game-data list. Using the NPC's RNG seed and difficulty GambleRare/Set/Unique/Uber/Ultra weights, rolls up to 14 items from the per-level gamble table, repairs/recharges item codes, picks a quality tier, creates each item (ITEM_CreateFromTemplate), marks it identified and on the inventory page, places it into the gamble inventory via SERVER_ItemToInventory, and frees the item if placement fails.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayerUnit, int32_t nNpcGameData);
-void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayerUnit, int32_t nNpcGameData);
+void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayerUnit, struct D2GameNpcStrc * nNpcGameData);
 // Dispatches an NPC interaction for a player. nMode==0: repair/trade path — registers player interaction, repairs items, and initialises inventory for vendor NPCs (Charsi=0x96, Fara=0xC6, Larzuk=0x203, Halbu=0xFC) if not yet done. nMode!=0 with a personal inventory: registers gamble interaction and validates it via SUNITNPC_ValidateNpcInteraction.
 void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc, int32_t nMode);
 // Strips all active hireable-only states (flag array 12) from a unit by iterating every state in sgptDataTable->nTxtStatesSize. For each active state that has the hireable flag set and owns a stat list, calls STATLIST_RemoveAndRecalc then FreeStatList. Returns non-zero if any state was removed.

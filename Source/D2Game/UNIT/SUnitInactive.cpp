@@ -200,7 +200,7 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGa
     sRecord.nItemDataSize = (int16_t)nSerializedLen;
     sRecord.nDespawnTimer = ITEMS::Items::Drop::ITEM_CalculateDespawnTimer(pGame, pUnit);
     uint32_t nSerializedBytes = (uint32_t)(uint16_t)sRecord.nItemDataSize;
-    int* pNewInactiveRecord = (int*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nSerializedBytes + 0xf, ".\\UNIT\\SUnitInactive.cpp", 0x1e2);
+    D2InactiveItemRecordStrc* pNewInactiveRecord = (D2InactiveItemRecordStrc*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nSerializedBytes + 0xf, ".\\UNIT\\SUnitInactive.cpp", 0x1e2);
     memcpy(pNewInactiveRecord, &sRecord, nSerializedBytes + 0xf);
     int32_t iVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
     if (iVar1) {
@@ -220,12 +220,12 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGa
 
     SUnit::FreeServerUnit(pGame, pUnit);
     if (pOutInactiveRecord) {
-      *pOutInactiveRecord = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
+      *pOutInactiveRecord = pNewInactiveRecord;
       return;
     }
 
-    *pNewInactiveRecord = (int)pInactiveList->pInactiveItems;
-    pInactiveList->pInactiveItems = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
+    pNewInactiveRecord->pNext = pInactiveList->pInactiveItems;
+    pInactiveList->pInactiveItems = pNewInactiveRecord;
     return;
 }
 

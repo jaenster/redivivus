@@ -13,6 +13,7 @@
 
 // Forward declarations
 struct D2ItemGenContextStrc;
+struct D2MagicAffixTxt;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 

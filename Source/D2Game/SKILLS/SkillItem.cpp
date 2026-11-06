@@ -1760,7 +1760,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnit
 BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t _bIsUndead;
     bool bIsUndead;
-    if ((pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER) == 0) {
+    if (!(pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
     }
 
@@ -1774,7 +1774,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    _bIsUndead = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 0x80);
+    _bIsUndead = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 0x80);
     if ((int)_bIsUndead >= nChance) {
       return 0;
     }

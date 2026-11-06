@@ -3006,7 +3006,7 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(D2UnitStrc * pSwitchParam, in
       case 3:
         nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
       nSavedAlignment = nAlignment;
-      nDistance = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+      nDistance = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2);
       if (nAlignment == 1) {
         if (nDistance) {
           nAlignment_00 = '\x02';
@@ -5121,7 +5121,7 @@ void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
       if (pMonStats->aSkill[0] >= 0 && pGame->dwGameFrame > pAiGeneral->dwArg1 && (int)nDistToTarget < (int)pMonStats->aip[7][pGame->nDifficulty]) {
         uRandPct = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100);
         if ((int)uRandPct < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-          nDistToTarget = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 4);
+          nDistToTarget = D2Common::Seed::RNG_GetRandomInRange(pSeed, 4);
           nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
           nOffsetX = gItemPower_t_PropertyTypeId2[nDistToTarget * 2];
           nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
@@ -8138,7 +8138,7 @@ void __fastcall AITHINK_Fn1_Hireable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
           nMaxFollowDist = 0xc;
         }
 
-        nRandVal = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 0x80);
+        nRandVal = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 0x80);
         if ((int)nRandVal < (int)nMaxFollowDist) {
           WalkRandomOffset(pGame, pUnit, 5);
           return;
@@ -8334,7 +8334,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
         pAiParam = (D2AiParamStrc*)D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         nCircleRandOffset = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 10);
         if (__frame0.nCirclePhase < 0x19) {
-          bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+          bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2);
           if (bFlipSign) {
             nCircleRandOffset = -nCircleRandOffset;
           }
@@ -8351,7 +8351,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
           }
         } else {
           if (__frame0.nCirclePhase < 0x32) {
-            bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+            bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2);
             if (bFlipSign) {
               nCircleRandOffset = -nCircleRandOffset;
             }
@@ -8363,7 +8363,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
           apply_segment_3:
           if (__frame0.nCirclePhase < 0x4b) {
-            bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+            bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2);
             if (bFlipSign) {
               nCircleRandOffset = -nCircleRandOffset;
             }
@@ -8374,7 +8374,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
           }
         }
 
-        bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2);
+        bFlipSign = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2);
         if (bFlipSign) {
           nCircleRandOffset = -nCircleRandOffset;
         }
@@ -8846,7 +8846,7 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       if ((int)nRandRoll < pMonsterAiGeneral->dwArg0) {
         nDistToTarget = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 0xf);
         nDistToTarget += 5;
-        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
+        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(pSeed, 2);
         if (nRandRoll) {
           nWeightedDistToHome = nDistToTarget;
           nDistToTarget = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nDistToTarget);
@@ -8854,12 +8854,12 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           nWeightedDistToHome = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nDistToTarget);
         }
 
-        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
+        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(pSeed, 2);
         if (nRandRoll) {
           nWeightedDistToHome = -nWeightedDistToHome;
         }
 
-        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pSeed->nSeedLow, 2);
+        nRandRoll = D2Common::Seed::RNG_GetRandomInRange(pSeed, 2);
         pFindTarget = pTarget;
         if (nRandRoll) {
           nDistToTarget = -nDistToTarget;
@@ -17325,7 +17325,7 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
         nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         if ((int)nRoll < 0x3c) {
           ClearCollisionAndResetPath(pGame, pUnit);
-          nRoll = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 8);
+          nRoll = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 8);
           pAiGeneral->dwArg0 = nRoll + 0x18;
           MoveAndCastSkill(pGame, pUnit, pTarget, 8, 8, 8);
           RestartAiThink(pGame, pUnit, 0xc);

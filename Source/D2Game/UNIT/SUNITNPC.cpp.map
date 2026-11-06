@@ -1061,9 +1061,10 @@
         "GAMBLE_GenerateGambleInventory"
       ],
       "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcProxyInventoryStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "int32_t"
+        "SGAMEDATA"
       ]
     },
     {

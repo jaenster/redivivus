@@ -17,6 +17,7 @@
         "SKILLITEMS_SetDispatchTableEntry"
       ],
       "usedTypes": [
+        "D2MagicAffixTxt",
         "int32_t"
       ]
     },

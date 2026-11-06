@@ -20,7 +20,7 @@ namespace D2Common::Seed {
 // Function declarations
 __attribute__((noinline)) inline uint32_t __fastcall UNIT_GetModuloFromSeed(struct D2SeedStrc * pSeed, uint32_t nModulo);
 __attribute__((noinline)) inline uint32_t __fastcall RANDOM_RandomNumberSelector(struct D2SeedStrc * pSeed, uint32_t nModulo);
-uint32_t __fastcall RNG_GetRandomInRange(uint32_t * pSeed, int32_t nMax);
+uint32_t __fastcall RNG_GetRandomInRange(struct D2SeedStrc * pSeed, int32_t nMax);
 uint32_t __fastcall SEED_GenerateRandomSeed(int32_t nSeedOffset);
 void __fastcall SEED_InitDefault(struct D2SeedStrc * pSeed);
 void __fastcall InitSeed_Param_666(struct D2SeedStrc * pSeed, int32_t nInitSeed);

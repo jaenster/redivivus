@@ -415,6 +415,8 @@ static void __stdcall ITEM_ReequipItemOnBody(D2UnitStrc * pUnit, int32_t bApplyE
 // Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
 // @sourcefile .\UNIT\Item.cpp
 void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
+    D2InventoryStrc* pInventory_00;
+    eD2PlayerAnimMode eVar1;
     uint8_t byItemComponent;
     eD2BodyLoc eBodyLoc;
     D2UnitStrc* pEquipItem;
@@ -426,9 +428,8 @@ void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
     int nItemQuality;
     bool bIterRemaining;
     int nSkillState[7];
-    D2InventoryStrc* pInventoryReequip;
     BOOL bReequippedThisPass;
-    D2UnitStrc* pBodyLocItem;
+    BOOL bNeedsGfxReload;
     if (!(pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitFlags >> 9 & 1))) {
       return;
     }
@@ -438,11 +439,9 @@ void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
       return;
     }
 
-    BOOL bNeedsGfxReload = 0;
-    D2InventoryStrc* pInventoryRef = pInventory;
+    bool bVar2 = false;
     ITEM_SaveSkillSelections(nSkillState, pUnit);
     for (pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory); pEquipItem; pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pEquipItem)) {
-      pBodyLocItem = pEquipItem;
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pEquipItem);
       if (pCarriedItem) {
         bMeetsRequirements = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pEquipItem);
@@ -455,7 +454,6 @@ void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
               if (bMeetsRequirements) {
                 D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 0);
                 ITEM_ApplySocketableAndEquipStats(0, pUnit, pCarriedItem);
-                pEquipItem = pBodyLocItem;
               }
             }
           }
@@ -463,84 +461,75 @@ void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
       }
     }
 
-    pBodyLocItem = 0;
+    int32_t pBodyLocItem = 0;
     do {
-      pEquipItem = pBodyLocItem;
-      pCarriedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventoryRef, (int32_t)pBodyLocItem);
-      if (pCarriedItem) {
-        bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pCarriedItem, ITEMFLAG_BROKEN, 0x203, ".\\UNIT\\Item.cpp");
-        if (!bItemFlag || (pStatOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, nullptr) , pStatOwner != 0)) {
-          bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 0x208, ".\\UNIT\\Item.cpp");
-          if (!bItemFlag || (pStatOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, nullptr) , pStatOwner != 0)) {
-            bMeetsRequirements = ITEM_CheckItemEquipRequirements(pUnit, pCarriedItem);
+      pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, pBodyLocItem);
+      if (pEquipItem) {
+        bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pEquipItem, ITEMFLAG_BROKEN, 0x203, ".\\UNIT\\Item.cpp");
+        if (!bItemFlag || (pCarriedItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pEquipItem, nullptr) , pCarriedItem != 0)) {
+          bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pEquipItem, ITEMFLAG_DISABLED, 0x208, ".\\UNIT\\Item.cpp");
+          if (!bItemFlag || (pCarriedItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pEquipItem, nullptr) , pCarriedItem != 0)) {
+            bMeetsRequirements = ITEM_CheckItemEquipRequirements(pUnit, pEquipItem);
             if (!bMeetsRequirements) {
-              D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 1);
-              byItemComponent = D2Common::Units::GetItemComponent(pUnit, pCarriedItem);
-              ITEM_RemoveItemFromBodyAndRecalc((uint32_t)byItemComponent, pCarriedItem, pUnit);
-              bNeedsGfxReload = 1;
-              pEquipItem = pBodyLocItem;
+              D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pEquipItem, ITEMFLAG_DISABLED, 1);
+              byItemComponent = D2Common::Units::GetItemComponent(pUnit, pEquipItem);
+              ITEM_RemoveItemFromBodyAndRecalc((uint32_t)byItemComponent, pEquipItem, pUnit);
+              bVar2 = true;
             }
           }
         }
       }
 
-      pBodyLocItem = (D2UnitStrc*)((int)pEquipItem + 1);
-    } while ((int)pBodyLocItem < 0xb);
+      pBodyLocItem++;
+    } while (pBodyLocItem < 0xb);
 
     int nBodyLocIter = 100;
     do {
-      bReequippedThisPass = 0;
+      bIterRemaining = false;
       pBodyLocItem = 0;
       do {
-        pEquipItem = pBodyLocItem;
-        pCarriedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventoryRef, (int32_t)pBodyLocItem);
-        if (pCarriedItem) {
-          bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pCarriedItem, ITEMFLAG_BROKEN, 0x226, ".\\UNIT\\Item.cpp");
+        pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, pBodyLocItem);
+        if (pEquipItem) {
+          bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pEquipItem, ITEMFLAG_BROKEN, 0x226, ".\\UNIT\\Item.cpp");
           if (!bItemFlag) {
-            bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 0x22a, ".\\UNIT\\Item.cpp");
-            if (bItemFlag || (pStatOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, nullptr) , !pStatOwner)) {
-              bMeetsRequirements = ITEM_CheckItemEquipRequirements(pUnit, pCarriedItem);
+            bItemFlag = D2Common::ITEMS::Items::CheckItemFlag(pEquipItem, ITEMFLAG_DISABLED, 0x22a, ".\\UNIT\\Item.cpp");
+            if (bItemFlag || (pCarriedItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pEquipItem, nullptr) , !pCarriedItem)) {
+              bMeetsRequirements = ITEM_CheckItemEquipRequirements(pUnit, pEquipItem);
               if (bMeetsRequirements) {
-                D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 0);
-                byItemComponent = D2Common::Units::GetItemComponent(pUnit, pCarriedItem);
-                pInventory = pUnit->pInventory;
-                bNeedsGfxReload = pCarriedItem->eAnimMode.ePlayerMode;
-                bReequippedThisPass = (BOOL)byItemComponent;
-                pInventoryReequip = pInventory;
-                if (pInventory) {
-                  eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pCarriedItem);
+                D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pEquipItem, ITEMFLAG_DISABLED, 0);
+                byItemComponent = D2Common::Units::GetItemComponent(pUnit, pEquipItem);
+                pInventory_00 = pUnit->pInventory;
+                eVar1 = pEquipItem->eAnimMode.ePlayerMode;
+                if (pInventory_00) {
+                  eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pEquipItem);
                   if (eBodyLoc != BODYLOC_SWAPPED_R_ARM && eBodyLoc != BODYLOC_SWAPPED_L_ARM) {
-                    D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventory, pCarriedItem);
-                    Engine::Gfx::GFX_ClearAllModeFlags(pUnit, bReequippedThisPass);
-                    if (bNeedsGfxReload == 1) {
-                      pEquipItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, nullptr);
-                      if (!pEquipItem) {
-                        ITEM_ApplySocketableAndEquipStats(1, pUnit, pCarriedItem);
-                        pInventory = pInventoryReequip;
+                    D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventory_00, pEquipItem);
+                    Engine::Gfx::GFX_ClearAllModeFlags(pUnit, (uint32_t)byItemComponent);
+                    if (eVar1 == eD2PlayerAnimMode_ns::Neutral) {
+                      pCarriedItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pEquipItem, nullptr);
+                      if (!pCarriedItem) {
+                        ITEM_ApplySocketableAndEquipStats(1, pUnit, pEquipItem);
                       }
                     }
 
-                    D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pCarriedItem);
+                    D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory_00, pEquipItem);
                   }
                 }
 
-                bReequippedThisPass = 1;
-                bNeedsGfxReload = 1;
-                pEquipItem = pBodyLocItem;
+                bIterRemaining = true;
+                bVar2 = true;
               }
             }
           }
         }
 
-        pBodyLocItem = (D2UnitStrc*)((int)pEquipItem + 1);
-      } while ((int)pBodyLocItem < 0xb);
-    } while (bReequippedThisPass && (bIterRemaining = nBodyLocIter != 0 , nBodyLocIter-- , bIterRemaining));
+        pBodyLocItem++;
+      } while (pBodyLocItem < 0xb);
+    } while (bIterRemaining && (bIterRemaining = nBodyLocIter != 0 , nBodyLocIter-- , bIterRemaining));
 
     nBodyLocIter = 0;
     do {
-      int iVar1;
-      iVar1 = nBodyLocIter;
-      pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventoryRef, nBodyLocIter);
+      pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodyLocIter);
       if (pEquipItem) {
         nItemQuality = D2Common::ITEMS::Items::GetItemQuality(pEquipItem);
         if (nItemQuality == 5) {
@@ -555,17 +544,16 @@ void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
               D2Common::ITEMS::Items::CheckItemFlag(pEquipItem, ITEMFLAG_BROKEN, 0x96, ".\\UNIT\\Item.cpp");
               D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pEquipItem);
               ITEM_ApplySocketableAndEquipStats(0, pUnit, pEquipItem);
-              iVar1 = nBodyLocIter;
             }
           }
         }
       }
 
-      nBodyLocIter = iVar1 + 1;
+      nBodyLocIter++;
     } while (nBodyLocIter < 0xb);
 
     ITEM_RestoreSkillSelections(nSkillState, pUnit);
-    if (!bNeedsGfxReload) {
+    if (!bVar2) {
       return;
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {

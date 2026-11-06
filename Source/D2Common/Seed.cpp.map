@@ -56,8 +56,8 @@
         "RNG_GetRandomInRange"
       ],
       "usedTypes": [
+        "D2SeedStrc",
         "int32_t",
-        "int64_t",
         "uint32_t"
       ]
     },

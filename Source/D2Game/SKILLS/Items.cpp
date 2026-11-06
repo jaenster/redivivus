@@ -26,9 +26,9 @@ namespace D2Game::SKILLS::Items {
 
 // Appends one {affixIndex, affixTxt} pair to a weighted-roll candidate list and RETURNS THE NEW COUNT. Writes pAffixTxt at [pCandidatePairs + nCount*8 + 4] and nAffixIndex at [pCandidatePairs + nCount*8], then returns nCount + 1. At the 0x1ff cap it writes nothing and returns nCount unchanged.
 // The return is the count: nCount arrives in EAX and 005c0d14 ADD EAX,0x1 falls into the RET.
-static int32_t __stdcall SKILLITEMS_SetDispatchTableEntry(int32_t pCandidatePairs, int32_t pAffixTxt, int32_t nAffixIndex, int32_t nCount) {
+static int32_t __stdcall SKILLITEMS_SetDispatchTableEntry(int32_t pCandidatePairs, D2MagicAffixTxt * pAffixTxt, int32_t nAffixIndex, int32_t nCount) {
     if (nCount < 0x1ff) {
-      *(int32_t*)(pCandidatePairs + 4 + nCount * 8) = pAffixTxt;
+      *(D2MagicAffixTxt**)(pCandidatePairs + 4 + nCount * 8) = (D2MagicAffixTxt*)pAffixTxt;
       *(int32_t*)(pCandidatePairs + nCount * 8) = nAffixIndex;
       nCount++;
     }
@@ -637,7 +637,7 @@ int32_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bSpawnableO
                     break;
                   }
 
-                  pItemTxt = SKILLITEMS_SetDispatchTableEntry((int32_t)anCandidatePairs, (int32_t)pCurAffixTxt, bForceRoll + nAffixBaseIdx, (int32_t)pCandidateList);
+                  pItemTxt = SKILLITEMS_SetDispatchTableEntry((int32_t)anCandidatePairs, pCurAffixTxt, bForceRoll + nAffixBaseIdx, (int32_t)pCandidateList);
                   pCandidateList = (D2MagicAffixTxt*)pItemTxt;
                   if (nItemMagicLvl) {
                     nWeightSum += (uint32_t)(uint8_t)*(char*)((int)pAffixEntry + 0x22) * pAffixEntry[-2];

@@ -9,10 +9,10 @@
 
 namespace D2Common::Seed {
 
-uint32_t __fastcall RNG_GetRandomInRange(uint32_t * pSeed, int32_t nMax) {
-    int64_t lSeedNext = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-    *(int64_t*)pSeed = lSeedNext;
-    return nMax - 1U & (uint32_t)lSeedNext;
+uint32_t __fastcall RNG_GetRandomInRange(D2SeedStrc * pSeed, int32_t nMax) {
+    D2SeedStrc lSeedNext = D2_SEED_NEXT(*pSeed);
+    *pSeed = lSeedNext;
+    return nMax - 1U & lSeedNext.nSeedLow;
 }
 
 uint32_t __fastcall GetSeed_nSeedLow_Unref_0060dcf0(D2SeedStrc * pSeed) {

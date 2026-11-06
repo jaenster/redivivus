@@ -166,9 +166,9 @@ void __fastcall SUNITNPC_UpdateNpcInventory(::SGAMEDATA * pGame, D2UnitStrc * pI
 
     int32_t nStatLayer = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem);
     if (nStatLayer) {
-      float fIsStackable;
-      fIsStackable = (float)D2Common::ITEMS::Items::IsStackable(pItem);
-      if (fIsStackable != 0.0) {
+      BOOL fIsStackable;
+      fIsStackable = D2Common::ITEMS::Items::IsStackable(pItem);
+      if (fIsStackable) {
         nMaxStack = D2Common::ITEMS::Items::ITEM_GetMaxStack(pItem);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_quantity, nMaxStack, 0);
         if (pUnit) {
@@ -2174,17 +2174,17 @@ void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, D2UnitStrc *
     } while (true);
 }
 
-void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pPlayerUnit, int32_t nNpcGameData) {
+void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pPlayerUnit, D2GameNpcStrc * nNpcGameData) {
     int nPlayerGUID = !pPlayerUnit ? -1 : pPlayerUnit->nUnitGUID;
-    int pInteractNode = *(int*)(nNpcGameData + 8);
+    D2NpcProxyInventoryStrc* pInteractNode = nNpcGameData->pProxyInventories;
     if (pInteractNode) {
       bool bAlreadyInteracted = false;
       do {
-        if (*(int*)(pInteractNode + 4) == nPlayerGUID) {
+        if (pInteractNode->nPlayerGUID == nPlayerGUID) {
           bAlreadyInteracted = true;
         }
 
-        pInteractNode = *(int*)(pInteractNode + 8);
+        pInteractNode = pInteractNode->pNext;
       } while (pInteractNode);
 
       if (bAlreadyInteracted) {
@@ -2192,7 +2192,7 @@ void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc 
       }
     }
 
-    GAMBLE_GenerateGambleInventory(pGame, pUnit, pPlayerUnit, nNpcGameData);
+    GAMBLE_GenerateGambleInventory(pGame, pUnit, pPlayerUnit, (int32_t)nNpcGameData);
 }
 
 // Dispatches an NPC interaction for a player. nMode==0: repair/trade path — registers player interaction, repairs items, and initialises inventory for vendor NPCs (Charsi=0x96, Fara=0xC6, Larzuk=0x203, Halbu=0xFC) if not yet done. nMode!=0 with a personal inventory: registers gamble interaction and validates it via SUNITNPC_ValidateNpcInteraction.
@@ -2213,7 +2213,7 @@ void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
       if (pNpcData->flags0x0C) {
         nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
         *(uint8_t*)&nGambleInteractNode->bGambling = 1;
-        SUNITNPC_ValidateNpcInteraction(pGame, pNpc, pPlayerUnit_lcl, (int32_t)pNpcData);
+        SUNITNPC_ValidateNpcInteraction(pGame, pNpc, pPlayerUnit_lcl, pNpcData);
         return;
       }
     } else {

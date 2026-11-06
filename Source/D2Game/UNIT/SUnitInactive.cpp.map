@@ -132,6 +132,7 @@
       ],
       "usedTypes": [
         "D2InactiveItemRecordBufferStrc",
+        "D2InactiveItemRecordStrc",
         "D2InactiveItemRecordStrc *",
         "D2InactiveUnitListStrc",
         "D2InventoryStrc",

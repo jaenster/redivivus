@@ -1981,7 +1981,7 @@ BOOL __stdcall DAMAGE_CheckKnockbackThreshold(D2UnitStrc * pUnit, D2DamageStrc *
       break;
     }
 
-    if (!(pDamage1->dwDmgTotal >= nMaxHp / (int)nKbDivisor && (pDamage1->dwDmgTotal >= nMaxHp / (int)(nKbDivisor / 2) || (uRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 2) , uRandRoll != 0)) && (pDamage1->dwDmgTotal >= nMaxHp / ((int)nKbDivisor >> 2) || (uRandRoll2 = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed.nSeedLow, 4) , uRandRoll2 != 0)) && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (uRandRoll2 = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(pUnit->nClassId, 3) , uRandRoll2 != 0)))) {
+    if (!(pDamage1->dwDmgTotal >= nMaxHp / (int)nKbDivisor && (pDamage1->dwDmgTotal >= nMaxHp / (int)(nKbDivisor / 2) || (uRandRoll = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2) , uRandRoll != 0)) && (pDamage1->dwDmgTotal >= nMaxHp / ((int)nKbDivisor >> 2) || (uRandRoll2 = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 4) , uRandRoll2 != 0)) && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (uRandRoll2 = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(pUnit->nClassId, 3) , uRandRoll2 != 0)))) {
       return 1;
     }
 
