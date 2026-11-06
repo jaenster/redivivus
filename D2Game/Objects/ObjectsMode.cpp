@@ -177,7 +177,7 @@ static D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
     &D2Game::Quests::QUESTS::A2Q3::OBJOP_A2Q3_ActivateHoradricStaffAltar,
     &D2Game::Quests::QUESTS::A2Q6::OBJOP_A2Q7_OpenArcaneNpcTrade,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnQuestItemReward,
-    &D2Game::Objects::ObjectsMode::OBJOP_RevealAutomapArea,
+    &D2Game::Objects::ObjectsMode::OBJOP_UseTeleportPad,
     &D2Game::Quests::QUESTS::A3Q1::OBJOP_A3Q1_KhalimsRelicAltar,
     &D2Game::Objects::ObjectsMode::OBJOP_OpenBreakableContainer,
     &D2Game::Objects::ObjectsMode::OBJOP_ExplodingTrap,
@@ -674,7 +674,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // @sourcefile .\OBJECTS\ObjMode.cpp
-static void AUTOMAP_RevealAfterTeleport(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2RoomStrc * pRoom) {
+static void OBJMODE_WarpPlayerToObject(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2RoomStrc * pRoom) {
     D2DrlgRoomCoordsStrc roomCoords;
     POINT ptCoords;
     D2Common::Units::GetCoords(pUnit, &ptCoords);
@@ -705,8 +705,9 @@ static void AUTOMAP_RevealAfterTeleport(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     pUnit2->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
 }
 
-// Object operate-fn: searches the victim object's room and all adjacent rooms for another object of the same classId, then calls AUTOMAP_RevealAfterTeleport on the first match found. Used by Waygate-style objects that need to reveal the automap of their destination area. Always returns 0.
-BOOL __fastcall OBJOP_RevealAutomapArea(D2ObjectOperateFnArg * pOperation) {
+// Object operate-fn of a teleport pad: looks for another object of the victim's classId in the victim's room, then in its adjacent rooms, and warps the operating player to the first one found (OBJMODE_WarpPlayerToObject). Always returns 0.
+// @evidence UNIT_OBJECT test 00581c2a, same-classId test 00581c33. Contributor proposal #102; old name kept as a label.
+BOOL __fastcall OBJOP_UseTeleportPad(D2ObjectOperateFnArg * pOperation) {
     int nTargetClassId;
     D2RoomStrc** pAdjRooms;
     uint32_t nAdjRoomCount;
@@ -725,7 +726,7 @@ BOOL __fastcall OBJOP_RevealAutomapArea(D2ObjectOperateFnArg * pOperation) {
 
     for (pUnit = pRoom->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
       if (pUnit->eUnitType == UNIT_OBJECT && pUnit != pVictimUnit && pUnit->nClassId == nTargetClassId) {
-        AUTOMAP_RevealAfterTeleport(pUnit, pOperation->pAttacker, pRoom);
+        OBJMODE_WarpPlayerToObject(pUnit, pOperation->pAttacker, pRoom);
         return 0;
       }
     }
@@ -740,7 +741,7 @@ BOOL __fastcall OBJOP_RevealAutomapArea(D2ObjectOperateFnArg * pOperation) {
       if (pAdjRooms[uAdjRoomIdx] != pRoom) {
         for (pVictimUnit = pAdjRooms[uAdjRoomIdx]->pUnitList; pVictimUnit; pVictimUnit = pVictimUnit->pRoomNext) {
           if (pVictimUnit->eUnitType == UNIT_OBJECT && pVictimUnit != pOperation->sArg.pVictim && pVictimUnit->nClassId == nTargetClassId) {
-            AUTOMAP_RevealAfterTeleport(pVictimUnit, pOperation->pAttacker, pAdjRooms[uAdjRoomIdx]);
+            OBJMODE_WarpPlayerToObject(pVictimUnit, pOperation->pAttacker, pAdjRooms[uAdjRoomIdx]);
             return 0;
           }
         }

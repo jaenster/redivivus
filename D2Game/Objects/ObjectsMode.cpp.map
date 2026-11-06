@@ -331,7 +331,7 @@
       ]
     },
     {
-      "name": "AUTOMAP_RevealAfterTeleport",
+      "name": "OBJMODE_WarpPlayerToObject",
       "address": "00581b50",
       "lines": [
         {
@@ -341,7 +341,7 @@
       ],
       "namespace": "D2Game::Objects::ObjectsMode",
       "calledFunctions": [
-        "AUTOMAP_RevealAfterTeleport",
+        "OBJMODE_WarpPlayerToObject",
         "GetCoords",
         "GetFreeCoordinates_WithNeighboorRooms",
         "GetGamePointer",
@@ -364,7 +364,7 @@
       ]
     },
     {
-      "name": "OBJOP_RevealAutomapArea",
+      "name": "OBJOP_UseTeleportPad",
       "address": "00581bf0",
       "lines": [
         {
@@ -374,9 +374,9 @@
       ],
       "namespace": "D2Game::Objects::ObjectsMode",
       "calledFunctions": [
-        "OBJOP_RevealAutomapArea",
+        "OBJOP_UseTeleportPad",
         "UNITS_GetRoom",
-        "AUTOMAP_RevealAfterTeleport",
+        "OBJMODE_WarpPlayerToObject",
         "DRLGROOM_GetAdjacentRoomsList"
       ],
       "usedTypes": [

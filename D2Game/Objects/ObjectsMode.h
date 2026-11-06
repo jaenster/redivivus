@@ -52,8 +52,9 @@ void __fastcall QUEST_DispatchObjectActivation(::SGAMEDATA * pGame, struct D2Uni
 // Sends the current server-side object state to a single client. Emits SCMD 0x0E (ObjectState) with the object's GUID, active flag (bit 1 of eUnitFlags), and current anim mode. For shrine-subclass objects in Neutral mode also sends SCMD 0x4D (UnitCastSkill) carrying the shrine code and the last activating player GUID. For portal-subclass objects sends SCMD 0x60 (TownPortalState).
 void __fastcall OBJECT_SendStateToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
-// Object operate-fn: searches the victim object's room and all adjacent rooms for another object of the same classId, then calls AUTOMAP_RevealAfterTeleport on the first match found. Used by Waygate-style objects that need to reveal the automap of their destination area. Always returns 0.
-BOOL __fastcall OBJOP_RevealAutomapArea(struct D2ObjectOperateFnArg * pOperation);
+// Object operate-fn of a teleport pad: looks for another object of the victim's classId in the victim's room, then in its adjacent rooms, and warps the operating player to the first one found (OBJMODE_WarpPlayerToObject). Always returns 0.
+// @evidence UNIT_OBJECT test 00581c2a, same-classId test 00581c33. Contributor proposal #102; old name kept as a label.
+BOOL __fastcall OBJOP_UseTeleportPad(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_ExplodingTrap(struct D2ObjectOperateFnArg * pOperation);
 // Object-operate handler that opens or closes a door unit, enforcing a 500ms tick debounce. Reads the victim's current anim mode: Walk/TownNeutral → check open-collision; if clear, block the path and set mode 0 (open); if blocked in both states and not TownNeutral, set mode 5 (close). TownWalk → check equipment restrictions; if locked, play sound and return. Death → remove collision and set mode 2. Updates dwTickCount on any mode change.
 BOOL __fastcall OBJOP_ToggleDoor(struct D2ObjectOperateFnArg * pOperation);
