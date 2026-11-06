@@ -264,11 +264,41 @@ class Matcher:
                     b = self.bare_name(n)
                     if b and ours_bare[b] == 1 and map_bare[b] == 1:
                         f, detail = bare[b], detail + ' (bare name)'
+                if f is None:
+                    f = self.kept_elsewhere(q, n)
+                    if f is not None:
+                        detail += ' (the copy the link keeps, %s)' % f.tu
                 if f is not None:
                     self.sourcemap_addr[f.key] = a
                 if f is not None and a in self.model:
                     pairs.append((10.0, f.key, a, detail))
         return self.assign(pairs, 'sourcemap')
+
+    def kept_elsewhere(self, q, n):
+        """A map entry whose TU's object has no copy of the function: an
+        inline function of a header (the map's `definedIn`), which VC8 emits
+        only into the objects that call it, and the link keeps from the first
+        of them in link order (ours.link_kept). Found among every object's
+        external functions by its qualified name, else by its bare name where
+        our qualifier is a prefix of the map's namespace (ours
+        'D2Common::Units::GetGUID', the map's 'D2Common::Units::Units'), and
+        only if that names one function."""
+        if not hasattr(self, '_external'):
+            self._external = collections.defaultdict(list)
+            for f in self.fns:
+                if not f.static:
+                    self._external[self.bare_name(f.name)].append(f)
+        b = self.bare_name(n)
+        cands = self._external.get(b, []) if b else []
+        exact = [f for f in cands if f.name == q]
+        if len(exact) == 1:
+            return exact[0]
+        ns = q[:-len(n)] if q.endswith(n) else q
+        def qualifier(f):
+            name = f.name.split('(', 1)[0]
+            return name[:-len(b)] if name.endswith('::' + b) else None
+        near = [f for f in cands if qualifier(f) and ns.startswith(qualifier(f))]
+        return near[0] if len(near) == 1 else None
 
     def by_sourcemap_rest(self, root):
         """Last: a map entry whose address nothing paired, and one of our
@@ -1021,7 +1051,7 @@ def main():
     ref = refimage.Reference(os.path.join(ORACLE, 'reference', 'Game.exe'))
     ref.load(os.path.join(REFCACHE, 'functions.tsv'))
     model = ref.model(os.path.join(REFCACHE, 'model.pkl'))
-    fns = ourslib.load_all(objdir)
+    fns = ourslib.link_kept(ourslib.load_all(objdir))
     m = Matcher(ref, model, fns, load_crtmap(os.path.join(ORACLE, 'evidence', 'crtmap.tsv')))
     for tier, n in m.run():
         print('  %-22s +%d' % (tier, n))

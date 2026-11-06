@@ -174,6 +174,35 @@ def load_all(objdir):
     return out
 
 
+def link_order(tus):
+    """Our TUs in the order recon/runs/build-vc8.sh hands their objects to
+    the linker: the TU paths through sort(1), as that script sorts them, so
+    under the same locale's collation (case-blind in en_* locales)."""
+    import subprocess
+    tus = sorted(set(tus))
+    r = subprocess.run(['sort'], input=''.join(t + '\n' for t in tus), capture_output=True, text=True)
+    out = [t for t in r.stdout.split('\n') if t]
+    if r.returncode != 0 or sorted(out) != tus:
+        return tus
+    return out
+
+
+def link_kept(fns):
+    """The functions the link keeps: of an external COMDAT that several
+    objects define (an inline function, a template instantiation: one copy
+    in every object that uses it, all selectany), the copy of the first
+    object in link order, as link.exe keeps the first definition it reads
+    and discards the rest. A static function is its object's own and always
+    kept. The copies are not interchangeable: objects of other directories
+    compile with other flags (/GS-, /O1)."""
+    rank = {t: i for i, t in enumerate(link_order(f.tu for f in fns))}
+    first = {}
+    for f in fns:
+        if not f.static and (f.symbol not in first or rank[f.tu] < rank[first[f.symbol].tu]):
+            first[f.symbol] = f
+    return [f for f in fns if f.static or first[f.symbol] is f]
+
+
 _fingerprints = {}
 
 

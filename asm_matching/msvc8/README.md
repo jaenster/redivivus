@@ -187,6 +187,22 @@ If the generator's `.cpp.map` source maps (gitignored in this repo) are
 present next to the sources, the `sourcemap` tier reads them and everything
 else only fills gaps; the other tiers need nothing but the tree and the image.
 
+Our side is the functions the link keeps, not every function of every object
+(`ours.link_kept`). An external COMDAT that several objects define - an inline
+function of a header, a template instantiation, all `selectany` - is the copy
+of the first object in link order, as link.exe keeps the first definition it
+reads and discards the rest; the original's one copy came about the same way.
+Link order is `recon/runs/build-vc8.sh`'s: the TU paths through `sort(1)`
+(`ours.link_order`, the same collation). The copies are not interchangeable,
+since a directory can compile with other flags (`/GS-`, `/O1`), so it is that
+copy that is paired and judged, and the discarded ones are neither paired nor
+listed as unmapped. A map entry whose own TU's object holds no kept copy - the
+generator's `inline-host` functions, defined in a `<unit>.inline.h` (the
+entry's `definedIn`) and emitted only into the objects that call them - is
+found among all objects' external functions by its qualified name, or by its
+bare name where our qualifier is a prefix of the map's namespace, if that
+names one function; the row's `tu` is then the object the copy came from.
+
 Two checks keep the map honest. Functions paired by order-blind evidence
 (strings, imports, calls, refs) should also fall in address order within their
 TU, as the original lays them out; and every generated name that carries its own
