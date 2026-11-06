@@ -41,20 +41,6 @@ extern char s_Unknown_006cc780[8];
 } // namespace Fog::Src::LogManager
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-namespace Fog::Debug {
-extern char gbSaveFileReadMarker[3];
-} // namespace Fog::Debug
-namespace Fog::Engine::Application {
-extern char gszSFileCurrentDirPrefix[3];
-} // namespace Fog::Engine::Application
-namespace Fog::File {
-// lpMultiByteStr parameter of MultiByteToWideChar
-extern char lpMultiByteStr_006ff97c[2];
-} // namespace Fog::File
-namespace Fog::Source::SFile {
-extern double gdConst0_25;
-extern double gdBytesToMegabytes;
-} // namespace Fog::Source::SFile
 namespace Fog::Source::SSComp {
 extern uint8_t gabHuffmanCodeLengths[256];
 extern uint32_t gaHuffmanFastDecodeTable[256];
@@ -63,12 +49,6 @@ extern uint8_t gabHuffmanNextTable[256];
 namespace Fog::Src {
 extern int TokenHashMapBucketSize;
 } // namespace Fog::Src
-namespace Fog::Src::DataArrays {
-extern double gfFloatGammaCorrectionInit;
-} // namespace Fog::Src::DataArrays
-namespace Fog::Src::ErrorManager {
-extern float gfTwoPow32;
-} // namespace Fog::Src::ErrorManager
 namespace Fog::Src::LogManager {
 extern char s_Cyrix_006cdeb0[6];
 extern char s_AMD_006cdeb8[4];

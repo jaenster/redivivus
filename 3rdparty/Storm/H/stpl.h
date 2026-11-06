@@ -182,7 +182,6 @@ public:
     /* 0x14 */ TSGrowableArray<TSExplicitList<T, -572662307>> tSlotListArray;
     /* 0x24 */ uint32_t nSlotMask;
 
-    static void* vftable_meta_ptr;
     static void * vftable[4];
     void InternalClear(int32_t bUnlinkOnly);
     void Destructor();
@@ -221,7 +220,6 @@ public:
     /* 0x34 */ uint32_t nChunkSize;
     /* 0x38 */ TSExplicitList<TSHashObjectChunk<T, TKey>, 16> tChunkList;
 
-    static void* vftable_meta_ptr;
     static void * vftable[4];
     void InternalDestroy();
     void Destructor();
@@ -246,7 +244,6 @@ public:
     /* 0x48 */ uint32_t nSequence;
     /* 0x4C */ int32_t bWrapped;
 
-    static void* vftable_meta_ptr;
     static void * vftable[4];
     TSExportTableSimple<T, THandle, N>* Constructor();
     static TSExportTableSimple<T, THandle, N>* __thiscall ScalarDeletingDestructor(TSExportTableSimple<T, THandle, N>* pThis, uint32_t dwFlags);
@@ -268,7 +265,6 @@ public:
 
     /* 0x50 */ TSync tSync;
 
-    static void* vftable_meta_ptr;
     static void * vftable[4];
     void Destructor();
     TSExportTableSync<T, THandle, TLockedHandle, TSync, N>* Constructor();
@@ -403,8 +399,6 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSExportTableSimple<CELLIST, HCELLIST__*, 0>
-// meta pointer for TSExportTableSimple<struct CELLIST,struct HCELLIST__ *,0>::vftable
-template<> void* TSExportTableSimple<CELLIST, HCELLIST__*, 0>::vftable_meta_ptr;
 // const TSExportTableSimple<struct CELLIST,struct HCELLIST__ *,0>::vftable
 template<> void * TSExportTableSimple<CELLIST, HCELLIST__*, 0>::vftable[4];
 template<> void TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Delete(::CELLIST * pNode);
@@ -417,8 +411,6 @@ template<> ::CELLIST * TSExportTableSimple<CELLIST, HCELLIST__*, 0>::New(uint32_
 template<> TSExportTableSimple<::CELLIST, HCELLIST__*, 0>* __thiscall TSExportTableSimple<CELLIST, HCELLIST__*, 0>::ScalarDeletingDestructor(TSExportTableSimple<::CELLIST, HCELLIST__*, 0>* pThis, uint32_t dwFlags);
 
 // TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>
-// meta pointer for TSExportTableSimple<struct SGAMEDATA,struct HSGAMEDATA__ *,0>::vftable
-template<> void* TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::vftable_meta_ptr;
 // const TSExportTableSimple<struct SGAMEDATA,struct HSGAMEDATA__ *,0>::vftable
 template<> void * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::vftable[4];
 template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Constructor();
@@ -432,8 +424,6 @@ template<> uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUn
 template<> ::SGAMEDATA * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::New(uint32_t * pHandle);
 
 // TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>
-// meta pointer for TSExportTableSync<struct CELLIST,struct HCELLIST__ *,struct HLOCKEDCELLIST__ *,class CCritSect,0>::vftable
-template<> void* TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::vftable_meta_ptr;
 // const TSExportTableSync<struct CELLIST,struct HCELLIST__ *,struct HLOCKEDCELLIST__ *,class CCritSect,0>::vftable
 template<> void * TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::vftable[4];
 template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::SyncEnterLock(int32_t * pLockedHandle, int32_t bForWriting);
@@ -450,8 +440,6 @@ template<> ::CELLIST * TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*
 template<> TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>* __thiscall TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::ScalarDeletingDestructor(TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>* pThis, uint32_t dwFlags);
 
 // TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>
-// meta pointer for TSExportTableSync<struct SGAMEDATA,struct HSGAMEDATA__ *,struct HSGAMEDATALOCK__ *,class CCritSect,0>::vftable
-template<> void* TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::vftable_meta_ptr;
 // const TSExportTableSync<struct SGAMEDATA,struct HSGAMEDATA__ *,struct HSGAMEDATALOCK__ *,class CCritSect,0>::vftable
 template<> void * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::vftable[4];
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Destructor();
@@ -557,8 +545,6 @@ template<> void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor();
 template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor();
 
 // TSHashTable<CELLIST, HASHKEY_NONE>
-// meta pointer for TSHashTable<struct CELLIST,class HASHKEY_NONE>::vftable
-template<> void* TSHashTable<CELLIST, HASHKEY_NONE>::vftable_meta_ptr;
 // const TSHashTable<struct CELLIST,class HASHKEY_NONE>::vftable
 template<> void * TSHashTable<CELLIST, HASHKEY_NONE>::vftable[4];
 template<> uint32_t TSHashTable<CELLIST, HASHKEY_NONE>::ComputeSlot(uint32_t dwHashVal);
@@ -584,8 +570,6 @@ template<> __attribute__((noinline)) inline int32_t TSHashTable<CELLIST, HASHKEY
 template<> __attribute__((noinline)) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSHashTable<MappingEntryNode, HASHKEY_STRI>
-// meta pointer for TSHashTable<struct MappingEntryNode,class HASHKEY_STRI>::vftable
-template<> void* TSHashTable<MappingEntryNode, HASHKEY_STRI>::vftable_meta_ptr;
 // const TSHashTable<struct MappingEntryNode,class HASHKEY_STRI>::vftable
 template<> void * TSHashTable<MappingEntryNode, HASHKEY_STRI>::vftable[4];
 template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Clear_Unref_005de320();
@@ -615,8 +599,6 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New(char * szKey, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSHashTable<SGAMEDATA, HASHKEY_NONE>
-// meta pointer for TSHashTable<struct SGAMEDATA,class HASHKEY_NONE>::vftable
-template<> void* TSHashTable<SGAMEDATA, HASHKEY_NONE>::vftable_meta_ptr;
 // const TSHashTable<struct SGAMEDATA,class HASHKEY_NONE>::vftable
 template<> void * TSHashTable<SGAMEDATA, HASHKEY_NONE>::vftable[4];
 template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly);
@@ -642,8 +624,6 @@ template<> __attribute__((noinline)) inline int32_t TSHashTable<SGAMEDATA, HASHK
 template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::New(uint32_t dwHashVal, HASHKEY_NONE * pKey, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSHashTable<StringEntryNode, HASHKEY_STRI>
-// meta pointer for TSHashTable<struct StringEntryNode,class HASHKEY_STRI>::vftable
-template<> void* TSHashTable<StringEntryNode, HASHKEY_STRI>::vftable_meta_ptr;
 // const TSHashTable<struct StringEntryNode,class HASHKEY_STRI>::vftable
 template<> void * TSHashTable<StringEntryNode, HASHKEY_STRI>::vftable[4];
 // Test a flag bit in nBucketMask field of the hash table
@@ -673,8 +653,6 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(u
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(char * szKey, uint32_t nExtraBytes, uint32_t dwFlags);
 
 // TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>
-// meta pointer for TSHashTableReuse<struct CELLIST,class HASHKEY_NONE,0>::vftable
-template<> void* TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::vftable_meta_ptr;
 // const TSHashTableReuse<struct CELLIST,class HASHKEY_NONE,0>::vftable
 template<> void * TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::vftable[4];
 template<> void TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalDestroy();
@@ -693,8 +671,6 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Destroy(T
 template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* pThis, uint32_t dwFlags);
 
 // TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
-// meta pointer for TSHashTableReuse<struct SGAMEDATA,class HASHKEY_NONE,0>::vftable
-template<> void* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::vftable_meta_ptr;
 // const TSHashTableReuse<struct SGAMEDATA,class HASHKEY_NONE,0>::vftable
 template<> void * TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::vftable[4];
 template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDestroy();

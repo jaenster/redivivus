@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2gfx/D2GFX.h"
 
 // Forward declarations
 struct D2ControlStrc;
@@ -48,7 +47,6 @@ extern D2FogArchiveStrc * MPQ_d2delta;
 extern D2FogArchiveStrc * MPQ_d2char;
 extern D2FogArchiveStrc * MPQ_d2video;
 extern D2FogArchiveStrc * MPQ_d2Xtalk;
-extern D2FogArchiveStrc * MPQ_d2kfixup_mpq;
 extern D2FogArchiveStrc * MPQ_d2kfixup;
 extern D2FogArchiveStrc * MPQ_d2speech;
 extern D2FogArchiveStrc * MPQ_d2music;

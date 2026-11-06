@@ -9,8 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Direct3D/d3dFloorCache.h"
-#include "Source/D2Direct3D/d3dSubtileCache.h"
 
 // Forward declarations
 struct D3DFloorCacheNodeStrc;

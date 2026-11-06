@@ -11,51 +11,6 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/globals/globals.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Game/Objects/Objects.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
-#include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Txt/Skills.h"
 
 // Forward declarations
 struct D2AllStatesDataTbl;
@@ -136,32 +91,27 @@ struct D2GemsTableStrc {
 };
 #endif // D2_DEFINED_D2GemsTableStrc
 
-namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
-// meta pointer for ChatIgnoreList::vftable
-extern void* vftable_meta_ptr;
-// const ChatIgnoreList::vftable
-extern void * vftable[12];
-} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
-namespace D2Common::Chat::Ignorelist::IgnoreList {
-// meta pointer for IgnoreList::vftable
-extern void* vftable_meta_ptr;
-// const IgnoreList::vftable
-extern void * vftable[12];
-} // namespace D2Common::Chat::Ignorelist::IgnoreList
 namespace D2Common::ITEMS::Items {
 extern D2DataTableTxtStrc * sgptDataTable;
 } // namespace D2Common::ITEMS::Items
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+extern char s_C_006ed5b4[2];
 namespace D2Common {
-extern char gsGameMonsterSpawnContext[4];
-extern char gsGameMissileTblsContext[4];
 extern char s___AV__TSExplicitList_UStringEntr_0074366c[56];
 extern int gpsPresetObjectTable[750];
 } // namespace D2Common
 namespace D2Common::Chat::Ignorelist {
 extern char s___AV__TSExplicitList_UMappingEnt_007436ac[56];
 } // namespace D2Common::Chat::Ignorelist
+namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
+// const ChatIgnoreList::vftable
+extern void * vftable[12];
+} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
+namespace D2Common::Chat::Ignorelist::IgnoreList {
+// const IgnoreList::vftable
+extern void * vftable[12];
+} // namespace D2Common::Chat::Ignorelist::IgnoreList
 namespace D2Common::Chat::Ignorelist::MappingEntryNode {
 extern char s___AUMappingEntryNode___0074362c[24];
 } // namespace D2Common::Chat::Ignorelist::MappingEntryNode
@@ -171,18 +121,12 @@ extern char s___AUStringEntryNode___0074364c[24];
 namespace D2Common::DATATBLS::BeltsTbls {
 extern D2BeltsTxt * pTxtBelts;
 } // namespace D2Common::DATATBLS::BeltsTbls
-namespace D2Common::DATATBLS::DataTbls {
-extern char gaFreeUnitsOrderData[3];
-} // namespace D2Common::DATATBLS::DataTbls
 namespace D2Common::DATATBLS::ItemTbls {
-extern unsigned int gszTxtColName_op;
 extern D2MagicAffixTableStrc gsMagicAffixTable;
 extern D2MagicAffixTableStrc pTxtMagicAffixes;
 extern D2GemsTableStrc nTxtGemsSize;
 } // namespace D2Common::DATATBLS::ItemTbls
 namespace D2Common::DATATBLS::LvlTbls {
-extern uint8_t gbExpansionInitialized;
-extern char * gaLanguageNames_00744508[15];
 extern int nTxtLvlTypesSize;
 extern D2LvlWarpTxt * pTxtLvlWarp;
 extern int nTxtLvlWarpSize;
@@ -201,8 +145,6 @@ extern int nTxtObjectsSize;
 } // namespace D2Common::DATATBLS::ObjectTbls
 namespace D2Common::DATATBLS::OverlayTbls {
 extern uint32_t gaOverlayVariantCodes[43];
-extern char * gaLanguageNames_00748a58[16];
-extern char * gaLanguageNames_00748a98[15];
 } // namespace D2Common::DATATBLS::OverlayTbls
 namespace D2Common::DATATBLS::TokTbls {
 extern unsigned int nTxtMonModeSize;
@@ -227,18 +169,13 @@ extern int gaOutJungPresetOffsetByLevel[3];
 namespace D2Common::Drlg::OutSiege {
 extern int gnAct5OuterWallGridOffsetByType[24];
 extern int gaAct5SceneryPresetTable_0[15][7];
-extern int gaAct5SceneryPresetTable_0_0__1_[15][7];
 } // namespace D2Common::Drlg::OutSiege
 namespace D2Common::Drlg::Preset {
 extern char s_HDM_006ee7c0[4];
 extern D2DrlgFileCacheNodeStrc * gpDrlgFileCache;
 } // namespace D2Common::Drlg::Preset
-namespace D2Common::DUNGEON::Dungeon {
-extern char * gaLanguageNames_007443a8[15];
-} // namespace D2Common::DUNGEON::Dungeon
 namespace D2Common::Environment {
 extern uint32_t gnTimeRates[3];
-extern char * gaLanguageNames_007444c8[15];
 } // namespace D2Common::Environment
 namespace D2Common::Logging {
 // lpCriticalSection parameter of LeaveCriticalSection
@@ -249,13 +186,7 @@ extern _RTL_CRITICAL_SECTION lpCriticalSection_0096ca30;
 extern FILE * pLOGFILE;
 extern BOOL bLOGFILE_ENABLED;
 } // namespace D2Common::Logging
-namespace D2Common::Logging::ProfCore {
-extern char * gaLanguageNames_0074430c_11[15];
-} // namespace D2Common::Logging::ProfCore
 namespace D2Common::Merc {
-extern uint8_t gaMonSeqMonsterTblData_Unknown;
-extern uint8_t gaMonSeqAnimData;
-extern uint32_t DWORD_007467b0;
 extern D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007468a0[14];
 extern D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746978[14];
 extern D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00746a80[14];
@@ -280,20 +211,7 @@ extern D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007480e8[14];
 extern D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_007481f0[14];
 extern D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00748310[14];
 } // namespace D2Common::Merc
-namespace D2Common::Monsters::MONSTERS {
-extern char * gaLanguageNames_00745648[15];
-extern char * gaLanguageNames_00745684[15];
-extern char * gaLanguageNames_007456c0[15];
-extern char * gaLanguageNames_007456fc[15];
-extern char * gaLanguageNames_00745738[15];
-} // namespace D2Common::Monsters::MONSTERS
 namespace D2Common::Txt::Cube {
-extern char gsGameDataTblsContext[4];
 extern int nTxtCubeMainSize;
 } // namespace D2Common::Txt::Cube
-namespace D2Common::Units {
-extern char * gaLanguageNames_00744588[15];
-extern char * gaLanguageNames_007445c4[15];
-extern char * gaLanguageNames_00744600[15];
-} // namespace D2Common::Units
 #endif // D2_MODULE_D2Common

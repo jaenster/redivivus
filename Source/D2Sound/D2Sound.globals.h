@@ -39,7 +39,4 @@ extern D2SoundSmpStrc * gpMusicStreamBuffer;
 extern uint32_t gnAmbientSoundLanguageCode;
 extern uint32_t gbAmbientSoundLangInitialized;
 } // namespace D2Sound::Src::D2SoundFast
-namespace D2Sound::Src::D2SoundSmp {
-extern float FLOAT_006da6b8;
-} // namespace D2Sound::Src::D2SoundSmp
 #endif // D2_MODULE_D2Sound

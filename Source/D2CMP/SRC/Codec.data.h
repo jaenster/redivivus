@@ -9,7 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2CMP/SRC/Codec.h"
 
 // Forward declarations
 struct D2CodecPixelBufferEntryStrc;

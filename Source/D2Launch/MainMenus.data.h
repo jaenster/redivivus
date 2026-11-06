@@ -9,7 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Win/D2WinAnimImage.h"
 
 // Forward declarations
 struct D2WinTextBox;

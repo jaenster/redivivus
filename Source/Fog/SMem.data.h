@@ -9,7 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "3rdparty/Storm/Source/SMem.h"
 
 // Forward declarations
 struct D2SMemTablesStrc;

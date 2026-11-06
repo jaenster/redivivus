@@ -21,8 +21,6 @@ struct D2WinTextBox;
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
 namespace D2Launch::CharSel {
 extern char * gaFrontEndPaletteFiles[4];
-extern char * gpszPaletteSkyDat[4];
-extern char * gpszPaletteSkyPl2[4];
 extern int nSelectedCharIndex;
 extern ::D2WinTextBox * gpWinTextBoxRealmSelect;
 extern int TotalCurrentChars;

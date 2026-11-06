@@ -22,7 +22,6 @@ namespace D2CMP::Draw {
 extern char s___AV__TSHashObjectChunk_UCELLIST_00741fb4[52];
 } // namespace D2CMP::Draw
 namespace D2CMP::SRC::CelCmp {
-extern uint32_t gaCelCmpDataBlock_006e36a0[224];
 extern char s___AUTCELENTRY___00741f14[16];
 extern TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0> gCelCmpCacheHandler;
 // lpCriticalSection parameter of DeleteCriticalSection

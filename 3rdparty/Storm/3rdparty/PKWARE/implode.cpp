@@ -2,16 +2,7 @@
 
 #include "3rdparty/Storm/3rdparty/PKWARE/implode.h"
 #include "Source/globals/globals.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

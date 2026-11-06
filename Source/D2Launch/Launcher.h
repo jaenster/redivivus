@@ -10,7 +10,6 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
 #include "Source/Fog/Save.h"
 
 // Forward declarations

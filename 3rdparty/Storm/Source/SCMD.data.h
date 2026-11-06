@@ -9,8 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
 struct D2StormListHead;

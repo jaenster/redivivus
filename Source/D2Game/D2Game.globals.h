@@ -11,68 +11,6 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/globals/globals.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Object.h"
-#include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Arena.h"
-#include "Source/D2Game/GAME/Task.h"
-#include "Source/D2Game/Monster/AI/AI.h"
-#include "Source/D2Game/Monster/AI/Baal.h"
-#include "Source/D2Game/Monster/MonsterMode.h"
-#include "Source/D2Game/Objects/Objects.h"
-#include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/D2Game/Quests/QUESTS.h"
-#include "Source/D2Game/SKILLS/Items.h"
-#include "Source/D2Game/SKILLS/SkillAss.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
-#include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/Quests/QUESTS.h"
 
 // Forward declarations
 struct D2MonsterEquipEntryStrc;
@@ -128,7 +66,6 @@ extern D2TimerTypeMethodsStrc pTimerMethods;
 } // namespace D2Game::GAME::Event::Dispatch
 namespace D2Game::GAME::Event::Dispatch::Monster {
 extern D2TimerTypeMethodsExStrc pTimerMethods;
-extern char * gaLanguageNames_0073c6e0[15];
 } // namespace D2Game::GAME::Event::Dispatch::Monster
 namespace D2Game::GAME::Event::Dispatch::Object {
 extern D2TimerTypeMethodsStrc pTimerMethods;
@@ -136,9 +73,6 @@ extern D2TimerTypeMethodsStrc pTimerMethods;
 namespace D2Game::GAME::Event::Dispatch::Player {
 extern D2TimerTypeMethodsExStrc pTimerMethods;
 } // namespace D2Game::GAME::Event::Dispatch::Player
-namespace D2Game::Monster::Create {
-extern char * gaLanguageNames_0073d530[15];
-} // namespace D2Game::Monster::Create
 namespace D2Game::Objects::ObjectsMode {
 extern D2ShrinesTableEntryStrc OBJECTSHRINEFUNCTION[24];
 } // namespace D2Game::Objects::ObjectsMode
@@ -162,7 +96,6 @@ extern D2NPCMessageTableStrc aNpcGossipData[6];
 } // namespace D2Game::Quests::QUESTS::A1Q2
 namespace D2Game::Quests::QUESTS::A1Q3 {
 extern D2NPCMessageTableStrc aNpcGossipData[6];
-extern D2NPCMessageTableStrc gbQuestA5Q2Unknown[6];
 } // namespace D2Game::Quests::QUESTS::A1Q3
 namespace D2Game::Quests::QUESTS::A1Q4 {
 extern D2NPCMessageTableStrc aNpcGossipData[11];

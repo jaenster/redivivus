@@ -11,109 +11,6 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/globals/globals.h"
-#include "Source/Bnclient/BnSend.h"
-#include "Source/Bnclient/SRP.h"
-#include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Client/ClientModeInGame.h"
-#include "Source/D2Client/Cursor.h"
-#include "Source/D2Client/D2BNetGatewayAccessStr.h"
-#include "Source/D2Client/D2GSPacketSrv0x2A.h"
-#include "Source/D2Client/D2GfxMemoryStrc.h"
-#include "Source/D2Client/D2GfxSettingsStrc.h"
-#include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
-#include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/GAME/Draw.h"
-#include "Source/D2Client/GAME/Game/Game.h"
-#include "Source/D2Client/GAME/Record.h"
-#include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Client/GAME/Sound.h"
-#include "Source/D2Client/Sound/Sound.h"
-#include "Source/D2Client/UI/Automap.h"
-#include "Source/D2Client/UI/Chat.h"
-#include "Source/D2Client/UI/CmdTbl.h"
-#include "Source/D2Client/UI/EscMenu.h"
-#include "Source/D2Client/UI/Inv.h"
-#include "Source/D2Client/UI/Path.h"
-#include "Source/D2Client/UI/QuestLog.h"
-#include "Source/D2Client/UI/ShowItems.h"
-#include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/UI/SpellSel.h"
-#include "Source/D2Client/UI/Text.h"
-#include "Source/D2Client/UI/UseItem.h"
-#include "Source/D2Client/UI/Waypoint.h"
-#include "Source/D2Client/UI/npcmenu.h"
-#include "Source/D2Client/UI/npcmenu/Merc.h"
-#include "Source/D2Client/UI/ui.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Object.h"
-#include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Client/Warden/WardenClient.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Arena.h"
-#include "Source/D2Game/GAME/Task.h"
-#include "Source/D2Game/Monster/AI/AI.h"
-#include "Source/D2Game/Monster/AI/Baal.h"
-#include "Source/D2Game/Monster/MonsterMode.h"
-#include "Source/D2Game/Objects/Objects.h"
-#include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/D2Game/Quests/QUESTS.h"
-#include "Source/D2Game/SKILLS/Items.h"
-#include "Source/D2Game/SKILLS/SkillAss.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/D2WinAnimImage.h"
-#include "Source/D2Win/Src/D2Comp.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
-#include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/ClientModeInGame.h"
-#include "Source/D2Client/UI/npcmenu.h"
-#include "Source/D2Client/UI/ui.h"
 
 // Forward declarations
 struct ButtonWrapper;
@@ -225,78 +122,12 @@ extern char s___AUSGAMEDATA___0070f56c[16];
 namespace D2Client::NPC {
 extern struct D2NpcMenuOptions D2NpcMenuOptions[48];
 } // namespace D2Client::NPC
-namespace D2Client::UI {
-// meta pointer for UIWidget::vftable
-extern uint8_t vftable_meta_ptr;
-// const UIWidget::vftable
-extern void * vftable[12];
-} // namespace D2Client::UI
-namespace D2Client::UI::Button::ButtonImplementation {
-// meta pointer for ButtonImplementation::vftable
-extern uint8_t vftable_meta_ptr;
-// const ButtonImplementation::vftable
-extern void * vftable[13];
-} // namespace D2Client::UI::Button::ButtonImplementation
-namespace D2Client::UI::Button::ButtonWrapper {
-// meta pointer for ButtonWrapper::vftable
-extern uint8_t vftable_meta_ptr;
-// const ButtonWrapper::vftable
-extern void * vftable[13];
-} // namespace D2Client::UI::Button::ButtonWrapper
-namespace D2Client::UI::Editbox::EditBoxImplementation {
-// meta pointer for EditBoxImplementation::vftable
-extern uint8_t vftable_meta_ptr;
-// const EditBoxImplementation::vftable
-extern void * vftable[19];
-} // namespace D2Client::UI::Editbox::EditBoxImplementation
-namespace D2Client::UI::Editbox::EditBoxWrapper {
-// meta pointer for EditBoxWrapper::vftable
-extern uint8_t vftable_meta_ptr;
-// const EditBoxWrapper::vftable
-extern void * vftable[19];
-} // namespace D2Client::UI::Editbox::EditBoxWrapper
 namespace D2Client::UI::Inv {
 extern uint32_t nScreenMode;
 } // namespace D2Client::UI::Inv
-namespace D2Client::UI::ListBox::ListBoxImplementation {
-// meta pointer for ListBoxImplementation::vftable
-extern void* vftable_meta_ptr;
-// const ListBoxImplementation::vftable
-extern void * vftable[16];
-} // namespace D2Client::UI::ListBox::ListBoxImplementation
-namespace D2Client::UI::ListBox::ListBoxWrapper {
-// meta pointer for ListBoxWrapper::vftable
-extern int vftable_meta_ptr;
-// const ListBoxWrapper::vftable
-extern void * vftable[16];
-} // namespace D2Client::UI::ListBox::ListBoxWrapper
-namespace D2Client::UI::Spinner::SpinnerImplementation {
-// meta pointer for SpinnerImplementation::vftable
-extern void* vftable_meta_ptr;
-// const SpinnerImplementation::vftable
-extern void * vftable[13];
-} // namespace D2Client::UI::Spinner::SpinnerImplementation
-namespace D2Client::UI::Spinner::SpinnerWrapper {
-// meta pointer for SpinnerWrapper::vftable
-extern void* vftable_meta_ptr;
-// const SpinnerWrapper::vftable
-extern void * vftable[13];
-} // namespace D2Client::UI::Spinner::SpinnerWrapper
 namespace D2Client::UNIT::CUnit {
 extern D2UnitStrc * pPlayerUnit;
 } // namespace D2Client::UNIT::CUnit
-namespace D2Client::Warden {
-// meta pointer for WardenClient::vftable
-extern void* vftable_meta_ptr;
-// const WardenClient::vftable
-extern void * vftable[7];
-} // namespace D2Client::Warden
-namespace D2Client::Warden::NWardenClient {
-// meta pointer for NWardenClient::Library::vftable
-extern void* vftable_meta_ptr;
-// const NWardenClient::Library::vftable
-extern void * vftable[7];
-} // namespace D2Client::Warden::NWardenClient
 namespace D2Client::Waypoint {
 extern D2WaypointStrc * pWaypoint;
 } // namespace D2Client::Waypoint
@@ -318,9 +149,6 @@ namespace D2Client::_Message {
 extern uint32_t gnLastMouseButtonEventType;
 } // namespace D2Client::_Message
 namespace D2Client::ClientModeInGame {
-extern char * gpszD2LngFileName;
-extern char * gpszLngManagerStartError;
-extern char * gpszLngCppError;
 extern eD2ClientAppMode gdwAppMode;
 extern D2IniConfigStrc * D2IniData_client;
 } // namespace D2Client::ClientModeInGame
@@ -376,9 +204,6 @@ extern uint32_t fps;
 namespace D2Client::GAME::Roster {
 extern D2RosterStrc * gpRosterPlayers;
 } // namespace D2Client::GAME::Roster
-namespace D2Client::GAME::SCmd {
-extern char * gaLanguageNames_00711d04[15];
-} // namespace D2Client::GAME::SCmd
 namespace D2Client::GAME::Select {
 extern uint32_t gbSuppressItemSelection;
 } // namespace D2Client::GAME::Select
@@ -413,6 +238,10 @@ extern char s_ACT03START_s_BIK_006d9174[17];
 extern char s_ACT02START_s_BIK_006d9188[17];
 extern char s_d2intro_s_bik_006d919c[14];
 } // namespace D2Client::Sound::SoundHdr
+namespace D2Client::UI {
+// const UIWidget::vftable
+extern void * vftable[12];
+} // namespace D2Client::UI
 namespace D2Client::UI::Automap {
 extern int nAutoMapZoomDivisor;
 extern D2AutomapLayerStrc * sgpAutomapLayer;
@@ -420,6 +249,14 @@ extern D2AutomapLayerStrc * sgpAutomapLayerEx;
 extern int nAutoMapScrollX;
 extern int nAutoMapScrollY;
 } // namespace D2Client::UI::Automap
+namespace D2Client::UI::Button::ButtonImplementation {
+// const ButtonImplementation::vftable
+extern void * vftable[13];
+} // namespace D2Client::UI::Button::ButtonImplementation
+namespace D2Client::UI::Button::ButtonWrapper {
+// const ButtonWrapper::vftable
+extern void * vftable[13];
+} // namespace D2Client::UI::Button::ButtonWrapper
 namespace D2Client::UI::Chat {
 extern int gaIMECompositionBuffer;
 // wchar16[257] - the chat input line. Was typed LPCWSTR (4 bytes). Size proven three ways: CHAT_ClearInput (0047bdc0) does memset(this, 0, 0x202) = 514 bytes = 257 wide chars; CHAT_* callers pass it to WSTRING_PutWideCharIntoBuffer with a 0x100 char limit and to WideCharToMultiByte with cbMultiByte 0x100 (256 chars + terminator); INPUT_HandleChatCharInput indexes it as *(uint16_t*)(base + i*2). Next symbol gaChatHistoryBuffer is 520 bytes away, so 514 fits. Declared as 4 bytes, every keystroke in the chat box wrote past the symbol.
@@ -440,9 +277,15 @@ extern D2UIFlagInitStrc g_UIFlagInitDrawMouseDown[4];
 extern D2UIFlagStrc GFX_bShowUIFlag;
 extern D2UIFlagDescStrc gaUIFlagDescsClient[3];
 } // namespace D2Client::UI::Draw
+namespace D2Client::UI::Editbox::EditBoxImplementation {
+// const EditBoxImplementation::vftable
+extern void * vftable[19];
+} // namespace D2Client::UI::Editbox::EditBoxImplementation
+namespace D2Client::UI::Editbox::EditBoxWrapper {
+// const EditBoxWrapper::vftable
+extern void * vftable[19];
+} // namespace D2Client::UI::Editbox::EditBoxWrapper
 namespace D2Client::UI::Inv {
-// param_2 parameter of wsprintfA
-extern char param_2_006d6454[3];
 extern int ScreenSizeY;
 extern int32_t gpInventoryContextUi;
 extern int gnPanelOffsetX;
@@ -454,10 +297,15 @@ extern uint32_t gbInvExpansionTabVisible;
 extern uint32_t gbTradeConfirmationPending;
 extern uint32_t gpInvItemDescPending;
 } // namespace D2Client::UI::Inv
+namespace D2Client::UI::ListBox::ListBoxImplementation {
+// const ListBoxImplementation::vftable
+extern void * vftable[16];
+} // namespace D2Client::UI::ListBox::ListBoxImplementation
+namespace D2Client::UI::ListBox::ListBoxWrapper {
+// const ListBoxWrapper::vftable
+extern void * vftable[16];
+} // namespace D2Client::UI::ListBox::ListBoxWrapper
 namespace D2Client::UI::npcmenu {
-// param_2 parameter of wsprintfA
-extern char param_2_006da0cc[4];
-extern char * gaLanguageNames_007273a8[15];
 extern uint32_t gnMonsterSpecialType;
 extern uint32_t gnNpcMenuMercHireCost1;
 extern uint32_t gnNpcMenuMercHireCost2;
@@ -481,12 +329,6 @@ extern D2BitBufferStrc * gpNpcMenuBitBuffer;
 extern uint8_t gbNpcMenuTransactionPending;
 extern uint32_t gnNpcMenuTransactionItemGUID;
 } // namespace D2Client::UI::npcmenu
-namespace D2Client::UI::Panel {
-extern char * gaLanguageNames_00722414[15];
-} // namespace D2Client::UI::Panel
-namespace D2Client::UI::Party {
-extern char * gaLanguageNames_00722470[15];
-} // namespace D2Client::UI::Party
 namespace D2Client::UI::Path {
 extern uint32_t MouseYOffset;
 extern uint32_t MouseXOffset;
@@ -531,14 +373,17 @@ extern uint16_t gaQuestDescData_TaintedSun[32];
 extern uint16_t gaQuestDescData_ArcaneSanctuary[32];
 extern uint16_t gaQuestDescData_TheSummoner[32];
 } // namespace D2Client::UI::QuestLog
-namespace D2Client::UI::SkillDesc {
-extern char * gaLanguageNames_0072d8d8[15];
-extern char * gaLanguageNames_0072d914[15];
-extern char * gaLanguageNames_0072d950[15];
-} // namespace D2Client::UI::SkillDesc
 namespace D2Client::UI::SpellSel {
 extern int WindowSizeX;
 } // namespace D2Client::UI::SpellSel
+namespace D2Client::UI::Spinner::SpinnerImplementation {
+// const SpinnerImplementation::vftable
+extern void * vftable[13];
+} // namespace D2Client::UI::Spinner::SpinnerImplementation
+namespace D2Client::UI::Spinner::SpinnerWrapper {
+// const SpinnerWrapper::vftable
+extern void * vftable[13];
+} // namespace D2Client::UI::Spinner::SpinnerWrapper
 namespace D2Client::UI::Text {
 extern uint32_t gnTextOverheadCounter;
 } // namespace D2Client::UI::Text
@@ -548,8 +393,6 @@ extern bool gbTradeResetFlag;
 extern int32_t g_nTradeWindowState;
 } // namespace D2Client::UI::Trade
 namespace D2Client::UI::ui {
-// param_2 parameter of wsprintfA
-extern char param_2_006d9be8[4];
 extern int ScreenSizeX;
 extern int gnGoldDialogTransactionType;
 extern ::SpinnerWrapper * gpCurrentDialog;
@@ -578,17 +421,7 @@ extern uint32_t ClickingDownOnWaypointEntry;
 } // namespace D2Client::UI::Waypoint
 namespace D2Client::UNIT::CUnit {
 extern D2UnitStrc * ClientSideUnitHashTables[6][128];
-extern D2UnitStrc * ClientSideUnitHashTables_1__0_[6][128];
-extern D2UnitStrc * ClientSideUnitHashTables_1__1_[6][128];
-extern D2UnitStrc * ClientSideUnitHashTables_2__0_[6][128];
-extern D2UnitStrc * ClientSideUnitHashTables_3__0_[6][128];
 extern D2UnitStrc * ServerSideUnitHashTables[6][128];
-extern D2UnitStrc * ServerSideUnitHashTables_0__1_[6][128];
-extern D2UnitStrc * ServerSideUnitHashTables_1__0_[6][128];
-extern D2UnitStrc * ServerSideUnitHashTables_1__1_[6][128];
-extern D2UnitStrc * ServerSideUnitHashTables_2__0_[6][128];
-extern D2UnitStrc * ServerSideUnitHashTables_3__0_[6][128];
-extern D2UnitStrc * ServerSideUnitHashTables_4__0_[6][128];
 extern uint32_t nNextGUID;
 } // namespace D2Client::UNIT::CUnit
 namespace D2Client::UNIT::Monster {
@@ -607,6 +440,14 @@ extern uint32_t gnSoundInitCooldown;
 extern unsigned int gnSoundLastPlayerAnimModeTime;
 extern int geSoundLastPlayerAnimMode;
 } // namespace D2Client::UNIT::UnitSnd
+namespace D2Client::Warden {
+// const WardenClient::vftable
+extern void * vftable[7];
+} // namespace D2Client::Warden
+namespace D2Client::Warden::NWardenClient {
+// const NWardenClient::Library::vftable
+extern void * vftable[7];
+} // namespace D2Client::Warden::NWardenClient
 namespace D2Client::Waypoint {
 extern int32_t nWaypointSignature;
 extern bool bNeedAllocation;

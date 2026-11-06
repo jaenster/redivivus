@@ -11,8 +11,13 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2gfx/D2GFX.h"
 
+// Forward declarations
+struct D2GfxHelperStrc;
+
+extern int RENDERER_nWindowWidth;
+extern int RENDERER_nWindowHeight;
+extern ::D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc;
 namespace D2gfx::D2GFX {
 extern eD2RendererMode eRendererMode;
 } // namespace D2gfx::D2GFX
@@ -34,7 +39,6 @@ extern int gnTileClipRight;
 extern BYTE * * gpPaletteBlendLookupTable;
 } // namespace D2gfx
 namespace D2gfx::D2GFX {
-extern uint64_t gaIntensityTableConstant;
 extern int gaGroundTileRowOffsets[15];
 extern int gaGroundTileRowWidths[15];
 extern int gaGroundTileSrcPointers[15];

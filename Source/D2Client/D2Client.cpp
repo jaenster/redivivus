@@ -172,7 +172,6 @@
 #include "Source/D2Hell/D2Hell.h"
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/D2WinAnimImage.h"
 #include "Source/D2Win/Src/D2Comp.h"
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2gfx/D2GFX.h"

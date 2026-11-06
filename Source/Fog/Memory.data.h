@@ -9,9 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/Memory.h"
 
 // Forward declarations
 struct D2MemoryManagerStrc;

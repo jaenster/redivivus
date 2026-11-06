@@ -4,58 +4,54 @@
  */
 
 #include "Source/globals/globals.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
 #include "Source/D2Common/Merc.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Multi/OOGUtilities.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
 #include "Source/Fog/Fog.globals.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Common/Chat/Ignorelist.h"
 #include "Source/D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 #include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Drlg/DrlgGrid.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Txt/Skills.h"
 
+namespace Storm::Source::SFile {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Storm::Source::SFile
+namespace Class::FILEREC {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::FILEREC
+namespace Class::EVENTREC {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::EVENTREC
+namespace Class::REQUEST {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::REQUEST
+namespace Class::AUDIOSTREAM {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::AUDIOSTREAM
+namespace Class::HANDLER {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::HANDLER
+
+// =============================================================================
+// Named only by initializers in this file
+// =============================================================================
+
+namespace D2Common::Merc {
+static uint8_t gaMonSeqMonsterTblData_Unknown; D2_STATIC_GUARD_BSS(gaMonSeqMonsterTblData_Unknown, "D2Common::Merc::gaMonSeqMonsterTblData_Unknown");
+} // namespace D2Common::Merc
+namespace D2Common::Merc {
+static uint8_t gaMonSeqAnimData; D2_STATIC_GUARD_BSS(gaMonSeqAnimData, "D2Common::Merc::gaMonSeqAnimData");
+} // namespace D2Common::Merc
+namespace D2Common::Merc {
+static uint32_t DWORD_007467b0 = 0x5070000; D2_STATIC_GUARD(DWORD_007467b0, "D2Common::Merc::DWORD_007467b0");
+} // namespace D2Common::Merc
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_C_006ed5b4[2] = { 'C', '\x00' }; D2_GLOBAL_GUARD(s_C_006ed5b4, "s_C_006ed5b4");
 
 // =============================================================================
 // Initialized scalars
@@ -372,12 +368,6 @@ void * vftable[12] = {
     (void*)&D2Common::Chat::Ignorelist::ChatIgnoreList::ScalarDeletingDestructor
 }; D2_GLOBAL_GUARD(vftable, "D2Common::Chat::Ignorelist::ChatIgnoreList::vftable");
 
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-void* vftable_meta_ptr = (void*)0x0070056c; D2_GLOBAL_GUARD(vftable_meta_ptr, "D2Common::Chat::Ignorelist::ChatIgnoreList::vftable_meta_ptr");
-
 } // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
 
 namespace D2Common::Chat::Ignorelist::IgnoreList {
@@ -400,12 +390,6 @@ void * vftable[12] = {
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::ClearAccountMappings,
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::ScalarDeletingDestructor
 }; D2_GLOBAL_GUARD(vftable, "D2Common::Chat::Ignorelist::IgnoreList::vftable");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-void* vftable_meta_ptr = (void*)0x00700644; D2_GLOBAL_GUARD(vftable_meta_ptr, "D2Common::Chat::Ignorelist::IgnoreList::vftable_meta_ptr");
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
@@ -2061,16 +2045,6 @@ char s___AV__TSExplicitList_UMappingEnt_007436ac[56] = {
 }; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UMappingEnt_007436ac, "D2Common::Chat::Ignorelist::s___AV__TSExplicitList_UMappingEnt_007436ac");
 
 } // namespace D2Common::Chat::Ignorelist
-
-namespace D2Common::Logging::ProfCore {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "D2Common::Logging::ProfCore::gaLanguageNames_0074430c_11");
-
-} // namespace D2Common::Logging::ProfCore
 
 namespace D2Common::DUNGEON::Dungeon {
 
@@ -3970,19 +3944,6 @@ D2MonSeqMonsterTbls D2MonSeqMonsterTbls_ARRAY_00748310[14] = {
         /* .nCounter2 = */ 0x13
     }
 }; D2_GLOBAL_GUARD(D2MonSeqMonsterTbls_ARRAY_00748310, "D2Common::Merc::D2MonSeqMonsterTbls_ARRAY_00748310");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "D2Common::Merc::DWORD_007467b0");
-
-// =============================================================================
-// Uninitialized data (BSS)
-// =============================================================================
-
-uint8_t gaMonSeqMonsterTblData_Unknown; D2_GLOBAL_GUARD_BSS(gaMonSeqMonsterTblData_Unknown, "D2Common::Merc::gaMonSeqMonsterTblData_Unknown");
-uint8_t gaMonSeqAnimData; D2_GLOBAL_GUARD_BSS(gaMonSeqAnimData, "D2Common::Merc::gaMonSeqAnimData");
 
 } // namespace D2Common::Merc
 

@@ -12,109 +12,7 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/BnSend.h"
-#include "Source/Bnclient/SRP.h"
-#include "Source/Bnclient/net_sid.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Client/ClientModeInGame.h"
-#include "Source/D2Client/Cursor.h"
-#include "Source/D2Client/D2BNetGatewayAccessStr.h"
-#include "Source/D2Client/D2GSPacketSrv0x2A.h"
-#include "Source/D2Client/D2GfxMemoryStrc.h"
-#include "Source/D2Client/D2GfxSettingsStrc.h"
-#include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
-#include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/GAME/Draw.h"
-#include "Source/D2Client/GAME/Game/Game.h"
-#include "Source/D2Client/GAME/Record.h"
-#include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Client/GAME/Sound.h"
-#include "Source/D2Client/Sound/Sound.h"
-#include "Source/D2Client/UI/Automap.h"
-#include "Source/D2Client/UI/Chat.h"
-#include "Source/D2Client/UI/CmdTbl.h"
-#include "Source/D2Client/UI/EscMenu.h"
-#include "Source/D2Client/UI/Inv.h"
-#include "Source/D2Client/UI/Path.h"
-#include "Source/D2Client/UI/QuestLog.h"
-#include "Source/D2Client/UI/ShowItems.h"
-#include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/UI/SpellSel.h"
-#include "Source/D2Client/UI/Text.h"
-#include "Source/D2Client/UI/UseItem.h"
-#include "Source/D2Client/UI/Waypoint.h"
-#include "Source/D2Client/UI/npcmenu.h"
-#include "Source/D2Client/UI/npcmenu/Merc.h"
-#include "Source/D2Client/UI/ui.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Object.h"
-#include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Client/Warden/WardenClient.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Direct3D/Renderer/Direct3D.h"
-#include "Source/D2Direct3D/d3dFloorCache.h"
-#include "Source/D2Direct3D/d3dSubtileCache.h"
 #include "Source/D2Direct3D/d3dTextureCache.h"
-#include "Source/D2Game/GAME/Arena.h"
-#include "Source/D2Game/GAME/Task.h"
-#include "Source/D2Game/Monster/AI/AI.h"
-#include "Source/D2Game/Monster/AI/Baal.h"
-#include "Source/D2Game/Monster/MonsterMode.h"
-#include "Source/D2Game/Objects/Objects.h"
-#include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/D2Game/Quests/QUESTS.h"
-#include "Source/D2Game/SKILLS/Items.h"
-#include "Source/D2Game/SKILLS/SkillAss.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/D2Glide/Renderer/Glide.h"
-#include "Source/D2Glide/glFloorCache.h"
-#include "Source/D2Glide/glSubtileCache.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Launch/MainMenus.h"
-#include "Source/D2Multi/OOGUtilities.h"
-#include "Source/D2Win/Src/D2Comp.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
-#include "3rdparty/Storm/H/stpl.h"
 
 // Forward declarations
 struct ARGLIST;
@@ -644,14 +542,6 @@ typedef void * (__stdcall *fnSendQueryRealms2)();
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD AddrBaseLow, DWORD AddrBaseHigh);
 
 // Full type definitions (used by value in globals)
-#ifndef D2_DEFINED_CLIENT_ID
-#define D2_DEFINED_CLIENT_ID
-struct CLIENT_ID {
-    /* 0x00 */ void * UniqueProcess;
-    /* 0x04 */ void * UniqueThread;
-};
-#endif // D2_DEFINED_CLIENT_ID
-
 #ifndef D2_DEFINED_D2AppModeBootstrapStrc
 #define D2_DEFINED_D2AppModeBootstrapStrc
 struct D2AppModeBootstrapStrc {
@@ -1249,120 +1139,6 @@ struct __attribute__((packed)) D2ShrinesTableEntryStrc {
 // Global data (referenced by multiple functions)
 // =============================================================================
 
-extern uint8_t IMAGE_DOS_HEADER__00400000[128];
-// lpDefault parameter of GetPrivateProfileStringA
-extern char lpDefault_006cc837[1];
-extern uint8_t gbChatDlgUpdateMarker;
-extern uint8_t gbFloatConstantBase;
-extern char gpCutsceneVideoFrameBuffer[8];
-// param_2 parameter of wsprintfA
-extern char param_2_006d57bc[3];
-// NOT a D2CharSelStrc: .rdata string pool starting with "*", then "<%s> ", "<%s%s> ", channel messages
-extern char gsCharSelContext[4];
-extern uint8_t gaMonsterDenEnvironmentData;
-extern uint8_t gaWeatherTransitionConstant;
-// NOT a pool manager: .rdata string pool starting with "end". D2PoolManagerStrc (6092 B, correct type, correctly applied at 00800000 and 0088cadc) was misapplied here
-extern char gTxtCompilationMemPool[4];
-extern double gdConst255;
-extern char * gpszPaletteAct1Dat;
-extern char * gpszPaletteAct1Pl2;
-extern char * gpszPaletteActPathFormat;
-extern char * gpszPalDatName;
-extern char * gpszPalPl2Name;
-extern unsigned int gaItemTypeTxtIndexData;
-extern char s_C_006ed5b4[2];
-extern char s_SAM_006fad3c[4];
-extern char * gaAtlRegistryRootKeys[12];
-extern char * gaLanguageNames_00705000[15];
-extern char * gaMonthAbbreviations[12];
-extern char * gaLanguageNames_0072d994[15];
-extern char * gaLanguageNames_0072d9d0[15];
-extern char * gaLanguageNames_0072da0c[15];
-extern char * gaszLanguageNames[32];
-extern uint32_t DEFAULT_SECURITY_COOKIE;
-extern double DOUBLE_0074adb4;
-// CRT x87 dispatch: maps the FXAM condition bits (C3,C2,C1,C0 folded into 4 bits) to a byte offset into the caller's per-class jump table.
-// Provenance: 00698548/006985af MOV EBX,0x74adbc; XLAT; MOVSX; ADD EBX,EDX+0x10; JMP [EBX] (code not yet in a function).
-extern uint8_t gabyFxamClassOffset[16];
-extern unsigned int gaCRT_FPremData_3;
-extern int RENDERER_nWindowWidth;
-extern int RENDERER_nWindowHeight;
-extern ::D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc;
-extern unsigned int UINT_0096d6a8;
-extern uint32_t LastErrorValue;
-extern uint32_t CountOfOwnedCriticalSections;
-extern void * CsrClientThread;
-extern void * Win32ThreadInfo;
-extern uint32_t User32Reserved[26];
-extern uint32_t UserReserved[5];
-extern void * WOW32Reserved;
-extern uint32_t CurrentLocale;
-extern uint32_t FpSoftwareStatusRegister;
-extern void * SystemReserved1[54];
-extern uint32_t ExceptionCode;
-extern void * ActivationContextStackPointer;
-extern uint8_t SpareBytes[36];
-extern uint32_t TxFsContext;
-extern uint32_t GdiTebBatch;
-extern CLIENT_ID RealClientId;
-extern void * GdiCachedProcessHandle;
-extern uint32_t GdiClientPID;
-extern uint32_t GdiCLientTID;
-extern void * GdiThreadLocalInfo;
-extern void * Win32ClientInfo[62];
-extern void * glDispatchTable[233];
-extern void * glReserved1[29];
-extern void * glReserved2;
-extern void * glSectionInfo;
-extern void * glSection;
-extern void * glTable;
-extern void * glCurrentRC;
-extern void * glContext;
-extern uint32_t LastStatusValue;
-extern uint16_t StaticUnicodeBuffer[261];
-extern void * DeallocationStack;
-extern void * TlsSlots[64];
-extern void * TlsLinks_Flink;
-extern void * TlsLinks_Blink;
-extern void * Vdm;
-extern void * ReservedForNtRpc;
-extern void * DbgSsReserved[2];
-extern uint32_t HardErrorMode;
-extern void * Instrumentation[9];
-extern GUID ActivityId;
-extern void * SubProcessTag;
-extern void * EtwLocalData;
-extern void * EtwTraceData;
-extern void * WinSockData;
-extern uint32_t GdiBatchCount;
-extern uint32_t IdealProcessorValue;
-extern uint32_t GuaranteedStackBytes;
-extern void * ReservedForPerf;
-extern void * ReservedForOle;
-extern uint32_t WaitingOnLoaderLock;
-extern void * SavedPriorityState;
-extern void * SoftPatchPtr1;
-extern void * ThreadPoolData;
-extern void * TlsExpansionSlots;
-extern uint32_t MuiGeneration;
-extern uint32_t IsImpersonating;
-extern void * NlsCache;
-extern void * pShimData;
-extern uint32_t HeapVirtualAffinity;
-extern void * CurrentTransactionHandle;
-extern void * ActiveFrame;
-extern void * FlsData;
-extern void * PreferredLanguages;
-extern void * UserPrefLanguages;
-extern void * MergedPrefLanguages;
-extern uint32_t MuiImpersonation;
-extern unsigned short CrossTebFlags;
-extern unsigned short SameTebFlags;
-extern void * TxnScopeEnterCallback;
-extern void * TxnScopeExitCallback;
-extern void * TxnScopeContext;
-extern uint32_t LockCount;
-extern void * ResourceRetValue;
 
 namespace D2Game::PLAYER::PlayerModes {
 
@@ -1384,31 +1160,6 @@ namespace Fog::Src::ErrorManager {
 
 } // namespace Fog::Src::ErrorManager
 
-namespace Storm::Source::SSignature {
-
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-
-} // namespace Storm::Source::SSTR
-
 namespace Fog::Debug {
 
 
@@ -1428,11 +1179,6 @@ namespace Storm::Source::SErr {
 
 
 } // namespace Storm::Source::SErr
-
-namespace Storm::Source::SLog {
-
-
-} // namespace Storm::Source::SLog
 
 namespace Storm::_3rdparty::zlib::deflate {
 
@@ -1479,11 +1225,6 @@ namespace D2Client::UI::Inv {
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 
@@ -1513,11 +1254,6 @@ namespace D2Client::UI::QuestLog {
 
 
 } // namespace D2Client::UI::QuestLog
-
-namespace D2Sound::Src::D2SoundSmp {
-
-
-} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -1654,11 +1390,6 @@ namespace D2Common::DATATBLS::ItemTbls {
 
 } // namespace D2Common::DATATBLS::ItemTbls
 
-namespace D2Common::Monsters::MONSTERS {
-
-
-} // namespace D2Common::Monsters::MONSTERS
-
 namespace D2Common::Drlg::Preset {
 
 
@@ -1684,72 +1415,20 @@ namespace D2Common::Drlg {
 
 } // namespace D2Common::Drlg
 
-namespace Define_the_symbol__ATL_MIXED {
-
-// meta pointer for Define_the_symbol__ATL_MIXED::Thank_you::vftable
-extern void* vftable_meta_ptr;
-
-} // namespace Define_the_symbol__ATL_MIXED
-
 namespace Storm::Source {
 
 
 } // namespace Storm::Source
-
-namespace Fog::File {
-
-
-} // namespace Fog::File
 
 namespace Fog::_3rdparty::crashy {
 
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace D2Hell {
-
-
-} // namespace D2Hell
-
 namespace Fog::Source::SSComp {
 
 
 } // namespace Fog::Source::SSComp
-
-namespace Class::FILEREC {
-
-// struct FILEREC RTTI Type Descriptor
-extern uint8_t RTTI_Type_Descriptor;
-
-} // namespace Class::FILEREC
-
-namespace Class::EVENTREC {
-
-// struct EVENTREC RTTI Type Descriptor
-extern uint8_t RTTI_Type_Descriptor;
-
-} // namespace Class::EVENTREC
-
-namespace Class::REQUEST {
-
-// struct REQUEST RTTI Type Descriptor
-extern uint8_t RTTI_Type_Descriptor;
-
-} // namespace Class::REQUEST
-
-namespace Class::AUDIOSTREAM {
-
-// struct AUDIOSTREAM RTTI Type Descriptor
-extern uint8_t RTTI_Type_Descriptor;
-
-} // namespace Class::AUDIOSTREAM
-
-namespace Class::HANDLER {
-
-// struct HANDLER RTTI Type Descriptor
-extern uint8_t RTTI_Type_Descriptor;
-
-} // namespace Class::HANDLER
 
 namespace D2Launch::MainMenus {
 
@@ -1791,11 +1470,6 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
-namespace D2Client::GAME::SCmd {
-
-
-} // namespace D2Client::GAME::SCmd
-
 namespace D2Client::UNIT::CUnit {
 
 
@@ -1810,16 +1484,6 @@ namespace D2Client::GAME::Rendering {
 
 
 } // namespace D2Client::GAME::Rendering
-
-namespace D2Client::UI::Panel {
-
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-
-} // namespace D2Client::UI::Party
 
 namespace D2Client::NPC {
 
@@ -1840,11 +1504,6 @@ namespace D2Client::UNIT::UnitSnd {
 
 
 } // namespace D2Client::UNIT::UnitSnd
-
-namespace D2Client::UI::SkillDesc {
-
-
-} // namespace D2Client::UI::SkillDesc
 
 namespace D2Win::Src::D2Comp {
 
@@ -2016,11 +1675,6 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
-namespace D2Game::Monster::Create {
-
-
-} // namespace D2Game::Monster::Create
-
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 
@@ -2126,25 +1780,10 @@ namespace D2Common::ITEMS::Items {
 
 } // namespace D2Common::ITEMS::Items
 
-namespace D2Common::Logging::ProfCore {
-
-
-} // namespace D2Common::Logging::ProfCore
-
-namespace D2Common::DUNGEON::Dungeon {
-
-
-} // namespace D2Common::DUNGEON::Dungeon
-
 namespace D2Common::Environment {
 
 
 } // namespace D2Common::Environment
-
-namespace D2Common::Units {
-
-
-} // namespace D2Common::Units
 
 namespace D2Common::Merc {
 

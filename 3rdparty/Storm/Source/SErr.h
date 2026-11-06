@@ -10,7 +10,6 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "3rdparty/Storm/H/stpl.h"
 
 // Forward declarations
 struct D2StormListHead;

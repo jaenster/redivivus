@@ -647,6 +647,11 @@ struct tagWINDOWPLACEMENT { UINT length; UINT flags; UINT showCmd; POINT ptMinPo
 typedef tagWINDOWPLACEMENT WINDOWPLACEMENT;
 typedef GUID IID;
 #endif // _WIN32
+#ifdef __cplusplus
+extern "C" IMAGE_DOS_HEADER __ImageBase;
+#else
+extern IMAGE_DOS_HEADER __ImageBase;
+#endif
 
 typedef int _Unwind_Reason_Code;
 struct _Unwind_Exception { uint64_t exception_class; void (*exception_cleanup)(_Unwind_Reason_Code, struct _Unwind_Exception *); uint64_t private_1; uint64_t private_2; };

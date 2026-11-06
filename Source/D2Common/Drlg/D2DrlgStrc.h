@@ -11,7 +11,6 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/D2RoomExStrc.h"
-#include "Source/D2Common/D2SeedStrc.h"
 
 // Forward declarations
 struct D2DrlgActStrc;

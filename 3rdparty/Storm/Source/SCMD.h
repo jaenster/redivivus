@@ -11,7 +11,6 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/ClientModeInGame.h"
-#include "3rdparty/Storm/H/stpl.h"
 
 // Forward declarations
 struct D2GameNpcStrc;

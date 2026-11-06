@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2BNetGatewayAccessStr.h"
 
 // Forward declarations
 struct D2BNetGatewayAccessStr;
@@ -36,7 +35,6 @@ extern char * KeyExpansion;
 extern char * KeyOwner;
 } // namespace Bnclient::_net_sid
 namespace Bnclient::BnDownload {
-extern char gaCDKeyAuthData[4];
 extern unsigned int gnNetworkSendState;
 extern char gbBnetFtpFileTransferActive[256];
 extern char gszBNetChatInputBuffer[260];

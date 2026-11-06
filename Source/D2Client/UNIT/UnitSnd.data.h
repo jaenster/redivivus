@@ -9,7 +9,6 @@
 #endif
 
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/UNIT/UnitSnd.h"
 
 extern eD2Sounds eD2Sounds_ARRAY_00727f48[12];
 extern eD2Sounds eD2Sounds_ARRAY_00727f78[12];

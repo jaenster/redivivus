@@ -3,61 +3,73 @@
  * Binary: Game.exe
  */
 
-#include "Source/globals/globals.h"
-#include "Source/D2CMP/Draw.h"
-#include "Source/D2CMP/SRC/Codec.h"
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
-#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/OutSiege.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging/ProfCore.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Multi/D2Multi.globals.h"
 #include "Source/D2Multi/OOGUtilities.h"
-#include "Source/D2Win/D2WinAnimImage.h"
-#include "Source/D2Win/Src/D2Comp.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Multi/ChatDlg.data.h"
-#include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Multi/ComCallback.h"
 #include "Source/D2Multi/D2Multi.h"
-#include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Win/D2WinAnimImage.h"
 
+
+// =============================================================================
+// Named only by initializers in this file
+// =============================================================================
+
+namespace D2Multi::ChatDlg {
+static int32_t gaMultiFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_STATIC_GUARD(gaMultiFormFontParamsFont7, "D2Multi::ChatDlg::gaMultiFormFontParamsFont7");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::ChatDlg {
+static int32_t gaMultiTextBoxScrollbarGeom0[3] = { 0x190, 0x186, 0x13a }; D2_STATIC_GUARD(gaMultiTextBoxScrollbarGeom0, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom0");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::ChatDlg {
+static int32_t gaMultiTextBoxScrollbarGeom1[3] = { 0x250, 0x189, 0xad }; D2_STATIC_GUARD(gaMultiTextBoxScrollbarGeom1, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom1");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::ChatDlg {
+static int32_t gaMultiTextBoxScrollbarGeom2[3] = { 0x2f1, 0x18a, 0xc4 }; D2_STATIC_GUARD(gaMultiTextBoxScrollbarGeom2, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom2");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::ChatDlg {
+static int32_t gaMultiTextBoxScrollbarGeom3[3] = { 0x2f1, 0x189, 0xc5 }; D2_STATIC_GUARD(gaMultiTextBoxScrollbarGeom3, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom3");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::ChatDlg {
+static int32_t gaMultiTextBoxScrollbarGeom4[3] = { 0x2f4, 0x187, 0xee }; D2_STATIC_GUARD(gaMultiTextBoxScrollbarGeom4, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom4");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::ChatDlg {
+static FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5] = {
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_STATIC_GUARD(gaMultiLogoAnimFrames, "D2Multi::ChatDlg::gaMultiLogoAnimFrames");
+} // namespace D2Multi::ChatDlg
 
 // =============================================================================
 // Initialized scalars
@@ -150,52 +162,7 @@ char s_asn_006d557c[4] = { 'a', 's', 'n', '\x00' }; D2_GLOBAL_GUARD(s_asn_006d55
 
 int32_t gaMultiFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont3, "D2Multi::ChatDlg::gaMultiFormFontParamsFont3");
 
-int32_t gaMultiFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont7, "D2Multi::ChatDlg::gaMultiFormFontParamsFont7");
-
-int32_t gaMultiTextBoxScrollbarGeom0[3] = { 0x190, 0x186, 0x13a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom0, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom0");
-
-int32_t gaMultiTextBoxScrollbarGeom1[3] = { 0x250, 0x189, 0xad }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom1, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom1");
-
-int32_t gaMultiTextBoxScrollbarGeom2[3] = { 0x2f1, 0x18a, 0xc4 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom2, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom2");
-
-int32_t gaMultiTextBoxScrollbarGeom3[3] = { 0x2f1, 0x189, 0xc5 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom3, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom3");
-
-int32_t gaMultiTextBoxScrollbarGeom4[3] = { 0x2f4, 0x187, 0xee }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom4, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom4");
-
 int32_t gaMultiTextBoxScrollbarGeom5[3] = { 0x2f4, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom5, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom5");
-
-FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5] = {
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    },
-    {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
-        /* .nDrawMode = */ 0x3,
-        /* .nFrameDelay = */ 0x1
-    }
-}; D2_GLOBAL_GUARD(gaMultiLogoAnimFrames, "D2Multi::ChatDlg::gaMultiLogoAnimFrames");
 
 _RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "D2Multi::ChatDlg::lpCriticalSection_0077ae28");
 
@@ -2142,10 +2109,6 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
-
-namespace D2Common::Logging::ProfCore {
-
-} // namespace D2Common::Logging::ProfCore
 
 namespace D2Common::DUNGEON::Dungeon {
 

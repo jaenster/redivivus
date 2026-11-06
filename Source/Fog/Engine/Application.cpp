@@ -5,25 +5,8 @@
 #include "Source/Fog/Debug.h"
 #include "Source/Fog/File.h"
 #include "3rdparty/Storm/Source/SFile.h"
-#include "Source/globals/globals.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/Objects/ObjectsRgn.h"
 #include "Source/Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -47,30 +30,6 @@ typedef HRESULT (__stdcall *pfnSHGetKnownFolderPath)(GUID * rfid, DWORD dwFlags,
 #endif
 
 uint32_t gaEnumProcessModuleHandles[1028] = {}; D2_GLOBAL_GUARD(gaEnumProcessModuleHandles, "gaEnumProcessModuleHandles");
-uint8_t IMAGE_RESOURCE_DIRECTORY_00995000[16] = {}; D2_GLOBAL_GUARD(IMAGE_RESOURCE_DIRECTORY_00995000, "IMAGE_RESOURCE_DIRECTORY_00995000");
-uint8_t Rsrc_Icon_1_409[744] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_1_409, "Rsrc_Icon_1_409");
-uint8_t Rsrc_Icon_2_409[296] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_2_409, "Rsrc_Icon_2_409");
-uint8_t Rsrc_Icon_3_409[744] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_3_409, "Rsrc_Icon_3_409");
-uint8_t Rsrc_Icon_4_409[296] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_4_409, "Rsrc_Icon_4_409");
-uint8_t Rsrc_Icon_5_409[2216] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_5_409, "Rsrc_Icon_5_409");
-uint8_t Rsrc_Icon_6_409[296] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_6_409, "Rsrc_Icon_6_409");
-uint8_t Rsrc_GroupIcon_65_409[34] = {}; D2_GLOBAL_GUARD(Rsrc_GroupIcon_65_409, "Rsrc_GroupIcon_65_409");
-uint8_t Rsrc_GroupIcon_66_409[34] = {}; D2_GLOBAL_GUARD(Rsrc_GroupIcon_66_409, "Rsrc_GroupIcon_66_409");
-uint8_t Rsrc_GroupIcon_67_409[34] = {}; D2_GLOBAL_GUARD(Rsrc_GroupIcon_67_409, "Rsrc_GroupIcon_67_409");
-uint8_t Rsrc_Version_1_409[92] = {}; D2_GLOBAL_GUARD(Rsrc_Version_1_409, "Rsrc_Version_1_409");
-char Rsrc_Manifest_1_409[1745] = { "<assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\">\r\n</assembly>PAPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGX" }; D2_GLOBAL_GUARD(Rsrc_Manifest_1_409, "Rsrc_Manifest_1_409");
-void * ExceptionList = (void *)0x00000000; D2_GLOBAL_GUARD(ExceptionList, "ExceptionList");
-void * SubSystemTib = (void *)0x00000000; D2_GLOBAL_GUARD(SubSystemTib, "SubSystemTib");
-void * FiberData = (void *)0x00000000; D2_GLOBAL_GUARD(FiberData, "FiberData");
-void * ArbitraryUserPointer = (void *)0x00000000; D2_GLOBAL_GUARD(ArbitraryUserPointer, "ArbitraryUserPointer");
-void * Self = (void *)0xffdff000; D2_GLOBAL_GUARD(Self, "Self");
-void * EnvironmentPointer = (void *)0x00000000; D2_GLOBAL_GUARD(EnvironmentPointer, "EnvironmentPointer");
-CLIENT_ID ClientId = {
-    /* .UniqueProcess = */ nullptr,
-    /* .UniqueThread = */ nullptr
-}; D2_GLOBAL_GUARD(ClientId, "ClientId");
-void * ActiveRpcHandle = (void *)0x00000000; D2_GLOBAL_GUARD(ActiveRpcHandle, "ActiveRpcHandle");
-void * ThreadLocalStoragePointer = (void *)0x00000000; D2_GLOBAL_GUARD(ThreadLocalStoragePointer, "ThreadLocalStoragePointer");
 
 namespace Fog::Engine::Application {
 
@@ -459,9 +418,6 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
 }
 
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
-    // Static local variables (originally global data)
-    static void * ProcessEnvironmentBlock = (void *)0x00000000; D2_STATIC_GUARD(ProcessEnvironmentBlock, "Fog::Engine::Application::DEBUG_EnumerateModulesViaPEB::ProcessEnvironmentBlock");
-
     void* pSavedEsp;
     EH4_EXCEPTION_REGISTRATION tSehFrame;
     tSehFrame.TryLevel = -2;
@@ -476,7 +432,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     }
 
     tSehFrame.TryLevel = 0;
-    uint32_t* pListHead = (uint32_t*)(*(int*)((int)ProcessEnvironmentBlock + 0xc) + 0x14);
+    uint32_t* pListHead = (uint32_t*)(*(int*)((int)*(void**)((char*)NtCurrentTeb() + 0x30) + 0xc) + 0x14);
     uint32_t* pEntry = (uint32_t*)*pListHead;
     while (true) {
       bool bVar1;

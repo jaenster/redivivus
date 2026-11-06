@@ -11,29 +11,20 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
 struct D2StormListHead;
 
-namespace Storm::Source::SFile {
-// struct Storm::SFile::ARCHIVEREC RTTI Type Descriptor
-extern uint8_t RTTI_Type_Descriptor;
-} // namespace Storm::Source::SFile
+// lpDefault parameter of GetPrivateProfileStringA
+extern char lpDefault_006cc837[1];
+extern void * ExceptionList;
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 namespace Storm::_3rdparty::zlib::deflate {
 extern char * z_errmsg[10];
 } // namespace Storm::_3rdparty::zlib::deflate
 namespace Storm::Source {
-extern char s_Unable_to_open_response_file___s_006fcbc0[33];
-extern char s_Invalid_argument___s_006fcc0c[21];
 extern char * gaSCMD_FallbackMessages[3];
-// param_2 parameter of wsprintfA
-extern char param_2_006ffc58[3];
-// lpOutputString parameter of OutputDebugStringA
-extern char lpOutputString_006ffcb0[2];
 } // namespace Storm::Source
 namespace Storm::Source::SErr {
 extern char s_File___s_006cf1e8[10];
@@ -46,8 +37,6 @@ namespace Storm::Source::SEVT {
 extern void * gpEventHashBuckets;
 } // namespace Storm::Source::SEVT
 namespace Storm::Source::SFile {
-// param_2 parameter of wsprintfA
-extern char param_2_006ce200[5];
 extern uint32_t gnSFileDataChunkSize;
 extern uint32_t gnSFileReadErrorMode;
 extern uint32_t gbSFileSeekOptimization;
@@ -61,13 +50,4 @@ extern char sRTTI_EVENTREC_AllocTag[16];
 extern char sRTTI_REQUEST_AllocTag[16];
 extern char sRTTI_AUDIOSTREAM_AllocTag[20];
 } // namespace Storm::Source::SFile
-namespace Storm::Source::SLog {
-extern char szOOGPasswordDialogTimeFmt;
-} // namespace Storm::Source::SLog
-namespace Storm::Source::SSignature {
-extern char gszHeapTagOperatorNew[4];
-} // namespace Storm::Source::SSignature
-namespace Storm::Source::SSTR {
-extern double gdblConstantTen;
-} // namespace Storm::Source::SSTR
 #endif // D2_MODULE_Storm

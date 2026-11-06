@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Fog/D2QServerStrc.h"
 
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Net)

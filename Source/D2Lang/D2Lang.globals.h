@@ -21,12 +21,5 @@ namespace D2Lang::StrTable::strtable {
 extern char gaLanguageCodeFallback[4];
 extern char gaLanguageCodeAbbrevTable[4];
 extern char gaLanguageCodeLookup[4];
-extern char * gpszStringTblPathFormat;
-extern char * gpszFontMapPathFormat;
-extern char * gpszPatchStringTblPathFormat;
-extern char * gpszExpansionStringTblPathFormat;
-extern char * gpszD2DataMpqName;
-extern char * gpszPatchD2MpqName;
-extern char * gpszD2ExpMpqName;
 } // namespace D2Lang::StrTable::strtable
 #endif // D2_MODULE_D2Lang

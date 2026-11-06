@@ -4,26 +4,89 @@
  */
 
 #include "Source/globals/globals.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Multi/OOGUtilities.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
 #include "3rdparty/Storm/Storm.globals.h"
 #include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Storm.h"
 
+
+// =============================================================================
+// Named only by initializers in this file
+// =============================================================================
+
+namespace Storm::Source {
+static char s_Unable_to_open_response_file___s_006fcbc0[33] = {
+    'U',
+    'n',
+    'a',
+    'b',
+    'l',
+    'e',
+    ' ',
+    't',
+    'o',
+    ' ',
+    'o',
+    'p',
+    'e',
+    'n',
+    ' ',
+    'r',
+    'e',
+    's',
+    'p',
+    'o',
+    'n',
+    's',
+    'e',
+    ' ',
+    'f',
+    'i',
+    'l',
+    'e',
+    ':',
+    ' ',
+    '%',
+    's',
+    '\x00'
+}; D2_STATIC_GUARD(s_Unable_to_open_response_file___s_006fcbc0, "Storm::Source::s_Unable_to_open_response_file___s_006fcbc0");
+} // namespace Storm::Source
+namespace Storm::Source {
+static char s_Invalid_argument___s_006fcc0c[21] = {
+    'I',
+    'n',
+    'v',
+    'a',
+    'l',
+    'i',
+    'd',
+    ' ',
+    'a',
+    'r',
+    'g',
+    'u',
+    'm',
+    'e',
+    'n',
+    't',
+    ':',
+    ' ',
+    '%',
+    's',
+    '\x00'
+}; D2_STATIC_GUARD(s_Invalid_argument___s_006fcc0c, "Storm::Source::s_Invalid_argument___s_006fcc0c");
+} // namespace Storm::Source
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char lpDefault_006cc837[1] = { '\x00' }; D2_GLOBAL_GUARD(lpDefault_006cc837, "lpDefault_006cc837");
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
+void * ExceptionList = (void *)0x00000000; D2_GLOBAL_GUARD(ExceptionList, "ExceptionList");
 
 namespace D2Common::Drlg::Maze {
 
@@ -532,66 +595,6 @@ namespace Storm::Source {
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char s_Unable_to_open_response_file___s_006fcbc0[33] = {
-    'U',
-    'n',
-    'a',
-    'b',
-    'l',
-    'e',
-    ' ',
-    't',
-    'o',
-    ' ',
-    'o',
-    'p',
-    'e',
-    'n',
-    ' ',
-    'r',
-    'e',
-    's',
-    'p',
-    'o',
-    'n',
-    's',
-    'e',
-    ' ',
-    'f',
-    'i',
-    'l',
-    'e',
-    ':',
-    ' ',
-    '%',
-    's',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Unable_to_open_response_file___s_006fcbc0, "Storm::Source::s_Unable_to_open_response_file___s_006fcbc0");
-
-char s_Invalid_argument___s_006fcc0c[21] = {
-    'I',
-    'n',
-    'v',
-    'a',
-    'l',
-    'i',
-    'd',
-    ' ',
-    'a',
-    'r',
-    'g',
-    'u',
-    'm',
-    'e',
-    'n',
-    't',
-    ':',
-    ' ',
-    '%',
-    's',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Invalid_argument___s_006fcc0c, "Storm::Source::s_Invalid_argument___s_006fcc0c");
-
 char * gaSCMD_FallbackMessages[3] = { (char*)&Storm::Source::s_Invalid_argument___s_006fcc0c, s_The_syntax_of_the_command_is_inco_006fcbe4, (char*)&Storm::Source::s_Unable_to_open_response_file___s_006fcbc0 }; D2_GLOBAL_GUARD(gaSCMD_FallbackMessages, "Storm::Source::gaSCMD_FallbackMessages");
 
 char param_2_006ffc58[3] = { '%', 's', '\x00' }; D2_GLOBAL_GUARD(param_2_006ffc58, "Storm::Source::param_2_006ffc58");
@@ -911,10 +914,6 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
-
-namespace D2Common::Logging::ProfCore {
-
-} // namespace D2Common::Logging::ProfCore
 
 namespace D2Common::DUNGEON::Dungeon {
 

@@ -61,6 +61,10 @@
 #include "Source/D2Client/GAME/Select.h"
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/Cursor.h"
 
 // One line in, one line out, on TCP 7777. Commands:
 //   state                -> a JSON line describing where the game actually is

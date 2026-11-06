@@ -3,28 +3,28 @@
  * Binary: Game.exe
  */
 
-#include "Source/globals/globals.h"
-#include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Multi/OOGUtilities.h"
 #include "3rdparty/crashy/crashy.globals.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
-#include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SComp.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/crashy/Report.h"
 
+namespace Storm::Source::SFile {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Storm::Source::SFile
+namespace Class::FILEREC {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::FILEREC
+namespace Class::EVENTREC {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::EVENTREC
+namespace Class::REQUEST {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::REQUEST
+namespace Class::AUDIOSTREAM {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::AUDIOSTREAM
+namespace Class::HANDLER {
+extern uint8_t RTTI_Type_Descriptor;
+} // namespace Class::HANDLER
 
 namespace D2Common::Drlg::Maze {
 
@@ -298,7 +298,6 @@ void * vftable[1] = { (void*)&Fog::_3rdparty::crashy::ScalarDeletingDestructor }
 // Initialized scalars
 // =============================================================================
 
-void* vftable_meta_ptr = (void*)0x00700a14; D2_GLOBAL_GUARD(vftable_meta_ptr, "Fog::_3rdparty::crashy::vftable_meta_ptr");
 uint32_t dwCurrentThreadId = 0; D2_GLOBAL_GUARD(dwCurrentThreadId, "Fog::_3rdparty::crashy::dwCurrentThreadId");
 
 } // namespace Fog::_3rdparty::crashy
@@ -606,10 +605,6 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
-
-namespace D2Common::Logging::ProfCore {
-
-} // namespace D2Common::Logging::ProfCore
 
 namespace D2Common::DUNGEON::Dungeon {
 

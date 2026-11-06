@@ -88,7 +88,7 @@
         }
       ],
       "exceptions": [],
-      "strict": false
+      "strict": true
     },
     "Storm": {
       "kind": "3rdparty",
@@ -765,7 +765,7 @@
         }
       ],
       "exceptions": [],
-      "strict": false,
+      "strict": true,
       "description": "The 1.14 crash-report library (Fog::_3rdparty::crashy)."
     },
     "D2Headers": {
