@@ -5,49 +5,39 @@
 
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
 
-*Redivivus* is Latin for a thing restored to life. It does what
-[D2MOO](https://github.com/ThePhrozenKeep/D2MOO) does for the game mechanics, and carries it
-through to the parts that make the game run at all: the program host and its main loop, the
-renderers, sound, input, files and archives, the network layer, and Blizzard's Storm and Fog
-libraries. Together they build into a program you can start and play.
-
-The tree is organised by the module names the game itself uses (`D2Client`, `D2Common`,
-`D2Game`, `D2Win`, `D2gfx`, `Fog`, ...). It is generated from reverse-engineered
-Ghidra databases and corrected where needed: the names, types and structure are
-reconstructions, and some functions still read like a decompiler wrote them, because one did.
-
-|Directory|What is in it|
+|At this commit|Ghidra database v1971|
 |-|-|
-|`Source/<module>/`|Blizzard's modules, one directory each, generated. `Source/D2Headers/` holds the shared headers `d2_platform.h` and `d2_enums.h`|
-|`3rdparty/Storm/`, `3rdparty/crashy/`|Storm and the crash-report library, generated|
-|`Source/globals/`|the game's global data, generated|
-|`project.json`|the module table: each module's directory, kind, dependencies with their evidence, exceptions, link order and strictness. `Source/modules.cmake` is generated from it, and the configure step fails when the two disagree|
-|`Redivivus/`|hand-written support code: the host glue, tracing, the crash handler|
-|`3rdparty/libbacktrace/`, `3rdparty/implibs/`|vendored code and the import-library definitions|
+|Build|every translation unit compiles with a strict `-std=c++17`, no `-fpermissive`; the executable links with no undefined symbol|
+|Play|single player works; a full playthrough has been completed on the Visual C++ 2005 build|
+|Modules|22 libraries, one per original module; 2 strict, with no include the original DLL imports did not allow|
 
-Includes are rooted at the tree: `#include "Source/D2Common/ITEMS/Items.h"`. Each module
-builds into its own static library, and the executable links them whole in the order of the
-1.14d link. The build also writes `build/module-gates.tsv`, which lists every include that
-crosses a module boundary the original 1.13d DLL imports did not allow.
+Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler of the original:
 
-The Ghidra databases behind the tree, 1.14d Windows and Mac, are open to read for anyone with
-an AI agent; see [Contributing](#contributing). How the project came about since 2021:
+|Measure|Identical machine code|
+|-|-|
+|Functions|7,695 of 14,626 (52.6%)|
+|Functions without placeholders|7,128 of 14,626 (48.7%), not counting 567 recovered unreferenced functions|
+|Code|629,865 of 2,598,518 bytes (24.24%)|
+|Instructions|1,815,425 of 2,598,518 bytes (69.9%), counting identical instructions in functions that still differ|
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
+  <img alt="The original's code split by how closely the rebuild matches it" src="asm_matching/msvc8/evidence/byte-match-light.svg">
+</picture>
+
+What is compared, what is left out (the C runtime, compiler-made exception code, PKWARE) and
+the figures over the whole binary: [BYTE-MATCHING.md](BYTE-MATCHING.md).
+
+*Redivivus* is Latin for a thing restored to life. Next to the game mechanics it carries the
+parts that make the game run at all: the program host and its main loop, the renderers, sound,
+input, files and archives, the network layer, and Blizzard's Storm and Fog libraries. The tree is
+generated from reverse-engineered Ghidra databases and corrected where needed, so the names,
+types and structure are reconstructions, and some functions still read like a decompiler wrote
+them. How it is laid out: [docs/layout.md](docs/layout.md). How it came about:
 [redivivus.app/about](https://redivivus.app/about).
 
-## Scope
-
 Redivivus is a single-player project, made to study and preserve the game. Online play on
-Battle.net is outside its scope: it is not designed, tested or supported for it.
-
-## Status
-
-- Every translation unit compiles with a strict `-std=c++17`, without `-fpermissive`,
-  and the executable links with no undefined symbol.
-- It starts, reaches the menus, and plays single player: create a character, enter the
-  game, walk, fight, change areas.
-- A full playthrough has been completed on the build made with Visual C++ 2005, the
-  compiler of the original (November 2026). Quests, bosses and act changes all work.
-- It is not finished. See [Known issues](#known-issues).
+Battle.net is outside its scope.
 
 ## Build and run
 
@@ -60,80 +50,29 @@ cmake --build build
 ```
 
 Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe -w`.
-
-- [docs/building.md](docs/building.md): getting the game, the toolchain per platform.
-- [docs/original-compilers.md](docs/original-compilers.md): building with the compilers that
-  built 1.14d, Visual C++ 2005 SP1 and Apple LLVM 4.2, and their flags.
+Per platform, and with the original compilers: [docs/building.md](docs/building.md),
+[docs/original-compilers.md](docs/original-compilers.md).
 
 ## Known issues
 
-- **When an NPC has quest news, the scrolling text box does not appear.** The quest itself
-  advances normally; only the dialog is missing.
-- **It can still crash.** Rarely now, but it is not ruled out. Every
-  crash so far has been a single wrong type or a lost value somewhere in the
-  reconstruction, and each one fixed takes a class of others with it. A crash writes a
-  report with a symbolised stack trace to `d2crash-<date>-<time>.txt` next to the
-  executable (the Visual C++ build writes `Crash.txt` and a minidump to
-  `BlizzardError/<date time>/`); please attach it to an
-  [issue](https://github.com/jaenster/redivivus/issues).
-
-## Verification
-
-[`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
-compares the machine code of each function with 1.14d. It is a check on the decompilation:
-where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1971 of the Ghidra database:
-
-|Measure|Identical machine code|
-|-|-|
-|Functions|7,695 of 14,626 (52.6%)|
-|Functions without placeholders|7,128 of 14,626 (48.7%), not counting the 567 identical functions that are placeholders (below)|
-|Code|629,865 of 2,598,518 bytes (24.24%)|
-|Instructions|1,815,425 of 2,598,518 bytes (69.9%), counting identical instructions in functions that still differ|
-
-Of the 7,695 identical functions, 567 are recovered unreferenced functions: code in
-1.14d that nothing calls by a direct reference and that Ghidra never defined as a function. They
-are in the tree as placeholders named `Unreferenced_<address>`, or `<twin>_Unref_<address>` where
-the bytes repeat a named function. They count among the original functions either way, so the
-second row leaves them out of the identical count only.
-
-These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
-rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
-exceptions is left out as well, and so is the PKWARE compression library, linked into the
-original as a prebuilt 1997 library that no Visual C++ 2005 compile produced. Over the whole binary, runtime
-included: 8,255 of 15,711 functions (52.5%), 728,840 of
-2,748,975 bytes (26.51%).
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
-  <img alt="The original's code split by how closely the rebuild matches it" src="asm_matching/msvc8/evidence/byte-match-light.svg">
-</picture>
-
-[BYTE-MATCHING.md](BYTE-MATCHING.md) explains what is compared, the kinds of match, and why
-whole matching functions are a strict measure next to identical instructions.
+- When an NPC has quest news, the scrolling text box does not appear; the quest itself advances.
+- It can still crash, rarely. A crash writes a report with a stack trace next to the executable;
+  please attach it to an [issue](https://github.com/jaenster/redivivus/issues).
+  Where the reports land: [docs/crash-reports.md](docs/crash-reports.md).
 
 ## Contributing
 
-Changes are welcome as pull requests or patches against a release tag. Most of the tree
-is regenerated, so a fix that belongs in the reverse-engineering (a wrong type, a missing
-parameter) is best reported as an issue with the evidence; it will land upstream and
-survive the next regeneration.
-
-[CONTRIBUTING.md](CONTRIBUTING.md) has the detail: which paths are generated and which are
-hand-written, and which door a given finding goes through so that it survives.
-
-With an AI agent you can read the Ghidra databases behind the tree (1.14d Windows and Mac)
-through a read-only MCP server, and report such fixes with the evidence. In Claude Code:
+Most of the tree is regenerated, so a fix in the reverse-engineering (a wrong type, a missing
+parameter) is best sent as a proposal against the Ghidra databases: it is checked, reviewed,
+and applied with you as the git author. With Claude Code:
 
 ```
 claude plugin marketplace add jaenster/redivivus
 claude plugin install redivivus@redivivus
 ```
 
-The plugin brings the MCP server and the house rules; sign in with GitHub from `/mcp`. Other
-agents: see https://redivivus.app/agent-setup/prompt.md. Corrections go in as proposals that are
-checked against the databases, reviewed, and applied with you as the git author; see
-[how proposals work](https://redivivus.app/about#contributing).
+Other agents, pull requests and which paths are generated: [CONTRIBUTING.md](CONTRIBUTING.md)
+and [redivivus.app/about#contributing](https://redivivus.app/about#contributing).
 
 ## Credits
 

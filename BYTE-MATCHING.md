@@ -85,6 +85,14 @@ the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summ
   produced: they match only by linking that library, so they are not in the headline.
 - **Original functions with no counterpart in the tree** count as not matching. They are
   real gaps.
+- **Recovered unreferenced functions count as original functions.** They are code in 1.14d
+  that nothing calls by a direct reference and that Ghidra never defined as a function, in the
+  tree as placeholders named `Unreferenced_<address>`, or `<twin>_Unref_<address>` where the
+  bytes repeat a named function. They stay in the denominator; the README's second row leaves
+  the identical ones out of the identical count only.
+
+Over the whole binary, runtime included, at this commit: 8,255 of 15,711
+functions (52.5%), 728,840 of 2,748,975 bytes (26.51%).
 
 ## What it does not say
 
