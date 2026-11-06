@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Common/Txt/Cube.cpp",
+  "file": "Source/D2Common/Txt/Cube.cpp",
   "functions": [
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_006429d0",

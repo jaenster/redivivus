@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/Quests/QUESTS/Quest40.cpp",
+  "file": "Source/D2Game/Quests/QUESTS/Quest40.cpp",
   "functions": [
     {
       "name": "TXT_SuperUniquesHardcoded_GetSuperUniqueIndex",

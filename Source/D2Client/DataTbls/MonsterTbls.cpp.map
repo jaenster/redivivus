@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/DataTbls/MonsterTbls.cpp",
+  "file": "Source/D2Client/DataTbls/MonsterTbls.cpp",
   "functions": [
     {
       "name": "Unreferenced_00451fb0",

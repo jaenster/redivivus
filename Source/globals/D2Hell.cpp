@@ -3,8 +3,26 @@
  * Binary: Game.exe
  */
 
-#include "globals/globals.h"
-#include "Storm/Storm.h"
+#include "Source/D2Hell/D2Hell.globals.h"
+#include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Storm.h"
 
 
 // =============================================================================
@@ -277,6 +295,12 @@ namespace Fog::_3rdparty::crashy {
 } // namespace Fog::_3rdparty::crashy
 
 namespace D2Hell {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char lpSubBlock_006ff9b8[2] = { "\\" }; D2_GLOBAL_GUARD(lpSubBlock_006ff9b8, "D2Hell::lpSubBlock_006ff9b8");
 
 } // namespace D2Hell
 

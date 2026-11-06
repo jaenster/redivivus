@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/3rdparty/crashy/Report.cpp",
+  "file": "3rdparty/crashy/Report.cpp",
   "functions": [
     {
       "name": "Constructor",

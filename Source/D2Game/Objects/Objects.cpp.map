@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/Objects/Objects.cpp",
+  "file": "Source/D2Game/Objects/Objects.cpp",
   "functions": [
     {
       "name": "MakeRandomShrine",

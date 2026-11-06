@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "support/d2_trace.h"
+#include "Redivivus/d2_trace.h"
 
 #ifndef _MSC_VER
 // The CRT's strlen behind Ghidra's _Wrappers name.

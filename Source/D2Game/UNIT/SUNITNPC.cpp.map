@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/UNIT/SUNITNPC.cpp",
+  "file": "Source/D2Game/UNIT/SUNITNPC.cpp",
   "functions": [
     {
       "name": "SUNITNPC_InitNpcInventory",

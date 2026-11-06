@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/Source/ClientEngine.cpp",
+  "file": "Source/D2Client/Source/ClientEngine.cpp",
   "functions": [
     {
       "name": "CLIENT_QuestEvent_CairnStonesPortal",

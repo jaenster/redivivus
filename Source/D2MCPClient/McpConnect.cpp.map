@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2MCPClient/McpConnect.cpp",
+  "file": "Source/D2MCPClient/McpConnect.cpp",
   "functions": [
     {
       "name": "GetD2GSRequestId_Unref_004166f0",

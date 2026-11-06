@@ -18,8 +18,8 @@ Every generated file starts with the line:
 
 | | |
 |-|-|
-| **Generated** - edits are overwritten | the module directories (`D2Client`, `D2Common`, `D2Game`, `D2Win`, `D2gfx`, `Storm`, `Fog`, `Bnclient`, `D2CMP`, `D2DDraw`, `D2Direct3D`, `D2Gdi`, `D2Glide`, `D2Lang`, `D2Launch`, `D2MCPClient`, `D2Multi`, `D2Net`, `D2Sound`), `globals/`, `d2_enums.h`, `d2_platform.h` |
-| **Hand-written** - pull requests welcome | `cmake/`, `docs/`, `support/`, `thirdparty/`, `asm_matching/`, `tools/`, `agent/`, `CMakeLists.txt`, `.github/`, `README.md` |
+| **Generated** - edits are overwritten | everything under `Source/`: the module directories (`Source/D2Client/`, `Source/D2Common/`, `Source/D2Game/`, `Source/Fog/`, ...), the shared headers in `Source/D2Headers/`, `Source/modules.cmake`; the global data in `Source/globals/`; also `3rdparty/Storm/` and `3rdparty/crashy/` |
+| **Hand-written** - pull requests welcome | `project.json` (the module table), `Redivivus/`, `3rdparty/libbacktrace/`, `3rdparty/implibs/`, `cmake/`, `docs/`, `asm_matching/`, `tools/`, `agent/`, `CMakeLists.txt`, `.github/`, `README.md` |
 
 An edit to a generated file compiles and then disappears at the next regeneration. The finding
 behind it is usually the valuable part, so the point is to land it somewhere upstream of the

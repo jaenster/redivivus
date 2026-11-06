@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Bnclient/BNGatewayAccess.cpp",
+  "file": "Source/Bnclient/BNGatewayAccess.cpp",
   "functions": [
     {
       "name": "GetSystemTimeZone",

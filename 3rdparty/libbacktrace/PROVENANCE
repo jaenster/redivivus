@@ -1,4 +1,4 @@
-libbacktrace, vendored for the crash report (support/d2_crash.cpp).
+libbacktrace, vendored for the crash report (Redivivus/d2_crash.cpp).
 
 Upstream:  https://github.com/ianlancetaylor/libbacktrace
 Commit:    0b9b49cf4a2c9229fc052d6716e1528b2f23e91a (2026-09-03)

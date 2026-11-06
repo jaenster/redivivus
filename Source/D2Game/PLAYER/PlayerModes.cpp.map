@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/PLAYER/PlayerModes.cpp",
+  "file": "Source/D2Game/PLAYER/PlayerModes.cpp",
   "functions": [
     {
       "name": "PLRMODES_ModeCallback_DeathDead_Unref_0053b210",

@@ -34,6 +34,22 @@ cmake --build build
 That produces `build/d2.exe`, a 32-bit Windows executable. `tools/check-build.sh` does
 the same from a clean clone and checks the result; CI runs it on every push.
 
+Each module under `Source/` and `3rdparty/` builds into its own static library, and the
+executable links them whole in the order of the 1.14d link. `-DREDIVIVUS_MODULE_LIBRARIES=OFF`
+compiles the tree into the executable directly instead.
+
+The module table is `project.json` (`modules`): each module's directory, kind, dependencies
+with their evidence, documented exceptions, link order and strictness. `Source/modules.cmake` is
+generated from it, and the configure step fails when the two disagree, so a change to the table
+belongs in `project.json`.
+
+The build also writes a module gate report. `build/module-gates.tsv` has one row per module
+pair: the includes of a module that the includer could not see under the original 1.13d DLL
+import graph, the documented exceptions, and what reaches it through `Source/globals/globals.h`
+(`via-root`). `build/module-gates-summary.tsv` sums it per module. The report does not fail
+the build, except for a module marked strict in the module table. `tools/check-build.sh`
+prints the summary, and CI uploads the report as the artifact `module-gates`.
+
 ## Run
 
 Copy `d2.exe` into your Diablo II folder, next to the original `Game.exe`, and

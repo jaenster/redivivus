@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/GAME/Targets.cpp",
+  "file": "Source/D2Game/GAME/Targets.cpp",
   "functions": [
     {
       "name": "TARGETS_AddTargetToTrackingList",

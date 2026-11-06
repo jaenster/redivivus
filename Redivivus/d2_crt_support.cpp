@@ -1,4 +1,4 @@
-#include "support/d2_trace.h"
+#include "Redivivus/d2_trace.h"
 // Hand-written CRT / intrinsic support layer.
 //
 // Every definition here stands in for a function that IS in Game.exe but is
@@ -11,7 +11,7 @@
 // Rules obeyed here, from docs/regen-workflow.md:
 //   - No fabricated ABI. Every body below is backed by the disassembly or the
 //     decompilation of the named address in
-//     Diablo2Lod /windows/lod/1.14d/Game.exe, quoted in support/README.md.
+//     Diablo2Lod /windows/lod/1.14d/Game.exe, quoted in Redivivus/README.md.
 //   - Where the ABI could not be honestly reproduced at the emitted call site,
 //     the symbol is LEFT UNDEFINED rather than stubbed. See README.md.
 //   - No shim exists only to make a count fall.

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/UI/ui.cpp",
+  "file": "Source/D2Client/UI/ui.cpp",
   "functions": [
     {
       "name": "MoveArgumentToEAX_Unref_0040f590",

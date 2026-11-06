@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SBig.cpp",
+  "file": "3rdparty/Storm/Source/SBig.cpp",
   "functions": [
     {
       "name": "SBIG_Accumulator_AddWithCarry",

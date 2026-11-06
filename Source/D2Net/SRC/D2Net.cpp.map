@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Net/SRC/D2Net.cpp",
+  "file": "Source/D2Net/SRC/D2Net.cpp",
   "functions": [
     {
       "name": "NET_GetLocalIPAddressString",

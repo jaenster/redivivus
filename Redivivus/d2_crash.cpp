@@ -3,7 +3,7 @@
 // this build carries. Every build is compiled with -g, so the report names source
 // lines for whoever compiled it, without the person reading it needing that exe.
 //
-// The DWARF is read by libbacktrace (thirdparty/libbacktrace) straight out of the
+// The DWARF is read by libbacktrace (3rdparty/libbacktrace) straight out of the
 // running image. Parsing it happens only on a crash, on a worker thread with its
 // own stack, so a stack overflow or a damaged stack still gets symbolised; if that
 // thread cannot finish, the report falls back to module+offset per frame.
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "thirdparty/libbacktrace/backtrace.h"
+#include "3rdparty/libbacktrace/backtrace.h"
 
 #ifndef REDIVIVUS_BUILD_ID
 #define REDIVIVUS_BUILD_ID "unknown"

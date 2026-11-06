@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SErr.cpp",
+  "file": "3rdparty/Storm/Source/SErr.cpp",
   "functions": [
     {
       "name": "SErrSetBlizzardErrorFunction",

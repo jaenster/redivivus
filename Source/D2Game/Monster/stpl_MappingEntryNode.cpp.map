@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/Monster/stpl_MappingEntryNode.cpp",
+  "file": "Source/D2Game/Monster/stpl_MappingEntryNode.cpp",
   "functions": [
     {
       "name": "Clear_Unref_005de320",

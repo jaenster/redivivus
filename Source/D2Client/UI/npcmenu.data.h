@@ -4,11 +4,14 @@
  */
 
 #pragma once
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
+#error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
+#endif
 
-#include "d2_platform.h"
-#include "D2Client/UI/QuestLog.h"
-#include "D2Client/UI/npcmenu.h"
-#include "D2Client/UI/npcmenu/Merc.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UI/QuestLog.h"
+#include "Source/D2Client/UI/npcmenu.h"
+#include "Source/D2Client/UI/npcmenu/Merc.h"
 
 // Forward declarations
 struct D2BitBufferStrc;

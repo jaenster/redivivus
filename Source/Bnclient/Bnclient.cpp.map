@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Bnclient/Bnclient.cpp",
+  "file": "Source/Bnclient/Bnclient.cpp",
   "functions": [
     {
       "name": "BNCLIENT_InitFilestream",

@@ -28,22 +28,22 @@ that follow find it decoded.
 Per TU it leaves <path>.log (the compiler's own output) and appends a row to
 build/compile_status.tsv: path, status (ok / FAIL), error count, first error.
 
-globals/*.cpp define data only - no function - and are the largest units in
+Source/globals/*.cpp define data only - no function - and are the largest units in
 the tree, so they are skipped unless --with-data asks for them (a whole-image
 link would need them; the per-function comparison does not).
 
 --extra DIR compiles what the whole-image build adds (recon/runs/build-vc8.sh)
 with the same command line and precompiled header, into DIR/obj instead of
-build/obj, where the oracle never sees them: globals/ (with --with-data) and
-the hand-written support TUs named by --support, translated into DIR/src. The
+build/obj, where the oracle never sees them: Source/globals/ (with --with-data) and
+the hand-written Redivivus/ TUs named by --support, translated into DIR/src. The
 TUs the oracle compares are then compiled once, for both.
 Exit status is 0 when every requested TU compiled.
 
 Flags come from ORACLE_CFLAGS (env.sh default). Anything but the default marks
 the build as an experiment, and status rows say so.
 
-The shared prefix every TU parses - vc8_compat.h, d2_platform.h and
-globals/globals.h - is compiled once into a precompiled header (build/pch/),
+The shared prefix every TU parses - vc8_compat.h, Source/D2Headers/d2_platform.h and
+Source/globals/globals.h - is compiled once into a precompiled header (build/pch/),
 cutting each TU's compile time about threefold. A precompiled header is parse
 state, not code: objdiff.py over 19 objects from nine modules found all 741
 functions identical with and without it. ORACLE_PCH=0 turns it off.
@@ -69,6 +69,7 @@ import vc8_translate  # noqa: E402
 
 from oracle_config import ORACLE, REPO, BUILD, CFLAGS, DEFAULT_CFLAGS, EXPERIMENT, VC, TOOL_CFLAGS  # noqa: E402
 SRC = os.path.join(BUILD, 'src')
+SUPPORT = 'Redivivus'       # the hand-written tree: headers mirrored, TUs only through --support
 OBJ = os.path.join(BUILD, 'obj')
 USE_PCH = os.environ.get('ORACLE_PCH', '1') == '1'
 PCHDIR = os.path.join(BUILD, 'pch')
@@ -162,11 +163,12 @@ def write_rsp():
     if USE_PCH:
         write_if_changed(os.path.join(PCHDIR, PCH_HEADER),
                          '// The prefix every TU parses, precompiled once (build.py, ORACLE_PCH=1).\n'
-                         '#include "d2_platform.h"\n#include "globals/globals.h"\n')
+                         '#include "%s"\n#include "Source/globals/globals.h"\n'
+                         % vc8_translate.PLATFORM_H.replace(os.sep, '/'))
         write_if_changed(os.path.join(PCHDIR, 'oracle_pch.cpp'), '// precompiled-header creation unit\n')
         lines += ['/FI' + PCH_HEADER, '/I' + win(PCHDIR), '/Fp' + win(PCH_FILE)]
     else:
-        lines += ['/FI' + win(os.path.join(SRC, 'd2_platform.h'))]
+        lines += ['/FI' + win(os.path.join(SRC, vc8_translate.PLATFORM_H))]
     lines += ['/I' + win(os.path.join(ORACLE, 'shim_include')),
               '/I' + win(SRC)]
     lines += ['/I' + win(d) for d in sorted(dirs) if d != SRC]
@@ -635,13 +637,13 @@ def sweep_box64_cache():
 
 
 def translate_support(extra_src, names):
-    """Translate the hand-written support TUs `names` into extra_src/support,
+    """Translate the hand-written support TUs `names` into extra_src/Redivivus,
     with the same per-tree state as the mirror; drop any no longer named."""
-    out = os.path.join(extra_src, 'support')
+    out = os.path.join(extra_src, SUPPORT)
     os.makedirs(out, exist_ok=True)
     n = 0
     for name in names:
-        rel = os.path.join('support', name)
+        rel = os.path.join(SUPPORT, name)
         with open(os.path.join(REPO, rel), encoding='utf-8', errors='surrogateescape') as f:
             data = vc8_translate.translate(f.read(), rel).encode('utf-8', errors='surrogateescape')
         dst = os.path.join(out, name)
@@ -737,9 +739,9 @@ def main():
                     help='processes decoding finished objects during the compile (default 2, or '
                          'ORACLE_DECODE_JOBS); 0: leave decoding to the readers')
     ap.add_argument('--force', action='store_true', help='recompile every TU, reading nothing from the cache')
-    ap.add_argument('--with-data', action='store_true', help='also compile globals/ (data only)')
-    ap.add_argument('--extra', metavar='DIR', help='compile globals/ and --support TUs into DIR/obj (build-vc8.sh)')
-    ap.add_argument('--support', default='', help='support/ TUs to compile into --extra, space-separated')
+    ap.add_argument('--with-data', action='store_true', help='also compile Source/globals/ (data only)')
+    ap.add_argument('--extra', metavar='DIR', help='compile Source/globals/ and --support TUs into DIR/obj (build-vc8.sh)')
+    ap.add_argument('--support', default='', help='Redivivus/ TUs to compile into --extra, space-separated')
     ap.add_argument('patterns', nargs='*')
     args = ap.parse_args()
     if args.force:
@@ -867,21 +869,21 @@ def main():
         expected_src.add(os.path.join(SRC, relpath))
         if not name.endswith('.cpp'):
             continue
-        if relpath.startswith('globals' + os.sep):
+        if relpath.startswith(os.path.join('Source', 'globals') + os.sep):
             if args.with_data:
                 tus.append(TU(relpath, os.path.join(SRC, relpath), extra_obj or OBJ, args.extra or BUILD))
         else:
             tus.append(TU(relpath, os.path.join(SRC, relpath), OBJ, BUILD))
     for name in args.support.split():
-        relpath = os.path.join('support', name)
+        relpath = os.path.join(SUPPORT, name)
         tus.append(TU(relpath, os.path.join(extra_src, relpath), extra_obj, args.extra))
     tus.sort(key=lambda t: t.rel)
     globals_dir = (extra_obj or OBJ) if args.with_data else extra_obj
-    data = 'globals' + os.sep
+    data = os.path.join('Source', 'globals') + os.sep
     keep = {OBJ: lambda r: not r.startswith(data) and os.path.exists(os.path.join(SRC, r + '.cpp'))
             or (globals_dir == OBJ and r.startswith(data) and os.path.exists(os.path.join(SRC, r + '.cpp')))}
     if extra_obj:
-        support = {os.path.join('support', n[:-4]) for n in args.support.split()}
+        support = {os.path.join(SUPPORT, n[:-4]) for n in args.support.split()}
         keep[extra_obj] = lambda r: r in support or (r.startswith(data) and os.path.exists(os.path.join(SRC, r + '.cpp')))
     pruned = prune(expected_src, keep)
     if args.patterns:

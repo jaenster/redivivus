@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2gfx/D2GFX.cpp",
+  "file": "Source/D2gfx/D2GFX.cpp",
   "functions": [
     {
       "name": "RENDERER_TogglePerspective_Unref_0044dc40",

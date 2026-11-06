@@ -4,11 +4,14 @@
  */
 
 #pragma once
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Glide)
+#error "D2Glide header included by a module that may not use D2Glide (original DLL import graph; see module-gates.tsv)"
+#endif
 
-#include "d2_platform.h"
-#include "D2Glide/Renderer/Glide.h"
-#include "D2Glide/glFloorCache.h"
-#include "D2Glide/glSubtileCache.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Glide/Renderer/Glide.h"
+#include "Source/D2Glide/glFloorCache.h"
+#include "Source/D2Glide/glSubtileCache.h"
 
 // Forward declarations
 struct D2GlideVertexTexCacheBlockStrc;

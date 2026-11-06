@@ -33,8 +33,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "thirdparty/libbacktrace/backtrace.h"
-#include "support/d2_trace.h"
+#include "3rdparty/libbacktrace/backtrace.h"
+#include "Redivivus/d2_trace.h"
 
 #ifndef REDIVIVUS_BUILD_ID
 #define REDIVIVUS_BUILD_ID "unknown"
@@ -91,7 +91,7 @@ void InitExe() {
 HANDLE g_hFile = INVALID_HANDLE_VALUE;
 bool g_bOpenTried = false;
 
-// Same folder rule and naming as the crash report (support/d2_crash.cpp).
+// Same folder rule and naming as the crash report (Redivivus/d2_crash.cpp).
 bool OpenLog() {
     if (g_bOpenTried) return g_hFile != INVALID_HANDLE_VALUE;
     g_bOpenTried = true;

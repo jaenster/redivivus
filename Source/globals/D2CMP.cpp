@@ -3,10 +3,31 @@
  * Binary: Game.exe
  */
 
-#include "globals/globals.h"
-#include "D2CMP/Draw.h"
-#include "D2CMP/SRC/LRUCache.h"
-#include "D2Client/D2GfxMemoryStrc.h"
+#include "Source/D2CMP/D2CMP.globals.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/D2GfxMemoryStrc.h"
 
 
 // =============================================================================
@@ -223,6 +244,252 @@ namespace D2CMP::SRC::CelCmp {
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
+
+uint32_t gaCelCmpDataBlock_006e36a0[224] = {
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x2,
+    0x1,
+    0x3,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x4,
+    0x2,
+    0x5,
+    0x1,
+    0x6,
+    0x3,
+    0x7,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x8,
+    0x4,
+    0x9,
+    0x2,
+    0xa,
+    0x5,
+    0xb,
+    0x1,
+    0xc,
+    0x6,
+    0xd,
+    0x3,
+    0xe,
+    0x7,
+    0xf,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x10,
+    0x8,
+    0x11,
+    0x4,
+    0x12,
+    0x9,
+    0x13,
+    0x2,
+    0x14,
+    0xa,
+    0x15,
+    0x5,
+    0x16,
+    0xb,
+    0x17,
+    0x1,
+    0x18,
+    0xc,
+    0x19,
+    0x6,
+    0x1a,
+    0xd,
+    0x1b,
+    0x3,
+    0x1c,
+    0xe,
+    0x1d,
+    0x7,
+    0x1e,
+    0xf,
+    0x1f
+}; D2_GLOBAL_GUARD(gaCelCmpDataBlock_006e36a0, "D2CMP::SRC::CelCmp::gaCelCmpDataBlock_006e36a0");
+
+char s___AUTCELENTRY___00741f14[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'T',
+    'C',
+    'E',
+    'L',
+    'E',
+    'N',
+    'T',
+    'R',
+    'Y',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUTCELENTRY___00741f14, "D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14");
 
 TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0> gCelCmpCacheHandler; D2_GLOBAL_GUARD(gCelCmpCacheHandler, "D2CMP::SRC::CelCmp::gCelCmpCacheHandler");
 
@@ -568,13 +835,150 @@ namespace D2Game::SKILLS::SkillNec {
 
 namespace D2CMP::SRC::CelCmp::CELLIST {
 
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUCELLIST___00741f2c[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'C',
+    'E',
+    'L',
+    'L',
+    'I',
+    'S',
+    'T',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUCELLIST___00741f2c, "D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c");
+
 } // namespace D2CMP::SRC::CelCmp::CELLIST
 
 namespace D2CMP {
 
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSExplicitList_UCELLIST____00741f44[48] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'E',
+    'x',
+    'p',
+    'l',
+    'i',
+    'c',
+    'i',
+    't',
+    'L',
+    'i',
+    's',
+    't',
+    '@',
+    'U',
+    'C',
+    'E',
+    'L',
+    'L',
+    'I',
+    'S',
+    'T',
+    '@',
+    '@',
+    '$',
+    '0',
+    '?',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'D',
+    '@',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_UCELLIST____00741f44, "D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44");
+
 } // namespace D2CMP
 
 namespace D2CMP::Draw {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSHashObjectChunk_UCELLIST_00741fb4[52] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'H',
+    'a',
+    's',
+    'h',
+    'O',
+    'b',
+    'j',
+    'e',
+    'c',
+    't',
+    'C',
+    'h',
+    'u',
+    'n',
+    'k',
+    '@',
+    'U',
+    'C',
+    'E',
+    'L',
+    'L',
+    'I',
+    'S',
+    'T',
+    '@',
+    '@',
+    'V',
+    'H',
+    'A',
+    'S',
+    'H',
+    'K',
+    'E',
+    'Y',
+    '_',
+    'N',
+    'O',
+    'N',
+    'E',
+    '@',
+    '@',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_UCELLIST_00741fb4, "D2CMP::Draw::s___AV__TSHashObjectChunk_UCELLIST_00741fb4");
 
 } // namespace D2CMP::Draw
 

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/PLAYER/PlayerSave2.cpp",
+  "file": "Source/D2Game/PLAYER/PlayerSave2.cpp",
   "functions": [
     {
       "name": "PLRSAVE_GetTime32",

@@ -55,7 +55,7 @@ extern "C" void __cpuid(int cpuInfo[4], int infoType);
 // Winsock linkage. Game.exe calls ws2_32 through the linker's import stubs
 // (`call 006b012c`, a `jmp [__imp_closesocket]`), which is what a declaration
 // WITHOUT dllimport produces; the Platform SDK declares every Winsock function
-// dllimport (`call [__imp_closesocket]`). Only crashy (Fog/3rdparty, 0x4016c0)
+// dllimport (`call [__imp_closesocket]`). Only crashy (3rdparty/crashy, 0x4016c0)
 // calls through the IAT directly, and flags.tsv gives it the SDK's linkage back.
 #ifndef WINSOCK_API_LINKAGE
 #define WINSOCK_API_LINKAGE

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/WindowHandle.cpp",
+  "file": "3rdparty/Storm/WindowHandle.cpp",
   "functions": [
     {
       "name": "WND_GetActiveWindow_Unref_0041c2a0",

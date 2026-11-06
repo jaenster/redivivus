@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Common/Drlg/Maze/Act3/Durance.cpp",
+  "file": "Source/D2Common/Drlg/Maze/Act3/Durance.cpp",
   "functions": [
     {
       "name": "ReplaceRooms",

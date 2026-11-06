@@ -85,15 +85,15 @@ def _alias_seed_call(m):
 
 HELPERS = [
     # (name, header, regex over consecutive lines, replacement(match) -> one line)
-    ('InitSeed_Param_666', 'D2Common/Seed.h',
+    ('InitSeed_Param_666', 'Source/D2Common/Seed.h',
      re.compile(r'^(?P<ind>[ \t]*)(?P<obj>' + LV + r')(?P<sep>\.|->)nSeedLow = (?P<v>[^;\n]+);\n'
                 r'(?P=ind)(?P=obj)(?P=sep)nSeedHigh = (?:0x29a|666);$', re.M),
      _seed_call),
-    ('InitSeed_Param_666', 'D2Common/Seed.h',
+    ('InitSeed_Param_666', 'Source/D2Common/Seed.h',
      re.compile(r'^(?P<ind>[ \t]*)(?P<a>' + LV + r')(?P<sa>\.|->)nSeedLow = (?P<v>[^;\n]+);\n'
                 r'(?P=ind)(?P<b>' + LV + r')(?P<sb>\.|->)nSeedHigh = (?:0x29a|666);$', re.M),
      _alias_seed_call),
-    ('STRING_ZeroOneWCHAR', 'D2Launch/MainMenus.h',
+    ('STRING_ZeroOneWCHAR', 'Source/D2Launch/MainMenus.h',
      re.compile(r'^(?P<ind>[ \t]*)\*\(uint16_t\s*\*\)(?P<p>' + LV + r'|\([^()\n]*\)) = 0;$', re.M),
      lambda m: '%sD2Launch::MainMenus::STRING_ZeroOneWCHAR(%s);' % (m.group('ind'), m.group('p'))),
 ]
@@ -131,7 +131,7 @@ def candidates(rows, status, model, pats):
                 continue
             if at.get(h[0]) not in calls.get(owner[0], ()):
                 continue                     # the original does not call it here: a store of its own
-            if h[0] == 'STRING_ZeroOneWCHAR' and tu == 'D2Launch/MainMenus':
+            if h[0] == 'STRING_ZeroOneWCHAR' and tu == 'Source/D2Launch/MainMenus':
                 body = text[text.rfind('\n', 0, m.start()) - 200:m.start()]
                 if 'STRING_ZeroOneWCHAR(void * pBuffer)' in body:
                     continue                 # the helper's own body

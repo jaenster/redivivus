@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Source/SSComp.cpp",
+  "file": "Source/Fog/Source/SSComp.cpp",
   "functions": [
     {
       "name": "COMPRESS_HeapSiftDown",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Launch/MainMenus.cpp",
+  "file": "Source/D2Launch/MainMenus.cpp",
   "functions": [
     {
       "name": "FORMS_DestroyListJmp_Unref_0041f930",

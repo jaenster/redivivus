@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/Monster/AI/AI.cpp",
+  "file": "Source/D2Game/Monster/AI/AI.cpp",
   "functions": [
     {
       "name": "ReturnFirstArgument_Unref_00518b90",

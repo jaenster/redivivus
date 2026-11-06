@@ -2,7 +2,7 @@
 # Regenerate the import libraries for the three DLLs Diablo II links but does
 # not contain.
 #
-#   thirdparty/gen-implibs.sh [dll-dir]
+#   3rdparty/implibs/gen-implibs.sh [dll-dir]
 #
 # Bink, Smacker and the Intel JPEG Library were licensed binaries. Ghidra shows
 # all 18 referenced entry points as isExternal in EXTERNAL: space, under the

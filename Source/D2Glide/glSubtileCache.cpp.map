@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Glide/glSubtileCache.cpp",
+  "file": "Source/D2Glide/glSubtileCache.cpp",
   "functions": [
     {
       "name": "GLSUBTILE_Initialize",

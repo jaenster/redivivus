@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2CMP/SRC/FastCmp.cpp",
+  "file": "Source/D2CMP/SRC/FastCmp.cpp",
   "functions": [
     {
       "name": "FASTCMP_CompressToRLE",

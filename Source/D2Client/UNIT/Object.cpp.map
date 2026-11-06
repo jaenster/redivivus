@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/UNIT/Object.cpp",
+  "file": "Source/D2Client/UNIT/Object.cpp",
   "functions": [
     {
       "name": "TEXT_CleanupMessageLog_Unref_004b1d50",

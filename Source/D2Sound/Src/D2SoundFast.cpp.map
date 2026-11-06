@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Sound/Src/D2SoundFast.cpp",
+  "file": "Source/D2Sound/Src/D2SoundFast.cpp",
   "functions": [
     {
       "name": "SOUND_IsAmbientStreaming",

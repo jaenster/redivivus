@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Memory.cpp",
+  "file": "Source/Fog/Memory.cpp",
   "functions": [
     {
       "name": "OutOfMemoryHandler",

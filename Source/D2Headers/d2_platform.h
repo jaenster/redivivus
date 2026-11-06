@@ -851,4 +851,4 @@ typedef char D2Row_char_32[32];
 typedef uint8_t D2Row_uint8_t_32768[32768];
 
 // Shared enum constants (SOUND_NONE, UNIT_PLAYER, SKILL_Attack, etc.)
-#include "d2_enums.h"
+#include "Source/D2Headers/d2_enums.h"

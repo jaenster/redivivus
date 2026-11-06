@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Lang/D2Lang.cpp",
+  "file": "Source/D2Lang/D2Lang.cpp",
   "functions": [
     {
       "name": "UI_FormatNumberWithCommas",

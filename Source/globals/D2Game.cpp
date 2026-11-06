@@ -3,23 +3,80 @@
  * Binary: Game.exe
  */
 
-#include "globals/globals.h"
-#include "D2Client/UNIT/Missile.h"
-#include "D2Client/UNIT/Object.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Game/D2QuestDataStrc.h"
-#include "D2Game/GAME/Event/Dispatch/Monster.h"
-#include "D2Game/GAME/Task.h"
-#include "D2Game/ITEMS/ItemMode.h"
-#include "D2Game/Monster/AI/AI.h"
-#include "D2Game/Monster/MonsterMode.h"
-#include "D2Game/Monster/Monsters.h"
-#include "D2Game/Objects/ObjectsMode.h"
-#include "D2Game/PLAYER/PlayerModes.h"
-#include "D2Game/PLAYER/PlayerTrade.h"
-#include "D2Game/Quests/QUESTS.h"
-#include "D2Game/SKILLS/SkillsServer.h"
-#include "D2Game/UNIT/sunitproxy.h"
+#include "Source/globals/globals.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Game/D2Game.globals.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/AI/Baal.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/Items.h"
+#include "Source/D2Game/SKILLS/SkillAss.h"
+#include "Source/D2Game/UNIT/SUnitDmg.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UNIT/Missile.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
+#include "Source/D2Game/GAME/Task.h"
+#include "Source/D2Game/ITEMS/ItemMode.h"
+#include "Source/D2Game/Monster/AI/AI.h"
+#include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/Objects/ObjectsMode.h"
+#include "Source/D2Game/PLAYER/PlayerModes.h"
+#include "Source/D2Game/PLAYER/PlayerTrade.h"
+#include "Source/D2Game/Quests/QUESTS.h"
+#include "Source/D2Game/SKILLS/SkillsServer.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
 
 
 // =============================================================================
@@ -228,6 +285,22 @@ D2TimerTypeMethodsStrc pTimerMethods = {
 } // namespace D2Game::GAME::Event::Dispatch
 
 namespace D2Game::UNIT::SUnitDmg {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_Stam_006e160c[5] = { 'S', 't', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Stam_006e160c, "D2Game::UNIT::SUnitDmg::s_Stam_006e160c");
+
+char s_Life_006e161c[5] = { 'L', 'i', 'f', 'e', '\x00' }; D2_GLOBAL_GUARD(s_Life_006e161c, "D2Game::UNIT::SUnitDmg::s_Life_006e161c");
+
+char s_Pois_006e1624[5] = { 'P', 'o', 'i', 's', '\x00' }; D2_GLOBAL_GUARD(s_Pois_006e1624, "D2Game::UNIT::SUnitDmg::s_Pois_006e1624");
+
+char s_Magc_006e1644[5] = { 'M', 'a', 'g', 'c', '\x00' }; D2_GLOBAL_GUARD(s_Magc_006e1644, "D2Game::UNIT::SUnitDmg::s_Magc_006e1644");
+
+char s_Ligt_006e1654[5] = { 'L', 'i', 'g', 't', '\x00' }; D2_GLOBAL_GUARD(s_Ligt_006e1654, "D2Game::UNIT::SUnitDmg::s_Ligt_006e1654");
+
+char s_Dam_006e1664[4] = { 'D', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Dam_006e1664, "D2Game::UNIT::SUnitDmg::s_Dam_006e1664");
 
 } // namespace D2Game::UNIT::SUnitDmg
 
@@ -535,9 +608,82 @@ D2TimerTypeMethodsExStrc pTimerMethods = {
     }
 }; D2_GLOBAL_GUARD(pTimerMethods, "D2Game::GAME::Event::Dispatch::Monster::pTimerMethods");
 
+char * gaLanguageNames_0073c6e0[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0073c6e0, "D2Game::GAME::Event::Dispatch::Monster::gaLanguageNames_0073c6e0");
+
 } // namespace D2Game::GAME::Event::Dispatch::Monster
 
 namespace D2Game {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+D2MonsterEquipEntryStrc gaMonsterEquipTable[12] = {
+    {
+        /* .szItemCode = */ { 'b', 's', 'd', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x104
+    },
+    {
+        /* .szItemCode = */ { 't', 'a', 'x', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x104
+    },
+    {
+        /* .szItemCode = */ { 'v', 'o', 'u', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x104
+    },
+    {
+        /* .szItemCode = */ { 't', 'o', 'w', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x105
+    },
+    {
+        /* .szItemCode = */ { 't', 'a', 'x', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x105
+    },
+    {
+        /* .szItemCode = */ { 'r', 'i', 'n', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x106
+    },
+    {
+        /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x103
+    },
+    {
+        /* .szItemCode = */ { 'h', 'g', 'l', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x10a
+    },
+    {
+        /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x103
+    },
+    {
+        /* .szItemCode = */ { 'h', 'b', 't', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x109
+    },
+    {
+        /* .szItemCode = */ { 'h', 'b', 't', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x109
+    },
+    {
+        /* .szItemCode = */ { 'c', 'r', 'n', ' ' },
+        /* .dwBodyLocAndFlag = */ 0x101
+    }
+}; D2_GLOBAL_GUARD(gaMonsterEquipTable, "D2Game::gaMonsterEquipTable");
 
 // =============================================================================
 // Initialized scalars
@@ -2024,6 +2170,180 @@ D2NPCMessageTableStrc aNpcGossipData[10] = {
         /* .nMessagesCount = */ 0x0
     }
 }; D2_GLOBAL_GUARD(aNpcGossipData, "D2Game::Quests::QUESTS::A5Q3::aNpcGossipData");
+
+char gaQ33_Normal_AmazonBowCodes[5][4] = {
+    { 'a', 'm', '1', ' ' },
+    { 'a', 'm', '2', ' ' },
+    { 'a', 'm', '3', ' ' },
+    { 'a', 'm', '4', ' ' },
+    { 'a', 'm', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_AmazonBowCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_AmazonBowCodes");
+
+char gaQ33_Normal_SorceressOrbCodes[5][4] = {
+    { 'o', 'b', '1', ' ' },
+    { 'o', 'b', '2', ' ' },
+    { 'o', 'b', '3', ' ' },
+    { 'o', 'b', '4', ' ' },
+    { 'o', 'b', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_SorceressOrbCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_SorceressOrbCodes");
+
+char gaQ33_Normal_NecromancerWandCodes[5][4] = {
+    { 'n', 'e', '1', ' ' },
+    { 'n', 'e', '2', ' ' },
+    { 'n', 'e', '3', ' ' },
+    { 'n', 'e', '4', ' ' },
+    { 'n', 'e', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_NecromancerWandCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_NecromancerWandCodes");
+
+char gaQ33_Normal_PaladinScepterCodes[5][4] = {
+    { 'p', 'a', '1', ' ' },
+    { 'p', 'a', '2', ' ' },
+    { 'p', 'a', '3', ' ' },
+    { 'p', 'a', '4', ' ' },
+    { 'p', 'a', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_PaladinScepterCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_PaladinScepterCodes");
+
+char gaQ33_Normal_BarbarianAxeCodes[5][4] = {
+    { 'b', 'a', '1', ' ' },
+    { 'b', 'a', '2', ' ' },
+    { 'b', 'a', '3', ' ' },
+    { 'b', 'a', '4', ' ' },
+    { 'b', 'a', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_BarbarianAxeCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_BarbarianAxeCodes");
+
+char gaQ33_Normal_DruidHelmCodes[5][4] = {
+    { 'd', 'r', '1', ' ' },
+    { 'd', 'r', '2', ' ' },
+    { 'd', 'r', '3', ' ' },
+    { 'd', 'r', '4', ' ' },
+    { 'd', 'r', '5', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_DruidHelmCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_DruidHelmCodes");
+
+char gaQ33_Normal_AssassinClawCodes[7][4] = {
+    { 'k', 't', 'r', ' ' },
+    { 'w', 'r', 'b', ' ' },
+    { 'a', 'x', 'f', ' ' },
+    { 'c', 'e', 's', ' ' },
+    { 'c', 'l', 'w', ' ' },
+    { 'b', 't', 'l', ' ' },
+    { 's', 'k', 'r', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Normal_AssassinClawCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Normal_AssassinClawCodes");
+
+char gaQ33_Nightmare_AmazonBowCodes[5][4] = {
+    { 'a', 'm', 'b', ' ' },
+    { 'a', 'm', 'c', ' ' },
+    { 'a', 'm', 'd', ' ' },
+    { 'a', 'm', 'e', ' ' },
+    { 'a', 'm', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_AmazonBowCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_AmazonBowCodes");
+
+char gaQ33_Nightmare_SorceressOrbCodes[5][4] = {
+    { 'o', 'b', 'b', ' ' },
+    { 'o', 'b', 'c', ' ' },
+    { 'o', 'b', 'd', ' ' },
+    { 'o', 'b', 'e', ' ' },
+    { 'o', 'b', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_SorceressOrbCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_SorceressOrbCodes");
+
+char gaQ33_Nightmare_NecromancerWandCodes[5][4] = {
+    { 'n', 'e', 'b', ' ' },
+    { 'n', 'e', 'c', ' ' },
+    { 'n', 'e', 'd', ' ' },
+    { 'n', 'e', 'e', ' ' },
+    { 'n', 'e', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_NecromancerWandCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_NecromancerWandCodes");
+
+char gaQ33_Nightmare_PaladinScepterCodes[5][4] = {
+    { 'p', 'a', 'b', ' ' },
+    { 'p', 'a', 'c', ' ' },
+    { 'p', 'a', 'd', ' ' },
+    { 'p', 'a', 'e', ' ' },
+    { 'p', 'a', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_PaladinScepterCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_PaladinScepterCodes");
+
+char gaQ33_Nightmare_BarbarianAxeCodes[5][4] = {
+    { 'b', 'a', 'b', ' ' },
+    { 'b', 'a', 'c', ' ' },
+    { 'b', 'a', 'd', ' ' },
+    { 'b', 'a', 'e', ' ' },
+    { 'b', 'a', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_BarbarianAxeCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_BarbarianAxeCodes");
+
+char gaQ33_Nightmare_DruidHelmCodes[5][4] = {
+    { 'd', 'r', 'b', ' ' },
+    { 'd', 'r', 'c', ' ' },
+    { 'd', 'r', 'd', ' ' },
+    { 'd', 'r', 'e', ' ' },
+    { 'd', 'r', 'f', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_DruidHelmCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_DruidHelmCodes");
+
+char gaQ33_Nightmare_AssassinClawCodes[7][4] = {
+    { '7', 'a', 'r', ' ' },
+    { '7', 'w', 'b', ' ' },
+    { '7', 'x', 'f', ' ' },
+    { '7', 'c', 's', ' ' },
+    { '7', 'l', 'w', ' ' },
+    { '7', 't', 'w', ' ' },
+    { '7', 'q', 'r', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Nightmare_AssassinClawCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Nightmare_AssassinClawCodes");
+
+char gaQ33_Hell_AmazonBowCodes[5][4] = {
+    { 'a', 'm', '6', ' ' },
+    { 'a', 'm', '7', ' ' },
+    { 'a', 'm', '8', ' ' },
+    { 'a', 'm', '9', ' ' },
+    { 'a', 'm', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_AmazonBowCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_AmazonBowCodes");
+
+char gaQ33_Hell_SorceressOrbCodes[5][4] = {
+    { 'o', 'b', '6', ' ' },
+    { 'o', 'b', '7', ' ' },
+    { 'o', 'b', '8', ' ' },
+    { 'o', 'b', '9', ' ' },
+    { 'o', 'b', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_SorceressOrbCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_SorceressOrbCodes");
+
+char gaQ33_Hell_NecromancerWandCodes[5][4] = {
+    { 'n', 'e', '6', ' ' },
+    { 'n', 'e', '7', ' ' },
+    { 'n', 'e', '8', ' ' },
+    { 'n', 'e', '9', ' ' },
+    { 'n', 'e', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_NecromancerWandCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_NecromancerWandCodes");
+
+char gaQ33_Hell_PaladinScepterCodes[5][4] = {
+    { 'p', 'a', '6', ' ' },
+    { 'p', 'a', '7', ' ' },
+    { 'p', 'a', '8', ' ' },
+    { 'p', 'a', '9', ' ' },
+    { 'p', 'a', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_PaladinScepterCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_PaladinScepterCodes");
+
+char gaQ33_Hell_BarbarianAxeCodes[5][4] = {
+    { 'b', 'a', '6', ' ' },
+    { 'b', 'a', '7', ' ' },
+    { 'b', 'a', '8', ' ' },
+    { 'b', 'a', '9', ' ' },
+    { 'b', 'a', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_BarbarianAxeCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_BarbarianAxeCodes");
+
+char gaQ33_Hell_DruidHelmCodes[5][4] = {
+    { 'd', 'r', '6', ' ' },
+    { 'd', 'r', '7', ' ' },
+    { 'd', 'r', '8', ' ' },
+    { 'd', 'r', '9', ' ' },
+    { 'd', 'r', 'a', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_DruidHelmCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_DruidHelmCodes");
+
+char gaQ33_Hell_AssassinClawCodes[7][4] = {
+    { '9', 'a', 'r', ' ' },
+    { '9', 'w', 'b', ' ' },
+    { '9', 'x', 'f', ' ' },
+    { '9', 'c', 's', ' ' },
+    { '9', 'l', 'w', ' ' },
+    { '9', 't', 'w', ' ' },
+    { '9', 'q', 'r', ' ' }
+}; D2_GLOBAL_GUARD(gaQ33_Hell_AssassinClawCodes, "D2Game::Quests::QUESTS::A5Q3::gaQ33_Hell_AssassinClawCodes");
 
 } // namespace D2Game::Quests::QUESTS::A5Q3
 
@@ -3984,6 +4304,12 @@ D2NPCMessageTableStrc aNpcGossipData[6] = {
         /* .nMessagesCount = */ 0x0
     }
 }; D2_GLOBAL_GUARD(aNpcGossipData, "D2Game::Quests::QUESTS::A1Q3::aNpcGossipData");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+D2NPCMessageTableStrc gbQuestA5Q2Unknown[6] = {}; D2_GLOBAL_GUARD(gbQuestA5Q2Unknown, "D2Game::Quests::QUESTS::A1Q3::gbQuestA5Q2Unknown");
 
 } // namespace D2Game::Quests::QUESTS::A1Q3
 
@@ -7870,6 +8196,28 @@ D2NPCMessageTableStrc aNpcGossipData[2] = {
 
 namespace D2Game::Monster::Create {
 
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_0073d530[15] = {
+    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
+    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
+    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
+    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
+    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
+    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
+    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
+    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
+    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
+    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
+    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
+    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
+    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
+    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
+    s_14_006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_0073d530, "D2Game::Monster::Create::gaLanguageNames_0073d530");
+
 } // namespace D2Game::Monster::Create
 
 namespace D2Game::Quests::QUESTS::A4Q0 {
@@ -10867,6 +11215,114 @@ D2NPCMessageTableStrc aNpcGossipData[8] = {
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
 namespace D2Game::SKILLS::SkillNec {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+uint8_t gaSkeletonComponentsByMasteryLvl[11][9] = {
+    {},
+    {},
+    {
+        0x0,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1
+    },
+    {
+        0x0,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x1
+    },
+    {
+        0x1,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x2
+    },
+    {
+        0x1,
+        0x1,
+        0x0,
+        0x0,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x2
+    },
+    {
+        0x1,
+        0x1,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x1,
+        0x3
+    },
+    {
+        0x2,
+        0x2,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x1,
+        0x3
+    },
+    {
+        0x2,
+        0x2,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x1,
+        0x2,
+        0x4
+    },
+    {
+        0x2,
+        0x3,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x2,
+        0x2,
+        0x4
+    },
+    {
+        0x2,
+        0x3,
+        0x1,
+        0x0,
+        0x0,
+        0x1,
+        0x2,
+        0x2,
+        0x4
+    }
+}; D2_GLOBAL_GUARD(gaSkeletonComponentsByMasteryLvl, "D2Game::SKILLS::SkillNec::gaSkeletonComponentsByMasteryLvl");
 
 } // namespace D2Game::SKILLS::SkillNec
 

@@ -603,6 +603,10 @@ def relocs_in(sorted_relocs, lo, hi):
 
 
 def module_of(tu):
+    if tu.startswith('3rdparty/crashy/'):
+        return 'Fog'                    # its namespace, Fog::_3rdparty::crashy (module_of_item)
+    if tu.startswith(('Source/', '3rdparty/')):
+        tu = tu.split('/', 1)[1]
     top = tu.split('/', 1)[0]
     if top == 'globals' and '/' in tu:
         top = tu.split('/', 1)[1]
@@ -1067,11 +1071,11 @@ def main():
         elif EXPERIMENT and os.path.realpath(os.path.dirname(args.out)) == os.path.realpath(EVIDENCE):
             sys.exit('refusing to write an experiment data audit into evidence/')
         if args.obj is None:
-            # globals/ holds most of the data and is not compiled into build/obj:
+            # Source/globals/ holds most of the data and is not compiled into build/obj:
             # the whole-image build (recon/runs/build-vc8.sh) compiles it with
-            # the same command line into build-exe/obj/globals.
+            # the same command line into build-exe/obj/Source/globals.
             args.obj = [os.path.join(BUILD, 'obj'),
-                        os.path.join(ORACLE, 'build-exe', 'obj', 'globals') + '=globals']
+                        os.path.join(ORACLE, 'build-exe', 'obj', 'Source', 'globals') + '=Source/globals']
             for spec in args.obj:
                 if not os.path.isdir(spec.partition('=')[0]):
                     print('warning: %s missing; its data is not compared' % spec.partition('=')[0], file=sys.stderr)

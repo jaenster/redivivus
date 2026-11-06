@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/Units.cpp",
+  "file": "Source/D2Client/Units.cpp",
   "functions": [
     {
       "name": "IfPlayer",

@@ -3,10 +3,21 @@
  * Binary: Game.exe
  */
 
-#include "globals/globals.h"
-#include "Fog/Source/SSComp.h"
-#include "Storm/Source/SErr.h"
-#include "Storm/Storm.h"
+#include "Source/globals/globals.h"
+#include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Multi/OOGUtilities.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.globals.h"
+#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Storm.h"
 
 
 // =============================================================================
@@ -28,6 +39,12 @@ namespace Fog::Src::ErrorManager {
 
 namespace Storm::Source::SSignature {
 
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char gszHeapTagOperatorNew[4] = { "new" }; D2_GLOBAL_GUARD(gszHeapTagOperatorNew, "Storm::Source::SSignature::gszHeapTagOperatorNew");
+
 } // namespace Storm::Source::SSignature
 
 namespace Fog::Engine::Application {
@@ -44,6 +61,12 @@ namespace Fog::Src::DataArrays {
 
 namespace Storm::Source::SSTR {
 
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+double gdblConstantTen = 10; D2_GLOBAL_GUARD(gdblConstantTen, "Storm::Source::SSTR::gdblConstantTen");
+
 } // namespace Storm::Source::SSTR
 
 namespace Fog::Debug {
@@ -55,6 +78,8 @@ namespace Storm::Source::SFile {
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
+
+char param_2_006ce200[5] = { "%s%s" }; D2_GLOBAL_GUARD(param_2_006ce200, "Storm::Source::SFile::param_2_006ce200");
 
 D2StormListHead gMpqArchiveList = {
     /* .nLinkOffset = */ 0x0,
@@ -200,6 +225,12 @@ uint32_t gnSFileDataChunkSize = 0x20000; D2_GLOBAL_GUARD(gnSFileDataChunkSize, "
 uint32_t gnSFileReadErrorMode = 0x2; D2_GLOBAL_GUARD(gnSFileReadErrorMode, "Storm::Source::SFile::gnSFileReadErrorMode");
 uint32_t gbSFileSeekOptimization = 0x1; D2_GLOBAL_GUARD(gbSFileSeekOptimization, "Storm::Source::SFile::gbSFileSeekOptimization");
 
+// =============================================================================
+// Uninitialized data (BSS)
+// =============================================================================
+
+uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Storm::Source::SFile::RTTI_Type_Descriptor");
+
 } // namespace Storm::Source::SFile
 
 namespace Fog::BitBuffer {
@@ -211,6 +242,35 @@ namespace Storm::Source::SErr {
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
+
+char s_File___s_006cf1e8[10] = {
+    'F',
+    'i',
+    'l',
+    'e',
+    ':',
+    '\x09',
+    '%',
+    's',
+    '\x0a',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_File___s_006cf1e8, "Storm::Source::SErr::s_File___s_006cf1e8");
+
+char s__s_006cf248[6] = { '\x0a', '%', 's', '\x0a', '\x0a', '\x00' }; D2_GLOBAL_GUARD(s__s_006cf248, "Storm::Source::SErr::s__s_006cf248");
+
+char s_Expr___s_006cf250[11] = {
+    'E',
+    'x',
+    'p',
+    'r',
+    ':',
+    '\x09',
+    '%',
+    's',
+    '\x0a',
+    '\x0a',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Expr___s_006cf250, "Storm::Source::SErr::s_Expr___s_006cf250");
 
 D2StormListHead gnStormErrorCallbackCount = {
     /* .nLinkOffset = */ 0x0,
@@ -241,9 +301,32 @@ char gszSSystemListAllocTag[14] = {
 
 namespace Storm::Source::SLog {
 
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+char szOOGPasswordDialogTimeFmt = '\x0d'; D2_GLOBAL_GUARD(szOOGPasswordDialogTimeFmt, "Storm::Source::SLog::szOOGPasswordDialogTimeFmt");
+
 } // namespace Storm::Source::SLog
 
 namespace Storm::_3rdparty::zlib::deflate {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * z_errmsg[10] = {
+    s_need_dictionary_006d3838,
+    s_stream_end_006d382c,
+    lpDefault_006cc837,
+    s_file_error_006d3820,
+    s_stream_error_006d3810,
+    s_data_error_006d3804,
+    s_insufficient_memory_006d37f0,
+    s_buffer_error_006d37e0,
+    s_incompatible_version_006d37c8,
+    lpDefault_006cc837
+}; D2_GLOBAL_GUARD(z_errmsg, "Storm::_3rdparty::zlib::deflate::z_errmsg");
 
 } // namespace Storm::_3rdparty::zlib::deflate
 
@@ -444,6 +527,76 @@ namespace Define_the_symbol__ATL_MIXED {
 } // namespace Define_the_symbol__ATL_MIXED
 
 namespace Storm::Source {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s_Unable_to_open_response_file___s_006fcbc0[33] = {
+    'U',
+    'n',
+    'a',
+    'b',
+    'l',
+    'e',
+    ' ',
+    't',
+    'o',
+    ' ',
+    'o',
+    'p',
+    'e',
+    'n',
+    ' ',
+    'r',
+    'e',
+    's',
+    'p',
+    'o',
+    'n',
+    's',
+    'e',
+    ' ',
+    'f',
+    'i',
+    'l',
+    'e',
+    ':',
+    ' ',
+    '%',
+    's',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Unable_to_open_response_file___s_006fcbc0, "Storm::Source::s_Unable_to_open_response_file___s_006fcbc0");
+
+char s_Invalid_argument___s_006fcc0c[21] = {
+    'I',
+    'n',
+    'v',
+    'a',
+    'l',
+    'i',
+    'd',
+    ' ',
+    'a',
+    'r',
+    'g',
+    'u',
+    'm',
+    'e',
+    'n',
+    't',
+    ':',
+    ' ',
+    '%',
+    's',
+    '\x00'
+}; D2_GLOBAL_GUARD(s_Invalid_argument___s_006fcc0c, "Storm::Source::s_Invalid_argument___s_006fcc0c");
+
+char * gaSCMD_FallbackMessages[3] = { (char*)&Storm::Source::s_Invalid_argument___s_006fcc0c, s_The_syntax_of_the_command_is_inco_006fcbe4, (char*)&Storm::Source::s_Unable_to_open_response_file___s_006fcbc0 }; D2_GLOBAL_GUARD(gaSCMD_FallbackMessages, "Storm::Source::gaSCMD_FallbackMessages");
+
+char param_2_006ffc58[3] = { '%', 's', '\x00' }; D2_GLOBAL_GUARD(param_2_006ffc58, "Storm::Source::param_2_006ffc58");
+
+char lpOutputString_006ffcb0[2] = { "\n" }; D2_GLOBAL_GUARD(lpOutputString_006ffcb0, "Storm::Source::lpOutputString_006ffcb0");
 
 } // namespace Storm::Source
 

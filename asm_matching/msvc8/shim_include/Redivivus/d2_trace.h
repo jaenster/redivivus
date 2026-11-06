@@ -1,4 +1,4 @@
-// The oracle's stand-in for support/d2_trace.h, found first on the include path.
+// The oracle's stand-in for Redivivus/d2_trace.h, found first on the include path.
 //
 // The tree's tracing and probe calls are debugging aids added to the
 // reconstruction; the original has none, so for the byte comparison they

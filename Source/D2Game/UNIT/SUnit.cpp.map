@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/UNIT/SUnit.cpp",
+  "file": "Source/D2Game/UNIT/SUnit.cpp",
   "functions": [
     {
       "name": "UNITS_SetNextUnit",

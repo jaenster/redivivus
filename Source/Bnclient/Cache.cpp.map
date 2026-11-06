@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Bnclient/Cache.cpp",
+  "file": "Source/Bnclient/Cache.cpp",
   "functions": [
     {
       "name": "CACHE_ComputeCRC32",

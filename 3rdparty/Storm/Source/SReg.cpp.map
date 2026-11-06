@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SReg.cpp",
+  "file": "3rdparty/Storm/Source/SReg.cpp",
   "functions": [
     {
       "name": "SRegGetBaseKey",

@@ -6,17 +6,17 @@
 # that module's functions match. Longest prefix wins.
 #
 # prefix	extra flags	evidence
-D2Client/	/GS-	evidence/flags.md "/GS-"
-D2DDraw/	/GS-	evidence/flags.md "/GS-"
-D2Direct3D/	/GS-	evidence/flags.md "/GS-"
-D2Gdi/	/GS-	evidence/flags.md "/GS-"
-D2Glide/	/GS-	evidence/flags.md "/GS-"
-D2Launch/	/GS-	evidence/flags.md "/GS-"
-D2Launch/Engine/		evidence/flags.md "/GS-": Fog code filed under D2Launch (00405f00 has a stack cookie)
-D2MCPClient/	/GS-	evidence/flags.md "/GS-"
-D2Multi/	/GS-	evidence/flags.md "/GS-"
-D2Sound/	/GS-	evidence/flags.md "/GS-"
-D2Win/	/GS-	evidence/flags.md "/GS-"
-D2gfx/	/GS-	evidence/flags.md "/GS-"
-D2Hell/	/Y- /O1 /Oy- /Ob1	evidence/flags.md "/O1 for D2Hell"
-Fog/3rdparty/crashy	/Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT	crashy's InternalCheckCorp (004016c0) calls WSAStartup/gethostbyname/WSACleanup through the IAT, the rest of the game through import stubs (vc8_compat.h); /Y- because the precompiled header already fixed the linkage
+Source/D2Client/	/GS-	evidence/flags.md "/GS-"
+Source/D2DDraw/	/GS-	evidence/flags.md "/GS-"
+Source/D2Direct3D/	/GS-	evidence/flags.md "/GS-"
+Source/D2Gdi/	/GS-	evidence/flags.md "/GS-"
+Source/D2Glide/	/GS-	evidence/flags.md "/GS-"
+Source/D2Launch/	/GS-	evidence/flags.md "/GS-"
+Source/D2Launch/Engine/		evidence/flags.md "/GS-": Fog code filed under D2Launch (00405f00 has a stack cookie)
+Source/D2MCPClient/	/GS-	evidence/flags.md "/GS-"
+Source/D2Multi/	/GS-	evidence/flags.md "/GS-"
+Source/D2Sound/	/GS-	evidence/flags.md "/GS-"
+Source/D2Win/	/GS-	evidence/flags.md "/GS-"
+Source/D2gfx/	/GS-	evidence/flags.md "/GS-"
+Source/D2Hell/	/Y- /O1 /Oy- /Ob1	evidence/flags.md "/O1 for D2Hell"
+3rdparty/crashy/	/Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT	crashy's InternalCheckCorp (004016c0) calls WSAStartup/gethostbyname/WSACleanup through the IAT, the rest of the game through import stubs (vc8_compat.h); /Y- because the precompiled header already fixed the linkage

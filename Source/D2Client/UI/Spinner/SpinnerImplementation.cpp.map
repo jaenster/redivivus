@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/UI/Spinner/SpinnerImplementation.cpp",
+  "file": "Source/D2Client/UI/Spinner/SpinnerImplementation.cpp",
   "functions": [
     {
       "name": "Destructor",

@@ -11,7 +11,7 @@
 #pragma once
 
 // The loud build's per-frame guard walk rides on the same two pump sites.
-#include "support/d2_loud.h"
+#include "Redivivus/d2_loud.h"
 
 #ifdef REDIVIVUS_DEV
 // Start the listener. Safe to call more than once; only the first call binds.
@@ -23,7 +23,7 @@ extern "C" void D2CONTROL_Pump(void);
 
 // d2_control.cpp names DRAW_GetBottomPanelY under D2Client::UI::Draw; the function now
 // lives in D2Client::UI::ui (ui.cpp). Retire when d2_control.cpp calls it there.
-#include "D2Client/UI/ui.h"
+#include "Source/D2Client/UI/ui.h"
 namespace D2Client::UI::Draw { using D2Client::UI::ui::DRAW_GetBottomPanelY; }
 #else
 static inline void D2CONTROL_Start(void) {}

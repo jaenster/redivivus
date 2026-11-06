@@ -36,6 +36,33 @@ jobs:
       - name: Build from a clean clone
         env:
           CHECK_BUILD_WORK: ${{ runner.temp }}/redivivus
+          CHECK_BUILD_REPORTS: ${{ runner.temp }}/reports
         run: |
           export CCACHE_DIR=$HOME/.cache/ccache CCACHE_MAXSIZE=2G CCACHE_COMPRESS=true
           tools/check-build.sh "$GITHUB_WORKSPACE" "$GITHUB_SHA"
+
+      # Report only: a wrong-direction include between modules fails the build only in
+      # a module the module table marks strict.
+      - name: Module gate report
+        if: always()
+        shell: bash
+        run: |
+          R="${{ runner.temp }}/reports"
+          [ -f "$R/module-gates-summary.tsv" ] || { echo "no gate report"; exit 0; }
+          cat "$R/module-gates.tsv"
+          {
+            echo "## Module gates"
+            echo
+            echo "Includes of a module the includer may not see under the original import graph (report only; strict modules fail the build)."
+            echo
+            awk -F'\t' 'NR==1 {print "|" $1 "|" $2 "|" $3 "|" $4 "|" $5 "|" $6 "|"; print "|-|-|-|-|-|-|"; next} {print "|" $1 "|" $2 "|" $3 "|" $4 "|" $5 "|" $6 "|"}' "$R/module-gates-summary.tsv"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-gates
+          path: ${{ runner.temp }}/reports/
+          retention-days: 30
+          if-no-files-found: ignore

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Win/Src/D2WinMain.cpp",
+  "file": "Source/D2Win/Src/D2WinMain.cpp",
   "functions": [
     {
       "name": "D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020",

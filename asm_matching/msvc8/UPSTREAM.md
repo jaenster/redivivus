@@ -63,7 +63,7 @@ functions next to MONSTER_SetVelocityPercent, 005a6380), else with most of
 them - at its address among them, and keep its namespace, which is its name;
 make static what only that file then calls. Name prefixes are no evidence:
 they are the database's, and DRLGPATH_SetPathPosition (0064fb90) lies among
-D2Common/PATH/Path's functions. A group whose callers lie hundreds of
+Source/D2Common/PATH/Path's functions. A group whose callers lie hundreds of
 functions apart is no object - /GL, or a misread convention - and stays
 where it is (`evidence/objects.tsv` lists what is left).
 
@@ -212,7 +212,7 @@ compiled in one object with every caller; where the tree files a caller in
 another TU, the two belong in one file - the generator files by Ghidra
 namespace (`fix_refile.py` refiles them, see "Files by object" above).
 UI_ShowMonsterNameBar (00452be0) takes its argument in ESI and is called
-from D2Client/UI/Draw, whose functions lie inside the range of the
+from Source/D2Client/UI/Draw, whose functions lie inside the range of the
 original's `ui.cpp` object (`scripts/tulayout.py`). What objects.tsv still
 lists are groups no object can hold, or whose functions' names other files
 use.

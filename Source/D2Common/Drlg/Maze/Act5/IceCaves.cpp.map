@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Common/Drlg/Maze/Act5/IceCaves.cpp",
+  "file": "Source/D2Common/Drlg/Maze/Act5/IceCaves.cpp",
   "functions": [
     {
       "name": "ReplaceRooms",

@@ -10,6 +10,10 @@
 # build/d2.exe exists, links with no undefined symbol, and every translation unit
 # compiled without -fpermissive.
 #
+# The build also writes the module gate report (build/module-gates.tsv: every
+# include of a module the includer may not see, per module pair). It is printed
+# here and must exist; CHECK_BUILD_REPORTS=<dir> keeps a copy of it.
+#
 # CHECK_BUILD_WORK picks a fixed work directory instead of a fresh temporary one,
 # so the paths in every compile line stay the same between runs. When ccache is
 # installed it is used as the compiler launcher, and a fixed directory is what
@@ -48,7 +52,7 @@ echo "compiler: $(i686-w64-mingw32-g++ --version | head -1)"
 CASE_BAD=$(cd "$WORK/src" && {
   git ls-files | sed 's/^/F\t/'
   git ls-files '*.c' '*.cpp' '*.h' '*.hpp' '*.inl' | while IFS= read -r f; do
-    grep -E '^[[:space:]]*#[[:space:]]*include[[:space:]]*"' "$f" | sed -E 's/.*"([^"]+)".*/\1/' |
+    { grep -E '^[[:space:]]*#[[:space:]]*include[[:space:]]*"' "$f" || true; } | sed -E 's/.*"([^"]+)".*/\1/' |
       while IFS= read -r inc; do printf 'I\t%s\t%s\n' "$f" "$inc"; done
   done
 } | awk -F'\t' '
@@ -103,4 +107,13 @@ fi
 
 i686-w64-mingw32-objdump -f "$WORK/build/d2.exe" | grep -q 'file format pei-i386' \
   || { echo "FAIL: d2.exe is not a 32-bit PE" >&2; exit 1; }
+
+GATES="$WORK/build/module-gates.tsv"; GATE_SUMMARY="$WORK/build/module-gates-summary.tsv"
+[ -f "$GATES" ] && [ -f "$GATE_SUMMARY" ] || { echo "FAIL: no module gate report" >&2; exit 1; }
+echo "module gates (wrong-direction includes, per module; strict modules fail the build):"
+column -t -s $'\t' "$GATE_SUMMARY" 2>/dev/null | sed 's/^/  /' || sed 's/^/  /' "$GATE_SUMMARY"
+awk -F'\t' 'NR>1 && $3=="violation" {p++; h+=$5} END {printf "module gates: %d module pair(s), %d header(s) included against the graph\n", p, h}' "$GATES"
+if [ -n "${CHECK_BUILD_REPORTS:-}" ]; then
+  mkdir -p "$CHECK_BUILD_REPORTS" && cp "$GATES" "$GATE_SUMMARY" "$CHECK_BUILD_REPORTS/"
+fi
 echo "OK: d2.exe, $(stat -c %s "$WORK/build/d2.exe" 2>/dev/null || stat -f %z "$WORK/build/d2.exe") bytes"

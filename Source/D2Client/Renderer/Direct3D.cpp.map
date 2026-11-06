@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/Renderer/Direct3D.cpp",
+  "file": "Source/D2Client/Renderer/Direct3D.cpp",
   "functions": [
     {
       "name": "RENDERER_D3D_CopyPixelsWithStride",

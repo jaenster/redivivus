@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SEVT.cpp",
+  "file": "3rdparty/Storm/Source/SEVT.cpp",
   "functions": [
     {
       "name": "LINKEDLIST_GetCount_Unref_0040f7c0",

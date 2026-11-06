@@ -31,12 +31,12 @@
 // that now means something else. A patch that silently half-applies is worse than
 // one that never applied - that first overrun is precisely how this was found.
 
-#include "d2_platform.h"
-#include "support/d2_patch.h"
-#include "support/d2_trace.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Redivivus/d2_patch.h"
+#include "Redivivus/d2_trace.h"
 
-#include "D2CMP/SRC/LRUCache.h"
-#include "D2Game/GAME/CCmd.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Game/GAME/CCmd.h"
 
 #include <cstdio>
 
@@ -97,7 +97,7 @@ volatile long g_bInstalled = 0;
 
 // ---------------------------------------------------------------------------
 // Per-opcode counts of the client messages the server dispatches, for d2ctl's `pkt`
-// (support/d2_control.cpp). NET_D2GS_SERVER_HandleAnyIncomingPacket (0052cfe0) hands
+// (Redivivus/d2_control.cpp). NET_D2GS_SERVER_HandleAnyIncomingPacket (0052cfe0) hands
 // each dequeued message to one of two dispatchers, GameSetup (mode 0) and InGame
 // (mode 1), each once; both messages are a 4-byte client id followed by the client's
 // packet, opcode first. The system queue (mode 2) carries no client packet. The

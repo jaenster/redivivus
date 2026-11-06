@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Source/SFile.cpp",
+  "file": "Source/Fog/Source/SFile.cpp",
   "functions": [
     {
       "name": "SFILE_InitializeFileSystem",

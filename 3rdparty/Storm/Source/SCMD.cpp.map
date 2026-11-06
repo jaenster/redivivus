@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SCMD.cpp",
+  "file": "3rdparty/Storm/Source/SCMD.cpp",
   "functions": [
     {
       "name": "SCMD_ConvertBool",

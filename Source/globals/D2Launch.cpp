@@ -3,8 +3,57 @@
  * Binary: Game.exe
  */
 
-#include "globals/globals.h"
-#include "Fog/Save.h"
+#include "Source/globals/globals.h"
+#include "Source/Bnclient/BnSend.h"
+#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/net_sid.h"
+#include "Source/D2CMP/Draw.h"
+#include "Source/D2CMP/SRC/Codec.h"
+#include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Client/D2IniConfigStrc.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/DATATBLS/ItemTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"
+#include "Source/D2Common/Drlg/D2DrlgReplaceRoomStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/OutSiege.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/Merc.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Unit.h"
+#include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Launch/D2Launch.globals.h"
+#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Win/D2WinAnimImage.h"
+#include "Source/D2Win/Src/D2Comp.h"
+#include "Source/D2Win/Src/D2WinFont.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/Fog/D2MemoryManagerStrc.h"
+#include "Source/Fog/D2PoolManagerStrc.h"
+#include "Source/Fog/D2QServerStrc.h"
+#include "Source/Fog/Memory.h"
+#include "Source/Fog/Save.h"
+#include "Source/Fog/Source/SFile.h"
+#include "Source/Fog/Source/SSComp.h"
+#include "Source/Fog/Src/LogManager.h"
+#include "3rdparty/Storm/3rdparty/zlib/deflate.h"
+#include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SCMD.h"
+#include "3rdparty/Storm/Source/SComp.h"
+#include "3rdparty/Storm/Source/SErr.h"
+#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Headers/d2_platform.h"
+#include "Source/Fog/Save.h"
 
 
 // =============================================================================
@@ -69,6 +118,12 @@ namespace Storm::_3rdparty::zlib::deflate {
 } // namespace Storm::_3rdparty::zlib::deflate
 
 namespace D2Launch::CharSel {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaFrontEndPaletteFiles[4] = { s_palette_fechar_pal_dat_006d39e8, s_palette_fechar_pal_pl2_006d39d0, s_palette_sky_pal_dat_006d39bc, s_palette_sky_pal_pl2_006d39a8 }; D2_GLOBAL_GUARD(gaFrontEndPaletteFiles, "D2Launch::CharSel::gaFrontEndPaletteFiles");
 
 // =============================================================================
 // Initialized scalars
@@ -314,6 +369,16 @@ namespace Class::HANDLER {
 } // namespace Class::HANDLER
 
 namespace D2Launch::MainMenus {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+int32_t gaMenuFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont3, "D2Launch::MainMenus::gaMenuFormFontParamsFont3");
+
+int32_t gaMenuFormFontParamsFont2[2] = { 0x2, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont2, "D2Launch::MainMenus::gaMenuFormFontParamsFont2");
+
+int32_t gaMenuFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont7, "D2Launch::MainMenus::gaMenuFormFontParamsFont7");
 
 } // namespace D2Launch::MainMenus
 

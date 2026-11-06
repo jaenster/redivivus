@@ -1,0 +1,878 @@
+{
+  "modules": {
+    "Fog": {
+      "kind": "dll-module",
+      "namespaces": [
+        "Fog"
+      ],
+      "dir": "Source/Fog",
+      "linkOrder": 1,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d Fog import table: 32 symbol(s) from Storm; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [
+        {
+          "to": "D2Lang",
+          "symbol": "MISC_GetLanguageCode",
+          "reason": "WriteCrashReportProcessInfo (00407a80) is 1.14-only: no <Inspector.*>/<Locale.Game> strings in any 1.13d binary, so the 1.13d import graph cannot judge Fog -> D2Lang here"
+        },
+        {
+          "to": "D2Lang",
+          "symbol": "STRTABLE_GetRegistryLanguage",
+          "reason": "WriteCrashReportProcessInfo (00407a80) is 1.14-only: no <Inspector.*>/<Locale.Game> strings in any 1.13d binary, so the 1.13d import graph cannot judge Fog -> D2Lang here"
+        }
+      ],
+      "strict": false
+    },
+    "Game": {
+      "kind": "exe",
+      "namespaces": [
+        "Game"
+      ],
+      "dir": "Source/Game",
+      "linkOrder": 2,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d Game import table: 7 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d Game import table: 13 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "1.13d Game import table: 7 symbol(s) from D2gfx; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "1.13d Game import table: 2 symbol(s) from D2Common; 1.13d only"
+        },
+        {
+          "module": "D2MCPClient",
+          "via": "import",
+          "evidence": "1.13d Game import table: 1 symbol(s) from D2MCPClient; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d Game import table: 2 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Win",
+          "via": "import",
+          "evidence": "1.13d Game import table: 8 symbol(s) from D2Win; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Client",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from Game; the host sees the interface, not what it imports"
+        },
+        {
+          "module": "D2Launch",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from Game; the host sees the interface, not what it imports"
+        },
+        {
+          "module": "D2Multi",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from Game; the host sees the interface, not what it imports"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "Storm": {
+      "kind": "3rdparty",
+      "namespaces": [
+        "Storm"
+      ],
+      "dir": "3rdparty/Storm",
+      "linkOrder": 3,
+      "dependencies": [],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Client": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Client"
+      ],
+      "dir": "Source/D2Client",
+      "linkOrder": 4,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 50 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 56 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 36 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 27 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Net",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 12 symbol(s) from D2Net; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 58 symbol(s) from D2gfx; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 627 symbol(s) from D2Common; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2MCPClient",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 1 symbol(s) from D2MCPClient; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 43 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Game",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 13 symbol(s) from D2Game; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Win",
+          "via": "import",
+          "evidence": "1.13d D2Client import table: 38 symbol(s) from D2Win; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Bnclient",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from D2Client; the host sees the interface, not what it imports"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Launch": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Launch"
+      ],
+      "dir": "Source/D2Launch",
+      "linkOrder": 5,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 19 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 27 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 21 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Net",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 4 symbol(s) from D2Net; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 2 symbol(s) from D2gfx; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2MCPClient",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 21 symbol(s) from D2MCPClient; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 11 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Bnclient",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 4 symbol(s) from Bnclient; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Win",
+          "via": "import",
+          "evidence": "1.13d D2Launch import table: 81 symbol(s) from D2Win; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Multi": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Multi"
+      ],
+      "dir": "Source/D2Multi",
+      "linkOrder": 6,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 11 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 15 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 17 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 1 symbol(s) from D2Common; 1.13d only"
+        },
+        {
+          "module": "D2MCPClient",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 28 symbol(s) from D2MCPClient; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 5 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Win",
+          "via": "import",
+          "evidence": "1.13d D2Multi import table: 77 symbol(s) from D2Win; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2MCPClient": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2MCPClient"
+      ],
+      "dir": "Source/D2MCPClient",
+      "linkOrder": 7,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2MCPClient import table: 2 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2MCPClient import table: 16 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2MCPClient import table: 6 symbol(s) from D2Lang; 1.13d only"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2gfx": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2gfx"
+      ],
+      "dir": "Source/D2gfx",
+      "linkOrder": 8,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2gfx import table: 4 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2gfx import table: 6 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Gdi",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from D2gfx; the host sees the interface, not what it imports"
+        },
+        {
+          "module": "D2DDraw",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from D2gfx; the host sees the interface, not what it imports"
+        },
+        {
+          "module": "D2Direct3D",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from D2gfx; the host sees the interface, not what it imports"
+        },
+        {
+          "module": "D2Glide",
+          "via": "load",
+          "evidence": "LoadLibrary + QueryInterface from D2gfx; the host sees the interface, not what it imports"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Win": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Win"
+      ],
+      "dir": "Source/D2Win",
+      "linkOrder": 9,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Win import table: 18 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Win import table: 27 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Win import table: 14 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2Win import table: 16 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "1.13d D2Win import table: 38 symbol(s) from D2gfx; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2Win import table: 8 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Glide": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Glide"
+      ],
+      "dir": "Source/D2Glide",
+      "linkOrder": 10,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Glide import table: 5 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Glide import table: 7 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Glide import table: 10 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2Glide import table: 1 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2DDraw": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2DDraw"
+      ],
+      "dir": "Source/D2DDraw",
+      "linkOrder": 11,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2DDraw import table: 7 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2DDraw import table: 9 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2DDraw import table: 11 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2DDraw import table: 1 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Sound": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Sound"
+      ],
+      "dir": "Source/D2Sound",
+      "linkOrder": 12,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Sound import table: 13 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Sound import table: 10 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "1.13d D2Sound import table: 1 symbol(s) from D2gfx; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Hell": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Hell"
+      ],
+      "dir": "Source/D2Hell",
+      "linkOrder": 13,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d import table"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d import table"
+        }
+      ],
+      "exceptions": [
+        {
+          "to": "Game",
+          "symbol": "MISC_OperatorNewShim",
+          "reason": "D2FILE_VerifySignatureWinTrust (00517ad6) and D2FILE_GetSignerOrganization (00517c30) are 1.14-only WinTrust code (no WINTRUST import in any 1.13d binary) and allocate through the program's global operator new (00405410, Game::Main)"
+        }
+      ],
+      "strict": false,
+      "embedded": true,
+      "description": "static library linked into each DLL that used it; calls only Storm and Fog"
+    },
+    "Bnclient": {
+      "kind": "dll-module",
+      "namespaces": [
+        "Bnclient"
+      ],
+      "dir": "Source/Bnclient",
+      "linkOrder": 14,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d Bnclient import table: 49 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d Bnclient import table: 20 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d Bnclient import table: 1 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "1.13d Bnclient import table: 1 symbol(s) from D2Common; 1.13d only"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Lang": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Lang"
+      ],
+      "dir": "Source/D2Lang",
+      "linkOrder": 15,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Lang import table: 9 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Lang import table: 10 symbol(s) from Fog; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Net": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Net"
+      ],
+      "dir": "Source/D2Net",
+      "linkOrder": 16,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Net import table: 2 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Net import table: 37 symbol(s) from Fog; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Game": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Game"
+      ],
+      "dir": "Source/D2Game",
+      "linkOrder": 17,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Game import table: 10 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Game import table: 30 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Game import table: 1 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2Game import table: 2 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Net",
+          "via": "import",
+          "evidence": "1.13d D2Game import table: 11 symbol(s) from D2Net; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "1.13d D2Game import table: 716 symbol(s) from D2Common; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2CMP": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2CMP"
+      ],
+      "dir": "Source/D2CMP",
+      "linkOrder": 18,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2CMP import table: 13 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2CMP import table: 19 symbol(s) from Fog; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Common": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Common"
+      ],
+      "dir": "Source/D2Common",
+      "linkOrder": 19,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Common import table: 19 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Common import table: 42 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Common import table: 8 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Lang",
+          "via": "import",
+          "evidence": "1.13d D2Common import table: 11 symbol(s) from D2Lang; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Direct3D": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Direct3D"
+      ],
+      "dir": "Source/D2Direct3D",
+      "linkOrder": 20,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Direct3D import table: 7 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Direct3D import table: 9 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Direct3D import table: 10 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2Sound",
+          "via": "import",
+          "evidence": "1.13d D2Direct3D import table: 1 symbol(s) from D2Sound; also in 1.13c, 1.10f"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Gdi": {
+      "kind": "dll-module",
+      "namespaces": [
+        "D2Gdi"
+      ],
+      "dir": "Source/D2Gdi",
+      "linkOrder": 21,
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.13d D2Gdi import table: 3 symbol(s) from Storm; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.13d D2Gdi import table: 4 symbol(s) from Fog; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "1.13d D2Gdi import table: 11 symbol(s) from D2CMP; also in 1.13c, 1.10f"
+        },
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "1.13d D2Gdi import table: 1 symbol(s) from D2gfx; also in 1.13c"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "crashy": {
+      "kind": "3rdparty",
+      "namespaces": [
+        "Fog::_3rdparty::crashy"
+      ],
+      "dir": "3rdparty/crashy",
+      "linkOrder": 0,
+      "dependencies": [
+        {
+          "module": "Fog",
+          "via": "import",
+          "evidence": "1.14-only crash reporter (no 1.13d counterpart); it calls Fog's FILETOOLS_*_UTF8 and STRING_* (00401100, 00401220, 00401790), Safesock WSACleanup (004016c0) and InitializeDebugSubsystem (00401640)"
+        },
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "1.14-only crash reporter; it frees through Storm's MISC_OperatorDeleteShim (00401090)"
+        }
+      ],
+      "exceptions": [],
+      "strict": false,
+      "description": "The 1.14 crash-report library (Fog::_3rdparty::crashy)."
+    },
+    "D2Headers": {
+      "kind": "headers-only",
+      "namespaces": [],
+      "files": [
+        "d2_platform.h",
+        "d2_enums.h"
+      ],
+      "dir": "Source/D2Headers",
+      "linkOrder": 22,
+      "dependencies": [],
+      "exceptions": [],
+      "strict": false,
+      "description": "Headers every module may include, the place of the original `\\d2\\source\\d2headers\\` (named by `Linklist.h` in 117 D2Game asserts, 1.06b-1.10f): the platform model and the enums the modules share."
+    },
+    "Redivivus": {
+      "kind": "ours",
+      "namespaces": [],
+      "dir": "Redivivus",
+      "linkOrder": 23,
+      "dependencies": [
+        {
+          "module": "libbacktrace",
+          "via": "import",
+          "evidence": "Redivivus/d2_crash.cpp symbolises the stack with libbacktrace"
+        }
+      ],
+      "exceptions": [],
+      "strict": false,
+      "description": "The hand-written support code of Redivivus: crash reports, the CRT shims, tracing and the dev control channel."
+    },
+    "libbacktrace": {
+      "kind": "3rdparty",
+      "namespaces": [],
+      "dir": "3rdparty/libbacktrace",
+      "linkOrder": 24,
+      "dependencies": [],
+      "exceptions": [],
+      "strict": false,
+      "description": "GCC's libbacktrace, vendored as C; the crash report symbolises the stack with it."
+    },
+    "D2OpenGL": {
+      "kind": "dll-module",
+      "target": "mac",
+      "namespaces": [
+        "D2OpenGL"
+      ],
+      "dir": "Source/D2OpenGL",
+      "dependencies": [
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "Mac build (carried from the earlier modules section; not re-derived)"
+        },
+        {
+          "module": "D2Client",
+          "via": "import",
+          "evidence": "Mac build (carried from the earlier modules section; not re-derived)"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "StormMac": {
+      "kind": "3rdparty",
+      "target": "mac",
+      "namespaces": [
+        "StormMac"
+      ],
+      "dir": "3rdparty/StormMac",
+      "dependencies": [
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "Mac build (carried from the earlier modules section; not re-derived)"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "MacSpecific": {
+      "kind": "dll-module",
+      "target": "mac",
+      "namespaces": [
+        "MacSpecific"
+      ],
+      "dir": "Source/MacSpecific",
+      "dependencies": [
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "Mac build (carried from the earlier modules section; not re-derived)"
+        },
+        {
+          "module": "D2Client",
+          "via": "import",
+          "evidence": "Mac build (carried from the earlier modules section; not re-derived)"
+        },
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "Mac build (carried from the earlier modules section; not re-derived)"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    }
+  }
+}

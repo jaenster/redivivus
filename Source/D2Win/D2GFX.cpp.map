@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Win/D2GFX.cpp",
+  "file": "Source/D2Win/D2GFX.cpp",
   "functions": [
     {
       "name": "CreateWindowWithChecks",

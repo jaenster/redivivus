@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Bnclient/net_sid.cpp",
+  "file": "Source/Bnclient/net_sid.cpp",
   "functions": [
     {
       "name": "NET_SID_CLIENT_GetStateAndClear",

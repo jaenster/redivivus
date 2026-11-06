@@ -205,7 +205,7 @@ def declared_names(path):
 def visible_names(text):
     """The names the headers `text` includes declare, as far as they include
     each other, with the header every TU is compiled with."""
-    seen, todo = set(), [os.path.join(REPO, 'd2_platform.h')]
+    seen, todo = set(), [os.path.join(REPO, 'Source', 'D2Headers', 'd2_platform.h')]
     todo += [os.path.join(REPO, n) for n in re.findall(r'^#include\s+"([^"]+)"', text, re.M)]
     names = set()
     while todo:

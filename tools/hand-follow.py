@@ -56,7 +56,7 @@ import sys
 MARK = re.compile(r'^// 1\.14d: (?:0x)?([0-9a-fA-F]{6,8})\b')
 MARKS = re.compile(r'^// 1\.14d: (?:0x)?([0-9a-fA-F]{6,8})\b', re.M)
 # Hand-owned by rsync exclude, not generated; their delta is not a hand patch over code.
-DEFAULT_EXCLUDES = ['asm_matching', 'support', 'thirdparty', 'cmake', 'tools',
+DEFAULT_EXCLUDES = ['asm_matching', 'Redivivus', '3rdparty/libbacktrace', '3rdparty/implibs', 'cmake', 'tools',
                     'CMakeLists.txt', 'README.md', '.gitignore', '*.map']
 SRC_EXT = ('.cpp', '.h', '.c', '.hpp', '.inc', '.CPP', '.H', '.C')
 CTX = 3
@@ -564,7 +564,7 @@ def load_path_map(a, tracked):
 
 class Canon:
     """Spell a path the way the tree does. Plans written on a case-insensitive file system
-    name `D2Game/Player/PlayerMsg.cpp` for the tracked `D2Game/PLAYER/PlayerMsg.cpp`; git
+    name `Source/D2Game/Player/PlayerMsg.cpp` for the tracked `Source/D2Game/PLAYER/PlayerMsg.cpp`; git
     treats those as two files, so every path from a map goes through here first."""
 
     def __init__(self, tracked):
@@ -835,7 +835,7 @@ def cmd_plan(a):
         if len(v) > 1:
             conflicts.append('case collision, one path on macOS and Windows: ' +
                              ' / '.join(sorted(v)))
-    owned = [p for p in tracked if p == 'CMakeLists.txt' or p.startswith(('support/', 'cmake/'))
+    owned = [p for p in tracked if p == 'CMakeLists.txt' or p.startswith(('Redivivus/', 'cmake/', '3rdparty/libbacktrace/', '3rdparty/implibs/'))
              or p in inv['hand_files']]
     moving = set(mv) | set(merge)
     for p in sorted(owned):

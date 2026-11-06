@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/UI/Waypoint.cpp",
+  "file": "Source/D2Client/UI/Waypoint.cpp",
   "functions": [
     {
       "name": "WAYPOINT_GetActIndexFromMouse",

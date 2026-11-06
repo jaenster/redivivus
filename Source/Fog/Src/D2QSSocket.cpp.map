@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Src/D2QSSocket.cpp",
+  "file": "Source/Fog/Src/D2QSSocket.cpp",
   "functions": [
     {
       "name": "QSSOCKET_SetCallbackHandler1",

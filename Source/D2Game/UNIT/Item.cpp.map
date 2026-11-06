@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/UNIT/Item.cpp",
+  "file": "Source/D2Game/UNIT/Item.cpp",
   "functions": [
     {
       "name": "Pre0x9DAnd0x9CPacket",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/PLAYER/PlayerTrade.cpp",
+  "file": "Source/D2Game/PLAYER/PlayerTrade.cpp",
   "functions": [
     {
       "name": "Objects_OperateFn32_OpenStash",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Game/SKILLS/SkillBar.cpp",
+  "file": "Source/D2Game/SKILLS/SkillBar.cpp",
   "functions": [
     {
       "name": "SKILLBAR_SrvStFn32_StrikeWithAuraState",

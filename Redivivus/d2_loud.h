@@ -1,4 +1,4 @@
-// The loud build's game-loop hook (support/d2_loud.cpp). Without REDIVIVUS_LOUD_GUARDS
+// The loud build's game-loop hook (Redivivus/d2_loud.cpp). Without REDIVIVUS_LOUD_GUARDS
 // it compiles to nothing.
 #pragma once
 

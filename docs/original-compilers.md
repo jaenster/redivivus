@@ -47,7 +47,7 @@ oracle does all of that, and runs the compiler under wine on Linux and macOS:
 ```sh
 asm_matching/msvc8/oracle setup     # once: Game.exe 1.14d from Blizzard's patch, VC8 from Microsoft's packages (~4 GB)
 asm_matching/msvc8/oracle all       # compile every translation unit, pair the functions, compare
-asm_matching/msvc8/oracle build D2Common/Environment   # recompile one source file after an edit
+asm_matching/msvc8/oracle build Source/D2Common/Environment   # recompile one source file after an edit
 asm_matching/msvc8/oracle diff <function>              # where one function differs from 1.14d
 ```
 

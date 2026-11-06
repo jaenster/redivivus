@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Net/SRC/Client.cpp",
+  "file": "Source/D2Net/SRC/Client.cpp",
   "functions": [
     {
       "name": "NET_CLIENT_SetConnectionTimeout",

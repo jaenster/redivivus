@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/SKILLS/SkillsSor.cpp",
+  "file": "Source/D2Client/SKILLS/SkillsSor.cpp",
   "functions": [
     {
       "name": "Skills_CltDoFunc_Sor_LinearMissileCount",

@@ -12,9 +12,23 @@ renderers, sound, input, files and archives, the network layer, and Blizzard's S
 libraries. Together they build into a program you can start and play.
 
 The tree is organised by the module names the game itself uses (`D2Client`, `D2Common`,
-`D2Game`, `D2Win`, `D2gfx`, `Storm`, `Fog`, ...). It is generated from reverse-engineered
+`D2Game`, `D2Win`, `D2gfx`, `Fog`, ...). It is generated from reverse-engineered
 Ghidra databases and corrected where needed: the names, types and structure are
 reconstructions, and some functions still read like a decompiler wrote them, because one did.
+
+|Directory|What is in it|
+|-|-|
+|`Source/<module>/`|Blizzard's modules, one directory each, generated. `Source/D2Headers/` holds the shared headers `d2_platform.h` and `d2_enums.h`|
+|`3rdparty/Storm/`, `3rdparty/crashy/`|Storm and the crash-report library, generated|
+|`Source/globals/`|the game's global data, generated|
+|`project.json`|the module table: each module's directory, kind, dependencies with their evidence, exceptions, link order and strictness. `Source/modules.cmake` is generated from it, and the configure step fails when the two disagree|
+|`Redivivus/`|hand-written support code: the host glue, tracing, the crash handler|
+|`3rdparty/libbacktrace/`, `3rdparty/implibs/`|vendored code and the import-library definitions|
+
+Includes are rooted at the tree: `#include "Source/D2Common/ITEMS/Items.h"`. Each module
+builds into its own static library, and the executable links them whole in the order of the
+1.14d link. The build also writes `build/module-gates.tsv`, which lists every include that
+crosses a module boundary the original 1.13d DLL imports did not allow.
 
 The Ghidra databases behind the tree, 1.14d Windows and Mac, are open to read for anyone with
 an AI agent; see [Contributing](#contributing). How the project came about since 2021:
@@ -132,7 +146,7 @@ checked against the databases, reviewed, and applied with you as the git author;
 
 ## License
 
-MIT, see [LICENSE](LICENSE). Code under `thirdparty/` keeps its own license.
+MIT, see [LICENSE](LICENSE). Code under `3rdparty/libbacktrace/` keeps its own license.
 
 The `.cpp.map` files map every function and line back to its address in 1.14d `Game.exe`. They
 are part of this work under the same license: if you use them, credit Redivivus and link here.

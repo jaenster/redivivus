@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/3rdparty/zlib/trees.cpp",
+  "file": "3rdparty/Storm/3rdparty/zlib/trees.cpp",
   "functions": [
     {
       "name": "tr_static_init_Unref_00421040",

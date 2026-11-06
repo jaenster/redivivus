@@ -85,9 +85,11 @@ the platform header's toolchain glue, never in game code. Each anchor must
 match exactly once, so a regenerated header that moved on fails here loudly
 instead of compiling unpatched. Only a header without __LINE__ may take a patch
 that adds a line.
-The vendored thirdparty/ and the build and tooling directories are not part
-of the reconstruction and are not mirrored; of the hand-written support/ tree
-only the headers are, because some game sources include them.
+The vendored libraries (3rdparty/libbacktrace, 3rdparty/implibs) and the
+build and tooling directories are not part of the reconstruction and are not
+mirrored; 3rdparty/Storm and 3rdparty/crashy are game code and are. Of the
+hand-written Redivivus/ tree only the headers are, because some game sources
+include them, and ghidra_version.cpp, the generated version stamp.
 """
 import hashlib
 import os
@@ -95,8 +97,11 @@ import re
 import sys
 
 SKIP_DIRS = {'.git', '.github', '.idea', 'asm_matching', 'build', 'cmake',
-             'thirdparty', 'tools', 'metrics'}
-HEADERS_ONLY = {'support'}   # hand-written scaffolding: its headers are included, its code is not ours to diff
+             'tools', 'metrics'}
+VENDORED = {os.path.join('3rdparty', 'libbacktrace'), os.path.join('3rdparty', 'implibs')}
+HEADERS_ONLY = {'Redivivus'}   # hand-written scaffolding: its headers are included, its code is not ours to diff
+HEADERS_ONLY_BUT = {os.path.join('Redivivus', 'ghidra_version.cpp')}   # generated, compiled like the game
+PLATFORM_H = os.path.join('Source', 'D2Headers', 'd2_platform.h')
 EXTS = ('.h', '.hpp', '.inl', '.cpp', '.c')
 
 NS_OPEN = re.compile(r'^(\s*)namespace\s+([A-Za-z_]\w*(?:::[A-Za-z_]\w*)+)\s*\{', re.M)
@@ -124,7 +129,7 @@ CONV_FIRST = re.compile(r'\b(__stdcall|__cdecl|__fastcall|__thiscall)\s+'
                         r'([A-Za-z_]\w*)\s*\(')
 
 FILE_PATCHES = {
-    'd2_platform.h': [
+    PLATFORM_H: [
         # The hook that runs right after the Windows headers: see vc8_after_windows.h.
         (r'^#  include <wintrust\.h>$', '#  include <wintrust.h>\n#  include <vc8_after_windows.h>'),
         # mingw lacks the MSVC names and maps them to C99's; VC8 has them, and the
@@ -152,7 +157,7 @@ RAD_IJL_IMPORTS = ('SmackOpen', 'SmackClose', 'SmackDoFrame', 'SmackNextFrame', 
                    'SmackToBuffer', 'BinkOpen', 'BinkClose', 'BinkDoFrame', 'BinkNextFrame',
                    'BinkWait', 'BinkCopyToBuffer', 'BinkSetSoundSystem', 'BinkOpenDirectSound',
                    'BinkDDSurfaceType', 'ijlInit', 'ijlFree', 'ijlWrite')
-FILE_PATCHES['d2_platform.h'] += [
+FILE_PATCHES[PLATFORM_H] += [
     (r'^extern "C" (?=[^;(]* __stdcall %s\()' % name, 'extern "C" __declspec(dllimport) ')
     for name in RAD_IJL_IMPORTS]
 
@@ -733,9 +738,12 @@ def sources(root):
         rel = os.path.relpath(dirpath, root)
         if rel == '.':
             dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS and not d.startswith('build')]
+        else:
+            dirnames[:] = [d for d in dirnames if os.path.join(rel, d) not in VENDORED]
         top = rel.split(os.sep)[0]
         for name in sorted(filenames):
-            if name.endswith(EXTS) and (top not in HEADERS_ONLY or name.endswith('.h')):
+            if name.endswith(EXTS) and (top not in HEADERS_ONLY or name.endswith('.h')
+                                        or os.path.join(rel, name) in HEADERS_ONLY_BUT):
                 yield rel, name
 
 

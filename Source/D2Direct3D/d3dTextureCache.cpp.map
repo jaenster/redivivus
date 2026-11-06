@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Direct3D/d3dTextureCache.cpp",
+  "file": "Source/D2Direct3D/d3dTextureCache.cpp",
   "functions": [
     {
       "name": "RENDERER_D3D_InitializeTextureCachePool",

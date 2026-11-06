@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Src/D2Net.cpp",
+  "file": "Source/Fog/Src/D2Net.cpp",
   "functions": [
     {
       "name": "NET_SERVER_SentPacketLog_Clear",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/GAME/Wall2.cpp",
+  "file": "Source/D2Client/GAME/Wall2.cpp",
   "functions": [
     {
       "name": "WALL2_InitUnitGfx",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Fog.cpp",
+  "file": "Source/Fog/Fog.cpp",
   "functions": [
     {
       "name": "D2CheckExpansionGame",

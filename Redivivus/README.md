@@ -1,4 +1,4 @@
-# `support/` - the hand-owned half of the tree
+# `Redivivus/` - the hand-owned half of the tree
 
 Files here are **option 3** in [`docs/regen-workflow.md`](../../../docs/regen-workflow.md): new
 files the generator never emits. `rsync --delete` cannot reach them and a merge cannot conflict in
@@ -17,11 +17,11 @@ The game writes `d2crash-YYYYMMDD-HHMMSS.txt` next to `d2.exe` (or in `%TEMP%` w
 is not writable). **Send that file.** It names the build, the exception, the registers, the stack
 as function and `file:line`, and every loaded module (wrappers such as cnc-ddraw, glide or an
 overlay show up there). The names come from the DWARF in your own `d2.exe`, read with the vendored
-libbacktrace (`thirdparty/libbacktrace`), so the report is readable without your exe - keep the
+libbacktrace (`3rdparty/libbacktrace`), so the report is readable without your exe - keep the
 build unstripped. One report is written per crash; the game's own error handling runs after it.
 A Fog halt (`ERROR_UnrecoverableInternalError_Halt`, the engine's assert) writes the same report,
 headed `HALT line=<n> at <addr>`, with the halting thread's stack; it is called from the halt's
-body in `Fog/Src/ErrorManager.cpp`, the one generated-file line this feature needs.
+body in `Source/Fog/Src/ErrorManager.cpp`, the one generated-file line this feature needs.
 
 `d2_crt_support.cpp` is compiled by the ad-hoc measure build (which globs `*.cpp`) and is listed
 explicitly in the hand-owned `CMakeLists.txt`.
@@ -32,7 +32,7 @@ Reproduced on `source/modified` `49f0e04fb`, all 503 TUs compiled with
 
 ```sh
 i686-w64-mingw32-g++ -std=c++17 -c -w -fms-extensions \
-  -include d2_platform.h -include support/d2_hand.h @incdirs.rsp -o <obj> <src>
+  -include Source/D2Headers/d2_platform.h -include Redivivus/d2_hand.h @incdirs.rsp -o <obj> <src>
 i686-w64-mingw32-ar rcs libd2.a *.o
 i686-w64-mingw32-g++ -o test.exe main.cpp -Wl,--whole-archive libd2.a -Wl,--no-whole-archive \
   -lgdi32 -luser32 -lkernel32 -ladvapi32 -lwinmm -lws2_32 -lole32 -loleaut32 -luuid -lcomctl32

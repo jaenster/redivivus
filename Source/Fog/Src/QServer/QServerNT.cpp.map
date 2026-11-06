@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Fog/Src/QServer/QServerNT.cpp",
+  "file": "Source/Fog/Src/QServer/QServerNT.cpp",
   "functions": [
     {
       "name": "AwaitAndClose",

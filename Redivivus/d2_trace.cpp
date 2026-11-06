@@ -2,8 +2,9 @@
 #include <stdio.h>
 
 #define D2_TRACE_DEFINITIONS
-#include "support/d2_trace.h"
-#include "globals/globals.h"
+#include "Redivivus/d2_trace.h"
+#include "Source/globals/globals.h"
+#include "Source/D2gfx/D2gfx.globals.h"
 
 static FILE* g_pLog = 0;
 
@@ -14,7 +15,7 @@ unsigned g_anClientPktCount[256];
 unsigned g_anServerPktCount[256];
 #endif
 
-// Under the Visual C++ build support/d2_trace.h is the msvc8 oracle's stand-in,
+// Under the Visual C++ build Redivivus/d2_trace.h is the msvc8 oracle's stand-in,
 // in which every tracing call compiles to nothing; only the counters above stay.
 #if !(defined(_MSC_VER) && defined(D2Trace))
 
@@ -32,7 +33,7 @@ static FILE* TraceLog() {
         char szPath[MAX_PATH];
 #ifndef REDIVIVUS_DEV
         // A release build logs here only for an armed write watchpoint; crash
-        // reports are support/d2_crash.cpp.
+        // reports are Redivivus/d2_crash.cpp.
         DWORD nDir = GetModuleFileNameA(0, szPath, MAX_PATH);
         while (nDir > 0 && szPath[nDir - 1] != '\\') nDir--;
         lstrcpyA(szPath + nDir, "d2trace.log");
@@ -134,7 +135,7 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
         return EXCEPTION_CONTINUE_EXECUTION;
     }
 #ifndef REDIVIVUS_DEV
-    // A release build reports crashes through support/d2_crash.cpp only.
+    // A release build reports crashes through Redivivus/d2_crash.cpp only.
     return EXCEPTION_CONTINUE_SEARCH;
 #endif
     void* pAddr = pExc->ExceptionRecord->ExceptionAddress;
@@ -213,7 +214,7 @@ __attribute__((init_priority(150))) static struct TraceInit {
     TraceInit() {
         AddVectoredExceptionHandler(1, TraceVectoredHandler);
         // The stack guarantee that keeps this handler runnable on a stack overflow
-        // is reserved by support/d2_crash.cpp.
+        // is reserved by Redivivus/d2_crash.cpp.
         D2Trace("vectored handler installed");
     }
 } g_traceInit;

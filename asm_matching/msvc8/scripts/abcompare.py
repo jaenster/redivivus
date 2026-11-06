@@ -40,7 +40,10 @@ def main():
         _n, _t, sb, xb = b[k]
         if xa == 'QUARANTINE' or xb == 'QUARANTINE' or xa == 'MISSING' or xb == 'MISSING':
             continue
-        mod = '/'.join(tu.split('/')[:args.depth])
+        parts = tu.split('/')
+        if parts[0] in ('Source', '3rdparty') and len(parts) > 1:
+            parts = parts[1:]           # the module is the directory under the layout root
+        mod = '/'.join(parts[:args.depth])
         c = mods[mod]
         c['n'] += 1
         c['a'] += xa == 'MATCH'

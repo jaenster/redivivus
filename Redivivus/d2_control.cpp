@@ -4,57 +4,63 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "support/d2_control.h"
-#include "support/d2_trace.h"
-#include "support/d2_patch.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
-#include "D2Common/DATATBLS/MonsterTbls.h"
-#include "D2Client/UNIT/Monster.h"
-#include "globals/globals.h"
-#include "D2Win/Src/D2WinMain.h"
-#include "D2Client/GAME/View.h"
-#include "D2Common/Drlg/D2DrlgFileStrc.h"
-#include "D2Common/Drlg/Drlg.h"
-#include "D2Common/Drlg/Transform.h"
-#include "D2Client/GAME/Wall2.h"
-#include "D2Common/DATATBLS/ObjectTbls.h"
-#include "D2Game/Objects/Objects.h"
-#include "D2gfx/D2GFX.h"
-#include "D2Game/GAME/Server.h"
-#include "D2Launch/MainMenus.h"
-#include "D2Launch/CharSel.h"
-#include "D2Client/UI/Path.h"
-#include "D2Client/UI/ui.h"
-#include "D2Common/ITEMS/Items.h"
-#include "D2Common/INVENTORY/Inventory.h"
-#include "D2Client/UI/npcmenu.h"
-#include "D2Client/GAME/Msg.h"
-#include "D2Common/Units.h"
-#include "D2Common/D2UnitStrc.h"
-#include "D2Common/D2MonStatsTxt.h"
-#include "D2Client/UNIT/PlrSkills.h"
-#include "D2Common/Txt/Skills.h"
-#include "D2Common/Stats/StatsEx.h"
-#include "D2Client/UI/Draw.h"
-#include "D2Client/UNIT/UnitMode.h"
-#include "D2Client/SKILLS/Skills.h"
-#include "D2Common/D2SkillsTxt.h"
-#include "D2Game/PLAYER/PlayerModes.h"
-#include "D2Game/PLAYER/PlayerMsg.h"
-#include "D2Common/COMPOSIT/Composit.h"
-#include "D2Client/GAME/SCmd.h"
-#include "D2Common/D2SkillStrc.h"
-#include "D2Lang/StrTable/strtable.h"
-#include "D2Common/DUNGEON/Dungeon.h"
-#include "D2Common/D2DynamicPathStrc.h"
-#include "D2Client/D2AutomapLayerStrc.h"
-#include "D2Client/UI/Automap.h"
-#include "D2Client/D2GameViewStrc.h"
-#include "D2Game/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/GAME/Select.h"
-#include "D2Common/Drlg/Transform.h"
-#include "D2Game/Ai/D2AiGeneralStrc.h"
+#include "Redivivus/d2_control.h"
+#include "Redivivus/d2_trace.h"
+#include "Redivivus/d2_patch.h"
+#include "Source/D2Client/DataTbls/MonsterTbls.h"
+#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Client/UNIT/Monster.h"
+#include "Source/globals/globals.h"
+// The module data the harness reads; each module declares its own globals.
+#include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Launch/D2Launch.globals.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/D2gfx/D2gfx.globals.h"
+#include "Source/D2Win/Src/D2WinMain.h"
+#include "Source/D2Client/GAME/View.h"
+#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Client/GAME/Wall2.h"
+#include "Source/D2Common/DATATBLS/ObjectTbls.h"
+#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2Game/GAME/Server.h"
+#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Launch/CharSel.h"
+#include "Source/D2Client/UI/Path.h"
+#include "Source/D2Client/UI/ui.h"
+#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/INVENTORY/Inventory.h"
+#include "Source/D2Client/UI/npcmenu.h"
+#include "Source/D2Client/GAME/Msg.h"
+#include "Source/D2Common/Units.h"
+#include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Client/UNIT/PlrSkills.h"
+#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Client/UI/Draw.h"
+#include "Source/D2Client/UNIT/UnitMode.h"
+#include "Source/D2Client/SKILLS/Skills.h"
+#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Game/PLAYER/PlayerModes.h"
+#include "Source/D2Game/PLAYER/PlayerMsg.h"
+#include "Source/D2Common/COMPOSIT/Composit.h"
+#include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Common/D2SkillStrc.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/D2DynamicPathStrc.h"
+#include "Source/D2Client/D2AutomapLayerStrc.h"
+#include "Source/D2Client/UI/Automap.h"
+#include "Source/D2Client/D2GameViewStrc.h"
+#include "Source/D2Game/UNIT/Monster.h"
+#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/GAME/Select.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 
 // One line in, one line out, on TCP 7777. Commands:
 //   state                -> a JSON line describing where the game actually is
@@ -156,7 +162,7 @@ static int AmapCount(D2AutomapCellStrc* pCell, int nDepth, int* pnMaxDepth) {
 // generated translation unit: the instrumentation that once incremented them sat in
 // D2Client/Game/SCmd.cpp and D2Game/Game/SCmd.cpp, and the first regen merge that touched
 // those files took them away and left the harness with two undefined symbols. Anything the
-// harness owns has to be defined in support/, which the generator never rewrites.
+// harness owns has to be defined in Redivivus/, which the generator never rewrites.
 unsigned g_anClientPktCount[256];
 unsigned g_anServerPktCount[256];
 
@@ -2205,7 +2211,7 @@ extern "C" void D2CONTROL_Start(void) {
     if (InterlockedExchange(&g_started, 1)) return;
     InitializeCriticalSection(&g_cs);
     // Our-side runtime patches go in before any game code that needs them runs.
-    // They live in support/ so the generated engine tree stays untouched.
+    // They live in Redivivus/ so the generated engine tree stays untouched.
     D2PATCH_InstallAll();
     CreateThread(0, 0, ServerThread, 0, 0, 0);
 }

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SBMP.cpp",
+  "file": "3rdparty/Storm/Source/SBMP.cpp",
   "functions": [
     {
       "name": "SBMP_ValidateTGAHeader",

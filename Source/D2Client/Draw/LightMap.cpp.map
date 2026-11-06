@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/Draw/LightMap.cpp",
+  "file": "Source/D2Client/Draw/LightMap.cpp",
   "functions": [
     {
       "name": "WEATHER_ApproximateDistanceCustomCC",

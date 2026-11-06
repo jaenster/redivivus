@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SSystem.cpp",
+  "file": "3rdparty/Storm/Source/SSystem.cpp",
   "functions": [
     {
       "name": "SSYSTEM_Shutdown",

@@ -72,7 +72,9 @@ def tree_files():
     for dirpath, dirnames, files in os.walk(REPO):
         rel = os.path.relpath(dirpath, REPO)
         if rel == '.':
-            dirnames[:] = [d for d in dirnames if d not in ('.git', 'asm_matching', 'build', 'thirdparty', 'tools')]
+            dirnames[:] = [d for d in dirnames if d not in ('.git', 'asm_matching', 'build', 'tools')]
+        elif rel == '3rdparty':
+            dirnames[:] = [d for d in dirnames if d not in ('libbacktrace', 'implibs')]   # vendored, not the game
         for f in files:
             if f.endswith(('.cpp', '.h')):
                 out.append(os.path.join(dirpath, f))

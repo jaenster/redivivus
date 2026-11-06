@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Bnclient/BnSend.cpp",
+  "file": "Source/Bnclient/BnSend.cpp",
   "functions": [
     {
       "name": "NET_SID_CLIENT_Send_0x1E_ClientId2",

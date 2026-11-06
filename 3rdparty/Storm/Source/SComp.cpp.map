@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SComp.cpp",
+  "file": "3rdparty/Storm/Source/SComp.cpp",
   "functions": [
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041c3d0",

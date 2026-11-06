@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Multi/OOGUtilities.cpp",
+  "file": "Source/D2Multi/OOGUtilities.cpp",
   "functions": [
     {
       "name": "OOG_DisableControlCallback",

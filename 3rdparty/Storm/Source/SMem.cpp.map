@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SMem.cpp",
+  "file": "3rdparty/Storm/Source/SMem.cpp",
   "functions": [
     {
       "name": "MISC_OperatorDeleteShim",

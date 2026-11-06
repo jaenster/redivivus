@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Game/Main.cpp",
+  "file": "Source/Game/Main.cpp",
   "functions": [
     {
       "name": "MISC_OperatorNewShim",

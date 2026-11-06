@@ -22,7 +22,7 @@ extern "C" void D2TraceFmt(const char* pszFormat, ...);
 #define D2TraceFmt(...) ((void)0)
 #endif
 
-// Write a crash report for a Fog halt (support/d2_crash.cpp): the line, the
+// Write a crash report for a Fog halt (Redivivus/d2_crash.cpp): the line, the
 // call-site address and the halting thread's stack. Declared here because the
 // generated ErrorManager.cpp already includes this header.
 extern "C" void D2CRASH_ReportHalt(int nLine, unsigned nAddress);

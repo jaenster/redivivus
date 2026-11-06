@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Sound/Src/D2SoundSmp.cpp",
+  "file": "Source/D2Sound/Src/D2SoundSmp.cpp",
   "functions": [
     {
       "name": "SOUNDSMP_WriteToBuffer",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/3rdparty/zlib/uncompr.cpp",
+  "file": "3rdparty/Storm/3rdparty/zlib/uncompr.cpp",
   "functions": [
     {
       "name": "uncompress",

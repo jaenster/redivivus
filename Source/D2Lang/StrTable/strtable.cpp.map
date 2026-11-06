@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Lang/StrTable/strtable.cpp",
+  "file": "Source/D2Lang/StrTable/strtable.cpp",
   "functions": [
     {
       "name": "ARCHIVE_LoadMPQFiles",

@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "Storm/Source/SLog.cpp",
+  "file": "3rdparty/Storm/Source/SLog.cpp",
   "functions": [
     {
       "name": "SLOG_FlushLog",

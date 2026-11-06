@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2CMP/SRC/Raw.cpp",
+  "file": "Source/D2CMP/SRC/Raw.cpp",
   "functions": [
     {
       "name": "RAW_CreateCelFrames",
