@@ -5,7 +5,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -29,6 +28,7 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Text.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ObjectInitFnArg.h"
@@ -42,7 +42,6 @@
 #include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/SkillsServer.h"
@@ -57,6 +56,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS/A1Q2.h"
 #include "D2Game/Quests/QUESTS/A2Q5.h"
@@ -524,7 +524,7 @@ void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         ppSpawnedPortal = 0;
         pSpecificData->bPortalSpawnInProgress = 1;
         eLevel = LEVEL_LutGholein;
-        bPortalSpawned = SKILLS::SkillsServer::SERVER_SpawnPortal(pQuestData->pGame, pQuestArgs->pPlayer, D2Common::Units::UNITS_GetRoom(pQuestArgs->pPlayer), D2Client::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pPlayer), D2Client::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pPlayer), eLevel, ppSpawnedPortal, nPortalClassId, bPortalSpawned);
+        bPortalSpawned = SKILLS::SkillsServer::SERVER_SpawnPortal(pQuestData->pGame, pQuestArgs->pPlayer, D2Common::Units::UNITS_GetRoom(pQuestArgs->pPlayer), D2Common::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pPlayer), D2Common::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pPlayer), eLevel, ppSpawnedPortal, nPortalClassId, bPortalSpawned);
         if (bPortalSpawned) {
           QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x241);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q14_CheckDurielLairAndComplete);
@@ -1200,8 +1200,8 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
       if (pQuestSpecific->bOrificeObjectPresent) {
         pDVar1 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pQuestSpecific->nOrificeObjectGUID);
         if (pDVar1) {
-          nOrificeX = D2Client::Units::GetXPosFromDynamicPathUnit(pDVar1);
-          nOrificeY = D2Client::Units::GetYPosFromDynamicPathUnit(pDVar1);
+          nOrificeX = D2Common::Units::GetXPosFromDynamicPathUnit(pDVar1);
+          nOrificeY = D2Common::Units::GetYPosFromDynamicPathUnit(pDVar1);
           pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pDVar1), nOrificeX - 0xd, nOrificeY + 3);
           if (pNearbyRoom) {
             pUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 100, nOrificeX - 0xd, nOrificeY + 3, pGame, pNearbyRoom, 1, 1, nullptr);

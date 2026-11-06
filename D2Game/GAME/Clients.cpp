@@ -6,8 +6,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -29,8 +27,8 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -69,6 +67,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/Clients.data.h"
 #include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -596,8 +595,8 @@ void __fastcall GAME_CollectNearbyUnitPositions(D2ClientStrc * pClient, uint32_t
         return;
       }
 
-      nX = D2Client::Units::GetXPosFromDynamicPathUnit(pPlayerUnit_lcl);
-      nY = D2Client::Units::GetYPosFromDynamicPathUnit(pPlayerUnit_lcl);
+      nX = D2Common::Units::GetXPosFromDynamicPathUnit(pPlayerUnit_lcl);
+      nY = D2Common::Units::GetYPosFromDynamicPathUnit(pPlayerUnit_lcl);
       pnMaxDist = 0;
       pClient->nPacketBuffer.nCount = 0;
       aProximityNodes[0].nNext = 0;
@@ -1682,9 +1681,9 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_IronGolem);
       if (pSkill) {
         pDrlgAct = (D2DrlgActStrc*)D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-        nErrorLine = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+        nErrorLine = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::Units::SetXForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
-        nErrorLine = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+        nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         D2Common::Units::SetYForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
         D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, (D2UnitStrc*)pRoom);
         SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGameOrig, pUnit, SKILL_IronGolem, (int32_t)pDrlgAct, 1, 0, 0);
@@ -1771,7 +1770,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
       SCmd::NET_D2GS_SERVER_Send_0x5F_PortalFlags(pClient, '_', uPortalFlags);
       D2Common::Stats::StatsEx::STATLIST_IterateChangedStats(pPlayerUnitOut, pPlayerUnitOut, PLAYER::PlayerMsg::SendAttributeUpdate);
       pPlayerUnit_lcl = pPlayerUnitOut;
-      uPortalFlags = D2Client::UNIT::Player::CheckFlagWithMask(pPlayerUnitOut, 1);
+      uPortalFlags = D2Common::Units::CheckFlagWithMask(pPlayerUnitOut, 1);
       if (uPortalFlags) {
         UNIT::SendUpdatedItemsToClient(pGame, pPlayerUnit_lcl, pClient, nullptr);
         if (pPlayerUnitOut) {

@@ -3,7 +3,7 @@
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Logging.h"
-#include "D2Game/PLAYER/PlayerPets.h"
+#include "D2Common/Txt/Skills.h"
 #include "globals/globals.h"
 #include "D2Common/Logging/ProfCore.data.h"
 

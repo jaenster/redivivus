@@ -530,7 +530,6 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "SCOMP_s_AllocDecompressBuffer",
-        "GetCurrentThreadId",
         "SMemAlloc",
         "SMemFree"
       ],

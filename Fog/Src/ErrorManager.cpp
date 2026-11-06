@@ -553,7 +553,7 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Assertion:>\n");
         if (!pExceptionContext && !pCrashInfo->apFrameAddrs) {
           dwDumpFlags = pCrashInfo->nSkipFrames;
-          dwThreadId = _3rdparty::crashy::GetCurrentThreadId();
+          dwThreadId = _3rdparty::crashy::ILT_GetCurrentThreadId();
           if (pCrashInfo->dwThreadId == dwThreadId) {
             dwDumpFlags += 2;
           }

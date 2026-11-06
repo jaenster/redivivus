@@ -4,21 +4,6 @@
   "file": "Game/Main.cpp",
   "functions": [
     {
-      "name": "MISC_OperatorDeleteShim",
-      "address": "004053f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004053f0"
-        }
-      ],
-      "namespace": "Game::Main",
-      "calledFunctions": [
-        "MISC_OperatorDeleteShim",
-        "SMemFree"
-      ]
-    },
-    {
       "name": "MISC_OperatorNewShim",
       "address": "00405410",
       "lines": [

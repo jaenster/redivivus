@@ -4,24 +4,6 @@
   "file": "D2Game/Monsters/Spawn.cpp",
   "functions": [
     {
-      "name": "MONSTER_GetMonsterClassByDifficulty",
-      "address": "0054da60",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0054da60"
-        }
-      ],
-      "namespace": "D2Game::Monsters::Monsters::Spawn",
-      "calledFunctions": [
-        "MONSTER_GetMonsterClassByDifficulty"
-      ],
-      "usedTypes": [
-        "D2MonStatsTxt",
-        "int32_t"
-      ]
-    },
-    {
       "name": "GetRoomCorners",
       "address": "0054dac0",
       "lines": [

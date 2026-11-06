@@ -1,8 +1,236 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Common/Skills.cpp",
+  "file": "D2Common/Txt/Skills.cpp",
   "functions": [
+    {
+      "name": "TXT_Skills_GetLine",
+      "address": "0045c4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c4b0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "TXT_Skills_GetLine"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "StoreLastSkillHit",
+      "address": "00460780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460780"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "StoreLastSkillHit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eSkillEType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSkillDescription",
+      "address": "004a89d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a89d0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "GetSkillDescription"
+      ],
+      "usedTypes": [
+        "D2SkillDescTxt",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "SKILL_GetMaxLevelForSkill",
+      "address": "004aa8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa8b0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "SKILL_GetMaxLevelForSkill"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetManaCostMultiplier",
+      "address": "004c9460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9460"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "SKILLS_GetManaCostMultiplier"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_GetBoltSpeed",
+      "address": "004cc7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc7c0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "MISSILE_GetBoltSpeed"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Skills_GetSkillRange",
+      "address": "004e6ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e6ca0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "TXT_Skills_GetSkillRange"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkilParam1",
+      "address": "004efc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004efc20"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "GetSkilParam1"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkilParam2",
+      "address": "004efc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004efc50"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "GetSkilParam2"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkilParam3",
+      "address": "004efc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004efc80"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "GetSkilParam3"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkillParam4",
+      "address": "004efcb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004efcb0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "GetSkillParam4"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetTxtSkillParam5",
+      "address": "004f4110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4110"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "definedIn": "D2Common/Txt/Skills.inline.h",
+      "calledFunctions": [
+        "GetTxtSkillParam5"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
     {
       "name": "SKILLS_CalcSkillParam",
       "address": "00643580",

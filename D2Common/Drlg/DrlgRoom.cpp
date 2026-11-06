@@ -2,7 +2,6 @@
 
 #include "D2Common/Drlg/DrlgRoom.h"
 #include "D2CMP/SRC/TileProjects.h"
-#include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -34,12 +33,12 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Drlg/RoomTile.h"
 #include "D2Common/Seed.h"
+#include "D2Common/Txt/Skills.h"
+#include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Level.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -47,6 +46,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Common/Seed.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -351,7 +351,7 @@ static D2RoomExStrc * DRLGSPAWN_GetRandomRoomFromLevel(D2DrlgLevelStrc * pLevel)
         exit(-1);
       }
 
-      nRandomIndex = D2Client::Archive::RANDOM_RandomNumberSelector(&pLevel->sSeed, pLevel->nRoomExCount);
+      nRandomIndex = Seed::RANDOM_RandomNumberSelector(&pLevel->sSeed, pLevel->nRoomExCount);
       pDVar1 = pLevel->pRoomExFirst;
       for (; nRandomIndex; nRandomIndex--) {
         pDVar1 = pDVar1->pRoomExNext;

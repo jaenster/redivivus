@@ -39,12 +39,9 @@ struct D2GSPacketSrv0x8D;
 struct D2GSPacketSrv0x8E;
 struct D2GSPacketSrv0x90;
 struct D2GSPacketSrv0x91;
-struct D2ItemStatCostTxt;
 struct D2ServerCmdStrc;
-struct D2SkillsTxt;
 struct D2UnitStrc;
 typedef int eD2ItemFlag;
-typedef uint32_t eD2Skills;
 typedef uint32_t eD2UnitStat;
 #ifndef RECON_FPTD_D2NET_CLIENT_D2GStoCLT
 #define RECON_FPTD_D2NET_CLIENT_D2GStoCLT
@@ -471,9 +468,7 @@ void __fastcall SCMD_Rcv_IgnoreShared_Unref_0045b0a0(char * pBytes);
 void __fastcall SCMD_SetOrClearBitFlag(struct D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet);
 int32_t __stdcall GetTxtMonStatsSize();
 void __fastcall SCMD_ClearPlayerTradeFields(struct D2UnitStrc * pUnit);
-struct D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2Skills eSkill);
 int Unreferenced_0045c4e0();
-struct D2ItemStatCostTxt * __fastcall TXT_ItemStatCost_GetLine(eD2UnitStat eUnitStat);
 // Writes the character save data to disk. Constructs the full .d2s file path from the save directory and character name, validates the save buffer signature (0xaa55aa55), extracts the player status byte from the appropriate offset based on version (offset 0x18 for version <92, 0x24 for version >=92), then writes the entire raw save buffer to the file.
 void __stdcall SaveCharacter();
 // CLIENT CONNECTION PACKET HANDLER (0xAF-0xB4)

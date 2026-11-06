@@ -12,6 +12,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Win/D2WinAccountList.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -198,7 +199,7 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     uint32_t dwControlState = pAccountList->sControl.dwState;
     if (Fog::BitBuffer::gadwBitMasks[2] & dwControlState && Fog::BitBuffer::gadwBitMasks[0] & dwControlState && pAccountList->pFirstEntry) {
       D2WinFont::SetAndReturnLastFont(pAccountList->nFontId);
-      Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       nPosX = pAccountList->sControl.dwPosX;
       pSource = pAccountList->pFirstEntry;
       nEntryIdx = 0;

@@ -4,6 +4,25 @@
   "file": "D2Common/DATATBLS/MissileTbls.cpp",
   "functions": [
     {
+      "name": "GetMissleById",
+      "address": "0046ace0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ace0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "definedIn": "D2Common/DATATBLS/MissileTbls.inline.h",
+      "calledFunctions": [
+        "GetMissleById"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "int32_t"
+      ]
+    },
+    {
       "name": "MISSILETBLS_PadCodeTo4Chars",
       "address": "006617b0",
       "lines": [

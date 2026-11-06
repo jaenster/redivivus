@@ -26,7 +26,7 @@
 #include "D2Common/Drlg/OutSiege.h"
 #include "D2Common/Drlg/Outdoors.h"
 #include "D2Common/Drlg/Preset.h"
-#include "D2Game/PLAYER/PlayerPets.h"
+#include "D2Common/Txt/Skills.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"

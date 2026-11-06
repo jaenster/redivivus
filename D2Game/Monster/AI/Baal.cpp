@@ -3,9 +3,7 @@
 #include "D2Game/Monster/AI/Baal.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -27,8 +25,8 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
@@ -40,7 +38,6 @@
 #include "D2Game/Monster/Monster.h"
 #include "D2Game/Monsters/Spawn.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -51,6 +48,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "Fog/Src/Safesock.h"
 
@@ -336,8 +334,8 @@ uint32_t __fastcall AI_BAAL_IsUnitInRange(D2UnitStrc * pUnit, int * pCandidate) 
         return 0;
       }
 
-      nLine = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nDist = GetCollisionDistanceFromXY((D2UnitStrc*)pCandidate, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), nLine);
+      nLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+      nDist = GetCollisionDistanceFromXY((D2UnitStrc*)pCandidate, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), nLine);
       return (uint32_t)(nDist < 0x3fc);
     }
 }
@@ -1093,10 +1091,10 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
               AI_Baal_ExecuteAction(pGame, pUnit, nParam, nullptr, 0, pClientSideData);
               return;
             }
-          nTeleportParam = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          __frame0.pGameForCast = (::SGAMEDATA*)D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          __frame0.nTargetX = D2Client::Units::GetXPosFromDynamicPathUnit(pTarget);
-          __frame0.nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
+          nTeleportParam = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+          __frame0.pGameForCast = (::SGAMEDATA*)D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+          __frame0.nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
+          __frame0.nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
           nMonClassId = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
           if (!nMonClassId) {
             nMonClassId = 1;
@@ -1309,8 +1307,8 @@ void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
         pAiCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
         if (!pAiCmd) {
           anchorCmdArgs.nCmdId = 10;
-          anchorCmdArgs.nCmdArg1 = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          anchorCmdArgs.nCmdArg2 = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          anchorCmdArgs.nCmdArg1 = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+          anchorCmdArgs.nCmdArg2 = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
           Ai::AiGeneral::CreateAiCmdAndFill(pGame, pUnit, &anchorCmdArgs);
           pAiCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
         }

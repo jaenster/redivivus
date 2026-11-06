@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2UnitPartyControlSub.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UNIT.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
@@ -32,6 +31,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -732,9 +732,9 @@ DWORD __fastcall PARTY_SplitGoldToPartyMembers(::SGAMEDATA * pGame, D2UnitStrc *
           if (pRoom) {
             eMemberLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
             if (eMemberLevelId == eLevelId) {
-              eAnimMode = D2Client::UNIT::GetAnimMode(pUnit);
+              eAnimMode = D2Common::Units::GetAnimMode(pUnit);
               if (eAnimMode != Death) {
-                eAnimMode = D2Client::UNIT::GetAnimMode(pUnit);
+                eAnimMode = D2Common::Units::GetAnimMode(pUnit);
                 if (eAnimMode != eD2PlayerAnimMode_ns::Dead) {
                   nGoldDelta = 0;
                   nAlivePartyMembers = 0;

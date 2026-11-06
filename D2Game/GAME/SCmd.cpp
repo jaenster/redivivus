@@ -18,11 +18,9 @@
 #include "D2Client/D2GSPacketSrv0x91.h"
 #include "D2Client/D2LightMapStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/UNIT/MonUnique.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2DynamicPathStrc.h"
@@ -49,8 +47,8 @@
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -84,6 +82,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -1402,10 +1401,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(D2
     aPacket.p7F.nPacketId = 0x90;
     aPacket.p7F.nUnitType = (uint8_t)dwUnitGUID;
     aPacket.p7F.nUnitLife = (uint16_t)(dwUnitGUID >> 8);
-    nErrLineOrAddr = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+    nErrLineOrAddr = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     d2_store24((char*)&aPacket.p7F.nUnitGUID + 1, (uint32_t)nErrLineOrAddr & 0xffffffu);
     *(uint8_t*)(char*)&aPacket.p7F.nAreaID = (uint8_t)((uint32_t)nErrLineOrAddr >> 0x18);
-    nErrLineOrAddr = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+    nErrLineOrAddr = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     *(uint8_t*)((char*)&aPacket.p7F.nAreaID + 1) = (uint8_t)nErrLineOrAddr;
     *(uint16_t*)((char*)&aPacket.p90.nPlayerY + 1) = (uint16_t)((uint32_t)nErrLineOrAddr >> 8);
     *(uint8_t*)((char*)&aPacket.p90.nPlayerY + 3) = (uint8_t)((uint32_t)nErrLineOrAddr >> 0x18);

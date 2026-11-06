@@ -6,7 +6,7 @@
 #pragma once
 
 #include "d2_platform.h"
-#include "Fog/SMem.h"
+#include "Storm/Source/SMem.h"
 
 // Forward declarations
 struct D2SMemTablesStrc;

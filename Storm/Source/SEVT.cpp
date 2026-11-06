@@ -2,13 +2,13 @@
 
 #include "Storm/Source/SEVT.h"
 #include "D2Hell/D2Hell.h"
-#include "Game/Main.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "Storm/Source/SEVT.data.h"
+#include "Storm/Source/SMem.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -414,7 +414,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
                 p = (uint32_t*)*ppHandlerLink;
                 if (*p == dwKey && (!pfnHandler || (pfnSEvtHandler)p[2] == pfnHandler)) {
                   *ppHandlerLink = p[3];
-                  Game::Main::MISC_OperatorDeleteShim(p);
+                  SMem::MISC_OperatorDeleteShim(p);
                   gnSevtSnapshotActive = 1;
                   _bRemoved = 1;
                   (*(int*)(pEvent[3] + 8))--;
@@ -478,7 +478,7 @@ BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
             pCurEvent = (int*)*ppEventLink;
             if (pCurEvent == pEvent) {
               *ppEventLink = pCurEvent[4];
-              Game::Main::MISC_OperatorDeleteShim(pCurEvent);
+              SMem::MISC_OperatorDeleteShim(pCurEvent);
               gnSevtRegisteredEventCount--;
             } else {
               ppEventLink = pCurEvent + 4;

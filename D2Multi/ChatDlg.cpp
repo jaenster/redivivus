@@ -34,9 +34,11 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "D2Multi/ComCallback.data.h"
 #include "D2Multi/OOG/ChatDlg.h"
+#include "D2Multi/OOGUtilities.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
@@ -1817,7 +1819,7 @@ uint32_t __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
         if (!(nRand % 1000)) {
           nRand = rand();
           if (!(nRand % 1000)) {
-            Fog::File::CONTAINER_InitializeBuffer(awszMessage, 2, 0x14, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(awszMessage, 2, 0x14, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             D2Lang::UTF8_ConvertToWideChar(awszMessage, "Moooooooo!", 0xc);
             if (!gpChatMessagesTextBox) {
               return 1;
@@ -1974,7 +1976,7 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
       pwszInput = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpChatDlgInputEditBox->sControl);
       if (pwszInput && gpCurrentChatRoomContext) {
         OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), szChannelName);
-        Fog::File::CONTAINER_InitializeBuffer(wszResult, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszResult, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szInputText, (uint16_t*)pwszInput, 0x100);
         pcInputEnd = szInputText;
         pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;

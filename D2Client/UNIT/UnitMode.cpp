@@ -6,13 +6,10 @@
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
 #include "D2Client/GAME/Roster.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Select.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -20,7 +17,6 @@
 #include "D2Client/UNIT/Path.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Client/Utils.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -31,6 +27,7 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Path.h"
 #include "D2Common/Drlg/Preset.h"
@@ -38,17 +35,15 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -56,6 +51,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -87,8 +84,8 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
         {
           D2Common::PATH::DynamicPath::SetTarget(pPlayerUnit_lcl->pPath.pDynamicPath, nullptr);
           if (pTargetUnit->eUnitFlags >> 2 & 1) {
-            nPosY = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-            D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
+            nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
+            D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
             nPosY = 0x20d;
             szSrcFile = ".\\UNIT\\UnitMode.cpp";
             memset(aSkillCastMsg, 0, 7 * sizeof(aSkillCastMsg[0]));
@@ -146,8 +143,8 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x13, eUnitType_00, nUnitGUID);
       return;
       case UNIT_PLAYER:
-        nPosY = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-      D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
+        nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
+      D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x13, eUnitType_00, nUnitGUID);
       return;
       case UNIT_ITEM:
@@ -428,7 +425,7 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_MONSTER) {
       uint32_t bCanMove;
-      bCanMove = Source::ClientEngine::GetSomeMonsterStatFlag(pUnit->nClassId, 2);
+      bCanMove = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(pUnit->nClassId, 2);
       if (!bCanMove) {
         goto clear_path_flag;
       }
@@ -507,7 +504,7 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
         nLine = 0x18;
       break;
       case UNITMODEACTION_ITEM_INTERACT:
-        if (nTargetOrX == 4 && (pItemUnit = Player::UNITS_FindClientSideUnit(nTargetGUIDOrY, UNIT_ITEM) , pItemUnit != 0) && pItemUnit->eUnitType == UNIT_ITEM && (bCanProceed = CheckFlags(pItemUnit, UNITFLAG_TARGETABLE) , !bCanProceed)) {
+        if (nTargetOrX == 4 && (pItemUnit = Player::UNITS_FindClientSideUnit(nTargetGUIDOrY, UNIT_ITEM) , pItemUnit != 0) && pItemUnit->eUnitType == UNIT_ITEM && (bCanProceed = D2Common::Units::CheckFlags(pItemUnit, UNITFLAG_TARGETABLE) , !bCanProceed)) {
           return;
         }
       nLine = 2;
@@ -837,7 +834,7 @@ void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
         }
       default:
         {
-          bTargetable = CheckFlags(pTargetUnit, UNITFLAG_TARGETABLE);
+          bTargetable = D2Common::Units::CheckFlags(pTargetUnit, UNITFLAG_TARGETABLE);
           if (!bTargetable) {
             GAME::Select::SELECT_UpdateUnitSelection(nullptr);
             return;

@@ -143,7 +143,6 @@
       "calledFunctions": [
         "ERRORMANAGER_UnhandledExceptionFilter",
         "CRASH_GetExceptionName",
-        "GetCurrentThreadId",
         "__security_check_cookie"
       ],
       "usedTypes": [

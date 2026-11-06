@@ -4,6 +4,63 @@
   "file": "D2Common/DATATBLS/ItemTbls.cpp",
   "functions": [
     {
+      "name": "GetSetsLine",
+      "address": "00483410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483410"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "definedIn": "D2Common/DATATBLS/ItemTbls.inline.h",
+      "calledFunctions": [
+        "GetSetsLine"
+      ],
+      "usedTypes": [
+        "D2SetsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSetItemsLine",
+      "address": "00483440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483440"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "definedIn": "D2Common/DATATBLS/ItemTbls.inline.h",
+      "calledFunctions": [
+        "GetSetItemsLine"
+      ],
+      "usedTypes": [
+        "D2SetItemsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INV_GetUniqueItemsTxtLine",
+      "address": "00483470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483470"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemTbls",
+      "definedIn": "D2Common/DATATBLS/ItemTbls.inline.h",
+      "calledFunctions": [
+        "INV_GetUniqueItemsTxtLine"
+      ],
+      "usedTypes": [
+        "D2UniqueItemsTxt",
+        "int32_t"
+      ]
+    },
+    {
       "name": "ITEMTBLS_ParseItemStatCostOrBase",
       "address": "006314a0",
       "lines": [

@@ -17,7 +17,6 @@
 #include "Fog/Debug.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
-#include "Fog/Source/SSignature.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
 #include "Storm/Source/SMem.h"
@@ -31,6 +30,7 @@
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Net/in_addr.h"
 #include "Fog/Fog.h"
+#include "Storm/Source/SSignature.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2606,7 +2606,7 @@ __time32_t __stdcall BNSEND_GetTime32(__time32_t * pTime) {
 // Hashes CD key data using Storm SBig (SHA-1-like) algorithm. Used for both 16-char and 26-char CD keys. Produces 20-byte hash output.
 void __fastcall BNSEND_HashCDKeyData(void * pOutHash, void * pTokenData, uint32_t nDataLength) {
     D2Sha1ContextStrc aSHA1Ctx;
-    Fog::Source::SSignature::Sha1_Initialize(&aSHA1Ctx);
+    Storm::Source::SSignature::Sha1_Initialize(&aSHA1Ctx);
     Storm::Source::SSignature::Sha1_Append(&aSHA1Ctx, (uint8_t*)pTokenData, nDataLength);
     Storm::Source::SSignature::Sha1_Finalize(&aSHA1Ctx, (uint8_t*)pOutHash);
 }

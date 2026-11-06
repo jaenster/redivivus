@@ -33,7 +33,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2MonStatsTxt.h"
 #include "D2Client/UNIT/PlrSkills.h"
-#include "D2Common/Skills.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Client/UI/Draw.h"
 #include "D2Client/UNIT/UnitMode.h"
@@ -2392,7 +2392,7 @@ static int UnitsReply(char* out, int outMax, int nWantType) {
                     const D2MonStatsTxt* pRow = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[pUnit->nClassId];
                     bNpc = pRow->npc; bInteract = pRow->interact; bInTown = pRow->inTown;
                     const D2MonStats2Txt* p2 =
-                        D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+                        D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
                     if (p2) { bIsAtt = p2->isAtt; bIsSel = p2->isSel; }
                     const uint16_t* pwsz = D2Lang::StrTable::strtable::GetLocaleString(pRow->NameStr);
                     if (pwsz) { int k = 0; for (; k < 32 && pwsz[k]; k++) szName[k] = (char)(pwsz[k] & 0x7f); szName[k] = 0; }

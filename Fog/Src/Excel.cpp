@@ -3,7 +3,7 @@
 #include "Fog/Src/Excel.h"
 #include "D2Common/D2BinFieldExcelStrc.h"
 #include "D2Common/Txt/D2TxtLinkNodeStrc.h"
-#include "D2Game/PLAYER/PlayerPets.h"
+#include "D2Common/Txt/Skills.h"
 #include "Fog/BitBuffer.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"

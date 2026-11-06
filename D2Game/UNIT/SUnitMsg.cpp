@@ -3,14 +3,9 @@
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Client/D2BattleNetEventCallbackTable.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UNIT.h"
-#include "D2Client/UNIT/CUnitEvent.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/Chat.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -24,13 +19,14 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/AiGeneral.h"
@@ -44,7 +40,6 @@
 #include "D2Game/Monster/MonsterMsg.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
@@ -59,6 +54,8 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/PlrSkills.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Objects/Objects.h"
@@ -1109,8 +1106,8 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
         nPacketIdModifier = 1;
         DVar5 = pMsg->uArgs.s99.dwTargetGUID;
         byArg = pMsg->uArgs.s99.nTargetType;
-        _byAttackerType = D2Client::UNIT::GetGUID(pUnit);
-        ePacketUnitType = D2Client::Units::GetType(pUnit);
+        _byAttackerType = D2Common::Units::GetGUID(pUnit);
+        ePacketUnitType = D2Common::Units::GetType(pUnit);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, (uint8_t)ePacketUnitType, _byAttackerType, byArg, DVar5, wTargetGUIDLo, wTargetGUIDHi, bySendToTarget, nPacketIdModifier);
         break;
         case 0x9a:
@@ -1120,7 +1117,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
         nCastDirection = 1;
         wTargetGUIDLo = pMsg->uArgs.s9A.nTargetY;
         targetX = pMsg->uArgs.s9A.nTargetX;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, (uint8_t)D2Client::Units::GetType(pUnit), D2Client::UNIT::GetGUID(pUnit), targetX, wTargetGUIDLo, dwSkillId, wTargetGUIDHi, bySkillMode, nCastDirection);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, (uint8_t)D2Common::Units::GetType(pUnit), D2Common::Units::GetGUID(pUnit), targetX, wTargetGUIDLo, dwSkillId, wTargetGUIDHi, bySkillMode, nCastDirection);
         break;
         case 0x9e:
           GAME::SCmd::NET_D2GS_SERVER_Send_0x9E_0x9F_0xA0_MercAttribute(pClient, pUnit, (uint16_t)pMsg->uArgs.s9E.nStatId, pMsg->uArgs.s9E.dwStatValue);
@@ -1135,7 +1132,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
           GAME::SCmd::NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(pClient, pMsg->uArgs.sA3.field_0x0, pMsg->uArgs.sA3.nSkillId, pMsg->uArgs.sA3.nSkillLevel, (uint8_t)pMsg->uArgs.sA3.eUnitType, pMsg->uArgs.sA3.nUnitGUID, (uint8_t)pMsg->uArgs.sA3.eTargetType, pMsg->uArgs.sA3.nTargetGUID, pMsg->uArgs.sA3.dwParam1, pMsg->uArgs.sA3.dwParam2);
         break;
         case 0xab:
-          dwTmp = D2Client::UNIT::CheckFlags(pUnit, UNITFLAG_UPGRLIFENHITCLASS);
+          dwTmp = D2Common::Units::CheckFlags(pUnit, UNITFLAG_UPGRLIFENHITCLASS);
         if (!dwTmp) {
           pUnitEx = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
           if (pUnitEx) {
@@ -1155,7 +1152,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
           DVar5 = pMsg->uArgs.s23.dwSkillOwnerGUID;
         wTargetX = pMsg->uArgs.s23.nSkillId;
         nSkillSlot = pMsg->uArgs.s23.nSkillSlot;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, (uint8_t)D2Client::Units::GetType(pUnit), D2Client::UNIT::GetGUID(pUnit), nSkillSlot, wTargetX, DVar5);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, (uint8_t)D2Common::Units::GetType(pUnit), D2Common::Units::GetGUID(pUnit), nSkillSlot, wTargetX, DVar5);
         break;
       }
     }
@@ -1177,7 +1174,7 @@ void __fastcall SERVER_UnitQueuePacketFree(D2UnitStrc * pUnit) {
       nLine = 0x3ce;
       pMsgNext = pMemoryToFree->pNext;
       szFile = ".\\UNIT\\SUnitMsg.cpp";
-      Fog::Memory::FreeServerMemory(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
+      Fog::Memory::FreeServerMemory(D2Common::Units::GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
       pMemoryToFree = pMsgNext;
     } while (pMsgNext);
 
@@ -1217,7 +1214,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
       break;
       case UNIT_ITEM:
         if (pUnit->eUnitFlags >> 4 & 1) {
-          if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run && (dwTargetGUID = D2Client::UNIT::CheckFlags(pUnit, UNITFLAG_SENDREFRESHMSG) , dwTargetGUID != 0)) {
+          if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run && (dwTargetGUID = D2Common::Units::CheckFlags(pUnit, UNITFLAG_SENDREFRESHMSG) , dwTargetGUID != 0)) {
             GAME::SCmd::Send0x9CItemDroppedToGround(pClient, pPlayerUnit_lcl, pUnit, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
           } else {
             GAME::SCmd::Send0x9CItemAddToGround(pClient, pUnit, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
@@ -1251,7 +1248,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
           GAME::SCmd::NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(pClient, pUnit->nUnitGUID, (uint16_t)nMiscVal);
         }
 
-        pMonStatsTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+        pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
         if (pMonStatsTxt) {
           pMonSkillEntry = pMonStatsTxt->aSkill;
           pClient = 0;
@@ -1300,7 +1297,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
           exit(-1);
         }
 
-        dwTargetGUID = D2Client::UNIT::Player::CheckFlagWithMask(pUnit, 0x1000);
+        dwTargetGUID = D2Common::Units::CheckFlagWithMask(pUnit, 0x1000);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x74_SYNCHDEADBODY(pClientSaved, pPlayerUnit_lcl, pUnit, (uint8_t)dwTargetGUID);
       }
 

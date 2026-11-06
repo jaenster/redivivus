@@ -325,20 +325,6 @@
       ]
     },
     {
-      "name": "STRING_ZeroOneWCHAR",
-      "address": "0042f530",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0042f530"
-        }
-      ],
-      "namespace": "D2Launch::MainMenus",
-      "calledFunctions": [
-        "STRING_ZeroOneWCHAR"
-      ]
-    },
-    {
       "name": "MAINMENU_CreateMessageBox",
       "address": "0042f540",
       "lines": [

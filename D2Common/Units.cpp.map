@@ -4,6 +4,182 @@
   "file": "D2Common/Units.cpp",
   "functions": [
     {
+      "name": "GetType",
+      "address": "0044be50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "CheckFlags",
+      "address": "00451f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f30"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "CheckFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitFlags",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetGUID",
+      "address": "00451f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetClassId",
+      "address": "00451f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f60"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetClassId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetAnimMode",
+      "address": "00451f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetAnimMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode"
+      ]
+    },
+    {
+      "name": "GetXPosFromDynamicPathUnit",
+      "address": "0045adf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045adf0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetXPosFromDynamicPathUnit",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetYPosFromDynamicPathUnit",
+      "address": "0045ae20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae20"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetYPosFromDynamicPathUnit",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckFlagWithMask",
+      "address": "00463720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463720"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "CheckFlagWithMask"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetMemPool",
+      "address": "004dc0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc0b0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetMemPool"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
       "name": "Return_Unref_005fe100",
       "address": "005fe100",
       "lines": [

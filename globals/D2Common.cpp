@@ -13,9 +13,7 @@
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/DrlgGrid.h"
 #include "D2Common/Logging/ProfCore.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/SKILLS/Items.h"
-#include "D2Game/UNIT/SUNITNPC.h"
+#include "D2Common/Txt/Skills.h"
 
 
 // =============================================================================

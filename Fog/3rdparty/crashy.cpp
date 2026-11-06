@@ -180,7 +180,7 @@ bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer) {
 }
 
 // JMP thunk
-DWORD __stdcall GetCurrentThreadId() {
+DWORD __stdcall ILT_GetCurrentThreadId() {
     return ::GetCurrentThreadId();
 }
 

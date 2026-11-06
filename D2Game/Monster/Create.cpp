@@ -2,14 +2,10 @@
 
 #include "D2Game/Monster/Create.h"
 #include "D2CMP/DUNGEON/Dungeon.h"
-#include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
-#include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -22,6 +18,7 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/D2UnitStrc.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
@@ -35,7 +32,9 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -47,8 +46,8 @@
 #include "D2Game/Monster/MonsterRegion.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
+#include "D2Game/Seed.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitInactive.h"
@@ -56,9 +55,11 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/Seed.inline.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/SKILLS/SkillAss.h"
+#include "D2Game/Seed.inline.h"
 #include "Fog/Src/Safesock.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -218,7 +219,7 @@ static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc *
       return;
       case 0xaf:
         nUmodId = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0xaf ? -1 : 0xaf;
-      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), nUmodId);
+      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), nUmodId);
       return;
       case 0xfa:
         Quests::QUESTS::QUEST_AttachToUnitByQuestId(pGame, pMonster, QUESTINT_TheSummoner);
@@ -629,7 +630,7 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
       pSeed = 0;
     }
 
-    uint32_t nSearchTileIdx = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nFloorTileCount);
+    uint32_t nSearchTileIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nFloorTileCount);
     if (!nSearchTileIdx) {
       nSearchTileIdx = 1;
     }
@@ -705,7 +706,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
       }
 
       Ai::AiGeneral::AssignMinionOwner(pGameInst, pUnit, nMinionClassId, UNIT_MONSTER, 1, (uint8_t)*((uint8_t*)pMonStats + 0xc) & Fog::BitBuffer::gadwBitMasks[5]);
-      nMinionClassId = D2Client::UNIT::Missile::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
+      nMinionClassId = Seed::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
       SpawnMinions_ByPattern(pGameInst, pUnit, (int)pMonStats->minion1, eD2MonsterAnimMode_ns::Neutral, nMinionClassId, ~(uint32_t)(wMinionType >> 2) & 1, 0x40);
       return;
     }
@@ -725,7 +726,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
       bHasSecondMinionType = 1;
     }
 
-    nPartySize = D2Client::UNIT::Missile::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
+    nPartySize = Seed::SEED_RollRangeInclusive(&pUnit->sSeed, (uint32_t)pMonStats->PartyMin, (uint32_t)pMonStats->PartyMax);
     if (nPartySize <= 0) {
       return;
     }
@@ -737,7 +738,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
         bMinionIsLeader = 0;
         nTmp = 0;
         eUnitType = UNIT_MONSTER;
-        Ai::AiGeneral::AssignMinionOwner(pGameInst, pSpawnedMinion, D2Client::UNIT::GetGUID(pUnit), eUnitType, nTmp, bMinionIsLeader);
+        Ai::AiGeneral::AssignMinionOwner(pGameInst, pSpawnedMinion, D2Common::Units::GetGUID(pUnit), eUnitType, nTmp, bMinionIsLeader);
         Ai::AiGeneral::AddMinionToList(pGameInst, pUnit, pSpawnedMinion);
       }
 
@@ -892,9 +893,9 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
         bRngOdd = !(sSeedTmp.nSeedLow & 1);
         if (!bRngOdd) {
           nOffsetX = nRadiusStep;
-          nOffsetY = D2Client::Archive::RANDOM_RandomNumberSelector(&pRoom->sSeed, nRingBottomY >> 1);
+          nOffsetY = D2Common::Seed::RANDOM_RandomNumberSelector(&pRoom->sSeed, nRingBottomY >> 1);
         } else {
-          nOffsetX = D2Client::Archive::RANDOM_RandomNumberSelector(&pRoom->sSeed, nRingBottomY >> 1);
+          nOffsetX = D2Common::Seed::RANDOM_RandomNumberSelector(&pRoom->sSeed, nRingBottomY >> 1);
           nOffsetY = nRadiusStep;
         }
 
@@ -1261,7 +1262,7 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
           case 5:
             if (pUnit && (pSpawnedMonster = SpawnMonsterAtRoomPos(pGame, pWorkingRoom, *pNextSpawnEntry + nOffsetX, pCurrentEntry[4] + nOffsetY, nClassId, eMode, -1, 0) , pSpawnedMonster != 0)) {
               bSetBossOwner = 0;
-              Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMonster, D2Client::UNIT::GetGUID(pUnit), D2Client::Units::GetType(pUnit), 0, bSetBossOwner);
+              Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMonster, D2Common::Units::GetGUID(pUnit), D2Common::Units::GetType(pUnit), 0, bSetBossOwner);
               nResult = 1;
             }
           break;
@@ -1395,7 +1396,7 @@ BOOL __fastcall SpawnRandomMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int3
       pSeed = 0;
     }
 
-    uint32_t nMonTypeIdx = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, (uint32_t)(uint8_t)pLevelTxt->nValidMonCount);
+    uint32_t nMonTypeIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, (uint32_t)(uint8_t)pLevelTxt->nValidMonCount);
     uint32_t nLevelMonCount = (uint32_t)(uint8_t)pLevelTxt->nValidMonCount;
     int nMonSearchAttempts = 0;
     if (!nLevelMonCount) {

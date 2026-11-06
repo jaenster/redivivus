@@ -11,7 +11,6 @@
 #include "D2Client/GAME/Rendering.h"
 #include "D2Client/GAME/View.h"
 #include "D2Client/GAME/Wall2.h"
-#include "D2Client/Seed.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Player.h"
@@ -33,10 +32,10 @@
 #include "D2Common/Drlg/Transform.h"
 #include "D2Common/Environment.h"
 #include "D2Common/PATH/DynamicPath.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
+#include "D2Game/Seed.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -45,6 +44,7 @@
 #include "globals/globals.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -659,7 +659,7 @@ void __thiscall DrawFloorTile(D2DrawFloorStrc * pFloor, D2DrlgTileDataStrc * pTi
 
     D2gfx::D2GFX::D2GFX_DrawGroundTile(pTileFirst, pLightEx, nScreenX, nScreenY, nWorldX, nWorldY, 0xff, nScreenPanels, pParam);
     if (pTileOther->nFlags & 2) {
-      nErrorLine = Seed::RollBetweenMinAndMax(pFloor->nRollSeed, 0, 1000);
+      nErrorLine = D2Game::Seed::RollBetweenMinAndMax(pFloor->nRollSeed, 0, 1000);
       if (pFloor->bWeatherSplashEnabled && nErrorLine < pFloor->uWeatherRelated) {
         D2Client::Draw::Weather::WEATHER_SpawnSplash(nScreenX, nScreenY, nWorldX << 0x10, nWorldY << 0x10);
       }

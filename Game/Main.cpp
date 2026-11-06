@@ -663,16 +663,6 @@ uint32_t gnServiceRunning = 0x0; D2_GLOBAL_GUARD(gnServiceRunning, "Game::Main::
 
 namespace Game::Main {
 
-// Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
-// The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
-void MISC_OperatorDeleteShim(void * p) {
-    if (!p) {
-      return;
-    }
-
-    Storm::Source::SMem::SMemFree(p, "delete", -1, 0);
-}
-
 void * MISC_OperatorNewShim(uint32_t nSize) {
     void* pMemory = Storm::Source::SMem::SMemAlloc(nSize, "new", -1, 0);
     return pMemory;

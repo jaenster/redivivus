@@ -85,24 +85,6 @@
       ]
     },
     {
-      "name": "TXT_Skills_GetLine",
-      "address": "0045c4b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0045c4b0"
-        }
-      ],
-      "namespace": "D2Client::GAME::SCmd",
-      "calledFunctions": [
-        "TXT_Skills_GetLine"
-      ],
-      "usedTypes": [
-        "D2SkillsTxt",
-        "eD2Skills"
-      ]
-    },
-    {
       "name": "Unreferenced_0045c4e0",
       "address": "0045c4e0",
       "lines": [
@@ -114,24 +96,6 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "Unreferenced_0045c4e0"
-      ]
-    },
-    {
-      "name": "TXT_ItemStatCost_GetLine",
-      "address": "0045c4f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0045c4f0"
-        }
-      ],
-      "namespace": "D2Client::GAME::SCmd",
-      "calledFunctions": [
-        "TXT_ItemStatCost_GetLine"
-      ],
-      "usedTypes": [
-        "D2ItemStatCostTxt",
-        "eD2UnitStat"
       ]
     },
     {

@@ -2,7 +2,6 @@
 
 #include "D2Client/Archive.h"
 #include "D2Common/D2BitBufferStrc.h"
-#include "D2Common/D2SeedStrc.h"
 #include "Fog/BitBuffer.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
@@ -463,42 +462,6 @@ void __fastcall ReadByteOrShort(D2BitBufferStrc * pBitBuffer) {
     }
 
     Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x10);
-}
-
-uint32_t __fastcall UNIT_GetModuloFromSeed(D2SeedStrc * pSeed, uint32_t nModulo) {
-    D2SeedStrc DVar1;
-    if ((int)nModulo <= 0) {
-      return 0;
-    }
-
-    int64_t nSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-    if (nModulo & nModulo - 1) {
-      DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)pSeed->nSeedHigh);
-      pSeed->nSeedHigh = DVar1.nSeedHigh;
-      pSeed->nSeedLow = DVar1.nSeedLow;
-      return (uint32_t)(DVar1.nSeedLow % nModulo);
-    }
-
-    DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)pSeed->nSeedHigh);
-    *pSeed = DVar1;
-    return nModulo - 1 & DVar1.nSeedLow;
-}
-
-uint32_t __fastcall RANDOM_RandomNumberSelector(D2SeedStrc * pSeed, uint32_t nModulo) {
-    D2SeedStrc DVar1;
-    if ((int)nModulo <= 0) {
-      return 0;
-    }
-    if (nModulo & nModulo - 1) {
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = DVar1.nSeedHigh;
-      pSeed->nSeedLow = DVar1.nSeedLow;
-      return (uint32_t)(DVar1.nSeedLow % nModulo);
-    }
-
-    DVar1 = D2_SEED_NEXT(*pSeed);
-    *pSeed = DVar1;
-    return nModulo - 1 & DVar1.nSeedLow;
 }
 
 } // namespace D2Client::Archive

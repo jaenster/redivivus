@@ -14,8 +14,7 @@
       ],
       "namespace": "Fog::Engine::Application",
       "calledFunctions": [
-        "DEBUG_CaptureThreadContext",
-        "GetCurrentThreadId"
+        "DEBUG_CaptureThreadContext"
       ],
       "usedTypes": [
         "LPCONTEXT",
@@ -335,7 +334,6 @@
       "namespace": "Fog::Engine::Application",
       "calledFunctions": [
         "DEBUG_UnwindStackFrames",
-        "GetCurrentThreadId",
         "SYSTEM_CaptureThreadContext",
         "__security_check_cookie"
       ],

@@ -10,16 +10,11 @@
 
 // Forward declarations
 struct D2UnitStrc;
-typedef uint32_t eD2PlayerAnimMode;
 typedef uint32_t eD2UnitFlags;
 
 namespace D2Client::UNIT {
 
 // Function declarations
-uint32_t __fastcall CheckFlags(struct D2UnitStrc * pUnit, eD2UnitFlags nFlagsC4);
-int32_t __fastcall GetGUID(struct D2UnitStrc * pUnit);
-int32_t __fastcall GetClassId(struct D2UnitStrc * pUnit);
-eD2PlayerAnimMode __fastcall GetAnimMode(struct D2UnitStrc * pUnit);
 void __fastcall SetMonsterFlags(struct D2UnitStrc * pUnit, eD2UnitFlags neD2UnitFlags, BOOL bSet);
 
 } // namespace D2Client::UNIT

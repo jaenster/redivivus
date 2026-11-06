@@ -2,11 +2,8 @@
 
 #include "D2Client/SKILLS/SkillsBar.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/Engine/Particle.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Path.h"
@@ -15,7 +12,6 @@
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -28,7 +24,9 @@
 #include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
+#include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
@@ -38,13 +36,11 @@
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
@@ -53,7 +49,10 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/GAME/PalShift.h"
+#include "D2Common/DATATBLS/DataTbls.inline.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Win/Src/D2WinFont.h"
@@ -104,7 +103,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Sk
       Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, D2Common::Units::GetHitClassForPlayerOrMonster(pUnit)), pUnit, 4, 0, 0);
       pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
       if (pConfirmedTarget && pUnit->pPath.pStaticPath) {
-        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);
+        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);
         return 1;
       }
     } else {
@@ -117,7 +116,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Sk
 
       pConfirmedTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 0, nExcludeGUID, nullptr);
       if (pConfirmedTarget && pUnit->pPath.pStaticPath) {
-        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);
+        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);
       }
     }
 
@@ -216,8 +215,8 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUni
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    nFreeCoordTmp.x = Units::GetXPosFromDynamicPathUnit(pTarget);
-    nFreeCoordTmp.y = Units::GetYPosFromDynamicPathUnit(pTarget);
+    nFreeCoordTmp.x = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
+    nFreeCoordTmp.y = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pTarget);
     if (!pRoom) {
       return 0;
@@ -234,7 +233,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUni
     }
 
     eMissilesId eCorpseMissile = (eMissilesId)pSkillTxt->cltmissile[1];
-    D2MonStats2Txt* pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pTarget->nClassId);
+    D2MonStats2Txt* pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pTarget->nClassId);
     if (!pMonStats2) {
       return 0;
     }
@@ -467,11 +466,11 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
 
         D2Common::Skills::SKILL_SetParam4(pSkill, -1);
       } else {
-        nDestX = Units::GetXPosFromDynamicPathUnit(pPlayerOrTarget);
-        nDestY = Units::GetYPosFromDynamicPathUnit(pPlayerOrTarget);
-        nCalcTmp = Units::GetXPosFromDynamicPathUnit(pUnit);
+        nDestX = D2Common::Units::GetXPosFromDynamicPathUnit(pPlayerOrTarget);
+        nDestY = D2Common::Units::GetYPosFromDynamicPathUnit(pPlayerOrTarget);
+        nCalcTmp = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         nDestX = nDestX * 2 - nCalcTmp;
-        nCalcTmp = Units::GetYPosFromDynamicPathUnit(pUnit);
+        nCalcTmp = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         nDestY = nDestY * 2 - nCalcTmp;
       }
 
@@ -542,14 +541,14 @@ void __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 9);
     if (pUnit->eUnitType == UNIT_MONSTER) {
       D2MonStatsTxt* pMonStatsTxt;
-      pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+      pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
       if (!pMonStatsTxt) {
         return;
       }
 
       nRunVelocity = (uint32_t)pMonStatsTxt->Run;
     } else {
-      pCharStatsTxt = DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
+      pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
       nRunVelocity = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity;
     }
 
@@ -1163,7 +1162,7 @@ BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2
     _bPathFound = D2Common::PATH::DynamicPath::PATH_CalculatePath(pServerPath, pUnit, 0);
     if (_bPathFound) {
       if (bIsPlayer) {
-        pCharStatsTxt = DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
+        pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
         if (pCharStatsTxt) {
           nSkillFlags = (uint32_t)pCharStatsTxt->WalkVelocity;
           nLine = 0x499;
@@ -1173,7 +1172,7 @@ BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2
       } else {
         nLine = 0x49f;
         szSkillsBarCpp = ".\\SKILLS\\SkillsBar.cpp";
-        pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+        pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
         nSkillFlags = (uint32_t)pMonStatsTxt->Velocity;
         D2Common::PATH::DynamicPath::SetVelocities(pServerPath, nSkillFlags << 8, szSkillsBarCpp, nLine);
       }

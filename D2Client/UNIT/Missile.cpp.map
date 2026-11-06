@@ -4,44 +4,6 @@
   "file": "D2Client/UNIT/Missile.cpp",
   "functions": [
     {
-      "name": "SEED_RollRangeInclusive",
-      "address": "004cc790",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004cc790"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Missile",
-      "calledFunctions": [
-        "SEED_RollRangeInclusive",
-        "RANDOM_RandomNumberSelector"
-      ],
-      "usedTypes": [
-        "D2SeedStrc",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "MISSILE_GetBoltSpeed",
-      "address": "004cc7c0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004cc7c0"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Missile",
-      "calledFunctions": [
-        "MISSILE_GetBoltSpeed"
-      ],
-      "usedTypes": [
-        "D2SkillsTxt",
-        "int32_t"
-      ]
-    },
-    {
       "name": "MISSILE_CheckLineOfSight",
       "address": "004cc800",
       "lines": [

@@ -28,10 +28,10 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
+#include "D2Common/Txt/Skills.h"
+#include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
@@ -54,6 +54,7 @@
 #include "D2Client/UI/Hireables.data.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -245,7 +246,7 @@ static void __stdcall GetAndDrawHirelingName(int32_t nX, int32_t nY, int32_t nPe
       return;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszName, 2, 0x20, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszName, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     uint16_t* pwszName = D2Lang::StrTable::strtable::GetLocaleString(pPetTypeTxt->name);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszName, pwszName);
     DrawHirelingName(nX, nY, 0, wszName);
@@ -1065,7 +1066,7 @@ void __stdcall UI_DrawHireableIcons() {
       return;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszTooltip, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszTooltip, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     wszTooltip[0] = L'\0';
     uint16_t* pwszStr1 = D2Lang::StrTable::strtable::GetLocaleString(0x58a2);
     uint16_t* pwszStr2 = D2Lang::StrTable::strtable::GetLocaleString(0x58a3);

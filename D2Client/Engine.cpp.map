@@ -590,26 +590,6 @@
       ]
     },
     {
-      "name": "StoreLastSkillHit",
-      "address": "00460780",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00460780"
-        }
-      ],
-      "namespace": "D2Client::Engine",
-      "calledFunctions": [
-        "StoreLastSkillHit"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "eD2UnitType",
-        "eSkillEType",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_004607d0",
       "address": "004607d0",
       "lines": [

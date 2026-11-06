@@ -28,7 +28,6 @@
 #include "D2Common/Units.h"
 #include "D2Common/Waypoints.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Win/DC6.h"

@@ -4,14 +4,13 @@
 #include "D2CMP/DUNGEON/Dungeon.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SubTile.h"
-#include "D2Client/Archive.h"
-#include "D2Client/DataTbls.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2RoomCoordListStrc.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgGridStrc.h"
 #include "D2Common/Drlg/D2DrlgLevelStrc.h"
@@ -30,9 +29,11 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Preset.data.h"
+#include "D2Common/Seed.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -106,11 +107,11 @@ static void __stdcall CreatesPresets(D2RoomExStrc * pRoomEx, int nWorldY, uint32
     bUseMonStats = 0;
     nWorldX = iVar1;
     if (eUnitType != UNIT_MONSTER) {
-      if (eUnitType == UNIT_OBJECT && (bUseMonStats = 0 , nMonStatsId >= 0x5b) && nMonStatsId <= 0x5c && (nSeedMod = D2Client::Archive::UNIT_GetModuloFromSeed(&pRoomEx->sSeed, 3) , !nSeedMod)) {
+      if (eUnitType == UNIT_OBJECT && (bUseMonStats = 0 , nMonStatsId >= 0x5b) && nMonStatsId <= 0x5c && (nSeedMod = Seed::UNIT_GetModuloFromSeed(&pRoomEx->sSeed, 3) , !nSeedMod)) {
         goto mark_processed;
       }
     } else {
-      nMonStatsId = D2Client::DataTbls::CheckMonStatId(nMonStatsId);
+      nMonStatsId = DATATBLS::MonsterTbls::CheckMonStatId(nMonStatsId);
       bUseMonStats = 1;
     }
 

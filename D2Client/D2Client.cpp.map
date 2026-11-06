@@ -1026,24 +1026,6 @@
       ]
     },
     {
-      "name": "GetMissleById",
-      "address": "0046ace0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0046ace0"
-        }
-      ],
-      "namespace": "D2Client",
-      "calledFunctions": [
-        "GetMissleById"
-      ],
-      "usedTypes": [
-        "D2MissilesTxt",
-        "int32_t"
-      ]
-    },
-    {
       "name": "ClientLight_UpdateRoomLightPulse",
       "address": "0046ad10",
       "lines": [
@@ -1785,25 +1767,6 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER",
         "HandleIncoming0x89"
-      ]
-    },
-    {
-      "name": "SEED_RollRange",
-      "address": "004bc500",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004bc500"
-        }
-      ],
-      "namespace": "D2Client",
-      "calledFunctions": [
-        "SEED_RollRange"
-      ],
-      "usedTypes": [
-        "D2SeedStrc",
-        "int32_t",
-        "uint32_t"
       ]
     },
     {

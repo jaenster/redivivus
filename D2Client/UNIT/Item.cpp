@@ -10,7 +10,6 @@
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/Msg.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Inv.h"
@@ -23,7 +22,6 @@
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/Units.h"
-#include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
 #include "D2Common/D2MonStatsTxt.h"
@@ -46,14 +44,12 @@
 #include "D2Common/Item.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -62,6 +58,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Common/D2UnitDataItemStrc.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -1672,7 +1669,7 @@ void __fastcall HandleItemPutInContainer(uint8_t * pBytes) {
           BVar1 = GAME::Game::CLIENT_CheckExpansion();
           bIsActiveCharm = D2Common::Units::GetInventoryPage(pPlayerUnit_lcl, eInvPage, BVar1);
           eInvPage = (eInventoryPage)bIsActiveCharm;
-          D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\Item.cpp", 0x456, pPlayerUnit_lcl->pInventory, Units::GetXPosFromDynamicPathUnit(pItem), Units::GetYPosFromDynamicPathUnit(pItem), eInvPage, 1, nInvPageConcat);
+          D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\Item.cpp", 0x456, pPlayerUnit_lcl->pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), eInvPage, 1, nInvPageConcat);
           UI::Inv::INV_ResetHoverAndContextState();
           if (pPlayerUnit_lcl->eUnitType == UNIT_PLAYER) {
             D2Common::INVENTORY::Inventory::GetEquipedWeapon(pPlayerUnit_lcl->pInventory);
@@ -2690,8 +2687,8 @@ static void ITEM_HandleSwapContainerNewItem(uint8_t * pPacketData, D2UnitDataIte
       byPage = eInvPage;
       bIsLoD = GAME::Game::CLIENT_CheckExpansion();
       nLine = D2Common::Units::GetInventoryPage(pPlayerUnit_lcl, eInvPage, bIsLoD);
-      nYPos = Units::GetYPosFromDynamicPathUnit(pItem);
-      nInvPageInt = Units::GetXPosFromDynamicPathUnit(pItem);
+      nYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pItem);
+      nInvPageInt = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
       bIsLoD = D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pItem, nInvPageInt, nYPos, nLine, nInvSlot, byPage);
       if (!bIsLoD) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x892);
@@ -2833,7 +2830,7 @@ void __fastcall HandleItemPutInBelt(uint8_t * pPacket) {
 
       bPlacedInInv = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pUnit, 2);
       if (bPlacedInInv) {
-        nXBeltSlot = Units::GetXPosFromDynamicPathUnit(pUnit);
+        nXBeltSlot = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::INVENTORY::Inventory::INVENTORY_CanPlaceItemInBelt(pInventory, pUnit, nXBeltSlot);
       }
 
@@ -2959,7 +2956,7 @@ static void __stdcall ITEM_HandleSwapBeltNewItem(int32_t pPacket, D2UnitDataItem
 
     BOOL bPlacedInInv = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pItem, 2);
     if (bPlacedInInv) {
-      bIsCharm = Units::GetXPosFromDynamicPathUnit(pItem);
+      bIsCharm = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
       bPlacedInInv = D2Common::INVENTORY::Inventory::INVENTORY_CanPlaceItemInBelt(pInventory, pItem, bIsCharm);
       if (!bPlacedInInv) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x970);
@@ -3503,9 +3500,9 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
             exit(-1);
           }
 
-          nLine = Units::GetXPosFromDynamicPathUnit(pLocalPlayer);
+          nLine = D2Common::Units::GetXPosFromDynamicPathUnit(pLocalPlayer);
           D2Common::INVENTORY::Inventory::INVENTORY_OnBeltChanged_NoOp(pInventory, nLine);
-          nMaxModeComp = Units::GetXPosFromDynamicPathUnit(pLocalPlayer);
+          nMaxModeComp = D2Common::Units::GetXPosFromDynamicPathUnit(pLocalPlayer);
           UI::Panel::PANEL_SetBeltSlotHoverFlag(nMaxModeComp, 0);
           if (pUnit->eUnitType == UNIT_PLAYER) {
             D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
@@ -3530,7 +3527,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
         D2Common::Units::SetYForStaticUnit(pCursorItem_lcl, (uint32_t)stItemDetails.y);
         bAnyItemChanged = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pCursorItem_lcl, 2);
         if (bAnyItemChanged) {
-          bFlag = Units::GetXPosFromDynamicPathUnit(pCursorItem_lcl);
+          bFlag = D2Common::Units::GetXPosFromDynamicPathUnit(pCursorItem_lcl);
           bAnyItemChanged = D2Common::INVENTORY::Inventory::INVENTORY_CanPlaceItemInBelt(pInventory, pCursorItem_lcl, bFlag);
           if (!bAnyItemChanged) {
             GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
@@ -3544,7 +3541,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
             ITEM_ApplySocketableAndEquipStats(0, pUnit, pCursorItem_lcl);
           }
 
-          nMaxModeComp = Units::GetXPosFromDynamicPathUnit(pCursorItem_lcl);
+          nMaxModeComp = D2Common::Units::GetXPosFromDynamicPathUnit(pCursorItem_lcl);
           UI::Panel::PANEL_SetBeltSlotHoverFlag(nMaxModeComp, 1);
           UI::ui::UI_SendMouseMoveMessage();
           bFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_SORTED);

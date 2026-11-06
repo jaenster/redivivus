@@ -4,19 +4,15 @@
 #include "D2Client/Core/Archive.h"
 #include "D2Client/Cursor.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/DataTbls.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
-#include "D2Client/GAME/RosterPets.h"
-#include "D2Client/GAME/SCmd.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/CmdTbl.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/Panel.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/PlrSkills.h"
@@ -33,14 +29,11 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
-#include "D2Game/GAME/Clients.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
@@ -57,6 +50,8 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/GAME/Game/Game.data.h"
+#include "D2Common/Txt/Skills.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Launch/MainMenus.h"
 
@@ -1792,9 +1787,9 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
         if (nTmpResult > 0) {
           do {
             eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nPrevActiveTab);
-            pSkillTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill);
+            pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
             if (pSkillTxt) {
-              pSkillDesc = DataTbls::GetSkillDescription(eSkill);
+              pSkillDesc = D2Common::Skills::GetSkillDescription(eSkill);
               if (pSkillDesc) {
                 if (nSkillTreeActiveTab == pSkillDesc->skillpage && (nTmpResult = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow) , (int)nClickY > nTmpResult - 0x30 && (int)nClickY < nTmpResult) && (nTmpResult = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn) , (int)nClickX > nTmpResult && (int)nClickX < nTmpResult + 0x30 && !gaSpellSelSkillTreeState[nPrevActiveTab] && !(*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
                   GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (int)pSkillTxt->skill, -1);
@@ -1872,9 +1867,9 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
       if (nTmpResult > 0) {
         do {
           eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nPrevActiveTab);
-          pSkillTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill);
+          pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
           if (pSkillTxt) {
-            pSkillDesc = DataTbls::GetSkillDescription(eSkill);
+            pSkillDesc = D2Common::Skills::GetSkillDescription(eSkill);
             if (pSkillDesc && nSkillTreeActiveTab == pSkillDesc->skillpage) {
               nTmpResult = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow);
               if ((int)nClickY > nTmpResult - 0x30 && (int)nClickY < nTmpResult) {
@@ -1963,9 +1958,9 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
         if (nSkillCount > 0) {
           do {
             /* Most likely where skills get assigned when clicked on */ eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(classId, skillIdOfClass);
-            pSkillTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill);
+            pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
             if (pSkillTxt) {
-              pSkillDesc = DataTbls::GetSkillDescription(eSkill);
+              pSkillDesc = D2Common::Skills::GetSkillDescription(eSkill);
               if (pSkillDesc) {
                 if (nSkillTreeActiveTab == pSkillDesc->skillpage) {
                   nRowY = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow);
@@ -1993,7 +1988,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
                         iSkillResult = 0;
                       }
 
-                      nNewSkills = DataTbls::SKILL_GetMaxLevelForSkill((int)pSkillTxt->skill);
+                      nNewSkills = D2Common::Skills::SKILL_GetMaxLevelForSkill((int)pSkillTxt->skill);
                       if (iSkillResult <= nNewSkills) {
                         iSkillResult = SPELLSEL_IsWaitingForSkill();
                         if (!iSkillResult) {
@@ -2062,7 +2057,7 @@ void __stdcall SKILLTREE_FreeResources() {
     }
 
     int nSkillIdx = 0;
-    uint32_t nClassId = UNIT::GetClassId(pUnit);
+    uint32_t nClassId = D2Common::Units::GetClassId(pUnit);
     int32_t nSkillCount = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
     if (nSkillCount <= 0) {
       return;
@@ -2074,7 +2069,7 @@ void __stdcall SKILLTREE_FreeResources() {
       }
 
       nSkillIdx++;
-      nClassId = UNIT::GetClassId(pUnit);
+      nClassId = D2Common::Units::GetClassId(pUnit);
       nSkillCount = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
     } while (nSkillIdx < nSkillCount);
 }
@@ -2264,7 +2259,7 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
               nCurLevel = D2Common::Skills::GetSkillLevel(pUnit, pCurSkill, 0);
             }
 
-            nNewSkills = DataTbls::SKILL_GetMaxLevelForSkill((int)pSkillTxt->skill);
+            nNewSkills = D2Common::Skills::SKILL_GetMaxLevelForSkill((int)pSkillTxt->skill);
             if (nCurLevel >= nNewSkills) {
               bCanSkill = 0;
             }
@@ -2348,7 +2343,7 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
     }
 
     int nSkillIdx = 0;
-    uint32_t nClassId = UNIT::GetClassId(pUnit);
+    uint32_t nClassId = D2Common::Units::GetClassId(pUnit);
     int32_t nSkillCount = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
     if (nSkillCount <= 0) {
       return;
@@ -2357,7 +2352,7 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
     do {
       eD2Skills eSkill;
       nSkillLevel = 0;
-      eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(UNIT::GetClassId(pUnit), nSkillIdx);
+      eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(D2Common::Units::GetClassId(pUnit), nSkillIdx);
       pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
       if (pSkillTxt) {
         nSkillDescIdx = (int)pSkillTxt->skilldesc;
@@ -2379,7 +2374,7 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
       }
 
       nSkillIdx++;
-      nClassId = UNIT::GetClassId(pUnitCopy);
+      nClassId = D2Common::Units::GetClassId(pUnitCopy);
       nSkillCount = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
       pUnit = pUnitCopy;
     } while (nSkillIdx < nSkillCount);

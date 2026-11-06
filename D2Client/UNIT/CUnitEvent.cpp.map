@@ -4,24 +4,6 @@
   "file": "D2Client/UNIT/CUnitEvent.cpp",
   "functions": [
     {
-      "name": "GetMemPool",
-      "address": "004dc0b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004dc0b0"
-        }
-      ],
-      "namespace": "D2Client::UNIT::CUnitEvent",
-      "calledFunctions": [
-        "GetMemPool"
-      ],
-      "usedTypes": [
-        "D2PoolManagerStrc",
-        "D2UnitStrc"
-      ]
-    },
-    {
       "name": "FreeEventList",
       "address": "004dc0c0",
       "lines": [

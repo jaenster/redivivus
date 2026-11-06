@@ -2,10 +2,7 @@
 
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -16,6 +13,7 @@
 #include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
@@ -25,13 +23,12 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/Path.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/D2PathTypeArg.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -40,7 +37,9 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2SeedStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -381,7 +380,7 @@ int32_t __stdcall GetInteractSize(D2UnitStrc * pUnit, int32_t nSizeX) {
         return nBaseSize;
       }
 
-      BOOL bHasInteractFlag = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pUnit->nClassId, interact);
+      BOOL bHasInteractFlag = DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pUnit->nClassId, interact);
       if (bHasInteractFlag) {
         return nBaseSize;
       }
@@ -1246,7 +1245,7 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
         }
         if (eUnitType == UNIT_OBJECT) {
           iVar1 = Units::GetCollisionType(pUnit);
-          Collision::AddCollision_Vector(Units::UNITS_GetRoom(pUnit), D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), iVar1);
+          Collision::AddCollision_Vector(Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), Units::GetYPosFromDynamicPathUnit(pUnit), Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), iVar1);
           return;
         }
       }
@@ -1587,12 +1586,12 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
     D2UnitStrc* pTargetUnit = pDynamicPath->pTargetUnit;
     pDynamicPath->eCollisionFlag = 0;
     if (pTargetUnit) {
-      iVar1 = D2Client::Units::GetXPosFromDynamicPathUnit(pTargetUnit);
+      iVar1 = Units::GetXPosFromDynamicPathUnit(pTargetUnit);
       if (!iVar1) {
         return 0;
       }
 
-      iVar1 = D2Client::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
+      iVar1 = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
       if (!iVar1) {
         return 0;
       }
@@ -1773,7 +1772,7 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
                 exit(-1);
               }
 
-              nUnitWidth = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit_00);
+              nUnitWidth = DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit_00);
               if (nUnitWidth < 0 || nUnitWidth >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nUnitWidth != 0x26) {
                 nUnitWidth = PATH_GetCollisionPatternFromMonStats(pUnit_00);
                 pDynamicPath->nCollisionPattern = nUnitWidth;
@@ -1888,7 +1887,7 @@ void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t bSkip) {
     nMonStatId = Units::GetUnitSizeX(pUnit);
     nMonStatId = GetInteractSize(pUnit, nMonStatId);
     int32_t nMonBaseId;
-    nMonBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
+    nMonBaseId = DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
     if (nMonBaseId >= 0 && nMonBaseId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       if (nMonBaseId <= 0x9e) {
         if (nMonBaseId < 0x9d && nMonBaseId != 0x26) {

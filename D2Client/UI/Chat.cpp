@@ -33,6 +33,7 @@
 #include "D2Client/UI/Chat.data.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/MiniPanel.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -995,9 +996,9 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
       return;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszPrefixW, 2, 0x154, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-    Fog::File::CONTAINER_InitializeBuffer(wszMessageW, 2, 0x154, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-    Fog::File::CONTAINER_InitializeBuffer(wszFormatted, 2, 0x154, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszPrefixW, 2, 0x154, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszMessageW, 2, 0x154, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszFormatted, 2, 0x154, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     char* pszMessageText;
     pszMessageText = aMessageText;
     pszMessageText = pszMessageText + strlen(pszMessageText) + 1;
@@ -1334,7 +1335,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
       pIgnoreListVtable = ppIgnoreList2->_vfptr;
       nCmpResult = ppIgnoreList->_vfptr->GetPersistentSetting(ppIgnoreList);
       pIgnoreListVtable->SavePersistentSetting(ppIgnoreList2, (uint32_t)!nCmpResult);
-      Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer2, 2, 0x104, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer2, 2, 0x104, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer2, "<BattleNet>: ", 0x208);
       ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
       nCmpResult = ppIgnoreList->_vfptr->GetPersistentSetting(ppIgnoreList);
@@ -1349,9 +1350,9 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
     } else {
       nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/ignore ");
       if (!nCmpResult || (nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/squelch ") , !nCmpResult)) {
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer1, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x22, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer1, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x22, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         CHAT_ExtractCommandParameter(0x11, pszInput, szExtractedAccount);
         nCmpResult = Storm::Source::SSTR::SStrCmpI(szExtractedAccount + 1, ClientModeInGame::D2IniData_client->szLastBnetAccount, 0x7fffffff);
         if (nCmpResult) {
@@ -1376,7 +1377,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
           if (nCmpResult) {
             nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/filtermsg ");
             if (!nCmpResult) {
-              Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               CHAT_ExtractCommandParameter(0x104, pszInput, szCommandParam);
               D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer3, "<BattleNet>: ", 0x208);
               ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
@@ -1435,7 +1436,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
                 goto close_chatbox;
               }
 
-              Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer4, 2, 0x104, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer4, 2, 0x104, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               CHAT_ExtractCommandParameter(0x104, pszInput, szCommandParam);
               D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer4, "<BattleNet>: ", 0x208);
               ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
@@ -1454,9 +1455,9 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
           }
         }
 
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer1, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x22, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer1, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x22, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         CHAT_ExtractCommandParameter(0x11, pszInput, szExtractedAccount);
         D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer1, "<BattleNet>: ", 0x208);
         D2Lang::UTF8_ConvertToWideChar(wszAccountName, szExtractedAccount, 0x22);

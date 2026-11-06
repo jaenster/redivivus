@@ -10,7 +10,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2RosterStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Roster.h"
 #include "D2Client/GAME/RosterPets.h"
@@ -18,7 +17,6 @@
 #include "D2Client/UI/Hireables.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -36,6 +34,7 @@
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -51,17 +50,15 @@
 #include "D2Common/Drlg/Transform.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/Merc.h"
-#include "D2Common/Skills.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
@@ -86,7 +83,9 @@
 #include "D2Client/UI/Automap.data.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/MiniPanel.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Drlg/D2DrlgCoordsStrc.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -2124,7 +2123,7 @@ static uint32_t AUTOMAP_GetUnitColor(D2UnitStrc * pUnit, uint8_t * pbColorOut) {
             eOwnership = -1;
           }
 
-          bIsNPC = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(eOwnership, interact);
+          bIsNPC = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(eOwnership, interact);
           if (bIsNPC) {
             if (!pUnit || (eOwnership = pUnit->nClassId , eOwnership != 0x219 && eOwnership != 0x21a) && eOwnership != 0x21b) {
               *pbColorOut = nAutoMapColorNPC;
@@ -2172,7 +2171,7 @@ static uint32_t AUTOMAP_GetUnitColor(D2UnitStrc * pUnit, uint8_t * pbColorOut) {
               case 3:
                 break;
               case 1:
-                bIsMerc = UNIT::CheckFlags(pUnit, UNITFLAG_ISMERC);
+                bIsMerc = D2Common::Units::CheckFlags(pUnit, UNITFLAG_ISMERC);
               if (bIsMerc) {
                 *pbColorOut = nAutoMapColorMerc;
                 return 1;
@@ -2807,7 +2806,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
         nClassId = pUnit->nClassId;
       }
 
-      eUnitState = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nClassId, interact);
+      eUnitState = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nClassId, interact);
       if (eUnitState) {
         uUnitColor.ePlayerMode = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
         pUnitTypeOrName = UNIT::CUnit::GetName(pUnit);

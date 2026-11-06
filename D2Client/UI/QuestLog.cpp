@@ -36,7 +36,6 @@
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
@@ -57,6 +56,7 @@
 #include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/UI/QuestLog.data.h"
 #include "D2Client/UI/ui.data.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1373,7 +1373,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
         D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pEntry->wszDescription, pLocaleStr, 300);
         pEntry->wszDescription[299] = L'\0';
       } else {
-        Fog::File::CONTAINER_InitializeBuffer(wszNumberBuffer, 2, 10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszNumberBuffer, 2, 10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         sprintf(szNumberString, "%d", *pQuestDataTbl != 0xe82 ? 0 : gQuestLog.MonstersleftInDenOfEvil);
         D2Lang::UTF8_ConvertToWideChar(wszNumberBuffer, szNumberString, 9);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(pEntry->wszDescription, pLocaleStr);

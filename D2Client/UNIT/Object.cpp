@@ -18,7 +18,6 @@
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitMode.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -44,8 +43,8 @@
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
+#include "D2Game/Seed.h"
 #include "D2Game/UNIT/PlayerList.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -60,7 +59,9 @@
 #include "D2Client/UNIT/Missile.h"
 #include "D2Client/UNIT/Object.data.h"
 #include "D2Common/D2SeedStrc.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -610,8 +611,8 @@ static void __stdcall OBJECT_HandlePortalOpen(int32_t bTargetable, int32_t nNewA
         D2Common::Units::SetupUpdateFlag(pUnit, 3);
         Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
         pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-        nPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::BlockCollisionPath(pUnit, D2Common::Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), nPosY);
+        nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+        D2Common::Units::BlockCollisionPath(pUnit, D2Common::Units::UNITS_GetRoom(pUnit), D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), nPosY);
         goto update_shadow;
       }
 
@@ -628,8 +629,8 @@ static void __stdcall OBJECT_HandlePortalOpen(int32_t bTargetable, int32_t nNewA
             D2Common::Units::RemoveCollision_Vector(pUnit);
           }
         } else if (!nNewAnimMode && eCurAnimMode != eD2ObjectAnimMode_ns::Neutral) {
-          nPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
-          D2Common::Units::BlockCollisionPath(pUnit, D2Common::Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), nPosY);
+          nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+          D2Common::Units::BlockCollisionPath(pUnit, D2Common::Units::UNITS_GetRoom(pUnit), D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), nPosY);
         }
 
         D2Common::Units::SetupUpdateFlag(pUnit, nNewAnimMode);
@@ -1081,7 +1082,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_7to12s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar2 = GetTickCount();
     if (pUnit->dwTickCount < DVar2) {
-      nDelayMs = SEED_RollRange(&pUnit->sSeed, 7000, 12000);
+      nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 7000, 12000);
       pUnit->dwTickCount = nDelayMs + DVar2;
       pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[5];
       D2Common::Units::SetupUpdateFlag(pUnit, 3);
@@ -1111,7 +1112,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
     if (pUnit->dwTickCount < DVar3) {
       D2SeedStrc* pSeed;
       pSeed = &pUnit->sSeed;
-      iVar4 = SEED_RollRange(pSeed, 23000, 33000);
+      iVar4 = D2Game::Seed::SEED_RollRange(pSeed, 23000, 33000);
       pUnit->dwTickCount = iVar4 + DVar3;
       pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[5];
       DVar2 = D2_SEED_NEXT(*pSeed);
@@ -1148,7 +1149,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_20to30s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar2 = GetTickCount();
     if (pUnit->dwTickCount < DVar2) {
-      nDelayMs = SEED_RollRange(&pUnit->sSeed, 20000, 30000);
+      nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 20000, 30000);
       pUnit->dwTickCount = nDelayMs + DVar2;
       pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[5];
       D2Common::Units::SetupUpdateFlag(pUnit, 3);
@@ -1182,7 +1183,7 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_10s(D2UnitStrc * pUnit) {
         return true;
       }
     } else if (pUnit->eAnimMode.ePlayerMode != Death && pUnit->dwTickCount < DVar1) {
-      nDelayMs = SEED_RollRange(&pUnit->sSeed, 0x1194, 0x1d4c);
+      nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 0x1194, 0x1d4c);
       pUnit->dwTickCount = nDelayMs + DVar1;
       D2Common::Units::SetupUpdateFlag(pUnit, 0);
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
@@ -1211,7 +1212,7 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
         return true;
       }
     } else if (pUnit->eAnimMode.ePlayerMode != Death && pUnit->dwTickCount < DVar1) {
-      nDelayMs = SEED_RollRange(&pUnit->sSeed, 0x9c4, 0x1d4c);
+      nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 0x9c4, 0x1d4c);
       pUnit->dwTickCount = nDelayMs + DVar1;
       D2Common::Units::SetupUpdateFlag(pUnit, 0);
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);

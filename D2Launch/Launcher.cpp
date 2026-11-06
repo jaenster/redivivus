@@ -27,6 +27,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/CharSel.data.h"
 #include "D2Launch/Launcher.data.h"
 #include "D2Launch/MainMenus.data.h"
@@ -129,8 +130,8 @@ BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
             if (nJoinResult != 0x7b) {
               pwszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x145b);
             } else {
-              Fog::File::CONTAINER_InitializeBuffer(awszFormattedMsg, 2, 0x100, MainMenus::STRING_ZeroOneWCHAR);
-              Fog::File::CONTAINER_InitializeBuffer(awszCharName, 2, 0x100, MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(awszFormattedMsg, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(awszCharName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszCharName, pSelectedCharacter->szCharname, 0x100);
               D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, awszFormattedMsg, D2Lang::StrTable::strtable::GetLocaleString(0x2b89), awszCharName);
               pwszMessage = awszFormattedMsg;
@@ -379,7 +380,7 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
       case OOG_ERROR_CHAR_NAME_DIALOG:
 
       case OOG_ERROR_CHAR_NAME_DIALOG_2:
-        Fog::File::CONTAINER_InitializeBuffer(awszCharName, 2, 0x200, MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(awszCharName, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       if (!pErrorData->pCustomData) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ad);
         exit(-1);

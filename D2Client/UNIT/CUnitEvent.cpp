@@ -5,13 +5,14 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
+#include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "globals/globals.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -33,14 +34,6 @@ typedef int32_t (__fastcall *fnCUnitEventCallback)(D2UnitStrc * pUnit, D2UnitStr
 
 namespace D2Client::UNIT::CUnitEvent {
 
-D2PoolManagerStrc * __fastcall GetMemPool(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return nullptr;
-    }
-
-    return pUnit->pMemory;
-}
-
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall FreeEventList(D2UnitStrc * pUnit) {
     int32_t nNull;
@@ -57,7 +50,7 @@ void __fastcall FreeEventList(D2UnitStrc * pUnit) {
       nNull = 0;
       nLine = 0x2f;
       szFile = ".\\UNIT\\CUnitEvent.cpp";
-      Fog::Memory::FreeServerMemory(GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
+      Fog::Memory::FreeServerMemory(D2Common::Units::GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
       pMemoryToFree = pPrevEvent;
     }
 
@@ -119,7 +112,7 @@ void __fastcall CUNITEVENT_RemoveByTypeAndState(D2UnitStrc * pUnit, int32_t nEve
         nNull = 0;
         nLine = 0x80;
         szFile = ".\\UNIT\\CUnitEvent.cpp";
-        Fog::Memory::FreeServerMemory(GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
+        Fog::Memory::FreeServerMemory(D2Common::Units::GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
       }
     }
 }

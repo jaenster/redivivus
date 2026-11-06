@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -30,6 +29,7 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Arena.h"
@@ -48,7 +48,6 @@
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerSave.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/UNIT/Party.h"
@@ -77,6 +76,7 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/D2Game.h"
 #include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -555,7 +555,7 @@ void __fastcall BroadcastPlayerJoin(::SGAMEDATA * pGame, D2ClientStrc * pClient)
               for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
                 dwCorpseGUIDArg = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
                 if (dwCorpseGUIDArg != -1) {
-                  SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign(pClient, D2Client::UNIT::GetGUID(pUnit), dwCorpseGUIDArg, true);
+                  SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign(pClient, D2Common::Units::GetGUID(pUnit), dwCorpseGUIDArg, true);
                 }
               }
             }
@@ -579,7 +579,7 @@ void __fastcall BroadcastPlayerLeave(::SGAMEDATA * pGame, D2ClientStrc * pClient
 
     for (pClient_00 = pGame->pClient; pClient_00; pClient_00 = pClient_00->pNext) {
       if (pClient_00->ConnectionState == 4) {
-        nUnitGUID = D2Client::UNIT::GetGUID(pUnit);
+        nUnitGUID = D2Common::Units::GetGUID(pUnit);
         SCmd::NET_D2GS_SERVER_Send_0x5C_REMOVECLIENT(pClient_00, nUnitGUID);
       }
     }

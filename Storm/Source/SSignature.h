@@ -86,6 +86,10 @@ int __fastcall Unreferenced_00425830(int param_1, int param_2);
 void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer);
 // Storm SBig SHA-1 implementation - init, update, and finalize functions
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
+// Was SBIG_SHA1Init. Oracle ".Initialize__4Sha1Fv" @100a2e60. Basis: both take only 'this'; both write count[0]=count[1]=0 then the five SHA-1 IV words 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 at +8..+0x18 (the PPC builds the same five constants with lis/addi pairs). SHA-1 confirmed by constant, not by name.
+__attribute__((noinline)) inline void __fastcall Sha1_Initialize(struct D2Sha1ContextStrc * pCtx);
+// Storm SBig SHA-1 implementation - init, update, and finalize functions
+// @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Update. Oracle ".Append__4Sha1FPCvUl" @100a2c10 = Append(const void*, unsigned long). Basis: this+2 args in both; sole callee is Sha1_Pump / Sha1::Pump in both; both update a 64-bit bit counter by (len<<3) with carry before buffering.
 void __thiscall Sha1_Append(struct D2Sha1ContextStrc * pCtx, uint8_t * pData, uint32_t nLen);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.

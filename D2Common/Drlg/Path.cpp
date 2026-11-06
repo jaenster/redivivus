@@ -19,7 +19,6 @@
 #include "D2Common/Units.h"
 #include "D2Game/D2PathTypeArg.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Fog.h"

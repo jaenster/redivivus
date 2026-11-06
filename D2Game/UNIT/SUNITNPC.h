@@ -21,11 +21,6 @@ typedef uint32_t eD2ServerIncomingStatus;
 typedef uint32_t eD2Skills;
 
 // Data types
-struct D2GambleTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ void * pTable;
-};
-
 struct __attribute__((packed)) D2UseMenuTmp {
     D2UseMenuTmp() = default;
     D2UseMenuTmp(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }

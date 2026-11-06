@@ -18,12 +18,19 @@ struct D2DifficultyLevelsTxt;
 struct D2InventoryToBeUpdatedStrc;
 struct D2PoolManagerStrc;
 struct D2StatesDataTbls;
+struct D2StatesTxt;
 struct D2UnitStrc;
+typedef uint32_t eD2Skills;
+typedef uint32_t eD2States;
 typedef uint32_t eD2UnitType;
 
 namespace D2Common::DATATBLS::DataTbls {
 
 // Function declarations
+__attribute__((noinline)) inline struct D2StatesTxt * __fastcall TXT_States_GetLine(eD2States eState);
+__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, uint32_t n100Percent);
+__attribute__((noinline)) inline struct D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId);
+__attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(eD2Skills eSkill);
 int32_t __fastcall DATATBLS_LookupStringId(char * szKey);
 uint32_t __stdcall DATATBLS_GetCompCodeByIndex(int32_t nIndex);
 DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel);

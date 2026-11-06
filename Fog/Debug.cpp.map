@@ -303,7 +303,6 @@
         "CrashDumpWriterThread",
         "__security_check_cookie",
         "DEBUG_LoadDbgHelp64Apis",
-        "GetCurrentThreadId",
         "SetEvent"
       ],
       "usedTypes": [

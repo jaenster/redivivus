@@ -54,6 +54,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/CharSel.data.h"
 #include "D2Launch/D2Launch.h"
 #include "D2Launch/Launcher.data.h"
@@ -4710,10 +4711,6 @@ void __stdcall FORMS_DestroyLists() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetCursorVisible(1);
 }
 
-void __fastcall STRING_ZeroOneWCHAR(void * pBuffer) {
-    *(uint16_t*)pBuffer = 0;
-}
-
 void __fastcall MAINMENU_CreateMessageBox(uint16_t * wszText1, uint16_t * wszText2, int32_t nButton1LabelId, int32_t nButton2LabelId, OnPress pfnOnPress1, OnPress pfnOnPress2, int32_t bEnableHotkeys, int32_t bSingleButtonEscape) {
     D2ControlStrc* pForm;
     ::D2WinTextBox* pTextBox;
@@ -8007,8 +8004,8 @@ int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerSt
                     return 0;
                   }
                   if (bEmailOk == 0x7b) {
-                    Fog::File::CONTAINER_InitializeBuffer(wszPopupMsg, 2, 0x100, STRING_ZeroOneWCHAR);
-                    Fog::File::CONTAINER_InitializeBuffer(wszCharName, 2, 0x100, STRING_ZeroOneWCHAR);
+                    Fog::File::CONTAINER_InitializeBuffer(wszPopupMsg, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+                    Fog::File::CONTAINER_InitializeBuffer(wszCharName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
                     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCharName, D2IniData_launcher->szNAME, 0x100);
                     D2MCPClient::McpConnect::FreeMCP();
                     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPopupMsg, D2Lang::StrTable::strtable::GetLocaleString(0x2b89), wszCharName);
@@ -8730,14 +8727,14 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
           nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
           if (nJoinResult) {
             if (nJoinResult != 0x14) {
-              Fog::File::CONTAINER_InitializeBuffer(wszCharNameW, 2, 100, STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszCharNameW, 2, 100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
               Fog::Src::LogManager::LOGFILE_WriteStringToFile("Error from MCP trying to create \'%s\' (err=%d)", D2IniData_launcher->szNAME, nJoinResult);
               D2MCPClient::McpConnect::FreeMCP();
-              Fog::File::CONTAINER_InitializeBuffer(wszErrorMsg, 2, 0xff, STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszErrorMsg, 2, 0xff, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x145e);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszErrorMsg, wszMessage);
-              Fog::File::CONTAINER_InitializeBuffer(wszErrorSuffix, 2, 0xff, STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszErrorSuffix, 2, 0xff, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x145f);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszErrorSuffix, wszMessage);
               sprintf(szCharName, "%s", D2IniData_launcher->szNAME);
@@ -8749,8 +8746,8 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
             }
 
             D2MCPClient::McpConnect::FreeMCP();
-            Fog::File::CONTAINER_InitializeBuffer(wszPopupText, 2, 0x100, STRING_ZeroOneWCHAR);
-            Fog::File::CONTAINER_InitializeBuffer(wszCharNameForMsg, 2, 0x100, STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszPopupText, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszCharNameForMsg, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCharNameForMsg, D2IniData_launcher->szNAME, 0x100);
             D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPopupText, D2Lang::StrTable::strtable::GetLocaleString(0x2b33), wszCharNameForMsg);
             MAINMENU_ShowPopupDialog(wszPopupText, UIMENU_CreateHeroSinglePlayer, 1);
@@ -9596,10 +9593,10 @@ BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit) {
             return 0;
           }
 
-          Fog::File::CONTAINER_InitializeBuffer(aBuffer, 2, 0x100, STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(aBuffer, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           nStrId = 0x2b71;
         } else {
-          Fog::File::CONTAINER_InitializeBuffer(aBuffer, 2, 0x100, STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(aBuffer, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           nStrId = 0x2b72;
         }
 

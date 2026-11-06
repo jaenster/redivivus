@@ -4,6 +4,45 @@
   "file": "D2Common/Seed.cpp",
   "functions": [
     {
+      "name": "UNIT_GetModuloFromSeed",
+      "address": "0045c390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c390"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "definedIn": "D2Common/Seed.inline.h",
+      "calledFunctions": [
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RANDOM_RandomNumberSelector",
+      "address": "0045c3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c3e0"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "definedIn": "D2Common/Seed.inline.h",
+      "calledFunctions": [
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "RNG_GetRandomInRange",
       "address": "00472210",
       "lines": [

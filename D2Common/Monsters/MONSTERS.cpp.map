@@ -4,6 +4,25 @@
   "file": "D2Common/Monsters/MONSTERS.cpp",
   "functions": [
     {
+      "name": "MONSTER_GetMonsterClassByDifficulty",
+      "address": "0054da60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054da60"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "definedIn": "D2Common/Monsters/MONSTERS.inline.h",
+      "calledFunctions": [
+        "MONSTER_GetMonsterClassByDifficulty"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "int32_t"
+      ]
+    },
+    {
       "name": "MONSTERS_OnInitMonster_NoOp_Unref_0063db80",
       "address": "0063db80",
       "lines": [

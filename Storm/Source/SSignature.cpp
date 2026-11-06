@@ -2,13 +2,13 @@
 
 #include "Storm/Source/SSignature.h"
 #include "Fog/Debug.h"
-#include "Fog/Source/SSignature.h"
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SBig.h"
 #include "Storm/Source/SLog.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "Fog/Engine/Application.data.h"
+#include "Storm/Source/SSignature.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -41,7 +41,7 @@ static BOOL __stdcall SSIG_FindSignatureMarker(int32_t nOffset, uint32_t nTotalS
 
 static void __stdcall SSIG_HashData(uint32_t nDataLen, uint8_t * pData, uint8_t * pDigestOut) {
     D2Sha1ContextStrc shaContext;
-    Fog::Source::SSignature::Sha1_Initialize(&shaContext);
+    Sha1_Initialize(&shaContext);
     Sha1_Append(&shaContext, pData, nDataLen);
     Sha1_Finalize(&shaContext, pDigestOut);
 }
@@ -58,7 +58,7 @@ void __fastcall SSignatureVerifyStream_Begin(D2SsigContextStrc * * ppContext, ui
     (*ppContext)->nBufferSize = nModulusLen + 4;
     uint8_t* pDataBuffer = (uint8_t*)SMem::SMemAlloc((*ppContext)->nBufferSize, ".\\SOURCE\\SSignature.cpp", 0x57, 8);
     (*ppContext)->pDataBuffer = pDataBuffer;
-    Fog::Source::SSignature::Sha1_Initialize(&(*ppContext)->sSha1);
+    Sha1_Initialize(&(*ppContext)->sSha1);
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.

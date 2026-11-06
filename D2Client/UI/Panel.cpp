@@ -20,12 +20,10 @@
 #include "D2Client/UI/Text.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
@@ -44,11 +42,10 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -71,8 +68,10 @@
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/ITEMS/ItemMode.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -970,7 +969,7 @@ void __stdcall PANEL_DrawExperienceBar() {
     BOOL bIsMagicOrBetter = Inv::INV_IsShopBuySellMode();
     if (bIsMagicOrBetter) {
       __frame0.auCostScratchBuf = L'\0';
-      Fog::File::CONTAINER_InitializeBuffer(__frame0.auStack_86, 2, 0x3f, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(__frame0.auStack_86, 2, 0x3f, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       bIsMagicOrBetter = npcmenu::NPCMENU_CalculateItemTransactionCost(gpPanelBeltHoverItem, 1, &__frame0.iStack_8, &__frame0.auCostScratchBuf, 0x40);
       if (bIsMagicOrBetter && __frame0.auCostScratchBuf != L'\0') {
         pwszStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
@@ -1143,7 +1142,7 @@ void __stdcall DRAW_EquipmentNeedArrows() {
           if (gnInventoryWarningItemCount > 0) {
             for (pWarningEntry = gaInventoryWarningItems_nWarningKind_col[0] + 4; nWarningItemIndex < gnInventoryWarningItemCount; nWarningItemIndex++ , pWarningEntry += 5) {
               if ((*(int (*)[5])(pWarningEntry - 4))[0] == 1) {
-                nItemClassId = UNIT::GetClassId(pItem);
+                nItemClassId = D2Common::Units::GetClassId(pItem);
                 pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
                 nTotalQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
                 bShoots = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pItem);
@@ -1594,7 +1593,7 @@ static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMo
       int32_t nItemXPos;
       gpPanelBeltSlot = 1;
       if (pItem != gpPanelBeltLastHoverItem) {
-        nItemXPos = Units::GetXPosFromDynamicPathUnit(pItem);
+        nItemXPos = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
         D2Common::DATATBLS::BeltsTbls::GetInvRectFromBeltsTxt(gnBeltPanelState, Inv::nScreenMode, aInvRect, nItemXPos);
         gpPanelBeltHoverItem = pItem;
         gpPanelBeltLastHoverItem = pItem;

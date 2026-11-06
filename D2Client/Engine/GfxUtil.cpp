@@ -3,12 +3,9 @@
 #include "D2Client/Engine/GfxUtil.h"
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2CMP/SRC/SpriteCache.h"
-#include "D2Client/D2Client.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2GfxInfoStrc.h"
 #include "D2Client/D2LightMapStrc.h"
-#include "D2Client/DataTbls.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/Path.h"
@@ -25,6 +22,8 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
+#include "D2Common/DATATBLS/MissileTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DATATBLS/OverlayTbls.h"
 #include "D2Common/DATATBLS/TokTbls.h"
@@ -34,14 +33,12 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
@@ -51,6 +48,9 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/ItemTbls.inline.h"
+#include "D2Common/DATATBLS/MissileTbls.inline.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Unit.h"
 #include "D2Game/ITEMS/ItemMode.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -390,7 +390,7 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
         eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
         if (eQuality == 5) {
           nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          pSetItemsTxt = DataTbls::GetSetItemsLine(nFileIndex);
+          pSetItemsTxt = D2Common::DATATBLS::ItemTbls::GetSetItemsLine(nFileIndex);
           if (pSetItemsTxt && (szGfxFile = pSetItemsTxt->invfile , *szGfxFile != '\0') || (szGfxFile = pItemsTxt->szSetInvFile , pItemsTxt->szSetInvFile[0] != '\0')) {
             pGfxData->dwFlags |= 0x10;
             pGfxData->szFilename = szGfxFile;
@@ -402,7 +402,7 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
       bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x1ae, ".\\ENGINE\\GfxUtil.cpp");
       if (bItemIdentified) {
         nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-        if (nQuality == 7 && ((iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit) , iVar1 > 0 && (pUniqueItemsTxt = DataTbls::INV_GetUniqueItemsTxtLine(iVar1) , pUniqueItemsTxt && (pcGfxFile = pUniqueItemsTxt->invfile , *pcGfxFile != '\0'))) || (pcGfxFile = pItemsTxt->szUniqueInvFile , pItemsTxt->szUniqueInvFile[0] != '\0'))) {
+        if (nQuality == 7 && ((iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit) , iVar1 > 0 && (pUniqueItemsTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(iVar1) , pUniqueItemsTxt && (pcGfxFile = pUniqueItemsTxt->invfile , *pcGfxFile != '\0'))) || (pcGfxFile = pItemsTxt->szUniqueInvFile , pItemsTxt->szUniqueInvFile[0] != '\0'))) {
           pGfxData->dwFlags |= 1;
           pGfxData->szFilename = pcGfxFile;
           return;
@@ -432,7 +432,7 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
       }
 
       iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      pUniqueItemsTxtFlippy = DataTbls::INV_GetUniqueItemsTxtLine(iVar1);
+      pUniqueItemsTxtFlippy = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(iVar1);
       if (!pUniqueItemsTxtFlippy) {
         return;
       }
@@ -445,7 +445,7 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
       }
 
       iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      pSetItemsTxtFlippy = DataTbls::GetSetItemsLine(iVar1);
+      pSetItemsTxtFlippy = D2Common::DATATBLS::ItemTbls::GetSetItemsLine(iVar1);
       if (!pSetItemsTxtFlippy) {
         return;
       }
@@ -573,7 +573,7 @@ BOOL __fastcall GFXUTIL_UnitHasAnimMode(D2UnitStrc * pUnit, uint32_t nMode) {
         }
       break;
       case UNIT_MONSTER:
-        pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
+        pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
       if (pMonStats2 && (uint8_t)Fog::BitBuffer::gadwBitMasks[nMode & 7] & pMonStats2->HD[(int)nMode >> 3]) {
         return 1;
       }
@@ -613,7 +613,7 @@ static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2
         }
       return 8;
       case UNIT_MONSTER:
-        pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
+        pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
       if (pMonStats2) {
         nNumDirections = (uint32_t)pMonStats2->byDirDT[nMode];
         if (nNumDirections == 8) {
@@ -626,7 +626,7 @@ static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2
 
       break;
       case UNIT_MISSILE:
-        pMissilesTxt = GetMissleById(nClassId);
+        pMissilesTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(nClassId);
       if (pMissilesTxt) {
         return (uint32_t)pMissilesTxt->NumDirections;
       }
@@ -1166,7 +1166,7 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
                       nPaletteIdx = GFXUTIL_GetCompositePaletteIndex(pUnit, byComponentType);
                       byPaletteIdx = nPaletteIdx;
                       if (!nMode || nMode == 0xc) {
-                        BVar2 = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pGfxData->nClassId, compositeDeath);
+                        BVar2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pGfxData->nClassId, compositeDeath);
                         if (BVar2) {
                           nArmTypeIndex = D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, (uint32_t)byComponentType, (uint32_t)byPaletteIdx);
                           pGfxData->nArmorToken = nArmTypeIndex;
@@ -1346,7 +1346,7 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
         nComponentTable = (uint32_t)((uint32_t)(uint8_t)byColorVariant << 24 | (uint32_t)((uint32_t)d2_load24((char*)&pComponentTable) & 0xffffffu));
         nMonStatsTxt = (int)pCofEntry;
         if (!nAnimMode || nAnimMode == 0xc) {
-          _bCompositeDeath = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nMonStatsId, compositeDeath);
+          _bCompositeDeath = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nMonStatsId, compositeDeath);
           if (_bCompositeDeath) {
             nVariantIdx = nComponentTable >> 0x18;
             nOverlay = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_GetMonsterComponentOverlay(nMonStatsId, (uint32_t)byColorIdx, nVariantIdx);

@@ -58,7 +58,7 @@ void __stdcall SYSTEM_GetCurrentProcessThreadCount();
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 char __stdcall SYSTEM_CaptureThreadContext(int * pnStackTop, DWORD dwThreadId, int * pStackSize, LPCVOID * ppEsp);
 bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer);
-DWORD __stdcall GetCurrentThreadId();
+DWORD __stdcall ILT_GetCurrentThreadId();
 void __stdcall thunk_InitializeDebugSubsystem();
 bool __stdcall InternalCheckCorp();
 void __fastcall SYSTEM_SetGlobalString(char * szText);

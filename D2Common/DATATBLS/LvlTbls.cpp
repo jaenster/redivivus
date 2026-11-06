@@ -2,7 +2,6 @@
 
 #include "D2Common/DATATBLS/LvlTbls.h"
 #include "D2CMP/DUNGEON/Dungeon.h"
-#include "D2Client/Archive.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -16,8 +15,8 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -29,6 +28,7 @@
 #include "globals/globals.h"
 #include "D2Common/DATATBLS/LvlTbls.data.h"
 #include "D2Common/DUNGEON/Dungeon.h"
+#include "D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1905,7 +1905,7 @@ int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int
     int* pIndexField = &pAutoMapLvlTbls[nUpperBound].nIndex;
     do {
       if (((D2AutoMapLvlTbls*)(pIndexField - 2))->nLevelType == nLevelType && pIndexField[-1] == nOrientation && ((uint8_t)*pIndexField == 0xff || (uint32_t)(uint8_t)*pIndexField == nIndex) && (*(uint8_t*)((int)pIndexField + 1) == 0xff || (int)(uint32_t)*(uint8_t*)((int)pIndexField + 1) <= nSubIndex && (int)(uint32_t)*(uint8_t*)((int)pIndexField + 2) >= nSubIndex)) {
-        nRandIdx = D2Client::Archive::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[nUpperBound].nSize);
+        nRandIdx = Seed::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[nUpperBound].nSize);
         return pAutoMapLvlTblsBase[nUpperBound].nCellNo[nRandIdx];
       }
 

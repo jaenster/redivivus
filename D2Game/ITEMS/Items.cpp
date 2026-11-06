@@ -7,6 +7,7 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
+#include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/UNIT/SUnit.h"

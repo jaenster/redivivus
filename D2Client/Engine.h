@@ -12,8 +12,6 @@
 struct D2UIMouseMsgStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2PlayerAnimMode;
-typedef uint32_t eD2UnitType;
-typedef uint32_t eSkillEType;
 
 namespace D2Client::Engine {
 
@@ -59,7 +57,6 @@ uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
 uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal);
 void __fastcall CLIENT_SetUnitFlag(struct D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet);
 void __fastcall Unreferenced_00460760(int param_1, int param_2);
-void __fastcall StoreLastSkillHit(eSkillEType pSkill, struct D2UnitStrc * pUnit, eD2UnitType nUnitType, uint32_t nUid);
 int __fastcall Unreferenced_004607d0(int param_1);
 int __fastcall Unreferenced_004607f0(int param_1);
 int __fastcall Unreferenced_00460810(int param_1);

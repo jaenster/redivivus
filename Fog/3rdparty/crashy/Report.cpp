@@ -3,9 +3,10 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/File.h"
-#include "Game/Main.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "Fog/Debug.data.h"
+#include "Storm/Source/SMem.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -28,7 +29,7 @@ namespace Fog::_3rdparty::crashy {
       pThis->pFile = 0;
     }
     if (nFlags & 1) {
-      Game::Main::MISC_OperatorDeleteShim(pThis);
+      Storm::Source::SMem::MISC_OperatorDeleteShim(pThis);
     }
 
     return pThis;

@@ -2,7 +2,6 @@
 
 #include "Storm/Source/SErr.h"
 #include "D2Hell/D2Hell.h"
-#include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Source/SEVT.h"

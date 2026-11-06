@@ -8,21 +8,6 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
-// Data types
-struct D2SMemTablesStrc {
-    /* 0x000 */ uint32_t aSizeClassTable[256]; // size class per 16-byte request granule (SMemSizeClassBucketLookup)
-    /* 0x400 */ uint8_t aUppercaseTable[256]; // case-fold table SMemStringToUppercase indexes with a SIGNED char: bytes 0x80-0xff read the last 128 bytes of aSizeClassTable
-};
-
-struct SMemHeapStatsStrc {
-    /* 0x00 */ int field_0x0;
-    /* 0x04 */ int field_0x4;
-    /* 0x08 */ int nIntervalStat0; // cleared every interval by SMemResetHeapStats (00411291)
-    /* 0x0C */ int nIntervalStat1; // cleared every interval by SMemResetHeapStats (00411293)
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ int field_0x14;
-};
-
 namespace Fog::SMem {
 
 // Function declarations

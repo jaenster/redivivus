@@ -5,11 +5,8 @@
 #include "D2Client/D2BattleNetEventCallbackTable.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/RosterPets.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -23,6 +20,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -33,8 +31,8 @@
 #include "D2Common/Merc.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Seed.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Waypoints.h"
@@ -49,7 +47,6 @@
 #include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Monster/Monster.h"
 #include "D2Game/Monster/MonsterAI.h"
-#include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerIntro.h"
 #include "D2Game/PLAYER/PlayerPets.h"
@@ -70,8 +67,8 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Common/D2SeedStrc.h"
-#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -695,8 +692,8 @@ int __fastcall SaveCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t
         return 1;
       }
 
-      nItemCount = D2Client::Units::GetXPosFromDynamicPathUnit(pDVar3);
-      nCorpseY = D2Client::Units::GetYPosFromDynamicPathUnit(pDVar3);
+      nItemCount = D2Common::Units::GetXPosFromDynamicPathUnit(pDVar3);
+      nCorpseY = D2Common::Units::GetYPosFromDynamicPathUnit(pDVar3);
       *(uint32_t*)pWritePtr2 = dwCorpseFlags;
       *(int32_t*)(pWritePtr + 8) = nItemCount;
       *(int32_t*)(pWritePtr + 0xc) = nCorpseY;
@@ -1418,7 +1415,7 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nPosY = 0;
         nOwnerGUID = 0;
         pGame_00 = pGame;
-        nClassId = D2Client::UNIT::GetClassId(pUnit);
+        nClassId = D2Common::Units::GetClassId(pUnit);
         pCorpseUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nClassId, nOwnerGUID, nPosY, pGame_00, pRoom, bCorpseInit, arg6, pReserved);
         if (!pCorpseUnit) {
           if (pnErrorCode) {
@@ -1435,7 +1432,7 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         UNIT::SUnit::SetSeed(pCorpseUnit, &pGame->pGameSeed);
         D2Common::DATATBLS::ItemStats::SetState(pCorpseUnit, STATE_playerbody, 1);
         pCorpseUnit->eUnitFlags &= ~UNITFLAG_INITSEEDSET;
-        nClassId = D2Client::UNIT::GetGUID(pUnit);
+        nClassId = D2Common::Units::GetGUID(pUnit);
         D2Common::INVENTORY::Inventory::INVENTORY_SetOwnerGUID(pCorpseUnit->pInventory, nClassId);
         nItemLoadError = 0;
         nResult = PLRSAVE_LoadItemsFromBuffer(pGame, pCorpseUnit, &pReadPtr, (uint8_t*)pOwnerUnit, dwFileVersion, 1, &nItemLoadError);
@@ -1450,7 +1447,7 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         D2Common::INVENTORY::Inventory::INVENTORY_AddCorpse(pUnit->pInventory, pCorpseUnit->nUnitGUID, 0, UNIT_MONSTER);
         nResult = pCorpseUnit->nUnitGUID;
         byAssignFlag = 1;
-        nClassId = D2Client::UNIT::GetGUID(pUnit);
+        nClassId = D2Common::Units::GetGUID(pUnit);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, nClassId, nResult, (bool)byAssignFlag);
         nCorpseIdx++;
       } while (nCorpseIdx < (int)(uint32_t)wCorpseCount);
@@ -1644,7 +1641,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         bSocketMode = 1;
         nSocketBodyLoc = 0;
         pInvDummy = &__frame0.nPutItemResult;
-        _bPutResult = ITEMS::ItemMode::PutItemInItem(pGame, __frame0.pOwnerUnit, dwSocketedItemGUID, D2Client::UNIT::GetGUID(__frame0.pGolemItem), pInvDummy, nSocketBodyLoc, bSocketMode, nSocketSlotX, nSocketSlotY);
+        _bPutResult = ITEMS::ItemMode::PutItemInItem(pGame, __frame0.pOwnerUnit, dwSocketedItemGUID, D2Common::Units::GetGUID(__frame0.pGolemItem), pInvDummy, nSocketBodyLoc, bSocketMode, nSocketSlotX, nSocketSlotY);
         if (!_bPutResult) {
           UNIT::SUnit::FreeServerUnit(pGame, __frame0.pGolemItem);
           return 0;

@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2LightMapStrc.h"
 #include "D2Client/D2UnderMouseStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Draw/LightMap.h"
 #include "D2Client/Draw/Weather.h"
 #include "D2Client/Engine.h"
@@ -29,7 +28,6 @@
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/UNIT/UnitMode.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Common/COMPOSIT/Composit.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
@@ -46,6 +44,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -58,19 +57,16 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Seed.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -80,7 +76,10 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2UnitDataItemStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Txt/Skills.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Launch/CharSel.h"
@@ -361,7 +360,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
                 return;
               }
             }
-          } else if (!pSkill && (pSkillsTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill) , eUnitStat == UNITSTAT_item_nonclassskill || pSkillsTxt && (int)pSkillsTxt->charclass == pUnit->nClassId)) {
+          } else if (!pSkill && (pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill) , eUnitStat == UNITSTAT_item_nonclassskill || pSkillsTxt && (int)pSkillsTxt->charclass == pUnit->nClassId)) {
             D2Common::Skills::AddSkill(pUnit, eSkill, 0, 0, ".\\UNIT\\Player.cpp", 0xe8);
             return;
           }
@@ -1062,7 +1061,7 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
       return;
     }
 
-    Engine::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, UNIT_OBJECT, nObjectGUID);
+    D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, UNIT_OBJECT, nObjectGUID);
 }
 
 static void PLAYER_InteractWithUnit(int32_t nTargetGUID, D2UnderMouseStrc * pUnderMouse) {
@@ -1143,10 +1142,10 @@ static void PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTarget
         bOutOfRange = SKILL_CheckAuraRange(pUnderMouse->pSkill, pUnderMouse->pTarget, &nCurDist, &nTotalDist);
         if (!bOutOfRange) {
           if (*(uint8_t*)&pUnderMouse->flags & 1) {
-            Engine::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+            D2Common::Skills::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
           }
           if (*(uint8_t*)&pUnderMouse->flags & 2) {
-            Engine::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+            D2Common::Skills::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
           }
 
           nStepsRemaining = nTotalDist - nCurDist;
@@ -1159,10 +1158,10 @@ static void PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTarget
               exit(-1);
             }
 
-            nSrcXPos = Units::GetXPosFromDynamicPathUnit(pUnderMouse->pPlayer);
-            nCurDist = Units::GetYPosFromDynamicPathUnit(pUnderMouse->pPlayer);
-            nDstX = Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-            nDstY = Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
+            nSrcXPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pPlayer);
+            nCurDist = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pPlayer);
+            nDstX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
+            nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
             nCurDist = (nDstY - nCurDist) * nStepsRemaining / nTotalDist + nCurDist;
             CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (short int)((nDstX - nSrcXPos) * nStepsRemaining / nTotalDist) + (short int)nSrcXPos, (int16_t)nCurDist, pUnderMouse->nMoveActionType);
             return;
@@ -1209,13 +1208,13 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
               if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
                 UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
                 if (*(uint8_t*)&pUnderMouse->flags & 1) {
-                  Engine::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                  D2Common::Skills::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
                 }
                 if (!(*(uint8_t*)&pUnderMouse->flags & 2)) {
                   return;
                 }
 
-                Engine::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                D2Common::Skills::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
                 return;
               }
 
@@ -1288,8 +1287,8 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
           nUnitType = pTargetUnit->eUnitType;
         }
 
-        nTargetY = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget), nTargetY);
+        nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget), nTargetY);
         pTargetUnit = pUnderMouse->pTarget;
         if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit->pUnitData.pUnitDataPlayer) {
           puVar1 = &pTargetUnit->pUnitData.pUnitDataPlayer->unk0x28;
@@ -1343,11 +1342,11 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
             if (!bCollides || (bCollides = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnderMouse->pPlayer, pUnderMouse->pTarget, 0x804) , bCollides != 0)) {
               bCollides = PLAYER_CheckPendingInteraction(eTargetUnitType, nTargetGUID);
               if (!bCollides) {
-                nTargetY = Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
-                nTargetX = Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
+                nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
+                nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
                 CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (int16_t)nTargetX, (int16_t)nTargetY, pUnderMouse->nMoveActionType);
                 if (bCanInteract) {
-                  Engine::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                  D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
                   GAME::Game::GAME_SetMouseButtonEventPending();
                   return;
                 }
@@ -1376,7 +1375,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
             bCollides = PLAYER_CheckPendingInteraction(eTargetUnitType, nTargetGUID);
             if (!bCollides) {
               UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
-              Engine::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+              D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
               GAME::Game::GAME_SetMouseButtonEventPending();
               return;
             }
@@ -1386,7 +1385,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
           nTargetY = D2Common::Collision::GetDistanceBetweenUnits(pTargetUnit, pUnderMouse->pPlayer);
         if (nTargetY > 4 || (bCollides = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnderMouse->pPlayer, pUnderMouse->pTarget, 0x804) , bCollides != 0)) {
           UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
-          Engine::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+          D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
           return;
         }
 
@@ -1399,7 +1398,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
           nTargetY = D2Common::Collision::GetDistanceBetweenUnits(pUnderMouse->pTarget, pUnderMouse->pPlayer);
           if (nTargetY > 4) {
             UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
-            Engine::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+            D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
           } else {
             UnitMode::UNITMODE_ExecuteSkillAction(UNITMODEACTION_ITEM_INTERACT, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
           }
@@ -1416,7 +1415,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
           } else {
             nClassId = pTargetUnit->nClassId;
           }
-        pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(nClassId);
+        pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nClassId);
         if (!pMonStatsTxt) {
           goto use_default_range;
         }
@@ -1836,7 +1835,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
           return;
         }
         if ((uint8_t)dwFlags & 4) {
-          pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+          pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
           if (pMonStatsTxt && *((uint8_t*)pMonStatsTxt + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             PLAYER_InteractWithUnitByType(UNIT_MONSTER, nTargetUnitGUID, pUnderMouse);
             return;
@@ -2098,8 +2097,8 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mous
     mouse.nX = nXConverted;
     mouse.nY = nY;
     if (mouse.pTarget && (mouse.pTarget->eUnitType == UNIT_OBJECT || mouse.pTarget->eUnitType == UNIT_ITEM)) {
-      mouse.nX = Units::GetXPosFromDynamicPathUnit(mouse.pTarget);
-      mouse.nY = Units::GetYPosFromDynamicPathUnit(mouse.pTarget);
+      mouse.nX = D2Common::Units::GetXPosFromDynamicPathUnit(mouse.pTarget);
+      mouse.nY = D2Common::Units::GetYPosFromDynamicPathUnit(mouse.pTarget);
     }
 
     uint16_t wMouseEventFlags = mouseEventFlags;
@@ -2232,9 +2231,9 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
       pDynamicPath = pKillerOrCorpse->pPath.pDynamicPath;
       D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0);
       D2Common::PATH::DynamicPath::SetUnitWidth(pKillerOrCorpse, 5);
-      nTmpPos = Units::GetYPosFromDynamicPathUnit(pUnit);
+      nTmpPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       nPosY = (int16_t)nTmpPos;
-      nTmpPos = Units::GetXPosFromDynamicPathUnit(pUnit);
+      nTmpPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       nPosX = (int16_t)nTmpPos;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       BVar2 = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pKillerOrCorpse, pRoom, nPosX, nPosY);
@@ -2712,14 +2711,6 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     CLIENT_ResolvePlayerCollision(pUnit);
 }
 
-uint32_t __fastcall CheckFlagWithMask(D2UnitStrc * pUnit, uint32_t dwMask) {
-    if (!pUnit) {
-      return 0;
-    }
-
-    return (uint32_t)((pUnit->eUnitFlagsEx & dwMask) != 0);
-}
-
 int __fastcall Unreferenced_004637f0(int param_1) {
     if (param_1 && *(int*)param_1 == 1 && *(int*)(param_1 + 0x14)) {
       return *(int*)(param_1 + 0x14) + 4;
@@ -2734,43 +2725,6 @@ int __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
     }
 
     return 0;
-}
-
-int32_t __fastcall TXT_MonStats_GetBaseId(D2UnitStrc * pUnit) {
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
-      return -1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
-    if (!pMonStatsTxt) {
-      return nClassId;
-    }
-
-    return (int)pMonStatsTxt->BaseId;
-}
-
-// The parameter arrives in a whole register; typing it from the single byte the body reads made the decompiler splice the indeterminate upper bytes back in as an uninitialised local, which then indexed an array with garbage in its high bits.
-BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, TXTMonStats2Field0x04DWORD nBitOffset) {
-    D2MonStats2Txt* pMonStatsExTxt = nullptr;
-    if (nMonStatsId >= 0 && nMonStatsId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-      int nMonStats2Id = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsId].MonStatsEx;
-      pMonStatsExTxt = nMonStats2Id >= 0 && nMonStats2Id < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Id : nullptr;
-    }
-    if (!pMonStatsExTxt) {
-      return 0;
-    }
-
-    return (uint32_t)pMonStatsExTxt->aComponents[((int)nBitOffset >> 3) - 0x11] & Fog::BitBuffer::gadwBitMasks[nBitOffset & corpseSel];
-}
-
-int32_t __fastcall ValidateClassId(int32_t nClassId) {
-    if (!(nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
-      return nClassId;
-    }
-
-    nClassId = -1;
-    return nClassId;
 }
 
 D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex) {

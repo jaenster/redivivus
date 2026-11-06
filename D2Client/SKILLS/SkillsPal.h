@@ -15,7 +15,6 @@ typedef uint32_t eD2Skills;
 namespace D2Client::SKILLS::SkillsPal {
 
 // Function declarations
-int32_t __fastcall SKILLS_GetManaCostMultiplier(int32_t nSkillId);
 // Client DoFunc for Paladin Zeal directional offset missile. Determines the firing direction quadrant from the unit's movement direction (or a random quadrant if stationary), applies a random ±1 offset from gnPaladinSkillIndexTable/gnPaladinSkillOffsetTable, then spawns a missile of the skill's cltmissilea type (offset by a calc-driven random variant) at the computed position. Returns 1 on success, 0 if skill/missile data is invalid or no confirmed target.
 BOOL __fastcall Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client DoFunc for Paladin Charge skill. Sets UNITFLAG_SKSRVDOFUNC on the caster, resolves target coordinates, spawns a missile, then sets the missile path type to 0xE (charge path) and recalculates its path. Returns TRUE if the missile was created and has a valid dynamic path.

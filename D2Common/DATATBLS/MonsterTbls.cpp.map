@@ -4,6 +4,156 @@
   "file": "D2Common/DATATBLS/MonsterTbls.cpp",
   "functions": [
     {
+      "name": "TXT_MonStats_GetLine",
+      "address": "00451f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f80"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "TXT_MonStats_GetLine"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_MonStats_GetMonStats2",
+      "address": "00451fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451fe0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_MonStats_GetFlagsByBitOffset",
+      "address": "00457490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457490"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "TXT_MonStats_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "TxtMonStatsField0x0c",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_MonStats_GetBaseId",
+      "address": "00463860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463860"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "TXT_MonStats_GetBaseId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+      "address": "004638a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004638a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "TXTMonStats2Field0x04DWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ValidateClassId",
+      "address": "00463900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463900"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "ValidateClassId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSomeMonsterStatFlag",
+      "address": "0046c140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c140"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "GetSomeMonsterStatFlag"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckMonStatId",
+      "address": "004e6c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e6c50"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MonsterTbls",
+      "definedIn": "D2Common/DATATBLS/MonsterTbls.inline.h",
+      "calledFunctions": [
+        "CheckMonStatId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "FilterNameString",
       "address": "00650eb0",
       "lines": [

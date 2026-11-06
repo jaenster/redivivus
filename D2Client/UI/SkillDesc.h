@@ -88,7 +88,6 @@ void __fastcall SKILLDESC_AppendSetBonusTextByStateValue(struct D2UnitStrc * pUn
 uint16_t * __fastcall SKILLDESC_FormatMagicPrefixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
 uint16_t * __fastcall SKILLDESC_FormatMagicSuffixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
 void __fastcall SKILLDESC_BuildMagicAffixDesc(struct D2UnitStrc * pUnit, uint16_t * wszText, int32_t nMaxBufferSize);
-int32_t __fastcall GetSkillParam4(eD2Skills eSkill);
 uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatOffset);
 int16_t GetSkillLongDescription(eD2Skills eSkill);
 int32_t __stdcall SKILLDESC_GetAuraBonusDamage();

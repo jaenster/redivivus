@@ -4,6 +4,21 @@
   "file": "D2Lang/Unicode/UNISYS.cpp",
   "functions": [
     {
+      "name": "STRING_ZeroOneWCHAR",
+      "address": "0042f530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f530"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "definedIn": "D2Lang/Unicode/UNISYS.inline.h",
+      "calledFunctions": [
+        "STRING_ZeroOneWCHAR"
+      ]
+    },
+    {
       "name": "STRING_CompareWideStrings",
       "address": "005264f0",
       "lines": [

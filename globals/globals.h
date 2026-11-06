@@ -71,6 +71,7 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Merc.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Direct3D/d3dFloorCache.h"
@@ -84,11 +85,9 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillAss.h"
-#include "D2Game/UNIT/SUNITNPC.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/sunitproxy.h"
 #include "D2Glide/Renderer/Glide.h"
@@ -107,7 +106,6 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/D2QServerStrc.h"
 #include "Fog/Memory.h"
-#include "Fog/SMem.h"
 #include "Fog/Save.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Source/SSComp.h"
@@ -116,6 +114,7 @@
 #include "Storm/Source/SCMD.h"
 #include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "Storm/H/stpl.h"
 
@@ -1205,15 +1204,6 @@ extern unsigned int gaItemTypeTxtIndexData;
 extern char s_C_006ed5b4[2];
 extern char s_SAM_006fad3c[4];
 extern char * gaAtlRegistryRootKeys[12];
-extern uint8_t gszIniConfigKeywordCharacterAutoSave[32];
-extern uint8_t gszIniConfigKeywordNetworkPort[32];
-extern uint8_t gszIniConfigKeywordDifficultySetting[32];
-extern uint8_t gszIniConfigKeywordLanguageCode[28];
-extern uint8_t gszIniConfigKeywordTextureFilter[96];
-extern uint8_t gszIniConfigKeywordGammaCorrection[96];
-extern uint8_t gszIniConfigKeywordVsyncOption[264];
-extern uint8_t gszIniConfigKeywordExperienceDisplay[96];
-extern uint8_t gszIniConfigKeywordVideoDriver[336];
 extern char * gaLanguageNames_00705000[15];
 extern char * gaMonthAbbreviations[12];
 extern char * gaLanguageNames_0072d994[15];
@@ -1226,7 +1216,6 @@ extern double DOUBLE_0074adb4;
 // Provenance: 00698548/006985af MOV EBX,0x74adbc; XLAT; MOVSX; ADD EBX,EDX+0x10; JMP [EBX] (code not yet in a function).
 extern uint8_t gabyFxamClassOffset[16];
 extern unsigned int gaCRT_FPremData_3;
-extern uint32_t gdwLastGameListRefreshTick;
 extern int RENDERER_nWindowWidth;
 extern int RENDERER_nWindowHeight;
 extern ::D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc;
@@ -2084,79 +2073,6 @@ extern char gszOogChatInputBuffer[512];
 extern D2IniConfigStrc * D2IniData_multiplayer;
 extern uint16_t LastGameRequestId;
 extern void * gpChatFormList;
-extern unsigned int gdwLastGameListRefreshTick;
-// Former interior labels: gszLanGameListEntryName=+0x1 gszLanGameListEntryDescription=+0x11 gbOOGLobbyScreenStatePadding=+0x12 gwOOGLobbyScreenState=+0x31 gwGameListCacheEntryPort=+0x33 gdwGameListCacheEntryFlags=+0x37 gPlayerInputState1=+0x6e gbDamageModConfigLoaded=+0xa3a5
-extern D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000];
-// Former interior labels: gaLanGameListEntryName=+0x1 gChatBufferData3=+0x2 gChatBufferData2=+0x3 gwLanGameListEntryPortPrev=+0x31 gnLanGameListEntryPort=+0x33 gnLanGameIPAddr=+0x37 gChatBufferData1=+0x3c gSaveFileBuffer=+0xbd2c gbSaveKeyBindingsFlag=+0xc12b gbOOGUnusedFlag_797261=+0xce21 gbUnusedOOGDataFlag=+0xd029 gbOOGUnusedFlag_79746c=+0xd02c
-extern D2GameListEntryStrc gbLanGameListEntryNamePadding[1000];
-extern char gszOOGRequestedGameName[256];
-extern ::D2WinTextBox * gpOOGGameListTextBox;
-extern ::D2WinTextBox * gpOogGameListDetailsPanelControl;
-extern D2ControlStrc * gpOOGJoinGameButton;
-extern D2ControlStrc * gpCtlGameListStatus;
-extern D2ControlStrc * gpOOGLobbyControl2;
-extern ::D2WinEditBox * gpOogGamePasswordEditControl;
-extern ::D2WinEditBox * gpCtlGameListTop;
-extern ::D2WinTextBox * gpCtlJoinGameLabel;
-extern ::D2WinTextBox * pUIGameUsername;
-extern ::D2WinTextBox * pUIGamePassword;
-extern ::D2WinTextBox * pUIGamePlayers;
-extern D2ControlStrc * gpCtlCreateGameDlgBackground;
-extern ::D2WinTextBox * gpCtlCreateGameDlgTitle;
-extern ::D2WinTextBox * gpCtlGameNameLabelOrQueueStatus;
-extern ::D2WinTextBox * gpCtlCreateGamePasswordLabel;
-extern ::D2WinTextBox * gUIGameListServerMessageText;
-extern ::D2WinTextBox * gUIGameListMaxPlayersLabel;
-extern ::D2WinTextBox * gUIGameListLevelRestrictionLabel;
-extern ::D2WinTextBox * gUIGameListLevelRestrictionLevelsLabel;
-extern D2ControlStrc * gUIGameListMaxPlayersInactiveImage;
-extern D2ControlStrc * gUIGameListMaxPlayersInactiveArrowButton;
-extern D2ControlStrc * gUIGameListMaxPlayersUpButton;
-extern D2ControlStrc * gUIGameListLevelRestrictionUpButton;
-extern D2ControlStrc * gUIGameListLevelRestrictionInactiveArrowButton;
-extern D2ControlStrc * gUIGameListCreateButton;
-extern ::D2WinEditBox * gpOogGameNameEditControl;
-extern ::D2WinEditBox * gUIGameListGameNameEditBox;
-extern ::D2WinEditBox * gUIGameListGamePasswordEditBox;
-extern ::D2WinEditBox * gUIGameListMaxPlayersEditBox;
-// Edit box control handle for level restriction field in Create Game dialog (TCP/IP mode only). Populated in OOGUTIL_OpenCreateGameDialog, read by NET_MCP_CLIENT_PrepareGameCreatePacket. Part of Create Game UI state cluster at 0x00798c28-0x00798c64.
-extern ::D2WinEditBox * gUILevelRestrictionEditBox;
-extern D2ControlStrc * gUIGameListLevelRestrictionInactiveImage;
-extern D2ControlStrc * gpCtlCreateGameDlgCancelButton;
-extern ::D2WinTextBox * gUIGameListStatusLabel;
-extern ::D2WinTextBox * gUIGameListPlayerListText;
-extern ::D2WinTextBox * gUIGameListActLabel;
-extern D2ControlStrc * gpProfileViewBackground;
-extern ::D2WinTextBox * gpProfileViewAccountName;
-extern ::D2WinTextBox * gpProfileViewSex;
-extern ::D2WinTextBox * gpProfileViewLocation;
-extern ::D2WinTextBox * gpProfileViewDescription;
-extern D2ControlStrc * gpProfileEditBackground;
-extern ::D2WinTextBox * gpProfileEditAccountName;
-extern ::D2WinEditBox * gpProfileEditSex;
-extern ::D2WinEditBox * gpProfileEditLocation;
-extern ::D2WinEditBox * gpProfileEditDescription;
-extern D2ControlStrc * gpProfileCloseButton;
-extern ::D2WinTextBox * gUIPlayerProfileCharacterNameLabel;
-extern ::D2WinTextBox * gUIPlayerProfileCharacterLevelLabel;
-extern ::D2WinTextBox * gUIPlayerProfileCharacterClassLabel;
-extern ::D2WinTextBox * gUIPlayerProfileExperienceLabel;
-extern D2ControlStrc * gpProfileOKButton;
-extern D2ControlStrc * gpProfileLadderButton;
-extern ::D2WinTextBox * gUIPlayerProfilePlaytimeLabel;
-extern int32_t gnProfileDialogMode;
-extern ::D2WinTextBox * gpChatCommandsTitle;
-extern ::D2WinTextBox * gpChatCommandsTextBox;
-extern D2ControlStrc * gpChatCommandsOKButton;
-extern D2ControlStrc * gpChatCommandsBackground;
-extern uint32_t gnGameListFilterState;
-extern uint32_t gnMCPCreateGamePendingFlag;
-extern int gnFilteredGameListCount;
-extern int nGameListDifficultyFilter;
-extern uint32_t CreateGameDifflevel;
-extern char gszProfileCharacterName[16];
-extern int gnProfileUserHardcoreFlag;
-extern int gnProfileUserExpansionFlag;
 
 } // namespace D2Multi::OOGUtilities
 
@@ -2337,58 +2253,6 @@ extern void * pD2CompItems;
 namespace D2Glide::Renderer::Glide {
 
 extern D2RendererFunctionsStrc GlideFunctionTable;
-extern uint32_t gaGlideDebugFontTexStartAddrs[96];
-extern float gfGlideDebugFontVertex0X;
-// @data gfGlideDebugFontVertex0Y
-// @wasnamed gfGlideDebugFontVertex1OOW
-// @evidence Vertex 0, field +4 (y). 0050bc6e calls
-// grDrawVertexArrayContiguous(FAN, 4, 0x880258, 0x1c): 4 vertices of stride 0x1c with fields
-// +0 x, +4 y, +8 argb, +0xc oow, +0x10 s, +0x14 t. This slot is written at 0050bc14 with the glyph Y.
-// @wasnamed gfGlideDebugFontVertex1OOW - wrong vertex and wrong field.
-extern float gfGlideDebugFontVertex0Y;
-// @data gfGlideDebugFontVertex1X
-// @wasnamed gfGlideDebugFontVertex1Y
-// @evidence Vertex 1, field +0 (x): copied from vertex 0's x at 0050bc25.
-// @wasnamed gfGlideDebugFontVertex1Y.
-extern float gfGlideDebugFontVertex1X;
-// @data gfGlideDebugFontVertex1Y
-// @wasnamed gfGlideDebugFontVertex2S
-// @evidence Vertex 1, field +4 (y): written at 0050bc38 with y+16.
-// @wasnamed gfGlideDebugFontVertex2S.
-extern float gfGlideDebugFontVertex1Y;
-extern float gfGlideDebugFontVertex3S;
-extern float gfGlideDebugFontVertex2T;
-// @data gfGlideDebugFontVertex3X
-// @wasnamed gfGlideDebugFontVertex3OOW
-// @evidence Vertex 3, field +0 (x): written at 0050bc4d with x+8.
-// @wasnamed gfGlideDebugFontVertex3OOW.
-extern float gfGlideDebugFontVertex3X;
-extern float gfGlideDebugFontVertex3T;
-// lpBuffer parameter of GetCharWidthA
-extern void * lpBuffer_008802c8[96];
-extern void * gpGlideDebugFontTexture;
-extern uint32_t gnGlideDebugFontTMU;
-extern int * gpnLightmapRowPointers;
-// @data gapGlideGroundStripVertexPtrs
-// @wasnamed gapGlideTileVertexPtrs
-// @evidence Built at runtime by 0050d646 and consumed by the loop at 0050daf8,
-// which calls grDrawVertexArray(STRIP, 12, .) five times up to 00880b58. A strip table, not the
-// static fan table at 0072f670. @wasnamed gapGlideTileVertexPtrs.
-extern void * gapGlideGroundStripVertexPtrs[60];
-extern uint8_t gbGlideGlobalLightGreen;
-extern uint8_t gbGlideGlobalLightBlue;
-extern uint8_t gbGlideGlobalLightRed;
-extern uint8_t * gpGlideLightingTable;
-extern int gnGlidePerspectiveOriginX;
-extern int32_t gnGlidePerspectiveScale;
-extern int gnGlidePerspectiveOriginY;
-extern void * gpPerspectiveLookupTable;
-extern uint8_t (*gpGlideSmackerTexBuf0)[32768];
-extern uint8_t (*gpGlideSmackerTexBuf1)[32768];
-extern uint32_t gnGlideSmackTex1StartAddr;
-extern uint32_t gnGlideSmackTex2StartAddr;
-extern uint8_t (*gpGlideSmackerTexBuf2)[32768];
-extern uint32_t gnGlideTMUHandle;
 
 } // namespace D2Glide::Renderer::Glide
 
@@ -3143,14 +3007,6 @@ extern D2BeltsTxt * pTxtBelts;
 // Globals recovered from multi-function body references
 // (classified static-local by xref count, but named in other bodies too)
 // =============================================================================
-
-extern float gfGlideDebugFontVertex0Y;
-// @data gfGlideDebugFontVertex2T
-// @wasnamed gfGlideDebugFontVertex2S
-// @evidence Vertex 2, field +0x14 (t) = 128.0. @wasnamed gfGlideDebugFontVertex2S.
-// @defect also typed double; it is a float.
-extern double gfGlideDebugFontVertex2T;
-extern float gfGlideDebugFontVertex3X;
 
 namespace D2Client::UNIT::CUnit {
 

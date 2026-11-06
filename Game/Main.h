@@ -26,9 +26,6 @@ typedef _SERVICE_TABLE_ENTRYA SERVICE_TABLE_ENTRYA;
 namespace Game::Main {
 
 // Function declarations
-// Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
-// The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
-void MISC_OperatorDeleteShim(void * p);
 void * MISC_OperatorNewShim(uint32_t nSize);
 void __stdcall MISC_GetValueFromD2Ini(struct D2IniConfigStrc * pD2IniData);
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName);

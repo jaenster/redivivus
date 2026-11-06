@@ -2,10 +2,8 @@
 
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Sound.h"
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/Sound/Sound.h"
@@ -39,13 +37,11 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Sound/D2SoundUntil.h"
@@ -54,6 +50,8 @@
 #include "globals/globals.h"
 #include "D2Client/UNIT/UnitSnd.data.h"
 #include "D2Common/D2SkillStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Txt/Skills.inline.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -2630,7 +2628,7 @@ static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
           }
         }
 
-        pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(nMonStatsId);
+        pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nMonStatsId);
         if (!pMonStatsTxt) {
           pMonSoundsResult = D2Common::DATATBLS::MonsterTbls::TxtGetMonSoundsLine(0);
           return pMonSoundsResult;
@@ -2697,7 +2695,7 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
     *pnSecondarySoundIdOut = 0;
     if (eUnitType == UNIT_MONSTER) {
       nMonStatsId = GetSndUnitClassId(pUnit);
-      bIsCritter = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nMonStatsId, TXTMonStats2Field0x04DWORD_ns::critter);
+      bIsCritter = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nMonStatsId, TXTMonStats2Field0x04DWORD_ns::critter);
       if (bIsCritter) {
         return;
       }
@@ -3581,7 +3579,7 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
     }
 
     int nBaseId;
-    nBaseId = Player::TXT_MonStats_GetBaseId(pUnit);
+    nBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
     if (nBaseId < 0 || nBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nBaseId = -1;
     }
@@ -4111,7 +4109,7 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
         return;
       }
 
-      pSkillsTxtLine = GAME::SCmd::TXT_Skills_GetLine(eSkill);
+      pSkillsTxtLine = D2Common::Skills::TXT_Skills_GetLine(eSkill);
       if (!pSkillsTxtLine) {
         return;
       }

@@ -7,7 +7,6 @@
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -23,7 +22,6 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -34,6 +32,7 @@
 #include "D2Client/Draw/LightMap.data.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -896,8 +895,8 @@ static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
 
     {
       eCollisionFlags eCollision;
-      nUnitX = Units::GetXPosFromDynamicPathUnit(pUnit);
-      nUnitY = Units::GetYPosFromDynamicPathUnit(pUnit);
+      nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       nCollisionY = 0;
       pCollisionCell = (int32_t*)gaLightmapInterpBuffer;
       do {

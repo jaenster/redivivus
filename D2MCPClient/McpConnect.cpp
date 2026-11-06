@@ -18,7 +18,7 @@
 #include "Fog/Src/Safesock.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
-#include "D2Launch/MainMenus.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2MCPClient/McpConnect.data.h"
 #include "Storm/Source/SFile.data.h"
 
@@ -1256,7 +1256,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x05(char * pBytes, size_t nSize) {
     } while (cChar != '\0');
 
     pCursor2 = pCursor2 + strlen(pCursor2) + 1;
-    Fog::File::CONTAINER_InitializeBuffer(wszServerName, 2, 0x240, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszServerName, 2, 0x240, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszServerName, pCharName, 0x240);
     MCPCONNECT_SanitizeWideString(wszServerName);
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szServerName, (uint16_t*)wszServerName, 0x400);

@@ -6,7 +6,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -20,6 +19,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -30,8 +30,8 @@
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -66,7 +66,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Chat.h"
 #include "D2Common/D2UnitDataItemStrc.h"
-#include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -250,7 +250,7 @@ static uint32_t __stdcall PLAYER_PlaceItemInInventory(::SGAMEDATA * pGame, int32
 
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit2, INVPAGE_INVENTORY);
       nErrorLine = pUnit2->nUnitGUID;
-      bItemPlaced = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\Player.cpp", 0xba, pGame, pUnit, nErrorLine, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit2), nParam, 1, 0);
+      bItemPlaced = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\Player.cpp", 0xba, pGame, pUnit, nErrorLine, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit2), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit2), nParam, 1, 0);
       return (uint32_t)(bItemPlaced != 0);
     }
 }
@@ -293,7 +293,7 @@ uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlac
       nItemGUID = pUnit2->nUnitGUID;
       pnBeltSlot = &bAutoPlace;
       dwGUID = bAutoPlace;
-      bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2), dwGUID, (uint32_t*)pnBeltSlot);
+      bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit2), dwGUID, (uint32_t*)pnBeltSlot);
       return (uint32_t)(bBeltPlaced != 0);
     }
 }
@@ -757,7 +757,7 @@ BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUn
       int nItemGold;
       pRequester = pGoldPiles[i];
       if (pUnit) {
-        eUnitType = D2Client::Units::GetType(pUnit);
+        eUnitType = D2Common::Units::GetType(pUnit);
         if (eUnitType == UNIT_PLAYER) {
           D2Common::Units::StoreOwner(pRequester, pUnit);
         }

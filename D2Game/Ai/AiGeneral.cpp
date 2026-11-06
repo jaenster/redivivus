@@ -10,6 +10,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"

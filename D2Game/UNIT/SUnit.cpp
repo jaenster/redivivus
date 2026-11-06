@@ -3,12 +3,8 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/SCmd.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2DynamicPathStrc.h"
@@ -23,6 +19,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -43,6 +40,7 @@
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/AiGeneral.h"
@@ -86,6 +84,9 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Txt/Skills.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -1279,7 +1280,7 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId == 0x15f || nClassId == 0x160 || nClassId == 0x161 || nAlignment != '\0' || (_bIsRevive = D2Client::UNIT::CheckFlags(pUnit, UNITFLAG_ISREVIVE) , !_bIsRevive))) {
+    if (!(nClassId == 0x15f || nClassId == 0x160 || nClassId == 0x161 || nAlignment != '\0' || (_bIsRevive = D2Common::Units::CheckFlags(pUnit, UNITFLAG_ISREVIVE) , !_bIsRevive))) {
       return;
     }
 
@@ -1747,7 +1748,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     eD2UnitType eMonsterOwnerType = eTargetUnitType;
-    D2SkillsTxt* pSkillsTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
+    D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
     if (!(pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;
     }
@@ -1958,8 +1959,8 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
 
     pDestRoom = D2Common::Units::UNITS_GetRoom(pStaircaseUnit);
     sD2SUnitStairs.pRoom = pDestRoom;
-    sD2SUnitStairs.nX = D2Client::Units::GetXPosFromDynamicPathUnit(pStaircaseUnit);
-    sD2SUnitStairs.nY = D2Client::Units::GetYPosFromDynamicPathUnit(pStaircaseUnit);
+    sD2SUnitStairs.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pStaircaseUnit);
+    sD2SUnitStairs.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pStaircaseUnit);
     if (pUnit->eUnitType != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15c);
       exit(-1);
@@ -2111,7 +2112,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
 
     UNITS_PlaceUnitInRoom(pAllocUnit, nPosX, nPosY, pGame, pRoom, 1);
     if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && (bIsMonsterDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pAllocUnit) , bIsMonsterDead != 0) && (bIsMonsterDead = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, deadCol) , !bIsMonsterDead)) {
+      if (eUnitType == UNIT_MONSTER && (bIsMonsterDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pAllocUnit) , bIsMonsterDead != 0) && (bIsMonsterDead = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, deadCol) , !bIsMonsterDead)) {
         D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pAllocUnit, 1);
         D2Common::PATH::DynamicPath::SetUnitWidth(pAllocUnit, 5);
         D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pAllocUnit->pPath.pDynamicPath, 0x8000);

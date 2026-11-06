@@ -6,7 +6,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2LightMapStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Draw/LightMap.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
@@ -27,13 +26,14 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
+#include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Win/DC6.h"
@@ -51,9 +51,9 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/Engine.data.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
-#include "D2Game/SKILLS/SkillSor.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -516,17 +516,6 @@ void __fastcall Unreferenced_00460760(int param_1, int param_2) {
     *(int*)(*(int*)(param_1 + 0x14) + 0x150) = param_2;
 }
 
-void __fastcall StoreLastSkillHit(eSkillEType pSkill, D2UnitStrc * pUnit, eD2UnitType nUnitType, uint32_t nUid) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer)) {
-      return;
-    }
-
-    pUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = 1;
-    pUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId = pSkill;
-    pUnit->pUnitData.pUnitDataPlayer->eTargetUnitType = nUnitType;
-    pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = nUid;
-}
-
 int __fastcall Unreferenced_004607d0(int param_1) {
     if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
       return *(int*)(*(int*)(param_1 + 0x14) + 0x154);
@@ -636,7 +625,7 @@ void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadius
       nLightRadius = 0xd;
     } else {
       uint8_t bVar1;
-      pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       if (!pMonStats2) {
         return;
       }

@@ -6,8 +6,6 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/DataTbls.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/Engine/GfxUtil.h"
 #include "D2Client/GAME/Game/Game.h"
@@ -17,7 +15,6 @@
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/SkillHelpers.h"
 #include "D2Client/Sound/Sound.h"
-#include "D2Client/Stats.h"
 #include "D2Client/UI/CmdTbl.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/Panel.h"
@@ -28,14 +25,12 @@
 #include "D2Client/UI/Trade.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitMode.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -49,6 +44,7 @@
 #include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/TokTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -63,16 +59,14 @@
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Server.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/Items.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
@@ -98,8 +92,13 @@
 #include "D2Client/UI/Panel.data.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UI/npcmenu.data.h"
+#include "D2Common/DATATBLS/DataTbls.inline.h"
+#include "D2Common/DATATBLS/ItemTbls.inline.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -548,8 +547,8 @@ static void __stdcall INV_DrawGridPlacementHighlight(D2InventoryStrc * pInventor
 
     D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCollidedItem, (char*)&nCollidedWidth, (char*)((uintptr_t)&pInventory + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
     int32_t nColorIndex = 3;
-    int32_t nGridCol = Units::GetYPosFromDynamicPathUnit(pCollidedItem);
-    int32_t nGridRow = Units::GetXPosFromDynamicPathUnit(pCollidedItem);
+    int32_t nGridCol = D2Common::Units::GetYPosFromDynamicPathUnit(pCollidedItem);
+    int32_t nGridRow = D2Common::Units::GetXPosFromDynamicPathUnit(pCollidedItem);
     DrawItemSolidBackground(*(uint8_t*)((char*)&pInventory + 3), nCollidedWidth, nGridRow, nColorIndex, nGridCol, pGridCoords);
 }
 
@@ -1986,7 +1985,7 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
         pUnit = 0;
         nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&pUnit);
         nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nByTimeBonus, nServerMin, (int32_t)pUnit, nullptr, nullptr, nullptr);
-        nServerMax = Stats::D2ApplyPercent(nMaxDamage, nServerMin, 100);
+        nServerMax = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nServerMin, 100);
         nMaxDamage += nServerMax;
         if (nServerMin) {
           *pbOutModified = 1;
@@ -2410,7 +2409,7 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
         pUnit = 0;
         nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&pUnit);
         nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nByTimeMod, nServerOrMod, (int32_t)pUnit, nullptr, nullptr, nullptr);
-        nPercentApplied = Stats::D2ApplyPercent(nArmorClass, nServerOrMod, 100);
+        nPercentApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nArmorClass, nServerOrMod, 100);
         nArmorClass += nPercentApplied;
         if (nServerOrMod) {
           bIsModified = 1;
@@ -2765,7 +2764,7 @@ static void __stdcall INV_FormatItemSpellDescText(uint32_t nValue, D2ItemsTxt * 
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwszNewline);
       return;
       case 2:
-        Fog::File::CONTAINER_InitializeBuffer(wszValueBuf, 2, 10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszValueBuf, 2, 10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       nValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pPlayer, nValue, pItemsTxt->dwCalc1);
       switch (pItemsTxt->wStat1) {
         case 6:
@@ -2783,14 +2782,14 @@ static void __stdcall INV_FormatItemSpellDescText(uint32_t nValue, D2ItemsTxt * 
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLabel);
       break;
       case 3:
-        Fog::File::CONTAINER_InitializeBuffer(wszValueBuf, 2, 10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszValueBuf, 2, 10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       nValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pPlayer, nValue, pItemsTxt->dwCalc1);
       pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wSpellDescStr);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLabel);
       break;
       case 4:
         pnQuantity = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pPlayer, nValue, pItemsTxt->dwCalc1);
-      Fog::File::CONTAINER_InitializeBuffer(aWStack_42c, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(aWStack_42c, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, aWStack_42c, D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wSpellDescStr), pnQuantity);
       pwszLabel = aWStack_42c;
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwszLabel);
@@ -3330,8 +3329,8 @@ static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryS
       gpInvItemUnderCursor = 1;
       if (pItemAtCell != gpInvHoveredItem) {
         D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemAtCell, (char*)((uintptr_t)&pCursorItem + 3), (char*)((uintptr_t)&nMouseX + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
-        nMouseY = Units::GetXPosFromDynamicPathUnit(pItemAtCell);
-        nYPos = Units::GetYPosFromDynamicPathUnit(pItemAtCell);
+        nMouseY = D2Common::Units::GetXPosFromDynamicPathUnit(pItemAtCell);
+        nYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pItemAtCell);
         gaInventoryItemSlots = ((uint32_t)pCursorItem >> 0x18) * (uint32_t)pGridLayout->nCellWidth / 2 + (uint32_t)pGridLayout->nCellWidth * nMouseY + pGridLayout->nPixelLeft;
         nInventoryContextMode = gaInventoryItemSlots;
         pItemToDescribe = pItemAtCell;
@@ -4319,7 +4318,7 @@ void __stdcall INV_DrawNpcButtonTooltip() {
 
     if (gaNpcShopButtons[nButtonIdx].wStringId == 0x276f) {
       D2UnitStrc* pUnit;
-      Fog::File::CONTAINER_InitializeBuffer(wszTooltipText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszTooltipText, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       pNpcUnit = npcmenu::GetInteractedUnit();
       if (pUnit && pNpcUnit) {
@@ -6059,7 +6058,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
         case 6:
           iServerStat = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
         iStatCheck = iServerStat >> 8;
-        iServerStat = UNIT::GetGUID(pUnit);
+        iServerStat = D2Common::Units::GetGUID(pUnit);
         iServerStat = GAME::RosterPets::GetRosterPerHPPercent(iServerStat);
         iStatRaw = iServerStat * iStatCheck / 100;
         iDamageValue = UNIT::CUnit::IsActive(pUnit);
@@ -6126,7 +6125,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
           iStatRaw += iServerStat;
           iStatBonusPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pRightArmItem, UNITSTAT_item_normaldamage, 0);
         } else {
-          iServerStat = UNIT::GetClassId(pUnit);
+          iServerStat = D2Common::Units::GetClassId(pUnit);
           if (iServerStat == 0x10f) {
             eStatId = UNITSTAT_dexterity;
             iDamageValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
@@ -7024,7 +7023,7 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
           goto substitute_args;
         }
 
-        Fog::File::CONTAINER_InitializeBuffer(wszContainerA, 2, 5, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszContainerA, 2, 5, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         pwArgDest = wszContainerA;
         if (awszArgs[nArgIdxN * 200] == L'[') {
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pwArgDest, awszArgs + nArgIdxN * 200, 4);
@@ -7146,7 +7145,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     BOOL bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_RUNEWORD, 0x735, ".\\UI\\inv.cpp");
     if (bFlagCheck) {
       D2RareAffixTxt* wSource;
-      Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
       pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszNameScratch);
@@ -7218,12 +7217,12 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           nIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_PlayerBodyPart);
           if (nIsOfType) {
             memset(szEarLevelStr, 0, 18 * sizeof(szEarLevelStr[0]));
-            Fog::File::CONTAINER_InitializeBuffer(__frame0.szUtf8Buf, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-            Fog::File::CONTAINER_InitializeBuffer(wszEarLevel, 2, 3, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(__frame0.szUtf8Buf, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszEarLevel, 2, 3, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             byEarLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit);
             Storm::Source::SSTR::SStrPrintf(szEarLevelStr, 3, "%d", (uint32_t)byEarLevel);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)wszEarLevel, szEarLevelStr, 3);
-            Fog::File::CONTAINER_InitializeBuffer(wszPlayerName, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszPlayerName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             pcNameSrc = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
             strcpy(__frame0.szPlayerNameCopy, pcNameSrc);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)__frame0.szUtf8Buf, __frame0.szPlayerNameCopy, 0x100);
@@ -7249,8 +7248,8 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwLocaleStr);
             D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwSeparator);
             __frame0.wszPossessive[0] = L'\0';
-            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-            Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
             D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBaseName, pwLocaleStr);
             nIsOfType = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
@@ -7264,7 +7263,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             pInventory = pUnit->pInventory;
             bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_SOCKETED, 0x799, ".\\UI\\inv.cpp");
             if (!bFlagCheck || !pInventory || (nErrorLine = D2Common::INVENTORY::Inventory::ITEM_ItemsInItem(pInventory) , !nErrorLine)) {
-              Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBaseName, pwLocaleStr);
               pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszBaseName);
@@ -7277,7 +7276,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           }
 
           iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(iScratch);
+          pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(iScratch);
           dwArgsEnd = 0;
           pwFmtStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr);
@@ -7339,7 +7338,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
                 D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSuffix, pwLocaleStr);
               }
             } else {
-              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               pcNameSrc = pSuffixAffix->name;
               __frame0.szUtf8Buf[0] = 0x28;
               __frame0.szUtf8Buf[1] = 0;
@@ -7369,16 +7368,16 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             exit(-1);
           }
 
-          Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBaseName, pwLocaleStr);
           pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszBaseName);
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLargeWorkBuf, pwLocaleStr);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwSeparator);
           __frame0.wszRareName = L'\0';
-          Fog::File::CONTAINER_InitializeBuffer(__frame0.wszRareNameBuf, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(__frame0.wszRareNameBuf, 2, 199, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           wsprintf(&__frame0.wszRareName, D2Lang::StrTable::strtable::GetLocaleString(0x6b6), wszPrefix, wszSuffix, 0);
-          Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, &__frame0.wszRareName, pUnit);
           pwLocaleStr = wszScratch;
           if (!bFlagCheck) {
@@ -7390,13 +7389,13 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           pUnit = pUnitSaved;
           break;
           case 7:
-            Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
           iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
           if (iScratch >= 0) {
             iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-            pUniqueItemsTxt = DataTbls::INV_GetUniqueItemsTxtLine(iScratch);
+            pUniqueItemsTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(iScratch);
             if (pUniqueItemsTxt) {
               if (pItemsTxt->bSkipName == '\0') {
                 pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszNameScratch);
@@ -7404,7 +7403,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
                 D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, pwSeparator);
               }
 
-              Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pUniqueItemsTxt->wNameStr);
               pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(pwLocaleStr);
               bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, pwLocaleStr, pUnit);
@@ -7425,10 +7424,10 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           break;
           case 5:
             iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          pSetItemsTxt = DataTbls::GetSetItemsLine(iScratch);
+          pSetItemsTxt = D2Common::DATATBLS::ItemTbls::GetSetItemsLine(iScratch);
           pItemsTxt = pItemsTxtSaved;
           if (pSetItemsTxt) {
-            Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxtSaved->wNameStr);
             D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszScratch, pwLocaleStr);
             pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszScratch);
@@ -7437,8 +7436,8 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwSeparator);
             pItemsTxt = pItemsTxtSaved;
             if (pSetItemsTxt->stringId) {
-              Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
               bFlagCheck = INV_FormatPlayerNameWithBase(wszBaseName, wszNameScratch, pUnit);
@@ -7446,7 +7445,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
                 pwLocaleStr = wszBaseName;
               } else {
                 __frame0.wszPossessive[0] = L'\0';
-                Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+                Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
                 wsprintf(__frame0.wszPossessive, D2Lang::StrTable::strtable::GetLocaleString(0x2769), wszNameScratch, 0);
                 pwLocaleStr = __frame0.wszPossessive;
               }
@@ -7493,7 +7492,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix->wNameStr);
               D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, pwLocaleStr);
             } else {
-              Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               __frame0.szUtf8Buf[0] = 0x28;
               __frame0.szUtf8Buf[1] = 0;
               pAffixNameTail = pPrefixAffix->name;
@@ -7545,7 +7544,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           exit(-1);
         }
       } else {
-        Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszScratch, pwLocaleStr);
         pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszScratch);
@@ -7678,11 +7677,11 @@ void __stdcall INV_ShowBookTooltip() {
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszDescription, pwSeparator);
         }
 
-        Fog::File::CONTAINER_InitializeBuffer(wszItemName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszItemName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         GetItemName(pItemToDescribe, wszItemName, 0x80);
         ui::MoveArgumentToEAX(wszItemName);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszDescription, wszItemName);
-        Fog::File::CONTAINER_InitializeBuffer(wszTooltip, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszTooltip, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         if (g_nCurrentInventoryPage - 1U <= 8) {
           INV_FormatItemTooltipWithCost(wszDescription, wszTooltip);
         } else {
@@ -7866,12 +7865,12 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     }
 
     nSetItemLoopIdx = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pItemToDescribe);
-    D2SetItemsTxt* pSetItemsTxt = DataTbls::GetSetItemsLine(nSetItemLoopIdx);
+    D2SetItemsTxt* pSetItemsTxt = D2Common::DATATBLS::ItemTbls::GetSetItemsLine(nSetItemLoopIdx);
     if (!pSetItemsTxt) {
       return;
     }
 
-    D2SetsTxt* pSetsTxt = DataTbls::GetSetsLine((int)pSetItemsTxt->set);
+    D2SetsTxt* pSetsTxt = D2Common::DATATBLS::ItemTbls::GetSetsLine((int)pSetItemsTxt->set);
     if (!pSetsTxt) {
       return;
     }
@@ -7896,8 +7895,8 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
       ppSetItemsTxtEntry = 0;
       nAdjReqStr = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItemToDescribe, UNITSTAT_item_req_percent, 0);
       if (nAdjReqStr) {
-        nReqAdjust = Stats::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->nReqStr, nAdjReqStr, 100);
-        ppSetItemsTxtEntry = (D2SetItemsTxt**)Stats::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->wReqDex, nAdjReqStr, 100);
+        nReqAdjust = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->nReqStr, nAdjReqStr, 100);
+        ppSetItemsTxtEntry = (D2SetItemsTxt**)D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->wReqDex, nAdjReqStr, 100);
       }
 
       bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_ETHEREAL, 0xd88, ".\\UI\\inv.cpp");
@@ -7997,7 +7996,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     wszStatBuffs[0] = L'\0';
     bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_SOCKETED, 0xde4, ".\\UI\\inv.cpp");
     if (bFlagCheck) {
-      Fog::File::CONTAINER_InitializeBuffer(wszSocketedText, 2, 300, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszSocketedText, 2, 300, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       INV_FormatEtherealSocketedText(pItemToDescribe, wszSocketedText);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszStatBuffs, wszSocketedText);
     }
@@ -8054,7 +8053,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     if (!g_nCurrentInventoryPage || g_nCurrentInventoryPage - 1U > 8) {
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszFinalTooltip, wszWorkBuf);
     } else {
-      Fog::File::CONTAINER_InitializeBuffer(wszTransactionCost, 2, 0x40, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszTransactionCost, 2, 0x40, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       bFlagCheck = npcmenu::NPCMENU_CalculateItemTransactionCost(pItemToDescribe, gnItemDescTitleMaxWidth, (int*)&pUnitInventory, wszTransactionCost, 0x40);
       if (bFlagCheck) {
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszFinalTooltip, wszWorkBuf);
@@ -8066,7 +8065,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
       } else {
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszFinalTooltip, wszWorkBuf);
         if (g_nCurrentInventoryPage != 4) {
-          Fog::File::CONTAINER_InitializeBuffer(wszKeepInInv, 2, 0x40, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszKeepInInv, 2, 0x40, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           pwAppendResult = D2Lang::StrTable::strtable::GetLocaleString(0xd05);
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszKeepInInv, pwAppendResult);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszFinalTooltip, pwLocaleStr);
@@ -8138,12 +8137,12 @@ void __stdcall INV_ShowTransmogrifyTooltip() {
         pwString = D2Lang::StrTable::strtable::GetLocaleString(0x150b);
         D2Lang::Unicode::UNISYS::AppendToBuffer(__frame0.wszTextBuffer, pwString);
         D2Lang::Unicode::UNISYS::AppendToBuffer(__frame0.wszTextBuffer, pwLineEnd);
-        Fog::File::CONTAINER_InitializeBuffer(__frame0.wszItemName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(__frame0.wszItemName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         GetItemName(pItemToDescribe, __frame0.wszItemName, 0x80);
         ui::MoveArgumentToEAX(__frame0.wszItemName);
         D2Lang::Unicode::UNISYS::AppendToBuffer(__frame0.wszTextBuffer, __frame0.wszItemName);
         __frame0.wszFullTooltip = L'\0';
-        Fog::File::CONTAINER_InitializeBuffer(__frame0.local_110e, 2, 0x3ff, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(__frame0.local_110e, 2, 0x3ff, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         if (g_nCurrentInventoryPage - 1U <= 8) {
           INV_FormatItemTooltipWithCost(__frame0.wszTextBuffer, &__frame0.wszFullTooltip);
         } else {
@@ -8395,7 +8394,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
             nBound = Cursor::GetMouseX();
             bFlagCheck = INV_IsMouseOverWeaponSwapSlot(nBound, nTmp);
             if (bFlagCheck) {
-              Fog::File::CONTAINER_InitializeBuffer(wszWeaponSwapTip, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszWeaponSwapTip, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               pwTmp = D2Lang::StrTable::strtable::GetLocaleString(0x58c6);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszWeaponSwapTip, pwTmp);
               wStringId = CmdTbl::CMD_GetKeyForCommand(0x2c, 1);
@@ -8540,8 +8539,8 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
         nTooltipFlag = 0;
         nTmpResult = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItemToDescribe, UNITSTAT_item_req_percent, 0);
         if (nTmpResult) {
-          nTooltipFlag = Stats::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->nReqStr, nTmpResult, 100);
-          nReqDexAdjust = Stats::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->wReqDex, nTmpResult, 100);
+          nTooltipFlag = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->nReqStr, nTmpResult, 100);
+          nReqDexAdjust = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->wReqDex, nTmpResult, 100);
         }
 
         bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_ETHEREAL, 0xffa, ".\\UI\\inv.cpp");
@@ -8985,7 +8984,7 @@ void __stdcall DRAW_UI_Inventory() {
 
         pSlotItem = UNIT::Player::GetPlayerUnit_UI();
         bIsPlayerDead = D2Common::Units::GetStashGoldLimit(pSlotItem);
-        Fog::File::CONTAINER_InitializeBuffer(wszStashGoldText, 2, 100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszStashGoldText, 2, 100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszStashGoldText, D2Lang::StrTable::strtable::GetLocaleString(0xfd3), bIsPlayerDead);
         bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
         bIsTwoHandedEquipped = gnPanelOffsetY - 0x19f;
@@ -9242,7 +9241,7 @@ void __stdcall DRAW_UI_Inventory() {
       DRAW_UI_InventoryContent(pSlotItem);
       CurrentInventoryPage = byPrevInvPage;
       D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-      Fog::File::CONTAINER_InitializeBuffer(wszPlayerName, 2, 0x17, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszPlayerName, 2, 0x17, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       pSlotItem = UNIT::Player::GetPlayerUnit_UI();
       if (pSlotItem) {
         pszRosterName = GAME::Roster::GetPlayerRosterName(pSlotItem);
@@ -9251,7 +9250,7 @@ void __stdcall DRAW_UI_Inventory() {
         }
       }
 
-      Fog::File::CONTAINER_InitializeBuffer(wszTradePartnerName, 2, 0x17, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszTradePartnerName, 2, 0x17, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       pwszText = (uint16_t*)Trade::TRADE_GetTradeWindowPtr();
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTradePartnerName, pwszText);
       nDrawTextWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszTradePartnerName);
@@ -9287,7 +9286,7 @@ void __stdcall DRAW_UI_Inventory() {
       nTradeNameWidth = gnPanelOffsetX - nDrawTextWidth / 2;
       pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x8a7);
       D2Win::Src::D2WinFont::DRAW_text(pwszText, nTradeNameWidth + 0xbb, bIsTwoHandedEquipped, nDrawY, bIsExpansion);
-      Fog::File::CONTAINER_InitializeBuffer(wszGoldText, 2, 0xf, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszGoldText, 2, 0xf, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       bIsTwoHandedEquipped = D2CLIENT_GetTradeAcceptedFlags();
       Storm::Source::SSTR::SStrPrintf(szGoldCount, 0xf, "%d", bIsTwoHandedEquipped);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
@@ -11030,7 +11029,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          Fog::File::CONTAINER_InitializeBuffer(wszCostText, 2, 0x40, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszCostText, 2, 0x40, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           nBufferSize = 0x40;
           pwszCostBuf = wszCostText;
           pnButtonXOffsets = &__frame0.nNpcTopY;

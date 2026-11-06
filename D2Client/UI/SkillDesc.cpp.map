@@ -489,24 +489,6 @@
       ]
     },
     {
-      "name": "GetSkillParam4",
-      "address": "004e6c70",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004e6c70"
-        }
-      ],
-      "namespace": "D2Client::UI::SkillDesc",
-      "calledFunctions": [
-        "GetSkillParam4"
-      ],
-      "usedTypes": [
-        "eD2Skills",
-        "int32_t"
-      ]
-    },
-    {
       "name": "SKILLDESC_GetStatNameString",
       "address": "004e6ce0",
       "lines": [

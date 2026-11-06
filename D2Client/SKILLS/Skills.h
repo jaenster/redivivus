@@ -31,16 +31,6 @@ struct D2SkillNextTargetSearchStrc {
     /* 0x14 */ uint32_t nCount; // units visited
 };
 
-struct D2SkillsPerClassStrc {
-    /* 0x00 */ short Amazon;
-    /* 0x02 */ short Sorceress;
-    /* 0x04 */ short Necromancer;
-    /* 0x06 */ short Paladin;
-    /* 0x08 */ short Barbarian;
-    /* 0x0A */ short Druid;
-    /* 0x0C */ short Assassin;
-};
-
 namespace D2Client::SKILLS::Skills {
 
 // Function declarations

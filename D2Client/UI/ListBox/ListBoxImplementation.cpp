@@ -23,6 +23,7 @@
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 #include "Fog/Debug.h"
 #include "Fog/Engine/Application.data.h"
@@ -815,12 +816,12 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     D2ListBoxItemStrc* pBuffer = pThis->aItems;
     int nInitRow = 0x7f;
     do {
-      Fog::File::CONTAINER_InitializeBuffer(pBuffer, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 1, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 2, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 3, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 4, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 5, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pBuffer, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 1, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 2, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 3, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 4, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 5, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       pBuffer++;
       nInitRow--;
     } while (nInitRow >= 0);

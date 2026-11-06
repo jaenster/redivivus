@@ -10,7 +10,6 @@
 
 // Forward declarations
 struct D2BitBufferStrc;
-struct D2SeedStrc;
 
 // Data types
 struct SMemBlockDetailsStrc {
@@ -49,7 +48,5 @@ uint32_t __thiscall ARCHIVE_RemoveNode(int32_t pThis, int * pNode);
 void ARCHIVE_WriteMemoryCheckReport();
 void __fastcall ReadByteShortOrDword(struct D2BitBufferStrc * pBitBuffer);
 void __fastcall ReadByteOrShort(struct D2BitBufferStrc * pBitBuffer);
-uint32_t __fastcall UNIT_GetModuloFromSeed(struct D2SeedStrc * pSeed, uint32_t nModulo);
-uint32_t __fastcall RANDOM_RandomNumberSelector(struct D2SeedStrc * pSeed, uint32_t nModulo);
 
 } // namespace D2Client::Archive

@@ -92,6 +92,32 @@ extern grTexMaxAddress GLIDEDLL_grTexMaxAddress_4;
 extern grBufferClear GLIDEDLL_grBufferClear_12;
 extern grChromakeyMode GLIDEDLL_grChromakeyMode_4;
 extern grBufferSwap GLIDEDLL_grBufferSwap_4;
+extern uint32_t gaGlideDebugFontTexStartAddrs[96];
+// lpBuffer parameter of GetCharWidthA
+extern void * lpBuffer_008802c8[96];
+extern void * gpGlideDebugFontTexture;
+extern uint32_t gnGlideDebugFontTMU;
+extern int * gpnLightmapRowPointers;
+// @data gapGlideGroundStripVertexPtrs
+// @wasnamed gapGlideTileVertexPtrs
+// @evidence Built at runtime by 0050d646 and consumed by the loop at 0050daf8,
+// which calls grDrawVertexArray(STRIP, 12, .) five times up to 00880b58. A strip table, not the
+// static fan table at 0072f670. @wasnamed gapGlideTileVertexPtrs.
+extern void * gapGlideGroundStripVertexPtrs[60];
+extern uint8_t gbGlideGlobalLightGreen;
+extern uint8_t gbGlideGlobalLightBlue;
+extern uint8_t gbGlideGlobalLightRed;
+extern uint8_t * gpGlideLightingTable;
+extern int gnGlidePerspectiveOriginX;
+extern int32_t gnGlidePerspectiveScale;
+extern int gnGlidePerspectiveOriginY;
+extern void * gpPerspectiveLookupTable;
+extern uint8_t (*gpGlideSmackerTexBuf0)[32768];
+extern uint8_t (*gpGlideSmackerTexBuf1)[32768];
+extern uint32_t gnGlideSmackTex1StartAddr;
+extern uint32_t gnGlideSmackTex2StartAddr;
+extern uint8_t (*gpGlideSmackerTexBuf2)[32768];
+extern uint32_t gnGlideTMUHandle;
 } // namespace D2Glide::Renderer::Glide
 
 namespace D2Glide::glBlocks {

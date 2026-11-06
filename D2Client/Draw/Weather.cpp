@@ -6,7 +6,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/GAME/Game/Game.h"
-#include "D2Client/Seed.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UNIT/CUnit.h"
@@ -26,7 +25,7 @@
 #include "D2Common/Environment.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
+#include "D2Game/Seed.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -42,6 +41,7 @@
 #include "D2Client/Draw/Weather.data.h"
 #include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/UI/Help.data.h"
+#include "D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -141,7 +141,7 @@ void __stdcall LoadCustomSettingsPerAreaAct5() {
       gnWeatherRngRangeMin = 0x2a;
       gnWeatherRngRangeMaxAct5 = 0xaa;
       gnWeatherRngRangeMax = 0xaa;
-      gnWeatherOffsetXModulo = Seed::RollBetweenMinAndMax(pSeed, 0x20, 0x38);
+      gnWeatherOffsetXModulo = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0x20, 0x38);
       gnWeatherParticleState = gnWeatherOffsetXModulo;
       return;
       case LEVEL_FrozenTundra:
@@ -149,7 +149,7 @@ void __stdcall LoadCustomSettingsPerAreaAct5() {
       gnWeatherRngRangeMax = 0x38;
       gnWeatherRngRangeMinAct5 = 0x1c;
       gnWeatherRngRangeMaxAct5 = 0x38;
-      gnWeatherOffsetXModulo = Seed::RollBetweenMinAndMax(pSeed, 0x20, 0x70);
+      gnWeatherOffsetXModulo = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0x20, 0x70);
       gnWeatherParticleState = gnWeatherOffsetXModulo;
       return;
       case LEVEL_ArreatSummit:
@@ -535,20 +535,20 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     short int nSplashSlotIndex = (short int)(nSlot >> 0x10);
     uint32_t bIsPerspectiveActive = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bIsPerspectiveActive) {
-      nRoll = Seed::RollBetweenMinAndMax(pSeed, 0, 5);
+      nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
       *(int32_t*)((int)nYOffset + nSplashSlotIndex * 0x18 + 4) = nRoll * 0x10000 + nWorldX;
-      nRoll = Seed::RollBetweenMinAndMax(pSeed, 0, 5);
+      nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
       *(int32_t*)((int)nYOffset + nSplashSlotIndex * 0x18 + 8) = nRoll * 0x10000 + nWorldY;
     } else {
       int nHalfRange;
-      nRoll = Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
+      nRoll = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
       nHalfRange = nRoll - 0x28;
       if (nHalfRange < 0) {
         nHalfRange = -nHalfRange;
       }
 
       nHalfRange = nHalfRange * -2 + 0x50;
-      nRange = Seed::RollBetweenMinAndMax(pSeed, -nHalfRange, nHalfRange * 2);
+      nRange = D2Game::Seed::RollBetweenMinAndMax(pSeed, -nHalfRange, nHalfRange * 2);
       *(int32_t*)((int)nYOffset + nSplashSlotIndex * 0x18 + 4) = nRange + nScreenX;
       *(int32_t*)((int)nYOffset + nSplashSlotIndex * 0x18 + 8) = nRoll + nScreenY;
     }
@@ -587,20 +587,20 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
     short int nBubbleIndex = (short int)(nSlot >> 0x10);
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bPerspective) {
-      nRollResult = Seed::RollBetweenMinAndMax(pSeed, 0, 5);
+      nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
       *(int32_t*)((int)nRoll + nBubbleIndex * 0x18 + 4) = (nRollResult - 2) * 0x10000 + nWorldX;
-      nRollResult = Seed::RollBetweenMinAndMax(pSeed, 0, 5);
+      nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 5);
       nRange = (nRollResult - 2) * 0x10000 + nWorldY;
     } else {
       int32_t nRollOffset;
-      nRollResult = Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
+      nRollResult = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
       nRange = nRollResult - 0x28;
       if (nRange < 0) {
         nRange = -nRange;
       }
 
       nRange = nRange * -2 + 0x50;
-      nRollOffset = Seed::RollBetweenMinAndMax(pSeed, -nRange, nRange * 2);
+      nRollOffset = D2Game::Seed::RollBetweenMinAndMax(pSeed, -nRange, nRange * 2);
       *(int32_t*)((int)nRoll + nBubbleIndex * 0x18 + 4) = nRollOffset + nScreenX;
       nRange = nRollResult - 0x1e + nScreenY;
     }
@@ -680,11 +680,11 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     D2WeatherParticleStrc* pParticleArray = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
     int nParticleSlotIndex = (short int)(nSlot >> 0x10);
     pParticleArray[nParticleSlotIndex].nDying = 0;
-    int32_t nTemp = Seed::RollBetweenMinAndMax(pSeed, 0, UI::ui::ScreenSizeX);
+    int32_t nTemp = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0, UI::ui::ScreenSizeX);
     pParticleArray[nParticleSlotIndex].nPosX = nTemp;
-    nTemp = Seed::RollBetweenMinAndMax(pSeed, 0x28, UI::Inv::ScreenSizeY - 0x57);
+    nTemp = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0x28, UI::Inv::ScreenSizeY - 0x57);
     pParticleArray[nParticleSlotIndex].nMaxY = nTemp;
-    nTemp = Seed::RollBetweenMinAndMax(pSeed, -0x14, nTemp + 0x14);
+    nTemp = D2Game::Seed::RollBetweenMinAndMax(pSeed, -0x14, nTemp + 0x14);
     pParticleArray[nParticleSlotIndex].nPosY = nTemp;
     D2SeedStrc sNextSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNextSeed;
@@ -1014,7 +1014,7 @@ static int WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
         DVar1 = D2_SEED_NEXT(*pSeed);
         *pSeed = DVar1;
         gnWeatherRngCountdown = DVar1.nSeedLow % 0x36b + 0xfa;
-        nChangeRate = Seed::RollBetweenMinAndMax(pSeed, gnWeatherRngRangeMin, gnWeatherRngRangeMax);
+        nChangeRate = D2Game::Seed::RollBetweenMinAndMax(pSeed, gnWeatherRngRangeMin, gnWeatherRngRangeMax);
         gnWeatherRngParam = nChangeRate;
       } else {
         seed64 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5 + (uint64_t)pSeed->nSeedHigh;
@@ -1070,15 +1070,15 @@ void __stdcall DRAW_Overlay_Weather() {
           gnWeatherTransitionCountdown = 3;
           gnWeatherTransitionState = 1;
         } else {
-          gnWeatherTransitionCountdown = Seed::RollBetweenMinAndMax(pSeed, 500, 0x5dc);
+          gnWeatherTransitionCountdown = D2Game::Seed::RollBetweenMinAndMax(pSeed, 500, 0x5dc);
           gnWeatherTransitionState = 0;
           if (gnBlizzardSoundPlayed) {
-            nLineOrCoord = Seed::RollBetweenMinAndMax(pSeed, 0x19, 0x32);
+            nLineOrCoord = D2Game::Seed::RollBetweenMinAndMax(pSeed, 0x19, 0x32);
             nClipLeft = Sound::SOUND_PlaySound(SOUND_ITEM_BOOTSCHAIN, nullptr, nLineOrCoord, 0, 0);
             if (nClipLeft) {
               nSoundPosZ = 0;
-              nLineOrCoord = Seed::RollBetweenMinAndMax(pSeed, -200, 400);
-              nPosX = Seed::RollBetweenMinAndMax(pSeed, -200, 400);
+              nLineOrCoord = D2Game::Seed::RollBetweenMinAndMax(pSeed, -200, 400);
+              nPosX = D2Game::Seed::RollBetweenMinAndMax(pSeed, -200, 400);
               Sound::SOUND_PlayEnvironmentSound(nClipLeft, nPosX, nLineOrCoord, nSoundPosZ);
             }
           } else {
@@ -1272,7 +1272,7 @@ void __fastcall WEATHER_TransitionState(uint32_t nState) {
           break;
           case 1:
             WEATHER_UpdateStateAct5(0);
-          gnWeatherOffsetXModulo = Seed::RollBetweenMinAndMax(&pPlayer->sSeed, 0x20, 0xe0);
+          gnWeatherOffsetXModulo = D2Game::Seed::RollBetweenMinAndMax(&pPlayer->sSeed, 0x20, 0xe0);
           return;
           case 2:
             LoadCustomSettingsPerAreaAct5();
@@ -1332,7 +1332,7 @@ void __stdcall WEATHER_UpdateTransition(D2SeedStrc * pSeed) {
           nCurrentState = 0;
         }
 
-        gnWeatherTransitionDurationRolled = Seed::RollBetweenMinAndMax(pSeed, gnWeatherRainParticleTimingMs[nCurrentState], gnWeatherRainTimingMin[nCurrentState]);
+        gnWeatherTransitionDurationRolled = D2Game::Seed::RollBetweenMinAndMax(pSeed, gnWeatherRainParticleTimingMs[nCurrentState], gnWeatherRainTimingMin[nCurrentState]);
         gnWeatherTransitionTicksRemaining = gnWeatherTransitionDurationRolled;
         WEATHER_TransitionState(nCurrentState);
       }

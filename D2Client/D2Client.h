@@ -12,9 +12,7 @@
 struct CMDPARAMS;
 struct D2EscMenuItemStrc;
 struct D2GSPacketSrv0x50;
-struct D2MissilesTxt;
 struct D2RC4StateStrc;
-struct D2SeedStrc;
 struct D2UIMouseMsgStrc;
 struct D2UnitFindArgStrc;
 struct D2UnitStrc;
@@ -97,7 +95,6 @@ void __stdcall CMD_SetHoldAlt();
 void __stdcall CMD_StopRun();
 void __stdcall CMD_ClearClickModifier();
 void __stdcall CMD_ReleaseHoldAltAndClearSelection();
-struct D2MissilesTxt * __fastcall GetMissleById(int32_t nMissileId);
 // Update room light pulse using light map + sin table; reset when level changes or timer ends.
 void __stdcall ClientLight_UpdateRoomLightPulse();
 int32_t __fastcall RNG_GetRandomInRangeWithMin(uint32_t * pSeed, int32_t nMin, int32_t nRange);
@@ -155,7 +152,6 @@ uint32_t __stdcall GetQuestAvailabilityByIndex(int32_t nUnused, int32_t nQuestIn
 void __fastcall thunk_ExitGamePlayCutScene(int32_t pPacket);
 // Handles GS→client packet 0x89: forwards byte pBytes[1] (subcommand/type) to Storm::Source::ClientEngine::HandleIncoming0x89 for game-state update processing.
 void __fastcall NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER(char * pBytes);
-int32_t __fastcall SEED_RollRange(struct D2SeedStrc * pSeed, int32_t nMin, int32_t nMax);
 void __stdcall OBJECT_SetLightRGB(uint8_t byRed, uint8_t byGreen, uint8_t byBlue, uint16_t nRadius, struct D2UnitStrc * pUnit);
 BOOL __fastcall OBJECT_CheckAutoLight(struct D2UnitStrc * pUnit, int32_t bSkipCofLoad);
 int __stdcall TEXT_EmptyCallback();

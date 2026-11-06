@@ -7,24 +7,25 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Common/ITEMS/ItemMods.h"
 
 // Forward declarations
-struct D2GambleTableStrc;
 struct D2GemsTxt;
 struct D2ItemRatioTxt;
 struct D2ItemsTableStrc;
 struct D2ItemsTxt;
-struct D2LowQualityItemsTableStrc;
-struct D2LowQualityItemsTxt;
 struct D2MagicAffixTableStrc;
 struct D2MagicAffixTxt;
 struct D2PoolManagerStrc;
-struct D2QualityItemsTableStrc;
-struct D2QualityItemsTxt;
 struct D2RareAffixTableStrc;
 struct D2RareAffixTxt;
+struct D2SetItemsTxt;
+struct D2SetsTxt;
+struct D2UniqueItemsTxt;
 
 struct D2BooksTxt;
+struct D2LowQualityItemsTxt;
+struct D2QualityItemsTxt;
 
 // Data types
 struct D2BooksTableStrc {
@@ -45,6 +46,11 @@ struct D2BooksTxt {
     /* 0x1C */ char bookspellcode[4]; // d2bs binfields FIELDTYPE_RAW4
 };
 
+struct D2GambleTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ void * pTable;
+};
+
 struct D2ItemStatCostDescPriorityStrc {
     D2ItemStatCostDescPriorityStrc() = default;
     D2ItemStatCostDescPriorityStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
@@ -53,6 +59,43 @@ struct D2ItemStatCostDescPriorityStrc {
 
     /* 0x00 */ short nStatId; // ItemStatCost row index
     /* 0x02 */ short nDescPriority; // descpriority column; qsort key (SORT_ItemDescPriority)
+};
+
+struct D2LowQualityItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
+};
+
+struct D2LowQualityItemsTxt {
+    /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ uint16_t wNameStringId;
+};
+
+struct D2QualityItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2QualityItemsTxt * pTable;
+};
+
+struct __attribute__((packed)) D2QualityItemsTxt {
+    /* 0x00 */ bool armor;
+    /* 0x01 */ bool weapon;
+    /* 0x02 */ bool shield;
+    /* 0x03 */ bool scepter;
+    /* 0x04 */ bool wand;
+    /* 0x05 */ bool staff;
+    /* 0x06 */ bool bow;
+    /* 0x07 */ bool boots;
+    /* 0x08 */ bool gloves;
+    /* 0x09 */ bool belt;
+    /* 0x0A */ uint8_t nummods;
+    /* 0x0B */ uint8_t field_0xb;
+    /* 0x0C */ D2MagixAffixModStrc mod[2];
+    /* 0x2C */ char effect1[32];
+    /* 0x4C */ char effect2[32];
+    /* 0x6C */ uint8_t field_0x6c;
+    /* 0x6D */ uint8_t field_0x6d;
+    /* 0x6E */ uint8_t field_0x6e;
+    /* 0x6F */ uint8_t field_0x6f;
 };
 
 struct D2RunesTxt {
@@ -126,6 +169,9 @@ extern D2RunesTxtTableStrc nTxtRunesSize;
 namespace D2Common::DATATBLS::ItemTbls {
 
 // Function declarations
+__attribute__((noinline)) inline struct D2SetsTxt * __fastcall GetSetsLine(int32_t nSetId);
+__attribute__((noinline)) inline struct D2SetItemsTxt * __fastcall GetSetItemsLine(int32_t nSetItemId);
+__attribute__((noinline)) inline struct D2UniqueItemsTxt * __fastcall INV_GetUniqueItemsTxtLine(int32_t nFileIndex);
 int32_t __fastcall ITEMTBLS_ParseItemStatCostOrBase(char * szFieldValue, int32_t * pResultType, int32_t nFieldType, int32_t nTableId);
 void __fastcall ITEMTBLS_CompileItemCodeExpression(char * szExpression, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 // Loads and compiles items.txt into the engine's runtime ItemsTxt table. Builds the ~194-field D2BinFieldInputStrc schema (code/version/type/damage/req/inv/vendor min-max/quality columns, with code/string/sound/stat/state link resolvers and calc-string compilers), then compiles the weapons, armor and misc .txt files separately and memcpy-merges them into one contiguous sgpTxtItems array (sgpTxtWeapons/sgpTxtArmor/sgpTxtMisc point into it). Registers each item code in the items code link (FillUpTxtLinkSub0x08) unless bUseTxt, saves the itemscode bin, and builds sgpTxtItemsVersion: a short index table of all rows whose version==0 (classic items). __fastcall(pMemory).

@@ -38,6 +38,7 @@
 #include "globals/globals.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/UI/EscMenu.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/CharSel.data.h"
 #include "D2Launch/MainMenus.data.h"
 #include "D2Win/D2WinImageEx.h"
@@ -1289,7 +1290,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
         }
 
         D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)gpCharSelPendingEntry->pCharSelCompStrc, dwFlags);
-        Fog::File::CONTAINER_InitializeBuffer(wszClassName, 2, 100, MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszClassName, 2, 100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
         pszText = gpCharSelPendingEntry->szGuildTag;
         pszText = pszText + strlen(pszText) + 1;
@@ -1302,8 +1303,8 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSelCopy->szCharname, 0);
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelDeleteButton);
         CHARSEL_GetClassNameString((uint32_t)gpCharSelPendingEntry->ePlayerClassID, wszClassName);
-        Fog::File::CONTAINER_InitializeBuffer(wszLineBuf, 2, 100, MainMenus::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszLevelStr, 2, 10, MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszLineBuf, 2, 100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszLevelStr, 2, 10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         sprintf(szTmpBuf, " %d ", (uint32_t)pSelectedChar->nLevel);
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLevelStr, szTmpBuf, 9);
         pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfd9);

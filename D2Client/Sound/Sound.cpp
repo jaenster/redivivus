@@ -21,7 +21,6 @@
 #include "D2Common/Units.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Sound/D2Sound.h"

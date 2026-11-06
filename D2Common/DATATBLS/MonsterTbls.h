@@ -13,7 +13,9 @@ struct D2HirelingTxt;
 struct D2MonPresetTxt;
 struct D2MonSeqMonsterTbls;
 struct D2MonSoundsTxt;
+struct D2MonStats2Txt;
 struct D2MonStatsInitStrc;
+struct D2MonStatsTxt;
 struct D2NpcTxt;
 struct D2ParsedTreasureClassEntriesStrc;
 struct D2ParsedTreasureClassStrc;
@@ -67,6 +69,15 @@ struct D2UniqueNameTablesStrc {
 namespace D2Common::DATATBLS::MonsterTbls {
 
 // Function declarations
+__attribute__((noinline)) inline struct D2MonStatsTxt * __fastcall TXT_MonStats_GetLine(int32_t nMonStatsId);
+__attribute__((noinline)) inline struct D2MonStats2Txt * __fastcall TXT_MonStats_GetMonStats2(int32_t nClassId);
+__attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_GetFlagsByBitOffset(int32_t nMonStatsId, TxtMonStatsField0x0c nBitOffset);
+__attribute__((noinline)) inline int32_t __fastcall TXT_MonStats_GetBaseId(struct D2UnitStrc * pUnit);
+// The parameter arrives in a whole register; typing it from the single byte the body reads made the decompiler splice the indeterminate upper bytes back in as an uninitialised local, which then indexed an array with garbage in its high bits.
+__attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, TXTMonStats2Field0x04DWORD nBitOffset);
+__attribute__((noinline)) inline int32_t __fastcall ValidateClassId(int32_t nClassId);
+__attribute__((noinline)) inline uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
+__attribute__((noinline)) inline int32_t __fastcall CheckMonStatId(int32_t nMonStatsId);
 // Post-processes all MonStats entries after TXT load: for each monster resolves its base MonStats ID (fixing out-of-range back-references), then queries AnimData to compute and store the scaled walk-anim frame count (offset +0x26) and run-anim frame count (offset +0x28), clamped to 0x7FFF, accounting for Velocity/Run speed overrides from the base monster.
 void __stdcall MONSTERTBLS_AllocateTransformArrays(int32_t nMonStatsSize);
 void __stdcall MONSTERTBLS_FreeTransformArrays();

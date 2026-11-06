@@ -4,12 +4,10 @@
 #include "D2Client/Cursor.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GameViewStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/Msg.h"
 #include "D2Client/GAME/Roster.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/View.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/UI/Path.h"
@@ -18,7 +16,6 @@
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/PlrSkills.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MonStatsTxt.h"
@@ -29,6 +26,7 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
@@ -37,7 +35,7 @@
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
-#include "D2Common/Skills.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/UnitFinds.h"
@@ -45,7 +43,6 @@
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/SKILLS/SkillsServer.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2gfx/D2GFX.h"
@@ -54,9 +51,12 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/Select.data.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2DynamicPathStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -187,9 +187,9 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     } else {
       if (!bSameUnitAsLast) {
         nErrorLine = pUnit->nClassId;
-        pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(nErrorLine);
+        pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nErrorLine);
         if (pMonStats) {
-          pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nErrorLine);
+          pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nErrorLine);
           if (pMonStats2 && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && pMonStats->Align != '\x01' && *((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
             gnSelectConstant13_X = nErrorLine;
             if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
@@ -583,7 +583,7 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
             break;
           }
           if (pTargetUnit->eUnitType == UNIT_MONSTER) {
-            bHasFlag = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTargetUnit->nClassId, shiftSel);
+            bHasFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTargetUnit->nClassId, shiftSel);
             if (bHasFlag) {
               break;
             }
@@ -681,9 +681,9 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
       }
 
       SetSelectedUnit_I(nullptr);
-      nPosOrResult = Units::GetXPosFromDynamicPathUnit(pUnit);
+      nPosOrResult = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       *pX = nPosOrResult;
-      nPosOrResult = Units::GetYPosFromDynamicPathUnit(pUnit);
+      nPosOrResult = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       *pY = nPosOrResult;
       pUnit = 0;
     }
@@ -847,9 +847,9 @@ void __stdcall SELECT_UpdateSelectedUnit() {
 
     gpSelectLastPlayerRoom = pRoom;
     int32_t nPlayerScreenX;
-    nPlayerScreenX = Units::GetXPosFromDynamicPathUnit(pPlayerUnitLocal);
+    nPlayerScreenX = D2Common::Units::GetXPosFromDynamicPathUnit(pPlayerUnitLocal);
     uint32_t nPlayerScreenY;
-    nPlayerScreenY = Units::GetYPosFromDynamicPathUnit(pPlayerUnitLocal);
+    nPlayerScreenY = D2Common::Units::GetYPosFromDynamicPathUnit(pPlayerUnitLocal);
     D2Common::Drlg::Transform::CoordsMapToScreen(&nPlayerScreenX, (int32_t*)&nPlayerScreenY);
     D2UnitStrc* pBestUnit;
     pBestUnit = 0;

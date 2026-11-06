@@ -14,7 +14,6 @@
 #include "D2Client/D2GameViewStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2RosterStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Draw/Weather.h"
 #include "D2Client/Engine.h"
 #include "D2Client/Engine/Gfx.h"
@@ -50,7 +49,6 @@
 #include "D2Client/UI/UseItem.h"
 #include "D2Client/UI/Waypoint.h"
 #include "D2Client/UI/npcmenu.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -90,12 +88,11 @@
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Text.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
@@ -135,9 +132,13 @@
 #include "D2Client/UI/ui.data.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/UNIT/UnitSnd.h"
+#include "D2Common/DATATBLS/DataTbls.inline.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.data.h"
 #include "D2Launch/MainMenus.h"
 #include "Fog/Engine/Application.data.h"
@@ -3588,7 +3589,7 @@ void __fastcall UI_FormatItemNameWithQuality(D2UnitStrc * pUnit, uint16_t * wszT
       return;
     } else {
       __frame0.wszItemName = L'\0';
-      Fog::File::CONTAINER_InitializeBuffer(__frame0.wszItemNameTail, 2, 0x7f, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(__frame0.wszItemNameTail, 2, 0x7f, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       Inv::GetItemName(pUnit, &__frame0.wszItemName, 0x100);
       pTmpStr = pOutput;
       if (!pOutput) {
@@ -4021,7 +4022,7 @@ void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
       return;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     UI_FormatPlayerNameAndStatus(pUnit, wszName, 0x80, bIsPartied, &nHpBarValue);
 }
 
@@ -4069,7 +4070,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
       if (nActiveState) {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pPlayerUnit_lcl, eState);
         if (pStatList) {
-          pStateTxt = DataTbls::MonsterTbls::TXT_States_GetLine(eState);
+          pStateTxt = D2Common::DATATBLS::DataTbls::TXT_States_GetLine(eState);
           if (pStateTxt && *((uint8_t*)pStateTxt + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pStateTxt->pgsvoverlay > 0 && (int)pStateTxt->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
             nStatId = pStateTxt->stat;
             if (nStatId >= 0 && (int)nStatId <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -4413,7 +4414,7 @@ void __stdcall UI_DrawArenaKillCount() {
     }
 
     nArenaScore = GAME::Roster::ROSTER_GetArenaScore(pRoster);
-    Fog::File::CONTAINER_InitializeBuffer(wszScoreText, 2, 0xc, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszScoreText, 2, 0xc, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szScoreText, "%d", nArenaScore);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszScoreText, szScoreText, 0xc);
     D2Win::Src::D2WinFont::DRAW_text(wszScoreText, 600, 0x19, 4, 0);
@@ -4770,7 +4771,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
           Dialog::gpDialog = Dialog::AllocDialogStrcWithBackground(215, 140, UI_DialogCloseCallback, 0, 0, 1);
           Dialog::DIALOG_SetHighlightStyle(Dialog::gpDialog, 1);
           D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-          Fog::File::CONTAINER_InitializeBuffer(wszPromptText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszPromptText, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           memset(wszPromptText, 0, 0x200);
           if (nTransactionType == 5) {
             nStatLayer = 0;
@@ -5144,7 +5145,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
         i = pUnit->nClassId;
       }
 
-      pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(i);
+      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(i);
       if (pMonStats2) {
         gnMercenaryHealthBarScreenY -= (uint32_t)pMonStats2->pixHeight;
       }
@@ -5169,7 +5170,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
         if (!nResult) {
           pwszStr = D2Lang::StrTable::strtable::GetLocaleString(0x90b);
         } else {
-          Fog::File::CONTAINER_InitializeBuffer(wszParen, 2, 2, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszParen, 2, 2, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           *(uint16_t*)(char*)&nNameColor = 0x28;
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszParen, (char*)&nNameColor, 2);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszNameBuf, wszParen);
@@ -5216,7 +5217,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
             nClassId = pUnit->nClassId;
           }
 
-          pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(nClassId);
+          pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nClassId);
           wMonTypeStrId = 0;
           nResult = D2Common::Monsters::MONSTERS::IsDemon(pUnit);
           if (nResult) {
@@ -5231,7 +5232,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
           bResult = UI_GetUniqueMonsterName(pUnit, wMonTypeStrId);
           if (!bResult) {
             if (wMonTypeStrId) {
-              Fog::File::CONTAINER_InitializeBuffer(wszDescBuf, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszDescBuf, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               pwszStr = D2Lang::StrTable::strtable::GetLocaleString(wMonTypeStrId);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDescBuf, pwszStr);
               pwszStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
@@ -5273,7 +5274,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
             nClassId = pUnit->nClassId;
           }
 
-          pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
+          pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
           if (pMonStats2) {
             gnMercenaryHealthBarScreenY -= (uint32_t)pMonStats2->pixHeight;
           }
@@ -5382,7 +5383,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
 
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
-        Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       UI_FormatPlayerNameAndStatus(pUnit, __frame0.wszNameBuf, 0x80, (bool*)&__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult);
       D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(__frame0.wszNameBuf, nHealthBarScreenX, gnMercenaryHealthBarScreenY - 0x48, __frame0.nScreenX, 1, (int32_t)__frame0.pLevelTxtResult);
       return;
@@ -5395,7 +5396,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
       case UNIT_MONSTER:
         nClassId = pUnit->nClassId;
       if (nClassId == 0x1a1 || nClassId == 0x1a2) {
-        pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(nClassId);
+        pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nClassId);
         if (!pMonStats) {
           gU16ImmunityStringBuffer2[0] = 0;
           gU16ImmunityStringBuffer1[0] = 0;
@@ -5406,11 +5407,11 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
         pwszTemp = D2Lang::StrTable::strtable::GetLocaleString(pMonStats->NameStr);
         D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pwszTemp);
       } else {
-        nResult = UNIT::CheckFlags(pUnit, UNITFLAG_ISMERC);
+        nResult = D2Common::Units::CheckFlags(pUnit, UNITFLAG_ISMERC);
         if (!nResult) {
           if (nClassId == 0x164) {
             __frame0.nScreenX = 3;
-            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             __frame0.pLevelTxtResult = 0;
             nResult = UI_GetRosterPlayerInfoForDisplay(__frame0.wszNameBuf, (int*)&__frame0.pLevelTxtResult, &__frame0.nScreenX, pUnit);
             if (nResult) {
@@ -5434,10 +5435,10 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
       gnMonsterHealthBarValue[0] = 0;
       return;
       case UNIT_OBJECT:
-        Fog::File::CONTAINER_InitializeBuffer(__frame0.wszObjBuf, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      Fog::File::CONTAINER_InitializeBuffer(wszLevelNameBuf, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(__frame0.wszObjBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszLevelNameBuf, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       __frame0.wszObjectName = L'\0';
-      Fog::File::CONTAINER_InitializeBuffer(__frame0.aObjectNameBuf, 2, 0x7f, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(__frame0.aObjectNameBuf, 2, 0x7f, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       bHasInteract = npcmenu::GetInteractedUnitGuid((int*)&__frame0.pLevelTxtResult);
       if (!bHasInteract) {
         nResult = Text::TEXT_IsScrollingTextActive();
@@ -5448,7 +5449,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine((uint16_t)nObjClassId);
           byObjSubClass = pObjectTxt->SubClass;
           if (byObjSubClass & 4) {
-            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             pwszTemp = CLIENT_GetLevelNameByLevelId((eD2LevelId)pUnit->pUnitData.pUnitDataObject->nShrineId);
             D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszObjectName, pwszTemp);
             if (eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER && eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER_UNCAPPED) {
@@ -5509,7 +5510,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           nClassId = ((uint32_t)pShadow->SelectDX >> 1) + pShadow->SelectX + nHealthBarScreenX;
           nWarpTooltipY = ((uint32_t)pShadow->SelectDY >> 1) + pShadow->SelectY + gnMercenaryHealthBarScreenY;
           __frame0.wszWarpName = L'\0';
-          Fog::File::CONTAINER_InitializeBuffer(__frame0.aWarpNameBuf, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(__frame0.aWarpNameBuf, 2, 199, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           pwszTemp = __frame0.pLevelTxtResult->wszLevelWarp;
           if (eCurrentRoomLevel == LEVEL_DenOfEvil) {
             nResult = GetQuestAvailabilityByIndex(0, 1);
@@ -8785,7 +8786,7 @@ static void __fastcall DRAW_UI_StatWindow_III(int32_t nX, int32_t nY, int32_t nV
     }
 
     iClearIdx = GAME::Select::SELECT_GetConstant13_Y();
-    D2MonStatsTxt* pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(iClearIdx);
+    D2MonStatsTxt* pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(iClearIdx);
     if (!pMonStatsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15c);
       exit(-1);
@@ -9822,7 +9823,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
           break;
           case 0x1e:
             iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_level, 0);
-          nDrawX = UNIT::GetClassId(pPlayer);
+          nDrawX = D2Common::Units::GetClassId(pPlayer);
           pExpTxtNextLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(nDrawX);
           if (iVar8 != pExpTxtNextLevel) {
             nStatVal = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(nDrawX, iVar8);
@@ -9935,7 +9936,7 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
 
     dwMsgType = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadTextPtr, 0);
     nLine = pNpcUnit->nClassId;
-    bMonInteractFlag = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
+    bMonInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
     if (bMonInteractFlag && nLine != 0x219 && nLine != 0x21a && nLine != 0x21b && nLine != 0x20f) {
       UNIT::CUnit::FacePlayer(pNpcUnit);
     }
@@ -9987,7 +9988,7 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
     }
 
     nLine = pNpcUnit->nClassId;
-    bMonInteractFlag = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
+    bMonInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
     if (bMonInteractFlag) {
       bIsSideNpc = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
       if (bIsSideNpc) {

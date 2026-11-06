@@ -12,16 +12,14 @@
 #include "D2Client/UI/Panel.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/INVENTORY/Inventory.h"
+#include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -37,7 +35,9 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/EscMenu.data.h"
 #include "D2Client/UI/MiniPanel.data.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -501,7 +501,7 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
           do {
             if (nMouseX > gnMiniPanelButtonX[nCenterX] && nMouseX < gnMiniPanelButtonX[nCenterX] + 0x14) {
               nButtonId = gnMiniPanelButtonFrame[nCenterX];
-              if (nButtonId == 7 || (eUnitType = Units::GetType(pPlayer) , eUnitType == UNIT_PLAYER && (eAnimMode = UNIT::GetAnimMode(pPlayer) , eAnimMode != eD2PlayerAnimMode_ns::Dead))) {
+              if (nButtonId == 7 || (eUnitType = D2Common::Units::GetType(pPlayer) , eUnitType == UNIT_PLAYER && (eAnimMode = D2Common::Units::GetAnimMode(pPlayer) , eAnimMode != eD2PlayerAnimMode_ns::Dead))) {
                 MINIPANEL_HandleButtonClick(nButtonId);
               }
             }
@@ -779,7 +779,7 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltip, pLocaleStr);
     if (bHasCommand && nCommandId != 0x39) {
       uint16_t wszKeyText[30];
-      Fog::File::CONTAINER_InitializeBuffer(wszKeyText, 2, 0x1e, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszKeyText, 2, 0x1e, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       nStringIndex = CmdTbl::CMD_GetKeyForCommand(nCommandId, 1);
       if (nStringIndex != 0xffff) {
         memset(wszKeyText, 0, 0x3c);

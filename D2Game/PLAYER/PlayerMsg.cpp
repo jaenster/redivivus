@@ -2,13 +2,9 @@
 
 #include "D2Game/PLAYER/PlayerMsg.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/RosterPets.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/Chat.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
@@ -25,6 +21,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -36,8 +33,8 @@
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/UnitFinds.h"
@@ -89,7 +86,10 @@
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Txt/Skills.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/PLAYER/PlayerMsg.data.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -763,9 +763,9 @@ void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           dwUnitGUID = pUnit->nUnitGUID;
         }
 
-        nPos = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+        nPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         wPosY = (uint16_t)nPos;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(pClient, '\x10', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nObjModeByte, (uint8_t)eUnitType, dwTargetGUID, (uint16_t)D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(pClient, '\x10', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nObjModeByte, (uint8_t)eUnitType, dwTargetGUID, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
         return;
       }
     }
@@ -1047,9 +1047,9 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
     }
 
     uint32_t nUnitPosX;
-    nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+    nUnitPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     uint32_t nUnitPosY;
-    nUnitPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+    nUnitPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     D2DynamicPathStrc* pDynamicPath;
     pDynamicPath = pUnit->pPath.pDynamicPath;
     uint8_t byVelX;
@@ -1283,7 +1283,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
       if (pTargetUnit) {
         nDist = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDist <= 0x32) {
-          pMonTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pTargetUnit->nClassId);
+          pMonTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pTargetUnit->nClassId);
           if (pMonTxt && Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonTxt + 0xd) && Fog::BitBuffer::gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonTxt + 0xd)) {
             D2Common::PATH::DynamicPath::ZeroPathPointsSize(pTargetUnit->pPath.pDynamicPath);
             Ai::AiGeneral::SetAiArgument(pTargetUnit, 1, 0x28);
@@ -1562,8 +1562,8 @@ static uint32_t __stdcall IsAccessableCheck(DWORD nItemGid, ::SGAMEDATA * pGame,
         case eD2PlayerAnimMode_ns::Run:
           nResult = IsOtherAct(pItem, pUnit);
         if (nResult == SERVERSTATUS_OK) {
-          nErrOrCoordY = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
-          iVar1 = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
+          nErrOrCoordY = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
+          iVar1 = D2Common::Units::GetYPosFromDynamicPathUnit(pItem);
           nResult = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nErrOrCoordY, (uint16_t)iVar1);
           if (nResult != SERVERSTATUS_OK) {
             return nResult;
@@ -1611,8 +1611,8 @@ int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheck
     }
     if (bCheckRange) {
       int32_t nAllyPosY;
-      nAllyPosX = D2Client::Units::GetXPosFromDynamicPathUnit(*ppUnit);
-      nAllyPosY = D2Client::Units::GetYPosFromDynamicPathUnit(*ppUnit);
+      nAllyPosX = D2Common::Units::GetXPosFromDynamicPathUnit(*ppUnit);
+      nAllyPosY = D2Common::Units::GetYPosFromDynamicPathUnit(*ppUnit);
       eVar1 = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nAllyPosX, (uint16_t)nAllyPosY);
       if (eVar1 != SERVERSTATUS_OK) {
         return eVar1;
@@ -1781,9 +1781,9 @@ static int32_t __stdcall CheckIfInrangeAndReassign(::SGAMEDATA * pGame, uint32_t
           }
 
           bReassign = true;
-          nServerX = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          nServerX = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
           nY = (uint16_t)nServerX;
-          nServerX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+          nServerX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', 0, pUnitId, (uint16_t)nServerX, nY, bReassign);
         }
       }
@@ -3514,8 +3514,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x2F_NpcInteract(::SGAMEDATA * pGame, D2
     eD2ServerIncomingStatus nRangeResult = IsOtherAct(pNpc, pUnit);
     if (nRangeResult == SERVERSTATUS_OK) {
       int32_t nNpcPosX;
-      nNpcPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pNpc);
-      nNpcPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pNpc);
+      nNpcPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pNpc);
+      nNpcPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pNpc);
       nRangeResult = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nNpcPosX, (uint16_t)nNpcPosY);
       if (nRangeResult == SERVERSTATUS_OK) {
         if (pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster) {
@@ -3733,7 +3733,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3B_AllocSkillPoint(::SGAMEDATA * pGame
     if (pSkill) {
       int nCurSkillLevel;
       nCurSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
-      nSkillMaxLevel = D2Client::DataTbls::SKILL_GetMaxLevelForSkill(eSkillId);
+      nSkillMaxLevel = D2Common::Skills::SKILL_GetMaxLevelForSkill(eSkillId);
       if (nCurSkillLevel >= nSkillMaxLevel) {
         bySkillSide = 0;
         bySkillArg = 1;
@@ -4324,7 +4324,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
       return SERVERSTATUS_BAD_TARGET;
     }
 
-    D2MonStatsTxt* pMonStat = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pMonster->nClassId);
+    D2MonStatsTxt* pMonStat = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pMonster->nClassId);
     /* is NPC and interactable */ if (pMonStat && Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStat + 0xd) && Fog::BitBuffer::gadwBitMasks[0] & (uint8_t)*((uint8_t*)pMonStat + 0xd)) {
       if (pMonster->pPath.pDynamicPath) {
         D2Common::PATH::DynamicPath::ZeroPathPointsSize(pMonster->pPath.pDynamicPath);
@@ -4958,7 +4958,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame,
               invPage = (eInventoryPage)nItemPosY;
               nDbgParam = 0;
               nItemPosY = nPrevInvPage;
-              D2Common::INVENTORY::Inventory::UnusedDebug(".\\PLAYER\\PlrMsg.cpp", 0x1830, pInventory, D2Client::Units::GetXPosFromDynamicPathUnit(pItem), D2Client::Units::GetYPosFromDynamicPathUnit(pItem), invPage, nDbgParam, nItemPosY);
+              D2Common::INVENTORY::Inventory::UnusedDebug(".\\PLAYER\\PlrMsg.cpp", 0x1830, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), invPage, nDbgParam, nItemPosY);
               D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pItem, (uint8_t)nPrevInvPage);
               D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
               itemFlagMask = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);

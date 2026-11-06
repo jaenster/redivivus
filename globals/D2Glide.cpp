@@ -432,44 +432,6 @@ D2RendererFunctionsStrc GlideFunctionTable = {
     /* .nfpClearCaches = */ &D2Glide::Renderer::Glide::ClearCaches
 }; D2_GLOBAL_GUARD(GlideFunctionTable, "D2Glide::Renderer::Glide::GlideFunctionTable");
 
-uint32_t gaGlideDebugFontTexStartAddrs[96] = {}; D2_GLOBAL_GUARD(gaGlideDebugFontTexStartAddrs, "D2Glide::Renderer::Glide::gaGlideDebugFontTexStartAddrs");
-
-void * lpBuffer_008802c8[96] = {}; D2_GLOBAL_GUARD(lpBuffer_008802c8, "D2Glide::Renderer::Glide::lpBuffer_008802c8");
-
-void * gapGlideGroundStripVertexPtrs[60] = {}; D2_GLOBAL_GUARD(gapGlideGroundStripVertexPtrs, "D2Glide::Renderer::Glide::gapGlideGroundStripVertexPtrs");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-float gfGlideDebugFontVertex0X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0X, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex0X");
-float gfGlideDebugFontVertex0Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0Y, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex0Y");
-float gfGlideDebugFontVertex1X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1X, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex1X");
-float gfGlideDebugFontVertex1Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1Y, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex1Y");
-float gfGlideDebugFontVertex3S = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3S, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex3S");
-float gfGlideDebugFontVertex2T = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex2T, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex2T");
-float gfGlideDebugFontVertex3X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3X, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex3X");
-float gfGlideDebugFontVertex3T = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex3T, "D2Glide::Renderer::Glide::gfGlideDebugFontVertex3T");
-void * gpGlideDebugFontTexture = 0; D2_GLOBAL_GUARD(gpGlideDebugFontTexture, "D2Glide::Renderer::Glide::gpGlideDebugFontTexture");
-uint32_t gnGlideDebugFontTMU = 0; D2_GLOBAL_GUARD(gnGlideDebugFontTMU, "D2Glide::Renderer::Glide::gnGlideDebugFontTMU");
-int * gpnLightmapRowPointers = 0; D2_GLOBAL_GUARD(gpnLightmapRowPointers, "D2Glide::Renderer::Glide::gpnLightmapRowPointers");
-uint8_t gbGlideGlobalLightGreen = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightGreen, "D2Glide::Renderer::Glide::gbGlideGlobalLightGreen");
-uint8_t gbGlideGlobalLightBlue = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightBlue, "D2Glide::Renderer::Glide::gbGlideGlobalLightBlue");
-uint8_t gbGlideGlobalLightRed = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightRed, "D2Glide::Renderer::Glide::gbGlideGlobalLightRed");
-// also labelled: glVertex
-uint8_t * gpGlideLightingTable = 0; D2_GLOBAL_GUARD(gpGlideLightingTable, "D2Glide::Renderer::Glide::gpGlideLightingTable");
-int gnGlidePerspectiveOriginX = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginX, "D2Glide::Renderer::Glide::gnGlidePerspectiveOriginX");
-// also labelled: gpGlideTexturePalette
-int32_t gnGlidePerspectiveScale = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveScale, "D2Glide::Renderer::Glide::gnGlidePerspectiveScale");
-int gnGlidePerspectiveOriginY = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginY, "D2Glide::Renderer::Glide::gnGlidePerspectiveOriginY");
-void * gpPerspectiveLookupTable = 0; D2_GLOBAL_GUARD(gpPerspectiveLookupTable, "D2Glide::Renderer::Glide::gpPerspectiveLookupTable");
-uint8_t (*gpGlideSmackerTexBuf0)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf0, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf0");
-uint8_t (*gpGlideSmackerTexBuf1)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf1, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf1");
-uint32_t gnGlideSmackTex1StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex1StartAddr, "D2Glide::Renderer::Glide::gnGlideSmackTex1StartAddr");
-uint32_t gnGlideSmackTex2StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex2StartAddr, "D2Glide::Renderer::Glide::gnGlideSmackTex2StartAddr");
-uint8_t (*gpGlideSmackerTexBuf2)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf2, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf2");
-uint32_t gnGlideTMUHandle = 0; D2_GLOBAL_GUARD(gnGlideTMUHandle, "D2Glide::Renderer::Glide::gnGlideTMUHandle");
-
 } // namespace D2Glide::Renderer::Glide
 
 namespace D2DDraw::Renderer::DirectDraw {

@@ -361,6 +361,24 @@
       ]
     },
     {
+      "name": "Sha1_Initialize",
+      "address": "00425d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425d90"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "definedIn": "Storm/Source/SSignature.inline.h",
+      "calledFunctions": [
+        "Sha1_Initialize"
+      ],
+      "usedTypes": [
+        "D2Sha1ContextStrc"
+      ]
+    },
+    {
       "name": "Sha1_Append",
       "address": "00425dd0",
       "lines": [

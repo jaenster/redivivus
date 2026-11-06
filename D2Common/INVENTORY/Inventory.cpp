@@ -4,12 +4,8 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/Engine/GfxUtil.h"
 #include "D2Client/UI/Panel.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/COMPOSIT/Composit.h"
-#include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
@@ -18,6 +14,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/BeltsTbls.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/TokTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -29,14 +26,15 @@
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/ITEMS/ItemMode.h"
 #include "D2Game/Monster/AI/AI.h"
 
@@ -215,8 +213,8 @@ static void __stdcall INVENTORY_RemoveItemFromGrid(D2UnitStrc * pItem, D2Invento
     if (pPageList->pGridCells) {
       int32_t nX;
       if (bUseWidthHeight) {
-        nX = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
-        nY = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
+        nX = Units::GetXPosFromDynamicPathUnit(pItem);
+        nY = Units::GetYPosFromDynamicPathUnit(pItem);
         ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, (char*)((uintptr_t)&bUseWidthHeight + 3), (char*)&byHeight, ".\\INVENTORY\\Inventory.cpp", 0x199);
         if (nY < (int)((uint32_t)byHeight + nY)) {
           nEndX = (uint32_t)*(uint8_t*)((char*)&bUseWidthHeight + 3) + nX;
@@ -237,8 +235,8 @@ static void __stdcall INVENTORY_RemoveItemFromGrid(D2UnitStrc * pItem, D2Invento
           } while (nCellY < (int)((uint32_t)byHeight + nY));
         }
       } else {
-        nX = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
-        nY = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
+        nX = Units::GetXPosFromDynamicPathUnit(pItem);
+        nY = Units::GetYPosFromDynamicPathUnit(pItem);
         pPageList->pGridCells[(uint32_t)pPageList->bWidth * nY + nX] = 0;
       }
     }
@@ -612,7 +610,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
     if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
       pRoom = Units::UNITS_GetRoom(pUnit);
       if (pRoom) {
-        bHasFlag = D2Client::UNIT::Player::CheckFlagWithMask(pUnit, 0x4000000);
+        bHasFlag = Units::CheckFlagWithMask(pUnit, 0x4000000);
         if (bHasFlag) {
           nUnitGUID = pUnit->nUnitGUID;
           eUnitType = pUnit->eUnitType;
@@ -1373,9 +1371,9 @@ D2UnitStrc * __stdcall GetUnitAndXAndY(D2InventoryStrc * pInventory, int32_t nGr
       int32_t nCoord;
       pUnit = pGridInfo->pGridCells[(uint32_t)pGridInfo->bWidth * nGridY + nGridX];
       if (pUnit) {
-        nCoord = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+        nCoord = Units::GetXPosFromDynamicPathUnit(pUnit);
         *pnOutX = nCoord;
-        nCoord = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+        nCoord = Units::GetYPosFromDynamicPathUnit(pUnit);
         *pnOutY = nCoord;
         return pUnit;
       }
@@ -1570,7 +1568,7 @@ D2UnitStrc * __stdcall INVENTORY_FindWornItemByType(D2InventoryStrc * pInventory
 uint32_t __stdcall INVENTORY_IsItemLocationValid(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     if (pInventory && pInventory->nSignatureMagic == 0x1020304 && pItem && pItem->eUnitType == UNIT_ITEM) {
       uint32_t nXPos;
-      nXPos = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
+      nXPos = Units::GetXPosFromDynamicPathUnit(pItem);
       return (int)nXPos >= 11 ? 0 : nXPos;
     }
 
@@ -1580,7 +1578,7 @@ uint32_t __stdcall INVENTORY_IsItemLocationValid(D2InventoryStrc * pInventory, D
 int32_t __stdcall INVENTORY_GetItemXPosition(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     if (pInventory && pInventory->nSignatureMagic == 0x1020304 && pUnit && pUnit->eUnitType == UNIT_ITEM) {
       int32_t nXPos;
-      nXPos = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+      nXPos = Units::GetXPosFromDynamicPathUnit(pUnit);
       return nXPos;
     }
 
@@ -4567,7 +4565,7 @@ static BOOL INVENTORY_CanDualWieldItems(D2UnitStrc * pUnit, D2UnitStrc * pItem1,
         }
       }
 
-      nShootsOrQuiverCheck = D2Client::UNIT::Player::ValidateClassId(pCharUnit->nClassId);
+      nShootsOrQuiverCheck = DATATBLS::MonsterTbls::ValidateClassId(pCharUnit->nClassId);
       switch (nShootsOrQuiverCheck) {
         case 0x1a1:
 
@@ -5028,7 +5026,7 @@ void __stdcall SaveCharAppearance(D2UnitStrc * pUnit, char * pArray1, char * pAr
             if (BVar1) {
               nTransformOrTypeCheck = COMPOSIT::Composit::COMPOSIT_GetBodyPartTransform(nBodyPartIdx, aBodyComponents);
               pArmTypeTxt = DATATBLS::TokTbls::TxtGetArmTypeLine(nTransformOrTypeCheck);
-              nErrorAddrOrClassId = D2Client::UNIT::GetClassId(pCurItem);
+              nErrorAddrOrClassId = Units::GetClassId(pCurItem);
               if (nErrorAddrOrClassId <= 0 || (nAltGfxIdx = INVENTORY_GetAlternateGfxIndex(*(int32_t*)pArmTypeTxt->token, *(int32_t*)pArmTypeTxt->token) , !nAltGfxIdx)) {
                 if (nBodyPartIdx < 0x10) {
                   pColor[(int)pArray1 - (int)pArray2] = -1;

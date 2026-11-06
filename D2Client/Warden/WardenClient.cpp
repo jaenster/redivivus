@@ -6,7 +6,6 @@
 #include "D2Client/D2IniConfigStrc.h"
 #include "D2Client/GAME/Msg.h"
 #include "Fog/3rdparty/crashy/Report.h"
-#include "Fog/Source/SSignature.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/3rdparty/zlib/uncompr.h"
 #include "Storm/D2Srp.h"
@@ -16,6 +15,7 @@
 #include "Storm/Source/SSignature.h"
 #include "globals/globals.h"
 #include "D2Client/GAME/Sound.data.h"
+#include "Storm/Source/SSignature.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -109,7 +109,7 @@ uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalL
 static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, uint8_t * pHashOut, uint32_t nSplitOffset, uint32_t nTotalLen, uint8_t * pModuleData) {
     uint8_t szUpperName[1024];
     D2Sha1ContextStrc sha1Ctx;
-    Fog::Source::SSignature::Sha1_Initialize(&sha1Ctx);
+    Storm::Source::SSignature::Sha1_Initialize(&sha1Ctx);
     if (nSplitOffset) {
       Storm::Source::SSignature::Sha1_Append(&sha1Ctx, pModuleData + nSplitOffset, nTotalLen - nSplitOffset);
       nTotalLen = nSplitOffset;

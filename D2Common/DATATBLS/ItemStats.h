@@ -9,13 +9,16 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2ItemStatCostTxt;
 struct D2StatesDataTbls;
 struct D2UnitStrc;
 typedef uint32_t eD2States;
+typedef uint32_t eD2UnitStat;
 
 namespace D2Common::DATATBLS::ItemStats {
 
 // Function declarations
+__attribute__((noinline)) inline struct D2ItemStatCostTxt * __fastcall TXT_ItemStatCost_GetLine(eD2UnitStat eUnitStat);
 void __stdcall SetState(struct D2UnitStrc * pUnit, eD2States eState, int32_t bSet);
 // No register arguments: ECX is loaded from pUnit [EBP+8] at 00639df3 before any use (1.14d asm).
 BOOL __stdcall UNIT_GetUnitState(struct D2UnitStrc * pUnit, eD2States eState);

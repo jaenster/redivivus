@@ -3,7 +3,6 @@
 #include "D2Game/GAME/Level.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -18,7 +17,7 @@
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Environment.h"
 #include "D2Common/PATH/Path.h"
-#include "D2Common/Skills.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Arena.h"
@@ -44,6 +43,7 @@
 #include "globals/globals.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2SeedStrc.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Objects/ObjectsMode.h"
 #include "D2Game/PLAYER/PlayerModes.h"
@@ -389,9 +389,9 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
             return;
           }
 
-          nErrorLine = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
           wPosY = (uint16_t)nErrorLine;
-          PLAYER::PlayerPets::PETS_ManagePetsByType(pGamePost, pUnit, (uint16_t)D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
+          PLAYER::PlayerPets::PETS_ManagePetsByType(pGamePost, pUnit, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
           return;
         }
 

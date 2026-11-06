@@ -4,6 +4,84 @@
   "file": "D2Common/DATATBLS/DataTbls.cpp",
   "functions": [
     {
+      "name": "TXT_States_GetLine",
+      "address": "00452040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00452040"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "definedIn": "D2Common/DATATBLS/DataTbls.inline.h",
+      "calledFunctions": [
+        "TXT_States_GetLine"
+      ],
+      "usedTypes": [
+        "D2StatesTxt",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "D2ApplyPercent",
+      "address": "00483360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483360"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "definedIn": "D2Common/DATATBLS/DataTbls.inline.h",
+      "calledFunctions": [
+        "D2ApplyPercent",
+        "_alldiv"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INV_GetCharStatsTxtLine",
+      "address": "004833e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004833e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "definedIn": "D2Common/DATATBLS/DataTbls.inline.h",
+      "calledFunctions": [
+        "INV_GetCharStatsTxtLine"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkillParam4",
+      "address": "004e6c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e6c70"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "definedIn": "D2Common/DATATBLS/DataTbls.inline.h",
+      "calledFunctions": [
+        "GetSkillParam4"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
       "name": "DATATBLS_NormalizeCodeTo4Chars",
       "address": "00611760",
       "lines": [

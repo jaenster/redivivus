@@ -127,7 +127,6 @@ struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromList(int32_t nFormIndex
 void __stdcall FORMS_DestroyList();
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nFormIndex);
 void __stdcall FORMS_DestroyLists();
-void __fastcall STRING_ZeroOneWCHAR(void * pBuffer);
 void __fastcall MAINMENU_CreateMessageBox(uint16_t * wszText1, uint16_t * wszText2, int32_t nButton1LabelId, int32_t nButton2LabelId, OnPress pfnOnPress1, OnPress pfnOnPress2, int32_t bEnableHotkeys, int32_t bSingleButtonEscape);
 // @abi __stdcall(void) -> void. Body is MOV [0x00779974],1 / RET - zero arguments, zero purge, so
 // __stdcall and __cdecl are indistinguishable from the RET alone. It is stored into

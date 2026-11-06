@@ -61,6 +61,11 @@ struct D2FogHeapDescStrc {
     /* 0x60 */ char szName[64]; // heap name string (variable length, 64 is minimum alloc)
 };
 
+struct D2SMemTablesStrc {
+    /* 0x000 */ uint32_t aSizeClassTable[256]; // size class per 16-byte request granule (SMemSizeClassBucketLookup)
+    /* 0x400 */ uint8_t aUppercaseTable[256]; // case-fold table SMemStringToUppercase indexes with a SIGNED char: bytes 0x80-0xff read the last 128 bytes of aSizeClassTable
+};
+
 struct SMemHeapDetailsStrc {
     /* 0x000 */ uint32_t dwSize; // set to sizeof by the caller (0x128)
     /* 0x004 */ uint32_t hHeap;
@@ -74,9 +79,21 @@ struct SMemHeapDetailsStrc {
     /* 0x124 */ uint32_t dwAllocatedBytes; // summed per region like the fields before it
 };
 
+struct SMemHeapStatsStrc {
+    /* 0x00 */ int field_0x0;
+    /* 0x04 */ int field_0x4;
+    /* 0x08 */ int nIntervalStat0; // cleared every interval by SMemResetHeapStats (00411291)
+    /* 0x0C */ int nIntervalStat1; // cleared every interval by SMemResetHeapStats (00411293)
+    /* 0x10 */ int field_0x10;
+    /* 0x14 */ int field_0x14;
+};
+
 namespace Storm::Source::SMem {
 
 // Function declarations
+// Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
+// The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
+__attribute__((noinline)) inline void MISC_OperatorDeleteShim(void * p);
 int __fastcall Unreferenced_004116e0(int param_1);
 uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId);
 uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash);

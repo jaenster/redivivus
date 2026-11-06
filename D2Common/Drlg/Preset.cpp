@@ -3,8 +3,6 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2CMP/DUNGEON/Dungeon.h"
 #include "D2CMP/SRC/TileProjects.h"
-#include "D2Client/Archive.h"
-#include "D2Client/DataTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -39,13 +37,14 @@
 #include "D2Common/Drlg/RoomTile.h"
 #include "D2Common/Drlg/Transform.h"
 #include "D2Common/Merc.h"
+#include "D2Common/Seed.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Level.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Hell/D2Hell.h"
@@ -56,8 +55,10 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Drlg/D2DrlgTileDataStrc.h"
 #include "D2Common/Drlg/Preset.data.h"
+#include "D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -803,11 +804,11 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                   pClassId = pBuffer;
                   if (nActId == 2) {
                     if ((int)pBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-                      pDataCursor = (char*)D2Client::DataTbls::CheckMonStatId(0x129);
+                      pDataCursor = (char*)DATATBLS::MonsterTbls::CheckMonStatId(0x129);
                       if (pClassId == pDataCursor) {
                         pClassId = (char*)0x17e;
                       } else {
-                        pDataCursor = (char*)D2Client::DataTbls::CheckMonStatId(0x16e);
+                        pDataCursor = (char*)DATATBLS::MonsterTbls::CheckMonStatId(0x16e);
                         if (pClassId != pDataCursor) {
                           goto add_preset_unit;
                         }
@@ -1971,7 +1972,7 @@ void __fastcall DRLGLEVEL_InitializeWithPresetArea(D2DrlgLevelStrc * pLevel) {
     pLevel->pDrlgLevelData.pDrlgLevelPresetData = pDrlgLevelPresetData;
     memset(pDrlgLevelPresetData, 0, sizeof(*pDrlgLevelPresetData));
     if (pLvlPrest->Files) {
-      nRandomFile = D2Client::Archive::RANDOM_RandomNumberSelector(&pLevel->sSeed, pLvlPrest->Files);
+      nRandomFile = Seed::RANDOM_RandomNumberSelector(&pLevel->sSeed, pLvlPrest->Files);
       pDrlgLevelPresetData->nPickedFile = nRandomFile;
     } else {
       pDrlgLevelPresetData->nPickedFile = -1;

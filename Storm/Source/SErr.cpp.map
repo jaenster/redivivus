@@ -136,7 +136,6 @@
       "calledFunctions": [
         "SErrPrepareAppFatal",
         "SERR_InternalEnterCriticalSection",
-        "GetCurrentThreadId",
         "SERR_InternalLeaveCriticalSection"
       ],
       "usedTypes": [
@@ -590,7 +589,6 @@
       "calledFunctions": [
         "SErrDisplayAppFatal",
         "SERR_InternalEnterCriticalSection",
-        "GetCurrentThreadId",
         "SMemZero",
         "SERR_InternalLeaveCriticalSection",
         "vsprintf",

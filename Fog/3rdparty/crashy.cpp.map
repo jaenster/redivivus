@@ -118,7 +118,6 @@
       "namespace": "Fog::_3rdparty::crashy",
       "calledFunctions": [
         "SYSTEM_CaptureThreadContext",
-        "GetCurrentThreadId",
         "SYSTEM_GetStackRegion",
         "__security_check_cookie"
       ],
@@ -146,7 +145,7 @@
       ]
     },
     {
-      "name": "GetCurrentThreadId",
+      "name": "ILT_GetCurrentThreadId",
       "address": "00401690",
       "lines": [],
       "namespace": "Fog::_3rdparty::crashy"
@@ -297,8 +296,7 @@
       ],
       "namespace": "Fog::_3rdparty::crashy",
       "calledFunctions": [
-        "SetCurrentThreadId",
-        "GetCurrentThreadId"
+        "SetCurrentThreadId"
       ]
     }
   ]

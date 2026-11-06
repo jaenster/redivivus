@@ -7,7 +7,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -21,6 +20,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
@@ -33,8 +33,8 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Seed.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Waypoints.h"
@@ -74,8 +74,8 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2UnitDataItemStrc.h"
-#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -158,7 +158,7 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
       D2Common::Units::SetXForStaticUnit(pItem, nX);
       D2Common::Units::SetYForStaticUnit(pItem, nY);
       nItemGUID = pItem->nUnitGUID;
-      bRestored = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0xea, pGame, pUnit, nItemGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pItem), D2Client::Units::GetYPosFromDynamicPathUnit(pItem), 0, 1, 0);
+      bRestored = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0xea, pGame, pUnit, nItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), 0, 1, 0);
       break;
       case eD2PlayerAnimMode_ns::Neutral:
         D2Common::Units::SetupUpdateFlag(pItem, 4);
@@ -233,7 +233,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         pSourceItem = (D2UnitStrc*)pUnit_00->nUnitGUID;
       }
 
-      nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x13f, pGame, pUnit, (int32_t)pSourceItem, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit_00), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit_00), 0, 1, 0);
+      nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x13f, pGame, pUnit, (int32_t)pSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00), 0, 1, 0);
       break;
       case Equipment:
         D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
@@ -255,7 +255,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       }
 
       pBodyLocParam = &eBodyLocation;
-      nPlaceResult = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, (DWORD)pSourceItem, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit_00), 0, (uint32_t*)pBodyLocParam);
+      nPlaceResult = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, (DWORD)pSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), 0, (uint32_t*)pBodyLocParam);
       break;
       case Ground:
 
@@ -321,7 +321,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
           D2Common::Units::SetXForStaticUnit(pItem, pItemUnknownStructure->nPosX);
           D2Common::Units::SetYForStaticUnit(pItem, nBodyLocId);
           nItemGUID = pItem->nUnitGUID;
-          nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x1c2, pGame, pUnit, nItemGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pItem), D2Client::Units::GetYPosFromDynamicPathUnit(pItem), 0, 0, 0);
+          nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x1c2, pGame, pUnit, nItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), 0, 0, 0);
           break;
         }
       case Equipment:

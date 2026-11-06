@@ -3,12 +3,9 @@
 #include "D2Game/Monster/MonsterAI.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacketSrv0x27.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/SCmd.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/npcmenu/Merc.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -28,6 +25,7 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Text.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/AiGeneral.h"
@@ -59,6 +57,9 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/npcmenu.data.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Txt/Skills.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -242,7 +243,7 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
             return;
           }
 
-          pSkillTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
+          pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
           if (pSkillTxt && nLevel >= pSkillTxt->reqlevel) {
             nStatValue = ((char)pHirelingTxt->nSkillLvlPerLvl[nLevelDiff] * nTmp >> 5) + (int)(char)pHirelingTxt->nSkillLevel[nLevelDiff];
             nStatValue = (int)nStatValue <= 0 ? 0 : nStatValue;
@@ -302,7 +303,7 @@ static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiS
       return 0;
     }
 
-    BOOL bInteractable = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pNpcUnit->nClassId, interact);
+    BOOL bInteractable = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pNpcUnit->nClassId, interact);
     if (!bInteractable) {
       return 1;
     }
@@ -659,8 +660,8 @@ void __fastcall ClearAISub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, fpAiClear fp
     while (pAiSub) {
       BOOL bHasInteractInfo;
       pNext = pAiSub->pNext;
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pAiSub->pUnit, ".\\MONSTER\\MonsterAI.cpp", 0x35c), 'b', '\x01', D2Client::UNIT::GetGUID(pUnit), 0);
-      if (!bClientSide || (bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pAiSub->pUnit, &eUnitType, &nUnitGUID) , bHasInteractInfo && eUnitType == UNIT_MONSTER) && (nMonsterGUID2 = D2Client::UNIT::GetGUID(pUnit) , nUnitGUID == nMonsterGUID2)) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pAiSub->pUnit, ".\\MONSTER\\MonsterAI.cpp", 0x35c), 'b', '\x01', D2Common::Units::GetGUID(pUnit), 0);
+      if (!bClientSide || (bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pAiSub->pUnit, &eUnitType, &nUnitGUID) , bHasInteractInfo && eUnitType == UNIT_MONSTER) && (nMonsterGUID2 = D2Common::Units::GetGUID(pUnit) , nUnitGUID == nMonsterGUID2)) {
         UNIT::SUnit::ClearInteractInfo(pAiSub->pUnit);
       }
       if (fpFunction) {

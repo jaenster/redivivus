@@ -2,7 +2,6 @@
 
 #include "D2Client/GAME/SCmd.h"
 #include "support/d2_trace.h"
-#include "D2Client/Archive.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacket0x18Decoded.h"
@@ -48,7 +47,6 @@
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/npcmenu/Merc.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/MonUnique.h"
@@ -59,7 +57,6 @@
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Client/UNIT/UnitMode.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Client/Warden/WardenClient.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -72,6 +69,7 @@
 #include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -85,8 +83,9 @@
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2CreateMonsterUnitStrc.h"
@@ -95,9 +94,7 @@
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/GAME/Server.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A4Q2.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Net/Game/Server.h"
@@ -115,9 +112,10 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UNIT/Missile.h"
-#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Seed.inline.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/Arena.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -1064,24 +1062,8 @@ void __fastcall SCMD_ClearPlayerTradeFields(D2UnitStrc * pUnit) {
     pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = 0;
 }
 
-D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2Skills eSkill) {
-    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      return D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    }
-
-    return nullptr;
-}
-
 int Unreferenced_0045c4e0() {
     return D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount;
-}
-
-D2ItemStatCostTxt * __fastcall TXT_ItemStatCost_GetLine(eD2UnitStat eUnitStat) {
-    if ((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-      return D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
-    }
-
-    return nullptr;
 }
 
 // Writes the character save data to disk. Constructs the full .d2s file path from the save directory and character name, validates the save buffer signature (0xaa55aa55), extracts the player status byte from the appropriate offset based on version (offset 0x18 for version <92, 0x24 for version >=92), then writes the entire raw save buffer to the file.
@@ -2698,7 +2680,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x73_CreateMissile(D2GSPacketSrv0x73 * p
     }
 
     D2Common::Units::Missile::SetCurrentFrame(pUnit, (uint32_t)wCurrentFrame);
-    uint32_t nGfxFrame = Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount >> 8);
+    uint32_t nGfxFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount >> 8);
     pUnit->nGfxCurrentFrame = nGfxFrame << 8;
 }
 
@@ -3393,8 +3375,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData) {
         nReadBits = Fog::BitBuffer::ReadUnsigned(&bitBuffer, (uint32_t)nSendBits);
       }
       if (!pStatList && (pStatList = D2Common::Stats::StatsEx::GetStatList(pUnit, STATE_none, 0x40) , !pStatList)) {
-        nSignedBits = UNIT::GetGUID(pUnit);
-        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0x40, 0, Units::GetType(pUnit), nSignedBits);
+        nSignedBits = D2Common::Units::GetGUID(pUnit);
+        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0x40, 0, D2Common::Units::GetType(pUnit), nSignedBits);
         D2Common::Stats::StatsEx::SetState(pStatList, STATE_none);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
         if (pStatList) {

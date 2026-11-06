@@ -4,8 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/Units.h"
-#include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -30,6 +28,7 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ObjectInitFnArg.h"
@@ -43,7 +42,6 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/UNIT/Party.h"
@@ -60,6 +58,7 @@
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Text.h"
+#include "D2Common/Units.inline.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS/A1Q2.h"
@@ -855,8 +854,8 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     bool bActiveUnit = true;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pQuestArgs->pTarget);
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    nPosYSpawn2 = D2Client::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pTarget);
-    int32_t nPlayerLevel = D2Client::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pTarget);
+    nPosYSpawn2 = D2Common::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pTarget);
+    int32_t nPlayerLevel = D2Common::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pTarget);
     UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x231, nPlayerLevel, nPosYSpawn2, pGame, pRoom, bActiveUnit, nPosYSpawn, pCreateParam);
     D2QuestDataStrc* pNextQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
     if (pNextQuestData) {

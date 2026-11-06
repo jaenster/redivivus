@@ -3,10 +3,7 @@
 #include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2LightMapStrc.h"
-#include "D2Client/DataTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/RosterPets.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -19,21 +16,19 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
+#include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
-#include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
-#include "D2Common/Skills.h"
-#include "D2Common/Stats/StatsEx.h"
-#include "D2Common/Txt/D2TxtLinkNodeStrc.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -57,6 +52,8 @@
 #include "Fog/Save.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/ItemTbls.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -450,7 +447,7 @@ void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         pPetListEntry = (D2PetStrc*)&pPlayerPets->pPetList[nPetListOffset].pPets;
         if (pPetListEntry) {
           for (pPetEntry = *(D2PetStrc**)pPetListEntry; pPetEntry; pPetEntry = pPetEntry->pNext) {
-            nPetUnitGUID = D2Client::UNIT::GetGUID(pPetUnit);
+            nPetUnitGUID = D2Common::Units::GetGUID(pPetUnit);
             if (pPetEntry->nPetGUID == nPetUnitGUID) {
               *(uint32_t*)pPetEntry &= -2;
               D2PetArgStrc sPetArgs = {0};
@@ -1514,7 +1511,7 @@ uint32_t __fastcall GetCarry1FlagOfitem(D2UnitStrc * pUnit) {
     }
 
     nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-    D2UniqueItemsTxt* pUniqueItemTxt = D2Client::DataTbls::INV_GetUniqueItemsTxtLine(nFileIndex);
+    D2UniqueItemsTxt* pUniqueItemTxt = D2Common::DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nFileIndex);
     if (pUniqueItemTxt) {
       return (uint32_t)((*((uint8_t*)pUniqueItemTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) != 0);
     }

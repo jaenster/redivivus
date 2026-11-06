@@ -12,7 +12,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Lang/Unicode/UNISYS.data.h"
-#include "D2Launch/MainMenus.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -954,7 +954,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
         break;
         case 10:
-          Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 2, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 2, STRING_ZeroOneWCHAR);
         STRING_CopyWideString(wszText1, wszSuffix);
         wszScratch[2] = L'(';
         STRING_CopyCharToWCharWithSetMaxSize(wszScratch, (char*)(wszScratch + 2), 2);

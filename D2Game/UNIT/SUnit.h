@@ -32,13 +32,6 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, struct D2
 #endif
 
 // Data types
-struct __attribute__((packed)) D2AnimDataRecordStrc {
-    /* 0x00 */ char szAnimDataName[8];
-    /* 0x08 */ int nFrames;
-    /* 0x0C */ int nAnimSpeed;
-    /* 0x10 */ uint8_t pFrameFlags[144];
-};
-
 struct D2SUnitStairs {
     /* 0x00 */ uint32_t nX;
     /* 0x04 */ uint32_t nY;

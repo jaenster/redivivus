@@ -9,7 +9,6 @@
 #include "d2_platform.h"
 
 // Forward declarations
-struct D2PoolManagerStrc;
 struct D2UnitStrc;
 #ifndef RECON_FPTD_fnCUnitEventCallback
 #define RECON_FPTD_fnCUnitEventCallback
@@ -31,7 +30,6 @@ struct D2CUnitEventStrc {
 namespace D2Client::UNIT::CUnitEvent {
 
 // Function declarations
-struct D2PoolManagerStrc * __fastcall GetMemPool(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall FreeEventList(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\CUnitEvent.cpp

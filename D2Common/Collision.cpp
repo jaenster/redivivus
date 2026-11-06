@@ -5,7 +5,6 @@
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SubTile.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/Units.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomCoordListStrc.h"
 #include "D2Common/D2RoomExStrc.h"
@@ -23,7 +22,6 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -34,6 +32,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -462,9 +461,9 @@ D2UnitStrc * __stdcall COLLISION_FindNearbyUnitByCallback(D2UnitStrc * pUnit, pf
     }
 
     int32_t nPosX;
-    nPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+    nPosX = Units::GetXPosFromDynamicPathUnit(pUnit);
     int32_t nPosY;
-    nPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+    nPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pUnitRoom, &ppAdjacentRooms, &nAdjacentRoomCount);
     for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjacentRoomCount; nAdjRoomIdx++) {
       iVar1 = nAdjRoomIdx;

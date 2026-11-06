@@ -62,7 +62,6 @@ void DRAW_Overlay_SecondsLeftToGame();
 // @evidence Body is one instruction: JMP 0x0046c060. The apparent 'duplicate body' was Ghidra following the jump.
 // EBX is not an argument: the target DRAW_Overlay_SecondsLeftToGame never reads it.
 void thunk_DRAW_Overlay_SecondsLeftToGame();
-uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
 void __fastcall CLIENT_SpawnMonstersAroundUnit(struct D2UnitStrc * pUnit, int32_t nMonsterClassId, int32_t nSpawnCount);
 void __fastcall DRLGROOM_SpawnRandomMonsters(struct D2RoomStrc * pRoom);
 int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppBestUnit, int32_t * pnBestValue, fnRoomUnitScanCallback pfnCallback);

@@ -16,7 +16,6 @@
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
 #include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -35,7 +34,6 @@
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/ErrorManager.h"
@@ -43,6 +41,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/Unit.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -120,8 +119,8 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
     pUnit->uSideData.pClientSide.nLastClickX = nX;
     pUnit->uSideData.pClientSide.nLastClickY = (uint16_t)nY;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    uint32_t nCurX = Units::GetXPosFromDynamicPathUnit(pUnit);
-    uint32_t nCurY = Units::GetYPosFromDynamicPathUnit(pUnit);
+    uint32_t nCurX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+    uint32_t nCurY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     switch (eMoveType) {
       case 1:
         {
@@ -216,9 +215,9 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
     pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
     if (pUnit == pPlayerUnit_lcl) {
       int16_t nSendY;
-      nClickYSaved = Units::GetYPosFromDynamicPathUnit(pUnit);
+      nClickYSaved = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       nSendY = (int16_t)nClickYSaved;
-      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT(0x5f, (int16_t)Units::GetXPosFromDynamicPathUnit(pUnit), nSendY);
+      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT(0x5f, (int16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), nSendY);
       return;
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {

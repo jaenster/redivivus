@@ -20,7 +20,6 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/Src/D2WinFont.h"
 #include "D2Win/Src/D2WinPalette.h"
@@ -29,7 +28,7 @@
 #include "Fog/File.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Launch/MainMenus.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -362,7 +361,7 @@ void __stdcall DRAW_AltItems() {
 void StaticInit_gaGroundItemLabels() {
     int nRemaining = 0x1f;
     do {
-      Fog::File::CONTAINER_InitializeBuffer(gaGroundItemLabels[-nRemaining + 31].wszName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(gaGroundItemLabels[-nRemaining + 31].wszName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       nRemaining--;
     } while (nRemaining >= 0);
 }

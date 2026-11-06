@@ -3,17 +3,9 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2CMP/Pallete.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/GAME/SCmd.h"
-#include "D2Client/Stats.h"
-#include "D2Client/UNIT.h"
-#include "D2Client/UNIT/CUnitEvent.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
-#include "D2Client/Units.h"
 #include "D2Common/COMPOSIT/Composit.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -39,6 +31,7 @@
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/Missile.h"
@@ -46,10 +39,8 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/PLAYER/Player.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/UNIT/PlayerList.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -64,6 +55,11 @@
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/PlrSkills.h"
 #include "D2Common/D2UnitDataItemStrc.h"
+#include "D2Common/DATATBLS/DataTbls.inline.h"
+#include "D2Common/DATATBLS/ItemStats.inline.h"
+#include "D2Common/DATATBLS/ItemTbls.inline.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/Monster/AI/AI.h"
 
@@ -2032,12 +2028,12 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
     }
 
     int nFileIndex = ITEM_GetItemData_nFileIndex(pItem);
-    D2SetItemsTxt* pSetItemsTxt = D2Client::DataTbls::GetSetItemsLine(nFileIndex);
+    D2SetItemsTxt* pSetItemsTxt = DATATBLS::ItemTbls::GetSetItemsLine(nFileIndex);
     if (!pSetItemsTxt) {
       return 0;
     }
 
-    D2SetsTxt* pSetsTxt = D2Client::DataTbls::GetSetsLine((int)pSetItemsTxt->set);
+    D2SetsTxt* pSetsTxt = DATATBLS::ItemTbls::GetSetsLine((int)pSetItemsTxt->set);
     if (!pSetsTxt) {
       return 0;
     }
@@ -2056,7 +2052,7 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
               bItemNotDisabledOrBroken = CheckItemFlag(pCarriedItem, ITEMFLAG_BROKEN, 0x144f, ".\\ITEMS\\Items.cpp");
               if (!bItemNotDisabledOrBroken) {
                 nFileIndex = ITEM_GetItemData_nFileIndex(pCarriedItem);
-                pCurSetItemsTxt = D2Client::DataTbls::GetSetItemsLine(nFileIndex);
+                pCurSetItemsTxt = DATATBLS::ItemTbls::GetSetItemsLine(nFileIndex);
                 if (pCurSetItemsTxt && pCurSetItemsTxt->set == pSetItemsTxt->set) {
                   nSetMask |= 1 << D2_SHIFT_COUNT(pCurSetItemsTxt->setIndex);
                 }
@@ -2770,11 +2766,11 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       }
 
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, uVal, 4);
-      nErrLine = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
-      if ((uint32_t)nErrLine <= 0 || (uVal = D2Client::Units::GetXPosFromDynamicPathUnit(pItem) , uVal < 0xf)) {
-        nErrLine = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
+      nErrLine = Units::GetXPosFromDynamicPathUnit(pItem);
+      if ((uint32_t)nErrLine <= 0 || (uVal = Units::GetXPosFromDynamicPathUnit(pItem) , uVal < 0xf)) {
+        nErrLine = Units::GetXPosFromDynamicPathUnit(pItem);
         if ((uint32_t)nErrLine > 0) {
-          uVal = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
+          uVal = Units::GetXPosFromDynamicPathUnit(pItem);
         } else {
           uVal = 0;
         }
@@ -2788,11 +2784,11 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       }
 
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, uVal, 4);
-      nErrLine = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
-      if ((uint32_t)nErrLine <= 0 || (uVal = D2Client::Units::GetYPosFromDynamicPathUnit(pItem) , uVal < 0xf)) {
-        nErrLine = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
+      nErrLine = Units::GetYPosFromDynamicPathUnit(pItem);
+      if ((uint32_t)nErrLine <= 0 || (uVal = Units::GetYPosFromDynamicPathUnit(pItem) , uVal < 0xf)) {
+        nErrLine = Units::GetYPosFromDynamicPathUnit(pItem);
         if ((uint32_t)nErrLine > 0) {
-          uVal = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
+          uVal = Units::GetYPosFromDynamicPathUnit(pItem);
         } else {
           uVal = 0;
         }
@@ -2946,7 +2942,7 @@ static void __stdcall ITEMS_SumSocketedItemStats(eD2UnitStat eUnitStat, int * pO
     for (pUnit_00 = INVENTORY::Inventory::INVENTORY_GetFirstItem(pItem->pInventory); pUnit_00; pUnit_00 = INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit_00)) {
       D2UnitStrc* pUnit_01;
       pUnit_01 = INVENTORY::Inventory::GetCarriedItem(pUnit_00);
-      eAnimMode = D2Client::UNIT::GetAnimMode(pItem);
+      eAnimMode = Units::GetAnimMode(pItem);
       if (eAnimMode == eD2PlayerAnimMode_ns::Neutral) {
         nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_01, eUnitStat, 0);
         *pOutTotal += nStatVal;
@@ -3169,14 +3165,14 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
       }
 
       nIdx = ITEM_GetItemData_nFileIndex(pUnit);
-      pUniqueTxt = D2Client::DataTbls::INV_GetUniqueItemsTxtLine(nIdx);
+      pUniqueTxt = DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nIdx);
       if (!pUniqueTxt) {
         goto apply_common_requirements;
       }
       if (!pUnit2) {
         nMaxLvlReqTmp = (uint32_t)pUniqueTxt->lvlReq;
       } else {
-        nClassId = D2Client::UNIT::Player::CheckFlagWithMask(pUnit2, 0x2000000);
+        nClassId = Units::CheckFlagWithMask(pUnit2, 0x2000000);
         if (!nClassId) {
           wItemVersion = ITEM_GetItemData_wItemVersion(pUnit);
           if (wItemVersion < 1) {
@@ -3194,7 +3190,7 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
       break;
       case QUALITY_SET:
         nIdx = ITEM_GetItemData_nFileIndex(pUnit);
-      pSetItemTxt = D2Client::DataTbls::GetSetItemsLine(nIdx);
+      pSetItemTxt = DATATBLS::ItemTbls::GetSetItemsLine(nIdx);
       if (!pSetItemTxt) {
         goto apply_common_requirements;
       }
@@ -3251,7 +3247,7 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
       if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex < sgptDataTable->nTxtSkillsCount) {
         pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex;
         if (pSkillTxt) {
-          if (!pUnit2 || (eUnitType = D2Client::Units::GetType(pUnit2) , eUnitType != UNIT_PLAYER) || (cCharClass = pSkillTxt->charclass , cCharClass < '\0' || cCharClass >= 7 || (uAffixIdx = D2Client::UNIT::GetClassId(pUnit2) , (uint8_t)uAffixIdx != (int)cCharClass))) {
+          if (!pUnit2 || (eUnitType = Units::GetType(pUnit2) , eUnitType != UNIT_PLAYER) || (cCharClass = pSkillTxt->charclass , cCharClass < '\0' || cCharClass >= 7 || (uAffixIdx = Units::GetClassId(pUnit2) , (uint8_t)uAffixIdx != (int)cCharClass))) {
             nClassId = (int)pSkillTxt->reqlevel + 6;
           } else {
             nClassId = (uint32_t)pSkillTxt->reqlevel;
@@ -3724,7 +3720,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
           if (pDVar1 && pDVar1->itemtrans < 0x15) {
             bIsType = ITEMS_IsA(pItem, (int)pDVar1->itemtype);
             if (bIsType) {
-              bIsType = D2Client::UNIT::GetClassId(pItem);
+              bIsType = Units::GetClassId(pItem);
               pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(bIsType);
               if (pItemsTxt) {
                 pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bTransform, (uint32_t)pDVar1->itemtrans);
@@ -3797,7 +3793,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
       }
 
       nStateOrAffixIdx = ITEM_GetItemData_nFileIndex(pItem);
-      pUniqueTxt = D2Client::DataTbls::INV_GetUniqueItemsTxtLine(nStateOrAffixIdx);
+      pUniqueTxt = DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nStateOrAffixIdx);
       if (!pUniqueTxt) {
         return nullptr;
       }
@@ -3826,7 +3822,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
       }
 
       nStateOrAffixIdx = ITEM_GetItemData_nFileIndex(pItem);
-      pSetItemTxt = D2Client::DataTbls::GetSetItemsLine(nStateOrAffixIdx);
+      pSetItemTxt = DATATBLS::ItemTbls::GetSetItemsLine(nStateOrAffixIdx);
       if (!pSetItemTxt) {
         return nullptr;
       }
@@ -4612,7 +4608,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         if (nParam1 || (eItemFlags = ITEM_GetItemData_eD2ItemFlag(pUnit) , (eItemFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
           nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0xc);
           if (nFileVersion <= 0x5c) {
-            pSetsTxt = D2Client::DataTbls::GetSetsLine(nBitVal);
+            pSetsTxt = DATATBLS::ItemTbls::GetSetsLine(nBitVal);
             if (!pSetsTxt) {
               set_error:
               bError = 1;
@@ -4639,7 +4635,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               bError = 1;
             }
           } else {
-            pSetItemsTxt = D2Client::DataTbls::GetSetItemsLine(nBitVal);
+            pSetItemsTxt = DATATBLS::ItemTbls::GetSetItemsLine(nBitVal);
             if (!pSetItemsTxt) {
               goto set_error;
             }
@@ -4977,9 +4973,9 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         read_stat_list:
         pStatsEx = Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(pUnit, (eD2States)pItemStatCostTxt, nParam1);
         if (!pStatsEx) {
-          nClassId = D2Client::UNIT::GetGUID(pUnit);
+          nClassId = Units::GetGUID(pUnit);
           eQualityType = QUALITY_MAGIC;
-          pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), nParam1, (int32_t)pStatsEx, eQualityType, nClassId);
+          pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(Units::GetMemPool(pUnit), nParam1, (int32_t)pStatsEx, eQualityType, nClassId);
           Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
           Stats::StatsEx::SetState(pStatsEx, (eD2States)pItemStatCostTxt);
         }
@@ -5274,7 +5270,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0xe);
               ItemMods::ITEMMODS_GetQualityMinMax(nBitVal, &nSkillId, &nSkillLevel);
               nStatVal = 7;
-              pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_item_singleskill);
+              pStatCostTxt = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_item_singleskill);
               nTmpVal2 = nSkillId;
               if (pStatCostTxt) {
                 nStatVal = (1 << D2_SHIFT_COUNT(pStatCostTxt->saveBits[0])) - 1;
@@ -5822,8 +5818,8 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     int nDexAdjust = 0;
     int32_t nReqPercentMod = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_req_percent, 0);
     if (nReqPercentMod) {
-      nStrAdjust = D2Client::Stats::D2ApplyPercent((uint32_t)wReqStr, nReqPercentMod, 100);
-      nDexAdjust = D2Client::Stats::D2ApplyPercent((uint32_t)wReqDex, nReqPercentMod, 100);
+      nStrAdjust = DATATBLS::DataTbls::D2ApplyPercent((uint32_t)wReqStr, nReqPercentMod, 100);
+      nDexAdjust = DATATBLS::DataTbls::D2ApplyPercent((uint32_t)wReqDex, nReqPercentMod, 100);
     }
     if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMissile && (pUnit->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_ETHEREAL) != UNIT_PLAYER) {
       nStrAdjust += -10;
@@ -5886,7 +5882,7 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
       eItemType = ITEM_GetItemData_wType(pUnit);
       if (eItemType != ITEMTYPE_Book || (nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0) , nStatValue > 0)) {
         eVar1 = TXT_ItemTypes_GetClass(pUnit);
-        if (eVar1 == CLASS_COUNT || pCharUnit && ((eUnitType = pCharUnit->eUnitType , eUnitType == UNIT_MONSTER && eVar1 == CLASS_BARBARIAN) && (nReqPercentMod = D2Client::UNIT::Player::ValidateClassId(pCharUnit->nClassId) , nReqPercentMod - 0x230U < 2) || eUnitType == UNIT_PLAYER && eVar1 == pCharUnit->nClassId)) {
+        if (eVar1 == CLASS_COUNT || pCharUnit && ((eUnitType = pCharUnit->eUnitType , eUnitType == UNIT_MONSTER && eVar1 == CLASS_BARBARIAN) && (nReqPercentMod = DATATBLS::MonsterTbls::ValidateClassId(pCharUnit->nClassId) , nReqPercentMod - 0x230U < 2) || eUnitType == UNIT_PLAYER && eVar1 == pCharUnit->nClassId)) {
           return 1;
         }
       }
@@ -6040,7 +6036,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
       if (nItemVersion >= 1) {
         nResult = ITEMS_CalculateGamblePrice(nPlayerLevel, pItem);
         if (nReducedPrices) {
-          nErrorAddress = D2Client::Stats::D2ApplyPercent(nResult, nReducedPrices, 100);
+          nErrorAddress = DATATBLS::DataTbls::D2ApplyPercent(nResult, nReducedPrices, 100);
           return nResult - nErrorAddress;
         }
 
@@ -6067,7 +6063,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
       dwResult = ITEMS_IsA(pItem, ITEMTYPE_BodyPart);
       if (dwResult) {
         nMonStatsId = ITEM_GetItemData_nFileIndex(pItem);
-        pMonStatsTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(nMonStatsId);
+        pMonStatsTxt = DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nMonStatsId);
         if (pMonStatsTxt) {
           nPrice = pItemsTxt->dwCost + pMonStatsTxt->aLevel[nDifficulty] * 8;
           __frame0.nSellPrice = nPrice;
@@ -6221,7 +6217,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
             nAffixRepairDelta = ITEM_GetItemData_nFileIndex(pItem);
           if (nAffixRepairDelta >= 0) {
             nAffixRepairDelta = ITEM_GetItemData_nFileIndex(pItem);
-            pUniqueItemsTxt = D2Client::DataTbls::INV_GetUniqueItemsTxtLine(nAffixRepairDelta);
+            pUniqueItemsTxt = DATATBLS::ItemTbls::INV_GetUniqueItemsTxtLine(nAffixRepairDelta);
             if (pUniqueItemsTxt) {
               if (nPrice <= 0xffff || !pUniqueItemsTxt->costMult) {
                 nAffixRepairDelta = pUniqueItemsTxt->costMult;
@@ -6289,7 +6285,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
           goto add_stat_costs;
           case QUALITY_SET:
             nAffixRepairDelta = ITEM_GetItemData_nFileIndex(pItem);
-          pSetItemsTxt = D2Client::DataTbls::GetSetItemsLine(nAffixRepairDelta);
+          pSetItemsTxt = DATATBLS::ItemTbls::GetSetItemsLine(nAffixRepairDelta);
           if (pSetItemsTxt) {
             if (nPrice <= 0xffff || !pSetItemsTxt->costMult) {
               nAffixRepairDelta = pSetItemsTxt->costMult;
@@ -6472,7 +6468,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
         case 3:
           {
             if (nReducedPrices) {
-              nResult = D2Client::Stats::D2ApplyPercent(iVar3, nReducedPrices, 100);
+              nResult = DATATBLS::DataTbls::D2ApplyPercent(iVar3, nReducedPrices, 100);
               iVar3 -= nResult;
             }
 
@@ -6486,7 +6482,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
         default:
           {
             if (nReducedPrices) {
-              nResult = D2Client::Stats::D2ApplyPercent(__frame0.nSellPrice, nReducedPrices, 100);
+              nResult = DATATBLS::DataTbls::D2ApplyPercent(__frame0.nSellPrice, nReducedPrices, 100);
               __frame0.nSellPrice = iVar4 - nResult;
             }
             if (__frame0.nSellPrice < 1) {
@@ -6737,7 +6733,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nStatValue = pItemUnit->pPath.pStaticPath->nPosX;
         clamp_grid_x:
-        if ((uint32_t)nStatValue <= 0 || (nBitValue = D2Client::Units::GetXPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
+        if ((uint32_t)nStatValue <= 0 || (nBitValue = Units::GetXPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
           goto read_grid_x;
         }
         nBitValue = 0xf;
@@ -6748,9 +6744,9 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
 
         read_grid_x:
-        nErrLine = D2Client::Units::GetXPosFromDynamicPathUnit(pItemUnit);
+        nErrLine = Units::GetXPosFromDynamicPathUnit(pItemUnit);
         if ((uint32_t)nErrLine > 0) {
-          nBitValue = D2Client::Units::GetXPosFromDynamicPathUnit(pItemUnit);
+          nBitValue = Units::GetXPosFromDynamicPathUnit(pItemUnit);
         } else {
           nBitValue = 0;
         }
@@ -6766,7 +6762,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nStatValue = pItemUnit->pPath.pStaticPath->nPosY;
         clamp_grid_y:
-        if ((uint32_t)nStatValue <= 0 || (nBitValue = D2Client::Units::GetYPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
+        if ((uint32_t)nStatValue <= 0 || (nBitValue = Units::GetYPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
           goto read_grid_y;
         }
         nBitValue = 0xf;
@@ -6777,9 +6773,9 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
 
         read_grid_y:
-        nErrLine = D2Client::Units::GetYPosFromDynamicPathUnit(pItemUnit);
+        nErrLine = Units::GetYPosFromDynamicPathUnit(pItemUnit);
         if ((uint32_t)nErrLine > 0) {
-          nBitValue = D2Client::Units::GetYPosFromDynamicPathUnit(pItemUnit);
+          nBitValue = Units::GetYPosFromDynamicPathUnit(pItemUnit);
         } else {
           nBitValue = 0;
         }
@@ -7499,7 +7495,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   }
 
                   Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, (uint32_t)bySaveBits);
-                  pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_item_mindamage_percent);
+                  pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_item_mindamage_percent);
                   anStatSeenValues[0x12] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_item_mindamage_percent, 0);
                   nBitValue = (uint32_t)pItemStatCostLine->saveBits[0];
                   nClampedValue = pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x12];
@@ -7524,7 +7520,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   }
 
                   Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, (uint32_t)bySaveBits);
-                  pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_firemaxdam);
+                  pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_firemaxdam);
                   anStatSeenValues[0x31] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_firemaxdam, 0);
                   nBitValue = (uint32_t)pItemStatCostLine->saveBits[0];
                   nClampedValue = pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x31];
@@ -7551,7 +7547,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   switch (eUnitStat) {
                     case UNITSTAT_lightmindam:
                       ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
-                    pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_lightmaxdam);
+                    pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_lightmaxdam);
                     anStatSeenValues[0x33] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_lightmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x33], pBitBuffer);
                     break;
@@ -7559,25 +7555,25 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                       goto write_generic_stat;
                     case UNITSTAT_magicmindam:
                       ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
-                    pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_magicmaxdam);
+                    pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_magicmaxdam);
                     anStatSeenValues[0x35] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_magicmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x35], pBitBuffer);
                     break;
                     case UNITSTAT_coldmindam:
                       ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
-                    pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_coldmaxdam);
+                    pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_coldmaxdam);
                     anStatSeenValues[0x37] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_coldmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x37], pBitBuffer);
-                    pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_coldlength);
+                    pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_coldlength);
                     anStatSeenValues[0x38] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_coldlength, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x38], pBitBuffer);
                     break;
                     case UNITSTAT_poisonmindam:
                       ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
-                    pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_poisonmaxdam);
+                    pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_poisonmaxdam);
                     anStatSeenValues[0x3a] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_poisonmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x3a], pBitBuffer);
-                    pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_poisonlength);
+                    pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_poisonlength);
                     anStatSeenValues[0x3b] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_poisonlength, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x3b], pBitBuffer);
                   }

@@ -2,9 +2,7 @@
 
 #include "D2Game/GAME/Event/Dispatch/Monster.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/Chat.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -16,12 +14,13 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ObjectOperateFnArg.h"
@@ -31,7 +30,6 @@
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Monster/MonsterAI.h"
 #include "D2Game/Monster/MonsterMode.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillMonst.h"
 #include "D2Game/SKILLS/SkillSor.h"
 #include "D2Game/SKILLS/SkillsServer.h"
@@ -43,6 +41,7 @@
 #include "Fog/Memory.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -319,7 +318,7 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     sMonsterKill.pVictim = pUnit;
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
-      pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       byAnimMode2 = 'd';
       if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         byAnimMode2 = 'e';
@@ -350,7 +349,7 @@ void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     killStrc.pVictim = pUnit;
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
-      pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       byAnimMode2 = 'd';
       if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         byAnimMode2 = 'e';
@@ -407,7 +406,7 @@ void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, D2UnitStrc * 
     D2MonsterKillStrc sMonsterKill;
     D2Common::PATH::DynamicPath::PATH_RestoreVelocityAndPathType(pUnit->pPath.pDynamicPath);
     int32_t nMonClassId = pUnit->nClassId;
-    uint32_t bHasGetHitFlag = D2Client::Source::ClientEngine::GetSomeMonsterStatFlag(nMonClassId, 3);
+    uint32_t bHasGetHitFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nMonClassId, 3);
     if (!bHasGetHitFlag) {
       SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 1, 0, 0);
       return;

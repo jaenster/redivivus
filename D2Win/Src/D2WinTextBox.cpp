@@ -21,6 +21,7 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/EscMenu.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinScrollbar.h"
@@ -190,7 +191,7 @@ int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_
         exit(-1);
       }
 
-      Fog::File::CONTAINER_InitializeBuffer(wszLocalBuf, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszLocalBuf, 2, 0x400, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLocalBuf, wszText);
       nCurLineNode = pnTextBox->sStyleControl.dwState;
       for (nLineNode = 0; nLineNode < nRow; nLineNode++) {
@@ -1394,7 +1395,7 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
       if (!((uint32_t)pTextBox->sStyleControl.fpDraw & 0x20)) {
         nVisibleLines = pTextBox->sControl.dwSizeX + pTextBox->sStyleControl.neD2FormType * -2;
         if (nAlignment == 2) {
-          Fog::File::CONTAINER_InitializeBuffer(wszIndent, 2, 6, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszIndent, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           memcpy(wszIndent, L"     ", 0xc);
           nStrLen = D2WinFont::DRAW_text0(wszIndent);
           nVisibleLines -= nStrLen;
@@ -1567,7 +1568,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
       nAvailWidth = pTextBox->sControl.dwSizeX + pTextBox->sStyleControl.neD2FormType * -2;
       nMaxPixelWidth = nAvailWidth;
       if (nAlignment == 2) {
-        Fog::File::CONTAINER_InitializeBuffer(wszIndentBuf, 2, 6, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(wszIndentBuf, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         memcpy(wszIndentBuf, L"     ", 0xc);
         nLine = D2WinFont::DRAW_text0(wszIndentBuf);
         nMaxPixelWidth = nAvailWidth - nLine;

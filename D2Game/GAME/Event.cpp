@@ -8,6 +8,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
+#include "D2Common/Units.h"
 #include "D2Game/D2TimerListStrc.h"
 #include "D2Game/GAME/Event/Dispatch/Monster.h"
 #include "D2Game/GAME/Targets.h"

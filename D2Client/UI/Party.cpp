@@ -13,7 +13,6 @@
 #include "D2Client/GAME/Roster.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/PlayerList.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -26,7 +25,6 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
@@ -44,6 +42,7 @@
 #include "D2Client/D2IniConfigStrc.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/Party.data.h"
+#include "D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -475,7 +474,7 @@ void __stdcall UI_DrawPartyButtons(D2UiPartyStrc * pUiParty) {
           bShowRedBox = true;
         }
         if (pUiParty->nCharLevel < 9) {
-          nResult = UNIT::PlayerList::GetFlag(UNIT::GetGUID(pUnit), pUiParty->nRosterGUID, 8);
+          nResult = UNIT::PlayerList::GetFlag(D2Common::Units::GetGUID(pUnit), pUiParty->nRosterGUID, 8);
           if (!nResult) {
             bShowRedBox = true;
           }

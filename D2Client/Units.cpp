@@ -8,59 +8,16 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
-#include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
-#include "D2Common/Unit.h"
-#include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 namespace D2Client::Units {
-
-eD2UnitType __fastcall GetType(D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-    }
-
-    return eUnitType;
-}
-
-int32_t __fastcall GetXPosFromDynamicPathUnit(D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nXPos;
-      if (pUnit->pPath.pDynamicPath) {
-        nXPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        return nXPos;
-      }
-
-      return 0;
-    }
-
-    return pUnit->pPath.pStaticPath->nPosX;
-}
-
-int32_t __fastcall GetYPosFromDynamicPathUnit(D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nYPos;
-      if (pUnit->pPath.pDynamicPath) {
-        nYPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        return nYPos;
-      }
-
-      return 0;
-    }
-
-    return pUnit->pPath.pStaticPath->nPosY;
-}
 
 void __fastcall IfPlayer(D2UnitStrc * pUnit) {
     int bIsActive = UNIT::CUnit::IsActive(pUnit);

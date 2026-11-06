@@ -23,7 +23,6 @@
 #include "D2Game/D2PathTypeArg.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/ErrorManager.h"

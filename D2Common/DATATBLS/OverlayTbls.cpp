@@ -2,9 +2,7 @@
 
 #include "D2Common/DATATBLS/OverlayTbls.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Player.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2MissilesTxt.h"
 #include "D2Common/D2MonStatsTxt.h"
@@ -14,22 +12,23 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Merc.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/DATATBLS/OverlayTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -187,7 +186,7 @@ uint32_t __stdcall GetComponentsData(D2UnitStrc * pUnit, uint32_t nIndex) {
         return 0;
       }
 
-      pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+      pMonStats2 = MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       if (!pMonStats2) {
         return 0;
       }
@@ -264,7 +263,7 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
       return 0;
     }
 
-    D2MonStats2Txt* pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+    D2MonStats2Txt* pMonStats2 = MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
     if (!pMonStats2) {
       return 0;
     }
@@ -279,8 +278,8 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
       eLevelId = DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       neAct = Drlg::GetActNoFromLevelNumber(eLevelId);
       if (neAct == ACT_II) {
-        nBaseClassId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-        nBaseClassId = D2Client::UNIT::Player::ValidateClassId(nBaseClassId);
+        nBaseClassId = MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
+        nBaseClassId = MonsterTbls::ValidateClassId(nBaseClassId);
         if (nBaseClassId) {
           if (nBaseClassId == 0xaa && gnOverlayTblsMaxId[nComponentIdx]) {
             return gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];

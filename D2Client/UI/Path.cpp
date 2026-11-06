@@ -27,7 +27,6 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"

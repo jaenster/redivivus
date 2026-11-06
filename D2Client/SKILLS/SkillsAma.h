@@ -15,7 +15,6 @@ typedef uint32_t eD2Skills;
 namespace D2Client::SKILLS::SkillsAma {
 
 // Function declarations
-int32_t __fastcall GetTxtSkillParam5(int32_t nSkillId);
 BOOL __fastcall Skills_CltStFunc_CheckThrowableAmmo(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_SetParam1Zero(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side start function for Amazon throwable/guided skills. First verifies the player has throwable ammo. Then finds the best target: uses the confirmed target if one exists, otherwise calls SKILL_FindClosestTargetWithStats within aurarange. Clamps the final param (target count or spread) between calc[0] and calc[2] results, stores it in skill param1. Sets skill param2/param3 to the target's unit type and GUID (or 1/-1 for no target) and orients the player's path toward the target. Returns 0 if no ammo or skill txt is missing.

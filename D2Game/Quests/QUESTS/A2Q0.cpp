@@ -20,7 +20,6 @@
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A1Q4.h"
 #include "D2Game/UNIT/PlayerList.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"

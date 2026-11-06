@@ -11,7 +11,6 @@
 // Forward declarations
 struct D2MissilesTxt;
 struct D2RoomStrc;
-struct D2SeedStrc;
 struct D2SkillArgStrc;
 struct D2UnitStrc;
 struct D2fpSkillFuncArg;
@@ -54,8 +53,6 @@ struct D2MissileSrvDoFuncData {
 namespace D2Client::UNIT::Missile {
 
 // Function declarations
-int32_t __fastcall SEED_RollRangeInclusive(struct D2SeedStrc * pSeed, int32_t nMinValue, int32_t nMaxValue);
-int32_t __fastcall MISSILE_GetBoltSpeed(int32_t nSkillId, int32_t nSkillLevel);
 bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, struct D2RoomStrc * pRoom, int32_t nMaxDistSq, int32_t nSourceX, int32_t nSourceY, int32_t nDeltaY);
 void __fastcall MISSILE_InitializeVisual(struct D2UnitStrc * pUnit, int32_t pSourceUnit);
 int32_t __fastcall MISSILE_CltHitFn10_ProgOverlay(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);

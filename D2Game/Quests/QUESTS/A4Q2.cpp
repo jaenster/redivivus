@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -54,6 +53,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/Text.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Quests/QUESTS/A1Q2.h"
 #include "D2Game/Quests/QUESTS/A4Q1.h"
 #include "Fog/Src/Safesock.h"
@@ -536,7 +536,7 @@ uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, D2QuestDataStrc * pQues
       if ((uint32_t)pDVar1->sQuestGUID.aPlayerGUID[6] >= 10 && *(char*)((int)pDVar1->sQuestGUID.aPlayerGUID + 6) != '\0') {
         pDVar2 = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pDVar1->sQuestGUID.aPlayerGUID[2]);
         if (pDVar2) {
-          pDVar2 = Q27_SpawnDiablo(pQuestData->pGame, D2Common::Units::UNITS_GetRoom(pDVar2), D2Client::Units::GetXPosFromDynamicPathUnit(pDVar2), D2Client::Units::GetYPosFromDynamicPathUnit(pDVar2), pDVar1);
+          pDVar2 = Q27_SpawnDiablo(pQuestData->pGame, D2Common::Units::UNITS_GetRoom(pDVar2), D2Common::Units::GetXPosFromDynamicPathUnit(pDVar2), D2Common::Units::GetYPosFromDynamicPathUnit(pDVar2), pDVar1);
           if (pDVar2) {
             *(uint8_t*)((int)pDVar1->sQuestGUID.aPlayerGUID + 2) = 0;
             *(uint8_t*)((int)pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;

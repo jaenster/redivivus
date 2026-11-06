@@ -10,14 +10,10 @@
 
 // Forward declarations
 struct D2UnitStrc;
-typedef uint32_t eD2UnitType;
 
 namespace D2Client::Units {
 
 // Function declarations
-eD2UnitType __fastcall GetType(struct D2UnitStrc * pUnit);
-int32_t __fastcall GetXPosFromDynamicPathUnit(struct D2UnitStrc * pUnit);
-int32_t __fastcall GetYPosFromDynamicPathUnit(struct D2UnitStrc * pUnit);
 void __fastcall IfPlayer(struct D2UnitStrc * pUnit);
 BOOL __fastcall IsUnitDistanceLowerThan700(struct D2UnitStrc * pUnit);
 

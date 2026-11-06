@@ -10,7 +10,6 @@
 #include "D2Client/D2GameViewStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2RosterStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
@@ -51,12 +50,11 @@
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Environment.h"
 #include "D2Common/Text.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Server.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
@@ -84,7 +82,9 @@
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/Party.data.h"
 #include "D2Client/UI/Text.data.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Lang/Unicode/UNISYS.inline.h"
 #include "D2Launch/MainMenus.h"
 #include "Fog/Engine/Application.data.h"
 
@@ -3671,7 +3671,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
         pszName = pMessageCtx->szName2;
         pszName = pszName + strlen(pszName) + 1;
         if (pszName != pMessageCtx->szName2 + 1) {
-          Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3b), awszName, awszName2);
           TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
@@ -3693,7 +3693,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
         pszName = pMessageCtx->szName2;
         pszName = pszName + strlen(pszName) + 1;
         if (pszName != pMessageCtx->szName2 + 1) {
-          Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3c), awszName, awszName2);
           TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
@@ -3767,7 +3767,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
           nNameStrId = 0xc98;
         } else {
           if (pMessageCtx->szName2[0] == '\0') {
-            pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pMessageCtx->nArg);
+            pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pMessageCtx->nArg);
             if (!pMonStatsTxt) {
               print_without_killer:
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
@@ -3959,9 +3959,9 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
       return;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszFormatBuf, 2, 0x264, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-    Fog::File::CONTAINER_InitializeBuffer(wszMsgBuf, 2, 0x264, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-    Fog::File::CONTAINER_InitializeBuffer(wszShortName, 2, 0x10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszFormatBuf, 2, 0x264, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszMsgBuf, 2, 0x264, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    Fog::File::CONTAINER_InitializeBuffer(wszShortName, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     byMsgType = pMessage->messageType;
     if (byMsgType == 6) {
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszMsgBuf, pszName, 0x100);
@@ -4003,7 +4003,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
             pbNameScan = pbNameScan + strlen(pbNameScan) + 1;
             pszName = pszName + strlen(pszName) + 1;
             if (pbNameScan + (-1 - (int)(pMessage->name + 1)) < (char*)0xf) {
-              Fog::File::CONTAINER_InitializeBuffer(wszNameBuf2, 2, 0x10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszNameBuf2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
               D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszNameBuf2, pMessage->name, 0x10);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszFormatBuf, wszNameBuf2);
               ui::AppendAsWideChar(wszFormatBuf, 4);
@@ -4034,7 +4034,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
           }
         case 7:
           {
-            Fog::File::CONTAINER_InitializeBuffer(wcWideStart, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wcWideStart, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0, 1, pszName, 0x100, (LPWSTR)wcWideStart, 0x100);
             byMsgType = pMessage->language;
             nCheckResult = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
@@ -7081,7 +7081,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
       if (szMessage[0] == -1 && szMessage[1] == -1 && ((nStringId = atoi(szMessage + 2) , nStringId >= 0x42d && nStringId <= 0x50f) || nStringId >= 0x5587 && nStringId <= 0x5615 || nStringId == 0x2aa4 || nStringId == 0x5586)) {
         wszString = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)nStringId);
         if (wszString) {
-          Fog::File::CONTAINER_InitializeBuffer(wszLocaleString, 2, 200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszLocaleString, 2, 200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           memset(wszLocaleString, 0, 400);
           nSizeMaybe = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszString);
           if ((int)nSizeMaybe >= 200) {
@@ -7094,7 +7094,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
         }
       }
 
-      Fog::File::CONTAINER_InitializeBuffer(wszConverted, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszConverted, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       byLanguageCode = D2Common::Chat::GetLanguageCode(pHover);
       bConverted = TEXT_ConvertCharToWideWithLanguage(nConvertedLen, szMessage, (uint32_t)byLanguageCode, (uint16_t*)wszConverted);
       if (bConverted) {
@@ -7156,7 +7156,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
       if (nStringId >= 0x1 && nStringId <= 0xfffe) {
         wszString = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)nStringId);
         if (wszString) {
-          Fog::File::CONTAINER_InitializeBuffer(wszLocaleString, 2, 200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(wszLocaleString, 2, 200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           memset(wszLocaleString, 0, 400);
           nSizeMaybe = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszString);
           if ((int)nSizeMaybe >= 200) {

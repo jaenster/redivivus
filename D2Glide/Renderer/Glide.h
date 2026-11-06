@@ -90,6 +90,9 @@ struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
 
 namespace D2Glide::Renderer::Glide {
 
+// @data gaGlideDebugFontVertices
+// @evidence The debug-font quad: 0050bc70 grDrawVertexArrayContiguous(FAN, 4, 0x880258, 0x1c). Four D2GlideVertexStrc; every store in RENDERER_GLIDE_InitDebugFont and DrawDebugChar is a 4-byte FST/MOV at +0 x, +4 y, +8 argb, +0xc oow, +0x10 s, +0x14 t.
+extern D2GlideVertexStrc gaGlideDebugFontVertices[4];
 extern D2GlideVertexStrc gaGlidePerspectiveVertices[15];
 extern D2GlideVertexStrc gGlidePerspectiveVertexBuffer[4];
 extern D2GlideVertexStrc gaGlideGroundTileVertices[36];

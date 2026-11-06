@@ -816,24 +816,6 @@
       ]
     },
     {
-      "name": "GetSomeMonsterStatFlag",
-      "address": "0046c140",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0046c140"
-        }
-      ],
-      "namespace": "D2Client::Source::ClientEngine",
-      "calledFunctions": [
-        "GetSomeMonsterStatFlag"
-      ],
-      "usedTypes": [
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "ROOM_FindSpawnPositionForMonster",
       "address": "0046c1a0",
       "lines": [

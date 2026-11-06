@@ -10,7 +10,6 @@
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2GfxInfoStrc.h"
 #include "D2Client/D2LightMapStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Draw/Weather.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/Engine/GfxUtil.h"
@@ -29,7 +28,6 @@
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/Text.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnitEvent.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Missile.h"
@@ -40,7 +38,6 @@
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/PlayerList.h"
 #include "D2Client/UNIT/UnitSnd.h"
-#include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -75,8 +72,8 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Seed.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
@@ -86,9 +83,7 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Lang/StrTable/strtable.h"
@@ -105,7 +100,10 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/Draw/LightMap.h"
 #include "D2Client/GAME/Game/Game.data.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/Drlg/Path.h"
+#include "D2Common/Txt/Skills.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -652,7 +650,7 @@ void __fastcall IsAttackable(D2UnitStrc * pUnit) {
     pUnit->eUnitFlags = eUnitFlags;
     if (pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bCanAttack;
-      bCanAttack = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, TXTMonStats2Field0x04DWORD_ns::isAtt);
+      bCanAttack = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, TXTMonStats2Field0x04DWORD_ns::isAtt);
       if (!bCanAttack) {
         return;
       }
@@ -708,7 +706,7 @@ int32_t __fastcall IsAlive(D2UnitStrc * pUnit) {
       case UNIT_ITEM:
         return (uint32_t)(nAnimMode == Special1);
       case UNIT_MONSTER:
-        _bIsUnflatDead = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, unflatDead);
+        _bIsUnflatDead = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, unflatDead);
       if (!_bIsUnflatDead && nAnimMode == 0xc) {
         return 1;
       }
@@ -894,7 +892,7 @@ uint16_t * __fastcall GetName(D2UnitStrc * pUnit) {
         return pwszName;
       }
 
-      pMonStatsTxt = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+      pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
       pwszName = D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr);
       return pwszName;
       case UNIT_ITEM:
@@ -1038,7 +1036,7 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
     D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pUnit);
     if (pSkill) {
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb4a);
-      pSkillsTxt = GAME::SCmd::TXT_Skills_GetLine(eSkillId);
+      pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
       if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         bHasPetSkill = true;
       }
@@ -1047,7 +1045,7 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
     pSkill = D2Common::Units::GetRightSkill(pUnit);
     if (pSkill) {
       eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb55);
-      pSkillsTxt = GAME::SCmd::TXT_Skills_GetLine(eSkillId);
+      pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
       if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         nOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pnSkillParams[3]);
         return (uint32_t)(nOwnerGUID == pUnit->nUnitGUID);
@@ -1748,7 +1746,7 @@ void __fastcall FaceTarget(D2UnitStrc * pUnit, int32_t bImmediate) {
       exit(-1);
     }
 
-    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, Units::GetXPosFromDynamicPathUnit(pTarget), Units::GetYPosFromDynamicPathUnit(pTarget), bImmediate);
+    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pTarget), bImmediate);
 }
 
 // Determines whether pUnit may interact with / target pUnit2 (hostility & targetability check). Returns nonzero if interaction allowed, 0 if not. Resolves pets to their player owner via RosterPets::GetRosterOwnerGUID and charmed/owned units. In town: only allows player-vs-player when ROSTER_CheckPlayerCanLoot permits looting a dead party member. Out of town: rejects self/same-unit; player-vs-player uses loot rights then PlayerList party flag (8); against monsters consults MonStats2 alSel/noSel flags (always-selectable / never-selectable); players may always interact with items and objects; otherwise falls back to Path::IsAllyOf (returns true only if NOT an ally). Also blocks a player from interacting with an enemy pet they don't own.
@@ -1829,7 +1827,7 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
           nClassId2 = pUnit2->nClassId;
         }
 
-        bCheckResult = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId2, alSel);
+        bCheckResult = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId2, alSel);
         if (bCheckResult) {
           return 1;
         }
@@ -1839,7 +1837,7 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
           nClassId2 = pUnit2->nClassId;
         }
 
-        bCheckResult = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId2, noSel);
+        bCheckResult = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId2, noSel);
         if (bCheckResult) {
           return 0;
         }
@@ -2232,7 +2230,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
 
     bResult = Monster::IsMonsterUnique(pUnit);
     if (bResult) {
-      bResult = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(iVar1, TXTMonStats2Field0x04DWORD_ns::noUniqueShift);
+      bResult = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(iVar1, TXTMonStats2Field0x04DWORD_ns::noUniqueShift);
       if (!bResult) {
         nPalShiftIdx = GAME::PalShift::PALSHIFT_GenerateShiftDuration(pUnit, (uint16_t)nNameSeed);
       }
@@ -2413,7 +2411,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
         if (pUnit->eUnitType == UNIT_MONSTER) {
           nResult = IsActive(pUnit);
           if (nResult) {
-            uResult = CheckFlags(pUnitTmp, UNITFLAG_CANBEATTACKED);
+            uResult = D2Common::Units::CheckFlags(pUnitTmp, UNITFLAG_CANBEATTACKED);
             if (uResult) {
               bSelectable = 1;
             }
@@ -2456,7 +2454,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
       case UNIT_PLAYER:
         goto check_gfx_bounds;
       case UNIT_MONSTER:
-        pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
+        pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
       if (*((uint8_t*)pMonStats2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         rcBounds.left = pMonStats2->nHtLeft + nScreenX;
         rcBounds.right = pMonStats2->nHtWidth + rcBounds.left;
@@ -2507,7 +2505,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
       switch (eUnitType) {
         case UNIT_MONSTER:
           {
-            pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
+            pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
             if (!pMonStats2) {
               goto test_frame_bounds;
             }

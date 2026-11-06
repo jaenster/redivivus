@@ -5,9 +5,7 @@
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/TileProjects.h"
-#include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/Engine.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomCoordListStrc.h"
@@ -51,11 +49,11 @@
 #include "D2Common/Drlg/TileSub.h"
 #include "D2Common/Drlg/Transform.h"
 #include "D2Common/Seed.h"
+#include "D2Common/Txt/Skills.h"
+#include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/Quests/QUESTS.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
@@ -66,6 +64,8 @@
 #include "globals/globals.h"
 #include "D2Common/Drlg/Drlg.data.h"
 #include "D2Common/Drlg/OutPlace.data.h"
+#include "D2Common/Seed.inline.h"
+#include "D2Common/Txt/Skills.inline.h"
 #include "D2Common/Unit.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -317,7 +317,7 @@ void __fastcall PLAYER_SetSkillHitFlagAndStoreTarget(D2UnitStrc * pUnit, eD2Skil
       pUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = 1;
     }
 
-    D2Client::Engine::StoreLastSkillHit(eSkill, pUnit, nUnitType, nUid);
+    Skills::StoreLastSkillHit(eSkill, pUnit, nUnitType, nUid);
 }
 
 // Loads act-specific town tile project (.dt1) for Acts I–III by building a DATA\GLOBAL\Tiles path and loading into pDrlg->apTileProjects.
@@ -1567,7 +1567,7 @@ void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnkOutdoor
       pUnkOutdoor->nPrevBorderPresetId = 0x3e;
     }
     if (!pLvlSub->BordType) {
-      nRandStartGroup = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnkOutdoor->pLevel->sSeed, nModulo);
+      nRandStartGroup = Seed::RANDOM_RandomNumberSelector(&pUnkOutdoor->pLevel->sSeed, nModulo);
     }
     if ((int)nModulo <= 0) {
       return;

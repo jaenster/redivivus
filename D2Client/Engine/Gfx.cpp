@@ -3,13 +3,10 @@
 #include "D2Client/Engine/Gfx.h"
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2CMP/SRC/SpriteCache.h"
-#include "D2Client/Archive.h"
-#include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2GfxInfoStrc.h"
 #include "D2Client/D2LightMapStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Draw/LightMap.h"
 #include "D2Client/Engine/GfxUtil.h"
 #include "D2Client/Engine/Particle.h"
@@ -21,7 +18,6 @@
 #include "D2Client/UI/Draw.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/ui.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -36,6 +32,8 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MissileTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DATATBLS/TokTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
@@ -45,15 +43,14 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
-#include "D2Common/Skills.h"
+#include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Hell/D2Hell.h"
@@ -74,8 +71,12 @@
 #include "D2Client/GAME/Rendering.h"
 #include "D2Client/UI/Help.data.h"
 #include "D2Client/UNIT/PlrSkills.h"
+#include "D2Common/DATATBLS/MissileTbls.inline.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/PATH/DynamicPath.h"
+#include "D2Common/Seed.inline.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Win/Src/D2WinFont.h"
 
@@ -942,7 +943,7 @@ static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\ENGINE\\Gfx.cpp", 0x464);
-    uint32_t bHasComponent = Source::ClientEngine::GetSomeMonsterStatFlag(nClassId, nComponent);
+    uint32_t bHasComponent = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, nComponent);
     if (bHasComponent) {
       uint8_t byComponent = GfxUtil::GFXUTIL_GetGfxInfoComponent(pUnit, nComponent);
       if (byComponent) {
@@ -1753,7 +1754,7 @@ static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode
       nAnimMode = nSeqMode;
     }
 
-    uint32_t bHasModeFlag = Source::ClientEngine::GetSomeMonsterStatFlag(nClassId, nAnimMode);
+    uint32_t bHasModeFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, nAnimMode);
     if (!bHasModeFlag) {
       return;
     }
@@ -2201,7 +2202,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
         return;
       }
       if (pUnit->eUnitType == UNIT_MONSTER) {
-        bResultFlag = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, noOvly);
+        bResultFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, noOvly);
         if (bResultFlag) {
           return;
         }
@@ -2236,7 +2237,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
           }
         case 6:
           {
-            nRandomValue = Archive::RANDOM_RandomNumberSelector(&pPlayer->sSeed, nRandomValue);
+            nRandomValue = D2Common::Seed::RANDOM_RandomNumberSelector(&pPlayer->sSeed, nRandomValue);
             pOverlay->nRandomOffset = nRandomValue;
             break;
           }
@@ -2293,13 +2294,13 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
         GFX_SyncStateOverlayPriority(&pOverlay->nOverlayType, pGfxInfo);
       }
       if (nColorScale) {
-        nRandomValue = Archive::RANDOM_RandomNumberSelector(&pPlayer->sSeed, nColorScale << 8);
+        nRandomValue = D2Common::Seed::RANDOM_RandomNumberSelector(&pPlayer->sSeed, nColorScale << 8);
         pOverlay->nRandomOffset = nRandomValue;
       }
 
       pOverlay->nAnimRate = pOverlayTxt->AnimRate << 4;
       if (nRandomMod) {
-        nRandomValue = Archive::RANDOM_RandomNumberSelector(&pPlayer->sSeed, nRandomMod << 4);
+        nRandomValue = D2Common::Seed::RANDOM_RandomNumberSelector(&pPlayer->sSeed, nRandomMod << 4);
         pOverlay->nAnimRate += nRandomValue;
       }
 
@@ -2936,8 +2937,8 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
                   if (nLayerComponentU == 0xf) {
                     pPalette = 0;
                     if (eUnitType == UNIT_MONSTER) {
-                      nErrLine = UNIT::GetClassId(pUnit);
-                      pMonStats2 = DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nErrLine);
+                      nErrLine = D2Common::Units::GetClassId(pUnit);
+                      pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nErrLine);
                       if (pMonStats2 && pMonStats2->byLocalBlood) {
                         bPerspectiveCapable = GAME::Game::GAMEDATA_GetBloodFlag();
                         if (bPerspectiveCapable) {
@@ -3786,7 +3787,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
       nGammaCopy = nGammaCopy & -256 | nDirOrGoldTier;
     }
     if (eUnitType == UNIT_MISSILE) {
-      pMissilesTxt = GetMissleById(pUnit->nClassId);
+      pMissilesTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(pUnit->nClassId);
       eDrawMode = DRAW_SOLID;
       if (pMissilesTxt->Trans == '\x01') {
         eDrawMode = DRAW_LIGHTTRANSPARENT;

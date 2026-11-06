@@ -1289,24 +1289,6 @@
       ]
     },
     {
-      "name": "CheckFlagWithMask",
-      "address": "00463720",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463720"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "CheckFlagWithMask"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_004637f0",
       "address": "004637f0",
       "lines": [
@@ -1335,59 +1317,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
-    },
-    {
-      "name": "TXT_MonStats_GetBaseId",
-      "address": "00463860",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463860"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "TXT_MonStats_GetBaseId"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
-      "address": "004638a0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004638a0"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
-      ],
-      "usedTypes": [
-        "TXTMonStats2Field0x04DWORD",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "ValidateClassId",
-      "address": "00463900",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463900"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "ValidateClassId"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {

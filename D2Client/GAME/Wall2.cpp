@@ -4,7 +4,6 @@
 #include "D2CMP/DUNGEON/Dungeon.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SubTile.h"
-#include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GameViewStrc.h"
 #include "D2Client/D2GfxInfoStrc.h"
@@ -28,6 +27,7 @@
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MissileTbls.h"
 #include "D2Common/DATATBLS/ObjectTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
@@ -40,7 +40,6 @@
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Sound/Src/D2SoundFast.h"
 #include "D2gfx/D2GFX.h"
@@ -51,6 +50,7 @@
 #include "globals/globals.h"
 #include "D2Client/GAME/PalShift.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/DATATBLS/MissileTbls.inline.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Win/Src/D2WinFont.h"
@@ -328,7 +328,7 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
             nMissileId = pUnit->nClassId;
           }
 
-          pMissileTxt = GetMissleById(nMissileId);
+          pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(nMissileId);
           if (!pMissileTxt) {
             goto restore_perspective;
           }

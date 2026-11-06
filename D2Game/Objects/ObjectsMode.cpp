@@ -2,14 +2,10 @@
 
 #include "D2Game/Objects/ObjectsMode.h"
 #include "D2Client/D2ClientStrc.h"
-#include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/Source/ClientEngine.h"
-#include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
-#include "D2Client/Units.h"
 #include "D2Common/Chat.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
@@ -26,6 +22,7 @@
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/ItemTbls.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
 #include "D2Common/DATATBLS/MonsterTbls.h"
@@ -44,8 +41,8 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/QuestRecord.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/UnitFinds.h"
@@ -94,8 +91,9 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UNIT/PlrSkills.h"
-#include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Common/Units.inline.h"
 #include "D2Game/Quests/QUESTS/A1Q3.h"
 #include "D2Game/Quests/QUESTS/A1Q4.h"
 #include "D2Game/Quests/QUESTS/A1Q5.h"
@@ -1315,12 +1313,12 @@ uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUn
     }
 
     nAlignment = pUnit->nClassId;
-    uint32_t uStatFlag = D2Client::Source::ClientEngine::GetSomeMonsterStatFlag(nAlignment, 2);
+    uint32_t uStatFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nAlignment, 2);
     if (!uStatFlag) {
       return 0;
     }
 
-    D2MonStats2Txt* pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nAlignment);
+    D2MonStats2Txt* pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nAlignment);
     if (!(pMonStats2 && pMonStats2->Height != '\0')) {
       return 0;
     }
@@ -2836,7 +2834,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
         goto dest_from_paired_portal;
       }
       if (__frame0.pPortalOwnerObj) {
-        nPortalOwnerObjGUID = D2Client::UNIT::GetGUID(__frame0.pPortalOwnerObj);
+        nPortalOwnerObjGUID = D2Common::Units::GetGUID(__frame0.pPortalOwnerObj);
         pUnit = __frame0.pPortalOwnerObj;
         if (nCollisionFlagsArg != nPortalOwnerObjGUID) {
           if (pOperation->sArg.pGame->bExpansion) {
@@ -2869,8 +2867,8 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
       if (!pUnit) {
         goto dest_from_level_spawn;
       }
-      ptDest.x = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-      ptDest.y = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+      ptDest.x = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      ptDest.y = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     }
 
@@ -4286,7 +4284,7 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
         pMonData = pMonsterRegion->pMonData;
         do {
           dwClassId = (uint32_t)(short int)pMonData->nClassId;
-          dwMonStatFlag = D2Client::Source::ClientEngine::GetSomeMonsterStatFlag(dwClassId, 2);
+          dwMonStatFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(dwClassId, 2);
           if (dwMonStatFlag) {
             Monsters::SpawnUniquePack(pOperation->sArg.pGame, D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 0, dwClassId, 1, 0, 0, 1);
             break;

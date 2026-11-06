@@ -18,12 +18,31 @@ struct D2SkillStrc;
 struct D2TimerArgStrc;
 struct D2UnitDataPlayerStrc;
 struct D2UnitStrc;
+typedef uint32_t eD2PlayerAnimMode;
 typedef uint32_t eD2Skills;
+typedef uint32_t eD2UnitFlags;
 typedef uint32_t eD2UnitType;
+
+// Data types
+struct __attribute__((packed)) D2AnimDataRecordStrc {
+    /* 0x00 */ char szAnimDataName[8];
+    /* 0x08 */ int nFrames;
+    /* 0x0C */ int nAnimSpeed;
+    /* 0x10 */ uint8_t pFrameFlags[144];
+};
 
 namespace D2Common::Units {
 
 // Function declarations
+__attribute__((noinline)) inline eD2UnitType __fastcall GetType(struct D2UnitStrc * pUnit);
+__attribute__((noinline)) inline uint32_t __fastcall CheckFlags(struct D2UnitStrc * pUnit, eD2UnitFlags nFlagsC4);
+__attribute__((noinline)) inline int32_t __fastcall GetGUID(struct D2UnitStrc * pUnit);
+__attribute__((noinline)) inline int32_t __fastcall GetClassId(struct D2UnitStrc * pUnit);
+__attribute__((noinline)) inline eD2PlayerAnimMode __fastcall GetAnimMode(struct D2UnitStrc * pUnit);
+__attribute__((noinline)) inline int32_t __fastcall GetXPosFromDynamicPathUnit(struct D2UnitStrc * pUnit);
+__attribute__((noinline)) inline int32_t __fastcall GetYPosFromDynamicPathUnit(struct D2UnitStrc * pUnit);
+__attribute__((noinline)) inline uint32_t __fastcall CheckFlagWithMask(struct D2UnitStrc * pUnit, uint32_t dwMask);
+__attribute__((noinline)) inline struct D2PoolManagerStrc * __fastcall GetMemPool(struct D2UnitStrc * pUnit);
 void __stdcall Return_Unref_005fe100(struct D2UnitStrc * pUnit, int32_t nParam);
 uint8_t __stdcall GetDirection(struct D2UnitStrc * pUnit);
 struct D2SkillStrc * __stdcall GetFirstSkill(struct D2UnitStrc * pUnit);

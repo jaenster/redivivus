@@ -46,11 +46,12 @@
 #include "D2Common/D2MonStatsTxt.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
-#include "D2Common/D2SeedStrc.h"
 #include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
+#include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/DATATBLS/LvlTbls.h"
+#include "D2Common/DATATBLS/MonsterTbls.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
@@ -59,16 +60,14 @@
 #include "D2Common/Environment.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
-#include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Txt/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/Objects/Objects.h"
-#include "D2Game/PLAYER/PlayerPets.h"
 #include "D2Game/SKILLS/SkillsServer.h"
-#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -104,7 +103,7 @@
 #include "D2Client/UI/UseItem.data.h"
 #include "D2Client/UI/npcmenu.data.h"
 #include "D2Client/UNIT/PlrSkills.h"
-#include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/GAME/Arena.h"
@@ -223,7 +222,7 @@ int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitSt
       return 0;
     }
 
-    int32_t nMonStatsId = UNIT::Player::TXT_MonStats_GetBaseId(pTargetUnit);
+    int32_t nMonStatsId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pTargetUnit);
     if (!(nMonStatsId < 0 || nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
       return 0;
     }
@@ -799,14 +798,6 @@ void __stdcall CMD_ClearClickModifier() {
 void __stdcall CMD_ReleaseHoldAltAndClearSelection() {
     UI::ui::SetUIFlag(UI_HOLDALT, UI_RESET, 0);
     GAME::Select::ClearSelectedUnit();
-}
-
-D2MissilesTxt * __fastcall GetMissleById(int32_t nMissileId) {
-    if (nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      return D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId;
-    }
-
-    return nullptr;
 }
 
 // Update room light pulse using light map + sin table; reset when level changes or timer ends.
@@ -1554,25 +1545,6 @@ void __fastcall thunk_ExitGamePlayCutScene(int32_t pPacket) {
 // Handles GS→client packet 0x89: forwards byte pBytes[1] (subcommand/type) to Storm::Source::ClientEngine::HandleIncoming0x89 for game-state update processing.
 void __fastcall NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER(char * pBytes) {
     Source::ClientEngine::HandleIncoming0x89((uint32_t)(uint8_t)pBytes[1]);
-}
-
-int32_t __fastcall SEED_RollRange(D2SeedStrc * pSeed, int32_t nMin, int32_t nMax) {
-    D2SeedStrc dSeedResult;
-    if (nMax <= nMin) {
-      return nMin;
-    }
-
-    uint32_t nRangeWidth = nMax - nMin;
-    if (nRangeWidth & nRangeWidth - 1) {
-      dSeedResult = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = dSeedResult.nSeedHigh;
-      pSeed->nSeedLow = dSeedResult.nSeedLow;
-      return (int)(dSeedResult.nSeedLow % nRangeWidth) + nMin;
-    }
-
-    dSeedResult = D2_SEED_NEXT(*pSeed);
-    *pSeed = dSeedResult;
-    return (nRangeWidth - 1 & dSeedResult.nSeedLow) + nMin;
 }
 
 void __stdcall OBJECT_SetLightRGB(uint8_t byRed, uint8_t byGreen, uint8_t byBlue, uint16_t nRadius, D2UnitStrc * pUnit) {

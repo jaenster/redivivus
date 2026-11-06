@@ -647,6 +647,30 @@ D2GlideVertexTexCacheBlockStrc gGlideVertex0 = {}; D2_GLOBAL_GUARD(gGlideVertex0
 static void * gpGlideSpriteBuffer = 0; D2_STATIC_GUARD(gpGlideSpriteBuffer, "gpGlideSpriteBuffer");
 static void * gpGlideSpritePixelBuffer = 0; D2_STATIC_GUARD(gpGlideSpritePixelBuffer, "gpGlideSpritePixelBuffer");
 uint32_t gaGlideColorDebugGradientIndices[1024] = {}; D2_GLOBAL_GUARD(gaGlideColorDebugGradientIndices, "gaGlideColorDebugGradientIndices");
+namespace D2Glide::Renderer::Glide {
+uint32_t gaGlideDebugFontTexStartAddrs[96] = {}; D2_GLOBAL_GUARD(gaGlideDebugFontTexStartAddrs, "D2Glide::Renderer::Glide::gaGlideDebugFontTexStartAddrs");
+void * lpBuffer_008802c8[96] = {}; D2_GLOBAL_GUARD(lpBuffer_008802c8, "D2Glide::Renderer::Glide::lpBuffer_008802c8");
+void * gpGlideDebugFontTexture = 0; D2_GLOBAL_GUARD(gpGlideDebugFontTexture, "D2Glide::Renderer::Glide::gpGlideDebugFontTexture");
+uint32_t gnGlideDebugFontTMU = 0; D2_GLOBAL_GUARD(gnGlideDebugFontTMU, "D2Glide::Renderer::Glide::gnGlideDebugFontTMU");
+int * gpnLightmapRowPointers = 0; D2_GLOBAL_GUARD(gpnLightmapRowPointers, "D2Glide::Renderer::Glide::gpnLightmapRowPointers");
+void * gapGlideGroundStripVertexPtrs[60] = {}; D2_GLOBAL_GUARD(gapGlideGroundStripVertexPtrs, "D2Glide::Renderer::Glide::gapGlideGroundStripVertexPtrs");
+uint8_t gbGlideGlobalLightGreen = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightGreen, "D2Glide::Renderer::Glide::gbGlideGlobalLightGreen");
+uint8_t gbGlideGlobalLightBlue = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightBlue, "D2Glide::Renderer::Glide::gbGlideGlobalLightBlue");
+uint8_t gbGlideGlobalLightRed = 0; D2_GLOBAL_GUARD(gbGlideGlobalLightRed, "D2Glide::Renderer::Glide::gbGlideGlobalLightRed");
+// also labelled: glVertex
+uint8_t * gpGlideLightingTable = 0; D2_GLOBAL_GUARD(gpGlideLightingTable, "D2Glide::Renderer::Glide::gpGlideLightingTable");
+int gnGlidePerspectiveOriginX = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginX, "D2Glide::Renderer::Glide::gnGlidePerspectiveOriginX");
+// also labelled: gpGlideTexturePalette
+int32_t gnGlidePerspectiveScale = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveScale, "D2Glide::Renderer::Glide::gnGlidePerspectiveScale");
+int gnGlidePerspectiveOriginY = 0; D2_GLOBAL_GUARD(gnGlidePerspectiveOriginY, "D2Glide::Renderer::Glide::gnGlidePerspectiveOriginY");
+void * gpPerspectiveLookupTable = 0; D2_GLOBAL_GUARD(gpPerspectiveLookupTable, "D2Glide::Renderer::Glide::gpPerspectiveLookupTable");
+uint8_t (*gpGlideSmackerTexBuf0)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf0, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf0");
+uint8_t (*gpGlideSmackerTexBuf1)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf1, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf1");
+uint32_t gnGlideSmackTex1StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex1StartAddr, "D2Glide::Renderer::Glide::gnGlideSmackTex1StartAddr");
+uint32_t gnGlideSmackTex2StartAddr = 0; D2_GLOBAL_GUARD(gnGlideSmackTex2StartAddr, "D2Glide::Renderer::Glide::gnGlideSmackTex2StartAddr");
+uint8_t (*gpGlideSmackerTexBuf2)[32768] = 0; D2_GLOBAL_GUARD(gpGlideSmackerTexBuf2, "D2Glide::Renderer::Glide::gpGlideSmackerTexBuf2");
+uint32_t gnGlideTMUHandle = 0; D2_GLOBAL_GUARD(gnGlideTMUHandle, "D2Glide::Renderer::Glide::gnGlideTMUHandle");
+} // namespace D2Glide::Renderer::Glide
 
 namespace D2Glide::Renderer::Glide {
 
@@ -2552,24 +2576,6 @@ void __stdcall RENDERER_GLIDE_InitSpriteCache() {
 }
 
 int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTexMemAlignment) {
-    // Static local variables (originally global data)
-    static unsigned int gfGlideDebugFontVertex0ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex0ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0ARGB");
-    static float gfGlideDebugFontVertex0OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex0OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0OOW");
-    static float gfGlideDebugFontVertex0Y; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex0Y, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0Y");
-    static double gfGlideDebugFontVertex0T = 0; D2_STATIC_GUARD(gfGlideDebugFontVertex0T, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex0T");
-    static unsigned int gfGlideDebugFontVertex1ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex1ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex1ARGB");
-    static float gfGlideDebugFontVertex1OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex1OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex1OOW");
-    static float gfGlideDebugFontVertex1S; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex1S, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex1S");
-    static float gfGlideDebugFontVertex1T; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex1T, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex1T");
-    static unsigned int gfGlideDebugFontVertex2ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex2ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2ARGB");
-    static float gfGlideDebugFontVertex2OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex2OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2OOW");
-    static float gfGlideDebugFontVertex2X; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex2X, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2X");
-    static double gfGlideDebugFontVertex2T = 0; D2_STATIC_GUARD(gfGlideDebugFontVertex2T, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex2T");
-    static unsigned int gfGlideDebugFontVertex3ARGB; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex3ARGB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3ARGB");
-    static float gfGlideDebugFontVertex3OOW; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex3OOW, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3OOW");
-    static float gfGlideDebugFontVertex3X; D2_STATIC_GUARD_BSS(gfGlideDebugFontVertex3X, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3X");
-    static double gfGlideDebugFontVertex3Y = 0; D2_STATIC_GUARD(gfGlideDebugFontVertex3Y, "D2Glide::Renderer::Glide::RENDERER_GLIDE_InitDebugFont::gfGlideDebugFontVertex3Y");
-
     int nCopyCount;
     uint32_t* pDstTexel;
     void* nGlyphTexBase;
@@ -2608,30 +2614,30 @@ int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTe
     } while ((int)pTexStartAddr < (intptr_t)((char*)&gaGlideDebugFontTexStartAddrs + sizeof(gaGlideDebugFontTexStartAddrs)));
 
     D2_FREE_AT(pTexBuf, ".\\Src\\glDebugFont.cpp", 0x70);
-    gfGlideDebugFontVertex0X = 0.0;
-    gfGlideDebugFontVertex0Y = 0.0;
-    gfGlideDebugFontVertex0OOW = 1.0;
-    gfGlideDebugFontVertex0ARGB = -1;
-    gfGlideDebugFontVertex1OOW = 1.0;
-    gfGlideDebugFontVertex1ARGB = -1;
-    gfGlideDebugFontVertex2ARGB = -1;
-    gfGlideDebugFontVertex0Y = 0.0;
-    gfGlideDebugFontVertex3ARGB = -1;
-    *(uint32_t*)(char*)&gfGlideDebugFontVertex0T = 0;
-    gfGlideDebugFontVertex1X = 0.0;
-    gfGlideDebugFontVertex1Y = 0.0;
-    gfGlideDebugFontVertex1S = 0.0;
-    gfGlideDebugFontVertex1T = 256.0;
-    gfGlideDebugFontVertex3S = 0.0;
-    gfGlideDebugFontVertex2T = 0.0;
-    gfGlideDebugFontVertex2OOW = 1.0;
-    gfGlideDebugFontVertex2X = 128.0;
-    gfGlideDebugFontVertex3X = 128.0;
-    *(uint32_t*)(char*)&gfGlideDebugFontVertex2T = 0x43800000;
-    gfGlideDebugFontVertex3X = 0.0;
-    gfGlideDebugFontVertex3T = 0.0;
-    *(uint32_t*)(char*)&gfGlideDebugFontVertex3Y = 0;
-    gfGlideDebugFontVertex3OOW = 1.0;
+    gaGlideDebugFontVertices[0].fX = 0.0;
+    gaGlideDebugFontVertices[0].fY = 0.0;
+    gaGlideDebugFontVertices[0].fOOW = 1.0;
+    gaGlideDebugFontVertices[0].dwColor = -1;
+    gaGlideDebugFontVertices[1].fOOW = 1.0;
+    gaGlideDebugFontVertices[1].dwColor = -1;
+    gaGlideDebugFontVertices[2].dwColor = -1;
+    gaGlideDebugFontVertices[0].fS = 0.0;
+    gaGlideDebugFontVertices[3].dwColor = -1;
+    gaGlideDebugFontVertices[0].fT = 0.0;
+    gaGlideDebugFontVertices[1].fX = 0.0;
+    gaGlideDebugFontVertices[1].fY = 0.0;
+    gaGlideDebugFontVertices[1].fS = 0.0;
+    gaGlideDebugFontVertices[1].fT = 256.0;
+    gaGlideDebugFontVertices[2].fX = 0.0;
+    gaGlideDebugFontVertices[2].fY = 0.0;
+    gaGlideDebugFontVertices[2].fOOW = 1.0;
+    gaGlideDebugFontVertices[2].fS = 128.0;
+    gaGlideDebugFontVertices[3].fS = 128.0;
+    gaGlideDebugFontVertices[2].fT = 256.0;
+    gaGlideDebugFontVertices[3].fX = 0.0;
+    gaGlideDebugFontVertices[3].fY = 0.0;
+    gaGlideDebugFontVertices[3].fT = 0.0;
+    gaGlideDebugFontVertices[3].fOOW = 1.0;
     return nTexStride * 0x60;
 }
 
@@ -2714,16 +2720,16 @@ static LPINT __stdcall RENDERER_GLIDE_DrawDebugChar(int32_t nPosX, int32_t nPosY
       return (LPINT)lpBuffer_008802c8[byChar];
     }
     if ((uint8_t)(byChar - 0x20U) <= 0x5f) {
-      gfGlideDebugFontVertex0X = (float)nPosX;
-      gfGlideDebugFontVertex0Y = (float)nPosY;
-      gfGlideDebugFontVertex1X = gfGlideDebugFontVertex0X;
-      gfGlideDebugFontVertex1Y = (float)(nPosY + 0x10);
-      gfGlideDebugFontVertex3S = (float)(nPosX + 8);
-      gfGlideDebugFontVertex2T = gfGlideDebugFontVertex1Y;
-      gfGlideDebugFontVertex3X = gfGlideDebugFontVertex3S;
-      gfGlideDebugFontVertex3T = gfGlideDebugFontVertex0Y;
+      gaGlideDebugFontVertices[0].fX = (float)nPosX;
+      gaGlideDebugFontVertices[0].fY = (float)nPosY;
+      gaGlideDebugFontVertices[1].fY = (float)(nPosY + 0x10);
+      gaGlideDebugFontVertices[2].fX = (float)(nPosX + 8);
+      gaGlideDebugFontVertices[1].fX = gaGlideDebugFontVertices[0].fX;
+      gaGlideDebugFontVertices[2].fY = gaGlideDebugFontVertices[1].fY;
+      gaGlideDebugFontVertices[3].fX = gaGlideDebugFontVertices[2].fX;
+      gaGlideDebugFontVertices[3].fY = gaGlideDebugFontVertices[0].fY;
       (*GLIDEDLL_grTexSource_16)(gnGlideDebugFontTMU, gaGlideDebugFontTexStartAddrs[(char)(byChar - 0x20)], 3, &gTexInfoDebugFontGlide);
-      (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, &gfGlideDebugFontVertex0X, 0x1c);
+      (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, gaGlideDebugFontVertices, 0x1c);
       return (LPINT)lpBuffer_008802c8[(char)(byChar - 0x20)];
     }
 
@@ -4290,6 +4296,8 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
 namespace D2Glide::Renderer::Glide {
 
 // Initialized data
+
+D2GlideVertexStrc gaGlideDebugFontVertices[4] = {}; D2_GLOBAL_GUARD(gaGlideDebugFontVertices, "D2Glide::Renderer::Glide::gaGlideDebugFontVertices");
 
 D2GlideVertexStrc gaGlidePerspectiveVertices[15] = {}; D2_GLOBAL_GUARD(gaGlidePerspectiveVertices, "D2Glide::Renderer::Glide::gaGlidePerspectiveVertices");
 

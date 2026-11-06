@@ -19,6 +19,7 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Hell/D2Hell.data.h"
+#include "Storm/Source/SMem.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -584,7 +585,7 @@ void * __thiscall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int
 FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree) {
     TSLink_TMESSAGESOURCE_Unlink((StormLinkStrc*)pFile);
     if (bFree & 1) {
-      Game::Main::MISC_OperatorDeleteShim(pFile);
+      Storm::Source::SMem::MISC_OperatorDeleteShim(pFile);
     }
 
     return pFile;
@@ -887,7 +888,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
           nVerifyResult = dwLastError != 0x800b0100 ? 2 : 1;
         }
 
-        Game::Main::MISC_OperatorDeleteShim(pWideStr);
+        Storm::Source::SMem::MISC_OperatorDeleteShim(pWideStr);
         return nVerifyResult;
       }
     }
@@ -980,7 +981,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
                   }
                 }
 
-                Game::Main::MISC_OperatorDeleteShim((void*)nWideCharLen);
+                Storm::Source::SMem::MISC_OperatorDeleteShim((void*)nWideCharLen);
               }
             }
           }
