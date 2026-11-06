@@ -4102,8 +4102,6 @@
         "D2GSPacketSrv0x27_TextStrc",
         "D2UnitStrc",
         "int32_t",
-        "uint16_t",
-        "uint32_t",
         "uint8_t"
       ]
     },

@@ -3838,32 +3838,27 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
 
     D2GSPacketSrv0x27_TextStrc* pOverheadText = Text::TEXT_GetOverheadGlobalPointer();
     nIndex = 0;
-    uint32_t nMsgTypeResult = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, 0);
-    short int nMsgType = (short int)nMsgTypeResult;
+    uint16_t uVar1 = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, 0);
     do {
-      uint16_t wMsgType;
-      if (nMsgType == -1) {
+      if (uVar1 == 0xffff) {
         return 0xffff;
       }
-
-      wMsgType = (uint16_t)nMsgTypeResult;
-      if (wMsgType != nMsgTypeToFind) {
+      if (uVar1 != nMsgTypeToFind) {
         nScrollQueueIdx = 0;
         if (!gnNpcMenuScrollMessageHead) {
-          return wMsgType;
+          return uVar1;
         }
 
-        while (gaNpcMenuHandledMessageIds[nScrollQueueIdx] != wMsgType) {
+        while (gaNpcMenuHandledMessageIds[nScrollQueueIdx] != uVar1) {
           nScrollQueueIdx++;
           if (nScrollQueueIdx >= (int)(uint32_t)gnNpcMenuScrollMessageHead) {
-            return wMsgType;
+            return uVar1;
           }
         }
       }
 
       nIndex++;
-      nMsgTypeResult = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, nIndex);
-      nMsgType = (short int)nMsgTypeResult;
+      uVar1 = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, nIndex);
     } while (true);
 }
 
@@ -3949,8 +3944,7 @@ bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId) {
 }
 
 int __stdcall NPCMENU_ShowSelectedDialogOption() {
-    uint32_t nMessageId;
-    uint16_t wMessageId;
+    D2GSPacketSrv0x27_TextStrc* pOverheadText;
     int32_t nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
     int nDialogBaseOffset = 3 - (uint32_t)D2NPCSpeech[gnNpcMenuCainIdentifyGUID].bNoIntro;
     if (!(nSelectedIndex >= nDialogBaseOffset && _Interaction::bInteractingWithNpc)) {
@@ -3959,7 +3953,7 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
 
     D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (pNpcUnit) {
-      D2GSPacketSrv0x27_TextStrc* pOverheadText;
+      uint16_t wDialogStringId;
       nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
       pOverheadText = Text::TEXT_GetOverheadGlobalPointer();
       if (!pOverheadText) {
@@ -3967,16 +3961,15 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
         exit(-1);
       }
 
-      nMessageId = D2Common::Text::TEXT_GetMessageByIndex(pOverheadText, nSelectedIndex - nDialogBaseOffset);
-      wMessageId = (uint16_t)nMessageId;
-      gnNpcMenuScrollCompleteMode = wMessageId;
+      wDialogStringId = D2Common::Text::TEXT_GetMessageByIndex(pOverheadText, nSelectedIndex - nDialogBaseOffset);
+      gnNpcMenuScrollCompleteMode = wDialogStringId;
       if (_Interaction::bInteractingWithNpc) {
         pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       } else {
         pNpcUnit = 0;
       }
 
-      Text::TEXT_ShowNpcDialog(pNpcUnit, wMessageId, 0);
+      Text::TEXT_ShowNpcDialog(pNpcUnit, wDialogStringId, 0);
       gnNpcMenuActiveMode = 1;
       Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
       Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
@@ -6828,6 +6821,7 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(nTitleStringId), 0x15, 0, 4, 1, 0, 0);
     D2GSPacketSrv0x27_TextStrc* pMsgLog = Text::TEXT_GetOverheadGlobalPointer();
     if (pMsgLog) {
+      uint16_t nSoundId;
       nErrorLine = D2Common::Text::TEXT_CountMessagesOfType2(pMsgLog);
       gnNpcMenuCainIdentifyGUID = nSpeechIdx;
       if (!D2NPCSpeech[nSpeechIdx].bNoIntro) {
@@ -6840,10 +6834,10 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
       pfnShowCurrentGossip = (fpDialogFunc)NPCMENU_ShowCurrentGossipCallback;
       Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd43), 0xf, 0, 0, 1, pfnShowCurrentGossip, nAddStringEnabled);
       for (nMsgLoopIdx = 0; nMsgLoopIdx < nErrorLine; nMsgLoopIdx++) {
-        dwFontArg = D2Common::Text::TEXT_GetMessageByIndex(pMsgLog, nMsgLoopIdx);
+        nSoundId = D2Common::Text::TEXT_GetMessageByIndex(pMsgLog, nMsgLoopIdx);
         nAddStringEnabled = 1;
         pfnShowSelectedOption = NPCMENU_ShowSelectedDialogOption;
-        Dialog::AddStringData(Dialog::gpNpcGossipDialog, Text::TEXT_LookupSoundStringIndex((uint16_t)dwFontArg), 0xf, 0, 0, 1, pfnShowSelectedOption, nAddStringEnabled);
+        Dialog::AddStringData(Dialog::gpNpcGossipDialog, Text::TEXT_LookupSoundStringIndex(nSoundId), 0xf, 0, 0, 1, pfnShowSelectedOption, nAddStringEnabled);
       }
 
       if (_Interaction::nCurrentInteractedNpcClassId == 0xc9) {

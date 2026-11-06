@@ -45,9 +45,9 @@ void __stdcall STRUCT_FreeTxtMessageForPacket0x27(struct D2GSPacketSrv0x27_TextS
 // @sourcefile .\Text\Text.cpp
 void __stdcall AddNewGossipText(struct D2GSPacketSrv0x27_TextStrc * pGossipText, int32_t nStringIndex, int32_t bMenu);
 int32_t __stdcall TEXT_CountMessagesOfType2(struct D2GSPacketSrv0x27_TextStrc * pMsgList);
-uint32_t __stdcall TEXT_GetMessageByIndex(struct D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex);
-uint32_t __stdcall OVERHEAD_GetMessageType0(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex);
-uint32_t __stdcall OVERHEAD_GetMessageType1(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nTargetIndex);
+uint16_t __stdcall TEXT_GetMessageByIndex(struct D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex);
+uint16_t __stdcall OVERHEAD_GetMessageType0(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex);
+uint16_t __stdcall OVERHEAD_GetMessageType1(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nTargetIndex);
 void __stdcall BuildPacket0x27Messages(struct D2GSPacketSrv0x27_TextStrc * pTxtMsg, uint32_t * pOutMessageData);
 // @sourcefile .\Text\Text.cpp
 void __stdcall StoreMessages(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, uint8_t * pPacketData);

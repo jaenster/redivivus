@@ -118,7 +118,7 @@ int32_t __stdcall TEXT_CountMessagesOfType2(D2GSPacketSrv0x27_TextStrc * pMsgLis
     return nCount;
 }
 
-uint32_t __stdcall TEXT_GetMessageByIndex(D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex) {
+uint16_t __stdcall TEXT_GetMessageByIndex(D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry = pMsgList->pMessage;
     int nIndex = 0;
     do {
@@ -127,7 +127,7 @@ uint32_t __stdcall TEXT_GetMessageByIndex(D2GSPacketSrv0x27_TextStrc * pMsgList,
       }
       if (pCurEntry->nType == 2) {
         if (nIndex == nTargetIndex) {
-          return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)pCurEntry >> 0x10) << 16 | (uint32_t)(uint16_t)pCurEntry->nMessage);
+          return pCurEntry->nMessage;
         }
 
         nIndex++;
@@ -137,7 +137,7 @@ uint32_t __stdcall TEXT_GetMessageByIndex(D2GSPacketSrv0x27_TextStrc * pMsgList,
     } while (true);
 }
 
-uint32_t __stdcall OVERHEAD_GetMessageType0(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex) {
+uint16_t __stdcall OVERHEAD_GetMessageType0(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry = pGSPacketSrv0x27_Text->pMessage;
     int nMatchCount = 0;
     do {
@@ -146,7 +146,7 @@ uint32_t __stdcall OVERHEAD_GetMessageType0(D2GSPacketSrv0x27_TextStrc * pGSPack
       }
       if (!pCurEntry->nType) {
         if (nMatchCount == nIndex) {
-          return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)pCurEntry >> 0x10) << 16 | (uint32_t)(uint16_t)pCurEntry->nMessage);
+          return pCurEntry->nMessage;
         }
 
         nMatchCount++;
@@ -156,7 +156,7 @@ uint32_t __stdcall OVERHEAD_GetMessageType0(D2GSPacketSrv0x27_TextStrc * pGSPack
     } while (true);
 }
 
-uint32_t __stdcall OVERHEAD_GetMessageType1(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nTargetIndex) {
+uint16_t __stdcall OVERHEAD_GetMessageType1(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nTargetIndex) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry = pGSPacketSrv0x27_Text->pMessage;
     int nType1Count = 0;
     do {
@@ -165,7 +165,7 @@ uint32_t __stdcall OVERHEAD_GetMessageType1(D2GSPacketSrv0x27_TextStrc * pGSPack
       }
       if (pCurEntry->nType == 1) {
         if (nType1Count == nTargetIndex) {
-          return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)pCurEntry >> 0x10) << 16 | (uint32_t)(uint16_t)pCurEntry->nMessage);
+          return pCurEntry->nMessage;
         }
 
         nType1Count++;
