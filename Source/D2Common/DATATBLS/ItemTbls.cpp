@@ -1700,12 +1700,9 @@ int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2) {
     return -(uint32_t)(*(uint32_t*)((char*)pEntry2 + 4) > *(uint32_t*)((char*)pEntry1 + 4));
 }
 
-// One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and gnItemTblsCacheSize (per-level upper-bound cache for [1..99]).
+// One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and the per-level row counts (anLevelLimit) (per-level upper-bound cache for [1..99]).
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
-    // Static local variables (originally global data)
-    static int gnItemTblsCacheSize[100] = {}; D2_STATIC_GUARD(gnItemTblsCacheSize, "D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_gamble::gnItemTblsCacheSize");
-
     int32_t nItemClassId;
     int nLevelCacheIdx;
     int* pGambleEntry;
@@ -1716,7 +1713,7 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
     };
     D2GambleTxt* pTxtGamble = (D2GambleTxt*)DataTbls::CompileTxt(pMemory, "gamble", gamble, &nTxtGambleSize.nSize, 0xc);
     if (nTxtGambleSize.nSize) {
-      nTxtGambleSize.pTable = D2_ALLOC_POOL_AT(nullptr, nTxtGambleSize.nSize * 4, ".\\DATATBLS\\ItemTbls.cpp", 0x7db);
+      nTxtGambleSize.pTable = (int*)D2_ALLOC_POOL_AT(nullptr, nTxtGambleSize.nSize * 4, ".\\DATATBLS\\ItemTbls.cpp", 0x7db);
       nIdx = 0;
       if (nTxtGambleSize.nSize > 0) {
         pGambleEntry = &pTxtGamble->nItemClassId;
@@ -1740,19 +1737,19 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
     }
 
     for (nIdx = 0; nIdx < nTxtGambleSize.nSize; nIdx++) {
-      *(int*)((int)nTxtGambleSize.pTable + nIdx * 4) = pTxtGamble[nIdx].nItemClassId;
+      nTxtGambleSize.pTable[nIdx] = pTxtGamble[nIdx].nItemClassId;
     }
 
-    gnItemTblsCacheSize[0] = 2;
+    nTxtGambleSize.anLevelLimit[0] = 2;
     nIdx = 1;
     do {
-      gnItemTblsCacheSize[nIdx] = nTxtGambleSize.nSize;
+      nTxtGambleSize.anLevelLimit[nIdx] = nTxtGambleSize.nSize;
       nLevelCacheIdx = 0;
       if (nTxtGambleSize.nSize > 0) {
         pGambleEntry = &pTxtGamble->nLevel;
         do {
           if (nIdx < *pGambleEntry) {
-            gnItemTblsCacheSize[nIdx] = nLevelCacheIdx;
+            nTxtGambleSize.anLevelLimit[nIdx] = nLevelCacheIdx;
             break;
           }
 

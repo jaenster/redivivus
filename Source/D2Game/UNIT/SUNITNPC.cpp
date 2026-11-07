@@ -2056,7 +2056,7 @@ void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, D2UnitStrc *
         pPlayerUnit = (D2UnitStrc*)0x5;
       }
 
-      nItemTableIdx = (&pGambleTable[1].nSize)[(int)pPlayerUnit];
+      nItemTableIdx = pGambleTable->anLevelLimit[(int)pPlayerUnit];
       if ((int)nItemTableIdx <= 0) {
         nItemTableIdx = 0;
       } else if (nItemTableIdx & nItemTableIdx - 1) {
@@ -2071,7 +2071,7 @@ void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, D2UnitStrc *
         nItemTableIdx = nItemTableIdx - 1 & nSeedState.nSeedLow;
       }
 
-      uRandLow = *(uint32_t*)((int)pGambleTable->pTable + nItemTableIdx * 4);
+      uRandLow = pGambleTable->pTable[nItemTableIdx];
       if (!pGame->bExpansion) {
         pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(uRandLow);
         if (!pItemsTxt) {

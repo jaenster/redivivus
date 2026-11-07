@@ -62,7 +62,8 @@ struct D2BooksTxt {
 #define D2_DEFINED_D2GambleTableStrc
 struct D2GambleTableStrc {
     /* 0x00 */ int nSize;
-    /* 0x04 */ void * pTable;
+    /* 0x04 */ int * pTable; // rows of the gamble item list (item code per row)
+    /* 0x08 */ int anLevelLimit[100]; // per item level, the number of gamble rows whose level is at most that
 };
 
 #endif // D2_DEFINED_D2GambleTableStrc
@@ -326,7 +327,7 @@ void __stdcall ITEMTBLS_FreeItemStatCost();
 void __fastcall TXT_AllocTxt_properties(struct D2PoolManagerStrc * pMemory);
 void __stdcall ITEMTBLS_FreeProperties();
 int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2);
-// One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and gnItemTblsCacheSize (per-level upper-bound cache for [1..99]).
+// One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and the per-level row counts (anLevelLimit) (per-level upper-bound cache for [1..99]).
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_gamble(struct D2PoolManagerStrc * pMemory);
 // @sourcefile .\DATATBLS\ItemTbls.cpp
