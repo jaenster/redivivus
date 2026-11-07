@@ -19,6 +19,7 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Game/GAME/Arena.h"

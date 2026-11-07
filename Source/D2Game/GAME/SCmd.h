@@ -280,14 +280,6 @@ struct __attribute__((packed)) D2GSPacketSrv0x90 {
 
 #endif // D2_DEFINED_D2GSPacketSrv0x90
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketSrv0x98 {
-    /* 0x00 */ uint8_t nPacketId;
-    /* 0x01 */ uint32_t nUnitGUID;
-    /* 0x05 */ uint16_t wValue;
-};
-
-#endif // D2_MODULE_D2Game
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2GSPacketSrv0x9C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nAction;

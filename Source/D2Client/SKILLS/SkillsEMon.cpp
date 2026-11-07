@@ -873,7 +873,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_BloodAndMissileB(D2UnitStrc * pUnit, eD2Sk
       return 0;
     }
 
-    UNIT::Monster::MONSTER_SpawnBloodParticles(pOwnerUnit, (D2MonStats2Txt*)0x3, 0);
+    UNIT::Monster::MONSTER_SpawnBloodParticles(pOwnerUnit, 3, 0);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
     sSkillArg.eSkillNo = eSkill;

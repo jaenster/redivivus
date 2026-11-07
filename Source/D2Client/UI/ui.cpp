@@ -3529,7 +3529,7 @@ void __fastcall UI_FormatItemNameWithQuality(D2UnitStrc * pUnit, uint16_t * wszT
     }
 }
 
-static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t * wszText, int32_t nFormatMode, bool * pbIsPartied, int * pnHpBarValue) {
+static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t * wszText, int32_t nFormatMode, BOOL * pbIsPartied, int * pnHpBarValue) {
     uint32_t nLangCode;
     int nUnitGUID;
     int nRoster1GUID;
@@ -3546,10 +3546,7 @@ static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t 
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDeadName, pRosterName, 0x80);
         nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
         D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszText, wszDeadName, D2Lang::StrTable::strtable::GetLocaleString(0x90b), nFormatMode, nLangCode);
-        pbIsPartied[0] = true;
-        pbIsPartied[1] = false;
-        pbIsPartied[2] = false;
-        pbIsPartied[3] = false;
+        *pbIsPartied = 1;
         return;
       }
 
@@ -3560,10 +3557,7 @@ static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t 
 
     int32_t nHpPercent = GAME::Roster::GetRosterPlayerHpPercent(nUnitGUID);
     *pnHpBarValue = (nHpPercent << 7) / 100;
-    pbIsPartied[0] = false;
-    pbIsPartied[1] = false;
-    pbIsPartied[2] = false;
-    pbIsPartied[3] = false;
+    *pbIsPartied = 0;
     if (!pUnit) {
       nUnitGUID = -1;
     } else {
@@ -3579,10 +3573,7 @@ static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t 
 
     nLangCode = GAME::Roster::CheckRostersArePartied(nRoster1GUID, nUnitGUID);
     if (nLangCode) {
-      pbIsPartied[0] = true;
-      pbIsPartied[1] = false;
-      pbIsPartied[2] = false;
-      pbIsPartied[3] = false;
+      *pbIsPartied = 1;
     }
 
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszText, pszRosterNameCopy, 0x80);
@@ -3903,7 +3894,7 @@ void __stdcall DRAW_UI_DeathMessage() {
 void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
     uint16_t wszName[128];
     tagRECT rcView;
-    bool bIsPartied[4];
+    BOOL bIsPartied;
     int nHpBarValue;
     int nViewLeft;
     int nViewTop;
@@ -3943,7 +3934,7 @@ void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
     }
 
     Fog::File::CONTAINER_InitializeBuffer(wszName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    UI_FormatPlayerNameAndStatus(pUnit, wszName, 0x80, bIsPartied, &nHpBarValue);
+    UI_FormatPlayerNameAndStatus(pUnit, wszName, 0x80, &bIsPartied, &nHpBarValue);
 }
 
 void __stdcall UI_DrawPlayerStateOverlays() {
@@ -5303,7 +5294,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
         Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-      UI_FormatPlayerNameAndStatus(pUnit, __frame0.wszNameBuf, 0x80, (bool*)&__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult);
+      UI_FormatPlayerNameAndStatus(pUnit, __frame0.wszNameBuf, 0x80, &__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult);
       D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(__frame0.wszNameBuf, nHealthBarScreenX, gnMercenaryHealthBarScreenY - 0x48, __frame0.nScreenX, 1, (int32_t)__frame0.pLevelTxtResult);
       return;
       case UNIT_ITEM:

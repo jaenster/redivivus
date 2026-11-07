@@ -198,7 +198,8 @@ uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
     return pwszResult;
 }
 
-void __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars) {
+uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars) {
+    uint16_t* puVar1 = pwszDst;
     uint16_t wCurChar = *pwszDst;
     while (wCurChar) {
       pwszDst++;
@@ -217,35 +218,37 @@ void __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc
     }
 
     *pwszDst = 0;
+    return puVar1;
 }
 
-void __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe) {
-    uint32_t nRemaining;
+uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe) {
+    uint16_t* pWritePtr = pDestination;
     while (nSizeMaybe) {
       if (*wszChar == L'\0') {
         break;
       }
 
-      *pDestination = *wszChar;
-      pDestination++;
+      *pWritePtr = *wszChar;
+      pWritePtr++;
       wszChar++;
       nSizeMaybe--;
     }
 
-    if (!nSizeMaybe) {
-      return;
+    if (nSizeMaybe) {
+      uint32_t nRemaining;
+      for (nRemaining = nSizeMaybe >> 1; nRemaining; nRemaining--) {
+        pWritePtr[0] = L'\0';
+        pWritePtr[1] = L'\0';
+        pWritePtr += 2;
+      }
+
+      for (nRemaining = (uint32_t)((nSizeMaybe & 1) != 0); nRemaining; nRemaining--) {
+        *pWritePtr = L'\0';
+        pWritePtr++;
+      }
     }
 
-    for (nRemaining = nSizeMaybe >> 1; nRemaining; nRemaining--) {
-      pDestination[0] = L'\0';
-      pDestination[1] = L'\0';
-      pDestination += 2;
-    }
-
-    for (nRemaining = (uint32_t)((nSizeMaybe & 1) != 0); nRemaining; nRemaining--) {
-      *pDestination = L'\0';
-      pDestination++;
-    }
+    return pDestination;
 }
 
 uint16_t * __fastcall STRING_CopyWideString(uint16_t * wDestination, uint16_t * wSource) {

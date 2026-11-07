@@ -63,6 +63,7 @@ struct D2ChatDlgUnknown_0x10;
 struct D2ChatPlayerNameNodeStrc;
 struct D2ClassIconWithNameStrc;
 struct D2ClientGameDataStrc;
+struct D2ClientMonAnimModeEntryStrc;
 struct D2ClientSoundChannelStrc;
 struct D2ClientStrc;
 struct D2ClientTimerStrc;
@@ -608,15 +609,6 @@ struct D2ClientLightPulseStrc {
     /* 0x28 */ uint32_t bApplied;
 };
 #endif // D2_DEFINED_D2ClientLightPulseStrc
-
-#ifndef D2_DEFINED_D2ClientMonAnimModeEntryStrc
-#define D2_DEFINED_D2ClientMonAnimModeEntryStrc
-struct D2ClientMonAnimModeEntryStrc {
-    /* 0x00 */ int32_t nField0;
-    /* 0x04 */ int32_t nField4;
-    /* 0x08 */ int32_t nField8;
-};
-#endif // D2_DEFINED_D2ClientMonAnimModeEntryStrc
 
 #ifndef D2_DEFINED_D2ClientSpriteLoadStatusStrc
 #define D2_DEFINED_D2ClientSpriteLoadStatusStrc

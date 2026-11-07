@@ -148,7 +148,7 @@ struct D2CompCofListNodeStrc {
 #ifndef D2_DEFINED_D2FontCacheEntryStrc
 #define D2_DEFINED_D2FontCacheEntryStrc
 struct D2FontCacheEntryStrc {
-    /* 0x00 */ void * pFontDC6; // struct DC6* font sprite image, freed by IMAGE_FreeImage
+    /* 0x00 */ struct DC6 * pFontDC6; // struct DC6* font sprite image, freed by IMAGE_FreeImage
     /* 0x04 */ void * pFontTable; // Allocated font table/cache data, freed by FreeClientMemory
     /* 0x08 */ struct D2FontTableHeaderStrc * pFontTableHeader; // The loaded font .tbl (same buffer as pFontTable): +8 glyph count, +0xa line height
     /* 0x0C */ struct D2FontGlyphStrc * pGlyphs; // Glyph array of the loaded .tbl, pFontTableHeader + 0xc (was misnamed szFontTablePath: it is not a path)

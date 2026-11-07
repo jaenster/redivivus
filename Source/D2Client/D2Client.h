@@ -570,6 +570,14 @@ struct D2ClientHotKeyStrc {
     /* 0x04 */ int nItemGUID;
 };
 #endif // D2_DEFINED_D2ClientHotKeyStrc
+#ifndef D2_DEFINED_D2ClientMonAnimModeEntryStrc
+#define D2_DEFINED_D2ClientMonAnimModeEntryStrc
+struct D2ClientMonAnimModeEntryStrc {
+    /* 0x00 */ int32_t nField0;
+    /* 0x04 */ int32_t nField4;
+    /* 0x08 */ int32_t nField8;
+};
+#endif // D2_DEFINED_D2ClientMonAnimModeEntryStrc
 #ifndef D2_DEFINED_D2ClientSoundChannelStrc
 #define D2_DEFINED_D2ClientSoundChannelStrc
 struct D2ClientSoundChannelStrc {
@@ -1831,6 +1839,14 @@ struct D2GSPacketSrv0x91 {
     /* 0x02 */ uint16_t nNpcID[12];
 };
 #endif // D2_DEFINED_D2GSPacketSrv0x91
+#ifndef D2_DEFINED_D2GSPacketSrv0x98
+#define D2_DEFINED_D2GSPacketSrv0x98
+struct __attribute__((packed)) D2GSPacketSrv0x98 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t nUnitGUID;
+    /* 0x05 */ uint16_t wValue;
+};
+#endif // D2_DEFINED_D2GSPacketSrv0x98
 #ifndef D2_DEFINED_D2GSPacketSrv0x9B
 #define D2_DEFINED_D2GSPacketSrv0x9B
 struct __attribute__((packed)) D2GSPacketSrv0x9B {

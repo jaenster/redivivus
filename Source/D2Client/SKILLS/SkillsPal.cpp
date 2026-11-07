@@ -602,7 +602,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(D2UnitStrc * pU
     uint32_t nCurrentTick = GAME::Game::GetEntryIndex();
     if (nCurrentTick > gdwBloodParticleThrottleNextTick) {
       gdwBloodParticleThrottleNextTick = nCurrentTick + 5;
-      UNIT::Monster::MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x1, 0);
+      UNIT::Monster::MONSTER_SpawnBloodParticles(pUnit, 1, 0);
     }
 
     return 1;

@@ -393,8 +393,8 @@
         "D2GFX_DrawShiftedImage"
       ],
       "usedTypes": [
+        "D2FontGlyphStrc",
         "D2GfxDataStrc",
-        "DC6",
         "GLOBALPALLETE",
         "WCHAR",
         "int32_t",

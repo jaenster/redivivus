@@ -25,7 +25,7 @@ struct D2FontGlyphStrc;
 #ifndef D2_DEFINED_D2FontCacheEntryStrc
 #define D2_DEFINED_D2FontCacheEntryStrc
 struct D2FontCacheEntryStrc {
-    /* 0x00 */ void * pFontDC6; // struct DC6* font sprite image, freed by IMAGE_FreeImage
+    /* 0x00 */ struct DC6 * pFontDC6; // struct DC6* font sprite image, freed by IMAGE_FreeImage
     /* 0x04 */ void * pFontTable; // Allocated font table/cache data, freed by FreeClientMemory
     /* 0x08 */ struct D2FontTableHeaderStrc * pFontTableHeader; // The loaded font .tbl (same buffer as pFontTable): +8 glyph count, +0xa line height
     /* 0x0C */ struct D2FontGlyphStrc * pGlyphs; // Glyph array of the loaded .tbl, pFontTableHeader + 0xc (was misnamed szFontTablePath: it is not a path)
@@ -107,7 +107,7 @@ int32_t __fastcall D2WINFONT_GetStringPixelWidth(uint16_t * pwszString, int32_t 
 // Thin wrapper around D2GFX_DrawSolidRectEx. Adjusts Y coordinates and forwards to renderer.
 void __stdcall D2WINFONT_DrawSolidRectFromBottomLeft(int32_t nX, DRAWMODE eDrawMode, int32_t nWidth, int32_t nY, int32_t nHeight, uint32_t dwColor);
 // Right-to-left text renderer (for RTL languages). Draws glyphs from right edge backwards with horizontal bounds checking. Processes color codes, newlines. Returns pointer to last glyph data.
-void * __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nLeftBound, uint32_t nRightBound);
+void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nLeftBound, uint32_t nRightBound);
 // Draws text with optional background box. If bDrawBackground is non-zero, calculates text width and adds 8px padding. Forwards to DrawWideStringWithDrawMode.
 void __fastcall D2WINFONT_DrawTextWithOptionalBackground(uint16_t * wszText, int32_t nX, int32_t nY, GLOBALPALLETE eGlobalPalette, int32_t bDrawBackground, DRAWMODE eDrawMode);
 // Thunk/wrapper for DrawWideStringSimple. Direct passthrough.

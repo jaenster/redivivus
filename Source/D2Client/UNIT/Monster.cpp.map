@@ -136,7 +136,6 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "D2WaypointStrc *",
         "WCHAR",
         "int32_t",
         "uint16_t",
@@ -1176,8 +1175,8 @@
         "UNITS_FindClientSideUnit"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x98",
         "D2UnitStrc",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -1198,9 +1197,9 @@
         "AdvanceAnimFrame"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
+        "D2ClientMonAnimModeEntryStrc",
         "D2ServerMessageHandleStrc",
-        "int32_t",
+        "D2UnitStrc",
         "uint32_t"
       ]
     },
@@ -1249,6 +1248,7 @@
         "PlayUnitFootstepSound"
       ],
       "usedTypes": [
+        "D2ClientMonAnimModeEntryStrc",
         "D2DynamicPathStrc",
         "D2MonStatsTxt",
         "D2UnitStrc",

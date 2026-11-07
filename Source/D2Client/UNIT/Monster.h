@@ -16,7 +16,6 @@
 
 // Forward declarations
 struct D2AiGeneralStrc;
-struct D2DynamicPathStrc;
 struct D2MonStatsTxt;
 struct D2MonsterAiParameterStruct;
 struct D2PalShiftEntryStrc;
@@ -59,6 +58,24 @@ struct D2AiParamStrc {
 };
 
 #endif // D2_DEFINED_D2AiParamStrc
+#ifndef D2_DEFINED_D2ClientMonAnimModeEntryStrc
+#define D2_DEFINED_D2ClientMonAnimModeEntryStrc
+struct D2ClientMonAnimModeEntryStrc {
+    /* 0x00 */ int32_t nField0;
+    /* 0x04 */ int32_t nField4;
+    /* 0x08 */ int32_t nField8;
+};
+
+#endif // D2_DEFINED_D2ClientMonAnimModeEntryStrc
+#ifndef D2_DEFINED_D2GSPacketSrv0x98
+#define D2_DEFINED_D2GSPacketSrv0x98
+struct __attribute__((packed)) D2GSPacketSrv0x98 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t nUnitGUID;
+    /* 0x05 */ uint16_t wValue;
+};
+
+#endif // D2_DEFINED_D2GSPacketSrv0x98
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2MercInitArgStrc {
     D2MercInitArgStrc() = default;
@@ -341,7 +358,7 @@ void __fastcall MONSTER_TransformToClassId(struct D2UnitStrc * pUnit, int32_t nC
 // Spawns a spread of missiles for Fetish monsters (BaseId 0x3f). Reads the difficulty-scaled count from MonStatsTxt TreasureClass, seeds an RNG from the unit GUID, and fires nMissileId missiles at alternating X/Y offsets (±5 tiles) around (nTargetX, nTargetY) via MakeMissile.
 void __stdcall MONSTER_SpawnFetishMissileSpread(struct D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nTargetX, int32_t nTargetY);
 // Spawns blood-trail particle missiles behind a bleeding running monster. Uses the unit seed to probabilistically skip frames (1/25, and 1/3 while running). Only proceeds for UNIT_MONSTER whose MonStats2 byBleed flag is set; spawn count comes from the item_extrablood stat or the passed default. For each drop it picks a direction-biased offset slot, scans the 8 collision-offset slots (gTxtCompilationMemPool tables) for a non-blocking tile near the unit's path X/Y, rolls a blood-missile variant (MISSILE_Blood1 + byBleed range), and creates it via MakeMissile. Advances the seed throughout; return value is a leftover register, not meaningful.
-void __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, struct D2MonStats2Txt * pD2MonStats2Txt, int nBloodDirSlot);
+void __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, int nDefaultCount, int nBloodDirSlot);
 // Central per-monster state/mode message dispatcher. Given a message type nParam (0..0x1d), a monster D2UnitStrc, and a server message handle, transitions the monster's path/anim mode: walk/run/move-to (0,1,4,5,etc.), got-hit (6,0x13), death (8) and dying/corpse (9), sequence/skill start (0x14,0x15,0x16), town-walk (0x12), etc. Restores collision and resets the 0x2000 path flag, sets target unit by type/GUID, calculates paths, applies per-classId special cases (unique death overlays/missiles/sounds, burrow transitions, special facing) keyed on the monster's base MonStats id, and updates UNITFLAG targetable/shadow/nodraw flags. Halts via Fog ErrorManager when a required pMessage is null. Tail applies velocity-percent stat changes and dispatches unique-mod walk callbacks. __fastcall (nParam in ECX, pUnit in EDX).
 void __fastcall MonsterMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);
 struct D2UnitStrc * __fastcall Unreferenced_004b1030(struct D2UnitStrc * param_1);
@@ -349,9 +366,9 @@ uint32_t __fastcall NPCMENU_ParseSpeechData(struct D2UnitStrc * pUnit, uint8_t *
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(struct D2UnitStrc * pUnit, struct D2MercInitArgStrc * pMercInit);
 int __fastcall MONSTER_CanBeConverted(struct D2UnitStrc * pUnit);
-void __fastcall NPCMENU_HandleQuestUpdate(int32_t pPacket);
+void __fastcall NPCMENU_HandleQuestUpdate(struct D2GSPacketSrv0x98 * pPacket);
 // Client-side monster animation tick / end-of-cycle event dispatcher. Fires MonsterMessage(9) when SplEndDeath is set and both target coords are zero at the end of the frame cycle. Then switches on mode (nParam+4): advances the frame, clears collision/size, sets a path-point flag, or resets size to 0x100 depending on mode 0-3.
-uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(struct D2DynamicPathStrc * pDynamicPath, int32_t pAnimModeEntry);
+uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(struct D2UnitStrc * pUnit, struct D2ClientMonAnimModeEntryStrc * pAnimModeEntry);
 // Client-side per-frame update tick for a monster/NPC unit (param is the unit; aliased as D2DynamicPathStrc). Skips if frozen-and-inactive; reads the unit's animation-mode entry, advances path/trail-effect stepping for walk modes, resolves the client-side target unit from the server path, periodically recalculates pathing, and faces the player when nearby. Computes name-color and the per-anim-mode completion flag, casts queued skill missiles, dispatches unique-mod get-hit handlers, interpolates path direction, fires the skill-anim-end handler, may spawn missile 0x1de on a DOUPDATE object, runs damage-state skill effects, and updates SFX/footstep sounds.
 void __fastcall CLIENT_UpdateUnitNameplate(struct D2UnitStrc * pDynamicPath);
 void StaticInit_gnMonsterUniqueNameBuffer();

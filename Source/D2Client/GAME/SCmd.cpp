@@ -2188,7 +2188,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER(char * pBytes) {
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
     sPayload.nData6 = pBytes[6];
-    UNIT::Monster::NPCMENU_HandleQuestUpdate((intptr_t)&sPayload);
+    UNIT::Monster::NPCMENU_HandleQuestUpdate((D2GSPacketSrv0x98*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes) {

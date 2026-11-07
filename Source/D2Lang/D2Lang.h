@@ -101,8 +101,8 @@ int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16
 uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars);
 uint16_t * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind);
 uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2);
-void __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars);
-void __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe);
+uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars);
+uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe);
 uint16_t * __fastcall STRING_CopyWideString(uint16_t * wDestination, uint16_t * wSource);
 int32_t __fastcall STRING_GetWideStringLength(uint16_t * wszString);
 uint16_t * __fastcall UNICODE_FindSubstring(uint16_t * pwszHaystack, uint16_t * pwszNeedle);

@@ -435,13 +435,14 @@ void __fastcall SendMercForHireList(::SGAMEDATA * pGame, D2ClientStrc * pClient,
 
 // In Normal difficulty returns min(nLevel, {12,20,28,36,45}[npc act]); otherwise nLevel unchanged.
 int32_t __fastcall SUNITNPC_GetActCappedLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nLevel) {
-    int aActLevels[6];
+    int aActLevels[5];
+    int nNpcIndex;
     int32_t nEffectiveLevel = nLevel;
     if (pGame->nDifficulty) {
       return nEffectiveLevel;
     }
 
-    D2GameNpcStrc* pGameNpc = sunitproxy::GetGameNpcByUnit(pGame, pUnit, aActLevels + 5);
+    D2GameNpcStrc* pGameNpc = sunitproxy::GetGameNpcByUnit(pGame, pUnit, &nNpcIndex);
     if (!pGameNpc) {
       return nEffectiveLevel;
     }

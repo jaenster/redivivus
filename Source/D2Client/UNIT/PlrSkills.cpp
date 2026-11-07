@@ -892,7 +892,7 @@ void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States
 
 void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
-    Monster::MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x5, 0);
+    Monster::MONSTER_SpawnBloodParticles(pUnit, 5, 0);
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!(pDVar1 && pDVar1->missile >= 0 && (int)pDVar1->missile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
