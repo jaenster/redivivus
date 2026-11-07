@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Game)
 #error "Game header included by a module that may not use Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Game) && !defined(D2_LOADS_Game)
+#error "internal Game header included from another module; include Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -51,7 +54,7 @@ uint32_t __stdcall ERRORMANAGER_TryGetProcAddress(HMODULE hModule, FARPROC * ppf
 void __stdcall LIB_LoadAdvapi32();
 // lpHandlerProc parameter of RegisterServiceCtrlHandlerA
 void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl);
-int Unreferenced_00406470();
+BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService);
 // Early app bootstrap: set log path, parse cmdline/registry for app mode, init INI, then ApplicationMain.
 void __fastcall PreInitApplication(int32_t argc, char * * argv);
 // ServiceMain for the DIABLO2SRV service. Registers the control handler, reports

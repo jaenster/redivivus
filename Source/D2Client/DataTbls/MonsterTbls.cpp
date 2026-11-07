@@ -2,8 +2,7 @@
 
 #include "Source/D2Client/DataTbls/MonsterTbls.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -11,12 +10,12 @@
 
 namespace D2Client::DataTbls::MonsterTbls {
 
-int __fastcall Unreferenced_00451fb0(int param_1) {
+D2MonStats2Txt * __fastcall Unreferenced_00451fb0(int param_1) {
     if (param_1 >= 0 && param_1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize) {
-      return (int)(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + param_1);
+      return D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + param_1;
     }
 
-    return 0;
+    return nullptr;
 }
 
 int Unreferenced_00452020() {

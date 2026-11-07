@@ -1211,6 +1211,9 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "Unreferenced_004b3560"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

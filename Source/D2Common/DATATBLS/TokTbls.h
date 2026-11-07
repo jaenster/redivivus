@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,6 +25,8 @@ struct D2MonModeTxt;
 struct D2PoolManagerStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ObjModeTxt
+#define D2_DEFINED_D2ObjModeTxt
 struct __attribute__((packed)) D2ObjModeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
@@ -43,6 +48,9 @@ struct __attribute__((packed)) D2ObjModeTxt {
     /* 0x33 */ uint8_t field_0x33;
 };
 
+#endif // D2_DEFINED_D2ObjModeTxt
+#ifndef D2_DEFINED_D2ObjTypeTxt
+#define D2_DEFINED_D2ObjTypeTxt
 struct __attribute__((packed)) D2ObjTypeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
@@ -64,6 +72,9 @@ struct __attribute__((packed)) D2ObjTypeTxt {
     /* 0x33 */ uint8_t field_0x33;
 };
 
+#endif // D2_DEFINED_D2ObjTypeTxt
+#ifndef D2_DEFINED_D2PlrTypeModeTxt
+#define D2_DEFINED_D2PlrTypeModeTxt
 struct __attribute__((packed)) D2PlrTypeModeTxt {
     /* 0x00 */ char szName[32];
     /* 0x20 */ char szToken[4];
@@ -85,6 +96,7 @@ struct __attribute__((packed)) D2PlrTypeModeTxt {
     /* 0x33 */ uint8_t field_0x33;
 };
 
+#endif // D2_DEFINED_D2PlrTypeModeTxt
 namespace D2Common::DATATBLS::TokTbls {
 
 // Function declarations

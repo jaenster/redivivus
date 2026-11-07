@@ -2,30 +2,19 @@
 
 #include "Source/Game/Main.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Common/Chat/Ignorelist.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2MCPClient/McpConnect.h"
-#include "Source/D2Sound/Sound.h"
-#include "Source/D2Win/D2GFX.h"
-#include "Source/D2Win/Src/D2WinArchive.h"
-#include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2MCPClient/D2MCPClient.h"
+#include "Source/D2Sound/D2Sound.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Src/AsyncData.h"
-#include "Source/Fog/Src/D2Net.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Launch/D2Launch.h"
+#include "Source/D2Launch/D2LaunchRoot.h"
 #include "Source/D2Multi/ChatDlg.h"
-#include "Source/D2gfx/D2GFX.data.h"
 #include "Source/Game/Main.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -758,7 +747,7 @@ static void INI_StripDelimiters(char * szText) {
     pCursor = szText;
     pCursor = pCursor + strlen(pCursor) + 1;
     int nLen;
-    nLen = (int)pCursor - (int)(szText + 1);
+    nLen = (intptr_t)pCursor - (intptr_t)(szText + 1);
     int nReadIdx;
     nReadIdx = 0;
     if (nLen > 0) {
@@ -832,7 +821,7 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
     strcpy((char*)pbArgName, pCursor);
     uint8_t* pbScan = pbArgName;
     pbScan = pbScan + strlen((char*)pbScan) + 1;
-    nCmdLen = (int)pbScan - (int)(pbArgName + 1);
+    nCmdLen = (intptr_t)pbScan - (intptr_t)(pbArgName + 1);
     uint8_t byChar = *pbArgName;
     pbScan = pbArgName;
     while (byChar) {
@@ -995,7 +984,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       Storm::Source::SSTR::SStrPack(__frame0.szLocaleFilePath, "System Survey\\ProductData\\", 0x104);
       pszLocaleSuffix = Storm::Source::SSTR::SStrLen(__frame0.szLocaleFilePath);
       szBufferOutput = __frame0.szLocaleFilePath + pszLocaleSuffix;
-      Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", (uintptr_t)&__frame0.dwSecurityCookie - (int)szBufferOutput);
+      Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", (intptr_t)&__frame0.dwSecurityCookie - (int)szBufferOutput);
       Fog::Source::SFile::SafeCreateDirectoryTree(__frame0.szLocaleFilePath);
       pLocaleFile = fopen(__frame0.szLocaleFilePath, "w");
       if (pLocaleFile) {
@@ -1008,7 +997,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
 
       bIsExpansion = Fog::D2CheckExpansionGame();
       if (bIsExpansion) {
-        Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", (uintptr_t)&__frame0.dwSecurityCookie - (int)szBufferOutput);
+        Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", (intptr_t)&__frame0.dwSecurityCookie - (int)szBufferOutput);
         Fog::Source::SFile::SafeCreateDirectoryTree(__frame0.szLocaleFilePath);
         pLocaleFile = fopen(__frame0.szLocaleFilePath, "w");
         if (pLocaleFile) {
@@ -1488,7 +1477,7 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
 }
 
 void __stdcall CreateRegedit() {
-    LPDWORD dwValueInfo;
+    DWORD dwValueInfo;
     DWORD dwValueNameLen;
     DWORD dwValueDataSize;
     HKEY hKeyDest;
@@ -1504,13 +1493,13 @@ void __stdcall CreateRegedit() {
       do {
         /* LPDWORD lpcbData for RegEnumValueA */ /* LPBYTE lpData for RegEnumValueA */ /* LPDWORD lpType for RegEnumValueA */ /* LPDWORD lpReserved for RegEnumValueA */ /* LPDWORD lpcchValueName for RegEnumValueA */ /* LPSTR lpValueName for RegEnumValueA */ /* DWORD dwIndex for RegEnumValueA */ /* HKEY hKey for RegEnumValueA */ dwValueNameLen = 0x104;
         dwValueDataSize = 0x400;
-        nRegStatus = RegEnumValueA(hKeySrc, dwIndex, szValueName, &dwValueNameLen, (LPDWORD)0x0, (LPDWORD)&dwValueInfo, dataBuf, &dwValueDataSize);
+        nRegStatus = RegEnumValueA(hKeySrc, dwIndex, szValueName, &dwValueNameLen, (LPDWORD)0x0, &dwValueInfo, dataBuf, &dwValueDataSize);
         dwIndex++;
         if (nRegStatus) {
           break;
         }
 
-        /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ nRegStatus = RegSetValueExA(hKeyDest, szValueName, 0, (DWORD)dwValueInfo, dataBuf, dwValueDataSize);
+        /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ nRegStatus = RegSetValueExA(hKeyDest, szValueName, 0, dwValueInfo, dataBuf, dwValueDataSize);
       } while (!nRegStatus);
 
       /* HKEY hKey for RegCloseKey */ RegCloseKey(hKeyDest);
@@ -1644,24 +1633,22 @@ void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl) {
     }
 }
 
-int Unreferenced_00406470() {
-    uint32_t* unaff_ESI;
-    uint32_t* unaff_EDI;
-    *unaff_EDI = 0;
-    *unaff_ESI = 0;
+BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService) {
+    *phService = (SC_HANDLE)0x0;
+    *phSCManager = (SC_HANDLE)0x0;
     DWORD DVar1 = GetVersion();
     if ((int)DVar1 < 0) {
       return 0;
     }
 
     SC_HANDLE pSVar2 = OpenSCManagerA((LPCSTR)0x0, (LPCSTR)0x0, 0xf003f);
-    *unaff_ESI = (uint32_t)(uintptr_t)pSVar2;
+    *phSCManager = pSVar2;
     if (!pSVar2) {
       return 0;
     }
 
     pSVar2 = OpenServiceA(pSVar2, s_DIABLO2SRV_007065dc, 0xf01ff);
-    *unaff_EDI = (uint32_t)(uintptr_t)pSVar2;
+    *phService = pSVar2;
     return 1;
 }
 

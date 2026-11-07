@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2gfx)
 #error "D2gfx header included by a module that may not use D2gfx (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2gfx) && !defined(D2_LOADS_D2gfx)
+#error "internal D2gfx header included from another module; include D2gfx's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,6 +26,7 @@ struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
 typedef uint32_t DRAWMODE;
 typedef uint32_t GLOBALPALLETE;
+typedef uint32_t eD2RendererMode;
 #ifndef RECON_FPTD_D2RendererFunctionsStrc_fpDrawGroundTile
 #define RECON_FPTD_D2RendererFunctionsStrc_fpDrawGroundTile
 typedef void (__fastcall *D2RendererFunctionsStrc_fpDrawGroundTile)(struct D2TileLibraryEntryStrc * pTile, struct D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, BYTE nAlpha, int nScreenPanels, void * pTileData);
@@ -262,11 +266,16 @@ struct __attribute__((packed)) _AppBarData {
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_D2GFXWindowPlacementStrc
+#define D2_DEFINED_D2GFXWindowPlacementStrc
 struct __attribute__((packed)) D2GFXWindowPlacementStrc {
     /* 0x00 */ HWND pHWND;
     /* 0x04 */ WINDOWPLACEMENT pWindowPLacement;
 };
 
+#endif // D2_DEFINED_D2GFXWindowPlacementStrc
+#ifndef D2_DEFINED_D2RendererFunctionsStrc
+#define D2_DEFINED_D2RendererFunctionsStrc
 struct D2RendererFunctionsStrc {
     /* 0x00 */ BOOL (__fastcall *nfpInitialize)(HINSTANCE);
     /* 0x04 */ BOOL (__fastcall *nfpInitPerspective)(struct D2GfxSettingsStrc *, ::D2GfxHelperStrc *);
@@ -324,6 +333,7 @@ struct D2RendererFunctionsStrc {
     /* 0xD4 */ void (__fastcall *nfpClearCaches)();
 };
 
+#endif // D2_DEFINED_D2RendererFunctionsStrc
 namespace D2gfx::D2GFX {
 
 // Function declarations
@@ -353,7 +363,7 @@ void __stdcall RENDERER_TogglePerspective();
 void __stdcall RENDERER_ToggleBlendedShadows();
 BOOL __stdcall D2GFX_ToggleLowQuality();
 void __stdcall D2GFX_GetWindowSizeByResolutionMode(int32_t nResolutionMode, int * nWidth, int * nHeight);
-HWND __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution);
+BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution);
 BOOL __stdcall D2GFX_DestroyWindow();
 void __stdcall D2GFX_OnActivationChange(BOOL bActive);
 HWND __stdcall GetHwnd();
@@ -413,8 +423,6 @@ BOOL __stdcall D2GFX_DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, in
 BOOL __stdcall D2GFX_DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2gfx)
-void __stdcall RENDERER_TogglePerspective_Unref_0044dc40();
-void __stdcall RENDERER_TogglePerspective_Unref_004769b0();
 void __stdcall RENDERER_TogglePerspective_Unref_00477be0();
 void thunk_D2GFX_ResetViewport();
 int __stdcall Unreferenced_004f5040(int param_1, int param_2, int param_3);
@@ -441,7 +449,7 @@ void __stdcall D2GFX_InitializeLineBuffer();
 void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeight);
 // Initializes color lookup tables for palette blending. Populates gPaletteBlendLookupTable (256x256 entries) by blending all combinations of source and destination palette indices. Used by rendering functions for alpha blending and color effects.
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable);
-int Unreferenced_004f8e90();
+void Unreferenced_004f8e90();
 void __stdcall D2GFX_InitializeWindowSize();
 void StaticInit_gpszWindowClassName();
 void StaticInit_szWindowClassName();

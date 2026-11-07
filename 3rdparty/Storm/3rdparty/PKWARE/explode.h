@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,6 +25,8 @@ typedef void (*pfnPkwareWrite)(void * pBuf, uint32_t * pnSize, void * pParam);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_TDcmpStruct
+#define D2_DEFINED_TDcmpStruct
 struct TDcmpStruct {
     /* 0x0000 */ uint32_t offs0000;
     /* 0x0004 */ uint32_t ctype;
@@ -50,6 +55,7 @@ struct TDcmpStruct {
     /* 0x3114 */ uint16_t LenBase[16];
 };
 
+#endif // D2_DEFINED_TDcmpStruct
 namespace Storm::_3rdparty::PKWARE::explode {
 
 // Function declarations

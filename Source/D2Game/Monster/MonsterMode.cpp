@@ -4,21 +4,8 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UI/SkillDesc.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
@@ -36,13 +23,8 @@
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitEvent.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Chat.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -433,7 +415,7 @@ void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnA
     eCollisionFlags eCollisionFlag;
     D2UnitStrc* pVictim = pUnitKill->sArg.pVictim;
     if (!pVictim) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed);
       exit(-1);
     } else {
       eCollisionFlags eCollision;
@@ -441,7 +423,7 @@ void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnA
         return;
       }
       /* bonewall */ if (pVictim->nClassId == 0x158) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f8);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f8);
         exit(-1);
       } else {
         eCollisionFlag = COLLISION_ITEMS;
@@ -452,12 +434,12 @@ void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnA
 
         pFreeCoordRoom = D2Common::Units::UNITS_GetRoom(pVictim);
         if (!pFreeCoordRoom) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ff);
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ff);
           exit(-1);
         } else {
           pVictimMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pVictim->nClassId);
           if (!pVictimMonStats) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x204);
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x204);
             exit(-1);
           }
 

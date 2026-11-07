@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,7 +18,6 @@
 struct D2MercForHire;
 struct D2MonsterAiStrc;
 struct D2UnitDataPlayerArenaStrc;
-struct D2UnitPlayerListStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 #ifndef RECON_FPTD_fpAiClear
@@ -24,12 +26,15 @@ typedef void (__fastcall *fpAiClear)(struct D2UnitStrc * pUnit);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2MonsterAiSubStrc
+#define D2_DEFINED_D2MonsterAiSubStrc
 struct D2MonsterAiSubStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ uint32_t nState;
     /* 0x08 */ struct D2MonsterAiSubStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2MonsterAiSubStrc
 namespace D2Game::Monster::MonsterAI {
 
 // Function declarations
@@ -57,7 +62,7 @@ void __fastcall FreeAndResetAiSub(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 void __fastcall NPC_BeginInteractionFromUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonster, struct D2MonsterAiStrc * pMonsterAi, uint8_t nQuestActionType);
 // nParam arrives in EDX, survives the UnitHasSwitchAiSet call (that callee clobbers only EAX/ECX) and is stored to nAiRelated2.
 BOOL __fastcall AI_SetSwitchAiTargetParams(struct D2UnitStrc * pUnit, int32_t nSwitchAiMode, uint32_t nTargetGUID);
-struct D2UnitPlayerListStrc * __fastcall AI_GetSwitchAiParam1(struct D2UnitStrc * pUnit);
+int32_t __fastcall AI_GetSwitchAiParam1(struct D2UnitStrc * pUnit);
 struct D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(struct D2UnitStrc * pUnit);
 void __fastcall AI_ClearSwitchAiTargetParams(struct D2UnitStrc * pUnit);
 uint32_t __fastcall NpcStateIsntZero(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer);

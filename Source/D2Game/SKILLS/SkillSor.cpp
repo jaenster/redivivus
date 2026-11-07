@@ -3,23 +3,8 @@
 #include "Source/D2Game/SKILLS/SkillSor.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
@@ -29,6 +14,7 @@
 #include "Source/D2Game/MISSILES/MissilesMode.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Objects/ObjectsMode.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
 #include "Source/D2Game/SKILLS/SkillDruid.h"
 #include "Source/D2Game/SKILLS/SkillNec.h"
@@ -41,11 +27,8 @@
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -895,6 +878,7 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
     bool bTargetIsAlly;
     int32_t nValue;
     D2StateExArgStrc sStateArg;
+    Skills_SrvDoFunc_025_Enchant_Slotmc uSlotC;
     D2UnitStrc* pEnchantTarget;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return 0;
@@ -918,12 +902,11 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    int32_t nAuraStatIdx;
-    nAuraStatIdx = (int32_t)pGame;
+    uSlotC.pGameSaved = pGame;
     sStateArg.pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (sStateArg.pTarget) {
       pEnchantTarget = sStateArg.pTarget;
-      _bTargetIsAlly = UNIT::SUnit::SKILL_CanUnitTargetAlly((::SGAMEDATA*)nAuraStatIdx, pUnit, sStateArg.pTarget);
+      _bTargetIsAlly = UNIT::SUnit::SKILL_CanUnitTargetAlly(uSlotC.pGameSaved, pUnit, sStateArg.pTarget);
       if (!_bTargetIsAlly) {
         sStateArg.pTarget = pUnit;
         pEnchantTarget = pUnit;
@@ -954,7 +937,7 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
 
     short int* psAuraStat = pSkillTxt->aurastat;
     int* piStatCalc = pSkillTxt->aurastatcalc;
-    nAuraStatIdx = 6;
+    uSlotC.nAuraStatRemaining = 6;
     do {
       D2UnitStrc* pCaster = pUnit;
       if (*psAuraStat >= 0 && (int)*psAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -966,8 +949,8 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
 
       piStatCalc++;
       psAuraStat++;
-      nAuraStatIdx--;
-    } while (nAuraStatIdx);
+      uSlotC.nAuraStatRemaining--;
+    } while (uSlotC.nAuraStatRemaining);
 
     D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pEnchantTarget, (int)pSkillTxt->aurastate, 1);
     return 1;
@@ -1116,14 +1099,15 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
     int32_t nAreaRange;
     D2UnitStrc* pThunderTarget;
     D2StatListExStrc* pStatsEx;
+    Skills_SrvDoFunc_029_ThunderStorm_Slotmc uSlotC;
     D2SkillsTxt* pSkillTxt2;
     D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pDVar1) {
       return 0;
     }
 
-    eMissilesId eMissileId = (eMissilesId)pDVar1->srvmissile[1];
-    if ((int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+    uSlotC.eMissileId = (eMissilesId)pDVar1->srvmissile[1];
+    if ((int)uSlotC.eMissileId < 0 || (int)uSlotC.eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (pDVar1->aurastate < 0) {
@@ -1161,10 +1145,10 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
       nAreaRange = GetTxtTableParam6(eSkill);
       pThunderTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGameCtx, pUnit, 0, 0, nAreaRange, 3, nPrevTargetGUID, nullptr);
       if (pThunderTarget) {
-        eMissileId = (eMissilesId)SKILLSOR_CreateMissileAtTarget(pGameCtx, eMissileId, eSkill, nSkillLvl, pThunderTarget, pUnit);
-        if ((D2UnitStrc*)eMissileId) {
-          MISSILES::MissilesMode::Hits(pGameCtx, (D2UnitStrc*)eMissileId, pThunderTarget, 1);
-          UNIT::SUnit::FreeServerUnit(pGameCtx, (D2UnitStrc*)eMissileId);
+        uSlotC.pMissile = SKILLSOR_CreateMissileAtTarget(pGameCtx, uSlotC.eMissileId, eSkill, nSkillLvl, pThunderTarget, pUnit);
+        if (uSlotC.pMissile) {
+          MISSILES::MissilesMode::Hits(pGameCtx, uSlotC.pMissile, pThunderTarget, 1);
+          UNIT::SUnit::FreeServerUnit(pGameCtx, uSlotC.pMissile);
           UNIT::SUnitMsg::SERVER_SendUnitMessagePacket(pUnit, pThunderTarget, (uint16_t)eSkill, (uint16_t)nSkillLvl, 0, 0, 0);
         }
 
@@ -1259,7 +1243,7 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
             pAbsorbEntry = (uint32_t*)gnAuraManaAbsorbIndex;
             do {
               if (!pAbsorbEntry[1] || bNotMonsterOnly) {
-                pnDamageField = (int32_t*)((uintptr_t)&pDamage->dwHitFlags + *pAbsorbEntry);
+                pnDamageField = (int32_t*)((intptr_t)&pDamage->dwHitFlags + *pAbsorbEntry);
                 nValue = *pnDamageField;
                 if (nValue > 0) {
                   nAbsorbAmt = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, nAbsorbPct, 100);
@@ -1276,7 +1260,7 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
               }
 
               pAbsorbEntry += 2;
-            } while ((int)pAbsorbEntry < (intptr_t)((char*)&gnAuraManaAbsorbIndex + sizeof(gnAuraManaAbsorbIndex)));
+            } while ((intptr_t)pAbsorbEntry < (intptr_t)((char*)&gnAuraManaAbsorbIndex + sizeof(gnAuraManaAbsorbIndex)));
 
             nCurMana = (int)nCurMana <= 0 ? 0 : nCurMana;
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurMana, 0);
@@ -1331,7 +1315,7 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
       D2RoomStrc* pRoom;
       pGameSaved = pGame;
       sSummonParams.pSkillTxt = (D2SkillsTxt*)SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, iHydraIdx, nSkillLvl, &nAnimMode, nullptr, nullptr);
-      if ((int)sSummonParams.pSkillTxt >= 0) {
+      if ((intptr_t)sSummonParams.pSkillTxt >= 0) {
         nPetType = (BOOL)pSkillTxt->pettype;
         if (nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);

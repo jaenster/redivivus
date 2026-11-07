@@ -2,21 +2,12 @@
 
 #include "Source/D2Game/Quests/QUESTS/A3Q3.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/Objects/Objects.h"
@@ -24,9 +15,7 @@
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Client/UNIT/Item.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -505,7 +494,7 @@ void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          (quest climax) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
               nNPCNo = UNIT::SUnit::GetPartyId(pQuestArgs->pPlayer);
               if (nNPCNo != 0xffff) {
-                UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nNPCNo, (::fpExecuteOnUnitFunction)Q20_PlayerCheckInAct3SetStep06, 0);
+                UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nNPCNo, (::fpExecuteOnUnitFunction)Q20_PlayerCheckInAct3SetStep06, nullptr);
               }
 
               UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerCheckBladeQuestCannotComplete);
@@ -850,7 +839,7 @@ static void Q20_SpawnUniqueSerpent(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2Qu
 uint32_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_BladeOfTheOldReligion);
     if (pQuestData) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pQuestData->pQuestSpecificData.pA3Q3 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA2Q3->bTaintedSunStartedFailed);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData->pQuestSpecificData.pA3Q3 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA2Q3->bTaintedSunStartedFailed);
     }
 
     return 0;
@@ -897,8 +886,8 @@ uint8_t __fastcall Q20_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
     D2UnitStrc* pRoom;
     D2QuestDataA1Q1Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q1;
     bool bVar1 = *(bool*)(pQuestSpecific->sQuestGUID.aPlayerGUID + 6);
-    *(uint8_t*)((int)pQuestSpecific->sQuestGUID.aPlayerGUID + 5) = 0;
-    if (!(bVar1 == 1 && *(bool*)((int)pQuestSpecific->sQuestGUID.aPlayerGUID + 3) && !*(bool*)((int)pQuestSpecific->sQuestGUID.aPlayerGUID + 2) && pGame->pAct[2])) {
+    *(uint8_t*)((char*)pQuestSpecific->sQuestGUID.aPlayerGUID + 5) = 0;
+    if (!(bVar1 == 1 && *(bool*)((char*)pQuestSpecific->sQuestGUID.aPlayerGUID + 3) && !*(bool*)((char*)pQuestSpecific->sQuestGUID.aPlayerGUID + 2) && pGame->pAct[2])) {
       return '\x01';
     }
 
@@ -1023,16 +1012,16 @@ bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID
     return false;
 }
 
-int __fastcall Unreferenced_005b9c80(int param_1, int param_2) {
-    int iVar1 = *(int*)(param_1 + 0x18);
-    if (*(char*)(iVar1 + 2) == '\x01') {
-      int iVar2 = !param_2 ? -1 : *(int*)(param_2 + 0xc);
-      if (*(int*)(iVar1 + 0x24) == iVar2) {
-        *(uint8_t*)(iVar1 + 2) = 0;
+int __fastcall Unreferenced_005b9c80(D2QuestDataStrc * param_1, D2UnitStrc * param_2) {
+    D2QuestDataA1Q3Strc* pDVar1 = param_1->pQuestSpecificData.pA1Q3;
+    if (pDVar1->bCharsiNotified == 1) {
+      int iVar2 = !param_2 ? -1 : param_2->nUnitGUID;
+      if (pDVar1->sQuestGUID.aPlayerGUID[4] == iVar2) {
+        pDVar1->bCharsiNotified = 0;
       }
     }
 
-    return iVar1;
+    return (int)pDVar1;
 }
 
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,

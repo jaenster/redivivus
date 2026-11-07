@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -26,6 +29,15 @@ typedef uint32_t eD2ItemTypes;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2ItemClassCandidateStrc {
+    /* 0x00 */ int32_t nItemsTxtIdx;
+    /* 0x04 */ struct D2ItemsTxt * pItemsTxt;
+};
+
+#endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2ItemGenContextStrc
+#define D2_DEFINED_D2ItemGenContextStrc
 struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ struct D2SeedStrc * pSeed; // seed the new item is rolled from: &pUnit->sSeed, the room seed, or 0
@@ -75,6 +87,7 @@ struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x80 */ eD2ItemFlag nFlags;
 };
 
+#endif // D2_DEFINED_D2ItemGenContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2TCStackEntryStrc {
     /* 0x00 */ struct D2ParsedTreasureClassStrc * pTC;
@@ -96,7 +109,7 @@ namespace D2Game::ITEMS::Items::Drop {
 int Unreferenced_00555cc0();
 void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, int32_t pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset);
 int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries);
-void __fastcall ITEM_InitializeDroppedItem(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, uint32_t dwUnused);
+void __fastcall ITEM_InitializeDroppedItem(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, struct D2RoomStrc * dwUnused);
 // Find collision-free coords near drop point. Offset (+2,+3), check if better room exists, then scan for free space using SPAWN_ITEM_COLLISION + COLLISION_ITEMS flags. Returns room or NULL if no space found.
 struct D2RoomStrc * __fastcall FindBestSpotToSpawnItem(struct D2RoomStrc * pRoom, POINT * pPoint, POINT * pNewPosition, uint32_t nCollisionMask, uint8_t nMaxSearchRadius);
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.

@@ -146,7 +146,7 @@
         "GetCursorItem_Unref_00468030"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "int32_t"
       ]
     },
     {

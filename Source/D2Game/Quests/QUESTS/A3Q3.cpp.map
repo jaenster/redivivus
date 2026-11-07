@@ -574,6 +574,10 @@
       "namespace": "D2Game::Quests::QUESTS::A3Q3",
       "calledFunctions": [
         "Unreferenced_005b9c80"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitStrc"
       ]
     },
     {

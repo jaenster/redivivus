@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -41,6 +44,8 @@ struct _SID_IDENTIFIER_AUTHORITY {
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_D2BlizzardErrorArgument
+#define D2_DEFINED_D2BlizzardErrorArgument
 struct __attribute__((packed)) D2BlizzardErrorArgument {
     /* 0x00 */ char * szProduct;
     /* 0x04 */ char * szLocale;
@@ -53,6 +58,9 @@ struct __attribute__((packed)) D2BlizzardErrorArgument {
     /* 0x50 */ int nAttachmentCount;
 };
 
+#endif // D2_DEFINED_D2BlizzardErrorArgument
+#ifndef D2_DEFINED_D2CrashReportStrc
+#define D2_DEFINED_D2CrashReportStrc
 struct D2CrashReportStrc {
     /* 0x00 */ char * pszExceptionName;
     /* 0x04 */ char * pszMessage; // 512-byte buffer, first byte cleared
@@ -63,6 +71,7 @@ struct D2CrashReportStrc {
     /* 0x18 */ struct _EXCEPTION_POINTERS * pExceptionPointers;
 };
 
+#endif // D2_DEFINED_D2CrashReportStrc
 namespace Fog::Src::ErrorManager {
 
 // Function declarations
@@ -94,7 +103,7 @@ DWORD __fastcall GetParentProcessId(int32_t nProcessId);
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize);
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport);
-int Unreferenced_00407dd0();
+uint8_t Unreferenced_00407dd0();
 void __stdcall InitializeSystemInfo();
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
 void EXIT_AtExit();

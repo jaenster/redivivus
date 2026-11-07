@@ -63,6 +63,20 @@
       ]
     },
     {
+      "name": "GetMCPThread",
+      "address": "00449ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449ac0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "GetMCPThread"
+      ]
+    },
+    {
       "name": "FreeMCP",
       "address": "00449ad0",
       "lines": [
@@ -664,7 +678,8 @@
       ],
       "usedTypes": [
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -989,7 +1004,6 @@
         "NET_MCP_CLIENT_Send"
       ],
       "usedTypes": [
-        "D2CharSelStrc",
         "MCPPacketCltStr",
         "uint16_t",
         "uint32_t"
@@ -1013,7 +1027,6 @@
         "NET_MCP_CLIENT_Send"
       ],
       "usedTypes": [
-        "D2CharSelStrc",
         "uint32_t"
       ]
     },
@@ -1250,9 +1263,6 @@
         "MCP_INCOMING_SetD2GSJoinResultAndSignal",
         "SetD2GSJoinResult",
         "SetEvent"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {

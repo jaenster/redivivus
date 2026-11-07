@@ -2,10 +2,7 @@
 
 #include "3rdparty/Storm/Source/SEVT.h"
 #include "3rdparty/Storm/H/stpl.h"
-#include "3rdparty/Storm/Source/SErr.h"
 #include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/Storm/Source/SEVT.data.h"
 #include "3rdparty/Storm/Source/SMem.inline.h"
@@ -36,17 +33,14 @@ static char s___AUBREAKCMD___007088d8[16] = {
     '\x00',
     '\x00'
 }; D2_STATIC_GUARD(s___AUBREAKCMD___007088d8, "s___AUBREAKCMD___007088d8");
-D2StormListHead gpSevtBreakCmdListHead = {
+StormLinkedListStrc gpSevtBreakCmdListHead = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&gpSevtBreakCmdListHead.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gpSevtBreakCmdListHead.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gpSevtBreakCmdListHead, "gpSevtBreakCmdListHead");
 static uint32_t gnSevtSnapshotActive = 0; D2_STATIC_GUARD(gnSevtSnapshotActive, "gnSevtSnapshotActive");
-namespace Storm::Source::SEVT {
-void * gpEventHashBuckets = 0; D2_GLOBAL_GUARD(gpEventHashBuckets, "Storm::Source::SEVT::gpEventHashBuckets");
-} // namespace Storm::Source::SEVT
 static uint32_t gaEventRegistryHead = 0; D2_STATIC_GUARD(gaEventRegistryHead, "gaEventRegistryHead");
 static uint32_t gnSevtRegisteredEventCount = 0; D2_STATIC_GUARD(gnSevtRegisteredEventCount, "gnSevtRegisteredEventCount");
 static _RTL_CRITICAL_SECTION lpCriticalSection_0077930c = {}; D2_STATIC_GUARD(lpCriticalSection_0077930c, "lpCriticalSection_0077930c");
@@ -140,15 +134,15 @@ static void SEVT_DeleteIdHashTable(D2SevtHandlerTableStrc * pTable) {
 }
 
 // @blizzard FindTypeHashEntry (SEVT.CPP)
-static uint32_t * SEVT_FindTypeHashEntry(uint32_t nSubId, uint32_t nEventId) {
-    uint32_t* pEvent;
+static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uint32_t nSubId, uint32_t nEventId) {
+    D2SevtTypeEntryStrc* pEvent;
     if (!gpEventHashBuckets || !gaEventRegistryHead) {
       pEvent = 0;
     } else {
-      pEvent = *(uint32_t**)((int)gpEventHashBuckets + ((nEventId ^ nSubId) & gaEventRegistryHead - 1) * 4);
+      pEvent = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1];
       if (pEvent) {
-        while (*pEvent != nEventId || pEvent[1] != nSubId) {
-          pEvent = (uint32_t*)pEvent[4];
+        while (pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
+          pEvent = pEvent->pNext;
           if (!pEvent) {
             return nullptr;
           }
@@ -168,23 +162,23 @@ uint32_t SEvtDestroy() {
     uint32_t nBucketIndex;
     D2SevtHandlerTableStrc* pTable;
     EnterCriticalSection(&lpCriticalSection_0077930c);
-    void* pObject_00 = gpEventHashBuckets;
+    D2SevtTypeEntryStrc** pObject_00 = gpEventHashBuckets;
     for (nBucketIndex = 0; nBucketIndex < gaEventRegistryHead; nBucketIndex++) {
-      void* pObject;
-      pObject = *(void**)((int)pObject_00 + nBucketIndex * 4);
+      D2SevtTypeEntryStrc* pObject;
+      pObject = pObject_00[nBucketIndex];
       while (pObject) {
-        pTable = *(D2SevtHandlerTableStrc**)((int)pObject + 0xc);
+        pTable = pObject->pHandlerTable;
         while (pTable) {
-          *(D2SevtHandlerTableStrc**)((int)pObject + 0xc) = pTable->pPrevState;
+          pObject->pHandlerTable = pTable->pPrevState;
           SEVT_DeleteIdHashTable(pTable);
           pObject_00 = gpEventHashBuckets;
-          pTable = *(D2SevtHandlerTableStrc**)((int)pObject + 0xc);
+          pTable = pObject->pHandlerTable;
         }
 
-        *(uint32_t*)((int)pObject_00 + nBucketIndex * 4) = *(uint32_t*)((int)pObject + 0x10);
+        pObject_00[nBucketIndex] = pObject->pNext;
         SMem::SMemFree(pObject, "delete", -1, 0);
         pObject_00 = gpEventHashBuckets;
-        pObject = *(void**)((int)gpEventHashBuckets + nBucketIndex * 4);
+        pObject = gpEventHashBuckets[nBucketIndex];
       }
     }
 
@@ -207,14 +201,14 @@ uint32_t SEvtDestroy() {
 // @former-name SEVT_SnapshotEventHandlers
 // @sourcefile .\SOURCE\SEVT.CPP
 void __stdcall SEvtPushState(uint32_t nEventId, uint32_t nSubId) {
-    uint32_t* pEvent;
+    D2SevtTypeEntryStrc* pEvent;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
       D2SevtHandlerTableStrc* ppSnapshot;
-      pEvent = *(uint32_t**)((int)gpEventHashBuckets + ((nEventId ^ nSubId) & gaEventRegistryHead - 1) * 4);
+      pEvent = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1];
       if (pEvent) {
-        while (*pEvent != nEventId || pEvent[1] != nSubId) {
-          pEvent = (uint32_t*)pEvent[4];
+        while (pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
+          pEvent = pEvent->pNext;
           if (!pEvent) {
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
             return;
@@ -223,9 +217,9 @@ void __stdcall SEvtPushState(uint32_t nEventId, uint32_t nSubId) {
 
         if (pEvent) {
           ppSnapshot = (D2SevtHandlerTableStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x11c, 0);
-          SEVT_CopyIdHashTable(ppSnapshot, (D2SevtHandlerTableStrc*)pEvent[3]);
-          ppSnapshot->pPrevState = (D2SevtHandlerTableStrc*)pEvent[3];
-          pEvent[3] = (uint32_t)ppSnapshot;
+          SEVT_CopyIdHashTable(ppSnapshot, pEvent->pHandlerTable);
+          ppSnapshot->pPrevState = pEvent->pHandlerTable;
+          pEvent->pHandlerTable = ppSnapshot;
           gnSevtSnapshotActive = 1;
         }
       }
@@ -237,26 +231,30 @@ void __stdcall SEvtPushState(uint32_t nEventId, uint32_t nSubId) {
 // Registers an event handler: allocates a handler node keyed by dwKey and links it into the handler table for (dwEventId, dwSubId); pfnHandler must be non-NULL and dwReserved zero. SEvtDispatch matches its key argument against the stored key.
 // Storm export SEvtRegisterHandler (export name list and Mac PPC 1.10b traceback).
 int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, int dwReserved, pfnSEvtHandler pfnHandler) {
-    void* pNewBuckets;
+    D2SevtTypeEntryStrc** pNewBuckets;
+    D2SevtHandlerTableStrc* pDVar3;
+    D2SevtHandlerNodeStrc** ppDVar4;
+    int* ppNewHandlerTails;
     int* pTailSlot;
-    uint32_t* pNode;
-    void* pObject;
+    D2SevtHandlerNodeStrc* pNode;
+    D2SevtTypeEntryStrc* pDVar5;
+    D2SevtTypeEntryStrc** ppDVar6;
     uint32_t nOldBucketCount;
     uint32_t nNewHandlerCapacity;
     uint32_t nBucketIndex;
     uint32_t iOldBucketIndex;
-    int nOldHandlerCapacity;
-    uint32_t* pNextNode;
-    uint32_t* ppNodeNext;
+    D2SevtHandlerNodeStrc* pNextNode;
+    D2SevtHandlerNodeStrc** ppNodeNext;
     if (!(pfnHandler ? (dwReserved != 0) - 1 : 0)) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-    uint32_t* pEvent = SEVT_FindTypeHashEntry(dwSubId, dwEventId);
+    D2SevtTypeEntryStrc* pEvent = SEVT_FindTypeHashEntry(dwSubId, dwEventId);
     if (!pEvent) {
-      pNewBuckets = gpEventHashBuckets;
+      D2SevtTypeEntryStrc* pDVar2;
+      ppDVar6 = gpEventHashBuckets;
       nOldBucketCount = gaEventRegistryHead;
       if (gnSevtRegisteredEventCount >= gaEventRegistryHead >> 1) {
         nBucketIndex = 1;
@@ -268,26 +266,27 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
           } while (nBucketIndex <= gnSevtRegisteredEventCount * 2 + 2);
         }
 
-        pNewBuckets = SMem::SMemAlloc(dwReserved * 4, ".\\SOURCE\\SEVT.CPP", 0x143, 8);
+        pNewBuckets = (D2SevtTypeEntryStrc**)SMem::SMemAlloc(dwReserved * 4, ".\\SOURCE\\SEVT.CPP", 0x143, 8);
+        ppDVar6 = pNewBuckets;
         nOldBucketCount = dwReserved;
         if (gpEventHashBuckets) {
-          pObject = gpEventHashBuckets;
+          ppDVar6 = gpEventHashBuckets;
           if (gaEventRegistryHead) {
             iOldBucketIndex = 0;
             nOldBucketCount = gaEventRegistryHead;
             if (gaEventRegistryHead > 0) {
               do {
-                pEvent = *(uint32_t**)((int)pObject + iOldBucketIndex * 4);
-                if (pEvent) {
+                if (ppDVar6[iOldBucketIndex]) {
+                  pDVar5 = ppDVar6[iOldBucketIndex];
                   do {
-                    pNode = (uint32_t*)pEvent[4];
-                    nBucketIndex = (pEvent[1] ^ *pEvent) & dwReserved - 1U;
-                    pEvent[4] = *(uint32_t*)((int)pNewBuckets + nBucketIndex * 4);
-                    *(uint32_t**)((int)pNewBuckets + nBucketIndex * 4) = (uint32_t*)pEvent;
-                    pEvent = pNode;
-                    pObject = gpEventHashBuckets;
+                    pDVar2 = pDVar5->pNext;
+                    nBucketIndex = (pDVar5->dwSubType ^ pDVar5->dwType) & dwReserved - 1U;
+                    pDVar5->pNext = pNewBuckets[nBucketIndex];
+                    pNewBuckets[nBucketIndex] = pDVar5;
+                    pDVar5 = pDVar2;
+                    ppDVar6 = gpEventHashBuckets;
                     nOldBucketCount = gaEventRegistryHead;
-                  } while (pNode);
+                  } while (pDVar2);
                 }
 
                 iOldBucketIndex++;
@@ -295,89 +294,90 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
             }
           }
 
-          SMem::SMemFree(pObject, ".\\SOURCE\\SEVT.CPP", 0x154, 0);
+          SMem::SMemFree(ppDVar6, ".\\SOURCE\\SEVT.CPP", 0x154, 0);
+          ppDVar6 = pNewBuckets;
           nOldBucketCount = dwReserved;
         }
       }
 
-      gpEventHashBuckets = pNewBuckets;
+      gpEventHashBuckets = ppDVar6;
       gaEventRegistryHead = nOldBucketCount;
       nBucketIndex = (dwEventId ^ dwSubId) & gaEventRegistryHead - 1;
-      pEvent = (uint32_t*)SMem::SMemAlloc(0x14, ".\\SOURCE\\SEVT.CPP", 0x15d, 8);
-      *pEvent = dwEventId;
-      pEvent[1] = dwSubId;
-      pNewBuckets = SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x160, 8);
+      pEvent = (D2SevtTypeEntryStrc*)SMem::SMemAlloc(0x14, ".\\SOURCE\\SEVT.CPP", 0x15d, 8);
+      pEvent->dwType = dwEventId;
+      pEvent->dwSubType = dwSubId;
+      pDVar3 = (D2SevtHandlerTableStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x160, 8);
       gnSevtRegisteredEventCount++;
-      pEvent[3] = (uint32_t)pNewBuckets;
-      pNewBuckets = gpEventHashBuckets;
-      pEvent[4] = *(uint32_t*)((int)gpEventHashBuckets + nBucketIndex * 4);
-      *(uint32_t**)((int)pNewBuckets + nBucketIndex * 4) = (uint32_t*)pEvent;
+      pEvent->pHandlerTable = pDVar3;
+      ppDVar6 = gpEventHashBuckets;
+      pEvent->pNext = gpEventHashBuckets[nBucketIndex];
+      ppDVar6[nBucketIndex] = pEvent;
     }
 
-    nBucketIndex = *(uint32_t*)(pEvent[3] + 4);
-    if (*(uint32_t*)(pEvent[3] + 8) >= nBucketIndex >> 1) {
-      int* ppNewHandlerTails;
+    nBucketIndex = pEvent->pHandlerTable->nBucketCount;
+    if (pEvent->pHandlerTable->nHandlerCount >= nBucketIndex >> 1) {
       nNewHandlerCapacity = 1;
       dwEventId = 1;
       if ((nBucketIndex & 0x7fffffff) != 0x7fffffff) {
         do {
           nNewHandlerCapacity *= 2;
           dwEventId = nNewHandlerCapacity;
-        } while (nNewHandlerCapacity <= *(int*)(pEvent[3] + 4) * 2 + 2U);
+        } while (nNewHandlerCapacity <= pEvent->pHandlerTable->nBucketCount * 2 + 2);
       }
 
-      pNewBuckets = SMem::SMemAlloc(dwEventId * 4, ".\\SOURCE\\SEVT.CPP", 0x16e, 8);
+      ppDVar4 = (D2SevtHandlerNodeStrc**)SMem::SMemAlloc(dwEventId * 4, ".\\SOURCE\\SEVT.CPP", 0x16e, 8);
       ppNewHandlerTails = (int*)SMem::SMemAlloc(dwEventId * 4, ".\\SOURCE\\SEVT.CPP", 0x16f, 8);
       if (dwEventId > 0) {
         pTailSlot = ppNewHandlerTails;
         dwSubId = dwEventId;
         do {
-          *pTailSlot = (int)pNewBuckets - (int)ppNewHandlerTails + (int)pTailSlot;
+          *pTailSlot = (intptr_t)ppDVar4 - (intptr_t)ppNewHandlerTails + (int)pTailSlot;
           pTailSlot++;
           dwSubId--;
         } while (dwSubId);
       }
-      if (*(int*)pEvent[3]) {
-        nOldHandlerCapacity = ((int*)pEvent[3])[1];
-        if (nOldHandlerCapacity) {
+      if (pEvent->pHandlerTable->pBuckets) {
+        nOldBucketCount = pEvent->pHandlerTable->nBucketCount;
+        if (nOldBucketCount) {
           dwSubId = 0;
-          if ((uint32_t)nOldHandlerCapacity > 0) {
+          if (nOldBucketCount > 0) {
             do {
-              pNode = *(uint32_t**)(*(int*)pEvent[3] + dwSubId * 4);
+              pNode = pEvent->pHandlerTable->pBuckets[dwSubId];
               while (pNode) {
-                ppNodeNext = pNode + 3;
-                nBucketIndex = *pNode & dwEventId - 1;
-                pNextNode = (uint32_t*)*ppNodeNext;
+                ppNodeNext = &pNode->pNext;
+                nBucketIndex = pNode->dwKey & dwEventId - 1;
+                pNextNode = *ppNodeNext;
                 *ppNodeNext = 0;
-                *(uint32_t**)ppNewHandlerTails[nBucketIndex] = (uint32_t*)pNode;
+                *(D2SevtHandlerNodeStrc**)ppNewHandlerTails[nBucketIndex] = (D2SevtHandlerNodeStrc*)pNode;
                 ppNewHandlerTails[nBucketIndex] = (int)ppNodeNext;
                 pNode = pNextNode;
               }
 
               dwSubId++;
-            } while (dwSubId < *(uint32_t*)(pEvent[3] + 4));
+            } while (dwSubId < pEvent->pHandlerTable->nBucketCount);
           }
         }
       }
 
       SMem::SMemFree(ppNewHandlerTails, ".\\SOURCE\\SEVT.CPP", 0x182, 0);
-      if (*(int*)pEvent[3]) {
-        SMem::SMemFree(*(void**)pEvent[3], ".\\SOURCE\\SEVT.CPP", 0x184, 0);
+      if (pEvent->pHandlerTable->pBuckets) {
+        SMem::SMemFree(pEvent->pHandlerTable->pBuckets, ".\\SOURCE\\SEVT.CPP", 0x184, 0);
       }
 
-      *(void**)pEvent[3] = (void*)pNewBuckets;
-      *(uint32_t*)(pEvent[3] + 4) = dwEventId;
+      pEvent->pHandlerTable->pBuckets = ppDVar4;
+      pEvent->pHandlerTable->nBucketCount = dwEventId;
     }
 
-    nBucketIndex = *(int*)(pEvent[3] + 4) - 1U & dwKey;
-    pNode = (uint32_t*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x18d, 8);
-    *pNode = dwKey;
-    pEvent[2]++;
-    pNode[1] = pEvent[2];
-    pNode[2] = (uint32_t)pfnHandler;
-    pNode[3] = *(uint32_t*)(*(int*)pEvent[3] + nBucketIndex * 4);
-    *(uint32_t**)(*(int*)pEvent[3] + nBucketIndex * 4) = (uint32_t*)pNode;
-    (*(int*)(pEvent[3] + 8))++;
+    nBucketIndex = pEvent->pHandlerTable->nBucketCount - 1 & dwKey;
+    pNode = (D2SevtHandlerNodeStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x18d, 8);
+    pNode->dwKey = dwKey;
+    pEvent->dwSequence++;
+    pNode->nPriority = pEvent->dwSequence;
+    pNode->pfnHandler = pfnHandler;
+    pNode->pNext = pEvent->pHandlerTable->pBuckets[nBucketIndex];
+    pEvent->pHandlerTable->pBuckets[nBucketIndex] = pNode;
+    uint32_t* puVar1 = &pEvent->pHandlerTable->nHandlerCount;
+    (*puVar1)++;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnSevtSnapshotActive = 1;
     LeaveCriticalSection(&lpCriticalSection_0077930c);
     return 1;
@@ -392,34 +392,35 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
 BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
     int _bRemoved;
     uint32_t nBucket;
-    uint32_t* ppHandlerLink;
+    D2SevtHandlerNodeStrc** ppHandlerLink;
     bool bRemoved;
+    D2SevtTypeEntryStrc* pEvent;
+    D2SevtHandlerTableStrc* pHandlerTable;
     D2SevtHandlerNodeStrc* pHandler;
-    uint32_t* pEvent;
-    uint32_t pHandlerLink;
-    int* pHandlerTable;
+    D2SevtHandlerNodeStrc* pHandlerLink;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ _bRemoved = 0;
     EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
-      uint32_t* p;
-      for (pEvent = *(uint32_t**)((int)gpEventHashBuckets + ((nEventId ^ nSubId) & gaEventRegistryHead - 1) * 4); pEvent; pEvent = (uint32_t*)pEvent[4]) {
-        if (*pEvent == nEventId && pEvent[1] == nSubId) {
+      uint32_t* puVar1;
+      for (pEvent = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1]; pEvent; pEvent = pEvent->pNext) {
+        if (pEvent->dwType == nEventId && pEvent->dwSubType == nSubId) {
           if (pEvent) {
-            pHandlerTable = (int*)pEvent[3];
-            if (*pHandlerTable && pHandlerTable[1]) {
-              nBucket = pHandlerTable[1] - 1U & dwKey;
-              ppHandlerLink = (uint32_t*)(*pHandlerTable + nBucket * 4);
-              pHandlerLink = *(uint32_t*)(*pHandlerTable + nBucket * 4);
+            pHandlerTable = pEvent->pHandlerTable;
+            if (pHandlerTable->pBuckets && pHandlerTable->nBucketCount) {
+              nBucket = pHandlerTable->nBucketCount - 1 & dwKey;
+              ppHandlerLink = pHandlerTable->pBuckets + nBucket;
+              pHandlerLink = pHandlerTable->pBuckets[nBucket];
               while (pHandlerLink) {
-                p = (uint32_t*)*ppHandlerLink;
-                if (*p == dwKey && (!pfnHandler || (pfnSEvtHandler)p[2] == pfnHandler)) {
-                  *ppHandlerLink = p[3];
-                  SMem::MISC_OperatorDeleteShim(p);
+                pHandler = *ppHandlerLink;
+                if (pHandler->dwKey == dwKey && (!pfnHandler || pHandler->pfnHandler == pfnHandler)) {
+                  *ppHandlerLink = pHandler->pNext;
+                  SMem::MISC_OperatorDeleteShim(pHandler);
                   gnSevtSnapshotActive = 1;
                   _bRemoved = 1;
-                  (*(int*)(pEvent[3] + 8))--;
+                  puVar1 = &pEvent->pHandlerTable->nHandlerCount;
+                  (*puVar1)--;
                 } else {
-                  ppHandlerLink = p + 3;
+                  ppHandlerLink = &pHandler->pNext;
                 }
 
                 pHandlerLink = *ppHandlerLink;
@@ -443,20 +444,19 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
 // @former-name SEVT_UnregisterEvent (invented)
 BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
     int _bRemoved;
-    int* pEvent;
+    D2SevtTypeEntryStrc* pEvent;
     bool bRemoved;
-    int* ppEventLink;
+    D2SevtTypeEntryStrc** ppEventLink;
     D2SevtHandlerTableStrc* ppHandlerTable;
-    int* pCurEvent;
-    int pEventLink;
+    D2SevtTypeEntryStrc* pCurEvent;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ _bRemoved = 0;
     EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
       uint32_t nBucket;
-      pEvent = *(int**)((int)gpEventHashBuckets + (gaEventRegistryHead - 1 & ((uint32_t)nEventId ^ nSubId)) * 4);
+      pEvent = gpEventHashBuckets[gaEventRegistryHead - 1 & ((uintptr_t)nEventId ^ nSubId)];
       if (pEvent) {
-        while ((char*)*pEvent != nEventId || pEvent[1] != nSubId) {
-          pEvent = (int*)pEvent[4];
+        while ((char*)pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
+          pEvent = pEvent->pNext;
           if (!pEvent) {
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
             return 0;
@@ -464,27 +464,27 @@ BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
         }
 
         if (pEvent) {
-          ppHandlerTable = (D2SevtHandlerTableStrc*)pEvent[3];
+          ppHandlerTable = pEvent->pHandlerTable;
           while (ppHandlerTable) {
-            pEvent[3] = (int)ppHandlerTable->pPrevState;
+            pEvent->pHandlerTable = ppHandlerTable->pPrevState;
             SEVT_DeleteIdHashTable(ppHandlerTable);
-            ppHandlerTable = (D2SevtHandlerTableStrc*)pEvent[3];
+            ppHandlerTable = pEvent->pHandlerTable;
           }
 
-          nBucket = gaEventRegistryHead - 1 & ((uint32_t)nEventId ^ nSubId);
-          ppEventLink = (int*)((int)gpEventHashBuckets + nBucket * 4);
-          pEventLink = *(int*)((int)gpEventHashBuckets + nBucket * 4);
-          while (pEventLink) {
-            pCurEvent = (int*)*ppEventLink;
+          nBucket = gaEventRegistryHead - 1 & ((uintptr_t)nEventId ^ nSubId);
+          ppEventLink = gpEventHashBuckets + nBucket;
+          pCurEvent = gpEventHashBuckets[nBucket];
+          while (pCurEvent) {
+            pCurEvent = *ppEventLink;
             if (pCurEvent == pEvent) {
-              *ppEventLink = pCurEvent[4];
+              *ppEventLink = pCurEvent->pNext;
               SMem::MISC_OperatorDeleteShim(pCurEvent);
               gnSevtRegisteredEventCount--;
             } else {
-              ppEventLink = pCurEvent + 4;
+              ppEventLink = &pCurEvent->pNext;
             }
 
-            pEventLink = *ppEventLink;
+            pCurEvent = *ppEventLink;
           }
 
           gnSevtSnapshotActive = 1;
@@ -502,37 +502,37 @@ uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList) {
 }
 
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
-uint32_t __thiscall LINKEDLIST_GetNodeOffset(int * pListInfo, int * pNode) {
-    uint32_t nOffset = pListInfo[1];
+uint32_t __thiscall LINKEDLIST_GetNodeOffset(StormLinkStrc * pListInfo, int pNode) {
+    uint32_t nOffset = pListInfo->pNext;
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
-    if ((int)pNode < 0) {
-      pNode = (int*)((int)pListInfo - *(int*)(*pListInfo + 4));
+    if (pNode < 0) {
+      pNode = (int)pListInfo - pListInfo->pPrevLink->pNext;
     }
 
-    return nOffset + (int)pNode;
+    return nOffset + pNode;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf(StormLinkStrc * pNode) {
     int* pPrevLink;
-    int pNext = *pNode;
+    StormLinkStrc* pNext = pNode->pPrevLink;
     if (!pNext) {
       return;
     }
 
     pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-    *pPrevLink = pNext;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *pPrevLink = (int)pNext;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-int __fastcall Unreferenced_004269a0(int param_1) {
-    uint32_t uVar1 = param_1 + 4;
-    *(uint32_t*)uVar1 = uVar1;
-    *(uint32_t*)(param_1 + 8) = ~uVar1;
-    return ~uVar1;
+int __fastcall Unreferenced_004269a0(StormLinkedListStrc * param_1) {
+    StormLinkStrc* pSVar1 = &param_1->head;
+    pSVar1->pPrevLink = pSVar1;
+    param_1->head.pNext = ~(uint32_t)pSVar1;
+    return ~(uint32_t)pSVar1;
 }
 
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.
@@ -540,20 +540,20 @@ int __fastcall Unreferenced_004269a0(int param_1) {
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
 // @rename-basis Behaviour. The exact inverse of SEvtPushState 00426370: it consumes the [3] predecessor link that only PushState writes. Two arguments (eventId, subId), so it names no handler. Not SEvtUnregisterType - it delegates to it in the no-predecessor case, so it cannot be it.
 // @former-name SEVT_UndoLastRegistration
-void __stdcall SEvtPopState(char * szText1, char * szText2) {
-    int* pNode;
+void __stdcall SEvtPopState(uint32_t szText1, uint32_t szText2) {
+    D2SevtHandlerTableStrc* pPrevHandlerTable;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
-      D2SevtHandlerTableStrc* pPrevHandlerTable;
-      for (pNode = *(int**)((int)gpEventHashBuckets + (((uint32_t)szText1 ^ (uint32_t)szText2) & gaEventRegistryHead - 1) * 4); pNode; pNode = (int*)pNode[4]) {
-        if ((char*)*pNode == szText1 && (char*)pNode[1] == szText2) {
+      D2SevtTypeEntryStrc* pNode;
+      for (pNode = gpEventHashBuckets[(szText1 ^ szText2) & gaEventRegistryHead - 1]; pNode; pNode = pNode->pNext) {
+        if (pNode->dwType == szText1 && pNode->dwSubType == szText2) {
           if (pNode) {
-            pPrevHandlerTable = ((D2SevtHandlerTableStrc*)pNode[3])->pPrevState;
+            pPrevHandlerTable = pNode->pHandlerTable->pPrevState;
             if (!pPrevHandlerTable) {
-              SEvtUnregisterType(szText1, (uint32_t)szText2);
+              SEvtUnregisterType((char*)szText1, szText2);
             } else {
-              SEVT_DeleteIdHashTable((D2SevtHandlerTableStrc*)pNode[3]);
-              pNode[3] = (int)pPrevHandlerTable;
+              SEVT_DeleteIdHashTable(pNode->pHandlerTable);
+              pNode->pHandlerTable = pPrevHandlerTable;
             }
           }
 
@@ -602,7 +602,7 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
     int* pPrevNode = *pTargetNode;
     if (pPrevNode) {
       pLinkSlot = pTargetNode[1];
-      if ((int)pLinkSlot < 0) {
+      if ((intptr_t)pLinkSlot < 0) {
         pLinkSlot = (int*)~(uint32_t)pLinkSlot;
       } else {
         pLinkSlot = (int*)((int)pLinkSlot + ((int)pTargetNode - pPrevNode[1]));
@@ -624,13 +624,13 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
           pTargetNode[1] = ppTargetList[1];
           pPrevNode = *pList;
           pLinkSlot = ppTargetList[1];
-          if ((int)pLinkSlot < 0) {
+          if ((intptr_t)pLinkSlot < 0) {
             *(int***)~(uint32_t)pLinkSlot = (int**)pTargetNode;
             ppTargetList[1] = (int*)ppNodeSlot;
             return;
           }
-          if ((int)pPrevNode < 0) {
-            pPrevNode = (int*)((int)ppTargetList - (*ppTargetList)[1]);
+          if ((intptr_t)pPrevNode < 0) {
+            pPrevNode = (int*)((char*)ppTargetList - (*ppTargetList)[1]);
           }
 
           *(int***)((int)pLinkSlot + (int)pPrevNode) = (int**)pTargetNode;
@@ -650,30 +650,30 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
 }
 
 // Retrieves the count field from a linked list node with bitwise masking. Returns count masked with sign-extend logic to handle special count encodings. Used for size queries on list structures.
-uint32_t __thiscall LINKEDLIST_GetCountMasked(int32_t pThis, int32_t nNode) {
+uint32_t __thiscall LINKEDLIST_GetCountMasked(StormLinkedListStrc * pThis, StormLinkStrc * nNode) {
     if (!nNode) {
-      nNode = pThis + 4;
+      nNode = &pThis->head;
     }
 
-    return (int)*(uint32_t*)(nNode + 4) <= 0 ? 0 : *(uint32_t*)(nNode + 4);
+    return nNode->pNext <= 0 ? 0 : nNode->pNext;
 }
 
-void __thiscall LINKEDLIST_GetHead(int32_t pThis, int * pListHead) {
+void __thiscall LINKEDLIST_GetHead(StormLinkedListStrc * pThis, StormLinkStrc * pListHead) {
     int* pLinkSlot;
     if (!pListHead) {
-      pListHead = (int*)(pThis + 4);
+      pListHead = &pThis->head;
     }
 
-    int nNextNode = *pListHead;
+    StormLinkStrc* nNextNode = pListHead->pPrevLink;
     if (!nNextNode) {
       return;
     }
 
     pLinkSlot = (int*)D2_StormNextLink(pListHead, -1);
-    *pLinkSlot = nNextNode;
-    *(int*)(*pListHead + 4) = pListHead[1];
-    *pListHead = 0;
-    pListHead[1] = 0;
+    *pLinkSlot = (int)nNextNode;
+    pListHead->pPrevLink->pNext = pListHead->pNext;
+    pListHead->pPrevLink = 0;
+    pListHead->pNext = 0;
 }
 
 int __fastcall Unreferenced_00426c60(int param_1) {
@@ -687,12 +687,12 @@ int __fastcall Unreferenced_00426c60(int param_1) {
 }
 
 // Gets the value stored at a specific index within a linked list. Returns the value field at offset+4 from the node pointer. Handles NULL input by defaulting to the list head at this+8.
-uint32_t __thiscall LINKEDLIST_GetValueAtIndex(void * pListHead, int32_t nNode) {
+intptr_t __thiscall LINKEDLIST_GetValueAtIndex(StormLinkedListStrc * pListHead, StormLinkStrc * nNode) {
     if (nNode) {
-      return *(uint32_t*)(nNode + 4);
+      return nNode->pNext;
     }
 
-    return *(uint32_t*)((int)pListHead + 8);
+    return pListHead->head.pNext;
 }
 
 } // namespace Storm::Source::SEVT
@@ -702,7 +702,7 @@ template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREA
     int* pNode;
     while (true) {
       int nNextNode;
-      pNode = (int)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      pNode = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
@@ -720,10 +720,10 @@ template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREA
 
 namespace Storm::Source::SEVT {
 
-void __fastcall LINKEDLIST_InsertHead(D2StormListHead * pList) {
+void __fastcall LINKEDLIST_InsertHead(StormLinkedListStrc * pList) {
     int* pLinkSlot;
     ((TSList<BREAKCMD, TSGetLink<BREAKCMD>>*)pList)->UnlinkAll();
-    StormLinkStrc* pSVar1 = &pList->terminator;
+    StormLinkStrc* pSVar1 = &pList->head;
     StormLinkStrc* nNextNode = pSVar1->pPrevLink;
     if (!nNextNode) {
       return;
@@ -736,9 +736,9 @@ void __fastcall LINKEDLIST_InsertHead(D2StormListHead * pList) {
     pSVar1->pNext = 0;
 }
 
-int __fastcall Unreferenced_00426d70(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
+StormLinkStrc * __fastcall Unreferenced_00426d70(StormLinkStrc * param_1) {
+    param_1->pPrevLink = 0;
+    param_1->pNext = 0;
     return param_1;
 }
 
@@ -761,21 +761,21 @@ int * * __thiscall LINKEDLIST_AllocNode(int * * pListHead, int32_t pList, int32_
 }
 
 // Unlinks a node from its doubly-linked list by updating prev/next pointers of adjacent nodes. If bit 0 of bFreeMemory is set, also frees the node memory via SMemFree. Returns the unlinked node pointer.
-int * __thiscall LINKEDLIST_UnlinkAndFree(int * pNode, uint8_t bFreeMemory) {
-    int nNextNode = *pNode;
+int * __thiscall LINKEDLIST_UnlinkAndFree(StormLinkStrc * pNode, uint8_t bFreeMemory) {
+    StormLinkStrc* nNextNode = pNode->pPrevLink;
     if (nNextNode) {
       int* pLinkSlot;
       pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
-      *pLinkSlot = nNextNode;
-      *(int*)(*pNode + 4) = pNode[1];
-      *pNode = 0;
-      pNode[1] = 0;
+      *pLinkSlot = (int)nNextNode;
+      pNode->pPrevLink->pNext = pNode->pNext;
+      pNode->pPrevLink = 0;
+      pNode->pNext = 0;
     }
     if (bFreeMemory & 1) {
       SMem::SMemFree(pNode, "delete", -1, 0);
     }
 
-    return pNode;
+    return (int*)pNode;
 }
 
 // Requests that the handler chain currently being dispatched for a given pData be abandoned. Under SEvt's critical section it allocates a 0xc-byte node tagged __AUBREAKCMD__, links it into the break-command list and stores the caller's pData at node[2].
@@ -795,7 +795,7 @@ int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
       pNewNode = pNode;
     } else {
       pNewNode = 0;
-      pNode = (StormBreakCmdStrc*)&gpSevtBreakCmdListHead.terminator;
+      pNode = (StormBreakCmdStrc*)&gpSevtBreakCmdListHead.head;
     }
 
     StormLinkStrc* nNextNode = pNode->link.pPrevLink;
@@ -808,34 +808,35 @@ int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
       pNode->link.pNext = 0;
     }
 
-    pNode->link.pPrevLink = gpSevtBreakCmdListHead.terminator.pPrevLink;
-    pNode->link.pNext = gpSevtBreakCmdListHead.terminator.pPrevLink->pNext;
-    gpSevtBreakCmdListHead.terminator.pPrevLink->pNext = (int)pNewNode;
-    gpSevtBreakCmdListHead.terminator.pPrevLink = &pNode->link;
+    pNode->link.pPrevLink = gpSevtBreakCmdListHead.head.pPrevLink;
+    pNode->link.pNext = gpSevtBreakCmdListHead.head.pPrevLink->pNext;
+    gpSevtBreakCmdListHead.head.pPrevLink->pNext = (intptr_t)pNewNode;
+    gpSevtBreakCmdListHead.head.pPrevLink = &pNode->link;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pNewNode->pData = pUnderMouse;
     LeaveCriticalSection(&lpCriticalSection_0077930c);
     return 1;
 }
 
 // Unlinks a node from the list, frees its memory, and returns the masked count value. Combines unlinking logic with memory cleanup and count extraction. Always deallocates via SMemFree after unlinking.
-uint32_t __thiscall LINKEDLIST_UnlinkFreeAndGetCount(void * pListHead, int * pNode) {
-    int* pLinkSlot = pNode;
+BREAKCMD * __thiscall LINKEDLIST_UnlinkFreeAndGetCount(StormLinkedListStrc * pListHead, StormLinkStrc * pNode) {
+    StormLinkStrc* nNextNode = pNode;
     if (!pNode) {
-      pLinkSlot = (int*)((int)pListHead + 4);
+      nNextNode = &pListHead->head;
     }
 
-    uint32_t uCount = pLinkSlot[1];
-    int nNextNode = *pNode;
+    uint32_t uCount = nNextNode->pNext;
+    nNextNode = pNode->pPrevLink;
     if (nNextNode) {
+      int* pLinkSlot;
       pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
-      *pLinkSlot = nNextNode;
-      *(int*)(*pNode + 4) = pNode[1];
-      *pNode = 0;
-      pNode[1] = 0;
+      *pLinkSlot = (int)nNextNode;
+      pNode->pPrevLink->pNext = pNode->pNext;
+      pNode->pPrevLink = 0;
+      pNode->pNext = 0;
     }
 
     SMem::SMemFree(pNode, s___AUBREAKCMD___007088d8, -2, 0);
-    return (int)uCount <= 0 ? 0 : uCount;
+    return (BREAKCMD*)((int)uCount <= 0 ? 0 : uCount);
 }
 
 // Dispatches an event: looks the (eventId, subId) pair up in the hash table and invokes every handler whose key matches arg3, walking the chain in descending registration-counter (priority) order. Locks SEvt's critical section and drains the break-command queue that SEvtBreakHandlerChain 00426e80 feeds.
@@ -847,8 +848,9 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     // Static local variables (originally global data)
     static LONG * lpAddend_007792fc; D2_STATIC_GUARD_BSS(lpAddend_007792fc, "Storm::Source::SEVT::SEvtDispatch::lpAddend_007792fc");
 
+    D2SevtHandlerTableStrc* pDVar1;
     int* pBreakCmd;
-    uint32_t* pEventEntry;
+    D2SevtTypeEntryStrc* pEventEntry;
     int* pLinkSlot;
     pfnSEvtHandler pfnHandler;
     int nNextNode;
@@ -861,8 +863,8 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     uLastPriority = -1;
     do {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-      pBreakCmd = (int*)(gpSevtBreakCmdListHead.terminator.pNext <= 0 ? 0 : gpSevtBreakCmdListHead.terminator.pNext);
-      if ((int)pBreakCmd > 0) {
+      pBreakCmd = (int*)(gpSevtBreakCmdListHead.head.pNext <= 0 ? 0 : gpSevtBreakCmdListHead.head.pNext);
+      if ((intptr_t)pBreakCmd > 0) {
         do {
           if ((void*)pBreakCmd[2] == pData) {
             nNextNode = *pBreakCmd;
@@ -879,7 +881,7 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
           }
 
           pBreakCmd = (int*)pBreakCmd[1];
-        } while ((int)pBreakCmd > 0);
+        } while ((intptr_t)pBreakCmd > 0);
 
         if (false) {
           stop_dispatch:
@@ -891,9 +893,9 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
         pHandlerNode = 0;
         pEventEntry = SEVT_FindTypeHashEntry(dwSubId, dwEventId);
         if (pEventEntry) {
-          pBreakCmd = (int*)pEventEntry[3];
-          if (*pBreakCmd && pBreakCmd[1]) {
-            for (pHandlerNode = *(D2SevtHandlerNodeStrc**)(*pBreakCmd + (pBreakCmd[1] - 1U & dwKey) * 4); pHandlerNode && (pHandlerNode->dwKey != dwKey || pHandlerNode->nPriority >= uLastPriority); pHandlerNode = pHandlerNode->pNext) {}
+          pDVar1 = pEventEntry->pHandlerTable;
+          if (pDVar1->pBuckets && pDVar1->nBucketCount) {
+            for (pHandlerNode = pDVar1->pBuckets[pDVar1->nBucketCount - 1 & dwKey]; pHandlerNode && (pHandlerNode->dwKey != dwKey || pHandlerNode->nPriority >= uLastPriority); pHandlerNode = pHandlerNode->pNext) {}
 
             if (lpAddend_007792fc == (LONG*)0x1) {
               gnSevtSnapshotActive = 0;
@@ -922,14 +924,15 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     } while (pHandlerNode);
 
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_007792fc);
-    if (gpSevtBreakCmdListHead.terminator.pNext > 0) {
+    if (gpSevtBreakCmdListHead.head.pNext > 0) {
+      BREAKCMD* nNode;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-      pBreakCmd = (int*)(gpSevtBreakCmdListHead.terminator.pNext <= 0 ? 0 : gpSevtBreakCmdListHead.terminator.pNext);
-      while ((int)pBreakCmd > 0) {
-        if ((void*)pBreakCmd[2] == pData) {
-          pBreakCmd = (int*)LINKEDLIST_UnlinkFreeAndGetCount(&gpSevtBreakCmdListHead, pBreakCmd);
+      nNode = (BREAKCMD*)(gpSevtBreakCmdListHead.head.pNext <= 0 ? 0 : gpSevtBreakCmdListHead.head.pNext);
+      while ((intptr_t)nNode > 0) {
+        if (nNode->pData == pData) {
+          nNode = LINKEDLIST_UnlinkFreeAndGetCount(&gpSevtBreakCmdListHead, &nNode->m_link);
         } else {
-          pBreakCmd = (int*)LINKEDLIST_GetValueAtIndex(&gpSevtBreakCmdListHead, (int32_t)pBreakCmd);
+          nNode = (BREAKCMD*)LINKEDLIST_GetValueAtIndex(&gpSevtBreakCmdListHead, &nNode->m_link);
         }
       }
 
@@ -939,142 +942,142 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     return bResult;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044de90(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044de90(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ecc0(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ecc0(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_0044ed00(int * pList) {
     return pList[2] <= 0 ? 0 : pList[2];
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045b9f0(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045b9f0(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045ba30(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045ba30(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601bf0(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601bf0(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601d60(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601d60(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_00601f00(int * pList) {
     return pList[2] <= 0 ? 0 : pList[2];
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601f60(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601f60(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_006020b0(int * pList) {
     return pList[2] <= 0 ? 0 : pList[2];
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_006024a0(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_006024a0(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e3b0(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e3b0(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e440(int * pList) {
@@ -1085,50 +1088,50 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e5d0(int * pList) {
     return pList[2] <= 0 ? 0 : pList[2];
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e690(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e690(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e760(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e760(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
-void __fastcall LINKEDLIST_UnlinkSelf_Unref_006c4070(int * pNode) {
+void __fastcall LINKEDLIST_UnlinkSelf_Unref_006c4070(StormLinkStrc * pNode) {
     int* piVar3;
-    int iVar1 = *pNode;
-    if (!iVar1) {
+    StormLinkStrc* pSVar1 = pNode->pPrevLink;
+    if (!pSVar1) {
       return;
     }
 
     piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = iVar1;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *piVar3 = (int)pSVar1;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 void StaticInit_gSevtBreakCmdList() {
-    gpSevtBreakCmdListHead.terminator.pNext = ~(uintptr_t)((char*)&gpSevtBreakCmdListHead + 4);
+    gpSevtBreakCmdListHead.head.pNext = ~(uintptr_t)((char*)&gpSevtBreakCmdListHead + 4);
     atexit(StaticFini_gSevtBreakCmdList);
 }
 
@@ -1145,15 +1148,27 @@ void StaticFini_CriticalSection_0077930c() {
 void StaticFini_gSevtBreakCmdList() {
     uint32_t* pBackLink;
     ((TSList<BREAKCMD, TSGetLink<BREAKCMD>>*)&gpSevtBreakCmdListHead)->UnlinkAll();
-    if (!gpSevtBreakCmdListHead.terminator.pPrevLink) {
+    if (!gpSevtBreakCmdListHead.head.pPrevLink) {
       return;
     }
 
     pBackLink = (uint32_t*)D2_StormNextLink((char*)&gpSevtBreakCmdListHead + 4, -1);
-    *pBackLink = (uint32_t)(uintptr_t)gpSevtBreakCmdListHead.terminator.pPrevLink;
-    gpSevtBreakCmdListHead.terminator.pPrevLink->pNext = gpSevtBreakCmdListHead.terminator.pNext;
-    gpSevtBreakCmdListHead.terminator.pPrevLink = 0;
-    gpSevtBreakCmdListHead.terminator.pNext = 0;
+    *pBackLink = (uint32_t)(uintptr_t)gpSevtBreakCmdListHead.head.pPrevLink;
+    gpSevtBreakCmdListHead.head.pPrevLink->pNext = gpSevtBreakCmdListHead.head.pNext;
+    gpSevtBreakCmdListHead.head.pPrevLink = 0;
+    gpSevtBreakCmdListHead.head.pNext = 0;
 }
+
+} // namespace Storm::Source::SEVT
+
+// =============================================================================
+// Co-located global data definitions
+// =============================================================================
+
+namespace Storm::Source::SEVT {
+
+// Initialized scalars
+
+D2SevtTypeEntryStrc * * gpEventHashBuckets = 0; D2_GLOBAL_GUARD(gpEventHashBuckets, "Storm::Source::SEVT::gpEventHashBuckets");
 
 } // namespace Storm::Source::SEVT

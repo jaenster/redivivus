@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -82,8 +85,8 @@ void __fastcall Q10_Callback05_ItemDropped(struct D2QuestDataStrc * pQuestData, 
 // Q10_AdjustStaffPieceCount. Helper that adds nCountDelta to the A2Q2 staff-piece
 // counter at sQuestGUID.aPlayerGUID[9] (the 'vip'/viper-piece slot). Used by the
 // drop/pickup bookkeeping. No QuestRecord access.
-void __fastcall Q10_AdjustStaffPieceCount(int pQuestArg, int nCountDelta);
-int Unreferenced_00599bf0();
+void __fastcall Q10_AdjustStaffPieceCount(struct D2QuestDataStrc * pQuestArg, int nCountDelta);
+BOOL __fastcall Unreferenced_00599bf0(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2. Object-operate fn for the Tomb-chest /
 // portal object that yields the Book of Skill scroll ('rt1 '). Activates the portal,
 // sets victim dropItemCode='rt1 ', counts eligible players via Q10_OnScrollPickup,

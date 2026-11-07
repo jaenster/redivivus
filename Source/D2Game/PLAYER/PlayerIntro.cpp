@@ -2,12 +2,10 @@
 
 #include "Source/D2Game/PLAYER/PlayerIntro.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2BitBufferStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/PLAYER/PlayerTrade.h"
-#include "Source/Fog/BitBuffer.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -151,14 +149,14 @@ void __fastcall CopySizeAndPosToBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * p
     *(uint32_t*)(pDest + 4) = pSizePosData[1];
 }
 
-void __fastcall PLAYERINTRO_CopyIntroData8Bytes(uint32_t * pdwParam1, uint32_t * pdwSrc) {
-    uint32_t* pDstBuf = *(uint32_t**)*pdwParam1;
-    *pDstBuf = *pdwSrc;
-    pDstBuf[1] = pdwSrc[1];
+void __fastcall PLAYERINTRO_CopyIntroData8Bytes(D2UnitDataPlayerInteractedNPCStrc * pdwParam1, uint32_t * pdwSrc) {
+    uint8_t* pDstBuf = pdwParam1->pIntro->pBuffer;
+    *(uint32_t*)pDstBuf = *pdwSrc;
+    *(uint32_t*)(pDstBuf + 4) = pdwSrc[1];
 }
 
-void __fastcall PLAYERINTRO_CopyIntroDataIndirect(int32_t pSrc, uint32_t * pdwIntroData) {
-    uint32_t* pDst = (uint32_t*)**(uint32_t**)(pSrc + 4);
+void __fastcall PLAYERINTRO_CopyIntroDataIndirect(D2UnitDataPlayerInteractedNPCStrc * pSrc, uint32_t * pdwIntroData) {
+    uint32_t* pDst = (uint32_t*)pSrc->pIntro2->pBuffer;
     *pDst = *pdwIntroData;
     pDst[1] = pdwIntroData[1];
 }

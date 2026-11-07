@@ -2,12 +2,8 @@
 
 #include "Source/D2CMP/SRC/GfxHash.h"
 #include "Source/D2CMP/SRC/CelCmp.h"
-#include "Source/D2CMP/SRC/SpriteCache.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/AsyncData.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -20,6 +16,12 @@
 #define D2_ALLOC_POOL_AT(pPool, size, szFile, nLine) Fog::Memory::AllocServerMemory((pPool), (size), (szFile), (nLine), 0)
 #endif
 
+#ifndef D2_NEW_POOL_AT
+#define D2_NEW_POOL_AT(pPool, T, szFile, nLine) ((T*)D2_ALLOC_POOL_AT((pPool), sizeof(T), (szFile), (nLine)))
+#endif
+
+static_assert(sizeof(void*) != 4 || sizeof(::D2GfxHashEntryStrc) == 0x30, "D2_NEW_AT(D2GfxHashEntryStrc): the 32-bit layout must be the 0x30 bytes 1.14d allocates");
+
 
 #ifndef RECON_FPTD_pfnCelPixelDataFree
 #define RECON_FPTD_pfnCelPixelDataFree
@@ -31,17 +33,17 @@ namespace D2CMP::SRC::GfxHash {
 // Unlinks hash entry pEntry from its bucket (pHashTable + 0x8000 + [pEntry+0]*4 -> [pEntry+0x2c]), frees the cache block's
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
-void __thiscall GFXHASH_UnlinkCacheEntry(int32_t pHashTable, D2PoolManagerStrc * pMemory, int * pEntry) {
+void __thiscall GFXHASH_UnlinkCacheEntry(int32_t pHashTable, D2PoolManagerStrc * pMemory, D2GfxHashEntryStrc * pEntry) {
     pfnCelPixelDataFree pFreeCallback;
     int* pFrameData;
     void* nErrAddress;
     int nFrameByteOffset;
     uint32_t nFrameIdx;
-    if (*(int**)(pHashTable + 0x8000 + *pEntry * 4) == pEntry) {
-      *(int*)(pHashTable + 0x8000 + *pEntry * 4) = pEntry[0xb];
+    if (*(D2GfxHashEntryStrc**)(pHashTable + 0x8000 + pEntry->nHashKey * 4) == pEntry) {
+      *(D2GfxHashEntryStrc**)(pHashTable + 0x8000 + pEntry->nHashKey * 4) = pEntry->pNext;
     }
 
-    D2CelCacheBlockStrc* pCacheBlock = (D2CelCacheBlockStrc*)pEntry[8];
+    D2CelCacheBlockStrc* pCacheBlock = pEntry->pCacheBlock;
     D2AsyncData_Line0x128* pAsyncData = pCacheBlock->tDecode.pAsyncData;
     if (pAsyncData) {
       int* pPixelData;
@@ -58,16 +60,16 @@ void __thiscall GFXHASH_UnlinkCacheEntry(int32_t pHashTable, D2PoolManagerStrc *
         nFrameIdx = 0;
         if ((uint32_t)((uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount) > 0) {
           do {
-            pPixelData = *(int**)(nFrameByteOffset + 0x18 + (int)pFrameData);
+            pPixelData = *(int**)(nFrameByteOffset + 0x18 + (char*)pFrameData);
             if (pPixelData) {
               if (pFreeCallback) {
                 (*pFreeCallback)(pPixelData);
               }
 
-              *(uint32_t*)(nFrameByteOffset + 0x18 + (int)pFrameData) = 0;
+              *(uint32_t*)(nFrameByteOffset + 0x18 + (char*)pFrameData) = 0;
             }
 
-            nFrameByteOffset = nFrameByteOffset + 0x23 + *(int*)(nFrameByteOffset + 0x1c + (int)pFrameData) + *(int*)(nFrameByteOffset + 0x14 + (int)pFrameData);
+            nFrameByteOffset = nFrameByteOffset + 0x23 + *(int*)(nFrameByteOffset + 0x1c + (char*)pFrameData) + *(int*)(nFrameByteOffset + 0x14 + (char*)pFrameData);
             nFrameIdx++;
           } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
         }
@@ -87,19 +89,23 @@ void __fastcall GFXHASH_InitHashTable(void * pHashTable) {
     memset(pHashTable, 0, 0x10000);
 }
 
-void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, int * pEntry) {
+void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, D2GfxHashEntryStrc * pEntry) {
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x141);
       exit(-1);
     }
-    if (pEntry[10]) {
-      *(int*)(pEntry[10] + 0x2c) = pEntry[0xb];
+    if (pEntry->pPrev) {
+      pEntry->pPrev->pNext = pEntry->pNext;
     }
-    if (pEntry[0xb]) {
-      *(int*)(pEntry[0xb] + 0x28) = pEntry[10];
+    if (pEntry->pNext) {
+      pEntry->pNext->pPrev = pEntry->pPrev;
     }
 
     GFXHASH_UnlinkCacheEntry((int32_t)pHashTable, pMemory, pEntry);
+}
+
+void __stdcall IGNORELIST_Initialize_Unref_0060ab70() {
+
 }
 
 uint32_t __fastcall GFXHASH_CalcDirectionIndex(D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, D2CelFileCacheEntryStrc * pCelEntry) {
@@ -187,84 +193,84 @@ static uint32_t GFXHASH_CalcHashKey(D2GfxDataStrc * pGfxData, uint32_t * pnDirec
     return ((nHashAccum >> 8 ^ nHashAccum) >> 0x10 ^ nHashAccum >> 8 ^ nHashAccum) & 0x1fff;
 }
 
-int32_t __fastcall GFXHASH_FindEntryByGfxData(void * pHashTable, D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, D2CelFileCacheEntryStrc * pCelEntry) {
+D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable, D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, D2CelFileCacheEntryStrc * pCelEntry) {
     int pCurEntry;
     bool bMatch;
     eD2UnitType eUnitType;
     uint32_t nHashKey;
     nHashKey = GFXHASH_CalcHashKey(pGfxData, pnFrameStep, (uint32_t*)pnDirIdx, pCelEntry);
-    int nEntryPtr;
-    nEntryPtr = *(int*)((int)pHashTable + nHashKey * 4 + 0x8000);
+    D2GfxHashEntryStrc* nEntryPtr;
+    nEntryPtr = *(D2GfxHashEntryStrc**)(pHashTable + nHashKey * 4 + 0x8000);
     int nSrcField1C;
     nSrcField1C = pGfxData->nCompositToken;
     int nSrcField20;
     nSrcField20 = pGfxData->nArmorToken;
-    for (; nEntryPtr; nEntryPtr = *(int*)(nEntryPtr + 0x2c)) {
+    for (; nEntryPtr; nEntryPtr = nEntryPtr->pNext) {
       int nSrcField18;
       nSrcField18 = pGfxData->nUnitToken;
       eUnitType = pGfxData->eUnitType;
       if (eUnitType == UNIT_COUNT) {
         if (pGfxData->dwFlags & 2) {
-          if (nSrcField18 != *(int*)(nEntryPtr + 8) || nSrcField1C != *(int*)(nEntryPtr + 0xc) || nSrcField20 != *(int*)(nEntryPtr + 0x10) || pGfxData->nModeToken != *(int*)(nEntryPtr + 0x14) || pGfxData->nWeaponClass != *(int*)(nEntryPtr + 0x18)) {
+          if (nSrcField18 != nEntryPtr->nUnitToken || nSrcField1C != nEntryPtr->nCompositToken || nSrcField20 != nEntryPtr->nArmorToken || pGfxData->nModeToken != nEntryPtr->nModeToken || pGfxData->nWeaponClass != nEntryPtr->nWeaponClass) {
             continue;
           }
 
           pCurEntry = pGfxData->nOverlayId;
           match_id:
-          bMatch = pCurEntry == *(int*)(nEntryPtr + 4);
+          bMatch = pCurEntry == nEntryPtr->nClassOrOverlayId;
         } else {
           match_tokens:
-          if (nSrcField18 != *(int*)(nEntryPtr + 8) || nSrcField1C != *(int*)(nEntryPtr + 0xc) || nSrcField20 != *(int*)(nEntryPtr + 0x10) || pGfxData->nModeToken != *(int*)(nEntryPtr + 0x14)) {
+          if (nSrcField18 != nEntryPtr->nUnitToken || nSrcField1C != nEntryPtr->nCompositToken || nSrcField20 != nEntryPtr->nArmorToken || pGfxData->nModeToken != nEntryPtr->nModeToken) {
             continue;
           }
-          bMatch = pGfxData->nWeaponClass == *(int*)(nEntryPtr + 0x18);
+          bMatch = pGfxData->nWeaponClass == nEntryPtr->nWeaponClass;
         }
-        if (bMatch && *pnDirIdx == *(int*)(nEntryPtr + 0x1c)) {
+        if (bMatch && *pnDirIdx == nEntryPtr->nDirIndex) {
           return nEntryPtr;
         }
       } else {
         if (eUnitType != UNIT_ITEM && eUnitType != UNIT_MISSILE) {
           goto match_tokens;
         }
-        if (nSrcField18 == *(int*)(nEntryPtr + 8) && nSrcField1C == *(int*)(nEntryPtr + 0xc) && nSrcField20 == *(int*)(nEntryPtr + 0x10) && pGfxData->nModeToken == *(int*)(nEntryPtr + 0x14) && pGfxData->nWeaponClass == *(int*)(nEntryPtr + 0x18)) {
+        if (nSrcField18 == nEntryPtr->nUnitToken && nSrcField1C == nEntryPtr->nCompositToken && nSrcField20 == nEntryPtr->nArmorToken && pGfxData->nModeToken == nEntryPtr->nModeToken && pGfxData->nWeaponClass == nEntryPtr->nWeaponClass) {
           pCurEntry = pGfxData->nClassId;
           goto match_id;
         }
       }
     }
 
-    return 0;
+    return nullptr;
 }
 
 // @sourcefile .\SRC\GfxHash.cpp
 uint32_t * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
-    uint32_t* pNewEntry = (uint32_t*)D2_ALLOC_POOL_AT(pMemory, 0x30, ".\\SRC\\GfxHash.cpp", 0xef);
+    D2GfxHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pMemory, D2GfxHashEntryStrc, ".\\SRC\\GfxHash.cpp", 0xef);
     D2GfxDataStrc* nGfxDataSaved = pGfxData;
-    pNewEntry[8] = nDirIdxOut;
+    pNewEntry->pCacheBlock = (D2CelCacheBlockStrc*)nDirIdxOut;
     nDirIdxOut = 0;
-    uint32_t nHashKey = GFXHASH_CalcHashKey(pGfxData, &nDirIdxOut, pNewEntry + 7, pCelEntry);
-    pNewEntry[2] = nGfxDataSaved->nUnitToken;
-    pNewEntry[3] = nGfxDataSaved->nCompositToken;
-    pNewEntry[4] = nGfxDataSaved->nArmorToken;
-    pNewEntry[5] = nGfxDataSaved->nModeToken;
-    pNewEntry[6] = nGfxDataSaved->nWeaponClass;
+    uint32_t nHashKey = GFXHASH_CalcHashKey(pGfxData, &nDirIdxOut, (uint32_t*)&pNewEntry->nDirIndex, pCelEntry);
+    pNewEntry->nUnitToken = nGfxDataSaved->nUnitToken;
+    pNewEntry->nCompositToken = nGfxDataSaved->nCompositToken;
+    pNewEntry->nArmorToken = nGfxDataSaved->nArmorToken;
+    pNewEntry->nModeToken = nGfxDataSaved->nModeToken;
+    pNewEntry->nWeaponClass = nGfxDataSaved->nWeaponClass;
     eD2UnitType nEntryType = nGfxDataSaved->eUnitType;
     if (nEntryType == UNIT_COUNT && nGfxDataSaved->dwFlags & 2) {
-      pNewEntry[1] = nGfxDataSaved->nOverlayId;
+      pNewEntry->nClassOrOverlayId = nGfxDataSaved->nOverlayId;
     } else if (nEntryType == UNIT_ITEM || nEntryType == UNIT_MISSILE) {
-      pNewEntry[1] = nGfxDataSaved->nClassId;
+      pNewEntry->nClassOrOverlayId = nGfxDataSaved->nClassId;
     }
 
-    pNewEntry[10] = 0;
-    uint32_t nPrevHead = *(uint32_t*)((int)pHashTable + nHashKey * 4 + 0x8000);
-    pNewEntry[0xb] = nPrevHead;
+    pNewEntry->pPrev = 0;
+    D2GfxHashEntryStrc* nPrevHead = *(D2GfxHashEntryStrc**)((char*)pHashTable + nHashKey * 4 + 0x8000);
+    pNewEntry->pNext = nPrevHead;
     if (nPrevHead) {
-      *(uint32_t**)(nPrevHead + 0x28) = (uint32_t*)pNewEntry;
+      nPrevHead->pPrev = pNewEntry;
     }
 
-    *pNewEntry = nHashKey;
-    *(uint32_t**)((int)pHashTable + nHashKey * 4 + 0x8000) = (uint32_t*)pNewEntry;
-    return pNewEntry;
+    pNewEntry->nHashKey = nHashKey;
+    *(D2GfxHashEntryStrc**)((char*)pHashTable + nHashKey * 4 + 0x8000) = (D2GfxHashEntryStrc*)pNewEntry;
+    return &pNewEntry->nHashKey;
 }
 
 } // namespace D2CMP::SRC::GfxHash

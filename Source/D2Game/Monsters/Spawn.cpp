@@ -2,28 +2,18 @@
 
 #include "Source/D2Game/Monsters/Spawn.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2RoomCoordListStrc.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/Transform.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Game/GAME/Event.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/Monster/Create.h"
+#include "Source/D2Game/Monster/MonsterRegion.h"
+#include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A4Q2.h"
 #include "Source/D2Game/SKILLS/SkillItem.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Monsters/MONSTERS.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -302,7 +292,6 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithMinions(::SGAMEDATA * pGame,
     bool bActive;
     int32_t nObjClassId;
     ::SGAMEDATA* pGameCopy;
-    void* pNullArg;
     if (byGroupSizeMin && byGroupSizeMax && byGroupSizeMax >= byGroupSizeMin) {
       D2UnitStrc* pUnit;
       bFoundPos = SPAWN_FindRandomPositionForMonster(pGame, pRoom, pCoordList, nClassId, &nFoundX, &nFoundY, 1);
@@ -319,11 +308,11 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithMinions(::SGAMEDATA * pGame,
       if (bFoundPos) {
         bHasObjColFlag = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nClassId);
         if (bHasObjColFlag == 0x210) {
-          pNullArg = 0;
+          nMinionCount = 0;
           nObjClassId = 0;
           bActive = true;
           pGameCopy = pGame;
-          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x232, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), pGameCopy, pRoom, bActive, nObjClassId, pNullArg);
+          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x232, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), pGameCopy, pRoom, bActive, nObjClassId, nMinionCount);
         }
       }
 
@@ -541,13 +530,15 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
       return pMonster;
     }
     if (nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId == 0x1b0) {
-      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23b, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
+      _bRescueQuestDone = 0;
+      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23b, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, _bRescueQuestDone);
       return pMonster;
     }
 
     int32_t nValidatedClassId = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nClassId);
     if (nValidatedClassId == 0x1b1) {
-      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23c, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
+      _bRescueQuestDone = 0;
+      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23c, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, _bRescueQuestDone);
     }
 
     return pMonster;

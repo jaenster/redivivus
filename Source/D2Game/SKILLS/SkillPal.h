@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -35,6 +38,8 @@ struct D2SkillAuraArgStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2SkillCallbackContextStrc
+#define D2_DEFINED_D2SkillCallbackContextStrc
 struct D2SkillCallbackContextStrc {
     /* 0x00 */ struct SGAMEDATA * pGame; // ECX of SKILLS_ApplyAreaEffect / SKILLS_InvokeCallbackNoTarget
     /* 0x04 */ struct D2UnitStrc * pUnit; // the caster / area owner (EDX of the builder)
@@ -42,11 +47,48 @@ struct D2SkillCallbackContextStrc {
     /* 0x0C */ void * pCallbackArg; // the builder's caller-supplied argument (damage block, event data, ...)
 };
 
+#endif // D2_DEFINED_D2SkillCallbackContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2SkillHitCountArgStrc {
     /* 0x00 */ int32_t eSkill;
     /* 0x04 */ int32_t nSkillLvl;
     /* 0x08 */ int32_t nHitCount; // Accumulated by the per-target callback through the caller's pointer (ADD [ECX+0x8],EAX). A caller that splits this object leaves it looking unassigned.
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_066_Conviction_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int * pnPassiveCalc;
+    /* 0x00 */ short * psAuraStat;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_066_Conviction_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ short * psValue;
+    /* 0x00 */ int * pnValue;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_081_HolyFreeze_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ short * psValue;
+    /* 0x00 */ int * pnValue;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_081_HolyFreeze_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int * pnPassiveCalc;
+    /* 0x00 */ short * psAuraStat;
 };
 
 #endif // D2_MODULE_D2Game

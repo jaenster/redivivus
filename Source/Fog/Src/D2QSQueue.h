@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,12 +18,15 @@
 struct D2QSQueueStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2QSQueueEntryStrc
+#define D2_DEFINED_D2QSQueueEntryStrc
 struct D2QSQueueEntryStrc {
     /* 0x00 */ uint16_t wMsgSize; // payload byte count; payload follows the 8-byte header
     /* 0x02 */ uint16_t wPad;
     /* 0x04 */ struct D2QSQueueEntryStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2QSQueueEntryStrc
 namespace Fog::Src::D2QSQueue {
 
 // Function declarations

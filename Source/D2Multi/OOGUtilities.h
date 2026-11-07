@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Multi)
 #error "D2Multi header included by a module that may not use D2Multi (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Multi) && !defined(D2_LOADS_D2Multi)
+#error "internal D2Multi header included from another module; include D2Multi's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,7 @@
 // Forward declarations
 struct D2ControlMsg;
 struct D2IniConfigStrc;
+struct D2WinEditBox;
 #ifndef RECON_FPTD_Mouse
 #define RECON_FPTD_Mouse
 typedef BOOL (__stdcall *Mouse)(struct D2ControlMsg * pControlMsg);
@@ -60,6 +64,8 @@ struct __attribute__((packed)) D2LanGameEntryStrc {
 };
 
 #endif // D2_MODULE_D2Multi
+#ifndef D2_DEFINED_D2LobbyControlsStrc
+#define D2_DEFINED_D2LobbyControlsStrc
 struct D2LobbyControlsStrc {
     /* 0x00 */ struct D2ControlStrc * pLobbyForm0;
     /* 0x04 */ struct D2ControlStrc * pLobbyForm1;
@@ -80,6 +86,9 @@ struct D2LobbyControlsStrc {
     /* 0x40 */ struct D2WinSmack * pCtlLobbyLadderMode;
 };
 
+#endif // D2_DEFINED_D2LobbyControlsStrc
+#ifndef D2_DEFINED_D2McpGameInfoStrc
+#define D2_DEFINED_D2McpGameInfoStrc
 struct __attribute__((packed)) D2McpGameInfoStrc {
     /* 0x00 */ int nHasMoreData; // 1 if bytes remain after this game's strings
     /* 0x04 */ uint16_t wRequestId;
@@ -99,14 +108,18 @@ struct __attribute__((packed)) D2McpGameInfoStrc {
     /* 0x8C */ char aszPlayerName[16][16];
 };
 
+#endif // D2_DEFINED_D2McpGameInfoStrc
+#ifndef D2_DEFINED_D2SmackerContextStrc
+#define D2_DEFINED_D2SmackerContextStrc
 struct D2SmackerContextStrc {
-    /* 0x00 */ void * hSmack; // Smack* returned by _SmackOpen_12; NULL = not open. Passed straight to _SmackWait_4/_SmackDoFrame_4/_SmackNextFrame_4, whose parameter is void* - it is a pointer, not a handle id. Fields read off it match the published RAD Smack layout: +0x04 Width, +0x08 Height, +0x0C Frames, +0x68 NewPalette, +0x6C Palette, +0x374 FrameNum.
+    /* 0x00 */ void * hSmack; // struct Smack* returned by _SmackOpen_12; NULL = not open. Passed straight to _SmackWait_4/_SmackDoFrame_4/_SmackNextFrame_4, whose parameter is void* - it is a pointer, not a handle id. Fields read off it match the published RAD Smack layout: +0x04 Width, +0x08 Height, +0x0C Frames, +0x68 NewPalette, +0x6C Palette, +0x374 FrameNum.
     /* 0x04 */ char eMode; // 's'=smk video, 'p'=pcx/bitmap static
     /* 0x05 */ uint8_t nPad[3]; // alignment padding
     /* 0x08 */ int nX; // screen X / width used by blit functions
     /* 0x0C */ int nY; // screen Y / height used by blit functions
 };
 
+#endif // D2_DEFINED_D2SmackerContextStrc
 struct __attribute__((packed)) D2WinButton {
     /* 0x000 */ D2ControlStrc sControl;
     /* 0x040 */ int nButtonFlags; // Button behaviour flags. Bits 0x3 (either bit): Push fires fpOnPress on mouse down (00501118), Mouse skips the release and the release callback (0050119b), Draw pins bPressedInside to 1 while pressed (00500e02). Bit1 0x2 additionally toggles bPressed/bPressedInside on each Push (005010d4). Bit2 0x4 skips button.wav (0050110a). Bits 3-6 unverified (scroll_up, scroll_down, transparent, hotkey_label). From asm of D2WINBUTTON Push/Mouse/Draw.
@@ -152,6 +165,8 @@ namespace D2Multi::OOGUtilities {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
 int __stdcall OOG_DisableControlCallback(uint32_t dwParam);
+// Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
+int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex);
 int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex);
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
@@ -164,7 +179,7 @@ int __stdcall OOGUTIL_JoinChannelFromInput(struct D2ControlStrc * dwUnused);
 int __stdcall OOGUTIL_JoinDefaultChannel(struct D2ControlMsg * pControlMsg);
 int __stdcall OOGUTIL_HandleChannelListDoubleClick(struct D2ControlMsg * pControlMsg);
 void __stdcall AbleToJoinGameOrBanned(int32_t bBanned);
-int Unreferenced_004414c0();
+void Unreferenced_004414c0();
 int __stdcall JoinOrCreateGame(DWORD dwUnused);
 // Attempts to restore MCP connection: displays connection message, creates thread if peer data exists, sends CharLogon packet. Returns 1 on success, 0 on failure.
 uint32_t __stdcall OOGMENU_RestoreMCPConnection();
@@ -177,7 +192,7 @@ int __stdcall CHAT_SendOutOfGameMessage();
 BOOL __stdcall OOGUTIL_OnPressChatWarningOk(struct D2ControlMsg * pControlMsg);
 int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix);
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText);
-int __fastcall Unreferenced_00442a70(int param_1, int param_2);
+int __fastcall Unreferenced_00442a70(uint32_t * param_1, int param_2);
 char * __fastcall OOGUTIL_GetStringEnd(char * szText);
 uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars);
 // OOGMENU_AddGameToCache(pGameInfo = g_CharSelectBuffer): append one realm game to the JOIN-screen

@@ -2,11 +2,9 @@
 
 #include "Source/D2Net/SRC/D2Net.h"
 #include "Source/D2Net/SRC/Client.h"
-#include "Source/Fog/Memory.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Net/D2Net.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Net/in_addr.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

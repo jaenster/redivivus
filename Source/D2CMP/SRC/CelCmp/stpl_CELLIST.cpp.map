@@ -80,7 +80,9 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "CELLIST",
         "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<TCELENTRY>",
         "uint32_t"
       ]
     },

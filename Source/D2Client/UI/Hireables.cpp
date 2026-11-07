@@ -16,26 +16,13 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/File.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Memory.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Storm.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Client/UI/Hireables.data.h"
-#include "Source/D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -162,7 +149,7 @@ void __stdcall FreeHireablesList() {
       }
 
       ppClassIcon++;
-    } while ((int)ppClassIcon < (intptr_t)((char*)&ClassIcons + sizeof(ClassIcons)));
+    } while ((intptr_t)ppClassIcon < (intptr_t)((char*)&ClassIcons + sizeof(ClassIcons)));
 
     if (!gpHireablesList) {
       return;
@@ -375,7 +362,7 @@ void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
       D2UnitStrc* pPetUnit;
       pPetUnit = UNIT::Player::UNITS_FindClientSideUnit(-1, UNIT_MONSTER);
       if (pPetUnit) {
-        GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pPlayer, pPetUnit, 1);
+        GAME::Select::SELECT_SetPetSeedTimestamp(pPlayer, pPetUnit, 1);
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
         Storm::SMsgBreakHandlerChain(pMsg);
@@ -386,14 +373,14 @@ void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
-int Unreferenced_004934b0() {
+D2UnitStrc * Unreferenced_004934b0() {
     D2UnitStrc* pDVar1 = UNIT::Player::GetPlayerUnit_UI();
     if (!pDVar1) {
-      return 0;
+      return nullptr;
     }
 
     pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pDVar1->pInventory);
-    return (int)pDVar1;
+    return pDVar1;
 }
 
 int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {

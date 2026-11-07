@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -36,7 +39,7 @@ void __stdcall QSSOCKET_SetCallbackHandler2(struct D2QSSocketStrc * pQSSocket, i
 // Socket receive loop, passed as thread proc to Fog::Safesock::Create_Flag0
 int __stdcall ReceiveLoopCallback(struct D2QSSocketStrc * pQSSocket);
 // lpStartAddress parameter of CreateThread
-DWORD __stdcall QSSOCKET_ThreadEntryPoint(void * lpThreadParam);
+DWORD __stdcall QSSOCKET_ThreadEntryPoint(struct D2QSSocketStrc * lpThreadParam);
 HANDLE __stdcall QSSOCKET_Initialize(struct D2QSSocketStrc * pQSSocket);
 DWORD __stdcall QSSOCKET_WaitForEvent(struct D2QSSocketStrc * pQSSocket, DWORD dwTimeout);
 void __stdcall QSSOCKET_SignalEvent(struct D2QSSocketStrc * pQSSocket);

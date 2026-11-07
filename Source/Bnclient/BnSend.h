@@ -4,18 +4,20 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/Bnclient/net_sid.h"
 
 // Forward declarations
 struct D2BNetGatewayAccessStr;
-struct D2CDKeyHashStrc;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-struct __time32_t;
 struct sockaddr;
 #endif // _WIN32
 #ifndef RECON_FPTD_pfnNewsEntryCallback
@@ -44,19 +46,43 @@ struct __attribute__((packed)) BnCDKeyHashInput26 {
 };
 
 #endif // D2_MODULE_Bnclient
-struct D2BnNewsTableStrc {
-    /* 0x00 */ uint32_t nCapacity; // unsigned JBE compares
-    /* 0x04 */ uint32_t nCount;
-    /* 0x08 */ void * pEntries; // 0x408-byte entries (IMUL 0x408); entry layout not modelled
-    /* 0x0C */ uint32_t nGrowStep; // 0 -> BNNEWS_RoundToPowerOfTwo sets 8
-};
-
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct D2XSHA1Strc {
-    /* 0x00 */ DWORD h[5];
+struct __attribute__((packed)) BnDoubleHashInput {
+    /* 0x00 */ uint32_t dwClientToken;
+    /* 0x04 */ uint32_t dwServerToken;
+    /* 0x08 */ D2XSHA1Strc sHash;
 };
 
 #endif // D2_MODULE_Bnclient
+#ifndef D2_DEFINED_D2BnNewsEntryStrc
+#define D2_DEFINED_D2BnNewsEntryStrc
+struct D2BnNewsEntryStrc {
+    /* 0x00 */ uint32_t dwFlags;
+    /* 0x04 */ uint32_t dwTimestamp;
+    /* 0x08 */ char szText[1024];
+};
+
+#endif // D2_DEFINED_D2BnNewsEntryStrc
+#ifndef D2_DEFINED_D2BnNewsTableStrc
+#define D2_DEFINED_D2BnNewsTableStrc
+struct D2BnNewsTableStrc {
+    /* 0x00 */ uint32_t nCapacity; // unsigned JBE compares
+    /* 0x04 */ uint32_t nCount;
+    /* 0x08 */ struct D2BnNewsEntryStrc * pEntries; // 0x408-byte entries (IMUL 0x408); entry layout not modelled
+    /* 0x0C */ uint32_t nGrowStep; // 0 -> BNNEWS_RoundToPowerOfTwo sets 8
+};
+
+#endif // D2_DEFINED_D2BnNewsTableStrc
+#ifndef D2_DEFINED_D2BnReadUserDataStrc
+#define D2_DEFINED_D2BnReadUserDataStrc
+struct __attribute__((packed)) D2BnReadUserDataStrc {
+    /* 0x00 */ uint32_t nAccountCount;
+    /* 0x04 */ uint32_t nKeyCount;
+    /* 0x08 */ uint32_t nRequestId;
+    /* 0x0C */ char szValues[0];
+};
+
+#endif // D2_DEFINED_D2BnReadUserDataStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct SID_C2S_CheckAd {
     /* 0x00 */ uint32_t dwPlatformId; // 'IX86'
@@ -109,6 +135,15 @@ struct SID_C2S_GetFileTime {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+struct __attribute__((packed)) SID_C2S_LogonResponse {
+    /* 0x00 */ uint32_t dwClientToken;
+    /* 0x04 */ uint32_t dwServerToken;
+    /* 0x08 */ D2XSHA1Strc sPasswordHash;
+    /* 0x1C */ char szUsername[256];
+};
+
+#endif // D2_MODULE_Bnclient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct SID_C2S_ReportVersion {
     /* 0x00 */ uint32_t dwPlatformId; // 'IX86'
     /* 0x04 */ uint32_t dwProductId; // 'D2DV' or 'D2XP'
@@ -151,23 +186,6 @@ struct __attribute__((packed)) SID_C2S_LocaleInfo {
 };
 
 #endif // D2_MODULE_Bnclient
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) BnDoubleHashInput {
-    /* 0x00 */ uint32_t dwClientToken;
-    /* 0x04 */ uint32_t dwServerToken;
-    /* 0x08 */ D2XSHA1Strc sHash;
-};
-
-#endif // D2_MODULE_Bnclient
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) SID_C2S_LogonResponse {
-    /* 0x00 */ uint32_t dwClientToken;
-    /* 0x04 */ uint32_t dwServerToken;
-    /* 0x08 */ D2XSHA1Strc sPasswordHash;
-    /* 0x1C */ char szUsername[256];
-};
-
-#endif // D2_MODULE_Bnclient
 namespace Bnclient::BnSend {
 
 // Function declarations
@@ -189,15 +207,15 @@ void __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning();
 void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, size_t nSize);
 // @sourcefile .\BnSend.cpp
 void BNSEND_FreeRealmQueryData();
-int32_t __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
+char * __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
 // SID_QUERYREALMS2 (0x40) client request sender. Queries available Battle.net realms. Packet format: empty (no payload). Sends request, waits for 0x40 response containing realm list with names and descriptions. Returns gpRealmQueryData on success, 0 on send failure.
 void * __stdcall NET_SID_CLIENT_Send_0x40_QueryRealms2();
 // @sourcefile .\BnSend.cpp
 void __stdcall BNSEND_FreeChannelListData();
-int __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
+void * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType);
 uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
-void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, uint32_t dwProductCode);
+void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode);
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat();
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText);
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd();
@@ -225,7 +243,7 @@ void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, size_t nSize);
 // @sourcefile .\BnSend.cpp
 uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys);
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
-int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int32_t pnMaxLens);
+int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int * pnMaxLens);
 void __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText);
 BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * szText2);
 BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szText2, char * szNewEmail);
@@ -239,7 +257,7 @@ void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, size_t nSize);
 void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand);
 int Unreferenced_0051bea0();
 BOOL __stdcall D2CheckExpansionGame();
-int __fastcall Unreferenced_0051bed0(int param_1);
+void __fastcall Unreferenced_0051bed0(int nConnectionState);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall GetDnsResults(void * lpThreadParam);
 void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2);
@@ -257,13 +275,13 @@ BOOL __fastcall BNCLIENT_WaitForChangePasswordResponse(uint32_t * pOutResponseCo
 int __fastcall BNCLIENT_EnterChatAndJoinChannel(char * szUsername, char * szStatstring, char * szAccountName, char * szChannelName, uint32_t dwFlags);
 int __stdcall thunk_NET_SID_CLIENT_Send_0x10_LeaveChat();
 BOOL __stdcall BNSEND_Disconnect();
-int __fastcall Unreferenced_0051c570(int param_1);
+int __fastcall Unreferenced_0051c570(char * param_1);
 int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t nSizeNoHeader);
-void __fastcall Unreferenced_0051c6b0(int param_1);
+void __fastcall Unreferenced_0051c6b0(char * param_1);
 void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText);
 // BATTLE.NET PACKET DISPATCH LOOP
 // Iterates over received network buffer, scanning for 0xFF packet start markers and dispatching complete packets to NET_SID_CLIENT_IncomingPacketHandler. For each packet: validates 4-byte header (0xFF, ID, size_lo, size_hi), checks if buffer contains full packet based on 2-byte little-endian size field, dispatches packet data (excluding 4-byte header) to handler, advances buffer pointer by packet size. Returns pointer to remaining unparsed buffer data for next iteration.
-char * __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t nSize);
+size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t nSize);
 void __stdcall BnetReadFunction(uint32_t dwThreadParam);
 uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddrLen);
 // Thread-safe wrapper around Fog::Safesock::GetSockNameDoesReturn. Returns local socket address info for Battle.net connection. Used by SID_AUTH_INFO sender.
@@ -282,19 +300,19 @@ void __fastcall BNNEWS_SetNewsChannel(int bIsClassic);
 int __thiscall BNNEWS_GetNewsEntryByIndex(int * pNewsTable, int nIndex);
 uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwSize);
 DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple);
-void __fastcall Unreferenced_0051d350(int param_1, int param_2);
+void __fastcall Unreferenced_0051d350(uint32_t * param_1, uint32_t * param_2);
 // @sourcefile .\BNNews.cpp
 void __stdcall BNNEWS_SaveToCache();
 // Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
 void __stdcall BNNEWS_InvokeCallbacks();
 void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray);
-void * __thiscall BNNEWS_DestroyNewsTable(void * pNewsTable, uint8_t bFreeMemory);
+void * __thiscall BNNEWS_DestroyNewsTable(struct D2BnNewsTableStrc * pNewsTable, uint8_t bFreeMemory);
 void __thiscall BNNEWS_ReallocateNewsTable(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCapacity);
 void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray);
-int __fastcall Unreferenced_0051d690(int param_1);
-void __fastcall BNNEWS_ClearNewsTable(uint32_t * pNewsTable);
+uint32_t * __fastcall Unreferenced_0051d690(uint32_t * param_1);
+void __fastcall BNNEWS_ClearNewsTable(struct D2BnNewsTableStrc * pNewsTable);
 void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int dwAdditionalCount, int bGrow);
-int __fastcall Unreferenced_0051d720(int param_1);
+uint32_t * __fastcall Unreferenced_0051d720(uint32_t * param_1);
 BOOL __stdcall BNNEWS_Shutdown();
 int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable);
 void __thiscall BNNEWS_EnsureCapacity(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwAdditionalCount);

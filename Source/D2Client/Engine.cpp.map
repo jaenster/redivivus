@@ -601,6 +601,9 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "Unreferenced_004607d0"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {
@@ -615,6 +618,9 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "Unreferenced_004607f0"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {
@@ -629,6 +635,9 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "Unreferenced_00460810"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {

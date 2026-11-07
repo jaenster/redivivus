@@ -132,6 +132,10 @@
       "calledFunctions": [
         "Unreferenced_004c10c0",
         "PLRSKILLS_CanUseSkillCheck"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc"
       ]
     },
     {
@@ -478,7 +482,6 @@
         "SetupUpdateFlag"
       ],
       "usedTypes": [
-        "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -766,9 +769,9 @@
         "NPCMENU_OnCursorItemRemoved"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x42",
         "D2InventoryStrc",
-        "D2UnitStrc",
-        "int32_t"
+        "D2UnitStrc"
       ]
     },
     {
@@ -1520,7 +1523,8 @@
         "D2UnitStrc",
         "eInventoryPage",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -1975,7 +1979,8 @@
         "D2UnitStrc",
         "eInventoryPage",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -2300,8 +2305,8 @@
         "ITEM_RemoveUninterruptableState"
       ],
       "usedTypes": [
-        "D2UnitStrc",
-        "int32_t"
+        "D2GSPacketSrv0x7C",
+        "D2UnitStrc"
       ]
     }
   ]

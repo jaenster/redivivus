@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,12 +21,17 @@ struct SGAMEDATA;
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2SUnitMsg23Strc
+#define D2_DEFINED_D2SUnitMsg23Strc
 struct __attribute__((packed)) D2SUnitMsg23Strc {
     /* 0x00 */ uint32_t dwSkillOwnerGUID;
     /* 0x04 */ uint16_t nSkillId;
     /* 0x06 */ uint8_t nSkillSlot;
 };
 
+#endif // D2_DEFINED_D2SUnitMsg23Strc
+#ifndef D2_DEFINED_D2SUnitMsg99Strc
+#define D2_DEFINED_D2SUnitMsg99Strc
 struct __attribute__((packed)) D2SUnitMsg99Strc {
     /* 0x00 */ uint16_t nSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
@@ -32,6 +40,9 @@ struct __attribute__((packed)) D2SUnitMsg99Strc {
     /* 0x08 */ uint8_t field_0x8;
 };
 
+#endif // D2_DEFINED_D2SUnitMsg99Strc
+#ifndef D2_DEFINED_D2SUnitMsg9AStrc
+#define D2_DEFINED_D2SUnitMsg9AStrc
 struct __attribute__((packed)) D2SUnitMsg9AStrc {
     /* 0x00 */ uint16_t nSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
@@ -41,6 +52,9 @@ struct __attribute__((packed)) D2SUnitMsg9AStrc {
     /* 0x08 */ uint8_t field_0x8;
 };
 
+#endif // D2_DEFINED_D2SUnitMsg9AStrc
+#ifndef D2_DEFINED_D2SUnitMsg9EStrc
+#define D2_DEFINED_D2SUnitMsg9EStrc
 struct D2SUnitMsg9EStrc {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ uint8_t nStatId;
@@ -50,6 +64,9 @@ struct D2SUnitMsg9EStrc {
     /* 0x08 */ uint32_t dwStatValue;
 };
 
+#endif // D2_DEFINED_D2SUnitMsg9EStrc
+#ifndef D2_DEFINED_D2SUnitMsgA1Strc
+#define D2_DEFINED_D2SUnitMsgA1Strc
 struct D2SUnitMsgA1Strc {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ uint8_t nStatId;
@@ -60,6 +77,9 @@ struct D2SUnitMsgA1Strc {
     /* 0x0C */ int32_t nNewValue;
 };
 
+#endif // D2_DEFINED_D2SUnitMsgA1Strc
+#ifndef D2_DEFINED_D2SUnitMsgA3Strc
+#define D2_DEFINED_D2SUnitMsgA3Strc
 struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
@@ -75,12 +95,18 @@ struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x1C */ uint32_t dwParam2;
 };
 
+#endif // D2_DEFINED_D2SUnitMsgA3Strc
+#ifndef D2_DEFINED_D2SUnitMsgA4Strc
+#define D2_DEFINED_D2SUnitMsgA4Strc
 struct D2SUnitMsgA4Strc {
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
 
     /* 0x00 */ int16_t nClassId;
 };
 
+#endif // D2_DEFINED_D2SUnitMsgA4Strc
+#ifndef D2_DEFINED_D2SUnitMsgA5Strc
+#define D2_DEFINED_D2SUnitMsgA5Strc
 struct __attribute__((packed)) D2SUnitMsgA5Strc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint8_t field_0x1;
@@ -90,6 +116,9 @@ struct __attribute__((packed)) D2SUnitMsgA5Strc {
     /* 0x08 */ uint16_t nSkillId;
 };
 
+#endif // D2_DEFINED_D2SUnitMsgA5Strc
+#ifndef D2_DEFINED_D2SUnitMsgABStrc
+#define D2_DEFINED_D2SUnitMsgABStrc
 struct __attribute__((packed)) D2SUnitMsgABStrc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint8_t field_0x1;
@@ -99,6 +128,9 @@ struct __attribute__((packed)) D2SUnitMsgABStrc {
     /* 0x08 */ uint8_t nHpPercent128;
 };
 
+#endif // D2_DEFINED_D2SUnitMsgABStrc
+#ifndef D2_DEFINED_D2SUnitMsgArgsUnion
+#define D2_DEFINED_D2SUnitMsgArgsUnion
 union D2SUnitMsgArgsUnion {
     /* 0x00 */ D2SUnitMsg23Strc s23;
     /* 0x00 */ D2SUnitMsg99Strc s99;
@@ -111,6 +143,9 @@ union D2SUnitMsgArgsUnion {
     /* 0x00 */ D2SUnitMsgABStrc sAB;
 };
 
+#endif // D2_DEFINED_D2SUnitMsgArgsUnion
+#ifndef D2_DEFINED_D2SUnitMsgStrc
+#define D2_DEFINED_D2SUnitMsgStrc
 struct __attribute__((packed)) D2SUnitMsgStrc {
     /* 0x00 */ struct D2SUnitMsgStrc * pNext;
     /* 0x04 */ uint8_t nOpcode; // S->C opcode the drain (SERVER_UnitQueuePacketSend) switches on; written as a byte
@@ -118,6 +153,7 @@ struct __attribute__((packed)) D2SUnitMsgStrc {
     /* 0x08 */ D2SUnitMsgArgsUnion uArgs; // per-opcode payload; each writer allocates only 8 + its member size (0xC..0x28)
 };
 
+#endif // D2_DEFINED_D2SUnitMsgStrc
 namespace D2Game::UNIT::SUnitMsg {
 
 // Function declarations

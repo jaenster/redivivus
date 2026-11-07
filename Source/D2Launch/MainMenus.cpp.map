@@ -16,6 +16,9 @@
       "calledFunctions": [
         "FORMS_DestroyListJmp_Unref_0041f930",
         "COMPRESS_DestroyEncoderContext"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -31,6 +34,9 @@
       "calledFunctions": [
         "FORMS_DestroyListJmp_Unref_0041f940",
         "COMPRESS_DestroyEncoderContext"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -45,6 +51,9 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "Unreferenced_0042e5c0"
+      ],
+      "usedTypes": [
+        "uint16_t"
       ]
     },
     {
@@ -94,6 +103,9 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "Unreferenced_0042e620"
+      ],
+      "usedTypes": [
+        "uint16_t"
       ]
     },
     {
@@ -109,6 +121,9 @@
       "calledFunctions": [
         "Unreferenced_0042e630",
         "isalpha"
+      ],
+      "usedTypes": [
+        "uint16_t"
       ]
     },
     {
@@ -859,7 +874,7 @@
         "D2WINMAIN_SetControlActive"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2ControlMsg"
       ]
     },
     {
@@ -877,7 +892,7 @@
         "D2WINMAIN_SetControlActive"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2ControlMsg"
       ]
     },
     {
@@ -1988,6 +2003,9 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "Unreferenced_00431c60"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -2986,7 +3004,8 @@
       "usedTypes": [
         "D2BNetRealmEntryStrc",
         "D2BNetRealmEntryStrc *",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -4170,6 +4189,20 @@
         "D2ControlStrc",
         "WCHAR",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "UI_ClearCursorAnimationState_Unref_00436ac0",
+      "address": "00436ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436ac0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UI_ClearCursorAnimationState_Unref_00436ac0"
       ]
     },
     {

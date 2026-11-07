@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 struct D2DrlgSubstGroupStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgFileStrc
+#define D2_DEFINED_D2DrlgFileStrc
 struct D2DrlgFileStrc {
     /* 0x00 */ int nAct; // DS1 act field (version >= 10). Values 1 or 2 enable tag/subst layer.
     /* 0x04 */ void * pDS1File; // Raw loaded DS1 file buffer. Freed with FreeClientMemory.
@@ -34,8 +39,13 @@ struct D2DrlgFileStrc {
     /* 0x58 */ int unk0x58; // Unknown. Zeroed on init, no known writes.
 };
 
+#endif // D2_DEFINED_D2DrlgFileStrc
+#ifndef D2_DEFINED_D2DrlgSubstGroupStrc
+#define D2_DEFINED_D2DrlgSubstGroupStrc
 struct __attribute__((packed)) D2DrlgSubstGroupStrc {
     /* 0x00 */ D2DrlgCoordStrc tBox; // Bounding box of the substitution group (nPosX, nPosY, nWidth, nHeight)
     /* 0x10 */ int nProbability; // Substitution probability/chance (DS1 version >= 13)
     /* 0x14 */ int nVariantCount; // Unknown substitution group field
 };
+
+#endif // D2_DEFINED_D2DrlgSubstGroupStrc

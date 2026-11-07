@@ -13,28 +13,13 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Transform.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Common/Units/UnitFinds.h"
-#include "Source/D2Game/Objects/Objects.h"
-#include "Source/D2Game/SKILLS/SkillsServer.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Game/D2Game.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/GAME/RosterPets.h"
 #include "Source/D2Client/GAME/Select.data.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
@@ -399,7 +384,7 @@ int __stdcall SELECT_GetConstant13_Y_Unref_00467400() {
     return _Selection::bHasSelectedUnit;
 }
 
-void __fastcall SELECT_SetPetSeedTimestamp(int32_t bEnabled, D2UnitStrc * pUnit, int32_t nTimestamp) {
+void __fastcall SELECT_SetPetSeedTimestamp(D2UnitStrc * bEnabled, D2UnitStrc * pUnit, int32_t nTimestamp) {
     if (!(bEnabled && pUnit)) {
       return;
     }
@@ -577,7 +562,7 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
       }
 
       pDirTableEntry++;
-      if ((int)pDirTableEntry >= (intptr_t)((char*)&gaTargetSelectionAngleTable + sizeof(gaTargetSelectionAngleTable))) {
+      if ((intptr_t)pDirTableEntry >= (intptr_t)((char*)&gaTargetSelectionAngleTable + sizeof(gaTargetSelectionAngleTable))) {
         return nullptr;
       }
     }
@@ -587,28 +572,28 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
 }
 
 // Resolves world coordinates for a click target. If pUnit is null, reads X/Y directly from pnOutX/pnOutY. Otherwise extracts the unit's position from its static or dynamic path. Then checks the local player's room for movement collision; if blocked, calls GetFreeCoordinates_WithMaxDistance (radius 7) to find the nearest walkable tile and writes the adjusted coords back to pnOutX/pnOutY. Returns null on success, or pUnit if no adjustment was needed.
-static int * __stdcall SELECT_GetTargetCoords(int * pnOutX, int * pUnit, int * pnOutY) {
+static D2UnitStrc * __stdcall SELECT_GetTargetCoords(int * pnOutX, D2UnitStrc * pUnit, int * pnOutY) {
     POINT ptCoord;
     eD2UnitType eUnitType;
     if (pUnit) {
       eD2UnitType eUnitTypeForY;
-      eUnitType = *pUnit;
+      eUnitType = pUnit->eUnitType;
       long xValue;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        xValue = *(int32_t*)(pUnit[0xb] + 0xc);
-      } else if ((D2DynamicPathStrc*)pUnit[0xb]) {
-        xValue = D2Common::PATH::DynamicPath::GetXPos((D2DynamicPathStrc*)pUnit[0xb]);
+        xValue = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        xValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
       } else {
         xValue = 0;
       }
 
       ptCoord.x = xValue;
-      eUnitTypeForY = *pUnit;
+      eUnitTypeForY = pUnit->eUnitType;
       long yValue;
       if (eUnitTypeForY == UNIT_OBJECT || (int)eUnitTypeForY > 3 && (int)eUnitTypeForY <= 5) {
-        yValue = *(int32_t*)(pUnit[0xb] + 0x10);
-      } else if ((D2DynamicPathStrc*)pUnit[0xb]) {
-        yValue = D2Common::PATH::DynamicPath::GetYPos((D2DynamicPathStrc*)pUnit[0xb]);
+        yValue = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        yValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
       } else {
         yValue = 0;
       }
@@ -713,7 +698,7 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
       return pUnit;
     }
 
-    pPlayerUnit_lcl = (D2UnitStrc*)SELECT_GetTargetCoords(pX, (int*)pUnit, pY);
+    pPlayerUnit_lcl = SELECT_GetTargetCoords(pX, pUnit, pY);
     return pPlayerUnit_lcl;
 }
 

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -21,6 +24,8 @@ typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, ch
 struct D2PoolStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2PoolBlockStrc
+#define D2_DEFINED_D2PoolBlockStrc
 struct __attribute__((packed)) D2PoolBlockStrc {
     /* 0x00 */ BYTE * pCommit;
     /* 0x04 */ DWORD * pUsage;
@@ -30,6 +35,9 @@ struct __attribute__((packed)) D2PoolBlockStrc {
     /* 0x14 */ struct D2PoolStrc * pPool;
 };
 
+#endif // D2_DEFINED_D2PoolBlockStrc
+#ifndef D2_DEFINED_D2PoolStrc
+#define D2_DEFINED_D2PoolStrc
 struct __attribute__((packed)) D2PoolStrc {
     /* 0x00 */ CRITICAL_SECTION pSync;
     /* 0x18 */ size_t nBlockSize;
@@ -40,6 +48,16 @@ struct __attribute__((packed)) D2PoolStrc {
     /* 0x2C */ struct D2PoolBlockStrc * pTail;
 };
 
+#endif // D2_DEFINED_D2PoolStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+union ReAlloc_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2PoolBlockStrc * pFoundBlock;
+    /* 0x00 */ int nOldBlockSize;
+};
+
+#endif // D2_MODULE_Fog
 namespace Fog::Memory {
 
 // Function declarations

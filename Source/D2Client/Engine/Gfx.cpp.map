@@ -78,6 +78,8 @@
         "GFX_HashTextureName"
       ],
       "usedTypes": [
+        "D2CofCacheStrc",
+        "D2CofTextureCacheEntryStrc",
         "uint32_t"
       ]
     },
@@ -106,6 +108,7 @@
         "GFX_HashTextureName"
       ],
       "usedTypes": [
+        "D2CofCacheStrc",
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
@@ -131,6 +134,7 @@
         "SStrHash"
       ],
       "usedTypes": [
+        "D2CofCacheStrc",
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
@@ -150,7 +154,8 @@
         "GFX_SyncStateOverlayPriority"
       ],
       "usedTypes": [
-        "D2GfxInfoStrc"
+        "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8"
       ]
     },
     {
@@ -174,7 +179,8 @@
         "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "eD2States",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -223,6 +229,7 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -246,6 +253,7 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -271,8 +279,10 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2OverlayTxt",
         "D2UnitStrc",
+        "eOverlayId",
         "int32_t",
         "uint8_t"
       ]
@@ -317,8 +327,10 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2OverlayTxt",
         "D2UnitStrc",
+        "eOverlayId",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -439,7 +451,8 @@
         "D2GfxInfoUnkStrc *",
         "D2UnitStrc",
         "int32_t",
-        "uint8_t"
+        "uint8_t",
+        "uint8_t *"
       ]
     },
     {
@@ -479,7 +492,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t",
-        "uint8_t"
+        "uint8_t",
+        "uint8_t *"
       ]
     },
     {
@@ -539,7 +553,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -559,7 +574,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -604,7 +620,8 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "D2GfxInfoStrc"
+        "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8"
       ]
     },
     {
@@ -888,6 +905,8 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
+        "D2GfxUnknown_0xa8 *",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -912,6 +931,7 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -1057,7 +1077,8 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2CofCacheStrc",
+        "void *"
       ]
     },
     {
@@ -1095,9 +1116,6 @@
         "GFX_FreeUnusedCofEntries",
         "FreeClientMemory",
         "memset"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {
@@ -1238,6 +1256,7 @@
         "GFX_GetModeStatusEntry"
       ],
       "usedTypes": [
+        "D2MonsterCofStatusEntryStrc",
         "int32_t"
       ]
     },
@@ -1291,7 +1310,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -1563,7 +1583,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {

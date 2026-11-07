@@ -682,7 +682,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2Skills",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -803,6 +804,7 @@
         "D2SkillsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
+        "SKILL_ExecuteClientProgressWithAura_Slotm",
         "eD2Skills",
         "int16_t",
         "int32_t"
@@ -1005,9 +1007,9 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -1131,10 +1133,10 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2UnitType",
+        "eMissilesId",
         "int32_t",
         "int64_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {

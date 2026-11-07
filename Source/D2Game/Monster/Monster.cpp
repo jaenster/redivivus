@@ -3,22 +3,9 @@
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DATATBLS/OverlayTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
@@ -28,16 +15,14 @@
 #include "Source/D2Game/Monster/MonsterAI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
 #include "Source/D2Game/Monster/MonsterRegion.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Chat.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Game/Monster/Monster.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -674,7 +659,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
           }
         }
 
-        pRoom = (D2RoomStrc*)((uintptr_t)&pRoom->ppRoomList + 2);
+        pRoom = (D2RoomStrc*)((intptr_t)&pRoom->ppRoomList + 2);
         nTmpInt++;
       } while (nTmpInt < 8);
 
@@ -692,7 +677,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
         pRoom = (D2RoomStrc*)(uMonTxt.pMonPropTxt->entry + nParam);
         nPlayerCount = 0;
         do {
-          if ((int)pRoom->ppRoomList < 0) {
+          if ((intptr_t)pRoom->ppRoomList < 0) {
             break;
           }
           if ((uint8_t)uMonTxt.pMonPropTxt->chance[nParam][nPlayerCount] <= '\0') {

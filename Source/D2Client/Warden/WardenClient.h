@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -64,12 +67,17 @@ typedef struct D2WardenModuleObjectStrc * (__fastcall *pfnWardenCreateInterface)
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2RC4StateStrc
+#define D2_DEFINED_D2RC4StateStrc
 struct D2RC4StateStrc {
     /* 0x000 */ uint8_t sbox[256]; // RC4 substitution box, 256-byte permutation array
     /* 0x100 */ uint8_t nIndexI; // RC4 i index (incremented each byte)
     /* 0x101 */ uint8_t nIndexJ; // RC4 j index (sbox swap partner)
 };
 
+#endif // D2_DEFINED_D2RC4StateStrc
+#ifndef D2_DEFINED_D2WardenModuleFuncsStrc
+#define D2_DEFINED_D2WardenModuleFuncsStrc
 struct D2WardenModuleFuncsStrc {
     /* 0x00 */ void (__thiscall *pfnGenerateRC4Keys)(struct D2WardenModuleObjectStrc *, void *, uint32_t);
     /* 0x04 */ void (__thiscall *pfnUnload)(struct D2WardenModuleObjectStrc *);
@@ -77,10 +85,16 @@ struct D2WardenModuleFuncsStrc {
     /* 0x0C */ void (__thiscall *pfnTick)(struct D2WardenModuleObjectStrc *, uint32_t);
 };
 
+#endif // D2_DEFINED_D2WardenModuleFuncsStrc
+#ifndef D2_DEFINED_D2WardenModuleObjectStrc
+#define D2_DEFINED_D2WardenModuleObjectStrc
 struct D2WardenModuleObjectStrc {
     /* 0x00 */ struct D2WardenModuleFuncsStrc * pFuncs;
 };
 
+#endif // D2_DEFINED_D2WardenModuleObjectStrc
+#ifndef D2_DEFINED_D2WardenModuleStrc
+#define D2_DEFINED_D2WardenModuleStrc
 struct D2WardenModuleStrc {
     /* 0x00 */ void * pLibrary;
     /* 0x04 */ uint32_t nImageSize;
@@ -89,6 +103,9 @@ struct D2WardenModuleStrc {
     /* 0x10 */ struct D2WardenModuleObjectStrc * (__fastcall *pfnCreateInterface)(::WardenClient *);
 };
 
+#endif // D2_DEFINED_D2WardenModuleStrc
+#ifndef D2_DEFINED_WardenClientVtable
+#define D2_DEFINED_WardenClientVtable
 struct WardenClientVtable {
     /* 0x00 */ void (__thiscall *SendPacket)(::WardenClient *, void *, uint32_t);
     /* 0x04 */ bool (__thiscall *CheckModule)(::WardenClient *, uint8_t *, void *);
@@ -103,10 +120,14 @@ struct WardenClientVtable {
     /* 0x1F */ uint8_t field_0x1f;
 };
 
+#endif // D2_DEFINED_WardenClientVtable
+#ifndef D2_DEFINED_WardenClient
+#define D2_DEFINED_WardenClient
 struct WardenClient {
     /* 0x00 */ struct WardenClientVtable * _vfptr;
 };
 
+#endif // D2_DEFINED_WardenClient
 namespace D2Client::Warden {
 
 // Function declarations

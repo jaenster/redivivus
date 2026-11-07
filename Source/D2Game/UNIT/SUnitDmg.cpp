@@ -2,24 +2,8 @@
 
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/D2StatInfoStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Common/Units/UnitFinds.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Event.h"
@@ -31,6 +15,7 @@
 #include "Source/D2Game/Monster/MonsterAI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
 #include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/Quests/QUESTS.h"
@@ -42,16 +27,11 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitEvent.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Cube.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Seed.inline.h"
@@ -399,7 +379,7 @@ int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(D2UnitStrc * pUnit, D2Unit
       nVictimClassId = pMonster->nClassId;
       D2MonStatsTxt* pMonStatsTxt = nVictimClassId >= 0 && nVictimClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nVictimClassId : nullptr;
       if (pMonStatsTxt) {
-        return (int)pMonStatsTxt->aColdEffect[*(uint8_t*)((uintptr_t)&pUnit->uSideData + 9)];
+        return (int)pMonStatsTxt->aColdEffect[*(uint8_t*)((intptr_t)&pUnit->uSideData + 9)];
       }
     }
 
@@ -1149,7 +1129,7 @@ static int32_t DAMAGE_AbsorbDamageByPercent(D2DamageContext * pCtx, D2ResistTabl
 
 static int32_t __stdcall DAMAGE_ApplyElementalDamageWithResist(D2DamageContext * pCtx, int32_t bBypass, D2ResistTableEntry * pEntry) {
     int nReducedDmg;
-    int* pDmgField = (int*)((uintptr_t)&pCtx->pDamage->dwHitFlags + pEntry->nDamageFieldOffset);
+    int* pDmgField = (int*)((intptr_t)&pCtx->pDamage->dwHitFlags + pEntry->nDamageFieldOffset);
     int nIncomingDmg = *pDmgField;
     if (nIncomingDmg <= 0) {
       *pDmgField = 0;
@@ -1173,11 +1153,11 @@ static int32_t __stdcall DAMAGE_ApplyElementalDamageWithResist(D2DamageContext *
       nReducedDmg = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nReducedDmg, 100 - nResist, 100);
     }
 
-    nullsub_7Arg(pCtx->pDefender, nIncomingDmg, nResist, pCtx->anDamageReduction[pEntry->nDisplayIndex], nReducedDmg, (uint32_t)pEntry->nEventId, (uint32_t)(uint8_t)pEntry->field_28);
+    nullsub_7Arg(pCtx->pDefender, nIncomingDmg, nResist, pCtx->anDamageReduction[pEntry->nDisplayIndex], nReducedDmg, pEntry->nEventId, (uint32_t)(uint8_t)pEntry->field_28);
     int32_t nAbsorbed = nReducedDmg;
     if (!bBypass) {
       nAbsorbed = DAMAGE_AbsorbDamageByPercent(pCtx, pEntry, nReducedDmg);
-      nullsub_B(pCtx->pDefender, nReducedDmg - nAbsorbed, (uint32_t)pEntry->nEventId);
+      nullsub_B(pCtx->pDefender, nReducedDmg - nAbsorbed, pEntry->nEventId);
     }
 
     *pDmgField = nAbsorbed;
@@ -1505,15 +1485,15 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
       do {
         if (pResistTableIter[8]) {
           nMercType = *pResistTableIter;
-          nResistScaled = *(int32_t*)((uintptr_t)&pDmg->dwHitFlags + nMercType);
+          nResistScaled = *(int32_t*)((intptr_t)&pDmg->dwHitFlags + nMercType);
           if (nResistScaled > 0) {
             nResistScaled = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nResistScaled, nXpMultiplier, 100);
-            *(int32_t*)((uintptr_t)&pDmg->dwHitFlags + nMercType) = nResistScaled;
+            *(int32_t*)((intptr_t)&pDmg->dwHitFlags + nMercType) = nResistScaled;
           }
         }
 
         pResistTableIter += 0xb;
-        pBypassFlags = (D2DamageStrc*)((uintptr_t)&pBypassFlags[-1].nOverlay + 3);
+        pBypassFlags = (D2DamageStrc*)((intptr_t)&pBypassFlags[-1].nOverlay + 3);
       } while (pBypassFlags);
     }
 
@@ -1559,16 +1539,16 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
 
 uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(void * pThis, D2UnitStrc * pUnit) {
     if (!(!pThis || *(int*)pThis != 1)) {
-      if (!*(int**)((int)pThis + 0x14)) {
+      if (!*(uint32_t**)((char*)pThis + 0x14)) {
         return 0;
       }
 
-      int nMonsterIndex = **(int**)((int)pThis + 0x14);
+      D2MonStatsTxt* nMonsterIndex = (D2MonStatsTxt*)**(uint32_t**)((char*)pThis + 0x14);
       if (!nMonsterIndex) {
         return 0;
       }
 
-      return (uint32_t)*(uint8_t*)(*(uint8_t*)((uintptr_t)&pUnit->uSideData + 9) + 0xa0 + nMonsterIndex);
+      return (uint32_t)nMonsterIndex->aDrain[*(uint8_t*)((intptr_t)&pUnit->uSideData + 9)];
     }
 
     return 100;
@@ -2126,7 +2106,7 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
 }
 
 // Determines the elemental damage type flag for a unit's current attack by round-robining through up to 4 elemental damage types (indexed via gnElementalDamageTypeCallCount mod 4). Checks nParam2 damage ranges; if none are positive falls back to a fire-type flag (0x10 if bit 0x2000 set) or default type 0xD. Returns combined flags ORed with nParam.
-static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t dwHitClass, int32_t pDamage) {
+static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t dwHitClass, D2DamageStrc * pDamage) {
     // Static local variables (originally global data)
     static int gaDamageTypeStatOffsets[16] = {
     0x24,
@@ -2154,18 +2134,18 @@ static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t dwHitClass, int32_t 
     int nDmgTypeMax = uDmgTypeIdx + 4;
     do {
       if ((int)uDmgTypeIdx >= nDmgTypeMax) {
-        if (*(uint16_t*)(pDamage + 4) & 0x2000) {
+        if (pDamage->wResultFlags & 0x2000U) {
           uDmgTypeFlags = 0x10;
         }
 
         break;
       }
-      if (*(int*)(pDamage + gaDamageTypeStatOffsets[uDmgTypeIdx * 2]) > 0) {
+      if (*(int*)((intptr_t)&pDamage->dwHitFlags + gaDamageTypeStatOffsets[uDmgTypeIdx * 2]) > 0) {
         uDmgTypeFlags = gaDamageTypeStatOffsets[uDmgTypeIdx * 2 + 1];
         if (uDmgTypeFlags) {
           break;
         }
-        if (*(uint16_t*)(pDamage + 4) & 0x2000) {
+        if (pDamage->wResultFlags & 0x2000U) {
           uDmgTypeFlags = 0x10;
         }
 
@@ -2228,7 +2208,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
     }
     if (pDamage->wResultFlags & 1) {
       if (!pDamage->nHitClassActiveSet && !(pDamage->dwHitClass & 0xf0U)) {
-        uMonFlag = DAMAGE_GetElementalDamageTypeFlags(pDamage->dwHitClass, (int32_t)pDamage);
+        uMonFlag = DAMAGE_GetElementalDamageTypeFlags(pDamage->dwHitClass, pDamage);
         pDamage->dwHitClass = uMonFlag;
       }
 
@@ -2596,7 +2576,7 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
           return;
         }
 
-        SKILLS::SkillEMonst::SKILLEMONST_ApplyReflectedDamage(pGameLocal, pUnit, pVictim, (uintptr_t)&sDamage);
+        SKILLS::SkillEMonst::SKILLEMONST_ApplyReflectedDamage(pGameLocal, pUnit, pVictim, &sDamage);
       }
 
       SERVER_GetHitCalculation(pGameLocal, pUnit, pVictim, &sDamage);
@@ -3017,7 +2997,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
           nAvoidChance = DVar1.nSeedLow % 100;
           nSeedMod = "evades";
           nParryBonus = bIsMissile;
-          SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, (uint32_t)nSeedMod);
+          SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, nSeedMod);
           nRandRoll = 8;
           if (nAvoidChance >= bIsMissile) {
             nRandRoll = nWeaponClass2;
@@ -3035,7 +3015,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
             pDVar3 = pUnit;
             iVar4 = nParryBonus;
             nWeaponClass3 = nRandRoll;
-            SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
+            SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, (char*)nDebugAddr);
             if ((int)nWeaponClass3 < nParryBonus) {
               return 0x10;
             }
@@ -3064,7 +3044,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
         pDVar3 = pUnit;
         iVar4 = nParryBonus;
         nWeaponClass2 = nRandRoll;
-        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, (uint32_t)nSeedMod);
+        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, nSeedMod);
         if ((int)nWeaponClass2 < nParryBonus) {
           return 0x10;
         }
@@ -3077,7 +3057,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "dodges";
-        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
+        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 4;
         }
@@ -3087,7 +3067,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "avoids";
-        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
+        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 2;
         }
@@ -3103,7 +3083,8 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
       return uBlockResult;
     }
 
-    int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, pGame->bExpansion);
+    int bExpansion = pGame->bExpansion;
+    int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, bExpansion);
     if (nBlockRate <= 0) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;
@@ -3121,7 +3102,7 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
     int nSeedMod = DVar1.nSeedLow % 100;
     int32_t nDebugAddr = (int32_t)s_blocks_006e1738;
     D2UnitStrc* nRandRoll = pDefUnit;
-    SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);
+    SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, (char*)nDebugAddr);
     if (nSeedMod >= nBlockRate) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,6 +32,8 @@ struct __attribute__((packed)) D2Wall2DrawContextStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2Wall2DrawEntryStrc
+#define D2_DEFINED_D2Wall2DrawEntryStrc
 struct D2Wall2DrawEntryStrc {
     /* 0x00 */ uint32_t dwType; // 0 unit, 1 tile, 2 unit shadow (dShadowPass tests bits 0/1); 1 for WALL2_AddLowerWallTile
     /* 0x04 */ int nX; // screen x (tile/unit position * 8)
@@ -37,6 +42,7 @@ struct D2Wall2DrawEntryStrc {
     /* 0x10 */ struct D2Wall2DrawEntryStrc * pNext; // next entry in the cell list
 };
 
+#endif // D2_DEFINED_D2Wall2DrawEntryStrc
 namespace D2Client::GAME::Wall2 {
 
 // Function declarations

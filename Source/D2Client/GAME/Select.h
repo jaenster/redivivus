@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -42,7 +45,7 @@ void SetSelectedUnit_I(struct D2UnitStrc * pUnit);
 void __stdcall ClearSelectedUnit();
 void __stdcall SetCanBeSelectedToFalse();
 int __stdcall SELECT_GetConstant13_Y_Unref_00467400();
-void __fastcall SELECT_SetPetSeedTimestamp(int32_t bEnabled, struct D2UnitStrc * pUnit, int32_t nTimestamp);
+void __fastcall SELECT_SetPetSeedTimestamp(struct D2UnitStrc * bEnabled, struct D2UnitStrc * pUnit, int32_t nTimestamp);
 void __fastcall SELECT_SetExclusionRect(RECT * pRect);
 int __fastcall UnitIsOfTypeMonster(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 // Client-side skill targeting resolver (D2Game::Game::Select). Given a candidate target unit and the requested cast position (*pX/*pY), returns the unit/coords the skill should actually act on. If the candidate is an already-active player it is kept as-is; otherwise (for non-flags4&1 skills) the candidate is dropped and its dynamic-path coords are substituted. If the requested position equals the local player's own position, it is nudged to the tile in front of the player (GetPositionNextToPlayerDirection). Suppresses targeting while moving for certain bUseFlags combos. Finally, if the player can use the skill (PLRSKILLS_CanUseSkillCheck) it applies skill-flag-driven target selection: flag 0x40 -> SKILL_FindTargetInRange, flag 0x20 + bAllowDirectional -> facing-direction target, flag 0x80 -> ground coords. Returns the resolved target unit (may be null) and writes resolved coords back through pX/pY.

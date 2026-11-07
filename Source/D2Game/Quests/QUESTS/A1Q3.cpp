@@ -2,22 +2,19 @@
 
 #include "Source/D2Game/Quests/QUESTS/A1Q3.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -150,7 +147,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           pA1Q3Data->nQuestItemCount--;
           nPartyId = UNIT::SUnit::GetPartyId(pQuestArgs->pPlayer);
           if (nPartyId != -1) {
-            UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestArgs->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_AutoCompleteIfHighLevel, 0);
+            UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestArgs->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_AutoCompleteIfHighLevel, nullptr);
           }
           if (pQuestData->bIsNotIntroduction != '\0') {
             if (pQuestData->nStateFlag == 4) {
@@ -188,7 +185,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       }
     } else if (nMsgIndex == 0x92) {
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x10c);
-      *(uint8_t*)((uintptr_t)&pGame->m_hashval + 2) = 1;
+      *(uint8_t*)((intptr_t)&pGame->m_hashval + 2) = 1;
       QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
     }
 }
@@ -535,7 +532,7 @@ static BOOL Q03_CheckPartyHasMalus(D2UnitStrc * pUnitStrc, D2QuestDataStrc * pQu
     }
 
     pQuestSpecific->bPartyHasMalus = false;
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_CheckPlayerHasMalus, 0);
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_CheckPlayerHasMalus, nullptr);
     return (uint32_t)pQuestSpecific->bPartyHasMalus;
 }
 

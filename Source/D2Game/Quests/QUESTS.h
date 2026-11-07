@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -46,8 +49,13 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, struct D
 #endif
 
 // Data types
+#ifndef D2_DEFINED_QUESTCALLBACKFN
+#define D2_DEFINED_QUESTCALLBACKFN
 typedef void (__fastcall *QUESTCALLBACKFN)(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 
+#endif // D2_DEFINED_QUESTCALLBACKFN
+#ifndef D2_DEFINED_D2GSPacketClt0x89
+#define D2_DEFINED_D2GSPacketClt0x89
 struct D2GSPacketClt0x89 {
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
 
@@ -55,6 +63,9 @@ struct D2GSPacketClt0x89 {
     /* 0x01 */ uint8_t nEventType;
 };
 
+#endif // D2_DEFINED_D2GSPacketClt0x89
+#ifndef D2_DEFINED_D2NPCMessageStrc
+#define D2_DEFINED_D2NPCMessageStrc
 struct D2NPCMessageStrc {
     /* 0x00 */ int nMonStatsId;
     /* 0x04 */ short nStringIndex;
@@ -62,11 +73,17 @@ struct D2NPCMessageStrc {
     /* 0x08 */ int32_t bMenu;
 };
 
+#endif // D2_DEFINED_D2NPCMessageStrc
+#ifndef D2_DEFINED_D2QuestArgStrcUnion1
+#define D2_DEFINED_D2QuestArgStrcUnion1
 struct D2QuestArgStrcUnion1 {
     /* 0x00 */ struct D2GSPacketSrv0x27_TextStrc * pTextControl;
     /* 0x04 */ int nIndex;
 };
 
+#endif // D2_DEFINED_D2QuestArgStrcUnion1
+#ifndef D2_DEFINED_D2QuestArgStrcUnion2
+#define D2_DEFINED_D2QuestArgStrcUnion2
 struct D2QuestArgStrcUnion2 {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -78,6 +95,9 @@ struct D2QuestArgStrcUnion2 {
     /* 0x07 */ uint8_t field_0x7;
 };
 
+#endif // D2_DEFINED_D2QuestArgStrcUnion2
+#ifndef D2_DEFINED_D2QuestArgStrcUnion3
+#define D2_DEFINED_D2QuestArgStrcUnion3
 struct D2QuestArgStrcUnion3 {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -85,6 +105,9 @@ struct D2QuestArgStrcUnion3 {
     /* 0x04 */ int nNewLevel;
 };
 
+#endif // D2_DEFINED_D2QuestArgStrcUnion3
+#ifndef D2_DEFINED_D2QuestInitDataExtended
+#define D2_DEFINED_D2QuestInitDataExtended
 struct __attribute__((packed)) D2QuestInitDataExtended {
     /* 0x00 */ void (__fastcall *fpQuestInit)(struct D2QuestDataStrc *);
     /* 0x04 */ int nAct;
@@ -94,6 +117,9 @@ struct __attribute__((packed)) D2QuestInitDataExtended {
     /* 0x14 */ eD2Quests nQuestIdReal;
 };
 
+#endif // D2_DEFINED_D2QuestInitDataExtended
+#ifndef D2_DEFINED_D2QuestTimerStrc
+#define D2_DEFINED_D2QuestTimerStrc
 struct D2QuestTimerStrc {
     /* 0x00 */ uint8_t (__fastcall *pfUpdate)(::SGAMEDATA *, struct D2QuestDataStrc *);
     /* 0x04 */ struct D2QuestDataStrc * pQuest;
@@ -102,11 +128,15 @@ struct D2QuestTimerStrc {
     /* 0x10 */ struct D2QuestTimerStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2QuestTimerStrc
+#ifndef D2_DEFINED_D2UnitQuestDataListStrc
+#define D2_DEFINED_D2UnitQuestDataListStrc
 struct D2UnitQuestDataListStrc {
     /* 0x00 */ struct D2QuestDataStrc * pQuestData;
     /* 0x04 */ struct D2UnitQuestDataListStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2UnitQuestDataListStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union D2QuestJoinFrameSlotUnion {
     /* 0x00 */ struct SGAMEDATA * pGameSaved; // pGame kept across the join handlers
@@ -114,12 +144,17 @@ union D2QuestJoinFrameSlotUnion {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_uD2QuestArgStrcUnion
+#define D2_DEFINED_uD2QuestArgStrcUnion
 union uD2QuestArgStrcUnion {
     /* 0x00 */ D2QuestArgStrcUnion1 sNpcActivate;
     /* 0x00 */ D2QuestArgStrcUnion2 sNpcMessage;
     /* 0x00 */ D2QuestArgStrcUnion3 sLevelChange;
 };
 
+#endif // D2_DEFINED_uD2QuestArgStrcUnion
+#ifndef D2_DEFINED_D2QuestArgStrc
+#define D2_DEFINED_D2QuestArgStrc
 struct __attribute__((packed)) D2QuestArgStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ int nEvent;
@@ -129,6 +164,7 @@ struct __attribute__((packed)) D2QuestArgStrc {
     /* 0x14 */ uD2QuestArgStrcUnion sQuestArgs;
 };
 
+#endif // D2_DEFINED_D2QuestArgStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -145,12 +181,12 @@ namespace D2Game::Quests::QUESTS {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2BitBufferStrc * __fastcall GetQuestBitBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_00543540(int param_1, int param_2);
+struct D2UnitDataPlayerInteractedNPCStrc * __fastcall Unreferenced_00543540(::SGAMEDATA * param_1, struct D2UnitStrc * param_2);
 int __fastcall Unreferenced_00543560(int param_1);
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall FreeQuestDataList(::SGAMEDATA * pGame, struct D2UnitQuestDataListStrc * pQuestDataList);
 struct D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, eD2QuestsInternal eQuestNoInternal);
-int __fastcall Unreferenced_00543690(int param_1, int param_2);
+int * __fastcall Unreferenced_00543690(int param_1, int param_2);
 // Looks up quest data by internal quest ID and attaches it to a unit. For QUESTINT_TheSearchForCain attaches to the cage object (classId 0x3d) and calls Q04_SetRescueTrigger; for QUESTINT_RadamentsLair attaches to Radament (0xe5); for QUESTINT_TheSummoner runs Q14 join noop on the Summoner (0xfa). Falls through to QUEST_AttachToUnit for all others.
 BOOL __fastcall QUEST_AttachToUnitByQuestId(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2QuestsInternal nQuestNoInternal);
 void __fastcall AddGossipMessageOnMonster(struct D2QuestDataStrc * pQuestData, struct D2GSPacketSrv0x27_TextStrc * sTextMessage, int32_t nMonStatsId, int32_t nMessageIndexMaybe);
@@ -216,7 +252,7 @@ void __fastcall Objects_InitFn23_LamEsenTome(struct D2ObjectInitFnArg * pInitArg
 void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
-void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t pNpcIdArray, struct D2UnitStrc * pUnit, int32_t nNpcIdCount);
+void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdArray, struct D2UnitStrc * pUnit, int32_t nNpcIdCount);
 // Builds and sends packet 0x91 (NpcGossip) to the player's client for a given act, listing which intro NPCs the player has already spoken with. Selects the act-specific NPC list (Acts I/II/III/V), calls INTRONPC_FillInPacketWithIntroNpcIds to populate the packet, and sends it only if at least one NPC entry needs to be communicated.
 // @sourcefile .\QUESTS\QUESTS.CPP
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
@@ -236,7 +272,7 @@ void __fastcall QUESTGUID_SetPlayerCountToZero(struct D2QuestGUIDStrc * pQuestGU
 void __fastcall QUESTGUID_RemovePlayerFromQuest(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Searches outward from a candidate POINT in expanding rings (up to nSearchIterations passes, stride 2) for a map tile that passes a collision-vector check (eCollisionFlags) within nScanRadius. Steps across nearby rooms via DRLGROOM_FindBetterNearbyRoom when the search position leaves the current room. On success writes the adjusted tile coordinates back into pPoint and the containing room into *pRoomsNear; on failure sets *pRoomsNear to NULL.
 void __fastcall FindSpawnableLocation(struct D2RoomStrc * pRoom, POINT * pPoint, uint32_t nScanRadius, int32_t neCollisionFlags, struct D2RoomStrc * * pRoomsNear, int32_t nMaxTries, int32_t nSearchIterations);
-int __fastcall Unreferenced_005454e0(int param_1, int param_2);
+void __fastcall Unreferenced_005454e0(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall SetRewardAndFinishFlags(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Sends quest state information to a specific unit (player). Retrieves quest control by difficulty, constructs a quest info packet, and sends to the player client.
 // @sourcefile .\QUESTS\QUESTS.CPP
@@ -285,7 +321,7 @@ struct D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, s
 void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonster, int32_t nDestinationAct, int32_t nUnused);
 // Handles the two completion paths for A3Q7 Khalim's Will. For event code 0x66 (player assembled the flail): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other code delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
 // @sourcefile .\QUESTS\QUESTS.CPP
-void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nLevelId, uint32_t nEventCode);
+void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nLevelId, struct D2UnitStrc * nEventCode);
 BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnitFallback);
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
 void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, int32_t nParam2);

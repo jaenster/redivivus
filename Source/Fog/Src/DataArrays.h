@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -25,7 +28,7 @@ void __fastcall FOG_InitDataArray(struct D2DataArrayStrc * pDataArray);
 uint32_t __fastcall FOG_GetMissileField(struct D2DataArrayStrc * pMissilesTxt);
 void __fastcall FOG_CloseDataArray(struct D2DataArrayStrc * pDataArray);
 void __fastcall FOG_ArrayFreeAtIndex(struct D2DataArrayStrc * pDataArray, int nHandle);
-void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * nElementSize, int nCount, int nMaxValue);
+void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, int nElementSize, int nCount, int nMaxValue);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 // Returns the entry of pDataArray addressed by nHandle (high word = slot index, low word = the entry's 16-bit id; low word 0 matches any), or NULL for handle -1, an empty slot or an id mismatch. Halts (lines 219/222) on an index outside numObjects or an uninitialised array.

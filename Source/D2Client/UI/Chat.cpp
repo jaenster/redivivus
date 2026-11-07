@@ -13,26 +13,18 @@
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/Text.h"
 #include "Source/D2Client/UI/ui.h"
-#include "Source/D2Common/Chat/Ignorelist.h"
 #include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
-#include "Source/D2Game/PLAYER/Player.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/File.h"
-#include "Source/Fog/Memory.h"
-#include "3rdparty/Storm/MessageStrc.h"
-#include "3rdparty/Storm/Source/SSTR.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/UI/Chat.data.h"
 #include "Source/D2Client/UI/Help.data.h"
-#include "Source/D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -212,7 +204,7 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
         if (gaIMECompositionBuffer != 7 && gaIMECompositionBuffer != 0xc) {
           goto cleanup;
         }
-        if ((uint32_t)pMsg & 1) {
+        if ((uintptr_t)pMsg & 1) {
           gnIMEInputMode = 1;
           gaChatInputBuffer = '\x01';
           goto cleanup;
@@ -456,7 +448,7 @@ static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szTe
     char* pScan1 = szText1;
     pScan1 = pScan1 + strlen(pScan1) + 1;
     char* pScan2;
-    if ((uint32_t)((int)pScan1 - (int)(szText1 + 1)) < (uint32_t)(int)strlen(szText2)) {
+    if ((uint32_t)((intptr_t)pScan1 - (intptr_t)(szText1 + 1)) < (uint32_t)(int)strlen(szText2)) {
       return -1;
     }
 
@@ -594,7 +586,7 @@ void __stdcall CHAT_DrawIMECandidates() {
         wszCandidate[nWideCount] = L'\0';
       }
 
-      /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ nWideCount = MultiByteToWideChar(0, 1, (LPCSTR)((int)pdwOffsetTable + (dwOffset - 0x18)), -1, (LPWSTR)wszCandidate, 0x101);
+      /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ nWideCount = MultiByteToWideChar(0, 1, (LPCSTR)((char*)pdwOffsetTable + (dwOffset - 0x18)), -1, (LPWSTR)wszCandidate, 0x101);
       if (nWideCount) {
         D2Win::Src::D2WinFont::DRAW_text(wszCandidate, 0x1e, nPosY - 0x170 + Inv::ScreenSizeY, 0, 0);
       }
@@ -869,7 +861,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
       }
 
       nCmdIndex++;
-      if ((int)&gaChatCommandTable[nCmdIndex] >= (intptr_t)((char*)&gaChatCommandTable + sizeof(gaChatCommandTable))) {
+      if ((intptr_t)&gaChatCommandTable[nCmdIndex] >= (intptr_t)((char*)&gaChatCommandTable + sizeof(gaChatCommandTable))) {
         return 0;
       }
     } while (true);
@@ -944,8 +936,8 @@ static void CHAT_ExtractWhisperPrefix(char * szInput, char * szOutPrefix) {
       char* pStar;
       pStar = Storm::Source::SSTR::SStrChr(szInput, '*');
       if (pStar) {
-        memcpy(szOutPrefix, szInput, (int)pStar - (int)szInput);
-        szOutPrefix[(int)pStar - (int)szInput] = '\0';
+        memcpy(szOutPrefix, szInput, (intptr_t)pStar - (intptr_t)szInput);
+        szOutPrefix[(intptr_t)pStar - (intptr_t)szInput] = '\0';
         return;
       }
     }
@@ -1108,7 +1100,7 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     char* pScan = szCommandName;
     pScan = pScan + strlen(pScan) + 1;
     int32_t nCompareResult = CHAT_CompareCaseInsensitive(szInput, szCommandName);
-    if (nCompareResult || szInput[(int)pScan - (int)(szCommandName + 1)] != ' ' && szInput[(int)pScan - (int)(szCommandName + 1)] != '\0') {
+    if (nCompareResult || szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != ' ' && szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != '\0') {
       return 0;
     }
 
@@ -1162,14 +1154,14 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     pScan = pScan + strlen(pScan) + 1;
     int32_t nCompareResult;
     nCompareResult = CHAT_CompareCaseInsensitive(szInput, szCommandName);
-    if (nCompareResult || szInput[(int)pScan - (int)(szCommandName + 1)] != ' ' && szInput[(int)pScan - (int)(szCommandName + 1)] != '\0') {
+    if (nCompareResult || szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != ' ' && szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != '\0') {
       return 0;
     }
 
     pScan = szInput;
     do {
       cScanChar = *pScan;
-      pScan[(uintptr_t)&sWhisperPacket + (0x10 - (int)szInput)] = cScanChar;
+      pScan[(intptr_t)&sWhisperPacket + (0x10 - (int)szInput)] = cScanChar;
       pScan++;
     } while (cScanChar != '\0');
 
@@ -1183,7 +1175,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
         if (nTokenCount == 2) {
           strcpy(szTargetName, pScan);
         } else if (nTokenCount == 3) {
-          pScan = pScan + (uintptr_t)&sWhisperPacket + (0x10 - (int)szInput);
+          pScan = pScan + (intptr_t)&sWhisperPacket + (0x10 - (int)szInput);
           strcpy(szMessageText, pScan);
           goto send_whisper;
         }
@@ -1489,6 +1481,7 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
     BOOL bIsValidChar;
     D2TextLineStrc* pWrapList;
     int32_t nTrimmedLen;
+    int nLineWidth;
     int32_t nScanIdx;
     char szMultiByteText[260];
     int32_t nSavedFont;
@@ -1499,13 +1492,13 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
 
     int nTextLength;
     nTextLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText);
-    int nLineWidth;
-    nLineWidth = pMsg->nWParam;
+    uint32_t wInputChar;
+    wInputChar = pMsg->nWParam;
     int nSavedLength;
     nSavedLength = nTextLength;
-    if (nLineWidth != 8) {
+    if (wInputChar != 8) {
       D2TextLineStrc* pDVar1;
-      switch (nLineWidth) {
+      switch (wInputChar) {
         case 0xd:
           {
             nScanIdx = 0;
@@ -1514,8 +1507,8 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
                 break;
               }
 
-              nLineWidth = isspace((uint32_t)(uint16_t)gwszChatInputText[nScanIdx]);
-              if (!nLineWidth) {
+              nTextLength = isspace((uint32_t)(uint16_t)gwszChatInputText[nScanIdx]);
+              if (!nTextLength) {
                 break;
               }
 
@@ -1537,7 +1530,7 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
           }
         default:
           {
-            if ((gbChatInputEnabled || (bIsValidChar = D2Win::Src::D2WinFont::D2WINFONT_IsFontCharacterValid((uint8_t)nLineWidth) , bIsValidChar != 0)) && gnChatInputTextCursorPosition < 0xff && nTextLength < 0xff) {
+            if ((gbChatInputEnabled || (bIsValidChar = D2Win::Src::D2WinFont::D2WINFONT_IsFontCharacterValid((uint8_t)wInputChar) , bIsValidChar != 0)) && gnChatInputTextCursorPosition < 0xff && nTextLength < 0xff) {
               nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
               pWrapList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(gwszChatInputText, (int*)&nWrapLineCount, ui::ScreenSizeX - 0x109);
               nLineWidth = 0;
@@ -1552,18 +1545,18 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
               D2Win::Src::D2WinFont::D2WINFONT_FreeWordWrapList((void**)&pWrapList->wszLine);
               if (nWrapLineCount <= 3 && (nWrapLineCount != 3 || nLineWidth <= ui::ScreenSizeX - 0x113)) {
                 nLineWidth = ui::ScreenSizeX - 0x109;
-                gwszChatInputText[nTextLength] = *(uint16_t*)&pMsg->nWParam;
+                gwszChatInputText[nTextLength] = (uint16_t)pMsg->nWParam;
                 pWrapList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(gwszChatInputText, (int*)&nWrapLineCount, nLineWidth);
-                nLineWidth = 0;
+                nTextLength = 0;
                 pDVar1 = pWrapList;
                 while (pDVar1) {
                   ppWVar2 = &pDVar1->wszLine;
                   pDVar1 = pDVar1->pNext;
-                  nLineWidth = D2Win::Src::D2WinFont::DRAW_text0(*ppWVar2);
+                  nTextLength = D2Win::Src::D2WinFont::DRAW_text0(*ppWVar2);
                 }
 
                 D2Win::Src::D2WinFont::D2WINFONT_FreeWordWrapList((void**)&pWrapList->wszLine);
-                if (nWrapLineCount != 3 || nLineWidth < ui::ScreenSizeX - 0x113) {
+                if (nWrapLineCount != 3 || nTextLength < ui::ScreenSizeX - 0x113) {
                   gnChatInputTextCursorPosition++;
                 }
               }

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,7 @@ struct D2AnimDataRecordStrc;
 struct D2DrlgActStrc;
 struct D2DynamicPathStrc;
 struct D2GfxInfoUnkStrc;
+struct D2GfxUnknown_0xa8;
 struct D2InventoryStrc;
 struct D2LightMapStrc;
 struct D2ParticleStrc;
@@ -30,21 +34,29 @@ struct D2TimerStrc;
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2AnimSeqStrc
+#define D2_DEFINED_D2AnimSeqStrc
 struct D2AnimSeqStrc {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ int nFrame;
 };
 
+#endif // D2_DEFINED_D2AnimSeqStrc
+#ifndef D2_DEFINED_D2GfxInfoStrc
+#define D2_DEFINED_D2GfxInfoStrc
 struct D2GfxInfoStrc {
     /* 0x00 */ uint8_t nComponentFlags[40]; // Per-component flags/state, 20 entries x 2 bytes each. Stride-2 byte access via GFXUTIL_GetGfxInfoComponent(nParam) = [nParam*2]
     /* 0x28 */ struct D2GfxInfoUnkStrc * pGfxInfoUnk; // Head of linked list of COF/mode cache entries
-    /* 0x2C */ void * pOverlayList; // Head of overlay linked list (nodes freed via FreeClientMemory in GFX_RemoveOverlayFromUnit)
+    /* 0x2C */ struct D2GfxUnknown_0xa8 * pOverlayList; // Head of overlay linked list (nodes freed via FreeClientMemory in GFX_RemoveOverlayFromUnit)
     /* 0x30 */ struct D2ParticleStrc * pParticle; // Particle system attachment
     /* 0x34 */ uint32_t dwCofDataFlags; // COF data flags, initialized to 2 in AllocGfxInfo. Accessed via GFX_GetGfxInfoField34/GFX_SetGfxInfoField34
     /* 0x38 */ int nPalShiftIndex; // Palette shift/gamma index
 };
 
+#endif // D2_DEFINED_D2GfxInfoStrc
+#ifndef D2_DEFINED_D2HoverTextStrc
+#define D2_DEFINED_D2HoverTextStrc
 struct D2HoverTextStrc {
     /* 0x00 */ int nStartFrame; // Base frame value computed from message length (len*8+0x7d), used as creation anchor
     /* 0x04 */ int nExpireFrame;
@@ -56,6 +68,9 @@ struct D2HoverTextStrc {
     /* 0x10 */ char szMessage[256];
 };
 
+#endif // D2_DEFINED_D2HoverTextStrc
+#ifndef D2_DEFINED_D2PathUnion
+#define D2_DEFINED_D2PathUnion
 union D2PathUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -63,6 +78,9 @@ union D2PathUnion {
     /* 0x00 */ struct D2DynamicPathStrc * pDynamicPath; // Used for PLAYER, MONSTER, MISSILE
 };
 
+#endif // D2_DEFINED_D2PathUnion
+#ifndef D2_DEFINED_D2ServerCmdStrc
+#define D2_DEFINED_D2ServerCmdStrc
 struct D2ServerCmdStrc {
     /* 0x00 */ int nBufferArraySize;
     /* 0x04 */ int nUsedBuffersCount;
@@ -70,6 +88,9 @@ struct D2ServerCmdStrc {
     /* 0x0C */ char * aBuffers;
 };
 
+#endif // D2_DEFINED_D2ServerCmdStrc
+#ifndef D2_DEFINED_D2SkillListStrc
+#define D2_DEFINED_D2SkillListStrc
 struct D2SkillListStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory;
     /* 0x04 */ struct D2SkillStrc * pFirstSkill;
@@ -79,11 +100,17 @@ struct D2SkillListStrc {
     /* 0x14 */ struct D2LightMapStrc * pLight;
 };
 
+#endif // D2_DEFINED_D2SkillListStrc
+#ifndef D2_DEFINED_D2UnionData0x64
+#define D2_DEFINED_D2UnionData0x64
 union D2UnionData0x64 {
     /* 0x00 */ D2UnitDataClientSide pClientSide;
     /* 0x00 */ D2UnitDataServerSide pServerSide;
 };
 
+#endif // D2_DEFINED_D2UnionData0x64
+#ifndef D2_DEFINED_D2UnitDataUnion
+#define D2_DEFINED_D2UnitDataUnion
 union D2UnitDataUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -94,6 +121,7 @@ union D2UnitDataUnion {
     /* 0x00 */ struct D2UnitDataItemStrc * pUnitDataItem;
 };
 
+#endif // D2_DEFINED_D2UnitDataUnion
 #pragma pack(push, 1)
 struct D2UnitStrc {
     /* 0x00 */ eD2UnitType eUnitType; // 0=PLAYER 1=MONSTER 2=OBJECT 3=MISSILE 4=ITEM 5=WARP

@@ -4,8 +4,8 @@
  */
 
 #include "Source/globals/globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "3rdparty/Storm/Storm.h"
+#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 
@@ -144,42 +144,42 @@ namespace Storm::Source::SFile {
 
 char param_2_006ce200[5] = { "%s%s" }; D2_GLOBAL_GUARD(param_2_006ce200, "Storm::Source::SFile::param_2_006ce200");
 
-D2StormListHead gMpqArchiveList = {
+StormLinkedListStrc gMpqArchiveList = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gMpqArchiveList.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gMpqArchiveList.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gMpqArchiveList, "Storm::Source::SFile::gMpqArchiveList");
 
-D2StormListHead gSFileAsyncReqQueue = {
+StormLinkedListStrc gSFileAsyncReqQueue = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileAsyncReqQueue.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileAsyncReqQueue.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gSFileAsyncReqQueue, "Storm::Source::SFile::gSFileAsyncReqQueue");
 
-D2StormListHead gSFileOpenFileList = {
+StormLinkedListStrc gSFileOpenFileList = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileOpenFileList.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileOpenFileList.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gSFileOpenFileList, "Storm::Source::SFile::gSFileOpenFileList");
 
-D2StormListHead gSFileAudioStreamList = {
+StormLinkedListStrc gSFileAudioStreamList = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileAudioStreamList.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileAudioStreamList.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gSFileAudioStreamList, "Storm::Source::SFile::gSFileAudioStreamList");
 
-D2StormListHead gSFileStreamRecordList = {
+StormLinkedListStrc gSFileStreamRecordList = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileStreamRecordList.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SFile::gSFileStreamRecordList.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gSFileStreamRecordList, "Storm::Source::SFile::gSFileStreamRecordList");
@@ -335,10 +335,10 @@ char s_Expr___s_006cf250[11] = {
     '\x00'
 }; D2_GLOBAL_GUARD(s_Expr___s_006cf250, "Storm::Source::SErr::s_Expr___s_006cf250");
 
-D2StormListHead gnStormErrorCallbackCount = {
+StormLinkedListStrc gnStormErrorCallbackCount = {
     /* .nLinkOffset = */ 0x0,
-    /* .terminator = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SErr::gnStormErrorCallbackCount.terminator.pPrevLink,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&Storm::Source::SErr::gnStormErrorCallbackCount.head.pPrevLink,
         /* .pNext = */ 0x0
     }
 }; D2_GLOBAL_GUARD(gnStormErrorCallbackCount, "Storm::Source::SErr::gnStormErrorCallbackCount");

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,6 +25,8 @@ struct DC6Block;
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2ArmTypeTxt
+#define D2_DEFINED_D2ArmTypeTxt
 struct __attribute__((packed)) D2ArmTypeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
@@ -43,6 +48,25 @@ struct __attribute__((packed)) D2ArmTypeTxt {
     /* 0x33 */ uint8_t field_0x33;
 };
 
+#endif // D2_DEFINED_D2ArmTypeTxt
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct D2GfxUtilNodeStrc {
+    /* 0x00 */ uint32_t dwParam;
+    /* 0x04 */ int32_t nType;
+    /* 0x08 */ int32_t nId;
+    /* 0x0C */ struct D2GfxUtilNodeStrc * pNext;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union GFXUTIL_BuildCofParams_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nEffectiveClassId;
+    /* 0x00 */ uint8_t * pCofLayer;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::Engine::GfxUtil {
 
 // Function declarations
@@ -52,15 +76,15 @@ uint8_t __fastcall GFXUTIL_GetCompositePaletteIndex(struct D2UnitStrc * pUnit, u
 void __stdcall InitializeModeTokens();
 // @sourcefile .\ENGINE\GfxUtil.cpp
 void __fastcall AllocGfxUtil(void * * ppListHead, uint32_t dwParam, uint32_t dwValue1, uint32_t dwValue2, int * pnNodeCount, int * pnBytesAllocated);
-int32_t __fastcall GFXUTIL_FindGfxNodeByTypeAndId(int32_t pNode, int32_t nType, int32_t nId);
+struct D2GfxUtilNodeStrc * __fastcall GFXUTIL_FindGfxNodeByTypeAndId(struct D2GfxUtilNodeStrc * pNode, int32_t nType, int32_t nId);
 // @sourcefile .\ENGINE\GfxUtil.cpp
-void __fastcall GFXUTIL_FreeGfxNodeList(void * * ppListHead, int * pnBytesAllocated);
+void __fastcall GFXUTIL_FreeGfxNodeList(struct D2GfxUtilNodeStrc * * ppListHead, int * pnBytesAllocated);
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, eUnitType (EDX): eD2UnitType
 int32_t __fastcall GFXUTIL_GetUnitToken(struct D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, uint32_t nId);
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pnMode (EDX): uint32_t *
 void __fastcall GFXUTIL_NormalizeItemMode(struct D2UnitStrc * pUnitStrc, uint32_t * pnMode);
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, pInventory (EDX): D2InventoryStrc *
-void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(struct D2UnitStrc * pUnitStrc, struct D2InventoryStrc * pInventory, BOOL bCheckBroken, uint32_t * pOutAppearance);
+void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(struct D2UnitStrc * pUnitStrc, struct D2InventoryStrc * pInventory, BOOL bCheckBroken, uint8_t * pOutAppearance);
 uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(struct DC6Block * pDC6Block, int32_t nDrawX, int32_t nScreenY, BOOL bFlipped);
 // Returns 1 if the unit supports animation mode nMode (0–15), 0 otherwise. Accounts for shape-shift/transform GFX overrides via SKILLS_GetStateTransformGfx. For players, always accepts modes 0–4, 8, 9. For monsters, checks the MonStats2 bitmask (HD/TR/LG/RA/LA/RH/LH/SH flags). For objects, checks ObjectsTxt->Mode[nMode+0x12]. Items accept mode 1 only.
 // @sourcefile .\ENGINE\GfxUtil.cpp

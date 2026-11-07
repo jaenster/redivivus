@@ -3,22 +3,12 @@
 #include "Source/D2Game/Quests/QUESTS/A1Q4.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
@@ -33,8 +23,7 @@
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitInactive.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
@@ -653,8 +642,8 @@ static void __stdcall Q04_SpawnDeckardCainNpc(D2RoomStrc * pRoom, ::SGAMEDATA * 
 
     register_spawned_cain:
     pSpawnedCain->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
-    *(uint8_t*)((int)pA1Q4Specific->sQuestGUID.aPlayerGUID + 0x51) = 1;
-    *(uint8_t*)((int)pA1Q4Specific->sQuestGUID.aPlayerGUID + 0x52) = 0;
+    *(uint8_t*)((char*)pA1Q4Specific->sQuestGUID.aPlayerGUID + 0x51) = 1;
+    *(uint8_t*)((char*)pA1Q4Specific->sQuestGUID.aPlayerGUID + 0x52) = 0;
     pA1Q4Specific->sQuestGUID.aPlayerGUID[0x1a] = pSpawnedCain->nUnitGUID;
 }
 
@@ -1027,7 +1016,7 @@ BOOL __fastcall Q04_CompleteOnEnterTristram(::SGAMEDATA * pGame, D2UnitStrc * pU
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             nPartyId = UNIT::SUnit::GetPartyId(pUnit);
             if (nPartyId != 0xffff) {
-              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_AutoCompleteForActIPlayer, 0);
+              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_AutoCompleteForActIPlayer, nullptr);
             }
           }
         }
@@ -1206,7 +1195,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation
         QUEST_SendQuestInfoToUnit(pOperation->sArg.pGame, pOperation->pAttacker);
         nPartyId = UNIT::SUnit::GetPartyId(pOperation->pAttacker);
         if (nPartyId != 0xffff) {
-          UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_AutoCompleteForActIPlayer, 0);
+          UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_AutoCompleteForActIPlayer, nullptr);
           return 0;
         }
       }
@@ -1236,7 +1225,7 @@ void __fastcall Objects_InitFn06_CairnStone(D2ObjectInitFnArg * pInitArg) {
 
       pObject = pQuestData->pQuestSpecificData.pA1Q4;
       if (pQuestData->bIsNotIntroduction == '\0' || pObject->sSub.bStonesRestorePending) {
-        cFlagByte = *(char*)((uintptr_t)&pObject->sSub.nStoneAttemptCount + 1);
+        cFlagByte = *(char*)((intptr_t)&pObject->sSub.nStoneAttemptCount + 1);
         pObject->sSub.bStonesRestorePending = 0;
         if (cFlagByte == '\0' && nClassId == 0x11) {
           if (!pInitArg->pObject) {
@@ -1341,7 +1330,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
     D2UnitStrc* pRoomUnitIter;
     __frame0.pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheSearchForCain);
     if (!(D2QuestDataA1Q4Strc*)__frame0.pQuestData) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x761);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x761);
       exit(-1);
     }
 
@@ -1500,7 +1489,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
           pRoomListEnd = __frame0.pExistingPortal;
           pMissileRoom = __frame0.pExistingPortal;
           next_room:
-          pRoomListEnd = (D2UnitStrc*)((uintptr_t)&pRoomListEnd->eUnitType + 1);
+          pRoomListEnd = (D2UnitStrc*)((intptr_t)&pRoomListEnd->eUnitType + 1);
         } while (pRoomListEnd < pMissileRoom);
       }
       if (!ptStonePos.x) {
@@ -1522,7 +1511,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
       QUEST_SetStateAndBroadcast(__frame0.pQuestData, 4, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q04_NotifyQuestStateToPlayer, 1);
       nPartyId = UNIT::SUnit::GetPartyId(pOperation->pAttacker);
       if (nPartyId != -1) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_HandleNpcInteraction, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_HandleNpcInteraction, nullptr);
       }
 
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x04);
@@ -1875,11 +1864,11 @@ void __fastcall Objects_InitFn54_CainStartPosition(D2ObjectInitFnArg * pInitArg)
     }
 
     pQuestData->sQuestGUID.aPlayerGUID[0x16] = nObjectGUID;
-    char bRescueFlag = *(char*)((int)pQuestData->sQuestGUID.aPlayerGUID + 0x3e);
+    char bRescueFlag = *(char*)((char*)pQuestData->sQuestGUID.aPlayerGUID + 0x3e);
     *(uint8_t*)(pQuestData->sQuestGUID.aPlayerGUID + 0x17) = 1;
     pQuestData->sQuestGUID.aPlayerGUID[0x1c] = pInitArg->nX;
     pQuestData->sQuestGUID.aPlayerGUID[0x1d] = pInitArg->nY;
-    if (!(bRescueFlag == '\x01' && *(char*)((int)pQuestData->sQuestGUID.aPlayerGUID + 0x3d) == '\0')) {
+    if (!(bRescueFlag == '\x01' && *(char*)((char*)pQuestData->sQuestGUID.aPlayerGUID + 0x3d) == '\0')) {
       return;
     }
 
@@ -2043,7 +2032,7 @@ BOOL __thiscall Q04_GetCainPortalCoordinates(void * pThis, uint32_t * pOutCoords
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
       D2QuestDataA1Q4Strc* pQuestSpecific;
       pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q4;
-      if (*(char*)((uintptr_t)&pQuestSpecific->sSub.field_0x7C + 2) != '\0' && !pQuestSpecific->sSub.field_0x7A) {
+      if (*(char*)((intptr_t)&pQuestSpecific->sSub.field_0x7C + 2) != '\0' && !pQuestSpecific->sSub.field_0x7A) {
         *pOutCoords = pQuestSpecific->nPortalX;
         pOutCoords[1] = pQuestSpecific->nPortalY;
         return 1;
@@ -2065,7 +2054,7 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     D2QuestDataA1Q4Strc* pDVar2 = pQuestData->pQuestSpecificData.pA1Q4;
-    if (*(char*)((uintptr_t)&pDVar2->sSub.field_0x7C + 1) != '\0') {
+    if (*(char*)((intptr_t)&pDVar2->sSub.field_0x7C + 1) != '\0') {
       return 1;
     }
 
@@ -2077,9 +2066,9 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return 1;
     }
 
-    D2UnitStrc* pCageUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->ptCainPos.x, pDVar2->ptCainPos.y, pGame, pSpawnRoom, 1, 1, nullptr);
+    D2UnitStrc* pCageUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->ptCainPos.x, pDVar2->ptCainPos.y, pGame, pSpawnRoom, 1, 1, 0);
     if (pCageUnit) {
-      *(uint8_t*)((uintptr_t)&pDVar2->sSub.field_0x7C + 1) = 1;
+      *(uint8_t*)((intptr_t)&pDVar2->sSub.field_0x7C + 1) = 1;
       pDVar2->nCainPortalGUID = pCageUnit->nUnitGUID;
     }
 
@@ -2095,7 +2084,7 @@ BOOL __fastcall Q04_GetCainPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POI
     }
 
     D2QuestDataA1Q4Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q4;
-    if (*(char*)((uintptr_t)&pQuestSpecific->sSub.field_0x7C + 1) == '\0') {
+    if (*(char*)((intptr_t)&pQuestSpecific->sSub.field_0x7C + 1) == '\0') {
       D2Common::Units::GetCoords(pUnit, pPoint);
     } else {
       pPoint->x = pQuestSpecific->ptCainPos.x;
@@ -2169,12 +2158,12 @@ void __fastcall Q04_InitializeTristramObjects(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    pFoundUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sCairnPos.x, sCairnPos.y, pGame, pCageRoom, 1, 1, nullptr);
+    pFoundUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sCairnPos.x, sCairnPos.y, pGame, pCageRoom, 1, 1, 0);
     if (!pFoundUnit) {
       return;
     }
 
-    *(uint8_t*)((uintptr_t)&pDVar1->sSub.field_0x7C + 2) = 1;
+    *(uint8_t*)((intptr_t)&pDVar1->sSub.field_0x7C + 2) = 1;
     pDVar1->nCageObjectGUID = pFoundUnit->nUnitGUID;
 }
 

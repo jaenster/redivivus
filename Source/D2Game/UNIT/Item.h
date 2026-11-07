@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -26,7 +29,7 @@ namespace D2Game::UNIT {
 void __fastcall SendUpdatedItemsToClient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, struct D2InventoryStrc * pInventory);
 void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
 BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-int Unreferenced_00597aa0();
+void __stdcall Unreferenced_00597aa0(struct D2UnitStrc * pItem);
 // Drains the pending-update queue on pUnit's inventory. For each queued GUID, looks up the item unit and clears body-loc overrides for TAKE/SET/EXCHANGE commands, then calls ITEM_ClearFlagsAndCommands. Recursively processes socketed-item sub-inventories. Finally deletes items marked ITEMCMD_DELETE. Called server-side after inventory transactions to apply deferred state changes.
 // @sourcefile .\INVENTORY\InvMode.cpp
 void __fastcall ITEM_ProcessInventoryUpdates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

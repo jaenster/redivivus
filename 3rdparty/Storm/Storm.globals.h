@@ -7,13 +7,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2StormListHead;
+struct StormLinkedListStrc;
 
 // lpDefault parameter of GetPrivateProfileStringA
 extern char lpDefault_006cc837[1];
@@ -30,21 +33,18 @@ namespace Storm::Source::SErr {
 extern char s_File___s_006cf1e8[10];
 extern char s__s_006cf248[6];
 extern char s_Expr___s_006cf250[11];
-extern D2StormListHead gnStormErrorCallbackCount;
+extern StormLinkedListStrc gnStormErrorCallbackCount;
 extern char gszSSystemListAllocTag[14];
 } // namespace Storm::Source::SErr
-namespace Storm::Source::SEVT {
-extern void * gpEventHashBuckets;
-} // namespace Storm::Source::SEVT
 namespace Storm::Source::SFile {
 extern uint32_t gnSFileDataChunkSize;
 extern uint32_t gnSFileReadErrorMode;
 extern uint32_t gbSFileSeekOptimization;
-extern D2StormListHead gMpqArchiveList;
-extern D2StormListHead gSFileAsyncReqQueue;
-extern D2StormListHead gSFileOpenFileList;
-extern D2StormListHead gSFileAudioStreamList;
-extern D2StormListHead gSFileStreamRecordList;
+extern StormLinkedListStrc gMpqArchiveList;
+extern StormLinkedListStrc gSFileAsyncReqQueue;
+extern StormLinkedListStrc gSFileOpenFileList;
+extern StormLinkedListStrc gSFileAudioStreamList;
+extern StormLinkedListStrc gSFileStreamRecordList;
 extern char sRTTI_ARCHIVEREC_AllocTag[32];
 extern char sRTTI_EVENTREC_AllocTag[16];
 extern char sRTTI_REQUEST_AllocTag[16];

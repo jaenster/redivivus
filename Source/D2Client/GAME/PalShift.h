@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,10 +18,13 @@
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2GamePalShiftGreenBloodStrc
+#define D2_DEFINED_D2GamePalShiftGreenBloodStrc
 struct D2GamePalShiftGreenBloodStrc {
     /* 0x00 */ uint8_t abyRemap[256]; // palette index remap read whole from GreenBlood.dat; AllocPalShift_GreenBlood allocs/memsets/reads 0x100 bytes
 };
 
+#endif // D2_DEFINED_D2GamePalShiftGreenBloodStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2GamePalShiftRandTransformStrc {
     /* 0x0000 */ uint8_t field_0x0;
@@ -26,6 +32,15 @@ struct D2GamePalShiftRandTransformStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2PalShiftEntryStrc
+#define D2_DEFINED_D2PalShiftEntryStrc
+struct D2PalShiftEntryStrc {
+    /* 0x0000 */ int32_t nMonsterId;
+    /* 0x0004 */ uint8_t aPalShifts[4096];
+    /* 0x1004 */ struct D2PalShiftEntryStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2PalShiftEntryStrc
 namespace D2Client::GAME::PalShift {
 
 // Function declarations
@@ -37,7 +52,7 @@ void __stdcall AllocPalShift_GreenBlood();
 void __stdcall InitPal();
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall FreeGamePalShift();
-int * __fastcall PALSHIFT_FindPalShiftByToken(int32_t nToken);
+struct D2PalShiftEntryStrc * __fastcall PALSHIFT_FindPalShiftByToken(int32_t nToken);
 // Loads a monster's palshift.dat color-remapping table on demand. Looks up MonStats for nMonsterId, returns early if missing or if a palshift entry already exists. Builds the path Data\\Global\\Monsters\\<2-char monster code>\\Cof\\palshift.dat, opens it if present, allocates a 0x1008-byte client-memory entry, reads the file into it, applies the green-blood palette transform, links it into the global palshift list, and registers it in gpMonsterPalShiftList by monster index. Side effects: client-memory alloc, MPQ file read, mutates global palshift list/array.
 // @sourcefile .\GAME\PalShift.cpp
 void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId);

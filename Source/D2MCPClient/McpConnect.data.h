@@ -7,6 +7,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2MCPClient)
 #error "D2MCPClient header included by a module that may not use D2MCPClient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2MCPClient) && !defined(D2_LOADS_D2MCPClient)
+#error "internal D2MCPClient header included from another module; include D2MCPClient's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Headers/d2_platform.h"
 
@@ -16,7 +19,6 @@ struct D2QSSocketStrc;
 typedef void (__fastcall *pfnMCPPacketCallback)(uint16_t wPacketField, char * pPayload);
 
 extern D2McpGameInfoStrc g_CharSelectBuffer;
-extern HANDLE MCPThread;
 extern pfnMCPPacketCallback g_pfnMCPCallback1;
 extern pfnMCPPacketCallback g_pfnMCPCallback2;
 // Former interior labels: gInterfaceConfig6=+0x4 gInterfaceConfig5=+0x8 gInterfaceConfig4=+0xc gInterfaceConfig3=+0x10 gInterfaceConfig2=+0x14
@@ -29,5 +31,5 @@ extern uint32_t D2GSGameToken;
 extern D2QSSocketStrc * MCPD2QSSocket;
 extern uint32_t D2GSJoinResult;
 extern char D2GSConnectIp[18];
-extern void * CharListPacket;
+extern uint8_t * CharListPacket;
 } // namespace D2MCPClient::McpConnect

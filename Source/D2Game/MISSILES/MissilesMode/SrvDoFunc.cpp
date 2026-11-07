@@ -2,15 +2,9 @@
 
 #include "Source/D2Game/MISSILES/MissilesMode/SrvDoFunc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

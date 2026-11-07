@@ -3,7 +3,6 @@
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
 #include "Source/D2Game/D2TimerListStrc.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
@@ -11,7 +10,7 @@
 #include "Source/D2Game/Objects/ObjectsMode.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/GAME/Event.data.h"
 

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2DrlgCoordIndexCtxStrc;
 struct D2DrlgCoordStrc;
 struct D2DrlgCoordsStrc;
 struct D2DrlgGridStrc;
@@ -41,7 +45,7 @@ void __fastcall ResetGrid_Unref_00601d20(struct D2DrlgGridStrc * pDrlgGrid);
 void __fastcall ResetGrid_Unref_00601db0(struct D2DrlgGridStrc * pDrlgGrid);
 void __fastcall ResetGrid_Unref_0060e290(struct D2DrlgGridStrc * pDrlgGrid);
 // Recursive 4-directional flood-fill on grid cells.
-void __fastcall DRLGGRID_FloodFillGridCoords(int * pFloodFillContext, int nX, int nY, int nDirection);
+void __fastcall DRLGGRID_FloodFillGridCoords(struct D2DrlgCoordIndexCtxStrc * pFloodFillContext, int nX, int nY, int nDirection);
 void __fastcall OverwriteFlag(int * pFlag, int32_t nFlag);
 void __fastcall OrFlag(int * pFlag, int32_t nFlag);
 void __fastcall AndFlag(int * pFlag, int32_t nFlag);
@@ -55,7 +59,7 @@ BOOL __fastcall IsPointInsideGridArea(struct D2DrlgGridStrc * pDrlgGrid, int32_t
 void __fastcall AlterGridFlag(struct D2DrlgGridStrc * pDrlgGrid, int32_t nX, int32_t nY, int32_t nFlag, int32_t eOperation);
 // Applies a flag operation (set, clear, or, and, etc.) to a specific grid cell. Uses the apFlagOperations function pointer table indexed by the operation type. The grid cell is located via the row pointer array.
 void __fastcall DRLGGRID_ApplyFlagOperation(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgCoordStrc * pCoord, int nFlag, int eOperation);
-int32_t __fastcall GetOffset(struct D2DrlgGridStrc * pGrid1, uint32_t nOffsetx, int32_t nOffset);
+eD2GridCellFlags * __fastcall GetOffset(struct D2DrlgGridStrc * pGrid1, uint32_t nOffsetx, int32_t nOffset);
 // Returns the grid flags at the specified (nX, nY) coordinates in the DRLG grid.
 int __fastcall GetGridFlags(struct D2DrlgGridStrc * pGrid, int nX, int nY);
 // Applies a flag operation (set/clear/xor) across all cells in the grid using the operation table apFlagOperations[eOperation].
@@ -67,7 +71,7 @@ void __fastcall DRLGGRID_ApplyFlagToBorderCells(struct D2DrlgGridStrc * pDrlgGri
 void __fastcall DRLGGRID_SetEdgeGridFlags(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgVertexStrc * pEdge, int nFlag, int eOperation, BOOL bIncludeEndpoints);
 // Bresenham line with perpendicular width, bounds-checked.
 void __fastcall DRLGGRID_SetLineFlagsWithWidth(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgVertexStrc * pEdge, struct D2DrlgCoordsStrc * pDrlgCoords, int nFlag, int eOperation, int nLineWidth);
-int __fastcall Unreferenced_0067cb60(int param_1, int param_2);
+void * __fastcall Unreferenced_0067cb60(struct D2DrlgGridStrc * param_1, struct D2DrlgGridStrc * param_2);
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_InitGridCells(struct D2PoolManagerStrc * pMemory, struct D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight);
 void __fastcall FillGrid(struct D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight, int * pCellPos, int * pCellRowOffsets);

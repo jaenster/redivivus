@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -48,7 +51,7 @@ BOOL __fastcall Q01_SetCannotCompleteInGame(::SGAMEDATA * pGame, struct D2UnitSt
 // A1Q1 (Den of Evil) -- completion-sound callback (Q01_PlayCompletionSound), an IteratePlayerOrMonsterUnits callback run when the Den is cleared. If this player's QUEST_DenOfEvil record has QUESTSTATE_JustCompleted, plays the quest-complete sound/event (event sound 0x23) on that player.
 BOOL __fastcall Q01_PlayCompletionSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A1Q1 (Den of Evil) -- per-party-member reward grant (Q01_SetPartyMemberRewardStates), called via ExecuteFunctionForEveryPartyMember from Q01_PropagateRewardToParty. For each party member whose QUEST_DenOfEvil record is not yet Completed or RewardAwaits, and who is currently in an Act I level (so they share credit for the kill), sets QUESTSTATE_JustCompleted and QUESTSTATE_RewardAwaits -- this is how every nearby party member, not just the killer, gets credited for clearing the Den and earns the skill point from Akara. Note nParam is the game struct accessed as a byte blob ([0x6d] = nDifficulty).
-void __fastcall Q01_SetPartyMemberRewardStates(int32_t nParam, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
+void __fastcall Q01_SetPartyMemberRewardStates(::SGAMEDATA * nParam, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 // A1Q1 (Den of Evil) -- reward propagation (Q01_PropagateRewardToParty), an IteratePlayerOrMonsterUnits callback run when the Den is cleared. For each player whose QUEST_DenOfEvil record has QUESTSTATE_JustCompleted, fans the reward out to that player's whole party via ExecuteFunctionForEveryPartyMember(Q01_SetPartyMemberRewardStates), so all party members in Act I get JustCompleted+RewardAwaits.
 BOOL __fastcall Q01_PropagateRewardToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A1Q1 (Den of Evil) trivial accessor: returns the cached count of Den monsters still alive (pA1Q1->nDenMonstersLeftToKillCount). That counter is recomputed in Q01_Callback_08 as dwMonSpawnCount - dwMonKillCount and drives the "almost cleared" UI hint.

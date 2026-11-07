@@ -2,30 +2,21 @@
 
 #include "Source/D2Game/Quests/QUESTS/A1Q5.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/SkillsServer.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Units/Missile.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -48,50 +39,50 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A1Q5 {
 
 // A1Q5 "Forgotten Tower" — removes a player from one of two in-quest GUID tracking lists (selected by nListSelector 0/1). Searches the list in nListBase for nPlayerGUID; if found, swaps it with the tail entry and decrements the count. Returns 1 if found+removed, 0 if not present. Used to deregister players who leave or are re-synced.
-static BOOL __stdcall Q05_RemovePlayerFromTrackingList(int32_t nListSelector, int32_t nListBase, int32_t nPlayerGUID) {
+static BOOL __stdcall Q05_RemovePlayerFromTrackingList(int32_t nListSelector, D2QuestDataA1Q5Strc * nListBase, int32_t nPlayerGUID) {
     uint32_t nListCount;
     int i = 0;
     if (nListSelector) {
-      nListCount = (uint32_t)*(uint16_t*)(nListBase + 100);
+      nListCount = (uint32_t)nListBase->nPlayersForRewardCount;
       if (!nListCount) {
         return 0;
       }
 
-      int* pListEntry = (int*)(nListBase + 0x34);
+      int32_t* pListEntry = nListBase->aPlayersForRewardGUIDs;
       do {
         if (*pListEntry == nPlayerGUID) {
           if (i != nListCount - 1) {
-            *(uint32_t*)(nListBase + 0x34 + i * 4) = *(uint32_t*)(nListBase + 0x30 + nListCount * 4);
+            nListBase->aPlayersForRewardGUIDs[i] = nListBase->aPlayersForRewardGUIDs[nListCount - 1];
           }
 
-          (*(short int*)(nListBase + 100))--;
+          nListBase->nPlayersForRewardCount--;
           return 1;
         }
 
         i++;
         pListEntry++;
-      } while (i < (int)(uint32_t)*(uint16_t*)(nListBase + 100));
+      } while (i < (int)(uint32_t)nListBase->nPlayersForRewardCount);
 
       return 0;
     }
 
-    nListCount = (uint32_t)*(uint16_t*)(nListBase + 0x30);
+    nListCount = (uint32_t)nListBase->nPlayersInTowerCount;
     if (!nListCount) {
       return 0;
     }
 
     do {
-      if (*(int*)(nListBase + i * 4) == nPlayerGUID) {
+      if (nListBase->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
         if (i != nListCount - 1) {
-          *(uint32_t*)(nListBase + i * 4) = *(uint32_t*)(nListBase - 4 + nListCount * 4);
+          nListBase->aPlayersInTowerGUIDs[i] = nListBase->aPlayersInTowerGUIDs[nListCount - 1];
         }
 
-        (*(short int*)(nListBase + 0x30))--;
+        nListBase->nPlayersInTowerCount--;
         return 1;
       }
 
       i++;
-    } while (i < (int)(uint32_t)*(uint16_t*)(nListBase + 0x30));
+    } while (i < (int)(uint32_t)nListBase->nPlayersInTowerCount);
 
     return 0;
 }
@@ -640,7 +631,7 @@ void __fastcall Q05_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
             nIndex = pQuestArgs->pPlayer->nUnitGUID;
           }
 
-          bQuestState = Q05_RemovePlayerFromTrackingList(0, (int32_t)pA1Q5Data, nIndex);
+          bQuestState = Q05_RemovePlayerFromTrackingList(0, pA1Q5Data, nIndex);
           if (bQuestState && !pA1Q5Data->nPlayersInTowerCount && !pA1Q5Data->nPlayersForRewardCount) {
             pQuestData->bIsActive = '\0';
           }
@@ -814,7 +805,7 @@ BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q05_SetPartyMemberRewardStates, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q05_SetPartyMemberRewardStates, nullptr);
       }
     }
 

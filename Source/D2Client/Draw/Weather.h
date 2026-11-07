@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -30,6 +33,8 @@ struct D2WeatherBubbleStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2WeatherLineOffsetStrc
+#define D2_DEFINED_D2WeatherLineOffsetStrc
 struct D2WeatherLineOffsetStrc {
     /* 0x00 */ int nStartX;
     /* 0x04 */ int nStartY;
@@ -37,6 +42,7 @@ struct D2WeatherLineOffsetStrc {
     /* 0x0C */ int nEndY;
 };
 
+#endif // D2_DEFINED_D2WeatherLineOffsetStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2WeatherParticleStrc {
     /* 0x00 */ short nFlags; // Alive flag; 0=dead/free slot
@@ -82,7 +88,7 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
 void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int nWorldY);
 void __stdcall WEATHER_UpdateParticles(struct D2SeedStrc * pSeed);
 void __stdcall WEATHER_DrawParticles();
-int Unreferenced_00473720();
+void Unreferenced_00473720(BOOL * pbCanRain, BOOL * pbCanMud);
 uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags();
 void __stdcall DRAW_Overlay_Weather();
 void __fastcall WEATHER_DrawBubbles(struct D2DataArrayStrc * pBubbleArray, struct DC6 * * pDC6Table);

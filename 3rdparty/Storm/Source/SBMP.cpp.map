@@ -143,6 +143,9 @@
         "SBMP_FlipImage",
         "SErrSetLastError",
         "SMemCopy"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -298,7 +301,8 @@
         "BITMAPINFOHEADER",
         "D2MPQFileStrc",
         "tagRGBQUAD",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -474,6 +478,7 @@
         "SBMP_UncompressPcxImage"
       ],
       "usedTypes": [
+        "D2PcxHeaderStrc",
         "uint32_t",
         "uint8_t"
       ]

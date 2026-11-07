@@ -7,10 +7,14 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Direct3D)
 #error "D2Direct3D header included by a module that may not use D2Direct3D (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Direct3D) && !defined(D2_LOADS_D2Direct3D)
+#error "internal D2Direct3D header included from another module; include D2Direct3D's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2gfx/D2gfx.public.h"
 
 // Forward declarations
 struct D2GfxDataStrc;

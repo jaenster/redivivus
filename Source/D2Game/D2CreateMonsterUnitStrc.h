@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2CreateMonsterUnitStrc
+#define D2_DEFINED_D2CreateMonsterUnitStrc
 struct __attribute__((packed)) D2CreateMonsterUnitStrc {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ int32_t nMonstatId;
@@ -24,3 +29,5 @@ struct __attribute__((packed)) D2CreateMonsterUnitStrc {
     /* 0x14 */ int32_t nOwnerGUID;
     /* 0x18 */ eD2UnitType eUnitType;
 };
+
+#endif // D2_DEFINED_D2CreateMonsterUnitStrc

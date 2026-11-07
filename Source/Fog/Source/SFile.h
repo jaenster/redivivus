@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -33,11 +36,14 @@ struct _WIN32_FIND_DATAA {
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_D2SFileSignatureKeyStrc
+#define D2_DEFINED_D2SFileSignatureKeyStrc
 struct D2SFileSignatureKeyStrc {
     /* 0x00 */ char * szKeyResourceName; // resource name of the public key blob passed to FindResourceA ("BLIZZARDKEY")
     /* 0x04 */ uint32_t dwAuthResult; // value written to *pdwAuthResult when the signature verifies with this key (5)
 };
 
+#endif // D2_DEFINED_D2SFileSignatureKeyStrc
 namespace Fog::Source::SFile {
 
 // Function declarations
@@ -78,7 +84,7 @@ void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 int __fastcall SFILE_EnsurePathEndsWithBackslash(char * szText1, uint32_t nMaxLen);
 int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot);
-int __fastcall Unreferenced_00407260(int param_1);
+uint32_t * __fastcall Unreferenced_00407260(uint32_t * param_1);
 int __fastcall Unreferenced_00407280(int param_1);
 int __fastcall Unreferenced_00407290(int param_1);
 int32_t __thiscall SFILE_CalculateBufferOffset(int32_t pThis, int32_t nBufferOffset);

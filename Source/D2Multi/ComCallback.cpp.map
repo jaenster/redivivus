@@ -159,6 +159,7 @@
         "AllocClientMemory"
       ],
       "usedTypes": [
+        "D2ChannelUserNameNodeStrc",
         "uint8_t"
       ]
     },
@@ -182,7 +183,7 @@
         "D2COMP_GetTitlePrefix"
       ],
       "usedTypes": [
-        "D2QuestDataA5Q2Strc",
+        "D2ChannelUserStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -848,6 +849,7 @@
       ],
       "usedTypes": [
         "D2ChannelUserStrc",
+        "D2ControlMsg",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -1065,6 +1067,7 @@
         "COMCALLBACK_ScrollChannelUserList"
       ],
       "usedTypes": [
+        "D2ChannelUserNameNodeStrc",
         "D2ChannelUserStrc",
         "WCHAR"
       ]
@@ -1128,7 +1131,6 @@
         "COMCALLBACK_RemoveUserFromList"
       ],
       "usedTypes": [
-        "int32_t",
         "uint32_t",
         "uint8_t"
       ]

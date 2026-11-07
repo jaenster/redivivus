@@ -34,7 +34,7 @@
         "TSIntrusiveList_Clear_Unref_0040f860"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -51,7 +51,7 @@
         "TSIntrusiveList_Clear_Unref_004179f0"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -68,7 +68,7 @@
         "TSIntrusiveList_Clear_Unref_00417a30"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -85,7 +85,7 @@
         "TSIntrusiveList_Clear_Unref_00417c30"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -102,7 +102,7 @@
         "TSIntrusiveList_Clear_Unref_0041c540"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -119,7 +119,7 @@
         "TSIntrusiveList_Clear_Unref_0041eb20"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -136,7 +136,7 @@
         "TSIntrusiveList_Clear_Unref_00426ac0"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -2427,7 +2427,7 @@
         "GetStepsOfMissileMovement_Unref_0044db20"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2PoolManagerStrc"
       ]
     },
     {
@@ -2503,6 +2503,20 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "RENDERER_TogglePerspective_Unref_0044dc40",
+      "address": "0044dc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dc40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective_Unref_0044dc40"
       ]
     },
     {
@@ -2989,7 +3003,7 @@
         "TSIntrusiveList_Clear"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3006,7 +3020,7 @@
         "TSIntrusiveList_Clear_Unreferenced"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3215,7 +3229,7 @@
         "TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3255,7 +3269,7 @@
         "TSIntrusiveList_Clear_Unreferenced_Unref_00602370"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3272,7 +3286,7 @@
         "TSIntrusiveList_Clear_Unreferenced_Unref_00602390"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3289,7 +3303,7 @@
         "TSIntrusiveList_Clear_Unreferenced_Unref_00603510"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3306,7 +3320,7 @@
         "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3323,7 +3337,7 @@
         "TSIntrusiveList_Clear_Unreferenced_Unref_006c4140"
       ],
       "usedTypes": [
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {

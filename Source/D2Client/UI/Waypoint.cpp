@@ -12,16 +12,10 @@
 #include "Source/D2Client/UI/npcmenu.h"
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Common/Waypoints.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Fog.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -145,7 +139,7 @@ static int32_t WAYPOINT_GetWaypointIndexFromMouse(int32_t nMouseX, int32_t nMous
     while ((pHitTestData = (uint32_t*)(pnRowLayout + 6) , gaWaypointListEntries[nIndex].bActivated == '\0' || nMouseX <= (int)pHitTestData[-1]) || nMouseX >= (int)(pHitTestData[-1] + 0x118) || nMouseY <= (int)*pHitTestData || nMouseY >= (int)(*pHitTestData + 0x1e)) {
       nIndex++;
       pnRowLayout = (int*)pHitTestData;
-      if ((int)&gaWaypointListEntries[nIndex].bActivated >= (intptr_t)((char*)&gaWaypointListEntries + sizeof(gaWaypointListEntries) + 4)) {
+      if ((intptr_t)&gaWaypointListEntries[nIndex].bActivated >= (intptr_t)((char*)&gaWaypointListEntries + sizeof(gaWaypointListEntries) + 4)) {
         return -1;
       }
     }
@@ -380,7 +374,7 @@ void __stdcall WAYPOINT_PopulateList() {
       *pPageEntry = '\0';
       nActIdx = WaypointCurrentSelectedAct;
       pPageEntry += 5;
-    } while ((int)pPageEntry < (intptr_t)((char*)&gaWaypointListEntries + sizeof(gaWaypointListEntries) + 4));
+    } while ((intptr_t)pPageEntry < (intptr_t)((char*)&gaWaypointListEntries + sizeof(gaWaypointListEntries) + 4));
 
     if (WaypointCurrentSelectedAct > 5) {
       D2Client::Waypoint::bNeedAllocation = false;
@@ -449,11 +443,9 @@ void __stdcall WAYPOINT_PopulateList() {
     } while ((int)nWaypointIdIter <= (int)(uint32_t)gaWaypointVisited[WaypointCurrentSelectedAct * 0xb + 10]);
 }
 
-int Unreferenced_0049c980() {
+void __stdcall Unreferenced_0049c980() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
-    int extraout_EAX;
-    int extraout_EAX_00;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit) {
       eAct eVar1;
@@ -464,14 +456,13 @@ int Unreferenced_0049c980() {
           eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
           Waypoint_SetWaypointArea((uint32_t)eVar1);
           WAYPOINT_PopulateList();
-          return extraout_EAX;
+          return;
         }
       }
     }
 
     WaypointCurrentSelectedAct = 0;
     WAYPOINT_PopulateList();
-    return extraout_EAX_00;
 }
 
 void __stdcall DRAW_UI_Waypoint() {
@@ -495,7 +486,7 @@ void __stdcall DRAW_UI_Waypoint() {
     int nTabXOff0;
     int nTabXOff1;
     eD2LevelId currentLevelId;
-    D2WaypointListEntryStrc* ActsInGame;
+    DRAW_UI_Waypoint_Slotm8 uSlot8;
     eD2Quests eQuest;
     eD2QuestState eQuestState;
     DRAW_UI_WaypointGFXLoad();
@@ -538,10 +529,10 @@ void __stdcall DRAW_UI_Waypoint() {
     nMouseX -= Inv::gnPanelOffsetX;
     nMouseY += Inv::gnPanelOffsetY;
     sDrawImageArgs.pDC6 = WaypointWayGateTabs;
-    /* Figure out if game got 4 or 5 acts for spacing (classic/xpac) */ ActsInGame = (D2WaypointListEntryStrc*)0x5;
+    /* Figure out if game got 4 or 5 acts for spacing (classic/xpac) */ uSlot8.nActsInGame = 5;
     _bIsExpansionCheck = Fog::D2CheckExpansionGame();
     if (!_bIsExpansionCheck || (_bIsExpansionCheck = GAME::Game::CLIENT_CheckExpansion() , !_bIsExpansionCheck)) {
-      ActsInGame = (D2WaypointListEntryStrc*)0x4;
+      uSlot8.nActsInGame = 4;
       anTabX[0] = 3;
       anTabX[1] = 0x51;
       anTabX[2] = 0x9f;
@@ -556,7 +547,7 @@ void __stdcall DRAW_UI_Waypoint() {
     }
 
     nActIndex = 0;
-    /* Loop trough all the acts */ if (ActsInGame) {
+    /* Loop trough all the acts */ if (uSlot8.nActsInGame) {
       do {
         if (nActIndex == WaypointCurrentSelectedAct) {
           sDrawImageArgs.nFrameNumber = nActIndex * 2;
@@ -602,7 +593,7 @@ void __stdcall DRAW_UI_Waypoint() {
 
         next_act:
         nActIndex++;
-      } while (nActIndex < (int)ActsInGame);
+      } while (nActIndex < uSlot8.nActsInGame);
     }
 
     sDrawImageArgs.pDC6 = ui::GetBuySellBtnDC6();
@@ -614,11 +605,11 @@ void __stdcall DRAW_UI_Waypoint() {
     nWaypointIndex = 0;
     sDrawImageArgs.pDC6 = WaypointWaygateIcons;
     if (MaximumAmountOfWaypointInSelectedAct > 0) {
-      ActsInGame = gaWaypointListEntries;
+      uSlot8.pWaypointEntry = gaWaypointListEntries;
       pDrawOffsets = (uint32_t*)(gaWaypointRowLayout + 1);
       do {
-        if (gaWaypointListEntries[nWaypointIndex].bActivated != '\0') {
-          if (gaWaypointListEntries[nWaypointIndex].eLevelId == eCurrentLevel) {
+        if (uSlot8.pWaypointEntry->bActivated != '\0') {
+          if (uSlot8.pWaypointEntry->eLevelId == eCurrentLevel) {
             sDrawImageArgs.nFrameNumber = (int)(ClickingDownOnWaypointEntry == nWaypointIndex);
           } else {
             sDrawImageArgs.nFrameNumber = ClickingDownOnWaypointEntry == nWaypointIndex ? 4 : 3;
@@ -633,7 +624,7 @@ void __stdcall DRAW_UI_Waypoint() {
                          this is something about current area */ if (gbWaypointButtonPressed == '\0' && ClickingDownOnWaypointEntry != -1 && nWaypointIndex == ClickingDownOnWaypointEntry) {
           dwColor = 3;
         }
-        if (gaWaypointListEntries[nWaypointIndex].eLevelId == eCurrentLevel) {
+        if (uSlot8.pWaypointEntry->eLevelId == eCurrentLevel) {
           dwColor = 3;
           sDrawImageArgs.nFrameNumber = 0;
           D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, *pDrawOffsets + Inv::gnPanelOffsetX, pDrawOffsets[1] - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
@@ -642,8 +633,8 @@ void __stdcall DRAW_UI_Waypoint() {
         nY = pDrawOffsets[3] - Inv::gnPanelOffsetY;
         _bIsExpansionCheck = 0;
         nTextX = pDrawOffsets[2] + Inv::gnPanelOffsetX;
-        D2Win::Src::D2WinFont::DRAW_text(ui::CLIENT_GetLevelNameByLevelId(gaWaypointListEntries[nWaypointIndex].eLevelId), nTextX, nY, dwColor, _bIsExpansionCheck);
-        ActsInGame++;
+        D2Win::Src::D2WinFont::DRAW_text(ui::CLIENT_GetLevelNameByLevelId(uSlot8.pWaypointEntry->eLevelId), nTextX, nY, dwColor, _bIsExpansionCheck);
+        uSlot8.pWaypointEntry++;
         nWaypointIndex++;
         pDrawOffsets += 6;
       } while (nWaypointIndex < MaximumAmountOfWaypointInSelectedAct);

@@ -23,6 +23,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
       ]
     },

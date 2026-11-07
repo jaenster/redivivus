@@ -217,8 +217,9 @@
       ],
       "usedTypes": [
         "D2GameNpcControlStrc",
-        "SGAMEDATA",
-        "void *"
+        "D2NpcPlayerInteractionStrc",
+        "D2NpcTradeItemStrc *",
+        "SGAMEDATA"
       ]
     },
     {
@@ -497,7 +498,8 @@
       ],
       "usedTypes": [
         "D2ItemsTableStrc",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -534,6 +536,7 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
+        "uint8_t",
         "void *"
       ]
     },

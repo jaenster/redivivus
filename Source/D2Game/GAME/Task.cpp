@@ -6,12 +6,9 @@
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/GAME/Server/ServerCmd.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/LogManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/GAME/Task.data.h"
-#include "Source/Fog/Fog.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -176,7 +173,7 @@ static void TASK_InsertTaskAtTimestamp(D2TaskQueueSlotStrc * pSlot, D2TaskNodeSt
     D2LinkNodeStrc* pInsertPos;
     pTaskNode->dwTimestamp += nDelay;
     pInsertPos = pSlot->sTaskList.pNext;
-    while (pInsertPos != &pSlot->sTaskList && pInsertPos[-2].pPrev != (D2LinkNodeStrc*)pTaskNode->dwTimestamp && -1 < (int)pInsertPos[-2].pPrev - (int)pTaskNode->dwTimestamp) {
+    while (pInsertPos != &pSlot->sTaskList && pInsertPos[-2].pPrev != (D2LinkNodeStrc*)pTaskNode->dwTimestamp && -1 < (intptr_t)pInsertPos[-2].pPrev - (int)pTaskNode->dwTimestamp) {
       pInsertPos = pInsertPos->pNext;
     }
 
@@ -240,7 +237,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
           pCurTask = &pSlot->sTaskList;
           pSortCur->pPrev = 0;
           pInsertBefore = pCurTask->pNext;
-          while (pInsertBefore != pCurTask && (int)pReadyTask[-2].pPrev - (int)pInsertBefore[-2].pPrev < 0) {
+          while (pInsertBefore != pCurTask && (intptr_t)pReadyTask[-2].pPrev - (intptr_t)pInsertBefore[-2].pPrev < 0) {
             pInsertBefore = pInsertBefore->pNext;
           }
 
@@ -261,7 +258,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
               pNextTask = pReadyTask->pPrev;
               do {
                 pInsertBefore = pReadyTask;
-                if (pSortNext[-2].pPrev == pNextTask[-2].pPrev || (int)pSortNext[-2].pPrev - (int)pNextTask[-2].pPrev < 0) {
+                if (pSortNext[-2].pPrev == pNextTask[-2].pPrev || (intptr_t)pSortNext[-2].pPrev - (intptr_t)pNextTask[-2].pPrev < 0) {
                   break;
                 }
 
@@ -387,7 +384,7 @@ void __stdcall TASK_GameTickCallback(uint32_t nParam, D2TaskNodeStrc * pTaskNode
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
         TASK_InsertTaskAtTimestamp(pDVar1, (D2TaskNodeStrc*)((char*)pFreeNode - 0xc), 0);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
-        pSlotLink[-2].pPrev = (D2LinkNodeStrc*)((uintptr_t)&pSlotLink[-2].pPrev[-1].pPrev + 3);
+        pSlotLink[-2].pPrev = (D2LinkNodeStrc*)((intptr_t)&pSlotLink[-2].pPrev[-1].pPrev + 3);
       } else {
         pDVar1->nTaskCount--;
         pSlotLink = &pDVar1->sSlotLink;
@@ -508,7 +505,7 @@ BOOL __fastcall TASK_EnqueueGameTask(D2TaskNodeStrc * pTaskNode, uint32_t dwCall
         pTailLink->pNext = pNewTaskLink;
         pSlotLink[-1].pPrev = pNewTaskLink;
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pSlot->nSlotIndex);
-        pSlotLink[-2].pPrev = (D2LinkNodeStrc*)((uintptr_t)&pSlotLink[-2].pPrev->pNext + 1);
+        pSlotLink[-2].pPrev = (D2LinkNodeStrc*)((intptr_t)&pSlotLink[-2].pPrev->pNext + 1);
         gnTaskQueueTailIndex++;
         pSlotLink->pNext->pPrev = pSlotLink->pPrev;
         pSlotLink->pPrev->pNext = pSlotLink->pNext;

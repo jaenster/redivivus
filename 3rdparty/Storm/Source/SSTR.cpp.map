@@ -317,7 +317,8 @@
         "SSTR_bjhash"
       ],
       "usedTypes": [
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -696,6 +697,7 @@
         "TRANSTBL_UnicodeToSingleByte"
       ],
       "usedTypes": [
+        "WCHAR",
         "uint16_t",
         "uint8_t"
       ]
@@ -827,20 +829,6 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
-    },
-    {
-      "name": "SSTR_StringLength",
-      "address": "006c9a38",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c9a38"
-        }
-      ],
-      "namespace": "Storm::Source::SSTR",
-      "calledFunctions": [
-        "SSTR_StringLength"
       ]
     }
   ]

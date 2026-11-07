@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,7 +32,7 @@ int __stdcall TILEPROJECT_GetRoofHeightIndex(struct D2TileLibraryEntryStrc * pTi
 BYTE * __stdcall TILE_GetTileFlags(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-void __stdcall TILEPROJECT_FreeSlot(int32_t pnProjectIds, int32_t pProject);
+void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, int32_t pProject);
 uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam);
 uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationIndex);
 #endif // D2_MODULE_D2CMP

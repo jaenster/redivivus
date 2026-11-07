@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2RoomStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 typedef uint32_t eMissilesId;
@@ -19,6 +23,8 @@ typedef uint32_t eMissilesId;
 struct D2fpSkillFuncSub;
 
 // Data types
+#ifndef D2_DEFINED_D2fpSkillFuncArg
+#define D2_DEFINED_D2fpSkillFuncArg
 struct D2fpSkillFuncArg {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ int32_t nSize;
@@ -27,9 +33,12 @@ struct D2fpSkillFuncArg {
     /* 0x10 */ int32_t bAvoidTownRooms; // Flag: skip town rooms (nParam & 0x2000)
     /* 0x14 */ int32_t nRoomCount; // Number of rooms from GetAdjacentRoomsList
     /* 0x18 */ struct D2UnitStrc * pUnit2;
-    /* 0x1C */ void * ppRoomList; // struct D2RoomStrc** array from GetAdjacentRoomsList
+    /* 0x1C */ struct D2RoomStrc * * ppRoomList; // struct D2RoomStrc** array from GetAdjacentRoomsList
 };
 
+#endif // D2_DEFINED_D2fpSkillFuncArg
+#ifndef D2_DEFINED_D2fpSkillFuncSub
+#define D2_DEFINED_D2fpSkillFuncSub
 struct __attribute__((packed)) D2fpSkillFuncSub {
     /* 0x00 */ struct D2UnitStrc * pOwner;
     /* 0x04 */ struct D2UnitStrc * pMissile;
@@ -38,3 +47,5 @@ struct __attribute__((packed)) D2fpSkillFuncSub {
     /* 0x10 */ int nTargetLimit; // missile callbacks: hit limit (MISSILE_CltHitFn25 sets it from cHitPar2, clamped to >= 1; CreateAtTarget compares it with the hit count)
     /* 0x14 */ eMissilesId nMissileTxtNo;
 };
+
+#endif // D2_DEFINED_D2fpSkillFuncSub

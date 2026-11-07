@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2CrashFrameStrc;
 struct D2SkillsTxt;
 struct Report;
 #ifndef RECON_FPTD_fnCrashOutputLine
@@ -62,7 +66,8 @@ struct D2CrashDumpRecordStrc {
 };
 
 #endif // D2_MODULE_Fog
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#ifndef D2_DEFINED_D2CrashDumpRequestStrc
+#define D2_DEFINED_D2CrashDumpRequestStrc
 struct __attribute__((packed)) D2CrashDumpRequestStrc {
     /* 0x00 */ HANDLE hFile;
     /* 0x04 */ struct _EXCEPTION_POINTERS * pExceptionPointers;
@@ -72,7 +77,9 @@ struct __attribute__((packed)) D2CrashDumpRequestStrc {
     /* 0x11 */ uint8_t field_0x11[3];
 };
 
-#endif // D2_MODULE_Fog
+#endif // D2_DEFINED_D2CrashDumpRequestStrc
+#ifndef D2_DEFINED_D2FogDebugModuleEntryStrc
+#define D2_DEFINED_D2FogDebugModuleEntryStrc
 struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
     /* 0x000 */ void * pImageBase; // %p in DBG-MODULE line
     /* 0x004 */ uint32_t nImageSize; // %08x
@@ -85,6 +92,7 @@ struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
     /* 0x224 */ uint32_t dwTimestamp; // printed as ' %8x' when nonzero
 };
 
+#endif // D2_DEFINED_D2FogDebugModuleEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 struct D2FogModuleNodeStrc {
     /* 0x000 */ char szModulePath[260]; // GetModuleFileNameExA / MODULEENTRY32.szExePath copy
@@ -118,6 +126,8 @@ struct D2ImagehlpSymbolBufStrc {
 };
 
 #endif // D2_MODULE_Fog
+#ifndef D2_DEFINED_EHExceptionRecord
+#define D2_DEFINED_EHExceptionRecord
 struct EHExceptionRecord {
     /* 0x00 */ DWORD ExceptionCode;
     /* 0x04 */ DWORD ExceptionFlags;
@@ -129,9 +139,13 @@ struct EHExceptionRecord {
     /* 0x1C */ void * pThrowInfo; // params.pThrowInfo (ThrowInfo not in the program)
 };
 
+#endif // D2_DEFINED_EHExceptionRecord
+#ifndef D2_DEFINED_EHRegistrationNode
+#define D2_DEFINED_EHRegistrationNode
 struct EHRegistrationNode {
 };
 
+#endif // D2_DEFINED_EHRegistrationNode
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 struct __attribute__((packed)) FPO_DATA_WORD {
     /* 0x00 */ DWORD ulOffStart;
@@ -293,19 +307,19 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.
 bool __stdcall DEBUG_LoadDbgHelp64Apis();
-int Unreferenced_00401c80();
+void __stdcall Unreferenced_00401c80();
 int __stdcall InitializeDebugSymbols();
-int Unreferenced_00401dd0();
+void __stdcall Unreferenced_00401dd0();
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModuleBase, char * szModuleName);
 bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement);
 bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, uint32_t * pdwLineNumber);
-bool __stdcall EnumerateLoadedModules(uint32_t pfnModuleCallback, uint32_t pUserContext);
+bool __stdcall EnumerateLoadedModules(void * pfnModuleCallback, void * pUserContext);
 void __fastcall SetSymbolSearchPath(char * szSearchPath);
-int __thiscall FindSymbolFile(void * pfnFindCallback, char * szSearchPath, char * szFileName, uint32_t nId, uint32_t dwTimestamp, uint32_t nThree, uint32_t dwFlags, char * szFoundFile, void * pUserContext);
+int __thiscall FindSymbolFile(void * pfnFindCallback, char * szSearchPath, char * szFileName, void * nId, uint32_t dwTimestamp, uint32_t nThree, uint32_t dwFlags, char * szFoundFile, void * pUserContext);
 int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModuleName, uint32_t dwBaseOfDll, uint32_t dwSizeOfDll, uint32_t dwBaseHigh);
 uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh);
-bool __stdcall WalkStackFrame(HANDLE hThread, uint32_t pStackFrame, uint32_t pContextRecord);
+bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContextRecord);
 // Write crash dump via background thread - wrapper for MiniDumpWriteDump on Windows
 void __stdcall WriteCrashDumpViaThread();
 // lpStartAddress parameter of CreateThread
@@ -318,8 +332,8 @@ void __stdcall ZeroStruct16Bytes(void * pStruct);
 void __stdcall ZeroStruct16BytesDuplicate(void * pStruct);
 void __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
 int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
-int __fastcall Unreferenced_00402c30(int param_1, int param_2);
-void __fastcall FormatAddressDebugString(uint32_t * pAddrInfo, char * pSymInfo, char * szOutput);
+bool __fastcall Unreferenced_00402c30(struct D2FogDebugModuleEntryStrc * pSrcEntry, struct D2FogDebugModuleTableStrc * pTable);
+void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput);
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport);
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp();
 void __fastcall DumpThreadContext(HANDLE hHandle);

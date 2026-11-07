@@ -13,7 +13,7 @@
 #include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2Common/Drlg/TileSub.h"
 #include "Source/D2Common/Seed.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Seed.inline.h"
@@ -82,7 +82,7 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
       }
 
       pTableEntry += 5;
-    } while ((int)pTableEntry < (int)((char*)gaAct5SpecialPresetTable_0 + 76));
+    } while ((intptr_t)pTableEntry < (intptr_t)((char*)gaAct5SpecialPresetTable_0 + 76));
 }
 
 // Checks if the grid cell at (nX, nY) is flagged, and if so spawns a preset at that location.
@@ -342,7 +342,7 @@ int32_t __fastcall DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub(D2DrlgLevelStr
         }
 
         pLvlSubEntry += 5;
-      } while ((int)pLvlSubEntry < (intptr_t)((char*)&gaAct5BorderPresetTable + sizeof(gaAct5BorderPresetTable)));
+      } while ((intptr_t)pLvlSubEntry < (intptr_t)((char*)&gaAct5BorderPresetTable + sizeof(gaAct5BorderPresetTable)));
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a5);
       exit(-1);
@@ -430,7 +430,7 @@ void __stdcall DRLGOUTROOM_PlaceAct5SceneryPresets(D2DrlgLevelStrc * pLevel) {
 
       next_entry:
       pTableEntry += 7;
-      if ((int)pTableEntry >= (intptr_t)((char*)&gaAct5SceneryPresetTable_0 + sizeof(gaAct5SceneryPresetTable_0) + 4)) {
+      if ((intptr_t)pTableEntry >= (intptr_t)((char*)&gaAct5SceneryPresetTable_0 + sizeof(gaAct5SceneryPresetTable_0) + 4)) {
         return;
       }
     } while (true);

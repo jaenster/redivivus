@@ -2,26 +2,20 @@
 
 #include "Source/D2Game/Quests/QUESTS/A2Q4.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -423,7 +417,7 @@ BOOL __fastcall Q12_CheckArcaneAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit
             /* SetQuestState Step0x07 - re-set journal sub-state after step clear */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
             nPartyId = UNIT::SUnit::GetPartyId(pUnit);
             if (nPartyId != 0xffff) {
-              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q12_SetArcaneCompleteOnPartyMember, 0);
+              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q12_SetArcaneCompleteOnPartyMember, nullptr);
             }
           }
         }
@@ -590,7 +584,7 @@ void __fastcall BlockHaremRoomForPlayerAccess(D2QuestDataStrc * pQuestData, D2Un
     }
 
     pA2Q4Specific->nPortalPlacedState = 0;
-    void* pNullArg = 0;
+    uint32_t pNullArg = 0;
     int32_t nInitialMode = 0;
     pA2Q4Specific->nHaremBlockerX = ptPlayerPos.x - 2;
     uint8_t bForcedSpawn = 1;

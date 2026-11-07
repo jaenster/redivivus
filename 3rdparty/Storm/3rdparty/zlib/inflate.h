@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,16 +19,30 @@ struct gz_header;
 struct z_stream;
 
 // Data types
+#ifndef D2_DEFINED_inflate_code
+#define D2_DEFINED_inflate_code
 struct inflate_code {
+    inflate_code() = default;
+    inflate_code(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    inflate_code(uint8_t a0, uint8_t a1, uint16_t a2) : op(a0), bits(a1), val(a2) {}
 
     /* 0x00 */ uint8_t op; // operation, extra bits, table bits
     /* 0x01 */ uint8_t bits; // bits in this part of the code
     /* 0x02 */ uint16_t val; // offset in table or code value
 };
 
+#endif // D2_DEFINED_inflate_code
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) inflate_state {
+union inflateSync_Slotm8 {
+    /* 0x00 */ uint8_t nLife0[4];
+    /* 0x00 */ uint32_t nTotalIn;
+};
+
+#endif // D2_MODULE_Storm
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
+#pragma pack(push, 1)
+struct inflate_state {
     /* 0x0000 */ int32_t mode; // current inflate mode
     /* 0x0004 */ int32_t last; // true if processing last block
     /* 0x0008 */ int32_t wrap; // bit 0 true for zlib, bit 1 true for gzip, bit 2 to validate check value
@@ -45,8 +62,8 @@ struct __attribute__((packed)) inflate_state {
     /* 0x0040 */ uint32_t length; // literal or length of data to copy
     /* 0x0044 */ uint32_t offset_val; // distance back to copy string from
     /* 0x0048 */ uint32_t extra; // extra bits needed
-    /* 0x004C */ void * lencode; // starting table for length/literal decoding
-    /* 0x0050 */ void * distcode; // starting table for distance decoding
+    /* 0x004C */ inflate_code * lencode; // starting table for length/literal decoding
+    /* 0x0050 */ inflate_code * distcode; // starting table for distance decoding
     /* 0x0054 */ uint32_t lenbits; // index bits for lencode
     /* 0x0058 */ uint32_t distbits; // index bits for distcode
     /* 0x005C */ uint32_t ncode; // number of code length code lengths
@@ -61,6 +78,7 @@ struct __attribute__((packed)) inflate_state {
     /* 0x1BC4 */ int32_t back; // bits back of last unprocessed length/lit
     /* 0x1BC8 */ uint32_t was; // initial length of match
 };
+#pragma pack(pop)
 
 #endif // D2_MODULE_Storm
 namespace Storm::_3rdparty::zlib::inflate {
@@ -77,7 +95,7 @@ int __fastcall inflateInit_(z_stream * pStream, char * szVersion, int32_t nStrea
 uint32_t __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue);
 void __fastcall fixedtables(inflate_state * state);
 int __fastcall inflateEnd(z_stream * pStream);
-uint32_t __fastcall inflateGetDictionary(z_stream * pStream, void * pDictionary, uint32_t * pnDictLength);
+uint32_t __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t * pnDictLength);
 uint32_t __fastcall inflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength);
 int __fastcall inflateGetHeader(z_stream * pStream, gz_header * pHead);
 uint32_t __fastcall inflateSync(z_stream * pStream);

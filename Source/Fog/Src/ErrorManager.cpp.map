@@ -282,6 +282,9 @@
       "namespace": "Fog::Src::ErrorManager",
       "calledFunctions": [
         "Unreferenced_00407dd0"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

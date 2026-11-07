@@ -413,6 +413,20 @@
       ]
     },
     {
+      "name": "D2WINPAL_SetGammaRamp_Unref_00509660",
+      "address": "00509660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509660"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "D2WINPAL_SetGammaRamp_Unref_00509660"
+      ]
+    },
+    {
       "name": "RENDERER_GLIDE_InitTextureMemory",
       "address": "00509670",
       "lines": [
@@ -753,7 +767,6 @@
         "exit"
       ],
       "usedTypes": [
-        "FxU",
         "GlideTexInfoStrc",
         "GrTexInfo",
         "int32_t",
@@ -940,6 +953,7 @@
       ],
       "usedTypes": [
         "D2RenderClipOutStrc",
+        "GlideTexInfoStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -1559,9 +1573,9 @@
         "RENDERER_GLIDE_ApplyColorLighting"
       ],
       "usedTypes": [
+        "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -1586,6 +1600,7 @@
       ],
       "usedTypes": [
         "D2FloatIntUnion",
+        "D2GfxLightStrc",
         "D2GlideVertexStrc",
         "D2TileLibraryEntryStrc",
         "RECT",
@@ -1614,6 +1629,7 @@
         "RENDERER_GLIDE_DrawWallTileSimple"
       ],
       "usedTypes": [
+        "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint8_t"
@@ -1846,6 +1862,9 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "RENDERER_GLIDE_BuildPerspectiveLUT"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {

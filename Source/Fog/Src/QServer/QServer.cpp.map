@@ -799,6 +799,9 @@
         "Unreferenced_006bf170",
         "AwaitAndClose",
         "QSERVER_CloseAllConnections"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
       ]
     },
     {
@@ -974,6 +977,9 @@
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
         "_NullSubRet4"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
       ]
     },
     {

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,7 @@
 struct D2SkillsTxt;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
+typedef uint32_t eMissilesId;
 
 namespace D2Client::SKILLS {
 
@@ -31,7 +35,7 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileWithZ(struct D2UnitStrc * pUnit, eD2
 BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_CheckTargetIsMonsterOrPlayer(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side helper that spawns up to nCount² missiles of type pMissileId in a circular area of radius nCount around (nCenterX, nCenterY). Uses a seeded PRNG to pick random offsets within the diameter; skips positions outside the circle or without a valid nearby room. Used by client skill effects to display visual missile bursts.
-void __fastcall SKILLSCLT_CreateMissileWithGfx(struct D2UnitStrc * pUnit, uint32_t nSeed, uint8_t * pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel);
+void __fastcall SKILLSCLT_CreateMissileWithGfx(struct D2UnitStrc * pUnit, uint32_t nSeed, eMissilesId pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel);
 // Client aura do-function: fires one missile toward the current target (or cursor if no target) with graphics and range determined by the aura's current level via SKILLSASS_GetCltMissileByAuraLevel and SKILLSASS_GetPrgCalcByAuraLevel. Falls back to aurarangecalc from SkillsTxt if prgcalc returns less than 1. Returns FALSE if the skill entry is invalid or missile ID is -1.
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLSCLT_SetMissilePathAndCalc(struct D2UnitStrc * pUnit, int32_t nInitSeed);

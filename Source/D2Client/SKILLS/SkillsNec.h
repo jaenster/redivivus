@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -39,7 +42,7 @@ BOOL __fastcall Skills_CltDoFunc_Nec_BoneSpear(struct D2UnitStrc * pUnit, eD2Ski
 BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillsNec.cpp
 BOOL __fastcall Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-int Unreferenced_004f3fb0();
+struct D2UnitStrc * __fastcall Unreferenced_004f3fb0(struct D2UnitStrc * pUnit);
 // Client start-function for Necromancer Revive. Validates that the confirmed target is a revivable, consumable, convertible monster, then selects a missile type from the skill txt (cltmissilea/b/c) based on the monster's overlayHeight size class (1=medium, 3=large). Launches the selected missile with the corpse as target. Returns 1 on success, 0 if any check fails.
 BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 #endif // D2_MODULE_D2Client

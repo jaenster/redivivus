@@ -72,6 +72,7 @@
       ],
       "usedTypes": [
         "D2ItemsTxt",
+        "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
@@ -189,6 +190,7 @@
         "ITEMDROP_IsItemClassEligible"
       ],
       "usedTypes": [
+        "D2ItemClassCandidateStrc",
         "D2ItemsTableStrc",
         "D2ItemsTxt",
         "D2SeedStrc",

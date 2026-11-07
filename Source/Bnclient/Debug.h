@@ -4,13 +4,18 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
+
+// Forward declarations
+struct D2IniConfigStrc;
 
 namespace Bnclient::Debug {
 
@@ -20,7 +25,7 @@ namespace Bnclient::Debug {
 void DEBUG_Trace_Unref_00515ec0(char * str);
 void DEBUG_Trace_Unref_00515ed0(char * str);
 void __thiscall DEBUG_LogFormattedMessage(void * pThis, char * szMessage);
-void __fastcall DEBUG_SetLoggingFlag(int nLoggingFlag);
+void __fastcall DEBUG_SetLoggingFlag(struct D2IniConfigStrc * nLoggingFlag);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0051a470..0051a479; unreferenced in 1.14d.
 __time32_t __stdcall DEBUG_GetTime32(__time32_t * pTime);

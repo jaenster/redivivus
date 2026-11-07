@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Multi)
 #error "D2Multi header included by a module that may not use D2Multi (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Multi) && !defined(D2_LOADS_D2Multi)
+#error "internal D2Multi header included from another module; include D2Multi's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -27,15 +30,16 @@ typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig
 #endif
 
 // Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
+#ifndef D2_DEFINED_D2ChatDlgUnknown_0x10
+#define D2_DEFINED_D2ChatDlgUnknown_0x10
 struct __attribute__((packed)) D2ChatDlgUnknown_0x10 {
     /* 0x00 */ char * pszText; // Heap copy of the chat line, allocated at .\Src\ChatDlg.cpp:0xc28 and NULL when the caller passed no string.
     /* 0x04 */ LPRECT lpRect;
     /* 0x08 */ int32_t nLength;
-    /* 0x0C */ uint32_t field3_0xc;
+    /* 0x0C */ struct D2ChatDlgUnknown_0x10 * pNext;
 };
 
-#endif // D2_MODULE_D2Multi
+#endif // D2_DEFINED_D2ChatDlgUnknown_0x10
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
 struct D2LadderRowBufStrc {
     /* 0x000 */ uint16_t wszCell[256]; // cleared as 0x80 dwords; ladder cell text
@@ -88,17 +92,17 @@ BOOL __stdcall CHATDLG_IsLobbyInitialized();
 void __stdcall LAUNCHER_DestroyLauncherForms();
 int __stdcall isServerDown();
 void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo);
-int Unreferenced_0043dce0();
+void Unreferenced_0043dce0();
 void __stdcall UIMENU_CantTestItBeacuseItCrash();
 void __stdcall CHATDLG_DestroyLobbyChatForms();
 void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230();
 void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240();
 // @sourcefile .\Src\ChatDlg.cpp
 void CHATDLG_FreeChatMsgNode(void * * pChatNode);
-int Unreferenced_0043e370();
+struct D2ChatDlgUnknown_0x10 * Unreferenced_0043e370();
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages();
-void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, int32_t pszMessage);
+void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszMessage);
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_EnqueueClearMessage();
 int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle);
@@ -200,7 +204,7 @@ BOOL __stdcall CHATDLG_UpdateChatRoomList();
 // Provenance: 1.14d asm 00440350, called as fpOnPress by D2WinTimer DrawEx 004fd8d2.
 BOOL __stdcall CHATDLG_OnTimerRequestLadderData(struct D2ControlMsg * pControlMsg);
 // Updates ladder board display after player click - renders rank cells with class colors and experience
-void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCount, int32_t nEntryIndex, char nFilterMode, int32_t nLadderData);
+void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCount, int32_t nEntryIndex, char nFilterMode, uint8_t * nLadderData);
 void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders();
 void __stdcall CHATDLG_OpenLadderClassicSoftcore();
 void __stdcall CHATDLG_OpenLadderClassicHardcore();

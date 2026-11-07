@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,21 +17,40 @@
 // Forward declarations
 struct D2PoolManagerStrc;
 
+// Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
+struct D2CelDataHashEntryStrc {
+    /* 0x00 */ uint32_t nBucket;
+    /* 0x04 */ char szFileName[32];
+    /* 0x24 */ void * pData;
+    /* 0x28 */ struct D2CelDataHashEntryStrc * pPrev;
+    /* 0x2C */ struct D2CelDataHashEntryStrc * pNext;
+};
+
+#endif // D2_MODULE_D2CMP
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
+struct D2CelDataHashTableStrc {
+    /* 0x000 */ uint32_t adwBucketState[512];
+    /* 0x800 */ struct D2CelDataHashEntryStrc * apBuckets[512];
+};
+
+#endif // D2_MODULE_D2CMP
 namespace D2CMP::SRC::CelDataHash {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall CELDATAHASH_UnlinkEntry(int32_t pHashTable, int * pEntry, struct D2PoolManagerStrc * pMemory);
+void __fastcall CELDATAHASH_UnlinkEntry(struct D2CelDataHashTableStrc * pHashTable, struct D2CelDataHashEntryStrc * pEntry, struct D2PoolManagerStrc * pMemory);
 void __fastcall CELDATAHASH_InitHashTable(void * pHashTable);
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall GFX_FreeAllCacheEntries(struct D2PoolManagerStrc * pMemory, int32_t pHashTable);
-int32_t __fastcall CELDATAHASH_FindByFilename(void * pHashTable, char * szFileName);
+void __fastcall GFX_FreeAllCacheEntries(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable);
+struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(struct D2CelDataHashTableStrc * pHashTable, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
-uint32_t * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, void * pHashTable, uint32_t nRefCount, char * szFileName);
+struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, struct D2CelDataHashTableStrc * pHashTable, uint32_t nRefCount, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall GFX_RemoveCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, int * pEntry);
+void __fastcall GFX_RemoveCacheEntry(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable, struct D2CelDataHashEntryStrc * pEntry);
+void __stdcall IGNORELIST_Initialize_Unref_0060b130();
 #endif // D2_MODULE_D2CMP
 
 } // namespace D2CMP::SRC::CelDataHash

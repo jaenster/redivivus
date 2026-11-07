@@ -4,18 +4,22 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/D2Common.h"
 
 // Forward declarations
 struct D2ItemStatCostTxt;
 struct D2MonTypeTxt;
 struct D2QuestLogStrc;
+struct D2SkillDescTxt;
 struct D2SkillStrc;
 struct D2SkillsTxt;
 struct D2StatListExStrc;
@@ -29,12 +33,17 @@ typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(struct D2UnitStrc * pUnit, 
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2ElemDmgStatTripleStrc
+#define D2_DEFINED_D2ElemDmgStatTripleStrc
 struct D2ElemDmgStatTripleStrc {
     /* 0x00 */ int nMinDamageStat;
     /* 0x04 */ int nMaxDamageStat;
     /* 0x08 */ int nMasteryStat;
 };
 
+#endif // D2_DEFINED_D2ElemDmgStatTripleStrc
+#ifndef D2_DEFINED_D2GemsTxt
+#define D2_DEFINED_D2GemsTxt
 struct __attribute__((packed)) D2GemsTxt {
     /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
@@ -50,6 +59,9 @@ struct __attribute__((packed)) D2GemsTxt {
     /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
 };
 
+#endif // D2_DEFINED_D2GemsTxt
+#ifndef D2_DEFINED_D2MonStatsInitStrc
+#define D2_DEFINED_D2MonStatsInitStrc
 struct D2MonStatsInitStrc {
     /* 0x00 */ int nMinHP;
     /* 0x04 */ int nMaxHP;
@@ -67,6 +79,9 @@ struct D2MonStatsInitStrc {
     /* 0x34 */ int nElDur;
 };
 
+#endif // D2_DEFINED_D2MonStatsInitStrc
+#ifndef D2_DEFINED_D2SkillChargeDescStrc
+#define D2_DEFINED_D2SkillChargeDescStrc
 struct D2SkillChargeDescStrc {
     /* 0x00 */ int32_t nFileIndex; // matched against the item file index and tested as a stat id (6..11 are >>8 shifted)
     /* 0x04 */ int32_t nDescFunc; // must be 1, else halt line 0x141
@@ -75,14 +90,24 @@ struct D2SkillChargeDescStrc {
     /* 0x0C */ int32_t nDescVal; // must be 2, else halt line 0x13d; read via the table base + 0xc
 };
 
+#endif // D2_DEFINED_D2SkillChargeDescStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union SKILLDESC_DrawSkillDmgProgressive_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2SkillDescTxt * pSkillDescTxt;
+    /* 0x00 */ int32_t nElemColorIdx;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::UI::SkillDesc {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-int __fastcall SKILLDESC_InitMissileBuffers(struct D2QuestLogStrc * pQuestLog);
+struct D2QuestLogStrc * __fastcall SKILLDESC_InitMissileBuffers(struct D2QuestLogStrc * pQuestLog);
 struct D2MonTypeTxt * __fastcall GetMonTypeLine(int32_t nMonType);
-void __fastcall SKILLDESC_FormatItemStatLine(int32_t pUnit, uint16_t * wszText, int32_t nMaxBufferSize, int32_t nStatListFlags, uint32_t nParam2);
+void __fastcall SKILLDESC_FormatItemStatLine(struct D2UnitStrc * pUnit, uint16_t * wszText, int32_t nMaxBufferSize, int32_t nStatListFlags, uint32_t nParam2);
 // NOTE: Register params: pUnit (ECX): D2UnitStrc *, pwszOutputBuffer (EDX): short *
 void __fastcall DamageToUndeadText(struct D2UnitStrc * pUnit, short * pwszOutputBuffer, int32_t nMaxBufferSize);
 BOOL __stdcall SKILLDESC_CalcStatGroupMinMax(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nGroupValue, struct D2ItemStatCostTxt * pItemStatCostTxt, BOOL * pbIsFirstInGroup);
@@ -103,7 +128,7 @@ int __stdcall SKILLDESC_CalcElemDamageRange(struct D2UnitStrc * pUnit, int * pnM
 void __fastcall SKILLDESC_CalcAttackRateForWeapon(struct D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, uint32_t param_1, uint32_t dwParam1, int32_t nSkillLevel, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
 void __fastcall SKILLDESC_CalcEquippedAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcCompareAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
-void __stdcall SKILLDESC_CalcDualWieldDmg(struct D2SkillStrc * pSkill, int32_t * param_1, struct D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, struct D2UnitStrc * pUnit2);
+void __stdcall SKILLDESC_CalcDualWieldDmg(struct D2SkillStrc * pSkill, int32_t * param_1, struct D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2);
 void __fastcall SKILLDESC_CalcDualWieldWithAR(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldWithARState(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldSimple(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);

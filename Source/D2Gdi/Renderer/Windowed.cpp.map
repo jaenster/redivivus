@@ -32,38 +32,6 @@
       ]
     },
     {
-      "name": "ClearScreen_Unref_0065a3f0",
-      "address": "0065a3f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0065a3f0"
-        }
-      ],
-      "namespace": "D2Gdi::Renderer::Windowed",
-      "calledFunctions": [
-        "ClearScreen_Unref_0065a3f0",
-        "TXT_AllocItemDropData"
-      ]
-    },
-    {
-      "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20",
-      "address": "006b2f20",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006b2f20"
-        }
-      ],
-      "namespace": "D2Gdi::Renderer::Windowed",
-      "calledFunctions": [
-        "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20"
-      ],
-      "usedTypes": [
-        "HBITMAP"
-      ]
-    },
-    {
       "name": "AdjustPerspectivePosition_Unref_006bf250",
       "address": "006bf250",
       "lines": [
@@ -1363,6 +1331,7 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc",
+        "Smack",
         "uint32_t",
         "uint8_t"
       ]
@@ -1385,38 +1354,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc",
+        "Smack",
         "uint8_t"
-      ]
-    },
-    {
-      "name": "FOG_ParseFieldValue",
-      "address": "006c9a76",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c9a76"
-        }
-      ],
-      "namespace": "D2Gdi::Renderer::Windowed",
-      "calledFunctions": [
-        "FOG_ParseFieldValue"
-      ],
-      "usedTypes": [
-        "char *"
-      ]
-    },
-    {
-      "name": "FOG_FindCharInString",
-      "address": "006c9aff",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c9aff"
-        }
-      ],
-      "namespace": "D2Gdi::Renderer::Windowed",
-      "calledFunctions": [
-        "FOG_FindCharInString"
       ]
     }
   ]

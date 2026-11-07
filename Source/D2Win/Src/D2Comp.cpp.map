@@ -58,7 +58,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -101,8 +102,10 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CompCofCacheEntryStrc",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -123,6 +126,7 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
+        "D2CompCofCacheEntryStrc",
         "int32_t"
       ]
     },
@@ -167,7 +171,8 @@
         "exit"
       ],
       "usedTypes": [
-        "int *",
+        "D2CompCofListNodeStrc",
+        "D2CompCofListNodeStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -194,9 +199,12 @@
         "exit"
       ],
       "usedTypes": [
-        "int *",
+        "D2CompCofCacheEntryStrc",
+        "D2CompCofListNodeStrc",
+        "D2CompCofListNodeStrc *",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -218,6 +226,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
         "D2GfxDataStrc",
         "int32_t",
         "uint32_t",
@@ -239,7 +248,9 @@
         "D2COMP_PopulateComponentFromCOF"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
         "D2GfxDataStrc",
+        "DC6",
         "int32_t",
         "uint8_t"
       ]
@@ -306,6 +317,7 @@
         "GetDC6OffsetY"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
         "D2GfxDataStrc",
         "int32_t",
         "uint32_t",
@@ -336,6 +348,8 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
+        "D2CompCofListNodeStrc",
         "D2GfxDataStrc",
         "int32_t",
         "uint32_t",
@@ -368,6 +382,8 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
+        "D2CompCofListNodeStrc",
         "D2GamePalShiftGreenBloodStrc",
         "D2GfxDataStrc",
         "DC6",
@@ -459,7 +475,8 @@
       ],
       "usedTypes": [
         "D2CharSelCompStrc",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -524,6 +541,8 @@
       ],
       "usedTypes": [
         "D2CharSelStrc",
+        "D2CompCofListNodeStrc",
+        "D2CompCofListNodeStrc *",
         "int32_t"
       ]
     },
@@ -568,7 +587,9 @@
       ],
       "usedTypes": [
         "D2CharSelCompStrc",
-        "int32_t"
+        "D2CompCofListNodeStrc",
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -817,6 +838,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -852,7 +874,7 @@
         "D2COMP_GetCompositeUnitListHead"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2CharSelCompStrc"
       ]
     },
     {
@@ -872,8 +894,8 @@
         "exit"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "D2CharSelCompStrc",
+        "int32_t"
       ]
     },
     {
@@ -915,6 +937,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -1176,6 +1199,7 @@
         "DRAW_text"
       ],
       "usedTypes": [
+        "D2CharSelCompStrc",
         "WCHAR",
         "int32_t",
         "uint32_t"
@@ -1209,8 +1233,7 @@
         "exit"
       ],
       "usedTypes": [
-        "D2MapAIStrc",
-        "D2QuestDataA3Q6Strc",
+        "D2CharSelCompStrc",
         "WCHAR",
         "int32_t",
         "tagRECT",
@@ -1241,6 +1264,7 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2CompCharacterCompositeItemStrc",
+        "D2ItemsTxt",
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"

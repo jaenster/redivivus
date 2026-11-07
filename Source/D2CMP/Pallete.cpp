@@ -4,7 +4,7 @@
 #include "Source/D2CMP/SRC/TileProjects.h"
 #include "Source/D2Common/D2TileLibraryEntryStrc.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

@@ -15,6 +15,9 @@
       "namespace": "D2Client::UI::Dialog",
       "calledFunctions": [
         "GetDialogCounter_Unref_004b70f0"
+      ],
+      "usedTypes": [
+        "D2DialogStrc"
       ]
     },
     {
@@ -473,6 +476,9 @@
       "calledFunctions": [
         "Unreferenced_004b7bc0",
         "memset"
+      ],
+      "usedTypes": [
+        "D2DialogStrc"
       ]
     },
     {
@@ -763,6 +769,10 @@
       "namespace": "D2Client::UI::Dialog",
       "calledFunctions": [
         "Unreferenced_004b8590"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogStringData"
       ]
     },
     {
@@ -777,6 +787,10 @@
       "namespace": "D2Client::UI::Dialog",
       "calledFunctions": [
         "Unreferenced_004b85b0"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "RECT"
       ]
     },
     {

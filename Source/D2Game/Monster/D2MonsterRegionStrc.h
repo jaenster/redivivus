@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,9 +16,13 @@
 #include "Source/D2Game/Monster/MonsterRegion.h"
 
 // Data types
+#ifndef D2_DEFINED_D2MonsterRegionFieldStrc
+#define D2_DEFINED_D2MonsterRegionFieldStrc
 struct __attribute__((packed)) D2MonsterRegionFieldStrc {
     /* 0x00 */ uint16_t nClassId; // Monster class ID from MonStats.txt
     /* 0x02 */ uint8_t nRarity; // Rarity from MonStats.txt
     /* 0x03 */ uint8_t pad;
     /* 0x04 */ D2MonsterRegionFieldSubStrc aArray[3]; // Shuffled by SEED_RollChampionPack
 };
+
+#endif // D2_DEFINED_D2MonsterRegionFieldStrc

@@ -4,24 +4,10 @@
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/Chat.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2DynamicPathStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Common/Units/UnitFinds.h"
-#include "Source/D2Common/Waypoints.h"
+#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
@@ -48,13 +34,8 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Help.data.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.data.h"
 
@@ -1768,7 +1749,7 @@ static int32_t __stdcall CheckIfInrangeAndReassign(::SGAMEDATA * pGame, uint32_t
 eD2ServerIncomingStatus __fastcall SCMD_0x01_WalkToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x01_WalkToLocation * pPacket, uint32_t nSize) {
     int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (!nStatus) {
-      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 2, (uint32_t)pPacket & 0xffff, nSize & 0xffff, 0);
+      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 2, (uintptr_t)pPacket & 0xffff, nSize & 0xffff, 0);
       nStatus = 0;
     }
 
@@ -1815,7 +1796,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x02_WalkToEntity(::SGAMEDATA * pGame, D
 eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x03_RunToLocation * pPacket, uint32_t nSize) {
     int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (!nStatus) {
-      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 3, (uint32_t)pPacket & 0xffff, nSize & 0xffff, 0);
+      PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 3, (uintptr_t)pPacket & 0xffff, nSize & 0xffff, 0);
       nStatus = 0;
     }
 
@@ -2034,7 +2015,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * p
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     uint32_t nTargetY = nSize & 0xffff;
-    uint32_t nTargetX = (uint32_t)pPacket & 0xffff;
+    uint32_t nTargetX = (uintptr_t)pPacket & 0xffff;
     pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
     CastSkillOnLocation(pUnit, pGame, nTargetX, nTargetY, pLeftSkill);
     nPierceIdx = 0;
@@ -2175,7 +2156,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * 
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     uint32_t nTargetY = nSize & 0xffff;
-    uint32_t nTargetX = (uint32_t)pPacket & 0xffff;
+    uint32_t nTargetX = (uintptr_t)pPacket & 0xffff;
     pRightSkill = D2Common::Units::GetRightSkill(pUnit);
     CastSkillOnLocation(pUnit, pGame, nTargetX, nTargetY, pRightSkill);
     nPierceIdx = 0;
@@ -3166,7 +3147,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * 
       return (eD2ServerIncomingStatus)nStatus;
     }
 
-    BOOL nRemoveResult = ITEMS::ItemMode::RemoveStackItem(dwItemGUID, (uint32_t)&nSize);
+    BOOL nRemoveResult = ITEMS::ItemMode::RemoveStackItem(dwItemGUID, &nSize);
     if (!nRemoveResult && nSize) {
       return SERVERSTATUS_BAD_PARAMS;
     }
@@ -4167,7 +4148,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4F_GoToTownFolk(::SGAMEDATA * pGame, D
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    eD2ServerIncomingStatus eVar1 = PlayerTrade::ClickButton(pGame, pUnit, pPacket->nButton, (uint32_t)((uint32_t)(uint16_t)(short int)pPacket->dwParam << 16 | (uint32_t)(uint16_t)*(uint16_t*)((uintptr_t)&pPacket->dwParam + 2)));
+    eD2ServerIncomingStatus eVar1 = PlayerTrade::ClickButton(pGame, pUnit, pPacket->nButton, (uint32_t)((uint32_t)(uint16_t)(short int)pPacket->dwParam << 16 | (uint32_t)(uint16_t)*(uint16_t*)((intptr_t)&pPacket->dwParam + 2)));
     return (eD2ServerIncomingStatus)eVar1;
 }
 
@@ -4626,7 +4607,7 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
         D2Common::ITEMS::Items::SetBodyLoc(pClonedOldItem, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc);
         D2Common::Units::SetupUpdateFlag(pClonedOldItem, 1);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOldItem, INVPAGE_None);
-        ITEMS::ItemMode::ITEMMODE_AddStatsList_ForMercSwap((uint32_t)pGame, pClonedOldItem, pUnit2, 0);
+        ITEMS::ItemMode::ITEMMODE_AddStatsList_ForMercSwap(pGame, pClonedOldItem, pUnit2, 0);
         ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
       }
     }
@@ -4930,7 +4911,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame,
               GAME::SCmd::Send0x9DRemoveItemFromContainer(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", 0x1834), pUnit, pItem, itemFlagMask);
               D2Common::Units::SetupUpdateFlag(pItem, 4);
               pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-              D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, (char*)((uintptr_t)&pPacket + 3), (char*)((uintptr_t)&nSize + 3), ".\\PLAYER\\PlrMsg.cpp", 0x183b);
+              D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, (char*)((intptr_t)&pPacket + 3), (char*)((intptr_t)&nSize + 3), ".\\PLAYER\\PlrMsg.cpp", 0x183b);
               bFoundSlot = D2Common::INVENTORY::Inventory::INVENTORY_CanPlaceItemInBelt(pInventory, pItem, nGridIndex);
               if (bFoundSlot) {
                 D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);

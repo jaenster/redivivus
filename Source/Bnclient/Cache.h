@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,25 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+union CACHE_ReadData_Slotm160 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ DWORD * pFileTimeOut;
+    /* 0x00 */ DWORD nBytesWritten;
+};
+
+#endif // D2_MODULE_Bnclient
+#ifndef D2_DEFINED_D2BnCacheBlockEntryStrc
+#define D2_DEFINED_D2BnCacheBlockEntryStrc
+struct __attribute__((packed)) D2BnCacheBlockEntryStrc {
+    /* 0x00 */ LONG nFileOffset;
+    /* 0x04 */ uint32_t dwBlockSize;
+    /* 0x08 */ uint32_t dwDataSize;
+    /* 0x0C */ uint32_t dwFlags;
+};
+
+#endif // D2_DEFINED_D2BnCacheBlockEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct __attribute__((packed)) D2BnCacheEntryHeaderStrc {
     /* 0x00 */ uint32_t dwHeaderSize; // always 0x144
@@ -29,6 +51,8 @@ struct __attribute__((packed)) D2BnCacheEntryHeaderStrc {
 };
 
 #endif // D2_MODULE_Bnclient
+#ifndef D2_DEFINED_D2BnCacheFileHeaderStrc
+#define D2_DEFINED_D2BnCacheFileHeaderStrc
 struct D2BnCacheFileHeaderStrc {
     /* 0x00 */ uint32_t dwSignature; // 'BN3\x1a' 0x1a334e42; 'BN2\x1a' 0x1a324e42 is the old format
     /* 0x04 */ uint32_t dwHeaderSize; // 0x2c
@@ -43,6 +67,7 @@ struct D2BnCacheFileHeaderStrc {
     /* 0x28 */ uint32_t dwBlockTableCrc32;
 };
 
+#endif // D2_DEFINED_D2BnCacheFileHeaderStrc
 namespace Bnclient::Cache {
 
 // Function declarations

@@ -2,22 +2,10 @@
 
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/Chat.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Item.h"
-#include "Source/D2Common/Logging.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
@@ -37,14 +25,9 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Game/D2Game.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Server.data.h"
@@ -474,12 +457,12 @@ static void __stdcall PLRMODES_UnequipAndPrepareItemForDrop(::SGAMEDATA * pGame,
     D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventory, pUnit2);
     D2UnitStrc* pOwnerUnit = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pUnit2);
     if (!pOwnerUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x25d);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x25d);
       exit(-1);
     } else {
       eD2ItemTypes eItemType;
       if (pUnit2 != pOwnerUnit) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x25e);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x25e);
         exit(-1);
       }
 
@@ -652,7 +635,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ff);
         exit(-1);
       } else {
-        pUnit_00 = UNIT::SUnit::CreateUnit(UNIT_PLAYER, pUnit->nClassId, nX, nY, pGame, pSpawnRoom, 1, 0x11, nullptr);
+        pUnit_00 = UNIT::SUnit::CreateUnit(UNIT_PLAYER, pUnit->nClassId, nX, nY, pGame, pSpawnRoom, 1, 0x11, 0);
         pSavedBodyUnit = pUnit_00;
         if (!pUnit_00) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x304);
@@ -862,7 +845,7 @@ void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       }
     }
 
-    int32_t bItemsEquipped = ITEMS::ItemMode::ITEMMODE_EquipCorpseItems(pGame, pUnit, (int32_t)pCorpseUnit);
+    int32_t bItemsEquipped = ITEMS::ItemMode::ITEMMODE_EquipCorpseItems(pGame, pUnit, pCorpseUnit);
     if (bItemsEquipped) {
       eD2UnitType eCorpseUnitType;
       D2Common::INVENTORY::Inventory::INVENTORY_RemoveCorpse(pUnit->pInventory, pCorpseUnit->nUnitGUID, 1);
@@ -1016,7 +999,7 @@ static void __stdcall PLRMODES_ReequipWeaponAfterThrow(::SGAMEDATA * pGame, uint
               exit(-1);
             }
 
-            ITEMS::ItemMode::ITEMMODE_ProcessItemBuy((D2UnitStrc**)pGame, pUnit, dwFindGUID, eBodyLoc);
+            ITEMS::ItemMode::ITEMMODE_ProcessItemBuy(pGame, pUnit, dwFindGUID, eBodyLoc);
           }
         }
       }
@@ -1080,7 +1063,7 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
                 if (nQuantity == pReloadItem->nClassId) {
                   pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pWeaponOwner->pInventory, nBodyLocWord & 0xff);
                   if (!pSlotItem) {
-                    bIsBroken = ITEMS::ItemMode::ITEMMODE_ProcessItemBuy((D2UnitStrc**)pGame, pWeaponOwner, pReloadItem->nUnitGUID, (eD2BodyLoc)nBodyLocWord);
+                    bIsBroken = ITEMS::ItemMode::ITEMMODE_ProcessItemBuy(pGame, pWeaponOwner, pReloadItem->nUnitGUID, (eD2BodyLoc)nBodyLocWord);
                     if (bIsBroken) {
                       return;
                     }

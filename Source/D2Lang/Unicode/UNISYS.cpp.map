@@ -107,7 +107,8 @@
         "UNICODE_FindWideChar"
       ],
       "usedTypes": [
-        "int16_t"
+        "int16_t",
+        "uint16_t"
       ]
     },
     {
@@ -277,6 +278,9 @@
       "namespace": "D2Lang::Unicode::UNISYS",
       "calledFunctions": [
         "Unreferenced_00526d00"
+      ],
+      "usedTypes": [
+        "uint16_t"
       ]
     },
     {
@@ -547,6 +551,7 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc",
+        "D2UnicodeKamapEntryStrc",
         "uint16_t",
         "uint32_t",
         "uint8_t"

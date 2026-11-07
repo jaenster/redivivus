@@ -2,22 +2,10 @@
 
 #include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2SkillsTxt.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/Event.h"
@@ -38,11 +26,7 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Chat.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 
@@ -273,7 +257,7 @@ uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlac
     }
 }
 
-static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * nGamePtr, int32_t bNoSkill, int32_t nItemClassId, int32_t pTemplateTxt, D2UnitStrc * pUnit) {
+static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * nGamePtr, int32_t bNoSkill, int32_t nItemClassId, D2CharStatsTxt * pTemplateTxt, D2UnitStrc * pUnit) {
     BOOL bIsStackable;
     int nValue;
     if (!pUnit) {
@@ -289,14 +273,14 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
         D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pCreatedItem, pStatList);
         D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
       }
-      if (!bNoSkill && *(short int*)(pTemplateTxt + 0xac) >= 0 && (int)*(short int*)(pTemplateTxt + 0xac) < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+      if (!bNoSkill && pTemplateTxt->StartSkill >= 0 && (int)pTemplateTxt->StartSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
         if (!pStatList) {
           pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pCreatedItem->pMemory, 0x40, 0, UNIT_ITEM, pCreatedItem->nUnitGUID);
           D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pCreatedItem, pStatList, 1);
         }
 
-        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_item_singleskill, 1, (uint32_t)*(uint16_t*)(pTemplateTxt + 0xac));
+        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_item_singleskill, 1, (uint32_t)(uint16_t)pTemplateTxt->StartSkill);
       }
 
       bIsStackable = D2Common::ITEMS::Items::IsStackable(pCreatedItem);
@@ -310,7 +294,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
 }
 
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
-void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t eClassId, int32_t nDifficulty, uint32_t * pCharItem) {
+void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2CharStatsTxt * eClassId, int32_t nDifficulty, D2CharItemStrc * pCharItem) {
     // Frame slots -20..-4 are ONE object: &dwBeltSlotOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -329,13 +313,13 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     ::SGAMEDATA* pGameLocal;
     uint16_t wLayer;
     D2ItemsTxt* pItemsTxt;
-    pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*pCharItem, &__frame0.nItemTxtLine);
+    pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pCharItem->dwItemCode, &__frame0.nItemTxtLine);
     if (!pItemsTxt) {
       return;
     }
 
     __frame0.i = 0;
-    if ((uint8_t)*(char*)((int)pCharItem + 5) <= '\0') {
+    if ((uint8_t)pCharItem->nItemCount <= '\0') {
       return;
     }
 
@@ -343,7 +327,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
       __frame0.pGameSaved = pGame;
       pNewItem = PLAYER_CreateRewardItemFromTemplate(__frame0.pGameSaved, nDifficulty, __frame0.nItemTxtLine, eClassId, pUnit);
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pNewItem, ITEMFLAG_BEGINNER, 1);
-      D2Common::ITEMS::Items::SetBodyLoc(pNewItem, *(eD2BodyLoc*)(pCharItem + 1));
+      D2Common::ITEMS::Items::SetBodyLoc(pNewItem, pCharItem->nBodyLoc);
       nLine = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pNewItem);
       if (nLine) {
         if (!pNewItem) {
@@ -370,7 +354,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
           PLAYER_PlaceItemInInventory(pGameLocal, 1, pUnit, pNewItem);
         }
       } else {
-        if ((char)pCharItem[1] != '\0') {
+        if (pCharItem->nBodyLoc != '\0') {
           nBeltResult = PLAYER_EquipItemToBodyLoc(__frame0.pGameSaved, pUnit, pNewItem);
           if (!nBeltResult) {
             PLAYER_PlaceItemInInventory(__frame0.pGameSaved, 1, pUnit, pNewItem);
@@ -409,7 +393,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
       }
 
       __frame0.i++;
-    } while (__frame0.i < (int)(uint32_t)*(uint8_t*)((int)pCharItem + 5));
+    } while (__frame0.i < (int)(uint32_t)(uint8_t)pCharItem->nItemCount);
 }
 
 void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct) {
@@ -422,7 +406,7 @@ void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * p
     i = 0;
     D2CharItemStrc* pCharItem = pCharStatsTxt->sItem;
     do {
-      PLAYER_CreateStarterItems(pGame, pUnit, (int32_t)pCharStatsTxt, i, (uint32_t*)pCharItem);
+      PLAYER_CreateStarterItems(pGame, pUnit, pCharStatsTxt, i, pCharItem);
       i++;
       pCharItem++;
     } while (i < 10);

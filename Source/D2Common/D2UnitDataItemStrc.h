@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,6 +21,8 @@ typedef uint8_t eD2InventoryGrid;
 typedef uint8_t eD2InventoryGridType;
 
 // Data types
+#ifndef D2_DEFINED_D2ItemInventoryNodeStrc
+#define D2_DEFINED_D2ItemInventoryNodeStrc
 struct __attribute__((packed)) D2ItemInventoryNodeStrc {
     /* 0x00 */ struct D2InventoryStrc * pInventory; // Socketed items inventory
     /* 0x04 */ struct D2UnitStrc * pPrevItem; // Previous item in linked list
@@ -29,3 +34,5 @@ struct __attribute__((packed)) D2ItemInventoryNodeStrc {
     /* 0x10 */ struct D2UnitStrc * pPrevItemInPage; // Previous item in page linked list
     /* 0x14 */ struct D2UnitStrc * pNextItemInPage; // Next item in page linked list
 };
+
+#endif // D2_DEFINED_D2ItemInventoryNodeStrc

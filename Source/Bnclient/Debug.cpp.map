@@ -58,6 +58,9 @@
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
         "DEBUG_SetLoggingFlag"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
       ]
     },
     {

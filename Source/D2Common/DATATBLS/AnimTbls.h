@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,12 +15,22 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2AnimDataRecordStrc;
 struct D2AnimDataStrc;
 struct D2InventoryStrc;
 struct D2PoolManagerStrc;
 struct D2UnitStrc;
 
+// Data types
+#ifndef D2_DEFINED_D2AnimDataRecordStrc
+#define D2_DEFINED_D2AnimDataRecordStrc
+struct __attribute__((packed)) D2AnimDataRecordStrc {
+    /* 0x00 */ char szAnimDataName[8];
+    /* 0x08 */ int nFrames;
+    /* 0x0C */ int nAnimSpeed;
+    /* 0x10 */ uint8_t pFrameFlags[144];
+};
+
+#endif // D2_DEFINED_D2AnimDataRecordStrc
 namespace D2Common::DATATBLS::AnimTbls {
 
 // Function declarations

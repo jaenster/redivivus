@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 struct DC6Block;
 
 // Data types
+#ifndef D2_DEFINED_DC6
+#define D2_DEFINED_DC6
 struct __attribute__((packed)) DC6 {
     /* 0x00 */ int nVersion;
     /* 0x04 */ int nFlags;
@@ -24,3 +29,5 @@ struct __attribute__((packed)) DC6 {
     /* 0x14 */ int nFrames;
     /* 0x18 */ struct DC6Block * pBlocks[0];
 };
+
+#endif // D2_DEFINED_DC6

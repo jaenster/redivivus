@@ -4,19 +4,24 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Drlg/Path.h"
+#include "Source/D2Common/D2Common.h"
 
 // Forward declarations
 struct D2DynamicPathStrc;
 struct D2RoomStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2PathTypeArg
+#define D2_DEFINED_D2PathTypeArg
 struct __attribute__((packed)) D2PathTypeArg {
     /* 0x00 */ D2DynamicPathCoordsStrc pCoords; // Source + destination coords packed
     /* 0x08 */ struct D2RoomStrc * pRoom; // Source room
@@ -34,3 +39,5 @@ struct __attribute__((packed)) D2PathTypeArg {
     /* 0x2C */ int nCollisionPattern; // Collision check pattern
     /* 0x30 */ struct D2DynamicPathStrc * pDynamicPath; // Owner dynamic path
 };
+
+#endif // D2_DEFINED_D2PathTypeArg

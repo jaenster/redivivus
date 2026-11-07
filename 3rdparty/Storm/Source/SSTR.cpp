@@ -1134,7 +1134,7 @@ int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount) {
     D2_CHECKS_BEGIN;
     D2_CHECK(str_1);
     D2_CHECK(str_2);
-    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (int)str_1 - (int)str_2);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (intptr_t)str_1 - (intptr_t)str_2);
     int nResult = strncmp(str_1, str_2, nMaxCount);
     return nResult;
 }
@@ -1148,7 +1148,7 @@ int32_t __stdcall SStrCmpI(char * str_1, char * str_2, size_t nMaxCount) {
     D2_CHECKS_BEGIN;
     D2_CHECK(str_1);
     D2_CHECK(str_2);
-    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (int)str_1 - (int)str_2);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (intptr_t)str_1 - (intptr_t)str_2);
     int nResult = _strnicmp(str_1, str_2, nMaxCount);
     return nResult;
 }
@@ -1174,9 +1174,9 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (nBufferOutputLength) {
       pDstLast = szBufferOutput + nBufferOutputLength - 1;
-      for (nOffset = (int)szBufferOutput - (int)pDstLast; (uint32_t)szBufferInput & 3 && nOffset; nOffset++) {
+      for (nOffset = (intptr_t)szBufferOutput - (intptr_t)pDstLast; (uintptr_t)szBufferInput & 3 && nOffset; nOffset++) {
         dwWord = *(uint32_t*)szBufferInput;
-        szBufferInput = (char*)((int)szBufferInput + 1);
+        szBufferInput = (char*)((char*)szBufferInput + 1);
         pDstLast[nOffset] = (char)dwWord;
         if ((char)dwWord == '\0') {
           return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput));
@@ -1191,7 +1191,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
         nOffsetPrev = nOffset;
         while (true) {
           dwMask2 &= 0x81010101;
-          szBufferInput = (char*)((int)szBufferInput + 4);
+          szBufferInput = (char*)((char*)szBufferInput + 4);
           if (dwMask2) {
             break;
           }
@@ -1237,7 +1237,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
           }
 
           dwWord = *(uint32_t*)szBufferInput;
-          szBufferInput = (char*)((int)szBufferInput + 4);
+          szBufferInput = (char*)((char*)szBufferInput + 4);
           cByte = (char)dwWord;
         }
       }
@@ -1245,7 +1245,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
       copy_tail_bytes:
       for (nOffset += -3; nOffset; nOffset++) {
         dwWord = *(uint32_t*)szBufferInput;
-        szBufferInput = (char*)((int)szBufferInput + 1);
+        szBufferInput = (char*)((char*)szBufferInput + 1);
         pDstLast[nOffset] = (char)dwWord;
         if ((char)dwWord == '\0') {
           return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput));
@@ -1276,7 +1276,7 @@ uint32_t __stdcall SStrLen(char * szText) {
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t dwCarry = -1;
-    for (szToCheck = szText; pNext = szToCheck , dwAlignSaved = guStringAlignmentTemp , ((uint32_t)szToCheck & 3) != 0; szToCheck++) {
+    for (szToCheck = szText; pNext = szToCheck , dwAlignSaved = guStringAlignmentTemp , ((uintptr_t)szToCheck & 3) != 0; szToCheck++) {
       if (*szToCheck == '\0') {
         szToCheck += -(int)szText;
         return (uint32_t)szToCheck;
@@ -1296,7 +1296,7 @@ uint32_t __stdcall SStrLen(char * szText) {
       } while (!dwZeroMask);
 
       if ((char)dwWord == '\0') {
-        return (int)pStrPos - (int)szText;
+        return (intptr_t)pStrPos - (intptr_t)szText;
       }
       if ((char)(dwWord >> 8) == '\0') {
         return (uint32_t)(pStrPos + (1 - (int)szText));
@@ -1343,7 +1343,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
         *pDstLast = '\0';
       }
 
-      for (; pScanNext = (uint32_t*)pScan , dwWord = guStringAlignmentTemp , ((uint32_t)pScan & 3) != 0; pScan = (char*)((int)pScan + 1)) {
+      for (; pScanNext = (uint32_t*)pScan , dwWord = guStringAlignmentTemp , ((uintptr_t)pScan & 3) != 0; pScan = (char*)((char*)pScan + 1)) {
         if ((char)*(uint32_t*)pScan == '\0') {
           goto append_source;
         }
@@ -1357,7 +1357,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
           dwWord = dwCarry - dwWord2;
           dwCarry = dwWord | dwWord2;
           dwZeroMask = (dwWord2 + 0x7efefeff ^ dwWord) & 0x81010101;
-          pScanNext = (uint32_t*)((int)pScan + 4);
+          pScanNext = (uint32_t*)((char*)pScan + 4);
           dwWord = guStringAlignmentTemp;
         } while (!dwZeroMask);
 
@@ -1365,22 +1365,22 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
           goto append_source;
         }
         if ((char)(dwWord2 >> 8) == '\0') {
-          pScan = (char*)((int)pScan + 1);
+          pScan = (char*)((char*)pScan + 1);
           goto append_source;
         }
         if (!(dwWord2 & 0xff0000)) {
-          pScan = (char*)((int)pScan + 2);
+          pScan = (char*)((char*)pScan + 2);
           goto append_source;
         }
 
         dwWord = dwZeroMask;
       } while (dwWord2 & -16777216);
 
-      pScan = (char*)((int)pScan + 3);
+      pScan = (char*)((char*)pScan + 3);
       append_source:
-      for (nOffset = (int)pScan - (int)pDstLast; (uint32_t)szSource & 3 && nOffset; nOffset++) {
+      for (nOffset = (intptr_t)pScan - (intptr_t)pDstLast; (uintptr_t)szSource & 3 && nOffset; nOffset++) {
         dwWord = *(uint32_t*)szSource;
-        szSource = (char*)((int)szSource + 1);
+        szSource = (char*)((char*)szSource + 1);
         pDstLast[nOffset] = (char)dwWord;
         if ((char)dwWord == '\0') {
           return (uint32_t)(pDstLast + (nOffset - (int)szText));
@@ -1394,7 +1394,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
         nOffsetPrev = nOffset;
         while (true) {
           dwWord2 &= 0x81010101;
-          szSource = (char*)((int)szSource + 4);
+          szSource = (char*)((char*)szSource + 4);
           if (dwWord2) {
             break;
           }
@@ -1440,7 +1440,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
           }
 
           dwWord = *(uint32_t*)szSource;
-          szSource = (char*)((int)szSource + 4);
+          szSource = (char*)((char*)szSource + 4);
           cByte = (char)dwWord;
         }
       }
@@ -1448,7 +1448,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
       copy_tail_bytes:
       for (nOffset += -3; nOffset; nOffset++) {
         dwCarry = *(uint32_t*)szSource;
-        szSource = (char*)((int)szSource + 1);
+        szSource = (char*)((char*)szSource + 1);
         pDstLast[nOffset] = (char)dwCarry;
         if ((char)dwCarry == '\0') {
           return (uint32_t)(pDstLast + (nOffset - (int)szText));
@@ -1875,7 +1875,7 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
 
 // Bob Jenkins hash over a byte buffer.
 // Name from the PowerPC 1.13c Storm traceback table (bjhash @10047b40).
-uint32_t __fastcall SSTR_bjhash(int * pData, uint32_t nLength, uint32_t nInitVal) {
+uint32_t __fastcall SSTR_bjhash(uint8_t * pData, uint32_t nLength, uint32_t nInitVal) {
     uint32_t nA;
     uint32_t nTmp;
     uint32_t nB = 0x9e3779b9;
@@ -1886,9 +1886,9 @@ uint32_t __fastcall SSTR_bjhash(int * pData, uint32_t nLength, uint32_t nInitVal
       int nMix;
       nInitVal = nLength / 0xc;
       do {
-        nMix = *(uint8_t*)((int)pData + 4) + nB + (uint32_t)d2_load24((uint8_t*)((int)pData + 5)) * 0x100;
-        nB = *(uint8_t*)((int)pData + 8) + nC2 + (uint32_t)d2_load24((uint8_t*)((int)pData + 9)) * 0x100;
-        nC = *pData - nB - nMix + nC ^ nB >> 0xd;
+        nMix = pData[4] + nB + (uint32_t)d2_load24((uint8_t*)(pData + 5)) * 0x100;
+        nB = pData[8] + nC2 + (uint32_t)d2_load24((uint8_t*)(pData + 9)) * 0x100;
+        nC = *(int*)pData - nB - nMix + nC ^ nB >> 0xd;
         nA = nMix - nB - nC ^ nC << 8;
         nB = nB - nA - nC ^ nA >> 0xd;
         nC = nC - nB - nA ^ nB >> 0xc;
@@ -1898,7 +1898,7 @@ uint32_t __fastcall SSTR_bjhash(int * pData, uint32_t nLength, uint32_t nInitVal
         nC = nC - nA - nTmp ^ nA >> 3;
         nB = nTmp - nA - nC ^ nC << 10;
         nC2 = nA - nB - nC ^ nB >> 0xf;
-        pData = (int*)((int)pData + 0xc);
+        pData += 0xc;
         nInitVal--;
       } while (nInitVal);
     }
@@ -1906,27 +1906,27 @@ uint32_t __fastcall SSTR_bjhash(int * pData, uint32_t nLength, uint32_t nInitVal
     nA = nC2 + nLength;
     switch (nRemaining) {
       case 0xb:
-        nA += (uint32_t)*(uint8_t*)((int)pData + 10) * 0x1000000;
+        nA += (uint32_t)pData[10] * 0x1000000;
       case 10:
-        nA += (uint32_t)*(uint8_t*)((int)pData + 9) * 0x10000;
+        nA += (uint32_t)pData[9] * 0x10000;
       case 9:
-        nA += (uint32_t)*(uint8_t*)((int)pData + 8) * 0x100;
+        nA += (uint32_t)pData[8] * 0x100;
       case 8:
-        nB += (uint32_t)*(uint8_t*)((int)pData + 7) * 0x1000000;
+        nB += (uint32_t)pData[7] * 0x1000000;
       case 7:
-        nB += (uint32_t)*(uint8_t*)((int)pData + 6) * 0x10000;
+        nB += (uint32_t)pData[6] * 0x10000;
       case 6:
-        nB += (uint32_t)*(uint8_t*)((int)pData + 5) * 0x100;
+        nB += (uint32_t)pData[5] * 0x100;
       case 5:
-        nB += *(uint8_t*)((int)pData + 4);
+        nB += pData[4];
       case 4:
-        nC += (uint32_t)*(uint8_t*)((int)pData + 3) * 0x1000000;
+        nC += (uint32_t)pData[3] * 0x1000000;
       case 3:
-        nC += (uint32_t)*(uint8_t*)((int)pData + 2) * 0x10000;
+        nC += (uint32_t)pData[2] * 0x10000;
       case 2:
-        nC += (uint32_t)*(uint8_t*)((int)pData + 1) * 0x100;
+        nC += (uint32_t)pData[1] * 0x100;
       case 1:
-        nC += *(uint8_t*)pData;
+        nC += *pData;
       default:
         nC = nC - nA - nB ^ nA >> 0xd;
       nTmp = nB - nA - nC ^ nC << 8;
@@ -1967,7 +1967,7 @@ int __stdcall SStrHashHT(uint8_t * pszText) {
     }
 
     *pWrite = 0;
-    uint32_t dwHash = SSTR_bjhash((int*)szUpper, nLen, 0);
+    uint32_t dwHash = SSTR_bjhash(szUpper, nLen, 0);
     return dwHash;
 }
 
@@ -2162,7 +2162,7 @@ int64_t __stdcall SStrToInt64(char * pStr) {
           nAccum = nTmp + nAccum * 10;
           pCursor++;
           if (nAccum >= 0x19999999) {
-            nDigit = (int)pCursor - (int)pStr;
+            nDigit = (intptr_t)pCursor - (intptr_t)pStr;
             nTmp = nDigit;
             fScale = fOne;
             fSquare = fBase;
@@ -2197,7 +2197,7 @@ int64_t __stdcall SStrToInt64(char * pStr) {
         } while (nTmp < 10);
 
         if (nAccum64) {
-          dVar1 = SSTR_PowDoubleInt((double)fBase, (int)pCursor - (int)pStr);
+          dVar1 = SSTR_PowDoubleInt((double)fBase, (intptr_t)pCursor - (intptr_t)pStr);
           nAccum64 = _allmul((uint32_t)(int64_t)(dVar1 + 0.5), (int)((uint64_t)(int64_t)(dVar1 + 0.5) >> 0x20), (uint32_t)nAccum64, nAccumHi);
           nResult = nAccum64 + (uint64_t)nAccum;
           goto apply_sign;
@@ -2267,7 +2267,7 @@ double __stdcall SStrToDouble(char * pStr) {
           nCurDigit = nExp + nCurDigit * 10;
           pCursor++;
           if ((uint32_t)nCurDigit >= 0x19999999) {
-            fResult = (int)pCursor - (int)pStr;
+            fResult = (intptr_t)pCursor - (intptr_t)pStr;
             nExp = fResult;
             if ((int)fResult < 0) {
               nExp = -fResult;
@@ -2303,7 +2303,7 @@ double __stdcall SStrToDouble(char * pStr) {
         } while (nExp < 10);
 
         if (dAccum != 0.0) {
-          dScale = SSTR_PowDoubleInt(10.0, (int)pCursor - (int)pStr);
+          dScale = SSTR_PowDoubleInt(10.0, (intptr_t)pCursor - (intptr_t)pStr);
           dAccumSlot = (double)nCurDigit;
           if (nCurDigit < 0) {
             dAccumSlot += 4294967296.0;
@@ -2457,7 +2457,7 @@ float __stdcall SStrToFloat(char * pStr) {
           nCurDigit = fExpScratch + nCurDigit * 10;
           pCursor++;
           if ((uint32_t)nCurDigit >= 0x19999999) {
-            nAbsExp = (int)pCursor - (int)pStr;
+            nAbsExp = (intptr_t)pCursor - (intptr_t)pStr;
             fExpScratch = nAbsExp;
             dScale = 1.0;
             dPow = 10.0;
@@ -2495,7 +2495,7 @@ float __stdcall SStrToFloat(char * pStr) {
         } while (fExpScratch < 10);
 
         if (dAccum != 0.0) {
-          dScale = SSTR_PowDoubleInt(10.0, (int)pCursor - (int)pStr);
+          dScale = SSTR_PowDoubleInt(10.0, (intptr_t)pCursor - (intptr_t)pStr);
           fParsedValue = (long double)nCurDigit;
           if (nCurDigit < 0) {
             fParsedValue += (long double)4294967296.0;
@@ -2685,7 +2685,7 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
       }
 
       if (pnCharsRead) {
-        *pnCharsRead = (int)pEnd - (int)pszUTF16 >> 1;
+        *pnCharsRead = (intptr_t)pEnd - (intptr_t)pszUTF16 >> 1;
         return nUTF8Len;
       }
     }
@@ -2792,10 +2792,10 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
     iResult = -1;
     report_counts:
     if (pnBytesRead) {
-      *pnBytesRead = (int)pInCur - (int)pInEnd >> 1;
+      *pnBytesRead = (intptr_t)pInCur - (intptr_t)pInEnd >> 1;
     }
     if (pnCharsWritten) {
-      *pnCharsWritten = (int)pInStart - (int)pbUTF8;
+      *pnCharsWritten = (intptr_t)pInStart - (intptr_t)pbUTF8;
     }
 
     return iResult;
@@ -2875,7 +2875,7 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
     }
 
     if (pnBytesRead) {
-      *pnBytesRead = (int)pEndInner - (int)szText;
+      *pnBytesRead = (intptr_t)pEndInner - (intptr_t)szText;
     }
 
     return nUTF16Len;
@@ -2972,10 +2972,10 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
     iAccum = -1;
     report_counts:
     if (pnBytesRead) {
-      *pnBytesRead = (int)pOutStart - (int)pInEnd;
+      *pnBytesRead = (intptr_t)pOutStart - (intptr_t)pInEnd;
     }
     if (pnCharsWritten) {
-      *pnCharsWritten = (int)pInStart - (int)pszUTF16Out >> 1;
+      *pnCharsWritten = (intptr_t)pInStart - (intptr_t)pszUTF16Out >> 1;
     }
 
     return iAccum;
@@ -3121,7 +3121,7 @@ void __stdcall UTF8_StepForwardOneChar(uint8_t * str_base, int position) {
     UTF8_AdvanceToCharBoundary(str_base, position + 1, 1);
 }
 
-static int __thiscall TRANSTBL_UnicodeToSingleByte(void * pThis, uint16_t * pXlatTbl, uint8_t * pbOut, int nCount) {
+static int __thiscall TRANSTBL_UnicodeToSingleByte(uint16_t * pThis, uint16_t * pXlatTbl, uint8_t * pbOut, int nCount) {
     uint8_t byMapped;
     uint16_t* pSearchEntry;
     int iSearchIdx;
@@ -3129,17 +3129,17 @@ static int __thiscall TRANSTBL_UnicodeToSingleByte(void * pThis, uint16_t * pXla
       return 0;
     }
 
-    uint16_t uCodepoint = *(uint16_t*)pThis;
+    uint16_t uCodepoint = *pThis;
     uint8_t* pOutCur = pbOut;
-    while (uCodepoint) {
+    while (uCodepoint != L'\0') {
       if (!nCount) {
-        return (int)pOutCur - (int)pbOut;
+        return (intptr_t)pOutCur - (intptr_t)pbOut;
       }
       if (uCodepoint < 0x100 && uCodepoint == pXlatTbl[uCodepoint]) {
-        *pOutCur = *(uint8_t*)pThis;
+        *pOutCur = (uint8_t)*pThis;
       } else {
         iSearchIdx = 0xff;
-        pSearchEntry = pXlatTbl + 0xfd;
+        pSearchEntry = (uint16_t*)(pXlatTbl + 0xfd);
         do {
           if (uCodepoint == pSearchEntry[2]) {
             break;
@@ -3173,8 +3173,8 @@ static int __thiscall TRANSTBL_UnicodeToSingleByte(void * pThis, uint16_t * pXla
         *pOutCur = byMapped;
       }
 
-      pSearchEntry = (uint16_t*)((int)pThis + 2);
-      pThis = (void*)((int)pThis + 2);
+      pSearchEntry = pThis + 1;
+      pThis = pThis + 1;
       pOutCur++;
       nCount--;
       uCodepoint = *pSearchEntry;
@@ -3185,7 +3185,7 @@ static int __thiscall TRANSTBL_UnicodeToSingleByte(void * pThis, uint16_t * pXla
       pOutCur++;
     }
 
-    return (int)pOutCur - (int)pbOut;
+    return (intptr_t)pOutCur - (intptr_t)pbOut;
 }
 
 static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, uint16_t * pDest, uint16_t * pXlatTbl) {
@@ -3197,7 +3197,7 @@ static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, 
     uint16_t* puVar1 = pDest;
     while (byCur) {
       if (!nCount) {
-        return (int)puVar1 - (int)pDest >> 1;
+        return (intptr_t)puVar1 - (intptr_t)pDest >> 1;
       }
 
       pbSrc++;
@@ -3212,19 +3212,19 @@ static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, 
       puVar1++;
     }
 
-    return (int)puVar1 - (int)pDest >> 1;
+    return (intptr_t)puVar1 - (intptr_t)pDest >> 1;
 }
 
 void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {
-    TRANSTBL_UnicodeToSingleByte(pSrcUTF16, gszUnicodeLatin1_1, pbOut, nCount);
+    TRANSTBL_UnicodeToSingleByte((uint16_t*)pSrcUTF16, gszUnicodeLatin1_1, pbOut, nCount);
 }
 
 void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {
-    TRANSTBL_UnicodeToSingleByte(pSrcUTF16, gszUnicodeLatin2_1, pbOut, nCount);
+    TRANSTBL_UnicodeToSingleByte((uint16_t*)pSrcUTF16, gszUnicodeLatin2_1, pbOut, nCount);
 }
 
 void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {
-    TRANSTBL_UnicodeToSingleByte(pSrcUTF16, gszUnicodeKorean_1, pbOut, nCount);
+    TRANSTBL_UnicodeToSingleByte((uint16_t*)pSrcUTF16, gszUnicodeKorean_1, pbOut, nCount);
 }
 
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count) {
@@ -3240,18 +3240,6 @@ void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int coun
 // ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
 void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count) {
     TRANSTBL_SingleByteToUnicode(src, count, dest, gszUnicodeKorean_1);
-}
-
-int __fastcall SSTR_StringLength(char * szText) {
-    int nLength = 0;
-    char cChar = *szText;
-    while (cChar != '\0') {
-      szText++;
-      nLength++;
-      cChar = *szText;
-    }
-
-    return nLength;
 }
 
 } // namespace Storm::Source::SSTR

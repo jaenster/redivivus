@@ -2,17 +2,14 @@
 
 #include "Source/D2Win/Src/D2WinList.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
+#include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Win/Src/D2WinArchive.h"
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Win/D2Win.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinList.h"
 #include "Source/D2Win/Src/D2WinList.data.h"
@@ -532,7 +529,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(pNewEntry->wszText, wszLocaleStr);
         D2WinFont::TEXT_CalcTextDimensions(wszLocaleStr, (int*)&pnFontType, (int*)&pnItemArray);
         pnFontType += 2;
-        if ((int)pnFontType > pList->sEntriesControl.nMaxTextWidth) {
+        if ((intptr_t)pnFontType > pList->sEntriesControl.nMaxTextWidth) {
           pList->sEntriesControl.nMaxTextWidth = (int32_t)pnFontType;
         }
 

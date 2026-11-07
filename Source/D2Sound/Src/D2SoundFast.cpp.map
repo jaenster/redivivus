@@ -389,6 +389,7 @@
         "AllocClientMemory"
       ],
       "usedTypes": [
+        "D2SoundWavCacheEntryStrc",
         "WAVEFORMATEX",
         "uint32_t"
       ]
@@ -413,6 +414,7 @@
       ],
       "usedTypes": [
         "D2SoundSmpStrc",
+        "D2SoundWavCacheEntryStrc",
         "int32_t",
         "uint8_t"
       ]
@@ -502,7 +504,8 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "D2SoundSmpStrc *"
+        "D2SoundSmpStrc *",
+        "D2SoundWavCacheEntryStrc"
       ]
     }
   ]

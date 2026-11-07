@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,11 +17,14 @@
 
 // Forward declarations
 struct D2DrlgLevelStrc;
+struct D2DrlgMapStrc;
 struct D2DrlgReplaceRoomStrc;
 struct D2RoomExStrc;
 typedef uint32_t eDrlgDirection;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgRoomExDataMazeStrc
+#define D2_DEFINED_D2DrlgRoomExDataMazeStrc
 struct __attribute__((packed)) D2DrlgRoomExDataMazeStrc {
     /* 0x00 */ D2DrlgGridStrc pOrientationGrid; // Orientation/shadow grid for outdoor tiles
     /* 0x14 */ D2DrlgGridStrc pWallGrid; // Wall grid for outdoor tiles
@@ -34,6 +40,7 @@ struct __attribute__((packed)) D2DrlgRoomExDataMazeStrc {
     /* 0x6C */ int nSubThemePicked; // Random subtheme variant picked (0-31)
 };
 
+#endif // D2_DEFINED_D2DrlgRoomExDataMazeStrc
 namespace D2Common::Drlg::Maze {
 
 // Function declarations
@@ -42,7 +49,7 @@ namespace D2Common::Drlg::Maze {
 // Directly sets a room's preset ID and variant in pRoomExData. Writes nPresetId and nVariant (stack arg) to the room data, and sets or clears the 'has preset' flag based on bHasPreset (stack arg). Returns the room pointer. No callers found (dead code).
 void __stdcall DRLGMAZE_SetRoomPresetDirect(struct D2RoomExStrc * pRoomEx, int nPresetId, int32_t nVariant, int32_t bHasPreset);
 // Searches the room's preset list for a matching preset ID, then replaces it with the new values from the stack args. Returns the matching node or 0.
-int __stdcall DRLGMAZE_FindAndReplacePreset(int pCtx, int nPresetId, int nNewPresetId, int nNewArg1, int nEnableFlag);
+struct D2RoomExStrc * __stdcall DRLGMAZE_FindAndReplacePreset(struct D2DrlgLevelStrc * pCtx, int nPresetId, int nNewPresetId, int nNewArg1, int nEnableFlag);
 // Iterates every room in pRoomEx's level and, for eligible non-preset neighbor pairs that are adjacent but not already linked, rolls the neighbor's seed against LvlMazeTxt.Merge to decide whether to merge them. On a hit, allocates orthogonal link nodes between the two rooms and calls DRLGMAZE_PickRoomPreset on the neighbor.
 void __stdcall DRLGMAZE_PickRoomPresets(struct D2RoomExStrc * pRoomEx);
 // DRLGMAZE_AllocRoomAndPickPreset - Maze.cpp
@@ -75,7 +82,7 @@ struct D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(struct D2DrlgLevelS
 uint32_t * __stdcall ReplaceRoom(struct D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, struct D2DrlgLevelStrc * pLevel, uint32_t * pRoll);
 void __fastcall PickSummonerLocation(struct D2DrlgLevelStrc * pLevel);
 // Randomises the stair/Nilathak spawn layout for the Halls of Pain / Halls of Vaught area (Act 5 Temple levels 0x7b-0x7c). Rolls a seed-derived value mod 3 to pick one of three room replacement sets, then calls ReplaceRoom with gaDrlgRoomReplacementsA (non-Vaught) and/or gaDrlgRoomReplacementsB (level 0x7b only). Halts with an internal error if the Vaught level did not have its replacement applied by replacement set A.
-int32_t ReplaceRooms(struct D2DrlgLevelStrc * pLevel);
+void ReplaceRooms(struct D2DrlgLevelStrc * pLevel);
 // DRLG maze generation: for special-room levels (selected by nLevelType, mapping to a base preset-file offset), randomly marks a fraction (~roomCount/5, min 2) of the level's RoomEx entries with a chosen preset variant. Uses the level's LCG seed to Fisher-Yates shuffle a 15-entry index table, then walks RoomEx rooms matching a target file index and rewrites their room-data fields (sets bit 2, replaces the file id, sets field[1]=-1). Skips eD2LevelId 8 (Den of Evil), hence the name. Mutates pLevel->sSeed as it consumes randoms.
 void __fastcall ForAllButDenOfEvil(struct D2DrlgLevelStrc * pLevel);
 void __fastcall DRLGMAZE_InitializeLevel(struct D2DrlgLevelStrc * pLevel);

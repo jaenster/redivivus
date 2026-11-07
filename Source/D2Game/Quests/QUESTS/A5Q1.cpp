@@ -2,13 +2,9 @@
 
 #include "Source/D2Game/Quests/QUESTS/A5Q1.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/Preset.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
@@ -18,8 +14,7 @@
 #include "Source/D2Game/Quests/QUESTS/A5Q3.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -129,7 +124,7 @@ void Q31_HandleLarzukRewardState(D2QuestDataStrc * pQuestData, int32_t nParam, D
     uint8_t byUnitLow = (uint8_t)(uintptr_t)pUnit;
     if (pQuestSpecificData->bLarzukTalked == 1) {
       pQuestData->nQuestPacketFlags = byUnitLow;
-      QUEST_SetStateAndBroadcast(pQuestData, (int)((uintptr_t)&pUnit->eUnitType + 1), pUnit, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
+      QUEST_SetStateAndBroadcast(pQuestData, (int)((intptr_t)&pUnit->eUnitType + 1), pUnit, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, 1);
       pQuestSpecificData->bLarzukTalked = byUnitLow;
     }
     if (pQuestSpecificData->bRewardAccepted != 1) {
@@ -359,7 +354,7 @@ BOOL __fastcall Q31_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q31_SetCompleteForPartyMember, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q31_SetCompleteForPartyMember, nullptr);
       }
     }
 

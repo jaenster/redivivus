@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -81,7 +84,7 @@ int __fastcall SAFESOCK_SetSocketNonBlocking(struct D2NetDataStrc * pNetData, u_
 int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(struct D2NetDataStrc * pNetData, char * pBytes, size_t nSize);
 void __fastcall SAFESOCK_EnterCriticalSection(struct D2NetDataStrc * pNetData);
 // Leaves the critical section embedded at offset 0xC within the safesock structure. Thin wrapper around Win32 LeaveCriticalSection.
-void __fastcall LeaveCriticalSection_Safesock(void * pSafesockStrc);
+void __fastcall LeaveCriticalSection_Safesock(struct D2NetDataStrc * pSafesockStrc);
 void __fastcall SAFESOCK_EnableNonBlocking(struct D2NetDataStrc * pNetData);
 void __fastcall SAFESOCK_DisableNonBlocking(struct D2NetDataStrc * pNetData);
 struct D2NetDataStrc * __fastcall SAFESOCK_CreateBlocking(char * szText1, int nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2);

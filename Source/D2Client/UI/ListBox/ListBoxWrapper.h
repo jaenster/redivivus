@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -157,6 +160,8 @@ struct ListBoxWrapperVtable;
 struct ListBoxImplementation;
 
 // Data types
+#ifndef D2_DEFINED_D2ListBoxItemStrc
+#define D2_DEFINED_D2ListBoxItemStrc
 struct __attribute__((packed)) D2ListBoxItemStrc {
     /* 0x0000 */ uint16_t wszText[6][1024]; // 6 columns of 0x400 WCHAR. WSTRING_PutWideCharIntoBuffer(row, src, 0x3ff) then a NUL word at index 0x3ff (LISTBOX_AddItem @004be500).
     /* 0x3000 */ uint16_t field_0x3000; // not observed in any access
@@ -165,12 +170,18 @@ struct __attribute__((packed)) D2ListBoxItemStrc {
     /* 0x300A */ uint32_t dwAuxData; // 004be703 MOV [i*0x300e+0x3012+this]
 };
 
+#endif // D2_DEFINED_D2ListBoxItemStrc
+#ifndef D2_DEFINED_ListBoxWrapper
+#define D2_DEFINED_ListBoxWrapper
 struct ListBoxWrapper {
     /* 0x00 */ struct ListBoxWrapperVtable * pVtable; // virtual function table
     /* 0x04 */ uint32_t nUnused04;
     /* 0x08 */ struct ListBoxImplementation * pImplementation;
 };
 
+#endif // D2_DEFINED_ListBoxWrapper
+#ifndef D2_DEFINED_ListBoxImplementationVtable
+#define D2_DEFINED_ListBoxImplementationVtable
 struct ListBoxImplementationVtable {
     /* 0x00 */ ::ListBoxImplementation * (__thiscall *ScalarDeletingDestructor)(::ListBoxImplementation *, uint32_t);
     /* 0x04 */ void (__thiscall *Draw)(::ListBoxImplementation *);
@@ -190,6 +201,9 @@ struct ListBoxImplementationVtable {
     /* 0x3C */ void (__thiscall *AddItem)(::ListBoxImplementation *, uint16_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *, uint32_t, int, BOOL, int);
 };
 
+#endif // D2_DEFINED_ListBoxImplementationVtable
+#ifndef D2_DEFINED_ListBoxWrapperVtable
+#define D2_DEFINED_ListBoxWrapperVtable
 struct ListBoxWrapperVtable {
     /* 0x00 */ ::ListBoxWrapper * (__thiscall *ScalarDeletingDestructor)(::ListBoxWrapper *, uint32_t);
     /* 0x04 */ void (__thiscall *Draw)(::ListBoxWrapper *);
@@ -209,6 +223,9 @@ struct ListBoxWrapperVtable {
     /* 0x3C */ void (__thiscall *Clear)(::ListBoxWrapper *);
 };
 
+#endif // D2_DEFINED_ListBoxWrapperVtable
+#ifndef D2_DEFINED_ListBoxImplementation
+#define D2_DEFINED_ListBoxImplementation
 struct __attribute__((packed)) ListBoxImplementation {
     /* 0x000000 */ struct ListBoxImplementationVtable * pVtable; // 004bf678 MOV [ESI],0x6daaec (LISTBOX_Create); 004bf8ca MOV [ESI],0x6da6c0 (LISTBOX_BaseDeletingDestructor)
     /* 0x000004 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
@@ -243,6 +260,7 @@ struct __attribute__((packed)) ListBoxImplementation {
     /* 0x180772 */ uint32_t nDrawCount; // 004bebe7 CMP [EDI+0x180772],0x2 in LISTBOX_OnMouseClick - guards the pfnOnItemActivated dispatch
 };
 
+#endif // D2_DEFINED_ListBoxImplementation
 namespace D2Client::UI::ListBox::ListBoxWrapper {
 
 // Function declarations

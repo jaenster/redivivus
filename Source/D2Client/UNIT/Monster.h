@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,7 @@ struct D2AiGeneralStrc;
 struct D2DynamicPathStrc;
 struct D2MonStatsTxt;
 struct D2MonsterAiParameterStruct;
+struct D2PalShiftEntryStrc;
 struct D2RoomStrc;
 struct D2ServerMessageHandleStrc;
 struct D2UnitStrc;
@@ -40,6 +44,8 @@ struct D2MonStats2Txt;
 struct D2MonsterNameStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2AiParamStrc
+#define D2_DEFINED_D2AiParamStrc
 struct D2AiParamStrc {
     /* 0x00 */ struct D2AiGeneralStrc * pMonsterAiGeneral;
     /* 0x04 */ void (__fastcall *fpAiFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
@@ -52,6 +58,7 @@ struct D2AiParamStrc {
     /* 0x20 */ struct D2MonStats2Txt * pMonStats2;
 };
 
+#endif // D2_DEFINED_D2AiParamStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2MercInitArgStrc {
     D2MercInitArgStrc() = default;
@@ -65,11 +72,16 @@ struct D2MercInitArgStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2MonMsgAnimModeStrc
+#define D2_DEFINED_D2MonMsgAnimModeStrc
 struct __attribute__((packed)) D2MonMsgAnimModeStrc {
     /* 0x00 */ eD2MonsterAnimMode eMode; // Mode MonsterMessage sets for this message id; 0x10 = none (MONSTER_IsModeMoveFlagSet rejects >= 0x10)
     /* 0x04 */ int bCheckMoveFlag; // Nonzero: test the MonStats2 per-mode move flag (+0x104 bit[mode])
 };
 
+#endif // D2_DEFINED_D2MonMsgAnimModeStrc
+#ifndef D2_DEFINED_D2MonStats2Txt
+#define D2_DEFINED_D2MonStats2Txt
 struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x000 */ short Id;
     /* 0x002 */ uint8_t field_0x2;
@@ -158,6 +170,7 @@ struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x133 */ uint8_t field_0x133;
 };
 
+#endif // D2_DEFINED_D2MonStats2Txt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2MonsterAiSelectTarget {
     /* 0x00 */ uint32_t nY;
@@ -168,19 +181,23 @@ struct D2MonsterAiSelectTarget {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2MonsterAnimModeFlagsStrc
+#define D2_DEFINED_D2MonsterAnimModeFlagsStrc
 struct D2MonsterAnimModeFlagsStrc {
     /* 0x00 */ int nSequenceFlags;
     /* 0x04 */ int nAltFlags;
     /* 0x08 */ int bHasMonStats;
 };
 
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+#endif // D2_DEFINED_D2MonsterAnimModeFlagsStrc
+#ifndef D2_DEFINED_D2MonsterCofStatusEntryStrc
+#define D2_DEFINED_D2MonsterCofStatusEntryStrc
 struct D2MonsterCofStatusEntryStrc {
     /* 0x00 */ int nModeLoadStatus[20]; // Load status per mode: 0=not loaded, 1=loaded
     /* 0x50 */ int nModePrecacheStatus[20]; // Precache status per mode: 0=not started, 1=in progress
 };
 
-#endif // D2_MODULE_D2Client
+#endif // D2_DEFINED_D2MonsterCofStatusEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 union D2MonsterData0x2c {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
@@ -211,16 +228,22 @@ struct D2MonsterDataComponents {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2MonsterEquipEntryStrc
+#define D2_DEFINED_D2MonsterEquipEntryStrc
 struct D2MonsterEquipEntryStrc {
     /* 0x00 */ char szItemCode[4]; // space-padded item code
     /* 0x04 */ int dwBodyLocAndFlag; // 0x101..0x10a, read with the code by MONSTER_EquipFromClassTable
 };
 
+#endif // D2_DEFINED_D2MonsterEquipEntryStrc
+#ifndef D2_DEFINED_D2MonsterForEachStruct
+#define D2_DEFINED_D2MonsterForEachStruct
 struct D2MonsterForEachStruct {
     /* 0x00 */ int value;
     /* 0x04 */ uint32_t (__fastcall *pCallBack)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2MonsterAiParameterStruct *);
 };
 
+#endif // D2_DEFINED_D2MonsterForEachStruct
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2MonsterModeStrc {
     /* 0x00 */ struct D2AiGeneralStrc * pMonsterAiGeneral; // AI general data (also flag bytes [0..1] cleared on path/target change). Aliases D2AiParamStrc.pMonsterAiGeneral
@@ -238,10 +261,23 @@ struct D2MonsterModeStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2MonsterNameStrc
+#define D2_DEFINED_D2MonsterNameStrc
 struct D2MonsterNameStrc {
     /* 0x00 */ uint16_t wszMonsterName[18];
 };
 
+#endif // D2_DEFINED_D2MonsterNameStrc
+#ifndef D2_DEFINED_D2MonsterPalShiftSlotStrc
+#define D2_DEFINED_D2MonsterPalShiftSlotStrc
+struct D2MonsterPalShiftSlotStrc {
+    /* 0x00 */ int32_t nMonsterId;
+    /* 0x04 */ struct D2PalShiftEntryStrc * pPalShift;
+};
+
+#endif // D2_DEFINED_D2MonsterPalShiftSlotStrc
+#ifndef D2_DEFINED_D2MonsterUModHandlerRowStrc
+#define D2_DEFINED_D2MonsterUModHandlerRowStrc
 struct D2MonsterUModHandlerRowStrc {
     /* 0x00 */ void (__fastcall *pfnHandler0)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 0
     /* 0x04 */ void (__fastcall *pfnHandler1)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Handler for dispatch type 1
@@ -251,6 +287,7 @@ struct D2MonsterUModHandlerRowStrc {
     /* 0x14 */ void (__fastcall *pfnHandlerInit)(::SGAMEDATA *, struct D2UnitStrc *, uint32_t, int32_t); // Init handler (dispatch type 5), called by MONSTER_DispatchUniqueModifiers when param_3==5
 };
 
+#endif // D2_DEFINED_D2MonsterUModHandlerRowStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -283,7 +320,7 @@ int32_t * __fastcall GetMonsterAi(struct D2UnitStrc * pUnit);
 int32_t __fastcall GetOwnerGUID(struct D2UnitStrc * pUnit);
 void __fastcall SetOwnerGUID(struct D2UnitStrc * pUnit, int32_t nOwnerGUID);
 int * __fastcall MONSTER_GetAiDataPtr(struct D2UnitStrc * pUnit);
-void __fastcall Unreferenced_004ae190(int param_1, int param_2);
+void __fastcall Unreferenced_004ae190(struct D2UnitStrc * param_1, int param_2);
 // Allocates and attaches a D2LightMapStrc to a monster unit. Computes the final light radius as the max of the monster's equipment light and its MonStats2 byLight value; special-cases Den of Evil quest monsters (clamped to radius 3). Replaces any existing light map and updates the unit's stored light radius.
 void __fastcall MONSTER_InitLightMap(struct D2UnitStrc * pUnit);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
@@ -297,18 +334,18 @@ void __fastcall MONSTER_ExplodeOwnerMissile(struct D2UnitStrc * pUnit);
 // Returns the catapult's facing direction if pUnit2 is a Catapult (BaseId 0x12a), is within collision distance 2 of pUnit, and pUnit is positioned exactly 3*composite-sprite-dims ahead in the catapult's facing direction. Returns 0 if any condition fails, indicating pUnit is not at the valid firing position.
 uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t dwParam1, uint32_t dwParam2);
 // Core initialization of a freshly allocated monster unit from its MonStats/MonStats2 record. Validates nClassId against the MonStats table, allocates the unit stat list and sets base stats: level (per-difficulty from TreasureClass area), attackrate, velocity%, animrate, and the six per-difficulty resistances (dmg/magic/fire/light/cold/poison), then applies difficulty scaling and base maxhp/hitpoints. Allocates the dynamic path (room nParam1, mode/coords from params) and sets velocity. Creates a player inventory for NPCs/interactables (or special class ids). Sets the update flag (nParam2). For dead/no-deadCol monsters removes collision, shrinks width and switches to corpse collision. Randomizes start gfx frame; sets targetable/shadow/valid-target/can-be-attacked unit flags from MonStats2 isSel/shadow/isAtt. Sets monstats type, special-monster init, light map, creates skill list, applies unique modifiers, then adds the monster's up to 8 skills (level += difficulty MonsterSkillBonus) with their modes. Finally computes an initial facing direction (random or special-case per base/class id, e.g. catapult firing position) and sets the path direction. nParam1=room ptr, pSkillIdPtr/nOverrideMode feed path alloc.
-void __fastcall MONSTER_InitMonsterUnit(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nOverrideMode, short * pSkillIdPtr, int32_t nClassId, uint32_t nAnimMode);
+void __fastcall MONSTER_InitMonsterUnit(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nOverrideMode, int32_t pSkillIdPtr, int32_t nClassId, uint32_t nAnimMode);
 void __fastcall FreeMonster(struct D2UnitStrc * pUnit);
 // Morphs an existing unit into a different monster type (nClassId), used by polymorph/transform effects. Validates nClassId against MonStats/MonStats2 tables, then tears down the old unit's gfx, inventory, lightmap and AI param block, assigns the new classId, and rebuilds it: sets velocities/collision, recreates inventory if the new monster is interactive, allocates a fresh stat list and applies base stats (attackrate/velocity/animrate=100, per-difficulty resistances from MonStats, maxhp/hitpoints=0x8000), reseeds the gfx start frame, updates targetable/shadow/attackable unit flags from MonStats2, recreates the skill list adding the 8 MonStats skills, randomizes facing for non-NPCs, reinits gfx (WALL2_InitUnitGfx) and computes a palette-shift index from TransLvl with special-case overrides for certain classIds/difficulties. Returns early without effect if the unit has no dynamic path.
 void __fastcall MONSTER_TransformToClassId(struct D2UnitStrc * pUnit, int32_t nClassId);
 // Spawns a spread of missiles for Fetish monsters (BaseId 0x3f). Reads the difficulty-scaled count from MonStatsTxt TreasureClass, seeds an RNG from the unit GUID, and fires nMissileId missiles at alternating X/Y offsets (±5 tiles) around (nTargetX, nTargetY) via MakeMissile.
 void __stdcall MONSTER_SpawnFetishMissileSpread(struct D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nTargetX, int32_t nTargetY);
 // Spawns blood-trail particle missiles behind a bleeding running monster. Uses the unit seed to probabilistically skip frames (1/25, and 1/3 while running). Only proceeds for UNIT_MONSTER whose MonStats2 byBleed flag is set; spawn count comes from the item_extrablood stat or the passed default. For each drop it picks a direction-biased offset slot, scans the 8 collision-offset slots (gTxtCompilationMemPool tables) for a non-blocking tile near the unit's path X/Y, rolls a blood-missile variant (MISSILE_Blood1 + byBleed range), and creates it via MakeMissile. Advances the seed throughout; return value is a leftover register, not meaningful.
-struct D2MonStats2Txt * __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, struct D2MonStats2Txt * pD2MonStats2Txt, int nBloodDirSlot);
+void __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, struct D2MonStats2Txt * pD2MonStats2Txt, int nBloodDirSlot);
 // Central per-monster state/mode message dispatcher. Given a message type nParam (0..0x1d), a monster D2UnitStrc, and a server message handle, transitions the monster's path/anim mode: walk/run/move-to (0,1,4,5,etc.), got-hit (6,0x13), death (8) and dying/corpse (9), sequence/skill start (0x14,0x15,0x16), town-walk (0x12), etc. Restores collision and resets the 0x2000 path flag, sets target unit by type/GUID, calculates paths, applies per-classId special cases (unique death overlays/missiles/sounds, burrow transitions, special facing) keyed on the monster's base MonStats id, and updates UNITFLAG targetable/shadow/nodraw flags. Halts via Fog ErrorManager when a required pMessage is null. Tail applies velocity-percent stat changes and dispatches unique-mod walk callbacks. __fastcall (nParam in ECX, pUnit in EDX).
 void __fastcall MonsterMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);
-int __fastcall Unreferenced_004b1030(int param_1);
-uint32_t __fastcall NPCMENU_ParseSpeechData(int * pUnit, uint8_t * pParam, int * pnSpeechResult);
+struct D2UnitStrc * __fastcall Unreferenced_004b1030(struct D2UnitStrc * param_1);
+uint32_t __fastcall NPCMENU_ParseSpeechData(struct D2UnitStrc * pUnit, uint8_t * pParam, int * pnSpeechResult);
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(struct D2UnitStrc * pUnit, struct D2MercInitArgStrc * pMercInit);
 int __fastcall MONSTER_CanBeConverted(struct D2UnitStrc * pUnit);

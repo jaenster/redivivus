@@ -840,8 +840,8 @@ void WriteCmpData(TCmpStruct * pCmp) {
     bool bEndOfInput;
     bEndOfInput = false;
     pCmp->out_buff[0] = (uint8_t)pCmp->ctype;
-    uint16_t* pbWindowCursor;
-    pbWindowCursor = (uint16_t*)(pCmp->work_buff + pCmp->dsize_bytes + 0x204);
+    uint8_t* pbWindowCursor;
+    pbWindowCursor = pCmp->work_buff + pCmp->dsize_bytes + 0x204;
     pCmp->out_buff[1] = (uint8_t)pCmp->dsize_bits;
     pCmp->out_bytes = 2;
     lmemset((uint32_t*)(pCmp->out_buff + 2), 0, 0x800);
@@ -878,13 +878,13 @@ void WriteCmpData(TCmpStruct * pCmp) {
       }
       if (__frame0.nPassCount) {
         if (__frame0.nPassCount != 1) {
-          SortBuffer(pCmp, (uint8_t*)((int)pbWindowCursor - nDictSizeBytes), pbWindowEnd + 1);
+          SortBuffer(pCmp, (uint8_t*)((char*)pbWindowCursor - nDictSizeBytes), pbWindowEnd + 1);
         } else {
-          SortBuffer(pCmp, (uint8_t*)((int)pbWindowCursor + (0x204 - nDictSizeBytes)), pbWindowEnd + 1);
+          SortBuffer(pCmp, (uint8_t*)((char*)pbWindowCursor + (0x204 - nDictSizeBytes)), pbWindowEnd + 1);
           __frame0.nPassCount++;
         }
       } else {
-        SortBuffer(pCmp, (uint8_t*)pbWindowCursor, pbWindowEnd + 1);
+        SortBuffer(pCmp, pbWindowCursor, pbWindowEnd + 1);
         __frame0.nPassCount++;
         if (pCmp->dsize_bytes != 0x1000) {
           __frame0.nPassCount++;
@@ -892,45 +892,45 @@ void WriteCmpData(TCmpStruct * pCmp) {
       }
 
       encode_next:
-      if (pbWindowEnd > (unsigned char*)pbWindowCursor) {
-        nDictSize = FindRep(pCmp, (uint8_t*)pbWindowCursor);
+      if (pbWindowEnd > pbWindowCursor) {
+        nDictSize = FindRep(pCmp, pbWindowCursor);
         while (true) {
           if (!nDictSize || nDictSize == 2 && pCmp->distance >= 0x100) {
             goto emit_literal;
           }
-          if (bEndOfInput && (uint8_t*)((int)pbWindowCursor + nDictSize) > pbWindowEnd) {
+          if (bEndOfInput && (uint8_t*)((char*)pbWindowCursor + nDictSize) > pbWindowEnd) {
             break;
           }
-          if (nDictSize >= 8 || (uint8_t*)((int)pbWindowCursor + 1) >= pbWindowEnd) {
+          if (nDictSize >= 8 || (uint8_t*)((char*)pbWindowCursor + 1) >= pbWindowEnd) {
             goto emit_match;
           }
 
           nBytesRead = pCmp->distance;
-          nNextMatchLen = FindRep(pCmp, (uint8_t*)((int)pbWindowCursor + 1));
+          nNextMatchLen = FindRep(pCmp, (uint8_t*)((char*)pbWindowCursor + 1));
           if (nDictSize >= nNextMatchLen || nDictSize + 1 >= nNextMatchLen && nBytesRead <= 0x80) {
             pCmp->distance = nBytesRead;
             goto emit_match;
           }
 
-          wLiteral = *pbWindowCursor;
-          pbWindowCursor = (uint16_t*)((int)pbWindowCursor + 1);
+          wLiteral = *(uint16_t*)pbWindowCursor;
+          pbWindowCursor = (uint8_t*)((char*)pbWindowCursor + 1);
           OutputBits(pCmp, (uint32_t)pCmp->nChBits[(uint8_t)wLiteral], (uint32_t)pCmp->nChCodes[(uint8_t)wLiteral]);
           nDictSize = nNextMatchLen;
         }
 
-        nDictSize = (int)pbWindowEnd - (int)pbWindowCursor;
+        nDictSize = (intptr_t)pbWindowEnd - (intptr_t)pbWindowCursor;
         if (nDictSize >= 2 && (nDictSize != 2 || pCmp->distance < 0x100)) {
           emit_match:
           OutputBits(pCmp, (uint32_t)pCmp->nChBits[nDictSize + 0xfe], (uint32_t)pCmp->nChCodes[nDictSize + 0xfe]);
           if (nDictSize == 2) {
             nDictSize = pCmp->distance >> 2;
             OutputBits(pCmp, (uint32_t)pCmp->dist_bits[nDictSize], (uint32_t)pCmp->dist_codes[nDictSize]);
-            pbWindowCursor++;
+            pbWindowCursor = (uint8_t*)((char*)pbWindowCursor + 2);
             OutputBits(pCmp, 2, pCmp->distance & 3);
           } else {
             nBytesRead = pCmp->distance >> D2_SHIFT_COUNT(pCmp->dsize_bits);
             OutputBits(pCmp, (uint32_t)pCmp->dist_bits[nBytesRead], (uint32_t)pCmp->dist_codes[nBytesRead]);
-            pbWindowCursor = (uint16_t*)((int)pbWindowCursor + nDictSize);
+            pbWindowCursor = (uint8_t*)((char*)pbWindowCursor + nDictSize);
             OutputBits(pCmp, pCmp->dsize_bits, pCmp->dsize_mask & pCmp->distance);
           }
 
@@ -938,8 +938,8 @@ void WriteCmpData(TCmpStruct * pCmp) {
         }
 
         emit_literal:
-        wLiteral = *pbWindowCursor;
-        pbWindowCursor = (uint16_t*)((int)pbWindowCursor + 1);
+        wLiteral = *(uint16_t*)pbWindowCursor;
+        pbWindowCursor = (uint8_t*)((char*)pbWindowCursor + 1);
         OutputBits(pCmp, (uint32_t)pCmp->nChBits[(uint8_t)wLiteral], (uint32_t)pCmp->nChCodes[(uint8_t)wLiteral]);
         goto encode_next;
       }
@@ -947,7 +947,7 @@ void WriteCmpData(TCmpStruct * pCmp) {
         break;
       }
 
-      pbWindowCursor += -0x800;
+      pbWindowCursor = (uint8_t*)((char*)pbWindowCursor - 0x1000);
       implode::lmemcpy((uint32_t*)pCmp->work_buff, (uint32_t*)(pCmp->work_buff + 0x1000), pCmp->dsize_bytes + 0x204);
     } while (true);
 
@@ -1154,9 +1154,9 @@ void lmemcpy(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize) {
     for (nCount = nSize & 3; nCount; nCount--) {
       uint8_t uByte;
       uByte = *(uint8_t*)pSrc;
-      pSrc = (uint32_t*)((int)pSrc + 1);
+      pSrc = (uint32_t*)((char*)pSrc + 1);
       *(uint8_t*)pDst = uByte;
-      pDst = (uint32_t*)((int)pDst + 1);
+      pDst = (uint32_t*)((char*)pDst + 1);
     }
 }
 
@@ -1197,7 +1197,7 @@ void lmemset(uint32_t * pDst, uint8_t byFill, uint32_t nSize) {
 
     for (; nCount; nCount--) {
       *(uint8_t*)pDst = byFill;
-      pDst = (uint32_t*)((int)pDst + 1);
+      pDst = (uint32_t*)((char*)pDst + 1);
     }
 }
 

@@ -4,13 +4,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 
 // Forward declarations
 struct D2PlayerListStrc;
@@ -20,11 +23,16 @@ struct D2UnitStrc;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#ifndef D2_DEFINED_D2RosterLinkListStrc
+#define D2_DEFINED_D2RosterLinkListStrc
 struct D2RosterLinkListStrc {
     /* 0x00 */ int nRosterGUID;
     /* 0x04 */ struct D2RosterLinkListStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2RosterLinkListStrc
+#ifndef D2_DEFINED_D2RosterPetSeedStrc
+#define D2_DEFINED_D2RosterPetSeedStrc
 #pragma pack(push, 1)
 struct D2RosterPetSeedStrc {
     /* 0x00 */ D2SeedStrc sSeed;
@@ -32,6 +40,9 @@ struct D2RosterPetSeedStrc {
 };
 #pragma pack(pop)
 
+#endif // D2_DEFINED_D2RosterPetSeedStrc
+#ifndef D2_DEFINED_D2RosterPetStrc
+#define D2_DEFINED_D2RosterPetStrc
 struct __attribute__((packed)) D2RosterPetStrc {
     /* 0x00 */ int nRosterClass;
     /* 0x04 */ int nSkillID;
@@ -46,6 +57,7 @@ struct __attribute__((packed)) D2RosterPetStrc {
     /* 0x30 */ struct D2RosterPetStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2RosterPetStrc
 namespace D2Client::GAME::Roster {
 
 // Function declarations
@@ -61,8 +73,8 @@ struct D2RosterStrc * __fastcall GetNextRosterPlayer(struct D2RosterStrc * pRost
 char * __fastcall GetRosterName(struct D2RosterStrc * pRoster);
 // Insertion-sorts a singly-linked D2RosterStrc list ascending by szRosterName (lexicographic). Builds a new sorted list by walking the original and inserting each node at its comparison position. Returns the sorted head, or NULL on NULL input.
 struct D2RosterStrc * __stdcall ROSTER_SortByName(struct D2RosterStrc * pRoster);
-int Unreferenced_004796b0();
-int Unreferenced_00479740();
+struct D2RosterStrc * Unreferenced_004796b0();
+struct D2RosterStrc * Unreferenced_00479740();
 // @sourcefile .\GAME\Roster.cpp
 void AllocRosterPartyList(uint16_t nPartyId);
 // @sourcefile .\GAME\Roster.cpp

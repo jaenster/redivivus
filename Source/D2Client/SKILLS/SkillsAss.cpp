@@ -6,19 +6,11 @@
 #include "Source/D2Client/SKILLS/Skills.h"
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Client/UNIT/CUnit.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -208,7 +200,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom(D2UnitStrc * p
     }
 
     int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
-    Skills::SKILL_SpawnRandomMissilesInArea(pUnit, (uint8_t*)eMissileId, nPrgCalc, nAuraRange, eSkill, nSkillLvl);
+    Skills::SKILL_SpawnRandomMissilesInArea(pUnit, eMissileId, nPrgCalc, nAuraRange, eSkill, nSkillLvl);
     return 1;
 }
 

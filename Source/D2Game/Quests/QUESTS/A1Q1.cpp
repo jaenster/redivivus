@@ -3,18 +3,12 @@
 #include "Source/D2Game/Quests/QUESTS/A1Q1.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
+#include "Source/D2Game/Monster/MonsterRegion.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -291,9 +285,9 @@ BOOL __fastcall Q01_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // A1Q1 (Den of Evil) -- per-party-member reward grant (Q01_SetPartyMemberRewardStates), called via ExecuteFunctionForEveryPartyMember from Q01_PropagateRewardToParty. For each party member whose QUEST_DenOfEvil record is not yet Completed or RewardAwaits, and who is currently in an Act I level (so they share credit for the kill), sets QUESTSTATE_JustCompleted and QUESTSTATE_RewardAwaits -- this is how every nearby party member, not just the killer, gets credited for clearing the Den and earns the skill point from Akara. Note nParam is the game struct accessed as a byte blob ([0x6d] = nDifficulty).
-void __fastcall Q01_SetPartyMemberRewardStates(int32_t nParam, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+void __fastcall Q01_SetPartyMemberRewardStates(::SGAMEDATA * nParam, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[*(uint8_t*)(nParam + 0x6d)];
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[nParam->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_DenOfEvil, QUESTSTATE_Completed);
     if (bQuestState == 1) {
       return;
@@ -331,7 +325,7 @@ BOOL __fastcall Q01_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q01_SetPartyMemberRewardStates, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q01_SetPartyMemberRewardStates, nullptr);
       }
     }
 

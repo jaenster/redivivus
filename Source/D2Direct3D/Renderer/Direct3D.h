@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Direct3D)
 #error "D2Direct3D header included by a module that may not use D2Direct3D (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Direct3D) && !defined(D2_LOADS_D2Direct3D)
+#error "internal D2Direct3D header included from another module; include D2Direct3D's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -30,6 +33,7 @@ typedef int _EXCEPTION_DISPOSITION;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct _CONTEXT;
 #endif // _WIN32
+struct DDPIXELFORMAT;
 struct DDSURFACEDESC2;
 struct IDirect3DDevice;
 struct IDirect3DInterface7;
@@ -140,7 +144,7 @@ typedef HRESULT (__stdcall *D3DDev3_SetTextureStageState)(void * This, DWORD dwS
 #endif
 #ifndef RECON_FPTD_D3DEnumPixelFormatsCallback
 #define RECON_FPTD_D3DEnumPixelFormatsCallback
-typedef HRESULT (__stdcall *D3DEnumPixelFormatsCallback)(void * lpDDPixFmt, DWORD * lpContext);
+typedef HRESULT (__stdcall *D3DEnumPixelFormatsCallback)(struct DDPIXELFORMAT * lpDDPixFmt, DWORD * lpContext);
 #endif
 #ifndef RECON_FPTD_D3DDev3_EnumTextureFormats
 #define RECON_FPTD_D3DDev3_EnumTextureFormats
@@ -475,6 +479,8 @@ struct IDirectDrawGammaControlVtbl;
 struct IDirectDrawSurface7Vtbl;
 
 // Data types
+#ifndef D2_DEFINED_D2D3DDisplayModeStrc
+#define D2_DEFINED_D2D3DDisplayModeStrc
 struct D2D3DDisplayModeStrc {
     /* 0x00 */ uint32_t dwModeFlags;
     /* 0x04 */ uint32_t dwBitsPerPixel;
@@ -483,6 +489,7 @@ struct D2D3DDisplayModeStrc {
     /* 0x10 */ uint32_t dwRefreshRate;
 };
 
+#endif // D2_DEFINED_D2D3DDisplayModeStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
 struct D2D3DSpriteInfoStrc {
     /* 0x00 */ struct D2GfxDataStrc * pSprite;
@@ -500,6 +507,8 @@ struct D2D3DSpriteInfoStrc {
 };
 
 #endif // D2_MODULE_D2Direct3D
+#ifndef D2_DEFINED_D2D3DVertexStrc
+#define D2_DEFINED_D2D3DVertexStrc
 struct D2D3DVertexStrc {
     /* 0x00 */ float fX;
     /* 0x04 */ float fY;
@@ -511,11 +520,15 @@ struct D2D3DVertexStrc {
     /* 0x1C */ float fV;
 };
 
+#endif // D2_DEFINED_D2D3DVertexStrc
+#ifndef D2_DEFINED_D2FloatIntUnion
+#define D2_DEFINED_D2FloatIntUnion
 union D2FloatIntUnion {
     /* 0x00 */ float fValue;
     /* 0x00 */ int nValue;
 };
 
+#endif // D2_DEFINED_D2FloatIntUnion
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
 struct D3DLIGHTINGCAPS {
     /* 0x00 */ DWORD dwSize;
@@ -592,12 +605,29 @@ struct __attribute__((packed)) DDDEVICEIDENTIFIER2 {
 };
 
 #endif // D2_MODULE_D2Direct3D
+#ifndef D2_DEFINED_DDPIXELFORMAT
+#define D2_DEFINED_DDPIXELFORMAT
+struct DDPIXELFORMAT {
+    /* 0x00 */ DWORD dwSize;
+    /* 0x04 */ DWORD dwFlags;
+    /* 0x08 */ DWORD dwFourCC;
+    /* 0x0C */ DWORD dwRGBBitCount;
+    /* 0x10 */ DWORD dwRBitMask;
+    /* 0x14 */ DWORD dwGBitMask;
+    /* 0x18 */ DWORD dwBBitMask;
+    /* 0x1C */ DWORD dwRGBAlphaBitMask;
+};
+
+#endif // D2_DEFINED_DDPIXELFORMAT
+#ifndef D2_DEFINED_DDSCAPS
+#define D2_DEFINED_DDSCAPS
 struct DDSCAPS {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ DWORD dwCaps;
 };
 
+#endif // D2_DEFINED_DDSCAPS
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
 struct DDSCAPS2 {
     /* 0x00 */ DWORD dwCaps;
@@ -607,6 +637,8 @@ struct DDSCAPS2 {
 };
 
 #endif // D2_MODULE_D2Direct3D
+#ifndef D2_DEFINED_DDSURFACEDESC2
+#define D2_DEFINED_DDSURFACEDESC2
 struct __attribute__((packed)) DDSURFACEDESC2 {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwFlags;
@@ -628,6 +660,9 @@ struct __attribute__((packed)) DDSURFACEDESC2 {
     /* 0x78 */ DWORD dwTextureStage;
 };
 
+#endif // D2_DEFINED_DDSURFACEDESC2
+#ifndef D2_DEFINED_Direct3D7Vtable
+#define D2_DEFINED_Direct3D7Vtable
 struct Direct3D7Vtable {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(struct IDirect3DInterface7 *, void *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(struct IDirect3DInterface7 *);
@@ -795,6 +830,9 @@ struct Direct3D7Vtable {
     /* 0xC7 */ uint8_t field_0xc7;
 };
 
+#endif // D2_DEFINED_Direct3D7Vtable
+#ifndef D2_DEFINED_Direct3DDevice7Vtable
+#define D2_DEFINED_Direct3DDevice7Vtable
 struct Direct3DDevice7Vtable {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -848,18 +886,30 @@ struct Direct3DDevice7Vtable {
     /* 0xC4 */ uint8_t ** field49;
 };
 
+#endif // D2_DEFINED_Direct3DDevice7Vtable
+#ifndef D2_DEFINED_IDirect3DDevice
+#define D2_DEFINED_IDirect3DDevice
 struct IDirect3DDevice {
     /* 0x00 */ struct Direct3DDevice7Vtable * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirect3DDevice
+#ifndef D2_DEFINED_IDirect3DInterface7
+#define D2_DEFINED_IDirect3DInterface7
 struct IDirect3DInterface7 {
     /* 0x00 */ struct Direct3D7Vtable * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirect3DInterface7
+#ifndef D2_DEFINED_IDirect3DTexture2
+#define D2_DEFINED_IDirect3DTexture2
 struct IDirect3DTexture2 {
     /* 0x00 */ struct IDirect3DTexture2Vtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirect3DTexture2
+#ifndef D2_DEFINED_IDirect3DTexture2Vtbl
+#define D2_DEFINED_IDirect3DTexture2Vtbl
 struct IDirect3DTexture2Vtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -869,10 +919,16 @@ struct IDirect3DTexture2Vtbl {
     /* 0x14 */ HRESULT (__stdcall *Load)(void *, void *); // Load(This, lpD3DTextureSrc)
 };
 
+#endif // D2_DEFINED_IDirect3DTexture2Vtbl
+#ifndef D2_DEFINED_IDirect3DVertexBuffer
+#define D2_DEFINED_IDirect3DVertexBuffer
 struct IDirect3DVertexBuffer {
     /* 0x00 */ struct IDirect3DVertexBufferVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirect3DVertexBuffer
+#ifndef D2_DEFINED_IDirect3DVertexBufferVtbl
+#define D2_DEFINED_IDirect3DVertexBufferVtbl
 struct IDirect3DVertexBufferVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -884,10 +940,16 @@ struct IDirect3DVertexBufferVtbl {
     /* 0x1C */ uint8_t * * Optimize;
 };
 
+#endif // D2_DEFINED_IDirect3DVertexBufferVtbl
+#ifndef D2_DEFINED_IDirect3DViewport3
+#define D2_DEFINED_IDirect3DViewport3
 struct IDirect3DViewport3 {
     /* 0x00 */ struct IDirect3DViewport3Vtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirect3DViewport3
+#ifndef D2_DEFINED_IDirect3DViewport3Vtbl
+#define D2_DEFINED_IDirect3DViewport3Vtbl
 struct IDirect3DViewport3Vtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -912,10 +974,16 @@ struct IDirect3DViewport3Vtbl {
     /* 0x50 */ HRESULT (__stdcall *Clear2)(void *, DWORD, void *, DWORD, DWORD, DWORD, DWORD);
 };
 
+#endif // D2_DEFINED_IDirect3DViewport3Vtbl
+#ifndef D2_DEFINED_IDirectDraw1
+#define D2_DEFINED_IDirectDraw1
 struct IDirectDraw1 {
     /* 0x00 */ struct IDirectDraw1Vtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectDraw1
+#ifndef D2_DEFINED_IDirectDraw1Vtbl
+#define D2_DEFINED_IDirectDraw1Vtbl
 struct IDirectDraw1Vtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(struct IDirectDraw *, IID *, LPVOID *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(struct IDirectDraw *);
@@ -942,10 +1010,16 @@ struct IDirectDraw1Vtbl {
     /* 0x58 */ HRESULT (__stdcall *WaitForVerticalBlank)(struct IDirectDraw1 *, DWORD, HANDLE);
 };
 
+#endif // D2_DEFINED_IDirectDraw1Vtbl
+#ifndef D2_DEFINED_IDirectDrawGammaControl
+#define D2_DEFINED_IDirectDrawGammaControl
 struct IDirectDrawGammaControl {
     /* 0x00 */ struct IDirectDrawGammaControlVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectDrawGammaControl
+#ifndef D2_DEFINED_IDirectDrawGammaControlVtbl
+#define D2_DEFINED_IDirectDrawGammaControlVtbl
 struct IDirectDrawGammaControlVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -954,10 +1028,16 @@ struct IDirectDrawGammaControlVtbl {
     /* 0x10 */ HRESULT (__stdcall *SetGammaRamp)(void *, DWORD, void *);
 };
 
+#endif // D2_DEFINED_IDirectDrawGammaControlVtbl
+#ifndef D2_DEFINED_IDirectDrawSurface7
+#define D2_DEFINED_IDirectDrawSurface7
 struct IDirectDrawSurface7 {
     /* 0x00 */ struct IDirectDrawSurface7Vtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectDrawSurface7
+#ifndef D2_DEFINED_IDirectDrawSurface7Vtbl
+#define D2_DEFINED_IDirectDrawSurface7Vtbl
 struct IDirectDrawSurface7Vtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -1010,6 +1090,9 @@ struct IDirectDrawSurface7Vtbl {
     /* 0xC0 */ HRESULT (__stdcall *GetLOD)(struct IDirectDrawSurface7 *, DWORD *);
 };
 
+#endif // D2_DEFINED_IDirectDrawSurface7Vtbl
+#ifndef D2_DEFINED_D2D3DDeviceSlotStrc
+#define D2_DEFINED_D2D3DDeviceSlotStrc
 struct __attribute__((packed)) D2D3DDeviceSlotStrc {
     /* 0x000 */ uint32_t dwFlags;
     /* 0x004 */ GUID guid;
@@ -1028,6 +1111,7 @@ struct __attribute__((packed)) D2D3DDeviceSlotStrc {
     /* 0x3BC */ int nModeCount;
 };
 
+#endif // D2_DEFINED_D2D3DDeviceSlotStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
 struct __attribute__((packed)) D3DDEVICEDESC {
     /* 0x00 */ DWORD dwSize;
@@ -1144,7 +1228,7 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
 // PUSH at 006b4aff feeding IDirect3DDevice3::EnumTextureFormats in Direct3DCallBack, so it is the
 // D3DEnumPixelFormatsCallback. Parameter 1 is an LPDDPIXELFORMAT; parameter 2 is the device-caps flag word, and the 0x200 bit
 // it sets is the one Direct3DCallBack tests for "Supports 1555 textures".
-HRESULT __stdcall D3D_EnumTextureFormatsCallback(void * lpDDPixFmt, DWORD * pnDeviceFlags);
+HRESULT __stdcall D3D_EnumTextureFormatsCallback(struct DDPIXELFORMAT * lpDDPixFmt, DWORD * pnDeviceFlags);
 void __fastcall ClearCaches();
 BOOL __fastcall CheckCutScene();
 void __fastcall UpdateScaleFactor(int nScaleFactor);
@@ -1154,6 +1238,7 @@ int __fastcall GetScreenSize(int * pWidth, int * pHeight);
 uint32_t __fastcall PALETTE_GetColorByIndex(int nPaletteIndex);
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused);
+void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t * pDest32Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwParam6);
 void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode);
 // Sets Direct3D alpha blending mode. Mode 1=opaque, 2=additive, 3=modulate, 4=alpha blend. Caches current mode to avoid redundant state changes.
 void __fastcall SetBlendMode(int nBlendMode);
@@ -1162,6 +1247,8 @@ int * __fastcall GetRenderStatistics();
 BOOL __fastcall ActivateWindow();
 BOOL __fastcall SetOption(int nOption, int nValue);
 void __fastcall DIRECTD3D_LogError(char * szErrorMessage, DWORD nResult);
+uint32_t __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20();
+void __fastcall SPRITECACHE_SetMaxSize_Unref_006b2f30(size_t nSize);
 void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, int nDeviceIndex);
 void __stdcall RENDERER_D3D_AllocateTextureCaches();
 void __stdcall RENDERER_D3D_FreeTextureCaches();
@@ -1175,7 +1262,7 @@ int32_t __fastcall RENDERER_D3D_CreateSystemMemoryTexture(struct IDirectDrawSurf
 void __stdcall RENDERER_D3D_ClearBackbuffer();
 void __fastcall RENDERER_D3D_CopySurfacePixels(struct IDirectDrawSurface7 * pSrcSurface, struct IDirectDrawSurface7 * pDestSurface, int nHeight);
 void __fastcall RENDERER_DIRECT3D_ErrorLog(char * szText, DWORD dwHResult);
-HRESULT __stdcall RENDERER_D3D_EnumDisplayModeCallback(int * pDisplayModeDesc, int pModeList);
+HRESULT __stdcall RENDERER_D3D_EnumDisplayModeCallback(int * pDisplayModeDesc, struct D2D3DDeviceSlotStrc * pModeList);
 BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char * lpDriverName, void * lpContext);
 void * __stdcall Catch_All_006b4c42();
 void * __stdcall Catch_All_006b4c73();
@@ -1206,7 +1293,7 @@ void __fastcall DebugFillBackBuffer(int nPosX, int nPosY);
 void __stdcall RENDERER_D3D_InitializeTexturePools();
 void __stdcall RENDERER_D3D_ReleaseFontTextures();
 void __stdcall RENDERER_D3D_CreateFontTextures();
-int __fastcall Unreferenced_006b74f0(int param_1);
+void __fastcall Unreferenced_006b74f0(void * pPalette);
 void __fastcall DrawString(int nPosX, int nPosY, char * szFormat, va_list va);
 void __fastcall DrawLight(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int nPosY);
 int __fastcall RENDERER_D3D_InitializeFontSystem(int nBaseOffset);
@@ -1226,7 +1313,7 @@ int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(struct D2TileLibraryEntr
 // Renders a shadow tile to texture with perspective projection in Direct3D. Calculates viewport bounds and renders textured quad with shadow blending.
 int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(struct D2TileLibraryEntryStrc * pTileEntry, int nTilePosX, int32_t nTilePosY, uint8_t byLightRow, uint32_t dwAlpha, int32_t nScreenSplitIndex);
 BOOL __fastcall DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, int nDrawMode, int nScreenPanels);
-BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, int pTexColorTable, uint8_t nParam4);
+BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pTexColorTable, uint8_t nParam4);
 BOOL __fastcall DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha);
 BOOL __fastcall DrawWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels);
 // Creates ground tile vertex buffer (6x6 grid = 36 vertices) and index buffer (60 indices for 5x5 tile strips) for perspective tile rendering. Calculates texture coordinates based on window dimensions (gnD3DTextureCacheBlockSize, gnD3DTextureCacheCount). Each vertex has position adjustment flags at corners (±1 in X/Y) for isometric diamond shape. Index buffer stored at gaD3DGroundTileIndexBuffer.
@@ -1236,8 +1323,8 @@ void __fastcall DrawGroundTile(struct D2TileLibraryEntryStrc * pTile, struct D2G
 // Builds 256x256 lighting lookup table at 0x00971740 for color modulation. Each entry[row][col] = clamp((row+col) / 255, 0, 255). Used by RENDERER_D3D_ApplyShadowTextureCoords and RENDERER_D3D_SetTextureStageColor to apply dynamic lighting to vertices. Total table size: 64KB.
 void __stdcall RENDERER_D3D_InitLightingTable();
 void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue);
-void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(void * pVertex, uint8_t nLightIndex, uint8_t byAlpha);
-void __fastcall RENDERER_D3D_SetTextureStageColor(void * pVertex, uint32_t dwGamma, uint8_t byAlpha);
+void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(struct D2D3DVertexStrc * pVertex, uint8_t nLightIndex, uint8_t byAlpha);
+void __fastcall RENDERER_D3D_SetTextureStageColor(struct D2D3DVertexStrc * pVertex, uint32_t dwGamma, uint8_t byAlpha);
 // Initializes perspective Z-division table at 0x00981748 (8192 entries). For each Z coordinate in range [-4096, 4095], calculates perspective factor as 3059712 / (Z - 3000), clamped to range Z=[-2999, 2999] to prevent divide-by-zero. Used for depth-based vertex scaling in 3D tile rendering.
 void __stdcall RENDERER_D3D_InitPerspectiveTransformTable();
 BOOL __stdcall RENDERER_D3D_IsPerspectiveEnabled();

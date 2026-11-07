@@ -34,7 +34,7 @@
       ],
       "usedTypes": [
         "int *",
-        "int32_t"
+        "intptr_t"
       ]
     },
     {
@@ -177,6 +177,7 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
+        "VS_FIXEDFILEINFO",
         "uint32_t"
       ]
     }

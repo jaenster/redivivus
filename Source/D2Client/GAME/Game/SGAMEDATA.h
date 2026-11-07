@@ -4,15 +4,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Game/Monster/D2MonsterRegionStrc.h"
-#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/D2Game/D2Game.h"
 #include "3rdparty/Storm/H/stpl.h"
 
 // Forward declarations
@@ -38,6 +39,8 @@ typedef uint8_t eD2HostGameType;
 struct D2ObjectControlStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ArenaControlStrc
+#define D2_DEFINED_D2ArenaControlStrc
 struct __attribute__((packed)) D2ArenaControlStrc {
     /* 0x00 */ eD2LevelId eLevelId; // Arena town level ID, read by GAME_GetTownLevelFromArenaCtrl
     /* 0x04 */ int nArenaTxtRecord; // Index into ArenaTxt table - selects score values for kills/deaths
@@ -45,10 +48,16 @@ struct __attribute__((packed)) D2ArenaControlStrc {
     /* 0x0C */ int nTemplateLevel; // Arena map template - only low byte used
 };
 
+#endif // D2_DEFINED_D2ArenaControlStrc
+#ifndef D2_DEFINED_D2GameNpcArrayStrc
+#define D2_DEFINED_D2GameNpcArrayStrc
 struct D2GameNpcArrayStrc {
     /* 0x00 */ D2GameNpcStrc pNpc[64];
 };
 
+#endif // D2_DEFINED_D2GameNpcArrayStrc
+#ifndef D2_DEFINED_D2GameNpcControlStrc
+#define D2_DEFINED_D2GameNpcControlStrc
 #pragma pack(push, 1)
 struct D2GameNpcControlStrc {
     /* 0x00 */ int nNpcCount;
@@ -58,6 +67,9 @@ struct D2GameNpcControlStrc {
 };
 #pragma pack(pop)
 
+#endif // D2_DEFINED_D2GameNpcControlStrc
+#ifndef D2_DEFINED_D2MonsterRegionStrc
+#define D2_DEFINED_D2MonsterRegionStrc
 struct __attribute__((packed)) D2MonsterRegionStrc {
     /* 0x000 */ uint8_t nAct; // Act number from LevelsTxt
     /* 0x001 */ uint8_t pad_0x1[3];
@@ -88,11 +100,17 @@ struct __attribute__((packed)) D2MonsterRegionStrc {
     /* 0x2E0 */ int dwDungeonLevelEx; // Same as dwDungeonLevel (set twice)
 };
 
+#endif // D2_DEFINED_D2MonsterRegionStrc
+#ifndef D2_DEFINED_D2ObjectRngShrines
+#define D2_DEFINED_D2ObjectRngShrines
 struct D2ObjectRngShrines {
     /* 0x00 */ int32_t nShrinesCount[8];
     /* 0x20 */ void * aShrinesRng[8];
 };
 
+#endif // D2_DEFINED_D2ObjectRngShrines
+#ifndef D2_DEFINED_D2QuestControlStrc
+#define D2_DEFINED_D2QuestControlStrc
 struct D2QuestControlStrc {
     /* 0x00 */ struct D2QuestDataStrc * pQuestData;
     /* 0x04 */ BOOL bExecuting;
@@ -104,6 +122,9 @@ struct D2QuestControlStrc {
     /* 0x20 */ uint8_t nEventId;
 };
 
+#endif // D2_DEFINED_D2QuestControlStrc
+#ifndef D2_DEFINED_D2TimerQueueStrc
+#define D2_DEFINED_D2TimerQueueStrc
 struct __attribute__((packed)) D2TimerQueueStrc {
     /* 0x000 */ int nIndex;
     /* 0x004 */ struct D2TimerStrc * pActiveTimersByType[5][64]; // 5 rows (unit type) of 64 frame buckets; type stride 0x100
@@ -113,11 +134,15 @@ struct __attribute__((packed)) D2TimerQueueStrc {
     /* 0xA1C */ struct D2TimerListStrc * pTimerList;
 };
 
+#endif // D2_DEFINED_D2TimerQueueStrc
+#ifndef D2_DEFINED_D2UnitPartyControl
+#define D2_DEFINED_D2UnitPartyControl
 struct D2UnitPartyControl {
     /* 0x00 */ int16_t nPartyId;
     /* 0x04 */ struct D2UnitPartyControlSub * pSub;
 };
 
+#endif // D2_DEFINED_D2UnitPartyControl
 struct SGAMEDATA : public TSHashObject<SGAMEDATA, HASHKEY_NONE> {
     /* 0x0018 */ LPCRITICAL_SECTION lpCriticalSection;
     /* 0x001C */ struct D2PoolManagerStrc * pMemoryPool;
@@ -181,6 +206,8 @@ struct SGAMEDATA : public TSHashObject<SGAMEDATA, HASHKEY_NONE> {
     /* 0x1DF0 */ int bUberDiablo; // Uber Diablo quest flag
 };
 
+#ifndef D2_DEFINED_D2ObjectControlStrc
+#define D2_DEFINED_D2ObjectControlStrc
 #pragma pack(push, 1)
 struct D2ObjectControlStrc {
     /* 0x0000 */ D2SeedStrc sSeed; // Object control seed
@@ -191,6 +218,7 @@ struct D2ObjectControlStrc {
 };
 #pragma pack(pop)
 
+#endif // D2_DEFINED_D2ObjectControlStrc
 namespace D2Client::GAME::Game {
 
 // Function declarations

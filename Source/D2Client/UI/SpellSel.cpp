@@ -15,26 +15,14 @@
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlrSkills.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -256,7 +244,7 @@ void __stdcall SPELLSEL_Cleanup() {
       }
 
       pClassIconEntry++;
-    } while ((int)pClassIconEntry < (intptr_t)((char*)&pSpellsClassSkillicon + sizeof(pSpellsClassSkillicon)));
+    } while ((intptr_t)pClassIconEntry < (intptr_t)((char*)&pSpellsClassSkillicon + sizeof(pSpellsClassSkillicon)));
 }
 
 DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId) {
@@ -642,64 +630,60 @@ static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nGridX, int32_t nSlo
     return nSlotX + 0x30;
 }
 
-int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
+short * __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
-    if (!pUnit) {
-      return 0;
+    if (pUnit) {
+      D2SkillStrc* pSkill;
+      pSkill = D2Common::Units::GetFirstSkill(pUnit);
+      while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
+        pSkill = D2Common::Skills::GetNext(pSkill);
+      }
     }
 
-    D2SkillStrc* pSkill = D2Common::Units::GetFirstSkill(pUnit);
-    while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
-      pSkill = D2Common::Skills::GetNext(pSkill);
-    }
-
-    return 0;
+    return nullptr;
 }
 
-int __fastcall SPELLSEL_FindChargedSkill2(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
+short * __fastcall SPELLSEL_FindChargedSkill2(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
-    if (!pUnit) {
-      return 0;
+    if (pUnit) {
+      D2SkillStrc* pSkill;
+      pSkill = D2Common::Units::GetFirstSkill(pUnit);
+      while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
+        pSkill = D2Common::Skills::GetNext(pSkill);
+      }
     }
 
-    D2SkillStrc* pSkill = D2Common::Units::GetFirstSkill(pUnit);
-    while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
-      pSkill = D2Common::Skills::GetNext(pSkill);
-    }
-
-    return 0;
+    return nullptr;
 }
 
-int __fastcall SPELLSEL_FindChargedSkill3(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
+short * __fastcall SPELLSEL_FindChargedSkill3(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
-    if (!pUnit) {
-      return 0;
+    if (pUnit) {
+      D2SkillStrc* pSkill;
+      pSkill = D2Common::Units::GetFirstSkill(pUnit);
+      while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
+        pSkill = D2Common::Skills::GetNext(pSkill);
+      }
     }
 
-    D2SkillStrc* pSkill = D2Common::Units::GetFirstSkill(pUnit);
-    while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
-      pSkill = D2Common::Skills::GetNext(pSkill);
-    }
-
-    return 0;
+    return nullptr;
 }
 
-int __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
+short * __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
-    if (!pUnit) {
-      return 0;
+    if (pUnit) {
+      D2SkillStrc* pSkill;
+      pSkill = D2Common::Units::GetFirstSkill(pUnit);
+      while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
+        pSkill = D2Common::Skills::GetNext(pSkill);
+      }
     }
 
-    D2SkillStrc* pSkill = D2Common::Units::GetFirstSkill(pUnit);
-    while (pSkill && ((pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill) , !pSkillsTxt || (nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill) , nQuantity <= 0)) || pSkillsTxt->skill != nTargetSkillId)) {
-      pSkill = D2Common::Skills::GetNext(pSkill);
-    }
-
-    return 0;
+    return nullptr;
 }
 
 void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
@@ -752,7 +736,7 @@ void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
       }
 
       pSlotSkillIdPtr++;
-      if ((int)pSlotSkillIdPtr >= (intptr_t)((char*)&gSpellSelGridRegion + 960)) {
+      if ((intptr_t)pSlotSkillIdPtr >= (intptr_t)((char*)&gSpellSelGridRegion + 960)) {
         if (nInitialMouseY <= Inv::ScreenSizeY - 0x31 && !bHandled) {
           bHasCharges = ui::GetUIFlag(UI_SKILLSELECT);
           if (bHasCharges) {
@@ -791,7 +775,7 @@ void __stdcall SPELLSEL_ClearSkillBinding(short * pSkillId, int32_t nChargesLeft
       }
 
       pSlotSkillId++;
-    } while ((int)pSlotSkillId < (intptr_t)((char*)&gSpellSelGridRegion + 720));
+    } while ((intptr_t)pSlotSkillId < (intptr_t)((char*)&gSpellSelGridRegion + 720));
 }
 
 void __stdcall SPELLSEL_ClearChargedSkillBindings() {
@@ -861,7 +845,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
       }
 
       pSlotSkillXPtr = (D2SpellSelGridRegionStrc*)(pSlotSkillXPtr->aSkillGrid + 1);
-    } while ((int)pSlotSkillXPtr < (intptr_t)((char*)&gSpellSelGridRegion + 240));
+    } while ((intptr_t)pSlotSkillXPtr < (intptr_t)((char*)&gSpellSelGridRegion + 240));
 }
 
 static int SPELLSEL_IsSkillSlotValid(int32_t nSlot) {
@@ -1164,52 +1148,36 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
     } while (true);
 }
 
-int __fastcall Unreferenced_004aa6b0(int param_1) {
-    int in_EAX;
-    int extraout_EAX;
-    BOOL bWeaponSwap;
-    BOOL bShowTooltips;
-    if (!gbSpellSelMouseHandFlag) {
-      int nGridStartX;
-      bShowTooltips = 0;
-      bWeaponSwap = 0;
-      gSpellSelGridRegion.sGridIndex[0] = 0;
-      nGridStartX = ui::ScreenSizeX - 0x80;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, param_1);
-      in_EAX = extraout_EAX;
-    }
-
-    return in_EAX;
-}
-
-int Unreferenced_004aa6e0() {
-    int in_EAX;
+void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {
     if (gbSpellSelMouseHandFlag) {
-      int extraout_EAX;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, 1, 1, 0);
-      in_EAX = extraout_EAX;
+      return;
     }
 
-    return in_EAX;
+    BOOL bShowTooltips = 0;
+    BOOL bWeaponSwap = 0;
+    gSpellSelGridRegion.sGridIndex[0] = 0;
+    int nGridStartX = ui::ScreenSizeX - 0x80;
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
-int Unreferenced_004aa710() {
-    int in_EAX;
-    int extraout_EAX;
-    BOOL bWeaponSwap;
-    BOOL bShowTooltips;
-    BOOL bChargedOnly;
+void __stdcall Unreferenced_004aa6e0() {
     if (!gbSpellSelMouseHandFlag) {
-      int nGridStartX;
-      bChargedOnly = 0;
-      bShowTooltips = 1;
-      bWeaponSwap = 0;
-      nGridStartX = ui::ScreenSizeX - 0x80;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
-      in_EAX = extraout_EAX;
+      return;
     }
 
-    return in_EAX;
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, 1, 1, 0);
+}
+
+void __stdcall Unreferenced_004aa710() {
+    if (gbSpellSelMouseHandFlag) {
+      return;
+    }
+
+    BOOL bChargedOnly = 0;
+    BOOL bShowTooltips = 1;
+    BOOL bWeaponSwap = 0;
+    int nGridStartX = ui::ScreenSizeX - 0x80;
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
 void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nSteps) {

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -27,6 +30,8 @@ typedef tagCANDIDATELIST * LPCANDIDATELIST;
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_D2ChatCommandStrc
+#define D2_DEFINED_D2ChatCommandStrc
 struct __attribute__((packed)) D2ChatCommandStrc {
     /* 0x00 */ char * pszCommand; // command text, e.g. "/players"
     /* 0x04 */ short nCommandType; // 3 = whole-line match, otherwise prefix match; low byte is the value returned through pbCommandType
@@ -34,6 +39,9 @@ struct __attribute__((packed)) D2ChatCommandStrc {
     /* 0x0A */ int bAllowedInSinglePlayer; // zero: skipped unless the game type is not GAMETYPE_SINGLEPLAYER
 };
 
+#endif // D2_DEFINED_D2ChatCommandStrc
+#ifndef D2_DEFINED_D2ChatPacketBuildStrc
+#define D2_DEFINED_D2ChatPacketBuildStrc
 struct D2ChatPacketBuildStrc {
     /* 0x000 */ uint8_t nCmd; // 0x15 chat, 0x14 overhead
     /* 0x001 */ uint8_t nMsgType; // 1 normal (CHAT_ParseCommand out), 2 whisper
@@ -42,6 +50,16 @@ struct D2ChatPacketBuildStrc {
     /* 0x103 */ char szTarget[17]; // whisper target; Send_Chat copies up to 16 from +0x103
 };
 
+#endif // D2_DEFINED_D2ChatPacketBuildStrc
+#ifndef D2_DEFINED_D2ChatPlayerNameNodeStrc
+#define D2_DEFINED_D2ChatPlayerNameNodeStrc
+struct D2ChatPlayerNameNodeStrc {
+    /* 0x000 */ char szName[512];
+    /* 0x200 */ int32_t nPlayerId;
+    /* 0x204 */ struct D2ChatPlayerNameNodeStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2ChatPlayerNameNodeStrc
 namespace D2Client::UI::Chat {
 
 // Function declarations

@@ -659,8 +659,7 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc",
-        "D2RoomExStrc",
-        "uint32_t"
+        "D2RoomExStrc"
       ]
     },
     {
@@ -1136,6 +1135,9 @@
       "calledFunctions": [
         "Unreferenced_0066c020",
         "TXT_LevelDefs_GetLine"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
       ]
     },
     {
@@ -1176,6 +1178,9 @@
       "calledFunctions": [
         "Unreferenced_0066c090",
         "DRLGWARP_GetVisArrayFromLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
       ]
     },
     {

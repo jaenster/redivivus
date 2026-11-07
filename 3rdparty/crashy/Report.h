@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_crashy)
 #error "crashy header included by a module that may not use crashy (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_crashy) && !defined(D2_LOADS_crashy)
+#error "internal crashy header included from another module; include crashy's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -27,6 +30,8 @@ typedef int64_t __time64_t;
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_Report
+#define D2_DEFINED_Report
 struct __attribute__((packed)) Report {
     /* 0x000 */ struct ReportVtable * _vfptr;
     /* 0x004 */ FILE * pFile;
@@ -36,10 +41,14 @@ struct __attribute__((packed)) Report {
     /* 0x80C */ char aszAttachmentPaths[16][1024];
 };
 
+#endif // D2_DEFINED_Report
+#ifndef D2_DEFINED_ReportVtable
+#define D2_DEFINED_ReportVtable
 struct ReportVtable {
     /* 0x00 */ ::Report * (__thiscall *ScalarDeletingDestructor)(::Report *, uint32_t);
 };
 
+#endif // D2_DEFINED_ReportVtable
 namespace Fog::_3rdparty::crashy {
 
 // Function declarations

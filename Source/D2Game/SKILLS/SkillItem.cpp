@@ -4,28 +4,10 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
-#include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
@@ -37,6 +19,8 @@
 #include "Source/D2Game/Monster/D2MonsterRegionStrc.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Game/PLAYER/PlayerTrade.h"
 #include "Source/D2Game/Quests/QUESTS/A5Q5.h"
@@ -46,14 +30,8 @@
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitEvent.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/ItemStats.inline.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/SKILLS/SkillItem.data.h"
 
@@ -304,10 +282,10 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
             pComponents = pMonStats2->aComponents;
             pSlot = pMonData->aArray;
             if (!pMonData->pad) {
-              nFreeSlots = (int)pComponents - (int)pSlot;
+              nFreeSlots = (intptr_t)pComponents - (intptr_t)pSlot;
               nMaxRetries = 0x10;
               do {
-                byCompCount = *(uint8_t*)(nFreeSlots + (int)pSlot);
+                byCompCount = *(uint8_t*)(nFreeSlots + (char*)pSlot);
                 if (byCompCount <= 1) {
                   pSlot->aComponentVariants[0] = 0;
                 } else {
@@ -775,7 +753,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
       return 0;
     }
 
-    nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, pItemTxt->dwLen);
+    nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
     eD2States eState;
     eState = (eD2States)pItemTxt->wState;
     D2StatListExStrc* pActiveStatList;
@@ -809,7 +787,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
 
       pStatCost = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (pStatCost) {
-        nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
+        nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
         switch (eUnitStat) {
           default:
             goto apply_stat_value;
@@ -944,7 +922,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, pItemTxt->dwLen);
+    nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
     eD2States eState;
     eState = (eD2States)pItemTxt->wState;
     D2StatListExStrc* pActiveStatList;
@@ -978,7 +956,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 
       pStatCost = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (pStatCost) {
-        nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
+        nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
         if (eUnitStat == UNITSTAT_manarecovery || eUnitStat == UNITSTAT_hpregen) {
           nStatValue <<= 8;
         }
@@ -1089,7 +1067,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, pItemTxt->dwLen);
+    nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
     eD2States eState = (eD2States)pItemTxt->wState;
     D2StatListExStrc* pActiveStatList = 0;
     int nBuffRemainingFrames = 0;
@@ -1114,7 +1092,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatSlot * 2 + 0x3e);
       pStatCost = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
       if (pStatCost && (int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-        nPercent = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatSlot * 4 + 0x44));
+        nPercent = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatSlot * 4 + 0x44));
         if ((int)nPercent > 0) {
           pExpireFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
           nStatScaled = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pExpireFrame, nPercent, 100);
@@ -1212,7 +1190,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       return 0;
     }
 
-    nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, pItemTxt->dwLen);
+    nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
     if ((int)nItemDuration <= 0) {
       return 0;
     }
@@ -1221,9 +1199,9 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     int nPrevBuffFrames = 0;
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (pStatList) {
-      D2StatListExStrc* pStatListExpireFrame;
-      pStatListExpireFrame = (D2StatListExStrc*)D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-      nPrevBuffFrames = (int)pStatListExpireFrame - pGame->dwGameFrame;
+      int32_t pStatListExpireFrame;
+      nPrevBuffFrames = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
+      nPrevBuffFrames -= pGame->dwGameFrame;
     }
 
     int nStatValue = pGame->dwGameFrame + nPrevBuffFrames + nItemDuration;
@@ -1259,7 +1237,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       if ((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         pStatCost = D2Common::DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(eUnitStat);
         if (pStatCost) {
-          nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, (int32_t)pItem, *pCalcPtr);
+          nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *pCalcPtr);
           if (nItemDuration) {
             D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, nItemDuration, 0);
             if (eUnitStat == UNITSTAT_staminarecoverybonus && (int)nItemDuration > 0) {

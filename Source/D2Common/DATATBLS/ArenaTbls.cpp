@@ -2,11 +2,7 @@
 
 #include "Source/D2Common/DATATBLS/ArenaTbls.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Game/GAME/Arena.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/Excel.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/ArenaTbls.data.h"
 

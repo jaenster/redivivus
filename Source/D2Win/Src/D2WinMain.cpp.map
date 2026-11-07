@@ -97,7 +97,7 @@
       ],
       "usedTypes": [
         "D2ControlStrc",
-        "uint32_t"
+        "DC6"
       ]
     },
     {
@@ -374,7 +374,7 @@
         "FORMS_GetFormTextAndEditBox_Unref_004f97d0"
       ],
       "usedTypes": [
-        "D2WinEditBox"
+        "uint32_t"
       ]
     },
     {
@@ -416,7 +416,7 @@
         "DRAW_OOG_ChannelPlayers"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2CharSelCompStrc"
       ]
     },
     {
@@ -480,6 +480,9 @@
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
         "Unreferenced_004f9b30"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
       ]
     },
     {
@@ -693,8 +696,7 @@
         "D2WIN_FindClosestControlToMouse"
       ],
       "usedTypes": [
-        "D2ControlStrc",
-        "int32_t"
+        "D2ControlStrc"
       ]
     },
     {
@@ -956,6 +958,7 @@
         "D2GFX_IsWindowActive"
       ],
       "usedTypes": [
+        "D2UIMouseMsgStrc",
         "tagTRACKMOUSEEVENT",
         "uint32_t"
       ]

@@ -25,28 +25,13 @@
 #include "Source/D2Client/UNIT/PlrSkills.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
@@ -360,7 +345,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
 void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2InventoryStrc* pInventory;
     D2SeedStrc sRandSeed;
-    Source::ClientEngine::CLIENT_RegisterActiveUnitInSlot((int32_t)pUnit);
+    Source::ClientEngine::CLIENT_RegisterActiveUnitInSlot(pUnit);
     D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nX, nY, pUnit, 1);
     if (!pUnit->pInventory) {
       pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
@@ -412,7 +397,7 @@ void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX
 }
 
 void __fastcall CLIENT_FreePlayerUnit(D2UnitStrc * pUnit) {
-    Source::ClientEngine::CLIENT_UnregisterActiveUnitFromSlot((int32_t)pUnit);
+    Source::ClientEngine::CLIENT_UnregisterActiveUnitFromSlot(pUnit);
     Engine::Gfx::FreeGfxInfo(pUnit);
     if (GAME::Game::sgpDrlgAct) {
       D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
@@ -672,7 +657,7 @@ static void __stdcall PLAYER_ApplyCurrentSkillFlags(int32_t bIsLocalPlayer, D2Un
 // Client-side player message/command dispatcher: applies a queued action (nMessageType) to a player unit from a D2ServerMessageHandleStrc. Frees any active light map and clears the current skill (except for type 0x13), restores path velocity, and resolves town vs non-town neutral mode. Switches on the message type to: set move/attack/interact targets (0/1/2/0x17/0x18), play a get-hit (6) / block (0x12) / cold-hit overlay+sound (0x13) / knockback (0x14) reaction, run skill cast/validate paths (0x15/0x16) , handle death (8/9) including closing panels and clearing trade/selection, and set run/skill anim modes (0x19). Returns 1 on success; on a failed skill/target it falls through to CLIENT_SetAnimModeAndMoveToCurrentPos and returns 0. Halts via Fog ErrorManager on an invalid message type.
 BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode) {
     int bIsActive;
-    D2ServerMessageHandleStrc* pMessageHandle;
+    uint32_t pMessageHandle;
     uint32_t bSkillValid;
     uint32_t dwMouseButtonState;
     int32_t pnSoundId;
@@ -737,10 +722,10 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
       bIsActive = SKILLS::Skills::SKILL_ProcessCastFromPacket(pUnit, (int*)pMessageSaved);
       goto check_cast_started;
       case 1:
-        pMessageHandle = (D2ServerMessageHandleStrc*)Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
+        pMessageHandle = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
       break;
       case 0:
-        pMessageHandle = (D2ServerMessageHandleStrc*)Path::PATH_SetTargetUnitAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
+        pMessageHandle = Path::PATH_SetTargetUnitAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
       break;
       case 0x17:
         bSkillValid = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
@@ -1053,17 +1038,12 @@ static void PLAYER_InteractWithUnit(int32_t nTargetGUID, D2UnderMouseStrc * pUnd
     pDVar1->pUnitData.pUnitDataPlayer->nTargetUnitGUID = nTargetGUID;
 }
 
-void __fastcall PLAYER_InteractAtTarget(int32_t pTargetUnit) {
+void __fastcall PLAYER_InteractAtTarget(D2UnitStrc * pTargetUnit) {
     D2UnderMouseStrc sInteractInfo;
-    sInteractInfo.pTarget = (D2UnitStrc*)pTargetUnit;
+    sInteractInfo.pTarget = pTargetUnit;
     sInteractInfo.pPlayer = GetPlayerUnit_UI();
     sInteractInfo.nAttackActionType = 2;
-    if (!pTargetUnit) {
-      PLAYER_InteractWithUnit(-1, &sInteractInfo);
-      return;
-    }
-
-    PLAYER_InteractWithUnit(*(int32_t*)(pTargetUnit + 0xc), &sInteractInfo);
+    PLAYER_InteractWithUnit(!pTargetUnit ? -1 : pTargetUnit->nUnitGUID, &sInteractInfo);
 }
 
 uint32_t __fastcall SKILL_CheckAuraRange(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int * pnMinX, int * pnMinY) {
@@ -1876,8 +1856,8 @@ static BOOL INPUT_HandleLeftClickRepeat(D2UnderMouseStrc * pUnderMouse) {
 
 // Player input handler that issues a walk/move command toward the coordinate or unit under the cursor (pMouse is the under-mouse input context). Bails if the player is already moving or cannot be interrupted. Computes the player's run/walk velocity (scaled by velocitypercent) and detects a run/walk toggle mismatch against the current path velocity and the input flags. If a target unit is set and it differs from the confirmed target (or a velocity mismatch), it retargets the dynamic path and re-issues the skill command; otherwise it flags the move and runs INPUT_ExecuteSkillCommand. Returns 1. Custom-register convention (pMouse in EDI).
 static uint32_t WalkToCoordOrUnit(D2UnderMouseStrc * pMouse) {
-    int nVelocityPct;
-    int32_t nClassId;
+    int32_t nCurVelocity;
+    int nClassId;
     int nRunVelocity;
     int nWalkVelocity;
     uint32_t dwFlags;
@@ -1906,14 +1886,14 @@ static uint32_t WalkToCoordOrUnit(D2UnderMouseStrc * pMouse) {
       nClassId = pPlayerUnit_lcl->nClassId;
     }
 
-    D2Common::Units::GetRunAndWalkVelocityForPlayer((int32_t)pPlayerUnit_lcl, nClassId, &nWalkVelocity, &nRunVelocity);
+    D2Common::Units::GetRunAndWalkVelocityForPlayer(pPlayerUnit_lcl, nClassId, &nWalkVelocity, &nRunVelocity);
     nWalkVelocity <<= 8;
     pDynamicPath = pMouse->pPlayer->pPath.pDynamicPath;
-    nVelocityPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMouse->pPlayer, UNITSTAT_velocitypercent, 0);
-    nVelocityPct *= nWalkVelocity;
-    nClassId = D2Common::PATH::DynamicPath::GetVelocity(pDynamicPath);
+    nClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMouse->pPlayer, UNITSTAT_velocitypercent, 0);
+    nClassId *= nWalkVelocity;
+    nCurVelocity = D2Common::PATH::DynamicPath::GetVelocity(pDynamicPath);
     dwFlags = pMouse->flags;
-    if (nClassId == nVelocityPct / 100) {
+    if (nCurVelocity == nClassId / 100) {
       if (!(dwFlags & 0x40)) {
         goto dispatch_move_command;
       }
@@ -1955,7 +1935,7 @@ static BOOL INPUT_HandleLeftClickWithPet(D2UnderMouseStrc * pUnderMouse) {
       if (pPetUnit) {
         pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
         if (pSeed->nState == 2) {
-          GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pUnderMouse->pPlayer, pPetUnit, 0);
+          GAME::Select::SELECT_SetPetSeedTimestamp(pUnderMouse->pPlayer, pPetUnit, 0);
         }
       }
     }
@@ -2033,7 +2013,7 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 
       pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
       if (pSeed->nState == 2) {
-        GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pUnderMouse->pPlayer, pPetUnit, 0);
+        GAME::Select::SELECT_SetPetSeedTimestamp(pUnderMouse->pPlayer, pPetUnit, 0);
       }
 
       return 0;
@@ -2302,7 +2282,7 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc 
       }
     }
 
-    D2Common::PATH::Path::PATH_CheckCollisionFlags(pDynamicPath, (uint32_t)pUnit, pTargetRoom, nNewX, nNewY);
+    D2Common::PATH::Path::PATH_CheckCollisionFlags(pDynamicPath, pUnit, pTargetRoom, nNewX, nNewY);
     if (!bWasMoveMode) {
       return;
     }
@@ -2677,20 +2657,20 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     CLIENT_ResolvePlayerCollision(pUnit);
 }
 
-int __fastcall Unreferenced_004637f0(int param_1) {
-    if (param_1 && *(int*)param_1 == 1 && *(int*)(param_1 + 0x14)) {
-      return *(int*)(param_1 + 0x14) + 4;
+int __fastcall Unreferenced_004637f0(D2UnitStrc * param_1) {
+    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataPlayer) {
+      return (int)(param_1->pUnitData.pUnitDataPlayer->szCharName + 4);
     }
 
     return 0;
 }
 
-int __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
+uint16_t * __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;
+      return (uint16_t*)pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;
     }
 
-    return 0;
+    return nullptr;
 }
 
 D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex) {
@@ -2871,13 +2851,13 @@ void __stdcall CLIENT_ClearServerAndClientUnitLists() {
 }
 
 void __stdcall CUNIT_IterateHashTableWithCallback(D2UnitStrc * * UnitHashTable, fnUnitIterCallback pfnCallback) {
-    void* pNextUnit;
+    D2UnitStrc* pNextUnit;
     int nBucketIndex = 0;
     do {
-      void* pCurUnit;
+      D2UnitStrc* pCurUnit;
       pCurUnit = UnitHashTable[nBucketIndex];
       while (pCurUnit) {
-        pNextUnit = *(void**)((int)pCurUnit + 0xe4);
+        pNextUnit = pCurUnit->pListNext;
         (*pfnCallback)(pCurUnit);
         pCurUnit = pNextUnit;
       }

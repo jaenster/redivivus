@@ -4,13 +4,15 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/BnSend.h"
 
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
@@ -19,6 +21,7 @@ typedef long __time32_t;
 
 #endif // _WIN32
 
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct D2CDKeyHashStrc {
     /* 0x00 */ uint32_t nKeyLength; // CD key string length (16 or 26)
     /* 0x04 */ uint32_t nPublic; // Public value from CD key
@@ -27,15 +30,18 @@ struct D2CDKeyHashStrc {
     /* 0x10 */ uint8_t abHash[20]; // SHA-1 hash of token data
 };
 
+#endif // D2_MODULE_Bnclient
+#ifndef D2_DEFINED_D2SrpSaltVerifierStrc
+#define D2_DEFINED_D2SrpSaltVerifierStrc
 struct D2SrpSaltVerifierStrc {
     /* 0x00 */ uint8_t aSalt[32]; // new-password SRP salt s
     /* 0x20 */ uint8_t aVerifier[32]; // new-password SRP verifier v
 };
 
+#endif // D2_DEFINED_D2SrpSaltVerifierStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct D2XSHA1ContextStrc {
-    /* 0x00 */ D2XSHA1Strc state;
-    /* 0x14 */ uint32_t aBlock[16];
+struct D2XSHA1Strc {
+    /* 0x00 */ DWORD h[5];
 };
 
 #endif // D2_MODULE_Bnclient
@@ -108,6 +114,13 @@ struct __attribute__((packed)) SID_C2S_AuthAccountChangeProof {
 };
 
 #endif // D2_MODULE_Bnclient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+struct D2XSHA1ContextStrc {
+    /* 0x00 */ D2XSHA1Strc state;
+    /* 0x14 */ uint32_t aBlock[16];
+};
+
+#endif // D2_MODULE_Bnclient
 namespace Bnclient::_net_sid {
 
 // Function declarations
@@ -125,7 +138,7 @@ void * __stdcall NET_SID_CLIENT_GetChannelNamePtr();
 // BATTLE.NET SID_CHATEVENT (0x0F) HANDLER
 // Receives chat event notifications from the Battle.net server with event type, flags, ping, username, and message text. Event types include: 0x01=show_user, 0x02=join, 0x03=leave, 0x04=whisper_recv, 0x05=talk, 0x06=broadcast, 0x07=channel, etc. Enqueues the raw packet bytes to the message queue (type 0) for asynchronous processing by the chat UI system.
 BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize);
-void __fastcall Unreferenced_00520680(int param_1);
+void __fastcall Unreferenced_00520680(struct D2XSHA1Strc * param_1);
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
 // Name per redivivus issue #36 (asm-verified hash variant).
 void __fastcall XSHA1_Transform(struct D2XSHA1ContextStrc * pShaCtx);
@@ -356,20 +369,20 @@ int __fastcall NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof(uint32_t nServer
 int32_t __fastcall NET_SID_CLIENT_VerifyServerProof(void * pM2ServerProof);
 BOOL __stdcall NET_SID_CLIENT_GetSIDFlag2();
 void __stdcall NET_SID_ClearSrpPassword();
-uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(int32_t pCdKeyData, uint32_t nNibbleIndex);
-void __fastcall NET_SID_CLIENT_SetCDKeyNibble(int32_t pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue);
-int __fastcall Unreferenced_00522570(int param_1, int param_2);
-void __fastcall NET_SID_CLIENT_SetCDKeyBit(int32_t pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue);
+uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex);
+void __fastcall NET_SID_CLIENT_SetCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue);
+int __fastcall Unreferenced_00522570(uint32_t * param_1, int param_2);
+void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue);
 void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn);
-void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, int32_t pOutBase5);
-void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(int32_t pToken);
+void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t * pOutBase5);
+void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(uint32_t * pToken);
 void __fastcall NET_SID_CLIENT_TransformCdKeyToken(char * nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00522bb0..00522bb9; unreferenced in 1.14d.
 __time32_t __stdcall NET_SID_GetTime32_00522bb0(__time32_t * pTime);
-void __fastcall NET_SID_CLIENT_GenerateRandomString(int32_t szOutBuf, int32_t nLength);
-void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(int32_t pThis, int32_t nSeed);
-int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSize, int32_t szCDKey);
+void __fastcall NET_SID_CLIENT_GenerateRandomString(char * szOutBuf, int32_t nLength);
+void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed);
+int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSize, char * szCDKey);
 int32_t __fastcall NET_SID_CLIENT_CalculateAlignedBufferSize(uint32_t nDataSize);
 void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSize, int32_t nBufferAlignment, int32_t szCDKey);
 void __stdcall DecodeAndLoadKeys();

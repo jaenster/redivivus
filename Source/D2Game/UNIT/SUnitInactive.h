@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,7 @@ struct D2MonsterDataMinionList;
 struct D2RoomStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
+typedef uint32_t eD2UnitType;
 
 struct D2InactiveItemRecordStrc;
 struct D2InactiveUnitRecordStrc;
@@ -35,6 +39,8 @@ struct D2InactiveItemRecordBufferStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2InactiveItemRecordStrc
+#define D2_DEFINED_D2InactiveItemRecordStrc
 struct __attribute__((packed)) D2InactiveItemRecordStrc {
     /* 0x00 */ struct D2InactiveItemRecordStrc * pNext;
     /* 0x04 */ int nDespawnTimer;
@@ -43,6 +49,9 @@ struct __attribute__((packed)) D2InactiveItemRecordStrc {
     /* 0x0E */ uint8_t itemData[1];
 };
 
+#endif // D2_DEFINED_D2InactiveItemRecordStrc
+#ifndef D2_DEFINED_D2InactiveMonsterRecordStrc
+#define D2_DEFINED_D2InactiveMonsterRecordStrc
 struct D2InactiveMonsterRecordStrc {
     /* 0x00 */ int nPosX;
     /* 0x04 */ int nPosY;
@@ -71,6 +80,9 @@ struct D2InactiveMonsterRecordStrc {
     /* 0x58 */ struct D2InactiveMonsterRecordStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2InactiveMonsterRecordStrc
+#ifndef D2_DEFINED_D2InactiveUnitListStrc
+#define D2_DEFINED_D2InactiveUnitListStrc
 struct D2InactiveUnitListStrc {
     /* 0x00 */ int nX;
     /* 0x04 */ int nY;
@@ -80,6 +92,7 @@ struct D2InactiveUnitListStrc {
     /* 0x14 */ struct D2InactiveUnitListStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2InactiveUnitListStrc
 struct __attribute__((packed)) D2InactiveUnitRecordStrc {
     /* 0x00 */ int nPosX;
     /* 0x04 */ int nPosY;
@@ -99,6 +112,32 @@ struct __attribute__((packed)) D2InactiveUnitRecordStrc {
     /* 0x30 */ struct D2InactiveUnitRecordStrc * pNext;
 };
 
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union SUNITINACTIVE_RoomInit_Slotm14 {
+    /* 0x00 */ struct D2InactiveItemRecordStrc * pInactiveItemList;
+    /* 0x00 */ eD2UnitType eUnitType;
+    /* 0x00 */ int32_t nGrowInterval;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union SUNITINACTIVE_RoomInitMonsters_Slotm18 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nClassId;
+    /* 0x00 */ uint8_t * pbyUMod;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union SUNITINACTIVE_RoomInitMonsters_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nPosX;
+    /* 0x00 */ uint8_t * pbyCurUMod;
+};
+
+#endif // D2_MODULE_D2Game
 namespace D2Game::UNIT::SUnitInactive {
 
 // Function declarations

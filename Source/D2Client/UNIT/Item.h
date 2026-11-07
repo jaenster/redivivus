@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,8 +21,9 @@ struct D2GSPacketSrv0x47;
 struct D2GSPacketSrv0x48;
 struct D2GSPacketSrv0x7D;
 struct D2InventoryStrc;
+struct D2ItemsTxt;
 struct D2RoomStrc;
-struct D2ServerMessageHandleStrc;
+struct D2SkillStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef int eD2ItemFlag;
@@ -40,9 +44,26 @@ typedef BOOL (__fastcall *D2ItemSpellInit)(::SGAMEDATA * pGame, struct D2UnitStr
 typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, uint32_t nOperand3, void * pContext);
 #endif
 
-struct D2ItemsTxt;
-
 // Data types
+#ifndef D2_DEFINED_D2GSPacketSrv0x42
+#define D2_DEFINED_D2GSPacketSrv0x42
+struct __attribute__((packed)) D2GSPacketSrv0x42 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+};
+
+#endif // D2_DEFINED_D2GSPacketSrv0x42
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct __attribute__((packed)) D2GSPacketSrv0x7C {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+};
+
+#endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2ItemRatioTxt
+#define D2_DEFINED_D2ItemRatioTxt
 struct D2ItemRatioTxt {
     /* 0x00 */ int Unique; // d2bs binfields FIELDTYPE_INT
     /* 0x04 */ int UniqueDivisor; // d2bs binfields FIELDTYPE_INT
@@ -65,16 +86,25 @@ struct D2ItemRatioTxt {
     /* 0x43 */ char Class_Specific; // d2bs binfields FIELDTYPE_CHAR
 };
 
+#endif // D2_DEFINED_D2ItemRatioTxt
+#ifndef D2_DEFINED_D2ItemsEventMethodStrc
+#define D2_DEFINED_D2ItemsEventMethodStrc
 struct D2ItemsEventMethodStrc {
     /* 0x00 */ int (__fastcall *pfnMethod)(int32_t, int32_t, uint32_t, void *); // Skill-calc operator. All 11 handlers across the two tables are __fastcall with RET 0x8: two operands in ECX/EDX, a third operand and the context pointer on the stack. The old fnSkillCalcMethod (2 params) belongs to SKILLS_CompileSkillFormula's pFunction parameter, not to this slot.
     /* 0x04 */ int nArgCount; // Number of stack args to pop before call (0=none, 1=one, 2=two, 3=three+return)
 };
 
+#endif // D2_DEFINED_D2ItemsEventMethodStrc
+#ifndef D2_DEFINED_D2ItemSpellStrc
+#define D2_DEFINED_D2ItemSpellStrc
 struct D2ItemSpellStrc {
     /* 0x00 */ BOOL (__fastcall *pSpellInit)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2UnitStrc *, int, int, eD2Skills);
     /* 0x04 */ BOOL (__fastcall *pSpellDestroy)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, struct D2UnitStrc *, int, int, eD2Skills);
 };
 
+#endif // D2_DEFINED_D2ItemSpellStrc
+#ifndef D2_DEFINED_D2ItemsTableStrc
+#define D2_DEFINED_D2ItemsTableStrc
 struct D2ItemsTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2ItemsTxt * pItems;
@@ -86,206 +116,7 @@ struct D2ItemsTableStrc {
     /* 0x1C */ int nMiscSize;
 };
 
-struct D2ItemsTxt {
-    /* 0x000 */ char szFlippyFile[32];
-    /* 0x020 */ char szInvFile[32];
-    /* 0x040 */ char szUniqueInvFile[32];
-    /* 0x060 */ char szSetInvFile[32];
-    /* 0x080 */ int dwCode; // item code fourcc (e.g. 'box '), compared as a dword like dwNormCode/dwUberCode/dwUltraCode
-    /* 0x084 */ int dwNormCode;
-    /* 0x088 */ int dwUberCode;
-    /* 0x08C */ int dwUltraCode;
-    /* 0x090 */ int dwAlternateGfx;
-    /* 0x094 */ int dwPSpell;
-    /* 0x098 */ short wState;
-    /* 0x09A */ short wCState1;
-    /* 0x09C */ short wCState2;
-    /* 0x09E */ short wStat1;
-    /* 0x0A0 */ short wStat2;
-    /* 0x0A2 */ short wStat3;
-    /* 0x0A4 */ int dwCalc1;
-    /* 0x0A8 */ int dwCalc2;
-    /* 0x0AC */ int dwCalc3;
-    /* 0x0B0 */ int dwLen;
-    /* 0x0B4 */ uint8_t nSpellDesc; // spelldesc column, TXT field type 4 (byte) at +0xb4 in TXT_AllocTxt_items; INV_FormatItemSpellDescText switches on it
-    /* 0x0B5 */ uint8_t pad_0xB5; // not written by the items.txt parser
-    /* 0x0B6 */ short wSpellDescStr;
-    /* 0x0B8 */ int dwSpellDescCalc;
-    /* 0x0BC */ int dwBetterGem;
-    /* 0x0C0 */ int dwWClass;
-    /* 0x0C4 */ int dw2HandedWClass;
-    /* 0x0C8 */ int dwTMogType;
-    /* 0x0CC */ int dwMinAc;
-    /* 0x0D0 */ int dwMaxAc;
-    /* 0x0D4 */ int dwGambleCost;
-    /* 0x0D8 */ int dwSpeed;
-    /* 0x0DC */ int dwBitfield1;
-    /* 0x0E0 */ int dwCost;
-    /* 0x0E4 */ int dwMinStack;
-    /* 0x0E8 */ int dwMaxStack;
-    /* 0x0EC */ int dwSpawnStack;
-    /* 0x0F0 */ int dwGemOffset;
-    /* 0x0F4 */ short wNameStr;
-    /* 0x0F6 */ short wVersion;
-    /* 0x0F8 */ short wAutoPrefix;
-    /* 0x0FA */ uint16_t wMissileType;
-    /* 0x0FC */ char nRarity;
-    /* 0x0FD */ char nLevel;
-    /* 0x0FE */ uint8_t nMinDam;
-    /* 0x0FF */ uint8_t nMaxDam;
-    /* 0x100 */ uint8_t nMinMisDam;
-    /* 0x101 */ char nMaxMisDam;
-    /* 0x102 */ uint8_t n2HandMinDam;
-    /* 0x103 */ uint8_t n2HandMaxDam;
-    /* 0x104 */ short nRangeAdder;
-    /* 0x106 */ short nStrBonus;
-    /* 0x108 */ short nDexBonus;
-    /* 0x10A */ short nReqStr;
-    /* 0x10C */ short wReqDex;
-    /* 0x10E */ char bAbsorbs;
-    /* 0x10F */ char bInvWidth;
-    /* 0x110 */ char bInvHeight;
-    /* 0x111 */ char bBlock;
-    /* 0x112 */ uint8_t bDurability;
-    /* 0x113 */ char bNoDurability;
-    /* 0x114 */ char bMissile;
-    /* 0x115 */ char bComponent;
-    /* 0x116 */ uint8_t bRArm;
-    /* 0x117 */ uint8_t bLArm;
-    /* 0x118 */ uint8_t bTorso;
-    /* 0x119 */ uint8_t bLegs;
-    /* 0x11A */ uint8_t bRSPad;
-    /* 0x11B */ uint8_t bLSPad;
-    /* 0x11C */ bool b2Handed;
-    /* 0x11D */ uint8_t bUseable;
-    /* 0x11E */ short wType;
-    /* 0x120 */ short wType2;
-    /* 0x122 */ short bSubType;
-    /* 0x124 */ short wDropSound;
-    /* 0x126 */ short wUseSound;
-    /* 0x128 */ char bDropSfxFrame;
-    /* 0x129 */ uint8_t bUnique;
-    /* 0x12A */ uint8_t bQuest;
-    /* 0x12B */ char bQuestDiffCheck;
-    /* 0x12C */ char bTransparent;
-    /* 0x12D */ uint8_t bTransTbl;
-    /* 0x12E */ char pad0x12E;
-    /* 0x12F */ char bLightRadius;
-    /* 0x130 */ uint8_t bBelt;
-    /* 0x131 */ char bAutoBelt;
-    /* 0x132 */ bool bStackable;
-    /* 0x133 */ char bSpawnable;
-    /* 0x134 */ char bSpellIcon;
-    /* 0x135 */ bool bDurWarning;
-    /* 0x136 */ bool bQntWarning;
-    /* 0x137 */ bool bHasInv;
-    /* 0x138 */ bool bGemSockets;
-    /* 0x139 */ uint8_t bTransmogrify;
-    /* 0x13A */ uint8_t bTMogMin;
-    /* 0x13B */ char bTMogMax;
-    /* 0x13C */ uint8_t bHitClass;
-    /* 0x13D */ bool b1or2Handed;
-    /* 0x13E */ bool bGemApplyType;
-    /* 0x13F */ char bLevelReq;
-    /* 0x140 */ uint8_t bMagicLvl;
-    /* 0x141 */ uint8_t bTransform;
-    /* 0x142 */ char bInvTrans;
-    /* 0x143 */ uint8_t bCompactSave;
-    /* 0x144 */ char bSkipName;
-    /* 0x145 */ bool bNameable;
-    /* 0x146 */ char bAkaraMin;
-    /* 0x147 */ char bGheedMin;
-    /* 0x148 */ char bCharsiMin;
-    /* 0x149 */ char bFaraMin;
-    /* 0x14A */ char bLysanderMin;
-    /* 0x14B */ char bDrognanMin;
-    /* 0x14C */ char bHraltiMin;
-    /* 0x14D */ char bAlkorMin;
-    /* 0x14E */ char bOrmusMin;
-    /* 0x14F */ char bElzixMin;
-    /* 0x150 */ char bAshearaMin;
-    /* 0x151 */ char bCainMin;
-    /* 0x152 */ char bHalbuMin;
-    /* 0x153 */ char bJamellaMin;
-    /* 0x154 */ char bMalahMin;
-    /* 0x155 */ char bLarzukMin;
-    /* 0x156 */ char bDrehyaMin;
-    /* 0x157 */ char bAkaraMax;
-    /* 0x158 */ char bGheedMax;
-    /* 0x159 */ char bCharsiMax;
-    /* 0x15A */ char bFaraMax;
-    /* 0x15B */ char bLysanderMax;
-    /* 0x15C */ char bDrognanMax;
-    /* 0x15D */ char bHraltiMax;
-    /* 0x15E */ char bAlkorMax;
-    /* 0x15F */ char bOrmusMax;
-    /* 0x160 */ char bElzixMax;
-    /* 0x161 */ char bAshearaMax;
-    /* 0x162 */ char bCainMax;
-    /* 0x163 */ char bHalbuMax;
-    /* 0x164 */ char bJamellaMax;
-    /* 0x165 */ char bMalahMax;
-    /* 0x166 */ char bLarzukMax;
-    /* 0x167 */ char bDrehyaMax;
-    /* 0x168 */ char bAkaraMagicMin;
-    /* 0x169 */ char bGheedMagicMin;
-    /* 0x16A */ char bCharsiMagicMin;
-    /* 0x16B */ char bFaraMagicMin;
-    /* 0x16C */ char bLysanderMagicMin;
-    /* 0x16D */ char bDrognanMagicMin;
-    /* 0x16E */ char bHraltiMagicMin;
-    /* 0x16F */ char bAlkorMagicMin;
-    /* 0x170 */ char bOrmusMagicMin;
-    /* 0x171 */ char bElzixMagicMin;
-    /* 0x172 */ char bAshearaMagicMin;
-    /* 0x173 */ char bCainMagicMin;
-    /* 0x174 */ char bHalbuMagicMin;
-    /* 0x175 */ char bJamellaMagicMin;
-    /* 0x176 */ char bMalahMagicMin;
-    /* 0x177 */ char bLarzukMagicMin;
-    /* 0x178 */ char bDrehyaMagicMin;
-    /* 0x179 */ char bAkaraMagicMax;
-    /* 0x17A */ char bGheedMagicMax;
-    /* 0x17B */ char bCharsiMagicMax;
-    /* 0x17C */ char bFaraMagicMax;
-    /* 0x17D */ char bLysanderMagicMax;
-    /* 0x17E */ char bDrognanMagicMax;
-    /* 0x17F */ char bHraltiMagicMax;
-    /* 0x180 */ char bAlkorMagicMax;
-    /* 0x181 */ char bOrmusMagicMax;
-    /* 0x182 */ char bElzixMagicMax;
-    /* 0x183 */ char bAshearaMagicMax;
-    /* 0x184 */ char bCainMagicMax;
-    /* 0x185 */ char bHalbuMagicMax;
-    /* 0x186 */ char bJamellaMagicMax;
-    /* 0x187 */ char bMalahMagicMax;
-    /* 0x188 */ char bLarzukMagicMax;
-    /* 0x189 */ char bDrehyaMagicMax;
-    /* 0x18A */ char bAkaraMagicLvl;
-    /* 0x18B */ char bGheedMagicLvl;
-    /* 0x18C */ char bCharsiMagicLvl;
-    /* 0x18D */ char bFaraMagicLvl;
-    /* 0x18E */ char bLysanderMagicLvl;
-    /* 0x18F */ char bDrognanMagicLvl;
-    /* 0x190 */ char bHraltiMagicLvl;
-    /* 0x191 */ char bAlkorMagicLvl;
-    /* 0x192 */ char bOrmusMagicLvl;
-    /* 0x193 */ char bElzixMagicLvl;
-    /* 0x194 */ char bAshearaMagicLvl;
-    /* 0x195 */ char bCainMagicLvl;
-    /* 0x196 */ char bHalbuMagicLvl;
-    /* 0x197 */ char bJamellaMagicLvl;
-    /* 0x198 */ char bMalahMagicLvl;
-    /* 0x199 */ char bLarzukMagicLvl;
-    /* 0x19A */ char bDrehyaMagicLvl;
-    /* 0x19B */ char pad0x19B;
-    /* 0x19C */ int dwNightmareUpgrade;
-    /* 0x1A0 */ int dwHellUpgrade;
-    /* 0x1A4 */ char bPermStoreItem;
-    /* 0x1A5 */ char bMultibuy;
-    /* 0x1A6 */ int16_t pad422; // padding
-};
-
+#endif // D2_DEFINED_D2ItemsTableStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2ItemTypeBaseIdEntryStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -295,11 +126,16 @@ struct D2ItemTypeBaseIdEntryStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2ItemTypeDefaultSlotStrc
+#define D2_DEFINED_D2ItemTypeDefaultSlotStrc
 struct D2ItemTypeDefaultSlotStrc {
     /* 0x00 */ int nItemTypeEquiv;
     /* 0x04 */ char szItemCode[4];
 };
 
+#endif // D2_DEFINED_D2ItemTypeDefaultSlotStrc
+#ifndef D2_DEFINED_D2ItemWeaponClassCodeStrc
+#define D2_DEFINED_D2ItemWeaponClassCodeStrc
 struct D2ItemWeaponClassCodeStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -307,6 +143,9 @@ struct D2ItemWeaponClassCodeStrc {
     /* 0x04 */ uint32_t nWeaponClass; // value ITEM_GetWeaponAnimClass returns for that code
 };
 
+#endif // D2_DEFINED_D2ItemWeaponClassCodeStrc
+#ifndef D2_DEFINED_D2UnitDataItemDetailsStrc
+#define D2_DEFINED_D2UnitDataItemDetailsStrc
 struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
     /* 0x00 */ uint32_t classId;
     /* 0x04 */ uint16_t x;
@@ -320,9 +159,13 @@ struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
     /* 0x14 */ uint32_t usedSockets;
 };
 
+#endif // D2_DEFINED_D2UnitDataItemDetailsStrc
+#ifndef D2_DEFINED_Item
+#define D2_DEFINED_Item
 struct Item {
 };
 
+#endif // D2_DEFINED_Item
 namespace D2Client::UNIT {
 
 // Function declarations
@@ -330,7 +173,7 @@ namespace D2Client::UNIT {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_RemoveItemStatsFromOwner(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t bRecalc, int32_t bUpdateResources);
-int Unreferenced_004c10c0();
+BOOL __fastcall Unreferenced_004c10c0(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 int32_t __fastcall ITEM_CheckItemEquipRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
 // @sourcefile .\UNIT\Item.cpp
@@ -340,7 +183,7 @@ void __fastcall ITEM_SetAnimModeAndPlace(struct D2UnitStrc * pUnit, struct D2Roo
 void __fastcall ITEM_FreeItemUnit(struct D2UnitStrc * pUnit);
 // Updates a ground-item unit's animation state and targetability flag each frame. Death/Neutral/Walk/GetHit/TownWalk modes clear UNITFLAG_TARGETABLE. Run mode sets UNITFLAG_TARGETABLE and adds OVERLAY_itemgleam if not already present. TownNeutral advances the frame and transitions to Run when the cycle ends. Halts on unexpected anim mode or null unit.
 void __fastcall ITEM_UpdateItemAnimation(struct D2UnitStrc * pUnit);
-void __fastcall ItemMessage(int32_t eMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t nUpdateFlag);
+void __fastcall ItemMessage(int32_t eMessageType, struct D2UnitStrc * pUnit, int32_t pMessage, int32_t nUpdateFlag);
 // Client-side handler for S2C packet 0x47. Recalculates all equipped item states for the unit identified in the packet. Walks inventory charms (enables qualifying ones), iterates body slots 0-10 (disables items failing requirements, re-enables items passing requirements in a convergence loop up to 100 iterations), recalculates set bonuses for quality-5 items, and reloads character GFX if equipment changed. Source: .\\UNIT\\Item.cpp
 // EDX bFromNetwork: 1 from the network handler, 0 from the two local callers; overwritten here before any read.
 void __fastcall ITEM_CltRecalcAllEquippedItems(struct D2GSPacketSrv0x47 * pBytes, int32_t bFromNetwork);
@@ -358,7 +201,7 @@ BOOL __fastcall ITEM_UpdateChargedSkillStat(struct D2UnitStrc * pUnit, int32_t n
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2UnitStat eUnitStat, uint32_t nValue, uint16_t nStatParam);
 void __fastcall ITEM_HandleItemFlagEditPacket(struct D2GSPacketSrv0x40 * pbPacket);
-void __fastcall ITEM_HandleCursorItemRemoval(int32_t pbPacket);
+void __fastcall ITEM_HandleCursorItemRemoval(struct D2GSPacketSrv0x42 * pbPacket);
 void __fastcall HandleItemToCursor(uint8_t * pBytes);
 int __fastcall Unreferenced_004c2150(int param_1);
 // @sourcefile .\UNIT\Item.cpp
@@ -396,7 +239,7 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall HandleItemUnequip(uint8_t * pBytes);
 // Client-side handler that equips/swaps an item into a player body location from a body-equip packet. Resolves the owner unit (must be UNIT_PLAYER); for a non-RELOAD item it locates the existing item, sets its anim mode/page; for a RELOAD item it removes the old server object and recreates the item from the packet. Sets the target body location, places the item in the inventory (slot 3, or 4 for body-loc 0xb/0xc), binds it to the body location, updates the primary weapon and GFX flags, applies socketable/equip stats, then runs the full equip-requirement recalc loop (disable failing, re-equip qualifying up to 100 passes, re-apply set bonuses) and reloads the unit mode COF. Halts via Fog ErrorManager on invalid state.
-void __stdcall ITEM_HandleSwapBodyEquipItem(int32_t pPacket, struct D2UnitDataItemDetailsStrc * pItemDetails);
+void __stdcall ITEM_HandleSwapBodyEquipItem(uint8_t * pPacket, struct D2UnitDataItemDetailsStrc * pItemDetails);
 void __fastcall HandleItemSwapBodyItem(uint8_t * pBytes);
 void __fastcall HandleItemWeaponSwitch(uint8_t * pPacket);
 // Client handler for a server packet that updates an existing item's quantity/stats (e.g. after stacking gold/potions). Locates the item by GUID, reloads its save data from the packet; on failure removes the item. If the item is not ITEMFLAG_IGNORE, clears the player's cursor inventory and refreshes the on-hand item display via ITEM_SetItemOnHand. Halts if the player or inventory is null.
@@ -427,7 +270,7 @@ void __fastcall ITEM_HandleItemMoveToBodyLoc(uint8_t * pPacket);
 // Client-side handler for a server item-update packet. Parses item details (ExtractItemDetails) then dispatches on the action code: place item into inventory grid (creates the item, applies socketable/equip stats, charm activation), equip-on-body / remove-from-body (mode 1: swaps primary weapon, clears CelCmp mode flags, runs the full re-equip pass that disables/enables items by ITEM_CheckItemEquipRequirements, recalcs equipped items and reloads the unit COF), put-in-belt (mode 2), or set-on-cursor (mode 4). Resolves the owning unit via UNITS_FindClientSideUnit, updates the local player's hand/weapon class ids and UI. Returns the affected item unit (or NULL); calls the unrecoverable-error halt on consistency failures. __fastcall(pbPacket).
 // @sourcefile .\UNIT\Item.cpp
 struct D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket);
-void __fastcall ITEM_HandleServerItemAction(int32_t pPacket);
+void __fastcall ITEM_HandleServerItemAction(struct D2GSPacketSrv0x7C * pPacket);
 #endif // D2_MODULE_D2Client
 // 19 internal functions (defined in .cpp)
 

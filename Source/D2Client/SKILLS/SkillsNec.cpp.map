@@ -373,6 +373,9 @@
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
         "D2CheckIfCorpseIsConsumable",
         "MONSTER_CanBeConverted"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {

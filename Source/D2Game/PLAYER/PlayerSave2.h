@@ -4,23 +4,36 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
 
 // Forward declarations
 struct D2ClientStrc;
 struct D2MercSaveDataStrc;
+struct D2RoomStrc;
 struct D2SaveFileHeaderStrc;
 struct D2SaveHotKeyStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
 
+// Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union CreateItemIronGolemItem_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2UnitStrc * pCreatedItem;
+    /* 0x00 */ int nSocketIdx;
+};
+
+#endif // D2_MODULE_D2Game
 namespace D2Game::PLAYER::PlayerSave2 {
 
 // Function declarations
@@ -37,24 +50,24 @@ int16_t __fastcall GetItemIndexInList(::SGAMEDATA * pGame, struct D2UnitStrc * p
 void __fastcall SaveMercData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SaveFileHeaderStrc * pSaveHeader);
 // Serializes the fixed 0x14f-byte .d2s save-file header for a player into the caller's output buffer (pStartAddress..pEndAddress). Builds a D2SaveFileHeaderStrc: magic 0xAA55AA55, file version 0x60, char name, character-status flags (sets expansion 0x20 and non-SP 0x40 bits), class id, level, create/current time, init seed, the 16 hotkey skill/item bindings, left/right/swap-hand skill+item indices, per-difficulty current act (|0x80), 0xFF-filled appearance arrays (filled by SaveCharAppearance), merc data, and guild rank. Then memcpy's the header (0x14f bytes) to the buffer and advances *pStartAddress by 0x14f. Returns a Fog::GuardStack value; bails (returns guard 2) if client/name/length invalid, or if the buffer is too small.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pStartAddress, DWORD pEndAddress);
+int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress);
 // Serializes the player's quest state into a .d2s quest block (0x12A bytes, magic "Woo!"). Copies all three difficulty quest bit-buffers (normal/nightmare/hell) from D2UnitDataPlayerStrc.pQuestRecord into a D2SaveFileQuestsStrc, then memcpys the struct to the output buffer and advances *pStartAddress. Returns non-zero on buffer-too-small or missing player data.
-int32_t __fastcall SaveQuests(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pStartAddress, uint16_t * pEndAddress);
+int32_t __fastcall SaveQuests(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress);
 // Serialises the player's waypoint activation state for all acts into a D2SaveFileWaypointsStrc (magic 0x5357, 0x50 bytes) and writes it to the save buffer. Returns 0 on success, 1 if buffer too small, 2 if player data missing.
-int32_t __fastcall SaveWaypoints(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pStartAddress, uint32_t * pEndAddress);
+int32_t __fastcall SaveWaypoints(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint32_t * pEndAddress);
 // Serialises per-act NPC introduction/interaction state into a D2SaveFileNpcStrc (magic 0x7701, 0x34 bytes) and writes it to the save buffer. Copies both the intro bit-buffer data and size/position info for each act. Returns 0 on success, 1 if buffer too small, 2 if player data missing.
-int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pStartAddress, uint32_t * pEndAddress);
+int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint32_t * pEndAddress);
 // Serialises a player's stat list into the save-file bit-stream. Writes the 0x6667 stat-section header, then iterates CopyStatsToBuffer output: for each stat with a non-zero csvbits entry in ItemStatCost.txt, clamps the value to the csvbits width (signed or unsigned per ITEMSTATCOSTFLAG_CSVSIGNED), writes the 9-bit stat ID, optional csvparam-width sub-index, and csvbits-width value via Fog::BitBuffer. Terminates the stream with the 0x1FF sentinel. Updates *pStartAddress to the byte after the last written bit. Returns 0 on success, 1 if the buffer is already full.
-BOOL __fastcall SaveStats(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pStartAddress, uint8_t * pEndAddress);
+BOOL __fastcall SaveStats(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress);
 // Serialises hard skill point allocations for the player's class to the save buffer (magic header 0x6669, then one byte per class skill). Iterates all class skills via SKILLS_GetClassSkillByIndex and writes the base (hard) level only. Returns 0 on success, 1 if buffer too small, 2 if class ID invalid.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall SaveSkills(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pStartAddress, DWORD pEndAddress);
-int __fastcall SaveItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int * pnOffset, uint32_t byPage, uint32_t bParam1, uint32_t bParam2, uint32_t param_1);
+int __fastcall SaveSkills(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress);
+int __fastcall SaveItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * pnOffset, uint8_t * byPage, uint32_t bParam1, uint32_t bParam2, uint32_t param_1);
 // Serializes the player's best corpse and its items into the .d2s save buffer. Iterates all corpse records in the player's inventory, picks the one with the highest total item value (ignoring gold), then writes the JM header (0x4A 0x4D), corpse count, position, and item list via SaveItems. Returns 0 on success, 1 if buffer too small, 2 if no inventory, 4 if SaveItems fails.
-int __fastcall SaveCorpseItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * ppWritePos, uint32_t * pEndAddress, uint32_t bPage1, uint32_t bPage2);
-int __fastcall SaveMercItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * ppWritePos, int32_t nEndOffset, int32_t bUnk1, int32_t bUnk2);
+int __fastcall SaveCorpseItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * ppWritePos, uint8_t * pEndAddress, uint32_t bPage1, uint32_t bPage2);
+int __fastcall SaveMercItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * ppWritePos, uint8_t * nEndOffset, int32_t bUnk1, int32_t bUnk2);
 // Serializes the Iron Golem's consumed item into the player save stream (LoD expansion only). Writes a 'kf' header and a 1-byte has-item flag. If the player has an Iron Golem pet (classId 0x123) with a valid IronGolem skill and a carried inventory item, serializes that item via SAVE_SerializeItemIfValid; clears the flag if serialization fails. Advances *ppWritePos past all written bytes.
-BOOL __fastcall SaveGolemItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * * ppWritePos, int32_t nEndOffset, uint32_t bPage1, uint32_t bPage2);
+BOOL __fastcall SaveGolemItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * * ppWritePos, uint8_t * nEndOffset, uint32_t bPage1, uint32_t bPage2);
 // Explicit GuardStack(0) tail on success, GuardStack(nItemsSpaceAvail) on failure - an int error code propagated from whichever Save* sub-step failed.
 int __fastcall MakeSaveFile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * pSaveBuffer, int * nStartOffset, int32_t nBufferSize, int32_t bUnk1, int32_t bUnk2);
 // Computes the character-title/flag index (0–0x1a) used when saving or loading a character's title progress. Checks expansion/classic match between the character status bits and the game's bExpansion flag (returns 8 or 9 on mismatch). On BattleNet servers, validates file-time freshness and game type (returns 0x19/0x1a). Then checks hardcore arena flag and character status bit 2 to return the hardcore-normal title codes (0xb/0xc/10). Finally maps difficulty + title-progress bits to the levelled codes (0xd/0xe), returning 0 when fully progressed.
@@ -75,7 +88,7 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, struct D2UnitStrc * 
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwFileVersion, uint32_t nSkillCount);
-int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppItemList, uint8_t * nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnLoadResult);
+int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * ppItemList, uint8_t * nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnLoadResult);
 // Deserializes the player's saved corpse(s) from the .d2s save stream during game/character load. ppCorpseList points at the current read cursor; validates the 'JM' (0x4D4A) corpse block header and a count <2 (at most one corpse). For each corpse: creates a UNIT_PLAYER unit of the loading player's class, clears CANBEATTACKED, binds the owning client, copies the char name, seeds it from the game seed, sets STATE_playerbody, links its inventory owner GUID to the player, then loads the corpse's items via PLRSAVE_LoadItemsFromBuffer. Registers an inventory notification and sends the 0x8E corpse-assign packet. Advances *ppCorpseList past the consumed bytes. Returns 0 on success or 0x15 on error; on error writes a granular error code (0x65-0x6A or the item-load error) into *pnParam when non-null.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppCorpseList, struct D2UnitStrc * pOwnerUnit, uint32_t dwFileVersion, int * pnErrorCode);
@@ -85,7 +98,7 @@ struct D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, struct D2UnitStrc *
 // Registers: pGame (ECX) and pPlayer (EDX) are passed by the caller but not read.
 int __fastcall LoadMerc2(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit2, uint32_t dwFileVersion, int * pnErrorCode);
 // Deserializes the Iron Golem item (and its socketed items) from the save stream. Reads the golem's base item via ITEM_CreateFromSaveData, then iterates usedSockets to read and socket each child item via PutItemInItem. Validates the runeword flag on completion. Returns 1 on success, 0 on any parse/create failure; advances *ppReadPos and writes *ppGolemItem.
-BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppGolemItem, uint8_t * * ppReadPos, int32_t nEndOffset, uint32_t nVersion);
+BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppGolemItem, uint8_t * * ppReadPos, uint8_t * nEndOffset, uint32_t nVersion);
 // Restores an Iron Golem from save (expansion-only, magic 0x666b). Reads the sacrificed item from the buffer via CreateItemIronGolemItem, equips it as the current skill, marks the golem for update, and registers its GUID on the client. If the golem byte is 0 (no golem), skips creation silently. Returns 0x17 on failure.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall LoadGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * * ppReadPos, struct D2UnitStrc * pEndBuf, uint32_t nVersion);
@@ -96,7 +109,7 @@ int32_t __fastcall HOTKEY_GetAssignedItemGUID(::SGAMEDATA * pGame, struct D2Unit
 // @sourcefile .\PLAYER\PlrSave2.cpp
 void __fastcall SetStatsAndHotkeys(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, int32_t nHitpoints, int32_t nMana);
 // Loads a player from a modern .d2s save buffer into a live server unit (fastcall pGame,pClient,pSaveHeader,nSaveDataOffset,ppUnit). Parses the header and creates the unit (PLAYERSAVE_ParseHeaderAndCreateUnit), then sequentially reads quests, waypoints, intro/NPC-greeting flags, stats, hard skills, items, corpse, mercenary, and golem from the buffer, threading a moving read pointer between pSaveHeader and the buffer end. Records pre-load HP/mana and restores them via SetStatsAndHotkeys on success. On parse error 2 at end-of-buffer it creates a fresh character. On any failure it frees the partially-built unit (and its DRLG room) and unlinks it from the client; returns gdwPlayerSaveVersion[errorCode] (0 = success). Writes the loaded unit to *ppUnit.
-int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2SaveFileHeaderStrc * pSaveHeader, int32_t nSaveDataOffset, struct D2UnitStrc * * ppUnit, uint32_t dwParam6, uint32_t dwParam7, uint32_t dwParam8);
+int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2SaveFileHeaderStrc * pSaveHeader, int32_t nSaveDataOffset, struct D2UnitStrc * * ppUnit, struct D2RoomStrc * dwParam6, uint32_t dwParam7, uint32_t dwParam8);
 #endif // D2_MODULE_D2Game
 // 2 internal functions (defined in .cpp)
 

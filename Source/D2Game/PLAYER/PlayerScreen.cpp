@@ -2,11 +2,8 @@
 
 #include "Source/D2Game/PLAYER/PlayerScreen.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
@@ -15,7 +12,6 @@
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/PlayerList.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -166,18 +162,18 @@ static void RefreshPlayerStatus(D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t * pPartyJoinArgs) {
+void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PartyJoinArgsStrc * pPartyJoinArgs) {
     D2UnitStrc* pOtherUnit;
     uint16_t nOldPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, (D2UnitStrc*)*pPartyJoinArgs);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, (D2UnitStrc*)*pPartyJoinArgs, pUnit);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, (D2UnitStrc*)pPartyJoinArgs[1]);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, (D2UnitStrc*)pPartyJoinArgs[1], pUnit);
-    RefreshPlayerStatus(pUnit, (D2UnitStrc*)*pPartyJoinArgs);
-    RefreshPlayerStatus(pUnit, (D2UnitStrc*)pPartyJoinArgs[1]);
-    if (nOldPartyId == *(uint16_t*)(pPartyJoinArgs + 2) && nOldPartyId != 0xffff) {
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pPartyJoinArgs->pInvitee);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pPartyJoinArgs->pInvitee, pUnit);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pPartyJoinArgs->pInviter);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pPartyJoinArgs->pInviter, pUnit);
+    RefreshPlayerStatus(pUnit, pPartyJoinArgs->pInvitee);
+    RefreshPlayerStatus(pUnit, pPartyJoinArgs->pInviter);
+    if (nOldPartyId == pPartyJoinArgs->nPartyId && nOldPartyId != 0xffff) {
       uint32_t pUnitGid;
-      pOtherUnit = (D2UnitStrc*)pPartyJoinArgs[1];
+      pOtherUnit = pPartyJoinArgs->pInviter;
       if (pUnit != pOtherUnit) {
         if (!pOtherUnit) {
           pUnitGid = -1;
@@ -189,8 +185,8 @@ void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
       }
     }
 
-    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, (D2UnitStrc*)*pPartyJoinArgs);
-    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, (D2UnitStrc*)pPartyJoinArgs[1]);
+    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, pPartyJoinArgs->pInvitee);
+    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, pPartyJoinArgs->pInviter);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender(pGame, pUnit);
 }
 
@@ -339,7 +335,7 @@ void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
 
 void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwArg, int * pnError) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTY_SendPlayerLeftEvent, (BOOL)(uintptr_t)pUnit);
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTY_SendPlayerLeftEvent, pUnit);
     UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
 }
 
@@ -388,7 +384,7 @@ static void __stdcall PARTYSCREEN_SetHostileWithParty(::SGAMEDATA * pGame, D2Uni
       return;
     }
 
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTYSCREEN_SetHostileForPlayer, (BOOL)(uintptr_t)pUnit2);
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTYSCREEN_SetHostileForPlayer, pUnit2);
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp

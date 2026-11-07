@@ -4,17 +4,11 @@
 #include "Source/D2Client/UI/Path.h"
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2DynamicPathStrc.h"
-#include "Source/D2Common/D2RoomStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2PathTypeArg.h"
 #include "Source/D2Game/Objects/Objects.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1622,10 +1616,10 @@ static void PATH_ResetPathState(D2DynamicPathStrc * pDynamicPath) {
     pDynamicPath->nVelocityY = 0;
 }
 
-int __fastcall Unreferenced_00650800(int param_1) {
-    D2DynamicPathStrc* pDynamicPath = *(D2DynamicPathStrc**)(param_1 + 0x2c);
+D2DynamicPathStrc * __fastcall Unreferenced_00650800(D2UnitStrc * param_1) {
+    D2DynamicPathStrc* pDynamicPath = param_1->pPath.pDynamicPath;
     if (!pDynamicPath) {
-      return 0;
+      return nullptr;
     }
 
     pDynamicPath->nFlags &= -9;
@@ -1633,11 +1627,11 @@ int __fastcall Unreferenced_00650800(int param_1) {
       pDynamicPath->eCollisionFlag = 0;
     }
     if (pDynamicPath->nFlags & 0x20U && pDynamicPath->dwPathPoints > 0 && pDynamicPath->dwVelocity) {
-      return (int)pDynamicPath;
+      return pDynamicPath;
     }
 
     PATH_ResetPathState(pDynamicPath);
-    return 0;
+    return nullptr;
 }
 
 BOOL __stdcall PATH_AdvanceUnitAlongPath(D2UnitStrc * pUnit, int pExternalPath) {
@@ -1772,7 +1766,7 @@ int32_t __stdcall PATH_GetCollisionTypeAt(D2DynamicPathStrc * pDynamicPath, D2Un
     return 1;
 }
 
-void __stdcall PATH_CheckCollisionFlags(D2DynamicPathStrc * pDynamicPath, uint32_t dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
+void __stdcall PATH_CheckCollisionFlags(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
     uint32_t _wPosX;
     _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
     BOOL bMoved = PATH_MoveUnitToPosition(pRoom, _wPosX, pDynamicPath);

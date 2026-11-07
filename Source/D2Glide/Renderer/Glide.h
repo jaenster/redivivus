@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Glide)
 #error "D2Glide header included by a module that may not use D2Glide (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Glide) && !defined(D2_LOADS_D2Glide)
+#error "internal D2Glide header included from another module; include D2Glide's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,7 @@ struct D2GfxLightStrc;
 struct D2GfxSettingsStrc;
 struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
+struct GlTextureCacheNodeStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Glide)
@@ -33,6 +37,8 @@ struct D2GlideGroundVertexCursorStrc {
 };
 
 #endif // D2_MODULE_D2Glide
+#ifndef D2_DEFINED_D2GlideVertexStrc
+#define D2_DEFINED_D2GlideVertexStrc
 struct D2GlideVertexStrc {
     /* 0x00 */ float fX;
     /* 0x04 */ float fY;
@@ -43,12 +49,18 @@ struct D2GlideVertexStrc {
     /* 0x18 */ float fW;
 };
 
+#endif // D2_DEFINED_D2GlideVertexStrc
+#ifndef D2_DEFINED_D2GlideWallCornerStrc
+#define D2_DEFINED_D2GlideWallCornerStrc
 struct D2GlideWallCornerStrc {
     /* 0x00 */ int32_t nX;
     /* 0x04 */ int32_t nY;
     /* 0x08 */ int32_t nZ;
 };
 
+#endif // D2_DEFINED_D2GlideWallCornerStrc
+#ifndef D2_DEFINED_D2RenderClipOutStrc
+#define D2_DEFINED_D2RenderClipOutStrc
 struct D2RenderClipOutStrc {
     /* 0x00 */ int32_t nSkipLeft;
     /* 0x04 */ int32_t nDrawWidth;
@@ -56,6 +68,7 @@ struct D2RenderClipOutStrc {
     /* 0x0C */ int32_t nDrawHeight;
 };
 
+#endif // D2_DEFINED_D2RenderClipOutStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Glide)
 struct GlideTexInfoStrc {
     /* 0x00 */ struct D2GfxDataStrc * pSprite; // D2GfxDataStrc pointer; written by RENDERER_GLIDE_GetSpriteMetadata via EDI
@@ -75,22 +88,28 @@ struct GlideTexInfoStrc {
 };
 
 #endif // D2_MODULE_D2Glide
+#ifndef D2_DEFINED_GlTextureCacheStrc
+#define D2_DEFINED_GlTextureCacheStrc
 struct GlTextureCacheStrc {
     /* 0x00 */ uint32_t dwEntrySize; // Size of each node in bytes (0x1C)
     /* 0x04 */ uint32_t nMaxEntries; // Total cache capacity
     /* 0x08 */ uint32_t nUsedCount; // Number of active entries
-    /* 0x0C */ uint8_t * pActiveHead; // Head of LRU active list
-    /* 0x10 */ uint8_t * pActiveTail; // Tail of LRU active list (MRU position)
-    /* 0x14 */ uint8_t * pFreeHead; // Head of free node list
-    /* 0x18 */ uint8_t * pFreeTail; // Tail of free node list
-    /* 0x1C */ uint8_t * pNodes; // Allocated node array base
+    /* 0x0C */ struct GlTextureCacheNodeStrc * pActiveHead; // Head of LRU active list
+    /* 0x10 */ struct GlTextureCacheNodeStrc * pActiveTail; // Tail of LRU active list (MRU position)
+    /* 0x14 */ struct GlTextureCacheNodeStrc * pFreeHead; // Head of free node list
+    /* 0x18 */ struct GlTextureCacheNodeStrc * pFreeTail; // Tail of free node list
+    /* 0x1C */ struct GlTextureCacheNodeStrc * pNodes; // Allocated node array base
 };
 
+#endif // D2_DEFINED_GlTextureCacheStrc
+#ifndef D2_DEFINED_D2GlideVertexTexCacheBlockStrc
+#define D2_DEFINED_D2GlideVertexTexCacheBlockStrc
 struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
     /* 0x00 */ D2GlideVertexStrc aVertex[4]; // fan block submitted by DrawShadowQuad/DrawPalettedQuad/DrawPerspectiveImage
     /* 0x70 */ GlTextureCacheStrc aTextureCache[3]; // indexed 1-based from &aVertex[2].fT (= aTextureCache - 0x20) by UploadTextureToCache
 };
 
+#endif // D2_DEFINED_D2GlideVertexTexCacheBlockStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -137,6 +156,7 @@ void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode);
 void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nFilteringMode);
 int * __fastcall GetRenderStatistics();
 BOOL __stdcall RENDERER_GLIDE_IsPerspectiveMode();
+void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode);
 BOOL __stdcall RENDERER_GLIDE_InitTextureMemory();
 void Unreferenced_00509a70();
 BOOL __stdcall RENDERER_GLIDE_DestroyWindow();
@@ -183,7 +203,7 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTileSimple(struct D2TileLibraryEntryStr
 // Renders shadow tile with perspective projection in GLIDE renderer. Takes screen coordinates and alpha, applies perspective transform and blending.
 BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, uint8_t nAlpha, int32_t nScreenPanels);
 BOOL __fastcall DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
-BOOL __thiscall RENDERER_GLIDE_DrawWallTileSimple(int32_t nScreenPanels, struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t pColorTable);
+BOOL __thiscall RENDERER_GLIDE_DrawWallTileSimple(int32_t nScreenPanels, struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, struct D2GfxLightStrc * pColorTable);
 BOOL __fastcall DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, struct D2GfxLightStrc * pLight, int32_t nScreenPanels, int32_t nAlpha);
 BOOL __fastcall DrawWallTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, struct D2GfxLightStrc * pLight, int32_t nScreenPanels);
 void RENDERER_GLIDE_InitGroundTileVertices();

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -27,7 +30,7 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer);
 BOOL __stdcall Key(struct D2ControlMsg * pTimer);
 // @sourcefile .\Src\D2WinTimer.cpp
 ::D2WinTimer * __fastcall D2WinTimer(int32_t nTimeoutInSeconds, OnPress pfnOnPress);
-void __fastcall D2WINEDITBOX_Destroy(int * pEditBox);
+void __fastcall D2WINEDITBOX_Destroy(::D2WinTimer * pEditBox);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 void __fastcall FORMS_DestroyD2WinTimer(::D2WinTimer * pTimer);

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2CoordStrc;
 struct D2GSPacketSrv0x27;
 struct D2GSPacketSrv0x27_TextStrc;
 struct D2GSPacketSrv0x50;
@@ -38,11 +42,16 @@ struct ScreenMessage_t;
 struct D2TextLineStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ScreenMessageListStrc
+#define D2_DEFINED_D2ScreenMessageListStrc
 struct __attribute__((packed)) D2ScreenMessageListStrc {
     /* 0x00 */ struct ScreenMessage_t * pHead; // singly linked via ScreenMessage_t+0x22
     /* 0x04 */ uint16_t nCount; // word; TEXT_FreeAllScreenMessages asserts it equals the freed count
 };
 
+#endif // D2_DEFINED_D2ScreenMessageListStrc
+#ifndef D2_DEFINED_D2TextBoxStrc
+#define D2_DEFINED_D2TextBoxStrc
 struct __attribute__((packed)) D2TextBoxStrc {
     /* 0x00 */ struct D2TextLineStrc * pLineList; // head of the 8-byte line nodes {WCHAR *pwszLine; next} from TEXT_ParseMultilineString / D2WINFONT_WordWrapString; freed by TEXT_FreeTextLineList
     /* 0x04 */ int nLineCount; // line count written by TEXT_ParseMultilineString / D2WINFONT_WordWrapString
@@ -59,11 +68,17 @@ struct __attribute__((packed)) D2TextBoxStrc {
     /* 0x2A */ uint16_t wUnused2A; // zeroed by TEXT_AllocTextBox (non-wrap path); no reader found in the Text module
 };
 
+#endif // D2_DEFINED_D2TextBoxStrc
+#ifndef D2_DEFINED_D2TextLineStrc
+#define D2_DEFINED_D2TextLineStrc
 struct D2TextLineStrc {
     /* 0x00 */ uint16_t * wszLine; // line text; TEXT_FreeTextLineList frees it before the node
     /* 0x04 */ struct D2TextLineStrc * pNext; // next line
 };
 
+#endif // D2_DEFINED_D2TextLineStrc
+#ifndef D2_DEFINED_ScreenMessage_t
+#define D2_DEFINED_ScreenMessage_t
 struct __attribute__((packed)) ScreenMessage_t {
     /* 0x00 */ uint16_t * apwszLines[6]; // Array of up to 6 wide string pointers (one per display line)
     /* 0x18 */ uint16_t nLineCount; // Number of active lines in apwszLines
@@ -72,6 +87,25 @@ struct __attribute__((packed)) ScreenMessage_t {
     /* 0x22 */ struct ScreenMessage_t * pNext; // next message; every list walk reads +0x22
 };
 
+#endif // D2_DEFINED_ScreenMessage_t
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union TEXT_DrawScrollingTextBox_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t nFirstVisibleYOffset;
+    /* 0x00 */ struct D2TextLineStrc * pBottomLine;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union TEXT_FindNonOverlappingRect_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ RECT * pExistingRect;
+    /* 0x00 */ int32_t nDistY;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::UI::Text {
 
 // Function declarations
@@ -92,11 +126,11 @@ void __fastcall TEXT_DrawTextBoxAtPosition(struct D2TextBoxStrc * pTextBox, int3
 void __stdcall TEXT_OnClickCloseNpcDialog(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall TEXT_SetNpcMenuSelection(struct D2UnitStrc * pUnit);
 void __stdcall TEXT_ClearNpcMenuSelection();
-int __fastcall Unreferenced_0049da60(int param_1);
+void __fastcall Unreferenced_0049da60(int bRegister);
 int __fastcall Unreferenced_0049dac0(int param_1);
-int __fastcall Unreferenced_0049dae0(int param_1, int param_2);
-struct ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(uint16_t * * ppwszText);
-void __fastcall TEXT_InsertScreenMessage(uint16_t * * ppwszText);
+int __fastcall Unreferenced_0049dae0(int param_1, struct D2CoordStrc * param_2);
+struct ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(struct ScreenMessage_t * ppwszText);
+void __fastcall TEXT_InsertScreenMessage(struct ScreenMessage_t * ppwszText);
 void __stdcall TEXT_DrawChatMessages();
 void __stdcall TEXT_DrawPartyMessages();
 void __stdcall TEXT_FreeStaticTextBox();
@@ -108,8 +142,8 @@ void __fastcall TEXT_SetScrollCompleteCallback(pfnTextScrollComplete pfnCallback
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0();
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e800();
 void __stdcall TEXT_SetTextBoxExclusionRect();
-int Unreferenced_0049e860();
-struct D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0();
+void Unreferenced_0049e860();
+uint32_t __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0();
 struct D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit();
 // Handles the 0x5a event message packet: switches on pMessageCtx->nMessageType, formats the localized message from the packet's names and argument, and prints it in pMessageCtx->nColor. pEventData is the format argument for message type 0x12, which also shakes the view and plays sound 0x1220.
 void __fastcall TEXT_HandleEventMessagePacket(struct D2Packet0x5aEventStructure * pMessageCtx);

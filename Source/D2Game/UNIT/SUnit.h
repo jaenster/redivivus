@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,9 +17,9 @@
 // Forward declarations
 struct D2ClientStrc;
 struct D2DamageStrc;
+struct D2LvlWarpTxt;
 struct D2PresetUnitStrc;
 struct D2QServerUnitRecordStrc;
-struct D2RoomExStrc;
 struct D2RoomStrc;
 struct D2SeedStrc;
 struct D2TimerStrc;
@@ -39,7 +42,7 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, struct D2
 struct D2SUnitStairs {
     /* 0x00 */ uint32_t nX;
     /* 0x04 */ uint32_t nY;
-    /* 0x08 */ struct D2RoomExStrc * pRoomEx;
+    /* 0x08 */ struct D2LvlWarpTxt * pRoomEx;
     /* 0x0C */ struct D2RoomStrc * pRoom;
     /* 0x10 */ struct SGAMEDATA * pGame;
 };
@@ -59,7 +62,7 @@ void __fastcall SetSeed(struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed);
 void __fastcall SetItemSeeds(struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed);
 // Increments and returns pGame->anUnitGuidCounters[eUnitType] (+0x90), skipping -1. The incremented value IS the new unit's GUID and is returned in EAX; typing it void made every caller read the GUID out of an unassigned local.
 uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitType eUnitType);
-int32_t __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID);
+struct D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID);
 // Finds a unit by type and GUID in the game's unit hash tables. Walks the unit linked list (pNext at offset 0xE4) matching dwUnitId.
 struct D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnitType, uint32_t nUnitGUID);
 // Returns the owner unit (parent) of the given unit. Checks eUnitFlagsEx bit 10 (has owner flag), then looks up eOwnerType/nOwnerGUID via FindUnitFromTable.
@@ -156,7 +159,7 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 void __fastcall TakeStairs(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pObject);
 // Server-side unit factory. Position is WORLD SUBTILES; bPlaceInRoom=1 routes through UNITS_PlaceUnitInRoom + AllocObjectData.
 // Dispatches on eUnitType through the jump table at 005554e8 (label UNIT_FillFunctions) - a switch, not an array of callbacks. Its six branch labels (FillPlayer/FillMonster/FillObject/FillMissile/FillItem/FillWarp) and the shared tail UNITS_RestoreUnitInRoom are case blocks of this function, not callable functions.
-struct D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int32_t nPosX, int32_t nPosY, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t bPlaceInRoom, int32_t nInitialMode, void * pMonsterData);
+struct D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int32_t nPosX, int32_t nPosY, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t bPlaceInRoom, int32_t nInitialMode, uint32_t pMonsterData);
 void __fastcall UNITS_UnlinkUnitFromRoom(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t bDisallowNotify);
 // Fully tears down a server-side unit: unlinks it from its room, frees quest-event data, then dispatches per-type cleanup (player: portals, party, resources, path; monster: target nodes, resources, path; object: object data, static path, unit data; missile: path, missile data; item: inventory+timers, item data; warp: static path). Finishes by freeing unit events, queued packets, and the unit itself. Asserts pGame/pUnit non-null and eUnitType < 6.
 // @sourcefile .\UNIT\SUnit.cpp
@@ -170,6 +173,7 @@ void __fastcall SUNIT_SpawnPresetUnitsForRoom(::SGAMEDATA * pGame, struct D2Room
 // Server-side teardown of a unit's entire inventory when the unit is being freed. Walks each inventory node: for equipped items (grid type 3) removes equip stats and clears the body location; for active charms unequips stats and emits a debug record of their grid position/page; then detaches the item from the inventory and frees the underlying server unit (any unit type < 6). Finally frees any item held on the cursor. Halts via ErrorManager on null unit or inventory-consistency failures.
 // @sourcefile .\UNIT\SUnit.cpp
 void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall Clear_Unref_005de320(struct D2UnitStrc * pUnit, eD2TimerTypeDWORD nUpdateType);
 void StaticInit_gnSeedCounter();
 #endif // D2_MODULE_D2Game
 // 4 internal functions (defined in .cpp)

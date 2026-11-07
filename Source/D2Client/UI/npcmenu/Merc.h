@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,6 +21,8 @@ struct D2GSPacketSrv0x8A;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2MercBaseStrc
+#define D2_DEFINED_D2MercBaseStrc
 struct D2MercBaseStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -25,6 +30,9 @@ struct D2MercBaseStrc {
     /* 0x04 */ uint32_t nBaseDefense;
 };
 
+#endif // D2_DEFINED_D2MercBaseStrc
+#ifndef D2_DEFINED_D2MercDifficultyStrc
+#define D2_DEFINED_D2MercDifficultyStrc
 struct D2MercDifficultyStrc {
     /* 0x00 */ int nExpModifier;
     /* 0x04 */ int nArmorModifier;
@@ -35,15 +43,9 @@ struct D2MercDifficultyStrc {
     /* 0x18 */ int nDamageFinalMult;
 };
 
-struct D2MercForHire {
-    /* 0x00 */ short nNameStringId;
-    /* 0x02 */ uint8_t field_0x2;
-    /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ int nSeed;
-    /* 0x08 */ int bActive;
-    /* 0x0C */ int field5_0xc;
-};
-
+#endif // D2_DEFINED_D2MercDifficultyStrc
+#ifndef D2_DEFINED_D2MercQuaternaryStrc
+#define D2_DEFINED_D2MercQuaternaryStrc
 struct D2MercQuaternaryStrc {
     /* 0x00 */ uint32_t nState;
     /* 0x04 */ int nDefenseFlag;
@@ -53,6 +55,9 @@ struct D2MercQuaternaryStrc {
     /* 0x14 */ int nDefenseBonus;
 };
 
+#endif // D2_DEFINED_D2MercQuaternaryStrc
+#ifndef D2_DEFINED_D2MercQuinaryStrc
+#define D2_DEFINED_D2MercQuinaryStrc
 struct D2MercQuinaryStrc {
     /* 0x00 */ uint32_t nAbility;
     /* 0x04 */ int nHealthBonus;
@@ -61,6 +66,9 @@ struct D2MercQuinaryStrc {
     /* 0x10 */ int field_10;
 };
 
+#endif // D2_DEFINED_D2MercQuinaryStrc
+#ifndef D2_DEFINED_D2MercSecondaryStrc
+#define D2_DEFINED_D2MercSecondaryStrc
 struct D2MercSecondaryStrc {
     /* 0x00 */ uint32_t nDamage;
     /* 0x04 */ uint32_t nArmor;
@@ -68,6 +76,9 @@ struct D2MercSecondaryStrc {
     /* 0x0C */ int nArmorBonus;
 };
 
+#endif // D2_DEFINED_D2MercSecondaryStrc
+#ifndef D2_DEFINED_D2MercTertiaryStrc
+#define D2_DEFINED_D2MercTertiaryStrc
 struct D2MercTertiaryStrc {
     /* 0x00 */ uint32_t nArmor;
     /* 0x04 */ uint32_t nDefense;
@@ -75,6 +86,9 @@ struct D2MercTertiaryStrc {
     /* 0x0C */ int nArmorBonus;
 };
 
+#endif // D2_DEFINED_D2MercTertiaryStrc
+#ifndef D2_DEFINED_D2MercWeaponAnimMapStrc
+#define D2_DEFINED_D2MercWeaponAnimMapStrc
 struct D2MercWeaponAnimMapStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -82,6 +96,7 @@ struct D2MercWeaponAnimMapStrc {
     /* 0x04 */ int32_t nWeaponClass;
 };
 
+#endif // D2_DEFINED_D2MercWeaponAnimMapStrc
 namespace D2Client::UI::npcmenu::Merc {
 
 // Function declarations
@@ -91,7 +106,7 @@ void __fastcall AddMercForHireToGlobalList(struct D2GSPacketSrv0x4E * pPacket);
 void __fastcall NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST(char * pBytes);
 struct D2BitBufferStrc * __stdcall NPCMENU_GetMercHireCost();
 void __fastcall NPCMENU_SetSelectedMercIndex(int16_t wMercNameId);
-void __fastcall NPCMENU_MercItemFoundCb(void * pUnit);
+void __fastcall NPCMENU_MercItemFoundCb(struct D2UnitStrc * pUnit);
 void __fastcall NPCMENU_HandleMercListPacket(struct D2GSPacketSrv0x8A * pPacket);
 void __stdcall NPCMENU_ResurrectMerc();
 int __stdcall NPCMENU_ShowMercResurrectDialog();

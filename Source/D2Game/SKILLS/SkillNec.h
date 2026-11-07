@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -45,6 +48,8 @@ struct D2MonsterCastPetHeadStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2MonsterCastPetStrc
+#define D2_DEFINED_D2MonsterCastPetStrc
 struct D2MonsterCastPetStrc {
     /* 0x00 */ uint32_t nFlags;
     /* 0x04 */ struct D2UnitStrc * pPlayer;
@@ -59,6 +64,7 @@ struct D2MonsterCastPetStrc {
     /* 0x28 */ struct D2SkillsTxt * pSkillTxt; // Not a coordinate. Skills_SrvDoFunc_015_SummonDecoy @005dc000 stores sgptDataTable->pTxtSkills + eSkill here and later dereferences it as (sSummonParams.nY)->calc[1] and ->calc[2].
 };
 
+#endif // D2_DEFINED_D2MonsterCastPetStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2NecroSkillArgStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
@@ -92,6 +98,15 @@ struct __attribute__((packed)) D2SkillAuraCtxStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_030_CastCurseAoE_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int32_t nCurseDuration;
+    /* 0x00 */ int * pAuraStatCalc;
+};
+
+#endif // D2_MODULE_D2Game
 namespace D2Game::SKILLS::SkillNec {
 
 // Function declarations
@@ -111,7 +126,7 @@ void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eSta
 int __fastcall Unreferenced_005c33d0(int param_1);
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill);
 uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nSkillId, struct D2NecroSkillArgStrc * pNecroSkillArg);
+void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t pNecroSkillArg);
 int32_t __fastcall SKILLNEC_ClampResistPenalty(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
 // Applies a Necromancer curse (e.g. Dim Vision, Taunt, Terror, Attract and resist-penalty curses) to a target unit. If the curse requires AI registration, validates the target is an attackable monster of non-good alignment and that the corpse-consume gate passes. Clamps the primary resist-penalty stat; if attackable, builds a D2StateExArgStrc (skill, level, duration, aura state, optional expire-callback SKILLNEC_OnCurseExpire selected branchlessly) and applies the curse state via SetStateWithExpiryTime. Adds up to 5 extra clamped stats to the state's stat list, optionally registers curse AI behavior, updates anim speed, and fires aura target/aura events. Returns 1 on success, 0 if rejected.
 void __fastcall SKILLNEC_ApplyCurseToUnit(struct D2UnitStrc * pUnit, struct D2NecroSkillArgStrc * pNecroSkillArg);

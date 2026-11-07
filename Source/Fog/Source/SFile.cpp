@@ -6,10 +6,6 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/Safesock.h"
-#include "3rdparty/Storm/Source/SFile.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
-#include "3rdparty/Storm/Source/SSystem.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Source/SFile.data.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
@@ -130,7 +126,7 @@ int __fastcall SafeCreateDirectoryTree(char * szPath) {
     char* pNextSep = Storm::Source::SSTR::SStrChr(szPath + 1, '\\');
     if (pNextSep) {
       while (true) {
-        nSegmentLen = (int)pNextSep - (int)szPath;
+        nSegmentLen = (intptr_t)pNextSep - (intptr_t)szPath;
         if (nSegmentLen >= 0x104) {
           break;
         }
@@ -451,11 +447,11 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
     }
 }
 
-int __fastcall Unreferenced_00407260(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *(uint32_t*)(param_1 + 0xc) = 0;
+uint32_t * __fastcall Unreferenced_00407260(uint32_t * param_1) {
+    *param_1 = 0;
+    param_1[1] = 0;
+    param_1[2] = 0;
+    param_1[3] = 0;
     return param_1;
 }
 

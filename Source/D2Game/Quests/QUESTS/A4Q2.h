@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -24,6 +27,8 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 
 // Data types
+#ifndef D2_DEFINED_D2GSPacketSrv0x5D
+#define D2_DEFINED_D2GSPacketSrv0x5D
 struct D2GSPacketSrv0x5D {
     /* 0x00 */ uint8_t nPacketId; // 0x5D
     /* 0x01 */ uint8_t nQuestId;
@@ -32,6 +37,7 @@ struct D2GSPacketSrv0x5D {
     /* 0x04 */ uint16_t nExtra;
 };
 
+#endif // D2_DEFINED_D2GSPacketSrv0x5D
 namespace D2Game::Quests::QUESTS::A4Q2 {
 
 // Function declarations
@@ -70,7 +76,7 @@ void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, struct D2Un
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // [A4Q3 Terror's End] Spawn Diablo (monster class 0xf3) at the given room/pos; retries with monster-level params -1/5/10. Marks the unit resurrect+init and sets the "Diablo spawned" flag in quest data.
-struct D2UnitStrc * __fastcall Q27_SpawnDiablo(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int nX, int nY, void * pQuestData);
+struct D2UnitStrc * __fastcall Q27_SpawnDiablo(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int nX, int nY, struct D2QuestDataA4Q2Strc * pQuestData);
 // Already documented: [A4Q3 Terror's End] Quest timer tick after Diablo's death. Two phases: (a) spawn-Diablo retry loop once seals are active; (b) post-kill teardown — after ~75s sends savefile to client, after ~90s re-runs Q27_PlayerEnterGame on the party, after ~95s leaves the server (classic D2 auto-quits ~roll-credits).
 uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // [A4Q3 Terror's End] Party-member callback: if QUEST_TerrorsEnd not Completed for this player and they are physically in Act IV, complete the quest via Q27_SetTerrorsEndCompleted. nParam is the SGAMEDATA.

@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/UNIT/Object.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/Sound/Sound.h"
@@ -15,29 +15,14 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Game/Seed.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Common/D2SeedStrc.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/npcmenu.data.h"
 #include "Source/D2Client/UNIT/Object.data.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -671,18 +656,19 @@ static void OBJECT_UpdateModeAndProperties(D2UnitStrc * pUnit, D2ServerMessageHa
 }
 
 // Gloaming shrine (nCode=16) server callback: reverses the activating player's character name string as an Easter egg effect
-void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t pShrinesTxt) {
+void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pPlayer);
     if (!pPlayerData) {
       return;
     }
 
     size_t nMaxLen = 0x10;
-    strncpy(pPlayerData->szCharName, _strrev(pPlayerData->szCharName), nMaxLen);
+    char* szReversed = _strrev(pPlayerData->szCharName);
+    strncpy(pPlayerData->szCharName, szReversed, nMaxLen);
 }
 
 // Spawns a 5×5 grid of Fireball missiles (MISSILE_Fireball) centred on pUnit's position, toggling X/Y offsets from ±5 to ±20 in steps of 5. Missile level is clamped to 1–8 based on pPlayer's level/5. Called server-side for trap objects (e.g. fire towers).
-void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t pShrinesTxt) {
+void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     int nLevel;
     D2SkillArgStrc sSkillArg;
     int nYNeg;
@@ -755,7 +741,7 @@ void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlaye
 }
 
 // Spawns a 6-missile ring of MISSILE_Explosivepotion around pUnit's position in a fixed ±6-tile grid pattern. pPlayer is the owner; skill level (nToHit) is clamped to [1,8] from pPlayer's level/5. Called when an explosive potion object triggers.
-void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t pShrinesTxt) {
+void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2SkillArgStrc sSkillArg;
     int anYOffsets[12];
     eD2UnitType eUnitType;
@@ -818,7 +804,7 @@ void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc *
 }
 
 // Identical structure to OBJECT_SpawnExplosivePotionGrid but fires MISSILE_Chokinggaspoition. Spawns 6 choking-gas missiles in a ±6-tile ring around pUnit; pPlayer owns them with level-scaled nToHit [1,8]. Called when a choking-gas potion object triggers.
-void __fastcall OBJECT_SpawnChokingGasGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t pShrinesTxt) {
+void __fastcall OBJECT_SpawnChokingGasGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2SkillArgStrc sSkillArg;
     int anYOffsets[12];
     eD2UnitType eUnitType;
@@ -944,7 +930,7 @@ static void __stdcall OBJECT_DispatchShrineServerActivate(int * pMessage, D2Unit
       return;
     }
     if (nShrineCode && (int)nShrineCode < nShrineDispatchTableSize && aShrineDispatchTable[nShrineCode].fpServerActivate) {
-      aShrineDispatchTable[nShrineCode].fpServerActivate(pUnit, pPlayer, (uint32_t)pShrinesTxt);
+      aShrineDispatchTable[nShrineCode].fpServerActivate(pUnit, pPlayer, pShrinesTxt);
     }
 
     OBJECT_PlayShrineSound(pPlayer, pUnit);

@@ -47,6 +47,7 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
+        "D2CoordStrc",
         "D2DrlgLevelStrc",
         "D2PoolManagerStrc",
         "D2SeedStrc",

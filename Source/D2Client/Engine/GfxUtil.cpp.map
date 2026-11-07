@@ -121,6 +121,7 @@
         "GFXUTIL_FindGfxNodeByTypeAndId"
       ],
       "usedTypes": [
+        "D2GfxUtilNodeStrc",
         "int32_t"
       ]
     },
@@ -139,7 +140,8 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "void *"
+        "D2GfxUtilNodeStrc",
+        "D2GfxUtilNodeStrc *"
       ]
     },
     {
@@ -203,7 +205,8 @@
         "D2InventoryStrc",
         "D2ItemsTxt",
         "D2UnitStrc",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -354,6 +357,7 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2MonStats2Txt",
+        "D2MonsterCofStatusEntryStrc",
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t",
@@ -734,6 +738,7 @@
         "D2GfxInfoUnkStrc",
         "D2ItemsTxt",
         "D2UnitStrc",
+        "GFXUTIL_BuildCofParams_Slotmc",
         "eD2UnitType",
         "int32_t",
         "uint32_t",
@@ -783,6 +788,7 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc",
+        "D2MonStatsTxt",
         "int32_t",
         "uint32_t",
         "uint8_t"

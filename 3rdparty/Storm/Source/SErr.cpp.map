@@ -36,8 +36,9 @@
         "StormGetInstance"
       ],
       "usedTypes": [
-        "uint16_t",
-        "uint32_t"
+        "D2SErrMessageSourceStrc",
+        "D2SErrMessageSourceStrc *",
+        "uint16_t"
       ]
     },
     {
@@ -158,6 +159,7 @@
         "SERR_InternalLeaveCriticalSection"
       ],
       "usedTypes": [
+        "D2SErrMessageSourceStrc",
         "uint16_t"
       ]
     },
@@ -189,6 +191,7 @@
         "SSYSTEM_ListOffsetToPointer"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -204,6 +207,9 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "Unreferenced_0041c410"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -277,7 +283,8 @@
         "SSYSTEM_ListGetNext"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -295,7 +302,8 @@
         "SSYSTEM_ListUnlink"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -327,7 +335,9 @@
         "SSYSTEM_ListGetData"
       ],
       "usedTypes": [
-        "int32_t"
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -363,8 +373,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -380,6 +390,9 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "Unreferenced_0041c7f0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -418,6 +431,7 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t",
         "uint8_t"
       ]
@@ -460,7 +474,9 @@
         "SMemFree"
       ],
       "usedTypes": [
-        "int32_t",
+        "HANDLER",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -479,6 +495,9 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "HANDLER",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -573,6 +592,7 @@
         "SERR_InternalLeaveCriticalSection"
       ],
       "usedTypes": [
+        "HANDLER",
         "int32_t"
       ]
     },

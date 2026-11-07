@@ -37,6 +37,11 @@
       "calledFunctions": [
         "Unreferenced_00543540",
         "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
       ]
     },
     {
@@ -1486,6 +1491,10 @@
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
       ]
     },
     {

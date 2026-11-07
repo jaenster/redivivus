@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -91,7 +94,7 @@ void __stdcall D2WINMAIN_SetExitCallback(pfnVoidNoArgCallback pfnExitCallback);
 // Clears gbMessageLoopActive message loop flag to 0, returns 1
 BOOL __stdcall D2WINMAIN_ClearMessageLoopFlag();
 // Sets control field at offset +4 to specified value, returns 1
-BOOL __stdcall D2WINMAIN_SetControlField4(struct D2ControlStrc * pControl, uint32_t dwValue);
+BOOL __stdcall D2WINMAIN_SetControlField4(struct D2ControlStrc * pControl, struct DC6 * dwValue);
 // Sets pFormSecond to the specified control, defocusing previous control if different
 BOOL __stdcall D2WINMAIN_SetFocusedControl(struct D2ControlStrc * pControl);
 struct D2ControlStrc * __stdcall FORMS_CreateAnyForm(struct FORMS_PredefinedFormStrc * pForm);
@@ -132,11 +135,11 @@ void __stdcall FORMS_DestroyControl(struct D2ControlStrc * pControl);
 // Returns pControl->dwState & gadwBitMasks[2], the active bit D2WINMAIN_SetControlActive sets; halts (line 858) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __fastcall D2WINMAIN_IsControlActive(struct D2ControlStrc * pControl);
-::D2WinEditBox * __stdcall FORMS_GetFormTextAndEditBox_Unref_004f97d0();
+uint32_t __stdcall FORMS_GetFormTextAndEditBox_Unref_004f97d0();
 void __stdcall DrawCursorOOG();
 void __stdcall DRAW_UI_Sprites();
 LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam);
-int __fastcall Unreferenced_004f9b30(int param_1);
+int __fastcall Unreferenced_004f9b30(struct D2ControlStrc * param_1);
 void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormKeyUpHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormActivate(struct D2UIMouseMsgStrc * pMsg);
@@ -146,7 +149,7 @@ void __stdcall D2WIN_HandleActivation(struct D2UIMouseMsgStrc * pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
 void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName);
 void __stdcall D2WIN_ToggleMusicOptions(struct D2UIMouseMsgStrc * pMsg);
-int32_t __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pControl1, struct D2ControlStrc * pControl2);
+struct D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pControl1, struct D2ControlStrc * pControl2);
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Returns gnWinMainState global value
 uint32_t __stdcall D2WINMAIN_GetWinMainState();
@@ -154,7 +157,7 @@ uint32_t __stdcall D2WINMAIN_GetWinMainState();
 struct D2ControlStrc * __stdcall D2WINMAIN_GetFormImage();
 void __stdcall D2WIN_HandleCursorHide(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_HandleMouseLeave(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall MOUSE_CaptureMousePosition(HWND * phWnd);
+void __stdcall MOUSE_CaptureMousePosition(struct D2UIMouseMsgStrc * phWnd);
 void __stdcall INPUT_FormTabKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_TakeScreenshotMsgHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormMouseHandler(struct D2UIMouseMsgStrc * pMsg);

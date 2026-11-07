@@ -4,16 +4,16 @@
  */
 
 #include "Source/globals/globals.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Game/D2Game.globals.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
+#include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/Objects/ObjectsMode.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Game/PLAYER/PlayerTrade.h"

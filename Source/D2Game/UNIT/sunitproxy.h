@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,30 +25,71 @@ struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#ifndef D2_DEFINED_D2LevelPlayerCountArgStrc
+#define D2_DEFINED_D2LevelPlayerCountArgStrc
 struct __attribute__((packed)) D2LevelPlayerCountArgStrc {
     /* 0x00 */ eD2LevelId eLevelId; // Level to count in; compared with DRLGROOM_GetLevelIdFromRoom of each unit's room
     /* 0x04 */ int32_t nCount; // Incremented by the IterateAllUnits callback for each unit whose room is in eLevelId; IterateAllUnits walks only pUnitList[0], so these are players
 };
 
+#endif // D2_DEFINED_D2LevelPlayerCountArgStrc
+#ifndef D2_DEFINED_D2MercForHire
+#define D2_DEFINED_D2MercForHire
+struct D2MercForHire {
+    /* 0x00 */ short nNameStringId;
+    /* 0x02 */ uint8_t field_0x2;
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ int nSeed;
+    /* 0x08 */ int bActive;
+    /* 0x0C */ int field5_0xc;
+};
+
+#endif // D2_DEFINED_D2MercForHire
+#ifndef D2_DEFINED_D2NpcItemTablesStrc
+#define D2_DEFINED_D2NpcItemTablesStrc
 struct D2NpcItemTablesStrc {
-    /* 0x00 */ void * pTradeItems; // allocated trade item array, 12 bytes per entry
+    /* 0x00 */ uint8_t * pTradeItems; // allocated trade item array, 12 bytes per entry
     /* 0x04 */ int nTradeCount;
     /* 0x08 */ void * pQuestItems; // allocated quest item array, 4 bytes per entry
     /* 0x0C */ int nQuestCount;
 };
 
+#endif // D2_DEFINED_D2NpcItemTablesStrc
+#ifndef D2_DEFINED_D2NpcPlayerInteractionStrc
+#define D2_DEFINED_D2NpcPlayerInteractionStrc
 struct D2NpcPlayerInteractionStrc {
     /* 0x00 */ int nPlayerGUID; // player GUID; SUNITPROXY_AddPlayerInteraction stores it
     /* 0x04 */ uint32_t bGambling;
     /* 0x08 */ struct D2NpcPlayerInteractionStrc * pNext; // next entry
 };
 
+#endif // D2_DEFINED_D2NpcPlayerInteractionStrc
+#ifndef D2_DEFINED_D2NpcProxyInventoryStrc
+#define D2_DEFINED_D2NpcProxyInventoryStrc
 struct D2NpcProxyInventoryStrc {
     /* 0x00 */ struct D2InventoryStrc * pInventory; // per-player proxy inventory returned by SUNITPROXY_GetPlayerProxyInventory
     /* 0x04 */ int nPlayerGUID; // matched against the player's GUID
     /* 0x08 */ struct D2NpcProxyInventoryStrc * pNext; // next entry
 };
 
+#endif // D2_DEFINED_D2NpcProxyInventoryStrc
+#ifndef D2_DEFINED_D2NpcTradeItemStrc
+#define D2_DEFINED_D2NpcTradeItemStrc
+struct D2NpcTradeItemStrc {
+    /* 0x00 */ uint8_t nMin;
+    /* 0x01 */ uint8_t nMax;
+    /* 0x02 */ uint8_t nMagicMin;
+    /* 0x03 */ uint8_t nMagicMax;
+    /* 0x04 */ uint32_t dwItemCode;
+    /* 0x08 */ uint8_t nMagicLvl;
+    /* 0x09 */ uint8_t field_0x9;
+    /* 0x0A */ uint8_t field_0xa;
+    /* 0x0B */ uint8_t field_0xb;
+};
+
+#endif // D2_DEFINED_D2NpcTradeItemStrc
+#ifndef D2_DEFINED_D2NpcTradeStateStrc
+#define D2_DEFINED_D2NpcTradeStateStrc
 struct D2NpcTradeStateStrc {
     /* 0x00 */ uint8_t bStoreFilled; // set to 1 after SUNITNPC_FillNpcStore runs; callers skip the refill while it is set
     /* 0x01 */ uint8_t bHirelingsInitialized; // SUNITNPC_ProcessNpcAction sets it to 1 the first time it runs
@@ -56,12 +100,15 @@ struct D2NpcTradeStateStrc {
     /* 0x06 */ uint8_t unk0x06;
     /* 0x07 */ uint8_t bRefillStorePending; // SUNITNPC_HandleTradeAction clears it, resets the proxy and refills the store
     /* 0x08 */ uint32_t dwLastTradeTick; // GetTickCount() stored by SUNITPROXY_QueueTradeAction and SUNITNPC_FillNpcStore
-    /* 0x0C */ void * pTradeList1; // 0xc-byte rows read by SUNITNPC_FillNpcStore
+    /* 0x0C */ struct D2NpcTradeItemStrc * pTradeList1; // 0xc-byte rows read by SUNITNPC_FillNpcStore
     /* 0x10 */ int nTradeList1;
-    /* 0x14 */ void * pTradeList2; // dword item codes read by SUNITNPC_FillNpcStore
+    /* 0x14 */ uint32_t * pTradeList2; // dword item codes read by SUNITNPC_FillNpcStore
     /* 0x18 */ int nTradeList2;
 };
 
+#endif // D2_DEFINED_D2NpcTradeStateStrc
+#ifndef D2_DEFINED_D2SUnitProxyStrc_Line0x85
+#define D2_DEFINED_D2SUnitProxyStrc_Line0x85
 struct D2SUnitProxyStrc_Line0x85 {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ int nAction; // trade action (SUNITPROXY_AddTradeQueueEntry p2); SUNITPROXY_ProcessNpcItemQueue counts entries with 4
@@ -70,12 +117,15 @@ struct D2SUnitProxyStrc_Line0x85 {
     /* 0x10 */ struct D2SUnitProxyStrc_Line0x85 * pNext; // Next node in the NPC proxy singly-linked list; push-front in SUNITPROXY_AddItemToNpcProxy (0x535f30) and SUNITPROXY_AddTradeQueueEntry (0x536760), walked by SUNITPROXY_ProcessNpcItemQueue and SUNITPROXY_FreeNpcProxyData
 };
 
+#endif // D2_DEFINED_D2SUnitProxyStrc_Line0x85
+#ifndef D2_DEFINED_D2GameNpcStrc
+#define D2_DEFINED_D2GameNpcStrc
 struct __attribute__((packed)) D2GameNpcStrc {
     /* 0x00 */ int nMonStatsId;
     /* 0x04 */ struct D2InventoryStrc * pInventory;
     /* 0x08 */ struct D2NpcProxyInventoryStrc * pProxyInventories; // head of D2NpcProxyInventoryStrc nodes (GetPlayerProxyInventory walks it, RemovePlayerProxyInventory unlinks)
     /* 0x0C */ int flags0x0C;
-    /* 0x10 */ int pHirelingSlots;
+    /* 0x10 */ struct D2MercForHire * pHirelingSlots;
     /* 0x14 */ struct D2SUnitProxyStrc_Line0x85 * pProxyQueue; // head of D2SUnitProxyStrc_Line0x85 entries: pushed by SUNITPROXY_AddItemToNpcProxy/AddTradeQueueEntry, drained by ProcessNpcItemQueue, freed by FreeNpcProxyData
     /* 0x18 */ struct D2NpcPlayerInteractionStrc * pPlayerInteractions; // head of D2NpcPlayerInteractionStrc nodes (AddPlayerInteraction pushes, RemovePlayerFromNpc unlinks)
     /* 0x1C */ int bTrading;
@@ -84,6 +134,7 @@ struct __attribute__((packed)) D2GameNpcStrc {
     /* 0x40 */ int nNpcGUID;
 };
 
+#endif // D2_DEFINED_D2GameNpcStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 typedef struct D2SUnitProxyStrc_Line0x85 * * PD2GameNpcProxyQueue;
 

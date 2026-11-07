@@ -386,6 +386,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2LogRecordStrc",
         "FILE",
         "int32_t",
         "uint32_t",
@@ -494,6 +495,9 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "Unreferenced_0040f580"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -589,6 +593,7 @@
         "GetTickCount"
       ],
       "usedTypes": [
+        "D2LogRecordStrc",
         "FILE",
         "int32_t",
         "uint32_t"
@@ -622,6 +627,7 @@
         "UnlinkListNode"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -730,6 +736,9 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "InitListHead"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -764,7 +773,8 @@
         "RemoveListNode"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -796,7 +806,7 @@
         "RemoveAllListNodes"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -833,8 +843,8 @@
         "RemoveAllListNodes"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "pfnEHHandlerRoutine",
         "uint32_t"
       ]
@@ -889,6 +899,7 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "StormLinkedListStrc",
         "pfnEHHandlerRoutine"
       ]
     },
@@ -908,6 +919,7 @@
         "InsertListNode"
       ],
       "usedTypes": [
+        "D2LogRecordStrc",
         "int *",
         "int32_t",
         "pfnEHHandlerRoutine",
@@ -947,7 +959,8 @@
         "memcpy"
       ],
       "usedTypes": [
-        "int *",
+        "D2LogRecordStrc",
+        "StormLinkStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -973,6 +986,7 @@
         "DeleteOldLogFiles"
       ],
       "usedTypes": [
+        "D2LogRecordStrc",
         "pfnEHHandlerRoutine",
         "uint32_t"
       ]
@@ -997,8 +1011,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2LogRecordStrc",
         "EH4_EXCEPTION_REGISTRATION",
-        "int *",
         "int32_t",
         "uint32_t",
         "va_list"

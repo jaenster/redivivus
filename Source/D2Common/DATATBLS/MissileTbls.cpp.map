@@ -110,7 +110,9 @@
         "MISSILETBLS_ValidateAndClampField"
       ],
       "usedTypes": [
+        "D2BinFieldInputStrc",
         "D2MissilesTxt",
+        "eD2BinFieldInputType",
         "int32_t",
         "uint32_t"
       ]

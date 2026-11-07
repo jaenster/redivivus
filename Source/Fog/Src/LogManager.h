@@ -4,24 +4,29 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
-struct D2StormListHead;
 struct EHExceptionRecord;
 struct EHRegistrationNode;
+struct StormLinkedListStrc;
 typedef int _EXCEPTION_DISPOSITION;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct _CONTEXT;
 #endif // _WIN32
 
 // Data types
+#ifndef D2_DEFINED_D2HighResTimestampStrc
+#define D2_DEFINED_D2HighResTimestampStrc
 struct D2HighResTimestampStrc {
     D2HighResTimestampStrc() = default;
     D2HighResTimestampStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
@@ -32,6 +37,18 @@ struct D2HighResTimestampStrc {
     /* 0x04 */ DWORD dwTick; // GetTickCount() at the same refresh
 };
 
+#endif // D2_DEFINED_D2HighResTimestampStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+struct __attribute__((packed)) D2LogRecordStrc {
+    /* 0x00 */ StormLinkStrc tLink;
+    /* 0x08 */ uint32_t nSize;
+    /* 0x0C */ int32_t nType;
+    /* 0x10 */ BOOL bTimestamp;
+    /* 0x14 */ SYSTEMTIME tTime;
+    /* 0x24 */ char szFileName[0];
+};
+
+#endif // D2_MODULE_Fog
 namespace Fog::Src::LogManager {
 
 // Function declarations
@@ -66,38 +83,38 @@ void __fastcall WriteRealmStartupHeader(FILE * pFile);
 FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotIndex);
 void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGameLogsPath, int32_t nGameLogsPathLength);
 // Writes a log record whose body is a hex dump to its log file, one formatted line at a time.
-void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord);
+void __fastcall WriteHexDumpLogEntry(struct D2LogRecordStrc * pLogRecord);
 void __stdcall CloseStaleLogFileHandles();
 void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName);
 void __fastcall CloseLogFileByName(uint8_t * szFileName);
 uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase);
 int __fastcall Unreferenced_0040f520(int param_1);
-int __fastcall Unreferenced_0040f580(int param_1);
+int __fastcall Unreferenced_0040f580(struct StormLinkedListStrc * param_1);
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 long __fastcall GetLogFileSize(uint8_t * szFileName);
 // @sourcefile .\Src\LogManager.cpp
 char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, int32_t nEndOffset);
 // Writes one log record to its log file, prefixed with the record's time of day.
-void __fastcall LogToFile(uint32_t pLogRecord);
+void __fastcall LogToFile(struct D2LogRecordStrc * pLogRecord);
 int __fastcall Unreferenced_0040f810(int param_1);
-void __fastcall UnlinkListNode(int * pNode);
+void __fastcall UnlinkListNode(struct StormLinkStrc * pNode);
 int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr);
 void __stdcall ExitOrCrashCleanup();
 void __stdcall ExitOrCrashCleanUpJmp();
 void __stdcall DeleteOldLogFiles();
 void __fastcall UnlinkListNodeDouble(int * pNode);
-void __fastcall InitListHead(int * pListHead);
+void __fastcall InitListHead(struct StormLinkedListStrc * pListHead);
 void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInsertAtHead, int * * ppTarget);
-void __thiscall RemoveListNode(int32_t pListHead, int * pNode);
+void __thiscall RemoveListNode(struct StormLinkedListStrc * pListHead, struct StormLinkStrc * pNode);
 void __fastcall ClearListNode(uint32_t * pNode);
-void __fastcall RemoveAllListNodes(struct D2StormListHead * pListHead);
+void __fastcall RemoveAllListNodes(struct StormLinkedListStrc * pListHead);
 void __fastcall DestroyListWithHandler(int * pListHead);
-void __fastcall TeardownListFull(struct D2StormListHead * pListHead);
+void __fastcall TeardownListFull(struct StormLinkedListStrc * pListHead);
 void __fastcall ZeroListNode(uint32_t * pNode);
 // Scalar deleting destructor: MOV ESI,ECX takes this; TEST byte [EBP+8],1 is the free flag; RET 4; returns this in EAX. Parameters were listed in STORAGE order (bFreeMemory first), which is the argument-swap shape that crashed IGNORELIST_DtorScalar; a vtable caller passes (this, bFreeMemory).
 void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory);
-void __fastcall DestroyAllListNodes(void * pListHead);
-int * * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
+void __fastcall DestroyAllListNodes(struct StormLinkedListStrc * pListHead);
+struct D2LogRecordStrc * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
 void __stdcall StopLogWriterThread();
 void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
 // lpStartAddress parameter of CreateThread

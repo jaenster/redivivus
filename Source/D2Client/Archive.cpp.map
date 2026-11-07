@@ -47,6 +47,9 @@
       "namespace": "D2Client::Archive",
       "calledFunctions": [
         "Unreferenced_0045b9d0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -61,6 +64,9 @@
       "namespace": "D2Client::Archive",
       "calledFunctions": [
         "Unreferenced_0045ba80"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -75,6 +81,9 @@
       "namespace": "D2Client::Archive",
       "calledFunctions": [
         "Unreferenced_0045baa0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -108,7 +117,8 @@
         "ARCHIVE_GetNodeValue"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -126,7 +136,8 @@
         "ARCHIVE_UnlinkNode"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -162,7 +173,9 @@
         "ARCHIVE_GetNodeSize"
       ],
       "usedTypes": [
-        "int32_t"
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -193,7 +206,7 @@
         "ARCHIVE_ClearList"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -285,7 +298,7 @@
         "SMemFree"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -312,11 +325,12 @@
       "usedTypes": [
         "SMemBlockDetailsStrc",
         "SMemHeapDetailsStrc",
-        "int * *",
-        "int * * *",
+        "StormLinkedListStrc",
+        "TALLOCREC",
+        "int *",
+        "int32_t",
         "uint16_t",
-        "uint16_t *",
-        "uint32_t"
+        "uint16_t *"
       ]
     },
     {

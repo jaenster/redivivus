@@ -5,7 +5,7 @@
 
 #include "Source/D2Direct3D/D2Direct3D.globals.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 
 

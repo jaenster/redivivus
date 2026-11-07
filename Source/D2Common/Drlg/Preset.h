@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,7 @@ struct D2DrlgCoordsStrc;
 struct D2DrlgFileStrc;
 struct D2DrlgLevelStrc;
 struct D2DrlgMapStrc;
+struct D2DrlgStrc;
 struct D2MapAIStrc;
 struct D2PoolManagerStrc;
 struct D2RoomExStrc;
@@ -29,6 +33,8 @@ typedef uint32_t eD2UnitType;
 struct D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgCoordStrc
+#define D2_DEFINED_D2DrlgCoordStrc
 struct D2DrlgCoordStrc {
     /* 0x00 */ int nPosX;
     /* 0x04 */ int nPosY;
@@ -36,6 +42,9 @@ struct D2DrlgCoordStrc {
     /* 0x0C */ int nHeight;
 };
 
+#endif // D2_DEFINED_D2DrlgCoordStrc
+#ifndef D2_DEFINED_D2DrlgPresetRoomStrc
+#define D2_DEFINED_D2DrlgPresetRoomStrc
 struct __attribute__((packed)) D2DrlgPresetRoomStrc {
     /* 0x00 */ int nLevelPrest;
     /* 0x04 */ int nPickedFile;
@@ -50,6 +59,7 @@ struct __attribute__((packed)) D2DrlgPresetRoomStrc {
     /* 0xF4 */ int nNavigationPointsCount; // count for pNavigationPoints (nWorldPointsBurialGroundsSize in D2DrlgRoomExDataPreset)
 };
 
+#endif // D2_DEFINED_D2DrlgPresetRoomStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2DrlgRoomExDataPreset {
     /* 0x00 */ int Def;
@@ -294,10 +304,15 @@ struct D2DrlgRoomExDataPreset {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds
+#define D2_DEFINED_D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds
 struct D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds {
     /* 0x00 */ POINT PointsList[6]; // My guess is thats a list of points where BloodRaven is moving to
 };
 
+#endif // D2_DEFINED_D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds
+#ifndef D2_DEFINED_D2LvlPrestTxt
+#define D2_DEFINED_D2LvlPrestTxt
 struct __attribute__((packed)) D2LvlPrestTxt {
     /* 0x000 */ int Def;
     /* 0x004 */ eD2LevelId LevelId;
@@ -320,6 +335,9 @@ struct __attribute__((packed)) D2LvlPrestTxt {
     /* 0x1AC */ int Dt1Mask;
 };
 
+#endif // D2_DEFINED_D2LvlPrestTxt
+#ifndef D2_DEFINED_D2PresetUnitStrc
+#define D2_DEFINED_D2PresetUnitStrc
 struct __attribute__((packed)) D2PresetUnitStrc {
     /* 0x00 */ int nMode; // Mode flag - 1 for monsters from monpreset.txt, 3 for items (item code encoded)
     /* 0x04 */ int nClassId; // Unit class ID - MonStats ID for monsters, Object ID for objects
@@ -331,6 +349,25 @@ struct __attribute__((packed)) D2PresetUnitStrc {
     /* 0x1C */ int nFlags; // Flags bitmask (bit 0 = auto-generated object)
 };
 
+#endif // D2_DEFINED_D2PresetUnitStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+union DRLGPRESET_BuildPresetArea_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2DrlgStrc * pDrlg;
+    /* 0x00 */ int nWallLayerIndex;
+};
+
+#endif // D2_MODULE_D2Common
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+union DRLGROOMEX_InitializePresetRoom_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2DrlgGridStrc * pCurrentGrid;
+    /* 0x00 */ int nWallLayersLeft;
+};
+
+#endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct __attribute__((packed)) D2DrlgGridTileDataStrc {
     /* 0x00 */ D2DrlgCoordStrc tCoord;
@@ -383,8 +420,8 @@ int32_t __fastcall DRLGPRESET_SetPickedFileInDrlgMap(struct D2DrlgMapStrc * pDrl
 struct D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(struct D2DrlgLevelStrc * pLevel, int32_t nLvlPrestId, struct D2DrlgCoordStrc * pDrlgCoord, struct D2SeedStrc * pSeed);
 int32_t __fastcall GetSizeX(int32_t nLvlPrestId);
 int32_t __fastcall GetSizeY(int32_t nLvlPrestId);
-int __fastcall Unreferenced_00666ff0(int param_1);
-int __fastcall Unreferenced_00667000(int param_1);
+int __fastcall Unreferenced_00666ff0(struct D2RoomExStrc * param_1);
+int __fastcall Unreferenced_00667000(struct D2RoomExStrc * param_1);
 // DRLGPRESET_GetPickedFilePathFromRoomEx
 // Returns the file path string for the randomly selected preset map file.
 // Accesses pRoomEx->pRoomExDataPreset->pMap->pTxtLevelPrest->File[nRandomMapFileSelector].
@@ -397,7 +434,7 @@ char * __fastcall DRLGPRESET_GetPickedFilePathFromRoomEx(struct D2RoomExStrc * p
 void __fastcall DRLGPRESET_GetDrlgFileSize(struct D2RoomExStrc * pDrlgMap, int32_t * pnWidth, int32_t * pnHeight);
 // DRLG preset-area "POP" (preset-object population) updater. Given a RoomEx and an (nX,nY) world coordinate plus bOtherRoom flag: if the room is a preset (type 2), finds which POP bounds rectangle the point falls inside and notes its matched POP id. Then iterates the room's nearby preset RoomEx neighbors and, comparing POP tick deadlines, calls DRLGPRESET_UpdatePopTiles to refresh/expire POP tiles (a fresh GetTickCount+500 deadline for the matched POP, or the stored deadline otherwise). If any update occurred, does a second pass writing back the new deadlines (0 for non-matching POPs, the new deadline for the matched POP). No return. NOTE: pRoomExData POP sub-structure accessed via raw +0x40/+0x44/+0x4c/+0x50 offsets - shared struct lacks named fields here.
 void __fastcall UpdatePops(struct D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL bOtherRoom);
-int __fastcall Unreferenced_00667420(int param_1);
+int __fastcall Unreferenced_00667420(struct D2DrlgLevelStrc * param_1);
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGLEVEL_InitializeWithPresetArea(struct D2DrlgLevelStrc * pLevel);
 // @sourcefile .\DRLG\Preset.cpp

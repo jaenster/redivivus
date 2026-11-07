@@ -4,13 +4,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/Objects/Objects.h"
+#include "Source/D2Game/D2Game.h"
 
 // Forward declarations
 struct D2DrlgRoomCoordsStrc;
@@ -35,22 +38,22 @@ struct D2ObjectControlSub0x1110Strc {
 #pragma pack(pop)
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2ObjectPopulateEntryStrc
+#define D2_DEFINED_D2ObjectPopulateEntryStrc
 struct D2ObjectPopulateEntryStrc {
     /* 0x00 */ int32_t nEnabled; // Non-zero = this populate type is available; OBJECT_RollAndDispatchPopulateFn tests it before calling pfnPopulate
     /* 0x04 */ int32_t (__fastcall *pfnPopulate)(::SGAMEDATA *, struct D2RoomStrc *, struct D2DrlgRoomCoordsStrc *); // Room-populate handler, called with &sRoomCoords
 };
 
+#endif // D2_DEFINED_D2ObjectPopulateEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2ObjectRngArray {
     /* 0x00 */ struct D2ObjectRngStrc * field0_0x0;
 };
 
 #endif // D2_MODULE_D2Client
-struct D2ObjectSpawnOffsetGroupStrc {
-    /* 0x00 */ int * pOffsets; // -> a run of (dx,dy) int pairs
-    /* 0x04 */ int nCount; // pair count, filled by StaticInit_6caf30
-};
-
+#ifndef D2_DEFINED_D2ShrinesTxt
+#define D2_DEFINED_D2ShrinesTxt
 struct D2ShrinesTxt {
     /* 0x00 */ uint8_t nCode;
     /* 0x01 */ uint8_t pad0x01[3];
@@ -66,6 +69,7 @@ struct D2ShrinesTxt {
     /* 0xB4 */ uint32_t dwLevelMin;
 };
 
+#endif // D2_DEFINED_D2ShrinesTxt
 namespace D2Client::UNIT::Object {
 
 // Function declarations
@@ -78,13 +82,13 @@ void __fastcall AllocObjectData(struct D2UnitStrc * pUnit, struct D2RoomStrc * p
 void __fastcall OBJECT_AddVisualOverlay(struct D2UnitStrc * pUnit);
 void __fastcall FreeObjectData(struct D2UnitStrc * pUnit);
 // Gloaming shrine (nCode=16) server callback: reverses the activating player's character name string as an Easter egg effect
-void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
+void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, struct D2ShrinesTxt * pShrinesTxt);
 // Spawns a 5×5 grid of Fireball missiles (MISSILE_Fireball) centred on pUnit's position, toggling X/Y offsets from ±5 to ±20 in steps of 5. Missile level is clamped to 1–8 based on pPlayer's level/5. Called server-side for trap objects (e.g. fire towers).
-void __fastcall OBJECT_SpawnFireballGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
+void __fastcall OBJECT_SpawnFireballGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, struct D2ShrinesTxt * pShrinesTxt);
 // Spawns a 6-missile ring of MISSILE_Explosivepotion around pUnit's position in a fixed ±6-tile grid pattern. pPlayer is the owner; skill level (nToHit) is clamped to [1,8] from pPlayer's level/5. Called when an explosive potion object triggers.
-void __fastcall OBJECT_SpawnExplosivePotionGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
+void __fastcall OBJECT_SpawnExplosivePotionGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, struct D2ShrinesTxt * pShrinesTxt);
 // Identical structure to OBJECT_SpawnExplosivePotionGrid but fires MISSILE_Chokinggaspoition. Spawns 6 choking-gas missiles in a ±6-tile ring around pUnit; pPlayer owns them with level-scaled nToHit [1,8]. Called when a choking-gas potion object triggers.
-void __fastcall OBJECT_SpawnChokingGasGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
+void __fastcall OBJECT_SpawnChokingGasGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, struct D2ShrinesTxt * pShrinesTxt);
 void __fastcall OBJECT_UpdateShrineOverlay(struct D2UnitStrc * pUnit, struct D2ShrinesTxt * pShrinesTxt);
 void __fastcall SetShrineTextInfo(struct D2UnitStrc * pUnit);
 void __fastcall ObjectMessage(int32_t eMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);

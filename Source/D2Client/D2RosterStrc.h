@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,10 +20,15 @@ struct D2RosterLinkListStrc;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#ifndef D2_DEFINED_D2PlayerListStrc
+#define D2_DEFINED_D2PlayerListStrc
 struct D2PlayerListStrc {
     /* 0x00 */ struct D2PlayerListSubStrc * pEntry;
 };
 
+#endif // D2_DEFINED_D2PlayerListStrc
+#ifndef D2_DEFINED_D2RosterStrc
+#define D2_DEFINED_D2RosterStrc
 struct __attribute__((packed)) D2RosterStrc {
     /* 0x00 */ char szRosterName[16];
     /* 0x10 */ int nRosterGUID;
@@ -43,3 +51,5 @@ struct __attribute__((packed)) D2RosterStrc {
     /* 0x66 */ char pRosterName[26]; // Formatted display name with guild tag
     /* 0x80 */ struct D2RosterStrc * pNext;
 };
+
+#endif // D2_DEFINED_D2RosterStrc

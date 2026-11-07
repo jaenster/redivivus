@@ -3,29 +3,16 @@
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/Items.h"
@@ -33,11 +20,8 @@
 #include "Source/D2Game/UNIT/Item.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Seed.inline.h"
@@ -82,7 +66,7 @@ int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntr
     return pDropListBase + nEntryIdx * 8;
 }
 
-void __fastcall ITEM_InitializeDroppedItem(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, uint32_t dwUnused) {
+void __fastcall ITEM_InitializeDroppedItem(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, D2RoomStrc * dwUnused) {
     uint32_t nItemClassId;
     if (pUnit) {
       pUnit->nUnitGUID = dwUnitGUID;
@@ -165,9 +149,9 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
     D2ItemsTxt* pItemTxt;
     pItemTxt = pItemsTxtSizeArr->pArmor;
     int nExceptionalStartIdx;
-    nExceptionalStartIdx = ((int)pItemTxt - (int)pItemsTxtSizeArr->pItems) / 0x1a8;
+    nExceptionalStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
     int nItemCount;
-    nItemCount = ((int)pItemsTxtSizeArr->pMisc - (int)pItemTxt) / 0x1a8;
+    nItemCount = ((intptr_t)pItemsTxtSizeArr->pMisc - (intptr_t)pItemTxt) / 0x1a8;
     uint32_t nCandidateIdx;
     nCandidateIdx = 0;
     if (!pItemTxt) {
@@ -230,9 +214,9 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
     D2ItemsTxt* pItemTxt;
     pItemTxt = pItemsTxtSizeArr->pWeapons;
     int nNormalStartIdx;
-    nNormalStartIdx = ((int)pItemTxt - (int)pItemsTxtSizeArr->pItems) / 0x1a8;
+    nNormalStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
     int nItemCount;
-    nItemCount = ((int)pItemsTxtSizeArr->pArmor - (int)pItemTxt) / 0x1a8;
+    nItemCount = ((intptr_t)pItemsTxtSizeArr->pArmor - (intptr_t)pItemTxt) / 0x1a8;
     uint32_t nCandidateIdx;
     nCandidateIdx = 0;
     if (!pItemTxt) {
@@ -285,19 +269,15 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
     BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
-    int aiCandidateArr[2048];
-    ::SGAMEDATA* pGameLocal;
-    pGameLocal = pGame;
-    D2SeedStrc* pSeedLocal;
-    pSeedLocal = pSeed;
+    D2ItemClassCandidateStrc aiCandidateArr[1024];
     D2ItemsTableStrc* pItemsTxtSizeArr;
     pItemsTxtSizeArr = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     D2ItemsTxt* pItemTxt;
     pItemTxt = pItemsTxtSizeArr->pMisc;
-    int nEliteStartIdx;
-    nEliteStartIdx = ((int)pItemTxt - (int)pItemsTxtSizeArr->pItems) / 0x1a8;
+    int iVar1;
+    iVar1 = (intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems;
     int nItemCount;
-    nItemCount = (pItemsTxtSizeArr->nSize * 0x1a8 - (int)pItemTxt + (int)pItemsTxtSizeArr->pItems) / 0x1a8;
+    nItemCount = (pItemsTxtSizeArr->nSize * 0x1a8 - (intptr_t)pItemTxt + (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
     uint32_t nCandidateCount;
     nCandidateCount = 0;
     uint32_t nCandidateIdx;
@@ -314,10 +294,9 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
         if (bIsMonsterDrop || pItemTxt->wType != 0x28) {
           _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeed, nMonsterLevel, eLevel, pItemTxt, nTCFilter);
           nCandidateCount = nCandidateIdx;
-          pSeed = pSeedLocal;
-          if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
-            aiCandidateArr[nCandidateIdx * 2 + 1] = (int)pItemTxt;
-            aiCandidateArr[nCandidateIdx * 2] = nLoopIdx + nEliteStartIdx;
+          if (_bPassesFilter && (pGame->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
+            aiCandidateArr[nCandidateIdx].pItemsTxt = pItemTxt;
+            aiCandidateArr[nCandidateIdx].nItemsTxtIdx = nLoopIdx + iVar1 / 0x1a8;
             nCandidateCount = nCandidateIdx + 1;
             nCandidateIdx = nCandidateCount;
           }
@@ -346,8 +325,8 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
 
     nRandIndex = 0;
     return_candidate:
-    if ((int)nRandIndex <= (int)nCandidateCount && aiCandidateArr + nRandIndex * 2) {
-      return aiCandidateArr[nRandIndex * 2];
+    if ((int)nRandIndex <= (int)nCandidateCount && aiCandidateArr + nRandIndex) {
+      return aiCandidateArr[nRandIndex].nItemsTxtIdx;
     }
     return -1;
 }
@@ -754,7 +733,7 @@ static int __stdcall ITEM_RollForcedMagicAffix(D2ItemGenContextStrc * pItemGenCt
     check_affix_rolled:
     if (!wMagicPrefix && !wForcedPrefix) {
       D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pUnit);
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x372);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x372);
       exit(-1);
     }
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0);
@@ -1033,7 +1012,7 @@ uint32_t __stdcall ITEM_RollItemQuality(D2UnitStrc * pUnit, D2ItemGenContextStrc
     ::SGAMEDATA* pGame;
     pGame = UNIT::SUnit::GetGamePointer(pUnit);
     if (!pGame) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x482);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x482);
       exit(-1);
     } else {
       int32_t nQualityRatioBase;
@@ -1046,7 +1025,7 @@ uint32_t __stdcall ITEM_RollItemQuality(D2UnitStrc * pUnit, D2ItemGenContextStrc
 
       pQualityRatioRow = D2Common::DATATBLS::ItemTbls::TXT_QualityRatio_GetLine(nQualityThreshold, (uint32_t)pGame->nDifficulty, !(uint16_t)nQualityRatioBase ? 0x10000 : 0x64);
       if (!pQualityRatioRow) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x486);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x486);
         exit(-1);
       } else {
         if (!pUnit) {
@@ -1057,7 +1036,7 @@ uint32_t __stdcall ITEM_RollItemQuality(D2UnitStrc * pUnit, D2ItemGenContextStrc
 
         pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nQualityThreshold);
         if (!pItemTxt) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
           exit(-1);
         }
         if (pItemTxt->bQuest != '\0') {
@@ -2087,15 +2066,9 @@ void __fastcall ITEMS_FillItemGenerationData(::SGAMEDATA * pGame, D2ItemGenConte
 
 int32_t __fastcall UNIT_GetMaxAvailableHPCharCode(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
-    static char HPLIST[4][4] = {
-    { 'h', 'p', '1', ' ' },
-    { 'h', 'p', '2', ' ' },
-    { 'h', 'p', '3', ' ' },
-    { 'h', 'p', '4', ' ' }
-}; D2_STATIC_GUARD(HPLIST, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableHPCharCode::HPLIST");
+    static uint32_t HPLIST[4] = { 0x20317068, 0x20327068, 0x20337068, 0x20347068 }; D2_STATIC_GUARD(HPLIST, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableHPCharCode::HPLIST");
     static int HPLISTSIZE = 0x4; D2_STATIC_GUARD(HPLISTSIZE, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableHPCharCode::HPLISTSIZE");
 
-    char szHpCode[4];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd5e);
@@ -2109,27 +2082,17 @@ int32_t __fastcall UNIT_GetMaxAvailableHPCharCode(D2UnitStrc * pUnit) {
       neAct += ACT_III;
     }
     if ((uint32_t)neAct >= (uint32_t)HPLISTSIZE) {
-      szHpCode[0] = HPLIST[3][0];
-      szHpCode[1] = HPLIST[3][1];
-      szHpCode[2] = HPLIST[3][2];
-      szHpCode[3] = HPLIST[3][3];
-      return (int32_t)szHpCode;
+      return HPLIST[3];
     }
 
-    return (int32_t)HPLIST[neAct];
+    return HPLIST[neAct];
 }
 
 int32_t __fastcall UNIT_GetMaxAvailableMPCharCode(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
-    static char MPLIST[4][4] = {
-    { 'm', 'p', '1', ' ' },
-    { 'm', 'p', '2', ' ' },
-    { 'm', 'p', '3', ' ' },
-    { 'm', 'p', '4', ' ' }
-}; D2_STATIC_GUARD(MPLIST, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableMPCharCode::MPLIST");
+    static uint32_t MPLIST[4] = { 0x2031706d, 0x2032706d, 0x2033706d, 0x2034706d }; D2_STATIC_GUARD(MPLIST, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableMPCharCode::MPLIST");
     static int MPLISTSIZE = 0x4; D2_STATIC_GUARD(MPLISTSIZE, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableMPCharCode::MPLISTSIZE");
 
-    char szMpCode[4];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd7d);
@@ -2143,14 +2106,10 @@ int32_t __fastcall UNIT_GetMaxAvailableMPCharCode(D2UnitStrc * pUnit) {
       neAct += ACT_III;
     }
     if ((uint32_t)neAct >= (uint32_t)MPLISTSIZE) {
-      szMpCode[0] = MPLIST[3][0];
-      szMpCode[1] = MPLIST[3][1];
-      szMpCode[2] = MPLIST[3][2];
-      szMpCode[3] = MPLIST[3][3];
-      return (int32_t)szMpCode;
+      return MPLIST[3];
     }
 
-    return (int32_t)MPLIST[neAct];
+    return MPLIST[neAct];
 }
 
 void __fastcall RefreshDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -2540,7 +2499,7 @@ D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc 
         nItemsTableSize = pnItemsTxtSize->nSize;
       }
       if ((int)pDVar1->classId < nItemsTableSize) {
-        pUnit = UNIT::SUnit::CreateUnit(UNIT_ITEM, pDVar1->classId, (uint32_t)pDVar1->x, (uint32_t)pDVar1->y, pGame, pRoom, 1, (uint32_t)pDVar1->nAnimMode, nullptr);
+        pUnit = UNIT::SUnit::CreateUnit(UNIT_ITEM, pDVar1->classId, (uint32_t)pDVar1->x, (uint32_t)pDVar1->y, pGame, pRoom, 1, (uint32_t)pDVar1->nAnimMode, 0);
         if (!pUnit) {
           return nullptr;
         }
@@ -2607,9 +2566,9 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
     }
 
     D2UnitStrc* pItem;
-    pItem = UNIT::SUnit::CreateUnit(UNIT_ITEM, bInitBaseStatsOk, pItemGenCtx->nPosX, pItemGenCtx->nPosY, pItemGenCtx->pGame, pItemGenCtx->pDrlgRoom, (uint8_t)pItemGenCtx->usually_one, pItemGenCtx->dwMode, nullptr);
-    int nItemPtr;
-    nItemPtr = (int)pItem;
+    pItem = UNIT::SUnit::CreateUnit(UNIT_ITEM, bInitBaseStatsOk, pItemGenCtx->nPosX, pItemGenCtx->nPosY, pItemGenCtx->pGame, pItemGenCtx->pDrlgRoom, (uint8_t)pItemGenCtx->usually_one, pItemGenCtx->dwMode, 0);
+    D2UnitStrc* nItemPtr;
+    nItemPtr = pItem;
     if (!pItem) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x809);
       exit(-1);
@@ -2634,7 +2593,7 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
     }
 
     D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
-    bInitBaseStatsOk = ITEM_InitItemBaseStats(pGame, (D2UnitStrc**)&nItemPtr, pItemGenCtx, 1);
+    bInitBaseStatsOk = ITEM_InitItemBaseStats(pGame, &nItemPtr, pItemGenCtx, 1);
     if (!bInitBaseStatsOk) {
       UNIT::SUnit::FreeServerUnit(pGame, pItem);
       return nullptr;
@@ -3965,22 +3924,22 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       } else {
                         eRolledQuality = eItemType;
                         if (eItemType == ITEMTYPE_None1) {
-                          eRolledQuality = GAME_GetItemQuality(nRolledItemClassId, nVictimLevel, pGame, pUnit, pAttacker, (uint16_t*)((uintptr_t)&pTCStack[0].nMagic + nStackOffset));
+                          eRolledQuality = GAME_GetItemQuality(nRolledItemClassId, nVictimLevel, pGame, pUnit, pAttacker, (uint16_t*)((intptr_t)&pTCStack[0].nMagic + nStackOffset));
                         }
                       }
                     }
 
                     nDropFlags = 0;
-                    if ((uint16_t)*(short int*)((uintptr_t)&pTCStack[0].nFromTCOffset0x30 + nStackOffset) > 0) {
+                    if ((uint16_t)*(short int*)((intptr_t)&pTCStack[0].nFromTCOffset0x30 + nStackOffset) > 0) {
                       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-                      wTempMod = *(uint16_t*)((uintptr_t)&pTCStack[0].nFromTCOffset0x30 + nStackOffset);
+                      wTempMod = *(uint16_t*)((intptr_t)&pTCStack[0].nFromTCOffset0x30 + nStackOffset);
                       pUnit->sSeed = sNewSeed;
                       if ((sNewSeed.nSeedLow & 0x3ff) < (uint32_t)wTempMod) {
                         nDropFlags = 4;
                       }
                     }
 
-                    wTempMod = *(uint16_t*)((uintptr_t)&pTCStack[0].nFromTCOffset0x32 + nStackOffset);
+                    wTempMod = *(uint16_t*)((intptr_t)&pTCStack[0].nFromTCOffset0x32 + nStackOffset);
                     local_550[1] = (int32_t)wTempMod;
                     if (wTempMod > 0) {
                       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);

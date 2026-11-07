@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,6 +32,8 @@ struct D2HSLColorStrc {
 };
 
 #endif // D2_MODULE_D2CMP
+#ifndef D2_DEFINED_D2PaletteEntryStrc
+#define D2_DEFINED_D2PaletteEntryStrc
 struct D2PaletteEntryStrc {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -38,6 +43,7 @@ struct D2PaletteEntryStrc {
     /* 0x03 */ uint8_t a;
 };
 
+#endif // D2_DEFINED_D2PaletteEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 struct PcxPaletteTrailer {
     /* 0x00 */ uint8_t nMarker; // 0x0c
@@ -89,7 +95,7 @@ void __stdcall DRAW_BuildScreenBlendAndDesatTable(LPPALETTEENTRY pPalette);
 void __stdcall DRAW_BuildColorTintTable(LPPALETTEENTRY pPalette);
 void __stdcall DRAW_BuildDarkenTable(LPPALETTEENTRY pPalette);
 void __stdcall DRAW_BuildBrightenTable(LPPALETTEENTRY pPalette);
-void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEENTRY pHSLPalette);
+void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, struct D2HSLColorStrc * pHSLPalette);
 LPPALETTEENTRY __stdcall DRAW_BuildAllPaletteTables(tagPALETTEENTRY * pPaletteEntry);
 void __stdcall DRAW_BuildPaletteTablesWrapper(tagPALETTEENTRY * pPaletteEntry, uint32_t * pdwSizeOut);
 #endif // D2_MODULE_D2CMP

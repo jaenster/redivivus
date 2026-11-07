@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,8 @@ struct D2DrlgAnimTileGridStrc;
 struct D2DrlgTileLinkStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgTileGridStrc
+#define D2_DEFINED_D2DrlgTileGridStrc
 struct __attribute__((packed)) D2DrlgTileGridStrc {
     /* 0x00 */ struct D2DrlgTileLinkStrc * pMapLinks; // Linked list of tile links (wall/floor classification). In warp nodes: struct D2RoomExStrc* target room
     /* 0x04 */ struct D2DrlgAnimTileGridStrc * pAnimTiles; // Linked list of animated tile grids. In warp nodes: pNext for linked list
@@ -25,3 +30,5 @@ struct __attribute__((packed)) D2DrlgTileGridStrc {
     /* 0x10 */ int nShadows; // Current shadow/roof tile write index (used during tile creation). In warp nodes: warp destination ID
     /* 0x14 */ D2DrlgRoomTilesStrc sRoomTiles; // Wall tile data array (0x30 bytes per element)
 };
+
+#endif // D2_DEFINED_D2DrlgTileGridStrc

@@ -4,14 +4,14 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -19,6 +19,8 @@
 
 namespace D2Common::DATATBLS::MonsterTbls {
 
+#ifndef D2_DEFINED_INLINE_00451f80
+#define D2_DEFINED_INLINE_00451f80
 __attribute__((noinline)) inline D2MonStatsTxt * __fastcall TXT_MonStats_GetLine(int32_t nMonStatsId) {
     if (nMonStatsId >= 0 && nMonStatsId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsId;
@@ -26,6 +28,7 @@ __attribute__((noinline)) inline D2MonStatsTxt * __fastcall TXT_MonStats_GetLine
 
     return nullptr;
 }
+#endif // D2_DEFINED_INLINE_00451f80
 
 __attribute__((noinline)) inline D2MonStats2Txt * __fastcall TXT_MonStats_GetMonStats2(int32_t nClassId) {
     if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
@@ -39,6 +42,8 @@ __attribute__((noinline)) inline D2MonStats2Txt * __fastcall TXT_MonStats_GetMon
     return nullptr;
 }
 
+#ifndef D2_DEFINED_INLINE_00457490
+#define D2_DEFINED_INLINE_00457490
 __attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_GetFlagsByBitOffset(int32_t nMonStatsId, TxtMonStatsField0x0c nBitOffset) {
     D2MonStatsTxt* pMonStatsTxt = nMonStatsId >= 0 && nMonStatsId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsId : nullptr;
     if (!pMonStatsTxt) {
@@ -47,6 +52,7 @@ __attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_GetFlagsByBitOffse
 
     return (uint32_t)(uint8_t)pMonStatsTxt->Code[((int)nBitOffset >> 3) - 4] & Fog::BitBuffer::gadwBitMasks[nBitOffset & primeevil];
 }
+#endif // D2_DEFINED_INLINE_00457490
 
 __attribute__((noinline)) inline int32_t __fastcall TXT_MonStats_GetBaseId(D2UnitStrc * pUnit) {
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
@@ -76,6 +82,8 @@ __attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_MonStats2_GetFlags
     return (uint32_t)pMonStatsExTxt->aComponents[((int)nBitOffset >> 3) - 0x11] & Fog::BitBuffer::gadwBitMasks[nBitOffset & corpseSel];
 }
 
+#ifndef D2_DEFINED_INLINE_00463900
+#define D2_DEFINED_INLINE_00463900
 __attribute__((noinline)) inline int32_t __fastcall ValidateClassId(int32_t nClassId) {
     if (!(nClassId < 0 || nClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return nClassId;
@@ -84,6 +92,7 @@ __attribute__((noinline)) inline int32_t __fastcall ValidateClassId(int32_t nCla
     nClassId = -1;
     return nClassId;
 }
+#endif // D2_DEFINED_INLINE_00463900
 
 __attribute__((noinline)) inline uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex) {
     D2MonStats2Txt* pMonStatsExTxt = nullptr;
@@ -98,6 +107,8 @@ __attribute__((noinline)) inline uint32_t __fastcall GetSomeMonsterStatFlag(int3
     return (uint32_t)pMonStatsExTxt->mDT[(int)nStatBitIndex >> 3] & Fog::BitBuffer::gadwBitMasks[nStatBitIndex & 7];
 }
 
+#ifndef D2_DEFINED_INLINE_004e6c50
+#define D2_DEFINED_INLINE_004e6c50
 __attribute__((noinline)) inline int32_t __fastcall CheckMonStatId(int32_t nMonStatsId) {
     if (!(nMonStatsId < 0 || nMonStatsId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return nMonStatsId;
@@ -106,5 +117,6 @@ __attribute__((noinline)) inline int32_t __fastcall CheckMonStatId(int32_t nMonS
     nMonStatsId = -1;
     return nMonStatsId;
 }
+#endif // D2_DEFINED_INLINE_004e6c50
 
 } // namespace D2Common::DATATBLS::MonsterTbls

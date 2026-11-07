@@ -7,19 +7,14 @@
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/ListBox/ListBoxWrapper.h"
 #include "Source/D2Client/UI/ui.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/File.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/UI/Help.data.h"
-#include "Source/D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -60,7 +55,7 @@ void __thiscall Clear(::ListBoxImplementation * pThis) {
         pItemCols[3][0] = L'\0';
         pItemCols[4][0] = L'\0';
         nItemIdx++;
-        pItemCols = (uint16_t (*)[1024])((int)(pItemCols + 6) + 0xe);
+        pItemCols = (uint16_t (*)[1024])((char*)(pItemCols + 6) + 0xe);
       } while (nItemIdx < (int)(uint32_t)pThis->nItemCount);
     }
 
@@ -107,7 +102,7 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
         }
 
         nFirstVisible++;
-        pItemEntry = (uint16_t (*)[1024])((int)(pItemEntry + 6) + 0xe);
+        pItemEntry = (uint16_t (*)[1024])((char*)(pItemEntry + 6) + 0xe);
       } while (nFirstVisible < (int)(uint32_t)pThis->nItemCount);
     }
 
@@ -206,7 +201,7 @@ int __thiscall GetVisibleItemCount(::ListBoxImplementation * pThis) {
       }
 
       i++;
-      pItemCols = (uint16_t (*)[1024])((int)(pItemCols + 6) + 0xe);
+      pItemCols = (uint16_t (*)[1024])((char*)(pItemCols + 6) + 0xe);
     } while (i < (int)nTotalItems);
 
     return nTotalItems;
@@ -334,7 +329,7 @@ BOOL __thiscall IsMouseInBounds(::ListBoxImplementation * pThis, D2UIMouseMsgStr
 }
 
 int __thiscall OnMouseWheel(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    short int nWheelDelta = *(short int*)((uintptr_t)&pMsg->nWParam + 2);
+    short int nWheelDelta = *(short int*)((intptr_t)&pMsg->nWParam + 2);
     if (nWheelDelta > 0) {
       pThis->nSelectedIndex = pThis->nFirstVisibleIndex;
       pThis->pVtable->OnUpArrow(pThis, pMsg);
@@ -455,7 +450,7 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
 
         nRowTop = nRowBottom + pThis->nItemSpacing;
         i++;
-        pItemCols = (uint16_t (*)[1024])((int)(pItemCols + 6) + 0xe);
+        pItemCols = (uint16_t (*)[1024])((char*)(pItemCols + 6) + 0xe);
       } while (i < (int)(uint32_t)pThis->nItemCount);
     }
 
@@ -612,7 +607,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
           nVisibleLineCount++;
         }
 
-        pItemEntry = (PD2ListBoxItemAuxData)((int)pItemEntry + 0x300e);
+        pItemEntry = (PD2ListBoxItemAuxData)((char*)pItemEntry + 0x300e);
         nItemIdx++;
         nScrollOffset++;
       } while (nItemIdx < pThis->nFirstVisibleIndex + nVisibleItemCount);
@@ -844,10 +839,10 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
       pRowPtr[3][0] = L'\0';
       pRowPtr[4][0] = L'\0';
       *(uint16_t*)(pRowPtr + 5) = 0;
-      *(uint32_t*)((int)(pRowPtr + 5) + 6) = 0;
-      *(uint32_t*)((int)(pRowPtr + 5) + 10) = 1;
-      *(uint32_t*)((int)(pRowPtr + 5) + 2) = 0;
-      pRowPtr = (uint16_t (*)[1024])((int)(pRowPtr + 6) + 0xe);
+      *(uint32_t*)((char*)(pRowPtr + 5) + 6) = 0;
+      *(uint32_t*)((char*)(pRowPtr + 5) + 10) = 1;
+      *(uint32_t*)((char*)(pRowPtr + 5) + 2) = 0;
+      pRowPtr = (uint16_t (*)[1024])((char*)(pRowPtr + 6) + 0xe);
       nItemIdx--;
     } while (nItemIdx);
 

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -47,23 +50,32 @@ struct D2PlayerInitStatsStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2PlayerModeAttribsStrc
+#define D2_DEFINED_D2PlayerModeAttribsStrc
 struct D2PlayerModeAttribsStrc {
     /* 0x00 */ int nStepMode; // 0 = no movement; 1 = step the path + play footstep sound (Walk/Run/TownWalk/KnockBack); 2 = skill/action mode: step the path only while SKILL_GetFlags bit0 is set, then re-issue the current skill
     /* 0x04 */ int nFrameAdvanceMode; // 0 = advance every frame (loop); 1 = advance only while not at end of frame cycle; 2 = at end of cycle set nGfxCurrentFrame = nFrameCount - 0x100 and halt (nAnimSpeed = 0); 3 = clamp nGfxCurrentFrame to 0x100 and halt
     /* 0x08 */ int nCompleteMode; // When the mode is considered finished: 0 = never (Death/Neutral/Dead); 1 = when the path step reports done; 2 or 3 = when IsAtEndOfFrameCycle reports done
 };
 
+#endif // D2_DEFINED_D2PlayerModeAttribsStrc
+#ifndef D2_DEFINED_D2PlayerModeFnPairStrc
+#define D2_DEFINED_D2PlayerModeFnPairStrc
 struct D2PlayerModeFnPairStrc {
     /* 0x00 */ void (__fastcall *pfnMoveToLocation)(::SGAMEDATA *, struct D2UnitStrc *, DWORD, int32_t, int32_t); // Called by PLRMODES_MoveToLocation as gaPlayerModeMoveFuncs[n*2]: RET 0xc, three stack arguments
     /* 0x04 */ void (__fastcall *pfnStartMode)(::SGAMEDATA *, struct D2UnitStrc *, DWORD, struct D2UnitStrc *); // Called by PLRMODES_StartModeID as gaPlayerModeMoveFuncs[n*2+1]: RET 8, two stack arguments
 };
 
+#endif // D2_DEFINED_D2PlayerModeFnPairStrc
+#ifndef D2_DEFINED_D2PlayerModeNetMsgStrc
+#define D2_DEFINED_D2PlayerModeNetMsgStrc
 struct D2PlayerModeNetMsgStrc {
     /* 0x00 */ void (__fastcall *pfnSend)(::SGAMEDATA *, struct D2UnitStrc *, struct D2ClientStrc *, int32_t); // Handler that sends the net message for this player animation mode
     /* 0x04 */ int32_t nMoveModeByte; // Mode byte sent in packet 0x0F PlayerMove (read as a byte by SendPlayerMoveOrObject / SendPlayerMove / SendPlayerStop)
     /* 0x08 */ int32_t nObjModeByte; // Mode byte sent in packet 0x10 CharToObj; equals nMoveModeByte except for the move/stop modes, where it is one higher
 };
 
+#endif // D2_DEFINED_D2PlayerModeNetMsgStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2PlayerMsgUnknownStrc {
     /* 0x00 */ uint32_t nValue;
@@ -98,7 +110,7 @@ void __fastcall JoinRoomSetup(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRo
 void __fastcall CLIENT_FreePlayerUnit(struct D2UnitStrc * pUnit);
 // Client-side player message/command dispatcher: applies a queued action (nMessageType) to a player unit from a D2ServerMessageHandleStrc. Frees any active light map and clears the current skill (except for type 0x13), restores path velocity, and resolves town vs non-town neutral mode. Switches on the message type to: set move/attack/interact targets (0/1/2/0x17/0x18), play a get-hit (6) / block (0x12) / cold-hit overlay+sound (0x13) / knockback (0x14) reaction, run skill cast/validate paths (0x15/0x16) , handle death (8/9) including closing panels and clearing trade/selection, and set run/skill anim modes (0x19). Returns 1 on success; on a failed skill/target it falls through to CLIENT_SetAnimModeAndMoveToCurrentPos and returns 0. Halts via Fog ErrorManager on an invalid message type.
 BOOL __fastcall PlayerMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode);
-void __fastcall PLAYER_InteractAtTarget(int32_t pTargetUnit);
+void __fastcall PLAYER_InteractAtTarget(struct D2UnitStrc * pTargetUnit);
 uint32_t __fastcall SKILL_CheckAuraRange(struct D2SkillStrc * pSkill, struct D2UnitStrc * pUnit, int * pnMinX, int * pnMinY);
 BOOL __stdcall PLAYER_CheckPendingInteraction(int32_t nTargetType, int32_t nTargetGUID);
 void __stdcall PLAYER_ClearRecursionClick();
@@ -115,8 +127,8 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(struct D2UnitStrc * pUnit, stru
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
 // @blizzard UnitProcessPlayerModeSimulation
 void __fastcall PLAYER_ProcessPlayerModeSimulation(struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_004637f0(int param_1);
-int __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pUnit);
+int __fastcall Unreferenced_004637f0(struct D2UnitStrc * param_1);
+uint16_t * __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, struct D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex);
 struct D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);
 struct D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);

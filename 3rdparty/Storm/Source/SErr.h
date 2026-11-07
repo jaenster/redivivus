@@ -4,15 +4,19 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Source/SFile.h"
 
 // Forward declarations
-struct D2StormListHead;
+struct StormLinkedListStrc;
 #ifndef RECON_FPTD_pfnBlizzardError
 #define RECON_FPTD_pfnBlizzardError
 typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, char * * ppszButtonText, uint32_t dwFlags, uint32_t dwErrorCode, bool bIsFatal);
@@ -23,12 +27,34 @@ typedef BOOL (__stdcall *pfnSErrDisplayCallback)(uint32_t dwErrorCode, char * sz
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2SErrMessageSourceStrc
+#define D2_DEFINED_D2SErrMessageSourceStrc
+struct __attribute__((packed)) D2SErrMessageSourceStrc {
+    /* 0x00 */ uint16_t wModuleId;
+    /* 0x02 */ uint8_t field_0x2;
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ HMODULE hModule;
+    /* 0x08 */ struct D2SErrMessageSourceStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2SErrMessageSourceStrc
+#ifndef D2_DEFINED_HANDLER
+#define D2_DEFINED_HANDLER
+struct __attribute__((packed)) HANDLER {
+    /* 0x00 */ StormLinkStrc m_link;
+    /* 0x08 */ BOOL (__stdcall *pfnHandler)(uint32_t, char *, void *, int32_t, char *);
+};
+
+#endif // D2_DEFINED_HANDLER
+#ifndef D2_DEFINED_SErrAppFatalContextStrc
+#define D2_DEFINED_SErrAppFatalContextStrc
 struct SErrAppFatalContextStrc {
     /* 0x00 */ void * pfnCallback; // SErrPrepareAppFatal arg 1
     /* 0x04 */ uint32_t nParam; // SErrPrepareAppFatal arg 2
     /* 0x08 */ DWORD dwThreadId; // GetCurrentThreadId of the preparer
 };
 
+#endif // D2_DEFINED_SErrAppFatalContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct StormSErrHandlerNode {
     /* 0x00 */ void * pPrevLink; // TSLink prev (Storm list: may hold ~&link)
@@ -104,20 +130,20 @@ void __stdcall SERR_InternalLeaveCriticalSection();
 // @oracle Storm 1.10b PPC export SErrPrepareAppFatal, code vector 10015af0 (TVector 100cbe9c).
 // @oracle-basis Callee set {EnterCriticalSection, GetCurrentThreadId, LeaveCriticalSection} is exactly the oracle's and is unique among all 19 SErr exports and all 82 functions of this namespace - the only other GetCurrentThreadId user, SErrDisplayAppFatal 0041d160, additionally calls memset/vsprintf/DisplayError/ExitProcess. Arity 2 = 2 (PPC prologue saves r3 and r4 only).
 void __stdcall SErrPrepareAppFatal(void * pfnCallback, uint32_t nCallbackParam);
-uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase);
-int __fastcall Unreferenced_0041c410(int param_1);
+uint32_t __thiscall SSYSTEM_ListOffsetToPointer(struct StormLinkStrc * pNode, int pBase);
+int __fastcall Unreferenced_0041c410(struct StormLinkedListStrc * param_1);
 int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode);
 void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget);
-uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode);
-void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode);
+uint32_t __thiscall SSYSTEM_ListGetNext(struct StormLinkedListStrc * pList, struct StormLinkStrc * pNode);
+void __thiscall SSYSTEM_ListUnlink(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
 int __fastcall Unreferenced_0041c6e0(int param_1);
-uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode);
+intptr_t __thiscall SSYSTEM_ListGetData(struct StormLinkedListStrc * pList, struct StormLinkStrc * pNode);
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
-void __fastcall TSList_HANDLER_Destructor(struct D2StormListHead * pList);
-int __fastcall Unreferenced_0041c7f0(int param_1);
+void __fastcall TSList_HANDLER_Destructor(struct StormLinkedListStrc * pList);
+struct StormLinkStrc * __fastcall Unreferenced_0041c7f0(struct StormLinkStrc * param_1);
 int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags);
-int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory);
+int * __thiscall SSYSTEM_ListFreeNode(struct StormLinkStrc * pNode, uint8_t bFreeMemory);
 // Under the error critical section, SMemAllocs a 12-byte list node, links it into gpStormErrorCallbackListHead and stores the caller's handler pointer at +8.
 // @was SSYSTEM_RegisterErrorCallback (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrRegisterHandler, code vector 10015960 (TVector 100cbea4).
@@ -126,8 +152,8 @@ int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory);
 void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback);
 // TSList<HANDLER>::Clear: unlinks and SMemFrees every node.
 // Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
-void __fastcall TSList_HANDLER_Clear(int32_t pList);
-uint32_t __thiscall SSYSTEM_ListRemoveAndFree(void * pList, int * pNode);
+void __fastcall TSList_HANDLER_Clear(struct StormLinkedListStrc * pList);
+::HANDLER * __thiscall SSYSTEM_ListRemoveAndFree(struct StormLinkedListStrc * pList, struct StormLinkStrc * pNode);
 // Displays an error dialog with optional stack trace and custom message. Formats error information, logs to debugger, and either shows MessageBox or calls registered error handler callback.
 // @was SSYSTEM_DisplayErrorDialog (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrDisplayError, code vector 10015f80 (from the TVector export block at 100cbe6c).

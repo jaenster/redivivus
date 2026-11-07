@@ -5,9 +5,7 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Net/in_addr.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -255,8 +253,8 @@ void __fastcall SAFESOCK_EnterCriticalSection(D2NetDataStrc * pNetData) {
 }
 
 // Leaves the critical section embedded at offset 0xC within the safesock structure. Thin wrapper around Win32 LeaveCriticalSection.
-void __fastcall LeaveCriticalSection_Safesock(void * pSafesockStrc) {
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)((int)pSafesockStrc + 0xc));
+void __fastcall LeaveCriticalSection_Safesock(D2NetDataStrc * pSafesockStrc) {
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pSafesockStrc->pSync);
 }
 
 int __fastcall Safesock_PollReadReady(D2NetDataStrc * pNetData) {

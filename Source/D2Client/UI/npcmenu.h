@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -32,6 +35,8 @@ typedef int (__stdcall *D2NpcMenuOptionFunc)();
 struct D2SpeechBankStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2HirelingHireData
+#define D2_DEFINED_D2HirelingHireData
 struct __attribute__((packed)) D2HirelingHireData {
     /* 0x00 */ int32_t nId;
     /* 0x04 */ int32_t nLevel;
@@ -50,6 +55,9 @@ struct __attribute__((packed)) D2HirelingHireData {
     /* 0x38 */ int16_t field14_0x38;
 };
 
+#endif // D2_DEFINED_D2HirelingHireData
+#ifndef D2_DEFINED_D2NpcMenuOptions
+#define D2_DEFINED_D2NpcMenuOptions
 struct __attribute__((packed)) D2NpcMenuOptions {
     /* 0x00 */ int nNpcId;
     /* 0x04 */ int nOptionsCount;
@@ -58,6 +66,9 @@ struct __attribute__((packed)) D2NpcMenuOptions {
     /* 0x26 */ uint8_t bEnabled;
 };
 
+#endif // D2_DEFINED_D2NpcMenuOptions
+#ifndef D2_DEFINED_D2NpcQuestCallbackEntry
+#define D2_DEFINED_D2NpcQuestCallbackEntry
 struct D2NpcQuestCallbackEntry {
     /* 0x00 */ int32_t nNpcClassId; // compared with the selected NPC's class id
     /* 0x04 */ int32_t nQuestId;
@@ -66,6 +77,9 @@ struct D2NpcQuestCallbackEntry {
     /* 0x10 */ int (__stdcall *pfnCallback)(); // int __stdcall(void); 8 of the 9 targets are code with no function defined
 };
 
+#endif // D2_DEFINED_D2NpcQuestCallbackEntry
+#ifndef D2_DEFINED_D2NPCSpeechStrc
+#define D2_DEFINED_D2NPCSpeechStrc
 struct __attribute__((packed)) D2NPCSpeechStrc {
     /* 0x00 */ int nNpcID;
     /* 0x04 */ uint8_t nAct;
@@ -79,6 +93,9 @@ struct __attribute__((packed)) D2NPCSpeechStrc {
     /* 0x15 */ uint8_t bGreeting;
 };
 
+#endif // D2_DEFINED_D2NPCSpeechStrc
+#ifndef D2_DEFINED_D2SpeechBankStrc
+#define D2_DEFINED_D2SpeechBankStrc
 struct __attribute__((packed)) D2SpeechBankStrc {
     /* 0x00 */ uint16_t wStringId; // string id shown by TEXT_ShowNpcDialog (NPCMENU_SendCainIdentifyItems)
     /* 0x02 */ uint8_t bQuestCondition; // 0: always eligible; else eligible when GetQuestState(eQuest, Completed) == nQuestCompleted
@@ -87,6 +104,7 @@ struct __attribute__((packed)) D2SpeechBankStrc {
     /* 0x0B */ int32_t nPlayerClass; // player class this line is for, 7 = any class
 };
 
+#endif // D2_DEFINED_D2SpeechBankStrc
 namespace D2Client::UI::npcmenu {
 
 // Function declarations
@@ -171,7 +189,7 @@ int __stdcall NPCMENU_GetCurrentShopMode();
 // Packet S->C 0x91 body, called by NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK.
 // Reads 12 word NPC class ids from the packet at +2. For each id below the MonStats count, sets bUpdated = 1 on every D2NPCSpeech entry with that nNpcID. Nothing in it is about trade or money.
 void __fastcall NPCMENU_MarkNpcSpeechesUpdated(struct D2GSPacketSrv0x91 * pBytes);
-int __fastcall Unreferenced_004b3560(int param_1);
+int __fastcall Unreferenced_004b3560(uint8_t * param_1);
 // Shared callback of the Imbue (Charsi, string 4017), Add Sockets (Larzuk, 22748) and Personalize (Anya, 22749) menu options: frees the NPC dialog, closes UI_NPCMENU, resets the cursor and hover state, sets the NPC UI state to 7 and gnNpcMenuTransactionType to 0, then opens the cube-style item panel for the current NPC (UI_OpenHoradricCubeWithNpcInteraction(nCurrentInteractedNpcGUID)). Returns 1.
 // Evidence: the only 3 references are the NPCMENU_Enable{CharsiImbue,LarzukSocket,AnyaPersonalize}Option stores; which service runs is chosen by the NPC, not here.
 int __stdcall NPCMENU_ItemServiceOptionCallback();

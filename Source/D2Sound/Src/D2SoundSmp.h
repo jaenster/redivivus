@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Sound)
 #error "D2Sound header included by a module that may not use D2Sound (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Sound) && !defined(D2_LOADS_D2Sound)
+#error "internal D2Sound header included from another module; include D2Sound's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -45,10 +48,15 @@ typedef ULONG (__stdcall *IUnknown_Release)(void * This);
 struct IDirectSoundVtbl;
 
 // Data types
+#ifndef D2_DEFINED_IDirectSound
+#define D2_DEFINED_IDirectSound
 struct IDirectSound {
     /* 0x00 */ struct IDirectSoundVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectSound
+#ifndef D2_DEFINED_IDirectSoundVtbl
+#define D2_DEFINED_IDirectSoundVtbl
 struct IDirectSoundVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -63,6 +71,7 @@ struct IDirectSoundVtbl {
     /* 0x28 */ void * Initialize;
 };
 
+#endif // D2_DEFINED_IDirectSoundVtbl
 namespace D2Sound::Src::D2SoundSmp {
 
 // Function declarations

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -50,6 +53,8 @@ typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgRoomTilesStrc
+#define D2_DEFINED_D2DrlgRoomTilesStrc
 struct D2DrlgRoomTilesStrc {
     /* 0x00 */ struct D2DrlgTileDataStrc * pWallTiles; // Wall tile data array (each element 0x30 bytes)
     /* 0x04 */ int nWallTilesCount; // Number of wall tiles allocated
@@ -59,6 +64,7 @@ struct D2DrlgRoomTilesStrc {
     /* 0x14 */ int nRoofTilesCount; // Number of roof tiles allocated
 };
 
+#endif // D2_DEFINED_D2DrlgRoomTilesStrc
 namespace D2Common::DUNGEON::Dungeon {
 
 // Function declarations
@@ -66,7 +72,7 @@ namespace D2Common::DUNGEON::Dungeon {
 // @sourcefile .\DUNGEON\Dungeon.cpp
 struct D2DrlgActStrc * __stdcall AllocAct(BYTE nActNo, int32_t dwInitSeed, BOOL bClientSide, ::SGAMEDATA * pGame, BYTE nDifficulty, struct D2PoolManagerStrc * pMemory, eD2LevelId eLevel, fAutoMap pfAutoMap, fTownAutoMap pfTownAutoMap);
 // The unit-list search loop leaves its found (or NULL) D2UnitStrc* result in EAX at the fallthrough return, unused by the body itself; caller evidence names the read pStaircaseUnit.
-struct D2UnitStrc * __stdcall TakeStairsInternal(struct D2RoomStrc * pRoom, eD2LevelId eLevelId, struct D2RoomExStrc * * ppRoomEx);
+struct D2UnitStrc * __stdcall TakeStairsInternal(struct D2RoomStrc * pRoom, eD2LevelId eLevelId, struct D2LvlWarpTxt * * ppRoomEx);
 // Returns the D2LvlWarpTxt record of the warp node whose Id matches the warp unit's class id, or NULL if the node is disabled.
 struct D2LvlWarpTxt * __stdcall DUNGEON_GetLvlWarpTxtForWarpUnit(struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
 struct D2DrlgTileDataStrc * __stdcall DRLGROOM_GetFloorTilesFromRoom(struct D2RoomStrc * pRoom, int * pFloorCount);

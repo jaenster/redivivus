@@ -7,14 +7,9 @@
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/Text.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/DC6.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/Fog/Memory.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Editbox.h"
 #include "Source/D2Client/UI/UIWidget.h"
@@ -300,20 +295,20 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
     if (!pThis->bAllowKeyRepeat && pMsg->uLParam.nLParam & 0x40000000U) {
       return 1;
     }
-    if ((uint32_t)pMsg->nWParam > 0x7f) {
+    if (pMsg->nWParam > 0x7f) {
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
       Storm::SMsgBreakHandlerChain(pMsg);
       return 1;
     }
 
-    uint8_t byChar;
-    byChar = *(uint8_t*)&pMsg->nWParam;
+    uint8_t nCharCode;
+    nCharCode = (uint8_t)pMsg->nWParam;
     if (pThis->pfnCharFilter) {
       uint16_t* pWVar1;
       bIsValidChar = pThis->pfnCharFilter((::UIWidget*)pThis, pMsg);
       apply_char:
-      if (byChar == 8) {
+      if (nCharCode == 8) {
         if (pThis->nTextLength > 0) {
           bIsValidChar = pThis->nCursorPos;
           if (bIsValidChar != pThis->nTextLength && bIsValidChar) {
@@ -342,7 +337,7 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
         pMsg->dwResult = 0;
         goto consume_char;
       }
-      if (byChar == 0x2e) {
+      if (nCharCode == 0x2e) {
         if (pThis->nTextLength > 0) {
           bIsValidChar = pThis->nCursorPos;
           if (bIsValidChar != pThis->nTextLength) {
@@ -373,7 +368,7 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
         if ((int)nLimit < (int)(nTextLen - 1)) {
           nInsertPos = pThis->nCursorPos;
           if (nInsertPos == nLimit) {
-            pThis->wszString[nInsertPos] = (short int)(char)byChar;
+            pThis->wszString[nInsertPos] = (short int)(char)nCharCode;
             pThis->nCursorPos++;
             pThis->wszString[pThis->nCursorPos] = L'\0';
             pThis->nTextLength++;
@@ -394,7 +389,7 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
             }
 
             pThis->wszString[pThis->nTextLength] = L'\0';
-            pThis->wszString[pThis->nCursorPos] = (short int)(char)byChar;
+            pThis->wszString[pThis->nCursorPos] = (short int)(char)nCharCode;
           }
         }
         if (pThis->nTextLength) {
@@ -435,18 +430,18 @@ int __thiscall OnChar(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
           }
         }
       } else {
-        if (byChar == 0x20 || byChar == 0x1b || byChar == 0xd) {
+        if (nCharCode == 0x20 || nCharCode == 0x1b || nCharCode == 0xd) {
           return 0;
         }
       }
     } else {
       if (pThis->bNumericOnly) {
-        bIsValidChar = isdigit((int)(char)byChar);
+        bIsValidChar = isdigit((int)(char)nCharCode);
         goto apply_char;
       }
 
-      bIsValidChar = D2Win::Src::D2WinFont::D2WINFONT_IsFontCharacterValid(byChar);
-      if (byChar != 0xd && byChar != 0x1b) {
+      bIsValidChar = D2Win::Src::D2WinFont::D2WINFONT_IsFontCharacterValid(nCharCode);
+      if (nCharCode != 0xd && nCharCode != 0x1b) {
         goto apply_char;
       }
 

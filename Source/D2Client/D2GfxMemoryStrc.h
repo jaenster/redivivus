@@ -4,13 +4,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2CMP/SRC/SpriteCache.h"
+#include "Source/D2CMP/D2CMP.h"
 
 // Forward declarations
 struct D2PoolManagerStrc;
@@ -22,6 +25,8 @@ typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 struct D2SpriteCache;
 
 // Data types
+#ifndef D2_DEFINED_D2GfxMemoryStrc
+#define D2_DEFINED_D2GfxMemoryStrc
 struct __attribute__((packed)) D2GfxMemoryStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory;
     /* 0x04 */ uint32_t pMaxMemory; // Upper memory bound; AllocEntry2 checks: usedMemory+request <= pMaxMemory
@@ -40,6 +45,11 @@ struct __attribute__((packed)) D2GfxMemoryStrc {
     /* 0x4C */ uint32_t nAllocations; // Current active allocation count; incremented each AllocEntry2 call
 };
 
+#endif // D2_DEFINED_D2GfxMemoryStrc
+#ifndef D2_DEFINED_D2SpriteCache
+#define D2_DEFINED_D2SpriteCache
 struct D2SpriteCache {
     /* 0x00 */ D2SpriteCacheEntryStrc aEntries[5120]; // 5120 entries of 0x1C bytes = 0x23000, the exact AllocServerMemory size in GFX_AllocSpriteCache (.\SRC\SpriteCache.cpp:2273)
 };
+
+#endif // D2_DEFINED_D2SpriteCache

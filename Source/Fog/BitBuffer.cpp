@@ -56,7 +56,7 @@ void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint3
       nByteOffset = nRemaining * 4;
       pCursorB = pBufferB;
       do {
-        pCursorA = (uint32_t*)((int)pBufferA - (int)pBufferB + (int)pCursorB);
+        pCursorA = (uint32_t*)((intptr_t)pBufferA - (intptr_t)pBufferB + (char*)pCursorB);
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
@@ -72,15 +72,15 @@ void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint3
         }
       case 3:
         {
-          *(uint8_t*)(nByteOffset + 2 + (int)pDest) = *(uint8_t*)(nByteOffset + 2 + (int)pBufferA) & *(uint8_t*)(nByteOffset + 2 + (int)pBufferB);
+          *(uint8_t*)(nByteOffset + 2 + (char*)pDest) = *(uint8_t*)(nByteOffset + 2 + (char*)pBufferA) & *(uint8_t*)(nByteOffset + 2 + (char*)pBufferB);
         }
       case 2:
         {
-          *(uint8_t*)(nByteOffset + 1 + (int)pDest) = *(uint8_t*)(nByteOffset + 1 + (int)pBufferA) & *(uint8_t*)(nByteOffset + 1 + (int)pBufferB);
+          *(uint8_t*)(nByteOffset + 1 + (char*)pDest) = *(uint8_t*)(nByteOffset + 1 + (char*)pBufferA) & *(uint8_t*)(nByteOffset + 1 + (char*)pBufferB);
         }
       case 1:
         {
-          *(uint8_t*)(nByteOffset + (int)pDest) = *(uint8_t*)(nByteOffset + (int)pBufferA) & *(uint8_t*)(nByteOffset + (int)pBufferB);
+          *(uint8_t*)(nByteOffset + (char*)pDest) = *(uint8_t*)(nByteOffset + (char*)pBufferA) & *(uint8_t*)(nByteOffset + (char*)pBufferB);
           return;
         }
     }
@@ -100,7 +100,7 @@ void __stdcall BITBUF_OrBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t
       nByteOffset = nRemaining * 4;
       pCursorB = pBufferB;
       do {
-        pCursorA = (uint32_t*)((int)pBufferA - (int)pBufferB + (int)pCursorB);
+        pCursorA = (uint32_t*)((intptr_t)pBufferA - (intptr_t)pBufferB + (char*)pCursorB);
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
@@ -116,15 +116,15 @@ void __stdcall BITBUF_OrBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t
         }
       case 3:
         {
-          pDest[nByteOffset + 2] = pBufferA[nByteOffset + 2] | *(uint8_t*)(nByteOffset + 2 + (int)pBufferB);
+          pDest[nByteOffset + 2] = pBufferA[nByteOffset + 2] | *(uint8_t*)(nByteOffset + 2 + (char*)pBufferB);
         }
       case 2:
         {
-          pDest[nByteOffset + 1] = pBufferA[nByteOffset + 1] | *(uint8_t*)(nByteOffset + 1 + (int)pBufferB);
+          pDest[nByteOffset + 1] = pBufferA[nByteOffset + 1] | *(uint8_t*)(nByteOffset + 1 + (char*)pBufferB);
         }
       case 1:
         {
-          pDest[nByteOffset] = pBufferA[nByteOffset] | *(uint8_t*)(nByteOffset + (int)pBufferB);
+          pDest[nByteOffset] = pBufferA[nByteOffset] | *(uint8_t*)(nByteOffset + (char*)pBufferB);
           return;
         }
     }
@@ -142,7 +142,7 @@ void __stdcall BITBUF_NotBuffer(uint8_t * pSrc, uint32_t * pDest, int32_t nBitCo
       nByteOffset = nRemaining * 4;
       pCursorDest = pDest;
       do {
-        *pCursorDest = ~*(uint32_t*)((int)pSrc - (int)pDest + (int)pCursorDest);
+        *pCursorDest = ~*(uint32_t*)((intptr_t)pSrc - (intptr_t)pDest + (char*)pCursorDest);
         pCursorDest++;
         nRemaining--;
       } while (nRemaining);
@@ -156,15 +156,15 @@ void __stdcall BITBUF_NotBuffer(uint8_t * pSrc, uint32_t * pDest, int32_t nBitCo
         }
       case 3:
         {
-          *(uint8_t*)(nByteOffset + 2 + (int)pDest) = ~pSrc[nByteOffset + 2];
+          *(uint8_t*)(nByteOffset + 2 + (char*)pDest) = ~pSrc[nByteOffset + 2];
         }
       case 2:
         {
-          *(uint8_t*)(nByteOffset + 1 + (int)pDest) = ~pSrc[nByteOffset + 1];
+          *(uint8_t*)(nByteOffset + 1 + (char*)pDest) = ~pSrc[nByteOffset + 1];
         }
       case 1:
         {
-          *(uint8_t*)(nByteOffset + (int)pDest) = ~pSrc[nByteOffset];
+          *(uint8_t*)(nByteOffset + (char*)pDest) = ~pSrc[nByteOffset];
           return;
         }
     }
@@ -184,7 +184,7 @@ void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_
       nByteOffset = nRemaining * 4;
       pCursorB = pBufferB;
       do {
-        pCursorA = (uint32_t*)((int)pBufferA - (int)pBufferB + (int)pCursorB);
+        pCursorA = (uint32_t*)((intptr_t)pBufferA - (intptr_t)pBufferB + (char*)pCursorB);
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
@@ -200,15 +200,15 @@ void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_
         }
       case 3:
         {
-          pDest[nByteOffset + 2] = pBufferA[nByteOffset + 2] ^ *(uint8_t*)(nByteOffset + 2 + (int)pBufferB);
+          pDest[nByteOffset + 2] = pBufferA[nByteOffset + 2] ^ *(uint8_t*)(nByteOffset + 2 + (char*)pBufferB);
         }
       case 2:
         {
-          pDest[nByteOffset + 1] = pBufferA[nByteOffset + 1] ^ *(uint8_t*)(nByteOffset + 1 + (int)pBufferB);
+          pDest[nByteOffset + 1] = pBufferA[nByteOffset + 1] ^ *(uint8_t*)(nByteOffset + 1 + (char*)pBufferB);
         }
       case 1:
         {
-          pDest[nByteOffset] = pBufferA[nByteOffset] ^ *(uint8_t*)(nByteOffset + (int)pBufferB);
+          pDest[nByteOffset] = pBufferA[nByteOffset] ^ *(uint8_t*)(nByteOffset + (char*)pBufferB);
           return;
         }
     }
@@ -279,7 +279,20 @@ void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValu
 
 int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     // Static local variables (originally global data)
-    static int gbGameSaveFileMarker[3] = { -0x7030101, -0x7f3f1f10, 0x0 }; D2_STATIC_GUARD(gbGameSaveFileMarker, "Fog::BitBuffer::Read::gbGameSaveFileMarker");
+    static uint8_t gbGameSaveFileMarker[12] = {
+    0xff,
+    0xfe,
+    0xfc,
+    0xf8,
+    0xf0,
+    0xe0,
+    0xc0,
+    0x80,
+    0x0,
+    0x0,
+    0x0,
+    0x0
+}; D2_STATIC_GUARD(gbGameSaveFileMarker, "Fog::BitBuffer::Read::gbGameSaveFileMarker");
 
     uint8_t byMask;
     uint32_t dwBitMask;
@@ -307,7 +320,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
 
         nBitsAtPos = pBuf->nBitsAtPos;
         byCurrent = *pBuf->pBuffer;
-        byMask = *(uint8_t*)((int)gbGameSaveFileMarker + nBitsAtPos);
+        byMask = gbGameSaveFileMarker[nBitsAtPos];
         dwBitMask = gdwBitBufferSeed[nBitsThisStep];
         pBuf->nBitsAtPos = nBitsAtPos + nBitsThisStep;
         nSize += ((uint8_t)((byMask & byCurrent) >> D2_SHIFT_COUNT(nBitsAtPos)) & dwBitMask) << D2_SHIFT_COUNT((uintptr_t)pBitBuffer);
@@ -318,7 +331,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
           pBuf->nBitsAtPos = 0;
         }
 
-        pBitBuffer = (D2BitBufferStrc*)((uintptr_t)&pBitBuffer->pBuffer + nBitsThisStep);
+        pBitBuffer = (D2BitBufferStrc*)((intptr_t)&pBitBuffer->pBuffer + nBitsThisStep);
       } while (nBitsRemaining > 0);
 
       return nSize;

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,6 +26,8 @@ struct D2LvlMazeTxt;
 struct D2RoomExStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgLevelDataUnion
+#define D2_DEFINED_D2DrlgLevelDataUnion
 union D2DrlgLevelDataUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -31,18 +36,27 @@ union D2DrlgLevelDataUnion {
     /* 0x00 */ struct D2DrlgLevelDataWildernessLevel * pDrlgLevelOutdoorsData; // when DRLG Type is DRLGTYPE_WildernessLevel
 };
 
+#endif // D2_DEFINED_D2DrlgLevelDataUnion
+#ifndef D2_DEFINED_D2DrlgLevelWarpCoordinatesStrc
+#define D2_DEFINED_D2DrlgLevelWarpCoordinatesStrc
 struct D2DrlgLevelWarpCoordinatesStrc {
     /* 0x00 */ int32_t anX[9];
     /* 0x24 */ int32_t anY[9];
     /* 0x48 */ int32_t nEntriesCount;
 };
 
+#endif // D2_DEFINED_D2DrlgLevelWarpCoordinatesStrc
+#ifndef D2_DEFINED_D2DrlgSpawnPointStrc
+#define D2_DEFINED_D2DrlgSpawnPointStrc
 struct D2DrlgSpawnPointStrc {
     /* 0x00 */ int nX;
     /* 0x04 */ int nY;
     /* 0x08 */ int nSpawnType;
 };
 
+#endif // D2_DEFINED_D2DrlgSpawnPointStrc
+#ifndef D2_DEFINED_D2DrlgLevelStrc
+#define D2_DEFINED_D2DrlgLevelStrc
 #pragma pack(push, 1)
 struct D2DrlgLevelStrc {
     /* 0x000 */ int eDrlgType;
@@ -70,3 +84,5 @@ struct D2DrlgLevelStrc {
     /* 0x22C */ int * pRoomExStateFlags;
 };
 #pragma pack(pop)
+
+#endif // D2_DEFINED_D2DrlgLevelStrc

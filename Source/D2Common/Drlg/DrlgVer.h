@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2DrlgCoordStrc;
+struct D2DrlgOrthStrc;
 struct D2DrlgVertexStrc;
 struct D2PoolManagerStrc;
 
@@ -28,13 +32,13 @@ struct D2DrlgVertexStrc * __fastcall DRLGVER_AllocVertex(struct D2PoolManagerStr
 void __stdcall DRLGVER_SetVertexFlags(struct D2DrlgVertexStrc * pVertex, int nFlag);
 // DRLG room outline generation: walks a linked list of room-edge descriptors (pDrlgRoomData) and splits a 4-vertex rectangular boundary (pFirstVertex's linked ring) by inserting new vertices where each edge's coordinate range intersects the room. nDirection (case 0-3) selects which side/axis (Y top, X right, Y bottom, X left) and the sign of comparison; uses pDrlgCoord or an override coord on the descriptor. New vertices are allocated from the server memory pool (AllocServerMemory, 0x14 bytes), tagged with nDirection and dwFlags (bit0 always, bit1 if descriptor field at +8 is set), and spliced into the vertex list. Returns 0 / end-of-list pointer; halts via ErrorManager on an invalid direction case.
 // @sourcefile .\DRLG\DrlgVer.cpp
-struct D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * pFirstVertex, struct D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, void * pDrlgRoomData);
+struct D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * pFirstVertex, struct D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, struct D2DrlgOrthStrc * pDrlgRoomData);
 // Allocates and chains four D2DrlgVertexStrc corner nodes for the given room coordinate rect (temporarily shrinking width/height by 1, restoring after), then calls DRLGVER_CreateVerticesFromEdges to insert edge-interior vertices. Normalises all vertex positions relative to the room origin. Used during DRLG Vers layout to build the vertex ring describing a room's boundary polygon.
 // @sourcefile .\DRLG\DrlgVer.cpp
-void __fastcall DRLGVER_CreateRoomVertices(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * * ppVertices, struct D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, void * pDrlgRoomData);
+void __fastcall DRLGVER_CreateRoomVertices(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * * ppVertices, struct D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, struct D2DrlgOrthStrc * pDrlgRoomData);
 // @sourcefile .\DRLG\DrlgVer.cpp
 void __fastcall DRLGVER_FreeVertices(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * * ppVertices);
-int __fastcall Unreferenced_0067d250(int param_1);
+int __fastcall Unreferenced_0067d250(struct D2DrlgVertexStrc * * param_1);
 void __fastcall GetCoordDiff(struct D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int * pDiffY);
 #endif // D2_MODULE_D2Common
 

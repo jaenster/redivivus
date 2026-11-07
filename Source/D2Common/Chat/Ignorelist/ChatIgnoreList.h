@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -65,10 +68,15 @@ typedef ::ChatIgnoreList * (__thiscall *ChatIgnoreList_ScalarDeletingDestructor)
 struct ChatIgnoreListVtable;
 
 // Data types
+#ifndef D2_DEFINED_ChatIgnoreList
+#define D2_DEFINED_ChatIgnoreList
 struct ChatIgnoreList {
     /* 0x00 */ struct ChatIgnoreListVtable * _vfptr;
 };
 
+#endif // D2_DEFINED_ChatIgnoreList
+#ifndef D2_DEFINED_ChatIgnoreListVtable
+#define D2_DEFINED_ChatIgnoreListVtable
 struct ChatIgnoreListVtable {
     /* 0x00 */ int32_t (__thiscall *AddByPattern)(::ChatIgnoreList *, char *);
     /* 0x04 */ int32_t (__thiscall *RemoveByPattern)(::ChatIgnoreList *, char *);
@@ -84,6 +92,7 @@ struct ChatIgnoreListVtable {
     /* 0x2C */ ::ChatIgnoreList * (__thiscall *ScalarDeletingDestructor)(::ChatIgnoreList *, uint32_t);
 };
 
+#endif // D2_DEFINED_ChatIgnoreListVtable
 namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
 
 // Function declarations

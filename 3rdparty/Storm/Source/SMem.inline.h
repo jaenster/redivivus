@@ -4,8 +4,12 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -13,6 +17,8 @@
 
 namespace Storm::Source::SMem {
 
+#ifndef D2_DEFINED_INLINE_004053f0
+#define D2_DEFINED_INLINE_004053f0
 // Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
 // The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
 __attribute__((noinline)) inline void MISC_OperatorDeleteShim(void * p) {
@@ -22,5 +28,6 @@ __attribute__((noinline)) inline void MISC_OperatorDeleteShim(void * p) {
 
     SMemFree(p, "delete", -1, 0);
 }
+#endif // D2_DEFINED_INLINE_004053f0
 
 } // namespace Storm::Source::SMem

@@ -2,31 +2,9 @@
 
 #include "Source/D2Game/SKILLS/SkillsServer.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
@@ -53,15 +31,9 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitEvent.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/SKILLS/SkillAma.h"
 #include "Source/D2Game/SKILLS/SkillBar.h"
@@ -114,10 +86,6 @@ typedef void (__fastcall *pfnSkillRangeCb)(D2UnitStrc * pUnit, void * pCtx);
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
 typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-#endif
-#ifndef RECON_FPTD_pfnUIMenuInstance
-#define RECON_FPTD_pfnUIMenuInstance
-typedef void (__stdcall *pfnUIMenuInstance)();
 #endif
 
 static D2SkillSrvStFunc SKILLSRVSTFUNCS[91] = {
@@ -745,7 +713,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         }
       }
 
-      pCallbackArg = (void*)((int)pCallbackArg + 1);
+      pCallbackArg = (void*)((char*)pCallbackArg + 1);
     } while ((uintptr_t)pCallbackArg < (uint32_t)nRoomCount);
 }
 
@@ -1454,7 +1422,7 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
 }
 
 // Sets skill data by entry type. The second parameter is a whole 32-bit value in EDX; typed from DL alone it was truncated to a byte.
-void __fastcall SKILLS_SetSkillDataByEType(D2UnitStrc * pUnitStrc, uint32_t nUnitLow, uint32_t dwValue, uint32_t nSkillId) {
+void __fastcall SKILLS_SetSkillDataByEType(D2UnitStrc * pUnitStrc, D2DamageStrc * nUnitLow, uint32_t dwValue, uint32_t nSkillId) {
     D2SkillsTxt* pSkillsTxt = (int)nSkillId >= 0 && (int)nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return;
@@ -1462,19 +1430,19 @@ void __fastcall SKILLS_SetSkillDataByEType(D2UnitStrc * pUnitStrc, uint32_t nUni
 
     switch (pSkillsTxt->EType) {
       case ELEMENTAL_COLD:
-        *(uint32_t*)(nUnitLow + 0x30) = dwValue;
+        nUnitLow->dwColdLength = dwValue;
       return;
       case ELEMENTAL_POISON:
-        *(uint32_t*)(nUnitLow + 0x2c) = dwValue;
+        nUnitLow->dwPoisLength = dwValue;
       return;
       case ELEMENTAL_STUN:
-        *(uint32_t*)(nUnitLow + 0x44) = dwValue;
+        nUnitLow->dwStunLen = dwValue;
       return;
       case ELEMENTAL_BURNING:
-        *(uint32_t*)(nUnitLow + 0x18) = dwValue;
+        nUnitLow->dwBurnLen = dwValue;
       return;
       case ELEMENTAL_FREEZE:
-        *(uint32_t*)(nUnitLow + 0x34) = dwValue;
+        nUnitLow->dwFrzLength = dwValue;
     }
 }
 
@@ -1803,7 +1771,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
         nLine = pUnit->nClassId;
       }
 
-      pNewPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nLine, ptPortalPos.x, ptPortalPos.y, pGame, eLevel, 1, 2, nullptr);
+      pNewPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nLine, ptPortalPos.x, ptPortalPos.y, pGame, eLevel, 1, 2, 0);
       if (!pNewPortal) {
         if (!pUnit) {
           nUnitGUID = -1;
@@ -1882,7 +1850,7 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
           return 0;
         }
 
-        pPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nClassId, nPosX, nPosY, pGame, pSpawnRoom, 1, 1, nullptr);
+        pPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nClassId, nPosX, nPosY, pGame, pSpawnRoom, 1, 1, 0);
         if (ppPortal) {
           *ppPortal = pPortal;
         }
@@ -2186,7 +2154,7 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
 
       iRingCol = 0;
       do {
-        if ((int)pSkillArg <= 0) {
+        if ((intptr_t)pSkillArg <= 0) {
           break;
         }
 
@@ -2196,14 +2164,14 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
         pSkillArgCopy->nUnitX = gaSkillMissileStarOffsets_4[iRingCol] * gaSkillMissileStarOffsets_1[iRingRow];
         pSkillArgCopy->nUnitY = gaSkillMissileStarOffsets_2[iRingCol] * gaSkillMissileStarOffsets_3[iRingRow];
         MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
-        pSkillArg = (D2SkillArgStrc*)((uintptr_t)&pSkillArg[-1].nFunctionParam + 2);
+        pSkillArg = (D2SkillArgStrc*)((intptr_t)&pSkillArg[-1].nFunctionParam + 2);
         iRingCol++;
       } while (iRingCol < 4);
 
       pSkillArgCopy->nUnitX = gnSkillMissileOffset_SkillStar1[iRingRow];
       pSkillArgCopy->nUnitY = gnSkillMissileOffset_SkillStar2[iRingRow];
       MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
-      pSkillArg = (D2SkillArgStrc*)((uintptr_t)&pSkillArg[-1].nFunctionParam + 3);
+      pSkillArg = (D2SkillArgStrc*)((intptr_t)&pSkillArg[-1].nFunctionParam + 3);
       iRingRow++;
       if (iRingRow >= 7) {
         return;
@@ -2505,7 +2473,7 @@ void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t n
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sUnitFindData);
     /* FARPROC lpfn for IsBadCodePtr */ _bIsBadCode = IsBadCodePtr((FARPROC)ppfnProc);
     if (_bIsBadCode) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1061);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1061);
       exit(-1);
     }
 
@@ -2528,12 +2496,12 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
     D2UnitFindDataStrc sParam;
     int iUnit;
     if (!pBaalWaveParam) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10b8);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10b8);
       exit(-1);
     } else {
       int32_t nX_00;
       if (!pBaalWaveParam->fpFunction) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10b9);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10b9);
         exit(-1);
       }
 
@@ -2560,7 +2528,7 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
       D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sParam);
       /* FARPROC lpfn for IsBadCodePtr */ _bIsBadCode = IsBadCodePtr((FARPROC)pBaalWaveParam->fpFunction);
       if (_bIsBadCode) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10db);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10db);
         exit(-1);
       }
 
@@ -2698,7 +2666,7 @@ void __thiscall SKILLS_CalcPetSkillDamage(void * pThis, int * pnDamageOut) {
       return;
     }
 
-    int nClassId = *(int*)((int)pThis + 4);
+    int nClassId = *(int*)((char*)pThis + 4);
     D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return;
@@ -4465,8 +4433,8 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatListEx) {
       uint32_t dwStunExpireFrame;
-      dwStunExpireFrame = *(int*)((int)pThis + 0xa8) + 100;
-      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(*(D2PoolManagerStrc**)((int)pThis + 0x1c), 2, dwStunExpireFrame, pUnit->eUnitType, pUnit->nUnitGUID);
+      dwStunExpireFrame = *(int*)((char*)pThis + 0xa8) + 100;
+      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(*(D2PoolManagerStrc**)((char*)pThis + 0x1c), 2, dwStunExpireFrame, pUnit->eUnitType, pUnit->nUnitGUID);
       pThis = (void*)pGameSaved;
       if (pStatListEx) {
         GAME::Event::SetEvent(pGameSaved, pUnit, 0xc, dwStunExpireFrame, 0, 0);
@@ -4477,7 +4445,7 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
         pThis = (void*)pGameSaved;
       }
     } else {
-      pExtendedExpiryFrame = *(int*)((int)pThis + 0xa8) + eState;
+      pExtendedExpiryFrame = *(int*)((char*)pThis + 0xa8) + eState;
       D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatListEx, pExtendedExpiryFrame);
       GAME::Event::SetEvent((::SGAMEDATA*)pThis, pUnit, 0xc, pExtendedExpiryFrame, 0, 0);
     }
@@ -4532,8 +4500,8 @@ D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2Uni
     return (D2UnitStrc*)pStatListEx;
 }
 
-void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance) {
-    D2UpdateState((D2UnitStrc*)wszText, (eD2States)pfnMenuInstance, 1);
+void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, eD2States pfnMenuInstance) {
+    D2UpdateState((D2UnitStrc*)wszText, pfnMenuInstance, 1);
 }
 
 } // namespace D2Game::SKILLS::SkillsServer

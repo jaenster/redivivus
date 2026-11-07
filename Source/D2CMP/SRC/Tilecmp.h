@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2GroundSubTileStrc;
 struct D2TileLibraryEntryStrc;
 struct D2TileLibraryHashStrc;
 struct D2TileLibraryHeaderStrc;
@@ -27,6 +31,8 @@ typedef void (__stdcall *pfnTilecmpPixelCallback)(uint32_t dwPixel);
 struct D2TileCmpTileSetStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2TileCmpTileNodeStrc
+#define D2_DEFINED_D2TileCmpTileNodeStrc
 struct D2TileCmpTileNodeStrc {
     /* 0x00 */ short wOffsetX; // Sub-tile X offset in isometric space
     /* 0x02 */ short wOffsetY; // Sub-tile Y offset in isometric space
@@ -38,6 +44,7 @@ struct D2TileCmpTileNodeStrc {
     /* 0x10 */ struct D2TileCmpTileNodeStrc * pNext; // Next node in linked list (chain walked by FreeTileSet)
 };
 
+#endif // D2_DEFINED_D2TileCmpTileNodeStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 struct D2TileCmpTileSetListStrc {
     /* 0x00 */ uint32_t dwFlags; // nonzero makes TILECMP_ExportCacheToBuffer set header +4 = 1
@@ -47,6 +54,8 @@ struct D2TileCmpTileSetListStrc {
 };
 
 #endif // D2_MODULE_D2CMP
+#ifndef D2_DEFINED_D2TileCmpTileSetStrc
+#define D2_DEFINED_D2TileCmpTileSetStrc
 struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x00 */ int nMinX; // Bounding min X; serialized: width = nMaxX - nMinX
     /* 0x04 */ int nMinY; // Bounding min Y; serialized: height = nMaxY - nMinY
@@ -75,6 +84,7 @@ struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x5C */ struct D2TileCmpTileSetStrc * pTileSetChain; // Next in tile-set chain (+0x5c, set by AddTileToSet)
 };
 
+#endif // D2_DEFINED_D2TileCmpTileSetStrc
 namespace D2CMP::SRC::Tilecmp {
 
 // Function declarations
@@ -92,15 +102,15 @@ void __stdcall TILECMP_AllocTileLink(uint32_t dwTileRef, uint32_t dwLinkData);
 void __stdcall TILECMP_FreeTileSetChain(struct D2TileCmpTileSetListStrc * pTileSetList);
 void __stdcall TILECMP_AddTileToSet(struct D2TileCmpTileSetListStrc * pTileSetList, uint16_t wFlags, uint16_t wRoofHeight, uint32_t nOrientation, uint32_t nMainIndex, uint32_t nSubIndex, uint32_t nRarity, uint32_t nDirection, uint32_t * pSubTileFlags);
 // @sourcefile .\SRC\Tilecmp.cpp
-void __stdcall TILECMP_CacheTileData(int * pTileMeasures, uint32_t * pTilePixels, int32_t nPitch, int32_t nOffsetX, int32_t nOffsetY);
-void __stdcall TILECMP_InitTileSetFromDT1(struct D2TileCmpTileSetStrc * pTileSet, int32_t nDT1Data);
+void __stdcall TILECMP_CacheTileData(struct D2TileCmpTileSetStrc * pTileMeasures, uint32_t * pTilePixels, int32_t nPitch, int32_t nOffsetX, int32_t nOffsetY);
+void __stdcall TILECMP_InitTileSetFromDT1(struct D2TileCmpTileSetStrc * pTileSet, void * nDT1Data);
 // @sourcefile .\SRC\Tilecmp.cpp
 // @note ESI nErrLine is not a real input (ESI is only saved, then overwritten at 00609df0). It stays because the halt tail at 00609d71 is reached at several stack depths (0x224/0x22d/0x239/0x247); without it the decompiler reads the 0x239 line as unaff_ESI.
 uint32_t __stdcall TILECMP_ExportCacheToBuffer(struct D2TileCmpTileSetListStrc * pTileSetList, struct D2TileLibraryHeaderStrc * * ppOutBuffer, DWORD nErrLine);
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_FreeTileCache(struct D2TileLibraryHeaderStrc * pTileLibrary, int32_t nUnused);
 // @sourcefile .\SRC\Tilecmp.cpp
-void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, void * pTileSetData, void * * ppDstBuffer, size_t * pSizeOut);
+void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, struct D2TileLibraryHeaderStrc * pTileSetData, void * * ppDstBuffer, size_t * pSizeOut);
 void __stdcall TILECMP_FixupPointersInPlace(struct D2TileLibraryHeaderStrc * pTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppTileCmpHdrOut, char * szText);
 void __stdcall TILECMP_FixupMinimalPointers(struct D2TileLibraryHeaderStrc * pTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppTileCmpHdrOut, char * szText);
 void __stdcall TILECMP_FixupMinimalPointers_HaltTail(int nLine);
@@ -119,11 +129,11 @@ void __stdcall TILECMP_RelocateSubTilePixelData(struct D2TileLibraryEntryStrc * 
 // HASH alias pPixelCallback produces "Unable to use type for symbol", and typing the parameter would
 // turn "pNodeByteIter = (void *)0x0" into a void*-to-function-pointer assignment. Costs one
 // conversion error at Tilecmp.cpp:1044. Do not retype either half without solving both roles.
-void __stdcall TILECMP_ProcessAllTilePixels(int32_t pTileCmpHdr, void * pNodeByteIter);
+void __stdcall TILECMP_ProcessAllTilePixels(struct D2TileLibraryHeaderStrc * pTileCmpHdr, void * pNodeByteIter);
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_DeepCopyWithRecompression(struct D2TileLibraryHeaderStrc * pSrcTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppDstTileCmpHdr, void * pPaletteContext);
 // @sourcefile .\SRC\Tilecmp.cpp
-void __stdcall TILECMP_ShallowCopyZeroPointers(void * pSrcDt1, void * * ppDt1Copy, size_t * pnSize);
+void __stdcall TILECMP_ShallowCopyZeroPointers(struct D2TileLibraryHeaderStrc * pSrcDt1, void * * ppDt1Copy, size_t * pnSize);
 #endif // D2_MODULE_D2CMP
 // 10 internal functions (defined in .cpp)
 

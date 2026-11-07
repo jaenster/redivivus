@@ -506,11 +506,12 @@ static inline void d2_store24(void* p, uint32_t v) { std::memcpy(p, &v, 3); }
 
 // TSLink<T>::NextLink, which VC8 inlined into every Storm unlink (see storm-next-link.ts).
 // The link is { prev link, next item }; a negative next is ~&terminator.
-struct D2StormLinkWords { D2StormLinkWords* m_prevlink; int m_next; };
-static inline int D2_StormNextLink(const void* pLink, int nLinkOffset) {
+// The words are intptr_t, which is int on the 32-bit target: an address or its complement.
+struct D2StormLinkWords { D2StormLinkWords* m_prevlink; intptr_t m_next; };
+static inline intptr_t D2_StormNextLink(const void* pLink, intptr_t nLinkOffset) {
   const D2StormLinkWords* pThis = (const D2StormLinkWords*)pLink;
   if (pThis->m_next < 0) return ~pThis->m_next;
-  if (nLinkOffset < 0) nLinkOffset = (int)(intptr_t)pThis - pThis->m_prevlink->m_next;
+  if (nLinkOffset < 0) nLinkOffset = (intptr_t)pThis - pThis->m_prevlink->m_next;
   return pThis->m_next + nLinkOffset;
 }
 
@@ -850,8 +851,6 @@ namespace _Wrappers {
 #endif // _WIN32
 
 // Array rows held by pointer (Ghidra `T[N] *` return and global types)
-struct D2MonsterRegionStrc;
-typedef D2MonsterRegionStrc D2Row_D2MonsterRegionStrc_1024[1024];
 typedef char D2Row_char_32[32];
 typedef uint8_t D2Row_uint8_t_32768[32768];
 

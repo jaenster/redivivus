@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,8 +18,20 @@
 struct D2CelDecodeStateStrc;
 struct D2CelFileCacheEntryStrc;
 struct D2PoolManagerStrc;
+struct DC6Block;
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
+union CODEC_DecompressAllFrames_Slotm338 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t * pnDirSizeOut;
+    /* 0x00 */ int32_t nFrameIndex;
+};
+
+#endif // D2_MODULE_D2CMP
+#ifndef D2_DEFINED_D2CodecBitStateStrc
+#define D2_DEFINED_D2CodecBitStateStrc
 struct D2CodecBitStateStrc {
     /* 0x00 */ uint32_t nReserved00; // field at +0 (not directly accessed by bit-reader fns)
     /* 0x04 */ uint32_t * pCurWord; // pointer to current 32-bit word in bit stream
@@ -24,6 +39,7 @@ struct D2CodecBitStateStrc {
     /* 0x0C */ int nBitOffset; // bit offset within current 32-bit word (0..31)
 };
 
+#endif // D2_DEFINED_D2CodecBitStateStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 struct D2CodecFrameBoundsStrc {
     /* 0x00 */ int32_t pFrameData; // frame header this bounds set was computed from
@@ -40,6 +56,8 @@ struct D2CodecFrameBoundsStrc {
 };
 
 #endif // D2_MODULE_D2CMP
+#ifndef D2_DEFINED_D2CodecFrameComponentStrc
+#define D2_DEFINED_D2CodecFrameComponentStrc
 struct D2CodecFrameComponentStrc {
     /* 0x00 */ uint32_t nXOffset;
     /* 0x04 */ uint32_t nYOffset;
@@ -54,6 +72,9 @@ struct D2CodecFrameComponentStrc {
     /* 0x28 */ uint32_t nStride;
 };
 
+#endif // D2_DEFINED_D2CodecFrameComponentStrc
+#ifndef D2_DEFINED_D2CodecPixelBufferEntryStrc
+#define D2_DEFINED_D2CodecPixelBufferEntryStrc
 struct D2CodecPixelBufferEntryStrc {
     /* 0x00 */ uint8_t * pPrevPixels; // previous-block pixel pointer
     /* 0x04 */ int nDstPixelAddress;
@@ -62,6 +83,7 @@ struct D2CodecPixelBufferEntryStrc {
     /* 0x10 */ int nHeight;
 };
 
+#endif // D2_DEFINED_D2CodecPixelBufferEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 struct __attribute__((packed)) D2DccFileHeaderStrc {
     /* 0x00 */ char nSignature; // 0x74 't'; the load is refused if this does not match
@@ -79,11 +101,11 @@ namespace D2CMP::SRC::Codec {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, struct D2CodecBitStateStrc * pBitState, int32_t bSigned, int32_t nBitWidthCode);
-void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, int32_t nInverseMapBase, int32_t nPaletteTableBase);
+void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, uint8_t * nInverseMapBase, uint8_t * nPaletteTableBase);
 void __fastcall CODEC_BuildInversePaletteFromBitmask(uint8_t * pInversePalette, uint32_t * pUsedColourBits, uint8_t * pPaletteData);
 // Decompress frame pixel data from bit streams. Processes frame iterator list, decodes pixels via two bit buffers (one for pixel delta, one for colors). Fills output buffer row-by-row. Returns bits read into pBitsRead and buffer advance into pBitOffsets.
-void __stdcall CODEC_DecompressFrameData(struct D2CodecFrameBoundsStrc * nCodecState, struct D2CodecPixelBufferEntryStrc * pBitState1, struct D2CodecBitStateStrc * nBits1, struct D2CodecBitStateStrc * pBitState2, struct D2CodecBitStateStrc * nBits2, struct D2CodecBitStateStrc * pBitState3, int * pBitOffsets, uint8_t * * ppOutBuffer, int * pBitsRead);
-BOOL __fastcall CODEC_EncodeRLE(int32_t pSrcImage, int32_t pFrameHeader, uint8_t * pOutBuf);
+void __stdcall CODEC_DecompressFrameData(struct D2CodecFrameBoundsStrc * nCodecState, struct D2CodecPixelBufferEntryStrc * pBitState1, struct D2CodecBitStateStrc * nBits1, struct D2CodecBitStateStrc * pBitState2, struct D2CodecBitStateStrc * nBits2, struct D2CodecBitStateStrc * pBitState3, struct D2CodecBitStateStrc * pBitOffsets, uint8_t * * ppOutBuffer, int * pBitsRead);
+BOOL __fastcall CODEC_EncodeRLE(struct D2CodecFrameComponentStrc * pSrcImage, struct DC6Block * pFrameHeader, uint8_t * pOutBuf);
 int __fastcall CODEC_LoadPaletteFromFile(char * szText, struct D2CelFileCacheEntryStrc * pCelEntry);
 void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, struct D2PoolManagerStrc * pMemory, int32_t nReadSize, uint8_t * pCelHeader, struct D2CelDecodeStateStrc * pDecodeState, int32_t nStartFrame, int32_t nFrameCount, size_t * pnSize, char * szFileName);
 #endif // D2_MODULE_D2CMP

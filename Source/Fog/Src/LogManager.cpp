@@ -4,17 +4,10 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Source/SFile.h"
 #include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SSTR.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/Fog/Fog.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 #include "Source/Fog/Src/LogManager.data.h"
-
-// Forward declarations (used only by pointer here)
-struct D2CharSelCompStrc;
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -347,7 +340,7 @@ static LPDWORD gLogWriterThreadId = 0; D2_STATIC_GUARD(gLogWriterThreadId, "gLog
 static CRITICAL_SECTION gLogMessageQueueCS = {}; D2_STATIC_GUARD(gLogMessageQueueCS, "gLogMessageQueueCS");
 // also labelled: FileHandlesCriticalSection_Maybe
 static _RTL_CRITICAL_SECTION gLogFileCS = {}; D2_STATIC_GUARD(gLogFileCS, "gLogFileCS");
-static D2StormListHead gLogMessageQueueHead = {}; D2_STATIC_GUARD(gLogMessageQueueHead, "gLogMessageQueueHead");
+static StormLinkedListStrc gLogMessageQueueHead = {}; D2_STATIC_GUARD(gLogMessageQueueHead, "gLogMessageQueueHead");
 static D2HighResTimestampStrc gHighResTimerInitTimestamp = D2HighResTimestampStrc(); D2_STATIC_GUARD(gHighResTimerInitTimestamp, "gHighResTimerInitTimestamp");
 static CRITICAL_SECTION gHighResTimerCS = {}; D2_STATIC_GUARD(gHighResTimerCS, "gHighResTimerCS");
 
@@ -909,15 +902,15 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
           if ((int)nEmptySlot < 0) {
             nEmptySlot = nSlot;
           }
-        } else if (!*(int*)((int)globalOpenFileHandleArray + nSlotOffset)) {
+        } else if (!*(int*)((char*)globalOpenFileHandleArray + nSlotOffset)) {
           nFreeHandleSlotTmp = nSlot;
           if ((int)nFreeHandleSlot >= 0) {
             nFreeHandleSlotTmp = nFreeHandleSlot;
-            if (dwNow - *(int*)((int)gLogFileLastAccessTimeArray + nSlotOffset) > gLogFileLastAccessTimeArray[nFreeHandleSlot]) {
+            if (dwNow - *(int*)((char*)gLogFileLastAccessTimeArray + nSlotOffset) > gLogFileLastAccessTimeArray[nFreeHandleSlot]) {
               nFreeHandleSlotTmp = nSlot;
             }
           }
-        } else if (dwNow - *(int*)((int)gLogFileLastAccessTimeArray + nSlotOffset) > dwNow - *(int*)((int)gLogFileLastAccessTimeArray + nIsNewFile)) {
+        } else if (dwNow - *(int*)((char*)gLogFileLastAccessTimeArray + nSlotOffset) > dwNow - *(int*)((char*)gLogFileLastAccessTimeArray + nIsNewFile)) {
           nIsNewFile = nSlotOffset;
           nLruSlot = nSlot;
         }
@@ -928,7 +921,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
         nSlotOffset += 4;
         pSearchName = pSavedFileName;
         pSlotNameBase = pStoredName;
-      } while ((int)pStoredName < (intptr_t)((char*)&gLogFileNameArray + sizeof(gLogFileNameArray)));
+      } while ((intptr_t)pStoredName < (intptr_t)((char*)&gLogFileNameArray + sizeof(gLogFileNameArray)));
 
       nSlot = nEmptySlot;
       if ((int)nEmptySlot >= 0) {
@@ -997,7 +990,7 @@ void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGame
 }
 
 // Writes a log record whose body is a hex dump to its log file, one formatted line at a time.
-void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
+void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
     // Frame slots -352..-8 are ONE object: &local_160 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1013,6 +1006,7 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 344, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
+    D2LogRecordStrc* szFileName;
     uint32_t pData;
     int iVar1;
     BOOL bBadPtr;
@@ -1021,39 +1015,39 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
     char* pRecordBody;
     uint32_t nColumn;
     uint8_t* pDumpHeader;
-    uint8_t* pbVar2;
+    uint8_t* lp;
     uint32_t nChunkLen;
     char cScanChar;
-    if (*(int*)(pLogRecord + 0xc) != 2) {
+    if (pLogRecord->nType != 2) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x389);
       exit(-1);
     }
 
-    pbVar2 = (uint8_t*)(pLogRecord + 0x24);
-    pData = Storm::Source::SSTR::SStrLen((char*)pbVar2);
-    pDumpHeader = pbVar2 + pData + 1;
+    szFileName = pLogRecord + 1;
+    pData = Storm::Source::SSTR::SStrLen((char*)szFileName);
+    pDumpHeader = (uint8_t*)((intptr_t)&szFileName->tLink.pPrevLink + pData + 1);
     __frame0.pDumpHeaderSaved = pDumpHeader;
-    if (*(int*)(pbVar2 + pData + 0xd)) {
+    if (*(int*)((intptr_t)&szFileName->nType + pData + 1)) {
       __frame0.pDumpData = *(uint8_t**)pDumpHeader;
     } else {
       pData = Storm::Source::SSTR::SStrLen((char*)(pDumpHeader + 0x14));
       __frame0.pDumpData = pDumpHeader + pData + 0x15;
     }
 
-    __frame0.pLogFile = FindOrOpenLogFileSlot(pbVar2, &__frame0.local_160);
+    __frame0.pLogFile = FindOrOpenLogFileSlot((uint8_t*)szFileName, &__frame0.local_160);
     if (__frame0.pLogFile) {
-      Storm::Source::SSTR::SStrPrintf(__frame0.szTimePrefix, 0x20, "%02d:%02d:%02d.%03d  ", (uint32_t)*(uint16_t*)(pLogRecord + 0x1c), (uint32_t)*(uint16_t*)(pLogRecord + 0x1e), (uint32_t)*(uint16_t*)(pLogRecord + 0x20), (uint32_t)*(uint16_t*)(pLogRecord + 0x22));
+      Storm::Source::SSTR::SStrPrintf(__frame0.szTimePrefix, 0x20, "%02d:%02d:%02d.%03d  ", (uint32_t)pLogRecord->tTime.wHour, (uint32_t)pLogRecord->tTime.wMinute, (uint32_t)pLogRecord->tTime.wSecond, (uint32_t)pLogRecord->tTime.wMilliseconds);
       Storm::Source::SSTR::SStrCopy(__frame0.szContPrefix, "              ", 0x20);
       __frame0.nBytesRemaining = *(uint32_t*)(pDumpHeader + 4);
       nChunkLen = 1;
-      pbVar2 = __frame0.pDumpData;
+      lp = __frame0.pDumpData;
       while (true) {
-        __frame0.pChunkStart = pbVar2;
+        __frame0.pChunkStart = lp;
         if (__frame0.nBytesRemaining <= 0) {
           break;
         }
 
-        iVar1 = (int)pbVar2 - (int)__frame0.pDumpData;
+        iVar1 = (int)lp - (int)__frame0.pDumpData;
         if (!*(int*)(pDumpHeader + 8)) {
           iVar1 = *(int*)pDumpHeader + iVar1;
         }
@@ -1076,7 +1070,7 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
         }
 
         /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ __frame0.szLineBuf[0] = '\0';
-        bBadPtr = IsBadReadPtr(pbVar2, nChunkLen);
+        bBadPtr = IsBadReadPtr(lp, nChunkLen);
         if (bBadPtr) {
           Storm::Source::SSTR::SStrCopy(__frame0.szLineBuf, "<unreadable>", 0x7fffffff);
         } else {
@@ -1088,15 +1082,15 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
               pRecordBody = " %02X";
             }
 
-            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)pbVar2[nColumn]);
+            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)lp[nColumn]);
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;
           if (*(int*)(__frame0.pDumpHeaderSaved + 0x10)) {
-            pbVar2 = __frame0.pChunkStart;
-            for (iVar1 = ((0x10 - nChunkLen) * 9 >> 2) + 2; __frame0.pChunkStart = pbVar2 , iVar1 != 0; iVar1--) {
+            lp = __frame0.pChunkStart;
+            for (iVar1 = ((0x10 - nChunkLen) * 9 >> 2) + 2; __frame0.pChunkStart = lp , iVar1 != 0; iVar1--) {
               Storm::Source::SSTR::SStrPack(__frame0.szLineBuf, " ", 0x100);
-              pbVar2 = __frame0.pChunkStart;
+              lp = __frame0.pChunkStart;
             }
 
             pLineCursor = __frame0.szLineBuf;
@@ -1105,7 +1099,7 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
             if (nChunkLen > 0) {
               pDumpHeader = (uint8_t*)(pLineCursor + (int)(__frame0.szLineBuf - (int)(__frame0.szLineBuf + 1)));
               do {
-                byAsciiChar = pbVar2[nColumn];
+                byAsciiChar = lp[nColumn];
                 if ((byAsciiChar & 0x7f) < 0x20) {
                   byAsciiChar = 0x2e;
                 }
@@ -1122,7 +1116,7 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
         }
 
         fprintf(__frame0.pLogFile, "%s\n", __frame0.szLineBuf);
-        pbVar2 += nChunkLen;
+        lp += nChunkLen;
         __frame0.nBytesRemaining -= nChunkLen;
         nChunkLen = __frame0.local_160;
       }
@@ -1196,7 +1190,7 @@ void __fastcall CloseLogFileByName(uint8_t * szFileName) {
       }
 
       nSlot++;
-      pSlotName = (char (*)[16])((int)pSlotName + 0x10);
+      pSlotName = (char (*)[16])((char*)pSlotName + 0x10);
       if (nSlot >= 0x14) {
         return;
       }
@@ -1208,7 +1202,7 @@ uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase) {
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
-    if ((int)pBase < 0) {
+    if ((intptr_t)pBase < 0) {
       pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     }
 
@@ -1219,11 +1213,11 @@ int __fastcall Unreferenced_0040f520(int param_1) {
     return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
 }
 
-int __fastcall Unreferenced_0040f580(int param_1) {
-    uint32_t uVar1 = param_1 + 4;
-    *(uint32_t*)uVar1 = uVar1;
-    *(uint32_t*)(param_1 + 8) = ~uVar1;
-    return ~uVar1;
+int __fastcall Unreferenced_0040f580(StormLinkedListStrc * param_1) {
+    StormLinkStrc* pSVar1 = &param_1->head;
+    pSVar1->pPrevLink = pSVar1;
+    param_1->head.pNext = ~(uint32_t)pSVar1;
+    return ~(uint32_t)pSVar1;
 }
 
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix) {
@@ -1262,7 +1256,7 @@ char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, i
       int nSeekResult;
       nSeekResult = fseek(pFile, nSavedStart, 0);
       if (!nSeekResult) {
-        fread((D2CharSelCompStrc*)pBuffer, 1, nEndOffset - nStartOffset, pFile);
+        fread(pBuffer, 1, nEndOffset - nStartOffset, pFile);
       }
 
       fclose(pFile);
@@ -1273,26 +1267,27 @@ char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, i
 }
 
 // Writes one log record to its log file, prefixed with the record's time of day.
-void __fastcall LogToFile(uint32_t pLogRecord) {
-    uint32_t nSlot = pLogRecord;
-    if (*(int*)(pLogRecord + 0xc) != 1) {
+void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
+    D2LogRecordStrc* nSlot = pLogRecord;
+    if (pLogRecord->nType != 1) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x2a1);
       exit(-1);
     }
 
-    uint8_t* szFileName = (uint8_t*)(pLogRecord + 0x24);
-    uint32_t nNameLen = Storm::Source::SSTR::SStrLen((char*)szFileName);
-    FILE* pFile = FindOrOpenLogFileSlot(szFileName, &nSlot);
+    D2LogRecordStrc* szFileName = pLogRecord + 1;
+    uint32_t nMsgLen = Storm::Source::SSTR::SStrLen((char*)szFileName);
+    uint8_t* szText = (uint8_t*)((intptr_t)&szFileName->tLink.pPrevLink + nMsgLen + 1);
+    FILE* pFile = FindOrOpenLogFileSlot((uint8_t*)szFileName, (uint32_t*)&nSlot);
     if (!pFile) {
       return;
     }
-    if (*(int*)(pLogRecord + 0x10)) {
-      fprintf(pFile, "%02d:%02d:%02d.%03d  ", (uint32_t)*(uint16_t*)(pLogRecord + 0x1c), (uint32_t)*(uint16_t*)(pLogRecord + 0x1e), (uint32_t)*(uint16_t*)(pLogRecord + 0x20), (uint32_t)*(uint16_t*)(pLogRecord + 0x22));
+    if (pLogRecord->bTimestamp) {
+      fprintf(pFile, "%02d:%02d:%02d.%03d  ", (uint32_t)pLogRecord->tTime.wHour, (uint32_t)pLogRecord->tTime.wMinute, (uint32_t)pLogRecord->tTime.wSecond, (uint32_t)pLogRecord->tTime.wMilliseconds);
     }
 
-    fwrite(szFileName + nNameLen + 1, Storm::Source::SSTR::SStrLen((char*)(szFileName + nNameLen + 1)), 1, pFile);
+    fwrite(szText, Storm::Source::SSTR::SStrLen((char*)szText), 1, pFile);
     DWORD dwNow = GetTickCount();
-    gLogFileLastAccessTimeArray[nSlot] = dwNow;
+    gLogFileLastAccessTimeArray[(int)nSlot] = dwNow;
 }
 
 int __fastcall Unreferenced_0040f810(int param_1) {
@@ -1301,18 +1296,18 @@ int __fastcall Unreferenced_0040f810(int param_1) {
     return param_1;
 }
 
-void __fastcall UnlinkListNode(int * pNode) {
+void __fastcall UnlinkListNode(StormLinkStrc * pNode) {
     int* pPrev;
-    int pNext = *pNode;
+    StormLinkStrc* pNext = pNode->pPrevLink;
     if (!pNext) {
       return;
     }
 
     pPrev = (int*)D2_StormNextLink(pNode, -1);
-    *pPrev = pNext;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *pPrev = (int)pNext;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr) {
@@ -1337,7 +1332,7 @@ void __stdcall ExitOrCrashCleanup() {
     uint32_t uElapsed = dwTickCountB - dwTickCountA;
     while (uElapsed < 1000) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nQueueCount = gLogMessageQueueHead.terminator.pNext <= 0 ? 0 : gLogMessageQueueHead.terminator.pNext;
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nQueueCount = gLogMessageQueueHead.head.pNext <= 0 ? 0 : gLogMessageQueueHead.head.pNext;
       LeaveCriticalSection(&gLogMessageQueueCS);
       if (!nQueueCount) {
         break;
@@ -1358,7 +1353,7 @@ void __stdcall ExitOrCrashCleanup() {
 
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogFileCS);
       openFileHandleArray++;
-    } while ((int)openFileHandleArray < (intptr_t)((char*)&globalOpenFileHandleArray + sizeof(globalOpenFileHandleArray)));
+    } while ((intptr_t)openFileHandleArray < (intptr_t)((char*)&globalOpenFileHandleArray + sizeof(globalOpenFileHandleArray)));
 }
 
 // JMP thunk
@@ -1427,13 +1422,13 @@ void __fastcall UnlinkListNodeDouble(int * pNode) {
     pNode[1] = 0;
 }
 
-void __fastcall InitListHead(int * pListHead) {
-    int* pNextField = pListHead + 1;
-    *pNextField = 0;
-    pListHead[2] = 0;
-    *pNextField = (int)pNextField;
-    *pListHead = 0;
-    pListHead[2] = ~(uint32_t)pNextField;
+void __fastcall InitListHead(StormLinkedListStrc * pListHead) {
+    StormLinkStrc* pSVar1 = &pListHead->head;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
+    pSVar1->pPrevLink = pSVar1;
+    pListHead->nLinkOffset = 0;
+    pListHead->head.pNext = ~(uint32_t)pSVar1;
 }
 
 void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInsertAtHead, int * * ppTarget) {
@@ -1446,7 +1441,7 @@ void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInser
     int* pNext = *ppCurNode;
     if (pNext) {
       pBackLink = ppCurNode[1];
-      if ((int)pBackLink < 0) {
+      if ((intptr_t)pBackLink < 0) {
         pBackLink = (int*)~(uint32_t)pBackLink;
       } else {
         pBackLink = (int*)((int)pBackLink + ((int)ppCurNode - pNext[1]));
@@ -1468,13 +1463,13 @@ void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInser
           ppCurNode[1] = ppTarget[1];
           pNext = *ppListHead;
           pBackLink = ppTarget[1];
-          if ((int)pBackLink < 0) {
+          if ((intptr_t)pBackLink < 0) {
             *(int***)~(uint32_t)pBackLink = (int**)ppCurNode;
             ppTarget[1] = (int*)pNode;
             return;
           }
-          if ((int)pNext < 0) {
-            pNext = (int*)((int)ppTarget - (*ppTarget)[1]);
+          if ((intptr_t)pNext < 0) {
+            pNext = (int*)((char*)ppTarget - (*ppTarget)[1]);
           }
 
           *(int***)((int)pBackLink + (int)pNext) = (int**)ppCurNode;
@@ -1493,22 +1488,22 @@ void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInser
     }
 }
 
-void __thiscall RemoveListNode(int32_t pListHead, int * pNode) {
+void __thiscall RemoveListNode(StormLinkedListStrc * pListHead, StormLinkStrc * pNode) {
     int* pPrevLink;
     if (!pNode) {
-      pNode = (int*)(pListHead + 4);
+      pNode = &pListHead->head;
     }
 
-    int pNext = *pNode;
+    StormLinkStrc* pNext = pNode->pPrevLink;
     if (!pNext) {
       return;
     }
 
     pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-    *pPrevLink = pNext;
-    *(int*)(*pNode + 4) = pNode[1];
-    *pNode = 0;
-    pNode[1] = 0;
+    *pPrevLink = (int)pNext;
+    pNode->pPrevLink->pNext = pNode->pNext;
+    pNode->pPrevLink = 0;
+    pNode->pNext = 0;
 }
 
 void __fastcall ClearListNode(uint32_t * pNode) {
@@ -1516,12 +1511,12 @@ void __fastcall ClearListNode(uint32_t * pNode) {
     pNode[1] = 0;
 }
 
-void __fastcall RemoveAllListNodes(D2StormListHead * pListHead) {
+void __fastcall RemoveAllListNodes(StormLinkedListStrc * pListHead) {
     int* pPrevLink;
     int* pNode;
     while (true) {
       int pNext;
-      pNode = (int)(int*)pListHead->terminator.pNext > 0 ? (int*)pListHead->terminator.pNext : 0;
+      pNode = (intptr_t)(int*)pListHead->head.pNext > 0 ? (int*)pListHead->head.pNext : 0;
       if (!pNode) {
         break;
       }
@@ -1546,14 +1541,14 @@ void __fastcall DestroyListWithHandler(int * pListHead) {
     ExceptionList = pPrevExceptionList;
 }
 
-void __fastcall TeardownListFull(D2StormListHead * pListHead) {
+void __fastcall TeardownListFull(StormLinkedListStrc * pListHead) {
     int* pPrevLink;
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9d3b;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
     uint32_t dwSEHTryLevel = 0;
     RemoveAllListNodes(pListHead);
-    StormLinkStrc* pSVar1 = &pListHead->terminator;
+    StormLinkStrc* pSVar1 = &pListHead->head;
     StormLinkStrc* pNext = pSVar1->pPrevLink;
     if (pNext) {
       pPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
@@ -1586,14 +1581,14 @@ void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory) {
     return pThis;
 }
 
-void __fastcall DestroyAllListNodes(void * pListHead) {
+void __fastcall DestroyAllListNodes(StormLinkedListStrc * pListHead) {
     int* pObject;
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9dc8;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
     while (true) {
       uint32_t dwSEHTryLevel;
-      pObject = (int)*(int**)((int)pListHead + 8) > 0 ? *(int**)((int)pListHead + 8) : 0;
+      pObject = (intptr_t)(int*)pListHead->head.pNext > 0 ? (int*)pListHead->head.pNext : 0;
       if (!pObject) {
         break;
       }
@@ -1606,16 +1601,16 @@ void __fastcall DestroyAllListNodes(void * pListHead) {
     ExceptionList = pPrevExceptionList;
 }
 
-int * * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags) {
+D2LogRecordStrc * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags) {
     uint32_t dwSEHTryLevel = -1;
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9e11;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
-    int** pNodeNew = (int**)Storm::Source::SMem::SMemAlloc(nPayloadSize + 0x24, s___AUMessage_LogManager___00708124, -2, dwAllocFlags | 8);
-    int** pNode;
+    D2LogRecordStrc* pNodeNew = (D2LogRecordStrc*)Storm::Source::SMem::SMemAlloc(nPayloadSize + 0x24, s___AUMessage_LogManager___00708124, -2, dwAllocFlags | 8);
+    D2LogRecordStrc* pNode;
     if (pNodeNew) {
-      *pNodeNew = 0;
-      pNodeNew[1] = 0;
+      pNodeNew->tLink.pPrevLink = 0;
+      pNodeNew->tLink.pNext = 0;
       pNode = pNodeNew;
     } else {
       pNode = 0;
@@ -1623,7 +1618,7 @@ int * * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nIns
 
     dwSEHTryLevel = -1;
     if (nInsertMode) {
-      InsertListNode(ppListHead, pNode, nInsertMode, nullptr);
+      InsertListNode(ppListHead, (int**)pNode, nInsertMode, nullptr);
     }
 
     ExceptionList = pPrevExceptionList;
@@ -1646,12 +1641,12 @@ void __stdcall StopLogWriterThread() {
 }
 
 void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose) {
+    BOOL bIsBadPtr;
     int* pPrevLink;
     if (!(!gLogWriterThreadStopFlag && gLogManagerInitialized)) {
       return;
     }
     if (!bSkipData) {
-      BOOL bIsBadPtr;
       /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pData, nDataLen);
       if (bIsBadPtr) {
         bSkipData = 1;
@@ -1666,14 +1661,14 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-    int** pNode = AllocateAndInsertMessageNode((int**)&gLogMessageQueueHead, 0, nPayloadSize, 0);
+    D2LogRecordStrc* pNode = AllocateAndInsertMessageNode((int**)&gLogMessageQueueHead, 0, nPayloadSize, 0);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
-    /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ pNode[2] = (int*)(nPayloadSize + 0x24);
-    pNode[3] = (int*)0x2;
-    pNode[4] = (int*)0x1;
-    GetLocalTime((LPSYSTEMTIME)(pNode + 5));
-    nLen1 = Storm::Source::SSTR::SStrCopy((char*)(pNode + 9), szText1, 0x7fffffff);
-    char* pMessageFields = (char*)(nLen1 + 1 + (int)(pNode + 9));
+    /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ pNode->nSize = nPayloadSize + 0x24;
+    pNode->nType = 2;
+    pNode->bTimestamp = 1;
+    GetLocalTime(&pNode->tTime);
+    nLen1 = Storm::Source::SSTR::SStrCopy((char*)(pNode + 1), szText1, 0x7fffffff);
+    char* pMessageFields = (char*)((intptr_t)&pNode[1].tLink.pPrevLink + nLen1 + 1);
     *(size_t*)(pMessageFields + 4) = nDataLen;
     *(void**)pMessageFields = (void*)pData;
     *(void**)(pMessageFields + 8) = (void*)pCategory;
@@ -1685,27 +1680,21 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-    int* pNext = *pNode;
+    StormLinkStrc* pNext = pNode->tLink.pPrevLink;
     if (pNext) {
-      pPrevLink = pNode[1];
-      if ((int)pPrevLink < 0) {
-        pPrevLink = (int*)~(uint32_t)pPrevLink;
-      } else {
-        pPrevLink = (int*)((int)pNode - pNext[1] + (int)pPrevLink);
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = (int)pNext;
-      (*pNode)[1] = (int)pNode[1];
-      *pNode = 0;
-      pNode[1] = 0;
+      pNode->tLink.pPrevLink->pNext = pNode->tLink.pNext;
+      pNode->tLink.pPrevLink = 0;
+      pNode->tLink.pNext = 0;
     }
 
-    *pNode = (int*)gLogMessageQueueHead.terminator.pPrevLink;
-    pNode[1] = (int*)gLogMessageQueueHead.terminator.pPrevLink->pNext;
-    gLogMessageQueueHead.terminator.pPrevLink->pNext = (int)pNode;
+    pNode->tLink.pPrevLink = gLogMessageQueueHead.head.pPrevLink;
+    pNode->tLink.pNext = gLogMessageQueueHead.head.pPrevLink->pNext;
+    gLogMessageQueueHead.head.pPrevLink->pNext = (intptr_t)pNode;
     gLogMessageQueueCount++;
-    gLogMessageQueueTotalBytes += (int)pNode[2];
-    gLogMessageQueueHead.terminator.pPrevLink = (StormLinkStrc*)pNode;
+    gLogMessageQueueTotalBytes += pNode->nSize;
+    gLogMessageQueueHead.head.pPrevLink = &pNode->tLink;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
 }
 
@@ -1722,29 +1711,29 @@ DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
     ExceptionList = &pPrevExceptionList;
     DWORD dwStopStartTick = 0;
     do {
-      int* pNode;
+      D2LogRecordStrc* pNode;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-      pNode = (int*)gLogMessageQueueHead.terminator.pNext;
-      if (gLogMessageQueueHead.terminator.pNext > 0) {
-        if (gLogMessageQueueHead.terminator.pNext) {
-          pNext = *(int*)gLogMessageQueueHead.terminator.pNext;
+      pNode = (D2LogRecordStrc*)gLogMessageQueueHead.head.pNext;
+      if (gLogMessageQueueHead.head.pNext > 0) {
+        if (gLogMessageQueueHead.head.pNext) {
+          pNext = *(int*)gLogMessageQueueHead.head.pNext;
           if (pNext) {
-            nOffset = *(uint32_t*)(gLogMessageQueueHead.terminator.pNext + 4);
-            pNodeNextLink = (uint32_t*)(gLogMessageQueueHead.terminator.pNext + 4);
+            nOffset = *(uint32_t*)(gLogMessageQueueHead.head.pNext + 4);
+            pNodeNextLink = (uint32_t*)(gLogMessageQueueHead.head.pNext + 4);
             if ((int)nOffset < 0) {
               pPrevLink = (int*)~nOffset;
             } else {
-              pPrevLink = (int*)(nOffset + (gLogMessageQueueHead.terminator.pNext - *(int*)(pNext + 4)));
+              pPrevLink = (int*)(nOffset + (gLogMessageQueueHead.head.pNext - *(int*)(pNext + 4)));
             }
 
             *pPrevLink = pNext;
-            *(uint32_t*)(*pNode + 4) = *pNodeNextLink;
-            *pNode = 0;
+            *(uint32_t*)(*(int*)pNode + 4) = *pNodeNextLink;
+            *(uint32_t*)pNode = 0;
             *pNodeNextLink = 0;
           }
 
           gLogMessageQueueCount--;
-          gLogMessageQueueTotalBytes -= *(int*)((int)pNode + 8);
+          gLogMessageQueueTotalBytes -= *(int*)((char*)pNode + 8);
         }
       } else {
         pNode = 0;
@@ -1772,17 +1761,22 @@ DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
         dwSleepMs = 0x32;
       } else {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogFileCS);
-        if (pNode[3] != 1) {
-          if (pNode[3] == 2) {
-            WriteHexDumpLogEntry((int32_t)pNode);
-          }
-        } else {
-          LogToFile((uint32_t)pNode);
+        switch (pNode->nType) {
+          case 1:
+            {
+              LogToFile(pNode);
+              break;
+            }
+          case 2:
+            {
+              WriteHexDumpLogEntry(pNode);
+              break;
+            }
         }
 
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogFileCS);
         dwSEHTryLevel = -1;
-        UnlinkListNodeDouble(pNode);
+        UnlinkListNodeDouble((int*)pNode);
         Storm::Source::SMem::SMemFree(pNode, "delete", -1, 0);
       }
       if (!gLogWriterThreadStopFlag) {
@@ -1798,7 +1792,7 @@ DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
 void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int32_t bAppendNewline, char * szFormat, va_list vaArgs) {
     uint32_t nTextLen;
     uint32_t nTotalLen;
-    int** pNode;
+    D2LogRecordStrc* pNode;
     int* pPrevLink;
     char szFormatted[4096];
     void* pSavedEsp;
@@ -1825,29 +1819,29 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
       pNode = AllocateAndInsertMessageNode((int**)&gLogMessageQueueHead, 0, nPayloadSize, 0);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
-      pNode[2] = (int*)(nPayloadSize + 0x24);
-      pNode[3] = (int*)0x1;
-      pNode[4] = (int*)(uint32_t)(nPriority == 1);
-      /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime((LPSYSTEMTIME)(pNode + 5));
-      Storm::Source::SSTR::SStrCopy((char*)(pNode + 9), szText, nPayloadSize);
-      nTextLen = Storm::Source::SSTR::SStrLen((char*)(pNode + 9));
-      Storm::Source::SSTR::SStrCopy((char*)((int)pNode + nTextLen + 0x25), szFormatted, nPayloadSize);
+      pNode->nSize = nPayloadSize + 0x24;
+      pNode->nType = 1;
+      pNode->bTimestamp = (uint32_t)(nPriority == 1);
+      /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&pNode->tTime);
+      Storm::Source::SSTR::SStrCopy((char*)(pNode + 1), szText, nPayloadSize);
+      nTextLen = Storm::Source::SSTR::SStrLen((char*)(pNode + 1));
+      Storm::Source::SSTR::SStrCopy((char*)((intptr_t)&pNode[1].tLink.pPrevLink + nTextLen + 1), szFormatted, nPayloadSize);
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
-      pNext = *pNode;
+      pNext = (int*)pNode->tLink.pPrevLink;
       if (pNext) {
         pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = (int)pNext;
-        (*pNode)[1] = (int)pNode[1];
-        *pNode = 0;
-        pNode[1] = 0;
+        pNode->tLink.pPrevLink->pNext = pNode->tLink.pNext;
+        pNode->tLink.pPrevLink = 0;
+        pNode->tLink.pNext = 0;
       }
 
-      *pNode = (int*)gLogMessageQueueHead.terminator.pPrevLink;
-      pNode[1] = (int*)gLogMessageQueueHead.terminator.pPrevLink->pNext;
-      gLogMessageQueueHead.terminator.pPrevLink->pNext = (int)pNode;
+      pNode->tLink.pPrevLink = gLogMessageQueueHead.head.pPrevLink;
+      pNode->tLink.pNext = gLogMessageQueueHead.head.pPrevLink->pNext;
+      gLogMessageQueueHead.head.pPrevLink->pNext = (intptr_t)pNode;
       gLogMessageQueueCount++;
-      gLogMessageQueueTotalBytes += (int)pNode[2];
-      gLogMessageQueueHead.terminator.pPrevLink = (StormLinkStrc*)pNode;
+      gLogMessageQueueTotalBytes += pNode->nSize;
+      gLogMessageQueueHead.head.pPrevLink = &pNode->tLink;
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
     }
 
@@ -1968,7 +1962,7 @@ void __fastcall Atomic64Store(int64_t * pllTarget, int64_t * pllValue) {
     bool bMatched;
     int64_t llNewValue = *pllValue;
     uint32_t dwCompareLo = (uint32_t)*pllTarget;
-    uint32_t dwExpectedHi = *(uint32_t*)((int)pllTarget + 4);
+    uint32_t dwExpectedHi = *(uint32_t*)((char*)pllTarget + 4);
     do {
       int64_t llCurrent;
       llCurrent = (uint64_t)((uint64_t)(uint32_t)dwExpectedHi << 32 | (uint64_t)(uint32_t)dwCompareLo);
@@ -2161,8 +2155,8 @@ void __stdcall LOGMGR_InitMessageQueue() {
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
     gLogMessageQueueHead.nLinkOffset = 0;
-    gLogMessageQueueHead.terminator.pPrevLink = &gLogMessageQueueHead.terminator;
-    gLogMessageQueueHead.terminator.pNext = ~(uintptr_t)((char*)&gLogMessageQueueHead + 4);
+    gLogMessageQueueHead.head.pPrevLink = &gLogMessageQueueHead.head;
+    gLogMessageQueueHead.head.pNext = ~(uintptr_t)((char*)&gLogMessageQueueHead + 4);
     uint32_t dwSEHTryLevel = -1;
     atexit(StaticFini_gLogMessageQueueHead);
     ExceptionList = pPrevExceptionList;

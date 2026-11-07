@@ -3,18 +3,8 @@
 #include "Source/D2Game/GAME/Level.h"
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgDeleteStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Environment.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
@@ -28,7 +18,6 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Objects/ObjectsMode.h"
@@ -77,14 +66,14 @@ static void __stdcall DispatchUnitUpdate(::SGAMEDATA * pGame, D2ClientStrc * pCl
     }
 }
 
-static void __stdcall SendRoomUnitUpdates(::SGAMEDATA * pGame, int32_t pRoomNode, D2ClientStrc * pClient) {
+static void __stdcall SendRoomUnitUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoomNode, D2ClientStrc * pClient) {
     D2UnitStrc* pNextUnit;
     if (!pRoomNode) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x44);
       exit(-1);
     }
 
-    D2UnitStrc* pUnit = *(D2UnitStrc**)(pRoomNode + 0x1c);
+    D2UnitStrc* pUnit = pRoomNode->pUnitUpdate;
     while (pUnit) {
       pNextUnit = pUnit->pChangeNextUnit;
       DispatchUnitUpdate(pGame, pClient, pUnit);
@@ -111,8 +100,8 @@ void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     do {
-      SendRoomUnitUpdates(pGame, *(int32_t*)(pGameSave->szGameName + (int)pRoomIdx * 4 - 0x2a), pRoomEnd);
-      pRoomIdx = (D2ClientStrc*)((uintptr_t)&pRoomIdx->nClientNo + 1);
+      SendRoomUnitUpdates(pGame, *(D2RoomStrc**)(pGameSave->szGameName + (int)pRoomIdx * 4 - 0x2a), pRoomEnd);
+      pRoomIdx = (D2ClientStrc*)((intptr_t)&pRoomIdx->nClientNo + 1);
     } while (pRoomIdx < pClient);
 }
 

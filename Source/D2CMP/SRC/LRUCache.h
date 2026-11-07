@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -24,6 +27,8 @@ typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2LRUCacheNodeStrc
+#define D2_DEFINED_D2LRUCacheNodeStrc
 struct D2LRUCacheNodeStrc {
     /* 0x00 */ void * pBuf; // allocated buffer for this entry
     /* 0x04 */ int nBufSize; // size of pBuf in bytes
@@ -32,6 +37,9 @@ struct D2LRUCacheNodeStrc {
     /* 0x10 */ struct D2LRUCacheNodeStrc * pPrev; // prev node in LRU or free list
 };
 
+#endif // D2_DEFINED_D2LRUCacheNodeStrc
+#ifndef D2_DEFINED_D2LRUCacheStrc
+#define D2_DEFINED_D2LRUCacheStrc
 struct D2LRUCacheStrc {
     /* 0x00 */ void * pAllocator; // Fog memory allocator (pMemory)
     /* 0x04 */ uint32_t dwBufSize; // max total bytes allowed across all live entries
@@ -48,6 +56,7 @@ struct D2LRUCacheStrc {
     /* 0x30 */ int nHitCount; // incremented by MoveToFront on cache hit
 };
 
+#endif // D2_DEFINED_D2LRUCacheStrc
 namespace D2CMP::SRC::LRUCache {
 
 // Function declarations

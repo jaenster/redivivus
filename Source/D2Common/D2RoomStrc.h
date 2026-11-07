@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,12 +26,17 @@ struct D2UnitStrc;
 typedef uint16_t eCollisionFlags;
 
 // Data types
+#ifndef D2_DEFINED_D2RoomCollisionGridStrc
+#define D2_DEFINED_D2RoomCollisionGridStrc
 struct __attribute__((packed)) D2RoomCollisionGridStrc {
     /* 0x00 */ D2DrlgRoomCoordsStrc sCoords; // Subtile world position/size + tile rect, copied from room coords
     /* 0x20 */ eCollisionFlags * pMapStart; // Pointer to collision data array (eCollisionFlags[width*height]), points to &aMap[0]
     /* 0x24 */ eCollisionFlags aMap[1]; // Variable-length collision flag array, indexed as [y*width+x], actual size = sCoords.dwXSize*sCoords.dwYSize
 };
 
+#endif // D2_DEFINED_D2RoomCollisionGridStrc
+#ifndef D2_DEFINED_D2RoomStrc
+#define D2_DEFINED_D2RoomStrc
 #pragma pack(push, 1)
 struct D2RoomStrc {
     /* 0x00 */ struct D2RoomStrc * * ppRoomList; // Array of adjacent/near active rooms
@@ -54,3 +62,5 @@ struct D2RoomStrc {
     /* 0x7C */ struct D2RoomStrc * pDrlgRoomNext; // Next room in act room linked list (D2DrlgActStrc.pRoom)
 };
 #pragma pack(pop)
+
+#endif // D2_DEFINED_D2RoomStrc

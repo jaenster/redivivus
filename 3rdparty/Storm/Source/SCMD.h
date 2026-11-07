@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,10 +16,9 @@
 #include "Source/D2Client/ClientModeInGame.h"
 
 // Forward declarations
-struct D2GameNpcStrc;
-struct D2StormListHead;
-struct D2UnitDataMonsterStrc;
 struct SCMD;
+struct StormLinkStrc;
+struct StormLinkedListStrc;
 #ifndef RECON_FPTD_SCMDCALLBACK
 #define RECON_FPTD_SCMDCALLBACK
 typedef BOOL (__stdcall *SCMDCALLBACK)(struct CMDPARAMS * pParams, char * szCmdLine);
@@ -31,6 +33,8 @@ typedef int (__stdcall *pfnSCmdUnknownArgCallback)(char * szArg);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_ARGLIST
+#define D2_DEFINED_ARGLIST
 struct ARGLIST {
     /* 0x00 */ uint32_t dwFlags;
     /* 0x04 */ uint32_t dwId; // 0xffffffff = no id
@@ -38,6 +42,7 @@ struct ARGLIST {
     /* 0x0C */ BOOL (__stdcall *pfnCallback)(struct CMDPARAMS *, char *);
 };
 
+#endif // D2_DEFINED_ARGLIST
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct __attribute__((packed)) StormCmdArgDefStrc {
     /* 0x00 */ struct StormCmdArgDefStrc * pPrev; // list link; SCmdRegisterArgument @006c4580 writes *pNewNode and pNewNode[1] as the two link words
@@ -80,21 +85,21 @@ BOOL __stdcall SCmdRegisterArgList(struct ARGLIST * pArgList, uint32_t nCount);
 int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-int __fastcall Unreferenced_006c4010(int param_1);
+int __fastcall Unreferenced_006c4010(struct StormLinkStrc * param_1);
 uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset);
-int __fastcall Unreferenced_006c40b0(int param_1);
-int __fastcall Unreferenced_006c40d0(int param_1);
+int __fastcall Unreferenced_006c40b0(struct StormLinkedListStrc * param_1);
+int __fastcall Unreferenced_006c40d0(struct StormLinkStrc * param_1);
 ::SCMD * __thiscall SCMD_GetListHead(::SCMD * pThis, ::SCMD * pNode);
 void __thiscall SCMD_MoveToList(::SCMD * pThis, ::SCMD * pNode, int nInsertMode, ::SCMD * pScmd);
 uint32_t __thiscall SCMD_GetNextOffset(::SCMD * pThis, ::SCMD * pNode);
-void __thiscall SCMD_UnlinkNode(::SCMD * pThis, ::SCMD * pNode);
-int __fastcall Unreferenced_006c4360(int param_1);
-uint32_t __thiscall SCMD_GetHandler(::SCMD * pThis, int nNodeOffset);
-void __fastcall SCMD_ClearAll(struct D2StormListHead * nListPtr);
-int __fastcall Unreferenced_006c4470(int param_1);
+void __thiscall SCMD_UnlinkNode(::SCMD * pThis, struct StormLinkStrc * pNode);
+struct StormLinkedListStrc * __fastcall Unreferenced_006c4360(struct StormLinkedListStrc * param_1);
+intptr_t __thiscall SCMD_GetHandler(::SCMD * pThis, struct StormLinkStrc * nNodeOffset);
+void __fastcall SCMD_ClearAll(struct StormLinkedListStrc * nListPtr);
+struct StormLinkStrc * __fastcall Unreferenced_006c4470(struct StormLinkStrc * param_1);
 ::SCMD * __thiscall SCMD_AllocNode(::SCMD * pThis, int nInsertMode, int nExtraSize, uint32_t dwAllocFlags);
 ::SCMD * __thiscall SCMD_FreeNode(::SCMD * pThis, uint8_t bFreeMemory);
-void __fastcall SCMD_FreeAllNodes(void * pListHead);
+void __fastcall SCMD_FreeAllNodes(struct StormLinkedListStrc * pListHead);
 uint32_t __thiscall SCMD_RemoveNode(::SCMD * pThis, ::SCMD * pNode);
 // @blizzard ProcessFlags (SCMD.CPP)
 BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * szText, int * pnOutConsumed);
@@ -121,7 +126,7 @@ int __stdcall SCmdGetNum(int nCmdId);
 // @namespace-fix moved Global -> Storm::Source::SCMD
 uint32_t __stdcall SCmdGetString(int dwCmdId, char * szText, int dwBufferSize);
 // @blizzard ProcessString (SCMD.CPP)
-BOOL __fastcall SCMD_ProcessString(uint32_t * ppszCursor, int * pCmdCtx, uint32_t * pCmdList, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
+BOOL __fastcall SCMD_ProcessString(char * * ppszCursor, int * pCmdCtx, uint32_t * pCmdList, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
 // Returns TRUE when the registered command with this id has a non-zero value. Looks the id up with SCMD_FindCommandValueById 006c4d70 and normalises the result to 0/1 with NEG/SBB/NEG.
 // @oracle SCmdGetBool
 // @oracle-source Storm export vector SCmdGetBool @100cbc84 -> code 10008b10 in Mac PPC 1.10b Storm

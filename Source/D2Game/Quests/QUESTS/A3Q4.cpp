@@ -2,19 +2,15 @@
 
 #include "Source/D2Game/Quests/QUESTS/A3Q4.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Client/UNIT/Item.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -332,7 +328,7 @@ void __fastcall Q21_PlayerSetGoldenBirdQuestState(::SGAMEDATA * pGame, D2UnitStr
 int __thiscall Q21_PartySetGoldenBirdState(void * pThis, ::SGAMEDATA * pGame) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId((D2UnitStrc*)pThis);
     if (nPartyId != 0xffff) {
-      UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, 0);
+      UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, nullptr);
     }
 
     return 0;
@@ -379,7 +375,7 @@ void __fastcall Q21_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         pGame = pQuestArgs->pGame;
         nMsgId = UNIT::SUnit::GetPartyId(pQuestArgs->pPlayer);
         if (nMsgId != 0xffff) {
-          UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nMsgId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, 0);
+          UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nMsgId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, nullptr);
           return;
         }
       } else if (nMsgId == 0x213) {

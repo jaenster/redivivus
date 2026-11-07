@@ -16,23 +16,8 @@
       "calledFunctions": [
         "RENDERER_D3D_CopyPixelsWithStride",
         "memcpy"
-      ]
-    },
-    {
-      "name": "RENDERER_D3D_ConvertPalettedTo32Bit",
-      "address": "006b1e30",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006b1e30"
-        }
-      ],
-      "namespace": "D2Client::Renderer::Direct3D",
-      "calledFunctions": [
-        "RENDERER_D3D_ConvertPalettedTo32Bit"
       ],
       "usedTypes": [
-        "uint32_t",
         "uint8_t"
       ]
     },
@@ -48,6 +33,9 @@
       "namespace": "D2Client::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_CloseRegistryKey"
+      ],
+      "usedTypes": [
+        "HKEY"
       ]
     }
   ]

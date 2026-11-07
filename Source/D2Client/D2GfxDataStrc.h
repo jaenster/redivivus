@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,8 @@ struct DC6Block;
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2GfxDataStrc
+#define D2_DEFINED_D2GfxDataStrc
 struct __attribute__((packed)) D2GfxDataStrc {
     /* 0x00 */ int nFrameNumber; // Current animation frame index
     /* 0x04 */ uint8_t dwFlags; // Flags: bit1=overlay, bit3=local player unit
@@ -39,3 +44,5 @@ struct __attribute__((packed)) D2GfxDataStrc {
     /* 0x40 */ int nDirection; // direction in 1/64 turns (0..0x3f): scaled nDirection*nDirections>>6 to a sprite direction (SPRITECACHE_GetOrLoadSprite/PrecacheSpriteSync), bounded < 0x40 in CELCMP_GetDC6BlockFromGfxData; used directly as the frame for UNIT_ITEM in LoadCelFileAndCache
     /* 0x44 */ uint32_t dwRenderFlags; // Rendering flags: bit1=apply palette color transform
 };
+
+#endif // D2_DEFINED_D2GfxDataStrc

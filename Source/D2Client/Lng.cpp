@@ -2,10 +2,7 @@
 
 #include "Source/D2Client/Lng.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 

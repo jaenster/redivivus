@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,6 +26,8 @@ typedef void (__fastcall *z_free_func)(void * opaque, void * address);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_gz_header
+#define D2_DEFINED_gz_header
 struct gz_header {
     /* 0x00 */ int text;
     /* 0x04 */ uint32_t time;
@@ -39,6 +44,9 @@ struct gz_header {
     /* 0x30 */ int done;
 };
 
+#endif // D2_DEFINED_gz_header
+#ifndef D2_DEFINED_static_tree_desc
+#define D2_DEFINED_static_tree_desc
 struct static_tree_desc {
     /* 0x00 */ ct_data * static_tree; // static tree or NULL
     /* 0x04 */ int32_t * extra_bits; // extra bits for each code or NULL
@@ -47,12 +55,18 @@ struct static_tree_desc {
     /* 0x10 */ int32_t max_length; // max bit length for the codes
 };
 
+#endif // D2_DEFINED_static_tree_desc
+#ifndef D2_DEFINED_tree_desc
+#define D2_DEFINED_tree_desc
 struct tree_desc {
     /* 0x00 */ ct_data * dyn_tree; // the dynamic tree
     /* 0x04 */ int32_t max_code; // largest code with non zero frequency
     /* 0x08 */ static_tree_desc * stat_desc; // the corresponding static tree
 };
 
+#endif // D2_DEFINED_tree_desc
+#ifndef D2_DEFINED_z_stream
+#define D2_DEFINED_z_stream
 struct z_stream {
     /* 0x00 */ uint8_t * next_in; // next input byte
     /* 0x04 */ uint32_t avail_in; // number of bytes available at next_in
@@ -70,6 +84,9 @@ struct z_stream {
     /* 0x34 */ uint32_t reserved; // reserved for future use
 };
 
+#endif // D2_DEFINED_z_stream
+#ifndef D2_DEFINED_deflate_state
+#define D2_DEFINED_deflate_state
 struct __attribute__((packed)) deflate_state {
     /* 0x0000 */ z_stream * strm; // pointer back to this zlib stream
     /* 0x0004 */ int32_t status; // deflate state machine status
@@ -138,6 +155,7 @@ struct __attribute__((packed)) deflate_state {
     /* 0x16C0 */ uint32_t high_water; // high water mark offset in window for initialized bytes
 };
 
+#endif // D2_DEFINED_deflate_state
 namespace Storm::_3rdparty::zlib::deflate {
 
 // Function declarations

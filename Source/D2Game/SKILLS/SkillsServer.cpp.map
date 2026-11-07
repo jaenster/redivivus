@@ -763,6 +763,7 @@
         "SKILLS_SetSkillDataByEType"
       ],
       "usedTypes": [
+        "D2DamageStrc",
         "D2UnitStrc",
         "uint32_t"
       ]
@@ -2938,7 +2939,7 @@
       ],
       "usedTypes": [
         "WCHAR",
-        "pfnUIMenuInstance"
+        "eD2States"
       ]
     }
   ]

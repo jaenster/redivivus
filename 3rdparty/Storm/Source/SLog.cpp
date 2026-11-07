@@ -206,12 +206,12 @@ void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOu
 }
 
 // @blizzard SLogDump (SLOG.CPP)
-void __stdcall SLogDump(uint32_t nHandle, int32_t pData, uint32_t nLength) {
+void __stdcall SLogDump(uint32_t nHandle, uint8_t * pData, uint32_t nLength) {
     char* szBufferInput;
     uint32_t nRowStart;
     uint32_t nCol;
     uint32_t nSlot;
-    char cByte;
+    uint8_t cByte;
     uint32_t nRowEnd;
     D2SLogStrc* pContext = SLOG_LockLog(&nSlot, 0, nHandle);
     if (!pContext) {
@@ -230,7 +230,7 @@ void __stdcall SLogDump(uint32_t nHandle, int32_t pData, uint32_t nLength) {
         if (nRowStart < nRowEnd) {
           do {
             if (nCol < nLength) {
-              /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pContext->acBuffer + pContext->nUsed, "%02x ", (uint32_t)*(uint8_t*)(nCol + pData));
+              /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pContext->acBuffer + pContext->nUsed, "%02x ", (uint32_t)pData[nCol]);
               nWritten = SSTR::SStrLen(pContext->acBuffer + pContext->nUsed);
             } else {
               nWritten = SSTR::SStrCopy(pContext->acBuffer + pContext->nUsed, "   ", 0x7fffffff);
@@ -247,9 +247,9 @@ void __stdcall SLogDump(uint32_t nHandle, int32_t pData, uint32_t nLength) {
 
           for (; nRowStart < nRowEnd; nRowStart++) {
             if (nRowStart < nLength) {
-              cByte = *(char*)(nRowStart + pData);
-              if ((uint8_t)(cByte - 0x20U) <= 0x5e) {
-                /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pContext->acBuffer + pContext->nUsed, "%c", (int)cByte);
+              cByte = pData[nRowStart];
+              if ((uint8_t)(cByte - 0x20) <= 0x5e) {
+                /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pContext->acBuffer + pContext->nUsed, "%c", (int)(char)cByte);
                 nWritten = SSTR::SStrLen(pContext->acBuffer + pContext->nUsed);
               } else {
                 szBufferInput = ".";

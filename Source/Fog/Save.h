@@ -4,15 +4,19 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
 
 // Data types
+#ifndef D2_DEFINED_D2MercSaveDataStrc
+#define D2_DEFINED_D2MercSaveDataStrc
 struct D2MercSaveDataStrc {
     /* 0x00 */ uint32_t dwFlags;
     /* 0x04 */ uint32_t dwSeed;
@@ -22,6 +26,9 @@ struct D2MercSaveDataStrc {
     /* 0x10 */ uint32_t adwUnknown10[4];
 };
 
+#endif // D2_DEFINED_D2MercSaveDataStrc
+#ifndef D2_DEFINED_D2SaveHandSkillStrc
+#define D2_DEFINED_D2SaveHandSkillStrc
 struct D2SaveHandSkillStrc {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -29,6 +36,7 @@ struct D2SaveHandSkillStrc {
     /* 0x02 */ short nItemIndex;
 };
 
+#endif // D2_DEFINED_D2SaveHandSkillStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 struct __attribute__((packed)) D2SaveHeaderStrc {
     /* 0x00 */ uint32_t dwMagic;
@@ -58,6 +66,8 @@ struct __attribute__((packed)) D2SaveHeaderStrc {
 };
 
 #endif // D2_MODULE_Fog
+#ifndef D2_DEFINED_D2SaveHotKeyStrc
+#define D2_DEFINED_D2SaveHotKeyStrc
 struct D2SaveHotKeyStrc {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -65,6 +75,9 @@ struct D2SaveHotKeyStrc {
     /* 0x02 */ short nItemIndex;
 };
 
+#endif // D2_DEFINED_D2SaveHotKeyStrc
+#ifndef D2_DEFINED_D2SaveFileHeaderStrc
+#define D2_DEFINED_D2SaveFileHeaderStrc
 struct __attribute__((packed)) D2SaveFileHeaderStrc {
     /* 0x00 */ uint32_t dwHeader;
     /* 0x04 */ uint32_t dwFileVersion;
@@ -97,6 +110,7 @@ struct __attribute__((packed)) D2SaveFileHeaderStrc {
     /* 0xD2 */ uint8_t nReserved[125]; // Unused header padding bytes (zeroed on save, never read)
 };
 
+#endif // D2_DEFINED_D2SaveFileHeaderStrc
 namespace Fog::Save {
 
 // Function declarations

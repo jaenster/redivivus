@@ -4,6 +4,7 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/QServer/QServer.h"
+#include "Source/Fog/Src/QServer/QServerNT.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Net/Game/Server.data.h"
@@ -45,7 +46,7 @@ void * __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nIpAddr
 }
 
 DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
-    // Frame slots -1616..-1592 are ONE object: &nAddrLen is passed out and the callee reaches the rest by byte offset.
+    // Frame slots -1616..-1568 are ONE object: &nAddrLen is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       int nAddrLen;
@@ -54,8 +55,11 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
       D2QServerStrc* pQServerRef;
       int nClientStep;
       int nClientCount;
+      SocketThreadMain_Slotm638 uSlot638;
+      SocketThreadMain_Slotm634 uSlot634;
+      sockaddr_in sClientAddr;
     };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 24, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 48, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     CRITICAL_SECTION* lpCriticalSection;
     uint32_t nFdIdx;
@@ -67,12 +71,10 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
     int nClientIdx;
     int nFdIsSetResult;
     SOCKET socketCur;
-    int aScannedClientPtrs[64];
+    D2QServerClientConnectionStrc* aScannedClientPtrs[64];
     fd_set fsset0;
     fd_set fsset1;
     timeval tvSelectTimeout;
-    LPCRITICAL_SECTION pClientLock;
-    uint32_t nSelectResult;
     char aRecvBuf[1460];
     char szErrBuf[100];
     D2QServerStrc* pQServerCopy;
@@ -97,10 +99,10 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
         nClientIdx = __frame0.nClientStep;
       }
 
-      pClientLock = (LPCRITICAL_SECTION)0x0;
+      __frame0.uSlot638.nScanIdx = 0;
       nClientIdx = __frame0.nBucketIdx;
       do {
-        if ((int)pClientLock >= ((D2QServerStrc*)lpThreadParam)->nConnectedClients) {
+        if (__frame0.uSlot638.nScanIdx >= ((D2QServerStrc*)lpThreadParam)->nConnectedClients) {
           break;
         }
 
@@ -114,11 +116,11 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
           __frame0.nClientStep = 0;
         }
 
-        nSelectResult = (uintptr_t)&pClientIter->clientLock;
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)nSelectResult);
+        __frame0.uSlot634.pScanClientLock = &pClientIter->clientLock;
+        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(__frame0.uSlot634.pScanClientLock);
         if (pClientIter->socket != -1) {
           IncrementClientRefCount((D2QServerStrc*)lpThreadParam, pClientIter);
-          aScannedClientPtrs[__frame0.nClientCount] = (int)pClientIter;
+          aScannedClientPtrs[__frame0.nClientCount] = pClientIter;
           __frame0.nClientCount++;
           if (fsset0.fd_count < 0x40) {
             fsset0.fd_array[fsset0.fd_count] = pClientIter->socket;
@@ -133,9 +135,9 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
         }
 
         pClientIter = pClientIter->pNextByToken;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)nSelectResult);
-        pClientLock = (LPCRITICAL_SECTION)((uintptr_t)&pClientLock->DebugInfo + 1);
-      } while ((int)pClientLock < 0x40);
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot634.pScanClientLock);
+        __frame0.uSlot638.nScanIdx++;
+      } while (__frame0.uSlot638.nScanIdx < 0x40);
 
       tvSelectTimeout.tv_usec = (long int)(100000 / (((D2QServerStrc*)lpThreadParam)->nConnectedClients / 64 + 1));
       nFdIsSetResult = 0;
@@ -144,9 +146,9 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&((D2QServerStrc*)lpThreadParam)->csClientLifecycle);
       if (__frame0.nClientCount > 0) {
         for (; nFdIsSetResult < __frame0.nClientCount; nFdIsSetResult++) {
-          nClientIdx = aScannedClientPtrs[nFdIsSetResult];
-          /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(nClientIdx + 0x2c));
-          if (*(int*)(nClientIdx + 0x10) == -1) {
+          pClientIter = aScannedClientPtrs[nFdIsSetResult];
+          /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pClientIter->clientLock);
+          if (pClientIter->socket == -1) {
             nFdIdx = 0;
             if (fsset0.fd_count > 0) {
               check_read_fd:
@@ -165,7 +167,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
             nFdIdx = 0;
             if (fsset1.fd_count > 0) {
               check_except_fd:
-              if (fsset1.fd_array[nFdIdx] != *(SOCKET*)(nClientIdx + 0x10)) {
+              if (fsset1.fd_array[nFdIdx] != pClientIter->socket) {
                 nFdIdx++;
                 if (nFdIdx >= fsset1.fd_count) {
                   continue;
@@ -196,14 +198,14 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
         }
       }
 
-      /* timeval * timeout for select */ /* fd_set * exceptfds for select */ /* fd_set * writefds for select */ /* fd_set * readfds for select */ /* int nfds for select */ nSelectResult = select(0x40, &fsset0, nullptr, &fsset1, &tvSelectTimeout);
+      /* timeval * timeout for select */ /* fd_set * exceptfds for select */ /* fd_set * writefds for select */ /* fd_set * readfds for select */ /* int nfds for select */ __frame0.uSlot634.nSelectResult = select(0x40, &fsset0, nullptr, &fsset1, &tvSelectTimeout);
       for (nClientIdx = 0; nClientIdx < __frame0.nClientCount; nClientIdx++) {
-        pClientIter = (D2QServerClientConnectionStrc*)aScannedClientPtrs[nClientIdx];
+        pClientIter = aScannedClientPtrs[nClientIdx];
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pClientIter->clientLock);
         RemoveClientAndClearLog((D2QServerStrc*)lpThreadParam, pClientIter);
       }
 
-      if (!nSelectResult) {
+      if (!__frame0.uSlot634.nSelectResult) {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&((D2QServerStrc*)lpThreadParam)->csClientLifecycle);
         nClientIdx = ((D2QServerStrc*)lpThreadParam)->aAcceptThreadStopFlags[0];
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ((D2QServerStrc*)lpThreadParam)->aAcceptThreadStopFlags[0] = 0;
@@ -213,28 +215,31 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
           ErrorManager::StubHook2(0);
           /* DWORD dwExitCode for ExitThread */ ExitThread(0);
         }
-      } else if (nSelectResult != -1 && (__frame0.nSocketIdx = -1 , __frame0.nClientCount >= 0)) {
+      } else if (__frame0.uSlot634.nSelectResult != -1 && (__frame0.nSocketIdx = -1 , __frame0.nClientCount >= 0)) {
         do {
           if (__frame0.nSocketIdx == -1) {
             socketCur = ((D2QServerStrc*)lpThreadParam)->aListenSockets[0];
           } else {
-            socketCur = *(SOCKET*)(aScannedClientPtrs[__frame0.nSocketIdx] + 0x10);
+            socketCur = aScannedClientPtrs[__frame0.nSocketIdx]->socket;
           }
 
-          nSelectResult = socketCur;
+          __frame0.uSlot634.nSelectResult = socketCur;
           /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ nClientIdx = __WSAFDIsSet(socketCur, &fsset1);
           /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (!nClientIdx) {
             nClientIdx = __WSAFDIsSet(socketCur, &fsset0);
             if (nClientIdx) {
               if (socketCur == ((D2QServerStrc*)lpThreadParam)->aListenSockets[0]) {
                 __frame0.nAddrLen = 0x10;
-                sockaddr_in sClientAddr = {0};
-                nSelectResult = 0;
+                __frame0.sClientAddr.sin_family = 0;
+                __frame0.sClientAddr.sin_port = 0;
+                __frame0.sClientAddr.sin_addr = 0;
+                memset(__frame0.sClientAddr.sin_zero, 0, 8 * sizeof(__frame0.sClientAddr.sin_zero[0]));
+                __frame0.uSlot634.nSelectResult = 0;
                 while (true) {
                   /* int iError for WSASetLastError */ _Wrappers::WSASetLastError(0);
-                  pClientLock = &((D2QServerStrc*)lpThreadParam)->csClientLifecycle;
-                  /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pClientLock);
-                  /* int * addrlen for accept */ /* sockaddr * addr for accept */ /* SOCKET s for accept */ socket = _Wrappers::accept(socketCur, (sockaddr*)&sClientAddr, &__frame0.nAddrLen);
+                  __frame0.uSlot638.pClientLock = &((D2QServerStrc*)lpThreadParam)->csClientLifecycle;
+                  /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(__frame0.uSlot638.pClientLock);
+                  /* int * addrlen for accept */ /* sockaddr * addr for accept */ /* SOCKET s for accept */ socket = _Wrappers::accept(socketCur, (sockaddr*)&__frame0.sClientAddr, &__frame0.nAddrLen);
                   if (socket != -1) {
                     break;
                   }
@@ -243,43 +248,43 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
                   if (nClientIdx != 0x2733) {
                     sprintf(szErrBuf, "Accept failed.  Error %d", nClientIdx);
                     /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Server thread close #2\n");
-                    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                     /* DWORD dwExitCode for ExitThread */ ExitThread(0);
                   }
 
-                  nSelectResult++;
-                  if (nSelectResult > 100) {
-                    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                  __frame0.uSlot634.nSelectResult++;
+                  if (__frame0.uSlot634.nSelectResult > 100) {
+                    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                     goto next_socket;
                   }
 
-                  /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                  /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                 }
 
-                nClientIdx = HACKL_CheckAndResetHacklistEntry((D2QServerStrc*)lpThreadParam, sClientAddr.sin_addr);
+                nClientIdx = HACKL_CheckAndResetHacklistEntry((D2QServerStrc*)lpThreadParam, __frame0.sClientAddr.sin_addr);
                 if (nClientIdx) {
                   Safesock::closeSocket(socket);
-                  /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                  /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                 } else {
-                  BVar1 = IsPerIpLimitReached((D2QServerStrc*)lpThreadParam, (in_addr*)&sClientAddr.sin_addr);
+                  BVar1 = IsPerIpLimitReached((D2QServerStrc*)lpThreadParam, (in_addr*)&__frame0.sClientAddr.sin_addr);
                   if (BVar1) {
-                    CheckIfPlayerIsBannedByAddress((D2QServerStrc*)lpThreadParam, (in_addr*)&sClientAddr.sin_addr, ".\\Src\\QServer\\QServer98.cpp", 0x138);
+                    CheckIfPlayerIsBannedByAddress((D2QServerStrc*)lpThreadParam, (in_addr*)&__frame0.sClientAddr.sin_addr, ".\\Src\\QServer\\QServer98.cpp", 0x138);
                     Safesock::closeSocket(socket);
-                    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                   } else {
-                    nClientIdx = CheckIpConnectionRate((D2QServerStrc*)lpThreadParam, (in_addr*)&sClientAddr.sin_addr);
+                    nClientIdx = CheckIpConnectionRate((D2QServerStrc*)lpThreadParam, (in_addr*)&__frame0.sClientAddr.sin_addr);
                     if (!nClientIdx) {
                       LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST] sServerThread(spamming server with reconnects)");
-                      BanIpAddress((D2QServerStrc*)lpThreadParam, ".\\Src\\QServer\\QServer98.cpp", sClientAddr.sin_addr, 0x142);
+                      BanIpAddress((D2QServerStrc*)lpThreadParam, ".\\Src\\QServer\\QServer98.cpp", __frame0.sClientAddr.sin_addr, 0x142);
                       Safesock::closeSocket(socket);
-                      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                     } else {
-                      pNewClientContainer = AddClient((D2QServerStrc*)lpThreadParam, socket, sClientAddr.sin_addr);
+                      pNewClientContainer = AddClient((D2QServerStrc*)lpThreadParam, socket, __frame0.sClientAddr.sin_addr);
                       if (((D2QServerStrc*)lpThreadParam)->pfnOnClientAcceptedHook) {
                         ((D2QServerStrc*)lpThreadParam)->pfnOnClientAcceptedHook((D2QServerStrc*)lpThreadParam, pNewClientContainer->client.nClientToken, ".\\Src\\QServer\\QServer98.cpp", 0x91);
                       }
 
-                      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pClientLock);
+                      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(__frame0.uSlot638.pClientLock);
                     }
                   }
                 }
@@ -292,7 +297,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
                   nFdIdx = pClientIter->nBytesRead;
                   nClientIdx = 0;
                   if (nFdIdx <= 0x5b4) {
-                    /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nClientIdx = recv(nSelectResult, pClientIter->aRecvBuffer + nFdIdx, 0x5b4 - nFdIdx, 0);
+                    /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nClientIdx = recv(__frame0.uSlot634.nSelectResult, pClientIter->aRecvBuffer + nFdIdx, 0x5b4 - nFdIdx, 0);
                   }
 
                   /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);

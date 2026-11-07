@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2PoolManagerStrc;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2CubeInputStrc
+#define D2_DEFINED_D2CubeInputStrc
 struct D2CubeInputStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -26,6 +31,7 @@ struct D2CubeInputStrc {
     /* 0x07 */ uint8_t nQuantity;
 };
 
+#endif // D2_DEFINED_D2CubeInputStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2CubeModStrc {
     /* 0x00 */ int nNameId;
@@ -36,6 +42,8 @@ struct D2CubeModStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2CubeOutputStrc
+#define D2_DEFINED_D2CubeOutputStrc
 struct D2CubeOutputStrc {
     /* 0x00 */ uint16_t wFlagsAndUpgrade; // Packed word: bits 0-10 are output flags (mod=1,sock=2,eth=4,uns=0x10,rem=0x20,reg=0x40,exc=0x80,eli=0x100,rep=0x200,rch=0x400,set=8). High byte is nUpgradeBase (upgrade tier 0=normal,1=exceptional,2=elite).
     /* 0x02 */ uint16_t nItemClassId;
@@ -51,6 +59,9 @@ struct D2CubeOutputStrc {
     /* 0x18 */ uint8_t aMods[60];
 };
 
+#endif // D2_DEFINED_D2CubeOutputStrc
+#ifndef D2_DEFINED_D2CubeMainTxt
+#define D2_DEFINED_D2CubeMainTxt
 struct __attribute__((packed)) D2CubeMainTxt {
     /* 0x00 */ uint8_t nEnabled;
     /* 0x01 */ uint8_t nLadder;
@@ -67,6 +78,7 @@ struct __attribute__((packed)) D2CubeMainTxt {
     /* 0x4C */ D2CubeOutputStrc pOutputItem[3];
 };
 
+#endif // D2_DEFINED_D2CubeMainTxt
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================

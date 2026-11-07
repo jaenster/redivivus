@@ -5,17 +5,8 @@
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Common/Chat.h"
-#include "Source/D2Common/D2BitBufferStrc.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2StatInfoStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
@@ -26,12 +17,9 @@
 #include "Source/D2Game/UNIT/PlayerList.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/Fog/BitBuffer.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/SMem.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/GAME/Server.data.h"
 
@@ -709,7 +697,7 @@ void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc
     }
 
     sPacket.nUnitGUID = pUnit->nUnitGUID;
-    sPacket.nSoundId = *(uint16_t*)((uintptr_t)&pUnit->uSideData + 10);
+    sPacket.nSoundId = *(uint16_t*)((intptr_t)&pUnit->uSideData + 10);
     sPacket.nPacketId = ',';
     sPacket.nUnitType = (uint8_t)pUnit->eUnitType;
     GAME::SCmd::NET_D2GS_SERVER_Send_0x2C_PlaySound(pClient, &sPacket);
@@ -909,8 +897,8 @@ void __fastcall SERVER_SendUnitMessagePacket(D2UnitStrc * pUnit, D2UnitStrc * pT
     pMsg->pad_0x5[1] = '\0';
     pMsg->pad_0x5[2] = '\0';
     *(uint8_t*)&pMsg->uArgs = '\0';
-    *(uint8_t*)((uintptr_t)&pMsg->uArgs + 1) = 0;
-    *(uint16_t*)((uintptr_t)&pMsg->uArgs + 2) = 0;
+    *(uint8_t*)((intptr_t)&pMsg->uArgs + 1) = 0;
+    *(uint16_t*)((intptr_t)&pMsg->uArgs + 2) = 0;
     *(uint32_t*)&pMsg->uArgs.sA3.nSkillLevel = 0;
     pMsg->uArgs.sA3.eUnitType = UNIT_PLAYER;
     pMsg->uArgs.sA3.nUnitGUID = 0;
@@ -1227,7 +1215,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
           pMonSkillEntry = pMonStatsTxt->aSkill;
           pClient = 0;
           do {
-            if ((uint8_t)Fog::BitBuffer::gadwBitMasks[(uint32_t)pClient & 7] & pMonStatsTxt->SendSkills[(int)pClient >> 3]) {
+            if ((uint8_t)Fog::BitBuffer::gadwBitMasks[(uintptr_t)pClient & 7] & pMonStatsTxt->SendSkills[(intptr_t)pClient >> 3]) {
               wSkillId = *pMonSkillEntry;
               if ((short int)wSkillId >= 0 && (int)(short int)wSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
                 pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)(short int)wSkillId);
@@ -1240,8 +1228,8 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
             }
 
             pMonSkillEntry++;
-            pClient = (D2ClientStrc*)((uintptr_t)&pClient->nClientNo + 1);
-          } while ((int)pClient < 8);
+            pClient = (D2ClientStrc*)((intptr_t)&pClient->nClientNo + 1);
+          } while ((intptr_t)pClient < 8);
         }
 
         PLAYER_SendStateListToClient(pUnit, pClientSaved);

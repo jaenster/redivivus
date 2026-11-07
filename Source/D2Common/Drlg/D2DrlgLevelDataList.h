@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -20,9 +23,13 @@ typedef BOOL (__fastcall *fpLevelDataEntry)(struct D2DrlgLevelPlacementStrc * pL
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgLevelDataEntry
+#define D2_DEFINED_D2DrlgLevelDataEntry
 struct __attribute__((packed)) D2DrlgLevelDataEntry {
     /* 0x00 */ BOOL (__fastcall *nfpLevelDataEntry)(struct D2DrlgLevelPlacementStrc *);
     /* 0x04 */ eD2LevelId neD2LevelId;
     /* 0x08 */ int nNodeLevelEntryIdPrev;
     /* 0x0C */ int nNodeLevelEntryIdNext;
 };
+
+#endif // D2_DEFINED_D2DrlgLevelDataEntry

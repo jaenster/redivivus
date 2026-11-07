@@ -2,16 +2,8 @@
 
 #include "Source/D2Game/SKILLS/SkillDruid.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Targets.h"
@@ -22,13 +14,8 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/SKILLS/SkillSor.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -826,7 +813,7 @@ static void __stdcall SKILLDRUID_GetSummonDamageBonus(D2SkillsTxt * pSkillTxt, :
       SkillsServer::SetDamageOnEvent(pUnit2, &sDamage, eSkill, nSkillLvl);
     }
 
-    SkillsServer::SKILLS_SetSkillDataByEType(pUnit2, (uintptr_t)&sDamage, nMinToHit, eSkill);
+    SkillsServer::SKILLS_SetSkillDataByEType(pUnit2, &sDamage, nMinToHit, eSkill);
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit2, pUnit, &sDamage, 0x80);
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit2, pUnit, 0);
 }

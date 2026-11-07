@@ -1,0 +1,261 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Fog/FogRoot.cpp",
+  "functions": [
+    {
+      "name": "D2CheckExpansionGame",
+      "address": "00408f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408f20"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "D2CheckExpansionGame",
+        "__security_check_cookie",
+        "SFILE_GetInstallPath",
+        "SStrPack",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BitScanReverse",
+      "address": "00409000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409000"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "BitScanReverse"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Return_Unref_00409c70",
+      "address": "00409c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409c70"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_00409c70"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040a030",
+      "address": "0040a030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a030"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040a030"
+      ]
+    },
+    {
+      "name": "FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070",
+      "address": "0040a070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a070"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FOG_GetAsyncFileCount_ReturnZero",
+      "address": "0040abe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040abe0"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "FOG_GetAsyncFileCount_ReturnZero"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040ada0",
+      "address": "0040ada0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040ada0"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040ada0"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040b110",
+      "address": "0040b110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b110"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040b110"
+      ]
+    },
+    {
+      "name": "Return_Unref_0040b120",
+      "address": "0040b120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b120"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return_Unref_0040b120"
+      ]
+    },
+    {
+      "name": "Return",
+      "address": "0040b320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b320"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "Return"
+      ]
+    },
+    {
+      "name": "MATH_sinTable_f32_LookupOffset",
+      "address": "0040b330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b330"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "MATH_sinTable_f32_LookupOffset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MATH_sinTable_f32_Lookup",
+      "address": "0040b350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b350"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "MATH_sinTable_f32_Lookup"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "THREADING_DeleteCriticalSection_Thunk",
+      "address": "0040eb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040eb60"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "THREADING_DeleteCriticalSection_Thunk"
+      ]
+    },
+    {
+      "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70",
+      "address": "0040eb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040eb70"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70"
+      ]
+    },
+    {
+      "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80",
+      "address": "0040eb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040eb80"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca548",
+      "address": "006ca548",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca548"
+        }
+      ],
+      "namespace": "Fog",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca548",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

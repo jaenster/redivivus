@@ -99,7 +99,6 @@
       ],
       "usedTypes": [
         "SOCKET",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -423,6 +422,7 @@
         "BnetDownloadFile"
       ],
       "usedTypes": [
+        "D2BnFtpFileHeaderStrc",
         "D2BnetDownloadStateStrc",
         "SOCKET",
         "int32_t",
@@ -454,8 +454,8 @@
         "_beginthreadex"
       ],
       "usedTypes": [
-        "D2BnetDownloadStateStrc",
         "FILETIME",
+        "int32_t",
         "uint32_t"
       ]
     },
@@ -502,7 +502,6 @@
         "D2ArchiveStrc",
         "D2MPQFileStrc",
         "FARPROC",
-        "FILETIME",
         "SID_C2S_ExtraWork",
         "int32_t",
         "uint32_t",

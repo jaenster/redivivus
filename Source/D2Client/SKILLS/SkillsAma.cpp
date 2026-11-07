@@ -7,17 +7,12 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/SKILLS/SkillsMon.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -58,7 +53,7 @@ BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, 
 
     int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
     D2UnitStrc* pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    D2UnitStrc* pFoundTarget = 0;
+    int32_t pFoundTarget = 0;
     if (!pConfirmedTarget) {
       pConfirmedTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, nAuraRange, 3, -1, (uint32_t*)&pFoundTarget);
     } else {
@@ -71,15 +66,15 @@ BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, 
       nMaxCount = nCalcMin;
     }
 
-    D2UnitStrc* nCalc0 = pFoundTarget;
-    if ((int)pFoundTarget <= nMaxCount) {
-      nCalc0 = (D2UnitStrc*)nMaxCount;
+    int nCalc0 = pFoundTarget;
+    if (pFoundTarget <= nMaxCount) {
+      nCalc0 = nMaxCount;
     }
-    if ((int)nCalc0 >= nCalcMin || (nCalcMin = nMaxCount , (int)pFoundTarget <= nMaxCount)) {
-      pFoundTarget = (D2UnitStrc*)nCalcMin;
+    if (nCalc0 >= nCalcMin || (nCalcMin = nMaxCount , pFoundTarget <= nMaxCount)) {
+      pFoundTarget = nCalcMin;
     }
 
-    D2Common::Skills::SKILL_SetParam1(pSkill, (int32_t)pFoundTarget);
+    D2Common::Skills::SKILL_SetParam1(pSkill, pFoundTarget);
     if (pConfirmedTarget) {
       D2Common::Skills::SKILL_SetParam2(pSkill, pConfirmedTarget->eUnitType);
       D2Common::Skills::SKILL_SetParam3(pSkill, pConfirmedTarget->nUnitGUID);
@@ -107,9 +102,9 @@ BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pU
 
     int32_t nMeleeRange = Skills::GetMeleeRangePlusFour(pUnit);
     D2UnitStrc* pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    D2UnitStrc* pFoundTarget = 0;
+    uint32_t pFoundTarget = 0;
     if (!pConfirmedTarget) {
-      pConfirmedTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, nMeleeRange, 0x20003, -1, (uint32_t*)&pFoundTarget);
+      pConfirmedTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, nMeleeRange, 0x20003, -1, &pFoundTarget);
       if (!pConfirmedTarget) {
         D2Common::Skills::SKILL_SetParam1(pSkill, 0);
         return 1;
@@ -120,10 +115,10 @@ BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pU
 
     int32_t nCalcMaxRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if ((int)pFoundTarget >= nCalcMaxRange) {
-      pFoundTarget = (D2UnitStrc*)nCalcMaxRange;
+      pFoundTarget = nCalcMaxRange;
     }
 
-    D2Common::Skills::SKILL_SetParam1(pSkill, (int32_t)pFoundTarget);
+    D2Common::Skills::SKILL_SetParam1(pSkill, pFoundTarget);
     eD2UnitType eUnitType = pConfirmedTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nSkillLvl = pConfirmedTarget->pPath.pStaticPath->nPosY;

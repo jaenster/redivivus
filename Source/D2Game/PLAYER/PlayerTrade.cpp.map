@@ -455,7 +455,6 @@
         "STATSEX_GetCurrentStat"
       ],
       "usedTypes": [
-        "D2InventoryStrc",
         "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
@@ -795,7 +794,8 @@
       ],
       "usedTypes": [
         "D2UnitDataPlayerStrc",
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "int32_t"
       ]
     },
     {
@@ -828,6 +828,7 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType",
+        "int32_t",
         "uint32_t",
         "uint8_t"
       ]

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -20,6 +23,8 @@ typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig
 #endif
 
 // Data types
+#ifndef D2_DEFINED_CMDPARAMSVALUE
+#define D2_DEFINED_CMDPARAMSVALUE
 union CMDPARAMSVALUE {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -29,6 +34,9 @@ union CMDPARAMSVALUE {
     /* 0x00 */ char * szStringValue; // string argument
 };
 
+#endif // D2_DEFINED_CMDPARAMSVALUE
+#ifndef D2_DEFINED_CMDPARAMS
+#define D2_DEFINED_CMDPARAMS
 struct __attribute__((packed)) CMDPARAMS {
     /* 0x00 */ uint32_t dwFlags; // argument flags; & 0x30000 = bool (0) / number (0x10000) / string (0x20000). From node +0x08
     /* 0x04 */ uint32_t dwId; // argument id, 0xffffffff = none. From node +0x0c
@@ -39,6 +47,7 @@ struct __attribute__((packed)) CMDPARAMS {
     /* 0x18 */ CMDPARAMSVALUE uValue; // parsed value. From node +0x3c
 };
 
+#endif // D2_DEFINED_CMDPARAMS
 namespace D2Client::ClientModeInGame {
 
 // Function declarations
@@ -68,7 +77,7 @@ BOOL __stdcall CmdLine_SaveDefaultCommandLine(struct CMDPARAMS * pParams, char *
 BOOL __stdcall CmdLine_SetAppMode(struct CMDPARAMS * pParams, char * szCmdLine);
 // LoadDataForGameAndSetupServer: registers cmdline options, loads core data, parses default command line from registry, ensures Save::szSaveCharacterName (username or "noname").
 BOOL __stdcall LoadDataForGameAndSetupServer(struct D2IniConfigStrc * D2IniData);
-int Unreferenced_0044b780();
+void Unreferenced_0044b780();
 struct D2IniConfigStrc * __stdcall D2IniData_Getter();
 struct D2BNetClientCallbacksStrc * __stdcall CLIENT_GetGameVersionInfo();
 char * __stdcall CLIENTMODE_GetGamePasswordPart1();
@@ -77,7 +86,7 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart3();
 uint32_t __stdcall CLIENTMODE_GetIngameUIFlags();
 void __stdcall CLIENTMODE_ClearIngameUIFlag();
 void __fastcall D2CLIENT_SetExitVar1(BOOL bResult);
-struct D2IniConfigStrc * __stdcall D2IniData_Getter_Unref_0044b890();
+BOOL __stdcall D2IniData_Getter_Unref_0044b890();
 // Client app-mode entry. Init memory/UI, load language + string tables, init TXT tables, then run pfModes[] loop. Returns to launcher based on quit/game type.
 int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, struct D2IniConfigStrc * D2IniData);
 void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe);
@@ -86,7 +95,7 @@ void Unreferenced_0044bb70();
 void __stdcall FreeQServer();
 int __stdcall CLIENTMODE_InitializeCallback();
 bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused);
-int __fastcall Unreferenced_0044bc10(int param_1, int param_2);
+int __fastcall Unreferenced_0044bc10(int param_1, char * param_2);
 // pfModes_StartServer: create/init QServer, connect to server, run MessageGameLoop for required user action; sets player count and globals.
 eD2ClientAppMode __stdcall NET_QServer_StartServer();
 uint32_t __stdcall CLIENTMODE_WaitForServerShutdown(uint32_t dwUnused);

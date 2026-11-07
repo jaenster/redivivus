@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2DialogStrc;
+struct D2DialogStringData;
 struct D2UIMouseMsgStrc;
 struct UIWidget;
 #ifndef RECON_FPTD_UIWidget_Draw
@@ -76,16 +80,24 @@ struct UIWidget;
 struct UIWidgetVtable;
 
 // Data types
+#ifndef D2_DEFINED_D2DialogSubStrc
+#define D2_DEFINED_D2DialogSubStrc
 struct D2DialogSubStrc {
     /* 0x00 */ struct UIWidget * pWidget;
     /* 0x04 */ struct D2DialogSubStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2DialogSubStrc
+#ifndef D2_DEFINED_UIWidget
+#define D2_DEFINED_UIWidget
 struct UIWidget {
     /* 0x00 */ struct UIWidgetVtable * pVtable;
     /* 0x04 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
 };
 
+#endif // D2_DEFINED_UIWidget
+#ifndef D2_DEFINED_UIWidgetVtable
+#define D2_DEFINED_UIWidgetVtable
 struct UIWidgetVtable {
     /* 0x00 */ ::UIWidget * (__thiscall *ScalarDeletingDestructor)(::UIWidget *, uint32_t);
     /* 0x04 */ void (__thiscall *Draw)(::UIWidget *);
@@ -101,12 +113,13 @@ struct UIWidgetVtable {
     /* 0x2C */ int (__thiscall *GetValue)(::UIWidget *);
 };
 
+#endif // D2_DEFINED_UIWidgetVtable
 namespace D2Client::UI::Dialog {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-int __stdcall GetDialogCounter_Unref_004b70f0();
+struct D2DialogStrc * __stdcall GetDialogCounter_Unref_004b70f0();
 void __stdcall INPUT_DialogClickHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogMouseDown(struct D2UIMouseMsgStrc * pMsg);
@@ -121,10 +134,10 @@ void __stdcall INPUT_DialogEnterKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DIALOG_InitializeSystem();
 void __stdcall DIALOG_CleanupSystem();
-int Unreferenced_004b7bc0();
+void Unreferenced_004b7bc0(struct D2DialogStrc * pDialog);
 void __fastcall AllocDialogSub(struct D2DialogStrc * pDialog, void * pVtable, int32_t nParam2, int32_t nParam3);
 void __stdcall DIALOG_RegisterHandler();
-struct D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, int32_t fpDialogFunc2, int32_t nBackgroundId, int32_t nExtraParam);
+struct D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, fpDialogFunc fpDialogFunc2, int32_t nBackgroundId, int32_t nExtraParam);
 struct D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc fpDialogFunc1, fpDialogFunc fpDialogFunc2, int32_t nExtraParam1, int32_t nLayoutMode, int32_t nAutoLayout, int32_t nWidth, int32_t nHeight, int32_t nExtraParam2, int32_t nExtraParam3);
 void __fastcall FreeDialogStrc(struct D2DialogStrc * pDialog);
 void __fastcall DIALOG_DrawBackground(struct D2DialogStrc * pDialog);
@@ -133,8 +146,8 @@ void __fastcall DIALOG_SetSelectedLine(struct D2DialogStrc * pDialog, int32_t nS
 void __fastcall DIALOG_SetHighlightStyle(struct D2DialogStrc * pDialog, int32_t nStyle);
 void __fastcall DIALOG_RecalculateLayout(struct D2DialogStrc * pDialog);
 int32_t __fastcall DIALOG_GetSelectedIndex(struct D2DialogStrc * pDialog);
-int __fastcall Unreferenced_004b8590(int param_1, int param_2);
-int __fastcall Unreferenced_004b85b0(int param_1, int param_2);
+struct D2DialogStringData * __fastcall Unreferenced_004b8590(struct D2DialogStrc * param_1, int param_2);
+void __fastcall Unreferenced_004b85b0(struct D2DialogStrc * pDialog, RECT * pRect);
 int __stdcall GetDialogCounter();
 void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
 void __stdcall DIALOG_InitializeSystem_Unref_004b9200();

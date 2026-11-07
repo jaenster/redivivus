@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct deflate_state;
 struct tree_desc;
 
 // Data types
+#ifndef D2_DEFINED_ct_data
+#define D2_DEFINED_ct_data
 struct ct_data {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -23,6 +28,7 @@ struct ct_data {
     /* 0x02 */ uint16_t dl; // dad (tree building) / len (bit length)
 };
 
+#endif // D2_DEFINED_ct_data
 namespace Storm::_3rdparty::zlib::trees {
 
 // Function declarations

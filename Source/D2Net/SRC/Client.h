@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Net)
 #error "D2Net header included by a module that may not use D2Net (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Net) && !defined(D2_LOADS_D2Net)
+#error "internal D2Net header included from another module; include D2Net's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -1324,6 +1327,8 @@ struct D2GameClients_Line0x347 {
 };
 
 #endif // D2_MODULE_D2Net
+#ifndef D2_DEFINED_D2OnePacketClientStrc
+#define D2_DEFINED_D2OnePacketClientStrc
 struct __attribute__((packed)) D2OnePacketClientStrc {
     /* 0x000 */ char pBytes[516];
     /* 0x204 */ size_t nSize;
@@ -1331,11 +1336,15 @@ struct __attribute__((packed)) D2OnePacketClientStrc {
     /* 0x20C */ struct D2OnePacketClientStrc * pD2PacketClientNext;
 };
 
+#endif // D2_DEFINED_D2OnePacketClientStrc
+#ifndef D2_DEFINED_D2PacketsClientStrc
+#define D2_DEFINED_D2PacketsClientStrc
 struct D2PacketsClientStrc {
     /* 0x000 */ char pBytes[1976];
     /* 0x7B8 */ int nCount;
 };
 
+#endif // D2_DEFINED_D2PacketsClientStrc
 namespace D2Net::SRC::Client {
 
 // Function declarations
@@ -1359,8 +1368,8 @@ DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadPara
 HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadParam);
 // @sourcefile .\SRC\Client.cpp
 int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
-int Unreferenced_0052aaa0();
-int Unreferenced_0052aad0();
+void Unreferenced_0052aaa0();
+void Unreferenced_0052aad0();
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall ThreadClientToServer(void * lpThreadParam);
 // Sends packet to server. Validates packet size <= 0x204 bytes, forwards to NET_SendPacketToClient (misnomer in callee name).

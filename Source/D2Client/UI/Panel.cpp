@@ -23,37 +23,18 @@
 #include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/BeltsTbls.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/TokTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/File.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Inv.data.h"
 #include "Source/D2Client/UI/MiniPanel.data.h"
 #include "Source/D2Client/UI/Panel.data.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1208,7 +1189,7 @@ void __stdcall Draw_EquipmentNeedToRepairBody() {
       }
 
       pSlotLocEntry++;
-      if ((int)pSlotLocEntry >= (intptr_t)((char*)&gaBodySlotLocTable + sizeof(gaBodySlotLocTable))) {
+      if ((intptr_t)pSlotLocEntry >= (intptr_t)((char*)&gaBodySlotLocTable + sizeof(gaBodySlotLocTable))) {
         return;
       }
     } while (true);
@@ -1248,7 +1229,7 @@ void __stdcall Draw_EquipmentNeedToRepairBody() {
       }
 
       pSlotLocEntry2++;
-      if ((int)pSlotLocEntry2 >= (intptr_t)((char*)&gaBodySlotLocTable + sizeof(gaBodySlotLocTable))) {
+      if ((intptr_t)pSlotLocEntry2 >= (intptr_t)((char*)&gaBodySlotLocTable + sizeof(gaBodySlotLocTable))) {
         return;
       }
     }
@@ -1589,7 +1570,7 @@ static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMo
     }
 }
 
-static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2UnitStrc * pUnit, int32_t nItemSlot) {
+static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2UnitStrc * pUnit, D2UnitStrc * nItemSlot) {
     if (!pItemTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa3d);
       exit(-1);
@@ -1597,7 +1578,7 @@ static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2Un
 
     BOOL bClickable = 1;
     if (pItemTxt->bUnique == '\x01' || pItemTxt->bQuest == '\x01') {
-      Text::TEXT_OpenQuestScroll((D2UnitStrc*)nItemSlot, pItemTxt);
+      Text::TEXT_OpenQuestScroll(nItemSlot, pItemTxt);
       bClickable = 0;
     } else if (pItemTxt->bUseable != '\x01') {
       UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x14);
@@ -1639,7 +1620,7 @@ void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2Inventor
       exit(-1);
     }
 
-    bClickable = PANEL_CheckEquipmentClickable(pItemTxt, pUnit, (int32_t)pItem);
+    bClickable = PANEL_CheckEquipmentClickable(pItemTxt, pUnit, pItem);
     if (bClickable != 1) {
       return;
     }
@@ -2455,7 +2436,7 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          ClickBeltRight(bIsDeadOrSlot, pPlayer, pPlayer->pInventory, (uint32_t)pMsg->nWParam >> 2 & 1);
+          ClickBeltRight(bIsDeadOrSlot, pPlayer, pPlayer->pInventory, pMsg->nWParam >> 2 & 1);
           Storm::SMsgBreakHandlerChain(pMsg);
           return;
         }

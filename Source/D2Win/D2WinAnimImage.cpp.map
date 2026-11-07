@@ -90,6 +90,7 @@
         "D2GfxDataStrc",
         "D2WinAnimImage",
         "DC6",
+        "DC6 *",
         "DC6Block",
         "int32_t"
       ]
@@ -149,6 +150,7 @@
         "D2GfxDataStrc",
         "D2WinAnimImage",
         "DC6",
+        "DC6 *",
         "DC6Block",
         "DRAWMODE",
         "FORMS_AnimFrameStrc",

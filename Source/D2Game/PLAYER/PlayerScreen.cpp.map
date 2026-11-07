@@ -161,6 +161,7 @@
         "NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender"
       ],
       "usedTypes": [
+        "D2PartyJoinArgsStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t",

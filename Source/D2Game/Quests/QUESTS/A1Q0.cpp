@@ -2,9 +2,8 @@
 
 #include "Source/D2Game/Quests/QUESTS/A1Q0.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/D2Game.globals.h"

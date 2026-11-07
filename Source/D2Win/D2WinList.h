@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@
 struct D2WinListEntry;
 
 // Data types
+#ifndef D2_DEFINED_D2WinListEntries
+#define D2_DEFINED_D2WinListEntries
 struct D2WinListEntries {
     /* 0x00 */ int32_t nFontId; // font for the entries: SetAndReturnLastFont(nFontId) in Draw/AddListItem; set from *pnFontType in the ctor (005075e0); was neD2FormType
     /* 0x04 */ int nFontHeight; // INT_ARRAY_006dd024[nFontId] (8/16/30/42); row pitch is nFontHeight + 2 * nRowPadding (Draw 005072b1, ctor); was pDC6
@@ -30,6 +35,7 @@ struct D2WinListEntries {
     /* 0x28 */ struct D2WinListEntry * pSelectedEntry;
 };
 
+#endif // D2_DEFINED_D2WinListEntries
 struct __attribute__((packed)) D2WinList {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ D2WinListEntries sEntriesControl; // D2WinList +0x40..+0x6b (allocation is 0x6c). Ctor: +0x00 font type, +0x04 font table value, +0x08 that >>2, +0x10 item count, +0x14 = -1, +0x18 visible rows - 1. +0x20 widest text, +0x24 entry chain head, +0x28 selected entry

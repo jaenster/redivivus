@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -25,14 +28,6 @@ typedef uint32_t eD2PlayerAnimMode;
 typedef uint32_t eD2Skills;
 typedef uint32_t eD2UnitFlags;
 typedef uint32_t eD2UnitType;
-
-// Data types
-struct __attribute__((packed)) D2AnimDataRecordStrc {
-    /* 0x00 */ char szAnimDataName[8];
-    /* 0x08 */ int nFrames;
-    /* 0x0C */ int nAnimSpeed;
-    /* 0x10 */ uint8_t pFrameFlags[144];
-};
 
 namespace D2Common::Units {
 
@@ -73,7 +68,7 @@ void __stdcall InitializeStaticPath(struct D2UnitStrc * pUnit, struct D2RoomStrc
 // @blizzard UnitGetRoom
 struct D2RoomStrc * __stdcall UNITS_GetRoom(struct D2UnitStrc * pUnit);
 void __stdcall SetTargetUnitForDynamicUnit(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
-void __stdcall GetRunAndWalkVelocityForPlayer(int32_t nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity);
+void __stdcall GetRunAndWalkVelocityForPlayer(struct D2UnitStrc * nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity);
 void __stdcall SetAnimData(struct D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassId, int32_t nMode);
 uint32_t __stdcall NeedsRoomUpdate(struct D2UnitStrc * pUnit);
 void __stdcall ChangeAnimMode(struct D2UnitStrc * pUnit, int32_t nMode);

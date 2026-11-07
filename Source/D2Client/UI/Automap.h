@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -24,6 +27,7 @@ struct DC6;
 typedef uint16_t eCollisionFlags;
 typedef uint32_t eD2LevelId;
 typedef uint32_t eD2MonsterAnimMode;
+typedef uint32_t eD2PlayerAnimMode;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -62,6 +66,8 @@ struct D2AutomapFileEntryStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2AutomapRelatedTxt
+#define D2_DEFINED_D2AutomapRelatedTxt
 struct D2AutomapRelatedTxt {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -69,11 +75,15 @@ struct D2AutomapRelatedTxt {
     /* 0x04 */ int nCount;
 };
 
+#endif // D2_DEFINED_D2AutomapRelatedTxt
+#ifndef D2_DEFINED_D2AutomapStrc
+#define D2_DEFINED_D2AutomapStrc
 struct __attribute__((packed)) D2AutomapStrc {
     /* 0x0000 */ D2AutomapCellStrc pAutomapCellList[512];
     /* 0x2800 */ struct D2AutomapStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2AutomapStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct __attribute__((packed)) D2AutomapUnknown {
     /* 0x00 */ size_t nFloorsSize;
@@ -87,6 +97,8 @@ struct __attribute__((packed)) D2AutomapUnknown {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_uD2UnitMode
+#define D2_DEFINED_uD2UnitMode
 union uD2UnitMode {
     /* 0x00 */ eD2PlayerAnimMode ePlayerMode; // match with plrmode..txt
     /* 0x00 */ eD2MonsterAnimMode eMonsterMode; // match with monmode.txt
@@ -97,6 +109,7 @@ union uD2UnitMode {
     /* 0x00 */ uint32_t field_3; // decompiler cast: mode value at byte offset 3
 };
 
+#endif // D2_DEFINED_uD2UnitMode
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -134,7 +147,7 @@ void __fastcall AUTOMAP_RotateCellLeft(uint32_t dwUnused, struct D2AutomapCellSt
 void __stdcall AUTOMAP_RebalanceTreeRight(struct D2AutomapCellStrc * * ppRootNode);
 // AVL tree left rebalance: handles single left rotation (right-right case) and double left-right rotation based on grandchild balance factor. Halts on unexpected balance states.
 void __stdcall AUTOMAP_RebalanceTreeLeft(struct D2AutomapCellStrc * * ppCell);
-int __fastcall Unreferenced_00457ac0(int param_1, int param_2);
+int __fastcall Unreferenced_00457ac0(struct D2AutomapCellStrc * param_1, struct D2AutomapCellStrc * param_2);
 // AUTOMAP_InsertCellIntoTree - Inserts an automap cell into an AVL tree.
 // Cells are sorted by (yPixel, xPixel, cellNo) with AVL self-balancing
 // using wWeight as the balance factor (-1, 0, +1).
@@ -193,7 +206,7 @@ void __stdcall AUTOMAP_DrawLevelName();
 void __stdcall AUTOMAP_DrawVersion();
 void __stdcall AUTOMAP_DrawServerIP();
 void __stdcall AUTOMAP_DrawDifficulty();
-int Unreferenced_0045a280();
+void Unreferenced_0045a280();
 void __stdcall AUTOMAP_LoadDC6Sprites();
 // AUTOMAP_Init - Initializes the automap subsystem.
 // Loads DC6 sprite assets for all 4 act map tilesets

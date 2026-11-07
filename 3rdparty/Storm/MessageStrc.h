@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_MessageStrc
+#define D2_DEFINED_MessageStrc
 struct __attribute__((packed)) MessageStrc {
     /* 0x00 */ uint8_t packetId;
     /* 0x01 */ uint8_t messageType;
@@ -23,3 +28,5 @@ struct __attribute__((packed)) MessageStrc {
     /* 0x0A */ char name[16];
     /* 0x1A */ char message[256];
 };
+
+#endif // D2_DEFINED_MessageStrc

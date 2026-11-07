@@ -8,14 +8,7 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlayerList.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/RosterPets.data.h"
 
@@ -55,11 +48,11 @@ void __stdcall FreeRosterPet() {
     pRosterPet = 0;
 }
 
-int __fastcall Unreferenced_00478a90(int param_1) {
+D2RosterPetStrc * __fastcall Unreferenced_00478a90(int param_1) {
     D2RosterPetStrc* pDVar1 = pRosterPet;
     while (true) {
       if (!pDVar1) {
-        return 0;
+        return nullptr;
       }
       if (pDVar1->nRosterGUID == param_1) {
         break;
@@ -68,7 +61,7 @@ int __fastcall Unreferenced_00478a90(int param_1) {
       pDVar1 = pDVar1->pNext;
     }
 
-    return (int)pDVar1;
+    return pDVar1;
 }
 
 // @sourcefile .\GAME\RosterPets.cpp

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2GemsTxt;
+struct D2ItemsTxt;
 struct D2MagicAffixTxt;
 struct D2RareAffixTxt;
 struct D2StatListExStrc;
@@ -20,6 +24,8 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 
 // Data types
+#ifndef D2_DEFINED_D2MagixAffixModStrc
+#define D2_DEFINED_D2MagixAffixModStrc
 struct D2MagixAffixModStrc {
     /* 0x00 */ int code;
     /* 0x04 */ int param;
@@ -27,6 +33,7 @@ struct D2MagixAffixModStrc {
     /* 0x0C */ int max;
 };
 
+#endif // D2_DEFINED_D2MagixAffixModStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct __attribute__((packed)) D2RepairTypeEntryStrc {
     /* 0x00 */ char byMode;
@@ -35,13 +42,16 @@ struct __attribute__((packed)) D2RepairTypeEntryStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2SetsTxtFStrc
+#define D2_DEFINED_D2SetsTxtFStrc
 struct D2SetsTxtFStrc {
     /* 0x00 */ int fcode;
-    /* 0x04 */ void * fparam;
+    /* 0x04 */ int fparam;
     /* 0x08 */ int fmin;
     /* 0x0C */ int fmax;
 };
 
+#endif // D2_DEFINED_D2SetsTxtFStrc
 namespace D2Common::ITEMS::ItemMods {
 
 // Function declarations
@@ -297,7 +307,7 @@ int32_t __fastcall PropertyFunc_ClassSkillsBonus(int32_t nType, struct D2UnitStr
 int32_t __fastcall PropertyFunc_ReturnTrue(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext);
 // Variant of SimpleStatWrapper: rolls a value from property min/max range (with expansion/classic RNG difference) then applies it via PropertyFunc_SimpleStat. Used for properties where the expansion path still needs RNG but not the ITEMMOD_ApplyRandomStatValue pipeline.
 int32_t __fastcall PropertyFunc_SimpleStatWithRoll(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext);
-int __fastcall Unreferenced_0065e9b0(int param_1);
+struct D2ItemsTxt * __fastcall Unreferenced_0065e9b0(struct D2UnitStrc * pUnit, struct D2UnitStrc * pFallback);
 // Rolls a random integer in [nMin, nParam] using the item's seed (via GetItemSeed for UNIT_ITEM, pUnit->sSeed otherwise). If min==max returns min with no RNG call. Returns the rolled value in EAX.
 int32_t __fastcall ITEMMOD_RollRandomValue(struct D2UnitStrc * pUnit, int32_t nMin, int32_t nMax);
 // Adds a stat to an item's stat list. Validates stat ID against ItemStatCost table, then calls ITEMMOD_GetOrCreateStatList to obtain or create the target stat list. Adds the shifted stat value via STATLIST_AddStatValue or D2AddStatToStatsListEx depending on nParam2. Special-cases poison (stat 0x3A) to also add/check UNITSTAT_poison_count. Returns nParam3 (the stat value) on success, 0 on invalid stat or missing stat list.

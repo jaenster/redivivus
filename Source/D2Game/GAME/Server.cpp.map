@@ -170,6 +170,9 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052bde0"
+      ],
+      "usedTypes": [
+        "LPCRITICAL_SECTION"
       ]
     },
     {
@@ -184,6 +187,9 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052bdf0"
+      ],
+      "usedTypes": [
+        "LPCRITICAL_SECTION"
       ]
     },
     {
@@ -2570,6 +2576,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2Game_Line0x13af",
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
@@ -2596,9 +2603,9 @@
         "exit"
       ],
       "usedTypes": [
+        "D2QServerUnitRecordStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2UnitType",
         "int32_t",
         "uint16_t",
         "uint32_t"
@@ -2714,6 +2721,9 @@
       "calledFunctions": [
         "QSERVER_PlayerMessageThread",
         "QSERVER_BroadcastPlayerMessage"
+      ],
+      "usedTypes": [
+        "D2PlayerMessageThreadArgsStrc"
       ]
     },
     {
@@ -2732,6 +2742,7 @@
         "strncpy"
       ],
       "usedTypes": [
+        "D2PlayerMessageThreadArgsStrc",
         "int32_t"
       ]
     },
@@ -3000,7 +3011,6 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "D2DrlgActStrc",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",

@@ -136,6 +136,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2AnimDataRecordStrc",
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
@@ -157,6 +158,7 @@
         "TXT_AnimTbls_Get"
       ],
       "usedTypes": [
+        "D2AnimDataRecordStrc",
         "D2AnimDataStrc",
         "uint32_t"
       ]

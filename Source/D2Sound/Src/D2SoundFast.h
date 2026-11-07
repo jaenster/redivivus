@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Sound)
 #error "D2Sound header included by a module that may not use D2Sound (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Sound) && !defined(D2_LOADS_D2Sound)
+#error "internal D2Sound header included from another module; include D2Sound's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -45,7 +48,7 @@ void __stdcall SOUND_ResetAmbientSoundFlags();
 BOOL __stdcall SOUND_GetMusicEnabled();
 int __stdcall SOUND_PlayNextAmbientSound();
 void __stdcall SOUND_LoadRegistrySettings();
-int Unreferenced_00514ff0();
+void Unreferenced_00514ff0();
 #endif // D2_MODULE_D2Sound
 
 } // namespace D2Sound::Src::D2SoundFast

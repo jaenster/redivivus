@@ -804,7 +804,7 @@ uint8_t gabHuffmanCodeLengths[256] = {
     0x6
 }; D2_GLOBAL_GUARD(gabHuffmanCodeLengths, "Fog::Source::SSComp::gabHuffmanCodeLengths");
 
-uint32_t gaHuffmanFastDecodeTable[256] = {}; D2_GLOBAL_GUARD(gaHuffmanFastDecodeTable, "Fog::Source::SSComp::gaHuffmanFastDecodeTable");
+uint8_t * gaHuffmanFastDecodeTable[256] = {}; D2_GLOBAL_GUARD(gaHuffmanFastDecodeTable, "Fog::Source::SSComp::gaHuffmanFastDecodeTable");
 
 uint8_t gabHuffmanNextTable[256] = {}; D2_GLOBAL_GUARD(gabHuffmanNextTable, "Fog::Source::SSComp::gabHuffmanNextTable");
 

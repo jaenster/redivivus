@@ -17,6 +17,7 @@
         "Q05_RemovePlayerFromTrackingList"
       ],
       "usedTypes": [
+        "D2QuestDataA1Q5Strc",
         "int32_t",
         "uint32_t"
       ]

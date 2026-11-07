@@ -257,7 +257,7 @@
         "D2GfxDataStrc",
         "D2RoomStrc",
         "D2UnitStrc",
-        "D2WaypointListEntryStrc",
+        "DRAW_UI_Waypoint_Slotm",
         "WCHAR",
         "eD2LevelId",
         "eD2QuestState",

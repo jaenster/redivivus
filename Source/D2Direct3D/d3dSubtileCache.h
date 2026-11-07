@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Direct3D)
 #error "D2Direct3D header included by a module that may not use D2Direct3D (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Direct3D) && !defined(D2_LOADS_D2Direct3D)
+#error "internal D2Direct3D header included from another module; include D2Direct3D's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,8 @@ struct IDirect3DTexture2;
 struct IDirectDrawSurface7;
 
 // Data types
+#ifndef D2_DEFINED_D3DSubtileCacheNodeStrc
+#define D2_DEFINED_D3DSubtileCacheNodeStrc
 struct D3DSubtileCacheNodeStrc {
     /* 0x00 */ int nIndex;
     /* 0x04 */ struct D2GroundSubTileStrc * pSubTile; // Subtile whose nTextureCacheIndex points at this node; InvalidateByIndex/Free/EnsureAvailableNode clear word [pSubTile+4]
@@ -26,6 +31,9 @@ struct D3DSubtileCacheNodeStrc {
     /* 0x14 */ struct D3DSubtileCacheNodeStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D3DSubtileCacheNodeStrc
+#ifndef D2_DEFINED_D3DSubtileCacheStrc
+#define D2_DEFINED_D3DSubtileCacheStrc
 struct D3DSubtileCacheStrc {
     /* 0x00 */ int nMaxNodes;
     /* 0x04 */ int nUsedCount;
@@ -36,6 +44,7 @@ struct D3DSubtileCacheStrc {
     /* 0x18 */ struct D3DSubtileCacheNodeStrc * pNodeBuffer;
 };
 
+#endif // D2_DEFINED_D3DSubtileCacheStrc
 namespace D2Direct3D::d3dSubtileCache {
 
 // Function declarations

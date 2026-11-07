@@ -18,9 +18,7 @@
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Common/Environment.h"
 #include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -113,7 +111,7 @@ void __stdcall DRLGROOM_SetWarpTileSelect(D2RoomStrc * pRoom, BOOL bSelect) {
 }
 
 // The unit-list search loop leaves its found (or NULL) D2UnitStrc* result in EAX at the fallthrough return, unused by the body itself; caller evidence names the read pStaircaseUnit.
-D2UnitStrc * __stdcall TakeStairsInternal(D2RoomStrc * pRoom, eD2LevelId eLevelId, D2RoomExStrc * * ppRoomEx) {
+D2UnitStrc * __stdcall TakeStairsInternal(D2RoomStrc * pRoom, eD2LevelId eLevelId, D2LvlWarpTxt * * ppRoomEx) {
     D2UnitStrc* pDVar1;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6a);
@@ -128,7 +126,7 @@ D2UnitStrc * __stdcall TakeStairsInternal(D2RoomStrc * pRoom, eD2LevelId eLevelI
 
       for (pDVar1 = pDVar2->pUnitList; pDVar1 && (pDVar1->eUnitType != UNIT_WARP || (D2RoomStrc*)pDVar1->nClassId != pRoom); pDVar1 = pDVar1->pRoomNext) {}
 
-      *ppRoomEx = (D2RoomExStrc*)eLevelId;
+      *ppRoomEx = (D2LvlWarpTxt*)eLevelId;
       return pDVar1;
     }
 }
@@ -1209,8 +1207,8 @@ void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
                   }
                 }
 
-                pRoom = (D2RoomStrc*)((uintptr_t)&pRoom->ppRoomList + 1);
-              } while ((int)pRoom < (int)pRoomToRemove->nRoomListCount);
+                pRoom = (D2RoomStrc*)((intptr_t)&pRoom->ppRoomList + 1);
+              } while ((intptr_t)pRoom < (int)pRoomToRemove->nRoomListCount);
             }
 
             Drlg::DrlgRoom::FreeDrlgRoomEx(pRoomToRemove->pRoomEx, pDrlgAct->bClientSide, pRoomToRemove->eFlags);
@@ -1566,7 +1564,7 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
         pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, (int*)&pDrlgAct, &nLocalY);
         if (pSpawnRoom) {
           Drlg::Transform::CoordsRoomToWorld((int32_t*)&pDrlgAct, &nLocalY);
-          ptSpawnCoord.x = (uintptr_t)&pDrlgAct->eLevelIdFirst + 3;
+          ptSpawnCoord.x = (intptr_t)&pDrlgAct->eLevelIdFirst + 3;
           ptSpawnCoord.y = nLocalY + 3;
           pFreeCoordRoom = Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, &ptSpawnCoord, nUnitSize, 0x1c09, 0);
           if (!pFreeCoordRoom) {

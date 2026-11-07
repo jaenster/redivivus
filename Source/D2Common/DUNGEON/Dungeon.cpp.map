@@ -109,7 +109,7 @@
         "exit"
       ],
       "usedTypes": [
-        "D2RoomExStrc *",
+        "D2LvlWarpTxt *",
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2LevelId",

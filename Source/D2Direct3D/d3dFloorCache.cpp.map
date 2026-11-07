@@ -80,8 +80,6 @@
         "D3DFLOOR_RemoveNodeByIndex"
       ],
       "usedTypes": [
-        "D2InventoryGridStrc",
-        "D2UnitStrc",
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc"
       ]

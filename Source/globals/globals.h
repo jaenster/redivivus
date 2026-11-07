@@ -16,8 +16,15 @@
 
 // Forward declarations
 struct ARGLIST;
+struct BINK {
+    /* 0x00 */ uint32_t Width;
+    /* 0x04 */ uint32_t Height;
+    /* 0x08 */ uint32_t Frames;
+    /* 0x0C */ uint32_t FrameNum;
+};
 struct BetaScreenEntry;
 struct BnMessQueue;
+struct CELLIST;
 struct CMDPARAMS;
 struct D2Act5SpecialPresetStrc;
 struct D2AiDispatchCallbacksStrc;
@@ -37,17 +44,23 @@ struct D2BNetClientCallbacksStrc;
 struct D2BNetGatewayAccessStr;
 struct D2BNetRealmEntryStrc;
 struct D2BaalFxSpiritSpawnStrc;
+struct D2BnCacheBlockEntryStrc;
 struct D2BnCacheFileHeaderStrc;
+struct D2BnNewsEntryStrc;
 struct D2BnNewsTableStrc;
+struct D2BnReadUserDataStrc;
 struct D2BodyLocsTxt;
 struct D2BooksTableStrc;
 struct D2BooksTxt;
+struct D2ChannelUserNameNodeStrc;
 struct D2ChannelUserStrc;
 struct D2CharSelCompStrc;
 struct D2CharSelStrc;
 struct D2CharStatsTxt;
 struct D2CharTemplateTxt;
 struct D2ChatCommandStrc;
+struct D2ChatDlgUnknown_0x10;
+struct D2ChatPlayerNameNodeStrc;
 struct D2ClassIconWithNameStrc;
 struct D2ClientGameDataStrc;
 struct D2ClientSoundChannelStrc;
@@ -59,12 +72,14 @@ struct D2CofCacheStrc;
 struct D2ColorsTxt;
 struct D2CompCharacterCompositeItemStrc;
 struct D2CompCodeTxt;
+struct D2CompCofCacheEntryStrc;
 struct D2CompositListStrc;
 struct D2CompositTxt;
 struct D2ConfigControlDescStrc;
 struct D2ControlMsg;
 struct D2ControlStrc;
 struct D2CoordStrc;
+struct D2CrashDumpRequestStrc;
 struct D2CursorDataStrc;
 struct D2D3DDeviceInfoStrc;
 struct D2D3DDeviceSlotStrc;
@@ -104,6 +119,7 @@ struct D2GameRecordStrc;
 struct D2GameViewStrc;
 struct D2GemsTxt;
 struct D2GfxHelperStrc;
+struct D2GfxLightExStrc;
 struct D2GfxMemoryStrc;
 struct D2GfxSettingsStrc;
 struct D2GlideVertexStrc;
@@ -183,6 +199,7 @@ struct D2MonsterAiParameterStruct;
 struct D2MonsterAnimModeFlagsStrc;
 struct D2MonsterForEachStruct;
 struct D2MonsterKillStrc;
+struct D2MonsterPalShiftSlotStrc;
 struct D2MonsterUModHandlerRowStrc;
 struct D2NET_CLIENT_D2GS_ServerToClient;
 struct D2NPCSpeechStrc;
@@ -204,10 +221,12 @@ struct D2ObjectSpawnOffsetGroupStrc;
 struct D2OnePacketClientStrc;
 struct D2OverlayTxt;
 struct D2PacketsClientStrc;
+struct D2PalShiftEntryStrc;
 struct D2PaletteEntryStrc;
 struct D2ParsedTreasureClassStrc;
 struct D2PassiveSkillsPerClassStrc;
 struct D2PathDirectionVectorStrc;
+struct D2PathPosStrc;
 struct D2PathTypeArg;
 struct D2PetTypeTxt;
 struct D2PlayerClassTxt;
@@ -237,6 +256,7 @@ struct D2RoomExStrc;
 struct D2RoomStrc;
 struct D2RunesTxt;
 struct D2RunesTxtTableStrc;
+struct D2SErrMessageSourceStrc;
 struct D2SFileSignatureKeyStrc;
 struct D2SLogStrc;
 struct D2SMemTablesStrc;
@@ -260,6 +280,7 @@ struct D2SoundChannelStrc;
 struct D2SoundEnvironTxt;
 struct D2SoundSmpStrc;
 struct D2SoundStringKeyStrc;
+struct D2SoundWavCacheEntryStrc;
 struct D2SoundsTxt;
 struct D2SoundsTxtSmall;
 struct D2SpeechBankStrc;
@@ -274,7 +295,6 @@ struct D2StatesDataTbls;
 struct D2StatesTxt;
 struct D2StorePageTxt;
 struct D2StormAsyncOpStrc;
-struct D2StormListHead;
 struct D2SuperUniquesTxt;
 struct D2TextBoxStrc;
 struct D2TombCanyonPresetRegionStrc;
@@ -285,6 +305,7 @@ struct D2UIFlagInitStrc;
 struct D2UIKeyBindingSetStrc;
 struct D2UIMouseMsgStrc;
 struct D2UberBossImmunityStrc;
+struct D2UnicodeKamapEntryStrc;
 struct D2UniqueCandidatePoolStrc;
 struct D2UniqueItemsTxt;
 struct D2UniqueNameTablesStrc;
@@ -316,6 +337,7 @@ struct GlFloorCacheNodeStrc;
 struct GlFloorCacheStrc;
 struct GlSubtileCacheNodeStrc;
 struct GlSubtileCacheStrc;
+struct GlTextureCacheNodeStrc;
 struct IDirect3DInterface7;
 struct IDirect3DTexture2;
 struct IDirect3DVertexBuffer;
@@ -359,7 +381,7 @@ typedef BOOL (__fastcall *fnSendChangeEmail)(char * szAcct, char * szOld, char *
 typedef BOOL (__fastcall *fnSendResetPassword)(char * szAcct, char * szEmail);
 typedef BOOL (__fastcall *fnWaitForChangePassword)(uint32_t * pOut);
 typedef BOOL (__fastcall *fnWaitForCreateAccount)(uint32_t * pOut);
-typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, int a4);
+typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, D2GfxLightExStrc * a4);
 typedef BOOL (__fastcall *fpLevelDataEntry)(D2DrlgLevelPlacementStrc * pLevelUnknown);
 typedef BOOL (__fastcall *pfnComCallback)(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText1, char * szText2);
 typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
@@ -396,9 +418,11 @@ typedef FxBool (__stdcall *grSstWinClose)(GrContext_t context);
 typedef FxU32 (__stdcall *grTexMinAddress)(GrChipID_t tmu);
 typedef FxU32 (__stdcall *grTexTextureMemRequired)(FxU32 evenOdd, GrTexInfo * info);
 typedef GrProc (__stdcall *grGetProcAddress)(char * procName);
+typedef HANDLE (__fastcall *fnConnectToBattleNet)();
 typedef bool (__fastcall *fnObjectClientFn)(D2UnitStrc * pUnit);
-typedef bool (__fastcall *pfnAiMapDirectionHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pAiParam, uint32_t nSeed);
+typedef bool (__fastcall *pfnAiMapDirectionHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pAiParam, D2PathPosStrc * nSeed);
 typedef char (__stdcall *fnGetProtocolVersionChar)();
+typedef char * (__fastcall *fnSendQueryAdURL)(uint32_t dwParam);
 typedef char * (__stdcall *grGetString)(FxU32 pname);
 typedef eD2ClientAppMode (__stdcall *fnClientAppModeProc)();
 typedef eD2ServerIncomingStatus (__fastcall *D2NET_SERVER_CLTtoD2GS)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
@@ -408,18 +432,15 @@ typedef int (__fastcall *D2PathTypeFunc)(D2PathTypeArg * pPathTypeArg);
 typedef int (__fastcall *SkillSelectProcFn)(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit);
 typedef int (__fastcall *fnApplyPrepatch)(int * pdw);
 typedef int (__fastcall *fnCacheFreeMem)(void * pMem);
-typedef int (__fastcall *fnConnectToBattleNet)();
 typedef int (__fastcall *fnDequeueMessage)(int * pTypeOut, void * pBufOut);
 typedef int (__fastcall *fnEnterChatAndJoinChannel)(char * szUser, char * szStat, char * szAcct, char * szChan, uint32_t dwFlags);
 typedef int (__fastcall *fnGetStateAndClear)(int * pOut);
-typedef int (__fastcall *fnGetStoredReadUserData)(int nRow, int nCol, char * * ppOut, int nMax);
+typedef int (__fastcall *fnGetStoredReadUserData)(int nRow, int nCol, char * * ppOut, int * nMax);
 typedef int (__fastcall *fnSendChangePassword)(char * szUser, char * szOld, char * szNew);
 typedef int (__fastcall *fnSendClickAd)(uint32_t dwAdId, int nParam);
 typedef int (__fastcall *fnSendCreateAccount)(char * szUser, char * szPass);
-typedef int (__fastcall *fnSendGetChannelList)(int nProduct);
 typedef int (__fastcall *fnSendLogonRequest)(char * szUser, char * szPass);
 typedef int (__fastcall *fnSendNewsInfo)(uint32_t dw1, uint32_t dw2);
-typedef int (__fastcall *fnSendQueryAdURL)(uint32_t dwParam);
 typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pContext);
 typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, uint32_t nOperand3, void * pContext);
 typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
@@ -444,7 +465,7 @@ typedef uint32_t (__fastcall *EQUIP_Handler)(D2UnitStrc * param_1, D2InventorySt
 typedef uint32_t (__fastcall *fnInitiatePatchDownload)(uint8_t * pbData, uint32_t nSize);
 typedef uint32_t (__fastcall *fnSendReadUserData)(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys);
 typedef uint32_t (__fastcall *fnSendWriteUserData)(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues);
-typedef uint32_t (__fastcall *fpCelDecodeCachedByFormat)(int32_t pDCCSrc, DC6 * pDCCDest);
+typedef uint32_t (__fastcall *fpCelDecodeCachedByFormat)(::CELLIST * pDCCSrc, DC6 * pDCCDest);
 typedef uint32_t (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * test);
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh);
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDllLow, DWORD BaseOfDllHigh, DWORD SizeOfDll);
@@ -476,18 +497,18 @@ typedef void (__fastcall *fnSendJoinChannel)(char * szChan, int nFlags, int nPar
 typedef void (__fastcall *fnSendNotifyJoin)(char * szName, char * szPass);
 typedef void (__fastcall *fnSendSetEmail)(char * szEmail);
 typedef void (__fastcall *fnSendStartAdvEx3)(char * szName, char * szPass, char * szDesc, int nFlags);
-typedef void (__fastcall *fnSetLoggingFlag)(uint32_t dwParam);
+typedef void (__fastcall *fnSetLoggingFlag)(D2IniConfigStrc * dwParam);
 typedef void (__fastcall *fnShrineClientOverlayUpdate)(D2UnitStrc * pUnit, D2ShrinesTxt * pShrinesTxt);
-typedef void (__fastcall *fnShrineServerActivate)(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, uint32_t dwParam);
+typedef void (__fastcall *fnShrineServerActivate)(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * dwParam);
 typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 typedef void (__fastcall *fpCelAllocDecodedByFormat)(DC6 * pDCC, DC6 * pDCCDest, uint8_t * pPaletteRemapFunc, uint32_t dwColorKey);
 typedef void (__fastcall *fpCelDrawFrameByFormat)(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, int32_t pBlendTable, int32_t pLookupTable2);
 typedef void (__fastcall *fpCelRemapFrameByFormat)(DC6Block * pFrame, BYTE * pPaletteRemap);
 typedef void (__fastcall *fpD2ShrineTableHandler)(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines);
-typedef void (__fastcall *fpDrawBlendedVisTile)(int a1, int a2, int a3, int a4);
-typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, int a4, BYTE a5);
+typedef void (__fastcall *fpDrawBlendedVisTile)(uint8_t * a1, int a2, int a3, int a4);
+typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, uint32_t * a4, BYTE a5);
 typedef void (__fastcall *fpDrawVisTile)(uint8_t * pbTileData, int32_t nScreenX, int32_t nScreenY);
-typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, int a4);
+typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, uint32_t * a4);
 typedef void (__fastcall *fpFillYBufferTable)(void * ppvBits, int nWidth, int nHeight, int a4);
 typedef void (__fastcall *fpMonsterUModHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
 typedef void (__fastcall *fpServerInitFunctions)(D2IniConfigStrc * pIni);
@@ -511,7 +532,6 @@ typedef void (__fastcall *pfnSCompEncodeCodec)(short * pDst, uint32_t * pnDstLen
 typedef void (__fastcall *pfnSpriteCacheValidate)(void * pCelContext, void * pCelData, void * pFrameInfo);
 typedef void (__stdcall *D2AppModeShutdownFunc)();
 typedef void (__stdcall *D2ClientQuestEventFn)();
-typedef void (__stdcall *D2WinWndHandlerFn)(D2UIMouseMsgStrc * pMsg);
 typedef void (__stdcall *fnD2InitUIFlagFunction)(D2UIMouseMsgStrc * param_1);
 typedef void (__stdcall *fnDecodeCDKeys)();
 typedef void (__stdcall *fnSetDownloadCancelFlag)();
@@ -535,6 +555,7 @@ typedef void (__stdcall *pfnSSystemShutdown)(uint32_t dwShutdownCode);
 typedef void (__stdcall *pfnUIMenuInstance)();
 typedef void (__stdcall *pfnVoidNoArgCallback)();
 typedef void * (__fastcall *fnSendGetAdvListEx)(char * szName, char * szPass, uint32_t dw1, uint32_t dw2);
+typedef void * (__fastcall *fnSendGetChannelList)(int nProduct);
 typedef void * (__fastcall *fnSendLogonRealmEx)(char * szRealm, char * szPass);
 typedef void * (__stdcall *fnBnetLoadAndReturn)();
 typedef void * (__stdcall *fnGetChannelNamePtr)();
@@ -867,7 +888,7 @@ struct D2RenderStatisticsStrc {
 #define D2_DEFINED_D2ShrineDispatchEntryStrc
 struct D2ShrineDispatchEntryStrc {
     /* 0x00 */ void (__fastcall *fpClientOverlayUpdate)(D2UnitStrc *, D2ShrinesTxt *); // Called by OBJECT_DispatchShrineClientFunc on client tick — updates GFX overlay state
-    /* 0x04 */ void (__fastcall *fpServerActivate)(D2UnitStrc *, D2UnitStrc *, uint32_t); // Called by OBJECT_HandleWellOpen when player activates shrine/well — server-side spawn or effect
+    /* 0x04 */ void (__fastcall *fpServerActivate)(D2UnitStrc *, D2UnitStrc *, D2ShrinesTxt *); // Called by OBJECT_HandleWellOpen when player activates shrine/well — server-side spawn or effect
     /* 0x08 */ int nOverlayIdActive; // GFX overlay ID shown when shrine is active/charged (-1 = none)
     /* 0x0C */ int nOverlayIdInactive; // GFX overlay ID shown when shrine is depleted/inactive (-1 = none)
     /* 0x10 */ int nSoundId; // Sound ID played when player activates shrine (0 = none)
@@ -1037,15 +1058,6 @@ struct __attribute__((packed)) D2UniqueCandidatePoolStrc {
     /* 0x08 */ D2UniqueCandidateStrc aCandidates[4096];
 };
 #endif // D2_DEFINED_D2UniqueCandidatePoolStrc
-
-#ifndef D2_DEFINED_D2WinWndHandlerStrc
-#define D2_DEFINED_D2WinWndHandlerStrc
-struct D2WinWndHandlerStrc {
-    /* 0x00 */ int32_t nType; // Handler kind, selecting the branch in D2WIN_RegisterWindowHandler @00506c40: 0 message, 1 command, 2 key down, 3 key up.
-    /* 0x04 */ int32_t nMessage; // Windows message id the handler is registered for, e.g. 0x200 WM_MOUSEMOVE.
-    /* 0x08 */ void (__stdcall *pfnCallback)(D2UIMouseMsgStrc *); // Handler. Must stay a POINTER type: emitted as an integer it carries the ORIGINAL binary's address and the call goes nowhere.
-};
-#endif // D2_DEFINED_D2WinWndHandlerStrc
 
 #ifndef D2_DEFINED_D2ZlibExtraLBitsBlOrderStrc
 #define D2_DEFINED_D2ZlibExtraLBitsBlOrderStrc
@@ -1815,11 +1827,6 @@ namespace D2Gdi::Renderer::Windowed {
 
 } // namespace D2Gdi::Renderer::Windowed
 
-namespace Storm::Source::SEVT {
-
-
-} // namespace Storm::Source::SEVT
-
 namespace D2Launch::Launcher {
 
 
@@ -2176,4 +2183,5 @@ extern char s_screen10_006d5ca4[];
 extern char s_server_006cc918[];
 extern char s_stream_end_006d382c[];
 extern char s_stream_error_006d3810[];
+extern char s_unknown_006cd5fc[];
 #undef D2_GATE_FROM_ROOT

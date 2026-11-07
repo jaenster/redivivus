@@ -4,12 +4,18 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+
+// Forward declarations
+struct D2StatInfoStrc;
 
 namespace D2Common::Logging {
 
@@ -25,11 +31,11 @@ void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_
 // "Game:%02d\tFrame:%d\tClient:%02d\t" plus Type:System/Type:Game and Size:%d. 00624780 is the generic
 // time/thread/level logger. Two different loggers, one name.
 // @caveat zero xrefs - called through a pointer or dead. Name derived from its format strings.
-void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, int32_t szFormat, ...);
+void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...);
 bool __fastcall LOGGING_OpenLogFile(char * szLogFileName);
 void __stdcall CloseLogging();
 // Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
-long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pStatInfo);
+long STATLIST_BinarySearchStatById(int32_t nStatKey, struct D2StatInfoStrc * pStatInfo);
 #endif // D2_MODULE_D2Common
 // 1 internal function (defined in .cpp)
 

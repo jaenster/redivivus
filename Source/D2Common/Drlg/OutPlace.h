@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -56,7 +59,7 @@ void __fastcall PlaceAct1245OutdoorBorders(struct D2DrlgLevelStrc * pLevel);
 // on the RoomEx at offset +0x264 of the level data struct.
 // Used as a callback during level chain parsing to establish orthogonal room linkage.
 void DRLGLEVEL_AllocOrthForAdjacentLevel(struct D2DrlgStrc * pDrlg, struct D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel);
-int32_t __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(struct D2DrlgLevelStrc * pLevel);
+struct D2DrlgLevelStrc * __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(struct D2DrlgLevelStrc * pLevel);
 // Act-specific level allocation. Parses per-act level data tables, allocates level ranges for the act, initializes Act III special handling, and sets Act V warp connections. Act IV sets a flag in Outer Steppes level data before allocating the rest.
 void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(struct D2DrlgStrc * pDrlg, eAct nActNo);
 struct D2RoomExStrc * __fastcall DRLGOUTROOM_CreateOutdoorRoomEx(struct D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t dwRoomFlags, int32_t dwOutdoorFlags, int32_t dwOutdoorFlagsEx, int32_t dwDT1Mask);

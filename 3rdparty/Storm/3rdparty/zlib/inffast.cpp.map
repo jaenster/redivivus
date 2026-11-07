@@ -17,10 +17,11 @@
         "ZLIB_InflateFast"
       ],
       "usedTypes": [
+        "inflate_code",
         "int32_t",
         "uint32_t",
         "uint8_t",
-        "uint8_t *"
+        "z_stream"
       ]
     }
   ]

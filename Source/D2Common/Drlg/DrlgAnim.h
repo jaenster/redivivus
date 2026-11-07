@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,12 +15,13 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2DrlgCoordStrc;
 struct D2DrlgGridStrc;
 struct D2DrlgTileDataStrc;
 struct D2RoomExStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgAnimTileGridStrc
+#define D2_DEFINED_D2DrlgAnimTileGridStrc
 struct D2DrlgAnimTileGridStrc {
     /* 0x00 */ struct D2DrlgTileDataStrc * * ppTileData; // Array of tile data pointers (one per animation frame)
     /* 0x04 */ int nFrames; // Number of animation frames
@@ -26,13 +30,14 @@ struct D2DrlgAnimTileGridStrc {
     /* 0x10 */ struct D2DrlgAnimTileGridStrc * pNext; // Next animated tile in linked list
 };
 
+#endif // D2_DEFINED_D2DrlgAnimTileGridStrc
 namespace D2Common::Drlg::DrlgAnim {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 // Scans every cell in the room's grid, looks up the tile in all tile projects, and for any tile whose library flags include bit 0x100 (animated) adds (matchCount-1) to the floor, wall, or roof animated tile counters in pRoomTiles and sets the animated-room flag 0x8000000 on pRoomEx.
-void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid, struct D2DrlgGridStrc * pOrientGrid, struct D2DrlgCoordStrc * pUnused, int nKillEdgeX, int nKillEdgeY);
+void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid, struct D2DrlgGridStrc * pOrientGrid, int32_t pUnused, int nKillEdgeX, int nKillEdgeY);
 void __fastcall AnimateTiles(struct D2RoomExStrc * pRoomEx);
 // Builds the animated-tile frame chains for a generated room. Scans the room's tile-entry array (stride 0x30 (0xc dwords)) for tiles flagged animated (TILEPROJECT_GetTileCount bit 0x100), looks up all project tile variants into a 40-entry result buffer, allocates a D2DrlgAnimTileGridStrc from the DRLG memory pool plus a per-frame ppTileData array, and creates floor/shadow/wall tile data for each animation frame (selecting CreateFloor/Shadow/WallTileData by entry type), tagging each with flag 8. Links the new anim-tile grid onto the room's pRoomTiles->pAnimTiles list. Halts on frame-count inconsistencies. Stack-guarded.
 // @sourcefile .\DRLG\DrlgAnim.cpp

@@ -4,16 +4,19 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Hell/D2Hell.h"
+#include "3rdparty/Storm/Source/SFile.h"
 
 // Forward declarations
-struct D2StormListHead;
+struct StormLinkedListStrc;
 #ifndef RECON_FPTD_pfnStormMsgIdleCallback
 #define RECON_FPTD_pfnStormMsgIdleCallback
 typedef int (__stdcall *pfnStormMsgIdleCallback)(int nIdleIteration);
@@ -33,58 +36,58 @@ namespace Storm::WindowHandle {
 // @blizzard SMsgPopRegisterState (SMSG.CPP)
 int __stdcall SMsgPopRegisterState(char * szText);
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
-uint32_t __stdcall SMsgPushRegisterState(uint32_t nSubId);
+uint32_t __stdcall SMsgPushRegisterState(HWND nSubId);
 // @blizzard SMsgDispatchMessage (SMSG.CPP)
 BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARAM dwLParam, BOOL * pbHandled, LRESULT * plResult);
 // @blizzard SMsgRegisterCommand (SMSG.CPP)
-void __stdcall SMsgRegisterCommand(uint32_t hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterCommand(HWND hWnd, uint32_t dwContext, int32_t pCallback);
 // @blizzard SMsgRegisterKeyDown (SMSG.CPP)
-void __stdcall SMsgRegisterKeyDown(uint32_t hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterKeyDown(HWND hWnd, uint32_t dwContext, int32_t pCallback);
 // @blizzard SMsgRegisterKeyUp (SMSG.CPP)
-void __stdcall SMsgRegisterKeyUp(uint32_t hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, int32_t pCallback);
 // @blizzard SMsgRegisterMessage (SMSG.CPP)
-void __stdcall SMsgRegisterMessage(uint32_t hWnd, uint32_t dwContext, int32_t pCallback);
+void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallback);
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
 void __stdcall SMsgUnregisterCommand(HWND hWnd, char * szText1, char * szText2);
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(uint32_t hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, char * szText1, char * szText2);
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(uint32_t hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, char * szText1, char * szText2);
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(uint32_t hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterMessage(HWND hWnd, char * szText1, char * szText2);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-HWND __stdcall WND_GetActiveWindow_Unref_0041c2a0();
-HWND __stdcall WND_GetActiveWindow_Unref_0041c2b0();
+DWORD __stdcall WND_GetActiveWindow_Unref_0041c2a0();
+uint32_t __stdcall WND_GetActiveWindow_Unref_0041c2b0();
 // @blizzard SMsgDoMessageLoop (SMSG.CPP)
 WPARAM __stdcall SMsgDoMessageLoop(pfnStormMsgIdleCallback pfnIdleCallback, uint32_t dwUnused);
 HWND __stdcall WND_GetActiveWindow();
-uint32_t __stdcall WND_SetActiveWindow(uint32_t pWindow);
-int __fastcall Unreferenced_004203c0(int param_1);
+uint32_t __stdcall WND_SetActiveWindow(HWND pWindow);
+int __fastcall Unreferenced_004203c0(struct StormLinkStrc * param_1);
 uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase);
-int __fastcall Unreferenced_00420470(int param_1);
-int __fastcall Unreferenced_004204f0(int param_1);
+int __fastcall Unreferenced_00420470(struct StormLinkedListStrc * param_1);
+int __fastcall Unreferenced_004204f0(struct StormLinkStrc * param_1);
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode);
 void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode, int * * ppAnchor);
-uint32_t __thiscall WND_GetNodeMaskedOffset(int32_t pThis, int32_t pNode);
-void __thiscall WND_UnlinkListNode(int32_t pThis, int * pNode);
-int __fastcall Unreferenced_004206a0(int param_1);
-uint32_t __thiscall WND_GetNodeData(int32_t pThis, int32_t pNode);
-void __fastcall WND_DetachAndClearChildren(struct D2StormListHead * pWindow);
-int __fastcall Unreferenced_004207d0(int param_1);
+uint32_t __thiscall WND_GetNodeMaskedOffset(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
+void __thiscall WND_UnlinkListNode(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
+struct StormLinkedListStrc * __fastcall Unreferenced_004206a0(struct StormLinkedListStrc * param_1);
+intptr_t __thiscall WND_GetNodeData(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
+void __fastcall WND_DetachAndClearChildren(struct StormLinkedListStrc * pWindow);
+struct StormLinkStrc * __fastcall Unreferenced_004207d0(struct StormLinkStrc * param_1);
 int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize, uint32_t dwFlags);
 int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags);
 // @blizzard AddWindow (SMSG.CPP)
-void __stdcall SMSG_AddWindow(uint32_t hWnd);
-uint32_t __thiscall WND_RemoveAndFreeRecord(void * pListHead, struct StormWndRecStrc * pRecord);
+void __stdcall SMSG_AddWindow(HWND hWnd);
+uint32_t __thiscall WND_RemoveAndFreeRecord(struct StormLinkedListStrc * pListHead, struct StormWndRecStrc * pRecord);
 // @blizzard FindWindow (SMSG.CPP)
-uint32_t __fastcall SMSG_FindWindow(int32_t nHandle);
+struct StormWndRecStrc * __fastcall SMSG_FindWindow(HWND nHandle);
 int Unreferenced_00420ae0();
 // Storm's registered window procedure; dispatches through SMsgDispatchMessage.
 // Name from the PowerPC 1.13c Storm traceback table (GenericWndProc @10026f30).
 LRESULT __stdcall GenericWndProc(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam);
 uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId);
-int __fastcall Unreferenced_00420d80(int param_1);
+int __fastcall Unreferenced_00420d80(uint32_t * param_1);
 int __fastcall Unreferenced_00420da0(int param_1);
 uint32_t __thiscall WND_ByteBuffer_HasRoom(int32_t pThis, int32_t nAddBytes);
 int32_t __thiscall WND_EntryArray_AllocNext(int32_t pThis, int * pnCount);

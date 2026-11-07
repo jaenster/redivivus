@@ -2,25 +2,18 @@
 
 #include "Source/D2Game/Quests/QUESTS/A5Q2.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A4Q2.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -767,7 +760,7 @@ void __fastcall Q32_InitData(D2QuestDataStrc * pQuestData) {
 // object's room/coords, flagged ISRESURRECT|ISINIT (frozen-in-cage appearance). Stores each spawned GUID into the
 // 3x5 group GUID table (at A5Q2-data+0xb0, indexed by nBarricadeGroupIdx) and attaches the A5Q2 quest to the unit.
 // Stops at 5 prisoners per group. Returns count spawned. No QuestRecord access.
-int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, int32_t nBarricadeObjPtr, int32_t nBarricadeGroupIdx) {
+int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * nBarricadeObjPtr, int32_t nBarricadeGroupIdx) {
     int32_t nSpawned = 0;
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
       return nSpawned;
@@ -776,7 +769,7 @@ int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, int
     int nAttempt = 0;
     do {
       D2UnitStrc* pUnit;
-      pUnit = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, *(D2RoomStrc**)(nBarricadeObjPtr + 8), *(int32_t*)(nBarricadeObjPtr + 0x14), *(int32_t*)(nBarricadeObjPtr + 0x18), 0x216, eD2MonsterAnimMode_ns::Neutral, 5, 0);
+      pUnit = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, nBarricadeObjPtr->pRoom, nBarricadeObjPtr->nX, nBarricadeObjPtr->nY, 0x216, eD2MonsterAnimMode_ns::Neutral, 5, 0);
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
         pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1.aPlayerGUID[nBarricadeGroupIdx * 5 + nSpawned - 1] = pUnit->nUnitGUID;
@@ -837,7 +830,7 @@ void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
 
     pA5Q2Data->aBarricadePos[nBarricadeIdx].x = pInitArg->nX;
     pA5Q2Data->aBarricadePos[nBarricadeIdx].y = pInitArg->nY;
-    int32_t nPrisonersSpawned = Q32_SpawnBarricadePrisoners(pQuestData, (int32_t)pInitArg, nBarricadeIdx);
+    int32_t nPrisonersSpawned = Q32_SpawnBarricadePrisoners(pQuestData, pInitArg, nBarricadeIdx);
     pA5Q2Data->nTotalPrisonersToFree += nPrisonersSpawned;
     pA5Q2Data->abGroupAllFreed[nBarricadeIdx] = 1;
     pA5Q2Data->abBarricadeGroupComplete[nBarricadeIdx] = 0;
@@ -854,7 +847,7 @@ BOOL __fastcall Q32_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q32_SetCompleteForPartyMember, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q32_SetCompleteForPartyMember, nullptr);
       }
     }
 
@@ -1004,9 +997,9 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     *pGroupBarricadeFlag = 1;
     pIterUnit = (D2UnitStrc*)D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pPrisonerRoom, sPortalCoords.x, sPortalCoords.y);
     D2UnitStrc* pPortalUnit;
-    pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, nullptr);
+    pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, 0);
     if (!pPortalUnit) {
-      pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x - 2, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, nullptr);
+      pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x - 2, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, 0);
       if (!pPortalUnit) {
         pQuestSpecificData = pQuestSpecificDataSaved;
         if (!pIterUnit) {
@@ -1019,7 +1012,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           pIterUnit = pBarricadeUnit;
         }
 
-        pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, nullptr);
+        pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sPortalCoords.x, sPortalCoords.y, pQuestData->pGame, (D2RoomStrc*)pIterUnit, 1, 1, 0);
         pQuestSpecificData = pQuestSpecificDataSaved;
         if (!pPortalUnit) {
           goto update_rescue_progress;

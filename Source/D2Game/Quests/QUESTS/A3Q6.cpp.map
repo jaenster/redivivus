@@ -439,6 +439,7 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
+        "Q23_Callback08_MonsterKilled_Slotm",
         "SGAMEDATA",
         "int32_t"
       ]

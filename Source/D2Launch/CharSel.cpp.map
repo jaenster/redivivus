@@ -844,7 +844,7 @@
         "CHARSEL_UpdateSelectedCharDisplay"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2ControlMsg",
         "uint32_t"
       ]
     },
@@ -866,7 +866,7 @@
         "CHARSEL_UpdateSelectedCharDisplay"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2ControlMsg"
       ]
     },
     {
@@ -945,8 +945,8 @@
       ],
       "usedTypes": [
         "D2BNetGatewayAccessStr",
-        "D2ControlStrc",
         "D2WinTextBox",
+        "D2WinTimer",
         "WCHAR",
         "int32_t",
         "uint16_t",
@@ -1352,8 +1352,8 @@
       ],
       "usedTypes": [
         "D2BNetGatewayAccessStr",
-        "D2ControlStrc",
         "D2WinTextBox",
+        "D2WinTimer",
         "WCHAR",
         "int32_t",
         "uint32_t"

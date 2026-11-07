@@ -2,15 +2,13 @@
 
 #include "Source/D2Game/UNIT/PlayerList.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -230,7 +228,7 @@ uint32_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2)
 
     pListEntry = 0;
     lookup_done:
-    wPtrHigh = (uint16_t)((uint32_t)pListEntry >> 0x10);
+    wPtrHigh = (uint16_t)((uintptr_t)pListEntry >> 0x10);
     if (pUnit != pUnit2 && pListEntry) {
       return (uint32_t)((uint32_t)(uint16_t)wPtrHigh << 16 | (uint32_t)(uint16_t)(short int)pListEntry->nRelationshipFlags);
     }

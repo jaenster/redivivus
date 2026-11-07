@@ -2,26 +2,12 @@
 
 #include "Source/D2Game/PLAYER/PlayerSave.h"
 #include "Source/D2Client/D2BattleNetEventCallbackTable.h"
-#include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/D2BitBufferStrc.h"
-#include "Source/D2Common/D2MissilesTxt.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Waypoints.h"
 #include "Source/D2Game/D2UnknownItemRelatedStruct.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
@@ -40,19 +26,11 @@
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/BitBuffer.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Hell/D2Hell.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/GAME/Server.data.h"
-
-// Forward declarations (used only by pointer here)
-struct D2CharSelCompStrc;
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -85,7 +63,7 @@ static D2UnitStrc * PLRSAVE_CreateItemFromSaveData(::SGAMEDATA * pGame, D2Unknow
     int nCopyOffset = 0x58 - (int)pSrcField;
     do {
       cStrChar = *pSrcField;
-      pSrcField[(uintptr_t)&sItemGenCtx + nCopyOffset] = cStrChar;
+      pSrcField[(intptr_t)&sItemGenCtx + nCopyOffset] = cStrChar;
       pSrcField++;
     } while (cStrChar != '\0');
 
@@ -127,7 +105,7 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
         D2Common::Units::SetupUpdateFlag(pItem, 4);
       nX = pSavedItemData->nPosX;
       nY = pSavedItemData->nPosY;
-      D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, &byItemWidth, (char*)((uintptr_t)&pItemUnknownStructure + 3), ".\\PLAYER\\PlrSave.cpp", 0xe1);
+      D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, &byItemWidth, (char*)((intptr_t)&pItemUnknownStructure + 3), ".\\PLAYER\\PlrSave.cpp", 0xe1);
       D2Common::Units::SetXForStaticUnit(pItem, nX);
       D2Common::Units::SetYForStaticUnit(pItem, nY);
       nItemGUID = pItem->nUnitGUID;
@@ -181,12 +159,12 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server-side: restores one saved item onto a player by its saved animMode (storage location), dispatching: Death/default=drop to ground at the item's path position (SERVER_ItemToInventory); Neutral=equip to its body-loc (SERVER_EquipItemToBodyLoc); Walk=place in belt (ITEM_TryPlaceInBelt at the item's X); GetHit=copy into player inventory and apply as a quest reward (ITEMMODE_ApplyQuestReward); TownWalk=nest into the container item identified by eBodyLocation (PutItemInItem, container GUID at +0xc). Run/TownNeutral and any mode > TownWalk fail. Returns 0 on success, 0xc on failure. Used during character load to repopulate a player's items.
 // @sourcefile .\PLAYER\PlrSave.cpp
-int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSourceItem, int32_t eBodyLocation) {
+int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSourceItem, D2UnitStrc * eBodyLocation) {
     eD2ItemAnimMode eAnimMode;
     int nPlaceResult;
     BOOL BVar1;
     DWORD dwContainerGUID;
-    int32_t* pBodyLocParam;
+    D2UnitStrc** pBodyLocParam;
     D2UnitStrc* pUnit_00 = pSourceItem;
     if (!pSourceItem) {
       eAnimMode = Container;
@@ -250,7 +228,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         dwContainerGUID = pUnit_00->nUnitGUID;
       }
 
-      BVar1 = ITEMS::ItemMode::PutItemInItem(pGame, pUnit, dwContainerGUID, *(DWORD*)(eBodyLocation + 0xc), (int32_t*)&pSourceItem, 0, 0, 0, 0);
+      BVar1 = ITEMS::ItemMode::PutItemInItem(pGame, pUnit, dwContainerGUID, eBodyLocation->nUnitGUID, (int32_t*)&pSourceItem, 0, 0, 0, 0);
       if (!BVar1) {
         return 0xc;
       }
@@ -542,7 +520,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
     uint16_t nCarriedCount;
     nCarriedCount = GetCarriedItemsCount(pInventory);
     int nSerializedSize;
-    nSerializedSize = (int)pCountField - (int)pBuffer;
+    nSerializedSize = (intptr_t)pCountField - (intptr_t)pBuffer;
     if (nBufSize >= nSerializedSize + 2) {
       eD2BodyLoc eBodyLoc;
       *pCountField = nCarriedCount;
@@ -645,23 +623,23 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
         *pCountField = nCarriedCount;
       }
 
-      nSerializedSize = (int)pWriteCursor - (int)pBuffer;
+      nSerializedSize = (intptr_t)pWriteCursor - (intptr_t)pBuffer;
     }
 
     return nSerializedSize;
 }
 
-D2InventoryStrc * __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, uint16_t * pBuffer, int32_t nBufSize, int32_t bParam1, int32_t bParam2, int32_t bParam3) {
-    D2InventoryStrc* pCopiedInventory;
+int32_t __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, uint16_t * pBuffer, int32_t nBufSize, int32_t bParam1, int32_t bParam2, int32_t bParam3) {
     if (bParam1 && pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      pCopiedInventory = (D2InventoryStrc*)PlayerTrade::CopyInventory(pUnit, (uint8_t*)pBuffer, nBufSize);
+      int32_t pCopiedInventory;
+      pCopiedInventory = PlayerTrade::CopyInventory(pUnit, (uint8_t*)pBuffer, nBufSize);
       if (pCopiedInventory) {
         return pCopiedInventory;
       }
     }
 
-    pCopiedInventory = (D2InventoryStrc*)SAVE_SerializeInventoryItems(pGameStrc, pUnit, pUnit->pInventory, pBuffer, nBufSize, bParam1, bParam2, bParam3);
-    return pCopiedInventory;
+    int iVar1 = SAVE_SerializeInventoryItems(pGameStrc, pUnit, pUnit->pInventory, pBuffer, nBufSize, bParam1, bParam2, bParam3);
+    return iVar1;
 }
 
 // Serializes a player's corpse into the save buffer. Writes magic word 0x4D4A then a has-corpse flag (uint16). If no live corpse unit exists, returns 4 (header-only bytes). Otherwise writes the corpse's world position (X/Y) and delegates to SAVE_SerializeInventoryItems to append the corpse inventory. Returns total bytes written (inventory size + 16) or halts with fatal error 0x97a/0x984 on buffer-overflow or inventory serialization failure.
@@ -784,17 +762,17 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
       savedCltHitSubs = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->CltHitSubMissile3 | (uint32_t)(uint16_t)pMissilesTxt->CltHitSubMissile4 << 16);
       savedFuncIds = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->nSrvDoFunc | (uint32_t)(uint16_t)pMissilesTxt->nSrvHitFunc << 16);
       savedProgSounds = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->ProgSound | (uint32_t)(uint16_t)pMissilesTxt->ProgOverlay << 16);
-      savedHitFlagsExtra = *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3);
+      savedHitFlagsExtra = *(uint32_t*)((intptr_t)&pMissilesTxt->HitFlags + 3);
       pMissilesTxt->nSrvDoFunc = 0;
       pMissilesTxt->nSrvHitFunc = 0;
       pMissilesTxt->CltHitSubMissile3 = 0;
       pMissilesTxt->CltHitSubMissile4 = 0;
       pMissilesTxt->ProgSound = 0;
       pMissilesTxt->ProgOverlay = 0;
-      *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3) = 0;
+      *(uint32_t*)((intptr_t)&pMissilesTxt->HitFlags + 3) = 0;
     }
 
-    uint32_t dwCrc = CRC32_Calculate((uint8_t*)pMissilesTxt, nCrcSeed);
+    uint32_t dwCrc = D2Hell::CRC32_Calculate((uint8_t*)pMissilesTxt, nCrcSeed);
     if (nFieldCount > 0x5b) {
       pMissilesTxt->CltHitSubMissile3 = (uint16_t)savedCltHitSubs;
       pMissilesTxt->CltHitSubMissile4 = (uint16_t)((uint32_t)savedCltHitSubs >> 16);
@@ -802,7 +780,7 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
       pMissilesTxt->nSrvHitFunc = (short int)((uint32_t)savedFuncIds >> 0x10);
       pMissilesTxt->ProgSound = (uint16_t)savedProgSounds;
       pMissilesTxt->ProgOverlay = (uint16_t)((uint32_t)savedProgSounds >> 16);
-      *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3) = savedHitFlagsExtra;
+      *(uint32_t*)((intptr_t)&pMissilesTxt->HitFlags + 3) = savedHitFlagsExtra;
     }
 
     return dwCrc;
@@ -810,7 +788,7 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
 
 // BNet character save handler. Builds 8KB save file in temp buffer, validates against existing save in database, optionally re-locks and saves character via BNet callback if changed. Copies to safe buffer on success.
 // @sourcefile .\PLAYER\PlrSave.cpp
-BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitStrc * pUnit, uint32_t nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId) {
+BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId) {
     // Static local variables (originally global data)
     static int gnBnetSaveUnchangedCount; D2_STATIC_GUARD_BSS(gnBnetSaveUnchangedCount, "D2Game::PLAYER::PlayerSave::SaveToFileBnet::gnBnetSaveUnchangedCount");
 
@@ -860,7 +838,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
     __frame0.wPacketHeader = (short int)nSaveSizePlus2;
     nSaveFileSize = (int)UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xa3b);
     int nSaveSize;
-    nSaveSize = (int)ITEMS::ItemMode::GetSavePacketList((D2ClientStrc*)nSaveFileSize);
+    nSaveSize = ITEMS::ItemMode::GetSavePacketList((D2ClientStrc*)nSaveFileSize);
     int nExistingCrc;
     nExistingCrc = PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)__frame0.saveTempBuffer, nSaveFileBytes);
     if (nExistingCrc == nSaveSize) {
@@ -868,7 +846,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
       pSaveBuffer = GAME::Clients::GetSaveGame((D2ClientStrc*)nSaveFileSize);
       nExistingSize = GAME::Clients::GetSaveGameSize((D2ClientStrc*)nSaveFileSize);
       if (!pSaveBuffer) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0xa46);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xa46);
         exit(-1);
       }
 
@@ -956,11 +934,11 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
 
     nCompareByteIdx = nSaveFileSize;
     GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, (void*)nRealmId);
-    ITEMS::ItemMode::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, (void*)nExistingCrc);
+    ITEMS::ItemMode::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, nExistingCrc);
     if (BattleNetServerService && BattleNetServerService->fpSaveDatabaseCharacter) {
       /* FARPROC lpfn for IsBadCodePtr */ _bLockResult = IsBadCodePtr((FARPROC)BattleNetServerService->fpSaveDatabaseCharacter);
       if (_bLockResult) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0xadc);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xadc);
         exit(-1);
       }
 
@@ -1013,7 +991,7 @@ static void __stdcall SaveToBuffer(::SGAMEDATA * pGame, int32_t nSaveParam, D2Un
     PlayerSave2::MakeSaveFile(pGame, pUnit, charSaveBuffer, (int*)&nSaveSize, 0x2000, nSaveParam, 0);
     size_t nSizeSave = nSaveSize;
     if ((int)nSaveSize <= 0) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0xb32);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xb32);
       exit(-1);
     }
 
@@ -1059,7 +1037,7 @@ BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ch
       ::SGAMEDATA* pGameCopy = pGame;
       SaveToBuffer(pGameCopy, bIsInteracting, pUnit, pClient);
     } else if (BattleNetServerService) {
-      nSaveResult = SaveToFileBnet(pGame, (uint32_t)szAccountName, pUnit, (uint32_t)szCharName, bIsInteracting, clientContainer, bUnknown, nRealm);
+      nSaveResult = SaveToFileBnet(pGame, (uint32_t)szAccountName, pUnit, szCharName, bIsInteracting, clientContainer, bUnknown, nRealm);
       bSaveSucceeded = nSaveResult;
     } else {
       PlayerSave::SaveToFile(pGame, pUnit, bIsInteracting, bUnknown, szCharName);
@@ -1090,7 +1068,7 @@ static BOOL __stdcall SERVER_CreatePlayerUnit(::SGAMEDATA * pGameStrc, D2ClientS
     int nClassIdCheck;
     GAME::Clients::SetCientFlag0x01(pClient);
     uint32_t nPlayerClassId = GAME::Clients::GetPlayerClassId(pClient);
-    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nPlayerClassId, 0, 0, pGameStrc, nullptr, 0, 0, nullptr);
+    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nPlayerClassId, 0, 0, pGameStrc, nullptr, 0, 0, 0);
     SERVER_InitPlayer(pGameStrc, pUnit, pClient);
     UNIT::SUnitMsg::SERVER_SendInitUnitPacket(pGameStrc, pUnit, pClient);
     uint8_t byAct = GAME::Clients::GetAct(pClient);
@@ -1262,7 +1240,7 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
       }
 
       GAME::Clients::CLIENT_SetAct(pClient, byActId);
-      pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, (uint32_t)sOldSaveHeader.wClassId, 0, 0, pGameCopy, nullptr, 0, 0, nullptr);
+      pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, (uint32_t)sOldSaveHeader.wClassId, 0, 0, pGameCopy, nullptr, 0, 0, 0);
       *ppUnitOut = pUnit;
       SERVER_InitPlayer(pGameCopy, pUnit, pClient);
       pClient_00 = pClient;
@@ -1366,7 +1344,7 @@ int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwSaveDa
     for (nDiffIndex = 0x14; nDiffIndex; nDiffIndex--) {
       *(uint32_t*)pCopyDst = *pdwSaveData;
       pdwSaveData++;
-      pCopyDst = (D2SaveFileWaypointsStrc*)((uintptr_t)&pCopyDst->nVersion + 2);
+      pCopyDst = (D2SaveFileWaypointsStrc*)((intptr_t)&pCopyDst->nVersion + 2);
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -1414,9 +1392,9 @@ int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwSaveCu
     do {
       D2UnitDataPlayerStrc* pPlayerData;
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(*(uint32_t**)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)(pIntroBufPos - 3));
+      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(*(D2UnitDataPlayerInteractedNPCStrc**)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)(pIntroBufPos - 3));
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(*(int32_t*)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)pIntroBufPos);
+      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(*(D2UnitDataPlayerInteractedNPCStrc**)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)pIntroBufPos);
       nIntroOffset += 4;
       pIntroBufPos++;
     } while (nIntroOffset < 0x6c);
@@ -1425,10 +1403,10 @@ int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwSaveCu
     return 0;
 }
 
-int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * pwStatData, int32_t nStatCount, uint32_t dwUnused, int * pnBytesConsumed) {
+int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * pwStatData, int32_t nStatCount, uint32_t dwUnused, int * pnBytesConsumed) {
     int32_t nStatValue;
     *pnBytesConsumed = 0;
-    if (*pwStatData != 0x6667) {
+    if (*(short int*)pwStatData != 0x6667) {
       return 4;
     }
 
@@ -1436,8 +1414,8 @@ int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     if (nStatCount > 0) {
       eD2UnitStat eUnitStat = UNITSTAT_strength;
       do {
-        if (*(uint8_t*)((int)pwStatData + (eUnitStat >> 3) + 2) & (uint8_t)(1 << ((uint8_t)eUnitStat & 7))) {
-          nStatValue = *(int32_t*)((int)pwStatData + nStatValueCount * 4 + 5);
+        if (pwStatData[(eUnitStat >> 3) + 2] & (uint8_t)(1 << ((uint8_t)eUnitStat & 7))) {
+          nStatValue = *(int32_t*)(pwStatData + nStatValueCount * 4 + 5);
           nStatValueCount++;
         } else {
           nStatValue = 0;
@@ -1472,10 +1450,9 @@ void __stdcall PLAYERSAVE_RestoreSkillLevel(D2UnitStrc * pUnit, eD2Skills eSkill
 
 // Body continues at 00532eb7, the JZ target of 00532eaa - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_oldSaveGameLoadingPart6_part1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_oldSaveGameLoadingPart6_part1':
-int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit, short * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed) {
-    uint8_t bySkillLevel;
+int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed) {
     *pnBytesConsumed = 0;
-    if (*pSkillSection != 0x6669) {
+    if (*(short int*)pSkillSection != 0x6669) {
       return 5;
     }
 
@@ -1486,9 +1463,8 @@ int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pCli
       eD2Skills eSkill;
       do {
         eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIndex);
-        bySkillLevel = *(uint8_t*)(nSkillIndex + 2 + (int)pSkillSection);
-        if (bySkillLevel) {
-          SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)bySkillLevel, 1);
+        if (pSkillSection[nSkillIndex + 2]) {
+          SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)pSkillSection[nSkillIndex + 2], 1);
         }
 
         nSkillIndex++;
@@ -1704,8 +1680,8 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     nHeaderItemCount = pStreamData[1];
     int nTotalBytesRead;
     nTotalBytesRead = 4;
-    short int* pStreamPos;
-    pStreamPos = pStreamData + 2;
+    uint8_t* pStreamPos;
+    pStreamPos = (uint8_t*)(pStreamData + 2);
     int nSubItemCount;
     nSubItemCount = 0;
     uint32_t nItemIndex;
@@ -1720,12 +1696,12 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     while (true) {
       D2ItemDupeCacheEntryStrc aDupeCache[1024];
       memset(&sGfxData, 0, 0x48);
-      if (*pStreamPos != 0x4d4a) {
+      if (*(short int*)pStreamPos != 0x4d4a) {
         return 0xe;
       }
 
-      nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)(pStreamPos + 1));
-      pStreamPos = (short int*)((int)(pStreamPos + 1) + nItemBytesRead);
+      nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)((char*)pStreamPos + 2));
+      pStreamPos = (uint8_t*)((int)((int)pStreamPos + 2) + nItemBytesRead);
       nTotalBytesRead = nTotalBytesRead + 2 + nItemBytesRead;
       nCacheIdx = 0;
       if (nSubItemCount > 0) {
@@ -1770,12 +1746,12 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
 
       for (nSubItemIndex = 0; nSubItemIndex < (int)nBytesAfterItem; nSubItemIndex++) {
         memset(&sGfxData, 0, 0x48);
-        if (*pStreamPos != 0x4d4a) {
+        if (*(short int*)pStreamPos != 0x4d4a) {
           return 0xe;
         }
 
-        nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)(pStreamPos + 1));
-        pStreamPos = (short int*)((int)(pStreamPos + 1) + nItemBytesRead);
+        nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)((char*)pStreamPos + 2));
+        pStreamPos = (uint8_t*)((int)((int)pStreamPos + 2) + nItemBytesRead);
         nTotalBytesRead = nTotalBytesRead + 2 + nItemBytesRead;
         if (nItemMode) {
           nSubSocketIdx = PLRSAVE_RestoreEquippedItem(pGameLocal, (D2UnknownItemRelatedStruct*)&sGfxData, &pLastItem, &nSubSocketCount, pUnit);
@@ -1795,9 +1771,9 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     while (true) {
-      nItemBitSize = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)(pStreamPos + 1));
+      nItemBitSize = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)((char*)pStreamPos + 2));
       nSubSocketIdx++;
-      pStreamPos = (short int*)((int)(pStreamPos + 1) + nItemBitSize);
+      pStreamPos = (uint8_t*)((int)((int)pStreamPos + 2) + nItemBitSize);
       nTotalBytesRead = nTotalBytesRead + 2 + nItemBitSize;
       pUnit = pUnitLocal;
       if (nSubSocketIdx >= (int)(uint32_t)*(uint8_t*)((char*)&sGfxData.nFrameNumber + 1)) {
@@ -1806,7 +1782,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
 
       skip_duplicate_sub_item:
       memset(&sGfxData, 0, 0x48);
-      if (*pStreamPos != 0x4d4a) {
+      if (*(short int*)pStreamPos != 0x4d4a) {
         return 0xe;
       }
     }
@@ -1822,38 +1798,38 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     uint32_t nUsedSockets;
     int nBytesConsumed;
     int nRestoreResult;
-    size_t nBytesLeft;
-    D2UnitStrc* pItemLocal = pItem;
+    uint8_t* nBytesLeft;
+    uint8_t* pItemLocal = (uint8_t*)pItem;
     if ((short int)pItem->eUnitType != 0x4d4a) {
       return 0xe;
     }
 
-    uint32_t nItemCount = (uint32_t)(uint16_t)*(uint16_t*)((uintptr_t)&pItem->eUnitType + 2);
-    int* pStreamCursor = &pItem->nClassId;
+    uint32_t nItemCount = (uint32_t)(uint16_t)*(uint16_t*)((intptr_t)&pItem->eUnitType + 2);
+    uint8_t* pStreamCursor = (uint8_t*)&pItem->nClassId;
     int nItemIndex = 0;
     D2UnitStrc* pCurrentUnit = pUnit;
     if (nItemCount) {
       D2UnitStrc* pSocketItem;
       do {
-        nBytesLeft = (int)pItemLocal + (nStreamEnd - (int)pStreamCursor);
+        nBytesLeft = pItemLocal + (nStreamEnd - (int)pStreamCursor);
         nRestoreResult = 0;
-        D2Common::ITEMS::Items::ReadInfoFromStreamVersioned((uint8_t*)pStreamCursor, nBytesLeft, 1, &itemDetails, eItemFormat);
+        D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, eItemFormat);
         if (itemDetails.classId == -1) {
           return 0xe;
         }
 
-        pItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, (uint8_t*)pStreamCursor, nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
+        pItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
         if (!pItem && nBytesConsumed <= 0) {
           return 0xe;
         }
 
-        pStreamCursor = (int*)((int)pStreamCursor + nBytesConsumed);
+        pStreamCursor = (uint8_t*)((char*)pStreamCursor + nBytesConsumed);
         if (pItem) {
           GAME::Task::TASK_Nop(pItem);
           if (bUsePageHandler) {
             nRestoreResult = PLRSAVE_RestoreItemToBodyLoc(pItem, pGame, pCurrentUnit, nullptr);
           } else {
-            nRestoreResult = PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pItem, 0);
+            nRestoreResult = PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pItem, nullptr);
           }
         }
 
@@ -1867,14 +1843,14 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         }
 
         for (nRestoreResult = 0; nRestoreResult < (int)nUsedSockets; nRestoreResult++) {
-          nBytesLeft = (int)pItemLocal + (nStreamEnd - (int)pStreamCursor);
-          D2Common::ITEMS::Items::ReadInfoFromStreamVersioned((uint8_t*)pStreamCursor, nBytesLeft, 1, &itemDetails, eItemFormat);
-          pSocketItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, (uint8_t*)pStreamCursor, nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
+          nBytesLeft = pItemLocal + (nStreamEnd - (int)pStreamCursor);
+          D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, eItemFormat);
+          pSocketItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
           if (!pSocketItem && nBytesConsumed <= 0) {
             return 0xe;
           }
 
-          pStreamCursor = (int*)((int)pStreamCursor + nBytesConsumed);
+          pStreamCursor = (uint8_t*)((char*)pStreamCursor + nBytesConsumed);
           if (!pItem) {
             if (pSocketItem) {
               UNIT::SUnit::FreeServerUnit(pGame, pSocketItem);
@@ -1884,7 +1860,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
             if (bUsePageHandler) {
               PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, pItem);
             } else {
-              PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, (int32_t)pItem);
+              PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, pItem);
             }
           }
         }
@@ -1903,7 +1879,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
       } while (nItemIndex < (int)nItemCount);
     }
     if (ppnBytesConsumed) {
-      *ppnBytesConsumed = (short int*)((int)pStreamCursor - (int)pItemLocal);
+      *ppnBytesConsumed = (short int*)((intptr_t)pStreamCursor - (intptr_t)pItemLocal);
     }
 
     return 0;
@@ -1929,7 +1905,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
     char* szCharName;
     int32_t nItemLoadResult;
     int nClassId;
-    D2ClientStrc* pClientLocal;
+    _oldSaveGameLoadingPart7_part1_Slotm8 uSlot8;
     *pnBytesConsumed = 0;
     if (!pUnit) {
       nClassId = -1;
@@ -1937,15 +1913,15 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
       nClassId = pUnit->nClassId;
     }
 
-    D2UnitStrc* pCorpseUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nClassId, 0, 0, pGame, nullptr, 1, 0x11, nullptr);
+    D2UnitStrc* pCorpseUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nClassId, 0, 0, pGame, nullptr, 1, 0x11, 0);
     if (!pCorpseUnit) {
       return 8;
     }
 
     pCorpseUnit->eUnitFlags &= ~UNITFLAG_CANBEATTACKED;
-    pClientLocal = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0x1511);
-    UNIT::SUnit::SetClient(pCorpseUnit, pClientLocal);
-    szCharName = GAME::Clients::GetCharName(pClientLocal);
+    uSlot8.pClientLocal = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0x1511);
+    UNIT::SUnit::SetClient(pCorpseUnit, uSlot8.pClientLocal);
+    szCharName = GAME::Clients::GetCharName(uSlot8.pClientLocal);
     D2Common::Units::SetNameInPlayerData(pCorpseUnit, szCharName);
     UNIT::SUnit::SetSeed(pCorpseUnit, &pGame->pGameSeed);
     D2Common::DATATBLS::ItemStats::SetState(pCorpseUnit, STATE_playerbody, 1);
@@ -1957,22 +1933,22 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
     }
 
     D2Common::INVENTORY::Inventory::INVENTORY_SetOwnerGUID(pCorpseUnit->pInventory, nClassId);
-    pClientLocal = 0;
+    uSlot8.nItemBytesRead = 0;
     if (nFormat == 0x47) {
-      nItemLoadResult = PLRSAVE_RestoreItemsFromStream(pGame, pCorpseUnit, (short int*)(pCorpseData + 0xc), 0x47, nSize - 0xc, 1, (int*)&pClientLocal);
+      nItemLoadResult = PLRSAVE_RestoreItemsFromStream(pGame, pCorpseUnit, (short int*)(pCorpseData + 0xc), 0x47, nSize - 0xc, 1, (int*)&uSlot8.nItemBytesRead);
     } else {
       if (nFormat - 0x48 > 0x18) {
         return 1;
       }
 
-      nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, (D2UnitStrc*)(pCorpseData + 0xc), nFormat, nSize - 0xc, 1, (short int**)&pClientLocal);
+      nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, (D2UnitStrc*)(pCorpseData + 0xc), nFormat, nSize - 0xc, 1, (short int**)&uSlot8.pClientLocal);
     }
     if (!nItemLoadResult) {
-      uint8_t* pCorpseBytesRead;
-      pCorpseBytesRead = &pClientLocal->nCharTemplate;
+      uint32_t pCorpseBytesRead;
+      pCorpseBytesRead = uSlot8.nItemBytesRead + 0xc;
       D2Common::INVENTORY::Inventory::INVENTORY_AddCorpse(pUnit->pInventory, pCorpseUnit->nUnitGUID, 0, UNIT_MONSTER);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, true);
-      *pnBytesConsumed = (uint32_t)pCorpseBytesRead;
+      *pnBytesConsumed = pCorpseBytesRead;
       nItemLoadResult = 0;
     }
 
@@ -1999,7 +1975,7 @@ int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pU
           return nCorpseResult;
         }
 
-        pCorpseHeader = (short int*)((int)pCorpseHeader + pBytesPerCorpse);
+        pCorpseHeader = (short int*)((char*)pCorpseHeader + pBytesPerCorpse);
         pCorpseData += pBytesPerCorpse;
         nRemainingBytes -= pBytesPerCorpse;
       }
@@ -2121,9 +2097,10 @@ uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t
 }
 
 // Legacy-save mercenary loader: parses the merc record from an older .d2s save buffer and reconstructs the hireling. For the "JM"-tagged 0x47 layout it just calls CreateMerc from type/name fields. Otherwise reads the merc block (dead flag, type, name, gold/exp), looks up HirelingTxt, converts experience for pre-0x5a versions, creates the merc, registers it as pet slot 7, then iterates the experience table to derive the merc level and applies stats (MERC_ApplyLevelStats), creating an inventory if missing and marking dead/freeing combat if the dead flag was set. Finally dispatches the merc's saved items (PLRSAVE_DispatchItemLoadByFormat), recalcs inventory and HP, and sends merc packets. Writes bytes-consumed to *pnParam2; returns 0 on success or 0xE on premature/invalid data. Custom convention (pGame in EBX).
-static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t * pdwReadPos, uint32_t nVersion, uint32_t nBytesRemaining, uint32_t * * ppnBytesConsumed, ::SGAMEDATA * pGame) {
+static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * pdwReadPos, uint32_t nVersion, uint32_t nBytesRemaining, uint32_t * * ppnBytesConsumed, ::SGAMEDATA * pGame) {
+    uint32_t uVar2;
     uint32_t dwStatValue;
-    uint32_t nReplaceFlag;
+    uint8_t* pbVar4;
     D2HirelingTxt* pHirelingTxt;
     uint32_t nConvertedExp;
     D2UnitStrc* pMercUnit;
@@ -2131,60 +2108,61 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
     int nLevel;
     D2PetDataStrc sPetData;
     int nMercLevel;
+    uint8_t* pdwSectionStart;
     int32_t nErrorLine;
     uint32_t** ppBytesOut = ppnBytesConsumed;
-    uint32_t* pdwSectionStart = pdwReadPos;
+    uint8_t* pbVar3 = pdwReadPos;
     *ppnBytesConsumed = 0;
     if (nVersion == 0x47) {
-      if ((short int)*pdwReadPos == 0x4d4a) {
-        if (*(uint32_t*)((int)pdwReadPos + 2) && *(uint16_t*)((int)pdwReadPos + 6)) {
-          UNIT::SUNITNPC::CreateMerc(pGame, pUnit, *(uint16_t*)((int)pdwReadPos + 6), *(uint32_t*)((int)pdwReadPos + 2), 0xffff, 0, 0);
+      if (*(short int*)pdwReadPos == 0x4d4a) {
+        if (*(uint32_t*)(pdwReadPos + 2) && *(uint16_t*)(pdwReadPos + 6)) {
+          UNIT::SUNITNPC::CreateMerc(pGame, pUnit, *(uint16_t*)(pdwReadPos + 6), *(uint32_t*)(pdwReadPos + 2), 0xffff, 0, 0);
         }
 
         *ppBytesOut = (uint32_t*)0x8;
         return 0;
       }
     } else {
-      uint32_t* puVar1;
+      uint16_t* puVar1;
       if (nBytesRemaining >= 1) {
-        if ((char)*pdwReadPos == '\0') {
+        if (!*pdwReadPos) {
           *ppnBytesConsumed = (uint32_t*)0x1;
           return 0;
         }
 
         *ppnBytesConsumed = 0;
         if (nBytesRemaining >= 0x12) {
-          nReplaceFlag = *(uint32_t*)((int)pdwReadPos + 2) & 0x10000;
-          puVar1 = pdwReadPos + 3;
-          pdwReadPos = (uint32_t*)((int)pdwReadPos + 0x12);
-          pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)(uint16_t)*puVar1, 1);
+          uVar2 = *(uint32_t*)(pdwReadPos + 2);
+          puVar1 = (uint16_t*)(pdwReadPos + 0xc);
+          pdwReadPos += 0x12;
+          pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)*puVar1, 1);
           if (!pHirelingTxt) {
             Fog::Src::LogManager::LOGFILE_WriteStringToFile("Unable to load merc.");
             return 0xe;
           }
           if (nVersion <= 0x59) {
-            nConvertedExp = _oldSaveGameLoadingPart8_part1(pGame, (uint16_t)pdwSectionStart[3], *(uint32_t*)((int)pdwSectionStart + 0xe));
-            *(uint32_t*)((int)pdwSectionStart + 0xe) = nConvertedExp;
+            nConvertedExp = _oldSaveGameLoadingPart8_part1(pGame, *(uint16_t*)(pbVar3 + 0xc), *(uint32_t*)(pbVar3 + 0xe));
+            *(uint32_t*)(pbVar3 + 0xe) = nConvertedExp;
           }
 
-          *(short int*)((int)pdwSectionStart + 10) += pHirelingTxt->nNameFirst;
-          if (*(uint16_t*)((int)pdwSectionStart + 10) > pHirelingTxt->nNameLast) {
-            *(uint16_t*)((int)pdwSectionStart + 10) = pHirelingTxt->nNameFirst;
+          *(uint16_t*)(pbVar3 + 10) = *(short int*)(pbVar3 + 10) + pHirelingTxt->nNameFirst;
+          if (*(uint16_t*)(pbVar3 + 10) > pHirelingTxt->nNameLast) {
+            *(uint16_t*)(pbVar3 + 10) = pHirelingTxt->nNameFirst;
           }
 
-          pMercUnit = UNIT::SUNITNPC::CreateMerc(pGame, pUnit, *(uint16_t*)((int)pdwSectionStart + 10), *(uint32_t*)((int)pdwSectionStart + 6), (uint16_t)pdwSectionStart[3], pHirelingTxt->classId, nReplaceFlag);
+          pMercUnit = UNIT::SUNITNPC::CreateMerc(pGame, pUnit, *(uint16_t*)(pbVar3 + 10), *(uint32_t*)(pbVar3 + 6), *(uint16_t*)(pbVar3 + 0xc), pHirelingTxt->classId, uVar2 & 0x10000);
           if (!pMercUnit) {
-            *ppnBytesConsumed = (uint32_t*)((int)pdwReadPos - (int)pdwSectionStart);
+            *ppnBytesConsumed = (uint32_t*)(pdwReadPos - (int)pbVar3);
             return 0;
           }
 
-          sPetData.nSeed = *(int*)((int)pdwSectionStart + 6);
-          sPetData.nNameId = (int)*(uint16_t*)((int)pdwSectionStart + 10);
-          sPetData.nType = (int)(uint16_t)pdwSectionStart[3];
+          sPetData.nSeed = *(int*)(pbVar3 + 6);
+          sPetData.nNameId = (int)*(uint16_t*)(pbVar3 + 10);
+          sPetData.nType = (int)*(uint16_t*)(pbVar3 + 0xc);
           PlayerPets::PETS_UpdatePetData(pUnit, PETTYPE_hireable, pMercUnit->nUnitGUID, &sPetData);
           D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
           nErrorLine = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-          dwStatValue = *(uint32_t*)((int)pdwSectionStart + 0xe);
+          dwStatValue = *(uint32_t*)(pbVar3 + 0xe);
           nMercLevel = 1;
           nCurrentExp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMercUnit, UNITSTAT_experience, 0);
           if (nCurrentExp < dwStatValue) {
@@ -2192,7 +2170,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
           }
 
           UNIT::SUnitMsg::UnitQueuePacket0x9E(pMercUnit, 0xd, dwStatValue);
-          pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)(uint16_t)pdwSectionStart[3], 1);
+          pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)*(uint16_t*)(pbVar3 + 0xc), 1);
           while (true) {
             if (!pHirelingTxt) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1660);
@@ -2209,7 +2187,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
               break;
             }
 
-            pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)(uint16_t)pdwSectionStart[3], nLevel);
+            pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)*(uint16_t*)(pbVar3 + 0xc), nLevel);
             nMercLevel = nLevel;
           }
 
@@ -2217,21 +2195,21 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
           if (!pMercUnit->pInventory) {
             D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pMercUnit);
           }
-          if (nReplaceFlag) {
+          if (uVar2 & 0x10000) {
             PlayerPets::SERVERUNIT_RemovePetFromUnit(pGame, pUnit, pMercUnit);
             pMercUnit->eUnitFlags |= UNITFLAG_ISDEAD;
             UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMercUnit, 0xc);
             Monster::MONSTER_StartAiAndRegenTimers(pGame, pMercUnit);
           }
 
-          puVar1 = pdwReadPos;
-          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, (uint8_t*)pdwReadPos, nVersion, (int)pdwSectionStart + (nBytesRemaining - (int)pdwReadPos), 0, (short int**)&pdwReadPos);
+          pbVar4 = pdwReadPos;
+          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 + (nBytesRemaining - (int)pdwReadPos)), 0, (short int**)&pdwReadPos);
           if (!nErrorLine) {
             ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
             ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), 0);
             Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);
-            *ppnBytesConsumed = (uint32_t*)((int)pdwReadPos - (int)pdwSectionStart + (int)puVar1);
+            *ppnBytesConsumed = (uint32_t*)(pbVar4 + ((intptr_t)pdwReadPos - (intptr_t)pbVar3));
             nErrorLine = 0;
           }
 
@@ -2277,7 +2255,7 @@ int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, ui
     } while (nHotkeyIndex < 0x10);
 
     if (nParam > 0x51) {
-      eSkill = *(eD2Skills*)((int)(pbParam + *pnBytesConsumed) + 4);
+      eSkill = *(eD2Skills*)((char*)(pbParam + *pnBytesConsumed) + 4);
       D2Common::Units::SetShiftLeftSkillData(pUnit, *(eD2Skills*)(pbParam + *pnBytesConsumed), -1);
       D2Common::Units::SetShiftRightSkillData(pUnit, eSkill, -1);
       *pnBytesConsumed += 8;
@@ -2287,7 +2265,7 @@ int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, ui
 }
 
 // Loads a player from a legacy/old-format save file (D2SaveFileHeaderStrc) and creates/restores the player unit. Validates min size (0x82), parses the header via _oldSaveGameLoadingPart, then walks the file sequentially through _oldSaveGameLoadingPart2..9 (stats, then skills, items, corpse, waypoints), advancing a cursor by the byte count each part writes back through ppUnit. Clamps gold/goldbank to inventory/stash limits, restores hp/mana and re-selects left/right skills, recomputes next-level exp (TXT_Experience), and sends a weapon-switch packet (0x97) if the client had weapons swapped. Out: *ppUnit = the loaded D2UnitStrc. Returns 0 on success or a nonzero error code. NOTE: nLoadResult/nNewCharFlags are read before assignment in the decompile — likely set via the out-params of _oldSaveGameLoadingPart (stale-snapshot artifact).
-int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, uint32_t dwParam6, uint32_t dwParam7, uint32_t dwParam8) {
+int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, D2RoomStrc * dwParam6, uint32_t dwParam7, uint32_t dwParam8) {
     // Frame slots -28..-20 are ONE object: &nSavedHp is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -2310,10 +2288,9 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     int32_t nLevel;
     uint32_t nNextExpRequired;
     uint32_t nNewCharFlags;
-    short int* pSkillsData;
     uint8_t* pItemsData;
-    uint32_t* pCorpseData;
-    uint8_t* pWaypointsData;
+    short int* pCorpseHeader;
+    uint8_t* pCorpseData;
     uint32_t nSkillMin;
     uint32_t nSkillMax;
     eD2Skills leftSkill;
@@ -2340,30 +2317,30 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     }
 
     *ppUnitOut = __frame1.pSavedMana;
-    int* pSaveCursor = (int*)((int)ppUnit + (int)pSavefile);
+    uint8_t* pSaveCursor = (uint8_t*)((int)ppUnit + (int)pSavefile);
     int nBytesRemaining = nGoldLimit - (int)ppUnit;
-    nLoadResult = _oldSaveGameLoadingPart2(__frame1.pSavedMana, pSaveCursor, nSavefileSize, (uint32_t*)&ppUnit);
+    nLoadResult = _oldSaveGameLoadingPart2(__frame1.pSavedMana, (int*)pSaveCursor, nSavefileSize, (uint32_t*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
 
-    uint32_t* pDataCursor = (uint32_t*)((int)pSaveCursor + (int)ppUnit);
+    uint8_t* pDataCursor = pSaveCursor + (int)ppUnit;
     nBytesRemaining -= (int)ppUnit;
-    nLoadResult = _oldSaveGameLoadingPart3(pUnit, pDataCursor, nSavefileSize, (uint32_t*)&ppUnit);
+    nLoadResult = _oldSaveGameLoadingPart3(pUnit, (uint32_t*)pDataCursor, nSavefileSize, (uint32_t*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
 
-    pDataCursor = (uint32_t*)((int)pDataCursor + (int)ppUnit);
+    pItemsData = pDataCursor + (int)ppUnit;
     nBytesRemaining -= (int)ppUnit;
-    nLoadResult = _oldSaveGameLoadingPart4(pUnit, pDataCursor, nSavefileSize, (uint32_t*)&ppUnit);
+    nLoadResult = _oldSaveGameLoadingPart4(pUnit, (uint32_t*)pItemsData, nSavefileSize, (uint32_t*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
 
-    pSkillsData = (short int*)((int)pDataCursor + (int)ppUnit);
+    pItemsData += (int)ppUnit;
     nBytesRemaining -= (int)ppUnit;
-    nLoadResult = _oldSaveGameLoadingPart5(__frame1.pGameLocal, pUnit, pSkillsData, 0x10, nSavefileSize, (int*)&ppUnit);
+    nLoadResult = _oldSaveGameLoadingPart5(__frame1.pGameLocal, pUnit, pItemsData, 0x10, nSavefileSize, (int*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
@@ -2388,9 +2365,9 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_goldbank, 0, 0);
     }
 
-    pSkillsData = (short int*)((int)pSkillsData + (int)ppUnit);
+    pItemsData += (int)ppUnit;
     nBytesRemaining -= (int)ppUnit;
-    iVar1 = _oldSaveGameLoadingPart6(__frame1.pGameLocal, __frame0.pClientOrig, pUnit, pSkillsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit);
+    iVar1 = _oldSaveGameLoadingPart6(__frame1.pGameLocal, __frame0.pClientOrig, pUnit, pItemsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit);
     if (!iVar1) {
       uint8_t bIsWeaponSwapped;
       PlayerSave2::PLAYERSAVE2_LoadOldSavegame_ReturnZero();
@@ -2405,19 +2382,19 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
       pPlayerData->eLeftSkillId = rightSkill;
       pPlayerData->eRightSkillId = leftSkill;
       nBytesRemaining -= (int)ppUnit;
-      pItemsData = (uint8_t*)((int)pSkillsData + (int)ppUnit);
+      pItemsData += (int)ppUnit;
       nLoadResult = PLRSAVE_DispatchItemLoadByFormat(__frame1.pGameLocal, pUnit, pItemsData, nSavefileSize, nBytesRemaining, 0, (short int**)&ppUnit);
       if (!nLoadResult) {
         nGoldLimit = nBytesRemaining - (int)ppUnit;
-        pSkillsData = (short int*)(pItemsData + (int)ppUnit);
-        iVar1 = _oldSaveGameLoadingPart7(__frame1.pGameLocal, pUnit, pSkillsData, nSavefileSize, nGoldLimit, (uint32_t*)&ppUnit);
+        pCorpseHeader = (short int*)(pItemsData + (int)ppUnit);
+        iVar1 = _oldSaveGameLoadingPart7(__frame1.pGameLocal, pUnit, pCorpseHeader, nSavefileSize, nGoldLimit, (uint32_t*)&ppUnit);
         if (!iVar1) {
-          pCorpseData = (uint32_t*)((int)pSkillsData + (int)ppUnit);
+          pCorpseData = (uint8_t*)((int)pCorpseHeader + (int)ppUnit);
           ppUnitOut = (D2UnitStrc**)_oldSaveGameLoadingPart8(pUnit, pCorpseData, nSavefileSize, nGoldLimit - (int)ppUnit, (uint32_t**)&ppUnit, __frame1.pGameLocal);
           if (!ppUnitOut) {
-            pWaypointsData = (uint8_t*)((int)pCorpseData + (int)ppUnit);
+            pCorpseData += (int)ppUnit;
             ppUnit = ppUnitOut;
-            _oldSaveGameLoadingPart9(pUnit, pWaypointsData, nSavefileSize, (int*)&ppUnit);
+            _oldSaveGameLoadingPart9(pUnit, pCorpseData, nSavefileSize, (int*)&ppUnit);
           }
         }
       }
@@ -2457,11 +2434,11 @@ int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientSt
       return 9;
     }
     if (pSavefile->dwFileVersion < 0x5c) {
-      nResult = SEVER_loadFrom_Old_Savegame(pGame, pClient, pSavefile, nSavefileSize, ppUnit, (uint32_t)pRoom, nSpawnX, nSpawnY);
+      nResult = SEVER_loadFrom_Old_Savegame(pGame, pClient, pSavefile, nSavefileSize, ppUnit, pRoom, nSpawnX, nSpawnY);
       return nResult;
     }
 
-    nResult = PlayerSave2::PLAYERSAVE_LoadModernFormat(pGame, pClient, pSavefile, nSavefileSize, ppUnit, (uint32_t)pRoom, nSpawnX, nSpawnY);
+    nResult = PlayerSave2::PLAYERSAVE_LoadModernFormat(pGame, pClient, pSavefile, nSavefileSize, ppUnit, pRoom, nSpawnX, nSpawnY);
     return nResult;
 }
 
@@ -2484,7 +2461,7 @@ static int32_t __fastcall CLIENT_ReadAndLoadSaveFile(D2ClientStrc * pClient, D2R
     sprintf(__frame0.saveFile, "%s%s.d2s", __frame0.saveDirectory, charName);
     FILE* pFile = fopen(__frame0.saveFile, "rb");
     if (pFile) {
-      nBytesRead = fread((D2CharSelCompStrc*)__frame0.saveBuffer, 1, 0x2000, pFile);
+      nBytesRead = fread(__frame0.saveBuffer, 1, 0x2000, pFile);
       fclose(pFile);
       if (nBytesRead) {
         nLoadResult = SERVER_LoadPlayerFromSaveFile(pGame, pClient, (D2SaveFileHeaderStrc*)__frame0.saveBuffer, nBytesRead, &__frame0.pLoadedUnit, pRoom, nX, nY);
@@ -2576,2110 +2553,6 @@ BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc 
 
 void __stdcall WapperSaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * szText) {
     SaveGameAllGameTypes(pGame, pUnit, szText, 0);
-}
-
-uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen) {
-    // Static local variables (originally global data)
-    static uint32_t CRC32_LookupTable[2084] = {
-    0x0,
-    0x77073096,
-    0xee0e612c,
-    0x990951ba,
-    0x76dc419,
-    0x706af48f,
-    0xe963a535,
-    0x9e6495a3,
-    0xedb8832,
-    0x79dcb8a4,
-    0xe0d5e91e,
-    0x97d2d988,
-    0x9b64c2b,
-    0x7eb17cbd,
-    0xe7b82d07,
-    0x90bf1d91,
-    0x1db71064,
-    0x6ab020f2,
-    0xf3b97148,
-    0x84be41de,
-    0x1adad47d,
-    0x6ddde4eb,
-    0xf4d4b551,
-    0x83d385c7,
-    0x136c9856,
-    0x646ba8c0,
-    0xfd62f97a,
-    0x8a65c9ec,
-    0x14015c4f,
-    0x63066cd9,
-    0xfa0f3d63,
-    0x8d080df5,
-    0x3b6e20c8,
-    0x4c69105e,
-    0xd56041e4,
-    0xa2677172,
-    0x3c03e4d1,
-    0x4b04d447,
-    0xd20d85fd,
-    0xa50ab56b,
-    0x35b5a8fa,
-    0x42b2986c,
-    0xdbbbc9d6,
-    0xacbcf940,
-    0x32d86ce3,
-    0x45df5c75,
-    0xdcd60dcf,
-    0xabd13d59,
-    0x26d930ac,
-    0x51de003a,
-    0xc8d75180,
-    0xbfd06116,
-    0x21b4f4b5,
-    0x56b3c423,
-    0xcfba9599,
-    0xb8bda50f,
-    0x2802b89e,
-    0x5f058808,
-    0xc60cd9b2,
-    0xb10be924,
-    0x2f6f7c87,
-    0x58684c11,
-    0xc1611dab,
-    0xb6662d3d,
-    0x76dc4190,
-    0x1db7106,
-    0x98d220bc,
-    0xefd5102a,
-    0x71b18589,
-    0x6b6b51f,
-    0x9fbfe4a5,
-    0xe8b8d433,
-    0x7807c9a2,
-    0xf00f934,
-    0x9609a88e,
-    0xe10e9818,
-    0x7f6a0dbb,
-    0x86d3d2d,
-    0x91646c97,
-    0xe6635c01,
-    0x6b6b51f4,
-    0x1c6c6162,
-    0x856530d8,
-    0xf262004e,
-    0x6c0695ed,
-    0x1b01a57b,
-    0x8208f4c1,
-    0xf50fc457,
-    0x65b0d9c6,
-    0x12b7e950,
-    0x8bbeb8ea,
-    0xfcb9887c,
-    0x62dd1ddf,
-    0x15da2d49,
-    0x8cd37cf3,
-    0xfbd44c65,
-    0x4db26158,
-    0x3ab551ce,
-    0xa3bc0074,
-    0xd4bb30e2,
-    0x4adfa541,
-    0x3dd895d7,
-    0xa4d1c46d,
-    0xd3d6f4fb,
-    0x4369e96a,
-    0x346ed9fc,
-    0xad678846,
-    0xda60b8d0,
-    0x44042d73,
-    0x33031de5,
-    0xaa0a4c5f,
-    0xdd0d7cc9,
-    0x5005713c,
-    0x270241aa,
-    0xbe0b1010,
-    0xc90c2086,
-    0x5768b525,
-    0x206f85b3,
-    0xb966d409,
-    0xce61e49f,
-    0x5edef90e,
-    0x29d9c998,
-    0xb0d09822,
-    0xc7d7a8b4,
-    0x59b33d17,
-    0x2eb40d81,
-    0xb7bd5c3b,
-    0xc0ba6cad,
-    0xedb88320,
-    0x9abfb3b6,
-    0x3b6e20c,
-    0x74b1d29a,
-    0xead54739,
-    0x9dd277af,
-    0x4db2615,
-    0x73dc1683,
-    0xe3630b12,
-    0x94643b84,
-    0xd6d6a3e,
-    0x7a6a5aa8,
-    0xe40ecf0b,
-    0x9309ff9d,
-    0xa00ae27,
-    0x7d079eb1,
-    0xf00f9344,
-    0x8708a3d2,
-    0x1e01f268,
-    0x6906c2fe,
-    0xf762575d,
-    0x806567cb,
-    0x196c3671,
-    0x6e6b06e7,
-    0xfed41b76,
-    0x89d32be0,
-    0x10da7a5a,
-    0x67dd4acc,
-    0xf9b9df6f,
-    0x8ebeeff9,
-    0x17b7be43,
-    0x60b08ed5,
-    0xd6d6a3e8,
-    0xa1d1937e,
-    0x38d8c2c4,
-    0x4fdff252,
-    0xd1bb67f1,
-    0xa6bc5767,
-    0x3fb506dd,
-    0x48b2364b,
-    0xd80d2bda,
-    0xaf0a1b4c,
-    0x36034af6,
-    0x41047a60,
-    0xdf60efc3,
-    0xa867df55,
-    0x316e8eef,
-    0x4669be79,
-    0xcb61b38c,
-    0xbc66831a,
-    0x256fd2a0,
-    0x5268e236,
-    0xcc0c7795,
-    0xbb0b4703,
-    0x220216b9,
-    0x5505262f,
-    0xc5ba3bbe,
-    0xb2bd0b28,
-    0x2bb45a92,
-    0x5cb36a04,
-    0xc2d7ffa7,
-    0xb5d0cf31,
-    0x2cd99e8b,
-    0x5bdeae1d,
-    0x9b64c2b0,
-    0xec63f226,
-    0x756aa39c,
-    0x26d930a,
-    0x9c0906a9,
-    0xeb0e363f,
-    0x72076785,
-    0x5005713,
-    0x95bf4a82,
-    0xe2b87a14,
-    0x7bb12bae,
-    0xcb61b38,
-    0x92d28e9b,
-    0xe5d5be0d,
-    0x7cdcefb7,
-    0xbdbdf21,
-    0x86d3d2d4,
-    0xf1d4e242,
-    0x68ddb3f8,
-    0x1fda836e,
-    0x81be16cd,
-    0xf6b9265b,
-    0x6fb077e1,
-    0x18b74777,
-    0x88085ae6,
-    0xff0f6a70,
-    0x66063bca,
-    0x11010b5c,
-    0x8f659eff,
-    0xf862ae69,
-    0x616bffd3,
-    0x166ccf45,
-    0xa00ae278,
-    0xd70dd2ee,
-    0x4e048354,
-    0x3903b3c2,
-    0xa7672661,
-    0xd06016f7,
-    0x4969474d,
-    0x3e6e77db,
-    0xaed16a4a,
-    0xd9d65adc,
-    0x40df0b66,
-    0x37d83bf0,
-    0xa9bcae53,
-    0xdebb9ec5,
-    0x47b2cf7f,
-    0x30b5ffe9,
-    0xbdbdf21c,
-    0xcabac28a,
-    0x53b39330,
-    0x24b4a3a6,
-    0xbad03605,
-    0xcdd70693,
-    0x54de5729,
-    0x23d967bf,
-    0xb3667a2e,
-    0xc4614ab8,
-    0x5d681b02,
-    0x2a6f2b94,
-    0xb40bbe37,
-    0xc30c8ea1,
-    0x5a05df1b,
-    0x2d02ef8d,
-    0x7d0f462f,
-    0x48624064,
-    0x3e937fbc,
-    0xfc15850,
-    0x9c6b4cb0,
-    0x49cc23f8,
-    0xa545eda3,
-    0xd2a60050,
-    0xa65b8071,
-    0x42133bfe,
-    0x1d495b9a,
-    0xa71c46a4,
-    0x1a82f8bc,
-    0x11d23f8b,
-    0x600074b7,
-    0xc1163308,
-    0x1d262760,
-    0x11cfe957,
-    0xdb28d6a5,
-    0xc104,
-    0x28f54685,
-    0x11d206fd,
-    0xa0007ab2,
-    0x963122c9,
-    0xc87631f5,
-    0x498623be,
-    0x83053688,
-    0xf948cc2f,
-    0x9301e386,
-    0x11d31f22,
-    0xfad22682,
-    0x475d2576,
-    0x2252373a,
-    0x489b5814,
-    0xfe310982,
-    0x37f1bade,
-    0x51c22e10,
-    0x46fcb49f,
-    0x28e6c2be,
-    0xe6edb98f,
-    0xfd24ad8a,
-    0x453da260,
-    0x936f50bf,
-    0x8509f784,
-    0xa50e4730,
-    0x48a70ae4,
-    0x4bc3998,
-    0x7277e0bf,
-    0xc6784488,
-    0x418f41a3,
-    0x50b315aa,
-    0xd442ba93,
-    0x679c4137,
-    0x4147c62e,
-    0x569db4b2,
-    0x4c25cb9a,
-    0x19e7c08c,
-    0x4e6a0a44,
-    0x5a5916a1,
-    0x8cded57c,
-    0xd38894d1,
-    0x11d2c052,
-    0x60002f87,
-    0xbdb19308,
-    0x6fc2cae0,
-    0x11d2bc78,
-    0xaa00a6af,
-    0xb6d82400,
-    0xd2ac28c0,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28bf,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28be,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28bd,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x2befc277,
-    0x11d25497,
-    0xa000cbbc,
-    0xebe622c9,
-    0x7d43d03,
-    0x11d26523,
-    0x60001d87,
-    0xbdb19308,
-    0xa3afdcc7,
-    0x11d1d3ee,
-    0xa0008dbc,
-    0xebe622c9,
-    0xf96029a2,
-    0x11d24282,
-    0x60001787,
-    0xbdb19308,
-    0xd2ac28b5,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x68a04844,
-    0x11d1d13d,
-    0xaa00a6af,
-    0xb6d82400,
-    0x2ffaaca2,
-    0x11d25dca,
-    0xaa00a6af,
-    0xb6d82400,
-    0x186cc547,
-    0x11d3db29,
-    0x8000d19b,
-    0x740a15c7,
-    0x186cc546,
-    0x11d3db29,
-    0x8000d19b,
-    0x740a15c7,
-    0x186cc545,
-    0x11d3db29,
-    0x8000d19b,
-    0x740a15c7,
-    0x186cc542,
-    0x11d3db29,
-    0x8000d19b,
-    0x740a15c7,
-    0x186cc541,
-    0x11d3db29,
-    0x8000d19b,
-    0x740a15c7,
-    0x26bb9432,
-    0x48d345fe,
-    0x722475a3,
-    0x86e7e3c5,
-    0xf17e8673,
-    0x11d1c3b4,
-    0x60000b87,
-    0xbdb19308,
-    0xfb09565b,
-    0x11d23631,
-    0xa000b8bc,
-    0xebe622c9,
-    0xd2ac28b2,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28b1,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28b0,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x9f2c0342,
-    0x11d3c5c4,
-    0x4544d19b,
-    0x5453,
-    0x9f2c0341,
-    0x11d3c5c4,
-    0x4544d19b,
-    0x5453,
-    0x11f72cce,
-    0x4ecd26e6,
-    0x68d62eaf,
-    0xd80767e6,
-    0x65b76fa5,
-    0x11d2ff37,
-    0xc0004e81,
-    0x586ea34f,
-    0x45fc707e,
-    0x11d21db4,
-    0xa000acbc,
-    0xebe622c9,
-    0x45fc707d,
-    0x11d21db4,
-    0xa000acbc,
-    0xebe622c9,
-    0x45fc707c,
-    0x11d21db4,
-    0xa000acbc,
-    0xebe622c9,
-    0x45fc707b,
-    0x11d21db4,
-    0xa000acbc,
-    0xebe622c9,
-    0x6621075,
-    0x11d1e92e,
-    0xc000c5a8,
-    0x6e72a34f,
-    0xd2ac28ab,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28aa,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28a9,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x1db1ae6b,
-    0x11d1e92e,
-    0xc000c5a8,
-    0x6e72a34f,
-    0xd2ac28a8,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28a7,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28af,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28ad,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28ac,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x2bb1938,
-    0x11d2cb8b,
-    0x6000b98b,
-    0xb6b19308,
-    0xd8761a41,
-    0x11d3801a,
-    0xf7dad19b,
-    0x34d8c3e1,
-    0x7f6b1760,
-    0x11d31fdb,
-    0x45442682,
-    0x5453,
-    0xd2ac28a5,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28a4,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac28a1,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac289f,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac289e,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x472afe7a,
-    0x11d3281b,
-    0xc0007d81,
-    0x586ea34f,
-    0x28f97ef7,
-    0x11d29538,
-    0xc000a997,
-    0x586ea34f,
-    0xd2ac289d,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd348372b,
-    0x45ae945b,
-    0xf4522a5,
-    0xa5845b12,
-    0xd2ac289c,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac289b,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac289a,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x81f75bc5,
-    0x11d24e5d,
-    0xa000c7bc,
-    0xebe622c9,
-    0xd2ac2899,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2893,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xee0b9ca0,
-    0x11d3a81e,
-    0x8000d19b,
-    0x740a15c7,
-    0x8a667154,
-    0x11d2f9cb,
-    0x60008aad,
-    0xbc5a57b0,
-    0x9301e380,
-    0x11d31f22,
-    0xfad22682,
-    0x475d2576,
-    0x810b5013,
-    0x11d2e88d,
-    0x6000c18b,
-    0xb6b19308,
-    0xd2ac2897,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x79ba9e00,
-    0x11d1b6ee,
-    0xc000be86,
-    0xef8fbf4f,
-    0xd2ac2892,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2890,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac288f,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac288a,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2884,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2883,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2882,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2881,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xe674304,
-    0x11d33b05,
-    0xe7f9d19b,
-    0x3615a0f0,
-    0xe674303,
-    0x11d33b05,
-    0xe7f9d19b,
-    0x3615a0f0,
-    0xd2ac28ba,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xf96029a1,
-    0x11d24282,
-    0x60001787,
-    0xbdb19308,
-    0xeed36461,
-    0x11d39ea5,
-    0x8000d19b,
-    0x740a15c7,
-    0x4be0537b,
-    0x11d35c19,
-    0x6000dc8b,
-    0xb6b19308,
-    0x995c1cf5,
-    0x11d354ff,
-    0x6000da8b,
-    0xb6b19308,
-    0xbae4d665,
-    0x11d34ea1,
-    0x6000da8b,
-    0xb6b19308,
-    0x55a8fd00,
-    0x11d34288,
-    0xd8ad19b,
-    0x3588c861,
-    0x4108fa85,
-    0x11d33586,
-    0x6000d78b,
-    0xb6b19308,
-    0xd2ac2898,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2896,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2894,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xf17e8672,
-    0x11d1c3b4,
-    0x60000b87,
-    0xbdb19308,
-    0xd2ac288e,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac288d,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac288c,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac288b,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2888,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2887,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2886,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac2885,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xfedfae25,
-    0x11d1e46e,
-    0xceaa,
-    0x12ac75f8,
-    0xcfa7cdc2,
-    0x11d200a1,
-    0xd5aa,
-    0x12ac75f8,
-    0xcda8d611,
-    0x11d2684a,
-    0x60001e87,
-    0xbdb19308,
-    0x4cb5622,
-    0x11d232e5,
-    0xaa00a6af,
-    0xb6d82400,
-    0x178f2f28,
-    0x11d1c364,
-    0x60a7,
-    0x12ac75f8,
-    0x268a0fa1,
-    0x11d260f2,
-    0xaa00a6af,
-    0xb6d82400,
-    0x268a0fa0,
-    0x11d260f2,
-    0xaa00a6af,
-    0xb6d82400,
-    0x2a91f713,
-    0x11d2a4bf,
-    0x6000dfbb,
-    0xd8db3308,
-    0x178f2f28,
-    0x11d1c364,
-    0x60a7,
-    0x12ac75f8,
-    0xaa97845,
-    0x11d1c877,
-    0x60000c87,
-    0xbdb19308,
-    0xaa97844,
-    0x11d1c877,
-    0x60000c87,
-    0xbdb19308,
-    0x865fd372,
-    0x11d29f67,
-    0x60002a87,
-    0xbdb19308,
-    0xf14599e5,
-    0x11d24689,
-    0xaa00a6af,
-    0xb6d82400,
-    0x178f2f27,
-    0x11d1c364,
-    0x60a7,
-    0x12ac75f8,
-    0x6496aba2,
-    0x11d261b0,
-    0xaa00a6af,
-    0xb6d82400,
-    0x6496aba1,
-    0x11d261b0,
-    0xaa00a6af,
-    0xb6d82400,
-    0x178f2f26,
-    0x11d1c364,
-    0x60a7,
-    0x12ac75f8,
-    0x178f2f25,
-    0x11d1c364,
-    0x60a7,
-    0x12ac75f8,
-    0x178f2f24,
-    0x11d1c364,
-    0x60a7,
-    0x12ac75f8,
-    0x2d3629f7,
-    0x4939813d,
-    0x5cf00885,
-    0x97fd756b,
-    0x6fc2cae1,
-    0x11d2bc78,
-    0xaa00a6af,
-    0xb6d82400,
-    0xd2ac287e,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac287d,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac287c,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac287b,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xd2ac287a,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0xced153e7,
-    0x11d23606,
-    0xf9b9,
-    0x12ac75f8,
-    0x8f2d8c9,
-    0x11d237c2,
-    0xf9b9,
-    0x12ac75f8,
-    0xd2ac2878,
-    0x11d1b39b,
-    0x60000487,
-    0xbdb19308,
-    0x6536115a,
-    0x11d27b2d,
-    0x18ba,
-    0x12ac75f8,
-    0x58c2b4d0,
-    0x11d146e7,
-    0xa000ac89,
-    0x294105c9,
-    0x480ff4b0,
-    0x11d128b2,
-    0xc000f7be,
-    0xef8fbf4f,
-    0x636b9f10,
-    0x11d10c7d,
-    0x2000b295,
-    0x2174dcaf,
-    0x819074a2,
-    0x11d3016c,
-    0x600014ae,
-    0x1114b097,
-    0x819074a3,
-    0x11d3016c,
-    0x600014ae,
-    0x1114b097,
-    0x3b2b6775,
-    0x45af70b6,
-    0x9a2ea8d,
-    0xf35995c6,
-    0x667955ad,
-    0x43ca6b3b,
-    0x69bc49b9,
-    0x7fffbab5,
-    0x995513af,
-    0x4b9a3027,
-    0x72c76e95,
-    0x680f7b3,
-    0xebfe7ba0,
-    0x11d2628d,
-    0x60000fae,
-    0x1114b097,
-    0x743b5d60,
-    0x11d2628d,
-    0x60000fae,
-    0x1114b097,
-    0x6d4a3650,
-    0x11d2628d,
-    0x60000fae,
-    0x1114b097,
-    0x53934290,
-    0x11d2628d,
-    0x60000fae,
-    0x1114b097,
-    0xa9e213f2,
-    0x486f9a60,
-    0x40533bbf,
-    0xbb1c6d8b,
-    0xd22ee73,
-    0x4a0d4a46,
-    0x5b04b289,
-    0x2564664d,
-    0x5102dacf,
-    0x11d3241b,
-    0x6000a7ae,
-    0x1114b097,
-    0x5102dace,
-    0x11d3241b,
-    0x6000a7ae,
-    0x1114b097,
-    0x5102dacd,
-    0x11d3241b,
-    0x6000a7ae,
-    0x1114b097,
-    0xe4c1d9a2,
-    0x48bdcbf7,
-    0xa534699a,
-    0x41890d5e,
-    0xfc47060e,
-    0x4b346153,
-    0x418e75b9,
-    0x3c7feb21,
-    0x286f484d,
-    0x4458375e,
-    0x38b172a2,
-    0x6a0af8e2,
-    0xda825e1b,
-    0x43d76830,
-    0x5a0b5d83,
-    0xa25629d8,
-    0x743f1dc6,
-    0x429f5aba,
-    0x4dc5df8b,
-    0xc23d2503,
-    0xe5a0e990,
-    0x430b2bad,
-    0x42a1da87,
-    0x58de75cf,
-    0x83783300,
-    0x4c8a4063,
-    0x8382b39d,
-    0x31eb7f0a,
-    0x934a9523,
-    0x4bc5a3ca,
-    0xd9d6a0ad,
-    0x2194975d,
-    0xfe44a9fe,
-    0x48bf8ed4,
-    0x1a1b669d,
-    0x6dfff9df,
-    0xd7954361,
-    0x11d35a0b,
-    0x5452e49b,
-    0xe785d900,
-    0x53def900,
-    0x46337168,
-    0x43d17fb4,
-    0xc7136a91,
-    0x7d82a29b,
-    0x4f822242,
-    0x115d398f,
-    0x413edf53,
-    0x8de12fd4,
-    0x48ce7cb3,
-    0x479ce8a7,
-    0xc58a2ea2,
-    0x24768c60,
-    0x11d35a0d,
-    0x5452e49b,
-    0xe785d900,
-    0x699b52c1,
-    0x46a8a885,
-    0x179708a3,
-    0xc7ad1924,
-    0xd26af734,
-    0x41da208b,
-    0xcee02482,
-    0xe10b8179,
-    0xfaa1c173,
-    0x43b60468,
-    0x8aea2a8a,
-    0xc976204f,
-    0x1dfdc8ea,
-    0x41d6bcf7,
-    0x64ab95b2,
-    0x633b2b3,
-    0xf0f094b,
-    0x4091b01c,
-    0xcdd4da1,
-    0x1a7107d8,
-    0xd3f5b8e6,
-    0x4a4c9b78,
-    0x23caea94,
-    0xd363b697,
-    0xb9f3eb85,
-    0x4ac1b781,
-    0xa093908d,
-    0x7d7de35e,
-    0x5ab0882e,
-    0x45167274,
-    0xee4e7d87,
-    0xd04fba99,
-    0x11c5c73b,
-    0x4ba166e9,
-    0x14e8baa0,
-    0x2dd9eec6,
-    0xe07f903f,
-    0x4e6062fd,
-    0xa7dedd8c,
-    0xb5656623,
-    0x1c22c56d,
-    0x4f5b9879,
-    0x992789a3,
-    0x1028dc6d,
-    0xcdebb919,
-    0x488a379a,
-    0x3cf56587,
-    0x40de36fd,
-    0xbf963d80,
-    0x11d0c559,
-    0xa0002b8a,
-    0xc15a25c9,
-    0x87fc0268,
-    0x43609a55,
-    0x4a00aa95,
-    0x6ce29d1d,
-    0xef985e71,
-    0x42d4d5c7,
-    0x72d4dba,
-    0xf4962e3e,
-    0x120ced89,
-    0x41733bf4,
-    0xb43c32a1,
-    0x3132cf06,
-    0xef011f79,
-    0x406d4000,
-    0xfbbfaf87,
-    0x579dc33f,
-    0xef114c90,
-    0x484ecd1d,
-    0xcf09e596,
-    0x212a91af,
-    0xef3e932c,
-    0x4f51d40b,
-    0x983fcf8c,
-    0x5d9db2f1,
-    0xefca3d92,
-    0x4672dfd8,
-    0x207403a6,
-    0x98ad4b89,
-    0xefe6629c,
-    0x428181f7,
-    0xd6c991bd,
-    0xf65aa904,
-    0xdafd8210,
-    0x4b915711,
-    0x5bf7e39f,
-    0xbf79e27a,
-    0xedcb4c7a,
-    0x4216daab,
-    0x506c2ea4,
-    0x1ddc6d59,
-    0xed311e41,
-    0x4175fbae,
-    0x8cd2596,
-    0xca93f654,
-    0xad74143d,
-    0x4ab7903d,
-    0xd3286680,
-    0x656d0363,
-    0x46858c3a,
-    0x45e30dc6,
-    0xeed460b7,
-    0x25b36cf1,
-    0x4b166a6a,
-    0x43f30d66,
-    0x62eee380,
-    0xa4e1de80,
-    0xc03ca9fe,
-    0x4204fe90,
-    0x33827880,
-    0xda77d14c,
-    0x4bbd1154,
-    0x4e2c62f6,
-    0xb6d35ca1,
-    0xa0f717c4,
-    0x8ecf4326,
-    0x4d8b455f,
-    0x5d8da9bd,
-    0xb3e9e3e,
-    0x8bd28edf,
-    0x4e9250db,
-    0x5444bda2,
-    0x42edd188,
-    0x903e9878,
-    0x40722c92,
-    0x68ea2c9b,
-    0x836739f5,
-    0x880842e3,
-    0x43e6145f,
-    0x18a734a9,
-    0x4705e506,
-    0xd616f352,
-    0x11ced622,
-    0x2000c5aa,
-    0xa3990baf,
-    0x990df4,
-    0x48720dbb,
-    0x306d3e83,
-    0xb6ae803e,
-    0xaa114de5,
-    0x4169c262,
-    0xd623c8a1,
-    0xb573cc98,
-    0x6825a449,
-    0x4d827524,
-    0xe3500f92,
-    0x1eabb36a,
-    0xc50a7e93,
-    0x4834f395,
-    0xa97ff69e,
-    0x6609e59d,
-    0xf2f0ce00,
-    0x11cfe0af,
-    0xa0004e9c,
-    0x5e4205c9,
-    0xe4524541,
-    0x11d18ea5,
-    0x6000968a,
-    0x1114b097,
-    0xe63232a0,
-    0x11d09dbf,
-    0xa000c19c,
-    0x5e4205c9,
-    0xc4a54da0,
-    0x11cfe0af,
-    0xa0004e9c,
-    0x5e4205c9,
-    0x1fd92e0,
-    0x11d0a2ff,
-    0xa0004f9c,
-    0x5e4205c9,
-    0xf6dcc200,
-    0x11d0a2fe,
-    0xa0004f9c,
-    0x5e4205c9,
-    0xba5a7a70,
-    0x11d09dbf,
-    0xa000c19c,
-    0x5e4205c9,
-    0x78ec89a0,
-    0x11cfe0af,
-    0xa0004e9c,
-    0x5e4205c9,
-    0x59b95640,
-    0x11d09667,
-    0x7da7,
-    0xfcab03f8,
-    0x7d916c0,
-    0x11cfe0af,
-    0xa0004e9c,
-    0x5e4205c9,
-    0x1318f560,
-    0x11d0912c,
-    0xa000aa9d,
-    0xcb430ac9,
-    0x48784000,
-    0x11d0d219,
-    0xc00039ba,
-    0x67edd74f,
-    0xb4319322,
-    0x11d0d20d,
-    0xc00039ba,
-    0x67edd74f,
-    0xf56920a0,
-    0x11d0d218,
-    0xc00039ba,
-    0x67edd74f,
-    0x762ccda1,
-    0x11d0d916,
-    0xc00039ba,
-    0x67edd74f,
-    0x2fe8f810,
-    0x11d0b2a5,
-    0x87a7,
-    0xfcab03f8,
-    0x2db72491,
-    0x11d1652c,
-    0xa8a7,
-    0xfcab03f8,
-    0x2db72490,
-    0x11d1652c,
-    0xa8a7,
-    0xfcab03f8,
-    0x1bb4af80,
-    0x11d0a303,
-    0xa0004f9c,
-    0x5e4205c9,
-    0x194c220,
-    0x11d0a303,
-    0xa0004f9c,
-    0x5e4205c9,
-    0x26c66a70,
-    0x11cfb367,
-    0xaa0024a0,
-    0xac576100,
-    0xaf465c71,
-    0x11cf9588,
-    0xaa0020a0,
-    0xac576100,
-    0x5454e9a0,
-    0x11cedb65,
-    0xaa001c92,
-    0x72496c00,
-    0x44eaa760,
-    0x11cfcb68,
-    0xa0004e9c,
-    0x5e4205c9,
-    0xf1d6860,
-    0x11cf88d9,
-    0xa0004e9c,
-    0x5e4205c9,
-    0x36e95ee0,
-    0x11cf8577,
-    0x80000c96,
-    0x824e53c7,
-    0x685bc400,
-    0x11cf9d2c,
-    0xaa00cda9,
-    0xe3866800,
-    0xd1eb6d20,
-    0x11d08923,
-    0xa000979d,
-    0xcb430ac9,
-    0xab1c531,
-    0x11d14745,
-    0xa1a7,
-    0xfcab03f8,
-    0xab1c530,
-    0x11d14745,
-    0xa1a7,
-    0xfcab03f8,
-    0x133efe41,
-    0x11d032dc,
-    0xa000fb9c,
-    0xcb430ac9,
-    0x133efe40,
-    0x11d032dc,
-    0xa000fb9c,
-    0xcb430ac9,
-    0x9d460580,
-    0x11cfa822,
-    0x80000c96,
-    0x824e53c7,
-    0x2b74f7c0,
-    0x11cf9154,
-    0xaa00cda9,
-    0xe3866800,
-    0x745a17a0,
-    0x11d074d3,
-    0xa000feb6,
-    0xda570fc9,
-    0x4d36e96f,
-    0x11cee325,
-    0x8c1bf,
-    0x1803e12b,
-    0x4d36e96c,
-    0x11cee325,
-    0x8c1bf,
-    0x1803e12b,
-    0x4d36e96b,
-    0x11cee325,
-    0x8c1bf,
-    0x1803e12b,
-    0xeb0d7dfa,
-    0x4f271990,
-    0xf2edd6b4,
-    0x4ca4c4ee,
-    0xeec6993a,
-    0x11d2b3fd,
-    0xc00016a9,
-    0x3886b94f,
-    0x1de12ab1,
-    0x11cfc9f5,
-    0x4544c7bf,
-    0x5453,
-    0x2538130,
-    0x11d0898f,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c2b,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c2a,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c29,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c28,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c27,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c26,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c25,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c24,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c23,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c22,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c21,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x13541c20,
-    0x11d08e33,
-    0xa000d09a,
-    0x356ea0c9,
-    0x6f1d2b83,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0x6f1d2b82,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0x6f1d2b81,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0x6f1d2b80,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0x6f1d2b70,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0x6f1d2b61,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0x6f1d2b60,
-    0x11cfd5a0,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02f3,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02f2,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0x55728220,
-    0x11cfd33c,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02f0,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02e4,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02e3,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02f5,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02f4,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02e2,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02e1,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xa36d02e0,
-    0x11cfc9f3,
-    0x4544c7bf,
-    0x5453,
-    0xe7e1f7c0,
-    0x11d088d2,
-    0xa000d09a,
-    0x356ea0c9,
-    0x54d41081,
-    0x4833dc15,
-    0x8f741ba4,
-    0x7981a373,
-    0x54d41080,
-    0x4833dc15,
-    0x8f741ba4,
-    0x7981a373,
-    0x57d7c6bd,
-    0x11d32356,
-    0xc0009d8e,
-    0xae44684f,
-    0x57d7c6bc,
-    0x11d32356,
-    0xc0009d8e,
-    0xae44684f,
-    0x5944e683,
-    0x11cfc92e,
-    0x4544c7bf,
-    0x5453,
-    0x5944e682,
-    0x11cfc92e,
-    0x4544c7bf,
-    0x5453,
-    0x5944e681,
-    0x11cfc92e,
-    0x4544c7bf,
-    0x5453,
-    0x5944e680,
-    0x11cfc92e,
-    0x4544c7bf,
-    0x5453,
-    0xbf798031,
-    0x4da2483a,
-    0x645d99aa,
-    0x9736ed,
-    0xbf798030,
-    0x4da2483a,
-    0x645d99aa,
-    0x9736ed,
-    0x9a4cb685,
-    0x11d3236d,
-    0xc0009d8e,
-    0xae44684f,
-    0x9a4cb684,
-    0x11d3236d,
-    0xc0009d8e,
-    0xae44684f,
-    0x5944e663,
-    0x11cfaa8a,
-    0x4544c7bf,
-    0x5453,
-    0x5944e662,
-    0x11cfaa8a,
-    0x4544c7bf,
-    0x5453,
-    0x89521361,
-    0x11cfaa8a,
-    0x4544c7bf,
-    0x5453,
-    0x89521360,
-    0x11cfaa8a,
-    0x4544c7bf,
-    0x5453,
-    0x25e609e5,
-    0x11cfb259,
-    0x4544c7bf,
-    0x5453,
-    0x25e609e4,
-    0x11cfb259,
-    0x4544c7bf,
-    0x5453,
-    0x25e609e1,
-    0x11cfb259,
-    0x4544c7bf,
-    0x5453,
-    0x25e609e0,
-    0x11cfb259,
-    0x4544c7bf,
-    0x5453,
-    0x3d82ab43,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab46,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab45,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab44,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab43,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab42,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab41,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab40,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x4516ec43,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x7f5d5ea0,
-    0x11d1d53a,
-    0xa000c082,
-    0x717269c9,
-    0x7f0f21e1,
-    0x11d1bfe1,
-    0xa000c082,
-    0x717269c9,
-    0x7f0f21e0,
-    0x11d1bfe1,
-    0xa000c082,
-    0x717269c9,
-    0x98116aa0,
-    0x11d1bdba,
-    0xa000c082,
-    0x717269c9,
-    0x8a63c360,
-    0x11d0997d,
-    0x80001c94,
-    0x7bfa0cc8,
-    0x3a23eea1,
-    0x11d094b1,
-    0x200039ab,
-    0x33e471af,
-    0x3a23eea0,
-    0x11d094b1,
-    0x200039ab,
-    0x33e471af,
-    0xa8a98ba0,
-    0x11cfc5e5,
-    0x800041b9,
-    0x7bfa0cc8,
-    0xaed22741,
-    0x11cfb31f,
-    0xaa00d59d,
-    0x2f1aa700,
-    0xaed22742,
-    0x11cfb31f,
-    0xaa00d59d,
-    0x2f1aa700,
-    0xaed22740,
-    0x11cfb31f,
-    0xaa00d59d,
-    0x2f1aa700,
-    0xe5745280,
-    0x11cfb24f,
-    0xaa00d59d,
-    0x2f1aa700,
-    0x3d82ab51,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab4a,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0xe2bf56c3,
-    0x11cf840f,
-    0x4000528f,
-    0xa3943533,
-    0xe2bf56c2,
-    0x11cf840f,
-    0x4000528f,
-    0xa3943533,
-    0xe2bf56c1,
-    0x11cf840f,
-    0x4000528f,
-    0xa3943533,
-    0xe2bf56c0,
-    0x11cf840f,
-    0x4000528f,
-    0xa3943533,
-    0xf406b180,
-    0x11cf7b3b,
-    0x4000528f,
-    0xa3943533,
-    0x4885ae63,
-    0x11cf78e8,
-    0x4000528f,
-    0xa3943533,
-    0xed1ec5c0,
-    0x11d0c0a8,
-    0x80001c94,
-    0x7bfa0cc8,
-    0x537da6a0,
-    0x11d0ca37,
-    0x80001c94,
-    0x7bfa0cc8,
-    0x4885ae60,
-    0x11cf78e8,
-    0x4000528f,
-    0xa3943533,
-    0x1630b821,
-    0x11cf7842,
-    0x4000528f,
-    0xa3943533,
-    0x1630b820,
-    0x11cf7842,
-    0x4000528f,
-    0xa3943533,
-    0xa42790e2,
-    0x11cf7810,
-    0x4000528f,
-    0xa3943533,
-    0xa42790e1,
-    0x11cf7810,
-    0x4000528f,
-    0xa3943533,
-    0xa42790e0,
-    0x11cf7810,
-    0x4000528f,
-    0xa3943533,
-    0xd3e16e81,
-    0x11cf7835,
-    0x4000528f,
-    0xa3943533,
-    0x35ff44e0,
-    0x11cf6c7c,
-    0x4000528f,
-    0xa3943533,
-    0x1411843,
-    0x11cf7786,
-    0x4000528f,
-    0xa3943533,
-    0xd3e16e80,
-    0x11cf7835,
-    0x4000528f,
-    0xa3943533,
-    0x1411842,
-    0x11cf7786,
-    0x4000528f,
-    0xa3943533,
-    0x1411841,
-    0x11cf7786,
-    0x4000528f,
-    0xa3943533,
-    0x1411840,
-    0x11cf7786,
-    0x4000528f,
-    0xa3943533,
-    0x10dd46a9,
-    0x11cf775b,
-    0x4000528f,
-    0xa3943533,
-    0x10dd46a8,
-    0x11cf775b,
-    0x4000528f,
-    0xa3943533,
-    0x3d82ab50,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab4f,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0xf6f23f45,
-    0x11cf7686,
-    0x4000528f,
-    0xa3943533,
-    0xf6f23f44,
-    0x11cf7686,
-    0x4000528f,
-    0xa3943533,
-    0xf6f23f43,
-    0x11cf7686,
-    0x4000528f,
-    0xa3943533,
-    0xf6f23f40,
-    0x11cf7686,
-    0x4000528f,
-    0xa3943533,
-    0xf6f23f42,
-    0x11cf7686,
-    0x4000528f,
-    0xa3943533,
-    0xf6f23f41,
-    0x11cf7686,
-    0x4000528f,
-    0xa3943533,
-    0x3d82ab46,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x35ff44e1,
-    0x11cf6c7c,
-    0x4000528f,
-    0xa3943533,
-    0x3d82ab4d,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab5f,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab5e,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x3d82ab44,
-    0x11cf62da,
-    0x200039ab,
-    0x33e471af,
-    0x2b957100,
-    0x11cf9e9a,
-    0x200039ab,
-    0x33e471af,
-    0xc5016cc0,
-    0x11ced273,
-    0x48ac,
-    0xa12538c0,
-    0x4516ec41,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x4516ec83,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x4516ecc8,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x2bc49361,
-    0x11cf8327,
-    0x4aac,
-    0xa12538c0,
-    0x5434e733,
-    0x11d16d66,
-    0xbbb,
-    0x5a8675f8,
-    0x4516ec7b,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x4516ec79,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x242f6bc1,
-    0x11d03849,
-    0x6d9b,
-    0xc31b78c0,
-    0x86b44e25,
-    0x11d19c82,
-    0xa0000bbb,
-    0xa6a081c9,
-    0xaf359780,
-    0x11cf6ba3,
-    0x4aac,
-    0xa12538c0,
-    0x59163de0,
-    0x11cf6d43,
-    0x4aac,
-    0xa12538c0,
-    0xd5f1cae0,
-    0x11d14bd7,
-    0x600074b9,
-    0xf3453e08,
-    0xeb16cb17,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb16,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb14,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb13,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb12,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb11,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb10,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0x242f6bc2,
-    0x11d03849,
-    0x6d9b,
-    0xc31b78c0,
-    0xff6b7f79,
-    0x11d1a40e,
-    0xf991,
-    0x668e75f8,
-    0xeb16cb0e,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xff6b7f77,
-    0x11d1a40e,
-    0xf991,
-    0x668e75f8,
-    0xeb16cb0d,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xff6b7f75,
-    0x11d1a40e,
-    0xf991,
-    0x668e75f8,
-    0xeb16cb0b,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb0a,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xff6b7f73,
-    0x11d1a40e,
-    0xf991,
-    0x668e75f8,
-    0x120f30c0,
-    0x11d01629,
-    0x80001c94,
-    0x7bfa0cc8,
-    0xeb16cb09,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xeb16cb08,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0x4516ec81,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0xeb16cb07,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0x4516ec82,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0x4516ec77,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0xa3a80d02,
-    0x11cf6e12,
-    0x4aac,
-    0xa12538c0,
-    0xa3a80d01,
-    0x11cf6e12,
-    0x4aac,
-    0xa12538c0,
-    0xeb16cb04,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0xff6b7f70,
-    0x11d1a40e,
-    0xf991,
-    0x668e75f8,
-    0xc3dfbd60,
-    0x11d03988,
-    0xc29e,
-    0xc31a29c0,
-    0xeb16cb03,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0x4a1b1be6,
-    0x11d1bfed,
-    0xa000d88e,
-    0x82a467c9,
-    0xeb16cb02,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0x549f498b,
-    0x11d1bfeb,
-    0xa000d88e,
-    0x82a467c9,
-    0x4516ec78,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0xe9e19280,
-    0x11cf6e05,
-    0x4aac,
-    0xa12538c0,
-    0x4516ec7c,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0xeb16cb00,
-    0x11ced271,
-    0x48ac,
-    0xa12538c0,
-    0x5434e72d,
-    0x11d16d66,
-    0xbbb,
-    0x5a8675f8,
-    0x4516ec40,
-    0x11d08f20,
-    0x6d9b,
-    0xc31b78c0,
-    0xde9eaa8,
-    0x11d03b84,
-    0x6d9b,
-    0xc31b78c0,
-    0xde9eaa7,
-    0x11d03b84,
-    0x6d9b,
-    0xc31b78c0,
-    0xde9eaa6,
-    0x11d03b84,
-    0x6d9b,
-    0xc31b78c0,
-    0xde9eaa3,
-    0x11d03b84,
-    0x6d9b,
-    0xc31b78c0,
-    0xde9eaa2,
-    0x11d03b84,
-    0x6d9b,
-    0xc31b78c0,
-    0xde9eaa1,
-    0x11d03b84,
-    0x6d9b,
-    0xc31b78c0,
-    0x4fa3569b,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa3569a,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35699,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35698,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35697,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35696,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35695,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35694,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35693,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35692,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35691,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa35690,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa3568f,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x4fa3568e,
-    0x11cf623f,
-    0x4aac,
-    0xa12538c0,
-    0x928c088b,
-    0x4c6b76b9,
-    0x90a536a5,
-    0xcd763885,
-    0xbd7349f5,
-    0x42e414f1,
-    0x2397799c,
-    0xc040db80,
-    0xb96eebca,
-    0x4ea5b326,
-    0xf52f2f88,
-    0xdd21e0ba,
-    0xe689c9a,
-    0x44a0053d,
-    0xedb929d,
-    0x860f753d,
-    0x8aeeeac7,
-    0x44d405f9,
-    0xb0091b5,
-    0x95cbf10d,
-    0x4b8aaafa,
-    0x42ba140f,
-    0x7e593191,
-    0xad2eaaaf,
-    0x3ee5b968,
-    0x4c342aca,
-    0xc7eb58b,
-    0x50b7193d,
-    0xe4cdd575,
-    0x4f012866,
-    0xec7e2eb1,
-    0x5893ece1,
-    0xb4211cfa,
-    0x4a9f51b9,
-    0x99db78ab,
-    0x8e67bbb2,
-    0x1b36bb7b,
-    0x410a09b7,
-    0x147d45b4,
-    0x3fb3d730,
-    0x7385e5df,
-    0x41d58fe8,
-    0xb4d7b686,
-    0xcfb64785,
-    0x1dd9e8da,
-    0x4d401c77,
-    0xfe98cfb0,
-    0x1295fffd,
-    0xf5049e7d,
-    0x11d24861,
-    0xa00007a4,
-    0xa82906c9,
-    0x7a503555,
-    0x11d14a83,
-    0xa000dba5,
-    0xf86703c9,
-    0xb0ab3b61,
-    0x11d133d7,
-    0xc00081a9,
-    0x74b1d74f,
-    0x93281500,
-    0x11d08cf8,
-    0xa000ab89,
-    0x294105c9,
-    0x4417c146,
-    0x11cf33ad,
-    0x6f81,
-    0x6e1520c0,
-    0x4417c145,
-    0x11cf33ad,
-    0x6f81,
-    0x6e1520c0,
-    0xca9c46f4,
-    0x11d1d3c5,
-    0x60005ab7,
-    0x12b35208,
-    0x93281503,
-    0x11d08cf8,
-    0xa000ab89,
-    0x294105c9,
-    0x4417c144,
-    0x11cf33ad,
-    0x6f81,
-    0x6e1520c0,
-    0x4417c142,
-    0x11cf33ad,
-    0x6f81,
-    0x6e1520c0
-}; D2_STATIC_GUARD(CRC32_LookupTable, "D2Game::PLAYER::PlayerSave::CRC32_Calculate::CRC32_LookupTable");
-
-    if (!nLen) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x40);
-      exit(-1);
-    }
-
-    uint32_t uCRC = -1;
-    do {
-      uCRC = uCRC >> 8 ^ CRC32_LookupTable[(uint32_t)*pbData ^ (uint8_t)uCRC];
-      nLen--;
-      pbData++;
-    } while (nLen);
-
-    return ~uCRC;
 }
 
 } // namespace D2Game::PLAYER::PlayerSave

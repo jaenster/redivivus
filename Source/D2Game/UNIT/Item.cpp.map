@@ -144,6 +144,9 @@
         "ITEM_CheckItemData_eD2ItemCmd",
         "SetBodyLoc",
         "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {

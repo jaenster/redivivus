@@ -15,6 +15,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "LINKEDLIST_NodeDestructor_Unref_0041c3d0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -31,6 +34,7 @@
         "LINKEDLIST_Unlink"
       ],
       "usedTypes": [
+        "D2BitStreamReaderStrc",
         "uint32_t"
       ]
     },
@@ -172,6 +176,9 @@
         "BITSTREAM_WriteBits"
       ],
       "usedTypes": [
+        "D2BitStreamWriterStrc",
+        "D2CompressEncoderStrc",
+        "D2CompressHuffNodeStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -331,6 +338,7 @@
       "usedTypes": [
         "D2ScompArenaStrc",
         "int32_t",
+        "uint32_t",
         "uint8_t"
       ]
     },
@@ -574,7 +582,8 @@
         "SCOMP_ReleaseTempBuffer"
       ],
       "usedTypes": [
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -645,6 +654,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041e930"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -673,6 +685,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041e9b0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -703,8 +718,8 @@
         "BITBUFFER_ReadBits"
       ],
       "usedTypes": [
+        "D2BitStreamReaderStrc",
         "uint16_t",
-        "uint16_t *",
         "uint32_t"
       ]
     },
@@ -738,6 +753,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041ea40"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -766,6 +784,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "LINKEDLIST_NodeDestructor_Unref_0041eae0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -831,6 +852,8 @@
         "HUFFMAN_DecodeSymbol"
       ],
       "usedTypes": [
+        "D2CompressHuffNodeStrc",
+        "D2HuffmanContextStrc",
         "int32_t",
         "uint16_t",
         "uint16_t *",
@@ -849,6 +872,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "LINKEDLIST_NodeDestructor_Unref_0041ed30"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -863,6 +889,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041ed70"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -897,7 +926,7 @@
         "LINKEDLIST_UnlinkAll"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -947,7 +976,8 @@
         "LINKEDLIST_MoveNode"
       ],
       "usedTypes": [
-        "int *",
+        "D2CompressHuffNodeStrc",
+        "D2HuffmanContextStrc",
         "int32_t"
       ]
     },
@@ -1007,7 +1037,8 @@
         "LINKEDLIST_UnlinkAll"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1025,8 +1056,7 @@
         "HUFFMAN_InitContext"
       ],
       "usedTypes": [
-        "D2CompressEncoderStrc",
-        "int32_t"
+        "D2CompressEncoderStrc"
       ]
     },
     {
@@ -1065,7 +1095,8 @@
         "LINKEDLIST_UnlinkAll"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2CompressEncoderStrc",
+        "D2CompressHuffNodeStrc"
       ]
     },
     {
@@ -1086,6 +1117,7 @@
         "COMPRESS_UpdateFrequencies"
       ],
       "usedTypes": [
+        "D2HuffmanContextStrc",
         "int32_t",
         "uint16_t",
         "uint16_t *",
@@ -1113,6 +1145,8 @@
         "COMPRESS_EncodeSymbol"
       ],
       "usedTypes": [
+        "D2BitStreamWriterStrc",
+        "D2CompressEncoderStrc",
         "int *",
         "int32_t",
         "uint32_t",
@@ -1134,8 +1168,7 @@
         "HUFFMAN_InitContext"
       ],
       "usedTypes": [
-        "D2CompressEncoderStrc",
-        "int32_t"
+        "D2CompressEncoderStrc"
       ]
     },
     {
@@ -1153,7 +1186,8 @@
         "HUFFMAN_InitContext"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2HuffmanContextStrc",
+        "uint32_t"
       ]
     },
     {
@@ -1198,7 +1232,7 @@
         "COMPRESS_DestroyEncoderContext"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2HuffmanContextStrc"
       ]
     },
     {
@@ -1213,6 +1247,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "LINKEDLIST_NodeDestructor_Unref_00420430"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {

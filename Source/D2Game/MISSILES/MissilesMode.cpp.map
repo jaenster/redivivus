@@ -142,6 +142,7 @@
       ],
       "usedTypes": [
         "D2DamageStrc",
+        "D2UnitStrc",
         "eD2ElementalDamageType",
         "int32_t"
       ]
@@ -162,6 +163,7 @@
       ],
       "usedTypes": [
         "D2DamageStrc",
+        "D2UnitStrc",
         "eD2ElementalDamageType",
         "int32_t"
       ]
@@ -2736,10 +2738,10 @@
       "usedTypes": [
         "D2DynamicPathStrc",
         "D2MissileSrvCollideCtxStrc",
-        "D2MissilesTxt",
         "D2PathPointStrc",
         "D2RoomStrc",
         "D2UnitStrc",
+        "MISSMODE_SrvDoFn01_BasicMissile_Slotmc",
         "SGAMEDATA",
         "eCollisionFlags",
         "eD2CollisionUnitSize",

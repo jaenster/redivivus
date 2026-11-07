@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -47,12 +50,17 @@ struct D2PetArguments {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2PetDataStrc
+#define D2_DEFINED_D2PetDataStrc
 struct D2PetDataStrc {
     /* 0x00 */ int nSeed;
     /* 0x04 */ int nNameId;
     /* 0x08 */ int nType;
 };
 
+#endif // D2_DEFINED_D2PetDataStrc
+#ifndef D2_DEFINED_D2PetStrc
+#define D2_DEFINED_D2PetStrc
 struct D2PetStrc {
     /* 0x00 */ uint8_t nFlags;
     /* 0x04 */ int nPetGUID;
@@ -60,6 +68,7 @@ struct D2PetStrc {
     /* 0x14 */ struct D2PetStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2PetStrc
 namespace D2Game::PLAYER::PlayerPets {
 
 // Function declarations
@@ -71,7 +80,7 @@ void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 // Releases all pet tracking memory for a player unit. Iterates every pet type list (skipping index 0), calling PETS_FreeOrKillPetList for each (type 7 = merc gets special kill flag). Frees the pet list array and the D2UnitDataPlayerPetsStrc itself from the game memory pool, then nulls pPets. Halts on missing player data.
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall FreePets(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_00574810(int param_1, int param_2);
+int __fastcall Unreferenced_00574810(struct D2UnitStrc * param_1, int param_2);
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall SummonAndAssign(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PetArgStrc * pSummonArgs);
 void __fastcall PETS_UpdatePetData(struct D2UnitStrc * pUnit, ePetType nPetType, int32_t nTargetPetGUID, struct D2PetDataStrc * pNewPetData);

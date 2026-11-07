@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2ChangedStatArrayStrc;
+struct D2ItemCalcContextStrc;
 struct D2ItemStatCostTxt;
 struct D2PoolManagerStrc;
 struct D2StatInfoStrc;
@@ -149,7 +153,7 @@ void __fastcall STATLIST_PropagateStatChange(struct D2StatListExStrc * pStatsEx,
 void __stdcall STATLIST_DetachAndRecalc(struct D2StatListExStrc * pStatListEx);
 // Detaches pStatsEx from its parent (STATLIST_DetachAndRecalc), then frees all associated memory: base stat array, full-stat array, changed-stat ID array, state flags, and recursively frees non-root child stat lists. Finally frees the D2StatListExStrc itself.
 void __fastcall FreeAnyStatList(struct D2StatListExStrc * pPlayerStatsEx);
-void __fastcall Unreferenced_00626cf0(int param_1);
+void __fastcall Unreferenced_00626cf0(struct D2StatListExStrc * param_1);
 void __stdcall STATLIST_FreeStatListMemory(struct D2UnitStrc * pUnit);
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
 void __stdcall STATLIST_SetStatValueInBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer, struct D2UnitStrc * pUnit);
@@ -176,7 +180,7 @@ int Unreferenced_00627b30();
 int __fastcall nullsub(int32_t nCalcCode, void * pContext);
 int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2);
 int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, uint32_t pContext);
-int * __fastcall MATH_RandomRange(int * nMin, int32_t nMax, uint32_t nRangeMax, int * pSeed);
+int __fastcall MATH_RandomRange(int32_t nMin, int32_t nMax, uint32_t nRangeMax, struct D2ItemCalcContextStrc * pSeed);
 int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQueryMode, uint32_t dwContext, struct D2UnitStrc * * ppUnit);
 #endif // D2_MODULE_D2Common
 // 13 internal functions (defined in .cpp)

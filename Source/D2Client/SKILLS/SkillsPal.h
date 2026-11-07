@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -37,9 +40,9 @@ BOOL __fastcall Skills_CltDoFunc_Pal_HolyBolt_Melee(struct D2UnitStrc * pUnit, e
 void __fastcall SKILL_StopAndClearUninterruptable(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
-BOOL __fastcall SKILL_ExecuteItemCast(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pDoFuncData, struct D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget);
-BOOL __fastcall SKILL_ExecuteItemCastOnUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, struct D2UnitStrc * pTargetUnit, uint16_t bHasTarget);
-void __fastcall SKILL_ExecuteItemCastAtCoords(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam);
+BOOL __fastcall SKILL_ExecuteItemCast(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pDoFuncData, struct D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget);
+BOOL __fastcall SKILL_ExecuteItemCastOnUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, struct D2UnitStrc * pTargetUnit, uint16_t bHasTarget);
+void __fastcall SKILL_ExecuteItemCastAtCoords(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam);
 #endif // D2_MODULE_D2Client
 // 1 internal function (defined in .cpp)
 

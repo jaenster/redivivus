@@ -5,11 +5,9 @@
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2Win/Src/D2WinMain.h"
 #include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Win/D2Win.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ControlStrc.h"
 

@@ -46,7 +46,8 @@
       ],
       "usedTypes": [
         "D2GamePalShiftGreenBloodStrc",
-        "D2MPQFileStrc"
+        "D2MPQFileStrc",
+        "D2MonsterPalShiftSlotStrc"
       ]
     },
     {
@@ -62,6 +63,9 @@
       "calledFunctions": [
         "FreeGamePalShift",
         "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2PalShiftEntryStrc"
       ]
     },
     {
@@ -78,6 +82,7 @@
         "PALSHIFT_FindPalShiftByToken"
       ],
       "usedTypes": [
+        "D2PalShiftEntryStrc",
         "int32_t"
       ]
     },
@@ -124,6 +129,7 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc",
+        "D2PalShiftEntryStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -144,6 +150,9 @@
         "AllocClientMemory",
         "memset",
         "PALSHIFT_LoadMonsterPalShift"
+      ],
+      "usedTypes": [
+        "D2MonsterPalShiftSlotStrc"
       ]
     },
     {
@@ -168,6 +177,7 @@
       "usedTypes": [
         "D2GamePalShiftRandTransformStrc *",
         "D2MonStats2Txt",
+        "D2PalShiftEntryStrc",
         "D2UnitStrc",
         "int32_t"
       ]

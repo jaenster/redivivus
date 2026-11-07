@@ -4,11 +4,14 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2SkillsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -16,6 +19,8 @@
 
 namespace D2Common::Skills {
 
+#ifndef D2_DEFINED_INLINE_0045c4b0
+#define D2_DEFINED_INLINE_0045c4b0
 __attribute__((noinline)) inline D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2Skills eSkill) {
     if ((int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
@@ -23,6 +28,7 @@ __attribute__((noinline)) inline D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2
 
     return nullptr;
 }
+#endif // D2_DEFINED_INLINE_0045c4b0
 
 __attribute__((noinline)) inline void __fastcall StoreLastSkillHit(eSkillEType pSkill, D2UnitStrc * pUnit, eD2UnitType nUnitType, uint32_t nUid) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer)) {
@@ -35,6 +41,8 @@ __attribute__((noinline)) inline void __fastcall StoreLastSkillHit(eSkillEType p
     pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = nUid;
 }
 
+#ifndef D2_DEFINED_INLINE_004a89d0
+#define D2_DEFINED_INLINE_004a89d0
 __attribute__((noinline)) inline D2SkillDescTxt * __fastcall GetSkillDescription(eD2Skills eSkillId) {
     D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (pSkillsTxt) {
@@ -47,7 +55,10 @@ __attribute__((noinline)) inline D2SkillDescTxt * __fastcall GetSkillDescription
 
     return nullptr;
 }
+#endif // D2_DEFINED_INLINE_004a89d0
 
+#ifndef D2_DEFINED_INLINE_004aa8b0
+#define D2_DEFINED_INLINE_004aa8b0
 __attribute__((noinline)) inline int32_t __fastcall SKILL_GetMaxLevelForSkill(int32_t skillId) {
     int32_t nMaxLevel;
     if (!(skillId < 0 || skillId >= ITEMS::Items::sgptDataTable->nTxtSkillsCount || (nMaxLevel = (int32_t)ITEMS::Items::sgptDataTable->pTxtSkills[skillId].maxlvl , nMaxLevel <= 0))) {
@@ -57,7 +68,10 @@ __attribute__((noinline)) inline int32_t __fastcall SKILL_GetMaxLevelForSkill(in
     nMaxLevel = 0x14;
     return nMaxLevel;
 }
+#endif // D2_DEFINED_INLINE_004aa8b0
 
+#ifndef D2_DEFINED_INLINE_004c9460
+#define D2_DEFINED_INLINE_004c9460
 __attribute__((noinline)) inline int32_t __fastcall SKILLS_GetManaCostMultiplier(int32_t nSkillId) {
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
@@ -66,7 +80,10 @@ __attribute__((noinline)) inline int32_t __fastcall SKILLS_GetManaCostMultiplier
 
     return pSkillsTxt->Param[0];
 }
+#endif // D2_DEFINED_INLINE_004c9460
 
+#ifndef D2_DEFINED_INLINE_004cc7c0
+#define D2_DEFINED_INLINE_004cc7c0
 __attribute__((noinline)) inline int32_t __fastcall MISSILE_GetBoltSpeed(int32_t nSkillId, int32_t nSkillLevel) {
     if (nSkillId < 0) {
       return 0;
@@ -85,7 +102,10 @@ __attribute__((noinline)) inline int32_t __fastcall MISSILE_GetBoltSpeed(int32_t
 
     return (nSkillLevel - 1) * pSkillsTxtLine->Param[3] + pSkillsTxtLine->Param[2];
 }
+#endif // D2_DEFINED_INLINE_004cc7c0
 
+#ifndef D2_DEFINED_INLINE_004e6ca0
+#define D2_DEFINED_INLINE_004e6ca0
 __attribute__((noinline)) inline int32_t __fastcall TXT_Skills_GetSkillRange(eD2Skills eSkill, int32_t pnSkillLevel) {
     if ((int)eSkill < 0) {
       return 0;
@@ -104,7 +124,10 @@ __attribute__((noinline)) inline int32_t __fastcall TXT_Skills_GetSkillRange(eD2
 
     return (pnSkillLevel - 1) * pSkillsTxtLine->Param[1] + pSkillsTxtLine->Param[0];
 }
+#endif // D2_DEFINED_INLINE_004e6ca0
 
+#ifndef D2_DEFINED_INLINE_004efc20
+#define D2_DEFINED_INLINE_004efc20
 __attribute__((noinline)) inline int32_t __fastcall GetSkilParam1(eD2Skills eSkill) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -113,7 +136,10 @@ __attribute__((noinline)) inline int32_t __fastcall GetSkilParam1(eD2Skills eSki
 
     return pSkillsTxt->Param[1];
 }
+#endif // D2_DEFINED_INLINE_004efc20
 
+#ifndef D2_DEFINED_INLINE_004efc50
+#define D2_DEFINED_INLINE_004efc50
 __attribute__((noinline)) inline int32_t __fastcall GetSkilParam2(eD2Skills eSkill) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -122,7 +148,10 @@ __attribute__((noinline)) inline int32_t __fastcall GetSkilParam2(eD2Skills eSki
 
     return pSkillsTxt->Param[2];
 }
+#endif // D2_DEFINED_INLINE_004efc50
 
+#ifndef D2_DEFINED_INLINE_004efc80
+#define D2_DEFINED_INLINE_004efc80
 __attribute__((noinline)) inline int32_t __fastcall GetSkilParam3(eD2Skills eSkill) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -131,7 +160,10 @@ __attribute__((noinline)) inline int32_t __fastcall GetSkilParam3(eD2Skills eSki
 
     return pSkillsTxt->Param[3];
 }
+#endif // D2_DEFINED_INLINE_004efc80
 
+#ifndef D2_DEFINED_INLINE_004efcb0
+#define D2_DEFINED_INLINE_004efcb0
 __attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(int32_t nSkillId, int32_t nSkillLevel) {
     if (nSkillId < 0) {
       return 0;
@@ -150,7 +182,10 @@ __attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(int32_t nSkil
 
     return (nSkillLevel - 1) * pSkillsTxt->Param[5] + pSkillsTxt->Param[4];
 }
+#endif // D2_DEFINED_INLINE_004efcb0
 
+#ifndef D2_DEFINED_INLINE_004f4110
+#define D2_DEFINED_INLINE_004f4110
 __attribute__((noinline)) inline int32_t __fastcall GetTxtSkillParam5(int32_t nSkillId) {
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
@@ -159,5 +194,6 @@ __attribute__((noinline)) inline int32_t __fastcall GetTxtSkillParam5(int32_t nS
 
     return pSkillsTxt->Param[5];
 }
+#endif // D2_DEFINED_INLINE_004f4110
 
 } // namespace D2Common::Skills

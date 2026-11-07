@@ -8,7 +8,7 @@
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Drlg/DrlgGrid.h"
 #include "Source/D2Common/Drlg/Preset.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/D2DrlgStrc.h"
 
@@ -44,8 +44,8 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
       pDStack_8 = pLvlSubTxtRecord->pTileTypeGrid;
       nWallLayerIdx = 0x1c;
       do {
-        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8 + 4, *(eD2GridCellFlags**)((int)pDrlgFile->pTileTypeLayer + nWallLayerIdx - 0xc), &gridInitCtx, nGridWidth);
-        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8, *(eD2GridCellFlags**)((int)(*ppDrlgFile)->pTileTypeLayer + nWallLayerIdx - 0x1c), &gridInitCtx, nGridWidth);
+        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8 + 4, *(eD2GridCellFlags**)((char*)pDrlgFile->pTileTypeLayer + nWallLayerIdx - 0xc), &gridInitCtx, nGridWidth);
+        DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8, *(eD2GridCellFlags**)((char*)(*ppDrlgFile)->pTileTypeLayer + nWallLayerIdx - 0x1c), &gridInitCtx, nGridWidth);
         pDrlgFile = *ppDrlgFile;
         pDStack_8++;
         nWallLayer++;

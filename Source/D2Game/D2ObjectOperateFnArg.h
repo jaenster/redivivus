@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,14 +20,21 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 
 // Data types
+#ifndef D2_DEFINED_D2ObjectModeArg
+#define D2_DEFINED_D2ObjectModeArg
 struct D2ObjectModeArg {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ struct D2UnitStrc * pVictim;
 };
 
+#endif // D2_DEFINED_D2ObjectModeArg
+#ifndef D2_DEFINED_D2ObjectOperateFnArg
+#define D2_DEFINED_D2ObjectOperateFnArg
 struct __attribute__((packed)) D2ObjectOperateFnArg {
     /* 0x00 */ D2ObjectModeArg sArg;
     /* 0x08 */ struct D2UnitStrc * pAttacker;
     /* 0x0C */ struct D2SeedStrc * pSeed;
     /* 0x10 */ int nObjectClassId;
 };
+
+#endif // D2_DEFINED_D2ObjectOperateFnArg

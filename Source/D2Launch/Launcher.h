@@ -4,13 +4,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Launch)
 #error "D2Launch header included by a module that may not use D2Launch (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Launch) && !defined(D2_LOADS_D2Launch)
+#error "internal D2Launch header included from another module; include D2Launch's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Fog/Save.h"
+#include "Source/Fog/Fog.h"
 
 // Forward declarations
 struct D2CharSelStrc;
@@ -42,7 +45,7 @@ BOOL __stdcall CHARSEL_HandleRealmChange(struct D2ControlMsg * pMsg);
 BOOL __stdcall HandleUpdateToExpansion(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(struct D2ControlMsg * pControlMsg);
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(struct D2IniConfigStrc * pIniConfig);
-DWORD __stdcall BeginCutSceneAtResolutionMode0_Unref_0043b800();
+void __stdcall BeginCutSceneAtResolutionMode0_Unref_0043b800();
 void __stdcall LAUNCHER_SetBusyFlag();
 void __stdcall LAUNCHER_ClearBusyFlag();
 BOOL __stdcall LAUNCHER_GetBusyFlag();

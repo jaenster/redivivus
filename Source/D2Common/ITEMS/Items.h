@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,7 @@ struct D2BitBufferStrc;
 struct D2InventoryStrc;
 struct D2ItemStatCostTxt;
 struct D2ItemTypesTxt;
+struct D2MagicAffixTxt;
 struct D2PoolManagerStrc;
 struct D2SeedStrc;
 struct D2SetItemsTxt;
@@ -34,16 +38,220 @@ typedef uint8_t eInventoryPage;
 typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, struct D2UnitStrc * pItem, struct D2UnitStrc * pPlayer);
 #endif
 
-struct D2MagicAffixTxt;
-
 // Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+#ifndef D2_DEFINED_D2ItemCalcContextStrc
+#define D2_DEFINED_D2ItemCalcContextStrc
 struct D2ItemCalcContextStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
-    /* 0x04 */ int32_t nContext;
+    /* 0x04 */ struct D2UnitStrc * nContext;
 };
 
-#endif // D2_MODULE_D2Common
+#endif // D2_DEFINED_D2ItemCalcContextStrc
+#ifndef D2_DEFINED_D2ItemsTxt
+#define D2_DEFINED_D2ItemsTxt
+struct D2ItemsTxt {
+    /* 0x000 */ char szFlippyFile[32];
+    /* 0x020 */ char szInvFile[32];
+    /* 0x040 */ char szUniqueInvFile[32];
+    /* 0x060 */ char szSetInvFile[32];
+    /* 0x080 */ int dwCode; // item code fourcc (e.g. 'box '), compared as a dword like dwNormCode/dwUberCode/dwUltraCode
+    /* 0x084 */ int dwNormCode;
+    /* 0x088 */ int dwUberCode;
+    /* 0x08C */ int dwUltraCode;
+    /* 0x090 */ int dwAlternateGfx;
+    /* 0x094 */ int dwPSpell;
+    /* 0x098 */ short wState;
+    /* 0x09A */ short wCState1;
+    /* 0x09C */ short wCState2;
+    /* 0x09E */ short wStat1;
+    /* 0x0A0 */ short wStat2;
+    /* 0x0A2 */ short wStat3;
+    /* 0x0A4 */ int dwCalc1;
+    /* 0x0A8 */ int dwCalc2;
+    /* 0x0AC */ int dwCalc3;
+    /* 0x0B0 */ int dwLen;
+    /* 0x0B4 */ uint8_t nSpellDesc; // spelldesc column, TXT field type 4 (byte) at +0xb4 in TXT_AllocTxt_items; INV_FormatItemSpellDescText switches on it
+    /* 0x0B5 */ uint8_t pad_0xB5; // not written by the items.txt parser
+    /* 0x0B6 */ short wSpellDescStr;
+    /* 0x0B8 */ int dwSpellDescCalc;
+    /* 0x0BC */ int dwBetterGem;
+    /* 0x0C0 */ int dwWClass;
+    /* 0x0C4 */ int dw2HandedWClass;
+    /* 0x0C8 */ int dwTMogType;
+    /* 0x0CC */ int dwMinAc;
+    /* 0x0D0 */ int dwMaxAc;
+    /* 0x0D4 */ int dwGambleCost;
+    /* 0x0D8 */ int dwSpeed;
+    /* 0x0DC */ int dwBitfield1;
+    /* 0x0E0 */ int dwCost;
+    /* 0x0E4 */ int dwMinStack;
+    /* 0x0E8 */ int dwMaxStack;
+    /* 0x0EC */ int dwSpawnStack;
+    /* 0x0F0 */ int dwGemOffset;
+    /* 0x0F4 */ short wNameStr;
+    /* 0x0F6 */ short wVersion;
+    /* 0x0F8 */ short wAutoPrefix;
+    /* 0x0FA */ uint16_t wMissileType;
+    /* 0x0FC */ char nRarity;
+    /* 0x0FD */ char nLevel;
+    /* 0x0FE */ uint8_t nMinDam;
+    /* 0x0FF */ uint8_t nMaxDam;
+    /* 0x100 */ uint8_t nMinMisDam;
+    /* 0x101 */ char nMaxMisDam;
+    /* 0x102 */ uint8_t n2HandMinDam;
+    /* 0x103 */ uint8_t n2HandMaxDam;
+    /* 0x104 */ short nRangeAdder;
+    /* 0x106 */ short nStrBonus;
+    /* 0x108 */ short nDexBonus;
+    /* 0x10A */ short nReqStr;
+    /* 0x10C */ short wReqDex;
+    /* 0x10E */ char bAbsorbs;
+    /* 0x10F */ char bInvWidth;
+    /* 0x110 */ char bInvHeight;
+    /* 0x111 */ char bBlock;
+    /* 0x112 */ uint8_t bDurability;
+    /* 0x113 */ char bNoDurability;
+    /* 0x114 */ char bMissile;
+    /* 0x115 */ char bComponent;
+    /* 0x116 */ uint8_t bRArm;
+    /* 0x117 */ uint8_t bLArm;
+    /* 0x118 */ uint8_t bTorso;
+    /* 0x119 */ uint8_t bLegs;
+    /* 0x11A */ uint8_t bRSPad;
+    /* 0x11B */ uint8_t bLSPad;
+    /* 0x11C */ bool b2Handed;
+    /* 0x11D */ uint8_t bUseable;
+    /* 0x11E */ short wType;
+    /* 0x120 */ short wType2;
+    /* 0x122 */ short bSubType;
+    /* 0x124 */ short wDropSound;
+    /* 0x126 */ short wUseSound;
+    /* 0x128 */ char bDropSfxFrame;
+    /* 0x129 */ uint8_t bUnique;
+    /* 0x12A */ uint8_t bQuest;
+    /* 0x12B */ char bQuestDiffCheck;
+    /* 0x12C */ char bTransparent;
+    /* 0x12D */ uint8_t bTransTbl;
+    /* 0x12E */ char pad0x12E;
+    /* 0x12F */ char bLightRadius;
+    /* 0x130 */ uint8_t bBelt;
+    /* 0x131 */ char bAutoBelt;
+    /* 0x132 */ bool bStackable;
+    /* 0x133 */ char bSpawnable;
+    /* 0x134 */ char bSpellIcon;
+    /* 0x135 */ bool bDurWarning;
+    /* 0x136 */ bool bQntWarning;
+    /* 0x137 */ bool bHasInv;
+    /* 0x138 */ bool bGemSockets;
+    /* 0x139 */ uint8_t bTransmogrify;
+    /* 0x13A */ uint8_t bTMogMin;
+    /* 0x13B */ char bTMogMax;
+    /* 0x13C */ uint8_t bHitClass;
+    /* 0x13D */ bool b1or2Handed;
+    /* 0x13E */ bool bGemApplyType;
+    /* 0x13F */ char bLevelReq;
+    /* 0x140 */ uint8_t bMagicLvl;
+    /* 0x141 */ uint8_t bTransform;
+    /* 0x142 */ char bInvTrans;
+    /* 0x143 */ uint8_t bCompactSave;
+    /* 0x144 */ char bSkipName;
+    /* 0x145 */ bool bNameable;
+    /* 0x146 */ char bAkaraMin;
+    /* 0x147 */ char bGheedMin;
+    /* 0x148 */ char bCharsiMin;
+    /* 0x149 */ char bFaraMin;
+    /* 0x14A */ char bLysanderMin;
+    /* 0x14B */ char bDrognanMin;
+    /* 0x14C */ char bHraltiMin;
+    /* 0x14D */ char bAlkorMin;
+    /* 0x14E */ char bOrmusMin;
+    /* 0x14F */ char bElzixMin;
+    /* 0x150 */ char bAshearaMin;
+    /* 0x151 */ char bCainMin;
+    /* 0x152 */ char bHalbuMin;
+    /* 0x153 */ char bJamellaMin;
+    /* 0x154 */ char bMalahMin;
+    /* 0x155 */ char bLarzukMin;
+    /* 0x156 */ char bDrehyaMin;
+    /* 0x157 */ char bAkaraMax;
+    /* 0x158 */ char bGheedMax;
+    /* 0x159 */ char bCharsiMax;
+    /* 0x15A */ char bFaraMax;
+    /* 0x15B */ char bLysanderMax;
+    /* 0x15C */ char bDrognanMax;
+    /* 0x15D */ char bHraltiMax;
+    /* 0x15E */ char bAlkorMax;
+    /* 0x15F */ char bOrmusMax;
+    /* 0x160 */ char bElzixMax;
+    /* 0x161 */ char bAshearaMax;
+    /* 0x162 */ char bCainMax;
+    /* 0x163 */ char bHalbuMax;
+    /* 0x164 */ char bJamellaMax;
+    /* 0x165 */ char bMalahMax;
+    /* 0x166 */ char bLarzukMax;
+    /* 0x167 */ char bDrehyaMax;
+    /* 0x168 */ char bAkaraMagicMin;
+    /* 0x169 */ char bGheedMagicMin;
+    /* 0x16A */ char bCharsiMagicMin;
+    /* 0x16B */ char bFaraMagicMin;
+    /* 0x16C */ char bLysanderMagicMin;
+    /* 0x16D */ char bDrognanMagicMin;
+    /* 0x16E */ char bHraltiMagicMin;
+    /* 0x16F */ char bAlkorMagicMin;
+    /* 0x170 */ char bOrmusMagicMin;
+    /* 0x171 */ char bElzixMagicMin;
+    /* 0x172 */ char bAshearaMagicMin;
+    /* 0x173 */ char bCainMagicMin;
+    /* 0x174 */ char bHalbuMagicMin;
+    /* 0x175 */ char bJamellaMagicMin;
+    /* 0x176 */ char bMalahMagicMin;
+    /* 0x177 */ char bLarzukMagicMin;
+    /* 0x178 */ char bDrehyaMagicMin;
+    /* 0x179 */ char bAkaraMagicMax;
+    /* 0x17A */ char bGheedMagicMax;
+    /* 0x17B */ char bCharsiMagicMax;
+    /* 0x17C */ char bFaraMagicMax;
+    /* 0x17D */ char bLysanderMagicMax;
+    /* 0x17E */ char bDrognanMagicMax;
+    /* 0x17F */ char bHraltiMagicMax;
+    /* 0x180 */ char bAlkorMagicMax;
+    /* 0x181 */ char bOrmusMagicMax;
+    /* 0x182 */ char bElzixMagicMax;
+    /* 0x183 */ char bAshearaMagicMax;
+    /* 0x184 */ char bCainMagicMax;
+    /* 0x185 */ char bHalbuMagicMax;
+    /* 0x186 */ char bJamellaMagicMax;
+    /* 0x187 */ char bMalahMagicMax;
+    /* 0x188 */ char bLarzukMagicMax;
+    /* 0x189 */ char bDrehyaMagicMax;
+    /* 0x18A */ char bAkaraMagicLvl;
+    /* 0x18B */ char bGheedMagicLvl;
+    /* 0x18C */ char bCharsiMagicLvl;
+    /* 0x18D */ char bFaraMagicLvl;
+    /* 0x18E */ char bLysanderMagicLvl;
+    /* 0x18F */ char bDrognanMagicLvl;
+    /* 0x190 */ char bHraltiMagicLvl;
+    /* 0x191 */ char bAlkorMagicLvl;
+    /* 0x192 */ char bOrmusMagicLvl;
+    /* 0x193 */ char bElzixMagicLvl;
+    /* 0x194 */ char bAshearaMagicLvl;
+    /* 0x195 */ char bCainMagicLvl;
+    /* 0x196 */ char bHalbuMagicLvl;
+    /* 0x197 */ char bJamellaMagicLvl;
+    /* 0x198 */ char bMalahMagicLvl;
+    /* 0x199 */ char bLarzukMagicLvl;
+    /* 0x19A */ char bDrehyaMagicLvl;
+    /* 0x19B */ char pad0x19B;
+    /* 0x19C */ int dwNightmareUpgrade;
+    /* 0x1A0 */ int dwHellUpgrade;
+    /* 0x1A4 */ char bPermStoreItem;
+    /* 0x1A5 */ char bMultibuy;
+    /* 0x1A6 */ int16_t pad422; // padding
+};
+
+#endif // D2_DEFINED_D2ItemsTxt
+#ifndef D2_DEFINED_D2MagicAffixTableStrc
+#define D2_DEFINED_D2MagicAffixTableStrc
 struct D2MagicAffixTableStrc {
     /* 0x00 */ int nSize; // total row count across all three sub-tables
     /* 0x04 */ struct D2MagicAffixTxt * pTable; // base of the 0x90-byte row array
@@ -52,33 +260,9 @@ struct D2MagicAffixTableStrc {
     /* 0x10 */ struct D2MagicAffixTxt * pAutoMagicStart; // automagic rows; that range runs from here to pTable + nSize*0x90
 };
 
-struct __attribute__((packed)) D2MagicAffixTxt {
-    /* 0x00 */ char name[32];
-    /* 0x20 */ uint16_t wNameStr; // string table ID for affix name (GetLocaleString index)
-    /* 0x22 */ short version;
-    /* 0x24 */ D2MagixAffixModStrc mod[3];
-    /* 0x54 */ bool spawnable;
-    /* 0x55 */ uint8_t pad0x55; // alignment padding after spawnable
-    /* 0x56 */ uint8_t transformcolor;
-    /* 0x57 */ uint8_t pad0x57; // alignment padding after transformcolor
-    /* 0x58 */ int level;
-    /* 0x5C */ int group;
-    /* 0x60 */ int maxlevel;
-    /* 0x64 */ bool rare;
-    /* 0x65 */ uint8_t levelreq;
-    /* 0x66 */ char classspecific;
-    /* 0x67 */ uint8_t class_;
-    /* 0x68 */ char classlevelreq;
-    /* 0x69 */ uint8_t pad0x69; // alignment padding after classlevelreq
-    /* 0x6A */ short include_type[7];
-    /* 0x78 */ short exclude_type[5];
-    /* 0x82 */ char frequency;
-    /* 0x83 */ uint8_t pad0x83; // alignment padding after frequency
-    /* 0x84 */ int divide;
-    /* 0x88 */ int multiply;
-    /* 0x8C */ int add;
-};
-
+#endif // D2_DEFINED_D2MagicAffixTableStrc
+#ifndef D2_DEFINED_D2RuneTableStrc
+#define D2_DEFINED_D2RuneTableStrc
 struct __attribute__((packed)) D2RuneTableStrc {
     /* 0x00 */ char szName[64]; // runeword name (ASCII, starts here, 64 bytes)
     /* 0x40 */ char szRuneName[64]; // rune name column (ASCII, starts here, 64 bytes)
@@ -105,10 +289,11 @@ struct __attribute__((packed)) D2RuneTableStrc {
     /* 0xB0 */ D2SetsTxtFStrc sEntry[7]; // t1code1..t1code7 property entries (t1code/t1param/t1min/t1max x7)
 };
 
+#endif // D2_DEFINED_D2RuneTableStrc
 namespace D2Common::ITEMS::Items {
 
 // Function declarations
-uint32_t __stdcall ITEMS_SearchItemCodeTable(struct D2UnitStrc * pUnit, int32_t dwContext, uint32_t nOffset);
+uint32_t __stdcall ITEMS_SearchItemCodeTable(struct D2UnitStrc * pUnit, struct D2UnitStrc * dwContext, uint32_t nOffset);
 // @sourcefile .\ITEMS\Items.cpp
 void __stdcall STRUCT_CreateDataItem(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit);
 // @sourcefile .\ITEMS\Items.cpp

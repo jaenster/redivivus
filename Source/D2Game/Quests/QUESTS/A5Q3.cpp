@@ -2,20 +2,9 @@
 
 #include "Source/D2Game/Quests/QUESTS/A5Q3.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
@@ -33,15 +22,11 @@
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitInactive.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -265,7 +250,7 @@ static void __stdcall Q33_SpawnAnyaAndPortal(D2QuestDataStrc * pQuestData, D2Que
     LONG nAnyaY = sAnyaCoords.y;
     pAnyaRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pAnyaMonster), sAnyaCoords.x, nAnyaY);
     if (pAnyaRoom) {
-      pAnyaMonster = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sAnyaCoords.x, sAnyaCoords.y, pQuestData->pGame, pAnyaRoom, 1, 1, nullptr);
+      pAnyaMonster = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, sAnyaCoords.x, sAnyaCoords.y, pQuestData->pGame, pAnyaRoom, 1, 1, 0);
       if (pAnyaMonster) {
         pA5Q3->bPortalSpawned = 1;
         pA5Q3->nPortalGUID = pAnyaMonster->nUnitGUID;
@@ -718,7 +703,7 @@ BOOL __fastcall Q33_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q33_SetCompleteForPartyMember, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q33_SetCompleteForPartyMember, nullptr);
       }
     }
 
@@ -1227,15 +1212,15 @@ static uint32_t Q33_CheckPartyHasScrollOfResistance(D2QuestDataStrc * pQuestData
       return 1;
     }
 
-    int32_t pnQuestSpecificData = *(int32_t*)&pQuestData->pQuestSpecificData;
+    D2QuestDataA5Q3Strc* pnQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q3;
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     if (nPartyId == 0xffff) {
       return 0;
     }
 
-    *(uint8_t*)(pnQuestSpecificData + 0xe2) = 0;
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q33_CheckPlayerHasScrollOfResistance, 0);
-    return (uint32_t)(*(char*)(pnQuestSpecificData + 0xe2) != '\0');
+    pnQuestSpecificData->bScrollOfResistanceFound = 0;
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q33_CheckPlayerHasScrollOfResistance, nullptr);
+    return (uint32_t)(pnQuestSpecificData->bScrollOfResistanceFound != 0);
 }
 
 // A5Q3 (Prison of Ice) fpStatusFilter callback. Writes a quest-log display sub-state byte into *nUnknown based on the player's per-difficulty bit-buffer. If Completed: returns true with *nUnknown=0. If RewardAwaits/JustCompleted: maps Step0x08/Step0x09 flags to values 5/6/0xd. Otherwise: checks party for Scroll of Resistance (4), CannotComplete (0xc), or falls back to nStateFlagPrev. Always returns true.
@@ -1540,7 +1525,7 @@ BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
       pDVar2->sAnyaPosition.x += 3;
       pDVar2->sAnyaPosition.y += 3;
     } else {
-      pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->sAnyaPosition.x, pDVar2->sAnyaPosition.y, pGame, pNearbyRoom, 1, 1, nullptr);
+      pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->sAnyaPosition.x, pDVar2->sAnyaPosition.y, pGame, pNearbyRoom, 1, 1, 0);
       if (pPortalUnit) {
         pDVar2->bAnyaPositionStored = 1;
         pDVar2->nAnyaPortalGUID = pPortalUnit->nUnitGUID;

@@ -2,21 +2,9 @@
 
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2UnitDataPlayerPetsStrc.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
@@ -25,11 +13,7 @@
 #include "Source/D2Game/PLAYER/PlayerTrade.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -87,7 +71,7 @@ static void KillHandlerPet(DWORD nUid, ::SGAMEDATA * pGame) {
       return;
     }
     if (pUnit->eUnitFlagsEx >> 8 & 1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
       exit(-1);
     }
 
@@ -258,9 +242,9 @@ static int32_t GetPetUidByIndex(int32_t nIndex, D2UnitStrc * pUnit) {
     return pFirstPet->nPetGUID;
 }
 
-int __fastcall Unreferenced_00574810(int param_1, int param_2) {
+int __fastcall Unreferenced_00574810(D2UnitStrc * param_1, int param_2) {
     D2PetListStrc* pDVar1;
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData((D2UnitStrc*)param_1);
+    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(param_1);
     pDVar1 = pDVar2 && pDVar2->pPets && param_2 >= 0 && param_2 < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? pDVar2->pPets->pPetList + param_2 : nullptr;
     if (pDVar1) {
       return pDVar1->nMax;
@@ -563,9 +547,9 @@ static void __stdcall ROOM_SpawnPetsFromSaveData(D2RoomStrc * pRoom, uint16_t wP
 
 // Iterates every live pet unit across all pet-type lists for a player and invokes pfnCallback(pPetUnit, pCallbackArg) for each. Resolves GUIDs to actual D2UnitStrc pointers via FindUnitFromTable; skips flagged-dead nodes (bit 0 set). Validates the callback pointer with IsBadCodePtr and halts if invalid.
 void __fastcall PetsForEach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnPetForEachCallback pfnCallback, void * pCallbackArg) {
-    uint32_t* pPetListHead;
+    D2PetStrc** pPetListHead;
     D2UnitStrc* pPetUnit;
-    uint8_t* pCurPetNode;
+    D2PetStrc* pCurPetNode;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     BOOL bInvalidPtr = IsBadCodePtr((FARPROC)pfnCallback);
     if (bInvalidPtr) {
@@ -586,11 +570,11 @@ void __fastcall PetsForEach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnPetForEa
 
     do {
       if (nPetTypeSize2 >= 0 && nPetTypeSize2 < nPetTypeSize) {
-        pPetListHead = (uint32_t*)&pPets->pPetList[nPetTypeSize2].pPets;
+        pPetListHead = &pPets->pPetList[nPetTypeSize2].pPets;
         if (pPetListHead) {
-          for (pCurPetNode = (uint8_t*)*pPetListHead; pCurPetNode; pCurPetNode = *(uint8_t**)(pCurPetNode + 0x14)) {
-            if (!(*pCurPetNode & 1)) {
-              pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pCurPetNode + 4));
+          for (pCurPetNode = *pPetListHead; pCurPetNode; pCurPetNode = pCurPetNode->pNext) {
+            if (!(pCurPetNode->nFlags & 1)) {
+              pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pCurPetNode->nPetGUID);
               if (pPetUnit) {
                 (*pfnCallback)(pPetUnit, pCallbackArg);
               }
@@ -969,11 +953,11 @@ void __fastcall PETS_ManagePetsByType(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 
 // Scans every pet across all pet types (except type 7) in the player's pet list; for each pet, looks it up in the monster unit table and removes it via RemovePetByGuidAndNotify if the monster unit is missing or in death mode 0. Cleans up stale pet references after kills or disconnects.
 static void __stdcall PETS_RemoveDeadPets(D2UnitStrc * pUnit, D2UnitDataPlayerPetsStrc * pUnitDataPlayerPets, ::SGAMEDATA * pGame) {
-    D2PetStrc* pPetListEntry;
+    D2PetListStrc* pPetListEntry;
     D2UnitStrc* pPetUnit;
     BOOL bIsDead;
-    int pNextNode;
-    int pPetNode;
+    D2PetStrc* pPetNode;
+    D2PetStrc* pNextNode;
     int32_t nPetTypeSize = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize;
     int nPetTypeIdx = 1;
     if (1 >= nPetTypeSize) {
@@ -982,19 +966,19 @@ static void __stdcall PETS_RemoveDeadPets(D2UnitStrc * pUnit, D2UnitDataPlayerPe
 
     do {
       if (nPetTypeIdx >= 0 && nPetTypeIdx < nPetTypeSize) {
-        pPetListEntry = (D2PetStrc*)&pUnitDataPlayerPets->pPetList[nPetTypeIdx].pPets;
+        pPetListEntry = &pUnitDataPlayerPets->pPetList[nPetTypeIdx];
         if (pPetListEntry && nPetTypeIdx != 7) {
-          pNextNode = *(int*)pPetListEntry;
+          pNextNode = pPetListEntry->pPets;
           while (true) {
             pPetNode = pNextNode;
             if (!pPetNode) {
               break;
             }
 
-            pNextNode = *(int*)(pPetNode + 0x14);
-            pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pPetNode + 4));
+            pNextNode = pPetNode->pNext;
+            pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetNode->nPetGUID);
             if (!pPetUnit || (bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pPetUnit) , bIsDead != 0)) {
-              RemovePetByGuidAndNotify(pGame, pUnit, *(DWORD*)(pPetNode + 4), 0);
+              RemovePetByGuidAndNotify(pGame, pUnit, pPetNode->nPetGUID, 0);
             }
           }
         }
@@ -1057,8 +1041,8 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(ePetType nPetType,
     char* pTxtPetTypeBase;
     D2UnitStrc* pConflictingPet;
     D2UnitDataPlayerStrc* pPlayerData;
-    int* pPetListEntry;
-    int pPetNodeEntry;
+    D2PetStrc** pPetListEntry;
+    D2PetStrc* pPetNodeEntry;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && (int)nPetType >= 0)) {
       return;
     }
@@ -1100,7 +1084,7 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(ePetType nPetType,
                 break;
               }
 
-              pPetListEntry = (int*)&pPlayerData->pPets->pPetList[nPetListStride].pPets;
+              pPetListEntry = &pPlayerData->pPets->pPetList[nPetListStride].pPets;
               if (!pPetListEntry) {
                 break;
               }
@@ -1110,7 +1094,7 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(ePetType nPetType,
                 break;
               }
 
-              pConflictingPet = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pPetNodeEntry + 4));
+              pConflictingPet = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetNodeEntry->nPetGUID);
               pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               if (!pConflictingPet) {
                 break;

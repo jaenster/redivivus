@@ -144,7 +144,8 @@
       "usedTypes": [
         "DC6",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -211,6 +212,7 @@
       ],
       "usedTypes": [
         "D2InventoryGridStrc",
+        "DC6",
         "uint32_t"
       ]
     },
@@ -277,6 +279,7 @@
         "exit"
       ],
       "usedTypes": [
+        "DC6",
         "int32_t",
         "uint32_t"
       ]
@@ -324,6 +327,7 @@
       ],
       "usedTypes": [
         "DC6",
+        "DC6Block",
         "int32_t",
         "uint32_t"
       ]
@@ -389,6 +393,7 @@
         "CELCMP_ValidateGfxDataIndexInRange"
       ],
       "usedTypes": [
+        "D2GfxDataStrc",
         "uint32_t"
       ]
     },
@@ -816,6 +821,9 @@
       "namespace": "D2CMP::SRC::CelCmp",
       "calledFunctions": [
         "BITSTREAM_CopyState"
+      ],
+      "usedTypes": [
+        "D2CodecBitStateStrc"
       ]
     },
     {
@@ -830,6 +838,9 @@
       "namespace": "D2CMP::SRC::CelCmp",
       "calledFunctions": [
         "BITSTREAM_GetByteOffset"
+      ],
+      "usedTypes": [
+        "D2CodecBitStateStrc"
       ]
     },
     {
@@ -893,8 +904,8 @@
       ],
       "usedTypes": [
         "pfnTilecmpPixelCallback",
-        "uint3",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {

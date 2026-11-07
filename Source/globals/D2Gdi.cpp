@@ -4,7 +4,7 @@
  */
 
 #include "Source/D2Gdi/D2Gdi.globals.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Gdi/Renderer/Windowed.h"
 

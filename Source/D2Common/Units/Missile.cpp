@@ -2,25 +2,16 @@
 
 #include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2StatInfoStrc.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Game/D2MissileDamageDataStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Skills.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/D2Common/Units.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CommonRoot.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -811,7 +802,7 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
     return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
-int32_t __stdcall GetElementalLength(int32_t nUnused, D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel) {
+int32_t __stdcall GetElementalLength(D2UnitStrc * nUnused, D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel) {
     int nLevLenBonus;
     D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
@@ -891,7 +882,7 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
         nResult = GetMaxElemDamage(pUnit, pOwner, nMissileId, nLevel);
       return nResult >> 8;
       case '\x15':
-        nResult = GetElementalLength((int32_t)pUnit, pOwner, nMissileId, nLevel);
+        nResult = GetElementalLength(pUnit, pOwner, nMissileId, nLevel);
       return nResult;
       case '\x16':
         nResult = GetMinElemDamage(pUnit, pOwner, nMissileId, nLevel);
@@ -1097,7 +1088,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       nElemType = (eD2ElementalDamageTypeDWORD)(uint8_t)pMissileTxt->EType;
       nElemMinDmg = GetMinElemDamage(pMissile, pUnit, nMissileId, nLevel);
       nElemMaxDmg = GetMaxElemDamage(pMissile, pUnit, nMissileId, nLevel);
-      nElemLength = GetElementalLength((int32_t)pMissile, pUnit, nMissileId, nLevel);
+      nElemLength = GetElementalLength(pMissile, pUnit, nMissileId, nLevel);
       nFinalElemMinDmg = (D2UnitStrc*)nElemMinDmg;
       if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         nMasteryElemMin = CalculateMasteryBonus(pUnit, nElemType, nElemMinDmg);

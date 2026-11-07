@@ -3,15 +3,9 @@
 #include "Source/D2Game/Quests/QUESTS/A5Q6.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
@@ -28,10 +22,8 @@
 #include "Source/D2Game/Seed.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Seed.inline.h"
 
@@ -104,7 +96,7 @@ BOOL __fastcall CreateObject0x235Tentacle4(::SGAMEDATA * pGame, D2UnitStrc * pUn
       pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       FindSpawnableLocation(pRoom, &ptSpawnPos, 5, 0x400, &pSpawnRoom, 0x12, 100);
       if (pSpawnRoom) {
-        UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x235, ptSpawnPos.x, ptSpawnPos.y, pGame, pSpawnRoom, 1, 1, nullptr);
+        UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x235, ptSpawnPos.x, ptSpawnPos.y, pGame, pSpawnRoom, 1, 1, 0);
       }
 
       return 1;
@@ -438,7 +430,7 @@ BOOL __fastcall Q36_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q36_SetCompleteForPartyMember, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q36_SetCompleteForPartyMember, nullptr);
       }
     }
 

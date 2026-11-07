@@ -4,8 +4,8 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/Utils.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2BinFieldInputStrc;
 struct D2MissilesTxt;
 struct D2PoolManagerStrc;
 
@@ -27,7 +31,7 @@ int32_t __fastcall MapMissilesTxtKeywordToNumber(char * szKey);
 int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 // Validates a single field of a D2MissilesTxt row (indexed by nMissileIdx) against [nMinVal, nMaxVal] and clamps it in-place if out of range. Reads the field via eFieldType (0=signed byte, 1=unsigned byte, 2=signed short, 3=unsigned short, 4=uint32) at nFieldOffset into the Missile sub-struct. On violation, walks pFieldDescArray to find the matching descriptor, then writes back the clamped value at the same offset and width.
-void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nMinVal, uint32_t nMaxVal, int32_t nFieldOffset, int32_t pFieldDescArray, int32_t nMissileIdx);
+void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nMinVal, uint32_t nMaxVal, int32_t nFieldOffset, struct D2BinFieldInputStrc * pFieldDescArray, int32_t nMissileIdx);
 // Builds the 147-column field-descriptor table for Missiles.txt (boolean bit-flags packed at offset 4, client/server Do/Hit/Dmg function-pointer columns, param/calc columns wired through MissileCalcLinker, sub-missile and overlay name links, damage/elemental-damage-by-level rows, velocity/accel, graphics, and collision columns) and compiles it into sgtDataTable.pTxtMissiles via CompileTxt (row stride 0x1a4). Post-compile: clamps each row's CollideType into 0..8. Finally serializes the compiled missile code table to a bin file via TXT_SaveTableToBinFile ("misscode"). __fastcall, pMemory = data-table pool. Called once at data-table load.
 // @sourcefile .\DATATBLS\MissileTbls.cpp
 void __fastcall TXT_AllocTxt_missiles(struct D2PoolManagerStrc * pMemory);

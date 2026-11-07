@@ -152,6 +152,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2WinTimer",
         "int32_t"
       ]
     }

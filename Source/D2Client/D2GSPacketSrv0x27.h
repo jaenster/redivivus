@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2GSPacketSrv0x27_Entry
+#define D2_DEFINED_D2GSPacketSrv0x27_Entry
 struct D2GSPacketSrv0x27_Entry {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -20,6 +25,9 @@ struct D2GSPacketSrv0x27_Entry {
     /* 0x02 */ short nMessage;
 };
 
+#endif // D2_DEFINED_D2GSPacketSrv0x27_Entry
+#ifndef D2_DEFINED_D2GSPacketSrv0x27
+#define D2_DEFINED_D2GSPacketSrv0x27
 struct __attribute__((packed)) D2GSPacketSrv0x27 {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ uint8_t eUnitType;
@@ -28,3 +36,5 @@ struct __attribute__((packed)) D2GSPacketSrv0x27 {
     /* 0x07 */ uint8_t field_0x7;
     /* 0x08 */ D2GSPacketSrv0x27_Entry aMessages[8];
 };
+
+#endif // D2_DEFINED_D2GSPacketSrv0x27

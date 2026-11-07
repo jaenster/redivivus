@@ -704,6 +704,7 @@
         "DAMAGE_GetMonsterDrainEffectiveness"
       ],
       "usedTypes": [
+        "D2MonStatsTxt",
         "D2UnitStrc",
         "uint32_t"
       ]
@@ -953,7 +954,7 @@
         "DAMAGE_GetElementalDamageTypeFlags"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2DamageStrc",
         "uint32_t"
       ]
     },

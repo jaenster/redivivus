@@ -235,7 +235,7 @@ int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize) {
-    char* pTermPos;
+    DWORD pTermPos;
     if (*szSubKey == '\0' || !szSubKey || !szValueName || *szValueName == '\0' || !szOutBuf || !dwOutBufSize) {
       SErr::SErrSetLastError(0x57);
     } else {
@@ -248,12 +248,12 @@ int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nF
             return 1;
           }
         } else {
-          pTermPos = (char*)(dwOutBufSize - 1);
-          if ((char*)(dwOutBufSize - 1) >= szValueName) {
-            pTermPos = szValueName;
+          pTermPos = dwOutBufSize - 1;
+          if (pTermPos >= (uintptr_t)szValueName) {
+            pTermPos = (DWORD)szValueName;
           }
 
-          pTermPos[(int)szOutBuf] = '\0';
+          szOutBuf[pTermPos] = '\0';
         }
 
         return 1;

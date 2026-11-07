@@ -843,6 +843,7 @@
         "SGAMEDATA",
         "eD2BodyLoc",
         "eD2Skills",
+        "int32_t",
         "int64_t",
         "uint32_t",
         "uint64_t"
@@ -971,6 +972,7 @@
         "SGAMEDATA",
         "eD2Skills",
         "eD2UnitType",
+        "eMissilesId",
         "int32_t",
         "uint32_t"
       ]
@@ -1266,6 +1268,7 @@
         "D2StateExArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
+        "Skills_SrvDoFunc_047_CloakOfShadows_Slotm",
         "eD2Skills",
         "int32_t"
       ]
@@ -1619,6 +1622,7 @@
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
+        "D2MindBlastArgStrc",
         "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",

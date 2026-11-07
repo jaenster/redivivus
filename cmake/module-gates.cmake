@@ -10,10 +10,18 @@
 # a documented exception. Source/globals/ is the shared root every module may include:
 # what it includes is the root's, and is counted on its own (via-root).
 #
+# A module another module may see is still reached through one header: its public
+# header (D2_MODULE_<m>_PUBLIC). A file that includes any other header of a module it
+# sees is an internal include, charged to the including file's module; the public
+# headers' own includes follow the import graph, so they never are one. A header of a
+# module the file's module only loads (D2_MODULE_<m>_LOADS) is listed as a load
+# include instead: the host sees the loaded module's interface, which is not its
+# public header (that one brings the loaded module's imports along).
+#
 # Writes <OUT>/module-gates.tsv (one row per module pair) and
 # <OUT>/module-gates-summary.tsv (one row per module), and prints the summary.
-# A module with D2_MODULE_<m>_STRICT ON fails here as soon as it has a violation;
-# the others only report.
+# A module with D2_MODULE_<m>_STRICT ON fails here as soon as it has a violation or
+# an internal include; the others only report.
 
 cmake_minimum_required(VERSION 3.16)
 if(NOT ROOT OR NOT OUT)
@@ -188,6 +196,42 @@ foreach(tu IN LISTS _tus)
     endforeach()
 endforeach()
 
+# Internal includes: a file of module m including a header of a module it sees that is
+# not that module's public header. Judged per include, against the including file.
+foreach(f IN LISTS _all_files)
+    _key(fk "${f}")
+    set(m "${OWNER_${fk}}")
+    if(NOT m OR m STREQUAL "(root)" OR D2_MODULE_${m}_KIND STREQUAL "ours" OR D2_MODULE_${m}_KIND STREQUAL "headers-only")
+        continue()
+    endif()
+    foreach(inc IN LISTS INC_${fk})
+        _key(ik "${inc}")
+        set(o "${OWNER_${ik}}")
+        if(NOT o OR o STREQUAL m OR o STREQUAL "(root)" OR NOT D2_MODULE_${o}_PUBLIC)
+            continue()
+        endif()
+        if(inc STREQUAL D2_MODULE_${o}_PUBLIC)
+            continue()
+        endif()
+        if(NOT o IN_LIST D2_MODULE_${m}_SEES AND NOT o IN_LIST D2_MODULE_${m}_EXCEPTIONS)
+            continue()
+        endif()
+        if(o IN_LIST D2_MODULE_${m}_LOADS)
+            set(p "${m}__${o}__load")
+        else()
+            set(p "${m}__${o}__internal")
+        endif()
+        if(NOT p IN_LIST _pairs)
+            list(APPEND _pairs "${p}")
+            set(TUS_${p})
+            set(HDR_${p})
+            set(EX_${p} "${f} -> ${inc}")
+        endif()
+        list(APPEND TUS_${p} "${f}")
+        list(APPEND HDR_${p} "${inc}")
+    endforeach()
+endforeach()
+
 # Via the root: headers globals.h pulls in that a module including it may not see.
 foreach(m IN LISTS D2_MODULES)
     if(NOT USES_ROOT_${m} OR D2_MODULE_${m}_KIND STREQUAL "ours")
@@ -233,16 +277,17 @@ foreach(p IN LISTS _pairs)
 endforeach()
 file(WRITE "${OUT}/module-gates.tsv" "${tsv}")
 
-set(summary "module\tstrict\tviolation_pairs\tviolation_headers\texcepted_pairs\tvia_root_pairs\n")
+set(summary "module\tstrict\tviolation_pairs\tviolation_headers\texcepted_pairs\tvia_root_pairs\tinternal_pairs\tinternal_headers\tload_pairs\n")
 set(lines)
 set(strict_failed)
 set(total_pairs 0)
+set(total_internal 0)
 set(clean)
 foreach(m IN LISTS D2_MODULES)
     if(D2_MODULE_${m}_KIND STREQUAL "ours" OR D2_MODULE_${m}_KIND STREQUAL "headers-only" OR NOT D2_MODULE_${m}_GENERATED)
         continue()
     endif()
-    foreach(v violation excepted via-root)
+    foreach(v violation excepted via-root internal load)
         if(NOT DEFINED PAIRS_${m}_${v})
             set(PAIRS_${m}_${v} 0)
         endif()
@@ -251,9 +296,10 @@ foreach(m IN LISTS D2_MODULES)
         endif()
     endforeach()
     set(s "${D2_MODULE_${m}_STRICT}")
-    string(APPEND summary "${m}\t${s}\t${PAIRS_${m}_violation}\t${SUM_${m}_violation}\t${PAIRS_${m}_excepted}\t${PAIRS_${m}_via-root}\n")
+    string(APPEND summary "${m}\t${s}\t${PAIRS_${m}_violation}\t${SUM_${m}_violation}\t${PAIRS_${m}_excepted}\t${PAIRS_${m}_via-root}\t${PAIRS_${m}_internal}\t${SUM_${m}_internal}\t${PAIRS_${m}_load}\n")
     math(EXPR total_pairs "${total_pairs}+${PAIRS_${m}_violation}")
-    if(PAIRS_${m}_violation EQUAL 0)
+    math(EXPR total_internal "${total_internal}+${PAIRS_${m}_internal}")
+    if(PAIRS_${m}_violation EQUAL 0 AND PAIRS_${m}_internal EQUAL 0)
         list(APPEND clean "${m}")
     elseif(s)
         list(APPEND strict_failed "${m}")
@@ -262,9 +308,9 @@ endforeach()
 file(WRITE "${OUT}/module-gates-summary.tsv" "${summary}")
 
 string(REPLACE ";" " " clean_text "${clean}")
-message(STATUS "module gates: ${total_pairs} wrong-direction module pair(s); at 0: ${clean_text}")
+message(STATUS "module gates: ${total_pairs} wrong-direction module pair(s), ${total_internal} internal-include pair(s); at 0: ${clean_text}")
 message(STATUS "module gates: report ${OUT}/module-gates.tsv, per module ${OUT}/module-gates-summary.tsv")
 if(strict_failed)
     string(REPLACE ";" " " failed_text "${strict_failed}")
-    message(FATAL_ERROR "module gates: strict module(s) with a wrong-direction include: ${failed_text} (see ${OUT}/module-gates.tsv)")
+    message(FATAL_ERROR "module gates: strict module(s) with a wrong-direction or internal include: ${failed_text} (see ${OUT}/module-gates.tsv)")
 endif()

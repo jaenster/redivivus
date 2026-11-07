@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -43,13 +46,15 @@ struct D2GifLzwEncoderStrc {
     /* 0x1C */ int32_t nClearCode;
     /* 0x20 */ int32_t nEOFCode;
     /* 0x24 */ int32_t nNextCode;
-    /* 0x28 */ void * pHashTable; // 0x4e2c bytes cleared by ClearBlock
-    /* 0x2C */ void * pCodeTable;
+    /* 0x28 */ int32_t * pHashTable; // 0x4e2c bytes cleared by ClearBlock
+    /* 0x2C */ uint32_t * pCodeTable;
     /* 0x30 */ int32_t nBlockLen;
     /* 0x34 */ uint8_t abBlock[256]; // [0]=length byte, data from [1]
 };
 
 #endif // D2_MODULE_Storm
+#ifndef D2_DEFINED_D2PcxHeaderStrc
+#define D2_DEFINED_D2PcxHeaderStrc
 struct D2PcxHeaderStrc {
     /* 0x00 */ uint8_t byManufacturer;
     /* 0x01 */ uint8_t byVersion;
@@ -71,6 +76,7 @@ struct D2PcxHeaderStrc {
     /* 0x4A */ uint8_t abFiller[54];
 };
 
+#endif // D2_DEFINED_D2PcxHeaderStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct __attribute__((packed)) D2TgaHeaderStrc {
     /* 0x00 */ uint8_t byIdLength;
@@ -119,7 +125,7 @@ int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, voi
 // Write bitmap data to PCX format file with RLE compression and palette
 // @sourcefile .\SOURCE\SBMP.CPP
 // @blizzard EncodePcx256File (SBMP.CPP)
-int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, int nPalettePtr, void * pPixels);
+int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, uint8_t * nPalettePtr, void * pPixels);
 // @blizzard CompressGifImage (SBMP.CPP)
 int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t * pDstBuf);
 // Loads an image from a named file into a caller-supplied pixel buffer. Opens the file through SFile, reads the first two bytes to pick the format with SBMP_DetectFormat, rewinds, and dispatches to SBMP_ReadBMP / SBMP_ReadGIF / SBMP_ReadTGA, then closes.
@@ -133,7 +139,7 @@ uint32_t __stdcall SBmpLoadImage(char * pszPath, void * pPalette, void * pPixels
 // @oracle-source PEF traceback-table function name .SBmpSaveImageEx @100047c0 in Mac PPC 1.10b Storm. Internal (deliberately NOT in the 337-name export table), but a first-party compiler-emitted symbol.
 // @rename-basis The PPC export vector for SBmpSaveImage points past this function to an 80-byte wrapper at 10004a90 that calls .SBmpSaveImageEx with a zero seventh argument, so the seven-argument extension-dispatching writer is the Ex, not the export. 1.14d has the identical pair: this function plus the six-argument forwarder at 006c7000, which is SBmpSaveImage.
 // @former-name SBMP_SaveImageToFile
-void __stdcall SBmpSaveImageEx(LPCSTR szText, int nPalette, uint8_t * pbPixels, int32_t nWidth, int nHeight, int nBpp, DWORD dwStride);
+void __stdcall SBmpSaveImageEx(LPCSTR szText, uint8_t * nPalette, uint8_t * pbPixels, int32_t nWidth, int nHeight, int nBpp, DWORD dwStride);
 // Loads an image from a named file into a buffer it allocates itself. Reads the whole file, probes width/height/bpp with a NULL-destination SBmpDecodeImage call, allocates width*height*bpp/8 through the caller's pfnAlloc (or SMemAlloc when that is NULL), decodes into it and hands the pointer back through ppBuffer.
 // @oracle SBmpAllocLoadImage
 // @oracle-source Storm export vector SBmpAllocLoadImage @100cbc5c -> code 10004ee0 in Mac PPC 1.10b Storm
@@ -147,7 +153,7 @@ uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, void * * p
 // @rename-basis Decisive, positive, cross-architecture. The PPC export vector for SBmpSaveImage does NOT point at the big extension-dispatching writer .SBmpSaveImageEx @100047c0; it points at 10004a90, an 80-byte function whose entire body is "li r9, 0x0; bl .SBmpSaveImageEx" - pass the six incoming argument registers straight through and supply 0 as the seventh. This function is that wrapper, instruction for instruction. Which of the pair is exported was the one thing that could not be settled from the Windows side (both are unreferenced in Game.exe); the PPC export table settles it by publishing an address.
 // @former-name SBMP_SaveImageSimple
 // @namespace-fix moved Global -> Storm::Source::SBMP
-void __stdcall SBmpSaveImage(LPCSTR szText, int nPalette, uint8_t * pbPixels, int32_t nWidth, int nHeight, int nBpp);
+void __stdcall SBmpSaveImage(LPCSTR szText, uint8_t * nPalette, uint8_t * pbPixels, int32_t nWidth, int nHeight, int nBpp);
 #endif // D2_MODULE_Storm
 // 21 internal functions (defined in .cpp)
 

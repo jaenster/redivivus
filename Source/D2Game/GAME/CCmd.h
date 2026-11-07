@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,8 @@ typedef uint8_t eD2HostGameType;
 typedef uint8_t eD2PlayerClassID;
 
 // Data types
+#ifndef D2_DEFINED_D2GSMsg67GameLogonSPStrc
+#define D2_DEFINED_D2GSMsg67GameLogonSPStrc
 struct __attribute__((packed)) D2GSMsg67GameLogonSPStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x67
     /* 0x01 */ char szGameName[16];
@@ -32,6 +37,7 @@ struct __attribute__((packed)) D2GSMsg67GameLogonSPStrc {
     /* 0x2D */ uint8_t nLanguageCode; // SetupGameChecks requires < 0xF
 };
 
+#endif // D2_DEFINED_D2GSMsg67GameLogonSPStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2GSMsg68GameLogonMultiStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x68
@@ -52,6 +58,8 @@ struct __attribute__((packed)) D2GSMsg68GameLogonMultiStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2GSMsg6CUploadSaveStrc
+#define D2_DEFINED_D2GSMsg6CUploadSaveStrc
 struct __attribute__((packed)) D2GSMsg6CUploadSaveStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x6C
     /* 0x01 */ uint8_t nChunkSize;
@@ -59,6 +67,7 @@ struct __attribute__((packed)) D2GSMsg6CUploadSaveStrc {
     /* 0x06 */ uint8_t aData[0]; // nChunkSize bytes
 };
 
+#endif // D2_DEFINED_D2GSMsg6CUploadSaveStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2GSMsg6DPingStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x6D

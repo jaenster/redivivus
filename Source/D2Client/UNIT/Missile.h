@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -24,24 +27,33 @@ typedef int (__fastcall *fpMissileSrvDoFuncData)(struct D2UnitStrc * pUnit, void
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2Missile031SpreadStrc
+#define D2_DEFINED_D2Missile031SpreadStrc
 struct D2Missile031SpreadStrc {
     /* 0x00 */ int nOffsetX;
     /* 0x04 */ int nOffsetY;
     /* 0x08 */ int nDirection; // read as a byte
 };
 
+#endif // D2_DEFINED_D2Missile031SpreadStrc
+#ifndef D2_DEFINED_D2Missile032SpreadStrc
+#define D2_DEFINED_D2Missile032SpreadStrc
 struct D2Missile032SpreadStrc {
     /* 0x00 */ int nFrameThreshold;
     /* 0x04 */ int nModulus; // idiv divisor
     /* 0x08 */ int nTargetX;
 };
 
+#endif // D2_DEFINED_D2Missile032SpreadStrc
+#ifndef D2_DEFINED_D2Missile036SpreadStrc
+#define D2_DEFINED_D2Missile036SpreadStrc
 struct D2Missile036SpreadStrc {
     /* 0x00 */ int nFrameThreshold; // row applies once the missile frame exceeds this (CMP EBX,[EAX]; JG); rows 0-3 are scanned, row 4 is the fallback
     /* 0x04 */ int nSparkInterval; // spawn an Explodingarrowexp spark when frame % nSparkInterval == 0 (IDIV [idx*12+0x6db8d0])
     /* 0x08 */ int nRockInterval; // spawn a Durieldeathrock when frame % nRockInterval == 0 (IDIV [idx*12+0x6db8d4])
 };
 
+#endif // D2_DEFINED_D2Missile036SpreadStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2MissileCltCollideCtxStrc {
     /* 0x00 */ struct D2UnitStrc * pMissile;
@@ -50,11 +62,14 @@ struct D2MissileCltCollideCtxStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2MissileSrvDoFuncData
+#define D2_DEFINED_D2MissileSrvDoFuncData
 struct D2MissileSrvDoFuncData {
     /* 0x00 */ int (__fastcall *pFunction)(struct D2UnitStrc *, void *);
     /* 0x04 */ int nFlags;
 };
 
+#endif // D2_DEFINED_D2MissileSrvDoFuncData
 namespace D2Client::UNIT::Missile {
 
 // Function declarations

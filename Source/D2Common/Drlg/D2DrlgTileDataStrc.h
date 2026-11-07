@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2RoomCoordListStrc;
 struct D2TileLibraryEntryStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgTileDataStrc
+#define D2_DEFINED_D2DrlgTileDataStrc
 struct D2DrlgTileDataStrc {
     /* 0x00 */ int nScreenX; // Screen X coordinate (from minimap->screen transform)
     /* 0x04 */ int nScreenY; // Screen Y coordinate (from minimap->screen transform + 0x28)
@@ -33,3 +38,5 @@ struct D2DrlgTileDataStrc {
     /* 0x2B */ uint8_t nIntensity; // No 1.14d reader or writer found among the tile functions (the initialisers write only +0x28..+0x2a); name unverified
     /* 0x2C */ int nFadeEndTime; // GetTickCount() timestamp when fade animation ends
 };
+
+#endif // D2_DEFINED_D2DrlgTileDataStrc

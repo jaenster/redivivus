@@ -1439,8 +1439,8 @@
         "AddSkill"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x94SkillStrc",
         "D2UnitStrc",
-        "uint16_t",
         "uint32_t",
         "uint8_t"
       ]

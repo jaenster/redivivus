@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Launch)
 #error "D2Launch header included by a module that may not use D2Launch (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Launch) && !defined(D2_LOADS_D2Launch)
+#error "internal D2Launch header included from another module; include D2Launch's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,11 +15,14 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2CompCofListNodeStrc;
 struct D2ControlMsg;
 struct D2ControlStrc;
 struct DC6;
 
 // Data types
+#ifndef D2_DEFINED_D2CharSelCompStrc
+#define D2_DEFINED_D2CharSelCompStrc
 struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x000 */ D2CharSelCompFlags nFlags;
     /* 0x004 */ uint8_t nAnimSpeed;
@@ -33,7 +39,7 @@ struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x028 */ char nComponentTransforms[16];
     /* 0x038 */ int dwComponentCodes[16];
     /* 0x078 */ int nComponentClasses[16];
-    /* 0x0B8 */ int * * ppCofCacheEntries;
+    /* 0x0B8 */ struct D2CompCofListNodeStrc * * ppCofCacheEntries;
     /* 0x0BC */ struct DC6 * pGuildEmblemImage;
     /* 0x0C0 */ uint8_t nGuildEmblemColor1;
     /* 0x0C1 */ uint8_t nGuildEmblemColor2;
@@ -48,6 +54,7 @@ struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x230 */ uint32_t dwProductCode;
 };
 
+#endif // D2_DEFINED_D2CharSelCompStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
 struct D2CharSelLineBufStrc {
     /* 0x00 */ uint16_t wszLineBuf[100];
@@ -55,6 +62,8 @@ struct D2CharSelLineBufStrc {
 };
 
 #endif // D2_MODULE_D2Launch
+#ifndef D2_DEFINED_D2CharSelStrc
+#define D2_DEFINED_D2CharSelStrc
 struct __attribute__((packed)) D2CharSelStrc {
     /* 0x000 */ char szCharname[256]; // Character name (max 16 chars + null, rest unused)
     /* 0x100 */ char szCommandStringTable[512]; // Byte-addressable chat command format string table (packed at fixed sub-offsets 0x8..0xfe); NOT wide chars despite original name
@@ -81,6 +90,9 @@ struct __attribute__((packed)) D2CharSelStrc {
     /* 0x34C */ struct D2CharSelStrc * pNext; // Next entry in char select linked list (sorted by recency)
 };
 
+#endif // D2_DEFINED_D2CharSelStrc
+#ifndef D2_DEFINED_D2RealmCharListCacheEntryStrc
+#define D2_DEFINED_D2RealmCharListCacheEntryStrc
 struct D2RealmCharListCacheEntryStrc {
     /* 0x00 */ uint32_t nHash; // SStrHash(szRealmKey, 0, 0)
     /* 0x04 */ void * pData; // SMemAlloc copy of the realm character list (CharSel.cpp 0xf2/0xfc)
@@ -88,6 +100,7 @@ struct D2RealmCharListCacheEntryStrc {
     /* 0x0C */ struct D2RealmCharListCacheEntryStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2RealmCharListCacheEntryStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -112,7 +125,7 @@ void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t 
 void __stdcall CHARSEL_FreeCachedRealmData();
 void __stdcall UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide();
 char * __stdcall GetPreferedRealm();
-int __fastcall Unreferenced_00437f30(int param_1);
+void __fastcall Unreferenced_00437f30(char * pszFilename);
 // @sourcefile .\Src\CharSel.cpp
 void __stdcall CHARSEL_DestroySelectedChar();
 // Draws local character slots in selection screen. Iterates gaCharSelScreenSlotControls[0-7] to render each slot's character name, level, class, and hardcore/expansion flags. Highlights selected slot, draws character preview sprite, and handles expired characters.
@@ -120,7 +133,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen();
 void __stdcall DRAW_LocalCharsInSelectionScreen0();
 // @sourcefile .\Src\CharSel.cpp
 void __stdcall CHARSEL_DestroyAllCharEntries();
-int __fastcall Unreferenced_00438f40(int param_1);
+int __fastcall Unreferenced_00438f40(char * param_1);
 void __stdcall CHARSEL_EnumerateLocalSaves();
 int __stdcall CHARSEL_UpdateSelectionExpansion();
 // @sourcefile .\Src\CharSel.cpp
@@ -140,8 +153,8 @@ BOOL __stdcall CHARSEL_OnPressScrollCharListUp(struct D2ControlMsg * pControlMsg
 BOOL __stdcall CHARSEL_OnPressScrollCharListDown(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_CharSelScrollbarCallback(struct D2ControlStrc * pControl);
 void __stdcall CHARSEL_ScrollCharList(int32_t nScrollDelta);
-BOOL __stdcall CHARSEL_HandleKeyNavExpansion(int32_t pKeyMsg);
-BOOL __stdcall CHARSEL_HandleKeyNavClassic(int32_t pKeyMsg);
+BOOL __stdcall CHARSEL_HandleKeyNavExpansion(struct D2ControlMsg * pKeyMsg);
+BOOL __stdcall CHARSEL_HandleKeyNavClassic(struct D2ControlMsg * pKeyMsg);
 void __stdcall CHARSEL_ShowWaitTimeout();
 BOOL __stdcall CHARSEL_InitRealmSelection();
 // @sourcefile .\Src\CharSel.cpp
@@ -151,7 +164,7 @@ void __stdcall CHARSEL_AddRetrievingEntry();
 // @sourcefile .\Src\CharSel.cpp
 void __stdcall CHARSEL_ClearCharDetailUI();
 void __stdcall CHARSEL_ResetCharListUI();
-int Unreferenced_0043a7e0();
+void Unreferenced_0043a7e0();
 void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123();
 BOOL __stdcall ChangeClosedRealmChoice(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall CHARSEL_OpenRealmChangeDialog(struct D2ControlMsg * pControlMsg);

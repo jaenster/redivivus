@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2GroundSubTileStrc;
 struct D2LRUCacheNodeStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2TileLibraryEntryStrc
+#define D2_DEFINED_D2TileLibraryEntryStrc
 struct __attribute__((packed)) D2TileLibraryEntryStrc {
     /* 0x00 */ int nDirection;
     /* 0x04 */ uint16_t nRoofHeight;
@@ -39,3 +44,5 @@ struct __attribute__((packed)) D2TileLibraryEntryStrc {
     /* 0x58 */ char * szFilePath; // DT1 file path; SPRITECACHE_AllocEntry passes it to CheckIfFileExists and reads nBlockDataSize bytes from it into pSubTiles
     /* 0x5C */ struct D2LRUCacheNodeStrc * pLruNode; // sprite-cache LRU node; SPRITECACHE_AllocEntry moves it to front, FreeEntry frees it
 };
+
+#endif // D2_DEFINED_D2TileLibraryEntryStrc

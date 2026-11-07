@@ -6,11 +6,9 @@
 #include "Source/D2Win/DC6.h"
 #include "Source/D2Win/Src/D2WinMain.h"
 #include "Source/D2Win/Src/D2WinTextBox.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Win/D2Win.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinScrollbar.h"
 
@@ -335,10 +333,10 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
         if (pScrollbar->sControl.dwSizeY - 10 > 10) {
           pDC6 = (DC6*)0xa;
           do {
-            pDC6 = (DC6*)((uintptr_t)&pDC6->nFormat + 2);
+            pDC6 = (DC6*)((intptr_t)&pDC6->nFormat + 2);
             nDrawY += -10;
             D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
-          } while ((int)pDC6 < pScrollbar->sControl.dwSizeY - 10);
+          } while ((intptr_t)pDC6 < pScrollbar->sControl.dwSizeY - 10);
         }
 
         sGfxData.nFrameNumber = pScrollbar->bUpArrowPressed ? 2 : 0;

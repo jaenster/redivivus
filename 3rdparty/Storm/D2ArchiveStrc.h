@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,8 @@ struct D2MPQHeaderStrc;
 struct D2MPQHashEntryStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ArchiveStrc
+#define D2_DEFINED_D2ArchiveStrc
 struct __attribute__((packed)) D2ArchiveStrc {
     /* 0x000 */ struct D2ArchiveStrc * pPrevLink;
     /* 0x004 */ struct D2ArchiveStrc * pNext;
@@ -45,6 +50,9 @@ struct __attribute__((packed)) D2ArchiveStrc {
     /* 0x258 */ int nPriority;
 };
 
+#endif // D2_DEFINED_D2ArchiveStrc
+#ifndef D2_DEFINED_D2MPQHashEntryStrc
+#define D2_DEFINED_D2MPQHashEntryStrc
 struct D2MPQHashEntryStrc {
     /* 0x00 */ uint32_t dwHashA;
     /* 0x04 */ uint32_t dwHashB;
@@ -53,6 +61,9 @@ struct D2MPQHashEntryStrc {
     /* 0x0C */ uint32_t dwBlockIndex; // index into the block table; read by SFILE_GetBlockTableEntry
 };
 
+#endif // D2_DEFINED_D2MPQHashEntryStrc
+#ifndef D2_DEFINED_D2MPQHeaderStrc
+#define D2_DEFINED_D2MPQHeaderStrc
 struct D2MPQHeaderStrc {
     /* 0x00 */ uint32_t dwMagic; // 'MPQ\x1a' (0x1a51504d), checked by SFILE_s_OpenArchive
     /* 0x04 */ uint32_t dwHeaderSize; // at least 0x20
@@ -64,3 +75,5 @@ struct D2MPQHeaderStrc {
     /* 0x18 */ uint32_t dwHashTableSize; // entries; also the hash mask base (size - 1)
     /* 0x1C */ uint32_t dwBlockTableSize; // entries
 };
+
+#endif // D2_DEFINED_D2MPQHeaderStrc

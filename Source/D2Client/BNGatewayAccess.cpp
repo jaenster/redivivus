@@ -9,8 +9,8 @@
 
 namespace D2Client::BNGatewayAccess {
 
-int32_t __stdcall NumGateways(int32_t pGatewayAccess) {
-    /* 0x2e680  14  ?NumGateways@BNGatewayAccess@@QAGHXZ */ return *(int32_t*)(pGatewayAccess + 8);
+int32_t __stdcall NumGateways(D2BNetGatewayAccessStr * pGatewayAccess) {
+    /* 0x2e680  14  ?NumGateways@BNGatewayAccess@@QAGHXZ */ return pGatewayAccess->nGatewayCount;
 }
 
 int32_t __stdcall CurGateway(D2BNetGatewayAccessStr * pGatewayAccess) {

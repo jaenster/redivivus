@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -28,18 +31,18 @@ int __fastcall UNITSND_GetSkillCastSound(struct D2UnitStrc * pUnit, uint32_t nAn
 uint32_t __fastcall UNITSND_GetSkillStartSound(struct D2UnitStrc * pUnit, uint32_t nAnimMode);
 // Maps a unit's animation/event flag word to a pair of sound ids. Resolves the unit's sound type; for monsters that are critters, returns no sound. The low nibble (nAnimFlags & 0xf) selects a base sound id into *pnSoundIdOut (0 if none); the high nibble (&0xf0) selects a secondary/param sound into *pnParam, with several cases branching on whether a base sound exists and whether the unit is a player/monster (gated by bExcludePlayerMonster). Both outputs default to 0. Halts via ErrorManager if pUnit is null.
 void __fastcall UNITSND_ResolveSoundFromFlags(struct D2UnitStrc * pUnit, uint32_t nAnimFlags, int32_t bExcludePlayerMonster, int * pnSoundIdOut, int * pnSecondarySoundIdOut);
-int __fastcall UNITSND_GetHitSound(int32_t pSoundTable, uint32_t nAnimMode);
+int __fastcall UNITSND_GetHitSound(struct D2UnitStrc * pSoundTable, uint32_t nAnimMode);
 void __fastcall AllocUnitSfxData(struct D2UnitStrc * pUnit, int32_t nChannelHandle);
 void __fastcall FreeSfxData(struct D2UnitStrc * pUnit, int32_t nSearchValue);
 int32_t __fastcall UNITSND_GetMissileSound(struct D2UnitStrc * pUnit, int32_t nSound);
 int __fastcall UNITSND_GetMissileLoopSound(struct D2UnitStrc * pUnit);
 void __fastcall IterateUnitSfxData(struct D2UnitStrc * pUnit, int32_t bForceStop);
 void __fastcall UNITSND_UpdatePositionalAudio(struct D2UnitStrc * pUnit);
-void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, int32_t pUnit);
+void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, struct D2UnitStrc * pUnit);
 // Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall UNITSND_GetSfxMode(struct D2UnitStrc * pUnit);
-void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, int32_t pUnit);
+void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, struct D2UnitStrc * pUnit);
 // Returns pUnit's client-side dwSfxStepTicks (+0x84, the field SetSfxStepTicks writes); halts (UnitSnd.cpp line 3303) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall UNITSND_GetSfxStepTicks(struct D2UnitStrc * pUnit);
@@ -52,8 +55,8 @@ int32_t __fastcall UNITSND_GetGroundMaterial(struct D2UnitStrc * pUnit);
 int32_t __fastcall UNITSND_GetFootstepSound(struct D2UnitStrc * pUnit, int32_t bIsRunning);
 // Plays a unit's footstep sound for the current animation frame. For monsters, gates on walk/run-like animation modes and MonStats class range. Computes the step interval from frame count, anim speed and footstep count (FsCnt, FootstepLayer/FsPrb/FsOff from MonSounds.txt for monsters), debounces against the last step tick (dwSfxStepTicks), and picks the loudest of three candidate frame offsets. Selects walk vs run footstep via UNITSND_GetFootstepSound, plays it with distance-scaled channel priority (quieter when not the local player), optionally plays the layered footstep sound by probability, and stamps dwSfxStepTicks. Client/sound side effect only.
 void __fastcall PlayUnitFootstepSound(struct D2UnitStrc * pUnit);
-int Unreferenced_004cb170();
-int Unreferenced_004cb180();
+int Unreferenced_004cb170(struct D2UnitStrc * pUnit);
+int Unreferenced_004cb180(struct D2UnitStrc * pUnit);
 void __fastcall UNITSND_StopAllSkillSounds(struct D2UnitStrc * pUnit);
 // Iterates the unit's active SFX channel list and stops or gracefully fades any channel whose base sound matches the unit's neutral (idle ambient) sound. bForceStop=1 kills the channel immediately; bForceStop=0 fades it. Halts with a fatal error if pUnit is null.
 void __stdcall UNITSND_UpdateNeutralSound(struct D2UnitStrc * pUnit, int32_t bForceStop);

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,8 @@ struct D2UnitStrc;
 struct DC6;
 
 // Data types
+#ifndef D2_DEFINED_D2HireablesListStrc
+#define D2_DEFINED_D2HireablesListStrc
 struct D2HireablesListStrc {
     /* 0x00 */ struct DC6 * pIcon;
     /* 0x04 */ uint8_t field_0x4;
@@ -37,6 +42,7 @@ struct D2HireablesListStrc {
     /* 0x13 */ uint8_t field_0x13;
 };
 
+#endif // D2_DEFINED_D2HireablesListStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -61,7 +67,7 @@ void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX);
 struct DC6 * __fastcall GetRosterIcon(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut);
 void __stdcall DRAW_Overlay_PetsAndPartyMembers();
 void __stdcall INPUT_HireableInteract(struct D2UIMouseMsgStrc * pMsg);
-int Unreferenced_004934b0();
+struct D2UnitStrc * Unreferenced_004934b0();
 int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound);
 void __stdcall INPUT_HireableHireClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall UI_HandleHirelingTooltipHoverTimer(struct D2UIMouseMsgStrc * pMsg);

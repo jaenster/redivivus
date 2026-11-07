@@ -2,25 +2,18 @@
 
 #include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/D2SeedStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
 #include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
 #include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Seed.h"
 #include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Game/SKILLS/Items.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Common/Txt/Skills.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.inline.h"
 #include "Source/D2Common/ITEMS/ItemMods.data.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -85,14 +78,14 @@ static D2MagixAffixModStrc * TXT_magixaffixes_GetModEntry(D2MagicAffixTxt * pMag
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void * __stdcall TXT_UniqueItems_GetModEntry(void * pTxtLine, uint32_t nMod) {
     if (nMod < 0xc) {
-      return (void*)(nMod * 0x10 + 0xc + (int)pTxtLine);
+      return (void*)(nMod * 0x10 + 0xc + (char*)pTxtLine);
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81);
     exit(-1);
 }
 
-static int32_t ITEMMOD_GetMaxLevelAtIndex(D2GemsTxt * pMagixAffixLine, uint32_t nIndex, uint32_t nModIndex) {
+static D2MagixAffixModStrc * ITEMMOD_GetMaxLevelAtIndex(D2GemsTxt * pMagixAffixLine, uint32_t nIndex, uint32_t nModIndex) {
     D2MagixAffixModStrc* pModPtrTable[3];
     pModPtrTable[0] = pMagixAffixLine->aWeaponMods;
     pModPtrTable[1] = pMagixAffixLine->aHelmMods;
@@ -102,7 +95,7 @@ static int32_t ITEMMOD_GetMaxLevelAtIndex(D2GemsTxt * pMagixAffixLine, uint32_t 
       exit(-1);
     }
     if (nModIndex < 3) {
-      return (int32_t)(pModPtrTable[nIndex] + nModIndex);
+      return pModPtrTable[nIndex] + nModIndex;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x90);
@@ -110,23 +103,23 @@ static int32_t ITEMMOD_GetMaxLevelAtIndex(D2GemsTxt * pMagixAffixLine, uint32_t 
 }
 
 // Retrieves a specific property modifier from an affix line. Rolls property values based on min/max ranges and returns property code, parameter, and calculated value.
-static int32_t ITEMMOD_GetPropertyFromAffix(D2MagicAffixTxt * pMagicAffixLine, uint32_t nGemModType, uint32_t nNumber, uint32_t nSelector) {
+static intptr_t ITEMMOD_GetPropertyFromAffix(D2MagicAffixTxt * pMagicAffixLine, uint32_t nGemModType, uint32_t nNumber, uint32_t nSelector) {
     D2MagixAffixModStrc* pModEntry;
     int32_t nMaxLevel;
     switch (nSelector) {
       case 0:
         pModEntry = TXT_magixaffixes_GetModEntry(pMagicAffixLine, nNumber);
-      return (int32_t)pModEntry;
+      return (intptr_t)pModEntry;
       case 1:
         if (nNumber < 0xc) {
-          return (uintptr_t)&pMagicAffixLine->mod[nNumber - 2].min;
+          return (intptr_t)&pMagicAffixLine->mod[nNumber - 2].min;
         }
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81);
       exit(-1);
       case 2:
 
       case 5:
-        nMaxLevel = ITEMMOD_GetMaxLevelAtIndex((D2GemsTxt*)pMagicAffixLine, nGemModType, nNumber);
+        nMaxLevel = (int32_t)ITEMMOD_GetMaxLevelAtIndex((D2GemsTxt*)pMagicAffixLine, nGemModType, nNumber);
       return nMaxLevel;
       case 3:
 
@@ -135,7 +128,7 @@ static int32_t ITEMMOD_GetPropertyFromAffix(D2MagicAffixTxt * pMagicAffixLine, u
       case 6:
 
       case 7:
-        return (int32_t)pMagicAffixLine;
+        return (intptr_t)pMagicAffixLine;
       default:
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaf);
       exit(-1);
@@ -647,7 +640,7 @@ int32_t __fastcall ITEMMOD_ApplySocketCount(int32_t nType, D2UnitStrc * pUnit, D
     }
 
     Items::ITEM_EditItemData_eItemFlag(pItemUnit, ITEMFLAG_SOCKETED, 1);
-    Items::ITEM_SetSocketCount(pItemUnit, (uint32_t)pProperty->fparam);
+    Items::ITEM_SetSocketCount(pItemUnit, pProperty->fparam);
     return 1;
 }
 
@@ -719,7 +712,7 @@ void __stdcall PropertyFunc_SimpleStatThunk2(int32_t nFastCallECX, int32_t pProp
 // coherent bonus, whereas classic items might show 4 separate resistance
 // lines with different values.
 int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
-    D2SetsTxtFStrc* nRangeLow;
+    int32_t nRangeLow;
     int32_t nRangeHigh;
     uint32_t nRandom;
     uint16_t wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
@@ -733,21 +726,21 @@ int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit
       nRangeHigh = pProperty->fmax;
       pProperty = (D2SetsTxtFStrc*)pProperty->fmin;
       if ((D2SetsTxtFStrc*)nRangeHigh != pProperty) {
-        nRangeLow = pProperty;
-        if (nRangeHigh < (int)pProperty) {
-          nRangeLow = (D2SetsTxtFStrc*)nRangeHigh;
+        nRangeLow = (int32_t)pProperty;
+        if (nRangeHigh < (intptr_t)pProperty) {
+          nRangeLow = nRangeHigh;
           nRangeHigh = (int32_t)pProperty;
         }
 
         wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
-        nRandom = nRangeHigh - (int)nRangeLow;
+        nRandom = nRangeHigh - nRangeLow;
         if (wItemVersion >= 1) {
           nRandom++;
         }
 
         pSeed = Items::GetItemSeed(pItemUnit);
         nRandom = Seed::RANDOM_RandomNumberSelector(pSeed, nRandom);
-        pProperty = (D2SetsTxtFStrc*)((uintptr_t)&nRangeLow->fcode + nRandom);
+        pProperty = (D2SetsTxtFStrc*)(nRandom + nRangeLow);
       }
 
       /* Applies all resistances property - single value expands to 4 resist stats
@@ -767,7 +760,7 @@ int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit
 
 // Property function for All Maximum Resistances (+X% max fire/light/cold/poison resist). Classic items: 4 independent RNG rolls via ITEMMOD_ApplyRandomStatValue. Expansion items: single RNG roll from property min/max applied identically to all four max-resist stats via PropertyFunc_SimpleStat. Halts if property data pointer is null.
 int32_t __fastcall PropertyFunc_AllMaxResistances(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
-    D2SetsTxtFStrc* nRangeLow;
+    int32_t nRangeLow;
     int32_t nRangeHigh;
     uint32_t nRandom;
     uint16_t wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
@@ -781,21 +774,21 @@ int32_t __fastcall PropertyFunc_AllMaxResistances(int32_t nType, D2UnitStrc * pU
       nRangeHigh = pProperty->fmax;
       pProperty = (D2SetsTxtFStrc*)pProperty->fmin;
       if ((D2SetsTxtFStrc*)nRangeHigh != pProperty) {
-        nRangeLow = pProperty;
-        if (nRangeHigh < (int)pProperty) {
-          nRangeLow = (D2SetsTxtFStrc*)nRangeHigh;
+        nRangeLow = (int32_t)pProperty;
+        if (nRangeHigh < (intptr_t)pProperty) {
+          nRangeLow = nRangeHigh;
           nRangeHigh = (int32_t)pProperty;
         }
 
         wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
-        nRandom = nRangeHigh - (int)nRangeLow;
+        nRandom = nRangeHigh - nRangeLow;
         if (wItemVersion >= 1) {
           nRandom++;
         }
 
         pSeed = Items::GetItemSeed(pItemUnit);
         nRandom = Seed::RANDOM_RandomNumberSelector(pSeed, nRandom);
-        pProperty = (D2SetsTxtFStrc*)((uintptr_t)&nRangeLow->fcode + nRandom);
+        pProperty = (D2SetsTxtFStrc*)(nRandom + nRangeLow);
       }
 
       PropertyFunc_SimpleStat(nType, pUnit, (int32_t)pProperty, bClearStat, 0, nState, pItemUnit, UNITSTAT_maxfireresist, dwStatListFlags);
@@ -817,7 +810,7 @@ int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     D2SeedStrc* pSeed;
     D2ItemsTxt* pDVar4;
     uint32_t nRolled;
-    D2SetsTxtFStrc* nRangeLow;
+    int32_t nRangeLow;
     int32_t nRangeB;
     D2SetsTxtFStrc* nRangeA;
     int32_t nErrLine;
@@ -832,21 +825,21 @@ int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     nRangeB = pProperty->fmax;
     nProperty = (int32_t)nRangeA;
     if (nRangeA != (D2SetsTxtFStrc*)nRangeB) {
-      nRangeLow = nRangeA;
-      if (nRangeB < (int)nRangeA) {
-        nRangeLow = (D2SetsTxtFStrc*)nRangeB;
+      nRangeLow = (int32_t)nRangeA;
+      if (nRangeB < (intptr_t)nRangeA) {
+        nRangeLow = nRangeB;
         nRangeB = (int32_t)nRangeA;
       }
 
       wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
-      nRolled = nRangeB - (int)nRangeLow;
+      nRolled = nRangeB - nRangeLow;
       if (wItemVersion >= 1) {
         nRolled++;
       }
 
       pSeed = Items::GetItemSeed(pItemUnit);
       nRolled = Seed::RANDOM_RandomNumberSelector(pSeed, nRolled);
-      nProperty = (int32_t)((uintptr_t)&nRangeLow->fcode + nRolled);
+      nProperty = (int32_t)(nRolled + nRangeLow);
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
       if (!pItemUnit) {
@@ -900,7 +893,7 @@ int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     D2SeedStrc* pSeed;
     D2ItemsTxt* pDVar4;
     uint32_t nRolled;
-    D2SetsTxtFStrc* nRangeLow;
+    int32_t nRangeLow;
     int32_t nRangeB;
     D2SetsTxtFStrc* nRangeA;
     int32_t nErrLine;
@@ -915,21 +908,21 @@ int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     nRangeB = pProperty->fmax;
     nProperty = (int32_t)nRangeA;
     if (nRangeA != (D2SetsTxtFStrc*)nRangeB) {
-      nRangeLow = nRangeA;
-      if (nRangeB < (int)nRangeA) {
-        nRangeLow = (D2SetsTxtFStrc*)nRangeB;
+      nRangeLow = (int32_t)nRangeA;
+      if (nRangeB < (intptr_t)nRangeA) {
+        nRangeLow = nRangeB;
         nRangeB = (int32_t)nRangeA;
       }
 
       wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
-      nRolled = nRangeB - (int)nRangeLow;
+      nRolled = nRangeB - nRangeLow;
       if (wItemVersion >= 1) {
         nRolled++;
       }
 
       pSeed = Items::GetItemSeed(pItemUnit);
       nRolled = Seed::RANDOM_RandomNumberSelector(pSeed, nRolled);
-      nProperty = (int32_t)((uintptr_t)&nRangeLow->fcode + nRolled);
+      nProperty = (int32_t)(nRolled + nRangeLow);
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
       if (!pItemUnit) {
@@ -988,7 +981,7 @@ int32_t __fastcall PropertyFunc_EnhancedDamage(int32_t nType, D2UnitStrc * pUnit
     D2ItemsTxt* pItemsTxt;
     uint32_t nRolled;
     int32_t iVar1;
-    D2SetsTxtFStrc* nRangeLow;
+    int32_t nRangeLow;
     uint32_t nBaseMaxDam;
     int32_t nRangeHigh;
     uint16_t wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
@@ -1001,21 +994,21 @@ int32_t __fastcall PropertyFunc_EnhancedDamage(int32_t nType, D2UnitStrc * pUnit
         nRangeHigh = pProperty->fmax;
         pProperty = (D2SetsTxtFStrc*)pProperty->fmin;
         if ((D2SetsTxtFStrc*)nRangeHigh != pProperty) {
-          nRangeLow = pProperty;
-          if (nRangeHigh < (int)pProperty) {
-            nRangeLow = (D2SetsTxtFStrc*)nRangeHigh;
+          nRangeLow = (int32_t)pProperty;
+          if (nRangeHigh < (intptr_t)pProperty) {
+            nRangeLow = nRangeHigh;
             nRangeHigh = (int32_t)pProperty;
           }
 
           wItemVersion = Items::ITEM_GetItemData_wItemVersion(pItemUnit);
-          nRolled = nRangeHigh - (int)nRangeLow;
+          nRolled = nRangeHigh - nRangeLow;
           if (wItemVersion >= 1) {
             nRolled++;
           }
 
           pSeed = Items::GetItemSeed(pItemUnit);
           nRolled = Seed::RANDOM_RandomNumberSelector(pSeed, nRolled);
-          pProperty = (D2SetsTxtFStrc*)((uintptr_t)&nRangeLow->fcode + nRolled);
+          pProperty = (D2SetsTxtFStrc*)(nRolled + nRangeLow);
         }
         if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
           if (!pItemUnit) {
@@ -1121,7 +1114,7 @@ int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2Uni
     }
 
     int32_t eSkill;
-    eSkill = (int32_t)pProperty->fparam;
+    eSkill = pProperty->fparam;
     if (eSkill < 0 || eSkill >= Items::sgptDataTable->nTxtSkillsCount || !(Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
@@ -1200,7 +1193,7 @@ int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2Uni
 
 // Property handler that packs three sub-values from a property entry into a single stat value and adds it to the unit's stat list. Reads three fields at pPropEntry+4/+8/+0xC, applies +0x100 offsets to the second and third, validates ranges (val1 &lt; 4, val2/val3 &lt; 0x400), then computes: stat = val1 + (val3*0x400 + val2)*4 and calls D2AddStatToStatsListEx. Halts on validation failure. Used for multi-field stats such as class/tab skill bonuses.
 int32_t __fastcall PropertyFunc_PackedStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
-    uint8_t* nPackedVal1;
+    uint32_t nPackedVal1;
     uint32_t nPackedVal2;
     uint32_t nPackedVal3;
     if (pProperty->fmin > pProperty->fmax) {
@@ -1208,17 +1201,17 @@ int32_t __fastcall PropertyFunc_PackedStat(int32_t nType, D2UnitStrc * pUnit, D2
       exit(-1);
     } else {
       D2StatListExStrc* pStatsEx;
-      nPackedVal1 = (uint8_t*)pProperty->fparam;
+      nPackedVal1 = pProperty->fparam;
       nPackedVal2 = pProperty->fmin + 0x100;
       nPackedVal3 = pProperty->fmax + 0x100;
       pStatsEx = ITEMMOD_GetOrCreateStatList(pItemUnit, nState, dwStatListFlags, pUnit);
       if (!pStatsEx) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x44a);
         exit(-1);
-      } else if (nPackedVal1 < (uint8_t*)0x4) {
+      } else if (nPackedVal1 <= 3) {
         if (nPackedVal2 <= 0x3ff) {
           if (nPackedVal3 <= 0x3ff) {
-            Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, (int32_t)(nPackedVal1 + (nPackedVal3 * 0x400 + nPackedVal2) * 4), 0);
+            Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eStatCode, nPackedVal1 + (nPackedVal3 * 0x400 + nPackedVal2) * 4, 0);
             return 1;
           }
 
@@ -1409,7 +1402,7 @@ int32_t __fastcall PropertyFunc_SingleSkillBonus(int32_t nType, D2UnitStrc * pUn
       nValue = nSkillId + nRangeLow;
     }
 
-    int32_t nParam_00 = (int32_t)pProperty->fparam;
+    int32_t nParam_00 = pProperty->fparam;
     if (nParam_00 >= 0 && nParam_00 < Items::sgptDataTable->nTxtSkillsCount) {
       pStatsEx = ITEMMOD_GetOrCreateStatList(pItemUnit, nState, dwStatListFlags, pUnit);
       if (pStatsEx) {
@@ -1808,20 +1801,21 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, ((seedAdvanced.nSeedLow & 3) + 1) * 0x100, 0);
 }
 
-int __fastcall Unreferenced_0065e9b0(int param_1) {
+D2ItemsTxt * __fastcall Unreferenced_0065e9b0(D2UnitStrc * pUnit, D2UnitStrc * pFallback) {
     D2ItemsTxt* pDVar1;
-    int in_EDX;
-    if (param_1 && *(int*)param_1 == 4) {
-      pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(*(uint32_t*)(param_1 + 4));
-      return (int)pDVar1;
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+      int nClassId = pUnit->nClassId;
+      pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
+      return pDVar1;
     }
-    if (!in_EDX) {
+    if (!pFallback) {
       pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(-1);
-      return (int)pDVar1;
+      return pDVar1;
     }
 
-    pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(*(uint32_t*)(in_EDX + 4));
-    return (int)pDVar1;
+    int nClassId2 = pFallback->nClassId;
+    pDVar1 = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId2);
+    return pDVar1;
 }
 
 // Rolls a random integer in [nMin, nParam] using the item's seed (via GetItemSeed for UNIT_ITEM, pUnit->sSeed otherwise). If min==max returns min with no RNG call. Returns the rolled value in EAX.
@@ -2212,12 +2206,12 @@ uint32_t __fastcall ITEMPROP_AddSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D
       }
     }
 
-    uint8_t* nSubIndex = (uint8_t*)pProperty->fparam;
-    if (!((int)nSubIndex >= 0 && (int)nSubIndex < Items::sgptDataTable->nTxtSkillsCount)) {
+    uint32_t nSkillId = pProperty->fparam;
+    if (!((int)nSkillId >= 0 && (int)nSkillId < Items::sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
-    uint32_t nSkillId = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, (uint32_t)nSubIndex, nRolledValue, nState);
+    nSkillId = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, nSkillId, nRolledValue, nState);
     return nSkillId;
 }
 
@@ -2229,7 +2223,7 @@ uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam4(uint32_t nType, D2UnitS
       nRolledValue = ITEMMOD_RollRandomValue(pUnit2, pProperty->fmin, pProperty->fmax);
     }
 
-    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, (uint32_t)pProperty->fparam, nRolledValue, nState);
+    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, pProperty->fparam, nRolledValue, nState);
     return nResult;
 }
 
@@ -2244,7 +2238,7 @@ uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t nType, D2UnitStrc * pUn
       }
     }
 
-    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, (int)pProperty->fparam % 3 + (int)pProperty->fparam / 3 * 8, nRolledValue, nState);
+    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, pProperty->fparam % 3 + pProperty->fparam / 3 * 8, nRolledValue, nState);
     return nResult;
 }
 
@@ -2323,9 +2317,10 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
 
 // Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.
 uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4) {
-    uint8_t* nDimProduct;
-    uint8_t* nSocketMin;
-    uint8_t* nValue;
+    uint32_t nDimProduct;
+    uint32_t uVar1;
+    uint32_t nSocketMin;
+    uint32_t nValue;
     uint32_t nWidthOut;
     D2UnitStrc* pItemUnit2 = pUnit2;
     if (!pProperty) {
@@ -2334,11 +2329,11 @@ uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D
     if (pUnit2 && pUnit2->eUnitType == UNIT_ITEM) {
       uint8_t nMaxSockCap;
       nWidthOut = dwParam1 & 0xffffff;
-      pUnit2 = (D2UnitStrc*)((uint32_t)pUnit2 & 0xffffff);
-      Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemUnit2, (char*)((uintptr_t)&nWidthOut + 3), (char*)((uintptr_t)&pUnit2 + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
-      nDimProduct = (uint8_t*)(((uint32_t)pUnit2 >> 0x18) * (nWidthOut >> 0x18));
-      nValue = (uint8_t*)(void*)0x6;
-      if (nDimProduct < (uint8_t*)0x7) {
+      pUnit2 = (D2UnitStrc*)((uintptr_t)pUnit2 & 0xffffff);
+      Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemUnit2, (char*)((intptr_t)&nWidthOut + 3), (char*)((intptr_t)&pUnit2 + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
+      nDimProduct = ((uintptr_t)pUnit2 >> 0x18) * (nWidthOut >> 0x18);
+      nValue = 6;
+      if (nDimProduct < 7) {
         nValue = nDimProduct;
         if (!nDimProduct) {
           return 0;
@@ -2346,32 +2341,32 @@ uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D
       }
 
       nMaxSockCap = Items::ITEM_GetMaxSockCount(pItemUnit2);
-      if ((uint8_t*)(uint32_t)nMaxSockCap <= nValue) {
+      if (nMaxSockCap <= nValue) {
         nMaxSockCap = Items::ITEM_GetMaxSockCount(pItemUnit2);
-        nValue = (uint8_t*)(uint32_t)nMaxSockCap;
+        nValue = (uint32_t)nMaxSockCap;
       }
 
-      nDimProduct = (uint8_t*)nRolledValue;
+      uVar1 = nRolledValue;
       if ((int)nRolledValue <= 0) {
-        nDimProduct = (uint8_t*)ITEMMOD_RollRandomValue(pItemUnit2, pProperty->fmin, pProperty->fmax);
-        if ((int)nDimProduct <= 0) {
-          nDimProduct = (uint8_t*)pProperty->fparam;
+        uVar1 = ITEMMOD_RollRandomValue(pItemUnit2, pProperty->fmin, pProperty->fmax);
+        if ((int)uVar1 <= 0) {
+          uVar1 = pProperty->fparam;
         }
       }
 
-      nSocketMin = nDimProduct;
-      if ((int)nDimProduct <= 1) {
-        nSocketMin = (uint8_t*)0x1;
+      nSocketMin = uVar1;
+      if ((int)uVar1 <= 1) {
+        nSocketMin = 1;
       }
-      if ((int)nSocketMin < (int)nValue && (nValue = nDimProduct , (int)nDimProduct <= 1)) {
-        nValue = (uint8_t*)0x1;
+      if ((int)nSocketMin < (int)nValue && (nValue = uVar1 , (int)uVar1 <= 1)) {
+        nValue = 1;
       } else if ((int)nValue <= 0) {
         return 0;
       }
 
       Items::ITEM_EditItemData_eItemFlag(pItemUnit2, ITEMFLAG_SOCKETED, 1);
-      Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit2, UNITSTAT_item_numsockets, (int32_t)nValue, 0);
-      return (uint32_t)nValue;
+      Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit2, UNITSTAT_item_numsockets, nValue, 0);
+      return nValue;
     }
 
     return 0;
@@ -2489,8 +2484,8 @@ uint32_t __fastcall ITEMPROP_AddTimedStat(uint32_t nType, D2UnitStrc * pUnit, D2
 
     uint32_t nClampedMinVal = pProperty->fmin + 0x100;
     uint32_t nClampedMaxVal = pProperty->fmax + 0x100;
-    pProperty = (D2SetsTxtFStrc*)((int)pProperty->fparam <= 0 ? 0 : (uint32_t)pProperty->fparam);
-    if ((int)pProperty >= 3) {
+    pProperty = (D2SetsTxtFStrc*)(pProperty->fparam <= 0 ? 0 : pProperty->fparam);
+    if ((intptr_t)pProperty >= 3) {
       pProperty = (D2SetsTxtFStrc*)0x3;
     }
 
@@ -2548,20 +2543,20 @@ uint32_t __fastcall ITEMPROP_AddStat_FixedOrRolledMaxDamageAware(uint32_t nType,
       return 0;
     }
 
-    uint8_t* nRolledValue_00 = (uint8_t*)pProperty->fparam;
+    uint32_t nRolledValue_00 = pProperty->fparam;
     if (!nRolledValue_00) {
-      nRolledValue_00 = (uint8_t*)ITEMMOD_RollRandomValue(pUnit2, pProperty->fmin, pProperty->fmax);
+      nRolledValue_00 = ITEMMOD_RollRandomValue(pUnit2, pProperty->fmin, pProperty->fmax);
       if (!nRolledValue_00) {
         return 0;
       }
     }
     if ((short int)nStatId == 0x16) {
-      ITEMPROP_AddMaxDamage(nType, pUnit, pUnit2, pProperty, nSet, 0x16, 0, (uint32_t)nRolledValue_00, nState, dwFlags, pContextUnit);
-    } else {
-      ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (short int)nStatId, 0, (int32_t)nRolledValue_00, nState);
+      ITEMPROP_AddMaxDamage(nType, pUnit, pUnit2, pProperty, nSet, 0x16, 0, nRolledValue_00, nState, dwFlags, pContextUnit);
+      return nRolledValue_00;
     }
 
-    return (uint32_t)nRolledValue_00;
+    ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (short int)nStatId, 0, nRolledValue_00, nState);
+    return nRolledValue_00;
 }
 
 uint32_t __fastcall ITEMPROP_SetIndestructible(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
@@ -2613,7 +2608,7 @@ uint32_t __fastcall ITEMPROP_AddStat_LayerFromParam4Lo(uint32_t nType, D2UnitStr
     }
 
     int32_t nValue = ITEMMOD_RollRandomValue(pUnit2, pProperty->fmin, pProperty->fmax);
-    uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, (uint32_t)*(uint16_t*)&pProperty->fparam, nValue, nState);
+    uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, (uint32_t)(uint16_t)pProperty->fparam, nValue, nState);
     return uRetVal;
 }
 
@@ -2623,7 +2618,7 @@ uint32_t __fastcall ITEMPROP_AddStat_RandLevelAsLayer(uint32_t nType, D2UnitStrc
     }
 
     uint32_t uRetVal = ITEMMOD_RollRandomValue(pUnit2, pProperty->fmin, pProperty->fmax);
-    uRetVal = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, uRetVal, (int32_t)pProperty->fparam, nState);
+    uRetVal = ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, pProperty, nSet, (int16_t)nStatId, uRetVal, pProperty->fparam, nState);
     return uRetVal;
 }
 

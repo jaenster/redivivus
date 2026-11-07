@@ -296,10 +296,10 @@ void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
     *pnW = 0;
 }
 
-int __fastcall Unreferenced_00425830(int param_1, int param_2) {
-    int iVar1 = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)param_2 << 8 | (uint16_t)(uint8_t)*(uint8_t*)(param_2 + 1)) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(param_2 + 2)) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(param_2 + 3));
-    *(int*)param_1 = iVar1;
-    return iVar1;
+int __fastcall Unreferenced_00425830(uint32_t * param_1, uint8_t * param_2) {
+    uint32_t uVar1 = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*param_2 << 8 | (uint16_t)(uint8_t)param_2[1]) << 8 | (uint32_t)(uint8_t)param_2[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)param_2[3]);
+    *param_1 = uVar1;
+    return uVar1;
 }
 
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
@@ -494,11 +494,11 @@ uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwHighWord, 
     return 0;
 }
 
-void __fastcall Unreferenced_00425ee0(int param_1, int param_2) {
-    *(char*)(param_2 + 3) = (char)param_1;
-    *(char*)(param_2 + 2) = (char)((uint32_t)param_1 >> 8);
-    *(char*)(param_2 + 1) = (char)((uint32_t)param_1 >> 0x10);
-    *(char*)param_2 = (char)((uint32_t)param_1 >> 0x18);
+void __fastcall Unreferenced_00425ee0(int param_1, uint8_t * param_2) {
+    param_2[3] = (uint8_t)param_1;
+    param_2[2] = (uint8_t)((uint32_t)param_1 >> 8);
+    param_2[1] = (uint8_t)((uint32_t)param_1 >> 0x10);
+    *param_2 = (uint8_t)((uint32_t)param_1 >> 0x18);
 }
 
 // Storm SBig SHA-1 implementation - init, update, and finalize functions
@@ -626,12 +626,12 @@ BigData * * __thiscall SSIGNATURE_RsaPowMod(BigData * * ppResult, BigData * * pp
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_ExportBytesWithPadding. DESCRIPTIVE, not an oracle name. Body = SBigToBinaryBuffer into the caller's buffer, then zero-fill the remainder to the requested length - the exact tail of Crypt::RSA::Process. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * ppBig, void * pOutBuf, uint32_t nBufLen) {
+void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * ppBig, uint8_t * pOutBuf, uint32_t nBufLen) {
     uint32_t nOrigLen = nBufLen;
     BigData* ppBigValue = *ppBig;
     SBig::SBigToBinaryBuffer(ppBigValue, pOutBuf, nBufLen, &nBufLen);
     if (nBufLen < nOrigLen) {
-      SMem::SMemZero((void*)(nBufLen + (int)pOutBuf), nOrigLen - nBufLen);
+      SMem::SMemZero(pOutBuf + nBufLen, nOrigLen - nBufLen);
     }
 
     return pOutBuf;
@@ -653,7 +653,7 @@ void __thiscall CryptRSA_Prepare(BigData * * ppKey, void * pModulusBytes, uint32
 
 // Crypt::RSA::Process: one RSA operation in place on nDataLen bytes at pData. Loads the bytes into a BigData, computes SBigPowMod(out, in, ppKey[1] exponent, ppKey[0] modulus), writes the result back with SBigToBinaryBuffer and zero-fills any shorter tail; used for both signing (SSignatureGenerate) and verifying (SSignatureVerifyStream_Finish).
 // Provenance: 1.14d asm 004260a0; PPC Storm 1.10b symbol Process__Q25Crypt3RSAFPUcUl with the same callee set.
-void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nDataLen) {
+void __thiscall CryptRSA_Process(BigData * * ppKey, uint8_t * pData, uint32_t nDataLen) {
     BigData* pPlainBn;
     BigData* pCipherBn;
     uint32_t local_8 = -1;
@@ -669,7 +669,7 @@ void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nData
     SBig::SBigPowMod(pCipherBn, pPlainBn, ppKey[1], *ppKey);
     SBig::SBigToBinaryBuffer(pCipherBn, pData, nBufCapacity, &nDataLen);
     if (nDataLen < nBufCapacity) {
-      SMem::SMemZero((void*)(nDataLen + (int)pData), nBufCapacity - nDataLen);
+      SMem::SMemZero(pData + nDataLen, nBufCapacity - nDataLen);
     }
 
     local_8 &= -256;
@@ -679,8 +679,8 @@ void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nData
     ExceptionList = sehRecord;
 }
 
-void __fastcall SSIG_FreeBigNum_Unref_00518b80(void * * pBigNum) {
-    SLog::SLogClose((uint32_t)*pBigNum);
+void __fastcall SSIG_FreeBigNum_Unref_00518b80(uint32_t * pBigNum) {
+    SLog::SLogClose(*pBigNum);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

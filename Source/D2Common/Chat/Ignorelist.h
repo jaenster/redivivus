@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -38,11 +41,9 @@ void __stdcall IGNORELIST_Initialize_Unref_005fe0f0();
 void __stdcall IGNORELIST_Initialize_Unref_005fe110();
 void __stdcall IGNORELIST_Initialize_Unref_005ff390();
 void __stdcall IGNORELIST_Initialize_Unref_00601b50();
-void __stdcall IGNORELIST_Initialize_Unref_0060ab70();
 void __stdcall IGNORELIST_Initialize_Unref_0060ac50();
-void __stdcall IGNORELIST_Initialize_Unref_0060b130();
 void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, char * pszDstBuf, int32_t nBufLen);
-void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, int32_t nDstBuf, int32_t nBufLen);
+void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, char * nDstBuf, int32_t nBufLen);
 void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize);
 void __stdcall IGNORELIST_Initialize_Unref_0063a800();
 void __stdcall IGNORELIST_Initialize_Unref_0063b9c0();

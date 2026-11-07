@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -32,6 +35,8 @@ typedef void (__fastcall *fpForEachClientFn)(struct D2ClientStrc * pClient, void
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2BNetSystemInfoStrc
+#define D2_DEFINED_D2BNetSystemInfoStrc
 struct __attribute__((packed)) D2BNetSystemInfoStrc {
     /* 0x000 */ uint32_t adwHeader[10]; // copied to FF01 pkt+0x01..+0x25
     /* 0x028 */ char szCompilationData[128]; // SStrCopy 0x80 -> pkt+0x29
@@ -54,6 +59,7 @@ struct __attribute__((packed)) D2BNetSystemInfoStrc {
     /* 0x110 */ uint32_t dw0x110; // -> pkt+0xe1
 };
 
+#endif // D2_DEFINED_D2BNetSystemInfoStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2Game_Line0x13af {
     /* 0x00 */ int32_t nValue;
@@ -64,6 +70,8 @@ struct D2Game_Line0x13af {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2Packet0x5aEventStructure
+#define D2_DEFINED_D2Packet0x5aEventStructure
 struct __attribute__((packed)) D2Packet0x5aEventStructure {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nMessageType;
@@ -74,6 +82,7 @@ struct __attribute__((packed)) D2Packet0x5aEventStructure {
     /* 0x18 */ char szName2[16];
 };
 
+#endif // D2_DEFINED_D2Packet0x5aEventStructure
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2PacketD2GS_SC_0xFFFD {
     /* 0x00 */ uint8_t nPacketSubType;
@@ -132,6 +141,14 @@ struct __attribute__((packed)) D2PacketD2GS_SC_0xFFFD {
     /* 0xBA */ uint8_t field_0xba;
     /* 0xBB */ uint8_t field_0xbb;
     /* 0xBC */ uint8_t field_0xbc;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2PlayerMessageThreadArgsStrc {
+    /* 0x00 */ int32_t nGameToken;
+    /* 0x04 */ int32_t nClientId;
+    /* 0x08 */ char szMessage[256];
 };
 
 #endif // D2_MODULE_D2Game
@@ -278,9 +295,9 @@ void * __fastcall QSERVER_GetTaskQueuePointer_Unref_0044bdd0(int32_t pQServer);
 void __stdcall ServerInit_nullsub_Unref_0052b8f0();
 void __stdcall ServerInit_nullsub_Unref_0052b900();
 uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052bdc0();
-int __stdcall Unreferenced_0052bdd0(int param_1);
-int __fastcall Unreferenced_0052bde0(int param_1, int param_2, int param_3);
-int __fastcall Unreferenced_0052bdf0(int param_1, int param_2, int param_3);
+bool __stdcall Unreferenced_0052bdd0(int nUnused);
+void __thiscall Unreferenced_0052bde0(LPCRITICAL_SECTION pCriticalSection, int nUnused);
+void __thiscall Unreferenced_0052bdf0(LPCRITICAL_SECTION pCriticalSection, int nUnused);
 int __fastcall Unreferenced_0052be00(int param_1);
 int __fastcall Unreferenced_0052be10(int param_1);
 void SRVLog(int32_t nLogCategory, char * szText, ...);
@@ -328,7 +345,7 @@ void __fastcall BroadcastPlayerLeave(::SGAMEDATA * pGame, struct D2ClientStrc * 
 uint32_t __fastcall NET_IsClientAllowedToJoin(uint32_t nClientID);
 void __fastcall LeaveHackPlayer(::SGAMEDATA * pGame, uint32_t nClientID, char * szPlayerName, int32_t nHackType);
 // Validates an incoming client join request before admitting them to a game. Checks: player name length ≤16 and language < 14, existing client name matches pPlayerName, token is valid, char class < 7, name contains no forbidden chars, then calls BattleNetServerService->fpFindPlayerToken to verify the BNet token. Calls GuardStack(1) on success, GuardStack(0) on any failure — callers treat the stack-cookie result as the admit/reject signal.
-BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameToken, uint8_t charClass, char * pPlayerName, uint32_t gameHash, uint32_t byRef1, uint32_t byRef2, uint8_t language, uint32_t byRef3, uint32_t byRef4, uint32_t byRef5, uint32_t byRef6, uint32_t dwParam);
+BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameToken, uint8_t charClass, char * pPlayerName, uint32_t gameHash, char * byRef1, uint32_t * byRef2, uint8_t language, uint32_t * byRef3, uint32_t * byRef4, uint32_t * byRef5, uint32_t * byRef6, uint32_t dwParam);
 // Tears down game completely. First clears token from global 1024-slot table (0x882d18-0x883d38) under csGameHash lock. Then frees subsystems in order: MonsterRegion, ObjectControl, QuestControl, NpcControl, all clients, all units (5 types), inactive unit lists, timer queue, party, arena. Frees all 5 acts via FreeDungeons. Finally destroys memory pool, leaves and deletes critical section. Called after 5 min idle timeout or when game empties (frames 1500-7500 with zero clients).
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_DestroyGame(int32_t nGameToken, ::SGAMEDATA * pGame);
@@ -412,11 +429,11 @@ uint32_t __stdcall QSERVER_GetClientCountByServerId(uint16_t nServerId);
 BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, struct D2QServerGameStatsStrc * pStats);
 int32_t __stdcall QSERVER_FillServerTokenArray(uint16_t * pOutArray, int32_t nMaxCount);
 // Exports up to nMaxCount unit type+mode records into pOutBuffer from the game currently assigned to nServerId. Looks up the game token via DATA_LastGameServer[nServerId] under the global hash lock, locks the game, then iterates all 128 player-unit buckets calling GetTypeAndMode for each unit (output stride 0x34 bytes). Returns the number of units exported. Used by external server-management queries.
-int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, void * pOutBuffer, int32_t nMaxCount);
+int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, struct D2QServerUnitRecordStrc * pOutBuffer, int32_t nMaxCount);
 // Dead/unused server-side helper that resolves a game token from a global server table, locks the game, selects one of the five unit-type hash-bucket arrays (player/monster/object/missile/item) by nUnitId, iterates all 128 buckets tracking statistics via GAME_TrackGameStatistics, then invokes a per-unit-type callback from PFN_UnitTypeToName_ARRAY. Not reachable in shipping 1.14d; retained for reference.
-void __stdcall Unused_GetUnitList(struct D2UnitStrc * * ppUnitArray, int32_t pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId);
+void __stdcall Unused_GetUnitList(struct D2UnitStrc * * ppUnitArray, struct D2Game_Line0x13af * pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId);
 // Searches the game on nServerId for nCount specific units identified by (pClassIds[i], pOutBuffer[i]) pairs and exports their type+mode into pUnitTypes (stride 0xd). Uses FindUnitFromTable for each entry; non-player hits additionally call a PFN_UnitTypeToName_ARRAY dispatch. Returns the count of units found. Counterpart to QSERVER_ExportUnitListByServerId for targeted rather than bulk export.
-int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, eD2UnitType * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer);
+int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, struct D2QServerUnitRecordStrc * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer);
 // Aggregates unit statistics across all active games in the global token table. For each game, iterates all 128 unit buckets and counts: players (bucket-type 0, increments pBucketCountdown[3]) and objects/monsters at bucket offset 0x19 (increments pBucketCountdown[1]). Also increments pBucketCountdown[0] per game found. Used for server-capacity and monitoring queries.
 void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown);
 // Iterates every token slot in the game-server token table and, for each live game, sends a message to all connected clients. nMsgType==1 sends a structured 0x5A event packet (category 4, event 0xF, payload dwEventPayload) via BroadcastEventMessage. Any other type sends the raw pszMessage string via CHAT_BroadcastMessageToAllClients, truncating to 255 bytes if needed. Locks and unlocks each game around the send.
@@ -424,7 +441,7 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
 void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessageBuffer);
 ::SGAMEDATA * __stdcall QSERVER_GetFirstActiveGame();
 // lpStartAddress parameter of CreateThread
-DWORD __stdcall QSERVER_PlayerMessageThread(void * lpThreadParam);
+DWORD __stdcall QSERVER_PlayerMessageThread(struct D2PlayerMessageThreadArgsStrc * lpThreadParam);
 // GAME_CreatePlayerMessageThread - Spawns worker thread for processing player messages asynchronously.
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_CreatePlayerMessageThread(int32_t nGameToken, int32_t nClientId, char * szMessageBuffer);
@@ -451,7 +468,7 @@ void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId);
 // Graceful player disconnect: saves all players (unless BNet with incomplete save), sends state 5 (leaving), sends pending save data (0xB3 for LAN/Open), sends state 6 (terminated), sends 0xB0 ConnectionTerminated, broadcasts 0x5A PlayerLeave event. If all clients gone, loops until empty. Sleeps 100ms for LAN/Open before closing socket.
 void __fastcall NET_D2GS_SERVER_LeaveServer(uint32_t nClientId, int32_t bBroadcastLeave);
 // Removes a client from the server by token, cleaning up their connection state.
-void __fastcall LeaveServer(::SGAMEDATA * pQServer, uint32_t nClientToken);
+void __fastcall LeaveServer(::SGAMEDATA * pQServer, struct D2ClientStrc * nClientToken);
 // Callback invoked when the character-server (CS) delivers save data for a joining client (JOIN step 3). Accumulates chunked save data; on completion with nCsResult==0 stores file-time fields into pClient and sends state-command 2 to advance the join sequence. On CS error or stale pClientContainer, triggers disconnect.
 // @sourcefile .\GAME\Game.cpp
 uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pSaveData, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, void * pClientContainer);

@@ -4,19 +4,11 @@
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2RoomStrc.h"
 #include "Source/D2Common/DATATBLS/FieldTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/Units.h"
-#include "Source/D2Game/SKILLS/SkillsServer.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2DynamicPathStrc.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -77,7 +69,7 @@ BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUn
       }
 
       /* Both arguments are reused here */ DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pSrcRoom, (D2RoomStrc***)&pSrcUnit, (int*)&pUnit);
-      for (nRoomIdx = 0; nRoomIdx < (int)pUnit; nRoomIdx++) {
+      for (nRoomIdx = 0; nRoomIdx < (intptr_t)pUnit; nRoomIdx++) {
         if (*(D2RoomStrc**)(pSrcUnit->unk0x19 + nRoomIdx * 4 - 0x19) == pUnitRoom) {
           return 1;
         }
@@ -100,7 +92,7 @@ D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType
 
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&pRoom);
     int nAdjacentRoomIdx = 0;
-    /* Room turns to nCounter */ if ((int)pRoom <= 0) {
+    /* Room turns to nCounter */ if ((intptr_t)pRoom <= 0) {
       return nullptr;
     }
 
@@ -121,7 +113,7 @@ D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType
       }
 
       nAdjacentRoomIdx++;
-    } while (nAdjacentRoomIdx < (int)pRoom);
+    } while (nAdjacentRoomIdx < (intptr_t)pRoom);
 
     return nullptr;
 }
@@ -503,7 +495,7 @@ int32_t __stdcall UNITFINDS_FindCullRange(D2UnitFindDataStrc * pUnitFindData) {
               if (pFindData->fpUnitTest) {
                 /* FARPROC lpfn for IsBadCodePtr */ bBadPtr = IsBadCodePtr((FARPROC)pFindData->fpUnitTest);
                 if (bBadPtr) {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int)Fog::Src::ErrorManager::GetInstructionPointer(), 0x13e);
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x13e);
                   exit(-1);
                 }
 

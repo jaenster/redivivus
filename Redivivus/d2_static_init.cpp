@@ -20,12 +20,12 @@
 
 #include "Source/globals/globals.h"
 #include "Redivivus/d2_trace.h"
-#include "Source/D2Net/SRP.h"
+#include "Source/Bnclient/SRP.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "3rdparty/Storm/Source/SSystem.h"
-#include "3rdparty/crashy/crashy.h"
+#include "3rdparty/crashy/crashyRoot.h"
 #include "Source/D2Multi/ChatDlg.h"
-#include "Source/D2Hell/D2Hell.h"
+#include "Source/D2Hell/D2HellRoot.h"
 #include "Source/Bnclient/BnDownload.h"
 #include "Source/Bnclient/BnSend.h"
 #include "Source/Bnclient/Bnet.h"
@@ -183,7 +183,7 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     D2Trace("staticinit[54] 006caed0");
     Bnclient::BnDownload::StaticInit_CriticalSection_00881f64();
     D2Trace("staticinit[55] 006caef0");
-    D2Net::SRP::SRP_GlobalInit();
+    Bnclient::SRP::SRP_GlobalInit();
     D2Trace("staticinit[56] 006caf10");
     D2Game::GAME::Server::StaticInit_Frames_TimeBetweenFrames();
     D2Trace("staticinit[57] 006caf30");

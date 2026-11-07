@@ -921,6 +921,7 @@
         "D2RoomStrc",
         "D2SeedStrc",
         "D2UnitStrc",
+        "Objects_PopulateFn7_CorpseOnStick_Slotm",
         "SGAMEDATA",
         "int32_t",
         "uint16_t",

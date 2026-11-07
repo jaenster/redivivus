@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -25,6 +28,8 @@ typedef void (__fastcall *ACTCALLBACKFN)(struct D2RoomStrc * pRoom);
 struct D2DrlgEnvironmentStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgActStrc
+#define D2_DEFINED_D2DrlgActStrc
 struct __attribute__((packed)) D2DrlgActStrc {
     /* 0x00 */ eD2LevelId eLevelIdFirst; // First level in the act (used by client)
     /* 0x04 */ struct D2DrlgEnvironmentStrc * pEnvironment; // Day/night environment cycle
@@ -42,6 +47,9 @@ struct __attribute__((packed)) D2DrlgActStrc {
     /* 0x5C */ struct D2PoolManagerStrc * pMemory; // Server memory pool manager
 };
 
+#endif // D2_DEFINED_D2DrlgActStrc
+#ifndef D2_DEFINED_D2DrlgEnvironmentStrc
+#define D2_DEFINED_D2DrlgEnvironmentStrc
 struct D2DrlgEnvironmentStrc {
     /* 0x00 */ int nTimeIndex; // Current cycle index (0-5), wraps at 6
     /* 0x04 */ int nEnvironmentData; // Current period-of-day value from environment data table
@@ -61,3 +69,5 @@ struct D2DrlgEnvironmentStrc {
     /* 0x30 */ int bEclipse; // BOOL - TRUE during Tainted Sun quest eclipse effect
     /* 0x34 */ int nLastBaseTime; // Last base time (nTicks/nTimeRate), used for change detection in UpdateCycleIndex
 };
+
+#endif // D2_DEFINED_D2DrlgEnvironmentStrc

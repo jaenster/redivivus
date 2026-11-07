@@ -2,7 +2,7 @@
 
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Lang/StrTable/strtable.h"
-#include "3rdparty/crashy/crashy.h"
+#include "3rdparty/crashy/crashyRoot.h"
 #include "3rdparty/crashy/Report.h"
 #include "Source/Fog/Debug.h"
 #include "Source/Fog/File.h"
@@ -12,14 +12,10 @@
 #include "Source/Fog/Src/AsyncData.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/Safesock.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Redivivus/d2_trace.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/globals/globals.h"
 #include "Source/Fog/Fog.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 
@@ -287,9 +283,8 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     return true;
 }
 
-int Unreferenced_00407dd0() {
-    uint32_t in_EAX;
-    return in_EAX & -256;
+uint8_t Unreferenced_00407dd0() {
+    return '\0';
 }
 
 void __stdcall InitializeSystemInfo() {
@@ -478,7 +473,7 @@ void OutputDebugStringSimple(char * szText, ...) {
     char* pScan = szBuffer;
     szBuffer[0] = '\0';
     pScan = pScan + strlen(pScan) + 1;
-    vsnprintf(szBuffer + ((int)pScan - (int)(szBuffer + 1)), 0x1000 - ((int)pScan - (int)(szBuffer + 1)), szText, __va);
+    vsnprintf(szBuffer + ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), 0x1000 - ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), szText, __va);
     /* LPCSTR lpOutputString for OutputDebugStringA */ szBuffer[0xfff] = '\0';
     OutputDebugStringA(szBuffer);
 }
@@ -494,7 +489,7 @@ void OutputDebugStringIfCapsLock(char * szText, ...) {
       pScan = szBuffer;
       szBuffer[0] = '\0';
       pScan = pScan + strlen(pScan) + 1;
-      vsnprintf(szBuffer + ((int)pScan - (int)(szBuffer + 1)), 0x1000 - ((int)pScan - (int)(szBuffer + 1)), szText, __va);
+      vsnprintf(szBuffer + ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), 0x1000 - ((intptr_t)pScan - (intptr_t)(szBuffer + 1)), szText, __va);
       /* LPCSTR lpOutputString for OutputDebugStringA */ szBuffer[0xfff] = '\0';
       OutputDebugStringA(szBuffer);
     }

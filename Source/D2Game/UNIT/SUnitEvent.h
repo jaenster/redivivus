@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,6 +25,8 @@ typedef BOOL (__fastcall *D2ItemStatCostItemEventFunc)(::SGAMEDATA * pGame, uint
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2SUnitEventStrc
+#define D2_DEFINED_D2SUnitEventStrc
 struct __attribute__((packed)) D2SUnitEventStrc {
     /* 0x00 */ uint8_t nUnitEvent; // events.txt id dispatched by UNITEVENT_DispatchEventsByType (MOVZX byte [ESI])
     /* 0x01 */ uint8_t field_0x1;
@@ -35,6 +40,7 @@ struct __attribute__((packed)) D2SUnitEventStrc {
     /* 0x1C */ struct D2SUnitEventStrc * pNext; // forward link; every walker follows +0x1c
 };
 
+#endif // D2_DEFINED_D2SUnitEventStrc
 namespace D2Game::UNIT::SUnitEvent {
 
 // Function declarations

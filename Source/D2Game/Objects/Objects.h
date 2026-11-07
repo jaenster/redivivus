@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -28,6 +31,8 @@ typedef uint32_t (__fastcall *pfnObjectPlaceTestCallback)(::SGAMEDATA * pGame, e
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2CoordStrc
+#define D2_DEFINED_D2CoordStrc
 struct D2CoordStrc {
     D2CoordStrc() = default;
     D2CoordStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
@@ -38,6 +43,17 @@ struct D2CoordStrc {
     /* 0x04 */ int nY;
 };
 
+#endif // D2_DEFINED_D2CoordStrc
+#ifndef D2_DEFINED_D2ObjectSpawnOffsetGroupStrc
+#define D2_DEFINED_D2ObjectSpawnOffsetGroupStrc
+struct D2ObjectSpawnOffsetGroupStrc {
+    /* 0x00 */ int * pOffsets; // -> a run of (dx,dy) int pairs
+    /* 0x04 */ int nCount; // pair count, filled by StaticInit_6caf30
+};
+
+#endif // D2_DEFINED_D2ObjectSpawnOffsetGroupStrc
+#ifndef D2_DEFINED_D2ObjectsTxt
+#define D2_DEFINED_D2ObjectsTxt
 struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x000 */ char Name[64];
     /* 0x040 */ uint16_t NameWideString[64];
@@ -135,6 +151,9 @@ struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x1BC */ int AutoMap;
 };
 
+#endif // D2_DEFINED_D2ObjectsTxt
+#ifndef D2_DEFINED_D2ObjGroupTxt
+#define D2_DEFINED_D2ObjGroupTxt
 struct D2ObjGroupTxt {
     /* 0x00 */ uint32_t dwId[8];
     /* 0x20 */ uint8_t nDensity[8];
@@ -144,6 +163,16 @@ struct D2ObjGroupTxt {
     /* 0x32 */ uint16_t pad0x32;
 };
 
+#endif // D2_DEFINED_D2ObjGroupTxt
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Objects_PopulateFn7_CorpseOnStick_Slotm14 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int32_t nSpawnGroupIdx;
+    /* 0x00 */ struct D2ObjectSpawnOffsetGroupStrc * pSpawnGroup;
+};
+
+#endif // D2_MODULE_D2Game
 namespace D2Game::Objects {
 
 // Function declarations

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,8 +16,10 @@
 
 // Forward declarations
 struct D2GridScreenCoordinates;
+struct D2InventoryEntryStrc;
 struct D2InventoryStrc;
 struct D2ItemsTxt;
+struct D2SetItemsTxt;
 struct D2UIMouseMsgStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2UnitStat;
@@ -29,11 +34,14 @@ typedef int32_t * PD2NpcShopButtonAction;
 typedef uint32_t * PD2NpcShopTabHasItems;
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2AttackSpeedStringStrc
+#define D2_DEFINED_D2AttackSpeedStringStrc
 struct __attribute__((packed)) D2AttackSpeedStringStrc {
     /* 0x00 */ int nKey; // item type or speed class
     /* 0x04 */ uint16_t wStringId;
 };
 
+#endif // D2_DEFINED_D2AttackSpeedStringStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2InvClassIdOverwrite {
     /* 0x00 */ int nClassId;
@@ -77,6 +85,8 @@ struct D2InventoryLayout {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2InventoryScreenCoordinates
+#define D2_DEFINED_D2InventoryScreenCoordinates
 struct D2InventoryScreenCoordinates {
     /* 0x00 */ int nLeft;
     /* 0x04 */ int nRight;
@@ -84,6 +94,9 @@ struct D2InventoryScreenCoordinates {
     /* 0x0C */ int nBottom;
 };
 
+#endif // D2_DEFINED_D2InventoryScreenCoordinates
+#ifndef D2_DEFINED_D2NpcShopButtonStrc
+#define D2_DEFINED_D2NpcShopButtonStrc
 struct __attribute__((packed)) D2NpcShopButtonStrc {
     /* 0x00 */ int32_t nSelectedState; // 1=selected, 0=unselected
     /* 0x04 */ int32_t nDrawCallback; // draw callback flag (1=active)
@@ -93,6 +106,34 @@ struct __attribute__((packed)) D2NpcShopButtonStrc {
     /* 0x10 */ int32_t nIconId; // cursor icon ID for this action
 };
 
+#endif // D2_DEFINED_D2NpcShopButtonStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union INPUT_InventoryLeftClick_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2UnitStrc * pNpcUnit;
+    /* 0x00 */ int32_t nSelectedShopTab;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union INV_DrawHirelingStats_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nMaxDamage;
+    /* 0x00 */ eD2UnitStat * pDmgTypeStatArray;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union ITEM_BuildSetItemTooltip_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int32_t nAdjReqDexValue;
+    /* 0x00 */ struct D2SetItemsTxt * * ppSetItemsTxtEntry;
+};
+
+#endif // D2_MODULE_D2Client
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -124,7 +165,7 @@ void __stdcall szPrintfBuffer(struct D2UnitStrc * pUnit, uint16_t * wszText);
 void __stdcall INV_FormatArmorClassText(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint16_t * wszText);
 void __stdcall INV_LoadBodySlotImages();
 void __stdcall INV_FreeBodySlotImages();
-int Unreferenced_00486ad0();
+uint8_t Unreferenced_00486ad0();
 int32_t __stdcall INV_GetGoldButtonX();
 int32_t __stdcall INV_GetGoldButtonY();
 // Returns whether the inventory is in an interactive (shop/stash/trade) mode. Thirty-three bytes that touch EAX only - a global load, a jump table and a return - so it preserves ECX. Declaring it __stdcall made the decompiler treat ECX as killed by the call, and ClickItemLeft carries a SETZ result in ECX across exactly this call. The lost register became an unassigned local, the pick-up branch was never taken, and clicking an inventory item stopped lifting it.
@@ -185,7 +226,7 @@ BOOL __stdcall INV_GetGambleFlag();
 void __stdcall INV_StashOpened();
 void __stdcall INV_StashOpenedWithGold();
 void __fastcall INV_SetInventoryActive(int32_t bActive);
-int Unreferenced_00489a10();
+void Unreferenced_00489a10();
 void __stdcall INV_HandleStashMouseMove(struct D2UIMouseMsgStrc * pMsg);
 // Handles left-click in stash window. Sets/clears gbInventoryDragInProgress based on cursor state. Picks up item from stash grid or places item, sends stash update packet to server.
 void __stdcall INV_HandleStashLeftClick(struct D2UIMouseMsgStrc * pMsg);
@@ -231,7 +272,7 @@ void __stdcall INV_DrawHirelingName(struct D2UnitStrc * pUnit);
 void __stdcall INV_DrawHirelingStatLabels();
 void __stdcall INV_DrawHirelingEmptySlots(struct D2UnitStrc * pUnit);
 void __fastcall INV_DrawHirelingCursorHighlight(struct D2UnitStrc * pUnit);
-int Unreferenced_0048b640();
+struct D2UnitStrc * Unreferenced_0048b640();
 void __stdcall INV_HandleMercInvLeftDown(struct D2UIMouseMsgStrc * pMsg);
 // Handles left-click events in mercenary inventory UI. Checks for close button click, then iterates through mercenary equipment slots to handle item equipping/unequipping. Validates item compatibility with mercenary, removes items client-side, sends 0x61 packet to server, and plays appropriate success/failure sounds.
 void __stdcall INV_HandleMercInvLeftClick(struct D2UIMouseMsgStrc * pMsg);

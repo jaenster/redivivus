@@ -18,30 +18,8 @@
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Client/Utils.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/D2fpSkillFuncArg.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Logging.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units/Missile.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/SKILLS.h"
@@ -53,9 +31,7 @@
 #include "Source/D2Client/SKILLS/SkillsMon.h"
 #include "Source/D2Client/SKILLS/SkillsNec.h"
 #include "Source/D2Client/SKILLS/SkillsSor.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -936,7 +912,7 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
     sCallbackArg.pUnit = pUnit;
     sCallbackArg.nSize = 0;
     sCallbackArg.nRadiusSq = nRadius * nRadius;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pCurRoom, (D2RoomStrc***)&sCallbackArg.ppRoomList, &sCallbackArg.nRoomCount);
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pCurRoom, &sCallbackArg.ppRoomList, &sCallbackArg.nRoomCount);
     pCallbackData = 0;
     if ((uint32_t)sCallbackArg.nRoomCount <= 0) {
       return;
@@ -945,10 +921,10 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
     sCallbackArg.bAvoidTownRooms = nTargetFlags & 0x2000;
     do {
       BOOL bInTown;
-      if (!sCallbackArg.bAvoidTownRooms || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(*(D2RoomStrc**)((int)sCallbackArg.ppRoomList + (int)pCallbackData * 4)) , !bInTown)) {
-        bInRadius = ROOM_IsPointInRadius(*(D2RoomStrc**)((int)sCallbackArg.ppRoomList + (int)pCallbackData * 4), nCenterXSaved, nCenterY, nRadius);
+      if (!sCallbackArg.bAvoidTownRooms || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(sCallbackArg.ppRoomList[(int)pCallbackData]) , !bInTown)) {
+        bInRadius = ROOM_IsPointInRadius(sCallbackArg.ppRoomList[(int)pCallbackData], nCenterXSaved, nCenterY, nRadius);
         if (bInRadius) {
-          pRoomUnitNext = *(D2UnitStrc**)(*(int*)((int)sCallbackArg.ppRoomList + (int)pCallbackData * 4) + 0x74);
+          pRoomUnitNext = sCallbackArg.ppRoomList[(int)pCallbackData]->pUnitList;
           while (true) {
             pUnit2 = pRoomUnitNext;
             if (!pUnit2) {
@@ -990,19 +966,19 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
         }
       }
 
-      pCallbackData = (void*)((int)pCallbackData + 1);
+      pCallbackData = (void*)((char*)pCallbackData + 1);
     } while ((uintptr_t)pCallbackData < (uint32_t)sCallbackArg.nRoomCount);
 }
 
 BOOL __fastcall SKILLS_RadiusCallback_IncrementCounter(D2fpSkillFuncArg * pFuncArg, D2UnitStrc * pUnit) {
-    pFuncArg->pSub->pOwner = (D2UnitStrc*)((uintptr_t)&pFuncArg->pSub->pOwner->eUnitType + 1);
+    pFuncArg->pSub->pOwner = (D2UnitStrc*)((intptr_t)&pFuncArg->pSub->pOwner->eUnitType + 1);
     return 1;
 }
 
-D2UnitStrc * __fastcall SKILL_FindClosestTarget(D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, uint32_t nTargetFlags) {
+int32_t __fastcall SKILL_FindClosestTarget(D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, uint32_t nTargetFlags) {
     int pClosestTarget = 0;
     SKILL_ForEachUnitInRadius(pUnit, nCenterX, nCenterY, nRadius, nTargetFlags | 0xa783, SKILLS_RadiusCallback_IncrementCounter, &pClosestTarget, 0);
-    return (D2UnitStrc*)pClosestTarget;
+    return pClosestTarget;
 }
 
 BOOL __fastcall SKILLS_RadiusCallback_FindMinMaxGUID(D2fpSkillFuncArg * pFuncArg, D2UnitStrc * pUnit) {
@@ -1479,8 +1455,8 @@ int32_t __stdcall SKILLS_CastSkillClient_Extern(eD2Skills eSkill, D2UnitStrc * p
     return ::D2Client::SKILLS::Skills::SKILLS_CastSkillClient(eSkill, pUnit, nOwnerGUID, nSkillLevel);
 }
 
-int32_t __fastcall SKILLS_CastSkillClientArgsReversed(D2UnitStrc * pUnit, eD2Skills eSkill, short * nSkillLevel, int32_t nOwnerGUID) {
-    int32_t nResult = SKILLS_CastSkillClient(eSkill, pUnit, nOwnerGUID, (uint32_t)nSkillLevel);
+int32_t __fastcall SKILLS_CastSkillClientArgsReversed(D2UnitStrc * pUnit, eD2Skills eSkill, uint32_t nSkillLevel, int32_t nOwnerGUID) {
+    int32_t nResult = SKILLS_CastSkillClient(eSkill, pUnit, nOwnerGUID, nSkillLevel);
     return nResult;
 }
 
@@ -1713,6 +1689,7 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     int nPrgStep;
     int16_t aSavedSP1X[2];
     int16_t aSavedSP1Y[2];
+    SKILL_ExecuteClientProgressWithAura_Slotm8 uSlot8;
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return;
@@ -1723,7 +1700,7 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
       return;
     }
 
-    D2UnitStrc* pUnitArg2Saved = pUnit2;
+    uSlot8.pUnitArg2Saved = pUnit2;
     D2StatListExStrc* pAuraStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nAuraState);
     if (!pAuraStatList) {
       D2StatListExStrc* pNewStatList;
@@ -1736,7 +1713,7 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
       D2Common::Stats::StatsEx::SetState(pNewStatList, (int)pSkillTxt->aurastate);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pNewStatList, 1);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pNewStatList, (int)pSkillTxt->aurastat[0], nProgressIndex, 0);
-      pUnit2 = pUnitArg2Saved;
+      pUnit2 = uSlot8.pUnitArg2Saved;
     }
 
     BOOL bHadTarget = GetCooordinates(pUnit, (int32_t*)aSavedSP1X, (int32_t*)aSavedSP1Y);
@@ -1756,14 +1733,14 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
       nPrgStep = 0;
       if (nProgressIndex - 1 > 0) {
-        pUnitArg2Saved = (D2UnitStrc*)pSkillTxt->cltprgfunc;
+        uSlot8.pnCltPrgFunc = pSkillTxt->cltprgfunc;
         do {
-          if (SKILLCLTDOFUNCS[(short int)pUnitArg2Saved->eUnitType]) {
+          if (SKILLCLTDOFUNCS[*uSlot8.pnCltPrgFunc]) {
             D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pAuraStatList, (int)pSkillTxt->aurastat[0], nPrgStep + 1, 0);
-            (*SKILLCLTDOFUNCS[(short int)pUnitArg2Saved->eUnitType])(pUnit, eSkill, nSkillLevel);
+            (*SKILLCLTDOFUNCS[*uSlot8.pnCltPrgFunc])(pUnit, eSkill, nSkillLevel);
           }
 
-          pUnitArg2Saved = (D2UnitStrc*)((uintptr_t)&pUnitArg2Saved->eUnitType + 2);
+          uSlot8.pnCltPrgFunc++;
           nPrgStep++;
         } while (nPrgStep < nProgressIndex - 1);
       }
@@ -1773,8 +1750,8 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     if (pSkillTxt->cltprgfunc[nProgressIndex - 1] >= 0 && pSkillTxt->cltprgfunc[nProgressIndex - 1] < SKILLCLTDOFUNCS_SIZE) {
       if (pSkillTxt->cltmissile[0] > 0) {
         if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-          GetCooordinates(pUnit, (int32_t*)&pUnitArg2Saved, (int32_t*)&pAuraStatList);
-          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, (uint32_t)pUnitArg2Saved, (uint32_t)pAuraStatList, eSkill, nSkillLevel, 0);
+          GetCooordinates(pUnit, &uSlot8.nMissileX, (int32_t*)&pAuraStatList);
+          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, uSlot8.nMissileX, (uint32_t)pAuraStatList, eSkill, nSkillLevel, 0);
         } else {
           MakeMissileAtSkillTarget(pUnit, (int)pSkillTxt->cltmissile[0], eSkill, nSkillLevel);
         }
@@ -1995,8 +1972,8 @@ void __fastcall SKILL_SpawnMissilesAtTarget(D2UnitStrc * pUnit, D2UnitStrc * pUn
     if (eMissilesId2 == ~MISSILE_Arrow) {
       nRingIdx = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((int)ganMissileRingCosOffsets + nRingIdx);
-        sSkillArg.nUnitY = *(int*)((int)ganMissileRingSinOffsets + nRingIdx);
+        sSkillArg.nUnitX = *(int*)((char*)ganMissileRingCosOffsets + nRingIdx);
+        sSkillArg.nUnitY = *(int*)((char*)ganMissileRingSinOffsets + nRingIdx);
         if (sSkillArg.nMissileTxtNo == MISSILE_Diabfire) {
           sSkillArg.nFlags ^= 0x4000;
         }
@@ -2114,7 +2091,7 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
     } while (nStateListIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x05Size);
 }
 
-void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, uint8_t * pMissileId, eD2Skills eSkill, int32_t nToHit, uint32_t nX, uint32_t nY) {
+void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, eMissilesId pMissileId, eD2Skills eSkill, int32_t nToHit, uint32_t nX, uint32_t nY) {
     BOOL nSkillLevel;
     D2SkillArgStrc sSkillArg;
     if (!nX || !nY) {
@@ -2126,12 +2103,12 @@ void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, uint8_t * pMissi
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nX;
-    sSkillArg.nFlags = 1;
-    sSkillArg.pOwner = pUnit;
-    sSkillArg.nY = nY;
     sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nFlags = 1;
+    sSkillArg.nY = nY;
     sSkillArg.nSkillLevel = nToHit;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileId;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.nMissileTxtNo = pMissileId;
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
@@ -2258,7 +2235,7 @@ void __fastcall SKILLS_ApplyDamageReduction(D2UnitStrc * pUnit, int32_t nReducti
 }
 
 // Spawns nCount missiles at random positions within nRadius of the casting unit. Seeds the unit's RNG from its current map coordinates, then for each spawn picks a random (X,Y) offset within the diameter, rejects positions within 3 distance units of the caster, and calls MISSILE_CreateFromUnitWithOffset with the given missile ID array, skill, and skill level. Returns 1 on success, 0 if coordinates could not be retrieved.
-uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, uint8_t * pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel) {
+uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, eMissilesId pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel) {
     uint32_t nDiameter;
     int nBaseY;
     uint32_t nSpawnY;
@@ -2342,7 +2319,7 @@ uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, uint8_t 
 
       nDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDist, nCount, nSpawnY, nSpawnX);
       if (nDist >= 4) {
-        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitCur, (eMissilesId)pMissileId, 0, 0, nSpawnY, nSpawnX, eSkill, nSkillLevel, 0);
+        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitCur, pMissileId, 0, 0, nSpawnY, nSpawnX, eSkill, nSkillLevel, 0);
       }
 
       nCountdown--;

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -34,6 +37,20 @@ struct __attribute__((packed)) D2BnetDownloadStateStrc {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+struct __attribute__((packed)) D2BnFtpFileHeaderStrc {
+    /* 0x00 */ uint8_t field_0x0;
+    /* 0x01 */ uint8_t field_0x1;
+    /* 0x02 */ uint8_t field_0x2;
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ uint32_t dwFileSize;
+    /* 0x08 */ uint32_t dwAdBannerId;
+    /* 0x0C */ uint32_t dwAdBannerExt;
+    /* 0x10 */ FILETIME ftFileTime;
+    /* 0x18 */ char szFileName[0];
+};
+
+#endif // D2_MODULE_Bnclient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct SID_C2S_ExtraWork {
     /* 0x00 */ uint16_t wGameType;
     /* 0x02 */ uint16_t wLength; // set to 4, then the ExtraWork callback may grow it
@@ -59,10 +76,10 @@ uint32_t __stdcall BNDOWNLOAD_HasPatchFilename();
 void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut);
 int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pbPatcherLaunched);
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam);
-void __fastcall BNDOWNLOAD_InitiateFileDownload(struct D2BnetDownloadStateStrc * pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2);
+void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2);
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.
 // EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
-void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, FILETIME * pModTime, LPCSTR szSourcePath, char * szDestPath, uint32_t * pPoolMgr, size_t nSize, int32_t bDeleteSource, int32_t bIsExtraWork);
+void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, uint32_t pModTime, LPCSTR szSourcePath, char * szDestPath, char * pPoolMgr, void * nSize, int32_t bDeleteSource, int32_t bIsExtraWork);
 uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t nSize);
 void StaticInit_CriticalSection_00881f64();
 void StaticFini_CriticalSection_00881f64();

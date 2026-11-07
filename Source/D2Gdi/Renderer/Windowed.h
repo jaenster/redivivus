@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Gdi)
 #error "D2Gdi header included by a module that may not use D2Gdi (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Gdi) && !defined(D2_LOADS_D2Gdi)
+#error "internal D2Gdi header included from another module; include D2Gdi's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -38,6 +41,108 @@ struct __attribute__((packed)) D2LogPalette256Strc {
 };
 
 #endif // D2_MODULE_D2Gdi
+#ifndef D2_DEFINED_Smack
+#define D2_DEFINED_Smack
+struct Smack {
+    /* 0x000 */ uint32_t Version;
+    /* 0x004 */ uint32_t Width;
+    /* 0x008 */ uint32_t Height;
+    /* 0x00C */ uint32_t Frames;
+    /* 0x010 */ uint8_t field_0x10;
+    /* 0x011 */ uint8_t field_0x11;
+    /* 0x012 */ uint8_t field_0x12;
+    /* 0x013 */ uint8_t field_0x13;
+    /* 0x014 */ uint8_t field_0x14;
+    /* 0x015 */ uint8_t field_0x15;
+    /* 0x016 */ uint8_t field_0x16;
+    /* 0x017 */ uint8_t field_0x17;
+    /* 0x018 */ uint8_t field_0x18;
+    /* 0x019 */ uint8_t field_0x19;
+    /* 0x01A */ uint8_t field_0x1a;
+    /* 0x01B */ uint8_t field_0x1b;
+    /* 0x01C */ uint8_t field_0x1c;
+    /* 0x01D */ uint8_t field_0x1d;
+    /* 0x01E */ uint8_t field_0x1e;
+    /* 0x01F */ uint8_t field_0x1f;
+    /* 0x020 */ uint8_t field_0x20;
+    /* 0x021 */ uint8_t field_0x21;
+    /* 0x022 */ uint8_t field_0x22;
+    /* 0x023 */ uint8_t field_0x23;
+    /* 0x024 */ uint8_t field_0x24;
+    /* 0x025 */ uint8_t field_0x25;
+    /* 0x026 */ uint8_t field_0x26;
+    /* 0x027 */ uint8_t field_0x27;
+    /* 0x028 */ uint8_t field_0x28;
+    /* 0x029 */ uint8_t field_0x29;
+    /* 0x02A */ uint8_t field_0x2a;
+    /* 0x02B */ uint8_t field_0x2b;
+    /* 0x02C */ uint8_t field_0x2c;
+    /* 0x02D */ uint8_t field_0x2d;
+    /* 0x02E */ uint8_t field_0x2e;
+    /* 0x02F */ uint8_t field_0x2f;
+    /* 0x030 */ uint8_t field_0x30;
+    /* 0x031 */ uint8_t field_0x31;
+    /* 0x032 */ uint8_t field_0x32;
+    /* 0x033 */ uint8_t field_0x33;
+    /* 0x034 */ uint8_t field_0x34;
+    /* 0x035 */ uint8_t field_0x35;
+    /* 0x036 */ uint8_t field_0x36;
+    /* 0x037 */ uint8_t field_0x37;
+    /* 0x038 */ uint8_t field_0x38;
+    /* 0x039 */ uint8_t field_0x39;
+    /* 0x03A */ uint8_t field_0x3a;
+    /* 0x03B */ uint8_t field_0x3b;
+    /* 0x03C */ uint8_t field_0x3c;
+    /* 0x03D */ uint8_t field_0x3d;
+    /* 0x03E */ uint8_t field_0x3e;
+    /* 0x03F */ uint8_t field_0x3f;
+    /* 0x040 */ uint8_t field_0x40;
+    /* 0x041 */ uint8_t field_0x41;
+    /* 0x042 */ uint8_t field_0x42;
+    /* 0x043 */ uint8_t field_0x43;
+    /* 0x044 */ uint8_t field_0x44;
+    /* 0x045 */ uint8_t field_0x45;
+    /* 0x046 */ uint8_t field_0x46;
+    /* 0x047 */ uint8_t field_0x47;
+    /* 0x048 */ uint8_t field_0x48;
+    /* 0x049 */ uint8_t field_0x49;
+    /* 0x04A */ uint8_t field_0x4a;
+    /* 0x04B */ uint8_t field_0x4b;
+    /* 0x04C */ uint8_t field_0x4c;
+    /* 0x04D */ uint8_t field_0x4d;
+    /* 0x04E */ uint8_t field_0x4e;
+    /* 0x04F */ uint8_t field_0x4f;
+    /* 0x050 */ uint8_t field_0x50;
+    /* 0x051 */ uint8_t field_0x51;
+    /* 0x052 */ uint8_t field_0x52;
+    /* 0x053 */ uint8_t field_0x53;
+    /* 0x054 */ uint8_t field_0x54;
+    /* 0x055 */ uint8_t field_0x55;
+    /* 0x056 */ uint8_t field_0x56;
+    /* 0x057 */ uint8_t field_0x57;
+    /* 0x058 */ uint8_t field_0x58;
+    /* 0x059 */ uint8_t field_0x59;
+    /* 0x05A */ uint8_t field_0x5a;
+    /* 0x05B */ uint8_t field_0x5b;
+    /* 0x05C */ uint8_t field_0x5c;
+    /* 0x05D */ uint8_t field_0x5d;
+    /* 0x05E */ uint8_t field_0x5e;
+    /* 0x05F */ uint8_t field_0x5f;
+    /* 0x060 */ uint8_t field_0x60;
+    /* 0x061 */ uint8_t field_0x61;
+    /* 0x062 */ uint8_t field_0x62;
+    /* 0x063 */ uint8_t field_0x63;
+    /* 0x064 */ uint8_t field_0x64;
+    /* 0x065 */ uint8_t field_0x65;
+    /* 0x066 */ uint8_t field_0x66;
+    /* 0x067 */ uint8_t field_0x67;
+    /* 0x068 */ uint32_t NewPalette;
+    /* 0x06C */ uint8_t Palette[772];
+    /* 0x370 */ uint32_t PalType;
+    /* 0x374 */ uint32_t FrameNum;
+};
+
+#endif // D2_DEFINED_Smack
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Gdi)
 struct __attribute__((packed)) BITMAPINFO256 {
     /* 0x00 */ BITMAPINFOHEADER bmiHeader;
@@ -53,8 +158,6 @@ BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Gdi)
 void __fastcall AdjustPerspectivePosition_Unref_00646010(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 void __fastcall AdjustPerspectivePosition_Unref_006460d0(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
-void __fastcall ClearScreen_Unref_0065a3f0(BOOL bPartial);
-HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20();
 void __fastcall AdjustPerspectivePosition_Unref_006bf250(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 BOOL __fastcall Initialize(HINSTANCE hInstance);
 // @sourcefile .\Src\gdiCore.cpp
@@ -145,8 +248,6 @@ BOOL __fastcall DrawGroundTile(struct D2TileLibraryEntryStrc * pTile, struct D2G
 void __fastcall CloseSmacker(struct D2SmackerContextStrc * pContext);
 void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int nVersion);
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
-uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut);
-char * __fastcall FOG_FindCharInString(char * szText, char cSearchChar);
 #endif // D2_MODULE_D2Gdi
 // 3 internal functions (defined in .cpp)
 

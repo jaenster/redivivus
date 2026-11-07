@@ -5,7 +5,7 @@
 
 #include "Source/D2Glide/D2Glide.globals.h"
 #include "Source/D2Glide/Renderer/Glide.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 
 

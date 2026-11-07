@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2DamageStrc;
+struct D2MissilesTxt;
 struct D2RoomStrc;
 struct D2SkillCallbackContextStrc;
 struct D2UnitStrc;
@@ -32,6 +36,15 @@ struct __attribute__((packed)) D2SubMissileAreaArgStrc {
     /* 0x0C */ int nSkillLevel; // the builders store the skill level; copied to D2SkillArgStrc +0x30 nSkillLevel (005ab2e6/005ab2e9)
     /* 0x10 */ int nMaxCount; // sub-missile cap; the callback returns 0 once D2SkillCallbackContextStrc.nHitCount reaches it
     /* 0x14 */ int nSubMissileId; // MissilesTxt HitSubMissile1; copied to D2SkillArgStrc.nMissileTxtNo
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union MISSMODE_SrvDoFn01_BasicMissile_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2MissilesTxt * pMissileTxt;
+    /* 0x00 */ int32_t nPathCoordIdx;
 };
 
 #endif // D2_MODULE_D2Game
@@ -58,8 +71,8 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pOwne
 int32_t __fastcall MISSILES_CalculateElementalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
 void __fastcall MISSILES_SetDamageByElementType(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamageStruct, int nDuration);
 // Writes a damage value into the correct elemental field of a D2DamageStrc based on the elemental type of the missile unit. Resolves the elemental type via GetElemTypeFromMissileId on the missile's class ID, then sets the appropriate damage field (physical, fire, lightning, magic, cold, poison, life-leech, mana-leech, stamina-leech, stun, burning, or freeze). For cold, poison, and burning, also zeroes the corresponding duration field if the damage value is zero or negative.
-void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, int32_t pMissile, int32_t nUnused, struct D2DamageStrc * pDamageStruct, int32_t nDamage);
-uint32_t __fastcall MISSILESMODE_GetElementalDamageField(int32_t nUnused1, int32_t pMissile, int32_t nUnused2, struct D2DamageStrc * pDamageStruct, int32_t nUnused3);
+void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, struct D2UnitStrc * pMissile, int32_t nUnused, struct D2DamageStrc * pDamageStruct, int32_t nDamage);
+uint32_t __fastcall MISSILESMODE_GetElementalDamageField(int32_t nUnused1, struct D2UnitStrc * pMissile, int32_t nUnused2, struct D2DamageStrc * pDamageStruct, int32_t nUnused3);
 // Zeroes all damage fields in a D2DamageStrc for the given missile. Clears phys/fire/lightning/magic/cold/poison/leech/stun/burn damage and flags, then based on the missile's elemental type also clears the appropriate duration fields (cold/freeze/poison/burn lengths), leaving only the relevant ones intact.
 void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, struct D2UnitStrc * nMissileId, struct D2DamageStrc * pDamage);
 // Adds nParam bonus to the D2MissileDamageDataStrc field that corresponds to the missile's elemental type (derived from its class ID). Dispatches on ELEMENTAL_NONE/FIRE/LIGHTNING/MAGIC/COLD/POISON/LIFEDRAIN/MANADRAIN/STAMDRAIN/STUN/BURNING/FREEZE, mapping each to the appropriate min/max/length/count field.

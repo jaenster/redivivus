@@ -3,38 +3,19 @@
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/mcp0x03data.h"
-#include "Source/D2Common/Chat/Ignorelist.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
 #include "Source/D2Launch/MainMenus.h"
-#include "Source/D2MCPClient/McpConnect.h"
+#include "Source/D2MCPClient/D2MCPClient.h"
 #include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Multi/ComCallback.h"
-#include "Source/D2Multi/McpConnect.h"
-#include "Source/D2Sound/Src/D2SoundFast.h"
-#include "Source/D2Win/D2GFX.h"
-#include "Source/D2Win/Src/D2Comp.h"
-#include "Source/D2Win/Src/D2WinArchive.h"
-#include "Source/D2Win/Src/D2WinButton.h"
-#include "Source/D2Win/Src/D2WinEditBox.h"
-#include "Source/D2Win/Src/D2WinImage.h"
-#include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/D2Win/Src/D2WinTextBox.h"
-#include "Source/Fog/File.h"
+#include "Source/D2Sound/D2Sound.h"
+#include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "Source/Fog/Src/Safesock.h"
-#include "Source/Fog/Src/String/FogString.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Multi/D2Multi.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Lang/Unicode/UNISYS.inline.h"
 #include "Source/D2Multi/ChatDlg.data.h"
 #include "Source/D2Multi/ComCallback.data.h"
 #include "Source/D2Multi/OOG.h"
@@ -53,10 +34,6 @@ typedef DWORD (__stdcall *fnGetTickCount)();
 #ifndef RECON_FPTD_fpD2WinEditBoxFilter
 #define RECON_FPTD_fpD2WinEditBoxFilter
 typedef int (__stdcall *fpD2WinEditBoxFilter)(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
-#endif
-#ifndef RECON_FPTD_OnPress
-#define RECON_FPTD_OnPress
-typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 #endif
 #ifndef RECON_FPTD_pfnFramePump
 #define RECON_FPTD_pfnFramePump
@@ -222,9 +199,15 @@ int __stdcall OOG_DisableControlCallback(uint32_t dwParam) {
     return 1;
 }
 
+// Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
+int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar) {
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpCtlChannelList, -1);
+    return 1;
+}
+
 int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex) {
     DWORD DVar1 = 0;
-    DVar1 = WaitForSingleObject(McpConnect::GetMCPThread(), DVar1);
+    DVar1 = WaitForSingleObject(D2MCPClient::McpConnect::GetMCPThread(), DVar1);
     if (!DVar1 || gnMCPConnectionRestoreResult) {
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
@@ -263,7 +246,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     LPDWORD dwBytesRead;
     char cChar;
     char* pszUrl;
-    pszUrl = (char*)pNetworkUnknown->pfnSendQueryAdURL(ghBannerAdProcess);
+    pszUrl = pNetworkUnknown->pfnSendQueryAdURL(ghBannerAdProcess);
     if (!pszUrl) {
       return 1;
     }
@@ -302,13 +285,13 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
         } while (*pcCopySrc != '\0');
 
         pcCopySrc = pszUrl;
-        for (nCopyCount = (uint32_t)((int)pcScan - (int)pszUrl) >> 2; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (uint32_t)((intptr_t)pcScan - (intptr_t)pszUrl) >> 2; nCopyCount; nCopyCount--) {
           *(uint32_t*)pcCopyDst = *(uint32_t*)pcCopySrc;
           pcCopySrc += 4;
           pcCopyDst += 4;
         }
 
-        for (nCopyCount = (int)pcScan - (int)pszUrl & 3; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (intptr_t)pcScan - (intptr_t)pszUrl & 3; nCopyCount; nCopyCount--) {
           *pcCopyDst = *pcCopySrc;
           pcCopySrc++;
           pcCopyDst++;
@@ -355,7 +338,7 @@ void __stdcall OOGUTIL_OpenChannelDialog() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpCtlChannelDlgCancelButton);
     gpCtlChannelNameEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x3c);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCtlChannelNameEditBox, 0x20);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCtlChannelNameEditBox, D2Win::Src::D2WinTextBox::EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCtlChannelNameEditBox, EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpCtlChannelNameEditBox, ChatDlg::EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState);
     gpCtlChannelList = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x3e);
     uint8_t* pbChannelList = (uint8_t*)pNetworkUnknown->pfnSendGetChannelList((uint8_t)(char)D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20);
@@ -516,26 +499,21 @@ void __stdcall AbleToJoinGameOrBanned(int32_t bBanned) {
     }
 }
 
-int Unreferenced_004414c0() {
-    uint32_t extraout_EAX;
-    int32_t bBanned;
-    eD2PlayerStatus eVar1 = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
-    uint32_t uVar2 = (uint32_t)eVar1;
-    if (!(eVar1 & PLAYERSTATUS_Died) || !(eVar1 & PLAYERSTATUS_Hardcore)) {
-      int32_t iVar3;
-      bBanned = 0;
-      if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
-        iVar3 = D2MCPClient::McpConnect::HasPeerName();
-        if (!iVar3) {
-          bBanned = 1;
-        }
-      }
-
-      AbleToJoinGameOrBanned(bBanned);
-      uVar2 = extraout_EAX;
+void Unreferenced_004414c0() {
+    if (!(!(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Died) || !(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore))) {
+      return;
     }
 
-    return uVar2;
+    int32_t bBanned = 0;
+    if (D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
+      int32_t iVar1;
+      iVar1 = D2MCPClient::McpConnect::HasPeerName();
+      if (!iVar1) {
+        bBanned = 1;
+      }
+    }
+
+    AbleToJoinGameOrBanned(bBanned);
 }
 
 int __stdcall JoinOrCreateGame(DWORD dwUnused) {
@@ -891,7 +869,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
         ppFormIter->pLobbyForm0 = pCreatedForm;
         pPredefFormIter++;
         ppFormIter = (D2LobbyControlsStrc*)&ppFormIter->pLobbyForm1;
-      } while ((int)pPredefFormIter < (intptr_t)((char*)&gaPredefinedForms_b + 816));
+      } while ((intptr_t)pPredefFormIter < (intptr_t)((char*)&gaPredefinedForms_b + 816));
 
       BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x17);
     } else {
@@ -914,7 +892,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
       ppUserListBtn = gaChatUserListButtonArray;
       bExpansion = 0x28;
       do {
-        pUserListButton = D2Win::Src::D2WinButton::D2WinButton(bExpansion, 0x24f, 0x3c, 100, nullptr, (OnPress)ComCallback::COMCALLBACK_HandleUserListClick, 0, 0, 4, 0, nullptr);
+        pUserListButton = D2Win::Src::D2WinButton::D2WinButton(bExpansion, 0x24f, 0x3c, 100, nullptr, ComCallback::COMCALLBACK_HandleUserListClick, 0, 0, 4, 0, nullptr);
         *ppUserListBtn = pUserListButton;
         bExpansion += 0x3c;
         ppUserListBtn++;
@@ -1030,7 +1008,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
 
       *ppUserListBtn = 0;
       ppUserListBtn++;
-    } while ((int)ppUserListBtn < (intptr_t)((char*)&gaChatUserListButtonArray + sizeof(gaChatUserListButtonArray)));
+    } while ((intptr_t)ppUserListBtn < (intptr_t)((char*)&gaChatUserListButtonArray + sizeof(gaChatUserListButtonArray)));
 
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlLobbyAccountList);
     ppFormIter = &gpLobbyForm0;
@@ -1041,7 +1019,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
 
       ppFormIter->pLobbyForm0 = 0;
       ppFormIter = (D2LobbyControlsStrc*)&ppFormIter->pLobbyForm1;
-    } while ((int)ppFormIter < (intptr_t)&gpLobbyForm0 + 68);
+    } while ((intptr_t)ppFormIter < (intptr_t)&gpLobbyForm0 + 68);
 
     if (!D2IniData_multiplayer->padding_0x35F[2]) {
       pForm = gpCtlLobbyChat;
@@ -1052,7 +1030,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
         }
 
         pForm++;
-      } while ((int)pForm <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+      } while ((intptr_t)pForm <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
 
       if (gpCtlConfirmDialog) {
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlConfirmDialog);
@@ -1089,7 +1067,7 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
     char* pcScan = szText1;
     pcScan = pcScan + strlen(pcScan) + 1;
     int32_t nCmdCmp = ChatDlg::someStrCompare(szText2, szText1);
-    if (!nCmdCmp && (szText2[(int)pcScan - (int)(szText1 + 1)] == ' ' || szText2[(int)pcScan - (int)(szText1 + 1)] == '\0')) {
+    if (!nCmdCmp && (szText2[(intptr_t)pcScan - (intptr_t)(szText1 + 1)] == ' ' || szText2[(intptr_t)pcScan - (intptr_t)(szText1 + 1)] == '\0')) {
       char* pcEnd;
       pcScan = gszOogReplyCommandBuffer;
       pcEnd = pcScan + strlen(pcScan);
@@ -1120,7 +1098,7 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
               return 1;
             }
 
-            sprintf(szMessageBuffer, "/w *%s %s", gszOogReplyCommandBuffer, szText2 + ((int)pcScan - (int)szTokenBuffer));
+            sprintf(szMessageBuffer, "/w *%s %s", gszOogReplyCommandBuffer, szText2 + ((intptr_t)pcScan - (intptr_t)szTokenBuffer));
             pNetworkUnknown->pfnSendChatCommand((uint8_t*)szMessageBuffer);
             return 1;
           }
@@ -1356,13 +1334,13 @@ int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix)
       pszSrc = szText;
       do {
         cFirstChar = *pszSrc;
-        pszSrc[(int)gszOogChatInputBuffer - (int)szText] = cFirstChar;
+        pszSrc[(intptr_t)gszOogChatInputBuffer - (intptr_t)szText] = cFirstChar;
         pszSrc++;
       } while (cFirstChar != '\0');
     } else {
       char* pszChannelName;
       pszSrc = szText;
-      pszChannelName = OOGUTIL_GetAccountName((char*)((int)gpCurrentChatRoomContext + 4));
+      pszChannelName = OOGUTIL_GetAccountName(gpCurrentChatRoomContext->szUsername);
       sprintf(gszOogChatInputBuffer, "/whisper *%s %s", pszChannelName, pszSrc);
     }
 
@@ -1422,9 +1400,9 @@ int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
     return nCopyIndex;
 }
 
-int __fastcall Unreferenced_00442a70(int param_1, int param_2) {
-    uint32_t uVar1 = *(uint32_t*)param_1 & -28673 | param_2 << 0xc;
-    *(uint32_t*)param_1 = uVar1;
+int __fastcall Unreferenced_00442a70(uint32_t * param_1, int param_2) {
+    uint32_t uVar1 = *param_1 & -28673 | param_2 << 0xc;
+    *param_1 = uVar1;
     return uVar1;
 }
 
@@ -1476,7 +1454,7 @@ void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
         }
 
         nIndex++;
-        pwCachePort = (uint16_t*)((int)pwCachePort + 0x3b);
+        pwCachePort = (uint16_t*)((char*)pwCachePort + 0x3b);
       } while (nIndex < nGameListDifficultyFilter);
     }
 
@@ -1540,7 +1518,7 @@ void __stdcall OOGMENU_RefreshGameListDisplay() {
         }
 
         nEntryIndex++;
-        pwEntryPort = (uint16_t*)((int)pwEntryPort + 0x3b);
+        pwEntryPort = (uint16_t*)((char*)pwEntryPort + 0x3b);
       } while (nEntryIndex < gnFilteredGameListCount);
     }
     if (bHasSelection) {
@@ -2089,7 +2067,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D
     do {
       nNameChar = *pnQueryResult;
       *(char*)((int)pEntry + (1 - (int)pnNameField) + (int)pnQueryResult) = (char)nNameChar;
-      pnQueryResult = (int*)((int)pnQueryResult + 1);
+      pnQueryResult = (int*)((char*)pnQueryResult + 1);
     } while ((char)nNameChar != '\0');
 
     char* pszDescEnd = OOGUTIL_GetStringEnd((char*)pnNameField);
@@ -2839,7 +2817,7 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
             } while (byScan);
 
             nAcceptedCount++;
-            pCacheSlot = (uint32_t*)((int)pCacheSlot + 0x3b);
+            pCacheSlot = (uint32_t*)((char*)pCacheSlot + 0x3b);
           }
           if (!pbCursor) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xad);
@@ -3708,7 +3686,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       Storm::Source::SReg::SRegSaveValue("Diablo II", "DIFF_LEVEL", 0, 0);
     }
 
-    uint8_t byActProgress = *(uint8_t*)((uintptr_t)&D2IniData_multiplayer->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
+    uint8_t byActProgress = *(uint8_t*)((intptr_t)&D2IniData_multiplayer->eCTEMP_eD2PlayerStatus + 1) & 0x1f;
     gUIGameListDifficultyHellButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x52);
     gUIGameListActLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x55);
     gUIGameListDifficultyNightmareButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x51);
@@ -3779,8 +3757,8 @@ void __fastcall OOGUTIL_CopyChannelName(char * szText1, char * szText2) {
       char* pszChannel;
       pszChannel = Storm::Source::SSTR::SStrChr(szText1, '*');
       if (pszChannel) {
-        memcpy(szText2, szText1, (int)pszChannel - (int)szText1);
-        szText2[(int)pszChannel - (int)szText1] = '\0';
+        memcpy(szText2, szText1, (intptr_t)pszChannel - (intptr_t)szText1);
+        szText2[(intptr_t)pszChannel - (intptr_t)szText1] = '\0';
         return;
       }
     }

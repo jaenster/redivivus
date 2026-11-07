@@ -2,8 +2,7 @@
 
 #include "Source/D2Glide/glTextureCache.h"
 #include "Source/D2Glide/Renderer/Glide.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Glide/Renderer/Glide.data.h"
 
@@ -30,7 +29,7 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
     pCache->dwEntrySize = dwTextureSize;
     size_t nAllocSize = nEntryCount * 0x1c;
     pCache->nMaxEntries = nEntryCount;
-    uint8_t* pNodeArray = (uint8_t*)D2_ALLOC_AT(nAllocSize, ".\\Src\\glTextureCache.cpp", 0x2d);
+    GlTextureCacheNodeStrc* pNodeArray = (GlTextureCacheNodeStrc*)D2_ALLOC_AT(nAllocSize, ".\\Src\\glTextureCache.cpp", 0x2d);
     pCache->pNodes = pNodeArray;
     memset(pNodeArray, 0, nAllocSize);
     int iNode = 0;
@@ -39,13 +38,13 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
       nByteOffset = 0;
       nVramAddr = nVramStart;
       do {
-        pNode = (int*)(pCache->pNodes + nByteOffset);
+        pNode = (int*)((intptr_t)&pCache->pNodes->nIndex + nByteOffset);
         *pNode = iNode;
         if (iNode < (int)(pCache->nMaxEntries - 1)) {
-          pNode[5] = (int)(pCache->pNodes + nByteOffset + 0x1c);
+          pNode[5] = (intptr_t)&pCache->pNodes[1].nIndex + nByteOffset;
         }
         if (iNode > 0) {
-          pNode[6] = (int)(pCache->pNodes + nByteOffset - 0x1c);
+          pNode[6] = (intptr_t)&pCache->pNodes[-1].nIndex + nByteOffset;
         }
 
         pNode[1] = nVramAddr;
@@ -60,18 +59,17 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
     pCache->pActiveTail = 0;
     pNodeArray = pCache->pNodes;
     pCache->pFreeHead = pNodeArray;
-    pCache->pFreeTail = pNodeArray + pCache->nMaxEntries * 0x1c - 0x1c;
+    pCache->pFreeTail = pNodeArray + (pCache->nMaxEntries - 1);
     if (!gbGlideIsDebugBuild) {
       iNode = 1;
       if (1 < (int)(pCache->nMaxEntries - 1)) {
-        pDebugScan = (uint32_t*)(pNodeArray + 0x20);
+        pDebugScan = &pNodeArray[1].dwAddress;
         do {
           if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
-            iNode *= 0x1c;
-            *(uint8_t**)(pNodeArray + iNode - 8) = pNodeArray + iNode + 0x1c;
-            *(uint8_t**)(pCache->pNodes + iNode + 0x34) = pCache->pNodes + iNode - 0x1c;
-            *(uint32_t*)(pCache->pNodes + iNode + 0x18) = 0;
-            *(uint32_t*)(pCache->pNodes + iNode + 0x14) = 0;
+            pNodeArray[iNode - 1].pNext = pNodeArray + iNode + 1;
+            pCache->pNodes[iNode + 1].pPrev = pCache->pNodes + iNode - 1;
+            pCache->pNodes[iNode].pPrev = 0;
+            pCache->pNodes[iNode].pNext = 0;
             pCache->nUsedCount++;
             break;
           }
@@ -81,11 +79,11 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
         } while (iNode < (int)(pCache->nMaxEntries - 1));
       }
 
-      nEntryCount = *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 0x18);
+      nEntryCount = pCache->pNodes[pCache->nMaxEntries - 1].dwAddress;
       if (nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000) {
-        *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 4) = 0;
-        *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 0x24) = 0;
-        pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2) * 0x1c;
+        pCache->pNodes[pCache->nMaxEntries - 1].pPrev = 0;
+        pCache->pNodes[pCache->nMaxEntries - 2].pNext = 0;
+        pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2);
         pCache->nMaxEntries--;
       }
     }
@@ -96,29 +94,28 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
 // Appends texture cache node to tail of active LRU list (most-recently-used position). Creates list if empty, otherwise links to existing tail.
 static void GLTEXCACHE_AppendNodeToTail(GlTextureCacheStrc * pCache, GlTextureCacheNodeStrc * pNode) {
     if (!pCache->pActiveHead) {
-      pCache->pActiveHead = (uint8_t*)pNode;
+      pCache->pActiveHead = pNode;
     } else {
-      *(GlTextureCacheNodeStrc**)(pCache->pActiveTail + 0x14) = (GlTextureCacheNodeStrc*)pNode;
+      pCache->pActiveTail->pNext = pNode;
       pNode->pPrev = pCache->pActiveTail;
     }
 
-    pCache->pActiveTail = (uint8_t*)pNode;
+    pCache->pActiveTail = pNode;
 }
 
 // Removes a texture cache node from the active LRU list by index. Returns pointer to removed node, or NULL if active list empty. Handles head, tail, and middle removal cases.
 GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheStrc * pCache, int nNodeIndex) {
-    uint8_t* pNeighbourNode;
-    GlTextureCacheNodeStrc* pHead = (GlTextureCacheNodeStrc*)pCache->pActiveHead;
+    GlTextureCacheNodeStrc* pHead = pCache->pActiveHead;
     if (!pHead) {
       return nullptr;
     }
 
-    GlTextureCacheNodeStrc* pTargetNode = (GlTextureCacheNodeStrc*)(pCache->pNodes + nNodeIndex * 0x1c);
-    if (pTargetNode == pHead) {
+    GlTextureCacheNodeStrc* pNeighbourNode = pCache->pNodes + nNodeIndex;
+    if (pNeighbourNode == pHead) {
       pNeighbourNode = pHead->pNext;
       pCache->pActiveHead = pNeighbourNode;
       if (pNeighbourNode) {
-        *(uint32_t*)(pNeighbourNode + 0x18) = 0;
+        pNeighbourNode->pPrev = 0;
       } else {
         pCache->pActiveTail = 0;
       }
@@ -127,18 +124,18 @@ GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheS
       pHead->pPrev = 0;
       return pHead;
     }
-    if (pTargetNode == (GlTextureCacheNodeStrc*)pCache->pActiveTail) {
-      pNeighbourNode = ((GlTextureCacheNodeStrc*)pCache->pActiveTail)->pPrev;
-      pCache->pActiveTail = pNeighbourNode;
-      *(uint32_t*)(pNeighbourNode + 0x14) = 0;
+    if (pNeighbourNode == pCache->pActiveTail) {
+      pHead = pCache->pActiveTail->pPrev;
+      pCache->pActiveTail = pHead;
+      pHead->pNext = 0;
     } else {
-      *(uint8_t**)(pTargetNode->pPrev + 0x14) = pTargetNode->pNext;
-      *(uint8_t**)(pTargetNode->pNext + 0x18) = pTargetNode->pPrev;
+      pNeighbourNode->pPrev->pNext = pNeighbourNode->pNext;
+      pNeighbourNode->pNext->pPrev = pNeighbourNode->pPrev;
     }
 
-    pTargetNode->pNext = 0;
-    pTargetNode->pPrev = 0;
-    return pTargetNode;
+    pNeighbourNode->pNext = 0;
+    pNeighbourNode->pPrev = 0;
+    return pNeighbourNode;
 }
 
 // Allocates node from free list and moves to active list tail (MRU position). Returns 1-based node index on success, 0 if cache full. Halts with error 0xc1 if free list unexpectedly empty.
@@ -147,30 +144,30 @@ static int GLTEXCACHE_AllocateNode(GlTextureCacheStrc * pCache) {
       return 0;
     }
 
-    int* pAllocNode = (int*)pCache->pFreeHead;
+    GlTextureCacheNodeStrc* pAllocNode = pCache->pFreeHead;
     if (pAllocNode) {
-      uint8_t* pNewFreeHead;
-      pNewFreeHead = (uint8_t*)pAllocNode[5];
+      GlTextureCacheNodeStrc* pNewFreeHead;
+      pNewFreeHead = pAllocNode->pNext;
       pCache->pFreeHead = pNewFreeHead;
       if (pNewFreeHead) {
-        memset(pNewFreeHead + 24, 0, 4 * sizeof(pNewFreeHead[0]));
+        pNewFreeHead->pPrev = 0;
       } else {
         pCache->pFreeTail = 0;
       }
 
-      pAllocNode[5] = 0;
-      pAllocNode[6] = 0;
+      pAllocNode->pNext = 0;
+      pAllocNode->pPrev = 0;
       if (!pCache->pActiveHead) {
         pCache->nUsedCount++;
-        pCache->pActiveHead = (uint8_t*)pAllocNode;
+        pCache->pActiveHead = pAllocNode;
       } else {
-        *(int**)(pCache->pActiveTail + 0x14) = (int*)pAllocNode;
-        pAllocNode[6] = (int)pCache->pActiveTail;
+        pCache->pActiveTail->pNext = pAllocNode;
+        pAllocNode->pPrev = pCache->pActiveTail;
         pCache->nUsedCount++;
       }
 
-      pCache->pActiveTail = (uint8_t*)pAllocNode;
-      return *pAllocNode + 1;
+      pCache->pActiveTail = pAllocNode;
+      return pAllocNode->nIndex + 1;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc1);
@@ -207,23 +204,23 @@ void __fastcall GLTEXCACHE_EvictLRU(GlTextureCacheStrc * pCache) {
       return;
     }
 
-    uint8_t* pEvictNode = pCache->pActiveHead;
+    GlTextureCacheNodeStrc* pEvictNode = pCache->pActiveHead;
     if (pEvictNode) {
-      uint8_t* pNextNode;
-      pNextNode = *(uint8_t**)(pEvictNode + 0x14);
+      GlTextureCacheNodeStrc* pNextNode;
+      pNextNode = pEvictNode->pNext;
       pCache->pActiveHead = pNextNode;
       if (pNextNode) {
-        *(uint32_t*)(pNextNode + 0x18) = 0;
+        pNextNode->pPrev = 0;
       } else {
         pCache->pActiveTail = 0;
       }
 
-      *(uint32_t*)(pEvictNode + 0x14) = 0;
-      *(uint32_t*)(pEvictNode + 0x18) = 0;
-      if (*(int*)(pEvictNode + 8)) {
-        *(uint32_t*)(*(int*)(pEvictNode + 8) + *(int*)(pEvictNode + 0xc) * 8) = 0;
-        *(uint32_t*)(*(int*)(pEvictNode + 8) + 4 + *(int*)(pEvictNode + 0xc) * 8) = 0;
-        *(uint32_t*)(pEvictNode + 8) = 0;
+      pEvictNode->pNext = 0;
+      pEvictNode->pPrev = 0;
+      if (pEvictNode->pHashTable) {
+        *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
+        *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8 + 4) = 0;
+        pEvictNode->pHashTable = 0;
       }
       if (!pCache->pFreeHead) {
         pCache->nUsedCount--;
@@ -232,8 +229,8 @@ void __fastcall GLTEXCACHE_EvictLRU(GlTextureCacheStrc * pCache) {
         return;
       }
 
-      *(uint8_t**)(pCache->pFreeTail + 0x14) = (uint8_t*)pEvictNode;
-      *(uint8_t**)(pEvictNode + 0x18) = pCache->pFreeTail;
+      pCache->pFreeTail->pNext = pEvictNode;
+      pEvictNode->pPrev = pCache->pFreeTail;
       pCache->pFreeTail = pEvictNode;
     }
 
@@ -261,32 +258,33 @@ void __fastcall GLTEXCACHE_Destroy(GlTextureCacheStrc * pCacheData, GlTextureCac
 
 // Ensures cache has free capacity by allocating a node. If cache is full, evicts LRU entry first.
 int __fastcall GLTEXCACHE_EnsureCapacity(GlTextureCacheStrc * pCache) {
-    uint8_t* pEvictNode;
-    uint8_t* pNextNode;
+    GlTextureCacheNodeStrc* pEvictNode;
+    GlTextureCacheNodeStrc* pNextNode;
     int nAllocResult = GLTEXCACHE_AllocateNode(pCache);
     while (!nAllocResult) {
       if (pCache->nUsedCount) {
         pEvictNode = pCache->pActiveHead;
         if (pEvictNode) {
-          pNextNode = *(uint8_t**)(pEvictNode + 0x14);
+          pNextNode = pEvictNode->pNext;
           pCache->pActiveHead = pNextNode;
           if (pNextNode) {
-            memset(pNextNode + 24, 0, 4 * sizeof(pNextNode[0]));
+            pNextNode->pPrev = 0;
           } else {
             pCache->pActiveTail = 0;
           }
 
-          memset(pEvictNode + 20, 0, 8 * sizeof(pEvictNode[0]));
-          if (*(int*)(pEvictNode + 8)) {
-            *(uint32_t*)(*(int*)(pEvictNode + 8) + *(int*)(pEvictNode + 0xc) * 8) = 0;
-            *(uint32_t*)(*(int*)(pEvictNode + 8) + 4 + *(int*)(pEvictNode + 0xc) * 8) = 0;
-            memset(pEvictNode + 8, 0, 4 * sizeof(pEvictNode[0]));
+          pEvictNode->pNext = 0;
+          pEvictNode->pPrev = 0;
+          if (pEvictNode->pHashTable) {
+            *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
+            *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8 + 4) = 0;
+            pEvictNode->pHashTable = 0;
           }
           if (!pCache->pFreeHead) {
             pCache->pFreeHead = pEvictNode;
           } else {
-            *(uint8_t**)(pCache->pFreeTail + 0x14) = (uint8_t*)pEvictNode;
-            *(uint8_t**)(pEvictNode + 0x18) = pCache->pFreeTail;
+            pCache->pFreeTail->pNext = pEvictNode;
+            pEvictNode->pPrev = pCache->pFreeTail;
           }
 
           pCache->pFreeTail = pEvictNode;

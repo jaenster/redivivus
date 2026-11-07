@@ -8,7 +8,8 @@
 #include "Source/D2Common/DUNGEON/Dungeon.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/Fog/Src/Excel.h"
+#include "Source/Fog/Fog.h"
+#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/DATATBLS/OverlayTbls.data.h"
@@ -293,8 +294,8 @@ uint32_t __stdcall OVERLAYTBLS_GetMonsterComponentOverlay(int32_t nMonStatId, ui
       return 0;
     }
 
-    void* pCompCodeResult = (void*)DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
-    return (uint32_t)pCompCodeResult;
+    uint32_t pCompCodeResult = DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
+    return pCompCodeResult;
 }
 
 } // namespace D2Common::DATATBLS::OverlayTbls

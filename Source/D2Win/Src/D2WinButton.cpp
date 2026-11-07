@@ -2,18 +2,15 @@
 
 #include "Source/D2Win/Src/D2WinButton.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
+#include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Multi/OOGUtilities.h"
-#include "Source/D2Sound/Src/D2SoundFast.h"
+#include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Win/D2Win.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

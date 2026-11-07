@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2BNetGatewayAccessStr
+#define D2_DEFINED_D2BNetGatewayAccessStr
 struct D2BNetGatewayAccessStr {
     /* 0x00 */ int nCurrentGateway; // Selected gateway index (1-based); stored as char-sized int
     /* 0x04 */ int bDirty; // 1 = selection was modified and needs to be saved
@@ -23,3 +28,5 @@ struct D2BNetGatewayAccessStr {
     /* 0x1C */ int bIsOverride; // 1 = loaded from Override Battle.net gateways key; 0 = default Diablo II key
     /* 0x20 */ void * pRealmsData; // Realms.bin loaded into memory; iterated as double-null-terminated string list
 };
+
+#endif // D2_DEFINED_D2BNetGatewayAccessStr

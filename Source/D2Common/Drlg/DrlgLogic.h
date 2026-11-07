@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,25 +17,27 @@
 // Forward declarations
 struct D2DrlgCoordListStrc;
 struct D2DrlgGridStrc;
+struct D2DrlgTileDataStrc;
 struct D2DrlgVertexStrc;
 struct D2PoolManagerStrc;
 struct D2RoomCoordListStrc;
 struct D2RoomExStrc;
 
 // Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+#ifndef D2_DEFINED_D2DrlgCoordIndexCtxStrc
+#define D2_DEFINED_D2DrlgCoordIndexCtxStrc
 struct D2DrlgCoordIndexCtxStrc {
     /* 0x00 */ struct D2RoomExStrc * pRoomEx;
     /* 0x04 */ struct D2DrlgGridStrc * pCoordGrid;
     /* 0x08 */ struct D2DrlgGridStrc * pOrientGrid;
-    /* 0x0C */ int32_t nReserved0C; // zeroed, no reader found
-    /* 0x10 */ int32_t nCallerArg10;
+    /* 0x0C */ struct D2DrlgGridStrc * nReserved0C; // zeroed, no reader found
+    /* 0x10 */ struct D2DrlgGridStrc * nCallerArg10;
     /* 0x14 */ struct D2DrlgGridStrc * pFloorGrid;
     /* 0x18 */ int32_t nCoordIndex; // in/out counter
     /* 0x1C */ uint32_t dwCoordFlags;
 };
 
-#endif // D2_MODULE_D2Common
+#endif // D2_DEFINED_D2DrlgCoordIndexCtxStrc
 namespace D2Common::Drlg::DrlgLogic {
 
 // Function declarations
@@ -48,7 +53,7 @@ void AllocEmptyRoomCoordList_Unused(struct D2PoolManagerStrc * pMemory, struct D
 void __fastcall FreeDrlgCoordList(struct D2RoomExStrc * pRoomEx);
 // Replaces all references to pOrientationGrid with pFloorGrid in pRoomEx's coordinate list, then recursively propagates the replacement to all neighbouring RoomEx entries that share the same level ID. Used during DRLG map-generation to commit a floor-grid assignment across a connected tile group.
 void __fastcall InitializeDrlgCoordList(struct D2RoomExStrc * pRoomEx, int nMatchIndex, int nNewIndex, int bNode);
-int __fastcall Unreferenced_0066c840(int param_1);
+int __fastcall Unreferenced_0066c840(struct D2DrlgTileDataStrc * param_1);
 // Two-pass wall flagging for DRLG layout grids. First pass: iterates pRoomEx's own wall tile array and calls AlterGridFlag for tiles that are standard left-side wall type (nFlags bits 0x1c000==0x4000, tileType!=15, non-special). Second pass: checks neighbouring rooms' map-link tile chains for matching wall tiles that project into pRoomEx bounds, flagging them with coordinate-transformed positions.
 void __stdcall DRLGLOGIC_SetGridWallFlags(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid);
 // Reads grid flags at each tile position and stores in tile entry offset +0x10.
@@ -70,7 +75,7 @@ struct D2RoomCoordListStrc * __fastcall DRLGLOGIC_GetCoordListFromSubtilePos(str
 struct D2RoomCoordListStrc * __fastcall GetCoordList(struct D2RoomExStrc * pRoomEx);
 // Allocates D2DrlgCoordListStrc, builds grid, populates coord list.
 // @sourcefile .\DRLG\DrlgLogic.cpp
-void __fastcall DRLGLOGIC_BuildRoomCoordList(struct D2RoomExStrc * pRoomEx, int nOrientGridFlags, int nFloorGridFlags, struct D2DrlgGridStrc * pGrid);
+void __fastcall DRLGLOGIC_BuildRoomCoordList(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * nOrientGridFlags, struct D2DrlgGridStrc * nFloorGridFlags, struct D2DrlgGridStrc * pGrid);
 #endif // D2_MODULE_D2Common
 // 4 internal functions (defined in .cpp)
 

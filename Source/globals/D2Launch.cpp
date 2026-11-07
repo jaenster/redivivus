@@ -5,6 +5,7 @@
 
 #include "Source/globals/globals.h"
 #include "Source/D2Launch/D2Launch.globals.h"
+#include "Source/D2Win/D2Win.h"
 #include "Source/D2Headers/d2_platform.h"
 
 

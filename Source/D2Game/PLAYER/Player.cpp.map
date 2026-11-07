@@ -327,6 +327,7 @@
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
+        "D2CharStatsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -362,6 +363,8 @@
         "ITEM_TryPlaceInBelt"
       ],
       "usedTypes": [
+        "D2CharItemStrc",
+        "D2CharStatsTxt",
         "D2ItemsTxt",
         "D2UnitStrc",
         "SGAMEDATA",

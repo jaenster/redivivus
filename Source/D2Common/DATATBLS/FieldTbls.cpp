@@ -3,8 +3,7 @@
 #include "Source/D2Common/DATATBLS/FieldTbls.h"
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/FieldTbls.data.h"
 
@@ -51,7 +50,7 @@ static int gaFieldStepDeltaY[9] = {
     -0x1,
     0x0
 }; D2_STATIC_GUARD(gaFieldStepDeltaY, "gaFieldStepDeltaY");
-static void * gpFieldDataTable = 0; D2_STATIC_GUARD(gpFieldDataTable, "gpFieldDataTable");
+static uint8_t * gpFieldDataTable = 0; D2_STATIC_GUARD(gpFieldDataTable, "gpFieldDataTable");
 unsigned int gnFieldDataTableWidth = {}; D2_GLOBAL_GUARD(gnFieldDataTableWidth, "gnFieldDataTableWidth");
 unsigned int gnFieldDataTableHeight = {}; D2_GLOBAL_GUARD(gnFieldDataTableHeight, "gnFieldDataTableHeight");
 static int gnFieldDataTableSize = 0; D2_STATIC_GUARD(gnFieldDataTableSize, "gnFieldDataTableSize");
@@ -80,13 +79,13 @@ int __stdcall FIELDTBLS_InitFieldData(D2ExpFieldFileStrc * pArchive, uint32_t dw
     uint32_t nHeight = pArchive->nHeight;
     uint32_t nWidth = pArchive->nWidth;
     size_t nAllocSize = nWidth * nHeight;
-    void* nErrAddress = D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\FieldTbls.cpp", 0x3e);
-    if (!nErrAddress) {
+    uint8_t* pFieldData = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\FieldTbls.cpp", 0x3e);
+    if (!pFieldData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x40);
       exit(-1);
     }
 
-    memcpy(nErrAddress, pArchive + 1, nAllocSize);
+    memcpy(pFieldData, pArchive + 1, nAllocSize);
     gnFieldDataTableDirectionOffset0 = gaFieldStepDeltaY[0] * nWidth + gaFieldStepDeltaX[0];
     gnFieldStepOffset_N = gaFieldStepDeltaY[1] * nWidth + gaFieldStepDeltaX[1];
     gnFieldTableHalfWidth = (int)nWidth >> 1;
@@ -98,7 +97,7 @@ int __stdcall FIELDTBLS_InitFieldData(D2ExpFieldFileStrc * pArchive, uint32_t dw
     gnFieldStepOffset_NE = gaFieldStepDeltaY[8] * nWidth + gaFieldStepDeltaX[8];
     gnFieldStepOffset_NW = gaFieldStepDeltaY[7] * nWidth + gaFieldStepDeltaX[7];
     gnFieldTableHalfHeight = (int)nHeight >> 1;
-    gpFieldDataTable = nErrAddress;
+    gpFieldDataTable = pFieldData;
     gnFieldDataTableWidth = nWidth;
     gnFieldDataTableHeight = nHeight;
     gnFieldDataTableSize = nAllocSize;
@@ -176,7 +175,7 @@ uint32_t __stdcall FIELDTBLS_GetFieldValueAtCoords(int * pnFieldOrigin, int32_t 
       exit(-1);
     }
 
-    return (uint32_t)*(uint8_t*)((int)gpFieldDataTable + nX + ((nY - pnFieldOrigin[1]) * 0x100 - *pnFieldOrigin));
+    return (uint32_t)gpFieldDataTable[nX + ((nY - pnFieldOrigin[1]) * 0x100 - *pnFieldOrigin)];
 }
 
 // Steps one cell through the field towards a target point, adjusting pX/pY
@@ -189,10 +188,10 @@ uint32_t __stdcall FIELDTBLS_StepFieldTowardsPoint(POINT * pPoint, int * pX, int
       exit(-1);
     }
 
-    uint8_t bFieldValue = *(uint8_t*)((int)gpFieldDataTable + gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX);
+    uint8_t bFieldValue = gpFieldDataTable[gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX];
     *pX = gaFieldStepDeltaX[bFieldValue] + *pX;
     *pY += gaFieldStepDeltaY[bFieldValue];
-    return (uint32_t)(*(char*)((int)gpFieldDataTable + gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX) != '\b');
+    return (uint32_t)(gpFieldDataTable[gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX] != '\b');
 }
 
 // Traces a path from (nX,nY) toward pPoint, checking collision flags

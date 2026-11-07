@@ -199,7 +199,8 @@
         "SAFESOCK_CreateBlocking"
       ],
       "usedTypes": [
-        "D2NetDataStrc"
+        "D2NetDataStrc",
+        "D2QSSocketStrc"
       ]
     },
     {

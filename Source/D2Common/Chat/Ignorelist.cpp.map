@@ -74,20 +74,6 @@
       ]
     },
     {
-      "name": "IGNORELIST_Initialize_Unref_0060ab70",
-      "address": "0060ab70",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0060ab70"
-        }
-      ],
-      "namespace": "D2Common::Chat::Ignorelist",
-      "calledFunctions": [
-        "IGNORELIST_Initialize_Unref_0060ab70"
-      ]
-    },
-    {
       "name": "IGNORELIST_Initialize_Unref_0060ac50",
       "address": "0060ac50",
       "lines": [
@@ -99,20 +85,6 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0060ac50"
-      ]
-    },
-    {
-      "name": "IGNORELIST_Initialize_Unref_0060b130",
-      "address": "0060b130",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0060b130"
-        }
-      ],
-      "namespace": "D2Common::Chat::Ignorelist",
-      "calledFunctions": [
-        "IGNORELIST_Initialize_Unref_0060b130"
       ]
     },
     {

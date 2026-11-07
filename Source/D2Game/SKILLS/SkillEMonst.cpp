@@ -2,21 +2,8 @@
 
 #include "Source/D2Game/SKILLS/SkillEMonst.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units/Missile.h"
-#include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
@@ -36,10 +23,7 @@
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Monsters/MONSTERS.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/SKILLS/SkillSor.h"
 
@@ -48,7 +32,7 @@
 
 namespace D2Game::SKILLS::SkillEMonst {
 
-void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, int32_t pCombatEntry) {
+void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, D2DamageStrc * pCombatEntry) {
     uint32_t nMercType;
     D2DamageStrc sDamage;
     int nPercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_thorns_percent, 0);
@@ -63,7 +47,7 @@ void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     memset(&sDamage, 0, 0x70);
-    sDamage.dwPhysDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(*(int32_t*)(pCombatEntry + 8), nPercent, 100);
+    sDamage.dwPhysDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pCombatEntry->dwPhysDamage, nPercent, 100);
     sDamage.dwHitClass = 0x8d;
     sDamage.wResultFlags = 0x4021;
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pAttacker, pUnit, 1, &sDamage);
@@ -1105,18 +1089,14 @@ BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
-int Unreferenced_005d2b40() {
-    D2UnitStrc* unaff_EDI;
-    D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(unaff_EDI, STATE_blood_mana);
-    int iVar1 = 0;
-    if (pStatListEx) {
-      int extraout_EAX;
-      D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(unaff_EDI, pStatListEx);
-      D2Common::Stats::StatsEx::FreeStatList(&pStatListEx->sStatList);
-      iVar1 = extraout_EAX;
+void __stdcall Unreferenced_005d2b40(D2UnitStrc * pUnit) {
+    D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
+    if (!pStatListEx) {
+      return;
     }
 
-    return iVar1;
+    D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatListEx);
+    D2Common::Stats::StatsEx::FreeStatList(&pStatListEx->sStatList);
 }
 
 // Applies a Blood Mana HP cost of nParam to pUnit. If HP is sufficient, deducts it and removes the STATE_blood_mana stat list when remaining HP falls below the skill's Param[4] threshold (in fixed-point). If HP is insufficient, forces HP to 0x100 (minimum alive) and removes the stat list.

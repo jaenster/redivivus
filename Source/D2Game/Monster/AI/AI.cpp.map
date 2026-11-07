@@ -638,6 +638,9 @@
       "calledFunctions": [
         "Unreferenced_005dc840",
         "CheckForModeZeroDeath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {
@@ -657,8 +660,8 @@
         "UNITS_CheckIfCanAttackTarget"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "uint32_t"
       ]
@@ -829,8 +832,8 @@
         "TestCollisionWithUnit"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "uint32_t"
       ]
@@ -1398,8 +1401,8 @@
         "D2MonsterAiParameterStruct",
         "D2RoomStrc",
         "D2UnitNodeStrc",
-        "D2UnitNodeStrc *",
         "D2UnitStrc",
+        "MONSTERAI_FindBestTarget_Slotm",
         "SGAMEDATA",
         "eAct",
         "int32_t",
@@ -1503,8 +1506,8 @@
         "QUEST_NpcWantsInteract"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "uint32_t"
       ]
@@ -3163,8 +3166,7 @@
         "D2AiGeneralStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -3923,7 +3925,6 @@
         "D2AiParamStrc",
         "D2DynamicPathStrc",
         "D2RoomStrc",
-        "D2UnitDataPlayerInteractedNPCStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -4007,7 +4008,6 @@
         "D2AiGeneralStrc *",
         "D2RoomStrc",
         "D2SeedStrc",
-        "D2UnitDataPlayerInteractedNPCStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
@@ -4099,6 +4099,9 @@
         "PlanNextAiMove"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2AiParamStrc",
+        "D2MonStatsTxt",
         "D2PetDataStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -4629,6 +4632,7 @@
       ],
       "usedTypes": [
         "D2MonsterAiCmdStrc",
+        "D2PathPosStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
@@ -4652,9 +4656,9 @@
       ],
       "usedTypes": [
         "D2MonsterAiCmdStrc",
+        "D2PathPosStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -4673,9 +4677,9 @@
         "AI_Monster_WalkToStoredPosition"
       ],
       "usedTypes": [
+        "D2PathPosStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -4697,9 +4701,9 @@
       ],
       "usedTypes": [
         "D2MonsterAiCmdStrc",
+        "D2PathPosStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -4721,9 +4725,9 @@
       ],
       "usedTypes": [
         "D2MonsterAiCmdStrc",
+        "D2PathPosStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -5056,6 +5060,9 @@
         "Unreferenced_005e7d30",
         "UNITS_GetRoom",
         "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {
@@ -5776,6 +5783,8 @@
         "D2GetSkillCalc"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2AiParamStrc",
         "D2RoomStrc",
         "D2SkillStrc",
         "D2SkillsTxt",
@@ -5991,6 +6000,7 @@
         "STATLIST_GetBaseStatValue"
       ],
       "usedTypes": [
+        "D2AiParamStrc",
         "D2SkillsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
@@ -6018,6 +6028,8 @@
         "UNIT_GetModuloFromSeed"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2AiParamStrc",
         "D2SeedStrc",
         "D2SkillStrc",
         "D2UnitStrc",
@@ -6041,6 +6053,7 @@
         "GetSkillLevel"
       ],
       "usedTypes": [
+        "D2AiParamStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
@@ -6599,6 +6612,7 @@
         "WalkRandomOffset"
       ],
       "usedTypes": [
+        "AI_Hireling_ThinkRangedCombat_Slotm",
         "D2AiParamStrc",
         "D2MonStatsTxt",
         "D2RoomStrc",
@@ -6646,6 +6660,7 @@
         "AI_ChangeModeAndTargetUnit"
       ],
       "usedTypes": [
+        "AI_Hireling_ThinkMeleeCombat_Slotm",
         "D2AiGeneralStrc",
         "D2AiGeneralStrc *",
         "D2RoomStrc",
@@ -6705,6 +6720,7 @@
         "RestartAiThink"
       ],
       "usedTypes": [
+        "AITHINK_Fn1_DruidBear_Slotmc",
         "D2AiGeneralStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
@@ -8007,6 +8023,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2AiParamStrc",
+        "D2MonStatsTxt",
+        "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
@@ -9229,8 +9247,8 @@
         "GetCurrentLifePercentage"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -9313,10 +9331,10 @@
         "ForEach"
       ],
       "usedTypes": [
+        "D2MonStatsTxt",
         "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "int32_t"
+        "SGAMEDATA"
       ]
     },
     {
@@ -9995,8 +10013,8 @@
         "GetDistanceBetween"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "int32_t",
         "uint32_t"
       ]

@@ -4,16 +4,8 @@
 #include "Source/D2Client/D2GSPacketSrv0x27.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UI/npcmenu.h"
-#include "Source/D2Client/UI/npcmenu/Merc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Text.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Clients.h"
@@ -21,19 +13,16 @@
 #include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Monsters.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q4.h"
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -310,7 +299,7 @@ static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiS
     npcInfoPkt.nUnitGUID = pNpcUnit->nUnitGUID;
     npcInfoPkt.nId = 0x27;
     npcInfoPkt.eUnitType = (uint8_t)pNpcUnit->eUnitType;
-    D2Common::Text::BuildPacket0x27Messages(pTxtMsg, (uint32_t*)&npcInfoPkt.nMessageCount);
+    D2Common::Text::BuildPacket0x27Messages(pTxtMsg, &npcInfoPkt.nMessageCount);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x27_NpcInfo(pClient, &npcInfoPkt);
     D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(pTxtMsg);
     Quests::QUESTS::NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(pGame, pClient);
@@ -558,12 +547,12 @@ BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nSwitchAi
     return 0;
 }
 
-D2UnitPlayerListStrc * __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
+int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return pUnit->pUnitData.pUnitDataPlayer->pPlayerList;
+      return (int32_t)pUnit->pUnitData.pUnitDataPlayer->pPlayerList;
     }
 
-    return nullptr;
+    return 0;
 }
 
 D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {

@@ -8,9 +8,8 @@
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/GAME/Server/ServerCmd.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/D2Net/Game/Server.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/D2Net/D2Net.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/GAME/Server.data.h"
 
@@ -145,7 +144,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
 
       pPlayerName = pPacket->uMsg.sGameLogonMulti.szCharName;
       szCharName[0] = '\0';
-      bServerValidRequest = Server::NET_D2GS_SERVER_IsValidChecks(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, (uint32_t)szCharName, (uint32_t)&__frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, (uint32_t)&__frame0.dwJoinParam3, (uint32_t)&__frame0.dwJoinParam2, (uint32_t)&__frame0.dwJoinParam0, (uint32_t)&__frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.dwClientVersion);
+      bServerValidRequest = Server::NET_D2GS_SERVER_IsValidChecks(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, szCharName, &__frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, &__frame0.dwJoinParam3, &__frame0.dwJoinParam2, &__frame0.dwJoinParam0, &__frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.dwClientVersion);
       if (bServerValidRequest) {
         Server::NET_D2GS_SERVER_SrvJoinGame(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, szCharName, __frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, __frame0.dwJoinParam3, __frame0.dwJoinParam2, __frame0.dwJoinParam0, __frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.dwClientVersion);
       }

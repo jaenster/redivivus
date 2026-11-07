@@ -418,6 +418,9 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00407260"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {

@@ -4,10 +4,9 @@
 #include "Source/D2Client/D2GfxInfoStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Drlg/Transform.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -35,7 +34,7 @@ void __stdcall AllocParticle(D2UnitStrc * pUnit) {
     if (!pParticle) {
       pParticle = D2_NEW_AT(D2ParticleStrc, ".\\ENGINE\\Particle.cpp", 0x48);
       if (!pParticle) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a);
         exit(-1);
       }
     }
@@ -314,7 +313,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
           case UNIT_MISSILE:
             {
               if (pOwner->eUnitType != UNIT_MONSTER) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a9);
+                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a9);
                 exit(-1);
               }
               if (pOwner->eAnimMode.ePlayerMode == Death) {

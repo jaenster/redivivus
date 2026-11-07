@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 struct D2SkillsTxt;
 
 // Data types
+#ifndef D2_DEFINED_D2SkillStrc
+#define D2_DEFINED_D2SkillStrc
 struct D2SkillStrc {
     /* 0x00 */ struct D2SkillsTxt * pRecord; // Pointer to skill txt record
     /* 0x04 */ struct D2SkillStrc * pNext; // Next skill in linked list
@@ -33,3 +38,5 @@ struct D2SkillStrc {
     /* 0x38 */ int nCharges; // Remaining charges (item skills)
     /* 0x3C */ int bItemSkill; // 1 if granted by item, 0 if innate
 };
+
+#endif // D2_DEFINED_D2SkillStrc

@@ -402,12 +402,13 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA",
+        "SUNITINACTIVE_RoomInitMonsters_Slotm",
+        "SUNITINACTIVE_RoomInitMonsters_Slotmc",
         "eAct",
         "eD2LevelId",
         "eD2MonsterAnimMode",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -503,6 +504,7 @@
         "D2ShrinesTxt",
         "D2UnitStrc",
         "SGAMEDATA",
+        "SUNITINACTIVE_RoomInit_Slotm",
         "int32_t",
         "uint32_t",
         "uint8_t"

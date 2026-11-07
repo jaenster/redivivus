@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -32,6 +35,8 @@ struct D2ColorInfo {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2DrawFloorStrc
+#define D2_DEFINED_D2DrawFloorStrc
 struct D2DrawFloorStrc {
     /* 0x00 */ bool bLowQuality;
     /* 0x01 */ uint8_t field_0x1;
@@ -55,6 +60,9 @@ struct D2DrawFloorStrc {
     /* 0x40 */ int nY;
 };
 
+#endif // D2_DEFINED_D2DrawFloorStrc
+#ifndef D2_DEFINED_D2GfxLightStrc
+#define D2_DEFINED_D2GfxLightStrc
 struct __attribute__((packed)) D2GfxLightStrc {
     D2GfxLightStrc() = default;
     D2GfxLightStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
@@ -67,6 +75,9 @@ struct __attribute__((packed)) D2GfxLightStrc {
     /* 0x03 */ BYTE nBlue;
 };
 
+#endif // D2_DEFINED_D2GfxLightStrc
+#ifndef D2_DEFINED_D2GfxLightExStrc
+#define D2_DEFINED_D2GfxLightExStrc
 #pragma pack(push, 1)
 struct D2GfxLightExStrc {
     /* 0x00 */ D2GfxLightStrc sLight;
@@ -75,6 +86,7 @@ struct D2GfxLightExStrc {
 };
 #pragma pack(pop)
 
+#endif // D2_DEFINED_D2GfxLightExStrc
 namespace D2Client::GAME::Draw {
 
 // Function declarations

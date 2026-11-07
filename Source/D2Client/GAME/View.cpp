@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/GAME/View.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/D2GameViewStrc.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
@@ -13,25 +13,17 @@
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Client/UI/Path.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Transform.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Game/Seed.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Draw/LightMap.data.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/GAME/View.data.h"
-#include "Source/D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -85,7 +77,7 @@ uint8_t * gpViewPalByteTable32x40 = 0; D2_GLOBAL_GUARD(gpViewPalByteTable32x40, 
 } // namespace D2Client::GAME::View
 static DC6 * gpAncientsBgDC6 = 0; D2_STATIC_GUARD(gpAncientsBgDC6, "gpAncientsBgDC6");
 static DC6 * gnDrawBackgroundRenderOffset = 0; D2_STATIC_GUARD(gnDrawBackgroundRenderOffset, "gnDrawBackgroundRenderOffset");
-uint32_t gnFrameDrawCounter = 0; D2_GLOBAL_GUARD(gnFrameDrawCounter, "gnFrameDrawCounter");
+static uint32_t gnFrameDrawCounter = 0; D2_STATIC_GUARD(gnFrameDrawCounter, "gnFrameDrawCounter");
 
 namespace D2Client::GAME::View {
 
@@ -165,12 +157,12 @@ uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
     return pTable;
 }
 
-void __fastcall Unreferenced_00475c30(int param_1) {
+void __fastcall Unreferenced_00475c30(LPVOID param_1) {
     if (!param_1) {
       return;
     }
 
-    D2Hell::D2MEM_VirtualFree((LPVOID)param_1);
+    D2Hell::D2MEM_VirtualFree(param_1);
 }
 
 // Allocates a (nDim × nDim × (nSteps+1)) pointer table via D2MEM_VirtualAlloc and fills it with pointers into gPaletteTransitionTable for each interpolated palette entry. Used to build lighting/palette blend lookup tables for the game view renderer. Returns the base pointer of the allocated table.
@@ -218,12 +210,12 @@ uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSte
     return pTable;
 }
 
-void __fastcall Unreferenced_00475d20(int param_1) {
+void __fastcall Unreferenced_00475d20(LPVOID param_1) {
     if (!param_1) {
       return;
     }
 
-    D2Hell::D2MEM_VirtualFree((LPVOID)param_1);
+    D2Hell::D2MEM_VirtualFree(param_1);
 }
 
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps) {
@@ -261,12 +253,12 @@ uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSte
     return pTable;
 }
 
-void __fastcall Unreferenced_00475de0(int param_1) {
+void __fastcall Unreferenced_00475de0(LPVOID param_1) {
     if (!param_1) {
       return;
     }
 
-    D2Hell::D2MEM_VirtualFree((LPVOID)param_1);
+    D2Hell::D2MEM_VirtualFree(param_1);
 }
 
 void __stdcall VIEW_InitLookupTables() {
@@ -704,13 +696,13 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       nScrollOffset = 0;
       do {
         nCloudSeedVal = D2Common::Seed::UNIT_GetModuloFromSeed(pAncientsCloudSeed, UI::SpellSel::WindowSizeX << 4);
-        *(uint32_t*)((int)gaAncientsCloudXPos + nScrollOffset) = nCloudSeedVal;
+        *(uint32_t*)((char*)gaAncientsCloudXPos + nScrollOffset) = nCloudSeedVal;
         ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
         *pAncientsCloudSeed = ullSeedValue;
-        *(uint32_t*)((int)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue.nSeedLow % 0xfa;
+        *(uint32_t*)((char*)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue.nSeedLow % 0xfa;
         ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
         *pAncientsCloudSeed = ullSeedValue;
-        *(uint32_t*)((int)gaAncientsCloudVelocities + nScrollOffset) = (ullSeedValue.nSeedLow & 0xf) + 8;
+        *(uint32_t*)((char*)gaAncientsCloudVelocities + nScrollOffset) = (ullSeedValue.nSeedLow & 0xf) + 8;
         nScrollOffset += 4;
       } while (nScrollOffset < 0x28);
 
@@ -720,12 +712,12 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     nScrollOffset = 0;
     do {
       nCloudIdx = UI::SpellSel::WindowSizeX;
-      *(int*)((int)gaAncientsCloudXPos + nScrollOffset) += *(int*)((int)gaAncientsCloudVelocities + nScrollOffset);
-      if (*(int*)((int)gaAncientsCloudXPos + nScrollOffset) > (nCloudIdx + 0x170) * 0x10) {
-        *(uint32_t*)((int)gaAncientsCloudXPos + nScrollOffset) = -5888;
+      *(int*)((char*)gaAncientsCloudXPos + nScrollOffset) += *(int*)((char*)gaAncientsCloudVelocities + nScrollOffset);
+      if (*(int*)((char*)gaAncientsCloudXPos + nScrollOffset) > (nCloudIdx + 0x170) * 0x10) {
+        *(uint32_t*)((char*)gaAncientsCloudXPos + nScrollOffset) = -5888;
         ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
         *pAncientsCloudSeed = ullSeedValue;
-        *(uint32_t*)((int)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue.nSeedLow % 300;
+        *(uint32_t*)((char*)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue.nSeedLow % 300;
       }
 
       nScrollOffset += 4;
@@ -733,14 +725,18 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
 
     nScrollOffset = 0;
     do {
-      nCloudIdx = *(int*)((int)gaAncientsCloudXPos + nScrollOffset) / 16;
+      nCloudIdx = *(int*)((char*)gaAncientsCloudXPos + nScrollOffset) / 16;
       sGfxData.pDC6 = gnDrawBackgroundRenderOffset;
       sGfxData.nFrameNumber = 0;
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCloudIdx, *(int32_t*)((int)gaAncientsCloudYPos + nScrollOffset), -0x22222223, DRAW_LIGHTTRANSPARENT, nullptr);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCloudIdx, *(int32_t*)((char*)gaAncientsCloudYPos + nScrollOffset), -0x22222223, DRAW_LIGHTTRANSPARENT, nullptr);
       sGfxData.nFrameNumber = 1;
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCloudIdx + 0x100, *(int32_t*)((int)gaAncientsCloudYPos + nScrollOffset), -0x22222223, DRAW_LIGHTTRANSPARENT, nullptr);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCloudIdx + 0x100, *(int32_t*)((char*)gaAncientsCloudYPos + nScrollOffset), -0x22222223, DRAW_LIGHTTRANSPARENT, nullptr);
       nScrollOffset += 4;
     } while (nScrollOffset < 0x28);
+}
+
+void __stdcall RENDERER_TogglePerspective_Unref_004769b0() {
+    gnFrameDrawCounter = (uint32_t)!gnFrameDrawCounter;
 }
 
 // Adjusts the looping screen-shake rumble sound (SOUND_BABOONDEMON_HIT_4) to match the current shake intensity. Converts nShakeIntensity (0–20) to a 0–255 target volume, starts the channel if not already playing, stops it if volume reaches 0, otherwise ramps the current volume toward the target by ±6 per call via SOUND_SetChannelPriority.

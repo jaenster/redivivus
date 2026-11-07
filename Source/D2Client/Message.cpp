@@ -5,10 +5,10 @@
 #include "Source/D2Client/GAME/Record.h"
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/ui.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/WindowHandle.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Win/D2Win.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 
@@ -29,7 +29,7 @@ static D2UIFlagInitStrc gaUIFlagInitMessageHandlers[4] = {
     {
         /* .eEventType = */ 0x0,
         /* .nMessageOrKeyCode = */ 0x84,
-        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::_Message::WndProcD
+        /* .pfHandler = */ &D2Client::_Message::WndProcD
     },
     {
         /* .eEventType = */ 0x1,
@@ -51,10 +51,10 @@ void __stdcall MESSAGE_OnActivate(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
-void __stdcall WndProcD(HWND * phWnd) {
-    /* LPARAM lParam for DefWindowProcA */ /* WPARAM wParam for DefWindowProcA */ /* UINT Msg for DefWindowProcA */ /* HWND hWnd for DefWindowProcA */ phWnd[6] = (HWND)0x1;
-    HWND lResult = (HWND)DefWindowProcA(*phWnd, (UINT)phWnd[1], (uint32_t)phWnd[2], (int32_t)phWnd[3]);
-    phWnd[7] = lResult;
+void __stdcall WndProcD(D2UIMouseMsgStrc * phWnd) {
+    /* LPARAM lParam for DefWindowProcA */ /* WPARAM wParam for DefWindowProcA */ /* UINT Msg for DefWindowProcA */ /* HWND hWnd for DefWindowProcA */ phWnd->bHandled = 1;
+    uint32_t lResult = DefWindowProcA(phWnd->hWnd, phWnd->uMsg, phWnd->nWParam, phWnd->uLParam.nLParam);
+    phWnd->dwResult = lResult;
 }
 
 void __stdcall MESSAGE_OnClose(HWND * phWnd) {
@@ -140,17 +140,17 @@ void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int3
               exit(-1);
             }
 
-            Storm::WindowHandle::SMsgRegisterMessage((uint32_t)hWnd, nMessageOrKeyCode, pfHandler);
+            Storm::WindowHandle::SMsgRegisterMessage(hWnd, nMessageOrKeyCode, pfHandler);
             return;
           }
         case 1:
-          Storm::WindowHandle::SMsgRegisterCommand((uint32_t)hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgRegisterCommand(hWnd, nMessageOrKeyCode, pfHandler);
         return;
         case 2:
-          Storm::WindowHandle::SMsgRegisterKeyUp((uint32_t)hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgRegisterKeyUp(hWnd, nMessageOrKeyCode, pfHandler);
         return;
         case 3:
-          Storm::WindowHandle::SMsgRegisterKeyDown((uint32_t)hWnd, nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgRegisterKeyDown(hWnd, nMessageOrKeyCode, pfHandler);
         default:
           return;
       }
@@ -171,17 +171,17 @@ void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, in
               exit(-1);
             }
 
-            Storm::WindowHandle::SMsgUnregisterMessage((uint32_t)hWnd, (char*)nMessageOrKeyCode, pfHandler);
+            Storm::WindowHandle::SMsgUnregisterMessage(hWnd, (char*)nMessageOrKeyCode, pfHandler);
             return;
           }
         case 1:
           Storm::WindowHandle::SMsgUnregisterCommand(hWnd, (char*)nMessageOrKeyCode, pfHandler);
         return;
         case 2:
-          Storm::WindowHandle::SMsgUnregisterKeyUp((uint32_t)hWnd, (char*)nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterKeyUp(hWnd, (char*)nMessageOrKeyCode, pfHandler);
         return;
         case 3:
-          Storm::WindowHandle::SMsgUnregisterKeyDown((uint32_t)hWnd, (char*)nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterKeyDown(hWnd, (char*)nMessageOrKeyCode, pfHandler);
         default:
           return;
       }
@@ -246,7 +246,7 @@ uint32_t __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd) {
     }
 
     MESSAGE_RegisterEventHandlerBatch(hWnd, gaUIFlagInitMessageHandlers, 4);
-    Storm::WindowHandle::SMsgPushRegisterState((uint32_t)hWnd);
+    Storm::WindowHandle::SMsgPushRegisterState(hWnd);
     return 1;
 }
 
@@ -268,7 +268,7 @@ void __fastcall MESSAGE_UnregisterWindowMessageHandlers(char * szText) {
 // Gets the current HWND and snapshots all registered event handlers. Used for save/restore state during modal dialogs.
 void __stdcall MESSAGE_SnapshotEventHandlers() {
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    Storm::WindowHandle::SMsgPushRegisterState((uint32_t)hWnd);
+    Storm::WindowHandle::SMsgPushRegisterState(hWnd);
 }
 
 // Gets the current HWND and undoes the last batch of event registrations. Restores previous snapshot state.

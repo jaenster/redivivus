@@ -2,16 +2,9 @@
 
 #include "Source/D2Game/Quests/QUESTS/A2Q2.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
@@ -20,7 +13,7 @@
 #include "Source/D2Game/Quests/QUESTS/A2Q3.h"
 #include "Source/D2Game/Quests/QUESTS/A2Q4.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Quests/QUESTS/A2Q1.h"
@@ -215,7 +208,7 @@ bool __fastcall Q10_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       return true;
     }
 
-    uint8_t uVar1 = Q10_CheckQuestItemsForDialog(pUnit, pQuestData, (uint8_t*)((uintptr_t)&pBitBuffer + 3));
+    uint8_t uVar1 = Q10_CheckQuestItemsForDialog(pUnit, pQuestData, (uint8_t*)((intptr_t)&pBitBuffer + 3));
     if (uVar1 != '\0') {
       return true;
     }
@@ -524,8 +517,8 @@ void __fastcall Q10_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
 // Q10_AdjustStaffPieceCount. Helper that adds nCountDelta to the A2Q2 staff-piece
 // counter at sQuestGUID.aPlayerGUID[9] (the 'vip'/viper-piece slot). Used by the
 // drop/pickup bookkeeping. No QuestRecord access.
-void __fastcall Q10_AdjustStaffPieceCount(int pQuestArg, int nCountDelta) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(pQuestArg + 4), QUESTINT_TheHoradricStaff);
+void __fastcall Q10_AdjustStaffPieceCount(D2QuestDataStrc * pQuestArg, int nCountDelta) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pQuestArg->pGame, QUESTINT_TheHoradricStaff);
     if (!pQuestData) {
       return;
     }
@@ -533,10 +526,8 @@ void __fastcall Q10_AdjustStaffPieceCount(int pQuestArg, int nCountDelta) {
     pQuestData->pQuestSpecificData.pA2Q2->nVipCount += nCountDelta;
 }
 
-int Unreferenced_00599bf0() {
-    ::SGAMEDATA* in_ECX;
-    D2UnitStrc* in_EDX;
-    D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(in_ECX, in_EDX, 0x20747368);
+BOOL __fastcall Unreferenced_00599bf0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20747368);
     return (uint32_t)!pDVar1;
 }
 

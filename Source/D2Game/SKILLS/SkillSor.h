@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -28,6 +31,22 @@ struct __attribute__((packed)) D2StaticFieldArgStrc {
     /* 0x08 */ int32_t nStaticMin;
     /* 0x0C */ int32_t nSynergyBonus;
     /* 0x10 */ eSkillEType eElemType;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_025_Enchant_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct SGAMEDATA * pGameSaved;
+    /* 0x00 */ int nAuraStatRemaining;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union Skills_SrvDoFunc_029_ThunderStorm_Slotmc {
+    /* 0x00 */ eMissilesId eMissileId;
+    /* 0x00 */ struct D2UnitStrc * pMissile;
 };
 
 #endif // D2_MODULE_D2Game

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,10 +20,13 @@ struct D2DrlgTileDataStrc;
 struct D2DrlgTileGridStrc;
 struct D2PoolManagerStrc;
 struct D2RoomExStrc;
+struct D2RoomStrc;
 struct D2TileLibraryEntryStrc;
 typedef uint32_t eD2GridCellFlags;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgTileLinkStrc
+#define D2_DEFINED_D2DrlgTileLinkStrc
 struct D2DrlgTileLinkStrc {
     /* 0x00 */ bool bFloor; // 0 = wall type, non-zero = floor type
     /* 0x01 */ uint8_t field_0x1;
@@ -30,6 +36,7 @@ struct D2DrlgTileLinkStrc {
     /* 0x08 */ struct D2DrlgTileLinkStrc * pNext; // Next tile link in list
 };
 
+#endif // D2_DEFINED_D2DrlgTileLinkStrc
 namespace D2Common::Drlg::RoomTile {
 
 // Function declarations
@@ -40,13 +47,13 @@ void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, struct D2Room
 // Allocates the next wall tile slot in pRoomEx's tile grid, links it into the *ppTileHead list, converts minimap coords to screen coords, sets colour/type/flags, then recursively creates a shadow tile (type 4) when nTileType==3 and propagates nGridFlags bits into that shadow tile's flags.
 struct D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(struct D2RoomExStrc * pRoomEx, struct D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, struct D2TileLibraryEntryStrc * pTileLibEntry, int nTileType);
 // Initializes D2DrlgTileDataStrc: sets library entry, RGB to 0xFF, maps grid flags to tile flags.
-void __fastcall DRLGROOMTILE_FillTileData(struct D2RoomExStrc * pRoomEx, struct D2DrlgTileDataStrc * pTileData, int nPosX, int nPosY, uint32_t nGridFlags, int pTileLibEntry);
+void __fastcall DRLGROOMTILE_FillTileData(struct D2RoomExStrc * pRoomEx, struct D2DrlgTileDataStrc * pTileData, int nPosX, int nPosY, uint32_t nGridFlags, struct D2TileLibraryEntryStrc * pTileLibEntry);
 // Allocates from floor tile array, links into floor list, calls FillTileData.
 struct D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateFloorTileData(struct D2RoomExStrc * pRoomEx, struct D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, struct D2TileLibraryEntryStrc * pTileLibEntry);
 // Allocates the next shadow tile entry from the room's pRoofTiles array, links it into the ppTileHead list, increments the shadow count, converts world coords to room-relative and screen coords (with +0x28 Y bias), copies RGB=white, hardcodes nTileType=0xD, and maps nGridFlags bits to nFlags (flip/lighting/transition bits).
 struct D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(struct D2RoomExStrc * pRoomEx, struct D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, struct D2TileLibraryEntryStrc * pTileLibEntry);
 // Creates a shadow tile data entry from grid cell flags. Gets the tile library entry for shadow type (0xd) and creates the shadow tile data for the room.
-void __fastcall DRLGROOMTILE_CreateShadowTileFromGrid(struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * nPosX, int nPosY, uint32_t nGridFlags);
+void __fastcall DRLGROOMTILE_CreateShadowTileFromGrid(struct D2RoomExStrc * pRoomEx, int nPosX, int nPosY, uint32_t nGridFlags);
 // Shrinks/reallocs tile data array.
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_CompactTileDataArray(struct D2RoomExStrc * pRoomEx);
@@ -68,7 +75,7 @@ void __fastcall DRLGROOMTILE_AllocTileDataArrays(struct D2RoomExStrc * pRoomEx);
 // Grows tile data array capacity via realloc.
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_GrowTileDataArray(struct D2PoolManagerStrc * pMemory, struct D2DrlgTileGridStrc * pTileGrid, int nAdditionalTiles);
-int __fastcall Unreferenced_0066f030(int param_1);
+int __fastcall Unreferenced_0066f030(struct D2RoomStrc * param_1);
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_FreeRoomTilesAll(struct D2RoomExStrc * pRoomEx);
 #endif // D2_MODULE_D2Common

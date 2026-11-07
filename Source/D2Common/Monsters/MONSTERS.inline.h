@@ -4,11 +4,13 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -16,6 +18,8 @@
 
 namespace D2Common::Monsters::MONSTERS {
 
+#ifndef D2_DEFINED_INLINE_0054da60
+#define D2_DEFINED_INLINE_0054da60
 __attribute__((noinline)) inline int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nDifficulty) {
     int nDiffStep;
     D2MonStatsTxt* pMonStatLine = nMonstatId >= 0 && nMonstatId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
@@ -34,5 +38,6 @@ __attribute__((noinline)) inline int32_t __fastcall MONSTER_GetMonsterClassByDif
 
     return nClassId;
 }
+#endif // D2_DEFINED_INLINE_0054da60
 
 } // namespace D2Common::Monsters::MONSTERS

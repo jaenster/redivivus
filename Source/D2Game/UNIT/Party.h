@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -26,11 +29,14 @@ typedef void (__fastcall *pfnPartyMemberFilter)(::SGAMEDATA * pGame, struct D2Un
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2UnitPartyControlSubSub
+#define D2_DEFINED_D2UnitPartyControlSubSub
 struct D2UnitPartyControlSubSub {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ struct D2UnitPartyControlSubSub * pNext;
 };
 
+#endif // D2_DEFINED_D2UnitPartyControlSubSub
 namespace D2Game::UNIT::Party {
 
 // Function declarations
@@ -51,7 +57,7 @@ int __stdcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, struct
 int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyId);
 BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, struct D2UnitStrc * pUnit, int * pLevelSum);
 void __fastcall CountModeZero(int32_t * pContext, struct D2UnitStrc * pUnit, int * pCount);
-void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, BOOL bExecute);
+void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * bExecute);
 // Calls fpFilter(pGame, pMember, pDataForFunction) once for each party member of pUnit that is in the same level. Looks up pUnit's room and level ID, resolves its party ID, then iterates the party's sub-sub list; for each member found in the unit table whose room maps to the same level ID, invokes the filter callback. Also calls the callback (once, with pUnit itself) if pUnit has no room or no party, acting as a fallback. The callback is __fastcall(pGame@ECX, pUnit@EDX, pUserData@stack) - all three known implementations end in RET 0x4 - and its return value is discarded.
 void __fastcall FindUnitWithFilter(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, pfnPartyMemberFilter fpFilter, void * pDataForFunction);
 // @sourcefile .\UNIT\Party.cpp

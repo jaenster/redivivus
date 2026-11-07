@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2SLogStrc
+#define D2_DEFINED_D2SLogStrc
 struct __attribute__((packed)) D2SLogStrc {
     /* 0x00 */ uint32_t nHandle; // the HSLOG this entry belongs to (slot = nHandle & 3)
     /* 0x04 */ struct D2SLogStrc * pNext; // next log in the slot's list
@@ -23,6 +28,7 @@ struct __attribute__((packed)) D2SLogStrc {
     /* 0x1C */ char acBuffer[65536];
 };
 
+#endif // D2_DEFINED_D2SLogStrc
 namespace Storm::Source::SLog {
 
 // Function declarations
@@ -38,7 +44,7 @@ void SLogWrite(uint32_t nHandle, char * szFormat, ...);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // @blizzard SLogDump (SLOG.CPP)
-void __stdcall SLogDump(uint32_t nHandle, int32_t pData, uint32_t nLength);
+void __stdcall SLogDump(uint32_t nHandle, uint8_t * pData, uint32_t nLength);
 // @blizzard SLogFlush (SLOG.CPP)
 void __stdcall SLogFlush(uint32_t nHandle);
 // @blizzard SLogFlushAll (SLOG.CPP)

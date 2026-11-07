@@ -106,6 +106,7 @@
         "D2DrlgWallLayerGridsStrc",
         "D2LvlSubTxt",
         "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
         "int32_t"
       ]
     },
@@ -505,8 +506,9 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
-        "D2PoolManagerStrc",
-        "int *"
+        "D2DrlgVertexStrc",
+        "D2DrlgVertexStrc *",
+        "D2PoolManagerStrc"
       ]
     },
     {
@@ -548,6 +550,10 @@
       "namespace": "D2Common::Drlg::Outdoors",
       "calledFunctions": [
         "Unreferenced_00675290"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc"
       ]
     },
     {

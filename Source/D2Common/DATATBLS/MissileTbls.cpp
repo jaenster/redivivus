@@ -4,10 +4,7 @@
 #include "Source/D2Common/D2MissilesTxt.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Skills.h"
-#include "Source/Fog/Src/Excel.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -163,33 +160,33 @@ void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, 
       nCalcCodeSize = Fog::Skills::SKILLS_ParseCalcExpression(pSrc, byCalcBuf, 0x400, (CalcGetKeyWordToNumber_t)MapMissilesTxtKeywordToNumber, nullptr, MISSILETBLS_ValidateCalcCode);
       if ((int)nCalcCodeSize > 0) {
         nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pMissCode, &MonsterTbls::sgtDataTable.nMissCodeSize, &MonsterTbls::sgtDataTable.nMissCodeCapacity, byCalcBuf, nCalcCodeSize);
-        *(int32_t*)(nOffset + (int)pRecord) = nParsedLen;
+        *(int32_t*)(nOffset + (char*)pRecord) = nParsedLen;
         return;
       }
     }
 
-    *(uint32_t*)(nOffset + (int)pRecord) = -1;
+    *(uint32_t*)(nOffset + (char*)pRecord) = -1;
 }
 
 // Validates a single field of a D2MissilesTxt row (indexed by nMissileIdx) against [nMinVal, nMaxVal] and clamps it in-place if out of range. Reads the field via eFieldType (0=signed byte, 1=unsigned byte, 2=signed short, 3=unsigned short, 4=uint32) at nFieldOffset into the Missile sub-struct. On violation, walks pFieldDescArray to find the matching descriptor, then writes back the clamped value at the same offset and width.
-void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nMinVal, uint32_t nMaxVal, int32_t nFieldOffset, int32_t pFieldDescArray, int32_t nMissileIdx) {
+void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nMinVal, uint32_t nMaxVal, int32_t nFieldOffset, D2BinFieldInputStrc * pFieldDescArray, int32_t nMissileIdx) {
     D2MissilesTxt* pMissileTxt = nMissileIdx < 0 || nMissileIdx >= ITEMS::Items::sgptDataTable->nTxtMissilesSize ? 0 : ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileIdx;
     uint32_t nRawVal = 0;
     switch (eFieldType) {
       case 0:
-        nRawVal = (uint32_t)*(char*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nRawVal = (uint32_t)*(char*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 1:
-        nRawVal = (uint32_t)*(uint8_t*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nRawVal = (uint32_t)*(uint8_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 2:
-        nRawVal = (uint32_t)*(short int*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nRawVal = (uint32_t)*(short int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 3:
-        nRawVal = (uint32_t)*(uint16_t*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nRawVal = (uint32_t)*(uint16_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 4:
-        nRawVal = *(uint32_t*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nRawVal = *(uint32_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
     }
 
     if (!((int)nRawVal < (int)nMinVal || (int)nRawVal > (int)nMaxVal)) {
@@ -197,12 +194,12 @@ void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nM
     }
 
     int iDescIdx = 0;
-    int pCurFieldDesc = *(int*)(pFieldDescArray + 4);
-    int pDescBase = pFieldDescArray;
-    while (pCurFieldDesc && *(int*)(pDescBase + 0xc) != nFieldOffset) {
+    eD2BinFieldInputType pCurFieldDesc = pFieldDescArray->eType;
+    D2BinFieldInputStrc* pDescBase = pFieldDescArray;
+    while (pCurFieldDesc != FIELDTYPE_END && pDescBase->nOffset != nFieldOffset) {
       iDescIdx++;
-      pCurFieldDesc = *(int*)(pFieldDescArray + 4 + iDescIdx * 0x14);
-      pDescBase = pFieldDescArray + iDescIdx * 0x14;
+      pCurFieldDesc = pFieldDescArray[iDescIdx].eType;
+      pDescBase = pFieldDescArray + iDescIdx;
     }
 
     uint32_t nClampedVal = nRawVal;
@@ -220,15 +217,15 @@ void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nM
       case 0:
 
       case 1:
-        *(char*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset) = (char)nMaxVal;
+        *(char*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = (char)nMaxVal;
       return;
       case 2:
 
       case 3:
-        *(short int*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset) = (short int)nMaxVal;
+        *(short int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = (short int)nMaxVal;
       return;
       case 4:
-        *(uint32_t*)((uintptr_t)&pMissileTxt->Missile + nFieldOffset) = nMaxVal;
+        *(uint32_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = nMaxVal;
     }
 }
 

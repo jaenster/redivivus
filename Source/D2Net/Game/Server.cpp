@@ -2,10 +2,7 @@
 
 #include "Source/D2Net/Game/Server.h"
 #include "Source/D2Net/SRC/Client.h"
-#include "Source/Fog/Src/D2Net.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/QServer/QServer.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Net/D2Net.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Net/Game/Server.data.h"
@@ -246,18 +243,18 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
     }
 
     uint8_t byOpcode = *pbPacket;
-    uint8_t* pPacketEnd = pbPacket;
-    int32_t nPacketSizeResult = NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize((char*)pbPacket, nSize, (int*)&pPacketEnd);
+    int32_t pPacketEnd = (int32_t)pbPacket;
+    int32_t nPacketSizeResult = NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize((char*)pbPacket, nSize, &pPacketEnd);
     if (!nPacketSizeResult) {
       return 3;
     }
-    if (byOpcode >= 0x71 && byOpcode != 0xff || (uint16_t)(uintptr_t)pPacketEnd > 0x204) {
+    if (byOpcode >= 0x71 && byOpcode != 0xff || (uint16_t)pPacketEnd > 0x204) {
       return 4;
     }
-    if ((int)(uint16_t)(uint32_t)pPacketEnd <= (int)nSize) {
+    if ((int)(pPacketEnd & 0xffffU) <= (int)nSize) {
       int nTokenMatch;
       *pnUnknown = 0;
-      *pnPacketSize = (uint16_t)(uint32_t)pPacketEnd;
+      *pnPacketSize = pPacketEnd & 0xffffU;
       if (byOpcode < 0x67) {
         *pnPacketClass = 1;
       } else if (byOpcode < 0x71) {
@@ -466,7 +463,7 @@ void __stdcall NET_WaitForEmptyEvent(DWORD dwTimeout) {
 }
 
 void __stdcall _NullSub() {
-    Fog::Src::_NullSubRet4((uint32_t)pQServer);
+    Fog::Src::_NullSubRet4(pQServer);
 }
 
 // @wasnamed _NullSub - one name on two different functions.
@@ -478,7 +475,7 @@ void __stdcall _NullSubRet8(uint32_t dwParam) {
 
 int32_t __fastcall NET_D2GS_SERVER_Send_0xAF01(D2QServerStrc * pQServer, uint32_t nClientId, char * pszSourceFile, int nLine) {
     uint8_t aPacketFrame[4];
-    *(uint16_t*)((char*)&aPacketFrame + 2) = (uint16_t)((uint32_t)pQServer >> 0x10);
+    *(uint16_t*)((char*)&aPacketFrame + 2) = (uint16_t)((uintptr_t)pQServer >> 0x10);
     aPacketFrame[0] = 0xaf;
     aPacketFrame[1] = 1;
     NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)aPacketFrame, 2);

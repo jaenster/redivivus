@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 
 // Data types
+#ifndef D2_DEFINED_D2UnitPlayerListStrc
+#define D2_DEFINED_D2UnitPlayerListStrc
 struct D2UnitPlayerListStrc {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ int32_t nRelationshipFlags; // Bitmask: 0x2=Muted, 0x4=Squelched, 0x8=Hostile
@@ -24,6 +29,7 @@ struct D2UnitPlayerListStrc {
     /* 0x10 */ struct D2UnitPlayerListStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2UnitPlayerListStrc
 namespace D2Game::UNIT::PlayerList {
 
 // Function declarations

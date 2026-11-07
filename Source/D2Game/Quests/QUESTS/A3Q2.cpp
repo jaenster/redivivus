@@ -2,17 +2,12 @@
 
 #include "Source/D2Game/Quests/QUESTS/A3Q2.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Objects/Objects.h"
@@ -21,8 +16,7 @@
 #include "Source/D2Game/Quests/QUESTS/A3Q6.h"
 #include "Source/D2Game/Quests/QUESTS/A4Q2.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Quests/QUESTS/A2Q6.h"
@@ -456,10 +450,8 @@ void __fastcall Q19_OnPlayerCubeKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pU
     pDVar1->nCubedWillCount++;
 }
 
-int Unreferenced_005b8750() {
-    ::SGAMEDATA* in_ECX;
-    D2UnitStrc* in_EDX;
-    D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(in_ECX, in_EDX, 0x20326671);
+BOOL __fastcall Unreferenced_005b8750(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
     return (uint32_t)!pDVar1;
 }
 

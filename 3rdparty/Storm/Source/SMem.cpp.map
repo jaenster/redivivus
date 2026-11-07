@@ -68,6 +68,9 @@
       "namespace": "Storm::Source::SMem",
       "calledFunctions": [
         "Unreferenced_004116e0"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc"
       ]
     },
     {
@@ -304,7 +307,6 @@
       ],
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
-        "int32_t",
         "uint8_t"
       ]
     },
@@ -363,8 +365,7 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -501,8 +502,8 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
+        "SMemReallocInPlace_Slotm",
         "int32_t",
-        "uint16_t",
         "uint32_t"
       ]
     },
@@ -523,6 +524,8 @@
         "SMemWriteBlockHeader"
       ],
       "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -569,9 +572,11 @@
       ],
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
         "LPCRITICAL_SECTION",
         "int32_t",
-        "uint16_t *"
+        "uint16_t *",
+        "uint8_t"
       ]
     },
     {
@@ -593,6 +598,7 @@
         "SStrCopy"
       ],
       "usedTypes": [
+        "D2FogHeapDescStrc",
         "SMemHeapDetailsStrc",
         "int32_t",
         "uint32_t"
@@ -702,6 +708,7 @@
         "SMEM_AllocateHeap"
       ],
       "usedTypes": [
+        "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -798,6 +805,7 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
+        "D2FogLargeBlockHdrStrc",
         "int32_t",
         "uint16_t",
         "uint32_t",

@@ -611,6 +611,7 @@
         "D2StateExArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
+        "Skills_SrvDoFunc_025_Enchant_Slotmc",
         "eD2Skills",
         "int32_t"
       ]
@@ -784,8 +785,8 @@
         "D2StateExArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
+        "Skills_SrvDoFunc_029_ThunderStorm_Slotmc",
         "eD2Skills",
-        "eMissilesId",
         "int32_t",
         "uint32_t"
       ]

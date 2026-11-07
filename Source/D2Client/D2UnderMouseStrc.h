@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2SkillStrc;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2UnderMouseStrc
+#define D2_DEFINED_D2UnderMouseStrc
 struct D2UnderMouseStrc {
     /* 0x00 */ uint32_t flags;
     /* 0x04 */ struct D2UnitStrc * pPlayer;
@@ -26,3 +31,5 @@ struct D2UnderMouseStrc {
     /* 0x18 */ int32_t nAttackActionType; // Action type for unit attacks: 0/1=move, 2=left skill, 4=right skill. Passed directly as nActionType to UNITMODE_ExecuteSkillAction
     /* 0x1C */ struct D2SkillStrc * pSkill;
 };
+
+#endif // D2_DEFINED_D2UnderMouseStrc

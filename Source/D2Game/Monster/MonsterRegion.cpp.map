@@ -57,7 +57,7 @@
         "D2LevelsTxt",
         "D2MonsterRegionFieldStrc",
         "D2MonsterRegionStrc",
-        "D2MonsterRegionStrc[1024]",
+        "D2MonsterRegionStrc *",
         "D2PoolManagerStrc",
         "D2SeedStrc",
         "eD2Difficulty",
@@ -79,8 +79,8 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
-        "D2PoolManagerStrc",
-        "int32_t"
+        "D2MonsterRegionStrc *",
+        "D2PoolManagerStrc"
       ]
     },
     {

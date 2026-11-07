@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,21 @@
 struct D2QServerClientConnectionStrc;
 struct D2QServerStrc;
 
+// Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+union SocketThreadMain_Slotm634 {
+    /* 0x00 */ LPCRITICAL_SECTION pScanClientLock;
+    /* 0x00 */ uint32_t nSelectResult;
+};
+
+#endif // D2_MODULE_Fog
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+union SocketThreadMain_Slotm638 {
+    /* 0x00 */ int nScanIdx;
+    /* 0x00 */ LPCRITICAL_SECTION pClientLock;
+};
+
+#endif // D2_MODULE_Fog
 namespace Fog::Src::QServer::QServer98 {
 
 // Function declarations

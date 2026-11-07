@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2DDraw)
 #error "D2DDraw header included by a module that may not use D2DDraw (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2DDraw) && !defined(D2_LOADS_D2DDraw)
+#error "internal D2DDraw header included from another module; include D2DDraw's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -254,15 +257,21 @@ typedef unsigned long COLORREF;
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_D2ddDebugFont
+#define D2_DEFINED_D2ddDebugFont
 struct D2ddDebugFont {
     /* 0x0000 */ uint8_t field_0x0;
     /* 0x0001 */ uint8_t _pad_0x0001[12287];
 };
 
+#endif // D2_DEFINED_D2ddDebugFont
+#ifndef D2_DEFINED_D2RendererCoreStrc
+#define D2_DEFINED_D2RendererCoreStrc
 struct D2RendererCoreStrc {
     /* 0x00 */ CRITICAL_SECTION sLock; // The renderer's lock; each renderer (gdi/dd/d3d/gl Core.cpp) allocates exactly 0x18 bytes for it and only Enter/LeaveCriticalSection touch it
 };
 
+#endif // D2_DEFINED_D2RendererCoreStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2DDraw)
 struct DDCOLORKEY {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -272,6 +281,8 @@ struct DDCOLORKEY {
 };
 
 #endif // D2_MODULE_D2DDraw
+#ifndef D2_DEFINED_DDSURFACEDESC
+#define D2_DEFINED_DDSURFACEDESC
 struct DDSURFACEDESC {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwFlags;
@@ -291,14 +302,23 @@ struct DDSURFACEDESC {
     /* 0x68 */ DWORD ddsCaps;
 };
 
+#endif // D2_DEFINED_DDSURFACEDESC
+#ifndef D2_DEFINED_IDirectDraw
+#define D2_DEFINED_IDirectDraw
 struct IDirectDraw {
     /* 0x00 */ struct IDirectDrawVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectDraw
+#ifndef D2_DEFINED_IDirectDrawPalette
+#define D2_DEFINED_IDirectDrawPalette
 struct IDirectDrawPalette {
     /* 0x00 */ struct IDirectDrawPaletteVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectDrawPalette
+#ifndef D2_DEFINED_IDirectDrawPaletteVtbl
+#define D2_DEFINED_IDirectDrawPaletteVtbl
 struct IDirectDrawPaletteVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(struct IDirectDrawPalette *, void *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(struct IDirectDrawPalette *);
@@ -309,10 +329,16 @@ struct IDirectDrawPaletteVtbl {
     /* 0x18 */ HRESULT (__stdcall *SetEntries)(struct IDirectDrawPalette *, DWORD, DWORD, DWORD, PALETTEENTRY *);
 };
 
+#endif // D2_DEFINED_IDirectDrawPaletteVtbl
+#ifndef D2_DEFINED_IDirectDrawSurface1
+#define D2_DEFINED_IDirectDrawSurface1
 struct IDirectDrawSurface1 {
     /* 0x00 */ struct IDirectDrawSurface1Vtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectDrawSurface1
+#ifndef D2_DEFINED_IDirectDrawSurface1Vtbl
+#define D2_DEFINED_IDirectDrawSurface1Vtbl
 struct IDirectDrawSurface1Vtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(struct IDirectDrawSurface1 *, void *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(struct IDirectDrawSurface1 *);
@@ -352,6 +378,9 @@ struct IDirectDrawSurface1Vtbl {
     /* 0x8C */ HRESULT (__stdcall *UpdateOverlayZOrder)(struct IDirectDrawSurface1 *, DWORD, struct IDirectDrawSurface1 *);
 };
 
+#endif // D2_DEFINED_IDirectDrawSurface1Vtbl
+#ifndef D2_DEFINED_IDirectDrawVtbl
+#define D2_DEFINED_IDirectDrawVtbl
 struct IDirectDrawVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(struct IDirectDraw *, IID *, LPVOID *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(struct IDirectDraw *);
@@ -385,6 +414,7 @@ struct IDirectDrawVtbl {
     /* 0x74 */ void * EvaluateMode;
 };
 
+#endif // D2_DEFINED_IDirectDrawVtbl
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2DDraw)
 struct __attribute__((packed)) DDBLTFX {
     /* 0x00 */ DWORD dwSize;

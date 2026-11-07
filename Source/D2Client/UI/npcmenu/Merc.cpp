@@ -13,9 +13,7 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Game/GAME/SCmd.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -23,6 +21,11 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+#ifndef RECON_FPTD_fnUnitIterCallback
+#define RECON_FPTD_fnUnitIterCallback
+typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
+#endif
 
 static uint8_t gnNpcMenuMercListCount = 0; D2_STATIC_GUARD(gnNpcMenuMercListCount, "gnNpcMenuMercListCount");
 
@@ -36,7 +39,7 @@ void __fastcall AddMercForHireToGlobalList(D2GSPacketSrv0x4E * pPacket) {
     int nMercSlot = 0;
     while (D2Client::Merc::D2MercForHire[nMercSlot].bActive) {
       nMercSlot++;
-      if ((int)&D2Client::Merc::D2MercForHire[nMercSlot].bActive >= (intptr_t)((char*)&D2Client::Merc::D2MercForHire + sizeof(D2Client::Merc::D2MercForHire) + 8)) {
+      if ((intptr_t)&D2Client::Merc::D2MercForHire[nMercSlot].bActive >= (intptr_t)((char*)&D2Client::Merc::D2MercForHire + sizeof(D2Client::Merc::D2MercForHire) + 8)) {
         return;
       }
     }
@@ -71,13 +74,13 @@ void __fastcall NPCMENU_SetSelectedMercIndex(int16_t wMercNameId) {
       }
 
       pMercEntry++;
-    } while ((int)pMercEntry < (intptr_t)((char*)&D2Client::Merc::D2MercForHire + sizeof(D2Client::Merc::D2MercForHire)));
+    } while ((intptr_t)pMercEntry < (intptr_t)((char*)&D2Client::Merc::D2MercForHire + sizeof(D2Client::Merc::D2MercForHire)));
 
     Hireables::UI_InitializeHirelingIconsUI();
 }
 
-void __fastcall NPCMENU_MercItemFoundCb(void * pUnit) {
-    if (!(pUnit && *(int*)((int)pUnit + 4) == 0x13e && *(int*)((int)pUnit + 0x10) == 2)) {
+void __fastcall NPCMENU_MercItemFoundCb(D2UnitStrc * pUnit) {
+    if (!(pUnit && pUnit->nClassId == 0x13e && pUnit->eAnimMode.ePlayerMode == Walk)) {
       return;
     }
 
@@ -131,7 +134,7 @@ void __fastcall NPCMENU_HandleMercListPacket(D2GSPacketSrv0x8A * pPacket) {
     }
 
     gnNpcMenuMercListCount = '\0';
-    UNIT::CUnit::CUNIT_IterateItemsWithCallback(NPCMENU_MercItemFoundCb);
+    UNIT::CUnit::CUNIT_IterateItemsWithCallback((fnUnitIterCallback)NPCMENU_MercItemFoundCb);
     if (gnNpcMenuMercListCount != '\0') {
       return;
     }

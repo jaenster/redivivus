@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,6 +26,8 @@ typedef uint32_t (__stdcall *pfnAsyncDataComplete)(void * pReadBuffer, size_t nR
 struct D2AsyncData_Line0x128;
 
 // Data types
+#ifndef D2_DEFINED_D2AsyncDataCallbackStrc
+#define D2_DEFINED_D2AsyncDataCallbackStrc
 struct __attribute__((packed)) D2AsyncDataCallbackStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, size_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
     /* 0x04 */ uint32_t aUserData[4];
@@ -30,12 +35,18 @@ struct __attribute__((packed)) D2AsyncDataCallbackStrc {
     /* 0x18 */ size_t nResultSize; // becomes nReadSize with pResultBuffer
 };
 
+#endif // D2_DEFINED_D2AsyncDataCallbackStrc
+#ifndef D2_DEFINED_D2AsyncDataSlotStrc
+#define D2_DEFINED_D2AsyncDataSlotStrc
 struct __attribute__((packed)) D2AsyncDataSlotStrc {
     /* 0x00 */ HANDLE hEvent;
     /* 0x04 */ BOOL bFree;
     /* 0x08 */ struct D2AsyncData_Line0x128 * pRequest;
 };
 
+#endif // D2_DEFINED_D2AsyncDataSlotStrc
+#ifndef D2_DEFINED_D2AsyncData_Line0x128
+#define D2_DEFINED_D2AsyncData_Line0x128
 struct __attribute__((packed)) D2AsyncData_Line0x128 {
     /* 0x00 */ struct D2MPQFileStrc * pFile; // open MPQ file handle (set by ARCHIVE_OpenD2FileWrap, read as struct D2MPQFileStrc* for seek/read/close)
     /* 0x04 */ struct D2PoolManagerStrc * pMemory;
@@ -50,6 +61,7 @@ struct __attribute__((packed)) D2AsyncData_Line0x128 {
     /* 0x50 */ struct D2AsyncData_Line0x128 * pNextDeferred; // Next entry in the gpAsyncDataDeferredList list of deferred requests (nFlags & 8): pushed at 0040a8c1, unlinked by ASYNCDATA_Free (0040ab58), walked at 0040a936
 };
 
+#endif // D2_DEFINED_D2AsyncData_Line0x128
 namespace Fog::Src::AsyncData {
 
 // Function declarations

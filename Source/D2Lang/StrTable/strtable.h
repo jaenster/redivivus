@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Lang)
 #error "D2Lang header included by a module that may not use D2Lang (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Lang) && !defined(D2_LOADS_D2Lang)
+#error "internal D2Lang header included from another module; include D2Lang's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 struct D2PoolManagerStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2LangTableEntryStrc
+#define D2_DEFINED_D2LangTableEntryStrc
 struct D2LangTableEntryStrc {
     /* 0x00 */ char * pszLangCode;
     /* 0x04 */ char * pszLangCodeNormalized;
@@ -24,6 +29,9 @@ struct D2LangTableEntryStrc {
     /* 0x14 */ uint32_t dwLangId;
 };
 
+#endif // D2_DEFINED_D2LangTableEntryStrc
+#ifndef D2_DEFINED_D2StringTableTblFileStrc
+#define D2_DEFINED_D2StringTableTblFileStrc
 struct __attribute__((packed)) D2StringTableTblFileStrc {
     /* 0x00 */ uint16_t wCRC; // CRC16-CCITT over [dwDataStartOffset, dwFileSize). Compared at 00525954 (CMP AX, word ptr [ESI])
     /* 0x02 */ uint16_t wIndexCount; // Number of ushort entries in the index array at 0x15. 00525978 MOVZX ECX,[ESI+2]; LEA EAX,[ESI+ECX*2+0x15]. Index bound at 00524930.
@@ -34,12 +42,23 @@ struct __attribute__((packed)) D2StringTableTblFileStrc {
     /* 0x11 */ uint32_t dwFileSize; // Unaligned. CRC end offset (4th arg, 0052593e MOV EAX,[ESI+0x11]) and the buffer bound every node offset is checked against (00525990/00525995, 00524930).
 };
 
+#endif // D2_DEFINED_D2StringTableTblFileStrc
+#ifndef D2_DEFINED_D2UntranslatedStringCacheNodeStrc
+#define D2_DEFINED_D2UntranslatedStringCacheNodeStrc
+struct D2UntranslatedStringCacheNodeStrc {
+    /* 0x00 */ uint16_t * wszText;
+    /* 0x04 */ char * szKey;
+    /* 0x08 */ struct D2UntranslatedStringCacheNodeStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2UntranslatedStringCacheNodeStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
 
 namespace D2Lang::StrTable::strtable {
 
+extern struct D2UntranslatedStringCacheNodeStrc * gpUntranslatedStringCacheHead;
 extern struct D2StringTableTblFileStrc * gpStringTableBase;
 extern struct D2StringTableTblFileStrc * gpStringTablePatchD2;
 extern struct D2StringTableTblFileStrc * gpStringTableExpansion;
@@ -73,7 +92,7 @@ uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount);
 uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey);
 void STRTABLE_InitCRC(uint16_t * pwCRC);
 void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData);
-int __fastcall Unreferenced_00525010(int param_1);
+uint16_t __fastcall Unreferenced_00525010(uint16_t wValue);
 void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset);
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText);
 uint32_t __fastcall STRTABLE_GetLanguageId(char * szText);

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,8 +15,13 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2QServerClientIpHashBucketTable
+#define D2_DEFINED_D2QServerClientIpHashBucketTable
 typedef struct D2QServerClientConnectionStrc * * D2QServerClientIpHashBucketTable;
 
+#endif // D2_DEFINED_D2QServerClientIpHashBucketTable
+#ifndef D2_DEFINED_D2QServerTokenFilterEntryStrc
+#define D2_DEFINED_D2QServerTokenFilterEntryStrc
 struct D2QServerTokenFilterEntryStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -21,6 +29,9 @@ struct D2QServerTokenFilterEntryStrc {
     /* 0x04 */ uint32_t nMaskTableIndex; // Prefix length 0..32: index into gadwQServerPrefixMasks
 };
 
+#endif // D2_DEFINED_D2QServerTokenFilterEntryStrc
+#ifndef D2_DEFINED_D2QServerWorkerTelemetryStrc
+#define D2_DEFINED_D2QServerWorkerTelemetryStrc
 struct __attribute__((packed)) D2QServerWorkerTelemetryStrc {
     /* 0x00 */ LARGE_INTEGER qpcAcceptLoopAccum;
     /* 0x08 */ LARGE_INTEGER qpcReserved08; // Reserved/unused in current analysis
@@ -48,3 +59,5 @@ struct __attribute__((packed)) D2QServerWorkerTelemetryStrc {
     /* 0xA8 */ int nAcceptedClients;
     /* 0xAC */ uint32_t dwWorkerSlotValue; // Mirrored from D2QServerStrc.aWorkerSlotValues[i] in CopyWorkerTelemetrySnapshot
 };
+
+#endif // D2_DEFINED_D2QServerWorkerTelemetryStrc

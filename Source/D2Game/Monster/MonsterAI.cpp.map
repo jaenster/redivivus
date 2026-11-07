@@ -387,8 +387,8 @@
         "AI_GetSwitchAiParam1"
       ],
       "usedTypes": [
-        "D2UnitPlayerListStrc",
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "int32_t"
       ]
     },
     {

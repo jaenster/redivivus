@@ -2,17 +2,14 @@
 
 #include "Source/D2Game/Quests/QUESTS/Quest40.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/PLAYER/PlayerIntro.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A5Q3.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 

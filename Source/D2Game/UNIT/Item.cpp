@@ -2,14 +2,8 @@
 
 #include "Source/D2Game/UNIT/Item.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
@@ -21,7 +15,7 @@
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Game/UNIT/sunitproxy.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 
@@ -328,33 +322,29 @@ BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc 
     return 1;
 }
 
-int Unreferenced_00597aa0() {
-    int extraout_EAX;
-    D2UnitStrc* unaff_ESI;
+void __stdcall Unreferenced_00597aa0(D2UnitStrc * pItem) {
     uint32_t uVar1;
-    uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(unaff_ESI, ITEMCMD_BODYLOC_TAKE_ITEM);
+    uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_TAKE_ITEM);
     if (!uVar1) {
-      uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(unaff_ESI, ITEMCMD_INVENTORY_SET_ITEM);
+      uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_INVENTORY_SET_ITEM);
       if (!uVar1) {
         goto LAB_00597ac3;
       }
     }
 
-    D2Common::ITEMS::Items::SetBodyLoc(unaff_ESI, BODYLOC_NONE);
+    D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
     LAB_00597ac3:
-    uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(unaff_ESI, ITEMCMD_BODYLOC_EXCHANGE_ITEM);
-    int iVar3 = 0;
-    if (uVar1) {
-      BOOL BVar2;
-      BVar2 = D2Common::ITEMS::Items::CheckItemFlag(unaff_ESI, ITEMFLAG_TAKEN, 0x180, ".\\INVENTORY\\InvMode.cpp");
-      iVar3 = 0;
-      if (BVar2) {
-        D2Common::ITEMS::Items::SetBodyLoc(unaff_ESI, BODYLOC_NONE);
-        iVar3 = extraout_EAX;
-      }
+    uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_EXCHANGE_ITEM);
+    if (!uVar1) {
+      return;
     }
 
-    return iVar3;
+    BOOL BVar2 = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_TAKEN, 0x180, ".\\INVENTORY\\InvMode.cpp");
+    if (!BVar2) {
+      return;
+    }
+
+    D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
 }
 
 // Drains the pending-update queue on pUnit's inventory. For each queued GUID, looks up the item unit and clears body-loc overrides for TAKE/SET/EXCHANGE commands, then calls ITEM_ClearFlagsAndCommands. Recursively processes socketed-item sub-inventories. Finally deletes items marked ITEMCMD_DELETE. Called server-side after inventory transactions to apply deferred state changes.

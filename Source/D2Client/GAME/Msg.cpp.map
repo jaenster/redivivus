@@ -93,7 +93,8 @@
       "usedTypes": [
         "D2GSPacketClt0x6D",
         "uint16_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -188,7 +189,6 @@
         "fclose"
       ],
       "usedTypes": [
-        "D2CharSelCompStrc",
         "FILE",
         "int32_t",
         "uint8_t"

@@ -582,6 +582,7 @@
         "D2StateExArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
+        "SKILLBAR_SrvStFn38_Whirlwind_Slotm",
         "eD2Skills",
         "eD2UnitType",
         "int32_t",
@@ -607,7 +608,6 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc",
-        "int32_t",
         "uint32_t"
       ]
     },

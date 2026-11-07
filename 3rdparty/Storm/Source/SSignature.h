@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -21,6 +24,8 @@ struct _CONTEXT;
 #endif // _WIN32
 
 // Data types
+#ifndef D2_DEFINED_D2Sha1ContextStrc
+#define D2_DEFINED_D2Sha1ContextStrc
 struct D2Sha1ContextStrc {
     /* 0x00 */ uint32_t nBitCountLow; // message length in bits, low dword
     /* 0x04 */ uint32_t nBitCountHigh; // message length in bits, high dword
@@ -29,6 +34,7 @@ struct D2Sha1ContextStrc {
     /* 0x5C */ uint32_t dwUnknown5C;
 };
 
+#endif // D2_DEFINED_D2Sha1ContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct __attribute__((packed)) D2SsigContextStrc {
     /* 0x00 */ uint32_t nModulusLen; // RSA modulus length in bytes, also the signature length; Finish passes it to CryptRSA_Prepare as nModulusLen
@@ -98,7 +104,7 @@ void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t n
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round4. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0xCA62C1D6 + W - Parity with K4, SHA-1 rounds 60..79. See SHA1_Round1's plate.
 void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
-int __fastcall Unreferenced_00425830(int param_1, int param_2);
+int __fastcall Unreferenced_00425830(uint32_t * param_1, uint8_t * param_2);
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Transform, and filed under Storm::Source::SBig. Oracle name is the class method Sha1::Pump, PPC mangled symbol ".Pump__4Sha1FPUlPCUc" @100a2ee0 = Pump(unsigned long*, const unsigned char*). Basis: same two arguments (state array, 64-byte block), no callees in either build, and it is the sole callee of Sha1_Append/Sha1::Append. PPC body 1680 bytes vs 1339 here - both fully unrolled. NOT part of SBig: it is a client of SBig's file, not a member; module fixed to SSignature.
@@ -106,13 +112,13 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_PackTwoIntsToBytes. DESCRIPTIVE, not an oracle name. Writes 8 bytes big-endian: out[0..3] = the SECOND stack argument, out[4..7] = the first. The old parameter names (dwHighWord first) are therefore inverted with respect to the byte order it produces. This is the 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize both emit inline (cf. Sha1_Finalize's byLen0..byLen7 stack bytes and the PPC's rlwimi/stb chain at 100a2b00). Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
 uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwHighWord, uint32_t dwParam);
-void __fastcall Unreferenced_00425ee0(int param_1, int param_2);
+void __fastcall Unreferenced_00425ee0(int param_1, uint8_t * param_2);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_ModPowWrapper. DESCRIPTIVE, not an oracle name. Body = SBigPowMod(*p4, *p1, *p2, *p3) and nothing else - the middle of Crypt::RSA::Process, which the PPC emits inline. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
 struct BigData * * __thiscall SSIGNATURE_RsaPowMod(struct BigData * * ppResult, struct BigData * * ppBase, struct BigData * * ppExponent, struct BigData * * ppModulus);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_ExportBytesWithPadding. DESCRIPTIVE, not an oracle name. Body = SBigToBinaryBuffer into the caller's buffer, then zero-fill the remainder to the requested length - the exact tail of Crypt::RSA::Process. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-void * __thiscall SSIGNATURE_RsaExportZeroPadded(struct BigData * * ppBig, void * pOutBuf, uint32_t nBufLen);
+void * __thiscall SSIGNATURE_RsaExportZeroPadded(struct BigData * * ppBig, uint8_t * pOutBuf, uint32_t nBufLen);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
 void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * ppBig, void * pBytes, uint32_t nByteCount);
@@ -122,8 +128,8 @@ void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * ppBig, void * pBy
 void __thiscall CryptRSA_Prepare(struct BigData * * ppKey, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen);
 // Crypt::RSA::Process: one RSA operation in place on nDataLen bytes at pData. Loads the bytes into a BigData, computes SBigPowMod(out, in, ppKey[1] exponent, ppKey[0] modulus), writes the result back with SBigToBinaryBuffer and zero-fills any shorter tail; used for both signing (SSignatureGenerate) and verifying (SSignatureVerifyStream_Finish).
 // Provenance: 1.14d asm 004260a0; PPC Storm 1.10b symbol Process__Q25Crypt3RSAFPUcUl with the same callee set.
-void __thiscall CryptRSA_Process(struct BigData * * ppKey, void * pData, uint32_t nDataLen);
-void __fastcall SSIG_FreeBigNum_Unref_00518b80(void * * pBigNum);
+void __thiscall CryptRSA_Process(struct BigData * * ppKey, uint8_t * pData, uint32_t nDataLen);
+void __fastcall SSIG_FreeBigNum_Unref_00518b80(uint32_t * pBigNum);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ef8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9f28(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_Storm

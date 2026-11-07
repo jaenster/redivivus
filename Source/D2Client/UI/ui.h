@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2CharStatsTxt;
 struct D2UIMouseMsgStrc;
 struct D2UnitStrc;
 struct DC6;
@@ -28,30 +32,44 @@ typedef void (__stdcall *fnD2InitUIFlagFunction)(struct D2UIMouseMsgStrc * param
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2ConfigControlDescStrc
+#define D2_DEFINED_D2ConfigControlDescStrc
 struct __attribute__((packed)) D2ConfigControlDescStrc {
     /* 0x00 */ int nCmdIndex; // Command index (0x39 = separator/header row)
     /* 0x04 */ uint16_t wStrId; // Locale string ID for this control's label
     /* 0x06 */ uint8_t _pad[4]; // Padding to 10 bytes
 };
 
+#endif // D2_DEFINED_D2ConfigControlDescStrc
+#ifndef D2_DEFINED_D2QuestAreaIntroStrc
+#define D2_DEFINED_D2QuestAreaIntroStrc
 struct __attribute__((packed)) D2QuestAreaIntroStrc {
     /* 0x00 */ int nLevelId;
     /* 0x04 */ int nQuestId;
     /* 0x08 */ char szDC6Name[5];
 };
 
+#endif // D2_DEFINED_D2QuestAreaIntroStrc
+#ifndef D2_DEFINED_D2UberBossImmunityStrc
+#define D2_DEFINED_D2UberBossImmunityStrc
 struct __attribute__((packed)) D2UberBossImmunityStrc {
     /* 0x00 */ int nStat;
     /* 0x04 */ uint16_t nStringId;
     /* 0x06 */ uint32_t nColor;
 };
 
+#endif // D2_DEFINED_D2UberBossImmunityStrc
+#ifndef D2_DEFINED_D2UIFlagInitStrc
+#define D2_DEFINED_D2UIFlagInitStrc
 struct D2UIFlagInitStrc {
     /* 0x00 */ int32_t eEventType; // 0=Message, 1=Command, 2=KeyUp, 3=KeyDown
     /* 0x04 */ int32_t nMessageOrKeyCode; // Windows message ID or virtual key code
     /* 0x08 */ void (__stdcall *pfHandler)(struct D2UIMouseMsgStrc *); // Event handler callback function
 };
 
+#endif // D2_DEFINED_D2UIFlagInitStrc
+#ifndef D2_DEFINED_D2UIKeyBindingSetStrc
+#define D2_DEFINED_D2UIKeyBindingSetStrc
 struct D2UIKeyBindingSetStrc {
     /* 0x00 */ int32_t nHandlerIdx_Cmd26_Exp; // Index into pHandlers patched with the key bound to command 0x26 (expansion); -1 = absent. Default 0x1b (VK_ESCAPE)
     /* 0x04 */ int32_t nHandlerIdx_Cmd16_Exp; // Index into pHandlers patched with the key bound to command 0x16 (expansion); -1 = absent. Default 0xc0
@@ -64,6 +82,25 @@ struct D2UIKeyBindingSetStrc {
     /* 0x20 */ struct D2UIFlagInitStrc * pHandlers; // The D2UIFlagInitStrc array whose nMessageOrKeyCode fields are rewritten
 };
 
+#endif // D2_DEFINED_D2UIKeyBindingSetStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union DRAW_UI_StatWindow_I_Slotm10 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t nStatRowOffset;
+    /* 0x00 */ struct D2CharStatsTxt * pCharStatsTxt;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union UI_ShowGoldTransactionDialog_Slotm14 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int32_t nTransactionTypeSaved;
+    /* 0x00 */ void * pAllocCtx;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::UI::ui {
 
 // Function declarations
@@ -87,7 +124,6 @@ void * __fastcall MoveArgumentToEAX_Unref_00420e40(void * pParam);
 void * __fastcall MoveArgumentToEAX_Unref_00420e50(void * pParam);
 void * __fastcall MoveArgumentToEAX_Unref_00421100(void * pParam);
 void * __fastcall MoveArgumentToEAX_Unref_004269b0(void * pParam);
-void __stdcall UI_ClearCursorAnimationState_Unref_00436ac0();
 int UI_GoldInputCallback_ReturnZero_Unref_00437d10();
 void __stdcall INPUT_ClearChatMessages(struct D2UIMouseMsgStrc * pMsg);
 struct DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename);
@@ -112,7 +148,7 @@ void __stdcall UI_DrawStoredTooltip();
 void __stdcall DRAW_UI_DeathMessage();
 void __fastcall UI_DrawPlayerNameOverhead(struct D2UnitStrc * pUnit);
 void __stdcall UI_DrawPlayerStateOverlays();
-int Unreferenced_004535d0();
+void __stdcall Unreferenced_004535d0();
 void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory);
 BOOL __fastcall GetUIFlag(eD2UIvars eUI);
 int Unreferenced_00453900();
@@ -156,7 +192,7 @@ int32_t __stdcall DRAW_GetBottomPanelY();
 void __stdcall DRAW_RegisterDrawHandlers();
 void __stdcall DRAW_RefreshNpcDialog();
 uint32_t __stdcall DRAW_IsDialogActive();
-int __fastcall Unreferenced_004549d0(int param_1);
+uint32_t * __fastcall Unreferenced_004549d0(uint32_t * param_1);
 void __stdcall DRAW_MonsterUnderCursorImmunites();
 void __fastcall DRAW_MonsterHealthBar(struct D2UnitStrc * pUnit);
 // Draw UI label showing unit name/life under mouse cursor during gameplay
@@ -265,8 +301,8 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive();
 void __stdcall INPUT_GambleRepairClick(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket);
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
-BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0();
-BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0();
+void thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(struct D2UnitStrc * pUnit);
+void thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(struct D2UnitStrc * pUnit);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_6caa10();
 void StaticInit_gU16ImmunityStringBuffer1();

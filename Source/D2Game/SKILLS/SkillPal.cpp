@@ -2,22 +2,9 @@
 
 #include "Source/D2Game/SKILLS/SkillPal.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
@@ -32,12 +19,8 @@
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/ItemStats.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -570,8 +553,8 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
     D2SkillAuraArgStrc nAuraStateId;
     D2SkillAuraArgStrc nAuraTargetStateId;
     int nStatLoopIdx;
-    int* pAuraStatArr;
-    int* pAuraStatCalcArr;
+    Skills_SrvDoFunc_066_Conviction_Slotmc uSlotC;
+    Skills_SrvDoFunc_066_Conviction_Slotm8 uSlot8;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt && pSkillsTxt->aurastate >= 0 && (int)pSkillsTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       int32_t nManaCost;
@@ -583,20 +566,20 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
       nAuraStateId.nSkillLvl = nSkillLvl;
       nAuraStateId.eSkill = eSkill;
       nAuraStateId.nAuraState = (int32_t)pSkillsTxt->aurastate;
-      pAuraStatCalcArr = pSkillsTxt->passivecalc;
-      pAuraStatArr = (int*)pSkillsTxt->passivestat;
+      uSlot8.pnPassiveCalc = pSkillsTxt->passivecalc;
+      uSlotC.psValue = pSkillsTxt->passivestat;
       nStatLoopIdx = 0;
       nAuraStateId.nDelayFrame = nStatIdx;
       do {
-        nAuraStateId.anStats[nStatLoopIdx] = (int)(short int)*pAuraStatArr;
+        nAuraStateId.anStats[nStatLoopIdx] = (int)*uSlotC.psValue;
         eUnitType = D2Common::Units::GetType(pCaster);
         if (eUnitType != UNIT_PLAYER || nMana >= nManaCost) {
-          nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *pAuraStatCalcArr, eSkill, nSkillLvl);
+          nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *uSlot8.pnPassiveCalc, eSkill, nSkillLvl);
           nAuraStateId.anCalcs[nStatLoopIdx] = nCalcVal;
         }
 
-        pAuraStatArr = (int*)((int)pAuraStatArr + 2);
-        pAuraStatCalcArr++;
+        uSlotC.psValue++;
+        uSlot8.pnPassiveCalc++;
         nStatLoopIdx++;
       } while (nStatLoopIdx < 5);
 
@@ -615,13 +598,13 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
       nAuraTargetStateId.nFlag = 0;
       nAuraTargetStateId.nDelayFrame = nStatIdx;
       if (pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        pAuraStatArr = pSkillsTxt->aurastatcalc;
-        pAuraStatCalcArr = (int*)pSkillsTxt->aurastat;
+        uSlotC.pnValue = pSkillsTxt->aurastatcalc;
+        uSlot8.psAuraStat = pSkillsTxt->aurastat;
         nStatIdx = 0;
         do {
-          nAuraTargetStateId.anStats[nStatIdx] = (int)(short int)*pAuraStatCalcArr;
+          nAuraTargetStateId.anStats[nStatIdx] = (int)*uSlot8.psAuraStat;
           if (!(nMana < nManaCost)) {
-            nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *pAuraStatArr, eSkill, nSkillLvl);
+            nCalcVal = D2Common::Skills::D2GetSkillCalc(pCaster, *uSlotC.pnValue, eSkill, nSkillLvl);
             nAuraTargetStateId.anCalcs[nStatIdx] = nCalcVal;
             if (nCalcVal) {
               nAuraTargetStateId.nFlag = 1;
@@ -630,8 +613,8 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
             nAuraTargetStateId.anCalcs[nStatIdx] = 0;
           }
 
-          pAuraStatCalcArr = (int*)((int)pAuraStatCalcArr + 2);
-          pAuraStatArr++;
+          uSlot8.psAuraStat++;
+          uSlotC.pnValue++;
           nStatIdx++;
         } while (nStatIdx < 6);
       }
@@ -1441,10 +1424,10 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
       uScratch.sAura.sAuraArg.nDelayFrame = pAuraArgs[3];
       nIdx = 0;
       pSrcCalc = pAuraArgs + 10;
-      nAuraArgDelta = (uintptr_t)&uScratch + (0x20 - (int)pAuraArgs);
+      nAuraArgDelta = (intptr_t)&uScratch + (0x20 - (int)pAuraArgs);
       do {
-        *(int32_t*)((uintptr_t)&uScratch + nIdx * 4 + 0x30) = pSrcCalc[-6];
-        *(int32_t*)(nAuraArgDelta + (int)pSrcCalc) = *pSrcCalc;
+        *(int32_t*)((intptr_t)&uScratch + nIdx * 4 + 0x30) = pSrcCalc[-6];
+        *(int32_t*)(nAuraArgDelta + (char*)pSrcCalc) = *pSrcCalc;
         nIdx++;
         pSrcCalc++;
       } while (nIdx < 6);
@@ -1490,8 +1473,8 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
     D2DamageStrc damageData;
     D2SkillAuraArgStrc nAuraSelfState;
     D2SkillAuraArgStrc nAuraTargetState;
-    int* pPassiveStatIter;
-    int* pPassiveCalcIter;
+    Skills_SrvDoFunc_081_HolyFreeze_Slotmc uSlotC;
+    Skills_SrvDoFunc_081_HolyFreeze_Slotm8 uSlot8;
     eD2Skills eSkill_00 = eSkill;
     pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillRecord && pSkillRecord->aurastate >= 0 && (int)pSkillRecord->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
@@ -1504,21 +1487,21 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
       nAuraSelfState.nSkillLvl = nSkillLvl;
       nAuraSelfState.eSkill = eSkill;
       nAuraSelfState.nAuraState = (int32_t)pSkillRecord->aurastate;
-      pPassiveStatIter = pSkillRecord->passivecalc;
-      pPassiveCalcIter = (int*)pSkillRecord->passivestat;
+      uSlotC.pnPassiveCalc = pSkillRecord->passivecalc;
+      uSlot8.psValue = pSkillRecord->passivestat;
       nAuraSelfState.pExtra = (void*)SKILLPAL_OnFreezeExpire;
       eSkill = SKILL_Attack;
       nAuraSelfState.nDelayFrame = nStateDelayFrame;
       do {
-        nAuraSelfState.anStats[eSkill] = (int)(short int)*pPassiveCalcIter;
+        nAuraSelfState.anStats[eSkill] = (int)*uSlot8.psValue;
         eUnitType = D2Common::Units::GetType(pUnit);
         if (eUnitType != UNIT_PLAYER || nMana >= nManaCost) {
-          nTmp = D2Common::Skills::D2GetSkillCalc(pUnit, *pPassiveStatIter, eSkill_00, nSkillLvl);
+          nTmp = D2Common::Skills::D2GetSkillCalc(pUnit, *uSlotC.pnPassiveCalc, eSkill_00, nSkillLvl);
           nAuraSelfState.anCalcs[eSkill] = nTmp;
         }
 
-        pPassiveCalcIter = (int*)((int)pPassiveCalcIter + 2);
-        pPassiveStatIter++;
+        uSlot8.psValue++;
+        uSlotC.pnPassiveCalc++;
         eSkill += SKILL_Kick;
       } while ((int)eSkill < 5);
 
@@ -1535,21 +1518,21 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
       nAuraTargetState.nAuraState = (int32_t)pSkillRecord->auratargetstate;
       nAuraTargetState.nDelayFrame = nStateDelayFrame;
       if (pSkillRecord->auratargetstate >= 0 && (int)pSkillRecord->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        pPassiveCalcIter = pSkillRecord->aurastatcalc;
-        pPassiveStatIter = (int*)pSkillRecord->aurastat;
+        uSlot8.pnValue = pSkillRecord->aurastatcalc;
+        uSlotC.psAuraStat = pSkillRecord->aurastat;
         eSkill = SKILL_Attack;
         do {
-          nAuraTargetState.anStats[eSkill] = (int)(short int)*pPassiveStatIter;
+          nAuraTargetState.anStats[eSkill] = (int)*uSlotC.psAuraStat;
           if (nMana >= nManaCost) {
-            nTmp = D2Common::Skills::D2GetSkillCalc(pUnit, *pPassiveCalcIter, eSkill_00, nSkillLvl);
+            nTmp = D2Common::Skills::D2GetSkillCalc(pUnit, *uSlot8.pnValue, eSkill_00, nSkillLvl);
             nAuraTargetState.anCalcs[eSkill] = nTmp;
             if (nTmp) {
               nAuraTargetState.nFlag = 1;
             }
           }
 
-          pPassiveStatIter = (int*)((int)pPassiveStatIter + 2);
-          pPassiveCalcIter++;
+          uSlotC.psAuraStat++;
+          uSlot8.pnValue++;
           eSkill += SKILL_Kick;
         } while ((int)eSkill < 6);
       }

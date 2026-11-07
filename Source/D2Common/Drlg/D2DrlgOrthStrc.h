@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,6 +20,8 @@ struct D2DrlgLevelStrc;
 struct D2RoomExStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgOrthLinkUnion
+#define D2_DEFINED_D2DrlgOrthLinkUnion
 union D2DrlgOrthLinkUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -24,6 +29,9 @@ union D2DrlgOrthLinkUnion {
     /* 0x00 */ struct D2DrlgLevelStrc * pLevel; // nType==0: linked level
 };
 
+#endif // D2_DEFINED_D2DrlgOrthLinkUnion
+#ifndef D2_DEFINED_D2DrlgOrthStrc
+#define D2_DEFINED_D2DrlgOrthStrc
 struct __attribute__((packed)) D2DrlgOrthStrc {
     /* 0x00 */ D2DrlgOrthLinkUnion pLink; // Linked level (nType==0) or room (nType==1)
     /* 0x04 */ eDrlgDirection neDrlgDirection;
@@ -32,3 +40,5 @@ struct __attribute__((packed)) D2DrlgOrthStrc {
     /* 0x10 */ struct D2DrlgCoordsStrc * psCoordinatesAndSize; // Points to sCoordinatesAndSize of linked level or sCoords of linked room
     /* 0x14 */ struct D2DrlgOrthStrc * pNext; // Next node in linked list
 };
+
+#endif // D2_DEFINED_D2DrlgOrthStrc

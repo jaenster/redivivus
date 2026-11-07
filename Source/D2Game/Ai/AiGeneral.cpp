@@ -3,12 +3,10 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -390,10 +388,10 @@ void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
 
 void __fastcall GetMonsterNameAndAi(D2UnitStrc * pUnit, uint32_t * pMonsterName, int * pMonsterAi) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
-      D2UnitDataMonsterStrc* pMonsterData = !pUnit->pUnitData.pUnitDataMonster ? 0 : (D2UnitDataMonsterStrc*)pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      if (pMonsterData->pAiGeneral) {
-        *pMonsterName = (uint32_t)d2_bits_of(pMonsterData->pPathParamOrName);
-        *pMonsterAi = (int)pMonsterData->pMonsterAi;
+      D2AiGeneralStrc* pMonsterData = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+      if (pMonsterData->pGame) {
+        *pMonsterName = pMonsterData->nOwnerGUIDEx;
+        *pMonsterAi = pMonsterData->eOwnerTypeEx;
         return;
       }
     }

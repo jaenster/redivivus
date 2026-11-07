@@ -3,24 +3,8 @@
 #include "Source/D2Game/SKILLS/SkillMonst.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
@@ -37,10 +21,7 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 
@@ -521,7 +502,7 @@ BOOL __fastcall Skills_SrvDoFunc_088_FireMissileFromBodyPart(::SGAMEDATA * pGame
       nFrameIdx = 8;
     }
 
-    byBodyPartIdx = *(uint8_t*)((uint32_t)(byBodyPartIdx & 7) * 9 + (int)((char*)&BYTE_ARRAY_006e3138 + 8) + nFrameIdx);
+    byBodyPartIdx = *(uint8_t*)((uint32_t)(byBodyPartIdx & 7) * 9 + (char*)((char*)&BYTE_ARRAY_006e3138 + 8) + nFrameIdx);
     _local_1c = (uint32_t)((uint32_t)((uint32_t)uStack_1b & 0xffffffu) << 8 | (uint32_t)(uint8_t)byBodyPartIdx);
     if (byBodyPartIdx != 99) {
       D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(byBodyPartIdx, &nOffsetX, &nOffsetY);
@@ -1504,8 +1485,8 @@ BOOL __fastcall Skills_SrvDoFunc_099_FireMissileRing8Dir(::SGAMEDATA * pGame, D2
 
       nDirIndex = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex);
-        sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex);
+        sSkillArg.nUnitX = *(int*)((char*)gnSkillMissileCount_FireRing + nDirIndex);
+        sSkillArg.nUnitY = *(int*)((char*)gnSkillMissileCount_FireOrb + nDirIndex);
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         nDirIndex += 8;
       } while (nDirIndex < 0x40);
@@ -1517,8 +1498,8 @@ BOOL __fastcall Skills_SrvDoFunc_099_FireMissileRing8Dir(::SGAMEDATA * pGame, D2
 
       nDirIndex = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex + 4);
-        sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex + 4);
+        sSkillArg.nUnitX = *(int*)((char*)gnSkillMissileCount_FireRing + nDirIndex + 4);
+        sSkillArg.nUnitY = *(int*)((char*)gnSkillMissileCount_FireOrb + nDirIndex + 4);
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         nDirIndex += nMissileCount * 4;
       } while (nDirIndex < 0x3c);

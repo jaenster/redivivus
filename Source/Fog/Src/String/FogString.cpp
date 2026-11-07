@@ -2,8 +2,7 @@
 
 #include "Source/Fog/Src/String/FogString.h"
 #include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/SMem.data.h"
 
@@ -188,7 +187,7 @@ uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, size_t n
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x100);
         exit(-1);
       } else {
-        if (!((int)(pbWrite2 + (1 - (int)pbDst)) <= (int)nBufSize)) {
+        if (!((intptr_t)(pbWrite2 + (1 - (int)pbDst)) <= (int)nBufSize)) {
           ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x101);
           exit(-1);
         }

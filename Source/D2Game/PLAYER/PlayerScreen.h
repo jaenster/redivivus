@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,17 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2ServerIncomingStatus;
 
+// Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2PartyJoinArgsStrc {
+    /* 0x00 */ struct D2UnitStrc * pInvitee;
+    /* 0x04 */ struct D2UnitStrc * pInviter;
+    /* 0x08 */ uint16_t nPartyId;
+    /* 0x0A */ uint8_t field_0xa;
+    /* 0x0B */ uint8_t field_0xb;
+};
+
+#endif // D2_MODULE_D2Game
 namespace D2Game::PLAYER::PlayerScreen {
 
 // Function declarations
@@ -28,7 +42,7 @@ void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, struct 
 void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);
 void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pPartyJoinArgs);
+void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PartyJoinArgsStrc * pPartyJoinArgs);
 // Processes acceptance of a party invite between pUnit (acceptor) and pInvitee (inviter). Allocates bidirectional player-list entries, checks PLAYERLIST_IsPartied result: if not fully partied sends 0x8B relationship packets and returns. Otherwise allocates a new party (if invitee has none) or joins the existing one via PARTY_AddUnitToParty, refreshes all relationship states, sends a join event (bParam=8) to acceptor's client, and iterates all units to assign them to the party.
 void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2);
 // @wasnamed PARTYSCREEN_AcceptPartyInvite - one name on two different functions.

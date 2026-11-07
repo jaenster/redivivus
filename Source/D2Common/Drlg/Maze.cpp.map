@@ -79,6 +79,10 @@
       "namespace": "D2Common::Drlg::Maze",
       "calledFunctions": [
         "DRLGMAZE_FindAndReplacePreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc"
       ]
     },
     {
@@ -899,6 +903,7 @@
       "usedTypes": [
         "D2DrlgLevelLinkNodeStrc",
         "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
         "eLvlTypes",
         "uint32_t"
       ]

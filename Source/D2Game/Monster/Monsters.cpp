@@ -4,26 +4,10 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UI/SkillDesc.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
-#include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
@@ -33,20 +17,17 @@
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Monster/MonsterRegion.h"
 #include "Source/D2Game/Monsters/Spawn.h"
 #include "Source/D2Game/Monsters/Umod.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/Monster/Monsters.data.h"
 #include "Source/D2Game/SKILLS/SkillSor.h"
 
@@ -471,12 +452,12 @@ int Unreferenced_005a0030() {
     return D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize;
 }
 
-int __fastcall Unreferenced_005a0040(int param_1) {
+D2MonUModTxt * __fastcall Unreferenced_005a0040(int param_1) {
     if (param_1 >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize) {
-      return 0;
+      return nullptr;
     }
 
-    return (int)(D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + param_1);
+    return D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod + param_1;
 }
 
 int Unreferenced_005a0060() {
@@ -538,16 +519,16 @@ void __fastcall MONSTER_SetMonsterDataFlags(D2UnitStrc * pUnit, uint16_t nFlagMa
       return;
     }
 
-    int pMonDataPtr = *(int*)&pUnit->pUnitData;
+    D2UnitDataMonsterStrc* pMonDataPtr = pUnit->pUnitData.pUnitDataMonster;
     if (!pMonDataPtr) {
       return;
     }
     if (nFlagValue) {
-      *(uint16_t*)(pMonDataPtr + 0x16) |= nFlagMask;
+      pMonDataPtr->eMonsterType |= nFlagMask;
       return;
     }
 
-    *(uint16_t*)(pMonDataPtr + 0x16) &= ~nFlagMask;
+    pMonDataPtr->eMonsterType &= ~nFlagMask;
 }
 
 // 2022.01.09 - dzik
@@ -615,7 +596,7 @@ static void __stdcall SetUniqueMonsterType(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     eD2LevelId eLevel = Monster::GetMonsterArea(pUnit);
     D2MonsterRegionStrc* pMonRegion = Monster::MonsterRegion::ReturnMonsterRegionEntryForLevel(pGame->pMonsterRegion, eLevel);
-    if (pMonRegion && (pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer || !(*(uint8_t*)((int)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 8))) {
+    if (pMonRegion && (pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer || !(*(uint8_t*)((char*)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 8))) {
       pMonRegion->dwUniqueCount++;
     }
     if (!(pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
@@ -760,7 +741,7 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
     int nTxtSizeSaved = nTxtSize;
     do {
       uint32_t nCpickWeight;
-      wCpick = *(uint16_t*)((int)pUmodEntry->cpick + aCandidateTable[0x200] - 0xe);
+      wCpick = *(uint16_t*)((char*)pUmodEntry->cpick + aCandidateTable[0x200] - 0xe);
       nCpickWeight = (uint32_t)wCpick;
       if ((short int)wCpick > 0 && pUmodEntry->champion != '\0') {
         _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, nExpansion, pUnit);
@@ -837,7 +818,7 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
       if (nPickIdx > 0) {
         nCpickOffset = (uint32_t)byDifficulty * 2 + 0x14;
         do {
-          wCpick = *(uint16_t*)((int)pUmodEntry->cpick + nCpickOffset - 0xe);
+          wCpick = *(uint16_t*)((char*)pUmodEntry->cpick + nCpickOffset - 0xe);
           nCpickWeight = (uint32_t)wCpick;
           if ((short int)wCpick > 0 && pUmodEntry->champion == '\0') {
             _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, nExpansion, pUnit);
@@ -977,7 +958,7 @@ void __thiscall MONSTER_RollAndAssignUMods(D2UnitStrc * pThis, ::SGAMEDATA * pGa
 // Copies transferable MonUMod enchantments from pSrcUnit to pDstUnit's MonUModList. If bAppend is false, finds the first empty slot in the destination list; if true, starts at slot 0. Only copies entries where the MonUModTxt xfer flag is set. Silently exits if either unit is not a valid monster with unit data. Used when spawning minions to inherit boss enchantments.
 static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pDstUnit, BOOL bAppend, D2UnitStrc * pSrcUnit) {
     uint8_t* pSrcEnchants;
-    D2WaypointStrc** nDstOffset;
+    uint8_t* nDstOffset;
     uint8_t* pDstSlot;
     uint8_t byUmodId;
     if (!pSrcUnit || pSrcUnit->eUnitType != UNIT_MONSTER || !pSrcUnit->pUnitData.pUnitDataMonster) {
@@ -988,9 +969,9 @@ static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pDstUnit, BOOL b
     if (!pDstUnit || pDstUnit->eUnitType != UNIT_MONSTER || !pDstUnit->pUnitData.pUnitDataPlayer) {
       nDstOffset = 0;
     } else {
-      nDstOffset = pDstUnit->pUnitData.pUnitDataPlayer->pWaypoint;
+      nDstOffset = (uint8_t*)pDstUnit->pUnitData.pUnitDataPlayer->pWaypoint;
     }
-    if (!(pSrcEnchants && nDstOffset)) {
+    if (!(pSrcEnchants && (D2WaypointStrc**)nDstOffset)) {
       return;
     }
 
@@ -999,7 +980,7 @@ static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pDstUnit, BOOL b
     if (!bAppend) {
       nSlot = 0;
       do {
-        if (*(char*)(nSlot + (int)nDstOffset) == '\0') {
+        if (*(char*)(nSlot + (char*)nDstOffset) == '\0') {
           goto copy_xfer_umods;
         }
 
@@ -1010,7 +991,7 @@ static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pDstUnit, BOOL b
     }
 
     copy_xfer_umods:
-    pDstSlot = (uint8_t*)((int)nDstOffset + nSlot);
+    pDstSlot = (uint8_t*)((char*)nDstOffset + nSlot);
     D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     for (; nSlot < 9 && (byUmodId = *pSrcEnchants , byUmodId != 0) && (int)(uint32_t)byUmodId < pDataTable->nTxtMonUmodSize && pDataTable->pTxtMonUmod + byUmodId; pSrcEnchants++) {
       if (pDataTable->pTxtMonUmod[byUmodId].xfer != '\0') {
@@ -1113,7 +1094,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
     BOOL bSetOwner;
     eD2UnitType eUnitType;
     uint16_t* pMonType;
-    if (!(!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer || !(*(uint8_t*)((int)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 4))) {
+    if (!(!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer || !(*(uint8_t*)((char*)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 4))) {
       return;
     }
 
@@ -1176,7 +1157,7 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nMinionCountMin, D
 
       Ai::AiGeneral::CallForEachMinion(pUnit, pContext, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);
       pEnchantEntry++;
-    } while ((int)pEnchantEntry < (intptr_t)((char*)&gnEnchantmentEffectOffset_Lightning + sizeof(gnEnchantmentEffectOffset_Lightning)));
+    } while ((intptr_t)pEnchantEntry < (intptr_t)((char*)&gnEnchantmentEffectOffset_Lightning + sizeof(gnEnchantmentEffectOffset_Lightning)));
 
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -1340,7 +1321,7 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
         }
       }
 
-      pAttacker = (D2UnitStrc*)((uintptr_t)&pAttacker[-1].pMsgLast + 3);
+      pAttacker = (D2UnitStrc*)((intptr_t)&pAttacker[-1].pMsgLast + 3);
     } while (pAttacker);
 }
 
@@ -2116,8 +2097,8 @@ void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, D2UnitStrc * 
         nPosY = 0;
       }
 
-      nDirX = *(int*)((int)anOffsetTable + nDirY + 0x10);
-      nDirY = *(int*)((int)anOffsetTable + nDirY);
+      nDirX = *(int*)((char*)anOffsetTable + nDirY + 0x10);
+      nDirY = *(int*)((char*)anOffsetTable + nDirY);
       nMissileSpawnIdx = 0;
       do {
         sSkillArg.nFunctionParam = nMissileSpawnIdx;
@@ -2261,7 +2242,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
     }
 
     nClassId = D2Common::DATATBLS::ItemStats::STATES_HasPassiveState(pUnit);
-    if (!(!nClassId && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer || !(*(uint8_t*)((int)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 8)))) {
+    if (!(!nClassId && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer || !(*(uint8_t*)((char*)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 8)))) {
       return;
     }
 
@@ -2669,7 +2650,7 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer) {
       nSecurityCookie = 0;
     } else {
-      nSecurityCookie = *(uint8_t*)((int)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) >> 3 & 1;
+      nSecurityCookie = *(uint8_t*)((char*)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) >> 3 & 1;
     }
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -3455,7 +3436,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       next_element:
       __frame0.pElChance += 3;
       pElMode = __frame0.pElModeCur + 1;
-      if ((int)(pElMode + __frame0.bExpansion) >= 3) {
+      if ((intptr_t)(pElMode + __frame0.bExpansion) >= 3) {
         return;
       }
     } while (true);

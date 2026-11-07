@@ -3,8 +3,7 @@
 #include "Source/D2Common/DATATBLS/BeltsTbls.h"
 #include "Source/D2Client/UI/Panel.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/Excel.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -123,7 +122,7 @@ void __stdcall GetBeltsLine(int32_t nIndex, int32_t bHigherRes, D2BeltsTxt * pRe
     uint8_t byPadByte1;
     uint8_t byPadByte2;
     if (!(pTxtBelts + nIndex)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
       exit(-1);
     }
 
@@ -144,15 +143,15 @@ void __stdcall GetBeltsLine(int32_t nIndex, int32_t bHigherRes, D2BeltsTxt * pRe
 void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_t * pInvRect, int32_t nBoxId) {
     D2BeltsEntryStrc* pBeltEntry;
     if (!pTxtBelts) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
       exit(-1);
     } else if (!(pTxtBelts + bHigherRes * 7 + nIndex)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
       exit(-1);
     } else {
       pBeltEntry = pTxtBelts[bHigherRes * 7 + nIndex].beltBoxes + nBoxId;
       if (!pBeltEntry) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
         exit(-1);
       }
 

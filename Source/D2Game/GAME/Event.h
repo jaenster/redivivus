@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -2623,6 +2626,8 @@ struct D2EventControlStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2EventEntryStrc
+#define D2_DEFINED_D2EventEntryStrc
 struct __attribute__((packed)) D2EventEntryStrc {
     /* 0x00 */ eD2TimerType nTimerType; // type of timer, varies between unit types
     /* 0x01 */ uint8_t pad_0x1;
@@ -2640,6 +2645,9 @@ struct __attribute__((packed)) D2EventEntryStrc {
     /* 0x2C */ void (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *);
 };
 
+#endif // D2_DEFINED_D2EventEntryStrc
+#ifndef D2_DEFINED_D2TimerStrc
+#define D2_DEFINED_D2TimerStrc
 struct __attribute__((packed)) D2TimerStrc {
     /* 0x00 */ eD2TimerType nTimerType; // the type of the timer, this varies between unit types
     /* 0x01 */ uint8_t field_0x1;
@@ -2657,12 +2665,16 @@ struct __attribute__((packed)) D2TimerStrc {
     /* 0x2C */ void (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
 };
 
+#endif // D2_DEFINED_D2TimerStrc
+#ifndef D2_DEFINED_D2EventStrc
+#define D2_DEFINED_D2EventStrc
 struct __attribute__((packed)) D2EventStrc {
     /* 0x0000 */ D2EventEntryStrc aEvents[600];
     /* 0x7080 */ struct D2EventStrc * pNext;
     /* 0x7084 */ struct D2EventStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D2EventStrc
 namespace D2Game::GAME::Event {
 
 // Function declarations

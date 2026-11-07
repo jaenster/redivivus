@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -24,12 +27,12 @@ void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * 
 void __stdcall DrawLight();
 void __stdcall VIEW_Init();
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps);
-void __fastcall Unreferenced_00475c30(int param_1);
+void __fastcall Unreferenced_00475c30(LPVOID param_1);
 // Allocates a (nDim × nDim × (nSteps+1)) pointer table via D2MEM_VirtualAlloc and fills it with pointers into gPaletteTransitionTable for each interpolated palette entry. Used to build lighting/palette blend lookup tables for the game view renderer. Returns the base pointer of the allocated table.
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSteps);
-void __fastcall Unreferenced_00475d20(int param_1);
+void __fastcall Unreferenced_00475d20(LPVOID param_1);
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps);
-void __fastcall Unreferenced_00475de0(int param_1);
+void __fastcall Unreferenced_00475de0(LPVOID param_1);
 void __stdcall VIEW_InitLookupTables();
 void __stdcall VIEW_FreeDC6Images();
 // Frees all five global palette lookup tables (gpViewPalPointerTable32x8, gpViewPalByteTable32x16, gpViewPalByteTable16x32, gpViewPalPointerTable32x32, gpViewPalByteTable32x40) via D2MEM_VirtualFree, NULLs them, resets gnSoundShakeVolume to 0, and calls VIEW_FreeDC6Images. Halts with an internal error if any table is NULL while an earlier one is not.
@@ -46,6 +49,7 @@ void __fastcall GAMEVIEW_PrepareScene(struct D2GameViewStrc * pGameView, uint32_
 void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespawn);
 // Renders the animated star-field overlay used in the Arcane Sanctuary. On first call, seeds a PRNG from SHAKE_StartTickcount, generates 8 brightness-graduated palette entries into gaArcaneStarColorTable, then calls VIEW_GenerateRandomViewParams for each of the 256 stars. Each frame, draws all 256 stars as single-pixel lines using D2GFX_DrawLine. Every 40 ms (tick delta > 0x28), advances each star's X position by its velocity; stars that fall off-screen are re-randomised via VIEW_GenerateRandomViewParams.
 void __stdcall DRAW_Overlay_ArcaneStars();
+void __stdcall RENDERER_TogglePerspective_Unref_004769b0();
 void __fastcall SetShake(int32_t nAmplitude, int32_t nArg3, int32_t nArg1, int32_t nArg2);
 BOOL __fastcall SHAKE_GetShake(int * pShakeX, int * pShakeY);
 void __stdcall SHAKE_Reset();

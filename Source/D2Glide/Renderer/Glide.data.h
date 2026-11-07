@@ -7,6 +7,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Glide)
 #error "D2Glide header included by a module that may not use D2Glide (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Glide) && !defined(D2_LOADS_D2Glide)
+#error "internal D2Glide header included from another module; include D2Glide's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Headers/d2_platform.h"
 
@@ -16,6 +19,7 @@ struct GlFloorCacheNodeStrc;
 struct GlFloorCacheStrc;
 struct GlSubtileCacheNodeStrc;
 struct GlSubtileCacheStrc;
+struct GlTextureCacheNodeStrc;
 typedef FxBool (__stdcall *grLfbLock)(GrLock_t type, GrBuffer_t buffer, GrLfbWriteMode_t writeMode, GrOriginLocation_t origin, FxBool pixelPipeline, GrLfbInfo_t * info);
 typedef FxBool (__stdcall *grLfbUnlock)(GrLock_t type, GrBuffer_t buffer);
 typedef FxU32 (__stdcall *grGet)(FxU32 pname, FxU32 plength, FxI32 * params);
@@ -65,7 +69,6 @@ extern uint32_t gnGlideColorCombineMode;
 extern uint32_t gnGlideAlphaBlendMode;
 extern uint32_t gnGlideTextureFilteringMode;
 extern uint32_t gbGlideInScene;
-extern uint32_t gbGlidePerspectiveMode;
 extern D2GlideVertexTexCacheBlockStrc gGlideVertex0;
 extern uint32_t gaGlideColorDebugGradientIndices[1024];
 
@@ -97,7 +100,7 @@ extern uint32_t gaGlideDebugFontTexStartAddrs[96];
 extern void * lpBuffer_008802c8[96];
 extern void * gpGlideDebugFontTexture;
 extern uint32_t gnGlideDebugFontTMU;
-extern int * gpnLightmapRowPointers;
+extern uint8_t * * gpnLightmapRowPointers;
 // @data gapGlideGroundStripVertexPtrs
 // @wasnamed gapGlideTileVertexPtrs
 // @evidence Built at runtime by 0050d646 and consumed by the loop at 0050daf8,
@@ -111,7 +114,7 @@ extern uint8_t * gpGlideLightingTable;
 extern int gnGlidePerspectiveOriginX;
 extern int32_t gnGlidePerspectiveScale;
 extern int gnGlidePerspectiveOriginY;
-extern void * gpPerspectiveLookupTable;
+extern int32_t * gpPerspectiveLookupTable;
 extern uint8_t (*gpGlideSmackerTexBuf0)[32768];
 extern uint8_t (*gpGlideSmackerTexBuf1)[32768];
 extern uint32_t gnGlideSmackTex1StartAddr;

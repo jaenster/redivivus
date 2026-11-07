@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,8 @@
 #include "Source/Fog/D2PoolManagerStrc.h"
 
 // Data types
+#ifndef D2_DEFINED_D2MemoryManagerStrc
+#define D2_DEFINED_D2MemoryManagerStrc
 struct __attribute__((packed)) D2MemoryManagerStrc {
     /* 0x0000 */ BOOL bInit;
     /* 0x0004 */ CRITICAL_SECTION pSync;
@@ -21,3 +26,5 @@ struct __attribute__((packed)) D2MemoryManagerStrc {
     /* 0xBE80 */ size_t nManagerIndex[8];
     /* 0xBEA0 */ size_t nFreeManagerIndex;
 };
+
+#endif // D2_DEFINED_D2MemoryManagerStrc

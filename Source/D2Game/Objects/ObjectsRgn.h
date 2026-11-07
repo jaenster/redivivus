@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,13 +25,38 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
 
+struct D2ObjectRngStrc;
+
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union AllocObjectControl_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2ObjectRngStrc * * ppLevelRngIter;
+    /* 0x00 */ struct D2ObjectRngShrines * pShrinesRngIter;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union AllocObjectControl_Slotmc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct SGAMEDATA * pGameSaved;
+    /* 0x00 */ int32_t nShrineClassIdxLoop;
+};
+
+#endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2ObjectControlSub0x1110
+#define D2_DEFINED_D2ObjectControlSub0x1110
 struct __attribute__((packed)) D2ObjectControlSub0x1110 {
     /* 0x00 */ struct D2RoomStrc * pRoom;
     /* 0x04 */ POINT sCoords;
     /* 0x0C */ struct D2ObjectControlSub0x1110 * pPrev;
 };
 
+#endif // D2_DEFINED_D2ObjectControlSub0x1110
+#ifndef D2_DEFINED_D2ObjectRngStrc
+#define D2_DEFINED_D2ObjectRngStrc
 struct __attribute__((packed)) D2ObjectRngStrc {
     /* 0x00 */ uint8_t nAct; // Act number from LevelsTxt
     /* 0x01 */ uint8_t pad_0x1[3];
@@ -43,6 +71,7 @@ struct __attribute__((packed)) D2ObjectRngStrc {
     /* 0x40 */ POINT aPoints1[10]; // Object placement positions
 };
 
+#endif // D2_DEFINED_D2ObjectRngStrc
 namespace D2Game::Objects::ObjectsRgn {
 
 // Function declarations

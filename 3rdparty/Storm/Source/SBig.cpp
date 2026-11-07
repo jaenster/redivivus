@@ -7,7 +7,6 @@
 #include "3rdparty/Storm/Source/SSTR.h"
 #include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/WindowHandle.h"
 #include "3rdparty/Storm/Source/SSystem.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -98,28 +97,28 @@ static void BigBuffer_DecodeDataBytes(uint32_t * pnReadPos, uint8_t * pBuffer, u
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Body is 'return this->m_data + nIndex*4', identical to the oracle's .__vc__15TSBaseArray<Ui>FUi @1009b390. operator[](Ui) on the dword element array.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-int32_t __thiscall TSBaseArray_Ui_Subscript(int32_t pThis, int32_t nIndex) {
-    return *(int*)(pThis + 8) + nIndex * 4;
+uint32_t * __thiscall TSBaseArray_Ui_Subscript(TSGrowableArray_Ui * pThis, int32_t nIndex) {
+    return pThis->pData + nIndex;
 }
 
 // @was SBIG_DynArray_GetLastElement (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Identical body to the oracle's .Top__15TSBaseArray<Ui>Fv @1009c580 - last element, i.e. m_data + (m_count-1)*4.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-int32_t __fastcall TSBaseArray_Ui_Top(int32_t pArray) {
-    if (*(int*)(pArray + 4)) {
-      return *(int*)(pArray + 8) - 4 + *(int*)(pArray + 4) * 4;
+uint32_t * __fastcall TSBaseArray_Ui_Top(BigBuffer * pArray) {
+    if (pArray->nCount) {
+      return pArray->pData + (pArray->nCount - 1);
     }
 
-    return 0;
+    return nullptr;
 }
 
 // @was SBIG_BitSet_GetWordAtOffset (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Same body as .__vc__15TSBaseArray<Ui>FUi @1009b390 with element scale 1 instead of 4. operator[](Ui) on a byte array.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-int32_t __thiscall TSBaseArray_Uc_Subscript(BigBuffer * pThis, int32_t nOffset) {
-    return (int)pThis->pData + nOffset;
+uint8_t * __thiscall TSBaseArray_Uc_Subscript(TSGrowableArray_Uc * pThis, int32_t nOffset) {
+    return pThis->pData + nOffset;
 }
 
 // @was SBIG_BitSet_GetDataPtr (pass 6, 2026.08.28)
@@ -152,24 +151,20 @@ BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor(BigBuffer * pBitSet) {
     return pBitSet;
 }
 
-int __fastcall Unreferenced_00421050(int param_1, int param_2) {
-    int in_EAX;
-    if (param_1) {
-      in_EAX = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)param_2);
-      *(uint8_t*)param_1 = *(uint8_t*)param_2;
+void __fastcall Unreferenced_00421050(uint8_t * pDst, uint8_t * pSrc) {
+    if (!pDst) {
+      return;
     }
 
-    return in_EAX;
+    *pDst = *pSrc;
 }
 
-int __fastcall Unreferenced_00421090(int param_1, int param_2) {
-    int in_EAX;
-    if (param_1) {
-      in_EAX = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)param_2);
-      *(uint8_t*)param_1 = *(uint8_t*)param_2;
+void __fastcall Unreferenced_00421090(uint8_t * pDst, uint8_t * pSrc) {
+    if (!pDst) {
+      return;
     }
 
-    return in_EAX;
+    *pDst = *pSrc;
 }
 
 // @was SBIG_BitSet_RoundUpPow2_Max64 (pass 6, 2026.08.28)
@@ -208,14 +203,14 @@ uint32_t __stdcall TSGrowableArray_Ui_RoundToChunk(uint32_t nValue, uint32_t nMu
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @oracle-negative Pass 6: NOT a TS* method. This is the flag-0 realloc fragment that the oracle inlines inside operator=, outlined here by MSVC, and it has ZERO callers. There is no oracle method name for it, so the descriptive name Resize was kept rather than upgraded. Do not map it onto ReallocData - that is 004216e0.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall SBIG_DynArray_Resize(int * pArray, int32_t nNewCount) {
-    *pArray = nNewCount;
-    if (!((uint32_t*)pArray[2] || nNewCount)) {
+void __thiscall SBIG_DynArray_Resize(TSGrowableArray_Ui * pArray, int32_t nNewCount) {
+    pArray->nCapacity = nNewCount;
+    if (!(pArray->pData || nNewCount)) {
       return;
     }
 
-    uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray[2], nNewCount * 4, s__I_00708874, -2, 0);
-    pArray[2] = (int)pNewBuffer;
+    uint32_t* pNewBuffer = SMem::SMemReAlloc(pArray->pData, nNewCount * 4, s__I_00708874, -2, 0);
+    pArray->pData = pNewBuffer;
 }
 
 uint32_t * __fastcall SBIG_BigBuffer_GetDataPtr_Unref_00421150(BigBuffer * pBitSet) {
@@ -318,22 +313,18 @@ uint32_t __stdcall TSGrowableArray_UcAlt_RoundToChunk(uint32_t nValue, uint32_t 
     return nValue;
 }
 
-int __fastcall Unreferenced_004212a0(int param_1, int param_2) {
-    int in_EAX;
-    if (param_1) {
-      in_EAX = *(int*)param_2;
-      *(int*)param_1 = in_EAX;
+void __fastcall Unreferenced_004212a0(uint32_t * pDst, uint32_t * pSrc) {
+    if (!pDst) {
+      return;
     }
 
-    return in_EAX;
+    *pDst = *pSrc;
 }
 
-int __fastcall Unreferenced_004212c0(int param_1, int param_2) {
-    uint32_t in_EAX;
-    uint8_t uVar1 = *(uint8_t*)param_1;
-    *(uint8_t*)param_1 = *(uint8_t*)param_2;
-    *(uint8_t*)param_2 = uVar1;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)in_EAX >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)uVar1);
+void __fastcall Unreferenced_004212c0(uint8_t * pA, uint8_t * pB) {
+    uint8_t uVar1 = *pA;
+    *pA = *pB;
+    *pB = uVar1;
 }
 
 // @was SBIG_BitSet_GetWord (pass 6, 2026.08.28)
@@ -372,21 +363,21 @@ int32_t __stdcall BigBuffer_Compare(BigBuffer * pBitSetA, BigBuffer * pBitSetB) 
 
         nWordA = 0;
       } else {
-        nWordA = *(int*)(nByteOffsetA + (int)pBitSetA->pData);
+        nWordA = *(int*)(nByteOffsetA + (char*)pBitSetA->pData);
       }
       if (nIndexB < nCountB) {
-        nWordB = *(int*)(nByteOffsetB + (int)pBitSetB->pData);
+        nWordB = *(int*)(nByteOffsetB + (char*)pBitSetB->pData);
       } else {
         nWordB = 0;
       }
       if (nWordA != nWordB) {
         if (nIndexA < pBitSetA->nCount) {
-          uWordA = *(uint32_t*)(nByteOffsetA + (int)pBitSetA->pData);
+          uWordA = *(uint32_t*)(nByteOffsetA + (char*)pBitSetA->pData);
         } else {
           uWordA = 0;
         }
         if (nIndexB < nCountB) {
-          uWordB = *(uint32_t*)(nByteOffsetB + (int)pBitSetB->pData);
+          uWordB = *(uint32_t*)(nByteOffsetB + (char*)pBitSetB->pData);
         } else {
           uWordB = 0;
         }
@@ -421,7 +412,7 @@ int32_t __stdcall SBIG_BigBuffer_FindHighestBit(BigBuffer * pBitSet) {
       nSlot--;
       nByteOffset += -4;
       nWordIndex--;
-      if (nSlot < nCount && *(int*)(nByteOffset + (int)pBitSet->pData)) {
+      if (nSlot < nCount && *(int*)(nByteOffset + (char*)pBitSet->pData)) {
         uMask = 0x80000000;
         nBit = 0x20;
         do {
@@ -480,7 +471,7 @@ int32_t __stdcall SBIG_BigBuffer_FindLowestBit(BigBuffer * pBitSet) {
     int nByteOffset = nWordIndex * 4;
     uint32_t nSlot = 0;
     do {
-      if (nWordIndex < nCount && *(int*)(nByteOffset + (int)pBitSet->pData)) {
+      if (nWordIndex < nCount && *(int*)(nByteOffset + (char*)pBitSet->pData)) {
         uMask = 1;
         nBit = 0;
         do {
@@ -537,20 +528,20 @@ void __thiscall SBIG_ArrayDwordReadAtCursor(uint32_t dwUnused, BigBuffer * pBigN
     SBIG_BigBuffer_GetFirstWord(pOutWord, pBigNum);
 }
 
-void __fastcall TSFixedArray_Ui_Destructor_Unref_00421570(void * pArray) {
-    if (!*(void**)((int)pArray + 8)) {
+void __fastcall TSFixedArray_Ui_Destructor_Unref_00421570(TSGrowableArray_Ui * pArray) {
+    if (!pArray->pData) {
       return;
     }
 
-    SMem::SMemFree(*(void**)((int)pArray + 8), s__I_00708874, -2, 0);
+    SMem::SMemFree(pArray->pData, s__I_00708874, -2, 0);
 }
 
-void __fastcall TSFixedArray_Ui_Destructor_Unref_00421590(void * pArray) {
-    if (!*(void**)((int)pArray + 8)) {
+void __fastcall TSFixedArray_Ui_Destructor_Unref_00421590(TSGrowableArray_Ui * pArray) {
+    if (!pArray->pData) {
       return;
     }
 
-    SMem::SMemFree(*(void**)((int)pArray + 8), s__E_00708880, -2, 0);
+    SMem::SMemFree(pArray->pData, s__E_00708880, -2, 0);
 }
 
 uint32_t * __fastcall SBIG_BigBuffer_GetDataPtr_Unref_004215b0(BigBuffer * pBitSet) {
@@ -612,56 +603,55 @@ void __thiscall TSGrowableArray_Uc_Reserve(uint32_t * pArray, int32_t nAdditiona
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @oracle-negative Pass 6: NOT a TS* method. Same flag-0 realloc fragment as 00421110, byte instantiation (SMem tag 0x708880), ZERO callers. No oracle name available; descriptive name kept.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall SBIG_ArrayByteSetCapacity(int * pArray, int32_t nCapacity) {
-    *pArray = nCapacity;
-    if (!((uint32_t*)pArray[2] || nCapacity)) {
+void __thiscall SBIG_ArrayByteSetCapacity(TSGrowableArray_Uc * pArray, int32_t nCapacity) {
+    pArray->nCapacity = nCapacity;
+    if (!((uint32_t*)pArray->pData || nCapacity)) {
       return;
     }
 
-    uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray[2], nCapacity, s__E_00708880, -2, 0);
-    pArray[2] = (int)pNewBuffer;
+    uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCapacity, s__E_00708880, -2, 0);
+    pArray->pData = (uint8_t*)pNewBuffer;
 }
 
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @oracle-negative Pass 6: NOT a TS* method. Same flag-0 realloc fragment as 00421110, second byte instantiation (SMem tag 0x70888c), ZERO callers. No oracle name available; descriptive name kept.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall SBIG_ArrayByteAltSetCapacity(int * pArray, int32_t nCapacity) {
-    *pArray = nCapacity;
-    if (!((uint32_t*)pArray[2] || nCapacity)) {
+void __thiscall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int32_t nCapacity) {
+    pArray->nCapacity = nCapacity;
+    if (!((uint32_t*)pArray->pData || nCapacity)) {
       return;
     }
 
-    uint32_t* pRealloced = SMem::SMemReAlloc((uint32_t*)pArray[2], nCapacity, s__D_0070888c, -2, 0);
-    pArray[2] = (int)pRealloced;
+    uint32_t* pRealloced = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCapacity, s__D_0070888c, -2, 0);
+    pArray->pData = (uint8_t*)pRealloced;
 }
 
 // @was SBIG_ArrayDwordRealloc (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacity) {
+void __thiscall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, uint32_t nCapacity) {
     uint32_t nIndex;
-    uint32_t* pOldBuffer = (uint32_t*)pArray[2];
-    *pArray = nCapacity;
+    uint32_t* pOldBuffer = pArray->pData;
+    pArray->nCapacity = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
-    pArray[2] = (uint32_t)pNewBuffer;
+    pArray->pData = pNewBuffer;
     if (pNewBuffer) {
       return;
     }
 
-    void* pFallbackBuffer = SMem::SMemAlloc(nCapacity * 4, s__I_00708874, -2, 0);
-    pArray[2] = (uint32_t)pFallbackBuffer;
+    uint32_t* pFallbackBuffer = (uint32_t*)SMem::SMemAlloc(nCapacity * 4, s__I_00708874, -2, 0);
+    pArray->pData = pFallbackBuffer;
     if (!pOldBuffer) {
       return;
     }
-    if (nCapacity >= pArray[1]) {
-      nCapacity = pArray[1];
+    if (nCapacity >= pArray->nCount) {
+      nCapacity = pArray->nCount;
     }
 
     for (nIndex = 0; nIndex < nCapacity; nIndex++) {
-      pNewBuffer = (uint32_t*)(pArray[2] + nIndex * 4);
-      if (pNewBuffer) {
-        *pNewBuffer = pOldBuffer[nIndex];
+      if (pArray->pData + nIndex) {
+        pArray->pData[nIndex] = pOldBuffer[nIndex];
       }
     }
 
@@ -672,40 +662,40 @@ void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacit
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Identical to TSFixedArray_Uc_ReallocData 004211c0; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSFixedArray_UcAlt_ReallocData(uint32_t * pArray, uint32_t nCapacity) {
+void __thiscall TSFixedArray_UcAlt_ReallocData(TSGrowableArray_Uc * pArray, uint32_t nCapacity) {
     uint32_t nIndex;
-    uint32_t* pOldBuffer = (uint32_t*)pArray[2];
-    *pArray = nCapacity;
-    uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity, s__D_0070888c, -2, 0x10);
-    pArray[2] = (uint32_t)pNewBuffer;
+    uint8_t* pOldBuffer = pArray->pData;
+    pArray->nCapacity = nCapacity;
+    uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity, s__D_0070888c, -2, 0x10);
+    pArray->pData = (uint8_t*)pNewBuffer;
     if (pNewBuffer) {
       return;
     }
 
-    void* pFallbackBuffer = SMem::SMemAlloc(nCapacity, s__D_0070888c, -2, 0);
-    pArray[2] = (uint32_t)pFallbackBuffer;
+    uint8_t* pFallbackBuffer = (uint8_t*)SMem::SMemAlloc(nCapacity, s__D_0070888c, -2, 0);
+    pArray->pData = pFallbackBuffer;
     if (!pOldBuffer) {
       return;
     }
-    if (nCapacity >= pArray[1]) {
-      nCapacity = pArray[1];
+    if (nCapacity >= pArray->nLen) {
+      nCapacity = pArray->nLen;
     }
 
     for (nIndex = 0; nIndex < nCapacity; nIndex++) {
-      if ((uint8_t*)(pArray[2] + nIndex)) {
-        *(uint8_t*)(pArray[2] + nIndex) = *(uint8_t*)(nIndex + (int)pOldBuffer);
+      if (pArray->pData + nIndex) {
+        pArray->pData[nIndex] = pOldBuffer[nIndex];
       }
     }
 
     SMem::SMemFree(pOldBuffer, s__D_0070888c, -2, 0);
 }
 
-void __fastcall TSFixedArray_Ui_Destructor_Unref_004217f0(void * pArray) {
-    if (!*(void**)((int)pArray + 8)) {
+void __fastcall TSFixedArray_Ui_Destructor_Unref_004217f0(TSGrowableArray_Ui * pArray) {
+    if (!pArray->pData) {
       return;
     }
 
-    SMem::SMemFree(*(void**)((int)pArray + 8), s__I_00708874, -2, 0);
+    SMem::SMemFree(pArray->pData, s__I_00708874, -2, 0);
 }
 
 // @was SBIG_ArrayDwordFreeBuffer (pass 6, 2026.08.28)
@@ -713,24 +703,22 @@ void __fastcall TSFixedArray_Ui_Destructor_Unref_004217f0(void * pArray) {
 // @oracle-method PLAUSIBLE. Frees the m_data pointer at +8 and nothing else. Its only xrefs are MSVC exception-unwind funclets, which is where a destructor is referenced from.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSFixedArray_Ui_Destructor(void * pArray) {
-    if (!*(void**)((int)pArray + 8)) {
+    if (!*(void**)((char*)pArray + 8)) {
       return;
     }
 
-    SMem::SMemFree(*(void**)((int)pArray + 8), s__I_00708874, -2, 0);
+    SMem::SMemFree(*(void**)((char*)pArray + 8), s__I_00708874, -2, 0);
 }
 
-int __fastcall Unreferenced_00421830(int param_1) {
-    int extraout_EAX;
-    _eh_vector_destructor_iterator_((void*)param_1, 0x14, 0x10, TSFixedArray_Ui_Destructor);
-    return extraout_EAX;
+void __fastcall Unreferenced_00421830(void * pArray) {
+    _eh_vector_destructor_iterator_(pArray, 0x14, 0x10, TSFixedArray_Ui_Destructor);
 }
 
-int __fastcall Unreferenced_00421860(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *(uint32_t*)(param_1 + 0xc) = 0;
+uint32_t * __fastcall Unreferenced_00421860(uint32_t * param_1) {
+    *param_1 = 0;
+    param_1[1] = 0;
+    param_1[2] = 0;
+    param_1[3] = 0;
     return param_1;
 }
 
@@ -740,7 +728,7 @@ int __fastcall Unreferenced_00421860(int param_1) {
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void * __thiscall TSFixedArray_Ui_Assign(uint32_t * pArray, void * pSrcArray) {
     if (pArray != (unsigned int*)pSrcArray) {
-      TSBaseArray_Ui_Copy(pArray, *(uint32_t*)((int)pSrcArray + 4), *(uint32_t**)((int)pSrcArray + 8));
+      TSBaseArray_Ui_Copy(pArray, *(uint32_t*)((char*)pSrcArray + 4), *(uint32_t**)((char*)pSrcArray + 8));
     }
 
     return pArray;
@@ -757,11 +745,11 @@ int __fastcall Unreferenced_004218a0(int param_1) {
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @oracle-negative Pass 6 examined this: no oracle symbol corresponds to it. The existing descriptive name matches what the body does and was kept unchanged rather than forced onto a TS* method name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-int32_t __thiscall SBIG_ArrayByteAppendData(uint32_t * pArray, uint32_t nCount, uint8_t * pSrc) {
-    uint32_t nGranularity;
-    uint32_t nNewSize = pArray[1] + nCount;
-    if (nNewSize > *pArray) {
-      nGranularity = pArray[3];
+int32_t __thiscall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, uint32_t nCount, uint8_t * pSrc) {
+    uint32_t nNewSize = pArray->nLen + nCount;
+    if (nNewSize > pArray->nCapacity) {
+      uint32_t nGranularity;
+      nGranularity = pArray->nGrowStep;
       if (!nGranularity) {
         nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nNewSize);
       }
@@ -769,25 +757,23 @@ int32_t __thiscall SBIG_ArrayByteAppendData(uint32_t * pArray, uint32_t nCount, 
         nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
       }
 
-      TSFixedArray_Uc_ReallocData((TSGrowableArray_Uc*)pArray, nNewSize);
+      TSFixedArray_Uc_ReallocData(pArray, nNewSize);
     }
 
-    nGranularity = 0;
+    uint32_t uVar1 = 0;
     if (nCount > 0) {
-      uint8_t* pSlot;
       do {
-        pSlot = (uint8_t*)(pArray[2] + nGranularity + pArray[1]);
-        if (pSlot) {
-          *pSlot = *pSrc;
+        if (pArray->pData + pArray->nLen + uVar1) {
+          pArray->pData[pArray->nLen + uVar1] = *pSrc;
         }
 
-        nGranularity++;
+        uVar1++;
         pSrc++;
-      } while (nGranularity < nCount);
+      } while (uVar1 < nCount);
     }
 
-    pArray[1] += nCount;
-    return pArray[1] - nCount;
+    pArray->nLen += nCount;
+    return pArray->nLen - nCount;
 }
 
 // @was SBIG_ArrayByteAppendSlot (pass 6, 2026.08.28)
@@ -842,26 +828,26 @@ void __thiscall TSGrowableArray_Uc_SetCount(uint32_t * pArray, uint32_t nNewCoun
 // @note Thunk onto SBIG_ArrayByteAppendData 004218b0. Pass 6 found no oracle counterpart; name kept.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 void __thiscall SBIG_ArrayByteAppendByte(uint32_t * pArray, uint8_t * pByte) {
-    SBIG_ArrayByteAppendData(pArray, 1, pByte);
+    SBIG_ArrayByteAppendData((TSGrowableArray_Uc*)pArray, 1, pByte);
 }
 
 // @was SBIG_ArrayByteAssignFromData (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE. Same body as TSBaseArray_Ui_Copy 004215c0 with element scale 1. SMem tag 0x708880.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSBaseArray_Uc_Copy(uint32_t * pArray, uint32_t nCount, uint8_t * pSrc) {
-    *pArray = nCount;
-    if ((uint32_t*)pArray[2] || nCount) {
+void __thiscall TSBaseArray_Uc_Copy(TSGrowableArray_Uc * pArray, uint32_t nCount, uint8_t * pSrc) {
+    pArray->nCapacity = nCount;
+    if ((uint32_t*)pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray[2], nCount, s__E_00708880, -2, 0);
-      pArray[2] = (uint32_t)pNewBuffer;
+      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__E_00708880, -2, 0);
+      pArray->pData = (uint8_t*)pNewBuffer;
     }
 
     uint32_t nIndex = 0;
     if (nCount > 0) {
       do {
-        if ((uint8_t*)(pArray[2] + nIndex)) {
-          *(uint8_t*)(pArray[2] + nIndex) = *pSrc;
+        if (pArray->pData + nIndex) {
+          pArray->pData[nIndex] = *pSrc;
         }
 
         nIndex++;
@@ -869,26 +855,26 @@ void __thiscall TSBaseArray_Uc_Copy(uint32_t * pArray, uint32_t nCount, uint8_t 
       } while (nIndex < nCount);
     }
 
-    pArray[1] = nCount;
+    pArray->nLen = nCount;
 }
 
 // @was SBIG_ArrayByteAltAssignFromData (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE. Same body as 004219f0; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSBaseArray_UcAlt_Copy(uint32_t * pArray, uint32_t nCount, uint8_t * pSrc) {
-    *pArray = nCount;
-    if ((uint32_t*)pArray[2] || nCount) {
+void __thiscall TSBaseArray_UcAlt_Copy(TSGrowableArray_Uc * pArray, uint32_t nCount, uint8_t * pSrc) {
+    pArray->nCapacity = nCount;
+    if ((uint32_t*)pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray[2], nCount, s__D_0070888c, -2, 0);
-      pArray[2] = (uint32_t)pNewBuffer;
+      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__D_0070888c, -2, 0);
+      pArray->pData = (uint8_t*)pNewBuffer;
     }
 
     uint32_t nIndex = 0;
     if (nCount > 0) {
       do {
-        if ((uint8_t*)(pArray[2] + nIndex)) {
-          *(uint8_t*)(pArray[2] + nIndex) = *pSrc;
+        if (pArray->pData + nIndex) {
+          pArray->pData[nIndex] = *pSrc;
         }
 
         nIndex++;
@@ -896,7 +882,7 @@ void __thiscall TSBaseArray_UcAlt_Copy(uint32_t * pArray, uint32_t nCount, uint8
       } while (nIndex < nCount);
     }
 
-    pArray[1] = nCount;
+    pArray->nLen = nCount;
 }
 
 // @was SBIG_ArrayDwordEnsureAdditional (pass 6, 2026.08.28)
@@ -919,21 +905,21 @@ void __thiscall TSGrowableArray_Ui_Reserve(uint32_t * pArray, int32_t nAdditiona
       }
     }
 
-    TSFixedArray_Ui_ReallocData(pArray, nNewSize);
+    TSFixedArray_Ui_ReallocData((BigBuffer*)pArray, nNewSize);
 }
 
 // @was SBIG_ArrayByteAltEnsureAdditional (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Same structure as 00421630; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSGrowableArray_UcAlt_Reserve(uint32_t * pArray, int32_t nAdditional, int32_t bAlignToGranularity) {
-    uint32_t nNewSize = nAdditional + pArray[1];
-    if (nNewSize <= *pArray) {
+void __thiscall TSGrowableArray_UcAlt_Reserve(TSGrowableArray_Uc * pArray, int32_t nAdditional, int32_t bAlignToGranularity) {
+    uint32_t nNewSize = nAdditional + pArray->nLen;
+    if (nNewSize <= pArray->nCapacity) {
       return;
     }
     if (bAlignToGranularity) {
       uint32_t nGranularity;
-      nGranularity = pArray[3];
+      nGranularity = pArray->nGrowStep;
       if (!nGranularity) {
         nGranularity = TSGrowableArray_UcAlt_CalcChunkSize((BigBuffer*)pArray, nNewSize);
       }
@@ -949,12 +935,12 @@ void __thiscall TSGrowableArray_UcAlt_Reserve(uint32_t * pArray, int32_t nAdditi
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED, and verified by hand this pass. Body is 'if (this != &src) Copy(src.m_count, src.m_data); this->m_chunk = src.m_chunk; return this'. The trailing chunk-field copy after the element copy is present ONLY in the oracle's .__as__ @100395e0 and is what identifies operator= rather than a plain copy helper. Its call to 004215c0 is also what establishes that function as TSBaseArray::Copy.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void * __thiscall TSGrowableArray_Ui_Assign(uint32_t * pDest, void * pSource) {
-    if (pDest != (unsigned int*)pSource) {
-      TSBaseArray_Ui_Copy(pDest, *(uint32_t*)((int)pSource + 4), *(uint32_t**)((int)pSource + 8));
+void * __thiscall TSGrowableArray_Ui_Assign(uint32_t * pDest, TSGrowableArray_Ui * pSource) {
+    if ((TSGrowableArray_Ui*)pDest != pSource) {
+      TSBaseArray_Ui_Copy(pDest, pSource->nLen, pSource->pData);
     }
 
-    pDest[3] = *(uint32_t*)((int)pSource + 0xc);
+    pDest[3] = pSource->nGrowStep;
     return pDest;
 }
 
@@ -1067,7 +1053,7 @@ void __stdcall BigBuffer_ToBinaryAppend(TSGrowableArray_Uc * pByteBuffer, BigBuf
 // BigBuffer = {+0 nCapacity, +4 nCount, +8 pData, +0xc nGrowStep, +0x10 nStartWord}; Count() = nCount - nStartWord (PPC oracle .Count__9BigBuffer).
 // Provenance: asm 00421d80; the PPC Storm has no destructor symbol to confirm the name.
 void __fastcall BigData_Destructor(BigData * pBigData) {
-    pfnEHHandlerRoutine pEhHandler = D2Client::WindowHandle::__GSHandlerCheck_EH_6c9f58;
+    pfnEHHandlerRoutine pEhHandler = __GSHandlerCheck_EH_6c9f58;
     void* pExceptionList = ExceptionList;
     ExceptionList = &pExceptionList;
     uint8_t* pObject = pBigData->sOutBuffer.pData;
@@ -1124,7 +1110,7 @@ void __thiscall SBIG_EnsureCapacity(BigBuffer * pDwordArray, uint32_t nIndex, in
         nNewCapacity = nGranularity - nValue % nGranularity + nValue;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDwordArray->nCapacity, nNewCapacity);
+      TSFixedArray_Ui_ReallocData(pDwordArray, nNewCapacity);
     }
     if (bZeroFill) {
       SMem::SMemZero(pDwordArray->pData + pDwordArray->nCount, (nIndex - pDwordArray->nCount) * 4 + 4);
@@ -1151,17 +1137,17 @@ void __thiscall TSGrowableArray_Ui_SetCount(BigBuffer * pDwordArray, uint32_t nN
         nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDwordArray->nCapacity, nNewCapacity);
+      TSFixedArray_Ui_ReallocData(pDwordArray, nNewCapacity);
     }
 
     pDwordArray->nCount = nNewLen;
 }
 
-int32_t __thiscall SBIG_AppendBytes(uint32_t * pByteArray, uint32_t nByteCount, uint8_t * pSrcBytes) {
-    uint32_t i;
-    uint32_t nNewLen = pByteArray[1] + nByteCount;
-    if (nNewLen > *pByteArray) {
-      i = pByteArray[3];
+int32_t __thiscall SBIG_AppendBytes(TSGrowableArray_Uc * pByteArray, uint32_t nByteCount, uint8_t * pSrcBytes) {
+    uint32_t nNewLen = pByteArray->nLen + nByteCount;
+    if (nNewLen > pByteArray->nCapacity) {
+      uint32_t i;
+      i = pByteArray->nGrowStep;
       if (!i) {
         i = TSGrowableArray_UcAlt_CalcChunkSize((BigBuffer*)pByteArray, nNewLen);
       }
@@ -1172,22 +1158,20 @@ int32_t __thiscall SBIG_AppendBytes(uint32_t * pByteArray, uint32_t nByteCount, 
       TSFixedArray_UcAlt_ReallocData(pByteArray, nNewLen);
     }
 
-    i = 0;
+    uint32_t uVar1 = 0;
     if (nByteCount > 0) {
-      uint8_t* pDst;
       do {
-        pDst = (uint8_t*)(pByteArray[2] + i + pByteArray[1]);
-        if (pDst) {
-          *pDst = *pSrcBytes;
+        if (pByteArray->pData + pByteArray->nLen + uVar1) {
+          pByteArray->pData[pByteArray->nLen + uVar1] = *pSrcBytes;
         }
 
-        i++;
+        uVar1++;
         pSrcBytes++;
-      } while (i < nByteCount);
+      } while (uVar1 < nByteCount);
     }
 
-    pByteArray[1] += nByteCount;
-    return pByteArray[1] - nByteCount;
+    pByteArray->nLen += nByteCount;
+    return pByteArray->nLen - nByteCount;
 }
 
 void __thiscall SBIG_GrowToIndex(BigBuffer * pDwordArray, int32_t nIndex) {
@@ -1210,16 +1194,16 @@ void __thiscall SBIG_GrowToIndex(BigBuffer * pDwordArray, int32_t nIndex) {
         nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDwordArray->nCapacity, nNewCapacity);
+      TSFixedArray_Ui_ReallocData(pDwordArray, nNewCapacity);
     }
 
     SMem::SMemZero(pDwordArray->pData + pDwordArray->nCount, (nTargetIndex - pDwordArray->nCount) * 4 + 4);
     pDwordArray->nCount = nNewLen;
 }
 
-int32_t __thiscall SBIG_GetPtrAtOffset(BigBuffer * pBigNum, int32_t nIndex) {
+uint32_t * __thiscall SBIG_GetPtrAtOffset(BigBuffer * pBigNum, int32_t nIndex) {
     SBIG_GrowToIndex(pBigNum, nIndex);
-    return (int32_t)(pBigNum->pData + pBigNum->nStartWord + nIndex);
+    return pBigNum->pData + pBigNum->nStartWord + nIndex;
 }
 
 void __fastcall SBIG_TrimToOffset(BigBuffer * pDwordArray) {
@@ -1237,7 +1221,7 @@ void __fastcall SBIG_TrimToOffset(BigBuffer * pDwordArray) {
         nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDwordArray->nCapacity, nNewCapacity);
+      TSFixedArray_Ui_ReallocData(pDwordArray, nNewCapacity);
     }
 
     pDwordArray->nCount = nNewLen;
@@ -1258,7 +1242,7 @@ void __thiscall SBIG_GrowToIndexNoZero(BigBuffer * pDwordArray, int32_t nIndex) 
         nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDwordArray->nCapacity, nNewCapacity);
+      TSFixedArray_Ui_ReallocData(pDwordArray, nNewCapacity);
     }
 
     pDwordArray->nCount = nNewLen;
@@ -1282,8 +1266,8 @@ void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
     }
 
     do {
-      int* pTopLimb;
-      pTopLimb = (int*)TSBaseArray_Ui_Top((int32_t)pDwordArray);
+      uint32_t* pTopLimb;
+      pTopLimb = TSBaseArray_Ui_Top(pDwordArray);
       if (*pTopLimb) {
         return;
       }
@@ -1300,20 +1284,20 @@ void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
           nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
         }
 
-        TSFixedArray_Ui_ReallocData(&pDwordArray->nCapacity, nNewCapacity);
+        TSFixedArray_Ui_ReallocData(pDwordArray, nNewCapacity);
       }
 
       pDwordArray->nCount = nNewLen;
     } while (nNewLen != pDwordArray->nStartWord);
 }
 
-void * __thiscall SBIG_CopyAssign(uint32_t * pDest, void * pSource) {
-    if (pDest != (unsigned int*)pSource) {
-      TSBaseArray_Ui_Copy(pDest, *(uint32_t*)((int)pSource + 4), *(uint32_t**)((int)pSource + 8));
+void * __thiscall SBIG_CopyAssign(uint32_t * pDest, BigBuffer * pSource) {
+    if ((BigBuffer*)pDest != pSource) {
+      TSBaseArray_Ui_Copy(pDest, pSource->nCount, pSource->pData);
     }
 
-    pDest[3] = *(uint32_t*)((int)pSource + 0xc);
-    pDest[4] = *(uint32_t*)((int)pSource + 0x10);
+    pDest[3] = pSource->nGrowStep;
+    pDest[4] = pSource->nStartWord;
     return pDest;
 }
 
@@ -1351,7 +1335,7 @@ static void __stdcall BigBuffer_Add_Ui(uint32_t nCarry, BigBuffer * pSource, Big
             nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
 
-          TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nNewCapacity);
+          TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
         }
 
         SMem::SMemZero(pDest->pData + pDest->nCount, (nDestIndex - pDest->nCount) * 4 + 4);
@@ -1373,7 +1357,7 @@ static void __stdcall BigBuffer_Add_Ui(uint32_t nCarry, BigBuffer * pSource, Big
         nGranularity = nNewLen - nDestIndex % nNewLen + nDestIndex;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nGranularity);
+      TSFixedArray_Ui_ReallocData(pDest, nGranularity);
     }
 
     pDest->nCount = nDestIndex;
@@ -1421,7 +1405,7 @@ static void __stdcall BigBuffer_Add(BigBuffer * pSourceA, BigBuffer * pSourceB, 
             nNewCapacity = nGranularity - nWordB % nGranularity + nWordB;
           }
 
-          TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nNewCapacity);
+          TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
         }
 
         SMem::SMemZero(pDest->pData + pDest->nCount, (nDestIndex - pDest->nCount) * 4 + 4);
@@ -1443,7 +1427,7 @@ static void __stdcall BigBuffer_Add(BigBuffer * pSourceA, BigBuffer * pSourceB, 
         nGranularity = nWordB - nDestIndex % nWordB + nDestIndex;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nGranularity);
+      TSFixedArray_Ui_ReallocData(pDest, nGranularity);
     }
 
     pDest->nCount = nDestIndex;
@@ -1477,7 +1461,7 @@ static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, 
               nGranularity = nNewLen - nWordIndex % nNewLen + nWordIndex;
             }
 
-            TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nGranularity);
+            TSFixedArray_Ui_ReallocData(pDest, nGranularity);
           }
 
           pDest->nCount = nWordIndex;
@@ -1514,7 +1498,7 @@ static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, 
             nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
 
-          TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nNewCapacity);
+          TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
         }
 
         SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex - pDest->nCount) * 4 + 4);
@@ -1564,7 +1548,7 @@ static void __stdcall BigBuffer_Div_Ux(uint32_t * pRemainderOut, BigBuffer * pDi
         nGranularity = nGranOrHi - nRemainder % nGranOrHi + nRemainder;
       }
 
-      TSFixedArray_Ui_ReallocData(&pQuotient->nCapacity, nGranularity);
+      TSFixedArray_Ui_ReallocData(pQuotient, nGranularity);
     }
 
     pQuotient->nCount = nRemainder;
@@ -1596,7 +1580,7 @@ static void __stdcall BigBuffer_Div_Ux(uint32_t * pRemainderOut, BigBuffer * pDi
             nNewCapacity = nGranularity - nGranOrHi % nGranularity + nGranOrHi;
           }
 
-          TSFixedArray_Ui_ReallocData(&pQuotient->nCapacity, nNewCapacity);
+          TSFixedArray_Ui_ReallocData(pQuotient, nNewCapacity);
         }
 
         SMem::SMemZero(pQuotient->pData + pQuotient->nCount, (nRemainder - pQuotient->nCount) * 4 + 4);
@@ -1690,7 +1674,7 @@ static void __stdcall BigBuffer_Mul_Ux(BigBuffer * pSource, uint32_t nMultiplier
             nNewCapacity = nGranularity - nNeededLen % nGranularity + nNeededLen;
           }
 
-          TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nNewCapacity);
+          TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
         }
 
         SMem::SMemZero(pDest->pData + pDest->nCount, (nAbsIndex - pDest->nCount) * 4 + 4);
@@ -1712,7 +1696,7 @@ static void __stdcall BigBuffer_Mul_Ux(BigBuffer * pSource, uint32_t nMultiplier
         nNeededLen = nAbsIndex - nCarry % nAbsIndex + nCarry;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nNeededLen);
+      TSFixedArray_Ui_ReallocData(pDest, nNeededLen);
     }
 
     pDest->nCount = nCarry;
@@ -1751,7 +1735,7 @@ static void __stdcall BigBuffer_Not(BigBuffer * pSource, BigBuffer * pDest) {
               nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
             }
 
-            TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nNewCapacity);
+            TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
           }
 
           SMem::SMemZero(pDest->pData + pDest->nCount, (nAbsIndex - pDest->nCount) * 4 + 4);
@@ -1778,7 +1762,7 @@ static void __stdcall BigBuffer_Not(BigBuffer * pSource, BigBuffer * pDest) {
         nGranularity = nNewLen - nAbsIndex % nNewLen + nAbsIndex;
       }
 
-      TSFixedArray_Ui_ReallocData(&pDest->nCapacity, nGranularity);
+      TSFixedArray_Ui_ReallocData(pDest, nGranularity);
     }
 
     pDest->nCount = nAbsIndex;
@@ -1812,7 +1796,7 @@ static void __stdcall BigBuffer_Or(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffer
               nAlignedCount = nChunkSize - nIndex % nChunkSize + nIndex;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
           }
 
           pResult->nCount = nIndex;
@@ -1849,7 +1833,7 @@ static void __stdcall BigBuffer_Or(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffer
             nAlignedCount2 = nAlignedCount - nChunkSize % nAlignedCount + nChunkSize;
           }
 
-          TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount2);
+          TSFixedArray_Ui_ReallocData(pResult, nAlignedCount2);
         }
 
         SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
@@ -1886,7 +1870,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
               nAlignedCount = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
           }
 
           SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
@@ -1914,7 +1898,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
           nAlignedCount = nChunkSize2 - nChunkSize % nChunkSize2 + nChunkSize;
         }
 
-        TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+        TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
       }
 
       SMem::SMemZero(pResult->pData + pResult->nCount, (nNeededCount - pResult->nCount) * 4 + 4);
@@ -1934,7 +1918,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
         nChunkSize = nNeededCount - nIndex % nNeededCount + nIndex;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nChunkSize);
+      TSFixedArray_Ui_ReallocData(pResult, nChunkSize);
     }
 
     pResult->nCount = nIndex;
@@ -1958,7 +1942,7 @@ static void BigBuffer_SetOne(BigBuffer * pResult) {
         nAlignedCount = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+      TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
     }
 
     pResult->nCount = nNeededCount;
@@ -1984,7 +1968,7 @@ static void BigBuffer_SetZero(BigBuffer * pResult) {
         nAlignedCount = nChunkSize - nValue % nChunkSize + nValue;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+      TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
     }
 
     pResult->nCount = nValue;
@@ -2047,7 +2031,7 @@ static void __stdcall BigBuffer_Shl(BigBuffer * pSrc, BigBuffer * pResult, uint3
               nAlignedCount = nChunkSize - nNeededLen % nChunkSize + nNeededLen;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
           }
 
           SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
@@ -2071,7 +2055,7 @@ static void __stdcall BigBuffer_Shl(BigBuffer * pSrc, BigBuffer * pResult, uint3
         i = nWordShift - nResultCount % nWordShift + nResultCount;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, i);
+      TSFixedArray_Ui_ReallocData(pResult, i);
     }
 
     pResult->nCount = nResultCount;
@@ -2126,7 +2110,7 @@ static void __stdcall BigBuffer_Shr(BigBuffer * pSrc, BigBuffer * pResult, uint3
               nAlignedCount = nChunkSize - nIndex % nChunkSize + nIndex;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
           }
 
           SMem::SMemZero(pResult->pData + pResult->nCount, (nSrcCount - pResult->nCount) * 4 + 4);
@@ -2152,7 +2136,7 @@ static void __stdcall BigBuffer_Shr(BigBuffer * pSrc, BigBuffer * pResult, uint3
         nIndex = nWordShift - nSrcCount % nWordShift + nSrcCount;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nIndex);
+      TSFixedArray_Ui_ReallocData(pResult, nIndex);
     }
 
     pResult->nCount = nSrcCount;
@@ -2200,7 +2184,7 @@ static void __stdcall BigBuffer_Sub_Ui(BigBuffer * pSrc, BigBuffer * pResult, ui
               nAlignedCount = nChunkSize - nSrcOffset % nChunkSize + nSrcOffset;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
           }
 
           SMem::SMemZero(pResult->pData + pResult->nCount, (nSrcCount - pResult->nCount) * 4 + 4);
@@ -2227,7 +2211,7 @@ static void __stdcall BigBuffer_Sub_Ui(BigBuffer * pSrc, BigBuffer * pResult, ui
         nAccumLo = nSrcOffset - nSrcCount % nSrcOffset + nSrcCount;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAccumLo);
+      TSFixedArray_Ui_ReallocData(pResult, nAccumLo);
     }
 
     pResult->nCount = nSrcCount;
@@ -2264,7 +2248,7 @@ static void __stdcall BigBuffer_Sub(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
               nChunkSize = dwRhsWord - dwLhsWord % dwRhsWord + dwLhsWord;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nChunkSize);
+            TSFixedArray_Ui_ReallocData(pResult, nChunkSize);
           }
 
           pResult->nCount = dwLhsWord;
@@ -2308,7 +2292,7 @@ static void __stdcall BigBuffer_Sub(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
             nAlignedCount = nChunkSize - dwRhsWord % nChunkSize + dwRhsWord;
           }
 
-          TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+          TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
         }
 
         SMem::SMemZero(pResult->pData + pResult->nCount, (dwLhsWord - pResult->nCount) * 4 + 4);
@@ -2348,7 +2332,7 @@ static void __stdcall BigBuffer_Xor(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
               nAlignedCount = nChunkSize - nIndex % nChunkSize + nIndex;
             }
 
-            TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+            TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
           }
 
           pResult->nCount = nIndex;
@@ -2385,7 +2369,7 @@ static void __stdcall BigBuffer_Xor(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
             nAlignedCount2 = nAlignedCount - nChunkSize % nAlignedCount + nChunkSize;
           }
 
-          TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount2);
+          TSFixedArray_Ui_ReallocData(pResult, nAlignedCount2);
         }
 
         SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
@@ -2419,7 +2403,7 @@ static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount
         nAlignedCount = nWordIndex - nByteInWord % nWordIndex + nByteInWord;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+      TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
     }
 
     pResult->nCount = nByteInWord;
@@ -2430,7 +2414,7 @@ static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount
 
     do {
       uint32_t dwCurWord;
-      byValue = *(uint8_t*)(i + (int)pSrcBytes);
+      byValue = *(uint8_t*)(i + (char*)pSrcBytes);
       nWordIndex = i >> 2;
       nByteInWord = i & 3;
       if (nByteInWord) {
@@ -2454,7 +2438,7 @@ static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount
             nAlignedCount2 = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
           }
 
-          TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount2);
+          TSFixedArray_Ui_ReallocData(pResult, nAlignedCount2);
         }
 
         SMem::SMemZero(pResult->pData + pResult->nCount, (nAlignedCount - pResult->nCount) * 4 + 4);
@@ -2516,7 +2500,7 @@ static void __stdcall BigBuffer_FromUnsigned(uint32_t dwValue, BigBuffer * pResu
           nAlignedCount = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
         }
 
-        TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nAlignedCount);
+        TSFixedArray_Ui_ReallocData(pResult, nAlignedCount);
       }
 
       SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
@@ -2536,7 +2520,7 @@ static void __stdcall BigBuffer_FromUnsigned(uint32_t dwValue, BigBuffer * pResu
         nChunkSize = nNeededCount - nIndex % nNeededCount + nIndex;
       }
 
-      TSFixedArray_Ui_ReallocData(&pResult->nCapacity, nChunkSize);
+      TSFixedArray_Ui_ReallocData(pResult, nChunkSize);
     }
 
     pResult->nCount = nIndex;
@@ -2832,11 +2816,11 @@ void __stdcall SBigSub(BigData * pResult, BigData * pBigA, BigData * pBigB) {
 void __stdcall SBigToBinaryArray(BigData * pBigData, void * pDestArray, int32_t bAppend) {
     BigBuffer_ToBinary(&pBigData->sPrimary, &pBigData->sOutBuffer);
     if (bAppend) {
-      SBIG_ArrayByteAppendData((uint32_t*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
+      SBIG_ArrayByteAppendData((TSGrowableArray_Uc*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
       return;
     }
 
-    TSBaseArray_Uc_Copy((uint32_t*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
+    TSBaseArray_Uc_Copy((TSGrowableArray_Uc*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
 }
 
 // @renamed-from SBIG_ExportBytesLimited (2026-08-28, Storm PowerPC oracle pass 4)
@@ -2876,11 +2860,11 @@ void __stdcall SBigToBinaryPtr(BigData * pBigData, uint8_t * * ppBufferOut, uint
 void __stdcall SBigToStrArray(BigData * pBigData, void * pDestArray, int32_t bAppend) {
     BigBuffer_ToStr(&pBigData->sStack, &pBigData->sPrimary, &pBigData->sOutBuffer);
     if (bAppend) {
-      SBIG_AppendBytes((uint32_t*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
+      SBIG_AppendBytes((TSGrowableArray_Uc*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
       return;
     }
 
-    TSBaseArray_UcAlt_Copy((uint32_t*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
+    TSBaseArray_UcAlt_Copy((TSGrowableArray_Uc*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
 }
 
 // @renamed-from SBIG_ExportDecimalToString (2026-08-28, Storm PowerPC oracle pass 4)
@@ -2905,11 +2889,11 @@ void __stdcall SBigToStrPtr(BigData * pBigData, uint8_t * * ppStringOut) {
 void __stdcall SBigToStreamArray(BigData * pBigData, void * pDestArray, int32_t bAppend) {
     BigBuffer_ToStream(&pBigData->sOutBuffer, &pBigData->sPrimary);
     if (bAppend) {
-      SBIG_ArrayByteAppendData((uint32_t*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
+      SBIG_ArrayByteAppendData((TSGrowableArray_Uc*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
       return;
     }
 
-    TSBaseArray_Uc_Copy((uint32_t*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
+    TSBaseArray_Uc_Copy((TSGrowableArray_Uc*)pDestArray, pBigData->sOutBuffer.nLen, pBigData->sOutBuffer.pData);
 }
 
 // @renamed-from SBIG_ExportVarintLimited (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3080,7 +3064,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
                 uBitIter = nAlignChunk - uNeeded % nAlignChunk + uNeeded;
               }
 
-              TSFixedArray_Ui_ReallocData(&pResult->nCapacity, uBitIter);
+              TSFixedArray_Ui_ReallocData(pResult, uBitIter);
             }
 
             SMem::SMemZero(pResult->pData + pResult->nCount, (nDividendLen - pResult->nCount) * 4 + 4);
@@ -3119,7 +3103,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
                 nAlignChunk = uBitIter2 - uNeeded % uBitIter2 + uNeeded;
               }
 
-              TSFixedArray_Ui_ReallocData(&pQuotient->nCapacity, nAlignChunk);
+              TSFixedArray_Ui_ReallocData(pQuotient, nAlignChunk);
             }
 
             SMem::SMemZero(pQuotient->pData + pQuotient->nCount, (nDividendLen - pQuotient->nCount) * 4 + 4);
@@ -3238,7 +3222,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
         uAlignedCap = uGrowStep - uLen % uGrowStep + uLen;
       }
 
-      TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uAlignedCap);
+      TSFixedArray_Ui_ReallocData(pnAcc, uAlignedCap);
     }
 
     pnAcc->nCount = uLen;
@@ -3287,7 +3271,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
                   uBitIter = uAlignedCap - uGrowStep % uAlignedCap + uGrowStep;
                 }
 
-                TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uBitIter);
+                TSFixedArray_Ui_ReallocData(pnAcc, uBitIter);
               }
 
               SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen - pnAcc->nCount) * 4 + 4);
@@ -3323,7 +3307,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
                   uNewCapacity = uAlignedCap - uGrowStep % uAlignedCap + uGrowStep;
                 }
 
-                TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uNewCapacity);
+                TSFixedArray_Ui_ReallocData(pnAcc, uNewCapacity);
               }
 
               SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen - pnAcc->nCount) * 4 + 4);
@@ -3366,7 +3350,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
               uNewCapacity = uAlignedCap - uGrowStep % uAlignedCap + uGrowStep;
             }
 
-            TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uNewCapacity);
+            TSFixedArray_Ui_ReallocData(pnAcc, uNewCapacity);
           }
 
           SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen - pnAcc->nCount) * 4 + 4);
@@ -3488,7 +3472,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
         uAlignedCap = uBitIter - uNewLen % uBitIter + uNewLen;
       }
 
-      TSFixedArray_Ui_ReallocData(&pnWork->nCapacity, uAlignedCap);
+      TSFixedArray_Ui_ReallocData(pnWork, uAlignedCap);
     }
 
     pnWork->nCount = uNewLen;
@@ -3500,7 +3484,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
         nByteOffset = uNeededCount + pnWork->nStartWord * 4;
         pWorkData = gbSBigMontgomeryConstant1 + uNeededCount;
         uNeededCount++;
-        *(uint8_t*)(nByteOffset + (int)pnWork->pData) = *pWorkData;
+        *(uint8_t*)(nByteOffset + (char*)pnWork->pData) = *pWorkData;
       } while (uNeededCount < 8);
     }
 
@@ -3516,7 +3500,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
         uAlignedCap = uGrowStep - uNeededCount % uGrowStep + uNeededCount;
       }
 
-      TSFixedArray_Ui_ReallocData(&self->nCapacity, uAlignedCap);
+      TSFixedArray_Ui_ReallocData(self, uAlignedCap);
     }
 
     self->nCount = uNeededCount;
@@ -3548,14 +3532,14 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
             uAlignedCap = uGrowStep - uNewLen % uGrowStep + uNewLen;
           }
 
-          TSFixedArray_Ui_ReallocData(&self->nCapacity, uAlignedCap);
+          TSFixedArray_Ui_ReallocData(self, uAlignedCap);
         }
 
         SMem::SMemZero(self->pData + self->nCount, (uNeededCount - self->nCount) * 4 + 4);
         self->nCount = uNewLen;
       }
 
-      *(uint8_t*)((int)self->pData + i + self->nStartWord * 4) = gbSBigMontgomeryConstant2[i];
+      *(uint8_t*)((char*)self->pData + i + self->nStartWord * 4) = gbSBigMontgomeryConstant2[i];
       i++;
     } while (i < 8);
 
@@ -3584,7 +3568,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
         uGrowStep = uNewLen - uNeededCount % uNewLen + uNeededCount;
       }
 
-      TSFixedArray_Ui_ReallocData(&pnQuotient->nCapacity, uGrowStep);
+      TSFixedArray_Ui_ReallocData(pnQuotient, uGrowStep);
     }
 
     pnQuotient->nCount = uNeededCount;
@@ -3618,7 +3602,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
             uGrowStep = uNewLen - uNeededCount % uNewLen + uNeededCount;
           }
 
-          TSFixedArray_Ui_ReallocData(&pnWork->nCapacity, uGrowStep);
+          TSFixedArray_Ui_ReallocData(pnWork, uGrowStep);
         }
 
         pnWork->nCount = uNeededCount;
@@ -3683,7 +3667,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
       }
 
       dwWordB = uNewCapacity;
-      TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uBitIter);
+      TSFixedArray_Ui_ReallocData(pnAcc, uBitIter);
     }
 
     pnAcc->nCount = uNewCapacity;
@@ -3732,7 +3716,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
               }
 
               uNeededCount = uGrowStep;
-              TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, nCapacity);
+              TSFixedArray_Ui_ReallocData(pnAcc, nCapacity);
             }
 
             SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNewCapacity - pnAcc->nCount) * 4 + 4);
@@ -3770,7 +3754,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
                 uBitIter2 = uGrowStep2 - uGrowStep % uGrowStep2 + uGrowStep;
               }
 
-              TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uBitIter2);
+              TSFixedArray_Ui_ReallocData(pnAcc, uBitIter2);
             }
 
             SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNeededCount - pnAcc->nCount) * 4 + 4);
@@ -3812,7 +3796,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
             }
 
             uNeededCount = uGrowStep;
-            TSFixedArray_Ui_ReallocData(&pnAcc->nCapacity, uBitIter);
+            TSFixedArray_Ui_ReallocData(pnAcc, uBitIter);
           }
 
           SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNewCapacity - pnAcc->nCount) * 4 + 4);
@@ -4016,7 +4000,7 @@ static void __stdcall BigBuffer_PowMod(BigBuffer * pnResult, BigBuffer * pnBase,
       uint32_t dwExpWord;
       pnBase = (BigBuffer*)(nWordIdx + 1);
       do {
-        pnBase = (BigBuffer*)((uintptr_t)&pnBase[-1].nStartWord + 3);
+        pnBase = (BigBuffer*)((intptr_t)&pnBase[-1].nStartWord + 3);
         nWordIdx--;
         dwExpWord = nWordIdx + pnExponent->nStartWord;
         if (dwExpWord < pnExponent->nCount) {
@@ -4394,7 +4378,7 @@ static int32_t __stdcall BigBuffer_IsPrime(BigStack * pStack, BigBuffer * pnCand
           bIsProbablePrime = 0;
         }
 
-        pnOddPart = (BigBuffer*)((int)pnOddPart + 4);
+        pnOddPart = (BigBuffer*)((char*)pnOddPart + 4);
       } while (bIsProbablePrime);
 
       pStack->nUsed -= 4;
@@ -4521,6 +4505,11 @@ BigBuffer * __fastcall TSBaseArray_UcAlt_Constructor_Unref_0060e220(BigBuffer * 
     pBitSet->nCount = 0;
     pBitSet->pData = 0;
     return pBitSet;
+}
+
+// compiler-generated C++ EH handler; its frame is never registered with the OS
+_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9f58(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
+    return ExceptionContinueSearch;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

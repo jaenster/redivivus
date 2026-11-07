@@ -18,22 +18,15 @@
 #include "Source/D2Client/UNIT/Path.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/Engine.data.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 
@@ -498,25 +491,25 @@ void __fastcall Unreferenced_00460760(int param_1, int param_2) {
     *(int*)(*(int*)(param_1 + 0x14) + 0x150) = param_2;
 }
 
-int __fastcall Unreferenced_004607d0(int param_1) {
-    if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
-      return *(int*)(*(int*)(param_1 + 0x14) + 0x154);
+int __fastcall Unreferenced_004607d0(D2UnitStrc * param_1) {
+    if (param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer) {
+      return param_1->pUnitData.pUnitDataPlayer->eQueuedSkillId;
     }
 
     return 0;
 }
 
-int __fastcall Unreferenced_004607f0(int param_1) {
-    if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
-      return *(int*)(*(int*)(param_1 + 0x14) + 0x158);
+int __fastcall Unreferenced_004607f0(D2UnitStrc * param_1) {
+    if (param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer) {
+      return param_1->pUnitData.pUnitDataPlayer->eTargetUnitType;
     }
 
     return 0;
 }
 
-int __fastcall Unreferenced_00460810(int param_1) {
-    if (param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14)) {
-      return *(int*)(*(int*)(param_1 + 0x14) + 0x15c);
+int __fastcall Unreferenced_00460810(D2UnitStrc * param_1) {
+    if (param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer) {
+      return param_1->pUnitData.pUnitDataPlayer->nTargetUnitGUID;
     }
 
     return 0;

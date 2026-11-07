@@ -1674,6 +1674,7 @@
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
+        "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ]

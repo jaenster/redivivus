@@ -3,8 +3,7 @@
 #include "Source/D2Client/UNIT/PlayerList.h"
 #include "Source/D2Client/D2RosterStrc.h"
 #include "Source/D2Client/GAME/Roster.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -164,16 +163,16 @@ int __fastcall Unreferenced_004dc480(int param_1, int param_2) {
     D2PlayerListSubStrc* pDVar1;
     D2PlayerListStrc* pDVar2 = GAME::Roster::GetPlayerList(param_1);
     if (!(pDVar2 && param_1 != param_2)) {
-      return (uint32_t)pDVar2 & -65536;
+      return (uintptr_t)pDVar2 & -65536;
     }
 
     for (pDVar1 = pDVar2->pEntry; pDVar2 = 0 , pDVar1 != 0; pDVar1 = pDVar1->pNext) {
       if (pDVar1->nRosterGUID == param_2) {
-        return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)pDVar1 >> 0x10) << 16 | (uint32_t)(uint16_t)(short int)pDVar1->nFlags);
+        return (uint32_t)((uint32_t)(uint16_t)(short int)((uintptr_t)pDVar1 >> 0x10) << 16 | (uint32_t)(uint16_t)(short int)pDVar1->nFlags);
       }
     }
 
-    return (uint32_t)pDVar2 & -65536;
+    return (uintptr_t)pDVar2 & -65536;
 }
 
 void __fastcall SetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag) {

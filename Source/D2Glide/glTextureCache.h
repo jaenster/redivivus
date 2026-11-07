@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Glide)
 #error "D2Glide header included by a module that may not use D2Glide (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Glide) && !defined(D2_LOADS_D2Glide)
+#error "internal D2Glide header included from another module; include D2Glide's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,7 +18,8 @@
 struct GlTextureCacheStrc;
 
 // Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Glide)
+#ifndef D2_DEFINED_GlTextureCacheNodeStrc
+#define D2_DEFINED_GlTextureCacheNodeStrc
 struct GlTextureCacheNodeStrc {
     /* 0x00 */ int nIndex; // Node index in array
     /* 0x04 */ uint32_t dwAddress; // VRAM texture address
@@ -25,11 +29,11 @@ struct GlTextureCacheNodeStrc {
     /* 0x11 */ uint8_t field_0x11;
     /* 0x12 */ uint8_t field_0x12;
     /* 0x13 */ uint8_t field_0x13;
-    /* 0x14 */ uint8_t * pNext; // Next in LRU list
-    /* 0x18 */ uint8_t * pPrev; // Previous in LRU list
+    /* 0x14 */ struct GlTextureCacheNodeStrc * pNext; // Next in LRU list
+    /* 0x18 */ struct GlTextureCacheNodeStrc * pPrev; // Previous in LRU list
 };
 
-#endif // D2_MODULE_D2Glide
+#endif // D2_DEFINED_GlTextureCacheNodeStrc
 namespace D2Glide::glTextureCache {
 
 // Function declarations

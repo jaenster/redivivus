@@ -418,6 +418,7 @@
         "QUEST_AttachToUnitByQuestId"
       ],
       "usedTypes": [
+        "D2ObjectInitFnArg",
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"

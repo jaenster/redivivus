@@ -197,9 +197,9 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -281,9 +281,9 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -348,9 +348,9 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -512,10 +512,10 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t",
         "uint32_t",
-        "uint64_t",
-        "uint8_t"
+        "uint64_t"
       ]
     },
     {

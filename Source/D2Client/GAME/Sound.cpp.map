@@ -218,6 +218,7 @@
         "SOUND_StopAndDetach"
       ],
       "usedTypes": [
+        "D2SoundChannelStrc *",
         "D2SoundsTxt",
         "int32_t",
         "uint32_t"
@@ -428,11 +429,12 @@
         "SOUNDSMP_SetVolume"
       ],
       "usedTypes": [
+        "D2ClientSoundChannelStrc",
         "D2FloatIntUnion",
-        "D2SoundsTxt",
+        "D2SoundChannelStrc",
+        "SOUND_UpdateChannelParams_Slotm",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {

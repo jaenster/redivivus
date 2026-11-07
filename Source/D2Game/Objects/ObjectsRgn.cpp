@@ -3,27 +3,12 @@
 #include "Source/D2Game/Objects/ObjectsRgn.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Object.h"
-#include "Source/D2Common/D2RoomStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Game/D2ObjectInitFnArg.h"
-#include "Source/D2Game/D2ObjectOperateFnArg.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/Monster/D2MonsterRegionStrc.h"
-#include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -62,12 +47,13 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     int* pShrineClassRng;
     int aShrineClassCounts[10];
     int32_t nShrinesTxtCount;
-    D2ObjectRngShrines* pShrinesRngIter;
+    AllocObjectControl_Slotmc uSlotC;
+    AllocObjectControl_Slotm8 uSlot8;
     int32_t nShrinesCount;
     uint8_t byEffectClass;
     size_t nAllocSize;
     int32_t* pnShrineClassCount;
-    int32_t nShrineClassIdxLoop = (int32_t)pGame;
+    uSlotC.pGameSaved = pGame;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x29);
       exit(-1);
@@ -84,7 +70,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     pObjectControl->pSub0x1110 = 0;
     eD2LevelId eLevel = LEVEL_RogueEncampment;
     if (1 < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
-      pShrinesRngIter = (D2ObjectRngShrines*)(pObjectControl->aLevelsRng + 1);
+      uSlot8.ppLevelRngIter = pObjectControl->aLevelsRng + 1;
       do {
         pLevelObjRng = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ObjectRngStrc, ".\\OBJECTS\\objrgn.cpp", 0x36);
         nShrinesTxtCount = (int32_t)D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
@@ -92,10 +78,10 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
         pLevelObjRng->nMonClassId = -1;
         pLevelObjRng->nAct = *(uint8_t*)(nShrinesTxtCount + 3);
         pLevelObjRng->nMinDistance = 0x7fffffff;
-        pShrinesRngIter->nShrinesCount[0] = (int32_t)pLevelObjRng;
-        pShrinesRngIter = (D2ObjectRngShrines*)(pShrinesRngIter->nShrinesCount + 1);
+        *uSlot8.ppLevelRngIter = pLevelObjRng;
+        uSlot8.ppLevelRngIter++;
         eLevel += LEVEL_RogueEncampment;
-        pGame = (::SGAMEDATA*)nShrineClassIdxLoop;
+        pGame = uSlotC.pGameSaved;
       } while ((int)eLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize);
     }
 
@@ -115,21 +101,21 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
 
     memset(pObjectControl->aObjectTypeCount, 0, 200);
     memset(pObjectControl->sShrinesRng.aShrinesRng, 0, 8 * sizeof(pObjectControl->sShrinesRng.aShrinesRng[0]));
-    nShrineClassIdxLoop = 0;
-    pShrinesRngIter = &pObjectControl->sShrinesRng;
+    uSlotC.nShrineClassIdxLoop = 0;
+    uSlot8.pShrinesRngIter = &pObjectControl->sShrinesRng;
     do {
-      if (aShrineClassCounts[nShrineClassIdxLoop] > 0) {
-        nAllocSize = aShrineClassCounts[nShrineClassIdxLoop] * 4;
+      if (aShrineClassCounts[uSlotC.nShrineClassIdxLoop] > 0) {
+        nAllocSize = aShrineClassCounts[uSlotC.nShrineClassIdxLoop] * 4;
         pShrineClassRng = (int*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nAllocSize, ".\\OBJECTS\\objrgn.cpp", 0x54);
-        pShrinesRngIter->aShrinesRng[0] = (uint8_t*)pShrineClassRng;
+        uSlot8.pShrinesRngIter->aShrinesRng[0] = (uint8_t*)pShrineClassRng;
         memset(pShrineClassRng, 0, nAllocSize);
       }
 
       nShrinesCount = nShrinesTxtCount;
-      nShrineClassIdxLoop++;
-      pShrinesRngIter->nShrinesCount[0] = 0;
-      pShrinesRngIter = (D2ObjectRngShrines*)(pShrinesRngIter->nShrinesCount + 1);
-    } while (nShrineClassIdxLoop < 8);
+      uSlotC.nShrineClassIdxLoop++;
+      uSlot8.pShrinesRngIter->nShrinesCount[0] = 0;
+      uSlot8.pShrinesRngIter = (D2ObjectRngShrines*)(uSlot8.pShrinesRngIter->nShrinesCount + 1);
+    } while (uSlotC.nShrineClassIdxLoop < 8);
 
     iShrineIdx = 0;
     if (nShrinesTxtCount > 0) {
@@ -229,7 +215,7 @@ void __thiscall SendDebugMessageToEveryone(void * pThis, char * pMessage) {
     int nBufOffset = 0x1e - (int)pMessage;
     do {
       cChar = *pMessage;
-      pMessage[(uintptr_t)&nMsgBuf + nBufOffset] = cChar;
+      pMessage[(intptr_t)&nMsgBuf + nBufOffset] = cChar;
       pMessage++;
     } while (cChar != '\0');
 
@@ -344,16 +330,16 @@ int32_t __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLe
     D2ObjectRngStrc* pLevelRng = pGame->pObjectControl->aLevelsRng[eLevel];
     int* pnPointsSize2 = &pLevelRng->nPointsSize2;
     if (*pnPointsSize2 == 4) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
     int nPoints = pLevelRng->nMinDistance + (pLevelRng->nMinDistance >> 0x1f & 7U);
     pLevelRng = (D2ObjectRngStrc*)(nPoints >> 3);
-    if (*pnPointsSize2 <= (int)pLevelRng) {
+    if (*pnPointsSize2 <= (intptr_t)pLevelRng) {
       return (uint32_t)((uint32_t)(nPoints >> 0xb) & 0xffffffu) << 8;
     }
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
 uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2LevelId eLevel) {
@@ -369,16 +355,16 @@ int32_t __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId
     D2ObjectRngStrc* pLevelRng = pGame->pObjectControl->aLevelsRng[eLevel];
     int* pnPointsSize1 = &pLevelRng->nPointsSize1;
     if (*pnPointsSize1 == 10) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
     int nPoints = pLevelRng->nMinDistance + (pLevelRng->nMinDistance >> 0x1f & 7U);
     pLevelRng = (D2ObjectRngStrc*)(nPoints >> 3);
-    if (*pnPointsSize1 <= (int)pLevelRng) {
+    if (*pnPointsSize1 <= (intptr_t)pLevelRng) {
       return (uint32_t)((uint32_t)(nPoints >> 0xb) & 0xffffffu) << 8;
     }
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
 void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId eLevel) {
@@ -390,32 +376,32 @@ uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2Lev
     int* pnPointsSize = &pRngOrDelta->nPointsSize2;
     int i = 0;
     if (*pnPointsSize <= 0) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
     LONG* pnPointY = &pRngOrDelta->aPoints2[0].y;
     do {
       pRngOrDelta = (D2ObjectRngStrc*)(((POINT*)(pnPointY - 1))->x - nX);
-      if ((int)pRngOrDelta < 0) {
+      if ((intptr_t)pRngOrDelta < 0) {
         pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
       }
-      if ((int)pRngOrDelta < 100) {
-        return (uint32_t)pRngOrDelta & -256;
+      if ((intptr_t)pRngOrDelta < 100) {
+        return (uintptr_t)pRngOrDelta & -256;
       }
 
       pRngOrDelta = (D2ObjectRngStrc*)(*pnPointY - nY);
-      if ((int)pRngOrDelta < 0) {
+      if ((intptr_t)pRngOrDelta < 0) {
         pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
       }
-      if ((int)pRngOrDelta < 100) {
-        return (uint32_t)pRngOrDelta & -256;
+      if ((intptr_t)pRngOrDelta < 100) {
+        return (uintptr_t)pRngOrDelta & -256;
       }
 
       i++;
       pnPointY += 2;
     } while (i < *pnPointsSize);
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
 void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
@@ -434,32 +420,32 @@ uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2Lev
     int* pnPointsSize = &pRngOrDelta->nPointsSize1;
     int i = 0;
     if (*pnPointsSize <= 0) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
     LONG* pnPointY = &pRngOrDelta->aPoints1[0].y;
     do {
       pRngOrDelta = (D2ObjectRngStrc*)(((POINT*)(pnPointY - 1))->x - nX);
-      if ((int)pRngOrDelta < 0) {
+      if ((intptr_t)pRngOrDelta < 0) {
         pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
       }
-      if ((int)pRngOrDelta < 0x32) {
-        return (uint32_t)pRngOrDelta & -256;
+      if ((intptr_t)pRngOrDelta < 0x32) {
+        return (uintptr_t)pRngOrDelta & -256;
       }
 
       pRngOrDelta = (D2ObjectRngStrc*)(*pnPointY - nY);
-      if ((int)pRngOrDelta < 0) {
+      if ((intptr_t)pRngOrDelta < 0) {
         pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
       }
-      if ((int)pRngOrDelta < 0x32) {
-        return (uint32_t)pRngOrDelta & -256;
+      if ((intptr_t)pRngOrDelta < 0x32) {
+        return (uintptr_t)pRngOrDelta & -256;
       }
 
       i++;
       pnPointY += 2;
     } while (i < *pnPointsSize);
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
 void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {

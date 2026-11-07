@@ -9,24 +9,10 @@
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -551,28 +537,27 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem(D2UnitStrc * p
     return (uint32_t)!pTargetItem;
 }
 
-int Unreferenced_004f3fb0() {
-    D2UnitStrc* in_ECX;
-    D2UnitStrc* pUnit = UNIT::CUnit::GetConfirmedTargetUnit(in_ECX);
-    if (!pUnit) {
-      return 0;
+D2UnitStrc * __fastcall Unreferenced_004f3fb0(D2UnitStrc * pUnit) {
+    D2UnitStrc* pUnit_00 = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
+    if (!pUnit_00) {
+      return nullptr;
     }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
-      return 0;
+    if (pUnit_00->eUnitType != UNIT_MONSTER) {
+      return nullptr;
     }
 
-    BOOL BVar1 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
+    BOOL BVar1 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit_00->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
     if (!BVar1) {
-      return 0;
+      return nullptr;
     }
 
-    uint32_t uVar2 = D2Common::Skills::D2CheckIfCorpseIsConsumable(pUnit, 0);
+    uint32_t uVar2 = D2Common::Skills::D2CheckIfCorpseIsConsumable(pUnit_00, 0);
     if (!uVar2) {
-      return 0;
+      return nullptr;
     }
 
-    int iVar3 = UNIT::Monster::MONSTER_CanBeConverted(pUnit);
-    return iVar3 ? (uint32_t)pUnit : 0;
+    int iVar3 = UNIT::Monster::MONSTER_CanBeConverted(pUnit_00);
+    return iVar3 ? (D2UnitStrc*)pUnit_00 : nullptr;
 }
 
 // Client start-function for Necromancer Revive. Validates that the confirmed target is a revivable, consumable, convertible monster, then selects a missile type from the skill txt (cltmissilea/b/c) based on the monster's overlayHeight size class (1=medium, 3=large). Launches the selected missile with the corpse as target. Returns 1 on success, 0 if any check fails.

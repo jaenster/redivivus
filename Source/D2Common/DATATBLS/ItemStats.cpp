@@ -4,9 +4,8 @@
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -79,7 +78,7 @@ void __stdcall STATES_ClearGfxFlags(D2UnitStrc * pUnit) {
 
 BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
     int i;
-    int32_t pGfxFlags = (int32_t)Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    uint32_t* pGfxFlags = (uint32_t*)Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (!pGfxFlags) {
       return 0;
     }
@@ -87,7 +86,7 @@ BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
     int nDwordCount = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     nDwordCount = nDwordCount / 32;
     for (i = 0; i < nDwordCount; i++) {
-      if (*(int*)(pGfxFlags + i * 4)) {
+      if (pGfxFlags[i]) {
         return 1;
       }
     }
@@ -121,11 +120,11 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
     nDwordCount = nDwordCount / 32;
     if (bIsBoss) {
       if (nDwordCount > 0) {
-        nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
+        nGfxOffset = (intptr_t)pGfxFlags - (intptr_t)pStateFlags;
         j = 0;
         do {
           i = j + 1;
-          pGfxWord = (uint32_t*)(nGfxOffset + (int)pStateFlags);
+          pGfxWord = (uint32_t*)(nGfxOffset + (char*)pStateFlags);
           *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j] & *pStateFlags;
           *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xf]->nStateBitmask[j];
           pStateFlags++;
@@ -138,11 +137,11 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
     } else {
       if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
         if (nDwordCount > 0) {
-          nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
+          nGfxOffset = (intptr_t)pGfxFlags - (intptr_t)pStateFlags;
           j = 0;
           do {
             i = j + 1;
-            pGfxWord = (uint32_t*)((int)pStateFlags + nGfxOffset);
+            pGfxWord = (uint32_t*)((char*)pStateFlags + nGfxOffset);
             *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j] & *pStateFlags;
             *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[j];
             pStateFlags++;
@@ -150,11 +149,11 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss)
           } while (i < nDwordCount);
         }
       } else if (nDwordCount > 0) {
-        nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
+        nGfxOffset = (intptr_t)pGfxFlags - (intptr_t)pStateFlags;
         j = 0;
         do {
           i = j + 1;
-          pGfxWord = (uint32_t*)((int)pStateFlags + nGfxOffset);
+          pGfxWord = (uint32_t*)((char*)pStateFlags + nGfxOffset);
           *pGfxWord |= ~ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j] & *pStateFlags;
           *pStateFlags &= ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[j];
           pStateFlags++;
@@ -176,13 +175,13 @@ int * __stdcall thunk_UNIT_GetStateList_StateFlags(D2UnitStrc * pUnit) {
 
 static BOOL STATES_HasMatchingStateFlag(D2UnitStrc * pUnit, D2StatesDataTbls * pStatesData) {
     int i;
-    int32_t nStateFlags = (int32_t)Stats::StatsEx::GetStateFlags(pUnit);
+    uint32_t* nStateFlags = (uint32_t*)Stats::StatsEx::GetStateFlags(pUnit);
     if (!nStateFlags) {
       return 0;
     }
 
     for (i = 0; i < (ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
-      if (pStatesData->nStateBitmask[i] & ((uint32_t*)nStateFlags)[i]) {
+      if (pStatesData->nStateBitmask[i] & nStateFlags[i]) {
         return 1;
       }
     }

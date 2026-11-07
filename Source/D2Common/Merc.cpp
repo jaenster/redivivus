@@ -4,18 +4,12 @@
 #include "Source/D2Client/UI/npcmenu.h"
 #include "Source/D2Client/UI/npcmenu/Merc.h"
 #include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/D2SeedStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

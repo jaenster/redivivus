@@ -4,23 +4,14 @@
 #include "Source/D2Client/D2GSPacketSrv0x73.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/D2MissileDamageDataStrc.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/MISSILES/MissilesMode.data.h"
 
@@ -248,7 +239,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       }
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MISSILE, pArgs->nMissileTxtNo, nPosX, nPosY, pGame, pSpawnRoom, 1, (uint32_t)pMissileTxt->CollideType, nullptr);
+    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MISSILE, pArgs->nMissileTxtNo, nPosX, nPosY, pGame, pSpawnRoom, 1, (uint32_t)pMissileTxt->CollideType, 0);
     if (!pUnit) {
       return nullptr;
     }

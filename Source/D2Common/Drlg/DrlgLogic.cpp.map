@@ -19,6 +19,7 @@
         "DRLGGRID_FloodFillGridCoords"
       ],
       "usedTypes": [
+        "D2DrlgCoordIndexCtxStrc",
         "uint32_t"
       ]
     },
@@ -160,6 +161,9 @@
       "namespace": "D2Common::Drlg::DrlgLogic",
       "calledFunctions": [
         "Unreferenced_0066c840"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc"
       ]
     },
     {

@@ -26,35 +26,16 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Text.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/Fog/File.h"
+#include "Source/D2Game/D2Game.h"
+#include "Source/D2Lang/D2Lang.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UI/npcmenu.data.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Lang/Unicode/UNISYS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -5207,28 +5188,9 @@ void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
     } while (nMessageCount);
 }
 
-int __fastcall Unreferenced_004b3560(int param_1) {
-    *(uint32_t*)(param_1 + 0x15) = 0;
-    *(uint32_t*)(param_1 + 0x19) = 0;
-    *(uint32_t*)(param_1 + 0x1d) = 0;
-    *(uint32_t*)(param_1 + 0x21) = 0;
-    *(uint32_t*)(param_1 + 0x25) = 0;
-    *(uint32_t*)(param_1 + 0x29) = 0;
-    *(uint32_t*)(param_1 + 0x2d) = 0;
-    *(uint32_t*)(param_1 + 0x31) = 0;
-    *(uint32_t*)(param_1 + 0x35) = 0;
-    *(uint32_t*)(param_1 + 0x39) = 0;
-    *(uint32_t*)(param_1 + 0x3d) = 0;
-    *(uint32_t*)(param_1 + 0x41) = 0;
-    *(uint32_t*)(param_1 + 0x45) = 0;
-    *(uint32_t*)(param_1 + 0x49) = 0;
-    *(uint32_t*)(param_1 + 0x4d) = 0;
-    *(uint32_t*)(param_1 + 0x51) = 0;
-    *(uint32_t*)(param_1 + 0x55) = 0;
-    *(uint32_t*)(param_1 + 0x59) = 0;
-    *(uint32_t*)(param_1 + 0x5d) = 0;
-    *(uint32_t*)(param_1 + 0x61) = 0;
-    return param_1;
+int __fastcall Unreferenced_004b3560(uint8_t * param_1) {
+    memset(param_1 + 21, 0, 80 * sizeof(param_1[0]));
+    return (int)param_1;
 }
 
 // Shared callback of the Imbue (Charsi, string 4017), Add Sockets (Larzuk, 22748) and Personalize (Anya, 22749) menu options: frees the NPC dialog, closes UI_NPCMENU, resets the cursor and hover state, sets the NPC UI state to 7 and gnNpcMenuTransactionType to 0, then opens the cube-style item panel for the current NPC (UI_OpenHoradricCubeWithNpcInteraction(nCurrentInteractedNpcGUID)). Returns 1.
@@ -6948,11 +6910,11 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     uint16_t wNumCharBuf[10];
     int32_t nMercAct;
     uint32_t dwListBoxFontArg;
-    uint32_t dwListBoxScrollArg;
-    uint32_t dwListBoxHighlightArg;
-    uint32_t dwListBoxTranspArg;
-    uint32_t dwListBoxBorderArg;
-    uint32_t dwListBoxAlignArg;
+    uint16_t* dwListBoxScrollArg;
+    uint16_t* dwListBoxHighlightArg;
+    uint16_t* dwListBoxTranspArg;
+    uint16_t* dwListBoxBorderArg;
+    uint16_t* dwListBoxAlignArg;
     int nListBoxLineIdx;
     uint32_t dwListBoxColorArg;
     uint32_t dwListBoxEnabledArg;
@@ -7166,7 +7128,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
       dwListBoxHighlightArg = 0;
       dwListBoxScrollArg = 0;
       pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd25);
-      pListBoxVtbl->AddItem(gpNpcMenuMercListBox, pszDialogPtr, (uint16_t*)dwListBoxScrollArg, (uint16_t*)dwListBoxHighlightArg, (uint16_t*)dwListBoxBorderArg, (uint16_t*)dwListBoxTranspArg, (uint16_t*)dwListBoxAlignArg, nListBoxLineIdx, dwListBoxColorArg, dwListBoxEnabledArg, dwListBoxFontArg);
+      pListBoxVtbl->AddItem(gpNpcMenuMercListBox, pszDialogPtr, dwListBoxScrollArg, dwListBoxHighlightArg, dwListBoxBorderArg, dwListBoxTranspArg, dwListBoxAlignArg, nListBoxLineIdx, dwListBoxColorArg, dwListBoxEnabledArg, dwListBoxFontArg);
     }
 
     Dialog::DIALOG_SetSelectedLine(Dialog::gpNpcMercListDialog, -1);
@@ -7180,9 +7142,9 @@ void __fastcall NPCMENU_HandleTradePacket(D2GSPacketSrv0x2A * pPacket) {
     D2GSPacketSrv0x2A_007c0d87.nResult = pPacket->nResult;
     *(uint8_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 3) = pPacket->field_0x3;
     *(uint32_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 4) = *(uint32_t*)&pPacket->field_0x4;
-    *(uint32_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 8) = *(uint32_t*)((uintptr_t)&pPacket->nUnitGUID + 1);
-    *(uint16_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 1) = *(uint16_t*)((uintptr_t)&pPacket->nGold + 1);
-    *(uint8_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 3) = *(uint8_t*)((uintptr_t)&pPacket->nGold + 3);
+    *(uint32_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 8) = *(uint32_t*)((intptr_t)&pPacket->nUnitGUID + 1);
+    *(uint16_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 1) = *(uint16_t*)((intptr_t)&pPacket->nGold + 1);
+    *(uint8_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 3) = *(uint8_t*)((intptr_t)&pPacket->nGold + 3);
     uint16_t wStatLayer = 0;
     eD2UnitStat eUnitStat = UNITSTAT_gold;
     PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, wStatLayer);

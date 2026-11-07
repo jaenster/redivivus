@@ -4,13 +4,16 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2WaypointStrc.h"
+#include "Source/D2Common/D2Common.h"
 
 // Forward declarations
 struct D2ClientStrc;
@@ -24,6 +27,15 @@ struct SGAMEDATA;
 typedef uint32_t eD2Skills;
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union _oldSaveGameLoadingPart7_part1_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2ClientStrc * pClientLocal;
+    /* 0x00 */ uint32_t nItemBytesRead;
+};
+
+#endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2ItemDupeCacheEntryStrc {
     /* 0x00 */ char szCode[4]; // D2UnknownItemRelatedStruct.szCode (+0x44)
@@ -146,13 +158,13 @@ namespace D2Game::PLAYER::PlayerSave {
 int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnknownItemRelatedStruct * pItemUnknownStructure, struct D2UnitStrc * * ppItemOut, uint32_t * pnStorageTypeOut);
 // Server-side: restores one saved item onto a player by its saved animMode (storage location), dispatching: Death/default=drop to ground at the item's path position (SERVER_ItemToInventory); Neutral=equip to its body-loc (SERVER_EquipItemToBodyLoc); Walk=place in belt (ITEM_TryPlaceInBelt at the item's X); GetHit=copy into player inventory and apply as a quest reward (ITEMMODE_ApplyQuestReward); TownWalk=nest into the container item identified by eBodyLocation (PutItemInItem, container GUID at +0xc). Run/TownNeutral and any mode > TownWalk fail. Returns 0 on success, 0xc on failure. Used during character load to repopulate a player's items.
 // @sourcefile .\PLAYER\PlrSave.cpp
-int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pSourceItem, int32_t eBodyLocation);
+int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pSourceItem, struct D2UnitStrc * eBodyLocation);
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
 int32_t __fastcall SAVE_SerializeItemIfValid(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, char * szText, size_t nSize, int32_t nParam1, int32_t nParam2, int32_t nParam3);
 // Serializes a player's inventory into the save buffer pBuffer (cap nBufSize). Writes magic 'JM' (0x4d4a), then a 16-bit carried-item count (GetCarriedItemsCount), then each item via SerializeItem/SAVE_SerializeItemIfValid into an 8KB scratch buffer. Handles equipped weapons and L/R-arm items specially (weapon-swap aware), skips arm items already counted in the equipped set, then iterates all carried items and finally the cursor item (only if UNIT_ITEM). Decrements the count for items that serialize to 0 bytes. Returns the total bytes written via the GuardStack tail (stdcall frame). Out: pBuffer filled; the count field is back-patched at the end.
 // Registers: pGame (ECX) and pUnit (EDX) are forwarded to SAVE_SerializeItemIfValid.
 int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, uint16_t * pBuffer, int32_t nBufSize, int32_t nParam2, int32_t nParam3, int32_t nParam4);
-struct D2InventoryStrc * __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, uint16_t * pBuffer, int32_t nBufSize, int32_t bParam1, int32_t bParam2, int32_t bParam3);
+int32_t __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, uint16_t * pBuffer, int32_t nBufSize, int32_t bParam1, int32_t bParam2, int32_t bParam3);
 // Serializes a player's corpse into the save buffer. Writes magic word 0x4D4A then a has-corpse flag (uint16). If no live corpse unit exists, returns 4 (header-only bytes). Otherwise writes the corpse's world position (X/Y) and delegates to SAVE_SerializeInventoryItems to append the corpse inventory. Returns total bytes written (inventory size + 16) or halts with fatal error 0x97a/0x984 on buffer-overflow or inventory serialization failure.
 int32_t __fastcall PLRSAVE_SerializeCorpseData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t * pCorpseBuffer, int32_t nBufferSize, int32_t nParam);
 struct D2SaveFileHeaderStrc * __stdcall PLRSAVE_MakeSaveFileReturnBuffer(int32_t nPlayerId, int32_t nExperiencePoints, ::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SaveFileHeaderStrc * pSaveFileHeader, int32_t nParam);
@@ -162,7 +174,7 @@ uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * szOut, uint8_t * 
 uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(struct D2MissilesTxt * pMissilesTxt, int32_t nCrcSeed);
 // BNet character save handler. Builds 8KB save file in temp buffer, validates against existing save in database, optionally re-locks and saves character via BNet callback if changed. Copies to safe buffer on success.
 // @sourcefile .\PLAYER\PlrSave.cpp
-BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, struct D2UnitStrc * pUnit, uint32_t nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId);
+BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, struct D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId);
 // Serializes the player unit to a .d2s file on disk (SP/LAN path). Calls MakeSaveFile into a stack buffer, then fopens "%sSaveDir%charName.d2s" in binary-write mode and fwrites the result. Guarded by DontNoSafeGameBool; logs an error if the file cannot be opened. Returns nothing; EAX is left over from fclose or the log call.
 void __fastcall SaveToFile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nParam, int nParamExtra, char * pCharName);
 // Top-level player save dispatcher. Clears UNITFLAGEX_UPDATEINV, detects if the player is currently trading (interact with another UNIT_PLAYER), then routes to SaveToBuffer (OBNet/LAN), SaveToFile (SP without BNet service), or SaveToFileBnet (BNet) based on game type and BattleNetServerService pointer.
@@ -173,11 +185,11 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, struct D2ClientStrc 
 int __fastcall _oldSaveGameLoadingPart2(struct D2UnitStrc * pUnit, int * pnSaveData, uint32_t dwUnused, uint32_t * pnBytesConsumed);
 int __fastcall _oldSaveGameLoadingPart3(struct D2UnitStrc * pUnit, uint32_t * pdwSaveData, uint32_t dwUnused, uint32_t * pnBytesConsumed);
 int __fastcall _oldSaveGameLoadingPart4(struct D2UnitStrc * pUnit, uint32_t * pdwSaveCursor, uint32_t dwUnused, uint32_t * pnBytesConsumed);
-int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * pwStatData, int32_t nStatCount, uint32_t dwUnused, int * pnBytesConsumed);
+int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * pwStatData, int32_t nStatCount, uint32_t dwUnused, int * pnBytesConsumed);
 void __stdcall PLAYERSAVE_RestoreSkillLevel(struct D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t byLevel);
 // Body continues at 00532eb7, the JZ target of 00532eaa - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_oldSaveGameLoadingPart6_part1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_oldSaveGameLoadingPart6_part1':
-int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, short * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed);
+int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed);
 // Deserializes one item from a bit-packed save/network buffer into the item struct. Zeroes 0x48 bytes, inits a BitBuffer over szText (0x40 bytes), reads the 32-bit item flags first. Branches on ITEMFLAG_100000 (new format) vs legacy: new format reads full bit fields (format ver, 4-char code, equip loc, storage, ilvl, mode, quality, price, durability, position, fileIndex, init/mod seeds, page) with a COMPACT sub-path and a BODYPART ("ear ") sub-path that reads a 7-bit-per-char name. Legacy path is similar but resolves the item code via TXT_Items_GetLine, also handling the "ear " body-part case. Resolves nItemClassid via TXT_Items_ConvertItemCodeToItemClassId. Returns the consumed bit count (new format) or constant 0x19 (legacy). Output: fully populated pItemUnknownStructure.
 int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(struct D2UnknownItemRelatedStruct * pItemUnknownStructure, char * szText);
 // Restores a player's item list from a save-game byte stream during load. Expects a "JM" (0x4D4A) section header followed by a uint16 item count; for each item validates the per-item "JM" tag, parses the record via PLAYERSAVE_ParseItemFromBuffer into a temp item struct, then instantiates it through PLRSAVE_RestoreItemFromSaveData (nItemMode==0, inventory items) or PLRSAVE_RestoreEquippedItem (equipped items). Maintains a large on-stack uniqueness cache (5119 ints, 5 fields/entry: render flags, armor token, class, weapon class, filename ptr) to dedupe identical gfx records, and recurses into socketed/nested sub-items. Writes total bytes consumed back through pBytesRead. Bails (GuardStack 0xe) on any missing JM header. Server-side __fastcall.
@@ -194,12 +206,11 @@ uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t
 // @sourcefile .\PLAYER\PlrSave.cpp
 int __stdcall _oldSaveGameLoadingPart9(struct D2UnitStrc * pUnit, uint8_t * pbParam, uint32_t nParam, int * pnBytesConsumed);
 // Loads a player from a legacy/old-format save file (D2SaveFileHeaderStrc) and creates/restores the player unit. Validates min size (0x82), parses the header via _oldSaveGameLoadingPart, then walks the file sequentially through _oldSaveGameLoadingPart2..9 (stats, then skills, items, corpse, waypoints), advancing a cursor by the byte count each part writes back through ppUnit. Clamps gold/goldbank to inventory/stash limits, restores hp/mana and re-selects left/right skills, recomputes next-level exp (TXT_Experience), and sends a weapon-switch packet (0x97) if the client had weapons swapped. Out: *ppUnit = the loaded D2UnitStrc. Returns 0 on success or a nonzero error code. NOTE: nLoadResult/nNewCharFlags are read before assignment in the decompile — likely set via the out-params of _oldSaveGameLoadingPart (stale-snapshot artifact).
-int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, struct D2UnitStrc * * ppUnit, uint32_t dwParam6, uint32_t dwParam7, uint32_t dwParam8);
+int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, struct D2UnitStrc * * ppUnit, struct D2RoomStrc * dwParam6, uint32_t dwParam7, uint32_t dwParam8);
 int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, struct D2UnitStrc * * ppUnit, struct D2RoomStrc * pRoom, uint32_t nSpawnX, uint32_t nSpawnY);
 // Loads player from save or creates new character. Dispatches to disk loader (SP/LAN), network loader (BNet), or fresh character creator based on game type and bLoadFromSave. After unit creation, updates passive skills and returns status. Called during join flow before placing unit in world.
 BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, char * pClientCharName, BOOL bLoadFromSave, struct D2UnitStrc * * ppUnitOut, struct D2RoomStrc * pRoomOrNull, uint32_t nX, uint32_t nY);
 void __stdcall WapperSaveGameAllGameTypes(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * szText);
-uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen);
 #endif // D2_MODULE_D2Game
 // 12 internal functions (defined in .cpp)
 

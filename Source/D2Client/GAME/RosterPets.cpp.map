@@ -33,6 +33,9 @@
       "namespace": "D2Client::GAME::RosterPets",
       "calledFunctions": [
         "Unreferenced_00478a90"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc"
       ]
     },
     {

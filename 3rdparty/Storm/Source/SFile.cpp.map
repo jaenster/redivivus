@@ -80,6 +80,7 @@
         "SMemCopy"
       ],
       "usedTypes": [
+        "D2LzwBufferStateStrc",
         "uint32_t"
       ]
     },
@@ -98,6 +99,7 @@
         "SMemCopy"
       ],
       "usedTypes": [
+        "D2LzwBufferStateStrc",
         "uint32_t"
       ]
     },
@@ -271,8 +273,9 @@
         "memmove"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "D2MPQBlockEntryStrc",
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -990,6 +993,7 @@
         "SFILE_CompareFileTime1"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -1005,6 +1009,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_004167a0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1019,6 +1026,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_004167f0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1033,6 +1043,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416820"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1047,6 +1060,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416850"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1063,6 +1079,7 @@
         "SFILE_CompareFileTime2"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -1097,6 +1114,7 @@
         "SFILE_CompareFileSize1"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -1114,6 +1132,7 @@
         "SFILE_CompareFileSize2"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -1131,6 +1150,7 @@
         "SFILE_CompareFileName"
       ],
       "usedTypes": [
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -1146,6 +1166,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_004169f0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1160,6 +1183,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416a00"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1174,6 +1200,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416a10"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1188,6 +1217,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416a20"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1202,6 +1234,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416a30"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1300,7 +1335,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2MPQFileStrc",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -1339,7 +1375,8 @@
         "pfnCryptReleaseContext",
         "pfnCryptSignHashA",
         "pfnCryptVerifySignatureA",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -1354,6 +1391,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00417850"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1368,6 +1408,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_004178a0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1399,6 +1442,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00417940"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1413,6 +1459,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00417990"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -1482,7 +1531,8 @@
         "SFILE_CompareFileRecord1"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1517,8 +1567,8 @@
         "SFILE_InsertFileRecordIntoList2"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "int *",
         "int32_t",
         "uint32_t"
@@ -1573,7 +1623,8 @@
         "SFILE_CompareFileRecord2"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1626,7 +1677,8 @@
         "SFILE_CompareFileRecord3"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1644,7 +1696,8 @@
         "SFILE_RemoveFileRecordFromList1"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1714,6 +1767,7 @@
         "SErrSetLastError"
       ],
       "usedTypes": [
+        "D2MPQFileStrc",
         "D2StormAudioStreamRec",
         "int32_t"
       ]
@@ -1734,6 +1788,7 @@
         "SErrSetLastError"
       ],
       "usedTypes": [
+        "D2MPQFileStrc",
         "D2StormAudioStreamRec",
         "int32_t"
       ]
@@ -1805,6 +1860,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00418470"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1839,7 +1897,8 @@
         "SFILE_RemoveFileRecordFromList2"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1855,6 +1914,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_004185b0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -1871,7 +1933,9 @@
         "SFILE_CompareFileRecord4"
       ],
       "usedTypes": [
-        "int32_t"
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -1888,7 +1952,8 @@
         "SFILE_RemoveFileRecordFromList3"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1906,7 +1971,8 @@
         "SFILE_RemoveFileRecordFromList4"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -1924,7 +1990,9 @@
         "SFILE_CompareFileRecord5"
       ],
       "usedTypes": [
-        "int32_t"
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -1941,7 +2009,9 @@
         "SFILE_CompareFileRecord6"
       ],
       "usedTypes": [
-        "int32_t"
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -1958,7 +2028,8 @@
         "SFILE_RemoveFileRecordFromList5"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2079,7 +2150,7 @@
         "SFILE_CloseStreamHandle2"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2133,7 +2204,7 @@
         "SFILE_CloseStreamHandle5"
       ],
       "usedTypes": [
-        "D2StormListHead",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2149,6 +2220,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00418a40"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -2291,8 +2365,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2311,8 +2385,8 @@
         "SFILE_CloseStreamHandle2"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2331,8 +2405,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2351,8 +2425,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2368,6 +2442,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00418d80"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -2385,8 +2462,8 @@
         "SFILE_CloseStreamHandle5"
       ],
       "usedTypes": [
-        "D2StormListHead",
         "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },
@@ -2402,6 +2479,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00418de0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -2416,6 +2496,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00418e50"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -2516,6 +2599,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00418ff0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -2549,6 +2635,9 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00419060"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -2682,6 +2771,8 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "StormEventRecStrc",
+        "StormLinkStrc",
         "uint32_t"
       ]
     },
@@ -2856,7 +2947,7 @@
       ],
       "usedTypes": [
         "D2StormAudioStreamRec",
-        "D2StormListHead"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -2898,6 +2989,7 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "D2StormAudioStreamRec",
+        "SFILE_CheckAudioStreams_Slotmc",
         "int32_t",
         "uint32_t"
       ]
@@ -2940,6 +3032,7 @@
       ],
       "usedTypes": [
         "D2StormAsyncOpStrc",
+        "StormLinkStrc",
         "pfnEHHandlerRoutine",
         "uint32_t"
       ]
@@ -2987,7 +3080,8 @@
         "SFILE_FreeArchiveRecord"
       ],
       "usedTypes": [
-        "D2StormAsyncOpStrc"
+        "D2StormAsyncOpStrc",
+        "intptr_t"
       ]
     },
     {
@@ -3007,7 +3101,7 @@
       ],
       "usedTypes": [
         "D2StormAsyncOpStrc",
-        "int32_t"
+        "StormLinkedListStrc"
       ]
     },
     {
@@ -3031,7 +3125,6 @@
         "D2StormAsyncOpStrc",
         "StormEventRecStrc",
         "StormLinkStrc",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -3050,7 +3143,9 @@
         "GetTickCount"
       ],
       "usedTypes": [
-        "int *",
+        "D2ArchiveStrc",
+        "D2StormAsyncOpStrc",
+        "D2StormAsyncOpStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -3083,8 +3178,11 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2StormAsyncOpStrc",
+        "StormEventRecStrc",
+        "StormLinkStrc",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -3130,7 +3228,7 @@
         "SFILE_SetRequestUrgentByBuffer"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2StormAsyncOpStrc"
       ]
     },
     {
@@ -3241,7 +3339,8 @@
         "D2StormAsyncCompletionStrc",
         "D2StormAsyncOpStrc",
         "LPOVERLAPPED",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -3267,8 +3366,9 @@
       ],
       "usedTypes": [
         "D2ArchiveStrc",
-        "int32_t",
+        "LPOVERLAPPED",
         "uint32_t",
+        "uint8_t",
         "void *"
       ]
     },
@@ -3288,7 +3388,7 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc",
-        "int32_t",
+        "LPOVERLAPPED",
         "uint32_t"
       ]
     },
@@ -3309,7 +3409,7 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "D2StormAsyncCompletionStrc",
-        "int32_t",
+        "LPOVERLAPPED",
         "uint32_t"
       ]
     },
@@ -3466,6 +3566,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *",
+        "SFILE_s_OpenArchive_Slotm",
+        "SFILE_s_OpenArchive_Slotmc",
         "StormLinkStrc",
         "int32_t",
         "uint32_t",
@@ -3551,7 +3653,6 @@
         "D2MPQFileStrc",
         "D2MPQFileStrc *",
         "D2MPQHeaderStrc",
-        "int32_t",
         "uint32_t"
       ]
     },

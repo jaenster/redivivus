@@ -11,22 +11,10 @@
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2DynamicPathStrc.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
@@ -581,7 +569,7 @@ void __fastcall SKILL_CreateLeapArcParticle(D2UnitStrc * pUnit, D2SkillStrc * pS
       }
 
       nArcOffsetZ++;
-    } while ((int)(uint32_t*)&gaLeapArcParticleOffsetZ[nArcOffsetZ].nMaxDist < (intptr_t)((char*)&gaLeapArcParticleOffsetZ + 12));
+    } while ((intptr_t)(uint32_t*)&gaLeapArcParticleOffsetZ[nArcOffsetZ].nMaxDist < (intptr_t)((char*)&gaLeapArcParticleOffsetZ + 12));
 
     nArcOffsetZ = gaLeapArcParticleOffsetZ[nArcOffsetZ].nSlope * nParam1 + gaLeapArcParticleOffsetZ[nArcOffsetZ].nIntercept;
     if (nArcOffsetZ < 500) {
@@ -1065,7 +1053,7 @@ void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nGamma
       nScreenY = D2Common::Units::GetTargetY(pUnit);
     }
 
-    Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nScreenX, nScreenY, (D2GamePalShiftGreenBloodStrc*)(uint32_t)(pUnit->eUnitType == UNIT_PLAYER), 0);
+    Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nScreenX, nScreenY, (uint32_t)(pUnit->eUnitType == UNIT_PLAYER), 0);
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
 }
 

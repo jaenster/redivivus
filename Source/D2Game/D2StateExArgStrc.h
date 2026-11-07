@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,6 +25,8 @@ typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2StateExArgStrc
+#define D2_DEFINED_D2StateExArgStrc
 struct __attribute__((packed)) D2StateExArgStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ struct D2UnitStrc * pTarget;
@@ -33,3 +38,5 @@ struct __attribute__((packed)) D2StateExArgStrc {
     /* 0x1C */ eD2States eAuraState;
     /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, int32_t);
 };
+
+#endif // D2_DEFINED_D2StateExArgStrc

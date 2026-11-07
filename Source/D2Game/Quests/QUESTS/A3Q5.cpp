@@ -3,26 +3,18 @@
 #include "Source/D2Game/Quests/QUESTS/A3Q5.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Create.h"
+#include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/PLAYER/PlayerTrade.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Quests/QUESTS/A3Q4.h"
@@ -688,7 +680,7 @@ BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q22_PartyMember_SetCompleted, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q22_PartyMember_SetCompleted, nullptr);
       }
     }
 
@@ -908,7 +900,7 @@ BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOpera
           return 0;
         }
 
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nAttackerPartyId, (::fpExecuteOnUnitFunction)Q22_PlayerCompleteKhalimsWill, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nAttackerPartyId, (::fpExecuteOnUnitFunction)Q22_PlayerCompleteKhalimsWill, nullptr);
         return 0;
       }
     }
@@ -1040,14 +1032,14 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q22_StatusFilter (BLACKENED TEMPLE) — fpStatusFilter: computes the quest-log status icon/string byte for this quest. If the player cannot yet reach Act III (QUEST_AbleGoToAct3 not Completed) writes 0 (hidden). Else starts from a base byte; if the quest is Completed, writes 0xb (or 0xd when JustCompleted just fired); else if at Step0x04 writes 0xd or 0x4 by the council-tracking flag. (NB: Q22_InitData actually assigns fpStatusFilter=null, so this is the historical/Mac status handler.) Read-only quest-record probes.
-bool __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBufferStrc * pBitBuffer, char * szText) {
+bool __thiscall Q22_StatusFilter(D2QuestDataStrc * pThis, uint32_t param_1, D2BitBufferStrc * pBitBuffer, char * szText) {
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
     if (!bQuestState) {
       *szText = '\0';
       return true;
     }
 
-    *szText = *(char*)(pThis + 0xb);
+    *szText = pThis->nStateFlagPrev;
     /* GetQuestState(Blackened Temple=0x15, Completed=0): completed -> status byte
                          0xb (or 0xd if just completed) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
     if (bQuestState) {
@@ -1060,9 +1052,9 @@ bool __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBufferStr
     /* GetQuestState(Blackened Temple=0x15, Step0x04=4): in-progress -> status byte
                          0x4 or 0xd by council-tracking flag */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
     if (bQuestState) {
-      *szText = *(char*)(*(int*)(pThis + 0x18) + 0xc) != '\0' ? 0xd : 0x4;
+      *szText = pThis->pQuestSpecificData.pA2Q4->bJerhynAiActive != '\0' ? 0xd : 0x4;
     }
-    if (*(char*)(pThis + 9) == '\0') {
+    if (pThis->bIsNotIntroduction == '\0') {
       *szText = '\0';
     }
 

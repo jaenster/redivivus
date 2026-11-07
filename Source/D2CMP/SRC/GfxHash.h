@@ -4,18 +4,56 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2CMP/SRC/SpriteCache.h"
 
 // Forward declarations
-struct D2CelFileCacheEntryStrc;
 struct D2GfxDataStrc;
 struct D2PoolManagerStrc;
+typedef uint32_t eD2UnitType;
 
+// Data types
+#ifndef D2_DEFINED_D2CelCacheBlockStrc
+#define D2_DEFINED_D2CelCacheBlockStrc
+struct __attribute__((packed)) D2CelCacheBlockStrc {
+    /* 0x00 */ eD2UnitType eUnitType; // written by the DCC path only
+    /* 0x04 */ int32_t nMode; // copied from D2GfxDataStrc
+    /* 0x08 */ int32_t nClassId; // copied from D2GfxDataStrc
+    /* 0x0C */ int32_t nUnitToken; // copied from D2GfxDataStrc
+    /* 0x10 */ int32_t nCompositToken; // copied from D2GfxDataStrc
+    /* 0x14 */ int32_t nArmorToken; // copied from D2GfxDataStrc
+    /* 0x18 */ int32_t nModeToken; // copied from D2GfxDataStrc
+    /* 0x1C */ int32_t nWeaponClass; // copied from D2GfxDataStrc
+    /* 0x20 */ D2CelDecodeStateStrc tDecode;
+};
+
+#endif // D2_DEFINED_D2CelCacheBlockStrc
+#ifndef D2_DEFINED_D2GfxHashEntryStrc
+#define D2_DEFINED_D2GfxHashEntryStrc
+struct D2GfxHashEntryStrc {
+    /* 0x00 */ uint32_t nHashKey;
+    /* 0x04 */ int32_t nClassOrOverlayId;
+    /* 0x08 */ int32_t nUnitToken;
+    /* 0x0C */ int32_t nCompositToken;
+    /* 0x10 */ int32_t nArmorToken;
+    /* 0x14 */ int32_t nModeToken;
+    /* 0x18 */ int32_t nWeaponClass;
+    /* 0x1C */ int32_t nDirIndex;
+    /* 0x20 */ struct D2CelCacheBlockStrc * pCacheBlock;
+    /* 0x24 */ struct D2SpriteCacheEntryStrc * pSpriteCacheEntry;
+    /* 0x28 */ struct D2GfxHashEntryStrc * pPrev;
+    /* 0x2C */ struct D2GfxHashEntryStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2GfxHashEntryStrc
 namespace D2CMP::SRC::GfxHash {
 
 // Function declarations
@@ -24,11 +62,12 @@ namespace D2CMP::SRC::GfxHash {
 // Unlinks hash entry pEntry from its bucket (pHashTable + 0x8000 + [pEntry+0]*4 -> [pEntry+0x2c]), frees the cache block's
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
-void __thiscall GFXHASH_UnlinkCacheEntry(int32_t pHashTable, struct D2PoolManagerStrc * pMemory, int * pEntry);
+void __thiscall GFXHASH_UnlinkCacheEntry(int32_t pHashTable, struct D2PoolManagerStrc * pMemory, struct D2GfxHashEntryStrc * pEntry);
 void __fastcall GFXHASH_InitHashTable(void * pHashTable);
-void __fastcall GFX_UnlinkCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, int * pEntry);
+void __fastcall GFX_UnlinkCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, struct D2GfxHashEntryStrc * pEntry);
+void __stdcall IGNORELIST_Initialize_Unref_0060ab70();
 uint32_t __fastcall GFXHASH_CalcDirectionIndex(struct D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, struct D2CelFileCacheEntryStrc * pCelEntry);
-int32_t __fastcall GFXHASH_FindEntryByGfxData(void * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
+struct D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
 // @sourcefile .\SRC\GfxHash.cpp
 uint32_t * __fastcall GFX_AllocCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, struct D2GfxDataStrc * pGfxData, struct D2CelFileCacheEntryStrc * pCelEntry);
 #endif // D2_MODULE_D2CMP

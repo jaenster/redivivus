@@ -4,7 +4,7 @@
  */
 
 #include "Source/D2DDraw/D2DDraw.globals.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2DDraw/Renderer/DirectDraw.h"
 

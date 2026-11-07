@@ -2,12 +2,8 @@
 
 #include "Source/D2Game/Quests/QUESTS/A3Q7.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Drlg/Preset.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
@@ -15,9 +11,9 @@
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A5Q3.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/Quests/QUESTS/A3Q6.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -95,7 +91,7 @@ void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char bRest
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_HandleKhalimsWillCompletion(pGame): on the Guardian quest data, force Khalim's-Eye and Khalim's-Flail counts to 2 (mark Khalim's Will assembled), then if the orb unit exists flag it for client update (SetupUpdateFlag 1, and mode-2 update for the secondary orb ref). Cross-quest helper: pokes the Khalim's-Will item bookkeeping that gates the Mephisto fight. No quest-state transitions.
-void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, uint32_t nEventCode) {
+void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc * nEventCode) {
     D2UnitStrc* pQuestData;
     D2QuestDataStrc* pOrbUnit = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGuardian);
     if (!pOrbUnit) {
@@ -124,7 +120,7 @@ void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, uint32_t nE
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_SetupDarkWandererMapAi(pGame, pDrlgMap): stores the passed DRLG map pointer into quest data, then if the tracked "wanderer" monster exists, its map is valid, and the map hasn't been taken yet -> transfers (DRLGPRESET_TakeFileFromDrlgMap) the monster's map-AI DRLG file into quest data and marks bDrlgMapTaken. Binds the Mephisto/Act4-transition actor's generated map into the quest. No quest-state transitions.
-void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, int32_t pMapAI) {
+void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, D2MapAIStrc * pMapAI) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)pThis, QUESTINT_TheGuardian);
     if (!pQuestData) {
       return;
@@ -132,7 +128,7 @@ void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, int32_t pMapAI) {
 
     D2QuestDataA3Q6Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q6;
     D2MapAIStrc** pDrlgMapPtr = &pQuestSpecificData->pDrlgMap;
-    *pDrlgMapPtr = (D2MapAIStrc*)pMapAI;
+    *pDrlgMapPtr = pMapAI;
     if (pQuestSpecificData->nDarkWandererMapAiState == '\0') {
       return;
     }
@@ -352,7 +348,7 @@ uint8_t __fastcall Q24_TimerCallback_SpawnPortals(::SGAMEDATA * pGame, D2QuestDa
         ptPortalPos.x = gnA3Q7ArchonState2[uVar2 * 2] + ptUnitPos.x;
         FindSpawnableLocation(pRoom, &ptPortalPos, 3, 0x3f11, (D2RoomStrc**)&pSpawnRoom, 0xb, 100);
         if (pSpawnRoom) {
-          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x83, ptPortalPos.x, ptPortalPos.y, pGameSaved, (D2RoomStrc*)pSpawnRoom, 1, 0, nullptr);
+          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x83, ptPortalPos.x, ptPortalPos.y, pGameSaved, (D2RoomStrc*)pSpawnRoom, 1, 0, 0);
         }
       }
 

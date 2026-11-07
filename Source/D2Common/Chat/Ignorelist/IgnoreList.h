@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -76,6 +79,8 @@ struct __attribute__((packed)) IgnoreList {
     /* 0x184 */ int32_t nPersistentIgnore; // "Persistent Ignore" registry value; returned by ChatIgnoreList_GetPersistentSetting 0060ddf0 (pThis[0x61]) and written by IGNORELIST_SavePersistentSetting 0060de00
 };
 
+#ifndef D2_DEFINED_IgnoreListVtable
+#define D2_DEFINED_IgnoreListVtable
 struct IgnoreListVtable {
     /* 0x00 */ int32_t (__thiscall *AddByPattern)(::IgnoreList *, char *);
     /* 0x04 */ int32_t (__thiscall *RemoveByPattern)(::IgnoreList *, char *);
@@ -91,6 +96,7 @@ struct IgnoreListVtable {
     /* 0x2C */ ::IgnoreList * (__thiscall *ScalarDeletingDestructor)(::IgnoreList *, uint32_t);
 };
 
+#endif // D2_DEFINED_IgnoreListVtable
 namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 // Function declarations

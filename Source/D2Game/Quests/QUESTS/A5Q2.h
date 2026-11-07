@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -129,7 +132,7 @@ void __fastcall Q32_InitData(struct D2QuestDataStrc * pQuestData);
 // object's room/coords, flagged ISRESURRECT|ISINIT (frozen-in-cage appearance). Stores each spawned GUID into the
 // 3x5 group GUID table (at A5Q2-data+0xb0, indexed by nBarricadeGroupIdx) and attaches the A5Q2 quest to the unit.
 // Stops at 5 prisoners per group. Returns count spawned. No QuestRecord access.
-int32_t __fastcall Q32_SpawnBarricadePrisoners(struct D2QuestDataStrc * pQuestData, int32_t nBarricadeObjPtr, int32_t nBarricadeGroupIdx);
+int32_t __fastcall Q32_SpawnBarricadePrisoners(struct D2QuestDataStrc * pQuestData, struct D2ObjectInitFnArg * nBarricadeObjPtr, int32_t nBarricadeGroupIdx);
 // Objects_InitFn62 (A5Q2 Rescue on Mount Arreat) -- object init fn for the barricade object.
 // Runs when a barricade object is created in the level. If quest in log: bumps server stateFlag->2 if below 2, and
 // if stateFlagPrev==0 and quest not failed (field_0xA8 < 5) broadcasts stateFlag 1 ("in log"). De-dupes the

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2ArchiveStrc;
 struct D2MPQBlockEntryStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2MPQFileStrc
+#define D2_DEFINED_D2MPQFileStrc
 struct __attribute__((packed)) D2MPQFileStrc {
     /* 0x000 */ struct D2MPQFileStrc * pPrevLink;
     /* 0x004 */ struct D2MPQFileStrc * pNext;
@@ -40,3 +45,5 @@ struct __attribute__((packed)) D2MPQFileStrc {
     /* 0x150 */ uint32_t nChecksumState;
     /* 0x154 */ uint32_t nExpectedFileSize;
 };
+
+#endif // D2_DEFINED_D2MPQFileStrc

@@ -4,19 +4,23 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
 
 // Forward declarations
 struct BigData;
 struct D2Srp;
 
 // Data types
+#ifndef D2_DEFINED_BigBuffer
+#define D2_DEFINED_BigBuffer
 struct BigBuffer {
     /* 0x00 */ uint32_t nCapacity; // m_alloc - allocated element count
     /* 0x04 */ uint32_t nCount; // m_count - used element count
@@ -25,6 +29,9 @@ struct BigBuffer {
     /* 0x10 */ uint32_t nStartWord; // m_offset - BigBuffer only; Count() is m_count - m_offset (oracle .Count__9BigBuffer)
 };
 
+#endif // D2_DEFINED_BigBuffer
+#ifndef D2_DEFINED_D2SrpCredentialsStrc
+#define D2_DEFINED_D2SrpCredentialsStrc
 struct D2SrpCredentialsStrc {
     /* 0x00 */ char szUsername[32];
     /* 0x20 */ char szPassword[32]; // wiped with a 0x20 memset after key exchange
@@ -34,6 +41,7 @@ struct D2SrpCredentialsStrc {
     /* 0xA8 */ uint8_t aClientProof_M1[20];
 };
 
+#endif // D2_DEFINED_D2SrpCredentialsStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct __attribute__((packed)) D2SrpSeedEntropyStrc {
     /* 0x00 */ __time32_t tTime; // _time32() result
@@ -42,6 +50,8 @@ struct __attribute__((packed)) D2SrpSeedEntropyStrc {
 };
 
 #endif // D2_MODULE_Bnclient
+#ifndef D2_DEFINED_TSGrowableArray_Uc
+#define D2_DEFINED_TSGrowableArray_Uc
 struct TSGrowableArray_Uc {
     /* 0x00 */ uint32_t nCapacity; // allocated byte capacity
     /* 0x04 */ uint32_t nLen; // current used byte count
@@ -49,16 +59,18 @@ struct TSGrowableArray_Uc {
     /* 0x0C */ uint32_t nGrowStep; // capacity grow step (pow2)
 };
 
+#endif // D2_DEFINED_TSGrowableArray_Uc
+#ifndef D2_DEFINED_BigStack
+#define D2_DEFINED_BigStack
 struct __attribute__((packed)) BigStack {
     /* 0x000 */ BigBuffer aBuffers[16]; // scratch BigBuffers; BigBuffer_Mul/Div/IsPrime take aBuffers[nUsed] and bump nUsed
     /* 0x140 */ uint32_t nUsed; // index of the next free scratch buffer (+0x140)
 };
 
+#endif // D2_DEFINED_BigStack
 namespace Bnclient::SRP {
 
 // Function declarations
-// @sourcefile .\SRP.cpp
-void __fastcall SRP_CreateContext(struct D2Srp * * ppSrp);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
@@ -73,16 +85,18 @@ struct D2Srp * __fastcall SRP_ConstructContext(struct D2Srp * pSrp);
 void __thiscall SRP_InitializeRandomState(struct D2Srp * pThis, uint32_t dwSeed);
 void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t nBytes);
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
-void __thiscall SRP_ComputePasswordHash(struct D2Srp * pSrp, void * pSalt, char * szText1, char * szText2, int * ppPasswordHash);
-void __thiscall SRP_ComputeScramblingParam(int32_t pThis, struct BigData * * ppBase, struct BigData * * ppResult);
+void __thiscall SRP_ComputePasswordHash(struct D2Srp * pSrp, void * pSalt, char * szText1, char * szText2, struct BigData * * ppPasswordHash);
+void __thiscall SRP_ComputeScramblingParam(struct D2Srp * pThis, struct BigData * * ppBase, struct BigData * * ppResult);
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
 void __thiscall SRP_HashBigNumToU32(struct D2Srp * pSrp, struct BigData * * ppBigNum, uint32_t * pdwOut);
-int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, struct BigData * * pPrivateKey, struct BigData * * ppServerPublic, struct BigData * * ppPasswordHash, struct BigData * * ppSharedSecret);
+int __thiscall SRP_ClientComputeSharedSecret(struct D2Srp * pSrp, struct BigData * * pPrivateKey, struct BigData * * ppServerPublic, struct BigData * * ppPasswordHash, struct BigData * * ppSharedSecret);
 int __thiscall SRP_ServerComputeSharedSecret(struct D2Srp * pThis, struct BigData * * ppClientPublic, int * ppServerPublic, struct BigData * * ppPrivateKey, struct BigData * * ppVerifier, struct BigData * * ppSharedSecret);
-void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * pSalt, void * pClientPublic, void * pServerPublic, void * pSessionKey, int32_t pClientProofOut);
+void __thiscall SRP_ComputeClientProof(struct D2Srp * pThis, char * szUsername, void * pSalt, void * pClientPublic, void * pServerPublic, void * pSessionKey, uint8_t * pClientProofOut);
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
 void __thiscall SRP_ComputeServerProof(struct D2Srp * pSrp, void * pClientPublic, void * pClientProof, void * pSessionKey, uint8_t * pHashOut);
 BOOL __fastcall SRP_IsContextInitialized(struct D2Srp * pSrp);
+// @sourcefile .\SRP.cpp
+void __fastcall SRP_CreateContext(struct D2Srp * * ppSrp);
 BOOL __thiscall SRP_ExportPublicValues(struct D2Srp * * ppSrp, uint32_t * pnGeneratorLen, void * pGeneratorOut, uint32_t * pnModulusLen, void * pModulusOut);
 BOOL __thiscall SRP_SetParameters(struct D2Srp * * ppSrp, uint32_t nGeneratorLen, uint8_t * pGeneratorBytes, uint32_t nModulusLen, uint8_t * pModulusBytes);
 // Seeds the SRP context's random state: loads *ppSrp and tail-jumps to SRP_InitializeRandomState(pSrp, dwSeed).
@@ -92,12 +106,14 @@ void __fastcall SRP_FreeParameters(struct D2Srp * * ppSrp);
 void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut);
 void __thiscall SRP_GenerateAccountCredentials(void * pThis, char * pCredsBuf, char * szUsername, char * szPassword);
 BOOL __thiscall SRP_ClientKeyExchange(void * pThis, struct D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes);
-BOOL __thiscall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, void * pSrpContext, int * pServerProof);
+BOOL __thiscall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, void * pSrpContext, uint8_t * pServerProof);
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes);
 void __thiscall SRP_ServerComputePublicB(void * pThis, int32_t nContextBase);
 void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uint32_t * pServerProof);
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
 void __thiscall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, int32_t nContextBase);
+void __stdcall SRP_GlobalInit();
+void SRP_AtexitCleanup();
 #endif // D2_MODULE_Bnclient
 
 } // namespace Bnclient::SRP

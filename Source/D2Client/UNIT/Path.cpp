@@ -15,16 +15,8 @@
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Object.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Transform.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
@@ -210,7 +202,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
       return;
     }
 
-    D2Common::PATH::Path::PATH_CheckCollisionFlags(pUnit->pPath.pDynamicPath, (uint32_t)pUnit, pRoom, nX, (uint16_t)nClickYSaved);
+    D2Common::PATH::Path::PATH_CheckCollisionFlags(pUnit->pPath.pDynamicPath, pUnit, pRoom, nX, (uint16_t)nClickYSaved);
 }
 
 uint32_t __fastcall PATH_SetTargetUnitAndCalculate(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetUnitId) {

@@ -13,26 +13,20 @@
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
-#include "Source/D2Common/Stats/StatsEx.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/Src/D2WinArchive.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "Source/D2Client/UI/Panel.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/UI/CmdTbl.data.h"
 #include "Source/D2Client/UI/Hireables.h"
-#include "Source/D2Client/UI/Panel.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Win/Src/D2WinMain.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -931,11 +925,11 @@ int32_t SORT_CompareInts(int * pA, int * pB) {
     if (*pB < *pA) {
       return 1;
     }
-    if (*(int*)((int)pA + 6)) {
-      return (*(int*)((int)pB + 6) != 0) - 1;
+    if (*(int*)((char*)pA + 6)) {
+      return (*(int*)((char*)pB + 6) != 0) - 1;
     }
 
-    return (uint32_t)(*(int*)((int)pB + 6) != 0);
+    return (uint32_t)(*(int*)((char*)pB + 6) != 0);
 }
 
 // Rebuilds derived mouse button bindings (0x100-0x104) from command table. Scans all key bindings and populates gKeyBindingTable slots for left/right/middle/scroll/forward mouse buttons. Invalidates bindings (sets 0xFFFF) if command has no handler or conflicts with mouse-specific restrictions.
@@ -997,7 +991,7 @@ void __stdcall CMD_RebuildDerivedBindings() {
       }
 
       pBinding++;
-      if ((int)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
+      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
         return;
       }
     } while (true);
@@ -1164,7 +1158,7 @@ void __fastcall CMD_ResetKeyBindingsToDefaults(DWORD bUseInstallDir) {
     do {
       *pWKeyCode = 0xffff;
       pWKeyCode += 5;
-    } while ((int)pWKeyCode < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 4));
+    } while ((intptr_t)pWKeyCode < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 4));
 
     int* pSrcDefault = gaKeyBindingsDefault;
     D2KeyBindStrc* pDstBinding = g_KeyBindingsTable;
@@ -1181,9 +1175,9 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
     int nIndex = 0;
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
     while (((D2KeyBindStrc*)((char*)pBinding - 0x6))->nCmdIndex != nCmdIndex || ((D2KeyBindStrc*)((char*)pBinding - 0x6))->nSlot != nSlot) {
-      pBinding = (PD2KeyBindSlot)((int)pBinding + 10);
+      pBinding = (PD2KeyBindSlot)((char*)pBinding + 10);
       nIndex++;
-      if ((int)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
+      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
         return 0xffff;
       }
     }
@@ -1432,14 +1426,14 @@ BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKe
           }
 
           nIndex++;
-        } while ((int)&g_KeyBindingsTable[nIndex].wKeyCode < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 4));
+        } while ((intptr_t)&g_KeyBindingsTable[nIndex].wKeyCode < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 4));
 
         nIndex = 0;
         pBinding2 = &g_KeyBindingsTable[0].nSlot;
         while (((D2KeyBindStrc*)((char*)pBinding2 - 0x6))->nCmdIndex != nCmdIndex || ((D2KeyBindStrc*)((char*)pBinding2 - 0x6))->nSlot != nSlot) {
-          pBinding2 = (PD2KeyBindSlot)((int)pBinding2 + 10);
+          pBinding2 = (PD2KeyBindSlot)((char*)pBinding2 + 10);
           nIndex++;
-          if ((int)pBinding2 >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
+          if ((intptr_t)pBinding2 >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
             if (nClearedIndex == 0x72) {
               return 0;
             }
@@ -1493,17 +1487,17 @@ void __fastcall CMD_UnbindCommand(int32_t nCmdIndex, int32_t nSlot) {
         ((D2KeyBindStrc*)((char*)pBinding - 0x6))->wKeyCode = 0xffff;
       }
 
-      pBinding = (PD2KeyBindSlot)((int)pBinding + 10);
-    } while ((int)pBinding < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6));
+      pBinding = (PD2KeyBindSlot)((char*)pBinding + 10);
+    } while ((intptr_t)pBinding < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6));
 }
 
 uint32_t __fastcall CMD_IsCommandBound(int32_t nCmdIndex, int32_t nSlot) {
     int nIndex = 0;
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
     while (((D2KeyBindStrc*)((char*)pBinding - 0x6))->nCmdIndex != nCmdIndex || ((D2KeyBindStrc*)((char*)pBinding - 0x6))->nSlot != nSlot) {
-      pBinding = (PD2KeyBindSlot)((int)pBinding + 10);
+      pBinding = (PD2KeyBindSlot)((char*)pBinding + 10);
       nIndex++;
-      if ((int)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
+      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
         return 0;
       }
     }
@@ -1516,9 +1510,9 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
     int nIndex = 0;
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
     while (((D2KeyBindStrc*)((char*)pBinding - 0x6))->nCmdIndex != nCmdIndex || ((D2KeyBindStrc*)((char*)pBinding - 0x6))->nSlot != nSlot) {
-      pBinding = (PD2KeyBindSlot)((int)pBinding + 10);
+      pBinding = (PD2KeyBindSlot)((char*)pBinding + 10);
       nIndex++;
-      if ((int)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
+      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
         pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb2);
         return pName;
       }
@@ -1850,9 +1844,9 @@ uint16_t * __fastcall CMD_GetKeyDescForCommand(int32_t nCmdIndex, int32_t nSlot)
     PD2KeyBindSlot pBinding;
     pBinding = &g_KeyBindingsTable[0].nSlot;
     while (((D2KeyBindStrc*)((char*)pBinding - 0x6))->nCmdIndex != nCmdIndex || ((D2KeyBindStrc*)((char*)pBinding - 0x6))->nSlot != nSlot) {
-      pBinding = (PD2KeyBindSlot)((int)pBinding + 10);
+      pBinding = (PD2KeyBindSlot)((char*)pBinding + 10);
       nIndex++;
-      if ((int)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
+      if ((intptr_t)pBinding >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
         wKeyCode = 0xffff;
         describe_key:
         {
@@ -1971,7 +1965,7 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
     int nIndex = 0;
     while ((uint32_t)g_KeyBindingsTable[nIndex].wKeyCode != pMsg->nWParam || (nCmdIndex = g_KeyBindingsTable[nIndex].nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnHandler) {
       nIndex++;
-      if ((int)&g_KeyBindingsTable[nIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
+      if ((intptr_t)&g_KeyBindingsTable[nIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
         return;
       }
     }
@@ -1998,7 +1992,7 @@ void __stdcall INPUT_DispatchKeyCommand(D2UIMouseMsgStrc * pMsg) {
     int nBindingIndex = 0;
     while ((uint32_t)g_KeyBindingsTable[nBindingIndex].wKeyCode != pMsg->nWParam || (nCmdIndex = g_KeyBindingsTable[nBindingIndex].nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnAltHandler) {
       nBindingIndex++;
-      if ((int)&g_KeyBindingsTable[nBindingIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
+      if ((intptr_t)&g_KeyBindingsTable[nBindingIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
         return;
       }
     }
@@ -2125,7 +2119,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
                 do {
                   *pDstTable = 0xffff;
                   pDstTable += 5;
-                } while ((int)pDstTable < (intptr_t)&g_KeyBindingsTable + 1144);
+                } while ((intptr_t)pDstTable < (intptr_t)&g_KeyBindingsTable + 1144);
 
                 pBindingRow = wFileMagic.aBindings;
                 pDstCopy = g_KeyBindingsTable;
@@ -2150,7 +2144,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
     do {
       *pDstTable = 0xffff;
       pDstTable += 5;
-    } while ((int)pDstTable < (intptr_t)&g_KeyBindingsTable + 1144);
+    } while ((intptr_t)pDstTable < (intptr_t)&g_KeyBindingsTable + 1144);
 
     int* pDefaultSrc = gaKeyBindingsDefault;
     pBindingRow = g_KeyBindingsTable;

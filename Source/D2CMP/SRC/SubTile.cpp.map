@@ -41,7 +41,6 @@
         "SUBTILE_CountRunLengthForByte"
       ],
       "usedTypes": [
-        "char *",
         "uint32_t"
       ]
     },
@@ -64,7 +63,9 @@
         "exit"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -86,6 +87,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2GroundSubTileStrc",
         "int32_t",
         "pfnRGBToPaletteIndex",
         "uint32_t",
@@ -129,6 +131,9 @@
       "namespace": "D2CMP::SRC::SubTile",
       "calledFunctions": [
         "Unreferenced_0060d7c0"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -267,6 +272,7 @@
       ],
       "usedTypes": [
         "D2GroundSubTileStrc",
+        "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
       ]

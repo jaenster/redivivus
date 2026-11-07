@@ -406,6 +406,7 @@
       ],
       "usedTypes": [
         "D2RoomStrc",
+        "D2UnitStrc",
         "POINT",
         "eCollisionFlags",
         "eD2UnitType"

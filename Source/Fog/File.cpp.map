@@ -89,6 +89,7 @@
       ],
       "usedTypes": [
         "CONTEXT",
+        "CRASH_DumpRegisters_Slotm6e",
         "Report",
         "fnCrashOutputLine",
         "uint32_t"

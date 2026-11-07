@@ -182,7 +182,8 @@
         "LRUCACHE_Init"
       ],
       "usedTypes": [
-        "D2PoolManagerStrc"
+        "D2PoolManagerStrc",
+        "uint32_t"
       ]
     },
     {
@@ -203,6 +204,7 @@
         "GFX_UnlinkCacheEntry"
       ],
       "usedTypes": [
+        "D2GfxHashEntryStrc",
         "int32_t"
       ]
     },
@@ -325,6 +327,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CelDataHashEntryStrc",
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
         "D2LRUCacheNodeStrc",
@@ -404,7 +407,8 @@
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -533,7 +537,8 @@
         "D2GfxMemoryStrc",
         "D2PoolManagerStrc",
         "D2SpriteCache",
-        "fnSpriteCacheEntryRelease"
+        "fnSpriteCacheEntryRelease",
+        "uint32_t"
       ]
     },
     {
@@ -731,6 +736,7 @@
         "GetTickCount"
       ],
       "usedTypes": [
+        "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc",
         "int32_t"
       ]
@@ -916,6 +922,7 @@
         "GFX_AllocSpriteCache"
       ],
       "usedTypes": [
+        "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -1029,6 +1036,7 @@
       "usedTypes": [
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -1063,6 +1071,7 @@
         "D2CelCacheBlockStrc",
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
         "DC6Block",
         "int32_t",
         "uint32_t"
@@ -1094,23 +1103,10 @@
       "usedTypes": [
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
-    },
-    {
-      "name": "SPRITECACHE_SetMaxSize_Unref_006b2f30",
-      "address": "006b2f30",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006b2f30"
-        }
-      ],
-      "namespace": "D2CMP::SRC::SpriteCache",
-      "calledFunctions": [
-        "SPRITECACHE_SetMaxSize_Unref_006b2f30"
       ]
     }
   ]

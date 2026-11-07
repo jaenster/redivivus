@@ -136,6 +136,9 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "Unreferenced_004b9440"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc"
       ]
     },
     {
@@ -504,7 +507,7 @@
         "SOUND_PlayItemSound"
       ],
       "usedTypes": [
-        "D2UnitDataItemStrc",
+        "D2SoundChannelStrc",
         "int32_t"
       ]
     },
@@ -582,6 +585,9 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "Unreferenced_004b9cd0"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {
@@ -673,7 +679,7 @@
       ],
       "usedTypes": [
         "D2SoundChannelStrc",
-        "int32_t",
+        "D2UnitStrc",
         "uint32_t"
       ]
     },

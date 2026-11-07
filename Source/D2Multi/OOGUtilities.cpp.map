@@ -22,6 +22,24 @@
       ]
     },
     {
+      "name": "EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine",
+      "address": "0043dba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043dba0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine",
+        "D2WINTEXTBOX_SetSelectedLine"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
       "name": "OOG_WaitMCPThreadDonePump",
       "address": "0043dbc0",
       "lines": [
@@ -600,6 +618,9 @@
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
         "Unreferenced_00442a70"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {

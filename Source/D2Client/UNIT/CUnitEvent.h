@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,8 @@ typedef int32_t (__fastcall *fnCUnitEventCallback)(struct D2UnitStrc * pUnit, st
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2CUnitEventStrc
+#define D2_DEFINED_D2CUnitEventStrc
 struct D2CUnitEventStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ int nEventType;
@@ -30,6 +35,7 @@ struct D2CUnitEventStrc {
     /* 0x1C */ struct D2CUnitEventStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D2CUnitEventStrc
 namespace D2Client::UNIT::CUnitEvent {
 
 // Function declarations

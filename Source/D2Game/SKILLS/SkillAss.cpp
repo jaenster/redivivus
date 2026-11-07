@@ -2,24 +2,8 @@
 
 #include "Source/D2Game/SKILLS/SkillAss.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Path.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Archive.h"
 #include "Source/D2Game/D2DamageStrc.h"
@@ -31,20 +15,16 @@
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
+#include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/SKILLS/SkillDruid.h"
 #include "Source/D2Game/SKILLS/SkillNec.h"
 #include "Source/D2Game/SKILLS/SkillPal.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/SMem.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/SKILLS/SkillsServer.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -779,12 +759,12 @@ void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, int32_t nInitSeed)
 }
 
 // Spawns a ring of missiles; skill-agnostic.
-void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride) {
+void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride) {
     int32_t nRoyalStrikeParam;
     D2SkillArgStrc sSkillArg;
     int anXYOffsetTable[128];
     uint64_t qwSeedState;
-    D2Common::Seed::InitSeed_Param_666((D2SeedStrc*)&qwSeedState, (int32_t)pUnit);
+    D2Common::Seed::InitSeed_Param_666((D2SeedStrc*)&qwSeedState, pUnit);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nTargetX;
     sSkillArg.nY = nTargetY;
@@ -925,8 +905,8 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, D2UnitStrc * pUnit,
     int nByteOffset = 0;
     do {
       D2UnitStrc* pMissile;
-      sSkillArg.nUnitX = *(int*)((int)anXYOffsetTable + nByteOffset);
-      sSkillArg.nUnitY = *(int*)((int)anXYOffsetTable + nByteOffset + 0x100);
+      sSkillArg.nUnitX = *(int*)((char*)anXYOffsetTable + nByteOffset);
+      sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + nByteOffset + 0x100);
       qwSeedState = (qwSeedState & 0xffffffff) * 0x6ac690c5 + (qwSeedState >> 0x20);
       sSkillArg.nFunctionParam = (int32_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
@@ -1016,12 +996,12 @@ void __fastcall SKILLASS_BuildSpiralMissilePath(D2UnitStrc * pUnit, int32_t nSee
 }
 
 // Spawns a spiral ring of missiles; skill-agnostic.
-void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride) {
+void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, int32_t pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride) {
     int32_t nRoyalStrikeParam;
     D2SkillArgStrc sSkillArg;
     int anXYOffsetTable[128];
     uint64_t qwSeedState;
-    D2Common::Seed::InitSeed_Param_666((D2SeedStrc*)&qwSeedState, (int32_t)pUnit);
+    D2Common::Seed::InitSeed_Param_666((D2SeedStrc*)&qwSeedState, pUnit);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nTargetX;
     sSkillArg.nY = nTargetY;
@@ -1162,8 +1142,8 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, D2UnitStrc * p
     int nByteOffset = 0;
     do {
       D2UnitStrc* pMissile;
-      sSkillArg.nUnitX = *(int*)((int)anXYOffsetTable + nByteOffset);
-      sSkillArg.nUnitY = *(int*)((int)anXYOffsetTable + nByteOffset + 0x100);
+      sSkillArg.nUnitX = *(int*)((char*)anXYOffsetTable + nByteOffset);
+      sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + nByteOffset + 0x100);
       qwSeedState = (qwSeedState & 0xffffffff) * 0x6ac690c5 + (qwSeedState >> 0x20);
       sSkillArg.nFunctionParam = (int32_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
@@ -1236,7 +1216,7 @@ BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDA
       nScatterRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkillSaved, nSkillLvl);
     }
 
-    SKILLASS_SpawnMissileRing(nChargeUpMissileId, (D2UnitStrc*)DVar1.nSeedLow, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nScatterRadius);
+    SKILLASS_SpawnMissileRing(nChargeUpMissileId, DVar1.nSeedLow, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nScatterRadius);
     return 1;
 }
 
@@ -1274,7 +1254,7 @@ BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pG
       nStrikeRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkillSaved, nSkillLvl);
     }
 
-    SKILLASS_SpawnSpiralMissileRing(nChargeUpMissileId, (D2UnitStrc*)DVar1.nSeedLow, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nStrikeRadius);
+    SKILLASS_SpawnSpiralMissileRing(nChargeUpMissileId, DVar1.nSeedLow, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nStrikeRadius);
     return 1;
 }
 
@@ -1489,7 +1469,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side per-hit damage application for the Assassin's dual-wield Whirlwind-style melee attack (also used by other dual-weapon skills). Args (custom calling convention): nParam=SGAMEDATA*, pDamage (in/out D2DamageStrc), pUnit=target, eSkill, pUnit1=skill-context unit, pUnit2(EBX)=attacker. Applies progressive charge-up damage, sets hit flags 3, computes skill min/max damage scaled by the damage struct's enhanced-damage percent (with 64-bit overflow-safe paths), adds kick damage similarly, rolls a uniform value in [min,max] from the attacker seed, and accumulates into pDamage->dwPhysDamage. Then, for each equipped weapon (main + offhand in BODYLOC_R_ARM slot), validates it is an unbroken usable weapon with an owner, toggles its item stats active, calls DAMAGE_CalculateOffensiveDamage and SKILLASS_DispatchChargeUpDamage so both weapons contribute, then restores the main weapon's stat-active flag.
-static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2DamageStrc * pDamage, D2UnitStrc * pUnit, eD2Skills eSkill, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
+static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2DamageStrc * pDamage, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pUnit1, D2UnitStrc * pUnit2) {
     uint32_t nMinDmg;
     int nEnhKickDmg;
     D2UnitStrc* pMainWeapon;
@@ -1506,10 +1486,11 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     int nMinDmgKick;
     D2InventoryStrc* pInventory;
     D2SeedStrc sNewSeed;
+    D2UnitStrc* pUnit3;
     SKILLASS_ApplyProgressiveDamageToTarget(pUnit2, pDamage);
     pDamage->dwHitFlags |= 3;
-    nMinDmg = D2Common::Skills::SKILL_CalcMinDamage(pUnit2, eSkill, (int32_t)pUnit1, 0);
-    nMaxDmg = D2Common::Skills::SKILL_CalcMaxDamage(pUnit2, eSkill, (int32_t)pUnit1, 0);
+    nMinDmg = D2Common::Skills::SKILL_CalcMinDamage(pUnit2, eSkill, pUnit1, 0);
+    nMaxDmg = D2Common::Skills::SKILL_CalcMaxDamage(pUnit2, eSkill, pUnit1, 0);
     nEnhDmgPctWork = pDamage->dwEnDmgPct;
     if ((int)nMinDmg > 0x100000) {
       if ((int)(nMinDmg & -16) < 0x640) {
@@ -1619,18 +1600,18 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     }
 
     pDamage->dwPhysDamage = pDamage->dwPhysDamage + nEnhDmgPctWork + nMinDmgKick;
-    SkillsServer::SetDamageOnEvent(pUnit2, pDamage, eSkill, (int32_t)pUnit1);
+    SkillsServer::SetDamageOnEvent(pUnit2, pDamage, eSkill, pUnit1);
     pInventory = pUnit2->pInventory;
     if (!pInventory) {
       return;
     }
 
     pMainWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
-    pUnit1 = 0;
+    pUnit3 = 0;
     if (pMainWeapon) {
       int32_t eBodyLoc;
       eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pMainWeapon);
-      pUnit1 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, eBodyLoc == BODYLOC_R_ARM ? 5 : 4);
+      pUnit3 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, eBodyLoc == BODYLOC_R_ARM ? 5 : 4);
     }
 
     bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pMainWeapon, ITEMTYPE_Weapon);
@@ -1639,14 +1620,14 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     } else {
       D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pMainWeapon, 0);
     }
-    if (pUnit1 && pUnit1 != pMainWeapon) {
-      bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit1, ITEMTYPE_Weapon);
+    if ((int32_t)pUnit3 && pUnit3 != pMainWeapon) {
+      bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit3, ITEMTYPE_Weapon);
       if (bIsWeaponType) {
-        bOffhandValid = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pUnit1);
+        bOffhandValid = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pUnit3);
         if (bOffhandValid) {
-          pWeaponOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pUnit1, nullptr);
+          pWeaponOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pUnit3, nullptr);
           if (pWeaponOwner) {
-            D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pUnit1, 0);
+            D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pUnit3, 0);
           }
         }
       }
@@ -1683,7 +1664,7 @@ static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
 
       sDamage.dwEnDmgPct = dwEnDmgPctValue;
-      SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pUnit, eSkill, (D2UnitStrc*)nSkillLvl, pAttacker);
+      SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pUnit, eSkill, nSkillLvl, pAttacker);
     }
 
     *(uint8_t*)(char*)&nSkillLvl = pSkillTxt->SrcDam;
@@ -1823,7 +1804,7 @@ BOOL __fastcall Skills_SrvDoFunc_042_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server-side Assassin skill handler that fires a scatter pattern of missiles toward or around the target cursor position. With nParam1/nParam2 both ≥ 2, spawns nParam1 missiles each at a random offset within ±nParam2 tiles of the target (skipping positions within 3 units of the caster). Falls back to a single on-target missile if either spread parameter is less than 2. Seeds the unit's RNG with the target X position before each scatter run.
-BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner, uint8_t * pMissileTxtId, int32_t nMissileCount, int32_t nSpread, eD2Skills eSkill, int32_t nSkillLevel) {
+BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner, eMissilesId pMissileTxtId, int32_t nMissileCount, int32_t nSpread, eD2Skills eSkill, int32_t nSkillLevel) {
     uint32_t nRandOffset;
     int nMissilePosY;
     int32_t nDistOrPosX;
@@ -1840,7 +1821,7 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nTargetX);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.pOwner = pOwner;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxtId;
+    sSkillArg.nMissileTxtNo = pMissileTxtId;
     sSkillArg.nFlags = 0x420;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
@@ -1884,7 +1865,7 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
           MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         }
 
-        pOwner = (D2UnitStrc*)((uintptr_t)&pOwner[-1].pMsgLast + 3);
+        pOwner = (D2UnitStrc*)((intptr_t)&pOwner[-1].pMsgLast + 3);
       } while (pOwner);
 
       return 1;
@@ -1910,7 +1891,7 @@ BOOL __fastcall Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles(::SGAMEDATA *
     }
 
     int32_t nRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->aurarangecalc, eSkill, nSkillLvl);
-    BOOL bResult = SKILLASS_CastScatterMissiles(pGame, pUnit, pUnit, (uint8_t*)nMissileId, nCount, nRange, eSkill, nSkillLvl);
+    BOOL bResult = SKILLASS_CastScatterMissiles(pGame, pUnit, pUnit, nMissileId, nCount, nRange, eSkill, nSkillLvl);
     return bResult;
 }
 
@@ -2262,6 +2243,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
     int32_t nCalcVal;
     D2SkillCurseArgStrc sCurseArgs;
     D2StateExArgStrc sStateExpiryArgs;
+    Skills_SrvDoFunc_047_CloakOfShadows_Slotm14 uSlot14;
     D2UnitStrc* pAuraTarget;
     eD2Skills eSkillOrig = eSkill;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -2301,7 +2283,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
 
     eSkill = (eD2Skills)pSkillTxt->passivestat;
     int* pCalcPtr = pSkillTxt->passivecalc + 1;
-    short int* pStatPtr = (short int*)0x4;
+    uSlot14.nPassiveStatsLeft = 4;
     do {
       eSkill += 2;
       if (*(short int*)eSkill >= 0) {
@@ -2312,8 +2294,8 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
       }
 
       pCalcPtr++;
-      pStatPtr = (short int*)((int)pStatPtr - 1);
-    } while (pStatPtr);
+      uSlot14.nPassiveStatsLeft--;
+    } while ((short int*)uSlot14.nPassiveStatsLeft);
 
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_skill, eSkillOrig, 0);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_level, nSkillLvl, 0);
@@ -2325,12 +2307,12 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
       sCurseArgs.eSkill = eSkillOrig;
       sCurseArgs.eTargetState = (eD2States)pSkillTxt->auratargetstate;
       eSkill = (eD2Skills)pSkillTxt->aurastatcalc;
-      pStatPtr = pSkillTxt->aurastat;
+      uSlot14.pAuraStat = pSkillTxt->aurastat;
       nAuraStatIdx = 0;
       do {
-        sCurseArgs.anStatIds[nAuraStatIdx] = (int)*pStatPtr;
+        sCurseArgs.anStatIds[nAuraStatIdx] = (int)*uSlot14.pAuraStat;
         sCurseArgs.anStatValues[nAuraStatIdx] = 0;
-        if (*pStatPtr >= 0) {
+        if (*uSlot14.pAuraStat >= 0) {
           nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *(int32_t*)eSkill, eSkillOrig, nSkillLvl);
           sCurseArgs.anStatValues[nAuraStatIdx] = nCalcVal;
         }
@@ -2338,7 +2320,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
         pAuraTarget = pUnitSaved;
         eSkill += SKILL_LeftHandThrow;
         nAuraStatIdx++;
-        pStatPtr++;
+        uSlot14.pAuraStat++;
       } while (nAuraStatIdx < 6);
 
       nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnitSaved, pSkillTxt->aurarangecalc, eSkillOrig, nSkillLvl);
@@ -2548,7 +2530,7 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
         pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (int)(char)byBodyLoc);
         if (!pExistingItem) {
           pUnit = (D2UnitStrc*)(int)(char)pEquipTableRow->mod[nRandEquipSlot];
-          if ((int)pUnit < 0 || (int)pUnit >= 8) {
+          if ((intptr_t)pUnit < 0 || (intptr_t)pUnit >= 8) {
             pUnit = 0;
           }
 
@@ -2698,7 +2680,7 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
 
     int32_t nMaxLifetime;
     nMaxLifetime = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-    if ((int)sSummonCast.pSkillTxt < nMaxLifetime) {
+    if ((intptr_t)sSummonCast.pSkillTxt < nMaxLifetime) {
       nMaxLifetime = 1;
       if (1 < nLifetime) {
         goto equip_and_activate_clone;
@@ -2749,7 +2731,7 @@ BOOL __fastcall SKILLASS_SrvStFn27_DragonTail(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, (D2UnitStrc*)nSkillLvl, pUnit);
+    SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, nSkillLvl, pUnit);
     *(uint8_t*)(char*)&nSkillLvl = pDVar1->SrcDam;
     if (!(uint8_t)nSkillLvl) {
       *(uint8_t*)(char*)&nSkillLvl = 0x80;
@@ -2812,7 +2794,7 @@ BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGam
     return 1;
 }
 
-static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(int32_t pCaster, int32_t nChancePct, D2UnitStrc * pUnit) {
+static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(D2UnitStrc * pCaster, int32_t nChancePct, D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
@@ -2832,7 +2814,7 @@ static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(int32_t pCaster, 
       return 0;
     }
 
-    nMercTypeOrRoll = D2Common::Seed::UNIT_GetModuloFromSeed((D2SeedStrc*)(pCaster + 0x20), 100);
+    nMercTypeOrRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pCaster->sSeed, 100);
     return (uint32_t)((int)nMercTypeOrRoll <= nChancePct);
 }
 
@@ -2882,7 +2864,7 @@ void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState
 }
 
 // Server-side application of the Conversion effect (Assassin/Druid "convert enemy to ally") to pUnit, cast by pUnit2 with skill data at nParam. RNG-rolls success; on success allocates/refreshes a STATE_conversion statlist with an expiry frame (game frame + base + random duration), sets the SKILLASS_OnConversionExpire callback, frees the converted unit's existing minions, sets it to alignment 2 (ally), retargets it, and creates a unit node. Also caps the convert's level/HP/maxhp against the caster via a STATE_conversion_save snapshot when the convert out-levels the caster. Returns 1 on success, 0 if the roll fails or stat allocation fails. Custom register calling convention (pUnit@ECX, nParam@EAX).
-static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, int32_t nParam) {
+static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2MindBlastArgStrc * nParam) {
     eD2UnitType eOwnerUnitType;
     int nHpResultLo;
     int32_t nMaxHpShifted;
@@ -2890,13 +2872,13 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     uint32_t nAlignment;
     int nHpFinal;
     int nMaxHpFinal;
-    uint32_t nConvertRoll = SKILLAMZ_GetGuidedArrowPiercingBonus((int32_t)pUnit2, *(int32_t*)(nParam + 4), pUnit);
+    uint32_t nConvertRoll = SKILLAMZ_GetGuidedArrowPiercingBonus(pUnit2, nParam->nStunLength, pUnit);
     if (!nConvertRoll) {
       return 0;
     }
 
-    nConvertRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, *(uint32_t*)(nParam + 0xc));
-    int nCasterLevel = nConvertRoll + pGame->dwGameFrame + *(int*)(nParam + 8);
+    nConvertRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, nParam->nStunChance);
+    int nCasterLevel = nConvertRoll + pGame->dwGameFrame + nParam->nConvertChance;
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_conversion);
     if (!pStatList) {
       if (!pUnit2) {
@@ -2991,7 +2973,7 @@ uint32_t __fastcall SKILLAMZ_HandleStrafeDamageAndNextDelay(D2SkillCallbackConte
     int nCopyDwords;
     D2DamageStrc sDamage;
     D2MindBlastArgStrc* pEventData = (D2MindBlastArgStrc*)pContext->pCallbackArg;
-    BOOL bConvertResult = SKILLASS_ApplyConversionToUnit(pUnit, pContext->pGame, pContext->pUnit, (int32_t)pEventData);
+    BOOL bConvertResult = SKILLASS_ApplyConversionToUnit(pUnit, pContext->pGame, pContext->pUnit, pEventData);
     if (bConvertResult) {
       return 1;
     }
@@ -3124,7 +3106,7 @@ BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStr
       sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nSkillToHit, 0);
       if (sDamage.wResultFlags & 1U) {
         sDamage.dwEnDmgPct = D2Common::Skills::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
-        SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, (D2UnitStrc*)nSkillLvl, pUnit);
+        SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, nSkillLvl, pUnit);
       }
 
       bySrcDamFinal = pDVar1->SrcDam;

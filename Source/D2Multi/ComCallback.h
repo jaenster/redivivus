@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Multi)
 #error "D2Multi header included by a module that may not use D2Multi (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Multi) && !defined(D2_LOADS_D2Multi)
+#error "internal D2Multi header included from another module; include D2Multi's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,17 @@ struct D2CharSelCompStrc;
 struct D2ControlMsg;
 
 // Data types
+#ifndef D2_DEFINED_D2ChannelUserNameNodeStrc
+#define D2_DEFINED_D2ChannelUserNameNodeStrc
+struct D2ChannelUserNameNodeStrc {
+    /* 0x00 */ char szUsername[50];
+    /* 0x32 */ char szFormattedName[18];
+    /* 0x44 */ struct D2ChannelUserNameNodeStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2ChannelUserNameNodeStrc
+#ifndef D2_DEFINED_D2ChannelUserStrc
+#define D2_DEFINED_D2ChannelUserStrc
 struct D2ChannelUserStrc {
     /* 0x00 */ int nSortRank; // Sort rank or reserved; always zeroed on alloc
     /* 0x04 */ char szUsername[50]; // Raw username with optional *clan prefix
@@ -37,6 +51,7 @@ struct D2ChannelUserStrc {
     /* 0xB0 */ struct D2ChannelUserStrc * pNext; // Next user in linked list
 };
 
+#endif // D2_DEFINED_D2ChannelUserStrc
 namespace D2Multi::ComCallback {
 
 // Function declarations
@@ -51,11 +66,11 @@ BOOL __fastcall COMCALLBACK_ReturnTrue(uint32_t dwCbArg1, uint32_t dwCbArg2, cha
 // Adds or updates a channel user in gpChannelUserLinkedListHead sorted list. Allocates 0x48-byte node, copies username and raw BNet data. Updates existing entry if username matches.
 void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * pbRawData);
 void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, char * szFormattedOutput);
-BOOL __fastcall COMCALLBACK_HandleGameListError(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, uint32_t szChannelName);
+BOOL __fastcall COMCALLBACK_HandleGameListError(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, char * szChannelName);
 BOOL __fastcall COMCALLBACK_ReturnFalse(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText1, char * szText2);
 void __stdcall COMCALLBACK_ClearChannelUserList();
-void __fastcall COMCALLBACK_FormatWhisperFrom(uint16_t * wszText, char * szSenderName);
-void __fastcall COMCALLBACK_FormatWhisperTo(uint16_t * wszText, char * szTargetName);
+void __fastcall COMCALLBACK_FormatWhisperFrom(uint16_t * wszText, int szSenderName);
+void __fastcall COMCALLBACK_FormatWhisperTo(uint16_t * wszText, int szTargetName);
 BOOL __stdcall COMCALLBACK_ValidateGameJoinability();
 BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(struct D2ControlMsg * pControlMsg);
 void __stdcall COMCALLBACK_UpdateChannelUserList();
@@ -72,12 +87,12 @@ BOOL __fastcall COMCALLBACK_AppendInfoMessage(uint32_t dwCbArg1, uint32_t dwCbAr
 BOOL __fastcall COMCALLBACK_HandleInfoRequest1(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, char * szInfoArg);
 BOOL __fastcall COMCALLBACK_HandleInfoRequest2(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t szUnused, char * szInfoArg);
 BOOL __fastcall COMCALLBACK_ProcessWhisperCommand(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szRawText, char * szWhisperText);
-BOOL __fastcall COMCALLBACK_HandleWhisperReply(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText, uint32_t szAccountName);
+BOOL __fastcall COMCALLBACK_HandleWhisperReply(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText, char * szAccountName);
 BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText, char * szEmoteArg);
 // Scrolls the chat-lobby user list by nScrollDelta rows: clamps gnChannelUserListScrollOffset to 0..gnChannelUserCount-11 (0 when fewer than 12 users), rebuilds the list through COMCALLBACK_UpdateChannelUserList when the offset changed, and shows the back/forward scroll buttons only when there is something to scroll to.
 // Provenance: asm 00448bd0..00448c6c; the four user-list scroll buttons call it with -10, 10, -1 and 1.
 void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta);
-BOOL __stdcall COMCALLBACK_HandleUserListClick(int * pnClickMsg);
+BOOL __stdcall COMCALLBACK_HandleUserListClick(struct D2ControlMsg * pnClickMsg);
 // Handles Battle.net game list errors by auto-squelching spamming users. When chat room context exists and throttle timer expires (1000ms cooldown), extracts username from context (strips clan tag *prefix), formats "/squelch *username" command, sends to network layer, clears channel view, and optionally adds user to ignore list if not self-squelching. Returns 1 on success, 0 if network send fails.
 uint32_t __stdcall COMCALLBACK_HandleGameListError1(struct D2ControlMsg * pControlMsg);
 uint32_t __stdcall COMCALLBACK_HandleGameListError2(struct D2ControlMsg * pControlMsg);
@@ -92,7 +107,7 @@ BOOL __fastcall COMCALLBACK_HandleChannelUserLeave(uint32_t dwCbArg1, uint32_t d
 // Chat event handler at gaComCallbackDispatch[7]: prints "You have joined channel: %s" to the chat box, copies szChannelName into gszCurrentChannelName and the multiplayer ini data (last channel, and the first-channel slot if empty), shows every gaChatUserListButtonArray button, deactivates gpCtlLobbyAccountList and clears the channel user list. Returns 1.
 // Provenance: asm 004496b0 (string "You have joined channel: %s"); dispatch slot 0070ec3c.
 BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwUnused, char * szChannelName);
-void __fastcall COMCALLBACK_RemoveUserFromList(int32_t nStrBase, uint32_t * pnCarryMask);
+void __fastcall COMCALLBACK_RemoveUserFromList(char * nStrBase, uint32_t * pnCarryMask);
 BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * pnKeyHi, uint32_t * pnKeyLo);
 #endif // D2_MODULE_D2Multi
 // 12 internal functions (defined in .cpp)

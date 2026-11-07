@@ -2,32 +2,11 @@
 
 #include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/COMPOSIT/Composit.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillStrc.h"
-#include "Source/D2Common/D2StatListExStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Units/Missile.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Skills.h"
-#include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2DynamicPathStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
@@ -131,16 +110,12 @@ int Unreferenced_006435c0() {
     return ITEMS::Items::sgptDataTable->nPassiveSkillsCount;
 }
 
-int __fastcall Unreferenced_006435d0(int param_1) {
-    D2DataTableTxtStrc* in_EAX;
-    if (param_1 >= 0) {
-      in_EAX = ITEMS::Items::sgptDataTable;
-      if (param_1 < ITEMS::Items::sgptDataTable->nPassiveSkillsCount) {
-        return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)ITEMS::Items::sgptDataTable->pPassiveSkillsPerClassStrc >> 0x10) << 16 | (uint32_t)(uint16_t)ITEMS::Items::sgptDataTable->pPassiveSkillsPerClassStrc[param_1].nSkillId);
-      }
+short __fastcall Unreferenced_006435d0(int nIndex) {
+    if (nIndex >= 0 && nIndex < ITEMS::Items::sgptDataTable->nPassiveSkillsCount) {
+      return ITEMS::Items::sgptDataTable->pPassiveSkillsPerClassStrc[nIndex].nSkillId;
     }
 
-    return (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)in_EAX >> 0x10) << 16 | (uint32_t)(uint16_t)0xffff);
+    return -1;
 }
 
 // Gets or allocates a stat list associated with a given state on a unit. If arg1 is nonzero and no stat list exists for the state, allocates one and attaches it. If arg1 is zero, frees the existing stat list for that state.
@@ -209,24 +184,24 @@ int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, uint32_t pC
     return nLeft;
 }
 
-int * __fastcall SKILLS_RandomRange(int * pnMinVal, int32_t nRange, uint32_t nUnused, int * pnSeed) {
+int __fastcall SKILLS_RandomRange(int32_t pnMinVal, int32_t nRange, uint32_t nUnused, D2SkillCalcContextStrc * pnSeed) {
     if (!pnSeed) {
-      return nullptr;
+      return 0;
     }
-    if ((int)pnMinVal >= nRange) {
+    if (pnMinVal >= nRange) {
       return pnMinVal;
     }
 
-    uint32_t nRandOffset = Seed::RANDOM_RandomNumberSelector((D2SeedStrc*)(*pnSeed + 0x20), nRange - (int)pnMinVal + 1);
-    return (int*)(nRandOffset + (int)pnMinVal);
+    uint32_t nRandOffset = Seed::RANDOM_RandomNumberSelector(&pnSeed->pUnit->sSeed, nRange - pnMinVal + 1);
+    return nRandOffset + pnMinVal;
 }
 
-int __fastcall SKILLS_GetMissileSpecialParam(int32_t nParamIndex, uint8_t bParamType, uint32_t nUnused, D2UnitStrc * * ppContext) {
+int __fastcall SKILLS_GetMissileSpecialParam(int32_t nParamIndex, uint8_t bParamType, uint32_t nUnused, D2SkillCalcContextStrc * ppContext) {
     if (!ppContext) {
       return 0;
     }
 
-    int32_t nSpecialParam = Units::Missile::GetSpecialParamValue(nullptr, *ppContext, bParamType, nParamIndex, (int32_t)ppContext[2]);
+    int32_t nSpecialParam = Units::Missile::GetSpecialParamValue(nullptr, ppContext->pUnit, bParamType, nParamIndex, ppContext->nSkillLevel);
     return nSpecialParam;
 }
 
@@ -291,15 +266,15 @@ int __stdcall GetSkillMode(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     return 0;
 }
 
-int32_t __stdcall SKILLS_GetSkillsTxtField0x14(int * pSkill) {
+int32_t __stdcall SKILLS_GetSkillsTxtField0x14(D2SkillStrc * pSkill) {
     if (!pSkill) {
       return 0;
     }
-    if (!*pSkill) {
+    if (!pSkill->pRecord) {
       return 0;
     }
 
-    return (int)*(char*)(*pSkill + 0x14);
+    return (int)pSkill->pRecord->range;
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
@@ -2462,8 +2437,8 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
       }
 
       nStateCount = (int32_t)(short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
-      pUnit = (D2UnitStrc*)((uintptr_t)&pUnit->eUnitType + 1);
-    } while ((int)pUnit < nStateCount);
+      pUnit = (D2UnitStrc*)((intptr_t)&pUnit->eUnitType + 1);
+    } while ((intptr_t)pUnit < nStateCount);
 
     return 1;
 }
@@ -2792,7 +2767,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
         return 0;
       }
 
-      uResult = Units::Missile::GetElementalLength(0, pUnit, (int)sMissileId, nSkillLevel);
+      uResult = Units::Missile::GetElementalLength(nullptr, pUnit, (int)sMissileId, nSkillLevel);
       return uResult;
       case 0x23:
 
@@ -2996,13 +2971,13 @@ int __fastcall SKILLS_EvalSkillDescCalc_CurrentLevel(eD2Skills eSkill, uint8_t b
     return nSkillLevel;
 }
 
-uint32_t __fastcall SKILLS_EvalSkillDescCalc_Chained(eD2Skills eSkill, uint8_t byInnerCalcType, uint8_t bCalcIndex, D2UnitStrc * * ppUnit) {
+uint32_t __fastcall SKILLS_EvalSkillDescCalc_Chained(eD2Skills eSkill, uint8_t byInnerCalcType, uint8_t bCalcIndex, D2SkillCalcContextStrc * ppUnit) {
     if (!ppUnit) {
       return 0;
     }
 
-    uint32_t uChainedResult = SKILLDESC_EvalDescCalcValue(*ppUnit, byInnerCalcType, (eD2Skills)ppUnit[1], (uint32_t)ppUnit[2]);
-    uChainedResult = SKILLDESC_EvalDescCalcValue(*ppUnit, bCalcIndex, eSkill, uChainedResult);
+    uint32_t uChainedResult = SKILLDESC_EvalDescCalcValue(ppUnit->pUnit, byInnerCalcType, ppUnit->nSkillId, ppUnit->nSkillLevel);
+    uChainedResult = SKILLDESC_EvalDescCalcValue(ppUnit->pUnit, bCalcIndex, eSkill, uChainedResult);
     return uChainedResult;
 }
 

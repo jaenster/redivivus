@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,8 @@ typedef int (__stdcall *fpD2QSSocketPacketHandler)(void * pContext);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2NetDataStrc
+#define D2_DEFINED_D2NetDataStrc
 struct __attribute__((packed)) D2NetDataStrc {
     /* 0x00 */ BOOL bConnected;
     /* 0x04 */ BOOL bInit;
@@ -32,6 +37,9 @@ struct __attribute__((packed)) D2NetDataStrc {
     /* 0x38 */ char szHost[64];
 };
 
+#endif // D2_DEFINED_D2NetDataStrc
+#ifndef D2_DEFINED_D2QSQueueStrc
+#define D2_DEFINED_D2QSQueueStrc
 struct __attribute__((packed)) D2QSQueueStrc {
     /* 0x00 */ int32_t bOverflow; // set when a dequeued message exceeds the caller's buffer
     /* 0x04 */ CRITICAL_SECTION csLock;
@@ -39,6 +47,9 @@ struct __attribute__((packed)) D2QSQueueStrc {
     /* 0x20 */ struct D2QSQueueEntryStrc * pTail;
 };
 
+#endif // D2_DEFINED_D2QSQueueStrc
+#ifndef D2_DEFINED_D2QSSocketStrc
+#define D2_DEFINED_D2QSSocketStrc
 struct __attribute__((packed)) D2QSSocketStrc {
     /* 0x000 */ HANDLE hThread;
     /* 0x004 */ DWORD dwThreadId; // thread id written by CreateThread (passed as its lpThreadId out argument)
@@ -55,3 +66,5 @@ struct __attribute__((packed)) D2QSSocketStrc {
     /* 0x16C */ void * pHandlerContext; // Second argument of QSSOCKET_SetCallbackHandler1; the sole argument passed to pfnPacketHandler.
     /* 0x170 */ D2QSQueueStrc aQueue; // Inbound message queue. D2QSQUEUE_Initialize(&this) in STRUCT_D2QSSocket_Init, FOG_EnqueueMessage(&this,...) in ProcessReceivedData, D2QSQueue::Free(&this) in FreeD2QSSocket. Runs to the 0x194 allocation size; no named struct exists for it yet.
 };
+
+#endif // D2_DEFINED_D2QSSocketStrc

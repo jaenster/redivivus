@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2UIMouseMsgStrc;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2NpcCashTabStrc
+#define D2_DEFINED_D2NpcCashTabStrc
 struct __attribute__((packed)) D2NpcCashTabStrc {
     /* 0x00 */ uint16_t nTooltipStringId;
     /* 0x02 */ int nTooltipX;
@@ -31,6 +36,7 @@ struct __attribute__((packed)) D2NpcCashTabStrc {
     /* 0x27 */ uint8_t bVisible;
 };
 
+#endif // D2_DEFINED_D2NpcCashTabStrc
 namespace D2Client::UI::UseItem {
 
 // Function declarations

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct DC6;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#ifndef D2_DEFINED_D2UiPartyBoxStrc
+#define D2_DEFINED_D2UiPartyBoxStrc
 struct D2UiPartyBoxStrc {
     /* 0x00 */ int bIsPartyButton; // 1=party join button (wide, 0x35px), 0=checkbox button (0x14px)
     /* 0x04 */ int nX;
@@ -27,6 +32,9 @@ struct D2UiPartyBoxStrc {
     /* 0x1C */ int bIsPressed; // Set to 1 on click, cleared after processing
 };
 
+#endif // D2_DEFINED_D2UiPartyBoxStrc
+#ifndef D2_DEFINED_D2UiPartyStrc
+#define D2_DEFINED_D2UiPartyStrc
 struct __attribute__((packed)) D2UiPartyStrc {
     /* 0x00 */ D2UiPartyBoxStrc pPartyButtons[5];
     /* 0xA0 */ char szPlayerName[25]; // UTF-8 player name from GetRosterName, max 15 chars + null + padding to 0xB9
@@ -37,3 +45,5 @@ struct __attribute__((packed)) D2UiPartyStrc {
     /* 0xC9 */ int nScreenY; // Panel Y position = nPositionY + 0xd, written by SetupPartyButtons
     /* 0xCD */ struct D2UiPartyStrc * pNext;
 };
+
+#endif // D2_DEFINED_D2UiPartyStrc

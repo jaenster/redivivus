@@ -154,17 +154,20 @@ if(REDIVIVUS_LOUD)
 endif()
 
 # ---------------------------------------------------------------------------
-# The modules. Each library compiles with D2_MODULE_<itself> and D2_SEES_<m> for
-# every module its dependencies let it include; the generated headers check
-# D2_SEES_<m> (an error only where D2_MODULE_STRICT is set) and compile a
-# declaration no other module uses only inside its own module. Source/globals/ and
-# any other unowned unit are the shared remainder (d2_root), which sees every module.
+# The modules. Each library compiles with D2_MODULE_<itself>, D2_SEES_<m> for
+# every module its dependencies let it include and D2_LOADS_<m> for each module it
+# loads; the generated headers check D2_SEES_<m> (an error only where
+# D2_MODULE_STRICT is set) and compile a declaration no other module uses only
+# inside its own module. A module's interface is its public header
+# (D2_MODULE_<m>_PUBLIC): another module's internal header is an error in a strict
+# module too. Each library links the modules it imports. Source/globals/ and any
+# other unowned unit are the shared remainder (d2_root), which sees every module.
 # ---------------------------------------------------------------------------
 set(D2_MODULE_LIBRARIES_LINKED)
 set(D2_UNCLAIMED ${D2_SOURCES})
 set(D2_ALL_MODULE_DEFS D2_MODULE_LIBRARIES)
 foreach(m IN LISTS D2_MODULES)
-    list(APPEND D2_ALL_MODULE_DEFS D2_MODULE_${m} D2_SEES_${m})
+    list(APPEND D2_ALL_MODULE_DEFS D2_MODULE_${m} D2_SEES_${m} D2_LOADS_${m})
 endforeach()
 
 if(REDIVIVUS_MODULE_LIBRARIES)
@@ -195,6 +198,9 @@ if(REDIVIVUS_MODULE_LIBRARIES)
             foreach(s IN LISTS D2_MODULE_${m}_SEES)
                 list(APPEND defs D2_SEES_${s})
             endforeach()
+            foreach(l IN LISTS D2_MODULE_${m}_LOADS)
+                list(APPEND defs D2_LOADS_${l})
+            endforeach()
             if(D2_MODULE_${m}_STRICT)
                 list(APPEND defs D2_MODULE_STRICT)
             endif()
@@ -202,7 +208,27 @@ if(REDIVIVUS_MODULE_LIBRARIES)
         endif()
         set_target_properties(${m} PROPERTIES
             D2_DEPENDS "${D2_MODULE_${m}_DEPENDS}" D2_KIND "${D2_MODULE_${m}_KIND}")
+        # The library's interface: its public header, the one header another module includes.
+        if(D2_MODULE_${m}_PUBLIC AND EXISTS "${D2_ROOT}/${D2_MODULE_${m}_PUBLIC}")
+            target_sources(${m} INTERFACE FILE_SET HEADERS BASE_DIRS "${D2_ROOT}"
+                FILES "${D2_ROOT}/${D2_MODULE_${m}_PUBLIC}")
+        endif()
         list(APPEND D2_MODULE_LIBRARIES_LINKED ${m})
+    endforeach()
+    # Each library depends on the modules it imports (the 1.13d import tables) and takes
+    # their interface. Not as a link item: a link dependency makes CMake put the imported
+    # library after its users on the executable's line, and the executable links the
+    # libraries in the 1.14d order, which decides the COMDAT copy the linker keeps.
+    foreach(m IN LISTS D2_MODULE_LIBRARIES_LINKED)
+        foreach(i IN LISTS D2_MODULE_${m}_IMPORTS)
+            if(TARGET ${i} AND i IN_LIST D2_MODULE_LIBRARIES_LINKED)
+                if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.27)
+                    target_link_libraries(${m} PUBLIC "$<COMPILE_ONLY:${i}>")
+                endif()
+                add_dependencies(${m} ${i})
+            endif()
+        endforeach()
+        set_property(TARGET ${m} PROPERTY D2_IMPORTS "${D2_MODULE_${m}_IMPORTS}")
     endforeach()
     # What no module owns: globals.cpp and any root unit.
     if(D2_UNCLAIMED)

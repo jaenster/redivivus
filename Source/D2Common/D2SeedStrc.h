@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2SeedStrc
+#define D2_DEFINED_D2SeedStrc
 struct D2SeedStrc {
     D2SeedStrc() = default;
     D2SeedStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
@@ -21,3 +26,5 @@ struct D2SeedStrc {
     /* 0x00 */ uint32_t nSeedLow;
     /* 0x04 */ uint32_t nSeedHigh;
 };
+
+#endif // D2_DEFINED_D2SeedStrc

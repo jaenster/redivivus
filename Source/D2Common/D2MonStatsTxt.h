@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2MonStatsTxtTC
+#define D2_DEFINED_D2MonStatsTxtTC
 struct D2MonStatsTxtTC {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -21,6 +26,9 @@ struct D2MonStatsTxtTC {
     /* 0x06 */ short TreasureClass4;
 };
 
+#endif // D2_DEFINED_D2MonStatsTxtTC
+#ifndef D2_DEFINED_D2MonStatsTxt
+#define D2_DEFINED_D2MonStatsTxt
 struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x000 */ uint16_t Id;
     /* 0x002 */ short BaseId;
@@ -157,3 +165,5 @@ struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x1A6 */ char SplEndGeneric;
     /* 0x1A7 */ char SplClientEnd;
 };
+
+#endif // D2_DEFINED_D2MonStatsTxt

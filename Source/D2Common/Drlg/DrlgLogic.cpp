@@ -11,8 +11,7 @@
 #include "Source/D2Common/Drlg/DrlgGrid.h"
 #include "Source/D2Common/Drlg/DrlgRoom.h"
 #include "Source/D2Common/Drlg/RoomTile.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -37,21 +36,21 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RoomCoordListStrc) == 0x30, "D2_N
 namespace D2Common::Drlg::DrlgLogic {
 
 // Iterates grid cells, builds coord entries for each non-flagged cell.
-static void DRLGLOGIC_PopulateGridCoordIndices(int * pnFloodFillContext) {
+static void DRLGLOGIC_PopulateGridCoordIndices(D2DrlgCoordIndexCtxStrc * pnFloodFillContext) {
     uint32_t nCellFlags;
     int nGridY;
     int nGridX;
-    int nWidth = *(int*)(*pnFloodFillContext + 0x3c);
-    int nHeight = *(int*)(*pnFloodFillContext + 0x40);
+    int nWidth = pnFloodFillContext->pRoomEx->sCoords.WorldSize.x;
+    int nHeight = pnFloodFillContext->pRoomEx->sCoords.WorldSize.y;
     for (nGridY = 0; nGridY <= nHeight; nGridY++) {
       for (nGridX = 0; nGridX <= nWidth; nGridX++) {
-        nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnFloodFillContext[1], nGridX, nGridY);
+        nCellFlags = DrlgGrid::GetGridFlags(pnFloodFillContext->pCoordGrid, nGridX, nGridY);
         if (!(nCellFlags & 0x10000000)) {
-          pnFloodFillContext[6]++;
-          pnFloodFillContext[7] = pnFloodFillContext[6] & 0xfffffffU | 0x10000000;
-          nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnFloodFillContext[4], nGridX, nGridY);
+          pnFloodFillContext->nCoordIndex++;
+          pnFloodFillContext->dwCoordFlags = pnFloodFillContext->nCoordIndex & 0xfffffffU | 0x10000000;
+          nCellFlags = DrlgGrid::GetGridFlags(pnFloodFillContext->nCallerArg10, nGridX, nGridY);
           if ((nCellFlags & 0x1e0ff00) == 0x1e00000 || (int)nCellFlags < 0) {
-            pnFloodFillContext[7] |= 0x20000000;
+            pnFloodFillContext->dwCoordFlags |= 0x20000000;
           }
 
           DrlgGrid::DRLGGRID_FloodFillGridCoords(pnFloodFillContext, nGridX, nGridY, -1);
@@ -174,15 +173,15 @@ static void __stdcall DRLGLOGIC_SetGridDoorFlags(D2DrlgGridStrc * pGrid, D2RoomE
     } while (nTileIndex < (uint32_t)pRoomTiles->sRoomTiles.nWallTilesCount);
 }
 
-int __fastcall Unreferenced_0066c840(int param_1) {
-    if ((*(uint32_t*)(param_1 + 0x14) & 0x1c000) != 0x4000) {
+int __fastcall Unreferenced_0066c840(D2DrlgTileDataStrc * param_1) {
+    if ((param_1->nFlags & 0x1c000U) != 0x4000) {
       return 0;
     }
-    if (*(int*)(param_1 + 0x1c) == 0xf) {
+    if (param_1->nTileType == 0xf) {
       return 0;
     }
 
-    return ~(*(uint32_t*)(param_1 + 0x14) >> 0xb) & 1;
+    return ~((uint32_t)param_1->nFlags >> 0xb) & 1;
 }
 
 // Two-pass wall flagging for DRLG layout grids. First pass: iterates pRoomEx's own wall tile array and calls AlterGridFlag for tiles that are standard left-side wall type (nFlags bits 0x1c000==0x4000, tileType!=15, non-special). Second pass: checks neighbouring rooms' map-link tile chains for matching wall tiles that project into pRoomEx bounds, flagging them with coordinate-transformed positions.
@@ -479,7 +478,7 @@ D2RoomCoordListStrc * __fastcall GetCoordList(D2RoomExStrc * pRoomEx) {
 
 // Links the DRLG coordinate-list grids of two adjacent rooms at border point (nX,nY). Looks up each room's coord-list grid index at the border point, validates that both grids exist, are different, belong to the same level, and share the same node flag, then calls InitializeDrlgCoordList to merge them. Halts fatally if pSrcRoom has no coord list.
 static void __stdcall DRLGLOGIC_LinkCoordListEntry(int32_t nY, int32_t nX, D2RoomExStrc * pNeighborRoom, D2RoomExStrc * pSrcRoom) {
-    int32_t nNeighborCoordIndex;
+    D2RoomCoordListStrc* nNeighborCoordIndex;
     int nDestIndex;
     int nSrcIndex;
     uint32_t bPointInside = DrlgRoom::DRLGCOORDS_IsPointInside(&pSrcRoom->sCoords, nX, nY);
@@ -491,9 +490,9 @@ static void __stdcall DRLGLOGIC_LinkCoordListEntry(int32_t nY, int32_t nX, D2Roo
     if (pNeighborCoordList) {
       D2RoomCoordListStrc* pCoordEntry;
       if (pNeighborCoordList->eFlags & 1) {
-        nNeighborCoordIndex = (int32_t)pNeighborCoordList->pCoord;
+        nNeighborCoordIndex = pNeighborCoordList->pCoord;
       } else {
-        nNeighborCoordIndex = DrlgGrid::GetGridFlags(&pNeighborCoordList->sCoordIndexGrid, nX - pSrcRoom->sCoords.WorldPosition.x, nY - pSrcRoom->sCoords.WorldPosition.y);
+        nNeighborCoordIndex = (D2RoomCoordListStrc*)DrlgGrid::GetGridFlags(&pNeighborCoordList->sCoordIndexGrid, nX - pSrcRoom->sCoords.WorldPosition.x, nY - pSrcRoom->sCoords.WorldPosition.y);
       }
 
       pNeighborCoordList = pNeighborRoom->pDrlgCoordList;
@@ -504,7 +503,7 @@ static void __stdcall DRLGLOGIC_LinkCoordListEntry(int32_t nY, int32_t nX, D2Roo
           pCoordEntry = (D2RoomCoordListStrc*)DrlgGrid::GetGridFlags(&pNeighborCoordList->sCoordIndexGrid, nX - pNeighborRoom->sCoords.WorldPosition.x, nY - pNeighborRoom->sCoords.WorldPosition.y);
         }
 
-        nDestIndex = *(int*)(nNeighborCoordIndex + 0x28);
+        nDestIndex = nNeighborCoordIndex->nIndex;
         if (!nDestIndex) {
           return;
         }
@@ -519,11 +518,11 @@ static void __stdcall DRLGLOGIC_LinkCoordListEntry(int32_t nY, int32_t nX, D2Roo
         if (nDestIndex == nSrcIndex) {
           return;
         }
-        if (*(int*)(nNeighborCoordIndex + 0x20) != pCoordEntry->bNode) {
+        if (nNeighborCoordIndex->bNode != pCoordEntry->bNode) {
           return;
         }
 
-        InitializeDrlgCoordList(pNeighborRoom, nSrcIndex, nDestIndex, *(int*)(nNeighborCoordIndex + 0x20));
+        InitializeDrlgCoordList(pNeighborRoom, nSrcIndex, nDestIndex, nNeighborCoordIndex->bNode);
         return;
       }
     }
@@ -566,7 +565,7 @@ static void DRLGLOGIC_LinkBorderCoordLists(D2RoomExStrc * pRoomEx) {
 
 // Allocates D2DrlgCoordListStrc, builds grid, populates coord list.
 // @sourcefile .\DRLG\DrlgLogic.cpp
-void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrientGridFlags, int nFloorGridFlags, D2DrlgGridStrc * pGrid) {
+void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * nOrientGridFlags, D2DrlgGridStrc * nFloorGridFlags, D2DrlgGridStrc * pGrid) {
     int nCoordCount;
     D2RoomCoordListStrc* pAllocCoordArray;
     int aCellsFlags[1024];
@@ -575,7 +574,7 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrient
     int nCoordIndexStart;
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
     D2PoolManagerStrc* pPoolManagerStrc = pLevel->pDrlg->pMemoryPool;
-    D2DrlgGridStrc* nOrientGridFlagsSave = (D2DrlgGridStrc*)nOrientGridFlags;
+    D2DrlgGridStrc* nOrientGridFlagsSave = nOrientGridFlags;
     D2DrlgLevelStrc* pLevelCtx = pLevel;
     D2DrlgCoordListStrc* pCoordListStrc = D2_NEW_POOL_AT(pPoolManagerStrc, D2DrlgCoordListStrc, ".\\DRLG\\DrlgLogic.cpp", 0xdf);
     memset(pCoordListStrc, 0, 0x34);
@@ -595,11 +594,11 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrient
     sCoordCtx.pCoordGrid = &pCoordListStrc->sOrientationGrid;
     sCoordCtx.pOrientGrid = nOrientGridFlagsSave;
     sCoordCtx.pFloorGrid = &sLocalGrid;
-    sCoordCtx.nReserved0C = (int32_t)pGrid;
+    sCoordCtx.nReserved0C = pGrid;
     sCoordCtx.nCallerArg10 = nFloorGridFlags;
     sCoordCtx.pRoomEx = pRoomEx;
     sCoordCtx.nCoordIndex = nCoordCount;
-    DRLGLOGIC_PopulateGridCoordIndices((int*)&sCoordCtx);
+    DRLGLOGIC_PopulateGridCoordIndices(&sCoordCtx);
     DrlgGrid::ResetGrid(&sLocalGrid);
     nCoordCount = sCoordCtx.nCoordIndex - nCoordIndexStart + 1;
     pCoordListStrc->nListSize = nCoordCount;

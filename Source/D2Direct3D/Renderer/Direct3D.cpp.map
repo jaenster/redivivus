@@ -15,6 +15,9 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "D3D_EnumTextureFormatsCallback"
+      ],
+      "usedTypes": [
+        "DDPIXELFORMAT"
       ]
     },
     {
@@ -177,6 +180,24 @@
       ]
     },
     {
+      "name": "RENDERER_D3D_ConvertPalettedTo32Bit",
+      "address": "006b1e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1e30"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_ConvertPalettedTo32Bit"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "RENDERER_D3D_SetBlendMode",
       "address": "006b1ea0",
       "lines": [
@@ -276,6 +297,37 @@
       "calledFunctions": [
         "DIRECTD3D_LogError",
         "LOGFILE_WriteStringToFile"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20",
+      "address": "006b2f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b2f20"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_SetMaxSize_Unref_006b2f30",
+      "address": "006b2f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b2f30"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SPRITECACHE_SetMaxSize_Unref_006b2f30"
       ]
     },
     {
@@ -516,7 +568,8 @@
       ],
       "usedTypes": [
         "DDSURFACEDESC",
-        "IDirectDrawSurface7"
+        "IDirectDrawSurface7",
+        "uint8_t"
       ]
     },
     {
@@ -553,6 +606,7 @@
         "RENDERER_DIRECT3D_ErrorLog"
       ],
       "usedTypes": [
+        "D2D3DDeviceSlotStrc",
         "DDSCAPS",
         "DDSURFACEDESC",
         "IDirect3DDevice",
@@ -1372,6 +1426,7 @@
         "HBITMAP",
         "HFONT",
         "IDirect3DTexture2",
+        "IDirect3DTexture2 *",
         "IDirectDrawSurface7",
         "IDirectDrawSurface7 *",
         "tagRECT"
@@ -1772,6 +1827,7 @@
         "RENDERER_D3D_SetTextureStageColor"
       ],
       "usedTypes": [
+        "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t",
         "uint8_t"
@@ -1800,6 +1856,7 @@
       "usedTypes": [
         "D2D3DVertexStrc",
         "D2FloatIntUnion",
+        "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "RECT",
         "uint32_t",
@@ -1981,6 +2038,7 @@
         "RENDERER_D3D_ApplyShadowTextureCoords"
       ],
       "usedTypes": [
+        "D2D3DVertexStrc",
         "uint8_t"
       ]
     },
@@ -1998,6 +2056,7 @@
         "RENDERER_D3D_SetTextureStageColor"
       ],
       "usedTypes": [
+        "D2D3DVertexStrc",
         "uint32_t"
       ]
     },
@@ -2231,7 +2290,8 @@
         "RENDERER_D3D_CopySmackerRowWithAlpha"
       ],
       "usedTypes": [
-        "uint16_t"
+        "uint16_t",
+        "uint8_t"
       ]
     },
     {
@@ -2304,7 +2364,8 @@
         "RENDERER_D3D_ResetSmackerSurfaces"
       ],
       "usedTypes": [
-        "D2SmackerContextStrc"
+        "D2SmackerContextStrc",
+        "Smack"
       ]
     },
     {

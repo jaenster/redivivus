@@ -62,6 +62,7 @@
       ],
       "usedTypes": [
         "D2StatStrc",
+        "D2UnitStrc",
         "WCHAR",
         "int32_t",
         "uint16_t",
@@ -233,7 +234,6 @@
       "usedTypes": [
         "WCHAR",
         "eD2UnitStat",
-        "short *",
         "wchar_t"
       ]
     },
@@ -698,6 +698,7 @@
         "SERVER_MaxDamage"
       ],
       "usedTypes": [
+        "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -1726,6 +1727,7 @@
       ],
       "usedTypes": [
         "D2SkillStrc",
+        "D2SkillsTxt",
         "D2UnitStrc",
         "WCHAR",
         "int32_t",
@@ -2434,10 +2436,10 @@
         "SKILLDESC_DrawTwoLineText"
       ],
       "usedTypes": [
-        "D2SkillDescTxt",
         "D2SkillStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
+        "SKILLDESC_DrawSkillDmgProgressive_Slotmc",
         "WCHAR",
         "eD2Skills",
         "int32_t",

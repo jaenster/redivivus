@@ -248,6 +248,7 @@
         "strncpy"
       ],
       "usedTypes": [
+        "D2ShrinesTxt",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc"
       ]
@@ -271,10 +272,10 @@
         "MakeMissile"
       ],
       "usedTypes": [
+        "D2ShrinesTxt",
         "D2SkillArgStrc",
         "D2UnitStrc",
-        "eD2UnitType",
-        "uint32_t"
+        "eD2UnitType"
       ]
     },
     {
@@ -296,10 +297,10 @@
         "MakeMissile"
       ],
       "usedTypes": [
+        "D2ShrinesTxt",
         "D2SkillArgStrc",
         "D2UnitStrc",
-        "eD2UnitType",
-        "uint32_t"
+        "eD2UnitType"
       ]
     },
     {
@@ -321,10 +322,10 @@
         "MakeMissile"
       ],
       "usedTypes": [
+        "D2ShrinesTxt",
         "D2SkillArgStrc",
         "D2UnitStrc",
-        "eD2UnitType",
-        "uint32_t"
+        "eD2UnitType"
       ]
     },
     {

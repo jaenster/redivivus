@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,11 +19,23 @@ struct D2UIMouseMsgStrc;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#ifndef D2_DEFINED_D2WaypointListEntryStrc
+#define D2_DEFINED_D2WaypointListEntryStrc
 struct __attribute__((packed)) D2WaypointListEntryStrc {
     /* 0x00 */ eD2LevelId eLevelId;
     /* 0x04 */ uint8_t bActivated;
 };
 
+#endif // D2_DEFINED_D2WaypointListEntryStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union DRAW_UI_Waypoint_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int32_t nActsInGame;
+    /* 0x00 */ struct D2WaypointListEntryStrc * pWaypointEntry;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::UI::Waypoint {
 
 // Function declarations
@@ -33,7 +48,7 @@ void __stdcall InitializeWaypoints();
 void __stdcall WAYPOINT_SendClosePacket();
 void __stdcall WAYPOINT_Shutdown();
 void __stdcall WAYPOINT_PopulateList();
-int Unreferenced_0049c980();
+void __stdcall Unreferenced_0049c980();
 void __stdcall DRAW_UI_Waypoint();
 void __stdcall INPUT_WaypointTravel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall WAYPOINT_SendOpenPacket();

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -54,6 +57,8 @@ typedef int (__fastcall *UNITFINDTEST)(struct D2UnitStrc * pUnit, struct D2UnitF
 struct D2UnitFindsStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2StaticPathStrc
+#define D2_DEFINED_D2StaticPathStrc
 struct D2StaticPathStrc {
     /* 0x00 */ struct D2RoomStrc * pRoom; // Room the static unit is in
     /* 0x04 */ int nScreenX; // Screen X coord (warp target X for warps)
@@ -68,11 +73,17 @@ struct D2StaticPathStrc {
     /* 0x1F */ uint8_t field_0x1F;
 };
 
+#endif // D2_DEFINED_D2StaticPathStrc
+#ifndef D2_DEFINED_D2TimerArgStrc
+#define D2_DEFINED_D2TimerArgStrc
 struct D2TimerArgStrc {
     /* 0x00 */ void * pTimerList; // Head of the timer node list. FrreeTimer @0054f580 (the only reader, via &pTimerArg->pTimerList) walks it through +4 and then frees this struct itself, so the slot is a void* list head, not an int*.
     /* 0x04 */ int nUnitGUID;
 };
 
+#endif // D2_DEFINED_D2TimerArgStrc
+#ifndef D2_DEFINED_D2UnitDataClientSide
+#define D2_DEFINED_D2UnitDataClientSide
 struct D2UnitDataClientSide {
     /* 0x00 */ struct D2LightMapStrc * pLight; // Unit light map (freed in FreeAnyUnit)
     /* 0x04 */ uint32_t dwStartLight; // Initial light radius (set by UNIT_SetLightRadiusX)
@@ -92,6 +103,9 @@ struct D2UnitDataClientSide {
     /* 0x2C */ struct D2CUnitEventStrc * pCUnitEventList; // Linked list of client unit events (state GFX callbacks)
 };
 
+#endif // D2_DEFINED_D2UnitDataClientSide
+#ifndef D2_DEFINED_D2UnitDataItemStrc
+#define D2_DEFINED_D2UnitDataItemStrc
 #pragma pack(push, 1)
 struct D2UnitDataItemStrc {
     /* 0x00 */ eD2ItemQuality eQuality; // Item quality (normal, magic, rare, unique, etc)
@@ -123,6 +137,9 @@ struct D2UnitDataItemStrc {
 };
 #pragma pack(pop)
 
+#endif // D2_DEFINED_D2UnitDataItemStrc
+#ifndef D2_DEFINED_D2UnitDataMissileStrc
+#define D2_DEFINED_D2UnitDataMissileStrc
 struct __attribute__((packed)) D2UnitDataMissileStrc {
     /* 0x00 */ int unk0x00; // Unknown dword 0
     /* 0x04 */ int unk0x04; // Unknown dword 1
@@ -142,6 +159,7 @@ struct __attribute__((packed)) D2UnitDataMissileStrc {
     /* 0x30 */ struct D2MissileStreamStrc * pStream; // Unknown last field
 };
 
+#endif // D2_DEFINED_D2UnitDataMissileStrc
 struct __attribute__((packed)) D2UnitDataMonsterStrc {
     /* 0x00 */ struct D2MonStatsTxt * pMonStatsTxt; // Pointer to MonStats.txt record
     /* 0x04 */ uint8_t Components[16]; // HD,TR,LG,RA,LA,RH,LH,S1..S8,+1pad. Indices 0-15
@@ -169,6 +187,8 @@ struct __attribute__((packed)) D2UnitDataMonsterStrc {
     /* 0x5F */ uint8_t unk0x5F;
 };
 
+#ifndef D2_DEFINED_D2UnitDataObjectStrc
+#define D2_DEFINED_D2UnitDataObjectStrc
 struct D2UnitDataObjectStrc {
     /* 0x00 */ struct D2ObjectsTxt * pTxtObjectsLine; // Pointer to Objects.txt record
     /* 0x04 */ uint8_t nShrineId; // Shrine ID / interaction type; on a portal object it is the destination level id (DRAW_UnitUnderMouse passes it to CLIENT_GetLevelNameByLevelId)
@@ -186,6 +206,7 @@ struct D2UnitDataObjectStrc {
     /* 0x28 */ char szOwnerName[16]; // Owner name, set by SetObjectDataOwnerName, 16 chars max
 };
 
+#endif // D2_DEFINED_D2UnitDataObjectStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct __attribute__((packed)) D2UnitDataPlayerSkillUnknown {
     /* 0x00 */ BOOL bUnknown;
@@ -244,6 +265,8 @@ struct D2UnitDataPlayerStrc {
 };
 #pragma pack(pop)
 
+#ifndef D2_DEFINED_D2UnitDataServerSide
+#define D2_DEFINED_D2UnitDataServerSide
 struct __attribute__((packed)) D2UnitDataServerSide {
     /* 0x00 */ uint32_t dwInteractGUID; // GUID of the unit being interacted with (-1 = none)
     /* 0x04 */ eD2UnitType dwInteractType; // eD2UnitType of the interacted unit (6 = none)
@@ -274,6 +297,7 @@ struct __attribute__((packed)) D2UnitDataServerSide {
     /* 0x2C */ struct D2SUnitEventStrc * pSrvUnitEventList; // server unit-event list (SUnitEvent.cpp), head = newest; linked via +0x1c
 };
 
+#endif // D2_DEFINED_D2UnitDataServerSide
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2UnitDataWarpStrc {
 };
@@ -288,6 +312,8 @@ union D2UnitEvent {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2UnitFindDataStrc
+#define D2_DEFINED_D2UnitFindDataStrc
 struct D2UnitFindDataStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory;
     /* 0x04 */ struct D2UnitFindsStrc * pUnitsArray;
@@ -302,16 +328,23 @@ struct D2UnitFindDataStrc {
     /* 0x28 */ int nDistance;
 };
 
+#endif // D2_DEFINED_D2UnitFindDataStrc
+#ifndef D2_DEFINED_D2UnitFindsStrc
+#define D2_DEFINED_D2UnitFindsStrc
 struct D2UnitFindsStrc {
     /* 0x00 */ struct D2UnitStrc * aFoundUnitsList[15];
 };
 
+#endif // D2_DEFINED_D2UnitFindsStrc
+#ifndef D2_DEFINED_D2UnitStatDiminishedEntryStrc
+#define D2_DEFINED_D2UnitStatDiminishedEntryStrc
 struct __attribute__((packed)) D2UnitStatDiminishedEntryStrc {
     /* 0x00 */ int nDiminishedFlag; // 1 = apply diminished formula, 0 = pass through
     /* 0x04 */ int nBaseOffset; // Base value for diminishing returns formula
     /* 0x08 */ eD2UnitStat eStat; // Stat enum queried via ITEM_GetMinimalStatValueShifted
 };
 
+#endif // D2_DEFINED_D2UnitStatDiminishedEntryStrc
 namespace D2Common::Unit {
 
 // Function declarations

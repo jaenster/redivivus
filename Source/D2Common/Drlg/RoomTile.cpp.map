@@ -111,6 +111,7 @@
       "usedTypes": [
         "D2DrlgTileDataStrc",
         "D2RoomExStrc",
+        "D2TileLibraryEntryStrc",
         "uint32_t"
       ]
     },
@@ -684,6 +685,9 @@
       "calledFunctions": [
         "Unreferenced_0066f030",
         "GetRoomExFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
       ]
     },
     {

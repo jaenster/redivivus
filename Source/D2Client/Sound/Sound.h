@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,7 +18,6 @@
 struct D2EscMenuItemStrc;
 struct D2MPQFileStrc;
 struct D2UIMouseMsgStrc;
-struct D2UnitDataItemStrc;
 struct D2UnitStrc;
 struct IDirectSoundBuffer;
 typedef uint32_t eD2Sounds;
@@ -60,6 +62,8 @@ struct IDirectSound3DBufferVtbl;
 struct IKsPropertySetVtbl;
 
 // Data types
+#ifndef D2_DEFINED_D2ClientSoundChannelStrc
+#define D2_DEFINED_D2ClientSoundChannelStrc
 struct D2ClientSoundChannelStrc {
     /* 0x00 */ struct D2SoundSmpStrc * pSoundSmp; // sample instance
     /* 0x04 */ int32_t nChannelType; // 0/1/2/6 speaker-config channel type
@@ -71,11 +75,17 @@ struct D2ClientSoundChannelStrc {
     /* 0x1C */ uint32_t dwLastEaxObstruction;
 };
 
+#endif // D2_DEFINED_D2ClientSoundChannelStrc
+#ifndef D2_DEFINED_D2SoundChannelNodeStrc
+#define D2_DEFINED_D2SoundChannelNodeStrc
 struct D2SoundChannelNodeStrc {
     /* 0x00 */ struct D2SoundChannelStrc * pChannel; // the channel record this node holds
     /* 0x04 */ struct D2SoundChannelNodeStrc * pNext; // next node in the active-channel list
 };
 
+#endif // D2_DEFINED_D2SoundChannelNodeStrc
+#ifndef D2_DEFINED_D2SoundChannelStrc
+#define D2_DEFINED_D2SoundChannelStrc
 struct __attribute__((packed)) D2SoundChannelStrc {
     /* 0x00 */ int * pListNode; // linked-list node ptr (dereferenced as *pChannel = channel data)
     /* 0x04 */ int nSoundId; // eD2Sounds id
@@ -102,6 +112,9 @@ struct __attribute__((packed)) D2SoundChannelStrc {
     /* 0x55 */ uint32_t nFadeEndTime; // global3+fadeOutMs target end time (pMatchChannelData+0x55)
 };
 
+#endif // D2_DEFINED_D2SoundChannelStrc
+#ifndef D2_DEFINED_D2SoundEnvironTxt
+#define D2_DEFINED_D2SoundEnvironTxt
 struct D2SoundEnvironTxt {
     /* 0x00 */ int Song;
     /* 0x04 */ int Day_Ambience;
@@ -127,6 +140,9 @@ struct D2SoundEnvironTxt {
     /* 0x54 */ int EAX_Air_Absorb;
 };
 
+#endif // D2_DEFINED_D2SoundEnvironTxt
+#ifndef D2_DEFINED_D2SoundSmpStrc
+#define D2_DEFINED_D2SoundSmpStrc
 struct D2SoundSmpStrc {
     /* 0x00 */ struct IDirectSoundBuffer * pDSBuffer; // IDirectSoundBuffer
     /* 0x04 */ uint32_t nBufSize; // total DirectSound buffer size in bytes
@@ -154,45 +170,16 @@ struct D2SoundSmpStrc {
     /* 0x5C */ int32_t nFadeEndTick; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
 };
 
-struct __attribute__((packed)) D2SoundsTxt {
-    /* 0x00 */ char Filename[60];
-    /* 0x3C */ uint8_t Volume;
-    /* 0x3D */ uint8_t Group_Size;
-    /* 0x3E */ uint8_t Loop;
-    /* 0x3F */ uint8_t Fade_In;
-    /* 0x40 */ uint8_t Fade_Out;
-    /* 0x41 */ uint8_t Defer_Inst;
-    /* 0x42 */ uint8_t Stop_Inst;
-    /* 0x43 */ short Duration;
-    /* 0x45 */ short Compound;
-    /* 0x47 */ int Falloff;
-    /* 0x4B */ uint8_t Reverb;
-    /* 0x4C */ uint8_t Cache;
-    /* 0x4D */ uint8_t Async_Only;
-    /* 0x4E */ uint8_t Priority;
-    /* 0x4F */ uint8_t Stream;
-    /* 0x50 */ uint8_t Stereo;
-    /* 0x51 */ uint8_t Tracking;
-    /* 0x52 */ uint8_t Solo;
-    /* 0x53 */ uint8_t Music_Vol;
-    /* 0x54 */ int Block[3];
-    /* 0x60 */ int32_t nGroupStartIndex; // Index of first sound in group
-    /* 0x64 */ int32_t aRecentSoundHistory[2]; // Recent sound indices for group randomization dedup
-    /* 0x6C */ void * pSoundDataBuffer; // Loaded WAV data pointer (FreeClientMemory)
-    /* 0x70 */ int32_t nSoundDataBytes; // Loaded buffer size in bytes
-    /* 0x74 */ int32_t aWavDataPtrAndSize[2]; // Unknown
-    /* 0x7C */ uint32_t nLRUTimestamp; // LRU eviction tick (gnCurrentGameAudioVolume)
-    /* 0x80 */ uint8_t nBlockCount; // Unknown
-    /* 0x81 */ uint8_t bFileNotFound; // Set to 1 when file open fails
-    /* 0x82 */ void * pAsyncData; // struct D2AsyncData_Line0x128* while async load in flight
-    /* 0x86 */ int32_t nLoadState; // 0=unloaded 1=async-loading 2=loaded
-    /* 0x8A */ int32_t nRefCount; // Active channel reference count
-};
-
+#endif // D2_DEFINED_D2SoundSmpStrc
+#ifndef D2_DEFINED_IDirectSound3DBuffer
+#define D2_DEFINED_IDirectSound3DBuffer
 struct IDirectSound3DBuffer {
     /* 0x00 */ struct IDirectSound3DBufferVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IDirectSound3DBuffer
+#ifndef D2_DEFINED_IDirectSound3DBufferVtbl
+#define D2_DEFINED_IDirectSound3DBufferVtbl
 struct IDirectSound3DBufferVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -217,10 +204,16 @@ struct IDirectSound3DBufferVtbl {
     /* 0x50 */ void * SetVelocity;
 };
 
+#endif // D2_DEFINED_IDirectSound3DBufferVtbl
+#ifndef D2_DEFINED_IKsPropertySet
+#define D2_DEFINED_IKsPropertySet
 struct IKsPropertySet {
     /* 0x00 */ struct IKsPropertySetVtbl * lpVtbl;
 };
 
+#endif // D2_DEFINED_IKsPropertySet
+#ifndef D2_DEFINED_IKsPropertySetVtbl
+#define D2_DEFINED_IKsPropertySetVtbl
 struct IKsPropertySetVtbl {
     /* 0x00 */ HRESULT (__stdcall *QueryInterface)(void *, GUID *, void * *);
     /* 0x04 */ ULONG (__stdcall *AddRef)(void *);
@@ -230,6 +223,7 @@ struct IKsPropertySetVtbl {
     /* 0x14 */ HRESULT (__stdcall *QuerySupport)(void *, void *, ULONG, ULONG *);
 };
 
+#endif // D2_DEFINED_IKsPropertySetVtbl
 namespace D2Client::Sound {
 
 // Function declarations
@@ -245,7 +239,7 @@ float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2);
 float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2);
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3);
 struct D2SoundChannelStrc * __stdcall SOUND_GetChannelArray();
-int __fastcall Unreferenced_004b9440(int param_1);
+struct D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int param_1);
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall SOUNDINST_StopChannel(int * pSoundInst);
@@ -255,23 +249,23 @@ int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle);
 int __fastcall SOUND_StopSound(int32_t nSoundId);
 int32_t __fastcall SOUND_IsChannelPlaying(int32_t nSoundGroup);
 struct D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, struct D2SoundChannelStrc * nExcludeChannel);
-int32_t __thiscall SOUND_CalculateDistance(int32_t pThis, int32_t nExcludeChannel);
+struct D2SoundChannelStrc * __thiscall SOUND_CalculateDistance(int32_t pThis, struct D2SoundChannelStrc * nExcludeChannel);
 float __thiscall SOUND_CalculateUnitDistance(int32_t pThis, struct D2UnitStrc * pUnit);
 void __fastcall SOUND_PlayEnvironmentSound(int32_t nSoundId, int32_t nPosX, int32_t nPosY, int32_t nPosZ);
 int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, struct D2UnitStrc * pUnit, int32_t nDelay, int32_t nVolume, int32_t nParam);
 int __fastcall SOUND_SetMasterVolume(int32_t nSoundId);
 void __fastcall SOUND_SetChannelPriority(int32_t nSoundId, int32_t nPriority);
-void __fastcall SOUND_PlayItemSound(int32_t nChannelData, struct D2UnitDataItemStrc * pItemData, int32_t nStartTick, int32_t nDuration);
+void __fastcall SOUND_PlayItemSound(struct D2SoundChannelStrc * nChannelData, int pItemData, int32_t nStartTick, int32_t nDuration);
 int __fastcall SOUND_GetSoundChannel(int32_t nSoundId);
 int __stdcall SOUND_IsMusicPlaying();
 BOOL __stdcall SOUND_GetAmbientMusicState();
 int __fastcall SOUND_StopChannelById(int32_t nSoundId);
-int __fastcall Unreferenced_004b9cd0(int param_1, int param_2);
+void __fastcall Unreferenced_004b9cd0(int nChannelHandle, uint8_t nPriority);
 void __stdcall SOUND_PauseAll();
 void __stdcall SOUND_ResumeAll();
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId);
 BOOL __fastcall SOUND_IsChannelAvailable(struct D2SoundChannelStrc * pChanA, struct D2SoundChannelStrc * pChanB, int32_t bComparePan, int32_t bCompareTime);
-uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId);
+uint32_t __fastcall SOUND_FindChannelForSound(struct D2UnitStrc * nSoundId);
 int Unreferenced_004b9eb0();
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration);
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime);
@@ -288,8 +282,8 @@ BOOL __stdcall SOUND_IsDirectSoundAvailable();
 BOOL __stdcall SOUND_IsEaxAvailable();
 int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, uint32_t nModulus);
 int Unreferenced_004e41e0();
-int Unreferenced_004e4200();
-int Unreferenced_004e4220();
+float __stdcall Unreferenced_004e4200();
+void __stdcall Unreferenced_004e4220();
 void __stdcall SOUND_TogglePauseAll();
 // @wasnamed SOUND_UpdateAllChannels - one name on two different functions.
 // @evidence Calls GetSoundEnvironLine, Day_/Night_Ambience and _Event,

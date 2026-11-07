@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Lang)
 #error "D2Lang header included by a module that may not use D2Lang (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Lang) && !defined(D2_LOADS_D2Lang)
+#error "internal D2Lang header included from another module; include D2Lang's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,6 +17,17 @@
 // Forward declarations
 struct D2PoolManagerStrc;
 
+// Data types
+#ifndef D2_DEFINED_D2UnicodeKamapEntryStrc
+#define D2_DEFINED_D2UnicodeKamapEntryStrc
+struct D2UnicodeKamapEntryStrc {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint16_t wCode;
+    /* 0x02 */ uint16_t wUnicode;
+};
+
+#endif // D2_DEFINED_D2UnicodeKamapEntryStrc
 namespace D2Lang::Unicode::UNISYS {
 
 // Function declarations
@@ -22,7 +36,7 @@ uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * ws
 int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars);
 int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16_t * pwszText2);
 uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars);
-short * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind);
+uint16_t * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind);
 uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2);
 void __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars);
 void __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe);
@@ -38,7 +52,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Lang)
 uint16_t * __fastcall UNICODE_FindSubstringNoCase(uint16_t * pwszHaystack, uint16_t * pwszNeedle);
-int __fastcall Unreferenced_00526d00(int param_1);
+int __fastcall Unreferenced_00526d00(uint16_t * param_1);
 bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t * pwChar);
 void UNICODE_FreeBuffer(void * pBuffer);
 void UNICODE_AllocBuffer(uint32_t nSize);

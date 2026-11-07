@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2DamageStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
@@ -24,7 +28,7 @@ namespace D2Game::SKILLS::SkillEMonst {
 BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, struct D2UnitStrc * pUnit, int32_t nSkillLvl, uint32_t dwParam);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker, int32_t pCombatEntry);
+void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker, struct D2DamageStrc * pCombatEntry);
 // Server do-function for skill 125 (Catapult Fire Bomb, Act 5 siege engine). Resolves the charge-up missile, gets the target/cursor position, computes the delta vector from the unit's current position to the target, spawns the firebomb missile with flags=2 (lobbed), then sets the missile's TargetX/Y to the rotated delta vector (perpendicular). Returns 1 on success, 0 on invalid skill or out-of-range missile ID.
 BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLEMONST_SrvStFn59_ImpInferno(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -67,7 +71,7 @@ BOOL __fastcall Skills_SrvDoFunc_139_FireOrthogonalMissile(::SGAMEDATA * pGame, 
 // SrvStFunc 63: monster-only skill that fires a missile at the target corpse. Checks the target lacks STATE_corpse_noselect, marks it with that state, creates a missile from srvmissilea using the owner as attacker and the corpse as the missile target, then sends a unit message packet to the caster.
 BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-int Unreferenced_005d2b40();
+void __stdcall Unreferenced_005d2b40(struct D2UnitStrc * pUnit);
 // Applies a Blood Mana HP cost of nParam to pUnit. If HP is sufficient, deducts it and removes the STATE_blood_mana stat list when remaining HP falls below the skill's Param[4] threshold (in fixed-point). If HP is insufficient, forces HP to 0x100 (minimum alive) and removes the stat list.
 void __fastcall SKILLEMONST_ProcessBloodMana(struct D2UnitStrc * pUnit, int32_t nHpCost);
 // Server-side skill DoFunc 140: scatters a difficulty-scaled number of minion monsters around the caster. Advances the caster unit's RNG seed; the spawn count is (2 + difficulty + seedLow mod 3). Determines the base spawn position from the caster's (or its current target's) static/dynamic path X/Y, then loops spawning monsters at randomized +-9 tile offsets via SpawnMonster, snapping each to a valid nearby room (DRLGROOM_FindBetterNearbyRoom). Each spawned minion is flagged NOXP|NOTC, given AI think mode 0xF (RestartAiThink), and has its owner stored as the caster. Returns 0 if pUnit is null, else 1.

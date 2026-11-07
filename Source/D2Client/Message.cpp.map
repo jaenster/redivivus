@@ -49,6 +49,10 @@
       "namespace": "D2Client::_Message",
       "calledFunctions": [
         "WndProcD"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "uint32_t"
       ]
     },
     {

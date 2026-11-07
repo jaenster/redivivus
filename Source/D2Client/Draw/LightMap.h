@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -31,6 +34,8 @@ struct D2ColorInfo2 {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2LightMapCellStrc
+#define D2_DEFINED_D2LightMapCellStrc
 struct D2LightMapCellStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -41,6 +46,25 @@ struct D2LightMapCellStrc {
     /* 0x07 */ uint8_t nBlue; // Blue channel 0-255
 };
 
+#endif // D2_DEFINED_D2LightMapCellStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union LIGHTMAP_ApplyStaticLightWithShadow_Slotm24 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nCoordYFar;
+    /* 0x00 */ uint32_t * pBufferRow;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union LIGHTMAP_ApplyStaticLightWithShadow_Slotm28 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nCoordXFar;
+    /* 0x00 */ uint32_t * pBufferCell;
+};
+
+#endif // D2_MODULE_D2Client
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================

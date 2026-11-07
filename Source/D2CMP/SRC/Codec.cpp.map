@@ -93,7 +93,9 @@
         "CODEC_CalculateFrameBounds"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2CodecFrameComponentStrc",
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -111,7 +113,8 @@
       ],
       "usedTypes": [
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -151,7 +154,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2CodecBitStateStrc",
+        "D2CodecPixelBufferEntryStrc",
         "uint32_t",
         "uint8_t",
         "uint8_t *"
@@ -198,7 +202,9 @@
         "LOGFILE_WriteStringToFile"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2CodecFrameComponentStrc",
+        "DC6Block",
+        "uint32_t",
         "uint8_t"
       ]
     },
@@ -256,10 +262,12 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "CODEC_DecompressAllFrames_Slotm",
         "D2CelDecodeStateStrc",
         "D2CodecBitStateStrc",
         "D2CodecFrameBoundsStrc",
         "D2PoolManagerStrc",
+        "DC6Block",
         "int32_t",
         "uint32_t",
         "uint8_t"

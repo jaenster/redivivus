@@ -216,7 +216,9 @@
         "LIGHTMAP_FillGridRect"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2LightMapCellStrc",
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -405,6 +407,7 @@
       ],
       "usedTypes": [
         "D2LightMapStrc",
+        "LIGHTMAP_ApplyStaticLightWithShadow_Slotm",
         "uint32_t",
         "uint8_t"
       ]

@@ -283,7 +283,9 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc",
-        "D2PoolManagerStrc"
+        "D2DrlgPresetRoomStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
       ]
     },
     {
@@ -490,7 +492,8 @@
         "D2DrlgTileGridStrc",
         "D2LvlPrestTxt",
         "D2PoolManagerStrc",
-        "D2RoomExStrc"
+        "D2RoomExStrc",
+        "DRLGROOMEX_InitializePresetRoom_Slotm"
       ]
     },
     {
@@ -606,6 +609,9 @@
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
         "Unreferenced_00666ff0"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
       ]
     },
     {
@@ -620,6 +626,9 @@
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
         "Unreferenced_00667000"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
       ]
     },
     {
@@ -721,6 +730,9 @@
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
         "Unreferenced_00667420"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
       ]
     },
     {
@@ -895,11 +907,11 @@
         "D2DrlgGridStrc",
         "D2DrlgLevelStrc",
         "D2DrlgMapStrc",
-        "D2DrlgStrc",
         "D2LvlPrestTxt",
         "D2ObjectsTxt",
         "D2PoolManagerStrc",
         "D2PresetUnitStrc",
+        "DRLGPRESET_BuildPresetArea_Slotm",
         "int32_t",
         "uint32_t",
         "void *"

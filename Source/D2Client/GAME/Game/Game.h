@@ -4,23 +4,27 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
 struct D2BNetClientCallbacksStrc;
 struct D2IniConfigStrc;
 struct D2PoolManagerStrc;
-struct D2StormListHead;
 struct D2UIMouseMsgStrc;
 struct DC6;
 struct EHExceptionRecord;
 struct EHRegistrationNode;
 struct SGAMEDATA;
+struct StormLinkedListStrc;
 typedef int _EXCEPTION_DISPOSITION;
 typedef uint32_t eD2ClientAppMode;
 typedef uint32_t eD2GSGameType;
@@ -34,6 +38,8 @@ typedef void (__fastcall *fnClientDrawProc)(int32_t nParam);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_BetaScreenEntry
+#define D2_DEFINED_BetaScreenEntry
 struct __attribute__((packed)) BetaScreenEntry {
     /* 0x00 */ uint32_t lastLoadTick; // last GetTickCount when slide was loaded
     /* 0x04 */ struct DC6 * cachedImage; // cached DC6 image
@@ -41,6 +47,7 @@ struct __attribute__((packed)) BetaScreenEntry {
     /* 0x09 */ char * fileName; // path token for wsprintf
 };
 
+#endif // D2_DEFINED_BetaScreenEntry
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2CharPortraitTextStrc {
     /* 0x00 */ char szName[100];
@@ -48,6 +55,8 @@ struct D2CharPortraitTextStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2ClientGameDataStrc
+#define D2_DEFINED_D2ClientGameDataStrc
 struct D2ClientGameDataStrc {
     /* 0x00 */ int32_t nZeroHead;
     /* 0x04 */ void (__fastcall *CurrentDrawFunction)(int32_t); // __fastcall draw proc; ECX=0 at every call site
@@ -83,6 +92,9 @@ struct D2ClientGameDataStrc {
     /* 0x7C */ uint32_t gnGameDataValue04fc;
 };
 
+#endif // D2_DEFINED_D2ClientGameDataStrc
+#ifndef D2_DEFINED_D2ClientTimerStrc
+#define D2_DEFINED_D2ClientTimerStrc
 struct D2ClientTimerStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -90,6 +102,14 @@ struct D2ClientTimerStrc {
     /* 0x04 */ DWORD dwDurationMs; // 0 = timer idle
 };
 
+#endif // D2_DEFINED_D2ClientTimerStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct __attribute__((packed)) D2StormListHead {
+    /* 0x00 */ int32_t nLinkOffset; // byte offset of the link node within each element; signed
+    /* 0x04 */ StormLinkStrc terminator; // TSList m_terminator, a TSLink: m_prevlink is the terminator's own address when empty, m_next is ~&terminator (negative) at the end of the list
+};
+
+#endif // D2_MODULE_D2Client
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -106,16 +126,16 @@ namespace D2Client::GAME::Game {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_00402a80();
-void __fastcall TSIntrusiveList_Clear_Unref_0040f860(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unref_004179f0(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unref_00417a30(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unref_00417c30(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unref_0041c540(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unref_0041eb20(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_0040f860(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_004179f0(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_00417a30(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_00417c30(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_0041c540(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_0041eb20(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(struct StormLinkedListStrc * pListHead);
 void __stdcall GAME_SetMouseButtonEventPending_Unref_0044b870();
 void __thiscall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, uint32_t dwDurationMs);
-int __fastcall Unreferenced_0044be10(int param_1);
+int __fastcall Unreferenced_0044be10(int * param_1);
 void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue);
 // Setter for gRunKeyDown (run modifier).
 void __fastcall SetRunKeyDown(BOOL bRunKeyDown);
@@ -146,7 +166,7 @@ void __stdcall INPUT_HandlePrimaryClickUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleRightClick(struct D2UIMouseMsgStrc * pMsg);
 // Process queued secondary click: build flags (run/modifier) and call ClickMap(4,x,y,flags).
 void __stdcall ProcessQueuedSecondaryClick();
-int Unreferenced_0044c340();
+void Unreferenced_0044c340();
 void __stdcall INPUT_HandleSecondaryClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleScrollDown(struct D2UIMouseMsgStrc * pMsg);
@@ -297,12 +317,13 @@ uint32_t __stdcall GAMEDATA_GetFpsDrawn();
 uint32_t __stdcall GetFPSSkip();
 int32_t __stdcall gnRecordingIndex();
 uint32_t __stdcall GetStepsOfMissileMovement();
-uint32_t __stdcall GetStepsOfMissileMovement_Unref_0044db20();
+struct D2PoolManagerStrc * __stdcall GetStepsOfMissileMovement_Unref_0044db20();
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType();
 void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs);
 void __stdcall GAMEDATA_LoadActTiles(uint32_t nAct);
 // ESI is not an argument: the body never reads it.
 void GAMEDATA_CheckColorTxtOverride();
+void __stdcall RENDERER_TogglePerspective_Unref_0044dc40();
 BOOL __stdcall GAMEDATA_GetBloodFlag();
 void __fastcall CLIENT_SetDifficulty(char nDifficulty);
 void __fastcall CLIENT_SetExpansion(bool bExpansion);
@@ -334,8 +355,8 @@ void __stdcall GAMEDATA_DrawCharacterPortrait();
 // End-game congrats screen; caches images in `gD2QServer.congratsBgImage`/`congratsOkButton` and uses `gD2QServer.frameSkipLevel` to decide whether to skip frames.
 uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused);
 void __stdcall GAMEDATA_ShowEndGameCutscene();
-void __fastcall TSIntrusiveList_Clear(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unreferenced(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced(struct StormLinkedListStrc * pListHead);
 // Client network timeout checks; triggers CLIENT_ConnectionRefused on long waits or failed connects.
 void __stdcall Client_CheckConnectionTimeouts();
 // Main game loop tick. Runs at ~25 FPS.
@@ -350,14 +371,14 @@ void __fastcall GAME_TryCopyFrom(::SGAMEDATA * pGame, ::SGAMEDATA * pGame2);
 BOOL __stdcall RegisterCmdLineLngOption();
 void __stdcall FreeLanguage();
 void __fastcall ClientInit_Noop16_Unref_00452160(struct D2IniConfigStrc * pIni);
-void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(struct StormLinkedListStrc * pListHead);
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad();
 void __fastcall CLIENT_SetDifficulty_Unref_00552830(char nDifficulty);
-void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602390(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(struct D2StormListHead * pListHead);
-void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(struct D2StormListHead * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602390(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(struct StormLinkedListStrc * pListHead);
+void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(struct StormLinkedListStrc * pListHead);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_D2Client
 

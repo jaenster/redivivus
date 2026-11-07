@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -20,6 +23,8 @@ typedef int (__stdcall *fpDialogFunc)();
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2DialogStringData
+#define D2_DEFINED_D2DialogStringData
 struct __attribute__((packed)) D2DialogStringData {
     /* 0x000 */ uint16_t szString[120];
     /* 0x0F0 */ int32_t nYPos; // Y draw position (set by RecalculateLayout)
@@ -32,6 +37,9 @@ struct __attribute__((packed)) D2DialogStringData {
     /* 0x10C */ int32_t nCallbackParam; // Parameter passed to click handler; nonzero increments nClickableCount
 };
 
+#endif // D2_DEFINED_D2DialogStringData
+#ifndef D2_DEFINED_D2DialogStrc
+#define D2_DEFINED_D2DialogStrc
 struct __attribute__((packed)) D2DialogStrc {
     /* 0x000 */ int32_t nTickcount;
     /* 0x004 */ int32_t field_0x04_padding; // Padding/unused after nTickcount
@@ -67,3 +75,5 @@ struct __attribute__((packed)) D2DialogStrc {
     /* 0xB08 */ struct D2DialogSubStrc * pDialogSub;
     /* 0xB0C */ struct D2DialogStrc * pPrev;
 };
+
+#endif // D2_DEFINED_D2DialogStrc

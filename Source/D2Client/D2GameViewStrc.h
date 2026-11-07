@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,8 @@
 #include "Source/D2Client/GAME/Wall2.h"
 
 // Data types
+#ifndef D2_DEFINED_D2Wall2CellStrc
+#define D2_DEFINED_D2Wall2CellStrc
 struct D2Wall2CellStrc {
     /* 0x00 */ uint32_t dwFlags; // cleared by WALL2_CollectRoomTilesAndUnits; WALL2_AddWallTile/AddLowerWallTile set bit 2
     /* 0x04 */ uint8_t field_0x4;
@@ -28,6 +33,9 @@ struct D2Wall2CellStrc {
     /* 0x20 */ struct D2Wall2DrawEntryStrc * pUnderFloorList; // WALL2_AddLowerWallTile (tile types 0x10..0x13) inserts sorted; WALL2_DrawUnderFloorTiles walks
 };
 
+#endif // D2_DEFINED_D2Wall2CellStrc
+#ifndef D2_DEFINED_D2Wall2DrawListStrc
+#define D2_DEFINED_D2Wall2DrawListStrc
 struct __attribute__((packed)) D2Wall2DrawListStrc {
     /* 0x0000 */ uint32_t dwWall2PassMask; // pass mask: bit0 under-floor (AddLowerWallTile), bit1 roof (AddRoofTile), bit3 shadow pass (AddShadowPassTile/InsertUnitDraw)
     /* 0x0004 */ D2Wall2DrawEntryStrc aWall2Entries[3000]; // draw-entry pool; every WALL2_Add*/Insert* takes aWall2Entries[nWall2EntryCount++] while it is < 3000
@@ -41,6 +49,9 @@ struct __attribute__((packed)) D2Wall2DrawListStrc {
     /* 0xEA80 */ int nWall2GridHeight; // view height/0x50 + 0xc
 };
 
+#endif // D2_DEFINED_D2Wall2DrawListStrc
+#ifndef D2_DEFINED_D2GameViewStrc
+#define D2_DEFINED_D2GameViewStrc
 struct __attribute__((packed)) D2GameViewStrc {
     /* 0x00 */ uint32_t nFlags;
     /* 0x04 */ tagRECT pView;
@@ -52,3 +63,5 @@ struct __attribute__((packed)) D2GameViewStrc {
     /* 0x34 */ uint8_t * pPalByteTable16x32;
     /* 0x38 */ D2Wall2DrawListStrc sWall2; // wall2 draw list: pass mask, 3000-entry pool, count and the cell grid. WALL2_IsInDrawGrid and the Add*/Insert* helpers take &sWall2 and reach the grid fields through it
 };
+
+#endif // D2_DEFINED_D2GameViewStrc

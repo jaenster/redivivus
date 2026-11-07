@@ -16,15 +16,7 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Client/Utils.h"
-#include "Source/D2Common/D2SkillsTxt.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/Drlg/Path.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
@@ -194,7 +186,7 @@ BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
         Object::ObjectMessage(nMessageType, pUnit, pMessage);
       return 1;
       case UNIT_ITEM:
-        ItemMessage(nMessageType, pUnit, (D2ServerMessageHandleStrc*)pMessage->nSkillId, pMessage->nItemId);
+        ItemMessage(nMessageType, pUnit, pMessage->nSkillId, pMessage->nItemId);
     }
 
     return 1;

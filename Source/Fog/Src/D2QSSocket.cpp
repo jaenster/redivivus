@@ -6,8 +6,7 @@
 #include "Source/Fog/Src/D2QSQueue.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/Safesock.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Net/Game/Server.data.h"
 
@@ -111,7 +110,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
     void* pvVar3 = pBuffer;
     do {
       int iVar1;
-      wPacketSize = *(uint16_t*)(pQServerStrc->nSizeFieldOffset + (int)pvVar3);
+      wPacketSize = *(uint16_t*)(pQServerStrc->nSizeFieldOffset + (char*)pvVar3);
       nPacketLen = (uint32_t)wPacketSize;
       iVar2 = pQServerStrc->nHeaderSize;
       iVar1 = (int)pBuffer + (nBufferSize - (int)pvVar3);
@@ -126,7 +125,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
       }
 
       wMsgSize = wPacketSize - (short int)iVar2;
-      pMessage = (void*)(iVar2 + (int)pvVar3);
+      pMessage = (void*)(iVar2 + (char*)pvVar3);
       if (pQServerStrc->pfnPacketHandler) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadHandlerPtr = IsBadCodePtr((FARPROC)pQServerStrc->pfnPacketHandler);
         if (bBadHandlerPtr) {
@@ -143,7 +142,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
 
           D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, wMsgSize);
           /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
-          pvVar3 = (void*)((int)pvVar3 + nPacketLen);
+          pvVar3 = (void*)((char*)pvVar3 + nPacketLen);
           continue;
         }
       } else {
@@ -151,7 +150,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
       }
 
-      pvVar3 = (void*)((int)pvVar3 + nPacketLen);
+      pvVar3 = (void*)((char*)pvVar3 + nPacketLen);
     } while (true);
 }
 
@@ -289,9 +288,9 @@ int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
 }
 
 // lpStartAddress parameter of CreateThread
-DWORD __stdcall QSSOCKET_ThreadEntryPoint(void * lpThreadParam) {
-    D2NetDataStrc* pSafesock = Safesock::SAFESOCK_CreateBlocking((char*)((int)lpThreadParam + 8), *(int*)((int)lpThreadParam + 0x10c), (LPTHREAD_START_ROUTINE)ReceiveLoopCallback, lpThreadParam, (char*)((int)lpThreadParam + 0x128));
-    *(D2NetDataStrc**)((int)lpThreadParam + 0x110) = (D2NetDataStrc*)pSafesock;
+DWORD __stdcall QSSOCKET_ThreadEntryPoint(D2QSSocketStrc * lpThreadParam) {
+    D2NetDataStrc* pSafesock = Safesock::SAFESOCK_CreateBlocking(lpThreadParam->szIpAddress, lpThreadParam->nPort, (LPTHREAD_START_ROUTINE)ReceiveLoopCallback, lpThreadParam, lpThreadParam->szName);
+    lpThreadParam->pSafesock = pSafesock;
     return 1;
 }
 

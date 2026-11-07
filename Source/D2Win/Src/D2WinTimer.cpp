@@ -3,9 +3,7 @@
 #include "Source/D2Win/Src/D2WinTimer.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinTimer.h"
 
@@ -141,13 +139,13 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     return pTimer;
 }
 
-void __fastcall D2WINEDITBOX_Destroy(int * pEditBox) {
-    if (*pEditBox != 8) {
+void __fastcall D2WINEDITBOX_Destroy(::D2WinTimer * pEditBox) {
+    if (pEditBox->sControl.neD2FormType != FORM_Timer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);
       exit(-1);
     }
 
-    pEditBox[8] = (int)D2WINTIMER_GetElapsed;
+    pEditBox->sControl.fpDrawEx = (::DrawEx)D2WINTIMER_GetElapsed;
 }
 
 } // namespace D2Win::Src::D2WinTimer

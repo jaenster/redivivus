@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -120,7 +123,6 @@ char * __stdcall SStrDup(char * szText);
 int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF16Out, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
 int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUTF8In, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count);
-int __fastcall SSTR_StringLength(char * szText);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 char * __stdcall SSTR_FindChar(char * szText, char cTarget, int32_t bFromEnd);
@@ -143,7 +145,7 @@ uint32_t __stdcall SStrToUnsigned(char * szText);
 ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive, ULONGLONG qwSeed);
 // Bob Jenkins hash over a byte buffer.
 // Name from the PowerPC 1.13c Storm traceback table (bjhash @10047b40).
-uint32_t __fastcall SSTR_bjhash(int * pData, uint32_t nLength, uint32_t nInitVal);
+uint32_t __fastcall SSTR_bjhash(uint8_t * pData, uint32_t nLength, uint32_t nInitVal);
 double __fastcall _Pow_int(uint32_t nValue, double dBase);
 // Scales dBase by a power of ten. Returns a double in ST(0), not through a hidden return pointer, so dBase sits at Stack[0x4] and nExp at Stack[0xc]. An 80-bit x87 return type would make Ghidra add a __return_storage_ptr__ at Stack[0x4] and shift every argument by four bytes.
 double SSTR_PowDoubleInt(double dBase, int nExp);

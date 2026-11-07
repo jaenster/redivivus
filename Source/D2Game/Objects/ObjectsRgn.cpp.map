@@ -27,8 +27,9 @@
         "TXT_Shrines_GetLine"
       ],
       "usedTypes": [
+        "AllocObjectControl_Slotm",
+        "AllocObjectControl_Slotmc",
         "D2ObjectControlStrc",
-        "D2ObjectRngShrines",
         "D2ObjectRngStrc",
         "D2SeedStrc",
         "D2ShrinesTxt",

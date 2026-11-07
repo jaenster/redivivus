@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2CharStatsTxt;
 struct D2ClientStrc;
 struct D2LevelPlayerCountArgStrc;
 struct D2RoomStrc;
@@ -21,6 +25,8 @@ struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
 
 // Data types
+#ifndef D2_DEFINED_D2CharItemStrc
+#define D2_DEFINED_D2CharItemStrc
 struct D2CharItemStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -31,6 +37,9 @@ struct D2CharItemStrc {
     /* 0x07 */ uint8_t field_0x7;
 };
 
+#endif // D2_DEFINED_D2CharItemStrc
+#ifndef D2_DEFINED_D2PartyDataStrc
+#define D2_DEFINED_D2PartyDataStrc
 struct __attribute__((packed)) D2PartyDataStrc {
     /* 0x00 */ uint32_t nUnitGUID;
     /* 0x04 */ uint32_t nLifePercent;
@@ -39,6 +48,7 @@ struct __attribute__((packed)) D2PartyDataStrc {
     /* 0x10 */ struct D2PartyDataStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D2PartyDataStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2PlayerHostileCheckArgStrc {
     /* 0x00 */ BOOL bHostile;
@@ -62,7 +72,7 @@ void __fastcall PLAYER_ClearTargetIfMatch(::SGAMEDATA * pGame, struct D2UnitStrc
 void __fastcall PLAYER_MoveToLocationWithTimeout(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY);
 uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
-void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t eClassId, int32_t nDifficulty, uint32_t * pCharItem);
+void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2CharStatsTxt * eClassId, int32_t nDifficulty, struct D2CharItemStrc * pCharItem);
 void __fastcall PLAYER_CreateAllStarterItems(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct);
 void __fastcall PLAYER_SendAllItemsToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 int32_t __fastcall GetPlayerTradeTickOrBusy(struct D2UnitStrc * pPlayer);

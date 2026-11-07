@@ -47,6 +47,9 @@
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
         "Unreferenced_005a0040"
+      ],
+      "usedTypes": [
+        "D2MonUModTxt"
       ]
     },
     {
@@ -169,6 +172,7 @@
         "MONSTER_SetMonsterDataFlags"
       ],
       "usedTypes": [
+        "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
@@ -424,7 +428,6 @@
       "usedTypes": [
         "D2DataTableTxtStrc",
         "D2UnitStrc",
-        "D2WaypointStrc *",
         "uint8_t"
       ]
     },

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,11 +16,16 @@
 #include "Source/Fog/Memory.h"
 
 // Data types
+#ifndef D2_DEFINED_D2PoolBlockEntryStrc
+#define D2_DEFINED_D2PoolBlockEntryStrc
 struct D2PoolBlockEntryStrc {
     /* 0x00 */ struct D2PoolBlockStrc * pBlock;
     /* 0x04 */ void * pCommit;
 };
 
+#endif // D2_DEFINED_D2PoolBlockEntryStrc
+#ifndef D2_DEFINED_D2PoolManagerStrc
+#define D2_DEFINED_D2PoolManagerStrc
 struct __attribute__((packed)) D2PoolManagerStrc {
     /* 0x0000 */ int nPoolId; // related to pool count..
     /* 0x0004 */ CRITICAL_SECTION pSync;
@@ -30,3 +38,5 @@ struct __attribute__((packed)) D2PoolManagerStrc {
     /* 0x17A8 */ DWORD dwMemory;
     /* 0x17AC */ char szName[32];
 };
+
+#endif // D2_DEFINED_D2PoolManagerStrc

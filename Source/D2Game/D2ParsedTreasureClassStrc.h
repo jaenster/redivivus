@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 typedef uint8_t eTCFlags;
 
 // Data types
+#ifndef D2_DEFINED_D2ParsedTreasureClassEntriesStrc
+#define D2_DEFINED_D2ParsedTreasureClassEntriesStrc
 struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
     /* 0x00 */ int32_t nCumulativeWeightClassic; // Cumulative weight for Classic linear scan
     /* 0x04 */ int32_t nCumulativeWeightExpansion; // Cumulative weight for Expansion binary search
@@ -31,6 +36,9 @@ struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
     /* 0x1A */ uint8_t pad26[2]; // padding to 28 bytes
 };
 
+#endif // D2_DEFINED_D2ParsedTreasureClassEntriesStrc
+#ifndef D2_DEFINED_D2ParsedTreasureClassStrc
+#define D2_DEFINED_D2ParsedTreasureClassStrc
 struct D2ParsedTreasureClassStrc {
     /* 0x00 */ int16_t nGroup;
     /* 0x02 */ int16_t nLevel;
@@ -49,3 +57,5 @@ struct D2ParsedTreasureClassStrc {
     /* 0x26 */ uint8_t pad38[2];
     /* 0x28 */ struct D2ParsedTreasureClassEntriesStrc * pEntries;
 };
+
+#endif // D2_DEFINED_D2ParsedTreasureClassStrc

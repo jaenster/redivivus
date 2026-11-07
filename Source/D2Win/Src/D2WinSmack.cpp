@@ -5,10 +5,8 @@
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Win/Src/D2Comp.h"
 #include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/Src/D2WinSmack.data.h"
 

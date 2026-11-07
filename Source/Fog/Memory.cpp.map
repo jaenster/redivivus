@@ -268,8 +268,7 @@
         "CRITICAL_SECTION",
         "D2PoolBlockEntryStrc",
         "D2PoolBlockStrc",
-        "D2PoolManagerStrc",
-        "uint32_t"
+        "D2PoolManagerStrc"
       ]
     },
     {
@@ -472,6 +471,7 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc",
+        "ReAlloc_Slotm",
         "int32_t",
         "uint32_t"
       ]

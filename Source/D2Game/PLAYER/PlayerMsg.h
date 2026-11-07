@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -36,6 +39,8 @@ struct D2ChatBroadcastCtx {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2ChatMessage
+#define D2_DEFINED_D2ChatMessage
 struct D2ChatMessage {
     /* 0x000 */ char nMessageId;
     /* 0x001 */ char nMessageType;
@@ -44,6 +49,7 @@ struct D2ChatMessage {
     /* 0x103 */ char szTarget[16];
 };
 
+#endif // D2_DEFINED_D2ChatMessage
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2GSPacketClt0x01_WalkToLocation {
     /* 0x00 */ uint8_t nCmd; // 0x01
@@ -747,6 +753,8 @@ struct D2GSPacketClt0x66_WardenStub {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2GSPacketSrv0x26
+#define D2_DEFINED_D2GSPacketSrv0x26
 struct __attribute__((packed)) D2GSPacketSrv0x26 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nMessageType;
@@ -759,6 +767,9 @@ struct __attribute__((packed)) D2GSPacketSrv0x26 {
     /* 0x1A */ char szMessage[256];
 };
 
+#endif // D2_DEFINED_D2GSPacketSrv0x26
+#ifndef D2_DEFINED_D2WarpChanceStrc
+#define D2_DEFINED_D2WarpChanceStrc
 struct D2WarpChanceStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -766,6 +777,7 @@ struct D2WarpChanceStrc {
     /* 0x04 */ int nOffset;
 };
 
+#endif // D2_DEFINED_D2WarpChanceStrc
 namespace D2Game::PLAYER::PlayerMsg {
 
 // Function declarations

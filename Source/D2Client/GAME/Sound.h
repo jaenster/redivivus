@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,10 +17,11 @@
 // Forward declarations
 struct D2ClientSoundChannelStrc;
 struct D2SoundChannelStrc;
-struct D2SoundsTxt;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2NpcGreetingSoundsStrc
+#define D2_DEFINED_D2NpcGreetingSoundsStrc
 struct D2NpcGreetingSoundsStrc {
     /* 0x00 */ int nGreetingSoundId; // <npc>_greeting_1 (Sounds.txt), the default pick.
     /* 0x04 */ int nInactiveSoundId; // <npc>_greeting_inactive_1, picked 1 in 2 when nMode is 0.
@@ -27,6 +31,9 @@ struct D2NpcGreetingSoundsStrc {
     /* 0x14 */ int nLastRecordingIdx; // gnRecordingIndex() when it was chosen (written [EDI+0x14])
 };
 
+#endif // D2_DEFINED_D2NpcGreetingSoundsStrc
+#ifndef D2_DEFINED_D2SoundEaxEnvironStrc
+#define D2_DEFINED_D2SoundEaxEnvironStrc
 struct D2SoundEaxEnvironStrc {
     /* 0x00 */ int32_t nEnvironment;
     /* 0x04 */ float fEnvSize;
@@ -43,6 +50,9 @@ struct D2SoundEaxEnvironStrc {
     /* 0x30 */ float fAirAbsorptionHF;
 };
 
+#endif // D2_DEFINED_D2SoundEaxEnvironStrc
+#ifndef D2_DEFINED_D2SoundStringKeyStrc
+#define D2_DEFINED_D2SoundStringKeyStrc
 struct D2SoundStringKeyStrc {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -50,6 +60,63 @@ struct D2SoundStringKeyStrc {
     /* 0x02 */ uint16_t nStringKey;
 };
 
+#endif // D2_DEFINED_D2SoundStringKeyStrc
+#ifndef D2_DEFINED_D2SoundsTxt
+#define D2_DEFINED_D2SoundsTxt
+struct __attribute__((packed)) D2SoundsTxt {
+    /* 0x00 */ char Filename[60];
+    /* 0x3C */ uint8_t Volume;
+    /* 0x3D */ uint8_t Group_Size;
+    /* 0x3E */ uint8_t Loop;
+    /* 0x3F */ uint8_t Fade_In;
+    /* 0x40 */ uint8_t Fade_Out;
+    /* 0x41 */ uint8_t Defer_Inst;
+    /* 0x42 */ uint8_t Stop_Inst;
+    /* 0x43 */ short Duration;
+    /* 0x45 */ short Compound;
+    /* 0x47 */ int Falloff;
+    /* 0x4B */ uint8_t Reverb;
+    /* 0x4C */ uint8_t Cache;
+    /* 0x4D */ uint8_t Async_Only;
+    /* 0x4E */ uint8_t Priority;
+    /* 0x4F */ uint8_t Stream;
+    /* 0x50 */ uint8_t Stereo;
+    /* 0x51 */ uint8_t Tracking;
+    /* 0x52 */ uint8_t Solo;
+    /* 0x53 */ uint8_t Music_Vol;
+    /* 0x54 */ int Block[3];
+    /* 0x60 */ int32_t nGroupStartIndex; // Index of first sound in group
+    /* 0x64 */ int32_t aRecentSoundHistory[2]; // Recent sound indices for group randomization dedup
+    /* 0x6C */ void * pSoundDataBuffer; // Loaded WAV data pointer (FreeClientMemory)
+    /* 0x70 */ int32_t nSoundDataBytes; // Loaded buffer size in bytes
+    /* 0x74 */ int32_t aWavDataPtrAndSize[2]; // Unknown
+    /* 0x7C */ uint32_t nLRUTimestamp; // LRU eviction tick (gnCurrentGameAudioVolume)
+    /* 0x80 */ uint8_t nBlockCount; // Unknown
+    /* 0x81 */ uint8_t bFileNotFound; // Set to 1 when file open fails
+    /* 0x82 */ void * pAsyncData; // struct D2AsyncData_Line0x128* while async load in flight
+    /* 0x86 */ int32_t nLoadState; // 0=unloaded 1=async-loading 2=loaded
+    /* 0x8A */ int32_t nRefCount; // Active channel reference count
+};
+
+#endif // D2_DEFINED_D2SoundsTxt
+#ifndef D2_DEFINED_D2SoundWavCacheEntryStrc
+#define D2_DEFINED_D2SoundWavCacheEntryStrc
+struct D2SoundWavCacheEntryStrc {
+    /* 0x00 */ char szFileName[80];
+    /* 0x50 */ int * pWavData;
+    /* 0x54 */ uint32_t nDataSize;
+    /* 0x58 */ uint32_t bStereo;
+    /* 0x5C */ struct D2SoundWavCacheEntryStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2SoundWavCacheEntryStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union SOUND_UpdateChannelParams_Slotm14 {
+    /* 0x00 */ struct D2SoundsTxt * pLife0;
+    /* 0x00 */ float fPosZ;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::GAME::Sound {
 
 // Function declarations
@@ -80,7 +147,7 @@ struct D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t n
 uint32_t __fastcall SOUND_GetPlaybackStatus(int * * ppnParam);
 void __stdcall SOUND_ShutdownAudio();
 // Recomputes and re-applies a positional sound channel's mixing state (__fastcall, ECX=pSoundChannel). Reads the channel's sound descriptor (pSoundChannel[2]) and its sounds.txt line; halts via Fog::ErrorManager if descriptor is null. Computes effective volume by chaining music/master volume, per-channel left/right multipliers (skipping certain reserved sound-id ranges and Solo lines), and positional bias from the mixer. If the new volume and the descriptor's 3D position (offsets 0xC/0x10/0x14/0x20) match the channel's cached copy (pSoundChannel[3..7]) it returns 0 early (no change); otherwise distance-attenuates volume via falloff min/max, calls SOUNDSMP_CalculateVolumeAndPan/SetPan/Set3DPosition/SetEaxObstruction/SetVolume, caches the new pos+volume into the channel, and returns the descriptor pointer. Side-effects: drives the underlying audio mixer sample.
-int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel);
+int __fastcall SOUND_UpdateChannelParams(struct D2ClientSoundChannelStrc * pSoundChannel);
 BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer);
 // Sets the global BackgroundSoundsActive flag then reinitializes the audio stream channels to apply the change. Queries the current mixer mode (DirectSound=1 or Sound3D=2), checks whether the corresponding subsystem is initialized, and calls SOUND_ShutdownAudio + SOUND_InitStreamChannels. Falls back to mixer mode 0 on init failure and adjusts the stored mixer setting accordingly.
 void __fastcall SOUND_SetBackgroundSoundsActive(uint32_t bActive);

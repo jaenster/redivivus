@@ -4,15 +4,21 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/H/stpl.h"
 
 // Forward declarations
 struct D2BitBufferStrc;
+struct StormLinkStrc;
+struct StormLinkedListStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -27,6 +33,29 @@ struct SMemBlockDetailsStrc {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_SMemHeapDetailsStrc
+#define D2_DEFINED_SMemHeapDetailsStrc
+struct SMemHeapDetailsStrc {
+    /* 0x000 */ uint32_t dwSize; // set to sizeof by the caller (0x128)
+    /* 0x004 */ uint32_t hHeap;
+    /* 0x008 */ char szFilename[260];
+    /* 0x10C */ int32_t nLineNumber;
+    /* 0x110 */ uint32_t nRegions;
+    /* 0x114 */ uint32_t dwCommittedBytes;
+    /* 0x118 */ uint32_t dwReservedBytes;
+    /* 0x11C */ uint32_t dwMaximumSize;
+    /* 0x120 */ uint32_t nAllocatedBlocks;
+    /* 0x124 */ uint32_t dwAllocatedBytes; // summed per region like the fields before it
+};
+
+#endif // D2_DEFINED_SMemHeapDetailsStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct __attribute__((packed)) TALLOCREC {
+    /* 0x00 */ TSLink<TALLOCREC> m_link;
+    /* 0x08 */ SMemHeapDetailsStrc sHeapDetails;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::Archive {
 
 // Function declarations
@@ -35,21 +64,21 @@ namespace D2Client::Archive {
 // Writes formatted text to a file handle using wvsprintfA. Variadic printf-style format arguments follow pFormat on the stack. Epilogue is a bare RET (no stack cleanup by callee), so the convention is __cdecl, not __stdcall.
 BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...);
 uint32_t __thiscall ARCHIVE_ComputeAddress(int * pNode, int32_t nBaseAddr);
-int __fastcall Unreferenced_0045b9d0(int param_1);
-int __fastcall Unreferenced_0045ba80(int param_1);
-int __fastcall Unreferenced_0045baa0(int param_1);
+int __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * param_1);
+int __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * param_1);
+int __fastcall Unreferenced_0045baa0(struct StormLinkStrc * param_1);
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode);
-uint32_t __thiscall ARCHIVE_GetNodeValue(int32_t pThis, int32_t nNode);
-void __thiscall ARCHIVE_UnlinkNode(int32_t pThis, int * pNode);
+uint32_t __thiscall ARCHIVE_GetNodeValue(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
+void __thiscall ARCHIVE_UnlinkNode(struct StormLinkedListStrc * pThis, int * pNode);
 void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, int * * ppTarget);
-uint32_t __thiscall ARCHIVE_GetNodeSize(int32_t pThis, int32_t nNode);
+intptr_t __thiscall ARCHIVE_GetNodeSize(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
 int __fastcall Unreferenced_0045bcb0(int param_1);
-void __fastcall ARCHIVE_ClearList(int32_t nList);
+void __fastcall ARCHIVE_ClearList(struct StormLinkedListStrc * nList);
 void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList);
 int __fastcall Unreferenced_0045bd80(int param_1);
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
 int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree);
-uint32_t __thiscall ARCHIVE_RemoveNode(int32_t pThis, int * pNode);
+uint32_t __thiscall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, int * pNode);
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport();

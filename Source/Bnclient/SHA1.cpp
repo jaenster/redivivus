@@ -424,10 +424,10 @@ void __fastcall SHA1_Update(uint32_t * pShaCtx, void * pData, uint32_t nByteLen)
     pShaCtx[6] += nByteLen >> 0x1d;
     if (nBitLo + nByteLen > 0x3f) {
       nProcessed = -nBitLo + 0x40;
-      memcpy((void*)(nBitLo + 0x1c + (int)pShaCtx), pData, nProcessed);
+      memcpy((void*)(nBitLo + 0x1c + (char*)pShaCtx), pData, nProcessed);
       SHA1_Transform(pShaCtx + 7, pShaCtx);
       for (nBufOffset = -nBitLo + 0x7f; nBufOffset < nByteLen; nBufOffset += 0x40) {
-        SHA1_Transform((uint32_t*)((int)pData + (nBufOffset - 0x3f)), pShaCtx);
+        SHA1_Transform((uint32_t*)((char*)pData + (nBufOffset - 0x3f)), pShaCtx);
         nProcessed += 0x40;
       }
 
@@ -436,7 +436,7 @@ void __fastcall SHA1_Update(uint32_t * pShaCtx, void * pData, uint32_t nByteLen)
       nProcessed = 0;
     }
 
-    memcpy((void*)(nBitLo + 0x1c + (int)pShaCtx), (void*)(nProcessed + (int)pData), nByteLen - nProcessed);
+    memcpy((void*)(nBitLo + 0x1c + (char*)pShaCtx), (void*)(nProcessed + (char*)pData), nByteLen - nProcessed);
 }
 
 void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx) {
@@ -465,7 +465,7 @@ void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx) {
     uVar1 = 0;
     do {
       dwBitLen2 = uVar1 + 1;
-      pHashOut[uVar1] = (uint8_t)(*(uint32_t*)((int)pShaCtx + (uVar1 & -4)) >> D2_SHIFT_COUNT(('\x03' - ((uint8_t)uVar1 & 3)) * '\b'));
+      pHashOut[uVar1] = (uint8_t)(*(uint32_t*)((char*)pShaCtx + (uVar1 & -4)) >> D2_SHIFT_COUNT(('\x03' - ((uint8_t)uVar1 & 3)) * '\b'));
       uVar1 = dwBitLen2;
     } while (dwBitLen2 < 0x14);
 }

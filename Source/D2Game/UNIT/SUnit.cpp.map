@@ -131,9 +131,9 @@
         "UNITS_GetHashTableSlot"
       ],
       "usedTypes": [
+        "D2UnitStrc *",
         "SGAMEDATA",
         "eD2UnitType",
-        "int32_t",
         "uint32_t"
       ]
     },
@@ -1809,6 +1809,25 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear_Unref_005de320",
+      "address": "005de320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005de320"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnit",
+      "calledFunctions": [
+        "Clear_Unref_005de320",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2TimerTypeDWORD"
       ]
     },
     {

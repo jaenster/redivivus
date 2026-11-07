@@ -347,7 +347,6 @@
         "AttachCorrectAiFunctionToMonster"
       ],
       "usedTypes": [
-        "D2NecroSkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
@@ -455,6 +454,7 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
+        "Skills_SrvDoFunc_030_CastCurseAoE_Slotmc",
         "eD2Skills",
         "int32_t",
         "uint32_t"

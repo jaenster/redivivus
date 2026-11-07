@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -26,6 +29,8 @@ typedef void (__stdcall *fpD2WinAnimImageNotify)(void * pNotify);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_FORMS_AnimFrameStrc
+#define D2_DEFINED_FORMS_AnimFrameStrc
 struct FORMS_AnimFrameStrc {
     /* 0x00 */ void * ppBaseImage; // Address of a struct DC6* global (so the table sees the image once it loads). Semantically struct DC6**, but declared void* because the initializer emitter renders a double-pointer slot as (struct DC6*)&global - a hard 'cannot convert struct DC6* to struct DC6**'. Readers cast explicitly: D2WinAnimImage::Draw 005005b0, DrawAnim 005003a0.
     /* 0x04 */ void * ppOverlayImage; // Second image drawn over the base, 0 when unused. void* for the same emitter reason as ppBaseImage.
@@ -33,6 +38,7 @@ struct FORMS_AnimFrameStrc {
     /* 0x0C */ int32_t nFrameDelay; // Frame interval scale: (row[3] * 1000) / 25 milliseconds
 };
 
+#endif // D2_DEFINED_FORMS_AnimFrameStrc
 namespace D2Win {
 
 // Function declarations

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,6 +32,8 @@ typedef uint32_t eDrlgDirection;
 struct D2LvlWarpTxt;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc
+#define D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc
 struct D2DrlgRoomExRoomTileNodeStrc {
     /* 0x00 */ struct D2RoomExStrc * pRoomEx; // room on the other side of the warp; DRLGROOMEX_AllocRoomTile stores the linked room, DRLGWARP_GetWarpDestinationRoom follows it
     /* 0x04 */ struct D2DrlgRoomExRoomTileNodeStrc * pRoomTileNext;
@@ -38,6 +43,9 @@ struct D2DrlgRoomExRoomTileNodeStrc {
     /* 0x14 */ struct D2DrlgTileDataStrc * pTileListClearedOnSelect; // tile list whose nFlags bit 8 DRLGWARP_UpdateWarpRoomExSelect clears
 };
 
+#endif // D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc
+#ifndef D2_DEFINED_D2LvlWarpTxt
+#define D2_DEFINED_D2LvlWarpTxt
 struct D2LvlWarpTxt {
     /* 0x00 */ int Id;
     /* 0x04 */ int SelectX;
@@ -53,6 +61,7 @@ struct D2LvlWarpTxt {
     /* 0x2C */ int Direction;
 };
 
+#endif // D2_DEFINED_D2LvlWarpTxt
 namespace D2Common::Drlg::DrlgRoom {
 
 // Function declarations
@@ -122,7 +131,7 @@ int __fastcall DRLGROOM_CoordsWithinDistance(struct D2DrlgCoordsStrc * pCoords1,
 BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(struct D2DrlgCoordsStrc * pDrlgCoords, struct D2DrlgCoordsStrc * pCoordinatesAndSizeB, int32_t nMaxDist);
 BOOL __fastcall ComputeRectanglesManhattanDistance(struct D2DrlgLevelStrc * pLevel, struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance);
 // NOTE: Register params: pLevelData (ECX): D2DrlgLevelStrc *, pRoomEx (EDX): D2RoomExStrc *
-uint32_t __fastcall AddRoomExToLevel(struct D2DrlgLevelStrc * pLevelData, struct D2RoomExStrc * pRoomEx);
+void __fastcall AddRoomExToLevel(struct D2DrlgLevelStrc * pLevelData, struct D2RoomExStrc * pRoomEx);
 BOOL __fastcall AreXYInsideCoordinates(struct D2DrlgCoordsStrc * pDrlgCoords, int32_t nX, int32_t nY);
 uint32_t __fastcall DRLGCOORDS_IsPointInside(struct D2DrlgCoordsStrc * pDrlgCoords, int32_t nX, int32_t nY);
 // Checks if world coordinates (nWorldX, nWorldY) fall within a RoomEx's
@@ -148,10 +157,10 @@ struct D2PresetUnitStrc * __fastcall AllocPresetUnit(struct D2RoomExStrc * pRoom
 struct D2PresetUnitStrc * __fastcall GetPresetUnits(struct D2RoomExStrc * pRoomEx);
 void __fastcall SetRoom(struct D2RoomExStrc * pRoomEx, struct D2RoomStrc * pRoom);
 void __fastcall GetRGB_IntensityFromRoomEx(struct D2RoomExStrc * pRoomEx, char * nIntensity, char * nRed, char * nGreen, char * nBlue);
-int __fastcall Unreferenced_0066c020(int param_1);
+int __fastcall Unreferenced_0066c020(struct D2RoomExStrc * param_1);
 // Retrieves the Vis array from the level definitions for the given level ID. Returns pointer to 8-entry vis array.
 int * __fastcall DRLGWARP_GetVisArrayFromLevelId(struct D2DrlgStrc * pDrlg, eD2LevelId eLevelId);
-void __fastcall Unreferenced_0066c090(int param_1);
+void __fastcall Unreferenced_0066c090(struct D2DrlgLevelStrc * param_1);
 struct D2DrlgStrc * __fastcall GetDrlgFromRoomEx(struct D2RoomExStrc * pRoomEx);
 // Fully tears down a D2RoomExStrc: frees tile data, nearby-room pointer array, outdoor or preset area data (by nPresetType), all preset units, all orth links (bidirectionally removing cross-references for type-1 orths), detaches the room from the level's linked list (decrementing nRoomExCount), frees room tiles and coord list, then frees the RoomEx struct itself from the pool.
 // @sourcefile .\DRLG\DrlgRoom.cpp

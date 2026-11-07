@@ -129,7 +129,7 @@ void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
           do {
             Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, *pStateEntry, 1);
             pStateEntry++;
-          } while ((int)pStateEntry < (intptr_t)((char*)&gaSetItemBonusStates + 20));
+          } while ((intptr_t)pStateEntry < (intptr_t)((char*)&gaSetItemBonusStates + 20));
 
           return;
         }
@@ -147,9 +147,9 @@ void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
 
           bDisabled = !(nEquippedMask & 1 << D2_SHIFT_COUNT(nQuality));
           if (!bDisabled) {
-            eState = *(eD2States*)((int)gaSetItemBonusStates + nBonusIdx);
+            eState = *(eD2States*)((char*)gaSetItemBonusStates + nBonusIdx);
           } else {
-            eState = *(eD2States*)((int)gaSetItemBonusStates + nBonusIdx);
+            eState = *(eD2States*)((char*)gaSetItemBonusStates + nBonusIdx);
           }
 
           Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, eState, (uint32_t)bDisabled);

@@ -5,20 +5,13 @@
 #include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
 #include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Game/D2GambleTxt.h"
-#include "Source/D2Game/SKILLS/Items.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Skills.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/Excel.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/Fog/Fog.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CommonRoot.h"
 #include "Source/D2Common/DATATBLS/ItemTbls.data.h"
 #include "Source/D2Common/DATATBLS/TokTbls.data.h"
 #include "Source/D2Common/Logging/ProfCore.data.h"
@@ -342,7 +335,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
       if (gsItemsTable.nSize > 0) {
         nTxtByteOffset = 0;
         do {
-          Fog::Src::Excel::FOG_AddTxtLinkRecord(MonsterTbls::sgtDataTable.sTxtItemsLink, *(char**)(gsItemsTable.pItems->szSetInvFile + nTxtByteOffset + 0x20));
+          Fog::Src::Excel::FOG_AddTxtLinkRecord(MonsterTbls::sgtDataTable.sTxtItemsLink, *(uint32_t*)(gsItemsTable.pItems->szSetInvFile + nTxtByteOffset + 0x20));
           i++;
           nTxtByteOffset += 0x1a8;
         } while (i < gsItemsTable.nSize);
@@ -360,7 +353,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
     short int* pItemVersion = &gsItemsTable.pItems->wVersion;
     do {
       if (!*pItemVersion) {
-        *(short int*)(nTxtByteOffset + (int)pTxtItemsVersion) = (short int)i;
+        *(short int*)(nTxtByteOffset + (char*)pTxtItemsVersion) = (short int)i;
         nTxtByteOffset += 2;
       }
 
@@ -657,7 +650,9 @@ D2RareAffixTxt * __stdcall TXT_RareAffixes_GetLine(int32_t nIndex) {
 void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
     uint32_t nStringId;
     uint16_t* pStringLookup;
+    TXT_AllocTxt_uniqueitems_Slotm8 uSlot8;
     char* pCurRecord;
+    uSlot8.pMemorySaved = pMemory;
     D2BinFieldInputStrc uniqueitems[68] = {
       {"index", FIELDTYPE_ASCII, 0x1f, 2, 0},
       {"version", FIELDTYPE_SHORT, 0, 0x24, 0},
@@ -728,9 +723,8 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
       {"max12", FIELDTYPE_INT, 0, 0x148, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    int nByteOffset = (int)pMemory;
     MonsterTbls::sgtDataTable.pTxtUniqueItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x37a);
-    MonsterTbls::sgtDataTable.pTxtUniqueItems = (D2UniqueItemsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "uniqueitems", uniqueitems, &MonsterTbls::sgtDataTable.nTxtUniqueItemsSize, 0x14c);
+    MonsterTbls::sgtDataTable.pTxtUniqueItems = (D2UniqueItemsTxt*)DataTbls::CompileTxt(uSlot8.pMemorySaved, "uniqueitems", uniqueitems, &MonsterTbls::sgtDataTable.nTxtUniqueItemsSize, 0x14c);
     if (MonsterTbls::sgtDataTable.nTxtUniqueItemsSize >= 0x7fff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37c);
       exit(-1);
@@ -741,9 +735,9 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    nByteOffset = 0;
+    uSlot8.nByteOffset = 0;
     do {
-      pCurRecord = (char*)&MonsterTbls::sgtDataTable.pTxtUniqueItems[nIdx].wId;
+      pCurRecord = MonsterTbls::sgtDataTable.pTxtUniqueItems->index + uSlot8.nByteOffset - 2;
       *(uint16_t*)pCurRecord = (uint16_t)nIdx;
       Fog::Src::Excel::FOG_ParseStringField(MonsterTbls::sgtDataTable.pTxtUniqueItemsLink, pCurRecord + 2);
       pStringLookup = 0;
@@ -753,7 +747,7 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
         *(short int*)(pCurRecord + 0x22) = 0x1507;
       }
 
-      nByteOffset += 0x14c;
+      uSlot8.nByteOffset += 0x14c;
       nIdx++;
     } while (nIdx < MonsterTbls::sgtDataTable.nTxtUniqueItemsSize);
 }
@@ -770,9 +764,11 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     int nSetIdx;
     uint16_t* pStringLookup;
     int nIdx;
+    TXT_AllocTxt_setitems_Slotm8 uSlot8;
     short int nSetItemSlot;
     D2SetItemsTxt* pCurSetItem;
     D2SetsTxt* pTxtSetsCached;
+    uSlot8.pMemorySaved = pMemory;
     D2BinFieldInputStrc sets[68] = {
       {"index", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtSetsLink},
       {"name", FIELDTYPE_KEY_WORD, 0, 2, (void*)DataTbls::DATATBLS_LookupStringId},
@@ -843,9 +839,8 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
       {"fmax8", FIELDTYPE_INT, 0, 0x10c, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    int nByteOffset = (int)pMemory;
     MonsterTbls::sgtDataTable.pTxtSetsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x3f2);
-    MonsterTbls::sgtDataTable.pTxtSets = (D2SetsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "sets", sets, &MonsterTbls::sgtDataTable.nTxtSetsSize, 0x128);
+    MonsterTbls::sgtDataTable.pTxtSets = (D2SetsTxt*)DataTbls::CompileTxt(uSlot8.pMemorySaved, "sets", sets, &MonsterTbls::sgtDataTable.nTxtSetsSize, 0x128);
     if (!(MonsterTbls::sgtDataTable.nTxtSetsSize < 0x7fff)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3f4);
       exit(-1);
@@ -949,7 +944,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
         {"end", FIELDTYPE_END, 0, 0, 0}
       };
       MonsterTbls::sgtDataTable.pTxtSetItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x45d);
-      MonsterTbls::sgtDataTable.pTxtSetItems = (D2SetItemsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "setitems", setitems, &MonsterTbls::sgtDataTable.nTxtSetItemsSize, 0x1b8);
+      MonsterTbls::sgtDataTable.pTxtSetItems = (D2SetItemsTxt*)DataTbls::CompileTxt(uSlot8.pMemorySaved, "setitems", setitems, &MonsterTbls::sgtDataTable.nTxtSetItemsSize, 0x1b8);
       if (!(MonsterTbls::sgtDataTable.nTxtSetItemsSize < 0x7fff)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45f);
         exit(-1);
@@ -960,9 +955,9 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
         return;
       }
 
-      nByteOffset = 0;
+      uSlot8.nByteOffset = 0;
       do {
-        pCurSetItem = &MonsterTbls::sgtDataTable.pTxtSetItems[nIdx];
+        pCurSetItem = (D2SetItemsTxt*)(MonsterTbls::sgtDataTable.pTxtSetItems->index + uSlot8.nByteOffset - 2);
         pCurSetItem->nId = (short int)nIdx;
         Fog::Src::Excel::FOG_ParseStringField(MonsterTbls::sgtDataTable.pTxtSetItemsLink, pCurSetItem->index);
         pStringLookup = 0;
@@ -984,7 +979,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
           }
         }
 
-        nByteOffset += 0x1b8;
+        uSlot8.nByteOffset += 0x1b8;
         nIdx++;
       } while (nIdx < MonsterTbls::sgtDataTable.nTxtSetItemsSize);
 
@@ -1136,13 +1131,13 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
       nGemsSize = 0;
       do {
         szGemCode[0] = nTxtGemsSize.pTable->letter[nGemsSize + 8] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 8];
-        byCodeChar = *(uint8_t*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 7);
+        byCodeChar = *(uint8_t*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 7);
         szGemCode[1] = byCodeChar == 0x20 ? 0 : byCodeChar;
-        byCodeChar = *(uint8_t*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 6);
+        byCodeChar = *(uint8_t*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 6);
         szGemCode[3] = '\0';
         szGemCode[2] = byCodeChar == 0x20 ? 0 : byCodeChar;
         nTxtGemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szGemCode, &pStringLookup);
-        *(short int*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 4) = (short int)nTxtGemsBase;
+        *(short int*)((char*)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 4) = (short int)nTxtGemsBase;
         nGemIdx++;
         nGemsSize += 0xc0;
       } while (nGemIdx < nTxtGemsSize.nSize);
@@ -1349,7 +1344,7 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
 
     short int* pEntry = &pTxtItemRatio->Version;
     do {
-      if (uVar1 == (uint8_t)*(char*)((int)pEntry + 3) && bIsUpgradeable == *(uint8_t*)(pEntry + 1)) {
+      if (uVar1 == (uint8_t)*(char*)((char*)pEntry + 3) && bIsUpgradeable == *(uint8_t*)(pEntry + 1)) {
         wMinVal = *pEntry;
         if (wMinVal <= nQualityTier && (int)(uint32_t)wMinVal >= (int)nBestMinVal) {
           nBestMatchIdx = nRatioIdx;
@@ -1369,11 +1364,11 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
 }
 
 int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2) {
-    if (*(short int*)((int)pEntry1 + 2) < *(short int*)((int)pEntry2 + 2)) {
+    if (*(short int*)((char*)pEntry1 + 2) < *(short int*)((char*)pEntry2 + 2)) {
       return -1;
     }
 
-    return (uint32_t)(*(short int*)((int)pEntry1 + 2) != *(short int*)((int)pEntry2 + 2));
+    return (uint32_t)(*(short int*)((char*)pEntry1 + 2) != *(short int*)((char*)pEntry2 + 2));
 }
 
 // Builds the itemstatcost.txt field-descriptor array (52 columns) and compiles it into the in-memory ItemStatCost table via DataTbls::CompileTxt (record size 0x144), enforcing a max of 0x1FF stats (fatal error otherwise). Then post-processes op-relationships: clears each stat's aOpBaseDependents arrays to -1, derives the charged-skill-level bit count (clamped 1..8, default 6) and its mask, and for every stat with an op walks its op-base/op-stat references to populate the dependency graph (aOpBaseDependents, aOpRelations, bHasOpBaseDependencies/bHasOp4Or5Dependency flags) plus special-case stat flag bits. Finally collects stats with a nonzero descpriority, qsorts them via SORT_ItemDescPriority, and allocates/stores the sorted pItemStatCostDescPriority list. __fastcall, pMemory in ECX.
@@ -1394,7 +1389,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
     uint8_t* pOp;
     int nStatByteOffset;
     short int* nStatOrdinal;
-    short int* pDepSlot;
+    TXT_AllocTxt_itemstatcost_Slotm8 uSlot8;
     D2BinFieldInputStrc aFieldDefinitions[52] = {
       {"stat", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtItemStatCostLink},
       {"send bits", FIELDTYPE_CHAR, 0, 8, 0},
@@ -1498,33 +1493,33 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
         } else {
           nOpBaseStatId = (uint32_t)*pOpBase;
           if ((int)nOpBaseStatId < nStatCount) {
-            pDepSlot = 0;
+            uSlot8.pDepSlot = 0;
             MonsterTbls::sgtDataTable.pTxtItemStatCost[nOpBaseStatId].bHasOpBaseDependencies = 1;
             pDepArrayCur = pDVar1[nOpBaseStatId].aOpBaseDependents + 1;
             do {
               if ((int)(uint32_t)(uint16_t)pDepArrayCur[-1] >= MonsterTbls::sgtDataTable.nTxtItemStatCostSize) {
                 add_op_base_dependent:
-                if ((int)pDepSlot < 0x40) {
-                  pDVar1[nOpBaseStatId].aOpBaseDependents[(int)pDepSlot] = (short int)(uintptr_t)nStatOrdinal;
+                if (uSlot8.pDepSlot < 0x40) {
+                  pDVar1[nOpBaseStatId].aOpBaseDependents[uSlot8.pDepSlot] = (short int)(uintptr_t)nStatOrdinal;
                 }
                 break;
               }
               if ((int)(uint32_t)(uint16_t)*pDepArrayCur >= MonsterTbls::sgtDataTable.nTxtItemStatCostSize) {
-                pDepSlot = (short int*)((int)pDepSlot + 1);
+                uSlot8.pDepSlot++;
                 goto add_op_base_dependent;
               }
               if ((int)(uint32_t)(uint16_t)pDepArrayCur[1] >= MonsterTbls::sgtDataTable.nTxtItemStatCostSize) {
-                pDepSlot = (short int*)((int)pDepSlot + 2);
+                uSlot8.pDepSlot += 2;
                 goto add_op_base_dependent;
               }
               if ((int)(uint32_t)(uint16_t)pDepArrayCur[2] >= MonsterTbls::sgtDataTable.nTxtItemStatCostSize) {
-                pDepSlot = (short int*)((int)pDepSlot + 3);
+                uSlot8.pDepSlot += 3;
                 goto add_op_base_dependent;
               }
 
-              pDepSlot = (short int*)((int)pDepSlot + 4);
+              uSlot8.pDepSlot += 4;
               pDepArrayCur += 4;
-            } while ((int)pDepSlot < 0x40);
+            } while (uSlot8.pDepSlot < 0x40);
 
             if (*pOp == 4 || (nStatCount = MonsterTbls::sgtDataTable.nTxtItemStatCostSize , *pOp == 5)) {
               *pHasOp45Dep = 1;
@@ -1533,9 +1528,9 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
           }
 
           nOpStatSlot = 0;
-          pDepSlot = pOpStat1;
+          uSlot8.pOpStatCur = (uint16_t*)pOpStat1;
           do {
-            nOpBaseStatId = (uint32_t)(uint16_t)*pDepSlot;
+            nOpBaseStatId = (uint32_t)*uSlot8.pOpStatCur;
             if ((int)nOpBaseStatId >= nStatCount) {
               break;
             }
@@ -1585,7 +1580,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
               pOpRelPtr += 0x18;
             } while (nStatCount < 0x10);
 
-            pDepSlot++;
+            uSlot8.pOpStatCur++;
             nOpStatSlot++;
             nStatCount = MonsterTbls::sgtDataTable.nTxtItemStatCostSize;
           } while (nOpStatSlot < 3);
@@ -1597,9 +1592,9 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
         pHasOpBaseDeps += 0x144;
         pHasOp45Dep += 0x144;
         pOp += 0x144;
-        nStatOrdinal = (short int*)((int)nStatOrdinal + 1);
+        nStatOrdinal = (short int*)((char*)nStatOrdinal + 1);
         nStatByteOffset += 0x144;
-      } while ((int)nStatOrdinal < nStatCount);
+      } while ((intptr_t)nStatOrdinal < nStatCount);
     }
 
     int nDescPriorityCopyIdx = 0;
@@ -1698,11 +1693,11 @@ void __stdcall ITEMTBLS_FreeProperties() {
 }
 
 int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2) {
-    if (*(uint32_t*)((int)pEntry1 + 4) > *(uint32_t*)((int)pEntry2 + 4)) {
+    if (*(uint32_t*)((char*)pEntry1 + 4) > *(uint32_t*)((char*)pEntry2 + 4)) {
       return 1;
     }
 
-    return -(uint32_t)(*(uint32_t*)((int)pEntry2 + 4) > *(uint32_t*)((int)pEntry1 + 4));
+    return -(uint32_t)(*(uint32_t*)((char*)pEntry2 + 4) > *(uint32_t*)((char*)pEntry1 + 4));
 }
 
 // One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and gnItemTblsCacheSize (per-level upper-bound cache for [1..99]).
@@ -1884,7 +1879,7 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
       nTypeCount = 0;
       if (MonsterTbls::sgtDataTable.nTxtItemTypesSize > 0) {
         do {
-          Fog::Src::Excel::FOG_AddTxtLinkRecord(MonsterTbls::sgtDataTable.pTxtItemTypesLink, *(char**)&MonsterTbls::sgtDataTable.pTxtItemTypes[nTypeCount].code[0]);
+          Fog::Src::Excel::FOG_AddTxtLinkRecord(MonsterTbls::sgtDataTable.pTxtItemTypesLink, *(uint32_t*)&MonsterTbls::sgtDataTable.pTxtItemTypes[nTypeCount].code[0]);
           nTypeCount++;
         } while (nTypeCount < MonsterTbls::sgtDataTable.nTxtItemTypesSize);
       }

@@ -136,6 +136,9 @@
       "namespace": "D2Common::Drlg::OutWild",
       "calledFunctions": [
         "Unreferenced_006801f0"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
       ]
     },
     {

@@ -174,7 +174,7 @@
         "D2GFX_DrawTileAdvanced"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2GroundSubTileStrc",
         "uint8_t"
       ]
     },
@@ -238,7 +238,9 @@
         "D2GFXHELPER_DrawGroundTileDispatch2"
       ],
       "usedTypes": [
+        "D2GfxLightExStrc",
         "D2GroundSubTileStrc",
+        "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t",
         "uint8_t"

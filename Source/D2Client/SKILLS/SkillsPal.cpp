@@ -13,27 +13,15 @@
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Merc.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/SKILLS/SkillsPal.data.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -363,7 +351,7 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nGamma, int32
 
         nDrawY = nWorldOffsetXOrY - nWorldOffsetY;
         nTrailCount = nRandDir - nDrawX;
-        Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nTrailCount, nDrawY, (D2GamePalShiftGreenBloodStrc*)0x1, 0);
+        Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nTrailCount, nDrawY, 1, 0);
         nNormStepY += nNormVelX;
         nNormStepX += nAbsVelY;
         nAccumY -= nAbsVelX;
@@ -621,7 +609,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(D2UnitStrc * pU
 }
 
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
-BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, short * pDoFuncData, D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget) {
+BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pDoFuncData, D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget) {
     BOOL eTargetState;
     int32_t bCastSucceeded;
     uint32_t nClientDoFuncResult;
@@ -678,7 +666,7 @@ BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
       Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)nOverlayId, 2, 0, 0, 0, 0, 0);
     }
 
-    nClientDoFuncResult = Skills::SKILL_ExecuteClientDoFunc(pUnit, eSkill, (int32_t)pDoFuncData, (uint32_t)bHasTarget);
+    nClientDoFuncResult = Skills::SKILL_ExecuteClientDoFunc(pUnit, eSkill, pDoFuncData, (uint32_t)bHasTarget);
     restore_caster_state:
     if (!pSavedTarget) {
       D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nSavedSP1X, (int16_t)nSavedSP1Y);
@@ -694,7 +682,7 @@ BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
     return nClientDoFuncResult;
 }
 
-BOOL __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, D2UnitStrc * pTargetUnit, uint16_t bHasTarget) {
+BOOL __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, D2UnitStrc * pTargetUnit, uint16_t bHasTarget) {
     if (pUnit && pTargetUnit) {
       BOOL nResult;
       nResult = SKILL_ExecuteItemCast(pUnit, eSkill, pSkillLevelData, pTargetUnit, 0, 0, bHasTarget);
@@ -704,7 +692,7 @@ BOOL __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill
     return 0;
 }
 
-void __fastcall SKILL_ExecuteItemCastAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam) {
+void __fastcall SKILL_ExecuteItemCastAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam) {
     if (!(pUnit && nTargetX && nTargetY)) {
       return;
     }

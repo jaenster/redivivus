@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,25 +15,26 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2GamePalShiftGreenBloodStrc;
 struct D2GfxInfoStrc;
+struct D2GfxLightExStrc;
 struct D2InventoryStrc;
 struct D2LightMapStrc;
 struct D2MonStatsTxt;
+struct D2MonsterCofStatusEntryStrc;
 struct D2ParticleStrc;
 struct D2UnitStrc;
 typedef uint32_t DRAWMODE;
 #ifndef RECON_FPTD_fpDrawBlendedVisTile
 #define RECON_FPTD_fpDrawBlendedVisTile
-typedef void (__fastcall *fpDrawBlendedVisTile)(int a1, int a2, int a3, int a4);
+typedef void (__fastcall *fpDrawBlendedVisTile)(uint8_t * a1, int a2, int a3, int a4);
 #endif
 #ifndef RECON_FPTD_fpDrawGroundTile
 #define RECON_FPTD_fpDrawGroundTile
-typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, int a4);
+typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, struct D2GfxLightExStrc * a4);
 #endif
 #ifndef RECON_FPTD_fpDrawRoofTile
 #define RECON_FPTD_fpDrawRoofTile
-typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, int a4, BYTE a5);
+typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, uint32_t * a4, BYTE a5);
 #endif
 #ifndef RECON_FPTD_fpDrawVisTile
 #define RECON_FPTD_fpDrawVisTile
@@ -38,7 +42,7 @@ typedef void (__fastcall *fpDrawVisTile)(uint8_t * pbTileData, int32_t nScreenX,
 #endif
 #ifndef RECON_FPTD_fpDrawWallTile
 #define RECON_FPTD_fpDrawWallTile
-typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, int a4);
+typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, uint32_t * a4);
 #endif
 #ifndef RECON_FPTD_fpFillYBufferTable
 #define RECON_FPTD_fpFillYBufferTable
@@ -50,6 +54,8 @@ typedef void (__fastcall *fpUnknown)(int a1, int a2, int a3, int a4);
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2CofCacheStrc
+#define D2_DEFINED_D2CofCacheStrc
 struct D2CofCacheStrc {
     /* 0x00 */ int32_t nFrameCount;
     /* 0x04 */ void * pCacheMemory;
@@ -57,16 +63,36 @@ struct D2CofCacheStrc {
     /* 0x0C */ void * apBuckets[512]; // hash buckets walked 0x200 deep by GFX_FreeUnusedCofEntries
 };
 
+#endif // D2_DEFINED_D2CofCacheStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct D2CofTextureCacheEntryStrc {
+    /* 0x00 */ struct D2CofTextureCacheEntryStrc * pNext;
+    /* 0x04 */ uint32_t dwFlags;
+    /* 0x08 */ uint32_t nFileSize;
+    /* 0x0C */ char szName[8];
+    /* 0x14 */ uint8_t * pFileData;
+    /* 0x18 */ uint8_t field_0x18;
+    /* 0x19 */ uint8_t field_0x19;
+    /* 0x1A */ uint8_t field_0x1a;
+    /* 0x1B */ uint8_t field_0x1b;
+};
+
+#endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2GfxHelperStrc
+#define D2_DEFINED_D2GfxHelperStrc
 struct D2GfxHelperStrc {
     /* 0x00 */ void (__fastcall *nfpFillYBufferTable)(void *, int, int, int);
     /* 0x04 */ void (__fastcall *nfpDrawVisTile)(uint8_t *, int32_t, int32_t);
     /* 0x08 */ void (__fastcall *nfpDrawVisTileLit)(int, int, int, int);
-    /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(int, int, int, int);
-    /* 0x10 */ void (__fastcall *nfpDrawWallTile)(int, int, int, int);
-    /* 0x14 */ void (__fastcall *nfpDrawBlendedVisTile)(int, int, int, int);
-    /* 0x18 */ void (__fastcall *nfpDrawRoofTile)(int, int, int, int, BYTE);
+    /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(int, int, int, struct D2GfxLightExStrc *);
+    /* 0x10 */ void (__fastcall *nfpDrawWallTile)(int, int, int, uint32_t *);
+    /* 0x14 */ void (__fastcall *nfpDrawBlendedVisTile)(uint8_t *, int, int, int);
+    /* 0x18 */ void (__fastcall *nfpDrawRoofTile)(int, int, int, uint32_t *, BYTE);
 };
 
+#endif // D2_DEFINED_D2GfxHelperStrc
+#ifndef D2_DEFINED_D2GfxInfoUnkStrc
+#define D2_DEFINED_D2GfxInfoUnkStrc
 struct D2GfxInfoUnkStrc {
     /* 0x00 */ int nAnimMode; // animation mode key; GFX_FindGfxInfoByModeAndWeapon compares it with the requested mode
     /* 0x04 */ int nWeaponParam; // Weapon/COF param used as cache key alongside pAnimMode
@@ -75,6 +101,7 @@ struct D2GfxInfoUnkStrc {
     /* 0x10 */ struct D2GfxInfoUnkStrc * pNext; // Next entry in linked list
 };
 
+#endif // D2_DEFINED_D2GfxInfoUnkStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2GfxSmack {
     /* 0x0000 */ uint32_t field0_0x0;
@@ -7100,6 +7127,8 @@ struct D2GfxSmack {
 };
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2GfxUnknown_0xa8
+#define D2_DEFINED_D2GfxUnknown_0xa8
 struct __attribute__((packed)) D2GfxUnknown_0xa8 {
     /* 0x00 */ int32_t nOverlayType; // From nOverlayType param of GFX_AddOverlayToUnit; later tested == 8 and == 2 / == 6.
     /* 0x04 */ eOverlayId neOverlayId; // From eOverlay param; indexes sgptDataTable->pTxtOverlay.
@@ -7226,6 +7255,9 @@ struct __attribute__((packed)) D2GfxUnknown_0xa8 {
     /* 0xA4 */ struct D2GfxUnknown_0xa8 * pNext; // 0xa4. Intrusive singly-linked list: pOverlay->pNext = pGfxInfo->pOverlayList; pGfxInfo->pOverlayList = pOverlay.
 };
 
+#endif // D2_DEFINED_D2GfxUnknown_0xa8
+#ifndef D2_DEFINED_D2MonModeTxt
+#define D2_DEFINED_D2MonModeTxt
 struct __attribute__((packed)) D2MonModeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
@@ -7247,15 +7279,16 @@ struct __attribute__((packed)) D2MonModeTxt {
     /* 0x33 */ uint8_t RN_Dir;
 };
 
+#endif // D2_DEFINED_D2MonModeTxt
 namespace D2Client::Engine::Gfx {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(struct D2UnitStrc * pUnit, int * pUnit2);
-void * __stdcall GFX_FindTextureInCache(void * pTextureCache, char * szPath);
+void * __stdcall GFX_FindTextureInCache(struct D2CofCacheStrc * pTextureCache, char * szPath);
 // @sourcefile .\ENGINE\Gfx.cpp
-void __stdcall GFX_RemoveOverlayFromUnit(struct D2UnitStrc * pUnit, int * pOverlay);
+void __stdcall GFX_RemoveOverlayFromUnit(struct D2UnitStrc * pUnit, struct D2GfxUnknown_0xa8 * pOverlay);
 BOOL __fastcall GFX_HasOverlayOfType(struct D2UnitStrc * pUnit, int32_t nOverlayType);
 void __fastcall GFX_SetOverlayFrame(struct D2UnitStrc * pUnit, int32_t nOverlayId, int32_t nFrame);
 void __fastcall GFX_DrawOverlayOnUnit(struct D2UnitStrc * pUnit, int32_t nOverlayId, int32_t nScreenX, int32_t nScreenY);
@@ -7292,12 +7325,12 @@ void __fastcall GFX_LoadMonsterCofArchive(uint8_t nCofNameIndex);
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall GFX_FreePlayerCofCache(int32_t nParam);
 // @sourcefile .\ENGINE\Gfx.cpp
-int32_t GFX_FreeMonsterCofCache();
+void GFX_FreeMonsterCofCache();
 void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFlags);
 int __stdcall GFX_GetCofCacheFlags();
 int __stdcall GFX_GetCofCacheMemUsage();
 int __stdcall GFX_GetGfxSystemFlags();
-int32_t __fastcall GFX_GetModeStatusEntry(int32_t nClassId);
+struct D2MonsterCofStatusEntryStrc * __fastcall GFX_GetModeStatusEntry(int32_t nClassId);
 // @sourcefile .\ENGINE\Gfx.cpp
 struct D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(struct D2UnitStrc * pUnit, int32_t nAnimMode, int nWeaponClass);
 // @sourcefile .\ENGINE\Gfx.cpp
@@ -7339,7 +7372,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall GFX_DrawUnitSelectionShape(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
-BOOL __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, struct D2GamePalShiftGreenBloodStrc * pPalShift, int32_t bDrawStates);
+BOOL __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, int32_t pPalShift, int32_t bDrawStates);
 int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0();
 #endif // D2_MODULE_D2Client
 // 24 internal functions (defined in .cpp)

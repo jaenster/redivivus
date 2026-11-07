@@ -1309,7 +1309,7 @@ static uint32_t crc32_little(uint8_t * pbBuf, uint32_t nLen, uint32_t nCrc) {
 
     uint32_t nBlockCount;
     uint32_t nCrcAcc = ~nCrc;
-    for (; nLen && (uint32_t)pbBuf & 3; pbBuf = (uint8_t*)((int)pbBuf + 1)) {
+    for (; nLen && (uintptr_t)pbBuf & 3; pbBuf = (uint8_t*)((char*)pbBuf + 1)) {
       nCrcAcc = nCrcAcc >> 8 ^ gdwCrc32Table0[((uint8_t)*(uint32_t*)pbBuf ^ nCrcAcc) & 0xff];
       nLen--;
     }
@@ -1338,7 +1338,7 @@ static uint32_t crc32_little(uint8_t * pbBuf, uint32_t nLen, uint32_t nCrc) {
       nBlockCount = nLen >> 2;
       do {
         nCrcAcc ^= *(uint32_t*)pbBuf;
-        pbBuf = (uint8_t*)((int)pbBuf + 4);
+        pbBuf = (uint8_t*)((char*)pbBuf + 4);
         nCrcAcc = gdwCrc32Table1[nCrcAcc >> 0x10 & 0xff] ^ gdwCrc32Table2[nCrcAcc >> 8 & 0xff] ^ gdwCrc32Table0[nCrcAcc >> 0x18] ^ gdwCrc32Table3[nCrcAcc & 0xff];
         nLen -= 4;
         nBlockCount--;
@@ -1347,7 +1347,7 @@ static uint32_t crc32_little(uint8_t * pbBuf, uint32_t nLen, uint32_t nCrc) {
 
     for (; nLen; nLen--) {
       nCrcAcc = nCrcAcc >> 8 ^ gdwCrc32Table0[((uint8_t)*(uint32_t*)pbBuf ^ nCrcAcc) & 0xff];
-      pbBuf = (uint8_t*)((int)pbBuf + 1);
+      pbBuf = (uint8_t*)((char*)pbBuf + 1);
     }
 
     return ~nCrcAcc;
@@ -2132,7 +2132,7 @@ int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * p
 
     uint32_t nBlockCount;
     uint32_t dwCrc = ~(((dwInitialCrc & 0xff00) + dwInitialCrc * 0x10000) * 0x100 + (dwInitialCrc >> 0x10 & 0xff) * 0x100 + (dwInitialCrc >> 0x18));
-    for (; nLength && (uint32_t)pbData & 3; pbData++) {
+    for (; nLength && (uintptr_t)pbData & 3; pbData++) {
       dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)*pbData];
       nLength--;
     }
@@ -2169,7 +2169,7 @@ int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * p
     pdwData++;
     for (; nLength; nLength--) {
       dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)(uint8_t)*pdwData];
-      pdwData = (uint32_t*)((int)pdwData + 1);
+      pdwData = (uint32_t*)((char*)pdwData + 1);
     }
 
     dwCrc = ~dwCrc;
@@ -2235,7 +2235,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t n
       do {
         dwAccum = 0;
         pdwCol = adwMatEven;
-        for (dwBits = *(uint32_t*)((int)adwMatEven + nIndex); dwBits; dwBits >>= 1) {
+        for (dwBits = *(uint32_t*)((char*)adwMatEven + nIndex); dwBits; dwBits >>= 1) {
           if (dwBits & 1) {
             dwAccum ^= *pdwCol;
           }
@@ -2243,7 +2243,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t n
           pdwCol++;
         }
 
-        *(uint32_t*)((int)adwMatOdd + nIndex) = dwAccum;
+        *(uint32_t*)((char*)adwMatOdd + nIndex) = dwAccum;
         nIndex += 4;
       } while (nIndex < 0x80);
 
@@ -2269,7 +2269,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t n
       do {
         dwAccum = 0;
         pdwCol = adwMatOdd;
-        for (dwBits = *(uint32_t*)((int)adwMatOdd + nIndex); dwBits; dwBits >>= 1) {
+        for (dwBits = *(uint32_t*)((char*)adwMatOdd + nIndex); dwBits; dwBits >>= 1) {
           if (dwBits & 1) {
             dwAccum ^= *pdwCol;
           }
@@ -2277,7 +2277,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t n
           pdwCol++;
         }
 
-        *(uint32_t*)((int)adwMatEven + nIndex) = dwAccum;
+        *(uint32_t*)((char*)adwMatEven + nIndex) = dwAccum;
         nIndex += 4;
       } while (nIndex < 0x80);
 

@@ -12,31 +12,17 @@
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/D2BitBufferStrc.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/SKILLS/SkillsMon.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -51,14 +37,12 @@ uint8_t * __fastcall GetMonUModList(D2UnitStrc * pUnit) {
     return (uint8_t*)pUnit->pUnitData.pUnitDataPlayer->pWaypoint;
 }
 
-int __fastcall Unreferenced_004ac760(int param_1) {
-    uint32_t in_EAX;
-    uint16_t uVar1 = (uint16_t)((uint32_t)in_EAX >> 0x10);
-    if (!(param_1 && *(int*)param_1 == 1 ? *(int*)(param_1 + 0x14) : 0)) {
-      return (uint32_t)uVar1 << 0x10;
+uint16_t __fastcall Unreferenced_004ac760(D2UnitStrc * pUnit) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
+      return 0;
     }
 
-    return (uint32_t)((uint32_t)(uint16_t)uVar1 << 16 | (uint32_t)(uint16_t)*(uint16_t*)(*(int*)(param_1 + 0x14) + 0x14));
+    return pUnit->pUnitData.pUnitDataMonster->nNameSeed;
 }
 
 void __fastcall SetNameSeed(D2UnitStrc * pUnit, uint16_t nNameSeed) {
@@ -324,7 +308,7 @@ void __fastcall MONUNIQUE_ApplyModifierBishbosh(D2UnitStrc * pUnit, int32_t eMod
     CUnit::FreeLightMap(pUnit);
     if (pUnit) {
       D2SeedStrc sNewSeed;
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer && *(uint8_t*)((int)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 4) {
+      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer && *(uint8_t*)((char*)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 4) {
         uSeedStep1 = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
         uSeedStep4 = (uSeedStep1 & 0xffffffff) * 0x6ac690c5 + (uSeedStep1 >> 0x20);
         sNewSeed = D2_SEED_NEXT_VAL(uSeedStep4);
@@ -543,7 +527,7 @@ void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
       }
 
       pInitFuncIter++;
-    } while ((int)pInitFuncIter < (intptr_t)((char*)&gaMonUniqueBaseModIds + sizeof(gaMonUniqueBaseModIds)));
+    } while ((intptr_t)pInitFuncIter < (intptr_t)((char*)&gaMonUniqueBaseModIds + sizeof(gaMonUniqueBaseModIds)));
 
     int i = 0;
     do {
@@ -666,7 +650,7 @@ void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod,
     } else if (pUnit->eAnimMode.ePlayerMode == Kick) {
       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = sNewSeed;
-      if (sNewSeed.nSeedLow % 100 == 0 && (int)pMonData->pQuestRecord[2] < 100) {
+      if (sNewSeed.nSeedLow % 100 == 0 && (intptr_t)pMonData->pQuestRecord[2] < 100) {
         D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         Source::ClientEngine::CLIENT_SpawnMonstersAroundUnit(pUnit, 0xe3, 4);
@@ -751,7 +735,7 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
       }
 
       nDirX = *(int*)((int)anDirOffsets + eMissileId + MISSILE_Cr_Arrow4);
-      nDirY = *(int*)((int)anDirOffsets + eMissileId);
+      nDirY = *(int*)((char*)anDirOffsets + eMissileId);
       nMissileCopyIdx = 0;
       do {
         sSkillArg.nFunctionParam = nMissileCopyIdx;

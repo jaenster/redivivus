@@ -1,0 +1,166 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Launch/D2LaunchRoot.cpp",
+  "functions": [
+    {
+      "name": "AppModeLauncherInit",
+      "address": "0042e590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e590"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "AppModeLauncherInit"
+      ],
+      "usedTypes": [
+        "fnAppModeRun *"
+      ]
+    },
+    {
+      "name": "AppModeLauncherShutdown",
+      "address": "0042e5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e5a0"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "AppModeLauncherShutdown"
+      ]
+    },
+    {
+      "name": "thunk__strstr",
+      "address": "0042e5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e5b0"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "thunk__strstr",
+        "strstr"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowBnetConnectionError",
+      "address": "0042f7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f7a0"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "MAINMENU_ShowBnetConnectionError",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ]
+    },
+    {
+      "name": "UIMENU_ToggleHardcoreMode",
+      "address": "00430730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430730"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "UIMENU_ToggleHardcoreMode"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_DisconnectAndReturnToMainMenu",
+      "address": "00434dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434dd0"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "UIMENU_DisconnectAndReturnToMainMenu",
+        "LAUNCHER_DisconnectFromBnet",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_ConnectViaTCPIPAndSelectChar",
+      "address": "00435d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435d80"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "MAINMENU_ConnectViaTCPIPAndSelectChar",
+        "NET_GetLocalIp",
+        "SAVEFILE_FindAllSaveFiles",
+        "UIMENU_CreateHeroSinglePlayer",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressSkipEmailAddress",
+      "address": "00436c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436c70"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "MAINMENU_OnPressSkipEmailAddress",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "thunk_UIMENU_MainMenuAgain",
+      "address": "004370b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004370b0"
+        }
+      ],
+      "namespace": "D2Launch",
+      "calledFunctions": [
+        "thunk_UIMENU_MainMenuAgain",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    }
+  ]
+}

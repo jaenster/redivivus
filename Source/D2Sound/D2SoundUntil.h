@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Sound)
 #error "D2Sound header included by a module that may not use D2Sound (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Sound) && !defined(D2_LOADS_D2Sound)
+#error "internal D2Sound header included from another module; include D2Sound's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -11,12 +14,33 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+// Data types
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+struct VS_FIXEDFILEINFO {
+    /* 0x00 */ DWORD dwSignature;
+    /* 0x04 */ DWORD dwStrucVersion;
+    /* 0x08 */ DWORD dwFileVersionMS;
+    /* 0x0C */ DWORD dwFileVersionLS;
+    /* 0x10 */ DWORD dwProductVersionMS;
+    /* 0x14 */ DWORD dwProductVersionLS;
+    /* 0x18 */ DWORD dwFileFlagsMask;
+    /* 0x1C */ DWORD dwFileFlags;
+    /* 0x20 */ DWORD dwFileOS;
+    /* 0x24 */ DWORD dwFileType;
+    /* 0x28 */ DWORD dwFileSubtype;
+    /* 0x2C */ DWORD dwFileDateMS;
+    /* 0x30 */ DWORD dwFileDateLS;
+};
+
+#endif // _WIN32
+
 namespace D2Sound::D2SoundUntil {
 
 // Function declarations
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
 void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, void * pItem);
-void __fastcall SOUND_sD2SoundSmp_Free(int * * ppListHead, int32_t nSearchValue);
+void __fastcall SOUND_sD2SoundSmp_Free(int * * ppListHead, intptr_t nSearchValue);
 BOOL __fastcall SOUNDUTIL_FindInLinkedList(int * pNode, int32_t nSearchValue);
 void __fastcall SOUNDUTIL_FreeLinkedList(int * * ppListHead);
 void __fastcall SOUNDUTIL_AppendToLinkedList(void * * ppListHead, uint32_t dwNodeValue);

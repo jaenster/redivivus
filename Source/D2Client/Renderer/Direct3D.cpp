@@ -2,60 +2,32 @@
 
 #include "Source/D2Client/Renderer/Direct3D.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 namespace D2Client::Renderer {
 
-void __fastcall RENDERER_D3D_CopyPixelsWithStride(void * pSrc, void * pDest, size_t nWidthBytes, int nHeight, int nDestPitch, uint32_t dwParam6) {
+void __fastcall RENDERER_D3D_CopyPixelsWithStride(uint8_t * pSrc, uint8_t * pDest, size_t nWidthBytes, int nHeight, int nDestPitch, uint32_t dwParam6) {
     if (nHeight <= 0) {
       return;
     }
 
     do {
       memcpy(pDest, pSrc, nWidthBytes);
-      pDest = (void*)((int)pDest + nDestPitch);
-      pSrc = (void*)((int)pSrc + nWidthBytes);
+      pDest += nDestPitch;
+      pSrc += nWidthBytes;
       nHeight--;
     } while (nHeight);
 }
 
-void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t * pDest32Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwParam6) {
-    uint8_t* pSrcPixel;
-    int nPixelsRemaining;
-    if (nHeight <= 0) {
+void __fastcall RENDERER_D3D_CloseRegistryKey(HKEY * phKey) {
+    if (!*phKey) {
       return;
     }
 
-    do {
-      uint32_t* pDestPixel;
-      pDestPixel = pDest32Bit;
-      pSrcPixel = pSrc8Bit;
-      nPixelsRemaining = nWidth;
-      if (nWidth > 0) {
-        do {
-          *pDestPixel = g_Palette32Bit[*pSrcPixel];
-          nPixelsRemaining--;
-          pDestPixel++;
-          pSrcPixel++;
-        } while (nPixelsRemaining);
-      }
-
-      pDest32Bit += nDestPitchInPixels;
-      pSrc8Bit += nWidth;
-      nHeight--;
-    } while (nHeight);
-}
-
-void __fastcall RENDERER_D3D_CloseRegistryKey(uint32_t * phKey) {
-    if (!(HKEY)*phKey) {
-      return;
-    }
-
-    /* HKEY hKey for RegCloseKey */ RegCloseKey((HKEY)*phKey);
-    *phKey = 0;
+    /* HKEY hKey for RegCloseKey */ RegCloseKey(*phKey);
+    *phKey = (HKEY)0x0;
 }
 
 } // namespace D2Client::Renderer

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,8 @@ struct D2DrlgLevelDataWildernessLevel;
 struct D2DrlgLevelStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2Act5SpecialPresetStrc
+#define D2_DEFINED_D2Act5SpecialPresetStrc
 struct D2Act5SpecialPresetStrc {
     /* 0x00 */ int eLevelId;
     /* 0x04 */ int nPresetArg; // last-but-one argument of SpawnOutdoorLevelPresetEx
@@ -24,6 +29,7 @@ struct D2Act5SpecialPresetStrc {
     /* 0x10 */ int nLvlPrestHorz; // used when the level is wider than tall
 };
 
+#endif // D2_DEFINED_D2Act5SpecialPresetStrc
 namespace D2Common::Drlg::OutSiege {
 
 // Function declarations

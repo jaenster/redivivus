@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,8 @@ typedef int32_t (__fastcall *pfnTextMessageCompare)(uint16_t * pnCodeA, uint16_t
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
+#define D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
 struct D2GSPacketSrv0x27_EntryStrc {
     /* 0x00 */ short nMessage;
     /* 0x02 */ uint8_t field_0x2;
@@ -27,6 +32,9 @@ struct D2GSPacketSrv0x27_EntryStrc {
     /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
+#ifndef D2_DEFINED_D2GSPacketSrv0x27_TextStrc
+#define D2_DEFINED_D2GSPacketSrv0x27_TextStrc
 struct D2GSPacketSrv0x27_TextStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory;
     /* 0x04 */ short nCount;
@@ -35,6 +43,7 @@ struct D2GSPacketSrv0x27_TextStrc {
     /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pMessage;
 };
 
+#endif // D2_DEFINED_D2GSPacketSrv0x27_TextStrc
 namespace D2Common::Text {
 
 // Function declarations
@@ -48,7 +57,7 @@ int32_t __stdcall TEXT_CountMessagesOfType2(struct D2GSPacketSrv0x27_TextStrc * 
 uint16_t __stdcall TEXT_GetMessageByIndex(struct D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex);
 uint16_t __stdcall OVERHEAD_GetMessageType0(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex);
 uint16_t __stdcall OVERHEAD_GetMessageType1(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nTargetIndex);
-void __stdcall BuildPacket0x27Messages(struct D2GSPacketSrv0x27_TextStrc * pTxtMsg, uint32_t * pOutMessageData);
+void __stdcall BuildPacket0x27Messages(struct D2GSPacketSrv0x27_TextStrc * pTxtMsg, uint8_t * pOutMessageData);
 // @sourcefile .\Text\Text.cpp
 void __stdcall StoreMessages(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, uint8_t * pPacketData);
 // @sourcefile .\Text\Text.cpp

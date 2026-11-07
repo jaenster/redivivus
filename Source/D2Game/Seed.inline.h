@@ -4,18 +4,21 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Game/Seed.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 namespace D2Game::Seed {
 
+#ifndef D2_DEFINED_INLINE_00472280
+#define D2_DEFINED_INLINE_00472280
 __attribute__((noinline)) inline int32_t __fastcall RollBetweenMinAndMax(D2SeedStrc * pSeed, int32_t nMin, uint32_t nMax) {
     D2SeedStrc sNewSeed;
     if ((int)nMax <= 0) {
@@ -32,7 +35,10 @@ __attribute__((noinline)) inline int32_t __fastcall RollBetweenMinAndMax(D2SeedS
     *pSeed = sNewSeed;
     return (nMax - 1 & sNewSeed.nSeedLow) + nMin;
 }
+#endif // D2_DEFINED_INLINE_00472280
 
+#ifndef D2_DEFINED_INLINE_004bc500
+#define D2_DEFINED_INLINE_004bc500
 __attribute__((noinline)) inline int32_t __fastcall SEED_RollRange(D2SeedStrc * pSeed, int32_t nMin, int32_t nMax) {
     D2SeedStrc dSeedResult;
     if (nMax <= nMin) {
@@ -51,7 +57,10 @@ __attribute__((noinline)) inline int32_t __fastcall SEED_RollRange(D2SeedStrc * 
     *pSeed = dSeedResult;
     return (nRangeWidth - 1 & dSeedResult.nSeedLow) + nMin;
 }
+#endif // D2_DEFINED_INLINE_004bc500
 
+#ifndef D2_DEFINED_INLINE_004cc790
+#define D2_DEFINED_INLINE_004cc790
 __attribute__((noinline)) inline int32_t __fastcall SEED_RollRangeInclusive(D2SeedStrc * pSeed, int32_t nMinValue, int32_t nMaxValue) {
     if (nMinValue >= nMaxValue) {
       return nMinValue;
@@ -60,5 +69,6 @@ __attribute__((noinline)) inline int32_t __fastcall SEED_RollRangeInclusive(D2Se
     uint32_t nRandResult = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nMaxValue - nMinValue + 1);
     return nRandResult + nMinValue;
 }
+#endif // D2_DEFINED_INLINE_004cc790
 
 } // namespace D2Game::Seed

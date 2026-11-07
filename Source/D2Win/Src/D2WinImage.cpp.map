@@ -164,6 +164,7 @@
         "IMAGE_GetFramesCount"
       ],
       "usedTypes": [
+        "D2WinImage",
         "int32_t"
       ]
     },

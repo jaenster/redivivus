@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,7 +20,6 @@ struct D2StatListExStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 typedef uint32_t eD2UnitStat;
-union D2UnitDataUnion;
 
 namespace D2Client::UNIT::PlrSkills {
 
@@ -79,7 +81,7 @@ void __fastcall STATES_SetStateOnUnit(struct D2UnitStrc * pUnit, eD2States eStat
 // @sourcefile .\UNIT\PlrSkills.cpp
 void __fastcall PLRSKILLS_RemoveStateFromUnit(struct D2UnitStrc * pUnit, eD2States eState);
 // @sourcefile .\UNIT\PlrSkills.cpp
-struct D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, D2UnitDataUnion * eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer);
+struct D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, eD2States eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer);
 // Invokes the state's setfunc dispatch table entry (STATESSETFUNC[]) and attaches a client state event handler with modifier skill/level stats. Guards: pUnit non-null, eState in bounds, notondead check vs unit type/mode.
 void __fastcall STATES_DispatchSetFunc(struct D2UnitStrc * pUnit, eD2States eState);
 // Dispatches the removal function for a state being stripped from pUnit. Looks up the state's remfunc index in D2StatesTxt, bounds-checks against STATESREMFUNC table (max 0x1e entries), calls the matching removal callback if non-null, then removes any unit-event of type 1 tied to the state if a matching stat-list exists. Validates pUnit non-null and eState in-range before any action.

@@ -3,16 +3,7 @@
 #include "Source/D2Game/Monster/AI/Baal.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/GAME/Targets.h"
@@ -20,10 +11,9 @@
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monsters/Spawn.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitDmg.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 
@@ -81,9 +71,9 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     BOOL bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
     int nAnchorBonus = 0;
     if (pAnchorData) {
-      nLifePercent = AI_GetWeightedDistanceToPoint(pUnit, *(int32_t*)((int)pAnchorData + 0xc), *(int32_t*)((int)pAnchorData + 0x10));
+      nLifePercent = AI_GetWeightedDistanceToPoint(pUnit, *(int32_t*)((char*)pAnchorData + 0xc), *(int32_t*)((char*)pAnchorData + 0x10));
       if (nLifePercent > 0x4b) {
-        nLifePercent = AI_GetWeightedDistanceToPoint(pTarget, *(int32_t*)((int)pAnchorData + 0xc), *(int32_t*)((int)pAnchorData + 0x10));
+        nLifePercent = AI_GetWeightedDistanceToPoint(pTarget, *(int32_t*)((char*)pAnchorData + 0xc), *(int32_t*)((char*)pAnchorData + 0x10));
         if (nLifePercent < 0x4b) {
           nAnchorBonus = 100;
         }
@@ -160,7 +150,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
 }
 
 // Baal-AI target selector: scans the game's per-act player unit-node lists (pGame->pUnitNodes[0..]) to pick the highest-scoring player target for the Baal monster pUnit2. For the first list it calls an indirect predicate (pUnit, called as code ptr) to gate candidates, skipping dead/dying players, then scores survivors via RiskAssignmentBaal; later lists are filtered by matching act. Tracks a separate best-of-secondary-list candidate and, if it's very close (collision dist <5) and not already in melee range, repaths Baal toward it (SetTarget/PATH_CalculatePath); if no path, that candidate becomes the result. Writes candidate count to *pnParam2 and best score to *pnParam1; returns the chosen target unit. Halts via Fog error if pUnit is null or a node holds a non-player. Custom calling convention (pUnit2 in EBX).
-static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestScore, int * pCandidateCount, int32_t pAnchorData, fpAiTargetPredicate pUnit, D2UnitStrc * pUnit2) {
+static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestScore, int * pCandidateCount, void * pAnchorData, fpAiTargetPredicate pUnit, D2UnitStrc * pUnit2) {
     int nScore;
     BOOL bInMeleeRange;
     D2UnitStrc* pTargetUnit;
@@ -213,7 +203,7 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
           if (!pTargetUnit || pTargetUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead || pTargetUnit->eAnimMode.ePlayerMode == Death) {
             nScore = 0;
           } else {
-            nScore = RiskAssignmentBaal(pUnit2, pTargetUnit, (void*)pAnchorData);
+            nScore = RiskAssignmentBaal(pUnit2, pTargetUnit, pAnchorData);
           }
 
           while (true) {
@@ -229,7 +219,7 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
             }
 
             pTargetUnit = pNode->pUnit;
-            nScore = RiskAssignmentBaal(pUnit2, pTargetUnit, (void*)pAnchorData);
+            nScore = RiskAssignmentBaal(pUnit2, pTargetUnit, pAnchorData);
           }
         }
       }
@@ -241,7 +231,7 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
         for (; pNode; pNode = pNode->pPrev) {
           pTargetUnit = pNode->pUnit;
           if (eAnchorAct == pTargetUnit->nAct) {
-            nErrorLine = RiskAssignmentBaal(pUnit2, pTargetUnit, (void*)pAnchorData);
+            nErrorLine = RiskAssignmentBaal(pUnit2, pTargetUnit, pAnchorData);
             if (nBestScore < nErrorLine) {
               pBestTarget = pTargetUnit;
               nBestScore = nErrorLine;
@@ -258,8 +248,8 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
           do {
             pTargetUnit = pNode->pUnit;
             if (eAnchorAct == pTargetUnit->nAct) {
-              nErrorLine = RiskAssignmentBaal(pUnit2, pTargetUnit, (void*)pAnchorData);
-              if ((int)ppNodeListSaved < nErrorLine) {
+              nErrorLine = RiskAssignmentBaal(pUnit2, pTargetUnit, pAnchorData);
+              if ((intptr_t)ppNodeListSaved < nErrorLine) {
                 pUnit = (fpAiTargetPredicate)pTargetUnit;
                 ppNodeListSaved = (D2UnitNodeStrc**)nErrorLine;
               }
@@ -603,7 +593,7 @@ static int32_t __stdcall AI_BAAL_ThroneRoomChooseAction(::SGAMEDATA * pGame, D2U
 }
 
 // Baal AI decision: builds a 16-entry weight table for Baal's possible actions and returns the chosen action index via weighted RNG roll. Initializes base weights (skills, summons, teleport, etc.), with difficulty adjustment (normal lowers some), distance-to-target tweaks (GetDistance: >0x23 and >0x19 thresholds shift melee/ranged weights), a life-based weight (anWeights[1] = base + (100 - target life%)), and context flags (nParam2 phase count, nParam6, level-difficulty scaling, AI_BAAL_HasPowerfulSkill, nParam3/4/5). Sums all weights, rolls target's seed modulo total (power-of-two fast path), then walks the table accumulating until the roll is exceeded and returns that index (fallback 1).
-static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, int32_t nParam1, D2UnitStrc * pUnit, int32_t nCandidateCount, int32_t bVeryFarFromAnchor, int32_t bBeyondAnchorLimit, int32_t nParam5, int32_t nBestScore, D2UnitStrc * pUnit2) {
+static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, D2AiGeneralStrc * nParam1, D2UnitStrc * pUnit, int32_t nCandidateCount, int32_t bVeryFarFromAnchor, int32_t bBeyondAnchorLimit, int32_t nParam5, int32_t nBestScore, D2UnitStrc * pUnit2) {
     int* pWeightCursor;
     uint32_t nTotalWeight;
     uint32_t nRandRoll;
@@ -632,7 +622,7 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, int32
       anWeights[0xd] = 0x28;
     }
 
-    anWeights[0xf] = (2 - *(int*)(nParam1 + 0x18)) * 10;
+    anWeights[0xf] = (2 - nParam1->dwArg1) * 10;
     if (anWeights[0xf] < 0) {
       anWeights[0xf] = 0;
     }
@@ -824,7 +814,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
       return nAction;
     }
     if (nFoundGUID) {
-      nAction = AI_Baal_SelectActionWeighted(pGame, (int32_t)pAiGeneral, pUnit2, nCandidateCount, _bVeryFarFromAnchor, nAction, _bInThroneRoom, nBestScore, pUnit);
+      nAction = AI_Baal_SelectActionWeighted(pGame, pAiGeneral, pUnit2, nCandidateCount, _bVeryFarFromAnchor, nAction, _bInThroneRoom, nBestScore, pUnit);
       return nAction;
     }
 
@@ -832,8 +822,8 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     return nCombatAiState;
 }
 
-void __fastcall AI_BAAL_CountPowerfulSkills(int32_t nSkillNode, int * pnSelfSkillNode, int * pnPowerfulSkillCount) {
-    if (!(nSkillNode != *pnSelfSkillNode && nSkillNode && *(int*)(nSkillNode + 0x10) && *(int*)(nSkillNode + 0x10) != 0xc)) {
+void __fastcall AI_BAAL_CountPowerfulSkills(D2UnitStrc * nSkillNode, int * pnSelfSkillNode, int * pnPowerfulSkillCount) {
+    if (!(nSkillNode != (D2UnitStrc*)*pnSelfSkillNode && nSkillNode && nSkillNode->eAnimMode.ePlayerMode != Death && nSkillNode->eAnimMode.ePlayerMode != Kick)) {
       return;
     }
 
@@ -841,11 +831,11 @@ void __fastcall AI_BAAL_CountPowerfulSkills(int32_t nSkillNode, int * pnSelfSkil
 }
 
 // Baal-AI helper that spawns a single weakened Baal clone minion. First counts existing "powerful skill" minions via CallForEachMinion/AI_BAAL_CountPowerfulSkills and bails if any already exist (one-clone guard). Resolves Baal's current target/owner, derives a spawn position near the target (or Baal) by jittering its X/Y with the room/unit RNG (mod 0x18 offsets), finds a valid nearby room, and spawns the clone monster (class id ~0x23a) via SpawnMonster. The clone is flagged NOXP|NOTC, restarts AI thinking, is registered as Baal's minion (AssignMinionOwner/AddMinionToList, mutual StoreOwner), and gets 1/3 of Baal's max-hp/current-hp with hpregen 0. On success increments a counter at *(nParam+0x18) and returns 1 (packed in EAX high bits); returns 0 if guard hit, owner dead, or spawn failed.
-static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * pUnit) {
+static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, D2AiGeneralStrc * nParam, D2UnitStrc * pUnit) {
     // Frame slots -32..-24 are ONE object: &nSeedMulHi is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      uint32_t nSeedMulHi;
+      D2UnitStrc* nSeedMulHi;
       uint32_t nCloneClassId;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -866,7 +856,7 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     int nPosY;
     nPosY = 0;
     __frame1.nPowerfulSkillCount = 0;
-    __frame0.nSeedMulHi = (uint32_t)pUnit;
+    __frame0.nSeedMulHi = pUnit;
     Ai::AiGeneral::CallForEachMinion(pUnit, &__frame0.nSeedMulHi, &__frame1.nPowerfulSkillCount, (pfnMinionForEachCallback)AI_BAAL_CountPowerfulSkills);
     if (__frame1.nPowerfulSkillCount) {
       return false;
@@ -971,13 +961,13 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     D2Common::Units::StoreOwner(pTargetUnit, pUnit);
     D2Common::Units::StoreOwner(pUnit, pTargetUnit);
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x10, nullptr);
-    (*(int*)(nParam + 0x18))++;
+    nParam->dwArg1++;
     return true;
 }
 
 // Executes a specific Baal AI action. Handles Baal clone spawning, teleport positioning, and multi-skill attack selection during the boss encounter.
 // @sourcefile .\Ai\AiBaal.cpp
-void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nParam, D2UnitStrc * pTarget, int nAction, D2MonsterAiCmdStrc * pClientSideData) {
+void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * nParam, D2UnitStrc * pTarget, int nAction, D2MonsterAiCmdStrc * pClientSideData) {
     // Frame slots -24..-4 are ONE object: &nUnitX is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1156,7 +1146,7 @@ void __fastcall AI_Fn1_BaalCrab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     int nCandidateCount = 0;
     int nBestScore = 0;
     ::SGAMEDATA* pGameSaved = pGame;
-    D2UnitStrc* pBestTarget = SelectTargetBaal(pGame, &nCandidateCount, &nBestScore, 0, (fpAiTargetPredicate)AI_BAAL_IsUnitInRange, pUnit);
+    D2UnitStrc* pBestTarget = SelectTargetBaal(pGame, &nCandidateCount, &nBestScore, nullptr, (fpAiTargetPredicate)AI_BAAL_IsUnitInRange, pUnit);
     D2MonsterAiCmdStrc* pAnchorCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
     if (!pAnchorCmd) {
       D2AiCmdArgumentsStrc anchorCmdArgs;
@@ -1190,7 +1180,7 @@ void __fastcall AI_Fn1_BaalCrab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     int32_t nSelectedAction = AI_BaalEvaluateCombatAction(pUnit, pGameSaved, pMonsterAiGeneral, nCandidateCount, nBestScore, pAnchorCmd, pBestTarget);
     ::SGAMEDATA* pGameCopy = pGameSaved;
-    AI_Baal_ExecuteAction(pGameSaved, pUnit, (int32_t)pMonsterAiGeneral, pBestTarget, nSelectedAction, pAnchorCmd);
+    AI_Baal_ExecuteAction(pGameSaved, pUnit, pMonsterAiGeneral, pBestTarget, nSelectedAction, pAnchorCmd);
     RestartAiThink(pGameCopy, pUnit, 0x19);
 }
 
@@ -1278,7 +1268,7 @@ void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
       if (!bIsDead) {
         nCandidateCount = 0;
         nBestScore = 0;
-        pBestTarget = SelectTargetBaal(pGame, &nCandidateCount, &nBestScore, 0, (fpAiTargetPredicate)AI_BAAL_IsUnitInRange, pUnit);
+        pBestTarget = SelectTargetBaal(pGame, &nCandidateCount, &nBestScore, nullptr, (fpAiTargetPredicate)AI_BAAL_IsUnitInRange, pUnit);
         pAiCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
         if (!pAiCmd) {
           anchorCmdArgs.nCmdId = 10;
@@ -1294,7 +1284,7 @@ void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
           nAction = 2;
         }
         if (pBestTarget) {
-          AI_Baal_ExecuteAction(pGame, pUnit, (int32_t)pMonsterAiGeneral, pBestTarget, nAction, pAiCmd);
+          AI_Baal_ExecuteAction(pGame, pUnit, pMonsterAiGeneral, pBestTarget, nAction, pAiCmd);
           RestartAiThink(pGame, pUnit, 0x19);
           return;
         }

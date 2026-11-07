@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -20,6 +23,22 @@ typedef uint32_t eD2Skills;
 struct D2RareAffixTxt;
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2MagicAffixCandidateStrc {
+    /* 0x00 */ int32_t nAffixIndex;
+    /* 0x04 */ struct D2MagicAffixTxt * pAffixTxt;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2RareAffixCandidateStrc {
+    /* 0x00 */ int32_t nAffixIndex;
+    /* 0x04 */ struct D2RareAffixTxt * pAffixTxt;
+};
+
+#endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2RareAffixTableStrc
+#define D2_DEFINED_D2RareAffixTableStrc
 struct D2RareAffixTableStrc {
     /* 0x00 */ int nSize; // row count; TXT_RareAffixes_GetLine bounds-checks against this
     /* 0x04 */ struct D2RareAffixTxt * pTable; // base of the 0x48-byte row array
@@ -27,6 +46,9 @@ struct D2RareAffixTableStrc {
     /* 0x0C */ struct D2RareAffixTxt * pPrefixStart; // first prefix row; GetMaxToRoll(1) iterates from here to the end of the table
 };
 
+#endif // D2_DEFINED_D2RareAffixTableStrc
+#ifndef D2_DEFINED_D2RareAffixTxt
+#define D2_DEFINED_D2RareAffixTxt
 struct D2RareAffixTxt {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
@@ -58,6 +80,7 @@ struct D2RareAffixTxt {
     /* 0x47 */ uint8_t field_0x47;
 };
 
+#endif // D2_DEFINED_D2RareAffixTxt
 namespace D2Game::SKILLS::Items {
 
 // Function declarations

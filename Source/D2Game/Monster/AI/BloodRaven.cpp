@@ -2,15 +2,11 @@
 
 #include "Source/D2Game/Monster/AI/BloodRaven.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -18,27 +14,27 @@
 namespace D2Game::Monster::AI::BloodRaven {
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
-int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int * pTarget, uint32_t nRadius) {
+int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t nRadius) {
     uint32_t nOffsetX;
     D2MonsterKillStrc sMonsterKillArgs;
     int32_t nTargetPosX;
     int nTarget;
-    int nTargetUnitType = *pTarget;
+    eD2UnitType eVar1 = pTarget->eUnitType;
     ::SGAMEDATA* pGameSaved = pGame;
     D2UnitStrc* pUnitSaved = pUnit;
-    if (nTargetUnitType == 2 || nTargetUnitType > 3 && nTargetUnitType <= 5) {
-      nTargetPosX = *(int32_t*)(pTarget[0xb] + 0xc);
-    } else if ((D2DynamicPathStrc*)pTarget[0xb]) {
-      nTargetPosX = D2Common::PATH::DynamicPath::GetXPos((D2DynamicPathStrc*)pTarget[0xb]);
+    if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
+      nTargetPosX = pTarget->pPath.pStaticPath->nPosX;
+    } else if (pTarget->pPath.pDynamicPath) {
+      nTargetPosX = D2Common::PATH::DynamicPath::GetXPos(pTarget->pPath.pDynamicPath);
     } else {
       nTargetPosX = 0;
     }
 
-    nTargetUnitType = *pTarget;
-    if (nTargetUnitType == 2 || nTargetUnitType > 3 && nTargetUnitType <= 5) {
-      nTarget = (int)*(int**)(pTarget[0xb] + 0x10);
-    } else if ((D2DynamicPathStrc*)pTarget[0xb]) {
-      nTarget = D2Common::PATH::DynamicPath::GetYPos((D2DynamicPathStrc*)pTarget[0xb]);
+    eVar1 = pTarget->eUnitType;
+    if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
+      nTarget = pTarget->pPath.pStaticPath->nPosY;
+    } else if (pTarget->pPath.pDynamicPath) {
+      nTarget = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
     } else {
       nTarget = 0x0;
     }
@@ -69,7 +65,7 @@ int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2Uni
       nRadius = -nRadius;
     }
 
-    nTargetUnitType = nTargetPosX + nOffsetX;
+    int nTargetUnitType = nTargetPosX + nOffsetX;
     eD2MonsterAnimMode eMoveMode = eD2MonsterAnimMode_ns::Run;
     BOOL eDecrepifyState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnitSaved, STATE_decrepify);
     if (eDecrepifyState) {
@@ -80,7 +76,7 @@ int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2Uni
     D2Common::PATH::DynamicPath::SetStepNum(pSelf->pPath.pDynamicPath, 1);
     MonsterMode::SetCurrentSkill(pSelf, eMoveMode, &sMonsterKillArgs);
     sMonsterKillArgs.nTargetX = nTargetUnitType;
-    sMonsterKillArgs.nTargetY = nTarget + nRadius;
+    sMonsterKillArgs.nTargetY = (int)(((D2UnitStrc*)nTarget)->unk0x19 + (nRadius - 0x19));
     int32_t nLifecycleResult = MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameSaved, &sMonsterKillArgs, 1);
     return nLifecycleResult;
 }

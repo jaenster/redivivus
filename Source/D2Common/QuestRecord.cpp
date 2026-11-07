@@ -2,9 +2,7 @@
 
 #include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/D2BitBufferStrc.h"
-#include "Source/Fog/BitBuffer.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -133,7 +131,7 @@ void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutpu
     /* Input is an array of 24x uint */ for (iCount = 0x18; iCount; iCount--) {
       *(uint32_t*)pOutputBuffer = *pInputAddress;
       pInputAddress++;
-      pOutputBuffer = (uint8_t*)((int)pOutputBuffer + 4);
+      pOutputBuffer = (uint8_t*)((char*)pOutputBuffer + 4);
     }
 }
 

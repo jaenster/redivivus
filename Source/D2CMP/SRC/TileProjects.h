@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,10 +19,15 @@ struct D2TileLibraryEntryStrc;
 struct D2TileLibraryHashNodeStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2TileLibraryHashStrc
+#define D2_DEFINED_D2TileLibraryHashStrc
 struct D2TileLibraryHashStrc {
     /* 0x00 */ struct D2TileLibraryHashNodeStrc * pNodes[128];
 };
 
+#endif // D2_DEFINED_D2TileLibraryHashStrc
+#ifndef D2_DEFINED_D2TileLibraryHeaderStrc
+#define D2_DEFINED_D2TileLibraryHeaderStrc
 struct D2TileLibraryHeaderStrc {
     /* 0x000 */ int nVersion; // DT1 header major version
     /* 0x004 */ int dwFlags; // DT1 header second dword; TILECMP_FreeTileCache tests 4 (single block, free only the header) and 8 (halt)
@@ -287,6 +295,9 @@ struct D2TileLibraryHeaderStrc {
     /* 0x110 */ struct D2TileLibraryEntryStrc * pTiles; // 0x60-byte tile records (file offset relocated to a pointer)
 };
 
+#endif // D2_DEFINED_D2TileLibraryHeaderStrc
+#ifndef D2_DEFINED_D2TileProjectStrc
+#define D2_DEFINED_D2TileProjectStrc
 struct D2TileProjectStrc {
     /* 0x000 */ char szFilename[260]; // DT1 path; TILEPROJECT_FindByFilename compares it
     /* 0x104 */ struct D2TileLibraryHeaderStrc * pTileLibrary; // freed by TILECMP_FreeTileCache in TileProjects::Free
@@ -294,6 +305,7 @@ struct D2TileProjectStrc {
     /* 0x10C */ struct D2TileProjectStrc * pNext; // next loaded tile project
 };
 
+#endif // D2_DEFINED_D2TileProjectStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================

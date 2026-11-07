@@ -2,22 +2,16 @@
 
 #include "Source/D2Game/Quests/QUESTS/A2Q7.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Seed.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/D2Common/D2SeedStrc.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -63,14 +57,14 @@ uint8_t __fastcall Q14_IsSevenTombsAtState1(::SGAMEDATA * pGame) {
 int __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pQuestData >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
     uint8_t nStateFlag = pQuestData->nStateFlag;
-    uint32_t uVar1 = (uint32_t)((uint32_t)pQuestData >> 8) & 0xffffffu;
+    uint32_t uVar1 = (uint32_t)((uintptr_t)pQuestData >> 8) & 0xffffffu;
     pQuestData = (D2QuestDataStrc*)(uint32_t)((uint32_t)((uint32_t)uVar1 & 0xffffffu) << 8 | (uint32_t)(uint8_t)nStateFlag);
     if (!(nStateFlag == 1 || !nStateFlag)) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pQuestData >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
     return (uint32_t)uVar1 << 8;
@@ -154,8 +148,8 @@ BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2
 }
 
 // Q14: set/clear the Izual(Tyrael) placement flag in A2Q6 data, only while the quest is introduced and field_0x0E unset. cParam==0 -> mark located (bIzualLocationSet=1) and set pIzualUnit sentinel (8 single-player / 9 multiplayer); cParam!=0 -> clear bIzualLocationSet. No quest-record state change.
-void __fastcall Q14_SetTyraelState(int pQuestData, char bClear) {
-    D2QuestDataStrc* pA4Q1Data = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(pQuestData + 4), QUESTINT_TheSevenTombs);
+void __fastcall Q14_SetTyraelState(D2QuestDataStrc * pQuestData, char bClear) {
+    D2QuestDataStrc* pA4Q1Data = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheSevenTombs);
     if (!(pA4Q1Data && pA4Q1Data->bIsNotIntroduction != '\0')) {
       return;
     }

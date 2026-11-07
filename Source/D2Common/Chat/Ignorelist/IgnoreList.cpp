@@ -4,12 +4,9 @@
 #include "Source/D2Common/Chat/Ignorelist.h"
 #include "Source/D2Common/Chat/Ignorelist/MappingEntryNode.h"
 #include "Source/D2Common/Chat/Ignorelist/StringEntryNode.h"
-#include "Source/Fog/Source/SFile.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/Fog/Fog.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Chat.h"
 #include "Source/D2Common/Chat/Ignorelist/ChatIgnoreList.h"
@@ -167,7 +164,7 @@ int32_t __thiscall CheckAccountNameIgnored(::IgnoreList * pThis, char * szAccoun
           uVar1 = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
           pCurEntry = (::StringEntryNode*)((int)uVar1 <= 0 ? 0 : uVar1);
           while (true) {
-            if ((int)pCurEntry <= 0) {
+            if ((intptr_t)pCurEntry <= 0) {
               return 0;
             }
 
@@ -223,7 +220,7 @@ int32_t __thiscall CheckIgnored(::IgnoreList * pThis, char * szPlayerName) {
         IGNORELIST_ExtractPrefix(pThis, szPlayerName, szPrefix, 0x100);
         pThis->_vfptr->GetMappedValue(pThis, szPrefix, szSuffix, 0x100);
         if (szSuffix[0] == '\0') {
-          IGNORELIST_ExtractSuffix(pThis, szPlayerName, (int32_t)szSuffix, 0x100);
+          IGNORELIST_ExtractSuffix(pThis, szPlayerName, szSuffix, 0x100);
           if (szSuffix[0] != '\0') {
             goto check_alternate_name;
           }

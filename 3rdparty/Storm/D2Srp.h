@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Storm)
 #error "Storm header included by a module that may not use Storm (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Storm) && !defined(D2_LOADS_Storm)
+#error "internal Storm header included from another module; include Storm's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,8 @@ struct __attribute__((packed)) BigData {
     /* 0x158 */ TSGrowableArray_Uc sOutBuffer; // byte output buffer at +0x158 filled by SBigToBinary*/ToStr*/ToStream*
 };
 
+#ifndef D2_DEFINED_D2Srp
+#define D2_DEFINED_D2Srp
 struct D2Srp {
     /* 0x00 */ int bInitialized; // 1 once N/g set
     /* 0x04 */ struct BigData * pGenerator; // SRP generator g bignum (47; built from SRP_SetParameters p1/p2, PowMod base)
@@ -28,3 +33,5 @@ struct D2Srp {
     /* 0x34 */ uint8_t aOutputBuffer[20]; // SHA1 output block for session-key bytes
     /* 0x48 */ uint32_t nBytesAvailable; // bytes left in output buffer
 };
+
+#endif // D2_DEFINED_D2Srp

@@ -2,14 +2,9 @@
 
 #include "Source/D2Game/Quests/QUESTS/A3Q1.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/Preset.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
@@ -20,8 +15,7 @@
 #include "Source/D2Game/Quests/QUESTS/A5Q3.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -136,7 +130,7 @@ void __fastcall Objects_InitFn50_HratliEnd(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q17_SetupHratliMapAi — (QUEST_SpokeToHratli helper, not Lam Esen). Stores a DRLG map pointer into the SpokeToHratli quest-specific data and, if Hratli's map-AI is flagged and his unit + map file are valid and not yet transplanted, moves the DRLG preset file onto Hratli's monster map-AI (one-shot via bDrlgMapTaken). No player quest-record state touched.
-void __thiscall Q17_SetupHratliMapAi(void * pThis, int32_t pMapAI) {
+void __thiscall Q17_SetupHratliMapAi(void * pThis, D2MapAIStrc * pMapAI) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)pThis, QUESTINT_SpokeToHratli);
     if (!pQuestData) {
       return;
@@ -144,7 +138,7 @@ void __thiscall Q17_SetupHratliMapAi(void * pThis, int32_t pMapAI) {
 
     D2QuestDataA3Q0Strc* pA3Q0Data = pQuestData->pQuestSpecificData.pA3Q0;
     D2MapAIStrc** ppSrcMapAI = &pA3Q0Data->pDrlgMap;
-    *ppSrcMapAI = (D2MapAIStrc*)pMapAI;
+    *ppSrcMapAI = pMapAI;
     if (!pA3Q0Data->bHratliMapAiSet) {
       return;
     }
@@ -757,7 +751,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     if (nPartyId != 0xffff) {
       pLamEsenData->nPlayersWithTome = false;
-      UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q18_CheckPlayerHasTome, 0);
+      UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q18_CheckPlayerHasTome, nullptr);
       if (pLamEsenData->nPlayersWithTome) {
         *pbyStatusCode = '\x02';
         return true;

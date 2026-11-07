@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,13 +19,14 @@ struct D2InventoryGridInfoStrc;
 struct D2InventoryStrc;
 struct D2ItemInventoryNodeStrc;
 struct D2PoolManagerStrc;
-struct D2RoomStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2BodyLocDWORD;
 typedef uint32_t eD2ItemTypes;
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2CorpseStrc
+#define D2_DEFINED_D2CorpseStrc
 struct __attribute__((packed)) D2CorpseStrc {
     /* 0x00 */ eD2UnitType eUnitType; // corpse unit type; nCorpseCount counts non-player entries
     /* 0x04 */ int nUnitGUID; // corpse unit GUID (ROOMCORPSE_GetGUID)
@@ -30,6 +34,9 @@ struct __attribute__((packed)) D2CorpseStrc {
     /* 0x0C */ struct D2CorpseStrc * pNext; // next corpse (+0xc)
 };
 
+#endif // D2_DEFINED_D2CorpseStrc
+#ifndef D2_DEFINED_D2GridScreenCoordinates
+#define D2_DEFINED_D2GridScreenCoordinates
 struct D2GridScreenCoordinates {
     /* 0x00 */ uint8_t nGridCols; // Grid column count (low byte of former nGridX int)
     /* 0x01 */ uint8_t nGridRows; // Grid row count (high byte of former nGridX int)
@@ -43,6 +50,9 @@ struct D2GridScreenCoordinates {
     /* 0x16 */ short pad_16; // Padding to maintain size 24
 };
 
+#endif // D2_DEFINED_D2GridScreenCoordinates
+#ifndef D2_DEFINED_D2InventoryEntryStrc
+#define D2_DEFINED_D2InventoryEntryStrc
 struct D2InventoryEntryStrc {
     /* 0x00 */ int nLeft;
     /* 0x04 */ int nRight;
@@ -53,6 +63,9 @@ struct D2InventoryEntryStrc {
     /* 0x12 */ uint16_t wPad; // Copied as an opaque 16-bit value in GetBodyDimensions; purpose unknown
 };
 
+#endif // D2_DEFINED_D2InventoryEntryStrc
+#ifndef D2_DEFINED_D2InventoryGridStrc
+#define D2_DEFINED_D2InventoryGridStrc
 struct D2InventoryGridStrc {
     /* 0x00 */ struct D2UnitStrc * pItem;
     /* 0x04 */ struct D2UnitStrc * pHeadItem;
@@ -69,6 +82,9 @@ struct D2InventoryGridStrc {
     /* 0x30 */ struct D2UnitStrc * pSwappedLeftArmItem;
 };
 
+#endif // D2_DEFINED_D2InventoryGridStrc
+#ifndef D2_DEFINED_D2InventorySizesStrc
+#define D2_DEFINED_D2InventorySizesStrc
 struct D2InventorySizesStrc {
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
 
@@ -76,11 +92,17 @@ struct D2InventorySizesStrc {
     /* 0x01 */ uint8_t Height;
 };
 
+#endif // D2_DEFINED_D2InventorySizesStrc
+#ifndef D2_DEFINED_D2InventoryToBeUpdatedStrc
+#define D2_DEFINED_D2InventoryToBeUpdatedStrc
 struct D2InventoryToBeUpdatedStrc {
     /* 0x00 */ uint32_t nUnitGuid;
     /* 0x04 */ struct D2InventoryToBeUpdatedStrc * pNext;
 };
 
+#endif // D2_DEFINED_D2InventoryToBeUpdatedStrc
+#ifndef D2_DEFINED_D2InventoryBodyStrc
+#define D2_DEFINED_D2InventoryBodyStrc
 struct __attribute__((packed)) D2InventoryBodyStrc {
     /* 0x00 */ D2InventoryEntryStrc rArm;
     /* 0x14 */ D2InventoryEntryStrc torso;
@@ -94,6 +116,9 @@ struct __attribute__((packed)) D2InventoryBodyStrc {
     /* 0xB4 */ D2InventoryEntryStrc gloves;
 };
 
+#endif // D2_DEFINED_D2InventoryBodyStrc
+#ifndef D2_DEFINED_D2InventoryTxt
+#define D2_DEFINED_D2InventoryTxt
 struct __attribute__((packed)) D2InventoryTxt {
     /* 0x00 */ int invLeft;
     /* 0x04 */ int invRight;
@@ -103,6 +128,7 @@ struct __attribute__((packed)) D2InventoryTxt {
     /* 0x28 */ D2InventoryBodyStrc pBody;
 };
 
+#endif // D2_DEFINED_D2InventoryTxt
 namespace D2Common::INVENTORY::Inventory {
 
 // Function declarations
@@ -127,7 +153,7 @@ BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory
 BOOL __stdcall INVENTORY_CheckGridCollisions(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, struct D2UnitStrc * * ppCollidedItemOut, int * pnCollidingItemCount, uint32_t nPage);
 // Checks whether the rectangular region [nGridX, nGridY, nGridX+itemW, nGridY+itemH] in the inventory grid for eInvPage is clear enough to place pUnit. Iterates every cell in the bounding box via the reinitialised grid; returns 0 if a box-code item blocks placement (when bCheckBox set) or if more than one distinct item occupies the region, otherwise returns 1. Writes a blocking item pointer to *pnOutItem when a conflict is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall INVENTORY_CheckGridOccupancy(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, int * pnOutItem, uint32_t nPageByte, int bCheckBox);
+BOOL __stdcall INVENTORY_CheckGridOccupancy(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, struct D2UnitStrc * * pnOutItem, uint32_t nPageByte, int bCheckBox);
 BOOL __stdcall INVENTORY_PlaceItemAtCoords(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, int32_t nUnused, uint8_t bGridIndex);
 void __stdcall UnusedDebug(char * szFilename, uint32_t nLine, struct D2InventoryStrc * pInventory, int32_t nX, int32_t nY, eInventoryPage neInventoryPage, uint32_t dwParam, int32_t nInvPage);
 void __stdcall NullSub(struct D2InventoryStrc * pInventory);
@@ -196,7 +222,7 @@ int32_t __stdcall INVENTORY_GetCorpseCount(struct D2InventoryStrc * pInventory);
 struct D2CorpseStrc * __stdcall INVENTORY_GetNextCorpse(struct D2CorpseStrc * pCorpse);
 int32_t __stdcall ROOMCORPSE_GetGUID(struct D2CorpseStrc * pCorpse);
 int32_t __stdcall CORPSE_GetMercClassId(struct D2CorpseStrc * pCorpse);
-struct D2RoomStrc * * __stdcall CORPSE_GetData(struct D2CorpseStrc * pRoom);
+eD2UnitType __stdcall CORPSE_GetData(struct D2CorpseStrc * pRoom);
 // Returns the equip action code for placing pItem into body slot nParam on pUnit. First validates body location fit and equipment requirements. For arm slots (R_ARM/L_ARM and their swap pairs), retrieves both the current and paired slot items and delegates to INVENTORY_GetEquipSwapAction. For other slots, returns 1 (replace) if the slot is occupied or 1 if placing a new item; returns 3 (move to stash) if clearing an occupied slot. Returns 0 on null unit/inventory or failed fit/req check.
 int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(struct D2UnitStrc * pUnit, eD2BodyLocDWORD nBodyLoc, struct D2UnitStrc * pItem, int bSkipRequirementsCheck);
 struct D2UnitStrc * __stdcall INVENTORY_GetNextItem(struct D2UnitStrc * pUnit);
@@ -216,7 +242,7 @@ void __stdcall SaveCharAppearance(struct D2UnitStrc * pUnit, char * pArray1, cha
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 void __stdcall NullSub_Unref_00611610(struct D2InventoryStrc * pInventory);
 void __stdcall NullSub_Unref_00611640(struct D2InventoryStrc * pInventory);
-int __fastcall Unreferenced_0063aad0(int param_1);
+int __fastcall Unreferenced_0063aad0(struct D2UnitStrc * param_1);
 // Removes an item unit from its owning D2InventoryStrc. Validates inventory signature (0x1020304), removes the item from its grid slot, clears the cursor-item pointer or unlinks it from the item list, zeroes the item's inventory/grid references, clears the owner's stat bonuses via STATLIST_RemoveFromOwnerAndRecalc, and clears dwPrimaryWeaponGUID if it matched. Returns 1 on success, 0 on any validation failure.
 BOOL __fastcall INVENTORY_RemoveItemFromInventory(struct D2UnitStrc * pItem);
 // Links pItem onto the tail of pInventoryStrc's item linked list (pFirstItem/pLastItem chain). Validates that pItem is a unit of type UNIT_ITEM (eUnitType==4) with valid pUnitData and pStatsEx. Sets pUnitDataItem->pInventory to the previous last item and pStatsEx to the inventory pointer.

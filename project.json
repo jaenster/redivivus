@@ -310,6 +310,7 @@
         "D2gfx"
       ],
       "dir": "Source/D2gfx",
+      "publicHeader": "D2gfx.public.h",
       "linkOrder": 8,
       "dependencies": [
         {
@@ -561,7 +562,7 @@
         }
       ],
       "exceptions": [],
-      "strict": false
+      "strict": true
     },
     "D2Net": {
       "kind": "dll-module",
@@ -583,7 +584,7 @@
         }
       ],
       "exceptions": [],
-      "strict": false
+      "strict": true
     },
     "D2Game": {
       "kind": "dll-module",

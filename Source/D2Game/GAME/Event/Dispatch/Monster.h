@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,6 +21,8 @@ typedef uint32_t eD2MonsterAnimMode;
 typedef uint32_t eD2TimerTypeDWORD;
 
 // Data types
+#ifndef D2_DEFINED_D2MonsterKillStrc
+#define D2_DEFINED_D2MonsterKillStrc
 struct __attribute__((packed)) D2MonsterKillStrc {
     /* 0x00 */ eD2MonsterAnimMode nUnitMode;
     /* 0x04 */ struct D2UnitStrc * pVictim;
@@ -32,6 +37,7 @@ struct __attribute__((packed)) D2MonsterKillStrc {
     /* 0x1C */ int nMonType2; // value: zeroed, passed as a byte argument
 };
 
+#endif // D2_DEFINED_D2MonsterKillStrc
 namespace D2Game::GAME::Event::Dispatch::Monster {
 
 // Function declarations

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -66,7 +69,7 @@ BOOL __fastcall SpawnRandomOutdoorDS1(struct D2DrlgLevelStrc * pLevel, int32_t n
 void __fastcall SpawnAct12Waypoint(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor decorator that scatters up to nShrines special tiles into a wilderness level grid. Builds a list of all interior (x,y) cells, Fisher-Yates shuffles it using the level seed, then walks the shuffled cells placing a shrine/decoration where the collision grid is clear (flags & 0x1b81 == 0): writes a per-style grid value (gnOutdoorsGridWidthByLevel[style]) into one grid and sets flag 0x1000 in the collision grid, cycling the 0..3 style index each placement. Stops once nShrines are placed or cells exhausted. Mutates pLevel grids and seed; no return.
 void __fastcall SpawnAct12Shrines(struct D2DrlgLevelStrc * pLevel, int32_t nShrines);
-int __fastcall Unreferenced_00675290(int param_1, int param_2);
+struct D2DrlgVertexStrc * __fastcall Unreferenced_00675290(struct D2DrlgLevelStrc * param_1, int param_2);
 void __fastcall AddAct124SecondaryBorder(struct D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId);
 // @sourcefile .\DRLG\Outdoors.cpp
 void __fastcall DRLGLEVEL_InitializeWithWildernessLevel(struct D2DrlgLevelStrc * pLevel);

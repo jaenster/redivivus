@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2GSPacketSrv0x81
+#define D2_DEFINED_D2GSPacketSrv0x81
 struct D2GSPacketSrv0x81 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nSkillId;
@@ -21,3 +26,5 @@ struct D2GSPacketSrv0x81 {
     /* 0x0C */ int nSeed2;
     /* 0x10 */ int nInitSeed;
 };
+
+#endif // D2_DEFINED_D2GSPacketSrv0x81

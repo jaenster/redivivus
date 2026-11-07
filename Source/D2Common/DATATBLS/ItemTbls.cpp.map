@@ -440,6 +440,7 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
+        "TXT_AllocTxt_uniqueitems_Slotm",
         "WCHAR",
         "int32_t",
         "uint32_t"
@@ -486,6 +487,7 @@
         "D2PoolManagerStrc",
         "D2SetItemsTxt",
         "D2SetsTxt",
+        "TXT_AllocTxt_setitems_Slotm",
         "WCHAR",
         "int32_t",
         "uint32_t"
@@ -919,6 +921,7 @@
         "D2BinFieldInputStrc",
         "D2ItemStatCostDescPriorityStrc",
         "D2PoolManagerStrc",
+        "TXT_AllocTxt_itemstatcost_Slotm",
         "int32_t",
         "uint16_t",
         "uint32_t",

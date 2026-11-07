@@ -200,6 +200,9 @@
       "calledFunctions": [
         "Unreferenced_00574810",
         "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {
@@ -455,13 +458,14 @@
         "FindUnitFromTable"
       ],
       "usedTypes": [
+        "D2PetStrc",
+        "D2PetStrc *",
         "D2UnitDataPlayerPetsStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
-        "pfnPetForEachCallback",
-        "uint8_t"
+        "pfnPetForEachCallback"
       ]
     },
     {
@@ -726,6 +730,7 @@
         "RemovePetByGuidAndNotify"
       ],
       "usedTypes": [
+        "D2PetListStrc",
         "D2PetStrc",
         "D2UnitDataPlayerPetsStrc",
         "D2UnitStrc",
@@ -781,6 +786,8 @@
       ],
       "usedTypes": [
         "D2DataTableTxtStrc",
+        "D2PetStrc",
+        "D2PetStrc *",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA",

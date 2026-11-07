@@ -11,33 +11,23 @@
 #include "Source/D2Client/UI/Draw.h"
 #include "Source/D2Client/UI/Path.h"
 #include "Source/D2Client/UI/ui.h"
-#include "Source/D2Common/Chat/Ignorelist.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/Logging/ProfCore.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Game/GAME/Server.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Net/Game/Server.h"
-#include "Source/D2Net/SRC/Client.h"
-#include "Source/D2Win/D2GFX.h"
-#include "Source/D2Win/Src/D2WinArchive.h"
-#include "Source/D2Win/Src/D2WinMain.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Fog.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SCMD.h"
-#include "3rdparty/Storm/Source/SReg.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Net/D2Net.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
+#include "3rdparty/Storm/H/stpl.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/ClientModeInGame.data.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2MCPClient/McpConnect.data.h"
-#include "Source/Fog/Src/LogManager.data.h"
-#include "3rdparty/Storm/H/CCritSect.h"
+#include "Source/D2MCPClient/D2MCPClient.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -320,15 +310,13 @@ BOOL __stdcall LoadDataForGameAndSetupServer(D2IniConfigStrc * D2IniData) {
     return 1;
 }
 
-int Unreferenced_0044b780() {
-    int extraout_EAX;
+void Unreferenced_0044b780() {
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
     if (hWnd) {
       SendMessageA(hWnd, 0x1c, 0, 0);
     }
 
     D2gfx::D2GFX::D2GFX_ResetViewport();
-    return extraout_EAX;
 }
 
 D2IniConfigStrc * __stdcall D2IniData_Getter() {
@@ -396,8 +384,8 @@ void __fastcall D2CLIENT_SetExitVar1(BOOL bResult) {
     gbQuitGame = bResult;
 }
 
-D2IniConfigStrc * __stdcall D2IniData_Getter_Unref_0044b890() {
-    return (D2IniConfigStrc*)gbQuitGame;
+BOOL __stdcall D2IniData_Getter_Unref_0044b890() {
+    return gbQuitGame;
 }
 
 // Client app-mode entry. Init memory/UI, load language + string tables, init TXT tables, then run pfModes[] loop. Returns to launcher based on quit/game type.
@@ -584,8 +572,8 @@ bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused) {
     return nInitResult == 2;
 }
 
-int __fastcall Unreferenced_0044bc10(int param_1, int param_2) {
-    D2Net::SRC::Client::NET_D2GS_ConnectToServer(param_1, (char*)param_2);
+int __fastcall Unreferenced_0044bc10(int param_1, char * param_2) {
+    D2Net::SRC::Client::NET_D2GS_ConnectToServer(param_1, param_2);
     _Message::MessageGameLoop((::fpGameLoopFunction)GameLoopFuncInitGame);
     return 1;
 }

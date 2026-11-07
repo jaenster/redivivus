@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -35,16 +38,25 @@ struct __attribute__((packed)) D2WeaponSwapSlotStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+union ITEMMODE_RemoveItemsFromCube_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int32_t nItemY;
+    /* 0x00 */ struct D2InventoryStrc * pPlayerInventory;
+};
+
+#endif // D2_MODULE_D2Game
 namespace D2Game::ITEMS::ItemMode {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-void * __fastcall GetSavePacketList(struct D2ClientStrc * pClient);
+int32_t __fastcall GetSavePacketList(struct D2ClientStrc * pClient);
 // @wasnamed GetSavePacketList - one name on two different functions.
 // @evidence Writes pClient->pSavePacketList (line 0x80a). 00538350 reads it (line 0x7ff).
 // A setter had been given the getter's name.
-void __fastcall SetSavePacketList(struct D2ClientStrc * pClient, void * pSavePacketList);
+void __fastcall SetSavePacketList(struct D2ClientStrc * pClient, int32_t pSavePacketList);
 void __fastcall ITEMMODE_NullSub_Unref_00558990(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 struct D2MonStatsTxt * __fastcall GetMonsterData(struct D2UnitStrc * pUnit);
 // Server-side callback invoked when an item/stat modifier (op-function) changes a unit stat by (fParam1 old -> fParam2 new). Extracts the stat index from the eSkill packed param, looks up its ItemStatCost.txt line, and fires associated aura item-events. Switches on the affected stat: maxhp/maxmana/maxstamina proportionally rescales the current hitpoints/mana/stamina; item_addclassskills/addskill_tab/nonclassskill/singleskill grant or remove the granted skill (allocating, broadcasting via 0x21, updating passive/pet stats, deselecting if leveled to 0); state toggles a unit state and gfx; item_aura activates/deactivates a periodic aura; item_charged_skill adds/removes a charged item skill. Pure side-effects on pUnit's stats/skills/states.
@@ -54,9 +66,9 @@ void __fastcall SendDropItemPacket(struct D2UnitStrc * pUnit, struct D2ClientStr
 void __fastcall PacketUpdateForClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall SERVER_ITEM_SendStackableUsagePackets(struct D2UnitStrc * pUnit, char * szFile, int32_t nLine);
-int Unreferenced_0055bfe0();
+void __fastcall Unreferenced_0055bfe0(struct D2UnitStrc * pUnit);
 void __fastcall ITEMMODE_ApplyItemToOwner(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
-void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApply);
+void __fastcall ITEMMODE_AddStatsList_ForMercSwap(::SGAMEDATA * dwParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApply);
 void __fastcall ITEMMODE_RemoveItemStates(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
 // Removes all stat contributions of an item being unequipped from its owner unit. Fires the periodic-stats timer trigger, handles set-item dequip logic, removes the stat list from the owner (unless broken and nEquipState==0), conditionally re-activates the off-hand weapon's stat list when dual-wielding, removes item states, and optionally updates resource stats (if nParam != 0). No-ops if either pointer is NULL or the item unit type is wrong.
 // @sourcefile .\ITEMS\ItemMode.cpp
@@ -77,7 +89,7 @@ void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, struct D2Un
 void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam);
 void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 int32_t __fastcall ITEMMODE_CheckItemRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
-int __fastcall Unreferenced_0055db80(int param_1);
+struct D2ClientStrc * __fastcall Unreferenced_0055db80(struct D2UnitStrc * param_1);
 // Server-side recalculation of all equipped/charm item enable states for a player (or hireling, eUnitFlags bit 9). Validates each item against the wearer's current requirements: enables qualifying active charms, disables body-slot items that fail requirements (unequipping their stats), then runs a convergence loop re-enabling items whose requirements are now met (handling primary-weapon swap and socketed/set bonuses), and re-applies set bonuses for quality-5 (set) items. Finishes by validating item quality and refreshing inventory; if bSendPacket, sends S2C 0x48 (RecalcEquippedItems2) to the owning player's client. Counterpart to the client-side 0x47/0x48 handlers.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t bSendPacket);
@@ -91,7 +103,7 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, struct D2UnitStrc * pUn
 // Server handler for stacking a stackable/socketable item onto another. Validates game and player unit, sends stackable-usage packets, then looks up both source and destination item units. If the destination is on the merc inventory page the operation is silently skipped. If IsItemSocketable confirms compatibility and class IDs match, calls ITEMMODE_MergeStackableItems, marks the destination with ITEMCMD_CURSOR_STACK_ITEM, upserts it in the update list, and refreshes the inventory. Returns 1 on success/handled, 0 if not applicable; calls ERROR_Halt on null game/player.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall StackItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nItemGUID, DWORD nScrollGUID, uint32_t * pbBadParams);
-BOOL __stdcall RemoveStackItem(uint32_t dwParam1, uint32_t dwParam2);
+BOOL __stdcall RemoveStackItem(uint32_t dwParam1, uint32_t * dwParam2);
 // Server-side handler: validates and places a beltable item (by GUID) into a specific belt slot for pUnit. If nParam==0, checks slot capacity via INVENTORY_CanPlaceItemInBelt; if non-zero, auto-finds a slot via INVENTORY_PlacePotionInBelt. On success, applies item effects to owner, clears TARGETABLE flag, handles charm activation, and broadcasts inventory refresh. Returns 1 on success, 0 on failure; writes error code to *pdwParam.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nItemGUID, uint32_t nBeltSlot, int32_t bAutoPlace, uint32_t * pbBadParams);
@@ -140,12 +152,12 @@ void __fastcall ITEMMODE_SetItemFlags(struct D2UnitStrc * pUnit, struct D2UnitSt
 void __fastcall ITEMMODE_CheckItemLevel(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
 BOOL __fastcall ITEMMODE_ApplyQuestReward(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // Randomly selects an item code from a weighted pickup table (pbParam encodes two pools: normal and good), using the unit's seed RNG. For the selected item, checks difficulty-based upgrade odds (UberCode / UltraCode from DifficultyLevels.txt) and potentially promotes the code to its uber or ultra variant. Returns the final item code string pointer.
-uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pItemCodeTable, struct D2UnitStrc * pUnit, int32_t bPreferGood);
+uint32_t __fastcall ITEMMODE_HandleItemPickup(::SGAMEDATA * nParam, uint8_t * pItemCodeTable, struct D2UnitStrc * pUnit, int32_t bPreferGood);
 // Iterates all items in a player's inventory; for each item in a body-location grid slot (type 3) or an active-charm slot (type 1), unequips its stats (ITEMMODE_UnequipItemStats), swaps the primary weapon slot if needed, recalculates equipped item states, then frees all recursive inventory children after the loop. Halts with an internal error if the item pointer is inconsistent.
 void __fastcall ITEMMODE_ProcessItemDropLogic(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall UpdatePlayerItemState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t connectionIsUp);
 void __fastcall ITEMMODE_GetItemCursorMode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
-void __fastcall ITEMMODE_IsItemOnCursor(int32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
+void __fastcall ITEMMODE_IsItemOnCursor(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
 // Recharges all charged-skill stats (stat 0xCC) on an item that are below their maximum charge count. For each under-charged skill, calls ITEMMOD_SetChargedSkillCharges and sends a 0x3E UpdateItemStats packet to the owning player's client. Returns 1 if any charge was restored, 0 otherwise.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
@@ -199,7 +211,7 @@ BOOL __fastcall PutItemInItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DW
 BOOL __fastcall ITEMMODE_HandleItemRepair(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nCursorItemGUID, int32_t nCubeGUID, int * eResult);
 // Server-side handler that moves a shop item from a vendor's inventory to the player's equipped body location after purchase. Validates the item exists and meets equip requirements, unregisters it from the vendor inventory, places it at the requested eBodyLoc, updates the primary weapon slot, applies socketed effects, clears the disabled flag, and refreshes inventory stats. Calls ERROR_UnrecoverableInternalError_Halt on any invariant violation.
 // @sourcefile .\ITEMS\ItemMode.cpp
-BOOL __fastcall ITEMMODE_ProcessItemBuy(struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit, int32_t nUnitGUID, eD2BodyLoc eBodyLoc);
+BOOL __fastcall ITEMMODE_ProcessItemBuy(::SGAMEDATA * ppUnit, struct D2UnitStrc * pUnit, int32_t nUnitGUID, eD2BodyLoc eBodyLoc);
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_ValidateTradeItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall ITEMEVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType);
@@ -207,7 +219,7 @@ void __fastcall ITEMEVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitStrc
 BOOL __fastcall ITEMMODE_TryPutItemInInventory(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t eBodyLoc);
 // Server-side: re-equips and restocks a player's items from a corpse inventory when reviving/reclaiming a corpse. First loop re-equips body-slot items (head..ring) into the live player, resolving equip conflicts via ITEMMODE_ResolveEquipConflict, applying socketed/owner stats and refreshing durability/quantity. Second loop drains remaining carried items into the inventory grid or belt (potions via INVENTORY_PlacePotionInBelt). Updates targetable/resurrect flags, queues item updates, and finally ITEMS_RecalcEquippedItemStates. Returns nonzero on success. Halts (Fog error) on inventory inconsistencies.
 // @sourcefile .\ITEMS\ItemMode.cpp
-int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nCorpseIndex);
+int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * nCorpseIndex);
 // Processes picking up items from a corpse into pItem (a socket or container). Iterates all items in the corpse's inventory, clones each via ITEM_CloneFromSerializedData, copies the clone's map coordinates, then calls PutItemInItem to place the clone into the target item slot. Returns 0 immediately if the corpse has no inventory or if any PutItemInItem call fails; returns 1 on full success.
 BOOL __fastcall ITEMMODE_ProcessCorpsePickup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCorpse, struct D2UnitStrc * pItem, int32_t bApplyRuneword);
 // @sourcefile .\ITEMS\ItemMode.cpp

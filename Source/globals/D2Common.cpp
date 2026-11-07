@@ -4,13 +4,10 @@
  */
 
 #include "Source/globals/globals.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Common/Merc.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Chat/Ignorelist.h"
-#include "Source/D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 #include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Source/D2Common/Drlg/DrlgGrid.h"
 

@@ -5,17 +5,14 @@
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2DynamicPathStrc.h"
 #include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2RoomStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/PATH/Path.h"
 #include "Source/D2Common/Units.h"
-#include "Source/D2Game/D2PathTypeArg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
@@ -1376,7 +1373,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t bForce) {
     return 1;
 }
 
-static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32_t pUnit) {
+static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit) {
     uint32_t nPathPoints;
     int ePathType = pDynamicPath->ePathType;
     switch (ePathType) {
@@ -1392,7 +1389,7 @@ static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32
         }
       case 10:
         {
-          Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(pUnit + 0x20));
+          Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, &pUnit->sSeed);
           break;
         }
       case 0xe:
@@ -1557,7 +1554,7 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
     }
     if (pDynamicPath->nFlags & 0x40000U) {
       uint32_t nPathPoints;
-      nPathPoints = PATH_CalculateMissilePath(pDynamicPath, (int32_t)pUnit);
+      nPathPoints = PATH_CalculateMissilePath(pDynamicPath, pUnit);
       return nPathPoints;
     }
 

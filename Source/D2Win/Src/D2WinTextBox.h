@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,7 +17,6 @@
 // Forward declarations
 struct D2ControlMsg;
 struct D2UIMouseMsgStrc;
-struct D2WinEditBox;
 struct D2WinTextBox;
 struct DC6;
 #ifndef RECON_FPTD_OnPress
@@ -26,11 +28,23 @@ typedef BOOL (__stdcall *OnPress)(struct D2ControlMsg * pControlMsg);
 typedef void (__stdcall *fpD2WinScrollbarOnChange)(struct D2UIMouseMsgStrc * pUnderMouse);
 #endif
 
+// Data types
+#ifndef D2_DEFINED_D2WinTextBoxLineStrc
+#define D2_DEFINED_D2WinTextBoxLineStrc
+struct D2WinTextBoxLineStrc {
+    /* 0x00 */ uint16_t * apwszCells[5];
+    /* 0x14 */ int32_t nLineStyle;
+    /* 0x18 */ bool bIndent;
+    /* 0x19 */ uint8_t field_0x19;
+    /* 0x1A */ uint8_t field_0x1a;
+    /* 0x1B */ uint8_t field_0x1b;
+    /* 0x1C */ struct D2WinTextBoxLineStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2WinTextBoxLineStrc
 namespace D2Win::Src::D2WinTextBox {
 
 // Function declarations
-// Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
-int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 // @sourcefile .\Src\D2WinTextBox.cpp
 BOOL __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox);
 int __fastcall D2WINTEXTBOX_SetLinePadding(::D2WinTextBox * pnTextBox, int32_t nPadLeft, int32_t nPadding);
@@ -48,7 +62,7 @@ void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t n
 void __fastcall D2WINTEXTBOX_SetColumnWidth(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nColumnWidth);
 void __fastcall D2WINTEXTBOX_SetColumnAlignment(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nAlignment);
 int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox);
-uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, uint32_t dwColor);
+uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor);
 BOOL __fastcall Draw(::D2WinTextBox * pTextBox);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall Key(struct D2ControlMsg * pControlMsg);

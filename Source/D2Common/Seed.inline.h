@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Common/Seed.h"
 #include "Source/D2Common/D2SeedStrc.h"
@@ -14,6 +17,8 @@
 
 namespace D2Common::Seed {
 
+#ifndef D2_DEFINED_INLINE_0045c390
+#define D2_DEFINED_INLINE_0045c390
 __attribute__((noinline)) inline uint32_t __fastcall UNIT_GetModuloFromSeed(D2SeedStrc * pSeed, uint32_t nModulo) {
     D2SeedStrc DVar1;
     if ((int)nModulo <= 0) {
@@ -32,7 +37,10 @@ __attribute__((noinline)) inline uint32_t __fastcall UNIT_GetModuloFromSeed(D2Se
     *pSeed = DVar1;
     return nModulo - 1 & DVar1.nSeedLow;
 }
+#endif // D2_DEFINED_INLINE_0045c390
 
+#ifndef D2_DEFINED_INLINE_0045c3e0
+#define D2_DEFINED_INLINE_0045c3e0
 __attribute__((noinline)) inline uint32_t __fastcall RANDOM_RandomNumberSelector(D2SeedStrc * pSeed, uint32_t nModulo) {
     D2SeedStrc DVar1;
     if ((int)nModulo <= 0) {
@@ -49,5 +57,6 @@ __attribute__((noinline)) inline uint32_t __fastcall RANDOM_RandomNumberSelector
     *pSeed = DVar1;
     return nModulo - 1 & DVar1.nSeedLow;
 }
+#endif // D2_DEFINED_INLINE_0045c3e0
 
 } // namespace D2Common::Seed

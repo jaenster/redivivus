@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 typedef int eD2ItemFlag;
 
 // Data types
+#ifndef D2_DEFINED_D2UnknownItemRelatedStruct
+#define D2_DEFINED_D2UnknownItemRelatedStruct
 struct __attribute__((packed)) D2UnknownItemRelatedStruct {
     /* 0x00 */ char nEquipLoc; // 5-bit equip slot from save file
     /* 0x01 */ uint8_t nStorageType; // 3-bit storage location/page from save file
@@ -37,3 +42,5 @@ struct __attribute__((packed)) D2UnknownItemRelatedStruct {
     /* 0x42 */ uint16_t wItemFormat;
     /* 0x44 */ char szCode[4];
 };
+
+#endif // D2_DEFINED_D2UnknownItemRelatedStruct

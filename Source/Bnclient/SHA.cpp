@@ -2,8 +2,7 @@
 
 #include "Source/Bnclient/SHA.h"
 #include "Source/Bnclient/SHA1.h"
-#include "3rdparty/Storm/Source/SBig.h"
-#include "3rdparty/Storm/Source/SMem.h"
+#include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -15,7 +14,6 @@ namespace Bnclient::SHA {
 // @sourcefile .\SHA.cpp
 int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength) {
     uint32_t i;
-    char* pOddSrcByte;
     uint8_t* pDstByte;
     uint32_t shaCtx[23];
     uint8_t aHashBuf[20];
@@ -34,12 +32,12 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
     }
 
     uint32_t nHalfLen = (uint32_t)nLength >> 1;
-    void* pTmpBuf = Storm::Source::SMem::SMemAlloc(nHalfLen, ".\\SHA.cpp", 200, 0);
+    uint8_t* pTmpBuf = (uint8_t*)Storm::Source::SMem::SMemAlloc(nHalfLen, ".\\SHA.cpp", 200, 0);
     uint32_t nByteIdx = 0;
     if (pTmpBuf) {
       if (nHalfLen > 0) {
         do {
-          *(char*)(nByteIdx + (int)pTmpBuf) = pWideStr[nByteIdx * 2];
+          pTmpBuf[nByteIdx] = pWideStr[nByteIdx * 2];
           nByteIdx++;
         } while (nByteIdx < nHalfLen);
       }
@@ -55,11 +53,11 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
 
       i = 0;
       if (nHalfLen > 0) {
-        pOddSrcByte = pWideStr + 1;
+        pDstByte = (uint8_t*)(pWideStr + 1);
         do {
-          *(char*)(i + (int)pTmpBuf) = *pOddSrcByte;
+          pTmpBuf[i] = *pDstByte;
           i++;
-          pOddSrcByte += 2;
+          pDstByte += 2;
         } while (i < nHalfLen);
       }
 

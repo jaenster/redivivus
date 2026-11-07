@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,7 @@
 typedef uint32_t eD2ArenaFlags;
 typedef uint32_t eD2GSGameType;
 typedef uint8_t eD2PlayerClassID;
+struct D2IniConfigStrc;
 #ifndef RECON_FPTD_fnApplyPrepatch
 #define RECON_FPTD_fnApplyPrepatch
 typedef int (__fastcall *fnApplyPrepatch)(int * pdw);
@@ -37,7 +41,7 @@ typedef BOOL (__fastcall *fnCacheWriteData)(char * szKey, void * pData, uint32_t
 #endif
 #ifndef RECON_FPTD_fnConnectToBattleNet
 #define RECON_FPTD_fnConnectToBattleNet
-typedef int (__fastcall *fnConnectToBattleNet)();
+typedef HANDLE (__fastcall *fnConnectToBattleNet)();
 #endif
 #ifndef RECON_FPTD_fnDecodeCDKeys
 #define RECON_FPTD_fnDecodeCDKeys
@@ -85,7 +89,7 @@ typedef int (__fastcall *fnGetStateAndClear)(int * pOut);
 #endif
 #ifndef RECON_FPTD_fnGetStoredReadUserData
 #define RECON_FPTD_fnGetStoredReadUserData
-typedef int (__fastcall *fnGetStoredReadUserData)(int nRow, int nCol, char * * ppOut, int nMax);
+typedef int (__fastcall *fnGetStoredReadUserData)(int nRow, int nCol, char * * ppOut, int * nMax);
 #endif
 #ifndef RECON_FPTD_fnGetUnknownFlag
 #define RECON_FPTD_fnGetUnknownFlag
@@ -141,7 +145,7 @@ typedef void * (__fastcall *fnSendGetAdvListEx)(char * szName, char * szPass, ui
 #endif
 #ifndef RECON_FPTD_fnSendGetChannelList
 #define RECON_FPTD_fnSendGetChannelList
-typedef int (__fastcall *fnSendGetChannelList)(int nProduct);
+typedef void * (__fastcall *fnSendGetChannelList)(int nProduct);
 #endif
 #ifndef RECON_FPTD_fnSendGetFileTime
 #define RECON_FPTD_fnSendGetFileTime
@@ -181,7 +185,7 @@ typedef void (__fastcall *fnSendNotifyJoin)(char * szName, char * szPass);
 #endif
 #ifndef RECON_FPTD_fnSendQueryAdURL
 #define RECON_FPTD_fnSendQueryAdURL
-typedef int (__fastcall *fnSendQueryAdURL)(uint32_t dwParam);
+typedef char * (__fastcall *fnSendQueryAdURL)(uint32_t dwParam);
 #endif
 #ifndef RECON_FPTD_fnSendQueryRealms2
 #define RECON_FPTD_fnSendQueryRealms2
@@ -213,7 +217,7 @@ typedef void (__stdcall *fnSetDownloadCancelFlag)();
 #endif
 #ifndef RECON_FPTD_fnSetLoggingFlag
 #define RECON_FPTD_fnSetLoggingFlag
-typedef void (__fastcall *fnSetLoggingFlag)(uint32_t dwParam);
+typedef void (__fastcall *fnSetLoggingFlag)(struct D2IniConfigStrc * dwParam);
 #endif
 #ifndef RECON_FPTD_fnWaitForChangePassword
 #define RECON_FPTD_fnWaitForChangePassword
@@ -233,16 +237,18 @@ typedef BOOL (__stdcall *fpD2IniTrueFunction)();
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2BNetClientCallbacksStrc
+#define D2_DEFINED_D2BNetClientCallbacksStrc
 struct D2BNetClientCallbacksStrc {
-    /* 0x00 */ void (__fastcall *pfnSetLoggingFlag)(uint32_t);
-    /* 0x04 */ int (__fastcall *pfnConnectToBattleNet)();
+    /* 0x00 */ void (__fastcall *pfnSetLoggingFlag)(struct D2IniConfigStrc *);
+    /* 0x04 */ HANDLE (__fastcall *pfnConnectToBattleNet)();
     /* 0x08 */ int (__fastcall *pfnSendLogonRequest)(char *, char *);
     /* 0x0C */ BOOL (__stdcall *pfnWaitForLogonResponse)();
     /* 0x10 */ BOOL (__stdcall *pfnDisconnect)();
     /* 0x14 */ void (__fastcall *pfnSendChatCommand)(uint8_t *);
     /* 0x18 */ void * (__stdcall *pfnGetChannelNamePtr)();
     /* 0x1C */ void (__fastcall *pfnSendJoinChannel)(char *, int, int);
-    /* 0x20 */ int (__fastcall *pfnSendGetChannelList)(int);
+    /* 0x20 */ void * (__fastcall *pfnSendGetChannelList)(int);
     /* 0x24 */ int (__fastcall *pfnDequeueMessage)(int *, void *);
     /* 0x28 */ int (__fastcall *pfnGetStateAndClear)(int *);
     /* 0x2C */ void (__fastcall *pfnSendGetFileTime)(char *, uint32_t);
@@ -265,7 +271,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0x70 */ void (__stdcall *pfnSetDownloadCancelFlag)();
     /* 0x74 */ uint32_t (__fastcall *pfnSendWriteUserData)(char *, uint32_t, char * *, char * *);
     /* 0x78 */ uint32_t (__fastcall *pfnSendReadUserData)(char *, uint32_t, uint32_t, char * *);
-    /* 0x7C */ int (__fastcall *pfnGetStoredReadUserData)(int, int, char * *, int);
+    /* 0x7C */ int (__fastcall *pfnGetStoredReadUserData)(int, int, char * *, int *);
     /* 0x80 */ void (__fastcall *pfnGetConnectionState)(int *);
     /* 0x84 */ void (*pfnLogWriteLine)(char *, ...);
     /* 0x88 */ int (*pfnLogIndent)(int, int);
@@ -275,7 +281,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0x98 */ void * (__stdcall *pfnBnetLoadAndReturn)();
     /* 0x9C */ int (__fastcall *pfnSendChangePasswordRequest)(char *, char *, char *);
     /* 0xA0 */ BOOL (__fastcall *pfnWaitForChangePasswordResponse)(uint32_t *);
-    /* 0xA4 */ int (__fastcall *pfnSendQueryAdURL)(uint32_t);
+    /* 0xA4 */ char * (__fastcall *pfnSendQueryAdURL)(uint32_t);
     /* 0xA8 */ int (__fastcall *pfnSendNewsInfo)(uint32_t, uint32_t);
     /* 0xAC */ BOOL (__stdcall *pfnNewsShutdown)();
     /* 0xB0 */ char (__stdcall *pfnGetProtocolVersionChar)();
@@ -290,6 +296,9 @@ struct D2BNetClientCallbacksStrc {
     /* 0xD4 */ void * pfnReserved;
 };
 
+#endif // D2_DEFINED_D2BNetClientCallbacksStrc
+#ifndef D2_DEFINED_D2CharSelSaveDataStrc
+#define D2_DEFINED_D2CharSelSaveDataStrc
 struct D2CharSelSaveDataStrc {
     /* 0x00 */ uint16_t wEncodedVersion; // WriteEncodedInt14Bit(0xe) = appearance data version
     /* 0x02 */ uint8_t abEquipmentSlot1[11]; // Character component appearance data set 1 (helmet/armor/etc)
@@ -305,6 +314,9 @@ struct D2CharSelSaveDataStrc {
     /* 0x24 */ uint8_t abReserved[220]; // Unused reserved bytes
 };
 
+#endif // D2_DEFINED_D2CharSelSaveDataStrc
+#ifndef D2_DEFINED_D2IniConfigStrc
+#define D2_DEFINED_D2IniConfigStrc
 struct __attribute__((packed)) D2IniConfigStrc {
     /* 0x000 */ char bD2ExpMpqExistsOrLanugageCode[4];
     /* 0x004 */ BOOL bCRASHAPP;
@@ -388,3 +400,5 @@ struct __attribute__((packed)) D2IniConfigStrc {
     /* 0x3C3 */ uint8_t padding_0x3C3[8];
     /* 0x3CB */ eD2PlayerStatus neD2PlayerStatus;
 };
+
+#endif // D2_DEFINED_D2IniConfigStrc

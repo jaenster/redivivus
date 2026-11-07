@@ -17,6 +17,7 @@
         "STATLIST_BinarySearchInsertPos"
       ],
       "usedTypes": [
+        "D2StatInfoStrc",
         "int32_t"
       ]
     },
@@ -78,8 +79,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc",
-        "D2StatStrc",
-        "void *"
+        "D2StatInfoStrc",
+        "D2StatStrc"
       ]
     },
     {
@@ -159,6 +160,7 @@
         "STATLIST_GetEffectiveStatsArray"
       ],
       "usedTypes": [
+        "D2StatInfoStrc",
         "D2StatListExStrc"
       ]
     },
@@ -1654,6 +1656,9 @@
       "calledFunctions": [
         "Unreferenced_00626cf0",
         "FreeAnyStatList"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc"
       ]
     },
     {
@@ -2206,7 +2211,9 @@
       ],
       "usedTypes": [
         "D2ItemStatCostTxt",
+        "D2StatInfoStrc",
         "D2StatListExStrc",
+        "D2StatStrc",
         "D2UnitStrc",
         "uint32_t"
       ]
@@ -2278,7 +2285,9 @@
       ],
       "usedTypes": [
         "D2ItemStatCostTxt",
+        "D2StatInfoStrc",
         "D2StatListExStrc",
+        "D2StatStrc",
         "D2UnitStrc",
         "uint32_t"
       ]
@@ -2380,6 +2389,7 @@
         "RANDOM_RandomNumberSelector"
       ],
       "usedTypes": [
+        "D2ItemCalcContextStrc",
         "int32_t",
         "uint32_t"
       ]

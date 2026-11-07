@@ -2,8 +2,7 @@
 
 #include "Source/D2Direct3D/d3dTextureCache.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
@@ -23,7 +22,7 @@ namespace D2Direct3D::d3dTextureCache {
 // Initializes a texture cache pool with doubly-linked free list. Allocates array of 32-byte cache entries (capped at 1024), creates surface+texture for each, links them via next/prev pointers. Returns updated memory usage.
 // @sourcefile .\Src\d3dTextureCache.cpp
 int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, int nTextureWidth, int nTextureHeight) {
-    int* pCurrentNode;
+    D3DTextureCacheNodeStrc* pCurrentNode;
     int nBytesPerTexture = g_nBytesPerPixel * nTextureWidth * nTextureHeight;
     int nNodeIndex = (nAvailableMemory - nBaseMemoryUsed) / nBytesPerTexture;
     pCache->nMaxNodes = nNodeIndex;
@@ -38,21 +37,20 @@ int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCa
     nNodeIndex = 0;
     if (-1 < pCache->nMaxNodes - 1) {
       BOOL bSurfaceCreated;
-      nAvailableMemory = 0;
       do {
-        pCurrentNode = (int*)((uintptr_t)&pCache->pNodeBuffer->nIndex + nAvailableMemory);
-        *pCurrentNode = nNodeIndex;
+        pCurrentNode = &pCache->pNodeBuffer[nNodeIndex];
+        pCurrentNode->nIndex = nNodeIndex;
         if (nNodeIndex < pCache->nMaxNodes - 1) {
-          pCurrentNode[6] = (uintptr_t)&pCache->pNodeBuffer[1].nIndex + nAvailableMemory;
+          pCurrentNode->pNext = &pCache->pNodeBuffer[nNodeIndex + 1];
         }
         if (nNodeIndex > 0) {
-          pCurrentNode[7] = (uintptr_t)&pCache->pNodeBuffer[-1].nIndex + nAvailableMemory;
+          pCurrentNode->pPrev = &pCache->pNodeBuffer[nNodeIndex - 1];
         }
 
-        bSurfaceCreated = Renderer::RENDERER_D3D_CreateSurfaceWithTexture((IDirectDrawSurface7**)(pCurrentNode + 4), (void**)(pCurrentNode + 5), nTextureWidth, nTextureHeight);
+        bSurfaceCreated = Renderer::RENDERER_D3D_CreateSurfaceWithTexture(&pCurrentNode->pSurface, (void**)&pCurrentNode->pTexture, nTextureWidth, nTextureHeight);
         if (!bSurfaceCreated) {
-          if (pCurrentNode[7]) {
-            *(uint32_t*)(pCurrentNode[7] + 0x18) = 0;
+          if (pCurrentNode->pPrev) {
+            pCurrentNode->pPrev->pNext = 0;
           }
 
           pCache->nMaxNodes = nNodeIndex;
@@ -64,7 +62,6 @@ int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCa
           break;
         }
 
-        nAvailableMemory += 0x20;
         nNodeIndex++;
       } while (nNodeIndex <= pCache->nMaxNodes - 1);
     }
@@ -227,8 +224,8 @@ void __fastcall D3DTEXCACHE_InvalidateByTilePtr(D3DTextureCacheStrc * pCache) {
       pUsedNode->pNext = 0;
       pUsedNode->pPrev = 0;
       if (pUsedNode->pAssociatedTilePtr) {
-        *(uint32_t*)((int)pUsedNode->pAssociatedTilePtr + (int)pUsedNode->nTileSlotIndex * 8) = 0;
-        *(uint32_t*)((int)pUsedNode->pAssociatedTilePtr + (int)pUsedNode->nTileSlotIndex * 8 + 4) = 0;
+        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + (int)pUsedNode->nTileSlotIndex * 8) = 0;
+        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + (int)pUsedNode->nTileSlotIndex * 8 + 4) = 0;
         pUsedNode->pAssociatedTilePtr = 0;
       }
       if (!pCache->pFreeHead) {
@@ -318,8 +315,8 @@ int32_t __fastcall D3DTEXCACHE_EnsureAvailableNode(D3DTextureCacheStrc * pCache)
           pEvictNode->pNext = 0;
           pEvictNode->pPrev = 0;
           if (pEvictNode->pAssociatedTilePtr) {
-            *(uint32_t*)((int)pEvictNode->pAssociatedTilePtr + (int)pEvictNode->nTileSlotIndex * 8) = 0;
-            *(uint32_t*)((int)pEvictNode->pAssociatedTilePtr + (int)pEvictNode->nTileSlotIndex * 8 + 4) = 0;
+            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + (int)pEvictNode->nTileSlotIndex * 8) = 0;
+            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + (int)pEvictNode->nTileSlotIndex * 8 + 4) = 0;
             pEvictNode->pAssociatedTilePtr = 0;
           }
           if (!pCache->pFreeHead) {

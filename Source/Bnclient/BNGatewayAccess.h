@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Bnclient)
 #error "Bnclient header included by a module that may not use Bnclient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Bnclient) && !defined(D2_LOADS_Bnclient)
+#error "internal Bnclient header included from another module; include Bnclient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,6 +32,15 @@ struct _TIME_ZONE_INFORMATION {
 
 #endif // _WIN32
 
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+union UpdateGatewaysFromIni_Slotm1c {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int nFieldLen;
+    /* 0x00 */ char * nTmp1;
+};
+
+#endif // D2_MODULE_Bnclient
 namespace Bnclient::BNGatewayAccess {
 
 // Function declarations
@@ -54,8 +66,8 @@ int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex
 // An "Override.." value name sets bIsOverride=1 @0x51827f.
 // @sourcefile .\BNetGW.cpp
 void __thiscall GetGatewayList(void * pThis, char * szText);
-void __fastcall GetBattlenetGatewayList(int32_t nGatewayAccess);
-void __fastcall GetBattlenetRealmsList(int32_t nGatewayAccess);
+void __fastcall GetBattlenetGatewayList(struct D2BNetGatewayAccessStr * nGatewayAccess);
+void __fastcall GetBattlenetRealmsList(struct D2BNetGatewayAccessStr * nGatewayAccess);
 uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize);
 void __fastcall WriteDefaultGatewayList(char * szText);
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.

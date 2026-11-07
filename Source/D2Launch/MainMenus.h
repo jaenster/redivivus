@@ -4,13 +4,15 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Launch)
 #error "D2Launch header included by a module that may not use D2Launch (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Launch) && !defined(D2_LOADS_D2Launch)
+#error "internal D2Launch header included from another module; include D2Launch's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
 #include "Source/D2Client/D2ControlStrc.h"
 
 // Forward declarations
@@ -38,11 +40,16 @@ typedef void (__stdcall *pfnUIMenuInstance)();
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2BNetRealmEntryStrc
+#define D2_DEFINED_D2BNetRealmEntryStrc
 struct D2BNetRealmEntryStrc {
     /* 0x00 */ char * szName; // realm name, AllocClientMemory copy (MAINMENU_QueryAndBuildRealmList 0x119f); qsort key of MAINMENU_CompareRealmNames
     /* 0x04 */ char * szDescription; // realm description (0x11a4)
 };
 
+#endif // D2_DEFINED_D2BNetRealmEntryStrc
+#ifndef D2_DEFINED_D2UIMsgMousePosStrc
+#define D2_DEFINED_D2UIMsgMousePosStrc
 struct D2UIMsgMousePosStrc {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -50,6 +57,7 @@ struct D2UIMsgMousePosStrc {
     /* 0x02 */ uint16_t nMouseY; // HIWORD(lParam): cursor y
 };
 
+#endif // D2_DEFINED_D2UIMsgMousePosStrc
 struct __attribute__((packed)) D2WinAnimImage {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ struct FORMS_AnimFrameStrc * pAnimFrames; // Five-row state table indexed by nAnimState (e.g. gaCharSelectAnimFramesAmazon); 0 = a static image drawn from sControl.pDC6. Non-zero also installs DrawAnim as sControl.fpDrawAnim (005008f0). From asm of Draw 005005b0 and UpdateFrame 00500480; was eFrameType.
@@ -62,6 +70,8 @@ struct __attribute__((packed)) D2WinAnimImage {
     /* 0x5C */ BOOL bAnimate; // Draw advances nCurrentFrame only while non-zero; 1 at creation (00500911), written by D2WINANIMIMAGE_SetAnimate. Was bLooping.
 };
 
+#ifndef D2_DEFINED_D2WinAnimImageNotifyStrc
+#define D2_DEFINED_D2WinAnimImageNotifyStrc
 struct D2WinAnimImageNotifyStrc {
     /* 0x00 */ struct D2WinAnimImage * pAnimImage; // Written from ESI at 005004e7 (MOV [EBP-0x24],ESI) - the animation being notified
     /* 0x04 */ uint32_t unk_04; // Not written by the only producer D2WINANIMIMAGE_UpdateFrame @00500480
@@ -69,6 +79,9 @@ struct D2WinAnimImageNotifyStrc {
     /* 0x0C */ BOOL bStateIsOne; // Written from ECX at 005004ea (SETZ CL on EAX==1) - the new animation state equals 1
 };
 
+#endif // D2_DEFINED_D2WinAnimImageNotifyStrc
+#ifndef D2_DEFINED_FORMS_PredefinedFormStrc
+#define D2_DEFINED_FORMS_PredefinedFormStrc
 struct __attribute__((packed)) FORMS_PredefinedFormStrc {
     /* 0x00 */ eD2FormType neD2FormType;
     /* 0x04 */ int aParams[4];
@@ -81,6 +94,7 @@ struct __attribute__((packed)) FORMS_PredefinedFormStrc {
     /* 0x2C */ uint32_t nFlagsOrType; // Button = nButtonFlags (D2WinButton +0x40 bit flags: 0, 1, 2, 4, 6, 8, 0x10, 0x20, 0x40 occur); uint32 flags/count for TextBox/EditBox/AccountList
 };
 
+#endif // D2_DEFINED_FORMS_PredefinedFormStrc
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
 struct tagPOINT {
@@ -90,11 +104,16 @@ struct tagPOINT {
 
 #endif // _WIN32
 
+#ifndef D2_DEFINED_D2UIMsgLParamUnion
+#define D2_DEFINED_D2UIMsgLParamUnion
 union D2UIMsgLParamUnion {
     /* 0x00 */ int32_t nLParam; // raw LPARAM; key messages test bit 30 (auto-repeat)
     /* 0x00 */ D2UIMsgMousePosStrc sMousePos; // mouse messages: x in the low word, y in the high word
 };
 
+#endif // D2_DEFINED_D2UIMsgLParamUnion
+#ifndef D2_DEFINED_D2ControlMsg
+#define D2_DEFINED_D2ControlMsg
 struct __attribute__((packed)) D2ControlMsg {
     /* 0x00 */ struct D2ControlStrc * pControl;
     /* 0x04 */ int uMsg;
@@ -106,6 +125,7 @@ struct __attribute__((packed)) D2ControlMsg {
     /* 0x1C */ uint32_t dwResult; // Handler result
 };
 
+#endif // D2_DEFINED_D2ControlMsg
 namespace D2Launch::MainMenus {
 
 // Function declarations
@@ -113,13 +133,13 @@ BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
-void __stdcall FORMS_DestroyListJmp_Unref_0041f930();
-void __stdcall FORMS_DestroyListJmp_Unref_0041f940();
-int __fastcall Unreferenced_0042e5c0(int param_1);
+void __fastcall FORMS_DestroyListJmp_Unref_0041f930(uint32_t * pEncoder);
+void __fastcall FORMS_DestroyListJmp_Unref_0041f940(uint32_t * pEncoder);
+uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue);
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
 void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
-int __fastcall Unreferenced_0042e620(int param_1);
-int __fastcall Unreferenced_0042e630(int param_1);
+int __fastcall Unreferenced_0042e620(uint16_t * param_1);
+int __fastcall Unreferenced_0042e630(uint16_t * param_1);
 void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut);
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance);
 void __stdcall MAINMENU_SetGlobalFlag();
@@ -129,7 +149,7 @@ void __stdcall IMAGE_LoadPredefinedImages();
 void __stdcall IMAGE_FreePredefinedImages();
 // Loads a palette pair (.dat and .pl2 files) for rendering. Constructs full paths by prepending "DATA\\GLOBAL\\" to the input filenames, checks if the palette is "palette\\fechar\\pal.dat" via string comparison, sets global flag gnIsFecharPalette accordingly, then calls D2Win palette loader with the constructed paths.
 int __fastcall D2GFX_SetPaletteForDraw(char * szPaletteDat, char * szPalettePl2);
-int Unreferenced_0042f370();
+void __stdcall Unreferenced_0042f370();
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromList(int32_t nFormIndex);
 void __stdcall FORMS_DestroyList();
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nFormIndex);
@@ -172,8 +192,8 @@ void __fastcall MAINMENU_SetGlobalValue3(uint32_t bShowBNetRealmPanel);
 void __stdcall MAINMENU_UpdateIPAddressDisplay();
 BOOL __stdcall MAINMENU_OnPressUpdateIpAddressDisplay(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_TCPIPOptions();
-BOOL __stdcall MAINMENU_DisableControlIfDataNonZero(int32_t pControlData);
-BOOL __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t pControlData);
+BOOL __stdcall MAINMENU_DisableControlIfDataNonZero(struct D2ControlMsg * pControlData);
+BOOL __stdcall MAINMENU_DisableControlIfDataNonZero2(struct D2ControlMsg * pControlData);
 // Shows BNet account creation UI. Clears gbPasswordChangeInProgress, creates form with username/password/confirmation fields. Entry point for new account flow from main menu.
 void __stdcall UIMENU_CreateBattleNetAccount();
 void __stdcall UIMENU_BackgroundAndExpansionText();
@@ -237,7 +257,7 @@ void __stdcall MAINMENU_AppendCreditsEnd();
 // @sourcefile .\Src\MainMenus.cpp
 uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount);
 void __stdcall MAINMENU_SyncCreditsColumns();
-int Unreferenced_00431020();
+void __stdcall Unreferenced_00431020();
 // @sourcefile .\Src\MainMenus.cpp
 // Registers: nReserved (ECX) is 0 at the only call site and not read.
 int __fastcall MAINMENU_DisplayCredits(int32_t nReserved);
@@ -256,7 +276,7 @@ BOOL __stdcall MAINMENU_OnPressTcpIpOptions(struct D2ControlMsg * pControlMsg);
 uint32_t __fastcall MAINMENU_DetectDoubleClick(struct D2ControlMsg * pMsg);
 void __stdcall UIMENU_ShowRealmNameOnButton();
 BOOL __stdcall MAINMENU_CleanupSoundAndClearMessageLoop(struct D2ControlMsg * pControlMsg);
-int __fastcall Unreferenced_00431c60(int param_1, int param_2);
+void __fastcall Unreferenced_00431c60(uint8_t * pPacket, int nSize);
 int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex);
 int __stdcall MAINMENU_ClearLoopFlagPump(int nFrameIndex);
 BOOL __stdcall UIMENU_TCPIPAddressInput(struct D2ControlMsg * pControlMsg);
@@ -354,6 +374,7 @@ void __stdcall UIMENU_ConfirmCreateCharacter();
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
 BOOL __stdcall MAINMENU_OnSubmitCreateBattleNetAccount(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(struct D2ControlStrc * pControl);
+void __stdcall UI_ClearCursorAnimationState_Unref_00436ac0();
 void __stdcall MAINMENU_BnetConnectionProgress();
 BOOL __stdcall MAINMENU_OnPressConfirmSkipEmailPopup(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressAcceptEmailAddress(struct D2ControlMsg * pControlMsg);

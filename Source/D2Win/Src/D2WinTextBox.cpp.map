@@ -4,24 +4,6 @@
   "file": "Source/D2Win/Src/D2WinTextBox.cpp",
   "functions": [
     {
-      "name": "EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine",
-      "address": "0043dba0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0043dba0"
-        }
-      ],
-      "namespace": "D2Win::Src::D2WinTextBox",
-      "calledFunctions": [
-        "EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine",
-        "D2WINTEXTBOX_SetSelectedLine"
-      ],
-      "usedTypes": [
-        "D2WinEditBox"
-      ]
-    },
-    {
       "name": "D2WINTEXTBOX_ComputeLineSpacingForLanguage",
       "address": "004fb5a0",
       "lines": [
@@ -61,6 +43,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "int32_t"
       ]
     },
@@ -107,6 +90,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
       ]
@@ -130,6 +114,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "int32_t"
       ]
     },
@@ -214,7 +199,6 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
-        "DrawEx",
         "int32_t"
       ]
     },
@@ -237,6 +221,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "int32_t"
       ]
     },
@@ -261,7 +246,6 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
-        "DC6",
         "int32_t",
         "uint32_t"
       ]
@@ -284,7 +268,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
-        "DrawEx",
+        "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
       ]
@@ -307,6 +291,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
       ]
@@ -392,6 +377,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "int32_t"
       ]
     },
@@ -451,6 +437,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "int32_t"
       ]
     },
@@ -472,6 +459,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "int32_t"
       ]
     },
@@ -524,15 +512,10 @@
         "exit"
       ],
       "usedTypes": [
-        "D2ControlStrc",
         "D2GfxDataStrc",
         "D2WinTextBox",
         "DC6",
-        "Draw",
         "GLOBALPALLETE",
-        "ListCheck",
-        "Mouse",
-        "Push",
         "WCHAR",
         "int32_t",
         "uint32_t"
@@ -560,7 +543,6 @@
       "usedTypes": [
         "D2ControlMsg",
         "D2WinTextBox",
-        "DrawEx",
         "int32_t",
         "uint32_t"
       ]
@@ -588,7 +570,6 @@
         "D2ControlMsg",
         "D2WinEditBox",
         "D2WinTextBox",
-        "DrawEx",
         "int32_t",
         "uint32_t"
       ]
@@ -858,6 +839,7 @@
       "usedTypes": [
         "D2WinScrollbar",
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
       ]
@@ -885,6 +867,7 @@
       ],
       "usedTypes": [
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
       ]

@@ -7,12 +7,10 @@
 #include "Source/Fog/Src/QServer/QServer98.h"
 #include "Source/Fog/Src/QServer/QServerNT.h"
 #include "Source/Fog/Src/Safesock.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/Fog/Fog.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Net/Game/Server.data.h"
-#include "Source/Fog/Fog.h"
+#include "Source/Fog/FogRoot.h"
 #include "Source/Fog/QServer.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -775,13 +773,13 @@ static void FreeHacklistBuckets(D2QServerStrc * pQServer) {
     LeaveCriticalSection(&pQServer->csHacklist);
 }
 
-void __fastcall Unreferenced_006bf170(int param_1) {
-    if (*(int*)param_1) {
-      QServer::QServerNT::AwaitAndClose((D2QServerStrc*)param_1);
+void __fastcall Unreferenced_006bf170(D2QServerStrc * param_1) {
+    if (param_1->bUseNtLocalMode) {
+      QServer::QServerNT::AwaitAndClose(param_1);
       return;
     }
 
-    QServer::QServer98::QSERVER_CloseAllConnections((D2QServerStrc*)param_1);
+    QServer::QServer98::QSERVER_CloseAllConnections(param_1);
 }
 
 // Increments active-connection counter for a client IP in QServer's per-IP hash table.
@@ -991,7 +989,7 @@ int __stdcall CountAllQueuedPackets(D2QServerStrc * pQServer) {
 // The body here is RET 0x4 (bytes c2 04 00) - a __stdcall
 // no-op that pops one dword of arguments. Sole caller is D2Game::Game::Server::_NullSub
 // @0052b6f0. The name states the stack cleanup, which is the only recoverable fact.
-void __stdcall _NullSubRet4(uint32_t dwArg1) {
+void __stdcall _NullSubRet4(D2QServerStrc * dwArg1) {
 
 }
 
@@ -1232,7 +1230,7 @@ int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int
 
     int* pQServer2 = 0;
     do {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)((uintptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (int)(pQServer_00->pClientBucketLocks - 3)));
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)((intptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (char*)(pQServer_00->pClientBucketLocks - 3)));
       for (pQServerClient = pQServer_00->pQServerClientList[nBucketIndex]; pQServerClient; pQServerClient = pQServerClient->pNextByToken) {
         if (!pQServerClient->bClosePending) {
           if (pQServer_00->bUseNtLocalMode) {
@@ -1243,7 +1241,7 @@ int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int
         }
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)((uintptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (int)(pQServer_00->pClientBucketLocks - 3)));
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)((intptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (char*)(pQServer_00->pClientBucketLocks - 3)));
       nBucketIndex++;
       pQServer2 = &((D2QServerStrc*)pQServer2)->nClientBucketCountForScan;
     } while (nBucketIndex < (uint32_t)pQServer_00->nClientBucketCount);

@@ -93,9 +93,9 @@
         "DRLGPRESET_TransferMapAI"
       ],
       "usedTypes": [
+        "D2MapAIStrc",
         "D2QuestDataA3Q0Strc",
-        "D2QuestDataStrc",
-        "int32_t"
+        "D2QuestDataStrc"
       ]
     },
     {

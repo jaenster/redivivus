@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2OverlayTxt;
 struct D2RoomStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2UnitType;
@@ -72,8 +76,8 @@ void __fastcall DRLGROOM_SpawnRandomMonsters(struct D2RoomStrc * pRoom);
 int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppBestUnit, int32_t * pnBestValue, fnRoomUnitScanCallback pfnCallback);
 int __fastcall CLIENT_FindClosestDeadUnitCallback(struct D2UnitStrc * pSourceUnit, struct D2UnitStrc * pCandidate, struct D2UnitStrc * * ppBestUnit, int * pnBestDistance);
 eD2UnitType __fastcall CLIENT_FindNearbyCorpseCallback(struct D2UnitStrc * pSourceUnit, struct D2UnitStrc * pCandidate, struct D2UnitStrc * * ppBestUnit, int * pnBestDistance);
-void __fastcall CLIENT_RegisterActiveUnitInSlot(int32_t nUnitId);
-void __fastcall CLIENT_UnregisterActiveUnitFromSlot(int32_t nUnitId);
+void __fastcall CLIENT_RegisterActiveUnitInSlot(struct D2UnitStrc * nUnitId);
+void __fastcall CLIENT_UnregisterActiveUnitFromSlot(struct D2UnitStrc * nUnitId);
 void __stdcall CLIENT_ClearActiveUnitSlotArray();
 // CLIENT-SIDE AI BEHAVIOR DISPATCHER:
 // Similar to server-side 4-stage pipeline but simpler
@@ -84,15 +88,15 @@ void __stdcall CLIENT_ClearActiveUnitSlotArray();
 // - Special cases: Corpse seekers, idle wanderers, basic chase
 // Called from CUNIT_UpdateClientFramesAndAI
 void __fastcall CLIENT_DispatchMonsterAiBehavior(struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_0046d9c0(int param_1);
+struct D2OverlayTxt * __fastcall Unreferenced_0046d9c0(int param_1);
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(struct D2UnitStrc * pUnit);
 int __fastcall CLIENT_GetEffectiveAnimMode(struct D2UnitStrc * pUnit);
 DWORD __fastcall CLIENT_GetEffectiveClassId(struct D2UnitStrc * pUnit);
 void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690();
 void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776a0();
 void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776b0();
-void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940();
-void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0();
+void __fastcall thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940(LPVOID * ppWardenModule);
+void __fastcall thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0(LPVOID * ppWardenModule);
 #endif // D2_MODULE_D2Client
 // 19 internal functions (defined in .cpp)
 

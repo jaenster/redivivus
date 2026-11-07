@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -26,10 +29,15 @@ typedef uint32_t eD2UnitStat;
 struct D2MonsterPathParamStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2MonsterAiStrc
+#define D2_DEFINED_D2MonsterAiStrc
 struct D2MonsterAiStrc {
     /* 0x00 */ struct D2MonsterAiSubStrc * pAiSub;
 };
 
+#endif // D2_DEFINED_D2MonsterAiStrc
+#ifndef D2_DEFINED_D2MonsterPathParamOrNameUnion
+#define D2_DEFINED_D2MonsterPathParamOrNameUnion
 union D2MonsterPathParamOrNameUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
@@ -37,6 +45,9 @@ union D2MonsterPathParamOrNameUnion {
     /* 0x00 */ struct D2MonsterPathParamStrc * pPathParam; // server: AllocAiParam block
 };
 
+#endif // D2_DEFINED_D2MonsterPathParamOrNameUnion
+#ifndef D2_DEFINED_D2MonsterPathParamStrc
+#define D2_DEFINED_D2MonsterPathParamStrc
 struct D2MonsterPathParamStrc {
     /* 0x00 */ uint8_t bPathFlag0; // cleared when the cached target changes or a path is found (GetPathCount)
     /* 0x01 */ uint8_t bPathFlag1;
@@ -55,6 +66,7 @@ struct D2MonsterPathParamStrc {
     /* 0x23 */ uint8_t field_0x23;
 };
 
+#endif // D2_DEFINED_D2MonsterPathParamStrc
 namespace D2Game::Monsters {
 
 // Function declarations
@@ -62,7 +74,7 @@ namespace D2Game::Monsters {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2MonLvlTxt * __fastcall GetMonLvlTxt(int32_t nMonLvlId);
 int Unreferenced_005a0030();
-int __fastcall Unreferenced_005a0040(int param_1);
+struct D2MonUModTxt * __fastcall Unreferenced_005a0040(int param_1);
 int Unreferenced_005a0060();
 uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(struct D2UnitStrc * pUnit, int32_t nMonTypeFlag);
 int32_t __fastcall GetUmodConstant(int32_t nUmodId);

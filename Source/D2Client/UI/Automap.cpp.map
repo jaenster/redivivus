@@ -399,6 +399,9 @@
       "namespace": "D2Client::UI::Automap",
       "calledFunctions": [
         "Unreferenced_00457ac0"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc"
       ]
     },
     {

@@ -2,8 +2,8 @@
 
 #include "Source/D2Common/Chat.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/Fog/Memory.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

@@ -204,6 +204,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -403,6 +404,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2UnitStrc",
         "int32_t",
         "uint8_t"
       ]
@@ -445,6 +447,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -466,6 +469,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -531,6 +535,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -766,6 +771,9 @@
       "calledFunctions": [
         "Unreferenced_004cb170",
         "TxtGetSoundIdLineFromUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {
@@ -781,6 +789,9 @@
       "calledFunctions": [
         "Unreferenced_004cb180",
         "TxtGetSoundIdLineFromUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {

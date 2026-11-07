@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -39,6 +42,8 @@ struct D2GfxNinePatchCoordsStrc {
 };
 
 #endif // D2_MODULE_D2Win
+#ifndef D2_DEFINED_D2GfxTileRectStrc
+#define D2_DEFINED_D2GfxTileRectStrc
 struct D2GfxTileRectStrc {
     /* 0x00 */ int nX0; // Left screen X
     /* 0x04 */ int nX1; // Right screen X
@@ -46,6 +51,7 @@ struct D2GfxTileRectStrc {
     /* 0x0C */ int nY1; // Bottom screen Y
 };
 
+#endif // D2_DEFINED_D2GfxTileRectStrc
 namespace D2Win::Src::D2WinImage {
 
 // Function declarations
@@ -59,7 +65,7 @@ BOOL __stdcall D2WINIMAGE_SetFrame(::D2WinImage * pImage, int32_t nFrame);
 // Sets eDrawMode (+0x44) to DRAW_SOLID; the second argument is never read (the only caller passes DRAW_LIGHTTRANSPARENT, Mac 1.14d also stores 5); halts unless the control type is 2 (image); returns TRUE.
 // The asm stores the constant 5 to [EAX+0x44] (004fd19a).
 BOOL __stdcall D2WINIMAGE_SetDrawModeSolid(::D2WinImage * pImage, DRAWMODE eDrawModeIgnored);
-int __stdcall D2WINIMAGE_StopAnimation(int * pImage);
+int __stdcall D2WINIMAGE_StopAnimation(::D2WinImage * pImage);
 BOOL __fastcall Draw(::D2WinImage * pImage);
 BOOL __fastcall Draw(struct D2WinImageEx * pImageEx);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);

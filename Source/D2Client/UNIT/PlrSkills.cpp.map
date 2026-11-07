@@ -978,9 +978,9 @@
       ],
       "usedTypes": [
         "D2StatListExStrc",
-        "D2UnitDataUnion",
         "D2UnitStrc",
         "eD2Skills",
+        "eD2States",
         "eD2UnitStat",
         "uint32_t"
       ]

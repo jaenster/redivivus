@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -66,10 +69,6 @@ typedef int (__fastcall *pfnSkillNoTargetCb)(struct D2SkillCallbackContextStrc *
 #define RECON_FPTD_pfnSkillRangeCb
 typedef void (__fastcall *pfnSkillRangeCb)(struct D2UnitStrc * pUnit, void * pCtx);
 #endif
-#ifndef RECON_FPTD_pfnUIMenuInstance
-#define RECON_FPTD_pfnUIMenuInstance
-typedef void (__stdcall *pfnUIMenuInstance)();
-#endif
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -107,6 +106,8 @@ struct __attribute__((packed)) D2BaalWaveParamStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2UnitFindArgStrc
+#define D2_DEFINED_D2UnitFindArgStrc
 struct D2UnitFindArgStrc {
     /* 0x00 */ int nFlags;
     /* 0x04 */ int nPad04; // Unused padding; zeroed by memset(0x38), never read/written by any consumer (TestUnit, callers).
@@ -124,6 +125,7 @@ struct D2UnitFindArgStrc {
     /* 0x34 */ int nReserved34; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
 };
 
+#endif // D2_DEFINED_D2UnitFindArgStrc
 namespace D2Game::SKILLS::SkillsServer {
 
 // Function declarations
@@ -181,7 +183,7 @@ uint32_t __fastcall IsSkillBoundToClass(struct D2UnitStrc * pUnit, int32_t nSkil
 // Removes all active states on pUnit that share the same group as eState (from States.txt). For each matching state found active, calls SetState(0), removes its stat list via STATLIST_RemoveAndRecalc/FreeStatList, and sets bDidRemoveState. If bRemoveOnly is 0, the target state itself is exempt from removal. Returns 1 if any state was removed, 0 otherwise (or if eState has no group).
 BOOL __fastcall D2UpdateState(struct D2UnitStrc * pUnit, eD2States eState, int32_t bRemoveOnly);
 // Sets skill data by entry type. The second parameter is a whole 32-bit value in EDX; typed from DL alone it was truncated to a byte.
-void __fastcall SKILLS_SetSkillDataByEType(struct D2UnitStrc * pUnitStrc, uint32_t nUnitLow, uint32_t dwValue, uint32_t nSkillId);
+void __fastcall SKILLS_SetSkillDataByEType(struct D2UnitStrc * pUnitStrc, struct D2DamageStrc * nUnitLow, uint32_t dwValue, uint32_t nSkillId);
 // Accumulates one elemental damage component (fire/lightning/magic/cold/poison/life-leech/mana-leech/stam-leech/stun/burn/freeze) into a D2DamageStrc event for pUnit. If eSkillType is unkwn5, rolls pUnit's seed to pick a random element from geSkillETypeTable and writes the resolved type back via pnParam. Sets dwHitClass and optionally outputs a hit-SFX id to pdwHitSfxOut.
 void __fastcall SERVER_AppendDamageToUnitEvent(struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent, eSkillEType eSkillType, int32_t randomizeValue, int32_t nDuration, uint32_t * pdwHitSfxOut, int * pnSkillETypeOut);
 BOOL __fastcall SKILLS_SrvStFn01_Attack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -299,7 +301,7 @@ void __fastcall ClearSkills(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __thiscall SKILL_ApplyStunState(void * pThis, struct D2UnitStrc * pUnit, eD2States eState);
 void __fastcall SKILL_StunExpireAndRestoreAi(struct D2UnitStrc * pUnit, eD2States eState, uint32_t pStatListEx);
 struct D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance);
+void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, eD2States pfnMenuInstance);
 #endif // D2_MODULE_D2Game
 // 8 internal functions (defined in .cpp)
 

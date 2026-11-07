@@ -15,6 +15,9 @@
       "namespace": "D2Client::DataTbls::MonsterTbls",
       "calledFunctions": [
         "Unreferenced_00451fb0"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt"
       ]
     },
     {

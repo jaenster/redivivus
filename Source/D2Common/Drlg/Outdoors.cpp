@@ -3,10 +3,8 @@
 #include "Source/D2Common/Drlg/Outdoors.h"
 #include "Source/D2Common/D2UnkOutdoorStrc.h"
 #include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgOrthStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgVertexStrc.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Drlg/DrlgGrid.h"
@@ -20,7 +18,7 @@
 #include "Source/D2Common/Drlg/TileSub.h"
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Common/Seed.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/Outdoors.data.h"
@@ -373,7 +371,7 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
 
 // Paste preset units from a LvlSub definition into the active outdoor room. Converts bounds to world coordinates, then for each preset check if it falls inside the sub-rect and spawn a new preset unit offset into the room’s local space.
 void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t roomY, D2DrlgWallLayerGridsStrc * pRoomCtx, D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSub, int * pRect) {
-    uint32_t* pCurrentPreset;
+    D2PresetUnitStrc* pCurrentPreset;
     int presetY1;
     int rectX0 = *pRect;
     int rectY0 = pRect[1];
@@ -386,13 +384,13 @@ void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t room
     Transform::CoordsRoomToWorld(&rectX1, &rectY1);
     int presetY0 = rectY0;
     int presetX0 = rectX0;
-    for (pCurrentPreset = (uint32_t*)&pLvlSub->pDrlgFile->pPresetUnit->nMode; pCurrentPreset; pCurrentPreset = (uint32_t*)pCurrentPreset[3]) {
+    for (pCurrentPreset = pLvlSub->pDrlgFile->pPresetUnit; pCurrentPreset; pCurrentPreset = pCurrentPreset->pPresetUnitNext) {
       int presetX1;
-      presetX1 = pCurrentPreset[2];
+      presetX1 = pCurrentPreset->nPosX;
       if (presetX1 > presetX0) {
-        presetY1 = pCurrentPreset[6];
+        presetY1 = pCurrentPreset->nPosY;
         if (presetY1 > presetY0 && presetX1 < rectX1 + presetX0 && presetY1 < rectY1 + presetY0) {
-          DrlgRoom::AllocPresetUnit(pRoomCtx->pRoomEx, pMemory, pCurrentPreset[5], pCurrentPreset[1], *pCurrentPreset, presetX1 - presetX0 + worldYBase, presetY1 - presetY0 + worldXBase);
+          DrlgRoom::AllocPresetUnit(pRoomCtx->pRoomEx, pMemory, pCurrentPreset->eType, pCurrentPreset->nClassId, pCurrentPreset->nMode, presetX1 - presetX0 + worldYBase, presetY1 - presetY0 + worldXBase);
           presetX0 = rectX0;
           presetY0 = rectY0;
         }
@@ -1041,7 +1039,7 @@ BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPres
 
     nGridWidthM2 = 0;
     if ((int)nTotalCells > 0) {
-      nSwapCellX = (uintptr_t)&pOutdoorsData->sGridOutdoor;
+      nSwapCellX = (intptr_t)&pOutdoorsData->sGridOutdoor;
       do {
         nSeedHighTmp = aCellShuffleTable[nGridWidthM2 * 2 + 1] + 1;
         nGridX = aCellShuffleTable[nGridWidthM2 * 2] + 1;
@@ -1358,29 +1356,29 @@ void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
 
 // Snap each outdoor vertex to 8-tile grid (divide by 8) and merge duplicate vertices by latching next pointer, OR-ing flags, and freeing redundant entries.
 // @sourcefile .\DRLG\Outdoors.cpp
-static void DRLGOUTDOOR_SimplifyOutdoorPoints(D2PoolManagerStrc * pMemory, int * * ppnParam) {
-    int* pPoint = *ppnParam;
+static void DRLGOUTDOOR_SimplifyOutdoorPoints(D2PoolManagerStrc * pMemory, D2DrlgVertexStrc * * ppnParam) {
+    D2DrlgVertexStrc* pPoint = *ppnParam;
     do {
-      *pPoint = *pPoint / 8;
-      pPoint[1] = pPoint[1] / 8;
-      pPoint = (int*)pPoint[4];
+      pPoint->nPosX = pPoint->nPosX / 8;
+      pPoint->nPosY = pPoint->nPosY / 8;
+      pPoint = pPoint->pNext;
     } while (pPoint != *ppnParam);
 
     do {
-      int* pNextPoint;
-      pNextPoint = (int*)pPoint[4];
-      if (*pPoint == *pNextPoint && pPoint[1] == pNextPoint[1]) {
-        if (pNextPoint == *ppnParam) {
+      D2DrlgVertexStrc* pMemoryToFree;
+      pMemoryToFree = pPoint->pNext;
+      if (pPoint->nPosX == pMemoryToFree->nPosX && pPoint->nPosY == pMemoryToFree->nPosY) {
+        if (pMemoryToFree == *ppnParam) {
           *ppnParam = pPoint;
         }
 
-        pPoint[4] = pNextPoint[4];
-        pPoint[3] |= pNextPoint[3];
-        *(char*)(pPoint + 2) = (char)pNextPoint[2];
-        D2_FREE_POOL_AT(pMemory, pNextPoint, ".\\DRLG\\Outdoors.cpp", 0x2cb);
+        pPoint->pNext = pMemoryToFree->pNext;
+        pPoint->dwFlags |= pMemoryToFree->dwFlags;
+        pPoint->nDirection = pMemoryToFree->nDirection;
+        D2_FREE_POOL_AT(pMemory, pMemoryToFree, ".\\DRLG\\Outdoors.cpp", 0x2cb);
       }
 
-      pPoint = (int*)pPoint[4];
+      pPoint = pPoint->pNext;
     } while (pPoint != *ppnParam);
 }
 
@@ -1455,8 +1453,8 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
     }
 }
 
-int __fastcall Unreferenced_00675290(int param_1, int param_2) {
-    return *(int*)(*(int*)(param_1 + 0x14) + 0x68 + param_2 * 4);
+D2DrlgVertexStrc * __fastcall Unreferenced_00675290(D2DrlgLevelStrc * param_1, int param_2) {
+    return param_1->pDrlgLevelData.pDrlgLevelOutdoorsData->pAdjacentVertices[param_2];
 }
 
 void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId) {
@@ -1503,7 +1501,7 @@ void __fastcall DRLGOUTDOOR_GenerateLevel(D2DrlgLevelStrc * pLevel) {
     DrlgGrid::DRLGGRID_InitGridCells(pMemory, &pDrlgLevelData->sGridMisc, nWidth, nTileSize);
     eAct eActNoTmp = GetActNoFromLevelNumber(pLevel->eD2LevelId);
     DrlgVer::DRLGVER_CreateRoomVertices(pMemory, &pDrlgLevelData->pVertices, (D2DrlgCoordStrc*)&pLevel->sCoordinatesAndSize, '\0', pDrlgLevelData->pOrthData);
-    DRLGOUTDOOR_SimplifyOutdoorPoints(pMemory, (int**)&pDrlgLevelData->pVertices);
+    DRLGOUTDOOR_SimplifyOutdoorPoints(pMemory, &pDrlgLevelData->pVertices);
     eAct eActNo = ACT_II;
     if (pLevel->eD2LevelId != 0x86) {
       eActNo = eActNoTmp;

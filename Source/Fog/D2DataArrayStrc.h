@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +15,8 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
+#ifndef D2_DEFINED_D2DataArrayStrc
+#define D2_DEFINED_D2DataArrayStrc
 struct D2DataArrayStrc {
     /* 0x000 */ char szName[256];
     /* 0x100 */ int numObjects; // Total capacity
@@ -22,5 +27,7 @@ struct D2DataArrayStrc {
     /* 0x114 */ int nUsedCount; // Zeroed on init
     /* 0x118 */ short nMagic; // Set to 0x8000 on init
     /* 0x11A */ short pad_0x11A; // Padding
-    /* 0x11C */ void * pData; // Points to inline data buffer (allocated at this+1 in FOG_CreateDataArray)
+    /* 0x11C */ uint8_t * pData; // Points to inline data buffer (allocated at this+1 in FOG_CreateDataArray)
 };
+
+#endif // D2_DEFINED_D2DataArrayStrc

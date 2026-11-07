@@ -7,11 +7,13 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Launch)
 #error "D2Launch header included by a module that may not use D2Launch (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Launch) && !defined(D2_LOADS_D2Launch)
+#error "internal D2Launch header included from another module; include D2Launch's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2WinTextBox;
 struct DC6;
 struct FORMS_AnimFrameStrc;
 
@@ -111,5 +113,3 @@ extern DC6 * DC6_FrontEnd_paladin_pafws;
 extern uint32_t gbCinematicsMenuShown;
 extern uint32_t fpInsertPlayCd;
 extern uint32_t gbCdCheckPassed[25];
-extern ::D2WinTextBox * gpCtlBnetProgressBar;
-extern ::D2WinTextBox * gbBnetConnectionTimerActive;

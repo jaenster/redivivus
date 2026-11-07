@@ -6,7 +6,7 @@
 #include "Source/D2Common/Drlg/DrlgGrid.h"
 #include "Source/D2Common/Drlg/DrlgVer.h"
 #include "Source/D2Common/Drlg/Maze.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/D2DrlgStrc.h"
 

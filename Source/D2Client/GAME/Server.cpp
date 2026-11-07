@@ -3,7 +3,7 @@
 #include "Source/D2Client/GAME/Server.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Game/GAME/Server.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"

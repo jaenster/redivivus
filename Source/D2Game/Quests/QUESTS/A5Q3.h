@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -24,17 +27,23 @@ struct SGAMEDATA;
 struct D2PathPosStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2MapAIStrc
+#define D2_DEFINED_D2MapAIStrc
 struct D2MapAIStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2PathPosStrc * pPosition;
 };
 
+#endif // D2_DEFINED_D2MapAIStrc
+#ifndef D2_DEFINED_D2PathPosStrc
+#define D2_DEFINED_D2PathPosStrc
 struct D2PathPosStrc {
     /* 0x00 */ int nDirection;
     /* 0x04 */ int nXpos;
     /* 0x08 */ int nYpos;
 };
 
+#endif // D2_DEFINED_D2PathPosStrc
 namespace D2Game::Quests::QUESTS::A5Q3 {
 
 // Function declarations

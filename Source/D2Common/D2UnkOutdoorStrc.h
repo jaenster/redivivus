@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -40,6 +43,8 @@ typedef BOOL (__fastcall *fpDrlgOutdoorValidateBorderCell)(struct D2DrlgLevelStr
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2UnkOutdoorStrc
+#define D2_DEFINED_D2UnkOutdoorStrc
 struct D2UnkOutdoorStrc {
     /* 0x00 */ struct D2DrlgLevelStrc * pLevel;
     /* 0x04 */ struct D2DrlgGridStrc * pCoordsGrid; // Pointer into pDrlgLevelData+0x54 (bounds/coord grid)
@@ -56,3 +61,5 @@ struct D2UnkOutdoorStrc {
     /* 0x30 */ void (__fastcall *pfnSetBlankCell)(struct D2DrlgLevelStrc *, int32_t, int32_t); // Call site 0066f687 (CALL EAX), same 3-arg fastcall shape. Concrete callee: SetBlankGridCell @006741a0.
     /* 0x34 */ void (__fastcall *pfnSpawnPreset)(struct D2DrlgLevelStrc *, int, int, int, int, int); // Call site 0066f63b (CALL EAX): ECX=pDrlgLevel, EDX=nX, four pushed args. Concrete callee: SpawnOutdoorLevelPresetEx @006743c0.
 };
+
+#endif // D2_DEFINED_D2UnkOutdoorStrc

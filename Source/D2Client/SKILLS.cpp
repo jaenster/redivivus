@@ -9,29 +9,10 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Path.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units/Missile.h"
-#include "Source/D2Common/Units/UnitFinds.h"
-#include "Source/D2Game/SKILLS/SkillsServer.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -437,7 +418,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsMonsterOrPlayer(D2UnitStrc * pUnit
 }
 
 // Client-side helper that spawns up to nCount² missiles of type pMissileId in a circular area of radius nCount around (nCenterX, nCenterY). Uses a seeded PRNG to pick random offsets within the diameter; skips positions outside the circle or without a valid nearby room. Used by client skill effects to display visual missile bursts.
-void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSeed, uint8_t * pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel) {
+void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSeed, eMissilesId pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel) {
     D2RoomStrc* pNearbyRoom;
     uint32_t nRandOffsetX;
     D2SkillArgStrc sSkillArg;
@@ -451,7 +432,7 @@ void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSee
     sSkillArg.pOwner = pUnit;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileId;
+    sSkillArg.nMissileTxtNo = pMissileId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2SeedStrc ullSeed = ullSeedPair;
     nSkillLevel = nDeltaY;
@@ -537,7 +518,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(D2UnitStrc * pUnit, e
       }
     }
 
-    SKILLSCLT_CreateMissileWithGfx(pUnit, nPosX, (uint8_t*)eMissileId, nPosX, nPosY, nPrgCalc, eSkill, nSkillLvl);
+    SKILLSCLT_CreateMissileWithGfx(pUnit, nPosX, eMissileId, nPosX, nPosY, nPrgCalc, eSkill, nSkillLvl);
     return 1;
 }
 
@@ -561,7 +542,7 @@ void __fastcall SKILLSCLT_SetMissilePathAndCalc(D2UnitStrc * pUnit, int32_t nIni
 }
 
 // Client-side missile spread fan: spawns nCount-indexed missiles for skill eSkill arranged via gnMissileSpreadTableX_Alt/Y_Alt offsets (stepped by nSkillLevel). Builds a zeroed D2SkillArgStrc (owner=pTargetUnit, target X/Y, missile txt id, flags=3, callback SKILLSCLT_SetMissilePathAndCalc), advances a 64-bit LCG seed per missile, calls MakeMissile then SetTargetX with GetSkilParam1+1. Display/prediction only; no server damage.
-static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32_t pUnit, D2UnitStrc * pTargetUnit, uint8_t * pMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCount) {
+static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32_t pUnit, D2UnitStrc * pTargetUnit, eMissilesId pMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCount) {
     // Static local variables (originally global data)
     static int gnMissileSpreadTableX_Alt[64] = {
     0x1e,
@@ -704,7 +685,7 @@ static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32
     sSkillArg.nX = nX;
     sSkillArg.pOwner = pTargetUnit;
     sSkillArg.nY = nY;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileId;
+    sSkillArg.nMissileTxtNo = pMissileId;
     sSkillArg.nFlags = 3;
     sSkillArg.nSkillLevel = eSkill;
     sSkillArg.fpFunction = SKILLSCLT_SetMissilePathAndCalc;
@@ -712,8 +693,8 @@ static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32
     sSkillArg.eSkillNo = nCount;
     do {
       D2UnitStrc* pMissileUnit;
-      sSkillArg.nUnitY = *(int*)((int)gnMissileSpreadTableY_Alt + nSpreadTableOffset);
-      sSkillArg.nUnitX = *(int*)((int)gnMissileSpreadTableX_Alt + nSpreadTableOffset);
+      sSkillArg.nUnitY = *(int*)((char*)gnMissileSpreadTableY_Alt + nSpreadTableOffset);
+      sSkillArg.nUnitX = *(int*)((char*)gnMissileSpreadTableX_Alt + nSpreadTableOffset);
       ullSeedPair = D2_SEED_NEXT_VAL(ullSeedPair);
       sSkillArg.nFunctionParam = ullSeedPair.nSeedLow;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
@@ -803,7 +784,7 @@ void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, int32_t nIn
 }
 
 // Variant of SKILLSCLT_CltCreateMissileAtTarget using the alternate spread tables gnMissileSpreadTableX_Alt2/Y_Alt2 and the SKILLSCLT_SetMissilePathExtended path callback. Client-side missile-fan spawner: iterates nCount missiles offset by spread tables (stepped by nSkillLevel), builds a D2SkillArgStrc, advances a per-missile LCG seed, calls MakeMissile + SetTargetX(GetSkilParam1+1). Prediction/display only.
-static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_t dwSeed, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, uint8_t * pMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCount) {
+static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_t dwSeed, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eMissilesId pMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCount) {
     // Static local variables (originally global data)
     static int gnMissileSpreadTableX_Alt2[64] = {
     0x1e,
@@ -946,7 +927,7 @@ static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_
     sSkillArg.nX = nX;
     sSkillArg.pOwner = pTargetUnit;
     sSkillArg.nY = nY;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileId;
+    sSkillArg.nMissileTxtNo = pMissileId;
     sSkillArg.nFlags = 3;
     sSkillArg.nSkillLevel = eSkill;
     sSkillArg.fpFunction = SKILLSCLT_SetMissilePathExtended;
@@ -954,8 +935,8 @@ static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_
     sSkillArg.eSkillNo = nCount;
     do {
       D2UnitStrc* pMissileUnit;
-      sSkillArg.nUnitY = *(int*)((int)gnMissileSpreadTableY_Alt2 + nSpreadTableOffset);
-      sSkillArg.nUnitX = *(int*)((int)gnMissileSpreadTableX_Alt2 + nSpreadTableOffset);
+      sSkillArg.nUnitY = *(int*)((char*)gnMissileSpreadTableY_Alt2 + nSpreadTableOffset);
+      sSkillArg.nUnitX = *(int*)((char*)gnMissileSpreadTableX_Alt2 + nSpreadTableOffset);
       ullSeedPair = D2_SEED_NEXT_VAL(ullSeedPair);
       sSkillArg.nFunctionParam = ullSeedPair.nSeedLow;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
@@ -1010,7 +991,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_CltCreateMissileAtTarget(D2UnitStrc *
     uint32_t pOwnerUnit = pUnit->nInitSeed;
     int32_t nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit);
     int32_t nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-    SKILLSCLT_CltCreateMissileAtTarget(nMissileId, pOwnerUnit, pUnit, (uint8_t*)nMissileId, nTargetX, nTargetY, nSkillLvl, nPrgCalc, eSkill);
+    SKILLSCLT_CltCreateMissileAtTarget(nMissileId, pOwnerUnit, pUnit, nMissileId, nTargetX, nTargetY, nSkillLvl, nPrgCalc, eSkill);
     return 1;
 }
 
@@ -1038,7 +1019,7 @@ BOOL __fastcall SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath(D2UnitStr
     D2UnitStrc* pOwnerUnit = (D2UnitStrc*)pUnit->nInitSeed;
     int32_t nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit);
     int32_t nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-    SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(nMissileId, pOwnerUnit, pUnit, (uint8_t*)nMissileId, nTargetX, nTargetY, nSkillLvl, nPrgCalc, eSkill);
+    SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(nMissileId, pOwnerUnit, pUnit, nMissileId, nTargetX, nTargetY, nSkillLvl, nPrgCalc, eSkill);
     return 1;
 }
 
@@ -1131,7 +1112,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnCaster(D2UnitStrc * pUnit, e
 }
 
 // Spawns nCount missiles from a seeded RNG (nSeed, multiplier 0x6ac690c5) at randomly scattered offsets (±20 subtiles in X and Y) around the cast coordinates (nX, nY). Each missile is fired via MakeMissile with the RNG-derived direction offsets stored in nUnitX/nUnitY; on success, stores the seed value in targetX and the packed direction word in targetY for server synchronization. Used by skills like Frozen Orb projectile burst.
-static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint32_t nSeed, D2UnitStrc * pUnit, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, uint8_t * pMissileId, int32_t nCount) {
+static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint32_t nSeed, D2UnitStrc * pUnit, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel, eMissilesId pMissileId, int32_t nCount) {
     uint32_t nSeedLowVal;
     D2SkillArgStrc sSkillArg;
     D2SeedStrc sSeed;
@@ -1142,7 +1123,7 @@ static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint3
     sSkillArg.nY = nY;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nFlags = 3;
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileId;
+    sSkillArg.nMissileTxtNo = pMissileId;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
     nX = nCount;
@@ -1214,7 +1195,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_ProjectileMissile(D2UnitStrc * pUnit,
       return 0;
     }
 
-    SKILLSCLT_CreateProjectileMissile(nAuraMissile, nTargetX, pUnit, nTargetX, nTargetY, eSkill, nSkillLvl, (uint8_t*)nAuraMissile, nPrgCalc);
+    SKILLSCLT_CreateProjectileMissile(nAuraMissile, nTargetX, pUnit, nTargetX, nTargetY, eSkill, nSkillLvl, nAuraMissile, nPrgCalc);
     return 1;
 }
 

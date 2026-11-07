@@ -279,6 +279,7 @@
         "D2GFX_DrawGroundTile"
       ],
       "usedTypes": [
+        "D2DrlgTileDataStrc",
         "D2GameViewStrc",
         "D2GfxLightExStrc",
         "D2TileLibraryEntryStrc",

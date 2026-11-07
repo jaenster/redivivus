@@ -6,16 +6,9 @@
 #include "Source/D2Client/GAME/Game/Game.h"
 #include "Source/D2Client/Source/ClientEngine.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/Collision.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Environment.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Units.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -260,7 +253,7 @@ void __fastcall LIGHTMAP_ValidateAndReset(D2LightMapStrc * pLightMap) {
 }
 
 static void __stdcall LIGHTMAP_FillGridRect(int nYStart, uint32_t nColorARGB, int nXStart, int nYEnd, int nXEnd) {
-    uint32_t* pCell;
+    D2LightMapCellStrc* pCell;
     int nColCount;
     uint8_t byBlue;
     uint8_t byGreen;
@@ -274,16 +267,16 @@ static void __stdcall LIGHTMAP_FillGridRect(int nYStart, uint32_t nColorARGB, in
     do {
       if (nXStartCopy <= nXEnd) {
         nColCount = nXEnd - nXStartCopy + 1;
-        pCell = (uint32_t*)nXStart;
+        pCell = (D2LightMapCellStrc*)nXStart;
         do {
-          *(char*)((int)pCell + 5) = (char)(nColorARGB >> 8);
+          pCell->nRed = (uint8_t)(nColorARGB >> 8);
           byGreen = (uint8_t)(nColorARGB >> 0x10);
-          *(uint8_t*)((int)pCell + 6) = byGreen;
+          pCell->nGreen = byGreen;
           byBlue = (uint8_t)(nColorARGB >> 0x18);
-          *pCell = 0;
-          *(char*)(pCell + 1) = (char)nColorARGB;
-          *(uint8_t*)((int)pCell + 7) = byBlue;
-          pCell += 2;
+          pCell->nCollisionGrid = 0;
+          pCell->nCellIntensity = (uint8_t)nColorARGB;
+          pCell->nBlue = byBlue;
+          pCell++;
           nColCount--;
         } while (nColCount);
       }
@@ -306,7 +299,7 @@ void __fastcall ROOM_GetAmbientLightColor(D2RoomStrc * pRoom, uint32_t * pIntens
       }
     }
 
-    D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, (char*)((uintptr_t)&bUseLevel + 3), &colorInfo.nRed, &colorInfo.nGreen, &colorInfo.nBlue);
+    D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, (char*)((intptr_t)&bUseLevel + 3), &colorInfo.nRed, &colorInfo.nGreen, &colorInfo.nBlue);
     nIntensity = bUseLevel >> 0x18;
     if (colorInfo.nRed == '\0' && colorInfo.nGreen == '\0' && colorInfo.nBlue == '\0') {
       D2Common::Environment::DRLGENV_GetLightColorFromAct(GAME::Game::sgpDrlgAct, (uint8_t*)&colorInfo.nRed, (uint8_t*)&colorInfo.nGreen, (uint8_t*)&colorInfo.nBlue);
@@ -344,12 +337,12 @@ void __stdcall LIGHTMAP_InitFromPlayerAndRooms(uint32_t bForceBlack) {
       nGreen = '\0';
       bForceBlack &= 0xffffff;
       nIntensity = 0;
-      ROOM_GetAmbientLightColor(pRoom, &nIntensity, &nRed, &nGreen, (char*)((uintptr_t)&bForceBlack + 3), 1);
+      ROOM_GetAmbientLightColor(pRoom, &nIntensity, &nRed, &nGreen, (char*)((intptr_t)&bForceBlack + 3), 1);
       LIGHTMAP_FillGridRect(0, (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&bForceBlack + 3) << 8 | (uint16_t)(uint8_t)nGreen) << 8 | (uint32_t)(uint8_t)nRed) & 0xffffffu) << 8 | nIntensity, 0, 0x2f, 0x2f);
       if (nNumRooms > 0) {
         do {
           if (ppRoomList[nRoomIndex] != pRoom) {
-            ROOM_GetAmbientLightColor(ppRoomList[nRoomIndex], &nIntensity, &nRed, &nGreen, (char*)((uintptr_t)&bForceBlack + 3), 1);
+            ROOM_GetAmbientLightColor(ppRoomList[nRoomIndex], &nIntensity, &nRed, &nGreen, (char*)((intptr_t)&bForceBlack + 3), 1);
             nColorARGB = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&bForceBlack + 3) << 8 | (uint16_t)(uint8_t)nGreen) << 8 | (uint32_t)(uint8_t)nRed) & 0xffffffu) << 8 | nIntensity;
             D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(ppRoomList[nRoomIndex], &roomCoords);
             nXStart = roomCoords.dwXStart - gnLightmapWorldRefreshFlag;
@@ -693,8 +686,8 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
     int nXCellsLeft;
     int nYLoopCount;
     int nYBase;
-    uint32_t* pBufferCell;
-    uint32_t* pBufferRow;
+    LIGHTMAP_ApplyStaticLightWithShadow_Slotm28 uSlot28;
+    LIGHTMAP_ApplyStaticLightWithShadow_Slotm24 uSlot24;
     int nRowCounter;
     int nCoordYTop;
     int nCoordXLeft;
@@ -726,10 +719,10 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
     int nGridCellX = pLightMap->nGridX >> 3;
     LIGHTMAP_SampleGridToBuffer(pLightMap);
     if (nRadiusCells >= 2) {
-      pBufferRow = (uint32_t*)(nRadius * 8 + 0x14);
+      uSlot24.nCoordYFar = nRadius * 8 + 0x14;
       nRowCounter = nGridCellX * 8 + 0x14;
       nYBase = nRadius * 8 - 0xc;
-      pBufferCell = (uint32_t*)(nGridCellX * 8 - 0xc);
+      uSlot28.nCoordXFar = nGridCellX * 8 - 0xc;
       nYBuffer = 0x22;
       nXBuffer = 0x1e;
       do {
@@ -746,17 +739,17 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
             LIGHTMAP_InterpolateCell(nCellLeft, nXBuffer);
             LIGHTMAP_ComputeInterpolationDir(nCoordXRight, nYBase, pLightMap);
             LIGHTMAP_InterpolateCell(nCellRight, nXBuffer);
-            LIGHTMAP_ComputeInterpolationDir(nCoordXLeft, (int)pBufferRow, pLightMap);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXLeft, uSlot24.nCoordYFar, pLightMap);
             LIGHTMAP_InterpolateCell(nCellLeft, nYBuffer);
-            LIGHTMAP_ComputeInterpolationDir(nCoordXRight, (int)pBufferRow, pLightMap);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXRight, uSlot24.nCoordYFar, pLightMap);
             LIGHTMAP_InterpolateCell(nCellRight, nYBuffer);
             LIGHTMAP_ComputeInterpolationDir(nRowCounter, nCoordYTop, pLightMap);
             LIGHTMAP_InterpolateCell(nYBuffer, nCellLeft);
             LIGHTMAP_ComputeInterpolationDir(nRowCounter, nCoordYBot, pLightMap);
             LIGHTMAP_InterpolateCell(nYBuffer, nCellRight);
-            LIGHTMAP_ComputeInterpolationDir((int)pBufferCell, nCoordYTop, pLightMap);
+            LIGHTMAP_ComputeInterpolationDir(uSlot28.nCoordXFar, nCoordYTop, pLightMap);
             LIGHTMAP_InterpolateCell(nXBuffer, nCellLeft);
-            LIGHTMAP_ComputeInterpolationDir((int)pBufferCell, nCoordYBot, pLightMap);
+            LIGHTMAP_ComputeInterpolationDir(uSlot28.nCoordXFar, nCoordYBot, pLightMap);
             LIGHTMAP_InterpolateCell(nXBuffer, nCellRight);
             nCoordXRight += 8;
             nCoordYBot += 8;
@@ -770,8 +763,8 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
 
         nXBuffer--;
         nRowCounter += 8;
-        pBufferRow = (uint32_t*)((int)pBufferRow + 8);
-        pBufferCell = (uint32_t*)((int)pBufferCell - 8);
+        uSlot24.nCoordYFar += 8;
+        uSlot28.nCoordXFar += -8;
         nYBase += -8;
         nCellRight = nYBuffer - 0x1f;
         nYBuffer++;
@@ -784,7 +777,7 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
       return;
     }
 
-    pBufferRow = gLightMapBuffer + (0x20 - (nRadius >> 3)) * 0x41;
+    uSlot24.pBufferRow = gLightMapBuffer + (0x20 - (nRadius >> 3)) * 0x41;
     nYBase = nStartY;
     nRowCounter = nCellSpan + 1;
     do {
@@ -794,11 +787,11 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
         nDistY = -nDistY;
       }
 
-      pBufferCell = pBufferRow;
+      uSlot28.pBufferCell = uSlot24.pBufferRow;
       nStartY = nStartX;
       nYLoopCount = nCellSpan + 1;
       do {
-        if ((int)*pBufferCell < 0x10) {
+        if ((int)*uSlot28.pBufferCell < 0x10) {
           nDistX = pLightMap->nGridX - nStartY;
           if ((int)nDistX < 0) {
             nDistX = -nDistX;
@@ -812,18 +805,18 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
             nDistX = nGridCellX * 0x3d7 + nRadiusCells * 0x197;
           }
 
-          nGridCellX = (8 - ((int)*pBufferCell >> 1)) * ((int)((pLightMap->nRadiusX - (nDistX >> 10)) * (int)((nGamma << 0x10) / nRadius)) >> 0x10) >> 3;
+          nGridCellX = (8 - ((int)*uSlot28.pBufferCell >> 1)) * ((int)((pLightMap->nRadiusX - (nDistX >> 10)) * (int)((nGamma << 0x10) / nRadius)) >> 0x10) >> 3;
           if (nGridCellX > 0) {
             LIGHTMAP_AddLightToCell(nYBase, nGridCellX, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nStartY);
           }
         }
 
-        pBufferCell++;
+        uSlot28.pBufferCell++;
         nStartY += 8;
         nYLoopCount--;
       } while (nYLoopCount);
 
-      pBufferRow += 0x40;
+      uSlot24.pBufferRow += 0x40;
       nYBase += 8;
       nRowCounter--;
     } while (nRowCounter);
@@ -896,7 +889,7 @@ static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
         } while (nCellRight < 0x40);
 
         nCollisionY++;
-      } while ((int)pCollisionCell < (intptr_t)((char*)&gaLightmapInterpBuffer + sizeof(gaLightmapInterpBuffer)));
+      } while ((intptr_t)pCollisionCell < (intptr_t)((char*)&gaLightmapInterpBuffer + sizeof(gaLightmapInterpBuffer)));
 
       if (nRadiusCells >= 2) {
         nCoordYBottom = nGridCellY * 8 + 0x14;

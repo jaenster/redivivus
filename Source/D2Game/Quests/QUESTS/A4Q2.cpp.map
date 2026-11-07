@@ -341,6 +341,7 @@
         "SpawnMonsterAtRoomPos"
       ],
       "usedTypes": [
+        "D2QuestDataA4Q2Strc",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
@@ -648,6 +649,7 @@
       ],
       "usedTypes": [
         "D2MonsterKillStrc",
+        "D2QuestDataA4Q2Strc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId",

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,6 +21,8 @@ struct D2TileLibraryHashStrc;
 struct D2TileLibraryHashRefStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2TileLibraryHashNodeStrc
+#define D2_DEFINED_D2TileLibraryHashNodeStrc
 struct D2TileLibraryHashNodeStrc {
     /* 0x00 */ int nIndex;
     /* 0x04 */ int nSubIndex;
@@ -26,11 +31,15 @@ struct D2TileLibraryHashNodeStrc {
     /* 0x10 */ struct D2TileLibraryHashNodeStrc * pNext; // next node in this hash bucket; AllocHashEntry links each new node in front of the old head
 };
 
+#endif // D2_DEFINED_D2TileLibraryHashNodeStrc
+#ifndef D2_DEFINED_D2TileLibraryHashRefStrc
+#define D2_DEFINED_D2TileLibraryHashRefStrc
 struct D2TileLibraryHashRefStrc {
     /* 0x00 */ struct D2TileLibraryEntryStrc * pTile;
     /* 0x04 */ struct D2TileLibraryHashRefStrc * pNext; // next tile ref of this node; AddTileToChain links each new ref in front of the old head (0060ceec)
 };
 
+#endif // D2_DEFINED_D2TileLibraryHashRefStrc
 namespace D2CMP::SRC::FindTiles {
 
 // Function declarations
@@ -41,7 +50,7 @@ int __fastcall FINDTILE_ComputeHash(char cSubIndex, char cIndex, char cTileSubTy
 struct D2TileLibraryHashStrc * __stdcall FINDTILE_AllocHashTable();
 void __fastcall FINDTILE_FreeHashTable(struct D2TileLibraryHashStrc * pHashTable);
 void __fastcall FINDTILE_Register(struct D2TileLibraryHashStrc * pHashTable, struct D2TileLibraryEntryStrc * pTileData);
-int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, struct D2TileLibraryEntryStrc * * pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex);
+int32_t __fastcall FINDTILE_Lookup(struct D2TileLibraryHashStrc * pHashTable, struct D2TileLibraryEntryStrc * * pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex);
 #endif // D2_MODULE_D2CMP
 // 2 internal functions (defined in .cpp)
 

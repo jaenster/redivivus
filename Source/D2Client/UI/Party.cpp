@@ -13,17 +13,10 @@
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlayerList.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Lang/Unicode/UNISYS.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2Win/Src/D2WinPalette.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -568,7 +561,7 @@ void __stdcall SetEachPlayerRosterGlobalPartyId() {
 
       pPartyId++;
       nY += 0x26;
-    } while ((int)pPartyId < (intptr_t)&gaEachplayerRosterPartyId + 28);
+    } while ((intptr_t)pPartyId < (intptr_t)&gaEachplayerRosterPartyId + 28);
 }
 
 BOOL __stdcall UI_CheckMouseInRectangle(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight) {
@@ -1210,14 +1203,14 @@ uint32_t ClickParty_II(int32_t eButtonType, D2RosterStrc * pRoster) {
         } while (*pSrc != '\0');
 
         pSrc = pszName;
-        for (nCopyCount = (uint32_t)((int)pszNameEnd - (int)pszName) >> 2; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (uint32_t)((intptr_t)pszNameEnd - (intptr_t)pszName) >> 2; nCopyCount; nCopyCount--) {
           *(uint32_t*)pDst = *(uint32_t*)pSrc;
           pSrc += 4;
           pDst += 4;
         }
 
         pfnSend = pDVar1->pfnSendChatCommand;
-        for (nCopyCount = (int)pszNameEnd - (int)pszName & 3; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (intptr_t)pszNameEnd - (intptr_t)pszName & 3; nCopyCount; nCopyCount--) {
           *pDst = *pSrc;
           pSrc++;
           pDst++;

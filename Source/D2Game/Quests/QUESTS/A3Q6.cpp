@@ -2,26 +2,19 @@
 
 #include "Source/D2Game/Quests/QUESTS/A3Q6.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2RoomStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/GAME/Clients.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A4Q3.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -543,7 +536,7 @@ BOOL __fastcall Q23_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q23_PartyMember_SetCompleted, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q23_PartyMember_SetCompleted, nullptr);
       }
     }
 
@@ -599,7 +592,7 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     D2ObjectsTxt* pBridgeObjectTxt;
     D2UnitStrc* pDroppedUnit;
     int32_t nDroppedItemGUID;
-    int32_t nSoulstoneDropLoop;
+    Q23_Callback08_MonsterKilled_Slotm8 uSlot8;
     ::SGAMEDATA* pGameInner;
     int32_t* piParticipantCount;
     QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q6.cpp", 0x26b);
@@ -611,9 +604,9 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     if (bIsNotIntroduction) {
       D2UnitDataPlayerStrc* pAttackerPlayerData;
       if (pQuestArgs->pPlayer) {
-        /* local8 is D2GameStrc* here */ nSoulstoneDropLoop = (int32_t)pQuestData->pGame;
+        /* local8 is D2GameStrc* here */ uSlot8.pGameDifficulty = pQuestData->pGame;
         pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[*(uint8_t*)(nSoulstoneDropLoop + 0x6d)], QUEST_TheGuardian, QUESTSTATE_Completed);
+        _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[uSlot8.pGameDifficulty->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Completed);
         if (!_bQuestState) {
           QUEST_StubEmpty(pQuestData, pQuestArgs, 0x3e);
           pGameInner = pQuestData->pGame;
@@ -643,17 +636,17 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
     QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_TheGuardian, QUESTSTATE_JustCompleted);
     /* local8 become D2UnitStrc* here */ if (pQuestSpecificData->bBridgeObjectValid) {
-      nSoulstoneDropLoop = (int32_t)UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pQuestSpecificData->nBridgeObjectGUID);
-      if ((D2UnitStrc*)nSoulstoneDropLoop) {
-        D2Common::Units::SetupUpdateFlag((D2UnitStrc*)nSoulstoneDropLoop, 1);
-        pBridgeObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(*(int32_t*)(nSoulstoneDropLoop + 4));
-        GAME::Event::SetEvent(pQuestData->pGame, (D2UnitStrc*)nSoulstoneDropLoop, 1, (pBridgeObjectTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
+      uSlot8.pBridgeObject = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pQuestSpecificData->nBridgeObjectGUID);
+      if (uSlot8.pBridgeObject) {
+        D2Common::Units::SetupUpdateFlag(uSlot8.pBridgeObject, 1);
+        pBridgeObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(uSlot8.pBridgeObject->nClassId);
+        GAME::Event::SetEvent(pQuestData->pGame, uSlot8.pBridgeObject, 1, (pBridgeObjectTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
       }
     }
 
     pQuestSpecificData->nMephistoApproachMode = 2;
     pQuestArgs->pTarget->dwDropItemCode = 0x2073736d;
-    /* local8 become int here */ nSoulstoneDropLoop = 0;
+    /* local8 become int here */ uSlot8.pBridgeObject = 0;
     if (pQuestSpecificData->nPlayerCount > 0) {
       do {
         pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDroppedItemGUID, nullptr, -1, 0);
@@ -662,8 +655,8 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
           pQuestSpecificData->bMephistoSoulstoneDropped = true;
         }
 
-        nSoulstoneDropLoop++;
-      } while (nSoulstoneDropLoop < pQuestSpecificData->nPlayerCount);
+        uSlot8.pGameDifficulty = (::SGAMEDATA*)((intptr_t)&uSlot8.pBridgeObject->eUnitType + 1);
+      } while ((intptr_t)uSlot8.pBridgeObject < pQuestSpecificData->nPlayerCount);
     }
 
     A4Q3::Q28_EmptyCallback();

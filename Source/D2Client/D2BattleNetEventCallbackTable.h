@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -72,6 +75,8 @@ typedef void (__fastcall *fnUpdateGameInformation)(int nCharClassId, int nLevelD
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2BattleNetEventCallbackTable
+#define D2_DEFINED_D2BattleNetEventCallbackTable
 struct D2BattleNetEventCallbackTable {
     /* 0x00 */ void (*fpCloseGame)(int, int);
     /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, void *, int, int, void *, int, int, int, int, int, int, void *);
@@ -99,3 +104,5 @@ struct D2BattleNetEventCallbackTable {
     /* 0x5C */ uint8_t * fpReserved9; // slot 23, offset 0x5C - never referenced in Game.exe
     /* 0x60 */ uint8_t * fpReserved10; // slot 24, offset 0x60 - never referenced in Game.exe
 };
+
+#endif // D2_DEFINED_D2BattleNetEventCallbackTable

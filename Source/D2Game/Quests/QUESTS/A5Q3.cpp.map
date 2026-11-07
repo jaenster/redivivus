@@ -609,9 +609,9 @@
         "ExecuteFunctionForEveryPartyMember"
       ],
       "usedTypes": [
+        "D2QuestDataA5Q3Strc",
         "D2QuestDataStrc",
         "D2UnitStrc",
-        "int32_t",
         "uint16_t",
         "uint32_t"
       ]
@@ -685,7 +685,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {

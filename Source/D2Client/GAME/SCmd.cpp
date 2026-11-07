@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Redivivus/d2_trace.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/D2GSPacket0x18Decoded.h"
 #include "Source/D2Client/D2GSPacket0x95Decoded.h"
 #include "Source/D2Client/D2GSPacket0x96Decoded.h"
@@ -56,44 +56,15 @@
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Client/Warden/WardenClient.h"
-#include "Source/D2Common/D2BitBufferStrc.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/Path.h"
-#include "Source/D2Common/Environment.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units/Missile.h"
-#include "Source/D2Game/D2CreateMonsterUnitStrc.h"
-#include "Source/D2Game/GAME/SCmd.h"
-#include "Source/D2Game/GAME/Server.h"
-#include "Source/D2Game/PLAYER/PlayerMsg.h"
-#include "Source/D2Game/Quests/QUESTS/A4Q2.h"
-#include "Source/D2Net/Game/Server.h"
-#include "Source/Fog/BitBuffer.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/MessageStrc.h"
-#include "3rdparty/Storm/Source/SSTR.h"
+#include "Source/D2Game/D2Game.h"
+#include "Source/D2Net/D2Net.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
 #include "Source/D2Client/GAME/SCmd.data.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -2165,15 +2136,15 @@ void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS(char * pBytes) {
     uint32_t nRemaining;
     uint8_t nSkillCount = pBytes[1];
-    uint16_t* pSkillEntry = (uint16_t*)(pBytes + 6);
+    D2GSPacketSrv0x94SkillStrc* pSkillEntry = (D2GSPacketSrv0x94SkillStrc*)(pBytes + 6);
     D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
 
     for (nRemaining = (uint32_t)nSkillCount; nRemaining; nRemaining--) {
-      D2Common::Skills::AddSkill(pUnit, (eD2Skills)*pSkillEntry, (uint32_t)(uint8_t)pSkillEntry[1], 0, ".\\GAME\\SCmd.cpp", 0xab7);
-      pSkillEntry = (uint16_t*)((int)pSkillEntry + 3);
+      D2Common::Skills::AddSkill(pUnit, (eD2Skills)pSkillEntry->wSkillId, (uint32_t)pSkillEntry->nSkillLevel, 0, ".\\GAME\\SCmd.cpp", 0xab7);
+      pSkillEntry++;
     }
 }
 
@@ -2217,7 +2188,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER(char * pBytes) {
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
     sPayload.nData6 = pBytes[6];
-    UNIT::Monster::NPCMENU_HandleQuestUpdate((uintptr_t)&sPayload);
+    UNIT::Monster::NPCMENU_HandleQuestUpdate((intptr_t)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes) {
@@ -2231,7 +2202,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes) {
       return;
     }
 
-    SKILLS::SkillsPal::SKILL_ExecuteItemCastOnUnit(pUnit, (eD2Skills)*(uint16_t*)(pBytes + 6), (short int*)(uint32_t)(uint8_t)pBytes[8], pTargetUnit, *(uint16_t*)(pBytes + 0xe));
+    SKILLS::SkillsPal::SKILL_ExecuteItemCastOnUnit(pUnit, (eD2Skills)*(uint16_t*)(pBytes + 6), (uint32_t)(uint8_t)pBytes[8], pTargetUnit, *(uint16_t*)(pBytes + 0xe));
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY(char * pBytes) {
@@ -2240,7 +2211,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY(char * pBytes) {
       return;
     }
 
-    SKILLS::SkillsPal::SKILL_ExecuteItemCastAtCoords(pUnit, (eD2Skills)*(uint16_t*)(pBytes + 6), (short int*)(uint32_t)(uint8_t)pBytes[10], (uint32_t)*(uint16_t*)(pBytes + 0xb), (uint32_t)*(uint16_t*)(pBytes + 0xd), *(uint16_t*)(pBytes + 0xf));
+    SKILLS::SkillsPal::SKILL_ExecuteItemCastAtCoords(pUnit, (eD2Skills)*(uint16_t*)(pBytes + 6), (uint32_t)(uint8_t)pBytes[10], (uint32_t)*(uint16_t*)(pBytes + 0xb), (uint32_t)*(uint16_t*)(pBytes + 0xd), *(uint16_t*)(pBytes + 0xf));
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID(D2UnitStrc * pUnit, D2GSPacketSrv0x4C * pBytes) {
@@ -2299,7 +2270,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x5A(char * pBytes) {
     for (nWords = 10; nWords; nWords--) {
       *(uint32_t*)pDst = *(uint32_t*)pBytes;
       pBytes += 4;
-      pDst = (D2Packet0x5aEventStructure*)((uintptr_t)&pDst->nArg + 1);
+      pDst = (D2Packet0x5aEventStructure*)((intptr_t)&pDst->nArg + 1);
     }
 
     UI::Text::TEXT_HandleEventMessagePacket(&packet);
@@ -2311,8 +2282,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x27_PRESETTALK(D2GSPacketSrv0x27 * pByt
     D2GSPacketSrv0x27* pDst = &packet;
     for (nWords = 10; nWords; nWords--) {
       *(uint32_t*)pDst = *(uint32_t*)pBytes;
-      pBytes = (D2GSPacketSrv0x27*)((uintptr_t)&pBytes->nUnitGUID + 2);
-      pDst = (D2GSPacketSrv0x27*)((uintptr_t)&pDst->nUnitGUID + 2);
+      pBytes = (D2GSPacketSrv0x27*)((intptr_t)&pBytes->nUnitGUID + 2);
+      pDst = (D2GSPacketSrv0x27*)((intptr_t)&pDst->nUnitGUID + 2);
     }
 
     UI::Text::TEXT_HandleOverheadTextPacket(&packet);
@@ -2325,9 +2296,9 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS(D2GSPacketSrv0x
     packet.nResult = pBytes->nResult;
     *(uint8_t*)((char*)&packet + 3) = pBytes->field_0x3;
     *(uint32_t*)((char*)&packet + 4) = *(uint32_t*)&pBytes->field_0x4;
-    *(uint32_t*)((char*)&packet + 8) = *(uint32_t*)((uintptr_t)&pBytes->nUnitGUID + 1);
-    *(uint16_t*)((char*)&packet.nGold + 1) = *(uint16_t*)((uintptr_t)&pBytes->nGold + 1);
-    *(uint8_t*)((char*)&packet.nGold + 3) = *(uint8_t*)((uintptr_t)&pBytes->nGold + 3);
+    *(uint32_t*)((char*)&packet + 8) = *(uint32_t*)((intptr_t)&pBytes->nUnitGUID + 1);
+    *(uint16_t*)((char*)&packet.nGold + 1) = *(uint16_t*)((intptr_t)&pBytes->nGold + 1);
+    *(uint8_t*)((char*)&packet.nGold + 3) = *(uint8_t*)((intptr_t)&pBytes->nGold + 3);
     UI::npcmenu::NPCMENU_HandleTradePacket(&packet);
 }
 
@@ -2396,7 +2367,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x42(char * pBytes) {
     D2SCmdPayload_u32_u16 sPayload;
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
-    UNIT::ITEM_HandleCursorItemRemoval((uintptr_t)&sPayload);
+    UNIT::ITEM_HandleCursorItemRemoval((D2GSPacketSrv0x42*)&sPayload);
 }
 
 void __fastcall SCMD_Rcv0x45_Ignore(char * pBytes) {
@@ -2449,10 +2420,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x53(D2GSPacketSrv0x53 * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x50(D2GSPacketSrv0x50 * pBytes) {
     D2GSPacketSrv0x50 sPacket;
     *(uint32_t*)(char*)&sPacket = *(uint32_t*)pBytes;
-    *(uint32_t*)((char*)&sPacket.aPayload + 1) = *(uint32_t*)((int)pBytes->aPayload + 1);
-    *(uint32_t*)((char*)&sPacket.aPayload + 5) = *(uint32_t*)((int)pBytes->aPayload + 5);
-    *(uint16_t*)((char*)&sPacket.aPayload + 9) = *(uint16_t*)((int)pBytes->aPayload + 9);
-    *(uint8_t*)((char*)&sPacket.aPayload[5] + 1) = *(uint8_t*)((int)pBytes->aPayload + 0xb);
+    *(uint32_t*)((char*)&sPacket.aPayload + 1) = *(uint32_t*)((char*)pBytes->aPayload + 1);
+    *(uint32_t*)((char*)&sPacket.aPayload + 5) = *(uint32_t*)((char*)pBytes->aPayload + 5);
+    *(uint16_t*)((char*)&sPacket.aPayload + 9) = *(uint16_t*)((char*)pBytes->aPayload + 9);
+    *(uint8_t*)((char*)&sPacket.aPayload[5] + 1) = *(uint8_t*)((char*)pBytes->aPayload + 0xb);
     NET_D2GS_CLIENT_Handle0x50_QuestSpecial(&sPacket);
 }
 
@@ -2593,7 +2564,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x61(char * pBytes) {
-    thunk_ExitGamePlayCutScene((int32_t)pBytes);
+    thunk_ExitGamePlayCutScene((uint8_t*)pBytes);
     UI::MiniPanel::SetupMiniPanel();
 }
 
@@ -2720,7 +2691,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED(char * pBytes) {
     D2SCmdPayload_u32_u16 sPayload;
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
-    UNIT::ITEM_HandleServerItemAction((uintptr_t)&sPayload);
+    UNIT::ITEM_HandleServerItemAction((D2GSPacketSrv0x7C*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7D(D2GSPacketSrv0x7D * pBytes) {
@@ -3038,7 +3009,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(D2GSPacketSrv0xA
         eSkill = Fog::BitBuffer::ReadUnsigned(&bitBuffer, (uint32_t)nSendBits);
       }
 
-      pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pUnit, pStatList, (D2UnitDataUnion*)eStateCopy, eUnitStat, eSkill, nStatParam);
+      pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pUnit, pStatList, eStateCopy, eUnitStat, eSkill, nStatParam);
       eUnitStat = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 9);
       eState = eStateCopy;
       pFoundUnit = pUnit;
@@ -3113,7 +3084,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
             eSkill = Fog::BitBuffer::ReadUnsigned(&bitBuffer, (uint32_t)nSendBits);
           }
 
-          pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pFoundUnit, pStatList, (D2UnitDataUnion*)eStateCopy, eUnitStat, eSkill, nStatParam);
+          pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pFoundUnit, pStatList, eStateCopy, eUnitStat, eSkill, nStatParam);
           eUnitStat = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 9);
           pUnit = pFoundUnit;
           eState = eStateCopy;
@@ -3400,7 +3371,7 @@ static D2ServerCmdStrc * STRUCT_CreateAndPreprareServerCmd(D2UnitStrc * pUnit) {
         }
 
         pTableEntry += 0xf;
-      } while ((int)pTableEntry < (intptr_t)((char*)&NET_D2GS_CLIENT_INCOMING + sizeof(NET_D2GS_CLIENT_INCOMING) + 4));
+      } while ((intptr_t)pTableEntry < (intptr_t)((char*)&NET_D2GS_CLIENT_INCOMING + sizeof(NET_D2GS_CLIENT_INCOMING) + 4));
 
       nD2PacketsClientBufferSize = nMaxPacketSize + 5;
     }

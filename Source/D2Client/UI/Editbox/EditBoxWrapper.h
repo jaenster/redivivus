@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -181,6 +184,8 @@ struct EditBoxImplementationVtable;
 struct EditBoxWrapperVtable;
 
 // Data types
+#ifndef D2_DEFINED_EditBoxImplementation
+#define D2_DEFINED_EditBoxImplementation
 struct __attribute__((packed)) EditBoxImplementation {
     /* 0x00 */ struct EditBoxImplementationVtable * pVtable; // virtual function table
     /* 0x04 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
@@ -207,12 +212,18 @@ struct __attribute__((packed)) EditBoxImplementation {
     /* 0x56 */ int bDrawFrame;
 };
 
+#endif // D2_DEFINED_EditBoxImplementation
+#ifndef D2_DEFINED_EditBoxWrapper
+#define D2_DEFINED_EditBoxWrapper
 struct EditBoxWrapper {
     /* 0x00 */ struct EditBoxWrapperVtable * pVtable; // virtual function table
     /* 0x04 */ uint32_t nUnused04;
     /* 0x08 */ struct EditBoxImplementation * pImplementation;
 };
 
+#endif // D2_DEFINED_EditBoxWrapper
+#ifndef D2_DEFINED_EditBoxImplementationVtable
+#define D2_DEFINED_EditBoxImplementationVtable
 struct EditBoxImplementationVtable {
     /* 0x00 */ ::EditBoxImplementation * (__thiscall *ScalarDeletingDestructor)(::EditBoxImplementation *, uint32_t);
     /* 0x04 */ void (__thiscall *Draw)(::EditBoxImplementation *);
@@ -235,6 +246,9 @@ struct EditBoxImplementationVtable {
     /* 0x48 */ void (__thiscall *SetNumericOnly)(::EditBoxImplementation *, BOOL);
 };
 
+#endif // D2_DEFINED_EditBoxImplementationVtable
+#ifndef D2_DEFINED_EditBoxWrapperVtable
+#define D2_DEFINED_EditBoxWrapperVtable
 struct EditBoxWrapperVtable {
     /* 0x00 */ ::EditBoxWrapper * (__thiscall *ScalarDeletingDestructor)(::EditBoxWrapper *, uint32_t);
     /* 0x04 */ void (__thiscall *Draw)(::EditBoxWrapper *);
@@ -257,6 +271,7 @@ struct EditBoxWrapperVtable {
     /* 0x48 */ void (__thiscall *SetNumericOnly)(::EditBoxWrapper *, BOOL);
 };
 
+#endif // D2_DEFINED_EditBoxWrapperVtable
 namespace D2Client::UI::Editbox::EditBoxWrapper {
 
 // Function declarations

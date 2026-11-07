@@ -2,10 +2,8 @@
 
 #include "Source/D2Client/UI/Editbox/EditBoxWrapper.h"
 #include "Source/D2Client/UI/Editbox/EditBoxImplementation.h"
-#include "Source/D2Client/D2ControlStrc.h"
-#include "3rdparty/Storm/Source/SMem.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "3rdparty/Storm/Storm.globals.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Editbox.h"
 #include "Source/D2Client/UI/UIWidget.h"

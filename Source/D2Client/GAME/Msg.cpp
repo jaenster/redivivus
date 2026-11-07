@@ -2,25 +2,18 @@
 
 #include "Source/D2Client/GAME/Msg.h"
 #include "Source/D2Client/ClientModeInGame.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/GAME/Game/Game.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/UI/Chat.h"
 #include "Source/D2Client/UI/Draw.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Net/SRC/Client.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Net/D2Net.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
-
-// Forward declarations (used only by pointer here)
-struct D2CharSelCompStrc;
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -124,14 +117,15 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     HANDLE hProcess;
     BOOL bReadOk;
     uint32_t nWardenChecksum;
+    LPCVOID pvVar1;
     D2GSPacketClt0x6D packet;
     char szModuleName[9];
     uint16_t wReadWord1[2];
     uint16_t wReadWord2[2];
+    uint8_t* pReadAddr;
     SIZE_T nBytesToRead;
     LPCVOID pBaseAddr;
     SIZE_T* pBytesRead;
-    LPCVOID pReadAddr;
     uint16_t* pReadBuffer;
     *(uint32_t*)(char*)&szModuleName = Game::gClientGameData.gnWardenChecksumModuleName * 0x470e31c1;
     *(uint32_t*)((char*)&szModuleName + 4) = Game::gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
@@ -143,17 +137,17 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
       hModule = GetModuleHandleA(szModuleName);
       if (hModule) {
         /* SIZE_T * lpNumberOfBytesRead for ReadProcessMemory */ pBytesRead = 0;
-        pReadAddr = (LPCVOID)(nModuleOffset + (int)hModule);
+        pvVar1 = (LPCVOID)(nModuleOffset + (char*)hModule);
         /* SIZE_T nSize for ReadProcessMemory */ nBytesToRead = 2;
         pReadBuffer = wReadWord1;
-        pBaseAddr = pReadAddr;
+        pBaseAddr = pvVar1;
         /* LPVOID lpBuffer for ReadProcessMemory */ /* LPCVOID lpBaseAddress for ReadProcessMemory */ hProcess = GetCurrentProcess();
         /* HANDLE hProcess for ReadProcessMemory */ bReadOk = ReadProcessMemory(hProcess, pBaseAddr, pReadBuffer, nBytesToRead, pBytesRead);
         if (bReadOk) {
           /* SIZE_T * lpNumberOfBytesRead for ReadProcessMemory */ pBytesRead = 0;
           /* SIZE_T nSize for ReadProcessMemory */ nBytesToRead = 2;
           pReadBuffer = wReadWord2;
-          /* LPVOID lpBuffer for ReadProcessMemory */ pReadAddr = (LPCVOID)((int)pReadAddr + 0x20);
+          /* LPVOID lpBuffer for ReadProcessMemory */ pReadAddr = (uint8_t*)((char*)pvVar1 + 0x20);
           /* LPCVOID lpBaseAddress for ReadProcessMemory */ hProcess = GetCurrentProcess();
           /* HANDLE hProcess for ReadProcessMemory */ bReadOk = ReadProcessMemory(hProcess, pReadAddr, pReadBuffer, nBytesToRead, pBytesRead);
           if (bReadOk) {
@@ -254,7 +248,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6A() {
 // @sourcefile .\GAME\Msg.cpp
 static uint8_t * MSG_ReadSaveFileToBuffer(size_t * pnFileSize) {
     size_t nFileSize;
-    D2CharSelCompStrc* pBuffer;
+    uint8_t* pBuffer;
     char szFilePath[1024];
     char szFullPath[500];
     if (D2Game::Save::szSaveCharacterName[0] == '\0') {
@@ -278,10 +272,10 @@ static uint8_t * MSG_ReadSaveFileToBuffer(size_t * pnFileSize) {
     nFileSize = ftell(pFile);
     *pnFileSize = nFileSize;
     fseek(pFile, 0, 0);
-    pBuffer = (D2CharSelCompStrc*)D2_ALLOC_AT(*pnFileSize, ".\\GAME\\Msg.cpp", 0x1ff);
+    pBuffer = (uint8_t*)D2_ALLOC_AT(*pnFileSize, ".\\GAME\\Msg.cpp", 0x1ff);
     fread(pBuffer, *pnFileSize, 1, pFile);
     fclose(pFile);
-    return (uint8_t*)pBuffer;
+    return pBuffer;
 }
 
 void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal) {
@@ -662,7 +656,7 @@ void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
     }
 
     *pTerminator = '\0';
-    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)(pTerminator + (1 - (uintptr_t)&sPacket)));
+    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)(pTerminator + (1 - (intptr_t)&sPacket)));
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x66(void * pData, uint32_t nLen) {

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,11 +20,16 @@ struct D2RoomStrc;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2DynamicPathCoordsUnion
+#define D2_DEFINED_D2DynamicPathCoordsUnion
 union D2DynamicPathCoordsUnion {
     /* 0x00 */ D2DynamicPathCoordsStrc tSubtile;
     /* 0x00 */ POINT tFixed;
 };
 
+#endif // D2_DEFINED_D2DynamicPathCoordsUnion
+#ifndef D2_DEFINED_D2DynamicPathStrc
+#define D2_DEFINED_D2DynamicPathStrc
 #pragma pack(push, 1)
 struct D2DynamicPathStrc {
     /* 0x000 */ D2DynamicPathCoordsUnion Coords; // Fixed-point world pos (hi=tile, lo=subtile)
@@ -81,3 +89,5 @@ struct D2DynamicPathStrc {
     /* 0x1D8 */ D2PathPointStrc SaveCoords[10]; // Saved collision test coords / init coords
 };
 #pragma pack(pop)
+
+#endif // D2_DEFINED_D2DynamicPathStrc

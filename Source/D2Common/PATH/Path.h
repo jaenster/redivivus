@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,7 +32,7 @@ void __stdcall PATH_SetPathTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc *
 BOOL __stdcall PATH_AdvanceUnitAlongPath(struct D2UnitStrc * pUnit, int pExternalPath);
 BOOL __stdcall PATH_GetCollisionMaskAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 int32_t __stdcall PATH_GetCollisionTypeAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, int wPosX, int wPosY);
-void __stdcall PATH_CheckCollisionFlags(struct D2DynamicPathStrc * pDynamicPath, uint32_t dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
+void __stdcall PATH_CheckCollisionFlags(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 BOOL __stdcall IsAllyOf(struct D2UnitStrc * pUnit, struct D2UnitStrc * pRosterUnit);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -51,7 +54,7 @@ int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(struct D2DynamicPathStrc * pD
 uint32_t __stdcall PATH_RecalculatePath(struct D2UnitStrc * pUnit, int32_t bHasTargetUnit);
 uint32_t __fastcall PATH_CheckPathCollision(struct D2UnitStrc * pUnit, struct D2DynamicPathStrc * pDynamicPath);
 BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_00650800(int param_1);
+struct D2DynamicPathStrc * __fastcall Unreferenced_00650800(struct D2UnitStrc * param_1);
 uint32_t __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
 #endif // D2_MODULE_D2Common
 // 12 internal functions (defined in .cpp)

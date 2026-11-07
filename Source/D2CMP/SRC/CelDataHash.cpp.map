@@ -18,8 +18,9 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
-        "D2PoolManagerStrc",
-        "int32_t"
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
+        "D2PoolManagerStrc"
       ]
     },
     {
@@ -55,6 +56,8 @@
         "exit"
       ],
       "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
@@ -75,7 +78,8 @@
         "SStrHash"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
         "uint32_t",
         "uint8_t"
       ]
@@ -96,6 +100,8 @@
         "SStrHash"
       ],
       "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
         "D2PoolManagerStrc",
         "uint32_t"
       ]
@@ -118,8 +124,24 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
         "D2PoolManagerStrc",
         "int32_t"
+      ]
+    },
+    {
+      "name": "IGNORELIST_Initialize_Unref_0060b130",
+      "address": "0060b130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b130"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "IGNORELIST_Initialize_Unref_0060b130"
       ]
     }
   ]

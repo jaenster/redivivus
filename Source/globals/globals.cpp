@@ -4,9 +4,8 @@
  */
 
 #include "Source/globals/globals.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Fog/Source/SFile.data.h"
 
 // =============================================================================
 // Declaration closure — definitions
@@ -167,6 +166,7 @@ char s_screen10_006d5ca4[] = "screen10"; D2_GLOBAL_GUARD(s_screen10_006d5ca4, "s
 char s_server_006cc918[] = "server"; D2_GLOBAL_GUARD(s_server_006cc918, "s_server_006cc918");
 char s_stream_end_006d382c[] = "stream end"; D2_GLOBAL_GUARD(s_stream_end_006d382c, "s_stream_end_006d382c");
 char s_stream_error_006d3810[] = "stream error"; D2_GLOBAL_GUARD(s_stream_error_006d3810, "s_stream_error_006d3810");
+char s_unknown_006cd5fc[] = "unknown"; D2_GLOBAL_GUARD(s_unknown_006cd5fc, "s_unknown_006cd5fc");
 
 extern char s_SAM_006fad3c[4];
 namespace Storm::Source::SFile {

@@ -109,7 +109,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2UnitType",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {

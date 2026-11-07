@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,6 +26,8 @@ typedef uint32_t eD2LevelId;
 typedef uint8_t eD2Difficulty;
 
 // Data types
+#ifndef D2_DEFINED_D2AutoMapLvlTbls
+#define D2_DEFINED_D2AutoMapLvlTbls
 struct D2AutoMapLvlTbls {
     /* 0x00 */ int nLevelType;
     /* 0x04 */ int nOrientation;
@@ -31,6 +36,7 @@ struct D2AutoMapLvlTbls {
     /* 0x1C */ int nSize;
 };
 
+#endif // D2_DEFINED_D2AutoMapLvlTbls
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct __attribute__((packed)) D2AutomapTxt {
     /* 0x00 */ char LevelName[16];
@@ -43,6 +49,8 @@ struct __attribute__((packed)) D2AutomapTxt {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2ExpansionLvlTblsTxt
+#define D2_DEFINED_D2ExpansionLvlTblsTxt
 struct D2ExpansionLvlTblsTxt {
     /* 0x000 */ void * pTileProject[32]; // Somehing with TileProjects
     /* 0x080 */ uint8_t field_0x80;
@@ -4015,6 +4023,7 @@ struct D2ExpansionLvlTblsTxt {
     /* 0xFFF */ uint8_t field_0xfff;
 };
 
+#endif // D2_DEFINED_D2ExpansionLvlTblsTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2LvlTblsTxt {
     /* 0x00 */ uint8_t field_0x0;
@@ -4044,6 +4053,8 @@ struct D2LvlTblsTxt {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2LvlTypesTxt
+#define D2_DEFINED_D2LvlTypesTxt
 struct __attribute__((packed)) D2LvlTypesTxt {
     /* 0x000 */ char File[32][60];
     /* 0x780 */ uint8_t Act;
@@ -4053,6 +4064,7 @@ struct __attribute__((packed)) D2LvlTypesTxt {
     /* 0x784 */ int Expansion;
 };
 
+#endif // D2_DEFINED_D2LvlTypesTxt
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================

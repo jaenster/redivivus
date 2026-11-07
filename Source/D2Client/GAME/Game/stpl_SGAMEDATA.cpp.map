@@ -181,6 +181,9 @@
       "calledFunctions": [
         "Unreferenced_0044fff0",
         "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<SGAMEDATA>"
       ]
     },
     {
@@ -195,6 +198,9 @@
       "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
       "calledFunctions": [
         "Unreferenced_00450030"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
       ]
     },
     {
@@ -326,6 +332,9 @@
       "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
       "calledFunctions": [
         "Unreferenced_00450350"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -340,6 +349,9 @@
       "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
       "calledFunctions": [
         "Unreferenced_00450370"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -499,6 +511,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+        "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
         "uint32_t"
       ]
     },

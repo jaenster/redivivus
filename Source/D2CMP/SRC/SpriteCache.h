@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,7 +16,9 @@
 
 // Forward declarations
 struct D2AsyncData_Line0x128;
+struct D2CelCacheBlockStrc;
 struct D2GfxDataStrc;
+struct D2GfxHashEntryStrc;
 struct D2GfxMemoryStrc;
 struct D2PoolManagerStrc;
 struct D2TileLibraryEntryStrc;
@@ -33,6 +38,8 @@ typedef uint32_t (__stdcall *fnSpriteDecodeComplete)(uint32_t * pReadBuffer, siz
 struct D2SpriteCacheEntryStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2CelDecodeStateStrc
+#define D2_DEFINED_D2CelDecodeStateStrc
 struct D2CelDecodeStateStrc {
     /* 0x00 */ uint8_t nFlags; // bit0 header only, bit1 loaded, bit2 async decode pending
     /* 0x01 */ uint8_t nDirCount; // directions in this group
@@ -48,6 +55,9 @@ struct D2CelDecodeStateStrc {
     /* 0x94 */ struct D2SpriteCacheEntryStrc * pCacheEntry;
 };
 
+#endif // D2_DEFINED_D2CelDecodeStateStrc
+#ifndef D2_DEFINED_D2CelFileCacheEntryStrc
+#define D2_DEFINED_D2CelFileCacheEntryStrc
 struct D2CelFileCacheEntryStrc {
     /* 0x00 */ uint32_t dwCacheFlags; // bit 0: header could not be loaded (set when the file open/palette load fails)
     /* 0x04 */ uint32_t dwVersion; // DC6 header +0x00
@@ -60,6 +70,9 @@ struct D2CelFileCacheEntryStrc {
     /* 0xA0 */ char szCelName[32]; // cel file name copied from the request (+0xa0)
 };
 
+#endif // D2_DEFINED_D2CelFileCacheEntryStrc
+#ifndef D2_DEFINED_D2SpriteCacheEntryStrc
+#define D2_DEFINED_D2SpriteCacheEntryStrc
 struct D2SpriteCacheEntryStrc {
     /* 0x00 */ void * pData; // Allocated block; released via FreeServerMemory in EvictEntry
     /* 0x04 */ uint32_t nSize; // Byte count added to / subtracted from D2GfxMemoryStrc.nUsedMemory
@@ -70,6 +83,9 @@ struct D2SpriteCacheEntryStrc {
     /* 0x18 */ struct D2SpriteCacheEntryStrc * pPrev; // LRU / free-list backward link
 };
 
+#endif // D2_DEFINED_D2SpriteCacheEntryStrc
+#ifndef D2_DEFINED_D2SpriteDecodeRequestStrc
+#define D2_DEFINED_D2SpriteDecodeRequestStrc
 struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, size_t, struct D2SpriteDecodeRequestStrc *);
     /* 0x04 */ uint8_t * pCelHeader;
@@ -80,29 +96,16 @@ struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
     /* 0x18 */ size_t nDecodedSize; // Fog nResultSize
 };
 
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-struct __attribute__((packed)) D2CelCacheBlockStrc {
-    /* 0x00 */ eD2UnitType eUnitType; // written by the DCC path only
-    /* 0x04 */ int32_t nMode; // copied from D2GfxDataStrc
-    /* 0x08 */ int32_t nClassId; // copied from D2GfxDataStrc
-    /* 0x0C */ int32_t nUnitToken; // copied from D2GfxDataStrc
-    /* 0x10 */ int32_t nCompositToken; // copied from D2GfxDataStrc
-    /* 0x14 */ int32_t nArmorToken; // copied from D2GfxDataStrc
-    /* 0x18 */ int32_t nModeToken; // copied from D2GfxDataStrc
-    /* 0x1C */ int32_t nWeaponClass; // copied from D2GfxDataStrc
-    /* 0x20 */ D2CelDecodeStateStrc tDecode;
-};
-
-#endif // D2_MODULE_D2CMP
+#endif // D2_DEFINED_D2SpriteDecodeRequestStrc
 namespace D2CMP::SRC::SpriteCache {
 
 // Function declarations
 void __stdcall SPRITECACHE_Init(BOOL bFreeAll);
 BOOL __stdcall SPRITECACHE_AllocEntry(struct D2TileLibraryEntryStrc * pTile, uint32_t dwFlags, uint32_t dwReserved);
-void __stdcall SPRITECACHE_GetStats(size_t * pnSize, HANDLE * phHandle, ULONG_PTR * pnHitCount, uint32_t * pnUsedPercent);
+void __stdcall SPRITECACHE_GetStats(size_t * pnSize, int * phHandle, ULONG_PTR * pnHitCount, uint32_t * pnUsedPercent);
 void __stdcall SPRITECACHE_Lock();
 void __stdcall SPRITECACHE_Unlock();
-void __stdcall GFX_InitLRUCache(struct D2PoolManagerStrc * pMemory, struct D2PoolManagerStrc * pPoolManager);
+void __stdcall GFX_InitLRUCache(struct D2PoolManagerStrc * pMemory, uint32_t pPoolManager);
 char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc);
 void __stdcall SetCompressedDataGlobalAndSaveItToRegistry(BOOL bUseCompressedData);
 uint32_t __stdcall SPRITECACHE_GetTotalEntries();
@@ -119,7 +122,7 @@ BOOL __stdcall SPRITECACHE_IsLoadPending(eD2UnitType eUnitType, int32_t nMode, i
 // Completed blocks are left untouched.
 void __stdcall SPRITECACHE_CancelPendingLoads();
 // Initialises the sprite/CEL data cache. All four parameters are stack scalars, none a pointer: dwCacheBytes (0x800000) and dwUnitCacheBytes (0x7d000) are byte counts, the latter forwarded as a size to 00609020. dwAvailMemOverride, when 0, makes the function query system memory and apply SUB EAX,0xb00000 / CMP EAX,0x4000000. Typed as pointers, the 0x800000 byte count was emitted as a pointer into whatever object happened to contain that address.
-void __stdcall GFX_InitCelDataCache(uint32_t nFlags, uint32_t dwCacheBytes, uint32_t dwUnitCacheBytes, uint32_t dwAvailMemOverride);
+void __stdcall GFX_InitCelDataCache(struct D2PoolManagerStrc * nFlags, uint32_t dwCacheBytes, uint32_t dwUnitCacheBytes, uint32_t dwAvailMemOverride);
 void __stdcall SPRITECACHE_Shutdown(int32_t bReleaseMemory);
 int __stdcall SPRITECACHE_GetOrLoadSprite(struct D2GfxDataStrc * pGfxData, int32_t bCheckOnly, int32_t bLoadAsCel);
 // Server sprite precache sync. GuardStack tail confirms BOOL return: GuardStack(1) on two early-out success paths, GuardStack(nLoadResult) on the cache-and-load path, GuardStack(0) on failure.
@@ -133,23 +136,22 @@ void __fastcall SPRITECACHE_SetMaxSize(size_t nSize);
 void __fastcall SPRITECACHE_TouchEntry(struct D2TileLibraryHeaderStrc * pTileLibrary);
 // Sprite-cache release callback: when gpfnSpriteCacheValidateCallback is set, calls it with the entry's descriptor (pHashEntry[8], halts at line 0xb5 if NULL), then unlinks the entry from gaGfxHashTable with GFX_UnlinkCacheEntry.
 // @provenance 1.14d asm 005fe170; formerly named SPRITECACHE_Validate.
-void __fastcall SPRITECACHE_ReleaseHashEntry(int * pHashEntry);
+void __fastcall SPRITECACHE_ReleaseHashEntry(struct D2GfxHashEntryStrc * pHashEntry);
 void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szText2, va_list vaArgs);
 void __stdcall SPRITECACHE_Unlock_Unref_005fee00();
 void __stdcall SPRITECACHE_Unlock_Unref_005fee50();
 int __fastcall Unreferenced_005fee80(int param_1);
 // @sourcefile .\SRC\SpriteCache.cpp
-void __fastcall GFX_AllocSpriteCache(struct D2GfxMemoryStrc * pGfxMemory, struct D2PoolManagerStrc * pMemory, void * pMaxMemory, fnSpriteCacheEntryRelease pfnReleaseEntry);
+void __fastcall GFX_AllocSpriteCache(struct D2GfxMemoryStrc * pGfxMemory, struct D2PoolManagerStrc * pMemory, uint32_t pMaxMemory, fnSpriteCacheEntryRelease pfnReleaseEntry);
 // @sourcefile .\SRC\SpriteCache.cpp
 struct D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_EvictEntry(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCandidate, uint32_t bPreferOld);
-void __fastcall SPRITECACHE_AllocateMemory(void * pCache, struct D2SpriteCacheEntryStrc * pEntry);
+void __fastcall SPRITECACHE_AllocateMemory(struct D2GfxMemoryStrc * pCache, struct D2SpriteCacheEntryStrc * pEntry);
 void __fastcall SPRITECACHE_FreeMemory(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCacheEntry, int32_t nFreedSize, uint32_t bEvictPriority);
 uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, size_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
 // @sourcefile .\SRC\SpriteCache.cpp
 void __fastcall SPRITECACHE_ReleaseMemory(struct D2GfxMemoryStrc * pGfxMemory);
 // @sourcefile .\SRC\SpriteCache.cpp
-void * * __fastcall SPRITECACHE_AllocEntry2(struct D2GfxMemoryStrc * pGfxMemory, void * nSize, void * pInitData, int32_t bPriority);
-void __fastcall SPRITECACHE_SetMaxSize_Unref_006b2f30(size_t nSize);
+void * * __fastcall SPRITECACHE_AllocEntry2(struct D2GfxMemoryStrc * pGfxMemory, uint32_t nSize, void * pInitData, int32_t bPriority);
 #endif // D2_MODULE_D2CMP
 // 15 internal functions (defined in .cpp)
 

@@ -8,7 +8,7 @@
 #include "Source/D2Common/Drlg/OutPlace.h"
 #include "Source/D2Common/Drlg/Outdoors.h"
 #include "Source/D2Common/Drlg/Preset.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/OutDesr.data.h"
@@ -461,7 +461,7 @@ static void PlaceTombEntriesInCanyon(D2DrlgLevelStrc * pLevel) {
     do {
       Outdoors::SpawnOutdoorLevelPresetEx(pLevel, pTombTableEntry[-1], *pTombTableEntry, pTombTableEntry[-3], pTombTableEntry[-2], 0);
       pTombTableEntry += 4;
-    } while ((int)pTombTableEntry < (intptr_t)((char*)&gaTombCanyonPresetOffsets + 156));
+    } while ((intptr_t)pTombTableEntry < (intptr_t)((char*)&gaTombCanyonPresetOffsets + 156));
 
     Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 4, 4, 0x18a, -1, 0);
 }

@@ -193,6 +193,9 @@
       "calledFunctions": [
         "Unreferenced_004796b0",
         "ROSTER_SortByName"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
       ]
     },
     {
@@ -226,6 +229,9 @@
       "calledFunctions": [
         "Unreferenced_00479740",
         "ROSTER_SortByLevel"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
       ]
     },
     {

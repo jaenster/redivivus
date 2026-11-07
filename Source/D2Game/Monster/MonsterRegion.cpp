@@ -3,23 +3,14 @@
 #include "Source/D2Game/Monster/MonsterRegion.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Game/Monster/D2MonsterRegionStrc.h"
 #include "Source/D2Game/Monster/Monster.h"
 #include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/SKILLS/SkillItem.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -251,11 +242,11 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
 
 // Allocates and populates a D2MonsterRegionStrc for every level (index 1..nTxtLevelsSize-1) in the game. Per level: pool-allocates a zeroed region, fills monster density/boss counts/wander/quest flags from LevelsTxt, rolls monster types via MONREGION_PopulateMonsterTypes, then seeds champion-pack data for each monster slot. Halts with fatal error 0x83 if DifficultyLevels txt lookup fails.
 // @sourcefile .\MONSTER\MonsterRegion.cpp
-void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2Row_D2MonsterRegionStrc_1024 * pMonsterRegionList, D2SeedStrc * pSeed, int32_t nSeedLow, eD2Difficulty nDifficulty, BOOL bExpansion) {
+void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionStrc * * pMonsterRegionList, D2SeedStrc * pSeed, int32_t nSeedLow, eD2Difficulty nDifficulty, BOOL bExpansion) {
     D2LevelsTxt* pLevelTxt;
     D2MonsterRegionFieldStrc* pMonField;
     int i;
-    int* pMonRegionListEntry;
+    D2MonsterRegionStrc** pMonRegionListEntry;
     short int nMonLevel;
     D2Common::Seed::InitSeed_Param_666(pSeed, nSeedLow);
     uint32_t nDifficulty_00 = (uint32_t)nDifficulty;
@@ -273,7 +264,7 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2Row_D2MonsterR
       }
 
       do {
-        pMonRegionListEntry = (int*)((int)pMonsterRegionList + 4);
+        pMonRegionListEntry = pMonsterRegionList + 1;
         pMonsterRegion = D2_NEW_POOL_AT(pMemory, D2MonsterRegionStrc, ".\\MONSTER\\MonsterRegion.cpp", 0x87);
         memset(pMonsterRegion, 0, 0x2e4);
         pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(nSeedLow);
@@ -306,9 +297,9 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2Row_D2MonsterR
           } while (i < (int)(uint32_t)pMonsterRegion->nCounter);
         }
 
-        *pMonRegionListEntry = (int)pMonsterRegion;
+        *pMonRegionListEntry = pMonsterRegion;
         nSeedLow++;
-        pMonsterRegionList = (D2Row_D2MonsterRegionStrc_1024*)(D2MonsterRegionStrc (*)[1024])pMonRegionListEntry;
+        pMonsterRegionList = pMonRegionListEntry;
       } while (nSeedLow < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize);
 
       return;
@@ -316,12 +307,12 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2Row_D2MonsterR
 }
 
 // @sourcefile .\MONSTER\MonsterRegion.cpp
-void __fastcall FreeMonsterRegion(D2PoolManagerStrc * pMemory, int32_t ppMonsterRegion) {
+void __fastcall FreeMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionStrc * * ppMonsterRegion) {
     int i;
     for (i = 1; i < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize; i++) {
-      ppMonsterRegion += 4;
-      if (*(void**)ppMonsterRegion) {
-        D2_FREE_POOL_AT(pMemory, *(void**)ppMonsterRegion, ".\\MONSTER\\MonsterRegion.cpp", 0xc5);
+      ppMonsterRegion++;
+      if (*ppMonsterRegion) {
+        D2_FREE_POOL_AT(pMemory, *ppMonsterRegion, ".\\MONSTER\\MonsterRegion.cpp", 0xc5);
       }
     }
 }
@@ -364,11 +355,11 @@ short * __fastcall InitializeSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion,
           return (short int*)pMonData;
         }
 
-        pMatchedMonData = (D2MonsterRegionFieldStrc*)((uintptr_t)&pMatchedMonData->nClassId + 1);
+        pMatchedMonData = (D2MonsterRegionFieldStrc*)((intptr_t)&pMatchedMonData->nClassId + 1);
         pMonData++;
-      } while ((int)pMatchedMonData < (int)(uint32_t)pMonsterRegion->nSpawnCount);
+      } while ((intptr_t)pMatchedMonData < (int)(uint32_t)pMonsterRegion->nSpawnCount);
 
-      if ((int)pMatchedMonData >= 13) {
+      if ((intptr_t)pMatchedMonData >= 13) {
         return nullptr;
       }
     }
@@ -399,7 +390,7 @@ void __fastcall AllocMonsterRegionForGame(::SGAMEDATA * pGame) {
     pGame->pGameSeed.nSeedLow = seedNext.nSeedLow;
     D2Common::Seed::InitSeed_Param_666(&monSeed, nInitSeed);
     pGame->dwMonSeed = nInitSeed;
-    AllocMonsterRegion(pGame->pMemoryPool, (D2MonsterRegionStrc (*)[1024])pGame->pMonsterRegion, &monSeed, nInitSeed, pGame->nDifficulty, pGame->bExpansion);
+    AllocMonsterRegion(pGame->pMemoryPool, pGame->pMonsterRegion, &monSeed, nInitSeed, pGame->nDifficulty, pGame->bExpansion);
 }
 
 void __fastcall IncreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t bIsSummoner) {

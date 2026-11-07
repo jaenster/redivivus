@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,9 +18,12 @@
 struct D2GSPacketClt0x5D;
 struct D2GSPacketSrv0x50;
 struct D2UIMouseMsgStrc;
+struct D2UnitStrc;
 struct DC6;
 
 // Data types
+#ifndef D2_DEFINED_D2QuestLogEntryStrc
+#define D2_DEFINED_D2QuestLogEntryStrc
 struct __attribute__((packed)) D2QuestLogEntryStrc {
     /* 0x000 */ uint8_t bVisible;
     /* 0x001 */ int32_t eQuestId;
@@ -32,6 +38,9 @@ struct __attribute__((packed)) D2QuestLogEntryStrc {
     /* 0x266 */ uint32_t nDisplayState;
 };
 
+#endif // D2_DEFINED_D2QuestLogEntryStrc
+#ifndef D2_DEFINED_D2QuestLogInfoStrc
+#define D2_DEFINED_D2QuestLogInfoStrc
 struct D2QuestLogInfoStrc {
     /* 0x00 */ uint8_t bValid; // 1 if this quest slot exists
     /* 0x01 */ uint8_t nIconIndex; // index into gpQuestLogActImages, < 0x1b
@@ -42,6 +51,9 @@ struct D2QuestLogInfoStrc {
     /* 0x0C */ uint32_t nQuestId;
 };
 
+#endif // D2_DEFINED_D2QuestLogInfoStrc
+#ifndef D2_DEFINED_D2QuestLogPanelRectStrc
+#define D2_DEFINED_D2QuestLogPanelRectStrc
 struct D2QuestLogPanelRectStrc {
     /* 0x00 */ int nLeft;
     /* 0x04 */ int nRight;
@@ -50,6 +62,9 @@ struct D2QuestLogPanelRectStrc {
     /* 0x10 */ int nTextY;
 };
 
+#endif // D2_DEFINED_D2QuestLogPanelRectStrc
+#ifndef D2_DEFINED_D2QuestLogStrc
+#define D2_DEFINED_D2QuestLogStrc
 struct __attribute__((packed)) D2QuestLogStrc {
     /* 0x000 */ uint32_t bQuestLogOpen;
     /* 0x004 */ uint32_t dwUnused04; // no references
@@ -89,6 +104,7 @@ struct __attribute__((packed)) D2QuestLogStrc {
     /* 0xFCD */ uint32_t nZooSpawnCounter;
 };
 
+#endif // D2_DEFINED_D2QuestLogStrc
 namespace D2Client::UI::QuestLog {
 
 // Function declarations
@@ -112,7 +128,7 @@ void __stdcall QUESTLOG_OnQuestLogMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall QUESTLOG_DrawQuestLogButton();
 void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId);
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(void * pUnit);
-void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(void * pUnit);
+void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(struct D2UnitStrc * pUnit);
 // QuestLog.cpp - Client handler for 0x5D quest state packets, plays sounds and updates UI
 void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, struct D2GSPacketClt0x5D * pPacket);
 void __stdcall QUESTLOG_ResetNpcDialogState();
@@ -124,7 +140,7 @@ void __fastcall QUESTLOG_SetZooSpawnFlag(uint32_t nZooSpawnCounter);
 uint8_t __stdcall QUESTLOG_GetZooSpawnFlag();
 bool QUESTLOG_FindZooDummyMonster();
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY);
-int __fastcall Unreferenced_004a3200(int param_1);
+uint8_t * __fastcall Unreferenced_004a3200(uint8_t * param_1);
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.
 void __stdcall QUESTLOG_LoadQuestIconsForAct(uint32_t nActIndex, int32_t bResetSelection);
 void __stdcall GameOverWtf();

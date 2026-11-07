@@ -4,17 +4,18 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/net_sid.h"
 
 // Forward declarations
 struct D2ClientStrc;
-struct D2DrlgActStrc;
 struct D2PlayerBasicsData;
 struct D2RoomStrc;
 struct D2SaveFileHeaderStrc;
@@ -22,12 +23,15 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 
 // Data types
+#ifndef D2_DEFINED_D2PacketListStrc
+#define D2_DEFINED_D2PacketListStrc
 struct D2PacketListStrc {
     /* 0x000 */ int nSize;
     /* 0x004 */ char pBytes[512]; // packet bytes; SCMD_QueuePacketForClient starts a new list when nSize+n > 0x200
     /* 0x204 */ struct D2PacketListStrc * pNext; // next list in the client's send / free chain (+0x204)
 };
 
+#endif // D2_DEFINED_D2PacketListStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2UnitProximityNodeStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
@@ -53,7 +57,7 @@ void __fastcall SetCientFlag0x01(struct D2ClientStrc * pClient);
 void __fastcall SetGameDataHook(::SGAMEDATA * pGame);
 void __fastcall AppearenceItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
 void __fastcall AppearenceItems2(uint32_t pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
-int Unreferenced_00537ab0();
+void Unreferenced_00537ab0(struct D2RoomStrc * pRoom1, struct D2RoomStrc * pRoom2);
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall FreeClientList(::SGAMEDATA * pGame);
 // Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
@@ -161,7 +165,7 @@ BOOL __fastcall CheckSyncWarpRateExceeded(::SGAMEDATA * pGame, struct D2UnitStrc
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall CLIENT_GetLangId(struct D2ClientStrc * pClient);
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __fastcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2DrlgActStrc * pDrlgAct, ::SGAMEDATA * pSpawnXY);
+void __fastcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t pDrlgAct, int32_t pSpawnXY);
 // Main client join handler: validates expansion/hardcore compatibility, loads or creates player unit, sends handshake packet (0x0B), portal flags (0x5F), stats, items, hotkeys, selected skills (left/right), life/mana/stamina. Computes A5Q3 resist bonuses if expansion. Returns error code on validation failure (kicks client). State 1→loading character data.
 int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(struct D2ClientStrc * pClient, ::SGAMEDATA * pGame, int32_t bLoadFromSave, struct D2RoomStrc * pRoom, uint32_t nX, uint32_t nY);
 // Allocates and initializes D2ClientStrc (1304 bytes). Sets client ID, 180-second timeout, class (arena template override), char/account names, language. Initializes 16 hotkey slots to -1, zeroes packet lists. Inserts into game's client linked list and two hash tables (by ID and name). Max 8 clients per game. Returns new client or null if full.

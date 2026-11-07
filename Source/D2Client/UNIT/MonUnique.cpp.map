@@ -33,6 +33,10 @@
       "namespace": "D2Client::UNIT::MonUnique",
       "calledFunctions": [
         "Unreferenced_004ac760"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
       ]
     },
     {

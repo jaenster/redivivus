@@ -3,10 +3,7 @@
 #include "Source/D2Common/Chat/Ignorelist.h"
 #include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Source/D2Common/Chat/Ignorelist/MappingEntryNode.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SSTR.h"
-#include "3rdparty/Storm/Storm.globals.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Chat.h"
 
@@ -42,15 +39,7 @@ void __stdcall IGNORELIST_Initialize_Unref_00601b50() {
 
 }
 
-void __stdcall IGNORELIST_Initialize_Unref_0060ab70() {
-
-}
-
 void __stdcall IGNORELIST_Initialize_Unref_0060ac50() {
-
-}
-
-void __stdcall IGNORELIST_Initialize_Unref_0060b130() {
 
 }
 
@@ -80,7 +69,7 @@ void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, ch
         }
 
         nCharIdx++;
-        pSrc[(int)pszDstBuf - (int)szText] = cCurrent;
+        pSrc[(intptr_t)pszDstBuf - (intptr_t)szText] = cCurrent;
         cCurrent = szText[nCharIdx];
         pSrc = szText + nCharIdx;
       } while (cCurrent != '*');
@@ -93,7 +82,7 @@ void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, ch
     return;
 }
 
-void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, int32_t nDstBuf, int32_t nBufLen) {
+void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, char * nDstBuf, int32_t nBufLen) {
     char cCurrent = *szText;
     uint32_t nLen = 0;
     if (cCurrent == '\0') {
@@ -117,14 +106,14 @@ void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, in
           break;
         }
 
-        *(char*)(nIdx + nDstBuf) = *pEnd;
+        nDstBuf[nIdx] = *pEnd;
         nLen++;
         pEnd = szText + nLen;
         nIdx++;
       } while (*pEnd != '\0');
     }
 
-    *(uint8_t*)(nLen + nDstBuf) = 0;
+    nDstBuf[nLen] = '\0';
 }
 
 void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize) {
@@ -137,7 +126,7 @@ void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, ch
     *szText2 = '\0';
     cPatternBuf[0] = '\0';
     memset(cPatternBuf + 1, 0, 0xff);
-    IGNORELIST_ExtractSuffix(pThis, szText1, (int32_t)cPatternBuf, 0x100);
+    IGNORELIST_ExtractSuffix(pThis, szText1, cPatternBuf, 0x100);
     if (cPatternBuf[0] == '\0') {
       IGNORELIST_ExtractPrefix(pThis, szText1, cPatternBuf, 0x100);
     }

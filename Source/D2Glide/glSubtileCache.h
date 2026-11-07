@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Glide)
 #error "D2Glide header included by a module that may not use D2Glide (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Glide) && !defined(D2_LOADS_D2Glide)
+#error "internal D2Glide header included from another module; include D2Glide's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 struct D2GroundSubTileStrc;
 
 // Data types
+#ifndef D2_DEFINED_GlSubtileCacheNodeStrc
+#define D2_DEFINED_GlSubtileCacheNodeStrc
 struct GlSubtileCacheNodeStrc {
     /* 0x00 */ int nIndex; // Node index in array
     /* 0x04 */ uint32_t dwAddress; // VRAM subtile address
@@ -23,6 +28,9 @@ struct GlSubtileCacheNodeStrc {
     /* 0x10 */ struct GlSubtileCacheNodeStrc * pPrev; // Previous in LRU list
 };
 
+#endif // D2_DEFINED_GlSubtileCacheNodeStrc
+#ifndef D2_DEFINED_GlSubtileCacheStrc
+#define D2_DEFINED_GlSubtileCacheStrc
 struct GlSubtileCacheStrc {
     /* 0x00 */ uint32_t dwEntrySize; // Size of each node in bytes (0x14)
     /* 0x04 */ uint32_t nMaxEntries; // Total cache capacity
@@ -34,6 +42,7 @@ struct GlSubtileCacheStrc {
     /* 0x1C */ struct GlSubtileCacheNodeStrc * pNodes; // Allocated node array base
 };
 
+#endif // D2_DEFINED_GlSubtileCacheStrc
 namespace D2Glide::glSubtileCache {
 
 // Function declarations
@@ -43,7 +52,7 @@ namespace D2Glide::glSubtileCache {
 // @sourcefile .\Src\glSubtileCache.cpp
 int __fastcall GLSUBTILE_Initialize(struct GlSubtileCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwSubtileSize);
 // Removes and returns the head node from active LRU list (least-recently-used).
-struct GlSubtileCacheNodeStrc * __fastcall GLSUBTILE_RemoveNodeFromHead(uint32_t dwParam, struct GlSubtileCacheStrc * pCache);
+struct GlSubtileCacheNodeStrc * __fastcall GLSUBTILE_RemoveNodeFromHead(struct GlSubtileCacheNodeStrc * dwParam, struct GlSubtileCacheStrc * pCache);
 // Promotes a subtile cache node to most-recently-used position (active list tail).
 void __fastcall GLSUBTILE_PromoteNodeToMRU(struct GlSubtileCacheStrc * pCache, int nNodeIndex1Based);
 // Removes the subtile-cache node at 0-based nNodeIndex (GLSUBTILE_RemoveNodeByIndex), clears its
@@ -54,7 +63,7 @@ void __fastcall GLSUBTILE_PromoteNodeToMRU(struct GlSubtileCacheStrc * pCache, i
 void __fastcall GLSUBTILE_InvalidateByIndex(struct GlSubtileCacheStrc * pCache, int nNodeIndex);
 // Destroys subtile cache by clearing all entries and freeing node array memory.
 // @sourcefile .\Src\glSubtileCache.cpp
-void __fastcall GLSUBTILE_Destroy(uint32_t * pCacheData, struct GlSubtileCacheStrc * pCache);
+void __fastcall GLSUBTILE_Destroy(struct GlSubtileCacheStrc * pCacheData, int pCache);
 // Ensures cache has free capacity by allocating a node. If cache is full, evicts LRU entry first.
 int __fastcall GLSUBTILE_EnsureCapacity(struct GlSubtileCacheStrc * pCache);
 #endif // D2_MODULE_D2Glide

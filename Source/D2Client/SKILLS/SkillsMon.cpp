@@ -9,27 +9,9 @@
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MissilesTxt.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units/Missile.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/MissileTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -207,25 +189,95 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPosition(D2UnitStrc * pUnit,
 // Client do-function for monster composite-directional missile skills (e.g. multi-direction breath/projectile attacks). Resolves target coordinates from skill params or cursor, computes direction and 8-dir GFX index, looks up the composite frame offset table (gaSkillCompositeDirectionalMissileConst) to get a per-frame spawn position, then fires the skill's cltmissilea missile at the adjusted world coordinate.
 BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
-    static int gaSkillCompositeDirectionalMissileConst[18] = {
-    0x30f0e1b,
-    0x16150763,
-    0xd0c1a1f,
-    0x13066302,
-    0xa191e14,
-    0x563010b,
-    0x181d1211,
-    0x63000908,
-    0x1c100f04,
-    0x717161f,
-    0xe0d0363,
-    0x7141e1b,
-    0x1026306,
-    0x121d1a0c,
-    0x1630513,
-    0x1c190a09,
-    0x63041110,
-    0x18081700
+    static uint8_t gaSkillCompositeDirectionalMissileConst[8][9] = {
+    {
+        '\x1b',
+        '\x0e',
+        '\x0f',
+        '\x03',
+        'c',
+        '\x07',
+        '\x15',
+        '\x16',
+        '\x1f'
+    },
+    {
+        '\x1a',
+        '\x0c',
+        '\x0d',
+        '\x02',
+        'c',
+        '\x06',
+        '\x13',
+        '\x14',
+        '\x1e'
+    },
+    {
+        '\x19',
+        '\x0a',
+        '\x0b',
+        '\x01',
+        'c',
+        '\x05',
+        '\x11',
+        '\x12',
+        '\x1d'
+    },
+    {
+        '\x18',
+        '\x08',
+        '\x09',
+        '\x00',
+        'c',
+        '\x04',
+        '\x0f',
+        '\x10',
+        '\x1c'
+    },
+    {
+        '\x1f',
+        '\x16',
+        '\x17',
+        '\x07',
+        'c',
+        '\x03',
+        '\x0d',
+        '\x0e',
+        '\x1b'
+    },
+    {
+        '\x1e',
+        '\x14',
+        '\x07',
+        '\x06',
+        'c',
+        '\x02',
+        '\x01',
+        '\x0c',
+        '\x1a'
+    },
+    {
+        '\x1d',
+        '\x12',
+        '\x13',
+        '\x05',
+        'c',
+        '\x01',
+        '\x09',
+        '\x0a',
+        '\x19'
+    },
+    {
+        '\x1c',
+        '\x10',
+        '\x11',
+        '\x04',
+        'c',
+        '\x00',
+        '\x17',
+        '\x08',
+        '\x18'
+    }
 }; D2_STATIC_GUARD(gaSkillCompositeDirectionalMissileConst, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_CompositeDirMissile::gaSkillCompositeDirectionalMissileConst");
     static uint8_t gaSkillCompositeDirMissileData[8] = { 0x1d, 0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x1f, 0x1e }; D2_STATIC_GUARD(gaSkillCompositeDirMissileData, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_CompositeDirMissile::gaSkillCompositeDirMissileData");
 
@@ -270,7 +322,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2
       nAdjFrame = 8;
     }
 
-    byCompositeFrame = *(uint8_t*)((int)gaSkillCompositeDirectionalMissileConst + nAdjFrame + (uint32_t)(byCompositeFrame & 7) * 9);
+    byCompositeFrame = gaSkillCompositeDirectionalMissileConst[byCompositeFrame & 7][nAdjFrame];
     _byDirIdx = (uint32_t)((uint32_t)((uint32_t)uStack_1b & 0xffffffu) << 8 | (uint32_t)(uint8_t)byCompositeFrame);
     if (byCompositeFrame != 99) {
       D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(byCompositeFrame, &nOffsetX, &nOffsetY);
@@ -847,8 +899,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
 
       nSpreadOffset = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((int)gaSkillRingMissileSpreadConstY + nSpreadOffset);
-        sSkillArg.nUnitY = *(int*)((int)gaSkillRingMissileSpreadConstZ + nSpreadOffset);
+        sSkillArg.nUnitX = *(int*)((char*)gaSkillRingMissileSpreadConstY + nSpreadOffset);
+        sSkillArg.nUnitY = *(int*)((char*)gaSkillRingMissileSpreadConstZ + nSpreadOffset);
         UNIT::Missile::MakeMissile(&sSkillArg);
         nSpreadOffset += 8;
       } while (nSpreadOffset < 0x40);
@@ -860,8 +912,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
 
       nSpreadOffset = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((int)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
-        sSkillArg.nUnitY = *(int*)((int)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
+        sSkillArg.nUnitX = *(int*)((char*)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
+        sSkillArg.nUnitY = *(int*)((char*)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
         UNIT::Missile::MakeMissile(&sSkillArg);
         nSpreadOffset += nNumRings * 4;
       } while (nSpreadOffset < 0x3c);

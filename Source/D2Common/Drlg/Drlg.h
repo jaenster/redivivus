@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -60,12 +63,17 @@ typedef uint8_t (__fastcall *fpLevelDataFn2)(struct D2DrlgLevelStrc * pDrlgLevel
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgActEnvironmentData
+#define D2_DEFINED_D2DrlgActEnvironmentData
 struct D2DrlgActEnvironmentData {
     /* 0x00 */ int nLenght;
     /* 0x04 */ int nEnvData;
     /* 0x08 */ int nLightColorRGB; // Packed RGB: byte[0]=R, byte[1]=G, byte[2]=B for global ambient light
 };
 
+#endif // D2_DEFINED_D2DrlgActEnvironmentData
+#ifndef D2_DEFINED_D2DrlgExitPointStrc
+#define D2_DEFINED_D2DrlgExitPointStrc
 struct __attribute__((packed)) D2DrlgExitPointStrc {
     /* 0x00 */ int nWorldX; // Exit point world X
     /* 0x04 */ int nWorldY; // Exit point world Y
@@ -75,6 +83,7 @@ struct __attribute__((packed)) D2DrlgExitPointStrc {
     /* 0x10 */ int field_10; // unknown (unused in observed exit functions)
 };
 
+#endif // D2_DEFINED_D2DrlgExitPointStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2DrlgFileCacheNodeStrc {
     /* 0x000 */ char szName[260]; // cached DS1 filename (key)
@@ -84,15 +93,23 @@ struct D2DrlgFileCacheNodeStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2DrlgLevelDataList
+#define D2_DEFINED_D2DrlgLevelDataList
 struct D2DrlgLevelDataList {
     /* 0x00 */ D2DrlgLevelDataEntry aEntry[15];
 };
 
+#endif // D2_DEFINED_D2DrlgLevelDataList
+#ifndef D2_DEFINED_D2DrlgLevelDataPresetArea
+#define D2_DEFINED_D2DrlgLevelDataPresetArea
 struct D2DrlgLevelDataPresetArea {
     /* 0x00 */ struct D2DrlgMapStrc * pDrlgMap; // Pointer to the main DrlgMap for this preset level. Set in InitializeRoomEx via DRLGPRESET_AllocDrlgMap. Cleared to NULL on free.
     /* 0x04 */ int nPickedFile; // Index of the randomly picked map file variant (0-based). Set from RANDOM_RandomNumberSelector over LvlPrest.Files count. -1 if only one file variant.
 };
 
+#endif // D2_DEFINED_D2DrlgLevelDataPresetArea
+#ifndef D2_DEFINED_D2DrlgLevelLinkNodeStrc
+#define D2_DEFINED_D2DrlgLevelLinkNodeStrc
 struct D2DrlgLevelLinkNodeStrc {
     /* 0x00 */ int dwData0; // Unknown field 0 - possibly level ID or flags
     /* 0x04 */ int dwData1; // Unknown field 1 - possibly direction or target
@@ -100,6 +117,9 @@ struct D2DrlgLevelLinkNodeStrc {
     /* 0x0C */ struct D2DrlgLevelLinkNodeStrc * pNext; // Next node in linked list (confirmed from free loop at 0x642163)
 };
 
+#endif // D2_DEFINED_D2DrlgLevelLinkNodeStrc
+#ifndef D2_DEFINED_D2DrlgLevelPlacementStrc
+#define D2_DEFINED_D2DrlgLevelPlacementStrc
 #pragma pack(push, 1)
 struct D2DrlgLevelPlacementStrc {
     /* 0x000 */ D2SeedStrc sSeed;
@@ -114,12 +134,36 @@ struct D2DrlgLevelPlacementStrc {
 };
 #pragma pack(pop)
 
+#endif // D2_DEFINED_D2DrlgLevelPlacementStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+struct D2DrlgOutRoomPathNodeStrc {
+    /* 0x00 */ int nFCost;
+    /* 0x04 */ int nHCost;
+    /* 0x08 */ int nGCost;
+    /* 0x0C */ int nX;
+    /* 0x10 */ int nY;
+    /* 0x14 */ int nDirStepCount;
+    /* 0x18 */ char * pDirDelta;
+    /* 0x1C */ uint8_t nDirection;
+    /* 0x1D */ uint8_t field_0x1d;
+    /* 0x1E */ uint8_t field_0x1e;
+    /* 0x1F */ uint8_t field_0x1f;
+    /* 0x20 */ struct D2DrlgOutRoomPathNodeStrc * pParent;
+    /* 0x24 */ struct D2DrlgOutRoomPathNodeStrc * pChild;
+};
+
+#endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2DrlgPresetTypeIndexStrc
+#define D2_DEFINED_D2DrlgPresetTypeIndexStrc
 struct D2DrlgPresetTypeIndexStrc {
     /* 0x00 */ int nLevelId;
     /* 0x04 */ int nFirstIndex;
     /* 0x08 */ int nLastIndex;
 };
 
+#endif // D2_DEFINED_D2DrlgPresetTypeIndexStrc
+#ifndef D2_DEFINED_D2DrlgPresetTypeStrc
+#define D2_DEFINED_D2DrlgPresetTypeStrc
 struct D2DrlgPresetTypeStrc {
     /* 0x00 */ int nOrientation;
     /* 0x04 */ int nType;
@@ -130,6 +174,7 @@ struct D2DrlgPresetTypeStrc {
     /* 0x18 */ int nOffsetY; // added to the room-to-world Y before bounds check
 };
 
+#endif // D2_DEFINED_D2DrlgPresetTypeStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2DrlgRoomExNearNodeStrc {
     /* 0x00 */ struct D2RoomExStrc * pRoomEx;
@@ -166,6 +211,8 @@ struct D2DrlgRoomTilesListStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2DrlgWallLayerGridsStrc
+#define D2_DEFINED_D2DrlgWallLayerGridsStrc
 struct D2DrlgWallLayerGridsStrc {
     /* 0x00 */ struct D2RoomExStrc * pRoomEx; // Target room being processed
     /* 0x04 */ struct D2DrlgGridStrc * apTileTypeGrids[4]; // Per-wall-layer tile type grids (pDrlgGrid[0..3]); iterated in parallel with apWallGrids up to nWallLayerCount
@@ -178,6 +225,9 @@ struct D2DrlgWallLayerGridsStrc {
     /* 0x38 */ int nSubTypeCount; // Number of sub-type entries to process (from room eRoomExFlags bits)
 };
 
+#endif // D2_DEFINED_D2DrlgWallLayerGridsStrc
+#ifndef D2_DEFINED_D2LvlMazeTxt
+#define D2_DEFINED_D2LvlMazeTxt
 struct __attribute__((packed)) D2LvlMazeTxt {
     /* 0x00 */ eD2LevelId Level; // ID from D2LevelsTxt
     /* 0x04 */ int Rooms[3]; // the minimum number of .ds1 map sections that will make up the maze in Normal, Nightmare and Hell difficulties.
@@ -186,6 +236,9 @@ struct __attribute__((packed)) D2LvlMazeTxt {
     /* 0x18 */ int Merge; // Possibly related to how adjacent .ds1s are connected with each other, but what the different values are for is unknown.
 };
 
+#endif // D2_DEFINED_D2LvlMazeTxt
+#ifndef D2_DEFINED_D2LvlSubTxt
+#define D2_DEFINED_D2LvlSubTxt
 struct __attribute__((packed)) D2LvlSubTxt {
     /* 0x000 */ int Type;
     /* 0x004 */ char File[60];
@@ -204,6 +257,7 @@ struct __attribute__((packed)) D2LvlSubTxt {
     /* 0x158 */ int Expansion;
 };
 
+#endif // D2_DEFINED_D2LvlSubTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct DrlgVertBorderVariantPair {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -213,6 +267,8 @@ struct DrlgVertBorderVariantPair {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2DrlgLevelDataWildernessLevel
+#define D2_DEFINED_D2DrlgLevelDataWildernessLevel
 struct __attribute__((packed)) D2DrlgLevelDataWildernessLevel {
     /* 0x000 */ uint32_t dwFlags; // Flags: 0x04=right border, 0x08=left border, 0x10=mid split, 0x20=has corner fill, 0x40=has preset placed, 0x80=top-left town, 0x100=top-right town, 0x200=left town, 0x400=bottom-left town
     /* 0x004 */ D2DrlgGridStrc sGridPreset; // Grid for preset level IDs / orientation
@@ -233,12 +289,24 @@ struct __attribute__((packed)) D2DrlgLevelDataWildernessLevel {
     /* 0x264 */ struct D2DrlgOrthStrc * pOrthData; // Linked list of orthogonal room connection data, freed by FreeRoomData
 };
 
+#endif // D2_DEFINED_D2DrlgLevelDataWildernessLevel
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+struct __attribute__((packed)) D2DrlgOutRoomPathPoolStrc {
+    /* 0x0000 */ struct D2DrlgOutRoomPathNodeStrc * pHead;
+    /* 0x0004 */ D2DrlgOutRoomPathNodeStrc aNodes[900];
+    /* 0x8CA4 */ int nNodeCount;
+};
+
+#endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2DrlgPresetTypeTablesStrc
+#define D2_DEFINED_D2DrlgPresetTypeTablesStrc
 struct __attribute__((packed)) D2DrlgPresetTypeTablesStrc {
     /* 0x000 */ D2DrlgPresetTypeIndexStrc aIndex[37];
     /* 0x1BC */ int nAlignPad;
     /* 0x1C0 */ D2DrlgPresetTypeStrc aTypes[34];
 };
 
+#endif // D2_DEFINED_D2DrlgPresetTypeTablesStrc
 namespace D2Common::Drlg {
 
 // Function declarations
@@ -271,7 +339,7 @@ void __fastcall DRLGLEVEL_AdjustRoomCoordinates(struct D2DrlgLevelStrc * pLevel)
 struct D2RoomExStrc * __fastcall GetRoomOfCoord(struct D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY);
 BOOL __fastcall LEVEL_CheckIfLevelIsTown(eD2LevelId eLevel);
 BOOL __stdcall DRLG_ReturnZero();
-int Unreferenced_00642770();
+int __fastcall Unreferenced_00642770(eD2LevelId eLevel);
 int __fastcall GetRoomByCoordsByLevel(struct D2DrlgStrc * pDrlg, int32_t nX, int32_t nY);
 // Allocates or returns existing D2DrlgActWarpsInfoStrc for a level. Copies Vis[8] and Warp[8] from LevelDefs.txt into nTargetArea[8] and nWarpId[8]. Linked list stored at pDrlg->pWarpsInfo (offset 0x90). Size: 0x48 bytes. Source: Drlg.cpp line 0x3E0.
 struct D2DrlgActWarpsInfoStrc * __fastcall DRLGACT_AllocWarpsInfo(struct D2DrlgStrc * pDrlg, eD2LevelId eLevel);
@@ -369,7 +437,7 @@ int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(struct D2DrlgLevelPlacement
 void __fastcall ACT1_fpLevelDataFn2_A(struct D2DrlgLevelStrc * pLevel, int nNodeOffset, eD2LevelId * nDirTableBase);
 // Lays out a connected group of DRLG levels from a level-data list. Seeds a temporary placement struct from the DRLG seed, fills each node's world size from LevelDefs (per difficulty), then drives a placement callback per node with backtracking (failed placement rewinds to the previous node). Second pass allocates each level (GetLevelAndAlloc), copies computed world position/size, sets the preset file for Rogue Encampment (1) / Lut Gholein (0x28) from the placement direction, and for Black Marsh (6) picks the Outer Cloister (0x1b) layout file via seed advance, invokes the optional per-level callback, and wires prev/next warp connections (skipped for act 4). Inputs: level-data list, two optional callbacks, target DRLG.
 void __stdcall DRLGLEVEL_ParseLevelData(struct D2DrlgLevelDataList * pLevelData, fpLevelDataFn1 fnPlacementValidator, fpLevelDataFn2 fnLevelDataCallback, struct D2DrlgStrc * pDrlg);
-void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, int * pnCellNode, int32_t nFlag);
+void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, struct D2DrlgVertexStrc * pnCellNode, int32_t nFlag);
 // Initializes the DRLG collision/tile grids for a room during level generation. Allocates three D2DrlgGridStrc grids (tile-type, wall, floor) sized to the room's world dimensions from the room's memory pool, seeds the floor grid's border cells, and runs Act-1 outdoor room grid setup for ACT_I. Decodes the room's waypoint and shrine sub-counts from eRoomExFlags and lays out their sub-tiles via SubTypeWpShrine using the level's SubWaypoint/SubShrine ids. Applies a level-type-specific grid flag (special areas) to empty floor cells, then finalizes the wall and floor grids. __fastcall, no return value.
 void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_InitializeMazeRoom(struct D2RoomExStrc * pRoomEx);
@@ -407,11 +475,13 @@ void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(struct D2DrlgLevelStrc * pLevel
 int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY2);
 // NOTE: Register params: pint (EAX): int *
 int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3);
+// Direction delta lookup from table based on (dir2-dir1)&3.
+uint8_t * __stdcall DRLGOUTROOM_GetDirectionDeltaLookup(char nDirection, char nParentDirection);
 // Core A* loop: expands nodes, computes f=g+h, uses 900-node pool.
-int * __stdcall DRLGOUTROOM_PathSearchStep(int * * ppNodeList, int32_t nMaxFCost, struct D2DrlgLevelStrc * pLevelCtx, int * pnTargetPos);
+struct D2DrlgOutRoomPathNodeStrc * __stdcall DRLGOUTROOM_PathSearchStep(struct D2DrlgOutRoomPathPoolStrc * ppNodeList, int32_t nMaxFCost, struct D2DrlgLevelStrc * pLevelCtx, int * pnTargetPos);
 // DRLG level-generation: builds the room-graph path connecting wilderness level exit pair nExitIndex (aExitPoints2 start -> aExitPoints3 target, both converted from world to 8-unit grid coords). If the two exits are adjacent (Manhattan <=1) it just allocates two vertices directly. Otherwise runs an iterative A*-style search (DRLGOUTROOM_PathSearchStep over a ~9000-int node pool, growing the cost bound each pass) and, on success, walks the result node chain allocating a D2DrlgVertexStrc list into pWildData->pAdjacentVertices[nExitIndex] (positions from node[3]/[4]). Returns TRUE if a path was built, FALSE if no path within the cost budget. Vertices come from the level's DRLG memory pool.
 BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(struct D2DrlgLevelStrc * pLevel, int32_t nExitIndex);
 #endif // D2_MODULE_D2Common
-// 11 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg

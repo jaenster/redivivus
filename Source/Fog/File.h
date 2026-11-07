@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -76,6 +79,17 @@ struct _WIN32_FIND_DATAW {
 
 #endif // _WIN32
 
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+union CRASH_DumpRegisters_Slotm6e0 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t nFpuErrOffset;
+    /* 0x00 */ BYTE * pXmmLane2;
+};
+
+#endif // D2_MODULE_Fog
+#ifndef D2_DEFINED_D2CrashFrameStrc
+#define D2_DEFINED_D2CrashFrameStrc
 struct D2CrashFrameStrc {
     /* 0x00 */ uint32_t dwReturnAddr;
     /* 0x04 */ uint32_t dw04;
@@ -88,13 +102,14 @@ struct D2CrashFrameStrc {
     /* 0x14 */ uint32_t a14[4];
 };
 
+#endif // D2_DEFINED_D2CrashFrameStrc
 namespace Fog::File {
 
 // Function declarations
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback);
 uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize);
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath);
-char * __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc);
+size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc);
 // Convention __cdecl_ediesi: the destination and its size arrive in EDI/ESI, the format and its arguments on the stack. A model, not custom storage, because the decompiler drops custom register parameters at a varargs call site.
 int STRING_FormatVarArgs(char * szDest, int32_t nDestSize, char * szFormat, ...);
 bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicationName, LPCSTR szCommandLine);

@@ -10,3 +10,7 @@
 template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Clear_Unref_00604070() {
     ((TSHashTable<::CELLIST, HASHKEY_NONE>*)this)->InternalClear(0);
 }
+
+// Static data members
+
+template<> void * TSHashTable<MappingEntryNode, HASHKEY_STRI>::vftable[4] = { (void*)&TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalDelete, (void*)&TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalNew, (void*)&TSHashTable<MappingEntryNode, HASHKEY_STRI>::ScalarDeletingDestructor, (void*)&TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destroy };

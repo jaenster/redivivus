@@ -18,25 +18,12 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/OverlayTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2gfx/D2GFX.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/UNIT/Missile.h"
-#include "Source/Fog/Fog.globals.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -979,7 +966,7 @@ void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
         if (pDVar1->colorshift == 'h' && (pLocalPlayerUnit = Player::GetPlayerUnit_UI() , pUnit == pLocalPlayerUnit) && (bIsWindowMode = D2gfx::D2GFX::IsWindowMode() , bIsWindowMode != 0)) {
           pUnit->uSideData.pClientSide.nPaletteIndex = 0;
         } else {
-          *(uint32_t*)((uintptr_t)&pUnit->uSideData + 8) = (uint32_t)(uint8_t)pDVar1->colorshift;
+          *(uint32_t*)((intptr_t)&pUnit->uSideData + 8) = (uint32_t)(uint8_t)pDVar1->colorshift;
         }
 
         pDVar3 = Player::GetPlayerUnit_UI();
@@ -1217,7 +1204,7 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
-D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2UnitDataUnion * eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer) {
+D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, eD2States eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer) {
     int byOldAlignment;
     if (!pUnit) {
       return nullptr;
@@ -1229,10 +1216,10 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     }
     if (!pStatList) {
       int nBaseStatVal;
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (eD2States)eState);
+      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
       if (!pStatList) {
         pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0, 0, pUnit->eUnitType, pUnit->nUnitGUID);
-        D2Common::Stats::StatsEx::SetState(pStatList, (eD2States)eState);
+        D2Common::Stats::StatsEx::SetState(pStatList, eState);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       } else {
         nBaseStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eUnitStat, nLayer);
@@ -1247,7 +1234,7 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     } else if ((int)eUnitStat < 0) {
       return pStatList;
     }
-    if ((int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((uintptr_t)&D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if ((int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((intptr_t)&D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x5d2);
     }
 

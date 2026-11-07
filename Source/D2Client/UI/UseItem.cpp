@@ -16,18 +16,14 @@
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/Src/D2WinFont.h"
-#include "Source/D2gfx/D2GFX.h"
-#include "Source/Fog/Memory.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Win/D2Win.h"
+#include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/D2Client.h"
+#include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/UI/UseItem.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -142,7 +138,7 @@ void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY) {
       if (nMouseX >= (int)pBoundsEntry[-1] && nMouseX <= (int)*pBoundsEntry && nMouseY >= (int)pBoundsEntry[1] && nMouseY <= (int)pBoundsEntry[2]) {
         Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
         nItemCount = nCashDisplayItemCount;
-        *(uint8_t*)((int)pBoundsEntry + 0x11) = 1;
+        *(uint8_t*)((char*)pBoundsEntry + 0x11) = 1;
         *(uint8_t*)(pBoundsEntry + 4) = 1;
       }
 

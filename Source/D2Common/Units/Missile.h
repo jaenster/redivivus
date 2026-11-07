@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -18,6 +21,8 @@ struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 
 // Data types
+#ifndef D2_DEFINED_D2MissileCalcContextStrc
+#define D2_DEFINED_D2MissileCalcContextStrc
 struct D2MissileCalcContextStrc {
     /* 0x00 */ struct D2UnitStrc * pMissile;
     /* 0x04 */ struct D2UnitStrc * pOwner;
@@ -25,6 +30,7 @@ struct D2MissileCalcContextStrc {
     /* 0x0C */ int nMissileLevel;
 };
 
+#endif // D2_DEFINED_D2MissileCalcContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2MissileRandCalcStrc {
     /* 0x00 */ struct D2UnitStrc * pMissile; // calc VM context: source missile unit (matches D2MissileCalcContextStrc)
@@ -39,11 +45,14 @@ struct D2MissileRandCalcStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2MissileStreamStrc
+#define D2_DEFINED_D2MissileStreamStrc
 struct D2MissileStreamStrc {
     /* 0x00 */ int * pStream;
     /* 0x04 */ int nStreamSize;
 };
 
+#endif // D2_DEFINED_D2MissileStreamStrc
 namespace D2Common::Units::Missile {
 
 // Function declarations
@@ -88,7 +97,7 @@ uint8_t __stdcall GetElemTypeFromMissileId(int32_t nMissileId);
 int32_t __stdcall GetMinElemDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel);
 // Returns the maximum elemental damage for a missile at a given level. Mirrors GetMinElemDamage but uses EMax + MaxELev1 from D2MissilesTxt. Optionally scales by EDmgSymPerCalc, then shifts by HitShift. Returns 0 for non-missile units or invalid IDs.
 int32_t __stdcall GetMaxElemDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel);
-int32_t __stdcall GetElementalLength(int32_t nUnused, struct D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel);
+int32_t __stdcall GetElementalLength(struct D2UnitStrc * nUnused, struct D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel);
 // Evaluates missile calc expression using missile/owner context and resolved missile id/level; dispatches into the calc VM callback path.
 int32_t __stdcall MISSILE_EvalMissileCalc(struct D2UnitStrc * pMissile, struct D2UnitStrc * pOwner, uint32_t nCalcExpression, int32_t nMissileId, int32_t nMissileLevel);
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.

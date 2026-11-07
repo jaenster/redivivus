@@ -292,6 +292,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
+        "Skills_SrvDoFunc_066_Conviction_Slotm",
+        "Skills_SrvDoFunc_066_Conviction_Slotmc",
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
@@ -767,6 +769,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
+        "Skills_SrvDoFunc_081_HolyFreeze_Slotm",
+        "Skills_SrvDoFunc_081_HolyFreeze_Slotmc",
         "eD2Skills",
         "eD2UnitType",
         "int32_t"

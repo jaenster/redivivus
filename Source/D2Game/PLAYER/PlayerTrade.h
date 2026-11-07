@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -33,12 +36,17 @@ struct D2CubeSetupEntryStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2TradeItemUidPairStrc
+#define D2_DEFINED_D2TradeItemUidPairStrc
 struct D2TradeItemUidPairStrc {
     /* 0x00 */ int nUID; // CreateStructure0xc stores its nUID argument
     /* 0x04 */ uint32_t nUIDOther;
     /* 0x08 */ struct D2TradeItemUidPairStrc * pNext; // next node; SetUidOther and PLRTRADE_FreeTradeCopyInventory walk it
 };
 
+#endif // D2_DEFINED_D2TradeItemUidPairStrc
+#ifndef D2_DEFINED_D2TradeRecordStrc
+#define D2_DEFINED_D2TradeRecordStrc
 struct D2TradeRecordStrc {
     /* 0x00 */ int32_t pCopyInventory;
     /* 0x04 */ void * pSaveBuffer;
@@ -48,6 +56,9 @@ struct D2TradeRecordStrc {
     /* 0x14 */ uint32_t dwAcceptLockEndTick;
 };
 
+#endif // D2_DEFINED_D2TradeRecordStrc
+#ifndef D2_DEFINED_D2UnitDataPlayerArenaStrc
+#define D2_DEFINED_D2UnitDataPlayerArenaStrc
 struct D2UnitDataPlayerArenaStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
 
@@ -55,15 +66,22 @@ struct D2UnitDataPlayerArenaStrc {
     /* 0x04 */ int bScoreDirty; // Set to 1 when score changes, triggers broadcast via ARENA_UpdatePlayerKillState
 };
 
+#endif // D2_DEFINED_D2UnitDataPlayerArenaStrc
+#ifndef D2_DEFINED_D2UnitDataPlayerInteractedNPCStrc
+#define D2_DEFINED_D2UnitDataPlayerInteractedNPCStrc
 struct D2UnitDataPlayerInteractedNPCStrc {
     /* 0x00 */ struct D2BitBufferStrc * pIntro;
     /* 0x04 */ struct D2BitBufferStrc * pIntro2;
 };
 
+#endif // D2_DEFINED_D2UnitDataPlayerInteractedNPCStrc
+#ifndef D2_DEFINED_D2UnitDataPlayerPetsStrc
+#define D2_DEFINED_D2UnitDataPlayerPetsStrc
 struct D2UnitDataPlayerPetsStrc {
     /* 0x00 */ struct D2PetListStrc * pPetList; // Lists for each pet type
 };
 
+#endif // D2_DEFINED_D2UnitDataPlayerPetsStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2CubeSetupStrc {
     /* 0x00 */ D2CubeSetupEntryStrc entry[3];
@@ -80,7 +98,7 @@ namespace D2Game::PLAYER::PlayerTrade {
 BOOL __fastcall Objects_OperateFn32_OpenStash(struct D2ObjectOperateFnArg * pOperation);
 uint32_t PLAYERTRADE_CompareUint32(uint32_t * pnLeft, uint32_t * pnRight);
 // Matches a single input descriptor (D2CubeInputStrc) against cube items. Checks flags (item code, item type, quality, unique ID, sockets, ethereal, normal/exceptional/elite tier, runeword), applies per-item stat requirements (op 15-26), and fills pMatchedItems entries with matched items. The usage array pItemUsedFlags tracks which items have been consumed. Returns 1 if the required quantity of matching items was found, 0 otherwise. Handles special output type 0xff (use-item) and 0xfe (use-type) by storing item pointers and upgrade class IDs in pMatchedItems for GenerateCubingResult.
-uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, struct D2InventoryStrc * pInventory, struct D2CubeMainTxt * pRecipe, int32_t nInputSlotIndex, struct D2CubeSetupStrc * pMatchedItems, int32_t pItemUsedFlags);
+uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, struct D2InventoryStrc * pInventory, struct D2CubeMainTxt * pRecipe, int32_t nInputSlotIndex, struct D2CubeSetupStrc * pMatchedItems, int32_t * pItemUsedFlags);
 // Two explicit GuardStack tails carrying a packed 16-bit item class id (aCandidateIds[nEndId]) on success, 0 on no-candidates-found. Own doc comment: "Returns class ID in EAX."
 uint16_t __fastcall ITEM_SelectRandomItemClassByType(::SGAMEDATA * pGame, int32_t nItemLevel, eD2ItemTypes eItemType);
 BOOL __fastcall CUBE_SpecialOutput_CowPortalRecipe(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer);

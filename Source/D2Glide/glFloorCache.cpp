@@ -2,8 +2,7 @@
 
 #include "Source/D2Glide/glFloorCache.h"
 #include "Source/D2Common/D2TileLibraryEntryStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Glide/Renderer/Glide.data.h"
 
@@ -42,13 +41,13 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
     int nVramAddr = nVramStart;
     if ((int)(pCache->nMaxEntries - 1) >= 0) {
       do {
-        pNode = (int*)((uintptr_t)&pCache->pNodes->nIndex + nByteOffset);
+        pNode = (int*)((intptr_t)&pCache->pNodes->nIndex + nByteOffset);
         *pNode = nEntryIndex;
         if (nEntryIndex < (int)(pCache->nMaxEntries - 1)) {
-          pNode[3] = (uintptr_t)&pCache->pNodes[1].nIndex + nByteOffset;
+          pNode[3] = (intptr_t)&pCache->pNodes[1].nIndex + nByteOffset;
         }
         if (nEntryIndex > 0) {
-          pNode[4] = (uintptr_t)&pCache->pNodes[-1].nIndex + nByteOffset;
+          pNode[4] = (intptr_t)&pCache->pNodes[-1].nIndex + nByteOffset;
         }
 
         pNode[1] = nVramAddr;
@@ -282,22 +281,21 @@ void __fastcall GLFLOOR_InvalidateByIndex(GlFloorCacheStrc * pCache, int nNodeIn
 
 // Destroys floor cache by evicting all active entries and freeing node array memory.
 // @sourcefile .\Src\glFloorCache.cpp
-void __fastcall GLFLOOR_Destroy(uint32_t * pCacheData, GlFloorCacheStrc * pCache) {
+void __fastcall GLFLOOR_Destroy(GlFloorCacheStrc * pCacheData, GlFloorCacheStrc * pCache) {
+    uint32_t nUsedCount;
     if (pCache) {
-      int nUsedCount;
-      nUsedCount = pCacheData[2];
+      nUsedCount = pCacheData->nUsedCount;
       while (nUsedCount) {
-        GLFLOOR_EvictLRU((GlFloorCacheStrc*)pCacheData);
-        nUsedCount = pCacheData[2];
+        GLFLOOR_EvictLRU(pCacheData);
+        nUsedCount = pCacheData->nUsedCount;
       }
     }
-    if ((void*)pCacheData[7]) {
-      D2_FREE_AT((void*)pCacheData[7], ".\\Src\\glFloorCache.cpp", 0x74);
-      pCacheData[7] = 0;
+    if (pCacheData->pNodes) {
+      D2_FREE_AT(pCacheData->pNodes, ".\\Src\\glFloorCache.cpp", 0x74);
+      pCacheData->pNodes = 0;
     }
 
-    *pCacheData = 0;
-    memset(pCacheData + 1, 0, 7 * sizeof(pCacheData[0]));
+    memset(pCacheData, 0, sizeof(*pCacheData));
 }
 
 // Ensures cache has free capacity by allocating a node. If cache is full, evicts LRU entry first. Returns success status.

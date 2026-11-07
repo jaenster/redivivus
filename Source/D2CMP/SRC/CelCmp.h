@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2CMP)
 #error "D2CMP header included by a module that may not use D2CMP (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2CMP) && !defined(D2_LOADS_D2CMP)
+#error "internal D2CMP header included from another module; include D2CMP's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -56,15 +59,15 @@ uint32_t __stdcall CELCMP_GetDirectionFrameTableIndex(int32_t nFrameIndex, uint3
 BOOL __stdcall CELCMP_CanConvertFormat(int32_t nSrcFormat, int32_t nDstFormat);
 uint32_t __stdcall CELCMP_GetFrameDecodeHandlerForward(uint32_t nGameDirection, uint32_t nLevelOfRotation);
 void __stdcall CELCMP_ValidateCelFilePointer(int32_t hFile, uint32_t dwParam);
-uint32_t __stdcall CELCMP_AllocateDecodedCelFile(int32_t pFile, uint32_t * ppDecodedOut, uint32_t dwParam1, uint32_t dwParam2);
+uint32_t __stdcall CELCMP_AllocateDecodedCelFile(struct DC6 * pFile, uint32_t * ppDecodedOut, uint8_t * dwParam1, uint32_t dwParam2);
 void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSerializedOut, size_t * pnSize);
 // Walk every frame in the DC6 sprite and apply palette colour-key conversion; asserts bit 2 of nFlags is set (indexed/ready format)
 void __stdcall CELCMP_ApplyPaletteToAllFrames(struct DC6 * pDCC, uint8_t * pPalette);
-uint32_t __stdcall CELCMP_SerializeCelFileToMemory(uint32_t * pDCCSrc, uint32_t * ppDCCDest, size_t * pSizeOut);
+uint32_t __stdcall CELCMP_SerializeCelFileToMemory(struct DC6 * pDCCSrc, uint32_t * ppDCCDest, size_t * pSizeOut);
 void __stdcall CELCMP_FreeCelFileMemory(void * pCelFile);
-void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t pDC6, BYTE * pPaletteRemap);
+void __stdcall CELCMP_InvokeFormatSpecificCleanup(struct DC6 * pDC6, BYTE * pPaletteRemap);
 uint32_t __stdcall CELCMP_CopyCelDataToBuffer(struct DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer);
-uint32_t __stdcall CELCMP_ValidateGfxDataIndexInRange(uint32_t * pGfxData);
+uint32_t __stdcall CELCMP_ValidateGfxDataIndexInRange(struct D2GfxDataStrc * pGfxData);
 int32_t __stdcall CELCMP_GetDC6BlockDataPointer(int32_t pFrameBlock);
 int32_t __stdcall CELCMP_GetDC6DirectionCount(int * pDC6File);
 pfnCelPixelDataFree __stdcall CELCMP_GetPixelDataFreeCallback();
@@ -75,8 +78,8 @@ void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal);
 uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, uint32_t * ppCelFileOut);
 uint32_t __stdcall CELCMP_RoundUpToMultiple_Unreferenced(uint32_t nValue, uint32_t nMultiple);
 void __stdcall BITSTREAM_InitWriter(uint32_t * pBitStream, int32_t nByteSize, struct D2CodecBitStateStrc * pBitState);
-void __fastcall BITSTREAM_CopyState(int dest, int src);
-int __fastcall BITSTREAM_GetByteOffset(int pBitState);
+void __fastcall BITSTREAM_CopyState(struct D2CodecBitStateStrc * dest, struct D2CodecBitStateStrc * src);
+int __fastcall BITSTREAM_GetByteOffset(struct D2CodecBitStateStrc * pBitState);
 void __thiscall BITSTREAM_AdvanceBits(int32_t pThis, int32_t nBitCount);
 void __stdcall GFX_InitGlobalCriticalSection();
 void __stdcall GFX_DestroyGlobalCriticalSection();

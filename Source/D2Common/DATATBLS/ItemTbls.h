@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -31,11 +34,16 @@ struct D2LowQualityItemsTxt;
 struct D2QualityItemsTxt;
 
 // Data types
+#ifndef D2_DEFINED_D2BooksTableStrc
+#define D2_DEFINED_D2BooksTableStrc
 struct D2BooksTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2BooksTxt * pTable;
 };
 
+#endif // D2_DEFINED_D2BooksTableStrc
+#ifndef D2_DEFINED_D2BooksTxt
+#define D2_DEFINED_D2BooksTxt
 struct D2BooksTxt {
     /* 0x00 */ uint16_t name; // d2bs binfields FIELDTYPE_KEY_WORD
     /* 0x02 */ char spellicon; // d2bs binfields FIELDTYPE_CHAR
@@ -49,11 +57,15 @@ struct D2BooksTxt {
     /* 0x1C */ char bookspellcode[4]; // d2bs binfields FIELDTYPE_RAW4
 };
 
+#endif // D2_DEFINED_D2BooksTxt
+#ifndef D2_DEFINED_D2GambleTableStrc
+#define D2_DEFINED_D2GambleTableStrc
 struct D2GambleTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ void * pTable;
 };
 
+#endif // D2_DEFINED_D2GambleTableStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2ItemStatCostDescPriorityStrc {
     D2ItemStatCostDescPriorityStrc() = default;
@@ -66,21 +78,32 @@ struct D2ItemStatCostDescPriorityStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2LowQualityItemsTableStrc
+#define D2_DEFINED_D2LowQualityItemsTableStrc
 struct D2LowQualityItemsTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
 };
 
+#endif // D2_DEFINED_D2LowQualityItemsTableStrc
+#ifndef D2_DEFINED_D2LowQualityItemsTxt
+#define D2_DEFINED_D2LowQualityItemsTxt
 struct D2LowQualityItemsTxt {
     /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x20 */ uint16_t wNameStringId;
 };
 
+#endif // D2_DEFINED_D2LowQualityItemsTxt
+#ifndef D2_DEFINED_D2QualityItemsTableStrc
+#define D2_DEFINED_D2QualityItemsTableStrc
 struct D2QualityItemsTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2QualityItemsTxt * pTable;
 };
 
+#endif // D2_DEFINED_D2QualityItemsTableStrc
+#ifndef D2_DEFINED_D2QualityItemsTxt
+#define D2_DEFINED_D2QualityItemsTxt
 struct __attribute__((packed)) D2QualityItemsTxt {
     /* 0x00 */ bool armor;
     /* 0x01 */ bool weapon;
@@ -103,6 +126,9 @@ struct __attribute__((packed)) D2QualityItemsTxt {
     /* 0x6F */ uint8_t field_0x6f;
 };
 
+#endif // D2_DEFINED_D2QualityItemsTxt
+#ifndef D2_DEFINED_D2RunesTxt
+#define D2_DEFINED_D2RunesTxt
 struct D2RunesTxt {
     /* 0x000 */ char name[64]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
@@ -156,11 +182,42 @@ struct D2RunesTxt {
     /* 0x11C */ int t1max7; // d2bs binfields FIELDTYPE_SIGNEDINT
 };
 
+#endif // D2_DEFINED_D2RunesTxt
+#ifndef D2_DEFINED_D2RunesTxtTableStrc
+#define D2_DEFINED_D2RunesTxtTableStrc
 struct D2RunesTxtTableStrc {
     /* 0x00 */ int nSize;
     /* 0x04 */ struct D2RunesTxt * pTable;
 };
 
+#endif // D2_DEFINED_D2RunesTxtTableStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+union TXT_AllocTxt_itemstatcost_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ int pDepSlot;
+    /* 0x00 */ uint16_t * pOpStatCur;
+};
+
+#endif // D2_MODULE_D2Common
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+union TXT_AllocTxt_setitems_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2PoolManagerStrc * pMemorySaved;
+    /* 0x00 */ int32_t nByteOffset;
+};
+
+#endif // D2_MODULE_D2Common
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+union TXT_AllocTxt_uniqueitems_Slotm8 {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ struct D2PoolManagerStrc * pMemorySaved;
+    /* 0x00 */ int32_t nByteOffset;
+};
+
+#endif // D2_MODULE_D2Common
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================

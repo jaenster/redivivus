@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,6 +17,7 @@
 
 // Forward declarations
 struct D2UIMouseMsgStrc;
+struct D2WinTextBoxLineStrc;
 #ifndef RECON_FPTD_fpD2WinScrollbarOnChange
 #define RECON_FPTD_fpD2WinScrollbarOnChange
 typedef void (__stdcall *fpD2WinScrollbarOnChange)(struct D2UIMouseMsgStrc * pUnderMouse);
@@ -34,18 +38,32 @@ struct __attribute__((packed)) D2WinScrollbar {
     /* 0x5C */ void (__stdcall *pfnOnChange)(struct D2UIMouseMsgStrc *); // Called with one argument (the D2UnderMouseStrc) from D2WINSCROLLBAR_HandleMouseWheel @00508030; return unused.
 };
 
+#ifndef D2_DEFINED_D2WinTextBoxListStateStrc
+#define D2_DEFINED_D2WinTextBoxListStateStrc
+struct D2WinTextBoxListStateStrc {
+    /* 0x00 */ int nTextOffsetX;
+    /* 0x04 */ int nTextOffsetY;
+    /* 0x08 */ struct D2WinTextBoxLineStrc * pLineHead;
+    /* 0x0C */ struct D2WinTextBoxLineStrc * pLineTail;
+    /* 0x10 */ struct D2WinTextBoxLineStrc * pTopLine;
+    /* 0x14 */ int nLineCount;
+    /* 0x18 */ int nTopLineIndex;
+    /* 0x1C */ uint32_t dwStyleFlags;
+    /* 0x20 */ int nSelectedLine;
+    /* 0x24 */ int nColumnCount;
+    /* 0x28 */ int anColumnX[5];
+    /* 0x3C */ uint32_t adwColumnFlags[5];
+};
+
+#endif // D2_DEFINED_D2WinTextBoxListStateStrc
 struct __attribute__((packed)) D2WinTextBox {
     /* 0x00 */ D2ControlStrc sControl;
-    /* 0x40 */ D2ControlStrc sStyleControl; // Style sub-control: eD2FormType=font, pDC6=alt font, fpKey=key handler, fpOnPress=color fn, fpDrawEx=max line width, dwState=line count, fpPush=loop flag
-    /* 0x80 */ int nLineSpacing; // Pixel spacing between lines (from D2WINTEXTBOX_ComputeLineSpacingForLanguage)
-    /* 0x84 */ int nVisibleLineCount; // Computed visible line count for layout
-    /* 0x88 */ int nScrollOffset; // Scroll line offset (used with scrollbar)
-    /* 0x8C */ int nScrollSubOffset; // Smooth-scroll sub-pixel offset; decremented by 2 per tick, reset to font height at wrap
+    /* 0x40 */ D2WinTextBoxListStateStrc sListState;
     /* 0x90 */ struct D2WinScrollbar * pScrollbar; // Linked scrollbar (struct D2WinScrollbar*, stored in dwPosY slot of partial [2])
     /* 0x94 */ int nScrollWidth; // Adjusted width for scrollable area (dwSizeX slot of [2])
     /* 0x98 */ int nScrollHeight; // Scrollable height (dwSizeY slot of [2])
     /* 0x9C */ int nExtraLineSpacingA; // Per-line extra spacing added when line flag byte[6]=0
     /* 0xA0 */ int nExtraLineSpacingB; // Per-line extra spacing added when line flag byte[6]!=0
     /* 0xA4 */ int nExtraLineSpacingC; // Second per-line extra spacing used in same branch as 0xa4
-    /* 0xA8 */ int * pLineSpacingGlobal; // Ref to gnTextBoxLineSpacing global (fpMouse slot of [2])
+    /* 0xA8 */ int pLineSpacingGlobal; // Ref to gnTextBoxLineSpacing global (fpMouse slot of [2])
 };

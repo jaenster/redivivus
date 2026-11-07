@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -16,6 +19,25 @@ struct D2CrashFrameStrc;
 struct D2FogDebugModuleEntryStrc;
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+struct __attribute__((packed)) CV_INFO_PDB20 {
+    /* 0x00 */ DWORD CvSignature;
+    /* 0x04 */ LONG Offset;
+    /* 0x08 */ DWORD Signature;
+    /* 0x0C */ DWORD Age;
+    /* 0x10 */ char PdbFileName[0];
+};
+
+#endif // D2_MODULE_Fog
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+struct __attribute__((packed)) CV_INFO_PDB70 {
+    /* 0x00 */ DWORD CvSignature;
+    /* 0x04 */ GUID Signature;
+    /* 0x14 */ DWORD Age;
+    /* 0x18 */ char PdbFileName[0];
+};
+
+#endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 struct D2DebugModuleInfo {
     /* 0x000 */ uint32_t pBase;

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -19,6 +22,17 @@ typedef int32_t (__fastcall *pfnDeflateBlockFunc)(deflate_state * pDeflateState,
 #endif
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+union COMPRESS_BuildHuffmanDecodeTable_Slotm20c {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t nSymbolCode;
+    /* 0x00 */ uint8_t * pSymbolPtr;
+};
+
+#endif // D2_MODULE_Fog
+#ifndef D2_DEFINED_D2SSCompDeflateBlockEntryStrc
+#define D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 struct D2SSCompDeflateBlockEntryStrc {
     /* 0x00 */ uint16_t nGoodLength; // zlib configuration_table.good_length -> deflate_state.good_match
     /* 0x02 */ uint16_t nMaxLazy; // zlib configuration_table.max_lazy -> deflate_state.max_lazy_match
@@ -27,6 +41,7 @@ struct D2SSCompDeflateBlockEntryStrc {
     /* 0x08 */ int32_t (__fastcall *pfnDeflateBlock)(deflate_state *, int32_t); // zlib configuration_table.func (DeflateStored / DeflateFast / DeflateSlow), __fastcall
 };
 
+#endif // D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 namespace Fog::Source::SSComp {
 
 // Function declarations

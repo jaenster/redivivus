@@ -91,6 +91,7 @@
         "D2MagicAffixTxt",
         "D2MagixAffixModStrc",
         "int32_t",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1169,6 +1170,10 @@
       "calledFunctions": [
         "Unreferenced_0065e9b0",
         "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc"
       ]
     },
     {

@@ -4,8 +4,8 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Source/SFile.h"
 #include "Source/Fog/Src/ErrorManager.h"
+#include "3rdparty/Storm/Storm.h"
 #include "3rdparty/Storm/D2AsyncDataStrc.h"
-#include "3rdparty/Storm/Source/SFile.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -73,11 +73,11 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
     int nSlotOffset = 0;
     do {
       HANDLE hEvent;
-      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pSlot = (void*)((uintptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nSlotOffset);
+      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pSlot = (void*)((intptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nSlotOffset);
       hEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
       nSlotOffset += 0xc;
       *(HANDLE*)pSlot = hEvent;
-      *(uint32_t*)((int)pSlot + 4) = 1;
+      *(uint32_t*)((char*)pSlot + 4) = 1;
     } while (nSlotOffset < 0xc00);
 
     gnAsyncDataHandleBufferSize = 0x100;
@@ -94,7 +94,7 @@ void __stdcall STRUCT_FreeAsyncData() {
       pMemoryToFree = pD2AsyncDataStrc;
       if (gnAsyncDataHandleBufferSize > 0) {
         do {
-          pSlot = (void*)((uintptr_t)&pMemoryToFree->aSlots[0].hEvent + nSlotOffset);
+          pSlot = (void*)((intptr_t)&pMemoryToFree->aSlots[0].hEvent + nSlotOffset);
           if (pSlot && *(HANDLE*)pSlot) {
             /* HANDLE hObject for CloseHandle */ CloseHandle(*(HANDLE*)pSlot);
             pMemoryToFree = pD2AsyncDataStrc;
@@ -173,8 +173,8 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     nSlotIndex = 0;
     if (gnAsyncDataHandleBufferSize > 0) {
       do {
-        pCandidateSlot = (D2AsyncDataSlotStrc*)((uintptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset);
-        /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(*(HANDLE*)((uintptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset), 0);
+        pCandidateSlot = (D2AsyncDataSlotStrc*)((intptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset);
+        /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(*(HANDLE*)((intptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset), 0);
         if (!dwWaitResult) {
           ASYNCDATA_CancelAndCleanup(pCandidateSlot->pRequest);
           pCandidateSlot->bFree = 0;

@@ -4,21 +4,14 @@
 #include "Source/D2Client/D2BattleNetEventCallbackTable.h"
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/DATATBLS/ArenaTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/D2DrlgActStrc.h"
-#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Level.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
 #include "Source/D2Game/Monster/Monster.h"
+#include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/PLAYER/PlayerSave.h"
@@ -32,14 +25,6 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Game/UNIT/sunitproxy.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/SMem.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Src/LogManager.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Source/SSTR.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
@@ -237,13 +222,9 @@ void __fastcall AppearenceItems2(uint32_t pClient, D2UnitStrc * pUnit, uint32_t 
     exit(-1);
 }
 
-int Unreferenced_00537ab0() {
-    int extraout_EAX;
-    D2RoomStrc* unaff_ESI;
-    D2RoomStrc* unaff_EDI;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_SwapRoomDataForRoomEx(unaff_ESI, unaff_EDI);
-    D2Common::DUNGEON::Dungeon::DRLGROOM_SwapActiveRoomExBetweenLevels(unaff_ESI, unaff_EDI);
-    return extraout_EAX;
+void Unreferenced_00537ab0(D2RoomStrc * pRoom1, D2RoomStrc * pRoom2) {
+    D2Common::DUNGEON::Dungeon::DRLGROOM_SwapRoomDataForRoomEx(pRoom1, pRoom2);
+    D2Common::DUNGEON::Dungeon::DRLGROOM_SwapActiveRoomExBetweenLevels(pRoom1, pRoom2);
 }
 
 // @sourcefile .\GAME\Clients.cpp
@@ -1205,7 +1186,7 @@ BOOL __fastcall SERVER_IsPlayerCharacterInGame(char * szCharName, char * szCharN
 // @sourcefile .\GAME\Clients.cpp
 int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size_t size, size_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2) {
     D2SaveFileHeaderStrc* pSaveBuffer;
-    void* nAddress;
+    uint32_t pSavePacketList;
     BOOL bComplete = 0;
     if (!gQServerClientTablesInitialized) {
       return 0;
@@ -1235,8 +1216,8 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size
         pClient->dwSave = dwSaveFlags;
         if (pClient->nSaveOpenSize == nTotalSize) {
           pClient->fClientFlags |= 8;
-          nAddress = (void*)PLAYER::PlayerSave::PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)pClient->pSaveGame, pClient->nSaveOpenSize);
-          pClient->pSavePacketList = nAddress;
+          pSavePacketList = PLAYER::PlayerSave::PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)pClient->pSaveGame, pClient->nSaveOpenSize);
+          pClient->pSavePacketList = pSavePacketList;
           bComplete = 1;
         }
 
@@ -1576,17 +1557,17 @@ int __fastcall CLIENT_GetLangId(D2ClientStrc * pClient) {
 }
 
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgActStrc * pDrlgAct, ::SGAMEDATA * pSpawnXY) {
+void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t pDrlgAct, int32_t pSpawnXY) {
     eD2LevelId eLevelId;
     uint32_t dwCorpseGUID;
-    D2RoomStrc** pCorpsePlayerData;
+    eD2UnitType pCorpsePlayerData;
     D2UnitStrc* pUnit_00;
     uint32_t nSpawnUnitSizeX;
     D2RoomStrc* pCorpseRoom;
     D2SkillStrc* pSkill;
     D2DrlgRoomCoordsStrc sRoomCoords;
     POINT ptCorpsePos;
-    D2DrlgActStrc* pDrlgActSpawn;
+    int32_t pDrlgActSpawn;
     int32_t nErrorLine;
     ::SGAMEDATA* pGameOrig = pGame;
     if (!(pGame && pUnit && pClient)) {
@@ -1595,10 +1576,10 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
 
     uint8_t bActNo = GetAct(pClient);
     if (!pRoom) {
-      pDrlgAct = (D2DrlgActStrc*)(pGameOrig->pAct + bActNo);
+      pDrlgAct = (int32_t)(pGameOrig->pAct + bActNo);
       pRoom = (D2RoomStrc*)D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGameOrig->pAct[bActNo]);
       dwCorpseGUID = D2Common::Units::GetUnitSizeX(pUnit);
-      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit((D2DrlgActStrc*)pDrlgAct->eLevelIdFirst, (eD2LevelId)pRoom, 0, (int*)&pDrlgActSpawn, (int*)&pGame, dwCorpseGUID);
+      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*(D2DrlgActStrc**)pDrlgAct, (eD2LevelId)pRoom, 0, &pDrlgActSpawn, (int*)&pGame, dwCorpseGUID);
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a1);
         exit(-1);
@@ -1608,19 +1589,19 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
     } else {
       pDrlgActSpawn = pDrlgAct;
-      pGame = pSpawnXY;
+      pGame = (::SGAMEDATA*)pSpawnXY;
     }
 
     CLIENT_SetRoom(pClient, pRoom);
-    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, (int32_t)pDrlgActSpawn, (int32_t)pGame, pGameOrig, pRoom, 0);
+    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, pDrlgActSpawn, (int32_t)pGame, pGameOrig, pRoom, 0);
     pClient->fClientFlags &= -2;
-    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)(uintptr_t)pDrlgActSpawn, (uint16_t)(uintptr_t)pGame, '\x01');
+    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)pDrlgActSpawn, (uint16_t)(uintptr_t)pGame, '\x01');
     SCmd::NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(pClient);
     pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory);
     while (pRoom) {
       dwCorpseGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID((D2CorpseStrc*)pRoom);
       pCorpsePlayerData = D2Common::INVENTORY::Inventory::CORPSE_GetData((D2CorpseStrc*)pRoom);
-      if (!pCorpsePlayerData) {
+      if (pCorpsePlayerData == UNIT_PLAYER) {
         nErrorLine = D2Common::INVENTORY::Inventory::CORPSE_GetMercClassId((D2CorpseStrc*)pRoom);
         pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse((D2CorpseStrc*)pRoom);
         D2Common::INVENTORY::Inventory::INVENTORY_RemoveCorpse(pUnit->pInventory, dwCorpseGUID, 0);
@@ -1634,9 +1615,9 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
           pDrlgAct = 0;
           pSpawnXY = 0;
           nSpawnUnitSizeX = D2Common::Units::GetUnitSizeX(pUnit_00);
-          pCorpseRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGameOrig->pAct[bActNo], eLevelId, 0, (int*)&pDrlgAct, (int*)&pSpawnXY, nSpawnUnitSizeX);
-          ptCorpsePos.x = (LONG)pDrlgAct;
-          ptCorpsePos.y = (LONG)pSpawnXY;
+          pCorpseRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGameOrig->pAct[bActNo], eLevelId, 0, &pDrlgAct, &pSpawnXY, nSpawnUnitSizeX);
+          ptCorpsePos.x = pDrlgAct;
+          ptCorpsePos.y = pSpawnXY;
           PLAYER::Player::PLAYER_PlaceCorpse(pGameOrig, pCorpseRoom, dwCorpseGUID, &ptCorpsePos);
         }
 
@@ -1654,13 +1635,13 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
     if ((D2UnitStrc*)pRoom) {
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_IronGolem);
       if (pSkill) {
-        pDrlgAct = (D2DrlgActStrc*)D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+        pDrlgAct = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
         nErrorLine = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::Units::SetXForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
         nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         D2Common::Units::SetYForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
         D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, (D2UnitStrc*)pRoom);
-        SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGameOrig, pUnit, SKILL_IronGolem, (int32_t)pDrlgAct, 1, 0, 0);
+        SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGameOrig, pUnit, SKILL_IronGolem, pDrlgAct, 1, 0, 0);
       }
     }
 
@@ -2244,7 +2225,7 @@ void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, int nClass) {
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nOldUnitGUID);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
     CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, nSpawnX, nSpawnY);
-    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, (D2DrlgActStrc*)nSpawnX, (::SGAMEDATA*)nSpawnY);
+    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, nSpawnX, nSpawnY);
     pClient->fClientFlags &= -2;
     if (pRoom != pClient->pRoom) {
       GAME_OnClientRoomChange(pRoom, pClient);
@@ -2255,17 +2236,18 @@ void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, int nClass) {
 }
 
 void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint8_t bActNo) {
+    int32_t _bActNo;
     uint32_t nSpawnY = 0;
     D2UnitStrc* pUnit = CLIENTS_GetControlUnit(pClient, 0);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     pClient->nClass = bActNo;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      *(D2DrlgActStrc**)&bActNo = (D2DrlgActStrc*)pUnit->pPath.pStaticPath->nPosX;
+      _bActNo = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      *(D2DrlgActStrc**)&bActNo = (D2DrlgActStrc*)D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      _bActNo = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      *(D2DrlgActStrc**)&bActNo = 0;
+      _bActNo = 0;
     }
 
     eUnitType = pUnit->eUnitType;
@@ -2279,8 +2261,8 @@ void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClien
     eUnitType = pUnit->eUnitType;
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nOldUnitGUID);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-    CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, (uint32_t)*(uint32_t*)&bActNo, nSpawnY);
-    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, *(D2DrlgActStrc**)&bActNo, (::SGAMEDATA*)nSpawnY);
+    CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, _bActNo, nSpawnY);
+    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, _bActNo, nSpawnY);
 }
 
 // pRoom in EAX, pClient in EDI: UNITS_SendUnitUpdateToClient for every unit in pRoom->pUnitList (pRoomNext chain); halts (line 98) on a NULL room.

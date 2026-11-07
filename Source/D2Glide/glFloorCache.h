@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Glide)
 #error "D2Glide header included by a module that may not use D2Glide (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Glide) && !defined(D2_LOADS_D2Glide)
+#error "internal D2Glide header included from another module; include D2Glide's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 struct D2TileLibraryEntryStrc;
 
 // Data types
+#ifndef D2_DEFINED_GlFloorCacheNodeStrc
+#define D2_DEFINED_GlFloorCacheNodeStrc
 struct GlFloorCacheNodeStrc {
     /* 0x00 */ int nIndex; // Node index in array
     /* 0x04 */ uint32_t dwAddress; // VRAM floor address
@@ -23,6 +28,9 @@ struct GlFloorCacheNodeStrc {
     /* 0x10 */ struct GlFloorCacheNodeStrc * pPrev; // Previous in LRU list
 };
 
+#endif // D2_DEFINED_GlFloorCacheNodeStrc
+#ifndef D2_DEFINED_GlFloorCacheStrc
+#define D2_DEFINED_GlFloorCacheStrc
 struct GlFloorCacheStrc {
     /* 0x00 */ uint32_t dwEntrySize; // Size of each node in bytes (0x14)
     /* 0x04 */ uint32_t nMaxEntries; // Total cache capacity
@@ -34,6 +42,7 @@ struct GlFloorCacheStrc {
     /* 0x1C */ struct GlFloorCacheNodeStrc * pNodes; // Allocated node array base
 };
 
+#endif // D2_DEFINED_GlFloorCacheStrc
 namespace D2Glide::glFloorCache {
 
 // Function declarations
@@ -59,7 +68,7 @@ void __fastcall GLFLOOR_EvictLRU(struct GlFloorCacheStrc * pCache);
 void __fastcall GLFLOOR_InvalidateByIndex(struct GlFloorCacheStrc * pCache, int nNodeIndex);
 // Destroys floor cache by evicting all active entries and freeing node array memory.
 // @sourcefile .\Src\glFloorCache.cpp
-void __fastcall GLFLOOR_Destroy(uint32_t * pCacheData, struct GlFloorCacheStrc * pCache);
+void __fastcall GLFLOOR_Destroy(struct GlFloorCacheStrc * pCacheData, struct GlFloorCacheStrc * pCache);
 // Ensures cache has free capacity by allocating a node. If cache is full, evicts LRU entry first. Returns success status.
 short __fastcall GLFLOOR_EnsureCapacity(struct GlFloorCacheStrc * pCache);
 #endif // D2_MODULE_D2Glide

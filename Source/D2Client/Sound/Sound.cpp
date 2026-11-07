@@ -9,16 +9,10 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Client/Utils.h"
-#include "Source/D2Common/Environment.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
-#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Sound/D2Sound.h"
-#include "Source/D2Sound/D2SoundUntil.h"
-#include "Source/D2Sound/Src/D2SoundFast.h"
-#include "Source/D2Sound/Src/D2SoundSmp.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Source/SFile.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Sound/Sound.data.h"
@@ -32,7 +26,7 @@ static uint32_t gnSoundChannelCount = 0; D2_STATIC_GUARD(gnSoundChannelCount, "g
 static uint32_t gpSoundChannelsArray = 0; D2_STATIC_GUARD(gpSoundChannelsArray, "gpSoundChannelsArray");
 static uint32_t gbSoundChaosEnabled = 0; D2_STATIC_GUARD(gbSoundChaosEnabled, "gbSoundChaosEnabled");
 static LONG * lpAddend_007c8a74 = 0; D2_STATIC_GUARD(lpAddend_007c8a74, "lpAddend_007c8a74");
-static void * pAudioDeviceContext = 0; D2_STATIC_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
+static int pAudioDeviceContext = 0; D2_STATIC_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
 static uint32_t gnSoundChannelIndex = 0; D2_STATIC_GUARD(gnSoundChannelIndex, "gnSoundChannelIndex");
 static uint32_t gnSoundChannelPlaybackState = 0; D2_STATIC_GUARD(gnSoundChannelPlaybackState, "gnSoundChannelPlaybackState");
 static int32_t int32_t_007c8c90 = 0; D2_STATIC_GUARD(int32_t_007c8c90, "int32_t_007c8c90");
@@ -129,24 +123,24 @@ D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
       }
 
       pChannel++;
-    } while ((int)pChannel < (intptr_t)((char*)&gaSoundChannelPool + sizeof(gaSoundChannelPool)));
+    } while ((intptr_t)pChannel < (intptr_t)((char*)&gaSoundChannelPool + sizeof(gaSoundChannelPool)));
 
     return nullptr;
 }
 
-int __fastcall Unreferenced_004b9440(int param_1) {
+D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int param_1) {
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     if (!param_1) {
-      return 0;
+      return nullptr;
     }
 
     for (; pDVar1; pDVar1 = pDVar1->pNext) {
       if (pDVar1->pChannel->nChannelHandle == param_1) {
-        return (int)pDVar1->pChannel;
+        return pDVar1->pChannel;
       }
     }
 
-    return 0;
+    return nullptr;
 }
 
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
@@ -169,7 +163,7 @@ static void SOUND_ReleaseChannel(D2SoundChannelStrc * pChannel) {
       return;
     }
 
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)&gpActiveSoundChannelsHead, (int32_t)pChannel);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)&gpActiveSoundChannelsHead, (intptr_t)pChannel);
     for (pChanNode = (D2SoundChannelStrc*)pChannel->pGlobal3Ref; pChanNode; pChanNode = (D2SoundChannelStrc*)pChanNode->nSoundId) {
       UNIT::UnitSnd::FreeSfxData((D2UnitStrc*)pChanNode->pListNode, pChannel->nChannelHandle);
     }
@@ -320,26 +314,26 @@ static D2SoundChannelStrc * __stdcall SOUND_FindActiveStreamChannel(D2SoundChann
     return nChannelData;
 }
 
-int32_t __thiscall SOUND_CalculateDistance(int32_t pThis, int32_t nExcludeChannel) {
+D2SoundChannelStrc * __thiscall SOUND_CalculateDistance(int32_t pThis, D2SoundChannelStrc * nExcludeChannel) {
     D2SoundChannelStrc* nChannelData;
     D2SoundsTxt* pSoundsTxt = SoundHdr::TXT_sounds_GetLineBySoundId(pThis);
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     while (true) {
       int nGroupId;
       if (!pDVar1) {
-        return 0;
+        return nullptr;
       }
 
       nChannelData = pDVar1->pChannel;
       nGroupId = SoundHdr::SOUNDHDR_GetSoundField0x60(nChannelData->nSoundId);
-      if (nGroupId == pSoundsTxt->nGroupStartIndex && nChannelData != (D2SoundChannelStrc*)nExcludeChannel && !nChannelData->bStopFlag && (pSoundsTxt->Compound < 0 || (nGroupId = SoundHdr::SOUNDHDR_GetGlobal3() , nGroupId - nChannelData->nScheduledTime <= (uint32_t)(int)pSoundsTxt->Compound))) {
+      if (nGroupId == pSoundsTxt->nGroupStartIndex && nChannelData != nExcludeChannel && !nChannelData->bStopFlag && (pSoundsTxt->Compound < 0 || (nGroupId = SoundHdr::SOUNDHDR_GetGlobal3() , nGroupId - nChannelData->nScheduledTime <= (uint32_t)(int)pSoundsTxt->Compound))) {
         break;
       }
 
       pDVar1 = pDVar1->pNext;
     }
 
-    return (int32_t)nChannelData;
+    return nChannelData;
 }
 
 static void __stdcall SOUND_CalculateUnitDirection(D2UnitStrc * pUnit, int32_t nSoundId, float * pfDirection) {
@@ -456,7 +450,7 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
       return 0;
     }
     if (pSoundsTxt->Compound) {
-      pChannel = (D2SoundChannelStrc*)SOUND_CalculateDistance(nSoundId, 0);
+      pChannel = SOUND_CalculateDistance(nSoundId, nullptr);
       if (pChannel) {
         goto finalize_channel;
       }
@@ -535,12 +529,12 @@ void __fastcall SOUND_SetChannelPriority(int32_t nSoundId, int32_t nPriority) {
     pChannel->pChannel->nPriority = nPriority;
 }
 
-void __fastcall SOUND_PlayItemSound(int32_t nChannelData, D2UnitDataItemStrc * pItemData, int32_t nStartTick, int32_t nDuration) {
-    *(uint32_t*)(nChannelData + 0x49) = *(uint32_t*)(nChannelData + 0x1c);
-    *(D2UnitDataItemStrc**)(nChannelData + 0x4d) = (D2UnitDataItemStrc*)pItemData;
-    *(int32_t*)(nChannelData + 0x51) = nStartTick;
-    *(int32_t*)(nChannelData + 0x55) = nStartTick + nDuration;
-    *(uint32_t*)(nChannelData + 0x45) = 1;
+void __fastcall SOUND_PlayItemSound(D2SoundChannelStrc * nChannelData, int pItemData, int32_t nStartTick, int32_t nDuration) {
+    nChannelData->nFadeInitialVolume = nChannelData->nPriority;
+    nChannelData->nFadeDir = pItemData;
+    nChannelData->nFadeStartTime = nStartTick;
+    nChannelData->nFadeEndTime = nStartTick + nDuration;
+    nChannelData->bFadeActive = 1;
 }
 
 int __fastcall SOUND_GetSoundChannel(int32_t nSoundId) {
@@ -618,28 +612,25 @@ int __fastcall SOUND_StopChannelById(int32_t nSoundId) {
     return 0;
 }
 
-int __fastcall Unreferenced_004b9cd0(int param_1, int param_2) {
-    D2SoundChannelNodeStrc* in_EAX;
-    if (!param_1) {
-      return (int)in_EAX;
+void __fastcall Unreferenced_004b9cd0(int nChannelHandle, uint8_t nPriority) {
+    if (!nChannelHandle) {
+      return;
     }
-
-    in_EAX = gpActiveSoundChannelsHead;
     if (!gpActiveSoundChannelsHead) {
-      return (int)in_EAX;
+      return;
     }
 
-    while (in_EAX->pChannel->nChannelHandle != param_1) {
+    D2SoundChannelNodeStrc* pDVar2 = gpActiveSoundChannelsHead;
+    while (pDVar2->pChannel->nChannelHandle != nChannelHandle) {
       D2SoundChannelNodeStrc** ppDVar1;
-      ppDVar1 = &in_EAX->pNext;
-      in_EAX = *ppDVar1;
+      ppDVar1 = &pDVar2->pNext;
+      pDVar2 = *ppDVar1;
       if (!*ppDVar1) {
-        return 0;
+        return;
       }
     }
 
-    in_EAX->pChannel->nPriorityByte = (uint8_t)param_2;
-    return (int)in_EAX;
+    pDVar2->pChannel->nPriorityByte = nPriority;
 }
 
 void __stdcall SOUND_PauseAll() {
@@ -712,8 +703,8 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
     return (uint32_t)(pChanB < pChanA);
 }
 
-uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId) {
-    D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, nSoundId);
+uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * nSoundId) {
+    D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, (int32_t)nSoundId);
     return (uint32_t)(pChannel != 0);
 }
 
@@ -1154,7 +1145,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
               exit(-1);
             }
           } else {
-            GAME::Sound::SOUND_UpdateChannelParams((int*)ppStreamHandle);
+            GAME::Sound::SOUND_UpdateChannelParams(ppStreamHandle);
             if (pSoundsTxt->nLoadState == 2) {
               SoundHdr::SOUNDHDR_UpdateLRUTimestamp(pChanEntry->nSoundId);
             }
@@ -1260,7 +1251,7 @@ void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * 
     }
 
     D2SoundsTxt* pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nChanDataPtr->nSoundId);
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free(&nChanDataPtr->pGlobal3Ref, (int32_t)pUnit);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free(&nChanDataPtr->pGlobal3Ref, (intptr_t)pUnit);
     if (!pSoundsTxtLine->Loop || nChanDataPtr->bFadeActive && !nChanDataPtr->nFadeDir) {
       bForceStopNeeded = true;
     } else {
@@ -1600,26 +1591,22 @@ int Unreferenced_004e41e0() {
     return (uint32_t)(2 < iVar1 - 1U);
 }
 
-int Unreferenced_004e4200() {
-    int extraout_EAX;
+float __stdcall Unreferenced_004e4200() {
     uint32_t uVar1 = Draw::Weather::WEATHER_CanHaveRain();
     if (!uVar1) {
-      return 0;
+      return 0.0;
     }
 
-    Draw::Weather::WEATHER_FloatPassthrough();
-    return extraout_EAX;
+    float fVar2 = Draw::Weather::WEATHER_FloatPassthrough();
+    return fVar2;
 }
 
-int Unreferenced_004e4220() {
-    int extraout_EAX;
+void __stdcall Unreferenced_004e4220() {
     eD2Sounds eSound = SOUND_ALKOR_ACT3_Q5_EARLY_VA;
     do {
       SoundHdr::SOUNDHDR_ClearReferenceCounts(eSound);
       eSound += SOUND_CURSOR_BUTTON_CLICK;
     } while ((int)eSound < 0xb3d);
-
-    return extraout_EAX;
 }
 
 static void SOUND_SetVolumeForChannel(int32_t nChannelIndex) {
@@ -1645,7 +1632,7 @@ void __stdcall SOUND_TogglePauseAll() {
 
     gnSoundChannelIndex = 0;
     if (pAudioDeviceContext) {
-      SOUND_StopById((int32_t)pAudioDeviceContext);
+      SOUND_StopById(pAudioDeviceContext);
       pAudioDeviceContext = 0;
     }
 
@@ -1751,7 +1738,7 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
 
     gnSoundChannelIndex = eSoundChannelCurrent;
     if (!nRainVolumeClamped) {
-      SOUND_StopById((int32_t)pAudioDeviceContext);
+      SOUND_StopById(pAudioDeviceContext);
       pAudioDeviceContext = 0;
       gnSoundChannelPlaybackState = 0;
       nRainVolumeClamped = gnSoundChannelPlaybackState;
@@ -1763,17 +1750,17 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
         goto update_eax_and_events;
       }
     } else if (!pAudioDeviceContext) {
-      pAudioDeviceContext = (void*)SOUND_PlaySound(gnSoundChannelPlaybackState, nullptr, 0, 0, 0);
+      pAudioDeviceContext = SOUND_PlaySound(gnSoundChannelPlaybackState, nullptr, 0, 0, 0);
       if (!pAudioDeviceContext) {
         goto update_eax_and_events;
       }
 
-      SOUND_SetChannelPriority((int32_t)pAudioDeviceContext, nRainVolume);
+      SOUND_SetChannelPriority(pAudioDeviceContext, nRainVolume);
       goto fade_weather_sound;
     }
 
     int nVolume;
-    nVolume = Sound::SOUND_SetMasterVolume((int32_t)pAudioDeviceContext);
+    nVolume = Sound::SOUND_SetMasterVolume(pAudioDeviceContext);
     if (nRainVolume > nVolume) {
       nVolume += 6;
       if (nRainVolume < nVolume) {
@@ -1786,9 +1773,9 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
       }
     }
     if (nVolume) {
-      SOUND_SetChannelPriority((int32_t)pAudioDeviceContext, nVolume);
+      SOUND_SetChannelPriority(pAudioDeviceContext, nVolume);
     } else {
-      SOUND_StopById((int32_t)pAudioDeviceContext);
+      SOUND_StopById(pAudioDeviceContext);
       pAudioDeviceContext = 0;
     }
 

@@ -4,11 +4,13 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/D2SkillsTxt.h"
-#include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -16,6 +18,8 @@
 
 namespace D2Common::DATATBLS::DataTbls {
 
+#ifndef D2_DEFINED_INLINE_00452040
+#define D2_DEFINED_INLINE_00452040
 __attribute__((noinline)) inline D2StatesTxt * __fastcall TXT_States_GetLine(eD2States eState) {
     if ((int)eState >= 0 && (int)eState < ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return ITEMS::Items::sgptDataTable->pTxtStates + eState;
@@ -23,7 +27,10 @@ __attribute__((noinline)) inline D2StatesTxt * __fastcall TXT_States_GetLine(eD2
 
     return nullptr;
 }
+#endif // D2_DEFINED_INLINE_00452040
 
+#ifndef D2_DEFINED_INLINE_00483360
+#define D2_DEFINED_INLINE_00483360
 __attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, uint32_t n100Percent) {
     if (!n100Percent) {
       return 0;
@@ -44,6 +51,7 @@ __attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValu
     int64_t qwResult = (int64_t)nValue * (int64_t)nPercent / (int)n100Percent;
     return (int32_t)qwResult;
 }
+#endif // D2_DEFINED_INLINE_00483360
 
 __attribute__((noinline)) inline D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId) {
     if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
@@ -53,6 +61,8 @@ __attribute__((noinline)) inline D2CharStatsTxt * __fastcall INV_GetCharStatsTxt
     return nullptr;
 }
 
+#ifndef D2_DEFINED_INLINE_004e6c70
+#define D2_DEFINED_INLINE_004e6c70
 __attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(eD2Skills eSkill) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -61,5 +71,6 @@ __attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(eD2Skills eSk
 
     return pSkillsTxt->Param[4];
 }
+#endif // D2_DEFINED_INLINE_004e6c70
 
 } // namespace D2Common::DATATBLS::DataTbls

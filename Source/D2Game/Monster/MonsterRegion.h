@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -23,10 +26,13 @@ typedef uint32_t eD2LevelId;
 typedef uint8_t eD2Difficulty;
 
 // Data types
+#ifndef D2_DEFINED_D2MonsterRegionFieldSubStrc
+#define D2_DEFINED_D2MonsterRegionFieldSubStrc
 struct D2MonsterRegionFieldSubStrc {
     /* 0x00 */ uint8_t aComponentVariants[16]; // Component variant index per slot (16 slots, indexed by MonStats2.aComponents[i])
 };
 
+#endif // D2_DEFINED_D2MonsterRegionFieldSubStrc
 namespace D2Game::Monster::MonsterRegion {
 
 // Function declarations
@@ -34,9 +40,9 @@ namespace D2Game::Monster::MonsterRegion {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 // Allocates and populates a D2MonsterRegionStrc for every level (index 1..nTxtLevelsSize-1) in the game. Per level: pool-allocates a zeroed region, fills monster density/boss counts/wander/quest flags from LevelsTxt, rolls monster types via MONREGION_PopulateMonsterTypes, then seeds champion-pack data for each monster slot. Halts with fatal error 0x83 if DifficultyLevels txt lookup fails.
 // @sourcefile .\MONSTER\MonsterRegion.cpp
-void __fastcall AllocMonsterRegion(struct D2PoolManagerStrc * pMemory, D2Row_D2MonsterRegionStrc_1024 * pMonsterRegionList, struct D2SeedStrc * pSeed, int32_t nSeedLow, eD2Difficulty nDifficulty, BOOL bExpansion);
+void __fastcall AllocMonsterRegion(struct D2PoolManagerStrc * pMemory, struct D2MonsterRegionStrc * * pMonsterRegionList, struct D2SeedStrc * pSeed, int32_t nSeedLow, eD2Difficulty nDifficulty, BOOL bExpansion);
 // @sourcefile .\MONSTER\MonsterRegion.cpp
-void __fastcall FreeMonsterRegion(struct D2PoolManagerStrc * pMemory, int32_t ppMonsterRegion);
+void __fastcall FreeMonsterRegion(struct D2PoolManagerStrc * pMemory, struct D2MonsterRegionStrc * * ppMonsterRegion);
 struct D2MonsterRegionStrc * __fastcall ReturnMonsterRegionEntryForLevel(struct D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel);
 // Looks up a monster's entry in the region spawn table by class ID, or registers a new entry if the monster qualifies as a multi-piece champion (TxtMonStatsEx.TotalPieces > 2). Returns a pointer to the matching D2MonsterRegionFieldStrc, or NULL if the monster is a special-cased superunique (IDs 0xC3, 0xC4, 0x126, 0x128) or the table is full. Rolls champion-pack seed via SEED_RollChampionPack on insertion.
 short * __fastcall InitializeSpawnCount(struct D2MonsterRegionStrc * * ppMonsterRegion, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);

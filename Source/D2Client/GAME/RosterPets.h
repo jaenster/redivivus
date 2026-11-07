@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -14,6 +17,7 @@
 // Forward declarations
 struct D2RosterMercArg;
 struct D2RosterPetSeedStrc;
+struct D2RosterPetStrc;
 struct D2UnitStrc;
 
 namespace D2Client::GAME::RosterPets {
@@ -23,7 +27,7 @@ namespace D2Client::GAME::RosterPets {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 // @sourcefile .\GAME\RosterPets.cpp
 void __stdcall FreeRosterPet();
-int __fastcall Unreferenced_00478a90(int param_1);
+struct D2RosterPetStrc * __fastcall Unreferenced_00478a90(int param_1);
 // @sourcefile .\GAME\RosterPets.cpp
 void __fastcall AddRosterPet(int32_t nRosterGUID, int32_t nOwnerGUID, int32_t nSkillId, int32_t nRosterType);
 // Registers a pet or mercenary in the client-side roster pet list. For skillID 7 (merc), first removes any existing merc for the owner, then adds the pet entry and populates seed/owner fields from pMercArg. If the merc unit already exists in the world, initializes it via MERC_InitializeFromPacket, marks it attackable, sets up its light map, and flags it for update.

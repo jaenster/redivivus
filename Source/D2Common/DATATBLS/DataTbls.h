@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -69,7 +72,7 @@ void __fastcall DATATBLS_BuildStatesDataList(struct D2AllStatesDataTbl * * ppAll
 void __fastcall TXT_States_AllocItemTypesStateDataTable(struct D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, int32_t nOffset);
 char * __stdcall GetUnitClassIdToName(struct D2UnitStrc * pUnit, char * szResult, size_t nSize);
 char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, size_t nSize);
-void __stdcall StoreDataTables(uint32_t szFileName, struct D2InventoryToBeUpdatedStrc * pInventoryToBeUpdated, size_t nSize, uint32_t dwVersion);
+void __stdcall StoreDataTables(char * szFileName, struct D2InventoryToBeUpdatedStrc * pInventoryToBeUpdated, size_t nSize, uint32_t dwVersion);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 struct D2ArchiveStrc * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine);
 // Loads and compiles a DataTbls .txt/.bin table into a parsed binary struct array. If sgtDataTable.bUseTxt is set, loads the .txt via ARCHIVE_LoadDataTables (mapping "leveldefs"->"levels"), parses each line into nEndOffset-sized records via Fog Excel, and writes a ".bin" cache through StoreDataTables. Then loads the table for use (.bin if gpaMiscTxtTables else freshly parsed .txt), returns the record buffer and writes the row count to *nTxtTableSize. Halts via ErrorManager on load failure.

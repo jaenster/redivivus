@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,6 +18,8 @@
 typedef uint32_t eD2GridCellFlags;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgGridStrc
+#define D2_DEFINED_D2DrlgGridStrc
 struct D2DrlgGridStrc {
     /* 0x00 */ eD2GridCellFlags * pCellsFlags; // Pointer to array of cell flags. NULL if grid not initialized.
     /* 0x04 */ int * pCellsRowOffsets; // Array of row start offsets into pCellsFlags (one per nHeight rows).
@@ -22,3 +27,5 @@ struct D2DrlgGridStrc {
     /* 0x0C */ int nHeight; // Number of rows (Y dimension).
     /* 0x10 */ int bIsSubGrid; // If nonzero, pCellsFlags is shared/embedded in another buffer and not freed by FreeGrid.
 };
+
+#endif // D2_DEFINED_D2DrlgGridStrc

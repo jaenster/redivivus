@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -80,6 +83,8 @@ typedef int (__fastcall *fpUIWidgetCharFilter)(::UIWidget * pWidget, struct D2UI
 struct ButtonWrapperVtable;
 
 // Data types
+#ifndef D2_DEFINED_ButtonImplementation
+#define D2_DEFINED_ButtonImplementation
 struct __attribute__((packed)) ButtonImplementation {
     /* 0x00 */ struct ButtonImplementationVtable * pVtable; // virtual function table
     /* 0x04 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
@@ -97,12 +102,18 @@ struct __attribute__((packed)) ButtonImplementation {
     /* 0x32 */ int nButtonKind;
 };
 
+#endif // D2_DEFINED_ButtonImplementation
+#ifndef D2_DEFINED_ButtonWrapper
+#define D2_DEFINED_ButtonWrapper
 struct ButtonWrapper {
     /* 0x00 */ struct ButtonWrapperVtable * pVtable; // virtual function table
     /* 0x04 */ uint32_t nUnused04;
     /* 0x08 */ struct ButtonImplementation * pImplementation;
 };
 
+#endif // D2_DEFINED_ButtonWrapper
+#ifndef D2_DEFINED_ButtonWrapperVtable
+#define D2_DEFINED_ButtonWrapperVtable
 struct ButtonWrapperVtable {
     /* 0x00 */ ::ButtonWrapper * (__thiscall *ScalarDeletingDestructor)(::ButtonWrapper *, uint32_t);
     /* 0x04 */ void (__thiscall *Draw)(::ButtonWrapper *);
@@ -118,3 +129,5 @@ struct ButtonWrapperVtable {
     /* 0x2C */ int (__thiscall *GetValue)(::ButtonWrapper *);
     /* 0x30 */ void (__thiscall *SetAccelerator)(::ButtonWrapper *, BOOL);
 };
+
+#endif // D2_DEFINED_ButtonWrapperVtable

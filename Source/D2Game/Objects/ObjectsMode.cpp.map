@@ -684,6 +684,7 @@
         "POINT",
         "SGAMEDATA",
         "int32_t",
+        "uint32_t",
         "uint8_t"
       ]
     },
@@ -1214,12 +1215,13 @@
       ],
       "usedTypes": [
         "D2ObjectOperateFnArg",
-        "D2RoomStrc",
         "D2ShrinesTxt",
         "D2SkillArgStrc",
         "D2UnitFindArgStrc",
         "D2UnitFindDataStrc",
         "D2UnitStrc",
+        "Shrines_StormShrineFunction_Slotm",
+        "Shrines_StormShrineFunction_Slotmc",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
@@ -1771,10 +1773,8 @@
       "usedTypes": [
         "D2ObjectOperateFnArg",
         "D2RoomStrc",
+        "D2UnitStrc",
         "POINT",
-        "SGAMEDATA",
-        "SGAMEDATA *",
-        "eD2PlayerAnimMode",
         "eD2UnitType",
         "int32_t"
       ]
@@ -2384,10 +2384,11 @@
         "exit"
       ],
       "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
         "uint32_t",
-        "uint64_t",
         "uint8_t"
       ]
     },

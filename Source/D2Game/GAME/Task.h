@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -15,11 +18,14 @@
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2LinkNodeStrc
+#define D2_DEFINED_D2LinkNodeStrc
 struct D2LinkNodeStrc {
     /* 0x00 */ struct D2LinkNodeStrc * pNext;
     /* 0x04 */ struct D2LinkNodeStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D2LinkNodeStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2TaskNodeStrc {
     /* 0x00 */ uint32_t dwTimestamp; // Due time (TASK_GetTimestamp + delay); lists are ordered by signed difference
@@ -29,6 +35,8 @@ struct __attribute__((packed)) D2TaskNodeStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2TaskQueueSlotStrc
+#define D2_DEFINED_D2TaskQueueSlotStrc
 struct __attribute__((packed)) D2TaskQueueSlotStrc {
     /* 0x00 */ uint32_t nSlotIndex; // index into gaTaskQueueHeadArray / aTaskQueueCriticalSections (0..31); stored at 005649c9
     /* 0x04 */ int32_t nTaskCount; // tasks enqueued into this slot; 0 at 005649cb, +1 per task at 00564ad6
@@ -36,6 +44,7 @@ struct __attribute__((packed)) D2TaskQueueSlotStrc {
     /* 0x10 */ D2LinkNodeStrc sSlotLink; // link in the gsTaskQueueListHead ring of slots
 };
 
+#endif // D2_DEFINED_D2TaskQueueSlotStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 typedef struct D2LinkNodeStrc * PD2TaskNodeLink;
 

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Client)
 #error "D2Client header included by a module that may not use D2Client (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Client) && !defined(D2_LOADS_D2Client)
+#error "internal D2Client header included from another module; include D2Client's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -20,12 +23,15 @@ typedef uint32_t eD2LevelId;
 typedef int32_t * PD2KeyBindSlot;
 
 #endif // D2_MODULE_D2Client
+#ifndef D2_DEFINED_D2KeyBindStrc
+#define D2_DEFINED_D2KeyBindStrc
 struct __attribute__((packed)) D2KeyBindStrc {
     /* 0x00 */ int32_t nCmdIndex; // command index (0..0x38); every access is a dword (CMP dword [EAX-6] in the lookup loops, MOV EAX,[ESI*2+0x7a6f90])
     /* 0x04 */ uint16_t wKeyCode; // VK code of bound key; 0xFFFF = unbound
     /* 0x06 */ int32_t nSlot; // binding slot 0 or 1, unaligned dword (CMP dword [EAX] at +6 in CMD_GetKeyForCommand 00469aad and siblings)
 };
 
+#endif // D2_DEFINED_D2KeyBindStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2KeyFileHeaderStrc {
     /* 0x00 */ uint16_t wSignature; // 0x5357

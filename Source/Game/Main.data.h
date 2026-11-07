@@ -7,6 +7,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Game)
 #error "Game header included by a module that may not use Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Game) && !defined(D2_LOADS_Game)
+#error "internal Game header included from another module; include Game's public header (see module-gates.tsv)"
+#endif
 
 #include "Source/D2Headers/d2_platform.h"
 

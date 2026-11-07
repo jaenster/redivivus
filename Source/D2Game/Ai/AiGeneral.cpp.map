@@ -302,7 +302,7 @@
         "GetMonsterNameAndAi"
       ],
       "usedTypes": [
-        "D2UnitDataMonsterStrc",
+        "D2AiGeneralStrc",
         "D2UnitStrc",
         "uint32_t"
       ]

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2BitBufferStrc;
+struct D2MapAIStrc;
 struct D2ObjectInitFnArg;
 struct D2ObjectOperateFnArg;
 struct D2QuestArgStrc;
@@ -34,7 +38,7 @@ uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pnCoords)
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
 void __fastcall Objects_InitFn50_HratliEnd(struct D2ObjectInitFnArg * pInitArg);
 // Q17_SetupHratliMapAi — (QUEST_SpokeToHratli helper, not Lam Esen). Stores a DRLG map pointer into the SpokeToHratli quest-specific data and, if Hratli's map-AI is flagged and his unit + map file are valid and not yet transplanted, moves the DRLG preset file onto Hratli's monster map-AI (one-shot via bDrlgMapTaken). No player quest-record state touched.
-void __thiscall Q17_SetupHratliMapAi(void * pThis, int32_t pMapAI);
+void __thiscall Q17_SetupHratliMapAi(void * pThis, struct D2MapAIStrc * pMapAI);
 // Q18_ActiveFilter — Lam Esen's Tome (QUEST_LamEsensTome). Decides whether the quest is "active" for gossip on Alkor (target monstats 0xfe = Alkor). Returns true if: quest in-progress (nStateFlag==1) and the player's record shows the quest NOT Completed and NOT FinishedInPreviousGame; OR the player currently carries Lam Esen's Tome item (code 0x20626262). Read-only.
 bool __fastcall Q18_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // Q18_InitObjectMode — Lam Esen's Tome. Sets the render/update mode of the associated object: default mode 2 when a flag byte is clear, otherwise a mode read from the quest data table. No quest-state record access.

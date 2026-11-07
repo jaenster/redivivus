@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Direct3D)
 #error "D2Direct3D header included by a module that may not use D2Direct3D (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Direct3D) && !defined(D2_LOADS_D2Direct3D)
+#error "internal D2Direct3D header included from another module; include D2Direct3D's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -22,6 +25,8 @@ typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D3DFloorCacheNodeStrc
+#define D2_DEFINED_D3DFloorCacheNodeStrc
 struct D3DFloorCacheNodeStrc {
     /* 0x00 */ int nIndex;
     /* 0x04 */ struct D2TileLibraryEntryStrc * pTile; // Tile whose nTextureCacheIndex points at this node; InvalidateByTilePtr/Free clear word [pTile+0x42]
@@ -31,6 +36,9 @@ struct D3DFloorCacheNodeStrc {
     /* 0x14 */ struct D3DFloorCacheNodeStrc * pPrev;
 };
 
+#endif // D2_DEFINED_D3DFloorCacheNodeStrc
+#ifndef D2_DEFINED_D3DFloorCacheStrc
+#define D2_DEFINED_D3DFloorCacheStrc
 struct D3DFloorCacheStrc {
     /* 0x00 */ int nMaxNodes;
     /* 0x04 */ int nUsedCount;
@@ -41,6 +49,7 @@ struct D3DFloorCacheStrc {
     /* 0x18 */ struct D3DFloorCacheNodeStrc * pNodeBuffer;
 };
 
+#endif // D2_DEFINED_D3DFloorCacheStrc
 namespace D2Direct3D::d3dFloorCache {
 
 // Function declarations

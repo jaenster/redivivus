@@ -2,14 +2,8 @@
 
 #include "Source/D2Game/Quests/QUESTS/A2Q3.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2SeedStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Environment.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/QuestRecord.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
@@ -22,11 +16,10 @@
 #include "Source/D2Game/Seed.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/D2Game.h"
+#include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -113,7 +106,7 @@ BOOL __fastcall Q11_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
       uint16_t nPartyId;
       nPartyId = UNIT::SUnit::GetPartyId(pUnit);
       if (nPartyId != 0xffff) {
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q11_SetTaintedSunRewardOnPartyMember, 0);
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q11_SetTaintedSunRewardOnPartyMember, nullptr);
       }
     }
 
@@ -710,19 +703,19 @@ void __fastcall Q11_InitTaintedSunForAct(::SGAMEDATA * pGame, char nActNo) {
       return;
     }
 
-    D2QuestDataA3Q2Strc* pQuestData = (D2QuestDataA3Q2Strc*)GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheTaintedSun);
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheTaintedSun);
     if (!pQuestData) {
       return;
     }
 
-    int pA2Q3Specific = pQuestData->nKhalimsBrainCount;
-    if (*(char*)(pA2Q3Specific + 3) != '\x01') {
+    D2QuestDataA2Q3Strc* pA2Q3Specific = pQuestData->pQuestSpecificData.pA2Q3;
+    if (pA2Q3Specific->bViperAmuletInitPending != '\x01') {
       return;
     }
 
     D2Common::Environment::DRLGENV_TaintedSunBegin(pGame->pAct[1]);
-    *(uint8_t*)(pA2Q3Specific + 3) = 0;
-    *(uint8_t*)(pA2Q3Specific + 2) = 1;
+    pA2Q3Specific->bViperAmuletInitPending = '\0';
+    pA2Q3Specific->bSunDarkened = true;
 }
 
 // A2Q3 - Q11_GetTaintedSunFlag: accessor returning the A2Q3 bTaintedSunStartedFailed flag (low byte) from the
@@ -808,16 +801,16 @@ void __fastcall Q11_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 // A2Q3 - Q11_StartDarknessTimer (custom register calling convention): if darkness not yet started, rolls a
 // random 15-17 tick delay (SEED_RollRange) and arms Q11_TimerCheckDarkness via AddQuestTimer, setting the
 // 'timer armed' flag. Schedules the delayed onset of the Tainted-Sun darkening. No quest-record access.
-static void __stdcall Q11_StartDarknessTimer(uint8_t * pQuestData) {
-    int pQuestSpecificData = *(int*)(pQuestData + 0x18);
-    if (!(pQuestData[0xc] == '\0' && *(char*)(pQuestSpecificData + 1) == '\0')) {
+static void __stdcall Q11_StartDarknessTimer(D2QuestDataStrc * pQuestData) {
+    D2QuestDataA2Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q3;
+    if (!(!pQuestData->nStateFlag && !pQuestSpecificData->bDarknessTimerArmed)) {
       return;
     }
 
-    D2SeedStrc* pSeed = GetQuestControlSeed(*(::SGAMEDATA**)(pQuestData + 4));
+    D2SeedStrc* pSeed = GetQuestControlSeed(pQuestData->pGame);
     int32_t nTimeout = Seed::SEED_RollRange(pSeed, 0xf, 0x11);
-    AddQuestTimer((D2QuestDataStrc*)pQuestData, Q11_TimerCheckDarkness, nTimeout);
-    *(uint8_t*)(pQuestSpecificData + 1) = 1;
+    AddQuestTimer(pQuestData, Q11_TimerCheckDarkness, nTimeout);
+    pQuestSpecificData->bDarknessTimerArmed = 1;
 }
 
 // A2Q3 - state-3 quest-event callback (fpQuestStateHandler[3], Q11_Callback_03): reacts to map/level enters.
@@ -829,7 +822,7 @@ void __fastcall Q11_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2GSPacketSrv0x27_TextStrc* pSpecificData = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
     D2QuestDataA2Q3Strc* pGossipControl = pQuestData->pQuestSpecificData.pA2Q3;
     if ((nLevelIndex == 0x2c || nLevelIndex == 0x2d) && !pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
-      Q11_StartDarknessTimer((uint8_t*)pQuestData);
+      Q11_StartDarknessTimer(pQuestData);
     }
     if (nLevelIndex == 0x28 && pGossipControl->bViperAmuletInitPending == '\x01') {
       uint8_t uVar1;

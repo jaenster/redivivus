@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -17,16 +20,40 @@ struct D2CharSelCompStrc;
 struct D2CharSelStrc;
 struct D2GfxDataStrc;
 struct D2PoolManagerStrc;
-struct D2QuestDataA3Q6Strc;
 struct DC6;
 
 // Data types
+#ifndef D2_DEFINED_D2CompCharacterCompositeItemStrc
+#define D2_DEFINED_D2CompCharacterCompositeItemStrc
 struct D2CompCharacterCompositeItemStrc {
     /* 0x00 */ int nItemCode;
     /* 0x04 */ int nWeaponClass; // Items.txt wclass (+0xc0) mapped through gaCompWeaponClassByCodeIndex (stored at 0050662d).
     /* 0x08 */ int nItemTypeIndex;
 };
 
+#endif // D2_DEFINED_D2CompCharacterCompositeItemStrc
+#ifndef D2_DEFINED_D2CompCofCacheEntryStrc
+#define D2_DEFINED_D2CompCofCacheEntryStrc
+struct D2CompCofCacheEntryStrc {
+    /* 0x00 */ int nRefCount;
+    /* 0x04 */ int32_t nAnimMode;
+    /* 0x08 */ int32_t nPlayerClassId;
+    /* 0x0C */ uint32_t dwWeaponClassToken;
+    /* 0x10 */ uint32_t nCofFileSize;
+    /* 0x14 */ uint8_t * pCofData;
+    /* 0x18 */ struct D2CompCofCacheEntryStrc * pNext;
+    /* 0x1C */ struct D2CompCofCacheEntryStrc * pPrev;
+};
+
+#endif // D2_DEFINED_D2CompCofCacheEntryStrc
+#ifndef D2_DEFINED_D2CompCofListNodeStrc
+#define D2_DEFINED_D2CompCofListNodeStrc
+struct D2CompCofListNodeStrc {
+    /* 0x00 */ struct D2CompCofCacheEntryStrc * pCacheEntry;
+    /* 0x04 */ struct D2CompCofListNodeStrc * pNext;
+};
+
+#endif // D2_DEFINED_D2CompCofListNodeStrc
 namespace D2Win::Src::D2Comp {
 
 // Function declarations
@@ -34,7 +61,7 @@ void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelStrc * pCharSel, int3
 void __stdcall D2COMP_SetUnitDisplayStrings(struct D2CharSelCompStrc * pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData);
 BOOL __fastcall D2COMP_SetAnimationMode(struct D2CharSelCompStrc * pCompUnit, int32_t nAnimMode);
 void __stdcall D2COMP_SetSelectionAndAuraImages(struct DC6 * pDC6, struct DC6 * pDC62);
-void __stdcall D2COMP_CreateCompositeUnit(uint32_t * pCompUnit, uint32_t nPlayerClassId, uint32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);
+void __stdcall D2COMP_CreateCompositeUnit(struct D2CharSelCompStrc * pCompUnit, uint32_t nPlayerClassId, uint32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);
 void __stdcall D2COMP_FreeAllCompositeUnits();
 void __stdcall D2COMP_SetAnimationSpeed(struct D2CharSelCompStrc * pCompUnit, uint8_t bySpeed);
 int __stdcall D2COMP_GetNumFrames(struct D2CharSelCompStrc * pCompUnit);
@@ -47,10 +74,10 @@ char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank,
 struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nClassicExpansion, uint8_t * pbyEquipSlots, char * szText);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
-void __fastcall D2COMP_PopulateComponentFromCOF(int32_t pCOFData, struct D2GfxDataStrc * pGfxData);
+void __fastcall D2COMP_PopulateComponentFromCOF(struct D2CharSelCompStrc * pCOFData, struct D2GfxDataStrc * pGfxData);
 uint8_t * __fastcall D2COMP_GetPaletteTransformTable(uint32_t nPaletteShift);
-void __fastcall D2COMP_DrawUnitShadow(uint32_t * pCompUnit);
-void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColor);
+void __fastcall D2COMP_DrawUnitShadow(struct D2CharSelCompStrc * pCompUnit);
+void __fastcall D2COMP_DrawCompositeUnit(struct D2CharSelCompStrc * pCompUnit, int32_t nDrawColor);
 int32_t __stdcall D2COMP_TruncateStringToFitWidth(uint16_t * wszText, int32_t nMaxWidth);
 void __stdcall D2COMP_AddTextLineToLayout(uint16_t * wszText, uint8_t * pLayoutBase, int * pnLineCount, int * pnMaxWidth, int * pnTotalHeight);
 void * __fastcall D2COMP_ZeroBuffer512(void * pBuffer);
@@ -64,16 +91,16 @@ void * __stdcall D2COMP_LoadExcelTxtFile(struct D2PoolManagerStrc * pMemory, cha
 void * __stdcall LoadTxt(struct D2PoolManagerStrc * pMemory, char * szTxtName, struct D2BinFieldInputStrc * pBinFields, size_t * pSize, int32_t nLineLength);
 void __fastcall D2COMP_AllocTxt_Items(struct D2PoolManagerStrc * pMemory);
 void __fastcall D2COMP_LoadItemTypesTxt(struct D2PoolManagerStrc * pMemory);
-int Unreferenced_005049d0();
+void __stdcall Unreferenced_005049d0();
 int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncestorType);
-uint32_t * __stdcall D2COMP_GetCompositeUnitListHead();
-uint32_t * __stdcall D2COMP_GetNextCompositeUnit(uint32_t * pCompUnit);
-uint32_t __stdcall D2COMP_GetNumDirections(uint32_t pCompUnit);
+struct D2CharSelCompStrc * __stdcall D2COMP_GetCompositeUnitListHead();
+struct D2CharSelCompStrc * __stdcall D2COMP_GetNextCompositeUnit(struct D2CharSelCompStrc * pCompUnit);
+uint32_t __stdcall D2COMP_GetNumDirections(struct D2CharSelCompStrc * pCompUnit);
 void __stdcall D2COMP_LoadGuildEmblemIcon(struct D2CharSelCompStrc * pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor);
 void __stdcall D2COMP_LoadAllItemPalettes();
 void __stdcall D2COMP_InitEmblemColorTables();
-int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pCompUnit);
-void __fastcall DRAW_OOG_ChannelPlayers(struct D2QuestDataA3Q6Strc * pA3Q6Data);
+int __fastcall D2COMP_DrawUnitNameAndTitle(struct D2CharSelCompStrc * pCompUnit);
+void __fastcall DRAW_OOG_ChannelPlayers(struct D2CharSelCompStrc * pA3Q6Data);
 void __stdcall D2COMP_AllocTxt_EverythingItems();
 #endif // D2_MODULE_D2Win
 // 16 internal functions (defined in .cpp)

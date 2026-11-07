@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2MCPClient)
 #error "D2MCPClient header included by a module that may not use D2MCPClient (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2MCPClient) && !defined(D2_LOADS_D2MCPClient)
+#error "internal D2MCPClient header included from another module; include D2MCPClient's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -12,7 +15,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2CharSelStrc;
 struct D2McpGameInfoStrc;
 struct MCPPacketSrv0x04;
 struct mcp0x03data;
@@ -91,6 +93,7 @@ struct __attribute__((packed)) MCPPacketCltStr {
 namespace D2MCPClient::McpConnect {
 
 // Function declarations
+HANDLE __stdcall GetMCPThread();
 void __stdcall FreeMCP();
 int32_t __stdcall HasPeerName();
 BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket();
@@ -121,8 +124,8 @@ void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int1
 void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGamePassword, uint16_t nRequestId);
 void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wRequestIdArg);
 void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wRequestIdArg);
-void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(struct D2CharSelStrc * pCharSel, uint16_t wRequestIdArg);
-void __fastcall NET_MCP_CLIENT_Send_0x18_CharUpgrade(struct D2CharSelStrc * pCharSel);
+void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(char * szCharName, uint16_t wRequestIdArg);
+void __fastcall NET_MCP_CLIENT_Send_0x18_CharUpgrade(char * szCharName);
 void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilterMode, uint16_t wRequestId);
 void __stdcall NET_MCP_CLIENT_Send_0x12_MOTD();
 void __stdcall NET_MCP_CLIENT_Send_0x13_CancelGameCreate();
@@ -165,7 +168,7 @@ void __stdcall NET_MCP_CLIENT_Send_0x0D();
 void __stdcall NET_MCP_CLIENT_Send_0x0F();
 void __stdcall NET_MCP_CLIENT_Send_0x10();
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, size_t nSize);
-BOOL __fastcall MCP_INCOMING_SetD2GSJoinResultAndSignal(int32_t pPacket);
+BOOL __fastcall MCP_INCOMING_SetD2GSJoinResultAndSignal(char * pPacket);
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x02(char * pBytes, size_t nSize);
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x07(char * pBytes, size_t nSize);
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize);

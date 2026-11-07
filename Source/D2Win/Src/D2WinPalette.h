@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Win)
 #error "D2Win header included by a module that may not use D2Win (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Win) && !defined(D2_LOADS_D2Win)
+#error "internal D2Win header included from another module; include D2Win's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -26,10 +29,9 @@ void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 // Builds the 72-entry palette pointer table on the stack and hands it to D2GFX_SetPaletteTable. The table is one contiguous array: [0..2] the three act1 palette planes, [3..51] the 49 gamma/data palettes, [52..64] the 13 transpose palettes, [65..71] act2/act5/neutral/units/index-counter/menu-in-game palettes. GetPalettePointer indexes it at +0x00..+0x11c.
 void __stdcall D2WINPALETTE_LoadPalettes();
-int Unreferenced_004fb1b0();
+void __stdcall Unreferenced_004fb1b0();
 // @sourcefile .\Src\D2WinPalette.cpp
 BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2);
-void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode);
 #endif // D2_MODULE_D2Win
 
 } // namespace D2Win::Src::D2WinPalette

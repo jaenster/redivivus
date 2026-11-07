@@ -6,7 +6,6 @@
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/QServer/QServer.h"
 #include "Source/Fog/Src/Safesock.h"
-#include "3rdparty/Storm/Source/SMem.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Net/Game/Server.data.h"
 
@@ -174,7 +173,7 @@ static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStruc
     return pTailPacket;
 }
 
-static int32_t __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * pSockAddr, int nWorkerIndex, int * pSockAddrLen) {
+static SOCKET __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * pSockAddr, int nWorkerIndex, int * pSockAddrLen) {
     char* szClientIpStr;
     BOOL bBeginReadOk2;
     memset(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampStart, 0, 0x48);
@@ -288,7 +287,7 @@ static int32_t __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * p
     pnTelemetryCounter = &pQServer->aWorkerTelemetry[nWorkerIndex].nAcceptedClients;
     (*pnTelemetryCounter)++;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pCsTelemetryLocal);
-    return (int32_t)FileHandle;
+    return (SOCKET)FileHandle;
 }
 
 static int __stdcall BeginAsyncWriteForClient(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pClient) {
@@ -336,7 +335,7 @@ int __stdcall PopAndFreeCompletedSendPacket(D2QServerClientConnectionStrc * pCli
 }
 
 // Accept thread entry point for QServer network listener. Polls listening socket with select(), accepts incoming client connections via AcceptConnection(), and periodically sweeps expired hacklist entries to enforce IP-based rate limiting. Telemetry tracks performance of each accept operation substage (hacklist check, connection limit, IP rate, IOCP attachment, initial recv).
-DWORD __stdcall AcceptThreadMain(void * lpThreadParam) {
+DWORD __stdcall AcceptThreadMain(D2QServerWorkerThreadContextStrc * lpThreadParam) {
     DWORD dwNextSweepTick;
     uint32_t dwQpcDelta;
     bool bRngCarry;
@@ -349,9 +348,9 @@ DWORD __stdcall AcceptThreadMain(void * lpThreadParam) {
     sockaddr addrClient;
     uint32_t dwStackCookie;
     D2QServerStrc* pQServer;
-    pQServer = *(D2QServerStrc**)lpThreadParam;
+    pQServer = lpThreadParam->pQServer;
     int nWorkerIndex;
-    nWorkerIndex = *(int*)((int)lpThreadParam + 4);
+    nWorkerIndex = lpThreadParam->nWorkerIndex;
     D2_FREE_AT(lpThreadParam, ".\\Src\\QServer\\QServerNT.cpp", 0x10d);
     DWORD dwSleepMs;
     dwSleepMs = GetTickCount();
@@ -630,9 +629,9 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
 }
 
 // lpStartAddress parameter of CreateThread
-DWORD __stdcall IoWorkerThreadMain(void * lpThreadParam) {
-    D2QServerStrc* pQServer = *(D2QServerStrc**)lpThreadParam;
-    int nWorkerIndex = *(int*)((int)lpThreadParam + 4);
+DWORD __stdcall IoWorkerThreadMain(D2QServerWorkerThreadContextStrc * lpThreadParam) {
+    D2QServerStrc* pQServer = lpThreadParam->pQServer;
+    int nWorkerIndex = lpThreadParam->nWorkerIndex;
     D2_FREE_AT(lpThreadParam, ".\\Src\\QServer\\QServerNT.cpp", 0x2ae);
     if (!pQServer->bUseDedicatedIoWorkers) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x2af);

@@ -4,15 +4,10 @@
 #include "Source/D2Client/D2UnitPartyControlSub.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/PLAYER/PlayerScreen.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 
@@ -428,7 +423,7 @@ void __fastcall CountModeZero(int32_t * pContext, D2UnitStrc * pUnit, int * pCou
     (*pCount)++;
 }
 
-void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, BOOL bExecute) {
+void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * bExecute) {
     D2UnitStrc* pUnit;
     D2UnitPartyControlSubSub* pSubSub;
     if (!pGame->pPartyControl) {
@@ -455,7 +450,7 @@ void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t 
     for (pSubSub = pFoundSub->pSub; pSubSub; pSubSub = pSubSub->pNext) {
       pUnit = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pSubSub->nUnitGUID);
       if (pUnit) {
-        (*fpFunction)(pGame, pUnit, (void*)bExecute);
+        (*fpFunction)(pGame, pUnit, bExecute);
       }
     }
 }
@@ -547,14 +542,14 @@ int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       nSearchGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetCursorItemGUID(pUnit->pInventory);
     }
     if (pUnit->eUnitType != UNIT_PLAYER) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27b);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27b);
       exit(-1);
     }
 
     {
       D2UnitPartyControlSub* pSub;
       if (!pGame) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27c);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27c);
         exit(-1);
       }
       if (!pGame->pPartyControl) {

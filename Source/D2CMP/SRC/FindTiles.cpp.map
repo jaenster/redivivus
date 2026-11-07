@@ -162,7 +162,9 @@
       ],
       "usedTypes": [
         "D2TileLibraryEntryStrc *",
-        "int *",
+        "D2TileLibraryHashNodeStrc",
+        "D2TileLibraryHashRefStrc",
+        "D2TileLibraryHashStrc",
         "int32_t",
         "uint32_t"
       ]

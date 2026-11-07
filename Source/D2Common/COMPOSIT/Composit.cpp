@@ -3,16 +3,17 @@
 #include "Source/D2Common/COMPOSIT/Composit.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/UNIT/Monster.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.h"
 #include "Source/D2Common/DATATBLS/TokTbls.h"
 #include "Source/D2Common/INVENTORY/Inventory.h"
 #include "Source/D2Common/ITEMS/Items.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/D2Common/Units.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2CMP/SRC/SpriteCache.data.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -381,7 +382,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
     char szModeTokenObj[4];
     char szWeaponTokenObj[4];
     char szTypeToken[4];
-    uint32_t nTypeToken;
+    char* nTypeToken;
     uint8_t* pszDirToken;
     uint32_t nPlrClassCopy;
     uint32_t nMode2;
@@ -426,8 +427,8 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           szTypeToken[3] = '\0';
           szModeToken[3] = '\0';
           szWeaponToken[0] = (uint8_t)*pnWeaponClass == 0x20 ? 0 : (uint8_t)*pnWeaponClass;
-          szWeaponToken[1] = *(uint8_t*)((int)pnWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((int)pnWeaponClass + 1);
-          szWeaponToken[2] = *(uint8_t*)((int)pnWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pnWeaponClass + 2);
+          szWeaponToken[1] = *(uint8_t*)((char*)pnWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((char*)pnWeaponClass + 1);
+          szWeaponToken[2] = *(uint8_t*)((char*)pnWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pnWeaponClass + 2);
           szTypeToken[0] = (uint8_t)nModeItemCode == 0x20 ? 0 : (uint8_t)nModeItemCode;
           byRawTokenChar1 = (uint8_t)((uint32_t)nModeItemCode >> 8);
           szTypeToken[1] = byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1;
@@ -442,7 +443,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             pszWeaponToken = (uint32_t*)szWeaponToken;
             pszModeToken = (uint32_t*)szModeToken;
             pszTypeToken = (uint32_t*)szTypeToken;
-            nTypeToken = (uint32_t)"DATA\\GLOBAL\\CHARS";
+            nTypeToken = "DATA\\GLOBAL\\CHARS";
             /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szOutCofPath, "%s\\%s\\COF\\%s%s%s.COF", nTypeToken, pszTypeToken, pszTypeToken, pszModeToken, pszWeaponToken);
             return;
           }
@@ -480,7 +481,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             }
           }
 
-          nItemCode = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(*(uint8_t*)((int)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 2)) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(*(uint8_t*)((int)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 1)) << 8 | (uint16_t)(uint8_t)((uint8_t)*pOutWeaponClass == 0x20 ? 0 : (uint8_t)*pOutWeaponClass))) & 0xffffffu);
+          nItemCode = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(*(uint8_t*)((char*)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 2)) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(*(uint8_t*)((char*)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 1)) << 8 | (uint16_t)(uint8_t)((uint8_t)*pOutWeaponClass == 0x20 ? 0 : (uint8_t)*pOutWeaponClass))) & 0xffffffu);
           byRawTokenChar1 = (uint8_t)((uint32_t)nPlrClassCopy >> 8);
           byRawTokenChar2 = (uint8_t)((uint32_t)nPlrClassCopy >> 0x10);
           nPlrClass = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)((uint8_t)nPlrClassCopy == 0x20 ? 0 : (uint8_t)nPlrClassCopy))) & 0xffffffu);
@@ -491,7 +492,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             pszWeaponToken = &nItemCode;
             pszModeToken = &bSpecialHandling;
             pszTypeToken = &nPlrClass;
-            nTypeToken = (uint32_t)"DATA\\GLOBAL\\MONSTERS";
+            nTypeToken = "DATA\\GLOBAL\\MONSTERS";
             /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szOutCofPath, "%s\\%s\\COF\\%s%s%s.COF", nTypeToken, pszTypeToken, pszTypeToken, pszModeToken, pszWeaponToken);
             return;
           }
@@ -522,8 +523,8 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           szWeaponTokenObj[3] = '\0';
           szModeTokenObj[3] = '\0';
           szWeaponTokenObj[0] = (uint8_t)nResolvedClass == 0x20 ? 0 : (uint8_t)nResolvedClass;
-          szWeaponTokenObj[1] = *(uint8_t*)((int)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 1);
-          szWeaponTokenObj[2] = *(uint8_t*)((int)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 2);
+          szWeaponTokenObj[1] = *(uint8_t*)((char*)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 1);
+          szWeaponTokenObj[2] = *(uint8_t*)((char*)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pOutWeaponClass + 2);
           byRawTokenChar1 = (uint8_t)((uint32_t)nModeOrClass >> 8);
           byRawTokenChar2 = (uint8_t)((uint32_t)nModeOrClass >> 0x10);
           nCompType = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0[0] == ' ' ? 0 : byObjTypeToken0[0]))) & 0xffffffu);
@@ -534,7 +535,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             pszWeaponToken = (uint32_t*)szWeaponTokenObj;
             pszModeToken = (uint32_t*)szModeTokenObj;
             pszTypeToken = &nCompType;
-            nTypeToken = (uint32_t)gszDirObjects;
+            nTypeToken = "DATA\\GLOBAL\\OBJECTS";
             /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szOutCofPath, "%s\\%s\\COF\\%s%s%s.COF", nTypeToken, pszTypeToken, pszTypeToken, pszModeToken, pszWeaponToken);
             return;
           }

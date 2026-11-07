@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -29,8 +32,8 @@ BOOL __fastcall INTRONPC_CheckIfSpokenWithNPC_Intro2(struct D2UnitDataPlayerInte
 void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nMonStatsId);
 void __fastcall CopyBufferToPointer(struct D2BitBufferStrc * pBitBuffer, char * pDest);
 void __fastcall CopySizeAndPosToBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pDest);
-void __fastcall PLAYERINTRO_CopyIntroData8Bytes(uint32_t * pdwParam1, uint32_t * pdwSrc);
-void __fastcall PLAYERINTRO_CopyIntroDataIndirect(int32_t pSrc, uint32_t * pdwIntroData);
+void __fastcall PLAYERINTRO_CopyIntroData8Bytes(struct D2UnitDataPlayerInteractedNPCStrc * pdwParam1, uint32_t * pdwSrc);
+void __fastcall PLAYERINTRO_CopyIntroDataIndirect(struct D2UnitDataPlayerInteractedNPCStrc * pSrc, uint32_t * pdwIntroData);
 // @sourcefile .\PLAYER\PlrIntro.cpp
 struct D2UnitDataPlayerInteractedNPCStrc * __fastcall STRUCT_AllocPlayerInteractedNPC(::SGAMEDATA * pGame);
 // @sourcefile .\PLAYER\PlrIntro.cpp

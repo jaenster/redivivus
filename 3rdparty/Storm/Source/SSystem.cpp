@@ -160,10 +160,10 @@ void __stdcall SSYSTEM_SetShutdownFlag(uint32_t bShutdown) {
 // Named per redivivus issue #35: SBIG_Constructor passes it with TSFixedArray_Ui_Destructor to the eh vector constructor iterator, so it is not a TSList helper.
 void __fastcall TSFixedArray_Ui_Constructor(void * pNode) {
     *(uint32_t*)pNode = 0;
-    *(uint32_t*)((int)pNode + 4) = 0;
-    *(uint32_t*)((int)pNode + 8) = 0;
-    *(uint32_t*)((int)pNode + 0xc) = 0;
-    *(uint32_t*)((int)pNode + 0x10) = 0;
+    *(uint32_t*)((char*)pNode + 4) = 0;
+    *(uint32_t*)((char*)pNode + 8) = 0;
+    *(uint32_t*)((char*)pNode + 0xc) = 0;
+    *(uint32_t*)((char*)pNode + 0x10) = 0;
 }
 
 // JMP thunk

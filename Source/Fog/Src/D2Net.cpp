@@ -51,7 +51,7 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
       pByteCountEntry = gaServerSentPacketByteCounts + nByteValue;
       nOldByteCount = *pByteCountEntry;
       *(uint32_t*)pByteCountEntry = (uint32_t)*pByteCountEntry + 1;
-      pOverflowCount = (int*)((int)gaServerSentPacketByteCounts + nByteValue * 8 + 4);
+      pOverflowCount = (int*)((char*)gaServerSentPacketByteCounts + nByteValue * 8 + 4);
       *pOverflowCount += (uint32_t)(-2 < (uint32_t)nOldByteCount);
       nBitCount += (uint32_t)Source::SSComp::gabHuffmanCodeLengths[nByteValue];
     }
@@ -84,7 +84,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
     uint8_t* pOut = (uint8_t*)pBuffer;
     size_t nBufferLeft = nBufferSize;
     if (!nBytesSize) {
-      return (int)pOut - (int)pBuffer;
+      return (intptr_t)pOut - (intptr_t)pBuffer;
     }
 
     do {
@@ -118,7 +118,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
     } while (nBytesSize);
 
     if (nBitsFree >= 8) {
-      return (int)pOut - (int)pBuffer;
+      return (intptr_t)pOut - (intptr_t)pBuffer;
     }
     if (!nBufferLeft) {
       return 0;
@@ -126,7 +126,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
 
     *pOut = byPending;
     pOut++;
-    return (int)pOut - (int)pBuffer;
+    return (intptr_t)pOut - (intptr_t)pBuffer;
 }
 
 int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize) {
@@ -164,8 +164,8 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
         uBitBuffer |= (uint32_t)byEntryLen << D2_SHIFT_COUNT(nBitsAvail);
       }
 
-      byEntryLen = *(uint8_t*)Source::SSComp::gaHuffmanFastDecodeTable[uBitBuffer >> 0x18];
-      byEntryLen = ((uint8_t*)Source::SSComp::gaHuffmanFastDecodeTable[uBitBuffer >> 0x18])[(uBitBuffer >> D2_SHIFT_COUNT(0x18 - byEntryLen) & gadwHuffmanBitMasks[byEntryLen]) + 1];
+      byEntryLen = *Source::SSComp::gaHuffmanFastDecodeTable[uBitBuffer >> 0x18];
+      byEntryLen = Source::SSComp::gaHuffmanFastDecodeTable[uBitBuffer >> 0x18][(uBitBuffer >> D2_SHIFT_COUNT(0x18 - byEntryLen) & gadwHuffmanBitMasks[byEntryLen]) + 1];
       byCodeLen = Source::SSComp::gabHuffmanCodeLengths[byEntryLen];
       nBitsAvail += (uint32_t)byCodeLen;
       if (nBitsAvail > 0x20) {
@@ -181,7 +181,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
       nBufferLeft--;
     }
 
-    return (int)pOut - (int)pBuffer;
+    return (intptr_t)pOut - (intptr_t)pBuffer;
 }
 
 } // namespace Fog::Src::D2Net

@@ -253,6 +253,9 @@
         "Unreferenced_00537ab0",
         "DRLGROOM_SwapRoomDataForRoomEx",
         "DRLGROOM_SwapActiveRoomExBetweenLevels"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
       ]
     },
     {
@@ -2001,15 +2004,14 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "D2DrlgActStrc",
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
-        "D2RoomStrc *",
         "D2SkillStrc",
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA",
         "eD2LevelId",
+        "eD2UnitType",
         "int32_t",
         "uint32_t",
         "uint8_t"

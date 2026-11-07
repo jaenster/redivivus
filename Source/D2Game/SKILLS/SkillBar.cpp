@@ -2,26 +2,9 @@
 
 #include "Source/D2Game/SKILLS/SkillBar.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/Collision.h"
-#include "Source/D2Common/D2MonStatsTxt.h"
-#include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
-#include "Source/D2Common/D2SkillsTxt.h"
-#include "Source/D2Common/D2StatListExStrc.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2CharStatsTxt.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/Drlg/Path.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/PATH/Path.h"
-#include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
@@ -40,10 +23,7 @@
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
-#include "Source/D2Common/DATATBLS/ItemStats.inline.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
-#include "Source/D2Common/Seed.inline.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
 #include "Source/D2Common/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -426,7 +406,7 @@ BOOL __fastcall Skills_SrvDoFunc_071_IronMaiden_GenericCurse(::SGAMEDATA * pGame
       if (!pItemStat) {
         break;
       }
-      if (*(uint8_t*)((uintptr_t)&pItemStat->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (*(uint8_t*)((intptr_t)&pItemStat->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         sCurseArgs.bUpdateAnimSpeed = 1;
       }
 
@@ -793,6 +773,7 @@ void __fastcall SKILLBAR_OnWarCryExpire(D2UnitStrc * pUnit, eD2States eState, in
 BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasTargetPos;
     D2PathPointStrc* pPathPoints;
+    SKILLBAR_SrvStFn38_Whirlwind_Slotm18 uSlot18;
     uint32_t nTargetY;
     uint32_t nTargetX;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -817,12 +798,12 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    D2UnitStrc* pNearbyTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
-    if (pNearbyTarget) {
-      bHasTargetPos = D2Common::Units::IsInMeleeRange(pUnit, pNearbyTarget, 0);
+    uSlot18.pNearbyTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
+    if (uSlot18.pNearbyTarget) {
+      bHasTargetPos = D2Common::Units::IsInMeleeRange(pUnit, uSlot18.pNearbyTarget, 0);
       if (bHasTargetPos) {
         UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-        bHasTargetPos = SkillsServer::SKILLS_ForceAttackTarget(pGame2, pUnit, pNearbyTarget);
+        bHasTargetPos = SkillsServer::SKILLS_ForceAttackTarget(pGame2, pUnit, uSlot18.pNearbyTarget);
         return bHasTargetPos;
       }
     }
@@ -838,13 +819,13 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    pNearbyTarget = (D2UnitStrc*)(eUnitType == UNIT_PLAYER ? 0x1c09 : 0x3c01);
+    uSlot18.nCollisionPattern = eUnitType == UNIT_PLAYER ? 0x1c09 : 0x3c01;
     D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, 0xc01);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 7);
     uint32_t bPathOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
     if (!bPathOk) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, (int32_t)pNearbyTarget);
+      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, uSlot18.nCollisionPattern);
       return 0;
     }
 
@@ -855,7 +836,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t nCalcResult = D2Common::PATH::DynamicPath::GetPathPoint(pDynPath, &pPathPoints);
     if (nCalcResult <= 0) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, (int32_t)pNearbyTarget);
+      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, uSlot18.nCollisionPattern);
       return 0;
     }
 
@@ -902,24 +883,24 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     if (pSkillsTxt->auraevent[0] >= 0) {
       short int* pAuraEventCursor = pSkillsTxt->auraevent;
       UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(pGame2, pUnit, 1, (int)pSkillsTxt->aurastate);
-      pNearbyTarget = 0;
+      uSlot18.nAuraEventIdx = 0;
       do {
         if (*pAuraEventCursor < 0) {
           break;
         }
 
         SkillsServer::D2SetAuraEvent(pGame2, pUnit, (int)*pAuraEventCursor, eSkill, nSkillLvl, (int)pAuraEventCursor[3], 1, (int)pSkillsTxt->aurastate);
-        pNearbyTarget = (D2UnitStrc*)((int)pNearbyTarget + 1);
+        uSlot18.nAuraEventIdx++;
         pAuraEventCursor++;
-      } while ((int)pNearbyTarget < 3);
+      } while (uSlot18.nAuraEventIdx < 3);
     }
 
     D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, (int)pSkillsTxt->aurastate, 1);
     return 1;
 }
 
-static BOOL SKILLAMZ_GetPlagueJavelinCloudCount(int32_t pUnit) {
-    D2InventoryStrc* pInventory = *(D2InventoryStrc**)(pUnit + 0x60);
+static BOOL SKILLAMZ_GetPlagueJavelinCloudCount(D2UnitStrc * pUnit) {
+    D2InventoryStrc* pInventory = pUnit->pInventory;
     if (!pInventory) {
       return 0;
     }
@@ -982,7 +963,7 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame,
       }
     }
 
-    BOOL nNextCloudFrame = SKILLAMZ_GetPlagueJavelinCloudCount((int32_t)pUnit);
+    BOOL nNextCloudFrame = SKILLAMZ_GetPlagueJavelinCloudCount(pUnit);
     int32_t iVar1 = 2;
     if (!nNextCloudFrame) {
       iVar1 = 1;

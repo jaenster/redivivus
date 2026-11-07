@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -31,12 +34,17 @@ typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, struct D2Un
 struct D2StatListExStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ChangedStatArrayStrc
+#define D2_DEFINED_D2ChangedStatArrayStrc
 struct D2ChangedStatArrayStrc {
     /* 0x00 */ int * pChangedStatIds; // Sorted array of packed stat IDs (statIndex<<16|subIndex)
     /* 0x04 */ short wCount; // Number of changed stat IDs
     /* 0x06 */ short wCapacity; // Allocated capacity (grows by 4)
 };
 
+#endif // D2_DEFINED_D2ChangedStatArrayStrc
+#ifndef D2_DEFINED_D2StatListStrc
+#define D2_DEFINED_D2StatListStrc
 struct __attribute__((packed)) D2StatListStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory; // Memory pool for allocations
     /* 0x04 */ struct D2UnitStrc * pUnitAttached; // Unit this stat list is attached to (the owner's unit)
@@ -54,6 +62,9 @@ struct __attribute__((packed)) D2StatListStrc {
     /* 0x38 */ void (__fastcall *fpExpire)(struct D2UnitStrc *, eD2States, int32_t); // Callback when stat list expires/is removed, fn(struct D2StatListExStrc*)
 };
 
+#endif // D2_DEFINED_D2StatListStrc
+#ifndef D2_DEFINED_D2StatListExStrc
+#define D2_DEFINED_D2StatListExStrc
 struct __attribute__((packed)) D2StatListExStrc {
     /* 0x00 */ D2StatListStrc sStatList; // Base stat list (60 bytes) - contains base stats, links, flags
     /* 0x3C */ struct D2StatListExStrc * pActiveHead; // Head of active child stat list chain (items, buffs)
@@ -65,3 +76,5 @@ struct __attribute__((packed)) D2StatListExStrc {
     /* 0x5C */ void (__fastcall *fpCallback)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, eD2Skills, int32_t, int32_t); // Stat-change callback installed by AllocStatListEx. The only value ever stored in 1.14d is D2Game::ITEMS::ItemMode::STATSLISTEX_FunctionCallback @0055b800 (__fastcall: ECX=pGame, EDX=pUnit, then pItemOwner/eSkill/fOld/fNew on the stack), written from SERVER_InitPlayer and the monster alloc path. No indirect call through this field exists in 1.14d Game.exe.
     /* 0x60 */ struct SGAMEDATA * pGame; // Game context pointer
 };
+
+#endif // D2_DEFINED_D2StatListExStrc

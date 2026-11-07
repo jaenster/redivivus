@@ -2,23 +2,12 @@
 
 #include "Source/D2Game/Quests/QUESTS/A5Q5.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2SkillArgStrc.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/DATATBLS/ItemStats.h"
-#include "Source/D2Common/DATATBLS/ObjectTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
-#include "Source/D2Common/Drlg/Drlg.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/QuestRecord.h"
-#include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Common/Units.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
-#include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/MISSILES/Missiles.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
@@ -29,13 +18,9 @@
 #include "Source/D2Game/UNIT/SUnit.h"
 #include "Source/D2Game/UNIT/SUnitInactive.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/Quests/QUESTS/A2Q6.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -693,7 +678,7 @@ BOOL __fastcall Q35_OnAncientsDefeated(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
             RewardExperienceFromAncients(pGame, pUnit);
             nPlayerPartyId = UNIT::SUnit::GetPartyId(pUnit);
             if (nPlayerPartyId != 0xffff) {
-              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPlayerPartyId, (::fpExecuteOnUnitFunction)Q35_SetCompleteForPartyMember, 0);
+              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPlayerPartyId, (::fpExecuteOnUnitFunction)Q35_SetCompleteForPartyMember, nullptr);
             }
           }
         }
@@ -822,7 +807,7 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q35_OnAncientsDefeated);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q35_SetCannotComplete);
     QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q5.cpp", 0x34a);
-    void* pCreateParam = 0;
+    uint32_t pCreateParam = 0;
     int32_t nPosYSpawn = 0;
     bool bActiveUnit = true;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pQuestArgs->pTarget);

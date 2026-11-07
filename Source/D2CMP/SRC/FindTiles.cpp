@@ -3,8 +3,7 @@
 #include "Source/D2CMP/SRC/FindTiles.h"
 #include "Source/D2CMP/SRC/TileProjects.h"
 #include "Source/D2Common/D2TileLibraryEntryStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -178,9 +177,9 @@ void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibr
     }
 }
 
-int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, D2TileLibraryEntryStrc * * pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex) {
+int32_t __fastcall FINDTILE_Lookup(D2TileLibraryHashStrc * pHashTable, D2TileLibraryEntryStrc * * pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex) {
     uint32_t i;
-    void* pChainNode;
+    D2TileLibraryHashRefStrc* pChainNode;
     bool bMatched;
     int nResultCount;
     nResultCount = 0;
@@ -188,7 +187,7 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, D2TileLibraryEntryStrc * 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcf);
       exit(-1);
     } else {
-      int* pEntry;
+      D2TileLibraryHashNodeStrc* pEntry;
       if (!pResultArray) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd0);
         exit(-1);
@@ -198,7 +197,7 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, D2TileLibraryEntryStrc * 
       }
 
       i = FINDTILE_ComputeHash((char)nSubIndex, (char)nTileSubType, (char)nTileType);
-      pEntry = pHashTable[(uint8_t)i];
+      pEntry = pHashTable->pNodes[(uint8_t)i];
       if (!pEntry) {
         return nResultCount;
       }
@@ -208,20 +207,20 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, D2TileLibraryEntryStrc * 
         if (bMatched) {
           goto copy_matches;
         }
-        if (pEntry[1] == nSubIndex && *pEntry == nTileSubType && pEntry[2] == nTileType) {
+        if (pEntry->nSubIndex == nSubIndex && pEntry->nIndex == nTileSubType && pEntry->nOrientation == nTileType) {
           bMatched = true;
         } else {
-          pEntry = (int*)pEntry[4];
+          pEntry = pEntry->pNext;
         }
       } while (pEntry);
 
       if (bMatched) {
         copy_matches:
-        pChainNode = (void*)pEntry[3];
+        pChainNode = pEntry->pRef;
         for (i = 0; pChainNode && i < nMaxResults; i++) {
           nResultCount++;
-          pResultArray[i] = *(D2TileLibraryEntryStrc**)pChainNode;
-          pChainNode = *(void**)((int)pChainNode + 4);
+          pResultArray[i] = pChainNode->pTile;
+          pChainNode = pChainNode->pNext;
         }
       }
 

@@ -1054,9 +1054,9 @@ void lmemcpy(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize) {
     for (nCount = nSize & 3; nCount; nCount--) {
       uint8_t uByte;
       uByte = *(uint8_t*)pSrc;
-      pSrc = (uint32_t*)((int)pSrc + 1);
+      pSrc = (uint32_t*)((char*)pSrc + 1);
       *(uint8_t*)pDst = uByte;
-      pDst = (uint32_t*)((int)pDst + 1);
+      pDst = (uint32_t*)((char*)pDst + 1);
     }
 }
 

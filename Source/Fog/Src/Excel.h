@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_Fog)
 #error "Fog header included by a module that may not use Fog (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_Fog) && !defined(D2_LOADS_Fog)
+#error "internal Fog header included from another module; include Fog's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -28,6 +31,8 @@ struct D2BinFieldHashNodeStrc {
 };
 
 #endif // D2_MODULE_Fog
+#ifndef D2_DEFINED_D2BinFieldInputStrc
+#define D2_DEFINED_D2BinFieldInputStrc
 struct __attribute__((packed)) D2BinFieldInputStrc {
     /* 0x00 */ char * szName;
     /* 0x04 */ eD2BinFieldInputType eType;
@@ -36,6 +41,7 @@ struct __attribute__((packed)) D2BinFieldInputStrc {
     /* 0x10 */ void * fpLinker; // by eType: struct D2TxtLinkStrc** (CODE*/NAME*), PFN_TxtKeyToWord* (KEY_WORD), PFN_TxtFieldLinker* (LINKER_*)
 };
 
+#endif // D2_DEFINED_D2BinFieldInputStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 union D2TxtCodeBufUnion {
     /* 0x00 */ uint32_t dwCode;
@@ -53,8 +59,8 @@ struct D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLi
 // @sourcefile .\Src\Excel\Excel.cpp
 void __stdcall STRUCT_FreeTxtLink(struct D2TxtLinkStrc * pTxtLink);
 int32_t __stdcall GetClassIdFromName(struct D2TxtLinkStrc * pTxtLink, uint32_t pItemsTxt, uint32_t dwParam3);
-BOOL __stdcall FOG_GetTxtLinkRecord(struct D2TxtLinkStrc * pTxtLink, int nRecordId, void * pResult);
-uint32_t __stdcall FOG_AddTxtLinkRecord(struct D2TxtLinkStrc * pTxtLink, char * nItemCode);
+BOOL __stdcall FOG_GetTxtLinkRecord(struct D2TxtLinkStrc * pTxtLink, int nRecordId, char * pResult);
+uint32_t __stdcall FOG_AddTxtLinkRecord(struct D2TxtLinkStrc * pTxtLink, uint32_t nItemCode);
 int32_t __stdcall GetLinkNodeIndex(struct D2TxtLinkStrc * pLink, char * szItemCode, uint32_t dwParam3);
 // @sourcefile .\Src\Excel\Excel.cpp
 int __stdcall FOG_ParseStringField(struct D2TxtLinkStrc * pTxtLink, char * szText);
@@ -68,8 +74,8 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(struct D2BinFieldExcelStrc * pBi
 int __stdcall FOG_ParseBinField(short * pOutMapping, struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput);
 // @sourcefile .\Src\Excel\Excel.cpp
 void __fastcall STRUCT_FreeTxtLinkNode(struct D2TxtLinkNodeStrc * pTxtLinkNode);
-int __fastcall FOG_GetRecordField(struct D2TxtLinkNodeStrc * pClientSideData, int nLinkIndex);
-int __stdcall FOG_ParseIntField(int * pTxtLink, int nLinkIndex, int nParam2);
+char * __fastcall FOG_GetRecordField(struct D2TxtLinkNodeStrc * pClientSideData, int nLinkIndex);
+int __stdcall FOG_ParseIntField(struct D2TxtLinkStrc * pTxtLink, int nLinkIndex, int nParam2);
 int __fastcall FOG_ParseTxtLink(struct D2TxtLinkStrc * pTxtLink, char * szText);
 #endif // D2_MODULE_Fog
 // 1 internal function (defined in .cpp)

@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -13,6 +16,7 @@
 
 // Forward declarations
 struct D2BitBufferStrc;
+struct D2MapAIStrc;
 struct D2ObjectInitFnArg;
 struct D2QuestArgStrc;
 struct D2QuestDataStrc;
@@ -29,9 +33,9 @@ void __fastcall Objects_InitFn52_NatalyaStart(struct D2ObjectInitFnArg * pInitAr
 // A3Q7 / slot QUESTINT_TheGuardian (Mephisto). Q23_NotifyGuardianStateToPlayers(pGame, cParam): drives/broadcasts the quest's state-flag machine. While quest is active (bIsNotIntroduction) and nStateFlag<6: if cParam==0 it saves the current prev-flag and advances state to 6 (or 7 in multiplayer); else it restores the saved prev-flag. Calls QUEST_SetStateAndBroadcast with A3Q6::Q23_PlayerNotifyCompleted as the per-player notify cb. No GetQuestState/SetQuestState calls here (uses the broadcast helper instead).
 void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char bRestorePrevState);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_HandleKhalimsWillCompletion(pGame): on the Guardian quest data, force Khalim's-Eye and Khalim's-Flail counts to 2 (mark Khalim's Will assembled), then if the orb unit exists flag it for client update (SetupUpdateFlag 1, and mode-2 update for the secondary orb ref). Cross-quest helper: pokes the Khalim's-Will item bookkeeping that gates the Mephisto fight. No quest-state transitions.
-void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, uint32_t nEventCode);
+void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * nEventCode);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_SetupDarkWandererMapAi(pGame, pDrlgMap): stores the passed DRLG map pointer into quest data, then if the tracked "wanderer" monster exists, its map is valid, and the map hasn't been taken yet -> transfers (DRLGPRESET_TakeFileFromDrlgMap) the monster's map-AI DRLG file into quest data and marks bDrlgMapTaken. Binds the Mephisto/Act4-transition actor's generated map into the quest. No quest-state transitions.
-void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, int32_t pMapAI);
+void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, struct D2MapAIStrc * pMapAI);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_StatusFilter: quest status-string filter callback (installed by Q24_InitData into fpStatusFilter). Stub - always returns false (no special status-bit suppression for this slot).
 bool __fastcall Q24_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_ActiveFilter: quest active/monster filter callback (installed by Q24_InitData into fpActiveFilter). Stub - always returns false.

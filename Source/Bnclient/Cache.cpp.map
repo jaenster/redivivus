@@ -77,7 +77,6 @@
       "usedTypes": [
         "LPFILETIME",
         "_SYSTEMTIME",
-        "int64_t",
         "uint32_t"
       ]
     },
@@ -150,6 +149,7 @@
         "CACHE_FindHashEntry"
       ],
       "usedTypes": [
+        "D2BnCacheBlockEntryStrc",
         "uint32_t"
       ]
     },
@@ -305,8 +305,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "CACHE_ReadData_Slotm",
         "D2BnCacheEntryHeaderStrc",
-        "FILETIME",
         "LPDWORD",
         "LPFILETIME",
         "uint32_t",
@@ -339,6 +339,7 @@
         "CACHE_Rebuild"
       ],
       "usedTypes": [
+        "D2BnCacheBlockEntryStrc",
         "D2BnCacheEntryHeaderStrc",
         "D2BnCacheFileHeaderStrc",
         "FILETIME",

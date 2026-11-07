@@ -4,34 +4,6 @@
   "file": "Source/D2gfx/D2GFX.cpp",
   "functions": [
     {
-      "name": "RENDERER_TogglePerspective_Unref_0044dc40",
-      "address": "0044dc40",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0044dc40"
-        }
-      ],
-      "namespace": "D2gfx::D2GFX",
-      "calledFunctions": [
-        "RENDERER_TogglePerspective_Unref_0044dc40"
-      ]
-    },
-    {
-      "name": "RENDERER_TogglePerspective_Unref_004769b0",
-      "address": "004769b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004769b0"
-        }
-      ],
-      "namespace": "D2gfx::D2GFX",
-      "calledFunctions": [
-        "RENDERER_TogglePerspective_Unref_004769b0"
-      ]
-    },
-    {
       "name": "RENDERER_TogglePerspective_Unref_00477be0",
       "address": "00477be0",
       "lines": [

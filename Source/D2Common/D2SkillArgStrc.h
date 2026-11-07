@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Common)
 #error "D2Common header included by a module that may not use D2Common (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Common) && !defined(D2_LOADS_D2Common)
+#error "internal D2Common header included from another module; include D2Common's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -21,6 +24,8 @@ typedef void (__fastcall *fpMissileInitFunction)(struct D2UnitStrc * pMissile, i
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2SkillArgStrc
+#define D2_DEFINED_D2SkillArgStrc
 struct __attribute__((packed)) D2SkillArgStrc {
     /* 0x00 */ int nFlags;
     /* 0x04 */ struct D2UnitStrc * pOwner;
@@ -46,3 +51,5 @@ struct __attribute__((packed)) D2SkillArgStrc {
     /* 0x54 */ void (__fastcall *fpFunction)(struct D2UnitStrc *, int32_t); // Optional per-missile init callback, invoked by CreatingMissile @0059fe30 as MOV EDX,[ESI+0x58] / MOV ECX,EBX / CALL EAX - pure __fastcall, two register args, no stack args, return discarded.
     /* 0x58 */ int32_t nFunctionParam; // second argument of fpFunction (fpMissileInitFunction nParam): a missile index, quadrant offset, revive count or a unit pointer depending on the caller; MakeMissile 004cd540 passes it through as int32_t
 };
+
+#endif // D2_DEFINED_D2SkillArgStrc

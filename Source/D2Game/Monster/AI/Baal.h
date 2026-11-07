@@ -4,6 +4,9 @@
 #if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_SEES_D2Game)
 #error "D2Game header included by a module that may not use D2Game (original DLL import graph; see module-gates.tsv)"
 #endif
+#if defined(D2_MODULE_LIBRARIES) && defined(D2_MODULE_STRICT) && !defined(D2_GATE_FROM_ROOT) && !defined(D2_MODULE_D2Game) && !defined(D2_LOADS_D2Game)
+#error "internal D2Game header included from another module; include D2Game's public header (see module-gates.tsv)"
+#endif
 
 #include <cstdint>
 #include <cstddef>
@@ -25,12 +28,15 @@ typedef BOOL (__fastcall *fpAiTargetPredicate)(struct D2UnitStrc * pUnit, struct
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2BaalFxSpiritSpawnStrc
+#define D2_DEFINED_D2BaalFxSpiritSpawnStrc
 struct D2BaalFxSpiritSpawnStrc {
     /* 0x00 */ int nFrameThreshold; // entry applies once the missile frame exceeds this (CMP EBX,[EAX]; JG)
     /* 0x04 */ int nSpawnInterval; // spawn a spirit when frame % nSpawnInterval == 0 (IDIV [idx*12+0x6db90c])
     /* 0x08 */ int bSpawnSpirit; // non-zero enables the BaalfxSpirit1 spawn (CMP [idx*12+0x6db910],EDX)
 };
 
+#endif // D2_DEFINED_D2BaalFxSpiritSpawnStrc
 namespace D2Game::Monster::AI::Baal {
 
 // Function declarations
@@ -40,10 +46,10 @@ uint32_t __fastcall AI_Baal_IsPortalInRange(uint32_t pGame, struct D2UnitStrc * 
 uint32_t __fastcall AI_BAAL_IsUnitInRange(struct D2UnitStrc * pUnit, int * pCandidate);
 // Weighted random action selector for Baal AI. Sums the nWeightCount weights in pnWeights, draws a random value from the unit's RNG seed (using bitmask fast-path when sum is a power of two), then walks the weight array to find which bucket the value falls in. Returns the index of the selected action (0-based); returns 1 as fallback if total weight is zero.
 int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, struct D2UnitStrc * pUnit);
-void __fastcall AI_BAAL_CountPowerfulSkills(int32_t nSkillNode, int * pnSelfSkillNode, int * pnPowerfulSkillCount);
+void __fastcall AI_BAAL_CountPowerfulSkills(struct D2UnitStrc * nSkillNode, int * pnSelfSkillNode, int * pnPowerfulSkillCount);
 // Executes a specific Baal AI action. Handles Baal clone spawning, teleport positioning, and multi-skill attack selection during the boss encounter.
 // @sourcefile .\Ai\AiBaal.cpp
-void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nParam, struct D2UnitStrc * pTarget, int nAction, struct D2MonsterAiCmdStrc * pClientSideData);
+void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * nParam, struct D2UnitStrc * pTarget, int nAction, struct D2MonsterAiCmdStrc * pClientSideData);
 void __fastcall BaalCrabAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Baal Crab (Baal's crab minion) AI tick. Selects best target via SelectTargetBaal, stores an anchor position AI-cmd (id=10) on first tick, then calls AI_BaalEvaluateCombatAction to choose an action and AI_Baal_ExecuteAction to perform it. Schedules next tick in 25 frames (RestartAiThink 0x19).
 void __fastcall AI_Fn1_BaalCrab(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);

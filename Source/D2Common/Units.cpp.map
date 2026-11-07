@@ -975,6 +975,7 @@
       ],
       "usedTypes": [
         "D2CharStatsTxt",
+        "D2UnitStrc",
         "int32_t"
       ]
     },

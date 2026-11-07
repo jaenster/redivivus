@@ -9,7 +9,7 @@
 #include "Source/D2Common/PATH/Path.h"
 #include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Units.h"
-#include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
