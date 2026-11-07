@@ -126,7 +126,7 @@ uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
       return ~nOffset;
     }
     if ((intptr_t)pBase < 0) {
-      pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
+      pBase = (int*)((intptr_t)pNode - *(int*)(*pNode + 4));
     }
 
     return nOffset + (int)pBase;
@@ -135,7 +135,7 @@ uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
 int __fastcall Unreferenced_00420470(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
@@ -163,9 +163,9 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
     if (piNext) {
       pBacklink = ppCur[1];
       if ((intptr_t)pBacklink < 0) {
-        pBacklink = (int*)~(uint32_t)pBacklink;
+        pBacklink = (int*)~(uintptr_t)pBacklink;
       } else {
-        pBacklink = (int*)((int)pBacklink + ((int)ppCur - piNext[1]));
+        pBacklink = (int*)((intptr_t)pBacklink + ((intptr_t)ppCur - piNext[1]));
       }
 
       *pBacklink = (int)piNext;
@@ -185,7 +185,7 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
           piNext = *ppList;
           pBacklink = ppAnchor[1];
           if ((intptr_t)pBacklink < 0) {
-            *(int***)~(uint32_t)pBacklink = (int**)ppCur;
+            *(int***)~(uintptr_t)pBacklink = (int**)ppCur;
             ppAnchor[1] = (int*)pNode;
             return;
           }
@@ -193,7 +193,7 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
             piNext = (int*)((char*)ppAnchor - (*ppAnchor)[1]);
           }
 
-          *(int***)((int)pBacklink + (int)piNext) = (int**)ppCur;
+          *(int***)((intptr_t)pBacklink + (intptr_t)piNext) = (int**)ppCur;
           ppAnchor[1] = (int*)pNode;
           return;
         }
@@ -241,7 +241,7 @@ StormLinkedListStrc * __fastcall Unreferenced_004206a0(StormLinkedListStrc * par
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
     param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return param_1;
 }
 
@@ -413,10 +413,10 @@ static void SMSG_DeleteWindow(HWND hWnd) {
       return;
     }
 
-    Source::SEVT::SEvtUnregisterType((char*)0x534d5347, (uint32_t)hWnd);
-    Source::SEVT::SEvtUnregisterType((char*)0x534d5348, (uint32_t)hWnd);
-    Source::SEVT::SEvtUnregisterType((char*)0x534d534a, (uint32_t)hWnd);
-    Source::SEVT::SEvtUnregisterType((char*)0x534d5349, (uint32_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d5347, (uint32_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d5348, (uint32_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d534a, (uint32_t)hWnd);
+    Source::SEVT::SEvtUnregisterType(0x534d5349, (uint32_t)hWnd);
     WND_RemoveAndFreeRecord(&gpWndTrackingListHead, pRecord);
 }
 
@@ -584,7 +584,7 @@ int __fastcall Unreferenced_00420da0(int param_1) {
     return *(int*)(param_1 + 4) - *(int*)(param_1 + 0x10);
 }
 
-uint32_t __thiscall WND_ByteBuffer_HasRoom(int32_t pThis, int32_t nAddBytes) {
+uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes) {
     return (uint32_t)((uint32_t)(*(int*)(pThis + 0x10) + nAddBytes) < *(uint32_t*)(pThis + 4));
 }
 

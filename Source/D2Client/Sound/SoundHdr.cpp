@@ -94,7 +94,7 @@ static D2SoundEnvironTxt * pTxtSoundEnviron = 0; D2_STATIC_GUARD(pTxtSoundEnviro
 static int nTxtSoundEnvironSize = 0; D2_STATIC_GUARD(nTxtSoundEnvironSize, "nTxtSoundEnvironSize");
 static int gpSoundHdrGlobal = 0; D2_STATIC_GUARD(gpSoundHdrGlobal, "gpSoundHdrGlobal");
 static int gnSoundIdRangeMax = 0; D2_STATIC_GUARD(gnSoundIdRangeMax, "gnSoundIdRangeMax");
-void * gpSoundLRUListHead = 0; D2_GLOBAL_GUARD(gpSoundLRUListHead, "gpSoundLRUListHead");
+D2SoundListNodeStrc * gpSoundLRUListHead = 0; D2_GLOBAL_GUARD(gpSoundLRUListHead, "gpSoundLRUListHead");
 static uint32_t gnCurrentGameAudioVolume = 0; D2_STATIC_GUARD(gnCurrentGameAudioVolume, "gnCurrentGameAudioVolume");
 static unsigned int gdwLastSoundAsyncLoadTick = {}; D2_STATIC_GUARD(gdwLastSoundAsyncLoadTick, "gdwLastSoundAsyncLoadTick");
 static int gnSoundEvictedAudioVolume = 0; D2_STATIC_GUARD(gnSoundEvictedAudioVolume, "gnSoundEvictedAudioVolume");
@@ -494,7 +494,7 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
     }
 
     gnSoundBufferBytesLoaded -= pSound->nSoundDataBytes;
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)&gpSoundLRUListHead, nSoundId);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free(&gpSoundLRUListHead, nSoundId);
     pSound->nLRUTimestamp = 0;
     if (pSound->pAsyncData) {
       Fog::Src::AsyncData::ASYNCDATA_Free((D2AsyncData_Line0x128*)pSound->pAsyncData);
@@ -511,30 +511,30 @@ BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMu
     int nId;
     D2SoundsTxt* pSound;
     D2ClientSoundChannelStrc* pPlaying;
+    int nPass;
     bool bFreedAny;
-    int* pLRUNode;
     int nNowVolume = gnCurrentGameAudioVolume;
     uint32_t nBytesTarget = gnSoundBufferBytesLoaded - nBytesNeeded;
     D2SoundsTxt* pSoundsBase = pTxtSounds;
     while (true) {
-      int nPass;
+      D2SoundListNodeStrc* pDVar1;
       if (gnSoundBufferBytesLoaded <= nBytesTarget) {
         return 1;
       }
 
       bFreedAny = false;
       nPass = 0;
-      pLRUNode = (int*)gpSoundLRUListHead;
+      pDVar1 = gpSoundLRUListHead;
       do {
-        if (pLRUNode) {
-          nId = *pLRUNode;
+        if (pDVar1) {
+          nId = pDVar1->nItemKey;
           if (!pSoundsBase || nId < 0 || nId >= nTxtSoundsSize) {
             pSound = 0;
           } else {
             pSound = pSoundsBase + nId;
           }
           if (!nPass && (pSound->nRefCount || pSound->Cache) || bRespectRecency && nNowVolume - pSound->nLRUTimestamp < 0x2ee || (pPlaying = GAME::Sound::SOUND_FindPlayingByIdSafe(nId) , pSoundsBase = pTxtSounds , pPlaying != 0)) {
-            pLRUNode = (int*)pLRUNode[1];
+            pDVar1 = pDVar1->pNext;
             continue;
           }
 
@@ -547,7 +547,7 @@ BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMu
         }
 
         nPass++;
-        pLRUNode = (int*)gpSoundLRUListHead;
+        pDVar1 = gpSoundLRUListHead;
         if (nPass > 1) {
           break;
         }
@@ -723,7 +723,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
 void __fastcall SOUNDHDR_UpdateLRUTimestamp(int32_t nSoundId) {
     D2SoundsTxt* pSound = !pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize ? 0 : pTxtSounds + nSoundId;
     pSound->nLRUTimestamp = gnCurrentGameAudioVolume;
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)&gpSoundLRUListHead, nSoundId);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free(&gpSoundLRUListHead, nSoundId);
     D2Sound::D2SoundUntil::SOUNDUTIL_AppendToLinkedList(&gpSoundLRUListHead, nSoundId);
 }
 

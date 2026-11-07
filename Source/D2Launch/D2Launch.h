@@ -28,6 +28,10 @@ struct DC6;
 #define RECON_FPTD_fnAppModeRun
 typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig);
 #endif
+#ifndef RECON_FPTD_fpRequiredUserAction
+#define RECON_FPTD_fpRequiredUserAction
+typedef BOOL (*fpRequiredUserAction)();
+#endif
 
 // Data types
 #ifndef D2_DEFINED_D2BNetRealmEntryStrc
@@ -168,6 +172,7 @@ fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule);
 void __stdcall AppModeLauncherShutdown();
 } // namespace D2Launch
 namespace D2Launch::MainMenus {
+bool fpRequiredUserAction();
 BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 } // namespace D2Launch::MainMenus

@@ -788,7 +788,7 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
 
 // BNet character save handler. Builds 8KB save file in temp buffer, validates against existing save in database, optionally re-locks and saves character via BNet callback if changed. Copies to safe buffer on success.
 // @sourcefile .\PLAYER\PlrSave.cpp
-BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId) {
+BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId) {
     // Static local variables (originally global data)
     static int gnBnetSaveUnchangedCount; D2_STATIC_GUARD_BSS(gnBnetSaveUnchangedCount, "D2Game::PLAYER::PlayerSave::SaveToFileBnet::gnBnetSaveUnchangedCount");
 
@@ -923,17 +923,17 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
         if (bSaveUnchanged) {
           gnBnetSaveUnchangedCount++;
           if (BattleNetServerService && BattleNetServerService->fpRelockDatabaseCharacter) {
-            BattleNetServerService->fpRelockDatabaseCharacter(nAccountId);
+            BattleNetServerService->fpRelockDatabaseCharacter(szAccountName);
           }
 
-          GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, (void*)nRealmId);
+          GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, nRealmId);
           return 0;
         }
       }
     }
 
     nCompareByteIdx = nSaveFileSize;
-    GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, (void*)nRealmId);
+    GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, nRealmId);
     ITEMS::ItemMode::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, nExistingCrc);
     if (BattleNetServerService && BattleNetServerService->fpSaveDatabaseCharacter) {
       /* FARPROC lpfn for IsBadCodePtr */ _bLockResult = IsBadCodePtr((FARPROC)BattleNetServerService->fpSaveDatabaseCharacter);
@@ -942,7 +942,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
         exit(-1);
       }
 
-      BattleNetServerService->fpSaveDatabaseCharacter(nAccountId, (uint8_t*)&__frame0.wPacketHeader, nSaveSizePlus2, nToken);
+      BattleNetServerService->fpSaveDatabaseCharacter(szAccountName, (uint8_t*)&__frame0.wPacketHeader, nSaveSizePlus2, nToken);
       GAME::Clients::CopySafeBuffer((D2ClientStrc*)nCompareByteIdx, __frame0.saveTempBuffer, nSaveFileBytes);
     }
 
@@ -1037,7 +1037,7 @@ BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ch
       ::SGAMEDATA* pGameCopy = pGame;
       SaveToBuffer(pGameCopy, bIsInteracting, pUnit, pClient);
     } else if (BattleNetServerService) {
-      nSaveResult = SaveToFileBnet(pGame, (uint32_t)szAccountName, pUnit, szCharName, bIsInteracting, clientContainer, bUnknown, nRealm);
+      nSaveResult = SaveToFileBnet(pGame, szAccountName, pUnit, szCharName, bIsInteracting, clientContainer, bUnknown, nRealm);
       bSaveSucceeded = nSaveResult;
     } else {
       PlayerSave::SaveToFile(pGame, pUnit, bIsInteracting, bUnknown, szCharName);
@@ -1811,7 +1811,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     if (nItemCount) {
       D2UnitStrc* pSocketItem;
       do {
-        nBytesLeft = pItemLocal + (nStreamEnd - (int)pStreamCursor);
+        nBytesLeft = pItemLocal + (nStreamEnd - (intptr_t)pStreamCursor);
         nRestoreResult = 0;
         D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, eItemFormat);
         if (itemDetails.classId == -1) {
@@ -1843,7 +1843,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         }
 
         for (nRestoreResult = 0; nRestoreResult < (int)nUsedSockets; nRestoreResult++) {
-          nBytesLeft = pItemLocal + (nStreamEnd - (int)pStreamCursor);
+          nBytesLeft = pItemLocal + (nStreamEnd - (intptr_t)pStreamCursor);
           D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, eItemFormat);
           pSocketItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
           if (!pSocketItem && nBytesConsumed <= 0) {
@@ -2152,7 +2152,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * 
 
           pMercUnit = UNIT::SUNITNPC::CreateMerc(pGame, pUnit, *(uint16_t*)(pbVar3 + 10), *(uint32_t*)(pbVar3 + 6), *(uint16_t*)(pbVar3 + 0xc), pHirelingTxt->classId, uVar2 & 0x10000);
           if (!pMercUnit) {
-            *ppnBytesConsumed = (uint32_t*)(pdwReadPos - (int)pbVar3);
+            *ppnBytesConsumed = (uint32_t*)(pdwReadPos - (intptr_t)pbVar3);
             return 0;
           }
 
@@ -2203,7 +2203,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * 
           }
 
           pbVar4 = pdwReadPos;
-          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 + (nBytesRemaining - (int)pdwReadPos)), 0, (short int**)&pdwReadPos);
+          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 + (nBytesRemaining - (intptr_t)pdwReadPos)), 0, (short int**)&pdwReadPos);
           if (!nErrorLine) {
             ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
             ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
@@ -2317,28 +2317,28 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     }
 
     *ppUnitOut = __frame1.pSavedMana;
-    uint8_t* pSaveCursor = (uint8_t*)((int)ppUnit + (int)pSavefile);
+    uint8_t* pSaveCursor = (uint8_t*)((intptr_t)ppUnit + (intptr_t)pSavefile);
     int nBytesRemaining = nGoldLimit - (int)ppUnit;
     nLoadResult = _oldSaveGameLoadingPart2(__frame1.pSavedMana, (int*)pSaveCursor, nSavefileSize, (uint32_t*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
 
-    uint8_t* pDataCursor = pSaveCursor + (int)ppUnit;
+    uint8_t* pDataCursor = pSaveCursor + (intptr_t)ppUnit;
     nBytesRemaining -= (int)ppUnit;
     nLoadResult = _oldSaveGameLoadingPart3(pUnit, (uint32_t*)pDataCursor, nSavefileSize, (uint32_t*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
 
-    pItemsData = pDataCursor + (int)ppUnit;
+    pItemsData = pDataCursor + (intptr_t)ppUnit;
     nBytesRemaining -= (int)ppUnit;
     nLoadResult = _oldSaveGameLoadingPart4(pUnit, (uint32_t*)pItemsData, nSavefileSize, (uint32_t*)&ppUnit);
     if (nLoadResult) {
       return nLoadResult;
     }
 
-    pItemsData += (int)ppUnit;
+    pItemsData += (intptr_t)ppUnit;
     nBytesRemaining -= (int)ppUnit;
     nLoadResult = _oldSaveGameLoadingPart5(__frame1.pGameLocal, pUnit, pItemsData, 0x10, nSavefileSize, (int*)&ppUnit);
     if (nLoadResult) {
@@ -2365,7 +2365,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_goldbank, 0, 0);
     }
 
-    pItemsData += (int)ppUnit;
+    pItemsData += (intptr_t)ppUnit;
     nBytesRemaining -= (int)ppUnit;
     iVar1 = _oldSaveGameLoadingPart6(__frame1.pGameLocal, __frame0.pClientOrig, pUnit, pItemsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit);
     if (!iVar1) {
@@ -2382,17 +2382,17 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
       pPlayerData->eLeftSkillId = rightSkill;
       pPlayerData->eRightSkillId = leftSkill;
       nBytesRemaining -= (int)ppUnit;
-      pItemsData += (int)ppUnit;
+      pItemsData += (intptr_t)ppUnit;
       nLoadResult = PLRSAVE_DispatchItemLoadByFormat(__frame1.pGameLocal, pUnit, pItemsData, nSavefileSize, nBytesRemaining, 0, (short int**)&ppUnit);
       if (!nLoadResult) {
         nGoldLimit = nBytesRemaining - (int)ppUnit;
-        pCorpseHeader = (short int*)(pItemsData + (int)ppUnit);
+        pCorpseHeader = (short int*)(pItemsData + (intptr_t)ppUnit);
         iVar1 = _oldSaveGameLoadingPart7(__frame1.pGameLocal, pUnit, pCorpseHeader, nSavefileSize, nGoldLimit, (uint32_t*)&ppUnit);
         if (!iVar1) {
-          pCorpseData = (uint8_t*)((int)pCorpseHeader + (int)ppUnit);
+          pCorpseData = (uint8_t*)((intptr_t)pCorpseHeader + (intptr_t)ppUnit);
           ppUnitOut = (D2UnitStrc**)_oldSaveGameLoadingPart8(pUnit, pCorpseData, nSavefileSize, nGoldLimit - (int)ppUnit, (uint32_t**)&ppUnit, __frame1.pGameLocal);
           if (!ppUnitOut) {
-            pCorpseData += (int)ppUnit;
+            pCorpseData += (intptr_t)ppUnit;
             ppUnit = ppUnitOut;
             _oldSaveGameLoadingPart9(pUnit, pCorpseData, nSavefileSize, (int*)&ppUnit);
           }

@@ -4,6 +4,8 @@
 #include "Source/D2CMP/SRC/CelCmp.h"
 #include "Source/D2CMP/SRC/CelCmp/CELLIST.h"
 #include "Source/D2CMP/SRC/CelCmp/TCELENTRY.h"
+#include "Source/D2Win/DC6.h"
+#include "Source/D2Win/DC6Block.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -16,7 +18,7 @@
 
 namespace D2CMP::SRC::Raw {
 
-uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, int32_t pCelFile) {
+uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
     uint32_t nDirAngle;
     uint32_t nDirIndex;
     ::TCELENTRY* nDirCount;
@@ -25,18 +27,18 @@ uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, int32_t pCelFile) 
     uint32_t iFrame = 0;
     uint32_t pDirNode = pRawFile->m_frames.m_terminator.m_next;
     for (nDirCount = (::TCELENTRY*)((int)pDirNode <= 0 ? 0 : pDirNode); 0 < (intptr_t)nDirCount; nDirCount = (::TCELENTRY*)nDirCount->m_link.m_next) {
-      uint32_t* pNewFrame;
+      DC6Block* pNewFrame;
       nFrameDataSize = nDirCount->nWidth * nDirCount->nHeight * 3;
-      pNewFrame = (uint32_t*)D2_ALLOC_AT(nFrameDataSize + 0x23, ".\\SRC\\Raw.cpp", 0x22);
-      *pNewFrame = nDirCount->dwArg7;
-      pNewFrame[1] = nDirCount->nWidth;
-      pNewFrame[2] = nDirCount->nHeight;
-      pNewFrame[3] = nDirCount->nOffsetX;
-      pNewFrame[4] = nDirCount->nOffsetY;
-      pNewFrame[5] = 0;
-      pNewFrame[6] = 0;
-      pNewFrame[7] = nFrameDataSize;
-      memcpy(pNewFrame + 8, nDirCount->pPixels, nFrameDataSize);
+      pNewFrame = (DC6Block*)D2_ALLOC_AT(nFrameDataSize + 0x23, ".\\SRC\\Raw.cpp", 0x22);
+      pNewFrame->nFlip = nDirCount->dwArg7;
+      pNewFrame->nWidth = nDirCount->nWidth;
+      pNewFrame->nHeight = nDirCount->nHeight;
+      pNewFrame->nOffsetX = nDirCount->nOffsetX;
+      pNewFrame->nOffsetY = nDirCount->nOffsetY;
+      pNewFrame->nAllocSize = 0;
+      pNewFrame->nNextBlock = 0;
+      pNewFrame->nLength = nFrameDataSize;
+      memcpy(pNewFrame + 1, nDirCount->pPixels, nFrameDataSize);
       pDirNode = pRawFile->nDirections;
       if (pDirNode > 1) {
         nDirAngle = (iFrame / nFramesPerDir << 6) / pDirNode;
@@ -48,7 +50,7 @@ uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, int32_t pCelFile) 
       pDirNode = iFrame / nFramesPerDir;
       nDirAngle = iFrame % nFramesPerDir;
       iFrame++;
-      *(uint32_t**)(pCelFile + 0x18 + (nDirIndex * nFramesPerDir + nDirAngle) * 4) = (uint32_t*)pNewFrame;
+      *(DC6Block**)(pCelFile[1].nTerm + (nDirIndex * nFramesPerDir + nDirAngle) * 4 - 0xc) = (DC6Block*)pNewFrame;
     }
 
     return pDirNode;

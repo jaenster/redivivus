@@ -10,12 +10,12 @@
 
 namespace D2Multi::OOG {
 
-int __stdcall OOGUTIL_PrintCallback_SetFlag(uint32_t dwParam) {
+int __stdcall OOGUTIL_PrintCallback_SetFlag(D2ControlMsg * pControlMsg) {
     gnMCPConnectionRestoreResult = 1;
     return 1;
 }
 
-int __stdcall OOGUTIL_DrawCallback_SetModeAndClearMsgLoop(uint32_t dwParam) {
+int __stdcall OOGUTIL_DrawCallback_SetModeAndClearMsgLoop(D2ControlMsg * pControlMsg) {
     gnOpenBNetMode = 4;
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;

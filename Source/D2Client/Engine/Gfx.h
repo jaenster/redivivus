@@ -22,6 +22,7 @@ struct D2LightMapStrc;
 struct D2MonStatsTxt;
 struct D2MonsterCofStatusEntryStrc;
 struct D2ParticleStrc;
+struct D2TileLibraryEntryStrc;
 struct D2UnitStrc;
 typedef uint32_t DRAWMODE;
 #ifndef RECON_FPTD_fpDrawBlendedVisTile
@@ -30,7 +31,7 @@ typedef void (__fastcall *fpDrawBlendedVisTile)(uint8_t * a1, int a2, int a3, in
 #endif
 #ifndef RECON_FPTD_fpDrawGroundTile
 #define RECON_FPTD_fpDrawGroundTile
-typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, struct D2GfxLightExStrc * a4);
+typedef BOOL (__fastcall *fpDrawGroundTile)(struct D2TileLibraryEntryStrc * a1, int a2, int a3, struct D2GfxLightExStrc * a4);
 #endif
 #ifndef RECON_FPTD_fpDrawRoofTile
 #define RECON_FPTD_fpDrawRoofTile
@@ -53,6 +54,8 @@ typedef void (__fastcall *fpFillYBufferTable)(void * ppvBits, int nWidth, int nH
 typedef void (__fastcall *fpUnknown)(int a1, int a2, int a3, int a4);
 #endif
 
+struct D2CofTextureCacheEntryStrc;
+
 // Data types
 #ifndef D2_DEFINED_D2CofCacheStrc
 #define D2_DEFINED_D2CofCacheStrc
@@ -60,11 +63,12 @@ struct D2CofCacheStrc {
     /* 0x00 */ int32_t nFrameCount;
     /* 0x04 */ void * pCacheMemory;
     /* 0x08 */ int32_t nCacheEntryCount;
-    /* 0x0C */ void * apBuckets[512]; // hash buckets walked 0x200 deep by GFX_FreeUnusedCofEntries
+    /* 0x0C */ struct D2CofTextureCacheEntryStrc * apBuckets[512]; // hash buckets walked 0x200 deep by GFX_FreeUnusedCofEntries
 };
 
 #endif // D2_DEFINED_D2CofCacheStrc
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+#ifndef D2_DEFINED_D2CofTextureCacheEntryStrc
+#define D2_DEFINED_D2CofTextureCacheEntryStrc
 struct D2CofTextureCacheEntryStrc {
     /* 0x00 */ struct D2CofTextureCacheEntryStrc * pNext;
     /* 0x04 */ uint32_t dwFlags;
@@ -77,14 +81,14 @@ struct D2CofTextureCacheEntryStrc {
     /* 0x1B */ uint8_t field_0x1b;
 };
 
-#endif // D2_MODULE_D2Client
+#endif // D2_DEFINED_D2CofTextureCacheEntryStrc
 #ifndef D2_DEFINED_D2GfxHelperStrc
 #define D2_DEFINED_D2GfxHelperStrc
 struct D2GfxHelperStrc {
     /* 0x00 */ void (__fastcall *nfpFillYBufferTable)(void *, int, int, int);
     /* 0x04 */ void (__fastcall *nfpDrawVisTile)(uint8_t *, int32_t, int32_t);
     /* 0x08 */ void (__fastcall *nfpDrawVisTileLit)(int, int, int, int);
-    /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(int, int, int, struct D2GfxLightExStrc *);
+    /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(struct D2TileLibraryEntryStrc *, int, int, struct D2GfxLightExStrc *);
     /* 0x10 */ void (__fastcall *nfpDrawWallTile)(int, int, int, uint32_t *);
     /* 0x14 */ void (__fastcall *nfpDrawBlendedVisTile)(uint8_t *, int, int, int);
     /* 0x18 */ void (__fastcall *nfpDrawRoofTile)(int, int, int, uint32_t *, BYTE);
@@ -96,7 +100,7 @@ struct D2GfxHelperStrc {
 struct D2GfxInfoUnkStrc {
     /* 0x00 */ int nAnimMode; // animation mode key; GFX_FindGfxInfoByModeAndWeapon compares it with the requested mode
     /* 0x04 */ int nWeaponParam; // Weapon/COF param used as cache key alongside pAnimMode
-    /* 0x08 */ int * pCofDataArray; // COF data array pointer, accessed at [5] (offset 0x14) by GFX_GetGfxInfoCofData
+    /* 0x08 */ struct D2CofTextureCacheEntryStrc * pCofDataArray; // COF data array pointer, accessed at [5] (offset 0x14) by GFX_GetGfxInfoCofData
     /* 0x0C */ int nCofDataCount; // COF data count or flags
     /* 0x10 */ struct D2GfxInfoUnkStrc * pNext; // Next entry in linked list
 };

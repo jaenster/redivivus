@@ -34,6 +34,15 @@ typedef int (__fastcall *CalcGetLinkerIndex_t)(char * szText, int * pOutHasResol
 typedef int (__fastcall *fnSkillCalcMethod)(int32_t nCalcCode, void * pContext);
 #endif
 
+// Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+struct D2SkillCalcOperandStackStrc {
+    /* 0x000 */ uint8_t abTokenTypes[64];
+    /* 0x040 */ uint32_t adwTokenValues[64];
+    /* 0x140 */ int32_t nTop;
+};
+
+#endif // D2_MODULE_Fog
 namespace Fog::Skills {
 
 // Function declarations
@@ -51,7 +60,7 @@ int __fastcall SKILLS_PopValue(int * pValueStack);
 // 12=TOKEN_GREATER_OR_EQ '>=' 13=TOKEN_GREATER '>' 14=TOKEN_LOGIC_EQUALS '==' 15=TOKEN_LOGIC_DIFFERENT '!='
 // 16=TOKEN_CUSTOM_RAW_CONSTANT (int literal / '.'id / 'string') 17=TOKEN_CUSTOM_FUNCTION_PARAMETER_CONSTANT (identifier)
 // 18=TOKEN_CUSTOM_FUNCTION_TABLE (identifier followed by '(').
-char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLookup, CalcGetLinkerIndex_t pfnSkillLookup, int nParserContext, char * szToken, uint8_t * pTokenType, int * pnTokenValue);
+char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLookup, CalcGetLinkerIndex_t pfnSkillLookup, struct D2SkillCalcOperandStackStrc * nParserContext, char * szToken, uint8_t * pTokenType, int * pnTokenValue);
 #endif // D2_MODULE_Fog
 // 5 internal functions (defined in .cpp)
 

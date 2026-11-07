@@ -155,7 +155,7 @@ template<> TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* TSList<TCELENTRY, TSGetLin
     int uPrevHead = pSource->m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = uPrevHead;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
     return this;
 }
 

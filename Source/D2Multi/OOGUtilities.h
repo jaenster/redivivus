@@ -164,7 +164,7 @@ namespace D2Multi::OOGUtilities {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
-int __stdcall OOG_DisableControlCallback(uint32_t dwParam);
+int __stdcall OOG_DisableControlCallback(struct D2ControlMsg * pControlMsg);
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
 int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex);

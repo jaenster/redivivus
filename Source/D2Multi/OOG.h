@@ -14,13 +14,16 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+// Forward declarations
+struct D2ControlMsg;
+
 namespace D2Multi::OOG {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
-int __stdcall OOGUTIL_PrintCallback_SetFlag(uint32_t dwParam);
-int __stdcall OOGUTIL_DrawCallback_SetModeAndClearMsgLoop(uint32_t dwParam);
+int __stdcall OOGUTIL_PrintCallback_SetFlag(struct D2ControlMsg * pControlMsg);
+int __stdcall OOGUTIL_DrawCallback_SetModeAndClearMsgLoop(struct D2ControlMsg * pControlMsg);
 #endif // D2_MODULE_D2Multi
 
 } // namespace D2Multi::OOG

@@ -47,12 +47,12 @@ static void __stdcall FASTCMP_CompressToRLE(uint8_t * pSrcData, uint32_t nLineCo
     int32_t pbLineStride;
     pbLineStride = (int32_t)pSrcData;
     if (!((uintptr_t)pDirectionOrder & 1)) {
-      pBaseData += (nLineCount - 1) * (int)pSrcData;
+      pBaseData += (nLineCount - 1) * (intptr_t)pSrcData;
       pbLineStride = -(int)pSrcData;
     }
 
     pDirectionOrder = (uint8_t*)(pbLineStride + (char*)pBaseData);
-    pSrcData = pBaseData + (int)pSrcData;
+    pSrcData = pBaseData + (intptr_t)pSrcData;
     uint8_t* pbRLEOut;
     pbRLEOut = pbRLEAlloc;
     if (nLineCount > 0) {

@@ -237,10 +237,9 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
     eD2ItemFlag eItemFlag;
     int nStatValue;
     D2ItemStatCostTxt* pItemStatCostTxt;
-    D2UnitStrc* pUpgradeClassId;
     D2ItemsTxt* pUpgradeItemTxt;
     BOOL bStackableResult;
-    D2UnitStrc** ppOutputEntry;
+    int32_t* ppOutputEntry;
     bool bCodeMatches;
     int nOutputSlots;
     eD2UnitStat eStatId;
@@ -579,11 +578,11 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                 }
                               }
 
-                              ppOutputEntry = &pMatchedItems->entry[0].pUnit2;
+                              ppOutputEntry = &pMatchedItems->entry[0].nClassId;
                               nOutputSlots = 3;
                               do {
                                 nItemCode = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pCubeItem);
-                                ppOutputEntry[1] = (D2UnitStrc*)nItemCode;
+                                ppOutputEntry[1] = nItemCode;
                                 if (pRecipe->pOutputItem[0].wFlagsAndUpgrade & 1) {
                                   ((D2CubeSetupEntryStrc*)(ppOutputEntry - 1))->pUnit1 = pCubeItem;
                                 }
@@ -591,17 +590,17 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                 bHasMaxSockets = pRecipe->pOutputItem[0].nType;
                                 if (bHasMaxSockets == 0xff) {
                                   ((D2CubeSetupEntryStrc*)(ppOutputEntry - 1))->pUnit1 = pCubeItem;
-                                  pUpgradeClassId = (D2UnitStrc*)D2Common::Units::GetClassId(pCubeItem);
-                                  *ppOutputEntry = pUpgradeClassId;
+                                  nItemCode = D2Common::Units::GetClassId(pCubeItem);
+                                  *ppOutputEntry = nItemCode;
                                   wInputFlags = pRecipe->pOutputItem[0].wFlagsAndUpgrade;
                                   if ((char)wInputFlags < '\0') {
                                     nItemCode = pCubeItemTxt->dwUberCode;
                                     if (nItemCode != 0x20202020) {
                                       pTxtLink = D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink;
                                       resolve_uber_upgrade:
-                                      pUpgradeClassId = (D2UnitStrc*)Fog::Src::Excel::GetClassIdFromName(pTxtLink, nItemCode, 0);
-                                      if ((intptr_t)pUpgradeClassId >= 0) {
-                                        pUpgradeItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine((uint32_t)pUpgradeClassId);
+                                      nItemCode = Fog::Src::Excel::GetClassIdFromName(pTxtLink, nItemCode, 0);
+                                      if ((int)nItemCode >= 0) {
+                                        pUpgradeItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemCode);
                                         if (pUpgradeItemTxt) {
                                           nFileIndex = pGame->bExpansion;
                                           goto store_upgrade_class;
@@ -610,17 +609,17 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                     }
                                   } else {
                                     try_ultra_upgrade:
-                                    if (wInputFlags & 0x100 && pCubeItemTxt->dwUltraCode != 0x20202020 && (pUpgradeClassId = (D2UnitStrc*)Fog::Src::Excel::GetClassIdFromName(D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink, pCubeItemTxt->dwUltraCode, 0) , (intptr_t)pUpgradeClassId >= 0) && (pUpgradeItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine((uint32_t)pUpgradeClassId) , pUpgradeItemTxt != 0)) {
+                                    if (wInputFlags & 0x100 && pCubeItemTxt->dwUltraCode != 0x20202020 && (nItemCode = Fog::Src::Excel::GetClassIdFromName(D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink, pCubeItemTxt->dwUltraCode, 0) , (int)nItemCode >= 0) && (pUpgradeItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemCode) , pUpgradeItemTxt != 0)) {
                                       nFileIndex = pGame->bExpansion;
                                       store_upgrade_class:
                                       if (nFileIndex || (uint16_t)pUpgradeItemTxt->wVersion < 100) {
-                                        *ppOutputEntry = pUpgradeClassId;
+                                        *ppOutputEntry = nItemCode;
                                       }
                                     }
                                   }
                                 } else if (bHasMaxSockets == 0xfe) {
                                   ((D2CubeSetupEntryStrc*)(ppOutputEntry - 1))->pUnit1 = pCubeItem;
-                                  *ppOutputEntry = (D2UnitStrc*)-1;
+                                  *ppOutputEntry = -1;
                                   wInputFlags = pRecipe->pOutputItem[0].wFlagsAndUpgrade;
                                   if ((char)wInputFlags >= 0) {
                                     goto try_ultra_upgrade;
@@ -780,7 +779,6 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
     uint32_t wMagicPrefixId;
     uint32_t wRarePrefixId;
     eD2ItemQuality eSourceQuality;
-    uint32_t uSourceFileIndex;
     D2UnitStrc* pDVar2;
     D2UnitStrc* pExtractedItem;
     D2UnitStrc* pClonedSocketItem;
@@ -793,6 +791,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
     D2ItemsTxt* pItemTxt;
     D2CubeOutputStrc* pOutputEntry;
     uint16_t* pAffixPtr;
+    uint32_t pSourceItem;
     eD2ItemQuality eItemFlags;
     uint32_t nILvlPercent;
     uint32_t nItemLevelClamped;
@@ -802,7 +801,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
     D2SetsTxtFStrc sProperty;
     int aOutputMeta[4];
     D2UnitStrc* apDStack_c8[4];
-    D2UnitStrc* nOutputClassId;
+    uint32_t nOutputClassId;
     uint32_t nTmp;
     uint32_t nOutItemLevel;
     D2CubeOutputStrc* pOutput;
@@ -848,32 +847,32 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
       } else {
         if (pOutputEntry->nPLvl) {
           nItemLevelClamped = (uint32_t)pOutputEntry->nPLvl;
-          uSourceFileIndex = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
+          pSourceItem = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
           pOutputEntry = pOutput;
-          if ((int)uSourceFileIndex > 0x100000) {
-            if ((int)(uSourceFileIndex & -16) < 0x640) {
-              nMulDivResult = (int64_t)(int)uSourceFileIndex * (int64_t)(int)nItemLevelClamped / 100;
+          if ((int)pSourceItem > 0x100000) {
+            if ((int)(pSourceItem & -16) < 0x640) {
+              nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nItemLevelClamped / 100;
               nOutItemLevel = (uint32_t)nMulDivResult;
               pOutputEntry = pOutput;
             } else {
-              nOutItemLevel = (int)uSourceFileIndex / 100 * nItemLevelClamped;
+              nOutItemLevel = (int)pSourceItem / 100 * nItemLevelClamped;
             }
           } else {
             if ((int32_t)nItemLevelClamped >= 0x10001) {
               if ((int32_t)(nItemLevelClamped & -16) < 0x640) {
-                nMulDivResult = (int64_t)(int)uSourceFileIndex * (int64_t)(int)nItemLevelClamped / 100;
+                nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nItemLevelClamped / 100;
                 nOutItemLevel = (uint32_t)nMulDivResult;
                 pOutputEntry = pOutput;
               } else {
-                nOutItemLevel = nItemLevelClamped / 100 * uSourceFileIndex;
+                nOutItemLevel = nItemLevelClamped / 100 * pSourceItem;
               }
             } else {
-              nOutItemLevel = (int)(uSourceFileIndex * nItemLevelClamped) / 100;
+              nOutItemLevel = (int)(pSourceItem * nItemLevelClamped) / 100;
             }
           }
         }
 
-        uSourceFileIndex = nOutItemLevel;
+        pSourceItem = nOutItemLevel;
         if (pOutputEntry->nILvl) {
           nItemLevelClamped = pMatchedItemsLocal->entry[nAffixIdx].nItemLevel;
           nILvlPercent = (uint32_t)pOutputEntry->nILvl;
@@ -897,11 +896,11 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
             }
           }
 
-          nOutItemLevel = uSourceFileIndex + nAffixIdx;
+          nOutItemLevel = pSourceItem + nAffixIdx;
         }
       }
 
-      uSourceFileIndex = nOutItemLevel;
+      pSourceItem = nOutItemLevel;
       nItemLevelClamped = nOutItemLevel;
       if ((int)nOutItemLevel <= 1) {
         nItemLevelClamped = 1;
@@ -909,7 +908,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
 
       pMaxExpTxt = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
       if ((int)nItemLevelClamped < pMaxExpTxt) {
-        if ((int)uSourceFileIndex <= 1) {
+        if ((int)pSourceItem <= 1) {
           nOutItemLevel = 1;
         }
       } else {
@@ -932,34 +931,34 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
         D2Common::Units::SetupUpdateFlag(pDVar2, 4);
         apDStack_c8[3] = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameTmp, pDVar2, nullptr, (uint32_t)!aOutputMeta[nOutputSlotIndex]);
         byOutputType = pOutput->nType;
-        pClonedOutput = 0;
+        pSourceItem = 0;
         if (byOutputType == 0xfe) {
-          pClonedSocketItem = pMatchedItemsTmp->entry[nAffixIdx].pUnit2;
-          if ((intptr_t)pClonedSocketItem >= 0) {
-            pClonedOutput = pClonedSocketItem;
+          nItemLevelClamped = pMatchedItemsTmp->entry[nAffixIdx].nClassId;
+          if ((int)nItemLevelClamped >= 0) {
+            pSourceItem = nItemLevelClamped;
           }
         } else {
           switch (byOutputType) {
             case 0xff:
               {
-                pClonedOutput = pMatchedItemsTmp->entry[nAffixIdx].pUnit2;
+                pSourceItem = pMatchedItemsTmp->entry[nAffixIdx].nClassId;
                 break;
               }
             case 0xfc:
               {
-                pClonedOutput = (D2UnitStrc*)(uint32_t)pOutput->nItemClassId;
+                pSourceItem = (uint32_t)pOutput->nItemClassId;
                 break;
               }
             case 0xfd:
               {
                 uVar1 = ITEM_SelectRandomItemClassByType(pGameTmp, nOutItemLevel, (eD2ItemTypes)pOutput->nItemClassId);
-                pClonedOutput = (D2UnitStrc*)(uint32_t)uVar1;
+                pSourceItem = (uint32_t)uVar1;
                 break;
               }
           }
         }
         if (apDStack_c8[3]) {
-          apDStack_c8[3]->nClassId = (int)pClonedOutput;
+          apDStack_c8[3]->nClassId = pSourceItem;
         }
 
         ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGameTmp, apDStack_c8 + 3, nullptr, 0);
@@ -993,29 +992,29 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           aOutputMeta[3] = (uint32_t)pOutput->nUniqueItemId;
           nTmp = -1;
           if (byOutputType == 0xff) {
-            nOutputClassId = pMatchedItemsLocal->entry[nOutputSlotIndex].pUnit2;
+            nOutputClassId = pMatchedItemsLocal->entry[nOutputSlotIndex].nClassId;
             if (wFlagsAndUpgrade & 0x40) {
               pDVar2 = pMatchedItemsLocal->entry[nOutputSlotIndex].pUnit1;
               if (pDVar2) {
                 eSourceQuality = D2Common::ITEMS::Items::GetItemQuality(pDVar2);
                 eItemFlags = eSourceQuality & 0xff;
-                uSourceFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pDVar2);
-                aOutputMeta[3] = (uint16_t)(uSourceFileIndex + 1);
+                pSourceItem = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pDVar2);
+                aOutputMeta[3] = (uint16_t)(pSourceItem + 1);
                 nOutItemLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pDVar2);
-                if ((char)eSourceQuality == '\a' && !(Fog::BitBuffer::gadwBitMasks[uSourceFileIndex & 0x1f] & pGameLocal->fUniqueSpawn[(int)uSourceFileIndex >> 5])) {
-                  nTmp = uSourceFileIndex;
+                if ((char)eSourceQuality == '\a' && !(Fog::BitBuffer::gadwBitMasks[pSourceItem & 0x1f] & pGameLocal->fUniqueSpawn[(int)pSourceItem >> 5])) {
+                  nTmp = pSourceItem;
                 }
               }
             }
           } else if (byOutputType == 0xfc) {
-            nOutputClassId = (D2UnitStrc*)(uint32_t)pOutput->nItemClassId;
+            nOutputClassId = (uint32_t)pOutput->nItemClassId;
           } else {
             if (byOutputType != 0xfd) {
               goto finish_output_item;
             }
 
             uVar1 = ITEM_SelectRandomItemClassByType(pGameLocal, nOutItemLevel, (eD2ItemTypes)pOutput->nItemClassId);
-            nOutputClassId = (D2UnitStrc*)(uint32_t)uVar1;
+            nOutputClassId = (uint32_t)uVar1;
           }
 
           memset(&sItemGenContext, 0, 0x84);
@@ -1023,7 +1022,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           sItemGenContext.wItemFormat = pGameLocal->wItemFormat;
           sItemGenContext.pUnit = pPlayer;
           sItemGenContext.dwFileIndex = aOutputMeta[3] & 0xffff;
-          sItemGenContext.nItemClassid = (int)nOutputClassId;
+          sItemGenContext.nItemClassid = nOutputClassId;
           sItemGenContext.nItemLevel = nOutItemLevel;
           sItemGenContext.pGame = pGameLocal;
           sItemGenContext.dwMode = 4;
@@ -1149,12 +1148,12 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           if (pOutputEntry->nQuantity) {
             bIsStackable = D2Common::ITEMS::Items::IsStackable(pDVar2);
             if (bIsStackable) {
-              uSourceFileIndex = D2Common::ITEMS::Items::ITEM_GetMaxStack(pDVar2);
-              if ((int)uSourceFileIndex >= (int)(uint32_t)pOutputEntry->nQuantity) {
-                uSourceFileIndex = (uint32_t)pOutputEntry->nQuantity;
+              pSourceItem = D2Common::ITEMS::Items::ITEM_GetMaxStack(pDVar2);
+              if ((int)pSourceItem >= (int)(uint32_t)pOutputEntry->nQuantity) {
+                pSourceItem = (uint32_t)pOutputEntry->nQuantity;
               }
 
-              D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDVar2, UNITSTAT_quantity, uSourceFileIndex, 0);
+              D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDVar2, UNITSTAT_quantity, pSourceItem, 0);
             }
           }
 
@@ -1175,9 +1174,9 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
         }
 
         byOutputType = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pDVar2);
-        uSourceFileIndex = (uint32_t)byOutputType;
+        pSourceItem = (uint32_t)byOutputType;
         if ((uint32_t)pOutputEntry->nQuantity <= (uint32_t)byOutputType) {
-          uSourceFileIndex = (uint32_t)pOutputEntry->nQuantity;
+          pSourceItem = (uint32_t)pOutputEntry->nQuantity;
         }
 
         nAffixIdx = D2Common::ITEMS::Items::GetItemQuality(pDVar2);
@@ -1185,12 +1184,12 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           case 4:
 
           case 9:
-            if ((int32_t)uSourceFileIndex < 4) {
+            if ((int32_t)pSourceItem < 4) {
               break;
             }
-          uSourceFileIndex = 3;
+          pSourceItem = 3;
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDVar2, ITEMFLAG_SOCKETED, 1);
-          D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, uSourceFileIndex);
+          D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, pSourceItem);
           continue;
           case 5:
 
@@ -1199,17 +1198,17 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           case 7:
 
           case 8:
-            if (1 < (int32_t)uSourceFileIndex) {
-              uSourceFileIndex = 1;
+            if (1 < (int32_t)pSourceItem) {
+              pSourceItem = 1;
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDVar2, ITEMFLAG_SOCKETED, 1);
-              D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, uSourceFileIndex);
+              D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, pSourceItem);
               continue;
             }
         }
 
-        if (uSourceFileIndex) {
+        if (pSourceItem) {
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDVar2, ITEMFLAG_SOCKETED, 1);
-          D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, uSourceFileIndex);
+          D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, pSourceItem);
         }
       }
     }
@@ -1529,13 +1528,13 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
         }
 
         sMatchedItems.entry[0].pUnit1 = 0;
-        sMatchedItems.entry[0].pUnit2 = 0;
+        sMatchedItems.entry[0].nClassId = 0;
         sMatchedItems.entry[0].nItemLevel = 0;
         sMatchedItems.entry[1].pUnit1 = 0;
-        sMatchedItems.entry[1].pUnit2 = 0;
+        sMatchedItems.entry[1].nClassId = 0;
         sMatchedItems.entry[1].nItemLevel = 0;
         sMatchedItems.entry[2].pUnit1 = 0;
-        sMatchedItems.entry[2].pUnit2 = 0;
+        sMatchedItems.entry[2].nClassId = 0;
         sMatchedItems.entry[2].nItemLevel = 0;
         _bValidInputs = CUBE_ValidateRecipeInputs(pGame, &sMatchedItems, pRecipe, pPlayer->pInventory);
         if (_bValidInputs) {

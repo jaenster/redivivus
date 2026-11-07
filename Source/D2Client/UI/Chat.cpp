@@ -854,7 +854,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
           Storm::Source::SSTR::SStrCopy(szOutParam, szToken, 0x7fffffff);
           pScan = szToken;
           pScan = pScan + strlen(pScan) + 1;
-          *ppszText += (int)(pScan + nCmdLen + (1 - (int)(szToken + 1)));
+          *ppszText += (intptr_t)(pScan + nCmdLen + (1 - (intptr_t)(szToken + 1)));
           *pbCommandType = (char)gaChatCommandTable[nCmdIndex].nCommandType;
           return 1;
         }
@@ -1161,7 +1161,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     pScan = szInput;
     do {
       cScanChar = *pScan;
-      pScan[(intptr_t)&sWhisperPacket + (0x10 - (int)szInput)] = cScanChar;
+      pScan[(intptr_t)&sWhisperPacket + (0x10 - (intptr_t)szInput)] = cScanChar;
       pScan++;
     } while (cScanChar != '\0');
 
@@ -1175,7 +1175,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
         if (nTokenCount == 2) {
           strcpy(szTargetName, pScan);
         } else if (nTokenCount == 3) {
-          pScan = pScan + (intptr_t)&sWhisperPacket + (0x10 - (int)szInput);
+          pScan = pScan + (intptr_t)&sWhisperPacket + (0x10 - (intptr_t)szInput);
           strcpy(szMessageText, pScan);
           goto send_whisper;
         }

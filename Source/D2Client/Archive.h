@@ -75,7 +75,7 @@ intptr_t __thiscall ARCHIVE_GetNodeSize(struct StormLinkedListStrc * pThis, stru
 int __fastcall Unreferenced_0045bcb0(int param_1);
 void __fastcall ARCHIVE_ClearList(struct StormLinkedListStrc * nList);
 void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList);
-int __fastcall Unreferenced_0045bd80(int param_1);
+uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1);
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
 int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree);
 uint32_t __thiscall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, int * pNode);

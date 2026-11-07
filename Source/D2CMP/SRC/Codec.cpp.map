@@ -57,6 +57,7 @@
       ],
       "usedTypes": [
         "D2CodecFrameBoundsStrc",
+        "D2CodecFrameComponentStrc",
         "uint32_t"
       ]
     },
@@ -93,6 +94,7 @@
         "CODEC_CalculateFrameBounds"
       ],
       "usedTypes": [
+        "D2CodecFrameBoundsStrc",
         "D2CodecFrameComponentStrc",
         "int32_t",
         "uint32_t"

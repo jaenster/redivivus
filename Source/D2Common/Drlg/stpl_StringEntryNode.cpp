@@ -38,7 +38,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::Assign(TSExplicitLi
     uint32_t* pNextPtr = (uint32_t*)&this->m_terminator;
     *pNextPtr = (uint32_t)pNextPtr;
     this->m_linkoffset = dwCapacity;
-    this->m_terminator.m_next = ~(uint32_t)pNextPtr;
+    this->m_terminator.m_next = ~(uintptr_t)pNextPtr;
 }
 
 template<> TSLink<::StringEntryNode>* TSExplicitList<StringEntryNode, -572662307>::Link(::StringEntryNode * pNode) {
@@ -53,7 +53,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::SetLinkOffset(int32
     this->m_linkoffset = nLinkOffset;
     uint32_t* pNextPtr = (uint32_t*)&this->m_terminator;
     *pNextPtr = (uint32_t)pNextPtr;
-    this->m_terminator.m_next = ~(uint32_t)pNextPtr;
+    this->m_terminator.m_next = ~(uintptr_t)pNextPtr;
 }
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEntryNode * pNode, uint32_t nLinkType, ::StringEntryNode * pExisting) {
@@ -221,7 +221,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll() {
         if ((int)nNextLink < 0) {
           pPrevLink = (int*)~nNextLink;
         } else {
-          pPrevLink = (int*)((int)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
+          pPrevLink = (int*)((intptr_t)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
         }
 
         *pPrevLink = nHeadEntry;
@@ -239,7 +239,7 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
     uint32_t dwCapacity = pSource->m_linkoffset;
     *pSentinelHead = (uint32_t)pSentinelHead;
     this->m_linkoffset = dwCapacity;
-    this->m_terminator.m_next = ~(uint32_t)pSentinelHead;
+    this->m_terminator.m_next = ~(uintptr_t)pSentinelHead;
     return this;
 }
 
@@ -251,7 +251,7 @@ TSExplicitList<::StringEntryNode, -572662307>* __thiscall CopyConstructor_Unrefe
     uint32_t dwCapacity = pSource->m_linkoffset;
     *pSentinelHead = (uint32_t)pSentinelHead;
     pThis->m_linkoffset = dwCapacity;
-    pThis->m_terminator.m_next = ~(uint32_t)pSentinelHead;
+    pThis->m_terminator.m_next = ~(uintptr_t)pSentinelHead;
     return pThis;
 }
 
@@ -340,7 +340,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_
             if ((int)nNextLink < 0) {
               pPrevLink = (int*)~nNextLink;
             } else {
-              pPrevLink = (int*)((int)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
+              pPrevLink = (int*)((intptr_t)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
             }
 
             *pPrevLink = nHeadEntry;
@@ -383,5 +383,5 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::ChangeLinkOffset(in
     TSLink<::StringEntryNode>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = nLinkOffset;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }

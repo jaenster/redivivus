@@ -127,7 +127,7 @@
         "SOUND_DetachUnit"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2ClientSoundChannelStrc"
       ]
     },
     {

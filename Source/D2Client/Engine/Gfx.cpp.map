@@ -109,9 +109,11 @@
       ],
       "usedTypes": [
         "D2CofCacheStrc",
+        "D2CofTextureCacheEntryStrc",
         "D2PoolManagerStrc",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -135,6 +137,7 @@
       ],
       "usedTypes": [
         "D2CofCacheStrc",
+        "D2CofTextureCacheEntryStrc",
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
@@ -1078,7 +1081,8 @@
       ],
       "usedTypes": [
         "D2CofCacheStrc",
-        "void *"
+        "D2CofTextureCacheEntryStrc",
+        "D2CofTextureCacheEntryStrc *"
       ]
     },
     {

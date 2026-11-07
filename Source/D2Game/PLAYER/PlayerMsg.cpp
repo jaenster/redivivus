@@ -281,7 +281,7 @@ D2NET_SERVER_D2GS_ClientToServer NET_D2GS_SERVER_INCOMING[103] = {
         /* .field1_0x4 = */ 0x1
     },
     {
-        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x39_ReturnBadParams,
+        /* .fpHandler = */ &D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x39_ReturnBadParams,
         /* .field1_0x4 = */ 0x0
     },
     {
@@ -1756,7 +1756,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x01_WalkToLocation(::SGAMEDATA * pGame,
     return (eD2ServerIncomingStatus)nStatus;
 }
 
-static eD2ServerIncomingStatus __stdcall AnyPacketClickOnMap(::SGAMEDATA * pGame, size_t nSize, eD2UnitType * peUnitTypeOut, size_t * nSizeEx, D2UnitStrc * pUnit, uint8_t * pPacket) {
+static eD2ServerIncomingStatus __stdcall AnyPacketClickOnMap(::SGAMEDATA * pGame, uint32_t nSize, eD2UnitType * peUnitTypeOut, uint32_t * nSizeEx, D2UnitStrc * pUnit, uint8_t * pPacket) {
     *peUnitTypeOut = UNIT_PLAYER;
     *nSizeEx = 0;
     if (nSize != 9) {
@@ -2094,9 +2094,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x08_LeftSkillOnLocationEx(::SGAMEDATA *
 // C->S Packet 0x09 - Left Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x06.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x09_LeftSkillOnEntityEx2 * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x09_LeftSkillOnEntityEx2 * pPacket, uint32_t nSize) {
     eD2UnitType eOutUnitType;
-    size_t nSize_00 = nSize;
+    uint32_t nSize_00 = nSize;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eOutUnitType, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
@@ -2235,9 +2235,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0F_RightSkillOnLocationEx(::SGAMEDATA 
 // C->S Packet 0x10 - Right Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x0D.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x10_RightSkillOnEntityEx2 * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x10_RightSkillOnEntityEx2 * pPacket, uint32_t nSize) {
     eD2UnitType eOutUnitType;
-    size_t nSize_00 = nSize;
+    uint32_t nSize_00 = nSize;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eOutUnitType, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
@@ -3136,7 +3136,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x21_MergeStackables(::SGAMEDATA * pGame
 // C->S 0x22 Unstack Item - STUB (5 bytes)
 // [op:1][itemGUID:u32]
 // RemoveStackItem returns 0 - dead code in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x22_ItemToBelt * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x22_ItemToBelt * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
     }
@@ -3381,13 +3381,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x2A_ItemToCube(::SGAMEDATA * pGame, D2U
 
 // C->S 0x2C NPC Buy (stub)
 // Always returns SERVERSTATUS_BAD_PARAMS in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2C_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2C_DeadStub * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2C_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2C_DeadStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
 // C->S 0x2D NPC Sell (stub)
 // Always returns SERVERSTATUS_BAD_PARAMS in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2D_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2D_DeadStub * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2D_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2D_DeadStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
@@ -3434,7 +3434,7 @@ void __fastcall LoadAreaOrSpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
 
 // C->S 0x2E NPC Identify (stub)
 // Always returns SERVERSTATUS_OK in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2E_DeadStub * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2E_DeadStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_OK;
 }
 
@@ -3622,7 +3622,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x38_NpcMenuSelect(::SGAMEDATA * pGame, 
 }
 
 // C->S 0x39 DISABLED. Stub - always returns BAD_PARAMS.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x39_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x39_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
@@ -4936,7 +4936,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame,
     return SERVERSTATUS_BAD_DATA;
 }
 
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x66_WardenStub * pPacket, size_t nSize) {
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x66_WardenStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_OK;
 }
 

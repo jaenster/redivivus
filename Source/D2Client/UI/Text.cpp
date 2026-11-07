@@ -2692,7 +2692,7 @@ void __fastcall Unreferenced_0049da60(int bRegister) {
     }
 }
 
-int __fastcall Unreferenced_0049dac0(int param_1) {
+int __fastcall Unreferenced_0049dac0(uint8_t * param_1) {
     if (!param_1) {
       return 0;
     }
@@ -2816,7 +2816,7 @@ void __stdcall TEXT_DrawChatMessages() {
       pPrevMessage = 0;
       do {
         pListHead = pPrevMessage;
-        pwszLine = pMessage->apwszLines[(int)pPrevMessage];
+        pwszLine = pMessage->apwszLines[(intptr_t)pPrevMessage];
         if (pwszLine) {
           if (bWordWrap) {
             for (nScreenY = 0; nScreenY < 400; nScreenY++) {
@@ -2847,11 +2847,11 @@ void __stdcall TEXT_DrawChatMessages() {
             }
           } else {
             nPixelWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLine);
-            nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pMessage->apwszLines[(int)pListHead], nPixelWidth);
+            nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pMessage->apwszLines[(intptr_t)pListHead], nPixelWidth);
             if (nPixelWidth) {
               nScreenY = nLineIdx * 0xf + nBaseY;
               Engine::Gfx::D2GFX_DrawSolidRectExBySize(nScreenX - 4, nScreenY - 0xe, nPixelWidth + 8, 0x10, 0, DRAW_TRANSPARENT);
-              D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[(int)pPrevMessage], nScreenX, nScreenY, pMessage->color, 0);
+              D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[(intptr_t)pPrevMessage], nScreenX, nScreenY, pMessage->color, 0);
               nLineIdx++;
             }
           }

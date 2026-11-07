@@ -50,6 +50,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041d8a0"
+      ],
+      "usedTypes": [
+        "D2BitStreamReader32Strc"
       ]
     },
     {
@@ -85,7 +88,8 @@
         "LINKEDLIST_Clear"
       ],
       "usedTypes": [
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -836,6 +840,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041ebb0"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {

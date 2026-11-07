@@ -129,6 +129,7 @@ struct __attribute__((packed)) D2ControlMsg {
 namespace D2Launch::MainMenus {
 
 // Function declarations
+bool fpRequiredUserAction();
 BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 // Module-private: no other module references these
@@ -271,7 +272,6 @@ BOOL __stdcall MAINMENUS_OnPressSetInsertPlayCd_ForCinematicDisc(struct D2Contro
 BOOL __stdcall MAINMENU_ShowCinematicsMenuAndSetFlag(struct D2ControlMsg * pControlMsg);
 int __stdcall MAINMENU_PollDisconnectFlagPump(int nFrameIndex);
 void __stdcall UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons();
-bool fpRequiredUserAction();
 BOOL __stdcall MAINMENU_OnPressTcpIpOptions(struct D2ControlMsg * pControlMsg);
 uint32_t __fastcall MAINMENU_DetectDoubleClick(struct D2ControlMsg * pMsg);
 void __stdcall UIMENU_ShowRealmNameOnButton();

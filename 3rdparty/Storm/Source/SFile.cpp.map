@@ -119,7 +119,9 @@
         "explode"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2LzwBufferStateStrc",
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -3245,9 +3247,6 @@
         "SFILE_CancelAsyncRequestNoReturn",
         "SErrSetLastError",
         "SFILE_CancelRequest"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {
@@ -3512,7 +3511,7 @@
         "SFILE_GetOpenFlags"
       ],
       "usedTypes": [
-        "int32_t",
+        "LPOVERLAPPED",
         "uint32_t",
         "void *"
       ]
@@ -3533,7 +3532,7 @@
       ],
       "usedTypes": [
         "D2ArchiveStrc",
-        "int32_t",
+        "LPOVERLAPPED",
         "uint32_t",
         "void *"
       ]

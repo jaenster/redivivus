@@ -200,7 +200,7 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
       return 0;
     }
 
-    int* pNtHeader = (int*)(*(int*)(pModuleBase + 0x1e) + (int)pModuleBase);
+    int* pNtHeader = (int*)(*(int*)(pModuleBase + 0x1e) + (intptr_t)pModuleBase);
     /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pNtHeader, 4);
     if (!(!bIsBadPtr && *pNtHeader == 0x4550)) {
       return 0;
@@ -584,8 +584,8 @@ int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, D2C
 
       walk_stack:
       __frame0.nFramesWritten = 0;
-      __frame0.nCurEip = threadContext.Eip;
-      __frame0.pCurEsp = (uint32_t*)threadContext.Esp;
+      __frame0.nCurEip = D2_CONTEXT_FIELD(threadContext, Eip);
+      __frame0.pCurEsp = (uint32_t*)D2_CONTEXT_FIELD(threadContext, Esp);
       cVar2 = _3rdparty::crashy::SYSTEM_CaptureThreadContext((LPCVOID*)&__frame0.pStackTop, dwThreadId, &__frame0.nStackLimit, &pStackBase);
       hThread = hOpenedThread;
       if (cVar2 != '\0') {
@@ -594,31 +594,31 @@ int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, D2C
             pDVar1 = __frame0.pFrameArrayBase + nFrameCount;
             pDVar1->dwReturnAddr = __frame0.nCurEip;
             pDVar1->dw08 = (uint32_t)__frame0.pCurEsp;
-            pDVar1->dw04 = threadContext.Ebp;
+            pDVar1->dw04 = D2_CONTEXT_FIELD(threadContext, Ebp);
             nFrameCount++;
             __frame0.nFramesWritten = nFrameCount;
             if (0x7f < nFrameCount) {
               break;
             }
           }
-          if (threadContext.Ebp <= (uintptr_t)__frame0.pCurEsp) {
+          if (D2_CONTEXT_FIELD(threadContext, Ebp) <= (uintptr_t)__frame0.pCurEsp) {
             break;
           }
-          if ((uint32_t*)(threadContext.Ebp + 8) > __frame0.pStackTop) {
+          if ((uint32_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + 8) > __frame0.pStackTop) {
             break;
           }
 
-          pNextEbp = *(uint32_t**)threadContext.Ebp;
+          pNextEbp = *(uint32_t**)D2_CONTEXT_FIELD(threadContext, Ebp);
           if ((uintptr_t)pNextEbp & 3) {
             break;
           }
-          if ((uintptr_t)pNextEbp <= threadContext.Ebp) {
+          if ((uintptr_t)pNextEbp <= D2_CONTEXT_FIELD(threadContext, Ebp)) {
             break;
           }
 
-          __frame0.pCurEsp = (uint32_t*)(threadContext.Ebp + 4);
+          __frame0.pCurEsp = (uint32_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + 4);
           __frame0.nCurEip = *__frame0.pCurEsp;
-          threadContext.Ebp = (DWORD)pNextEbp;
+          D2_CONTEXT_FIELD(threadContext, Ebp) = (DWORD)pNextEbp;
         }
 
         tSehFrame.TryLevel = -2;

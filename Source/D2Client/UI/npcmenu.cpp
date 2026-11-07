@@ -5188,9 +5188,9 @@ void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
     } while (nMessageCount);
 }
 
-int __fastcall Unreferenced_004b3560(uint8_t * param_1) {
+uint8_t * __fastcall Unreferenced_004b3560(uint8_t * param_1) {
     memset(param_1 + 21, 0, 80 * sizeof(param_1[0]));
-    return (int)param_1;
+    return param_1;
 }
 
 // Shared callback of the Imbue (Charsi, string 4017), Add Sockets (Larzuk, 22748) and Personalize (Anya, 22749) menu options: frees the NPC dialog, closes UI_NPCMENU, resets the cursor and hover state, sets the NPC UI state to 7 and gnNpcMenuTransactionType to 0, then opens the cube-style item panel for the current NPC (UI_OpenHoradricCubeWithNpcInteraction(nCurrentInteractedNpcGUID)). Returns 1.

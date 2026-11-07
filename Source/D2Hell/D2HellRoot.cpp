@@ -467,7 +467,7 @@ void __thiscall LINKEDLIST_SetNodeValue(StormLinkedListStrc * pNode, int32_t dwV
     pNode->nLinkOffset = dwValue;
     StormLinkStrc* pSVar1 = &pNode->head;
     pSVar1->pPrevLink = pSVar1;
-    pNode->head.pNext = ~(uint32_t)pSVar1;
+    pNode->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __thiscall LINKEDLIST_InsertNode(StormLinkedListStrc * pList, void * pNewItem, int32_t nInsertMode, void * pRefItem) {

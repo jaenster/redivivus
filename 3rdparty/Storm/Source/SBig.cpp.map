@@ -660,6 +660,7 @@
         "SMemReAlloc"
       ],
       "usedTypes": [
+        "TSGrowableArray_Ui",
         "uint32_t"
       ]
     },

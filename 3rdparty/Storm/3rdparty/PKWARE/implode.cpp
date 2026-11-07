@@ -969,11 +969,11 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
     int nBestLen = 1;
     uint32_t nHashIdx = (uint32_t)pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4];
     uint16_t* pChainLinkEntry = pCmpState->phash_offs + nHashIdx;
-    if ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(int)pCmpState - pCmpState->dsize_bytes) - 0x27cb) {
+    if ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes) - 0x27cb) {
       do {
         pChainLinkEntry++;
         nHashIdx++;
-      } while ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(int)pCmpState - pCmpState->dsize_bytes) - 0x27cb);
+      } while ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes) - 0x27cb);
 
       pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4] = (uint16_t)nHashIdx;
     }
@@ -1001,7 +1001,7 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
         } while (nCandidateLen < 0x204);
 
         if (nCandidateLen >= nBestLen) {
-          pCmpState->distance = (uint32_t)(pbSrcPos + (nCandidateLen - (int)pbCandidateMatch) - 1);
+          pCmpState->distance = (uint32_t)(pbSrcPos + (nCandidateLen - (intptr_t)pbCandidateMatch) - 1);
           nBestLen = nCandidateLen;
           if (nCandidateLen > 10) {
             if (nCandidateLen == 0x204) {
@@ -1075,7 +1075,7 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
               }
 
               if (nCandidateLen >= nBestLen) {
-                pCmpState->distance = (uint32_t)(pbSrcPos + (-1 - (int)pbCandidateMatch));
+                pCmpState->distance = (uint32_t)(pbSrcPos + (-1 - (intptr_t)pbCandidateMatch));
                 if (nCandidateLen > nBestLen) {
                   if (nCandidateLen == 0x204) {
                     return 0x204;

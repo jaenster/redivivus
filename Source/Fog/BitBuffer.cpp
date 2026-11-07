@@ -60,7 +60,7 @@ void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint3
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
-        *(uint32_t*)((int)pDest + (-4 - (int)pBufferB) + (int)pCursorB) = *pCursorA & dwValB;
+        *(uint32_t*)((intptr_t)pDest + (-4 - (intptr_t)pBufferB) + (intptr_t)pCursorB) = *pCursorA & dwValB;
       } while (nRemaining);
     }
 
@@ -104,7 +104,7 @@ void __stdcall BITBUF_OrBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
-        *(uint32_t*)(pDest + (-4 - (int)pBufferB) + (int)pCursorB) = *pCursorA | dwValB;
+        *(uint32_t*)(pDest + (-4 - (intptr_t)pBufferB) + (intptr_t)pCursorB) = *pCursorA | dwValB;
       } while (nRemaining);
     }
 
@@ -188,7 +188,7 @@ void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
-        *(uint32_t*)(pDest + (-4 - (int)pBufferB) + (int)pCursorB) = *pCursorA ^ dwValB;
+        *(uint32_t*)(pDest + (-4 - (intptr_t)pBufferB) + (intptr_t)pCursorB) = *pCursorA ^ dwValB;
       } while (nRemaining);
     }
 

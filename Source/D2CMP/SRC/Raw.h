@@ -16,13 +16,14 @@
 
 // Forward declarations
 struct CELLIST;
+struct DC6;
 
 namespace D2CMP::SRC::Raw {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, int32_t pCelFile);
+uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, struct DC6 * pCelFile);
 #endif // D2_MODULE_D2CMP
 
 } // namespace D2CMP::SRC::Raw

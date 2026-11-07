@@ -20,6 +20,8 @@ struct D2CelFileCacheEntryStrc;
 struct D2PoolManagerStrc;
 struct DC6Block;
 
+struct D2CodecFrameComponentStrc;
+
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 union CODEC_DecompressAllFrames_Slotm338 {
@@ -42,8 +44,8 @@ struct D2CodecBitStateStrc {
 #endif // D2_DEFINED_D2CodecBitStateStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 struct D2CodecFrameBoundsStrc {
-    /* 0x00 */ int32_t pFrameData; // frame header this bounds set was computed from
-    /* 0x04 */ int32_t pFrameArray; // base of the D2CodecFrameComponentStrc array
+    /* 0x00 */ uint32_t * pFrameData; // frame header this bounds set was computed from
+    /* 0x04 */ struct D2CodecFrameComponentStrc * pFrameArray; // base of the D2CodecFrameComponentStrc array
     /* 0x08 */ int32_t nMinX; // smallest nXOffset across the frame components
     /* 0x0C */ int32_t nMinY;
     /* 0x10 */ int32_t nWidth; // nMaxX - nMinX; the decode stride
@@ -77,7 +79,7 @@ struct D2CodecFrameComponentStrc {
 #define D2_DEFINED_D2CodecPixelBufferEntryStrc
 struct D2CodecPixelBufferEntryStrc {
     /* 0x00 */ uint8_t * pPrevPixels; // previous-block pixel pointer
-    /* 0x04 */ int nDstPixelAddress;
+    /* 0x04 */ uint8_t * nDstPixelAddress;
     /* 0x08 */ int nPitch;
     /* 0x0C */ int nWidth;
     /* 0x10 */ int nHeight;

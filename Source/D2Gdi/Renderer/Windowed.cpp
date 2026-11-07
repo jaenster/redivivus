@@ -1379,7 +1379,7 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
           }
         default:
           {
-            bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile((int)pTile, a2, nPosY, pLight);
+            bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, a2, nPosY, pLight);
             return bDrawResult;
           }
         case 2:
@@ -1390,7 +1390,7 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       a2 += nPanelOffsetX;
-      bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile((int)pTile, a2, nPosY, pLight);
+      bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, a2, nPosY, pLight);
       return bDrawResult;
     }
 
@@ -1469,7 +1469,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       memset(gnSmackerGlideYOffset.pFrameBuffer, 0, 0x6db0);
       nVersion = 0;
       nFileSize = 0;
-      dwLoadResult = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
+      dwLoadResult = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (dwLoadResult && nVersion) {
         iVar2 = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
         Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);

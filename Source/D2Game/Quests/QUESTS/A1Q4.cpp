@@ -1475,7 +1475,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
       pMissileRoom = __frame0.pExistingPortal;
       if (__frame0.pExistingPortal) {
         do {
-          pMissileUnit = __frame0.ppRoomList[(int)pRoomListEnd]->pUnitList;
+          pMissileUnit = __frame0.ppRoomList[(intptr_t)pRoomListEnd]->pUnitList;
           do {
             pRoomUnitIter = pMissileUnit;
             if (!pRoomUnitIter) {

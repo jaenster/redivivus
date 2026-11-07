@@ -965,7 +965,7 @@ uint32_t __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags) {
     return nHeapId;
 }
 
-uint32_t __stdcall SMemGetHeapByPtr(int32_t pObject) {
+uint32_t __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -982,12 +982,12 @@ uint32_t __stdcall SMemGetHeapByPtr(int32_t pObject) {
       return *(uint32_t*)((uint32_t)*(volatile uint8_t*)0x4 * 0x10000 + 4);
     }
 
-    int iVar1 = pObject - 8;
-    if (*(uint8_t*)(pObject - 5) & 8) {
-      iVar1 = *(int*)(pObject - 0xc);
+    uint8_t* puVar1 = pObject - 8;
+    if (pObject[-5] & 8) {
+      puVar1 = *(uint8_t**)(pObject - 0xc);
     }
 
-    return *(uint32_t*)((uint32_t)*(uint16_t*)(iVar1 + 4) * 0x10000 + 4);
+    return *(uint32_t*)((uint32_t)*(uint16_t*)(puVar1 + 4) * 0x10000 + 4);
 }
 
 int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) {
@@ -1141,7 +1141,7 @@ uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObjec
     D2FogHeapDescStrc* pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&pObject, pBlock);
     SMEM_SatisfyFreeRequest(pObjectSaved, pHeap, pBlock);
     if (pObject != (void*)-1) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + (int)pObject);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + (intptr_t)pObject);
     }
 
     return (uint32_t)(pHeap != 0);
@@ -1587,7 +1587,7 @@ uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSou
         pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&szSourceFile, pBlockHdr);
         pResult = SMemReallocCore((int*)&szSourceFile, (uint32_t*)pHeap, pBlock, &pBlockHdr->wBlockSize, (uint8_t)dwFlags, nSize);
         if (szSourceFile != (char*)-1) {
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + (int)szSourceFile);
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + (intptr_t)szSourceFile);
         }
 
         return pResult;

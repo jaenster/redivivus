@@ -739,6 +739,7 @@
         "SRegLoadData"
       ],
       "usedTypes": [
+        "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -1884,6 +1885,7 @@
         "RENDERER_D3D_BuildWallTileVerticesNoPerspective"
       ],
       "usedTypes": [
+        "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "uint8_t"
       ]

@@ -122,7 +122,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
 // @oracle-source Storm export name list, and the PEF traceback-named body .SEvtUnregisterType @10017290 in Mac PPC 1.10b Storm
 // @rename-basis Behaviour plus argument count, both confirmed against the PPC. Two arguments here, and .SEvtUnregisterType reads only r3 and r4 and then computes "xor r28, r26, r27" - the same eventId ^ subId bucket hash this function uses. With two arguments it cannot name a handler. It walks the event's whole stack of handler tables freeing each with SEVT_FreeEventHandlerTable, then unlinks and frees the event record from its hash bucket and decrements gnSevtRegisteredEventCount. Removing the (eventId, subId) entry itself is what "type" means here.
 // @former-name SEVT_UnregisterEvent (invented)
-BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId);
+BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId);
 uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList);
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
 uint32_t __thiscall LINKEDLIST_GetNodeOffset(struct StormLinkStrc * pListInfo, int pNode);

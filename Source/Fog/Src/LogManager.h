@@ -96,7 +96,7 @@ long __fastcall GetLogFileSize(uint8_t * szFileName);
 char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, int32_t nEndOffset);
 // Writes one log record to its log file, prefixed with the record's time of day.
 void __fastcall LogToFile(struct D2LogRecordStrc * pLogRecord);
-int __fastcall Unreferenced_0040f810(int param_1);
+uint32_t * __fastcall Unreferenced_0040f810(uint32_t * param_1);
 void __fastcall UnlinkListNode(struct StormLinkStrc * pNode);
 int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr);
 void __stdcall ExitOrCrashCleanup();

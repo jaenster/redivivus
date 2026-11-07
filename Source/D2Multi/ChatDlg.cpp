@@ -49,7 +49,7 @@ typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
 #endif
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
-typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
+typedef int (__stdcall *ChatDlgCallback)(D2ControlMsg * pControlMsg);
 #endif
 #ifndef RECON_FPTD_fpD2WinEditBoxFilter
 #define RECON_FPTD_fpD2WinEditBoxFilter
@@ -570,7 +570,7 @@ void __stdcall LAUNCHER_RestoreFocusToControl() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
 }
 
-BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(uint32_t pCallbackArg) {
+BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(D2ControlMsg * pControlMsg) {
     uint16_t nRequestId;
     do {
       nRequestId = CreateJoinGameRequestId + 1;
@@ -578,7 +578,7 @@ BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(uint32_t pCallbackArg) {
     } while (!nRequestId);
 
     CreateJoinGameRequestId = nRequestId;
-    (*gpfnChatDlgCallback)(pCallbackArg);
+    (*gpfnChatDlgCallback)(pControlMsg);
     return 1;
 }
 
@@ -669,17 +669,17 @@ int __stdcall isServerDown() {
     return 0;
 }
 
-void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo) {
+void LAUNCHER_AllocCharSelectComponent(uint8_t * pCharInfo) {
     int32_t nComponentMode = 5;
     if (*(uint16_t*)(pCharInfo + 0x3cb) & 4 && !(*(uint16_t*)(pCharInfo + 0x3cb) & 8)) {
       BOOL bIsExpansion;
       bIsExpansion = Fog::D2CheckExpansionGame();
-      if (bIsExpansion || *(uint8_t*)(pCharInfo + 0x1ee) < 5) {
+      if (bIsExpansion || pCharInfo[0x1ee] < 5) {
         nComponentMode = 1;
       }
     }
 
-    gpChatDlgCharSelCompositeUnit = D2Win::Src::D2Comp::AllocCharSelectComponent((uint32_t)*(uint8_t*)(pCharInfo + 0x1ee), nComponentMode, (uint8_t*)(pCharInfo + 0x3a1), (char*)(pCharInfo + 0x3b1));
+    gpChatDlgCharSelCompositeUnit = D2Win::Src::D2Comp::AllocCharSelectComponent((uint32_t)pCharInfo[0x1ee], nComponentMode, pCharInfo + 0x3a1, (char*)(pCharInfo + 0x3b1));
     if (!gpChatDlgCharSelCompositeUnit) {
       return;
     }
@@ -1370,14 +1370,14 @@ void __fastcall UIMENU_DrawTitleAndSubtitleOnCenterScreen(uint16_t * wszTitle, u
     D2Win::Src::D2WinTextBox::SetText(pTextBox, wszSubTitle, 0, false, 0);
 }
 
-int __stdcall CHATDLG_DestroyListCallback(uint32_t dwParam) {
+int __stdcall CHATDLG_DestroyListCallback(D2ControlMsg * pControlMsg) {
     FORMS_DestroyListEx();
     return 1;
 }
 
 uint32_t __stdcall CHATDLG_InvokeCallbackIfSet(D2ControlMsg * pControlMsg) {
     if (gpfnChatDlgCallback) {
-      (*gpfnChatDlgCallback)((uint32_t)pControlMsg);
+      (*gpfnChatDlgCallback)(pControlMsg);
     }
 
     return 1;
@@ -1949,11 +1949,11 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
         pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;
         pcChannelEnd = szChannelName;
         pcChannelEnd = pcChannelEnd + strlen(pcChannelEnd) + 1;
-        if ((intptr_t)(pcInputEnd + (int)(pcChannelEnd + (-(int)(szChannelName + 1) - (int)(szInputText + 1)))) <= 0xff) {
+        if ((intptr_t)(pcInputEnd + (intptr_t)(pcChannelEnd + (-(intptr_t)(szChannelName + 1) - (intptr_t)(szInputText + 1)))) <= 0xff) {
           strncpy(szArgPrefix, szInputText, nSize);
           szArgPrefix[nSize] = '\0';
-          strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(szInputText + 1))));
-          szArgRemainder[(int)(pcInputEnd + (-nSize - (int)(szInputText + 1)))] = '\0';
+          strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (intptr_t)(szInputText + 1))));
+          szArgRemainder[(intptr_t)(pcInputEnd + (-nSize - (intptr_t)(szInputText + 1)))] = '\0';
           sprintf(szInputText, "%s%s%s", szArgPrefix, szChannelName, szArgRemainder);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, szInputText, 0x100);
           D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, wszResult);
@@ -2650,7 +2650,7 @@ uint32_t __fastcall CHATDLG_ReadUserProfile(char * szAccount, char * szSex, char
     pNetworkUnknown->pfnSendReadUserData(szAccount, 3, 1, gaszChatDlgProfileKeys);
     gbChatOptionButtonState = 0;
     uint16_t* pwszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
-    UIMENU_PrintSmallTitleOnCenterScreen(pwszTitle, OOG::ChatDlg::CHATDLG_PrintCallback_SetFlag);
+    UIMENU_PrintSmallTitleOnCenterScreen(pwszTitle, (ChatDlgCallback)OOG::ChatDlg::CHATDLG_PrintCallback_SetFlag);
     D2Win::Src::D2WinMain::MessagePump(CHATDLG_PollUserProfileReply);
     FORMS_DestroyListEx();
     return (uint32_t)!gbChatOptionButtonState;

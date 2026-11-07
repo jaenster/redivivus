@@ -472,14 +472,14 @@ static char * __stdcall STRING_GetStringLength(char * szText, char * * ppszText,
     char* pszLenBase = szText + 1;
     char* pszScan = szText;
     pszScan = pszScan + strlen(pszScan) + 1;
-    *ppszText += (int)(pszScan + (1 - (int)pszLenBase));
+    *ppszText += (intptr_t)(pszScan + (1 - (intptr_t)pszLenBase));
     if (*ppszText >= pszBufferEnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26);
       exit(-1);
     }
 
     strcpy(szDest, szText);
-    return szDest + (int)(pszScan + (1 - (int)pszLenBase));
+    return szDest + (intptr_t)(pszScan + (1 - (intptr_t)pszLenBase));
 }
 
 int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
@@ -881,7 +881,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
       pbGameNameSrc++;
       pwGameNameLenDst++;
       pszScan = pszSrc;
-    } while ((intptr_t)(pbGameNameSrc + (-0x1f - (int)pBytes)) < (int)(uint32_t)(uint8_t)pBytes[0xe]);
+    } while ((intptr_t)(pbGameNameSrc + (-0x1f - (intptr_t)pBytes)) < (int)(uint32_t)(uint8_t)pBytes[0xe]);
 
     return 1;
 }
@@ -935,7 +935,7 @@ bool __fastcall NET_MCP_CLIENT_Incoming0x0E(char * pBytes, size_t nSize) {
     char* szGameName = pBytes + 1;
     char* pszScan = szGameName;
     pszScan = pszScan + strlen(pszScan) + 1;
-    MCPCONNECT_SetGameNameAndPassword(1, szGameName, szGameName + (int)(pszScan + (1 - (int)(pBytes + 2))));
+    MCPCONNECT_SetGameNameAndPassword(1, szGameName, szGameName + (intptr_t)(pszScan + (1 - (intptr_t)(pBytes + 2))));
     return true;
 }
 

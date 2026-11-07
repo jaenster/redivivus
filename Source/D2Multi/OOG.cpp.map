@@ -17,7 +17,7 @@
         "OOGUTIL_PrintCallback_SetFlag"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2ControlMsg"
       ]
     },
     {
@@ -35,7 +35,7 @@
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2ControlMsg"
       ]
     }
   ]

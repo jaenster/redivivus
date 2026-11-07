@@ -704,7 +704,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
     int32_t nTextWidth;
     int nLineStride;
     int nTextPixelWidth;
-    uint32_t* pCurLine;
+    D2WinTextBoxLineStrc* pCurLine;
     uint16_t* pCellText;
     uint16_t wszCellText[1024];
     D2GfxDataStrc sGfxData;
@@ -774,12 +774,12 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
         }
       }
 
-      pCurLine = (uint32_t*)pTextBox->sListState.pTopLine->apwszCells;
+      pCurLine = pTextBox->sListState.pTopLine;
       nLineIndex = 0;
-      if ((D2WinTextBoxLineStrc*)pCurLine) {
+      if (pCurLine) {
         do {
           for (nColIndex = 0; nColIndex < pTextBox->sListState.nColumnCount; nColIndex++) {
-            pCellText = (uint16_t*)pCurLine[nColIndex];
+            pCellText = pCurLine->apwszCells[nColIndex];
             if (!pCellText) {
               break;
             }
@@ -822,7 +822,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
             } else {
               dwState = pTextBox->sListState.dwStyleFlags;
               if (dwState & 2) {
-                nTextWidth = D2WinFont::DRAW_text0((uint16_t*)*pCurLine);
+                nTextWidth = D2WinFont::DRAW_text0(pCurLine->apwszCells[0]);
                 nLineStride = (pTextBox->sControl.dwSizeX - nTextWidth) / 2;
                 if (nLineStride < 0) {
                   nLineStride = 0;
@@ -832,7 +832,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
               } else {
                 nColDrawX = nUsableWidth2;
                 if (dwState & 0x10) {
-                  nLineStride = D2WinFont::DRAW_text0((uint16_t*)*pCurLine);
+                  nLineStride = D2WinFont::DRAW_text0(pCurLine->apwszCells[0]);
                   if (nLineStride < 0) {
                     nLineStride = 0;
                   }
@@ -846,11 +846,11 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
               wszCellText[nLineStride] = L'\0';
             }
 
-            D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszCellText, (uint16_t*)pCurLine[nColIndex]);
+            D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszCellText, pCurLine->apwszCells[nColIndex]);
             D2WINTEXTBOX_TruncateStringToFitWidth(pColWidth, wszCellText);
             nLineStride = nCurY;
             if (pTextBox->sListState.nSelectedLine == pTextBox->sListState.nTopLineIndex + nLineIndex && pTextBox->sListState.dwStyleFlags & 1) {
-              dwColor = pCurLine[5] != PALETTE_GOLD ? pCurLine[5] : 0;
+              dwColor = pCurLine->nLineStyle != PALETTE_GOLD ? pCurLine->nLineStyle : 0;
               if (!nColIndex) {
                 D2WinFont::D2WINFONT_DrawTextWithOffsetBackground(wszCellText, nColDrawX, nCurY, uFontHeight, (uint32_t)bVar3, DRAW_SOLID, dwColor);
               } else {
@@ -859,9 +859,9 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
             } else {
               dwState = pTextBox->sListState.dwStyleFlags;
               if (dwState & 0x40) {
-                D2WinFont::D2WINFONT_DrawWideStringRightToLeft((uint16_t*)pCurLine[nColIndex], nColDrawX, nCurY, pCurLine[5], pTextBox->nExtraLineSpacingA, uFontHeight);
+                D2WinFont::D2WINFONT_DrawWideStringRightToLeft(pCurLine->apwszCells[nColIndex], nColDrawX, nCurY, pCurLine->nLineStyle, pTextBox->nExtraLineSpacingA, uFontHeight);
               } else {
-                dwColor = pCurLine[5];
+                dwColor = pCurLine->nLineStyle;
                 if ((char)dwState < '\0') {
                   nLineStride = pTextBox->nExtraLineSpacingA + nCurY;
                 }
@@ -871,7 +871,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
             }
           }
 
-          if (*(char*)(pCurLine + 6) == '\0') {
+          if (!pCurLine->bIndent) {
             nLineStride = pTextBox->nExtraLineSpacingC;
           } else {
             nLineStride = pTextBox->nExtraLineSpacingB;
@@ -880,11 +880,11 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
           nLineIndex++;
           nCurY = nCurY + nLineStride + nTextPixelWidth;
           nRemainingHeight -= nLineStride + nTextPixelWidth;
-          pCurLine = (uint32_t*)pCurLine[7];
+          pCurLine = pCurLine->pNext;
           if (!pCurLine) {
             break;
           }
-          if (*(char*)(pCurLine + 6) == '\0') {
+          if (!pCurLine->bIndent) {
             nLineStride = pTextBox->nExtraLineSpacingC;
           } else {
             nLineStride = pTextBox->nExtraLineSpacingB;
@@ -1321,7 +1321,7 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
     int32_t nMaxWidth;
     uint16_t* pAllocedText;
     int nVisibleLines;
-    int32_t wDestination;
+    uint16_t* wDestination;
     uint16_t* pszTrimmed;
     uint16_t wszWorkBuf[1024];
     uint16_t wszIndent[6];
@@ -1393,15 +1393,15 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
         pLineEntry->apwszCells[0][2] = pLineEntry->apwszCells[0][3];
         pLineEntry->apwszCells[0][1] = pLineEntry->apwszCells[0][2];
         *pLineEntry->apwszCells[0] = pLineEntry->apwszCells[0][1];
-        wDestination = (int32_t)(pLineEntry->apwszCells[0] + 5);
+        wDestination = pLineEntry->apwszCells[0] + 5;
       } else {
         nSourceLine = 0x167;
         nMaxWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pszTrimmed);
-        wDestination = (int32_t)Fog::Memory::AllocClientMemory(nMaxWidth * 2 + 2, ".\\Src\\D2WinTextBox.cpp", nSourceLine, nStrLen);
-        pLineEntry->apwszCells[0] = (uint16_t*)wDestination;
+        wDestination = (uint16_t*)Fog::Memory::AllocClientMemory(nMaxWidth * 2 + 2, ".\\Src\\D2WinTextBox.cpp", nSourceLine, nStrLen);
+        pLineEntry->apwszCells[0] = wDestination;
       }
 
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)wDestination, pszTrimmed);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wDestination, pszTrimmed);
       memset(pLineEntry->apwszCells + 1, 0, 4 * sizeof(pLineEntry->apwszCells[0]));
       pLineEntry->nLineStyle = nLineStyle;
       pLineEntry->bIndent = bIndent;
@@ -1583,7 +1583,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
       pszCurScan = (uint16_t*)(nTotalLen - nWrapCharCount);
       pFirstLine[nWrapCharCount] = L'\0';
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pSecondLine, pCharCursor, (size_t)pszCurScan);
-      pSecondLine[(int)pszCurScan] = L'\0';
+      pSecondLine[(intptr_t)pszCurScan] = L'\0';
       Storm::Source::SMem::SMemFree(pWorkBuf, ".\\Src\\D2WinTextBox.cpp", 0x4bf, 0);
       D2WinTextBox::SetText(pTextBoxSaved, pFirstLine, nLineStyle, true, nAlignment);
       if (nAlignment == 1) {

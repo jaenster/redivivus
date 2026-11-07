@@ -923,6 +923,7 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc",
+        "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -974,6 +975,7 @@
         "D2CelCacheBlockStrc",
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
         "D2SpriteCacheEntryStrc",
         "DC6Block",
         "int32_t",
@@ -1006,6 +1008,7 @@
         "D2CelCacheBlockStrc",
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
         "D2SpriteCacheEntryStrc",
         "int32_t",
         "uint32_t"

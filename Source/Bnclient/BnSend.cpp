@@ -242,7 +242,7 @@ void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint3
     Storm::Source::SSTR::SStrCopy(sPacket.szExeInfo, szExeInfoStr, 0x100);
     char* szFilenameCursor = sPacket.szExeInfo;
     szFilenameCursor = szFilenameCursor + strlen(szFilenameCursor) + 1;
-    NET_SID_CLIENT_Send(7, (char*)&sPacket, (size_t)(szFilenameCursor + (0x15 - (int)(sPacket.szExeInfo + 1))));
+    NET_SID_CLIENT_Send(7, (char*)&sPacket, (size_t)(szFilenameCursor + (0x15 - (intptr_t)(sPacket.szExeInfo + 1))));
 }
 
 void __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning() {
@@ -477,7 +477,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
     pszCursor = pszCursor + strlen(pszCursor) + 1;
     char* pszScanEnd = __frame0.szPacketBuf + 1 + (int)(pszCursor + (0x207 - (intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520)));
     pszScanEnd = pszScanEnd + strlen(pszScanEnd) + 1;
-    NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (int)(pszCursor + (0x207 - (intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520)))) + (int)(pszText2End + 0x410)));
+    NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (intptr_t)(pszCursor + (0x207 - (intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520)))) + (intptr_t)(pszText2End + 0x410)));
 }
 
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
@@ -565,7 +565,7 @@ void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * s
     uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings, szGameName, 0x100);
     uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + nGameNameLen + 1, szGamePassword, 0x100);
     uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2, szGameDescription, 0x100);
-    NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, (size_t)(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x15 - (int)adwHeader.szStrings)));
+    NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, (size_t)(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x15 - (intptr_t)adwHeader.szStrings)));
 }
 
 DWORD __stdcall BNCLIENT_SendKeepAlive() {
@@ -621,7 +621,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * s
     uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy((char*)(aPacketBuf + nGameNameLen + 0x11), szText2, 0x100);
     uint32_t nDescLen = Storm::Source::SSTR::SStrCopy((char*)(aPacketBuf + nPasswordLen + nGameNameLen + 0x12), "", 0x100);
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(9);
-    NET_SID_CLIENT_Send(9, (char*)aPacketBuf, (size_t)(aPacketBuf + nPasswordLen + nGameNameLen + 0x12 + (nDescLen + 0x11 - (int)(aPacketBuf + 0x10))));
+    NET_SID_CLIENT_Send(9, (char*)aPacketBuf, (size_t)(aPacketBuf + nPasswordLen + nGameNameLen + 0x12 + (nDescLen + 0x11 - (intptr_t)(aPacketBuf + 0x10))));
     _net_sid::NET_SID_CLIENT_WaitForPacketId(9);
     void* pGameList = g_pBNetGameListData;
     return pGameList;
@@ -727,7 +727,7 @@ void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     pszLocaleCursor = pszLocaleCursor + strlen(pszLocaleCursor) + 1;
     /* int cchData for GetLocaleInfoA */ /* LPSTR lpLCData for GetLocaleInfoA */ /* LCTYPE LCType for GetLocaleInfoA */ /* LCID Locale for GetLocaleInfoA */ GetLocaleInfoA(0x400, 0x1002, pszLocaleCursor, 0x40);
     pszLocaleCursor = pszLocaleCursor + strlen(pszLocaleCursor) + 1;
-    NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (size_t)(pszLocaleCursor + (0x20 - (int)ftSystemTime.szStrings)));
+    NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (size_t)(pszLocaleCursor + (0x20 - (intptr_t)ftSystemTime.szStrings)));
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bRequestType) {
@@ -1500,9 +1500,9 @@ size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
           nBytesProcessed++;
         } while (*pScanPtr != -1);
       }
-      if (pBytes + (nSize - (intptr_t)pScanPtr) < (char*)0x4 || (wPacketSize = (uint32_t)*(uint16_t*)(pScanPtr + 2) , (intptr_t)(pBytes + (nSize - (int)pScanPtr)) < (int)wPacketSize)) {
-        memcpy(pBytes, pScanPtr, (size_t)(pBytes + (nSize - (int)pScanPtr)));
-        return (size_t)(pBytes + (nSize - (int)pScanPtr));
+      if (pBytes + (nSize - (intptr_t)pScanPtr) < (char*)0x4 || (wPacketSize = (uint32_t)*(uint16_t*)(pScanPtr + 2) , (intptr_t)(pBytes + (nSize - (intptr_t)pScanPtr)) < (int)wPacketSize)) {
+        memcpy(pBytes, pScanPtr, (size_t)(pBytes + (nSize - (intptr_t)pScanPtr)));
+        return (size_t)(pBytes + (nSize - (intptr_t)pScanPtr));
       }
 
       _net_sid::NET_SID_CLIENT_IncomingPacketHandler(pScanPtr[1], pScanPtr + 4, wPacketSize - 4);
@@ -2116,7 +2116,7 @@ void __stdcall BNNEWS_SaveToCache() {
         nDestOffset = 4 - (int)pEntryText;
         do {
           cStrChar = *pEntryText;
-          pEntryText[(int)pWritePtr + nDestOffset] = cStrChar;
+          pEntryText[(intptr_t)pWritePtr + nDestOffset] = cStrChar;
           pEntryText++;
         } while (cStrChar != '\0');
 
@@ -2524,7 +2524,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
             nCopyOffset = 8 - (int)pMsgText;
             do {
               uVar1 = *pMsgText;
-              *(char*)((int)pNewEntry + nCopyOffset + (int)pMsgText) = (char)uVar1;
+              *(char*)((intptr_t)pNewEntry + nCopyOffset + (intptr_t)pMsgText) = (char)uVar1;
               pMsgText = (uint32_t*)((char*)pMsgText + 1);
             } while ((char)uVar1 != '\0');
 

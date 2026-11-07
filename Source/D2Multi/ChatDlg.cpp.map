@@ -128,8 +128,8 @@
         "LAUNCHER_GenerateJoinGameRequestId"
       ],
       "usedTypes": [
-        "uint16_t",
-        "uint32_t"
+        "D2ControlMsg",
+        "uint16_t"
       ]
     },
     {
@@ -309,7 +309,8 @@
         "D2COMP_SetCurrentFrame"
       ],
       "usedTypes": [
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -847,7 +848,7 @@
         "FORMS_DestroyListEx"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2ControlMsg"
       ]
     },
     {

@@ -19,6 +19,20 @@ struct D2CharSelCompStrc;
 struct D2ControlMsg;
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
+struct D2BnBannerAdMsgStrc {
+    /* 0x00 */ uint32_t dwBannerId;
+    /* 0x04 */ uint8_t field_0x4;
+    /* 0x05 */ uint8_t field_0x5;
+    /* 0x06 */ uint8_t field_0x6;
+    /* 0x07 */ uint8_t field_0x7;
+    /* 0x08 */ char * szFileName;
+    /* 0x0C */ void * pAllocation;
+    /* 0x10 */ void * pFileData;
+    /* 0x14 */ uint32_t dwFileSize;
+};
+
+#endif // D2_MODULE_D2Multi
 #ifndef D2_DEFINED_D2ChannelUserNameNodeStrc
 #define D2_DEFINED_D2ChannelUserNameNodeStrc
 struct D2ChannelUserNameNodeStrc {

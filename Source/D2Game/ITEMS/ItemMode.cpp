@@ -1648,8 +1648,7 @@ static void ITEMMODE_GetItemTypeFlags(D2UnitStrc * pOwner, int32_t * pnTypeFlags
       exit(-1);
     }
 
-    *pnTypeFlags = 0;
-    memset(pnTypeFlags + 1, 0, 9 * sizeof(pnTypeFlags[0]));
+    memset(pnTypeFlags, 0, 10 * sizeof(pnTypeFlags[0]));
     if (pOwner->eUnitType == UNIT_PLAYER && pOwner->nClassId == 4) {
       pnTypeFlags[7] = 1;
     }
@@ -6530,7 +6529,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
     eD2ItemFlag eItemFlagMask;
     D2UnitStrc* pSavedCubeItem;
     uint32_t nSrcPage;
-    ITEMMODE_RemoveItemsFromCube_Slotm8 uSlot8;
+    D2InventoryStrc* pPlayerInventory;
     uint8_t bSparseSearch;
     uint32_t dwCarriedGUID;
     eD2UnitType eUnitType;
@@ -6581,16 +6580,14 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
         nSrcInvPage = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nSrcInvPage + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eInvPage);
         bInTrade = D2Common::Units::GetInventoryPage(pUnit2, eInvPage, pGame->bExpansion);
         eUnitType = pCarriedItem->eUnitType;
-        int32_t nItemYValue;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nItemYValue = pCarriedItem->pPath.pStaticPath->nPosY;
+          pPlayerInventory = (D2InventoryStrc*)pCarriedItem->pPath.pStaticPath->nPosY;
         } else if (pCarriedItem->pPath.pDynamicPath) {
-          nItemYValue = D2Common::PATH::DynamicPath::GetYPos(pCarriedItem->pPath.pDynamicPath);
+          pPlayerInventory = (D2InventoryStrc*)D2Common::PATH::DynamicPath::GetYPos(pCarriedItem->pPath.pDynamicPath);
         } else {
-          nItemYValue = 0;
+          pPlayerInventory = 0;
         }
 
-        uSlot8.nItemY = nItemYValue;
         eUnitType = pCarriedItem->eUnitType;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
           nPutResult = pCarriedItem->pPath.pStaticPath->nPosX;
@@ -6600,7 +6597,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
           nPutResult = 0;
         }
 
-        D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x813, pCubeInventory, nPutResult, uSlot8.nItemY, (eInventoryPage)bInTrade, 0, nSrcInvPage);
+        D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x813, pCubeInventory, nPutResult, (int32_t)pPlayerInventory, (eInventoryPage)bInTrade, 0, nSrcInvPage);
         D2Common::Units::SetupUpdateFlag(pCubeItem, 4);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pCarriedItem, INVPAGE_INVENTORY);
         dwCarriedGUID = pCarriedItem->nUnitGUID;
@@ -6609,8 +6606,8 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
         if (pCubeItem && pCubeItem->eUnitType == UNIT_ITEM && pCubeItem->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::GetHit) {
           eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCubeItem);
           nSrcPage = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nSrcPage + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eInvPage);
-          uSlot8.pPlayerInventory = pUnit2->pInventory;
-          if (uSlot8.pPlayerInventory) {
+          pPlayerInventory = pUnit2->pInventory;
+          if (pPlayerInventory) {
             bInTrade = 0;
             bRefreshInv = 1;
             eInvPage_00 = D2Common::Units::GetInventoryPage(pUnit2, eInvPage, pGame->bExpansion);
@@ -6624,9 +6621,9 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
               }
             }
 
-            pGridPos = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(uSlot8.pPlayerInventory, pCubeItem, eInvPage_00, 0, nSrcPage, ".\\ITEMS\\ItemMode.cpp", 0x817);
+            pGridPos = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pPlayerInventory, pCubeItem, eInvPage_00, 0, nSrcPage, ".\\ITEMS\\ItemMode.cpp", 0x817);
             if (pGridPos) {
-              pGridPos = D2Common::INVENTORY::Inventory::PutItemInInventory(uSlot8.pPlayerInventory, pCubeItem, 1);
+              pGridPos = D2Common::INVENTORY::Inventory::PutItemInInventory(pPlayerInventory, pCubeItem, 1);
               if (pGridPos) {
                 eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCubeItem);
                 if (eInvPage != INVPAGE_STASH) {
@@ -6639,7 +6636,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
                   ITEMMODE_AddStatsList(pCubeItem, pUnit2, 0);
                 }
                 if (bRefreshInv) {
-                  D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(uSlot8.pPlayerInventory, nullptr);
+                  D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInventory, nullptr);
                 }
 
                 D2Common::Units::SetupUpdateFlag(pCubeItem, 0);
@@ -6655,7 +6652,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
                 }
 
                 D2Common::Units::RefreshInventory(pUnit2, 1);
-                D2Common::INVENTORY::Inventory::UpsertToUpdateList(uSlot8.pPlayerInventory, pCubeItem);
+                D2Common::INVENTORY::Inventory::UpsertToUpdateList(pPlayerInventory, pCubeItem);
                 if (bInTrade == 1) {
                   PLAYER::PlayerTrade::PLRTRADE_AddItemToTrade(pGame, pUnit2, pCubeItem);
                 }

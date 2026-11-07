@@ -3489,7 +3489,7 @@ uint32_t __stdcall GetWeaponAnimClass(D2UnitStrc * pUnit) {
         nAnimClassIdx = (uint32_t)wAnimClass;
       }
 
-      return gdwUnitStrucFieldMask[(int)(pUnit->unk0x19 + nAnimClassIdx * 7 - 0x19)];
+      return gdwUnitStrucFieldMask[(intptr_t)(pUnit->unk0x19 + nAnimClassIdx * 7 - 0x19)];
       case eD2PlayerAnimMode_ns::Skill3:
 
       case eD2PlayerAnimMode_ns::Skill4:
@@ -3502,7 +3502,7 @@ uint32_t __stdcall GetWeaponAnimClass(D2UnitStrc * pUnit) {
           nWeaponAnimClass = (uint32_t)wAnimClass;
         }
 
-        return gdwUnitStrucFieldMask[(int)(pUnit->unk0x19 + nWeaponAnimClass * 7 - 0x19)];
+        return gdwUnitStrucFieldMask[(intptr_t)(pUnit->unk0x19 + nWeaponAnimClass * 7 - 0x19)];
       }
     }
 
@@ -4012,9 +4012,9 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         case UNIT_OBJECT:
           if ((intptr_t)pUnitArg < 8) {
             pObjTxt = DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit_00->nClassId);
-            pUnit_00->nFrameCount = pObjTxt->FrameCnt[(int)pAnimMode];
-            wFrameDelta = pObjTxt->FrameDelta[(int)pAnimMode];
-            pUnit_00->nGfxCurrentFrame = (uint32_t)pObjTxt->Start[(int)pAnimMode] << 8;
+            pUnit_00->nFrameCount = pObjTxt->FrameCnt[(intptr_t)pAnimMode];
+            wFrameDelta = pObjTxt->FrameDelta[(intptr_t)pAnimMode];
+            pUnit_00->nGfxCurrentFrame = (uint32_t)pObjTxt->Start[(intptr_t)pAnimMode] << 8;
             if (pObjTxt->Sync) {
               pUnit_00->nAnimSpeed = wFrameDelta;
               return;

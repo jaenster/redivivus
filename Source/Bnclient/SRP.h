@@ -108,7 +108,7 @@ void __thiscall SRP_GenerateAccountCredentials(void * pThis, char * pCredsBuf, c
 BOOL __thiscall SRP_ClientKeyExchange(void * pThis, struct D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes);
 BOOL __thiscall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, void * pSrpContext, uint8_t * pServerProof);
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes);
-void __thiscall SRP_ServerComputePublicB(void * pThis, int32_t nContextBase);
+void __thiscall SRP_ServerComputePublicB(void * pThis, uint8_t * nContextBase);
 void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uint32_t * pServerProof);
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
 void __thiscall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, int32_t nContextBase);

@@ -75,7 +75,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, struct D2BinFieldExcelStrc 
 // @sourcefile .\Src\Excel\Excel.cpp
 void __fastcall STRUCT_FreeTxtLinkNode(struct D2TxtLinkNodeStrc * pTxtLinkNode);
 char * __fastcall FOG_GetRecordField(struct D2TxtLinkNodeStrc * pClientSideData, int nLinkIndex);
-int __stdcall FOG_ParseIntField(struct D2TxtLinkStrc * pTxtLink, int nLinkIndex, int nParam2);
+char * __stdcall FOG_ParseIntField(struct D2TxtLinkStrc * pTxtLink, int nLinkIndex, int nParam2);
 int __fastcall FOG_ParseTxtLink(struct D2TxtLinkStrc * pTxtLink, char * szText);
 #endif // D2_MODULE_Fog
 // 1 internal function (defined in .cpp)

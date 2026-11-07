@@ -1744,7 +1744,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                 nGridX = *(int*)nSubIdx;
                 if (nGridX && nGridX < (int)nRandExitIdx) {
                   pCellPtr = pExitCount;
-                  if (*(int*)((int)pSubLevelMap + (nSubIdx - (int)pDistWorkMap)) == nGridY) {
+                  if (*(int*)((intptr_t)pSubLevelMap + (nSubIdx - (intptr_t)pDistWorkMap)) == nGridY) {
                     nRandExitIdx = nGridX;
                     pCellPtr = (D2DrlgSubLevelPlaceStrc**)2;
                   }
@@ -1773,7 +1773,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                   pCellPtr = (D2DrlgSubLevelPlaceStrc**)((uintptr_t)pCellPtr | 4);
                 }
 
-                pAdjPtr = (int*)((int)pSubLevelMap + (nSubIdx - (int)pDistWorkMap));
+                pAdjPtr = (int*)((intptr_t)pSubLevelMap + (nSubIdx - (intptr_t)pDistWorkMap));
                 if (*(int*)((char*)pAdjPtr + ((intptr_t)pDistMap - (intptr_t)pSubLevelMap)) == 1 && *pAdjPtr != nGridY) {
                   pCellPtr = (D2DrlgSubLevelPlaceStrc**)((uintptr_t)pCellPtr | 2);
                 }

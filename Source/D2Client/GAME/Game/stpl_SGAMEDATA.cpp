@@ -211,7 +211,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       pNewBuf = pBlock;
       do {
         pNext = &pNewBuf->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (int)pBlock + (int)pNext + (int)this->m_data);
+        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)pNext + (int)this->m_data);
         if (puVar1) {
           pNewTerminator = puVar1 + 1;
           *pNewTerminator = 0;
@@ -436,7 +436,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       if ((int)encPrev < 0) {
         pPrevLink = (int*)~encPrev;
       } else {
-        pPrevLink = (int*)((int)pTVar1 + (encPrev - *(int*)(pNext + 4)));
+        pPrevLink = (int*)((intptr_t)pTVar1 + (encPrev - *(int*)(pNext + 4)));
       }
 
       *pPrevLink = pNext;
@@ -626,42 +626,43 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __thiscall TSHashTable<SGAMED
 }
 
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Clear() {
-    int* pPrevLink;
+    char* pcVar2;
+    uint32_t* pPrevLink;
     char* pLinkSlot;
+    uint32_t nIndex;
     ::SGAMEDATA* pEntryBase;
+    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk;
     uint32_t dwLinkOffset;
     int nNodePtr;
-    void* pChunk;
-    int* pChunkSlot;
-    int pEntries;
+    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pEntries;
     char* pSlot;
     while (true) {
-      uint32_t nIndex;
-      pChunk = (intptr_t)(void*)this->m_terminator.m_next > 0 ? (void*)this->m_terminator.m_next : 0;
-      if (!pChunk) {
+      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1;
+      pChunk = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)this->m_terminator.m_next;
+      if ((intptr_t)pChunk <= 0) {
         break;
       }
 
-      pEntries = *(int*)((char*)pChunk + 0x10);
-      pChunkSlot = (int*)((char*)pChunk + 0x10);
+      pEntries = pChunk->m_link.m_prevlink;
+      pTVar1 = &pChunk->m_link;
       if (pEntries) {
-        dwLinkOffset = *(uint32_t*)((char*)pChunk + 0x14);
-        pPrevLink = (int*)D2_StormNextLink(pChunkSlot, -1);
-        *pPrevLink = pEntries;
-        *(uint32_t*)(*pChunkSlot + 4) = *(uint32_t*)((char*)pChunk + 0x14);
-        *pChunkSlot = 0;
-        *(uint32_t*)((char*)pChunk + 0x14) = 0;
+        dwLinkOffset = pTVar1->m_next;
+        pPrevLink = (uint32_t*)D2_StormNextLink(pTVar1, -1);
+        *pPrevLink = (uint32_t)(uintptr_t)pEntries;
+        pTVar1->m_prevlink->m_next = pTVar1->m_next;
+        pTVar1->m_prevlink = 0;
+        pTVar1->m_next = 0;
       }
 
       nIndex = 0;
-      if ((uint32_t)*(int*)((char*)pChunk + 4) > 0) {
+      if (pChunk->nArrayCount > 0) {
         pEntryBase = 0;
         do {
-          pEntries = *(int*)((char*)pChunk + 8);
-          nNodePtr = *(int*)(pEntryBase->szGameName + pEntries - 0x1e);
-          pSlot = pEntryBase->szGameName + pEntries - 0x1e;
+          pcVar2 = pChunk->pArray->szGameName;
+          nNodePtr = *(int*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x48);
+          pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x48;
           if (nNodePtr) {
-            dwLinkOffset = *(uint32_t*)(pEntryBase->szGameName + pEntries - 0x1a);
+            dwLinkOffset = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x44);
             if ((int)dwLinkOffset < 0) {
               pLinkSlot = (char*)~dwLinkOffset;
             } else {
@@ -669,16 +670,16 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
             }
 
             *(int*)pLinkSlot = nNodePtr;
-            *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + pEntries - 0x1a);
+            *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x44);
             *(uint32_t*)pSlot = 0;
-            pSlot = pEntryBase->szGameName + pEntries - 0x1a;
+            pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x44;
             *(uint32_t*)pSlot = 0;
           }
 
-          nNodePtr = *(int*)(pEntryBase->szGameName + pEntries - 0x26);
-          pSlot = pEntryBase->szGameName + pEntries - 0x26;
+          nNodePtr = *(int*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x50);
+          pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x50;
           if (nNodePtr) {
-            dwLinkOffset = *(uint32_t*)(pEntryBase->szGameName + pEntries - 0x22);
+            dwLinkOffset = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x4c);
             if ((int)dwLinkOffset < 0) {
               pLinkSlot = (char*)~dwLinkOffset;
             } else {
@@ -686,18 +687,18 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
             }
 
             *(int*)pLinkSlot = nNodePtr;
-            *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + pEntries - 0x22);
+            *(uint32_t*)(*(int*)pSlot + 4) = *(uint32_t*)(pEntryBase->szGameName + (intptr_t)pcVar2 - 0x4c);
             *(uint32_t*)pSlot = 0;
-            pSlot = pEntryBase->szGameName + pEntries - 0x22;
+            pSlot = pEntryBase->szGameName + (intptr_t)pcVar2 - 0x4c;
             *(uint32_t*)pSlot = 0;
           }
 
           pEntryBase++;
           nIndex++;
-        } while (nIndex < *(uint32_t*)((char*)pChunk + 4));
+        } while (nIndex < pChunk->nArrayCount);
       }
-      if (*(void**)((char*)pChunk + 8)) {
-        Storm::Source::SMem::SMemFree(*(void**)((char*)pChunk + 8), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
+      if (pChunk->pArray) {
+        Storm::Source::SMem::SMemFree(pChunk->pArray, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
       }
 
       Storm::Source::SMem::SMemFree(pChunk, D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, 0);
@@ -723,7 +724,7 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKE
     TSLink<::SGAMEDATA>* pListHead = &this->tFullList.m_terminator;
     pListHead->m_prevlink = pListHead;
     pBucket->m_linkoffset = -0x22222223;
-    this->tFullList.m_terminator.m_next = ~(uint32_t)pListHead;
+    this->tFullList.m_terminator.m_next = ~(uintptr_t)pListHead;
     this->tSlotListArray.m_alloc = 0;
     this->tSlotListArray.m_count = 0;
     this->tSlotListArray.m_data = 0;
@@ -734,7 +735,7 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKE
       pListHead = &this->tFullList.m_terminator;
       pListHead->m_prevlink = pListHead;
       pBucket->m_linkoffset = 0xc;
-      this->tFullList.m_terminator.m_next = ~(uint32_t)pListHead;
+      this->tFullList.m_terminator.m_next = ~(uintptr_t)pListHead;
     }
 
     this->nSlotMask = 3;
@@ -747,7 +748,7 @@ template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKE
         pListHead = &pBucket->m_terminator;
         pListHead->m_prevlink = pListHead;
         pBucket->m_linkoffset = 4;
-        pBucket->m_terminator.m_next = ~(uint32_t)pListHead;
+        pBucket->m_terminator.m_next = ~(uintptr_t)pListHead;
       }
 
       nBucketIdx++;

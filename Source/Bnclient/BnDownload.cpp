@@ -990,7 +990,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       } else {
         pDestPtr = szDestPath;
         pDestPtr = pDestPtr + strlen(pDestPtr) + 1;
-        __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (int)(szDestPath + 1))), ".\\BnDownload.cpp", 0x179);
+        __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (intptr_t)(szDestPath + 1))), ".\\BnDownload.cpp", 0x179);
         bOpened = (int)__frame0.dwStackPad3 - (int)szDestPath;
         do {
           byScanChar = *szDestPath;
@@ -1002,11 +1002,11 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
         if (strlen(pPoolMgr) != 0) {
           pDestPtr = pPoolMgr;
           pDestPtr = pDestPtr + strlen(pDestPtr) + 1;
-          __frame0.dwStackPad2 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (int)(pPoolMgr + 1))), ".\\BnDownload.cpp", 0x182);
+          __frame0.dwStackPad2 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (intptr_t)(pPoolMgr + 1))), ".\\BnDownload.cpp", 0x182);
           pDestPtr = pPoolMgr;
           do {
             byScanChar = *pDestPtr;
-            pDestPtr[(int)__frame0.dwStackPad2 - (int)pPoolMgr] = byScanChar;
+            pDestPtr[(int)__frame0.dwStackPad2 - (intptr_t)pPoolMgr] = byScanChar;
             pDestPtr++;
           } while (byScanChar != '\0');
 
@@ -1046,8 +1046,8 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
 
         pbFtpEntryEnd = pDestPtr;
         pbFtpEntryEnd = pbFtpEntryEnd + strlen(pbFtpEntryEnd) + 1;
-        pbStrCursor = pDestPtr + (int)(pbFtpEntryEnd + (1 - (int)(pDestPtr + 1)));
-        pDestPtr += (int)(pbFtpEntryEnd + (1 - (int)(pDestPtr + 1)));
+        pbStrCursor = pDestPtr + (intptr_t)(pbFtpEntryEnd + (1 - (intptr_t)(pDestPtr + 1)));
+        pDestPtr += (intptr_t)(pbFtpEntryEnd + (1 - (intptr_t)(pDestPtr + 1)));
         byScanChar = *pbStrCursor;
       }
 

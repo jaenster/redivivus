@@ -155,7 +155,7 @@ struct D2PacketListStrc * __fastcall CLIENT_GetDispatchList(struct D2ClientStrc 
 void __fastcall GetAccountName(struct D2ClientStrc * pClient, char * szText);
 void __fastcall GetClientContainer(struct D2ClientStrc * pClient, uint32_t * pdwContainer);
 void __fastcall GetRealm(struct D2ClientStrc * pClient, uint32_t * pdwRealm);
-void __fastcall SetRealm(struct D2ClientStrc * pClient, void * dwRealm);
+void __fastcall SetRealm(struct D2ClientStrc * pClient, uint32_t dwRealm);
 struct D2PlayerBasicsData * __fastcall CLIENT_GetPlayerBasicsData(struct D2ClientStrc * pClient);
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall RecordSyncWarpTimestamp(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

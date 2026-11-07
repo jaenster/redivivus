@@ -469,12 +469,13 @@ void __fastcall MONSTER_KillAllInLevel(::SGAMEDATA * pGame, int32_t nAltMonClass
 }
 
 // Server-side: fully initializes a spawned monster's stats/skills/inventory. Bails unless pUnit is a valid UNIT_MONSTER with MonStats/MonStatsEx records. Rolls component appearance, applies act-boss name bytes (classId 0x137/0x138), computes level/difficulty scaling (player-count multipliers), then SETs resistances, block, attack/velocity/animrate, HP (rolled min..max + player% bonus, capped 0x7FFFFF, x256), armorclass, experience and HP-regen via STATLIST_SetUnitStat. Applies difficulty scaling, attaches a second stat list, creates player or NPC inventory, builds the skills list (8 skills from MonStatsEx with level bonus + mode), sets CANBEATTACKED/PETIGNORE flags, rolls up-to-6 random monster properties (MonProp txt, per-difficulty chance), and equips summon items. Halts on bad HP-regen value.
-static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint32_t nParam, D2UnitStrc * pUnit) {
+static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom, short * nParam, D2UnitStrc * pUnit) {
     uint32_t dwTmpStat;
     uint32_t nTmpVal;
     D2StatListExStrc* pStatsEx;
     D2InventoryStrc* pNpcInventory;
     D2SkillListStrc* pSkillsList;
+    short int* psVar2;
     uint16_t nLayer;
     D2MonStatsInitStrc sMonStats;
     D2MonsterLevelDataStrc monLevelData;
@@ -525,7 +526,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
     int nMonClassId;
     nMonClassId = nTmpInt;
-    MONSTER_RollComponentAppearance(nParam, pUnit);
+    MONSTER_RollComponentAppearance((int32_t)nParam, pUnit);
     if (nTmpInt >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nTmpInt = -1;
     }
@@ -550,11 +551,11 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     byDifficultyIdx = pGame->nDifficulty;
     if (byDifficultyIdx > 0) {
       if (1 < byDifficultyIdx) {
-        nParam = 2;
+        nParam = (short int*)0x2;
         goto init_stats_for_difficulty;
       }
       if (byDifficultyIdx > 0) {
-        nParam = (uint32_t)byDifficultyIdx;
+        nParam = (short int*)(uint32_t)byDifficultyIdx;
         goto init_stats_for_difficulty;
       }
     }
@@ -571,23 +572,23 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       nPlayerCount = monLevelData.nPlayerMultiplyer3;
     }
 
-    int nMonLevel = (int)pMonStatsTxt->aLevel[nParam];
+    int nMonLevel = (int)pMonStatsTxt->aLevel[(intptr_t)nParam];
     nTmpInt = pGame->bExpansion;
     if (nTmpInt && nParam && !(Fog::BitBuffer::gadwBitMasks[2] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc)) && !(Fog::BitBuffer::gadwBitMasks[6] & (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc))) {
-      nTmpVal = nParam;
-      nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (eD2Difficulty)nTmpVal, nTmpInt);
+      psVar2 = nParam;
+      nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (eD2Difficulty)(uintptr_t)psVar2, nTmpInt);
     }
 
     D2Common::Stats::StatsEx::AllocStatListEx(pUnit, 0, (fpStatListExChangeCb)ITEMS::ItemMode::STATSLISTEX_FunctionCallback, pGame);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nMonLevel, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_monster_playercount, nPlayerCount, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damageresist, (int)pMonStatsTxt->aResDm[nParam], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_magicresist, (int)pMonStatsTxt->aResMa[nParam], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, (int)pMonStatsTxt->aResFi[nParam], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, (int)pMonStatsTxt->aResLi[nParam], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_coldresist, (int)pMonStatsTxt->aResCo[nParam], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_poisonresist, (int)pMonStatsTxt->aResPo[nParam], 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)pMonStatsTxt->aToBlock[nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damageresist, (int)pMonStatsTxt->aResDm[(intptr_t)nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_magicresist, (int)pMonStatsTxt->aResMa[(intptr_t)nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, (int)pMonStatsTxt->aResFi[(intptr_t)nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, (int)pMonStatsTxt->aResLi[(intptr_t)nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_coldresist, (int)pMonStatsTxt->aResCo[(intptr_t)nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_poisonresist, (int)pMonStatsTxt->aResPo[(intptr_t)nParam], 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)*(uint8_t*)((intptr_t)nParam + (intptr_t)pMonStatsTxt->aToBlock), 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_attackrate, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 0x4b, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
@@ -597,7 +598,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     memset(&sMonStats, 0, 0x38);
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, (int32_t)pRoom, nParam, nMonLevel, 7, &sMonStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, (int32_t)pRoom, (uint32_t)nParam, nMonLevel, 7, &sMonStats);
     nTmpVal = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, sMonStats.nMaxHP - sMonStats.nMinHP + 1);
     int32_t nScaledStat = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nTmpVal + sMonStats.nMinHP, monLevelData.nPlayerMultiplyer, 100);
     nTmpInt = nTmpVal + sMonStats.nMinHP + nScaledStat;
@@ -674,18 +675,18 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       uMonTxt.pMonPropTxt = MONSTER_GetMonPropTxtRecord(pUnit->nClassId);
       /* uMonTxt now holds a D2MonPropTxt* (MONSTER_GetMonPropTxtRecord); see
                          00573d35. */ if (uMonTxt.pMonPropTxt) {
-        pRoom = (D2RoomStrc*)(uMonTxt.pMonPropTxt->entry + nParam);
+        pRoom = (D2RoomStrc*)(uMonTxt.pMonPropTxt->entry + (intptr_t)nParam);
         nPlayerCount = 0;
         do {
           if ((intptr_t)pRoom->ppRoomList < 0) {
             break;
           }
-          if ((uint8_t)uMonTxt.pMonPropTxt->chance[nParam][nPlayerCount] <= '\0') {
+          if ((uint8_t)uMonTxt.pMonPropTxt->chance[(int)nParam][nPlayerCount] <= '\0') {
             D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, 0, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, 0);
           } else {
             DVar1 = D2_SEED_NEXT(pUnit->sSeed);
             pUnit->sSeed = DVar1;
-            if ((int)(DVar1.nSeedLow % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[nParam][nPlayerCount]) {
+            if ((int)(DVar1.nSeedLow % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[(int)nParam][nPlayerCount]) {
               D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, 0, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, 0);
             }
           }
@@ -733,7 +734,7 @@ void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, 
 
     pUnitDataMonster->pMonStatsTxt = pMonStatsTxt;
     short int* pSpawnCountResult = MonsterRegion::InitializeSpawnCount(pGame->pMonsterRegion, pRoom, pUnit);
-    MONSTER_InitStats(pGame, pRoom, (uint32_t)pSpawnCountResult, pUnit);
+    MONSTER_InitStats(pGame, pRoom, pSpawnCountResult, pUnit);
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
       pAiGeneralInit = 0;
     } else {

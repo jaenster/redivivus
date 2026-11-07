@@ -12,50 +12,51 @@ namespace Storm::_3rdparty::zlib::inffast {
 
 // Fast-path inflate decompression main loop. Processes compressed data using precomputed Huffman tables with 15-bit lookahead for literal/distance pairs. Copies match data with optimized 3-byte blocking pattern.
 void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
-    uint8_t* pbVar1;
-    inflate_code iVar3;
+    inflate_code iVar2;
     uint8_t byLastByte;
     uint8_t* pCopyByte;
     uint32_t dwCodeEntry;
     uint32_t nWrapCopyLen;
-    int iVar4;
+    uint8_t* pCopySrc;
     uint8_t* nCopySrc;
     int nCopySrc3;
+    uint8_t* pbVar3;
     uint32_t nDistance;
     inflate_code dwDistEntry;
     uint32_t nMatchLen;
-    uint32_t* puVar2;
-    puVar2 = (uint32_t*)pInflateState->state;
+    inflate_state* pInternalState;
+    uint32_t* puVar1;
+    puVar1 = (uint32_t*)pInflateState->state;
     uint32_t dwBitHold;
-    dwBitHold = puVar2[0xe];
+    dwBitHold = puVar1[0xe];
     uint8_t* pInput;
     pInput = pInflateState->next_in - 1;
     uint8_t* pInputSafeEnd;
     pInputSafeEnd = pInput + (pInflateState->avail_in - 5);
     int nWriteBase;
-    nWriteBase = puVar2[10];
+    nWriteBase = puVar1[10];
     uint8_t* pOutput;
     pOutput = pInflateState->next_out - 1;
     uint8_t* pOutputSafeEnd;
     pOutputSafeEnd = pOutput + (pInflateState->avail_out - 0x101);
     uint32_t nWindowSize;
-    nWindowSize = puVar2[0xb];
+    nWindowSize = puVar1[0xb];
     uint32_t nWindowWrap;
-    nWindowWrap = puVar2[0xc];
+    nWindowWrap = puVar1[0xc];
     int nWindowPos;
-    nWindowPos = puVar2[0xd];
+    nWindowPos = puVar1[0xd];
     inflate_code* pLenCodeTable;
-    pLenCodeTable = (inflate_code*)puVar2[0x13];
+    pLenCodeTable = (inflate_code*)puVar1[0x13];
     inflate_code* pDistCodeTable;
-    pDistCodeTable = (inflate_code*)puVar2[0x14];
+    pDistCodeTable = (inflate_code*)puVar1[0x14];
     uint8_t* pOutputBase;
     pOutputBase = pOutput + (pInflateState->avail_out - nEndPos);
     uint32_t nLenCodeBits;
-    nLenCodeBits = puVar2[0x15];
+    nLenCodeBits = puVar1[0x15];
     uint32_t nDistCodeBits;
-    nDistCodeBits = puVar2[0x16];
+    nDistCodeBits = puVar1[0x16];
     uint32_t nBitCount;
-    nBitCount = puVar2[0xf];
+    nBitCount = puVar1[0xf];
     while (true) {
       if (nBitCount < 0xf) {
         pCopyByte = pInput + 1;
@@ -64,13 +65,13 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
         nBitCount += 0x10;
       }
 
-      iVar3 = pLenCodeTable[(1 << D2_SHIFT_COUNT(nLenCodeBits)) - 1U & dwBitHold];
-      dwBitHold >>= D2_SHIFT_COUNT(iVar3.bits);
-      nBitCount -= (uint32_t)d2_bits_of(iVar3) >> 8 & 0xff;
-      while ((uint8_t)(uint32_t)d2_bits_of(iVar3)) {
-        if ((uint32_t)d2_bits_of(iVar3) & 0x10) {
-          nMatchLen = (uint32_t)d2_bits_of(iVar3) >> 0x10;
-          dwCodeEntry = (uint32_t)d2_bits_of(iVar3) & 0xf;
+      iVar2 = pLenCodeTable[(1 << D2_SHIFT_COUNT(nLenCodeBits)) - 1U & dwBitHold];
+      dwBitHold >>= D2_SHIFT_COUNT(iVar2.bits);
+      nBitCount -= (uint32_t)d2_bits_of(iVar2) >> 8 & 0xff;
+      while ((uint8_t)(uint32_t)d2_bits_of(iVar2)) {
+        if ((uint32_t)d2_bits_of(iVar2) & 0x10) {
+          nMatchLen = (uint32_t)d2_bits_of(iVar2) >> 0x10;
+          dwCodeEntry = (uint32_t)d2_bits_of(iVar2) & 0xf;
           if (dwCodeEntry) {
             if (nBitCount < dwCodeEntry) {
               pInput++;
@@ -99,9 +100,9 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
 
           goto decode_distance;
         }
-        if ((uint32_t)d2_bits_of(iVar3) & 0x40) {
-          if ((uint32_t)d2_bits_of(iVar3) & 0x20) {
-            *puVar2 = 0xb;
+        if ((uint32_t)d2_bits_of(iVar2) & 0x40) {
+          if ((uint32_t)d2_bits_of(iVar2) & 0x20) {
+            *puVar1 = 0xb;
             goto save_state_and_return;
           }
 
@@ -109,12 +110,12 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
           goto bad_data;
         }
 
-        iVar3 = pLenCodeTable[((1 << D2_SHIFT_COUNT(iVar3.op)) - 1U & dwBitHold) + ((uint32_t)d2_bits_of(iVar3) >> 0x10)];
-        dwBitHold >>= D2_SHIFT_COUNT(iVar3.bits);
-        nBitCount -= (uint32_t)d2_bits_of(iVar3) >> 8 & 0xff;
+        iVar2 = pLenCodeTable[((1 << D2_SHIFT_COUNT(iVar2.op)) - 1U & dwBitHold) + ((uint32_t)d2_bits_of(iVar2) >> 0x10)];
+        dwBitHold >>= D2_SHIFT_COUNT(iVar2.bits);
+        nBitCount -= (uint32_t)d2_bits_of(iVar2) >> 8 & 0xff;
       }
 
-      byLastByte = (uint8_t)iVar3.val;
+      byLastByte = (uint8_t)iVar2.val;
       goto emit_byte;
       dodist:
       while (true) {
@@ -152,19 +153,19 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
       dwBitHold >>= (int8_t)dwCodeEntry;
       if (nDistance > (uint32_t)((intptr_t)pOutput - (intptr_t)pOutputBase)) {
         dwCodeEntry = nDistance - ((intptr_t)pOutput - (intptr_t)pOutputBase);
-        if (dwCodeEntry > nWindowSize && puVar2[0x6f0]) {
+        if (dwCodeEntry > nWindowSize && puVar1[0x6f0]) {
           pInflateState->msg = "invalid distance too far back";
           bad_data:
-          *puVar2 = 0x1d;
+          *puVar1 = 0x1d;
           save_state_and_return:
           nWriteBase = (int)pInput - (nBitCount >> 3);
           nWindowPos = nBitCount + (nBitCount >> 3) * -8;
           pInflateState->next_in = (uint8_t*)(nWriteBase + 1);
           pInflateState->next_out = pOutput + 1;
-          pInflateState->avail_out = (uint32_t)(pOutputSafeEnd + (0x101 - (int)pOutput));
+          pInflateState->avail_out = (uint32_t)(pOutputSafeEnd + (0x101 - (intptr_t)pOutput));
           pInflateState->avail_in = (uint32_t)(pInputSafeEnd + (5 - nWriteBase));
-          puVar2[0xf] = nWindowPos;
-          puVar2[0xe] = dwBitHold & (1 << D2_SHIFT_COUNT(nWindowPos)) - 1U;
+          puVar1[0xf] = nWindowPos;
+          puVar1[0xe] = dwBitHold & (1 << D2_SHIFT_COUNT(nWindowPos)) - 1U;
           return;
         }
 
@@ -174,11 +175,11 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
           if (dwCodeEntry < nMatchLen) {
             nMatchLen -= dwCodeEntry;
             do {
-              pbVar1 = pCopyByte + 1;
+              pbVar3 = pCopyByte + 1;
               pCopyByte++;
               pOutput++;
               dwCodeEntry--;
-              *pOutput = *pbVar1;
+              *pOutput = *pbVar3;
             } while (dwCodeEntry);
 
             pCopyByte = pOutput - nDistance;
@@ -189,11 +190,11 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
           if (nWrapCopyLen < nMatchLen) {
             nMatchLen -= nWrapCopyLen;
             do {
-              pbVar1 = pCopyByte + 1;
+              pbVar3 = pCopyByte + 1;
               pCopyByte++;
               pOutput++;
               nWrapCopyLen--;
-              *pOutput = *pbVar1;
+              *pOutput = *pbVar3;
             } while (nWrapCopyLen);
 
             pCopyByte = (uint8_t*)(nWindowPos - 1);
@@ -201,11 +202,11 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
               nMatchLen -= nWindowWrap;
               dwCodeEntry = nWindowWrap;
               do {
-                pbVar1 = pCopyByte + 1;
+                pbVar3 = pCopyByte + 1;
                 pCopyByte++;
                 pOutput++;
                 dwCodeEntry--;
-                *pOutput = *pbVar1;
+                *pOutput = *pbVar3;
               } while (dwCodeEntry);
 
               pCopyByte = pOutput - nDistance;
@@ -216,11 +217,11 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
           if (dwCodeEntry < nMatchLen) {
             nMatchLen -= dwCodeEntry;
             do {
-              pbVar1 = pCopyByte + 1;
+              pbVar3 = pCopyByte + 1;
               pCopyByte++;
               pOutput++;
               dwCodeEntry--;
-              *pOutput = *pbVar1;
+              *pOutput = *pbVar3;
             } while (dwCodeEntry);
 
             pCopyByte = pOutput - nDistance;
@@ -232,11 +233,11 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
             nMatchLen -= 3;
             pOutput[1] = pCopyByte[1];
             pOutput[2] = pCopyByte[2];
-            pbVar1 = pCopyByte + 3;
+            pbVar3 = pCopyByte + 3;
             pCopyByte += 3;
             pOutput += 3;
             nCopySrc3--;
-            *pOutput = *pbVar1;
+            *pOutput = *pbVar3;
           } while (nCopySrc3);
         }
         if (!nMatchLen) {
@@ -251,29 +252,29 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
 
         byLastByte = pCopyByte[2];
       } else {
-        nCopySrc3 = (int)pOutput - nDistance;
+        pCopyByte = pOutput - nDistance;
         do {
-          pCopyByte = pOutput;
-          iVar4 = nCopySrc3;
-          pCopyByte[1] = *(uint8_t*)(iVar4 + 1);
-          pCopyByte[2] = *(uint8_t*)(iVar4 + 2);
-          pOutput = pCopyByte + 3;
-          *pOutput = *(uint8_t*)(iVar4 + 3);
+          pbVar3 = pOutput;
+          pCopySrc = pCopyByte;
+          pbVar3[1] = pCopySrc[1];
+          pbVar3[2] = pCopySrc[2];
+          pOutput = pbVar3 + 3;
+          *pOutput = pCopySrc[3];
           nMatchLen -= 3;
-          nCopySrc3 = iVar4 + 3;
+          pCopyByte = pCopySrc + 3;
         } while (nMatchLen > 2);
 
         if (!nMatchLen) {
           goto check_room;
         }
 
-        pOutput = pCopyByte + 4;
-        *pOutput = *(uint8_t*)(iVar4 + 4);
+        pOutput = pbVar3 + 4;
+        *pOutput = pCopySrc[4];
         if (nMatchLen <= 1) {
           goto check_room;
         }
 
-        byLastByte = *(uint8_t*)(iVar4 + 5);
+        byLastByte = pCopySrc[5];
       }
 
       emit_byte:

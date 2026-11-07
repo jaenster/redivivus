@@ -172,7 +172,7 @@ void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText);
 // @was SSYSTEM_UnregisterErrorCallback (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrUnregisterHandler, code vector 10015330 (TVector 100cbee4).
 // @oracle-basis Callee set {EnterCriticalSection, <free>, LeaveCriticalSection} with arity 1, operating on the same list SErrRegisterHandler 0041c900 builds. The oracle calls SMemFree directly; MSVC factored the unlink+free into SSYSTEM_ListRemoveAndFree 0041ca10, which calls SMemFree - the same operation one level down. SSYSTEM_ListRemoveAndFree has this function as its only caller.
-void __stdcall SErrUnregisterHandler(int32_t nCallbackId);
+void __stdcall SErrUnregisterHandler(pfnSErrDisplayCallback nCallbackId);
 // @was SSYSTEM_FatalAssert (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrDisplayAppFatal, code vector 100168d0 (TVector 100cbe64).
 // @oracle-basis Callee set matches seven for seven, in order, and is unique in both builds: EnterErrorCriticalSection, GetCurrentThreadId, memset, LeaveErrorCriticalSection, vsnprintf/vsprintf, SErrDisplayError, ExitProcess. No other function in either module combines GetCurrentThreadId with memset and a vararg format. The old name FatalAssert was descriptively close but this is the SErr export, not an assert macro.

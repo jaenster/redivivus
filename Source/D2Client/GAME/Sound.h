@@ -131,7 +131,7 @@ BOOL __fastcall SOUND_ParseStreamWavHeader(struct D2SoundsTxt * pSoundStream);
 // Sets the EAX reverb environment for the current room if the active sound mixer supports 3D audio and the requested environment ID differs from the current one. Reads all EAX parameters (room volume, HF, decay, reflections, reverb, size, diffusion, air absorption, room rolloff) from the SoundEnvironTxt record for nEnvId, scales integer fields by /1000 to floats, and calls SOUND_ApplyEAXEnvironment. Updates gnCurrentEaxEnvironmentId.
 void __fastcall SOUND_SetEaxEnvironment(int32_t nEnvId);
 uint32_t __thiscall SOUND_MatchesSoundId(int32_t pSoundEntry, int32_t nSoundId);
-void __fastcall SOUND_DetachUnit(int32_t pSoundEntry);
+void __fastcall SOUND_DetachUnit(struct D2ClientSoundChannelStrc * pSoundEntry);
 void __fastcall SOUND_StopAndDetach(struct D2ClientSoundChannelStrc * ppnParam);
 void __stdcall CleanUpGame();
 BOOL __stdcall SOUND_IsInitialized();

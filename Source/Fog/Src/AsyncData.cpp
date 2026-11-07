@@ -493,7 +493,7 @@ void __fastcall ASYNCDATA_Free(D2AsyncData_Line0x128 * pAsyncData) {
 
       bIsComplete = ASYNCDATA_IsComplete(pAsyncData);
       if (!bIsComplete) {
-        Storm::Source::SFile::SFILE_CancelAsyncRequestNoReturn((int32_t)pAsyncData->pReadBuffer);
+        Storm::Source::SFile::SFILE_CancelAsyncRequestNoReturn(pAsyncData->pReadBuffer);
         /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(pAsyncData->pSlot->hEvent, -1);
         ASYNCDATA_CancelAndCleanup(pAsyncData);
       }

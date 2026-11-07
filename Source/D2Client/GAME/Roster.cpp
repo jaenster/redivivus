@@ -131,14 +131,14 @@ static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szP
     pSrcCursor = szClanTag;
     do {
       cChar = *pSrcCursor;
-      pSrcCursor[(int)pRoster + (0x46 - (int)szClanTag)] = cChar;
+      pSrcCursor[(intptr_t)pRoster + (0x46 - (intptr_t)szClanTag)] = cChar;
       pSrcCursor++;
     } while (cChar != '\0');
 
     int nDstDelta = 0x4a - (int)szGuildTag;
     do {
       cChar = *szGuildTag;
-      szGuildTag[(int)pRoster + nDstDelta] = cChar;
+      szGuildTag[(intptr_t)pRoster + nDstDelta] = cChar;
       szGuildTag++;
     } while (cChar != '\0');
 
@@ -150,7 +150,7 @@ static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szP
     nDstDelta = 0x66 - (int)szPlayerName;
     do {
       cChar = *szPlayerName;
-      szPlayerName[(int)pRoster + nDstDelta] = cChar;
+      szPlayerName[(intptr_t)pRoster + nDstDelta] = cChar;
       szPlayerName++;
     } while (cChar != '\0');
 }

@@ -213,6 +213,7 @@
       "usedTypes": [
         "D2InventoryGridStrc",
         "DC6",
+        "DC6Block *",
         "uint32_t"
       ]
     },
@@ -840,7 +841,8 @@
         "BITSTREAM_GetByteOffset"
       ],
       "usedTypes": [
-        "D2CodecBitStateStrc"
+        "D2CodecBitStateStrc",
+        "uint8_t"
       ]
     },
     {
@@ -858,7 +860,8 @@
       ],
       "usedTypes": [
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {

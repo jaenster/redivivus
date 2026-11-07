@@ -430,6 +430,9 @@
       "namespace": "D2Game::Quests::QUESTS::A5Q1",
       "calledFunctions": [
         "Unreferenced_005875d0"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

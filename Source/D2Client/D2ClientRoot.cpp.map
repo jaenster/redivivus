@@ -2075,7 +2075,7 @@
       "usedTypes": [
         "int32_t",
         "pfnWardenCreateInterface",
-        "uint32_t"
+        "uint8_t"
       ]
     },
     {

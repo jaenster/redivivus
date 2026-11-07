@@ -100,7 +100,7 @@ void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     do {
-      SendRoomUnitUpdates(pGame, *(D2RoomStrc**)(pGameSave->szGameName + (int)pRoomIdx * 4 - 0x2a), pRoomEnd);
+      SendRoomUnitUpdates(pGame, *(D2RoomStrc**)(pGameSave->szGameName + (intptr_t)pRoomIdx * 4 - 0x2a), pRoomEnd);
       pRoomIdx = (D2ClientStrc*)((intptr_t)&pRoomIdx->nClientNo + 1);
     } while (pRoomIdx < pClient);
 }

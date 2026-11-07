@@ -723,7 +723,7 @@ void __stdcall LogCpuInfo() {
     uint64_t uVar1;
     char szModelName[256];
     char* Format;
-    switch (gSystemInfo.wProcessorLevel) {
+    switch (gSystemInfo.sWinSystemInfo.wProcessorLevel) {
       case 3:
         {
           Format = "Intel 386";
@@ -949,7 +949,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
     pSearchName = szFileName;
     do {
       byChar = *pSearchName;
-      pSearchName[(int)gLogFileNameArray + (nSlot * 0x10 - (int)szFileName)] = byChar;
+      pSearchName[(int)gLogFileNameArray + (nSlot * 0x10 - (intptr_t)szFileName)] = byChar;
       pSearchName++;
     } while (byChar);
 
@@ -1203,7 +1203,7 @@ uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase) {
       return ~nOffset;
     }
     if ((intptr_t)pBase < 0) {
-      pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
+      pBase = (int*)((intptr_t)pNode - *(int*)(*pNode + 4));
     }
 
     return nOffset + (int)pBase;
@@ -1216,7 +1216,7 @@ int __fastcall Unreferenced_0040f520(int param_1) {
 int __fastcall Unreferenced_0040f580(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
@@ -1287,12 +1287,12 @@ void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
 
     fwrite(szText, Storm::Source::SSTR::SStrLen((char*)szText), 1, pFile);
     DWORD dwNow = GetTickCount();
-    gLogFileLastAccessTimeArray[(int)nSlot] = dwNow;
+    gLogFileLastAccessTimeArray[(intptr_t)nSlot] = dwNow;
 }
 
-int __fastcall Unreferenced_0040f810(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
+uint32_t * __fastcall Unreferenced_0040f810(uint32_t * param_1) {
+    *param_1 = 0;
+    param_1[1] = 0;
     return param_1;
 }
 
@@ -1428,7 +1428,7 @@ void __fastcall InitListHead(StormLinkedListStrc * pListHead) {
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInsertAtHead, int * * ppTarget) {
@@ -1442,9 +1442,9 @@ void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInser
     if (pNext) {
       pBackLink = ppCurNode[1];
       if ((intptr_t)pBackLink < 0) {
-        pBackLink = (int*)~(uint32_t)pBackLink;
+        pBackLink = (int*)~(uintptr_t)pBackLink;
       } else {
-        pBackLink = (int*)((int)pBackLink + ((int)ppCurNode - pNext[1]));
+        pBackLink = (int*)((intptr_t)pBackLink + ((intptr_t)ppCurNode - pNext[1]));
       }
 
       *pBackLink = (int)pNext;
@@ -1464,7 +1464,7 @@ void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInser
           pNext = *ppListHead;
           pBackLink = ppTarget[1];
           if ((intptr_t)pBackLink < 0) {
-            *(int***)~(uint32_t)pBackLink = (int**)ppCurNode;
+            *(int***)~(uintptr_t)pBackLink = (int**)ppCurNode;
             ppTarget[1] = (int*)pNode;
             return;
           }
@@ -1472,7 +1472,7 @@ void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInser
             pNext = (int*)((char*)ppTarget - (*ppTarget)[1]);
           }
 
-          *(int***)((int)pBackLink + (int)pNext) = (int**)ppCurNode;
+          *(int***)((intptr_t)pBackLink + (intptr_t)pNext) = (int**)ppCurNode;
           ppTarget[1] = (int*)pNode;
           return;
         }

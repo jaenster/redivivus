@@ -183,27 +183,29 @@ uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, D2Codec
 }
 
 static BOOL CODEC_AdvanceFrameIterator(int * pIterState, D2CodecFrameBoundsStrc * pFrameBounds) {
-    int nFrameEntry;
+    int iVar1;
     int nFrameWidth;
+    uint32_t uVar2;
     uint32_t nXRemainder;
+    uint32_t nYRemainder;
     pIterState[9] += pIterState[0xd];
-    nFrameEntry = pIterState[9];
+    iVar1 = pIterState[9];
     nFrameWidth = pIterState[1];
-    if (nFrameEntry < nFrameWidth) {
+    if (iVar1 < nFrameWidth) {
       pIterState[0xc] += pIterState[0xd];
       pIterState[8]++;
-      if (!(nFrameEntry + 5 >= nFrameWidth)) {
+      if (!(iVar1 + 5 >= nFrameWidth)) {
         pIterState[0xd] = 4;
         return 1;
       }
 
-      pIterState[0xd] = nFrameWidth - nFrameEntry;
+      pIterState[0xd] = nFrameWidth - iVar1;
       return 1;
     }
 
     pIterState[10] += pIterState[0xe];
-    nFrameEntry = pIterState[2];
-    if (!(pIterState[10] >= nFrameEntry)) {
+    iVar1 = pIterState[2];
+    if (!(pIterState[10] >= iVar1)) {
       nXRemainder = pIterState[3] % 4;
       pIterState[9] = 0;
       if ((int)(-nXRemainder + 5) < nFrameWidth) {
@@ -215,35 +217,35 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, D2CodecFrameBoundsStrc 
       pIterState[0xc] = pIterState[0xb];
       pIterState[7] += pFrameBounds->nBlockStride;
       pIterState[8] = pIterState[7];
-      if (!(pIterState[10] + 5 >= nFrameEntry)) {
+      if (!(pIterState[10] + 5 >= iVar1)) {
         pIterState[0xe] = 4;
         return 1;
       }
 
-      pIterState[0xe] = nFrameEntry - pIterState[10];
+      pIterState[0xe] = iVar1 - pIterState[10];
       return 1;
     }
 
-    uint32_t nYRemainder;
+    D2CodecFrameComponentStrc* nFrameEntry;
     (*pIterState)++;
     nFrameWidth = *pIterState;
-    nFrameEntry = nFrameWidth * 0x2c + pFrameBounds->pFrameArray;
+    nFrameEntry = pFrameBounds->pFrameArray + nFrameWidth;
     while (nFrameWidth < pFrameBounds->nFrameCount) {
-      if (*(int*)(nFrameEntry + 4) && *(int*)(nFrameEntry + 8)) {
-        pIterState[1] = *(int*)(nFrameEntry + 4);
-        pIterState[2] = *(int*)(nFrameEntry + 8);
-        pIterState[3] = *(int*)(nFrameEntry + 0xc) - pFrameBounds->nMinX;
-        if (*(int*)(nFrameEntry + 0x28)) {
-          nFrameWidth = 0;
+      if (nFrameEntry->nYOffset && nFrameEntry->nWidth) {
+        pIterState[1] = nFrameEntry->nYOffset;
+        pIterState[2] = nFrameEntry->nWidth;
+        pIterState[3] = nFrameEntry->nHeight - pFrameBounds->nMinX;
+        if (nFrameEntry->nStride) {
+          uVar2 = 0;
         } else {
-          nFrameWidth = *(int*)(nFrameEntry + 8);
+          uVar2 = nFrameEntry->nWidth;
         }
 
         nXRemainder = pIterState[3];
-        nYRemainder = *(int*)(nFrameEntry + 0x10) - pFrameBounds->nMinY - nFrameWidth;
+        nYRemainder = nFrameEntry->nXOffset2 - pFrameBounds->nMinY - uVar2;
         pIterState[4] = nYRemainder;
-        pIterState[5] = *(int*)(nFrameEntry + 0x20);
-        pIterState[6] = *(int*)(nFrameEntry + 0x24);
+        pIterState[5] = nFrameEntry->nStrideValue1;
+        pIterState[6] = nFrameEntry->nStrideValue0;
         nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * pFrameBounds->nBlockStride;
         pIterState[7] = nFrameWidth;
         pIterState[8] = nFrameWidth;
@@ -255,19 +257,19 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, D2CodecFrameBoundsStrc 
           nFrameWidth = -nXRemainder + 4;
         }
 
-        nFrameEntry = pIterState[2];
+        iVar1 = pIterState[2];
         pIterState[0xd] = nFrameWidth;
-        if ((int)(-nYRemainder + 5) < nFrameEntry) {
-          nFrameEntry = -nYRemainder + 4;
+        if ((int)(-nYRemainder + 5) < iVar1) {
+          iVar1 = -nYRemainder + 4;
         }
 
-        pIterState[0xe] = nFrameEntry;
+        pIterState[0xe] = iVar1;
         return 1;
       }
 
       nFrameWidth++;
       *pIterState = nFrameWidth;
-      nFrameEntry += 0x2c;
+      nFrameEntry++;
     }
 
     return 0;
@@ -294,25 +296,24 @@ static void CODEC_InitializeFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds)
     }
 }
 
-static void __stdcall CODEC_CalculateFrameBounds(int32_t pFrameData, int32_t nMaxXAccum, int * pOutBounds, D2CodecFrameComponentStrc * pFrameArray) {
+static void __stdcall CODEC_CalculateFrameBounds(uint32_t * pFrameData, int32_t nMaxXAccum, D2CodecFrameBoundsStrc * pOutBounds, D2CodecFrameComponentStrc * pFrameArray) {
     uint32_t nMinY;
-    uint32_t* pFrameEntry;
     int nFramesLeft;
-    *pOutBounds = pFrameData;
-    pOutBounds[1] = (int)pFrameArray;
-    int iVar2 = *(int*)(pFrameData + 0xc);
-    pOutBounds[7] = iVar2;
-    pOutBounds[6] = nMaxXAccum;
+    pOutBounds->pFrameData = pFrameData;
+    pOutBounds->pFrameArray = pFrameArray;
+    uint32_t uVar1 = pFrameData[3];
+    pOutBounds->nFrameCount = uVar1;
+    pOutBounds->nMaxXAccum = nMaxXAccum;
     uint32_t nMinXLeft = 0x7fffffff;
     nMaxXAccum = -0x80000000;
     int nMinYAccum = 0x7fffffff;
     int nMaxYExtent = -0x80000000;
     int nMaxX = -0x80000000;
-    int iVar3 = 0x7fffffff;
-    if (pFrameArray < pFrameArray + iVar2) {
-      uint32_t uVar1;
+    int iVar2 = 0x7fffffff;
+    if (pFrameArray < pFrameArray + uVar1) {
+      uint32_t* pFrameEntry;
       pFrameEntry = &pFrameArray->nStride;
-      nFramesLeft = (uint32_t)((int)(pFrameArray + iVar2) + (-1 - (int)pFrameArray)) / 0x2c + 1;
+      nFramesLeft = (uint32_t)((int)(pFrameArray + uVar1) + (-1 - (int)pFrameArray)) / 0x2c + 1;
       do {
         uVar1 = pFrameEntry[-7];
         if (*pFrameEntry) {
@@ -321,38 +322,38 @@ static void __stdcall CODEC_CalculateFrameBounds(int32_t pFrameData, int32_t nMa
           nMinY = pFrameEntry[-8];
         }
 
-        iVar2 = pFrameEntry[-6] - nMinY;
+        nMaxX = pFrameEntry[-6] - nMinY;
         if ((int)uVar1 < (int)nMinXLeft) {
           nMinXLeft = uVar1;
         }
         if ((int)(uVar1 + pFrameEntry[-9]) > nMaxXAccum) {
           nMaxXAccum = uVar1 + pFrameEntry[-9];
         }
-        if (iVar2 < nMinYAccum) {
-          nMinYAccum = iVar2;
+        if (nMaxX < nMinYAccum) {
+          nMinYAccum = nMaxX;
         }
-        if ((int)(iVar2 + pFrameEntry[-8]) > nMaxYExtent) {
-          nMaxYExtent = iVar2 + pFrameEntry[-8];
+        if ((int)(nMaxX + pFrameEntry[-8]) > nMaxYExtent) {
+          nMaxYExtent = nMaxX + pFrameEntry[-8];
         }
 
         pFrameEntry += 0xb;
         nFramesLeft--;
         nMaxX = nMaxXAccum;
-        iVar3 = nMinYAccum;
+        iVar2 = nMinYAccum;
       } while (nFramesLeft);
     }
 
-    pOutBounds[3] = iVar3;
-    pOutBounds[5] = nMaxYExtent - iVar3;
-    pOutBounds[2] = nMinXLeft;
-    pOutBounds[4] = nMaxX - nMinXLeft;
+    pOutBounds->nMinY = iVar2;
+    pOutBounds->nHeight = nMaxYExtent - iVar2;
+    pOutBounds->nMinX = nMinXLeft;
+    pOutBounds->nWidth = nMaxX - nMinXLeft;
 }
 
 void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, uint8_t * nInverseMapBase, uint8_t * nPaletteTableBase) {
     int i = 0;
     int nMappedCount = 0;
     do {
-      if ((nPaletteTableBase + i)[nPaletteMaskBase - (int)nPaletteTableBase] != '\0') {
+      if ((nPaletteTableBase + i)[nPaletteMaskBase - (intptr_t)nPaletteTableBase] != '\0') {
         nPaletteTableBase[i] = (uint8_t)nMappedCount;
         nInverseMapBase[nMappedCount] = (uint8_t)i;
         nMappedCount++;
@@ -388,7 +389,7 @@ void __fastcall CODEC_BuildInversePaletteFromBitmask(uint8_t * pInversePalette, 
     int i = 0;
     int nMappedCount = 0;
     do {
-      if ((pPaletteData + i)[(int)(aUsedFlags - (int)pPaletteData)]) {
+      if ((pPaletteData + i)[(intptr_t)(aUsedFlags - (intptr_t)pPaletteData)]) {
         pPaletteData[i] = (uint8_t)nMappedCount;
         pInversePalette[nMappedCount] = (uint8_t)i;
         nMappedCount++;
@@ -410,7 +411,7 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
     int iRow;
     int iCol;
     uint8_t* pTempRowPtr;
-    void* pvVar1;
+    uint8_t* pbVar1;
     int nCodeWidth;
     int nRowsRemaining;
     int iEncRowIdx;
@@ -418,7 +419,7 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
     uint8_t aTmpRow[28];
     uint8_t byFillValue;
     if (!pEqualCellStream || !pPrevIterState->pPrevPixels || (nSkipBit = CODEC_ReadBits(pEqualCellStream, 1) , !nSkipBit)) {
-      pOutRow = (uint8_t*)pCurIterState->nDstPixelAddress;
+      pOutRow = pCurIterState->nDstPixelAddress;
       nCodeWidth = 0;
       iRow = 1;
       do {
@@ -436,7 +437,7 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
           iRow = 0;
           do {
             memset(pOutRow, (uint32_t)byFillValue, pCurIterState->nWidth);
-            pOutRow = (uint8_t*)((char*)pOutRow + pCurIterState->nPitch);
+            pOutRow += pCurIterState->nPitch;
             iRow++;
           } while (iRow < pCurIterState->nHeight);
         }
@@ -447,11 +448,11 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
           do {
             for (iCol = 0; iCol < iRow; iCol++) {
               nSkipBit = CODEC_ReadBits(nBitStream2, nCodeWidth);
-              *(uint8_t*)(iCol + (char*)pOutRow) = (*ppPixelValues)[nSkipBit];
+              pOutRow[iCol] = (*ppPixelValues)[nSkipBit];
               iRow = pCurIterState->nWidth;
             }
 
-            pOutRow = (uint8_t*)((char*)pOutRow + pCurIterState->nPitch);
+            pOutRow += pCurIterState->nPitch;
             iEncRowIdx++;
           } while (iEncRowIdx < pCurIterState->nHeight);
         }
@@ -459,8 +460,8 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
 
       *ppPixelValues += 4;
     } else if (pCurIterState->nWidth == pPrevIterState->nWidth && (nRowsRemaining = pCurIterState->nHeight , nRowsRemaining == pPrevIterState->nHeight)) {
-      pDstRow = (uint8_t*)pPrevIterState->nDstPixelAddress;
-      if ((uint8_t*)pCurIterState->nDstPixelAddress != pDstRow) {
+      pDstRow = pPrevIterState->nDstPixelAddress;
+      if (pCurIterState->nDstPixelAddress != pDstRow) {
         pTempRowPtr = aTmpRow;
         if (nRowsRemaining > 0) {
           iRow = pPrevIterState->nPitch;
@@ -472,13 +473,13 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
           } while (nRowsRemaining);
         }
 
-        pvVar1 = (void*)pCurIterState->nDstPixelAddress;
+        pbVar1 = pCurIterState->nDstPixelAddress;
         iRow = 0;
         pOutRow = aTmpRow;
         if (pCurIterState->nHeight > 0) {
           do {
-            memcpy(pvVar1, pOutRow, pCurIterState->nWidth);
-            pvVar1 = (void*)((char*)pvVar1 + pCurIterState->nPitch);
+            memcpy(pbVar1, pOutRow, pCurIterState->nWidth);
+            pbVar1 += pCurIterState->nPitch;
             pOutRow += 5;
             iRow++;
           } while (iRow < pCurIterState->nHeight);
@@ -487,12 +488,12 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, D2Codec
         }
       }
     } else {
-      pvVar1 = (void*)pCurIterState->nDstPixelAddress;
+      pbVar1 = pCurIterState->nDstPixelAddress;
       iRow = 0;
       if (pCurIterState->nHeight > 0) {
         do {
-          memset(pvVar1, 0, pCurIterState->nWidth);
-          pvVar1 = (void*)((char*)pvVar1 + pCurIterState->nPitch);
+          memset(pbVar1, 0, pCurIterState->nWidth);
+          pbVar1 += pCurIterState->nPitch;
           iRow++;
         } while (iRow < pCurIterState->nHeight);
 
@@ -576,7 +577,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
 
           nPixelMask = nBitsRead | -16;
           pNextOutPixel = pOutPixel + 4;
-          nPrevPixelOffset += -(int)pOutPixel;
+          nPrevPixelOffset += -(intptr_t)pOutPixel;
           nPixelSlot = 4;
           byPrevColor = 0;
           pPixelSlotPtr = pNextOutPixel;
@@ -587,7 +588,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
               break;
             }
 
-            *pPixelSlotPtr = pPixelSlotPtr[(int)nPrevPixelOffset];
+            *pPixelSlotPtr = pPixelSlotPtr[(intptr_t)nPrevPixelOffset];
             check_slots_left:
             if (!nPixelSlot) {
               goto store_cell;
@@ -698,7 +699,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
               nBitsRead--;
               pOutPixelCursor--;
               if (!((&nPixelMask)[(int)nBitsRead >> 5] & Fog::BitBuffer::gadwBitMasks[nBitsRead & 0x1f])) {
-                *pOutPixelCursor = pOutPixelCursor[(int)nPrevPixelOffset];
+                *pOutPixelCursor = pOutPixelCursor[(intptr_t)nPrevPixelOffset];
               }
             } while (nBitsRead);
           }
@@ -715,7 +716,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
     }
 
     *pBitsRead = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2) * 0x20 - nBitShift + pBitOffsets->nBitOffset;
-    ppOutBuffer[1] = pOutPixelCursor - (int)*ppOutBuffer;
+    ppOutBuffer[1] = pOutPixelCursor - (intptr_t)*ppOutBuffer;
 }
 
 BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block * pFrameHeader, uint8_t * pOutBuf) {
@@ -923,7 +924,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       local_314 = __frame0.nEndFrame - nStartFrame;
       pbVar7 = local_318;
       do {
-        __frame0.local_334 = *(uint32_t*)((int)pdwCompressedData + (*(int*)pbVar7 - *(int*)local_318));
+        __frame0.local_334 = *(uint32_t*)((intptr_t)pdwCompressedData + (*(int*)pbVar7 - *(int*)local_318));
         *__frame0.uSlot338.pnDirSizeOut = *pnSize;
         *pnSize += __frame0.local_334;
         __frame0.uSlot338.pnDirSizeOut++;
@@ -989,7 +990,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
           uVar9 = g_aCodecBitMaskLookupTable[uVar10 >> 0x18 & 0xf];
           nNumBits = g_aCodecBitMaskLookupTable[uVar10 >> 8 & 0xf];
           nNumBits_00 = g_aCodecBitMaskLookupTable[__frame0.local_32c];
-          local_318 = (uint8_t*)g_aCodecBitMaskLookupTable[(int)local_318];
+          local_318 = (uint8_t*)g_aCodecBitMaskLookupTable[(intptr_t)local_318];
           __frame0.local_348 = g_aCodecBitMaskLookupTable[__frame0.local_348];
           uVar10 = g_aCodecBitMaskLookupTable[uVar10 >> 0x14 & 0xf];
           __frame0.local_32c = (aFrameHeaderInfo[3] * 0x2c - 1) / 0x2c + 1;
@@ -1070,7 +1071,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
           }
         }
 
-        CODEC_CalculateFrameBounds((int32_t)aFrameHeaderInfo, __frame0.uSlot338.nFrameIndex, &sFrameBounds.pFrameData, gCodecFrameWorkBuffer);
+        CODEC_CalculateFrameBounds(aFrameHeaderInfo, __frame0.uSlot338.nFrameIndex, &sFrameBounds, gCodecFrameWorkBuffer);
         CODEC_InitializeFrameIterator(&sFrameBounds);
         memset(gaCodecFrameDecodeBuffer, 0, sFrameBounds.nBlockCount * 0x14);
         pDVar1 = __frame0.local_330;
@@ -1295,7 +1296,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
               aUsedColourBits[7] = aFrameIterState[0xe];
               CODEC_DecodeFramePixels(&local_318, (D2CodecBitStateStrc*)__frame0.pComponentTableEnd, &sBitState, pPrevIterState, (D2CodecPixelBufferEntryStrc*)(aUsedColourBits + 3));
               pPrevIterState->pPrevPixels = (uint8_t*)aUsedColourBits[3];
-              gaCodecFrameDecodeBuffer[uVar3].nDstPixelAddress = aUsedColourBits[4];
+              gaCodecFrameDecodeBuffer[uVar3].nDstPixelAddress = (uint8_t*)aUsedColourBits[4];
               gaCodecFrameDecodeBuffer[uVar3].nPitch = aUsedColourBits[5];
               gaCodecFrameDecodeBuffer[uVar3].nWidth = aUsedColourBits[6];
               gaCodecFrameDecodeBuffer[uVar3].nHeight = aUsedColourBits[7];

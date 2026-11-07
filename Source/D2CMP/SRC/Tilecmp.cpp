@@ -170,18 +170,18 @@ void __stdcall TILECMP_AddTileToSet(D2TileCmpTileSetListStrc * pTileSetList, uin
     }
 }
 
-static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t nPitch, int32_t pTile) {
+static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t nPitch, D2TileCmpTileSetStrc * pTile) {
     int iCol;
     int iRow;
     uint32_t dwPixel;
-    if (*(uint8_t*)(pTile + 0x51) & 2) {
+    if (pTile->field_0x51 & 2) {
       iRow = 0;
       do {
         iCol = 0;
         do {
           dwPixel = *(uint32_t*)pTilePixels;
           pTilePixels = (uint8_t*)((char*)pTilePixels + 3);
-          if ((dwPixel & 0xffffff) != (uint32_t)d2_load24((uint8_t*)(pTile + 0x34))) {
+          if ((dwPixel & 0xffffff) != (uint32_t)((uint32_t)pTile->dwTransparentColor & 0xffffffu)) {
             return 0;
           }
 
@@ -192,7 +192,7 @@ static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t 
         pTilePixels = (uint8_t*)((char*)pTilePixels + nPitch - 0x60);
       } while (iRow < 0x20);
     }
-    if (!(*(uint8_t*)(pTile + 0x51) & 1)) {
+    if (!(pTile->field_0x51 & 1)) {
       return 1;
     }
 
@@ -230,7 +230,7 @@ void __stdcall TILECMP_CacheTileData(D2TileCmpTileSetStrc * pTileMeasures, uint3
     }
 
     BOOL bPixelsValid;
-    bPixelsValid = TILECMP_ValidateTilePixels((uint8_t*)pTilePixels, nPitch, (int32_t)pTileMeasures);
+    bPixelsValid = TILECMP_ValidateTilePixels((uint8_t*)pTilePixels, nPitch, pTileMeasures);
     if (bPixelsValid) {
       return;
     }
@@ -825,7 +825,7 @@ void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderSt
           do {
             pDVar1 = pTileSetData->pTiles;
             pDstTileSetEntry[3] = 0;
-            nCalcSize = TILECMP_CopyTileNodes(pWriteCursor, (D2TileLibraryEntryStrc*)(-0x48 - (int)pDstTileSetArray + (int)pDstTileSetEntry + (int)pDVar1));
+            nCalcSize = TILECMP_CopyTileNodes(pWriteCursor, (D2TileLibraryEntryStrc*)(-0x48 - (intptr_t)pDstTileSetArray + (intptr_t)pDstTileSetEntry + (intptr_t)pDVar1));
             nSrcTileSetOffset = (intptr_t)pWriteCursor - (intptr_t)nErrAddress;
             pDstTileSetEntry[1] = nCalcSize;
             pWriteCursor += nCalcSize;
@@ -867,7 +867,7 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         nCurTilePixelTotal = 8 - (int)szText;
         do {
           byStrChar = *szText;
-          szText[(int)pTileCmpHdr + nCurTilePixelTotal] = byStrChar;
+          szText[(intptr_t)pTileCmpHdr + nCurTilePixelTotal] = byStrChar;
           szText++;
         } while (byStrChar != '\0');
       }
@@ -878,20 +878,20 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         szText = 0;
         do {
           pBVar1 = pTileCmpHdr->pTiles->abSubTileFlags;
-          *(uint8_t**)(szText + (int)(pBVar1 + 0x30)) = &pTileCmpHdr->field_0x8;
-          *(int*)(szText + (int)(pBVar1 + 0x2c)) = (intptr_t)&pTileCmpHdr->nVersion + *(int*)(szText + (int)(pBVar1 + 0x20));
-          nCurTilePixelTotal = *(int*)(szText + (int)(pBVar1 + 0x28)) * 0x14;
+          *(uint8_t**)(szText + (intptr_t)(pBVar1 + 0x30)) = &pTileCmpHdr->field_0x8;
+          *(int*)(szText + (intptr_t)(pBVar1 + 0x2c)) = (intptr_t)&pTileCmpHdr->nVersion + *(int*)(szText + (intptr_t)(pBVar1 + 0x20));
+          nCurTilePixelTotal = *(int*)(szText + (intptr_t)(pBVar1 + 0x28)) * 0x14;
           nTileSetByteOffset = 0;
-          if (*(int*)(szText + (int)(pBVar1 + 0x28)) > 0) {
+          if (*(int*)(szText + (intptr_t)(pBVar1 + 0x28)) > 0) {
             iTileSetIter = 0;
             do {
-              nNodePixelOffset = *(int*)(szText + (int)(pBVar1 + 0x2c));
+              nNodePixelOffset = *(int*)(szText + (intptr_t)(pBVar1 + 0x2c));
               pNodePixelPtr = (int*)(nNodePixelOffset + 0x10 + iTileSetIter);
               *pNodePixelPtr = (int)((int)pTileSetData + *pNodePixelPtr);
               nTileSetByteOffset++;
               nCurTilePixelTotal += (uint32_t)*(uint16_t*)(nNodePixelOffset + iTileSetIter + 10);
               iTileSetIter += 0x14;
-            } while (nTileSetByteOffset < *(int*)(szText + (int)(pBVar1 + 0x28)));
+            } while (nTileSetByteOffset < *(int*)(szText + (intptr_t)(pBVar1 + 0x28)));
           }
 
           szText += 0x60;

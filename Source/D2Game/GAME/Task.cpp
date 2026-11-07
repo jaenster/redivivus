@@ -224,7 +224,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
       do {
         nRemainingSlots--;
         nStepsRemaining = (int)pSlotNode[-2].pPrev - (uint32_t)!((nRemainingSlots >= 0) + nTailCycleCount);
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (int)pSlotNode[-2].pNext);
+        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (intptr_t)pSlotNode[-2].pNext);
         pInsertBefore = pSlotNode - 1;
         pSortCur = pSlotNode[-1].pNext;
         for (pCurTask = pSortCur; nStepsRemaining && (nStepsRemaining-- , pCurTask != pInsertBefore); pCurTask = pCurTask->pPrev) {}
@@ -232,7 +232,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
         pReadyTask = pCurTask->pPrev;
         pCurTask->pPrev = pInsertBefore;
         pInsertBefore->pNext = pCurTask;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (int)pSlotNode[-2].pNext);
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (intptr_t)pSlotNode[-2].pNext);
         if (pReadyTask != pInsertBefore) {
           pCurTask = &pSlot->sTaskList;
           pSortCur->pPrev = 0;
@@ -490,7 +490,7 @@ BOOL __fastcall TASK_EnqueueGameTask(D2TaskNodeStrc * pTaskNode, uint32_t dwCall
     }
     if (gsTaskQueueListHead.pPrev != &gsTaskQueueListHead && gsTaskQueueListHead.pPrev) {
       pSlot = (D2TaskQueueSlotStrc*)(gsTaskQueueListHead.pPrev - 2);
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (int)gsTaskQueueListHead.pPrev[-2].pNext);
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (intptr_t)gsTaskQueueListHead.pPrev[-2].pNext);
       pNewTaskLink = &pTaskNode->sLink;
       if (!(pSlotLink - 1)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x77);

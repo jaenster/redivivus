@@ -77,7 +77,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Assign(TSExplicitList<::S
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = dwValue;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 // Address of pNode's link in this list, or the terminator for a null node.
@@ -142,7 +142,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::SetLinkOffset(int32_t nLi
     this->m_linkoffset = nLinkOffset;
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = pTVar1;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 // Unreferenced copy of SetLinkOffset: sets the link offset and resets the terminator.
@@ -152,7 +152,7 @@ void __thiscall SetLinkOffset_Unreferenced(TSExplicitList<::SGAMEDATA, -57266230
     pThis->m_linkoffset = nLinkOffset;
     TSLink<::SGAMEDATA>* pTVar1 = &pThis->m_terminator;
     pTVar1->m_prevlink = pTVar1;
-    pThis->m_terminator.m_next = ~(uint32_t)pTVar1;
+    pThis->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 // Copy constructor: takes pSource's link offset and starts with an empty terminator; returns this.
@@ -164,7 +164,7 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
     int nListId = pSource->m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = nListId;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
     return this;
 }
 
@@ -249,7 +249,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
         if ((int)encPrev < 0) {
           pPrevLink = (int*)~encPrev;
         } else {
-          pPrevLink = (int*)((int)pNode + (encPrev - *(int*)(pNext + 4)));
+          pPrevLink = (int*)((intptr_t)pNode + (encPrev - *(int*)(pNext + 4)));
         }
 
         *pPrevLink = pNext;
@@ -279,7 +279,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
         if ((int)encPrev < 0) {
           pPrevLink = (int*)~encPrev;
         } else {
-          pPrevLink = (int*)((int)pNode + (encPrev - *(int*)(pNext + 4)));
+          pPrevLink = (int*)((intptr_t)pNode + (encPrev - *(int*)(pNext + 4)));
         }
 
         *pPrevLink = pNext;
@@ -301,7 +301,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::ChangeLinkOffset(int32_t 
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = nLinkOffset;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
@@ -404,7 +404,7 @@ TSExplicitList<::SGAMEDATA, -572662307>* __thiscall CopyConstructor_Unreferenced
     int nListId = pSource->m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     pThis->m_linkoffset = nListId;
-    pThis->m_terminator.m_next = ~(uint32_t)pTVar1;
+    pThis->m_terminator.m_next = ~(uintptr_t)pTVar1;
     return pThis;
 }
 
@@ -618,20 +618,20 @@ template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAM
     this->tReuseList.m_terminator.m_next = 0;
     TSLink<::SGAMEDATA>* pListHead = &this->tReuseList.m_terminator;
     pListHead->m_prevlink = pListHead;
-    this->tReuseList.m_terminator.m_next = ~(uint32_t)pListHead;
+    this->tReuseList.m_terminator.m_next = ~(uintptr_t)pListHead;
     pReuseList->m_linkoffset = -0x22222223;
     this->tChunkList.m_terminator.m_next = 0;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1 = &this->tChunkList.m_terminator;
     pTVar1->m_prevlink = pTVar1;
     this->tChunkList.m_linkoffset = 0x10;
-    this->tChunkList.m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->tChunkList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     this->nChunkSize = 0x10;
     if (pReuseList->m_linkoffset != 4) {
       pReuseList->UnlinkAll();
       pListHead = &this->tReuseList.m_terminator;
       pListHead->m_prevlink = pListHead;
       pReuseList->m_linkoffset = 4;
-      this->tReuseList.m_terminator.m_next = ~(uint32_t)pListHead;
+      this->tReuseList.m_terminator.m_next = ~(uintptr_t)pListHead;
     }
 
     return this;

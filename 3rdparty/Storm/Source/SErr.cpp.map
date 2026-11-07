@@ -593,7 +593,7 @@
       ],
       "usedTypes": [
         "HANDLER",
-        "int32_t"
+        "pfnSErrDisplayCallback"
       ]
     },
     {

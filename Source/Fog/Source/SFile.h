@@ -21,6 +21,19 @@ struct D2StormAsyncCompletionStrc;
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
+struct _SYSTEM_INFO {
+    /* 0x00 */ uint32_t u;
+    /* 0x04 */ DWORD dwPageSize;
+    /* 0x08 */ LPVOID lpMinimumApplicationAddress;
+    /* 0x0C */ LPVOID lpMaximumApplicationAddress;
+    /* 0x10 */ DWORD_PTR dwActiveProcessorMask;
+    /* 0x14 */ DWORD dwNumberOfProcessors;
+    /* 0x18 */ DWORD dwProcessorType;
+    /* 0x1C */ DWORD dwAllocationGranularity;
+    /* 0x20 */ WORD wProcessorLevel;
+    /* 0x22 */ WORD wProcessorRevision;
+};
+
 struct _WIN32_FIND_DATAA {
     /* 0x000 */ DWORD dwFileAttributes;
     /* 0x004 */ FILETIME ftCreationTime;
@@ -44,6 +57,18 @@ struct D2SFileSignatureKeyStrc {
 };
 
 #endif // D2_DEFINED_D2SFileSignatureKeyStrc
+#ifndef D2_DEFINED_D2SystemInfoStrc
+#define D2_DEFINED_D2SystemInfoStrc
+struct __attribute__((packed)) D2SystemInfoStrc {
+    /* 0x00 */ int bInitialized; // set to 1 at the end of InitializeSystemInfo; SFILE_GetGlobalPointer hands out the struct only when set
+    /* 0x04 */ uint32_t eOSType; // 0 = Win9x, 1 = NT4, 2 = 2000, 3 = XP, 4 = later (GetVersionExA)
+    /* 0x08 */ float fOSVersion; // major + minor/100 from GetVersionExA
+    /* 0x0C */ uint32_t dwTotalPhysicalMemory; // MEMORYSTATUS.dwTotalPhys
+    /* 0x10 */ uint32_t dwUnknown10; // no reader or writer found
+    /* 0x14 */ _SYSTEM_INFO sWinSystemInfo; // GetSystemInfo result
+};
+
+#endif // D2_DEFINED_D2SystemInfoStrc
 namespace Fog::Source::SFile {
 
 // Function declarations
@@ -78,7 +103,7 @@ int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize);
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen);
 BOOL __stdcall GetUseDirectCommand();
 void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize);
-uint32_t __stdcall SFILE_GetGlobalPointer();
+struct D2SystemInfoStrc * __stdcall SFILE_GetGlobalPointer();
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)

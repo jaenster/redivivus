@@ -40,7 +40,7 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2BnBannerAdMsgStrc"
       ]
     },
     {
@@ -333,7 +333,7 @@
         "COMCALLBACK_HandleBannerAdFile"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2BnBannerAdMsgStrc"
       ]
     },
     {

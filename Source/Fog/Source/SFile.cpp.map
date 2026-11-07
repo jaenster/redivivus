@@ -512,7 +512,7 @@
         "SFILE_GetGlobalPointer"
       ],
       "usedTypes": [
-        "uint32_t"
+        "D2SystemInfoStrc"
       ]
     },
     {

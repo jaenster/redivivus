@@ -960,7 +960,7 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
         nCharNameDelta = 0x24 - (int)pPlayerData;
         do {
           cNameChar = pPlayerData->szCharName[0];
-          *(char*)((int)pOutRecord + nCharNameDelta + (int)pPlayerData) = cNameChar;
+          *(char*)((intptr_t)pOutRecord + nCharNameDelta + (intptr_t)pPlayerData) = cNameChar;
           pPlayerData = (D2UnitDataPlayerStrc*)(pPlayerData->szCharName + 1);
         } while (cNameChar != '\0');
       } else {

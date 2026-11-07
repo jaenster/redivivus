@@ -2317,12 +2317,12 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
     char szRegPath[22];
     uint32_t* pnGuidSize;
     int32_t nLoadResult;
-    uint32_t pSFileGlobal = Fog::Source::SFile::SFILE_GetGlobalPointer();
+    D2SystemInfoStrc* pSFileGlobal = Fog::Source::SFile::SFILE_GetGlobalPointer();
     if (!pSFileGlobal) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x408);
       exit(-1);
     }
-    if (*(int*)(pSFileGlobal + 4) == 1) {
+    if (pSFileGlobal->eOSType == 1) {
       return 0;
     }
 
@@ -4031,8 +4031,8 @@ void __stdcall RENDERER_D3D_CreateFontTextures() {
         DIRECTD3D_LogError("Failed to unlock memory surface", dwHResult);
       }
 
-      pTextureHandle = (IDirect3DTexture2**)((int)g_pFontTextureHandle + __frame0.nFontArrayOffset);
-      pTextureSurface = (IDirectDrawSurface7**)((int)g_pFontTextureSurface + __frame0.nFontArrayOffset);
+      pTextureHandle = (IDirect3DTexture2**)((intptr_t)g_pFontTextureHandle + __frame0.nFontArrayOffset);
+      pTextureSurface = (IDirectDrawSurface7**)((intptr_t)g_pFontTextureSurface + __frame0.nFontArrayOffset);
       BVar1 = RENDERER_D3D_CreateSurfaceWithTexture(pTextureSurface, (void**)pTextureHandle, 8, 0x10);
       if (!BVar1) {
         break;
@@ -4795,7 +4795,7 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nP
     return 0;
 }
 
-BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pTexColorTable, uint8_t nParam4) {
+static BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(int nScreenPanels, D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pTexColorTable, uint8_t nParam4) {
     int _nParam4;
     int nViewportBottom;
     short int* psSubtileCoords;
@@ -4809,12 +4809,17 @@ BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, D2
     BOOL bRendered = 0;
     int nPanelWidth = RENDERER_nWindowWidth;
     int nPanelXOffset = -0x20;
-    if (pThis != (void*)0x1) {
-      if (pThis == (void*)0x2) {
-        nPanelXOffset = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nPanelWidth = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    switch (nScreenPanels) {
+      case 1:
+        {
+          nPanelWidth = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+          break;
+        }
+      case 2:
+        {
+          nPanelXOffset = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
+        }
     }
 
     int nSubtileCount = 0;
@@ -4978,7 +4983,7 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
     exit(-1);
 }
 
-static BOOL __stdcall RENDERER_D3D_DrawTransparentWallTile(D2TileLibraryEntryStrc * pTile, uint8_t nAlpha, int * pLight, int nPosX, int nPosY, int pTexColorTable) {
+static BOOL __stdcall RENDERER_D3D_DrawTransparentWallTile(D2TileLibraryEntryStrc * pTile, uint8_t nAlpha, int nScreenPanels, int nPosX, int nPosY, D2GfxLightStrc * pLight) {
     BOOL nBlendMode = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
     if (nBlendMode) {
       RENDERER_D3D_SetBlendMode(1);
@@ -4991,11 +4996,11 @@ static BOOL __stdcall RENDERER_D3D_DrawTransparentWallTile(D2TileLibraryEntryStr
       RENDERER_D3D_SetTextureFilterMode(1);
       nBlendMode = RENDERER_D3D_IsPerspectiveEnabled();
       if (nBlendMode) {
-        nBlendMode = RENDERER_D3D_RenderWallTileWithPerspective((int)pLight, pTile, nPosX, nPosY, (D2GfxLightStrc*)pTexColorTable, nAlpha);
+        nBlendMode = RENDERER_D3D_RenderWallTileWithPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, nAlpha);
         return nBlendMode;
       }
 
-      nBlendMode = RENDERER_D3D_BuildWallTileVerticesNoPerspective(pLight, pTile, nPosX, nPosY, (D2GfxLightStrc*)pTexColorTable, nAlpha);
+      nBlendMode = RENDERER_D3D_BuildWallTileVerticesNoPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, nAlpha);
       return nBlendMode;
     }
 
@@ -5003,7 +5008,7 @@ static BOOL __stdcall RENDERER_D3D_DrawTransparentWallTile(D2TileLibraryEntryStr
 }
 
 BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha) {
-    BOOL BVar1 = RENDERER_D3D_DrawTransparentWallTile(pTile, nAlpha, (int*)nScreenPanels, nPosX, nPosY, (int)pLight);
+    BOOL BVar1 = RENDERER_D3D_DrawTransparentWallTile(pTile, nAlpha, nScreenPanels, nPosX, nPosY, pLight);
     return BVar1;
 }
 
@@ -5019,7 +5024,7 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
         return BVar1;
       }
 
-      BVar1 = RENDERER_D3D_BuildWallTileVerticesNoPerspective((void*)nScreenPanels, pTile, nPosX, nPosY, pLight, 0xff);
+      BVar1 = RENDERER_D3D_BuildWallTileVerticesNoPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, 0xff);
       return BVar1;
     }
 
@@ -5659,7 +5664,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uint32_t bFileLoaded;
       nVersion = 0;
       nFileSize = 0;
-      bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
+      bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bFileLoaded && nVersion) {
         nPixelCol = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteRGBA, &aPixelData, 0x6db0, &nImgWidth, &nImgBpp, &nImgHeight);
         Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\d3dSmack.cpp", 0xda, 0);

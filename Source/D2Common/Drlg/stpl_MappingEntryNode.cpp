@@ -38,14 +38,14 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::Assign(TSExplicitL
     uint32_t* pNextPtr = (uint32_t*)&this->m_terminator;
     *pNextPtr = (uint32_t)pNextPtr;
     this->m_linkoffset = dwCapacity;
-    this->m_terminator.m_next = ~(uint32_t)pNextPtr;
+    this->m_terminator.m_next = ~(uintptr_t)pNextPtr;
 }
 
 template<> void TSExplicitList<MappingEntryNode, -572662307>::SetLinkOffset(int32_t nLinkOffset) {
     this->m_linkoffset = nLinkOffset;
     int32_t* pSentinelNext = (int32_t*)&this->m_terminator;
     *pSentinelNext = (int32_t)pSentinelNext;
-    this->m_terminator.m_next = ~(uint32_t)pSentinelNext;
+    this->m_terminator.m_next = ~(uintptr_t)pSentinelNext;
 }
 
 template<> TSLink<::MappingEntryNode>* TSExplicitList<MappingEntryNode, -572662307>::Link(::MappingEntryNode * pNode) {
@@ -228,7 +228,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
         if ((int)nNextLink < 0) {
           pPrevLink = (int*)~nNextLink;
         } else {
-          pPrevLink = (int*)((int)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
+          pPrevLink = (int*)((intptr_t)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
         }
 
         *pPrevLink = nHeadEntry;
@@ -246,6 +246,6 @@ template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<Mappin
     uint32_t dwCapacity = pSource->m_linkoffset;
     *pSentinelHead = (uint32_t)pSentinelHead;
     this->m_linkoffset = dwCapacity;
-    this->m_terminator.m_next = ~(uint32_t)pSentinelHead;
+    this->m_terminator.m_next = ~(uintptr_t)pSentinelHead;
     return this;
 }

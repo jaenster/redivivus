@@ -126,7 +126,7 @@ int __stdcall SCmdGetNum(int nCmdId);
 // @namespace-fix moved Global -> Storm::Source::SCMD
 uint32_t __stdcall SCmdGetString(int dwCmdId, char * szText, int dwBufferSize);
 // @blizzard ProcessString (SCMD.CPP)
-BOOL __fastcall SCMD_ProcessString(char * * ppszCursor, int * pCmdCtx, uint32_t * pCmdList, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
+BOOL __fastcall SCMD_ProcessString(char * * ppszCursor, int * pCmdCtx, struct StormCmdArgDefStrc * * pCmdList, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
 // Returns TRUE when the registered command with this id has a non-zero value. Looks the id up with SCMD_FindCommandValueById 006c4d70 and normalises the result to 0/1 with NEG/SBB/NEG.
 // @oracle SCmdGetBool
 // @oracle-source Storm export vector SCmdGetBool @100cbc84 -> code 10008b10 in Mac PPC 1.10b Storm

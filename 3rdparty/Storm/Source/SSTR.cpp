@@ -1179,7 +1179,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
         szBufferInput = (char*)((char*)szBufferInput + 1);
         pDstLast[nOffset] = (char)dwWord;
         if ((char)dwWord == '\0') {
-          return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput));
+          return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput));
         }
       }
 
@@ -1213,21 +1213,21 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
         while (true) {
           if (cByte == '\0') {
             pDstLast[nOffset - 3] = (char)dwWord;
-            return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput) - 3);
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput) - 3);
           }
           if ((char)(dwWord >> 8) == '\0') {
             *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
-            return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput) - 2);
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput) - 2);
           }
           if (!(dwWord & 0xff0000)) {
             *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
             pDstLast[nOffset - 1] = '\0';
-            return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput) - 1);
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput) - 1);
           }
 
           *(uint32_t*)(pDstLast + nOffset - 3) = dwWord;
           if (!(dwWord & -16777216)) {
-            return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput));
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput));
           }
 
           nOffset += 4;
@@ -1248,11 +1248,11 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
         szBufferInput = (char*)((char*)szBufferInput + 1);
         pDstLast[nOffset] = (char)dwWord;
         if ((char)dwWord == '\0') {
-          return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput));
+          return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput));
         }
       }
       *pDstLast = '\0';
-      return (uint32_t)(pDstLast + (nOffset - (int)szBufferOutput));
+      return (uint32_t)(pDstLast + (nOffset - (intptr_t)szBufferOutput));
     }
 
     return 0;
@@ -1278,7 +1278,7 @@ uint32_t __stdcall SStrLen(char * szText) {
     uint32_t dwCarry = -1;
     for (szToCheck = szText; pNext = szToCheck , dwAlignSaved = guStringAlignmentTemp , ((uintptr_t)szToCheck & 3) != 0; szToCheck++) {
       if (*szToCheck == '\0') {
-        szToCheck += -(int)szText;
+        szToCheck += -(intptr_t)szText;
         return (uint32_t)szToCheck;
       }
     }
@@ -1299,17 +1299,17 @@ uint32_t __stdcall SStrLen(char * szText) {
         return (intptr_t)pStrPos - (intptr_t)szText;
       }
       if ((char)(dwWord >> 8) == '\0') {
-        return (uint32_t)(pStrPos + (1 - (int)szText));
+        return (uint32_t)(pStrPos + (1 - (intptr_t)szText));
       }
       if (!(dwWord & 0xff0000)) {
-        return (uint32_t)(pStrPos + (2 - (int)szText));
+        return (uint32_t)(pStrPos + (2 - (intptr_t)szText));
       }
 
       dwAlignSaved = dwZeroMask;
     } while (dwWord & -16777216);
 
     szToCheck = pStrPos + 3;
-    szToCheck += -(int)szText;
+    szToCheck += -(intptr_t)szText;
     return (uint32_t)szToCheck;
 }
 
@@ -1383,7 +1383,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
         szSource = (char*)((char*)szSource + 1);
         pDstLast[nOffset] = (char)dwWord;
         if ((char)dwWord == '\0') {
-          return (uint32_t)(pDstLast + (nOffset - (int)szText));
+          return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText));
         }
       }
       nOffset += 3;
@@ -1416,21 +1416,21 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
         while (true) {
           if (cByte == '\0') {
             pDstLast[nOffset - 3] = (char)dwWord;
-            return (uint32_t)(pDstLast + (nOffset - (int)szText) - 3);
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText) - 3);
           }
           if ((char)(dwWord >> 8) == '\0') {
             *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
-            return (uint32_t)(pDstLast + (nOffset - (int)szText) - 2);
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText) - 2);
           }
           if (!(dwWord & 0xff0000)) {
             *(short int*)(pDstLast + nOffset - 3) = (short int)dwWord;
             pDstLast[nOffset - 1] = '\0';
-            return (uint32_t)(pDstLast + (nOffset - (int)szText) - 1);
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText) - 1);
           }
 
           *(uint32_t*)(pDstLast + nOffset - 3) = dwWord;
           if (!(dwWord & -16777216)) {
-            return (uint32_t)(pDstLast + (nOffset - (int)szText));
+            return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText));
           }
 
           nOffset += 4;
@@ -1451,11 +1451,11 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
         szSource = (char*)((char*)szSource + 1);
         pDstLast[nOffset] = (char)dwCarry;
         if ((char)dwCarry == '\0') {
-          return (uint32_t)(pDstLast + (nOffset - (int)szText));
+          return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText));
         }
       }
       *pDstLast = '\0';
-      return (uint32_t)(pDstLast + (nOffset - (int)szText));
+      return (uint32_t)(pDstLast + (nOffset - (intptr_t)szText));
     }
 
     return 0;
@@ -1651,7 +1651,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMa
               break;
             }
           }
-          if ((uintptr_t)(pWritePos + (1 - (int)szTokenOut)) < nMaxLen) {
+          if ((uintptr_t)(pWritePos + (1 - (intptr_t)szTokenOut)) < nMaxLen) {
             nWritten++;
             *pWritePos = cCur;
             pWritePos++;

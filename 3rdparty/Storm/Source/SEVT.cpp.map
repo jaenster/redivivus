@@ -228,6 +228,7 @@
       "usedTypes": [
         "D2SevtHandlerNodeStrc",
         "D2SevtHandlerNodeStrc *",
+        "D2SevtHandlerNodeStrc * *",
         "D2SevtTypeEntryStrc",
         "D2SevtTypeEntryStrc *",
         "pfnSEvtHandler",

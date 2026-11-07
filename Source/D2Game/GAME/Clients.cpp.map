@@ -1863,7 +1863,8 @@
         "SetRealm"
       ],
       "usedTypes": [
-        "D2ClientStrc"
+        "D2ClientStrc",
+        "uint32_t"
       ]
     },
     {

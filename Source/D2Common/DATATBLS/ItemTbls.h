@@ -201,24 +201,6 @@ union TXT_AllocTxt_itemstatcost_Slotm8 {
 };
 
 #endif // D2_MODULE_D2Common
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-union TXT_AllocTxt_setitems_Slotm8 {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ struct D2PoolManagerStrc * pMemorySaved;
-    /* 0x00 */ int32_t nByteOffset;
-};
-
-#endif // D2_MODULE_D2Common
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-union TXT_AllocTxt_uniqueitems_Slotm8 {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ struct D2PoolManagerStrc * pMemorySaved;
-    /* 0x00 */ int32_t nByteOffset;
-};
-
-#endif // D2_MODULE_D2Common
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================

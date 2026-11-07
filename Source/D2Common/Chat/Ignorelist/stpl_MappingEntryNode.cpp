@@ -49,7 +49,7 @@ template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32
             if ((int)nNextLink < 0) {
               pPrevLink = (int*)~nNextLink;
             } else {
-              pPrevLink = (int*)((int)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
+              pPrevLink = (int*)((intptr_t)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
             }
 
             *pPrevLink = nHeadEntry;
@@ -92,7 +92,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::ChangeLinkOffset(i
     TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = nLinkOffset;
-    this->m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
 // @sourcefile .\Chat\Ignorelist.cpp
@@ -116,7 +116,7 @@ TSExplicitList<::MappingEntryNode, -572662307>* __thiscall CopyConstructor_Unref
     uint32_t dwInitCapacity = pSource->m_linkoffset;
     *pHead = (uint32_t)pHead;
     pThis->m_linkoffset = dwInitCapacity;
-    pThis->m_terminator.m_next = ~(uint32_t)pHead;
+    pThis->m_terminator.m_next = ~(uintptr_t)pHead;
     return pThis;
 }
 
@@ -282,7 +282,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       pBucket = pBlock;
       do {
         uHeadEntry = &pBucket->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (int)pBlock + (int)uHeadEntry + (int)this->m_data);
+        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)uHeadEntry + (int)this->m_data);
         if (puVar1) {
           pNewTerminator = puVar1 + 1;
           *pNewTerminator = 0;
@@ -607,7 +607,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     uint32_t nOldBucketCount = pThis->nSlotMask + 1;
     uint32_t* pNewBucketCount = (uint32_t*)(nOldBucketCount * 2);
-    uint32_t* pCurEntry = (uint32_t*)~(uint32_t)tempList.m_terminator.m_prevlink;
+    uint32_t* pCurEntry = (uint32_t*)~(uintptr_t)tempList.m_terminator.m_prevlink;
     tempList.m_linkoffset = -0x22222223;
     tempList.m_terminator.m_next = (intptr_t)pCurEntry;
     TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* nHashTableBase = pThis;
@@ -664,7 +664,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
           ppTempListHead = &pPrevPtr->m_terminator;
           ppTempListHead->m_prevlink = ppTempListHead;
           pPrevPtr->m_linkoffset = 4;
-          pPrevPtr->m_terminator.m_next = ~(uint32_t)ppTempListHead;
+          pPrevPtr->m_terminator.m_next = ~(uintptr_t)ppTempListHead;
         }
 
         nBucketOffset += 0xc;
@@ -717,7 +717,7 @@ template<> TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* TSHashTable<MappingE
     TSLink<::MappingEntryNode>* pTVar1 = &this->tFullList.m_terminator;
     pTVar1->m_prevlink = pTVar1;
     pBucketNode->m_linkoffset = -0x22222223;
-    this->tFullList.m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     this->tSlotListArray.m_alloc = 0;
     this->tSlotListArray.m_count = 0;
     this->tSlotListArray.m_data = 0;
@@ -728,7 +728,7 @@ template<> TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* TSHashTable<MappingE
       pTVar1 = &this->tFullList.m_terminator;
       pTVar1->m_prevlink = pTVar1;
       pBucketNode->m_linkoffset = 0xc;
-      this->tFullList.m_terminator.m_next = ~(uint32_t)pTVar1;
+      this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     }
 
     this->nSlotMask = 3;
@@ -741,7 +741,7 @@ template<> TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* TSHashTable<MappingE
         pTVar1 = &pBucketNode->m_terminator;
         pTVar1->m_prevlink = pTVar1;
         pBucketNode->m_linkoffset = 4;
-        pBucketNode->m_terminator.m_next = ~(uint32_t)pTVar1;
+        pBucketNode->m_terminator.m_next = ~(uintptr_t)pTVar1;
       }
 
       nBucketIter++;

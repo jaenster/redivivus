@@ -75,7 +75,7 @@ static void __stdcall D2WINFONT_BuildFontPath(char * szPathOut, int32_t nFontInd
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBasePath, "%s\\%s\\", "DATA\\LOCAL", "Font");
     char* pcScan = szBasePath;
     pcScan = pcScan + strlen(pcScan) + 1;
-    if (nBufferSize <= (intptr_t)(pcScan + (0x14 - (int)(szBasePath + 1)))) {
+    if (nBufferSize <= (intptr_t)(pcScan + (0x14 - (intptr_t)(szBasePath + 1)))) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
     }
@@ -97,7 +97,7 @@ static void __stdcall GetFontTablePath(int32_t nBufSize, int32_t nFontIndex, LPS
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBasePath, "%s\\%s\\", "DATA\\LOCAL", "Font");
     char* pcScan = szBasePath;
     pcScan = pcScan + strlen(pcScan) + 1;
-    if (nBufSize <= (intptr_t)(pcScan + (0x14 - (int)(szBasePath + 1)))) {
+    if (nBufSize <= (intptr_t)(pcScan + (0x14 - (intptr_t)(szBasePath + 1)))) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
       exit(-1);
     }

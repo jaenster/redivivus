@@ -1187,7 +1187,7 @@ void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
             pRoom = 0;
             if ((int)*pnListCount > 0) {
               do {
-                nearRoom = pRoomToRemove->ppRoomList[(int)pRoom];
+                nearRoom = pRoomToRemove->ppRoomList[(intptr_t)pRoom];
                 if (nearRoom != pRoomToRemove) {
                   nAdjRoomListCount = nearRoom->nRoomListCount;
                   i = 0;

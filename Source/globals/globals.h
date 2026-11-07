@@ -13,6 +13,7 @@
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Direct3D/d3dTextureCache.h"
+#include "Source/D2Launch/MainMenus.h"
 
 // Forward declarations
 struct ARGLIST;
@@ -70,6 +71,7 @@ struct D2ClientTimerStrc;
 struct D2CodecFrameComponentStrc;
 struct D2CodecPixelBufferEntryStrc;
 struct D2CofCacheStrc;
+struct D2CofTextureCacheEntryStrc;
 struct D2ColorsTxt;
 struct D2CompCharacterCompositeItemStrc;
 struct D2CompCodeTxt;
@@ -279,6 +281,7 @@ struct D2SkillsPerClassCounter;
 struct D2SkillsTxt;
 struct D2SoundChannelStrc;
 struct D2SoundEnvironTxt;
+struct D2SoundListNodeStrc;
 struct D2SoundSmpStrc;
 struct D2SoundStringKeyStrc;
 struct D2SoundWavCacheEntryStrc;
@@ -297,7 +300,9 @@ struct D2StatesTxt;
 struct D2StorePageTxt;
 struct D2StormAsyncOpStrc;
 struct D2SuperUniquesTxt;
+struct D2SystemInfoStrc;
 struct D2TextBoxStrc;
+struct D2TileLibraryEntryStrc;
 struct D2TombCanyonPresetRegionStrc;
 struct D2TooltipTextStrc;
 struct D2TxtLinkStrc;
@@ -363,6 +368,7 @@ struct WardenClientVtable;
 struct ct_data;
 struct deflate_state;
 struct static_tree_desc;
+typedef BOOL (*fpRequiredUserAction)();
 typedef BOOL (__fastcall *D2CubeSpecialOutput)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
 typedef BOOL (__fastcall *D2ItemSpellDestroy)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eD2Skill);
 typedef BOOL (__fastcall *D2ItemSpellInit)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eD2Skill);
@@ -382,8 +388,9 @@ typedef BOOL (__fastcall *fnSendChangeEmail)(char * szAcct, char * szOld, char *
 typedef BOOL (__fastcall *fnSendResetPassword)(char * szAcct, char * szEmail);
 typedef BOOL (__fastcall *fnWaitForChangePassword)(uint32_t * pOut);
 typedef BOOL (__fastcall *fnWaitForCreateAccount)(uint32_t * pOut);
-typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, D2GfxLightExStrc * a4);
+typedef BOOL (__fastcall *fpDrawGroundTile)(D2TileLibraryEntryStrc * a1, int a2, int a3, D2GfxLightExStrc * a4);
 typedef BOOL (__fastcall *fpLevelDataEntry)(D2DrlgLevelPlacementStrc * pLevelUnknown);
+typedef BOOL (__fastcall *fpLoadAllMediaMpqFiles)(::fpRequiredUserAction fpInsertPlayCd, ::fpRequiredUserAction fpInsertExpansionCd, int32_t nZero, D2IniConfigStrc * D2IniData);
 typedef BOOL (__fastcall *pfnComCallback)(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText1, char * szText2);
 typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 typedef BOOL (__stdcall *SCMDCALLBACK)(CMDPARAMS * pParams, char * szCmdLine);
@@ -445,7 +452,7 @@ typedef int (__fastcall *fnSendNewsInfo)(uint32_t dw1, uint32_t dw2);
 typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pContext);
 typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, uint32_t nOperand3, void * pContext);
 typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
-typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
+typedef int (__stdcall *ChatDlgCallback)(D2ControlMsg * pControlMsg);
 typedef int (__stdcall *D2NpcMenuOptionFunc)();
 typedef int (__stdcall *fnGetDownloadProgress)();
 typedef int (__stdcall *fnGetGameVersion)();
@@ -2102,8 +2109,6 @@ extern char s___N__006ed59c[];
 extern char s_____006ccb30[];
 extern char s__not_xlated_call_ken_w_00730520[];
 extern char s__s_palette_act_d__s_006dc7d0[];
-extern char s_block_006e1730[];
-extern char s_blocks_006e1738[];
 extern char s_buffer_error_006d37e0[];
 extern char s_buysell_006d6b50[];
 extern char s_client_006cc920[];

@@ -1,3 +1,6 @@
+// The control channel exists only in a REDIVIVUS_DEV build (see d2_control.h); any
+// other build compiles this file to nothing, as CMake leaves it out there.
+#ifdef REDIVIVUS_DEV
 #include <windows.h>
 #include <winsock2.h>
 #include <tlhelp32.h>
@@ -1386,7 +1389,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             bUsableL, nCodeL,
             pLeft ? (int)D2Client::UNIT::PlrSkills::PLRSKILLS_CanUseSkillCheck(pPl, pLeft) : -1,
             (int)D2Client::Cursor::GetMouseX(), (int)D2Client::Cursor::GetMouseY(),
-            (int)D2Client::UI::Draw::DRAW_GetBottomPanelY());
+            (int)D2Client::UI::ui::DRAW_GetBottomPanelY());
         lstrcpynA(reply, whyOut, replyMax);
         return;
     }
@@ -2632,7 +2635,7 @@ extern "C" void D2CONTROL_Pump(void) {
             D2Client::UNIT::Player::ClickMap((int32_t)a.wp, a.x, a.y, 0);
             D2TraceFmt("CLICKMAP-CMD type=%d at %d,%d mouse=%d,%d panelY=%d", (int)a.wp, a.x, a.y,
                        (int)D2Client::Cursor::GetMouseX(), (int)D2Client::Cursor::GetMouseY(),
-                       (int)D2Client::UI::Draw::DRAW_GetBottomPanelY());
+                       (int)D2Client::UI::ui::DRAW_GetBottomPanelY());
         } else if (a.kind == 6) {
             D2Client::UNIT::UnitMode::UNITMODE_ExecuteSkillAction(
                 (eD2UnitModeAction)(int)a.wp, D2Client::UNIT::Player::GetPlayerUnit_UI(), a.x, a.y, 0);
@@ -2718,3 +2721,4 @@ extern "C" void D2CONTROL_Pump(void) {
         D2Client::UI::npcmenu::NPCMENU_ExecuteShopTransaction(0, 0);
     }
 }
+#endif // REDIVIVUS_DEV

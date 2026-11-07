@@ -104,7 +104,7 @@ eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(D2UnitStrc * pUnit, int32_t
     if (pMonster) {
       nEventFrame = pMonster->nClassId;
       if (nEventFrame >= 0 && nEventFrame < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-        return (int)*(short int*)((int)pMissileTable + (int)(ITEMS::Items::sgptDataTable->pTxtMonStats[nEventFrame].Code - 0x10));
+        return (int)*(short int*)((intptr_t)pMissileTable + (intptr_t)(ITEMS::Items::sgptDataTable->pTxtMonStats[nEventFrame].Code - 0x10));
       }
     }
 
@@ -688,8 +688,8 @@ void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * 
         exit(-1);
       }
 
-      *pdwAnimFlags = gdwMonStatAnimFlagsTable[(int)pUnit].dwFlags;
-      *pdwValidFlags = gdwMonStatAnimFlagsTable[(int)pUnit].dwValidFlags;
+      *pdwAnimFlags = gdwMonStatAnimFlagsTable[(intptr_t)pUnit].dwFlags;
+      *pdwValidFlags = gdwMonStatAnimFlagsTable[(intptr_t)pUnit].dwValidFlags;
       return;
     }
 }

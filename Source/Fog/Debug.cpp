@@ -1124,9 +1124,9 @@ void __fastcall DumpThreadContext(HANDLE hHandle) {
     /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ sContext.ContextFlags = 0x10007;
     GetThreadContext(hHandle, &sContext);
     Src::LogManager::LogWithCategoryVarArgs("", "Stack bytes:\n");
-    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Esp, 0x1000, nullptr, 1, 0);
+    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)D2_CONTEXT_FIELD(sContext, Esp), 0x1000, nullptr, 1, 0);
     Src::LogManager::LogWithCategoryVarArgs("", "Code bytes:\n");
-    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Eip, 0x20, nullptr, 1, 0);
+    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)D2_CONTEXT_FIELD(sContext, Eip), 0x20, nullptr, 1, 0);
 }
 
 static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD nAddress, void * pdwDisplacement, void * pLine) {
@@ -1436,7 +1436,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
     char chCur;
     DWORD nBytesThisRow;
     uint8_t* pStackPtr;
-    pStackPtr = (uint8_t*)pContext->Esp;
+    pStackPtr = (uint8_t*)D2_CONTEXT_FIELD(*pContext, Esp);
     D2FogModuleNodeStrc* pModuleListIter;
     pModuleListIter = pModuleListHead;
     __frame1.aSymInfo[0] = 0x18;
@@ -1446,7 +1446,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Annotated stack dump");
     uint32_t nEip;
-    nEip = pContext->Eip;
+    nEip = D2_CONTEXT_FIELD(*pContext, Eip);
     D2FogModuleNodeStrc* pEipModule;
     pEipModule = FindModuleContainingAddress(nEip, pModuleListIter);
     BOOL bBadPtr;
@@ -1600,7 +1600,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
         pszCopySrc = pCurModule;
         do {
           chCopy = pszCopySrc->szModulePath[0];
-          (szModulePath - (int)pCurModule)[(int)pszCopySrc] = chCopy;
+          (szModulePath - (intptr_t)pCurModule)[(intptr_t)pszCopySrc] = chCopy;
           pszCopySrc = (D2FogModuleNodeStrc*)(pszCopySrc->szModulePath + 1);
         } while (chCopy != '\0');
 
@@ -1944,9 +1944,9 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     }
 
     memset(__frame0.stackFrame, 0, 0xa4);
-    __frame0.nAddrFrameOffset = __frame1.pContextCopy->Esp;
-    __frame0.stackFrame[0] = __frame1.pContextCopy->Eip;
-    __frame0.nAddrStackOffset = __frame1.pContextCopy->Ebp;
+    __frame0.nAddrFrameOffset = D2_CONTEXT_FIELD(*__frame1.pContextCopy, Esp);
+    __frame0.stackFrame[0] = D2_CONTEXT_FIELD(*__frame1.pContextCopy, Eip);
+    __frame0.nAddrStackOffset = D2_CONTEXT_FIELD(*__frame1.pContextCopy, Ebp);
     __frame0.nAddrPCMode = 3;
     __frame0.nAddrFrameMode = 3;
     __frame0.nAddrStackMode = 3;
@@ -2115,9 +2115,9 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Stack Crawl:");
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Address  Frame    Module       Return    Stack");
     memset(&tStackFrame, 0, 0xa4);
-    tStackFrame.AddrPC.Offset = pContextBase->Eip;
-    tStackFrame.AddrStack.Offset = pContextBase->Esp;
-    tStackFrame.AddrFrame.Offset = pContextBase->Ebp;
+    tStackFrame.AddrPC.Offset = D2_CONTEXT_FIELD(*pContextBase, Eip);
+    tStackFrame.AddrStack.Offset = D2_CONTEXT_FIELD(*pContextBase, Esp);
+    tStackFrame.AddrFrame.Offset = D2_CONTEXT_FIELD(*pContextBase, Ebp);
     tStackFrame.AddrPC.Mode = AddrModeFlat;
     tStackFrame.AddrStack.Mode = AddrModeFlat;
     tStackFrame.AddrFrame.Mode = AddrModeFlat;

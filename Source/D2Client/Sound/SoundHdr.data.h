@@ -14,5 +14,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/globals/globals.h"
 
+// Forward declarations
+struct D2SoundListNodeStrc;
+
 extern D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8];
-extern void * gpSoundLRUListHead;
+extern D2SoundListNodeStrc * gpSoundLRUListHead;

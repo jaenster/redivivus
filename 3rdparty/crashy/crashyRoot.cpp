@@ -132,8 +132,8 @@ char __stdcall SYSTEM_CaptureThreadContext(LPCVOID * pnStackTop, DWORD dwThreadI
     if (dwCurThreadId == dwThreadId) {
       RtlCaptureContext(&ctx);
       read_stack_region:
-      *ppEsp = (LPCVOID)ctx.Esp;
-      bVar1 = SYSTEM_GetStackRegion(&pStackBase, (LPCVOID)ctx.Esp, &pStackTop);
+      *ppEsp = (LPCVOID)D2_CONTEXT_FIELD(ctx, Esp);
+      bVar1 = SYSTEM_GetStackRegion(&pStackBase, (LPCVOID)D2_CONTEXT_FIELD(ctx, Esp), &pStackTop);
       if (bVar1) {
         *pnStackTop = pStackTop;
         *pnStackSize = (intptr_t)pStackTop - (intptr_t)pStackBase;
@@ -265,7 +265,7 @@ bool __fastcall ErrorReportingLaunch(char * szText, D2BlizzardErrorArgument * pA
     pSrcCur = pSrcCur + strlen(pSrcCur) + 1;
     launch_error_reporter:
     if ((char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1)) < (char*)0x400) {
-      if ((szCmdLine + 0xfff)[(int)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '/' && (szCmdLine + 0xfff)[(int)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '\\') {
+      if ((szCmdLine + 0xfff)[(intptr_t)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '/' && (szCmdLine + 0xfff)[(intptr_t)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '\\') {
         File::STRING_AppendStringToString(szExePath, 0x400, "\\");
       }
 
@@ -351,7 +351,7 @@ void __stdcall DebugThread() {
       tThreadNameInfo.dwThreadID = -1;
       tThreadNameInfo.dwFlags = 0;
       tSehFrame.TryLevel = 0;
-      /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0x406d1388, 0, 4, &tThreadNameInfo.dwType);
+      /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&tThreadNameInfo.dwType);
     }
 
     ExceptionList = tSehFrame.Next;

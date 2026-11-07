@@ -199,7 +199,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     uint32_t nNewMask = pThis->nSlotMask + 1;
     uint32_t* nNewBucketCount = (uint32_t*)(nNewMask * 2);
-    uint32_t* pOldBucket = (uint32_t*)~(uint32_t)pendingList.m_terminator.m_prevlink;
+    uint32_t* pOldBucket = (uint32_t*)~(uintptr_t)pendingList.m_terminator.m_prevlink;
     pendingList.m_linkoffset = -0x22222223;
     pendingList.m_terminator.m_next = (intptr_t)pOldBucket;
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pQServerStateSaved = pThis;
@@ -256,7 +256,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
           pPendingHead2 = &pNodeNext->m_terminator;
           pPendingHead2->m_prevlink = pPendingHead2;
           pNodeNext->m_linkoffset = 4;
-          pNodeNext->m_terminator.m_next = ~(uint32_t)pPendingHead2;
+          pNodeNext->m_terminator.m_next = ~(uintptr_t)pPendingHead2;
         }
 
         nResetBucketOffset += 0xc;

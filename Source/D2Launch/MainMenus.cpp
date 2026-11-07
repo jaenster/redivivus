@@ -14,6 +14,7 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
+#include "Source/globals/globals.h"
 #include "Source/D2Launch/D2Launch.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Help.data.h"
@@ -4169,7 +4170,7 @@ DC6 * DC6_FrontEnd_barbarian_bafws = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_barbarian_b
 DC6 * DC6_FrontEnd_paladin_pafws = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_paladin_pafws, "DC6_FrontEnd_paladin_pafws");
 uint32_t gbCinematicsMenuShown = 0; D2_GLOBAL_GUARD(gbCinematicsMenuShown, "gbCinematicsMenuShown");
 uint32_t fpInsertPlayCd = 0; D2_GLOBAL_GUARD(fpInsertPlayCd, "fpInsertPlayCd");
-static int fpLoadAllMediaMpqCallback = 0; D2_STATIC_GUARD(fpLoadAllMediaMpqCallback, "fpLoadAllMediaMpqCallback");
+static fpLoadAllMediaMpqFiles fpLoadAllMediaMpqCallback = (fpLoadAllMediaMpqFiles)0; D2_STATIC_GUARD(fpLoadAllMediaMpqCallback, "fpLoadAllMediaMpqCallback");
 uint32_t gbCdCheckPassed[25] = {}; D2_GLOBAL_GUARD(gbCdCheckPassed, "gbCdCheckPassed");
 static int FORMS_nListExExCount = 0; D2_STATIC_GUARD(FORMS_nListExExCount, "FORMS_nListExExCount");
 static int FORMS_nListCount = 0; D2_STATIC_GUARD(FORMS_nListCount, "FORMS_nListCount");
@@ -7561,18 +7562,18 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
         pszNameSrc = pszSrc + 4;
         pszDescDst = pszNameSrc;
         pszDescDst = pszDescDst + strlen((char*)pszDescDst) + 1;
-        pszDescDst += 1 - (int)(pszSrc + 5);
+        pszDescDst += 1 - (intptr_t)(pszSrc + 5);
         pcVar1 = (char*)D2_ALLOC_AT((size_t)pszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
         pRealmEntry->szName = pcVar1;
         Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, (int32_t)pszDescDst);
-        pszNameSrc += (int)pszDescDst;
+        pszNameSrc += (intptr_t)pszDescDst;
         pszSrc = pszNameSrc;
         pszSrc = pszSrc + strlen((char*)pszSrc) + 1;
-        pszSrc += 1 - (int)(pszNameSrc + 1);
+        pszSrc += 1 - (intptr_t)(pszNameSrc + 1);
         pcVar1 = (char*)D2_ALLOC_AT((size_t)pszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
         pRealmEntry->szDescription = pcVar1;
         Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, (int32_t)pszSrc);
-        pszSrc = pszNameSrc + (int)pszSrc;
+        pszSrc = pszNameSrc + (intptr_t)pszSrc;
         MAINMENU_AddRealmToList(pRealmEntry);
         nRemaining--;
         pRealmArray = g_pBNetRealmList;
@@ -7605,7 +7606,7 @@ BOOL fpInsertPlayCd() {
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1431), 0, false, 0);
     gbCinematicsMenuShown = 0;
     ::fpInsertPlayCd = 0;
-    fpLoadAllMediaMpqCallback = (int)D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
+    fpLoadAllMediaMpqCallback = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
     gbCdCheckPassed[0] = 0;
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollDisconnectFlagPump);
     FORMS_DestroyList();
@@ -7616,7 +7617,7 @@ BOOL fpInsertExpansionCd() {
     UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton(1);
     gbCinematicsMenuShown = 0;
     ::fpInsertPlayCd = 0;
-    fpLoadAllMediaMpqCallback = (int)D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
+    fpLoadAllMediaMpqCallback = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
     gbCdCheckPassed[0] = 0;
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollDisconnectFlagPump);
     FORMS_DestroyList();
@@ -9133,7 +9134,7 @@ static BOOL MAINMENU_IsValidEmailAddress(char * szText) {
       pszDot = Storm::Source::SSTR::SStrChr(pszAtSign, '.');
       if (pszDot && pszAtSign > szText && pszDot > pszAtSign + 1) {
         nTextLen = Storm::Source::SSTR::SStrLen(szText);
-        if ((int)nTextLen > (intptr_t)(pszDot + (1 - (int)szText))) {
+        if ((int)nTextLen > (intptr_t)(pszDot + (1 - (intptr_t)szText))) {
           bIsValidEmail = 1;
         }
       }

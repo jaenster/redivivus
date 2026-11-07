@@ -59,11 +59,7 @@ static char * g_szBuildNumber = 0; D2_STATIC_GUARD(g_szBuildNumber, "g_szBuildNu
 static char * g_szPlatform = 0; D2_STATIC_GUARD(g_szPlatform, "g_szPlatform");
 static char * g_szPrimaryAssignment = 0; D2_STATIC_GUARD(g_szPrimaryAssignment, "g_szPrimaryAssignment");
 static char * g_szAssignments = 0; D2_STATIC_GUARD(g_szAssignments, "g_szAssignments");
-int gbSystemInfoInitialized = 0; D2_GLOBAL_GUARD(gbSystemInfoInitialized, "gbSystemInfoInitialized");
-uint32_t g_eOSType = 0; D2_GLOBAL_GUARD(g_eOSType, "g_eOSType");
-float fGameVersion = 0; D2_GLOBAL_GUARD(fGameVersion, "fGameVersion");
-uint32_t g_dwTotalPhysicalMemory = 0; D2_GLOBAL_GUARD(g_dwTotalPhysicalMemory, "g_dwTotalPhysicalMemory");
-_SYSTEM_INFO gSystemInfo = {}; D2_GLOBAL_GUARD(gSystemInfo, "gSystemInfo");
+D2SystemInfoStrc gSystemInfo = {}; D2_GLOBAL_GUARD(gSystemInfo, "gSystemInfo");
 static char gszCrashReportProcessPath[2048] = {}; D2_STATIC_GUARD(gszCrashReportProcessPath, "gszCrashReportProcessPath");
 static uint32_t g_dwErrorState = 0; D2_STATIC_GUARD(g_dwErrorState, "g_dwErrorState");
 static uint32_t gbFogErrorManagerInitialized = 0; D2_STATIC_GUARD(gbFogErrorManagerInitialized, "gbFogErrorManagerInitialized");
@@ -309,16 +305,16 @@ void __stdcall InitializeSystemInfo() {
         fMajorVersionF += 4294967296.0;
       }
 
-      fGameVersion = fMajorVersionF + fMinorVersionFrac / 100.0;
+      gSystemInfo.fOSVersion = fMajorVersionF + fMinorVersionFrac / 100.0;
       switch (osVersionInfo.dwPlatformId) {
         case 2:
           {
-            g_eOSType = 1;
+            gSystemInfo.eOSType = 1;
             if (osVersionInfo.dwMajorVersion >= 5) {
               if (osVersionInfo.dwMinorVersion >= 2) {
-                g_eOSType = 4;
+                gSystemInfo.eOSType = 4;
               } else {
-                g_eOSType = 3 - (uint32_t)!osVersionInfo.dwMinorVersion;
+                gSystemInfo.eOSType = 3 - !osVersionInfo.dwMinorVersion;
               }
             }
 
@@ -326,15 +322,15 @@ void __stdcall InitializeSystemInfo() {
           }
         default:
           {
-            g_eOSType = 0;
+            gSystemInfo.eOSType = 0;
           }
       }
     }
 
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ GlobalMemoryStatus(&memoryStatus);
-    /* LPSYSTEM_INFO lpSystemInfo for GetSystemInfo */ g_dwTotalPhysicalMemory = memoryStatus.dwTotalPhys;
-    GetSystemInfo(&gSystemInfo);
-    gbSystemInfoInitialized = 1;
+    /* LPSYSTEM_INFO lpSystemInfo for GetSystemInfo */ gSystemInfo.dwTotalPhysicalMemory = memoryStatus.dwTotalPhys;
+    GetSystemInfo(&gSystemInfo.sWinSystemInfo);
+    gSystemInfo.bInitialized = 1;
 }
 
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.

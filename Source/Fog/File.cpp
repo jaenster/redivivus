@@ -146,26 +146,26 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
     bool bVar1 = Engine::Application::DEBUG_CaptureThreadContext(dwThreadId, &sContext);
     if (bVar1) {
       if (sContext.ContextFlags & 0x10002) {
-        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EAX", sContext.Eax);
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EBX", sContext.Ebx);
+        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EAX", D2_CONTEXT_FIELD(sContext, Eax));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EBX", D2_CONTEXT_FIELD(sContext, Ebx));
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ECX", sContext.Ecx);
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ECX", D2_CONTEXT_FIELD(sContext, Ecx));
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDX", sContext.Edx);
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDX", D2_CONTEXT_FIELD(sContext, Edx));
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "\n");
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESI", sContext.Esi);
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESI", D2_CONTEXT_FIELD(sContext, Esi));
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDI", sContext.Edi);
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDI", D2_CONTEXT_FIELD(sContext, Edi));
         __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n\n");
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10001) {
-        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EBP", sContext.Ebp);
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESP", sContext.Esp);
+        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EBP", D2_CONTEXT_FIELD(sContext, Ebp));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESP", D2_CONTEXT_FIELD(sContext, Esp));
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EIP", sContext.Eip);
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EIP", D2_CONTEXT_FIELD(sContext, Eip));
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "FLG", sContext.EFlags);
         nWritten += nChunkLen;
@@ -188,14 +188,14 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10008) {
-        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "CTRL", sContext.FloatSave.ControlWord);
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "STAT", sContext.FloatSave.StatusWord);
+        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "CTRL", D2_CONTEXT_FIELD(sContext, FloatSave).ControlWord);
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "STAT", D2_CONTEXT_FIELD(sContext, FloatSave).StatusWord);
         __snprintf_s(szLineBuffer + nWritten + nChunkLen, 0x400 - (nWritten + nChunkLen), -1, "\n");
         (*pOutputCallback)(pReport, szLineBuffer);
-        nFpuErrSelector = sContext.FloatSave.RegisterArea + 8;
-        nFpuDataOffset = sContext.FloatSave.RegisterArea + 4;
+        nFpuErrSelector = D2_CONTEXT_X87_AREA(sContext) + 8;
+        nFpuDataOffset = D2_CONTEXT_X87_AREA(sContext) + 4;
         iReg = 0;
-        pStRegLoWord = sContext.FloatSave.RegisterArea;
+        pStRegLoWord = D2_CONTEXT_X87_AREA(sContext);
         do {
           *(uint32_t*)(char*)&uSlot6E0.nFpuErrOffset = (uint16_t)*(uint16_t*)nFpuErrSelector;
           nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%5s%d:0x%08x 0x%08x 0x%08x", "ST", iReg, *(uint32_t*)pStRegLoWord, *(uint32_t*)nFpuDataOffset, uSlot6E0.nFpuErrOffset);
@@ -213,11 +213,11 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10020) {
-        nFpuDataOffset = sContext.FloatSave.RegisterArea + 0xc;
-        uSlot6E0.pXmmLane2 = sContext.FloatSave.RegisterArea + 8;
-        nFpuErrSelector = sContext.FloatSave.RegisterArea + 4;
+        nFpuDataOffset = D2_CONTEXT_X87_AREA(sContext) + 0xc;
+        uSlot6E0.pXmmLane2 = D2_CONTEXT_X87_AREA(sContext) + 8;
+        nFpuErrSelector = D2_CONTEXT_X87_AREA(sContext) + 4;
         iReg = 0;
-        pStRegLoWord = sContext.FloatSave.RegisterArea;
+        pStRegLoWord = D2_CONTEXT_X87_AREA(sContext);
         do {
           nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%5s%d:0x%08x 0x%08x 0x%08x 0x%08x", "XMM", iReg, *(uint32_t*)pStRegLoWord, *(uint32_t*)nFpuErrSelector, *(uint32_t*)uSlot6E0.pXmmLane2, *(uint32_t*)nFpuDataOffset);
           nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%5s%d:0x%08x 0x%08x 0x%08x 0x%08x", "XMM", iReg + 1, *(uint32_t*)(pStRegLoWord + 0x10), *(uint32_t*)(nFpuErrSelector + 0x10), *(uint32_t*)(uSlot6E0.pXmmLane2 + 0x10), *(uint32_t*)(nFpuDataOffset + 0x10));
@@ -462,7 +462,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
       } while (cCurChar != '\0');
 
       if (nRemaining) {
-        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
+        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
       }
 
       truncate:
@@ -470,7 +470,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
     }
 
     pLastSep = pLastSep + strlen(pLastSep) + 1;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
 }
 
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {
@@ -506,7 +506,7 @@ static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * 
       } while (cCurChar != '\0');
 
       if (nDestSize) {
-        return (size_t)(pSrcScan + (-1 - (int)szSrc));
+        return (size_t)(pSrcScan + (-1 - (intptr_t)szSrc));
       }
 
       truncate:
@@ -514,7 +514,7 @@ static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * 
     }
 
     pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
-    return (size_t)(pSrcScan + (-1 - (int)szSrc));
+    return (size_t)(pSrcScan + (-1 - (intptr_t)szSrc));
 }
 
 size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc) {
@@ -532,7 +532,7 @@ size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, c
     if (!nRemaining) {
       pDestEnd = szSrc + 1;
       szSrc = szSrc + strlen(szSrc) + 1;
-      return (size_t)(szSrc + (nDestLen - (int)pDestEnd));
+      return (size_t)(szSrc + (nDestLen - (intptr_t)pDestEnd));
     }
 
     char* pSrcScan;
@@ -550,7 +550,7 @@ size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, c
     }
 
     *pDestEnd = '\0';
-    return (size_t)(pSrcScan + (nDestLen - (int)szSrc));
+    return (size_t)(pSrcScan + (nDestLen - (intptr_t)szSrc));
 }
 
 // Convention __cdecl_ediesi: the destination and its size arrive in EDI/ESI, the format and its arguments on the stack. A model, not custom storage, because the decompiler drops custom register parameters at a varargs call site.

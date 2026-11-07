@@ -109,14 +109,14 @@ uint32_t __thiscall SOUND_MatchesSoundId(int32_t pSoundEntry, int32_t nSoundId) 
     return (uint32_t)(*(int*)(pSoundEntry + 4) == nSoundId);
 }
 
-void __fastcall SOUND_DetachUnit(int32_t pSoundEntry) {
-    if (!*(int*)(pSoundEntry + 8)) {
+void __fastcall SOUND_DetachUnit(D2ClientSoundChannelStrc * pSoundEntry) {
+    if (!pSoundEntry->pActiveSound) {
       return;
     }
 
-    *(uint32_t*)(*(int*)(pSoundEntry + 8) + 0x30) = 2;
-    *(uint32_t*)(*(int*)(pSoundEntry + 8) + 0x2c) = 0;
-    *(uint32_t*)(pSoundEntry + 8) = 0;
+    pSoundEntry->pActiveSound->nPlayMode = 2;
+    pSoundEntry->pActiveSound->pClientChannel = 0;
+    pSoundEntry->pActiveSound = 0;
 }
 
 void __fastcall SOUND_StopAndDetach(D2ClientSoundChannelStrc * ppnParam) {

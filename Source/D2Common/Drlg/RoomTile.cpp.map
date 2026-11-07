@@ -547,7 +547,7 @@
         "D2DrlgGridStrc",
         "D2DrlgTileGridStrc",
         "D2RoomExStrc",
-        "int32_t",
+        "eD2GridCellFlags",
         "uint32_t"
       ]
     },

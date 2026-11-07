@@ -96,9 +96,9 @@ void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nS
           return;
         }
         if (!(nCurScreenY < gnMinTileScreenY_b)) {
-          nClipLeft = gnTileClipLeft - (int)(nDstPtr + nScreenX + (nRunLen - (int)nDstRowPtr));
+          nClipLeft = gnTileClipLeft - (int)(nDstPtr + nScreenX + (nRunLen - (intptr_t)nDstRowPtr));
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
-          nClipRight = -(int)(nDstPtr + nScreenX + (nRunLen - (int)nDstRowPtr)) + gnTileClipRight;
+          nClipRight = -(int)(nDstPtr + nScreenX + (nRunLen - (intptr_t)nDstRowPtr)) + gnTileClipRight;
           nClipRight = (int)nClipRight <= 0 ? 0 : nClipRight;
           if ((int)nClipRight >= (int)uVar1) {
             nClipRight = uVar1;
@@ -280,9 +280,9 @@ void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int3
         if (!(nErrorLine < gnMinTileScreenY_b)) {
           pTileData = pbRunEnd + nRunLen;
           pRowNext = pDst + nRunLen + nSkip;
-          nClipLeft = gnTileClipLeft - (int)(pDst + nScreenX + (nSkip - (int)pRowDst));
+          nClipLeft = gnTileClipLeft - (int)(pDst + nScreenX + (nSkip - (intptr_t)pRowDst));
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
-          nClipRight = -(int)(pDst + nScreenX + (nSkip - (int)pRowDst)) + gnTileClipRight;
+          nClipRight = -(int)(pDst + nScreenX + (nSkip - (intptr_t)pRowDst)) + gnTileClipRight;
           nClipRight = (int)nClipRight <= 0 ? 0 : nClipRight;
           if ((int)nClipRight >= (int)nRunLen) {
             nClipRight = nRunLen;
@@ -409,9 +409,9 @@ void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
           pTileData = pbRunEnd + nRunLen;
           pRowNext = pDst + nRunLen + nSkip;
           pbLineEnd = (uint8_t (*)[32])(pbLineBuf + nRunLen);
-          nClipLeft = gnTileClipLeft - (int)(pDst + nScreenX + (nSkip - (int)pRowDst));
+          nClipLeft = gnTileClipLeft - (int)(pDst + nScreenX + (nSkip - (intptr_t)pRowDst));
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
-          nClipRight = -(int)(pDst + nScreenX + (nSkip - (int)pRowDst)) + gnTileClipRight;
+          nClipRight = -(int)(pDst + nScreenX + (nSkip - (intptr_t)pRowDst)) + gnTileClipRight;
           nClipRight = (int)nClipRight <= 0 ? 0 : nClipRight;
           if ((int)nClipRight >= (int)nRunLen) {
             nClipRight = nRunLen;

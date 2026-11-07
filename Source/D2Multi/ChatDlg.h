@@ -22,7 +22,7 @@ struct D2WinTextBox;
 struct mcp0x03data;
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
-typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
+typedef int (__stdcall *ChatDlgCallback)(struct D2ControlMsg * pControlMsg);
 #endif
 #ifndef RECON_FPTD_fnAppModeRun
 #define RECON_FPTD_fnAppModeRun
@@ -71,7 +71,7 @@ int __fastcall Unreferenced_0043cc20(int param_1);
 void __stdcall IMAGE_LoadPredefinedImagesExEx();
 void __stdcall LAUNCHER_FreeLauncherImages();
 void __stdcall LAUNCHER_RestoreFocusToControl();
-BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(uint32_t pCallbackArg);
+BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(struct D2ControlMsg * pControlMsg);
 // OnPress of the chat-lobby user-list page-back button gpCtlLobbyUserListPrevPageButton: COMCALLBACK_ScrollChannelUserList(-10); returns 1.
 // Provenance: asm 0043d9e0 (RET 4); fpOnPressCallback of form record 0070d060 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fce8.
 BOOL __stdcall CHATDLG_OnPressUserListPrevPage(struct D2ControlMsg * pControlMsg);
@@ -91,7 +91,7 @@ BOOL __fastcall LAUNCHER_SetGameListCacheActive(BOOL bActive);
 BOOL __stdcall CHATDLG_IsLobbyInitialized();
 void __stdcall LAUNCHER_DestroyLauncherForms();
 int __stdcall isServerDown();
-void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo);
+void LAUNCHER_AllocCharSelectComponent(uint8_t * pCharInfo);
 void Unreferenced_0043dce0();
 void __stdcall UIMENU_CantTestItBeacuseItCrash();
 void __stdcall CHATDLG_DestroyLobbyChatForms();
@@ -117,7 +117,7 @@ BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen,
 BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText);
 void __stdcall FORMS_DestroyListEx();
 void __fastcall UIMENU_DrawTitleAndSubtitleOnCenterScreen(uint16_t * wszTitle, uint16_t * wszSubTitle);
-int __stdcall CHATDLG_DestroyListCallback(uint32_t dwParam);
+int __stdcall CHATDLG_DestroyListCallback(struct D2ControlMsg * pControlMsg);
 uint32_t __stdcall CHATDLG_InvokeCallbackIfSet(struct D2ControlMsg * pControlMsg);
 // Opens the ladder type menu: background form 0x5d (gpDC6LadderChoiceEXP), title text box 0x5e (string 0x14c5), buttons 0x5f HARDCORE LADDER, 0x61 STANDARD LADDER, 0x62/0x63 expansion hardcore/standard ladder and 0x64 CANCEL (CHATDLG_OnPressCloseDialog); 0x60 is never created.
 // Provenance: asm 0043eb30..0043eb93; called by CHATDLG_DestroyFormsAndShowLadder (lobby LADDER button) and CHATDLG_OnPressCloseDialogRedrawLadder.

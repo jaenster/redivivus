@@ -1080,12 +1080,12 @@ void __fastcall NET_D2GS_SERVER_Send_0x5B_PlayerJoin(D2ClientStrc * pClient, D2U
     Clients::GetGuildTag(pOtherClient, packet.szGuildTag);
     char* pGuildTagEnd = packet.szGuildTag;
     pGuildTagEnd = pGuildTagEnd + strlen(pGuildTagEnd) + 1;
-    char* szGuildName = packet.szGuildTag + 1 + (int)(pGuildTagEnd + (0x109 - (intptr_t)((uint8_t*)&packet + 300)));
+    char* szGuildName = packet.szGuildTag + 1 + (intptr_t)(pGuildTagEnd + (0x109 - (intptr_t)((uint8_t*)&packet + 300)));
     Clients::GetGuildName(pOtherClient, szGuildName);
     char* pGuildNameEnd = szGuildName;
     pGuildNameEnd = pGuildNameEnd + strlen(pGuildNameEnd) + 1;
-    packet.nPacketLength = (short int)(uintptr_t)(pGuildNameEnd + ((intptr_t)((uint8_t*)&packet + 300) * -2 - (int)(pGuildTagEnd + (0x109 - (intptr_t)((uint8_t*)&packet + 300)))) + 0x235 + (int)szGuildName);
-    SCMD_QueuePacketForClient(&packet.nPacketId, (size_t)(pGuildNameEnd + ((intptr_t)((uint8_t*)&packet + 300) * -2 - (int)(pGuildTagEnd + (0x109 - (intptr_t)((uint8_t*)&packet + 300)))) + 0x235 + (int)szGuildName), pClient);
+    packet.nPacketLength = (short int)(uintptr_t)(pGuildNameEnd + ((intptr_t)((uint8_t*)&packet + 300) * -2 - (intptr_t)(pGuildTagEnd + (0x109 - (intptr_t)((uint8_t*)&packet + 300)))) + 0x235 + (intptr_t)szGuildName);
+    SCMD_QueuePacketForClient(&packet.nPacketId, (size_t)(pGuildNameEnd + ((intptr_t)((uint8_t*)&packet + 300) * -2 - (intptr_t)(pGuildTagEnd + (0x109 - (intptr_t)((uint8_t*)&packet + 300)))) + 0x235 + (intptr_t)szGuildName), pClient);
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
       PLAYER::PlayerPets::PLAYERPETS_SendPetListToClient(pClient, pUnit);
     }

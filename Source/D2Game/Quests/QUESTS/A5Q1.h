@@ -64,7 +64,7 @@ void __fastcall Q31_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData,
 bool __fastcall Q31_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // A5Q1 sequence filter: chains to the next quest's sequence filter (nSequenceQuestId). Only proceeds when this quest reached stateFlag 5 (reward given) or intro shown; validates the chained fn ptr before calling. No quest-state bit reads.
 bool __fastcall Q31_SequenceFilter(struct D2QuestDataStrc * pQuestData);
-void __fastcall Unreferenced_005875d0(int param_1);
+void __fastcall Unreferenced_005875d0(uint8_t * param_1);
 // A5Q1: on game load, rebuild volatile in-memory state (nStateFlagPrev@+0xb, nStateFlag@+0xc) from the player's persisted quest-record bits. Priority: Completed(0)/FinishedPrev(0xf)/RewardAwaits(1) -> prev=5 (done); Step0x04(4) -> prev2,flag3; Step0x03(3) -> prev1,flag3; Step0x02(2) -> prev1,flag2; else if player has spoken with Larzuk-intro NPC 0x201 and intro shown -> flag=1. Decompiler shows nQuestIdReal via [ESI+0xe0].
 void __fastcall Q31_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A5Q1 init: allocates the A5Q1-specific data block, wires up the state-handler table (Callback 0/2/3/8/10/11/13), the Larzuk NPC gossip message table (mon 0x1ff, string 0x4e6d), and the filter fn ptrs (status/active/sequence). Sets nQuestIdReal=Q35/SiegeOnHarrogath, nInitNo=4, nSequenceQuestId; zeroes all progress flags.

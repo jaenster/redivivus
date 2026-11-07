@@ -1688,7 +1688,7 @@ void __fastcall GLIDE_PixelDataFreeCallback_ClearCacheNodes(int * pCacheIndices)
     gGlideVertex0.aTextureCache[pCacheIndices[8] - 1].pNodes[pCacheIndices[9] - 1].pHashTable = 0;
 }
 
-static int RENDERER_GLIDE_GetSpriteMetadata(D2GfxDataStrc * pGfxData, uint32_t * * ppMetadata) {
+static int RENDERER_GLIDE_GetSpriteMetadata(D2GfxDataStrc * pGfxData, GlideTexInfoStrc * ppMetadata) {
     int bSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(pGfxData, 0, 1);
     if (!bSpriteLoaded) {
       return 0;
@@ -1698,15 +1698,15 @@ static int RENDERER_GLIDE_GetSpriteMetadata(D2GfxDataStrc * pGfxData, uint32_t *
       exit(-1);
     }
 
-    *ppMetadata = (uint32_t*)pGfxData;
+    ppMetadata->pSprite = pGfxData;
     int32_t nDimension = D2CMP::SRC::CelCmp::GetDC6Width(pGfxData->pDC6Block);
-    ppMetadata[1] = (uint32_t*)nDimension;
+    ppMetadata->nWidth = nDimension;
     uint32_t* nDC6OffsetX = (uint32_t*)D2CMP::SRC::CelCmp::GetDC6OffsetX(pGfxData->pDC6Block);
-    ppMetadata[3] = nDC6OffsetX;
+    ppMetadata->nLeft = (int32_t)nDC6OffsetX;
     uint32_t* nDC6Height = (uint32_t*)D2CMP::SRC::CelCmp::GetDC6Height(pGfxData->pDC6Block);
-    ppMetadata[2] = nDC6Height;
+    ppMetadata->nHeight = (int32_t)nDC6Height;
     uint32_t* nDC6OffsetY = (uint32_t*)D2CMP::SRC::CelCmp::GetDC6OffsetY(pGfxData->pDC6Block);
-    ppMetadata[4] = nDC6OffsetY;
+    ppMetadata->nTop = (int32_t)nDC6OffsetY;
     return 1;
 }
 
@@ -2147,7 +2147,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int32_t nPosX, int32
     int nScreenY;
     int nScreenX;
     float fHalfWindowWidth;
-    int bSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&textureSize);
+    int bSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, &textureSize);
     if (!bSpriteResult) {
       return;
     }
@@ -2231,7 +2231,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, D
     int32_t nUploadResult;
     GlideTexInfoStrc texInfo;
     int32_t nPosXSaved = nPosX;
-    int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&texInfo);
+    int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, &texInfo);
     if (!nSpriteResult) {
       return 0;
     }
@@ -2269,7 +2269,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, D
 void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift) {
     GlideTexInfoStrc texSizeBuf;
     int32_t nPosXSaved = nPosX;
-    int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&texSizeBuf);
+    int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
     if (!(nSpriteResult && texSizeBuf.nLeft + nPosX <= RENDERER_nWindowWidth && -1 < texSizeBuf.nWidth + texSizeBuf.nLeft + nPosX && -1 < texSizeBuf.nTop + nPosY && texSizeBuf.nTop + nPosY - texSizeBuf.nHeight < RENDERER_nWindowHeight)) {
       return;
     }
@@ -2288,7 +2288,7 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
     GlideTexInfoStrc texSizeBuf;
     int32_t nPosXSaved = nPosX;
     RENDERER_GLIDE_SetDrawMode(nDrawMode);
-    int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&texSizeBuf);
+    int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
     if (!nSpriteResult) {
       return;
     }
@@ -2416,7 +2416,7 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
     GlideTexInfoStrc texSizeBuf;
     D2RenderClipOutStrc sClip;
     RENDERER_GLIDE_SetDrawMode(nDrawMode);
-    int nTmp = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&texSizeBuf);
+    int nTmp = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
     if (!nTmp) {
       return;
     }
@@ -2482,7 +2482,7 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY) {
     GlideTexInfoStrc texSizeBuf;
-    int pSpriteMetadata = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&texSizeBuf);
+    int pSpriteMetadata = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
     if (!pSpriteMetadata) {
       return;
     }
@@ -2512,7 +2512,7 @@ void __fastcall DrawImageFast(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPos
     RENDERER_GLIDE_SetAlphaBlendMode(4);
     (*GLIDEDLL_grDitherMode_4)(0);
     (*GLIDEDLL_grConstantColorValue_4)(0x40);
-    int pSpriteMetadata = RENDERER_GLIDE_GetSpriteMetadata(pData, (uint32_t**)&texSizeBuf);
+    int pSpriteMetadata = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
     if (!pSpriteMetadata) {
       return;
     }
@@ -4195,7 +4195,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uint32_t bFileLoadOk;
       nVersion = 0;
       dwFileSize = 0;
-      bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &dwFileSize, 0, 3, 0);
+      bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &dwFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bFileLoadOk && nVersion) {
         bDecoded = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, dwFileSize, abImgBuf, *gpGlideSmackerTexBuf2, 0x6db0, &nImgWidth, &nImgHeight, &nImgBpp);
         Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\glSmack.cpp", 0xdb, 0);

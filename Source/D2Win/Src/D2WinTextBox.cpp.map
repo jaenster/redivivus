@@ -514,6 +514,7 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "D2WinTextBox",
+        "D2WinTextBoxLineStrc",
         "DC6",
         "GLOBALPALLETE",
         "WCHAR",

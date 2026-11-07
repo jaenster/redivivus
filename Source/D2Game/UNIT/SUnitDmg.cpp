@@ -2974,7 +2974,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
     D2UnitStrc* pDVar3;
     int32_t iVar4;
     uint32_t nWeaponClass3;
-    int32_t nDebugAddr;
+    char* nDebugAddr;
     uint32_t dwSeedLow;
     eD2PlayerAnimMode eAnimMode;
     char* nSeedMod;
@@ -3011,11 +3011,11 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
           D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pUnit->pInventory, &nWeaponClass2, -1, 1);
           if (nWeaponClass2 == 0xd) {
             nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-            nDebugAddr = (int32_t)s_block_006e1730;
+            nDebugAddr = "block";
             pDVar3 = pUnit;
             iVar4 = nParryBonus;
             nWeaponClass3 = nRandRoll;
-            SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, (char*)nDebugAddr);
+            SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
             if ((int)nWeaponClass3 < nParryBonus) {
               return 0x10;
             }
@@ -3100,9 +3100,9 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
     D2SeedStrc DVar1 = D2_SEED_NEXT(pDefUnit->sSeed);
     pDefUnit->sSeed = DVar1;
     int nSeedMod = DVar1.nSeedLow % 100;
-    int32_t nDebugAddr = (int32_t)s_blocks_006e1738;
+    char* nDebugAddr = "blocks";
     D2UnitStrc* nRandRoll = pDefUnit;
-    SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, (char*)nDebugAddr);
+    SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);
     if (nSeedMod >= nBlockRate) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;

@@ -668,10 +668,10 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     do {
       BOOL bInTown;
-      if (!(dwTargetFlags & 0x2000) || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[(int)pCallbackArg]) , !bInTown)) {
-        bInTown = SKILLS_IsRoomInRange(ppRoomList[(int)pCallbackArg], nX, nRadius, nY);
+      if (!(dwTargetFlags & 0x2000) || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[(intptr_t)pCallbackArg]) , !bInTown)) {
+        bInTown = SKILLS_IsRoomInRange(ppRoomList[(intptr_t)pCallbackArg], nX, nRadius, nY);
         if (bInTown) {
-          pNextUnit = ppRoomList[(int)pCallbackArg]->pUnitList;
+          pNextUnit = ppRoomList[(intptr_t)pCallbackArg]->pUnitList;
           while (true) {
             pTarget = pNextUnit;
             if (!pTarget) {

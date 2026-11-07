@@ -1380,7 +1380,7 @@ void __fastcall SetGuildName(D2ClientStrc * pClient, char * szGuildName) {
     int nGuildNameOffset = 0x464 - (int)szGuildName;
     do {
       cCurrent = *szGuildName;
-      szGuildName[(int)pClient + nGuildNameOffset] = cCurrent;
+      szGuildName[(intptr_t)pClient + nGuildNameOffset] = cCurrent;
       szGuildName++;
     } while (cCurrent != '\0');
 }
@@ -1470,10 +1470,10 @@ void __fastcall GetClientContainer(D2ClientStrc * pClient, uint32_t * pdwContain
 }
 
 void __fastcall GetRealm(D2ClientStrc * pClient, uint32_t * pdwRealm) {
-    *pdwRealm = (uint32_t)(uintptr_t)pClient->pRealm;
+    *pdwRealm = pClient->pRealm;
 }
 
-void __fastcall SetRealm(D2ClientStrc * pClient, void * dwRealm) {
+void __fastcall SetRealm(D2ClientStrc * pClient, uint32_t dwRealm) {
     pClient->pRealm = dwRealm;
 }
 

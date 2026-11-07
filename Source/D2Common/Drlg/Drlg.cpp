@@ -3159,7 +3159,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
         switch (pDrlgLevel->eD2LevelId) {
           case 1:
             {
-              /* aCurrentDir[index] - base EBP-0x108 is &aCurrentDir[0]. */ nNodeOffset = pLevelUnknown.aCurrentDir[(int)fnPlacementValidator];
+              /* aCurrentDir[index] - base EBP-0x108 is &aCurrentDir[0]. */ nNodeOffset = pLevelUnknown.aCurrentDir[(intptr_t)fnPlacementValidator];
               break;
             }
           default:
@@ -3169,7 +3169,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
           case 0x28:
             {
               /* aCurrentDir[index+1] - base EBP-0x104 is &aCurrentDir[1], index scaled by 4.
-                          */ nNodeOffset = pLevelUnknown.aCurrentDir[(int)((uint8_t*)fnPlacementValidator + 1)];
+                          */ nNodeOffset = pLevelUnknown.aCurrentDir[(intptr_t)((uint8_t*)fnPlacementValidator + 1)];
               break;
             }
         }
@@ -3181,8 +3181,8 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
       if (pDrlgLevel->eD2LevelId == 6) {
         pOuterCloisterLevel = GetLevelAndAlloc(pDrlg, 0x1b);
         pOuterCloisterLevelData = pOuterCloisterLevel->pDrlgLevelData.pDrlgLevelPresetData;
-        if (pLevelUnknown.aCurrentDir[(int)fnPlacementValidator] != 1) {
-          if (pLevelUnknown.aCurrentDir[(int)fnPlacementValidator] != 3) {
+        if (pLevelUnknown.aCurrentDir[(intptr_t)fnPlacementValidator] != 1) {
+          if (pLevelUnknown.aCurrentDir[(intptr_t)fnPlacementValidator] != 3) {
             goto link_level_warps;
           }
 
@@ -3226,7 +3226,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
                           */ fnPlacementValidator = (fpLevelDataFn1)((uint8_t*)fnPlacementValidator + 1);
       nNodeOffset = (int)fnPlacementValidator * 0x10;
       /* Second pass cursor advances by ONE 16-byte entry (EDI = index*0x10 added to
-                         pLevelData), not by a whole list. */ pLevelData1 = (D2DrlgLevelDataList*)(pLevelData->aEntry + (int)fnPlacementValidator);
+                         pLevelData), not by a whole list. */ pLevelData1 = (D2DrlgLevelDataList*)(pLevelData->aEntry + (intptr_t)fnPlacementValidator);
     } while (((D2DrlgLevelDataEntry*)pLevelData1)->neD2LevelId != LEVEL_None);
 }
 

@@ -234,8 +234,8 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
     D2SevtTypeEntryStrc** pNewBuckets;
     D2SevtHandlerTableStrc* pDVar3;
     D2SevtHandlerNodeStrc** ppDVar4;
-    int* ppNewHandlerTails;
-    int* pTailSlot;
+    D2SevtHandlerNodeStrc*** ppNewHandlerTails;
+    D2SevtHandlerNodeStrc*** pTailSlot;
     D2SevtHandlerNodeStrc* pNode;
     D2SevtTypeEntryStrc* pDVar5;
     D2SevtTypeEntryStrc** ppDVar6;
@@ -326,12 +326,12 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
       }
 
       ppDVar4 = (D2SevtHandlerNodeStrc**)SMem::SMemAlloc(dwEventId * 4, ".\\SOURCE\\SEVT.CPP", 0x16e, 8);
-      ppNewHandlerTails = (int*)SMem::SMemAlloc(dwEventId * 4, ".\\SOURCE\\SEVT.CPP", 0x16f, 8);
+      ppNewHandlerTails = (D2SevtHandlerNodeStrc***)SMem::SMemAlloc(dwEventId * 4, ".\\SOURCE\\SEVT.CPP", 0x16f, 8);
       if (dwEventId > 0) {
         pTailSlot = ppNewHandlerTails;
         dwSubId = dwEventId;
         do {
-          *pTailSlot = (intptr_t)ppDVar4 - (intptr_t)ppNewHandlerTails + (int)pTailSlot;
+          *pTailSlot = (D2SevtHandlerNodeStrc**)((intptr_t)ppDVar4 - (intptr_t)ppNewHandlerTails + (char*)pTailSlot);
           pTailSlot++;
           dwSubId--;
         } while (dwSubId);
@@ -348,8 +348,8 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t
                 nBucketIndex = pNode->dwKey & dwEventId - 1;
                 pNextNode = *ppNodeNext;
                 *ppNodeNext = 0;
-                *(D2SevtHandlerNodeStrc**)ppNewHandlerTails[nBucketIndex] = (D2SevtHandlerNodeStrc*)pNode;
-                ppNewHandlerTails[nBucketIndex] = (int)ppNodeNext;
+                *ppNewHandlerTails[nBucketIndex] = pNode;
+                ppNewHandlerTails[nBucketIndex] = ppNodeNext;
                 pNode = pNextNode;
               }
 
@@ -442,7 +442,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
 // @oracle-source Storm export name list, and the PEF traceback-named body .SEvtUnregisterType @10017290 in Mac PPC 1.10b Storm
 // @rename-basis Behaviour plus argument count, both confirmed against the PPC. Two arguments here, and .SEvtUnregisterType reads only r3 and r4 and then computes "xor r28, r26, r27" - the same eventId ^ subId bucket hash this function uses. With two arguments it cannot name a handler. It walks the event's whole stack of handler tables freeing each with SEVT_FreeEventHandlerTable, then unlinks and frees the event record from its hash bucket and decrements gnSevtRegisteredEventCount. Removing the (eventId, subId) entry itself is what "type" means here.
 // @former-name SEVT_UnregisterEvent (invented)
-BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
+BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId) {
     int _bRemoved;
     D2SevtTypeEntryStrc* pEvent;
     bool bRemoved;
@@ -453,9 +453,9 @@ BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
     EnterCriticalSection(&lpCriticalSection_0077930c);
     if (gpEventHashBuckets && gaEventRegistryHead) {
       uint32_t nBucket;
-      pEvent = gpEventHashBuckets[gaEventRegistryHead - 1 & ((uintptr_t)nEventId ^ nSubId)];
+      pEvent = gpEventHashBuckets[gaEventRegistryHead - 1 & (nEventId ^ nSubId)];
       if (pEvent) {
-        while ((char*)pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
+        while (pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
           pEvent = pEvent->pNext;
           if (!pEvent) {
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
@@ -471,7 +471,7 @@ BOOL __stdcall SEvtUnregisterType(char * nEventId, uint32_t nSubId) {
             ppHandlerTable = pEvent->pHandlerTable;
           }
 
-          nBucket = gaEventRegistryHead - 1 & ((uintptr_t)nEventId ^ nSubId);
+          nBucket = gaEventRegistryHead - 1 & (nEventId ^ nSubId);
           ppEventLink = gpEventHashBuckets + nBucket;
           pCurEvent = gpEventHashBuckets[nBucket];
           while (pCurEvent) {
@@ -531,7 +531,7 @@ void __fastcall LINKEDLIST_UnlinkSelf(StormLinkStrc * pNode) {
 int __fastcall Unreferenced_004269a0(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
@@ -550,7 +550,7 @@ void __stdcall SEvtPopState(uint32_t szText1, uint32_t szText2) {
           if (pNode) {
             pPrevHandlerTable = pNode->pHandlerTable->pPrevState;
             if (!pPrevHandlerTable) {
-              SEvtUnregisterType((char*)szText1, szText2);
+              SEvtUnregisterType(szText1, szText2);
             } else {
               SEVT_DeleteIdHashTable(pNode->pHandlerTable);
               pNode->pHandlerTable = pPrevHandlerTable;
@@ -603,9 +603,9 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
     if (pPrevNode) {
       pLinkSlot = pTargetNode[1];
       if ((intptr_t)pLinkSlot < 0) {
-        pLinkSlot = (int*)~(uint32_t)pLinkSlot;
+        pLinkSlot = (int*)~(uintptr_t)pLinkSlot;
       } else {
-        pLinkSlot = (int*)((int)pLinkSlot + ((int)pTargetNode - pPrevNode[1]));
+        pLinkSlot = (int*)((intptr_t)pLinkSlot + ((intptr_t)pTargetNode - pPrevNode[1]));
       }
 
       *pLinkSlot = (int)pPrevNode;
@@ -625,7 +625,7 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
           pPrevNode = *pList;
           pLinkSlot = ppTargetList[1];
           if ((intptr_t)pLinkSlot < 0) {
-            *(int***)~(uint32_t)pLinkSlot = (int**)pTargetNode;
+            *(int***)~(uintptr_t)pLinkSlot = (int**)pTargetNode;
             ppTargetList[1] = (int*)ppNodeSlot;
             return;
           }
@@ -633,7 +633,7 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
             pPrevNode = (int*)((char*)ppTargetList - (*ppTargetList)[1]);
           }
 
-          *(int***)((int)pLinkSlot + (int)pPrevNode) = (int**)pTargetNode;
+          *(int***)((intptr_t)pLinkSlot + (intptr_t)pPrevNode) = (int**)pTargetNode;
           ppTargetList[1] = (int*)ppNodeSlot;
           return;
         }

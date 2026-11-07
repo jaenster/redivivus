@@ -37,7 +37,7 @@ typedef void (__fastcall *fpDrawBlendedVisTile)(uint8_t * a1, int a2, int a3, in
 #endif
 #ifndef RECON_FPTD_fpDrawGroundTile
 #define RECON_FPTD_fpDrawGroundTile
-typedef BOOL (__fastcall *fpDrawGroundTile)(int a1, int a2, int a3, struct D2GfxLightExStrc * a4);
+typedef BOOL (__fastcall *fpDrawGroundTile)(struct D2TileLibraryEntryStrc * a1, int a2, int a3, struct D2GfxLightExStrc * a4);
 #endif
 #ifndef RECON_FPTD_fpDrawRoofTile
 #define RECON_FPTD_fpDrawRoofTile

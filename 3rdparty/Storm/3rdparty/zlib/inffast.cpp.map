@@ -18,6 +18,7 @@
       ],
       "usedTypes": [
         "inflate_code",
+        "inflate_state",
         "int32_t",
         "uint32_t",
         "uint8_t",

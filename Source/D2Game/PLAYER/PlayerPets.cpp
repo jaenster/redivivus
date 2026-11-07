@@ -1214,7 +1214,7 @@ void __fastcall PETS_ResetAllPetLimitsToBase(::SGAMEDATA * pGame, D2UnitStrc * p
     D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
       if (nIndex >= 0 && nIndex < nPetTypeSize) {
-        pTxtPetTypeEntry = (D2PetTypeTxt*)(pTxtPetType->baseicon + (int)(pDataTable->pTxtPetType->baseicon - 0x1e));
+        pTxtPetTypeEntry = (D2PetTypeTxt*)(pTxtPetType->baseicon + (intptr_t)(pDataTable->pTxtPetType->baseicon - 0x1e));
         if (pTxtPetTypeEntry) {
           PETS_SetMaxAndTrimExcess(pGame, pUnit, nIndex, (int)pTxtPetTypeEntry->basemax);
           pDataTable = D2Common::ITEMS::Items::sgptDataTable;

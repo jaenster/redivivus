@@ -47,6 +47,7 @@ struct D2SaveHandSkillStrc;
 struct D2SaveHotKeyStrc;
 struct D2SockaddrInStrc;
 struct D2StormAsyncCompletionStrc;
+struct D2SystemInfoStrc;
 struct D2TxtLinkStrc;
 struct deflate_state;
 
@@ -158,8 +159,8 @@ struct __attribute__((packed)) D2CrashDumpRequestStrc {
 #endif // D2_DEFINED_D2CrashDumpRequestStrc
 #ifndef D2_DEFINED_D2CrashFrameStrc
 #define D2_DEFINED_D2CrashFrameStrc
-struct D2CrashFrameStrc {
-    /* 0x00 */ uint32_t dwReturnAddr;
+struct __attribute__((packed)) D2CrashFrameStrc {
+    /* 0x00 */ uintptr_t dwReturnAddr;
     /* 0x04 */ uint32_t dw04;
     /* 0x08 */ uint32_t dw08;
     /* 0x0C */ uint32_t dw0C;
@@ -601,6 +602,17 @@ struct D2SSCompDeflateBlockEntryStrc {
     /* 0x08 */ int32_t (__fastcall *pfnDeflateBlock)(deflate_state *, int32_t); // zlib configuration_table.func (DeflateStored / DeflateFast / DeflateSlow), __fastcall
 };
 #endif // D2_DEFINED_D2SSCompDeflateBlockEntryStrc
+#ifndef D2_DEFINED_D2SystemInfoStrc
+#define D2_DEFINED_D2SystemInfoStrc
+struct __attribute__((packed)) D2SystemInfoStrc {
+    /* 0x00 */ int bInitialized; // set to 1 at the end of InitializeSystemInfo; SFILE_GetGlobalPointer hands out the struct only when set
+    /* 0x04 */ uint32_t eOSType; // 0 = Win9x, 1 = NT4, 2 = 2000, 3 = XP, 4 = later (GetVersionExA)
+    /* 0x08 */ float fOSVersion; // major + minor/100 from GetVersionExA
+    /* 0x0C */ uint32_t dwTotalPhysicalMemory; // MEMORYSTATUS.dwTotalPhys
+    /* 0x10 */ uint32_t dwUnknown10; // no reader or writer found
+    /* 0x14 */ _SYSTEM_INFO sWinSystemInfo; // GetSystemInfo result
+};
+#endif // D2_DEFINED_D2SystemInfoStrc
 #ifndef D2_DEFINED_D2TSExplicitListHeadStrc
 #define D2_DEFINED_D2TSExplicitListHeadStrc
 struct __attribute__((packed)) D2TSExplicitListHeadStrc {
@@ -742,7 +754,7 @@ int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize);
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen);
 BOOL __stdcall GetUseDirectCommand();
 void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize);
-uint32_t __stdcall SFILE_GetGlobalPointer();
+struct D2SystemInfoStrc * __stdcall SFILE_GetGlobalPointer();
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 } // namespace Fog::Source::SFile
 namespace Fog::Source::SSComp {

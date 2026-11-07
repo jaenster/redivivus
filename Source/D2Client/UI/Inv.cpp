@@ -2493,7 +2493,7 @@ static void __stdcall INV_FormatAttackSpeedText(uint16_t * wszText, D2UnitStrc *
         /* .wStringId = */ 0xfed
     }
 }; D2_STATIC_GUARD(gnAttackSpeedBoostDisplayValue, "D2Client::UI::Inv::INV_FormatAttackSpeedText::gnAttackSpeedBoostDisplayValue");
-    static int gnInventoryCursorX[90] = {
+    static int gnInventoryCursorX[104] = {
     0x1,
     0x1,
     0x1,
@@ -2583,9 +2583,7 @@ static void __stdcall INV_FormatAttackSpeedText(uint16_t * wszText, D2UnitStrc *
     0x5,
     0x5,
     0x5,
-    0x5
-}; D2_STATIC_GUARD(gnInventoryCursorX, "D2Client::UI::Inv::INV_FormatAttackSpeedText::gnInventoryCursorX");
-    static int gnInventoryCursorY[14] = {
+    0x5,
     0x0,
     0x2,
     0x1,
@@ -2600,7 +2598,7 @@ static void __stdcall INV_FormatAttackSpeedText(uint16_t * wszText, D2UnitStrc *
     0x4,
     0x0,
     0x3
-}; D2_STATIC_GUARD(gnInventoryCursorY, "D2Client::UI::Inv::INV_FormatAttackSpeedText::gnInventoryCursorY");
+}; D2_STATIC_GUARD(gnInventoryCursorX, "D2Client::UI::Inv::INV_FormatAttackSpeedText::gnInventoryCursorX");
 
     uint32_t bIsType;
     int bIsRanged;
@@ -2637,7 +2635,7 @@ static void __stdcall INV_FormatAttackSpeedText(uint16_t * wszText, D2UnitStrc *
           nClassId = pPlayer->nClassId;
         }
 
-        nSpeedClass = gnInventoryCursorX[nWeaponSpeed * 5 - 0x32 + gnInventoryCursorY[bIsRanged + nClassId * 2]];
+        nSpeedClass = gnInventoryCursorX[nWeaponSpeed * 5 - 0x32 + gnInventoryCursorX[bIsRanged + nClassId * 2 + 0x5a]];
       }
     }
 
@@ -7460,7 +7458,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               pbyUtf8Scan = __frame0.szUtf8Buf;
               strcat((char*)__frame0.szUtf8Buf, ")");
               pbyUtf8Scan = pbyUtf8Scan + strlen((char*)pbyUtf8Scan) + 1;
-              pcNameDst = pbyUtf8Scan + ((int)pcNameDst - (int)(__frame0.szUtf8Buf + 1));
+              pcNameDst = pbyUtf8Scan + ((intptr_t)pcNameDst - (int)(__frame0.szUtf8Buf + 1));
               D2Lang::UTF8_ConvertToWideChar(wszScratch, (char*)__frame0.szUtf8Buf, 0x200);
               D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, wszScratch);
               pUnit = pUnitSaved;
@@ -11042,17 +11040,17 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             } while (nShopButtonIdx < gaNpcShopButtonTable[0]);
 
             if (pMsg != (D2UIMouseMsgStrc*)-1) {
-              if (gaNpcShopButtons[(int)pMsg].nSelectedState == 1) {
+              if (gaNpcShopButtons[(intptr_t)pMsg].nSelectedState == 1) {
                 Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
                 if (bHasSelectedTab == 1) {
                   if (pMsg != (D2UIMouseMsgStrc*)__frame0.uSlot8.nSelectedShopTab) {
-                    gaNpcShopButtons[(int)pClickedButton].nDrawCallback = 1;
+                    gaNpcShopButtons[(intptr_t)pClickedButton].nDrawCallback = 1;
                     gaNpcShopButtons[__frame0.uSlot8.nSelectedShopTab].nDrawCallback = 0;
                     gShopTradeUIState = 1;
                     goto consume_shop_button_click;
                   }
 
-                  gaNpcShopButtons[(int)pClickedButton].nDrawCallback = 0;
+                  gaNpcShopButtons[(intptr_t)pClickedButton].nDrawCallback = 0;
                   g_nCurrentInventoryPage = 1;
                   pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
                   if (pCursorItem_lcl) {
@@ -11067,7 +11065,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
                     }
                   }
                 } else {
-                  gaNpcShopButtons[(int)pClickedButton].nDrawCallback = 1;
+                  gaNpcShopButtons[(intptr_t)pClickedButton].nDrawCallback = 1;
                 }
 
                 gShopTradeUIState = 1;

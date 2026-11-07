@@ -720,9 +720,9 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc",
+        "GlideTexInfoStrc",
         "int32_t",
-        "uint32_t",
-        "uint32_t *"
+        "uint32_t"
       ]
     },
     {

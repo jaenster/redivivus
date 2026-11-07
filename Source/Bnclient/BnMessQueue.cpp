@@ -86,7 +86,7 @@ uint32_t __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessa
     char* pDestBuffer = pNewMessage->bBuffer;
     Storm::Source::SSTR::SStrCopy(pDestBuffer, szMessage, 0x120);
     pDestBuffer = pDestBuffer + strlen(pDestBuffer) + 1;
-    pNewMessage->nDataSize = (size_t)(pDestBuffer + (1 - (int)(pNewMessage->bBuffer + 1)));
+    pNewMessage->nDataSize = (size_t)(pDestBuffer + (1 - (intptr_t)(pNewMessage->bBuffer + 1)));
     pNewMessage->nZero = nEventType;
     pNewMessage->pNext = 0;
     if (!(pDestBuffer + (1 - (intptr_t)(pNewMessage->bBuffer + 1)) < (char*)0x121)) {

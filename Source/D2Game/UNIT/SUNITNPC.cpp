@@ -648,9 +648,9 @@ int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * 
           pDVar1 = (D2SeedStrc*)D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nModulo);
           *pSeedSave = D2_SEED_NEXT(*pSeedSave);
           pSeed = pDVar1;
-          D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pGameNpc->sTrade.pTradeList1[(int)pDVar1].dwItemCode, (int*)&pSeed);
+          D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode, (int*)&pSeed);
           D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01((uint32_t)pSeed);
-          *pdwOutItemCode = pGameNpc->sTrade.pTradeList1[(int)pDVar1].dwItemCode;
+          *pdwOutItemCode = pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode;
           *pdwReservedOut = dwReservedSave;
           return 1;
         }
@@ -2057,7 +2057,7 @@ void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, D2UnitStrc *
         pPlayerUnit = (D2UnitStrc*)0x5;
       }
 
-      nItemTableIdx = pGambleTable->anLevelLimit[(int)pPlayerUnit];
+      nItemTableIdx = pGambleTable->anLevelLimit[(intptr_t)pPlayerUnit];
       if ((int)nItemTableIdx <= 0) {
         nItemTableIdx = 0;
       } else if (nItemTableIdx & nItemTableIdx - 1) {

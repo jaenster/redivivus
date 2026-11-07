@@ -80,49 +80,61 @@ template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -57266
 }
 
 template<> void TSExplicitList<CELLIST, -572662307>::Clear() {
-    int* pBackLink;
-    int* pLinkField;
-    void* pObject;
+    TSLink<::CELLIST>* pTVar2;
+    TSLink<::CELLIST>* pTVar3;
+    uint32_t* pBackLink;
+    ::CELLIST* pObject;
+    TSLink<::TCELENTRY>* nNext;
     uint32_t uLinkOffset;
     while (true) {
-      int nNext;
-      pObject = (intptr_t)(void*)this->m_terminator.m_next > 0 ? (void*)this->m_terminator.m_next : 0;
-      if (!pObject) {
+      TSLink<::TCELENTRY>* pTVar1;
+      pObject = (::CELLIST*)this->m_terminator.m_next;
+      if ((intptr_t)pObject <= 0) {
         break;
       }
 
-      ((TSList<::TCELENTRY, TSGetLink<::TCELENTRY>>*)((char*)pObject + 0x2c))->UnlinkAll();
-      pLinkField = (int*)((char*)pObject + 0x30);
-      nNext = *pLinkField;
+      pObject->m_frames.UnlinkAll();
+      pTVar1 = &pObject->m_frames.m_terminator;
+      nNext = pTVar1->m_prevlink;
       if (nNext) {
-        uLinkOffset = *(uint32_t*)((char*)pObject + 0x34);
-        pBackLink = (int*)D2_StormNextLink(pLinkField, -1);
-        *pBackLink = nNext;
-        *(uint32_t*)(*pLinkField + 4) = *(uint32_t*)((char*)pObject + 0x34);
-        *pLinkField = 0;
-        *(uint32_t*)((char*)pObject + 0x34) = 0;
+        uLinkOffset = pTVar1->m_next;
+        pBackLink = (uint32_t*)D2_StormNextLink(pTVar1, -1);
+        *pBackLink = (uint32_t)(uintptr_t)nNext;
+        pTVar1->m_prevlink->m_next = pTVar1->m_next;
+        pTVar1->m_prevlink = 0;
+        pTVar1->m_next = 0;
       }
 
-      nNext = *(int*)((char*)pObject + 0xc);
-      pLinkField = (int*)((char*)pObject + 0xc);
-      if (nNext) {
-        uLinkOffset = *(uint32_t*)((char*)pObject + 0x10);
-        pBackLink = (int*)D2_StormNextLink(pLinkField, -1);
-        *pBackLink = nNext;
-        *(uint32_t*)(*pLinkField + 4) = *(uint32_t*)((char*)pObject + 0x10);
-        *pLinkField = 0;
-        *(uint32_t*)((char*)pObject + 0x10) = 0;
+      pTVar3 = pObject->m_linktofull.m_prevlink;
+      pTVar2 = &pObject->m_linktofull;
+      if (pTVar3) {
+        uLinkOffset = pObject->m_linktofull.m_next;
+        if ((int)uLinkOffset < 0) {
+          pBackLink = (uint32_t*)~uLinkOffset;
+        } else {
+          pBackLink = (uint32_t*)((char*)pTVar2 + (uLinkOffset - pTVar3->m_next));
+        }
+
+        *pBackLink = (uint32_t)(uintptr_t)pTVar3;
+        pTVar2->m_prevlink->m_next = pObject->m_linktofull.m_next;
+        pTVar2->m_prevlink = 0;
+        pObject->m_linktofull.m_next = 0;
       }
 
-      nNext = *(int*)((char*)pObject + 4);
-      pLinkField = (int*)((char*)pObject + 4);
-      if (nNext) {
-        uLinkOffset = *(uint32_t*)((char*)pObject + 8);
-        pBackLink = (int*)D2_StormNextLink(pLinkField, -1);
-        *pBackLink = nNext;
-        *(uint32_t*)(*pLinkField + 4) = *(uint32_t*)((char*)pObject + 8);
-        *pLinkField = 0;
-        *(uint32_t*)((char*)pObject + 8) = 0;
+      pTVar3 = pObject->m_linktoslot.m_prevlink;
+      pTVar2 = &pObject->m_linktoslot;
+      if (pTVar3) {
+        uLinkOffset = pObject->m_linktoslot.m_next;
+        if ((int)uLinkOffset < 0) {
+          pBackLink = (uint32_t*)~uLinkOffset;
+        } else {
+          pBackLink = (uint32_t*)((char*)pTVar2 + (uLinkOffset - pTVar3->m_next));
+        }
+
+        *pBackLink = (uint32_t)(uintptr_t)pTVar3;
+        pTVar2->m_prevlink->m_next = pObject->m_linktoslot.m_next;
+        pTVar2->m_prevlink = 0;
+        pObject->m_linktoslot.m_next = 0;
       }
 
       Storm::Source::SMem::SMemFree(pObject, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
@@ -241,7 +253,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       pBucketSlot = pBlock;
       do {
         nNext = &pBucketSlot->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (int)pBlock + (int)nNext + (int)this->m_data);
+        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)nNext + (int)this->m_data);
         if (puVar1) {
           pNewTerminator = puVar1 + 1;
           *pNewTerminator = 0;
@@ -518,7 +530,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NO
       if ((int)uLinkOffset < 0) {
         pPrevLinkPtr = (uint32_t*)~uLinkOffset;
       } else {
-        pPrevLinkPtr = (uint32_t*)((int)pTVar1 + (uLinkOffset - *(int*)(pActiveHead + 4)));
+        pPrevLinkPtr = (uint32_t*)((intptr_t)pTVar1 + (uLinkOffset - *(int*)(pActiveHead + 4)));
       }
 
       *pPrevLinkPtr = (uint32_t)(uintptr_t)pActiveHead;
@@ -542,7 +554,7 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLo
       pTVar1->m_next = 0;
       pTVar1->m_prevlink = pTVar1;
       pNewEntry->m_frames.m_linkoffset = 0;
-      pNewEntry->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
+      pNewEntry->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
     } else {
       pNewEntry = 0;
     }
@@ -568,7 +580,7 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
       pNewEntry->m_frames.m_terminator.m_next = 0;
       pTVar1 = &pNewEntry->m_frames.m_terminator;
       pTVar1->m_prevlink = pTVar1;
-      pNewEntry->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
+      pNewEntry->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
       pNewEntry->m_frames.m_linkoffset = 0;
       pInsertPoint = (TSLink<::CELLIST>*)((intptr_t)&pNewEntry->m_hashval + pList->m_linkoffset);
     } else {
@@ -715,10 +727,9 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
 template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
     int* pBackLinkR;
     TSLink<::TCELENTRY>* pFreeListSlot;
-    uint32_t nAllocPolicy;
+    int nAllocPolicy;
     uint32_t nCopyCount;
     TSLink<::TCELENTRY>* pActiveNext;
-    uint32_t* pFreeListHead;
     uint32_t nNewCapacityValue = nAlloc;
     ::CELLIST* pOldBlock = this->m_data;
     if (nAlloc < this->m_count) {
@@ -759,27 +770,27 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
       nAlloc = nNewCapacityValue;
     }
     if (nAlloc > 0) {
-      int nNewNodeBase;
+      ::CELLIST* nNewNodeBase;
       pFreeListSlot = &pOldBlock->m_frames.m_terminator;
       do {
-        nNewNodeBase = -0x30 - (int)pOldBlock + (int)pFreeListSlot + (int)this->m_data;
+        nNewNodeBase = (::CELLIST*)(-0x30 - (intptr_t)pOldBlock + (intptr_t)pFreeListSlot + (int)this->m_data);
         if (nNewNodeBase) {
-          *(uint32_t*)(nNewNodeBase + 4) = 0;
-          *(uint32_t*)(nNewNodeBase + 8) = 0;
-          *(uint32_t*)(nNewNodeBase + 0xc) = 0;
-          *(uint32_t*)(nNewNodeBase + 0x10) = 0;
-          *(uint32_t*)(nNewNodeBase + 0x18) = (uint32_t)(uintptr_t)pFreeListSlot[-3].m_prevlink;
-          *(uint32_t*)(nNewNodeBase + 0x1c) = *(uint32_t*)((char*)(pFreeListSlot - 3) + 4);
-          *(uint32_t*)(nNewNodeBase + 0x20) = (uint32_t)(uintptr_t)pFreeListSlot[-2].m_prevlink;
-          *(uint32_t*)(nNewNodeBase + 0x24) = *(uint32_t*)((char*)(pFreeListSlot - 2) + 4);
-          *(uint32_t*)(nNewNodeBase + 0x28) = (uint32_t)(uintptr_t)pFreeListSlot[-1].m_prevlink;
-          pFreeListHead = (uint32_t*)(nNewNodeBase + 0x30);
-          *pFreeListHead = 0;
-          *(uint32_t*)(nNewNodeBase + 0x34) = 0;
-          nAllocPolicy = *(uint32_t*)((char*)(pFreeListSlot - 1) + 4);
-          *pFreeListHead = (uint32_t)(uintptr_t)pFreeListHead;
-          *(uint32_t*)(nNewNodeBase + 0x2c) = nAllocPolicy;
-          *(uint32_t*)(nNewNodeBase + 0x34) = ~(uint32_t)pFreeListHead;
+          nNewNodeBase->m_linktoslot.m_prevlink = 0;
+          nNewNodeBase->m_linktoslot.m_next = 0;
+          nNewNodeBase->m_linktofull.m_prevlink = 0;
+          nNewNodeBase->m_linktofull.m_next = 0;
+          nNewNodeBase->dwFlags = *(uint32_t*)(pFreeListSlot - 3);
+          nNewNodeBase->nFormat = *(uint32_t*)((char*)(pFreeListSlot - 3) + 4);
+          nNewNodeBase->pRawData = pFreeListSlot[-2].m_prevlink;
+          nNewNodeBase->nFrameCount = *(uint32_t*)((char*)(pFreeListSlot - 2) + 4);
+          nNewNodeBase->nDirections = *(uint32_t*)(pFreeListSlot - 1);
+          pActiveNext = &nNewNodeBase->m_frames.m_terminator;
+          pActiveNext->m_prevlink = 0;
+          nNewNodeBase->m_frames.m_terminator.m_next = 0;
+          nAllocPolicy = *(int*)((char*)(pFreeListSlot - 1) + 4);
+          pActiveNext->m_prevlink = pActiveNext;
+          nNewNodeBase->m_frames.m_linkoffset = nAllocPolicy;
+          nNewNodeBase->m_frames.m_terminator.m_next = ~(uintptr_t)pActiveNext;
         }
 
         ((TSList<::TCELENTRY, TSGetLink<::TCELENTRY>>*)((char*)(pFreeListSlot - 1) + 4))->UnlinkAll();
@@ -847,7 +858,7 @@ template<> __attribute__((noinline)) inline ::CELLIST * TSGrowableArray<CELLIST>
       pTVar1->m_next = 0;
       pTVar1->m_prevlink = pTVar1;
       pNewNode->m_frames.m_linkoffset = 0;
-      pNewNode->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
+      pNewNode->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
     }
 
     nNextCount = this->m_count;
@@ -904,7 +915,7 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
       pNewNode->m_frames.m_terminator.m_next = 0;
       pTVar1 = &pNewNode->m_frames.m_terminator;
       pTVar1->m_prevlink = pTVar1;
-      pNewNode->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
+      pNewNode->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
       pNewNode->m_frames.m_linkoffset = 0;
       ppInsertSlot = (TSLink<::CELLIST>*)((intptr_t)&pNewNode->m_hashval + pList->m_linkoffset);
     } else {

@@ -107,7 +107,7 @@ namespace D2Game::ITEMS::Items::Drop {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 int Unreferenced_00555cc0();
-void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, int32_t pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset);
+void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, uint32_t * pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset);
 int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries);
 void __fastcall ITEM_InitializeDroppedItem(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, struct D2RoomStrc * dwUnused);
 // Find collision-free coords near drop point. Offset (+2,+3), check if better room exists, then scan for free space using SPAWN_ITEM_COLLISION + COLLISION_ITEMS flags. Returns room or NULL if no space found.

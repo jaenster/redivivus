@@ -734,7 +734,7 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
         nPosY = 0;
       }
 
-      nDirX = *(int*)((int)anDirOffsets + eMissileId + MISSILE_Cr_Arrow4);
+      nDirX = *(int*)((intptr_t)anDirOffsets + eMissileId + MISSILE_Cr_Arrow4);
       nDirY = *(int*)((char*)anDirOffsets + eMissileId);
       nMissileCopyIdx = 0;
       do {

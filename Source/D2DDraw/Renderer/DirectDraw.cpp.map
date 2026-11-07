@@ -59,6 +59,7 @@
         "SRegLoadData"
       ],
       "usedTypes": [
+        "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
       ]

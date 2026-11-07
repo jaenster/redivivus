@@ -2424,7 +2424,7 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
 
     do {
       BOOL eStateId;
-      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[(int)pUnit];
+      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[(intptr_t)pUnit];
       eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
       if (eStateId) {
         pStatList = Stats::StatsEx::GetStatsByState(i, eState);

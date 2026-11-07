@@ -89,7 +89,7 @@ LRESULT __stdcall GenericWndProc(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPA
 uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId);
 int __fastcall Unreferenced_00420d80(uint32_t * param_1);
 int __fastcall Unreferenced_00420da0(int param_1);
-uint32_t __thiscall WND_ByteBuffer_HasRoom(int32_t pThis, int32_t nAddBytes);
+uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes);
 int32_t __thiscall WND_EntryArray_AllocNext(int32_t pThis, int * pnCount);
 void __thiscall WND_EntryArray_FreeEntries(int32_t pThis, int32_t nFreeCount);
 int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntry, int32_t bAllocNew);

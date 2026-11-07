@@ -383,7 +383,7 @@ uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2Lev
     do {
       pRngOrDelta = (D2ObjectRngStrc*)(((POINT*)(pnPointY - 1))->x - nX);
       if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
+        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
       }
       if ((intptr_t)pRngOrDelta < 100) {
         return (uintptr_t)pRngOrDelta & -256;
@@ -391,7 +391,7 @@ uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2Lev
 
       pRngOrDelta = (D2ObjectRngStrc*)(*pnPointY - nY);
       if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
+        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
       }
       if ((intptr_t)pRngOrDelta < 100) {
         return (uintptr_t)pRngOrDelta & -256;
@@ -427,7 +427,7 @@ uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2Lev
     do {
       pRngOrDelta = (D2ObjectRngStrc*)(((POINT*)(pnPointY - 1))->x - nX);
       if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
+        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
       }
       if ((intptr_t)pRngOrDelta < 0x32) {
         return (uintptr_t)pRngOrDelta & -256;
@@ -435,7 +435,7 @@ uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2Lev
 
       pRngOrDelta = (D2ObjectRngStrc*)(*pnPointY - nY);
       if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(int)pRngOrDelta;
+        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
       }
       if ((intptr_t)pRngOrDelta < 0x32) {
         return (uintptr_t)pRngOrDelta & -256;

@@ -41,7 +41,7 @@ typedef int (__stdcall *pfnFramePump)(int nFrameIndex);
 #endif
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
-typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
+typedef int (__stdcall *ChatDlgCallback)(D2ControlMsg * pControlMsg);
 #endif
 
 static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e920 = {
@@ -194,7 +194,7 @@ int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, 
 
 namespace D2Multi::OOGUtilities {
 
-int __stdcall OOG_DisableControlCallback(uint32_t dwParam) {
+int __stdcall OOG_DisableControlCallback(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, 1);
     return 1;
 }
@@ -874,7 +874,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
       BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x17);
     } else {
       ChatDlg::UIMENU_CantTestItBeacuseItCrash();
-      ChatDlg::LAUNCHER_AllocCharSelectComponent((int32_t)pD2IniConfig);
+      ChatDlg::LAUNCHER_AllocCharSelectComponent((uint8_t*)pD2IniConfig);
     }
 
     gpChatMessagesTextBox = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x15);
@@ -2066,7 +2066,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D
     pnQueryResult = pnNameField;
     do {
       nNameChar = *pnQueryResult;
-      *(char*)((int)pEntry + (1 - (int)pnNameField) + (int)pnQueryResult) = (char)nNameChar;
+      *(char*)((intptr_t)pEntry + (1 - (intptr_t)pnNameField) + (intptr_t)pnQueryResult) = (char)nNameChar;
       pnQueryResult = (int*)((char*)pnQueryResult + 1);
     } while ((char)nNameChar != '\0');
 
@@ -2078,7 +2078,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D
       pbCopySrc = pbLevelField;
       do {
         byCopy = *pbCopySrc;
-        pbCopySrc[(int)pEntry + (0x11 - (int)pbLevelField)] = byCopy;
+        pbCopySrc[(intptr_t)pEntry + (0x11 - (intptr_t)pbLevelField)] = byCopy;
         pbCopySrc++;
       } while (byCopy);
 
@@ -2773,7 +2773,7 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
           pbCursor = pbField;
           do {
             byScan = *pbCursor;
-            pbCursor[(int)pCacheSlot + (-0x36 - (int)pbField)] = byScan;
+            pbCursor[(intptr_t)pCacheSlot + (-0x36 - (intptr_t)pbField)] = byScan;
             pbCursor++;
           } while (byScan);
 
@@ -2812,7 +2812,7 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
             nLevelCopyOffset = -0x26 - (int)pbField;
             do {
               byScan = *pbField;
-              pbField[(int)pCacheSlot + nLevelCopyOffset] = byScan;
+              pbField[(intptr_t)pCacheSlot + nLevelCopyOffset] = byScan;
               pbField++;
             } while (byScan);
 

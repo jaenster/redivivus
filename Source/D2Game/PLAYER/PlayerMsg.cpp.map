@@ -1311,7 +1311,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
-        "eD2UnitType"
+        "eD2UnitType",
+        "uint32_t"
       ]
     },
     {
@@ -1494,7 +1495,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
-        "eD2UnitType"
+        "eD2UnitType",
+        "uint32_t"
       ]
     },
     {
@@ -2344,7 +2346,8 @@
         "D2GSPacketClt0x2C_DeadStub",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2ServerIncomingStatus"
+        "eD2ServerIncomingStatus",
+        "uint32_t"
       ]
     },
     {
@@ -2364,7 +2367,8 @@
         "D2GSPacketClt0x2D_DeadStub",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2ServerIncomingStatus"
+        "eD2ServerIncomingStatus",
+        "uint32_t"
       ]
     },
     {
@@ -2415,7 +2419,8 @@
         "D2GSPacketClt0x2E_DeadStub",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2ServerIncomingStatus"
+        "eD2ServerIncomingStatus",
+        "uint32_t"
       ]
     },
     {
@@ -2692,7 +2697,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2ServerIncomingStatus"
+        "eD2ServerIncomingStatus",
+        "uint32_t"
       ]
     },
     {
@@ -3829,7 +3835,8 @@
         "D2GSPacketClt0x66_WardenStub",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2ServerIncomingStatus"
+        "eD2ServerIncomingStatus",
+        "uint32_t"
       ]
     },
     {

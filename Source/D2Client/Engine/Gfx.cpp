@@ -39,12 +39,14 @@
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
 #endif
 
-#ifndef D2_FREE_AT
-#define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
-#endif
-
 #ifndef D2_NEW_AT
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
+#endif
+
+static_assert(sizeof(void*) != 4 || sizeof(::D2CofTextureCacheEntryStrc) == 0x1c, "D2_NEW_AT(D2CofTextureCacheEntryStrc): the 32-bit layout must be the 0x1c bytes 1.14d allocates");
+
+#ifndef D2_FREE_AT
+#define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2GfxInfoUnkStrc) == 0x14, "D2_NEW_AT(D2GfxInfoUnkStrc): the 32-bit layout must be the 0x14 bytes 1.14d allocates");
@@ -131,8 +133,8 @@ static uint32_t GFX_HashTextureName(char * pArchive) {
 static void GFX_ExtractFilenameFromPath(char * szPath, char * szOutFilename) {
     char* pcEnd = szPath;
     pcEnd = pcEnd + strlen(pcEnd) + 1;
-    char* pcCur = szPath + (int)(pcEnd + (-4 - (int)(szPath + 1)));
-    if (szPath[(int)(pcEnd + (-4 - (int)(szPath + 1)))] != '.') {
+    char* pcCur = szPath + (intptr_t)(pcEnd + (-4 - (intptr_t)(szPath + 1)));
+    if (szPath[(intptr_t)(pcEnd + (-4 - (intptr_t)(szPath + 1)))] != '.') {
       return;
     }
 
@@ -158,7 +160,7 @@ void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * s
     GFX_ExtractFilenameFromPath(szPath, nFilenameWord0);
     _strlwr(nFilenameWord0);
     nHash = GFX_HashTextureName(nFilenameWord0);
-    pEntry = (D2CofTextureCacheEntryStrc*)pTextureCache->apBuckets[nHash];
+    pEntry = pTextureCache->apBuckets[nHash];
     while (true) {
       if (!pEntry) {
         return nullptr;
@@ -176,12 +178,11 @@ void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * s
 // @sourcefile .\ENGINE\Gfx.cpp
 static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * szPath) {
     char* pcSrcFile;
+    uint8_t* pLoadedFile;
     uint32_t nHash;
     uint32_t dwUnused;
     char szFilename[260];
     int32_t nSrcLine;
-    char cCh;
-    int nCopyOffset;
     uint32_t* pSize;
     szFilename[0] = '\0';
     memset(szFilename + 1, 0, 0x103);
@@ -189,35 +190,32 @@ static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * s
     _strlwr(szFilename);
     void* nAddress = GFX_FindTextureInCache(pTextureCache, szFilename);
     if (!nAddress) {
-      uint32_t* pEntry = (uint32_t*)D2_ALLOC_AT(0x1c, ".\\ENGINE\\Gfx.cpp", 0xdc);
-      *pEntry = 0;
-      memset(pEntry + 1, 0, 6 * sizeof(pEntry[0]));
-      pEntry[1] |= 1;
-      pcSrcFile = szFilename;
-      nCopyOffset = 0xc - (int)pcSrcFile;
-      do {
-        cCh = *pcSrcFile;
-        pcSrcFile[(int)pEntry + nCopyOffset] = cCh;
-        pcSrcFile++;
-      } while (cCh != '\0');
-
+      D2CofTextureCacheEntryStrc* pEntry = D2_NEW_AT(D2CofTextureCacheEntryStrc, ".\\ENGINE\\Gfx.cpp", 0xdc);
+      pEntry->pNext = 0;
+      pEntry->dwFlags = 0;
+      pEntry->nFileSize = 0;
+      memset(pEntry->szName, 0, 8 * sizeof(pEntry->szName[0]));
+      pEntry->pFileData = 0;
+      *(uint32_t*)&pEntry->field_0x18 = 0;
+      pEntry->dwFlags |= 1;
+      strcpy(pEntry->szName, szFilename);
       nSrcLine = 0xe0;
       pcSrcFile = ".\\ENGINE\\Gfx.cpp";
-      pSize = pEntry + 2;
-      nAddress = D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pSize, pcSrcFile, nSrcLine);
-      pEntry[5] = (uint32_t)(uintptr_t)nAddress;
-      if (!nAddress) {
+      pSize = &pEntry->nFileSize;
+      pLoadedFile = (uint8_t*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pSize, pcSrcFile, nSrcLine);
+      pEntry->pFileData = pLoadedFile;
+      if (!pLoadedFile) {
         return nullptr;
       }
-      if (*(uint8_t*)((char*)nAddress + 2) > 0x40) {
+      if (pLoadedFile[2] > 0x40) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xec);
         exit(-1);
       }
 
       nHash = GFX_HashTextureName(szFilename);
-      *pEntry = (uint32_t)(uintptr_t)pTextureCache->apBuckets[nHash];
+      pEntry->pNext = pTextureCache->apBuckets[nHash];
       pTextureCache->apBuckets[nHash] = pEntry;
-      gbCofCacheLRUEnabled = gbCofCacheLRUEnabled + 0x1c + pEntry[2];
+      gbCofCacheLRUEnabled = gbCofCacheLRUEnabled + 0x1c + pEntry->nFileSize;
       return pEntry;
     }
 
@@ -226,7 +224,7 @@ static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * s
 
 // @sourcefile .\ENGINE\Gfx.cpp
 static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * pCache) {
-    int* piVar1;
+    uint32_t* puVar1;
     uint32_t nBucket;
     char DVar1;
     if (pCache->nFrameCount) {
@@ -236,7 +234,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
     int32_t nSrcLine = 0x10b;
     char* pNameEnd = ".\\ENGINE\\Gfx.cpp";
     int32_t* pSize = &pCache->nCacheEntryCount;
-    uint32_t* pEntry = (uint32_t*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, (uint32_t*)pSize, pNameEnd, nSrcLine);
+    D2CofTextureCacheEntryStrc* pEntry = (D2CofTextureCacheEntryStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, (uint32_t*)pSize, pNameEnd, nSrcLine);
     pCache->pCacheMemory = pEntry;
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10c);
@@ -245,30 +243,30 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
 
     int nRemaining = pCache->nCacheEntryCount;
     gbCofCacheLRUEnabled += nRemaining;
-    for (; nRemaining; nRemaining += -0x18 - *piVar1) {
+    for (; nRemaining; nRemaining += -0x18 - *puVar1) {
       uint32_t nHash;
-      if (pEntry[1]) {
-        pEntry[1] = 0;
+      if (pEntry->dwFlags) {
+        pEntry->dwFlags = 0;
       }
-      if (*(uint8_t*)((char*)pEntry + 0x1a) > 0x40) {
+      if ((uint8_t)pEntry->field_0x1a > 0x40) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x126);
         exit(-1);
       }
 
-      pEntry[5] = (uint32_t)(uintptr_t)(pEntry + 6);
-      pNameEnd = (char*)(pEntry + 3);
+      pEntry->pFileData = (uint8_t*)&pEntry->field_0x18;
+      pNameEnd = pEntry->szName;
       pNameEnd = pNameEnd + strlen(pNameEnd) + 1;
-      if ((uint32_t)((int)pNameEnd - ((int)pEntry + 0xd)) >= 8) {
+      if ((uint32_t)((intptr_t)pNameEnd - (intptr_t)(pEntry->szName + 1)) >= 8) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
         exit(-1);
       }
 
-      nHash = Storm::Source::SSTR::SStrHash((char*)(pEntry + 3), 1, 0);
+      nHash = Storm::Source::SSTR::SStrHash(pEntry->szName, 1, 0);
       nBucket = (((nHash >> 8 ^ nHash) >> 8 ^ nHash) >> 8 ^ nHash) & 0x1ff;
-      *pEntry = (uint32_t)(uintptr_t)pCache->apBuckets[nBucket];
+      pEntry->pNext = pCache->apBuckets[nBucket];
       pCache->apBuckets[nBucket] = pEntry;
-      piVar1 = (int*)(pEntry + 2);
-      pEntry = (uint32_t*)((int)(pEntry + 6) + *piVar1);
+      puVar1 = &pEntry->nFileSize;
+      pEntry = (D2CofTextureCacheEntryStrc*)(&pEntry->field_0x18 + *puVar1);
     }
 
     pCache->nFrameCount = 1;
@@ -688,7 +686,7 @@ uint8_t * __fastcall GFX_GetGfxInfoCofData(D2UnitStrc * pUnit, int32_t pAnimMode
 
     for (pCur = pGfxInfo->pGfxInfoUnk; pCur; pCur = pCur->pNext) {
       if (pCur->nAnimMode == pAnimMode) {
-        return (uint8_t*)pCur->pCofDataArray[5];
+        return pCur->pCofDataArray->pFileData;
       }
     }
 
@@ -736,7 +734,7 @@ static BOOL GFX_FreeGfxInfoEntry(D2UnitStrc * pUnit, D2GfxInfoUnkStrc * pGfxInfo
       if (!pMemoryToFree) {
         return 0;
       }
-      if ((D2GfxInfoUnkStrc*)pMemoryToFree->pCofDataArray == pGfxInfoUnk) {
+      if (pMemoryToFree->pCofDataArray == (D2CofTextureCacheEntryStrc*)pGfxInfoUnk) {
         break;
       }
 
@@ -860,14 +858,14 @@ static uint8_t * __stdcall GFX_LoadCompositCof(uint8_t * * pnOutCofData, uint32_
       pCofData = (int*)GFX_FindTextureInCache(pTextureCache, szCofPath);
       if (!pCofData) {
         pCofData = (int*)GFX_LoadCofFile(pTextureCache, szCofPath);
-        if (!pCofData) {
+        if (!(D2CofTextureCacheEntryStrc*)pCofData) {
           return nullptr;
         }
       }
 
       pNewEntry->nAnimMode = nAnimMode;
       pNewEntry->nWeaponParam = nWeaponParam;
-      pNewEntry->pCofDataArray = pCofData;
+      pNewEntry->pCofDataArray = (D2CofTextureCacheEntryStrc*)pCofData;
       pNewEntry->pNext = pGfxInfoEntry->pGfxInfoUnk;
       pGfxInfoEntry->pGfxInfoUnk = pNewEntry;
       nAnimModeCopy = nAnimMode;
@@ -1412,22 +1410,22 @@ void __fastcall GFX_LoadMonsterCofArchive(uint8_t nCofNameIndex) {
 
 // @sourcefile .\ENGINE\Gfx.cpp
 static void GFX_FreeUnusedCofEntries(D2CofCacheStrc * pCacheTable) {
-    uint32_t* pMemoryToFree;
-    void** ppBucketHead = pCacheTable->apBuckets;
+    D2CofTextureCacheEntryStrc* pMemoryToFree;
+    D2CofTextureCacheEntryStrc** ppBucketHead = pCacheTable->apBuckets;
     int nBucketsLeft = 0x200;
     do {
-      uint32_t* pNextEntry;
-      pNextEntry = (uint32_t*)*ppBucketHead;
+      D2CofTextureCacheEntryStrc* pNextEntry;
+      pNextEntry = *ppBucketHead;
       while (true) {
         pMemoryToFree = pNextEntry;
         if (!pMemoryToFree) {
           break;
         }
 
-        pNextEntry = (uint32_t*)*pMemoryToFree;
-        if (*(uint8_t*)(pMemoryToFree + 1) & 1) {
-          gbCofCacheLRUEnabled += -0x1c - pMemoryToFree[2];
-          D2_FREE_AT((void*)pMemoryToFree[5], ".\\ENGINE\\Gfx.cpp", 0xe3c);
+        pNextEntry = pMemoryToFree->pNext;
+        if (pMemoryToFree->dwFlags & 1) {
+          gbCofCacheLRUEnabled += -0x1c - pMemoryToFree->nFileSize;
+          D2_FREE_AT(pMemoryToFree->pFileData, ".\\ENGINE\\Gfx.cpp", 0xe3c);
           D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0xe3d);
         }
       }
@@ -1812,7 +1810,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_AsyncLoadUnitSprites(int32_t nAsyncBlock
             }
           }
 
-          pCofData = (uint8_t*)pGfxInfoUnk->pCofDataArray[5];
+          pCofData = pGfxInfoUnk->pCofDataArray->pFileData;
           if (pCofData) {
             pCofIdentity = (uint8_t*)GfxUtil::GFXUTIL_Identity(pCofData);
             if (!pCofIdentity) {
@@ -2357,7 +2355,7 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
     if (!pGfxInfoUnk) {
       return;
     }
-    if (!pGfxInfoUnk->pCofDataArray[5]) {
+    if (!pGfxInfoUnk->pCofDataArray->pFileData) {
       return;
     }
 
@@ -2387,6 +2385,7 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
 
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, int32_t nTestX, int32_t nTestY) {
+    uint8_t* pData;
     BOOL nCofIdentity;
     D2UnitStrc* pOwnerUnit;
     D2InventoryStrc* pInventoryUsed;
@@ -2416,11 +2415,12 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
     for (pGfxInfoUnk = pGfxInfo->pGfxInfoUnk; pGfxInfoUnk; pGfxInfoUnk = pGfxInfoUnk->pNext) {
       int pAnimMode = pSeqMode;
       if (pGfxInfoUnk->nAnimMode == pAnimMode) {
-        if (!(void*)pGfxInfoUnk->pCofDataArray[5]) {
+        pData = pGfxInfoUnk->pCofDataArray->pFileData;
+        if (!pData) {
           return 0;
         }
 
-        pBounds = GfxUtil::GFXUTIL_Identity((void*)pGfxInfoUnk->pCofDataArray[5]);
+        pBounds = GfxUtil::GFXUTIL_Identity(pData);
         if (!pBounds) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda4);
           exit(-1);
@@ -2486,11 +2486,13 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
     if (!pGfxInfoUnk) {
       return 0;
     }
-    if (!(void*)pGfxInfoUnk->pCofDataArray[5]) {
+
+    uint8_t* pData = pGfxInfoUnk->pCofDataArray->pFileData;
+    if (!pData) {
       return 0;
     }
 
-    void* pBounds = GfxUtil::GFXUTIL_Identity((void*)pGfxInfoUnk->pCofDataArray[5]);
+    void* pBounds = GfxUtil::GFXUTIL_Identity(pData);
     if (!pBounds) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd3);
       exit(-1);
@@ -2837,7 +2839,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
               }
             }
 
-            pCofData = (uint8_t*)pDVar1->pCofDataArray[5];
+            pCofData = pDVar1->pCofDataArray->pFileData;
             if (pCofData) {
               pCofDataBase = pCofData;
               pCofIdentityData = (uint8_t*)GfxUtil::GFXUTIL_Identity(pCofData);

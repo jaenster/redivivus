@@ -31,7 +31,7 @@ typedef uint32_t eD2ServerIncomingStatus;
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2CubeSetupEntryStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit1;
-    /* 0x04 */ struct D2UnitStrc * pUnit2;
+    /* 0x04 */ int32_t nClassId;
     /* 0x08 */ int32_t nItemLevel;
 };
 

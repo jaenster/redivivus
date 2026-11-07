@@ -999,7 +999,7 @@ int __fastcall Unreferenced_00438f40(char * param_1) {
     char cVar1;
     char* pcVar2 = param_1;
     pcVar2 = pcVar2 + strlen(pcVar2) + 1;
-    if (pcVar2 + (-2 - (intptr_t)(param_1 + 1)) < (char*)0xe && param_1[(int)(pcVar2 + (-1 - (int)(param_1 + 1)))] != '-' && *param_1 != '_') {
+    if (pcVar2 + (-2 - (intptr_t)(param_1 + 1)) < (char*)0xe && param_1[(intptr_t)(pcVar2 + (-1 - (intptr_t)(param_1 + 1)))] != '-' && *param_1 != '_') {
       return 1;
     }
 

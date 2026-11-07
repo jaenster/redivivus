@@ -13,9 +13,7 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
-extern int gbSystemInfoInitialized;
-extern uint32_t g_eOSType;
-extern float fGameVersion;
-extern uint32_t g_dwTotalPhysicalMemory;
-// lpSystemInfo parameter of GetSystemInfo
-extern _SYSTEM_INFO gSystemInfo;
+// Forward declarations
+struct D2SystemInfoStrc;
+
+extern D2SystemInfoStrc gSystemInfo;

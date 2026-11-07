@@ -67,7 +67,7 @@ void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t n
       nAvail = *(uint32_t*)(iVar1 + 0x48);
       while (nBytes > nAvail) {
         memcpy(pDst, (void*)(iVar1 - nAvail + 0x48), nAvail);
-        pDst = (void*)((int)pDst + *(int*)(*(int*)pThis + 0x48));
+        pDst = (void*)((intptr_t)pDst + *(int*)(*(int*)pThis + 0x48));
         nBytes -= *(int*)(*(int*)pThis + 0x48);
         SHA1::SHA1_Init(aShaCtx);
         SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0xc), 0x14);
@@ -470,10 +470,10 @@ uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32
     return (uint32_t)(nCompareResult == 1);
 }
 
-void __thiscall SRP_ServerComputePublicB(void * pThis, int32_t nContextBase) {
-    BigData* pSmallKeyBigInt = SHA::SHA1_FromBigIntBytes((void*)(nContextBase + 0x20), 0x20);
-    SRP_ExtractSessionKeyBytes(pThis, (void*)(nContextBase + 0x80), 0x20);
-    BigData* pRandomKeyBigInt = SHA::SHA1_FromBigIntBytes((void*)(nContextBase + 0x80), 0x20);
+void __thiscall SRP_ServerComputePublicB(void * pThis, uint8_t * nContextBase) {
+    BigData* pSmallKeyBigInt = SHA::SHA1_FromBigIntBytes(nContextBase + 0x20, 0x20);
+    SRP_ExtractSessionKeyBytes(pThis, nContextBase + 0x80, 0x20);
+    BigData* pRandomKeyBigInt = SHA::SHA1_FromBigIntBytes(nContextBase + 0x80, 0x20);
     BigData* pPublicB = SHA::SHA1_BigIntFromUnsigned(0);
     SHA::SHA1_BigIntPowMod(pPublicB, *(BigData**)(*(int*)pThis + 4), pRandomKeyBigInt, *(BigData**)(*(int*)pThis + 8));
     SHA::SHA1_BigIntAdd(pPublicB, pPublicB, pSmallKeyBigInt);
@@ -485,7 +485,7 @@ void __thiscall SRP_ServerComputePublicB(void * pThis, int32_t nContextBase) {
 
     SHA::SHA1_BigIntFree(pRandomKeyBigInt);
     SHA::SHA1_BigIntFree(pSmallKeyBigInt);
-    SHA::SHA1_ToBigIntBytes(pPublicB, (uint8_t*)(nContextBase + 0xa0), 0x20);
+    SHA::SHA1_ToBigIntBytes(pPublicB, nContextBase + 0xa0, 0x20);
     SHA::SHA1_BigIntFree(pPublicB);
 }
 

@@ -2310,7 +2310,7 @@ uint16_t * __fastcall SKILLDESC_FormatMagicPrefixDesc(D2UnitStrc * pUnit, D2Gems
     uint16_t* pStrEnd = wszText1 + nStrLen - 1;
     if (wszText1[nStrLen - 1] == L'\n') {
       pStrEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
-      wszText1[(int)pStrEnd - 1] = L'\0';
+      wszText1[(intptr_t)pStrEnd - 1] = L'\0';
     }
 
     return pStrEnd;
@@ -2329,7 +2329,7 @@ uint16_t * __fastcall SKILLDESC_FormatMagicSuffixDesc(D2UnitStrc * pUnit, D2Gems
     uint16_t* wszOutputEnd = wszText1 + nStrLen - 1;
     if (wszText1[nStrLen - 1] == L'\n') {
       wszOutputEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
-      wszText1[(int)wszOutputEnd - 1] = L'\0';
+      wszText1[(intptr_t)wszOutputEnd - 1] = L'\0';
     }
 
     return wszOutputEnd;

@@ -1071,7 +1071,7 @@ static void DownloadSave(char * pBytes) {
       int nByteOffset;
       nByteOffset = 7 - (int)pDst;
       do {
-        *pDst = pDst[(int)(pBytes + nByteOffset)];
+        *pDst = pDst[(intptr_t)(pBytes + nByteOffset)];
         i++;
         pDst++;
       } while (i < (int)(uint32_t)(uint8_t)pBytes[1]);
@@ -2488,7 +2488,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x5B(D2GSPacketSrv0x5B * pBytes) {
     char* szGuildTag = pBytes->szGuildTag;
     char* pScan = szGuildTag;
     pScan = pScan + strlen(pScan) + 1;
-    Roster::ROSTER_AllocOrUpdatePlayer(pBytes->nPlayerGUID, (uint32_t)pBytes->nCharType, pBytes->szPlayerName, pBytes->nPlayerLevel, pBytes->nPartyId, pBytes->nUnused, (uint32_t)(uint16_t)pBytes->bInParty, pBytes->nGuildFlags, szGuildTag, szGuildTag + (int)(pScan + (1 - (int)(pBytes->szGuildTag + 1))));
+    Roster::ROSTER_AllocOrUpdatePlayer(pBytes->nPlayerGUID, (uint32_t)pBytes->nCharType, pBytes->szPlayerName, pBytes->nPlayerLevel, pBytes->nPartyId, pBytes->nUnused, (uint32_t)(uint16_t)pBytes->bInParty, pBytes->nGuildFlags, szGuildTag, szGuildTag + (intptr_t)(pScan + (1 - (intptr_t)(pBytes->szGuildTag + 1))));
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x5C(D2GSPacketSrv0x5C * pBytes) {

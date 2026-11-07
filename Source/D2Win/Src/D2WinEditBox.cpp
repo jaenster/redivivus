@@ -513,7 +513,7 @@ static void __stdcall D2WINEDITBOX_HandleTextSelection(int * pEditBox, int * pX,
 
           bLineWrapped = true;
           locate_cursor_and_advance:
-          pcVar1 = szEditText + (pEditBox[0x97] - (int)pcVar1);
+          pcVar1 = szEditText + (pEditBox[0x97] - (intptr_t)pcVar1);
           if (*pX == -1 && (intptr_t)pcVar1 >= 0 && (intptr_t)pcVar1 <= nLoopCount) {
             nClampedX = nLineWidth;
             if (pcVar1) {
@@ -718,7 +718,7 @@ BOOL __stdcall D2WINEDITBOX_CreateControl(D2ControlMsg * pControl, int eFormType
             }
 
             pCurrentDrawOp = pEditBox->nCursorIndex;
-            pEditBox->nCursorIndex = (int32_t)(pszLineStart + (eRelX - (int)szConvertedText) - 1);
+            pEditBox->nCursorIndex = (int32_t)(pszLineStart + (eRelX - (intptr_t)szConvertedText) - 1);
             bCursorPlaced = true;
           }
           if (bLineWrapped) {
@@ -1097,7 +1097,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         pbClipSrc = (uint8_t*)D2WINEDITBOX_GetTextBuffer();
       pbClipEnd = pbClipSrc;
       pbClipEnd = pbClipEnd + strlen((char*)pbClipEnd) + 1;
-      if ((intptr_t)(pbClipEnd + (nCallbackResult - (int)(pbClipSrc + 1))) > (int)(pEditBox->nMaxLength - 1)) {
+      if ((intptr_t)(pbClipEnd + (nCallbackResult - (intptr_t)(pbClipSrc + 1))) > (int)(pEditBox->nMaxLength - 1)) {
         return 0;
       }
 
@@ -1172,7 +1172,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
       D2WINEDITBOX_ClearSelection(pEditBox);
       pbClipEnd = __frame0.szFilteredClipText;
       pbClipEnd = pbClipEnd + strlen((char*)pbClipEnd) + 1;
-      pwszCursor = (uint16_t*)((int)pbClipEnd * 2 - 0x25e + nSelStart * 2 - (intptr_t)((uint8_t*)&__frame0 + 2980));
+      pwszCursor = (uint16_t*)((intptr_t)pbClipEnd * 2 - 0x25e + nSelStart * 2 - (intptr_t)((uint8_t*)&__frame0 + 2980));
       break;
       case 3:
         bHasCopySelection = D2WINEDITBOX_HasSelection(pEditBox);
@@ -1724,7 +1724,7 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
             }
 
             strncpy(szLineSegment, pcLineStart, nLineCharCount);
-            pcLineEnd[(int)(szLineSegment - (int)pcLineStart)] = '\0';
+            pcLineEnd[(intptr_t)(szLineSegment - (intptr_t)pcLineStart)] = '\0';
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineSegment, szLineSegment, 0x100);
             D2WinFont::TEXT_CalcTextDimensions(wszLineSegment, &nSelSegWidth, &nSegHeight);
             nSelMin = nX;
@@ -1765,11 +1765,11 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
 
       draw_line_text:
       strncpy(szLineSegment, pcLineStart, nLineCharCount);
-      pcLineEnd[(int)(szLineSegment - (int)pcLineStart)] = '\0';
+      pcLineEnd[(intptr_t)(szLineSegment - (intptr_t)pcLineStart)] = '\0';
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineSegment, szLineSegment, 0x100);
       D2WinFont::DRAW_text(wszLineSegment, nX, nYEnd_00, pEditBox->nMaxValue, 0);
       if (bCursorVisible && !bCursorDrawn) {
-        pcLineStart = szFullText + (pEditBox->nCursorIndex - (int)pcLineStart);
+        pcLineStart = szFullText + (pEditBox->nCursorIndex - (intptr_t)pcLineStart);
         if ((intptr_t)pcLineStart >= 0 && (intptr_t)pcLineStart <= (int)nLineCharCount) {
           nSelMin = nX;
           if (pcLineStart) {

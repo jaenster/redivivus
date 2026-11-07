@@ -69,7 +69,7 @@ void __stdcall IGNORELIST_Initialize_Unref_0060ab70();
 uint32_t __fastcall GFXHASH_CalcDirectionIndex(struct D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, struct D2CelFileCacheEntryStrc * pCelEntry);
 struct D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
 // @sourcefile .\SRC\GfxHash.cpp
-uint32_t * __fastcall GFX_AllocCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, struct D2GfxDataStrc * pGfxData, struct D2CelFileCacheEntryStrc * pCelEntry);
+struct D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, struct D2GfxDataStrc * pGfxData, struct D2CelFileCacheEntryStrc * pCelEntry);
 #endif // D2_MODULE_D2CMP
 // 1 internal function (defined in .cpp)
 

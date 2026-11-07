@@ -784,14 +784,14 @@ int __fastcall MakeSaveFile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * p
                     if (!nItemsSpaceAvail && (!pGame->bExpansion || (nItemsSpaceAvail = SaveMercItems(pGame, pUnit, &pTempCursor, (uint8_t*)&__frame0.nItemsTempEnd, bUnk2, 1) , !nItemsSpaceAvail && (nItemsSpaceAvail = SaveGolemItems(pGame, pUnit, (char**)&pTempCursor, (uint8_t*)&__frame0.nItemsTempEnd, bUnk2, 1) , !nItemsSpaceAvail)))) {
                       pEffectiveEnd = pEndAddress;
                       if ((intptr_t)pTempCursor - (int)__frame0.itemsTempBuf > nAvailableSpace) {
-                        pEffectiveEnd = __frame0.pStartAddress + (int)(puVar1 + nAvailableSpace + (-((int)pTempCursor - (int)__frame0.itemsTempBuf) - (int)__frame0.itemsTempBuf));
+                        pEffectiveEnd = __frame0.pStartAddress + (int)(puVar1 + nAvailableSpace + (-((intptr_t)pTempCursor - (int)__frame0.itemsTempBuf) - (int)__frame0.itemsTempBuf));
                       }
 
                       nItemsSpaceAvail = SaveItems(pGame, pUnit, &__frame0.pStartAddress, pEffectiveEnd, bUnk1, bUnk2, 0);
                       if (!nItemsSpaceAvail) {
                         nItemsSpaceAvail = SaveCorpseItems(pGame, pUnit, &__frame0.pStartAddress, pEndAddress, bUnk2, 0);
                         if (!nItemsSpaceAvail && (!pGame->bExpansion || (nItemsSpaceAvail = SaveMercItems(pGame, pUnit, &__frame0.pStartAddress, pEndAddress, bUnk2, 0) , !nItemsSpaceAvail && (nItemsSpaceAvail = SaveGolemItems(pGame, pUnit, (char**)&__frame0.pStartAddress, pEndAddress, bUnk2, 0) , !nItemsSpaceAvail)))) {
-                          nSaveFileSize = (int)__frame0.pStartAddress - (int)pSaveBuffer;
+                          nSaveFileSize = (int)__frame0.pStartAddress - (intptr_t)pSaveBuffer;
                           *nStartOffset = nSaveFileSize;
                           *(size_t*)(pSaveBuffer + 8) = nSaveFileSize;
                           dwCrc = Fog::Save::CalculateChecksum(pSaveBuffer, nSaveFileSize);
@@ -1302,7 +1302,7 @@ int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return 0x14;
     }
 
-    *ppReadPos = (uint8_t*)((int)ppItemList + (int)pBufStart);
+    *ppReadPos = (uint8_t*)((intptr_t)ppItemList + (intptr_t)pBufStart);
     return 0;
 }
 

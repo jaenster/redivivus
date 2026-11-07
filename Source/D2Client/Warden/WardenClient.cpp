@@ -1010,7 +1010,7 @@ void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule) {
     while ((intptr_t)nModuleCount > 0) {
       HMODULE hLibModule;
       ppWardenModule[2] = (LPVOID)((char*)ppWardenModule[2] - 1);
-      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((char*)pModuleBase + (int)ppWardenModule[2] * 8 + nImportTableOffset) + (int)*ppWardenModule));
+      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((char*)pModuleBase + (int)ppWardenModule[2] * 8 + nImportTableOffset) + (intptr_t)*ppWardenModule));
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hLibModule);
       nModuleCount = ppWardenModule[2];
     }

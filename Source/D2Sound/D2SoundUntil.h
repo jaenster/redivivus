@@ -14,6 +14,9 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+// Forward declarations
+struct D2SoundListNodeStrc;
+
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
@@ -40,13 +43,13 @@ namespace D2Sound::D2SoundUntil {
 // Function declarations
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
 void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, void * pItem);
-void __fastcall SOUND_sD2SoundSmp_Free(int * * ppListHead, intptr_t nSearchValue);
-BOOL __fastcall SOUNDUTIL_FindInLinkedList(int * pNode, int32_t nSearchValue);
-void __fastcall SOUNDUTIL_FreeLinkedList(int * * ppListHead);
-void __fastcall SOUNDUTIL_AppendToLinkedList(void * * ppListHead, uint32_t dwNodeValue);
+void __fastcall SOUND_sD2SoundSmp_Free(struct D2SoundListNodeStrc * * ppListHead, intptr_t nSearchValue);
+BOOL __fastcall SOUNDUTIL_FindInLinkedList(struct D2SoundListNodeStrc * pNode, int32_t nSearchValue);
+void __fastcall SOUNDUTIL_FreeLinkedList(struct D2SoundListNodeStrc * * ppListHead);
+void __fastcall SOUNDUTIL_AppendToLinkedList(struct D2SoundListNodeStrc * * ppListHead, intptr_t dwNodeValue);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Sound)
-int __fastcall Unreferenced_005169f0(int param_1);
+int __fastcall Unreferenced_005169f0(struct D2SoundListNodeStrc * pList);
 // Maps file szText read-only and copies the size-prefixed blob located at image base + the dword at e_lfanew header (signature dword 0x454c 'LE', checked at 00516b61) +0xb8 (size at +8, data at +0xc) into pBuffer; returns TRUE on success, last error 0x7a when *pnBufferSize is too small.
 BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBufferSize, void * pBuffer);
 uint32_t __fastcall SOUNDUTIL_GetVersionResourceSize(LPCSTR szText);

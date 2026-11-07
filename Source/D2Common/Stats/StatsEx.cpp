@@ -1784,7 +1784,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
           dwFlags = nPackedStat >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt;
           if (true && (pItemStatCostTxt = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
-            anOp45Stats[(int)pStatListEx] = nPackedStat;
+            anOp45Stats[(intptr_t)pStatListEx] = nPackedStat;
             pStatListEx = (D2StatListExStrc*)((intptr_t)&pStatListEx->sStatList.pMemory + 1);
           }
         }
@@ -2006,7 +2006,7 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
           dwFlags = iVar2 >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt;
           if (true && (pItemStatCostTxt = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
-            anOp45Stats[(int)pOp45Owner] = iVar2;
+            anOp45Stats[(intptr_t)pOp45Owner] = iVar2;
             pOp45Owner = (D2UnitStrc*)((intptr_t)&pOp45Owner->eUnitType + 1);
           }
         }

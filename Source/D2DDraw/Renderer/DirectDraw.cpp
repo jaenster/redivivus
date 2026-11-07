@@ -93,12 +93,12 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
     char szRegKey[22];
     uint32_t* pGuidSize;
     int32_t nLine;
-    uint32_t pSFileGlobal = Fog::Source::SFile::SFILE_GetGlobalPointer();
+    D2SystemInfoStrc* pSFileGlobal = Fog::Source::SFile::SFILE_GetGlobalPointer();
     if (!pSFileGlobal) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6f);
       exit(-1);
     }
-    if (*(int*)(pSFileGlobal + 4) == 1) {
+    if (pSFileGlobal->eOSType == 1) {
       g_bDDrawGammaInitialized = 1;
     }
 
@@ -2150,7 +2150,7 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
           }
         default:
           {
-            bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile((int)pTile, a2, nPosY, pLight);
+            bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, a2, nPosY, pLight);
             return bDrawResult;
           }
         case 2:
@@ -2161,7 +2161,7 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       a2 += nPanelOffset;
-      bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile((int)pTile, a2, nPosY, pLight);
+      bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, a2, nPosY, pLight);
       return bDrawResult;
     }
 
@@ -2246,7 +2246,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       memset(gpSmackerImageBuffer, 0, 0x6db0);
       nVersion = 0;
       nFileSize = 0;
-      bLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
+      bLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bLoaded && nVersion) {
         bDecoded = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteRgb, (uint8_t*)gpSmackerImageBuffer, 0x6db0, &nImageHeight, &nImageWidth, &nBitDepth);
         Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\ddSmack.cpp", 0x78, 0);

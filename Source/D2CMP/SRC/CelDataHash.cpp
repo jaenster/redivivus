@@ -107,7 +107,7 @@ D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(D2PoolManagerStrc * p
     int nDstStrOffset = 4 - (int)szFileName;
     do {
       byChar = *szFileName;
-      szFileName[(int)pNewEntry + nDstStrOffset] = byChar;
+      szFileName[(intptr_t)pNewEntry + nDstStrOffset] = byChar;
       szFileName++;
     } while (byChar != '\0');
 

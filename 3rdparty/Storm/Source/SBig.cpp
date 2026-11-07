@@ -552,21 +552,19 @@ uint32_t * __fastcall SBIG_BigBuffer_GetDataPtr_Unref_004215b0(BigBuffer * pBitS
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE, upgraded this pass. It is the inner element-copy body of the oracle's .__as__ @100395e0, which MSVC outlined. Its call site inside TSGrowableArray_Ui_Assign 00421ba0 is Copy(src.m_count, src.m_data) on this, which is the Copy(Ui, const T*) signature. Not independently confirmed against a standalone oracle symbol, because MWCC never emitted one.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSBaseArray_Ui_Copy(uint32_t * pArray, uint32_t nCount, uint32_t * pSrc) {
-    uint32_t* pDstElem;
-    *pArray = nCount;
-    if ((uint32_t*)pArray[2] || nCount) {
+void __thiscall TSBaseArray_Ui_Copy(TSGrowableArray_Ui * pArray, uint32_t nCount, uint32_t * pSrc) {
+    pArray->nCapacity = nCount;
+    if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray[2], nCount * 4, s__I_00708874, -2, 0);
-      pArray[2] = (uint32_t)pNewBuffer;
+      pNewBuffer = SMem::SMemReAlloc(pArray->pData, nCount * 4, s__I_00708874, -2, 0);
+      pArray->pData = pNewBuffer;
     }
 
     uint32_t nIndex = 0;
     if (nCount > 0) {
       do {
-        pDstElem = (uint32_t*)(pArray[2] + nIndex * 4);
-        if (pDstElem) {
-          *pDstElem = *pSrc;
+        if (pArray->pData + nIndex) {
+          pArray->pData[nIndex] = *pSrc;
         }
 
         nIndex++;
@@ -574,7 +572,7 @@ void __thiscall TSBaseArray_Ui_Copy(uint32_t * pArray, uint32_t nCount, uint32_t
       } while (nIndex < nCount);
     }
 
-    pArray[1] = nCount;
+    pArray->nLen = nCount;
 }
 
 // @was SBIG_ArrayByteEnsureAdditional (pass 6, 2026.08.28)
@@ -728,7 +726,7 @@ uint32_t * __fastcall Unreferenced_00421860(uint32_t * param_1) {
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void * __thiscall TSFixedArray_Ui_Assign(uint32_t * pArray, void * pSrcArray) {
     if (pArray != (unsigned int*)pSrcArray) {
-      TSBaseArray_Ui_Copy(pArray, *(uint32_t*)((char*)pSrcArray + 4), *(uint32_t**)((char*)pSrcArray + 8));
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pArray, *(uint32_t*)((char*)pSrcArray + 4), *(uint32_t**)((char*)pSrcArray + 8));
     }
 
     return pArray;
@@ -937,7 +935,7 @@ void __thiscall TSGrowableArray_UcAlt_Reserve(TSGrowableArray_Uc * pArray, int32
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void * __thiscall TSGrowableArray_Ui_Assign(uint32_t * pDest, TSGrowableArray_Ui * pSource) {
     if ((TSGrowableArray_Ui*)pDest != pSource) {
-      TSBaseArray_Ui_Copy(pDest, pSource->nLen, pSource->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDest, pSource->nLen, pSource->pData);
     }
 
     pDest[3] = pSource->nGrowStep;
@@ -1293,7 +1291,7 @@ void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
 
 void * __thiscall SBIG_CopyAssign(uint32_t * pDest, BigBuffer * pSource) {
     if ((BigBuffer*)pDest != pSource) {
-      TSBaseArray_Ui_Copy(pDest, pSource->nCount, pSource->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDest, pSource->nCount, pSource->pData);
     }
 
     pDest[3] = pSource->nGrowStep;
@@ -2549,7 +2547,7 @@ static void __stdcall BigBuffer_ToStr(BigStack * pStack, BigBuffer * pValue, TSG
     BigBuffer* pDividend = pStack->aBuffers + pStack->nUsed;
     pStack->nUsed++;
     if (pDividend != pValue) {
-      TSBaseArray_Ui_Copy(&pDividend->nCapacity, pValue->nCount, pValue->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDividend, pValue->nCount, pValue->pData);
     }
 
     pDividend->nGrowStep = pValue->nGrowStep;
@@ -2653,7 +2651,7 @@ void __stdcall SBigAnd(BigData * pResult, BigData * pBigA, BigData * pBigB) {
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigCopy(BigData * pDst, BigData * pSrc) {
     if (pDst != pSrc) {
-      TSBaseArray_Ui_Copy((uint32_t*)pDst, pSrc->sPrimary.nCount, pSrc->sPrimary.pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDst, pSrc->sPrimary.nCount, pSrc->sPrimary.pData);
     }
 
     pDst->sPrimary.nGrowStep = pSrc->sPrimary.nGrowStep;
@@ -2935,7 +2933,7 @@ void __thiscall SBIG_CopyBigNumToTemp(BigStack * pStack, BigBuffer * pDest, BigB
       return;
     }
 
-    TSBaseArray_Ui_Copy(&pDest->nCapacity, pSrc->nCount, pSrc->pData);
+    TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDest, pSrc->nCount, pSrc->pData);
     pDest->nGrowStep = pSrc->nGrowStep;
     pDest->nStartWord = pSrc->nStartWord;
     pStack->nUsed--;
@@ -2972,7 +2970,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
     nDivisorLen = pDivisor->nCount - uVar1;
     if (nDivisorLen > nDividendLen) {
       if (pRemainder != pDividend) {
-        TSBaseArray_Ui_Copy(&pRemainder->nCapacity, pDividend->nCount, pDividend->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pRemainder, pDividend->nCount, pDividend->pData);
       }
 
       pRemainder->nGrowStep = pDividend->nGrowStep;
@@ -3142,26 +3140,26 @@ static void __stdcall BigBuffer_Gcd(BigBuffer * pnA, BigStack * pStack, BigBuffe
     int32_t nCmp = BigBuffer_Compare(pnA, pnB);
     if (nCmp > 0) {
       if (pnResult != pnA) {
-        TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnA->nCount, pnA->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnA->nCount, pnA->pData);
       }
 
       pnResult->nGrowStep = pnA->nGrowStep;
       pnResult->nStartWord = pnA->nStartWord;
       if (pBignum != pnB) {
-        TSBaseArray_Ui_Copy(&pBignum->nCapacity, pnB->nCount, pnB->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pBignum, pnB->nCount, pnB->pData);
       }
 
       pBignum->nGrowStep = pnB->nGrowStep;
       pBignum->nStartWord = pnB->nStartWord;
     } else {
       if (pnResult != pnB) {
-        TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnB->nCount, pnB->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnB->nCount, pnB->pData);
       }
 
       pnResult->nGrowStep = pnB->nGrowStep;
       pnResult->nStartWord = pnB->nStartWord;
       if (pBignum != pnA) {
-        TSBaseArray_Ui_Copy(&pBignum->nCapacity, pnA->nCount, pnA->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pBignum, pnA->nCount, pnA->pData);
       }
 
       pBignum->nGrowStep = pnA->nGrowStep;
@@ -3172,13 +3170,13 @@ static void __stdcall BigBuffer_Gcd(BigBuffer * pnA, BigStack * pStack, BigBuffe
     while (!bIsZero) {
       BigBuffer_Div(pnResult, pnQuotient, pBignum, pStack, pnResult);
       if (pnResult != pBignum) {
-        TSBaseArray_Ui_Copy(&pnResult->nCapacity, pBignum->nCount, pBignum->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pBignum->nCount, pBignum->pData);
       }
 
       pnResult->nGrowStep = pBignum->nGrowStep;
       pnResult->nStartWord = pBignum->nStartWord;
       if (pBignum != pnQuotient) {
-        TSBaseArray_Ui_Copy(&pBignum->nCapacity, pnQuotient->nCount, pnQuotient->pData);
+        TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pBignum, pnQuotient->nCount, pnQuotient->pData);
       }
 
       pBignum->nGrowStep = pnQuotient->nGrowStep;
@@ -3365,7 +3363,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
       return;
     }
 
-    TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnAcc->nCount, pnAcc->pData);
+    TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnAcc->nCount, pnAcc->pData);
     pnResult->nGrowStep = pnAcc->nGrowStep;
     pnResult->nStartWord = pnAcc->nStartWord;
     pStack->nUsed--;
@@ -3407,7 +3405,7 @@ static void __stdcall BigBuffer_Pow(BigBuffer * pnResult, BigBuffer * pnBase, ui
       pnAcc = pStack->aBuffers + dwTmp3;
     }
     if (pnAcc != pnBase) {
-      TSBaseArray_Ui_Copy(&pnAcc->nCapacity, pnBase->nCount, pnBase->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnAcc, pnBase->nCount, pnBase->pData);
     }
 
     pnAcc->nGrowStep = pnBase->nGrowStep;
@@ -3424,7 +3422,7 @@ static void __stdcall BigBuffer_Pow(BigBuffer * pnResult, BigBuffer * pnBase, ui
       return;
     }
 
-    TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnAcc->nCount, pnAcc->pData);
+    TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnAcc->nCount, pnAcc->pData);
     pnResult->nGrowStep = pnAcc->nGrowStep;
     pnResult->nStartWord = pnAcc->nStartWord;
     pStack->nUsed--;
@@ -3616,13 +3614,13 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
 
     BigBuffer_Div(pnShiftTmp, pnQuotient, pnModulus, pStack, pnQuotient);
     if (pnInput != pnWork) {
-      TSBaseArray_Ui_Copy(&pnInput->nCapacity, pnWork->nCount, pnWork->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnInput, pnWork->nCount, pnWork->pData);
       pnInput->nGrowStep = pnWork->nGrowStep;
       pnInput->nStartWord = pnWork->nStartWord;
       pStack->nUsed--;
     }
     if (pnResult != pnQuotient) {
-      TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnQuotient->nCount, pnQuotient->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnQuotient->nCount, pnQuotient->pData);
       pnResult->nGrowStep = pnQuotient->nGrowStep;
       pnResult->nStartWord = pnQuotient->nStartWord;
       pStack->nUsed--;
@@ -3817,7 +3815,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
       return;
     }
 
-    TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnAcc->nCount, pnAcc->pData);
+    TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnAcc->nCount, pnAcc->pData);
     pnResult->nGrowStep = pnAcc->nGrowStep;
     pnResult->nStartWord = pnAcc->nStartWord;
     pStack->nUsed--;
@@ -3909,13 +3907,13 @@ static void __stdcall BigBuffer_InvMod(BigBuffer * pnResult, BigBuffer * pnModul
     BigBuffer* pnT1 = pStack->aBuffers + nStackBase + 4;
     pStack->nUsed = nStackBase + 5;
     if (pDividend != pnInput) {
-      TSBaseArray_Ui_Copy(&pDividend->nCapacity, pnInput->nCount, pnInput->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDividend, pnInput->nCount, pnInput->pData);
     }
 
     pDividend->nGrowStep = pnInput->nGrowStep;
     pDividend->nStartWord = pnInput->nStartWord;
     if (pBignum != pnModulus) {
-      TSBaseArray_Ui_Copy(&pBignum->nCapacity, pnModulus->nCount, pnModulus->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pBignum, pnModulus->nCount, pnModulus->pData);
     }
 
     pBignum->nGrowStep = pnModulus->nGrowStep;
@@ -3930,25 +3928,25 @@ static void __stdcall BigBuffer_InvMod(BigBuffer * pnResult, BigBuffer * pnModul
         BigBuffer_Mul(pQuotient, pQuotient, pResult, pStack);
         BigBuffer_Add(pnResult, pQuotient, pQuotient);
         if (pnResult != pResult) {
-          TSBaseArray_Ui_Copy(&pnResult->nCapacity, pResult->nCount, pResult->pData);
+          TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pResult->nCount, pResult->pData);
         }
 
         pnResult->nGrowStep = pResult->nGrowStep;
         pnResult->nStartWord = pResult->nStartWord;
         if (pResult != pQuotient) {
-          TSBaseArray_Ui_Copy(&pResult->nCapacity, pQuotient->nCount, pQuotient->pData);
+          TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pResult, pQuotient->nCount, pQuotient->pData);
         }
 
         pResult->nGrowStep = pQuotient->nGrowStep;
         pResult->nStartWord = pQuotient->nStartWord;
         if (pDividend != pBignum) {
-          TSBaseArray_Ui_Copy(&pDividend->nCapacity, pBignum->nCount, pBignum->pData);
+          TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pDividend, pBignum->nCount, pBignum->pData);
         }
 
         pDividend->nGrowStep = pBignum->nGrowStep;
         pDividend->nStartWord = pBignum->nStartWord;
         if (pBignum != pnT1) {
-          TSBaseArray_Ui_Copy(&pBignum->nCapacity, pnT1->nCount, pnT1->pData);
+          TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pBignum, pnT1->nCount, pnT1->pData);
         }
 
         pBignum->nGrowStep = pnT1->nGrowStep;
@@ -4038,7 +4036,7 @@ static void __stdcall BigBuffer_PowMod(BigBuffer * pnResult, BigBuffer * pnBase,
       } while (nWordIdx);
     }
     if (pnResult != pnAcc) {
-      TSBaseArray_Ui_Copy(&pnResult->nCapacity, pnAcc->nCount, pnAcc->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnResult, pnAcc->nCount, pnAcc->pData);
       pnResult->nGrowStep = pnAcc->nGrowStep;
       pnResult->nStartWord = pnAcc->nStartWord;
       pStack->nUsed--;
@@ -4312,7 +4310,7 @@ static int32_t __stdcall BigBuffer_IsPrime(BigStack * pStack, BigBuffer * pnCand
     BigBuffer_Sub_Ui(pnCandidate, pnNegOne, 1);
     pBVar1 = pnOddPart;
     if (pnOddPart != pnNegOne) {
-      TSBaseArray_Ui_Copy(&pnOddPart->nCapacity, pnNegOne->nCount, pnNegOne->pData);
+      TSBaseArray_Ui_Copy((TSGrowableArray_Ui*)pnOddPart, pnNegOne->nCount, pnNegOne->pData);
     }
 
     pBVar1->nGrowStep = pnNegOne->nGrowStep;
@@ -4371,7 +4369,7 @@ static int32_t __stdcall BigBuffer_IsPrime(BigStack * pStack, BigBuffer * pnCand
           break;
         }
 
-        BigBuffer_FromUnsigned(*(uint32_t*)((int)gnSBigMillerRabinWitness + (int)pnOddPart), pnWitness);
+        BigBuffer_FromUnsigned(*(uint32_t*)((intptr_t)gnSBigMillerRabinWitness + (intptr_t)pnOddPart), pnWitness);
         BigBuffer_PowMod(pQuotient, pBVar1, pnCandidate, pnCandidate, pStack);
         nCmpResult = BigBuffer_Compare(pQuotient, pBVar1);
         if (nCmpResult) {

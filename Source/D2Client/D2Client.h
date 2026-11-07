@@ -33,6 +33,7 @@ struct D2ClientSoundChannelStrc;
 struct D2ClientStrc;
 struct D2ClientVisibilityBufferStrc;
 struct D2ClientVisibilityEntryStrc;
+struct D2CofTextureCacheEntryStrc;
 struct D2ControlMsg;
 struct D2ControlStrc;
 struct D2DialogStringData;
@@ -74,10 +75,12 @@ struct D2RosterStrc;
 struct D2SaveFileHeaderStrc;
 struct D2SkillStrc;
 struct D2SoundChannelStrc;
+struct D2SoundListNodeStrc;
 struct D2SoundSmpStrc;
 struct D2SpeechBankStrc;
 struct D2SpriteCache;
 struct D2TextLineStrc;
+struct D2TileLibraryEntryStrc;
 struct D2TimerListStrc;
 struct D2TimerStrc;
 struct D2UIFlagInitStrc;
@@ -156,6 +159,10 @@ typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig
 #ifndef RECON_FPTD_fpGameLoopFunction
 #define RECON_FPTD_fpGameLoopFunction
 typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
+#endif
+#ifndef RECON_FPTD_fpRequiredUserAction
+#define RECON_FPTD_fpRequiredUserAction
+typedef BOOL (*fpRequiredUserAction)();
 #endif
 
 // Data types
@@ -356,7 +363,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x00 */ void (*fpCloseGame)(int, int);
     /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, void *, int, int, void *, int, int, int, int, int, int, void *);
     /* 0x08 */ void (__fastcall *fpGetDatabaseCharacter)(struct D2ClientStrc *, LPCSTR, DWORD, LPCSTR);
-    /* 0x0C */ void (*fpSaveDatabaseCharacter)(int, void *, int, int); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
+    /* 0x0C */ void (*fpSaveDatabaseCharacter)(char *, void *, int, int); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
     /* 0x10 */ uint8_t * fpServerLogMessage;
     /* 0x14 */ void (__fastcall *fpEnterGame)(uint16_t, char *, uint16_t, uint32_t, uint32_t);
     /* 0x18 */ int (*fpFindPlayerToken)(int, void *, void *, void *, void *, void *, void *);
@@ -367,7 +374,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x2C */ void (__fastcall *fpUpdateGameInformation)(int, int);
     /* 0x30 */ void (__fastcall *fpReserved2_systemMsg)(struct D2BNetSystemInfoStrc *);
     /* 0x34 */ int (*fpSetGameData)();
-    /* 0x38 */ void (*fpRelockDatabaseCharacter)(int);
+    /* 0x38 */ void (*fpRelockDatabaseCharacter)(char *);
     /* 0x3C */ void (*fpLoadComplete)();
     /* 0x40 */ uint8_t * fpReserved3; // slot 16, offset 0x40 - never referenced in Game.exe
     /* 0x44 */ uint8_t * fpReserved4; // slot 17, offset 0x44 - never referenced in Game.exe
@@ -633,7 +640,7 @@ struct __attribute__((packed)) D2ClientStrc {
     /* 0x05D */ uint8_t nPad5D[3];
     /* 0x060 */ void * pClientContainer; // Opaque BNet connection handle
     /* 0x064 */ int unk0x64;
-    /* 0x068 */ void * pRealm;
+    /* 0x068 */ uint32_t pRealm;
     /* 0x06C */ int nStartSkill; // First field of save appearance buffer
     /* 0x070 */ int unk0x70;
     /* 0x074 */ int unk0x74;
@@ -714,9 +721,23 @@ struct D2CofCacheStrc {
     /* 0x00 */ int32_t nFrameCount;
     /* 0x04 */ void * pCacheMemory;
     /* 0x08 */ int32_t nCacheEntryCount;
-    /* 0x0C */ void * apBuckets[512]; // hash buckets walked 0x200 deep by GFX_FreeUnusedCofEntries
+    /* 0x0C */ struct D2CofTextureCacheEntryStrc * apBuckets[512]; // hash buckets walked 0x200 deep by GFX_FreeUnusedCofEntries
 };
 #endif // D2_DEFINED_D2CofCacheStrc
+#ifndef D2_DEFINED_D2CofTextureCacheEntryStrc
+#define D2_DEFINED_D2CofTextureCacheEntryStrc
+struct D2CofTextureCacheEntryStrc {
+    /* 0x00 */ struct D2CofTextureCacheEntryStrc * pNext;
+    /* 0x04 */ uint32_t dwFlags;
+    /* 0x08 */ uint32_t nFileSize;
+    /* 0x0C */ char szName[8];
+    /* 0x14 */ uint8_t * pFileData;
+    /* 0x18 */ uint8_t field_0x18;
+    /* 0x19 */ uint8_t field_0x19;
+    /* 0x1A */ uint8_t field_0x1a;
+    /* 0x1B */ uint8_t field_0x1b;
+};
+#endif // D2_DEFINED_D2CofTextureCacheEntryStrc
 #ifndef D2_DEFINED_D2ConfigControlDescStrc
 #define D2_DEFINED_D2ConfigControlDescStrc
 struct __attribute__((packed)) D2ConfigControlDescStrc {
@@ -1041,7 +1062,7 @@ struct D2GfxHelperStrc {
     /* 0x00 */ void (__fastcall *nfpFillYBufferTable)(void *, int, int, int);
     /* 0x04 */ void (__fastcall *nfpDrawVisTile)(uint8_t *, int32_t, int32_t);
     /* 0x08 */ void (__fastcall *nfpDrawVisTileLit)(int, int, int, int);
-    /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(int, int, int, struct D2GfxLightExStrc *);
+    /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(struct D2TileLibraryEntryStrc *, int, int, struct D2GfxLightExStrc *);
     /* 0x10 */ void (__fastcall *nfpDrawWallTile)(int, int, int, uint32_t *);
     /* 0x14 */ void (__fastcall *nfpDrawBlendedVisTile)(uint8_t *, int, int, int);
     /* 0x18 */ void (__fastcall *nfpDrawRoofTile)(int, int, int, uint32_t *, BYTE);
@@ -1052,7 +1073,7 @@ struct D2GfxHelperStrc {
 struct D2GfxInfoUnkStrc {
     /* 0x00 */ int nAnimMode; // animation mode key; GFX_FindGfxInfoByModeAndWeapon compares it with the requested mode
     /* 0x04 */ int nWeaponParam; // Weapon/COF param used as cache key alongside pAnimMode
-    /* 0x08 */ int * pCofDataArray; // COF data array pointer, accessed at [5] (offset 0x14) by GFX_GetGfxInfoCofData
+    /* 0x08 */ struct D2CofTextureCacheEntryStrc * pCofDataArray; // COF data array pointer, accessed at [5] (offset 0x14) by GFX_GetGfxInfoCofData
     /* 0x0C */ int nCofDataCount; // COF data count or flags
     /* 0x10 */ struct D2GfxInfoUnkStrc * pNext; // Next entry in linked list
 };
@@ -2973,7 +2994,7 @@ struct __attribute__((packed)) D2SoundChannelStrc {
     /* 0x1C */ int nPriority; // channel priority (set by SOUND_SetChannelPriority)
     /* 0x20 */ float fUnitDistance; // unit distance (pChannel[8])
     /* 0x24 */ int nParam; // extra param (pChannel[9])
-    /* 0x28 */ int * pGlobal3Ref; // ptr to global3 timing struct (checked non-null + [4]!=0)
+    /* 0x28 */ struct D2SoundListNodeStrc * pUnitList; // ptr to global3 timing struct (checked non-null + [4]!=0)
     /* 0x2C */ struct D2ClientSoundChannelStrc * pClientChannel; // unknown
     /* 0x30 */ int nPlayMode; // 1=streaming
     /* 0x34 */ uint32_t nScheduledTime; // global3+delay scheduled start time (pChannel[0xd])
@@ -3033,6 +3054,13 @@ struct D2SoundEnvironTxt {
     /* 0x54 */ int EAX_Air_Absorb;
 };
 #endif // D2_DEFINED_D2SoundEnvironTxt
+#ifndef D2_DEFINED_D2SoundListNodeStrc
+#define D2_DEFINED_D2SoundListNodeStrc
+struct __attribute__((packed)) D2SoundListNodeStrc {
+    /* 0x00 */ intptr_t nItemKey;
+    /* 0x04 */ struct D2SoundListNodeStrc * pNext;
+};
+#endif // D2_DEFINED_D2SoundListNodeStrc
 #ifndef D2_DEFINED_D2SoundSmpStrc
 #define D2_DEFINED_D2SoundSmpStrc
 struct D2SoundSmpStrc {
@@ -3789,6 +3817,7 @@ namespace D2Client::Engine {
 // both references (00460568, 00460608) only register the address with MOV ECX,0x460490 / CALL
 // 00451bb0 - neither loads ESI. Here the funcdef was right and the implementation was the outlier.
 uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused);
+BOOL fpRequiredUserAction();
 } // namespace D2Client::Engine
 namespace D2Client::GAME::Game {
 ::SGAMEDATA * __thiscall ScalarDeletingDestructor(::SGAMEDATA * pThis, uint32_t dwFlags);

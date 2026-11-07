@@ -515,6 +515,26 @@ static inline intptr_t D2_StormNextLink(const void* pLink, intptr_t nLinkOffset)
   return pThis->m_next + nLinkOffset;
 }
 
+// The x86-only registers of a Win32 CONTEXT, by the role they have on either target
+// (see context-register-field.ts). On x86 each is the member access itself.
+#if defined(_WIN64) || defined(__x86_64__)
+#define D2_CONTEXT_X64_Eax Rax
+#define D2_CONTEXT_X64_Ebx Rbx
+#define D2_CONTEXT_X64_Ecx Rcx
+#define D2_CONTEXT_X64_Edx Rdx
+#define D2_CONTEXT_X64_Esi Rsi
+#define D2_CONTEXT_X64_Edi Rdi
+#define D2_CONTEXT_X64_Ebp Rbp
+#define D2_CONTEXT_X64_Esp Rsp
+#define D2_CONTEXT_X64_Eip Rip
+#define D2_CONTEXT_X64_FloatSave FltSave
+#define D2_CONTEXT_FIELD(c, f) ((c).D2_CONTEXT_X64_##f)
+#define D2_CONTEXT_X87_AREA(c) ((BYTE*)(c).FltSave.FloatRegisters)
+#else
+#define D2_CONTEXT_FIELD(c, f) ((c).f)
+#define D2_CONTEXT_X87_AREA(c) ((c).FloatSave.RegisterArea)
+#endif
+
 // A parameter-check block (see param-check-block.ts): every D2_CHECK ANDs an all-ones or zero
 // mask into one accumulator, all checks are evaluated, and one test of it runs the failure arm.
 // VC8 compiles a check to neg/sbb and the accumulation to and; with the assumption after the block

@@ -295,6 +295,7 @@
         "SOUND_StopChannelById"
       ],
       "usedTypes": [
+        "D2SoundListNodeStrc",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -846,6 +847,7 @@
       ],
       "usedTypes": [
         "D2MonSoundsTxt",
+        "D2SoundListNodeStrc",
         "D2UnitStrc",
         "int32_t"
       ]

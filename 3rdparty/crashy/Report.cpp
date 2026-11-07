@@ -132,10 +132,10 @@ int8_t __thiscall AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToR
         *pDst = '\0';
         pBaseDirPtr = pBaseDirPtr + strlen(pBaseDirPtr) + 1;
         copy_file_into_report_dir:
-        pBaseDirPtr += -1 - (int)pThis->szReportDir;
+        pBaseDirPtr += -1 - (intptr_t)pThis->szReportDir;
         if (pBaseDirPtr < (char*)0x400) {
-          szPathCopy[(int)pBaseDirPtr] = '/';
-          bExtracted = File::FILETOOLS_ExtractFilename(szPathCopy + (int)(pBaseDirPtr + 1), szPath, (intptr_t)&local_8 - (int)(szPathCopy + (int)(pBaseDirPtr + 1)));
+          szPathCopy[(intptr_t)pBaseDirPtr] = '/';
+          bExtracted = File::FILETOOLS_ExtractFilename(szPathCopy + (intptr_t)(pBaseDirPtr + 1), szPath, (intptr_t)&local_8 - (int)(szPathCopy + (intptr_t)(pBaseDirPtr + 1)));
           if ((char)bExtracted != '\0') {
             File::FILETOOLS_CopyFile_UTF8(szPath, szPathCopy);
             szPath = szPathCopy;

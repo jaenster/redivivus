@@ -1313,7 +1313,6 @@ int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(struct D2TileLibraryEntr
 // Renders a shadow tile to texture with perspective projection in Direct3D. Calculates viewport bounds and renders textured quad with shadow blending.
 int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(struct D2TileLibraryEntryStrc * pTileEntry, int nTilePosX, int32_t nTilePosY, uint8_t byLightRow, uint32_t dwAlpha, int32_t nScreenSplitIndex);
 BOOL __fastcall DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, int nDrawMode, int nScreenPanels);
-BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pTexColorTable, uint8_t nParam4);
 BOOL __fastcall DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha);
 BOOL __fastcall DrawWallTile(struct D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, struct D2GfxLightStrc * pLight, int nScreenPanels);
 // Creates ground tile vertex buffer (6x6 grid = 36 vertices) and index buffer (60 indices for 5x5 tile strips) for perspective tile rendering. Calculates texture coordinates based on window dimensions (gnD3DTextureCacheBlockSize, gnD3DTextureCacheCount). Each vertex has position adjustment flags at corners (±1 in X/Y) for isometric diamond shape. Index buffer stored at gaD3DGroundTileIndexBuffer.
@@ -1345,6 +1344,6 @@ void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca520(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca530(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_D2Direct3D
-// 14 internal functions (defined in .cpp)
+// 15 internal functions (defined in .cpp)
 
 } // namespace D2Direct3D::Renderer

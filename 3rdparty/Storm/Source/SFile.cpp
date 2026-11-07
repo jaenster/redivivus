@@ -170,19 +170,19 @@ void SFILE_DecompressLzw_BufferWrite(void * pSrc, uint32_t * pnBytes, D2LzwBuffe
 // callbacks. The name is descriptively correct and the @sourcefile stamp already places it in SFILE.CPP,
 // so SFile owning its own explode wrapper alongside SComp's is the real structure, not an error.
 // @blizzard DecompressLzw (SFILE.CPP)
-int32_t __stdcall SFILE_DecompressLzw(int32_t pSrcData, int32_t pDstData, int32_t nDstSize) {
-    int32_t bufState[5];
+int32_t __stdcall SFILE_DecompressLzw(uint8_t * pDstData, uint8_t * pSrcData, int32_t nSrcSize) {
+    D2LzwBufferStateStrc sBufState;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779080);
     if (!gpSFileExplodeWorkBuffer) {
       gpSFileExplodeWorkBuffer = SMem::SMemAlloc(0x3134, ".\\SOURCE\\SFILE.CPP", 0x2c9, 0);
     }
 
-    bufState[2] = pSrcData;
-    bufState[0] = pDstData;
-    bufState[1] = 0;
-    bufState[3] = 0;
-    bufState[4] = nDstSize;
-    _3rdparty::PKWARE::explode::explode((pfnPkwareRead)SFILE_DecompressLzw_BufferRead, (pfnPkwareWrite)SFILE_DecompressLzw_BufferWrite, (TDcmpStruct*)gpSFileExplodeWorkBuffer, bufState);
+    sBufState.pDst = pDstData;
+    sBufState.pSrc = pSrcData;
+    sBufState.nSrcPos = 0;
+    sBufState.nDstPos = 0;
+    sBufState.nSrcSize = nSrcSize;
+    _3rdparty::PKWARE::explode::explode((pfnPkwareRead)SFILE_DecompressLzw_BufferRead, (pfnPkwareWrite)SFILE_DecompressLzw_BufferWrite, (TDcmpStruct*)gpSFileExplodeWorkBuffer, &sBufState);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779080);
     return 1;
 }
@@ -1563,35 +1563,35 @@ uint32_t __thiscall SFILE_CompareFileName(StormLinkStrc * pLink, int pLeft) {
 int __fastcall Unreferenced_004169f0(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_00416a00(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_00416a10(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_00416a20(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_00416a30(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
@@ -1735,7 +1735,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
               }
             }
 
-            SFILE_Decrypt(pMPQFileSaved->nDecryptKey + __frame0.nReadCount, (uint32_t*)((int)__frame0.pReadBuffer + (int)pArchive), nSectorIndex & -4);
+            SFILE_Decrypt(pMPQFileSaved->nDecryptKey + __frame0.nReadCount, (uint32_t*)((intptr_t)__frame0.pReadBuffer + (intptr_t)pArchive), nSectorIndex & -4);
             pArchive = (D2MPQFileStrc*)(pArchive->szFileName + (nSectorIndex - 8));
             __frame0.nReadCount++;
             nSectorSize = __frame0.nBaseOffset;
@@ -1777,7 +1777,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
               switch (nFileSizeBits) {
                 case 0x100:
                   {
-                    SFILE_DecompressLzw(__frame0.nBaseOffset + (int)pDstBuf, (int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8), nSectorSize);
+                    SFILE_DecompressLzw((uint8_t*)(__frame0.nBaseOffset + (char*)pDstBuf), (uint8_t*)((intptr_t)__frame0.pReadBuffer + (intptr_t)(pArchive->szFileName - 8)), nSectorSize);
                     break;
                   }
                 case 0x200:
@@ -1798,7 +1798,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          char array at offset 8 - if it ever becomes a char* the expression silently
                          turns into a load.
                          Cannot be fixed here without retyping the parameter, i.e. a signature change.
-                          */ if (pMPQFileSaved->bChecksumEnabled && pMPQFileSaved->nChecksumState != 1 && *(uint8_t*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)) & 0xc0) {
+                          */ if (pMPQFileSaved->bChecksumEnabled && pMPQFileSaved->nChecksumState != 1 && *(uint8_t*)((intptr_t)__frame0.pReadBuffer + (intptr_t)(pArchive->szFileName - 8)) & 0xc0) {
                       pMPQFileSaved->nChecksumState = 1;
                     }
 
@@ -1821,7 +1821,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          (compressed). Destination advance is therefore bounded by nReadLen rounded up
                          to whole
                          sectors; SFILE_ReadSectors cannot itself walk pDstBuf out of the caller's
-                         buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (char*)pDstBuf), &nDestSize, (uint32_t*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)), nSectorSize, (uint32_t)pMpqArchive->szArchivePath);
+                         buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (char*)pDstBuf), &nDestSize, (uint32_t*)((intptr_t)__frame0.pReadBuffer + (intptr_t)(pArchive->szFileName - 8)), nSectorSize, (uint32_t)pMpqArchive->szArchivePath);
                     if (!BVar1) {
                       SErr::SErrDisplayError(0x85100083, (uint32_t*)pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
                     }
@@ -1830,7 +1830,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                   }
               }
             } else if (__frame0.pReadBuffer != pDstBuf) {
-              SMem::SMemCopy((void*)(__frame0.nBaseOffset + (char*)pDstBuf), (void*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)), nChunkSize);
+              SMem::SMemCopy((void*)(__frame0.nBaseOffset + (char*)pDstBuf), (void*)((intptr_t)__frame0.pReadBuffer + (intptr_t)(pArchive->szFileName - 8)), nChunkSize);
             }
             __frame0.nBaseOffset += nChunkSize;
             pArchive = (D2MPQFileStrc*)((char*)pArchive + nSectorSize);
@@ -2253,9 +2253,9 @@ void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, 
     if (pEntry) {
       pLink = ppSlot[1];
       if ((intptr_t)pLink < 0) {
-        pLink = (int*)~(uint32_t)pLink;
+        pLink = (int*)~(uintptr_t)pLink;
       } else {
-        pLink = (int*)((int)pLink + ((int)ppSlot - pEntry[1]));
+        pLink = (int*)((intptr_t)pLink + ((intptr_t)ppSlot - pEntry[1]));
       }
 
       *pLink = (int)pEntry;
@@ -2275,7 +2275,7 @@ void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, 
           pEntry = *ppListContainer;
           pLink = ppListHead[1];
           if ((intptr_t)pLink < 0) {
-            *(int***)~(uint32_t)pLink = (int**)ppSlot;
+            *(int***)~(uintptr_t)pLink = (int**)ppSlot;
             ppListHead[1] = (int*)pNode;
             return;
           }
@@ -2283,7 +2283,7 @@ void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, 
             pEntry = (int*)((char*)ppListHead - (*ppListHead)[1]);
           }
 
-          *(int***)((int)pLink + (int)pEntry) = (int**)ppSlot;
+          *(int***)((intptr_t)pLink + (intptr_t)pEntry) = (int**)ppSlot;
           ppListHead[1] = (int*)pNode;
           return;
         }
@@ -2390,9 +2390,9 @@ void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * *
     if (pEntry) {
       pLink = ppSlot[1];
       if ((intptr_t)pLink < 0) {
-        pLink = (int*)~(uint32_t)pLink;
+        pLink = (int*)~(uintptr_t)pLink;
       } else {
-        pLink = (int*)((int)pLink + ((int)ppSlot - pEntry[1]));
+        pLink = (int*)((intptr_t)pLink + ((intptr_t)ppSlot - pEntry[1]));
       }
 
       *pLink = (int)pEntry;
@@ -2412,7 +2412,7 @@ void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * *
           pEntry = *ppListContainer;
           pLink = ppListHead[1];
           if ((intptr_t)pLink < 0) {
-            *(int***)~(uint32_t)pLink = (int**)ppSlot;
+            *(int***)~(uintptr_t)pLink = (int**)ppSlot;
             ppListHead[1] = (int*)pNode;
             return;
           }
@@ -2420,7 +2420,7 @@ void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * *
             pEntry = (int*)((char*)ppListHead - (*ppListHead)[1]);
           }
 
-          *(int***)((int)pLink + (int)pEntry) = (int**)ppSlot;
+          *(int***)((intptr_t)pLink + (intptr_t)pEntry) = (int**)ppSlot;
           ppListHead[1] = (int*)pNode;
           return;
         }
@@ -2464,9 +2464,9 @@ void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * *
     if (pEntry) {
       pLink = ppSlot[1];
       if ((intptr_t)pLink < 0) {
-        pLink = (int*)~(uint32_t)pLink;
+        pLink = (int*)~(uintptr_t)pLink;
       } else {
-        pLink = (int*)((int)pLink + ((int)ppSlot - pEntry[1]));
+        pLink = (int*)((intptr_t)pLink + ((intptr_t)ppSlot - pEntry[1]));
       }
 
       *pLink = (int)pEntry;
@@ -2486,7 +2486,7 @@ void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * *
           pEntry = *ppListContainer;
           pLink = ppListHead[1];
           if ((intptr_t)pLink < 0) {
-            *(int***)~(uint32_t)pLink = (int**)ppSlot;
+            *(int***)~(uintptr_t)pLink = (int**)ppSlot;
             ppListHead[1] = (int*)pNode;
             return;
           }
@@ -2494,7 +2494,7 @@ void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * *
             pEntry = (int*)((char*)ppListHead - (*ppListHead)[1]);
           }
 
-          *(int***)((int)pLink + (int)pEntry) = (int**)ppSlot;
+          *(int***)((intptr_t)pLink + (intptr_t)pEntry) = (int**)ppSlot;
           ppListHead[1] = (int*)pNode;
           return;
         }
@@ -2803,7 +2803,7 @@ StormLinkedListStrc * __fastcall Unreferenced_00418470(StormLinkedListStrc * par
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
     param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return param_1;
 }
 
@@ -2818,9 +2818,9 @@ void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * *
     if (pEntry) {
       pLink = ppSlot[1];
       if ((intptr_t)pLink < 0) {
-        pLink = (int*)~(uint32_t)pLink;
+        pLink = (int*)~(uintptr_t)pLink;
       } else {
-        pLink = (int*)((int)pLink + ((int)ppSlot - pEntry[1]));
+        pLink = (int*)((intptr_t)pLink + ((intptr_t)ppSlot - pEntry[1]));
       }
 
       *pLink = (int)pEntry;
@@ -2840,7 +2840,7 @@ void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * *
           pEntry = *ppListContainer;
           pLink = ppListHead[1];
           if ((intptr_t)pLink < 0) {
-            *(int***)~(uint32_t)pLink = (int**)ppSlot;
+            *(int***)~(uintptr_t)pLink = (int**)ppSlot;
             ppListHead[1] = (int*)pNode;
             return;
           }
@@ -2848,7 +2848,7 @@ void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * *
             pEntry = (int*)((char*)ppListHead - (*ppListHead)[1]);
           }
 
-          *(int***)((int)pLink + (int)pEntry) = (int**)ppSlot;
+          *(int***)((intptr_t)pLink + (intptr_t)pEntry) = (int**)ppSlot;
           ppListHead[1] = (int*)pNode;
           return;
         }
@@ -3186,7 +3186,7 @@ void __fastcall SFILE_FreeArchiveRecord(D2ArchiveStrc * pArchive) {
 
     D2ArchiveStrc* pPrevLink = pArchive->pNext;
     if ((intptr_t)pPrevLink < 0) {
-      ppPrevSlot = (int*)~(uint32_t)pPrevLink;
+      ppPrevSlot = (int*)~(uintptr_t)pPrevLink;
     } else {
       ppPrevSlot = (int*)((char*)pPrevLink + ((intptr_t)pArchive - (intptr_t)pNextNode->pNext));
     }
@@ -3335,7 +3335,7 @@ StormLinkedListStrc * __fastcall Unreferenced_00418d80(StormLinkedListStrc * par
     pSVar1->pNext = 0;
     pSVar1->pPrevLink = pSVar1;
     param_1->nLinkOffset = 0;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return param_1;
 }
 
@@ -4567,9 +4567,9 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
           if (nFileHandle) {
             pDVar3 = pSelectedRequest->pNext;
             if ((intptr_t)pDVar3 < 0) {
-              piVar2 = (int*)~(uint32_t)pDVar3;
+              piVar2 = (int*)~(uintptr_t)pDVar3;
             } else {
-              piVar2 = (int*)((int)pDVar3 + ((int)pSelectedRequest - nFileHandle->pNext));
+              piVar2 = (int*)((intptr_t)pDVar3 + ((intptr_t)pSelectedRequest - nFileHandle->pNext));
             }
 
             *piVar2 = (int)nFileHandle;
@@ -4703,11 +4703,11 @@ static void SFILE_SetRequestUrgentByBuffer(void * pReadBuffer, BOOL bUrgent) {
 }
 
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
-void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nAsyncHandle) {
+void __stdcall SFILE_CancelAsyncRequestNoReturn(void * nAsyncHandle) {
     D2_CHECKS_BEGIN;
     D2_CHECK(nAsyncHandle);
     D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
-    SFILE_CancelRequest((void*)nAsyncHandle, nullptr);
+    SFILE_CancelRequest(nAsyncHandle, nullptr);
 }
 
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
@@ -5334,8 +5334,8 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, int32_t nReadCtx) {
-    uint32_t nOpenFlags = SFileLoadFileEx2(nullptr, pArchive, ppOutBuffer, pdwOutSize, nSize, SFILE_GetOpenFlags(), (LPOVERLAPPED)nReadCtx, 0);
+uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, LPOVERLAPPED nReadCtx) {
+    uint32_t nOpenFlags = SFileLoadFileEx2(nullptr, pArchive, ppOutBuffer, pdwOutSize, nSize, SFILE_GetOpenFlags(), nReadCtx, 0);
     return nOpenFlags;
 }
 
@@ -5343,8 +5343,8 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx) {
-    uint32_t nResult = SFileLoadFileEx2(pArchive, pFileHandle, ppOutBuffer, pdwOutSize, nExtraPadBytes, nSearchScope, (LPOVERLAPPED)nReadCtx, 0);
+uint32_t __stdcall SFileLoadFileEx(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx) {
+    uint32_t nResult = SFileLoadFileEx2(pArchive, pFileHandle, ppOutBuffer, pdwOutSize, nExtraPadBytes, nSearchScope, nReadCtx, 0);
     return nResult;
 }
 

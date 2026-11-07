@@ -15,6 +15,7 @@
 
 // Forward declarations
 struct D2SoundEaxEnvironStrc;
+struct D2SoundListNodeStrc;
 struct D2SoundSmpStrc;
 struct IDirectDraw;
 struct IDirectSound;
@@ -66,10 +67,10 @@ DWORD __stdcall SOUND_GetSound3DFlag();
 namespace D2Sound::D2SoundUntil {
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
 void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, void * pItem);
-void __fastcall SOUND_sD2SoundSmp_Free(int * * ppListHead, intptr_t nSearchValue);
-BOOL __fastcall SOUNDUTIL_FindInLinkedList(int * pNode, int32_t nSearchValue);
-void __fastcall SOUNDUTIL_FreeLinkedList(int * * ppListHead);
-void __fastcall SOUNDUTIL_AppendToLinkedList(void * * ppListHead, uint32_t dwNodeValue);
+void __fastcall SOUND_sD2SoundSmp_Free(struct D2SoundListNodeStrc * * ppListHead, intptr_t nSearchValue);
+BOOL __fastcall SOUNDUTIL_FindInLinkedList(struct D2SoundListNodeStrc * pNode, int32_t nSearchValue);
+void __fastcall SOUNDUTIL_FreeLinkedList(struct D2SoundListNodeStrc * * ppListHead);
+void __fastcall SOUNDUTIL_AppendToLinkedList(struct D2SoundListNodeStrc * * ppListHead, intptr_t dwNodeValue);
 } // namespace D2Sound::D2SoundUntil
 namespace D2Sound::Sound {
 // Applies EAX environment parameters to gpDirectSoundEAXInterface. Two modes: gnSoundQualityMode==1 (simple: vol/distance/flags), ==2 (full: 14 reverb properties including decay, reflections, room size). Calls Set() on EAX property GUIDs for each param.

@@ -740,7 +740,7 @@ static void INI_StripDelimiters(char * szText) {
     pCursor = szText;
     do {
       cChar = *pCursor;
-      pCursor[(int)(aWorkBuf + (4 - (int)szText))] = cChar;
+      pCursor[(intptr_t)(aWorkBuf + (4 - (intptr_t)szText))] = cChar;
       pCursor++;
     } while (cChar != '\0');
 
@@ -809,7 +809,7 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
           break;
         }
 
-        szCmdLine[(int)(szArgNameBuf + nDstOffset)] = cChar;
+        szCmdLine[(intptr_t)(szArgNameBuf + nDstOffset)] = cChar;
         nNameLen++;
         szCmdLine++;
       } while (nNameLen < nCmdLen);
@@ -850,7 +850,7 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
     nCmdLen = 0;
     while (szArgNameBuf[0] != '\0') {
       szArgNameBuf[0] = szArgNameBuf[nCmdLen + 1];
-      pOutValue[nCmdLen] = pbArgName[(int)(szArgNameBuf + (nCmdLen - (int)pbScan))];
+      pOutValue[nCmdLen] = pbArgName[(intptr_t)(szArgNameBuf + (nCmdLen - (intptr_t)pbScan))];
       nCmdLen++;
     }
 
@@ -1583,8 +1583,8 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
     char* pszModeStr;
     char* pszCmdToken = szText;
     pszCmdToken = pszCmdToken + strlen(pszCmdToken) + 1;
-    char* szCmdLineCopy = (char*)D2_ALLOC_AT((size_t)(pszCmdToken + (1 - (int)(szText + 1))), ".\\DUNGEON\\Dungeon.cpp", 0x1ba);
-    Storm::Source::SSTR::SStrCopy(szCmdLineCopy, szText, (int32_t)(pszCmdToken + (1 - (int)(szText + 1))));
+    char* szCmdLineCopy = (char*)D2_ALLOC_AT((size_t)(pszCmdToken + (1 - (intptr_t)(szText + 1))), ".\\DUNGEON\\Dungeon.cpp", 0x1ba);
+    Storm::Source::SSTR::SStrCopy(szCmdLineCopy, szText, (int32_t)(pszCmdToken + (1 - (intptr_t)(szText + 1))));
     pszCmdToken = strtok(szCmdLineCopy, "-");
     while (pszCmdToken) {
       eD2ApplicationMode eMode;

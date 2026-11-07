@@ -380,7 +380,7 @@ static int __stdcall SBMP_LoadFromMemory(uint8_t * pData, uint32_t dataSize, uin
       return 1;
     }
 
-    bPaletteDecoded = SBMP_DecodeTGAPixels(pData + (uint32_t)*pData + nColorMapSize + 0x12, pData, (int)(pData + (dataSize - (int)(pData + (uint32_t)*pData + nColorMapSize + 0x12))), pixels, nMaxPixelBytes);
+    bPaletteDecoded = SBMP_DecodeTGAPixels(pData + (uint32_t)*pData + nColorMapSize + 0x12, pData, (int)(pData + (dataSize - (intptr_t)(pData + (uint32_t)*pData + nColorMapSize + 0x12))), pixels, nMaxPixelBytes);
     if (bPaletteDecoded) {
       return 1;
     }
@@ -478,7 +478,7 @@ static void __thiscall SBMP_FlipImage(int numRows, void * dst, uint8_t * src, in
     void* _Dst = dst;
     while (true) {
       size_t sVar1;
-      sVar1 = (int)dst + (dstSize - (int)_Dst);
+      sVar1 = (intptr_t)dst + (dstSize - (intptr_t)_Dst);
       numRows--;
       _Size = rowWidth;
       if (rowWidth >= (int)sVar1) {
@@ -978,7 +978,7 @@ static int __stdcall SBMP_EncodeBmp256File(uint8_t * nPalettePtr, uint32_t nSrcS
       pSrcPalEntry[(intptr_t)aPalette - (intptr_t)nPalettePtr] = pSrcPalEntry[-2];
       aPalette[nPalIndex].rgbGreen = pSrcPalEntry[-1];
       aPalette[nPalIndex].rgbBlue = *pSrcPalEntry;
-      pSrcPalEntry[(int)aPalette + (1 - (int)nPalettePtr)] = '\0';
+      pSrcPalEntry[(intptr_t)aPalette + (1 - (intptr_t)nPalettePtr)] = '\0';
       nPalIndex++;
       pSrcPalEntry += 4;
     } while (nPalIndex < 0x100);

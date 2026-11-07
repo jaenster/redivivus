@@ -1796,7 +1796,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
         pFrameEntry = nTotalFrames;
         pOldFile = pFrameOffsets;
         do {
-          pOldFile = (int*)((int)pOldFile + *(int*)(*pFrameSlot + 0x24) + *(int*)(*pFrameSlot + 0x1c) + 0x23);
+          pOldFile = (int*)((intptr_t)pOldFile + *(int*)(*pFrameSlot + 0x24) + *(int*)(*pFrameSlot + 0x1c) + 0x23);
           pFrameSlot++;
           pFrameEntry--;
           pSerializedEnd = pOldFile;
@@ -1814,7 +1814,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
       if ((uint32_t)nTotalFrames > 0) {
         pDstFrameOffset = pSerializedBlock + 6;
         pSrcParam += 0xd;
-        pDstFrame = (uint32_t*)((int)pFrameOffsets + (int)pSerializedBlock);
+        pDstFrame = (uint32_t*)((intptr_t)pFrameOffsets + (intptr_t)pSerializedBlock);
         do {
           *pDstFrameOffset = (intptr_t)pDstFrame - (intptr_t)pSerializedBlock;
           *pDstFrame = *(uint32_t*)(*pSrcParam + 4);
@@ -1831,7 +1831,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
           if (*(int*)(pFrameEntry + 0x20)) {
             memcpy(pColorShiftDst, (void*)(pFrameEntry + 0x20), *(size_t*)(pFrameEntry + 0x1c));
             pDstFrame[6] = (intptr_t)pColorShiftDst - (intptr_t)pSerializedBlock;
-            pColorShiftDst = (uint32_t*)((int)pColorShiftDst + *(int*)(*pSrcParam + 0x1c));
+            pColorShiftDst = (uint32_t*)((intptr_t)pColorShiftDst + *(int*)(*pSrcParam + 0x1c));
           } else {
             pDstFrame[6] = 0;
           }
@@ -1889,11 +1889,11 @@ uint32_t __stdcall CELCMP_SerializeCelFileToMemory(DC6 * pDCCSrc, uint32_t * ppD
     uint32_t nFrameCount = pDCCSrc->nFrames * pDCCSrc->nDirections;
     size_t nTotalSize = nFrameCount * 4 + 0x18;
     if (nFrameCount > 0) {
-      uint32_t* pSrcFrameSlot;
-      pSrcFrameSlot = (uint32_t*)(pDCCSrc + 1);
+      DC6Block** pSrcFrameSlot;
+      pSrcFrameSlot = (DC6Block**)(pDCCSrc + 1);
       iFrame = nFrameCount;
       do {
-        nTotalSize = nTotalSize + 0x23 + *(int*)(*pSrcFrameSlot + 0x1c) + *(int*)(*pSrcFrameSlot + 0x14);
+        nTotalSize = nTotalSize + 0x23 + (*pSrcFrameSlot)->nLength + (*pSrcFrameSlot)->nAllocSize;
         pSrcFrameSlot++;
         iFrame--;
       } while (iFrame);
@@ -1928,7 +1928,7 @@ uint32_t __stdcall CELCMP_SerializeCelFileToMemory(DC6 * pDCCSrc, uint32_t * ppD
 
         iNextFrame = iFrame + 1;
         pDstFrameCursor[6] = (intptr_t)pColorShiftDst - (intptr_t)pWriteCursor;
-        pDstFrameCursor = (int*)((int)pColorShiftDst + *(int*)(*(int*)(pDCCSrc[1].nTerm + iFrame * 4 - 0xc) + 0x14));
+        pDstFrameCursor = (int*)((intptr_t)pColorShiftDst + *(int*)(*(int*)(pDCCSrc[1].nTerm + iFrame * 4 - 0xc) + 0x14));
         iFrame = iNextFrame;
       } while (iNextFrame < nFrameCount);
 
@@ -2509,7 +2509,7 @@ uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, uint32_t 
     pCelFile->nDirections = pHashEntry->nDirections;
     pCelFile->nFrames = pHashEntry->nFrameCount / pHashEntry->nDirections;
     if (pHashEntry->dwFlags & 4) {
-      Raw::RAW_CreateCelFrames(pHashEntry, (int32_t)pCelFile);
+      Raw::RAW_CreateCelFrames(pHashEntry, pCelFile);
       *(void**)pCelFile->nTerm = pHashEntry->pRawData;
     } else {
       (*gapfnCelDecodeCachedByFormat[pHashEntry->nFormat])(pHashEntry, pCelFile);
@@ -2546,12 +2546,12 @@ void __fastcall BITSTREAM_CopyState(D2CodecBitStateStrc * dest, D2CodecBitStateS
     dest->nBitOffset = src->nBitOffset;
 }
 
-int __fastcall BITSTREAM_GetByteOffset(D2CodecBitStateStrc * pBitState) {
+uint8_t * __fastcall BITSTREAM_GetByteOffset(D2CodecBitStateStrc * pBitState) {
     int nBitPosAligned = pBitState->nBitOffset + 7;
-    return nBitPosAligned / 8 + (int)pBitState->pCurWord;
+    return (uint8_t*)(nBitPosAligned / 8 + (char*)pBitState->pCurWord);
 }
 
-void __thiscall BITSTREAM_AdvanceBits(int32_t pThis, int32_t nBitCount) {
+void __thiscall BITSTREAM_AdvanceBits(uint8_t * pThis, int32_t nBitCount) {
     uint32_t nNewBitPos = *(int*)(pThis + 0xc) + nBitCount;
     *(uint32_t*)(pThis + 0xc) = nNewBitPos & 0x1f;
     *(int*)(pThis + 4) += (int)nNewBitPos / 32 * 4;

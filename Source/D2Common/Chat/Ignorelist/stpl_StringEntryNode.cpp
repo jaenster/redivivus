@@ -152,7 +152,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       pBucket = pBlock;
       do {
         uHead = &pBucket->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (int)pBlock + (int)uHead + (int)this->m_data);
+        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)uHead + (int)this->m_data);
         if (puVar1) {
           pNewTerminator = puVar1 + 1;
           *pNewTerminator = 0;
@@ -511,7 +511,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     uint32_t nOldBucketCount = pThis->nSlotMask + 1;
     uint32_t* pNewBucketCount = (uint32_t*)(nOldBucketCount * 2);
-    uint32_t* pCurEntry = (uint32_t*)~(uint32_t)tempList.m_terminator.m_prevlink;
+    uint32_t* pCurEntry = (uint32_t*)~(uintptr_t)tempList.m_terminator.m_prevlink;
     tempList.m_linkoffset = -0x22222223;
     tempList.m_terminator.m_next = (intptr_t)pCurEntry;
     TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* nHashTableBase = pThis;
@@ -568,7 +568,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
           ppTempHead = &pPrevPtr->m_terminator;
           ppTempHead->m_prevlink = ppTempHead;
           pPrevPtr->m_linkoffset = 4;
-          pPrevPtr->m_terminator.m_next = ~(uint32_t)ppTempHead;
+          pPrevPtr->m_terminator.m_next = ~(uintptr_t)ppTempHead;
         }
 
         nBucketOffset += 0xc;
@@ -621,7 +621,7 @@ template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* TSHashTable<StringEnt
     TSLink<::StringEntryNode>* pTVar1 = &this->tFullList.m_terminator;
     pTVar1->m_prevlink = pTVar1;
     pBucketEntry->m_linkoffset = -0x22222223;
-    this->tFullList.m_terminator.m_next = ~(uint32_t)pTVar1;
+    this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     this->tSlotListArray.m_alloc = 0;
     this->tSlotListArray.m_count = 0;
     this->tSlotListArray.m_data = 0;
@@ -632,7 +632,7 @@ template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* TSHashTable<StringEnt
       pTVar1 = &this->tFullList.m_terminator;
       pTVar1->m_prevlink = pTVar1;
       pBucketEntry->m_linkoffset = 0xc;
-      this->tFullList.m_terminator.m_next = ~(uint32_t)pTVar1;
+      this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     }
 
     this->nSlotMask = 3;
@@ -645,7 +645,7 @@ template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* TSHashTable<StringEnt
         pTVar1 = &pBucketEntry->m_terminator;
         pTVar1->m_prevlink = pTVar1;
         pBucketEntry->m_linkoffset = 4;
-        pBucketEntry->m_terminator.m_next = ~(uint32_t)pTVar1;
+        pBucketEntry->m_terminator.m_next = ~(uintptr_t)pTVar1;
       }
 
       nBucketIter++;

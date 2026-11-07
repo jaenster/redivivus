@@ -14768,7 +14768,7 @@ void __fastcall AITHINK_AncientKoric(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
               }
 
               nRangeThreshold = (int)pAct->aip[3][pGame->nDifficulty];
-              pAiParam = (D2AiParamStrc*)(nRangeThreshold * (int)pAiParam / nDistToTarget);
+              pAiParam = (D2AiParamStrc*)(nRangeThreshold * (intptr_t)pAiParam / nDistToTarget);
               bInMeleeRange = nRangeThreshold * bInMeleeRange / nDistToTarget;
               MonsterMode::SetCurrentSkill(pUnit, (int)pAct->aSkMode[0], &killStrc);
               pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pAct->aSkill[0]);
@@ -14951,8 +14951,8 @@ void __fastcall AITHINK_Fn1_Ancient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     }
 }
 
-int __fastcall Unreferenced_005ef1e0(int param_1, int param_2) {
-    return *(uint32_t*)(*(int*)param_1 + 0x18) & param_2;
+int __fastcall Unreferenced_005ef1e0(uint8_t * * param_1, int param_2) {
+    return *(uint32_t*)(*param_1 + 0x18) & param_2;
 }
 
 void __fastcall AI_SetClearFlags(D2AiParamStrc * pAiParam, uint32_t nFlags, int32_t bSet) {
@@ -17356,7 +17356,7 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 
           nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nAiArg0);
           nLandingY = nRoll + ((intptr_t)nMonStatsTxtAddr - (intptr_t)pTargetCopy);
-          pTargetCopy = (D2UnitStrc*)((int)pTargetCopy * 2);
+          pTargetCopy = (D2UnitStrc*)((intptr_t)pTargetCopy * 2);
           if ((intptr_t)pTargetCopy < 0xc) {
             pTargetCopy = (D2UnitStrc*)0xc;
           } else if ((intptr_t)pTargetCopy > 0x24) {
@@ -19195,7 +19195,7 @@ void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, D2UnitStrc * pUn
     PlanNextAiMove(pGame, pUnit, (int)nMonStatsBase->aip[2][nSeedLowScratch]);
 }
 
-int __fastcall Unreferenced_005f6e20(int param_1) {
+int __fastcall Unreferenced_005f6e20(uint8_t * param_1) {
     uint32_t uVar1 = 0;
     if (*(short int*)(param_1 + 0x32) > 0) {
       uVar1 = *(short int*)(param_1 + 0x34) * 100 / (int)*(short int*)(param_1 + 0x32) - 100;

@@ -431,10 +431,10 @@ void __stdcall ITEM_GetPlayerNameAkaNamedString(D2UnitStrc * pUnit, char * pCust
       return;
     }
 
-    char* pDstName = (char*)((int)pUnit->pUnitData.pUnitDataPlayer + (0x4a - (int)pCustomName));
+    char* pDstName = (char*)((intptr_t)pUnit->pUnitData.pUnitDataPlayer + (0x4a - (intptr_t)pCustomName));
     do {
       cCh = *pCustomName;
-      pDstName[(int)pCustomName] = cCh;
+      pDstName[(intptr_t)pCustomName] = cCh;
       pCustomName++;
     } while (cCh != '\0');
 }

@@ -686,7 +686,7 @@ void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
 
 void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t bInitSpriteCache) {
     float fPhysMemMB;
-    uint32_t pStormGlobal;
+    D2SystemInfoStrc* pStormGlobal;
     pStormGlobal = Fog::Source::SFile::SFILE_GetGlobalPointer();
     if (!pStormGlobal) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30);
@@ -694,15 +694,16 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
     }
 
     uint32_t dwPhysMemBytes;
-    dwPhysMemBytes = *(uint32_t*)(pStormGlobal + 0xc);
+    dwPhysMemBytes = pStormGlobal->dwTotalPhysicalMemory;
     if (dwPhysMemBytes < 0x167d000) {
       fPhysMemMB = (float)dwPhysMemBytes;
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("This machine doesn\'t have enough physical memory (> %.2f MB) for minimal performance!", (double)(fPhysMemMB * 9.5367431640625e-7));
       exit(-1);
     }
 
-    pStormGlobal = dwPhysMemBytes - 0xb00000;
-    dwPhysMemBytes = pStormGlobal * 10 / 100;
+    uint32_t dwAvailMemOverride;
+    dwAvailMemOverride = dwPhysMemBytes - 0xb00000;
+    dwPhysMemBytes = dwAvailMemOverride * 10 / 100;
     if (dwPhysMemBytes > 0x300000) {
       if (dwPhysMemBytes >= 0x500000) {
         dwPhysMemBytes = 0x500000;
@@ -713,7 +714,7 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
 
     Sound::SoundHdr::SOUNDHDR_SetGlobal4(dwPhysMemBytes);
     int nRemainingBytes;
-    nRemainingBytes = pStormGlobal - dwPhysMemBytes;
+    nRemainingBytes = dwAvailMemOverride - dwPhysMemBytes;
     if (bInitSpriteCache) {
       nRemainingBytes += -0x600000;
       D2CMP::SRC::SpriteCache::GFX_InitLRUCache(pMemory, 0x600000);
@@ -733,7 +734,7 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
 
     dwCelCacheSize = 0x1800000;
     init_caches:
-    D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(pMemory, dwCelCacheSize, 0x7d000, pStormGlobal);
+    D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(pMemory, dwCelCacheSize, 0x7d000, dwAvailMemOverride);
     Engine::Gfx::GFX_InitCofSystem(0x200000);
 }
 

@@ -28,6 +28,14 @@ typedef void (__fastcall *pfnSCompEncodeCodec)(short * pDst, uint32_t * pnDstLen
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
+struct D2BitStreamReader32Strc {
+    /* 0x00 */ uint32_t * pCur;
+    /* 0x04 */ uint32_t dwBitBuffer;
+    /* 0x08 */ uint32_t nBitCount;
+};
+
+#endif // D2_MODULE_Storm
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2BitStreamReaderStrc {
     /* 0x00 */ uint16_t * pCur;
     /* 0x04 */ uint32_t dwBitBuffer;
@@ -122,7 +130,7 @@ struct __attribute__((packed)) D2HuffmanContextStrc {
     /* 0x3064 */ int32_t nActiveListBack; // active-list sentinel back-link ~self at 0x3064
     /* 0x3068 */ int32_t nNodeCount; // nodes allocated so far at 0x3068
     /* 0x306C */ struct D2CompressHuffNodeStrc * _pad306C[258]; // symbol-to-node lookup table (0x102 entries); same layout as D2CompressEncoderStrc.apSymbolNodes
-    /* 0x3474 */ uint32_t aQuickTable[96]; // 0x80 quick-decode entries × 3 dwords at 0x3474
+    /* 0x3474 */ uint32_t aQuickTable[384]; // 0x80 quick-decode entries x 3 dwords (epoch, bit count, symbol or tree node) at 0x3474; object size 0x3a74
 };
 
 #endif // D2_MODULE_Storm
@@ -134,9 +142,9 @@ void __fastcall COMPRESS_DestroyEncoderContext(struct D2CompressEncoderStrc * pE
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(struct StormLinkStrc * pNode);
 void __thiscall LINKEDLIST_Unlink(struct D2BitStreamReaderStrc * pList, uint32_t * pNode);
-int __fastcall Unreferenced_0041d8a0(int param_1);
+int __fastcall Unreferenced_0041d8a0(struct D2BitStreamReader32Strc * param_1);
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask);
-void __thiscall LINKEDLIST_Clear(int32_t pBitBuffer, int32_t nBits);
+void __thiscall LINKEDLIST_Clear(uint8_t * pBitBuffer, int32_t nBits);
 struct D2BitStreamWriterStrc * __thiscall LINKEDLIST_InsertAfter(struct D2BitStreamWriterStrc * pList, uint8_t * pNode, int32_t pNewNode);
 int32_t __fastcall BITBUFFER_GetRemainingBits(int * pBitStream);
 void __thiscall BITSTREAM_WriteBits(struct D2BitStreamWriterStrc * pBitStream, int32_t nBitsValue, int32_t nBitCount);
@@ -182,7 +190,7 @@ uint32_t __thiscall HUFFMAN_GetDecodedOffset(int * pNode, int * pBase);
 int __fastcall Unreferenced_0041e930(struct StormLinkStrc * param_1);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(void * pNode);
 int __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_0041e9d0(int param_1, int param_2);
+int __fastcall Unreferenced_0041e9d0(int * param_1, int * param_2);
 uint32_t __thiscall BITBUFFER_ReadBits(struct D2BitStreamReaderStrc * pBitBuf, uint32_t nBits, uint32_t nMask);
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize);
 int __fastcall Unreferenced_0041ea40(struct StormLinkStrc * param_1);
@@ -190,7 +198,7 @@ int __fastcall Unreferenced_0041ea60(int param_1);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(struct StormLinkStrc * pNode);
 int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrDefault);
 void __thiscall LINKEDLIST_UnlinkNode(int32_t pThis, int * pNode);
-int __fastcall Unreferenced_0041ebb0(int param_1);
+uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * param_1);
 int32_t __thiscall HUFFMAN_DecodeSymbol(struct D2HuffmanContextStrc * pThis, uint16_t * * pBitBuf);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(struct StormLinkStrc * pNode);
 struct StormLinkedListStrc * __fastcall Unreferenced_0041ed70(struct StormLinkedListStrc * param_1);

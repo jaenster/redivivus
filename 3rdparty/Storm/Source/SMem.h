@@ -22,23 +22,6 @@ typedef void (__stdcall *pfnSMemDumpCallback)(uint32_t dwUserArg, char * szLine)
 #endif
 
 // Data types
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-struct _SYSTEM_INFO {
-    /* 0x00 */ uint32_t u;
-    /* 0x04 */ DWORD dwPageSize;
-    /* 0x08 */ LPVOID lpMinimumApplicationAddress;
-    /* 0x0C */ LPVOID lpMaximumApplicationAddress;
-    /* 0x10 */ DWORD_PTR dwActiveProcessorMask;
-    /* 0x14 */ DWORD dwNumberOfProcessors;
-    /* 0x18 */ DWORD dwProcessorType;
-    /* 0x1C */ DWORD dwAllocationGranularity;
-    /* 0x20 */ WORD wProcessorLevel;
-    /* 0x22 */ WORD wProcessorRevision;
-};
-
-#endif // _WIN32
-
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2FogHeapBlockHdrStrc {
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -150,7 +133,7 @@ LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap);
 void __stdcall SMEM_FreeEmptyHeaps();
 // @blizzard SMemDestroy (SMEM.CPP)
 uint32_t __stdcall SMemDestroy();
-uint32_t __stdcall SMemGetHeapByPtr(int32_t pObject);
+uint32_t __stdcall SMemGetHeapByPtr(uint8_t * pObject);
 int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize);
 uint32_t __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t dwParam);
 int32_t __stdcall SMemHeapDestroy(LPVOID nHeapId);

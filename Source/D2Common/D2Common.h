@@ -196,6 +196,7 @@ struct D2SkillStrc;
 struct D2SkillsHeaderTxt;
 struct D2SkillsPerClassCounter;
 struct D2SkillsTxt;
+struct D2SoundListNodeStrc;
 struct D2SoundsTxtSmall;
 struct D2StatInfoStrc;
 struct D2StatListExStrc;
@@ -7839,7 +7840,7 @@ struct D2UnitDataClientSide {
     /* 0x0E */ uint8_t field_0xe;
     /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ uint32_t nSfxMode; // Current animation mode for SFX playback
-    /* 0x14 */ void * pUnitSfxData; // Linked list of sound sample data attached to unit
+    /* 0x14 */ struct D2SoundListNodeStrc * pUnitSfxData; // Linked list of sound sample data attached to unit
     /* 0x18 */ uint32_t dwSfxTicks; // Tick count for general SFX timing
     /* 0x1C */ uint32_t dwSfxAsyncTicks; // Tick count for async SFX (neutral sounds etc)
     /* 0x20 */ uint32_t dwSfxStepTicks; // Tick count for footstep SFX timing

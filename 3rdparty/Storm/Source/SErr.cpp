@@ -247,7 +247,7 @@ uint32_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, int pBase
 int __fastcall Unreferenced_0041c410(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
@@ -308,9 +308,9 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
     if (pLink) {
       ppPrevLink = pEffectiveNode[1];
       if ((intptr_t)ppPrevLink < 0) {
-        ppPrevLink = (int*)~(uint32_t)ppPrevLink;
+        ppPrevLink = (int*)~(uintptr_t)ppPrevLink;
       } else {
-        ppPrevLink = (int*)((int)ppPrevLink + ((int)pEffectiveNode - pLink[1]));
+        ppPrevLink = (int*)((intptr_t)ppPrevLink + ((intptr_t)pEffectiveNode - pLink[1]));
       }
 
       *ppPrevLink = (int)pLink;
@@ -330,7 +330,7 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
           pLink = *pList;
           ppPrevLink = ppTarget[1];
           if ((intptr_t)ppPrevLink < 0) {
-            *(int***)~(uint32_t)ppPrevLink = (int**)pEffectiveNode;
+            *(int***)~(uintptr_t)ppPrevLink = (int**)pEffectiveNode;
             ppTarget[1] = (int*)pNode;
             return;
           }
@@ -338,7 +338,7 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
             pLink = (int*)((char*)ppTarget - (*ppTarget)[1]);
           }
 
-          *(int***)((int)ppPrevLink + (int)pLink) = (int**)pEffectiveNode;
+          *(int***)((intptr_t)ppPrevLink + (intptr_t)pLink) = (int**)pEffectiveNode;
           ppTarget[1] = (int*)pNode;
           return;
         }
@@ -856,11 +856,11 @@ void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText) {
 // @was SSYSTEM_UnregisterErrorCallback (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrUnregisterHandler, code vector 10015330 (TVector 100cbee4).
 // @oracle-basis Callee set {EnterCriticalSection, <free>, LeaveCriticalSection} with arity 1, operating on the same list SErrRegisterHandler 0041c900 builds. The oracle calls SMemFree directly; MSVC factored the unlink+free into SSYSTEM_ListRemoveAndFree 0041ca10, which calls SMemFree - the same operation one level down. SSYSTEM_ListRemoveAndFree has this function as its only caller.
-void __stdcall SErrUnregisterHandler(int32_t nCallbackId) {
+void __stdcall SErrUnregisterHandler(pfnSErrDisplayCallback nCallbackId) {
     SERR_InternalEnterCriticalSection();
     ::HANDLER* piEntry = (::HANDLER*)(gnStormErrorCallbackCount.head.pNext <= 0 ? 0 : gnStormErrorCallbackCount.head.pNext);
     while ((intptr_t)piEntry > 0) {
-      if (piEntry->pfnHandler == (pfnSErrDisplayCallback)nCallbackId) {
+      if (piEntry->pfnHandler == nCallbackId) {
         piEntry = SSYSTEM_ListRemoveAndFree(&gnStormErrorCallbackCount, &piEntry->m_link);
       } else {
         piEntry = (::HANDLER*)piEntry->m_link.pNext;

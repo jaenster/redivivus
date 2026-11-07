@@ -110,7 +110,7 @@ struct D2CodecFrameComponentStrc {
 #define D2_DEFINED_D2CodecPixelBufferEntryStrc
 struct D2CodecPixelBufferEntryStrc {
     /* 0x00 */ uint8_t * pPrevPixels; // previous-block pixel pointer
-    /* 0x04 */ int nDstPixelAddress;
+    /* 0x04 */ uint8_t * nDstPixelAddress;
     /* 0x08 */ int nPitch;
     /* 0x0C */ int nWidth;
     /* 0x10 */ int nHeight;

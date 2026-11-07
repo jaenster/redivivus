@@ -20,11 +20,6 @@ extern "C" void D2CONTROL_Start(void);
 // Drain queued actions and publish a state snapshot. MUST be called from the game thread -
 // it dispatches through the game's own WndProc, exactly as Windows would.
 extern "C" void D2CONTROL_Pump(void);
-
-// d2_control.cpp names DRAW_GetBottomPanelY under D2Client::UI::Draw; the function now
-// lives in D2Client::UI::ui (ui.cpp). Retire when d2_control.cpp calls it there.
-#include "Source/D2Client/UI/ui.h"
-namespace D2Client::UI::Draw { using D2Client::UI::ui::DRAW_GetBottomPanelY; }
 #else
 static inline void D2CONTROL_Start(void) {}
 static inline void D2CONTROL_Pump(void) {}

@@ -510,7 +510,7 @@ static uint32_t __stdcall longest_match(uint32_t nCurMatch, deflate_state * pDef
           }
         }
 
-        pMatch = pScanNext + (0x102 - (int)pScanEnd);
+        pMatch = pScanNext + (0x102 - (intptr_t)pScanEnd);
         if ((intptr_t)pMatch > pBestLen) {
           pDeflateState->match_start = nCurMatch;
           if ((intptr_t)pMatch >= (int)nNiceMatch) {
@@ -521,8 +521,8 @@ static uint32_t __stdcall longest_match(uint32_t nCurMatch, deflate_state * pDef
             return (uint32_t)pMatch;
           }
 
-          cScanEnd1 = pScanStart[(int)(pScanNext + (0x101 - (int)pScanEnd))];
-          cScanEnd2 = pScanStart[(int)pMatch];
+          cScanEnd1 = pScanStart[(intptr_t)(pScanNext + (0x101 - (intptr_t)pScanEnd))];
+          cScanEnd2 = pScanStart[(intptr_t)pMatch];
           pBestLen = (int)pMatch;
         }
       }
@@ -1295,7 +1295,7 @@ static block_state __stdcall deflate_rle(int32_t nFlush, deflate_state * pDeflat
             pScanCur = pScanNext;
           } while (pScanNext < pBlockStart + 0x102);
 
-          pDeflateState->match_length = (uint32_t)(pScanNext + (0x102 - (int)(pBlockStart + 0x102)));
+          pDeflateState->match_length = (uint32_t)(pScanNext + (0x102 - (intptr_t)(pBlockStart + 0x102)));
           if (pScanNext + (0x102 - (intptr_t)(pBlockStart + 0x102)) > (uint8_t*)pDeflateState->lookahead) {
             pDeflateState->match_length = pDeflateState->lookahead;
           }

@@ -611,6 +611,9 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "Unreferenced_0040f810"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {

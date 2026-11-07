@@ -107,6 +107,7 @@
 #include "3rdparty/Storm/D2MPQFileStrc.h"
 #include "3rdparty/Storm/Source/SFile.h"
 #include "3rdparty/Storm/StormRoot.h"
+#include "Source/globals/globals.h"
 #include "Source/Bnclient/BnSend.h"
 #include "Source/Bnclient/SRP.h"
 #include "Source/Bnclient/net_sid.h"
@@ -3642,17 +3643,15 @@ int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId) {
 }
 
 pfnWardenCreateInterface __thiscall WARDEN_DecryptBuffer(int * ppModule, int32_t nOrdinal) {
-    int pContext = *ppModule;
+    uint8_t* pContext = (uint8_t*)*ppModule;
     if (!pContext) {
       return nullptr;
     }
-
-    uint32_t nOffset = nOrdinal - *(int*)(pContext + 0x18);
-    if (nOffset >= *(uint32_t*)(pContext + 0x14)) {
+    if (!((uint32_t)(nOrdinal - *(int*)(pContext + 0x18)) < *(uint32_t*)(pContext + 0x14))) {
       return nullptr;
     }
 
-    return (pfnWardenCreateInterface)(*(int*)(*(int*)(pContext + 0x10) + nOffset * 4 + pContext) + pContext);
+    return (pfnWardenCreateInterface)(pContext + *(int*)(pContext + *(int*)(pContext + 0x10) + (nOrdinal - *(int*)(pContext + 0x18)) * 4));
 }
 
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
@@ -3711,7 +3710,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
           }
 
           ppFVar7 = *__frame0.ppInputSaved;
-          pImageWritePtr = (void*)((int)ppOutput[10] + (int)ppFVar7);
+          pImageWritePtr = (void*)((intptr_t)ppOutput[10] + (intptr_t)ppFVar7);
           nHeaderSize = *ppFVar7;
           __frame0.bCopyPass = true;
           ppuVar1 = __frame0.ppInputSaved;
@@ -3766,7 +3765,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
 
           __frame0.pModuleBase = (uint32_t*)(__frame0.pModuleBase[7] + (int)__frame0.pModuleBase);
           for (__frame0.nImportIdx = 0; nHeaderSize = __frame0.nImportIdx , ppFVar7 = __frame0.pModuleBase , __frame0.nImportIdx < (*ppuVar1)[8]; __frame0.nImportIdx++) {
-            /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(__frame0.pModuleBase[__frame0.nImportIdx * 2] + (int)*ppuVar1));
+            /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(__frame0.pModuleBase[__frame0.nImportIdx * 2] + (intptr_t)*ppuVar1));
             ppuVar1 = __frame0.ppInputSaved;
             if (!hModule) {
               goto release_if_failed;
@@ -3802,7 +3801,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
             }
 
             ppuVar1 = ppOutput + nHeaderSize * 3 + 10;
-            lpAddress = (LPVOID)((int)*ppuVar1 + (int)ppFVar7);
+            lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
             __frame0.pModuleBase = ppuVar1[1];
             /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)__frame0.pModuleBase, (DWORD)ppuVar1[2], &__frame0.dwOldProtect);
             if ((uintptr_t)ppuVar1[2] & 0xf0) {
@@ -3855,7 +3854,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
 
           D2_SEH_FENCE();
           ppFVar7 = *__frame0.ppInputSaved;
-          pImageWritePtr = (void*)((int)ppOutput[10] + (int)ppFVar7);
+          pImageWritePtr = (void*)((intptr_t)ppOutput[10] + (intptr_t)ppFVar7);
           nHeaderSize = *ppFVar7;
           __frame0.bCopyPass = true;
           ppuVar1 = __frame0.ppInputSaved;
@@ -3916,7 +3915,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
 
           __frame0.pModuleBase = (uint32_t*)(__frame0.pModuleBase[7] + (int)__frame0.pModuleBase);
           for (__frame0.nImportIdx = 0; nHeaderSize = __frame0.nImportIdx , ppFVar7 = __frame0.pModuleBase , __frame0.nImportIdx < (*ppuVar1)[8]; __frame0.nImportIdx++) {
-            /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(__frame0.pModuleBase[__frame0.nImportIdx * 2] + (int)*ppuVar1));
+            /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA((LPCSTR)(__frame0.pModuleBase[__frame0.nImportIdx * 2] + (intptr_t)*ppuVar1));
             ppuVar1 = __frame0.ppInputSaved;
             if (!hModule) {
               goto release_if_failed;
@@ -3958,7 +3957,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
             }
 
             ppuVar1 = ppOutput + nHeaderSize * 3 + 10;
-            lpAddress = (LPVOID)((int)*ppuVar1 + (int)ppFVar7);
+            lpAddress = (LPVOID)((intptr_t)*ppuVar1 + (intptr_t)ppFVar7);
             __frame0.pModuleBase = ppuVar1[1];
             /* PDWORD lpflOldProtect for VirtualProtect */ /* DWORD flNewProtect for VirtualProtect */ /* SIZE_T dwSize for VirtualProtect */ /* LPVOID lpAddress for VirtualProtect */ VirtualProtect(lpAddress, (SIZE_T)__frame0.pModuleBase, (DWORD)ppuVar1[2], &__frame0.dwOldProtect);
             if ((uintptr_t)ppuVar1[2] & 0xf0) {

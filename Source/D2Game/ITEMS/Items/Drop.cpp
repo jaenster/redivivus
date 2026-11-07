@@ -47,14 +47,14 @@ int Unreferenced_00555cc0() {
     return pDVar1->nSize;
 }
 
-void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, int32_t pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset) {
+void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, uint32_t * pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset) {
     int nDropCount = *pnDropCount;
     if (nDropCount >= 0x3ff) {
       return;
     }
 
-    *(uint32_t*)(pDropListArr + 4 + nDropCount * 8) = dwItemTxtEntry;
-    *(uint32_t*)(pDropListArr + nDropCount * 8) = dwWeightOffset;
+    pDropListArr[nDropCount * 2 + 1] = dwItemTxtEntry;
+    pDropListArr[nDropCount * 2] = dwWeightOffset;
     (*pnDropCount)++;
 }
 
@@ -2069,6 +2069,7 @@ int32_t __fastcall UNIT_GetMaxAvailableHPCharCode(D2UnitStrc * pUnit) {
     static uint32_t HPLIST[4] = { 0x20317068, 0x20327068, 0x20337068, 0x20347068 }; D2_STATIC_GUARD(HPLIST, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableHPCharCode::HPLIST");
     static int HPLISTSIZE = 0x4; D2_STATIC_GUARD(HPLISTSIZE, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableHPCharCode::HPLISTSIZE");
 
+    uint32_t szHpCode;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd5e);
@@ -2082,7 +2083,8 @@ int32_t __fastcall UNIT_GetMaxAvailableHPCharCode(D2UnitStrc * pUnit) {
       neAct += ACT_III;
     }
     if ((uint32_t)neAct >= (uint32_t)HPLISTSIZE) {
-      return HPLIST[3];
+      szHpCode = HPLIST[3];
+      return szHpCode;
     }
 
     return HPLIST[neAct];
@@ -2093,6 +2095,7 @@ int32_t __fastcall UNIT_GetMaxAvailableMPCharCode(D2UnitStrc * pUnit) {
     static uint32_t MPLIST[4] = { 0x2031706d, 0x2032706d, 0x2033706d, 0x2034706d }; D2_STATIC_GUARD(MPLIST, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableMPCharCode::MPLIST");
     static int MPLISTSIZE = 0x4; D2_STATIC_GUARD(MPLISTSIZE, "D2Game::ITEMS::Items::Drop::UNIT_GetMaxAvailableMPCharCode::MPLISTSIZE");
 
+    uint32_t szMpCode;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd7d);
@@ -2106,7 +2109,8 @@ int32_t __fastcall UNIT_GetMaxAvailableMPCharCode(D2UnitStrc * pUnit) {
       neAct += ACT_III;
     }
     if ((uint32_t)neAct >= (uint32_t)MPLISTSIZE) {
-      return MPLIST[3];
+      szMpCode = MPLIST[3];
+      return szMpCode;
     }
 
     return MPLIST[neAct];

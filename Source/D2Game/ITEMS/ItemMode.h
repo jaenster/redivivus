@@ -38,15 +38,6 @@ struct __attribute__((packed)) D2WeaponSwapSlotStrc {
 };
 
 #endif // D2_MODULE_D2Game
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-union ITEMMODE_RemoveItemsFromCube_Slotm8 {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ int32_t nItemY;
-    /* 0x00 */ struct D2InventoryStrc * pPlayerInventory;
-};
-
-#endif // D2_MODULE_D2Game
 namespace D2Game::ITEMS::ItemMode {
 
 // Function declarations

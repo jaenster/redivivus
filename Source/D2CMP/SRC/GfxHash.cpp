@@ -243,7 +243,7 @@ D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable,
 }
 
 // @sourcefile .\SRC\GfxHash.cpp
-uint32_t * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
+D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
     D2GfxHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pMemory, D2GfxHashEntryStrc, ".\\SRC\\GfxHash.cpp", 0xef);
     D2GfxDataStrc* nGfxDataSaved = pGfxData;
     pNewEntry->pCacheBlock = (D2CelCacheBlockStrc*)nDirIdxOut;
@@ -270,7 +270,7 @@ uint32_t * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pH
 
     pNewEntry->nHashKey = nHashKey;
     *(D2GfxHashEntryStrc**)((char*)pHashTable + nHashKey * 4 + 0x8000) = (D2GfxHashEntryStrc*)pNewEntry;
-    return &pNewEntry->nHashKey;
+    return pNewEntry;
 }
 
 } // namespace D2CMP::SRC::GfxHash

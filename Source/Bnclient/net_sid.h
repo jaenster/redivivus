@@ -384,7 +384,7 @@ void __fastcall NET_SID_CLIENT_GenerateRandomString(char * szOutBuf, int32_t nLe
 void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed);
 int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSize, char * szCDKey);
 int32_t __fastcall NET_SID_CLIENT_CalculateAlignedBufferSize(uint32_t nDataSize);
-void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSize, int32_t nBufferAlignment, int32_t szCDKey);
+void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSize, int32_t nBufferAlignment, char * szCDKey);
 void __stdcall DecodeAndLoadKeys();
 void __stdcall FreeKeys();
 uint32_t __stdcall NET_SID_CLIENT_GetProductId();

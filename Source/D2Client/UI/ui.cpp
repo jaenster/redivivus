@@ -3022,7 +3022,7 @@ DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename) {
     char* pszDst = pszNameDst;
     while (cChar != '\0') {
       *pszDst = cChar;
-      cChar = pszDst[(int)(pFilename + (1 - (int)pszNameDst))];
+      cChar = pszDst[(intptr_t)(pFilename + (1 - (intptr_t)pszNameDst))];
       pszDst++;
     }
 
@@ -8965,7 +8965,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
         do {
           nBtnY = Inv::ScreenSizeY + pBtnEntry[1] + Inv::gnPanelOffsetY;
           if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(*pBtnEntry + Inv::gnPanelOffsetX) && nMouseX < (int)(*pBtnEntry + Inv::gnPanelOffsetX + 0x28)) {
-            gaStatScreenButtons[(int)pMsg].bHitTest = 1;
+            gaStatScreenButtons[(intptr_t)pMsg].bHitTest = 1;
             Cursor::UI_HandleCursorMouseMove(pBtnIdx);
             pBtnIdx->bHandled = 1;
             pBtnIdx->dwResult = 0;

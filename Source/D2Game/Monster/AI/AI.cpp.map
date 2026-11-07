@@ -7251,6 +7251,9 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "Unreferenced_005ef1e0"
+      ],
+      "usedTypes": [
+        "uint8_t *"
       ]
     },
     {
@@ -9172,6 +9175,9 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "Unreferenced_005f6e20"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

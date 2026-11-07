@@ -392,6 +392,9 @@
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
         "Unreferenced_0049dac0"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

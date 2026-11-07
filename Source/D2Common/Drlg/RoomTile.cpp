@@ -1015,7 +1015,7 @@ void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2
 
 // Counts wall/floor/shadow tiles from grid flags.
 void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, int bCountFloors, int bKillEdgeX, int bKillEdgeY) {
-    int32_t nCellFlagsOffset;
+    eD2GridCellFlags* nCellFlagsOffset;
     BOOL bIsInside;
     int nWorldPosX = pRoomEx->sCoords.WorldPosition.x;
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
@@ -1027,14 +1027,14 @@ void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGr
       nX = 0;
       if (nWidth > 0) {
         do {
-          nCellFlagsOffset = (int32_t)DrlgGrid::GetOffset(pGrid, nX, bKillEdgeX);
-          if (*(uint8_t*)nCellFlagsOffset & 1) {
+          nCellFlagsOffset = DrlgGrid::GetOffset(pGrid, nX, bKillEdgeX);
+          if ((*nCellFlagsOffset & CELLFLAGS_0x01) != CELLFLAGS_NONE) {
             pTileGrid->sRoomTiles.nWallTilesCount++;
           }
-          if (*(uint8_t*)nCellFlagsOffset & 2 || bCountFloors && (bIsInside = DrlgRoom::AreXYInsideCoordinates(&pRoomEx->sCoords, nX + nWorldPosX, bKillEdgeX + nWorldPosY) , bIsInside != 0)) {
+          if ((*nCellFlagsOffset & CELLFLAGS_0x02) != CELLFLAGS_NONE || bCountFloors && (bIsInside = DrlgRoom::AreXYInsideCoordinates(&pRoomEx->sCoords, nX + nWorldPosX, bKillEdgeX + nWorldPosY) , bIsInside != 0)) {
             pTileGrid->sRoomTiles.nFloorTilesCount++;
           }
-          if (*(uint32_t*)nCellFlagsOffset & 0x8000000) {
+          if ((*nCellFlagsOffset & CELLFLAGS_0x8000000) != CELLFLAGS_NONE) {
             pTileGrid->sRoomTiles.nRoofTilesCount++;
           }
 

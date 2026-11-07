@@ -59,7 +59,7 @@ int __fastcall Unreferenced_0045b9d0(StormLinkStrc * param_1) {
 int __fastcall Unreferenced_0045ba80(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
-    param_1->head.pNext = ~(uint32_t)pSVar1;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
@@ -113,9 +113,9 @@ void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, 
     if (pNext) {
       pPrevLink = ppCurNode[1];
       if ((intptr_t)pPrevLink < 0) {
-        pPrevLink = (int*)~(uint32_t)pPrevLink;
+        pPrevLink = (int*)~(uintptr_t)pPrevLink;
       } else {
-        pPrevLink = (int*)((int)pPrevLink + ((int)ppCurNode - pNext[1]));
+        pPrevLink = (int*)((intptr_t)pPrevLink + ((intptr_t)ppCurNode - pNext[1]));
       }
 
       *pPrevLink = (int)pNext;
@@ -135,7 +135,7 @@ void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, 
           pNext = *ppList;
           pPrevLink = ppTarget[1];
           if ((intptr_t)pPrevLink < 0) {
-            *(int***)~(uint32_t)pPrevLink = (int**)ppCurNode;
+            *(int***)~(uintptr_t)pPrevLink = (int**)ppCurNode;
             ppTarget[1] = (int*)ppNode;
             return;
           }
@@ -143,7 +143,7 @@ void __thiscall ARCHIVE_LinkNode(int * * ppList, int * * ppNode, int32_t nMode, 
             pNext = (int*)((char*)ppTarget - (*ppTarget)[1]);
           }
 
-          *(int***)((int)pPrevLink + (int)pNext) = (int**)ppCurNode;
+          *(int***)((intptr_t)pPrevLink + (intptr_t)pNext) = (int**)ppCurNode;
           ppTarget[1] = (int*)ppNode;
           return;
         }
@@ -210,9 +210,9 @@ void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList) {
     *(uint32_t*)(nList + 8) = 0;
 }
 
-int __fastcall Unreferenced_0045bd80(int param_1) {
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 4) = 0;
+uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1) {
+    *param_1 = 0;
+    param_1[1] = 0;
     return param_1;
 }
 
@@ -292,7 +292,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
     ARCHIVE_WriteFormattedText(hFileTmp, "================================================\n\n");
     pListTail.head.pPrevLink = &pListTail.head;
     pListTail.nLinkOffset = 0;
-    pListTail.head.pNext = ~(uint32_t)pListTail.head.pPrevLink;
+    pListTail.head.pNext = ~(uintptr_t)pListTail.head.pPrevLink;
     uint16_t** pHeapEnum = 0;
     sHeapDetails.dwSize = 0x128;
     int nResult = Storm::Source::SMem::SMemFindNextHeap(0, (int*)&pHeapEnum, &sHeapDetails);
@@ -320,9 +320,9 @@ void ARCHIVE_WriteMemoryCheckReport() {
         if (pNextNode) {
           pPrevLink = pNewRec[1];
           if ((intptr_t)pPrevLink < 0) {
-            pPrevLink = (int*)~(uint32_t)pPrevLink;
+            pPrevLink = (int*)~(uintptr_t)pPrevLink;
           } else {
-            pPrevLink = (int*)((int)pPrevLink + ((int)pNewRec - pNextNode[1]));
+            pPrevLink = (int*)((intptr_t)pPrevLink + ((intptr_t)pNewRec - pNextNode[1]));
           }
 
           *pPrevLink = (int)pNextNode;

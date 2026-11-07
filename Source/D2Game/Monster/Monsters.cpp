@@ -1151,8 +1151,8 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nMinionCountMin, D
     do {
       void* pContext;
       pContext = (void*)*pEnchantEntry;
-      if (Umod::aUmodInitTable[(int)pContext]) {
-        (*Umod::aUmodInitTable[(int)pContext])(pUnit, (int32_t)pContext, 1);
+      if (Umod::aUmodInitTable[(intptr_t)pContext]) {
+        (*Umod::aUmodInitTable[(intptr_t)pContext])(pUnit, (int32_t)pContext, 1);
       }
 
       Ai::AiGeneral::CallForEachMinion(pUnit, pContext, nullptr, (pfnMinionForEachCallback)UMOD_DispatchInitFunction);

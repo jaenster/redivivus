@@ -174,7 +174,7 @@ uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * szOut, uint8_t * 
 uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(struct D2MissilesTxt * pMissilesTxt, int32_t nCrcSeed);
 // BNet character save handler. Builds 8KB save file in temp buffer, validates against existing save in database, optionally re-locks and saves character via BNet callback if changed. Copies to safe buffer on success.
 // @sourcefile .\PLAYER\PlrSave.cpp
-BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, struct D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId);
+BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, struct D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId);
 // Serializes the player unit to a .d2s file on disk (SP/LAN path). Calls MakeSaveFile into a stack buffer, then fopens "%sSaveDir%charName.d2s" in binary-write mode and fwrites the result. Guarded by DontNoSafeGameBool; logs an error if the file cannot be opened. Returns nothing; EAX is left over from fclose or the log call.
 void __fastcall SaveToFile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nParam, int nParamExtra, char * pCharName);
 // Top-level player save dispatcher. Clears UNITFLAGEX_UPDATEINV, detects if the player is currently trading (interact with another UNIT_PLAYER), then routes to SaveToBuffer (OBNet/LAN), SaveToFile (SP without BNet service), or SaveToFileBnet (BNet) based on game type and BattleNetServerService pointer.

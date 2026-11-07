@@ -234,7 +234,7 @@ void __fastcall GetBattlenetRealmsList(D2BNetGatewayAccessStr * nGatewayAccess) 
     uint32_t _bFileLoaded;
     bool bFileLoaded;
     DWORD dwFileSize = 0;
-    _bFileLoaded = Storm::Source::SFile::SFileLoadFile("Data\\Global\\Realms.bin", &nGatewayAccess->pRealmsData, &dwFileSize, 0, 0);
+    _bFileLoaded = Storm::Source::SFile::SFileLoadFile("Data\\Global\\Realms.bin", &nGatewayAccess->pRealmsData, &dwFileSize, 0, (LPOVERLAPPED)0x0);
     if (_bFileLoaded) {
       return;
     }
@@ -248,7 +248,7 @@ uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize) {
     bool bFileLoaded;
     uint32_t* pFileData;
     DWORD dwFileSize = 0;
-    _bFileLoaded = Storm::Source::SFile::SFileLoadFile("DATA\\GLOBAL\\gateways.txt", (void**)&pFileData, &dwFileSize, 0, 0);
+    _bFileLoaded = Storm::Source::SFile::SFileLoadFile("DATA\\GLOBAL\\gateways.txt", (void**)&pFileData, &dwFileSize, 0, (LPOVERLAPPED)0x0);
     if (!_bFileLoaded) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f9);
       exit(-1);
@@ -543,21 +543,21 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
     char cCur;
     int nFieldLen;
     int32_t nLine;
-    char* pCur = szText;
-    char* nTmp2 = pCur + strlen(pCur);
-    pCur = nTmp2 + 1;
-    pCur = FindSection(pClientSideData, szText, "Server List Version");
+    char* pcVar1 = szText;
+    char* nTmp2 = pcVar1 + strlen(pcVar1);
+    pcVar1 = nTmp2 + 1;
+    char* pCur = FindSection(pClientSideData, szText, "Server List Version");
     if (!pCur) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x277);
       exit(-1);
     } else {
-      pCur = FindKey(pClientSideData, pCur, "VER");
-      if (!pCur) {
+      pcVar1 = FindKey(pClientSideData, pCur, "VER");
+      if (!pcVar1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27c);
         exit(-1);
       } else {
-        nTmp4 = pCur;
-        nIniVersion = strtoul(pCur, &nTmp4, 10);
+        nTmp4 = pcVar1;
+        nIniVersion = strtoul(pcVar1, &nTmp4, 10);
         nGatewayIniIdx = nIniVersion;
         if (nIniVersion <= pClientSideData->nFormatVersion) {
           return;
@@ -580,11 +580,11 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         pRegMultiSzBuf = (char*)Storm::Source::SMem::SMemAlloc(nSize, ".\\BNetGW.cpp", 0x297, 0);
         sprintf(pRegMultiSzBuf, "%d", nGatewayIniIdx);
         pSectionGateways = Storm::Source::SSTR::SStrLen(pRegMultiSzBuf);
-        pCur = pRegMultiSzBuf + pSectionGateways + 1;
-        *pCur = '0';
-        pCur[1] = '0';
-        pCur[2] = '\0';
-        pCur += 3;
+        pcVar1 = pRegMultiSzBuf + pSectionGateways + 1;
+        *pcVar1 = '0';
+        pcVar1[1] = '0';
+        pcVar1[2] = '\0';
+        pcVar1 += 3;
         pIniKeyVal = FindSection(pClientSideData, szText, "Server Gateways");
         nGatewayIniIdx = 1;
         sprintf(szKeyBuf, "%d", 1);
@@ -592,35 +592,35 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         while (pZoneVal) {
           pEnuLineEnd = SkipToEOL(pClientSideData, pZoneVal, nTmp2);
           uSlot1C.nFieldLen = (intptr_t)pEnuLineEnd - (intptr_t)pZoneVal;
-          Storm::Source::SSTR::SStrCopy(pCur, pZoneVal, uSlot1C.nFieldLen + 1);
-          nTmp3 = pCur;
-          pZoneVal = FindSection(pClientSideData, szText, pCur);
+          Storm::Source::SSTR::SStrCopy(pcVar1, pZoneVal, uSlot1C.nFieldLen + 1);
+          nTmp3 = pcVar1;
+          pZoneVal = FindSection(pClientSideData, szText, pcVar1);
           if (pZoneVal) {
-            uSlot1C.nTmp1 = pCur + uSlot1C.nFieldLen + 1;
-            pCur = FindKey(pClientSideData, pZoneVal, "ZONE");
-            if (pCur) {
-              pEnuLineEnd = SkipToEOL(pClientSideData, pCur, nTmp2);
-              nZoneLen = (intptr_t)pEnuLineEnd - (intptr_t)pCur;
+            uSlot1C.nTmp1 = pcVar1 + uSlot1C.nFieldLen + 1;
+            pcVar1 = FindKey(pClientSideData, pZoneVal, "ZONE");
+            if (pcVar1) {
+              pEnuLineEnd = SkipToEOL(pClientSideData, pcVar1, nTmp2);
+              nZoneLen = (intptr_t)pEnuLineEnd - (intptr_t)pcVar1;
               nFieldLen = nZoneLen + 1;
             } else {
               nFieldLen = 2;
-              pCur = "0";
+              pcVar1 = "0";
               nZoneLen = 1;
             }
 
-            Storm::Source::SSTR::SStrCopy(uSlot1C.nTmp1, pCur, nFieldLen);
+            Storm::Source::SSTR::SStrCopy(uSlot1C.nTmp1, pcVar1, nFieldLen);
             uSlot1C.nTmp1 = uSlot1C.nTmp1 + nZoneLen + 1;
-            pCur = FindKey(pClientSideData, pZoneVal, "ENU");
-            if (pCur) {
-              pZoneVal = SkipToEOL(pClientSideData, pCur, nTmp2);
-              nFieldLen = (intptr_t)pZoneVal - (intptr_t)pCur;
+            pcVar1 = FindKey(pClientSideData, pZoneVal, "ENU");
+            if (pcVar1) {
+              pZoneVal = SkipToEOL(pClientSideData, pcVar1, nTmp2);
+              nFieldLen = (intptr_t)pZoneVal - (intptr_t)pcVar1;
             } else {
               nFieldLen = (int)strlen(nTmp3);
-              pCur = nTmp3;
+              pcVar1 = nTmp3;
             }
 
-            Storm::Source::SSTR::SStrCopy(uSlot1C.nTmp1, pCur, nFieldLen + 1);
-            pCur = uSlot1C.nTmp1 + nFieldLen + 1;
+            Storm::Source::SSTR::SStrCopy(uSlot1C.nTmp1, pcVar1, nFieldLen + 1);
+            pcVar1 = uSlot1C.nTmp1 + nFieldLen + 1;
           }
 
           nGatewayIniIdx++;
@@ -628,8 +628,8 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
           pZoneVal = FindKey(pClientSideData, pIniKeyVal, szKeyBuf);
         }
 
-        *pCur = '\0';
-        nGatewayDataLen = (int)pCur + (1 - (int)pRegMultiSzBuf);
+        *pcVar1 = '\0';
+        nGatewayDataLen = (int)pcVar1 + (1 - (int)pRegMultiSzBuf);
         if (!((int)nGatewayDataLen < (int)nSize)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e6);
           exit(-1);

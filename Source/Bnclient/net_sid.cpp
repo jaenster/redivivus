@@ -470,10 +470,10 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, size_t nS
     char* szText1 = pBytes + 8;
     char* pszEnd = szText1;
     pszEnd = pszEnd + strlen(pszEnd) + 1;
-    if ((uintptr_t)(pszEnd + (9 - (int)(pBytes + 9))) < nSize) {
+    if ((uintptr_t)(pszEnd + (9 - (intptr_t)(pBytes + 9))) < nSize) {
       pszEnd = szText1;
       pszEnd = pszEnd + strlen(pszEnd) + 1;
-      BnSend::BNSEND_SendString(szText1 + (int)(pszEnd + (1 - (int)(pBytes + 9))));
+      BnSend::BNSEND_SendString(szText1 + (intptr_t)(pszEnd + (1 - (intptr_t)(pBytes + 9))));
     }
 
     BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7fffffff, 3, 0, 0, (FILETIME*)pBytes, szText1, nullptr);
@@ -578,8 +578,8 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
       szFilenameScan = szText1;
       szFilenameScan = szFilenameScan + strlen(szFilenameScan) + 1;
       g_dwLastAdId = dwAdIdReg;
-      if (*szText1 != '\0' && szText1[(int)(szFilenameScan + (1 - (int)(pBytes + 0x11)))] != '\0') {
-        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (int)(szFilenameScan + (1 - (int)(pBytes + 0x11))));
+      if (*szText1 != '\0' && szText1[(intptr_t)(szFilenameScan + (1 - (intptr_t)(pBytes + 0x11)))] != '\0') {
+        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (intptr_t)(szFilenameScan + (1 - (intptr_t)(pBytes + 0x11))));
       }
 
       return 1;
@@ -2213,9 +2213,9 @@ void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed) {
     do {
       pRandBufPos = hashWorkBuf + nXorIdx;
       *pRandBufPos ^= hashWorkBuf[nXorIdx % 0x14 + 0xb0];
-      hashWorkBuf[nXorIdx + 1] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (1 - (int)hashWorkBuf)) / 0x14 * -0x14 + 0xb1];
-      hashWorkBuf[nXorIdx + 2] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (2 - (int)hashWorkBuf)) / 0x14 * -0x14 + 0xb2];
-      hashWorkBuf[nXorIdx + 3] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (3 - (int)hashWorkBuf)) / 0x14 * -0x14 + 0xb3];
+      hashWorkBuf[nXorIdx + 1] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (1 - (intptr_t)hashWorkBuf)) / 0x14 * -0x14 + 0xb1];
+      hashWorkBuf[nXorIdx + 2] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (2 - (intptr_t)hashWorkBuf)) / 0x14 * -0x14 + 0xb2];
+      hashWorkBuf[nXorIdx + 3] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (3 - (intptr_t)hashWorkBuf)) / 0x14 * -0x14 + 0xb3];
       nXorIdx += 4;
     } while (nXorIdx < 0x70);
 
@@ -2342,7 +2342,7 @@ int32_t __fastcall NET_SID_CLIENT_CalculateAlignedBufferSize(uint32_t nDataSize)
     return nDataSize + 8;
 }
 
-void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSize, int32_t nBufferAlignment, int32_t szCDKey) {
+void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSize, int32_t nBufferAlignment, char * szCDKey) {
     int nKeyByteIdx;
     uint32_t nChunkSize;
     int nCopyCount;
@@ -2370,7 +2370,7 @@ void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSi
         exit(-1);
       }
 
-      NET_SID_CLIENT_EncodeCDKeyHash((char*)szCDKey, 1);
+      NET_SID_CLIENT_EncodeCDKeyHash(szCDKey, 1);
       nChunkSize = 0;
       nBlockCounter = 0;
       while (nDataSize) {
@@ -2472,7 +2472,7 @@ static int32_t NET_SID_CLIENT_DecodeAndValidateBuffer(int * pnData, uint32_t nDa
 static uint32_t * NET_SID_CLIENT_LoadAndDecodeCDKeyFile(uint32_t * szFileName, DWORD * pdwFileSize) {
     *pdwFileSize = 0x400;
     uint32_t* pLoadedKeyBuf = szFileName;
-    Storm::Source::SFile::SFileLoadFile((char*)szFileName, (void**)&pLoadedKeyBuf, pdwFileSize, 1, 0);
+    Storm::Source::SFile::SFileLoadFile((char*)szFileName, (void**)&pLoadedKeyBuf, pdwFileSize, 1, (LPOVERLAPPED)0x0);
     if (!(pLoadedKeyBuf && *pdwFileSize)) {
       return nullptr;
     }
@@ -2537,7 +2537,7 @@ void __stdcall DecodeAndLoadKeys() {
 
       szFileName[nXorByteIdx + 1] = '\0';
       g_dwCdKeyClassicSize = 0x400;
-      Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyClassicSize, 1, 0);
+      Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyClassicSize, 1, (LPOVERLAPPED)0x0);
       if (pFileBuf && g_dwCdKeyClassicSize) {
         bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyClassicSize);
         pKeyClassicBuf = (uint32_t*)pFileBuf;
@@ -2556,7 +2556,7 @@ void __stdcall DecodeAndLoadKeys() {
     KeyClassic = (char*)pKeyClassicBuf;
     sprintf(szFileName, "%s\\%s.clh", "font", "font");
     g_dwCdKeyOwnerSize = 0x400;
-    Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, 0);
+    Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, (LPOVERLAPPED)0x0);
     if (!pFileBuf || !g_dwCdKeyOwnerSize) {
       pKeyBuf = 0;
     } else {
@@ -2591,7 +2591,7 @@ void __stdcall DecodeAndLoadKeys() {
       szFileName[nXorByteIdx + 1] = '\0';
       g_dwCdKeyOwnerSize = 0x400;
       KeyOwner = (char*)pKeyBuf;
-      Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, 0);
+      Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, (LPOVERLAPPED)0x0);
       if (pFileBuf && g_dwCdKeyOwnerSize) {
         bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyOwnerSize);
         pKeyBuf = pFileBuf;
@@ -2633,7 +2633,7 @@ void __stdcall DecodeAndLoadKeys() {
 
       szFileName[nXorByteIdx + 1] = '\0';
       g_dwCdKeyExpansionSize = 0x400;
-      Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyExpansionSize, 1, 0);
+      Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyExpansionSize, 1, (LPOVERLAPPED)0x0);
       if (pFileBuf && g_dwCdKeyExpansionSize) {
         bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyExpansionSize);
         pKeyBuf = pFileBuf;

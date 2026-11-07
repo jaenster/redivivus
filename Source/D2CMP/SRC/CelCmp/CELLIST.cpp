@@ -63,7 +63,7 @@ void __thiscall Destructor(::CELLIST * pThis) {
     int nAllocPolicy = pSource->m_frames.m_linkoffset;
     pTVar1->m_prevlink = pTVar1;
     pThis->m_frames.m_linkoffset = nAllocPolicy;
-    pThis->m_frames.m_terminator.m_next = ~(uint32_t)pTVar1;
+    pThis->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
     return pThis;
 }
 

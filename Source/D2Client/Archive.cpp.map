@@ -241,6 +241,9 @@
       "namespace": "D2Client::Archive",
       "calledFunctions": [
         "Unreferenced_0045bd80"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {

@@ -1108,7 +1108,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                         pObjTxtGrowable = (D2ObjectsTxt*)uSlot14.nGrowInterval;
                         do {
                           GAME::Event::SetEvent(pGame, pUnit, 2, (int)(pObjTxtGrowable->Name + pGame->dwGameFrame), 0, 0);
-                          pObjTxtGrowable = (D2ObjectsTxt*)(pObjTxtGrowable->Name + (int)uSlot14.pInactiveItemList);
+                          pObjTxtGrowable = (D2ObjectsTxt*)(pObjTxtGrowable->Name + (intptr_t)uSlot14.pInactiveItemList);
                           nRemainingGrowSteps--;
                         } while (nRemainingGrowSteps);
                       }

@@ -39,6 +39,11 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ChannelUserNameNodeStrc) == 0x48,
 static_assert(sizeof(void*) != 4 || sizeof(::D2ChannelUserStrc) == 0xb4, "D2_NEW_AT(D2ChannelUserStrc): the 32-bit layout must be the 0xb4 bytes 1.14d allocates");
 
 
+#ifndef RECON_FPTD_ChatDlgCallback
+#define RECON_FPTD_ChatDlgCallback
+typedef int (__stdcall *ChatDlgCallback)(D2ControlMsg * pControlMsg);
+#endif
+
 static uint8_t gaBnetCdKeyCharDecodeTable[256] = {
     0xff,
     0xff,
@@ -342,7 +347,7 @@ int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnused) {
     return 1;
 }
 
-static int COMCALLBACK_HandleBannerAdFile(uint32_t * pBannerAdData) {
+static int COMCALLBACK_HandleBannerAdFile(D2BnBannerAdMsgStrc * pBannerAdData) {
     char* pszExtension;
     int nExtChar;
     char szTempPath[260];
@@ -362,11 +367,11 @@ static int COMCALLBACK_HandleBannerAdFile(uint32_t * pBannerAdData) {
       /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(lpFileName_00798e30);
       hFile = Fog::Source::SFile::thunk_CreateFileA(szTempFileName, 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 4, 0x8000000, (HANDLE)0x0);
       if (hFile != (HANDLE)-1) {
-        Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)pBannerAdData[4], pBannerAdData[5], &dwBytesWritten, (LPOVERLAPPED)0x0);
+        Fog::Source::SFile::thunk_WriteFile(hFile, pBannerAdData->pFileData, pBannerAdData->dwFileSize, &dwBytesWritten, (LPOVERLAPPED)0x0);
         Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
       }
 
-      pszExtension = strrchr((char*)pBannerAdData[2], 0x2e);
+      pszExtension = strrchr(pBannerAdData->szFileName, 0x2e);
       nExtChar = tolower((int)pszExtension[1]);
       D2Win::Src::D2WinSmack::D2WINSMACK_LoadAndDecodeSmacker(gpLobbyForm0.pCtlLobbyLadderMode, szTempFileName, nExtChar);
       nExtChar = 0;
@@ -377,9 +382,9 @@ static int COMCALLBACK_HandleBannerAdFile(uint32_t * pBannerAdData) {
       } while (byNameChar != '\0');
     }
 
-    ghBannerAdProcess = *pBannerAdData;
-    D2_FREE_AT((void*)pBannerAdData[2], ".\\Src\\ComCallback.cpp", 0x386);
-    D2_FREE_AT((void*)pBannerAdData[3], ".\\Src\\ComCallback.cpp", 0x387);
+    ghBannerAdProcess = pBannerAdData->dwBannerId;
+    D2_FREE_AT(pBannerAdData->szFileName, ".\\Src\\ComCallback.cpp", 0x386);
+    D2_FREE_AT(pBannerAdData->pAllocation, ".\\Src\\ComCallback.cpp", 0x387);
     return 1;
 }
 
@@ -499,7 +504,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
             nIndex = 0x36 - (int)pszDst;
             do {
               cCopied = *pszDst;
-              pszDst[(int)pUser + nIndex] = cCopied;
+              pszDst[(intptr_t)pUser + nIndex] = cCopied;
               pszDst++;
             } while (cCopied != '\0');
 
@@ -661,7 +666,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
         nIndex = 0x36 - (int)pszDst;
         do {
           cCopied = *pszDst;
-          pszDst[(int)pUser + nIndex] = cCopied;
+          pszDst[(intptr_t)pUser + nIndex] = cCopied;
           pszDst++;
         } while (cCopied != '\0');
       }
@@ -818,7 +823,7 @@ void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * 
     nCmpResult = 0x32 - (int)pbRawData;
     do {
       byChar = *pbRawData;
-      pbRawData[(int)pNewNode + nCmpResult] = byChar;
+      pbRawData[(intptr_t)pNewNode + nCmpResult] = byChar;
       pbRawData++;
     } while (byChar);
 
@@ -923,7 +928,7 @@ static int32_t COMCALLBACK_CheckUserListFlags(uint32_t * pnEventData) {
       return 1;
     }
 
-    BOOL nHandlerResult = (*gaComCallbackDispatch[*pnEventData])(pnEventData[1], pnEventData[2], (char*)szText1, pszScan + (1 - ((int)pnEventData + 0x19)) + (int)szText1);
+    BOOL nHandlerResult = (*gaComCallbackDispatch[*pnEventData])(pnEventData[1], pnEventData[2], (char*)szText1, pszScan + (1 - ((intptr_t)pnEventData + 0x19)) + (intptr_t)szText1);
     if (!nHandlerResult) {
       return 1;
     }
@@ -1044,7 +1049,7 @@ BOOL __stdcall COMCALLBACK_ValidateGameJoinability() {
     // Static local variables (originally global data)
     static char gbChannelUserCountFormatPadding[50] = {}; D2_STATIC_GUARD(gbChannelUserCountFormatPadding, "D2Multi::ComCallback::COMCALLBACK_ValidateGameJoinability::gbChannelUserCountFormatPadding");
 
-    uint32_t msgBuffer[72];
+    D2BnBannerAdMsgStrc msgBuffer[12];
     int nMsgType;
     int nResult = pNetworkUnknown->pfnDequeueMessage(&nMsgType, msgBuffer);
     if (!nResult) {
@@ -1054,7 +1059,7 @@ BOOL __stdcall COMCALLBACK_ValidateGameJoinability() {
     switch (nMsgType) {
       case 0:
         {
-          COMCALLBACK_CheckUserListFlags(msgBuffer);
+          COMCALLBACK_CheckUserListFlags(&msgBuffer[0].dwBannerId);
           break;
         }
       case 2:
@@ -2029,7 +2034,7 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) 
     if (!nSendResult) {
       uint16_t* wszTitle;
       wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, (ChatDlgCallback)OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
       return 0;
     }
 
@@ -2074,7 +2079,7 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError2(D2ControlMsg * pControlMsg) 
     if (!nSendResult) {
       uint16_t* wszTitle;
       wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, (ChatDlgCallback)OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
       return 0;
     }
 
@@ -2113,7 +2118,7 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
         nResult = 4 - (int)szUsername;
         do {
           cNameChar = *szUsername;
-          szUsername[(int)pNewUser + nResult] = cNameChar;
+          szUsername[(intptr_t)pNewUser + nResult] = cNameChar;
           szUsername++;
         } while (cNameChar != '\0');
 
@@ -2503,7 +2508,7 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     do {
       byChar = abKeyBuf[nVal];
       pbScan = abKeyBuf + nVal;
-      nHash = (uintptr_t)(pbScan + (0x16 - (int)(abKeyBuf + 0xf))) & 0xf;
+      nHash = (uintptr_t)(pbScan + (0x16 - (intptr_t)(abKeyBuf + 0xf))) & 0xf;
       nVal--;
       *pbScan = abKeyBuf[nHash];
       abKeyBuf[nHash] = byChar;

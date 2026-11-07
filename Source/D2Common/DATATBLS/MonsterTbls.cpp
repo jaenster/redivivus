@@ -199,7 +199,7 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
       pcEndPtr = szText;
       do {
         cModeChar = *pcEndPtr;
-        pcEndPtr[(intptr_t)&nSkillIdx - (int)szText] = cModeChar;
+        pcEndPtr[(intptr_t)&nSkillIdx - (intptr_t)szText] = cModeChar;
         pcEndPtr++;
       } while (cModeChar != '\0');
 

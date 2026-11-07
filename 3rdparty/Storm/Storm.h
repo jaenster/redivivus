@@ -945,7 +945,7 @@ int __stdcall SFileCloseArchive(struct D2ArchiveStrc * pArchive);
 // Shuts down async I/O subsystem by setting gbSFileAsyncIOShutdown shutdown flag, waiting for gpCurrentAsyncIORequest to finish (10ms polling, timeout when worker thread dies), then iterating gSFileStreamRecordList.pNext linked list to unlink, decrement refcount, and free all pending async file requests. Frees file record data when refcount hits zero.
 BOOL __stdcall SFileDdaDestroy();
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
-void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nAsyncHandle);
+void __stdcall SFILE_CancelAsyncRequestNoReturn(void * nAsyncHandle);
 // Cancels all async I/O requests for a file handle. Validates handle, iterates gSFileStreamRecordList.pNext list, cancels any matching requests (including gpCurrentAsyncIORequest if active), unlinks from queue, decrements refcount, and frees when refcount hits zero. Clears file handle's async flag (offset 0x134). Returns 1 on success, 0 if handle invalid.
 BOOL __stdcall SFileDdaEnd(struct D2MPQFileStrc * hFile);
 // Re-prioritises the queued Storm reads into pReadBuffer: SFILE_SetRequestUrgentByBuffer(pReadBuffer, nPriority > 0), then signals ghAsyncIOEvent if nPriority > 0. SetLastError(0x57) on a NULL buffer. Fog AsyncData passes D2AsyncData_Line0x128.pReadBuffer (+0x3c).
@@ -962,12 +962,12 @@ BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBy
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, int32_t nReadCtx);
+uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, LPOVERLAPPED nReadCtx);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileLoadFileEx"
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx);
+uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenArchive (SFILE.CPP)
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);

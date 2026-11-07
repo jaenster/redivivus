@@ -107,9 +107,9 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "StormCmdArgDefStrc *",
         "pfnSCmdErrorCallback",
-        "pfnSCmdUnknownArgCallback",
-        "uint32_t"
+        "pfnSCmdUnknownArgCallback"
       ]
     },
     {
@@ -401,6 +401,7 @@
       ],
       "usedTypes": [
         "SCMD",
+        "StormLinkStrc",
         "uint32_t",
         "uint8_t"
       ]
@@ -560,9 +561,9 @@
         "SCMD_PerformConversion"
       ],
       "usedTypes": [
+        "StormCmdArgDefStrc *",
         "pfnSCmdErrorCallback",
-        "pfnSCmdUnknownArgCallback",
-        "uint32_t"
+        "pfnSCmdUnknownArgCallback"
       ]
     },
     {
@@ -636,6 +637,7 @@
         "SStrCopy"
       ],
       "usedTypes": [
+        "StormCmdArgDefStrc",
         "StormLinkedListStrc"
       ]
     },
@@ -676,6 +678,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "StormCmdArgDefStrc *",
         "char *",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback",
@@ -717,6 +720,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "StormCmdArgDefStrc",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback",
         "uint32_t"

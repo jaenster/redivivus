@@ -189,7 +189,7 @@ int __stdcall NPCMENU_GetCurrentShopMode();
 // Packet S->C 0x91 body, called by NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK.
 // Reads 12 word NPC class ids from the packet at +2. For each id below the MonStats count, sets bUpdated = 1 on every D2NPCSpeech entry with that nNpcID. Nothing in it is about trade or money.
 void __fastcall NPCMENU_MarkNpcSpeechesUpdated(struct D2GSPacketSrv0x91 * pBytes);
-int __fastcall Unreferenced_004b3560(uint8_t * param_1);
+uint8_t * __fastcall Unreferenced_004b3560(uint8_t * param_1);
 // Shared callback of the Imbue (Charsi, string 4017), Add Sockets (Larzuk, 22748) and Personalize (Anya, 22749) menu options: frees the NPC dialog, closes UI_NPCMENU, resets the cursor and hover state, sets the NPC UI state to 7 and gnNpcMenuTransactionType to 0, then opens the cube-style item panel for the current NPC (UI_OpenHoradricCubeWithNpcInteraction(nCurrentInteractedNpcGUID)). Returns 1.
 // Evidence: the only 3 references are the NPCMENU_Enable{CharsiImbue,LarzukSocket,AnyaPersonalize}Option stores; which service runs is chosen by the NPC, not here.
 int __stdcall NPCMENU_ItemServiceOptionCallback();

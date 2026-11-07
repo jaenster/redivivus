@@ -493,7 +493,6 @@
       ],
       "usedTypes": [
         "D2InventoryGridInfoStrc",
-        "int *",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -560,7 +559,6 @@
       ],
       "usedTypes": [
         "D2InventoryGridInfoStrc",
-        "int *",
         "uint32_t",
         "uint8_t"
       ]

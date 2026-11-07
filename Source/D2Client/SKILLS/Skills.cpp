@@ -921,10 +921,10 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
     sCallbackArg.bAvoidTownRooms = nTargetFlags & 0x2000;
     do {
       BOOL bInTown;
-      if (!sCallbackArg.bAvoidTownRooms || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(sCallbackArg.ppRoomList[(int)pCallbackData]) , !bInTown)) {
-        bInRadius = ROOM_IsPointInRadius(sCallbackArg.ppRoomList[(int)pCallbackData], nCenterXSaved, nCenterY, nRadius);
+      if (!sCallbackArg.bAvoidTownRooms || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(sCallbackArg.ppRoomList[(intptr_t)pCallbackData]) , !bInTown)) {
+        bInRadius = ROOM_IsPointInRadius(sCallbackArg.ppRoomList[(intptr_t)pCallbackData], nCenterXSaved, nCenterY, nRadius);
         if (bInRadius) {
-          pRoomUnitNext = sCallbackArg.ppRoomList[(int)pCallbackData]->pUnitList;
+          pRoomUnitNext = sCallbackArg.ppRoomList[(intptr_t)pCallbackData]->pUnitList;
           while (true) {
             pUnit2 = pRoomUnitNext;
             if (!pUnit2) {

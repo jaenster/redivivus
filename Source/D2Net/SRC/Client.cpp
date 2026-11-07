@@ -507,8 +507,8 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
 
       pD2PacketClient_to_0xAE = pNewPacket;
       pD2PacketClient_from_0xAF = pTailPacket;
-      pBytesSize -= (int)nPacketSize;
-      pBytes += (int)nPacketSize;
+      pBytesSize -= (intptr_t)nPacketSize;
+      pBytes += (intptr_t)nPacketSize;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x203);

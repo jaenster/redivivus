@@ -90,8 +90,8 @@ union CRASH_DumpRegisters_Slotm6e0 {
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2CrashFrameStrc
 #define D2_DEFINED_D2CrashFrameStrc
-struct D2CrashFrameStrc {
-    /* 0x00 */ uint32_t dwReturnAddr;
+struct __attribute__((packed)) D2CrashFrameStrc {
+    /* 0x00 */ uintptr_t dwReturnAddr;
     /* 0x04 */ uint32_t dw04;
     /* 0x08 */ uint32_t dw08;
     /* 0x0C */ uint32_t dw0C;

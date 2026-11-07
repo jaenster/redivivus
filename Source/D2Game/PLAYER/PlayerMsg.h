@@ -847,7 +847,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x08_LeftSkillOnLocationEx(::SGAMEDATA *
 // C->S Packet 0x09 - Left Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x06.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x09_LeftSkillOnEntityEx2 * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x09_LeftSkillOnEntityEx2 * pPacket, uint32_t nSize);
 // C->S Packet 0x0A - Left Skill on Unit, Repeat+Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held+shift: delegates to handler 0x07.
@@ -875,7 +875,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0F_RightSkillOnLocationEx(::SGAMEDATA 
 // C->S Packet 0x10 - Right Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x0D.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x10_RightSkillOnEntityEx2 * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x10_RightSkillOnEntityEx2 * pPacket, uint32_t nSize);
 // C->S Packet 0x11 - Right Skill on Unit, Repeat+Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held+shift: delegates to handler 0x0E.
@@ -964,7 +964,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x21_MergeStackables(::SGAMEDATA * pGame
 // C->S 0x22 Unstack Item - STUB (5 bytes)
 // [op:1][itemGUID:u32]
 // RemoveStackItem returns 0 - dead code in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x22_ItemToBelt * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x22_ItemToBelt * pPacket, uint32_t nSize);
 // C->S 0x23 Item to Belt (9B). Packet: [op:1][itemGUID:u32][beltSlot:u32]. Cursor item to belt slot.
 eD2ServerIncomingStatus __fastcall SCMD_0x23_ItemToBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x23_ItemFromBelt * pPacket, uint32_t nSize);
 // C->S 0x24 Item from Belt (5B). Packet: [op:1][itemGUID:u32]. Belt item to cursor.
@@ -983,15 +983,15 @@ eD2ServerIncomingStatus __fastcall SCMD_0x29_ScrollIntoBook(::SGAMEDATA * pGame,
 eD2ServerIncomingStatus __fastcall SCMD_0x2A_ItemToCube(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2A_ItemToCube * pPacket, uint32_t nSize);
 // C->S 0x2C NPC Buy (stub)
 // Always returns SERVERSTATUS_BAD_PARAMS in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2C_ReturnBadParams(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2C_DeadStub * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2C_ReturnBadParams(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2C_DeadStub * pPacket, uint32_t nSize);
 // C->S 0x2D NPC Sell (stub)
 // Always returns SERVERSTATUS_BAD_PARAMS in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2D_ReturnBadParams(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2D_DeadStub * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2D_ReturnBadParams(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2D_DeadStub * pPacket, uint32_t nSize);
 // If target level is in the same act as the player, spawns a red portal (object 0x3B) at player position-5 X. If target is LEVEL_None, loads current act's town. If target is a different act, calls InitLevel directly. Used by SCMD handlers that warp the player to a new area.
 void __fastcall LoadAreaOrSpawnPortal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2LevelId eLevel, int32_t nMasks);
 // C->S 0x2E NPC Identify (stub)
 // Always returns SERVERSTATUS_OK in 1.14d.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2E_DeadStub * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2E_DeadStub * pPacket, uint32_t nSize);
 // C->S 0x2F NPC Repair/Interact (9 bytes)
 // [op:1][unk0x01:u32][npcGUID:u32]
 // Validates NPC target, range <=10, triggers NPC AI state change.
@@ -1016,7 +1016,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x37_GambleConfirm(::SGAMEDATA * pGame, 
 // C->S 0x38 NPC Menu Select (13B). Packet: [op:1][npcGUID:u32][menuId:u32][params:4B]. Select NPC menu option (trade/identify/repair/gamble/hire/quest).
 eD2ServerIncomingStatus __fastcall SCMD_0x38_NpcMenuSelect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x38_NpcMenuSelect * pPacket, uint32_t nSize);
 // C->S 0x39 DISABLED. Stub - always returns BAD_PARAMS.
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x39_ReturnBadParams(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x39_ReturnBadParams(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
 // C->S 0x3A Add Stat Point (3B). Packet: [op:1][statId:u16]. Stat 0-15, supports repeat count up to 100.
 eD2ServerIncomingStatus __fastcall SCMD_0x3A_AllocStatPoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x3A_AllocStatPoint * pPacket, uint32_t nSize);
 // C->S 0x3B Add Skill Point (3B). Packet: [op:1][skillId:u16]. Validates skill exists and can be leveled.
@@ -1084,7 +1084,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x61_MercEquipItem(::SGAMEDATA * pGame, 
 // Moves belt-compatible item from inventory to belt if allowed; sends 0x9C/0x9D updates.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x63_ItemToBeltAuto * pPacket, uint32_t nSize);
-eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x66_WardenStub * pPacket, size_t nSize);
+eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x66_WardenStub * pPacket, uint32_t nSize);
 // C->S PACKET DISPATCHER - PlrMsg.cpp
 // Dispatch table: NET_D2GS_SERVER_INCOMING at 0x006E0D18 (103 entries, 8 bytes each)
 // Entry: {fpHandler:4, bRequiresAlive:4}

@@ -222,49 +222,49 @@ void __fastcall TSIntrusiveList_Clear_Unref_0040f860(StormLinkedListStrc * pList
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_004179f0(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_00417a30(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_00417c30(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_0041c540(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_0041eb20(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __stdcall GAME_SetMouseButtonEventPending_Unref_0044b870() {
@@ -1644,7 +1644,7 @@ void __fastcall ClientInit_CharName(D2IniConfigStrc * pIniConfig) {
 
     char* pszCur = pszCharName;
     pszCur = pszCur + strlen(pszCur) + 1;
-    pszCur += 1 - (int)(pIniConfig->szNAME + 1);
+    pszCur += 1 - (intptr_t)(pIniConfig->szNAME + 1);
     D2Game::Save::szSaveCharacterName[0] = '\0';
     D2Game::Save::szSaveCharacterName[1] = '\0';
     D2Game::Save::szSaveCharacterName[2] = '\0';
@@ -2442,14 +2442,14 @@ void __fastcall TSIntrusiveList_Clear(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 // Client network timeout checks; triggers CLIENT_ConnectionRefused on long waits or failed connects.
@@ -3014,7 +3014,7 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(StormLinkedLis
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 // JMP thunk
@@ -3030,35 +3030,35 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(StormLinkedLis
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602390(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00603510(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(StormLinkedListStrc * pListHead) {
     StormLinkStrc* pSVar1 = &pListHead->head;
     pSVar1->pPrevLink = pSVar1;
     pListHead->nLinkOffset = 0;
-    pListHead->head.pNext = ~(uint32_t)pSVar1;
+    pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS
