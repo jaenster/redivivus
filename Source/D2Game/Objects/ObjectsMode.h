@@ -35,7 +35,7 @@ typedef uint32_t eD2TimerTypeDWORD;
 typedef uint32_t eD2UnitStat;
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 #endif
 
 // Data types
@@ -122,11 +122,11 @@ void __fastcall Shrines_ExplodingShrineFunction(struct D2ObjectOperateFnArg * pA
 // Object operate handler for a Poison shrine. Using the shrine unit's seed, spawns dwArg0..dwArg1 random potion items ("gpm" item code) at the best free spot near the attacker via FindBestSpotToSpawnItem + ITEM_CreateItemInstance (quantity 1, DOUPDATE). Then fires 6 poison missiles in a fixed offset spread (the aMissileOffsets ring) centered on the shrine, with skill level scaled by attacker level/5 (clamped 1..8). Side effect: advances the shrine seed.
 void __fastcall Shrines_PoisonShrineFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
 void __fastcall Shrines_CombatBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
-void __fastcall SHRINE_OnStaminaExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
+void __fastcall SHRINE_OnStaminaExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
 void __fastcall Shrines_StaminaBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
 void __fastcall Shrines_StatBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
 void __fastcall QUEST_DispatchObjectActivation_Unref_00583bc0(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall SHRINE_OnSkillExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
+void __fastcall SHRINE_OnSkillExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
 void __fastcall Shrines_SkillBoostFunction(struct D2ObjectOperateFnArg * pArguments, struct D2ShrinesTxt * pTxtShrines);
 // Object operate-handler invoked when a player activates a shrine. Guards against re-use (bails if already activated or wrong anim mode), records the activating player's GUID, marks the object dirty/update, and builds+attaches a floating hover-text label (shrine name string). Then looks up the shrine's D2ShrinesTxt record and dispatches its specific effect via OBJECTSHRINEFUNCTION[nCode].fpShrineHandler (falling back to Shrines_RefillFunction if none), validating the pointer with IsBadCodePtr. Schedules the shrine-reset event (nResetTimeInMins) and an object anim event. Returns Fog::GuardStack result (BOOL).
 BOOL __fastcall OBJOP_ActivateShrine(struct D2ObjectOperateFnArg * pOperation);

@@ -13,23 +13,21 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
 struct BigData;
 struct D2Srp;
 
 // Data types
-#ifndef D2_DEFINED_BigBuffer
-#define D2_DEFINED_BigBuffer
-struct BigBuffer {
-    /* 0x00 */ uint32_t nCapacity; // m_alloc - allocated element count
-    /* 0x04 */ uint32_t nCount; // m_count - used element count
-    /* 0x08 */ uint32_t * pData; // m_data - element array
-    /* 0x0C */ uint32_t nGrowStep; // m_chunk - chunk granularity, capped at 256/sizeof(element); written by TSGrowableArray_*_CalcChunkSize
-    /* 0x10 */ uint32_t nStartWord; // m_offset - BigBuffer only; Count() is m_count - m_offset (oracle .Count__9BigBuffer)
+#ifndef D2_DEFINED_BigStack
+#define D2_DEFINED_BigStack
+struct __attribute__((packed)) BigStack {
+    /* 0x000 */ BigBuffer aBuffers[16]; // scratch BigBuffers; BigBuffer_Mul/Div/IsPrime take aBuffers[nUsed] and bump nUsed
+    /* 0x140 */ uint32_t nUsed; // index of the next free scratch buffer (+0x140)
 };
 
-#endif // D2_DEFINED_BigBuffer
+#endif // D2_DEFINED_BigStack
 #ifndef D2_DEFINED_D2SrpCredentialsStrc
 #define D2_DEFINED_D2SrpCredentialsStrc
 struct D2SrpCredentialsStrc {
@@ -60,14 +58,6 @@ struct TSGrowableArray_Uc {
 };
 
 #endif // D2_DEFINED_TSGrowableArray_Uc
-#ifndef D2_DEFINED_BigStack
-#define D2_DEFINED_BigStack
-struct __attribute__((packed)) BigStack {
-    /* 0x000 */ BigBuffer aBuffers[16]; // scratch BigBuffers; BigBuffer_Mul/Div/IsPrime take aBuffers[nUsed] and bump nUsed
-    /* 0x140 */ uint32_t nUsed; // index of the next free scratch buffer (+0x140)
-};
-
-#endif // D2_DEFINED_BigStack
 namespace Bnclient::SRP {
 
 // Function declarations
@@ -83,7 +73,7 @@ struct D2Srp * __fastcall SRP_ConstructContext(struct D2Srp * pSrp);
 // the 20-byte digest to aRandomPoolB (this+0x20), and clears aOutputBuffer (20 bytes) and nBytesAvailable.
 // Provenance: 1.14d asm 00527dd0..00527e60 (SHA1_Update(ctx, &sSeedEntropy, 0xc) at 00527e0c..00527e14).
 void __thiscall SRP_InitializeRandomState(struct D2Srp * pThis, uint32_t dwSeed);
-void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t nBytes);
+void __thiscall SRP_ExtractSessionKeyBytes(struct D2Srp * * pThis, void * pDst, uint32_t nBytes);
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
 void __thiscall SRP_ComputePasswordHash(struct D2Srp * pSrp, void * pSalt, char * szText1, char * szText2, struct BigData * * ppPasswordHash);
 void __thiscall SRP_ComputeScramblingParam(struct D2Srp * pThis, struct BigData * * ppBase, struct BigData * * ppResult);
@@ -111,7 +101,7 @@ uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32
 void __thiscall SRP_ServerComputePublicB(void * pThis, uint8_t * nContextBase);
 void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uint32_t * pServerProof);
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
-void __thiscall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, int32_t nContextBase);
+void __thiscall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, uint8_t * nContextBase);
 void __stdcall SRP_GlobalInit();
 void SRP_AtexitCleanup();
 #endif // D2_MODULE_Bnclient

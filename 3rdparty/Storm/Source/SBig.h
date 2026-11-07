@@ -15,7 +15,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct BigBuffer;
 struct BigData;
 struct BigStack;
 struct EHExceptionRecord;
@@ -27,10 +26,17 @@ struct _CONTEXT;
 #endif // _WIN32
 
 // Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-typedef BigBuffer D2SbigArrayStrc;
+#ifndef D2_DEFINED_BigBuffer
+#define D2_DEFINED_BigBuffer
+struct BigBuffer {
+    /* 0x00 */ uint32_t nCapacity; // m_alloc - allocated element count
+    /* 0x04 */ uint32_t nCount; // m_count - used element count
+    /* 0x08 */ uint32_t * pData; // m_data - element array
+    /* 0x0C */ uint32_t nGrowStep; // m_chunk - chunk granularity, capped at 256/sizeof(element); written by TSGrowableArray_*_CalcChunkSize
+    /* 0x10 */ uint32_t nStartWord; // m_offset - BigBuffer only; Count() is m_count - m_offset (oracle .Count__9BigBuffer)
+};
 
-#endif // D2_MODULE_Storm
+#endif // D2_DEFINED_BigBuffer
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct TSGrowableArray_Ui {
     /* 0x00 */ uint32_t nCapacity;
@@ -38,6 +44,10 @@ struct TSGrowableArray_Ui {
     /* 0x08 */ uint32_t * pData;
     /* 0x0C */ uint32_t nGrowStep;
 };
+
+#endif // D2_MODULE_Storm
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
+typedef BigBuffer D2SbigArrayStrc;
 
 #endif // D2_MODULE_Storm
 namespace Storm::Source::SBig {

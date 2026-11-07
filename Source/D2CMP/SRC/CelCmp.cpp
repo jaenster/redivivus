@@ -2069,7 +2069,7 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
             exit(-1);
           }
 
-          (*gaaCelDrawFuncTable[nFormat])((uint8_t*)pImageHeader, pDstBits + nDrawYAdj * nDstPitch + nDrawXAdj, nDrawXAdj, nClipLeft, nClipRight, nDstPitch, (int32_t)pGfxData, nFrameHeight, (int32_t)pRenderArg1, (int32_t)pRenderArg2, (int32_t)pPalette);
+          (*gaaCelDrawFuncTable[nFormat])((uint8_t*)pImageHeader, pDstBits + nDrawYAdj * nDstPitch + nDrawXAdj, nDrawXAdj, nClipLeft, nClipRight, nDstPitch, (int32_t)pGfxData, nFrameHeight, (int32_t)pRenderArg1, pRenderArg2, (int32_t)pPalette);
           return;
         }
 
@@ -2102,7 +2102,7 @@ uint32_t __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, in
     }
 }
 
-void __stdcall CELCMP_DrawCelFrameFromGfxData(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, int32_t pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2) {
+void __stdcall CELCMP_DrawCelFrameFromGfxData(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2) {
     int nBottomY;
     int nClampedBottom;
     int nClampedTop;

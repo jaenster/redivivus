@@ -24,6 +24,7 @@ struct D2InventoryStrc;
 struct D2ItemsTxt;
 struct D2RoomStrc;
 struct D2SkillStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef int eD2ItemFlag;
@@ -206,7 +207,7 @@ void __fastcall HandleItemToCursor(uint8_t * pBytes);
 int __fastcall Unreferenced_004c2150(int param_1);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_RemoveUninterruptableState(struct D2UnitStrc * pUnit);
-void __fastcall ITEM_ClearUnitState(struct D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam);
+void __fastcall ITEM_ClearUnitState(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
 void __fastcall ITEM_RemoveClientSide(struct D2UnitStrc * pUnit);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall PlayerIsUnInterruptable(struct D2UnitStrc * pUnit);

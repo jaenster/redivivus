@@ -23,6 +23,7 @@ struct D2DrlgFileStrc;
 struct D2DrlgLevelStrc;
 struct D2DrlgMapStrc;
 struct D2DrlgStrc;
+struct D2DrlgVertexStrc;
 struct D2MapAIStrc;
 struct D2PoolManagerStrc;
 struct D2RoomExStrc;
@@ -420,7 +421,7 @@ int32_t __fastcall DRLGPRESET_SetPickedFileInDrlgMap(struct D2DrlgMapStrc * pDrl
 struct D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(struct D2DrlgLevelStrc * pLevel, int32_t nLvlPrestId, struct D2DrlgCoordStrc * pDrlgCoord, struct D2SeedStrc * pSeed);
 int32_t __fastcall GetSizeX(int32_t nLvlPrestId);
 int32_t __fastcall GetSizeY(int32_t nLvlPrestId);
-int __fastcall Unreferenced_00666ff0(struct D2RoomExStrc * param_1);
+struct D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(struct D2RoomExStrc * param_1);
 int __fastcall Unreferenced_00667000(struct D2RoomExStrc * param_1);
 // DRLGPRESET_GetPickedFilePathFromRoomEx
 // Returns the file path string for the randomly selected preset map file.
@@ -434,7 +435,7 @@ char * __fastcall DRLGPRESET_GetPickedFilePathFromRoomEx(struct D2RoomExStrc * p
 void __fastcall DRLGPRESET_GetDrlgFileSize(struct D2RoomExStrc * pDrlgMap, int32_t * pnWidth, int32_t * pnHeight);
 // DRLG preset-area "POP" (preset-object population) updater. Given a RoomEx and an (nX,nY) world coordinate plus bOtherRoom flag: if the room is a preset (type 2), finds which POP bounds rectangle the point falls inside and notes its matched POP id. Then iterates the room's nearby preset RoomEx neighbors and, comparing POP tick deadlines, calls DRLGPRESET_UpdatePopTiles to refresh/expire POP tiles (a fresh GetTickCount+500 deadline for the matched POP, or the stored deadline otherwise). If any update occurred, does a second pass writing back the new deadlines (0 for non-matching POPs, the new deadline for the matched POP). No return. NOTE: pRoomExData POP sub-structure accessed via raw +0x40/+0x44/+0x4c/+0x50 offsets - shared struct lacks named fields here.
 void __fastcall UpdatePops(struct D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL bOtherRoom);
-int __fastcall Unreferenced_00667420(struct D2DrlgLevelStrc * param_1);
+struct D2DrlgVertexStrc * __fastcall Unreferenced_00667420(struct D2DrlgLevelStrc * param_1);
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGLEVEL_InitializeWithPresetArea(struct D2DrlgLevelStrc * pLevel);
 // @sourcefile .\DRLG\Preset.cpp

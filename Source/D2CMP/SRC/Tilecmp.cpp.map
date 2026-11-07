@@ -375,6 +375,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2GroundSubTileStrc",
         "D2TileLibraryHeaderStrc",
         "int32_t"
       ]

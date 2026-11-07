@@ -1697,10 +1697,10 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    pTarget = (D2UnitStrc*)pTargetUnit->nUnitGUID;
+    uint32_t nTarget = (uint32_t)pTargetUnit->nUnitGUID;
     if (eTargetUnitType == UNIT_MONSTER) {
-      Ai::AiGeneral::GetMonsterNameAndAi(pTargetUnit, (uint32_t*)&pTarget, (int*)&eMonsterOwnerType);
-      if (pTarget == (D2UnitStrc*)-1) {
+      Ai::AiGeneral::GetMonsterNameAndAi(pTargetUnit, (uint32_t*)&nTarget, (int*)&eMonsterOwnerType);
+      if (nTarget == -1) {
         return 0;
       }
       if (eMonsterOwnerType != UNIT_PLAYER) {
@@ -1713,7 +1713,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    pTargetUnit = FindUnitFromTable(pGame, eMonsterOwnerType, (uint32_t)pTarget);
+    pTargetUnit = FindUnitFromTable(pGame, eMonsterOwnerType, nTarget);
     if (!pTargetUnit) {
       return 0;
     }

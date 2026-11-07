@@ -17,6 +17,7 @@
 // Forward declarations
 struct D2DamageStrc;
 struct D2SkillCallbackContextStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
@@ -65,11 +66,11 @@ BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall SKILLSOR_SrvStFn12_TargetInAuraRange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLSOR_SrvStFn13_ThunderStorm(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
 BOOL __fastcall SKILLSOR_SrvStFn14_Hydra(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILL_InitChargedBoltPath(struct D2UnitStrc * pUnit, int32_t nMissileIdx);
+void __fastcall SKILL_InitChargedBoltPath(struct D2UnitStrc * pUnit, intptr_t nMissileIdx);
 // Server do-func for Sorceress Charged Bolt (skill 17). Sets UNITFLAG_SKSRVDOFUNC, looks up the charge-up missile ID (SKILLASS_GetChargeUpMissile), evaluates calc[0] for bolt count, then loops that many times calling CreatingMissile with a per-bolt D2SkillArgStrc (fpFunction = SKILL_InitChargedBoltPath, flags 0x21, target from SKILLS_GetTargetOrCursorPos). Each bolt gets an independent random path initialised by SKILL_InitChargedBoltPath.
 BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillSor.cpp
-void __fastcall SetFrozenArmorState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nUnused);
+void __fastcall SetFrozenArmorState(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nUnused);
 // Server skill-do function shared by Sorceress frozen-armor skills (Frozen Armor, Shiver Armor, Chilling Armor — skill index 018 group). Validates the skill entry, sets UNITFLAG_SKSRVDOFUNC, activates the aura state, builds a D2StateExArgStrc with the duration calc result, attaches a stat list with SetFrozenArmorState as the expiry callback, adds aura/passive stats and modifier-list entries, registers aura-target events and up to 3 aura events, then toggles the GFX state. Returns the stat list pointer cast to BOOL on success.
 BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_019_Inferno(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

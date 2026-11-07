@@ -751,7 +751,7 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
     return bHitResult;
 }
 
-void __fastcall SKILLBAR_OnWarCryExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
+void __fastcall SKILLBAR_OnWarCryExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     int32_t nRemoveFlag = 1;
     eD2States eExpireState = eState;
     UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nRemoveFlag, eExpireState);

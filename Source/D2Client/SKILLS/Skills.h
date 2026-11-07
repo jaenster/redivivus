@@ -18,6 +18,7 @@
 struct D2CUnitEventStrc;
 struct D2RoomStrc;
 struct D2SkillArgStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct D2fpSkillFuncArg;
 typedef uint32_t eD2Skills;
@@ -114,7 +115,7 @@ void __fastcall SKILLS_CreateMissileSpiralGrid(int32_t nSkillLevel, struct D2Ski
 // Client-side tick: iterates all states flagged in pAllStatesDataTblFlag0x05, and for each that is active on pUnit and has a valid cltactivefunc, dispatches the corresponding SKILLCLTDOFUNCS handler. Reads the state's stat list to pass the originating skill ID and level to the handler. Called each client frame to sustain aura/state visual/missile effects.
 void __fastcall SKILL_ProcessActiveStateEffects(struct D2UnitStrc * pUnit);
 void __fastcall SKILL_CreateMissileAtCoords(struct D2UnitStrc * pUnit, eMissilesId pMissileId, eD2Skills eSkill, int32_t nToHit, uint32_t nX, uint32_t nY);
-void __fastcall SKILLS_SetMissileDirectionCallback(struct D2UnitStrc * pUnit, int nDirection);
+void __fastcall SKILLS_SetMissileDirectionCallback(struct D2UnitStrc * pUnit, intptr_t nDirection);
 // Spawns nCount missiles scattered randomly within a square of half-side nRadius around the skill target (pSkillArg->nX/nY). Advances the caster unit's RNG seed to pick a starting quadrant, then for each missile picks independent random X/Y offsets in [0, 2*nRadius), sets nUnitX/nUnitY to a quadrant-biased aim point (±16 tiles), assigns SKILLS_SetMissileDirectionCallback, and calls MakeMissile. Restores nX/nY in pSkillArg after all missiles are created.
 void __fastcall SKILLS_CreateMissileScatter(struct D2UnitStrc * pUnit, struct D2SkillArgStrc * pSkillArg, int32_t nRadius, int32_t nCount);
 BOOL __fastcall CLIENT_HandleUnitMessage0x16(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
@@ -124,7 +125,7 @@ void __fastcall SKILLS_ApplyDamageReduction(struct D2UnitStrc * pUnit, int32_t n
 uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(struct D2UnitStrc * pUnit, eMissilesId pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel);
 // Client-side skill expiry handler called when a skill animation completes. If the unit's current skill is not STATE_skill_move and has no loop flag (bit 1), looks up the skill's srvdofunc: 0x43 stops and clears the uninterruptable skill (Paladin Holy Shield etc.), 0x4C stops and clears sound (Barbarian), 0x4D/0x4E handles teleport landing. No-ops for all other srvdofunc values.
 // @sourcefile .\SKILLS\Skills.cpp
-void __fastcall SKILLS_CltProcessActiveSkill(struct D2UnitStrc * pUnit, eD2Skills eExpiredSkill, int32_t nExpiredSkillLevel);
+void __fastcall SKILLS_CltProcessActiveSkill(struct D2UnitStrc * pUnit, eD2Skills eExpiredSkill, struct D2StatListExStrc * nExpiredSkillLevel);
 void __fastcall SKILL_CreateActiveSkillStatList(struct D2UnitStrc * pUnit);
 // Iterates all skills in a player's skill list and adjusts bonus levels by nBonusDelta for skills matching eSkillEType (element type, 0=all) and nSkillPage (skill tree tab, 4=all). Only affects player-owned skills (owner GUID == -1) with base level > 0 and flag bit 1 set. Removes skills whose total level drops to 0. Triggers SKILLS_UpdateAllPassiveSkills afterward.
 // @sourcefile .\SKILLS\Skills.cpp

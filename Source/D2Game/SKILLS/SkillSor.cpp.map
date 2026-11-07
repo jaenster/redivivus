@@ -245,6 +245,7 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "int32_t",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -299,6 +300,7 @@
         "SKILLS_UpdatePassivesAndPets"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",

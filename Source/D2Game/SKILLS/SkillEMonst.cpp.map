@@ -532,6 +532,7 @@
       ],
       "usedTypes": [
         "D2SkillsTxt",
+        "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",

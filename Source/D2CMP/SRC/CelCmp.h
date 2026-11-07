@@ -41,7 +41,7 @@ uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t 
 uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, uint32_t nLevelOfRotation);
 void __stdcall CELCMP_FixupPointersAndPrepare(struct DC6 * pDC6, struct DC6 * * ppDC6Out, char * szFile, int32_t nLine, int32_t nExpectedFormat, char * szName);
 void __stdcall CELCMP_DrawCelFrame(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, uint32_t nDstPitch, BYTE * pRenderArg1, BYTE * pRenderArg2, BYTE * pPalette);
-void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, int32_t pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2);
+void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2);
 void __stdcall CELCMP_DrawCelFrameCentered(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, int32_t nDstPitch, BYTE * pBlendTable, uint8_t byBlendColor);
 struct DC6Block * __stdcall CELCMP_GetDC6BlockFromGfxData(struct D2GfxDataStrc * pGfxData);
 int32_t __stdcall GetDC6Width(struct DC6Block * pDC6Block);

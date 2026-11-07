@@ -684,7 +684,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     } while (*pScanDwordEnd != '\0');
 
     D2SoundsTxt* pSoundCopy = pSound;
-    if (!(pszDst + (int)((int)pSoundScan + (-(int)(pSound->Filename + 1) - (int)(pszOutPath + 1))) < (char*)0x50)) {
+    if (!(pszDst + (int)((intptr_t)pSoundScan + (-(int)(pSound->Filename + 1) - (intptr_t)(pszOutPath + 1))) < (char*)0x50)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ab);
       exit(-1);
     }

@@ -1012,16 +1012,22 @@ bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID
     return false;
 }
 
-int __fastcall Unreferenced_005b9c80(D2QuestDataStrc * param_1, D2UnitStrc * param_2) {
+void __fastcall Unreferenced_005b9c80(D2QuestDataStrc * param_1, D2UnitStrc * param_2) {
+    int iVar2;
     D2QuestDataA1Q3Strc* pDVar1 = param_1->pQuestSpecificData.pA1Q3;
-    if (pDVar1->bCharsiNotified == 1) {
-      int iVar2 = !param_2 ? -1 : param_2->nUnitGUID;
-      if (pDVar1->sQuestGUID.aPlayerGUID[4] == iVar2) {
-        pDVar1->bCharsiNotified = 0;
-      }
+    if (pDVar1->bCharsiNotified != 1) {
+      return;
+    }
+    if (!param_2) {
+      iVar2 = -1;
+    } else {
+      iVar2 = param_2->nUnitGUID;
+    }
+    if (pDVar1->sQuestGUID.aPlayerGUID[4] != iVar2) {
+      return;
     }
 
-    return (int)pDVar1;
+    pDVar1->bCharsiNotified = 0;
 }
 
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,

@@ -835,10 +835,10 @@ void __stdcall InitializeStaticPath(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int3
     pPath->nPosY = nY;
     pPath->nDirection = 0;
     pPath->pRoom = pRoom;
-    pUnit = (D2UnitStrc*)nX;
+    int nUnit = nX;
     int nScreenYLocal = nY;
-    Drlg::Transform::CoordsMapToScreen((int32_t*)&pUnit, &nScreenYLocal);
-    pPath->nScreenX = (int)pUnit;
+    Drlg::Transform::CoordsMapToScreen((int32_t*)&nUnit, &nScreenYLocal);
+    pPath->nScreenX = nUnit;
     pPath->nScreenY = nScreenYLocal;
 }
 
@@ -1592,6 +1592,7 @@ void __stdcall SetAnimActionFrame(D2UnitStrc * pUnit, int32_t nFrame) {
 int32_t __stdcall GetEventFrameInfo(D2UnitStrc * pUnit, int32_t nFrame) {
     uint32_t nSeqCurrentFrame;
     uint32_t nSeqFrameCount;
+    int32_t nUnit;
     int32_t nLine = nFrame;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdcc);
@@ -1616,8 +1617,8 @@ int32_t __stdcall GetEventFrameInfo(D2UnitStrc * pUnit, int32_t nFrame) {
     }
 
     D2MonSeqTxt* pSeqTxt = Merc::MERC_GetSequenceTxt(pUnit);
-    Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, nLine << 8, nLine << 8, &nSeqCurrentFrame, &nSeqFrameCount, (uint32_t*)&nFrame, (uint32_t*)&pUnit);
-    return (int32_t)pUnit;
+    Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, nLine << 8, nLine << 8, &nSeqCurrentFrame, &nSeqFrameCount, (uint32_t*)&nFrame, (uint32_t*)&nUnit);
+    return nUnit;
 }
 
 BOOL __stdcall HasCollision(D2UnitStrc * pUnit) {

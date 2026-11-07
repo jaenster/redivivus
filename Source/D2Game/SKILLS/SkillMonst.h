@@ -78,7 +78,7 @@ BOOL __fastcall Skills_SrvDoFunc_099_FireMissileRing8Dir(::SGAMEDATA * pGame, st
 BOOL __fastcall Skills_SrvDoFunc_100_FreezingMeleeAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Monster skill server do-func: fires a single directional missile (srvmissilea). If a target unit exists, faces the caster path toward the target and sets delta from target pos; otherwise uses the path SP1 as the direction delta. calc[0] sets nSubLoopMult. Spawns one missile via CreatingMissile.
 BOOL __fastcall Skills_SrvDoFunc_101_FireDirectionalMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLMONST_RandomizeMissilePath(struct D2UnitStrc * pUnit, int32_t nMissileIdx);
+void __fastcall SKILLMONST_RandomizeMissilePath(struct D2UnitStrc * pUnit, intptr_t nMissileIdx);
 // Monster skill server do-func: fires multiple randomly-pathed missiles (srvmissilea). calc[0] determines count. Resolves target/cursor position, then loops spawning missiles with SKILLMONST_RandomizeMissilePath callback (flag 0x21) via CreatingMissile.
 BOOL __fastcall Skills_SrvDoFunc_102_FireRandomMultiMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Monster skill server start-func 54: records the target unit for a delayed missile-fire skill. Stores target GUID and type into skill Param1/Param2 via SKILL_SetParam, clears the dynamic path target, then writes the target's world position into the caster's path SP1 for later use by the do-func.

@@ -727,7 +727,7 @@ uint32_t __thiscall ITEMMOD_GetMaxAffixGroupClassic(int32_t pThis, D2UnitStrc * 
 
     int iVar2 = (intptr_t)pCurAffixEntry - (intptr_t)pRareAffixTableInfo->pTable;
     if (pThis) {
-      nAffixRangeBytes = pRareAffixTableInfo->nSize * 0x48 - (int)pRareAffixTableInfo->pPrefixStart + (int)pRareAffixTableInfo->pTable;
+      nAffixRangeBytes = pRareAffixTableInfo->nSize * 0x48 - (intptr_t)pRareAffixTableInfo->pPrefixStart + (intptr_t)pRareAffixTableInfo->pTable;
     } else {
       nAffixRangeBytes = (intptr_t)pRareAffixTableInfo->pPrefixStart - (intptr_t)pRareAffixTableInfo->pSuffixStart;
     }
@@ -790,7 +790,7 @@ uint32_t __thiscall GetMaxToRoll(int32_t pThis, D2UnitStrc * pUnit) {
 
     int iVar2 = (intptr_t)pCurAffixEntry - (intptr_t)pRareAffixTableInfo->pTable;
     if (pThis) {
-      nAffixRangeBytes = pRareAffixTableInfo->nSize * 0x48 - (int)pRareAffixTableInfo->pPrefixStart + (int)pRareAffixTableInfo->pTable;
+      nAffixRangeBytes = pRareAffixTableInfo->nSize * 0x48 - (intptr_t)pRareAffixTableInfo->pPrefixStart + (intptr_t)pRareAffixTableInfo->pTable;
     } else {
       nAffixRangeBytes = (intptr_t)pRareAffixTableInfo->pPrefixStart - (intptr_t)pRareAffixTableInfo->pSuffixStart;
     }

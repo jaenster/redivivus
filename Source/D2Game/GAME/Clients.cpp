@@ -1569,6 +1569,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
     POINT ptCorpsePos;
     int32_t pDrlgActSpawn;
     int32_t nErrorLine;
+    D2DrlgActStrc** pDrlgAct2;
     ::SGAMEDATA* pGameOrig = pGame;
     if (!(pGame && pUnit && pClient)) {
       return;
@@ -1576,10 +1577,10 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
 
     uint8_t bActNo = GetAct(pClient);
     if (!pRoom) {
-      pDrlgAct = (int32_t)(pGameOrig->pAct + bActNo);
+      pDrlgAct2 = pGameOrig->pAct + bActNo;
       pRoom = (D2RoomStrc*)D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGameOrig->pAct[bActNo]);
       dwCorpseGUID = D2Common::Units::GetUnitSizeX(pUnit);
-      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*(D2DrlgActStrc**)pDrlgAct, (eD2LevelId)pRoom, 0, &pDrlgActSpawn, (int*)&pGame, dwCorpseGUID);
+      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*pDrlgAct2, (eD2LevelId)pRoom, 0, &pDrlgActSpawn, (int*)&pGame, dwCorpseGUID);
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a1);
         exit(-1);

@@ -136,6 +136,8 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
     uint16_t wClassId[2];
     char* pszNextFlagsToken;
     char cCur;
+    uint32_t nPszNextFlagsToken;
+    uint32_t nPszNextFlagsToken2;
     if (*pszField == '\"') {
       pszField++;
     }
@@ -181,8 +183,8 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
       }
     }
     if ((uint32_t)(int)strlen(pszField) <= 4) {
-      CUBE_PadItemCodeString(pszField, (char*)&pszNextFlagsToken);
-      nClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, (uint32_t)pszNextFlagsToken, 0);
+      CUBE_PadItemCodeString(pszField, (char*)&nPszNextFlagsToken2);
+      nClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, nPszNextFlagsToken2, 0);
       if (nClassId >= 0) {
         pInput->wFlagsAndUpgrade |= 2;
         pInput->nItemClassId = (uint16_t)nClassId;
@@ -190,8 +192,8 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
       }
     }
     if ((uint32_t)(int)strlen(pszField) <= 4) {
-      CUBE_PadItemCodeString(pszField, (char*)&pszNextFlagsToken);
-      pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine((uint32_t)pszNextFlagsToken, (int*)wClassId);
+      CUBE_PadItemCodeString(pszField, (char*)&nPszNextFlagsToken);
+      pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nPszNextFlagsToken, (int*)wClassId);
       if (!pItemsTxt) {
         goto lookup_unique_or_set;
       }
@@ -384,6 +386,7 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
     char* pszScan;
     bool bTokenMatch;
     char* pszPadded;
+    uint32_t nPszPadded;
     D2CubeOutputStrc* pOutputCopy;
     pOutputCopy = pOutput;
     if (*pszField == '\"') {
@@ -451,8 +454,8 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
                 }
               }
               if ((uint32_t)(int)strlen(pszItemCodeField) <= 4) {
-                CUBE_PadItemCodeString(pszItemCodeField, (char*)&pszPadded);
-                nItemTypeClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, (uint32_t)pszPadded, 0);
+                CUBE_PadItemCodeString(pszItemCodeField, (char*)&nPszPadded);
+                nItemTypeClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, nPszPadded, 0);
                 if (nItemTypeClassId >= 0) {
                   pOutputCopy->nType = 0xfd;
                   pOutputCopy->nItemClassId = (uint16_t)nItemTypeClassId;

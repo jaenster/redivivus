@@ -7,7 +7,6 @@
 #include "Source/D2Win/DC6.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/D2Lang/D2Lang.globals.h"
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Launch/MainMenus.data.h"
@@ -126,21 +125,21 @@ int Unreferenced_004fab60() {
 }
 
 BOOL __stdcall MPQ_LoadAllDataMpqFiles() {
-    MPQ_d2data = D2Hell::ARCHIVE_LoadMPQ("d2data.mpq", 0, nullptr, 1000);
+    D2WinArchive::MPQ_d2data = D2Hell::ARCHIVE_LoadMPQ("d2data.mpq", 0, nullptr, 1000);
     MPQ_d2sfx = D2Hell::ARCHIVE_LoadMPQ("d2sfx.mpq", 0, nullptr, 1000);
     MPQ_d2speech = D2Hell::ARCHIVE_LoadMPQ("d2speech.mpq", 0, nullptr, 1000);
     MPQ_d2delta = D2Hell::ARCHIVE_LoadMPQ("d2delta.mpq", 0, nullptr, 1000);
     MPQ_d2kfixup = D2Hell::ARCHIVE_LoadMPQ("d2kfixup.mpq", 0, nullptr, 1000);
-    MPQ_patch_d2 = D2Hell::ARCHIVE_LoadMPQ("patch_d2.mpq", 0, nullptr, 5000);
-    MPQ_d2exp = D2Hell::ARCHIVE_LoadMPQ("d2exp.mpq", 0, nullptr, 3000);
+    D2WinArchive::MPQ_patch_d2 = D2Hell::ARCHIVE_LoadMPQ("patch_d2.mpq", 0, nullptr, 5000);
+    D2WinArchive::MPQ_d2exp = D2Hell::ARCHIVE_LoadMPQ("d2exp.mpq", 0, nullptr, 3000);
     BOOL bDirectMode = Fog::Source::SFile::GetUseDirectCommand();
     if (!bDirectMode) {
-      if (MPQ_d2data && MPQ_d2sfx && MPQ_d2speech) {
+      if (D2WinArchive::MPQ_d2data && MPQ_d2sfx && MPQ_d2speech) {
         bDirectMode = Fog::D2CheckExpansionGame();
         if (!bDirectMode) {
           return 1;
         }
-        if (MPQ_d2exp) {
+        if (D2WinArchive::MPQ_d2exp) {
           return 1;
         }
       }
@@ -224,9 +223,9 @@ void __stdcall MPQ_UnloadAllMediaMpqFiles() {
 }
 
 void __stdcall MPQ_UnloadAllDataMpqFiles() {
-    if (MPQ_d2data) {
-      D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2data);
-      MPQ_d2data = 0;
+    if (D2WinArchive::MPQ_d2data) {
+      D2Hell::ARCHIVE_FreeMpqFile(D2WinArchive::MPQ_d2data);
+      D2WinArchive::MPQ_d2data = 0;
     }
     if (MPQ_d2speech) {
       D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2speech);
@@ -244,17 +243,17 @@ void __stdcall MPQ_UnloadAllDataMpqFiles() {
       D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2kfixup);
       MPQ_d2kfixup = 0;
     }
-    if (MPQ_d2exp) {
-      D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2exp);
-      MPQ_d2exp = 0;
+    if (D2WinArchive::MPQ_d2exp) {
+      D2Hell::ARCHIVE_FreeMpqFile(D2WinArchive::MPQ_d2exp);
+      D2WinArchive::MPQ_d2exp = 0;
     }
     if (MPQ_d2Xmusic) {
       D2Hell::ARCHIVE_FreeMpqFile(MPQ_d2Xmusic);
       MPQ_d2Xmusic = 0;
     }
-    if (MPQ_patch_d2) {
-      D2Hell::ARCHIVE_FreeMpqFile(MPQ_patch_d2);
-      MPQ_patch_d2 = 0;
+    if (D2WinArchive::MPQ_patch_d2) {
+      D2Hell::ARCHIVE_FreeMpqFile(D2WinArchive::MPQ_patch_d2);
+      D2WinArchive::MPQ_patch_d2 = 0;
     }
 
     MPQ_UnloadAllMediaMpqFiles();

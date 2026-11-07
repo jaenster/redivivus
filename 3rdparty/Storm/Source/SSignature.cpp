@@ -2,9 +2,7 @@
 
 #include "3rdparty/Storm/Source/SSignature.h"
 #include "3rdparty/Storm/Source/SBig.h"
-#include "3rdparty/Storm/Source/SLog.h"
 #include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/Storm/Source/SSignature.inline.h"
 

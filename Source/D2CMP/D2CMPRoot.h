@@ -16,6 +16,7 @@
 
 // Forward declarations
 struct D2LRUCacheNodeStrc;
+struct D2TileLibraryEntryStrc;
 
 namespace D2CMP {
 
@@ -26,7 +27,7 @@ void __fastcall SPRITECACHE_LRU_FreeEntryCallback(struct D2LRUCacheNodeStrc * pE
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(struct D2LRUCacheNodeStrc * pEntry);
 uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDirections, void * * ppRawData, int32_t bRawData);
 uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t pComp8);
-uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t pComp24);
+uint32_t __stdcall TILEPROJECT_GetMainIndex(struct D2TileLibraryEntryStrc * pComp24);
 uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24);
 void __stdcall D2CMP_MinDouble(double fParam1, double fParam2);
 void __stdcall D2CMP_MaxDouble(double fParam1, double fParam2);

@@ -113,7 +113,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
       wPacketSize = *(uint16_t*)(pQServerStrc->nSizeFieldOffset + (char*)pvVar3);
       nPacketLen = (uint32_t)wPacketSize;
       iVar2 = pQServerStrc->nHeaderSize;
-      iVar1 = (int)pBuffer + (nBufferSize - (int)pvVar3);
+      iVar1 = (intptr_t)pBuffer + (nBufferSize - (intptr_t)pvVar3);
       if (iVar1 < iVar2 || iVar1 < (int)nPacketLen) {
         _Size = (intptr_t)pBuffer + (nBufferSize - (intptr_t)pvVar3);
         memcpy(pBuffer, pvVar3, _Size);

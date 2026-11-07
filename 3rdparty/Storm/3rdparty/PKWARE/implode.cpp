@@ -1226,7 +1226,7 @@ void SortBuffer(TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd) {
     short int wScanPos;
     uint16_t* pCountTableCursor = pCmp->phash_to_index;
     uint16_t nCumulativeCount = 0;
-    uint32_t nClearDwordCount = (uint32_t)((int)pCmp + (0x1fcb - (int)pCountTableCursor)) >> 2;
+    uint32_t nClearDwordCount = (uint32_t)((intptr_t)pCmp + (0x1fcb - (intptr_t)pCountTableCursor)) >> 2;
     uint16_t* puVar1 = pCountTableCursor;
     if (nClearDwordCount <= 1) {
       nClearDwordCount = 1;

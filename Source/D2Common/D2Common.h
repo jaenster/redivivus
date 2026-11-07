@@ -241,7 +241,7 @@ typedef void (__fastcall *ACTCALLBACKFN)(struct D2RoomStrc * pRoom);
 #endif
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_ROOMCALLBACKFN
 #define RECON_FPTD_ROOMCALLBACKFN
@@ -7271,8 +7271,8 @@ struct __attribute__((packed)) D2SkillArgStrc {
     /* 0x48 */ uint32_t nAttBonus; // monster tohit stat, used when nFlags & 0x1000 (CreatingAMissile 0056ecb0)
     /* 0x4C */ uint32_t nTotalFrames;
     /* 0x50 */ uint32_t nLightRadius; // duplicate of the nLightOverride name at 0x38 before; no known consumer
-    /* 0x54 */ void (__fastcall *fpFunction)(struct D2UnitStrc *, int32_t); // Optional per-missile init callback, invoked by CreatingMissile @0059fe30 as MOV EDX,[ESI+0x58] / MOV ECX,EBX / CALL EAX - pure __fastcall, two register args, no stack args, return discarded.
-    /* 0x58 */ int32_t nFunctionParam; // second argument of fpFunction (fpMissileInitFunction nParam): a missile index, quadrant offset, revive count or a unit pointer depending on the caller; MakeMissile 004cd540 passes it through as int32_t
+    /* 0x54 */ void (__fastcall *fpFunction)(struct D2UnitStrc *, intptr_t); // Optional per-missile init callback, invoked by CreatingMissile @0059fe30 as MOV EDX,[ESI+0x58] / MOV ECX,EBX / CALL EAX - pure __fastcall, two register args, no stack args, return discarded.
+    /* 0x58 */ intptr_t nFunctionParam; // second argument of fpFunction (fpMissileInitFunction nParam): a missile index, quadrant offset, revive count or a unit pointer depending on the caller; MakeMissile 004cd540 passes it through as int32_t
 };
 #endif // D2_DEFINED_D2SkillArgStrc
 #ifndef D2_DEFINED_D2SkillCalcTxt
@@ -7713,7 +7713,7 @@ struct __attribute__((packed)) D2StatListStrc {
     /* 0x2C */ struct D2StatListExStrc * pPrevLink; // Previous stat list in linked chain (used for iteration)
     /* 0x30 */ struct D2StatListExStrc * pNextLink; // Next stat list in linked chain
     /* 0x34 */ struct D2StatListExStrc * pParent; // Parent stat list (the unit's main D2StatListExStrc)
-    /* 0x38 */ void (__fastcall *fpExpire)(struct D2UnitStrc *, eD2States, int32_t); // Callback when stat list expires/is removed, fn(struct D2StatListExStrc*)
+    /* 0x38 */ void (__fastcall *fpExpire)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *); // Callback when stat list expires/is removed, fn(struct D2StatListExStrc*)
 };
 #endif // D2_DEFINED_D2StatListStrc
 #ifndef D2_DEFINED_D2StatListExStrc

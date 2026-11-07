@@ -128,7 +128,7 @@ void __fastcall TEXT_SetNpcMenuSelection(struct D2UnitStrc * pUnit);
 void __stdcall TEXT_ClearNpcMenuSelection();
 void __fastcall Unreferenced_0049da60(int bRegister);
 int __fastcall Unreferenced_0049dac0(uint8_t * param_1);
-int __fastcall Unreferenced_0049dae0(int param_1, struct D2CoordStrc * param_2);
+int __fastcall Unreferenced_0049dae0(struct D2TextBoxStrc * param_1, struct D2CoordStrc * param_2);
 struct ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(struct ScreenMessage_t * ppwszText);
 void __fastcall TEXT_InsertScreenMessage(struct ScreenMessage_t * ppwszText);
 void __stdcall TEXT_DrawChatMessages();

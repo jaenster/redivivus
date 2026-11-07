@@ -269,7 +269,7 @@ uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2In
     }
 
     eD2UnitType eUnitType = pUnit->eUnitType;
-    pUnit = (D2UnitStrc*)pUnit->nClassId;
+    int32_t nUnit = pUnit->nClassId;
     if (nMode == -1) {
       nMode = Units::GetAnimOrSeqMode(pOrigUnit);
     }
@@ -277,13 +277,13 @@ uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2In
     int32_t nAnimMode = nMode;
     nMode = nAnimMode;
     if (pOrigUnit->eUnitFlagsEx >> 3 & 1) {
-      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&pUnit, &nMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
+      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nUnit, &nMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
       if (!bIgnoreTransform) {
         nMode = nAnimMode;
       }
     }
 
-    uint32_t nWeaponClassCode = COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, (int32_t)pUnit, nMode, pInventory, (int32_t*)pnWeaponClassIndex);
+    uint32_t nWeaponClassCode = COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, nUnit, nMode, pInventory, (int32_t*)pnWeaponClassIndex);
     return nWeaponClassCode;
 }
 
@@ -302,13 +302,13 @@ BOOL __stdcall COMPOSIT_HasWeaponDrawn(D2UnitStrc * pUnit) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     int32_t nWeaponClassIndex = 0;
     int32_t nAnimMode = -1;
-    pUnit = (D2UnitStrc*)pUnit->nClassId;
+    int32_t nUnit = pUnit->nClassId;
     nAnimMode = Units::GetAnimOrSeqMode(pOrigUnit);
     if (pOrigUnit->eUnitFlagsEx >> 3 & 1) {
-      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&pUnit, &nAnimMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
+      Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nUnit, &nAnimMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
     }
 
-    COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, (int32_t)pUnit, nAnimMode, pInventory, &nWeaponClassIndex);
+    COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, nUnit, nAnimMode, pInventory, &nWeaponClassIndex);
     if (nWeaponClassIndex != 1 && nWeaponClassIndex != 7) {
       return 0;
     }
@@ -560,11 +560,11 @@ void __stdcall COMPOSIT_GetCofPathWithTransform(D2UnitStrc * pUnit, LPSTR szText
 
     eD2UnitType eUnitType = pUnit->eUnitType;
     uint32_t nClassId = pUnit->nClassId;
-    pUnit = (D2UnitStrc*)Units::GetAnimOrSeqMode(pUnit);
-    Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nClassId, (int*)&pUnit, ".\\COMPOSIT\\Composit.cpp", 0x10c);
+    uint32_t nUnit = (uint32_t)Units::GetAnimOrSeqMode(pUnit);
+    Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nClassId, (int*)&nUnit, ".\\COMPOSIT\\Composit.cpp", 0x10c);
     uint32_t nEffectiveMode = nModeOverride;
     if (nModeOverride == -1) {
-      nEffectiveMode = (uint32_t)pUnit;
+      nEffectiveMode = nUnit;
     }
 
     COMPOSIT_BuildCofPath(pOrigUnit, nClassId, nEffectiveMode, eUnitType, pInventory, szText, pnWeaponClass, bBuildFullPath, bSpecialHandling);

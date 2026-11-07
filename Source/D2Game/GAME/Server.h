@@ -406,7 +406,7 @@ void __fastcall RemoveObject(struct D2ClientStrc * pClient, struct D2UnitStrc * 
 void __fastcall RemoveObjects(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 uint32_t __stdcall _TableNullSub20_Unref_0052e070();
 uint32_t __stdcall _TableNullSub20_Unref_0052e080();
-void __thiscall SERVER_EnterCriticalSection(int32_t pThis, int * pCriticalSection, int32_t nParam);
+void __thiscall SERVER_EnterCriticalSection(TSExportTableSync<::SGAMEDATA, struct HSGAMEDATA__*, struct HSGAMEDATALOCK__*, CCritSect, 0>* pThis, int * pCriticalSection, int32_t nParam);
 uint32_t __stdcall ParamIsOne(int32_t nParam);
 uint32_t __thiscall QSERVER_TestGameFlags(int32_t pQServer, uint32_t nFlags);
 BOOL __fastcall QSERVER_HasActiveTaskQueue(int32_t pQServer);

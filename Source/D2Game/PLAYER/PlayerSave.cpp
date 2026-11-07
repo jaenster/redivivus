@@ -165,6 +165,9 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     BOOL BVar1;
     DWORD dwContainerGUID;
     D2UnitStrc** pBodyLocParam;
+    DWORD nSourceItem;
+    DWORD nSourceItem2;
+    int32_t nSourceItem3;
     D2UnitStrc* pUnit_00 = pSourceItem;
     if (!pSourceItem) {
       eAnimMode = Container;
@@ -179,34 +182,34 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       default:
         D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
       if (!pUnit_00) {
-        pSourceItem = (D2UnitStrc*)-1;
+        nSourceItem3 = -1;
       } else {
-        pSourceItem = (D2UnitStrc*)pUnit_00->nUnitGUID;
+        nSourceItem3 = pUnit_00->nUnitGUID;
       }
 
-      nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x13f, pGame, pUnit, (int32_t)pSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00), 0, 1, 0);
+      nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x13f, pGame, pUnit, nSourceItem3, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00), 0, 1, 0);
       break;
       case Equipment:
         D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
       if (!pUnit_00) {
-        pSourceItem = (D2UnitStrc*)-1;
+        nSourceItem2 = -1;
       } else {
-        pSourceItem = (D2UnitStrc*)pUnit_00->nUnitGUID;
+        nSourceItem2 = (DWORD)pUnit_00->nUnitGUID;
       }
 
       pBodyLocParam = &eBodyLocation;
-      nPlaceResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, (DWORD)pSourceItem, D2Common::ITEMS::Items::GetBodyLocation(pUnit_00), 1, (uint32_t*)pBodyLocParam);
+      nPlaceResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nSourceItem2, D2Common::ITEMS::Items::GetBodyLocation(pUnit_00), 1, (uint32_t*)pBodyLocParam);
       break;
       case Belt:
         D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
       if (!pUnit_00) {
-        pSourceItem = (D2UnitStrc*)-1;
+        nSourceItem = -1;
       } else {
-        pSourceItem = (D2UnitStrc*)pUnit_00->nUnitGUID;
+        nSourceItem = (DWORD)pUnit_00->nUnitGUID;
       }
 
       pBodyLocParam = &eBodyLocation;
-      nPlaceResult = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, (DWORD)pSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), 0, (uint32_t*)pBodyLocParam);
+      nPlaceResult = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nSourceItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), 0, (uint32_t*)pBodyLocParam);
       break;
       case Ground:
 
@@ -558,7 +561,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
           eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pCarriedItem);
           nWritten = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pInvEntry);
           if (nWritten != 3 || eBodyLoc != BODYLOC_R_ARM && eBodyLoc != BODYLOC_L_ARM) {
-            nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pCarriedItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+            nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pCarriedItem, pWriteCursor, (intptr_t)pBuffer + (nBufSize - (intptr_t)pWriteCursor), nParam2, nParam3, nParam4);
             if (nWritten < 0) {
               return -1;
             }
@@ -575,7 +578,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
             goto serialize_right_arm_item;
           }
         } else if (pRightArmItem != pEquippedWeapon) {
-          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pLeftArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pLeftArmItem, pWriteCursor, (intptr_t)pBuffer + (nBufSize - (intptr_t)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -587,7 +590,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
           }
         } else {
           serialize_right_arm_item:
-          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pRightArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pRightArmItem, pWriteCursor, (intptr_t)pBuffer + (nBufSize - (intptr_t)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -598,7 +601,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
           }
         }
         if (pLeftArmItem) {
-          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pLeftArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pLeftArmItem, pWriteCursor, (intptr_t)pBuffer + (nBufSize - (intptr_t)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -609,7 +612,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
           }
         }
         if (pCursorItem_lcl && pCursorItem_lcl->eUnitType == UNIT_ITEM) {
-          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pCursorItem_lcl, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pCursorItem_lcl, pWriteCursor, (intptr_t)pBuffer + (nBufSize - (intptr_t)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -836,15 +839,16 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
     int nSaveSizePlus2;
     nSaveSizePlus2 = nSaveFileSize + 2;
     __frame0.wPacketHeader = (short int)nSaveSizePlus2;
-    nSaveFileSize = (int)UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xa3b);
+    D2ClientStrc* pClient;
+    pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xa3b);
     int nSaveSize;
-    nSaveSize = ITEMS::ItemMode::GetSavePacketList((D2ClientStrc*)nSaveFileSize);
+    nSaveSize = ITEMS::ItemMode::GetSavePacketList(pClient);
     int nExistingCrc;
     nExistingCrc = PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)__frame0.saveTempBuffer, nSaveFileBytes);
     if (nExistingCrc == nSaveSize) {
       D2SaveFileHeaderStrc* pSaveBuffer;
-      pSaveBuffer = GAME::Clients::GetSaveGame((D2ClientStrc*)nSaveFileSize);
-      nExistingSize = GAME::Clients::GetSaveGameSize((D2ClientStrc*)nSaveFileSize);
+      pSaveBuffer = GAME::Clients::GetSaveGame(pClient);
+      nExistingSize = GAME::Clients::GetSaveGameSize(pClient);
       if (!pSaveBuffer) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xa46);
         exit(-1);
@@ -926,14 +930,14 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
             BattleNetServerService->fpRelockDatabaseCharacter(szAccountName);
           }
 
-          GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, nRealmId);
+          GAME::Clients::SetRealm(pClient, nRealmId);
           return 0;
         }
       }
     }
 
-    nCompareByteIdx = nSaveFileSize;
-    GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, nRealmId);
+    nCompareByteIdx = (int)pClient;
+    GAME::Clients::SetRealm(pClient, nRealmId);
     ITEMS::ItemMode::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, nExistingCrc);
     if (BattleNetServerService && BattleNetServerService->fpSaveDatabaseCharacter) {
       /* FARPROC lpfn for IsBadCodePtr */ _bLockResult = IsBadCodePtr((FARPROC)BattleNetServerService->fpSaveDatabaseCharacter);

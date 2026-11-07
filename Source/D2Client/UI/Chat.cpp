@@ -1263,7 +1263,8 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
     char* pszInput;
     pszInput = pszInputBase + nInputOffset;
     sChatPacket.nIMEMode = (uint8_t)gaIMECompositionBuffer;
-    nInputOffset = (int32_t)pszInput;
+    char* pInputOffset;
+    pInputOffset = pszInput;
     int nCompareResult;
     nCompareResult = _stricmp(pszInput, "/fps");
     if (!nCompareResult) {
@@ -1311,8 +1312,8 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
     sChatPacket.nCmd = '\x15';
     sChatPacket.nIMEMode = (uint8_t)gaIMECompositionBuffer;
     if (!gbChatInputEnabled || (nCmpResult = CHAT_IsWideStringASCII(pwInputMessage) , (char)nCmpResult != '\0')) {
-      BVar1 = CHAT_ParseCommand((char**)&nInputOffset, &sChatPacket.nMsgType, sChatPacket.szTarget);
-      pszInput = (char*)nInputOffset;
+      BVar1 = CHAT_ParseCommand((char**)&pInputOffset, &sChatPacket.nMsgType, sChatPacket.szTarget);
+      pszInput = pInputOffset;
       if (BVar1 && sChatPacket.nMsgType == '\0') {
         sChatPacket.nCmd = '\x14';
       }

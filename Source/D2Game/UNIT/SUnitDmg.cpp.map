@@ -235,6 +235,7 @@
         "UpdateAnimSpeed"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
@@ -349,10 +350,10 @@
       ],
       "usedTypes": [
         "D2MonStatsTxt",
+        "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",
-        "int32_t",
         "uint32_t",
         "uint8_t"
       ]

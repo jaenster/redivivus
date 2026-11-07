@@ -1830,7 +1830,7 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
         } while (nValidCelCount < 4);
 
         if (!pMiddlePointer[5]) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)(D2AutomapTxt*)0x50d);
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)0x50d);
           exit(-1);
         }
 

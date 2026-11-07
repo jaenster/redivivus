@@ -43,7 +43,7 @@ typedef uint32_t (__fastcall *PFN_AreaEffectCallback)(struct D2SkillCallbackCont
 #endif
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_UNITFINDTEST
 #define RECON_FPTD_UNITFINDTEST
@@ -253,7 +253,7 @@ struct D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, struct 
 // Iterates all units in adjacent rooms within nRadius of the skill target/cursor position and invokes fpCallback for each unit that passes SKILLS_CheckTargetFlags. Skips town rooms when flag 0x2000 is set. Returns 1 if target position resolved and room was found, 0 otherwise. fpCallback is invoked __fastcall as (pCurUnit, pCallbackCtx) - pCallbackCtx being arg6.
 uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32_t nTargetFlags, struct D2UnitStrc * pUnit, int32_t nRadius, pfnSkillRangeCb fpCallback, void * pCallbackCtx);
 // @sourcefile .\SKILLS\Skills.cpp
-void __fastcall DefaultExpireFunction(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+void __fastcall DefaultExpireFunction(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 // Server-side: applies a state/aura (e.g. a curse or buff) with an optional frame-based expiry onto pStateExArg->pTarget. Validates the state id and (for monster targets) that the monster is non-NPC and attackable. For curse states, reduces duration by the target's curse_resistance and aborts if resistance>=99 or the target has STATE_attract immunity. If an identical existing state (same state/skill/level) is present it just refreshes the timeout; a stronger existing level blocks the new one, a weaker one is removed. Allocates a fresh D2StatListExStrc, sets state/skill/level/stat, attaches it to the unit, schedules an expiry event (timer id 0xc), sets aura/expire flags, and installs the expire callback (DefaultExpireFunction if none given). Returns the resulting stat list, or NULL on rejection.
 struct D2StatListExStrc * __fastcall SetStateWithExpiryTime(struct D2StateExArgStrc * pStateExArg);
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pAttacker (EDX): D2UnitStrc *

@@ -600,7 +600,8 @@
         "SCMD_FreeAllNodes"
       ],
       "usedTypes": [
-        "StormLinkedListStrc"
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {

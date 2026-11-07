@@ -903,6 +903,7 @@
         "CMD_GetKeyForCommand"
       ],
       "usedTypes": [
+        "D2UIKeyBindingSetStrc",
         "int32_t",
         "uint16_t",
         "uint32_t"

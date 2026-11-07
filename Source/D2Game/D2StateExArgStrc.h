@@ -15,13 +15,14 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2StatListExStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 typedef uint32_t eD2States;
 typedef uint32_t eD2UnitStat;
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 #endif
 
 // Data types
@@ -36,7 +37,7 @@ struct __attribute__((packed)) D2StateExArgStrc {
     /* 0x14 */ eD2UnitStat eStat;
     /* 0x18 */ int32_t nSkillCalc;
     /* 0x1C */ eD2States eAuraState;
-    /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, int32_t);
+    /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *);
 };
 
 #endif // D2_DEFINED_D2StateExArgStrc

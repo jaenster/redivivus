@@ -162,9 +162,9 @@ int32_t __stdcall GetDistanceBetweenUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit
       eUnitType2 = 0;
     }
 
-    pUnit = (D2UnitStrc*)(nTargetX - eUnitType2);
-    if ((intptr_t)pUnit < 0) {
-      pUnit = (D2UnitStrc*)-(intptr_t)pUnit;
+    int nUnit = nTargetX - eUnitType2;
+    if (nUnit < 0) {
+      nUnit = -nUnit;
     }
 
     eUnitTypeTmp = pUnit2->eUnitType;
@@ -192,8 +192,8 @@ int32_t __stdcall GetDistanceBetweenUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit
 
     nSizeUnit2 = Units::GetUnitSizeX(pUnit1Saved);
     nSizeUnit = Units::GetUnitSizeX(pUnit2);
-    if ((intptr_t)pUnit < 8 && nTargetX < 8 && nSizeUnit2 < 4 && nSizeUnit < 4) {
-      eUnitType2 = gnCollisionGridMaxNodes[(intptr_t)(pUnit->unk0x19 + nTargetX * 8 - 0x19)];
+    if (nUnit < 8 && nTargetX < 8 && nSizeUnit2 < 4 && nSizeUnit < 4) {
+      eUnitType2 = gnCollisionGridMaxNodes[(intptr_t)(((D2UnitStrc*)nUnit)->unk0x19 + nTargetX * 8 - 0x19)];
       if (eUnitType2 < 0) {
         return 0;
       }
@@ -215,7 +215,7 @@ int32_t __stdcall GetDistanceBetweenUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit
         eUnitType2 = -eUnitType2;
       }
 
-      eUnitType2 = (int)pUnit - eUnitType2;
+      eUnitType2 = nUnit - eUnitType2;
       nSizeAdj2 = Units::GetUnitSizeX(pUnit1Saved);
       nSizeX2Tmp = Units::GetUnitSizeX(pUnit2);
       nSizeAdjY = (nSizeX2Tmp >> 1) + (nSizeAdj2 >> 1);
@@ -2224,7 +2224,7 @@ BOOL __stdcall TestCollision(D2RoomStrc * pRoom, POINT * nIterY, POINT * pPoint2
               }
             } else {
               if (nY2 < (intptr_t)pRoom) {
-                nX2 = (int)nIterY + (1 - (int)pRoom);
+                nX2 = (intptr_t)nIterY + (1 - (intptr_t)pRoom);
                 nBresenhamErr2 = nDifferenceX - nX2;
                 nDifferenceX = nX2;
               }

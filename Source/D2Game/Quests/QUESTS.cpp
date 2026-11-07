@@ -2992,17 +2992,17 @@ BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
-void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, int32_t nParam2) {
+void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, D2QuestDataA1Q5Strc * nParam2) {
     if (nParam1) {
-      if (*(uint16_t*)(nParam2 + 100) < 0xc) {
-        *(uint32_t*)(nParam2 + 0x34 + (uint32_t)*(uint16_t*)(nParam2 + 100) * 4) = nPlayerGUID;
-        (*(short int*)(nParam2 + 100))++;
+      if (nParam2->nPlayersForRewardCount < 0xc) {
+        nParam2->aPlayersForRewardGUIDs[nParam2->nPlayersForRewardCount] = nPlayerGUID;
+        nParam2->nPlayersForRewardCount++;
         return;
       }
     } else {
-      if (*(uint16_t*)(nParam2 + 0x30) < 0xc) {
-        *(uint32_t*)(nParam2 + (uint32_t)*(uint16_t*)(nParam2 + 0x30) * 4) = nPlayerGUID;
-        (*(short int*)(nParam2 + 0x30))++;
+      if (nParam2->nPlayersInTowerCount < 0xc) {
+        nParam2->aPlayersInTowerGUIDs[nParam2->nPlayersInTowerCount] = nPlayerGUID;
+        nParam2->nPlayersInTowerCount++;
       }
     }
 }

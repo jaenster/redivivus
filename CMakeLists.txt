@@ -182,6 +182,22 @@ if(REDIVIVUS_MODULE_LIBRARIES)
         endif()
         set(srcs ${D2_UNCLAIMED})
         list(FILTER srcs INCLUDE REGEX "^${dir}/")
+        # Its units in the 1.14d link's order (D2_MODULE_<m>_UNITS, project.json
+        # "unitOrder"), any unit the list does not name after them in path order: the
+        # archive's members follow the list, and the executable links them whole in
+        # member order.
+        if(D2_MODULE_${m}_UNITS)
+            set(ordered)
+            foreach(u IN LISTS D2_MODULE_${m}_UNITS)
+                if("${D2_ROOT}/${u}" IN_LIST srcs)
+                    list(APPEND ordered "${D2_ROOT}/${u}")
+                endif()
+            endforeach()
+            if(ordered)
+                list(REMOVE_ITEM srcs ${ordered})
+            endif()
+            set(srcs ${ordered} ${srcs})
+        endif()
         if(D2_MODULE_${m}_DATA AND EXISTS "${D2_ROOT}/${D2_MODULE_${m}_DATA}")
             list(APPEND srcs "${D2_ROOT}/${D2_MODULE_${m}_DATA}")
         endif()

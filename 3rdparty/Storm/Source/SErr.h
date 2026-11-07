@@ -131,12 +131,12 @@ void __stdcall SERR_InternalLeaveCriticalSection();
 // @oracle-basis Callee set {EnterCriticalSection, GetCurrentThreadId, LeaveCriticalSection} is exactly the oracle's and is unique among all 19 SErr exports and all 82 functions of this namespace - the only other GetCurrentThreadId user, SErrDisplayAppFatal 0041d160, additionally calls memset/vsprintf/DisplayError/ExitProcess. Arity 2 = 2 (PPC prologue saves r3 and r4 only).
 void __stdcall SErrPrepareAppFatal(void * pfnCallback, uint32_t nCallbackParam);
 uint32_t __thiscall SSYSTEM_ListOffsetToPointer(struct StormLinkStrc * pNode, int pBase);
-int __fastcall Unreferenced_0041c410(struct StormLinkedListStrc * param_1);
+void __fastcall Unreferenced_0041c410(struct StormLinkedListStrc * param_1);
 int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode);
 void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget);
 uint32_t __thiscall SSYSTEM_ListGetNext(struct StormLinkedListStrc * pList, struct StormLinkStrc * pNode);
 void __thiscall SSYSTEM_ListUnlink(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
-int __fastcall Unreferenced_0041c6e0(int param_1);
+struct StormLinkedListStrc * __fastcall Unreferenced_0041c6e0(struct StormLinkedListStrc * param_1);
 intptr_t __thiscall SSYSTEM_ListGetData(struct StormLinkedListStrc * pList, struct StormLinkStrc * pNode);
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).

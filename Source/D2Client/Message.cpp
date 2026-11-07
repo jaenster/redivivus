@@ -171,17 +171,17 @@ void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, in
               exit(-1);
             }
 
-            Storm::WindowHandle::SMsgUnregisterMessage(hWnd, (char*)nMessageOrKeyCode, pfHandler);
+            Storm::WindowHandle::SMsgUnregisterMessage(hWnd, nMessageOrKeyCode, pfHandler);
             return;
           }
         case 1:
-          Storm::WindowHandle::SMsgUnregisterCommand(hWnd, (char*)nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterCommand(hWnd, nMessageOrKeyCode, pfHandler);
         return;
         case 2:
-          Storm::WindowHandle::SMsgUnregisterKeyUp(hWnd, (char*)nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterKeyUp(hWnd, nMessageOrKeyCode, pfHandler);
         return;
         case 3:
-          Storm::WindowHandle::SMsgUnregisterKeyDown(hWnd, (char*)nMessageOrKeyCode, pfHandler);
+          Storm::WindowHandle::SMsgUnregisterKeyDown(hWnd, nMessageOrKeyCode, pfHandler);
         default:
           return;
       }

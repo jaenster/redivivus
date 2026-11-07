@@ -43,7 +43,7 @@ typedef BOOL (__fastcall *fpSkillsFunc)(D2fpSkillFuncArg * pArg, D2UnitStrc * pU
 #endif
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
 #endif
 
 int ganMissileRingSinOffsets[64] = {
@@ -913,7 +913,7 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
     sCallbackArg.nSize = 0;
     sCallbackArg.nRadiusSq = nRadius * nRadius;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pCurRoom, &sCallbackArg.ppRoomList, &sCallbackArg.nRoomCount);
-    pCallbackData = 0;
+    int nCallbackData = 0x0;
     if ((uint32_t)sCallbackArg.nRoomCount <= 0) {
       return;
     }
@@ -921,10 +921,10 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
     sCallbackArg.bAvoidTownRooms = nTargetFlags & 0x2000;
     do {
       BOOL bInTown;
-      if (!sCallbackArg.bAvoidTownRooms || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(sCallbackArg.ppRoomList[(intptr_t)pCallbackData]) , !bInTown)) {
-        bInRadius = ROOM_IsPointInRadius(sCallbackArg.ppRoomList[(intptr_t)pCallbackData], nCenterXSaved, nCenterY, nRadius);
+      if (!sCallbackArg.bAvoidTownRooms || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(sCallbackArg.ppRoomList[nCallbackData]) , !bInTown)) {
+        bInRadius = ROOM_IsPointInRadius(sCallbackArg.ppRoomList[nCallbackData], nCenterXSaved, nCenterY, nRadius);
         if (bInRadius) {
-          pRoomUnitNext = sCallbackArg.ppRoomList[(intptr_t)pCallbackData]->pUnitList;
+          pRoomUnitNext = sCallbackArg.ppRoomList[nCallbackData]->pUnitList;
           while (true) {
             pUnit2 = pRoomUnitNext;
             if (!pUnit2) {
@@ -966,8 +966,8 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
         }
       }
 
-      pCallbackData = (void*)((char*)pCallbackData + 1);
-    } while ((uintptr_t)pCallbackData < (uint32_t)sCallbackArg.nRoomCount);
+      nCallbackData++;
+    } while ((uintptr_t)(void*)nCallbackData < (uint32_t)sCallbackArg.nRoomCount);
 }
 
 BOOL __fastcall SKILLS_RadiusCallback_IncrementCounter(D2fpSkillFuncArg * pFuncArg, D2UnitStrc * pUnit) {
@@ -1690,6 +1690,7 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     int16_t aSavedSP1X[2];
     int16_t aSavedSP1Y[2];
     SKILL_ExecuteClientProgressWithAura_Slotm8 uSlot8;
+    uint32_t nAuraStatList;
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return;
@@ -1750,8 +1751,8 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     if (pSkillTxt->cltprgfunc[nProgressIndex - 1] >= 0 && pSkillTxt->cltprgfunc[nProgressIndex - 1] < SKILLCLTDOFUNCS_SIZE) {
       if (pSkillTxt->cltmissile[0] > 0) {
         if (*((uint8_t*)pSkillTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-          GetCooordinates(pUnit, &uSlot8.nMissileX, (int32_t*)&pAuraStatList);
-          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, uSlot8.nMissileX, (uint32_t)pAuraStatList, eSkill, nSkillLevel, 0);
+          GetCooordinates(pUnit, &uSlot8.nMissileX, (int32_t*)&nAuraStatList);
+          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, uSlot8.nMissileX, nAuraStatList, eSkill, nSkillLevel, 0);
         } else {
           MakeMissileAtSkillTarget(pUnit, (int)pSkillTxt->cltmissile[0], eSkill, nSkillLevel);
         }
@@ -2112,7 +2113,7 @@ void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, eMissilesId pMis
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
-void __fastcall SKILLS_SetMissileDirectionCallback(D2UnitStrc * pUnit, int nDirection) {
+void __fastcall SKILLS_SetMissileDirectionCallback(D2UnitStrc * pUnit, intptr_t nDirection) {
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, (uint8_t)nDirection);
 }
 
@@ -2330,7 +2331,7 @@ uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, eMissile
 
 // Client-side skill expiry handler called when a skill animation completes. If the unit's current skill is not STATE_skill_move and has no loop flag (bit 1), looks up the skill's srvdofunc: 0x43 stops and clears the uninterruptable skill (Paladin Holy Shield etc.), 0x4C stops and clears sound (Barbarian), 0x4D/0x4E handles teleport landing. No-ops for all other srvdofunc values.
 // @sourcefile .\SKILLS\Skills.cpp
-void __fastcall SKILLS_CltProcessActiveSkill(D2UnitStrc * pUnit, eD2Skills eExpiredSkill, int32_t nExpiredSkillLevel) {
+void __fastcall SKILLS_CltProcessActiveSkill(D2UnitStrc * pUnit, eD2Skills eExpiredSkill, D2StatListExStrc * nExpiredSkillLevel) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return;

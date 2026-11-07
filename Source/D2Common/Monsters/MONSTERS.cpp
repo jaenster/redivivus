@@ -776,6 +776,12 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
     eD2UnitType eUnitTypeForY;
     int32_t nErrorLine;
     D2DynamicPathStrc* pDynamicPath;
+    int32_t nUnit;
+    int32_t nUnit2;
+    int32_t nUnit3;
+    int32_t nUnit4;
+    int32_t nUnit5;
+    int32_t nUnit6;
     D2UnitStrc* pUnitIn;
     pUnitIn = pUnit;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
@@ -794,8 +800,8 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
         if ((int)nBaseId > 0x14e) {
           switch (nBaseId) {
             case MonsterUnitMinionSpawner:
-              DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (eD2Skills*)&pUnit);
-            nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x1c5 ? -1 : 0x1c5, (int32_t)pUnit);
+              DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (eD2Skills*)&nUnit6);
+            nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x1c5 ? -1 : 0x1c5, nUnit6);
             *pnMonId = nErrorLine;
             nPosX = Units::GetXPosFromDynamicPathUnit(pUnitIn);
             *pnPosX = nPosX;
@@ -821,8 +827,8 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
             *pdwSpawnMode = 1;
             return;
             case MonsterUnitAncientStatue1:
-              DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (eD2Skills*)&pUnit);
-            nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x21c ? -1 : 0x21c, (int32_t)pUnit);
+              DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (eD2Skills*)&nUnit5);
+            nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x21c ? -1 : 0x21c, nUnit5);
             *pnMonId = nErrorLine;
             nPosX = Units::GetXPosFromDynamicPathUnit(pUnitIn);
             *pnPosX = nPosX;
@@ -860,8 +866,8 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
           goto default_spawn_params;
         }
         if (nBaseId == MonsterUnitSuckerNest) {
-          DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (eD2Skills*)&pUnit);
-          nSpawnMonId = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x72 ? -1 : 0x72, (int32_t)pUnit);
+          DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (eD2Skills*)&nUnit4);
+          nSpawnMonId = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x72 ? -1 : 0x72, nUnit4);
           *pnMonId = nSpawnMonId;
           eUnitType = pUnitIn->eUnitType;
           if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -896,8 +902,8 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
         } else {
           nErrorLine = pUnit->nClassId;
         }
-      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nErrorLine, nullptr, (eD2Skills*)&pUnit);
-      nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0xf ? -1 : 0xf, (int32_t)pUnit);
+      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nErrorLine, nullptr, (eD2Skills*)&nUnit3);
+      nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0xf ? -1 : 0xf, nUnit3);
       *pnMonId = nErrorLine;
       nPosX = Units::GetXPosFromDynamicPathUnit(pUnitIn);
       *pnPosX = nPosX;
@@ -930,8 +936,8 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
         } else {
           nErrorLine = pUnit->nClassId;
         }
-      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nErrorLine, nullptr, (eD2Skills*)&pUnit);
-      nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x44 ? -1 : 0x44, (int32_t)pUnit);
+      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nErrorLine, nullptr, (eD2Skills*)&nUnit2);
+      nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x44 ? -1 : 0x44, nUnit2);
       *pnMonId = nErrorLine;
       nErrorLine = Units::GetXPosFromDynamicPathUnit(pUnitIn);
       *pnPosX = nErrorLine + 8;
@@ -957,8 +963,8 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
         } else {
           nErrorLine = pUnit->nClassId;
         }
-      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nErrorLine, nullptr, (eD2Skills*)&pUnit);
-      nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x12d ? -1 : 0x12d, (int32_t)pUnit);
+      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nErrorLine, nullptr, (eD2Skills*)&nUnit);
+      nErrorLine = MONSTER_GetMonsterClassByDifficulty(ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x12d ? -1 : 0x12d, nUnit);
       *pnMonId = nErrorLine;
       pDynamicPath = pUnitIn->pPath.pDynamicPath;
       nPosJitter = PATH::DynamicPath::GetXSP1(pDynamicPath);

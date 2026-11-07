@@ -951,6 +951,10 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
     uint32_t dwWeaponSwapRaw;
     uint32_t nHand;
     uint32_t nItemGUID;
+    uint32_t nHeader;
+    uint32_t nHeader2;
+    uint32_t nHeader3;
+    uint32_t nHeader4;
     D2SaveFileHeaderStrc* pSaveFile = *ppSaveFileHeader;
     *pOutUnit = 0;
     GAME::Clients::SetFileFlags(pClient, 0);
@@ -1034,17 +1038,17 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
         return 4;
       }
 
-      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pLeftHand, (uint32_t*)&pHeader, &nHand, &nItemGUID);
-      pPlayerData->eLeftSkillId = (eD2Skills)pHeader;
+      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pLeftHand, (uint32_t*)&nHeader4, &nHand, &nItemGUID);
+      pPlayerData->eLeftSkillId = (eD2Skills)nHeader4;
       pPlayerData->nLeftSkillOwnerGUID = nItemGUID;
-      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pRightHand, (uint32_t*)&pHeader, &nHand, &nItemGUID);
-      pPlayerData->eRightSkillId = (eD2Skills)pHeader;
+      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pRightHand, (uint32_t*)&nHeader3, &nHand, &nItemGUID);
+      pPlayerData->eRightSkillId = (eD2Skills)nHeader3;
       pPlayerData->nRightSkillOwnerGUID = nItemGUID;
-      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pLeftSwapHand, (uint32_t*)&pHeader, &nHand, &nItemGUID);
-      pPlayerData->eSwitchLeftSkillId = (eD2Skills)pHeader;
+      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pLeftSwapHand, (uint32_t*)&nHeader2, &nHand, &nItemGUID);
+      pPlayerData->eSwitchLeftSkillId = (eD2Skills)nHeader2;
       pPlayerData->nSwitchLeftSkillOwnerGUID = nItemGUID;
-      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pRightSwapHand, (uint32_t*)&pHeader, &nHand, &nItemGUID);
-      pPlayerData->eSwitchRightSkillId = (eD2Skills)pHeader;
+      PlayerSave2::SetHotkey((D2SaveHotKeyStrc*)&pSaveFile->pRightSwapHand, (uint32_t*)&nHeader, &nHand, &nItemGUID);
+      pPlayerData->eSwitchRightSkillId = (eD2Skills)nHeader;
       pPlayerData->nSwitchRightSkillOwnerGUID = nItemGUID;
       GAME::Clients::SetGuildInfo(pClient, pSaveFile->nGuildInfo[0], '\0', '\0');
       *ppSaveFileHeader = pDVar1;

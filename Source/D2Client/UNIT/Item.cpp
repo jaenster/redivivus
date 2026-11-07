@@ -28,11 +28,6 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-#ifndef RECON_FPTD_PFN_StatExpireCallback
-#define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-#endif
-
 static short gnWeaponHandClassId_Right = 0; D2_STATIC_GUARD(gnWeaponHandClassId_Right, "gnWeaponHandClassId_Right");
 static short gnWeaponHandClassId_Left = 0; D2_STATIC_GUARD(gnWeaponHandClassId_Left, "gnWeaponHandClassId_Left");
 
@@ -1143,7 +1138,7 @@ void __fastcall ITEM_RemoveUninterruptableState(D2UnitStrc * pUnit) {
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\Item.cpp", 0xcca);
 }
 
-void __fastcall ITEM_ClearUnitState(D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam) {
+void __fastcall ITEM_ClearUnitState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
@@ -1162,7 +1157,7 @@ void __fastcall ITEM_RemoveClientSide(D2UnitStrc * pUnit) {
 
       pUninterruptStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 2, 0xc, eUnitType, nUnitGUID);
       D2Common::Stats::StatsEx::SetState(pUninterruptStatList, STATE_uninterruptable);
-      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pUninterruptStatList, (PFN_StatExpireCallback)ITEM_ClearUnitState);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pUninterruptStatList, ITEM_ClearUnitState);
       return;
     }
 
@@ -1735,7 +1730,7 @@ void __fastcall HandleItemRemoveFromContainer(uint8_t * pBytes) {
             CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pBytesSaved + 4), UNIT_ITEM);
             pItem = ITEM_CreateItemFromBodyPacket(0, 0, 0, pBytesSaved2, &stItemDetails);
             if (!pItem) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)(D2InventoryStrc*)0x4dd);
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)0x4dd);
               exit(-1);
             }
           } else {

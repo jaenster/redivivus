@@ -2714,7 +2714,7 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
     pInCur = pszUTF16Out;
     while (pInCur < pOutEnd) {
       uCodepoint = (uint32_t)*pInCur;
-      nPszUTF16Out = (int)(uint16_t*)0x1;
+      nPszUTF16Out = (int)0x1;
       if (uCodepoint >= 0xd800 && uCodepoint <= 0xdbff) {
         if (pInCur + 1 >= pOutEnd) {
           break;
@@ -2723,7 +2723,7 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
         uSurrPair = (uint32_t)pInCur[1];
         if (uSurrPair >= 0xdc00 && uSurrPair <= 0xdfff) {
           uCodepoint = (uCodepoint - 0xd7f7) * 0x400 + uSurrPair;
-          nPszUTF16Out = (int)(uint16_t*)0x2;
+          nPszUTF16Out = (int)0x2;
         }
       }
       if (uCodepoint < 0x80) {

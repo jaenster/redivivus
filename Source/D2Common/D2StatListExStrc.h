@@ -22,9 +22,10 @@ struct SGAMEDATA;
 typedef uint32_t eD2Skills;
 typedef uint32_t eD2States;
 typedef uint32_t eD2UnitType;
+struct D2StatListExStrc;
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_fpStatListExChangeCb
 #define RECON_FPTD_fpStatListExChangeCb
@@ -59,7 +60,7 @@ struct __attribute__((packed)) D2StatListStrc {
     /* 0x2C */ struct D2StatListExStrc * pPrevLink; // Previous stat list in linked chain (used for iteration)
     /* 0x30 */ struct D2StatListExStrc * pNextLink; // Next stat list in linked chain
     /* 0x34 */ struct D2StatListExStrc * pParent; // Parent stat list (the unit's main D2StatListExStrc)
-    /* 0x38 */ void (__fastcall *fpExpire)(struct D2UnitStrc *, eD2States, int32_t); // Callback when stat list expires/is removed, fn(struct D2StatListExStrc*)
+    /* 0x38 */ void (__fastcall *fpExpire)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *); // Callback when stat list expires/is removed, fn(struct D2StatListExStrc*)
 };
 
 #endif // D2_DEFINED_D2StatListStrc

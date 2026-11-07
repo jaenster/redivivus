@@ -607,14 +607,14 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     uint32_t nOldBucketCount = pThis->nSlotMask + 1;
     uint32_t* pNewBucketCount = (uint32_t*)(nOldBucketCount * 2);
-    uint32_t* pCurEntry = (uint32_t*)~(uintptr_t)tempList.m_terminator.m_prevlink;
+    intptr_t nCurEntry = ~(uintptr_t)tempList.m_terminator.m_prevlink;
     tempList.m_linkoffset = -0x22222223;
-    tempList.m_terminator.m_next = (intptr_t)pCurEntry;
+    tempList.m_terminator.m_next = nCurEntry;
     TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* nHashTableBase = pThis;
     tempList.UnlinkAll();
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     tempList.m_linkoffset = 4;
-    tempList.m_terminator.m_next = (intptr_t)pCurEntry;
+    tempList.m_terminator.m_next = nCurEntry;
     uint32_t nIterCount = 0;
     if (nOldBucketCount) {
       int nBucketByteOff;
@@ -652,7 +652,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
       } while (nIterCount < nOldBucketCount);
     }
 
-    pCurEntry = pNewBucketCount;
+    uint32_t* pCurEntry = pNewBucketCount;
     pThis->tSlotListArray.SetCount((uint32_t)pNewBucketCount);
     if (pCurEntry) {
       nBucketOffset = 0;

@@ -7,6 +7,7 @@
       ],
       "dir": "Source/Fog",
       "linkOrder": 1,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -35,6 +36,7 @@
       ],
       "dir": "Source/Game",
       "linkOrder": 2,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -97,6 +99,7 @@
       ],
       "dir": "3rdparty/Storm",
       "linkOrder": 3,
+      "unitOrder": "original-address",
       "dependencies": [],
       "exceptions": [],
       "strict": false
@@ -108,6 +111,7 @@
       ],
       "dir": "Source/D2Client",
       "linkOrder": 4,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -180,6 +184,7 @@
       ],
       "dir": "Source/D2Launch",
       "linkOrder": 5,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -237,6 +242,7 @@
       ],
       "dir": "Source/D2Multi",
       "linkOrder": 6,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -284,6 +290,7 @@
       ],
       "dir": "Source/D2MCPClient",
       "linkOrder": 7,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -312,6 +319,7 @@
       "dir": "Source/D2gfx",
       "publicHeader": "D2gfx.public.h",
       "linkOrder": 8,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -354,6 +362,7 @@
       ],
       "dir": "Source/D2Win",
       "linkOrder": 9,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -396,6 +405,7 @@
       ],
       "dir": "Source/D2Glide",
       "linkOrder": 10,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -428,6 +438,7 @@
       ],
       "dir": "Source/D2DDraw",
       "linkOrder": 11,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -460,6 +471,7 @@
       ],
       "dir": "Source/D2Sound",
       "linkOrder": 12,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -487,6 +499,7 @@
       ],
       "dir": "Source/D2Hell",
       "linkOrder": 13,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -517,6 +530,7 @@
       ],
       "dir": "Source/Bnclient",
       "linkOrder": 14,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -549,6 +563,7 @@
       ],
       "dir": "Source/D2Lang",
       "linkOrder": 15,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -571,6 +586,7 @@
       ],
       "dir": "Source/D2Net",
       "linkOrder": 16,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -593,6 +609,7 @@
       ],
       "dir": "Source/D2Game",
       "linkOrder": 17,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -635,6 +652,7 @@
       ],
       "dir": "Source/D2CMP",
       "linkOrder": 18,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -657,6 +675,7 @@
       ],
       "dir": "Source/D2Common",
       "linkOrder": 19,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -689,6 +708,7 @@
       ],
       "dir": "Source/D2Direct3D",
       "linkOrder": 20,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -721,6 +741,7 @@
       ],
       "dir": "Source/D2Gdi",
       "linkOrder": 21,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Storm",
@@ -753,6 +774,7 @@
       ],
       "dir": "3rdparty/crashy",
       "linkOrder": 0,
+      "unitOrder": "original-address",
       "dependencies": [
         {
           "module": "Fog",

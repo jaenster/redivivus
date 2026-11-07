@@ -410,7 +410,7 @@ static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
     bool bIsScrollOrBookType;
     uint32_t nSuffixId;
     if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)(uint8_t*)0x1ec);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)0x1ec);
       exit(-1);
     }
 

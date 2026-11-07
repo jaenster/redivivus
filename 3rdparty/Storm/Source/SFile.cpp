@@ -1560,18 +1560,16 @@ uint32_t __thiscall SFILE_CompareFileName(StormLinkStrc * pLink, int pLeft) {
     return nValue + pLeft;
 }
 
-int __fastcall Unreferenced_004169f0(StormLinkedListStrc * param_1) {
+void __fastcall Unreferenced_004169f0(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
 }
 
-int __fastcall Unreferenced_00416a00(StormLinkedListStrc * param_1) {
+void __fastcall Unreferenced_00416a00(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_00416a10(StormLinkedListStrc * param_1) {
@@ -1588,11 +1586,10 @@ int __fastcall Unreferenced_00416a20(StormLinkedListStrc * param_1) {
     return ~(uint32_t)pSVar1;
 }
 
-int __fastcall Unreferenced_00416a30(StormLinkedListStrc * param_1) {
+void __fastcall Unreferenced_00416a30(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_00416a90(int param_1) {
@@ -4638,7 +4635,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
               pDVar3 = gpCurrentAsyncIORequest;
             }
 
-            pDVar3->pCompletion->pfnComplete(pDVar3->pReadBufferBase, (int)pDVar3->pChunkWritePtr + (pDVar3->nChunkBytesRead - (int)pDVar3->pReadBufferBase), pDVar3->pCompletion);
+            pDVar3->pCompletion->pfnComplete(pDVar3->pReadBufferBase, (intptr_t)pDVar3->pChunkWritePtr + (pDVar3->nChunkBytesRead - (intptr_t)pDVar3->pReadBufferBase), pDVar3->pCompletion);
             pDVar3 = gpCurrentAsyncIORequest;
           }
 
@@ -4711,11 +4708,11 @@ void __stdcall SFILE_CancelAsyncRequestNoReturn(void * nAsyncHandle) {
 }
 
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
-int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle) {
+int __stdcall SFILE_CancelAsyncRequestWithStatus(void * nRequestHandle) {
     D2_CHECKS_BEGIN;
     D2_CHECK(nRequestHandle);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    int nResult = SFILE_CancelRequest((void*)nRequestHandle, nullptr);
+    int nResult = SFILE_CancelRequest(nRequestHandle, nullptr);
     return nResult;
 }
 

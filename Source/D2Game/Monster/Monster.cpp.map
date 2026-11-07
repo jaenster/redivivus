@@ -345,7 +345,6 @@
       "usedTypes": [
         "D2UnitDataItemStrc",
         "D2UnitStrc",
-        "int32_t",
         "uint32_t",
         "uint64_t",
         "uint8_t"

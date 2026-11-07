@@ -14,6 +14,7 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Bnclient/SRP.h"
+#include "3rdparty/Storm/Source/SBig.h"
 
 // Data types
 struct __attribute__((packed)) BigData {

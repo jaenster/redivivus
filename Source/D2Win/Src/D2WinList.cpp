@@ -483,6 +483,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     int32_t nStrLen;
     int eFontType;
     D2WinListEntry* pTailEntry;
+    int32_t nPnFontType;
     ::D2WinList* pList = D2_NEW_AT(::D2WinList, ".\\Src\\D2WinList.cpp", 0x2e);
     memset(pList, 0, 0x6c);
     pList->sControl.neD2FormType = FORM_List;
@@ -528,12 +529,12 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(pNewEntry->wszText, wszLocaleStr);
         D2WinFont::TEXT_CalcTextDimensions(wszLocaleStr, (int*)&pnFontType, (int*)&pnItemArray);
-        pnFontType += 2;
-        if ((intptr_t)pnFontType > pList->sEntriesControl.nMaxTextWidth) {
-          pList->sEntriesControl.nMaxTextWidth = (int32_t)pnFontType;
+        nPnFontType = (int32_t)(pnFontType + 2);
+        if (nPnFontType > pList->sEntriesControl.nMaxTextWidth) {
+          pList->sEntriesControl.nMaxTextWidth = nPnFontType;
         }
 
-        pNewEntry->nTextWidth = (int32_t)pnFontType;
+        pNewEntry->nTextWidth = nPnFontType;
         pNewEntry->pfnOnActivate = (fpListEntryCallback)nSizeX[2];
         pNewEntry->nLeft = 0;
         pNewEntry->nRight = 0;

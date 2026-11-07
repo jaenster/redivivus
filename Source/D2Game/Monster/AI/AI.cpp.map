@@ -781,9 +781,9 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2MonsterAiParameterStruct",
         "D2RoomStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -807,8 +807,8 @@
         "TestCollisionWithUnit"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -857,8 +857,8 @@
         "TestIfMonsterCanHitTarget"
       ],
       "usedTypes": [
+        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -902,8 +902,8 @@
         "GetOwnerUnit"
       ],
       "usedTypes": [
-        "D2UnitStrc",
-        "D2UnitStrc *"
+        "D2MonsterAiParameterStruct",
+        "D2UnitStrc"
       ]
     },
     {
@@ -5568,6 +5568,8 @@
         "AI_Monster_ValidateSkillAtPosition"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
         "D2MonsterLevelDataStrc",
         "D2RoomStrc",
         "D2SeedStrc",

@@ -2884,7 +2884,7 @@ int32_t __fastcall Missiles_SrvHitFunc_AlwaysPierce(::SGAMEDATA * pGame, D2UnitS
     return pTarget ? 2 : 0;
 }
 
-void __fastcall MISSILES_SetPathFromTotalFramesCallback(D2UnitStrc * pMissile, int nParam) {
+void __fastcall MISSILES_SetPathFromTotalFramesCallback(D2UnitStrc * pMissile, intptr_t nParam) {
     uint8_t nDistance;
     if (!pMissile) {
       return;
@@ -4090,7 +4090,7 @@ static int getDamageTarget(D2UnitStrc * pUnit) {
     return nDmgTargetMode;
 }
 
-void __fastcall MISSILESMODE_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+void __fastcall MISSILESMODE_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 

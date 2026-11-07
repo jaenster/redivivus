@@ -1085,7 +1085,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
     return 0;
 }
 
-void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, int32_t nSeedOffset) {
+void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, intptr_t nSeedOffset) {
     if (!pUnit) {
       return;
     }
@@ -2042,7 +2042,7 @@ D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
-void __fastcall SKILLSMON_SetMissilePathLinear(D2UnitStrc * pUnit, int32_t nSeedOffset) {
+void __fastcall SKILLSMON_SetMissilePathLinear(D2UnitStrc * pUnit, intptr_t nSeedOffset) {
     if (!pUnit) {
       return;
     }

@@ -122,7 +122,7 @@ bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, D2RoomStrc * pRoom, int
     return (bool)(bCollision != 0 ? 0 : 1);
 }
 
-void __fastcall MISSILE_InitializeVisual(D2UnitStrc * pUnit, int32_t pSourceUnit) {
+void __fastcall MISSILE_InitializeVisual(D2UnitStrc * pUnit, intptr_t pSourceUnit) {
     uint32_t nRandFrame;
     if (!pUnit) {
       return;
@@ -338,7 +338,7 @@ int32_t __fastcall MISSILE_CltHitFn34_MephistoDoNotDraw(D2UnitStrc * pUnit, D2Un
     return 1;
 }
 
-void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(D2UnitStrc * pUnit, int nParam) {
+void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(D2UnitStrc * pUnit, intptr_t nParam) {
     uint8_t nDistance;
     if (!pUnit) {
       return;
@@ -6042,7 +6042,7 @@ void __fastcall MISSILE_CltDoFn08_LightningTrail(D2UnitStrc * pUnit) {
             }
 
             sSkillArg.fpFunction = MISSILE_InitializeVisual;
-            sSkillArg.nFunctionParam = (int32_t)pUnit;
+            sSkillArg.nFunctionParam = (intptr_t)pUnit;
             Missile::MakeMissile(&sSkillArg);
           }
         }
@@ -6988,7 +6988,7 @@ void __fastcall MISSILE_CltDoFn22_BrDeathLightningBolt(D2UnitStrc * pUnit) {
               sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
               sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltSubMissile1;
               sSkillArg.fpFunction = MISSILE_InitializeVisual;
-              sSkillArg.nFunctionParam = (int32_t)pUnit;
+              sSkillArg.nFunctionParam = (intptr_t)pUnit;
               pOwner = Missile::MakeMissile(&sSkillArg);
               if (pOwner) {
                 nPosX = Engine::Particle::PARTICLE_GetPosZShifted(pUnit);

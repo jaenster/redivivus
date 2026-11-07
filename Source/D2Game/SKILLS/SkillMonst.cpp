@@ -1601,7 +1601,7 @@ BOOL __fastcall Skills_SrvDoFunc_101_FireDirectionalMissile(::SGAMEDATA * pGame,
     return 0;
 }
 
-void __fastcall SKILLMONST_RandomizeMissilePath(D2UnitStrc * pUnit, int32_t nMissileIdx) {
+void __fastcall SKILLMONST_RandomizeMissilePath(D2UnitStrc * pUnit, intptr_t nMissileIdx) {
     if (!pUnit) {
       return;
     }

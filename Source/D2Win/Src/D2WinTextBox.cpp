@@ -1525,6 +1525,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
     int nMaxPixelWidth;
     uint16_t* pCharCursor;
     int32_t nLine;
+    int nPszCurScan;
     uint16_t* pszCurScan = wszText;
     ::D2WinTextBox* pTextBoxSaved = pTextBox;
     if (!pTextBox) {
@@ -1580,10 +1581,10 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
       pFirstLine = (uint16_t*)Storm::Source::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x4b7, 0);
       pSecondLine = (uint16_t*)Storm::Source::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x4b8, 0);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pFirstLine, pWorkBuf, nWrapCharCount);
-      pszCurScan = (uint16_t*)(nTotalLen - nWrapCharCount);
+      nPszCurScan = nTotalLen - nWrapCharCount;
       pFirstLine[nWrapCharCount] = L'\0';
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pSecondLine, pCharCursor, (size_t)pszCurScan);
-      pSecondLine[(intptr_t)pszCurScan] = L'\0';
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pSecondLine, pCharCursor, (size_t)nPszCurScan);
+      pSecondLine[nPszCurScan] = L'\0';
       Storm::Source::SMem::SMemFree(pWorkBuf, ".\\Src\\D2WinTextBox.cpp", 0x4bf, 0);
       D2WinTextBox::SetText(pTextBoxSaved, pFirstLine, nLineStyle, true, nAlignment);
       if (nAlignment == 1) {

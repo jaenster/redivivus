@@ -85,7 +85,7 @@ typedef void (__fastcall *pfnSkillRangeCb)(D2UnitStrc * pUnit, void * pCtx);
 #endif
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
 #endif
 
 static D2SkillSrvStFunc SKILLSRVSTFUNCS[91] = {
@@ -661,17 +661,17 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     sContext.pUnit = pUnit;
     sContext.nHitCount = 0;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pCurRoom, &ppRoomList, &nRoomCount);
-    pCallbackArg = 0;
+    int nCallbackArg = 0x0;
     if ((uint32_t)nRoomCount <= 0) {
       return;
     }
 
     do {
       BOOL bInTown;
-      if (!(dwTargetFlags & 0x2000) || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[(intptr_t)pCallbackArg]) , !bInTown)) {
-        bInTown = SKILLS_IsRoomInRange(ppRoomList[(intptr_t)pCallbackArg], nX, nRadius, nY);
+      if (!(dwTargetFlags & 0x2000) || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[nCallbackArg]) , !bInTown)) {
+        bInTown = SKILLS_IsRoomInRange(ppRoomList[nCallbackArg], nX, nRadius, nY);
         if (bInTown) {
-          pNextUnit = ppRoomList[(intptr_t)pCallbackArg]->pUnitList;
+          pNextUnit = ppRoomList[nCallbackArg]->pUnitList;
           while (true) {
             pTarget = pNextUnit;
             if (!pTarget) {
@@ -713,8 +713,8 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         }
       }
 
-      pCallbackArg = (void*)((char*)pCallbackArg + 1);
-    } while ((uintptr_t)pCallbackArg < (uint32_t)nRoomCount);
+      nCallbackArg++;
+    } while ((uintptr_t)(void*)nCallbackArg < (uint32_t)nRoomCount);
 }
 
 // Resolves and applies a skill hit to a target unit. Resolves missile owner if the attacker is a missile. Checks block/evasion (setting hit/block/evade/dodge flags in pDamage->wResultFlags). Sets interrupt flag if target lacks STATE_uninterruptable. Applies critical damage modifier, then calls DAMAGE_ApplyDamageToUnit if the hit flag is set, followed by SERVER_GetHitCalculation for post-hit effects.
@@ -3088,7 +3088,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-void __fastcall DefaultExpireFunction(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall DefaultExpireFunction(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
     int32_t nAuraEventArg = 1;
     eD2States pStateArg = eState;
     UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nAuraEventArg, pStateArg);
@@ -4466,7 +4466,7 @@ void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eStat
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pAiGeneral, 0);
     }
 
-    DefaultExpireFunction(pUnit, eState, pStatListEx);
+    DefaultExpireFunction(pUnit, eState, (D2StatListExStrc*)pStatListEx);
 }
 
 D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl) {

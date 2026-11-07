@@ -1861,8 +1861,8 @@ uint32_t __stdcall _TableNullSub20_Unref_0052e080() {
     return 0;
 }
 
-void __thiscall SERVER_EnterCriticalSection(int32_t pThis, int * pCriticalSection, int32_t nParam) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(pThis + 0x50));
+void __thiscall SERVER_EnterCriticalSection(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pThis, int * pCriticalSection, int32_t nParam) {
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pThis->tSync.m_critsect);
     *pCriticalSection = nParam != 0 ? 0x1U : 0xffffffff;
 }
 

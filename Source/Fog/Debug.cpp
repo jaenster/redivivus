@@ -1491,7 +1491,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
         do {
           pBytesRemaining = __frame1.szHexLine;
           pBytesRemaining = pBytesRemaining + strlen(pBytesRemaining) + 1;
-          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((int)pBytesRemaining - (int)(__frame1.szHexLine + 1)), 0x100 - ((int)pBytesRemaining - (int)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)pStackPtr[nTmp], (uint32_t)pStackPtr[nTmp + 1], (uint32_t)pStackPtr[nTmp + 2], (uint32_t)pStackPtr[nTmp + 3]);
+          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((int)pBytesRemaining - (int)(__frame1.szHexLine + 1)), 0x100 - ((intptr_t)pBytesRemaining - (int)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)pStackPtr[nTmp], (uint32_t)pStackPtr[nTmp + 1], (uint32_t)pStackPtr[nTmp + 2], (uint32_t)pStackPtr[nTmp + 3]);
           for (pDVar1 = pModuleListIter; pDVar1; pDVar1 = pDVar1->pNext) {
             if (*(uint8_t**)(pStackPtr + nTmp) >= pDVar1->dwBaseAddress && *(uint8_t**)(pStackPtr + nTmp) < pDVar1->dwBaseAddress + pDVar1->dwSize) {
               pEipModule = (D2FogModuleNodeStrc*)0x1;
@@ -1634,7 +1634,7 @@ BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize)
 
     LPSTR pszEnd = lpFilename;
     pszEnd = pszEnd + strlen(pszEnd) + 1;
-    int32_t nScanIndex = (int)pszEnd + (-1 - (int)(lpFilename + 1));
+    int32_t nScanIndex = (intptr_t)pszEnd + (-1 - (intptr_t)(lpFilename + 1));
     if (nScanIndex <= 0) {
       return 0;
     }

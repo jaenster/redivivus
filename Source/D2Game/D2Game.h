@@ -106,6 +106,7 @@ struct D2SUnitMsgABStrc;
 union D2SUnitMsgArgsUnion;
 struct D2SUnitProxyStrc_Line0x85;
 struct D2SkillsTxt;
+struct D2StatListExStrc;
 struct D2TimerListStrc;
 struct D2TimerStrc;
 struct D2TradeItemUidPairStrc;
@@ -2303,7 +2304,7 @@ struct __attribute__((packed)) D2StateExArgStrc {
     /* 0x14 */ eD2UnitStat eStat;
     /* 0x18 */ int32_t nSkillCalc;
     /* 0x1C */ eD2States eAuraState;
-    /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, int32_t);
+    /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *);
 };
 #endif // D2_DEFINED_D2StateExArgStrc
 #ifndef D2_DEFINED_D2SUnitEventStrc

@@ -1530,6 +1530,7 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -2525,9 +2526,9 @@
         "SetState"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2States",
-        "int32_t"
+        "eD2States"
       ]
     },
     {

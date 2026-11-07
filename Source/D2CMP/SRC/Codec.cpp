@@ -313,7 +313,7 @@ static void __stdcall CODEC_CalculateFrameBounds(uint32_t * pFrameData, int32_t 
     if (pFrameArray < pFrameArray + uVar1) {
       uint32_t* pFrameEntry;
       pFrameEntry = &pFrameArray->nStride;
-      nFramesLeft = (uint32_t)((int)(pFrameArray + uVar1) + (-1 - (int)pFrameArray)) / 0x2c + 1;
+      nFramesLeft = (uint32_t)((intptr_t)(pFrameArray + uVar1) + (-1 - (intptr_t)pFrameArray)) / 0x2c + 1;
       do {
         uVar1 = pFrameEntry[-7];
         if (*pFrameEntry) {
@@ -531,6 +531,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
     uint8_t byPrevColor;
     uint32_t nLookupMask;
     uint32_t nBitMaskCheck;
+    int nPrevPixelOffset2;
     uint8_t* pOutPixelCursor;
     pOutPixelCursor = *ppOutBuffer;
     int nBitShift;
@@ -577,7 +578,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
 
           nPixelMask = nBitsRead | -16;
           pNextOutPixel = pOutPixel + 4;
-          nPrevPixelOffset += -(intptr_t)pOutPixel;
+          nPrevPixelOffset2 = (int)(nPrevPixelOffset - (intptr_t)pOutPixel);
           nPixelSlot = 4;
           byPrevColor = 0;
           pPixelSlotPtr = pNextOutPixel;
@@ -588,7 +589,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
               break;
             }
 
-            *pPixelSlotPtr = pPixelSlotPtr[(intptr_t)nPrevPixelOffset];
+            *pPixelSlotPtr = pPixelSlotPtr[nPrevPixelOffset2];
             check_slots_left:
             if (!nPixelSlot) {
               goto store_cell;
@@ -699,7 +700,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
               nBitsRead--;
               pOutPixelCursor--;
               if (!((&nPixelMask)[(int)nBitsRead >> 5] & Fog::BitBuffer::gadwBitMasks[nBitsRead & 0x1f])) {
-                *pOutPixelCursor = pOutPixelCursor[(intptr_t)nPrevPixelOffset];
+                *pOutPixelCursor = pOutPixelCursor[nPrevPixelOffset2];
               }
             } while (nBitsRead);
           }

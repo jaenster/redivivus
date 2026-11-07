@@ -2700,6 +2700,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     int nTransformClassId;
     uint16_t* pUnitTypeOrName;
     uD2UnitMode uUnitColor;
+    int32_t nUnitTypeOrName;
     if (!pUnit) {
       pUnitTypeOrName = (uint16_t*)0x6;
     } else {
@@ -2731,13 +2732,13 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
           return;
         }
         if (AutoMapPartyNames && pUnit && pUnit->nClassId == 0x10b) {
-          pUnitTypeOrName = (uint16_t*)D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
+          nUnitTypeOrName = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
           wPortalLabel = D2Lang::StrTable::strtable::GetLocaleString(0xcf3);
           dwTextColor = uUnitColor.ePlayerMode & 0xff;
           eUnitState = 0;
           nTemp += -0x12;
           D2Win::Src::D2WinFont::DRAW_text(wPortalLabel, xLocation - D2Win::Src::D2WinFont::DRAW_text0(wPortalLabel) / 2, nTemp, dwTextColor, eUnitState);
-          D2Win::Src::D2WinFont::SetAndReturnLastFont((int32_t)pUnitTypeOrName);
+          D2Win::Src::D2WinFont::SetAndReturnLastFont(nUnitTypeOrName);
           return;
         }
 

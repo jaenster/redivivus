@@ -4006,7 +4006,7 @@ void __stdcall Unreferenced_004535d0() {
     UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)UI_DrawPlayerNameOverhead);
 }
 
-void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
+void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
     uint16_t wKey;
     if (nButtonIndex == -1) {
       return;
@@ -4017,7 +4017,7 @@ void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaul
       wKey = nDefaultKey;
     }
 
-    *(uint32_t*)(*(int*)(pButtonContainer + 0x20) + 4 + nButtonIndex * 0xc) = (uint32_t)wKey;
+    pButtonContainer->pHandlers[nButtonIndex].nMessageOrKeyCode = (uint32_t)wKey;
 }
 
 static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndices) {

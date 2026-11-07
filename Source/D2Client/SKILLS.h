@@ -38,9 +38,9 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsMonsterOrPlayer(struct D2UnitStrc 
 void __fastcall SKILLSCLT_CreateMissileWithGfx(struct D2UnitStrc * pUnit, uint32_t nSeed, eMissilesId pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel);
 // Client aura do-function: fires one missile toward the current target (or cursor if no target) with graphics and range determined by the aura's current level via SKILLSASS_GetCltMissileByAuraLevel and SKILLSASS_GetPrgCalcByAuraLevel. Falls back to aurarangecalc from SkillsTxt if prgcalc returns less than 1. Returns FALSE if the skill entry is invalid or missile ID is -1.
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLSCLT_SetMissilePathAndCalc(struct D2UnitStrc * pUnit, int32_t nInitSeed);
+void __fastcall SKILLSCLT_SetMissilePathAndCalc(struct D2UnitStrc * pUnit, intptr_t nInitSeed);
 // Builds a serpentine (weaving) pre-computed path for a missile unit, used by skills like Guided Arrow. Caps the path at 0x4D frames, sets path type 10, then for each frame advances the direction by a randomly-seeded amplitude and sign (flipping every gapSkillDamageDescFuncTable[0x89] frames), samples gnSkillSynergiesTableIndex/Offset for X/Y deltas, and writes each resulting (nX, nY) into the missile's path-point array via GetPathPoint.
-void __fastcall SKILLSCLT_SetMissilePathExtended(struct D2UnitStrc * pUnit, int32_t nInitSeed);
+void __fastcall SKILLSCLT_SetMissilePathExtended(struct D2UnitStrc * pUnit, intptr_t nInitSeed);
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissilesOnTargetVelocity(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_CltCreateMissileAtTarget(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

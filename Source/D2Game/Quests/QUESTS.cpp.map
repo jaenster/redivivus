@@ -2256,6 +2256,7 @@
         "QUEST_AddPlayerGUIDToTrackingList"
       ],
       "usedTypes": [
+        "D2QuestDataA1Q5Strc",
         "int32_t",
         "uint32_t"
       ]

@@ -19,6 +19,7 @@ struct D2ClientStrc;
 struct D2DrlgActStrc;
 struct D2QuestDataStrc;
 struct D2RoomStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2States;
@@ -75,8 +76,8 @@ void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, struct D
 uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
-void __fastcall SKILLSASS_StatExpireCallback_ClearState2(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
+void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
+void __fastcall SKILLSASS_StatExpireCallback_ClearState2(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
 void __fastcall MONSTERAI_FlagIfDeadOrNull(struct D2UnitStrc * pUnit, uint32_t * pdwDeadFlag, uint32_t dwArg1);
 #endif // D2_MODULE_D2Game
 

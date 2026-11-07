@@ -4164,6 +4164,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
     int bDecoded;
     int nPalIdx;
     int nRowOffset;
+    void* pVersion;
     if (!gpGlideSmackerTexBuf2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8e);
       exit(-1);
@@ -4193,12 +4194,12 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       }
     } else {
       uint32_t bFileLoadOk;
-      nVersion = 0;
+      pVersion = 0;
       dwFileSize = 0;
-      bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &dwFileSize, 0, 3, (LPOVERLAPPED)0x0);
-      if (bFileLoadOk && nVersion) {
-        bDecoded = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, dwFileSize, abImgBuf, *gpGlideSmackerTexBuf2, 0x6db0, &nImgWidth, &nImgHeight, &nImgBpp);
-        Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\glSmack.cpp", 0xdb, 0);
+      bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &dwFileSize, 0, 3, (LPOVERLAPPED)0x0);
+      if (bFileLoadOk && pVersion) {
+        bDecoded = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, dwFileSize, abImgBuf, *gpGlideSmackerTexBuf2, 0x6db0, &nImgWidth, &nImgHeight, &nImgBpp);
+        Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\glSmack.cpp", 0xdb, 0);
         bFileLoadOk = nImgWidth;
         if (bDecoded && nImgWidth == 0x1d4 && nImgHeight == 0x3c && nImgBpp == 8) {
           nPalIdx = 0;

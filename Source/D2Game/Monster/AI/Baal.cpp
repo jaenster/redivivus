@@ -158,6 +158,7 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
     int32_t nAnchorY;
     int32_t nErrorLine;
     D2DynamicPathStrc* pDynamicPath;
+    int nNodeListSaved;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9e);
       exit(-1);
@@ -243,15 +244,15 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
 
         pNode = ppNodeListSaved[2];
         pUnit = 0;
-        ppNodeListSaved = 0;
+        nNodeListSaved = 0x0;
         if (pNode) {
           do {
             pTargetUnit = pNode->pUnit;
             if (eAnchorAct == pTargetUnit->nAct) {
               nErrorLine = RiskAssignmentBaal(pUnit2, pTargetUnit, pAnchorData);
-              if ((intptr_t)ppNodeListSaved < nErrorLine) {
+              if (nNodeListSaved < nErrorLine) {
                 pUnit = (fpAiTargetPredicate)pTargetUnit;
-                ppNodeListSaved = (D2UnitNodeStrc**)nErrorLine;
+                nNodeListSaved = nErrorLine;
               }
             }
 
@@ -270,7 +271,7 @@ static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestS
                 nErrorLine = D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
                 if (!nErrorLine) {
                   pBestTarget = (D2UnitStrc*)pUnit;
-                  nBestScore = (int)ppNodeListSaved;
+                  nBestScore = nNodeListSaved;
                 }
               }
             }
@@ -822,8 +823,8 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     return nCombatAiState;
 }
 
-void __fastcall AI_BAAL_CountPowerfulSkills(D2UnitStrc * nSkillNode, int * pnSelfSkillNode, int * pnPowerfulSkillCount) {
-    if (!(nSkillNode != (D2UnitStrc*)*pnSelfSkillNode && nSkillNode && nSkillNode->eAnimMode.ePlayerMode != Death && nSkillNode->eAnimMode.ePlayerMode != Kick)) {
+void __fastcall AI_BAAL_CountPowerfulSkills(D2UnitStrc * nSkillNode, D2UnitStrc * * pnSelfSkillNode, int * pnPowerfulSkillCount) {
+    if (!(nSkillNode != *pnSelfSkillNode && nSkillNode && nSkillNode->eAnimMode.ePlayerMode != Death && nSkillNode->eAnimMode.ePlayerMode != Kick)) {
       return;
     }
 

@@ -3210,7 +3210,7 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 
     int nItem;
-    nItem = (int)(void*)0x4;
+    nItem = (int)0x4;
     if (!bIsArmor) {
       _bIsThrowable = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItemUnit);
       if (!_bIsThrowable) {

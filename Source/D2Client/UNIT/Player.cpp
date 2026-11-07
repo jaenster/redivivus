@@ -2657,12 +2657,12 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     CLIENT_ResolvePlayerCollision(pUnit);
 }
 
-int __fastcall Unreferenced_004637f0(D2UnitStrc * param_1) {
+uint8_t * __fastcall Unreferenced_004637f0(D2UnitStrc * param_1) {
     if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataPlayer) {
-      return (int)(param_1->pUnitData.pUnitDataPlayer->szCharName + 4);
+      return (uint8_t*)(param_1->pUnitData.pUnitDataPlayer->szCharName + 4);
     }
 
-    return 0;
+    return nullptr;
 }
 
 uint16_t * __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {

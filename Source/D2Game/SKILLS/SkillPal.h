@@ -17,6 +17,7 @@
 
 // Forward declarations
 struct D2DynamicPathStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
@@ -119,7 +120,7 @@ BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, struct D2Uni
 // Retired notes from 'SKILLPAL_SmiteAttack':
 // Server-side Paladin Smite skill attack. Resolves the unit's current melee target (GetTargetEx), bails if none or out of melee range. For players: reads the equipped shield's base min/max damage, adds Holy Shield bonus damage if that state is active, runs to-hit and physical/elemental skill-damage calcs (D2GetSkillCalc against the skill's per-level columns), then performs the hit check. Finally applies the assembled D2DamageStrc via DAMAGE_CalculateAndApplyDamage and flushes the combat queue. Uses a caller-provided stack frame (nParam2) as scratch for the damage struct and intermediates.
 BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLPAL_OnAuraExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwArg1);
+void __fastcall SKILLPAL_OnAuraExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwArg1);
 // Paladin skill helper: reduces the remaining duration of active poison and curse states on pUnit by nParam percent (via D2ApplyPercent). Iterates all states flagged as curse states (pAllStatesDataTblFlag0x0B) and adjusts each statlist timeout; reschedules the expiry event for each shortened state. Returns non-zero if at least one state was shortened.
 BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nPercent);
 // Aura-state hit callback (PFN_AreaEffectCallback shape): pContext->pCallbackArg is a D2SkillAuraArgStrc. Applies nAuraState to pUnit for nDelayFrame frames through SetStateWithExpiryTime (expire callback pExtra, else SKILLPAL_OnAuraExpire when the caster is the target), stores the new stat list in pStatList, then for each of the 6 anStats/anCalcs pairs with a non-zero value adds the stat (clamped by SKILLNEC_ClampResistPenalty and the difficulty floor for stats 0x43/0x44) or raises the current stat up to its maxstat, counting each applied pair in nAppliedCount. Finally tags the list with the skill and level and removes the state in nFlag if set. Returns 1 when the state was applied, 0 otherwise.
@@ -141,7 +142,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, struct D2UnitSt
 // Server do-function for skill 73 (Fist of the Heavens). Resolves the charge-up missile via SKILLASS_GetChargeUpMissile, gets the target/cursor position, spawns the FotH missile via CreatingMissile with path type 0xE (arcing), then applies Concentration aura magic-damage bonus to the missile's magicmindam/magicmaxdam stats if active. Returns 1 on success, 0 on invalid skill or no target.
 BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, struct D2DynamicPathStrc * nSkillLvl);
 BOOL __fastcall SKILPAL_SrvStFn36_HolyShield(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLPAL_OnConversionExpire(struct D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam);
+void __fastcall SKILLPAL_OnConversionExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
 // Server-side skill DoFunc 79 (Paladin Conversion). Attempts to convert the caster's current target into a temporary ally. Resolves the target (GetTargetEx) and, if a combat-queue entry exists, checks SKILLPAL_CanConvertTarget. On success: applies/refreshes the auratargetstate state-list on the target with a duration from D2GetSkillCalc(auralencalc) and an OnConversionExpire expire-function, sets a frame-12 event, frees the monster's own minions, sets the target's alignment to friendly (2), reparents it as the caster's unit-node, clears the caster's target, and strips flag-8 stat-lists. If the target's level exceeds the caster's, saves a STATE_conversion_save stat-list (conversion_level/conversion_maxhp) and rescales the target's level/HP/maxHP down to the caster via D2ApplyPercent. Returns 1 on conversion (or on plain combat-queue processing when state invalid), 0 on failure. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.
 BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server do-function for skill 80 (Smite). Gets the current attack target, spawns the Smite missile via CreatingMissile aimed at the target's position, sets the missile's target unit type/GUID, and applies the skill's srvoverlay to the target unit. Returns 1 on success, 0 on invalid skill, no missile ID, or no target.

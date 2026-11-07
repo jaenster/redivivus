@@ -2273,6 +2273,7 @@ static void gen_bitlen(tree_desc * pTreeDesc, deflate_state * pDeflateState) {
     uint16_t* pwMaxBitLenCount;
     uint16_t wCurBitLenCount;
     uint16_t wFreq;
+    int nHeapCursor;
     int nMaxSymbol = pTreeDesc->max_code;
     ct_data* pDynTree = pTreeDesc->dyn_tree;
     static_tree_desc* pStatDesc = pTreeDesc->stat_desc;
@@ -2347,7 +2348,7 @@ static void gen_bitlen(tree_desc * pTreeDesc, deflate_state * pDeflateState) {
       nBits = (uint32_t)*pwMaxBitLenCount;
       if (nBits) {
         pwBitLenCount = (uint16_t*)(pDeflateState->heap + nHeapMaxIdx);
-        pHeapCursor = (int32_t*)nBits;
+        nHeapCursor = (int)nBits;
         do {
           nExtraBaseIdx = *(int*)(pwBitLenCount - 2);
           nHeapMaxIdx--;
@@ -2358,8 +2359,8 @@ static void gen_bitlen(tree_desc * pTreeDesc, deflate_state * pDeflateState) {
               pDynTree[nExtraBaseIdx].dl = (uint16_t)nMaxBitLen;
             }
 
-            nBits = (int)pHeapCursor - 1;
-            pHeapCursor = (int32_t*)nBits;
+            nBits = nHeapCursor - 1;
+            nHeapCursor = (int)nBits;
           }
         } while (nBits);
       }

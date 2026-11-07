@@ -168,6 +168,7 @@
         "SOUNDSMP_Stop"
       ],
       "usedTypes": [
+        "D2SoundChannelStrc *",
         "IDirectSound",
         "uint32_t"
       ]

@@ -127,7 +127,7 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(struct D2UnitStrc * pUnit, stru
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
 // @blizzard UnitProcessPlayerModeSimulation
 void __fastcall PLAYER_ProcessPlayerModeSimulation(struct D2UnitStrc * pUnit);
-int __fastcall Unreferenced_004637f0(struct D2UnitStrc * param_1);
+uint8_t * __fastcall Unreferenced_004637f0(struct D2UnitStrc * param_1);
 uint16_t * __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, struct D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex);
 struct D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);

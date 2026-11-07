@@ -128,9 +128,9 @@
         "SKILLS_ClampHpManaStamina"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2States",
-        "int32_t"
+        "eD2States"
       ]
     },
     {

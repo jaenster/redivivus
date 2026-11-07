@@ -1114,6 +1114,7 @@ int32_t __stdcall SMemHeapDestroy(LPVOID nHeapId) {
 }
 
 uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObject) {
+    int nObject;
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -1138,10 +1139,10 @@ uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObjec
       return 0;
     }
 
-    D2FogHeapDescStrc* pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&pObject, pBlock);
+    D2FogHeapDescStrc* pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&nObject, pBlock);
     SMEM_SatisfyFreeRequest(pObjectSaved, pHeap, pBlock);
-    if (pObject != (void*)-1) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + (intptr_t)pObject);
+    if (nObject != -1) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nObject);
     }
 
     return (uint32_t)(pHeap != 0);
@@ -1256,7 +1257,7 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
     } else {
       D2FogHeapDescStrc* pActiveHeap;
       nBinIndex = pHeap->nReserved;
-      nNeededTotal = (int)pHeap->pWriteCursor + (nTotalSize - (int)pHeap);
+      nNeededTotal = (intptr_t)pHeap->pWriteCursor + (nTotalSize - (intptr_t)pHeap);
       if (nNeededTotal > nBinIndex) {
         nNeededTotal = nBinIndex * 2;
         if (nBinIndex >= 0x10000000) {
@@ -1269,7 +1270,7 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
         }
 
         pHeap->bActive = 0;
-        nNeededTotal = (int)pActiveHeap->pWriteCursor + (nTotalSize - (int)pActiveHeap);
+        nNeededTotal = (intptr_t)pActiveHeap->pWriteCursor + (nTotalSize - (intptr_t)pActiveHeap);
         pHeap = pActiveHeap;
       }
       if (nNeededTotal > pHeap->nCommitted) {
@@ -1567,6 +1568,7 @@ uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSou
     D2FogHeapDescStrc* pHeap;
     uint32_t* pResult;
     D2FogHeapBlockHdrStrc* pBlockHdr;
+    int nSourceFile;
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -1584,10 +1586,10 @@ uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSou
           pBlockHdr = (D2FogHeapBlockHdrStrc*)pBlock[-3];
         }
 
-        pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&szSourceFile, pBlockHdr);
-        pResult = SMemReallocCore((int*)&szSourceFile, (uint32_t*)pHeap, pBlock, &pBlockHdr->wBlockSize, (uint8_t)dwFlags, nSize);
-        if (szSourceFile != (char*)-1) {
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + (intptr_t)szSourceFile);
+        pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&nSourceFile, pBlockHdr);
+        pResult = SMemReallocCore((int*)&nSourceFile, (uint32_t*)pHeap, pBlock, &pBlockHdr->wBlockSize, (uint8_t)dwFlags, nSize);
+        if (nSourceFile != -1) {
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nSourceFile);
         }
 
         return pResult;

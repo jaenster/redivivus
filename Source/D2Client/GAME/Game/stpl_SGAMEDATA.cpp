@@ -286,9 +286,9 @@ template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>
     pArray->Destructor();
 }
 
-template<> int __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * param_1) {
+template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * param_1) {
     memset(param_1, 0, sizeof(*param_1));
-    return (int)param_1;
+    return param_1;
 }
 
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {

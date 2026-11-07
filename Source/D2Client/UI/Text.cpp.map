@@ -411,7 +411,8 @@
         "Unreferenced_0049dae0"
       ],
       "usedTypes": [
-        "D2CoordStrc"
+        "D2CoordStrc",
+        "D2TextBoxStrc"
       ]
     },
     {

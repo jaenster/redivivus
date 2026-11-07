@@ -1302,7 +1302,8 @@
         "Unreferenced_004637f0"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "uint8_t"
       ]
     },
     {

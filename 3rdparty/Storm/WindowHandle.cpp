@@ -2,11 +2,10 @@
 
 #include "3rdparty/Storm/WindowHandle.h"
 #include "Source/D2Client/UI/EscMenu.h"
+#include "Source/Bnclient/Bnclient.h"
 #include "3rdparty/Storm/H/stpl.h"
+#include "3rdparty/Storm/Source/SBig.h"
 #include "3rdparty/Storm/Source/SEVT.h"
-#include "3rdparty/Storm/Source/SErr.h"
-#include "3rdparty/Storm/Source/SMem.h"
-#include "3rdparty/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/Storm/Source/SErr.data.h"
 #include "3rdparty/Storm/WindowHandle.data.h"
@@ -120,23 +119,22 @@ int __fastcall Unreferenced_004203c0(StormLinkStrc * param_1) {
     return param_1->pNext <= 0 ? 0 : param_1->pNext;
 }
 
-uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
-    uint32_t nOffset = pNode[1];
+StormLinkStrc * __thiscall WND_ResolveListOffset(StormLinkStrc * pNode, intptr_t pBase) {
+    uint32_t nOffset = pNode->pNext;
     if ((int)nOffset < 0) {
-      return ~nOffset;
+      return (StormLinkStrc*)~nOffset;
     }
-    if ((intptr_t)pBase < 0) {
-      pBase = (int*)((intptr_t)pNode - *(int*)(*pNode + 4));
+    if (pBase < 0) {
+      pBase = (intptr_t)pNode - pNode->pPrevLink->pNext;
     }
 
-    return nOffset + (int)pBase;
+    return (StormLinkStrc*)(nOffset + pBase);
 }
 
-int __fastcall Unreferenced_00420470(StormLinkedListStrc * param_1) {
+void __fastcall Unreferenced_00420470(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
 }
 
 int __fastcall Unreferenced_004204f0(StormLinkStrc * param_1) {
@@ -434,13 +432,13 @@ static void __stdcall SMSG_InternalRegister(HWND hWnd, int32_t pCallback, uint32
 }
 
 // @blizzard InternalUnregister (SMSG.CPP)
-static void __stdcall SMSG_InternalUnregister(uint32_t nEventId, char * szText1, char * szText2, HWND hWnd) {
+static void __stdcall SMSG_InternalUnregister(uint32_t nEventId, uint32_t szText1, char * szText2, HWND hWnd) {
     StormWndRecStrc* nRecord = SMSG_FindWindow(hWnd);
     if (!nRecord) {
       SMSG_AddWindow(hWnd);
     }
 
-    Source::SEVT::SEvtUnregisterHandler(nEventId, (uint32_t)hWnd, (uint32_t)szText1, (pfnSEvtHandler)szText2);
+    Source::SEVT::SEvtUnregisterHandler(nEventId, (uint32_t)hWnd, szText1, (pfnSEvtHandler)szText2);
 }
 
 int Unreferenced_00420ae0() {
@@ -533,22 +531,22 @@ void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallb
 }
 
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
-void __stdcall SMsgUnregisterCommand(HWND hWnd, char * szText1, char * szText2) {
+void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t szText1, char * szText2) {
     SMSG_InternalUnregister(0x534d5348, szText1, szText2, hWnd);
 }
 
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(HWND hWnd, char * szText1, char * szText2) {
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t szText1, char * szText2) {
     SMSG_InternalUnregister(0x534d5349, szText1, szText2, hWnd);
 }
 
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(HWND hWnd, char * szText1, char * szText2) {
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t szText1, char * szText2) {
     SMSG_InternalUnregister(0x534d534a, szText1, szText2, hWnd);
 }
 
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(HWND hWnd, char * szText1, char * szText2) {
+void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2) {
     SMSG_InternalUnregister(0x534d5347, szText1, szText2, hWnd);
 }
 
@@ -588,14 +586,14 @@ uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes) {
     return (uint32_t)((uint32_t)(*(int*)(pThis + 0x10) + nAddBytes) < *(uint32_t*)(pThis + 4));
 }
 
-int32_t __thiscall WND_EntryArray_AllocNext(int32_t pThis, int * pnCount) {
+BigBuffer * __thiscall WND_EntryArray_AllocNext(BigStack * pThis, int * pnCount) {
     if (pnCount) {
       (*pnCount)++;
     }
 
-    int nIndex = *(int*)(pThis + 0x140);
-    *(int*)(pThis + 0x140) = nIndex + 1;
-    return pThis + nIndex * 0x14;
+    uint32_t uVar1 = pThis->nUsed;
+    pThis->nUsed = uVar1 + 1;
+    return pThis->aBuffers + uVar1;
 }
 
 void __thiscall WND_EntryArray_FreeEntries(int32_t pThis, int32_t nFreeCount) {

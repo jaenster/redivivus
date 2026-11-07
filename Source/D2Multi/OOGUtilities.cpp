@@ -2066,7 +2066,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D
     pnQueryResult = pnNameField;
     do {
       nNameChar = *pnQueryResult;
-      *(char*)((intptr_t)pEntry + (1 - (intptr_t)pnNameField) + (intptr_t)pnQueryResult) = (char)nNameChar;
+      *(char*)((intptr_t)pEntry + (1 - (intptr_t)pnNameField) + (char*)pnQueryResult) = (char)nNameChar;
       pnQueryResult = (int*)((char*)pnQueryResult + 1);
     } while ((char)nNameChar != '\0');
 

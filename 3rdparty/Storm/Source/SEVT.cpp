@@ -528,11 +528,10 @@ void __fastcall LINKEDLIST_UnlinkSelf(StormLinkStrc * pNode) {
     pNode->pNext = 0;
 }
 
-int __fastcall Unreferenced_004269a0(StormLinkedListStrc * param_1) {
+void __fastcall Unreferenced_004269a0(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
 }
 
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.
@@ -676,13 +675,13 @@ void __thiscall LINKEDLIST_GetHead(StormLinkedListStrc * pThis, StormLinkStrc * 
     pListHead->pNext = 0;
 }
 
-int __fastcall Unreferenced_00426c60(int param_1) {
-    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
-    *puVar1 = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *puVar1 = (uint32_t)(uintptr_t)puVar1;
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+StormLinkedListStrc * __fastcall Unreferenced_00426c60(StormLinkedListStrc * param_1) {
+    StormLinkStrc* pSVar1 = &param_1->head;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
+    pSVar1->pPrevLink = pSVar1;
+    param_1->nLinkOffset = 0;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return param_1;
 }
 

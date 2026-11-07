@@ -514,11 +514,11 @@ void __fastcall SFILE_CloseAllOpenFiles1_Unref_004168f0(struct D2ArchiveStrc * p
 uint32_t __thiscall SFILE_CompareFileSize1(struct StormLinkStrc * pLink, int pLeft);
 uint32_t __thiscall SFILE_CompareFileSize2(struct StormLinkStrc * pLink, int pLeft);
 uint32_t __thiscall SFILE_CompareFileName(struct StormLinkStrc * pLink, int pLeft);
-int __fastcall Unreferenced_004169f0(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_00416a00(struct StormLinkedListStrc * param_1);
+void __fastcall Unreferenced_004169f0(struct StormLinkedListStrc * param_1);
+void __fastcall Unreferenced_00416a00(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_00416a10(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_00416a20(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_00416a30(struct StormLinkedListStrc * param_1);
+void __fastcall Unreferenced_00416a30(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_00416a90(int param_1);
 int __fastcall Unreferenced_00416ab0(int param_1);
 // @sourcefile .\SOURCE\SFILE.CPP
@@ -635,7 +635,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam);
 void __stdcall SFILE_CreateCdThread();
 int __fastcall Unreferenced_0041a8d0(DWORD * param_1, HANDLE * param_2);
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
-int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle);
+int __stdcall SFILE_CancelAsyncRequestWithStatus(void * nRequestHandle);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileLoadFileEx2"
 // @wasnamed SFILE_LoadFile
 // @basis behaviour-confirmed as part of a three-way arity lock. The 8-parameter worker (archive, filename, buffer, bytes, extrabytes, flags, callback, readflags) that both shorter members forward into: open, size, allocate size+extrabytes, read, close. SFileLoadFileEx2 is the only 8-parameter Load in the real API, and the extra 8th slot is precisely the readflags the 7-parameter caller pins to 0.

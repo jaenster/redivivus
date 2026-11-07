@@ -149,7 +149,7 @@ void __stdcall DRAW_UI_DeathMessage();
 void __fastcall UI_DrawPlayerNameOverhead(struct D2UnitStrc * pUnit);
 void __stdcall UI_DrawPlayerStateOverlays();
 void __stdcall Unreferenced_004535d0();
-void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory);
+void __stdcall UI_SetButtonKeyBinding(struct D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory);
 BOOL __fastcall GetUIFlag(eD2UIvars eUI);
 int Unreferenced_00453900();
 BOOL __fastcall UI_GetFlag(eD2UIvars eUI);

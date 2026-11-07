@@ -32,7 +32,7 @@
 
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
 #endif
 
 namespace D2Game::SKILLS::SkillAss {
@@ -739,7 +739,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     return 1;
 }
 
-void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, int32_t nInitSeed) {
+void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, intptr_t nInitSeed) {
     if (!pUnit) {
       return;
     }
@@ -908,7 +908,7 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SG
       sSkillArg.nUnitX = *(int*)((char*)anXYOffsetTable + nByteOffset);
       sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + nByteOffset + 0x100);
       qwSeedState = (qwSeedState & 0xffffffff) * 0x6ac690c5 + (qwSeedState >> 0x20);
-      sSkillArg.nFunctionParam = (int32_t)qwSeedState;
+      sSkillArg.nFunctionParam = (intptr_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       nRoyalStrikeParam = D2Common::Skills::GetSkilParam1(SKILL_RoyalStrike);
       nRoyalStrikeParam += 1;
@@ -918,7 +918,7 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SG
 }
 
 // Builds the spiral flight path for an Assassin missile unit (e.g. trap/blade projectiles). Clamps total frames to 0x4D, seeds the unit's PRNG from nParam (high word 0x29a), sets path type 10, and steps a turning angle around the unit's facing direction: each frame advances the direction by a seed-derived angle step (turn direction flips every gnSpiralMissileBaseOffset frames), looks up per-direction X/Y deltas via gnSkillAssTableIndexBySkill/OffsetBySkill, and writes the accumulated position into the dynamic path's PathPoints. Sets the final point count. Mutates pUnit->sSeed.
-void __fastcall SKILLASS_BuildSpiralMissilePath(D2UnitStrc * pUnit, int32_t nSeed) {
+void __fastcall SKILLASS_BuildSpiralMissilePath(D2UnitStrc * pUnit, intptr_t nSeed) {
     // Static local variables (originally global data)
     static int gnSkillAssTableOffsetBySkill[8] = { 0x0, 0x2, 0x2, 0x2, 0x0, -0x2, -0x2, -0x2 }; D2_STATIC_GUARD(gnSkillAssTableOffsetBySkill, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSkillAssTableOffsetBySkill");
     static int gnSkillAssTableIndexBySkill[8] = { 0x2, 0x2, 0x0, -0x2, -0x2, -0x2, 0x0, 0x2 }; D2_STATIC_GUARD(gnSkillAssTableIndexBySkill, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSkillAssTableIndexBySkill");
@@ -1145,7 +1145,7 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, int32_t pUnit,
       sSkillArg.nUnitX = *(int*)((char*)anXYOffsetTable + nByteOffset);
       sSkillArg.nUnitY = *(int*)((char*)anXYOffsetTable + nByteOffset + 0x100);
       qwSeedState = (qwSeedState & 0xffffffff) * 0x6ac690c5 + (qwSeedState >> 0x20);
-      sSkillArg.nFunctionParam = (int32_t)qwSeedState;
+      sSkillArg.nFunctionParam = (intptr_t)qwSeedState;
       pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pMissile && eMissileId == MISSILE_Royalstrikechainlightning) {
         nRoyalStrikeParam = D2Common::Skills::GetSkilParam1(SKILL_RoyalStrike);
@@ -2384,7 +2384,7 @@ BOOL __fastcall Skills_SrvDoFunc_048_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
     return bMissileCreated;
 }
 
-void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     if (!pUnit) {
       return;
@@ -2479,6 +2479,7 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
     uint64_t nSlotCount;
     D2MonEquipTxt* pNextRow;
     D2SeedStrc sNewSeed;
+    int nUnit;
     D2UnitStrc* pMonster = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
@@ -2529,9 +2530,9 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
         byBodyLoc = pEquipTableRow->loc[nRandEquipSlot];
         pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (int)(char)byBodyLoc);
         if (!pExistingItem) {
-          pUnit = (D2UnitStrc*)(int)(char)pEquipTableRow->mod[nRandEquipSlot];
-          if ((intptr_t)pUnit < 0 || (intptr_t)pUnit >= 8) {
-            pUnit = 0;
+          nUnit = (int)(char)pEquipTableRow->mod[nRandEquipSlot];
+          if (nUnit < 0 || nUnit >= 8) {
+            nUnit = 0x0;
           }
 
           pItemCodeOrPool = pEquipTableRow->item[nRandEquipSlot];
@@ -2551,7 +2552,7 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
           sEquipEntry.dwItemCode = pItemCodeOrPool;
           sEquipEntry.nBodyLoc = byBodyLoc;
           sEquipEntry.nFlag = '\x01';
-          Monster::MONSTER_CreateAndEquipItem(pGame, pMonster, &sEquipEntry, nItemLevel, (eD2ItemQuality)pUnit);
+          Monster::MONSTER_CreateAndEquipItem(pGame, pMonster, &sEquipEntry, nItemLevel, (eD2ItemQuality)nUnit);
         }
       }
     }
@@ -2819,7 +2820,7 @@ static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(D2UnitStrc * pCas
 }
 
 // State-expire callback for the Assassin conversion (Mind Blast convert) effect. Resets the unit's alignment to hostile, clears the conversion state, frees monster target nodes, then restores pre-conversion level/HP from the STATE_conversion_save stat list (scaling current HP proportionally). Removes all flag-8 stat lists (the conversion buff layers).
-void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam) {
+void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     int nConvMaxHp;
     int32_t nTxtMaxHp;
     uint32_t nHpShifted;
@@ -2895,7 +2896,7 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
       }
 
       D2Common::Stats::StatsEx::SetState(pStatList, STATE_conversion);
-      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatList, (PFN_StatExpireCallback)SKILLASS_OnConversionExpire);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatList, SKILLASS_OnConversionExpire);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_conversion, 1);
     }

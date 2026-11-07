@@ -141,6 +141,8 @@
         "WND_ResolveListOffset"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -628,6 +630,9 @@
       "calledFunctions": [
         "SMsgUnregisterCommand",
         "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -643,6 +648,9 @@
       "calledFunctions": [
         "SMsgUnregisterKeyDown",
         "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -658,6 +666,9 @@
       "calledFunctions": [
         "SMsgUnregisterKeyUp",
         "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -673,6 +684,9 @@
       "calledFunctions": [
         "SMsgUnregisterMessage",
         "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
       ]
     },
     {
@@ -775,7 +789,8 @@
         "WND_EntryArray_AllocNext"
       ],
       "usedTypes": [
-        "int32_t"
+        "BigBuffer",
+        "BigStack"
       ]
     },
     {

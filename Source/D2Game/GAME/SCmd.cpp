@@ -2247,6 +2247,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
     uint8_t byComponent;
     eD2UnitType eUnitType;
     BOOL BVar1;
+    uint32_t nComponentBytes;
     D2ClientStrc* pClientSaved = pClient;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int32_t nScratch;
@@ -2394,7 +2395,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
         } else {
           do {
             nStatIndex = (uint32_t)(uint16_t)aStatBuf[nIndex].wStatIndex;
-            pComponentBytes = (char*)(uint32_t)(uint16_t)aStatBuf[nIndex].wSubIndex;
+            nComponentBytes = (uint32_t)(uint16_t)aStatBuf[nIndex].wSubIndex;
             nStatValue = aStatBuf[nIndex].nStatValue;
             pStatCostTxt = (int)nStatIndex < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatIndex : nullptr;
             if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] && pStatCostTxt->sendBits > '\0') {
@@ -2405,7 +2406,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
 
               Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, 9);
               if (pStatCostTxt->sendParamBits) {
-                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, (uintptr_t)pComponentBytes & 0xffff, (uint32_t)pStatCostTxt->sendParamBits);
+                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nComponentBytes & 0xffff, (uint32_t)pStatCostTxt->sendParamBits);
               }
 
               Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatValue, (uint32_t)pStatCostTxt->sendBits);

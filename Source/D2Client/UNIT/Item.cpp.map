@@ -862,6 +862,7 @@
         "SetState"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
       ]

@@ -31,7 +31,8 @@
         "ARCHIVE_ComputeAddress"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -225,7 +226,8 @@
         "ARCHIVE_ClearList"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },

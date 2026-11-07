@@ -2051,6 +2051,7 @@
         "SERVER_EnterCriticalSection"
       ],
       "usedTypes": [
+        "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
       ]
     },

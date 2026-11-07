@@ -611,6 +611,7 @@
         "Unreferenced_00666ff0"
       ],
       "usedTypes": [
+        "D2DrlgGridStrc",
         "D2RoomExStrc"
       ]
     },
@@ -732,7 +733,8 @@
         "Unreferenced_00667420"
       ],
       "usedTypes": [
-        "D2DrlgLevelStrc"
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc"
       ]
     },
     {

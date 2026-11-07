@@ -75,18 +75,18 @@ void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType
                 exit(-1);
               }
 
-              Storm::WindowHandle::SMsgUnregisterMessage(hHandle, (char*)pMessage, (char*)pCallback);
+              Storm::WindowHandle::SMsgUnregisterMessage(hHandle, (uint32_t)pMessage, (char*)pCallback);
               return;
             }
           }
         case 1:
-          Storm::WindowHandle::SMsgUnregisterCommand(hHandle, (char*)pMessage, (char*)pCallback);
+          Storm::WindowHandle::SMsgUnregisterCommand(hHandle, (uint32_t)pMessage, (char*)pCallback);
         return;
         case 2:
-          Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, (char*)pMessage, (char*)pCallback);
+          Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, (uint32_t)pMessage, (char*)pCallback);
         return;
         case 3:
-          Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, (char*)pMessage, (char*)pCallback);
+          Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, (uint32_t)pMessage, (char*)pCallback);
         default:
           return;
       }

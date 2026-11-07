@@ -510,7 +510,7 @@ typedef void (__fastcall *fnShrineClientOverlayUpdate)(D2UnitStrc * pUnit, D2Shr
 typedef void (__fastcall *fnShrineServerActivate)(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * dwParam);
 typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 typedef void (__fastcall *fpCelAllocDecodedByFormat)(DC6 * pDCC, DC6 * pDCCDest, uint8_t * pPaletteRemapFunc, uint32_t dwColorKey);
-typedef void (__fastcall *fpCelDrawFrameByFormat)(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, int32_t pBlendTable, int32_t pLookupTable2);
+typedef void (__fastcall *fpCelDrawFrameByFormat)(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, uint8_t * pBlendTable, int32_t pLookupTable2);
 typedef void (__fastcall *fpCelRemapFrameByFormat)(DC6Block * pFrame, BYTE * pPaletteRemap);
 typedef void (__fastcall *fpD2ShrineTableHandler)(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines);
 typedef void (__fastcall *fpDrawBlendedVisTile)(uint8_t * a1, int a2, int a3, int a4);

@@ -83,6 +83,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2Srp",
+        "D2Srp *",
         "uint32_t"
       ]
     },
@@ -574,7 +576,7 @@
       ],
       "usedTypes": [
         "D2Srp *",
-        "int32_t"
+        "uint8_t"
       ]
     },
     {

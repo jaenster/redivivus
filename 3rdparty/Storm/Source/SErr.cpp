@@ -242,11 +242,10 @@ uint32_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, int pBase
     return nOffset + pBase;
 }
 
-int __fastcall Unreferenced_0041c410(StormLinkedListStrc * param_1) {
+void __fastcall Unreferenced_0041c410(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
 }
 
 // Looks the message-source module for (dwMessageId >> 16) & 0xfff out of gpErrorModuleList, then calls FormatMessageA with that module as lpSource. Returns nonzero on success.
@@ -378,13 +377,13 @@ void __thiscall SSYSTEM_ListUnlink(StormLinkedListStrc * pThis, StormLinkStrc * 
     pNode->pNext = 0;
 }
 
-int __fastcall Unreferenced_0041c6e0(int param_1) {
-    uint32_t* puVar1 = (uint32_t*)(param_1 + 4);
-    *puVar1 = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *puVar1 = (uint32_t)(uintptr_t)puVar1;
-    *(uint32_t*)param_1 = 0;
-    *(uint32_t*)(param_1 + 8) = ~(uint32_t)puVar1;
+StormLinkedListStrc * __fastcall Unreferenced_0041c6e0(StormLinkedListStrc * param_1) {
+    StormLinkStrc* pSVar1 = &param_1->head;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
+    pSVar1->pPrevLink = pSVar1;
+    param_1->nLinkOffset = 0;
+    param_1->head.pNext = ~(uintptr_t)pSVar1;
     return param_1;
 }
 

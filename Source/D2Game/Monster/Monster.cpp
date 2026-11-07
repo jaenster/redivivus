@@ -307,7 +307,7 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
 }
 
 // Randomises the 16 visual component slots of a monster unit. Two paths: if nParam is 0 or its byte[3] is 0, iterates all 16 component indices via GetComponentsData and seeds each slot by RNG (power-of-two fast-path uses bitmask; otherwise modulo). Writes results into pUnitData->szCharName+4. If nParam has a count in byte[3], uses RANDOM_RandomNumberSelector to pick one appearance entry from the nParam table and writes it into pUnitData->sSeed/nPlayerGUID/nModSeed fields. No-ops on null unit or non-monster.
-void __fastcall MONSTER_RollComponentAppearance(int32_t nParam, D2UnitStrc * pUnit) {
+void __fastcall MONSTER_RollComponentAppearance(uint8_t * nParam, D2UnitStrc * pUnit) {
     uint32_t nRollResult;
     uint8_t byComponent;
     int nLoopCount;
@@ -320,7 +320,7 @@ void __fastcall MONSTER_RollComponentAppearance(int32_t nParam, D2UnitStrc * pUn
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
-    if (!nParam || *(uint8_t*)(nParam + 3) <= 0) {
+    if (!nParam || nParam[3] <= 0) {
       D2SeedStrc DVar1;
       if (false || !pUnit->pUnitData.pUnitDataPlayer) {
         pComponentData = 0;
@@ -355,8 +355,8 @@ void __fastcall MONSTER_RollComponentAppearance(int32_t nParam, D2UnitStrc * pUn
         nLoopCount--;
       } while (nLoopCount);
     } else {
-      nRollResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)*(uint8_t*)(nParam + 3));
-      pAppearanceEntry = (uint32_t*)(nRollResult * 0x10 + 4 + nParam);
+      nRollResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)nParam[3]);
+      pAppearanceEntry = (uint32_t*)(nParam + nRollResult * 0x10 + 4);
       if (pUnit->eUnitType == UNIT_MONSTER) {
         pItemData = pUnit->pUnitData.pUnitDataItem;
         if (pItemData && &pItemData->sSeed) {
@@ -526,7 +526,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
     int nMonClassId;
     nMonClassId = nTmpInt;
-    MONSTER_RollComponentAppearance((int32_t)nParam, pUnit);
+    MONSTER_RollComponentAppearance((uint8_t*)nParam, pUnit);
     if (nTmpInt >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nTmpInt = -1;
     }

@@ -2703,12 +2703,12 @@ int __fastcall Unreferenced_0049dac0(uint8_t * param_1) {
     return 1;
 }
 
-int __fastcall Unreferenced_0049dae0(int param_1, D2CoordStrc * param_2) {
+int __fastcall Unreferenced_0049dae0(D2TextBoxStrc * param_1, D2CoordStrc * param_2) {
     int iVar2;
-    uint16_t uVar1 = *(uint16_t*)(param_1 + 0x10);
+    uint16_t uVar1 = param_1->nWidth;
     param_2->nY += -0x32;
     param_2->nX -= (uint32_t)(uVar1 >> 1);
-    iVar2 = param_2->nY + *(int*)(param_1 + 4) * -0xf - 3;
+    iVar2 = param_2->nY + param_1->nLineCount * -0xf - 3;
     param_2->nY = iVar2;
     return iVar2;
 }
@@ -2776,9 +2776,10 @@ void __stdcall TEXT_DrawChatMessages() {
     int nScreenY;
     uint16_t* pwszClear;
     int nWrapLineCount;
-    uint32_t pWrapNext;
-    ScreenMessage_t* pPrevMessage;
     uint16_t* pwszLine;
+    D2TextLineStrc* pTextLine;
+    int nPrevMessage;
+    int nListHead;
     if (!ScreenMessagesMaybe.nCount) {
       return;
     }
@@ -2813,10 +2814,10 @@ void __stdcall TEXT_DrawChatMessages() {
         break;
       }
 
-      pPrevMessage = 0;
+      nPrevMessage = 0x0;
       do {
-        pListHead = pPrevMessage;
-        pwszLine = pMessage->apwszLines[(intptr_t)pPrevMessage];
+        nListHead = nPrevMessage;
+        pwszLine = pMessage->apwszLines[nPrevMessage];
         if (pwszLine) {
           if (bWordWrap) {
             for (nScreenY = 0; nScreenY < 400; nScreenY++) {
@@ -2829,7 +2830,7 @@ void __stdcall TEXT_DrawChatMessages() {
             if (pWrapNode) {
               nScreenY = nLineIdx * 0xf + nBaseY;
               do {
-                pWrapNext = (uint32_t)pWrapNode->pNext;
+                pTextLine = pWrapNode->pNext;
                 nPixelWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pWrapNode->wszLine);
                 nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pWrapNode->wszLine, nPixelWidth);
                 if (nPixelWidth) {
@@ -2841,32 +2842,32 @@ void __stdcall TEXT_DrawChatMessages() {
 
                 D2_FREE_AT(pWrapNode->wszLine, ".\\UI\\text.cpp", 0xa47);
                 D2_FREE_AT(pWrapNode, ".\\UI\\text.cpp", 0xa48);
-                pWrapNode = (D2TextLineStrc*)pWrapNext;
+                pWrapNode = pTextLine;
                 pMessage = pMessageHead;
-              } while (pWrapNext);
+              } while (pTextLine);
             }
           } else {
             nPixelWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLine);
-            nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pMessage->apwszLines[(intptr_t)pListHead], nPixelWidth);
+            nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pMessage->apwszLines[nListHead], nPixelWidth);
             if (nPixelWidth) {
               nScreenY = nLineIdx * 0xf + nBaseY;
               Engine::Gfx::D2GFX_DrawSolidRectExBySize(nScreenX - 4, nScreenY - 0xe, nPixelWidth + 8, 0x10, 0, DRAW_TRANSPARENT);
-              D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[(intptr_t)pPrevMessage], nScreenX, nScreenY, pMessage->color, 0);
+              D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[nPrevMessage], nScreenX, nScreenY, pMessage->color, 0);
               nLineIdx++;
             }
           }
         }
 
-        pPrevMessage = (ScreenMessage_t*)((char*)pPrevMessage + 1);
-      } while ((intptr_t)pPrevMessage < 6);
+        nPrevMessage++;
+      } while (nPrevMessage < 6);
 
       pMessage = pMessage->pNext;
       pListHead = ScreenMessagesMaybe.pHead;
       pMessageHead = pMessage;
     }
 
-    pPrevMessage = 0;
-    pWrapNext = GetTickCount();
+    ScreenMessage_t* pPrevMessage = 0;
+    uint32_t pWrapNext = GetTickCount();
     while (true) {
       pMessage = pListHead;
       if (!pMessage) {

@@ -2124,6 +2124,7 @@
         "PETS_RecalculateAllPetLimits"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",

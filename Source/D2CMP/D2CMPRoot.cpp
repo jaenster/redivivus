@@ -4,6 +4,7 @@
 #include "Source/D2CMP/SRC/CelCmp/CELLIST.h"
 #include "Source/D2CMP/SRC/CelDataHash.h"
 #include "Source/D2CMP/SRC/LRUCache.h"
+#include "Source/D2Common/D2TileLibraryEntryStrc.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2CMP/D2CMP.globals.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -86,13 +87,13 @@ uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t pComp8) {
     return *(uint32_t*)(pComp8 + 0x10);
 }
 
-uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t pComp24) {
+uint32_t __stdcall TILEPROJECT_GetMainIndex(D2TileLibraryEntryStrc * pComp24) {
     if (!pComp24) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
       exit(-1);
     }
 
-    return (uint32_t)((uint32_t)(uint16_t)(short int)(pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(pComp24 + 4));
+    return (uint32_t)((uint32_t)(uint16_t)(short int)((uintptr_t)pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)pComp24->nRoofHeight);
 }
 
 uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24) {

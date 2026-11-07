@@ -56,7 +56,7 @@
 
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_UNITFINDTEST
 #define RECON_FPTD_UNITFINDTEST
@@ -2037,7 +2037,7 @@ void __fastcall Shrines_CombatBoostFunction(D2ObjectOperateFnArg * pArguments, D
     D2Common::Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_tohit, nLine, 0);
 }
 
-void __fastcall SHRINE_OnStaminaExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
+void __fastcall SHRINE_OnStaminaExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     SKILLS::SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);
     int32_t nValue = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nValue, 0);
@@ -2079,7 +2079,7 @@ void __fastcall QUEST_DispatchObjectActivation_Unref_00583bc0(::SGAMEDATA * pGam
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets((D2UnitStrc*)pGame);
 }
 
-void __fastcall SHRINE_OnSkillExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
+void __fastcall SHRINE_OnSkillExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     SKILLS::SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
 }

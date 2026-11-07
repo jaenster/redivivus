@@ -146,19 +146,19 @@ void __stdcall CleanUpGame() {
     }
 
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
-    uint32_t* pChannel = (uint32_t*)&gaSoundChannels[0].pActiveSound;
+    D2SoundChannelStrc** pChannel = &gaSoundChannels[0].pActiveSound;
     do {
       if ((D2SoundSmpStrc*)pChannel[-2]) {
         if (*pChannel) {
           nStreamProgress = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress((D2SoundSmpStrc*)pChannel[-2]);
-          *(uint32_t*)(*pChannel + 0x41) = nStreamProgress;
+          *(uint32_t*)(*pChannel)->undefined_0x41 = nStreamProgress;
         }
 
         D2Sound::Src::D2SoundSmp::SOUNDSMP_Stop((D2SoundSmpStrc*)pChannel[-2]);
       }
       if (*pChannel) {
-        *(uint32_t*)(*pChannel + 0x30) = 2;
-        *(uint32_t*)(*pChannel + 0x2c) = 0;
+        (*pChannel)->nPlayMode = 2;
+        (*pChannel)->pClientChannel = 0;
         *pChannel = 0;
       }
 

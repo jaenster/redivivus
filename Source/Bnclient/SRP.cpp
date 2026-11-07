@@ -4,7 +4,6 @@
 #include "Source/Bnclient/BnclientRoot.h"
 #include "Source/Bnclient/SHA.h"
 #include "Source/Bnclient/SHA1.h"
-#include "3rdparty/Storm/Storm.h"
 #include "3rdparty/Storm/D2Srp.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Bnclient/SRP.data.h"
@@ -58,30 +57,30 @@ void __thiscall SRP_InitializeRandomState(D2Srp * pThis, uint32_t dwSeed) {
     pThis->nBytesAvailable = 0;
 }
 
-void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t nBytes) {
+void __thiscall SRP_ExtractSessionKeyBytes(D2Srp * * pThis, void * pDst, uint32_t nBytes) {
     uint32_t nAvail;
-    int iVar1;
+    D2Srp* nSrpBase;
     uint32_t aShaCtx[23];
     if (nBytes) {
-      iVar1 = *(int*)pThis;
-      nAvail = *(uint32_t*)(iVar1 + 0x48);
+      nSrpBase = *pThis;
+      nAvail = nSrpBase->nBytesAvailable;
       while (nBytes > nAvail) {
-        memcpy(pDst, (void*)(iVar1 - nAvail + 0x48), nAvail);
-        pDst = (void*)((intptr_t)pDst + *(int*)(*(int*)pThis + 0x48));
-        nBytes -= *(int*)(*(int*)pThis + 0x48);
+        memcpy(pDst, (void*)((char*)nSrpBase + (0x48 - nAvail)), nAvail);
+        pDst = (void*)((char*)pDst + (*pThis)->nBytesAvailable);
+        nBytes -= (*pThis)->nBytesAvailable;
         SHA1::SHA1_Init(aShaCtx);
-        SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0xc), 0x14);
-        SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0x34), 0x14);
-        SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0x20), 0x14);
-        SHA1::SHA1_Final((uint8_t*)(*(int*)pThis + 0x34), aShaCtx);
-        *(uint32_t*)(*(int*)pThis + 0x48) = 0x14;
-        iVar1 = *(int*)pThis;
-        nAvail = *(uint32_t*)(iVar1 + 0x48);
+        SHA1::SHA1_Update(aShaCtx, (*pThis)->aRandomPoolA, 0x14);
+        SHA1::SHA1_Update(aShaCtx, (*pThis)->aOutputBuffer, 0x14);
+        SHA1::SHA1_Update(aShaCtx, (*pThis)->aRandomPoolB, 0x14);
+        SHA1::SHA1_Final((*pThis)->aOutputBuffer, aShaCtx);
+        (*pThis)->nBytesAvailable = 0x14;
+        nSrpBase = *pThis;
+        nAvail = nSrpBase->nBytesAvailable;
       }
 
       if (nBytes > 0) {
-        memcpy(pDst, (void*)(*(int*)pThis - *(int*)(*(int*)pThis + 0x48) + 0x48), nBytes);
-        *(int*)(*(int*)pThis + 0x48) -= nBytes;
+        memcpy(pDst, (void*)((char*)*pThis + (0x48 - (*pThis)->nBytesAvailable)), nBytes);
+        (*pThis)->nBytesAvailable -= nBytes;
       }
     }
 }
@@ -332,7 +331,7 @@ void __fastcall SRP_FreeParameters(D2Srp * * ppSrp) {
 
 void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut) {
     uint32_t* pSalt = pSaltOut;
-    SRP_ExtractSessionKeyBytes(pThis, pSaltOut, 0x20);
+    SRP_ExtractSessionKeyBytes((D2Srp**)pThis, pSaltOut, 0x20);
     SRP_ComputePasswordHash(*(D2Srp**)pThis, pSalt, szUsername, (char*)szPassword, (BigData**)&pSaltOut);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
     szPassword = (uint32_t*)pVerifier;
@@ -345,7 +344,7 @@ void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint
 void __thiscall SRP_GenerateAccountCredentials(void * pThis, char * pCredsBuf, char * szUsername, char * szPassword) {
     Storm::Source::SSTR::SStrCopy(pCredsBuf, szUsername, 0x7fffffff);
     Storm::Source::SSTR::SStrCopy(pCredsBuf + 0x20, szPassword, 0x7fffffff);
-    SRP_ExtractSessionKeyBytes(pThis, pCredsBuf + 0x40, 0x20);
+    SRP_ExtractSessionKeyBytes((D2Srp**)pThis, pCredsBuf + 0x40, 0x20);
     BigData* pPasswordHash = SHA::SHA1_FromBigIntBytes(pCredsBuf + 0x40, 0x20);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
     SHA::SHA1_BigIntPowMod(pVerifier, *(BigData**)(*(int*)pThis + 4), pPasswordHash, *(BigData**)(*(int*)pThis + 8));
@@ -472,7 +471,7 @@ uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32
 
 void __thiscall SRP_ServerComputePublicB(void * pThis, uint8_t * nContextBase) {
     BigData* pSmallKeyBigInt = SHA::SHA1_FromBigIntBytes(nContextBase + 0x20, 0x20);
-    SRP_ExtractSessionKeyBytes(pThis, nContextBase + 0x80, 0x20);
+    SRP_ExtractSessionKeyBytes((D2Srp**)pThis, nContextBase + 0x80, 0x20);
     BigData* pRandomKeyBigInt = SHA::SHA1_FromBigIntBytes(nContextBase + 0x80, 0x20);
     BigData* pPublicB = SHA::SHA1_BigIntFromUnsigned(0);
     SHA::SHA1_BigIntPowMod(pPublicB, *(BigData**)(*(int*)pThis + 4), pRandomKeyBigInt, *(BigData**)(*(int*)pThis + 8));
@@ -530,8 +529,8 @@ void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uin
 }
 
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
-void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, int32_t nContextBase) {
-    SRP_ComputeServerProof(*ppSrp, (void*)(nContextBase + 0x60), (void*)(nContextBase + 0xe8), (void*)(nContextBase + 0xc0), (uint8_t*)(nContextBase + 0xfc));
+void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, uint8_t * nContextBase) {
+    SRP_ComputeServerProof(*ppSrp, nContextBase + 0x60, nContextBase + 0xe8, nContextBase + 0xc0, nContextBase + 0xfc);
 }
 
 void __stdcall SRP_GlobalInit() {

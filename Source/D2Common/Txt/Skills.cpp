@@ -2228,6 +2228,7 @@ uint32_t __stdcall SKILL_FindTeleportPosition(D2UnitStrc * pUnit, D2UnitStrc * p
     POINT ptFreeCoord;
     int32_t nCasterY;
     LONG nUnit2;
+    int nUnit;
     D2UnitStrc* pCaster = pUnit;
     if (!(!pUnit2 || (_bInMeleeRange = Units::IsInMeleeRange(pUnit, pUnit2, 0) , !_bInMeleeRange))) {
       return 0;
@@ -2235,11 +2236,11 @@ uint32_t __stdcall SKILL_FindTeleportPosition(D2UnitStrc * pUnit, D2UnitStrc * p
 
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      pUnit = (D2UnitStrc*)pUnit->pPath.pStaticPath->nPosX;
+      nUnit = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      pUnit = (D2UnitStrc*)PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nUnit = PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      pUnit = 0;
+      nUnit = 0x0;
     }
 
     eD2UnitType eUnitTypeTmp = pCaster->eUnitType;
@@ -2280,7 +2281,7 @@ uint32_t __stdcall SKILL_FindTeleportPosition(D2UnitStrc * pUnit, D2UnitStrc * p
       return 0;
     }
 
-    uint32_t nX = (int)((nDestX - (int)pUnit) * 2) / nDistance + nDestX;
+    uint32_t nX = (int)((nDestX - nUnit) * 2) / nDistance + nDestX;
     uint32_t nDestY = (int)((nRawTargetY - nCasterY) * 2) / nDistance + nRawTargetY;
     pUnit = (D2UnitStrc*)Units::UNITS_GetRoom(pCaster);
     if (!pUnit) {

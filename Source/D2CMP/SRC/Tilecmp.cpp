@@ -653,7 +653,7 @@ uint32_t __stdcall TILECMP_ExportCacheToBuffer(D2TileCmpTileSetListStrc * pTileS
 void __stdcall TILECMP_FreeTileCache(D2TileLibraryHeaderStrc * pTileLibrary, int32_t nUnused) {
     D2TileLibraryEntryStrc* pDVar2;
     int iNode;
-    int nNodeBase;
+    D2GroundSubTileStrc* pSubTile;
     int iTileSet;
     if (nUnused) {
       return;
@@ -681,15 +681,15 @@ void __stdcall TILECMP_FreeTileCache(D2TileLibraryHeaderStrc * pTileLibrary, int
           if (pDVar2[iTileSet].nSubTiles > 0) {
             nUnused = 0;
             do {
-              nNodeBase = (int)pDVar2[iTileSet].pSubTiles + nUnused;
-              if (*(void**)(nNodeBase + 0x10)) {
-                D2_FREE_AT(*(void**)(nNodeBase + 0x10), ".\\SRC\\Tilecmp.cpp", 0x274);
+              pSubTile = (D2GroundSubTileStrc*)((char*)pDVar2[iTileSet].pSubTiles + nUnused);
+              if (pSubTile->pPixelData) {
+                D2_FREE_AT(pSubTile->pPixelData, ".\\SRC\\Tilecmp.cpp", 0x274);
               }
 
               nUnused += 0x14;
               iNode++;
-              *(uint16_t*)(nNodeBase + 10) = 0;
-              *(uint32_t*)(nNodeBase + 0x10) = 0;
+              pSubTile->wDataLength = 0;
+              pSubTile->pPixelData = 0;
             } while (iNode < pDVar2[iTileSet].nSubTiles);
           }
           if ((void*)pDVar2[iTileSet].pSubTiles) {
@@ -825,7 +825,7 @@ void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderSt
           do {
             pDVar1 = pTileSetData->pTiles;
             pDstTileSetEntry[3] = 0;
-            nCalcSize = TILECMP_CopyTileNodes(pWriteCursor, (D2TileLibraryEntryStrc*)(-0x48 - (intptr_t)pDstTileSetArray + (intptr_t)pDstTileSetEntry + (intptr_t)pDVar1));
+            nCalcSize = TILECMP_CopyTileNodes(pWriteCursor, (D2TileLibraryEntryStrc*)(-0x48 - (intptr_t)pDstTileSetArray + (intptr_t)pDstTileSetEntry + (char*)pDVar1));
             nSrcTileSetOffset = (intptr_t)pWriteCursor - (intptr_t)nErrAddress;
             pDstTileSetEntry[1] = nCalcSize;
             pWriteCursor += nCalcSize;

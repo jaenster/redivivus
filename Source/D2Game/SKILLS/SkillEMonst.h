@@ -16,6 +16,7 @@
 
 // Forward declarations
 struct D2DamageStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
@@ -56,7 +57,7 @@ BOOL __fastcall Skills_SrvDoFunc_130_SpawnSubMissiles(::SGAMEDATA * pGame, struc
 BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(struct D2UnitStrc * pUnitStrc, struct D2UnitStrc * pUnit);
-void __fastcall SKILLEMONST_OnDeathSpawnExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t nStatListParam);
+void __fastcall SKILLEMONST_OnDeathSpawnExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nStatListParam);
 BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_134_AreaExplosionAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLEMONST_SrvStFn62_MinionSpawner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

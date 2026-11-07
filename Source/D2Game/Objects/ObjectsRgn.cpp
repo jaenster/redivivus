@@ -46,13 +46,13 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     D2ShrinesTxt* pShrinesTxt;
     int* pShrineClassRng;
     int aShrineClassCounts[10];
-    int32_t nShrinesTxtCount;
     AllocObjectControl_Slotmc uSlotC;
     AllocObjectControl_Slotm8 uSlot8;
     int32_t nShrinesCount;
     uint8_t byEffectClass;
     size_t nAllocSize;
     int32_t* pnShrineClassCount;
+    D2LevelsTxt* pLevelsTxt;
     uSlotC.pGameSaved = pGame;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x29);
@@ -73,10 +73,10 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
       uSlot8.ppLevelRngIter = pObjectControl->aLevelsRng + 1;
       do {
         pLevelObjRng = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ObjectRngStrc, ".\\OBJECTS\\objrgn.cpp", 0x36);
-        nShrinesTxtCount = (int32_t)D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
+        pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
         memset(pLevelObjRng, 0, 0x90);
         pLevelObjRng->nMonClassId = -1;
-        pLevelObjRng->nAct = *(uint8_t*)(nShrinesTxtCount + 3);
+        pLevelObjRng->nAct = *(uint8_t*)((char*)pLevelsTxt + 3);
         pLevelObjRng->nMinDistance = 0x7fffffff;
         *uSlot8.ppLevelRngIter = pLevelObjRng;
         uSlot8.ppLevelRngIter++;
@@ -85,7 +85,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
       } while ((int)eLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize);
     }
 
-    nShrinesTxtCount = D2Common::DATATBLS::ObjectTbls::GetShrinesSize();
+    int32_t nShrinesTxtCount = D2Common::DATATBLS::ObjectTbls::GetShrinesSize();
     int iShrineIdx = 0;
     memset(aShrineClassCounts, 0, 8 * sizeof(aShrineClassCounts[0]));
     if (0 < nShrinesTxtCount) {

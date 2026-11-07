@@ -259,34 +259,45 @@ class LibMatcher:
         call of our symbol X lands on one original address; X is paired there
         when at least VOTES_MIN sites agree, VOTES_SHARE of them. Our symbol
         is the library function our image links under that name."""
-        by_sym = {}
+        cands = collections.defaultdict(list)   # symbol -> our linked, unpaired functions
+        own = {}                                # (member, symbol) -> that member's one
         for f in self.fns:
             if f.key not in self.map and is_linked(f, self.linked):
-                by_sym.setdefault(f.symbol, []).append(f)
-        by_sym = {k: v[0] for k, v in by_sym.items() if len(v) == 1}
+                cands[f.symbol].append(f)
+                own[(f.tu, f.symbol)] = f
+        by_sym = {k: v[0] for k, v in cands.items() if len(v) == 1}
         # A call binds to a definition in the caller's own object first: the
         # static write_char of outputs.obj is not output.obj's, though both
-        # are `_write_char`, so _output_s_l's calls do not vote for the one
-        # _output_l calls.
+        # are `_write_char`, so _output_s_l's calls vote for outputs.obj's
+        # copy, and _output_l's for output.obj's - each its own, also when
+        # the image links several (/OPT:NOREF keeps every loaded member's).
         defined = collections.defaultdict(set)
         for f in self.fns:
             defined[f.tu].add(f.symbol)
+
+        def callee(caller, sym):
+            if sym in defined[caller.tu]:
+                return own.get((caller.tu, sym))
+            return by_sym.get(sym)
         votes = collections.defaultdict(collections.Counter)
+        target_fn = {}
         for s, e, f in pairs:
             sites = self.memo.get(f, s, (e,))
             if sites is None:
-                if not any(k in ('call', 'fptr') and t in by_sym for _o, k, t in f.refs):
+                if not any(k in ('call', 'fptr') and t in cands for _o, k, t in f.refs):
                     continue                    # no call that could vote: nothing to align
                 sites = self.memo.put(f, s, self.aligned_calls(f, s, e), (e,))
             for sym, target in sites:
-                if sym in by_sym and (sym not in defined[f.tu] or by_sym[sym].tu == f.tu):
-                    votes[sym][target] += 1
+                g = callee(f, sym)
+                if g is not None:
+                    target_fn[g.key] = g
+                    votes[g.key][target] += 1
         n = 0
-        for sym, c in sorted(votes.items()):
+        for key, c in sorted(votes.items()):
             (t, k), total = c.most_common(1)[0], sum(c.values())
             if k < VOTES_MIN or k < VOTES_SHARE * total or t in self.taken or t not in self.model:
                 continue
-            f = by_sym[sym]
+            f = target_fn[key]
             ends = [(self.similarity(f, t, e), e) for e in self.spans(t, limit=f.size)]
             if not ends:
                 continue

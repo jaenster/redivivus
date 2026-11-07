@@ -320,7 +320,7 @@ BOOL __fastcall SKILLSOR_SrvStFn14_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return (uint32_t)!_bHasTarget;
 }
 
-void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, int32_t nMissileIdx) {
+void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, intptr_t nMissileIdx) {
     if (!pUnit) {
       return;
     }
@@ -390,7 +390,7 @@ BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // @sourcefile .\SKILLS\SkillSor.cpp
-void __fastcall SetFrozenArmorState(D2UnitStrc * pUnit, eD2States eState, int32_t nUnused) {
+void __fastcall SetFrozenArmorState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nUnused) {
     int32_t nAuraTargetFlag = 1;
     eD2States pStateArg = eState;
     UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nAuraTargetFlag, pStateArg);

@@ -60,7 +60,7 @@ void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint3
         dwValB = *pCursorB;
         pCursorB++;
         nRemaining--;
-        *(uint32_t*)((intptr_t)pDest + (-4 - (intptr_t)pBufferB) + (intptr_t)pCursorB) = *pCursorA & dwValB;
+        *(uint32_t*)((intptr_t)pDest + (-4 - (intptr_t)pBufferB) + (char*)pCursorB) = *pCursorA & dwValB;
       } while (nRemaining);
     }
 

@@ -629,7 +629,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         }
 
         *pcVar1 = '\0';
-        nGatewayDataLen = (int)pcVar1 + (1 - (int)pRegMultiSzBuf);
+        nGatewayDataLen = (intptr_t)pcVar1 + (1 - (intptr_t)pRegMultiSzBuf);
         if (!((int)nGatewayDataLen < (int)nSize)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e6);
           exit(-1);

@@ -12,24 +12,14 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
-struct BigBuffer;
 struct D2BNetClientCallbacksStrc;
 struct D2BNetGatewayAccessStr;
 struct D2BnNewsEntryStrc;
 
 // Data types
-#ifndef D2_DEFINED_BigBuffer
-#define D2_DEFINED_BigBuffer
-struct BigBuffer {
-    /* 0x00 */ uint32_t nCapacity; // m_alloc - allocated element count
-    /* 0x04 */ uint32_t nCount; // m_count - used element count
-    /* 0x08 */ uint32_t * pData; // m_data - element array
-    /* 0x0C */ uint32_t nGrowStep; // m_chunk - chunk granularity, capped at 256/sizeof(element); written by TSGrowableArray_*_CalcChunkSize
-    /* 0x10 */ uint32_t nStartWord; // m_offset - BigBuffer only; Count() is m_count - m_offset (oracle .Count__9BigBuffer)
-};
-#endif // D2_DEFINED_BigBuffer
 #ifndef D2_DEFINED_BigStack
 #define D2_DEFINED_BigStack
 struct __attribute__((packed)) BigStack {

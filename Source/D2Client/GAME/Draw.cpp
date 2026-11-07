@@ -685,6 +685,7 @@ void __thiscall DrawFloorByViewAndFloor(D2DrawFloorStrc * pDrawFloor, D2GameView
     int nRoomCount;
     D2RoomStrc** ppRooms;
     int nTileCount;
+    int32_t nGameView;
     BOOL bLowQuality = D2gfx::D2GFX::D2GFX_GetLowQuality();
     *(BOOL*)pDrawFloor = bLowQuality;
     uint32_t bIsPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
@@ -794,11 +795,11 @@ void __thiscall DrawFloorByViewAndFloor(D2DrawFloorStrc * pDrawFloor, D2GameView
 
     eD2UnitType eUnitType = pPlayer->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      pGameView = (D2GameViewStrc*)pPlayer->pPath.pStaticPath->nPosX;
+      nGameView = pPlayer->pPath.pStaticPath->nPosX;
     } else if (pPlayer->pPath.pDynamicPath) {
-      pGameView = (D2GameViewStrc*)D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
+      nGameView = D2Common::PATH::DynamicPath::GetXPos(pPlayer->pPath.pDynamicPath);
     } else {
-      pGameView = 0;
+      nGameView = 0x0;
     }
 
     eD2UnitType ePlayerUnitType = pPlayer->eUnitType;
@@ -809,20 +810,20 @@ void __thiscall DrawFloorByViewAndFloor(D2DrawFloorStrc * pDrawFloor, D2GameView
     } else {
       nPlayerY = 0;
     }
-    if ((intptr_t)pGameView - pDrawFloor->nMinTileX < bDrawEdges) {
+    if (nGameView - pDrawFloor->nMinTileX < bDrawEdges) {
       DrawSubTile(pDrawFloor, pDrawFloor->nMinTileX - 5, nPlayerY, 0, -5);
     }
-    if (pDrawFloor->nMaxTileX - (intptr_t)pGameView < nRoomIdx) {
+    if (pDrawFloor->nMaxTileX - nGameView < nRoomIdx) {
       DrawSubTile(pDrawFloor, pDrawFloor->nMaxTileX + 5, nPlayerY, 0, 5);
     }
     if (nPlayerY - pDrawFloor->nMinTileY < bDrawEdges) {
-      DrawSubTile(pDrawFloor, (int32_t)pGameView, pDrawFloor->nMinTileY - 5, -5, 0);
+      DrawSubTile(pDrawFloor, nGameView, pDrawFloor->nMinTileY - 5, -5, 0);
     }
     if (!(pDrawFloor->nMaxTileY - nPlayerY < nRoomIdx)) {
       return;
     }
 
-    DrawSubTile(pDrawFloor, (int32_t)pGameView, pDrawFloor->nMaxTileY + 5, 5, 0);
+    DrawSubTile(pDrawFloor, nGameView, pDrawFloor->nMaxTileY + 5, 5, 0);
 }
 
 // Renders roof tiles for current game view with lighting intensity flags and alpha blending

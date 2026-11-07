@@ -76,12 +76,12 @@ namespace D2Client::UNIT::Missile {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, struct D2RoomStrc * pRoom, int32_t nMaxDistSq, int32_t nSourceX, int32_t nSourceY, int32_t nDeltaY);
-void __fastcall MISSILE_InitializeVisual(struct D2UnitStrc * pUnit, int32_t pSourceUnit);
+void __fastcall MISSILE_InitializeVisual(struct D2UnitStrc * pUnit, intptr_t pSourceUnit);
 int32_t __fastcall MISSILE_CltHitFn10_ProgOverlay(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 // Client-side hit function for missile type 013 (homing/seeking). Returns 1 (no-hit) if owner is missing/active, missile is in a town room, or targeting flags are ambiguous. If target-lock flag (bit 1) is set and the colliding target differs from the locked target, returns 0 (miss). If retarget flag (bit 1 of nTargetFlags) is set and no frames remain, calls MISSILE_RetargetClosest and returns result. Used as CltHitFunc dispatch entry.
 int32_t __fastcall MISSILE_CltHitFn13_Homing(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall MISSILE_CltHitFn34_MephistoDoNotDraw(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(struct D2UnitStrc * pUnit, int nParam);
+void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(struct D2UnitStrc * pUnit, intptr_t nParam);
 // Client-side hit function for missile type 046 (spiral sub-missile burst). On collision, spawns a circular grid of sub-missiles (HitSubMissile1) centred on the missile's position using SKILLS_CreateMissilespiralGrid. Sub-missile count = (level-1)*HitPar2+HitPar1, falling back to skill calc[3] if less than 1. Uses MISSILES_SetPathFromTotalFramesCallbackAlt as the path callback. Always returns 1.
 int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall MISSILE_CltHitFn51_LightTrailJavelin(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);

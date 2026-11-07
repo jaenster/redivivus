@@ -16,6 +16,8 @@
 #include "3rdparty/Storm/Source/SFile.h"
 
 // Forward declarations
+struct BigBuffer;
+struct BigStack;
 struct StormLinkedListStrc;
 #ifndef RECON_FPTD_pfnStormMsgIdleCallback
 #define RECON_FPTD_pfnStormMsgIdleCallback
@@ -48,13 +50,13 @@ void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, int32_t pCallbac
 // @blizzard SMsgRegisterMessage (SMSG.CPP)
 void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallback);
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
-void __stdcall SMsgUnregisterCommand(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t szText1, char * szText2);
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t szText1, char * szText2);
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t szText1, char * szText2);
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 DWORD __stdcall WND_GetActiveWindow_Unref_0041c2a0();
@@ -64,8 +66,8 @@ WPARAM __stdcall SMsgDoMessageLoop(pfnStormMsgIdleCallback pfnIdleCallback, uint
 HWND __stdcall WND_GetActiveWindow();
 uint32_t __stdcall WND_SetActiveWindow(HWND pWindow);
 int __fastcall Unreferenced_004203c0(struct StormLinkStrc * param_1);
-uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase);
-int __fastcall Unreferenced_00420470(struct StormLinkedListStrc * param_1);
+struct StormLinkStrc * __thiscall WND_ResolveListOffset(struct StormLinkStrc * pNode, intptr_t pBase);
+void __fastcall Unreferenced_00420470(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_004204f0(struct StormLinkStrc * param_1);
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode);
 void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode, int * * ppAnchor);
@@ -90,7 +92,7 @@ uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId);
 int __fastcall Unreferenced_00420d80(uint32_t * param_1);
 int __fastcall Unreferenced_00420da0(int param_1);
 uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes);
-int32_t __thiscall WND_EntryArray_AllocNext(int32_t pThis, int * pnCount);
+struct BigBuffer * __thiscall WND_EntryArray_AllocNext(struct BigStack * pThis, int * pnCount);
 void __thiscall WND_EntryArray_FreeEntries(int32_t pThis, int32_t nFreeCount);
 int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntry, int32_t bAllocNew);
 void StaticInit_gWndTrackingList();

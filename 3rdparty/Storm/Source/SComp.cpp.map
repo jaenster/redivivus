@@ -643,6 +643,8 @@
         "HUFFMAN_GetDecodedOffset"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -675,6 +677,9 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "LINKEDLIST_NodeDestructor_Unref_0041e970"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {
@@ -824,7 +829,8 @@
         "LINKEDLIST_UnlinkNode"
       ],
       "usedTypes": [
-        "int32_t",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
         "uint32_t"
       ]
     },

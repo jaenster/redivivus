@@ -412,6 +412,7 @@ static void __stdcall D2WINEDITBOX_HandleTextSelection(int * pEditBox, int * pX,
     bool bLineWrapped;
     char cCur;
     int nPadding;
+    int nPcVar1;
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x648);
       exit(-1);
@@ -513,12 +514,12 @@ static void __stdcall D2WINEDITBOX_HandleTextSelection(int * pEditBox, int * pX,
 
           bLineWrapped = true;
           locate_cursor_and_advance:
-          pcVar1 = szEditText + (pEditBox[0x97] - (intptr_t)pcVar1);
-          if (*pX == -1 && (intptr_t)pcVar1 >= 0 && (intptr_t)pcVar1 <= nLoopCount) {
+          nPcVar1 = (int)(szEditText + (pEditBox[0x97] - (intptr_t)pcVar1));
+          if (*pX == -1 && nPcVar1 >= 0 && nPcVar1 <= nLoopCount) {
             nClampedX = nLineWidth;
-            if (pcVar1) {
+            if (nPcVar1) {
               D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineWidthBuf, szLineBuildBuf, 0x100);
-              nLoopCount = D2WinFont::D2WINFONT_GetStringPixelWidth(wszLineWidthBuf, (int32_t)pcVar1);
+              nLoopCount = D2WinFont::D2WINFONT_GetStringPixelWidth(wszLineWidthBuf, nPcVar1);
               nClampedX = nLoopCount + nLineWidth;
             }
 
@@ -1587,6 +1588,7 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
     int nSelMax;
     bool bCursorVisible;
     char cCurChar;
+    int nPcLineStart;
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x510);
       exit(-1);
@@ -1769,11 +1771,11 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineSegment, szLineSegment, 0x100);
       D2WinFont::DRAW_text(wszLineSegment, nX, nYEnd_00, pEditBox->nMaxValue, 0);
       if (bCursorVisible && !bCursorDrawn) {
-        pcLineStart = szFullText + (pEditBox->nCursorIndex - (intptr_t)pcLineStart);
-        if ((intptr_t)pcLineStart >= 0 && (intptr_t)pcLineStart <= (int)nLineCharCount) {
+        nPcLineStart = (int)(szFullText + (pEditBox->nCursorIndex - (intptr_t)pcLineStart));
+        if (nPcLineStart >= 0 && nPcLineStart <= (int)nLineCharCount) {
           nSelMin = nX;
-          if (pcLineStart) {
-            nPixelWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszLineSegment, (int32_t)pcLineStart);
+          if (nPcLineStart) {
+            nPixelWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszLineSegment, nPcLineStart);
             nSelMin = nPixelWidth + nX;
           }
 

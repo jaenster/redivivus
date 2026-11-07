@@ -38,7 +38,7 @@ typedef void (__fastcall *pfnStatChangedCb)(D2UnitStrc * pUnit, uint16_t nStatId
 #endif
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_fpStatListExChangeCb
 #define RECON_FPTD_fpStatListExChangeCb
@@ -1830,7 +1830,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
       return;
     }
 
-    (*fpExpireRaw)(pPrevUnitAttached, pStatList->sStatList.eState, (int32_t)pStatList);
+    (*fpExpireRaw)(pPrevUnitAttached, pStatList->sStatList.eState, pStatList);
 }
 
 // Detaches pStatsEx from its parent (STATLIST_DetachAndRecalc), then frees all associated memory: base stat array, full-stat array, changed-stat ID array, state flags, and recursively frees non-root child stat lists. Finally frees the D2StatListExStrc itself.

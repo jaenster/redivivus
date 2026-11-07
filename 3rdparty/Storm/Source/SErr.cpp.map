@@ -319,6 +319,9 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "Unreferenced_0041c6e0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {

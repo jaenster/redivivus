@@ -270,6 +270,7 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",
@@ -507,9 +508,9 @@
         "MONSTER_FreeUnitNodes"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2States",
-        "int32_t"
+        "eD2States"
       ]
     },
     {
@@ -607,9 +608,9 @@
         "MONSTER_FreeUnitNodes"
       ],
       "usedTypes": [
+        "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2States",
-        "int32_t"
+        "eD2States"
       ]
     },
     {

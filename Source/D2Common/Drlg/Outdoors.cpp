@@ -957,16 +957,18 @@ BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPres
     int32_t nSwapCellY;
     int32_t nSeedHighTmp;
     int32_t nSwapCellX;
+    int32_t nSubPresetOffset;
     int32_t nSwapCellXTmp;
     int64_t lSeedMulProduct;
     uint8_t nDsOffset;
     uint32_t nShuffleRemaining;
+    D2DrlgGridStrc* pDrlgGrid;
     int32_t nLvlPrestIdCopy = nLvlPrestId;
     DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLvlPrestId);
     D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     uint32_t nGridWidthM2 = pOutdoorsData->nGridCoordsWidth - 2;
     uint32_t nTotalCells = (pOutdoorsData->nGridCoordsHeight - 2) * nGridWidthM2;
-    int32_t nSubPresetOffset = (int32_t)pOutdoorsData;
+    D2DrlgLevelDataWildernessLevel* pDrlgLevelDataWildernessLevel = pOutdoorsData;
     uint32_t nTotalCellsCopy = nTotalCells;
     if (!nTotalCells) {
       return 0;
@@ -1032,19 +1034,19 @@ BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPres
           nSwapCellXTmp = nSwapCellX;
           aCellShuffleTable[nRandIdxB * 2] = i;
           aCellShuffleTable[nRandIdxB * 2 + 1] = nSwapCellXTmp;
-          pOutdoorsData = (D2DrlgLevelDataWildernessLevel*)nSubPresetOffset;
+          pOutdoorsData = pDrlgLevelDataWildernessLevel;
         } while (nShuffleRemaining);
       }
     }
 
     nGridWidthM2 = 0;
     if ((int)nTotalCells > 0) {
-      nSwapCellX = (intptr_t)&pOutdoorsData->sGridOutdoor;
+      pDrlgGrid = &pOutdoorsData->sGridOutdoor;
       do {
         nSeedHighTmp = aCellShuffleTable[nGridWidthM2 * 2 + 1] + 1;
         nGridX = aCellShuffleTable[nGridWidthM2 * 2] + 1;
         nSwapCellY = nGridX;
-        i = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)nSwapCellX, nGridX, nSeedHighTmp);
+        i = DrlgGrid::GetGridFlags(pDrlgGrid, nGridX, nSeedHighTmp);
         if ((char)i < '\0') {
           nSubPresetOffset = 0;
           do {

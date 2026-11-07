@@ -31,7 +31,7 @@ typedef uint32_t eD2UnitStat;
 typedef uint32_t eD2UnitType;
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_fpStatListExChangeCb
 #define RECON_FPTD_fpStatListExChangeCb

@@ -2632,6 +2632,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
     eD2UnitType eUnitType;
     int32_t nErrLine;
     D2ItemStatCostTxt* pStatCostTxt;
+    int32_t nItemsTxtLine;
     if (!pItem) {
       nClassId = -1;
     } else {
@@ -2839,12 +2840,12 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
 
     pItemsTxtLine = 0;
     pStatListEx = 0;
-    ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&pItemsTxtLine, (int*)&pStatListEx);
+    ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&nItemsTxtLine, (int*)&pStatListEx);
     D2StatListExStrc* pSeedHigh = pStatListEx;
     nErrLine = 1;
     if (pStatListEx) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (int32_t)pItemsTxtLine, 0x20);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nItemsTxtLine, 0x20);
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (int32_t)pSeedHigh, 0x20);
       nErrLine = 0x20;
     }

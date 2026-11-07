@@ -47,6 +47,7 @@ namespace D2Common::Units::UnitFinds {
 BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUnit) {
     D2RoomStrc* pUnitRoom;
     int nRoomIdx;
+    int nUnit;
     D2UnitStrc* pUnitSaved = pUnit;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18);
@@ -68,8 +69,8 @@ BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUn
         return 0;
       }
 
-      /* Both arguments are reused here */ DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pSrcRoom, (D2RoomStrc***)&pSrcUnit, (int*)&pUnit);
-      for (nRoomIdx = 0; nRoomIdx < (intptr_t)pUnit; nRoomIdx++) {
+      /* Both arguments are reused here */ DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pSrcRoom, (D2RoomStrc***)&pSrcUnit, (int*)&nUnit);
+      for (nRoomIdx = 0; nRoomIdx < nUnit; nRoomIdx++) {
         if (*(D2RoomStrc**)(pSrcUnit->unk0x19 + nRoomIdx * 4 - 0x19) == pUnitRoom) {
           return 1;
         }
@@ -290,6 +291,7 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
     DWORD nMonsterMode;
     eD2PlayerAnimMode ePlayerMode;
     uint32_t nSearchFlags;
+    int32_t nUnitFindArg;
     D2UnitFindArgStrc* pArgs = pUnitFindArg;
     D2UnitStrc* pTestUnit = pUnit;
     if (!pUnitFindArg) {
@@ -301,11 +303,11 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
 
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      pUnitFindArg = (D2UnitFindArgStrc*)pUnit->pPath.pStaticPath->nPosX;
+      nUnitFindArg = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      pUnitFindArg = (D2UnitFindArgStrc*)PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nUnitFindArg = PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      pUnitFindArg = 0;
+      nUnitFindArg = 0x0;
     }
 
     eD2UnitType eUnitTypeY = pTestUnit->eUnitType;
@@ -317,7 +319,7 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
       pUnit = 0;
     }
 
-    int nOffsetX = (int)pUnitFindArg - pArgs->nX;
+    int nOffsetX = nUnitFindArg - pArgs->nX;
     int nOffsetY = (int)pUnit - pArgs->nY;
     if (nOffsetY * nOffsetY + nOffsetX * nOffsetX > pArgs->nDistance * pArgs->nDistance) {
       return 0;
@@ -425,14 +427,14 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
       eCollisionFlags eCollision;
       pUnitRoom = UNITS_GetRoom(pTestUnit);
       if (pUnitRoom) {
-        bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, (int*)&pUnitFindArg, (int*)&pUnit);
+        bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, (int*)&nUnitFindArg, (int*)&pUnit);
         while (bLOSStep) {
-          eCollision = Collision::CheckCollision_BlockPlayerMissile(pUnitRoom, (int32_t)pUnitFindArg, (int32_t)pUnit, COLLIDE_WALL);
+          eCollision = Collision::CheckCollision_BlockPlayerMissile(pUnitRoom, nUnitFindArg, (int32_t)pUnit, COLLIDE_WALL);
           if (eCollision == COLBIT_MISSILE_BARRIER) {
             return 0;
           }
 
-          bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, (int*)&pUnitFindArg, (int*)&pUnit);
+          bLOSStep = DATATBLS::FieldTbls::FIELDTBLS_StepFieldTowardsPoint(pArgs->pCoords, (int*)&nUnitFindArg, (int*)&pUnit);
         }
       }
     }

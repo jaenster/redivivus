@@ -19,6 +19,7 @@ struct D2DamageStrc;
 struct D2MissilesTxt;
 struct D2RoomStrc;
 struct D2SkillCallbackContextStrc;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
@@ -139,7 +140,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SetRoomPortalFlag(::SGAMEDATA * pGame, struc
 BOOL __fastcall Missiles_SrvHitFunc_ActivateObjectOnWallHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 BOOL __fastcall Missiles_SrvHitFunc_SpawnSubMissileAtWallHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall Missiles_SrvHitFunc_AlwaysPierce(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget);
-void __fastcall MISSILES_SetPathFromTotalFramesCallback(struct D2UnitStrc * pMissile, int nParam);
+void __fastcall MISSILES_SetPathFromTotalFramesCallback(struct D2UnitStrc * pMissile, intptr_t nParam);
 // Server hit callback: spawns HitSubMissile1 in a star (radial) pattern at the parent missile's position. Star count = (skillLvl-1)*sHitPar2 + sHitPar1; if less than 1, falls back to skill calc[3]. Uses MISSILES_SetPathFromTotalFramesCallback for each spoke and delegates to SKILLS_CreateMissileStar. Always returns 1.
 BOOL __fastcall Missiles_SrvHitFunc_SpawnMissileStarPattern(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 BOOL __fastcall Missiles_SrvHitFunc_SpawnRandomMonsterAtHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
@@ -195,7 +196,7 @@ BOOL __fastcall MISSMODE_RedemptionHitWithMana(::SGAMEDATA * pGame, struct D2Uni
 void __fastcall MISSMODE_PortalArrival(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 void __fastcall MISSMODE_ExpireAndFree(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t bOnExpire);
-void __fastcall MISSILESMODE_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
+void __fastcall MISSILESMODE_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
 void __fastcall MISSILEEVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nIndex);
 // Server-side missile hit function: on impact, resolves the owning unit and skill parameters, looks up the HitSubMissile1 entry from MissilesTxt, computes AoE radius and max-count (from HitPar or skill calcs), applies damage to the primary target via MISSMODE_HitWithArmorReduction, then calls SKILLS_ApplyAreaEffect with MISSMODE_CreateSubMissileInvertFrame as the area callback to spawn inverted-frame sub-missiles around the impact point. Returns TRUE in all non-error paths.
 // @sourcefile .\MISSILES\MissMode.cpp

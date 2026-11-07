@@ -10,10 +10,17 @@ models which copy of a COMDAT the link keeps (ours.link_kept) by the same
 order, so the three agree.
 
     modules.py order  < tus       module<TAB>tu, in link order (tu = path without .cpp)
-    modules.py includes <list>    one /INCLUDE symbol per object (list: module<TAB>tu<TAB>obj)
+    modules.py includes [--noref] <list>
+                                  one /INCLUDE symbol per object (list: module<TAB>tu<TAB>obj);
+                                  --noref: for a link with /OPT:NOREF
 
-The order inside a library is the TUs' paths through sort(1), the order a
-directory glob hands CMake, then the data unit, which CMake appends.
+The order inside a library is the module's D2_MODULE_<m>_UNITS: its units in
+the 1.14d link's order (project.json "unitOrder": "original-address", each
+unit placed by the address of its first function in the module's runs), which
+the CMake module libraries list their sources in too. A unit the list does not
+name (a hand-written one), and every unit of a module without the list, follows
+in path order through sort(1), the order a directory glob hands CMake; the data
+unit, which CMake appends, comes last.
 """
 import collections
 import os
@@ -28,6 +35,7 @@ SKIP_KINDS = ('headers-only',)
 SKIP_MODULES = ('libbacktrace',)   # GCC only; CMake leaves it out of the module libraries too
 
 _cache = {}
+_units = {}
 
 
 def load(repo):
@@ -36,9 +44,25 @@ def load(repo):
     if repo in _cache:
         return _cache[repo]
     path = os.path.join(repo, 'Source', 'modules.cmake')
-    order, attrs = [], collections.defaultdict(dict)
+    order, attrs, units = [], collections.defaultdict(dict), {}
+    listing = None
     with open(path) as fh:
         for line in fh:
+            if listing is not None:
+                # One unit per line, a comment after it; ')' ends the list.
+                body = line.split('#', 1)[0].strip()
+                if body.startswith(')'):
+                    listing = None
+                elif body:
+                    units[listing].append(body[:-4] if body.endswith('.cpp') else body)
+                continue
+            m = re.match(r'\s*set\(D2_MODULE_(\w+?)_UNITS\s*(.*)$', line)
+            if m:
+                rest = m.group(2).split('#', 1)[0].strip()
+                units[m.group(1)] = [t[:-4] if t.endswith('.cpp') else t for t in rest.rstrip(')').split()]
+                if not rest.endswith(')'):
+                    listing = m.group(1)
+                continue
             m = re.match(r'\s*set\(D2_MODULES\s+(.*)\)\s*$', line)
             if m:
                 order = m.group(1).split()
@@ -50,7 +74,14 @@ def load(repo):
         raise SystemExit('%s: no D2_MODULES' % path)
     mods = [(n, attrs[n].get('DIR', ''), attrs[n].get('DATA', ''), attrs[n].get('KIND', '')) for n in order]
     _cache[repo] = mods
+    _units[repo] = {n: u for n, u in units.items() if u}
     return mods
+
+
+def unit_order(repo):
+    """{module: [tu, ...]}: D2_MODULE_<m>_UNITS, for each module that has the list."""
+    load(repo)
+    return _units[os.path.realpath(repo)]
 
 
 def linked(repo):
@@ -87,6 +118,7 @@ def sort1(tus):
 def libraries(tus, repo):
     """[(module, [tu, ...])] in link order; empty libraries left out."""
     data = {d[:-4]: n for n, _dir, d, _k in load(repo) if d.endswith('.cpp')}
+    listed = unit_order(repo)
     groups = collections.defaultdict(list)
     for tu in tus:
         groups[module_of(tu, repo)].append(tu)
@@ -94,7 +126,10 @@ def libraries(tus, repo):
     for n in linked(repo):
         if not groups.get(n):
             continue
-        body = [t for t in sort1(groups[n]) if data.get(t) != n]
+        have = set(groups[n])
+        first = [t for t in listed.get(n, []) if t in have and data.get(t) != n]
+        rest = [t for t in sort1(groups[n]) if data.get(t) != n and t not in set(first)]
+        body = first + rest
         tail = [t for t in groups[n] if data.get(t) == n]
         out.append((n, body + tail))
     return out
@@ -109,14 +144,39 @@ SCN_LNK_INFO, SCN_LNK_REMOVE, SCN_MEM_DISCARDABLE = 0x200, 0x800, 0x02000000
 ENTRY_ROOTS = ('_WinMain@16',)     # what the C runtime's entry calls into ours
 
 
-def kept_sections(objs, roots=ENTRY_ROOTS):
+def kept_sections(objs, roots=ENTRY_ROOTS, noref=False):
     """{(obj index, section number)} - the sections /OPT:REF keeps when the
     objects are linked whole in this order: every non-COMDAT section that
     reaches the image, the definitions of `roots`, and whatever those refer
     to, a COMDAT that several objects define resolving to the first object's
     copy (link.exe keeps the first definition it reads), an associative
-    COMDAT kept with the section it belongs to."""
+    COMDAT kept with the section it belongs to. With noref, what /OPT:NOREF
+    keeps: every section that reaches the image, of a COMDAT that several
+    objects define the first object's copy only."""
     import coffobj
+    if noref:
+        owner = {}                              # COMDAT symbol -> first (obj, section)
+        for i, o in enumerate(objs):
+            for sym in o.symbols:
+                if sym is not None and sym.storage == coffobj.C_EXTERNAL and sym.section > 0 and \
+                        o.sections[sym.section].flags & coffobj.SCN_LNK_COMDAT:
+                    owner.setdefault(sym.name, (i, sym.section))
+        dup = set()                             # later objects' copies, discarded
+        for i, o in enumerate(objs):
+            for sym in o.symbols:
+                if sym is not None and sym.storage == coffobj.C_EXTERNAL and sym.section > 0 and \
+                        o.sections[sym.section].flags & coffobj.SCN_LNK_COMDAT and \
+                        owner[sym.name] != (i, sym.section):
+                    dup.add((i, sym.section))
+        kept = set()
+        for i, o in enumerate(objs):
+            for sec in o.sections[1:]:
+                if sec.size and not sec.flags & (SCN_LNK_INFO | SCN_LNK_REMOVE | SCN_MEM_DISCARDABLE):
+                    k = (i, sec.number)
+                    a = (i, sec.comdat_assoc) if sec.comdat == 5 and sec.comdat_assoc else None
+                    if k not in dup and a not in dup:
+                        kept.add(k)
+        return kept
     first = {}                                  # external symbol -> (obj, section)
     for i, o in enumerate(objs):
         for sym in o.symbols:
@@ -154,7 +214,7 @@ def kept_sections(objs, roots=ENTRY_ROOTS):
     return kept
 
 
-def include_symbols(objects, libs=None):
+def include_symbols(objects, libs=None, noref=False):
     """{obj path: (symbol, how)} - for each object, an external symbol that no
     object before it defines, for /INCLUDE:<symbol>, which makes link.exe load that library
     member as if the object were named on the command line. VC8's link.exe has
@@ -170,6 +230,7 @@ def include_symbols(objects, libs=None):
                 folded group survives
       foldable  else a COMDAT ICF may fold: forcing it can move the folded
                 group to this object's place; the .map comparison shows it
+    With noref the kept sections are /OPT:NOREF's (kept_sections).
     An object of which the whole-object link keeps nothing - (None, 'empty'),
     e.g. a data unit with no data - is not forced: left out it changes nothing.
     One that contributes kept sections but defines no symbol of its own gets
@@ -179,7 +240,7 @@ def include_symbols(objects, libs=None):
     for path in objects:
         with open(path, 'rb') as fh:
             objs.append(coffobj.CoffObject(fh.read(), path))
-    kept = kept_sections(objs)
+    kept = kept_sections(objs, noref=noref)
     libs = libs or ['' for _ in objects]
     first = {}
     inlib = collections.Counter()               # (library, symbol) -> its members defining it
@@ -246,9 +307,9 @@ def main(argv):
         for n, group in libraries(tus, repo):
             for t in group:
                 print('%s\t%s' % (n, t))
-    elif len(argv) == 2 and argv[0] == 'includes':
-        rows = [l.rstrip('\n').split('\t') for l in open(argv[1]) if l.strip()]
-        syms = include_symbols([r[2] for r in rows], [r[0] for r in rows])
+    elif len(argv) in (2, 3) and argv[0] == 'includes' and (len(argv) == 2 or argv[1] == '--noref'):
+        rows = [l.rstrip('\n').split('\t') for l in open(argv[-1]) if l.strip()]
+        syms = include_symbols([r[2] for r in rows], [r[0] for r in rows], noref=len(argv) == 3)
         for r in rows:
             sym, how = syms[r[2]]
             print('%s\t%s\t%s\t%s' % (r[0], r[1], sym or '-', how))

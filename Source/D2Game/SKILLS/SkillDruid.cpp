@@ -21,11 +21,6 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-#ifndef RECON_FPTD_PFN_StatExpireCallback
-#define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-#endif
-
 namespace D2Game::SKILLS::SkillDruid {
 
 // Server DoFunc for Druid skill 114 (Raven). Resolves the raven monster class ID and pet type, sets UNITFLAG_SKSRVDOFUNC, creates the summon via SKILL_CreateSummon, then clears UNITSTAT_hpregen and UNITFLAG_CANBEATTACKED on the raven. Applies SKILLNEC_ReviveCorpseAsMinion (level from calc[1]) and SKILLNEC_ApplySummonBuffs. Returns TRUE if the raven was created.
@@ -279,7 +274,7 @@ BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * 
         pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, pGame->dwGameFrame + nAuraLen, eUnitType, nUnitGUID);
         if (pStatList) {
           D2Common::Stats::StatsEx::SetState(pStatList, (int)pSkillTxt->aurastate);
-          D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatList, (PFN_StatExpireCallback)SKILLDRUID_OnShapeshiftExpire);
+          D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatList, SKILLDRUID_OnShapeshiftExpire);
           D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
           D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 1);
           GAME::Event::SetEvent(pGame, pUnit, 0xc, pGame->dwGameFrame + nAuraLen, 0, 0);

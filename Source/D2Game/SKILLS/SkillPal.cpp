@@ -27,7 +27,7 @@
 
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam);
 #endif
 #ifndef RECON_FPTD_PFN_AreaEffectCallback
 #define RECON_FPTD_PFN_AreaEffectCallback
@@ -218,7 +218,7 @@ BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 0;
 }
 
-void __fastcall SKILLPAL_OnAuraExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwArg1) {
+void __fastcall SKILLPAL_OnAuraExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwArg1) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     BOOL eNoManaRegenState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
     if (eNoManaRegenState) {
@@ -1140,7 +1140,7 @@ BOOL __fastcall SKILPAL_SrvStFn36_HolyShield(::SGAMEDATA * pGame, D2UnitStrc * p
     return (uint32_t)(bHasShield != 0);
 }
 
-void __fastcall SKILLPAL_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam) {
+void __fastcall SKILLPAL_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     uint32_t dwAlignmentRaw;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     UNIT::SUnit::SetAlignment(pUnit, '\0', 1);
@@ -1267,7 +1267,7 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
         }
 
         D2Common::Stats::StatsEx::SetState(pConvStatList, (int)pSkillsTxt->auratargetstate);
-        D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pConvStatList, (PFN_StatExpireCallback)SKILLPAL_OnConversionExpire);
+        D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pConvStatList, SKILLPAL_OnConversionExpire);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit_00, pConvStatList, 1);
         D2Common::DATATBLS::ItemStats::SetState(pUnit_00, (int)pSkillsTxt->auratargetstate, 1);
       }

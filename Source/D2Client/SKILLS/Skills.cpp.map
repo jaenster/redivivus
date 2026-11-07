@@ -1027,7 +1027,8 @@
         "SetDirectionAndNewDirection"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "intptr_t"
       ]
     },
     {
@@ -1161,9 +1162,9 @@
       ],
       "usedTypes": [
         "D2SkillStrc",
+        "D2StatListExStrc",
         "D2UnitStrc",
         "eD2Skills",
-        "int32_t",
         "uint32_t"
       ]
     },

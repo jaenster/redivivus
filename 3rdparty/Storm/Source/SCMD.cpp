@@ -917,7 +917,7 @@ uint32_t __stdcall SCmdCheckId(int nCmdId) {
 // @former-name SCMD_Cleanup
 // @sourcefile .\SOURCE\SCMD.CPP
 uint32_t __stdcall SCmdDestroy() {
-    int pNode;
+    intptr_t pNode;
     int nListIndex = 0;
     do {
       StormLinkedListStrc* pListHead;

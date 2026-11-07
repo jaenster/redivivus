@@ -606,6 +606,8 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     uint8_t byPresetType;
     uint32_t eCellUnitType;
     uint32_t* pnPosY;
+    int nBuffer;
+    int nPcVar1;
     int32_t* pDs1File;
     pDs1File = (int32_t*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, pBuffer, nullptr, ".\\DRLG\\Preset.cpp", 0x300);
     pFile->pDS1File = pDs1File;
@@ -727,7 +729,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
           eUnitType = *pCursor;
           pClassId = pCursor[1];
           __frame0.nWallLayerIdx = 0;
-          pBuffer = (char*)pClassId;
+          nBuffer = pClassId;
           switch (eUnitType) {
             case 1:
               {
@@ -735,24 +737,24 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                 if (__frame0.nDs1Version > 4) {
                   nPresetCount = 0;
                   pMonPresetTxt = DATATBLS::MonsterTbls::MONSTERTBLS_GetMonPresetRecord(nActId, (int*)&nPresetCount);
-                  if (pMonPresetTxt && (intptr_t)pBuffer < (int)nPresetCount) {
-                    byPresetType = pMonPresetTxt[(intptr_t)pBuffer].nType;
-                    pBuffer = (char*)(uint32_t)pMonPresetTxt[(intptr_t)pBuffer].wPlace;
+                  if (pMonPresetTxt && nBuffer < (int)nPresetCount) {
+                    byPresetType = pMonPresetTxt[nBuffer].nType;
+                    nBuffer = (int)(uint32_t)pMonPresetTxt[nBuffer].wPlace;
                     switch (byPresetType) {
                       case 0:
                         {
                           nClassId = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
-                          pBuffer = pBuffer + ITEMS::Items::sgptDataTable->nTxtMonStatsSize + nClassId;
+                          nBuffer = (int)((char*)nBuffer + ITEMS::Items::sgptDataTable->nTxtMonStatsSize + nClassId);
                           break;
                         }
                       case 2:
                         {
-                          pBuffer += ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
+                          nBuffer = (int)((char*)nBuffer + ITEMS::Items::sgptDataTable->nTxtMonStatsSize);
                           break;
                         }
                       default:
                         {
-                          pBuffer = (char*)-1;
+                          nBuffer = -1;
                           break;
                         }
                       case 1:
@@ -762,9 +764,9 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                     }
                   }
 
-                  pClassId = (int32_t)pBuffer;
+                  pClassId = nBuffer;
                   if (nActId == 2) {
-                    if ((intptr_t)pBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+                    if (nBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
                       pDataCursor = DATATBLS::MonsterTbls::CheckMonStatId(0x129);
                       if (pClassId == pDataCursor) {
                         pClassId = 0x17e;
@@ -783,13 +785,13 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                       pBuffer = (char*)pClassId;
                       break;
                     }
-                  } else if (nActId == 4 && (intptr_t)pBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && (intptr_t)pBuffer >= 0) {
-                    if (pBuffer != (char*)0x202) {
-                      if ((intptr_t)pBuffer <= 0x218 || (intptr_t)pBuffer > 0x21b) {
+                  } else if (nActId == 4 && nBuffer < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nBuffer >= 0) {
+                    if (nBuffer != 0x202) {
+                      if (nBuffer <= 0x218 || nBuffer > 0x21b) {
                         goto add_preset_unit;
                       }
 
-                      pClassId = 0x3f5 - (int)pBuffer;
+                      pClassId = 0x3f5 - nBuffer;
                     } else {
                       pClassId = 0x1cd;
                     }
@@ -846,11 +848,11 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                   }
 
                   __frame0.nWallLayerIdx = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)__frame0.nWallLayerIdx & 0xffffffu));
-                  DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(__frame0.nWallLayerIdx, (int*)&pBuffer);
+                  DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(__frame0.nWallLayerIdx, (int*)&nBuffer);
                 }
 
                 __frame0.nWallLayerIdx = 3;
-                pClassId = (int32_t)pBuffer;
+                pClassId = nBuffer;
                 break;
               }
           }
@@ -916,22 +918,22 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     }
 
     do {
-      pcVar1 = (char*)*pCursor2;
+      nPcVar1 = (int)*pCursor2;
       pCursor = pCursor2 + 1;
       pnPosY = pCursor2 + 2;
       pCursor2 += 3;
-      if (pcVar1) {
+      if (nPcVar1) {
         for (pPreset = pFile->pPresetUnit; pPreset; pPreset = pPreset->pPresetUnitNext) {
           if (pPreset->nPosX == *pCursor && pPreset->nPosY == *pnPosY) {
             pPathNodes = D2_NEW_POOL_AT(nullptr, D2MapAIStrc, ".\\DRLG\\Preset.cpp", 0x4a8);
             pPreset->pMapAI = pPathNodes;
-            pDVar2 = (D2PathPosStrc*)D2_ALLOC_POOL_AT(nullptr, (int)pcVar1 * 0xc, ".\\DRLG\\Preset.cpp", 0x4a9);
+            pDVar2 = (D2PathPosStrc*)D2_ALLOC_POOL_AT(nullptr, nPcVar1 * 0xc, ".\\DRLG\\Preset.cpp", 0x4a9);
             pPreset->pMapAI->pPosition = pDVar2;
-            pPreset->pMapAI->nSize = (int)pcVar1;
-            if ((intptr_t)pcVar1 > 0) {
+            pPreset->pMapAI->nSize = nPcVar1;
+            if (nPcVar1 > 0) {
               nStrLen = 0;
               pCursor = pCursor2;
-              pBuffer = pcVar1;
+              pBuffer = (char*)nPcVar1;
               do {
                 *(uint32_t*)((intptr_t)&pPreset->pMapAI->pPosition->nXpos + nStrLen) = *pCursor;
                 *(uint32_t*)((intptr_t)&pPreset->pMapAI->pPosition->nYpos + nStrLen) = pCursor[1];
@@ -956,9 +958,9 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
           }
         }
 
-        pCursor2 += (intptr_t)pcVar1 * 2;
+        pCursor2 += nPcVar1 * 2;
         if (__frame0.nDs1Version >= 0xf) {
-          pCursor2 += (intptr_t)pcVar1;
+          pCursor2 += nPcVar1;
         }
       }
 
@@ -1702,8 +1704,8 @@ int32_t __fastcall GetSizeY(int32_t nLvlPrestId) {
     return pLvlPrest->SizeY;
 }
 
-int __fastcall Unreferenced_00666ff0(D2RoomExStrc * param_1) {
-    return (int)param_1->pRoomExData.pRoomExDataPreset->pMazeGrid;
+D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(D2RoomExStrc * param_1) {
+    return param_1->pRoomExData.pRoomExDataPreset->pMazeGrid;
 }
 
 int __fastcall Unreferenced_00667000(D2RoomExStrc * param_1) {
@@ -1916,8 +1918,8 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
     } while (nNearIdx < pRoomEx->nDrlgRoomsExNearCount);
 }
 
-int __fastcall Unreferenced_00667420(D2DrlgLevelStrc * param_1) {
-    return (int)param_1->pDrlgLevelData.pDrlgLevelPresetData->pDrlgMap->pVertices;
+D2DrlgVertexStrc * __fastcall Unreferenced_00667420(D2DrlgLevelStrc * param_1) {
+    return param_1->pDrlgLevelData.pDrlgLevelPresetData->pDrlgMap->pVertices;
 }
 
 // @sourcefile .\DRLG\Preset.cpp

@@ -3024,7 +3024,7 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
       pBinFieldExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pArchive, nFileSize);
       pRowCountOrData = (D2ArchiveStrc*)Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinFieldExcel);
       pRecord = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, (int)pRowCountOrData * nLineLength, ".\\Src\\D2Comp.cpp", 0x9fa);
-      memset(pRecord, 0, (int)pRowCountOrData * nLineLength);
+      memset(pRecord, 0, (intptr_t)pRowCountOrData * nLineLength);
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinFieldExcel, pBinFields, (char*)pRecord, (size_t)pRowCountOrData, nLineLength);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinFieldExcel);
     }

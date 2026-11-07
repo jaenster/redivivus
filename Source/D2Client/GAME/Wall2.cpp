@@ -1104,6 +1104,8 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
     int32_t nLine;
     D2Wall2CellStrc* pGridCellVoid;
     D2TileLibraryEntryStrc* pTileLibEntry;
+    int nRoom;
+    int nDrawContext;
     D2Wall2DrawContextStrc* pDVar1 = pDrawContext;
     D2RoomStrc* pRoom_00 = pRoom;
     D2GameViewStrc* pGameView = pDrawContext->pGameView;
@@ -1176,11 +1178,11 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
       }
       if (!pDVar1->nTickCount) {
         for (pUnit = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFirstUnitInRoom(pRoom_00); pUnit; pUnit = pUnit->pRoomNext) {
-          pRoom = (D2RoomStrc*)D2Common::Units::GetTargetX(pUnit);
-          pDrawContext = (D2Wall2DrawContextStrc*)D2Common::Units::GetTargetY(pUnit);
-          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160((int32_t)pRoom, (int32_t)pDrawContext, (int32_t*)&pRoom, (int32_t*)&pDrawContext);
-          nCellX = (int)pRoom - pGameView->sWall2.nWall2GridOriginX;
-          nCellY = (int)pDrawContext - pGameView->sWall2.nWall2GridOriginY;
+          nRoom = D2Common::Units::GetTargetX(pUnit);
+          nDrawContext = D2Common::Units::GetTargetY(pUnit);
+          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(nRoom, nDrawContext, (int32_t*)&nRoom, (int32_t*)&nDrawContext);
+          nCellX = nRoom - pGameView->sWall2.nWall2GridOriginX;
+          nCellY = nDrawContext - pGameView->sWall2.nWall2GridOriginY;
           if (nCellX >= 0 && nCellY >= 0) {
             nRoofHeightIdx2 = pGameView->sWall2.nWall2GridDim;
             if (nCellX < nRoofHeightIdx2 && nCellY < nRoofHeightIdx2) {

@@ -391,7 +391,7 @@ BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc 
     return 0;
 }
 
-void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     if (!pUnit) {
       return;
@@ -400,7 +400,7 @@ void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUni
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
 }
 
-void __fastcall SKILLSASS_StatExpireCallback_ClearState2(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+void __fastcall SKILLSASS_StatExpireCallback_ClearState2(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 

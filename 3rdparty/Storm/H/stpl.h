@@ -132,7 +132,7 @@ public:
     void Destructor();
     void ReallocData(uint32_t nAlloc);
     static void __fastcall Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray);
-    static int __fastcall Unreferenced_00450030(TSGrowableArray<T>* param_1);
+    static TSGrowableArray<T>* __fastcall Unreferenced_00450030(TSGrowableArray<T>* param_1);
     void Reserve(uint32_t nCount, int32_t bRound);
     void SetCount(uint32_t nCount);
     TSGrowableArray<T>* ScalarDeletingDestructor(uint32_t dwFlags);
@@ -513,7 +513,7 @@ template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<SGAMEDATA, -5726623
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocData(uint32_t nAlloc);
 template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor();
 template<> void __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044fff0(TSGrowableArray<::SGAMEDATA>* pArray);
-template<> int __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * param_1);
+template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * __fastcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_00450030(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * param_1);
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Reserve(uint32_t nCount, int32_t bRound);
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount(uint32_t nCount);
 template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags);

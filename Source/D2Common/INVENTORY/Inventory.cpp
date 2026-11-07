@@ -1272,7 +1272,7 @@ BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2Unit
 
     D2UnitStrc* pPrevItem = 0;
     eInvPage = 0;
-    pUnit = (D2UnitStrc*)nRow;
+    int nUnit = nRow;
     int nCol = nGridX;
     if (nRow >= nRowYEnd) {
       return 1;
@@ -1281,7 +1281,7 @@ BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2Unit
     do {
       nRowYEnd = nCol;
       while (nCol < nColXEnd) {
-        pCellUnit = pDVar2_col->pGridCells[(uint32_t)pDVar2_col->bWidth * (intptr_t)pUnit + nCol];
+        pCellUnit = pDVar2_col->pGridCells[(uint32_t)pDVar2_col->bWidth * nUnit + nCol];
         if (pCellUnit) {
           *pnOutItem = pCellUnit;
           pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pCellUnit->nClassId);
@@ -1300,9 +1300,9 @@ BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2Unit
         nRowYEnd = nGridX;
       }
 
-      pUnit = (D2UnitStrc*)((intptr_t)&pUnit->eUnitType + 1);
+      nUnit = (intptr_t)&((D2UnitStrc*)nUnit)->eUnitType + 1;
       nCol = nRowYEnd;
-    } while ((intptr_t)pUnit < (int)(((uintptr_t)pInventory >> 0x18) + nRow));
+    } while (nUnit < (int)(((uintptr_t)pInventory >> 0x18) + nRow));
 
     if (eInvPage > 1) {
       *pnOutItem = 0;

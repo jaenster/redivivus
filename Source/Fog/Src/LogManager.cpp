@@ -1082,7 +1082,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
               pRecordBody = " %02X";
             }
 
-            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)lp[nColumn]);
+            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((intptr_t)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)lp[nColumn]);
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;
@@ -1197,20 +1197,20 @@ void __fastcall CloseLogFileByName(uint8_t * szFileName) {
     } while (true);
 }
 
-uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase) {
-    uint32_t nOffset = pNode[1];
+StormLinkStrc * __thiscall ComputeAbsoluteFromRelative(StormLinkStrc * pNode, intptr_t pBase) {
+    uint32_t nOffset = pNode->pNext;
     if ((int)nOffset < 0) {
-      return ~nOffset;
+      return (StormLinkStrc*)~nOffset;
     }
-    if ((intptr_t)pBase < 0) {
-      pBase = (int*)((intptr_t)pNode - *(int*)(*pNode + 4));
+    if (pBase < 0) {
+      pBase = (intptr_t)pNode - pNode->pPrevLink->pNext;
     }
 
-    return nOffset + (int)pBase;
+    return (StormLinkStrc*)(nOffset + pBase);
 }
 
-int __fastcall Unreferenced_0040f520(int param_1) {
-    return (int)*(uint32_t*)(param_1 + 4) <= 0 ? 0 : *(uint32_t*)(param_1 + 4);
+void * __fastcall Unreferenced_0040f520(StormLinkStrc * param_1) {
+    return (void*)(param_1->pNext <= 0 ? 0 : param_1->pNext);
 }
 
 int __fastcall Unreferenced_0040f580(StormLinkedListStrc * param_1) {

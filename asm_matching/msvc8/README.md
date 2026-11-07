@@ -196,9 +196,11 @@ of the first object in link order, as link.exe keeps the first definition it
 reads and discards the rest; the original's one copy came about the same way.
 Link order is `recon/runs/build-vc8.sh`'s, which is the CMake build's: the
 module libraries of `Source/modules.cmake` in the executable's (1.14d) link
-order, each library's TUs through `sort(1)` and its data unit last, what no
-module owns last of all (`ours.link_order`, `scripts/modules.py`). Against the
-plain path order it moves 7 pairings to another TU's copy and no MATCH (v2013). The copies are not interchangeable,
+order, each library's TUs in the original's order (`D2_MODULE_<m>_UNITS`,
+below) and its data unit last, what no module owns last of all
+(`ours.link_order`, `scripts/modules.py`). Against the plain path order it
+moves 7 pairings to another TU's copy and no MATCH (v2013); the original's TU
+order moves 22 more and no MATCH (v2015). The copies are not interchangeable,
 since a directory can compile with other flags (`/GS-`, `/O1`), so it is that
 copy that is paired and judged, and the discarded ones are neither paired nor
 listed as unmapped. A map entry whose own TU's object holds no kept copy - the
@@ -409,7 +411,7 @@ audit and the module ground truth into `evidence/permodule.tsv` and
 | `match`, `match_bytes` | M's functions that MATCH, and their bytes |
 | `ident_bytes` | the audit's `ident_bytes` summed: bytes in instructions identical to ours, the whole function for a MATCH |
 | `bands` | M's 1.14d address bands: its `runs-v2.tsv` rows; for crashy, Game and D2Hell each run of two or more of their functions |
-| `in_lib`, `in_other_lib`, `unpaired`, `not_linked` | where M's functions' counterparts are: in the M library of the exe, in another module's library (filed in the wrong module), without a counterpart, or paired but not in the exe (dropped by `/OPT:REF`) |
+| `in_lib`, `in_other_lib`, `unpaired`, `not_linked` | where M's functions' counterparts are: in the M library of the exe, in another module's library (filed in the wrong module), without a counterpart, or paired but not in the exe (dropped by `/OPT:REF`; 0 to a few with the default `/OPT:NOREF`) |
 | `lib_functions`, `lib_foreign` | the functions the M library puts in the exe, and how many of them are no counterpart of one of M's |
 | `order_lcs` | the longest common subsequence of M's functions in the original's address order and in ours: the longest run of them, not necessarily adjacent, that both images lay out in the same order (a longest increasing subsequence of our addresses). `order_lcs / functions` is the ordered-match ratio |
 | `same_offset` | M's functions at the same distance from the start of their module as in the original. Ours: from the lowest address of any function of the M library. The original's: from the first function of M's band, a later band counting on from where the one before ends (its last function's end, rounded up to 16), as if M's bands were one. Only a counterpart inside the M library counts. Padding counts: one function of another size, or one dropped, moves every later one |
@@ -419,9 +421,27 @@ audit and the module ground truth into `evidence/permodule.tsv` and
 `order_lcs` measures the order of objects and of functions inside them,
 `same_offset` adds every size and every gap, so it stays near zero until a
 module's leading functions all match in order and size. The original keeps
-functions nothing calls (`not_linked`: the exe's `/OPT:REF` drops them, 2319
-on v2013), so no module can sit at its offsets while that holds. The
-original's bands also show how it was linked: Fog, Storm and D2Launch each
+functions nothing calls and folds no identical ones, so build-vc8.sh links
+with the original's options, `/OPT:NOREF /OPT:NOICF /DEBUG /RELEASE
+/SAFESEH:NO` (its header gives the evidence; `--opt-ref` is the earlier
+`/OPT:REF /OPT:ICF` link, which dropped 2319 of them as `not_linked`). On
+v2015 that took order from 4211 to 5076 and same-offset from 4 to 34 at the
+same MATCH. What separated the rest was mostly object order: inside a TU 94%
+of the functions are in the original's order, but our objects sat in each
+library in path order, of which only 127 of 438 TUs follow the original's.
+Each module's units are now in the original's order: project.json
+`modules.<m>.unitOrder: "original-address"` has the generator place each unit
+by the 1.14d address of its first function inside the module's runs
+(`moduleRuns`), and write the list to `Source/modules.cmake` as
+`D2_MODULE_<m>_UNITS`, each unit with that address and the number of runs its
+functions form. The CMake module libraries list their sources in it (GNU ld
+links an archive's members whole, in member order), and `scripts/modules.py`
+reads it for build-vc8.sh's libraries and for `ours.link_order`, so the link
+and the COMDAT pairing agree. On v2015 that took order from 5076 to 10827 and
+same-offset from 34 to 67 at the same MATCH. What limits it now: 245 of 438
+units are split over several runs in the original (an inlined helper kept in
+another object, a namespace that was several source files), and a unit takes
+one place. The original's bands also show how it was linked: Fog, Storm and D2Launch each
 have a second band after the C runtime (and D2Direct3D sits there too), which
 is where a library member lands that only a later pass of the linker pulls in.
 

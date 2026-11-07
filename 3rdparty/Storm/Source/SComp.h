@@ -186,10 +186,10 @@ uint32_t __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t *
 BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSizeIn, uint32_t dwFlags);
 // @sourcefile .\SOURCE\SCOMP.CPP
 uint32_t __stdcall SCOMP_CleanupTempBuffer();
-uint32_t __thiscall HUFFMAN_GetDecodedOffset(int * pNode, int * pBase);
+struct StormLinkStrc * __thiscall HUFFMAN_GetDecodedOffset(struct StormLinkStrc * pNode, intptr_t pBase);
 int __fastcall Unreferenced_0041e930(struct StormLinkStrc * param_1);
-void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(void * pNode);
-int __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * param_1);
+void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(struct StormLinkStrc * pNode);
+void __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_0041e9d0(int * param_1, int * param_2);
 uint32_t __thiscall BITBUFFER_ReadBits(struct D2BitStreamReaderStrc * pBitBuf, uint32_t nBits, uint32_t nMask);
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize);
@@ -197,7 +197,7 @@ int __fastcall Unreferenced_0041ea40(struct StormLinkStrc * param_1);
 int __fastcall Unreferenced_0041ea60(int param_1);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(struct StormLinkStrc * pNode);
 int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrDefault);
-void __thiscall LINKEDLIST_UnlinkNode(int32_t pThis, int * pNode);
+void __thiscall LINKEDLIST_UnlinkNode(struct StormLinkedListStrc * pThis, int * pNode);
 uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * param_1);
 int32_t __thiscall HUFFMAN_DecodeSymbol(struct D2HuffmanContextStrc * pThis, uint16_t * * pBitBuf);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(struct StormLinkStrc * pNode);

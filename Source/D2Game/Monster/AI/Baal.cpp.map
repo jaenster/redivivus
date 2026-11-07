@@ -318,7 +318,8 @@
         "AI_BAAL_CountPowerfulSkills"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "D2UnitStrc *"
       ]
     },
     {

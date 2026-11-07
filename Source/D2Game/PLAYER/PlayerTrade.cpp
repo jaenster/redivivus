@@ -2451,6 +2451,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
     uint32_t nCancelReason;
     uint8_t byGoldSide;
     ::SGAMEDATA* pGame2;
+    int nPartnerUnit;
     ::SGAMEDATA* pGame01;
     pGame01 = pGame;
     if (!pUnit) {
@@ -2606,10 +2607,10 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
           }
         }
       } else {
-        pPartnerUnit = (D2UnitStrc*)D2Common::Units::GetInventoryGoldLimit(pTradePartner);
+        nPartnerUnit = (int)D2Common::Units::GetInventoryGoldLimit(pTradePartner);
         nPartnerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTradePartner, UNITSTAT_gold, 0);
-        if ((D2UnitStrc*)(nPartnerGold + nGoldAmount) > pPartnerUnit) {
-          nGoldAmount = (int)pPartnerUnit - nPartnerGold;
+        if ((D2UnitStrc*)(nPartnerGold + nGoldAmount) > (D2UnitStrc*)nPartnerUnit) {
+          nGoldAmount = nPartnerUnit - nPartnerGold;
         }
         if (pPlayerData->pTradeCopyInventory) {
           byGoldSide = '\0';
@@ -2831,6 +2832,7 @@ void __fastcall PLRTRADE_ProcessTradeStateTick(::SGAMEDATA * pGame, D2UnitStrc *
     eD2UnitType eInteractType;
     D2UnitDataPlayerStrc* pPartnerData;
     D2UnitStrc* pPartnerUnit;
+    uint32_t nTradeCopy;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     eD2TradeState nTradeState = pPlayerData->dwTradeState;
     if ((int)nTradeState <= 4) {
@@ -2872,9 +2874,9 @@ void __fastcall PLRTRADE_ProcessTradeStateTick(::SGAMEDATA * pGame, D2UnitStrc *
     }
     if (nTradeState == TRADESTATE_LOCK2_WAIT) {
       BOOL bHasInteract;
-      bHasInteract = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, (uint32_t*)&pTradeCopy);
+      bHasInteract = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, (uint32_t*)&nTradeCopy);
       if (bHasInteract && eInteractType == UNIT_PLAYER) {
-        pPartnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, (uint32_t)pTradeCopy);
+        pPartnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nTradeCopy);
         if (pPartnerUnit) {
           pPlayerData = D2Common::Units::GetPlayerData(pUnit);
           pPartnerData = D2Common::Units::GetPlayerData(pPartnerUnit);

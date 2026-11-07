@@ -18,6 +18,7 @@
 struct D2DamageStrc;
 struct D2SkillCallbackContextStrc;
 struct D2SkillsTxt;
+struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
@@ -122,7 +123,7 @@ BOOL __fastcall Skills_SrvStFunc_18_AlwaysAllow(::SGAMEDATA * pGame, struct D2Un
 BOOL __fastcall Skills_SrvStFunc_19_IsTargetOutsideTown(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
+void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
 int __fastcall Unreferenced_005c33d0(int param_1);
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill);
 uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
@@ -135,14 +136,14 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, struct D2
 // Applies the Dim Vision curse (skill 0x47) to pTarget. Calculates the duration via auralencalc and divides by the difficulty's AiCurseDivisor, then iterates up to 6 aurastat/aurastatcalc entries to build a D2NecroSkillArgStrc and calls SKILLNEC_ApplyCurseToUnit. Sets bUpdateAnimSpeed if any stat has ITEMSTATCOSTFLAG_UPDATEANIMRATE.
 void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, int32_t nSkillLvl);
 // Three arguments, not two: the epilogue at 005c3b2a is RET 0x4, so there is one stack argument the body never reads. It is stored in the same D2StateExArgStrc.pFunction slot as SKILLNEC_OnCurseExpire (005c3370) and SKILLNEC_OnConvertExpire (005c3db0), both of which are already declared with the third parameter, and the slot's type is void(*)(D2UnitStrc*, eD2States, int32_t). Declaring only two made the assignment in Skills_SrvDoFunc_059_CastCorpseSkill a type error - which only became visible once the CALL_RETURN override that had split that function was cleared, so the body compiles for the first time.
-void __fastcall SKILLS_NecroShredAlignmentCallback(struct D2UnitStrc * pUnit, eD2States eAlignmentState, int32_t pStatListEx);
+void __fastcall SKILLS_NecroShredAlignmentCallback(struct D2UnitStrc * pUnit, eD2States eAlignmentState, struct D2StatListExStrc * pStatListEx);
 void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(struct D2UnitStrc * pUnit, void * pSkillData);
 // Body continues at 005c3bcc, the JNZ target of 005c3bc0 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLNEC_CastCorpseSkill'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SKILLNEC_CastCorpseSkill':
 // Server-side execution body for Necromancer corpse-targeting skills (e.g. Corpse Explosion, Bone Spirit from corpse). Validates the targeted corpse via SKILLNEC_ValidateCorpseTarget, sets the corpse's alignment/aura-state, frees its minions, computes radius and duration from skill calcs with difficulty divisor, then calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, and finally applies the necro-shred alignment state. Returns 1 on success, 0 on invalid target.
 BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 uint32_t __fastcall SKILLNEC_ValidateReviveTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCorpse);
-void __fastcall SKILLNEC_OnConvertExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwArg1);
+void __fastcall SKILLNEC_OnConvertExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwArg1);
 // Server-side event callback that applies the Necromancer Attract/Convert curse to pUnit. Validates the revive target, clamps the resist penalty stat, builds a D2StateExArgStrc with skill/level/duration from the event context array (ppGame), calls SetStateWithExpiryTime with SKILLNEC_OnConvertExpire, adds up to 5 clamped resist-penalty stats, updates animation speed if flagged, sets the unit's alignment to friendly (1), adds it to the player's target node table, switches its AI to mode 3, and schedules an expiry event. Returns 1 on success.
 int32_t __fastcall SKILLNEC_ApplyConvertToUnit(struct D2UnitStrc * pUnit, struct D2SkillAuraCtxStrc * pCtx);
 // Server do-function for Necromancer Conversion (Attract/Conversion) AoE skill (SrvDoFunc 61). Validates the skill entry and its aurastat/auratargetstate fields. Sets UNITFLAG_SKSRVDOFUNC on the caster. Computes aura range and duration (reduced by difficulty via SKILLNEC_ApplyCurseDifficultyDivisor), collects up to 6 aura stats and their calc values from SkillsTxt. Calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_ApplyConvertToUnit as the per-unit callback.

@@ -522,7 +522,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(D2UnitStrc * pUnit, e
     return 1;
 }
 
-void __fastcall SKILLSCLT_SetMissilePathAndCalc(D2UnitStrc * pUnit, int32_t nInitSeed) {
+void __fastcall SKILLSCLT_SetMissilePathAndCalc(D2UnitStrc * pUnit, intptr_t nInitSeed) {
     if (!pUnit) {
       return;
     }
@@ -706,7 +706,7 @@ static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32
 }
 
 // Builds a serpentine (weaving) pre-computed path for a missile unit, used by skills like Guided Arrow. Caps the path at 0x4D frames, sets path type 10, then for each frame advances the direction by a randomly-seeded amplitude and sign (flipping every gapSkillDamageDescFuncTable[0x89] frames), samples gnSkillSynergiesTableIndex/Offset for X/Y deltas, and writes each resulting (nX, nY) into the missile's path-point array via GetPathPoint.
-void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, int32_t nInitSeed) {
+void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, intptr_t nInitSeed) {
     // Static local variables (originally global data)
     static int gnSkillSynergiesTableOffset[8] = { 0x0, 0x2, 0x2, 0x2, 0x0, -0x2, -0x2, -0x2 }; D2_STATIC_GUARD(gnSkillSynergiesTableOffset, "D2Client::SKILLS::SKILLSCLT_SetMissilePathExtended::gnSkillSynergiesTableOffset");
     static int gnSkillSynergiesTableIndex[8] = { 0x2, 0x2, 0x0, -0x2, -0x2, -0x2, 0x0, 0x2 }; D2_STATIC_GUARD(gnSkillSynergiesTableIndex, "D2Client::SKILLS::SKILLSCLT_SetMissilePathExtended::gnSkillSynergiesTableIndex");

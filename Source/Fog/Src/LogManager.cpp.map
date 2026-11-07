@@ -466,6 +466,8 @@
         "ComputeAbsoluteFromRelative"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -481,6 +483,9 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "Unreferenced_0040f520"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
       ]
     },
     {

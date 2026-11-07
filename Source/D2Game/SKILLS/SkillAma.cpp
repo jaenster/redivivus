@@ -558,14 +558,13 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
     return 1;
 }
 
-void __fastcall SKILLS_AmazonDamagePercentCallback(D2UnitStrc * pUnit, int nDamagePercent) {
+void __fastcall SKILLS_AmazonDamagePercentCallback(D2UnitStrc * pUnit, intptr_t nDamagePercent) {
     if (!nDamagePercent) {
       return;
     }
 
     int nCurDamagePercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
-    nCurDamagePercent += nDamagePercent;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damagepercent, nCurDamagePercent, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damagepercent, nCurDamagePercent + nDamagePercent, 0);
 }
 
 // Server SrvDoFunc for Guided Arrow (skill 010). Sets UNITFLAG_SKSRVDOFUNC on the caster, selects srvmissilea or srvmissileb depending on weapon class, then spawns the Guided Arrow missile. If a damage-percent calc value is present, attaches the AmazonDamagePercentCallback. Encodes the direction delta (cursor minus caster position) into the missile's TargetY field for homing.

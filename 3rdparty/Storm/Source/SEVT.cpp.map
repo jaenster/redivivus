@@ -474,6 +474,9 @@
       "namespace": "Storm::Source::SEVT",
       "calledFunctions": [
         "Unreferenced_00426c60"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
       ]
     },
     {

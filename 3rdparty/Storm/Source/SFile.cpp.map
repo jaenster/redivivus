@@ -3263,9 +3263,6 @@
         "SFILE_CancelAsyncRequestWithStatus",
         "SErrSetLastError",
         "SFILE_CancelRequest"
-      ],
-      "usedTypes": [
-        "int32_t"
       ]
     },
     {

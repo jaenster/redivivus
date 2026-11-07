@@ -1511,6 +1511,7 @@
         "ITEMMOD_AddStatToItem"
       ],
       "usedTypes": [
+        "D2SetsTxtFStrc",
         "D2UnitStrc",
         "eD2Skills",
         "int32_t",
@@ -1566,6 +1567,7 @@
       ],
       "usedTypes": [
         "D2SeedStrc",
+        "D2SetsTxtFStrc",
         "D2SkillsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",

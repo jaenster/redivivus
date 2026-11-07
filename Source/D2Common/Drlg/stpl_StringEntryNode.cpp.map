@@ -188,6 +188,7 @@
         "StringEntryNode",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
         "uint32_t"
       ]
     },
@@ -300,6 +301,7 @@
       "usedTypes": [
         "TSHashObject<StringEntryNode, HASHKEY_STRI>",
         "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
         "uint32_t"
       ]
     },

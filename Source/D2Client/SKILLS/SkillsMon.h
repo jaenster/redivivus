@@ -55,7 +55,7 @@ void __fastcall SKILLSMON_SetMonsterDeathFrame(struct D2SkillsTxt * pSkillsTxt, 
 BOOL __fastcall Skills_CltDoFunc_Mon_PeriodicMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side skill-do function for monster directional-beam attacks. Validates the skill and its cltmissilea missile entry, sets UNITFLAG_SKSRVDOFUNC on the caster, builds a D2SkillArgStrc with origin coords and calc[0] as sub-loop multiplier, then aims at the confirmed target unit (or SP1 vector if no target) and spawns the missile via MakeMissile. Sets target X on the resulting missile. Returns 1 on success, 0 if skill/missile is invalid.
 BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLSMON_SetMissilePathRandom(struct D2UnitStrc * pUnit, int32_t nSeedOffset);
+void __fastcall SKILLSMON_SetMissilePathRandom(struct D2UnitStrc * pUnit, intptr_t nSeedOffset);
 // Client do-func that spawns N randomly-directed missiles (N = calc[0]) from the caster's position toward the target area. Fills a shared D2SkillArgStrc with flag 0x21, owner, position, skill level, and SKILLSMON_SetMissilePathRandom callback, then calls MakeMissile once per missile index. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_ClearSkillFlags(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -84,7 +84,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(struct D2UnitStrc
 BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side handler that spawns a Spider Lay (web) missile for a spider monster. Requires a valid dynamic path with non-zero 8-flags (direction). Reads the unit's SpiderLay skill level, determines the unit's facing direction via UpdateDirection+MONSTERS_GetGfxOffsetTable2, looks up a fixed per-direction offset table to offset the spawn point, rejects town rooms, then fires MISSILE_Spidergoolay via MakeMissile with nFlags=0x25, playing SOUND_SORCERESS_ENERGYSHIELD_HIT_3 on success.
 struct D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(struct D2UnitStrc * pUnit);
-void __fastcall SKILLSMON_SetMissilePathLinear(struct D2UnitStrc * pUnit, int32_t nSeedOffset);
+void __fastcall SKILLSMON_SetMissilePathLinear(struct D2UnitStrc * pUnit, intptr_t nSeedOffset);
 #endif // D2_MODULE_D2Client
 // 2 internal functions (defined in .cpp)
 

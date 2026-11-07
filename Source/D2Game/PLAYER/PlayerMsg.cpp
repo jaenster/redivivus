@@ -3293,6 +3293,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x28_SocketItem(::SGAMEDATA * pGame, D2U
     eD2UnitType eInteractUnitType;
     uint32_t dwGemGUID;
     uint32_t dwSocketableGUID;
+    uint32_t nPacket;
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
     }
@@ -3309,8 +3310,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x28_SocketItem(::SGAMEDATA * pGame, D2U
       return (eD2ServerIncomingStatus)eVar1;
     }
 
-    BOOL bHasInteract = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, (uint32_t*)&pPacket);
-    if (!bHasInteract || (pInteractUnit = UNIT::SUnit::FindUnitFromTable(pGame, eInteractUnitType, (uint32_t)pPacket) , !pInteractUnit || pInteractUnit->eUnitType != UNIT_PLAYER)) {
+    BOOL bHasInteract = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractUnitType, (uint32_t*)&nPacket);
+    if (!bHasInteract || (pInteractUnit = UNIT::SUnit::FindUnitFromTable(pGame, eInteractUnitType, nPacket) , !pInteractUnit || pInteractUnit->eUnitType != UNIT_PLAYER)) {
       nSize = 0;
       bHasInteract = ITEMS::ItemMode::PutItemInItem(pGame, pUnit, dwItemGUID, nItemGid, (int32_t*)&nSize, 1, 1, 1, 1);
       if (!bHasInteract && nSize) {
@@ -4355,7 +4356,7 @@ static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc *
     return bPathReachable;
 }
 
-void __fastcall PLRMODES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+void __fastcall PLRMODES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
@@ -4527,6 +4528,8 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
     D2InventoryStrc* pMercInventory;
     eD2BodyLoc eBodyLoc1;
     eD2BodyLoc eBodyLoc2;
+    int32_t nItemAtBodyLoc;
+    int32_t nMercInventory;
     if (!pGame->bExpansion) {
       return 3;
     }
@@ -4558,21 +4561,21 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
         }
       }
 
-      pItemAtBodyLoc = (D2UnitStrc*)(uint32_t)eBodyLoc1;
+      nItemAtBodyLoc = (int32_t)(uint32_t)eBodyLoc1;
       if (!pClonedOldItem) {
         equip_new_item:
         pClonedNewItemLocal = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pUnit1, pUnit2, 1);
         D2Common::Units::SetupUpdateFlag(pClonedNewItemLocal, 4);
-        pMercInventory = (D2InventoryStrc*)pUnit1->nUnitGUID;
-        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_PERIODICSTATS, (int32_t)pMercInventory);
-        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, (int32_t)pMercInventory);
+        nMercInventory = pUnit1->nUnitGUID;
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_PERIODICSTATS, nMercInventory);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nMercInventory);
         if (!pClonedNewItemLocal) {
           dwOldItemGUID = -1;
         } else {
           dwOldItemGUID = pClonedNewItemLocal->nUnitGUID;
         }
 
-        ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit2, dwOldItemGUID, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc, 1, &bEquipOk);
+        ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit2, dwOldItemGUID, (eD2BodyLoc)nItemAtBodyLoc, 1, &bEquipOk);
         ITEMS::ItemMode::ToCursorItem(pGame, pUnit, pUnit1);
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInv, nullptr);
         if (pClonedOldItem) {
@@ -4590,7 +4593,7 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
 
       pItemSlot2 = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pMercInventory, pClonedOldItem);
       if (pClonedOldItem == pItemSlot2) {
-        D2Common::INVENTORY::Inventory::NullSub_2Arg(pMercInventory, (uint32_t)pItemAtBodyLoc);
+        D2Common::INVENTORY::Inventory::NullSub_2Arg(pMercInventory, nItemAtBodyLoc);
         ITEMS::ItemMode::ITEMMODE_UnequipItemStats(pGame, pClonedOldItem, pUnit2, 0, 0);
         ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
         bMeetsEquipReqs = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit1, pUnit2, 0, nullptr, nullptr, nullptr);
@@ -4602,9 +4605,9 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
           goto equip_new_item;
         }
 
-        D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pMercInventory, pClonedOldItem, (int32_t)pItemAtBodyLoc);
+        D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pMercInventory, pClonedOldItem, nItemAtBodyLoc);
         D2Common::INVENTORY::Inventory::PutItemInInventory(pMercInventory, pClonedOldItem, 3);
-        D2Common::ITEMS::Items::SetBodyLoc(pClonedOldItem, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc);
+        D2Common::ITEMS::Items::SetBodyLoc(pClonedOldItem, (eD2BodyLoc)nItemAtBodyLoc);
         D2Common::Units::SetupUpdateFlag(pClonedOldItem, 1);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOldItem, INVPAGE_None);
         ITEMS::ItemMode::ITEMMODE_AddStatsList_ForMercSwap(pGame, pClonedOldItem, pUnit2, 0);

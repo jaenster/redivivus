@@ -643,7 +643,7 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
     uint32_t pLookupTable2 = 0;
     int nClipBottom = nDrawLines;
     uint8_t* pBlendTable = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLines);
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, nViewportHeight, RENDERER_nWindowWidth, 0, (int32_t)pBlendTable, nSkipLines, nClipBottom, pLookupTable2);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, nViewportHeight, RENDERER_nWindowWidth, 0, pBlendTable, nSkipLines, nClipBottom, pLookupTable2);
 }
 
 void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, void * pCropRect, int32_t nDrawMode) {
@@ -674,7 +674,7 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
     int32_t nClipTop_00 = __frame0.nClipTop;
     int32_t nClipBottom_00 = __frame0.nClipBottom;
     uint8_t* pPalettePtr = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect);
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (int32_t)pPalettePtr, nClipTop_00, nClipBottom_00, bOutOfBounds);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, pPalettePtr, nClipTop_00, nClipBottom_00, bOutOfBounds);
 }
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {
@@ -1444,6 +1444,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
     uint32_t nImgBitDepth;
     uint32_t nImgHeight;
     DWORD nFileSize;
+    void* pVersion;
     pBuffer->eMode = (char)nVersion;
     if ((char)nVersion != 'p') {
       if ((char)nVersion != 's') {
@@ -1467,12 +1468,12 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uint8_t bVar1;
       gnSmackerGlideYOffset.pFrameBuffer = D2_ALLOC_AT(0x6db0, ".\\Src\\gdiSmack.cpp", 0x51);
       memset(gnSmackerGlideYOffset.pFrameBuffer, 0, 0x6db0);
-      nVersion = 0;
+      pVersion = 0;
       nFileSize = 0;
-      dwLoadResult = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
-      if (dwLoadResult && nVersion) {
-        iVar2 = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
-        Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);
+      dwLoadResult = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
+      if (dwLoadResult && pVersion) {
+        iVar2 = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
+        Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);
         if (iVar2 && nImgWidth == 0x1d4 && nImgHeight == 0x3c && nImgBitDepth == 8) {
           iVar2 = 0;
           do {

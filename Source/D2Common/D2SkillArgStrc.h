@@ -20,7 +20,7 @@ typedef uint32_t eD2Skills;
 typedef uint32_t eMissilesId;
 #ifndef RECON_FPTD_fpMissileInitFunction
 #define RECON_FPTD_fpMissileInitFunction
-typedef void (__fastcall *fpMissileInitFunction)(struct D2UnitStrc * pMissile, int32_t nParam);
+typedef void (__fastcall *fpMissileInitFunction)(struct D2UnitStrc * pMissile, intptr_t nParam);
 #endif
 
 // Data types
@@ -48,8 +48,8 @@ struct __attribute__((packed)) D2SkillArgStrc {
     /* 0x48 */ uint32_t nAttBonus; // monster tohit stat, used when nFlags & 0x1000 (CreatingAMissile 0056ecb0)
     /* 0x4C */ uint32_t nTotalFrames;
     /* 0x50 */ uint32_t nLightRadius; // duplicate of the nLightOverride name at 0x38 before; no known consumer
-    /* 0x54 */ void (__fastcall *fpFunction)(struct D2UnitStrc *, int32_t); // Optional per-missile init callback, invoked by CreatingMissile @0059fe30 as MOV EDX,[ESI+0x58] / MOV ECX,EBX / CALL EAX - pure __fastcall, two register args, no stack args, return discarded.
-    /* 0x58 */ int32_t nFunctionParam; // second argument of fpFunction (fpMissileInitFunction nParam): a missile index, quadrant offset, revive count or a unit pointer depending on the caller; MakeMissile 004cd540 passes it through as int32_t
+    /* 0x54 */ void (__fastcall *fpFunction)(struct D2UnitStrc *, intptr_t); // Optional per-missile init callback, invoked by CreatingMissile @0059fe30 as MOV EDX,[ESI+0x58] / MOV ECX,EBX / CALL EAX - pure __fastcall, two register args, no stack args, return discarded.
+    /* 0x58 */ intptr_t nFunctionParam; // second argument of fpFunction (fpMissileInitFunction nParam): a missile index, quadrant offset, revive count or a unit pointer depending on the caller; MakeMissile 004cd540 passes it through as int32_t
 };
 
 #endif // D2_DEFINED_D2SkillArgStrc

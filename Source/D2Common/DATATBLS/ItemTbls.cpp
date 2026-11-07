@@ -721,9 +721,9 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
       {"max12", FIELDTYPE_INT, 0, 0x148, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    int nByteOffset = (int)pMemory;
+    D2PoolManagerStrc* pPoolManager = pMemory;
     MonsterTbls::sgtDataTable.pTxtUniqueItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x37a);
-    MonsterTbls::sgtDataTable.pTxtUniqueItems = (D2UniqueItemsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "uniqueitems", uniqueitems, &MonsterTbls::sgtDataTable.nTxtUniqueItemsSize, 0x14c);
+    MonsterTbls::sgtDataTable.pTxtUniqueItems = (D2UniqueItemsTxt*)DataTbls::CompileTxt(pPoolManager, "uniqueitems", uniqueitems, &MonsterTbls::sgtDataTable.nTxtUniqueItemsSize, 0x14c);
     if (MonsterTbls::sgtDataTable.nTxtUniqueItemsSize >= 0x7fff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37c);
       exit(-1);
@@ -734,7 +734,6 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    nByteOffset = 0;
     do {
       pCurRecord = (char*)&MonsterTbls::sgtDataTable.pTxtUniqueItems[nIdx].wId;
       *(uint16_t*)pCurRecord = (uint16_t)nIdx;
@@ -746,7 +745,6 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
         *(short int*)(pCurRecord + 0x22) = 0x1507;
       }
 
-      nByteOffset += 0x14c;
       nIdx++;
     } while (nIdx < MonsterTbls::sgtDataTable.nTxtUniqueItemsSize);
 }
@@ -836,9 +834,9 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
       {"fmax8", FIELDTYPE_INT, 0, 0x10c, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    int nByteOffset = (int)pMemory;
+    D2PoolManagerStrc* pPoolManager = pMemory;
     MonsterTbls::sgtDataTable.pTxtSetsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x3f2);
-    MonsterTbls::sgtDataTable.pTxtSets = (D2SetsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "sets", sets, &MonsterTbls::sgtDataTable.nTxtSetsSize, 0x128);
+    MonsterTbls::sgtDataTable.pTxtSets = (D2SetsTxt*)DataTbls::CompileTxt(pPoolManager, "sets", sets, &MonsterTbls::sgtDataTable.nTxtSetsSize, 0x128);
     if (!(MonsterTbls::sgtDataTable.nTxtSetsSize < 0x7fff)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3f4);
       exit(-1);
@@ -942,7 +940,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
         {"end", FIELDTYPE_END, 0, 0, 0}
       };
       MonsterTbls::sgtDataTable.pTxtSetItemsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x45d);
-      MonsterTbls::sgtDataTable.pTxtSetItems = (D2SetItemsTxt*)DataTbls::CompileTxt((D2PoolManagerStrc*)nByteOffset, "setitems", setitems, &MonsterTbls::sgtDataTable.nTxtSetItemsSize, 0x1b8);
+      MonsterTbls::sgtDataTable.pTxtSetItems = (D2SetItemsTxt*)DataTbls::CompileTxt(pPoolManager, "setitems", setitems, &MonsterTbls::sgtDataTable.nTxtSetItemsSize, 0x1b8);
       if (!(MonsterTbls::sgtDataTable.nTxtSetItemsSize < 0x7fff)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45f);
         exit(-1);
@@ -953,7 +951,6 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
         return;
       }
 
-      nByteOffset = 0;
       do {
         pCurSetItem = &MonsterTbls::sgtDataTable.pTxtSetItems[nIdx];
         pCurSetItem->nId = (short int)nIdx;
@@ -977,7 +974,6 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
           }
         }
 
-        nByteOffset += 0x1b8;
         nIdx++;
       } while (nIdx < MonsterTbls::sgtDataTable.nTxtSetItemsSize);
 

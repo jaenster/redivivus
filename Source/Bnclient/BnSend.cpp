@@ -826,6 +826,7 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
     int nMaxLensOffset;
     char** ppszOutBuf;
     D2BnReadUserDataStrc* pszSrcData;
+    int nPpszOutBufs;
     BOOL bHasAnswer = _net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x26);
     if (!bHasAnswer) {
       return 0;
@@ -839,7 +840,7 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
 
       nMaxLensOffset = (intptr_t)pnMaxLens - (intptr_t)ppszOutBufs;
       ppszOutBuf = ppszOutBufs;
-      ppszOutBufs = (char**)nKeyCount;
+      nPpszOutBufs = nKeyCount;
       do {
         if ((char)pszSrcData->nAccountCount != '\0') {
           strncpy(*ppszOutBuf, (char*)pszSrcData, *(size_t*)(nMaxLensOffset + (char*)ppszOutBuf));
@@ -850,9 +851,9 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
 
         pNextSrc = Storm::Source::SSTR::SStrLen((char*)pszSrcData);
         ppszOutBuf++;
-        ppszOutBufs = (char**)((char*)ppszOutBufs - 1);
+        nPpszOutBufs--;
         pszSrcData = (D2BnReadUserDataStrc*)((intptr_t)&pszSrcData->nAccountCount + pNextSrc + 1);
-      } while (ppszOutBufs);
+      } while (nPpszOutBufs);
 
       return 1;
     }
@@ -2516,7 +2517,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
               pStrEnd = (uint32_t*)((char*)pStrEnd + 1);
             } while ((char)uVar1 != '\0');
 
-            nStrLen = (int)pStrEnd - ((int)pEntryData + 5);
+            nStrLen = (intptr_t)pStrEnd - ((intptr_t)pEntryData + 5);
             if (nStrLen >= 0x400) {
               goto reset_news_table;
             }

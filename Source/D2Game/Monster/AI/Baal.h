@@ -46,7 +46,7 @@ uint32_t __fastcall AI_Baal_IsPortalInRange(uint32_t pGame, struct D2UnitStrc * 
 uint32_t __fastcall AI_BAAL_IsUnitInRange(struct D2UnitStrc * pUnit, int * pCandidate);
 // Weighted random action selector for Baal AI. Sums the nWeightCount weights in pnWeights, draws a random value from the unit's RNG seed (using bitmask fast-path when sum is a power of two), then walks the weight array to find which bucket the value falls in. Returns the index of the selected action (0-based); returns 1 as fallback if total weight is zero.
 int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, struct D2UnitStrc * pUnit);
-void __fastcall AI_BAAL_CountPowerfulSkills(struct D2UnitStrc * nSkillNode, int * pnSelfSkillNode, int * pnPowerfulSkillCount);
+void __fastcall AI_BAAL_CountPowerfulSkills(struct D2UnitStrc * nSkillNode, struct D2UnitStrc * * pnSelfSkillNode, int * pnPowerfulSkillCount);
 // Executes a specific Baal AI action. Handles Baal clone spawning, teleport positioning, and multi-skill attack selection during the boss encounter.
 // @sourcefile .\Ai\AiBaal.cpp
 void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * nParam, struct D2UnitStrc * pTarget, int nAction, struct D2MonsterAiCmdStrc * pClientSideData);

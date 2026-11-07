@@ -5,8 +5,9 @@
 #
 #   d2_check_modules(<project.json>)   after include(Source/modules.cmake)
 #
-# Compares, per Windows module: dir, kind, strict, the direct dependencies in order,
-# the modules named by exceptions; and the link order of the whole table.
+# Compares, per Windows module: dir, kind, strict, the unit order rule, the direct
+# dependencies in order, the modules named by exceptions; and the link order of the
+# whole table.
 
 function(d2_check_modules json_path)
     if(NOT EXISTS "${json_path}")
@@ -53,6 +54,17 @@ function(d2_check_modules json_path)
         endif()
         if(NOT strict STREQUAL "${D2_MODULE_${name}_STRICT}")
             list(APPEND problems "${name}: strict ${strict} in project.json, ${D2_MODULE_${name}_STRICT} in modules.cmake")
+        endif()
+        string(JSON unit_order ERROR_VARIABLE noerr GET "${m}" unitOrder)
+        if(noerr)
+            set(unit_order "path")
+        endif()
+        set(cmake_unit_order "${D2_MODULE_${name}_UNIT_ORDER}")
+        if(cmake_unit_order STREQUAL "")
+            set(cmake_unit_order "path")
+        endif()
+        if(NOT unit_order STREQUAL cmake_unit_order)
+            list(APPEND problems "${name}: unitOrder ${unit_order} in project.json, ${cmake_unit_order} in modules.cmake")
         endif()
         set(deps)
         string(JSON ndeps ERROR_VARIABLE noerr LENGTH "${m}" dependencies)

@@ -1780,7 +1780,7 @@ void __stdcall SOUND_ClearGlobalState() {
     memset(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags, 0, 0x1000);
 }
 
-void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
@@ -4020,7 +4020,7 @@ void __thiscall WARDEN_RC4Init(D2RC4StateStrc * pRc4State, uint8_t * pKey, uint3
     } while (nNextIdx < 0x100);
 }
 
-void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatListEx) {
+void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatListEx) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
@@ -4032,7 +4032,7 @@ int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGa
     return (uint32_t)(pUnit->nClassId == 0x1d4);
 }
 
-void __fastcall SKILLSASS_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall SKILLSASS_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 

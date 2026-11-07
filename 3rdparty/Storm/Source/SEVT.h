@@ -127,7 +127,7 @@ uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList);
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
 uint32_t __thiscall LINKEDLIST_GetNodeOffset(struct StormLinkStrc * pListInfo, int pNode);
 void __fastcall LINKEDLIST_UnlinkSelf(struct StormLinkStrc * pNode);
-int __fastcall Unreferenced_004269a0(struct StormLinkedListStrc * param_1);
+void __fastcall Unreferenced_004269a0(struct StormLinkedListStrc * param_1);
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.
 // @oracle SEvtPopState
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
@@ -153,7 +153,7 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
 // Retrieves the count field from a linked list node with bitwise masking. Returns count masked with sign-extend logic to handle special count encodings. Used for size queries on list structures.
 uint32_t __thiscall LINKEDLIST_GetCountMasked(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
 void __thiscall LINKEDLIST_GetHead(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pListHead);
-int __fastcall Unreferenced_00426c60(int param_1);
+struct StormLinkedListStrc * __fastcall Unreferenced_00426c60(struct StormLinkedListStrc * param_1);
 // Gets the value stored at a specific index within a linked list. Returns the value field at offset+4 from the node pointer. Handles NULL input by defaulting to the list head at this+8.
 intptr_t __thiscall LINKEDLIST_GetValueAtIndex(struct StormLinkedListStrc * pListHead, struct StormLinkStrc * nNode);
 void __fastcall LINKEDLIST_InsertHead(struct StormLinkedListStrc * pList);

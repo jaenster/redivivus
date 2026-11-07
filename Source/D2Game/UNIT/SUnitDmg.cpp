@@ -53,10 +53,6 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2CombatEntryStrc) == 0x88, "D2_NEW_AT(D2CombatEntryStrc): the 32-bit layout must be the 0x88 bytes 1.14d allocates");
 
 
-#ifndef RECON_FPTD_PFN_StatExpireCallback
-#define RECON_FPTD_PFN_StatExpireCallback
-typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-#endif
 #ifndef RECON_FPTD_pfnAoEDamageFilter
 #define RECON_FPTD_pfnAoEDamageFilter
 typedef int32_t (__fastcall *pfnAoEDamageFilter)(::SGAMEDATA * pGame, D2UnitStrc * pSrcUnit, D2UnitStrc * pTargetUnit);
@@ -309,7 +305,7 @@ static void __stdcall DAMAGE_ApplyPoison(D2UnitStrc * pUnit, int32_t nPoisonRate
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
-void __fastcall DAMAGE_OnColdExpire(D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam) {
+void __fastcall DAMAGE_OnColdExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     BOOL bIsDead = SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsDead) {
       uint32_t bStateActive;
@@ -435,7 +431,7 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
       pColdStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, eUnitType, nAttackerGUID);
       GAME::Event::SetEvent(pGame, pUnit2, 0xc, nExpireFrame, 0, 0);
       D2Common::Stats::StatsEx::SetState(pColdStatList, STATE_cold);
-      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pColdStatList, (PFN_StatExpireCallback)DAMAGE_OnColdExpire);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pColdStatList, DAMAGE_OnColdExpire);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pColdStatList, 1);
       D2Common::Stats::StatsEx::STATLIST_SetStatValue(pColdStatList, UNITSTAT_velocitypercent, nColdEffectPct, 0);
       D2Common::Stats::StatsEx::STATLIST_SetStatValue(pColdStatList, UNITSTAT_attackrate, nColdEffectPct, 0);
@@ -462,7 +458,7 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
     D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_shatter, 0);
 }
 
-void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     uint8_t byAIDelay;
     BOOL bIsModeZeroDeath = SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsModeZeroDeath) {
@@ -1580,13 +1576,14 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
     uD2UnitMode eAnimMode;
     eD2UnitType eUnitType;
     D2MonStatsTxt* pMonStats;
+    int32_t nDefender;
     D2UnitStrc* pDefenderSaved;
     pDefenderSaved = pDefender;
     if (!pDmgStrc->dwLifeLeech && !pDmgStrc->dwManaLeech) {
       return;
     }
     if ((pDefender ? pDefender->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      pDefender = (D2UnitStrc*)0x64;
+      nDefender = 0x64;
     } else {
       if (!pDefender->pUnitData.pUnitDataMonster) {
         return;
@@ -1597,8 +1594,8 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
         return;
       }
 
-      pDefender = (D2UnitStrc*)(uint32_t)pMonStats->aDrain[pGame->nDifficulty];
-      if (!pDefender) {
+      nDefender = (int32_t)(uint32_t)pMonStats->aDrain[pGame->nDifficulty];
+      if (!nDefender) {
         return;
       }
     }
@@ -1653,8 +1650,8 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
         if (!nMaxHp) {
           return;
         }
-        if (pDefender != (D2UnitStrc*)0x64) {
-          nMaxHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHp, (int32_t)pDefender, 100);
+        if (nDefender != 0x64) {
+          nMaxHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHp, nDefender, 100);
         }
 
         nMaxHpCap = D2Common::Stats::StatsEx::GetTxtMaxHp(pAttacker);
@@ -1679,8 +1676,8 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
     if (pDmgStrc->dwManaLeech) {
       int32_t nLeechAmount;
       nLeechAmount = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nManaStat, pDmgStrc->dwManaLeech, 100);
-      if (pDefender != (D2UnitStrc*)0x64) {
-        nLeechAmount = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nLeechAmount, (int32_t)pDefender, 100);
+      if (nDefender != 0x64) {
+        nLeechAmount = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nLeechAmount, nDefender, 100);
       }
 
       DAMAGE_ApplyManaToUnit(nLeechAmount / 64, pAttacker);
@@ -1688,8 +1685,8 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
     }
     if (pDmgStrc->dwLifeLeech) {
       nMaxHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nManaStat, pDmgStrc->dwLifeLeech, 100);
-      if (pDefender != (D2UnitStrc*)0x64) {
-        nMaxHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHp, (int32_t)pDefender, 100);
+      if (nDefender != 0x64) {
+        nMaxHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHp, nDefender, 100);
       }
 
       DAMAGE_ApplyHealingToUnit(nMaxHp / 64, pAttacker);

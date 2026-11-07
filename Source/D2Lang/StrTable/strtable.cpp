@@ -1279,6 +1279,8 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
     char szPathBuf[260];
     char szFormatBuf[260];
     char szFontDir[32];
+    int* pEntryIdx;
+    int* pEntryIdx2;
     if (gpStringTableBase) {
       gnStringTableRefCount++;
       return 1;
@@ -1368,21 +1370,21 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
       pnEntryCount = &gpStringTablePatchD2->nNodeCount;
       gpStringIndexPatchD2 = (uint16_t**)D2_ALLOC_AT(gpStringTablePatchD2->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 0x1c5);
       memset(gpStringIndexPatchD2, 0, *pnEntryCount * 4);
-      nEntryIdx = (intptr_t)&gpStringTablePatchD2->nNodeCount;
+      pEntryIdx2 = &gpStringTablePatchD2->nNodeCount;
       nCountEntryIdx = 0;
       j = &gpStringTablePatchD2[1].wCRC + gpStringTablePatchD2->wIndexCount;
       i = 0;
-      if (*(int*)nEntryIdx > 0) {
+      if (*pEntryIdx2 > 0) {
         puEntryHdr = (uint16_t*)((char*)j + 0xf);
         do {
           pszUtf8Chars = Unicode::UNISYS::UNICODE_GetWideCharCount((char*)((intptr_t)&gpStringTablePatchD2->wCRC + *(int*)(puEntryHdr - 2)), (uint32_t)*puEntryHdr);
           i = i + 1 + pszUtf8Chars;
           nCountEntryIdx++;
           puEntryHdr = (uint16_t*)((char*)puEntryHdr + 0x11);
-        } while (nCountEntryIdx < *(int*)nEntryIdx);
+        } while (nCountEntryIdx < *pEntryIdx2);
       }
 
-      pEntryData = (char*)nEntryIdx;
+      pEntryData = (char*)pEntryIdx2;
       gpStringBufferPatchD2 = (uint16_t*)D2_ALLOC_AT(i * 2, ".\\StrTable\\strtable.cpp", 0x1dc);
       i = 0;
       k = gpStringBufferPatchD2;
@@ -1396,7 +1398,7 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
           j = (uint16_t*)((char*)j + 0x11);
           i++;
           k = k + pszUtf8Chars + 1;
-        } while (i < *(int*)nEntryIdx);
+        } while (i < *pEntryIdx2);
       }
       if (isXpac) {
         strncpy(szFormatBuf, "data\\local\\lng\\%s\\expansionstring.tbl", 0x103);
@@ -1411,21 +1413,21 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         pnEntryCount = &gpStringTableExpansion->nNodeCount;
         gpStringIndexExpansion = (uint16_t**)D2_ALLOC_AT(gpStringTableExpansion->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 0x1f8);
         memset(gpStringIndexExpansion, 0, *pnEntryCount * 4);
-        nEntryIdx = (intptr_t)&gpStringTableExpansion->nNodeCount;
+        pEntryIdx = &gpStringTableExpansion->nNodeCount;
         nCountEntryIdx = 0;
         j = &gpStringTableExpansion[1].wCRC + gpStringTableExpansion->wIndexCount;
         i = 0;
-        if (*(int*)nEntryIdx > 0) {
+        if (*pEntryIdx > 0) {
           puEntryHdr = (uint16_t*)((char*)j + 0xf);
           do {
             pszUtf8Chars = Unicode::UNISYS::UNICODE_GetWideCharCount((char*)((intptr_t)&gpStringTableExpansion->wCRC + *(int*)(puEntryHdr - 2)), (uint32_t)*puEntryHdr);
             nCountEntryIdx++;
             puEntryHdr = (uint16_t*)((char*)puEntryHdr + 0x11);
             i = i + 1 + pszUtf8Chars;
-          } while (nCountEntryIdx < *(int*)nEntryIdx);
+          } while (nCountEntryIdx < *pEntryIdx);
         }
 
-        pEntryData = (char*)nEntryIdx;
+        pEntryData = (char*)pEntryIdx;
         gpStringBufferExpansion = (uint16_t*)D2_ALLOC_AT(i * 2, ".\\StrTable\\strtable.cpp", 0x20f);
         i = 0;
         k = gpStringBufferExpansion;
@@ -1439,7 +1441,7 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
             j = (uint16_t*)((char*)j + 0x11);
             i++;
             k = k + pszUtf8Chars + 1;
-          } while (i < *(int*)nEntryIdx);
+          } while (i < *pEntryIdx);
         }
       }
 

@@ -199,14 +199,14 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     uint32_t nNewMask = pThis->nSlotMask + 1;
     uint32_t* nNewBucketCount = (uint32_t*)(nNewMask * 2);
-    uint32_t* pOldBucket = (uint32_t*)~(uintptr_t)pendingList.m_terminator.m_prevlink;
+    intptr_t nOldBucket = ~(uintptr_t)pendingList.m_terminator.m_prevlink;
     pendingList.m_linkoffset = -0x22222223;
-    pendingList.m_terminator.m_next = (intptr_t)pOldBucket;
+    pendingList.m_terminator.m_next = nOldBucket;
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pQServerStateSaved = pThis;
     pendingList.UnlinkAll();
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     pendingList.m_linkoffset = 4;
-    pendingList.m_terminator.m_next = (intptr_t)pOldBucket;
+    pendingList.m_terminator.m_next = nOldBucket;
     uint32_t nBucketIdx = 0;
     if (nNewMask) {
       int nOldBucketIdx;
@@ -244,7 +244,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       } while (nBucketIdx < nNewMask);
     }
 
-    pOldBucket = nNewBucketCount;
+    uint32_t* pOldBucket = nNewBucketCount;
     pThis->tSlotListArray.SetCount((uint32_t)nNewBucketCount);
     if (pOldBucket) {
       nResetBucketOffset = 0;

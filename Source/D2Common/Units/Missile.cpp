@@ -1140,23 +1140,23 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
     int nDmgPercentBonus = 0;
     int nItemMinDmgBonus = 0;
     int nItemMaxDmgPercent = 0;
-    nSkillId = 0;
+    D2UnitStrc* pUnit3 = 0;
     if (nSourceDamage) {
       int16_t nStrBonus;
       pMissileDamageData->nFlags |= 1;
       if (pOwner->eUnitType == UNIT_PLAYER) {
-        nSkillId = (int32_t)GetWeaponBySkill(pOwner, 1);
+        pUnit3 = GetWeaponBySkill(pOwner, 1);
       } else if (pOwner->eUnitType == UNIT_MONSTER && pOwner->pInventory) {
-        nSkillId = (int32_t)GetEquippedWeapon(pOwner);
+        pUnit3 = GetEquippedWeapon(pOwner);
       }
 
-      _bHasBonusStats = HasBonusStats((D2UnitStrc*)nSkillId, pOwner);
+      _bHasBonusStats = HasBonusStats(pUnit3, pOwner);
       if (_bHasBonusStats) {
         pMissileDamageData->nFlags |= 2;
       }
 
       nItemMinDmgBonus = 0;
-      if (!nSkillId || *(int*)nSkillId != 4) {
+      if (!pUnit3 || *(int*)pUnit3 != 4) {
         if (pOwner->eUnitType == UNIT_MONSTER) {
           nMercTypeCheck = Monsters::MONSTERS::MONSTER_GetMercType(pOwner);
           if (nMercTypeCheck) {
@@ -1170,26 +1170,26 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         nLevel = nStatVal << 8;
       } else {
         if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]) {
-          _bHasBonusStats = ITEMS::Items::IsTwoHanded((D2UnitStrc*)nSkillId);
+          _bHasBonusStats = ITEMS::Items::IsTwoHanded(pUnit3);
           if (_bHasBonusStats) {
             nSourceDamage /= 2;
           }
         }
 
-        nItemMinDmgBonus = Skills::SKILLS_GetItemBonusDamage(pOwner, (D2UnitStrc*)nSkillId, nullptr, 1);
-        nStrBonus = ITEMS::Items::ITEM_GetItemsTxt_wStrBonus((D2UnitStrc*)nSkillId);
+        nItemMinDmgBonus = Skills::SKILLS_GetItemBonusDamage(pOwner, pUnit3, nullptr, 1);
+        nStrBonus = ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pUnit3);
         if (nStrBonus) {
           nMissileId = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_strength, 0);
           nItemMinDmgBonus += nMissileId * nStrBonus / 100;
         }
 
-        nStrBonus = ITEMS::Items::ITEM_GetItemsTxt_wDexBonus((D2UnitStrc*)nSkillId);
+        nStrBonus = ITEMS::Items::ITEM_GetItemsTxt_wDexBonus(pUnit3);
         if (nStrBonus) {
           nMissileId = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_dexterity, 0);
           nItemMinDmgBonus += nMissileId * nStrBonus / 100;
         }
 
-        nMasteryElemMin = ITEMS::Items::ITEM_GetTxtItemTypes_throwable((D2UnitStrc*)nSkillId);
+        nMasteryElemMin = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit3);
         if (nMasteryElemMin) {
           nMissileId = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_item_throw_mindamage, 0);
           eUnitStat = UNITSTAT_item_throw_maxdamage;
@@ -1206,7 +1206,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         nMissileId <<= 8;
         nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, eUnitStat, 0);
         nLevel = nStatVal << 8;
-        nMercType = ITEMS::Items::ITEMS_IsA((D2UnitStrc*)nSkillId, ITEMTYPE_Blunt);
+        nMercType = ITEMS::Items::ITEMS_IsA(pUnit3, ITEMTYPE_Blunt);
         if (nMercType) {
           pMissileDamageData->nUndeadDamagePercent += 0x32;
         }

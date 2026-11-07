@@ -94,6 +94,16 @@ struct ARGLIST {
     /* 0x0C */ BOOL (__stdcall *pfnCallback)(struct CMDPARAMS *, char *);
 };
 #endif // D2_DEFINED_ARGLIST
+#ifndef D2_DEFINED_BigBuffer
+#define D2_DEFINED_BigBuffer
+struct BigBuffer {
+    /* 0x00 */ uint32_t nCapacity; // m_alloc - allocated element count
+    /* 0x04 */ uint32_t nCount; // m_count - used element count
+    /* 0x08 */ uint32_t * pData; // m_data - element array
+    /* 0x0C */ uint32_t nGrowStep; // m_chunk - chunk granularity, capped at 256/sizeof(element); written by TSGrowableArray_*_CalcChunkSize
+    /* 0x10 */ uint32_t nStartWord; // m_offset - BigBuffer only; Count() is m_count - m_offset (oracle .Count__9BigBuffer)
+};
+#endif // D2_DEFINED_BigBuffer
 #ifndef D2_DEFINED_StormLinkStrc
 #define D2_DEFINED_StormLinkStrc
 struct __attribute__((packed)) StormLinkStrc {
@@ -1196,13 +1206,13 @@ void __stdcall SMsgRegisterKeyUp(HWND hWnd, uint32_t dwContext, int32_t pCallbac
 // @blizzard SMsgRegisterMessage (SMSG.CPP)
 void __stdcall SMsgRegisterMessage(HWND hWnd, uint32_t dwContext, int32_t pCallback);
 // @blizzard SMsgUnregisterCommand (SMSG.CPP)
-void __stdcall SMsgUnregisterCommand(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterCommand(HWND hWnd, uint32_t szText1, char * szText2);
 // @blizzard SMsgUnregisterKeyDown (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyDown(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyDown(HWND hWnd, uint32_t szText1, char * szText2);
 // @blizzard SMsgUnregisterKeyUp (SMSG.CPP)
-void __stdcall SMsgUnregisterKeyUp(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t szText1, char * szText2);
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
-void __stdcall SMsgUnregisterMessage(HWND hWnd, char * szText1, char * szText2);
+void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2);
 } // namespace Storm::WindowHandle
 
 // Globals

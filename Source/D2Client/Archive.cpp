@@ -40,16 +40,16 @@ BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...) {
     return _bResult;
 }
 
-uint32_t __thiscall ARCHIVE_ComputeAddress(int * pNode, int32_t nBaseAddr) {
-    uint32_t nOffset = pNode[1];
+StormLinkStrc * __thiscall ARCHIVE_ComputeAddress(StormLinkStrc * pNode, intptr_t nBaseAddr) {
+    uint32_t nOffset = pNode->pNext;
     if ((int)nOffset < 0) {
-      return ~nOffset;
+      return (StormLinkStrc*)~nOffset;
     }
     if (nBaseAddr < 0) {
-      nBaseAddr = (int)pNode - *(int*)(*pNode + 4);
+      nBaseAddr = (intptr_t)pNode - pNode->pPrevLink->pNext;
     }
 
-    return nOffset + nBaseAddr;
+    return (StormLinkStrc*)(nOffset + nBaseAddr);
 }
 
 int __fastcall Unreferenced_0045b9d0(StormLinkStrc * param_1) {
@@ -194,20 +194,20 @@ void __fastcall ARCHIVE_ClearList(StormLinkedListStrc * nList) {
     }
 }
 
-void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList) {
+void __fastcall ARCHIVE_ClearAndFreeHead(StormLinkedListStrc * nList) {
     int* pPrevLink;
-    ARCHIVE_ClearList((StormLinkedListStrc*)nList);
-    int* pHead = (int*)(nList + 4);
-    int nNext = *pHead;
+    ARCHIVE_ClearList(nList);
+    StormLinkStrc* pSVar1 = &nList->head;
+    StormLinkStrc* nNext = pSVar1->pPrevLink;
     if (!nNext) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pHead, -1);
-    *pPrevLink = nNext;
-    *(uint32_t*)(*pHead + 4) = *(uint32_t*)(nList + 8);
-    *pHead = 0;
-    *(uint32_t*)(nList + 8) = 0;
+    pPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
+    *pPrevLink = (int)nNext;
+    pSVar1->pPrevLink->pNext = pSVar1->pNext;
+    pSVar1->pPrevLink = 0;
+    pSVar1->pNext = 0;
 }
 
 uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1) {

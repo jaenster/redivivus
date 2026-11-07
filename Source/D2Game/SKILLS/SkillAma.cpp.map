@@ -398,7 +398,8 @@
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "intptr_t"
       ]
     },
     {
