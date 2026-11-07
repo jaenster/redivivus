@@ -15,14 +15,27 @@
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
 
+// Forward declarations
+struct D2FogArchiveStrc;
+
 namespace D2Lang::Unicode::UNISYS {
 extern uint16_t CharacterLookupTable[256];
 } // namespace D2Lang::Unicode::UNISYS
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Lang)
+extern D2FogArchiveStrc * MPQ_d2data;
+extern D2FogArchiveStrc * MPQ_patch_d2;
+extern D2FogArchiveStrc * MPQ_d2exp;
 namespace D2Lang::StrTable::strtable {
 extern char gaLanguageCodeFallback[4];
 extern char gaLanguageCodeAbbrevTable[4];
 extern char gaLanguageCodeLookup[4];
+extern uint16_t * * gpStringIndexBase;
+extern uint16_t * * gpStringIndexPatchD2;
+extern uint16_t * * gpStringIndexExpansion;
+extern uint16_t * gpStringBufferBase;
+extern uint16_t * gpStringBufferPatchD2;
+extern uint16_t * gpStringBufferExpansion;
+extern int gnStringTableRefCount;
 } // namespace D2Lang::StrTable::strtable
 #endif // D2_MODULE_D2Lang

@@ -3,6 +3,7 @@
  * Binary: Game.exe
  */
 
+#include "Source/D2Lang/D2Lang.globals.h"
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 

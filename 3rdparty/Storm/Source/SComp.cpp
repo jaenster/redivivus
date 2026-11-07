@@ -305,8 +305,8 @@ void __thiscall BITSTREAM_WriteLiteralByte(D2CompressEncoderStrc * pHuffState, D
     int nBits = 0;
     D2CompressHuffNodeStrc* pDVar1 = pHuffState->apSymbolNodes[nSymbol];
     for (pParent = pHuffState->apSymbolNodes[nSymbol]->pParent; pParent; pParent = pParent->pParent) {
-      nBits++;
       nCode = (uint32_t)(pParent->pSibling != pDVar1) | nCode * 2;
+      nBits++;
       pDVar1 = pParent;
     }
 

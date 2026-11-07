@@ -194,8 +194,11 @@ Our side is the functions the link keeps, not every function of every object
 function of a header, a template instantiation, all `selectany` - is the copy
 of the first object in link order, as link.exe keeps the first definition it
 reads and discards the rest; the original's one copy came about the same way.
-Link order is `recon/runs/build-vc8.sh`'s: the TU paths through `sort(1)`
-(`ours.link_order`, the same collation). The copies are not interchangeable,
+Link order is `recon/runs/build-vc8.sh`'s, which is the CMake build's: the
+module libraries of `Source/modules.cmake` in the executable's (1.14d) link
+order, each library's TUs through `sort(1)` and its data unit last, what no
+module owns last of all (`ours.link_order`, `scripts/modules.py`). Against the
+plain path order it moves 7 pairings to another TU's copy and no MATCH (v2013). The copies are not interchangeable,
 since a directory can compile with other flags (`/GS-`, `/O1`), so it is that
 copy that is paired and judged, and the discarded ones are neither paired nor
 listed as unmapped. A map entry whose own TU's object holds no kept copy - the
@@ -391,6 +394,37 @@ count as uncompared when a game function reads them; items only the runtime read
 import slots and compiler EH/RTTI data are left out, as the function figure leaves
 the runtime out. Never quote its counts in prose; read the file.
 
+## Per-module figures
+
+`recon/runs/build-vc8.sh` links the exe from one static library per module,
+as the CMake build does (`--flat` links the objects instead, in the same
+order), so the linker map says which module library every function of ours
+came from. `scripts/permodule.py --map <build>/d2recon-vc8.map` turns that, the
+audit and the module ground truth into `evidence/permodule.tsv` and
+`evidence/permodule.md`, a module per row:
+
+| Column | What it counts |
+|-|-|
+| `functions`, `bytes` | M's functions: the original functions of the headline's universe (no C runtime, prebuilt library or compiler EH code) that `docs/data/attribution-v2.tsv` gives to M, else the `runs-v2.tsv` band they lie in. attribution-v2 has no crashy, Game or D2Hell (it counts them as Fog, Fog, Bnclient): a function whose counterpart is in one of those three takes that module. The rows add up to the headline |
+| `match`, `match_bytes` | M's functions that MATCH, and their bytes |
+| `ident_bytes` | the audit's `ident_bytes` summed: bytes in instructions identical to ours, the whole function for a MATCH |
+| `bands` | M's 1.14d address bands: its `runs-v2.tsv` rows; for crashy, Game and D2Hell each run of two or more of their functions |
+| `in_lib`, `in_other_lib`, `unpaired`, `not_linked` | where M's functions' counterparts are: in the M library of the exe, in another module's library (filed in the wrong module), without a counterpart, or paired but not in the exe (dropped by `/OPT:REF`) |
+| `lib_functions`, `lib_foreign` | the functions the M library puts in the exe, and how many of them are no counterpart of one of M's |
+| `order_lcs` | the longest common subsequence of M's functions in the original's address order and in ours: the longest run of them, not necessarily adjacent, that both images lay out in the same order (a longest increasing subsequence of our addresses). `order_lcs / functions` is the ordered-match ratio |
+| `same_offset` | M's functions at the same distance from the start of their module as in the original. Ours: from the lowest address of any function of the M library. The original's: from the first function of M's band, a later band counting on from where the one before ends (its last function's end, rounded up to 16), as if M's bands were one. Only a counterpart inside the M library counts. Padding counts: one function of another size, or one dropped, moves every later one |
+| `longest_match_run`, `run_start` | the longest stretch of M's functions, consecutive in the original's address order, that all MATCH, and where it starts |
+| `identical` | `yes` when every one of M's functions MATCHes and sits at its offset and the library holds nothing else: the whole module is the original's code laid out the original's way, the target a module can reach |
+
+`order_lcs` measures the order of objects and of functions inside them,
+`same_offset` adds every size and every gap, so it stays near zero until a
+module's leading functions all match in order and size. The original keeps
+functions nothing calls (`not_linked`: the exe's `/OPT:REF` drops them, 2319
+on v2013), so no module can sit at its offsets while that holds. The
+original's bands also show how it was linked: Fog, Storm and D2Launch each
+have a second band after the C runtime (and D2Direct3D sits there too), which
+is where a library member lands that only a later pass of the linker pulls in.
+
 ## Flags
 
 The default (`scripts/oracle_config.py`):
@@ -574,6 +608,8 @@ map (`bracket`, `align`) and `tulayout.py` order our functions by source line
 | `scripts/peimage.py`, `refimage.py`, `funcdecode.py` | the original, carved and decoded |
 | `scripts/coffobj.py`, `objfuncs.py`, `ours.py` | our objects |
 | `scripts/funcmap.py` | which original function is which |
+| `scripts/modules.py` | the module libraries of `Source/modules.cmake`: link order, and the `/INCLUDE` symbol that forces each member into the link |
+| `scripts/permodule.py` | `evidence/permodule.tsv`/`.md`: the figures and the layout agreement per module |
 | `scripts/compare.py`, `audit.py`, `asmdiff.py` | the judgement |
 | `scripts/datamatch.py` | the data judgement: `evidence/dataextent.tsv`, `data-audit.tsv`, `datatrend.tsv`, `data-fixes.tsv` |
 | `scripts/byte_match_svg.py` | the summary's byte kinds as a bar chart |

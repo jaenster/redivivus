@@ -12,6 +12,9 @@
 // Initialized scalars
 // =============================================================================
 
+D2FogArchiveStrc * MPQ_d2data = 0; D2_GLOBAL_GUARD(MPQ_d2data, "MPQ_d2data");
+D2FogArchiveStrc * MPQ_patch_d2 = 0; D2_GLOBAL_GUARD(MPQ_patch_d2, "MPQ_patch_d2");
+D2FogArchiveStrc * MPQ_d2exp = 0; D2_GLOBAL_GUARD(MPQ_d2exp, "MPQ_d2exp");
 
 namespace D2Common::Drlg::Maze {
 
@@ -96,6 +99,13 @@ char * gpszExpansionStringTblPathFormat = s_data_local_lng__s_expansionstring_00
 char * gpszD2DataMpqName = s_d2data_mpq_006dc770; D2_GLOBAL_GUARD(gpszD2DataMpqName, "D2Lang::StrTable::strtable::gpszD2DataMpqName");
 char * gpszPatchD2MpqName = s_patch_d2_mpq_006dc728; D2_GLOBAL_GUARD(gpszPatchD2MpqName, "D2Lang::StrTable::strtable::gpszPatchD2MpqName");
 char * gpszD2ExpMpqName = s_d2exp_mpq_006cd3a0; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "D2Lang::StrTable::strtable::gpszD2ExpMpqName");
+uint16_t * * gpStringIndexBase = 0; D2_GLOBAL_GUARD(gpStringIndexBase, "D2Lang::StrTable::strtable::gpStringIndexBase");
+uint16_t * * gpStringIndexPatchD2 = 0; D2_GLOBAL_GUARD(gpStringIndexPatchD2, "D2Lang::StrTable::strtable::gpStringIndexPatchD2");
+uint16_t * * gpStringIndexExpansion = 0; D2_GLOBAL_GUARD(gpStringIndexExpansion, "D2Lang::StrTable::strtable::gpStringIndexExpansion");
+uint16_t * gpStringBufferBase = 0; D2_GLOBAL_GUARD(gpStringBufferBase, "D2Lang::StrTable::strtable::gpStringBufferBase");
+uint16_t * gpStringBufferPatchD2 = 0; D2_GLOBAL_GUARD(gpStringBufferPatchD2, "D2Lang::StrTable::strtable::gpStringBufferPatchD2");
+uint16_t * gpStringBufferExpansion = 0; D2_GLOBAL_GUARD(gpStringBufferExpansion, "D2Lang::StrTable::strtable::gpStringBufferExpansion");
+int gnStringTableRefCount = 0; D2_GLOBAL_GUARD(gnStringTableRefCount, "D2Lang::StrTable::strtable::gnStringTableRefCount");
 
 } // namespace D2Lang::StrTable::strtable
 

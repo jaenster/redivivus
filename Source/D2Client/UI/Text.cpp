@@ -6825,38 +6825,38 @@ static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, D2TextBoxStrc * pT
 
     gpTextScrollBoxBuffer = 0;
     BOOL BVar1 = TEXT_DrawScrollingTextBox(pTextBox);
-    if (!BVar1) {
+    if (BVar1) {
+      gbTextScrollBoxAnimating = 1;
+      if (!gnTextNpcInteractGuid && gpTextScrollingBox) {
+        TEXT_FreeTextBox(gpTextScrollingBox);
+        gpTextScrollingBox = 0;
+        GAME::Select::SELECT_SetExclusionRect(nullptr);
+      }
+
+      TEXT_CloseScrollingText();
+      if (gpTextScrollCompleteCallback) {
+        nHandlerCount = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 0, nullptr);
+        return nHandlerCount;
+      }
+      if (gbTextStaticPopupActive == 1) {
+        gbTextStaticPopupActive = 0;
+      } else if (gnTextNpcInteractGuid) {
+        npcmenu::NPCMENU_CloseScrollAndInteraction(gnTextNpcGuid);
+      }
+
+      ui::UI_UpdateCursorAnimationTimer();
+      gnTextNpcInteractGuid = 0;
+      GAME::Select::SELECT_SetExclusionRect(nullptr);
+      if (gbTextEventHandlersRegistered == 1) {
+        nCount = 7;
+        gbTextEventHandlersRegistered = 0;
+        _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, nCount);
+      }
+
+      return 0;
+    } else {
       return 1;
     }
-
-    gbTextScrollBoxAnimating = 1;
-    if (!gnTextNpcInteractGuid && gpTextScrollingBox) {
-      TEXT_FreeTextBox(gpTextScrollingBox);
-      gpTextScrollingBox = 0;
-      GAME::Select::SELECT_SetExclusionRect(nullptr);
-    }
-
-    TEXT_CloseScrollingText();
-    if (gpTextScrollCompleteCallback) {
-      nHandlerCount = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 0, nullptr);
-      return nHandlerCount;
-    }
-    if (gbTextStaticPopupActive == 1) {
-      gbTextStaticPopupActive = 0;
-    } else if (gnTextNpcInteractGuid) {
-      npcmenu::NPCMENU_CloseScrollAndInteraction(gnTextNpcGuid);
-    }
-
-    ui::UI_UpdateCursorAnimationTimer();
-    gnTextNpcInteractGuid = 0;
-    GAME::Select::SELECT_SetExclusionRect(nullptr);
-    if (gbTextEventHandlersRegistered == 1) {
-      nCount = 7;
-      gbTextEventHandlersRegistered = 0;
-      _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, nCount);
-    }
-
-    return 0;
 }
 
 void __stdcall TEXT_CloseNpcInteraction() {

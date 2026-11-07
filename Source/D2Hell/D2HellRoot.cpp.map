@@ -532,6 +532,7 @@
         "TSLink_TMESSAGESOURCE_Unlink"
       ],
       "usedTypes": [
+        "StormFaultHandlerNodeStrc",
         "StormLinkStrc"
       ]
     },

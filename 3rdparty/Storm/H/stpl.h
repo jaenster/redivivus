@@ -66,7 +66,7 @@ template<class T>
 class TSLink {
 public:
     /* 0x00 */ TSLink<T>* m_prevlink; // previous node's link, or the list head's own terminator link
-    /* 0x04 */ intptr_t m_next; // address of the NEXT ITEM (not its link); end of list is ~(int)&terminator, i.e. negative
+    /* 0x04 */ intptr_t m_next; // address of the next element (not its link), or ~address of the list terminator at the end
 
     TSLink<T>* NextLink(int32_t nLinkOffset);
 };

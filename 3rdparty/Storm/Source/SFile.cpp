@@ -355,8 +355,8 @@ void __thiscall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, uint3
     D2MPQBlockEntryStrc* pDst = pSectorTable + (nSectorCount - 1);
     if (nSectorCount > 1) {
       uint8_t* pDstExtra;
-      nSectorsLeft = nSectorCount - 1;
       pDstExtra = pDst->abMD5 + 8;
+      nSectorsLeft = nSectorCount - 1;
       do {
         memmove(pDst, pSrc, 0x10);
         pSrc += -0x10;

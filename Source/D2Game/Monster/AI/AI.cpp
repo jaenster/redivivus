@@ -2095,22 +2095,21 @@ uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, D2Uni
     }
 
     uint32_t pDistAsUnit = AI::GetDistance(pUnit, pOther);
-    if ((int)pDistAsUnit >= (int)ppAllyData->nMaxScanRadius) {
-      return 0;
+    if ((int)pDistAsUnit < (int)ppAllyData->nMaxScanRadius) {
+      _bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pOther);
+      if (_bCanAttack) {
+        return 0;
+      }
+
+      ppAllyData->pLOSFlagOrSecondary = (D2UnitStrc*)((intptr_t)&ppAllyData->pLOSFlagOrSecondary->eUnitType + 1);
+      if ((int)pDistAsUnit >= (int)ppAllyData->nBestDistance) {
+        return 0;
+      }
+
+      ppAllyData->nBestDistance = pDistAsUnit;
+      ppAllyData->pBestUnit = pOther;
     }
 
-    _bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pOther);
-    if (_bCanAttack) {
-      return 0;
-    }
-
-    ppAllyData->pLOSFlagOrSecondary = (D2UnitStrc*)((intptr_t)&ppAllyData->pLOSFlagOrSecondary->eUnitType + 1);
-    if ((int)pDistAsUnit >= (int)ppAllyData->nBestDistance) {
-      return 0;
-    }
-
-    ppAllyData->nBestDistance = pDistAsUnit;
-    ppAllyData->pBestUnit = pOther;
     return 0;
 }
 
@@ -2895,43 +2894,44 @@ static BOOL __stdcall MONSTERAI_ValidateSwitchTarget(D2UnitStrc * * ppUnit, int 
     }
 
     D2UnitStrc* pSwitchTarget = *ppUnit;
-    if (!pSwitchTarget) {
+    if (pSwitchTarget) {
+      if (nParam2 <= 5) {
+        D2UnitStrc* pPrevTarget;
+        pDynamicPath = pUnit->pPath.pDynamicPath;
+        nSavedPathType = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
+        pPrevTarget = D2Common::PATH::DynamicPath::GetTargetUnit(pDynamicPath);
+        nPathSP1X = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
+        nPathSP1Y = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
+        D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pSwitchTarget);
+        D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 2);
+        D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+        D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pPrevTarget);
+        D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nPathSP1X, (int16_t)nPathSP1Y);
+        D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, nSavedPathType);
+        pPrevTarget = (D2UnitStrc*)D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
+        if (!pPrevTarget) {
+          nPathPoints = 7;
+          pAiParamsPtr = &sAiParams;
+          sAiParams.pBestUnit = pPrevTarget;
+          sAiParams.nBestDistance = 0x7fffffff;
+          sAiParams.pLOSFlagOrSecondary = pSwitchTarget;
+          ForEach(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pAiParamsPtr, (fpMonsterAiForEach)pPrevTarget, nPathPoints);
+          if (!sAiParams.pBestUnit) {
+            return 1;
+          }
+          if ((int)sAiParams.nBestDistance >= 0x14) {
+            return 1;
+          }
+
+          *ppUnit = sAiParams.pBestUnit;
+          *pDistance = sAiParams.nBestDistance;
+        }
+      }
+
+      return 0;
+    } else {
       return 1;
     }
-    if (nParam2 <= 5) {
-      D2UnitStrc* pPrevTarget;
-      pDynamicPath = pUnit->pPath.pDynamicPath;
-      nSavedPathType = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
-      pPrevTarget = D2Common::PATH::DynamicPath::GetTargetUnit(pDynamicPath);
-      nPathSP1X = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-      nPathSP1Y = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
-      D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pSwitchTarget);
-      D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 2);
-      D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
-      D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pPrevTarget);
-      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nPathSP1X, (int16_t)nPathSP1Y);
-      D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, nSavedPathType);
-      pPrevTarget = (D2UnitStrc*)D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
-      if (!pPrevTarget) {
-        nPathPoints = 7;
-        pAiParamsPtr = &sAiParams;
-        sAiParams.pBestUnit = pPrevTarget;
-        sAiParams.nBestDistance = 0x7fffffff;
-        sAiParams.pLOSFlagOrSecondary = pSwitchTarget;
-        ForEach(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pAiParamsPtr, (fpMonsterAiForEach)pPrevTarget, nPathPoints);
-        if (!sAiParams.pBestUnit) {
-          return 1;
-        }
-        if ((int)sAiParams.nBestDistance >= 0x14) {
-          return 1;
-        }
-
-        *ppUnit = sAiParams.pBestUnit;
-        *pDistance = sAiParams.nBestDistance;
-      }
-    }
-
-    return 0;
 }
 
 // Resolves the current target for a monster's "switch AI" (the secondary AI targeting mode, e.g. for converted/charmed or special monsters). Only operates on UNIT_MONSTER units that have a switch-AI param. Param1 selects target domain: 1=player by GUID, 2=monster by GUID, 4=missile by GUID (looked up via FindUnitFromTable), 3=proximity scan (toggles alignment, runs AI ForEach over nearby units to pick the best by distance). For the resolved candidate, optionally requires line of sight (bRequireLOS) and that it is alive/valid; on success writes the unit to *ppOutUnit and distance to *pOutDistance and returns 1, else clears the switch-AI target params and returns 0. Custom register calling convention (pGame in EAX, pUnit in ESI).

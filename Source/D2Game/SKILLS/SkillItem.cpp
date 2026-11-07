@@ -1738,7 +1738,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnit
 BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t _bIsUndead;
     bool bIsUndead;
-    if (!(pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
+    if ((pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER) == 0) {
       return 0;
     }
 

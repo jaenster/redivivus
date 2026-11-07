@@ -212,7 +212,7 @@ char * __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
 void * __stdcall NET_SID_CLIENT_Send_0x40_QueryRealms2();
 // @sourcefile .\BnSend.cpp
 void __stdcall BNSEND_FreeChannelListData();
-void * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
+char * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType);
 uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
 void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode);

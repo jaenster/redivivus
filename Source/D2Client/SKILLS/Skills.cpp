@@ -2103,11 +2103,11 @@ void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, eMissilesId pMis
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nX = nX;
-    sSkillArg.eSkillNo = eSkill;
     sSkillArg.nFlags = 1;
-    sSkillArg.nY = nY;
-    sSkillArg.nSkillLevel = nToHit;
     sSkillArg.pOwner = pUnit;
+    sSkillArg.nY = nY;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nToHit;
     sSkillArg.nMissileTxtNo = pMissileId;
     UNIT::Missile::MakeMissile(&sSkillArg);
 }

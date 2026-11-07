@@ -72,7 +72,7 @@ char s___AUItem_NewsTable___0072ff8c[24] = {
 } // namespace Bnclient::BnSend
 static uint32_t g_nBNetServerToken = 0; D2_STATIC_GUARD(g_nBNetServerToken, "g_nBNetServerToken");
 static uint32_t g_nBNetClientToken = 0; D2_STATIC_GUARD(g_nBNetClientToken, "g_nBNetClientToken");
-static void * g_pBNetChannelListData = 0; D2_STATIC_GUARD(g_pBNetChannelListData, "g_pBNetChannelListData");
+static char * g_pBNetChannelListData = 0; D2_STATIC_GUARD(g_pBNetChannelListData, "g_pBNetChannelListData");
 static void * gpRealmQueryData = 0; D2_STATIC_GUARD(gpRealmQueryData, "gpRealmQueryData");
 void * g_pBNetGameListData = 0; D2_GLOBAL_GUARD(g_pBNetGameListData, "g_pBNetGameListData");
 void * gpBNetWriteUserData = 0; D2_GLOBAL_GUARD(gpBNetWriteUserData, "gpBNetWriteUserData");
@@ -364,7 +364,7 @@ void __stdcall BNSEND_FreeChannelListData() {
     g_pBNetChannelListData = 0;
 }
 
-void * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar) {
+char * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar) {
     uint32_t dwChannelFlags = 0;
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
     if (bIsExpansion && !bIsExpansionChar) {
@@ -999,7 +999,7 @@ void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, size_t nSiz
     }
 
     g_pBNetChannelListData = 0;
-    g_pBNetChannelListData = D2_ALLOC_AT(nSize, ".\\BnSend.cpp", 0x1e6);
+    g_pBNetChannelListData = (char*)D2_ALLOC_AT(nSize, ".\\BnSend.cpp", 0x1e6);
     memcpy(g_pBNetChannelListData, pbChannelData, nSize);
 }
 

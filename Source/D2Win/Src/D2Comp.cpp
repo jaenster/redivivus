@@ -2933,7 +2933,10 @@ void __stdcall D2COMP_SetUnitDisplayStrings(D2CharSelCompStrc * pCompUnit, uint1
 
 BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t nAnimMode) {
     uint8_t* pCOFLayerData;
-    if (pCompUnit) {
+    if (!pCompUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8bf);
+      exit(-1);
+    } else {
       {
         D2CompCofListNodeStrc* pCOFEntry;
         pCOFEntry = *pCompUnit->ppCofCacheEntries;
@@ -2962,9 +2965,6 @@ BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t n
         return 1;
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8bf);
-    exit(-1);
 }
 
 // Returns the code index (1..13) paired with the four-character weapon-class code nWeaponClassCode ('bow '..'ht2 ') in gaCompWeaponClassCodeMap, or 0 when the code is not in the map; the index selects gaCompWeaponClassByCodeIndex.

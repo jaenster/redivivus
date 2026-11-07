@@ -179,7 +179,7 @@ struct StormLinkStrc * __thiscall LINKEDLIST_GetOffset(struct StormLinkedListStr
 void __thiscall LINKEDLIST_SetNodeValue(struct StormLinkedListStrc * pNode, int32_t dwValue);
 void __thiscall LINKEDLIST_InsertNode(struct StormLinkedListStrc * pList, void * pNewItem, int32_t nInsertMode, void * pRefItem);
 int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, void * nOffset);
-void __thiscall LINKEDLIST_RemoveNode(int * pList, void * nOffset);
+void __thiscall LINKEDLIST_RemoveNode(int * pList, struct StormFaultHandlerNodeStrc * pItem);
 // @wasnamed LINKEDLIST_GetCount - one name on two different functions.
 // @evidence Calls LINKEDLIST_GetOffset(nOffset,p) then returns node[+4].
 // It counts nothing. 00426a60 is the real count (returns max(pList[+8],0)).

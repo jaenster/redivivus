@@ -72,8 +72,7 @@ void __stdcall SERR_AddStormFacility(uint16_t wModuleId) {
 
     SIZE_T dwBytes = 0xc;
     DWORD dwFlags = 4;
-    HANDLE hHeap = GetProcessHeap();
-    /* HANDLE hHeap for HeapAlloc */ pNewNode = (D2SErrMessageSourceStrc*)HeapAlloc(hHeap, dwFlags, dwBytes);
+    /* HANDLE hHeap for HeapAlloc */ pNewNode = (D2SErrMessageSourceStrc*)HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
     *ppTailLink = pNewNode;
     pNewNode->wModuleId = wModuleId;
     HMODULE hModule = SSystem::StormGetInstance();
@@ -213,8 +212,7 @@ int __stdcall SErrRegisterMessageSource(uint16_t wModuleId, HMODULE dwModuleBase
     SERR_InternalEnterCriticalSection();
     SIZE_T dwBytes = 0xc;
     DWORD dwFlags = 4;
-    HANDLE hHeap = GetProcessHeap();
-    D2SErrMessageSourceStrc* pNewModule = (D2SErrMessageSourceStrc*)HeapAlloc(hHeap, dwFlags, dwBytes);
+    D2SErrMessageSourceStrc* pNewModule = (D2SErrMessageSourceStrc*)HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
     pNewModule->wModuleId = wModuleId;
     pNewModule->hModule = dwModuleBase;
     pNewModule->pNext = gpErrorModuleList;
@@ -406,16 +404,16 @@ template<> __attribute__((noinline)) inline void TSList<HANDLER, TSGetLink<HANDL
     int* pPrevLink;
     int* pNode;
     while (true) {
-      int pNext;
+      int nPrevLink;
       pNode = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
 
-      pNext = *pNode;
-      if (pNext) {
+      nPrevLink = *pNode;
+      if (nPrevLink) {
         pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-        *pPrevLink = pNext;
+        *pPrevLink = nPrevLink;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
         pNode[1] = 0;

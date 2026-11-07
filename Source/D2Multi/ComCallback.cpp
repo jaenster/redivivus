@@ -39,11 +39,6 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ChannelUserNameNodeStrc) == 0x48,
 static_assert(sizeof(void*) != 4 || sizeof(::D2ChannelUserStrc) == 0xb4, "D2_NEW_AT(D2ChannelUserStrc): the 32-bit layout must be the 0xb4 bytes 1.14d allocates");
 
 
-#ifndef RECON_FPTD_ChatDlgCallback
-#define RECON_FPTD_ChatDlgCallback
-typedef int (__stdcall *ChatDlgCallback)(D2ControlMsg * pControlMsg);
-#endif
-
 static uint8_t gaBnetCdKeyCharDecodeTable[256] = {
     0xff,
     0xff,
@@ -2034,7 +2029,7 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) 
     if (!nSendResult) {
       uint16_t* wszTitle;
       wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, (ChatDlgCallback)OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
       return 0;
     }
 
@@ -2079,7 +2074,7 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError2(D2ControlMsg * pControlMsg) 
     if (!nSendResult) {
       uint16_t* wszTitle;
       wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, (ChatDlgCallback)OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
       return 0;
     }
 

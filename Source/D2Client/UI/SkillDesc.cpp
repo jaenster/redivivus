@@ -7048,19 +7048,19 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       SKILLDESC_FormatMinMaxRange(nCalcA, nCalcB, pwszOutput, nSigned, wDescTextA, wDescTextB);
       return 1;
       case 0x35:
-        pnCalcResult = SpellSel::SPELLSEL_FindChargedSkill1(pUnitLocal, eSkill);
+        pnCalcResult = (short int*)SpellSel::SPELLSEL_FindChargedSkill1(pUnitLocal, eSkill);
       SKILLDESC_DescLine35_BonusList(pnCalcResult, wDescTextA);
       return 1;
       case 0x36:
-        pnCalcResult = SpellSel::SPELLSEL_FindChargedSkill2(pUnitLocal, eSkill);
+        pnCalcResult = (short int*)SpellSel::SPELLSEL_FindChargedSkill2(pUnitLocal, eSkill);
       SKILLDESC_DescLine35_BonusList(pnCalcResult, wDescTextA);
       return 1;
       case 0x37:
-        pnCalcResult = SpellSel::SPELLSEL_FindChargedSkill3(pUnitLocal, eSkill);
+        pnCalcResult = (short int*)SpellSel::SPELLSEL_FindChargedSkill3(pUnitLocal, eSkill);
       SKILLDESC_DescLine35_BonusList(pnCalcResult, wDescTextA);
       return 1;
       case 0x38:
-        pnCalcResult = SpellSel::SPELLSEL_FindChargedSkill4(pUnitLocal, eSkill);
+        pnCalcResult = (short int*)SpellSel::SPELLSEL_FindChargedSkill4(pUnitLocal, eSkill);
       SKILLDESC_DescLine35_BonusList(pnCalcResult, wDescTextA);
       return 1;
       case 0x39:

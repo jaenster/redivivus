@@ -37,6 +37,11 @@
 
 #include "Source/D2CMP/SRC/LRUCache.h"
 #include "Source/D2Game/GAME/CCmd.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/DATATBLS/LvlTbls.h"
+#include "Source/D2Win/D2Win.globals.h"
+#include "Source/Fog/Source/SFile.h"
 
 #include <cstdio>
 
@@ -158,6 +163,39 @@ void D2PATCH_LRUCACHE_Unlink(D2LRUCacheNodeStrc* pEntry, D2LRUCacheStrc* pCache)
         }
     }
     g_pfnLRUCacheUnlink(pEntry, pCache);
+}
+
+// ---------------------------------------------------------------------------
+// Refuse to run on game data older than 1.14d. Levels.txt in d2exp.mpq has 133
+// rows; 1.14d's Patch_D2.mpq overrides it with 137. Without the patch the game
+// starts normally and only faults when it builds one of the missing levels, e.g.
+// the Act V waypoint to the Worldstone Keep. This check is ours, not 1.14d's.
+const int kLevelsRows114d = 137;
+
+void (__fastcall* g_pfnAllocTxtLevels)(D2PoolManagerStrc*) =
+    &D2Common::DATATBLS::LvlTbls::TXT_AllocTxt_levels;
+
+void __fastcall D2PATCH_TXT_AllocTxt_levels(D2PoolManagerStrc* pMemory) {
+    g_pfnAllocTxtLevels(pMemory);
+
+    const int nRows = D2Common::DATATBLS::MonsterTbls::sgtDataTable.nTxtLevelsSize;
+    // The MPQs are opened only outside server mode and -direct; d2data.mpq being
+    // open says that load ran.
+    const bool bPatchMissing = D2Win::Src::D2WinArchive::MPQ_d2data &&
+                               !D2Win::Src::D2WinArchive::MPQ_patch_d2 &&
+                               !Fog::Source::SFile::GetUseDirectCommand();
+    if (nRows >= kLevelsRows114d && !bPatchMissing) return;
+
+    char szText[512];
+    snprintf(szText, sizeof(szText),
+             "Patch_D2.mpq is missing or from an older version - Diablo II 1.14d data is required.\n\n"
+             "The level table has %d rows, 1.14d has %d%s. Update Diablo II to 1.14d and make sure "
+             "its Patch_D2.mpq is in the game folder.",
+             nRows, kLevelsRows114d, bPatchMissing ? ", and Patch_D2.mpq was not opened" : "");
+    D2TraceFmt("D2PATCH game data check failed: levels=%d patch_d2=%s", nRows,
+               bPatchMissing ? "missing" : "open");
+    MessageBoxA(0, szText, "Diablo II", MB_OK | MB_ICONERROR | MB_TOPMOST | MB_SETFOREGROUND);
+    ExitProcess(1);
 }
 
 } // namespace
@@ -307,12 +345,20 @@ void D2PATCH_InstallAll(void) {
     for (int i = 0; i < 9; i++) szNeedle[i] = (char)(kNeedleXor[i] ^ 0x5a);
     szNeedle[9] = '\0';
     D2PATCH_RedirectFormatString(szNeedle, szVersion, 2);
+
+    // One call, from DATATBLS_LoadAllTxts.
+    D2PATCH_RedirectAllCalls((void*)&D2Common::DATATBLS::LvlTbls::TXT_AllocTxt_levels,
+                             (void*)&D2PATCH_TXT_AllocTxt_levels, 1);
 }
 
 #ifdef _MSC_VER
-// The development build installs these from D2CONTROL_Start. The Visual C++
-// build has no control channel, so it installs them from the CRT's initialiser
-// table, before WinMain runs any game code.
+// Both builds install these before WinMain runs any game code: Visual C++ from the
+// CRT's initialiser table, GCC from a constructor. D2CONTROL_Start calls it too;
+// the second call returns at once.
 #pragma section(".CRT$XCU", read)
 extern "C" __declspec(allocate(".CRT$XCU")) void (__cdecl* const gpfnD2PatchInstallAll)(void) = D2PATCH_InstallAll;
+#elif defined(__GNUC__)
+// The same for the GCC build: before WinMain, not at the first in-game pump, so the
+// splash already shows the R<version> line and every patch is in before the menus run.
+__attribute__((constructor)) static void D2PATCH_InstallAtStartup(void) { D2PATCH_InstallAll(); }
 #endif

@@ -534,14 +534,14 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * p
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall SaveSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint8_t * pEndAddress) {
     int nHardPoints;
-    uint8_t* puVar1 = *pStartAddress;
-    if (puVar1 + D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2 > pEndAddress) {
+    uint8_t* pHeader = *pStartAddress;
+    if (pHeader + D2Common::ITEMS::Items::sgptDataTable->nSkillCountMaxPerClass + 2 > pEndAddress) {
       return 1;
     }
 
-    puVar1[0] = 'i';
-    puVar1[1] = 'f';
-    uint8_t* pWriteCursor = puVar1 + 2;
+    pHeader[0] = 'i';
+    pHeader[1] = 'f';
+    uint8_t* pWriteCursor = pHeader + 2;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x307);
     uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
     if ((int)nClassId >= 7) {

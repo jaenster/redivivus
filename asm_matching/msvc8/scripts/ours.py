@@ -176,15 +176,12 @@ def load_all(objdir):
 
 def link_order(tus):
     """Our TUs in the order recon/runs/build-vc8.sh hands their objects to
-    the linker: the TU paths through sort(1), as that script sorts them, so
-    under the same locale's collation (case-blind in en_* locales)."""
-    import subprocess
-    tus = sorted(set(tus))
-    r = subprocess.run(['sort'], input=''.join(t + '\n' for t in tus), capture_output=True, text=True)
-    out = [t for t in r.stdout.split('\n') if t]
-    if r.returncode != 0 or sorted(out) != tus:
-        return tus
-    return out
+    the linker: grouped into the module libraries of Source/modules.cmake in
+    the executable's link order, each library's TUs through sort(1)
+    (modules.py), whether the build links the libraries or the objects."""
+    import modules
+    from oracle_config import REPO
+    return modules.link_order(tus, REPO)
 
 
 def link_kept(fns):

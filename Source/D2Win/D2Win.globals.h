@@ -22,11 +22,6 @@ struct D2ItemsTxt;
 struct D2WinEditBox;
 typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t param_3, LPARAM param_4);
 
-namespace D2Win::Src::D2WinArchive {
-extern D2FogArchiveStrc * MPQ_d2data;
-extern D2FogArchiveStrc * MPQ_patch_d2;
-extern D2FogArchiveStrc * MPQ_d2exp;
-} // namespace D2Win::Src::D2WinArchive
 namespace D2Win::Src::D2WinMain {
 extern int nPosX;
 extern int nPosY;
@@ -51,10 +46,13 @@ extern D2FogArchiveStrc * MPQ_d2delta;
 extern D2FogArchiveStrc * MPQ_d2char;
 extern D2FogArchiveStrc * MPQ_d2video;
 extern D2FogArchiveStrc * MPQ_d2Xtalk;
+extern D2FogArchiveStrc * MPQ_d2data;
 extern D2FogArchiveStrc * MPQ_d2kfixup;
 extern D2FogArchiveStrc * MPQ_d2speech;
 extern D2FogArchiveStrc * MPQ_d2music;
 extern D2FogArchiveStrc * MPQ_d2Xvideo;
+extern D2FogArchiveStrc * MPQ_patch_d2;
+extern D2FogArchiveStrc * MPQ_d2exp;
 } // namespace D2Win::Src::D2WinArchive
 namespace D2Win::Src::D2WinButton {
 extern int gnFormControlCount;

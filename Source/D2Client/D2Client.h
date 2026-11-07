@@ -416,7 +416,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0x14 */ void (__fastcall *pfnSendChatCommand)(uint8_t *);
     /* 0x18 */ void * (__stdcall *pfnGetChannelNamePtr)();
     /* 0x1C */ void (__fastcall *pfnSendJoinChannel)(char *, int, int);
-    /* 0x20 */ void * (__fastcall *pfnSendGetChannelList)(int);
+    /* 0x20 */ char * (__fastcall *pfnSendGetChannelList)(int);
     /* 0x24 */ int (__fastcall *pfnDequeueMessage)(int *, void *);
     /* 0x28 */ int (__fastcall *pfnGetStateAndClear)(int *);
     /* 0x2C */ void (__fastcall *pfnSendGetFileTime)(char *, uint32_t);

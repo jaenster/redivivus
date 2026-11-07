@@ -3083,8 +3083,7 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
       return uBlockResult;
     }
 
-    int bExpansion = pGame->bExpansion;
-    int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, bExpansion);
+    int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, pGame->bExpansion);
     if (nBlockRate <= 0) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;

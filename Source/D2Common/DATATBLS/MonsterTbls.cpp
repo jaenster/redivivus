@@ -648,7 +648,7 @@ void __fastcall DATATBLS_CompileUniqueTitleTxt(D2PoolManagerStrc * pMemory, char
       {"Name", FIELDTYPE_KEY_WORD, 0, 0, (void*)DataTbls::DATATBLS_LookupStringId},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    if (nTitleIdx >= 4) {
+    if (nTitleIdx > 3) {
       return;
     }
 

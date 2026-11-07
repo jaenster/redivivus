@@ -515,8 +515,8 @@ int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, void * nOffset) {
     return nNodeValue;
 }
 
-void __thiscall LINKEDLIST_RemoveNode(int * pList, void * nOffset) {
-    StormLinkStrc* pNodeLink = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, nOffset);
+void __thiscall LINKEDLIST_RemoveNode(int * pList, StormFaultHandlerNodeStrc * pItem) {
+    StormLinkStrc* pNodeLink = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, pItem);
     TSLink_TMESSAGESOURCE_Unlink(pNodeLink);
 }
 
@@ -533,14 +533,14 @@ int32_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pList, void * nOffset) {
 // Named per redivivus issue #35; T from gFaultHandlerList, whose nodes are allocated with .?AUTMESSAGESOURCE@@ (0072f9fc).
 void __fastcall TSList_TMESSAGESOURCE_UnlinkAll(StormLinkedListStrc * pList) {
     while (true) {
-      void* nOffset;
-      nOffset = (void*)pList->head.pNext;
-      if ((intptr_t)nOffset <= 0) {
-        nOffset = 0;
+      StormFaultHandlerNodeStrc* pItem;
+      pItem = (StormFaultHandlerNodeStrc*)pList->head.pNext;
+      if ((intptr_t)pItem <= 0) {
+        pItem = 0;
         break;
       }
 
-      LINKEDLIST_RemoveNode(&pList->nLinkOffset, nOffset);
+      LINKEDLIST_RemoveNode(&pList->nLinkOffset, pItem);
     }
 }
 

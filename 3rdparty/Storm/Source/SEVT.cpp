@@ -701,16 +701,16 @@ template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREA
     int* pLinkSlot;
     int* pNode;
     while (true) {
-      int nNextNode;
+      int nPrevLink;
       pNode = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
 
-      nNextNode = *pNode;
-      if (nNextNode) {
+      nPrevLink = *pNode;
+      if (nPrevLink) {
         pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
-        *pLinkSlot = nNextNode;
+        *pLinkSlot = nPrevLink;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
         pNode[1] = 0;

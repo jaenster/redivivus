@@ -19,7 +19,6 @@ struct D2CharSelStrc;
 struct D2CompCofCacheEntryStrc;
 struct D2ControlMsg;
 struct D2ControlStrc;
-struct D2FogArchiveStrc;
 struct D2FontGlyphStrc;
 struct D2FontTableHeaderStrc;
 struct D2IniConfigStrc;
@@ -617,11 +616,6 @@ void __fastcall D2WINEDITBOX_Destroy(::D2WinTimer * pEditBox);
 } // namespace D2Win::Src::D2WinTimer
 
 // Globals
-namespace D2Win::Src::D2WinArchive {
-extern D2FogArchiveStrc * MPQ_d2data;
-extern D2FogArchiveStrc * MPQ_d2exp;
-extern D2FogArchiveStrc * MPQ_patch_d2;
-} // namespace D2Win::Src::D2WinArchive
 namespace D2Win::Src::D2WinMain {
 extern int nPosX;
 extern int nPosY;
