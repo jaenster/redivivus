@@ -275,8 +275,8 @@ void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t 
     D2UnitDataObjectStrc* pObjectData = D2_NEW_AT(D2UnitDataObjectStrc, ".\\UNIT\\Object.cpp", 0x76);
     pUnit->pUnitData.pUnitDataObject = pObjectData;
     memset(pObjectData, 0, 0x38);
-    pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[0] = 0;
-    pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[1] = 0;
+    pUnit->pUnitData.pUnitDataObject->unk0x10 = 0;
+    pUnit->pUnitData.pUnitDataObject->unk0x14 = 0;
     D2ObjectsTxt* pTxtLine = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
     if (pTxtLine->Selectable[pUnit->eAnimMode.ePlayerMode]) {
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
@@ -318,16 +318,16 @@ void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t 
             exit(-1);
           }
 
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eLevelId;
+          pUnit->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eLevelId;
           break;
         }
       case 0x3c:
         {
           eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
           if (eLevelId == LEVEL_Tristram) {
-            pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = LEVEL_StonyField;
+            pUnit->pUnitData.pUnitDataObject->nShrineId = LEVEL_StonyField;
           } else if (eLevelId == LEVEL_StonyField) {
-            pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = LEVEL_Tristram;
+            pUnit->pUnitData.pUnitDataObject->nShrineId = LEVEL_Tristram;
           }
 
           break;

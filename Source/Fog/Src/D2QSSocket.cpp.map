@@ -102,7 +102,6 @@
       ],
       "usedTypes": [
         "D2QSSocketStrc",
-        "uint16_t",
         "uint32_t"
       ]
     },

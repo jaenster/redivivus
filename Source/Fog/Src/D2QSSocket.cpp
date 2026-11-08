@@ -29,7 +29,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x194, "D2_NEW_A
 
 #ifndef RECON_FPTD_fpD2QSSocketPacketHandler
 #define RECON_FPTD_fpD2QSSocketPacketHandler
-typedef int (__stdcall *fpD2QSSocketPacketHandler)(void * pContext);
+typedef int (__fastcall *fpD2QSSocketPacketHandler)(uint8_t * pPacketBuf, int nPacketSize, void * pContext);
 #endif
 
 namespace Fog::Src::D2QSSocket {
@@ -102,21 +102,21 @@ int __stdcall ReadBytesFromSocket(D2QSSocketStrc * pMCPQSocket, char * pOutBuf, 
 static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * pBuffer, int nBufferSize) {
     BOOL bBadHandlerPtr;
     int iVar2;
-    uint16_t wMsgSize;
-    void* pMessage;
+    uint32_t uVar3;
+    uint8_t* pPacketBuf;
+    uint32_t nPacketSize;
+    uint8_t* pMessage;
     uint32_t nPacketLen;
     size_t _Size;
-    uint16_t wPacketSize;
-    void* pvVar3 = pBuffer;
+    uint8_t* _Src = (uint8_t*)pBuffer;
     do {
       int iVar1;
-      wPacketSize = *(uint16_t*)(pQServerStrc->nSizeFieldOffset + (char*)pvVar3);
-      nPacketLen = (uint32_t)wPacketSize;
+      nPacketLen = (uint32_t)*(uint16_t*)(_Src + pQServerStrc->nSizeFieldOffset);
       iVar2 = pQServerStrc->nHeaderSize;
-      iVar1 = (intptr_t)pBuffer + (nBufferSize - (intptr_t)pvVar3);
+      iVar1 = (intptr_t)pBuffer + (nBufferSize - (intptr_t)_Src);
       if (iVar1 < iVar2 || iVar1 < (int)nPacketLen) {
-        _Size = (intptr_t)pBuffer + (nBufferSize - (intptr_t)pvVar3);
-        memcpy(pBuffer, pvVar3, _Size);
+        _Size = (intptr_t)pBuffer + (nBufferSize - (intptr_t)_Src);
+        memcpy(pBuffer, _Src, _Size);
         return _Size;
       }
       if (0x2063 < (int32_t)nPacketLen) {
@@ -124,33 +124,41 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         exit(-1);
       }
 
-      wMsgSize = wPacketSize - (short int)iVar2;
-      pMessage = (void*)(iVar2 + (char*)pvVar3);
-      if (pQServerStrc->pfnPacketHandler) {
-        /* FARPROC lpfn for IsBadCodePtr */ bBadHandlerPtr = IsBadCodePtr((FARPROC)pQServerStrc->pfnPacketHandler);
-        if (bBadHandlerPtr) {
-          ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x101);
-          exit(-1);
-        }
-
-        iVar2 = pQServerStrc->pfnPacketHandler(pQServerStrc->pHandlerContext);
-        if (!iVar2) {
-          if (pQServerStrc->nSizeFieldOffset > 0) {
-            pMessage = pvVar3;
-            wMsgSize = wPacketSize;
-          }
-
-          D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, wMsgSize);
-          /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
-          pvVar3 = (void*)((char*)pvVar3 + nPacketLen);
-          continue;
-        }
-      } else {
-        D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, wMsgSize);
+      pMessage = _Src + iVar2;
+      uVar3 = (uint16_t)(nPacketLen - iVar2);
+      if (!pQServerStrc->pfnPacketHandler) {
+        D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, (uint16_t)(nPacketLen - iVar2));
         /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
+        _Src += nPacketLen;
+        continue;
       }
 
-      pvVar3 = (void*)((char*)pvVar3 + nPacketLen);
+      /* FARPROC lpfn for IsBadCodePtr */ bBadHandlerPtr = IsBadCodePtr((FARPROC)pQServerStrc->pfnPacketHandler);
+      if (bBadHandlerPtr) {
+        ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x101);
+        exit(-1);
+      }
+
+      pPacketBuf = pMessage;
+      nPacketSize = uVar3;
+      if (pQServerStrc->nSizeFieldOffset > 0) {
+        pPacketBuf = _Src;
+        nPacketSize = nPacketLen;
+      }
+
+      iVar2 = pQServerStrc->pfnPacketHandler(pPacketBuf, nPacketSize, pQServerStrc->pHandlerContext);
+      if (iVar2) {
+        _Src += nPacketLen;
+        continue;
+      }
+      if (pQServerStrc->nSizeFieldOffset > 0) {
+        pMessage = _Src;
+        uVar3 = nPacketLen;
+      }
+
+      D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, (uint16_t)uVar3);
+      /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
+      _Src += nPacketLen;
     } while (true);
 }
 

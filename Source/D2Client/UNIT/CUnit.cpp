@@ -793,7 +793,7 @@ uint16_t * __fastcall GetName(D2UnitStrc * pUnit) {
       if (!pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->IsDoor) {
         bIsShrine = D2Common::Units::IsShrine(pUnit);
         if (bIsShrine) {
-          pwszName = D2Lang::StrTable::strtable::GetLocaleString(pUnit->pUnitData.pUnitDataMonster->Components[0] + 0x2a39);
+          pwszName = D2Lang::StrTable::strtable::GetLocaleString(pUnit->pUnitData.pUnitDataObject->nShrineId + 0x2a39);
           return pwszName;
         }
 
@@ -2046,7 +2046,7 @@ D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_
     pUnit = InitCommonData(pUnit, nUnitGUID, nClassId, nX, nY, eUnitType, nUnused, nState);
     if (pUnit) {
       BOOL bIsShrine;
-      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = nInteraction;
+      pUnit->pUnitData.pUnitDataObject->nShrineId = nInteraction;
       bIsShrine = D2Common::Units::IsShrine(pUnit);
       if (bIsShrine) {
         Object::SetShrineTextInfo(pUnit);

@@ -310,9 +310,7 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     uint32_t dwB;
     uint32_t uVar2;
     uint32_t dwTmp10;
-    uint32_t auStack_194[10];
-    uint32_t uStack_16c;
-    uint32_t aMsgSchedule[80];
+    uint32_t aMsgSchedule[94];
     uint8_t byMsgByte10;
     uint32_t dwSchedWord;
     uint32_t dwSchedWord2;
@@ -320,17 +318,17 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     do {
       uint8_t byMsgByte0e;
       nIndex2 = nIndex + 4;
-      (&uStack_16c)[nIndex2] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*pBuffer << 8 | (uint16_t)(uint8_t)pBuffer[1]) << 8 | (uint32_t)(uint8_t)pBuffer[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[3]);
+      aMsgSchedule[nIndex + 0xe] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*pBuffer << 8 | (uint16_t)(uint8_t)pBuffer[1]) << 8 | (uint32_t)(uint8_t)pBuffer[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[3]);
       byMsgByte10 = pBuffer[10];
-      aMsgSchedule[nIndex + 1] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[4] << 8 | (uint16_t)(uint8_t)pBuffer[5]) << 8 | (uint32_t)(uint8_t)pBuffer[6]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[7]);
+      aMsgSchedule[nIndex + 0xf] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[4] << 8 | (uint16_t)(uint8_t)pBuffer[5]) << 8 | (uint32_t)(uint8_t)pBuffer[6]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[7]);
       byMsgByte0e = pBuffer[0xe];
-      aMsgSchedule[nIndex + 2] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[8] << 8 | (uint16_t)(uint8_t)pBuffer[9]) << 8 | (uint32_t)(uint8_t)byMsgByte10) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[0xb]);
-      aMsgSchedule[nIndex + 3] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[0xc] << 8 | (uint16_t)(uint8_t)pBuffer[0xd]) << 8 | (uint32_t)(uint8_t)byMsgByte0e) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[0xf]);
+      aMsgSchedule[nIndex + 0x10] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[8] << 8 | (uint16_t)(uint8_t)pBuffer[9]) << 8 | (uint32_t)(uint8_t)byMsgByte10) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[0xb]);
+      aMsgSchedule[nIndex + 0x11] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)pBuffer[0xc] << 8 | (uint16_t)(uint8_t)pBuffer[0xd]) << 8 | (uint32_t)(uint8_t)byMsgByte0e) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[0xf]);
       nIndex = nIndex2;
       pBuffer += 0x10;
     } while (nIndex2 < 0x10);
 
-    uint32_t* pSchedule = auStack_194 + nIndex2;
+    uint32_t* pSchedule = aMsgSchedule + nIndex2;
     do {
       nIndex2++;
       dwB = pSchedule[0xb] ^ pSchedule[6] ^ pSchedule[-2] ^ *pSchedule;
@@ -345,20 +343,20 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     uint32_t dwE = pHashState[4];
     nIndex = 0;
     do {
-      uVar1 = dwE + 0x5a827999 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (~dwB & dwD | dwC & dwB) + aMsgSchedule[nIndex];
+      uVar1 = dwE + 0x5a827999 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (~dwB & dwD | dwC & dwB) + aMsgSchedule[nIndex + 0xe];
       uVar2 = _rotl(dwB, 0x1e);
-      aMsgSchedule[nIndex] = 0;
+      aMsgSchedule[nIndex + 0xe] = 0;
       dwTmp10 = _rotl(dwWorkA, 0x1e);
-      dwB = dwD + 0x5a827999 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (~dwWorkA & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex + 1];
-      aMsgSchedule[nIndex + 1] = 0;
+      dwB = dwD + 0x5a827999 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (~dwWorkA & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex + 0xf];
+      aMsgSchedule[nIndex + 0xf] = 0;
       dwE = uVar1 * 0x40000000 | uVar1 >> 2;
-      dwWorkA = dwC + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~uVar1 & uVar2 | uVar1 & dwTmp10) + aMsgSchedule[nIndex + 2];
-      aMsgSchedule[nIndex + 2] = 0;
+      dwWorkA = dwC + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~uVar1 & uVar2 | uVar1 & dwTmp10) + aMsgSchedule[nIndex + 0x10];
+      aMsgSchedule[nIndex + 0x10] = 0;
       dwD = dwB * 0x40000000 | dwB >> 2;
-      dwB = uVar2 + 0x5a827999 + (dwWorkA * 0x20 | dwWorkA >> 0x1b) + (~dwB & dwTmp10 | dwE & dwB) + aMsgSchedule[nIndex + 3];
-      aMsgSchedule[nIndex + 3] = 0;
-      dwSchedWord = aMsgSchedule[nIndex + 4];
-      aMsgSchedule[nIndex + 4] = 0;
+      dwB = uVar2 + 0x5a827999 + (dwWorkA * 0x20 | dwWorkA >> 0x1b) + (~dwB & dwTmp10 | dwE & dwB) + aMsgSchedule[nIndex + 0x11];
+      aMsgSchedule[nIndex + 0x11] = 0;
+      dwSchedWord = aMsgSchedule[nIndex + 0x12];
+      aMsgSchedule[nIndex + 0x12] = 0;
       dwC = dwWorkA * 0x40000000 | dwWorkA >> 2;
       nIndex += 5;
       dwWorkA = dwTmp10 + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~dwWorkA & dwE | dwD & dwWorkA) + dwSchedWord;
@@ -366,20 +364,20 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
 
     do {
       uVar2 = _rotl(dwB, 0x1e);
-      dwB = dwE + 0x6ed9eba1 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex];
-      aMsgSchedule[nIndex] = 0;
+      dwB = dwE + 0x6ed9eba1 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex + 0xe];
+      aMsgSchedule[nIndex + 0xe] = 0;
       dwTmp10 = _rotl(dwWorkA, 0x1e);
-      dwWorkA = dwD + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex + 1];
-      aMsgSchedule[nIndex + 1] = 0;
+      dwWorkA = dwD + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex + 0xf];
+      aMsgSchedule[nIndex + 0xf] = 0;
       nIndex2 = nIndex + 5;
       dwE = dwB * 0x40000000 | dwB >> 2;
-      uVar1 = dwC + 0x6ed9eba1 + (dwWorkA * 0x20 | dwWorkA >> 0x1b) + (dwB ^ uVar2 ^ dwTmp10) + aMsgSchedule[nIndex + 2];
-      aMsgSchedule[nIndex + 2] = 0;
+      uVar1 = dwC + 0x6ed9eba1 + (dwWorkA * 0x20 | dwWorkA >> 0x1b) + (dwB ^ uVar2 ^ dwTmp10) + aMsgSchedule[nIndex + 0x10];
+      aMsgSchedule[nIndex + 0x10] = 0;
       dwD = dwWorkA * 0x40000000 | dwWorkA >> 2;
-      dwB = uVar2 + 0x6ed9eba1 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (dwE ^ dwWorkA ^ dwTmp10) + aMsgSchedule[nIndex + 3];
-      aMsgSchedule[nIndex + 3] = 0;
-      dwSchedWord = aMsgSchedule[nIndex + 4];
-      aMsgSchedule[nIndex + 4] = 0;
+      dwB = uVar2 + 0x6ed9eba1 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (dwE ^ dwWorkA ^ dwTmp10) + aMsgSchedule[nIndex + 0x11];
+      aMsgSchedule[nIndex + 0x11] = 0;
+      dwSchedWord = aMsgSchedule[nIndex + 0x12];
+      aMsgSchedule[nIndex + 0x12] = 0;
       dwC = uVar1 * 0x40000000 | uVar1 >> 2;
       dwWorkA = dwTmp10 + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwE ^ dwD ^ uVar1) + dwSchedWord;
       nIndex = nIndex2;
@@ -387,19 +385,19 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
 
     do {
       uVar2 = _rotl(dwB, 0x1e);
-      dwB = ((dwC | dwB) & dwD | dwC & dwB) + aMsgSchedule[nIndex2] + dwE - 0x70e44324 + (dwWorkA << 5 | dwWorkA >> 0x1b);
-      aMsgSchedule[nIndex2] = 0;
+      dwB = ((dwC | dwB) & dwD | dwC & dwB) + aMsgSchedule[nIndex2 + 0xe] + dwE - 0x70e44324 + (dwWorkA << 5 | dwWorkA >> 0x1b);
+      aMsgSchedule[nIndex2 + 0xe] = 0;
       dwTmp10 = _rotl(dwWorkA, 0x1e);
-      dwWorkA = ((uVar2 | dwWorkA) & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex2 + 1] + dwD - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
-      aMsgSchedule[nIndex2 + 1] = 0;
+      dwWorkA = ((uVar2 | dwWorkA) & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex2 + 0xf] + dwD - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
+      aMsgSchedule[nIndex2 + 0xf] = 0;
       dwE = dwB * 0x40000000 | dwB >> 2;
-      uVar1 = ((dwB | dwTmp10) & uVar2 | dwB & dwTmp10) + aMsgSchedule[nIndex2 + 2] + dwC - 0x70e44324 + (dwWorkA * 0x20 | dwWorkA >> 0x1b);
-      aMsgSchedule[nIndex2 + 2] = 0;
+      uVar1 = ((dwB | dwTmp10) & uVar2 | dwB & dwTmp10) + aMsgSchedule[nIndex2 + 0x10] + dwC - 0x70e44324 + (dwWorkA * 0x20 | dwWorkA >> 0x1b);
+      aMsgSchedule[nIndex2 + 0x10] = 0;
       dwD = dwWorkA * 0x40000000 | dwWorkA >> 2;
-      dwB = ((dwE | dwWorkA) & dwTmp10 | dwE & dwWorkA) + aMsgSchedule[nIndex2 + 3] + uVar2 - 0x70e44324 + (uVar1 * 0x20 | uVar1 >> 0x1b);
-      aMsgSchedule[nIndex2 + 3] = 0;
-      dwSchedWord = aMsgSchedule[nIndex2 + 4];
-      aMsgSchedule[nIndex2 + 4] = 0;
+      dwB = ((dwE | dwWorkA) & dwTmp10 | dwE & dwWorkA) + aMsgSchedule[nIndex2 + 0x11] + uVar2 - 0x70e44324 + (uVar1 * 0x20 | uVar1 >> 0x1b);
+      aMsgSchedule[nIndex2 + 0x11] = 0;
+      dwSchedWord = aMsgSchedule[nIndex2 + 0x12];
+      aMsgSchedule[nIndex2 + 0x12] = 0;
       dwC = uVar1 * 0x40000000 | uVar1 >> 2;
       nIndex2 += 5;
       dwWorkA = ((dwD | uVar1) & dwE | dwD & uVar1) + dwSchedWord + dwTmp10 - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
@@ -407,21 +405,21 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
 
     do {
       uVar2 = _rotl(dwB, 0x1e);
-      dwB = (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex2] + dwE - 0x359d3e2a + (dwWorkA << 5 | dwWorkA >> 0x1b);
-      aMsgSchedule[nIndex2] = 0;
+      dwB = (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex2 + 0xe] + dwE - 0x359d3e2a + (dwWorkA << 5 | dwWorkA >> 0x1b);
+      aMsgSchedule[nIndex2 + 0xe] = 0;
       dwTmp10 = _rotl(dwWorkA, 0x1e);
-      dwWorkA = (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex2 + 1] + dwD - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
-      aMsgSchedule[nIndex2 + 1] = 0;
+      dwWorkA = (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex2 + 0xf] + dwD - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
+      aMsgSchedule[nIndex2 + 0xf] = 0;
       dwE = dwB * 0x40000000 | dwB >> 2;
-      uVar1 = (dwB ^ uVar2 ^ dwTmp10) + aMsgSchedule[nIndex2 + 2] + dwC - 0x359d3e2a + (dwWorkA * 0x20 | dwWorkA >> 0x1b);
-      aMsgSchedule[nIndex2 + 2] = 0;
-      dwSchedWord = aMsgSchedule[nIndex2 + 3];
+      uVar1 = (dwB ^ uVar2 ^ dwTmp10) + aMsgSchedule[nIndex2 + 0x10] + dwC - 0x359d3e2a + (dwWorkA * 0x20 | dwWorkA >> 0x1b);
+      aMsgSchedule[nIndex2 + 0x10] = 0;
+      dwSchedWord = aMsgSchedule[nIndex2 + 0x11];
       dwD = dwWorkA * 0x40000000 | dwWorkA >> 2;
-      aMsgSchedule[nIndex2 + 3] = 0;
-      dwSchedWord2 = aMsgSchedule[nIndex2 + 4];
+      aMsgSchedule[nIndex2 + 0x11] = 0;
+      dwSchedWord2 = aMsgSchedule[nIndex2 + 0x12];
       dwB = (dwE ^ dwWorkA ^ dwTmp10) + dwSchedWord + uVar2 - 0x359d3e2a + (uVar1 * 0x20 | uVar1 >> 0x1b);
       dwC = uVar1 * 0x40000000 | uVar1 >> 2;
-      aMsgSchedule[nIndex2 + 4] = 0;
+      aMsgSchedule[nIndex2 + 0x12] = 0;
       nIndex2 += 5;
       dwWorkA = (dwE ^ dwD ^ uVar1) + dwSchedWord2 + dwTmp10 - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
     } while (nIndex2 < 0x50);

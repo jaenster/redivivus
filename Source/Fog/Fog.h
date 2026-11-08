@@ -528,7 +528,7 @@ struct __attribute__((packed)) D2QSSocketStrc {
     /* 0x120 */ int nHeaderLeadByte; // Third argument of QSSOCKET_SetCallbackHandler2; no use site found.
     /* 0x124 */ int bStopRequested; // Set to 1 by QSSOCKET_BlockSocket; polled by ReceiveLoopCallback to exit the receive loop. Was mis-named szName - the name buffer is at 0x128.
     /* 0x128 */ char szName[64]; // SStrCopy target in STRUCT_D2QSSocket_Init; defaults to "UNKNOWN". Runs to 0x168.
-    /* 0x168 */ int (__stdcall *pfnPacketHandler)(void *); // Set by QSSOCKET_SetCallbackHandler1. When non-null ProcessReceivedData calls it with pHandlerContext; a zero return means "not consumed, enqueue it".
+    /* 0x168 */ int (__fastcall *pfnPacketHandler)(uint8_t *, int, void *); // Set by QSSOCKET_SetCallbackHandler1. When non-null ProcessReceivedData calls it with pHandlerContext; a zero return means "not consumed, enqueue it".
     /* 0x16C */ void * pHandlerContext; // Second argument of QSSOCKET_SetCallbackHandler1; the sole argument passed to pfnPacketHandler.
     /* 0x170 */ D2QSQueueStrc aQueue; // Inbound message queue. D2QSQUEUE_Initialize(&this) in STRUCT_D2QSSocket_Init, FOG_EnqueueMessage(&this,...) in ProcessReceivedData, D2QSQueue::Free(&this) in FreeD2QSSocket. Runs to the 0x194 allocation size; no named struct exists for it yet.
 };
