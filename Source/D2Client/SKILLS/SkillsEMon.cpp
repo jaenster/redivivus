@@ -90,6 +90,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
     int32_t nDestX;
     int32_t nTmp;
     D2SeedStrc sSeedNext;
+    int32_t nTargetUnit;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
@@ -132,7 +133,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
       sSkillArg.eSkillNo = eSkill;
       nTmp = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[0], eSkill, nSkillLvl);
       nInitPosZ = Engine::Particle::PARTICLE_GetPosZShifted(pUnit);
-      pTargetUnit = (D2UnitStrc*)(nTmp + nInitPosZ);
+      nTargetUnit = nTmp + nInitPosZ;
       nAnimTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[1], eSkill, nSkillLvl);
       nAnimTotalFrames += pMissileTxt->Param2;
       nSkillLvl = (uint32_t)(uint8_t)pMissileTxt->AnimLen << 8;
@@ -160,7 +161,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
         D2Common::Units::SetAnimationSpeed(pNewMissile, nSkillLvl);
         D2Common::Units::Missile::SetTotalFrames(pNewMissile, nAnimTotalFrames);
         D2Common::Units::Missile::SetCurrentFrame(pNewMissile, nAnimTotalFrames);
-        Engine::Particle::SetPosVectorShifted(pNewMissile, 0, 0, (int32_t)pTargetUnit);
+        Engine::Particle::SetPosVectorShifted(pNewMissile, 0, 0, nTargetUnit);
         Engine::Particle::PARTICLE_UpdatePosition(pNewMissile);
         Engine::Particle::SetOffsetVector(pNewMissile, 0, 0, nZStepPerFrame, 1);
       }

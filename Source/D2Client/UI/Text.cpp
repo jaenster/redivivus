@@ -2905,12 +2905,12 @@ void __stdcall TEXT_DrawChatMessages() {
 
 void __stdcall TEXT_DrawPartyMessages() {
     int nLineY;
-    ScreenMessage_t* pPrevMessage;
     int nRowY;
     DRAWMODE eDrawMode;
     int32_t nRectColor;
     int32_t nRectH;
     ScreenMessage_t* pNext;
+    int nPrevMessage;
     if (!ScreenPartyMessages.nCount) {
       return;
     }
@@ -2925,7 +2925,7 @@ void __stdcall TEXT_DrawPartyMessages() {
     }
     if (pMessage) {
       int32_t nPixelWidth;
-      pPrevMessage = 0;
+      nPrevMessage = 0x0;
       nRowY = 0;
       do {
         nLineY = 0;
@@ -2939,7 +2939,7 @@ void __stdcall TEXT_DrawPartyMessages() {
             nPixelWidth = D2Win::Src::D2WinFont::D2WINFONT_GetStringPixelWidthN((uint16_t*)pMessage->apwszLines[0], nPixelWidth);
             nPixelWidth += 10;
             Engine::Gfx::D2GFX_DrawSolidRectExBySize(nScreenX - 5, nRowY - nLineY / 2 - 0x81 + Inv::ScreenSizeY, nPixelWidth, nRectH, nRectColor, eDrawMode);
-            D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[0], nScreenX, (int)pPrevMessage - nLineY / 2 - 0x73 + Inv::ScreenSizeY, pMessageHead->color, 0);
+            D2Win::Src::D2WinFont::DRAW_text(pMessage->apwszLines[0], nScreenX, nPrevMessage - nLineY / 2 - 0x73 + Inv::ScreenSizeY, pMessageHead->color, 0);
           }
 
           nLineY += 0x19;
@@ -2948,12 +2948,12 @@ void __stdcall TEXT_DrawPartyMessages() {
 
         pMessageHead = pMessageHead->pNext;
         nRowY += -0x19;
-        pPrevMessage = (ScreenMessage_t*)((char*)pPrevMessage - 0x19);
+        nPrevMessage += -0x19;
       } while (pMessageHead);
     }
 
     pMessage = ScreenPartyMessages.pHead;
-    pPrevMessage = 0;
+    ScreenMessage_t* pPrevMessage = 0;
     DWORD dwNow = GetTickCount();
     while (pMessage) {
       if (pMessage->dwMessageExpiration < dwNow) {

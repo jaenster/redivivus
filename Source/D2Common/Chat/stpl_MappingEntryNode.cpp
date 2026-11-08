@@ -19,7 +19,7 @@ template<> TSLink<::MappingEntryNode>* TSLink<MappingEntryNode>::NextLink(intptr
       return (TSLink<::MappingEntryNode>*)~nNextOffset;
     }
     if (nLinkOffset < 0) {
-      nLinkOffset = (int)this - this->m_prevlink->m_next;
+      nLinkOffset = (intptr_t)this - this->m_prevlink->m_next;
     }
 
     return (TSLink<::MappingEntryNode>*)(nNextOffset + nLinkOffset);

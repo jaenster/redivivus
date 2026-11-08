@@ -10,12 +10,12 @@
 
 
 template<> TSLink<CMDDEF> * TSLink<CMDDEF>::NextLink(intptr_t nLinkOffset) {
-    uint32_t uOffset = this->m_next;
-    if ((int)uOffset < 0) {
+    intptr_t uOffset = this->m_next;
+    if (uOffset < 0) {
       return (TSLink<CMDDEF>*)~uOffset;
     }
     if (nLinkOffset < 0) {
-      nLinkOffset = (int)this - this->m_prevlink->m_next;
+      nLinkOffset = (intptr_t)this - this->m_prevlink->m_next;
     }
 
     return (TSLink<CMDDEF>*)(uOffset + nLinkOffset);
@@ -146,8 +146,8 @@ template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Destructor() {
       return;
     }
 
-    uint32_t nNextOffset = this->m_terminator.m_next;
-    if ((int)nNextOffset < 0) {
+    intptr_t nNextOffset = this->m_terminator.m_next;
+    if (nNextOffset < 0) {
       piPrevLink = (StormLinkStrc**)~nNextOffset;
     } else {
       piPrevLink = (StormLinkStrc**)((char*)pTVar1 + (nNextOffset - pListHead->m_next));

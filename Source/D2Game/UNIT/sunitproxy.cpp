@@ -982,6 +982,7 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
     D2NpcProxyInventoryStrc* pNextProxyEntry;
     D2NpcProxyInventoryStrc* pProxyEntry;
     D2NpcProxyInventoryStrc* pProxyEntryIter;
+    int nMemory;
     if (!pMemory) {
       nPlayerClassId = -1;
     } else {
@@ -993,9 +994,9 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
     if (!pUnit) {
-      pMemory = (D2PoolManagerStrc*)-1;
+      nMemory = -1;
     } else {
-      pMemory = (D2PoolManagerStrc*)pUnit->nUnitGUID;
+      nMemory = pUnit->nUnitGUID;
     }
     if (pNpc->flags0x0C) {
       pNextProxyEntry = pNpc->pProxyInventories;
@@ -1005,7 +1006,7 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
         if (!pProxyEntry) {
           break;
         }
-        if ((D2PoolManagerStrc*)pProxyEntry->nPlayerGUID == pMemory) {
+        if (pProxyEntry->nPlayerGUID == nMemory) {
           if (pProxyEntryIter) {
             pProxyEntryIter->pNext = pProxyEntry->pNext;
           } else {
@@ -1031,7 +1032,7 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
 
     D2NpcPlayerInteractionStrc* pPrevInteraction = 0;
     D2NpcPlayerInteractionStrc* pInteractionEntry = pNpc->pPlayerInteractions;
-    while ((D2PoolManagerStrc*)pInteractionEntry->nPlayerGUID != pMemory) {
+    while (pInteractionEntry->nPlayerGUID != nMemory) {
       D2NpcPlayerInteractionStrc** pInteractionIter;
       pInteractionIter = &pInteractionEntry->pNext;
       pPrevInteraction = pInteractionEntry;

@@ -413,7 +413,7 @@ static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
     bool bIsScrollOrBookType;
     uint32_t nSuffixId;
     if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)0x1ec);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
       exit(-1);
     }
 
@@ -6328,7 +6328,7 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
     eInventoryPage ePreviousPage;
     int32_t nBodyLocOrXPos;
     D2ClientStrc* pClient;
-    uint32_t nRuneword;
+    eD2ItemFlag nRuneword;
     D2UnitStrc* pItemRef = pRuneword;
     if (!(pGame && pPlayer && pRuneword && pRuneword->eUnitType == UNIT_ITEM && pPlayer->pInventory)) {
       return;
@@ -6345,7 +6345,7 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
             if (pClient) {
               nRuneword = 0x0;
               D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&nRuneword, 0x20, 1);
-              GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pPlayer, pItemRef, (eD2ItemFlag)nRuneword);
+              GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pPlayer, pItemRef, nRuneword);
             }
           }
 

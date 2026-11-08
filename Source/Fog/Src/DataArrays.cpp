@@ -193,6 +193,7 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
     long double fTmp;
     double fTmp1;
     double dCountMinus1;
+    int* pElementSize;
     int pElemSize = nElementSize;
     if (!(nElementSize == 1 || nElementSize == 2 || nElementSize == 4)) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xe);
@@ -213,7 +214,7 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
             fCountMinus1 = (long double)nCount - (long double)1.0;
             dCountMinus1 = (double)fCountMinus1;
             pByteOut = (uint8_t*)pArrayData;
-            nElementSize = (int)pArrayData;
+            pElementSize = (int*)pArrayData;
             if (fTmp < fCountMinus1 == (fTmp == fCountMinus1)) {
               return;
             }
@@ -243,8 +244,8 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
                   }
                 case 4:
                   {
-                    *(int*)nElementSize = nOutValue;
-                    nElementSize += 4;
+                    *pElementSize = nOutValue;
+                    pElementSize += 1;
                     break;
                   }
               }

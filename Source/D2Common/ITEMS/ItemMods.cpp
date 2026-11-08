@@ -726,7 +726,7 @@ int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit
       D2SeedStrc* pSeed;
       nRangeHigh = pProperty->fmax;
       nProperty = pProperty->fmin;
-      if ((D2SetsTxtFStrc*)nRangeHigh != (D2SetsTxtFStrc*)nProperty) {
+      if (nRangeHigh != nProperty) {
         nRangeLow = nProperty;
         if (nRangeHigh < nProperty) {
           nRangeLow = nRangeHigh;
@@ -775,7 +775,7 @@ int32_t __fastcall PropertyFunc_AllMaxResistances(int32_t nType, D2UnitStrc * pU
       D2SeedStrc* pSeed;
       nRangeHigh = pProperty->fmax;
       nProperty = pProperty->fmin;
-      if ((D2SetsTxtFStrc*)nRangeHigh != (D2SetsTxtFStrc*)nProperty) {
+      if (nRangeHigh != nProperty) {
         nRangeLow = nProperty;
         if (nRangeHigh < nProperty) {
           nRangeLow = nRangeHigh;
@@ -996,7 +996,7 @@ int32_t __fastcall PropertyFunc_EnhancedDamage(int32_t nType, D2UnitStrc * pUnit
         uint8_t byMaxDam;
         nRangeHigh = pProperty->fmax;
         nProperty = pProperty->fmin;
-        if ((D2SetsTxtFStrc*)nRangeHigh != (D2SetsTxtFStrc*)nProperty) {
+        if (nRangeHigh != nProperty) {
           nRangeLow = nProperty;
           if (nRangeHigh < nProperty) {
             nRangeLow = nRangeHigh;

@@ -714,7 +714,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
 
       nCallbackArg++;
-    } while ((uintptr_t)(void*)nCallbackArg < (uint32_t)nRoomCount);
+    } while ((uintptr_t)nCallbackArg < (uint32_t)nRoomCount);
 }
 
 // Resolves and applies a skill hit to a target unit. Resolves missile owner if the attacker is a missile. Checks block/evasion (setting hit/block/evade/dodge flags in pDamage->wResultFlags). Sets interrupt flag if target lacks STATE_uninterruptable. Applies critical damage modifier, then calls DAMAGE_ApplyDamageToUnit if the hit flag is set, followed by SERVER_GetHitCalculation for post-hit effects.
@@ -932,6 +932,7 @@ void __fastcall SKILLS_UpdatePetMax(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
     int nSkillLvl;
     int nPetMaxCalc;
     eD2Skills eSkill;
+    short int* pSkillId;
     D2SkillsTxt* pSkillTxt = pUnit && pUnit->eUnitType == UNIT_PLAYER && nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillTxt) {
       return;
@@ -951,9 +952,9 @@ void __fastcall SKILLS_UpdatePetMax(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
     int nSkillIdx = 0;
     if (pPetTypeTxt->nSkillIndexCounter > 0) {
       D2SkillsTxt* pPetSkillTxt;
-      nSkillId = (int32_t)pPetTypeTxt->nSkillId;
+      pSkillId = (short int*)pPetTypeTxt->nSkillId;
       do {
-        eSkill = (eD2Skills)*(short int*)nSkillId;
+        eSkill = (eD2Skills)*pSkillId;
         pPetSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
         if (pPetSkillTxt) {
           pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
@@ -972,7 +973,7 @@ void __fastcall SKILLS_UpdatePetMax(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
           }
         }
 
-        nSkillId += 2;
+        pSkillId += 1;
         nSkillIdx++;
       } while (nSkillIdx < pPetTypeTxt->nSkillIndexCounter);
     }
@@ -2146,15 +2147,15 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
     pSkillArg->nUnitY = -0xe;
     MISSILES::Missiles::CreatingMissile(pGame, pSkillArg);
     int iRingRow = 0;
-    pSkillArg = (D2SkillArgStrc*)(nMissileCount - 1);
+    int nSkillArg = nMissileCount - 1;
     do {
-      if (!pSkillArg) {
+      if (!nSkillArg) {
         return;
       }
 
       iRingCol = 0;
       do {
-        if ((intptr_t)pSkillArg <= 0) {
+        if (nSkillArg <= 0) {
           break;
         }
 
@@ -2164,14 +2165,14 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
         pSkillArgCopy->nUnitX = gaSkillMissileStarOffsets_4[iRingCol] * gaSkillMissileStarOffsets_1[iRingRow];
         pSkillArgCopy->nUnitY = gaSkillMissileStarOffsets_2[iRingCol] * gaSkillMissileStarOffsets_3[iRingRow];
         MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
-        pSkillArg = (D2SkillArgStrc*)((intptr_t)&pSkillArg[-1].nFunctionParam + 2);
+        nSkillArg = nSkillArg - 4 + 2;
         iRingCol++;
       } while (iRingCol < 4);
 
       pSkillArgCopy->nUnitX = gnSkillMissileOffset_SkillStar1[iRingRow];
       pSkillArgCopy->nUnitY = gnSkillMissileOffset_SkillStar2[iRingRow];
       MISSILES::Missiles::CreatingMissile(pGame, pSkillArgCopy);
-      pSkillArg = (D2SkillArgStrc*)((intptr_t)&pSkillArg[-1].nFunctionParam + 3);
+      nSkillArg = nSkillArg - 4 + 3;
       iRingRow++;
       if (iRingRow >= 7) {
         return;

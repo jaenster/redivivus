@@ -593,7 +593,7 @@ int32_t __thiscall LINKEDLIST_GetNextOrHead(int32_t pThis, int32_t nNode) {
 // false one.
 void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t nInsertMode, int * * ppTargetList) {
     int* piVar1;
-    uint32_t piVar2;
+    intptr_t piVar2;
     StormLinkStrc* pTargetNode = (StormLinkStrc*)ppNodeSlot;
     if (!ppNodeSlot) {
       pTargetNode = (StormLinkStrc*)(pList + 1);
@@ -620,7 +620,7 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
           pTargetNode->pNext = ((StormLinkStrc*)ppTargetList)->pNext;
           piVar1 = *pList;
           piVar2 = ((StormLinkStrc*)ppTargetList)->pNext;
-          if ((int)piVar2 < 0) {
+          if (piVar2 < 0) {
             *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)pTargetNode;
             ((StormLinkStrc*)ppTargetList)->pNext = (intptr_t)ppNodeSlot;
             return;
@@ -820,7 +820,7 @@ BREAKCMD * __thiscall LINKEDLIST_UnlinkFreeAndGetCount(StormLinkedListStrc * pLi
       nNextNode = &pListHead->head;
     }
 
-    uint32_t uCount = nNextNode->pNext;
+    intptr_t uCount = nNextNode->pNext;
     nNextNode = pNode->pPrevLink;
     if (nNextNode) {
       StormLinkStrc** pLinkSlot;
@@ -832,7 +832,7 @@ BREAKCMD * __thiscall LINKEDLIST_UnlinkFreeAndGetCount(StormLinkedListStrc * pLi
     }
 
     SMem::SMemFree(pNode, s___AUBREAKCMD___007088d8, -2, 0);
-    return (BREAKCMD*)((int)uCount <= 0 ? 0 : uCount);
+    return (BREAKCMD*)(uCount <= 0 ? 0 : uCount);
 }
 
 // Dispatches an event: looks the (eventId, subId) pair up in the hash table and invokes every handler whose key matches arg3, walking the chain in descending registration-counter (priority) order. Locks SEvt's critical section and drains the break-command queue that SEvtBreakHandlerChain 00426e80 feeds.

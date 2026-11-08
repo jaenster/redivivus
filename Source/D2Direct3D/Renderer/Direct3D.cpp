@@ -3176,6 +3176,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     static uint8_t DAT_00970eac; D2_STATIC_GUARD_BSS(DAT_00970eac, "D2Direct3D::Renderer::RENDERER_DIRECT3D_UploadTextureToCache::DAT_00970eac");
     static int INT_00970ec4; D2_STATIC_GUARD_BSS(INT_00970ec4, "D2Direct3D::Renderer::RENDERER_DIRECT3D_UploadTextureToCache::INT_00970ec4");
 
+    int iVar1;
     DWORD dwHResult;
     int iCacheNodeIdx;
     uint8_t* pbOutlinePixel;
@@ -3189,34 +3190,36 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     uint8_t cPixel;
     int iMipLevel;
     uint8_t* pRemapTable;
+    int nPalette;
+    char* pIMipLevel;
     DC6Block* pDC6Block = pTexInfo->pSprite->pDC6Block;
     if (!pDC6Block) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11e);
       exit(-1);
     }
 
-    int iVar1 = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
+    char* pIVar1 = (char*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
     int nMipIdx = nMode;
     if (nMode == 4) {
       nMipIdx = 1;
     }
-    if (!*(int*)(iVar1 + nMipIdx * 8)) {
+    if (!*(int*)(pIVar1 + nMipIdx * 8)) {
       iMipLevel = pTexInfo->nWidth;
       if (iMipLevel <= 0x20 && pTexInfo->nHeight <= 0x20) {
-        *(uint32_t*)(iVar1 + nMipIdx * 8) = 3;
+        *(uint32_t*)(pIVar1 + nMipIdx * 8) = 3;
       } else if (iMipLevel <= 0x80 && pTexInfo->nHeight <= 0x80) {
-        *(uint32_t*)(iVar1 + nMipIdx * 8) = 2;
+        *(uint32_t*)(pIVar1 + nMipIdx * 8) = 2;
       } else {
         if (iMipLevel > 0x100 || pTexInfo->nHeight > 0x100) {
           return 0;
         }
 
-        *(uint32_t*)(iVar1 + nMipIdx * 8) = 1;
+        *(uint32_t*)(pIVar1 + nMipIdx * 8) = 1;
       }
     }
 
-    iMipLevel = *(int*)(iVar1 + nMipIdx * 8);
-    int* pnCacheNodeIdx = (int*)(iVar1 + 4 + nMipIdx * 8);
+    iMipLevel = *(int*)(pIVar1 + nMipIdx * 8);
+    int* pnCacheNodeIdx = (int*)(pIVar1 + 4 + nMipIdx * 8);
     D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
     if (*pnCacheNodeIdx && (*(uint8_t**)(*pnCacheNodeIdx * 0x20 - 0x14 + (&INT_00970ec4)[iMipLevel * 7]) == pPalette || nMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
@@ -3248,15 +3251,15 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     } else {
       iCacheNodeIdx = *pnCacheNodeIdx * 0x20;
       nTmp = *(int*)(iCacheNodeIdx - 0x10 + (&INT_00970ec4)[iMipLevel * 7]);
-      iMipLevel = iCacheNodeIdx - 0x20 + (&INT_00970ec4)[iMipLevel * 7];
+      pIMipLevel = (char*)(iCacheNodeIdx - 0x20 + (&INT_00970ec4)[iMipLevel * 7]);
       pbPixelData = gpD3DTextureSpritePoolMemory0;
-      *(int*)(iMipLevel + 4) = iVar1;
-      *(int*)(iMipLevel + 8) = nMipIdx;
-      *(uint8_t**)(iMipLevel + 0xc) = (uint8_t*)pPalette;
+      *(int*)(pIMipLevel + 4) = (int)pIVar1;
+      *(int*)(pIMipLevel + 8) = nMipIdx;
+      *(uint8_t**)(pIMipLevel + 0xc) = (uint8_t*)pPalette;
       if (!nTmp) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16d);
         exit(-1);
-      } else if (!*(int*)(iMipLevel + 0x14)) {
+      } else if (!*(int*)(pIMipLevel + 0x14)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16e);
         exit(-1);
       } else if (!pcSrcPixel) {
@@ -3306,8 +3309,8 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
           nTexWidth = pTexInfo->nTexWidth;
           pcSrcPixel = gpD3DTextureSpritePoolMemory0 + nTexWidth;
           pbOutlineDst = (uint8_t*)(nTexWidth + (char*)pbPixelData);
-          pPalette = (uint8_t*)(pTexInfo->nTexArea + nTexWidth * -2);
-          if ((intptr_t)pPalette > 0) {
+          nPalette = pTexInfo->nTexArea + nTexWidth * -2;
+          if (nPalette > 0) {
             do {
               cPixel = *pcSrcPixel;
               pcSrcPixel++;
@@ -3319,8 +3322,8 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
               }
 
               pbOutlineDst++;
-              pPalette--;
-            } while (pPalette);
+              nPalette += -1;
+            } while (nPalette);
           }
         }
 
@@ -3348,12 +3351,12 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
             DIRECTD3D_LogError("Failed to unlock memory surface", dwHResult);
           }
           if (gnD3DTextureCapFlags & Fog::BitBuffer::gadwBitMasks[10]) {
-            RENDERER_D3D_CopySurfacePixels(*(IDirectDrawSurface7**)(iMipLevel + 0x10), pDestSurface_00, pTexInfo->nTexHeight);
+            RENDERER_D3D_CopySurfacePixels(*(IDirectDrawSurface7**)(pIMipLevel + 0x10), pDestSurface_00, pTexInfo->nTexHeight);
           } else {
-            (*(dt_df2bbc22*)((char*)*(void**)(uintptr_t)*(int**)(iMipLevel + 0x14) + 20))(*(int**)(iMipLevel + 0x14), lpD3DTexture_00);
+            (*(dt_df2bbc22*)((char*)*(void**)*(int**)(pIMipLevel + 0x14) + 20))(*(int**)(pIMipLevel + 0x14), lpD3DTexture_00);
           }
 
-          dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(iMipLevel + 0x14));
+          dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(pIMipLevel + 0x14));
           if (!dwHResult) {
             return 1;
           }
@@ -4074,7 +4077,7 @@ void __fastcall Unreferenced_006b74f0(void * pPalette) {
       int* piVar1;
       piVar1 = (int*)*ppvVar2;
       if (piVar1) {
-        nResult = (**(code**)((char*)*(void**)(uintptr_t)piVar1 + 124))(piVar1, pPalette);
+        nResult = (**(code**)((char*)*(void**)piVar1 + 124))(piVar1, pPalette);
         if (nResult) {
           DIRECTD3D_LogError("SetPalette (debug font surface)", nResult);
           return;
@@ -5272,7 +5275,7 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
         *(uint32_t*)((char*)pAlpha + 0x110) = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x5f] + (uint32_t)byLightIntensity * 0x100]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x60] + (uint32_t)byLightIntensity * 0x100]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x61] + (uint32_t)byLightIntensity * 0x100]);
         *(float*)((char*)pAlpha + 0x100) = (float)*(int*)(pLightCursor + 0x62);
         *(float*)((char*)pAlpha + 0x104) = (float)*(int*)(pLightCursor + 0x66);
-        pAlpha = (float*)((char*)pAlpha + 0x120);
+        pAlpha += 0x48;
         pTileData = (void*)((char*)pTileData - 1);
         pLightCursor += 0x6c;
       } while (pTileData);

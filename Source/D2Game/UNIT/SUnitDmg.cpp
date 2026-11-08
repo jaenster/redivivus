@@ -1493,22 +1493,22 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
 
     SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 0xb, pUnit, pUnit2, pDmg);
     DAMAGE_ProcessFreezeAndPoisonImmunity(&dmgCtx);
-    pBypassFlags = 0;
+    int32_t nBypassFlags = 0x0;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
       if (pDmg->dwHitFlags & 0x400U) {
-        pBypassFlags = (D2DamageStrc*)0x1;
+        nBypassFlags = 0x1;
       }
     } else {
       BVar1 = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pUnit);
       nMercType = D2Common::Monsters::MONSTERS::IsDemon(pUnit);
       if (BVar1 && pDmg->dwHitFlags & 0x100U) {
-        pBypassFlags = (D2DamageStrc*)0x1;
+        nBypassFlags = 0x1;
       }
       if (nMercType && pDmg->dwHitFlags & 0x200U) {
-        pBypassFlags = (D2DamageStrc*)0x1;
+        nBypassFlags = 0x1;
       }
       if (!BVar1 && !nMercType && pDmg->dwHitFlags & 0x400U) {
-        pBypassFlags = (D2DamageStrc*)0x1;
+        nBypassFlags = 0x1;
       }
     }
 
@@ -1518,7 +1518,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         break;
       }
 
-      DAMAGE_ApplyElementalDamageWithResist(&dmgCtx, (int32_t)pBypassFlags, &gaDefenseReductionTable[nDrStatValue]);
+      DAMAGE_ApplyElementalDamageWithResist(&dmgCtx, nBypassFlags, &gaDefenseReductionTable[nDrStatValue]);
       nDrStatValue++;
     } while (nDrStatValue < 0xc);
 

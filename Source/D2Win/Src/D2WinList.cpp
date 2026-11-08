@@ -528,8 +528,8 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         }
 
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(pNewEntry->wszText, wszLocaleStr);
-        D2WinFont::TEXT_CalcTextDimensions(wszLocaleStr, (int*)&pnFontType, (int*)&pnItemArray);
-        nPnFontType = (int32_t)(pnFontType + 2);
+        D2WinFont::TEXT_CalcTextDimensions(wszLocaleStr, (int*)&nPnFontType, (int*)&pnItemArray);
+        nPnFontType += 8;
         if (nPnFontType > pList->sEntriesControl.nMaxTextWidth) {
           pList->sEntriesControl.nMaxTextWidth = nPnFontType;
         }

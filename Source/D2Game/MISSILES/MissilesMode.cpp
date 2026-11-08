@@ -247,6 +247,7 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
     int iVar2;
     D2StatStrc aStatBonusValues[128];
     int16_t nMonType;
+    int nDamage;
     D2DamageStrc* pDamageOut = pDamage;
     memset(pDamage, 0, 0x70);
     int nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);
@@ -302,17 +303,17 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
     pDamage->dwStunLen = nStatValue;
     if (pTarget) {
       BOOL BVar1;
-      pDamage = (D2DamageStrc*)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
+      nDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
       dwTmp = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
       if (dwTmp) {
         nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_demondamage_percent, 0);
-        pDamage = (D2DamageStrc*)((intptr_t)&pDamage->dwHitFlags + nStatValue);
+        nDamage += nStatValue;
       }
 
       BVar1 = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget);
       if (BVar1) {
         nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_undeaddamage_percent, 0);
-        pDamage = (D2DamageStrc*)((intptr_t)&pDamage->dwHitFlags + nStatValue);
+        nDamage += nStatValue;
       }
       if (pTarget->eUnitType == UNIT_MONSTER) {
         nStatValue = pTarget->nClassId;
@@ -324,17 +325,17 @@ void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
             for (nStatValue = 0; nStatValue < nElemDamage; nStatValue++) {
               dwTmp = UNIT::SUnitDmg::DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aStatBonusValues[nStatValue].wSubIndex, (int)nMonType);
               if (dwTmp) {
-                pDamage = (D2DamageStrc*)((intptr_t)&pDamage->dwHitFlags + aStatBonusValues[nStatValue].nStatValue);
+                nDamage += aStatBonusValues[nStatValue].nStatValue;
               }
             }
           }
         }
       }
-      if ((intptr_t)pDamage < -0x59) {
-        pDamage = (D2DamageStrc*)-90;
+      if (nDamage < -0x59) {
+        nDamage = -90;
       }
 
-      pDamageOut->dwPhysDamage = pDamageOut->dwPhysDamage * (int)pDamage / 100 + pDamageOut->dwPhysDamage;
+      pDamageOut->dwPhysDamage = pDamageOut->dwPhysDamage * nDamage / 100 + pDamageOut->dwPhysDamage;
     }
 
     nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_deadlystrike, 0);
@@ -6094,12 +6095,12 @@ int __fastcall MISSILESMODE_SrvDoFn31_TwinWaveMaker(::SGAMEDATA * pGame, D2UnitS
       }
 
       UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-      pOwner = (D2UnitStrc*)0x2;
+      uint32_t nOwner = 0x2;
       if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        pOwner = 0;
+        nOwner = 0x0;
       }
       if (pMissileTxt->CollideKill != '\0') {
-        pOwner = (D2UnitStrc*)((uintptr_t)pOwner | 1);
+        nOwner |= 1;
       }
       if (pMissileTxt->AlwaysExplode != '\0') {
         MISSMODE_ApplyNextHitState(pUnit, nullptr);
@@ -6107,13 +6108,13 @@ int __fastcall MISSILESMODE_SrvDoFn31_TwinWaveMaker(::SGAMEDATA * pGame, D2UnitS
         UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGameSaved, 0, nullptr, pUnit, nullptr);
         nProgOverlay = pMissileTxt->nSrvHitFunc;
         if (nProgOverlay > 0 && nProgOverlay < MISSILESSRVHITFUNCS_SIZE) {
-          pOwner = (D2UnitStrc*)(*MISSILESSRVHITFUNCS[nProgOverlay])(pGameLocal, pUnit, nullptr);
-          if ((uintptr_t)pOwner & 4) {
+          nOwner = (uint32_t)(D2UnitStrc*)(*MISSILESSRVHITFUNCS[nProgOverlay])(pGameLocal, pUnit, nullptr);
+          if (nOwner & 4) {
             return 2;
           }
         }
       }
-      if (!((uintptr_t)pOwner & 1)) {
+      if (!(nOwner & 1)) {
         return 2;
       }
 

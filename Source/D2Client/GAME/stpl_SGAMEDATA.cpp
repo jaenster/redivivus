@@ -16,7 +16,7 @@ template<> TSLink<::SGAMEDATA>* TSLink<SGAMEDATA>::NextLink(intptr_t nLinkOffset
       return (TSLink<::SGAMEDATA>*)~nOffset;
     }
     if (nLinkOffset < 0) {
-      nLinkOffset = (int)this - this->m_prevlink->m_next;
+      nLinkOffset = (intptr_t)this - this->m_prevlink->m_next;
     }
 
     return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
@@ -572,12 +572,12 @@ template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
     ppSlot->m_prevlink = pExisting;
     ppSlot->m_next = pList->m_terminator.m_next;
     intptr_t pTailLink2 = pList->m_terminator.m_next;
-    int pHeadOffset = pList->m_linkoffset;
+    intptr_t pHeadOffset = pList->m_linkoffset;
     if (pTailLink2 < 0) {
       *(TSLink<::SGAMEDATA>**)~pTailLink2 = (TSLink<::SGAMEDATA>*)ppSlot;
     } else {
       if (pHeadOffset < 0) {
-        pHeadOffset = (int)pExisting - pExisting->m_prevlink->m_next;
+        pHeadOffset = (intptr_t)pExisting - pExisting->m_prevlink->m_next;
       }
 
       *(TSLink<::SGAMEDATA>**)(pTailLink2 + pHeadOffset) = (TSLink<::SGAMEDATA>*)ppSlot;

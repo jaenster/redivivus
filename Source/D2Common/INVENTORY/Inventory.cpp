@@ -767,6 +767,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
     D2UnitStrc** pScanCell;
     int iVar1;
     int nRowCount;
+    int* pStartCol;
     int32_t nSavedStartCol = nStartCol;
     uint32_t nScore = 0;
     if (nStartCol > 0) {
@@ -808,13 +809,13 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
     if (nStartRow > 0) {
       if (nStartCol < iVar1) {
         nRowCount = iVar1 - nStartCol;
-        nStartCol = (int32_t)(pGridInfo->pGridCells + nGridWidth * (nStartRow - 1) + nStartCol);
+        pStartCol = (int*)(pGridInfo->pGridCells + nGridWidth * (nStartRow - 1) + nStartCol);
         do {
-          if (*(int*)nStartCol) {
+          if (*pStartCol) {
             nScore++;
           }
 
-          nStartCol += 4;
+          pStartCol += 1;
           nRowCount--;
         } while (nRowCount);
       }
@@ -1300,7 +1301,7 @@ BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2Unit
         nRowYEnd = nGridX;
       }
 
-      nUnit = (intptr_t)&((D2UnitStrc*)nUnit)->eUnitType + 1;
+      nUnit++;
       nCol = nRowYEnd;
     } while (nUnit < (int)(((uintptr_t)pInventory >> 0x18) + nRow));
 
@@ -2512,6 +2513,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemOfTypeInMain(D2InventoryStrc * pInvento
 D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInventory, uint32_t nItemCode, D2UnitStrc * pAfterItem) {
     eD2UnitType eUnitType;
     D2UnitDataItemStrc* pItemData;
+    int nInventory;
     D2InventoryStrc* pInventory_00;
     pInventory_00 = pInventory;
     if (!pInventory) {
@@ -2522,7 +2524,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
     }
 
     D2ItemsTxt* pItemsTxt;
-    pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nItemCode, (int*)&pInventory);
+    pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nItemCode, (int*)&nInventory);
     if (!pItemsTxt) {
       return nullptr;
     }
@@ -2559,7 +2561,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
       scan_for_match:
       if (pGridInfo) {
         while (true) {
-          if ((D2InventoryStrc*)pGridInfo->nClassId == pInventory) {
+          if (pGridInfo->nClassId == nInventory) {
             eUnitType = pGridInfo->eUnitType;
             if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
               nPosX = pGridInfo->pPath.pStaticPath->nPosX;
@@ -2603,6 +2605,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
 D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInventory, uint32_t nItemCode, D2UnitStrc * pAfterItem) {
     eD2UnitType eUnitType;
     D2UnitDataItemStrc* pItemData;
+    int nInventory;
     D2InventoryStrc* pInventoryCopy;
     pInventoryCopy = pInventory;
     if (!pInventory) {
@@ -2613,7 +2616,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
     }
 
     D2ItemsTxt* pItemsTxt;
-    pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nItemCode, (int*)&pInventory);
+    pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nItemCode, (int*)&nInventory);
     if (!pItemsTxt) {
       return nullptr;
     }
@@ -2650,7 +2653,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
       search_from_item:
       if (pCurItem) {
         while (true) {
-          if ((D2InventoryStrc*)pCurItem->nClassId == pInventory) {
+          if (pCurItem->nClassId == nInventory) {
             eUnitType = pCurItem->eUnitType;
             if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
               nPosX = pCurItem->pPath.pStaticPath->nPosX;

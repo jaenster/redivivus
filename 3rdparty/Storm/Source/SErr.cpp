@@ -294,7 +294,7 @@ int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {
 
 void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget) {
     int* piVar1;
-    uint32_t piVar2;
+    intptr_t piVar2;
     StormLinkStrc* pEffectiveNode = (StormLinkStrc*)pNode;
     if (!pNode) {
       pEffectiveNode = (StormLinkStrc*)(pList + 1);
@@ -321,7 +321,7 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
           pEffectiveNode->pNext = ((StormLinkStrc*)ppTarget)->pNext;
           piVar1 = *pList;
           piVar2 = ((StormLinkStrc*)ppTarget)->pNext;
-          if ((int)piVar2 < 0) {
+          if (piVar2 < 0) {
             *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)pEffectiveNode;
             ((StormLinkStrc*)ppTarget)->pNext = (intptr_t)pNode;
             return;
@@ -527,7 +527,7 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
 // TSList<HANDLER>::Clear: unlinks and SMemFrees every node.
 // Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
 void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
-    uint32_t* pPrevLink;
+    StormLinkStrc** pPrevLink;
     StormLinkStrc* pNext;
     while (true) {
       ::HANDLER* pNode;
@@ -538,8 +538,8 @@ void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
 
       pNext = pNode->m_link.pPrevLink;
       if (pNext) {
-        pPrevLink = (uint32_t*)D2_StormNextLink(pNode, -1);
-        *pPrevLink = (uint32_t)(uintptr_t)pNext;
+        pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+        *pPrevLink = pNext;
         pNode->m_link.pPrevLink->pNext = pNode->m_link.pNext;
         pNode->m_link.pPrevLink = 0;
         pNode->m_link.pNext = 0;
@@ -556,7 +556,7 @@ void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
       pNext = &pList->head;
     }
 
-    uint32_t nResultOffset = pNext->pNext;
+    intptr_t nResultOffset = pNext->pNext;
     pNext = pNode->pPrevLink;
     if (pNext) {
       pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
@@ -567,7 +567,7 @@ void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
     }
 
     SMem::SMemFree(pNode, gszSSystemListAllocTag, -2, 0);
-    return (::HANDLER*)((int)nResultOffset <= 0 ? 0 : nResultOffset);
+    return (::HANDLER*)(nResultOffset <= 0 ? 0 : nResultOffset);
 }
 
 // Displays an error dialog with optional stack trace and custom message. Formats error information, logs to debugger, and either shows MessageBox or calls registered error handler callback.

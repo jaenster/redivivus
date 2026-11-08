@@ -3092,6 +3092,18 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
 // Draw shadow sprite layers for a unit. Skips hidden/dead units. Handles perspective view toggling for player unit. Returns 1 if shadow was drawn, 0 if skipped or off-screen.
 // @sourcefile .\ENGINE\Gfx.cpp
 int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
+    // The values VC8 kept in pZHalfOffset's one frame slot, one member each: a frame object reaches the slot.
+    union pZHalfOffset_u {
+      uint8_t* pZHalfOffset2;
+      int nZHalfOffset;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(pZHalfOffset_u) == 4, "pZHalfOffset_u must stay one 4-byte frame slot");
+    // The values VC8 kept in pCofLayerDataBase's one frame slot, one member each: a frame object reaches the slot.
+    union pCofLayerDataBase_u {
+      uint8_t* pCofLayerDataBase2;
+      uint32_t nCofLayerDataBase;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(pCofLayerDataBase_u) == 4, "pCofLayerDataBase_u must stay one 4-byte frame slot");
     D2UnitStrc* pPlayerOrOwner;
     eD2UnitType eUnitType;
     int32_t nTmp;
@@ -3112,11 +3124,12 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
     int nClassId;
     eD2UnitType eUnitTypeGfx;
     int nDrawY;
+    pCofLayerDataBase_u pCofLayerDataBase;
     uint32_t nFrameMetricX;
     uint8_t* pCofDataBase;
     uint32_t nDirection;
     int32_t nSeqMode;
-    uint8_t* pZHalfOffset;
+    pZHalfOffset_u pZHalfOffset;
     int nDrawX;
     int nScreenX;
     int nScreenY;
@@ -3155,15 +3168,14 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       }
     }
 
-    uint8_t* pCofLayerDataBase;
-    pCofLayerDataBase = (uint8_t*)D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    if (pCofLayerDataBase) {
+    pCofLayerDataBase.nCofLayerDataBase = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+    if (pCofLayerDataBase.nCofLayerDataBase) {
       nTmp = Particle::PARTICLE_GetPosZRaw(pUnit);
-      pZHalfOffset = (uint8_t*)(nTmp / 2);
+      pZHalfOffset.nZHalfOffset = nTmp / 2;
       nCoordTmp = D2Common::Units::GetPrecisionX(pUnit);
       nPrecisionX = nCoordTmp - nTmp / 2;
       nTmp = D2Common::Units::GetPrecisionY(pUnit);
-      nResult = nTmp - (int)pZHalfOffset;
+      nResult = nTmp - pZHalfOffset.nZHalfOffset;
       nCallResult2 = D2gfx::D2GFX::D2GFX_IsInPerspectiveBounds(nPrecisionX, nResult);
       if (!nCallResult2) {
         if (!bPerspToggled) {
@@ -3208,7 +3220,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
     }
 
     nResult = nDrawY;
-    if (pCofLayerDataBase) {
+    if (pCofLayerDataBase.nCofLayerDataBase) {
       nCallResult2 = UI::Path::DRAW_GetTypeOfBorder();
       switch (nCallResult2) {
         case 1:
@@ -3268,12 +3280,12 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
 
       pCofDataBase = pCofData;
       pCofIdentity = (uint8_t*)GfxUtil::GFXUTIL_Identity(pCofData);
-      pZHalfOffset = pCofIdentity;
+      pZHalfOffset.pZHalfOffset2 = pCofIdentity;
       byLayerComponent = D2Common::Units::GetDirection(pUnit);
       nDirection = (uint32_t)byLayerComponent;
       GfxUtil::GFXUTIL_CalcDirectionAndFrame(pUnit, eUnitTypeGfx, nClassId, nSeqMode, &nDirection, (uint32_t*)(aFrameMetrics + 2), &nFrameCount, (uint32_t)pCofIdentity[2], 1);
       pCofData = GfxUtil::GFXUTIL_GetCofLayerData(pCofData, aFrameMetrics[2], nFrameMetricX);
-      pCofLayerDataBase = pCofData;
+      pCofLayerDataBase.pCofLayerDataBase2 = pCofData;
       if (!pCofData) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x94e);
         exit(-1);
@@ -3283,7 +3295,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       nTmp = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, pCofData, aFrameMetrics + 1, nDirection, nFrameMetricX);
       if (nTmp > 0) {
         nLayerIdx = 0;
-        if (*pZHalfOffset > 0) {
+        if ((uint8_t)*pZHalfOffset.pZHalfOffset2 > 0) {
           do {
             byLayerComponent = pCofData[nLayerIdx];
             if (0xf < byLayerComponent) {
@@ -3301,8 +3313,8 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
             }
 
             nLayerIdx++;
-            pCofData = pCofLayerDataBase;
-          } while (nLayerIdx < *pZHalfOffset);
+            pCofData = pCofLayerDataBase.pCofLayerDataBase2;
+          } while (nLayerIdx < *pZHalfOffset.pZHalfOffset2);
         }
         if (bPerspToggled) {
           D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(nPerspCapable);

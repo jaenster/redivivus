@@ -59,7 +59,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::SetLinkOffset(int32
 template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEntryNode * pNode, uint32_t nLinkType, ::StringEntryNode * pExisting) {
     TSLink<::StringEntryNode>* pTVar1;
     TSLink<::StringEntryNode>* pSrcSlot;
-    int pCurHead;
+    intptr_t pCurHead;
     intptr_t pTailLink2;
     if (pNode) {
       pSrcSlot = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
@@ -95,7 +95,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
             return;
           }
           if (pCurHead < 0) {
-            pCurHead = (int)pDstSlot - pDstSlot->m_prevlink->m_next;
+            pCurHead = (intptr_t)pDstSlot - pDstSlot->m_prevlink->m_next;
           }
 
           *(TSLink<::StringEntryNode>**)(pTailLink2 + pCurHead) = (TSLink<::StringEntryNode>*)pSrcSlot;

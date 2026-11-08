@@ -19,7 +19,7 @@ template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(intptr_t
       return (TSLink<::StringEntryNode>*)~nNextOffset;
     }
     if (nLinkOffset < 0) {
-      nLinkOffset = (int)this - this->m_prevlink->m_next;
+      nLinkOffset = (intptr_t)this - this->m_prevlink->m_next;
     }
 
     return (TSLink<::StringEntryNode>*)(nNextOffset + nLinkOffset);

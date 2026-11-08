@@ -373,6 +373,7 @@ void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize) {
 void __stdcall McpConnectionLoop(int * pnParam) {
     DWORD dwWaitResult;
     sockaddr peerAddr;
+    int nPnParam;
     if (!pMCPEventHandle) {
       /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pMCPEventHandle = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
     }
@@ -392,8 +393,8 @@ void __stdcall McpConnectionLoop(int * pnParam) {
         return;
       }
 
-      pnParam = (int*)0x10;
-      bGotPeerName = Fog::Src::Safesock::GetPeerNameDoesReturn(pNetData, &peerAddr, (int*)&pnParam);
+      nPnParam = 0x10;
+      bGotPeerName = Fog::Src::Safesock::GetPeerNameDoesReturn(pNetData, &peerAddr, (int*)&nPnParam);
       if (!bGotPeerName) {
         D2GSJoinResult = 2;
         return;

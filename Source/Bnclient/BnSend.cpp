@@ -2062,6 +2062,7 @@ void __stdcall BNNEWS_SaveToCache() {
     char* pStrScanEnd;
     char cStrChar;
     intptr_t nDestOffset;
+    int nStrScanEnd;
     uint32_t nUnreadCount = g_nNewsMaxCacheSize.nCount;
     ftWriteTime.dwHighDateTime = g_nNewsMaxCacheSize.nCount - g_nFirstUnreadNewsIndex;
     if (ftWriteTime.dwHighDateTime >= 0x100) {
@@ -2101,7 +2102,7 @@ void __stdcall BNNEWS_SaveToCache() {
     if (g_nFirstUnreadNewsIndex < nUnreadCount) {
       D2BnNewsEntryStrc* pDVar1;
       nEntryDiff = g_nFirstUnreadNewsIndex * 0x408;
-      pStrScanEnd = (char*)(nUnreadCount - g_nFirstUnreadNewsIndex);
+      nStrScanEnd = (int)(nUnreadCount - g_nFirstUnreadNewsIndex);
       do {
         pDVar1 = g_nNewsMaxCacheSize.pEntries;
         pEntryText = g_nNewsMaxCacheSize.pEntries->szText + nEntryDiff;
@@ -2117,9 +2118,9 @@ void __stdcall BNNEWS_SaveToCache() {
         } while (cStrChar != '\0');
 
         nEntryDiff += 0x408;
-        pStrScanEnd = (char*)((char*)pStrScanEnd - 1);
+        nStrScanEnd--;
         pWritePtr = (uint32_t*)((char*)pWritePtr + nTextLen + 5);
-      } while (pStrScanEnd);
+      } while (nStrScanEnd);
 
       pStrScanEnd = 0;
       nTotalSize = nAccumSize;

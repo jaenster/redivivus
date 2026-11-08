@@ -798,7 +798,7 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
     int nNameLen = 0;
     int32_t nConfigIdx = -1;
     if (nCmdLen >= 0x100) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(DWORD)Fog::Src::ErrorManager::GetInstructionPointer(), 0x103);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x103);
       exit(-1);
     }
     if (nCmdLen > 0) {

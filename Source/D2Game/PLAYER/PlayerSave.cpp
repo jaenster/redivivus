@@ -1705,7 +1705,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
       }
 
       nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)((char*)pStreamPos + 2));
-      pStreamPos = (uint8_t*)((int)((int)pStreamPos + 2) + nItemBytesRead);
+      pStreamPos = (uint8_t*)((char*)pStreamPos + 2 + nItemBytesRead);
       nTotalBytesRead = nTotalBytesRead + 2 + nItemBytesRead;
       nCacheIdx = 0;
       if (nSubItemCount > 0) {
@@ -1755,7 +1755,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         }
 
         nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)((char*)pStreamPos + 2));
-        pStreamPos = (uint8_t*)((int)((int)pStreamPos + 2) + nItemBytesRead);
+        pStreamPos = (uint8_t*)((char*)pStreamPos + 2 + nItemBytesRead);
         nTotalBytesRead = nTotalBytesRead + 2 + nItemBytesRead;
         if (nItemMode) {
           nSubSocketIdx = PLRSAVE_RestoreEquippedItem(pGameLocal, (D2UnknownItemRelatedStruct*)&sGfxData, &pLastItem, &nSubSocketCount, pUnit);
@@ -1777,7 +1777,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     while (true) {
       nItemBitSize = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)((char*)pStreamPos + 2));
       nSubSocketIdx++;
-      pStreamPos = (uint8_t*)((int)((int)pStreamPos + 2) + nItemBitSize);
+      pStreamPos = (uint8_t*)((char*)pStreamPos + 2 + nItemBitSize);
       nTotalBytesRead = nTotalBytesRead + 2 + nItemBitSize;
       pUnit = pUnitLocal;
       if (nSubSocketIdx >= (int)(uint32_t)*(uint8_t*)((char*)&sGfxData.nFrameNumber + 1)) {

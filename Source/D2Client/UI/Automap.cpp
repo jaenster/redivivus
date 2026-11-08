@@ -2683,6 +2683,7 @@ static void __stdcall AUTOMAP_DrawXMarker(int32_t nX, DWORD nColor, int32_t nY) 
 // Source: .\\UI\\automap.cpp
 // @sourcefile .\UI\automap.cpp
 static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
+    int16_t nMyPartyId;
     int16_t nUnitPartyId;
     int nTemp;
     BOOL eUnitState;
@@ -2700,15 +2701,11 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     int nTransformClassId;
     uint16_t* pUnitTypeOrName;
     uD2UnitMode uUnitColor;
-    int32_t nUnitTypeOrName;
-    if (!pUnit) {
-      pUnitTypeOrName = (uint16_t*)0x6;
-    } else {
-      pUnitTypeOrName = (uint16_t*)pUnit->eUnitType;
-    }
-
+    eD2UnitType nUnitTypeOrName;
+    int32_t nUnitTypeOrName2;
+    eD2UnitType nUnitTypeOrName3 = !pUnit ? 0x6 : (eD2UnitType)pUnit->eUnitType;
     uUnitColor.ePlayerMode &= -256;
-    if (!(pUnitTypeOrName || (nTemp = UNIT::CUnit::IsActive(pUnit) , !nTemp) || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eUnitState != 0))) {
+    if (!(nUnitTypeOrName3 || (nTemp = UNIT::CUnit::IsActive(pUnit) , !nTemp) || (eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , eUnitState != 0))) {
       return;
     }
 
@@ -2725,116 +2722,126 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     if (!(xLocation >= gnAutomapClipLeft && xLocation <= gnAutomapClipRight && yLocation >= gnAutomapClipTop && yLocation <= gnAutomapClipBottom)) {
       return;
     }
-    if (pUnitTypeOrName) {
-      int16_t nMyPartyId;
-      if (pUnitTypeOrName != (uint16_t*)0x1) {
-        if (pUnitTypeOrName != (uint16_t*)0x2) {
+
+    switch (nUnitTypeOrName3) {
+      case 0x0:
+        {
+          if (nAutoMapParty || *(uint8_t*)(char*)&uUnitColor.ePlayerMode != nAutoMapColorParty) {
+            AUTOMAP_DrawXMarker(xLocation, uUnitColor.ePlayerMode, yLocation);
+          }
+          if (!AutoMapPartyNames) {
+            return;
+          }
+          if (!nAutoMapParty) {
+            return;
+          }
+
+          pNameUnit = UNIT::Player::GetPlayerUnit_UI();
+          if (pUnit == pNameUnit) {
+            return;
+          }
+
+          pNameUnit = pUnit;
+          if (*(uint8_t*)(char*)&uUnitColor.ePlayerMode == nAutoMapColorParty) {
+            if (!nAutoMapParty) {
+              return;
+            }
+
+            pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+            AUTOMAP_DrawTextCentered(xLocation, yLocation, 2, pPlayerData->szCharName);
+            return;
+          }
+
+          break;
+        }
+      default:
+        {
           return;
         }
-        if (AutoMapPartyNames && pUnit && pUnit->nClassId == 0x10b) {
-          nUnitTypeOrName = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
-          wPortalLabel = D2Lang::StrTable::strtable::GetLocaleString(0xcf3);
-          dwTextColor = uUnitColor.ePlayerMode & 0xff;
-          eUnitState = 0;
-          nTemp += -0x12;
-          D2Win::Src::D2WinFont::DRAW_text(wPortalLabel, xLocation - D2Win::Src::D2WinFont::DRAW_text0(wPortalLabel) / 2, nTemp, dwTextColor, eUnitState);
-          D2Win::Src::D2WinFont::SetAndReturnLastFont(nUnitTypeOrName);
+      case 0x2:
+        {
+          if (AutoMapPartyNames && pUnit && pUnit->nClassId == 0x10b) {
+            nUnitTypeOrName2 = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
+            wPortalLabel = D2Lang::StrTable::strtable::GetLocaleString(0xcf3);
+            dwTextColor = uUnitColor.ePlayerMode & 0xff;
+            eUnitState = 0;
+            nTemp += -0x12;
+            D2Win::Src::D2WinFont::DRAW_text(wPortalLabel, xLocation - D2Win::Src::D2WinFont::DRAW_text0(wPortalLabel) / 2, nTemp, dwTextColor, eUnitState);
+            D2Win::Src::D2WinFont::SetAndReturnLastFont(nUnitTypeOrName2);
+            return;
+          }
+
+          AUTOMAP_DrawXMarker(xLocation, uUnitColor.ePlayerMode, yLocation);
           return;
         }
+      case 0x1:
+        {
+          AUTOMAP_DrawXMarker(xLocation, uUnitColor.ePlayerMode, yLocation);
+          if (!AutoMapPartyNames) {
+            return;
+          }
+          if (!pUnit) {
+            nClassId = -1;
+          } else {
+            nClassId = pUnit->nClassId;
+          }
 
-        AUTOMAP_DrawXMarker(xLocation, uUnitColor.ePlayerMode, yLocation);
-        return;
-      }
+          eUnitState = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nClassId, interact);
+          if (eUnitState) {
+            uUnitColor.ePlayerMode = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
+            pUnitTypeOrName = UNIT::CUnit::GetName(pUnit);
+            eUnitState = 0;
+            nTargetY = 4;
+            nTemp += -0x12;
+            D2Win::Src::D2WinFont::DRAW_text(pUnitTypeOrName, xLocation - D2Win::Src::D2WinFont::DRAW_text0(pUnitTypeOrName) / 2, nTemp, nTargetY, eUnitState);
+            D2Win::Src::D2WinFont::SetAndReturnLastFont(uUnitColor.ePlayerMode);
+          }
+          if (!AutoMapPartyNames) {
+            return;
+          }
+          if (!nAutoMapParty) {
+            return;
+          }
 
-      AUTOMAP_DrawXMarker(xLocation, uUnitColor.ePlayerMode, yLocation);
-      if (!AutoMapPartyNames) {
-        return;
-      }
-      if (!pUnit) {
-        nClassId = -1;
-      } else {
-        nClassId = pUnit->nClassId;
-      }
+          nUnitTypeOrName = 0x6;
+          if (pUnit) {
+            nUnitTypeOrName = (eD2UnitType)pUnit->eUnitType;
+            nTransformClassId = pUnit->nClassId;
+            uUnitColor = pUnit->eAnimMode;
+          } else {
+            nTransformClassId = -1;
+            uUnitColor.ePlayerMode = Death;
+          }
 
-      eUnitState = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nClassId, interact);
-      if (eUnitState) {
-        uUnitColor.ePlayerMode = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
-        pUnitTypeOrName = UNIT::CUnit::GetName(pUnit);
-        eUnitState = 0;
-        nTargetY = 4;
-        nTemp += -0x12;
-        D2Win::Src::D2WinFont::DRAW_text(pUnitTypeOrName, xLocation - D2Win::Src::D2WinFont::DRAW_text0(pUnitTypeOrName) / 2, nTemp, nTargetY, eUnitState);
-        D2Win::Src::D2WinFont::SetAndReturnLastFont(uUnitColor.ePlayerMode);
-      }
-      if (!AutoMapPartyNames) {
-        return;
-      }
-      if (!nAutoMapParty) {
-        return;
-      }
+          D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, (eD2UnitType*)&nUnitTypeOrName, &nTransformClassId, (int*)&uUnitColor.ePlayerMode, ".\\UI\\automap.cpp", 0xa15);
+          if (nUnitTypeOrName) {
+            return;
+          }
 
-      pUnitTypeOrName = (uint16_t*)0x6;
-      if (pUnit) {
-        pUnitTypeOrName = (uint16_t*)pUnit->eUnitType;
-        nTransformClassId = pUnit->nClassId;
-        uUnitColor = pUnit->eAnimMode;
-      } else {
-        nTransformClassId = -1;
-        uUnitColor.ePlayerMode = Death;
-      }
+          eUnitState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
+          if (!eUnitState) {
+            return;
+          }
 
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, (eD2UnitType*)&pUnitTypeOrName, &nTransformClassId, (int*)&uUnitColor.ePlayerMode, ".\\UI\\automap.cpp", 0xa15);
-      if (pUnitTypeOrName) {
-        return;
-      }
+          pNameUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
+          if (!pNameUnit) {
+            return;
+          }
+          if (pNameUnit->eUnitType != UNIT_PLAYER) {
+            return;
+          }
 
-      eUnitState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
-      if (!eUnitState) {
-        return;
-      }
+          pMyPlayer = UNIT::Player::GetPlayerUnit_UI();
+          nMyPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pMyPlayer);
+          if (nMyPartyId != -1) {
+            nUnitPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
+            if (nMyPartyId == nUnitPartyId) {
+              return;
+            }
+          }
 
-      pNameUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
-      if (!pNameUnit) {
-        return;
-      }
-      if (pNameUnit->eUnitType != UNIT_PLAYER) {
-        return;
-      }
-
-      pMyPlayer = UNIT::Player::GetPlayerUnit_UI();
-      nMyPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pMyPlayer);
-      if (nMyPartyId != -1) {
-        nUnitPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
-        if (nMyPartyId == nUnitPartyId) {
-          return;
+          break;
         }
-      }
-    } else {
-      if (nAutoMapParty || *(uint8_t*)(char*)&uUnitColor.ePlayerMode != nAutoMapColorParty) {
-        AUTOMAP_DrawXMarker(xLocation, uUnitColor.ePlayerMode, yLocation);
-      }
-      if (!AutoMapPartyNames) {
-        return;
-      }
-      if (!nAutoMapParty) {
-        return;
-      }
-
-      pNameUnit = UNIT::Player::GetPlayerUnit_UI();
-      if (pUnit == pNameUnit) {
-        return;
-      }
-
-      pNameUnit = pUnit;
-      if (*(uint8_t*)(char*)&uUnitColor.ePlayerMode == nAutoMapColorParty) {
-        if (!nAutoMapParty) {
-          return;
-        }
-
-        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-        AUTOMAP_DrawTextCentered(xLocation, yLocation, 2, pPlayerData->szCharName);
-        return;
-      }
     }
 
     pPlayerData = D2Common::Units::GetPlayerData(pNameUnit);

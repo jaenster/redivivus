@@ -133,6 +133,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     uint32_t uAlphaG;
     uint8_t aAlphaTable[1021];
     uint32_t nText1;
+    uint32_t nSrcFile;
     int nSrcLine = 99;
     char* szSrcFile = ".\\Src\\D2WinPalette.cpp";
     void* pDatFileHandle = D2Hell::D2FILE_AllocAndLoadD2File(D2WinArchive::ReturnZero(), szText1, 0, szSrcFile, nSrcLine);
@@ -206,10 +207,10 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     pSrcBytes = &MostLikelyCurrentPalletePtr[0].peBlue;
     do {
       uint8_t bVar2;
-      szSrcFile = (char*)((uint32_t)((PALETTEENTRY*)(pSrcBytes - 2))->peRed * 0xaa / 100);
+      nSrcFile = (uint32_t)((PALETTEENTRY*)(pSrcBytes - 2))->peRed * 0xaa / 100;
       nText1 = 0xff;
-      if (szSrcFile < (char*)0x100) {
-        nText1 = (uint32_t)szSrcFile;
+      if (nSrcFile < 0x100) {
+        nText1 = nSrcFile;
       }
 
       uAlphaR = (uint32_t)pSrcBytes[-1] * 0xaa / 100;

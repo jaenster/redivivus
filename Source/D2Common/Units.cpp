@@ -897,6 +897,7 @@ void __stdcall SetTargetUnitForDynamicUnit(D2UnitStrc * pUnit, D2UnitStrc * pTar
 
 eD2UnitType __stdcall GetTargetTypeFromDynamicUnit(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType;
+    eD2UnitType nUnit;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b9);
       exit(-1);
@@ -908,8 +909,8 @@ eD2UnitType __stdcall GetTargetTypeFromDynamicUnit(D2UnitStrc * pUnit) {
         exit(-1);
       }
 
-      /* pUnit is reused here for return */ PATH::DynamicPath::GetTargetTypeAndGUID(pUnit->pPath.pDynamicPath, (eD2UnitType*)&pUnit, &nTargetId);
-      return (eD2UnitType)pUnit;
+      /* pUnit is reused here for return */ PATH::DynamicPath::GetTargetTypeAndGUID(pUnit->pPath.pDynamicPath, (eD2UnitType*)&nUnit, &nTargetId);
+      return nUnit;
     }
 }
 
@@ -3464,18 +3465,19 @@ uint32_t __stdcall GetWeaponAnimClass(D2UnitStrc * pUnit) {
     uint32_t nAnimClassIdx;
     uint32_t nWeaponAnimClass;
     eD2PlayerAnimMode nAnimMode;
+    int nUnit;
     D2UnitStrc* pUnitOrg = pUnit;
     eD2UnitType eUnitType = UNIT_COUNT;
     if (pUnit) {
       eUnitType = pUnit->eUnitType;
       nAnimMode = pUnit->eAnimMode.ePlayerMode;
-      pUnit = (D2UnitStrc*)pUnit->nClassId;
+      nUnit = pUnit->nClassId;
     } else {
       nAnimMode = Death;
-      pUnit = (D2UnitStrc*)-1;
+      nUnit = -1;
     }
 
-    Skills::SKILLS_GetStateTransformGfx(pUnitOrg, &eUnitType, (int*)&pUnit, (int*)&nAnimMode, ".\\UNITS\\Units.cpp", 0x118a);
+    Skills::SKILLS_GetStateTransformGfx(pUnitOrg, &eUnitType, (int*)&nUnit, (int*)&nAnimMode, ".\\UNITS\\Units.cpp", 0x118a);
     if (!(eUnitType == UNIT_PLAYER && true)) {
       return 0;
     }
@@ -3491,7 +3493,7 @@ uint32_t __stdcall GetWeaponAnimClass(D2UnitStrc * pUnit) {
         nAnimClassIdx = (uint32_t)wAnimClass;
       }
 
-      return gdwUnitStrucFieldMask[(intptr_t)(pUnit->unk0x19 + nAnimClassIdx * 7 - 0x19)];
+      return gdwUnitStrucFieldMask[(int)(nUnit + 0x19 + nAnimClassIdx * 7 - 0x19)];
       case eD2PlayerAnimMode_ns::Skill3:
 
       case eD2PlayerAnimMode_ns::Skill4:
@@ -3504,7 +3506,7 @@ uint32_t __stdcall GetWeaponAnimClass(D2UnitStrc * pUnit) {
           nWeaponAnimClass = (uint32_t)wAnimClass;
         }
 
-        return gdwUnitStrucFieldMask[(intptr_t)(pUnit->unk0x19 + nWeaponAnimClass * 7 - 0x19)];
+        return gdwUnitStrucFieldMask[(int)(nUnit + 0x19 + nWeaponAnimClass * 7 - 0x19)];
       }
     }
 

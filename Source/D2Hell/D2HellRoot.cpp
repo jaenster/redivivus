@@ -428,8 +428,8 @@ void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpr
 
 StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(StormLinkStrc * pLink, int32_t nLinkOffset) {
     StormLinkStrc* pResult;
-    uint32_t pNextItem = pLink->pNext;
-    if ((int)pNextItem < 0) {
+    intptr_t pNextItem = pLink->pNext;
+    if (pNextItem < 0) {
       pResult = (StormLinkStrc*)~pNextItem;
     } else {
       if (nLinkOffset < 0) {

@@ -852,7 +852,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
       pSkill = (short int*)pSkillsTxt->aurastat;
       do {
         pAuraStatCalc++;
-        pSkill = (short int*)((char*)pSkill + 2);
+        pSkill += 1;
         wCurAuraStatId = *pSkill;
         if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
           pGameArg.anStatIds[iAuraStatIdx] = -1;

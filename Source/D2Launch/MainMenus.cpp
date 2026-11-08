@@ -7528,8 +7528,6 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
     int nRemaining;
     uint8_t chScan;
     size_t nAllocSize;
-    int nPszDescDst;
-    int nPszSrc;
     UIMENU_PleaseWaitWithCancelButton();
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_ClearLoopFlagPump);
     if (Launcher::gpBNetCallbacks) {
@@ -7565,18 +7563,18 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
         pszNameSrc = pszSrc + 4;
         pszDescDst = pszNameSrc;
         pszDescDst = pszDescDst + strlen((char*)pszDescDst) + 1;
-        nPszDescDst = (int)(pszDescDst - (pszSrc + 5) + 1);
-        pcVar1 = (char*)D2_ALLOC_AT((size_t)nPszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
+        pszDescDst += 1 - (intptr_t)(pszSrc + 5);
+        pcVar1 = (char*)D2_ALLOC_AT((size_t)pszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
         pRealmEntry->szName = pcVar1;
-        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, nPszDescDst);
-        pszNameSrc += nPszDescDst;
+        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, (int32_t)pszDescDst);
+        pszNameSrc += (intptr_t)pszDescDst;
         pszSrc = pszNameSrc;
         pszSrc = pszSrc + strlen((char*)pszSrc) + 1;
-        nPszSrc = (int)(pszSrc - (pszNameSrc + 1) + 1);
-        pcVar1 = (char*)D2_ALLOC_AT((size_t)nPszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
+        pszSrc += 1 - (intptr_t)(pszNameSrc + 1);
+        pcVar1 = (char*)D2_ALLOC_AT((size_t)pszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
         pRealmEntry->szDescription = pcVar1;
-        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, nPszSrc);
-        pszSrc = pszNameSrc + nPszSrc;
+        Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, (int32_t)pszSrc);
+        pszSrc = pszNameSrc + (intptr_t)pszSrc;
         MAINMENU_AddRealmToList(pRealmEntry);
         nRemaining--;
         pRealmArray = g_pBNetRealmList;

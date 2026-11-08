@@ -1759,6 +1759,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
     uint32_t* pDstFrameOffset;
     size_t _Size;
     int* pSerializedEnd;
+    char* pFrameEntry2;
     int* pSrcParam = pOldFile;
     if (!(pOldFile[1] & 1U)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2cb);
@@ -1826,10 +1827,10 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
           _Size = *(size_t*)(*pSrcParam + 0x24);
           pDstFrame[7] = _Size;
           memcpy(pDstFrame + 8, (void*)(*pSrcParam + 0x28), _Size);
-          pFrameEntry = *pSrcParam;
+          pFrameEntry2 = (char*)*pSrcParam;
           pColorShiftDst = (uint32_t*)((char*)pDstFrame + pDstFrame[7] + 0x23);
-          if (*(int*)(pFrameEntry + 0x20)) {
-            memcpy(pColorShiftDst, (void*)(pFrameEntry + 0x20), *(size_t*)(pFrameEntry + 0x1c));
+          if (*(int*)(pFrameEntry2 + 0x20)) {
+            memcpy(pColorShiftDst, (void*)(pFrameEntry2 + 0x20), *(size_t*)(pFrameEntry2 + 0x1c));
             pDstFrame[6] = (intptr_t)pColorShiftDst - (intptr_t)pSerializedBlock;
             pColorShiftDst = (uint32_t*)((intptr_t)pColorShiftDst + *(int*)(*pSrcParam + 0x1c));
           } else {
@@ -2029,6 +2030,7 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
     int nFrameHeight;
     int nDrawXAdj;
     int32_t nErrorLine;
+    int32_t nGfxData;
     DC6* pDC6 = pGfxData->pDC6;
     if (!pDC6 || pDC6->nVersion == 6 && !(pDC6->nFlags & 4)) {
       DC6Block* pImageHeader;
@@ -2040,7 +2042,7 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
           nDrawYAdj = nDrawY + pImageHeader->nOffsetY;
           nFrameHeight = pImageHeader->nHeight;
           nDrawXAdj = nDrawX + pImageHeader->nOffsetX;
-          pGfxData = 0;
+          nGfxData = 0x0;
           if (nDrawYAdj - nFrameHeight < 0) {
             nFrameHeight = nDrawYAdj + 1;
           }
@@ -2048,8 +2050,8 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
             return;
           }
           if (nDrawYAdj >= nDstHeight) {
-            pGfxData = (D2GfxDataStrc*)(nDrawYAdj - nDstHeight + 1);
-            nFrameHeight -= (int)pGfxData;
+            nGfxData = nDrawYAdj - nDstHeight + 1;
+            nFrameHeight -= nGfxData;
             if (nFrameHeight <= 0) {
               return;
             }
@@ -2069,7 +2071,7 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
             exit(-1);
           }
 
-          (*gaaCelDrawFuncTable[nFormat])((uint8_t*)pImageHeader, pDstBits + nDrawYAdj * nDstPitch + nDrawXAdj, nDrawXAdj, nClipLeft, nClipRight, nDstPitch, (int32_t)pGfxData, nFrameHeight, (int32_t)pRenderArg1, pRenderArg2, (int32_t)pPalette);
+          (*gaaCelDrawFuncTable[nFormat])((uint8_t*)pImageHeader, pDstBits + nDrawYAdj * nDstPitch + nDrawXAdj, nDrawXAdj, nClipLeft, nClipRight, nDstPitch, nGfxData, nFrameHeight, (int32_t)pRenderArg1, pRenderArg2, (int32_t)pPalette);
           return;
         }
 

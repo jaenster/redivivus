@@ -5203,6 +5203,12 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
 
 // Draw UI label showing unit name/life under mouse cursor during gameplay
 void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
+    // The values VC8 kept in pLevelTxtResult's one frame slot, one member each: a frame object reaches the slot.
+    union pLevelTxtResult_u {
+      D2LevelsTxt* pLevelsTxt;
+      int32_t nLevelTxtResult;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(pLevelTxtResult_u) == 4, "pLevelTxtResult_u must stay one 4-byte frame slot");
     // Frame slots -1056..-4 are ONE object: &wszWarpName is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -5213,7 +5219,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
       uint8_t aObjectNameBuf[254];
       char szTooltipBuf[128];
       uint16_t wszNameBuf[130];
-      D2LevelsTxt* pLevelTxtResult;
+      pLevelTxtResult_u pLevelTxtResult;
       int nScreenX;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1052, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -5263,7 +5269,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
         return;
       }
 
-      D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nX, nY, 0, &__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult);
+      D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nX, nY, 0, &__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult.pLevelsTxt);
       nResult = Path::DRAW_GetTypeOfBorder();
       switch (nResult) {
         case 1:
@@ -5280,7 +5286,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           }
       }
 
-      gnMercenaryHealthBarScreenY = (int)__frame0.pLevelTxtResult->MonLvl;
+      gnMercenaryHealthBarScreenY = (int)__frame0.pLevelTxtResult.pLevelsTxt->MonLvl;
       nHealthBarScreenX = __frame0.nScreenX;
     } else {
       nX = D2Common::Units::GetTargetX(pUnit);
@@ -5294,8 +5300,8 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
         Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-      UI_FormatPlayerNameAndStatus(pUnit, __frame0.wszNameBuf, 0x80, &__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult);
-      D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(__frame0.wszNameBuf, nHealthBarScreenX, gnMercenaryHealthBarScreenY - 0x48, __frame0.nScreenX, 1, (int32_t)__frame0.pLevelTxtResult);
+      UI_FormatPlayerNameAndStatus(pUnit, __frame0.wszNameBuf, 0x80, &__frame0.nScreenX, (int*)&__frame0.pLevelTxtResult.nLevelTxtResult);
+      D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(__frame0.wszNameBuf, nHealthBarScreenX, gnMercenaryHealthBarScreenY - 0x48, __frame0.nScreenX, 1, __frame0.pLevelTxtResult.nLevelTxtResult);
       return;
       case UNIT_ITEM:
         if (!Draw::GFX_bShowUIFlag.AltShowItems) {
@@ -5322,14 +5328,14 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           if (nClassId == 0x164) {
             __frame0.nScreenX = 3;
             Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-            __frame0.pLevelTxtResult = 0;
-            nResult = UI_GetRosterPlayerInfoForDisplay(__frame0.wszNameBuf, (int*)&__frame0.pLevelTxtResult, &__frame0.nScreenX, pUnit);
+            __frame0.pLevelTxtResult.nLevelTxtResult = 0x0;
+            nResult = UI_GetRosterPlayerInfoForDisplay(__frame0.wszNameBuf, (int*)&__frame0.pLevelTxtResult.nLevelTxtResult, &__frame0.nScreenX, pUnit);
             if (nResult) {
               if (__frame0.nScreenX == 3) {
                 return;
               }
 
-              D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(__frame0.wszNameBuf, nHealthBarScreenX, gnMercenaryHealthBarScreenY - 0x48, __frame0.nScreenX, 1, (int32_t)__frame0.pLevelTxtResult);
+              D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(__frame0.wszNameBuf, nHealthBarScreenX, gnMercenaryHealthBarScreenY - 0x48, __frame0.nScreenX, 1, __frame0.pLevelTxtResult.nLevelTxtResult);
               return;
             }
           }
@@ -5349,7 +5355,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
       Fog::File::CONTAINER_InitializeBuffer(wszLevelNameBuf, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       __frame0.wszObjectName = L'\0';
       Fog::File::CONTAINER_InitializeBuffer(__frame0.aObjectNameBuf, 2, 0x7f, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-      bHasInteract = npcmenu::GetInteractedUnitGuid((int*)&__frame0.pLevelTxtResult);
+      bHasInteract = npcmenu::GetInteractedUnitGuid((int*)&__frame0.pLevelTxtResult.pLevelsTxt);
       if (!bHasInteract) {
         nResult = Text::TEXT_IsScrollingTextActive();
         if (nResult != 1) {
@@ -5413,15 +5419,15 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
       case UNIT_WARP:
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       eCurrentRoomLevel = D2Common::DUNGEON::Dungeon::GetWarpDestinationLevel(pRoom, pUnit->nClassId);
-      __frame0.pLevelTxtResult = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eCurrentRoomLevel);
-      if (__frame0.pLevelTxtResult) {
+      __frame0.pLevelTxtResult.pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eCurrentRoomLevel);
+      if (__frame0.pLevelTxtResult.pLevelsTxt) {
         pShadow = D2Common::DUNGEON::Dungeon::DUNGEON_GetLvlWarpTxtForWarpUnit(pRoom, pUnit);
         if (pShadow) {
           nClassId = ((uint32_t)pShadow->SelectDX >> 1) + pShadow->SelectX + nHealthBarScreenX;
           nWarpTooltipY = ((uint32_t)pShadow->SelectDY >> 1) + pShadow->SelectY + gnMercenaryHealthBarScreenY;
           __frame0.wszWarpName = L'\0';
           Fog::File::CONTAINER_InitializeBuffer(__frame0.aWarpNameBuf, 2, 199, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-          pwszTemp = __frame0.pLevelTxtResult->wszLevelWarp;
+          pwszTemp = __frame0.pLevelTxtResult.pLevelsTxt->wszLevelWarp;
           if (eCurrentRoomLevel == LEVEL_DenOfEvil) {
             nResult = GetQuestAvailabilityByIndex(0, 1);
             wWarpStrId = 0x13de;
@@ -8944,6 +8950,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
     int32_t nStatPts;
     uint32_t* pBtnEntry;
     int nBtnY;
+    int nMsg;
     D2UIMouseMsgStrc* pBtnIdx = pMsg;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -8960,12 +8967,12 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       nStatPts = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_statpts, 0);
       if (nStatPts) {
-        pMsg = 0;
+        nMsg = 0x0;
         pBtnEntry = (uint32_t*)gaStatScreenButtons;
         do {
           nBtnY = Inv::ScreenSizeY + pBtnEntry[1] + Inv::gnPanelOffsetY;
           if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(*pBtnEntry + Inv::gnPanelOffsetX) && nMouseX < (int)(*pBtnEntry + Inv::gnPanelOffsetX + 0x28)) {
-            gaStatScreenButtons[(intptr_t)pMsg].bHitTest = 1;
+            gaStatScreenButtons[nMsg].bHitTest = 1;
             Cursor::UI_HandleCursorMouseMove(pBtnIdx);
             pBtnIdx->bHandled = 1;
             pBtnIdx->dwResult = 0;
@@ -8974,7 +8981,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          pMsg = (D2UIMouseMsgStrc*)((intptr_t)&pMsg->hWnd + 1);
+          nMsg++;
           pBtnEntry = (uint32_t*)((char*)pBtnEntry + 0xe);
         } while ((intptr_t)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons)));
       }

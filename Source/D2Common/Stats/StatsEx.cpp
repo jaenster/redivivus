@@ -1733,6 +1733,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
     int nShiftedStatToAdd;
     int nPackedStat;
     D2StatStrc* pStatEntryEnd;
+    int nStatListEx;
     D2StatListExStrc* pStatList = pStatListEx;
     if (!pStatListEx) {
       return;
@@ -1778,18 +1779,18 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
       if (eStatIdx & 0x20000000) {
         nOp45StatCount = pStatListEx->sFullStats.pStatInfo;
         pStatEntryEnd = nOp45StatCount + pStatListEx->sFullStats.wStatCount;
-        pStatListEx = 0;
+        nStatListEx = 0x0;
         for (; nOp45StatCount < pStatEntryEnd; nOp45StatCount++) {
           nPackedStat = (int)((uint32_t)(uint16_t)nOp45StatCount->wSubIndex | (uint32_t)(uint16_t)nOp45StatCount->wStatIndex << 16);
           dwFlags = nPackedStat >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt;
           if (true && (pItemStatCostTxt = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
-            anOp45Stats[(intptr_t)pStatListEx] = nPackedStat;
-            pStatListEx = (D2StatListExStrc*)((intptr_t)&pStatListEx->sStatList.pMemory + 1);
+            anOp45Stats[nStatListEx] = nPackedStat;
+            nStatListEx++;
           }
         }
 
-        for (nOp45Count = 0; nOp45Count < (intptr_t)pStatListEx; nOp45Count++) {
+        for (nOp45Count = 0; nOp45Count < nStatListEx; nOp45Count++) {
           eStatIdx = anOp45Stats[nOp45Count] >> 0x10 & 0xffff;
           if (true && (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx) {
             STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &ITEMS::Items::sgptDataTable->pTxtItemStatCost[eStatIdx].stat, nullptr);
@@ -1950,6 +1951,7 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
     int32_t nOp45Count;
     int nShiftedStatNoDmg;
     D2StatStrc* pStatEntryEnd;
+    int nOp45Owner;
     D2StatListExStrc* pChildStatsEx = pStatsEx;
     D2StatListExStrc* pUnitStatsEx = pOp45Owner->pStatsEx;
     if (!(pUnitStatsEx && pUnitStatsEx->sStatList.nFlags & 0x80000000U)) {
@@ -2000,18 +2002,18 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
         pEffectiveStatsArr = STATLIST_GetEffectiveStatsArray(pChildStatsEx);
         pStatCur = pEffectiveStatsArr->pStatInfo;
         pStatEntryEnd = pStatCur + pEffectiveStatsArr->wStatCount;
-        pOp45Owner = 0;
+        nOp45Owner = 0x0;
         for (; pStatCur < pStatEntryEnd; pStatCur++) {
           iVar2 = (int)((uint32_t)(uint16_t)pStatCur->wSubIndex | (uint32_t)(uint16_t)pStatCur->wStatIndex << 16);
           dwFlags = iVar2 >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt;
           if (true && (pItemStatCostTxt = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr) && pItemStatCostTxt->bHasOp4Or5Dependency) {
-            anOp45Stats[(intptr_t)pOp45Owner] = iVar2;
-            pOp45Owner = (D2UnitStrc*)((intptr_t)&pOp45Owner->eUnitType + 1);
+            anOp45Stats[nOp45Owner] = iVar2;
+            nOp45Owner++;
           }
         }
 
-        for (nOp45Idx = 0; nOp45Idx < (intptr_t)pOp45Owner; nOp45Idx++) {
+        for (nOp45Idx = 0; nOp45Idx < nOp45Owner; nOp45Idx++) {
           nOp45Count = anOp45Stats[nOp45Idx];
           pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(nOp45Count >> 0x10 & 0xffff);
           if (pItemStatCostLine) {
@@ -2475,6 +2477,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
     uint32_t nOpStatIndex;
     int32_t nCombinedStatVal;
     uint16_t wOpStatIndex;
+    int nUnit2;
     D2UnitStrc* pOwnerUnit = pUnit;
     if (!(pUnit && pUnit2 && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
       return;
@@ -2492,7 +2495,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
       D2ItemStatCostTxt* pStatCostTxt = false || (int)(uint32_t)(uint16_t)pStatCur->wStatIndex >= pDataTable->nTxtItemStatCostSize ? 0 : pDataTable->pTxtItemStatCost + (uint16_t)pStatCur->wStatIndex;
       if ((uint8_t)(pStatCostTxt->op - 6) <= 1) {
         pUnit = (D2UnitStrc*)&pStatCostTxt->opStat1;
-        pUnit2 = 0;
+        nUnit2 = 0x0;
         do {
           wOpStatIndex = (uint16_t)pUnit->eUnitType;
           if (wOpStatIndex == 0xffff) {
@@ -2509,9 +2512,9 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
           nCombinedStatVal = STATLIST_CalcCombinedStatValue(pOwnerUnit->pStatsEx, nOpStatIndex << 0x10);
           STATLIST_SetFullStatValue(nOpStatIndex << 0x10, nCombinedStatVal, pStatCostTxt, pOwnerUnit, pOwnerUnit->pStatsEx);
           pUnit = (D2UnitStrc*)((intptr_t)&pUnit->eUnitType + 2);
-          pUnit2 = (D2UnitStrc*)((intptr_t)&pUnit2->eUnitType + 1);
+          nUnit2++;
           pDataTable = ITEMS::Items::sgptDataTable;
-        } while ((intptr_t)pUnit2 < 3);
+        } while (nUnit2 < 3);
       }
     }
 }

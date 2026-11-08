@@ -1166,8 +1166,8 @@ uint32_t __stdcall SCOMP_CleanupTempBuffer() {
 }
 
 StormLinkStrc * __thiscall HUFFMAN_GetDecodedOffset(StormLinkStrc * pNode, intptr_t pBase) {
-    uint32_t nOffset = pNode->pNext;
-    if ((int)nOffset < 0) {
+    intptr_t nOffset = pNode->pNext;
+    if (nOffset < 0) {
       return (StormLinkStrc*)~nOffset;
     }
     if (pBase < 0) {
@@ -1346,7 +1346,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStrea
     if (!bNeedRebuild) {
       return pTreeNode->nSymbol;
     }
-    if (nBitCount > (uintptr_t)(D2CompressHuffNodeStrc*)0x7) {
+    if (nBitCount > (uintptr_t)0x7) {
       uVar2 = pThis->nEpoch;
       pQuickFill[1] = nBitCount;
       *pQuickFill = uVar2;
@@ -1394,7 +1394,7 @@ StormLinkedListStrc * __fastcall Unreferenced_0041ed70(StormLinkedListStrc * par
 
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef) {
     int* piVar1;
-    uint32_t pNeighbor2;
+    intptr_t pNeighbor2;
     StormLinkStrc* pNodeCur = (StormLinkStrc*)pNode;
     if (!pNode) {
       pNodeCur = (StormLinkStrc*)(pListHead + 1);
@@ -1421,7 +1421,7 @@ void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nI
           pNodeCur->pNext = ((StormLinkStrc*)pInsertRef)->pNext;
           piVar1 = *pListHead;
           pNeighbor2 = ((StormLinkStrc*)pInsertRef)->pNext;
-          if ((int)pNeighbor2 < 0) {
+          if (pNeighbor2 < 0) {
             *(StormLinkStrc**)~pNeighbor2 = (StormLinkStrc*)pNodeCur;
             ((StormLinkStrc*)pInsertRef)->pNext = (intptr_t)pNode;
             return;

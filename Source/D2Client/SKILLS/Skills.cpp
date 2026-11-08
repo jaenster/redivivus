@@ -968,7 +968,7 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
       }
 
       nCallbackData++;
-    } while ((uintptr_t)(void*)nCallbackData < (uint32_t)sCallbackArg.nRoomCount);
+    } while ((uintptr_t)nCallbackData < (uint32_t)sCallbackArg.nRoomCount);
 }
 
 BOOL __fastcall SKILLS_RadiusCallback_IncrementCounter(D2fpSkillFuncArg * pFuncArg, D2UnitStrc * pUnit) {

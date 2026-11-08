@@ -2743,7 +2743,7 @@ static void __stdcall INV_FormatItemSpellDescText(D2UnitStrc * pItem, D2ItemsTxt
         return;
     }
 
-    Storm::Source::SSTR::SStrPrintf(szValueAscii, 10, "%ld", (long int)(D2UnitStrc*)nItem);
+    Storm::Source::SSTR::SStrPrintf(szValueAscii, 10, "%ld", (long int)nItem);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszValueBuf, szValueAscii, 9);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwszSpace);
     pwszLabel = wszValueBuf;
@@ -5960,6 +5960,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
     eD2UnitStat nColorCode;
     eD2UnitStat eStatId;
     uint32_t nStatArrayIdx;
+    int nDiffLevelsTxt;
     if (!pUnit) {
       return;
     }
@@ -6023,7 +6024,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
         iStatBonusPct = 0;
         iStatRaw = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
         iDmgTypeLoopCount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_mindamage_percent, 0);
-        pDiffLevelsTxt = (D2DifficultyLevelsTxt*)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
+        nDiffLevelsTxt = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
         if (iDmgTypeLoopCount + iStatRaw > 0) {
           nColorCode = UNITSTAT_vitality;
         } else {
@@ -6083,7 +6084,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
         }
 
         iDamageValue = (iDmgTypeLoopCount + 100 + iStatRaw) * iStatValue / 100 + iStatBonusPct;
-        iStatRaw = ((intptr_t)&pDiffLevelsTxt[1].UberCodeOddsGood + iStatRaw) * uSlot10.nMaxDamage / 100 + iStatBonusPct;
+        iStatRaw = (nDiffLevelsTxt + 0x64 + iStatRaw) * uSlot10.nMaxDamage / 100 + iStatBonusPct;
         uSlot10.pDmgTypeStatArray = nPropertyArray1 + 1;
         nPropertyArray1[0] = UNITSTAT_firemindam;
         nPropertyArray1[1] = UNITSTAT_firemaxdam;
@@ -10918,10 +10919,11 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     int bHasSelectedTab;
     uint8_t byNewShopPage;
     int32_t nBufferSize;
-    D2UIMouseMsgStrc* pClickedButton;
     uint16_t* pwszCostBuf;
     int32_t nMsg;
-    int32_t nMsg2;
+    int nMsg2;
+    int32_t nMsg3;
+    int nClickedButton;
     D2UIMouseMsgStrc* pUnderMouse2;
     pUnderMouse2 = pMsg;
     int32_t x;
@@ -10981,12 +10983,12 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          bHasNpcGuid = npcmenu::GetInteractedUnitGuid((int*)&nMsg2);
+          bHasNpcGuid = npcmenu::GetInteractedUnitGuid((int*)&nMsg3);
           if (!bHasNpcGuid) {
             return;
           }
 
-          __frame0.uSlot8.pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nMsg2, UNIT_MONSTER);
+          __frame0.uSlot8.pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nMsg3, UNIT_MONSTER);
           if (!__frame0.uSlot8.pNpcUnit) {
             return;
           }
@@ -11037,7 +11039,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
           nShopButtonIdx = 0;
           bHasSelectedTab = 0;
           __frame0.uSlot8.nSelectedShopTab = 0;
-          pMsg = (D2UIMouseMsgStrc*)-1;
+          nMsg2 = -1;
           if (gaNpcShopButtonTable[0] > 0) {
             pnButtonState = &gaNpcShopButtons[0].nDrawCallback;
             pnButtonXOffsets = NPCButtonArray + CurrentNpcButtonSelection * 4;
@@ -11047,27 +11049,27 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
                 __frame0.uSlot8.nSelectedShopTab = nShopButtonIdx;
               }
               if (gnInvMouseX > *pnButtonXOffsets + gnPanelOffsetX && gnInvMouseX < *pnButtonXOffsets + gnPanelOffsetX + 0x2d && gpInvCursorItem > __frame0.nNpcTopY && gpInvCursorItem < gnPanelOffsetY - 0x41 + ScreenSizeY) {
-                pMsg = (D2UIMouseMsgStrc*)nShopButtonIdx;
+                nMsg2 = nShopButtonIdx;
               }
 
-              pClickedButton = pMsg;
+              nClickedButton = nMsg2;
               nShopButtonIdx = (intptr_t)&((D2UIMouseMsgStrc*)nShopButtonIdx)->hWnd + 1;
               pnButtonXOffsets++;
               pnButtonState += 5;
             } while (nShopButtonIdx < gaNpcShopButtonTable[0]);
 
-            if (pMsg != (D2UIMouseMsgStrc*)-1) {
-              if (gaNpcShopButtons[(intptr_t)pMsg].nSelectedState == 1) {
+            if (nMsg2 != -1) {
+              if (gaNpcShopButtons[nMsg2].nSelectedState == 1) {
                 Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
                 if (bHasSelectedTab == 1) {
-                  if (pMsg != (D2UIMouseMsgStrc*)__frame0.uSlot8.nSelectedShopTab) {
-                    gaNpcShopButtons[(intptr_t)pClickedButton].nDrawCallback = 1;
+                  if (nMsg2 != __frame0.uSlot8.nSelectedShopTab) {
+                    gaNpcShopButtons[nClickedButton].nDrawCallback = 1;
                     gaNpcShopButtons[__frame0.uSlot8.nSelectedShopTab].nDrawCallback = 0;
                     gShopTradeUIState = 1;
                     goto consume_shop_button_click;
                   }
 
-                  gaNpcShopButtons[(intptr_t)pClickedButton].nDrawCallback = 0;
+                  gaNpcShopButtons[nClickedButton].nDrawCallback = 0;
                   g_nCurrentInventoryPage = 1;
                   pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
                   if (pCursorItem_lcl) {
@@ -11082,7 +11084,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
                     }
                   }
                 } else {
-                  gaNpcShopButtons[(intptr_t)pClickedButton].nDrawCallback = 1;
+                  gaNpcShopButtons[nClickedButton].nDrawCallback = 1;
                 }
 
                 gShopTradeUIState = 1;

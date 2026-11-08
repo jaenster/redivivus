@@ -120,8 +120,8 @@ int __fastcall Unreferenced_004203c0(StormLinkStrc * param_1) {
 }
 
 StormLinkStrc * __thiscall WND_ResolveListOffset(StormLinkStrc * pNode, intptr_t pBase) {
-    uint32_t nOffset = pNode->pNext;
-    if ((int)nOffset < 0) {
+    intptr_t nOffset = pNode->pNext;
+    if (nOffset < 0) {
       return (StormLinkStrc*)~nOffset;
     }
     if (pBase < 0) {
@@ -152,7 +152,7 @@ int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode) {
 
 void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode, int * * ppAnchor) {
     int* piVar1;
-    uint32_t piTmp;
+    intptr_t piTmp;
     StormLinkStrc* ppCur = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppCur = (StormLinkStrc*)(ppList + 1);
@@ -179,7 +179,7 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
           ppCur->pNext = ((StormLinkStrc*)ppAnchor)->pNext;
           piVar1 = *ppList;
           piTmp = ((StormLinkStrc*)ppAnchor)->pNext;
-          if ((int)piTmp < 0) {
+          if (piTmp < 0) {
             *(StormLinkStrc**)~piTmp = (StormLinkStrc*)ppCur;
             ((StormLinkStrc*)ppAnchor)->pNext = (intptr_t)pNode;
             return;

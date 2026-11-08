@@ -215,6 +215,7 @@ void __stdcall StoreMessages(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text,
     short int nMsgCode;
     short int* pCurPacket;
     D2GSPacketSrv0x27_EntryStrc* pOldHead;
+    int nGSPacketSrv0x27_Text;
     D2GSPacketSrv0x27_TextStrc* pTxtMsg = pGSPacketSrv0x27_Text;
     if (!pGSPacketSrv0x27_Text) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10b);
@@ -229,7 +230,7 @@ void __stdcall StoreMessages(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text,
         exit(-1);
       }
 
-      pGSPacketSrv0x27_Text = 0;
+      nGSPacketSrv0x27_Text = 0x0;
       pCurPacket = (short int*)pPacketData;
       if (*pPacketData <= 0) {
         return;
@@ -245,9 +246,9 @@ void __stdcall StoreMessages(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text,
         pNewEntry->nType = (uint32_t)byMsgType;
         pTxtMsg->nCount++;
         pTxtMsg->pMessage = pNewEntry;
-        pGSPacketSrv0x27_Text = (D2GSPacketSrv0x27_TextStrc*)((intptr_t)&pGSPacketSrv0x27_Text->pMemory + 1);
+        nGSPacketSrv0x27_Text++;
         pCurPacket += 2;
-      } while ((intptr_t)pGSPacketSrv0x27_Text < (int)(uint32_t)*pPacketData);
+      } while (nGSPacketSrv0x27_Text < (int)(uint32_t)*pPacketData);
 
       return;
     }

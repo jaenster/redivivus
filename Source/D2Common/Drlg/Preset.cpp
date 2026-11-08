@@ -582,7 +582,6 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     D2MonPresetTxt* pMonPresetTxt;
     int32_t nClassId;
     int32_t pDataCursor;
-    char* pcVar1;
     D2PresetUnitStrc* pPreset;
     D2DrlgSubstGroupStrc* pSubstGroups;
     D2MapAIStrc* pPathNodes;
@@ -601,6 +600,8 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     uint32_t* pnPosY;
     int nBuffer;
     int nPcVar1;
+    int32_t nPcVar12;
+    int nBuffer2;
     int32_t* pDs1File;
     pDs1File = (int32_t*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, pBuffer, nullptr, ".\\DRLG\\Preset.cpp", 0x300);
     pFile->pDS1File = pDs1File;
@@ -743,7 +744,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                         }
                       case 2:
                         {
-                          nBuffer = (int)((char*)nBuffer + ITEMS::Items::sgptDataTable->nTxtMonStatsSize);
+                          nBuffer += ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
                           break;
                         }
                       default:
@@ -765,8 +766,8 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                       if (pClassId == pDataCursor) {
                         pClassId = 0x17e;
                       } else {
-                        pcVar1 = (char*)DATATBLS::MonsterTbls::CheckMonStatId(0x16e);
-                        if ((char*)pClassId != pcVar1) {
+                        nPcVar12 = DATATBLS::MonsterTbls::CheckMonStatId(0x16e);
+                        if (pClassId != nPcVar12) {
                           goto add_preset_unit;
                         }
 
@@ -927,7 +928,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
             if (nPcVar1 > 0) {
               nStrLen = 0;
               pCursor = pCursor2;
-              pBuffer = (char*)nPcVar1;
+              nBuffer2 = nPcVar1;
               do {
                 *(uint32_t*)((intptr_t)&pPreset->pMapAI->pPosition->nXpos + nStrLen) = *pCursor;
                 *(uint32_t*)((intptr_t)&pPreset->pMapAI->pPosition->nYpos + nStrLen) = pCursor[1];
@@ -941,9 +942,9 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                 }
 
                 nStrLen += 0xc;
-                pBuffer--;
+                nBuffer2 += -1;
                 pCursor = pCursor2;
-              } while (pBuffer);
+              } while (nBuffer2);
 
               pBuffer = 0;
             }
@@ -1454,6 +1455,7 @@ void __fastcall DRLGROOMEX_InitializePresetRoom(D2RoomExStrc * pRoomEx) {
     D2DrlgGridStrc pGrid;
     D2DrlgGridStrc pOtherGrid;
     DRLGROOMEX_InitializePresetRoom_Slotm10 uSlot10;
+    D2DrlgGridStrc* pGridIter;
     RoomTile::DRLGROOMTILE_AllocRoomTileGrid(pRoomEx);
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     D2DrlgPresetRoomStrc* pDrlgRoomExDataPreset = pRoomEx->pRoomExData.pRoomExDataPreset;
@@ -1486,24 +1488,24 @@ void __fastcall DRLGROOMEX_InitializePresetRoom(D2RoomExStrc * pRoomEx) {
     D2DrlgFileStrc* pDrlgFile = pPresetRoom->pMap->pDrlgFile;
     int nWallLayers = pDrlgFile->nWallLayers;
     int nFloorLayers = pDrlgFile->nFloorLayers;
-    D2DrlgGridStrc* pGridIter = 0;
     if (nFloorLayers > 0) {
+      int nGridIter2 = 0x0;
       do {
-        if (!pGridIter && nFillBlanks) {
+        if (!nGridIter2 && nFillBlanks) {
           _bIsFillBlanks = 1;
         } else {
           _bIsFillBlanks = 0;
         }
 
-        uSlot10.pCurrentGrid = pPresetRoom->pFloorGrid + (intptr_t)pGridIter;
+        uSlot10.pCurrentGrid = pPresetRoom->pFloorGrid + nGridIter2;
         RoomTile::DRLGROOMTILE_CountTilesFromGrid(pRoomEx, uSlot10.pCurrentGrid, _bIsFillBlanks, _bKillEdgeX, _bKillEdgeY);
         if (nAnimate) {
           DrlgAnim::DRLGROOMTILE_CountAnimTilesFromGrid(pRoomEx, uSlot10.pCurrentGrid, nullptr, 0, _bKillEdgeX, _bKillEdgeY);
         }
 
-        pGridIter = (D2DrlgGridStrc*)((intptr_t)&pGridIter->pCellsFlags + 1);
+        nGridIter2++;
         pPresetRoom = pDrlgRoomExDataPreset;
-      } while ((intptr_t)pGridIter < nFloorLayers);
+      } while (nGridIter2 < nFloorLayers);
     }
     if (nWallLayers > 0) {
       pGridIter = pPresetRoom->pWallGrid;
@@ -1532,18 +1534,18 @@ void __fastcall DRLGROOMEX_InitializePresetRoom(D2RoomExStrc * pRoomEx) {
     }
 
     RoomTile::DRLGROOMTILE_AllocTileDataArrays(pRoomEx);
-    pGridIter = 0;
+    int nGridIter = 0x0;
     if (nFloorLayers > 0) {
       do {
-        if (!pGridIter && nFillBlanks) {
+        if (!nGridIter && nFillBlanks) {
           _bFillBlanks = 1;
         } else {
           _bFillBlanks = 0;
         }
 
-        RoomTile::InitRoomTiles(pRoomEx, pDrlgRoomExDataPreset->pFloorGrid + (intptr_t)pGridIter, nullptr, _bFillBlanks, _bKillEdgeX, _bKillEdgeY);
-        pGridIter = (D2DrlgGridStrc*)((intptr_t)&pGridIter->pCellsFlags + 1);
-      } while ((intptr_t)pGridIter < nFloorLayers);
+        RoomTile::InitRoomTiles(pRoomEx, pDrlgRoomExDataPreset->pFloorGrid + nGridIter, nullptr, _bFillBlanks, _bKillEdgeX, _bKillEdgeY);
+        nGridIter++;
+      } while (nGridIter < nFloorLayers);
     }
     if (nWallLayers > 0) {
       pGridIter = pDrlgRoomExDataPreset->pWallGrid;

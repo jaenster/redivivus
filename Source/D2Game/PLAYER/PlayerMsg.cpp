@@ -1781,9 +1781,10 @@ static eD2ServerIncomingStatus __stdcall AnyPacketClickOnMap(::SGAMEDATA * pGame
 
 // Handles C→S packet 0x02 (Walk To Entity, 9 bytes: [op][unitType:u32][GUID:u32]). Validates packet size, unit type < 6, and proximity via CloseEnoughToInteract(range=0x32). If valid and in range, calls PLRMODES_StartModeID with walk mode 2 targeting the entity. Returns SERVERSTATUS_OK on success, error codes for bad size/type/range.
 eD2ServerIncomingStatus __fastcall SCMD_0x02_WalkToEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x02_WalkToEntity * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&pPacket, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType nPacket;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus == SERVERSTATUS_OK) {
-      PlayerModes::PLRMODES_StartModeID(pGame, pUnit, nullptr, 2, (eD2UnitType)pPacket, nSize, 0);
+      PlayerModes::PLRMODES_StartModeID(pGame, pUnit, nullptr, 2, nPacket, nSize, 0);
       nStatus = SERVERSTATUS_OK;
     }
 
@@ -1807,9 +1808,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, 
 // [op:1][unitType:u32][GUID:u32]
 // Validates range 0x32, calls StartModeID(mode=3).
 eD2ServerIncomingStatus __fastcall SCMD_0x04_RunToEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x04_RunToEntity * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&pPacket, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType nPacket;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus == SERVERSTATUS_OK) {
-      PlayerModes::PLRMODES_StartModeID(pGame, pUnit, nullptr, 3, (eD2UnitType)pPacket, nSize, 0);
+      PlayerModes::PLRMODES_StartModeID(pGame, pUnit, nullptr, 3, nPacket, nSize, 0);
       nStatus = SERVERSTATUS_OK;
     }
 
@@ -2908,6 +2910,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToInventory(::SGAMEDATA * pG
 eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1D_Swap2HandItem * pPacket, uint32_t nSize) {
     int32_t nTradeCheck;
     BOOL nSwapResult;
+    uint32_t nPacket;
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
     }
@@ -2933,9 +2936,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nGridOffset);
       nMovePermission = Player::CheckItemMovePermission(pGame, pUnit, pItem);
       if (nMovePermission) {
-        pPacket = 0;
-        nSwapResult = ITEMS::ItemMode::SERVER_Swap2HandItem(pGame, pUnit, dwItemGUID, (eD2BodyLoc)nSize, 0, (uint32_t*)&pPacket);
-        if (!nSwapResult && pPacket) {
+        nPacket = 0x0;
+        nSwapResult = ITEMS::ItemMode::SERVER_Swap2HandItem(pGame, pUnit, dwItemGUID, (eD2BodyLoc)nSize, 0, (uint32_t*)&nPacket);
+        if (!nSwapResult && nPacket) {
           return SERVERSTATUS_BAD_PARAMS;
         }
       }

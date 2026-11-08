@@ -1268,6 +1268,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
     char* pszAccountNameLoop;
     fnEnterGame* ppfpEnterGame;
     char* szCharName;
+    char* szCharNameLoop;
     D2Packet0x5aEventStructure packet0x5a;
     char szAccountName[256];
     int nClassId;
@@ -1276,7 +1277,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
     D2ClientStrc* pClientNext;
     uint32_t dwFrameMod8192 = pGame->dwGameFrame & 0x80001fff;
     bool bIs8192thFrame = !dwFrameMod8192;
-    char* szCharNameLoop = 0;
+    int nCharNameLoop = 0x0;
     if ((int)dwFrameMod8192 < 0) {
       bIs8192thFrame = (dwFrameMod8192 - 1 | -8192) == -1;
     }
@@ -1287,8 +1288,8 @@ static void UpdateClients(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    CheckClientTimeouts(pGame, (int*)&szCharNameLoop);
-    if (bIs8192thFrame && !szCharNameLoop) {
+    CheckClientTimeouts(pGame, (int*)&nCharNameLoop);
+    if (bIs8192thFrame && !nCharNameLoop) {
       SaveAllPlayers(pGame);
     }
 
@@ -2602,6 +2603,7 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
 void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown) {
     D2UnitStrc* pUnit;
     D2UnitStrc** ppUnitBucketCursor;
+    int nBucketCountdown;
     int32_t* pStatsCursor = pBucketCountdown;
     *pBucketCountdown = 0;
     pBucketCountdown[1] = 0;
@@ -2615,7 +2617,7 @@ void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown
         pGame = QSERVER_FindAndLockGame((uint32_t)pGame);
         if (pGame) {
           ppUnitBucketCursor = pGame->pUnitList[0];
-          pBucketCountdown = (int32_t*)0x80;
+          nBucketCountdown = 0x80;
           do {
             for (pUnit = ppUnitBucketCursor[0x80]; pUnit; pUnit = UNIT::SUnit::GetNextUnit(pUnit)) {
               pStatsCursor[1]++;
@@ -2626,8 +2628,8 @@ void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown
             }
 
             ppUnitBucketCursor++;
-            pBucketCountdown = (int32_t*)((char*)pBucketCountdown - 1);
-          } while (pBucketCountdown);
+            nBucketCountdown--;
+          } while (nBucketCountdown);
 
           if (!pGame->lpCriticalSection) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);

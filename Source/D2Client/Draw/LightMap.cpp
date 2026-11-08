@@ -257,17 +257,17 @@ static void __stdcall LIGHTMAP_FillGridRect(int nYStart, uint32_t nColorARGB, in
     int nColCount;
     uint8_t byBlue;
     uint8_t byGreen;
-    int nXStartCopy = nXStart;
     if (nYStart > nYEnd) {
       return;
     }
 
-    nXStart = (int)(gaLightMapCells + nYStart * 0x30 + nXStart);
+    D2LightMapCellStrc* pLightMapCell = gaLightMapCells + nYStart * 0x30 + nXStart;
     int nRowCount = nYEnd - nYStart + 1;
     do {
+      int nXStartCopy = nXStart;
       if (nXStartCopy <= nXEnd) {
         nColCount = nXEnd - nXStartCopy + 1;
-        pCell = (D2LightMapCellStrc*)nXStart;
+        pCell = pLightMapCell;
         do {
           pCell->nRed = (uint8_t)(nColorARGB >> 8);
           byGreen = (uint8_t)(nColorARGB >> 0x10);
@@ -281,7 +281,7 @@ static void __stdcall LIGHTMAP_FillGridRect(int nYStart, uint32_t nColorARGB, in
         } while (nColCount);
       }
 
-      nXStart += 0x180;
+      pLightMapCell += 0x30;
       nRowCount--;
     } while (nRowCount);
 }

@@ -19,7 +19,7 @@ template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(intptr_t nLinkOffset) {
       return (TSLink<::CELLIST>*)~nOffsetOrRef;
     }
     if (nLinkOffset < 0) {
-      nLinkOffset = (int)this - this->m_prevlink->m_next;
+      nLinkOffset = (intptr_t)this - this->m_prevlink->m_next;
     }
 
     return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
@@ -195,14 +195,14 @@ template<> void TSExplicitList<CELLIST, -572662307>::SetLinkOffset(int32_t nLink
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::Next(::CELLIST * pNode) {
-    uint32_t nOffsetOrRef;
+    intptr_t nOffsetOrRef;
     if (pNode) {
       nOffsetOrRef = *(uint32_t*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
     } else {
       nOffsetOrRef = this->m_terminator.m_next;
     }
 
-    return (::CELLIST*)((int)nOffsetOrRef <= 0 ? 0 : nOffsetOrRef);
+    return (::CELLIST*)(nOffsetOrRef <= 0 ? 0 : nOffsetOrRef);
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<CELLIST, -572662307> that no member owns
@@ -274,7 +274,7 @@ template<> void TSHashObject<CELLIST, HASHKEY_NONE>::Destructor() {
 template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode, uint32_t nLinkType, ::CELLIST * pExisting) {
     TSLink<::CELLIST>* pTVar1;
     TSLink<::CELLIST>* pSrcSlot;
-    int pSrcEntry;
+    intptr_t pSrcEntry;
     intptr_t pTailLink2;
     if (pNode) {
       pSrcSlot = (TSLink<::CELLIST>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
@@ -310,7 +310,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode,
             return;
           }
           if (pSrcEntry < 0) {
-            pSrcEntry = (int)pDstSlot - pDstSlot->m_prevlink->m_next;
+            pSrcEntry = (intptr_t)pDstSlot - pDstSlot->m_prevlink->m_next;
           }
 
           *(TSLink<::CELLIST>**)(pTailLink2 + pSrcEntry) = (TSLink<::CELLIST>*)pSrcSlot;
@@ -532,7 +532,7 @@ template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCrit
 
 // Walk the chunk list and free all CelList object chunks
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Clear() {
-    uint32_t* pBackLink;
+    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pBackLink;
     TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pObject;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext;
     while (true) {
@@ -545,8 +545,8 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
       nNext = pObject->m_link.m_prevlink;
       pTVar1 = &pObject->m_link;
       if (nNext) {
-        pBackLink = (uint32_t*)D2_StormNextLink(pTVar1, -1);
-        *pBackLink = (uint32_t)(uintptr_t)nNext;
+        pBackLink = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)D2_StormNextLink(pTVar1, -1);
+        *pBackLink = nNext;
         pTVar1->m_prevlink->m_next = pTVar1->m_next;
         pTVar1->m_prevlink = 0;
         pTVar1->m_next = 0;
@@ -601,12 +601,19 @@ template<> __attribute__((noinline)) inline TSHashTable<::CELLIST, HASHKEY_NONE>
 // [override: patch]
 template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     TSHashTable<::CELLIST, HASHKEY_NONE>* pThis = this;
+    // The values VC8 kept in nIndex's one frame slot, one member each: a frame object reaches the slot.
+    union nIndex_u {
+      uint32_t nIndex2;
+      uint32_t* pIndex;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(nIndex_u) == 4, "nIndex_u must stay one 4-byte frame slot");
     TSLink<::CELLIST>* pNextLink;
     TSLink<::CELLIST>* ppDstHead;
     TSExplicitList<::CELLIST, -572662307>* pPrevLink;
     TSLink<::CELLIST>** pNodeIt;
     int nBucketByteOffset;
     TSExplicitList<::CELLIST, -572662307> nTempSentinel;
+    nIndex_u nIndex;
     int nBucketOffset;
     intptr_t nBucketNextLink;
     TSLink<::CELLIST>* pNodeHead;
@@ -621,7 +628,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     nTempSentinel.m_terminator.m_prevlink = &nTempSentinel.m_terminator;
     nTempSentinel.m_linkoffset = 4;
     nTempSentinel.m_terminator.m_next = (intptr_t)pBucket;
-    uint32_t nIndex = 0;
+    nIndex.nIndex2 = 0;
     if (nNewSize) {
       TSLink<::CELLIST>** pBackLink1;
       nBucketOffset = 0;
@@ -653,16 +660,16 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
         }
 
         nBucketOffset++;
-        nIndex++;
+        nIndex.nIndex2++;
         pThis = pHashTable;
-      } while (nIndex < nNewSize);
+      } while (nIndex.nIndex2 < nNewSize);
     }
 
     uint32_t* puVar1 = nDoubleBucketCount;
     pThis->tSlotListArray.SetCount((uint32_t)nDoubleBucketCount);
     if (puVar1) {
       nBucketByteOffset = 0;
-      nIndex = (uint32_t)puVar1;
+      nIndex.pIndex = puVar1;
       do {
         pPrevLink = &pThis->tSlotListArray.m_data[nBucketByteOffset];
         if (pPrevLink->m_linkoffset != 4) {
@@ -674,10 +681,10 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
         }
 
         nBucketByteOffset++;
-        nIndex--;
-      } while (nIndex);
+        nIndex.pIndex = (uint32_t*)((char*)nIndex.pIndex - 1);
+      } while (nIndex.pIndex);
 
-      nIndex = 0;
+      nIndex.nIndex2 = 0;
       puVar1 = nDoubleBucketCount;
     }
 
@@ -797,7 +804,7 @@ template<> TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* TSExp
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::LinkNode(TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNode, uint32_t nLinkType, TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pExisting) {
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pTVar1;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* ppSrcSlot;
-    int pOldNext;
+    intptr_t pOldNext;
     intptr_t pBackLinkDst2;
     if (pNode) {
       ppSrcSlot = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)((intptr_t)&pNode->nArrayAlloc + this->m_linkoffset);
@@ -833,7 +840,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Li
             return;
           }
           if (pOldNext < 0) {
-            pOldNext = (int)ppDstSlot - ppDstSlot->m_prevlink->m_next;
+            pOldNext = (intptr_t)ppDstSlot - ppDstSlot->m_prevlink->m_next;
           }
 
           *(TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)(pBackLinkDst2 + pOldNext) = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)ppSrcSlot;

@@ -184,7 +184,7 @@ void __thiscall GetGatewayList(void * pThis, char * szText) {
     char* pDataCursor = szText;
     if (*(int*)((char*)pThis + 0x10)) {
       dwRegDataSize = (DWORD)pThis;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int)(uintptr_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x146);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x146);
       exit(-1);
     }
 
@@ -438,6 +438,7 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
     char* pEndPtr;
     int nGatewayCount;
     int32_t nLine;
+    int nGatewayAccess;
     D2BNetGatewayAccessStr* pGatewayAccess_00;
     pGatewayAccess_00 = pGatewayAccess;
     if (pGatewayAccess->pGatewayData) {
@@ -484,14 +485,14 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
     } else {
       pCur = pGatewayAccess_00->pGatewayData;
       nEntryCount = -2;
-      pGatewayAccess = 0;
+      nGatewayAccess = 0x0;
       if ((int)pGatewayAccess_00->nGatewayDataSize > 0) {
         do {
           pStrLen = Storm::Source::SSTR::SStrLen(pCur);
-          pGatewayAccess = (D2BNetGatewayAccessStr*)((intptr_t)&pGatewayAccess->nCurrentGateway + pStrLen + 1);
+          nGatewayAccess = nGatewayAccess + pStrLen + 1;
           pCur = pCur + pStrLen + 1;
           nEntryCount++;
-        } while ((intptr_t)pGatewayAccess < (int)pGatewayAccess_00->nGatewayDataSize);
+        } while (nGatewayAccess < (int)pGatewayAccess_00->nGatewayDataSize);
       }
 
       nGatewayCount = (nEntryCount - 1) / 3;

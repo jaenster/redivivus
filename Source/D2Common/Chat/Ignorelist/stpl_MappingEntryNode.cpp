@@ -536,12 +536,12 @@ template<> ::MappingEntryNode * __thiscall TSHashTable<MappingEntryNode, HASHKEY
     pBucketHead->m_prevlink = pHeadEntry;
     pBucketHead->m_next = pList->m_terminator.m_next;
     intptr_t dwNext2 = pList->m_terminator.m_next;
-    int pNext = pList->m_linkoffset;
+    intptr_t pNext = pList->m_linkoffset;
     if (dwNext2 < 0) {
       *(TSLink<::MappingEntryNode>**)~dwNext2 = (TSLink<::MappingEntryNode>*)pBucketHead;
     } else {
       if (pNext < 0) {
-        pNext = (int)pHeadEntry - pHeadEntry->m_prevlink->m_next;
+        pNext = (intptr_t)pHeadEntry - pHeadEntry->m_prevlink->m_next;
       }
 
       *(TSLink<::MappingEntryNode>**)(dwNext2 + pNext) = (TSLink<::MappingEntryNode>*)pBucketHead;
@@ -596,12 +596,19 @@ void __thiscall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<MappingEntr
 // [override: patch]
 template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::GrowListArray() {
     TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis = this;
+    // The values VC8 kept in nIterCount's one frame slot, one member each: a frame object reaches the slot.
+    union nIterCount_u {
+      uint32_t nIterCount2;
+      uint32_t* pIterCount;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(nIterCount_u) == 4, "nIterCount_u must stay one 4-byte frame slot");
     TSLink<::MappingEntryNode>* pBucket;
     TSLink<::MappingEntryNode>* ppTempListHead;
     TSExplicitList<::MappingEntryNode, -572662307>* pPrevPtr;
     TSLink<::MappingEntryNode>** pBackPtr;
     int nBucketOffset;
     TSExplicitList<::MappingEntryNode, -572662307> tempList;
+    nIterCount_u nIterCount;
     int nBucketByteOff;
     intptr_t nBucketNextLink;
     TSLink<::MappingEntryNode>* pPrevLink;
@@ -616,7 +623,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
     tempList.m_terminator.m_prevlink = &tempList.m_terminator;
     tempList.m_linkoffset = 4;
     tempList.m_terminator.m_next = nCurEntry;
-    uint32_t nIterCount = 0;
+    nIterCount.nIterCount2 = 0;
     if (nOldBucketCount) {
       TSLink<::MappingEntryNode>** pBackLink1;
       nBucketByteOff = 0;
@@ -648,16 +655,16 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
         }
 
         nBucketByteOff++;
-        nIterCount++;
+        nIterCount.nIterCount2++;
         pThis = nHashTableBase;
-      } while (nIterCount < nOldBucketCount);
+      } while (nIterCount.nIterCount2 < nOldBucketCount);
     }
 
     uint32_t* pCurEntry = pNewBucketCount;
     pThis->tSlotListArray.SetCount((uint32_t)pNewBucketCount);
     if (pCurEntry) {
       nBucketOffset = 0;
-      nIterCount = (uint32_t)pCurEntry;
+      nIterCount.pIterCount = pCurEntry;
       do {
         pPrevPtr = &pThis->tSlotListArray.m_data[nBucketOffset];
         if (pPrevPtr->m_linkoffset != 4) {
@@ -669,10 +676,10 @@ template<> __attribute__((noinline)) inline void TSHashTable<MappingEntryNode, H
         }
 
         nBucketOffset++;
-        nIterCount--;
-      } while (nIterCount);
+        nIterCount.pIterCount = (uint32_t*)((char*)nIterCount.pIterCount - 1);
+      } while (nIterCount.pIterCount);
 
-      nIterCount = 0;
+      nIterCount.nIterCount2 = 0;
       pCurEntry = pNewBucketCount;
     }
 

@@ -257,9 +257,9 @@ int __fastcall SSignatureVerifyStream_Finish(D2SsigContextStrc * pContext, void 
 int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen) {
     D2SsigContextStrc* pSsigContext;
     SSignatureVerifyStream_Begin((D2SsigContextStrc**)&pSsigContext, nModulusLen, nExponentLen);
-    uintptr_t pContext = (uintptr_t)pSsigContext;
+    D2SsigContextStrc* pSsigContext2 = pSsigContext;
     SSignatureVerifyStream_ProvideData(pSsigContext, pData, nDataLen);
-    int bVerified = SSignatureVerifyStream_Finish((D2SsigContextStrc*)pContext, pModulusBytes, pExponentBytes);
+    int bVerified = SSignatureVerifyStream_Finish(pSsigContext2, pModulusBytes, pExponentBytes);
     return bVerified;
 }
 

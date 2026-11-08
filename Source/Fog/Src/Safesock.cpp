@@ -56,6 +56,7 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     WSADATA wsaData;
     uint8_t sockNameBuf[16];
     char cIpChar;
+    int nHostNameOrSockLen;
     LPVOID pThreadParamLocal = pThreadParam;
     LPTHREAD_START_ROUTINE pThreadProcLocal = pThreadProc;
     char* szHostNameOrSockLen = szHostName;
@@ -132,8 +133,8 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     }
     /* char * cp for inet_addr */ if (cp_0075d040[0] == '\0' || (nLocalIpAddr = inet_addr(cp_0075d040) , !nLocalIpAddr)) {
       char* pSrcIp;
-      /* int * namelen for getsockname */ /* sockaddr * name for getsockname */ /* SOCKET s for getsockname */ szHostNameOrSockLen = (char*)0x10;
-      nResult = getsockname(hSocket, (sockaddr*)sockNameBuf, (int*)&szHostNameOrSockLen);
+      /* int * namelen for getsockname */ /* sockaddr * name for getsockname */ /* SOCKET s for getsockname */ nHostNameOrSockLen = 0x10;
+      nResult = getsockname(hSocket, (sockaddr*)sockNameBuf, (int*)&nHostNameOrSockLen);
       if (nResult != -1) {
         /* in_addr in for inet_ntoa */ pSrcIp = inet_ntoa((in_addr)*(uint32_t*)((char*)&sockNameBuf + 4));
         pDstIp = cp_0075d040;

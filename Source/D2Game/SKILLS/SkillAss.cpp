@@ -1813,6 +1813,7 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
     uint32_t nTargetY;
     uint32_t nTargetX;
     eD2UnitType eUnitTypeCheck;
+    int32_t nOwner;
     BOOL bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY);
     if (!bGotTargetPos) {
       return 0;
@@ -1833,7 +1834,7 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
       return 1;
     }
     if (nMissileCount > 0) {
-      pOwner = (D2UnitStrc*)nMissileCount;
+      nOwner = nMissileCount;
       do {
         nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpread * 2);
         x2 = nRandOffset + (nTargetX - nSpread);
@@ -1865,8 +1866,8 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
           MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
         }
 
-        pOwner = (D2UnitStrc*)((intptr_t)&pOwner[-1].pMsgLast + 3);
-      } while (pOwner);
+        nOwner = nOwner - 4 + 3;
+      } while (nOwner);
 
       return 1;
     }
@@ -2245,6 +2246,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
     D2StateExArgStrc sStateExpiryArgs;
     Skills_SrvDoFunc_047_CloakOfShadows_Slotm14 uSlot14;
     D2UnitStrc* pAuraTarget;
+    int32_t* pSkill;
     eD2Skills eSkillOrig = eSkill;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -2281,15 +2283,15 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    short int* pSkill = (short int*)pSkillTxt->passivestat;
+    short int* pSkill2 = (short int*)pSkillTxt->passivestat;
     int* pCalcPtr = pSkillTxt->passivecalc + 1;
     uSlot14.nPassiveStatsLeft = 4;
     do {
-      pSkill = (short int*)((char*)pSkill + 2);
-      if (*pSkill >= 0) {
+      pSkill2 += 1;
+      if (*pSkill2 >= 0) {
         nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pCalcPtr, eSkillOrig, nSkillLvl);
         if (nCalcVal) {
-          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)*pSkill, nCalcVal, 0);
+          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)*pSkill2, nCalcVal, 0);
         }
       }
 
@@ -2306,19 +2308,19 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
       sCurseArgs.nDurationFrames = sStateExpiryArgs.nDurationInFrames;
       sCurseArgs.eSkill = eSkillOrig;
       sCurseArgs.eTargetState = (eD2States)pSkillTxt->auratargetstate;
-      eSkill = (eD2Skills)pSkillTxt->aurastatcalc;
+      pSkill = (int32_t*)pSkillTxt->aurastatcalc;
       uSlot14.pAuraStat = pSkillTxt->aurastat;
       nAuraStatIdx = 0;
       do {
         sCurseArgs.anStatIds[nAuraStatIdx] = (int)*uSlot14.pAuraStat;
         sCurseArgs.anStatValues[nAuraStatIdx] = 0;
         if (*uSlot14.pAuraStat >= 0) {
-          nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *(int32_t*)eSkill, eSkillOrig, nSkillLvl);
+          nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pSkill, eSkillOrig, nSkillLvl);
           sCurseArgs.anStatValues[nAuraStatIdx] = nCalcVal;
         }
 
         pAuraTarget = pUnitSaved;
-        eSkill += SKILL_LeftHandThrow;
+        pSkill = (int32_t*)((char*)pSkill + SKILL_LeftHandThrow);
         nAuraStatIdx++;
         uSlot14.pAuraStat++;
       } while (nAuraStatIdx < 6);

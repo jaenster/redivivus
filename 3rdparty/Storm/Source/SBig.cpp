@@ -4358,21 +4358,21 @@ static int32_t __stdcall BigBuffer_IsPrime(BigStack * pStack, BigBuffer * pnCand
       } while (bIsProbablePrime);
     }
     if (bIsProbablePrime) {
-      pnOddPart = 0;
+      int nPnOddPart = 0x0;
       do {
         pBVar1 = pnWitness;
-        if ((uintptr_t)pnOddPart >= 4) {
+        if ((uint32_t)nPnOddPart >= 4) {
           break;
         }
 
-        BigBuffer_FromUnsigned(*(uint32_t*)((intptr_t)gnSBigMillerRabinWitness + (intptr_t)pnOddPart), pnWitness);
+        BigBuffer_FromUnsigned(*(uint32_t*)((char*)gnSBigMillerRabinWitness + nPnOddPart), pnWitness);
         BigBuffer_PowMod(pQuotient, pBVar1, pnCandidate, pnCandidate, pStack);
         nCmpResult = BigBuffer_Compare(pQuotient, pBVar1);
         if (nCmpResult) {
           bIsProbablePrime = 0;
         }
 
-        pnOddPart = (BigBuffer*)((char*)pnOddPart + 4);
+        nPnOddPart += 4;
       } while (bIsProbablePrime);
 
       pStack->nUsed -= 4;

@@ -1417,18 +1417,18 @@ void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
     gbCursorVisible = 1;
     D2gfx::D2GFX::UpdateOSCursorVisibilty(1);
     D2gfx::D2GFX::D2GFX_GetScreenSize((int*)&phWnd, &nScreenHeight);
-    phWnd = (D2UIMouseMsgStrc*)((intptr_t)&phWnd[-1].dwResult + 3);
+    int nPhWnd = (intptr_t)&phWnd[-1].dwResult + 3;
     nScreenHeight--;
     uint32_t bWindowActive = D2gfx::D2GFX::D2GFX_IsWindowActive();
     if (bWindowActive) {
       int nClampedX;
       nClampedX = nRawX;
-      if (nRawX > (intptr_t)phWnd) {
-        nClampedX = (int)phWnd;
+      if (nRawX > nPhWnd) {
+        nClampedX = nPhWnd;
       }
 
       Y = nScreenHeight;
-      if ((int)nRawY > nScreenHeight || (bXOutOfRange = (intptr_t)phWnd < nRawX , nRawX = nClampedX , Y = nRawY , bXOutOfRange)) {
+      if ((int)nRawY > nScreenHeight || (bXOutOfRange = nPhWnd < nRawX , nRawX = nClampedX , Y = nRawY , bXOutOfRange)) {
         /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(nClampedX, Y);
         nRawX = nClampedX;
         nRawY = Y;

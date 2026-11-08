@@ -1337,7 +1337,9 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
 
       wStrId = SKILLDESC_GetStatNameString(iVar1, 0);
       wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wStrId);
-      uVar2 = 0;
+      /* The 0 fills the argument slot UNICODE_FormatWideString consumes for the %% in
+                         the descstr: the formatter advances one argument per conversion, %% included.
+                         1.14d pushes seven dwords here (ADD ESP,0x1c). */ uVar2 = 0;
       nRepairCostFinal = nStatParam;
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszOutputBuffer, D2Lang::StrTable::strtable::GetLocaleString(pStatCostLine->descstrpos), nGroupValue, uVar2, nRepairCostFinal, wszLocaleStr);
       goto append_descstr2;
@@ -4592,6 +4594,8 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
     int nStrDexBonus;
     int nBonusDamage;
     int* pnMaxDamageAlias;
+    int nUnit22;
+    int nPnMaxDamage;
     *pnMinDamage = 0;
     *pnMaxDamage = 0;
     if (!pSkill || !pUnit2 && (!pUnit->pInventory || (pUnit2 = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory) , !pUnit2))) {
@@ -4654,23 +4658,24 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
         *pnMaxDamageAlias = *pnMinDamage;
       }
 
-      pUnit2 = 0;
-      pnMaxDamage = 0;
-      SKILLDESC_CalcElemDamageRange(pUnit, (int*)&pUnit2, (int*)&pnMaxDamage, (uint32_t*)pElemType, pSkill);
-      if ((intptr_t)pnMaxDamage < (intptr_t)pUnit2) {
-        pnMaxDamage = (int*)pUnit2;
+      nUnit22 = 0x0;
+      nPnMaxDamage = 0x0;
+      SKILLDESC_CalcElemDamageRange(pUnit, (int*)&nUnit22, (int*)&nPnMaxDamage, (uint32_t*)pElemType, pSkill);
+      if (nPnMaxDamage < nUnit22) {
+        nPnMaxDamage = nUnit22;
       }
 
-      *pnMinDamage = (int)(pUnit2->unk0x19 + *pnMinDamage - 0x19);
-      *pnMaxDamageAlias = (int)(((D2UnitStrc*)pnMaxDamage)->unk0x19 + *pnMaxDamageAlias - 0x19);
+      *pnMinDamage = (int)(nUnit22 + 0x19 + *pnMinDamage - 0x19);
+      *pnMaxDamageAlias = (int)(nPnMaxDamage + 0x19 + *pnMaxDamageAlias - 0x19);
       return;
     }
 
     uIsMissilePotion = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wMissileType(pWeaponUnit);
     *pElemType = 0;
     nMinDmgTmp = D2Common::Units::Missile::GetMinDamage(nullptr, pUnit, uIsMissilePotion, 1);
-    nMinDmgTmp += (int32_t)D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
-    pUnit2 = (D2UnitStrc*)nMinDmgTmp;
+    nMaxDmgTmp = D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
+    int nUnit2;
+    nUnit2 = nMinDmgTmp + nMaxDmgTmp;
     nMinDmgTmp = D2Common::Units::Missile::GetMaxDamage(nullptr, pUnit, uIsMissilePotion, 1);
     nMinDmgTmp += (int32_t)D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, uIsMissilePotion, 1);
     nStrDexBonus = nMinDmgTmp;
@@ -4685,7 +4690,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
         nStatTmp = 1;
       }
 
-      pUnit2 = (D2UnitStrc*)((intptr_t)pUnit2 / nStatTmp);
+      nUnit2 /= nStatTmp;
       nStrDexBonus /= nStatTmp;
       goto store_damage_range;
       case 4:
@@ -4700,7 +4705,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
     }
 
     store_damage_range:
-    nBonusDamage = (intptr_t)pUnit2 >> 8;
+    nBonusDamage = nUnit2 >> 8;
     nStatTmp = nStrDexBonus >> 8;
     if (nStrDexBonus >> 8 <= nBonusDamage) {
       nStatTmp = nBonusDamage;
@@ -4718,6 +4723,8 @@ void __fastcall SKILLDESC_DrawSkillDmgAura(D2UnitStrc * pUnit, D2SkillStrc * pSk
     uint8_t byDmgShiftFactor;
     int32_t nSkillDescAddr;
     int32_t nMinDamage2;
+    int32_t nMinDamage3;
+    int32_t nWeaponUnit;
     int nDmgBonus = 0;
     if (!(pSkill && pSkillsTxt)) {
       return;
@@ -4771,18 +4778,18 @@ void __fastcall SKILLDESC_DrawSkillDmgAura(D2UnitStrc * pUnit, D2SkillStrc * pSk
 
     nDmgPercentResult = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nThrowMinDmg, nBonusApplied, 100);
     nSkillDescAddr = nMaxDamage;
-    nMinDamage = (D2UnitStrc*)(nThrowMinDmg + nDmgPercentResult);
+    nMinDamage3 = nThrowMinDmg + nDmgPercentResult;
     nBonusApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nBonusApplied, 100);
     nMaxDamage = nSkillDescAddr + nBonusApplied;
-    AdjustDamageByType(pUnit, (int*)&nMinDamage, &nMaxDamage, pSkillsTxt->EType);
-    pWeaponUnit = (D2UnitStrc*)nMaxDamage;
-    if (nMaxDamage < (intptr_t)nMinDamage) {
-      pWeaponUnit = nMinDamage;
+    AdjustDamageByType(pUnit, (int*)&nMinDamage3, &nMaxDamage, pSkillsTxt->EType);
+    nWeaponUnit = nMaxDamage;
+    if (nMaxDamage < nMinDamage3) {
+      nWeaponUnit = nMinDamage3;
     }
 
     byDmgShiftFactor = pSkillsTxt->SrcDam;
-    nMinDamage2 = D2Common::DATATBLS::DataTbls::D2ApplyPercent((int32_t)nMinDamage, (uint32_t)byDmgShiftFactor, 0x80);
-    nMaxDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent((int32_t)pWeaponUnit, (uint32_t)byDmgShiftFactor, 0x80);
+    nMinDamage2 = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMinDamage3, (uint32_t)byDmgShiftFactor, 0x80);
+    nMaxDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nWeaponUnit, (uint32_t)byDmgShiftFactor, 0x80);
     SKILLDESC_CalcSkillElemDamage(pUnit, (int*)&nMinDamage2, &nMaxDamage, &nElemType, pSkillsTxt, nSkillLevel);
     SKILLDESC_DrawDamageNumbers(nMinDamage2, nMaxDamage, nElemType, nY, nXRight, nXLeft);
 }
@@ -5220,8 +5227,8 @@ void __fastcall SKILLDESC_DrawSkillDmgKick(D2UnitStrc * pUnit, D2SkillStrc * pSk
       nHandedness = nMinDmgStat;
     }
 
-    int nUnitSaved = (int)pSkillsTxt->skill;
-    int32_t nMaxDmgStat = D2Common::Skills::D2GetSkillCalc(pUnitWorking, pSkillsTxt->calc[0], (eD2Skills)nUnitSaved, nSkillLevel);
+    eD2Skills nUnitSaved = (eD2Skills)(int)pSkillsTxt->skill;
+    int32_t nMaxDmgStat = D2Common::Skills::D2GetSkillCalc(pUnitWorking, pSkillsTxt->calc[0], nUnitSaved, nSkillLevel);
     if (nMaxDmgStat) {
       nMastery = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnitWorking, UNITSTAT_passive_fire_mastery, 0);
       if (nMastery) {
@@ -5234,7 +5241,7 @@ void __fastcall SKILLDESC_DrawSkillDmgKick(D2UnitStrc * pUnit, D2SkillStrc * pSk
     nMinDamage += nBonusApplied;
     nMaxDmgStat = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHandedness, nMaxDmgStat, 100);
     nMaxDamage += nMaxDmgStat;
-    nMaxDmgStat = D2Common::Skills::D2GetSkillCalc(pUnitWorking, pSkillsTxt->calc[1], (eD2Skills)nUnitSaved, nSkillLevel);
+    nMaxDmgStat = D2Common::Skills::D2GetSkillCalc(pUnitWorking, pSkillsTxt->calc[1], nUnitSaved, nSkillLevel);
     if (nMaxDmgStat) {
       nMastery = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnitWorking, UNITSTAT_passive_cold_mastery, 0);
       if (nMastery) {
@@ -5247,7 +5254,7 @@ void __fastcall SKILLDESC_DrawSkillDmgKick(D2UnitStrc * pUnit, D2SkillStrc * pSk
     nMinDamage += nBonusApplied;
     nMaxDmgStat = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHandedness, nMaxDmgStat, 100);
     nMaxDamage += nMaxDmgStat;
-    nMaxDmgStat = D2Common::Skills::D2GetSkillCalc(pUnitWorking, pSkillsTxt->calc[2], (eD2Skills)nUnitSaved, nSkillLevel);
+    nMaxDmgStat = D2Common::Skills::D2GetSkillCalc(pUnitWorking, pSkillsTxt->calc[2], nUnitSaved, nSkillLevel);
     if (nMaxDmgStat) {
       nMastery = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnitWorking, UNITSTAT_passive_ltng_mastery, 0);
       if (nMastery) {
@@ -5277,23 +5284,23 @@ void __fastcall SKILLDESC_DrawSkillDmgFist(D2UnitStrc * pUnit, D2SkillStrc * pSk
     }
 
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    pSkillsTxt = 0;
+    int nSkillsTxt = 0x0;
     int nElemMinDmg = 0;
     int32_t nElemMaxDmg = 0;
     if (bIsExpansion) {
-      SKILLDESC_CalcSkillElemDamage(pUnit, (int*)&pSkillsTxt, &nElemMinDmg, &nElemMaxDmg, pSkillDescTxt, nSkillLevel);
+      SKILLDESC_CalcSkillElemDamage(pUnit, (int*)&nSkillsTxt, &nElemMinDmg, &nElemMaxDmg, pSkillDescTxt, nSkillLevel);
       nMaxDmgBonused = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, (int)pSkillDescTxt->skill);
-      nMinDmgBonused = (int)pSkillsTxt->srvprgfunc + nMaxDmgBonused * (int)pSkillsTxt / 100 - 0x30;
+      nMinDmgBonused = nSkillsTxt + 0x30 + nMaxDmgBonused * nSkillsTxt / 100 - 0x30;
       nMaxDmgBonused = nElemMinDmg + nMaxDmgBonused * nElemMinDmg / 100;
       nElemTypeOut = nElemMaxDmg;
     } else {
-      SKILLDESC_CalcSkillElemDamage(pUnit, (int*)&pSkillsTxt, &nElemMaxDmg, &nElemMinDmg, pSkillDescTxt, nSkillLevel);
+      SKILLDESC_CalcSkillElemDamage(pUnit, (int*)&nSkillsTxt, &nElemMaxDmg, &nElemMinDmg, pSkillDescTxt, nSkillLevel);
       nElemTypeOut = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
       if (nElemTypeOut <= -0x5a) {
         nElemTypeOut = -0x5a;
       }
 
-      nMinDmgBonused = (int)pSkillsTxt->srvprgfunc + nElemTypeOut * (int)pSkillsTxt / 100 - 0x30;
+      nMinDmgBonused = nSkillsTxt + 0x30 + nElemTypeOut * nSkillsTxt / 100 - 0x30;
       nMaxDmgBonused = nElemMaxDmg + nElemTypeOut * nElemMaxDmg / 100;
       nElemTypeOut = nElemMinDmg;
     }
@@ -5310,9 +5317,9 @@ void __fastcall SKILLDESC_DrawSkillDmgTrap(D2UnitStrc * pUnit, D2SkillStrc * pSk
     }
 
     int nMinDmgAccum = 0;
-    pSkillsTxt = 0;
+    int nSkillsTxt2 = 0x0;
     int32_t nElemType = 0;
-    SKILLDESC_CalcWeaponDamageRange(pUnit, &nMinDmgAccum, (int*)&pSkillsTxt, &nElemType, 0, pSkill, 0, nullptr, 0, 0);
+    SKILLDESC_CalcWeaponDamageRange(pUnit, &nMinDmgAccum, (int*)&nSkillsTxt2, &nElemType, 0, pSkill, 0, nullptr, 0, 0);
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xd40);
     if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId)) {
       nTrapDmgBonus = 0;
@@ -5321,7 +5328,7 @@ void __fastcall SKILLDESC_DrawSkillDmgTrap(D2UnitStrc * pUnit, D2SkillStrc * pSk
     }
 
     nMinDmgAccum += nTrapDmgBonus * nMinDmgAccum / 100;
-    nSkillsTxt = (int)pSkillsTxt->srvprgfunc + nTrapDmgBonus * (int)pSkillsTxt / 100 - 0x30;
+    nSkillsTxt = nSkillsTxt2 + 0x30 + nTrapDmgBonus * nSkillsTxt2 / 100 - 0x30;
     SKILLDESC_CalcElemDamageRange(pUnit, &nMinDmgAccum, (int*)&nSkillsTxt, (uint32_t*)&nElemType, pSkill);
     SKILLDESC_DrawDamageNumbers(nMinDmgAccum, nSkillsTxt, nElemType, nY, nXRight, nXLeft);
 }
@@ -5345,14 +5352,14 @@ void __fastcall SKILLDESC_DrawSkillDmgConversion(D2UnitStrc * pUnit, D2SkillStrc
       nElemType = 3;
     }
 
-    pSkillsTxt = 0;
+    int32_t nSkillsTxt = 0x0;
     int nKickMaxDmg = 0;
     int32_t nKickBonusPct = nConversionBonus;
-    D2Common::Skills::SKILL_CalcKickDamage(pUnitSaved, (int*)&pSkillsTxt, &nKickMaxDmg, &nKickBonusPct);
-    nKickMinApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent((int32_t)pSkillsTxt, nKickBonusPct, 100);
+    D2Common::Skills::SKILL_CalcKickDamage(pUnitSaved, (int*)&nSkillsTxt, &nKickMaxDmg, &nKickBonusPct);
+    nKickMinApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nSkillsTxt, nKickBonusPct, 100);
     nConvRangeBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMinDmgShifted >> 8, nConversionBonus, 100);
     int nKickMaxSaved = nKickMaxDmg;
-    pSkillsTxt = (D2SkillsTxt*)((char*)pSkillsTxt->srvprgfunc + nConvRangeBonus + nKickMinApplied + (nMinDmgShifted >> 8) - 0x30);
+    pSkillsTxt = (D2SkillsTxt*)(nSkillsTxt + 0x30 + nConvRangeBonus + nKickMinApplied + (nMinDmgShifted >> 8) - 0x30);
     nMinDmgShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nKickMaxDmg, nKickBonusPct, 100);
     int nAuraMaxSaved = nAuraMaxDmg;
     nKickMinApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAuraMaxDmg, nConversionBonus, 100);
@@ -5763,15 +5770,16 @@ static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2U
     int32_t nMinDmgRaw;
     int nMaxDamage;
     int nMaxDmgRaw;
+    int nOwner;
     int32_t nMinElemRaw = nMissileId;
     nMinElemRaw = D2Common::Units::Missile::GetMinElemDamage(nullptr, pOwner, nMissileId, nLevel);
     nMinElemRaw *= 0x4b;
     nMinDmgRaw = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pOwner, nMissileId, nLevel);
-    pOwner = (D2UnitStrc*)(nMinDmgRaw * 0x4b);
-    ApplyPassiveFireMasteryDamage(pSkillsTxt, &nMinElemRaw, (int32_t*)&pOwner);
-    ApplyPassiveLightningMasteryDamage(pSkillsTxt, &nMinElemRaw, (int32_t*)&pOwner);
+    nOwner = nMinDmgRaw * 0x4b;
+    ApplyPassiveFireMasteryDamage(pSkillsTxt, &nMinElemRaw, (int32_t*)&nOwner);
+    ApplyPassiveLightningMasteryDamage(pSkillsTxt, &nMinElemRaw, (int32_t*)&nOwner);
     nMaxDmgRaw = nMinElemRaw >> 8;
-    nMaxDamage = (intptr_t)pOwner >> 8;
+    nMaxDamage = nOwner >> 8;
     byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(nMissileId);
     switch (byElemType) {
       case 2:

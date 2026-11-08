@@ -189,11 +189,18 @@ template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATAL
 // [override: patch]
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis = this;
+    // The values VC8 kept in nBucketIdx's one frame slot, one member each: a frame object reaches the slot.
+    union nBucketIdx_u {
+      uint32_t nBucketIdx2;
+      uint32_t* pBucketIdx;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(nBucketIdx_u) == 4, "nBucketIdx_u must stay one 4-byte frame slot");
     TSLink<::SGAMEDATA>* pBackLink;
     TSLink<::SGAMEDATA>* pPendingHead2;
-    int* pOldBucket2;
+    TSLink<::SGAMEDATA>** pOldBucket2;
     TSExplicitList<::SGAMEDATA, -572662307>* pNodeNext;
     TSExplicitList<::SGAMEDATA, -572662307> pendingList;
+    nBucketIdx_u nBucketIdx;
     int nOldBucketIdx;
     intptr_t nBucketNextLink;
     TSLink<::SGAMEDATA>* pNodeData;
@@ -208,7 +215,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     pendingList.m_linkoffset = 4;
     pendingList.m_terminator.m_next = nOldBucket;
-    uint32_t nBucketIdx = 0;
+    nBucketIdx.nBucketIdx2 = 0;
     if (nNewMask) {
       nOldBucketIdx = 0;
       pPendingHead2 = pendingList.m_terminator.m_prevlink;
@@ -222,8 +229,8 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
           pBackLink = (TSLink<::SGAMEDATA>*)(nBucketNextLink + 4);
           pNodeData = pBackLink->m_prevlink;
           if (pNodeData) {
-            pOldBucket2 = (int*)D2_StormNextLink(pBackLink, -1);
-            *pOldBucket2 = (int)pNodeData;
+            pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
+            *pOldBucket2 = pNodeData;
             pBackLink->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
             pBackLink->m_prevlink = 0;
             *(uint32_t*)(nBucketNextLink + 8) = 0;
@@ -239,9 +246,9 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
         }
 
         nOldBucketIdx++;
-        nBucketIdx++;
+        nBucketIdx.nBucketIdx2++;
         pThis = pQServerStateSaved;
-      } while (nBucketIdx < nNewMask);
+      } while (nBucketIdx.nBucketIdx2 < nNewMask);
     }
 
     uint32_t* pOldBucket = nNewBucketCount;
@@ -249,7 +256,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     if (pOldBucket) {
       int nResetBucketOffset;
       nResetBucketOffset = 0;
-      nBucketIdx = (uint32_t)pOldBucket;
+      nBucketIdx.pBucketIdx = pOldBucket;
       do {
         pNodeNext = &pThis->tSlotListArray.m_data[nResetBucketOffset];
         if (pNodeNext->m_linkoffset != 4) {
@@ -261,10 +268,10 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
         }
 
         nResetBucketOffset++;
-        nBucketIdx--;
-      } while (nBucketIdx);
+        nBucketIdx.pBucketIdx = (uint32_t*)((char*)nBucketIdx.pBucketIdx - 1);
+      } while (nBucketIdx.pBucketIdx);
 
-      nBucketIdx = 0;
+      nBucketIdx.nBucketIdx2 = 0;
       pOldBucket = nNewBucketCount;
     }
 
@@ -276,8 +283,8 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       pPendingHead2 = pBackLink->m_prevlink;
       if (pPendingHead2) {
         nNewMask = pBackLink->m_next;
-        pOldBucket2 = (int*)D2_StormNextLink(pBackLink, -1);
-        *pOldBucket2 = (int)pPendingHead2;
+        pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
+        *pOldBucket2 = pPendingHead2;
         pBackLink->m_prevlink->m_next = pBackLink->m_next;
         pBackLink->m_prevlink = 0;
         pBackLink->m_next = 0;

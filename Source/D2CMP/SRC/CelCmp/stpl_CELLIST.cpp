@@ -601,12 +601,12 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
     pInsertPoint->m_prevlink = pActiveHead;
     pInsertPoint->m_next = pList->m_terminator.m_next;
     intptr_t pTailLink2 = pList->m_terminator.m_next;
-    int pNextLink = pList->m_linkoffset;
+    intptr_t pNextLink = pList->m_linkoffset;
     if (pTailLink2 < 0) {
       *(TSLink<::CELLIST>**)~pTailLink2 = (TSLink<::CELLIST>*)pInsertPoint;
     } else {
       if (pNextLink < 0) {
-        pNextLink = (int)pActiveHead - pActiveHead->m_prevlink->m_next;
+        pNextLink = (intptr_t)pActiveHead - pActiveHead->m_prevlink->m_next;
       }
 
       *(TSLink<::CELLIST>**)(pTailLink2 + pNextLink) = (TSLink<::CELLIST>*)pInsertPoint;
@@ -935,12 +935,12 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
     ppInsertSlot->m_prevlink = pFreeListHead;
     ppInsertSlot->m_next = pList->m_terminator.m_next;
     intptr_t pOldTail2 = pList->m_terminator.m_next;
-    int pListTail = pList->m_linkoffset;
+    intptr_t pListTail = pList->m_linkoffset;
     if (pOldTail2 < 0) {
       *(TSLink<::CELLIST>**)~pOldTail2 = (TSLink<::CELLIST>*)ppInsertSlot;
     } else {
       if (pListTail < 0) {
-        pListTail = (int)pFreeListHead - pFreeListHead->m_prevlink->m_next;
+        pListTail = (intptr_t)pFreeListHead - pFreeListHead->m_prevlink->m_next;
       }
 
       *(TSLink<::CELLIST>**)(pOldTail2 + pListTail) = (TSLink<::CELLIST>*)ppInsertSlot;

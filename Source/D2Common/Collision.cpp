@@ -193,7 +193,7 @@ int32_t __stdcall GetDistanceBetweenUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit
     nSizeUnit2 = Units::GetUnitSizeX(pUnit1Saved);
     nSizeUnit = Units::GetUnitSizeX(pUnit2);
     if (nUnit < 8 && nTargetX < 8 && nSizeUnit2 < 4 && nSizeUnit < 4) {
-      eUnitType2 = gnCollisionGridMaxNodes[(intptr_t)(((D2UnitStrc*)nUnit)->unk0x19 + nTargetX * 8 - 0x19)];
+      eUnitType2 = gnCollisionGridMaxNodes[(int)(nUnit + 0x19 + nTargetX * 8 - 0x19)];
       if (eUnitType2 < 0) {
         return 0;
       }

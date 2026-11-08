@@ -41,8 +41,8 @@ BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...) {
 }
 
 StormLinkStrc * __thiscall ARCHIVE_ComputeAddress(StormLinkStrc * pNode, intptr_t nBaseAddr) {
-    uint32_t nOffset = pNode->pNext;
-    if ((int)nOffset < 0) {
+    intptr_t nOffset = pNode->pNext;
+    if (nOffset < 0) {
       return (StormLinkStrc*)~nOffset;
     }
     if (nBaseAddr < 0) {
@@ -60,7 +60,7 @@ intptr_t __fastcall Unreferenced_0045ba80(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
-    return ~(uint32_t)pSVar1;
+    return ~(uintptr_t)pSVar1;
 }
 
 int __fastcall Unreferenced_0045baa0(StormLinkStrc * param_1) {

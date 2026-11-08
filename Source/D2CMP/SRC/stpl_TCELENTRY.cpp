@@ -17,7 +17,7 @@ template<> TSLink<::TCELENTRY>* TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Link(::
 }
 
 template<> __attribute__((noinline)) inline void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::LinkNode(::TCELENTRY * ptr, uint32_t nLinkType, ::TCELENTRY * pExisting) {
-    int nLinkBase;
+    intptr_t nLinkBase;
     intptr_t pTmp2;
     ::TCELENTRY* pEntry = ptr;
     if (!ptr) {
@@ -50,7 +50,7 @@ template<> __attribute__((noinline)) inline void TSList<TCELENTRY, TSGetLink<TCE
             return;
           }
           if (nLinkBase < 0) {
-            nLinkBase = (int)pExisting - pExisting->m_link.m_prevlink->m_next;
+            nLinkBase = (intptr_t)pExisting - pExisting->m_link.m_prevlink->m_next;
           }
 
           *(::TCELENTRY**)(pTmp2 + nLinkBase) = (::TCELENTRY*)pEntry;

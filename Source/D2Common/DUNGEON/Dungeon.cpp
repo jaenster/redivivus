@@ -1157,6 +1157,7 @@ void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
     D2RoomStrc* nearRoom;
     uint32_t* pnListCount;
     D2RoomStrc** ppAdjRoomList;
+    int nRoom;
     D2RoomStrc* pRoomToRemove;
     pRoomToRemove = pRoom;
     if (!pRoom) {
@@ -1184,10 +1185,10 @@ void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
             }
 
             pnListCount = &pRoom->nRoomListCount;
-            pRoom = 0;
+            nRoom = 0x0;
             if ((int)*pnListCount > 0) {
               do {
-                nearRoom = pRoomToRemove->ppRoomList[(intptr_t)pRoom];
+                nearRoom = pRoomToRemove->ppRoomList[nRoom];
                 if (nearRoom != pRoomToRemove) {
                   nAdjRoomListCount = nearRoom->nRoomListCount;
                   i = 0;
@@ -1207,8 +1208,8 @@ void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
                   }
                 }
 
-                pRoom = (D2RoomStrc*)((intptr_t)&pRoom->ppRoomList + 1);
-              } while ((intptr_t)pRoom < (int)pRoomToRemove->nRoomListCount);
+                nRoom++;
+              } while (nRoom < (int)pRoomToRemove->nRoomListCount);
             }
 
             Drlg::DrlgRoom::FreeDrlgRoomEx(pRoomToRemove->pRoomEx, pDrlgAct->bClientSide, pRoomToRemove->eFlags);
@@ -1555,16 +1556,17 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
     D2RoomStrc* pFreeCoordRoom;
     POINT ptSpawnCoord;
     int nLocalY;
+    int32_t nDrlgAct;
     if (pDrlgAct) {
       {
         D2DrlgStrc** ppDVar1;
         ppDVar1 = &pDrlgAct->pDrlg;
         pDrlgAct = 0;
         nLocalY = 0;
-        pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, (int*)&pDrlgAct, &nLocalY);
+        pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, (int*)&nDrlgAct, &nLocalY);
         if (pSpawnRoom) {
-          Drlg::Transform::CoordsRoomToWorld((int32_t*)&pDrlgAct, &nLocalY);
-          ptSpawnCoord.x = (intptr_t)&pDrlgAct->eLevelIdFirst + 3;
+          Drlg::Transform::CoordsRoomToWorld((int32_t*)&nDrlgAct, &nLocalY);
+          ptSpawnCoord.x = nDrlgAct + 3;
           ptSpawnCoord.y = nLocalY + 3;
           pFreeCoordRoom = Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, &ptSpawnCoord, nUnitSize, 0x1c09, 0);
           if (!pFreeCoordRoom) {

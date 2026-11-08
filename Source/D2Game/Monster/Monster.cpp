@@ -482,6 +482,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2MonStatsExTxtSlot uMonTxt;
     int32_t nStatLayer;
     uint32_t dwHpRegenRaw;
+    int32_t nRoom;
     if (!pUnit) {
       return;
     }
@@ -593,12 +594,12 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 0x4b, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, 0x80, 0);
-    if (pGame->nGameType != SGAMETYPE_BNET_HOST || (pRoom = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
-      pRoom = (D2RoomStrc*)0x1;
+    if (pGame->nGameType != SGAMETYPE_BNET_HOST || (nRoom = 0x0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
+      nRoom = 0x1;
     }
 
     memset(&sMonStats, 0, 0x38);
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, (int32_t)pRoom, (uint32_t)nParam, nMonLevel, 7, &sMonStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, nRoom, (uint32_t)nParam, nMonLevel, 7, &sMonStats);
     nTmpVal = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, sMonStats.nMaxHP - sMonStats.nMinHP + 1);
     int32_t nScaledStat = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nTmpVal + sMonStats.nMinHP, monLevelData.nPlayerMultiplyer, 100);
     nTmpInt = nTmpVal + sMonStats.nMinHP + nScaledStat;

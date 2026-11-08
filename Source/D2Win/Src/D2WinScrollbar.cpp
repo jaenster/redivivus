@@ -3,7 +3,6 @@
 #include "Source/D2Win/Src/D2WinScrollbar.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Launch/MainMenus.h"
-#include "Source/D2Win/DC6.h"
 #include "Source/D2Win/Src/D2WinMain.h"
 #include "Source/D2Win/Src/D2WinTextBox.h"
 #include "Source/D2gfx/D2gfx.public.h"
@@ -295,6 +294,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
     DC6* pDC6;
     uint32_t dwState;
     int32_t nLine;
+    int nDC6;
     if (!pScrollbar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe7);
       exit(-1);
@@ -331,12 +331,12 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = 5;
         if (pScrollbar->sControl.dwSizeY - 10 > 10) {
-          pDC6 = (DC6*)0xa;
+          nDC6 = 0xa;
           do {
-            pDC6 = (DC6*)((intptr_t)&pDC6->nFormat + 2);
+            nDC6 = nDC6 + 8 + 2;
             nDrawY += -10;
             D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
-          } while ((intptr_t)pDC6 < pScrollbar->sControl.dwSizeY - 10);
+          } while (nDC6 < pScrollbar->sControl.dwSizeY - 10);
         }
 
         sGfxData.nFrameNumber = pScrollbar->bUpArrowPressed ? 2 : 0;

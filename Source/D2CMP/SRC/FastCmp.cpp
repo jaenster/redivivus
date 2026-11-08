@@ -51,7 +51,8 @@ static void __stdcall FASTCMP_CompressToRLE(int32_t nWidth, uint32_t nLineCount,
       pbLineStride = -nWidth;
     }
 
-    dwFlags = (uint32_t)(pBaseData + pbLineStride);
+    uint8_t* pFlags;
+    pFlags = (uint8_t*)(pBaseData + pbLineStride);
     char* pWidth;
     pWidth = (char*)(pBaseData + nWidth);
     uint8_t* pbRLEOut;
@@ -71,8 +72,8 @@ static void __stdcall FASTCMP_CompressToRLE(int32_t nWidth, uint32_t nLineCount,
             *pbRLEOut = 0x80;
             pbRLEOut++;
             nLinesDone++;
-            pBaseData = (uint8_t*)dwFlags;
-            dwFlags += pbLineStride;
+            pBaseData = pFlags;
+            pFlags = (uint8_t*)((char*)pFlags + pbLineStride);
           }
         } else {
           nColorRunLen = SUBTILE_CountRunLengthForByte((char*)pBaseData, pWidth, '\0', 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
@@ -391,7 +392,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pRLEData, uint8_
             break;
           }
 
-          nPaletteTrans = (int)(uint8_t*)(nDrawStartX - nClipStartX);
+          nPaletteTrans = (int)(nDrawStartX - nClipStartX);
           if (nPaletteTrans < 0) {
             nPaletteTrans = (int)nullptr;
           }

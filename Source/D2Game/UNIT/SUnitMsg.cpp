@@ -2,7 +2,6 @@
 
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Client/D2BattleNetEventCallbackTable.h"
-#include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Common/D2Common.h"
@@ -1152,6 +1151,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
     short int* pMonSkillEntry;
     uint8_t bRemove;
     uint16_t wSkillId;
+    int nClient;
     int nMonSkillEntry;
     D2ClientStrc* pClientSaved = pClient;
     if (!pUnit) {
@@ -1208,9 +1208,9 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
         pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
         if (pMonStatsTxt) {
           pMonSkillEntry = pMonStatsTxt->aSkill;
-          pClient = 0;
+          nClient = 0x0;
           do {
-            if ((uint8_t)Fog::BitBuffer::gadwBitMasks[(uintptr_t)pClient & 7] & pMonStatsTxt->SendSkills[(intptr_t)pClient >> 3]) {
+            if ((uint8_t)Fog::BitBuffer::gadwBitMasks[(uint32_t)nClient & 7] & pMonStatsTxt->SendSkills[nClient >> 3]) {
               wSkillId = *pMonSkillEntry;
               if ((short int)wSkillId >= 0 && (int)(short int)wSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
                 pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)(short int)wSkillId);
@@ -1223,8 +1223,8 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
             }
 
             pMonSkillEntry++;
-            pClient = (D2ClientStrc*)((intptr_t)&pClient->nClientNo + 1);
-          } while ((intptr_t)pClient < 8);
+            nClient++;
+          } while (nClient < 8);
         }
 
         PLAYER_SendStateListToClient(pUnit, pClientSaved);

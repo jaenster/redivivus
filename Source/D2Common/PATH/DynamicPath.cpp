@@ -1782,10 +1782,10 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
       PATH_AddUnitCollision(pUnit_00);
       Unit::DRLGROOM_AddUnitToRoom(pUnit_00, pDynamicPath->pRoom);
     }
-    pMemory = (D2PoolManagerStrc*)((uint32_t)pDynamicPath->Coords.tFixed.x >> 0xb);
+    LONG nMemory = (uint32_t)pDynamicPath->Coords.tFixed.x >> 0xb;
     uint32_t nScreenY = (uint32_t)pDynamicPath->Coords.tFixed.y >> 0xb;
-    Drlg::Transform::DRLG_MapWorldToScreenCoords((int32_t*)&pMemory, (int32_t*)&nScreenY);
-    pDynamicPath->ScreenPos.x = (LONG)pMemory;
+    Drlg::Transform::DRLG_MapWorldToScreenCoords((int32_t*)&nMemory, (int32_t*)&nScreenY);
+    pDynamicPath->ScreenPos.x = nMemory;
     pDynamicPath->ScreenPos.y = nScreenY;
     if (!nParam) {
       return;

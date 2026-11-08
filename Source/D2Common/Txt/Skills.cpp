@@ -2418,14 +2418,14 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    pUnit = 0;
+    int nUnit = 0x0;
     if ((short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
       return 1;
     }
 
     do {
       BOOL eStateId;
-      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[(intptr_t)pUnit];
+      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[nUnit];
       eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
       if (eStateId) {
         pStatList = Stats::StatsEx::GetStatsByState(i, eState);
@@ -2438,8 +2438,8 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
       }
 
       nStateCount = (int32_t)(short int)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
-      pUnit = (D2UnitStrc*)((intptr_t)&pUnit->eUnitType + 1);
-    } while ((intptr_t)pUnit < nStateCount);
+      nUnit++;
+    } while (nUnit < nStateCount);
 
     return 1;
 }

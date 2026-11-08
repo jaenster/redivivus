@@ -538,7 +538,7 @@ void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pManager->pSync);
-    pMemory = 0;
+    int nMemory = 0x0;
     if ((int)pManager->nPools > 0) {
       D2PoolStrc* pPool;
       pPool = pManager->pPools;
@@ -574,9 +574,9 @@ void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
         }
 
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pPool->pSync);
-        pMemory = (D2PoolManagerStrc*)((intptr_t)&pMemory->nPoolId + 1);
+        nMemory++;
         pPool++;
-      } while ((intptr_t)pMemory < (int)pManager->nPools);
+      } while (nMemory < (int)pManager->nPools);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pManager->pSync);
