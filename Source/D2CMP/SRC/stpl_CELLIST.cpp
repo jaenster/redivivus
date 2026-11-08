@@ -358,9 +358,9 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Delete(::CELLIST * pNode) {
 
 template<> void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
     TSLink<::CELLIST>** pPrev;
+    intptr_t nBucketIdx;
     TSLink<::CELLIST>* nNext;
     intptr_t uLinkOffset;
-    int nBucketIdx;
     while (true) {
       TSLink<::CELLIST>* pBackLink;
       nBucketIdx = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
@@ -388,9 +388,9 @@ template<> void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
 
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll() {
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pPrev;
+    intptr_t nBucketIdx;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext;
     intptr_t uLinkOffset;
-    int nBucketIdx;
     while (true) {
       TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pBackLink;
       nBucketIdx = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;

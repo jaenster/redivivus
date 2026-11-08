@@ -667,9 +667,9 @@ void __fastcall Q34_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Q34_Callback_03 (Betrayal of Harrogath). Gossip/choice handler. On Nihlathak menu (textControl 0x6d) at state-flag 2: advances to state-flag 3 and iterates Q34_UpdateQuestStep. On choice index 0x79 (decline): broadcasts state-flag 2 and clears bAcceptedQuest. No direct QuestRecord access.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q4.cpp
 void __fastcall Q34_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int nChoiceIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    int nChoiceIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     D2QuestDataA5Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q4;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x6d && pQuestData->nStateFlag == 2) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x6d && pQuestData->nStateFlag == 2) {
       QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0x2ec);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q34_UpdateQuestStep);
     }

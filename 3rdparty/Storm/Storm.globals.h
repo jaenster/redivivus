@@ -18,11 +18,10 @@
 // Forward declarations
 struct StormLinkedListStrc;
 
-// lpDefault parameter of GetPrivateProfileStringA
-extern char lpDefault_006cc837[1];
 extern void * ExceptionList;
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
+extern char s___AUCMDDEF___0074c47c[16];
 namespace Storm::_3rdparty::zlib::deflate {
 extern char * z_errmsg[10];
 } // namespace Storm::_3rdparty::zlib::deflate
@@ -30,9 +29,6 @@ namespace Storm::Source {
 extern char * gaSCMD_FallbackMessages[3];
 } // namespace Storm::Source
 namespace Storm::Source::SErr {
-extern char s_File___s_006cf1e8[10];
-extern char s__s_006cf248[6];
-extern char s_Expr___s_006cf250[11];
 extern StormLinkedListStrc gnStormErrorCallbackCount;
 extern char gszSSystemListAllocTag[14];
 } // namespace Storm::Source::SErr

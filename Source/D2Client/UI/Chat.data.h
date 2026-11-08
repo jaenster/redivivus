@@ -14,7 +14,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 extern int cChatCmdExclaim;
-extern char cChatCmdSlash[2];
 extern char gaChatInputBuffer;
 extern uint32_t gnChatInputTextCursorPosition;
 extern int gnChatInputTextLength;

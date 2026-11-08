@@ -348,11 +348,11 @@ void __fastcall Q20_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
     ::SGAMEDATA* pGame;
-    D2GSPacketSrv0x27_TextStrc* pControlId = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.nIndex == 0x4e && pQuestData->bIsNotIntroduction != '\0' && !pQuestData->nStateFlag) {
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x4e && pQuestData->bIsNotIntroduction != '\0' && !pQuestData->nStateFlag) {
       pQuestData->nStateFlag = 1;
     }
-    if (pControlId != (D2GSPacketSrv0x27_TextStrc*)0x4b) {
+    if (nOldLevel != 0x4b) {
       return;
     }
 

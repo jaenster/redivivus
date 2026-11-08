@@ -984,7 +984,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       Storm::Source::SSTR::SStrPack(__frame0.szLocaleFilePath, "System Survey\\ProductData\\", 0x104);
       pszLocaleSuffix = Storm::Source::SSTR::SStrLen(__frame0.szLocaleFilePath);
       szBufferOutput = __frame0.szLocaleFilePath + pszLocaleSuffix;
-      Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", (intptr_t)&__frame0.dwSecurityCookie - (int)szBufferOutput);
+      Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", (intptr_t)&__frame0.dwSecurityCookie - (intptr_t)szBufferOutput);
       Fog::Source::SFile::SafeCreateDirectoryTree(__frame0.szLocaleFilePath);
       pLocaleFile = fopen(__frame0.szLocaleFilePath, "w");
       if (pLocaleFile) {
@@ -997,7 +997,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
 
       bIsExpansion = Fog::D2CheckExpansionGame();
       if (bIsExpansion) {
-        Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", (intptr_t)&__frame0.dwSecurityCookie - (int)szBufferOutput);
+        Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", (intptr_t)&__frame0.dwSecurityCookie - (intptr_t)szBufferOutput);
         Fog::Source::SFile::SafeCreateDirectoryTree(__frame0.szLocaleFilePath);
         pLocaleFile = fopen(__frame0.szLocaleFilePath, "w");
         if (pLocaleFile) {
@@ -1485,10 +1485,10 @@ void __stdcall CreateRegedit() {
     uint8_t dataBuf[1024];
     char szValueName[260];
     char szInstallPath[260];
-    LSTATUS nRegStatus = RegOpenKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta", &hKeySrc);
+    LSTATUS nRegStatus = RegOpenKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta", &hKeySrc);
     if (!nRegStatus) {
       DWORD dwIndex;
-      /* PHKEY phkResult for RegCreateKeyA */ /* LPCSTR lpSubKey for RegCreateKeyA */ /* HKEY hKey for RegCreateKeyA */ RegCreateKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II", &hKeyDest);
+      /* PHKEY phkResult for RegCreateKeyA */ /* LPCSTR lpSubKey for RegCreateKeyA */ /* HKEY hKey for RegCreateKeyA */ RegCreateKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Blizzard Entertainment\\Diablo II", &hKeyDest);
       dwIndex = 0;
       do {
         /* LPDWORD lpcbData for RegEnumValueA */ /* LPBYTE lpData for RegEnumValueA */ /* LPDWORD lpType for RegEnumValueA */ /* LPDWORD lpReserved for RegEnumValueA */ /* LPDWORD lpcchValueName for RegEnumValueA */ /* LPSTR lpValueName for RegEnumValueA */ /* DWORD dwIndex for RegEnumValueA */ /* HKEY hKey for RegEnumValueA */ dwValueNameLen = 0x104;
@@ -1504,7 +1504,7 @@ void __stdcall CreateRegedit() {
 
       /* HKEY hKey for RegCloseKey */ RegCloseKey(hKeyDest);
       /* HKEY hKey for RegCloseKey */ RegCloseKey(hKeySrc);
-      /* LPCSTR lpSubKey for RegDeleteKeyA */ /* HKEY hKey for RegDeleteKeyA */ RegDeleteKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta");
+      /* LPCSTR lpSubKey for RegDeleteKeyA */ /* HKEY hKey for RegDeleteKeyA */ RegDeleteKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta");
     }
 
     szInstallPath[0] = '\0';
@@ -1576,7 +1576,7 @@ void __stdcall LIB_LoadAdvapi32() {
 // @sourcefile .\Main.cpp
 static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(eD2ApplicationMode * eAppMode, char * szText) {
     // Static local variables (originally global data)
-    static char * gApplicationModeCommandLineArgumentArray[6] = { s_modstate0_006cc928, s_client_006cc920, s_server_006cc918, s_multiplayer_006cc90c, s_launcher_006cc900, s_expand_006cc8f8 }; D2_STATIC_GUARD(gApplicationModeCommandLineArgumentArray, "Game::Main::CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument::gApplicationModeCommandLineArgumentArray");
+    static char * gApplicationModeCommandLineArgumentArray[6] = { (char*)"modstate0", (char*)"client", (char*)"server", (char*)"multiplayer", (char*)"launcher", (char*)"expand" }; D2_STATIC_GUARD(gApplicationModeCommandLineArgumentArray, "Game::Main::CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument::gApplicationModeCommandLineArgumentArray");
 
     int nStrCmp;
     char cChar;

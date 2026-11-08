@@ -16,5 +16,4 @@
 // Forward declarations
 struct D2SoundChannelNodeStrc;
 
-extern float FLOAT_006da690;
 extern D2SoundChannelNodeStrc * gpActiveSoundChannelsHead;

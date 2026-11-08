@@ -1175,61 +1175,61 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen01_006d5d10
+        /* .fileName = */ (char*)"screen01"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen02_006d5d04
+        /* .fileName = */ (char*)"screen02"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen03_006d5cf8
+        /* .fileName = */ (char*)"screen03"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen04_006d5cec
+        /* .fileName = */ (char*)"screen04"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen05_006d5ce0
+        /* .fileName = */ (char*)"screen05"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen06_006d5cd4
+        /* .fileName = */ (char*)"screen06"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen07_006d5cc8
+        /* .fileName = */ (char*)"screen07"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen08_006d5cbc
+        /* .fileName = */ (char*)"screen08"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen09_006d5cb0
+        /* .fileName = */ (char*)"screen09"
     },
     {
         /* .lastLoadTick = */ 0x0,
         /* .cachedImage = */ nullptr,
         /* .paletteIndex = */ 0x0,
-        /* .fileName = */ s_screen10_006d5ca4
+        /* .fileName = */ (char*)"screen10"
     }
 }; D2_STATIC_GUARD(gBetaScreenEntries, "D2Client::GAME::Game::DrawBetaScreen::gBetaScreenEntries");
 
@@ -2277,7 +2277,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
       pDstChar = (D2CharPortraitTextStrc*)(pDstChar->szName + 1);
     } while (*pSrcChar != '\0');
 
-    nHardcoreFlag = (int)pDstChar - (intptr_t)&sText;
+    nHardcoreFlag = (intptr_t)pDstChar - (intptr_t)&sText;
     pSrcChar = sText.szName + 99;
     do {
       pNextChar = pSrcChar + 1;

@@ -145,7 +145,8 @@ set(D2_MODULE_Storm_UNITS
     3rdparty/Storm/3rdparty/zlib/inftrees.cpp  # 0042e120 (outside the module's runs), 1 run
     3rdparty/Storm/3rdparty/PKWARE/explode.cpp  # 006b01b0, 1 run
     3rdparty/Storm/3rdparty/PKWARE/implode.cpp  # 006b0870, 1 run
-    3rdparty/Storm/Source/SCMD.cpp  # 006c3cb0, 7 runs
+    3rdparty/Storm/Source/SCMD.cpp  # 006c3cb0, 9 runs
+    3rdparty/Storm/Source/stpl_CMDDEF.cpp  # 006c4040, 5 runs
     3rdparty/Storm/Source/SBMP.cpp  # 006c50d0, 1 run
     3rdparty/Storm/3rdparty/zlib/uncompr.cpp  # 006c79c0 (outside the module's runs), 1 run
 )

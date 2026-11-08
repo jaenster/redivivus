@@ -255,9 +255,10 @@ int __fastcall SSignatureVerifyStream_Finish(D2SsigContextStrc * pContext, void 
 // Was SSIG_SignDataBlock. Storm export (PPC vector 100cdfe4 -> 100a3890). It is a VERIFY, not a sign. Basis: PPC body = inline Begin (operator new + SMemAlloc + Sha1::Initialize) then bl SSignatureVerifyStream_ProvideData then bl SSignatureVerifyStream_Finish; this function = SSignatureVerifyStream_Begin -> ...ProvideData -> ...Finish, the same three steps with MSVC keeping Begin out of line. PPC reads r3..r8 = 6 args == 6 params here.
 // Returns Finish's result in EAX (tail at 0041d7fe..0041d806 leaves it untouched): nonzero if the signature verifies. The nExponentLen stack slot is reused as the Begin context out-parameter.
 int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen) {
-    SSignatureVerifyStream_Begin((D2SsigContextStrc**)&nExponentLen, nModulusLen, nExponentLen);
-    uint32_t pContext = nExponentLen;
-    SSignatureVerifyStream_ProvideData((D2SsigContextStrc*)nExponentLen, pData, nDataLen);
+    D2SsigContextStrc* pSsigContext;
+    SSignatureVerifyStream_Begin((D2SsigContextStrc**)&pSsigContext, nModulusLen, nExponentLen);
+    uintptr_t pContext = (uintptr_t)pSsigContext;
+    SSignatureVerifyStream_ProvideData(pSsigContext, pData, nDataLen);
     int bVerified = SSignatureVerifyStream_Finish((D2SsigContextStrc*)pContext, pModulusBytes, pExponentBytes);
     return bVerified;
 }

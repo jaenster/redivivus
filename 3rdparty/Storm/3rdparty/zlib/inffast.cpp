@@ -33,7 +33,7 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
     pInput = pInflateState->next_in - 1;
     uint8_t* pInputSafeEnd;
     pInputSafeEnd = pInput + (pInflateState->avail_in - 5);
-    int nWriteBase;
+    intptr_t nWriteBase;
     nWriteBase = puVar1[10];
     uint8_t* pOutput;
     pOutput = pInflateState->next_out - 1;
@@ -158,7 +158,7 @@ void __fastcall ZLIB_InflateFast(z_stream * pInflateState, int32_t nEndPos) {
           bad_data:
           *puVar1 = 0x1d;
           save_state_and_return:
-          nWriteBase = (int)pInput - (nBitCount >> 3);
+          nWriteBase = (intptr_t)pInput - (nBitCount >> 3);
           nWindowPos = nBitCount + (nBitCount >> 3) * -8;
           pInflateState->next_in = (uint8_t*)(nWriteBase + 1);
           pInflateState->next_out = pOutput + 1;

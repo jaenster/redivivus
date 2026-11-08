@@ -212,8 +212,8 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Nex
 template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
     TSLink<::MappingEntryNode>** pPrevLink;
     intptr_t nNextLink;
+    intptr_t nSlotOffset;
     TSLink<::MappingEntryNode>* pHeadEntry;
-    int nSlotOffset;
     while (true) {
       TSLink<::MappingEntryNode>* pSlot;
       nSlotOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;

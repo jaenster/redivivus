@@ -1462,7 +1462,7 @@ void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
     gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].dwIpAddr = 0;
     gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].wDisplayedCount = (uint16_t)pGameInfo->nPlayerCount;
     char* pszSrc = pGameInfo->szGameName;
-    nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szName - (int)pszSrc;
+    nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szName - (intptr_t)pszSrc;
     do {
       cChar = *pszSrc;
       pszSrc[nIndex] = cChar;
@@ -1470,7 +1470,7 @@ void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
     } while (cChar != '\0');
 
     pszSrc = pGameInfo->szGameDescription;
-    nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szDescription - (int)pszSrc;
+    nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szDescription - (intptr_t)pszSrc;
     do {
       cChar = *pszSrc;
       pszSrc[nIndex] = cChar;
@@ -2728,7 +2728,7 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
     bool bDiffMatch;
     int nAcceptedCount;
     uint8_t byScan;
-    int nLevelCopyOffset;
+    intptr_t nLevelCopyOffset;
     eD2PlayerStatus ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
     uint32_t dwFilterMin = 0;
     uint32_t dwFilterMax = 0;
@@ -2809,7 +2809,7 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
             nGameListDifficultyFilter--;
           } else {
             pbField += 2;
-            nLevelCopyOffset = -0x26 - (int)pbField;
+            nLevelCopyOffset = -0x26 - (intptr_t)pbField;
             do {
               byScan = *pbField;
               pbField[(intptr_t)pCacheSlot + nLevelCopyOffset] = byScan;

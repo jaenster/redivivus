@@ -27,9 +27,6 @@ extern D2FogArchiveStrc * MPQ_d2data;
 extern D2FogArchiveStrc * MPQ_patch_d2;
 extern D2FogArchiveStrc * MPQ_d2exp;
 namespace D2Lang::StrTable::strtable {
-extern char gaLanguageCodeFallback[4];
-extern char gaLanguageCodeAbbrevTable[4];
-extern char gaLanguageCodeLookup[4];
 extern uint16_t * * gpStringIndexBase;
 extern uint16_t * * gpStringIndexPatchD2;
 extern uint16_t * * gpStringIndexExpansion;

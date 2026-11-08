@@ -3370,7 +3370,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
           __frame0.nElLengthScaled = sMonStats.nElDur * __frame0.nExpansionMod / 128 + sMonStats.nElDur;
         }
 
-        eElementType = __frame0.pElModeCur[(int)(__frame0.pMonStats->aElType + __frame0.bExpansion)];
+        eElementType = __frame0.pElModeCur[(intptr_t)(__frame0.pMonStats->aElType + __frame0.bExpansion)];
         if (eElementType == ELEMENTAL_RANDOM) {
           nElDifficultyIdx = D2Common::Seed::UNIT_GetModuloFromSeed(&__frame0.pUnitSaved->sSeed, 5);
           eElementType = (eD2ElementalDamageType)nElDifficultyIdx;

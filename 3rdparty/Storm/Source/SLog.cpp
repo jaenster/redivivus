@@ -6,12 +6,10 @@
 #include "3rdparty/Storm/Source/SSTR.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/Storm/Source/SFile.data.h"
-#include "3rdparty/Storm/Source/SLog.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-char param_2_006cff28[3] = { "%c" }; D2_GLOBAL_GUARD(param_2_006cff28, "param_2_006cff28");
 static CRITICAL_SECTION gaSLogCritSect[4] = {}; D2_STATIC_GUARD(gaSLogCritSect, "gaSLogCritSect");
 static D2SLogStrc * gaSLogHead[4] = {}; D2_STATIC_GUARD(gaSLogHead, "gaSLogHead");
 
@@ -174,6 +172,7 @@ void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOu
 
     D2SLogStrc* pContext;
     uint32_t nNewHandle;
+    int32_t nFileName;
     int* pnHandleSaved = pnHandleOut;
     char cFirstChar = (char)*szFileName;
     if (pnHandleOut) {
@@ -188,7 +187,7 @@ void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOu
         nNewHandle = gnSLogSequence + 1;
         gnSLogSequence = nNewHandle;
         *pnHandleSaved = nNewHandle;
-        pContext = SLOG_LockLog((uint32_t*)&szFileName, 1, nNewHandle);
+        pContext = SLOG_LockLog((uint32_t*)&nFileName, 1, nNewHandle);
         if (!pContext) {
           *pnHandleSaved = 0;
           return;
@@ -197,7 +196,7 @@ void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOu
         pContext->hFile = hFile;
         pContext->bTimestamps = 1;
         pContext->nIndent = 0;
-        SLOG_UnlockLog((int32_t)szFileName);
+        SLOG_UnlockLog(nFileName);
         return;
       }
     }

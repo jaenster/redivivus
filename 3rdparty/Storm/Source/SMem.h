@@ -149,7 +149,7 @@ int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize);
 uint32_t __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t dwParam);
 int32_t __stdcall SMemHeapDestroy(LPVOID nHeapId);
 uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObject);
-int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, int32_t pObject);
+int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, void * pObject);
 BOOL __stdcall SMemDumpState(pfnSMemDumpCallback pfnCallback, uint32_t dwCallbackArg);
 // @blizzard SMemHeapAlloc (SMEM.CPP)
 uint32_t * __stdcall SMemHeapAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t dwFlags);

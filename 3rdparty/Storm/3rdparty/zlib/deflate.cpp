@@ -1193,6 +1193,7 @@ static block_state __stdcall deflate_rle(int32_t nFlush, deflate_state * pDeflat
     uint8_t* pScanNext;
     uint8_t* pBlockStart;
     bool bBlockFull;
+    uint32_t nMatchLen;
     uint8_t byLit;
     uint32_t nBlockStartOff;
     int nBlockStartOff2;
@@ -1295,8 +1296,9 @@ static block_state __stdcall deflate_rle(int32_t nFlush, deflate_state * pDeflat
             pScanCur = pScanNext;
           } while (pScanNext < pBlockStart + 0x102);
 
-          pDeflateState->match_length = (uint32_t)(pScanNext - (pBlockStart + 0x102) + 0x102);
-          if (pScanNext + (0x102 - (intptr_t)(pBlockStart + 0x102)) > (uint8_t*)pDeflateState->lookahead) {
+          nMatchLen = (intptr_t)pScanNext + (0x102 - (intptr_t)(pBlockStart + 0x102));
+          pDeflateState->match_length = nMatchLen;
+          if (nMatchLen > pDeflateState->lookahead) {
             pDeflateState->match_length = pDeflateState->lookahead;
           }
         }

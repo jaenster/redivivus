@@ -458,7 +458,7 @@ void __fastcall Q28_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // A4Q3 Hell's Forge — Q28_Callback_03 (state-handler slot 3): handles the gossip event id 0x67. Removes player from participant list, then if internal stateFlag==2 and the player has not Completed/RewardAwaits Hell's Forge, advances internal stateFlag to 3 (soulstone-on-anvil acknowledged) and re-syncs all players via IteratePlayerOrMonsterUnits(Q28_PlayerUpdateForgeState).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
 void __fastcall Q28_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x67) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x67) {
       return;
     }
 

@@ -531,7 +531,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
     uint8_t byPrevColor;
     uint32_t nLookupMask;
     uint32_t nBitMaskCheck;
-    int nPrevPixelOffset2;
+    intptr_t nPrevPixelOffset2;
     uint8_t* pOutPixelCursor;
     pOutPixelCursor = *ppOutBuffer;
     int nBitShift;
@@ -1080,7 +1080,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         local_314 = 0;
         local_318 = 0;
         pdwBitCursor = sBitState.pCurWord;
-        if ((uint32_t)__frame0.local_330 & 2) {
+        if ((uintptr_t)__frame0.local_330 & 2) {
           iVar6 = 0x20 - uVar11;
           __frame0.local_32c = *sBitState.pCurWord >> D2_SHIFT_COUNT(uVar11);
           if (iVar6 >= 0x14) {
@@ -1261,7 +1261,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
 
         if ((void*)gCodecFrameWorkBuffer < __frame0.pComponentTableEnd) {
           puVar9 = &gCodecFrameWorkBuffer[0].nStride;
-          iVar6 = ((int)__frame0.pComponentTableEnd - ((uintptr_t)&gCodecFrameWorkBuffer[0].nXOffset + 1)) / 0x2c + 1;
+          iVar6 = ((intptr_t)__frame0.pComponentTableEnd - ((uintptr_t)&gCodecFrameWorkBuffer[0].nXOffset + 1)) / 0x2c + 1;
           do {
             if (*puVar9) {
               uVar3 = 0;

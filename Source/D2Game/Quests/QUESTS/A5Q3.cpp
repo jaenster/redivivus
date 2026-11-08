@@ -890,9 +890,9 @@ void __fastcall Q33_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     ::SGAMEDATA* pGame;
     D2BitBufferStrc* pQuestRecord;
     int nNpcIndex;
-    nNpcIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
-    D2GSPacketSrv0x27_TextStrc* pTextControl;
-    pTextControl = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
+    nNpcIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    int32_t nOldLevel;
+    nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     if (nNpcIndex == 0x70) {
       if (pQuestData->bIsNotIntroduction == '\0' || pQuestData->nStateFlag) {
         goto check_town_and_temple;
@@ -922,7 +922,7 @@ void __fastcall Q33_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     cleanup_monsters:
     Q33_CleanupQuestMonsters(pQuestData);
     check_town_and_temple:
-    if (pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x6d && (QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs) , pQuestData->nStateFlag == 2)) {
+    if (nOldLevel == 0x6d && (QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs) , pQuestData->nStateFlag == 2)) {
       pGame = pQuestArgs->pGame;
       pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
       pQuestRecord = pPlayerData->pQuestRecord[pGame->nDifficulty];

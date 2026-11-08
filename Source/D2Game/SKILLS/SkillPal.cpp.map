@@ -729,6 +729,7 @@
       "usedTypes": [
         "D2DamageAuraArgUnion",
         "D2SeedStrc",
+        "D2SkillAuraArgStrc",
         "D2SkillCallbackContextStrc",
         "D2UnitStrc",
         "SGAMEDATA",

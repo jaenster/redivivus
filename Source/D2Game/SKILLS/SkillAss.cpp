@@ -1620,7 +1620,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     } else {
       D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pMainWeapon, 0);
     }
-    if ((int32_t)pUnit3 && pUnit3 != pMainWeapon) {
+    if (pUnit3 && pUnit3 != pMainWeapon) {
       bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit3, ITEMTYPE_Weapon);
       if (bIsWeaponType) {
         bOffhandValid = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pUnit3);
@@ -2281,15 +2281,15 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    eSkill = (eD2Skills)pSkillTxt->passivestat;
+    short int* pSkill = (short int*)pSkillTxt->passivestat;
     int* pCalcPtr = pSkillTxt->passivecalc + 1;
     uSlot14.nPassiveStatsLeft = 4;
     do {
-      eSkill += 2;
-      if (*(short int*)eSkill >= 0) {
+      pSkill = (short int*)((char*)pSkill + 2);
+      if (*pSkill >= 0) {
         nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pCalcPtr, eSkillOrig, nSkillLvl);
         if (nCalcVal) {
-          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)*(short int*)eSkill, nCalcVal, 0);
+          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, (int)*pSkill, nCalcVal, 0);
         }
       }
 

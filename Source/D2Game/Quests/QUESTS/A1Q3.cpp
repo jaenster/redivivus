@@ -271,7 +271,7 @@ void __fastcall Q03_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     }
 
     D2BitBufferStrc* pBitBuffer;
-    if (!(pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x1 && pQuestData->nStateFlag == 2)) {
+    if (!(pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 1 && pQuestData->nStateFlag == 2)) {
       return;
     }
 

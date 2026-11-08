@@ -20,7 +20,6 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-float FLOAT_006da690 = 0.5; D2_GLOBAL_GUARD(FLOAT_006da690, "FLOAT_006da690");
 D2SoundChannelNodeStrc * gpActiveSoundChannelsHead = 0; D2_GLOBAL_GUARD(gpActiveSoundChannelsHead, "gpActiveSoundChannelsHead");
 static uint32_t gnSoundChannelCount = 0; D2_STATIC_GUARD(gnSoundChannelCount, "gnSoundChannelCount");
 static uint32_t gpSoundChannelsArray = 0; D2_STATIC_GUARD(gpSoundChannelsArray, "gpSoundChannelsArray");

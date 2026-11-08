@@ -984,7 +984,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
         pDestPtr = szDestPath;
         pDestPtr = pDestPtr + strlen(pDestPtr) + 1;
         __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (intptr_t)(szDestPath + 1))), ".\\BnDownload.cpp", 0x179);
-        bOpened = (int)__frame0.dwStackPad3 - (int)szDestPath;
+        bOpened = (intptr_t)__frame0.dwStackPad3 - (intptr_t)szDestPath;
         do {
           byScanChar = *szDestPath;
           szDestPath[bOpened] = byScanChar;
@@ -999,7 +999,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           pDestPtr = pPoolMgr;
           do {
             byScanChar = *pDestPtr;
-            pDestPtr[(int)__frame0.dwStackPad2 - (intptr_t)pPoolMgr] = byScanChar;
+            pDestPtr[(intptr_t)__frame0.dwStackPad2 - (intptr_t)pPoolMgr] = byScanChar;
             pDestPtr++;
           } while (byScanChar != '\0');
 

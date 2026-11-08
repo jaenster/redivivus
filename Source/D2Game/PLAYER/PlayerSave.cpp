@@ -60,7 +60,7 @@ static D2UnitStrc * PLRSAVE_CreateItemFromSaveData(::SGAMEDATA * pGame, D2Unknow
     sItemGenCtx.pDrlgRoom = 0;
     sItemGenCtx.usually_one = 1;
     sItemGenCtx.bFromCustomData = 1;
-    int nCopyOffset = 0x58 - (int)pSrcField;
+    intptr_t nCopyOffset = 0x58 - (intptr_t)pSrcField;
     do {
       cStrChar = *pSrcField;
       pSrcField[(intptr_t)&sItemGenCtx + nCopyOffset] = cStrChar;
@@ -888,7 +888,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
         nCompareByteIdx = 0;
         if ((int)nExistingSize > 0) {
           do {
-            if ((__frame0.saveTempBuffer + nCompareByteIdx)[(int)pSaveBuffer - (int)__frame0.saveTempBuffer] != __frame0.saveTempBuffer[nCompareByteIdx]) {
+            if ((__frame0.saveTempBuffer + nCompareByteIdx)[(intptr_t)pSaveBuffer - (intptr_t)__frame0.saveTempBuffer] != __frame0.saveTempBuffer[nCompareByteIdx]) {
               bSaveUnchanged = false;
               goto restore_header_fields;
             }

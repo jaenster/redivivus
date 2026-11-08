@@ -26,9 +26,6 @@ typedef DWORD (__stdcall *pfnSymSetOptions)(DWORD SymOptions);
 typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD AddrBase);
 typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDLE hThread, void * StackFrame, void * ContextRecord, void * ReadMemoryRoutine, pfnSymFunctionTableAccess FunctionTableAccessRoutine, pfnSymGetModuleBase GetModuleBaseRoutine, void * TranslateAddress);
 
-extern char gaHexCharsLookupTable[4];
-extern uint16_t gnSymbolSearchPathSeparator;
-extern char gDebugSpaceString;
 // lpCriticalSection parameter of InitializeCriticalSection
 // lpCriticalSection parameter of LeaveCriticalSection
 // lpCriticalSection parameter of EnterCriticalSection

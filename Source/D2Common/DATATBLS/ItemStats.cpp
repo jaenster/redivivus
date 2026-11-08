@@ -108,7 +108,7 @@ int * __stdcall STATES_AssertGetGfxFlags(D2UnitStrc * pUnit) {
 void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss) {
     int i;
     int j;
-    int nGfxOffset;
+    intptr_t nGfxOffset;
     uint32_t* pGfxWord;
     int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     uint32_t* pStateFlags = (uint32_t*)Stats::StatsEx::GetStateFlags(pUnit);

@@ -10,7 +10,6 @@
 #include "Source/D2Common/ITEMS/Items.h"
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -35,8 +34,6 @@
 static unsigned int gDelim_A_Act = 0x4341; D2_STATIC_GUARD(gDelim_A_Act, "gDelim_A_Act");
 static char gDelim_n_NpcClass[4] = { 'n', 'p', 'c', '\x00' }; D2_STATIC_GUARD(gDelim_n_NpcClass, "gDelim_n_NpcClass");
 uint32_t gszHirelingFieldName_act = 0x746361; D2_GLOBAL_GUARD(gszHirelingFieldName_act, "gszHirelingFieldName_act");
-char s_A_006ed5ac[2] = { 'A', '\x00' }; D2_GLOBAL_GUARD(s_A_006ed5ac, "s_A_006ed5ac");
-char s_B_006ed5b0[2] = { 'B', '\x00' }; D2_GLOBAL_GUARD(s_B_006ed5b0, "s_B_006ed5b0");
 static D2MonItemPercentTxt * pMonItemPercentTxt = 0; D2_STATIC_GUARD(pMonItemPercentTxt, "pMonItemPercentTxt");
 static D2UniqueNameTablesStrc gsTxtUniqueNameTables = {}; D2_STATIC_GUARD(gsTxtUniqueNameTables, "gsTxtUniqueNameTables");
 static unsigned int gnAutoItemTypeTCCount = {}; D2_STATIC_GUARD(gnAutoItemTypeTCCount, "gnAutoItemTypeTCCount");
@@ -2819,8 +2816,8 @@ void __stdcall MONSTERTBLS_FreeMonUModTxt() {
 // Populates sgtDataTable.pParsedTreasureClassDiffActChestABC by looking up each "Act N&lt;diff&gt; Chest &lt;A|B|C&gt;" TreasureClass name (formatted via sprintf) in the treasure-class link table for all 3 difficulties × 5 acts × 3 chest types (A/B/C). Stores a pointer to the resolved D2ParsedTreasureClassStrc or NULL for each slot.
 void __stdcall TXT_AllocParsedTreasureClassDiffActChestABC() {
     // Static local variables (originally global data)
-    static char * gaszTreasureClassChestColumnNames[3] = { s_A_006ed5ac, s_B_006ed5b0, s_C_006ed5b4 }; D2_STATIC_GUARD(gaszTreasureClassChestColumnNames, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gaszTreasureClassChestColumnNames");
-    static char * gapTreasureClassChestParsedData[3] = { lpDefault_006cc837, s___N__006ed59c, s___H__006ed5a4 }; D2_STATIC_GUARD(gapTreasureClassChestParsedData, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gapTreasureClassChestParsedData");
+    static char * gaszTreasureClassChestColumnNames[3] = { (char*)"A", (char*)"B", (char*)"C" }; D2_STATIC_GUARD(gaszTreasureClassChestColumnNames, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gaszTreasureClassChestColumnNames");
+    static char * gapTreasureClassChestParsedData[3] = { (char*)"", (char*)" (N)", (char*)" (H)" }; D2_STATIC_GUARD(gapTreasureClassChestParsedData, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gapTreasureClassChestParsedData");
 
     int nActNum;
     int32_t nTCIdx;

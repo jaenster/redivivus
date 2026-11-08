@@ -493,7 +493,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
     uint32_t bIsStackable;
     int32_t nScrollCountBonus;
     int32_t nRolledMax;
-    int32_t nScrollsToGen;
+    intptr_t nScrollsToGen;
     D2ItemsTxt* pItemTxtTmp;
     int nTradeItemClassId;
     int32_t nNpcIndex;
@@ -564,7 +564,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
                   }
 
                   pItemTxtTmp = (D2ItemsTxt*)((intptr_t)&pTradeItemTxt[-1].pad422 + 1);
-                  nScrollsToGen = (int32_t)pItemTxtTmp;
+                  nScrollsToGen = (intptr_t)pItemTxtTmp;
                 }
               }
             }

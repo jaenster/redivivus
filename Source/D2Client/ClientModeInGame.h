@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
 struct D2BNetClientCallbacksStrc;
@@ -23,18 +24,6 @@ typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig
 #endif
 
 // Data types
-#ifndef D2_DEFINED_CMDPARAMSVALUE
-#define D2_DEFINED_CMDPARAMSVALUE
-union CMDPARAMSVALUE {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ BOOL bValue; // boolean argument
-    /* 0x00 */ int32_t nSignedValue; // numeric argument, signed
-    /* 0x00 */ uint32_t dwUnsignedValue; // numeric argument, unsigned
-    /* 0x00 */ char * szStringValue; // string argument
-};
-
-#endif // D2_DEFINED_CMDPARAMSVALUE
 #ifndef D2_DEFINED_CMDPARAMS
 #define D2_DEFINED_CMDPARAMS
 struct __attribute__((packed)) CMDPARAMS {

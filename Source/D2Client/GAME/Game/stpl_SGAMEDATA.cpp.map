@@ -64,7 +64,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
         "TSLink<SGAMEDATA> *",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {

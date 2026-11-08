@@ -43,7 +43,7 @@ void __fastcall INV_SubstituteFormatToken(uint16_t * wszText, int32_t nTokenInde
       return;
     }
 
-    int nWorkLen = (intptr_t)wszWorkBuffer - (intptr_t)wszText;
+    intptr_t nWorkLen = (intptr_t)wszWorkBuffer - (intptr_t)wszText;
     while (*wszText != L'%' || (uint32_t)(uint16_t)wszText[1] != wTokenChar) {
       *(uint16_t*)(nWorkLen + (char*)wszText) = *wszText;
       nCopied++;

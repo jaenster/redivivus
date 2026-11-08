@@ -19,7 +19,6 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"
@@ -38,7 +37,6 @@
 
 
 int cChatCmdExclaim = 0x21; D2_GLOBAL_GUARD(cChatCmdExclaim, "cChatCmdExclaim");
-char cChatCmdSlash[2] = { '/', '\x00' }; D2_GLOBAL_GUARD(cChatCmdSlash, "cChatCmdSlash");
 static int gnChatHistoryReadIndex = 0x7; D2_STATIC_GUARD(gnChatHistoryReadIndex, "gnChatHistoryReadIndex");
 static uint32_t gnChatHistoryWriteIndex = 0x7; D2_STATIC_GUARD(gnChatHistoryWriteIndex, "gnChatHistoryWriteIndex");
 static D2UIFlagInitStrc gUIFlagChatInit[4] = {
@@ -793,7 +791,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
     // Static local variables (originally global data)
     static D2ChatCommandStrc gaChatCommandTable[3] = {
     {
-        /* .pszCommand = */ cChatCmdSlash,
+        /* .pszCommand = */ (char*)"/",
         /* .nCommandType = */ 0x3,
         /* .bTakesParameter = */ 0x0,
         /* .bAllowedInSinglePlayer = */ 0x0
@@ -805,7 +803,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
         /* .bAllowedInSinglePlayer = */ 0x1
     },
     {
-        /* .pszCommand = */ s___006d727c,
+        /* .pszCommand = */ (char*)"@",
         /* .nCommandType = */ 0x2,
         /* .bTakesParameter = */ 0x1,
         /* .bAllowedInSinglePlayer = */ 0x0

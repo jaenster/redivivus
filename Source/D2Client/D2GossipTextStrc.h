@@ -15,8 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Data types
-#ifndef D2_DEFINED_D2GossipTextStrc
-#define D2_DEFINED_D2GossipTextStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2GossipTextStrc {
     /* 0x00 */ int16_t nStringIndex;
     /* 0x02 */ uint8_t field_0x2;
@@ -25,4 +24,4 @@ struct D2GossipTextStrc {
     /* 0x08 */ struct D2GossipTextStrc * pNext;
 };
 
-#endif // D2_DEFINED_D2GossipTextStrc
+#endif // D2_MODULE_D2Client

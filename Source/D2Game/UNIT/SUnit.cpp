@@ -946,7 +946,7 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
     int32_t nPosY;
     char cNameChar;
     eD2UnitType eUnitType;
-    int nCharNameDelta;
+    intptr_t nCharNameDelta;
     if (!pOutRecord) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9aa);
       exit(-1);
@@ -957,7 +957,7 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
         exit(-1);
       }
       if (pUnit->eUnitType == UNIT_PLAYER && (pPlayerData = D2Common::Units::GetPlayerData(pUnit) , pPlayerData != 0)) {
-        nCharNameDelta = 0x24 - (int)pPlayerData;
+        nCharNameDelta = 0x24 - (intptr_t)pPlayerData;
         do {
           cNameChar = pPlayerData->szCharName[0];
           *(char*)((intptr_t)pOutRecord + nCharNameDelta + (intptr_t)pPlayerData) = cNameChar;

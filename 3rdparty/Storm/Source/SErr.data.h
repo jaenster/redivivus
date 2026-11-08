@@ -13,7 +13,6 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
-extern char gdwSystemMemoryMax[2];
 extern uint32_t gbSSystemErrorDialogActive;
 extern uint32_t gbSSystemShutdownInProgress;
 extern uint32_t dwLastErrorCode;

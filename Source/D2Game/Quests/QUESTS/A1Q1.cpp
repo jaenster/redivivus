@@ -432,7 +432,7 @@ void __fastcall Q01_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2BitBufferStrc* pBitBuffer;
     ::SGAMEDATA* pGame;
     D2QuestDataA1Q1Strc* pQuestDataA1Q1 = pQuestData->pQuestSpecificData.pA1Q1;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.nIndex == 8) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 8) {
       bool bDidSetStateFlag;
       if (pQuestData->bIsNotIntroduction != '\0') {
         bDidSetStateFlag = false;
@@ -453,7 +453,7 @@ void __fastcall Q01_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q01_SyncQuestStepToPlayer);
         return;
       }
-    } else if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x1 && (QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs) , pQuestData->nStateFlag == 2)) {
+    } else if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 1 && (QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs) , pQuestData->nStateFlag == 2)) {
       pGame = pQuestArgs->pGame;
       pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
       pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

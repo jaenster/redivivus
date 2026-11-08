@@ -212,7 +212,7 @@ void __thiscall SendDebugMessageToEveryone(void * pThis, char * pMessage) {
     char cChar;
     nMsgBuf.szName[4] = '\0';
     nMsgBuf.szName[3] = '\0';
-    int nBufOffset = 0x1e - (int)pMessage;
+    intptr_t nBufOffset = 0x1e - (intptr_t)pMessage;
     do {
       cChar = *pMessage;
       pMessage[(intptr_t)&nMsgBuf + nBufOffset] = cChar;

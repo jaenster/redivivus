@@ -1399,7 +1399,7 @@ void __fastcall GFX_ClearAllModeFlags(D2UnitStrc * pUnit, int32_t nMaxMode) {
 // Builds the COF archive path for a monster COF name index and loads it. The index is a single byte: the prologue does MOVZX EAX, CL before indexing the name table at 0x6d6c30, so the upper 24 bits of ECX are dead.
 void __fastcall GFX_LoadMonsterCofArchive(uint8_t nCofNameIndex) {
     // Static local variables (originally global data)
-    static char * gpszMonsterCofNameTable[5] = { s_cmncof_a1_d2_006d6c44, s_cmncof_a2_d2_006d6c54, s_cmncof_a3_d2_006d6c64, s_cmncof_a4_d2_006d6c74, s_cmncof_a6_d2_006d6c84 }; D2_STATIC_GUARD(gpszMonsterCofNameTable, "D2Client::Engine::Gfx::GFX_LoadMonsterCofArchive::gpszMonsterCofNameTable");
+    static char * gpszMonsterCofNameTable[5] = { (char*)"cmncof_a1.d2", (char*)"cmncof_a2.d2", (char*)"cmncof_a3.d2", (char*)"cmncof_a4.d2", (char*)"cmncof_a6.d2" }; D2_STATIC_GUARD(gpszMonsterCofNameTable, "D2Client::Engine::Gfx::GFX_LoadMonsterCofArchive::gpszMonsterCofNameTable");
 
     char szCofPath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szCofPath, "%s\\%s", "DATA\\GLOBAL", gpszMonsterCofNameTable[nCofNameIndex]);

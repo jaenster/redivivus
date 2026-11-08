@@ -24,24 +24,6 @@ extern uint32_t gadwInvBitMasks[32];
 namespace Fog::Debug {
 extern HMODULE hDbgHelpDll;
 } // namespace Fog::Debug
-namespace Fog::Src::ErrorManager {
-extern char s_English_with_Korean_Chat_006cc788[28];
-extern char s_Russian_006cc7a4[8];
-extern char s_Polish_006cc7ac[8];
-extern char s_Traditional_Chinese_006cc7b4[20];
-extern char s_Simplified_Chinese_006cc7c8[20];
-extern char s_Korean_006cc7dc[8];
-extern char s_Japanese_006cc7e4[12];
-extern char s_Italian_006cc7f0[8];
-extern char s_Portuguese_006cc7f8[12];
-extern char s_French_006cc804[8];
-extern char s_German_006cc80c[8];
-extern char s_Spanish_006cc814[8];
-extern char s_English_006cc81c[8];
-} // namespace Fog::Src::ErrorManager
-namespace Fog::Src::LogManager {
-extern char s_Unknown_006cc780[8];
-} // namespace Fog::Src::LogManager
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 namespace Fog::Source::SSComp {
@@ -52,9 +34,4 @@ extern uint8_t gabHuffmanNextTable[256];
 namespace Fog::Src {
 extern int TokenHashMapBucketSize;
 } // namespace Fog::Src
-namespace Fog::Src::LogManager {
-extern char s_Cyrix_006cdeb0[6];
-extern char s_AMD_006cdeb8[4];
-extern char s_Intel_006cdebc[8];
-} // namespace Fog::Src::LogManager
 #endif // D2_MODULE_Fog

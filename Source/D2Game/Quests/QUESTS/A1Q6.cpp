@@ -314,14 +314,14 @@ void __fastcall Q06_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     BOOL bStateAlreadyAdvanced;
     ::SGAMEDATA* pPlayerData;
     int nAreaIndex;
-    nAreaIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    nAreaIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nAreaIndex - 0x22U > 3 || pQuestData->bIsNotIntroduction == '\0') {
       D2BitBufferStrc* pBitBuffer;
       if (pQuestData->nStateFlag == 4 && nAreaIndex == 0x28) {
         QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x187);
         return;
       }
-      if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x1) {
+      if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 1) {
         return;
       }
 

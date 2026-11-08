@@ -618,7 +618,7 @@ void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, 
     }
 
     char (*pFileSlot)[60] = pLvlTypeTxt->File + nFileIndex;
-    int nDstOffset = (intptr_t)szFilename - (intptr_t)pFileSlot;
+    intptr_t nDstOffset = (intptr_t)szFilename - (intptr_t)pFileSlot;
     do {
       cCurrent = (*pFileSlot)[0];
       *(char*)((char*)pFileSlot + nDstOffset) = cCurrent;

@@ -3077,8 +3077,8 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     BOOL bQuestDone;
     POINT ptPos;
     ::SGAMEDATA* pGame;
-    ptPos.y = (LONG)pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-    int nLevelId = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    ptPos.y = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    int nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nLevelId == 0x4a) {
       bool bFlagOver3 = 3 < pQuestData->nStateFlag;
       if (!bFlagOver3) {
@@ -3104,7 +3104,7 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       pJerhynUnit = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
       /* SetQuestState Step0x07 - journal sub-state (index 0x32 path) */ D2Common::QuestRecord::SetQuestState(pJerhynUnit->pQuestRecord[pGame->nDifficulty], QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
     }
-    if ((D2GSPacketSrv0x27_TextStrc*)ptPos.y != (D2GSPacketSrv0x27_TextStrc*)0x28) {
+    if (ptPos.y != 0x28) {
       return;
     }
 

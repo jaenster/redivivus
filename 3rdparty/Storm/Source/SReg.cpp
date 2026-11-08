@@ -51,7 +51,7 @@ int __fastcall SREG_InternalDeleteEntry(uint8_t byFlags, char * pszSubKey, LPCST
 
     SSTR::SStrPack(szKeyPath, pszSubKey, 0x104);
     if ((byFlags & 5) != 4) {
-      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ lResult = RegOpenKeyExA((HKEY)0x80000001, szKeyPath, 0, 0x20019, &hKey);
+      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ lResult = RegOpenKeyExA(HKEY_CURRENT_USER, szKeyPath, 0, 0x20019, &hKey);
       if (!lResult) {
         /* LPCSTR lpValueName for RegDeleteValueA */ /* HKEY hKey for RegDeleteValueA */ lResult = RegDeleteValueA(hKey, szValueName);
         if (lResult) {
@@ -72,7 +72,7 @@ int __fastcall SREG_InternalDeleteEntry(uint8_t byFlags, char * pszSubKey, LPCST
 
     lResult = 0;
     if ((byFlags & 5) != 1) {
-      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ lResult2 = RegOpenKeyExA((HKEY)0x80000002, szKeyPath, 0, 0x20019, &hKey);
+      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ lResult2 = RegOpenKeyExA(HKEY_LOCAL_MACHINE, szKeyPath, 0, 0x20019, &hKey);
       if (!lResult2) {
         /* LPCSTR lpValueName for RegDeleteValueA */ /* HKEY hKey for RegDeleteValueA */ lResult2 = RegDeleteValueA(hKey, szValueName);
         if (lResult2) {
@@ -118,7 +118,7 @@ static BOOL __stdcall SREG_InternalLoadEntry(LPDWORD pdwType, LPBYTE pbData, cha
 
     SSTR::SStrPack(szKeyPath, pszSubKey, 0x104);
     if (!(byFlags & 4)) {
-      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ dwErrCode = RegOpenKeyExA((HKEY)0x80000001, szKeyPath, 0, 0x20019, &hKey);
+      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ dwErrCode = RegOpenKeyExA(HKEY_CURRENT_USER, szKeyPath, 0, 0x20019, &hKey);
       if (!dwErrCode) {
         /* LPDWORD lpcbData for RegQueryValueExA */ /* LPBYTE lpData for RegQueryValueExA */ /* LPDWORD lpType for RegQueryValueExA */ /* LPDWORD lpReserved for RegQueryValueExA */ *pdwDataLen = dwBufSize;
         /* LPCSTR lpValueName for RegQueryValueExA */ /* HKEY hKey for RegQueryValueExA */ dwErrCode = RegQueryValueExA(hKey, szValueName, (LPDWORD)0x0, pdwType, pbData, pdwDataLen);
@@ -129,7 +129,7 @@ static BOOL __stdcall SREG_InternalLoadEntry(LPDWORD pdwType, LPBYTE pbData, cha
       }
     }
     if (!(byFlags & 1)) {
-      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ dwErrCode = RegOpenKeyExA((HKEY)0x80000002, szKeyPath, 0, 0x20019, &hKey);
+      /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ dwErrCode = RegOpenKeyExA(HKEY_LOCAL_MACHINE, szKeyPath, 0, 0x20019, &hKey);
       if (dwErrCode) {
         goto fail;
       }
@@ -166,7 +166,7 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 
     SSTR::SStrPack(szKeyPath, pszSubKey, 0x104);
     DWORD dwErrCode;
-    dwErrCode = RegCreateKeyExA((HKEY)((dwFlags & 4) != 0 ? 0x80000002 : 0x80000001), szKeyPath, 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hKey, &dwDisposition);
+    dwErrCode = RegCreateKeyExA((dwFlags & 4) != 0 ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, szKeyPath, 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hKey, &dwDisposition);
     if (!dwErrCode) {
       /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ dwErrCode = RegSetValueExA(hKey, szValueName, 0, dwType, pbDataLocal, dwDataLen);
       if (!dwErrCode) {

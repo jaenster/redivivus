@@ -456,9 +456,9 @@ void __fastcall Q02_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // A1Q2 Sisters' Burial Grounds, state-fn slot 3. Handles area-entry trigger (index 0x11): if quest introduced and nStateFlag&lt;3, advances nStateFlag to 3 and broadcasts state 2 (Q02_NotifyQuestStateToPlayer), then syncs step bits to all players. Also handles player-leaves path (pTextControl==1): removes player from participant list and, if nStateFlag==2 and not Completed/RewardAwaits, advances nStateFlag to 3 and resyncs steps.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
 void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2GSPacketSrv0x27_TextStrc* pTextControl;
-    pTextControl = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.nIndex == 0x11 && pQuestData->bIsNotIntroduction == '\x01') {
+    int32_t nOldLevel;
+    nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x11 && pQuestData->bIsNotIntroduction == '\x01') {
       bool bStateFlagLow;
       bStateFlagLow = pQuestData->nStateFlag < 3;
       if (bStateFlagLow) {
@@ -473,7 +473,7 @@ void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         goto sync_quest_step;
       }
     }
-    if (pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x1) {
+    if (nOldLevel != 1) {
       return;
     }
 

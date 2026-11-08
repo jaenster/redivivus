@@ -14,13 +14,13 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Game/D2Game.h"
+#include "3rdparty/Storm/Storm.h"
 
 // Forward declarations
 struct ButtonImplementation;
 struct ButtonImplementationVtable;
 struct ButtonWrapper;
 struct ButtonWrapperVtable;
-union CMDPARAMSVALUE;
 struct D2AiGeneralStrc;
 struct D2AutomapCellStrc;
 struct D2BNetClientCallbacksStrc;
@@ -238,17 +238,6 @@ struct ButtonWrapperVtable {
     /* 0x30 */ void (__thiscall *SetAccelerator)(::ButtonWrapper *, BOOL);
 };
 #endif // D2_DEFINED_ButtonWrapperVtable
-#ifndef D2_DEFINED_CMDPARAMSVALUE
-#define D2_DEFINED_CMDPARAMSVALUE
-union CMDPARAMSVALUE {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ BOOL bValue; // boolean argument
-    /* 0x00 */ int32_t nSignedValue; // numeric argument, signed
-    /* 0x00 */ uint32_t dwUnsignedValue; // numeric argument, unsigned
-    /* 0x00 */ char * szStringValue; // string argument
-};
-#endif // D2_DEFINED_CMDPARAMSVALUE
 #ifndef D2_DEFINED_CMDPARAMS
 #define D2_DEFINED_CMDPARAMS
 struct __attribute__((packed)) CMDPARAMS {
@@ -371,7 +360,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x20 */ void (*fpUnlockDatabaseCharacter)(void *);
     /* 0x24 */ uint8_t * fpReserved1;
     /* 0x28 */ void (__fastcall *fpUpdateCharacterLadder)(char *, uint16_t, uint32_t, uint32_t, uint32_t, uint16_t, void *);
-    /* 0x2C */ void (__fastcall *fpUpdateGameInformation)(int, int);
+    /* 0x2C */ void (__fastcall *fpUpdateGameInformation)(WORD, char *, int32_t, int32_t);
     /* 0x30 */ void (__fastcall *fpReserved2_systemMsg)(struct D2BNetSystemInfoStrc *);
     /* 0x34 */ int (*fpSetGameData)();
     /* 0x38 */ void (*fpRelockDatabaseCharacter)(char *);
@@ -1261,16 +1250,6 @@ struct __attribute__((packed)) D2GfxUnknown_0xa8 {
     /* 0xA4 */ struct D2GfxUnknown_0xa8 * pNext; // 0xa4. Intrusive singly-linked list: pOverlay->pNext = pGfxInfo->pOverlayList; pGfxInfo->pOverlayList = pOverlay.
 };
 #endif // D2_DEFINED_D2GfxUnknown_0xa8
-#ifndef D2_DEFINED_D2GossipTextStrc
-#define D2_DEFINED_D2GossipTextStrc
-struct D2GossipTextStrc {
-    /* 0x00 */ int16_t nStringIndex;
-    /* 0x02 */ uint8_t field_0x2;
-    /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ int32_t bMenu;
-    /* 0x08 */ struct D2GossipTextStrc * pNext;
-};
-#endif // D2_DEFINED_D2GossipTextStrc
 #ifndef D2_DEFINED_D2GroundItemLabelStrc
 #define D2_DEFINED_D2GroundItemLabelStrc
 struct D2GroundItemLabelStrc {

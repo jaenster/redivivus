@@ -38,7 +38,7 @@ static D2GfxSettingsStrc dwD2GFX_Gamma = {}; D2_STATIC_GUARD(dwD2GFX_Gamma, "dwD
 static BOOL bAspect = 0x1; D2_STATIC_GUARD(bAspect, "bAspect");
 static uint32_t IsOSCursorVisible = 0x1; D2_STATIC_GUARD(IsOSCursorVisible, "IsOSCursorVisible");
 // also labelled: gnGFXUnknownA
-static char * gpszDiabloIIClassNameSource = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
+static char * gpszDiabloIIClassNameSource = (char*)"Diablo II"; D2_STATIC_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
 static uint32_t gnD2GFX_RequestedScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_RequestedScaleFactor, "gnD2GFX_RequestedScaleFactor");
 static uint32_t gnD2GFX_ActiveScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_ActiveScaleFactor, "gnD2GFX_ActiveScaleFactor");
 HINSTANCE hInstance = 0; D2_GLOBAL_GUARD(hInstance, "hInstance");
@@ -254,8 +254,8 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     wndClass.cbWndExtra = 0;
     wndClass.hInstance = hInstance;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    /* UINT fuLoad for LoadImageA */ /* int cy for LoadImageA */ /* int cx for LoadImageA */ /* UINT type for LoadImageA */ /* LPCSTR name for LoadImageA */ /* HINSTANCE hInst for LoadImageA */ wndClass.hIcon = (HICON)LoadImageA(hInstance, (LPCSTR)(bIsExpansion != 0 ? 0x67 : 0x66), 1, 0, 0, 0);
-    /* LPCSTR lpCursorName for LoadCursorA */ /* HINSTANCE hInstance for LoadCursorA */ wndClass.hCursor = LoadCursorA((HINSTANCE)0x0, (LPCSTR)0x7f00);
+    /* UINT fuLoad for LoadImageA */ /* int cy for LoadImageA */ /* int cx for LoadImageA */ /* UINT type for LoadImageA */ /* LPCSTR name for LoadImageA */ /* HINSTANCE hInst for LoadImageA */ wndClass.hIcon = (HICON)LoadImageA(hInstance, bIsExpansion != 0 ? MAKEINTRESOURCEA(0x67) : MAKEINTRESOURCEA(0x66), 1, 0, 0, 0);
+    /* LPCSTR lpCursorName for LoadCursorA */ /* HINSTANCE hInstance for LoadCursorA */ wndClass.hCursor = LoadCursorA((HINSTANCE)0x0, MAKEINTRESOURCEA(0x7f00));
     /* int i for GetStockObject */ wndClass.hbrBackground = (HBRUSH)GetStockObject(5);
     /* WNDCLASSA * lpWndClass for RegisterClassA */ wndClass.lpszMenuName = (LPCSTR)0x0;
     wndClass.lpszClassName = gpszWindowClassName;
@@ -1887,7 +1887,7 @@ void __stdcall D2GFX_InitializeWindowSize() {
 
 void StaticInit_gpszWindowClassName() {
     // Static local variables (originally global data)
-    static char * fnCursorVisibilityHook = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(fnCursorVisibilityHook, "D2gfx::D2GFX::StaticInit_gpszWindowClassName::fnCursorVisibilityHook");
+    static char * fnCursorVisibilityHook = (char*)"Diablo II"; D2_STATIC_GUARD(fnCursorVisibilityHook, "D2gfx::D2GFX::StaticInit_gpszWindowClassName::fnCursorVisibilityHook");
 
     gpszWindowClassName = fnCursorVisibilityHook;
 }

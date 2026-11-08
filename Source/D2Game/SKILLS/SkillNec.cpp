@@ -828,6 +828,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
     D2SkillAuraCtxStrc pGameArg;
     int* pAuraStatCalc;
     short int wCurAuraStatId;
+    short int* pSkill;
     eD2Skills eSkillSaved = eSkill;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
@@ -848,11 +849,11 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
       pGameArg.pGame = pGame;
       pGameArg.pCaster = pUnit;
       pGameArg.nDurationInFrames = nDurationCalc;
-      eSkill = (eD2Skills)pSkillsTxt->aurastat;
+      pSkill = (short int*)pSkillsTxt->aurastat;
       do {
         pAuraStatCalc++;
-        eSkill += 2;
-        wCurAuraStatId = *(short int*)eSkill;
+        pSkill = (short int*)((char*)pSkill + 2);
+        wCurAuraStatId = *pSkill;
         if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
           pGameArg.anStatIds[iAuraStatIdx] = -1;
           break;
@@ -866,7 +867,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
           pGameArg.bUpdateAnimRate = 1;
         }
 
-        pGameArg.anStatIds[iAuraStatIdx] = (int)*(short int*)eSkill;
+        pGameArg.anStatIds[iAuraStatIdx] = (int)*pSkill;
         nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkillSaved, nSkillLvl);
         pGameArg.anStatValues[iAuraStatIdx] = nDurationCalc;
         iAuraStatIdx++;

@@ -412,6 +412,8 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
     int nCurMana;
     int* pSkillsTxtSaved;
     int* pAuraStatCalcArr;
+    short int* pSkill;
+    short int* pSkill2;
     eD2Skills eSkill_00 = eSkill;
     D2SkillsTxt* pSkillData = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillData) {
@@ -431,15 +433,15 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || nMana >= nManaCost) {
       pAuraStatCalcArr = pSkillData->aurastatcalc;
       nCalc = 0;
-      eSkill = (eD2Skills)pSkillData->aurastat;
+      pSkill2 = (short int*)pSkillData->aurastat;
       do {
-        if (*(short int*)eSkill < 0) {
+        if (*pSkill2 < 0) {
           break;
         }
 
-        nAuraStateArg.anStats[nCalc] = (int)*(short int*)eSkill;
+        nAuraStateArg.anStats[nCalc] = (int)*pSkill2;
         nDelayInterval = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalcArr, eSkill_00, nSkillLvl);
-        eSkill += SKILL_Throw;
+        pSkill2 = (short int*)((intptr_t)pSkill2 + SKILL_Throw);
         pAuraStatCalcArr++;
         nAuraStateArg.anCalcs[nCalc] = nDelayInterval;
         nCalc++;
@@ -452,16 +454,16 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
         SkillsServer::SKILLS_InvokeCallbackNoTarget(pGame, pUnit, SKILLPAL_ApplyAuraStateToTarget, &nAuraStateArg);
         if (nAuraStateArg.pStatList && nMana > nManaCost && pSkillData->passivestate <= 0) {
           pSkillsTxtSaved = pSkillData->passivecalc;
-          eSkill = (eD2Skills)pSkillData->passivestat;
+          pSkill = (short int*)pSkillData->passivestat;
           nCurMana = 5;
           do {
-            eUnitStat = (eD2UnitStat)*(short int*)eSkill;
+            eUnitStat = (eD2UnitStat)*pSkill;
             nDelayInterval = D2Common::Skills::D2GetSkillCalc(pUnit, *pSkillsTxtSaved, eSkill_00, nSkillLvl);
             if (nDelayInterval && (int)eUnitStat > 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
               D2Common::Stats::StatsEx::D2AddStatToStatsListEx((D2StatListExStrc*)nAuraStateArg.pStatList, eUnitStat, nDelayInterval, 0);
             }
 
-            eSkill += SKILL_Throw;
+            pSkill = (short int*)((intptr_t)pSkill + SKILL_Throw);
             pSkillsTxtSaved++;
             nCurMana--;
           } while (nCurMana);
@@ -1401,30 +1403,30 @@ void __fastcall SKILLPAL_OnFreezeExpire(D2UnitStrc * pUnit, eD2States eState, ui
 // Per-target hit callback. Skips monsters already cold-affected for the current difficulty, copies damage params from the arg struct into a D2DamageStrc, optionally applies an aura state, then applies damage + hit calculation. Advances the unit RNG and sets/clears STATE_shatter on a 20% roll. Returns 1 when processed, 0 if skipped.
 uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nIdx;
-    int nAuraArgDelta;
+    intptr_t nAuraArgDelta;
     uint32_t* pCopySrc;
     uint32_t* pCopyDst;
     D2DamageAuraArgUnion uScratch;
     D2SkillCallbackContextStrc sContext;
     D2UnitStrc* pCaster = pContext->pUnit;
     ::SGAMEDATA* pGame = pContext->pGame;
-    int32_t* pAuraArgs = (int32_t*)pContext->pCallbackArg;
+    D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       nIdx = pUnit->nClassId;
       if (nIdx < 0 || nIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nIdx) || D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nIdx].aColdEffect[pGame->nDifficulty] >= 0) {
         return 0;
       }
     }
-    if (pAuraArgs[0x12]) {
+    if (pAuraArgs->nFlag) {
       int32_t* pSrcCalc;
       memset(&uScratch.sAura.sAuraArg, 0, 0x50);
-      uScratch.sAura.sAuraArg.nAuraState = *pAuraArgs;
-      uScratch.sAura.sAuraArg.nSkillLvl = pAuraArgs[2];
-      uScratch.sAura.sAuraArg.eSkill = pAuraArgs[1];
-      uScratch.sAura.sAuraArg.nDelayFrame = pAuraArgs[3];
+      uScratch.sAura.sAuraArg.nAuraState = pAuraArgs->nAuraState;
+      uScratch.sAura.sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
+      uScratch.sAura.sAuraArg.eSkill = pAuraArgs->eSkill;
+      uScratch.sAura.sAuraArg.nDelayFrame = pAuraArgs->nDelayFrame;
       nIdx = 0;
-      pSrcCalc = pAuraArgs + 10;
-      nAuraArgDelta = (intptr_t)&uScratch + (0x20 - (int)pAuraArgs);
+      pSrcCalc = pAuraArgs->anCalcs;
+      nAuraArgDelta = (intptr_t)&uScratch + (0x20 - (intptr_t)pAuraArgs);
       do {
         *(int32_t*)((intptr_t)&uScratch + nIdx * 4 + 0x30) = pSrcCalc[-6];
         *(int32_t*)(nAuraArgDelta + (char*)pSrcCalc) = *pSrcCalc;
@@ -1437,8 +1439,8 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
       sContext.pUnit = pCaster;
       SKILLPAL_ApplyAuraStateToTarget(&sContext, pUnit);
     }
-    if ((uint32_t*)pAuraArgs[0x13]) {
-      pCopySrc = (uint32_t*)pAuraArgs[0x13];
+    if (pAuraArgs->pExtra) {
+      pCopySrc = (uint32_t*)pAuraArgs->pExtra;
       pCopyDst = (uint32_t*)&uScratch;
       for (nIdx = 0x1c; nIdx; nIdx--) {
         *pCopyDst = *pCopySrc;

@@ -41,7 +41,7 @@ typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMes
 typedef void (__stdcall *pfnVoidNoArgCallback)();
 #endif
 
-static char * szBnNewsChannelName = s_BNNews_D2DV_006df210; D2_STATIC_GUARD(szBnNewsChannelName, "szBnNewsChannelName");
+static char * szBnNewsChannelName = (char*)"BNNews-D2DV"; D2_STATIC_GUARD(szBnNewsChannelName, "szBnNewsChannelName");
 namespace Bnclient::BnSend {
 char s___AUItem_NewsTable___0072ff8c[24] = {
     '.',
@@ -404,7 +404,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bFor
     Storm::Source::SSTR::SStrCopy(__frame0.szChannelBuf, szText, 0x100);
     char* pszChannelCursor = __frame0.szChannelBuf;
     pszChannelCursor = pszChannelCursor + strlen(pszChannelCursor) + 1;
-    NET_SID_CLIENT_Send(0xc, (char*)&__frame0.dwJoinFlags, (size_t)(pszChannelCursor + (5 - (int)(__frame0.szChannelBuf + 1))));
+    NET_SID_CLIENT_Send(0xc, (char*)&__frame0.dwJoinFlags, (size_t)(pszChannelCursor + (5 - (intptr_t)(__frame0.szChannelBuf + 1))));
 }
 
 uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
@@ -823,7 +823,7 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
 
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
 int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int * pnMaxLens) {
-    int nMaxLensOffset;
+    intptr_t nMaxLensOffset;
     char** ppszOutBuf;
     D2BnReadUserDataStrc* pszSrcData;
     int nPpszOutBufs;
@@ -2057,11 +2057,11 @@ void __stdcall BNNEWS_SaveToCache() {
     char* pEntryText;
     int nEntryDiff;
     _SYSTEMTIME stSystemTime;
-    int nTextLen;
+    intptr_t nTextLen;
     _FILETIME ftWriteTime;
     char* pStrScanEnd;
     char cStrChar;
-    int nDestOffset;
+    intptr_t nDestOffset;
     uint32_t nUnreadCount = g_nNewsMaxCacheSize.nCount;
     ftWriteTime.dwHighDateTime = g_nNewsMaxCacheSize.nCount - g_nFirstUnreadNewsIndex;
     if (ftWriteTime.dwHighDateTime >= 0x100) {
@@ -2109,7 +2109,7 @@ void __stdcall BNNEWS_SaveToCache() {
         pStrScan = pEntryText;
         pStrScan = pStrScan + strlen(pStrScan) + 1;
         nTextLen = (intptr_t)pStrScan - (intptr_t)(pDVar1->szText + nEntryDiff + 1);
-        nDestOffset = 4 - (int)pEntryText;
+        nDestOffset = 4 - (intptr_t)pEntryText;
         do {
           cStrChar = *pEntryText;
           pEntryText[(intptr_t)pWritePtr + nDestOffset] = cStrChar;
@@ -2466,7 +2466,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
     uint32_t nEntryCount;
     uint32_t* pEntryData;
     uint32_t adwCacheHeader[2];
-    int nCopyOffset;
+    intptr_t nCopyOffset;
     __frame0.bLoadSuccess = 0;
     __frame0.pCacheData = 0;
     BOOL bCacheReadOk;
@@ -2517,7 +2517,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
               goto reset_news_table;
             }
 
-            nCopyOffset = 8 - (int)pMsgText;
+            nCopyOffset = 8 - (intptr_t)pMsgText;
             do {
               uVar1 = *pMsgText;
               *(char*)((intptr_t)pNewEntry + nCopyOffset + (intptr_t)pMsgText) = (char)uVar1;
@@ -2963,7 +2963,7 @@ int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutP
     do {
       bSwapChar = __frame1.abWorkBuf[nLoopIdx];
       pCurByte = __frame1.abWorkBuf + nLoopIdx;
-      nChecksumAccum = (uintptr_t)(pCurByte + (0x16 - (int)(__frame1.abWorkBuf + 0xf))) & 0xf;
+      nChecksumAccum = (uint32_t)(pCurByte - (__frame1.abWorkBuf + 0xf) + 0x16) & 0xf;
       nLoopIdx--;
       *pCurByte = __frame1.abWorkBuf[nChecksumAccum];
       __frame1.abWorkBuf[nChecksumAccum] = bSwapChar;

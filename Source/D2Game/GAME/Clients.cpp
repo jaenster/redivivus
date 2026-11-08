@@ -1377,7 +1377,7 @@ void __fastcall GetGuildName(D2ClientStrc * pClient, char * szGuildName) {
 
 void __fastcall SetGuildName(D2ClientStrc * pClient, char * szGuildName) {
     char cCurrent;
-    int nGuildNameOffset = 0x464 - (int)szGuildName;
+    intptr_t nGuildNameOffset = 0x464 - (intptr_t)szGuildName;
     do {
       cCurrent = *szGuildName;
       szGuildName[(intptr_t)pClient + nGuildNameOffset] = cCurrent;

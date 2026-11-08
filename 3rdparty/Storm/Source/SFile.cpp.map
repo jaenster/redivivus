@@ -1210,7 +1210,8 @@
         "Unreferenced_00416a10"
       ],
       "usedTypes": [
-        "StormLinkedListStrc"
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -1227,7 +1228,8 @@
         "Unreferenced_00416a20"
       ],
       "usedTypes": [
-        "StormLinkedListStrc"
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {

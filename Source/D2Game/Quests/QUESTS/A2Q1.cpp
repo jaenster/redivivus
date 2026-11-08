@@ -443,7 +443,7 @@ void __fastcall Q09_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A2Q1 callback[3]: Atma introduction-reply handler. Triggered when the gossip control id == 0x28 (player finished Atma's intro speech). Removes the player from the pending-gossip GUID list. If quest is at nStateFlag==2 (introduced) and not yet Completed/RewardAwaits, advances to nStateFlag 3 (objective active: go kill Radament) and mirrors state into all players' records via Q09_UpdateQuestRecord.
 void __fastcall Q09_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x28) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x28) {
       return;
     }
 

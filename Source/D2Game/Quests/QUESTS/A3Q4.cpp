@@ -201,7 +201,7 @@ void __fastcall Q21_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // (the bird-quest-finished trigger), removes the player from the participant list
 // (QUESTGUID_RemovePlayerFromList). No QuestRecord state changes here.
 void __fastcall Q21_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x4b) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x4b) {
       return;
     }
 

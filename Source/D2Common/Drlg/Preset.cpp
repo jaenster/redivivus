@@ -575,7 +575,7 @@ void StaticFini_gLogMessageQueueCS_Unref_00665940() {
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc * pMemory, char * pBuffer) {
     // Static local variables (originally global data)
-    static char * gpD2DrlgFileBuffer = (char *)&D2Common::Drlg::Preset::s_HDM_006ee7c0; D2_STATIC_GUARD(gpD2DrlgFileBuffer, "D2Common::Drlg::Preset::ParsePresetsOfDrlgFile::gpD2DrlgFileBuffer");
+    static char * gpD2DrlgFileBuffer = (char*)"HDM"; D2_STATIC_GUARD(gpD2DrlgFileBuffer, "D2Common::Drlg::Preset::ParsePresetsOfDrlgFile::gpD2DrlgFileBuffer");
 
     int nStrLen;
     int nCharLower;

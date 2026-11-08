@@ -610,11 +610,11 @@ void __fastcall Q05_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2QuestDataA1Q5Strc* pA1Q5Data;
     ::SGAMEDATA* pGame;
     int nIndex;
-    nIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    nIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (pQuestData->bIsNotIntroduction == '\0') {
       BOOL bQuestState;
       handle_left_town:
-      if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x1) {
+      if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 1) {
         if (pQuestData->nStateFlag == 2) {
           pGame = pQuestArgs->pGame;
           D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];

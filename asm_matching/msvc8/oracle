@@ -7,9 +7,10 @@
 #   oracle libmap             derive evidence/libmap.tsv (the linked runtime's functions -> address)
 #   oracle audit [--data]     byte-compare every mapped function: evidence/audit.tsv
 #                             (--data, or ORACLE_DATA=1: then the data audit too)
-#   oracle data [extents|audit] byte-compare our initialised data with the original's:
+#   oracle data [extents|strings|audit] byte-compare our initialised data with the original's:
 #                             evidence/data-audit.tsv (extents: re-read Ghidra's data
-#                             extents from a codegen snapshot, evidence/dataextent.tsv)
+#                             extents from a codegen snapshot, evidence/dataextent.tsv;
+#                             strings: its untyped strings, evidence/datastrings.tsv)
 #   oracle diff <name|addr>   one function, ours beside the original
 #   oracle all                build, map, libmap, audit
 #   oracle quick [--verify]   all, doing only what changed; prints gained/lost MATCH

@@ -18,7 +18,6 @@
 #include "Source/D2Net/D2Net.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
-#include "3rdparty/Storm/Storm.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "3rdparty/Storm/H/stpl.h"
@@ -56,73 +55,62 @@ typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 namespace D2Client::ClientModeInGame {
 // also labelled: lpText_006d5b20
 char gCmdLineHelpText[154] = { "Available command line options:\n  -set[default command line]\t\tSet new default command line string\n  -lng[lngfile]\t\t\tUse \"lngfile\" for language resources\n" }; D2_GLOBAL_GUARD(gCmdLineHelpText, "D2Client::ClientModeInGame::gCmdLineHelpText");
-char gszCmdLineSwitchP[2] = { "p" }; D2_GLOBAL_GUARD(gszCmdLineSwitchP, "D2Client::ClientModeInGame::gszCmdLineSwitchP");
-char gszCmdLineSwitchC[2] = { "c" }; D2_GLOBAL_GUARD(gszCmdLineSwitchC, "D2Client::ClientModeInGame::gszCmdLineSwitchC");
-} // namespace D2Client::ClientModeInGame
-namespace D2Common::Txt::Cube {
-char gpCubeRecipeItemTypeFlags_7[4] = { "set" }; D2_GLOBAL_GUARD(gpCubeRecipeItemTypeFlags_7, "D2Common::Txt::Cube::gpCubeRecipeItemTypeFlags_7");
-} // namespace D2Common::Txt::Cube
-namespace D2Client::ClientModeInGame {
-// also labelled: CRT_StrLen
-char gszCmdLineSwitchHelp[5] = { "help" }; D2_GLOBAL_GUARD(gszCmdLineSwitchHelp, "D2Client::ClientModeInGame::gszCmdLineSwitchHelp");
-char gszCmdLineSwitchH[2] = { "h" }; D2_GLOBAL_GUARD(gszCmdLineSwitchH, "D2Client::ClientModeInGame::gszCmdLineSwitchH");
-char gszCmdLineSwitchQuestionMark[2] = { "?" }; D2_GLOBAL_GUARD(gszCmdLineSwitchQuestionMark, "D2Client::ClientModeInGame::gszCmdLineSwitchQuestionMark");
 } // namespace D2Client::ClientModeInGame
 char * gpszCmdLineHelpText = (char *)&D2Client::ClientModeInGame::gCmdLineHelpText; D2_GLOBAL_GUARD(gpszCmdLineHelpText, "gpszCmdLineHelpText");
 static ARGLIST gaClientCmdLineArgs[8] = {
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchQuestionMark,
+        /* .szName = */ (char*)"\?",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchH,
+        /* .szName = */ (char*)"h",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchHelp,
+        /* .szName = */ (char*)"help",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
     },
     {
         /* .dwFlags = */ 0x20000,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char *)&D2Common::Txt::Cube::gpCubeRecipeItemTypeFlags_7,
+        /* .szName = */ (char*)"set",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_SaveDefaultCommandLine
     },
     {
         /* .dwFlags = */ 0x20000,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ s_mode_006d5bc4,
+        /* .szName = */ (char*)"mode",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_SetAppMode
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchC,
+        /* .szName = */ (char*)"c",
         /* .pfnCallback = */ &D2Client::WINMAIN_TestMemoryAccess
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ cLogFileReadMode,
+        /* .szName = */ (char*)"r",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_StopRecordingSetFlags
     },
     {
         /* .dwFlags = */ 0x0,
         /* .dwId = */ 0xffffffff,
-        /* .szName = */ (char*)&D2Client::ClientModeInGame::gszCmdLineSwitchP,
+        /* .szName = */ (char*)"p",
         /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_EnableRecording
     }
 }; D2_STATIC_GUARD(gaClientCmdLineArgs, "gaClientCmdLineArgs");
 namespace D2Client::ClientModeInGame {
 eD2ClientAppMode gdwAppMode = APPMODE_SAVE; D2_GLOBAL_GUARD(gdwAppMode, "D2Client::ClientModeInGame::gdwAppMode");
 } // namespace D2Client::ClientModeInGame
-static char * gpszDiabloIICaption = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(gpszDiabloIICaption, "gpszDiabloIICaption");
+static char * gpszDiabloIICaption = (char*)"Diablo II"; D2_STATIC_GUARD(gpszDiabloIICaption, "gpszDiabloIICaption");
 static BOOL gbQuitGame = 0x1; D2_STATIC_GUARD(gbQuitGame, "gbQuitGame");
 static eD2ClientAppMode gClientAppModeQueue[5] = {}; D2_STATIC_GUARD(gClientAppModeQueue, "gClientAppModeQueue");
 namespace D2Client::ClientModeInGame {
@@ -236,7 +224,7 @@ BOOL __stdcall CmdLine_SaveDefaultCommandLine(CMDPARAMS * pParams, char * szCmdL
 // @provenance 1.14d asm 0044b600.
 BOOL __stdcall CmdLine_SetAppMode(CMDPARAMS * pParams, char * szCmdLine) {
     // Static local variables (originally global data)
-    static char * gaClientModeHandlerTable[7] = { nullptr, nullptr, s_Game_006d5b14, nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(gaClientModeHandlerTable, "D2Client::ClientModeInGame::CmdLine_SetAppMode::gaClientModeHandlerTable");
+    static char * gaClientModeHandlerTable[7] = { nullptr, nullptr, (char*)"Game", nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(gaClientModeHandlerTable, "D2Client::ClientModeInGame::CmdLine_SetAppMode::gaClientModeHandlerTable");
 
     int nNameCmp;
     char szUserName[16];

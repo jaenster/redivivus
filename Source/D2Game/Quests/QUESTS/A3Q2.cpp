@@ -60,7 +60,7 @@ void __fastcall Q19_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // Q19_Callback_03 (Khalim's Will). State-3 handler: on NPC interaction index 0x4d, if quest is active (bIsNotIntroduction) and nStateFlag<3, advances the quest StateFlag to 1 (started/in-progress). Touches only the in-memory nStateFlag, not the QuestRecord bitfield.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
 void __fastcall Q19_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!(pQuestArgs->sQuestArgs.sNpcActivate.nIndex == 0x4d && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag < 3)) {
+    if (!(pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x4d && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag < 3)) {
       return;
     }
 

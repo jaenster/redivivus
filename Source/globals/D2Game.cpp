@@ -28,49 +28,9 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Storm::Source::SSignature {
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-} // namespace Storm::Source::SSTR
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 } // namespace Fog::BitBuffer
-
-namespace Storm::Source::SErr {
-
-} // namespace Storm::Source::SErr
 
 namespace Storm::Source::SLog {
 
@@ -83,14 +43,6 @@ namespace Storm::_3rdparty::zlib::deflate {
 namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
-
-namespace D2Lang::StrTable::strtable {
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
 
 namespace D2Common::DATATBLS::LvlTbls {
 
@@ -108,10 +60,6 @@ namespace D2Client::UI::Inv {
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 } // namespace D2Client::Warden::NWardenClient
@@ -119,26 +67,6 @@ namespace D2Client::Warden::NWardenClient {
 namespace D2Client::Warden {
 
 } // namespace D2Client::Warden
-
-namespace D2Client::Sound::SoundHdr {
-
-} // namespace D2Client::Sound::SoundHdr
-
-namespace D2Client::UI::ui {
-
-} // namespace D2Client::UI::ui
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::UI::QuestLog {
-
-} // namespace D2Client::UI::QuestLog
-
-namespace D2Sound::Src::D2SoundSmp {
-
-} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -188,13 +116,13 @@ namespace Bnclient::BnSend {
 
 } // namespace Bnclient::BnSend
 
-namespace Bnclient::BnDownload {
-
-} // namespace Bnclient::BnDownload
-
 namespace Bnclient::_net_sid {
 
 } // namespace Bnclient::_net_sid
+
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
 
 namespace D2Game::GAME::Event::Dispatch {
 
@@ -223,26 +151,6 @@ D2TimerTypeMethodsStrc pTimerMethods = {
 }; D2_GLOBAL_GUARD(pTimerMethods, "D2Game::GAME::Event::Dispatch::pTimerMethods");
 
 } // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char s_Stam_006e160c[5] = { 'S', 't', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Stam_006e160c, "D2Game::UNIT::SUnitDmg::s_Stam_006e160c");
-
-char s_Life_006e161c[5] = { 'L', 'i', 'f', 'e', '\x00' }; D2_GLOBAL_GUARD(s_Life_006e161c, "D2Game::UNIT::SUnitDmg::s_Life_006e161c");
-
-char s_Pois_006e1624[5] = { 'P', 'o', 'i', 's', '\x00' }; D2_GLOBAL_GUARD(s_Pois_006e1624, "D2Game::UNIT::SUnitDmg::s_Pois_006e1624");
-
-char s_Magc_006e1644[5] = { 'M', 'a', 'g', 'c', '\x00' }; D2_GLOBAL_GUARD(s_Magc_006e1644, "D2Game::UNIT::SUnitDmg::s_Magc_006e1644");
-
-char s_Ligt_006e1654[5] = { 'L', 'i', 'g', 't', '\x00' }; D2_GLOBAL_GUARD(s_Ligt_006e1654, "D2Game::UNIT::SUnitDmg::s_Ligt_006e1654");
-
-char s_Dam_006e1664[4] = { 'D', 'a', 'm', '\x00' }; D2_GLOBAL_GUARD(s_Dam_006e1664, "D2Game::UNIT::SUnitDmg::s_Dam_006e1664");
-
-} // namespace D2Game::UNIT::SUnitDmg
 
 namespace D2Game::PLAYER::PlayerModes {
 
@@ -549,21 +457,21 @@ D2TimerTypeMethodsExStrc pTimerMethods = {
 }; D2_GLOBAL_GUARD(pTimerMethods, "D2Game::GAME::Event::Dispatch::Monster::pTimerMethods");
 
 char * gaLanguageNames_0073c6e0[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0073c6e0, "D2Game::GAME::Event::Dispatch::Monster::gaLanguageNames_0073c6e0");
 
 } // namespace D2Game::GAME::Event::Dispatch::Monster
@@ -645,21 +553,9 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common {
-
-} // namespace D2Common
-
-namespace D2Common::Txt::Cube {
-
-} // namespace D2Common::Txt::Cube
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 } // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::OutSiege {
 
@@ -685,21 +581,17 @@ namespace Storm::Source {
 
 } // namespace Storm::Source
 
-namespace Fog::File {
-
-} // namespace Fog::File
-
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace D2Hell {
-
-} // namespace D2Hell
-
 namespace Fog::Source::SSComp {
 
 } // namespace Fog::Source::SSComp
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 
@@ -717,6 +609,10 @@ namespace Class::AUDIOSTREAM {
 
 } // namespace Class::AUDIOSTREAM
 
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
 namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
@@ -728,6 +624,10 @@ namespace D2Launch::MainMenus {
 namespace D2Multi::OOGUtilities {
 
 } // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
 
 namespace D2Client::GAME::Game {
 
@@ -749,6 +649,10 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
 namespace D2Client::GAME::SCmd {
 
 } // namespace D2Client::GAME::SCmd
@@ -768,6 +672,14 @@ namespace D2Client::UI::Panel {
 namespace D2Client::UI::Party {
 
 } // namespace D2Client::UI::Party
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::Sound {
 
@@ -8135,21 +8047,21 @@ namespace D2Game::Monster::Create {
 // =============================================================================
 
 char * gaLanguageNames_0073d530[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0073d530, "D2Game::Monster::Create::gaLanguageNames_0073d530");
 
 } // namespace D2Game::Monster::Create
@@ -11280,6 +11192,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
@@ -11400,6 +11316,10 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 } // namespace Bnclient
@@ -11459,3 +11379,7 @@ namespace D2Common::Logging {
 namespace D2Common::DATATBLS::TokTbls {
 
 } // namespace D2Common::DATATBLS::TokTbls
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug

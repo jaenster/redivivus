@@ -516,8 +516,8 @@ uint32_t __thiscall SFILE_CompareFileSize2(struct StormLinkStrc * pLink, intptr_
 uint32_t __thiscall SFILE_CompareFileName(struct StormLinkStrc * pLink, intptr_t pLeft);
 void __fastcall Unreferenced_004169f0(struct StormLinkedListStrc * param_1);
 void __fastcall Unreferenced_00416a00(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_00416a10(struct StormLinkedListStrc * param_1);
-int __fastcall Unreferenced_00416a20(struct StormLinkedListStrc * param_1);
+intptr_t __fastcall Unreferenced_00416a10(struct StormLinkedListStrc * param_1);
+intptr_t __fastcall Unreferenced_00416a20(struct StormLinkedListStrc * param_1);
 void __fastcall Unreferenced_00416a30(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_00416a90(int param_1);
 int __fastcall Unreferenced_00416ab0(int param_1);
@@ -623,7 +623,7 @@ struct D2StormAsyncOpStrc * __thiscall SFILE_DeleteAsyncRequest(struct D2StormAs
 // @blizzard SFileDestroy (SFILE.CPP)
 int __stdcall SFileDestroy();
 // Releases and frees one async request (REQUEST tag) and returns the next link of the list it was on (0 at the end). Provenance: 1.14d asm 0041a2c0.
-int __thiscall SFILE_DeleteAsyncRequestGetNext(struct StormLinkedListStrc * pListContext, struct D2StormAsyncOpStrc * pAsyncOp);
+struct D2StormAsyncOpStrc * __thiscall SFILE_DeleteAsyncRequestGetNext(struct StormLinkedListStrc * pListContext, struct D2StormAsyncOpStrc * pAsyncOp);
 // Cancels a pending async file request. The PPC second parameter is IDirectSoundBuffer*; the Windows typing is unchanged.
 // Name from the PowerPC 1.13c Storm traceback table (static CancelRequest @10020440).
 int __stdcall SFILE_CancelRequest(void * hFileHandle, struct D2MPQFileStrc * pMPQFile);

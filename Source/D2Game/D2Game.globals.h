@@ -229,14 +229,6 @@ extern D2NPCMessageTableStrc aNpcGossipData[4];
 namespace D2Game::SKILLS::SkillNec {
 extern uint8_t gaSkeletonComponentsByMasteryLvl[11][9];
 } // namespace D2Game::SKILLS::SkillNec
-namespace D2Game::UNIT::SUnitDmg {
-extern char s_Stam_006e160c[5];
-extern char s_Life_006e161c[5];
-extern char s_Pois_006e1624[5];
-extern char s_Magc_006e1644[5];
-extern char s_Ligt_006e1654[5];
-extern char s_Dam_006e1664[4];
-} // namespace D2Game::UNIT::SUnitDmg
 namespace D2Game::UNIT::SUNITNPC {
 extern uint32_t gptItemCodeArmor;
 } // namespace D2Game::UNIT::SUNITNPC

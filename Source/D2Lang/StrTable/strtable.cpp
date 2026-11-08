@@ -299,18 +299,18 @@ static uint16_t gwStrTableDefaultEncoding[256] = {
 }; D2_STATIC_GUARD(gwStrTableDefaultEncoding, "gwStrTableDefaultEncoding");
 static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
-        /* .pszLangCode = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeLookup,
-        /* .pszLangCodeNormalized = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
-        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangCode = */ (char*)"ENU",
+        /* .pszLangCodeNormalized = */ (char*)"ENG",
+        /* .pszLangNameEng = */ (char*)"ENG",
         /* .pszLangAbbrev = */ gaLangNameFormat_Nominative,
         /* .szLangTag = */ { 'S', 'U', 'n', 'e' },
         /* .dwLangId = */ 0x0
     },
     {
-        /* .pszLangCode = */ gszCrashDumpRegisterFormatString,
-        /* .pszLangCodeNormalized = */ gszCrashDumpRegisterFormatString,
-        /* .pszLangNameEng = */ gszCrashDumpRegisterFormatString,
-        /* .pszLangAbbrev = */ gszCrashDumpRegisterFormatString,
+        /* .pszLangCode = */ (char*)"ESP",
+        /* .pszLangCodeNormalized = */ (char*)"ESP",
+        /* .pszLangNameEng = */ (char*)"ESP",
+        /* .pszLangAbbrev = */ (char*)"ESP",
         /* .szLangTag = */ { 'S', 'E', 's', 'e' },
         /* .dwLangId = */ 0x1
     },
@@ -349,7 +349,7 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
         /* .pszLangCode = */ gaLangAbbreviation_Cyrillic,
         /* .pszLangCodeNormalized = */ gaLangAbbreviation_Cyrillic,
-        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)"ENG",
         /* .pszLangAbbrev = */ gaLangAbbreviation_Cyrillic,
         /* .szLangTag = */ { 'A', 'J', 'a', 'j' },
         /* .dwLangId = */ 0x6
@@ -357,7 +357,7 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
         /* .pszLangCode = */ gaLangAbbreviation_Korean,
         /* .pszLangCodeNormalized = */ gaLangAbbreviation_Korean,
-        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)"ENG",
         /* .pszLangAbbrev = */ s_HAN_006e0268,
         /* .szLangTag = */ { 'R', 'K', 'o', 'k' },
         /* .dwLangId = */ 0x7
@@ -365,16 +365,16 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
     {
         /* .pszLangCode = */ s_SIN_006e0264,
         /* .pszLangCodeNormalized = */ s_SIN_006e0264,
-        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangNameEng = */ (char*)"ENG",
         /* .pszLangAbbrev = */ s_SIN_006e0264,
         /* .szLangTag = */ { 'N', 'C', 'h', 'z' },
         /* .dwLangId = */ 0x8
     },
     {
-        /* .pszLangCode = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeFallback,
-        /* .pszLangCodeNormalized = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeFallback,
-        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
-        /* .pszLangAbbrev = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeFallback,
+        /* .pszLangCode = */ (char*)"CHI",
+        /* .pszLangCodeNormalized = */ (char*)"CHI",
+        /* .pszLangNameEng = */ (char*)"ENG",
+        /* .pszLangAbbrev = */ (char*)"CHI",
         /* .szLangTag = */ { 'W', 'T', 'h', 'z' },
         /* .dwLangId = */ 0x9
     },
@@ -395,9 +395,9 @@ static D2LangTableEntryStrc gaLanguageTable[13] = {
         /* .dwLangId = */ 0xb
     },
     {
-        /* .pszLangCode = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeLookup,
-        /* .pszLangCodeNormalized = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
-        /* .pszLangNameEng = */ (char*)&D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable,
+        /* .pszLangCode = */ (char*)"ENU",
+        /* .pszLangCodeNormalized = */ (char*)"ENG",
+        /* .pszLangNameEng = */ (char*)"ENG",
         /* .pszLangAbbrev = */ s_HAN_006e0268,
         /* .szLangTag = */ { 'R', 'K', 'o', 'k' },
         /* .dwLangId = */ 0xc
@@ -884,7 +884,7 @@ uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
     DWORD dwDataSize;
     HKEY hKey;
     char cChar;
-    LSTATUS lStatus = RegOpenKeyExA((HKEY)0x80000001, "Control Panel\\International", 0, 0x20019, &hKey);
+    LSTATUS lStatus = RegOpenKeyExA(HKEY_CURRENT_USER, "Control Panel\\International", 0, 0x20019, &hKey);
     if (lStatus) {
       return 0;
     }

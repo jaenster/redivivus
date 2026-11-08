@@ -46,7 +46,7 @@ static D2CursorDataStrc CursorData[7] = {
         /* .nAnimStep = */ 0x0,
         /* .bKeyPressSwitch = */ 0x1,
         /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_Gaunt_006d6b80
+        /* .szCursorname = */ (char*)"Gaunt"
     },
     {
         /* .bAnimated = */ 0x1,
@@ -55,7 +55,7 @@ static D2CursorDataStrc CursorData[7] = {
         /* .nAnimStep = */ 0x0,
         /* .bKeyPressSwitch = */ 0x1,
         /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_grasp_006d6b78
+        /* .szCursorname = */ (char*)"grasp"
     },
     {
         /* .bAnimated = */ 0x1,
@@ -64,7 +64,7 @@ static D2CursorDataStrc CursorData[7] = {
         /* .nAnimStep = */ 0x40,
         /* .bKeyPressSwitch = */ 0x1,
         /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_ohand_006d6b70
+        /* .szCursorname = */ (char*)"ohand"
     },
     {
         /* .bAnimated = */ 0x1,
@@ -73,7 +73,7 @@ static D2CursorDataStrc CursorData[7] = {
         /* .nAnimStep = */ 0x20,
         /* .bKeyPressSwitch = */ 0x1,
         /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_orotate_006d6b68
+        /* .szCursorname = */ (char*)"orotate"
     },
     {
         /* .bAnimated = */ 0x1,
@@ -82,7 +82,7 @@ static D2CursorDataStrc CursorData[7] = {
         /* .nAnimStep = */ 0x40,
         /* .bKeyPressSwitch = */ 0x1,
         /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_ppress_006d6b60
+        /* .szCursorname = */ (char*)"ppress"
     },
     {
         /* .bAnimated = */ 0x1,
@@ -91,7 +91,7 @@ static D2CursorDataStrc CursorData[7] = {
         /* .nAnimStep = */ 0x40,
         /* .bKeyPressSwitch = */ 0x1,
         /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_protate_006d6b58
+        /* .szCursorname = */ (char*)"protate"
     },
     {
         /* .bAnimated = */ 0x0,

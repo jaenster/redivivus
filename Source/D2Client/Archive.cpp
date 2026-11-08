@@ -56,7 +56,7 @@ int __fastcall Unreferenced_0045b9d0(StormLinkStrc * param_1) {
     return param_1->pNext <= 0 ? 0 : param_1->pNext;
 }
 
-int __fastcall Unreferenced_0045ba80(StormLinkedListStrc * param_1) {
+intptr_t __fastcall Unreferenced_0045ba80(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
@@ -279,7 +279,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
     TALLOCREC* pRec;
     int* pPrevLink;
     int** ppInsertAfter;
-    int32_t ppTmp;
+    intptr_t ppTmp;
     SMemHeapDetailsStrc* pSrcInfo;
     uint16_t* pScan;
     uint32_t* pdwCopyDst;

@@ -1068,8 +1068,8 @@ static void DownloadSave(char * pBytes) {
     pDst = D2Game::Save::pRawSaveBuffer + D2Game::Save::nRawSaveBufferSize;
     int i = 0;
     if ((uint8_t)pBytes[1] > '\0') {
-      int nByteOffset;
-      nByteOffset = 7 - (int)pDst;
+      intptr_t nByteOffset;
+      nByteOffset = 7 - (intptr_t)pDst;
       do {
         *pDst = pDst[(intptr_t)(pBytes + nByteOffset)];
         i++;

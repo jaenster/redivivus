@@ -377,11 +377,11 @@ void __fastcall Q18_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // Q18_Callback_03 — Lam Esen's Tome, state-3 handler (Alkor dialog progression). On gossip index 0x4f during intro with nStateFlag==0, bumps nStateFlag to 1 (quest started). On text-control 0x4b: removes the player from the GUID list and, if nStateFlag==2 and the player record is not yet Completed, broadcasts state 1, sets live state flag to 3 (a3q1.cpp:0x166), and re-syncs every player via Q18_PlayerUpdateTomeState. Reads record (Completed); writes only nStateFlag + GUID list.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2GSPacketSrv0x27_TextStrc* pTextControl = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.nIndex == 0x4f && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag < 1) {
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x4f && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag < 1) {
       pQuestData->nStateFlag = 1;
     }
-    if (pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x4b) {
+    if (nOldLevel != 0x4b) {
       return;
     }
 

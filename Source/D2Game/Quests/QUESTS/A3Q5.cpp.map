@@ -258,7 +258,8 @@
       ],
       "usedTypes": [
         "D2QuestArgStrc",
-        "D2QuestDataStrc"
+        "D2QuestDataStrc",
+        "int32_t"
       ]
     },
     {

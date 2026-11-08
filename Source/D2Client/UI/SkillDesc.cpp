@@ -1102,6 +1102,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
     int nRepairCostBase;
     char szValueBuffer[12];
     uint16_t wszValueFormatted[10];
+    int32_t nUnit;
     uint16_t* pStatId;
     D2SkillsTxt* pSkillsTxt;
     uint16_t* pStatParam;
@@ -1355,12 +1356,12 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         Fog::File::CONTAINER_InitializeBuffer(wszFormatBuffer, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       wszFormatBuffer[0] = L'\0';
       nStatParam = 0;
-      pUnit = 0;
+      nUnit = 0x0;
       if (GAME::Game::sgpDrlgAct) {
-        nStatParam = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, (int32_t*)&pUnit);
+        nStatParam = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, (int32_t*)&nUnit);
       }
 
-      nRepairCostFinal = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nGroupValue, nStatParam, (int32_t)pUnit, (uint32_t*)&nStatParam, &nRepairCostBase, &nRepairCostAlt);
+      nRepairCostFinal = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nGroupValue, nStatParam, nUnit, (uint32_t*)&nStatParam, &nRepairCostBase, &nRepairCostAlt);
       if (!GAME::Game::sgpDrlgAct) {
         nRepairCostFinal = nRepairCostBase;
       }
@@ -4563,13 +4564,13 @@ void __fastcall SKILLDESC_DrawSkillDmgType3(D2UnitStrc * pUnit, D2SkillStrc * pS
 
     nMinDamage = 0;
     int nMaxDamage = 0;
-    pSkillsTxt = 0;
+    int32_t nSkillsTxt = 0x0;
     nSkillLevelTmp = nSkillLevel;
     pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa0c), nSkillLevelTmp);
     nSkillLevelTmp = nSkillLevel;
     uint32_t uDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa0d), nSkillLevelTmp);
-    SKILLDESC_DrawDamageWithRange(pUnit, (int*)&nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, pDamCalc2, uDamCalc2, pSkill, 0, nullptr);
-    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, (int32_t)pSkillsTxt, nY, nXRight, nXLeft);
+    SKILLDESC_DrawDamageWithRange(pUnit, (int*)&nMinDamage, &nMaxDamage, (int32_t*)&nSkillsTxt, pDamCalc2, uDamCalc2, pSkill, 0, nullptr);
+    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, nSkillsTxt, nY, nXRight, nXLeft);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
@@ -4795,14 +4796,14 @@ void __fastcall SKILLDESC_DrawSkillDmgAuraElem(D2UnitStrc * pUnit, D2SkillStrc *
     }
 
     uint8_t byDmgShiftFactor = pSkillsTxt->SrcDam;
-    pSkillsTxt = 0;
-    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, 0, 0, pSkill, 0, nullptr);
+    int32_t nSkillsTxt = 0x0;
+    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nSkillsTxt, 0, 0, pSkill, 0, nullptr);
     nMinDamage *= (uint32_t)byDmgShiftFactor;
     nMinDamage = nMinDamage / 128;
     nMaxDamage *= (uint32_t)byDmgShiftFactor;
     nMaxDamage = nMaxDamage / 128;
-    SKILLDESC_CalcSkillElemDamage(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, nSkillDescAddrSaved, nSkillLevel);
-    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, (int32_t)pSkillsTxt, nY, nXRight, nXLeft);
+    SKILLDESC_CalcSkillElemDamage(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nSkillsTxt, nSkillDescAddrSaved, nSkillLevel);
+    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, nSkillsTxt, nY, nXRight, nXLeft);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgDualWield(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
@@ -4812,15 +4813,15 @@ void __fastcall SKILLDESC_DrawSkillDmgDualWield(D2UnitStrc * pUnit, D2SkillStrc 
 
     int nMinDamage = 0;
     int nMaxDamage = 0;
-    pSkillsTxt = 0;
+    int32_t nSkillsTxt = 0x0;
     D2UnitStrc* pPrimaryWeapon = SKILLDESC_GetPrimaryWeapon(pUnit);
     if (!pPrimaryWeapon) {
       return;
     }
 
-    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, 0, 0, pSkill, 0, pPrimaryWeapon);
+    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nSkillsTxt, 0, 0, pSkill, 0, pPrimaryWeapon);
     SKILLDESC_GetSecondaryWeapon(pUnit);
-    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, (int32_t)pSkillsTxt, nY, nXRight, nXLeft);
+    SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, nSkillsTxt, nY, nXRight, nXLeft);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgComplex(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
@@ -5303,6 +5304,7 @@ void __fastcall SKILLDESC_DrawSkillDmgFist(D2UnitStrc * pUnit, D2SkillStrc * pSk
 // @sourcefile .\UI\SkillDesc.cpp
 void __fastcall SKILLDESC_DrawSkillDmgTrap(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
     int nTrapDmgBonus;
+    int32_t nSkillsTxt;
     if (!(pSkill && pSkillsTxt)) {
       return;
     }
@@ -5319,9 +5321,9 @@ void __fastcall SKILLDESC_DrawSkillDmgTrap(D2UnitStrc * pUnit, D2SkillStrc * pSk
     }
 
     nMinDmgAccum += nTrapDmgBonus * nMinDmgAccum / 100;
-    pSkillsTxt = (D2SkillsTxt*)((char*)pSkillsTxt->srvprgfunc + nTrapDmgBonus * (int)pSkillsTxt / 100 - 0x30);
-    SKILLDESC_CalcElemDamageRange(pUnit, &nMinDmgAccum, (int*)&pSkillsTxt, (uint32_t*)&nElemType, pSkill);
-    SKILLDESC_DrawDamageNumbers(nMinDmgAccum, (int32_t)pSkillsTxt, nElemType, nY, nXRight, nXLeft);
+    nSkillsTxt = (int)pSkillsTxt->srvprgfunc + nTrapDmgBonus * (int)pSkillsTxt / 100 - 0x30;
+    SKILLDESC_CalcElemDamageRange(pUnit, &nMinDmgAccum, (int*)&nSkillsTxt, (uint32_t*)&nElemType, pSkill);
+    SKILLDESC_DrawDamageNumbers(nMinDmgAccum, nSkillsTxt, nElemType, nY, nXRight, nXLeft);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgConversion(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
@@ -5414,7 +5416,7 @@ void __fastcall SKILLDESC_DrawSkillDmgSummon(D2UnitStrc * pUnit, D2SkillStrc * p
       } else {
         D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pPrimaryWeapon, 0);
       }
-      if ((int32_t)pUnit2 && pUnit2 != pPrimaryWeapon) {
+      if (pUnit2 && pUnit2 != pPrimaryWeapon) {
         uIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_Weapon);
         if (uIsWeapon) {
           bWeaponEnabled = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pUnit2);

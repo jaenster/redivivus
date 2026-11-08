@@ -46,29 +46,6 @@ typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 #endif
 
 char gszExtDc6[5] = { '.', 'd', 'c', '6', '\x00' }; D2_GLOBAL_GUARD(gszExtDc6, "gszExtDc6");
-char gszExtDcc[5] = { '.', 'd', 'c', 'c', '\x00' }; D2_GLOBAL_GUARD(gszExtDcc, "gszExtDcc");
-char gszDirObjects[20] = {
-    'D',
-    'A',
-    'T',
-    'A',
-    '\\',
-    'G',
-    'L',
-    'O',
-    'B',
-    'A',
-    'L',
-    '\\',
-    'O',
-    'B',
-    'J',
-    'E',
-    'C',
-    'T',
-    'S',
-    '\x00'
-}; D2_GLOBAL_GUARD(gszDirObjects, "gszDirObjects");
 static char gszSrcFileSpriteCache[22] = {
     '.',
     '\\',
@@ -94,7 +71,7 @@ static char gszSrcFileSpriteCache[22] = {
     '\x00'
 }; D2_STATIC_GUARD(gszSrcFileSpriteCache, "gszSrcFileSpriteCache");
 static BOOL bUseCompressedData = 0x1; D2_STATIC_GUARD(bUseCompressedData, "bUseCompressedData");
-static void* gpszExtDcc = (void*)&gszExtDcc; D2_STATIC_GUARD(gpszExtDcc, "gpszExtDcc");
+static void* gpszExtDcc = (void*)(char*)".dcc"; D2_STATIC_GUARD(gpszExtDcc, "gpszExtDcc");
 static void* gpszExtDc6 = (void*)&gszExtDc6; D2_STATIC_GUARD(gpszExtDc6, "gpszExtDc6");
 static D2LRUCacheStrc gSpriteCacheLru = {}; D2_STATIC_GUARD(gSpriteCacheLru, "gSpriteCacheLru");
 static int gbSpriteCacheLruInitialized = 0; D2_STATIC_GUARD(gbSpriteCacheLruInitialized, "gbSpriteCacheLruInitialized");
@@ -1854,7 +1831,7 @@ static uint32_t __stdcall SPRITECACHE_LoadDCCAndCache(D2CelFileCacheEntryStrc * 
       SPRITECACHE_LoadCelFileAndCache(szText, pCelEntry, pCacheBlock, pGfxData, nFrameGroupIndex, nFrameStep);
     }
 
-    D2GfxHashEntryStrc* pHashEntry = GfxHash::GFX_AllocCacheEntry(D2GfxMemoryStrc_0089db60.pMemory, gaGfxHashTable, (uint32_t)ppLruEntry->pData, pGfxData, pCelEntry);
+    D2GfxHashEntryStrc* pHashEntry = GfxHash::GFX_AllocCacheEntry(D2GfxMemoryStrc_0089db60.pMemory, gaGfxHashTable, (D2CelCacheBlockStrc*)ppLruEntry->pData, pGfxData, pCelEntry);
     if (!pHashEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d1);
       exit(-1);
@@ -1899,7 +1876,7 @@ static BOOL __stdcall SPRITECACHE_LoadCelAndCache(D2CelFileCacheEntryStrc * pCel
         SPRITECACHE_FreeMemory(&D2GfxMemoryStrc_0089db60, ppCacheEntry, nLoadResult, 1);
       }
 
-      D2GfxHashEntryStrc* pGfxHashEntry = GfxHash::GFX_AllocCacheEntry(D2GfxMemoryStrc_0089db60.pMemory, gaGfxHashTable, (uint32_t)ppCacheEntry->pData, pGfxData, pCelEntry);
+      D2GfxHashEntryStrc* pGfxHashEntry = GfxHash::GFX_AllocCacheEntry(D2GfxMemoryStrc_0089db60.pMemory, gaGfxHashTable, (D2CelCacheBlockStrc*)ppCacheEntry->pData, pGfxData, pCelEntry);
       if (!pGfxHashEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x630);
         exit(-1);

@@ -4,10 +4,8 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Source/SFile.h"
 #include "Source/Fog/Src/ErrorManager.h"
-#include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
-#include "Source/Fog/Src/LogManager.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -29,7 +27,6 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 typedef BOOL (__stdcall *pfnGetDiskFreeSpaceEx)(LPCSTR lpDirectoryName, void * lpFreeBytesAvailableToCaller, void * lpTotalNumberOfBytes, void * lpTotalNumberOfFreeBytes);
 #endif
 
-char cLogFileReadMode[2] = { 'r', '\x00' }; D2_GLOBAL_GUARD(cLogFileReadMode, "cLogFileReadMode");
 static char gszLogFilePath[260] = {
     'D',
     '2',
@@ -712,7 +709,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
 
 void __stdcall LogCpuInfo() {
     // Static local variables (originally global data)
-    static char * gaCpuVendorNames[5] = { (char*)&Fog::Src::LogManager::s_Unknown_006cc780, (char*)&Fog::Src::LogManager::s_Intel_006cdebc, (char*)&Fog::Src::LogManager::s_AMD_006cdeb8, (char*)&Fog::Src::LogManager::s_Cyrix_006cdeb0, nullptr }; D2_STATIC_GUARD(gaCpuVendorNames, "Fog::Src::LogManager::LogCpuInfo::gaCpuVendorNames");
+    static char * gaCpuVendorNames[5] = { (char*)"Unknown", (char*)"Intel", (char*)"AMD", (char*)"Cyrix", nullptr }; D2_STATIC_GUARD(gaCpuVendorNames, "Fog::Src::LogManager::LogCpuInfo::gaCpuVendorNames");
 
     int nVendorIndex;
     uint32_t nVersionLow;
@@ -1047,7 +1044,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           break;
         }
 
-        iVar1 = (int)lp - (int)__frame0.pDumpData;
+        iVar1 = (intptr_t)lp - (intptr_t)__frame0.pDumpData;
         if (!*(int*)(pDumpHeader + 8)) {
           iVar1 = *(int*)pDumpHeader + iVar1;
         }
@@ -1082,7 +1079,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
               pRecordBody = " %02X";
             }
 
-            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((intptr_t)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)lp[nColumn]);
+            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), 0x100 - ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)lp[nColumn]);
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;
@@ -1097,7 +1094,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
             pLineCursor = pLineCursor + strlen(pLineCursor) + 1;
             nColumn = 0;
             if (nChunkLen > 0) {
-              pDumpHeader = (uint8_t*)(pLineCursor + (int)(__frame0.szLineBuf - (int)(__frame0.szLineBuf + 1)));
+              pDumpHeader = (uint8_t*)(pLineCursor + (int)(__frame0.szLineBuf - (__frame0.szLineBuf + 1)));
               do {
                 byAsciiChar = lp[nColumn];
                 if ((byAsciiChar & 0x7f) < 0x20) {
@@ -1110,7 +1107,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
               } while (nColumn < nChunkLen);
             }
 
-            pLineCursor[(int)(__frame0.szLineBuf + (nColumn - (int)(__frame0.szLineBuf + 1)))] = '\0';
+            pLineCursor[(int)(__frame0.szLineBuf - (__frame0.szLineBuf + 1) + nColumn)] = '\0';
             pDumpHeader = __frame0.pDumpHeaderSaved;
           }
         }
@@ -1213,7 +1210,7 @@ void * __fastcall Unreferenced_0040f520(StormLinkStrc * param_1) {
     return (void*)(param_1->pNext <= 0 ? 0 : param_1->pNext);
 }
 
-int __fastcall Unreferenced_0040f580(StormLinkedListStrc * param_1) {
+intptr_t __fastcall Unreferenced_0040f580(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;

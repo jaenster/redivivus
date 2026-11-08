@@ -2,7 +2,9 @@
 """datamatch.py - byte-compare our initialised data with the original's.
 
     datamatch.py extents [--snapshot DIR] [--out evidence/dataextent.tsv]
+    datamatch.py strings [--snapshot DIR] [--strings-out evidence/datastrings.tsv]
     datamatch.py audit [--obj DIR ...] [--out evidence/data-audit.tsv] [--label TEXT]
+                       [--strings evidence/datastrings.tsv] [--compiler-data REPORT]
 
 The function audit (audit.py) judges code; this judges what the code reads:
 every global and constant table of ours against the bytes 1.14d's Game.exe
@@ -54,6 +56,19 @@ size) and data-fixes.tsv (the largest defects, a likely root cause each).
 Compiler literals our code references (`__real@`, `??_C@` strings, `??_7`
 vftables) have no Ghidra name of their own; the datamap's address pairs them,
 and they are judged the same way but reported apart (kind `literal`).
+
+A read-only string the generator spells as a literal at its uses (its
+compiler-data pass: Ghidra's `s_Russian_006cc7a4` becomes "Russian" in the
+bodies and tables) has no symbol of ours to pair by name. Those are found by
+the generator's byte rule over dataextent.tsv and datastrings.tsv (`strings`
+writes it from the snapshot's strings.ndjson), or read from the generator's
+own report (`--compiler-data`), and judged through every relocation of the
+original that points at one: the function of ours the funcmap pairs with the
+code use, the pointer field of ours paired with the data use. Content and
+terminator are compared; placement in our image is not. Kind `strlit`, its
+own summary row; the headline stays the named data. UNUSED (no reference in
+the original) and UNPAIRED (only code or data of ours that does not pair, the
+runtime's) are left out of its count.
 
 Never quote counts from this file in prose; they go stale. Read the file.
 """
@@ -530,6 +545,10 @@ def judge(pe, relocs, it, u, res):
         uv = struct.unpack_from('<I', ub, p)[0]
         if p in orel and p in urel:
             kind, verdict, sym = pointer_verdict(pe, res, u.obj, urel[p], ov, uv)
+            if sym.startswith('??_C@_0'):
+                t = u.obj.symbol(urel[p].symbol)
+                have = our_string(u.obj.sections[t.section], t.value + uv) if t.section > 0 else None
+                LITERAL_FIELDS[ov].append(('%s+%d' % (it.name, p), have))
         elif p in orel:
             kind, sym = 'none', '(no relocation)'
             verdict = 'raw' if uv == ov else 'null' if uv == 0 else 'bad'
@@ -747,6 +766,393 @@ def float_constants(pe, items, paired_addr, objs, game_fns, dead):
     return out
 
 
+# -- string literals ------------------------------------------------------------
+#
+# The generator (ghidra-reconstruct codegen/compiler-data.ts) spells a read-only
+# string as a literal at each use instead of declaring it: the bodies and the
+# pointer tables that named `s_Russian_006cc7a4` say "Russian", and VC8 pools a
+# `??_C@` literal of those bytes. No symbol of ours then carries the label, so
+# the name pairing above cannot reach it. Its address is recorded where the
+# generator decided it: the codegen snapshot it read (Ghidra's typed globals in
+# dataextent.tsv, its untyped strings in datastrings.tsv), with the generator's
+# byte rule. A literal is then paired through the places that use it: every
+# relocation of the original that points at the string, in code (the function
+# the funcmap pairs with ours: which literals does our function reference?) or
+# in data (the pointer field of the table we pair: which literal does ours
+# name?). Content is compared, terminator included; where the literal lands in
+# our image is the linker's choice and is not compared.
+
+STRING_ITEM_TYPES = re.compile(r'^char\[\d+\]$|^(string|TerminatedCString)$')
+UNTYPED_STRING_ENCODINGS = re.compile(r'^char\[\d+\]$|^(string|TerminatedCString|string-utf8|char)$', re.I)
+DS_HEADER = 'address\tlength\tencoding\tlabel'
+
+
+def pooled_extent(length):
+    """The object a literal of `length` characters occupies in VC8's pooled .rdata: padded to 4."""
+    return (length + 1 + 3) & ~3
+
+
+def string_literal_shape(raw):
+    """The generator's byte rule for a string it may spell as a literal: `raw`
+    (the item's bytes over its extent) holds exactly one terminated string,
+    zero padding after the terminator, and no more than the literal padded to
+    4. Returns (content without the terminator, None) or (None, reason)."""
+    nul = raw.find(b'\0')
+    if nul < 0:
+        return None, 'no terminator inside the extent'
+    if nul == 0:
+        return None, 'empty'
+    if any(raw[nul:]):
+        return None, 'bytes after the terminator (two strings, or a table)'
+    if len(raw) > pooled_extent(nul):
+        return None, 'object of %d bytes is larger than the literal padded to 4' % len(raw)
+    return raw[:nul], None
+
+
+def string_label(address, text):
+    """Ghidra's label for an untyped string, as compiler-data.ts derives it."""
+    out = ''
+    for ch in text:
+        if len(out) >= 33:
+            break
+        out += ch if (ch.isascii() and (ch.isalnum() or ch == '_')) else '_'
+    return 's_%s_%08x' % (out, address)
+
+
+def strings_main(args):
+    """evidence/datastrings.tsv: Ghidra's string records in .rdata/.data from a
+    snapshot (strings.ndjson), the untyped strings dataextent.tsv has no row for."""
+    snap = args.snapshot
+    manifest = json.load(open(os.path.join(snap, 'manifest.json')))
+    prov = manifest.get('provenance', {})
+    ro = (prov.get('programInfo') or {}).get('readOnlyDataSections') or []
+    out = []
+    seen = set()
+    for line in open(os.path.join(snap, 'strings.ndjson')):
+        if not line.strip():
+            continue
+        s = json.loads(line)
+        a = int(s['address'], 16)
+        if not (DATA_LO <= a < DATA_HI) or a in seen:
+            continue
+        seen.add(a)
+        out.append((a, int(s.get('length') or 0), s.get('encoding') or '', string_label(a, s.get('value') or '')))
+    out.sort()
+    with open(args.strings_out, 'w') as fh:
+        fh.write('# Ghidra %s v%s strings, snapshot written %s; read-only %s\n' % (
+            prov.get('programPath', '?'), prov.get('programVersion', '?'), prov.get('writtenAt', '?'),
+            ','.join('%08x-%08x' % (lo, hi) for lo, hi in ro)))
+        fh.write(DS_HEADER + '\n')
+        for row in out:
+            fh.write('%08x\t%d\t%s\t%s\n' % row)
+    print('%d strings from %s v%s -> %s' % (len(out), prov.get('programPath'), prov.get('programVersion'),
+                                            args.strings_out))
+
+
+def load_datastrings(path):
+    """([(address, length, encoding, label)], version, read-only ranges)."""
+    rows, version, ro = [], '?', []
+    if not path or not os.path.exists(path):
+        return rows, version, ro
+    for line in open(path):
+        if line.startswith('# Ghidra'):
+            m = re.search(r' v(\d+)', line)
+            version = m.group(1) if m else '?'
+            m = re.search(r'read-only (\S+)', line)
+            if m:
+                for span in m.group(1).split(','):
+                    if '-' in span:
+                        lo, hi = span.split('-')
+                        ro.append((int(lo, 16), int(hi, 16)))
+            continue
+        if line.startswith('address\t') or not line.strip():
+            continue
+        c = line.rstrip('\n').split('\t')
+        rows.append((int(c[0], 16), int(c[1]), c[2], c[3]))
+    return rows, version, ro
+
+
+def load_compiler_data(path):
+    """Addresses the generator's own report (GHIDRA_COMPILER_DATA_REPORT, written
+    by codegen/compiler-data.ts) classifies `string-literal`, or None."""
+    if not path:
+        return None
+    out = set()
+    for line in open(path):
+        c = line.rstrip('\n').split('\t')
+        if len(c) > 2 and c[2] == 'string-literal':
+            out.add(int(c[0], 16))
+    return out
+
+
+class Lit:
+    __slots__ = ('addr', 'text', 'extent', 'name', 'type', 'source', 'refs', 'ns')
+
+
+def literal_candidates(items, strings, read, covered, read_only, generator=None):
+    """The strings the generator spells as literals, which no symbol of ours
+    pairs with. `read(va, n)` reads the original; `covered` holds the addresses
+    a symbol of ours already pairs; `read_only` is [(lo, hi)]; `generator`, the
+    set from the generator's own report when one is given, overrides the rule.
+    The rule (compiler-data.ts): in a read-only section, one terminated string
+    in an object no larger than it padded to 4, no other label inside it, not
+    inside another datum."""
+    starts = sorted({it.addr for it in items} | {s[0] for s in strings})
+    spans = sorted([(it.addr, it.addr + max(1, it.size)) for it in items if it.kind != 'interior'] +
+                   [(s[0], s[0] + s[1] + 1) for s in strings])
+    span_starts = [s[0] for s in spans]
+
+    def ro(a):
+        return any(lo <= a < hi for lo, hi in read_only)
+
+    def label_inside(lo, hi):
+        k = bisect.bisect_right(starts, lo)
+        return k < len(starts) and starts[k] < hi
+
+    def inside_another(a):
+        k = bisect.bisect_left(span_starts, a)
+        return any(spans[j][1] > a for j in range(max(0, k - 64), k))
+
+    out = []
+    typed = set()
+    for it in items:
+        typed.add(it.addr)
+        if it.kind != 'data' or it.addr in covered or not STRING_ITEM_TYPES.match(it.type):
+            continue
+        if generator is not None and it.addr not in generator:
+            continue
+        if not ro(it.addr):
+            continue
+        text, why = string_literal_shape(read(it.addr, it.extent))
+        if why or (generator is None and (label_inside(it.addr, it.addr + len(text) + 1) or inside_another(it.addr))):
+            continue
+        lit = Lit()
+        lit.addr, lit.text, lit.extent, lit.name, lit.type, lit.source, lit.refs, lit.ns = (
+            it.addr, text, it.extent, it.name, it.type, 'typed', it.refs, it.ns)
+        out.append(lit)
+    for a, length, enc, label in strings:
+        if a in typed or a in covered or not UNTYPED_STRING_ENCODINGS.match(enc) or length <= 0:
+            continue
+        if generator is not None and a not in generator:
+            continue
+        if not ro(a):
+            continue
+        text, why = string_literal_shape(read(a, length + 1))
+        if why or len(text) != length:
+            continue
+        if generator is None and (label_inside(a, a + length + 1) or inside_another(a)):
+            continue
+        lit = Lit()
+        lit.addr, lit.text, lit.extent, lit.name, lit.type, lit.source, lit.refs, lit.ns = (
+            a, text, length + 1, label, enc, 'untyped', [], '')
+        out.append(lit)
+    out.sort(key=lambda x: x.addr)
+    return out
+
+
+def our_string(sec, off):
+    """The terminated narrow string a literal of ours holds at `off`, or None."""
+    if sec is None or off < 0 or off >= len(sec.data):
+        return None
+    end = sec.data.find(b'\0', off)
+    return bytes(sec.data[off:end]) if end >= 0 else None
+
+
+class OurLiterals:
+    """The `??_C@` narrow literals our objects hold: per function of ours (by
+    TU and symbol), the strings it references; and image-wide, every one."""
+
+    def __init__(self, objs):
+        self.objs = objs
+        self.fn_cache = {}
+        self.everywhere = set()
+        self.by_tu = collections.defaultdict(set)
+        for tu, o in objs.items():
+            for s in o.symbols:
+                if s is not None and s.name.startswith('??_C@_0') and s.section > 0:
+                    t = our_string(o.sections[s.section], s.value)
+                    if t is not None:
+                        self.everywhere.add(t)
+                        self.by_tu[tu].add(t)
+
+    def of_function(self, tu, symbol):
+        """The strings our function `symbol` of `tu` references (a set), or None
+        when the object or the function is not there."""
+        key = (tu, symbol)
+        if key in self.fn_cache:
+            return self.fn_cache[key]
+        o = self.objs.get(tu)
+        got = None
+        if o is not None:
+            for s, sec, start, end in o.functions():
+                if s.name != symbol:
+                    continue
+                got = set() if got is None else got
+                for r in sec.relocs:
+                    if not (start <= r.offset < end) or r.type != coffobj.DIR32:
+                        continue
+                    t = o.symbol(r.symbol)
+                    if t is None or not t.name.startswith('??_C@_0') or t.section <= 0:
+                        continue
+                    add = struct.unpack_from('<i', sec.data, r.offset)[0] if r.offset + 4 <= len(sec.data) else 0
+                    v = our_string(o.sections[t.section], t.value + add)
+                    if v is not None:
+                        got.add(v)
+        self.fn_cache[key] = got
+        return got
+
+
+def nearest(want, haves):
+    """The literal of `haves` most like `want`, when one is like it at all."""
+    import difflib
+    best, score = None, 0.0
+    for h in haves:
+        r = difflib.SequenceMatcher(None, want, h, autojunk=False).ratio()
+        if r > score:
+            best, score = h, r
+    return best if score >= 0.6 else None
+
+
+def judge_literal(want, sites, everywhere, tu_haves=()):
+    """(status, method, notes) for one literal of the original holding `want`.
+    sites: one (where, haves, theirs) per use the original makes of it that a
+    place of ours pairs with: `haves` the strings that place of ours names (a
+    set; empty when it names none), `theirs` the strings the original's place
+    names (a literal of ours that is one of those is that other string, not a
+    wrong spelling of this one). everywhere: every literal our image holds.
+    tu_haves: per use, the literals the whole object of ours holds that the
+    use's function sits in (a catch funclet or a split-off helper of ours is
+    another function of that object).
+
+      MATCH    a paired use of ours names a literal of exactly these bytes and
+               none names another (method `use`), or, no function of ours
+               naming it, the object of a use holds it (method `tu`)
+      STRING   a paired use of ours names a literal of other content, and no
+               use names this one: the generator spelled another string
+      MISSING  uses pair, none names this string or one like it, nor does the
+               object of any use hold it
+    No pairing use at all is judged by the caller (UNUSED, UNPAIRED).
+    """
+    if not sites:
+        return 'UNUSED', 'none', []
+    agree = [w for w, h, _t in sites if want in h]
+    differ = []
+    for w, h, theirs in sites:
+        if want in h:
+            continue
+        n = nearest(want, h - theirs)
+        if n is not None:
+            differ.append((w, n))
+    if agree and not differ:
+        return 'MATCH', 'use', ['%d of %d uses agree' % (len(agree), len(sites))]
+    if differ and not agree:
+        w, n = differ[0]
+        return 'STRING', 'use', ['%s names %r where the original holds %r' % (w, n, want)]
+    if agree and differ:
+        w, n = differ[0]
+        return 'STRING', 'use', ['%d uses agree; %s names %r' % (len(agree), w, n)]
+    if any(want in h for h in tu_haves):
+        return 'MATCH', 'tu', ['no function of ours at a use names it; the object of a use holds it']
+    return 'MISSING', 'use', ['%d paired uses (%s), none names it%s' % (
+        len(sites), ', '.join(w for w, _h, _t in sites[:3]),
+        '; the image holds it elsewhere' if want in everywhere else '')]
+
+
+LITERAL_FIELDS = collections.defaultdict(list)     # original string address -> [(where, our string)]
+
+
+def literal_rows(pe, lits, funcmap_rows, ours_lits):
+    """Audit rows (kind `strlit`) for the literals, paired through the
+    original's relocations that point at each."""
+    starts = [r[0] for r in funcmap_rows]
+    targets = collections.defaultdict(list)
+    want_at = {l.addr for l in lits}
+    relocs = sorted(pe.relocs)
+    for va in relocs:
+        try:
+            t = pe.u32(va)
+        except ValueError:
+            continue
+        if t in want_at:
+            targets[t].append(va)
+    text = pe.section('.text')
+    tlo, thi = pe.base + text.va, pe.base + text.va + text.vsize
+    rdata = pe.section('.rdata')
+    rlo, rhi = pe.base + rdata.va, pe.base + rdata.end
+    theirs_cache = {}
+
+    def theirs(start, end):
+        """The strings the original's function [start, end) points at."""
+        if start not in theirs_cache:
+            got = set()
+            for va in relocs_in(relocs, start, end):
+                t = pe.u32(va)
+                if rlo <= t < rhi:
+                    c = pe.cstring(t)
+                    if c:
+                        got.add(c)
+            theirs_cache[start] = got
+        return theirs_cache[start]
+    out = []
+    for l in lits:
+        sites = []
+        tu_haves = []
+        readers = []
+        code_uses = data_uses = 0
+        for va in sorted(targets.get(l.addr, ())):
+            if tlo <= va < thi:
+                code_uses += 1
+                k = bisect.bisect_right(starts, va) - 1
+                if k < 0 or not (funcmap_rows[k][0] <= va < funcmap_rows[k][1]):
+                    continue
+                start, end, name, tu, sym = funcmap_rows[k]
+                readers.append(name)
+                haves = ours_lits.of_function(tu, sym)
+                if haves is not None:
+                    sites.append((name, haves, theirs(start, end)))
+                    tu_haves.append(ours_lits.by_tu.get(tu, set()))
+            else:
+                data_uses += 1
+        for where, have in LITERAL_FIELDS.get(l.addr, ()):
+            sites.append((where, {have} if have is not None else set(), set()))
+        want = l.text
+        if not targets.get(l.addr) and not LITERAL_FIELDS.get(l.addr):
+            status, method, notes = judge_literal(want, [], ours_lits.everywhere)
+        else:
+            status, method, notes = judge_literal(want, sites, ours_lits.everywhere, tu_haves)
+            if not sites:
+                # Every use sits in code or data no symbol of ours pairs with:
+                # the runtime's, as the headline leaves its items out.
+                status, method = 'UNPAIRED', 'none'
+                notes = ['%d uses, none in code or data of ours that pairs' % (code_uses + data_uses)]
+        notes = ['%s string, %d code and %d data uses in the original' % (l.source, code_uses, data_uses)] + notes
+        module = module_of_item(l)
+        if module == '?' and readers:
+            module = module_of_item(type('R', (), {'ns': '', 'refs': readers})())
+        matched = l.extent if status == 'MATCH' else 0
+        judged = status in ('MATCH', 'STRING', 'MISSING')
+        diff = 0 if status == 'MATCH' or not judged else len(want) + 1
+        out.append((l.addr, l.extent, len(want) + 1 if status == 'MATCH' else 0, section_of(pe, l.addr),
+                    module, l.name, '', '', 'strlit', method, l.type, status,
+                    status if status in ('STRING', 'MISSING') else '', 0 if status in ('STRING', 'MISSING') else -1,
+                    diff, matched, '; '.join(notes)))
+    return out
+
+
+def load_funcmap_rows():
+    """[(start, end, name, tu, symbol)] from funcmap.tsv, by start."""
+    out = []
+    p = os.path.join(EVIDENCE, 'funcmap.tsv')
+    if os.path.exists(p):
+        for line in open(p):
+            if line.startswith('start\t'):
+                continue
+            c = line.rstrip('\n').split('\t')
+            out.append((int(c[0], 16), int(c[1], 16), c[2], c[3], c[4]))
+    out.sort()
+    return out
+
+
 def runtime_names():
     out = set()
     p = os.path.join(EVIDENCE, 'runtime.tsv')
@@ -773,6 +1179,10 @@ def root_cause(r):
         return ('generator', 'yes' if referenced else 'no',
                 'interior label emitted as an object of its own; the original\'s name is an alias into its '
                 'container, so a reader of ours sees a separate copy' + ('' if referenced else ' (nothing reads it)'))
+    if kind == 'strlit':
+        return ('generator', 'maybe', 'string the generator spells as a literal: %s; read the function' % (
+            'our use names a literal of other content' if status == 'STRING'
+            else 'no use of ours names it (an inlined copy split into pieces, or a call the body lost)'))
     if 'address claimed by' in notes and 'COOKIE' in r[5]:
         return ('generator', 'no', 'a runtime (CRT) global the library defines too; ours shadows it')
     if status == 'RELOC':
@@ -811,7 +1221,7 @@ def write_fixes(rows, path, top=50):
     An interior label emitted as a copy nothing of ours references is dead
     weight, and its extent is its container's tail, not a size of its own:
     those are one summary row at the end instead of crowding the list."""
-    bad = [r for r in rows if r[11] != 'MATCH']
+    bad = [r for r in rows if r[11] not in ('MATCH', 'UNUSED', 'UNPAIRED')]
     dead = [r for r in bad if r[8] == 'interior' and 'referenced by our code' not in r[16]]
     bad = [r for r in bad if r not in dead]
     bad.sort(key=lambda r: (-r[1], r[0]))
@@ -898,6 +1308,15 @@ def audit_main(args):
     for r in consts:
         paired_addr[r[0]] += 1
     rows += consts
+    # Strings the generator spells as literals: no symbol of ours names them.
+    strings, strings_version, read_only = load_datastrings(args.strings)
+    if not read_only:
+        ro_sec = pe.section('.rdata')
+        read_only = [(pe.base + ro_sec.va, pe.base + ro_sec.end)]
+    lits = literal_candidates(items, strings, pe.read, set(paired_addr), read_only,
+                              load_compiler_data(args.compiler_data))
+    lit_rows = literal_rows(pe, lits, load_funcmap_rows(), OurLiterals(objs))
+    rows += lit_rows
     rows.sort(key=lambda r: (r[0], r[6]))
     # Twice-paired addresses: two of ours claim one original item.
     twice = {a for a, k in paired_addr.items() if k > 1}
@@ -914,7 +1333,7 @@ def audit_main(args):
     # covers counts as uncompared when a game function references it; one
     # only the runtime references is the runtime's, out as in the function
     # figure; imports and compiler EH/RTTI data are the linker's and compiler's.
-    covered = set(paired_addr)
+    covered = set(paired_addr) | {r[0] for r in lit_rows}
     uncompared = []
     runtime_items = []
     excluded = collections.Counter()
@@ -933,7 +1352,7 @@ def audit_main(args):
     # An interior label's bytes are its container's: it is judged (is ours
     # laid out inside the container, or an object of its own?) but its
     # bytes stay out of the totals, which would count them twice.
-    named = [r for r in rows if r[8] not in ('literal', 'import', 'compiler', 'interior')]
+    named = [r for r in rows if r[8] not in ('literal', 'strlit', 'import', 'compiler', 'interior')]
     interior = [r for r in rows if r[8] == 'interior']
     lit = [r for r in rows if r[8] == 'literal']
     tree = subprocess.run(['git', '-C', REPO, 'describe', '--always', '--dirty', '--tags'],
@@ -973,6 +1392,30 @@ def audit_main(args):
     lm = [r for r in lit if r[11] == 'MATCH']
     lines.append('Compiler literals (__real@, ??_C@, ??_7) paired by datamap: %d of %d MATCH, %d of %d bytes' % (
         len(lm), len(lit), sum(r[1] for r in lm), sum(r[1] for r in lit)))
+    lc = collections.Counter(r[11] for r in lit_rows)
+    lb = collections.Counter()
+    for r in lit_rows:
+        lb[r[11]] += r[1]
+    used = [r for r in lit_rows if r[11] in ('MATCH', 'STRING', 'MISSING')]
+    lines.append('String literals (read-only strings the generator spells at their uses; %s, strings v%s): '
+                 '%d of %d MATCH, %d of %d bytes; %s; content compared, placement not' % (
+                     'its compiler-data report' if args.compiler_data else 'its byte rule',
+                     strings_version, lc['MATCH'], len(used), lb['MATCH'], sum(r[1] for r in used),
+                     ', '.join('%s %d' % (k, lc[k]) for k in ('STRING', 'MISSING') if lc[k]) or 'none differ'))
+    lines.append('  left out: %d the original never references (UNUSED), %d used only by code or data no symbol of '
+                 'ours pairs with (UNPAIRED: the runtime\'s)' % (lc['UNUSED'], lc['UNPAIRED']))
+    lm_by = collections.Counter(r[9] for r in lit_rows if r[11] == 'MATCH')
+    lines.append('  paired by: %s; %d typed (dataextent), %d untyped (datastrings)' % (
+        ', '.join('%s %d' % kv for kv in sorted(lm_by.items())) or 'none',
+        sum(1 for r in lit_rows if r[16].startswith('typed')), sum(1 for r in lit_rows if r[16].startswith('untyped'))))
+    lt = [r for r in lit_rows if r[16].startswith('typed') and r[11] in ('MATCH', 'STRING', 'MISSING')
+          and r[3] != '.bss']
+    ltm = [r for r in lt if r[11] == 'MATCH']
+    lines.append('Initialised game data with the typed string literals: %d of %d symbols MATCH (%.2f%%), '
+                 '%d of %d bytes (%.2f%%)' % (
+                     mn + len(ltm), tn + len(lt), 100.0 * (mn + len(ltm)) / max(1, tn + len(lt)),
+                     mb + sum(r[1] for r in ltm), tb + sum(r[1] for r in lt),
+                     100.0 * (mb + sum(r[1] for r in ltm)) / max(1, tb + sum(r[1] for r in lt))))
     lines.append('status of the initialised game data compared (symbols, original bytes):')
     st = collections.Counter()
     stb = collections.Counter()
@@ -1003,7 +1446,7 @@ def audit_main(args):
         rs = [r for r in named if r[3] == sec]
         m = [r for r in rs if r[11] == 'MATCH']
         lines.append('  %-7s %5d/%-5d %8d/%-8d' % (sec, len(m), len(rs), sum(r[1] for r in m), sum(r[1] for r in rs)))
-    pm = collections.Counter(r[9] for r in rows)
+    pm = collections.Counter(r[9] for r in rows if r[8] != 'strlit')
     lines.append('floating-point constants judged by the literals of their readers\' objects: %d, %d MATCH' % (
         len(consts), sum(1 for r in consts if r[11] == 'MATCH')))
     lines.append('pairings: ' + ', '.join('%s %d' % kv for kv in pm.most_common()) +
@@ -1048,6 +1491,10 @@ def main():
     e = sub.add_parser('extents')
     e.add_argument('--snapshot', default=default_snapshot())
     e.add_argument('--out', default=EXTENTS)
+    e.add_argument('--strings-out', default=os.path.join(EVIDENCE, 'datastrings.tsv'))
+    st = sub.add_parser('strings')
+    st.add_argument('--snapshot', default=default_snapshot())
+    st.add_argument('--strings-out', default=os.path.join(EVIDENCE, 'datastrings.tsv'))
     a = sub.add_parser('audit')
     a.add_argument('--extents', default=EXTENTS)
     a.add_argument('--obj', action='append', default=None,
@@ -1058,11 +1505,21 @@ def main():
     a.add_argument('--trend', default=None)
     a.add_argument('--fixes', default=None)
     a.add_argument('--label', default='')
+    a.add_argument('--strings', default=os.path.join(EVIDENCE, 'datastrings.tsv'),
+                   help='Ghidra\'s untyped strings (`datamatch.py strings`)')
+    a.add_argument('--compiler-data', default=None,
+                   help='the generator\'s compiler-data report (GHIDRA_COMPILER_DATA_REPORT): its string-literal '
+                        'rows replace the byte rule')
     args = ap.parse_args()
     if args.cmd == 'extents':
         if not args.snapshot:
             sys.exit('no codegen snapshot found; pass --snapshot DIR (holding globals.ndjson)')
         extents_main(args)
+        strings_main(args)
+    elif args.cmd == 'strings':
+        if not args.snapshot:
+            sys.exit('no codegen snapshot found; pass --snapshot DIR (holding strings.ndjson)')
+        strings_main(args)
     elif args.cmd in (None, 'audit'):
         if args.cmd is None:
             args = a.parse_args([])

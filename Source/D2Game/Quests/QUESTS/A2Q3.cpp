@@ -818,8 +818,8 @@ static void __stdcall Q11_StartDarknessTimer(D2QuestDataStrc * pQuestData) {
 // 0x28 with bAcceptedQuest -> Q11_BeginTaintedSun and, on success, sync records (Q11_UpdateQuestRecord) and
 // clear bAcceptedQuest. On gossip control 0x28: remove player from GUID list and bump stateFlag 2->3. No record reads.
 void __fastcall Q11_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int nLevelIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
-    D2GSPacketSrv0x27_TextStrc* pSpecificData = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
+    int nLevelIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     D2QuestDataA2Q3Strc* pGossipControl = pQuestData->pQuestSpecificData.pA2Q3;
     if ((nLevelIndex == 0x2c || nLevelIndex == 0x2d) && !pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
       Q11_StartDarknessTimer(pQuestData);
@@ -832,7 +832,7 @@ void __fastcall Q11_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         pGossipControl->bViperAmuletInitPending = '\0';
       }
     }
-    if (pSpecificData != (D2GSPacketSrv0x27_TextStrc*)0x28) {
+    if (nOldLevel != 0x28) {
       return;
     }
 

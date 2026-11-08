@@ -2468,7 +2468,7 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
       nUnitId = pUnit_00->nClassId;
     }
 
-    int nTxt = (int)D2Common::Units::GetObjectTxtRecordFromObject(pUnit_00);
+    intptr_t nTxt = (intptr_t)D2Common::Units::GetObjectTxtRecordFromObject(pUnit_00);
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && ((bResult = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, (uint32_t*)&pUId) , bResult || (pPlayerData = D2Common::Units::GetPlayerData(pUnit) , pPlayerData->bCutscenePending != 0)) || (pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) , pCursorItem_lcl && nUnitId != 0x10b))) {
       return 0;
     }

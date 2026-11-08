@@ -17,7 +17,7 @@
         "SCMD_ConvertBool"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "uint32_t"
       ]
     },
@@ -39,7 +39,7 @@
         "SMemCopy"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "uint32_t"
       ]
     },
@@ -61,7 +61,7 @@
         "SStrCopy"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "uint32_t"
       ]
     },
@@ -108,7 +108,8 @@
         "SMemFree"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc *",
+        "CMDDEF *",
+        "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
       ]
@@ -131,25 +132,6 @@
       ]
     },
     {
-      "name": "SCMD_GetListOffset",
-      "address": "006c4040",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4040"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_GetListOffset"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "intptr_t",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_006c40b0",
       "address": "006c40b0",
       "lines": [
@@ -163,7 +145,8 @@
         "Unreferenced_006c40b0"
       ],
       "usedTypes": [
-        "StormLinkedListStrc"
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {
@@ -184,78 +167,6 @@
       ]
     },
     {
-      "name": "SCMD_GetListHead",
-      "address": "006c4160",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4160"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_GetListHead"
-      ],
-      "usedTypes": [
-        "SCMD"
-      ]
-    },
-    {
-      "name": "SCMD_MoveToList",
-      "address": "006c4180",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4180"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_MoveToList"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SCMD_GetNextOffset",
-      "address": "006c4230",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4230"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_GetNextOffset"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SCMD_UnlinkNode",
-      "address": "006c4290",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4290"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_UnlinkNode"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "StormLinkStrc",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "SCMD_FindFlagDef",
       "address": "006c42e0",
       "lines": [
@@ -272,7 +183,7 @@
         "strncmp"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "uint32_t"
       ]
     },
@@ -294,66 +205,6 @@
       ]
     },
     {
-      "name": "SCMD_GetHandler",
-      "address": "006c4380",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4380"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_GetHandler"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "StormLinkStrc",
-        "intptr_t"
-      ]
-    },
-    {
-      "name": "UnlinkAll",
-      "address": "006c43f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c43f0"
-        }
-      ],
-      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
-      "calledFunctions": [
-        "UnlinkAll"
-      ],
-      "usedTypes": [
-        "TSLink<CMDDEF>",
-        "TSLink<CMDDEF> *",
-        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SCMD_ClearAll",
-      "address": "006c4430",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4430"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_ClearAll",
-        "UnlinkAll"
-      ],
-      "usedTypes": [
-        "StormLinkStrc",
-        "StormLinkStrc *",
-        "StormLinkedListStrc",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_006c4470",
       "address": "006c4470",
       "lines": [
@@ -368,26 +219,6 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
-    },
-    {
-      "name": "SCMD_AllocNode",
-      "address": "006c44c0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c44c0"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_AllocNode",
-        "SMemAlloc",
-        "SCMD_MoveToList"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "uint32_t"
       ]
     },
     {
@@ -429,50 +260,10 @@
         "SStrCopy"
       ],
       "usedTypes": [
+        "CMDDEF",
+        "CMDDEF *",
         "SCMDCALLBACK",
-        "StormCmdArgDefStrc",
-        "StormCmdArgDefStrc *",
         "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SCMD_FreeAllNodes",
-      "address": "006c4760",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c4760"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_FreeAllNodes",
-        "SMemFree"
-      ],
-      "usedTypes": [
-        "StormLinkedListStrc",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SCMD_RemoveNode",
-      "address": "006c47b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006c47b0"
-        }
-      ],
-      "namespace": "Storm::Source::SCMD",
-      "calledFunctions": [
-        "SCMD_RemoveNode",
-        "SMemFree"
-      ],
-      "usedTypes": [
-        "SCMD",
-        "StormLinkStrc",
-        "StormLinkStrc *",
         "uint32_t"
       ]
     },
@@ -497,8 +288,8 @@
         "SStrCopy"
       ],
       "usedTypes": [
+        "CMDDEF",
         "CMDPARAMS",
-        "StormCmdArgDefStrc",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -519,7 +310,8 @@
         "SCMD_FindFlagDef"
       ],
       "usedTypes": [
-        "int *"
+        "CMDDEF",
+        "StormCmdProcessingStrc"
       ]
     },
     {
@@ -543,8 +335,8 @@
         "SCMD_ProcessCurrentFlag"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
-        "int *",
+        "CMDDEF",
+        "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "uint32_t"
       ]
@@ -569,7 +361,8 @@
         "SCMD_PerformConversion"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc *",
+        "CMDDEF *",
+        "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
       ]
@@ -588,7 +381,7 @@
         "SCmdCheckId"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "StormLinkedListStrc"
       ]
     },
@@ -605,7 +398,7 @@
       "calledFunctions": [
         "SCmdDestroy",
         "SMemFree",
-        "SCMD_FreeAllNodes"
+        "Clear"
       ],
       "usedTypes": [
         "StormLinkedListStrc",
@@ -626,7 +419,7 @@
         "SCmdGetNum"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "StormLinkedListStrc"
       ]
     },
@@ -646,7 +439,7 @@
         "SStrCopy"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
         "StormLinkedListStrc"
       ]
     },
@@ -687,7 +480,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc *",
+        "CMDDEF *",
+        "StormCmdProcessingStrc",
         "char *",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback",
@@ -729,10 +523,10 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "StormCmdArgDefStrc",
+        "CMDDEF",
+        "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
-        "pfnSCmdUnknownArgCallback",
-        "uint32_t"
+        "pfnSCmdUnknownArgCallback"
       ]
     },
     {

@@ -4,7 +4,6 @@
  */
 
 #include "Source/globals/globals.h"
-#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
 // =============================================================================
@@ -16,157 +15,33 @@
 // content and agrees with it only by accident.
 // =============================================================================
 
-char s_14_006cc77c[] = "14"; D2_GLOBAL_GUARD(s_14_006cc77c, "s_14_006cc77c");
 char s_207_82_87_133_0070f130[] = "207.82.87.133"; D2_GLOBAL_GUARD(s_207_82_87_133_0070f130, "s_207_82_87_133_0070f130");
-char s_AppID_006fad8c[] = "AppID"; D2_GLOBAL_GUARD(s_AppID_006fad8c, "s_AppID_006fad8c");
-char s_Assertion_Failure_006ccb6c[] = "Assertion Failure"; D2_GLOBAL_GUARD(s_Assertion_Failure_006ccb6c, "s_Assertion_Failure_006ccb6c");
 char s_BLIZZARDKEY_006cef6c[] = "BLIZZARDKEY"; D2_GLOBAL_GUARD(s_BLIZZARDKEY_006cef6c, "s_BLIZZARDKEY_006cef6c");
-char s_BNNews_D2DV_006df210[] = "BNNews-D2DV"; D2_GLOBAL_GUARD(s_BNNews_D2DV_006df210, "s_BNNews_D2DV_006df210");
-char s_Blizzard_Entertainment__Inc__006deb80[] = "Blizzard Entertainment, Inc."; D2_GLOBAL_GUARD(s_Blizzard_Entertainment__Inc__006deb80, "s_Blizzard_Entertainment__Inc__006deb80");
-char s_CLSID_006fad84[] = "CLSID"; D2_GLOBAL_GUARD(s_CLSID_006fad84, "s_CLSID_006fad84");
-char s_CLen_006e163c[] = "CLen"; D2_GLOBAL_GUARD(s_CLen_006e163c, "s_CLen_006e163c");
-char s_Cold_006e164c[] = "Cold"; D2_GLOBAL_GUARD(s_Cold_006e164c, "s_Cold_006e164c");
-char s_Component_Categories_006fad6c[] = "Component Categories"; D2_GLOBAL_GUARD(s_Component_Categories_006fad6c, "s_Component_Categories_006fad6c");
-char s_D2X_INTRO__s_BIK_006d913c[] = "D2X_INTRO_%s.BIK"; D2_GLOBAL_GUARD(s_D2X_INTRO__s_BIK_006d913c, "s_D2X_INTRO__s_BIK_006d913c");
-char s_D2_LNG_006d5ee0[] = "D2.LNG"; D2_GLOBAL_GUARD(s_D2_LNG_006d5ee0, "s_D2_LNG_006d5ee0");
 char s_DIABLO2SRV_007065dc[] = "DIABLO2SRV"; D2_GLOBAL_GUARD(s_DIABLO2SRV_007065dc, "s_DIABLO2SRV_007065dc");
-char s_Deadlock_006ccb34[] = "Deadlock"; D2_GLOBAL_GUARD(s_Deadlock_006ccb34, "s_Deadlock_006ccb34");
-char s_Diablo_2_EXE_006cc838[] = "Diablo 2.EXE"; D2_GLOBAL_GUARD(s_Diablo_2_EXE_006cc838, "s_Diablo_2_EXE_006cc838");
-char s_Diablo_II_006cc8b8[] = "Diablo II"; D2_GLOBAL_GUARD(s_Diablo_II_006cc8b8, "s_Diablo_II_006cc8b8");
 char s_Direct3D_Enumeration_0074c058[] = "Direct3D Enumeration"; D2_GLOBAL_GUARD(s_Direct3D_Enumeration_0074c058, "s_Direct3D_Enumeration_0074c058");
-char s_Do_you_wish_to_terminate_the_appl_006cf1f4[] = "Do you wish to terminate the application\?"; D2_GLOBAL_GUARD(s_Do_you_wish_to_terminate_the_appl_006cf1f4, "s_Do_you_wish_to_terminate_the_appl_006cf1f4");
-char s_ERROR___u__0x_08x__006cf2e0[] = "ERROR #%u (0x%08x)"; D2_GLOBAL_GUARD(s_ERROR___u__0x_08x__006cf2e0, "s_ERROR___u__0x_08x__006cf2e0");
 char s_Enumeration_Class_0074c044[] = "Enumeration Class"; D2_GLOBAL_GUARD(s_Enumeration_Class_0074c044, "s_Enumeration_Class_0074c044");
 char s_Error_1__Diablo_II_is_unable_to_p_0072daa8[] = "Error 1: Diablo II is unable to proceed.  Unsupported graphics mode."; D2_GLOBAL_GUARD(s_Error_1__Diablo_II_is_unable_to_p_0072daa8, "s_Error_1__Diablo_II_is_unable_to_p_0072daa8");
 char s_Error_1__Diablo_II_is_unable_to_p_0072daf0[] = "Error 1: Diablo II is unable to proceed.  Unsupported graphics mode."; D2_GLOBAL_GUARD(s_Error_1__Diablo_II_is_unable_to_p_0072daf0, "s_Error_1__Diablo_II_is_unable_to_p_0072daf0");
-char s_FLen_006e1634[] = "FLen"; D2_GLOBAL_GUARD(s_FLen_006e1634, "s_FLen_006e1634");
-char s_FileType_006fad60[] = "FileType"; D2_GLOBAL_GUARD(s_FileType_006fad60, "s_FileType_006fad60");
-char s_File_Read_Error_006ccb94[] = "File Read Error"; D2_GLOBAL_GUARD(s_File_Read_Error_006ccb94, "s_File_Read_Error_006ccb94");
-char s_File_Write_Error_006ccb80[] = "File Write Error"; D2_GLOBAL_GUARD(s_File_Write_Error_006ccb80, "s_File_Write_Error_006ccb80");
-char s_File___s_Line___d__006cf284[] = "File:\011%s\012Line:\011%d\012"; D2_GLOBAL_GUARD(s_File___s_Line___d__006cf284, "s_File___s_Line___d__006cf284");
-char s_Fire_006e165c[] = "Fire"; D2_GLOBAL_GUARD(s_Fire_006e165c, "s_Fire_006e165c");
-char s_Font16_006dc970[] = "Font16"; D2_GLOBAL_GUARD(s_Font16_006dc970, "s_Font16_006dc970");
-char s_Font24_006dc930[] = "Font24"; D2_GLOBAL_GUARD(s_Font24_006dc930, "s_Font24_006dc930");
-char s_Font30_006dc968[] = "Font30"; D2_GLOBAL_GUARD(s_Font30_006dc968, "s_Font30_006dc968");
-char s_Font42_006dc960[] = "Font42"; D2_GLOBAL_GUARD(s_Font42_006dc960, "s_Font42_006dc960");
-char s_Font6_006dc938[] = "Font6"; D2_GLOBAL_GUARD(s_Font6_006dc938, "s_Font6_006dc938");
-char s_Font8_006dc978[] = "Font8"; D2_GLOBAL_GUARD(s_Font8_006dc978, "s_Font8_006dc978");
-char s_FontExocet10_006dc910[] = "FontExocet10"; D2_GLOBAL_GUARD(s_FontExocet10_006dc910, "s_FontExocet10_006dc910");
-char s_FontExocet8_006dc8f4[] = "FontExocet8"; D2_GLOBAL_GUARD(s_FontExocet8_006dc8f4, "s_FontExocet8_006dc8f4");
-char s_FontFormal10_006dc950[] = "FontFormal10"; D2_GLOBAL_GUARD(s_FontFormal10_006dc950, "s_FontFormal10_006dc950");
-char s_FontFormal11_006dc920[] = "FontFormal11"; D2_GLOBAL_GUARD(s_FontFormal11_006dc920, "s_FontFormal11_006dc920");
-char s_FontFormal12_006dc940[] = "FontFormal12"; D2_GLOBAL_GUARD(s_FontFormal12_006dc940, "s_FontFormal12_006dc940");
-char s_FontInGameChat_006dc8d0[] = "FontInGameChat"; D2_GLOBAL_GUARD(s_FontInGameChat_006dc8d0, "s_FontInGameChat_006dc8d0");
-char s_FontRidiculous_006dc900[] = "FontRidiculous"; D2_GLOBAL_GUARD(s_FontRidiculous_006dc900, "s_FontRidiculous_006dc900");
-char s_Function___s__006cf274[] = "Function:\011%s\012"; D2_GLOBAL_GUARD(s_Function___s__006cf274, "s_Function___s__006cf274");
-char s_Game_006d5b14[] = "Game"; D2_GLOBAL_GUARD(s_Game_006d5b14, "s_Game_006d5b14");
-char s_Gaunt_006d6b80[] = "Gaunt"; D2_GLOBAL_GUARD(s_Gaunt_006d6b80, "s_Gaunt_006d6b80");
-char s_Halt_006ccb64[] = "Halt"; D2_GLOBAL_GUARD(s_Halt_006ccb64, "s_Halt_006ccb64");
-char s_Handle___s__006cf25c[] = "Handle:\011%s\012"; D2_GLOBAL_GUARD(s_Handle___s__006cf25c, "s_Handle___s__006cf25c");
-char s_Hardware_006fad48[] = "Hardware"; D2_GLOBAL_GUARD(s_Hardware_006fad48, "s_Hardware_006fad48");
-char s_Interface_006fad54[] = "Interface"; D2_GLOBAL_GUARD(s_Interface_006fad54, "s_Interface_006fad54");
-char s_Mana_006e1614[] = "Mana"; D2_GLOBAL_GUARD(s_Mana_006e1614, "s_Mana_006e1614");
-char s_Mime_006fad40[] = "Mime"; D2_GLOBAL_GUARD(s_Mime_006fad40, "s_Mime_006fad40");
-char s_Missing_Dll_006ccb50[] = "Missing Dll"; D2_GLOBAL_GUARD(s_Missing_Dll_006ccb50, "s_Missing_Dll_006ccb50");
-char s_No_Error_006ccbc8[] = "No Error"; D2_GLOBAL_GUARD(s_No_Error_006ccbc8, "s_No_Error_006ccbc8");
-char s_Object___s__006cf268[] = "Object:\011%s\012"; D2_GLOBAL_GUARD(s_Object___s__006cf268, "s_Object___s__006cf268");
-char s_Out_of_Memory_Error_006ccba4[] = "Out of Memory Error"; D2_GLOBAL_GUARD(s_Out_of_Memory_Error_006ccba4, "s_Out_of_Memory_Error_006ccba4");
 char s_PKWARE_Data_Compression_Library_f_0074be60[] = "PKWARE Data Compression Library for Win32\015\012Copyright 1989-1995 PKWARE Inc.  All Rights Reserved\015\012Patent No. 5,051,745\015\012PKWARE Data Compression Library Reg. U.S. Pat. and Tm. Off.\015\012Version 1.11"; D2_GLOBAL_GUARD(s_PKWARE_Data_Compression_Library_f_0074be60, "s_PKWARE_Data_Compression_Library_f_0074be60");
-char s_PLen_006e162c[] = "PLen"; D2_GLOBAL_GUARD(s_PLen_006e162c, "s_PLen_006e162c");
-char s_Press_OK_to_terminate_the_applica_006cf220[] = "Press OK to terminate the application."; D2_GLOBAL_GUARD(s_Press_OK_to_terminate_the_applica_006cf220, "s_Press_OK_to_terminate_the_applica_006cf220");
-char s_Program___s__006cf298[] = "Program:\011%s\012"; D2_GLOBAL_GUARD(s_Program___s__006cf298, "s_Program___s__006cf298");
-char s_ReallyTheLastSucker_006dc8e0[] = "ReallyTheLastSucker"; D2_GLOBAL_GUARD(s_ReallyTheLastSucker_006dc8e0, "s_ReallyTheLastSucker_006dc8e0");
-char s_Registry_Error_006ccb40[] = "Registry Error"; D2_GLOBAL_GUARD(s_Registry_Error_006ccb40, "s_Registry_Error_006ccb40");
-char s_SECURITY_006fad30[] = "SECURITY"; D2_GLOBAL_GUARD(s_SECURITY_006fad30, "s_SECURITY_006fad30");
-char s_SYSTEM_006fad28[] = "SYSTEM"; D2_GLOBAL_GUARD(s_SYSTEM_006fad28, "s_SYSTEM_006fad28");
-char s_Software_006d71ec[] = "Software"; D2_GLOBAL_GUARD(s_Software_006d71ec, "s_Software_006d71ec");
-char s_Stupid_Lng_cpp_error__006d5ea8[] = "Stupid Lng.cpp error."; D2_GLOBAL_GUARD(s_Stupid_Lng_cpp_error__006d5ea8, "s_Stupid_Lng_cpp_error__006d5ea8");
-char s_The_syntax_of_the_command_is_inco_006fcbe4[] = "The syntax of the command is incorrect."; D2_GLOBAL_GUARD(s_The_syntax_of_the_command_is_inco_006fcbe4, "s_The_syntax_of_the_command_is_inco_006fcbe4");
-char s_This_application_has_encountered__006cf2a8[] = "This application has encountered a critical error:\012\012%s\012"; D2_GLOBAL_GUARD(s_This_application_has_encountered__006cf2a8, "s_This_application_has_encountered__006cf2a8");
-char s_TypeLib_006fad20[] = "TypeLib"; D2_GLOBAL_GUARD(s_TypeLib_006fad20, "s_TypeLib_006fad20");
-char s_Unable_to_start_LNG_manager__006d5ec0[] = "Unable to start LNG manager."; D2_GLOBAL_GUARD(s_Unable_to_start_LNG_manager__006d5ec0, "s_Unable_to_start_LNG_manager__006d5ec0");
-char s_Unknown_Error_006ccbb8[] = "Unknown Error"; D2_GLOBAL_GUARD(s_Unknown_Error_006ccbb8, "s_Unknown_Error_006ccbb8");
-char s_Warning_006ccb5c[] = "Warning"; D2_GLOBAL_GUARD(s_Warning_006ccb5c, "s_Warning_006ccb5c");
-char s___006d727c[] = "@"; D2_GLOBAL_GUARD(s___006d727c, "s___006d727c");
-char s___H__006ed5a4[] = " (H)"; D2_GLOBAL_GUARD(s___H__006ed5a4, "s___H__006ed5a4");
-char s___N__006ed59c[] = " (N)"; D2_GLOBAL_GUARD(s___N__006ed59c, "s___N__006ed59c");
-char s_____006ccb30[] = "\?\?\?"; D2_GLOBAL_GUARD(s_____006ccb30, "s_____006ccb30");
 char s__not_xlated_call_ken_w_00730520[] = " -not xlated call ken w"; D2_GLOBAL_GUARD(s__not_xlated_call_ken_w_00730520, "s__not_xlated_call_ken_w_00730520");
-char s__s_palette_act_d__s_006dc7d0[] = "%s\\palette\\act%d\\%s"; D2_GLOBAL_GUARD(s__s_palette_act_d__s_006dc7d0, "s__s_palette_act_d__s_006dc7d0");
 char s_buffer_error_006d37e0[] = "buffer error"; D2_GLOBAL_GUARD(s_buffer_error_006d37e0, "s_buffer_error_006d37e0");
 char s_buysell_006d6b50[] = "buysell"; D2_GLOBAL_GUARD(s_buysell_006d6b50, "s_buysell_006d6b50");
-char s_client_006cc920[] = "client"; D2_GLOBAL_GUARD(s_client_006cc920, "s_client_006cc920");
-char s_cmncof_a1_d2_006d6c44[] = "cmncof_a1.d2"; D2_GLOBAL_GUARD(s_cmncof_a1_d2_006d6c44, "s_cmncof_a1_d2_006d6c44");
-char s_cmncof_a2_d2_006d6c54[] = "cmncof_a2.d2"; D2_GLOBAL_GUARD(s_cmncof_a2_d2_006d6c54, "s_cmncof_a2_d2_006d6c54");
-char s_cmncof_a3_d2_006d6c64[] = "cmncof_a3.d2"; D2_GLOBAL_GUARD(s_cmncof_a3_d2_006d6c64, "s_cmncof_a3_d2_006d6c64");
-char s_cmncof_a4_d2_006d6c74[] = "cmncof_a4.d2"; D2_GLOBAL_GUARD(s_cmncof_a4_d2_006d6c74, "s_cmncof_a4_d2_006d6c74");
-char s_cmncof_a6_d2_006d6c84[] = "cmncof_a6.d2"; D2_GLOBAL_GUARD(s_cmncof_a6_d2_006d6c84, "s_cmncof_a6_d2_006d6c84");
-char s_d2_promo_bik_006d91ac[] = "d2_promo.bik"; D2_GLOBAL_GUARD(s_d2_promo_bik_006d91ac, "s_d2_promo_bik_006d91ac");
-char s_d2data_mpq_006dc770[] = "d2data.mpq"; D2_GLOBAL_GUARD(s_d2data_mpq_006dc770, "s_d2data_mpq_006dc770");
-char s_d2exp_mpq_006cd3a0[] = "d2exp.mpq"; D2_GLOBAL_GUARD(s_d2exp_mpq_006cd3a0, "s_d2exp_mpq_006cd3a0");
 char s_data_error_006d3804[] = "data error"; D2_GLOBAL_GUARD(s_data_error_006d3804, "s_data_error_006d3804");
-char s_data_global_music_act1_caves_wav_006dea30[] = "data\\global\\music\\act1\\caves.wav"; D2_GLOBAL_GUARD(s_data_global_music_act1_caves_wav_006dea30, "s_data_global_music_act1_caves_wav_006dea30");
-char s_data_global_music_act1_crypt_wav_006de9e4[] = "data\\global\\music\\act1\\crypt.wav"; D2_GLOBAL_GUARD(s_data_global_music_act1_crypt_wav_006de9e4, "s_data_global_music_act1_crypt_wav_006de9e4");
-char s_data_global_music_act1_monastery__006dea08[] = "data\\global\\music\\act1\\monastery.wav"; D2_GLOBAL_GUARD(s_data_global_music_act1_monastery__006dea08, "s_data_global_music_act1_monastery__006dea08");
-char s_data_global_music_act2_desert_wav_006de8c4[] = "data\\global\\music\\act2\\desert.wav"; D2_GLOBAL_GUARD(s_data_global_music_act2_desert_wav_006de8c4, "s_data_global_music_act2_desert_wav_006de8c4");
-char s_data_global_music_act2_harem_wav_006de9c0[] = "data\\global\\music\\act2\\harem.wav"; D2_GLOBAL_GUARD(s_data_global_music_act2_harem_wav_006de9c0, "s_data_global_music_act2_harem_wav_006de9c0");
-char s_data_global_music_act2_sewer_wav_006de8a0[] = "data\\global\\music\\act2\\sewer.wav"; D2_GLOBAL_GUARD(s_data_global_music_act2_sewer_wav_006de8a0, "s_data_global_music_act2_sewer_wav_006de8a0");
-char s_data_global_music_act2_tombs_wav_006de99c[] = "data\\global\\music\\act2\\tombs.wav"; D2_GLOBAL_GUARD(s_data_global_music_act2_tombs_wav_006de99c, "s_data_global_music_act2_tombs_wav_006de99c");
-char s_data_global_music_act3_kurast_wav_006de87c[] = "data\\global\\music\\act3\\kurast.wav"; D2_GLOBAL_GUARD(s_data_global_music_act3_kurast_wav_006de87c, "s_data_global_music_act3_kurast_wav_006de87c");
-char s_data_global_music_act3_kurastsewe_006de950[] = "data\\global\\music\\act3\\kurastsewer.wav"; D2_GLOBAL_GUARD(s_data_global_music_act3_kurastsewe_006de950, "s_data_global_music_act3_kurastsewe_006de950");
-char s_data_global_music_act3_spider_wav_006de978[] = "data\\global\\music\\act3\\spider.wav"; D2_GLOBAL_GUARD(s_data_global_music_act3_spider_wav_006de978, "s_data_global_music_act3_spider_wav_006de978");
-char s_data_global_music_act4_diablo_wav_006de858[] = "data\\global\\music\\act4\\diablo.wav"; D2_GLOBAL_GUARD(s_data_global_music_act4_diablo_wav_006de858, "s_data_global_music_act4_diablo_wav_006de858");
-char s_data_global_music_act5_icecaves_w_006de90c[] = "data\\global\\music\\act5\\icecaves.wav"; D2_GLOBAL_GUARD(s_data_global_music_act5_icecaves_w_006de90c, "s_data_global_music_act5_icecaves_w_006de90c");
-char s_data_global_music_act5_xtemple_wa_006de8e8[] = "data\\global\\music\\act5\\xtemple.wav"; D2_GLOBAL_GUARD(s_data_global_music_act5_xtemple_wa_006de8e8, "s_data_global_music_act5_xtemple_wa_006de8e8");
-char s_data_global_music_common_options__006dea54[] = "data\\global\\music\\common\\options.wav"; D2_GLOBAL_GUARD(s_data_global_music_common_options__006dea54, "s_data_global_music_common_options__006dea54");
-char s_data_global_music_introedit_wav_006de930[] = "data\\global\\music\\introedit.wav"; D2_GLOBAL_GUARD(s_data_global_music_introedit_wav_006de930, "s_data_global_music_introedit_wav_006de930");
-char s_data_local_font__s_default_map_006e02d8[] = "data\\local\\font\\%s\\default.map"; D2_GLOBAL_GUARD(s_data_local_font__s_default_map_006e02d8, "s_data_local_font__s_default_map_006e02d8");
 char s_data_local_lng__s_expansionstring_006e028c[] = "data\\local\\lng\\%s\\expansionstring.tbl"; D2_GLOBAL_GUARD(s_data_local_lng__s_expansionstring_006e028c, "s_data_local_lng__s_expansionstring_006e028c");
 char s_data_local_lng__s_patchstring_tbl_006e02b4[] = "data\\local\\lng\\%s\\patchstring.tbl"; D2_GLOBAL_GUARD(s_data_local_lng__s_patchstring_tbl_006e02b4, "s_data_local_lng__s_patchstring_tbl_006e02b4");
-char s_data_local_lng__s_string_tbl_006e02f8[] = "data\\local\\lng\\%s\\string.tbl"; D2_GLOBAL_GUARD(s_data_local_lng__s_string_tbl_006e02f8, "s_data_local_lng__s_string_tbl_006e02f8");
 char s_dialogbackground_00727498[] = "dialogbackground"; D2_GLOBAL_GUARD(s_dialogbackground_00727498, "s_dialogbackground_00727498");
-char s_expand_006cc8f8[] = "expand"; D2_GLOBAL_GUARD(s_expand_006cc8f8, "s_expand_006cc8f8");
 char s_file_error_006d3820[] = "file error"; D2_GLOBAL_GUARD(s_file_error_006d3820, "s_file_error_006d3820");
-char s_grasp_006d6b78[] = "grasp"; D2_GLOBAL_GUARD(s_grasp_006d6b78, "s_grasp_006d6b78");
 char s_incompatible_version_006d37c8[] = "incompatible version"; D2_GLOBAL_GUARD(s_incompatible_version_006d37c8, "s_incompatible_version_006d37c8");
 char s_insufficient_memory_006d37f0[] = "insufficient memory"; D2_GLOBAL_GUARD(s_insufficient_memory_006d37f0, "s_insufficient_memory_006d37f0");
-char s_launcher_006cc900[] = "launcher"; D2_GLOBAL_GUARD(s_launcher_006cc900, "s_launcher_006cc900");
-char s_mode_006d5bc4[] = "mode"; D2_GLOBAL_GUARD(s_mode_006d5bc4, "s_mode_006d5bc4");
-char s_modstate0_006cc928[] = "modstate0"; D2_GLOBAL_GUARD(s_modstate0_006cc928, "s_modstate0_006cc928");
-char s_multiplayer_006cc90c[] = "multiplayer"; D2_GLOBAL_GUARD(s_multiplayer_006cc90c, "s_multiplayer_006cc90c");
 char s_need_dictionary_006d3838[] = "need dictionary"; D2_GLOBAL_GUARD(s_need_dictionary_006d3838, "s_need_dictionary_006d3838");
-char s_ohand_006d6b70[] = "ohand"; D2_GLOBAL_GUARD(s_ohand_006d6b70, "s_ohand_006d6b70");
-char s_orotate_006d6b68[] = "orotate"; D2_GLOBAL_GUARD(s_orotate_006d6b68, "s_orotate_006d6b68");
-char s_pal_dat_006dc7c8[] = "pal.dat"; D2_GLOBAL_GUARD(s_pal_dat_006dc7c8, "s_pal_dat_006dc7c8");
-char s_pal_pl2_006dc7c0[] = "pal.pl2"; D2_GLOBAL_GUARD(s_pal_pl2_006dc7c0, "s_pal_pl2_006dc7c0");
-char s_palette_act1_pal_dat_006dc7fc[] = "palette\\act1\\pal.dat"; D2_GLOBAL_GUARD(s_palette_act1_pal_dat_006dc7fc, "s_palette_act1_pal_dat_006dc7fc");
-char s_palette_act1_pal_pl2_006dc7e4[] = "palette\\act1\\pal.pl2"; D2_GLOBAL_GUARD(s_palette_act1_pal_pl2_006dc7e4, "s_palette_act1_pal_pl2_006dc7e4");
 char s_palette_fechar_pal_dat_006d39e8[] = "palette\\fechar\\pal.dat"; D2_GLOBAL_GUARD(s_palette_fechar_pal_dat_006d39e8, "s_palette_fechar_pal_dat_006d39e8");
 char s_palette_fechar_pal_pl2_006d39d0[] = "palette\\fechar\\pal.pl2"; D2_GLOBAL_GUARD(s_palette_fechar_pal_pl2_006d39d0, "s_palette_fechar_pal_pl2_006d39d0");
 char s_palette_sky_pal_dat_006d39bc[] = "palette\\sky\\pal.dat"; D2_GLOBAL_GUARD(s_palette_sky_pal_dat_006d39bc, "s_palette_sky_pal_dat_006d39bc");
 char s_palette_sky_pal_pl2_006d39a8[] = "palette\\sky\\pal.pl2"; D2_GLOBAL_GUARD(s_palette_sky_pal_pl2_006d39a8, "s_palette_sky_pal_pl2_006d39a8");
-char s_patch_d2_mpq_006dc728[] = "patch_d2.mpq"; D2_GLOBAL_GUARD(s_patch_d2_mpq_006dc728, "s_patch_d2_mpq_006dc728");
-char s_ppress_006d6b60[] = "ppress"; D2_GLOBAL_GUARD(s_ppress_006d6b60, "s_ppress_006d6b60");
-char s_profile_description_006d4eb8[] = "profile\\description"; D2_GLOBAL_GUARD(s_profile_description_006d4eb8, "s_profile_description_006d4eb8");
-char s_profile_location_006d4ecc[] = "profile\\location"; D2_GLOBAL_GUARD(s_profile_location_006d4ecc, "s_profile_location_006d4ecc");
-char s_profile_sex_006d4ee0[] = "profile\\sex"; D2_GLOBAL_GUARD(s_profile_sex_006d4ee0, "s_profile_sex_006d4ee0");
-char s_protate_006d6b58[] = "protate"; D2_GLOBAL_GUARD(s_protate_006d6b58, "s_protate_006d6b58");
-char s_screen01_006d5d10[] = "screen01"; D2_GLOBAL_GUARD(s_screen01_006d5d10, "s_screen01_006d5d10");
-char s_screen02_006d5d04[] = "screen02"; D2_GLOBAL_GUARD(s_screen02_006d5d04, "s_screen02_006d5d04");
-char s_screen03_006d5cf8[] = "screen03"; D2_GLOBAL_GUARD(s_screen03_006d5cf8, "s_screen03_006d5cf8");
-char s_screen04_006d5cec[] = "screen04"; D2_GLOBAL_GUARD(s_screen04_006d5cec, "s_screen04_006d5cec");
-char s_screen05_006d5ce0[] = "screen05"; D2_GLOBAL_GUARD(s_screen05_006d5ce0, "s_screen05_006d5ce0");
-char s_screen06_006d5cd4[] = "screen06"; D2_GLOBAL_GUARD(s_screen06_006d5cd4, "s_screen06_006d5cd4");
-char s_screen07_006d5cc8[] = "screen07"; D2_GLOBAL_GUARD(s_screen07_006d5cc8, "s_screen07_006d5cc8");
-char s_screen08_006d5cbc[] = "screen08"; D2_GLOBAL_GUARD(s_screen08_006d5cbc, "s_screen08_006d5cbc");
-char s_screen09_006d5cb0[] = "screen09"; D2_GLOBAL_GUARD(s_screen09_006d5cb0, "s_screen09_006d5cb0");
-char s_screen10_006d5ca4[] = "screen10"; D2_GLOBAL_GUARD(s_screen10_006d5ca4, "s_screen10_006d5ca4");
-char s_server_006cc918[] = "server"; D2_GLOBAL_GUARD(s_server_006cc918, "s_server_006cc918");
 char s_stream_end_006d382c[] = "stream end"; D2_GLOBAL_GUARD(s_stream_end_006d382c, "s_stream_end_006d382c");
 char s_stream_error_006d3810[] = "stream error"; D2_GLOBAL_GUARD(s_stream_error_006d3810, "s_stream_error_006d3810");
 char s_unknown_006cd5fc[] = "unknown"; D2_GLOBAL_GUARD(s_unknown_006cd5fc, "s_unknown_006cd5fc");
 
-extern char s_SAM_006fad3c[4];
 namespace Storm::Source::SFile {
 extern uint8_t RTTI_Type_Descriptor;
 } // namespace Storm::Source::SFile
@@ -192,151 +67,140 @@ extern uint8_t RTTI_Type_Descriptor;
 
 char gpCutsceneVideoFrameBuffer[8] = { "640x146" }; D2_GLOBAL_GUARD(gpCutsceneVideoFrameBuffer, "gpCutsceneVideoFrameBuffer");
 
-char param_2_006d57bc[3] = { '%', 'd', '\x00' }; D2_GLOBAL_GUARD(param_2_006d57bc, "param_2_006d57bc");
-
-char gsCharSelContext[4] = { '*', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(gsCharSelContext, "gsCharSelContext");
-
-char gTxtCompilationMemPool[4] = { 'e', 'n', 'd', '\x00' }; D2_GLOBAL_GUARD(gTxtCompilationMemPool, "gTxtCompilationMemPool");
-
-// also labelled: gaAudioPaletteConvertData
-double gdConst255 = 255; D2_GLOBAL_GUARD(gdConst255, "gdConst255");
-
-char s_SAM_006fad3c[4] = { 'S', 'A', 'M', '\x00' }; D2_GLOBAL_GUARD(s_SAM_006fad3c, "s_SAM_006fad3c");
-
 char * gaAtlRegistryRootKeys[12] = {
-    s_AppID_006fad8c,
-    s_CLSID_006fad84,
-    s_Component_Categories_006fad6c,
-    s_FileType_006fad60,
-    s_Interface_006fad54,
-    s_Hardware_006fad48,
-    s_Mime_006fad40,
-    s_SAM_006fad3c,
-    s_SECURITY_006fad30,
-    s_SYSTEM_006fad28,
-    s_Software_006d71ec,
-    s_TypeLib_006fad20
+    (char*)"AppID",
+    (char*)"CLSID",
+    (char*)"Component Categories",
+    (char*)"FileType",
+    (char*)"Interface",
+    (char*)"Hardware",
+    (char*)"Mime",
+    (char*)"SAM",
+    (char*)"SECURITY",
+    (char*)"SYSTEM",
+    (char*)"Software",
+    (char*)"TypeLib"
 }; D2_GLOBAL_GUARD(gaAtlRegistryRootKeys, "gaAtlRegistryRootKeys");
 
 char * gaLanguageNames_00705000[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_00705000, "gaLanguageNames_00705000");
 
 char * gaMonthAbbreviations[12] = {
-    s_Jan_006ccb2c,
-    s_Feb_006ccb28,
-    s_Mar_006ccb24,
-    s_Apr_006ccb20,
-    s_May_006ccb1c,
-    s_Jun_006ccb18,
-    s_Jul_006ccb14,
-    s_Aug_006ccb10,
-    s_Sep_006ccb0c,
-    s_Oct_006ccb08,
-    s_Nov_006ccb04,
-    s_Dec_006ccb00
+    (char*)"Jan",
+    (char*)"Feb",
+    (char*)"Mar",
+    (char*)"Apr",
+    (char*)"May",
+    (char*)"Jun",
+    (char*)"Jul",
+    (char*)"Aug",
+    (char*)"Sep",
+    (char*)"Oct",
+    (char*)"Nov",
+    (char*)"Dec"
 }; D2_GLOBAL_GUARD(gaMonthAbbreviations, "gaMonthAbbreviations");
 
 char * gaLanguageNames_0072d994[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d994, "gaLanguageNames_0072d994");
 
 char * gaLanguageNames_0072d9d0[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d9d0, "gaLanguageNames_0072d9d0");
 
 char * gaLanguageNames_0072da0c[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072da0c, "gaLanguageNames_0072da0c");
 
 char * gaszLanguageNames[32] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c,
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14",
     nullptr,
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c,
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14",
     nullptr
 }; D2_GLOBAL_GUARD(gaszLanguageNames, "gaszLanguageNames");
 
@@ -368,15 +232,17 @@ char Rsrc_Manifest_1_409[1745] = { "<assembly xmlns=\"urn:schemas-microsoft-com:
 // =============================================================================
 
 uint8_t gbChatDlgUpdateMarker = 0x2d; D2_GLOBAL_GUARD(gbChatDlgUpdateMarker, "gbChatDlgUpdateMarker");
+uint16_t gnSymbolSearchPathSeparator = 0x3b; D2_GLOBAL_GUARD(gnSymbolSearchPathSeparator, "gnSymbolSearchPathSeparator");
 uint8_t gbFloatConstantBase = 0x0; D2_GLOBAL_GUARD(gbFloatConstantBase, "gbFloatConstantBase");
 uint8_t gaMonsterDenEnvironmentData = 0x0; D2_GLOBAL_GUARD(gaMonsterDenEnvironmentData, "gaMonsterDenEnvironmentData");
 uint8_t gaWeatherTransitionConstant = 0x0; D2_GLOBAL_GUARD(gaWeatherTransitionConstant, "gaWeatherTransitionConstant");
-char * gpszPaletteAct1Dat = s_palette_act1_pal_dat_006dc7fc; D2_GLOBAL_GUARD(gpszPaletteAct1Dat, "gpszPaletteAct1Dat");
-char * gpszPaletteAct1Pl2 = s_palette_act1_pal_pl2_006dc7e4; D2_GLOBAL_GUARD(gpszPaletteAct1Pl2, "gpszPaletteAct1Pl2");
-char * gpszPaletteActPathFormat = s__s_palette_act_d__s_006dc7d0; D2_GLOBAL_GUARD(gpszPaletteActPathFormat, "gpszPaletteActPathFormat");
-char * gpszPalDatName = s_pal_dat_006dc7c8; D2_GLOBAL_GUARD(gpszPalDatName, "gpszPalDatName");
-char * gpszPalPl2Name = s_pal_pl2_006dc7c0; D2_GLOBAL_GUARD(gpszPalPl2Name, "gpszPalPl2Name");
+char * gpszPaletteAct1Dat = (char*)"palette\\act1\\pal.dat"; D2_GLOBAL_GUARD(gpszPaletteAct1Dat, "gpszPaletteAct1Dat");
+char * gpszPaletteAct1Pl2 = (char*)"palette\\act1\\pal.pl2"; D2_GLOBAL_GUARD(gpszPaletteAct1Pl2, "gpszPaletteAct1Pl2");
+char * gpszPaletteActPathFormat = (char*)"%s\\palette\\act%d\\%s"; D2_GLOBAL_GUARD(gpszPaletteActPathFormat, "gpszPaletteActPathFormat");
+char * gpszPalDatName = (char*)"pal.dat"; D2_GLOBAL_GUARD(gpszPalDatName, "gpszPalDatName");
+char * gpszPalPl2Name = (char*)"pal.pl2"; D2_GLOBAL_GUARD(gpszPalPl2Name, "gpszPalPl2Name");
 unsigned int gaItemTypeTxtIndexData = 0x6d6567; D2_GLOBAL_GUARD(gaItemTypeTxtIndexData, "gaItemTypeTxtIndexData");
+char gDebugSpaceString = ' '; D2_GLOBAL_GUARD(gDebugSpaceString, "gDebugSpaceString");
 unsigned int gaCRT_FPremData_3 = 0x6a9a24; D2_GLOBAL_GUARD(gaCRT_FPremData_3, "gaCRT_FPremData_3");
 unsigned int UINT_0096d6a8 = {}; D2_GLOBAL_GUARD(UINT_0096d6a8, "UINT_0096d6a8");
 uint8_t IMAGE_RESOURCE_DIRECTORY_00995000[16] = {}; D2_GLOBAL_GUARD(IMAGE_RESOURCE_DIRECTORY_00995000, "IMAGE_RESOURCE_DIRECTORY_00995000");
@@ -395,49 +261,9 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Storm::Source::SSignature {
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-} // namespace Storm::Source::SSTR
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 } // namespace Fog::BitBuffer
-
-namespace Storm::Source::SErr {
-
-} // namespace Storm::Source::SErr
 
 namespace Storm::Source::SLog {
 
@@ -450,14 +276,6 @@ namespace Storm::_3rdparty::zlib::deflate {
 namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
-
-namespace D2Lang::StrTable::strtable {
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
 
 namespace D2Common::DATATBLS::LvlTbls {
 
@@ -475,10 +293,6 @@ namespace D2Client::UI::Inv {
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 } // namespace D2Client::Warden::NWardenClient
@@ -486,26 +300,6 @@ namespace D2Client::Warden::NWardenClient {
 namespace D2Client::Warden {
 
 } // namespace D2Client::Warden
-
-namespace D2Client::Sound::SoundHdr {
-
-} // namespace D2Client::Sound::SoundHdr
-
-namespace D2Client::UI::ui {
-
-} // namespace D2Client::UI::ui
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::UI::QuestLog {
-
-} // namespace D2Client::UI::QuestLog
-
-namespace D2Sound::Src::D2SoundSmp {
-
-} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -555,21 +349,17 @@ namespace Bnclient::BnSend {
 
 } // namespace Bnclient::BnSend
 
-namespace Bnclient::BnDownload {
-
-} // namespace Bnclient::BnDownload
-
 namespace Bnclient::_net_sid {
 
 } // namespace Bnclient::_net_sid
 
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-} // namespace D2Game::UNIT::SUnitDmg
 
 namespace D2Game::PLAYER::PlayerModes {
 
@@ -607,21 +397,9 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common {
-
-} // namespace D2Common
-
-namespace D2Common::Txt::Cube {
-
-} // namespace D2Common::Txt::Cube
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 } // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::OutSiege {
 
@@ -653,21 +431,17 @@ namespace Storm::Source {
 
 } // namespace Storm::Source
 
-namespace Fog::File {
-
-} // namespace Fog::File
-
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace D2Hell {
-
-} // namespace D2Hell
-
 namespace Fog::Source::SSComp {
 
 } // namespace Fog::Source::SSComp
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 
@@ -709,6 +483,10 @@ uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Class::
 
 } // namespace Class::AUDIOSTREAM
 
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
 namespace Class::HANDLER {
 
 // =============================================================================
@@ -726,6 +504,10 @@ namespace D2Launch::MainMenus {
 namespace D2Multi::OOGUtilities {
 
 } // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
 
 namespace D2Client::GAME::Game {
 
@@ -747,6 +529,10 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
 namespace D2Client::GAME::SCmd {
 
 } // namespace D2Client::GAME::SCmd
@@ -766,6 +552,14 @@ namespace D2Client::UI::Panel {
 namespace D2Client::UI::Party {
 
 } // namespace D2Client::UI::Party
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::Sound {
 
@@ -991,6 +785,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
@@ -1111,6 +909,10 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 } // namespace Bnclient
@@ -1146,3 +948,7 @@ namespace D2Common::Logging {
 namespace D2Common::DATATBLS::TokTbls {
 
 } // namespace D2Common::DATATBLS::TokTbls
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug

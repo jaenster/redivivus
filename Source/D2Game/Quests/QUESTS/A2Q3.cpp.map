@@ -591,10 +591,10 @@
         "QUEST_SetStateFlag"
       ],
       "usedTypes": [
-        "D2GSPacketSrv0x27_TextStrc",
         "D2QuestArgStrc",
         "D2QuestDataA2Q3Strc",
-        "D2QuestDataStrc"
+        "D2QuestDataStrc",
+        "int32_t"
       ]
     },
     {

@@ -16,219 +16,6 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char s_Unknown_006cc780[8] = { 'U', 'n', 'k', 'n', 'o', 'w', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Unknown_006cc780, "Fog::Src::LogManager::s_Unknown_006cc780");
-
-char s_Cyrix_006cdeb0[6] = { 'C', 'y', 'r', 'i', 'x', '\x00' }; D2_GLOBAL_GUARD(s_Cyrix_006cdeb0, "Fog::Src::LogManager::s_Cyrix_006cdeb0");
-
-char s_AMD_006cdeb8[4] = { 'A', 'M', 'D', '\x00' }; D2_GLOBAL_GUARD(s_AMD_006cdeb8, "Fog::Src::LogManager::s_AMD_006cdeb8");
-
-char s_Intel_006cdebc[8] = { 'I', 'n', 't', 'e', 'l', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Intel_006cdebc, "Fog::Src::LogManager::s_Intel_006cdebc");
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char s_English_with_Korean_Chat_006cc788[28] = {
-    'E',
-    'n',
-    'g',
-    'l',
-    'i',
-    's',
-    'h',
-    ' ',
-    'w',
-    'i',
-    't',
-    'h',
-    ' ',
-    'K',
-    'o',
-    'r',
-    'e',
-    'a',
-    'n',
-    ' ',
-    'C',
-    'h',
-    'a',
-    't',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_English_with_Korean_Chat_006cc788, "Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788");
-
-char s_Russian_006cc7a4[8] = { 'R', 'u', 's', 's', 'i', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Russian_006cc7a4, "Fog::Src::ErrorManager::s_Russian_006cc7a4");
-
-char s_Polish_006cc7ac[8] = { 'P', 'o', 'l', 'i', 's', 'h', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Polish_006cc7ac, "Fog::Src::ErrorManager::s_Polish_006cc7ac");
-
-char s_Traditional_Chinese_006cc7b4[20] = {
-    'T',
-    'r',
-    'a',
-    'd',
-    'i',
-    't',
-    'i',
-    'o',
-    'n',
-    'a',
-    'l',
-    ' ',
-    'C',
-    'h',
-    'i',
-    'n',
-    'e',
-    's',
-    'e',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Traditional_Chinese_006cc7b4, "Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4");
-
-char s_Simplified_Chinese_006cc7c8[20] = {
-    'S',
-    'i',
-    'm',
-    'p',
-    'l',
-    'i',
-    'f',
-    'i',
-    'e',
-    'd',
-    ' ',
-    'C',
-    'h',
-    'i',
-    'n',
-    'e',
-    's',
-    'e',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Simplified_Chinese_006cc7c8, "Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8");
-
-char s_Korean_006cc7dc[8] = { 'K', 'o', 'r', 'e', 'a', 'n', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_Korean_006cc7dc, "Fog::Src::ErrorManager::s_Korean_006cc7dc");
-
-char s_Japanese_006cc7e4[12] = {
-    'J',
-    'a',
-    'p',
-    'a',
-    'n',
-    'e',
-    's',
-    'e',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Japanese_006cc7e4, "Fog::Src::ErrorManager::s_Japanese_006cc7e4");
-
-char s_Italian_006cc7f0[8] = { 'I', 't', 'a', 'l', 'i', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Italian_006cc7f0, "Fog::Src::ErrorManager::s_Italian_006cc7f0");
-
-char s_Portuguese_006cc7f8[12] = {
-    'P',
-    'o',
-    'r',
-    't',
-    'u',
-    'g',
-    'u',
-    'e',
-    's',
-    'e',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_Portuguese_006cc7f8, "Fog::Src::ErrorManager::s_Portuguese_006cc7f8");
-
-char s_French_006cc804[8] = { 'F', 'r', 'e', 'n', 'c', 'h', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_French_006cc804, "Fog::Src::ErrorManager::s_French_006cc804");
-
-char s_German_006cc80c[8] = { 'G', 'e', 'r', 'm', 'a', 'n', '\x00', '\x00' }; D2_GLOBAL_GUARD(s_German_006cc80c, "Fog::Src::ErrorManager::s_German_006cc80c");
-
-char s_Spanish_006cc814[8] = { 'S', 'p', 'a', 'n', 'i', 's', 'h', '\x00' }; D2_GLOBAL_GUARD(s_Spanish_006cc814, "Fog::Src::ErrorManager::s_Spanish_006cc814");
-
-char s_English_006cc81c[8] = { 'E', 'n', 'g', 'l', 'i', 's', 'h', '\x00' }; D2_GLOBAL_GUARD(s_English_006cc81c, "Fog::Src::ErrorManager::s_English_006cc81c");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-float gfTwoPow32 = 4294967296.0; D2_GLOBAL_GUARD(gfTwoPow32, "Fog::Src::ErrorManager::gfTwoPow32");
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Storm::Source::SSignature {
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char gszSFileCurrentDirPrefix[3] = { ".\\" }; D2_GLOBAL_GUARD(gszSFileCurrentDirPrefix, "Fog::Engine::Application::gszSFileCurrentDirPrefix");
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-double gdConst0_25 = 0.25; D2_GLOBAL_GUARD(gdConst0_25, "Fog::Source::SFile::gdConst0_25");
-
-double gdBytesToMegabytes = 9.5367431640625E-7; D2_GLOBAL_GUARD(gdBytesToMegabytes, "Fog::Source::SFile::gdBytesToMegabytes");
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-double gfFloatGammaCorrectionInit = 100; D2_GLOBAL_GUARD(gfFloatGammaCorrectionInit, "Fog::Src::DataArrays::gfFloatGammaCorrectionInit");
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-} // namespace Storm::Source::SSTR
-
-namespace Fog::Debug {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char gbSaveFileReadMarker[3] = { 'r', 'b', '\x00' }; D2_GLOBAL_GUARD(gbSaveFileReadMarker, "Fog::Debug::gbSaveFileReadMarker");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-HMODULE hDbgHelpDll = 0; D2_GLOBAL_GUARD(hDbgHelpDll, "Fog::Debug::hDbgHelpDll");
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 // =============================================================================
@@ -309,10 +96,6 @@ uint32_t gadwInvBitMasks[32] = {
 
 } // namespace Fog::BitBuffer
 
-namespace Storm::Source::SErr {
-
-} // namespace Storm::Source::SErr
-
 namespace Storm::Source::SLog {
 
 } // namespace Storm::Source::SLog
@@ -324,14 +107,6 @@ namespace Storm::_3rdparty::zlib::deflate {
 namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
-
-namespace D2Lang::StrTable::strtable {
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
 
 namespace D2Common::DATATBLS::LvlTbls {
 
@@ -349,10 +124,6 @@ namespace D2Client::UI::Inv {
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 } // namespace D2Client::Warden::NWardenClient
@@ -360,26 +131,6 @@ namespace D2Client::Warden::NWardenClient {
 namespace D2Client::Warden {
 
 } // namespace D2Client::Warden
-
-namespace D2Client::Sound::SoundHdr {
-
-} // namespace D2Client::Sound::SoundHdr
-
-namespace D2Client::UI::ui {
-
-} // namespace D2Client::UI::ui
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::UI::QuestLog {
-
-} // namespace D2Client::UI::QuestLog
-
-namespace D2Sound::Src::D2SoundSmp {
-
-} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -429,21 +180,17 @@ namespace Bnclient::BnSend {
 
 } // namespace Bnclient::BnSend
 
-namespace Bnclient::BnDownload {
-
-} // namespace Bnclient::BnDownload
-
 namespace Bnclient::_net_sid {
 
 } // namespace Bnclient::_net_sid
 
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-} // namespace D2Game::UNIT::SUnitDmg
 
 namespace D2Game::PLAYER::PlayerModes {
 
@@ -481,21 +228,9 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common {
-
-} // namespace D2Common
-
-namespace D2Common::Txt::Cube {
-
-} // namespace D2Common::Txt::Cube
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 } // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::OutSiege {
 
@@ -521,23 +256,9 @@ namespace Storm::Source {
 
 } // namespace Storm::Source
 
-namespace Fog::File {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char lpMultiByteStr_006ff97c[2] = { "w" }; D2_GLOBAL_GUARD(lpMultiByteStr_006ff97c, "Fog::File::lpMultiByteStr_006ff97c");
-
-} // namespace Fog::File
-
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
-
-namespace D2Hell {
-
-} // namespace D2Hell
 
 namespace Fog::Source::SSComp {
 
@@ -810,6 +531,10 @@ uint8_t gabHuffmanNextTable[256] = {}; D2_GLOBAL_GUARD(gabHuffmanNextTable, "Fog
 
 } // namespace Fog::Source::SSComp
 
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
 namespace Class::FILEREC {
 
 } // namespace Class::FILEREC
@@ -826,6 +551,10 @@ namespace Class::AUDIOSTREAM {
 
 } // namespace Class::AUDIOSTREAM
 
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
 namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
@@ -837,6 +566,10 @@ namespace D2Launch::MainMenus {
 namespace D2Multi::OOGUtilities {
 
 } // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
 
 namespace D2Client::GAME::Game {
 
@@ -858,6 +591,10 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
 namespace D2Client::GAME::SCmd {
 
 } // namespace D2Client::GAME::SCmd
@@ -877,6 +614,14 @@ namespace D2Client::UI::Panel {
 namespace D2Client::UI::Party {
 
 } // namespace D2Client::UI::Party
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::Sound {
 
@@ -1102,6 +847,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
@@ -1228,6 +977,10 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 } // namespace Bnclient
@@ -1263,3 +1016,13 @@ namespace D2Common::Logging {
 namespace D2Common::DATATBLS::TokTbls {
 
 } // namespace D2Common::DATATBLS::TokTbls
+
+namespace Fog::Debug {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+HMODULE hDbgHelpDll = 0; D2_GLOBAL_GUARD(hDbgHelpDll, "Fog::Debug::hDbgHelpDll");
+
+} // namespace Fog::Debug

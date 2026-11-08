@@ -20,49 +20,9 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Storm::Source::SSignature {
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-} // namespace Storm::Source::SSTR
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 } // namespace Fog::BitBuffer
-
-namespace Storm::Source::SErr {
-
-} // namespace Storm::Source::SErr
 
 namespace Storm::Source::SLog {
 
@@ -75,43 +35,6 @@ namespace Storm::_3rdparty::zlib::deflate {
 namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
-
-namespace D2Lang::StrTable::strtable {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char gaLanguageCodeFallback[4] = { 'C', 'H', 'I', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeFallback, "D2Lang::StrTable::strtable::gaLanguageCodeFallback");
-
-char gaLanguageCodeAbbrevTable[4] = { 'E', 'N', 'G', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeAbbrevTable, "D2Lang::StrTable::strtable::gaLanguageCodeAbbrevTable");
-
-char gaLanguageCodeLookup[4] = { 'E', 'N', 'U', '\x00' }; D2_GLOBAL_GUARD(gaLanguageCodeLookup, "D2Lang::StrTable::strtable::gaLanguageCodeLookup");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-char * gpszStringTblPathFormat = s_data_local_lng__s_string_tbl_006e02f8; D2_GLOBAL_GUARD(gpszStringTblPathFormat, "D2Lang::StrTable::strtable::gpszStringTblPathFormat");
-char * gpszFontMapPathFormat = s_data_local_font__s_default_map_006e02d8; D2_GLOBAL_GUARD(gpszFontMapPathFormat, "D2Lang::StrTable::strtable::gpszFontMapPathFormat");
-char * gpszPatchStringTblPathFormat = s_data_local_lng__s_patchstring_tbl_006e02b4; D2_GLOBAL_GUARD(gpszPatchStringTblPathFormat, "D2Lang::StrTable::strtable::gpszPatchStringTblPathFormat");
-char * gpszExpansionStringTblPathFormat = s_data_local_lng__s_expansionstring_006e028c; D2_GLOBAL_GUARD(gpszExpansionStringTblPathFormat, "D2Lang::StrTable::strtable::gpszExpansionStringTblPathFormat");
-char * gpszD2DataMpqName = s_d2data_mpq_006dc770; D2_GLOBAL_GUARD(gpszD2DataMpqName, "D2Lang::StrTable::strtable::gpszD2DataMpqName");
-char * gpszPatchD2MpqName = s_patch_d2_mpq_006dc728; D2_GLOBAL_GUARD(gpszPatchD2MpqName, "D2Lang::StrTable::strtable::gpszPatchD2MpqName");
-char * gpszD2ExpMpqName = s_d2exp_mpq_006cd3a0; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "D2Lang::StrTable::strtable::gpszD2ExpMpqName");
-uint16_t * * gpStringIndexBase = 0; D2_GLOBAL_GUARD(gpStringIndexBase, "D2Lang::StrTable::strtable::gpStringIndexBase");
-uint16_t * * gpStringIndexPatchD2 = 0; D2_GLOBAL_GUARD(gpStringIndexPatchD2, "D2Lang::StrTable::strtable::gpStringIndexPatchD2");
-uint16_t * * gpStringIndexExpansion = 0; D2_GLOBAL_GUARD(gpStringIndexExpansion, "D2Lang::StrTable::strtable::gpStringIndexExpansion");
-uint16_t * gpStringBufferBase = 0; D2_GLOBAL_GUARD(gpStringBufferBase, "D2Lang::StrTable::strtable::gpStringBufferBase");
-uint16_t * gpStringBufferPatchD2 = 0; D2_GLOBAL_GUARD(gpStringBufferPatchD2, "D2Lang::StrTable::strtable::gpStringBufferPatchD2");
-uint16_t * gpStringBufferExpansion = 0; D2_GLOBAL_GUARD(gpStringBufferExpansion, "D2Lang::StrTable::strtable::gpStringBufferExpansion");
-int gnStringTableRefCount = 0; D2_GLOBAL_GUARD(gnStringTableRefCount, "D2Lang::StrTable::strtable::gnStringTableRefCount");
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
 
 namespace D2Common::DATATBLS::LvlTbls {
 
@@ -129,10 +52,6 @@ namespace D2Client::UI::Inv {
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 } // namespace D2Client::Warden::NWardenClient
@@ -140,26 +59,6 @@ namespace D2Client::Warden::NWardenClient {
 namespace D2Client::Warden {
 
 } // namespace D2Client::Warden
-
-namespace D2Client::Sound::SoundHdr {
-
-} // namespace D2Client::Sound::SoundHdr
-
-namespace D2Client::UI::ui {
-
-} // namespace D2Client::UI::ui
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::UI::QuestLog {
-
-} // namespace D2Client::UI::QuestLog
-
-namespace D2Sound::Src::D2SoundSmp {
-
-} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -209,21 +108,36 @@ namespace Bnclient::BnSend {
 
 } // namespace Bnclient::BnSend
 
-namespace Bnclient::BnDownload {
-
-} // namespace Bnclient::BnDownload
-
 namespace Bnclient::_net_sid {
 
 } // namespace Bnclient::_net_sid
 
+namespace D2Lang::StrTable::strtable {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+char * gpszStringTblPathFormat = (char*)"data\\local\\lng\\%s\\string.tbl"; D2_GLOBAL_GUARD(gpszStringTblPathFormat, "D2Lang::StrTable::strtable::gpszStringTblPathFormat");
+char * gpszFontMapPathFormat = (char*)"data\\local\\font\\%s\\default.map"; D2_GLOBAL_GUARD(gpszFontMapPathFormat, "D2Lang::StrTable::strtable::gpszFontMapPathFormat");
+char * gpszPatchStringTblPathFormat = s_data_local_lng__s_patchstring_tbl_006e02b4; D2_GLOBAL_GUARD(gpszPatchStringTblPathFormat, "D2Lang::StrTable::strtable::gpszPatchStringTblPathFormat");
+char * gpszExpansionStringTblPathFormat = s_data_local_lng__s_expansionstring_006e028c; D2_GLOBAL_GUARD(gpszExpansionStringTblPathFormat, "D2Lang::StrTable::strtable::gpszExpansionStringTblPathFormat");
+char * gpszD2DataMpqName = (char*)"d2data.mpq"; D2_GLOBAL_GUARD(gpszD2DataMpqName, "D2Lang::StrTable::strtable::gpszD2DataMpqName");
+char * gpszPatchD2MpqName = (char*)"patch_d2.mpq"; D2_GLOBAL_GUARD(gpszPatchD2MpqName, "D2Lang::StrTable::strtable::gpszPatchD2MpqName");
+char * gpszD2ExpMpqName = (char*)"d2exp.mpq"; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "D2Lang::StrTable::strtable::gpszD2ExpMpqName");
+uint16_t * * gpStringIndexBase = 0; D2_GLOBAL_GUARD(gpStringIndexBase, "D2Lang::StrTable::strtable::gpStringIndexBase");
+uint16_t * * gpStringIndexPatchD2 = 0; D2_GLOBAL_GUARD(gpStringIndexPatchD2, "D2Lang::StrTable::strtable::gpStringIndexPatchD2");
+uint16_t * * gpStringIndexExpansion = 0; D2_GLOBAL_GUARD(gpStringIndexExpansion, "D2Lang::StrTable::strtable::gpStringIndexExpansion");
+uint16_t * gpStringBufferBase = 0; D2_GLOBAL_GUARD(gpStringBufferBase, "D2Lang::StrTable::strtable::gpStringBufferBase");
+uint16_t * gpStringBufferPatchD2 = 0; D2_GLOBAL_GUARD(gpStringBufferPatchD2, "D2Lang::StrTable::strtable::gpStringBufferPatchD2");
+uint16_t * gpStringBufferExpansion = 0; D2_GLOBAL_GUARD(gpStringBufferExpansion, "D2Lang::StrTable::strtable::gpStringBufferExpansion");
+int gnStringTableRefCount = 0; D2_GLOBAL_GUARD(gnStringTableRefCount, "D2Lang::StrTable::strtable::gnStringTableRefCount");
+
+} // namespace D2Lang::StrTable::strtable
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-} // namespace D2Game::UNIT::SUnitDmg
 
 namespace D2Game::PLAYER::PlayerModes {
 
@@ -261,21 +175,9 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common {
-
-} // namespace D2Common
-
-namespace D2Common::Txt::Cube {
-
-} // namespace D2Common::Txt::Cube
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 } // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::OutSiege {
 
@@ -301,21 +203,17 @@ namespace Storm::Source {
 
 } // namespace Storm::Source
 
-namespace Fog::File {
-
-} // namespace Fog::File
-
 namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace D2Hell {
-
-} // namespace D2Hell
-
 namespace Fog::Source::SSComp {
 
 } // namespace Fog::Source::SSComp
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 
@@ -333,6 +231,10 @@ namespace Class::AUDIOSTREAM {
 
 } // namespace Class::AUDIOSTREAM
 
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
 namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
@@ -344,6 +246,10 @@ namespace D2Launch::MainMenus {
 namespace D2Multi::OOGUtilities {
 
 } // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
 
 namespace D2Client::GAME::Game {
 
@@ -365,6 +271,10 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
 namespace D2Client::GAME::SCmd {
 
 } // namespace D2Client::GAME::SCmd
@@ -384,6 +294,14 @@ namespace D2Client::UI::Panel {
 namespace D2Client::UI::Party {
 
 } // namespace D2Client::UI::Party
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::Sound {
 
@@ -872,6 +790,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
@@ -992,6 +914,10 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 } // namespace Bnclient
@@ -1027,3 +953,7 @@ namespace D2Common::Logging {
 namespace D2Common::DATATBLS::TokTbls {
 
 } // namespace D2Common::DATATBLS::TokTbls
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug

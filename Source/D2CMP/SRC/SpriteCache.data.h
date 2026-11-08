@@ -19,8 +19,6 @@ struct D2LRUCacheStrc;
 typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
 
 extern char gszExtDc6[5];
-extern char gszExtDcc[5];
-extern char gszDirObjects[20];
 extern pfnLruFreeEntry gpfnSpriteCacheFreeEntry;
 extern BYTE gaCelDataHashTable[4096];
 extern D2LRUCacheStrc gCelDataCacheLru;

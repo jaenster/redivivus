@@ -13,7 +13,6 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
 #include "Source/Bnclient/Bnclient.h"
-#include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Sound/SoundHdr.data.h"
 
@@ -32,56 +31,56 @@ static float FLOAT_006d9108 = 400; D2_STATIC_GUARD(FLOAT_006d9108, "FLOAT_006d91
 D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8] = {
     {
         /* .nCutsceneId = */ 0x0,
-        /* .pszVideoPath = */ s_d2_promo_bik_006d91ac,
+        /* .pszVideoPath = */ (char*)"d2_promo.bik",
         /* .bHasAltSoundPath = */ 0x0,
         /* .bCharacterAnimationPlayed = */ 0x0,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x1,
-        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_d2intro_s_bik_006d919c,
+        /* .pszVideoPath = */ (char*)"d2intro%s.bik",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x2,
-        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT02START_s_BIK_006d9188,
+        /* .pszVideoPath = */ (char*)"ACT02START%s.BIK",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x3,
-        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT03START_s_BIK_006d9174,
+        /* .pszVideoPath = */ (char*)"ACT03START%s.BIK",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x4,
-        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT04START_s_BIK_006d9160,
+        /* .pszVideoPath = */ (char*)"ACT04START%s.BIK",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x5,
-        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_ACT04END_s_BIK_006d9150,
+        /* .pszVideoPath = */ (char*)"ACT04END%s.BIK",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x6,
-        /* .pszVideoPath = */ s_D2X_INTRO__s_BIK_006d913c,
+        /* .pszVideoPath = */ (char*)"D2X_INTRO_%s.BIK",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}
     },
     {
         /* .nCutsceneId = */ 0x7,
-        /* .pszVideoPath = */ (char*)&D2Client::Sound::SoundHdr::s_D2X_OUT__s_BIK_006d912c,
+        /* .pszVideoPath = */ (char*)"D2X_OUT_%s.BIK",
         /* .bHasAltSoundPath = */ 0x1,
         /* .bCharacterAnimationPlayed = */ 0x1,
         /* .pad = */ {}

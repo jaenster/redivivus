@@ -90,7 +90,7 @@ void __fastcall D3DSUBTILE_SetPalette(D3DSubtileCacheStrc * pCache, void * pPale
       return;
     }
 
-    while (!(int)pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
+    while (!pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
       nNodeIndex++;
       if (nNodeIndex >= pCache->nMaxNodes - 1) {
         return;

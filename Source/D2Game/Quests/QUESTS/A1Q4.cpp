@@ -2329,9 +2329,9 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2QuestDataA1Q4Strc* pA1Q4SubCast;
     D2BitBufferStrc* pBitBuffer;
     ::SGAMEDATA* pGame;
-    D2GSPacketSrv0x27_TextStrc* pGossipText = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     D2QuestDataA1Q4Strc* pA1Q4Sub = pQuestData->pQuestSpecificData.pA1Q4;
-    int nGossipIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    int nGossipIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nGossipIndex == 0x26 && pA1Q4Sub->sSub.bCairnMonsterSaved == '\0' && pA1Q4Sub->sSub.bQuestObjectsActivated == '\0' && pQuestData->nStateFlag >= 6) {
       QUEST_DebugPrint(pQuestData->pGame, "Started quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 599);
       QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x422);
@@ -2339,7 +2339,7 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       QUEST_SetStateAndBroadcast(pQuestData, 4, pQuestArgs->pPlayer, (::fpExecuteOnUnitFunction)Q04_NotifyQuestStateToPlayer, 0);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q04_SyncQuestStepToPlayer);
     }
-    if (pGossipText == (D2GSPacketSrv0x27_TextStrc*)0x1) {
+    if (nOldLevel == 1) {
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
       if (!pQuestArgs->pPlayer) {
         nPlayerGUID = -1;

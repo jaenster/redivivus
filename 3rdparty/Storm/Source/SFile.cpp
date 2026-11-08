@@ -939,12 +939,12 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
       return 0;
     }
 
-    /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ szFileName = (LPCSTR)0x0;
+    uint32_t nFileName = 0x0;
     uint32_t nRemaining = GetFileSize(hFileResult, (LPDWORD)0x0);
     if (nRemaining != -1) {
       uint8_t* pReadBuffer;
       pReadBuffer = (uint8_t*)SMem::SMemAlloc(0x1000, ".\\SOURCE\\SFILE.CPP", 0xb83, 0);
-      CrcBuffer(nullptr, 0, (uint32_t*)&szFileName, 1);
+      CrcBuffer(nullptr, 0, (uint32_t*)&nFileName, 1);
       for (; nRemaining > 0; nRemaining -= nChunkSize) {
         nChunkSize = nRemaining;
         if (nRemaining >= 0x1000) {
@@ -962,11 +962,11 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
           return 0;
         }
 
-        CrcBuffer(pReadBuffer, nChunkSize, (uint32_t*)&szFileName, 2);
+        CrcBuffer(pReadBuffer, nChunkSize, (uint32_t*)&nFileName, 2);
         hFileResult = hFile;
       }
 
-      CrcBuffer(nullptr, 0, (uint32_t*)&szFileName, 4);
+      CrcBuffer(nullptr, 0, (uint32_t*)&nFileName, 4);
       if (pReadBuffer) {
         SMem::SMemFree(pReadBuffer, ".\\SOURCE\\SFILE.CPP", 0xb97, 0);
       }
@@ -974,7 +974,7 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hFileResult);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-    return (uint32_t)szFileName;
+    return nFileName;
 }
 
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileRegisterLoadNotifyProc"
@@ -1565,14 +1565,14 @@ void __fastcall Unreferenced_00416a00(StormLinkedListStrc * param_1) {
     param_1->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-int __fastcall Unreferenced_00416a10(StormLinkedListStrc * param_1) {
+intptr_t __fastcall Unreferenced_00416a10(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
     return ~(uint32_t)pSVar1;
 }
 
-int __fastcall Unreferenced_00416a20(StormLinkedListStrc * param_1) {
+intptr_t __fastcall Unreferenced_00416a20(StormLinkedListStrc * param_1) {
     StormLinkStrc* pSVar1 = &param_1->head;
     pSVar1->pPrevLink = pSVar1;
     param_1->head.pNext = ~(uintptr_t)pSVar1;
@@ -4358,7 +4358,7 @@ int __stdcall SFileDestroy() {
 }
 
 // Releases and frees one async request (REQUEST tag) and returns the next link of the list it was on (0 at the end). Provenance: 1.14d asm 0041a2c0.
-int __thiscall SFILE_DeleteAsyncRequestGetNext(StormLinkedListStrc * pListContext, D2StormAsyncOpStrc * pAsyncOp) {
+D2StormAsyncOpStrc * __thiscall SFILE_DeleteAsyncRequestGetNext(StormLinkedListStrc * pListContext, D2StormAsyncOpStrc * pAsyncOp) {
     D2StormAsyncOpStrc* pPrev = pAsyncOp;
     if (!pAsyncOp) {
       pPrev = (D2StormAsyncOpStrc*)&pListContext->head;
@@ -4367,7 +4367,7 @@ int __thiscall SFILE_DeleteAsyncRequestGetNext(StormLinkedListStrc * pListContex
     pPrev = pPrev->pNext;
     SFILE_ReleaseAsyncRequest(pAsyncOp);
     SMem::SMemFree(pAsyncOp, sRTTI_REQUEST_AllocTag, -2, 0);
-    return (intptr_t)pPrev <= 0 ? 0 : (uint32_t)pPrev;
+    return (intptr_t)pPrev <= 0 ? nullptr : pPrev;
 }
 
 // Cancels a pending async file request. The PPC second parameter is IDirectSoundBuffer*; the Windows typing is unchanged.
@@ -5346,20 +5346,19 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     StormLinkStrc* pScanPos;
     uint32_t nBlockIndex;
     D2ArchiveStrc** pBlockOffset;
-    char* pArchiveNext;
     __frame0.pSavedArchive = ppArchive;
     uint8_t* pScanBuffer = (uint8_t*)SMem::SMemAlloc(0x1000, ".\\SOURCE\\SFILE.CPP", 0x10c2, 0);
     __frame0.uSlotC.nBufferedBytes = 0;
-    char* pArchive = 0;
+    uint32_t nWindowOffset = 0;
     while (true) {
-      char* pcVar1;
-      pArchiveNext = (char*)ppArchive->nArchiveOffset;
-      pcVar1 = pArchiveNext;
-      if (pArchiveNext >= __frame0.uSlotC.pszArchivePath + (intptr_t)pArchive) {
-        /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ppArchive->hFile, (LONG)pArchiveNext, (PLONG)0x0, 0);
+      uint32_t uVar1;
+      nBlockIndex = ppArchive->nArchiveOffset;
+      uVar1 = nBlockIndex;
+      if (nBlockIndex >= __frame0.uSlotC.nBufferedBytes + nWindowOffset) {
+        /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ppArchive->hFile, nBlockIndex, (PLONG)0x0, 0);
         /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ __frame0.uSlot8.nBytesReadOut = 0;
         ReadFile(ppArchive->hFile, pScanBuffer, 0x1000, &__frame0.uSlot8.nBytesReadOut, (LPOVERLAPPED)0x0);
-        if (__frame0.uSlot8.nBytesReadOut < 0x20 || (pcVar1 = (char*)ppArchive->nArchiveOffset , pcVar1 + 0x20 >= (char*)ppArchive->nArchiveFileSize)) {
+        if (__frame0.uSlot8.nBytesReadOut < 0x20 || (uVar1 = ppArchive->nArchiveOffset , uVar1 + 0x20 >= ppArchive->nArchiveFileSize)) {
           SFILE_FreeArchiveRecord(ppArchive);
           SMem::SMemFree(ppArchive, "delete", -1, 0);
           SErr::SErrSetLastError(0x8510006c);
@@ -5368,10 +5367,10 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
         }
 
         __frame0.uSlotC.nBufferedBytes = __frame0.uSlot8.nBytesReadOut;
-        pArchive = pArchiveNext;
+        nWindowOffset = nBlockIndex;
       }
 
-      SMem::SMemCopy(ppArchive->pMpqHeader, pScanBuffer + ((intptr_t)pcVar1 - (intptr_t)pArchive), 0x20);
+      SMem::SMemCopy(ppArchive->pMpqHeader, pScanBuffer + (uVar1 - nWindowOffset), 0x20);
       if (ppArchive->pMpqHeader->dwMagic == 0x1a51504d && ppArchive->pMpqHeader->dwHeaderSize >= 0x20) {
         break;
       }

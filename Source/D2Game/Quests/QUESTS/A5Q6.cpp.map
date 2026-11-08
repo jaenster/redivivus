@@ -445,11 +445,11 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc",
-        "D2GossipTextStrc",
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
-        "SGAMEDATA"
+        "SGAMEDATA",
+        "int32_t"
       ]
     },
     {

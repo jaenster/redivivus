@@ -857,7 +857,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
     char* pszSrc = pBytes + 0x2f;
     char* pszScan = pszSrc;
     pszScan = pszScan + strlen(pszScan) + 1;
-    nCopyOffset = (intptr_t)&g_CharSelectBuffer.szGameDescription - (int)pszSrc;
+    nCopyOffset = (intptr_t)&g_CharSelectBuffer.szGameDescription - (intptr_t)pszSrc;
     do {
       cByte = *pszSrc;
       pszSrc[nCopyOffset] = cByte;

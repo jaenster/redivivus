@@ -233,14 +233,6 @@ extern int nSoundVolumeRightChannel;
 extern int32_t int32_t_007c8c7c;
 extern uint32_t gnActiveSoundChannelCount;
 } // namespace D2Client::Sound
-namespace D2Client::Sound::SoundHdr {
-extern char s_D2X_OUT__s_BIK_006d912c[15];
-extern char s_ACT04END_s_BIK_006d9150[15];
-extern char s_ACT04START_s_BIK_006d9160[17];
-extern char s_ACT03START_s_BIK_006d9174[17];
-extern char s_ACT02START_s_BIK_006d9188[17];
-extern char s_d2intro_s_bik_006d919c[14];
-} // namespace D2Client::Sound::SoundHdr
 namespace D2Client::UI {
 // const UIWidget::vftable
 extern void * vftable[12];
@@ -337,33 +329,6 @@ extern uint32_t MouseYOffset;
 extern uint32_t MouseXOffset;
 } // namespace D2Client::UI::Path
 namespace D2Client::UI::QuestLog {
-extern char s_a5q6_006da1ec[5];
-extern char s_a5q5_006da1f4[5];
-extern char s_a5q4_006da1fc[5];
-extern char s_a5q3_006da204[5];
-extern char s_a5q2_006da20c[5];
-extern char s_a5q1_006da214[5];
-extern char s_a4q3_006da21c[5];
-extern char s_a4q2_006da224[5];
-extern char s_a4q1_006da22c[5];
-extern char s_a3q6_006da234[5];
-extern char s_a3q5_006da23c[5];
-extern char s_a3q4_006da244[5];
-extern char s_a3q3_006da24c[5];
-extern char s_a3q2_006da254[5];
-extern char s_a3q1_006da25c[5];
-extern char s_a2q6_006da264[5];
-extern char s_a2q5_006da26c[5];
-extern char s_a2q4_006da274[5];
-extern char s_a2q3_006da27c[5];
-extern char s_a2q2_006da284[5];
-extern char s_a2q1_006da28c[5];
-extern char s_a1q6_006da294[5];
-extern char s_a1q5_006da29c[5];
-extern char s_a1q4_006da2a4[5];
-extern char s_a1q3_006da2ac[5];
-extern char s_a1q2_006da2b4[5];
-extern char s_a1q1_006da2bc[5];
 extern uint16_t gaQuestDescData_DenOfEvil[32];
 extern uint16_t gaQuestDescData_SistersBurialGrounds[32];
 extern uint16_t gaQuestDescData_ToolsOfTheTrade[32];

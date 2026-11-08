@@ -316,8 +316,8 @@ void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     uint32_t nJournalStringId;
     ::SGAMEDATA* pGame;
     int nLamEsenDone2;
-    nLamEsenDone2 = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x4b) {
+    nLamEsenDone2 = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x4b) {
       D2BitBufferStrc* pBitBuffer;
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
       if (pQuestData->nStateFlag > 1 && pQuestData->nStateFlag <= 3) {

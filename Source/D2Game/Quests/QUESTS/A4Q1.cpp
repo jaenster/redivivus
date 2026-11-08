@@ -481,7 +481,7 @@ void __fastcall Q26_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // Q26_Callback_03 — object/portal interaction handler (handler[3]). On the relevant object (id 0x67), remove player from list; if stateflag==2 and quest not Completed, advance stateflag->3 (Jerhyn portal opened path), resync all players, and if first time (prev stateflag 0) broadcast stateflag 1. Drives progression after the Jerhyn red-portal step.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q1.cpp
 void __fastcall Q26_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x67) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x67) {
       return;
     }
 

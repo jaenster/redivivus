@@ -30,49 +30,9 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Storm::Source::SSignature {
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-} // namespace Storm::Source::SSTR
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 } // namespace Fog::BitBuffer
-
-namespace Storm::Source::SErr {
-
-} // namespace Storm::Source::SErr
 
 namespace Storm::Source::SLog {
 
@@ -85,14 +45,6 @@ namespace Storm::_3rdparty::zlib::deflate {
 namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
-
-namespace D2Lang::StrTable::strtable {
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
 
 namespace D2Common::DATATBLS::LvlTbls {
 
@@ -110,10 +62,6 @@ namespace D2Client::UI::Inv {
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 } // namespace D2Client::Warden::NWardenClient
@@ -121,26 +69,6 @@ namespace D2Client::Warden::NWardenClient {
 namespace D2Client::Warden {
 
 } // namespace D2Client::Warden
-
-namespace D2Client::Sound::SoundHdr {
-
-} // namespace D2Client::Sound::SoundHdr
-
-namespace D2Client::UI::ui {
-
-} // namespace D2Client::UI::ui
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::UI::QuestLog {
-
-} // namespace D2Client::UI::QuestLog
-
-namespace D2Sound::Src::D2SoundSmp {
-
-} // namespace D2Sound::Src::D2SoundSmp
 
 namespace D2Client::UI {
 
@@ -190,21 +118,17 @@ namespace Bnclient::BnSend {
 
 } // namespace Bnclient::BnSend
 
-namespace Bnclient::BnDownload {
-
-} // namespace Bnclient::BnDownload
-
 namespace Bnclient::_net_sid {
 
 } // namespace Bnclient::_net_sid
 
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
 namespace D2Game::GAME::Event::Dispatch {
 
 } // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-} // namespace D2Game::UNIT::SUnitDmg
 
 namespace D2Game::PLAYER::PlayerModes {
 
@@ -242,21 +166,9 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common {
-
-} // namespace D2Common
-
-namespace D2Common::Txt::Cube {
-
-} // namespace D2Common::Txt::Cube
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 } // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::OutSiege {
 
@@ -282,10 +194,6 @@ namespace Storm::Source {
 
 } // namespace Storm::Source
 
-namespace Fog::File {
-
-} // namespace Fog::File
-
 namespace Fog::_3rdparty::crashy {
 
 // =============================================================================
@@ -302,13 +210,13 @@ uint32_t dwCurrentThreadId = 0; D2_GLOBAL_GUARD(dwCurrentThreadId, "Fog::_3rdpar
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace D2Hell {
-
-} // namespace D2Hell
-
 namespace Fog::Source::SSComp {
 
 } // namespace Fog::Source::SSComp
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 
@@ -326,6 +234,10 @@ namespace Class::AUDIOSTREAM {
 
 } // namespace Class::AUDIOSTREAM
 
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
 namespace Class::HANDLER {
 
 } // namespace Class::HANDLER
@@ -337,6 +249,10 @@ namespace D2Launch::MainMenus {
 namespace D2Multi::OOGUtilities {
 
 } // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
 
 namespace D2Client::GAME::Game {
 
@@ -358,6 +274,10 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
+namespace D2Client::UI::ui {
+
+} // namespace D2Client::UI::ui
+
 namespace D2Client::GAME::SCmd {
 
 } // namespace D2Client::GAME::SCmd
@@ -377,6 +297,14 @@ namespace D2Client::UI::Panel {
 namespace D2Client::UI::Party {
 
 } // namespace D2Client::UI::Party
+
+namespace D2Client::UI::QuestLog {
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Client::UI::npcmenu {
+
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::Sound {
 
@@ -602,6 +530,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
@@ -722,6 +654,10 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 } // namespace Bnclient
@@ -757,3 +693,7 @@ namespace D2Common::Logging {
 namespace D2Common::DATATBLS::TokTbls {
 
 } // namespace D2Common::DATATBLS::TokTbls
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug

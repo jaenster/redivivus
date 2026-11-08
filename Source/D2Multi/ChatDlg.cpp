@@ -11,7 +11,6 @@
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Multi/D2Multi.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Help.data.h"
@@ -60,7 +59,7 @@ typedef int (__stdcall *fpD2WinEditBoxFilter)(::D2WinEditBox * pEditBox, int nTe
 typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
 #endif
 
-static char * gaszChatDlgProfileKeys[3] = { s_profile_sex_006d4ee0, s_profile_location_006d4ecc, s_profile_description_006d4eb8 }; D2_STATIC_GUARD(gaszChatDlgProfileKeys, "gaszChatDlgProfileKeys");
+static char * gaszChatDlgProfileKeys[3] = { (char*)"profile\\sex", (char*)"profile\\location", (char*)"profile\\description" }; D2_STATIC_GUARD(gaszChatDlgProfileKeys, "gaszChatDlgProfileKeys");
 unsigned short CreateJoinGameRequestId = 0x1; D2_GLOBAL_GUARD(CreateJoinGameRequestId, "CreateJoinGameRequestId");
 static uint8_t g_nLadderFilterMode = 0xff; D2_STATIC_GUARD(g_nLadderFilterMode, "g_nLadderFilterMode");
 static uint8_t gnLadderCurrentFilterMode = 0xff; D2_STATIC_GUARD(gnLadderCurrentFilterMode, "gnLadderCurrentFilterMode");
@@ -614,7 +613,7 @@ uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueNam
     DWORD dwValueType;
     HKEY hKey;
     /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ *pdwDataSize = 0;
-    LSTATUS lStatus = RegOpenKeyExA((HKEY)0x80000002, szSubKey, 0, 0x20019, &hKey);
+    LSTATUS lStatus = RegOpenKeyExA(HKEY_LOCAL_MACHINE, szSubKey, 0, 0x20019, &hKey);
     if (lStatus) {
       return 0;
     }
@@ -2324,7 +2323,7 @@ BOOL __stdcall CHATDLG_OnTimerRequestLadderData(D2ControlMsg * pControlMsg) {
 // Updates ladder board display after player click - renders rank cells with class colors and experience
 void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCount, int32_t nEntryIndex, char nFilterMode, uint8_t * nLadderData) {
     // Static local variables (originally global data)
-    static char * gaszPlayerClassTokens[7] = { (char*)&D2Multi::ChatDlg::s_ama_006d5564, (char*)&D2Multi::ChatDlg::s_sor_006d5568, (char*)&D2Multi::ChatDlg::s_nec_006d556c, (char*)&D2Multi::ChatDlg::s_pal_006d5570, (char*)&D2Multi::ChatDlg::s_bar_006d5574, (char*)&D2Multi::ChatDlg::s_dru_006d5578, (char*)&D2Multi::ChatDlg::s_asn_006d557c }; D2_STATIC_GUARD(gaszPlayerClassTokens, "D2Multi::ChatDlg::CHATDLG_HandleChatListClick::gaszPlayerClassTokens");
+    static char * gaszPlayerClassTokens[7] = { (char*)"ama", (char*)"sor", (char*)"nec", (char*)"pal", (char*)"bar", (char*)"dru", (char*)"asn" }; D2_STATIC_GUARD(gaszPlayerClassTokens, "D2Multi::ChatDlg::CHATDLG_HandleChatListClick::gaszPlayerClassTokens");
 
     int nCmp;
     char* pbCopySrc;

@@ -3,14 +3,12 @@
  * Binary: Game.exe
  */
 
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/UI/Panel.h"
 #include "Source/D2Client/UI/UseItem.h"
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/Warden/WardenClient.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/UI/Button/ButtonImplementation.h"
@@ -50,49 +48,9 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Storm::Source::SSignature {
-
-} // namespace Storm::Source::SSignature
-
-namespace Fog::Engine::Application {
-
-} // namespace Fog::Engine::Application
-
-namespace Fog::Source::SFile {
-
-} // namespace Fog::Source::SFile
-
-namespace Fog::Src::DataArrays {
-
-} // namespace Fog::Src::DataArrays
-
-namespace Storm::Source::SSTR {
-
-} // namespace Storm::Source::SSTR
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 } // namespace Fog::BitBuffer
-
-namespace Storm::Source::SErr {
-
-} // namespace Storm::Source::SErr
 
 namespace Storm::Source::SLog {
 
@@ -106,14 +64,6 @@ namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
 
-namespace D2Lang::StrTable::strtable {
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
-
 namespace D2Common::DATATBLS::LvlTbls {
 
 } // namespace D2Common::DATATBLS::LvlTbls
@@ -124,9 +74,9 @@ namespace D2Client::ClientModeInGame {
 // Initialized scalars
 // =============================================================================
 
-char * gpszD2LngFileName = s_D2_LNG_006d5ee0; D2_GLOBAL_GUARD(gpszD2LngFileName, "D2Client::ClientModeInGame::gpszD2LngFileName");
-char * gpszLngManagerStartError = s_Unable_to_start_LNG_manager__006d5ec0; D2_GLOBAL_GUARD(gpszLngManagerStartError, "D2Client::ClientModeInGame::gpszLngManagerStartError");
-char * gpszLngCppError = s_Stupid_Lng_cpp_error__006d5ea8; D2_GLOBAL_GUARD(gpszLngCppError, "D2Client::ClientModeInGame::gpszLngCppError");
+char * gpszD2LngFileName = (char*)"D2.LNG"; D2_GLOBAL_GUARD(gpszD2LngFileName, "D2Client::ClientModeInGame::gpszD2LngFileName");
+char * gpszLngManagerStartError = (char*)"Unable to start LNG manager."; D2_GLOBAL_GUARD(gpszLngManagerStartError, "D2Client::ClientModeInGame::gpszLngManagerStartError");
+char * gpszLngCppError = (char*)"Stupid Lng.cpp error."; D2_GLOBAL_GUARD(gpszLngCppError, "D2Client::ClientModeInGame::gpszLngCppError");
 
 } // namespace D2Client::ClientModeInGame
 
@@ -186,10 +136,6 @@ uint32_t nScreenMode = 0; D2_GLOBAL_GUARD(nScreenMode, "D2Client::UI::Inv::nScre
 
 } // namespace D2Client::UI::Inv
 
-namespace D2Common::DATATBLS::DataTbls {
-
-} // namespace D2Common::DATATBLS::DataTbls
-
 namespace D2Client::Warden::NWardenClient {
 
 // =============================================================================
@@ -210,134 +156,582 @@ void * vftable[7] = { (void*)&D2Client::Warden::SendPacket, (void*)&D2Client::Wa
 
 } // namespace D2Client::Warden
 
-namespace D2Client::Sound::SoundHdr {
+namespace D2Client::UI {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char s_D2X_OUT__s_BIK_006d912c[15] = {
-    'D',
-    '2',
-    'X',
-    '_',
-    'O',
+void * vftable[12] = {
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall,
+    (void*)&_purecall
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::vftable");
+
+} // namespace D2Client::UI
+
+namespace D2Client::UI::Button::ButtonImplementation {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[13] = {
+    (void*)&D2Client::UI::Button::ButtonImplementation::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::Button::ButtonImplementation::Draw,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseWheel,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseDown,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseUp,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseMove,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnChar,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnUpArrow,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnDownArrow,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnRightArrow,
+    (void*)&D2Client::UI::Button::ButtonImplementation::OnLeftArrow,
+    (void*)&D2Client::UI::Button::ButtonImplementation::GetValue,
+    (void*)&D2Client::UI::Button::ButtonImplementation::SetAccelerator
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Button::ButtonImplementation::vftable");
+
+} // namespace D2Client::UI::Button::ButtonImplementation
+
+namespace D2Client::UI::Button::ButtonWrapper {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[13] = {
+    (void*)&D2Client::UI::Button::ButtonWrapper::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::Button::ButtonWrapper::Draw,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseWheel,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseDown,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseUp,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseMove,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnChar,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnUpArrow,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnDownArrow,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnRightArrow,
+    (void*)&D2Client::UI::Button::ButtonWrapper::OnLeftArrow,
+    (void*)&D2Client::UI::Button::ButtonWrapper::GetValue,
+    (void*)&D2Client::UI::Button::ButtonWrapper::SetAccelerator
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Button::ButtonWrapper::vftable");
+
+} // namespace D2Client::UI::Button::ButtonWrapper
+
+namespace D2Client::UI::Editbox::EditBoxImplementation {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[19] = {
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::Draw,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseWheel,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseDown,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseUp,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseMove,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnChar,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnUpArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnDownArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnRightArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnLeftArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::GetValue,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::GetText,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::GetRepeatDelta,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetText,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetNumber,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetWidth,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetKeyRepeat,
+    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetNumericOnly
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Editbox::EditBoxImplementation::vftable");
+
+} // namespace D2Client::UI::Editbox::EditBoxImplementation
+
+namespace D2Client::UI::Editbox::EditBoxWrapper {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[19] = {
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::Draw,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseWheel,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseDown,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseUp,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseMove,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnChar,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnUpArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnDownArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnRightArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnLeftArrow,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::GetValue,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::GetRepeatDelta,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetText,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetNumber,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::GetText,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetWidth,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetKeyRepeat,
+    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetNumericOnly
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Editbox::EditBoxWrapper::vftable");
+
+} // namespace D2Client::UI::Editbox::EditBoxWrapper
+
+namespace D2Client::UI::Spinner::SpinnerImplementation {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[13] = {
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::Draw,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseWheel,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseDown,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseUp,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseMove,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnChar,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnUpArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnDownArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnRightArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnLeftArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::GetValue,
+    (void*)&D2Client::UI::Spinner::SpinnerImplementation::GetRepeatDelta
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Spinner::SpinnerImplementation::vftable");
+
+} // namespace D2Client::UI::Spinner::SpinnerImplementation
+
+namespace D2Client::UI::Spinner::SpinnerWrapper {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[13] = {
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::Draw,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseWheel,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseDown,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseUp,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseMove,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnChar,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnUpArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnDownArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnRightArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnLeftArrow,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::GetValue,
+    (void*)&D2Client::UI::Spinner::SpinnerWrapper::GetRepeatDelta
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Spinner::SpinnerWrapper::vftable");
+
+} // namespace D2Client::UI::Spinner::SpinnerWrapper
+
+namespace D2Client::UI::ListBox::ListBoxWrapper {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[16] = {
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::Draw,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseWheel,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseDown,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseUp,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseMove,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnChar,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnUpArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnDownArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnRightArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnLeftArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::GetValue,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::AddItem,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::GetItemUserData,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::GetItemCount,
+    (void*)&D2Client::UI::ListBox::ListBoxWrapper::Clear
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::ListBox::ListBoxWrapper::vftable");
+
+} // namespace D2Client::UI::ListBox::ListBoxWrapper
+
+namespace D2Client::UI::ListBox::ListBoxImplementation {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+void * vftable[16] = {
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::ScalarDeletingDestructor,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::Draw,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseWheel,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseDown,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseUp,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseMove,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnChar,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnUpArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnDownArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnRightArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnLeftArrow,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::GetValue,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::DrawScrollbar,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::GetItemCount,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::Clear,
+    (void*)&D2Client::UI::ListBox::ListBoxImplementation::AddItem
+}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::ListBox::ListBoxImplementation::vftable");
+
+} // namespace D2Client::UI::ListBox::ListBoxImplementation
+
+namespace D2gfx::D2GFX {
+
+} // namespace D2gfx::D2GFX
+
+namespace D2Sound::Sound {
+
+} // namespace D2Sound::Sound
+
+namespace Bnclient::BnSend {
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient::_net_sid {
+
+} // namespace Bnclient::_net_sid
+
+namespace D2Lang::StrTable::strtable {
+
+} // namespace D2Lang::StrTable::strtable
+
+namespace D2Game::GAME::Event::Dispatch {
+
+} // namespace D2Game::GAME::Event::Dispatch
+
+namespace D2Game::PLAYER::PlayerModes {
+
+} // namespace D2Game::PLAYER::PlayerModes
+
+namespace D2Game::GAME::Event::Dispatch::Player {
+
+} // namespace D2Game::GAME::Event::Dispatch::Player
+
+namespace D2Game::Objects::ObjectsMode {
+
+} // namespace D2Game::Objects::ObjectsMode
+
+namespace D2Game::GAME::Event::Dispatch::Object {
+
+} // namespace D2Game::GAME::Event::Dispatch::Object
+
+namespace D2Game::GAME::Event::Dispatch::Monster {
+
+} // namespace D2Game::GAME::Event::Dispatch::Monster
+
+namespace D2Game {
+
+} // namespace D2Game
+
+namespace D2CMP::SRC::CelCmp {
+
+} // namespace D2CMP::SRC::CelCmp
+
+namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
+
+} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
+
+namespace D2Common::Chat::Ignorelist::IgnoreList {
+
+} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+namespace D2Common::DATATBLS::ItemTbls {
+
+} // namespace D2Common::DATATBLS::ItemTbls
+
+namespace D2Common::Drlg::OutSiege {
+
+} // namespace D2Common::Drlg::OutSiege
+
+namespace D2Common::Drlg::Outdoors {
+
+} // namespace D2Common::Drlg::Outdoors
+
+namespace D2Common::Drlg::OutJung {
+
+} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common::Drlg {
+
+} // namespace D2Common::Drlg
+
+namespace Define_the_symbol__ATL_MIXED {
+
+} // namespace Define_the_symbol__ATL_MIXED
+
+namespace Storm::Source {
+
+} // namespace Storm::Source
+
+namespace Fog::_3rdparty::crashy {
+
+} // namespace Fog::_3rdparty::crashy
+
+namespace Fog::Source::SSComp {
+
+} // namespace Fog::Source::SSComp
+
+namespace Storm::Source::SFile {
+
+} // namespace Storm::Source::SFile
+
+namespace Class::FILEREC {
+
+} // namespace Class::FILEREC
+
+namespace Class::EVENTREC {
+
+} // namespace Class::EVENTREC
+
+namespace Class::REQUEST {
+
+} // namespace Class::REQUEST
+
+namespace Class::AUDIOSTREAM {
+
+} // namespace Class::AUDIOSTREAM
+
+namespace Storm::Source::SErr {
+
+} // namespace Storm::Source::SErr
+
+namespace Class::HANDLER {
+
+} // namespace Class::HANDLER
+
+namespace D2Launch::MainMenus {
+
+} // namespace D2Launch::MainMenus
+
+namespace D2Multi::OOGUtilities {
+
+} // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+} // namespace D2Multi::ChatDlg
+
+namespace D2Client::GAME::Game {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUSGAMEDATA___0070f56c[16] = {
+    '.',
+    '?',
+    'A',
     'U',
-    'T',
-    '_',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_D2X_OUT__s_BIK_006d912c, "D2Client::Sound::SoundHdr::s_D2X_OUT__s_BIK_006d912c");
-
-char s_ACT04END_s_BIK_006d9150[15] = {
+    'S',
+    'G',
     'A',
-    'C',
-    'T',
-    '0',
-    '4',
+    'M',
     'E',
-    'N',
     'D',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT04END_s_BIK_006d9150, "D2Client::Sound::SoundHdr::s_ACT04END_s_BIK_006d9150");
-
-char s_ACT04START_s_BIK_006d9160[17] = {
     'A',
-    'C',
     'T',
-    '0',
-    '4',
+    'A',
+    '@',
+    '@',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUSGAMEDATA___0070f56c, "D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c");
+
+// also labelled: lpCriticalSection_QSERVERLoopRelated, lpCriticalSection_007a0468
+_RTL_CRITICAL_SECTION gHostGameStateCs = {}; D2_GLOBAL_GUARD(gHostGameStateCs, "D2Client::GAME::Game::gHostGameStateCs");
+
+HACCEL gbLanguageDllLoaded = nullptr; D2_GLOBAL_GUARD(gbLanguageDllLoaded, "D2Client::GAME::Game::gbLanguageDllLoaded");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+D2DrlgActStrc * sgpDrlgAct = 0; D2_GLOBAL_GUARD(sgpDrlgAct, "D2Client::GAME::Game::sgpDrlgAct");
+D2Game_Line0x546 * D2GameGame0x546 = 0; D2_GLOBAL_GUARD(D2GameGame0x546, "D2Client::GAME::Game::D2GameGame0x546");
+uint32_t gnWeatherOverlayActId = 0; D2_GLOBAL_GUARD(gnWeatherOverlayActId, "D2Client::GAME::Game::gnWeatherOverlayActId");
+D2GameViewStrc * D2GameView = 0; D2_GLOBAL_GUARD(D2GameView, "D2Client::GAME::Game::D2GameView");
+
+} // namespace D2Client::GAME::Game
+
+namespace D2Client {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSExplicitList_USGAMEDATA__0070f584[48] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
     'S',
-    'T',
-    'A',
-    'R',
-    'T',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT04START_s_BIK_006d9160, "D2Client::Sound::SoundHdr::s_ACT04START_s_BIK_006d9160");
-
-char s_ACT03START_s_BIK_006d9174[17] = {
-    'A',
-    'C',
-    'T',
-    '0',
-    '3',
-    'S',
-    'T',
-    'A',
-    'R',
-    'T',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT03START_s_BIK_006d9174, "D2Client::Sound::SoundHdr::s_ACT03START_s_BIK_006d9174");
-
-char s_ACT02START_s_BIK_006d9188[17] = {
-    'A',
-    'C',
-    'T',
-    '0',
-    '2',
-    'S',
-    'T',
-    'A',
-    'R',
-    'T',
-    '%',
-    's',
-    '.',
-    'B',
-    'I',
-    'K',
-    '\x00'
-}; D2_GLOBAL_GUARD(s_ACT02START_s_BIK_006d9188, "D2Client::Sound::SoundHdr::s_ACT02START_s_BIK_006d9188");
-
-char s_d2intro_s_bik_006d919c[14] = {
-    'd',
-    '2',
+    'E',
+    'x',
+    'p',
+    'l',
     'i',
-    'n',
+    'c',
+    'i',
     't',
-    'r',
-    'o',
-    '%',
-    's',
-    '.',
-    'b',
+    'L',
     'i',
-    'k',
+    's',
+    't',
+    '@',
+    'U',
+    'S',
+    'G',
+    'A',
+    'M',
+    'E',
+    'D',
+    'A',
+    'T',
+    'A',
+    '@',
+    '@',
+    '$',
+    '0',
+    '?',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'C',
+    'D',
+    '@',
+    '@',
+    '@',
     '\x00'
-}; D2_GLOBAL_GUARD(s_d2intro_s_bik_006d919c, "D2Client::Sound::SoundHdr::s_d2intro_s_bik_006d919c");
+}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_USGAMEDATA__0070f584, "D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584");
 
-} // namespace D2Client::Sound::SoundHdr
+D2ClientLightPulseStrc gRoomLightPulse = {}; D2_GLOBAL_GUARD(gRoomLightPulse, "D2Client::gRoomLightPulse");
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gnTradePlayerGoldAmount = 0; D2_GLOBAL_GUARD(gnTradePlayerGoldAmount, "D2Client::gnTradePlayerGoldAmount");
+uint32_t gnTradeAcceptedFlags = 0; D2_GLOBAL_GUARD(gnTradeAcceptedFlags, "D2Client::gnTradeAcceptedFlags");
+BOOL bReceivedQuestAvailabilityPacket = 0; D2_GLOBAL_GUARD(bReceivedQuestAvailabilityPacket, "D2Client::bReceivedQuestAvailabilityPacket");
+int gnNpcShopSecondActiveTab = 0; D2_GLOBAL_GUARD(gnNpcShopSecondActiveTab, "D2Client::gnNpcShopSecondActiveTab");
+
+} // namespace D2Client
+
+namespace D2Client::GAME::Record {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4[56] = {
+    '.',
+    '?',
+    'A',
+    'V',
+    '?',
+    '$',
+    'T',
+    'S',
+    'H',
+    'a',
+    's',
+    'h',
+    'O',
+    'b',
+    'j',
+    'e',
+    'c',
+    't',
+    'C',
+    'h',
+    'u',
+    'n',
+    'k',
+    '@',
+    'U',
+    'S',
+    'G',
+    'A',
+    'M',
+    'E',
+    'D',
+    'A',
+    'T',
+    'A',
+    '@',
+    '@',
+    'V',
+    'H',
+    'A',
+    'S',
+    'H',
+    'K',
+    'E',
+    'Y',
+    '_',
+    'N',
+    'O',
+    'N',
+    'E',
+    '@',
+    '@',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, "D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4");
+
+} // namespace D2Client::GAME::Record
+
+namespace D2Client::_Message {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gnLastMouseButtonEventType = 0x1; D2_GLOBAL_GUARD(gnLastMouseButtonEventType, "D2Client::_Message::gnLastMouseButtonEventType");
+
+} // namespace D2Client::_Message
+
+namespace D2Client::Engine {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "D2Client::Engine::gaScreenResolutionTableIndexArray");
+uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "D2Client::Engine::gaScreenResolutionModeArray");
+uint32_t gbCharScreenOkPressed = 0; D2_GLOBAL_GUARD(gbCharScreenOkPressed, "D2Client::Engine::gbCharScreenOkPressed");
+uint32_t gbCharScreenOkButtonConfirmed = 0; D2_GLOBAL_GUARD(gbCharScreenOkButtonConfirmed, "D2Client::Engine::gbCharScreenOkButtonConfirmed");
+uint32_t gbCharScreenCancelPressed = 0; D2_GLOBAL_GUARD(gbCharScreenCancelPressed, "D2Client::Engine::gbCharScreenCancelPressed");
+
+} // namespace D2Client::Engine
 
 namespace D2Client::UI::ui {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
-
-char param_2_006d9be8[4] = { '%', 'l', 'd', '\x00' }; D2_GLOBAL_GUARD(param_2_006d9be8, "D2Client::UI::ui::param_2_006d9be8");
 
 uint16_t gU16ImmunityStringBuffer2[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer2, "D2Client::UI::ui::gU16ImmunityStringBuffer2");
 
@@ -359,103 +753,112 @@ DC6 * gpHoradricBackgroundDC6 = 0; D2_GLOBAL_GUARD(gpHoradricBackgroundDC6, "D2C
 
 } // namespace D2Client::UI::ui
 
-namespace D2Client::UI::npcmenu {
+namespace D2Client::GAME::SCmd {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char param_2_006da0cc[4] = { '%', '2', 'u', '\x00' }; D2_GLOBAL_GUARD(param_2_006da0cc, "D2Client::UI::npcmenu::param_2_006da0cc");
+char * gaLanguageNames_00711d04[15] = {
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
+}; D2_GLOBAL_GUARD(gaLanguageNames_00711d04, "D2Client::GAME::SCmd::gaLanguageNames_00711d04");
 
-char * gaLanguageNames_007273a8[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_007273a8, "D2Client::UI::npcmenu::gaLanguageNames_007273a8");
+} // namespace D2Client::GAME::SCmd
+
+namespace D2Client::Draw::LightMap {
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-uint32_t gnMonsterSpecialType = 0; D2_GLOBAL_GUARD(gnMonsterSpecialType, "D2Client::UI::npcmenu::gnMonsterSpecialType");
-uint32_t gnNpcMenuMercHireCost1 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost1, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost1");
-uint32_t gnNpcMenuMercHireCost2 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost2, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost2");
-uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "D2Client::UI::npcmenu::gbNpcMenuInitialized");
-uint8_t gnNpcMenuActiveMode = 0; D2_GLOBAL_GUARD(gnNpcMenuActiveMode, "D2Client::UI::npcmenu::gnNpcMenuActiveMode");
+uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "D2Client::Draw::LightMap::gbLightmapColorEnabled");
+D2LightMapStrc * gpLightMap = 0; D2_GLOBAL_GUARD(gpLightMap, "D2Client::Draw::LightMap::gpLightMap");
 
-} // namespace D2Client::UI::npcmenu
+} // namespace D2Client::Draw::LightMap
+
+namespace D2Client::GAME::Rendering {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Client::GAME::Rendering::CurrentRendingEngine");
+uint32_t gnCurrentEngineIndex = 0; D2_GLOBAL_GUARD(gnCurrentEngineIndex, "D2Client::GAME::Rendering::gnCurrentEngineIndex");
+uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "D2Client::GAME::Rendering::fps");
+
+} // namespace D2Client::GAME::Rendering
+
+namespace D2Client::UI::Panel {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00722414[15] = {
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
+}; D2_GLOBAL_GUARD(gaLanguageNames_00722414, "D2Client::UI::Panel::gaLanguageNames_00722414");
+
+} // namespace D2Client::UI::Panel
+
+namespace D2Client::UI::Party {
+
+// =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char * gaLanguageNames_00722470[15] = {
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
+}; D2_GLOBAL_GUARD(gaLanguageNames_00722470, "D2Client::UI::Party::gaLanguageNames_00722470");
+
+} // namespace D2Client::UI::Party
 
 namespace D2Client::UI::QuestLog {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
-
-char s_a5q6_006da1ec[5] = { 'a', '5', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a5q6_006da1ec, "D2Client::UI::QuestLog::s_a5q6_006da1ec");
-
-char s_a5q5_006da1f4[5] = { 'a', '5', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a5q5_006da1f4, "D2Client::UI::QuestLog::s_a5q5_006da1f4");
-
-char s_a5q4_006da1fc[5] = { 'a', '5', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a5q4_006da1fc, "D2Client::UI::QuestLog::s_a5q4_006da1fc");
-
-char s_a5q3_006da204[5] = { 'a', '5', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a5q3_006da204, "D2Client::UI::QuestLog::s_a5q3_006da204");
-
-char s_a5q2_006da20c[5] = { 'a', '5', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a5q2_006da20c, "D2Client::UI::QuestLog::s_a5q2_006da20c");
-
-char s_a5q1_006da214[5] = { 'a', '5', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a5q1_006da214, "D2Client::UI::QuestLog::s_a5q1_006da214");
-
-char s_a4q3_006da21c[5] = { 'a', '4', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a4q3_006da21c, "D2Client::UI::QuestLog::s_a4q3_006da21c");
-
-char s_a4q2_006da224[5] = { 'a', '4', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a4q2_006da224, "D2Client::UI::QuestLog::s_a4q2_006da224");
-
-char s_a4q1_006da22c[5] = { 'a', '4', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a4q1_006da22c, "D2Client::UI::QuestLog::s_a4q1_006da22c");
-
-char s_a3q6_006da234[5] = { 'a', '3', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a3q6_006da234, "D2Client::UI::QuestLog::s_a3q6_006da234");
-
-char s_a3q5_006da23c[5] = { 'a', '3', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a3q5_006da23c, "D2Client::UI::QuestLog::s_a3q5_006da23c");
-
-char s_a3q4_006da244[5] = { 'a', '3', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a3q4_006da244, "D2Client::UI::QuestLog::s_a3q4_006da244");
-
-char s_a3q3_006da24c[5] = { 'a', '3', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a3q3_006da24c, "D2Client::UI::QuestLog::s_a3q3_006da24c");
-
-char s_a3q2_006da254[5] = { 'a', '3', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a3q2_006da254, "D2Client::UI::QuestLog::s_a3q2_006da254");
-
-char s_a3q1_006da25c[5] = { 'a', '3', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a3q1_006da25c, "D2Client::UI::QuestLog::s_a3q1_006da25c");
-
-char s_a2q6_006da264[5] = { 'a', '2', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a2q6_006da264, "D2Client::UI::QuestLog::s_a2q6_006da264");
-
-char s_a2q5_006da26c[5] = { 'a', '2', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a2q5_006da26c, "D2Client::UI::QuestLog::s_a2q5_006da26c");
-
-char s_a2q4_006da274[5] = { 'a', '2', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a2q4_006da274, "D2Client::UI::QuestLog::s_a2q4_006da274");
-
-char s_a2q3_006da27c[5] = { 'a', '2', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a2q3_006da27c, "D2Client::UI::QuestLog::s_a2q3_006da27c");
-
-char s_a2q2_006da284[5] = { 'a', '2', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a2q2_006da284, "D2Client::UI::QuestLog::s_a2q2_006da284");
-
-char s_a2q1_006da28c[5] = { 'a', '2', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a2q1_006da28c, "D2Client::UI::QuestLog::s_a2q1_006da28c");
-
-char s_a1q6_006da294[5] = { 'a', '1', 'q', '6', '\x00' }; D2_GLOBAL_GUARD(s_a1q6_006da294, "D2Client::UI::QuestLog::s_a1q6_006da294");
-
-char s_a1q5_006da29c[5] = { 'a', '1', 'q', '5', '\x00' }; D2_GLOBAL_GUARD(s_a1q5_006da29c, "D2Client::UI::QuestLog::s_a1q5_006da29c");
-
-char s_a1q4_006da2a4[5] = { 'a', '1', 'q', '4', '\x00' }; D2_GLOBAL_GUARD(s_a1q4_006da2a4, "D2Client::UI::QuestLog::s_a1q4_006da2a4");
-
-char s_a1q3_006da2ac[5] = { 'a', '1', 'q', '3', '\x00' }; D2_GLOBAL_GUARD(s_a1q3_006da2ac, "D2Client::UI::QuestLog::s_a1q3_006da2ac");
-
-char s_a1q2_006da2b4[5] = { 'a', '1', 'q', '2', '\x00' }; D2_GLOBAL_GUARD(s_a1q2_006da2b4, "D2Client::UI::QuestLog::s_a1q2_006da2b4");
-
-char s_a1q1_006da2bc[5] = { 'a', '1', 'q', '1', '\x00' }; D2_GLOBAL_GUARD(s_a1q1_006da2bc, "D2Client::UI::QuestLog::s_a1q1_006da2bc");
 
 uint16_t gaQuestDescData_DenOfEvil[32] = {
     0xe82,
@@ -844,693 +1247,41 @@ uint16_t gaQuestDescData_TheSummoner[32] = {
 
 } // namespace D2Client::UI::QuestLog
 
-namespace D2Sound::Src::D2SoundSmp {
-
-} // namespace D2Sound::Src::D2SoundSmp
-
-namespace D2Client::UI {
+namespace D2Client::UI::npcmenu {
 
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-void * vftable[12] = {
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall,
-    (void*)&_purecall
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::vftable");
-
-} // namespace D2Client::UI
-
-namespace D2Client::UI::Button::ButtonImplementation {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[13] = {
-    (void*)&D2Client::UI::Button::ButtonImplementation::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::Button::ButtonImplementation::Draw,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseWheel,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseDown,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseUp,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnMouseMove,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnChar,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnUpArrow,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnDownArrow,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnRightArrow,
-    (void*)&D2Client::UI::Button::ButtonImplementation::OnLeftArrow,
-    (void*)&D2Client::UI::Button::ButtonImplementation::GetValue,
-    (void*)&D2Client::UI::Button::ButtonImplementation::SetAccelerator
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Button::ButtonImplementation::vftable");
-
-} // namespace D2Client::UI::Button::ButtonImplementation
-
-namespace D2Client::UI::Button::ButtonWrapper {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[13] = {
-    (void*)&D2Client::UI::Button::ButtonWrapper::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::Button::ButtonWrapper::Draw,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseWheel,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseDown,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseUp,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnMouseMove,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnChar,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnUpArrow,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnDownArrow,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnRightArrow,
-    (void*)&D2Client::UI::Button::ButtonWrapper::OnLeftArrow,
-    (void*)&D2Client::UI::Button::ButtonWrapper::GetValue,
-    (void*)&D2Client::UI::Button::ButtonWrapper::SetAccelerator
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Button::ButtonWrapper::vftable");
-
-} // namespace D2Client::UI::Button::ButtonWrapper
-
-namespace D2Client::UI::Editbox::EditBoxImplementation {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[19] = {
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::Draw,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseWheel,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseDown,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseUp,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnMouseMove,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnChar,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnUpArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnDownArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnRightArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::OnLeftArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::GetValue,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::GetText,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::GetRepeatDelta,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetText,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetNumber,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetWidth,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetKeyRepeat,
-    (void*)&D2Client::UI::Editbox::EditBoxImplementation::SetNumericOnly
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Editbox::EditBoxImplementation::vftable");
-
-} // namespace D2Client::UI::Editbox::EditBoxImplementation
-
-namespace D2Client::UI::Editbox::EditBoxWrapper {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[19] = {
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::Draw,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseWheel,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseDown,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseUp,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnMouseMove,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnChar,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnUpArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnDownArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnRightArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::OnLeftArrow,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::GetValue,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::GetRepeatDelta,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetText,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetNumber,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::GetText,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetWidth,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetKeyRepeat,
-    (void*)&D2Client::UI::Editbox::EditBoxWrapper::SetNumericOnly
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Editbox::EditBoxWrapper::vftable");
-
-} // namespace D2Client::UI::Editbox::EditBoxWrapper
-
-namespace D2Client::UI::Spinner::SpinnerImplementation {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[13] = {
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::Draw,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseWheel,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseDown,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseUp,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnMouseMove,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnChar,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnUpArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnDownArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnRightArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::OnLeftArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::GetValue,
-    (void*)&D2Client::UI::Spinner::SpinnerImplementation::GetRepeatDelta
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Spinner::SpinnerImplementation::vftable");
-
-} // namespace D2Client::UI::Spinner::SpinnerImplementation
-
-namespace D2Client::UI::Spinner::SpinnerWrapper {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[13] = {
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::Draw,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseWheel,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseDown,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseUp,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnMouseMove,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnChar,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnUpArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnDownArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnRightArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::OnLeftArrow,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::GetValue,
-    (void*)&D2Client::UI::Spinner::SpinnerWrapper::GetRepeatDelta
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::Spinner::SpinnerWrapper::vftable");
-
-} // namespace D2Client::UI::Spinner::SpinnerWrapper
-
-namespace D2Client::UI::ListBox::ListBoxWrapper {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[16] = {
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::Draw,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseWheel,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseDown,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseUp,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnMouseMove,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnChar,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnUpArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnDownArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnRightArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::OnLeftArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::GetValue,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::AddItem,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::GetItemUserData,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::GetItemCount,
-    (void*)&D2Client::UI::ListBox::ListBoxWrapper::Clear
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::ListBox::ListBoxWrapper::vftable");
-
-} // namespace D2Client::UI::ListBox::ListBoxWrapper
-
-namespace D2Client::UI::ListBox::ListBoxImplementation {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-void * vftable[16] = {
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::ScalarDeletingDestructor,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::Draw,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseWheel,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseDown,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseUp,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnMouseMove,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnChar,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnUpArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnDownArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnRightArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::OnLeftArrow,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::GetValue,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::DrawScrollbar,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::GetItemCount,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::Clear,
-    (void*)&D2Client::UI::ListBox::ListBoxImplementation::AddItem
-}; D2_GLOBAL_GUARD(vftable, "D2Client::UI::ListBox::ListBoxImplementation::vftable");
-
-} // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2gfx::D2GFX {
-
-} // namespace D2gfx::D2GFX
-
-namespace D2Sound::Sound {
-
-} // namespace D2Sound::Sound
-
-namespace Bnclient::BnSend {
-
-} // namespace Bnclient::BnSend
-
-namespace Bnclient::BnDownload {
-
-} // namespace Bnclient::BnDownload
-
-namespace Bnclient::_net_sid {
-
-} // namespace Bnclient::_net_sid
-
-namespace D2Game::GAME::Event::Dispatch {
-
-} // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-} // namespace D2Game::UNIT::SUnitDmg
-
-namespace D2Game::PLAYER::PlayerModes {
-
-} // namespace D2Game::PLAYER::PlayerModes
-
-namespace D2Game::GAME::Event::Dispatch::Player {
-
-} // namespace D2Game::GAME::Event::Dispatch::Player
-
-namespace D2Game::Objects::ObjectsMode {
-
-} // namespace D2Game::Objects::ObjectsMode
-
-namespace D2Game::GAME::Event::Dispatch::Object {
-
-} // namespace D2Game::GAME::Event::Dispatch::Object
-
-namespace D2Game::GAME::Event::Dispatch::Monster {
-
-} // namespace D2Game::GAME::Event::Dispatch::Monster
-
-namespace D2Game {
-
-} // namespace D2Game
-
-namespace D2CMP::SRC::CelCmp {
-
-} // namespace D2CMP::SRC::CelCmp
-
-namespace D2Common::Chat::Ignorelist::ChatIgnoreList {
-
-} // namespace D2Common::Chat::Ignorelist::ChatIgnoreList
-
-namespace D2Common::Chat::Ignorelist::IgnoreList {
-
-} // namespace D2Common::Chat::Ignorelist::IgnoreList
-
-namespace D2Common {
-
-} // namespace D2Common
-
-namespace D2Common::Txt::Cube {
-
-} // namespace D2Common::Txt::Cube
-
-namespace D2Common::DATATBLS::ItemTbls {
-
-} // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-} // namespace D2Common::Drlg::Preset
-
-namespace D2Common::Drlg::OutSiege {
-
-} // namespace D2Common::Drlg::OutSiege
-
-namespace D2Common::Drlg::Outdoors {
-
-} // namespace D2Common::Drlg::Outdoors
-
-namespace D2Common::Drlg::OutJung {
-
-} // namespace D2Common::Drlg::OutJung
-
-namespace D2Common::Drlg {
-
-} // namespace D2Common::Drlg
-
-namespace Define_the_symbol__ATL_MIXED {
-
-} // namespace Define_the_symbol__ATL_MIXED
-
-namespace Storm::Source {
-
-} // namespace Storm::Source
-
-namespace Fog::File {
-
-} // namespace Fog::File
-
-namespace Fog::_3rdparty::crashy {
-
-} // namespace Fog::_3rdparty::crashy
-
-namespace D2Hell {
-
-} // namespace D2Hell
-
-namespace Fog::Source::SSComp {
-
-} // namespace Fog::Source::SSComp
-
-namespace Class::FILEREC {
-
-} // namespace Class::FILEREC
-
-namespace Class::EVENTREC {
-
-} // namespace Class::EVENTREC
-
-namespace Class::REQUEST {
-
-} // namespace Class::REQUEST
-
-namespace Class::AUDIOSTREAM {
-
-} // namespace Class::AUDIOSTREAM
-
-namespace Class::HANDLER {
-
-} // namespace Class::HANDLER
-
-namespace D2Launch::MainMenus {
-
-} // namespace D2Launch::MainMenus
-
-namespace D2Multi::OOGUtilities {
-
-} // namespace D2Multi::OOGUtilities
-
-namespace D2Client::GAME::Game {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char s___AUSGAMEDATA___0070f56c[16] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUSGAMEDATA___0070f56c, "D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c");
-
-// also labelled: lpCriticalSection_QSERVERLoopRelated, lpCriticalSection_007a0468
-_RTL_CRITICAL_SECTION gHostGameStateCs = {}; D2_GLOBAL_GUARD(gHostGameStateCs, "D2Client::GAME::Game::gHostGameStateCs");
-
-HACCEL gbLanguageDllLoaded = nullptr; D2_GLOBAL_GUARD(gbLanguageDllLoaded, "D2Client::GAME::Game::gbLanguageDllLoaded");
+char * gaLanguageNames_007273a8[15] = {
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
+}; D2_GLOBAL_GUARD(gaLanguageNames_007273a8, "D2Client::UI::npcmenu::gaLanguageNames_007273a8");
 
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-D2DrlgActStrc * sgpDrlgAct = 0; D2_GLOBAL_GUARD(sgpDrlgAct, "D2Client::GAME::Game::sgpDrlgAct");
-D2Game_Line0x546 * D2GameGame0x546 = 0; D2_GLOBAL_GUARD(D2GameGame0x546, "D2Client::GAME::Game::D2GameGame0x546");
-uint32_t gnWeatherOverlayActId = 0; D2_GLOBAL_GUARD(gnWeatherOverlayActId, "D2Client::GAME::Game::gnWeatherOverlayActId");
-D2GameViewStrc * D2GameView = 0; D2_GLOBAL_GUARD(D2GameView, "D2Client::GAME::Game::D2GameView");
+uint32_t gnMonsterSpecialType = 0; D2_GLOBAL_GUARD(gnMonsterSpecialType, "D2Client::UI::npcmenu::gnMonsterSpecialType");
+uint32_t gnNpcMenuMercHireCost1 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost1, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost1");
+uint32_t gnNpcMenuMercHireCost2 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost2, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost2");
+uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "D2Client::UI::npcmenu::gbNpcMenuInitialized");
+uint8_t gnNpcMenuActiveMode = 0; D2_GLOBAL_GUARD(gnNpcMenuActiveMode, "D2Client::UI::npcmenu::gnNpcMenuActiveMode");
 
-} // namespace D2Client::GAME::Game
-
-namespace D2Client {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char s___AV__TSExplicitList_USGAMEDATA__0070f584[48] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'E',
-    'x',
-    'p',
-    'l',
-    'i',
-    'c',
-    'i',
-    't',
-    'L',
-    'i',
-    's',
-    't',
-    '@',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    '$',
-    '0',
-    '?',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'D',
-    '@',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_USGAMEDATA__0070f584, "D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584");
-
-D2ClientLightPulseStrc gRoomLightPulse = {}; D2_GLOBAL_GUARD(gRoomLightPulse, "D2Client::gRoomLightPulse");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint32_t gnTradePlayerGoldAmount = 0; D2_GLOBAL_GUARD(gnTradePlayerGoldAmount, "D2Client::gnTradePlayerGoldAmount");
-uint32_t gnTradeAcceptedFlags = 0; D2_GLOBAL_GUARD(gnTradeAcceptedFlags, "D2Client::gnTradeAcceptedFlags");
-BOOL bReceivedQuestAvailabilityPacket = 0; D2_GLOBAL_GUARD(bReceivedQuestAvailabilityPacket, "D2Client::bReceivedQuestAvailabilityPacket");
-int gnNpcShopSecondActiveTab = 0; D2_GLOBAL_GUARD(gnNpcShopSecondActiveTab, "D2Client::gnNpcShopSecondActiveTab");
-
-} // namespace D2Client
-
-namespace D2Client::GAME::Record {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4[56] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'H',
-    'a',
-    's',
-    'h',
-    'O',
-    'b',
-    'j',
-    'e',
-    'c',
-    't',
-    'C',
-    'h',
-    'u',
-    'n',
-    'k',
-    '@',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    'V',
-    'H',
-    'A',
-    'S',
-    'H',
-    'K',
-    'E',
-    'Y',
-    '_',
-    'N',
-    'O',
-    'N',
-    'E',
-    '@',
-    '@',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, "D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4");
-
-} // namespace D2Client::GAME::Record
-
-namespace D2Client::_Message {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint32_t gnLastMouseButtonEventType = 0x1; D2_GLOBAL_GUARD(gnLastMouseButtonEventType, "D2Client::_Message::gnLastMouseButtonEventType");
-
-} // namespace D2Client::_Message
-
-namespace D2Client::Engine {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "D2Client::Engine::gaScreenResolutionTableIndexArray");
-uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "D2Client::Engine::gaScreenResolutionModeArray");
-uint32_t gbCharScreenOkPressed = 0; D2_GLOBAL_GUARD(gbCharScreenOkPressed, "D2Client::Engine::gbCharScreenOkPressed");
-uint32_t gbCharScreenOkButtonConfirmed = 0; D2_GLOBAL_GUARD(gbCharScreenOkButtonConfirmed, "D2Client::Engine::gbCharScreenOkButtonConfirmed");
-uint32_t gbCharScreenCancelPressed = 0; D2_GLOBAL_GUARD(gbCharScreenCancelPressed, "D2Client::Engine::gbCharScreenCancelPressed");
-
-} // namespace D2Client::Engine
-
-namespace D2Client::GAME::SCmd {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char * gaLanguageNames_00711d04[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00711d04, "D2Client::GAME::SCmd::gaLanguageNames_00711d04");
-
-} // namespace D2Client::GAME::SCmd
-
-namespace D2Client::Draw::LightMap {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "D2Client::Draw::LightMap::gbLightmapColorEnabled");
-D2LightMapStrc * gpLightMap = 0; D2_GLOBAL_GUARD(gpLightMap, "D2Client::Draw::LightMap::gpLightMap");
-
-} // namespace D2Client::Draw::LightMap
-
-namespace D2Client::GAME::Rendering {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Client::GAME::Rendering::CurrentRendingEngine");
-uint32_t gnCurrentEngineIndex = 0; D2_GLOBAL_GUARD(gnCurrentEngineIndex, "D2Client::GAME::Rendering::gnCurrentEngineIndex");
-uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "D2Client::GAME::Rendering::fps");
-
-} // namespace D2Client::GAME::Rendering
-
-namespace D2Client::UI::Panel {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char * gaLanguageNames_00722414[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00722414, "D2Client::UI::Panel::gaLanguageNames_00722414");
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char * gaLanguageNames_00722470[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
-}; D2_GLOBAL_GUARD(gaLanguageNames_00722470, "D2Client::UI::Party::gaLanguageNames_00722470");
-
-} // namespace D2Client::UI::Party
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::Sound {
 
@@ -1626,21 +1377,21 @@ int gaUnitSoundIdsAmazon[11] = {
 }; D2_GLOBAL_GUARD(gaUnitSoundIdsAmazon, "D2Client::UNIT::UnitSnd::gaUnitSoundIdsAmazon");
 
 char * gaLanguageNames_0072a300[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072a300, "D2Client::UNIT::UnitSnd::gaLanguageNames_0072a300");
 
 int gaLevelAmbientMusicPlayedFlags[1024] = {}; D2_GLOBAL_GUARD(gaLevelAmbientMusicPlayedFlags, "D2Client::UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags");
@@ -1664,57 +1415,57 @@ namespace D2Client::UI::SkillDesc {
 // =============================================================================
 
 char * gaLanguageNames_0072d8d8[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d8d8, "D2Client::UI::SkillDesc::gaLanguageNames_0072d8d8");
 
 char * gaLanguageNames_0072d914[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d914, "D2Client::UI::SkillDesc::gaLanguageNames_0072d914");
 
 char * gaLanguageNames_0072d950[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_GLOBAL_GUARD(gaLanguageNames_0072d950, "D2Client::UI::SkillDesc::gaLanguageNames_0072d950");
 
 } // namespace D2Client::UI::SkillDesc
@@ -1927,6 +1678,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 } // namespace D2Common::Chat::Ignorelist
@@ -2136,6 +1891,10 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 } // namespace Bnclient
@@ -2171,3 +1930,7 @@ namespace D2Common::Logging {
 namespace D2Common::DATATBLS::TokTbls {
 
 } // namespace D2Common::DATATBLS::TokTbls
+
+namespace Fog::Debug {
+
+} // namespace Fog::Debug

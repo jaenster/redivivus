@@ -401,7 +401,7 @@ void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // Q10_Callback_03. Gossip sub-event handler: when the text-control id == 0x28,
 // removes the player from the quest GUID participation list. No QuestRecord writes.
 void __fastcall Q10_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl != (D2GSPacketSrv0x27_TextStrc*)0x28) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x28) {
       return;
     }
 

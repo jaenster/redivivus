@@ -8,7 +8,6 @@
 #include "3rdparty/Storm/Source/SSystem.h"
 #include "3rdparty/Storm/StormRoot.h"
 #include "3rdparty/Storm/WindowHandle.h"
-#include "Source/globals/globals.h"
 #include "3rdparty/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "3rdparty/Storm/Source/SErr.data.h"
@@ -26,7 +25,6 @@ typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, ch
 typedef BOOL (__stdcall *pfnSErrDisplayCallback)(uint32_t dwErrorCode, char * szErrorText, void * pStackTrace, int32_t nTraceFlags, char * szCustomMsg);
 #endif
 
-char gdwSystemMemoryMax[2] = { ")" }; D2_GLOBAL_GUARD(gdwSystemMemoryMax, "gdwSystemMemoryMax");
 static SErrAppFatalContextStrc gpSSystemThreadContextCallback = {}; D2_STATIC_GUARD(gpSSystemThreadContextCallback, "gpSSystemThreadContextCallback");
 static _RTL_CRITICAL_SECTION lpCriticalSection_007790cc = {}; D2_STATIC_GUARD(lpCriticalSection_007790cc, "lpCriticalSection_007790cc");
 uint32_t gbSSystemErrorDialogActive = 0; D2_GLOBAL_GUARD(gbSSystemErrorDialogActive, "gbSSystemErrorDialogActive");
@@ -98,18 +96,18 @@ void __stdcall SERR_AddStormMessages() {
 static LPSTR * SERR_GetString(int32_t nErrorIndex) {
     // Static local variables (originally global data)
     static char * gaSErrMessageStrings[12] = {
-    s_ERROR___u__0x_08x__006cf2e0,
-    s_This_application_has_encountered__006cf2a8,
-    s_Program___s__006cf298,
-    s_File___s_Line___d__006cf284,
-    s_Function___s__006cf274,
-    s_Object___s__006cf268,
-    s_Handle___s__006cf25c,
-    (char*)&Storm::Source::SErr::s_Expr___s_006cf250,
-    (char*)&Storm::Source::SErr::s__s_006cf248,
-    s_Press_OK_to_terminate_the_applica_006cf220,
-    s_Do_you_wish_to_terminate_the_appl_006cf1f4,
-    (char*)&Storm::Source::SErr::s_File___s_006cf1e8
+    (char*)"ERROR #%u (0x%08x)",
+    (char*)"This application has encountered a critical error:\012\012%s\012",
+    (char*)"Program:\011%s\012",
+    (char*)"File:\011%s\012Line:\011%d\012",
+    (char*)"Function:\011%s\012",
+    (char*)"Object:\011%s\012",
+    (char*)"Handle:\011%s\012",
+    (char*)"Expr:\011%s\012\012",
+    (char*)"\012%s\012\012",
+    (char*)"Press OK to terminate the application.",
+    (char*)"Do you wish to terminate the application\?",
+    (char*)"File:\011%s\012"
 }; D2_STATIC_GUARD(gaSErrMessageStrings, "Storm::Source::SErr::SERR_GetString::gaSErrMessageStrings");
     static char gszErrorStringBuffer[256] = {}; D2_STATIC_GUARD(gszErrorStringBuffer, "Storm::Source::SErr::SERR_GetString::gszErrorStringBuffer");
 
@@ -511,7 +509,7 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
     if (gnStormErrorCallbackCount.head.pNext < 0) {
       pPrevSlot = (uint32_t*)~gnStormErrorCallbackCount.head.pNext;
     } else {
-      int32_t nListOffset;
+      intptr_t nListOffset;
       nListOffset = gnStormErrorCallbackCount.nLinkOffset;
       if (gnStormErrorCallbackCount.nLinkOffset < 0) {
         nListOffset = (intptr_t)&gnStormErrorCallbackCount.head - gnStormErrorCallbackCount.head.pPrevLink->pNext;

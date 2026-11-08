@@ -6328,6 +6328,7 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
     eInventoryPage ePreviousPage;
     int32_t nBodyLocOrXPos;
     D2ClientStrc* pClient;
+    uint32_t nRuneword;
     D2UnitStrc* pItemRef = pRuneword;
     if (!(pGame && pPlayer && pRuneword && pRuneword->eUnitType == UNIT_ITEM && pPlayer->pInventory)) {
       return;
@@ -6342,9 +6343,9 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
           if (pPlayer->eUnitType == UNIT_PLAYER) {
             pClient = UNIT::SUnit::SUNIT_GetClient(pPlayer, ".\\ITEMS\\ItemMode.cpp", 0x1a75);
             if (pClient) {
-              pRuneword = 0;
-              D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&pRuneword, 0x20, 1);
-              GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pPlayer, pItemRef, (eD2ItemFlag)pRuneword);
+              nRuneword = 0x0;
+              D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&nRuneword, 0x20, 1);
+              GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pPlayer, pItemRef, (eD2ItemFlag)nRuneword);
             }
           }
 

@@ -342,12 +342,12 @@ void __fastcall Q22_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nState;
     uint32_t nSourceLine;
-    D2GSPacketSrv0x27_TextStrc* pDVar1 = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.nIndex == 0x52 && pQuestData->bIsNotIntroduction != '\0' && !pQuestData->nStateFlag) {
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x52 && pQuestData->bIsNotIntroduction != '\0' && !pQuestData->nStateFlag) {
       pQuestData->nStateFlag = 1;
       pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q22_Callback02_NpcDeactivate;
     }
-    if (pDVar1 != (D2GSPacketSrv0x27_TextStrc*)0x4b) {
+    if (nOldLevel != 0x4b) {
       return;
     }
 
@@ -356,17 +356,17 @@ void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       return;
     }
 
-    ::SGAMEDATA* pSVar2 = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pDVar3 = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer = pDVar3->pQuestRecord[pSVar2->nDifficulty];
-    BOOL BVar4 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+    ::SGAMEDATA* pSVar1 = pQuestArgs->pGame;
+    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pSVar1->nDifficulty];
+    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     /* GetQuestState(nQuestIdReal=Blackened Temple, Step0x04=4): bail if already at
-                         step 4 */ if (BVar4 == 1) {
+                         step 4 */ if (BVar3 == 1) {
       return;
     }
 
-    BVar4 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x04);
-    if (BVar4 == 1) {
+    BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x04);
+    if (BVar3 == 1) {
       return;
     }
     if (pQuestData->nStateFlagPrev < 3) {

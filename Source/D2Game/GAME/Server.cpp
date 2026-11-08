@@ -1734,7 +1734,7 @@ void __fastcall ObjectIdToName(char * szText, int32_t nId) {
     char cChar;
     D2ObjectsTxt* pDVar1 = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nId);
     if (pDVar1) {
-      int nDstOffset;
+      intptr_t nDstOffset;
       nDstOffset = (intptr_t)szText - (intptr_t)pDVar1;
       do {
         cChar = pDVar1->Name[0];

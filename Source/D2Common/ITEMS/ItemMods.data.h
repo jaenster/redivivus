@@ -16,6 +16,6 @@
 // Forward declarations
 struct D2SetsTxtFStrc;
 struct D2UnitStrc;
-typedef uint32_t (__fastcall *fpProperties)(uint32_t param_1, D2UnitStrc * param_2, D2UnitStrc * param_3, D2SetsTxtFStrc * param_4, uint32_t param_5, int param_6, uint32_t param_7, uint32_t param_8, int param_9, uint32_t param_10, uint32_t param_11);
+typedef uint32_t (__fastcall *fpProperties)(uint32_t param_1, D2UnitStrc * param_2, D2UnitStrc * param_3, D2SetsTxtFStrc * param_4, uint32_t param_5, int param_6, uint32_t param_7, uint32_t param_8, int param_9, uint32_t param_10, D2UnitStrc * pContextUnit);
 
 extern fpProperties PROPERTIESFUNCTIONS[37];

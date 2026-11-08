@@ -243,12 +243,12 @@ D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable,
 }
 
 // @sourcefile .\SRC\GfxHash.cpp
-D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
+D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, D2CelCacheBlockStrc * pCacheBlock, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
     D2GfxHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pMemory, D2GfxHashEntryStrc, ".\\SRC\\GfxHash.cpp", 0xef);
     D2GfxDataStrc* nGfxDataSaved = pGfxData;
-    pNewEntry->pCacheBlock = (D2CelCacheBlockStrc*)nDirIdxOut;
-    nDirIdxOut = 0;
-    uint32_t nHashKey = GFXHASH_CalcHashKey(pGfxData, &nDirIdxOut, (uint32_t*)&pNewEntry->nDirIndex, pCelEntry);
+    pNewEntry->pCacheBlock = pCacheBlock;
+    pCacheBlock = 0;
+    uint32_t nHashKey = GFXHASH_CalcHashKey(pGfxData, (uint32_t*)&pCacheBlock, (uint32_t*)&pNewEntry->nDirIndex, pCelEntry);
     pNewEntry->nUnitToken = nGfxDataSaved->nUnitToken;
     pNewEntry->nCompositToken = nGfxDataSaved->nCompositToken;
     pNewEntry->nArmorToken = nGfxDataSaved->nArmorToken;

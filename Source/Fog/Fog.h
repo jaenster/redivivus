@@ -664,7 +664,6 @@ uint8_t __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset);
 void __stdcall InitBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, size_t nSize);
 int32_t __stdcall GetNextPositon(struct D2BitBufferStrc * pBitBuffer);
 void __stdcall WriteValueToBitBuffer(struct D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits);
-int32_t __stdcall Read(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 uint32_t __stdcall ReadUnsigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 int32_t __stdcall ReadSigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 void __stdcall BitBufferEndCurrentByte(struct D2BitBufferStrc * pBitBuffer);
@@ -919,25 +918,11 @@ void __stdcall SMEM_TitleCaseString(char * pMcpData);
 } // namespace Fog::Src::String::FogString
 
 // Globals
-extern char cLogFileReadMode[2];
-extern char gszCrashDumpRegisterFormatString[4];
 extern char gszCrashLogTempDir[1024];
 // lpCriticalSection parameter of InitializeCriticalSection
 // lpCriticalSection parameter of LeaveCriticalSection
 // lpCriticalSection parameter of EnterCriticalSection
 extern _RTL_CRITICAL_SECTION lpCriticalSection_0098a6f0;
-extern char s_Apr_006ccb20[4];
-extern char s_Aug_006ccb10[4];
-extern char s_Dec_006ccb00[4];
-extern char s_Feb_006ccb28[4];
-extern char s_Jan_006ccb2c[4];
-extern char s_Jul_006ccb14[4];
-extern char s_Jun_006ccb18[4];
-extern char s_Mar_006ccb24[4];
-extern char s_May_006ccb1c[4];
-extern char s_Nov_006ccb04[4];
-extern char s_Oct_006ccb08[4];
-extern char s_Sep_006ccb0c[4];
 namespace Fog::BitBuffer {
 // Bit masks 1<<n for n=0..31 (0x1..0x80000000); 622 references, used with OR to set a bit and TEST/AND to test one (e.g. D2WINMAIN_SetControlVisible 004f96f8); ERRORMANAGER_InitErrorManager checks every entry against 1<<n at startup (00408e58).
 extern uint32_t gadwBitMasks[32];
@@ -947,21 +932,3 @@ extern uint32_t gadwInvBitMasks[32];
 namespace Fog::Debug {
 extern HMODULE hDbgHelpDll;
 } // namespace Fog::Debug
-namespace Fog::Src::ErrorManager {
-extern char s_English_006cc81c[8];
-extern char s_English_with_Korean_Chat_006cc788[28];
-extern char s_French_006cc804[8];
-extern char s_German_006cc80c[8];
-extern char s_Italian_006cc7f0[8];
-extern char s_Japanese_006cc7e4[12];
-extern char s_Korean_006cc7dc[8];
-extern char s_Polish_006cc7ac[8];
-extern char s_Portuguese_006cc7f8[12];
-extern char s_Russian_006cc7a4[8];
-extern char s_Simplified_Chinese_006cc7c8[20];
-extern char s_Spanish_006cc814[8];
-extern char s_Traditional_Chinese_006cc7b4[20];
-} // namespace Fog::Src::ErrorManager
-namespace Fog::Src::LogManager {
-extern char s_Unknown_006cc780[8];
-} // namespace Fog::Src::LogManager

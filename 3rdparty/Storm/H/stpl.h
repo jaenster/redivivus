@@ -689,6 +689,9 @@ template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAM
 // TSLink<CELLIST>
 template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(intptr_t nLinkOffset);
 
+// TSLink<CMDDEF>
+template<> TSLink<CMDDEF> * TSLink<CMDDEF>::NextLink(intptr_t nLinkOffset);
+
 // TSLink<MappingEntryNode>
 template<> TSLink<::MappingEntryNode>* TSLink<MappingEntryNode>::NextLink(intptr_t nLinkOffset);
 
@@ -707,7 +710,16 @@ template<> __attribute__((noinline)) inline void TSList<ARCHIVEREC, TSGetLink<AR
 template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREAKCMD>>::UnlinkAll();
 
 // TSList<CMDDEF, TSGetLink<CMDDEF>>
-template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll();
+template<> TSLink<CMDDEF> * TSList<CMDDEF, TSGetLink<CMDDEF>>::Link(CMDDEF * ptr);
+template<> __attribute__((noinline)) inline void TSList<CMDDEF, TSGetLink<CMDDEF>>::LinkNode(CMDDEF * ptr, uint32_t nLinkType, CMDDEF * pExisting);
+template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::Next(CMDDEF * ptr);
+template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkNode(CMDDEF * ptr);
+template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::RawNext(CMDDEF * ptr);
+template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::UnlinkAll();
+template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Destructor();
+template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags);
+template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Clear();
+template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::DeleteNode(CMDDEF * ptr);
 
 // TSList<EVENTREC, TSGetLink<EVENTREC>>
 template<> __attribute__((noinline)) inline void TSList<EVENTREC, TSGetLink<EVENTREC>>::UnlinkAll();

@@ -104,7 +104,7 @@ D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(D2PoolManagerStrc * p
     }
 
     pNewEntry->nBucket = nBucketIdx;
-    int nDstStrOffset = 4 - (int)szFileName;
+    intptr_t nDstStrOffset = 4 - (intptr_t)szFileName;
     do {
       byChar = *szFileName;
       szFileName[(intptr_t)pNewEntry + nDstStrOffset] = byChar;

@@ -1943,7 +1943,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x83_Unused(D2ClientStrc * pClient, char * 
     D2GSPacketSrvTextData sPacket;
     char cChar;
     sPacket.nPacketId = 0x83;
-    int nDstDelta = 1 - (int)szText;
+    intptr_t nDstDelta = 1 - (intptr_t)szText;
     do {
       cChar = *szText;
       szText[(intptr_t)&sPacket + nDstDelta] = cChar;
@@ -1969,7 +1969,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x88_Unused(D2ClientStrc * pClient, char * 
     D2GSPacketSrvTextData sPacket;
     char cChar;
     sPacket.nPacketId = 0x88;
-    int nDstDelta = 1 - (int)szText;
+    intptr_t nDstDelta = 1 - (intptr_t)szText;
     do {
       cChar = *szText;
       szText[(intptr_t)&sPacket + nDstDelta] = cChar;

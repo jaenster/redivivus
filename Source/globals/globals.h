@@ -464,7 +464,7 @@ typedef int (__stdcall *pfnSFileReadError)(void * pnBytesRead, uint32_t dwLastEr
 typedef int32_t (*fpProfCoreInitCb)();
 typedef int32_t (__fastcall *D2MissileCltHitFunc)(D2UnitStrc * pMissile, D2UnitStrc * pTarget);
 typedef int32_t (__fastcall *D2ObjectPopulateFn)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pRoomCoords);
-typedef int32_t (__fastcall *D2PropertyHandler_fn)(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t nParam2, int32_t nParam3, uint32_t nParam, int32_t nContext);
+typedef int32_t (__fastcall *D2PropertyHandler_fn)(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t nParam2, int32_t nParam3, uint32_t nParam, D2UnitStrc * pContextUnit);
 typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
 typedef fnAppModeRun * (__fastcall *D2AppModeInitFunc)(HMODULE hModule);
 typedef int32_t (__fastcall *fnCUnitEventCallback)(int nClientEvent, D2UnitStrc * pOwnerUnit, D2UnitStrc * pMissile, uint32_t dwArg2, uint32_t dwEventData1, uint32_t dwEventData2);
@@ -832,7 +832,7 @@ struct D2ObjModeFuncEntryStrc {
 #ifndef D2_DEFINED_D2PropertyFuncEntryStrc
 #define D2_DEFINED_D2PropertyFuncEntryStrc
 struct D2PropertyFuncEntryStrc {
-    /* 0x00 */ int32_t (__fastcall *pfnHandler)(int32_t, D2UnitStrc *, D2UnitStrc *, D2SetsTxtFStrc *, eD2UnitStat, int32_t, int32_t, uint32_t, int32_t); // Property function handler pointer
+    /* 0x00 */ int32_t (__fastcall *pfnHandler)(int32_t, D2UnitStrc *, D2UnitStrc *, D2SetsTxtFStrc *, eD2UnitStat, int32_t, int32_t, uint32_t, D2UnitStrc *); // Property function handler pointer
     /* 0x04 */ int32_t nStatCode; // Stat code parameter passed to handler
 };
 #endif // D2_DEFINED_D2PropertyFuncEntryStrc
@@ -1162,35 +1162,10 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::LogManager {
-
-
-} // namespace Fog::Src::LogManager
-
-namespace Fog::Src::ErrorManager {
-
-
-} // namespace Fog::Src::ErrorManager
-
-namespace Fog::Debug {
-
-
-} // namespace Fog::Debug
-
-namespace Storm::Source::SFile {
-
-
-} // namespace Storm::Source::SFile
-
 namespace Fog::BitBuffer {
 
 
 } // namespace Fog::BitBuffer
-
-namespace Storm::Source::SErr {
-
-
-} // namespace Storm::Source::SErr
 
 namespace Storm::_3rdparty::zlib::deflate {
 
@@ -1202,25 +1177,10 @@ namespace D2Launch::CharSel {
 
 } // namespace D2Launch::CharSel
 
-namespace D2Lang::StrTable::strtable {
-
-
-} // namespace D2Lang::StrTable::strtable
-
-namespace D2Multi::ChatDlg {
-
-
-} // namespace D2Multi::ChatDlg
-
 namespace D2Client::ClientModeInGame {
 
 
 } // namespace D2Client::ClientModeInGame
-
-namespace D2Common::Txt::Cube {
-
-
-} // namespace D2Common::Txt::Cube
 
 namespace D2Common::DATATBLS::LvlTbls {
 
@@ -1246,26 +1206,6 @@ namespace D2Client::Warden {
 
 
 } // namespace D2Client::Warden
-
-namespace D2Client::Sound::SoundHdr {
-
-
-} // namespace D2Client::Sound::SoundHdr
-
-namespace D2Client::UI::ui {
-
-
-} // namespace D2Client::UI::ui
-
-namespace D2Client::UI::npcmenu {
-
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::UI::QuestLog {
-
-
-} // namespace D2Client::UI::QuestLog
 
 namespace D2Client::UI {
 
@@ -1332,25 +1272,20 @@ namespace Bnclient::BnSend {
 
 } // namespace Bnclient::BnSend
 
-namespace Bnclient::BnDownload {
-
-
-} // namespace Bnclient::BnDownload
-
 namespace Bnclient::_net_sid {
 
 
 } // namespace Bnclient::_net_sid
 
+namespace D2Lang::StrTable::strtable {
+
+
+} // namespace D2Lang::StrTable::strtable
+
 namespace D2Game::GAME::Event::Dispatch {
 
 
 } // namespace D2Game::GAME::Event::Dispatch
-
-namespace D2Game::UNIT::SUnitDmg {
-
-
-} // namespace D2Game::UNIT::SUnitDmg
 
 namespace D2Game::GAME::Event::Dispatch::Player {
 
@@ -1392,20 +1327,10 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList
 
-namespace D2Common {
-
-
-} // namespace D2Common
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 
 } // namespace D2Common::DATATBLS::ItemTbls
-
-namespace D2Common::Drlg::Preset {
-
-
-} // namespace D2Common::Drlg::Preset
 
 namespace D2Common::Drlg::OutSiege {
 
@@ -1442,6 +1367,16 @@ namespace Fog::Source::SSComp {
 
 } // namespace Fog::Source::SSComp
 
+namespace Storm::Source::SFile {
+
+
+} // namespace Storm::Source::SFile
+
+namespace Storm::Source::SErr {
+
+
+} // namespace Storm::Source::SErr
+
 namespace D2Launch::MainMenus {
 
 
@@ -1451,6 +1386,11 @@ namespace D2Multi::OOGUtilities {
 
 
 } // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+
+
+} // namespace D2Multi::ChatDlg
 
 namespace D2Client::GAME::Game {
 
@@ -1482,6 +1422,11 @@ namespace D2Client::Engine {
 
 } // namespace D2Client::Engine
 
+namespace D2Client::UI::ui {
+
+
+} // namespace D2Client::UI::ui
+
 namespace D2Client::UNIT::CUnit {
 
 
@@ -1496,6 +1441,16 @@ namespace D2Client::GAME::Rendering {
 
 
 } // namespace D2Client::GAME::Rendering
+
+namespace D2Client::UI::QuestLog {
+
+
+} // namespace D2Client::UI::QuestLog
+
+namespace D2Client::UI::npcmenu {
+
+
+} // namespace D2Client::UI::npcmenu
 
 namespace D2Client::NPC {
 
@@ -1782,6 +1737,11 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 } // namespace D2Common::Chat::Ignorelist::StringEntryNode
 
+namespace D2Common {
+
+
+} // namespace D2Common
+
 namespace D2Common::Chat::Ignorelist {
 
 
@@ -1826,6 +1786,11 @@ namespace D2Gdi::Renderer::Windowed {
 
 
 } // namespace D2Gdi::Renderer::Windowed
+
+namespace Fog::Debug {
+
+
+} // namespace Fog::Debug
 
 namespace D2Launch::Launcher {
 
@@ -1962,6 +1927,11 @@ namespace Bnclient::Bnet {
 
 } // namespace Bnclient::Bnet
 
+namespace Bnclient::BnDownload {
+
+
+} // namespace Bnclient::BnDownload
+
 namespace Bnclient {
 
 
@@ -2012,6 +1982,16 @@ namespace D2Common::DATATBLS::BeltsTbls {
 
 } // namespace D2Common::DATATBLS::BeltsTbls
 
+namespace D2Common::Drlg::Preset {
+
+
+} // namespace D2Common::Drlg::Preset
+
+namespace D2Common::Txt::Cube {
+
+
+} // namespace D2Common::Txt::Cube
+
 // =============================================================================
 // Globals recovered from multi-function body references
 // (classified static-local by xref count, but named in other bodies too)
@@ -2033,152 +2013,29 @@ namespace D2Client::UNIT::CUnit {
 // =============================================================================
 
 // Ghidra names for untyped data (the address is in the name)
-extern char s_14_006cc77c[];
 extern char s_207_82_87_133_0070f130[];
-extern char s_AppID_006fad8c[];
-extern char s_Assertion_Failure_006ccb6c[];
 extern char s_BLIZZARDKEY_006cef6c[];
-extern char s_BNNews_D2DV_006df210[];
-extern char s_Blizzard_Entertainment__Inc__006deb80[];
-extern char s_CLSID_006fad84[];
-extern char s_CLen_006e163c[];
-extern char s_Cold_006e164c[];
-extern char s_Component_Categories_006fad6c[];
-extern char s_D2X_INTRO__s_BIK_006d913c[];
-extern char s_D2_LNG_006d5ee0[];
 extern char s_DIABLO2SRV_007065dc[];
-extern char s_Deadlock_006ccb34[];
-extern char s_Diablo_2_EXE_006cc838[];
-extern char s_Diablo_II_006cc8b8[];
 extern char s_Direct3D_Enumeration_0074c058[];
-extern char s_Do_you_wish_to_terminate_the_appl_006cf1f4[];
-extern char s_ERROR___u__0x_08x__006cf2e0[];
 extern char s_Enumeration_Class_0074c044[];
 extern char s_Error_1__Diablo_II_is_unable_to_p_0072daa8[];
 extern char s_Error_1__Diablo_II_is_unable_to_p_0072daf0[];
-extern char s_FLen_006e1634[];
-extern char s_FileType_006fad60[];
-extern char s_File_Read_Error_006ccb94[];
-extern char s_File_Write_Error_006ccb80[];
-extern char s_File___s_Line___d__006cf284[];
-extern char s_Fire_006e165c[];
-extern char s_Font16_006dc970[];
-extern char s_Font24_006dc930[];
-extern char s_Font30_006dc968[];
-extern char s_Font42_006dc960[];
-extern char s_Font6_006dc938[];
-extern char s_Font8_006dc978[];
-extern char s_FontExocet10_006dc910[];
-extern char s_FontExocet8_006dc8f4[];
-extern char s_FontFormal10_006dc950[];
-extern char s_FontFormal11_006dc920[];
-extern char s_FontFormal12_006dc940[];
-extern char s_FontInGameChat_006dc8d0[];
-extern char s_FontRidiculous_006dc900[];
-extern char s_Function___s__006cf274[];
-extern char s_Game_006d5b14[];
-extern char s_Gaunt_006d6b80[];
-extern char s_Halt_006ccb64[];
-extern char s_Handle___s__006cf25c[];
-extern char s_Hardware_006fad48[];
-extern char s_Interface_006fad54[];
-extern char s_Mana_006e1614[];
-extern char s_Mime_006fad40[];
-extern char s_Missing_Dll_006ccb50[];
-extern char s_No_Error_006ccbc8[];
-extern char s_Object___s__006cf268[];
-extern char s_Out_of_Memory_Error_006ccba4[];
 extern char s_PKWARE_Data_Compression_Library_f_0074be60[];
-extern char s_PLen_006e162c[];
-extern char s_Press_OK_to_terminate_the_applica_006cf220[];
-extern char s_Program___s__006cf298[];
-extern char s_ReallyTheLastSucker_006dc8e0[];
-extern char s_Registry_Error_006ccb40[];
-extern char s_SECURITY_006fad30[];
-extern char s_SYSTEM_006fad28[];
-extern char s_Software_006d71ec[];
-extern char s_Stupid_Lng_cpp_error__006d5ea8[];
-extern char s_The_syntax_of_the_command_is_inco_006fcbe4[];
-extern char s_This_application_has_encountered__006cf2a8[];
-extern char s_TypeLib_006fad20[];
-extern char s_Unable_to_start_LNG_manager__006d5ec0[];
-extern char s_Unknown_Error_006ccbb8[];
-extern char s_Warning_006ccb5c[];
-extern char s___006d727c[];
-extern char s___H__006ed5a4[];
-extern char s___N__006ed59c[];
-extern char s_____006ccb30[];
 extern char s__not_xlated_call_ken_w_00730520[];
-extern char s__s_palette_act_d__s_006dc7d0[];
 extern char s_buffer_error_006d37e0[];
 extern char s_buysell_006d6b50[];
-extern char s_client_006cc920[];
-extern char s_cmncof_a1_d2_006d6c44[];
-extern char s_cmncof_a2_d2_006d6c54[];
-extern char s_cmncof_a3_d2_006d6c64[];
-extern char s_cmncof_a4_d2_006d6c74[];
-extern char s_cmncof_a6_d2_006d6c84[];
-extern char s_d2_promo_bik_006d91ac[];
-extern char s_d2data_mpq_006dc770[];
-extern char s_d2exp_mpq_006cd3a0[];
 extern char s_data_error_006d3804[];
-extern char s_data_global_music_act1_caves_wav_006dea30[];
-extern char s_data_global_music_act1_crypt_wav_006de9e4[];
-extern char s_data_global_music_act1_monastery__006dea08[];
-extern char s_data_global_music_act2_desert_wav_006de8c4[];
-extern char s_data_global_music_act2_harem_wav_006de9c0[];
-extern char s_data_global_music_act2_sewer_wav_006de8a0[];
-extern char s_data_global_music_act2_tombs_wav_006de99c[];
-extern char s_data_global_music_act3_kurast_wav_006de87c[];
-extern char s_data_global_music_act3_kurastsewe_006de950[];
-extern char s_data_global_music_act3_spider_wav_006de978[];
-extern char s_data_global_music_act4_diablo_wav_006de858[];
-extern char s_data_global_music_act5_icecaves_w_006de90c[];
-extern char s_data_global_music_act5_xtemple_wa_006de8e8[];
-extern char s_data_global_music_common_options__006dea54[];
-extern char s_data_global_music_introedit_wav_006de930[];
-extern char s_data_local_font__s_default_map_006e02d8[];
 extern char s_data_local_lng__s_expansionstring_006e028c[];
 extern char s_data_local_lng__s_patchstring_tbl_006e02b4[];
-extern char s_data_local_lng__s_string_tbl_006e02f8[];
 extern char s_dialogbackground_00727498[];
-extern char s_expand_006cc8f8[];
 extern char s_file_error_006d3820[];
-extern char s_grasp_006d6b78[];
 extern char s_incompatible_version_006d37c8[];
 extern char s_insufficient_memory_006d37f0[];
-extern char s_launcher_006cc900[];
-extern char s_mode_006d5bc4[];
-extern char s_modstate0_006cc928[];
-extern char s_multiplayer_006cc90c[];
 extern char s_need_dictionary_006d3838[];
-extern char s_ohand_006d6b70[];
-extern char s_orotate_006d6b68[];
-extern char s_pal_dat_006dc7c8[];
-extern char s_pal_pl2_006dc7c0[];
-extern char s_palette_act1_pal_dat_006dc7fc[];
-extern char s_palette_act1_pal_pl2_006dc7e4[];
 extern char s_palette_fechar_pal_dat_006d39e8[];
 extern char s_palette_fechar_pal_pl2_006d39d0[];
 extern char s_palette_sky_pal_dat_006d39bc[];
 extern char s_palette_sky_pal_pl2_006d39a8[];
-extern char s_patch_d2_mpq_006dc728[];
-extern char s_ppress_006d6b60[];
-extern char s_profile_description_006d4eb8[];
-extern char s_profile_location_006d4ecc[];
-extern char s_profile_sex_006d4ee0[];
-extern char s_protate_006d6b58[];
-extern char s_screen01_006d5d10[];
-extern char s_screen02_006d5d04[];
-extern char s_screen03_006d5cf8[];
-extern char s_screen04_006d5cec[];
-extern char s_screen05_006d5ce0[];
-extern char s_screen06_006d5cd4[];
-extern char s_screen07_006d5cc8[];
-extern char s_screen08_006d5cbc[];
-extern char s_screen09_006d5cb0[];
-extern char s_screen10_006d5ca4[];
-extern char s_server_006cc918[];
 extern char s_stream_end_006d382c[];
 extern char s_stream_error_006d3810[];
 extern char s_unknown_006cd5fc[];

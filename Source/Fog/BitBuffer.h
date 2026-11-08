@@ -27,7 +27,6 @@ uint8_t __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset);
 void __stdcall InitBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, size_t nSize);
 int32_t __stdcall GetNextPositon(struct D2BitBufferStrc * pBitBuffer);
 void __stdcall WriteValueToBitBuffer(struct D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits);
-int32_t __stdcall Read(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 uint32_t __stdcall ReadUnsigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 int32_t __stdcall ReadSigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 void __stdcall BitBufferEndCurrentByte(struct D2BitBufferStrc * pBitBuffer);
@@ -38,6 +37,7 @@ void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint3
 void __stdcall BITBUF_OrBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t * pDest, int32_t nBitCount);
 void __stdcall BITBUF_NotBuffer(uint8_t * pSrc, uint32_t * pDest, int32_t nBitCount);
 void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t * pDest, int32_t nBitCount);
+int32_t __stdcall Read(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 void __stdcall BITBUFFER_WriteDwordPair(struct D2BitBufferStrc * pBitBuffer, int32_t * nValue, int32_t nSize);
 int32_t __stdcall BITBUFFER_ReadHuffmanValue(struct D2BitBufferStrc * pBitBuffer, int32_t * pHuffmanTree);
 #endif // D2_MODULE_Fog

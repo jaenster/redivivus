@@ -67,7 +67,8 @@
         "Unreferenced_0045ba80"
       ],
       "usedTypes": [
-        "StormLinkedListStrc"
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {

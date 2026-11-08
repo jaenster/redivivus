@@ -1155,8 +1155,9 @@ uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObjec
     return (uint32_t)(pHeap != 0);
 }
 
-int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, int32_t pObject) {
+int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, void * pObject) {
     D2FogHeapBlockHdrStrc* pBlock;
+    int32_t nObject;
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -1165,7 +1166,7 @@ int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, int32_t pObjec
       }
     }
 
-    int32_t pObjectSaved = pObject;
+    void* pObjectSaved = pObject;
     BOOL nValid = SMEM_CheckValidBlock(0, 1, nullptr, (D2FogHeapBlockHdrStrc*)pObject);
     if (!nValid) {
       return -1;
@@ -1173,17 +1174,17 @@ int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, int32_t pObjec
     if (!pObjectSaved) {
       pBlock = 0;
     } else {
-      pBlock = (D2FogHeapBlockHdrStrc*)(pObjectSaved - 8);
-      if (*(uint8_t*)(pObjectSaved - 5) & 8) {
-        pBlock = *(D2FogHeapBlockHdrStrc**)(pObjectSaved - 0xc);
+      pBlock = (D2FogHeapBlockHdrStrc*)((char*)pObjectSaved - 8);
+      if (*(uint8_t*)((char*)pObjectSaved - 5) & 8) {
+        pBlock = *(D2FogHeapBlockHdrStrc**)((char*)pObjectSaved - 0xc);
       }
     }
     if (*(int*)((uint32_t)*(uint16_t*)&pBlock->uLink * 0x10000 + 4) != nHeapId) {
       return -1;
     }
 
-    SMemGetBlockDataAndSize(&nHeapId, (uint8_t*)pObjectSaved, &pObject, pBlock);
-    return pObject;
+    SMemGetBlockDataAndSize(&nHeapId, (uint8_t*)pObjectSaved, (int*)&nObject, pBlock);
+    return nObject;
 }
 
 // @blizzard AllocateHeapBlock (SMEM.CPP)

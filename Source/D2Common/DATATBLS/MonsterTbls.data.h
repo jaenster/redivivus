@@ -14,5 +14,3 @@
 #include "Source/D2Headers/d2_platform.h"
 
 extern uint32_t gszHirelingFieldName_act;
-extern char s_A_006ed5ac[2];
-extern char s_B_006ed5b0[2];

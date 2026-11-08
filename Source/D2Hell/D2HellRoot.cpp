@@ -3,7 +3,6 @@
 #include "Source/D2Hell/D2HellRoot.h"
 #include "Source/Fog/Fog.h"
 #include "Source/Game/Main.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Hell/D2HellRoot.data.h"
 
@@ -33,7 +32,7 @@ typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpre
 typedef BOOL (__stdcall *pfnStormErrorHandler)(DWORD dwErrorCode, char * szBuffer, DWORD dwBufferSize);
 #endif
 
-static LPCSTR lpCaption_006cc848 = (LPCSTR)s_Diablo_2_EXE_006cc838; D2_STATIC_GUARD(lpCaption_006cc848, "lpCaption_006cc848");
+static LPCSTR lpCaption_006cc848 = (LPCSTR)(char*)"Diablo 2.EXE"; D2_STATIC_GUARD(lpCaption_006cc848, "lpCaption_006cc848");
 static char s___AUTMESSAGESOURCE___0072f9fc[24] = {
     '.',
     '?',
@@ -91,7 +90,7 @@ bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
     // Static local variables (originally global data)
-    static LPCSTR gnFileSignatureResult = (LPCSTR)s_Blizzard_Entertainment__Inc__006deb80; D2_STATIC_GUARD(gnFileSignatureResult, "D2Hell::D2FILE_VerifyFileSignature::gnFileSignatureResult");
+    static LPCSTR gnFileSignatureResult = (LPCSTR)(char*)"Blizzard Entertainment, Inc."; D2_STATIC_GUARD(gnFileSignatureResult, "D2Hell::D2FILE_VerifyFileSignature::gnFileSignatureResult");
 
     bool bVar1;
     char bIsSigned;

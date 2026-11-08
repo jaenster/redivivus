@@ -1502,7 +1502,6 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc",
-        "D2GSPacketSrv0x27_TextStrc",
         "D2QuestArgStrc",
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc",

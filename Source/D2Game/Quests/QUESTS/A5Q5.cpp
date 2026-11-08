@@ -839,10 +839,10 @@ void __fastcall Q35_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2UnitStrc* pAncientAlive;
     ::SGAMEDATA* pGame;
     int nLevelId;
-    nLevelId = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     D2QuestDataA5Q5Strc* pQuestSpecificData;
     pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x6d) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x6d) {
       BOOL bIsCompleted;
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
       if (pQuestData->bIsNotIntroduction == '\0') {

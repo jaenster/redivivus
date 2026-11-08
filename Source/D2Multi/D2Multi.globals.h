@@ -25,13 +25,6 @@ typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
 namespace D2Multi::ChatDlg {
-extern char s_ama_006d5564[4];
-extern char s_sor_006d5568[4];
-extern char s_nec_006d556c[4];
-extern char s_pal_006d5570[4];
-extern char s_bar_006d5574[4];
-extern char s_dru_006d5578[4];
-extern char s_asn_006d557c[4];
 // lpCriticalSection parameter of DeleteCriticalSection
 // lpCriticalSection parameter of InitializeCriticalSection
 // lpCriticalSection parameter of LeaveCriticalSection

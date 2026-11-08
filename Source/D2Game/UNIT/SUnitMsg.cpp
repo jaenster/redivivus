@@ -42,7 +42,7 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 #endif
 #ifndef RECON_FPTD_fnUpdateGameInformation
 #define RECON_FPTD_fnUpdateGameInformation
-typedef void (__fastcall *fnUpdateGameInformation)(int nCharClassId, int nLevelDelta);
+typedef void (__fastcall *fnUpdateGameInformation)(WORD nGameId, char * szCharName, int32_t nClassId, int32_t nLevel);
 #endif
 
 static uint32_t gaStartingLevelByAct[5] = { 0x1, 0xf, 0x14, 0x1a, 0x20 }; D2_STATIC_GUARD(gaStartingLevelByAct, "gaStartingLevelByAct");
@@ -114,33 +114,27 @@ void __fastcall thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo(::SGAMEDATA * pG
 
 // Server-side level-up handler: recomputes pUnit's level from accumulated experience, updates UNITSTAT_level and UNITSTAT_nextexp, then — if the unit gained one or more levels — scales up max HP/mana/stamina (and restores them to max), awards stat points and skill points, refreshes NPC gamble inventories, broadcasts party info (0x75) to all players, recalculates equipped item stats, and calls the BattleNet UpdateGameInformation callback. Called from the SUnitMsg message-processing layer.
 void __fastcall UpdateGameInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int nCurHp;
     D2CharStatsTxt* pCharStats;
-    if (!pUnit) {
-      nCurHp = -1;
-    } else {
-      nCurHp = pUnit->nClassId;
-    }
-
+    int nCharClassId = !pUnit ? -1 : pUnit->nClassId;
     int32_t nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
     uint32_t nExperience = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
-    int nNewLevel = D2Common::DATATBLS::DataTbls::DATATBLS_GetLevelFromExperience(nCurHp, nExperience);
+    int nNewLevel = D2Common::DATATBLS::DataTbls::DATATBLS_GetLevelFromExperience(nCharClassId, nExperience);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nNewLevel, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(nCurHp, nNewLevel), 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(nCharClassId, nNewLevel), 0);
     int nLevelDelta = nNewLevel - nCurrentStat;
     if (nLevelDelta <= 0) {
       return;
     }
-    if (nCurHp < 0 || nCurHp >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
+    if (nCharClassId < 0 || nCharClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) {
       pCharStats = 0;
     } else {
-      pCharStats = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nCurHp;
+      pCharStats = D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nCharClassId;
     }
 
     nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxhp, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nCurrentStat + (uint32_t)(uint8_t)pCharStats->LifePerLevel * nLevelDelta * 0x40, 0);
     nCurrentStat = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     if (nCurHp > 0) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurrentStat, 0);
     }
@@ -169,8 +163,8 @@ void __fastcall UpdateGameInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    char* nLevelDelta_00 = D2Common::Units::GetPlayerName(pUnit);
-    (**ppfnUpdateGameInfo)((uint32_t)pGame->nServerToken, (int)nLevelDelta_00);
+    char* szCharName = D2Common::Units::GetPlayerName(pUnit);
+    (**ppfnUpdateGameInfo)(pGame->nServerToken, szCharName, nCharClassId, nNewLevel);
 }
 
 static void PLAYER_AddEnergyStatPoints(D2UnitStrc * pUnit, int32_t nPoints) {

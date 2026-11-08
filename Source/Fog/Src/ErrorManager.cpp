@@ -14,7 +14,6 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "Redivivus/d2_trace.h"
 #include "3rdparty/Storm/Storm.h"
-#include "Source/globals/globals.h"
 #include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
@@ -28,18 +27,18 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #endif
 
 static char * gaErrorTypeNames[12] = {
-    s_No_Error_006ccbc8,
-    s_Unknown_Error_006ccbb8,
-    s_Out_of_Memory_Error_006ccba4,
-    s_File_Read_Error_006ccb94,
-    s_File_Write_Error_006ccb80,
-    s_Assertion_Failure_006ccb6c,
-    s_Halt_006ccb64,
-    s_Warning_006ccb5c,
-    s_Missing_Dll_006ccb50,
-    s_Registry_Error_006ccb40,
-    s_Deadlock_006ccb34,
-    s_____006ccb30
+    (char*)"No Error",
+    (char*)"Unknown Error",
+    (char*)"Out of Memory Error",
+    (char*)"File Read Error",
+    (char*)"File Write Error",
+    (char*)"Assertion Failure",
+    (char*)"Halt",
+    (char*)"Warning",
+    (char*)"Missing Dll",
+    (char*)"Registry Error",
+    (char*)"Deadlock",
+    (char*)"\?\?\?"
 }; D2_STATIC_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
     /* .DebugInfo = */ nullptr,
@@ -159,21 +158,21 @@ uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, D
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     // Static local variables (originally global data)
     static char * gaLanguageNames[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_STATIC_GUARD(gaLanguageNames, "Fog::Src::ErrorManager::WriteCrashReportProcessInfo::gaLanguageNames");
 
     uint8_t* szPath;

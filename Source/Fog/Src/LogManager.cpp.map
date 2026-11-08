@@ -502,7 +502,8 @@
         "Unreferenced_0040f580"
       ],
       "usedTypes": [
-        "StormLinkedListStrc"
+        "StormLinkedListStrc",
+        "intptr_t"
       ]
     },
     {

@@ -5642,7 +5642,7 @@ uint8_t __stdcall ITEM_GetTxtItemTypes_varinvgfx(D2UnitStrc * pUnit) {
 
 D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32_t nGfxIndex) {
     // Static local variables (originally global data)
-    static char * gpszItemNoInvGfx = (char *)&lpDefault_006cc837; D2_STATIC_GUARD(gpszItemNoInvGfx, "D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx::gpszItemNoInvGfx");
+    static char * gpszItemNoInvGfx = (char*)""; D2_STATIC_GUARD(gpszItemNoInvGfx, "D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx::gpszItemNoInvGfx");
 
     D2ItemTypesTxt* pItemTypesTxt;
     uint32_t nClampedGfxIdx;

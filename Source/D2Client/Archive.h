@@ -65,7 +65,7 @@ namespace D2Client::Archive {
 BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...);
 struct StormLinkStrc * __thiscall ARCHIVE_ComputeAddress(struct StormLinkStrc * pNode, intptr_t nBaseAddr);
 int __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * param_1);
-int __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * param_1);
+intptr_t __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_0045baa0(struct StormLinkStrc * param_1);
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode);
 uint32_t __thiscall ARCHIVE_GetNodeValue(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);

@@ -315,7 +315,7 @@ static void __stdcall TILECMP_ExtractIsometricSubTile(D2TileCmpTileNodeStrc * pS
     void* pSrcDT1Pixel = (void*)((char*)pTileData + (nSubTileOffset * 0xa0 + nSubTileIndex) * 3);
     int nRowOffset = 0x2a;
     nSubTileIndex = 0xc;
-    int nTileData = (int)pSubTilePixelBuf;
+    intptr_t nTileData = (intptr_t)pSubTilePixelBuf;
     do {
       memcpy((void*)(nRowOffset + nTileData), (void*)(nRowOffset + (char*)pSrcDT1Pixel), nSubTileIndex);
       if (iRow < 7) {
@@ -916,10 +916,10 @@ void __stdcall TILECMP_FixupMinimalPointers(D2TileLibraryHeaderStrc * pTileCmpHd
       do {
         pDVar1 = pTileCmpHdr->pTiles;
         pDVar1[iTileSet].szFilePath = pTileCmpHdr->szLibraryName;
-        if ((int)pDVar1[iTileSet].pSubTiles) {
+        if (pDVar1[iTileSet].pSubTiles) {
           TILECMP_FixupMinimalPointers_HaltTail(0x3a2);
         }
-        if ((int)pDVar1[iTileSet].pLruNode) {
+        if (pDVar1[iTileSet].pLruNode) {
           TILECMP_FixupMinimalPointers_HaltTail(0x3a3);
         }
 

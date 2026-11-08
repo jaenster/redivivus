@@ -87,6 +87,46 @@ struct D2AdjacentUnitCheckArgStrc {
 };
 
 #endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiAllyHealScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pHealTarget;
+    /* 0x04 */ int32_t nLowestLifePct;
+    /* 0x08 */ int32_t nMaxDistance;
+    /* 0x0C */ int32_t nUnused0C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x10 */ int32_t nUnused10; // not used by this callback; the caller reserves 40 bytes
+    /* 0x14 */ int32_t nUnused14; // not used by this callback; the caller reserves 40 bytes
+    /* 0x18 */ int32_t nUnused18; // not used by this callback; the caller reserves 40 bytes
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiBloodLordScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pNearestBloodLord;
+    /* 0x04 */ struct D2UnitStrc * pWoundedBloodLord;
+    /* 0x08 */ int32_t nMaxDistance;
+    /* 0x0C */ int32_t nNearestDist;
+    /* 0x10 */ int32_t nWoundedDist;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiClassCountScanStrc {
+    /* 0x00 */ int32_t nClassId;
+    /* 0x04 */ int32_t nMaxScanRadius;
+    /* 0x08 */ int32_t nCount;
+    /* 0x0C */ int32_t nUnused0C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x10 */ int32_t nUnused10; // not used by this callback; the caller reserves 40 bytes
+    /* 0x14 */ int32_t nUnused14; // not used by this callback; the caller reserves 40 bytes
+    /* 0x18 */ int32_t nUnused18; // not used by this callback; the caller reserves 40 bytes
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2AiCmdArgumentsStrc
 #define D2_DEFINED_D2AiCmdArgumentsStrc
 struct D2AiCmdArgumentsStrc {
@@ -100,6 +140,21 @@ struct D2AiCmdArgumentsStrc {
 };
 
 #endif // D2_DEFINED_D2AiCmdArgumentsStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiCorpseScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pCorpse;
+    /* 0x04 */ int32_t nCorpseCount;
+    /* 0x08 */ int32_t nCorpseDistance;
+    /* 0x0C */ int32_t nMaxScanRadius;
+    /* 0x10 */ int32_t nUnused10; // not used by this callback; the caller reserves 40 bytes
+    /* 0x14 */ int32_t nUnused14; // not used by this callback; the caller reserves 40 bytes
+    /* 0x18 */ int32_t nUnused18; // not used by this callback; the caller reserves 40 bytes
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2AiListStrc
 #define D2_DEFINED_D2AiListStrc
 struct __attribute__((packed)) D2AiListStrc {
@@ -111,6 +166,36 @@ struct __attribute__((packed)) D2AiListStrc {
 
 #endif // D2_DEFINED_D2AiListStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiLowLifeScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pBestUnit;
+    /* 0x04 */ int32_t nBestDistance;
+    /* 0x08 */ int32_t nLifePctThreshold;
+    /* 0x0C */ int32_t nUnused0C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x10 */ int32_t nUnused10; // not used by this callback; the caller reserves 40 bytes
+    /* 0x14 */ int32_t nUnused14; // not used by this callback; the caller reserves 40 bytes
+    /* 0x18 */ int32_t nUnused18; // not used by this callback; the caller reserves 40 bytes
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiMephistoScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pNearestUnit;
+    /* 0x04 */ int32_t nNearestDistance;
+    /* 0x08 */ int32_t nCloseCount;
+    /* 0x0C */ struct D2UnitStrc * pWeakestUnit;
+    /* 0x10 */ int32_t nWeakestLife;
+    /* 0x14 */ struct D2UnitStrc * pNearestWhenPlayer;
+    /* 0x18 */ int32_t nNearestWhenPlayerDistance;
+    /* 0x1C */ int32_t nTotalCount;
+    /* 0x20 */ int32_t nUnused20;
+    /* 0x24 */ int32_t nUnused24;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2AiMinionHealScanStrc {
     /* 0x00 */ int32_t nHealRange;
     /* 0x04 */ int32_t nBuffRange;
@@ -118,6 +203,36 @@ struct D2AiMinionHealScanStrc {
     /* 0x0C */ struct D2UnitStrc * pHealTarget;
     /* 0x10 */ struct D2UnitStrc * pBuffTarget;
     /* 0x14 */ int32_t nCandidateCount;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiNearbyAllyScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pNearestAlly;
+    /* 0x04 */ int32_t nNearestDistance;
+    /* 0x08 */ int32_t nAllyCount;
+    /* 0x0C */ int32_t nMaxScanRadius;
+    /* 0x10 */ int32_t nUnused10; // not used by this callback; the caller reserves 40 bytes
+    /* 0x14 */ int32_t nUnused14; // not used by this callback; the caller reserves 40 bytes
+    /* 0x18 */ int32_t nUnused18; // not used by this callback; the caller reserves 40 bytes
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiResurrectScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pResurrectTarget;
+    /* 0x04 */ struct D2UnitStrc * pDamagedAlly;
+    /* 0x08 */ int32_t nMatchCount;
+    /* 0x0C */ int32_t nInRangeCount;
+    /* 0x10 */ int32_t nMaxScanRadius;
+    /* 0x14 */ int32_t bUndeadOnly;
+    /* 0x18 */ int32_t bAllowType8;
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
 };
 
 #endif // D2_MODULE_D2Game
@@ -138,11 +253,56 @@ struct D2AiShadowMasterScanStrc {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2AiSkillCandidateStrc {
-    /* 0x00 */ struct D2SkillStrc * pSkill;
+    /* 0x00 */ struct D2UnitStrc * pTarget;
     /* 0x04 */ eD2Skills eSkillId;
     /* 0x08 */ int32_t nScore;
     /* 0x0C */ int32_t nUnused0C; // only zeroed
     /* 0x10 */ int32_t nUnused10; // only zeroed
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiSummonScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pNearestCorpse;
+    /* 0x04 */ int32_t nNearestCorpseDistance;
+    /* 0x08 */ int32_t nMaxScanRadius;
+    /* 0x0C */ struct D2UnitStrc * pNearestLiving;
+    /* 0x10 */ int32_t nNearestLivingDistance;
+    /* 0x14 */ int32_t nLivingCount;
+    /* 0x18 */ int32_t nSearchMode;
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiThreatScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pBestUnit;
+    /* 0x04 */ int32_t nBestDistance;
+    /* 0x08 */ int32_t bNeedLOS;
+    /* 0x0C */ int32_t nMaxScanRadius;
+    /* 0x10 */ int32_t nGridIndex;
+    /* 0x14 */ struct D2UnitStrc * pLowThreatUnit;
+    /* 0x18 */ int32_t nLowThreatDistance;
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiWoundedAllyScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pWoundedAlly;
+    /* 0x04 */ int32_t nWoundedCount;
+    /* 0x08 */ int32_t nLifePctThreshold;
+    /* 0x0C */ int32_t nMaxScanRadius;
+    /* 0x10 */ int32_t nUnused10; // not used by this callback; the caller reserves 40 bytes
+    /* 0x14 */ int32_t nUnused14; // not used by this callback; the caller reserves 40 bytes
+    /* 0x18 */ int32_t nUnused18; // not used by this callback; the caller reserves 40 bytes
+    /* 0x1C */ int32_t nUnused1C; // not used by this callback; the caller reserves 40 bytes
+    /* 0x20 */ int32_t nUnused20; // not used by this callback; the caller reserves 40 bytes
+    /* 0x24 */ int32_t nUnused24; // not used by this callback; the caller reserves 40 bytes
 };
 
 #endif // D2_MODULE_D2Game
@@ -280,18 +440,18 @@ int32_t __fastcall MONSTERAI_GetDistanceToCoords(struct D2UnitStrc * pUnit, int3
 // Line-of-sight check for monster AI: returns BOOL (TRUE if pUnit has a clear shot at pTarget). Computes the tile distance via GetDistance and picks a perpendicular spread offset from a distance-indexed table (2 at dist<3, 3 mid, 4 far; default 3 beyond 0x18). Then runs three COLLISION_LOS collision tests via TestCollisionByCoordinates: the direct line to the target plus two offset rays (target +/- the perpendicular offset) so a target peeking past a wall corner still counts as hittable. Returns FALSE on null args (still wrapped through Fog::Debug::GuardStack). Read-only; no game-state mutation.
 BOOL __fastcall TestIfMonsterCanHitTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int __fastcall Unreferenced_005dc840(struct D2UnitStrc * param_1);
-uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppAllyData);
+uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2AiNearbyAllyScanStrc * pScan);
 struct D2UnitStrc * __fastcall AI_ForEachFn04_FindDyingMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, uint32_t * test);
 uint32_t __fastcall MONSTERAI_GetThreatLevel(struct D2UnitStrc * pUnit);
 uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // ForEach callback used during AI target scanning. For each candidate pOther unit: if it is a valid attackable player/monster (alive, TARGETABLE flag set, can-attack check passes), records it in ppResults as a preferred (threat>=2 → ppResults[0]/[1]) or secondary (ppResults[5]/[6]) target when within distance ppResults[3]/[6] respectively, skipping if already blocked by LOS (TestCollisionWithUnit). If the unit fails those checks but is an aligned monster with nAiFlags bit 3 set, checks grid index against ppResults[4] and clears ppResults[2] on match (pack-leader slot invalidation). Always returns 0.
-uint32_t __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppResults);
+uint32_t __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2AiThreatScanStrc * pScan);
 uint32_t __fastcall AI_ForEachFn06_NearestTargetByThreat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppResults);
 uint32_t __fastcall AI_ForEachFn07_AltHighThreatTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppResults);
 uint32_t __fastcall AI_ForEachFn11_AltHittableTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppResults);
 uint32_t __fastcall AI_ForEachFn08_NearestClosedDoor(uint32_t pGame, int * pSourceUnit, struct D2UnitStrc * pUnit, struct D2MonsterAiParameterStruct * ppResults);
-int __fastcall AI_ForEachFn09_FindOwnMinionCorpse(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppResults);
-uint32_t __fastcall AI_ForEachFn12_CountClassInRange(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, int * pCountBuf);
+int __fastcall AI_ForEachFn09_FindOwnMinionCorpse(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2AiCorpseScanStrc * pScan);
+uint32_t __fastcall AI_ForEachFn12_CountClassInRange(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2AiClassCountScanStrc * pScan);
 // Iterates every client in the rooms adjacent to pUnit's room and invokes pfnAiForEach for each corresponding player unit. Stops and returns the first non-zero callback result. Used by monster AI to scan nearby player units for targeting.
 // Body spans 005dcee0-005dcf64 (single function, RET 0x10). 005dcef9 is the JNZ target of the null-room test at 005dcef1, NOT a call target - a function defined there makes EBP look like a parameter and turns the three EBP-relative locals (ppRoomList at -0xc, nRoomCount at -8, nRoomIndex at -4) into wild pointers.
 uint32_t __stdcall ForEachCallType1(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MonsterAiParameterStruct * pAiParam, fpMonsterAiForEach pfnAiForEach);
@@ -412,7 +572,7 @@ void __fastcall AI_Fn1_InvisoSpawner(::SGAMEDATA * pGame, struct D2UnitStrc * pU
 void __fastcall AI_Fn1_MosquitoNest(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AI_Fn0_BoneWall(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AI_Fn1_BoneWall(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
-uint32_t __fastcall MONSTERAI_FindAlliedMonsterToHeal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonsterCandidate, struct D2UnitStrc * * pSearchData);
+uint32_t __fastcall MONSTERAI_FindAlliedMonsterToHeal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonsterCandidate, struct D2AiAllyHealScanStrc * pScan);
 // Per-frame primary AI think routine for the High Priest / spellcaster boss class (monstats AI id 1 variant). Uses the unit's LCG seed for all probability rolls. When idle (dwArg0==0): if already in retreat (bEngagedInCombat) re-rolls to keep fleeing/walking; otherwise tries, in order, a heal cast (Skill2) on a wounded allied monster found via ForEach/MONSTERAI_FindAlliedMonsterToHeal, a ranged attack cast (Skill1) with positional jitter when target is in range, a missile attack (MissS1) when in missile range, then falls back to approach/walk. The post-idle block handles flee/reposition behaviour (WalkRandomOffset, MONSTERAI_CommandWalkToUnit, PlanNextAiMove) gated on seed rolls vs MonStats AI param columns (indexed off TreasureClass+difficulty). Ends each branch by scheduling the next move or CalledOnEndAiFunction1.
 void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Per-tick monster AI for a stationary turret-type monster (desert/turret). Fires its primary skill (Skill1/Sk1mode) at the current target when off cooldown (dwArg0 timer in D2AiGeneralStrc) and within range (MonStats.TreasureClass-relative range fields by difficulty). Computes target and self coordinates, picks a firing direction via gfx-offset/spawn-timer tables, validates the skill at the aim position, casts it, advances the burst counter (dwArg1) and reschedules dwArg0 cooldown; otherwise calls PlanNextAiMove to idle. No return.
@@ -675,7 +835,7 @@ void __fastcall AITHINK_Fn1_Baboon(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 void __fastcall AITHINK_Fn1_QuillRat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Unit-iteration callback used to locate a dead Fallen corpse eligible for revival by a Fallen Shaman. Accepts pCandidate if: it is a different monster unit; its base MonStats ID is 0x13 (Fallen) or 0x3A (Carver); alignment is neutral (0) and the corpse-dead flag (eUnitFlags bit 1) is set; has no passive or light state active; is in death animation mode (Kick); and is within the search radius stored in pOutResult[3]. On match, stores candidate in pOutResult[0], distance in pOutResult[2], and increments count at pOutResult[1].
-uint32_t __fastcall MONSTERAI_FindFallenForRevival(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2MonsterAiParameterStruct * pOutResult);
+uint32_t __fastcall MONSTERAI_FindFallenForRevival(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2AiCorpseScanStrc * pScan);
 // Per-tick server AI for the Fallen Shaman monster. Uses the unit's LCG seed (nSeedLow*0x6ac690c5 + nSeedHigh) plus difficulty-indexed parameter words read from MonStats (offsets off TreasureClass) as percentage rolls to decide behavior: chance to break off combat (CalledOnEndAiFunction1); ForEach scan (radius from params) using MONSTERAI_FindFallenForRevival to locate a dead/fallen unit to resurrect; chance to summon a minion (CreateMinion); if a revival target was found and validated (AI_Monster_ValidateSkillAtPosition) cast Skill1 on it (MONSTERAI_CommandSkillSequence); otherwise pick the current or a newly-found target and cast Skill2 (SERVER_UNIT_CastSkill), or fall through to PlanNextAiMove / SetCombatStateAndApproachTarget. Mutates pUnit->sSeed each roll.
 void __fastcall AITHINK_Fn1_FallenShaman(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall SandMaggotAi_CastDelayedSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
@@ -695,14 +855,14 @@ void __fastcall AITHINK_Fn1_Scarab(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 // Mummy AI decision tick. If currently attacking but not yet engaged, walks toward target. Within melee range and engaged: double-RNG chooses between two CalledOnEndAiFunction1 modes (4 or 5) or idles. Within range but not engaged: walks toward target. Out of range: RNG to wander randomly vs idle. All thresholds difficulty-scaled via TreasureClass offsets.
 void __fastcall AITHINK_Fn1_Mummy(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Unit-iterator callback used to find the best dead monster for a resurrection AI to raise. For each candidate: must be an allied UNIT_MONSTER, not pUnit itself, not alignment 2, flagged as dead (eUnitFlags bit 1 set), and have no passive state. Filters by undead type depending on whether pOutResult[5] is set. If within the range limit (pOutResult[4]), prefers monsters in Kick anim with no light state (written to *pOutResult), otherwise tracks partially-damaged non-Death candidates in pOutResult[1]. Always returns 0.
-uint32_t __fastcall MONSTERAI_FindMonsterToResurrect(uint32_t dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2UnitStrc * * pOutResult);
+uint32_t __fastcall MONSTERAI_FindMonsterToResurrect(uint32_t dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2AiResurrectScanStrc * pScan);
 // Server-side per-tick AI mode-1 routine for the Greater Mummy (resurrector). Advances the monster RNG seed and uses per-difficulty MonStats AI columns as % chances: when engaged or in close range may end the AI step (CalledOnEndAiFunction1). Scans nearby units via ForEach + MONSTERAI_FindMonsterToResurrect to find a corpse/ally to revive (search radius from AI param column, with a special-case branch when this unit is the Q09 boss class, invoking Q09_AICallback_GreaterMummy). Rolls to cast Skill2 (revive) on the best found unit, else Skill1, else Skill3 on a re-acquired target (SERVER_UNIT_CastSkill); otherwise walks toward / approaches the target. No return; movement/skill side effects.
 void __fastcall AITHINK_Fn1_GreaterMummy(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Strips the unit's targetable/attackable flags, removes both COLLIDE_UNIT_RELATED and COLLIDE_MONSTER collision entries from its room at the current position, sets path width to 5, clears the collision pattern on the dynamic path, then calls RestartAiThink with delay 0xC. Used to fully reset a monster's spatial presence before repositioning.
 void __fastcall ClearCollisionAndResetPath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Reduces a large monster's collision footprint to 1 tile after it finishes an entry/emergence sequence. Sets ISVALIDTARGET|CANBEATTACKED|TARGETABLE flags, then if the current width is already 1 returns early. Otherwise relocates the unit in-place via SUNIT_RelocateUnit with width=0, adds a SMALL_UNIT_PRESENCE collision cell at the new position, sets path unit-width to 1, and restarts AI think in 12 ticks.
 BOOL __fastcall AI_Monster_ShrinkCollisionSize(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-uint32_t __fastcall MONSTERAI_FindLowHpTarget(uint32_t dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2UnitStrc * * pOutResult);
+uint32_t __fastcall MONSTERAI_FindLowHpTarget(uint32_t dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2AiLowLifeScanStrc * pScan);
 // AI Function1 handler for Vulture (Carrion Bird) monster type. Complex flying AI with landing, egg-laying, retreat, and multi-skill attack patterns.
 void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Combat AI tick for the Mosquito-type monster (Act 3 swamp). Uses a 3-state machine in dwArg0/dwArg1: state 0=walk toward target; state 1=random wander with step counter; state 2=approach-offset walk that transitions back to state 1. When engaged in combat, rolls against Skill1 chance: on success casts Skill1 on target; otherwise calls CalledOnEndAiFunction1. Resets state machine if a 20% idle-retreat roll fires.
@@ -749,11 +909,11 @@ int __fastcall Unreferenced_005f6e20(uint8_t * param_1);
 // Per-think server AI for the Zakarum Zealot/Fanatic melee monster (__fastcall: pGame, pUnit, pAiParam). Computes a run-speed pct from MonStats Run/Velocity and current life pct. If the target resolves to a player and the act is Act III with the Blackened Temple quest completed, the monster flees (MONSTERAI_CommandRunAwayFromUnit) or wanders. While attacking, if life dropped below a difficulty-scaled threshold it sets a brief flee flag and runs away; then checks line-of-sight to the target's path position (CheckCollision_BlockPlayerMissile) and approaches/walks toward it if blocked. Out of combat it rolls a chance to walk to vs run to the target. In combat it rolls flee vs SetCombatStateAndApproachTarget, ending the think with CalledOnEndAiFunction1 (engage) using difficulty-indexed MonStats chances. Uses per-unit seed RNG for all rolls and stores flee state in the AiGeneral struct.
 void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // ForEach callback that searches for a wounded allied Hydra or Golem (classId 0xEB or 0xEE). Skips self, dead units, non-monsters, non-allies, and alignment==2 units. Accepts candidates within the search radius (ppSearchParams[3]) whose current HP percentage is below 61 (0x3D). Tracks the lowest-HP candidate in ppSearchParams[0] and increments a match counter in ppSearchParams[1]. Always returns 0.
-uint32_t __fastcall MONSTERAI_FindWoundedHydraGolem(int pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2MonsterAiParameterStruct * ppSearchParams);
+uint32_t __fastcall MONSTERAI_FindWoundedHydraGolem(int pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2AiWoundedAllyScanStrc * pScan);
 // Per-think server AI for a Zakarum priest/caster monster (__fastcall: pGame, pUnit, pAiParam). When engaged or attacking and below ~33% life, casts Skill3 (a self-defense/blink skill) at a position reflected away from the target (doubling/quadrupling the target-to-self vector), gated by a difficulty-scaled cooldown in AiGeneral->dwArg0 and validated by AI_Monster_ValidateSkillAtPosition. In combat it may also roll to disengage (CalledOnEndAiFunction1). Scans for a wounded ally hydra/golem via ForEach+MONSTERAI_FindWoundedHydraGolem and casts Skill1 (heal/buff) on it by chance. Then, depending on whether a wall blocks line to the target (CollisionWithWall), rolls difficulty-indexed MonStats chances to cast Skill4 or Skill2 (each with its own AiGeneral cooldown dwArg1/dwArg2), else SetCombatStateAndApproachTarget or PlanNextAiMove. All probabilities use the per-unit seed LCG.
 void __fastcall AITHINK_Fn1_ZakarumPriest(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // ForEach callback used by Mephisto's AI to gather candidate target data into a pInfo array. For each valid, living, attackable unit within 1025 tiles: increments pInfo[7] (total count), increments pInfo[2] if within 226 tiles (melee range), tracks closest target in pInfo[0]/pInfo[1], tracks lowest-HP target in pInfo[3]/pInfo[4], and tracks closest player in pInfo[5]/pInfo[6]. Always returns 0.
-uint32_t __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2UnitStrc * * pInfo);
+uint32_t __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2AiMephistoScanStrc * pScan);
 struct D2UnitStrc * __fastcall DecideMephistoAlternateTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MonStatsTxt * nMonStatsOffset, struct D2UnitStrc * fallback);
 // Server-side primary AI think function for the Mephisto act boss. Reads its AI state (dwArg0/1/2 in the D2AiGeneralStrc passed via pAiParam) plus current life%, distance to target and difficulty to pick the next action: melee, teleport-on-collision/range, or weighted-random cast among MonStats Skill1..6 (Sk*mode). Uses the unit RNG seed for all rolls. Mutates dwArg0 (skill-rotation counter), dwArg1 (sub-phase) and dwArg2 (next skill-state); issues moves/casts and schedules the next think via PlanNextAiMove. No return value.
 void __fastcall AITHINK_Fn1_Mephisto(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
@@ -781,7 +941,7 @@ void __fastcall AI_Fn1_GargoyleTrap(::SGAMEDATA * pGame, struct D2UnitStrc * pUn
 void __fastcall AI_Fn1_SkeletonMage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall FetishShamanAi_ClearInfernoState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // ForEach callback for the Necromancer AI to locate its own summons (Skeleton classId 0x8D or Revive 0x18C). Accepts only monsters that are summoned (flag bit 1 set), not in a passive state, owned by pUnit (or revive with special ownership), alignment==0, within the search radius (ppSearchCtx[2]), and not of type 0xC. Splits matches: idle summons increment ppSearchCtx[5] and track nearest in [3]/[4]; active (Kick mode) summons track nearest in [0]/[1]. Returns 0.
-uint32_t __fastcall AI_Necromancer_FindOwnedSummonCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidateUnit, struct D2UnitStrc * * ppSearchCtx);
+uint32_t __fastcall AI_Necromancer_FindOwnedSummonCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidateUnit, struct D2AiSummonScanStrc * pScan);
 // Server AI tick for the Fetish Shaman. If target is in Skill1 range and inferno state is inactive, spawns a minion command (CreateMinion cmd=1) and casts Skill1 toward the target. Otherwise, searches for owned summons via AI_Necromancer_FindOwnedSummonCallback; if one is found nearby, randomly decides to issue a heal/resurrect command (cmd=0xE) via Skill3 or walk to it. Falls back to approaching the combat target.
 void __fastcall AI_Fn1_FetishShaman(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Sand Maggot Queen AI tick. Periodically spawns larva minions (UNITFLAG_NOXP) near its own position via SpawnMonster using MonStats2 spawn parameters. Uses dwArg0/1/2 in AiGeneralStrc to track phase: arg1=0 burrow/wait, arg1=1 spawn, arg2=1 cooldown. Spawn count ceiling and cooldown duration are difficulty-scaled fields from MonStatsTxt.
@@ -800,7 +960,7 @@ void __fastcall AI_Fn1_DoomKnight(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 // Server AI tick function for the Abyss Knight monster (Function1 slot). If Skill2 has an aura state and HP% is below the difficulty threshold and the aura is not active, rolls RNG to cast the aura self-buff. If already engaged in combat, rolls to either commit a melee attack (CalledOnEndAiFunction1) or plan next move. Out of combat: arms a cooldown counter (dwArg0) when target enters range, then if Skill1 is available and cooldown is zero, casts Skill1 and resets the cooldown. Decrements dwArg0 each tick. Otherwise rolls RNG to walk/wander or approach the target for melee.
 void __fastcall AI_Fn1_AbyssKnight(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Unit-search callback for Blood Lord (classId 0x136) target selection. Accepts a candidate unit only if it is an alive allied monster with UNITFLAG_NOXP set, neutral alignment, within the search radius, and itself a Blood Lord. Tracks the nearest candidate in ppSearchParams[0/3] and the lowest-HP candidate (below 40% life) in ppSearchParams[1/4] for priority healing/resurrection targeting.
-uint32_t __fastcall MONSTERAI_FindBloodLordTarget(int32_t nCallbackResult, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2UnitStrc * * ppSearchParams);
+uint32_t __fastcall MONSTERAI_FindBloodLordTarget(int32_t nCallbackResult, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2AiBloodLordScanStrc * pScan);
 // Server-side per-tick AI for the Oblivion Knight monster (AI function index 1). Scans nearby units via ForEach+MONSTERAI_FindBloodLordTarget to find a Blood Lord to buff. When the target is within melee range: re-applies its aura (Skill4) if the target lacks the aura state, else either walks toward a found Blood Lord or melees the player (mode 2 + WalkTowardsUnitOffset) and casts Skill3 (curse) when it arrives. At range, casts ranged skills against the best LOS target gated by seed rolls and MonStats chance columns: Skill6 on a per-cast cooldown stored in pAiGeneral->dwArg0 (gameframe-based), else Skill3 or Skill1 depending on rolls and the monster's component[10]. Falls back to WalkRandomOffsetAroundUnit or SetCombatStateAndApproachTarget / PlanNextAiMove.
 void __fastcall AI_Fn1_OblivionKnight(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // Quill Mother AI tick. If currently in an attack animation, issues a CreateMinion command targeting the current target, then either walks to target (out-of-combat) or calls CalledOnEndAiFunction1 with mode 4 (in-combat). If idle, rolls the unit RNG against difficulty-scaled MonStats thresholds: out-of-combat may walk to target or schedule a delay; in-combat may attack or schedule a delay.

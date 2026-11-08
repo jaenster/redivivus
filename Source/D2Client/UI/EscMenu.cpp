@@ -59696,7 +59696,7 @@ void __stdcall DRAW_EscMenu() {
               pCurrentTable = gpEscMenuCurrentTable;
               break;
               case 2:
-                if ((int)pCurrentTable[nItemIndex].pDC6Main) {
+                if (pCurrentTable[nItemIndex].pDC6Main) {
                   D2Win::Src::D2WinFont::IMAGE_DrawDC6ImageOnScreen(pCurrentTable[nItemIndex].pDC6Main, ui::ScreenSizeX / 2 - 0xe6, nItemBottomY, 0, eDrawMode, -1);
                   pCurrentTable = gpEscMenuCurrentTable;
                 }

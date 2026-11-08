@@ -171,9 +171,6 @@ typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDL
 typedef DWORD (__stdcall *pfnUnDecorateSymbolName)(char * DecoratedName, char * UnDecoratedName, DWORD UndecoratedLength, DWORD Flags);
 #endif
 
-char gaHexCharsLookupTable[4] = { '%', 's', '\x0a', '\x00' }; D2_GLOBAL_GUARD(gaHexCharsLookupTable, "gaHexCharsLookupTable");
-uint16_t gnSymbolSearchPathSeparator = 0x3b; D2_GLOBAL_GUARD(gnSymbolSearchPathSeparator, "gnSymbolSearchPathSeparator");
-char gDebugSpaceString = ' '; D2_GLOBAL_GUARD(gDebugSpaceString, "gDebugSpaceString");
 static HANDLE ghCurrentProcessHandle = INVALID_HANDLE_VALUE; D2_STATIC_GUARD(ghCurrentProcessHandle, "ghCurrentProcessHandle");
 static _RTL_CRITICAL_SECTION lpCriticalSection_0075cfbc = {}; D2_STATIC_GUARD(lpCriticalSection_0075cfbc, "lpCriticalSection_0075cfbc");
 static uint32_t gnDbgSymInitRefcount = 0; D2_STATIC_GUARD(gnDbgSymInitRefcount, "gnDbgSymInitRefcount");
@@ -782,7 +779,7 @@ void __stdcall WriteCrashDumpViaThread() {
       __frame0.nBufferSize = 0x1000;
       __frame0.pUserStreamEnd = szUserStream;
       __frame0.pUserStreamEnd = __frame0.pUserStreamEnd + strlen(__frame0.pUserStreamEnd) + 1;
-      __frame0.pUserStreamEnd += 1 - (int)(szUserStream + 1);
+      __frame0.pUserStreamEnd += 1 - (intptr_t)(szUserStream + 1);
       __frame0.nUserStreamCount = 1;
       __frame0.szUserStreamText = szUserStream;
     }
@@ -1491,7 +1488,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
         do {
           pBytesRemaining = __frame1.szHexLine;
           pBytesRemaining = pBytesRemaining + strlen(pBytesRemaining) + 1;
-          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((int)pBytesRemaining - (int)(__frame1.szHexLine + 1)), 0x100 - ((intptr_t)pBytesRemaining - (int)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)pStackPtr[nTmp], (uint32_t)pStackPtr[nTmp + 1], (uint32_t)pStackPtr[nTmp + 2], (uint32_t)pStackPtr[nTmp + 3]);
+          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1)), 0x100 - ((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)pStackPtr[nTmp], (uint32_t)pStackPtr[nTmp + 1], (uint32_t)pStackPtr[nTmp + 2], (uint32_t)pStackPtr[nTmp + 3]);
           for (pDVar1 = pModuleListIter; pDVar1; pDVar1 = pDVar1->pNext) {
             if (*(uint8_t**)(pStackPtr + nTmp) >= pDVar1->dwBaseAddress && *(uint8_t**)(pStackPtr + nTmp) < pDVar1->dwBaseAddress + pDVar1->dwSize) {
               pEipModule = (D2FogModuleNodeStrc*)0x1;
@@ -1518,7 +1515,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
 
       pBytesRemaining = __frame1.szHexLine;
       pBytesRemaining = pBytesRemaining + strlen(pBytesRemaining) + 1;
-      __frame1.pBytesToDump = (int)pBytesRemaining - (int)(__frame1.szHexLine + 1);
+      __frame1.pBytesToDump = (intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1);
       nByteOffset = 0;
       if (nTmp > 0) {
         pAsciiOut = (uint8_t*)(__frame1.szHexLine + __frame1.pBytesToDump);

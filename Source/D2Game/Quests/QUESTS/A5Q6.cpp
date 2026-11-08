@@ -27,9 +27,6 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Seed.inline.h"
 
-// Forward declarations (used only by pointer here)
-struct D2GossipTextStrc;
-
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -629,12 +626,12 @@ void __fastcall Q36_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     bool bQuestState;
     ::SGAMEDATA* pGame;
     D2BitBufferStrc* pBitBuffer;
-    D2GossipTextStrc* pTextControl = (D2GossipTextStrc*)pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-    int nIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    int nIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nIndex == 0x6d) {
       Q36_SendQuestSpecialPacket(pQuestArgs->pPlayer, pQuestArgs->pGame);
     }
-    if (pTextControl == (D2GossipTextStrc*)0x6d) {
+    if (nOldLevel == 0x6d) {
       D2UnitDataPlayerStrc* pPlayerData;
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
       if (pQuestData->nStateFlag == 2) {

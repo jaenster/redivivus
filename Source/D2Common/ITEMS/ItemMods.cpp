@@ -550,7 +550,7 @@ static int32_t __stdcall PropertyFunc_SimpleStat(int32_t nType, D2UnitStrc * pUn
 }
 
 // Property-to-stat conversion with additional context parameter for situational stat application. Reads scaled value from pPropData+4, optionally maximizes enhanced-damage stats, gets or creates the stat list (using pUnit as context for ITEMMOD_GetOrCreateStatList), then adds or negates the stat value. Halts on stat list failure.
-int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int nStatVal;
     int32_t nValue;
     int32_t nProperty;
@@ -603,7 +603,7 @@ int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, D2UnitStrc 
 // - Crushing Blow, Deadly Strike, Open Wounds, Knockback
 // - Many other single-stat bonuses
 // The actual stat ID is determined by the dispatch table parameter.
-int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int32_t nResult = ITEMMOD_ApplyRandomStatValue(pItemUnit, nType, pUnit, eStatCode, bClearStat, 0, nState, dwStatListFlags, pProperty);
     return nResult;
 }
@@ -633,7 +633,7 @@ void __stdcall PropertyFunc_SimpleStatThunk1(int32_t bClearStat, int32_t param_1
 // - Set items with sockets
 // - Cube recipes that add sockets
 // Error: If pProperty==NULL, calls Fog::ErrorManager::ERROR (line 0x312)
-int32_t __fastcall ITEMMOD_ApplySocketCount(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall ITEMMOD_ApplySocketCount(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x312);
       exit(-1);
@@ -662,13 +662,13 @@ int32_t __fastcall ITEMMOD_ApplySocketCount(int32_t nType, D2UnitStrc * pUnit, D
 // - Runewords that grant indestructibility (e.g., Breath of the Dying)
 // This overrides the item's normal durability values, making it immune to
 // durability loss from use or being hit.
-int32_t __fastcall ITEMMOD_ApplyIndestructible(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
-    if (!nContext || *(int*)nContext != 4) {
-      nContext = (int32_t)pItemUnit;
+int32_t __fastcall ITEMMOD_ApplyIndestructible(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
+    if (!pContextUnit || pContextUnit->eUnitType != UNIT_ITEM) {
+      pContextUnit = pItemUnit;
     }
 
-    Stats::StatsEx::STATLIST_SetUnitStat((D2UnitStrc*)nContext, UNITSTAT_maxdurability, 0, 0);
-    Stats::StatsEx::STATLIST_SetUnitStat((D2UnitStrc*)nContext, UNITSTAT_durability, 0, 0);
+    Stats::StatsEx::STATLIST_SetUnitStat(pContextUnit, UNITSTAT_maxdurability, 0, 0);
+    Stats::StatsEx::STATLIST_SetUnitStat(pContextUnit, UNITSTAT_durability, 0, 0);
     return 1;
 }
 
@@ -686,7 +686,7 @@ int32_t __fastcall ITEMMOD_ApplyIndestructible(int32_t nType, D2UnitStrc * pUnit
 // That flag triggers ITEMMOD_MaximizeStatForEnhanced which sets
 // the base damage/defense to its maximum value before applying the percentage
 // modifier, ensuring % bonuses scale from the item's best possible base.
-int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStatAndMaximize(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStatAndMaximize(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int32_t nResult = ITEMMOD_ApplyRandomStatValue(pItemUnit, nType, pUnit, eStatCode, bClearStat, 1, nState, dwStatListFlags, pProperty);
     return nResult;
 }
@@ -711,7 +711,7 @@ void __stdcall PropertyFunc_SimpleStatThunk2(int32_t nFastCallECX, int32_t pProp
 // This is why expansion items can show "All Resistances +15" as a single
 // coherent bonus, whereas classic items might show 4 separate resistance
 // lines with different values.
-int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int32_t nRangeLow;
     int32_t nRangeHigh;
     uint32_t nRandom;
@@ -760,7 +760,7 @@ int32_t __fastcall PropertyFunc_AllResistances(int32_t nType, D2UnitStrc * pUnit
 }
 
 // Property function for All Maximum Resistances (+X% max fire/light/cold/poison resist). Classic items: 4 independent RNG rolls via ITEMMOD_ApplyRandomStatValue. Expansion items: single RNG roll from property min/max applied identically to all four max-resist stats via PropertyFunc_SimpleStat. Halts if property data pointer is null.
-int32_t __fastcall PropertyFunc_AllMaxResistances(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_AllMaxResistances(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int32_t nRangeLow;
     int32_t nRangeHigh;
     uint32_t nRandom;
@@ -808,7 +808,7 @@ int32_t __fastcall PropertyFunc_AllMaxResistances(int32_t nType, D2UnitStrc * pU
 }
 
 // Item-property callback that rolls and applies minimum-damage stats (UNITSTAT_mindamage, UNITSTAT_secondary_mindamage, UNITSTAT_item_throw_mindamage) to a unit. Reads min/max range from pPropData[8/12], rolls a random value in [min,max] via RANDOM_RandomNumberSelector on the item seed (range is exclusive for older item versions). Looks up the item's Items.txt row to decide which damage stats apply: one-hand vs. two-hand min damage are written separately for weapons; throw-min is applied for throwable weapons or non-weapons. Calls PropertyFunc_SimpleStat for each applicable stat. Halts with an internal error if pPropData is null.
-int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     D2ItemsTxt* pDVar4;
     uint32_t nRolled;
@@ -891,7 +891,7 @@ int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2U
 // - Throwing weapons (javelins, throwing axes, knives)
 // Min/Max damage properties typically appear together on affixes like
 // "Sharp" (+min/max damage) or "Jagged" (+min/max damage).
-int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     D2ItemsTxt* pDVar4;
     uint32_t nRolled;
@@ -978,7 +978,7 @@ int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2U
 //   * This is an anti-overflow safeguard
 // The param=0xFFFFFFFF in dispatch table signals "no stat ID" - the function
 // calculates which stats to modify internally based on weapon type.
-int32_t __fastcall PropertyFunc_EnhancedDamage(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_EnhancedDamage(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     D2ItemsTxt* pItemsTxt;
     uint32_t nRolled;
@@ -1071,7 +1071,7 @@ int32_t __fastcall PropertyFunc_EnhancedDamage(int32_t nType, D2UnitStrc * pUnit
 // - Classic/Expansion: Both use same path (ITEMMOD_ApplyRandomStatValue)
 // This is a simple wrapper that applies a randomized value from the property's
 // min/max range to the all-skills stat.
-int32_t __fastcall PropertyFunc_AllSkills(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_AllSkills(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     ITEMMOD_ApplyRandomStatValue(pItemUnit, nType, pUnit, UNITSTAT_item_allskills, bClearStat, 0, nState, dwStatListFlags, pProperty);
     return eStatCode;
 }
@@ -1105,7 +1105,7 @@ int32_t __fastcall PropertyFunc_AllSkills(int32_t nType, D2UnitStrc * pUnit, D2U
 // - Max charges: 20 (rolled with variance)
 // - Current charges: 20 (starts at max)
 // - Packed value encodes all 3 fields into one stat
-int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int32_t nReqLevel;
     int32_t nItemLevel;
     int nClampedSkillLevel;
@@ -1195,7 +1195,7 @@ int32_t __fastcall PropertyFunc_Charges(int32_t nType, D2UnitStrc * pUnit, D2Uni
 }
 
 // Property handler that packs three sub-values from a property entry into a single stat value and adds it to the unit's stat list. Reads three fields at pPropEntry+4/+8/+0xC, applies +0x100 offsets to the second and third, validates ranges (val1 &lt; 4, val2/val3 &lt; 0x400), then computes: stat = val1 + (val3*0x400 + val2)*4 and calls D2AddStatToStatsListEx. Halts on validation failure. Used for multi-field stats such as class/tab skill bonuses.
-int32_t __fastcall PropertyFunc_PackedStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_PackedStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     uint32_t nPackedVal1;
     uint32_t nPackedVal2;
     uint32_t nPackedVal3;
@@ -1258,7 +1258,7 @@ int32_t __fastcall PropertyFunc_PackedStat(int32_t nType, D2UnitStrc * pUnit, D2
 // - Poison Damage: poisonmindam (+57) → poisonmaxdam (+58) + poison_count++
 // This function is why elemental damage properties always have both min and max
 // values - they're applied as a pair to consecutive stats.
-int32_t __fastcall PropertyFunc_MinMaxDamagePair(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_MinMaxDamagePair(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2ItemsTxt* pItemsTxt;
     uint32_t bIsWeapon;
     uint32_t bIsWeaponForSecondary;
@@ -1334,7 +1334,7 @@ int32_t __fastcall PropertyFunc_MinMaxDamagePair(int32_t nType, D2UnitStrc * pUn
 }
 
 // Applies three consecutive stat values (min, max, length/duration at eUnitStat+0, +1, +2) from a property entry to an item's stat list. Scales each value by stat type, gets or creates the stat list, and optionally negates existing values (remove mode when nParam2!=0). Increments UNITSTAT_poison_count when base stat is poisonmindam.
-int32_t __fastcall ITEMMOD_ApplyTripleStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall ITEMMOD_ApplyTripleStat(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     int nBaseValue;
     eD2UnitStat eMinStat = eStatCode;
     int32_t nLenVal = pProperty->fmin;
@@ -1374,7 +1374,7 @@ int32_t __fastcall ITEMMOD_ApplyTripleStat(int32_t nType, D2UnitStrc * pUnit, D2
 }
 
 // Property function for +X to Skill Y bonus. Reads skill ID from pPropEntry+4 and rolls level value from pPropEntry+8/C range (inclusive upper bound for expansion items). Adds UNITSTAT_item_singleskill with skill ID as layer to the item's stat list. Returns 0 if skill ID out of range or stat list unavailable.
-int32_t __fastcall PropertyFunc_SingleSkillBonus(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_SingleSkillBonus(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     D2StatListExStrc* pStatsEx;
     int32_t nExistingValue;
@@ -1423,7 +1423,7 @@ int32_t __fastcall PropertyFunc_SingleSkillBonus(int32_t nType, D2UnitStrc * pUn
 }
 
 // Property function for +X to Elemental Skills bonus (e.g. +2 to Fire Skills). Rolls value from property min/max range (inclusive for expansion items), then adds UNITSTAT_item_elemskill with hardcoded layer 1 to the item's stat list. Returns 0 if rolled value is zero or stat list unavailable.
-int32_t __fastcall PropertyFunc_ElemSkillBonus(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_ElemSkillBonus(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     int32_t nExistingValue;
     int nRangeLow;
@@ -1466,7 +1466,7 @@ int32_t __fastcall PropertyFunc_ElemSkillBonus(int32_t nType, D2UnitStrc * pUnit
 }
 
 // Property function for +X to [Class] Skills bonus (e.g. +2 to Sorceress Skills). Maps property code 0x53-0x57,0xb3-0xb4 to class skill layers 0-6 for UNITSTAT_item_addclassskills. Rolls value from property min/max range.
-int32_t __fastcall PropertyFunc_ClassSkillsBonus(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_ClassSkillsBonus(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     int32_t nExistingValue;
     int nRangeLow;
@@ -1534,12 +1534,12 @@ int32_t __fastcall PropertyFunc_ClassSkillsBonus(int32_t nType, D2UnitStrc * pUn
 }
 
 // No-op property handler: ignores all args and returns 1 (success). Default/placeholder entry in the ItemMods property-function dispatch table for properties with no stat-apply behavior.
-int32_t __fastcall PropertyFunc_ReturnTrue(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_ReturnTrue(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     return 1;
 }
 
 // Variant of SimpleStatWrapper: rolls a value from property min/max range (with expansion/classic RNG difference) then applies it via PropertyFunc_SimpleStat. Used for properties where the expansion path still needs RNG but not the ITEMMOD_ApplyRandomStatValue pipeline.
-int32_t __fastcall PropertyFunc_SimpleStatWithRoll(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext) {
+int32_t __fastcall PropertyFunc_SimpleStatWithRoll(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit, D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     D2SeedStrc* pSeed;
     int nRangeLow;
     uint32_t nRandom;
@@ -1888,7 +1888,7 @@ int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t dwFlags, 
     return nValue;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_EnhancedIfItem(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_EnhancedIfItem(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -1901,7 +1901,7 @@ uint32_t __fastcall ITEMPROP_AddStat_EnhancedIfItem(int32_t nType, D2UnitStrc * 
     return nResult;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_EnhancedAlways(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_EnhancedAlways(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -1914,7 +1914,7 @@ uint32_t __fastcall ITEMPROP_AddStat_EnhancedAlways(uint32_t nType, D2UnitStrc *
     return nResult;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -1929,7 +1929,7 @@ uint32_t __fastcall ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem(int32_t 
     return uRetVal;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_PreserveRolledValue(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_PreserveRolledValue(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -1945,7 +1945,7 @@ uint32_t __fastcall ITEMPROP_AddStat_PreserveRolledValue(uint32_t nType, D2UnitS
 }
 
 // Item property handler that adds minimum damage stats to an item. Rolls nParam12 if zero (via ITEMMOD_RollRandomValue). For weapons with both one-hand and two-hand entries, writes stat 0x15 (MinDamage) and 0x17 (2HandMinDamage) respectively, clamping so base+roll >= 1. For throwable weapons also writes stat 0x9F (MinMissileDamage). Returns the rolled value.
-uint32_t __fastcall ITEMPROP_AddMinDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddMinDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     uint32_t nClassId;
     uint8_t byBaseDam;
     if (!pProperty) {
@@ -2014,7 +2014,7 @@ uint32_t __fastcall ITEMPROP_AddMinDamage(uint32_t nType, D2UnitStrc * pUnit, D2
 }
 
 // Item property handler that adds maximum damage stats to an item. Mirror of ITEMPROP_AddMinDamage: rolls nParam12 if zero, writes stat 0x16 (MaxDamage) and 0x18 (2HandMaxDamage) for applicable weapon hands, clamping so base+roll >= 0. For throwable weapons also writes stat 0xA0 (MaxMissileDamage). Returns the rolled value.
-uint32_t __fastcall ITEMPROP_AddMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     uint32_t nClassId;
     uint8_t byBaseDam;
     if (!pProperty) {
@@ -2083,7 +2083,7 @@ uint32_t __fastcall ITEMPROP_AddMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2
 }
 
 // Item-property applier for the Enhanced-Damage (% damage) affix. If no pre-rolled value (nParam12) is supplied, rolls one from the property's min/max range. For weapon item units, seeds base min/max (and 2-handed/throwable variants) damage stats from the base ItemsTxt line via ConvertItemCodeToClassIdAndGetItemsTxtLine. Computes the effective max damage and, when D2ApplyPercent of the ED% would overflow to a non-increasing value, delegates to ITEMPROP_AddMaxDamage instead. Otherwise writes the ED% as stat 0x12 and 0x11 on the item via ITEMMOD_AddStatToItem. Returns the applied value (or 0 on bad inputs).
-uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nPercent, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nPercent, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     D2ItemsTxt* pItemsTxt;
     D2ItemsTxt* pBaseTxtLine;
     uint32_t nIsWeapon;
@@ -2186,7 +2186,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, D2UnitStrc * pUni
     return 1;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_Simple(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_Simple(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2198,7 +2198,7 @@ uint32_t __fastcall ITEMPROP_AddStat_Simple(uint32_t nType, D2UnitStrc * pUnit, 
     return nResult;
 }
 
-uint32_t __fastcall ITEMPROP_AddSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2218,7 +2218,7 @@ uint32_t __fastcall ITEMPROP_AddSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D
     return nSkillId;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam4(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam4(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2230,7 +2230,7 @@ uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam4(uint32_t nType, D2UnitS
     return nResult;
 }
 
-uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2246,7 +2246,7 @@ uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t nType, D2UnitStrc * pUn
 }
 
 // Properties func 11 (att-skill/hit-skill/gethit-skill/kill-skill/death-skill/levelup-skill): resolves the skill level (derived from item level vs. skill req level when <= 0, clamped to max), takes the chance (default 5), and adds the stat with param skill<<6 | level via ITEMMOD_AddStatToItem. No RNG draw.
-uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     int32_t nReqLevel;
     int32_t nItemLevel;
     uint32_t nPropPtr;
@@ -2319,7 +2319,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
 }
 
 // Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.
-uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4) {
+uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     uint32_t nDimProduct;
     uint32_t uVar1;
     uint32_t nSocketMin;
@@ -2376,7 +2376,7 @@ uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D
 }
 
 // Item-property applier for "skill charges" / charged-skill modifiers (the prop pointed to by nParam1 holds skill id at +4, charge spec at +8, level spec at +0xc). Validates pUnit2 is an item and the skill id is valid. Resolves the granted skill level: explicit value, or derived from (item level - skill req level)/4 +1 (clamped to 1..skill max level), or a negative spec meaning a per-level scaling. Resolves the max charge count (explicit, default 5, or per-skill-level computed), clamped to 1..0xff. Rolls a random initial current-charge count from the item seed (RANDOM_RandomNumberSelector). Then adds the charges stat onto the item's stat list (ITEMMOD_GetOrCreateStatList + D2AddStatToStatsListEx), packing current/max charges and the skill id+level into the stat value/param using the itemstatcost shift fields. Returns the max charge count (0 on validation failure).
-uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     int32_t nReqLevel;
     int32_t nItemLevel;
     int nSkillLvlClamped;
@@ -2475,7 +2475,7 @@ uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit,
 }
 
 // Adds a timed (duration-encoded) stat to an item's stat list. Validates the stat ID, clamps min/max duration values to [0, 0x3FF], rolls the charge count from the prop entry (clamped to [0,3]), packs duration and count into a combined value, then writes it via D2AddStatToStatsListEx. Used for item properties that carry a duration component (e.g. timed skill charges). Returns the clamped max timer value on success, 0 on failure.
-uint32_t __fastcall ITEMPROP_AddTimedStat(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatCode, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddTimedStat(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatCode, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2511,7 +2511,7 @@ uint32_t __fastcall ITEMPROP_AddTimedStat(uint32_t nType, D2UnitStrc * pUnit, D2
     return nTimerType;
 }
 
-uint32_t __fastcall ITEMPROP_SetFixedMinDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_SetFixedMinDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2526,7 +2526,7 @@ uint32_t __fastcall ITEMPROP_SetFixedMinDamage(uint32_t nType, D2UnitStrc * pUni
     return nRolledValue_00;
 }
 
-uint32_t __fastcall ITEMPROP_SetFixedMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_SetFixedMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2541,7 +2541,7 @@ uint32_t __fastcall ITEMPROP_SetFixedMaxDamage(uint32_t nType, D2UnitStrc * pUni
     return nRolledValue_00;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_FixedOrRolledMaxDamageAware(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_FixedOrRolledMaxDamageAware(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2562,7 +2562,7 @@ uint32_t __fastcall ITEMPROP_AddStat_FixedOrRolledMaxDamageAware(uint32_t nType,
     return nRolledValue_00;
 }
 
-uint32_t __fastcall ITEMPROP_SetIndestructible(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_SetIndestructible(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
@@ -2585,7 +2585,7 @@ uint32_t __fastcall ITEMPROP_SetIndestructible(uint32_t nType, D2UnitStrc * pUni
     return 1;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam7(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam7(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2595,7 +2595,7 @@ uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam7(uint32_t nType, D2UnitS
     return uRetVal;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2605,7 +2605,7 @@ uint32_t __fastcall ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7(uint32_t nTyp
     return uRetVal;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_LayerFromParam4Lo(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_LayerFromParam4Lo(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2615,7 +2615,7 @@ uint32_t __fastcall ITEMPROP_AddStat_LayerFromParam4Lo(uint32_t nType, D2UnitStr
     return uRetVal;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_RandLevelAsLayer(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_RandLevelAsLayer(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2625,7 +2625,7 @@ uint32_t __fastcall ITEMPROP_AddStat_RandLevelAsLayer(uint32_t nType, D2UnitStrc
     return uRetVal;
 }
 
-uint32_t __fastcall ITEMPROP_AddStat_WithMaxDurabilityReset(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * nPropPtr, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t nStatLayer, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddStat_WithMaxDurabilityReset(int32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * nPropPtr, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t nStatLayer, D2UnitStrc * pContextUnit) {
     if (!(nPropPtr && pUnit2)) {
       return 0;
     }
@@ -2647,7 +2647,7 @@ uint32_t __fastcall ITEMPROP_AddStat_WithMaxDurabilityReset(int32_t nType, D2Uni
     return 0;
 }
 
-uint32_t __fastcall ITEMPROP_ApplyEthereal(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
+uint32_t __fastcall ITEMPROP_ApplyEthereal(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!(pProperty && pUnit2 && pUnit2->eUnitType == UNIT_ITEM)) {
       return 0;
     }
@@ -2667,7 +2667,7 @@ uint32_t __fastcall ITEMPROP_ApplyEthereal(uint32_t nType, D2UnitStrc * pUnit, D
 }
 
 // Already-documented (existing description is accurate and detailed — expansion property pipeline iterating up to 7 func slots from D2PropertiesTxt).
-void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, void * dwParam2, uint32_t dwParam3, uint32_t dwParam4, D2SetsTxtFStrc * pSetsTxtF, int32_t nState, uint32_t dwStatListFlags, uint32_t pContextUnit) {
+void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, void * dwParam2, uint32_t dwParam3, uint32_t dwParam4, D2SetsTxtFStrc * pSetsTxtF, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     // Static local variables (originally global data)
     static int PropertiesFuncCount = 0x25; D2_STATIC_GUARD(PropertiesFuncCount, "D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion::PropertiesFuncCount");
 
@@ -2698,7 +2698,7 @@ void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, D2UnitS
 }
 
 // Top-level item-property applicator: applies one item/set property (described by a D2SetsTxtFStrc / properties.txt function row) to a unit's stat list. If the source item is an Expansion item (ITEM_GetItemData_wItemVersion != 0) it forwards to ITEMMOD_ApplyPropertyToUnitStatsExpansion (the full classic+expansion pipeline). Otherwise (classic item) it looks up the property's function code (fcode) in gaPropertyFuncTable and, if in range with a non-null handler, invokes that handler with the unit, the property row, its stat code and the passed magnitude/parameter args. Halts via ErrorManager if pSetsTxtF is null in the classic path. Mutates pUnit's stats; no return.
-static void __stdcall ITEMMOD_ApplyPropertyToUnitStats(uint32_t nType, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pSetsTxtF, D2UnitStrc * pUnit, void * dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, uint32_t pContextUnit) {
+static void __stdcall ITEMMOD_ApplyPropertyToUnitStats(uint32_t nType, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pSetsTxtF, D2UnitStrc * pUnit, void * dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, D2UnitStrc * pContextUnit) {
     // Static local variables (originally global data)
     static D2PropertyFuncEntryStrc gaPropertyFuncTable[244] = {
     {
@@ -3734,7 +3734,7 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
           pPropEntry = (D2SetsTxtFStrc*)pUniqueLine->sEntry;
           nPropIter = 0xc;
           do {
-            ITEMMOD_ApplyPropertyToUnitStats(3, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, 0);
+            ITEMMOD_ApplyPropertyToUnitStats(3, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, nullptr);
             pPropEntry++;
             nPropIter--;
           } while (nPropIter);
@@ -3756,7 +3756,7 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
       if (!wItemVersion) {
         nPropIter = 2;
         do {
-          ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, 0);
+          ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, nullptr);
           pPropEntry++;
           nPropIter--;
         } while (nPropIter);
@@ -3766,7 +3766,7 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
 
       nPropIter = 9;
       do {
-        ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, 0);
+        ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, 0, 0x40, nullptr);
         pPropEntry++;
         nPropIter--;
       } while (nPropIter);
@@ -3783,7 +3783,7 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
           nPropIter = 0;
         }
 
-        ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, nPropIter, nStatCount, 0);
+        ITEMMOD_ApplyPropertyToUnitStats(4, nullptr, pPropEntry, pUnit, nullptr, 0, 0, bClearStat, nPropIter, nStatCount, nullptr);
         nBonusSetIdx++;
         pPropEntry++;
       } while ((int)nBonusSetIdx < 10);
@@ -3804,7 +3804,7 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
         return;
       }
 
-      ITEMMOD_ApplyPropertyToUnitStats(nType, nullptr, pPropEntry, pUnit, pMagicAffixLine, nPropIdx, nGemModType, bClearStat, 0, 0x40, (uint32_t)pUnit2);
+      ITEMMOD_ApplyPropertyToUnitStats(nType, nullptr, pPropEntry, pUnit, pMagicAffixLine, nPropIdx, nGemModType, bClearStat, 0, 0x40, pUnit2);
       nPropIdx++;
     } while ((int)nPropIdx < nPropCount);
 }
@@ -3828,7 +3828,7 @@ void __stdcall RollRunewordMostlikely(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, u
         return;
       }
 
-      ITEMMOD_ApplyPropertyToUnitStatsExpansion(6, pUnit, pUnit2, nullptr, nPropIdx, 0, pPropEntry, 0xab, 0x40, 0);
+      ITEMMOD_ApplyPropertyToUnitStatsExpansion(6, pUnit, pUnit2, nullptr, nPropIdx, 0, pPropEntry, 0xab, 0x40, nullptr);
       nPropIdx++;
       pPropEntry++;
     } while (nPropIdx < 7);
@@ -3944,7 +3944,7 @@ void __fastcall ITEMMOD_ApplySetBonuses(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
       do {
         pSetsTxtIter = (D2SetsTxt*)pSetsTxtIter->aPartialBonus;
         if (((D2SetsTxtPStrc*)pSetsTxtIter)->pcodea >= 0) {
-          ITEMMOD_ApplyPropertyToUnitStats(4, pUnit, (D2SetsTxtFStrc*)pSetsTxtIter, pUnit2, nullptr, nEquipMask, 0, 0, nApplyFlags, 0, 0);
+          ITEMMOD_ApplyPropertyToUnitStats(4, pUnit, (D2SetsTxtFStrc*)pSetsTxtIter, pUnit2, nullptr, nEquipMask, 0, 0, nApplyFlags, 0, nullptr);
         }
 
         nEquipMask++;
@@ -3961,7 +3961,7 @@ void __fastcall ITEMMOD_ApplySetBonuses(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
         return;
       }
 
-      ITEMMOD_ApplyPropertyToUnitStats(4, pUnit, pSetPropEntry, pUnit2, nullptr, nEquipMask, 0, 0, nApplyFlags, 0, 0);
+      ITEMMOD_ApplyPropertyToUnitStats(4, pUnit, pSetPropEntry, pUnit2, nullptr, nEquipMask, 0, 0, nApplyFlags, 0, nullptr);
       nEquipMask++;
       pSetPropEntry++;
     } while ((int)nEquipMask < 8);
@@ -3973,7 +3973,7 @@ void __stdcall ITEMMOD_ApplyRunewordProperties(D2UnitStrc * pUnit, D2SetsTxtFStr
       return;
     }
 
-    ITEMMOD_ApplyPropertyToUnitStats(7, nullptr, pProperty, pUnit, pProperty, 0, 0, 0, 0, 0x40, 0);
+    ITEMMOD_ApplyPropertyToUnitStats(7, nullptr, pProperty, pUnit, pProperty, 0, 0, 0, 0, 0x40, nullptr);
     BOOL bIsEthereal = Items::CheckItemFlag(pUnit, ITEMFLAG_ETHEREAL, 0x858, ".\\ITEMS\\ItemMods.cpp");
     if (!bIsEthereal) {
       return;

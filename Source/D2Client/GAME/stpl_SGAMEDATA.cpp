@@ -233,9 +233,9 @@ void __thiscall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
 
 template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
     TSLink<::SGAMEDATA>** pPrevLink;
+    intptr_t nHeadOffset;
     intptr_t encPrev;
     TSLink<::SGAMEDATA>* pNext;
-    int nHeadOffset;
     while (true) {
       TSLink<::SGAMEDATA>* pNode;
       nHeadOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
@@ -264,8 +264,8 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll() {
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext;
+    intptr_t nHeadOffset;
     intptr_t encPrev;
-    int nHeadOffset;
     while (true) {
       TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNode;
       nHeadOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;

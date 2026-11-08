@@ -660,9 +660,10 @@
         "UNITS_CheckIfCanAttackTarget"
       ],
       "usedTypes": [
-        "D2MonsterAiParameterStruct",
+        "D2AiNearbyAllyScanStrc",
         "D2UnitStrc",
         "SGAMEDATA",
+        "int32_t",
         "uint32_t"
       ]
     },
@@ -781,7 +782,7 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
-        "D2MonsterAiParameterStruct",
+        "D2AiThreatScanStrc",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -902,8 +903,9 @@
         "GetOwnerUnit"
       ],
       "usedTypes": [
-        "D2MonsterAiParameterStruct",
-        "D2UnitStrc"
+        "D2AiCorpseScanStrc",
+        "D2UnitStrc",
+        "int32_t"
       ]
     },
     {
@@ -922,6 +924,7 @@
         "GetDistance"
       ],
       "usedTypes": [
+        "D2AiClassCountScanStrc",
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
@@ -1402,8 +1405,8 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2AiThreatScanStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2RoomStrc",
         "D2UnitNodeStrc",
         "D2UnitStrc",
@@ -2909,8 +2912,8 @@
         "GetCurrentLifePercentage"
       ],
       "usedTypes": [
+        "D2AiAllyHealScanStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -2944,11 +2947,11 @@
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
+        "D2AiAllyHealScanStrc",
         "D2AiGeneralStrc",
         "D2AiParamStrc",
         "D2MissilesTxt",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -7367,9 +7370,9 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2AiNearbyAllyScanStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SkillsTxt",
         "D2StatListExStrc",
         "D2SuperUniquesTxt",
@@ -7968,7 +7971,7 @@
         "CheckMonsterType"
       ],
       "usedTypes": [
-        "D2MonsterAiParameterStruct",
+        "D2AiCorpseScanStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
@@ -8000,9 +8003,9 @@
       ],
       "usedTypes": [
         "D2AiCmdArgumentsStrc",
+        "D2AiCorpseScanStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -8301,9 +8304,9 @@
         "GetTxtMaxHp"
       ],
       "usedTypes": [
+        "D2AiResurrectScanStrc",
         "D2MonStatsTxt",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -8335,8 +8338,8 @@
       ],
       "usedTypes": [
         "D2AiParamStrc",
+        "D2AiResurrectScanStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -8422,8 +8425,8 @@
         "GetTxtMaxHp"
       ],
       "usedTypes": [
+        "D2AiLowLifeScanStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -8464,9 +8467,9 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2AiLowLifeScanStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2RoomStrc",
         "D2SeedStrc",
         "D2UnitStrc",
@@ -9260,7 +9263,7 @@
         "GetCurrentLifePercentage"
       ],
       "usedTypes": [
-        "D2MonsterAiParameterStruct",
+        "D2AiWoundedAllyScanStrc",
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
@@ -9294,8 +9297,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2AiParamStrc",
+        "D2AiWoundedAllyScanStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -9322,8 +9325,8 @@
         "STATSEX_GetCurrentStat"
       ],
       "usedTypes": [
+        "D2AiMephistoScanStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -9344,8 +9347,8 @@
         "ForEach"
       ],
       "usedTypes": [
+        "D2AiMephistoScanStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2UnitStrc",
         "SGAMEDATA"
       ]
@@ -9799,8 +9802,8 @@
         "GetDistanceBetween"
       ],
       "usedTypes": [
+        "D2AiSummonScanStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -9834,8 +9837,8 @@
       "usedTypes": [
         "D2AiCmdArgumentsStrc",
         "D2AiParamStrc",
+        "D2AiSummonScanStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2SkillStrc",
         "D2UnitStrc",
@@ -9935,10 +9938,10 @@
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
+        "D2AiClassCountScanStrc",
         "D2AiGeneralStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -10144,8 +10147,8 @@
         "GetCurrentLifePercentage"
       ],
       "usedTypes": [
+        "D2AiBloodLordScanStrc",
         "D2UnitStrc",
-        "D2UnitStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -10176,15 +10179,14 @@
         "SetCombatStateAndApproachTarget"
       ],
       "usedTypes": [
+        "D2AiBloodLordScanStrc",
         "D2AiGeneralStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
-        "int64_t",
         "uint32_t",
         "uint8_t"
       ]

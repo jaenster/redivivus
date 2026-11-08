@@ -172,6 +172,7 @@
         "GFXHASH_CalcHashKey"
       ],
       "usedTypes": [
+        "D2CelCacheBlockStrc",
         "D2CelFileCacheEntryStrc",
         "D2GfxDataStrc",
         "D2GfxHashEntryStrc",

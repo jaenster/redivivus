@@ -775,11 +775,11 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // A2Q6 "The Seven Tombs" — state-3 callback: level-transition handler keyed on level id (nIndex). Caches the Horadric-staff tomb level id (the randomly-chosen true tomb) on first use. When the player enters the staff tomb (iVar1==tomb id): if nStateFlag!=2 sets flag 2 and, if prev>1, advances the record (Q14_UpdateQuestRecordStep). Entering Duriel's Lair (0x2e): sets flag 2 + record step, then broadcasts state 1 (reward awaits) if prev==0. Entering Lut Gholein (0x49): sets flag 2 if flag<=1. Tail broadcasts state 2 (in-progress) + syncs record. Read/writes nStateFlag, not the bitbuffer record directly.
 void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nLevelId;
-    nLevelId = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
+    nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nLevelId - 0x28U > 0x22) {
       return;
     }
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x28) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x28) {
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
     }
     if (pQuestData->bIsNotIntroduction == '\0') {

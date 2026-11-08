@@ -642,8 +642,8 @@ BOOL __fastcall Q27_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 void __fastcall Q27_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar3;
-    int nDialogIndex = pQuestArgs->sQuestArgs.sNpcActivate.nIndex;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x67 && pQuestData->nStateFlag == 2) {
+    int nDialogIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x67 && pQuestData->nStateFlag == 2) {
       ::SGAMEDATA* pSVar1;
       pSVar1 = pQuestArgs->pGame;
       D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pSVar1->nDifficulty];

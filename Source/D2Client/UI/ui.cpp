@@ -2869,21 +2869,21 @@ static D2StatScreenButtonStrc gaStatScreenButtons[4] = {
     }
 }; D2_STATIC_GUARD(gaStatScreenButtons, "gaStatScreenButtons");
 static char * gaLanguageNames_00724a80[15] = {
-    (char*)&Fog::Src::ErrorManager::s_English_006cc81c,
-    (char*)&Fog::Src::ErrorManager::s_Spanish_006cc814,
-    (char*)&Fog::Src::ErrorManager::s_German_006cc80c,
-    (char*)&Fog::Src::ErrorManager::s_French_006cc804,
-    (char*)&Fog::Src::ErrorManager::s_Portuguese_006cc7f8,
-    (char*)&Fog::Src::ErrorManager::s_Italian_006cc7f0,
-    (char*)&Fog::Src::ErrorManager::s_Japanese_006cc7e4,
-    (char*)&Fog::Src::ErrorManager::s_Korean_006cc7dc,
-    (char*)&Fog::Src::ErrorManager::s_Simplified_Chinese_006cc7c8,
-    (char*)&Fog::Src::ErrorManager::s_Traditional_Chinese_006cc7b4,
-    (char*)&Fog::Src::ErrorManager::s_Polish_006cc7ac,
-    (char*)&Fog::Src::ErrorManager::s_Russian_006cc7a4,
-    (char*)&Fog::Src::ErrorManager::s_English_with_Korean_Chat_006cc788,
-    (char*)&Fog::Src::LogManager::s_Unknown_006cc780,
-    s_14_006cc77c
+    (char*)"English",
+    (char*)"Spanish",
+    (char*)"German",
+    (char*)"French",
+    (char*)"Portuguese",
+    (char*)"Italian",
+    (char*)"Japanese",
+    (char*)"Korean",
+    (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese",
+    (char*)"Polish",
+    (char*)"Russian",
+    (char*)"English with Korean Chat",
+    (char*)"Unknown",
+    (char*)"14"
 }; D2_STATIC_GUARD(gaLanguageNames_00724a80, "gaLanguageNames_00724a80");
 static uint32_t gdwQuestResurrectDismissThrottle = 0; D2_STATIC_GUARD(gdwQuestResurrectDismissThrottle, "gdwQuestResurrectDismissThrottle");
 DC6 * DC6_EnteredAreaName = 0; D2_GLOBAL_GUARD(DC6_EnteredAreaName, "DC6_EnteredAreaName");

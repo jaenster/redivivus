@@ -373,6 +373,16 @@ compares by what it names (our target symbol's original address, through a jump
 thunk where the original's table names the thunk), a pointer to a literal of ours
 by the literal's content.
 
+A read-only string the generator spells as a literal at its uses (`s_Russian_006cc7a4`
+becomes `"Russian"` in the bodies and tables) has no symbol of ours to pair by name.
+Those are found by the generator's byte rule over `dataextent.tsv` and
+`evidence/datastrings.tsv` (Ghidra's untyped strings, written by `oracle data strings`
+from the snapshot), or taken from the generator's own compiler-data report
+(`--compiler-data`), and judged through every relocation of the original that points
+at one: the function of ours the funcmap pairs with a code use, the pointer field of
+ours paired with a data use. Content and terminator are compared, placement is not.
+They are kind `strlit`, a summary row of their own; the headline stays the named data.
+
 | status | meaning |
 |-|-|
 | `MATCH` | every byte equal, every pointer names the same target |
@@ -631,7 +641,7 @@ map (`bracket`, `align`) and `tulayout.py` order our functions by source line
 | `scripts/modules.py` | the module libraries of `Source/modules.cmake`: link order, and the `/INCLUDE` symbol that forces each member into the link |
 | `scripts/permodule.py` | `evidence/permodule.tsv`/`.md`: the figures and the layout agreement per module |
 | `scripts/compare.py`, `audit.py`, `asmdiff.py` | the judgement |
-| `scripts/datamatch.py` | the data judgement: `evidence/dataextent.tsv`, `data-audit.tsv`, `datatrend.tsv`, `data-fixes.tsv` |
+| `scripts/datamatch.py` | the data judgement: `evidence/dataextent.tsv`, `datastrings.tsv`, `data-audit.tsv`, `datatrend.tsv`, `data-fixes.tsv` |
 | `scripts/byte_match_svg.py` | the summary's byte kinds as a bar chart |
 | `scripts/check.py`, `snippet.py` | the inner loop: re-judge a TU, try a variant |
 | `scripts/diffgrams.py`, `classify.py`, `tulayout.py` | what differs, over all pairs |

@@ -10,9 +10,6 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-// also labelled: gfFloatMantissaMask
-double gdConst1 = 1; D2_GLOBAL_GUARD(gdConst1, "gdConst1");
-double gfFloatScalingFactor = 0.5; D2_GLOBAL_GUARD(gfFloatScalingFactor, "gfFloatScalingFactor");
 static uint64_t cSStrAtoDecimalPoint = 0x41f0000000000000; D2_STATIC_GUARD(cSStrAtoDecimalPoint, "cSStrAtoDecimalPoint");
 static int gdwUTF8ConversionTab[6] = { 0x0, 0x3080, 0xe2080, 0x3c82080, -0x5f7df80, -0x7df7df80 }; D2_STATIC_GUARD(gdwUTF8ConversionTab, "gdwUTF8ConversionTab");
 static uint8_t gaUTF8ByteCountTable[256] = {

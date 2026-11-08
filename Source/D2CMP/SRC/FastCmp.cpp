@@ -36,45 +36,46 @@ BOOL gbCodecUseFallbackDecompressor = 0; D2_GLOBAL_GUARD(gbCodecUseFallbackDecom
 
 namespace D2CMP::SRC::FastCmp {
 
-static void __stdcall FASTCMP_CompressToRLE(uint8_t * pSrcData, uint32_t nLineCount, uint8_t * pDirectionOrder, uint8_t * * ppRLEBuffer, uint32_t * ppRLEEnd, uint8_t * pBaseData) {
+static void __stdcall FASTCMP_CompressToRLE(int32_t nWidth, uint32_t nLineCount, uint32_t dwFlags, uint8_t * * ppRLEBuffer, uint32_t * ppRLEEnd, uint8_t * pBaseData) {
     int nColorRunLen;
     uint32_t nColorTailFlag;
     int nZeroTailFlag;
     uint8_t* pbRLEAlloc;
-    pbRLEAlloc = (uint8_t*)D2_ALLOC_AT(((int)pSrcData * 2 + 1) * nLineCount, ".\\SRC\\FastCmp.cpp", 0x25);
+    pbRLEAlloc = (uint8_t*)D2_ALLOC_AT((nWidth * 2 + 1) * nLineCount, ".\\SRC\\FastCmp.cpp", 0x25);
     uint32_t nLinesDone;
     nLinesDone = 0;
     int32_t pbLineStride;
-    pbLineStride = (int32_t)pSrcData;
-    if (!((uintptr_t)pDirectionOrder & 1)) {
-      pBaseData += (nLineCount - 1) * (intptr_t)pSrcData;
-      pbLineStride = -(int)pSrcData;
+    pbLineStride = nWidth;
+    if (!(dwFlags & 1)) {
+      pBaseData += (nLineCount - 1) * nWidth;
+      pbLineStride = -nWidth;
     }
 
-    pDirectionOrder = (uint8_t*)(pbLineStride + (char*)pBaseData);
-    pSrcData = pBaseData + (intptr_t)pSrcData;
+    dwFlags = (uint32_t)(pBaseData + pbLineStride);
+    char* pWidth;
+    pWidth = (char*)(pBaseData + nWidth);
     uint8_t* pbRLEOut;
     pbRLEOut = pbRLEAlloc;
     if (nLineCount > 0) {
       int32_t nZeroRunLen;
       do {
         if (!*pBaseData) {
-          nZeroRunLen = D2CMP::SUBTILE_CountRunLength((char*)pBaseData, (char*)pSrcData, 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
+          nZeroRunLen = D2CMP::SUBTILE_CountRunLength((char*)pBaseData, pWidth, 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
           if (!nColorTailFlag && !nZeroTailFlag) {
             *pbRLEOut = (uint8_t)nZeroRunLen | 0x80;
             pbRLEOut++;
             pBaseData += nZeroRunLen;
           } else {
             end_line:
-            pSrcData += pbLineStride;
+            pWidth = (char*)((char*)pWidth + pbLineStride);
             *pbRLEOut = 0x80;
             pbRLEOut++;
             nLinesDone++;
-            pBaseData = pDirectionOrder;
-            pDirectionOrder += pbLineStride;
+            pBaseData = (uint8_t*)dwFlags;
+            dwFlags += pbLineStride;
           }
         } else {
-          nColorRunLen = SUBTILE_CountRunLengthForByte((char*)pBaseData, (char*)pSrcData, '\0', 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
+          nColorRunLen = SUBTILE_CountRunLengthForByte((char*)pBaseData, pWidth, '\0', 0x7f, (uint32_t*)&nZeroTailFlag, &nColorTailFlag);
           *pbRLEOut = (uint8_t)nColorRunLen;
           for (; pbRLEOut++ , (uint32_t)nColorRunLen > 0; nColorRunLen--) {
             *pbRLEOut = *pBaseData;
@@ -130,6 +131,7 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(DC6 * pDCC, DC6 * pDCCDest, p
     uint8_t* pbIndexOut;
     uint32_t nFrameFlags;
     uint32_t nCompressedSizeOut;
+    uint32_t* ppFrameDest;
     if (!(pDCC->nFlags & 4)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce);
       exit(-1);
@@ -164,8 +166,8 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(DC6 * pDCC, DC6 * pDCCDest, p
         pbSrcPixel += 3;
       }
 
-      pNewFrameData = (uint32_t*)pSrcFrame->nVersion;
-      FASTCMP_CompressToRLE((uint8_t*)pNewFrameData[1], pNewFrameData[2], (uint8_t*)*pNewFrameData, &pbCompressedData, &nCompressedSize, pbIndexedBuf);
+      ppFrameDest = (uint32_t*)pSrcFrame->nVersion;
+      FASTCMP_CompressToRLE(ppFrameDest[1], ppFrameDest[2], *ppFrameDest, &pbCompressedData, &nCompressedSize, pbIndexedBuf);
       D2_FREE_AT(pbIndexedBuf, ".\\SRC\\FastCmp.cpp", 0xf0);
       nCompressedSizeOut = nCompressedSize;
       pNewFrameData = (uint32_t*)D2_ALLOC_AT(nCompressedSize + 0x23, ".\\SRC\\FastCmp.cpp", 0xf2);
@@ -1896,7 +1898,7 @@ uint32_t __fastcall FASTCMP_DecompressRLEWithPaletteConversion(::CELLIST * pDCCS
     uint32_t nFrameCounter = 0;
     uint32_t nDirectionCount = pDCCSrc->m_frames.m_terminator.m_next;
     for (nFrameInDir = (::TCELENTRY*)((int)nDirectionCount <= 0 ? 0 : nDirectionCount); 0 < (intptr_t)nFrameInDir; nFrameInDir = (::TCELENTRY*)nFrameInDir->m_link.m_next) {
-      FASTCMP_CompressToRLE((uint8_t*)nFrameInDir->nWidth, nFrameInDir->nHeight, (uint8_t*)nFrameInDir->dwArg7, &pbCompressedData, &nCompressedSize, nFrameInDir->pPixels);
+      FASTCMP_CompressToRLE(nFrameInDir->nWidth, nFrameInDir->nHeight, nFrameInDir->dwArg7, &pbCompressedData, &nCompressedSize, nFrameInDir->pPixels);
       nFrameTableIndex = nCompressedSize;
       pNewFrame = (uint32_t*)D2_ALLOC_AT(nCompressedSize + 0x23, ".\\SRC\\FastCmp.cpp", 0x82);
       pMemoryToFree = pbCompressedData;

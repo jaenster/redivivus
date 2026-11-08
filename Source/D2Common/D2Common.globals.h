@@ -100,7 +100,6 @@ extern D2DataTableTxtStrc * sgptDataTable;
 } // namespace D2Common::ITEMS::Items
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-extern char s_C_006ed5b4[2];
 namespace D2Common {
 extern char s___AV__TSExplicitList_UStringEntr_0074366c[56];
 extern int gpsPresetObjectTable[750];
@@ -175,7 +174,6 @@ extern int gnAct5OuterWallGridOffsetByType[24];
 extern int gaAct5SceneryPresetTable_0[15][7];
 } // namespace D2Common::Drlg::OutSiege
 namespace D2Common::Drlg::Preset {
-extern char s_HDM_006ee7c0[4];
 extern D2DrlgFileCacheNodeStrc * gpDrlgFileCache;
 } // namespace D2Common::Drlg::Preset
 namespace D2Common::Environment {

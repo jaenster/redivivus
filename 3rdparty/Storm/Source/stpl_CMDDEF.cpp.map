@@ -1,0 +1,222 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "3rdparty/Storm/Source/stpl_CMDDEF.cpp",
+  "functions": [
+    {
+      "name": "NextLink",
+      "address": "006c4040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4040"
+        }
+      ],
+      "namespace": "TSLink<CMDDEF>",
+      "calledFunctions": [
+        "NextLink"
+      ],
+      "usedTypes": [
+        "TSLink<CMDDEF>",
+        "intptr_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Link",
+      "address": "006c4160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4160"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "Link"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "TSLink<CMDDEF>",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "006c4180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4180"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "CMDDEF *",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Next",
+      "address": "006c4230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4230"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "Next"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>"
+      ]
+    },
+    {
+      "name": "UnlinkNode",
+      "address": "006c4290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4290"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "UnlinkNode"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "CMDDEF *",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>"
+      ]
+    },
+    {
+      "name": "RawNext",
+      "address": "006c4380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4380"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "RawNext"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>"
+      ]
+    },
+    {
+      "name": "UnlinkAll",
+      "address": "006c43f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c43f0"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSLink<CMDDEF>",
+        "TSLink<CMDDEF> *",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "006c4430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4430"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "StormLinkStrc *",
+        "TSLink<CMDDEF>",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NewNode",
+      "address": "006c44c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c44c0"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "NewNode",
+        "SMemAlloc",
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "006c4760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4760"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DeleteNode",
+      "address": "006c47b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c47b0"
+        }
+      ],
+      "namespace": "TSList<CMDDEF, TSGetLink<CMDDEF>>",
+      "calledFunctions": [
+        "DeleteNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CMDDEF",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "TSList<CMDDEF, TSGetLink<CMDDEF>>"
+      ]
+    }
+  ]
+}

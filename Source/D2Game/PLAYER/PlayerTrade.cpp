@@ -1906,12 +1906,13 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
       goto remove_source_item;
     }
     if (eItemPage == INVPAGE_MERC) {
+      uint32_t nUnit;
       ITEMS::ItemMode::ITEMMODE_SetItemFlags(pOwner, pClonedItem);
       remove_source_item:
-      pUnit = 0;
-      D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&pUnit, 0x20, 1);
+      nUnit = 0x0;
+      D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&nUnit, 0x20, 1);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pClonedItem, (uint8_t)(uintptr_t)pUnit2);
-      GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pOwner, pClonedItem, (eD2ItemFlag)pUnit);
+      GAME::SCmd::Send0x9DRemoveItemFromContainer(pClient, pOwner, pClonedItem, (eD2ItemFlag)nUnit);
       ITEMS::ItemMode::ITEMMODE_DeleteItemFromInventory(pGame, pOwner, pClonedItem, 0);
     }
 

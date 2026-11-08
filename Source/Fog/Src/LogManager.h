@@ -89,7 +89,7 @@ void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName);
 void __fastcall CloseLogFileByName(uint8_t * szFileName);
 struct StormLinkStrc * __thiscall ComputeAbsoluteFromRelative(struct StormLinkStrc * pNode, intptr_t pBase);
 void * __fastcall Unreferenced_0040f520(struct StormLinkStrc * param_1);
-int __fastcall Unreferenced_0040f580(struct StormLinkedListStrc * param_1);
+intptr_t __fastcall Unreferenced_0040f580(struct StormLinkedListStrc * param_1);
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 long __fastcall GetLogFileSize(uint8_t * szFileName);
 // @sourcefile .\Src\LogManager.cpp

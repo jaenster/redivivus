@@ -28,8 +28,6 @@
 #include "Source/D2Game/UNIT/SUnitEvent.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
-#include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
@@ -1282,7 +1280,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x1,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Dam_006e1664,
+        /* .nEventId = */ (char*)"Dam",
         0x8
     },
     {
@@ -1295,7 +1293,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Fire_006e165c,
+        /* .nEventId = */ (char*)"Fire",
         0x8
     },
     {
@@ -1308,7 +1306,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Ligt_006e1654,
+        /* .nEventId = */ (char*)"Ligt",
         0x8
     },
     {
@@ -1321,7 +1319,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Cold_006e164c,
+        /* .nEventId = */ (char*)"Cold",
         0x8
     },
     {
@@ -1334,7 +1332,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x2,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Magc_006e1644,
+        /* .nEventId = */ (char*)"Magc",
         0x8
     },
     {
@@ -1347,7 +1345,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x0,
-        /* .nEventId = */ s_CLen_006e163c,
+        /* .nEventId = */ (char*)"CLen",
         0x0
     },
     {
@@ -1360,7 +1358,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x0,
-        /* .nEventId = */ s_FLen_006e1634,
+        /* .nEventId = */ (char*)"FLen",
         0x0
     },
     {
@@ -1373,7 +1371,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x0,
-        /* .nEventId = */ s_PLen_006e162c,
+        /* .nEventId = */ (char*)"PLen",
         0x0
     },
     {
@@ -1386,7 +1384,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x0,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Pois_006e1624,
+        /* .nEventId = */ (char*)"Pois",
         0x0
     },
     {
@@ -1399,7 +1397,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Life_006e161c,
+        /* .nEventId = */ (char*)"Life",
         0x8
     },
     {
@@ -1412,7 +1410,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ s_Mana_006e1614,
+        /* .nEventId = */ (char*)"Mana",
         0x8
     },
     {
@@ -1425,7 +1423,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
         /* .nDisplayIndex = */ 0x0,
         /* .nFlag7 = */ 0x1,
         /* .nEnabled = */ 0x1,
-        /* .nEventId = */ (char*)&D2Game::UNIT::SUnitDmg::s_Stam_006e160c,
+        /* .nEventId = */ (char*)"Stam",
         0x8
     }
 }; D2_STATIC_GUARD(gaDefenseReductionTable, "D2Game::UNIT::SUnitDmg::DAMAGE_ApplyDefensiveReduction::gaDefenseReductionTable");

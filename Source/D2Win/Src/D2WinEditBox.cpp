@@ -1039,7 +1039,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
     int32_t nSelStart;
     int32_t nSelEnd;
     int nCurSel;
-    int nCursorOffset;
+    intptr_t nCursorOffset;
     int nSelCursor;
     uint8_t byCurChar;
     __frame0.abKeyBuffer[0] = byKeyChar;
@@ -1109,7 +1109,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         pbClipScan = pbClipScan + strlen((char*)pbClipScan) + 1;
         nHasText2 = 0;
         if ((intptr_t)pbClipScan - (intptr_t)pbClipEnd > 0) {
-          nCursorOffset = pEditBox->nCursorIndex - (int)pbClipSrc;
+          nCursorOffset = pEditBox->nCursorIndex - (intptr_t)pbClipSrc;
           do {
             bFontCharValid = D2WinFont::D2WINFONT_IsFontCharacterValid(*pbClipSrc);
             if (!bFontCharValid) {
@@ -1166,7 +1166,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(__frame0.awszPostSelText, __frame0.awszEditBuffer + nSelEnd);
       pbClipEnd = __frame0.szFilteredClipText;
       pbClipEnd = pbClipEnd + strlen((char*)pbClipEnd) + 1;
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(__frame0.awszPasteText, (char*)__frame0.szFilteredClipText, (int32_t)(pbClipEnd + (1 - (int)(__frame0.szFilteredClipText + 1))));
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(__frame0.awszPasteText, (char*)__frame0.szFilteredClipText, (int32_t)(pbClipEnd - (__frame0.szFilteredClipText + 1) + 1));
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(__frame0.awszEditBuffer, __frame0.awszPreSelText);
       D2Lang::Unicode::UNISYS::AppendToBuffer(__frame0.awszEditBuffer, __frame0.awszPasteText);
       D2Lang::Unicode::UNISYS::AppendToBuffer(__frame0.awszEditBuffer, __frame0.awszPostSelText);
@@ -1251,7 +1251,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
     int nSizeY = pEditBox->sControl.dwSizeY;
     if (!(pEditBox->nFlags & 8) || (nCallbackResult = D2WINEDITBOX_HandleMouseClick((int*)pEditBox, (short*)__frame0.awszEditBuffer) , nCallbackResult < nSizeY + nHasText2 * -2)) {
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(pEditBox->wszText, __frame0.awszEditBuffer);
-      pEditBox->nCursorIndex = (intptr_t)pwszCursor - (int)__frame0.awszEditBuffer >> 1;
+      pEditBox->nCursorIndex = (intptr_t)pwszCursor - (intptr_t)__frame0.awszEditBuffer >> 1;
       D2WINEDITBOX_UpdateCursorPosition(pEditBox);
       if (pEditBox->fpChangeCallback) {
         pEditBox->fpChangeCallback(nullptr);

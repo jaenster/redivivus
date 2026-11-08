@@ -5,7 +5,6 @@
 #include "Source/Fog/Fog.h"
 #include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2CMP/Draw.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -19,8 +18,6 @@ typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, 
 static double gdConst360 = 360; D2_STATIC_GUARD(gdConst360, "gdConst360");
 // also labelled: gWpnClass_w_WeaponClass4
 static double gdConst60 = 60; D2_STATIC_GUARD(gdConst60, "gdConst60");
-// also labelled: gdDrlgHueConst181
-double gdConst180 = 180; D2_GLOBAL_GUARD(gdConst180, "gdConst180");
 // also labelled: gMercenary_t_TownEnumValue2
 static double gdConst0_2 = 0.20000000298023224; D2_STATIC_GUARD(gdConst0_2, "gdConst0_2");
 static uint32_t gbTransparentColorEnabled = 0; D2_STATIC_GUARD(gbTransparentColorEnabled, "gbTransparentColorEnabled");
@@ -933,9 +930,9 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, D2HSLColorS
     } while (nTableIdx < 0x100);
 
     nEntryCount = -(int)pHSLPalette;
-    int iVar5 = (int)ahslBuffer + nEntryCount + 0x18;
+    intptr_t iVar5 = (intptr_t)ahslBuffer + nEntryCount + 0x18;
     int iVar2 = -(int)pHSLPalette;
-    int nHSLEntryBufOffset = (int)ahslBuffer + iVar2;
+    intptr_t nHSLEntryBufOffset = (intptr_t)ahslBuffer + iVar2;
     pHSLPalette = (D2HSLColorStrc*)(pPalette + 0x15fc0);
     nHueShift = 0;
     do {

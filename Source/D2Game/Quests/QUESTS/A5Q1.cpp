@@ -424,13 +424,13 @@ void __fastcall Q31_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     BOOL bQuestState;
     D2BitBufferStrc* pBitBuffer;
     ::SGAMEDATA* pGame;
-    if (pQuestArgs->sQuestArgs.sNpcActivate.nIndex - 0x6eU <= 2) {
+    if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel - 0x6eU <= 2) {
       if (pQuestData->bIsNotIntroduction != '\0' && (pQuestData->nStateFlag == 1 || pQuestData->nStateFlag == 2)) {
         QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q1.cpp", 0x229);
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q31_SyncQuestProgress);
         return;
       }
-    } else if (pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x6d) {
+    } else if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 0x6d) {
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
       if (pQuestData->nStateFlag == 2) {
         pGame = pQuestArgs->pGame;

@@ -110,7 +110,7 @@ void __fastcall D3DFLOOR_SetPalette(D3DFloorCacheStrc * pCache, void * pPalette)
       return;
     }
 
-    while (!(int)pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
+    while (!pCache->pNodeBuffer[nNodeIndex].pSurface || (pSurface = pCache->pNodeBuffer[nNodeIndex].pSurface , nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette) , !nResult)) {
       nNodeIndex++;
       if (nNodeIndex >= pCache->nMaxNodes - 1) {
         return;

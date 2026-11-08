@@ -25,8 +25,6 @@ typedef void (__fastcall *fnCrashOutputLine)(::Report * pReport, char * szString
 typedef int (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
 #endif
 
-char gdwFileReadPosition[3] = { '\x0a', '\x0a', '\x00' }; D2_GLOBAL_GUARD(gdwFileReadPosition, "gdwFileReadPosition");
-char gszCrashDumpRegisterFormatString[4] = { 'E', 'S', 'P', '\x00' }; D2_GLOBAL_GUARD(gszCrashDumpRegisterFormatString, "gszCrashDumpRegisterFormatString");
 pfnFogExceptionFilter gpCurrentExceptionFilter = (pfnFogExceptionFilter)0; D2_GLOBAL_GUARD(gpCurrentExceptionFilter, "gpCurrentExceptionFilter");
 void * gpCurrentExceptionContext = 0; D2_GLOBAL_GUARD(gpCurrentExceptionContext, "gpCurrentExceptionContext");
 

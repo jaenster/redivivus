@@ -7,26 +7,11 @@
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Fog/Source/SFile.data.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-// also labelled: gbCompressionDecoderMarker
-char gszDot[2] = { "." }; D2_GLOBAL_GUARD(gszDot, "gszDot");
-char s_Dec_006ccb00[4] = { 'D', 'e', 'c', '\x00' }; D2_GLOBAL_GUARD(s_Dec_006ccb00, "s_Dec_006ccb00");
-char s_Nov_006ccb04[4] = { 'N', 'o', 'v', '\x00' }; D2_GLOBAL_GUARD(s_Nov_006ccb04, "s_Nov_006ccb04");
-char s_Oct_006ccb08[4] = { 'O', 'c', 't', '\x00' }; D2_GLOBAL_GUARD(s_Oct_006ccb08, "s_Oct_006ccb08");
-char s_Sep_006ccb0c[4] = { 'S', 'e', 'p', '\x00' }; D2_GLOBAL_GUARD(s_Sep_006ccb0c, "s_Sep_006ccb0c");
-char s_Aug_006ccb10[4] = { 'A', 'u', 'g', '\x00' }; D2_GLOBAL_GUARD(s_Aug_006ccb10, "s_Aug_006ccb10");
-char s_Jul_006ccb14[4] = { 'J', 'u', 'l', '\x00' }; D2_GLOBAL_GUARD(s_Jul_006ccb14, "s_Jul_006ccb14");
-char s_Jun_006ccb18[4] = { 'J', 'u', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Jun_006ccb18, "s_Jun_006ccb18");
-char s_May_006ccb1c[4] = { 'M', 'a', 'y', '\x00' }; D2_GLOBAL_GUARD(s_May_006ccb1c, "s_May_006ccb1c");
-char s_Apr_006ccb20[4] = { 'A', 'p', 'r', '\x00' }; D2_GLOBAL_GUARD(s_Apr_006ccb20, "s_Apr_006ccb20");
-char s_Mar_006ccb24[4] = { 'M', 'a', 'r', '\x00' }; D2_GLOBAL_GUARD(s_Mar_006ccb24, "s_Mar_006ccb24");
-char s_Feb_006ccb28[4] = { 'F', 'e', 'b', '\x00' }; D2_GLOBAL_GUARD(s_Feb_006ccb28, "s_Feb_006ccb28");
-char s_Jan_006ccb2c[4] = { 'J', 'a', 'n', '\x00' }; D2_GLOBAL_GUARD(s_Jan_006ccb2c, "s_Jan_006ccb2c");
 static double gdFogJulianDaysPerYear = 365.25; D2_STATIC_GUARD(gdFogJulianDaysPerYear, "gdFogJulianDaysPerYear");
 static double gdFogJulianDaysPerMonth = 30.6001000000000; D2_STATIC_GUARD(gdFogJulianDaysPerMonth, "gdFogJulianDaysPerMonth");
 static BOOL D2Ini_bUseDirect = 0x0; D2_STATIC_GUARD(D2Ini_bUseDirect, "D2Ini_bUseDirect");

@@ -17,6 +17,7 @@
 struct ARGLIST;
 struct BigData;
 struct CMDPARAMS;
+union CMDPARAMSVALUE;
 struct D2ArchiveStrc;
 struct D2CompressEncoderStrc;
 struct D2CompressHuffNodeStrc;
@@ -127,6 +128,35 @@ public:
     /* 0x00 */ CRITICAL_SECTION m_critsect;
 };
 #endif // D2_DEFINED_CCritSect
+#ifndef D2_DEFINED_CMDPARAMSVALUE
+#define D2_DEFINED_CMDPARAMSVALUE
+union CMDPARAMSVALUE {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ BOOL bValue; // boolean argument
+    /* 0x00 */ int32_t nSignedValue; // numeric argument, signed
+    /* 0x00 */ uint32_t dwUnsignedValue; // numeric argument, unsigned
+    /* 0x00 */ char * szStringValue; // string argument
+};
+#endif // D2_DEFINED_CMDPARAMSVALUE
+#ifndef D2_DEFINED_CMDDEF
+#define D2_DEFINED_CMDDEF
+struct __attribute__((packed)) CMDDEF {
+    /* 0x00 */ struct CMDDEF * pPrev; // list link; SCmdRegisterArgument @006c4580 writes *pNewNode and pNewNode[1] as the two link words
+    /* 0x04 */ struct CMDDEF * pNext; // walked by SCMD_ParseArgument off gpStormCmdListHeadSlash / gpStormCmdListHeadBackslash
+    /* 0x08 */ uint32_t nArgTypeFlags; // &0x30000 selects bool (0) / int (0x10000) / string (0x20000)
+    /* 0x0C */ int nCmdGroupId; // command/group id used to match sibling records
+    /* 0x10 */ char szName[16]; // switch name, at most 15 chars. SCmdRegisterArgument: SStrCopy(node+0x10, szText, 0x10); SCMD_PerformConversion passes its address as CMDPARAMS.szName
+    /* 0x20 */ uint32_t nTextLen; // SCmdRegisterArgument (006c4580): nTextLen = SStrLen(szText); stored as pPrevLink[8] on the fresh 64-byte node
+    /* 0x24 */ uint32_t dwSetValue; // value a boolean switch sets. SCmdRegisterArgument stores dwSetValue here (pPrevLink[9])
+    /* 0x28 */ uint32_t dwSetMask; // mask a boolean switch applies. SCmdRegisterArgument stores dwSetMask here (pPrevLink[10])
+    /* 0x2C */ void * pVariable; // caller's variable the parsed value is written to. SCmdRegisterArgument stores pVariable here (pPrevLink[0xb])
+    /* 0x30 */ uint32_t dwVariableBytes; // size of pVariable in bytes; a boolean switch requires 4. SCmdRegisterArgument stores dwVariableBytes here (pPrevLink[0xc])
+    /* 0x34 */ BOOL (__stdcall *pfnCallback)(struct CMDPARAMS *, char *); // SCMDCALLBACK called with a CMDPARAMS view; returning 0 aborts parsing. SCmdRegisterArgument stores pfnCallback here; called at 006c48ad
+    /* 0x38 */ int bSupplied; // set to 1 once the argument has been supplied
+    /* 0x3C */ CMDPARAMSVALUE uValue; // current value: dwSetValue default for a boolean, the number, or an SMemAlloc'd string (SCMD.CPP line 0x121)
+};
+#endif // D2_DEFINED_CMDDEF
 #ifndef D2_DEFINED_ct_data
 #define D2_DEFINED_ct_data
 struct ct_data {
@@ -1238,8 +1268,6 @@ void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t szText1, char * szText2
 // Globals
 extern void * ExceptionList;
 extern uint16_t gnSFileSearchLocale;
-// lpDefault parameter of GetPrivateProfileStringA
-extern char lpDefault_006cc837[1];
 
 // Inline functions: the module compiled these into each caller
 namespace Storm::Source::SMem {

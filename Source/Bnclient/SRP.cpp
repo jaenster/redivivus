@@ -6,13 +6,10 @@
 #include "Source/Bnclient/SHA1.h"
 #include "3rdparty/Storm/D2Srp.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/Bnclient/SRP.data.h"
 #include "Source/Bnclient/net_sid.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
-
-char s_ColonSeparator[2] = { ':', '\x00' }; D2_GLOBAL_GUARD(s_ColonSeparator, "s_ColonSeparator");
 
 namespace Bnclient::SRP {
 
@@ -88,7 +85,7 @@ void __thiscall SRP_ExtractSessionKeyBytes(D2Srp * * pThis, void * pDst, uint32_
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
 void __thiscall SRP_ComputePasswordHash(D2Srp * pSrp, void * pSalt, char * szText1, char * szText2, BigData * * ppPasswordHash) {
     // Static local variables (originally global data)
-    static char * g_pColonSeparator = (char *)&s_ColonSeparator; D2_STATIC_GUARD(g_pColonSeparator, "Bnclient::SRP::SRP_ComputePasswordHash::g_pColonSeparator");
+    static char * g_pColonSeparator = (char*)":"; D2_STATIC_GUARD(g_pColonSeparator, "Bnclient::SRP::SRP_ComputePasswordHash::g_pColonSeparator");
 
     uint32_t sha1Ctx[23];
     uint8_t hashBuf[20];

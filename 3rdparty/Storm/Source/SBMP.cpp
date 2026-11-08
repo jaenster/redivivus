@@ -903,7 +903,7 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
 // @blizzard DecodeBmpMem (SBMP.CPP)
 static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * pBpp, uint8_t * pData, int palette, void * pixels, int dstSize) {
     uint32_t rowWidth;
-    int nPaletteByteOffset;
+    intptr_t nPaletteByteOffset;
     uint32_t srcStride;
     uint8_t* pDstPaletteByte;
     uint8_t* bHasPalette = (uint8_t*)palette;
@@ -923,7 +923,7 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
       if (palette) {
         pDstPaletteByte = (uint8_t*)(palette + 3);
         pSrcPaletteByte = pData + 0x37;
-        nPaletteByteOffset = palette - (int)(pData + 0x36);
+        nPaletteByteOffset = palette - (intptr_t)(pData + 0x36);
         palette = 0x100;
         do {
           pDstPaletteByte[-3] = pSrcPaletteByte[1];

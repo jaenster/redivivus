@@ -1106,7 +1106,7 @@ void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, in
     sprintf(szFlagsKey, "dwFlags");
     sprintf(szGuidKey, "GUID");
     HKEY hCreatedKey = (HKEY)0x0;
-    LSTATUS nRegResult = RegCreateKeyExA((HKEY)0x80000001, "SOFTWARE\\Blizzard Entertainment\\Diablo II\\VideoConfig", 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hCreatedKey, &dwDisposition);
+    LSTATUS nRegResult = RegCreateKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Blizzard Entertainment\\Diablo II\\VideoConfig", 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hCreatedKey, &dwDisposition);
     HKEY hKey = hCreatedKey;
     if (nRegResult) {
       return;
@@ -4033,8 +4033,8 @@ void __stdcall RENDERER_D3D_CreateFontTextures() {
         DIRECTD3D_LogError("Failed to unlock memory surface", dwHResult);
       }
 
-      pTextureHandle = (IDirect3DTexture2**)((intptr_t)g_pFontTextureHandle + __frame0.nFontArrayOffset);
-      pTextureSurface = (IDirectDrawSurface7**)((intptr_t)g_pFontTextureSurface + __frame0.nFontArrayOffset);
+      pTextureHandle = (IDirect3DTexture2**)((char*)g_pFontTextureHandle + __frame0.nFontArrayOffset);
+      pTextureSurface = (IDirectDrawSurface7**)((char*)g_pFontTextureSurface + __frame0.nFontArrayOffset);
       BVar1 = RENDERER_D3D_CreateSurfaceWithTexture(pTextureSurface, (void**)pTextureHandle, 8, 0x10);
       if (!BVar1) {
         break;
@@ -5101,11 +5101,11 @@ void __stdcall RENDERER_D3D_InitGroundTileCache() {
         nAdjX = iCol + iRow;
         iCol++;
         fTexV = (float)nAdjX * __frame0.fTexVStep + (float)fTexUStep.nValue / (float)gnD3DTextureCacheCount;
-        *(uint32_t*)((int)__frame0.pLockedVB + 8) = 0x3f000000;
-        *(uint32_t*)((int)__frame0.pLockedVB + 0xc) = 0x3f800000;
-        *(float*)((int)__frame0.pLockedVB + 0x18) = (float)nAdjY * (160.0 / fBlockSize / 10.0) + (float)(nDiagDiff + 0x50) / fBlockSizeInner;
-        *(float*)((int)__frame0.pLockedVB + 0x1c) = fTexV;
-        __frame0.pLockedVB = (void*)((int)__frame0.pLockedVB + 0x20);
+        *(uint32_t*)((char*)__frame0.pLockedVB + 8) = 0x3f000000;
+        *(uint32_t*)((char*)__frame0.pLockedVB + 0xc) = 0x3f800000;
+        *(float*)((char*)__frame0.pLockedVB + 0x18) = (float)nAdjY * (160.0 / fBlockSize / 10.0) + (float)(nDiagDiff + 0x50) / fBlockSizeInner;
+        *(float*)((char*)__frame0.pLockedVB + 0x1c) = fTexV;
+        __frame0.pLockedVB = (void*)((char*)__frame0.pLockedVB + 0x20);
       } while (iCol < 6);
 
       iRow++;
@@ -5421,7 +5421,7 @@ int __fastcall RENDERER_D3D_CreateSmackerSurfaces(int nParam) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e);
         exit(-1);
       }
-      if (!(int)gpD3DSmackerVideoTexture0[nSurfaceOffset]) {
+      if (!gpD3DSmackerVideoTexture0[nSurfaceOffset]) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f);
         exit(-1);
       }

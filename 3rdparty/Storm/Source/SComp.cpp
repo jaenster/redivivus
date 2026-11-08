@@ -985,7 +985,7 @@ uint32_t __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t *
             _Src = pScratch;
             if ((uint32_t*)((char*)pScratch + nSrcLenCur) > pSrcCur && (uint32_t*)(nSrcLenCur + (char*)pSrcCur) > pScratch) {
               _Src = __frame0.pTempBuf;
-              if ((uint32_t*)((char*)pScratch + nSrcLenCur) > __frame0.pTempBuf && (uint32_t*)(nSrcLenCur + (int)__frame0.pTempBuf) > pScratch) {
+              if ((uint32_t*)((char*)pScratch + nSrcLenCur) > __frame0.pTempBuf && (uint32_t*)(nSrcLenCur + (char*)__frame0.pTempBuf) > pScratch) {
                 _Src = (uint32_t*)(pDst + 1);
               }
             }
