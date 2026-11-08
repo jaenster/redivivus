@@ -642,8 +642,8 @@ int32_t __fastcall PETS_GetTotalPetCount(D2UnitStrc * pUnit) {
 // Sends the full pet roster of a player unit to a client. For each live pet across all type lists: mercs (type 7) get a 0x81 AssignMerc packet (with seed and name ID); all other pets get a 0x7A SummonLog packet. Used on game join or area transition to synchronise the client's summon display.
 void __fastcall PLAYERPETS_SendPetListToClient(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     D2UnitStrc* pPetUnit;
-    uint16_t wMercType;
     uint32_t nOwnerGUID;
+    int nClassId;
     D2PetStrc* pPetNode;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
@@ -674,11 +674,11 @@ void __fastcall PLAYERPETS_SendPetListToClient(D2ClientStrc * pClient, D2UnitStr
           if (!(pPetNode->nFlags & 1)) {
             pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetNode->nPetGUID);
             if (pPetUnit) {
-              wMercType = (uint16_t)pPetUnit->nClassId;
+              nClassId = pPetUnit->nClassId;
               if (nPetTypeIdx != 7) {
-                GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(pClient, '\x01', (uint8_t)nPetTypeIdx, pPetNode->nPetGUID, nOwnerGUID, wMercType);
+                GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(pClient, '\x01', (uint8_t)nPetTypeIdx, pPetNode->nPetGUID, nOwnerGUID, (uint16_t)nClassId);
               } else {
-                GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(pClient, '\x01', '\a', pPetNode->nPetGUID, nOwnerGUID, wMercType, pPetNode->pPetData.nSeed, pPetNode->pPetData.nNameId);
+                GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(pClient, '\x01', '\a', pPetNode->nPetGUID, nOwnerGUID, (uint16_t)nClassId, pPetNode->pPetData.nSeed, pPetNode->pPetData.nNameId);
               }
             }
           }

@@ -1950,8 +1950,8 @@ void __fastcall DRLGMAZE_FreeRoomPresetData(D2LvlSubTxt * pData) {
 
 uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(D2RoomExStrc * pRoomEx, int32_t nSubType, int32_t nSubTheme) {
     uint32_t dwSubMask;
+    int nSubIndex;
     int nCurrentType;
-    uint8_t nSubIndex;
     D2SeedStrc sNewSeed;
     if (nSubType != -1 && nSubTheme != -1) {
       D2LvlSubTxt* pTxtLvlSubLine;

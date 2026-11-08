@@ -2820,6 +2820,7 @@ int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nSound) {
     int nSoundId = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nSound);
     uint8_t bVar1 = Sound::SoundHdr::SOUNDHDR_GetSoundGroupSize(nSoundId);
     D2SoundListNodeStrc* pSfxNode = pUnit->uSideData.pClientSide.pUnitSfxData;
+    int nSoundGroupSize = (int)bVar1;
     while (true) {
       if (!pSfxNode) {
         return 0;
@@ -2827,7 +2828,7 @@ int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nSound) {
 
       nSfxSoundId = pSfxNode->nItemKey;
       nChannelId = Sound::SOUND_StopChannelById(nSfxSoundId);
-      if (nChannelId >= nSoundId && nChannelId < (int)((uint32_t)bVar1 + nSoundId)) {
+      if (nChannelId >= nSoundId && nChannelId < nSoundGroupSize + nSoundId) {
         break;
       }
 

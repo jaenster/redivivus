@@ -1654,7 +1654,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x16_UPDATE(char * pBytes) {
     D2UnitStrc* pUnit;
     uint8_t* pUnitEntry;
     int i;
-    uint16_t nY;
+    int nY;
     if (pBytes[3] == '\0') {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x855);
       exit(-1);
@@ -1670,10 +1670,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x16_UPDATE(char * pBytes) {
 
       do {
         nX = *(uint16_t*)(pUnitEntry + 5);
-        nY = *(uint16_t*)(pUnitEntry + 7);
+        nY = (int)*(uint16_t*)(pUnitEntry + 7);
         pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pUnitEntry + 1), (eD2UnitType)*pUnitEntry);
         if (pUnit) {
-          UNIT::Path::PATH_MoveUnitToPoint(pUnit, nX, (uint32_t)nY, 0, 0, 0);
+          UNIT::Path::PATH_MoveUnitToPoint(pUnit, nX, nY, 0, 0, 0);
         }
 
         i++;
