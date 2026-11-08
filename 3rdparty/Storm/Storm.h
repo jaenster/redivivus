@@ -20,6 +20,8 @@ struct CMDPARAMS;
 struct D2ArchiveStrc;
 struct D2CompressEncoderStrc;
 struct D2CompressHuffNodeStrc;
+struct D2FogHeapBlockHdrStrc;
+union D2FogHeapBlockLinkUnion;
 struct D2MPQBlockEntryStrc;
 struct D2MPQFileStrc;
 struct D2MPQHashEntryStrc;
@@ -189,6 +191,24 @@ struct __attribute__((packed)) D2CompressEncoderStrc {
     /* 0x306C */ struct D2CompressHuffNodeStrc * apSymbolNodes[258]; // +0x306c: symbol-to-node lookup table (0x102 entries)
 };
 #endif // D2_DEFINED_D2CompressEncoderStrc
+#ifndef D2_DEFINED_D2FogHeapBlockLinkUnion
+#define D2_DEFINED_D2FogHeapBlockLinkUnion
+union D2FogHeapBlockLinkUnion {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t dwHeapSignature;
+    /* 0x00 */ struct D2FogHeapBlockHdrStrc * pNextFree;
+};
+#endif // D2_DEFINED_D2FogHeapBlockLinkUnion
+#ifndef D2_DEFINED_D2FogHeapBlockHdrStrc
+#define D2_DEFINED_D2FogHeapBlockHdrStrc
+struct __attribute__((packed)) D2FogHeapBlockHdrStrc {
+    /* 0x00 */ uint16_t wBlockSize; // total block size in bytes (includes header)
+    /* 0x02 */ uint8_t byPadding; // extra padding bytes between header and user data
+    /* 0x03 */ uint8_t byFlags; // flags: bit0=debug-tail,bit1=free,bit2=large(VirtualAlloc),bit4=prev-free-adjacent,bit6=temp,bit7=leak-protected
+    /* 0x04 */ D2FogHeapBlockLinkUnion uLink; // lo16=upper16(heap ptr),hi16=0x6f6d magic — written from heap+0x0c
+};
+#endif // D2_DEFINED_D2FogHeapBlockHdrStrc
 #ifndef D2_DEFINED_D2MPQBlockEntryStrc
 #define D2_DEFINED_D2MPQBlockEntryStrc
 struct __attribute__((packed)) D2MPQBlockEntryStrc {
@@ -997,7 +1017,7 @@ namespace Storm::Source::SMem {
 // Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
 // The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
 __attribute__((noinline)) inline void MISC_OperatorDeleteShim(void * p);
-int32_t __stdcall SMemFindNextBlock(uint16_t * * nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
+int32_t __stdcall SMemFindNextBlock(uint32_t nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
 int32_t __stdcall SMemFindNextHeap(uint32_t nCurHeapId, int * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
 int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
 uint32_t __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags);

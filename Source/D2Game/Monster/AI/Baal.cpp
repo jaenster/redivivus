@@ -987,6 +987,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     int32_t nTeleportParam;
     int* pnX;
     int* pnY;
+    int nGameForCast;
     while (true) {
       D2MonStatsTxt* pMonStats;
       pMonStats = pUnit && (nMonClassId = pUnit->nClassId) >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
@@ -1058,7 +1059,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
               return;
             }
           nTeleportParam = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-          __frame0.pGameForCast = (::SGAMEDATA*)D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+          nGameForCast = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
           __frame0.nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
           __frame0.nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
           nMonClassId = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
@@ -1067,7 +1068,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
           }
 
           __frame0.nUnitX = (nTeleportParam - __frame0.nTargetX) * 0x19 / nMonClassId + nTeleportParam;
-          __frame0.nUnitY = ((int)__frame0.pGameForCast - __frame0.nTargetY) * 0x19 / nMonClassId + (int)__frame0.pGameForCast;
+          __frame0.nUnitY = (nGameForCast - __frame0.nTargetY) * 0x19 / nMonClassId + nGameForCast;
           nClassId = pUnit->nClassId;
           if (nClassId == 0x2c5) {
             SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[4], (int)pMonStats->aSkill[4], nullptr, __frame0.nTargetX, __frame0.nTargetY);

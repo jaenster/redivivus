@@ -955,6 +955,7 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
     uint32_t nHeader2;
     uint32_t nHeader3;
     uint32_t nHeader4;
+    uint32_t nHeader5;
     D2SaveFileHeaderStrc* pSaveFile = *ppSaveFileHeader;
     *pOutUnit = 0;
     GAME::Clients::SetFileFlags(pClient, 0);
@@ -1027,8 +1028,8 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
       D2SaveHotKeyStrc* pHotKey = pSaveFile->pHotKeys;
       nResult = 0;
       do {
-        PlayerSave2::SetHotkey(pHotKey, (uint32_t*)&pHeader, &nHand, &nItemGUID);
-        GAME::Clients::SetGotkeyInfo(pClient, nResult, (uint16_t)(uintptr_t)pHeader, (uint8_t)nHand, nItemGUID);
+        PlayerSave2::SetHotkey(pHotKey, (uint32_t*)&nHeader5, &nHand, &nItemGUID);
+        GAME::Clients::SetGotkeyInfo(pClient, nResult, (uint16_t)nHeader5, (uint8_t)nHand, nItemGUID);
         pHotKey++;
         nResult++;
       } while (nResult < 0x10);

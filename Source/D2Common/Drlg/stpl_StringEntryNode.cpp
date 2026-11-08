@@ -35,8 +35,8 @@ template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<StringEntryNode, -5
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::Assign(TSExplicitList<::StringEntryNode, -572662307>* pSource) {
     uint32_t dwCapacity = pSource->m_linkoffset;
-    uint32_t* pNextPtr = (uint32_t*)&this->m_terminator;
-    *pNextPtr = (uint32_t)pNextPtr;
+    TSLink<::StringEntryNode>* pNextPtr = &this->m_terminator;
+    pNextPtr->m_prevlink = pNextPtr;
     this->m_linkoffset = dwCapacity;
     this->m_terminator.m_next = ~(uintptr_t)pNextPtr;
 }
@@ -51,8 +51,8 @@ template<> TSLink<::StringEntryNode>* TSExplicitList<StringEntryNode, -572662307
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::SetLinkOffset(int32_t nLinkOffset) {
     this->m_linkoffset = nLinkOffset;
-    uint32_t* pNextPtr = (uint32_t*)&this->m_terminator;
-    *pNextPtr = (uint32_t)pNextPtr;
+    TSLink<::StringEntryNode>* pNextPtr = &this->m_terminator;
+    pNextPtr->m_prevlink = pNextPtr;
     this->m_terminator.m_next = ~(uintptr_t)pNextPtr;
 }
 
@@ -60,7 +60,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
     TSLink<::StringEntryNode>* pTVar1;
     TSLink<::StringEntryNode>* pSrcSlot;
     int pCurHead;
-    uint32_t pTailLink;
+    intptr_t pTailLink2;
     if (pNode) {
       pSrcSlot = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
     } else {
@@ -69,10 +69,9 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
 
     TSLink<::StringEntryNode>* pDstSlot = pSrcSlot->m_prevlink;
     if (pDstSlot) {
-      int* pPrevLink;
-      pTailLink = pSrcSlot->m_next;
-      pPrevLink = (int*)D2_StormNextLink(pSrcSlot, -1);
-      *pPrevLink = (int)pDstSlot;
+      TSLink<::StringEntryNode>** pPrevLink;
+      pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pSrcSlot, -1);
+      *pPrevLink = pDstSlot;
       pSrcSlot->m_prevlink->m_next = pSrcSlot->m_next;
       pSrcSlot->m_prevlink = 0;
       pSrcSlot->m_next = 0;
@@ -89,9 +88,9 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
           pSrcSlot->m_prevlink = pDstSlot;
           pSrcSlot->m_next = pDstSlot->m_next;
           pCurHead = this->m_linkoffset;
-          pTailLink = pDstSlot->m_next;
-          if ((int)pTailLink < 0) {
-            *(TSLink<::StringEntryNode>**)~pTailLink = (TSLink<::StringEntryNode>*)pSrcSlot;
+          pTailLink2 = pDstSlot->m_next;
+          if (pTailLink2 < 0) {
+            *(TSLink<::StringEntryNode>**)~pTailLink2 = (TSLink<::StringEntryNode>*)pSrcSlot;
             pDstSlot->m_next = (intptr_t)pNode;
             return;
           }
@@ -99,7 +98,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
             pCurHead = (int)pDstSlot - pDstSlot->m_prevlink->m_next;
           }
 
-          *(TSLink<::StringEntryNode>**)(pTailLink + pCurHead) = (TSLink<::StringEntryNode>*)pSrcSlot;
+          *(TSLink<::StringEntryNode>**)(pTailLink2 + pCurHead) = (TSLink<::StringEntryNode>*)pSrcSlot;
           pDstSlot->m_next = (intptr_t)pNode;
           return;
         }
@@ -125,7 +124,7 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::RawN
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkNode(::StringEntryNode * pNode) {
     TSLink<::StringEntryNode>* pSlot;
-    int* pPrevLink;
+    TSLink<::StringEntryNode>** pPrevLink;
     if (pNode) {
       pSlot = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
     } else {
@@ -137,27 +136,27 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkNode(::String
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pSlot, -1);
-    *pPrevLink = (int)nHeadEntry;
+    pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pSlot, -1);
+    *pPrevLink = nHeadEntry;
     pSlot->m_prevlink->m_next = pSlot->m_next;
     pSlot->m_prevlink = 0;
     pSlot->m_next = 0;
 }
 
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next(::StringEntryNode * pNode) {
-    uint32_t nAbsOffset;
     if (pNode) {
-      nAbsOffset = *(uint32_t*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
-    } else {
-      nAbsOffset = this->m_terminator.m_next;
+      intptr_t nAbsOffset;
+      nAbsOffset = *(intptr_t*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset);
+      return (::StringEntryNode*)(nAbsOffset <= 0 ? 0 : nAbsOffset);
     }
 
-    return (::StringEntryNode*)((int)nAbsOffset <= 0 ? 0 : nAbsOffset);
+    intptr_t nFirstLink = this->m_terminator.m_next;
+    return (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
 
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode) {
-    int* piVar2;
-    uint32_t nNextLink;
+    TSLink<::StringEntryNode>** pPrevLink2;
+    intptr_t nNextLink;
     if (!pNode->m_linktoslot.m_next) {
       return;
     }
@@ -167,7 +166,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntry
     if (nHeadEntry) {
       TSLink<::StringEntryNode>** pPrevLink;
       nNextLink = pNode->m_linktoslot.m_next;
-      if ((int)nNextLink < 0) {
+      if (nNextLink < 0) {
         pPrevLink = (TSLink<::StringEntryNode>**)~nNextLink;
       } else {
         pPrevLink = (TSLink<::StringEntryNode>**)((char*)pTVar1 + (nNextLink - nHeadEntry->m_next));
@@ -185,14 +184,14 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntry
       return;
     }
 
-    nNextLink = pNode->m_linktofull.m_next;
-    if ((int)nNextLink < 0) {
-      piVar2 = (int*)~nNextLink;
+    intptr_t nNextLink2 = pNode->m_linktofull.m_next;
+    if (nNextLink2 < 0) {
+      pPrevLink2 = (TSLink<::StringEntryNode>**)~nNextLink2;
     } else {
-      piVar2 = (int*)((char*)pTVar1 + (nNextLink - nHeadEntry->m_next));
+      pPrevLink2 = (TSLink<::StringEntryNode>**)((char*)pTVar1 + (nNextLink2 - nHeadEntry->m_next));
     }
 
-    *piVar2 = (int)nHeadEntry;
+    *pPrevLink2 = nHeadEntry;
     pTVar1->m_prevlink->m_next = pNode->m_linktofull.m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
@@ -204,41 +203,41 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Delete(::StringEntry
 }
 
 template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll() {
-    int* pPrevLink;
-    int nHeadEntry;
-    uint32_t nNextLink;
+    TSLink<::StringEntryNode>** pPrevLink;
+    TSLink<::StringEntryNode>* pHeadEntry;
+    intptr_t nNextLink;
     int nSlotOffset;
     while (true) {
-      int* pSlot;
+      TSLink<::StringEntryNode>* pSlot;
       nSlotOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
       if (!nSlotOffset) {
         break;
       }
 
-      nHeadEntry = *(int*)(this->m_linkoffset + nSlotOffset);
-      pSlot = (int*)(this->m_linkoffset + nSlotOffset);
-      if (nHeadEntry) {
-        nNextLink = pSlot[1];
-        if ((int)nNextLink < 0) {
-          pPrevLink = (int*)~nNextLink;
+      pHeadEntry = *(TSLink<::StringEntryNode>**)(this->m_linkoffset + nSlotOffset);
+      pSlot = (TSLink<::StringEntryNode>*)(this->m_linkoffset + nSlotOffset);
+      if (pHeadEntry) {
+        nNextLink = pSlot->m_next;
+        if (nNextLink < 0) {
+          pPrevLink = (TSLink<::StringEntryNode>**)~nNextLink;
         } else {
-          pPrevLink = (int*)((intptr_t)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
+          pPrevLink = (TSLink<::StringEntryNode>**)((char*)pSlot + (nNextLink - pHeadEntry->m_next));
         }
 
-        *pPrevLink = nHeadEntry;
-        *(int*)(*pSlot + 4) = pSlot[1];
-        *pSlot = 0;
-        pSlot[1] = 0;
+        *pPrevLink = pHeadEntry;
+        pSlot->m_prevlink->m_next = pSlot->m_next;
+        pSlot->m_prevlink = 0;
+        pSlot->m_next = 0;
       }
     }
 }
 
 template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringEntryNode, -572662307>::CopyConstructor(TSExplicitList<::StringEntryNode, -572662307>* pSource) {
-    uint32_t* pSentinelHead = (uint32_t*)&this->m_terminator;
-    *pSentinelHead = 0;
-    pSentinelHead[1] = 0;
+    TSLink<::StringEntryNode>* pSentinelHead = &this->m_terminator;
+    pSentinelHead->m_prevlink = 0;
+    pSentinelHead->m_next = 0;
     uint32_t dwCapacity = pSource->m_linkoffset;
-    *pSentinelHead = (uint32_t)pSentinelHead;
+    pSentinelHead->m_prevlink = pSentinelHead;
     this->m_linkoffset = dwCapacity;
     this->m_terminator.m_next = ~(uintptr_t)pSentinelHead;
     return this;
@@ -246,30 +245,30 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<StringEntryNode, -572662307> that no member owns
 TSExplicitList<::StringEntryNode, -572662307>* __thiscall CopyConstructor_Unreferenced(TSExplicitList<::StringEntryNode, -572662307>* pThis, TSExplicitList<::StringEntryNode, -572662307>* pSource) {
-    uint32_t* pSentinelHead = (uint32_t*)&pThis->m_terminator;
-    *pSentinelHead = 0;
-    pSentinelHead[1] = 0;
+    TSLink<::StringEntryNode>* pSentinelHead = &pThis->m_terminator;
+    pSentinelHead->m_prevlink = 0;
+    pSentinelHead->m_next = 0;
     uint32_t dwCapacity = pSource->m_linkoffset;
-    *pSentinelHead = (uint32_t)pSentinelHead;
+    pSentinelHead->m_prevlink = pSentinelHead;
     pThis->m_linkoffset = dwCapacity;
     pThis->m_terminator.m_next = ~(uintptr_t)pSentinelHead;
     return pThis;
 }
 
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Next(::StringEntryNode * pNode) {
-    uint32_t uAbsOffset;
     if (pNode) {
-      uAbsOffset = *(uint32_t*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset);
-    } else {
-      uAbsOffset = this->tFullList.m_terminator.m_next;
+      intptr_t uAbsOffset;
+      uAbsOffset = *(intptr_t*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset);
+      return (::StringEntryNode*)(uAbsOffset <= 0 ? 0 : uAbsOffset);
     }
 
-    return (::StringEntryNode*)((int)uAbsOffset <= 0 ? 0 : uAbsOffset);
+    intptr_t nFirstLink = this->tFullList.m_terminator.m_next;
+    return (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
 
 template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
-    int* piVar2;
-    uint32_t nNextLink;
+    TSLink<::StringEntryNode>** pPrevLink2;
+    intptr_t nNextLink;
     char* pObject = this->m_key.szString;
     if (pObject) {
       Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
@@ -280,7 +279,7 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
     if (nHeadEntry) {
       TSLink<::StringEntryNode>** pPrevLink;
       nNextLink = this->m_linktofull.m_next;
-      if ((int)nNextLink < 0) {
+      if (nNextLink < 0) {
         pPrevLink = (TSLink<::StringEntryNode>**)~nNextLink;
       } else {
         pPrevLink = (TSLink<::StringEntryNode>**)((char*)pTVar1 + (nNextLink - nHeadEntry->m_next));
@@ -298,14 +297,14 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
       return;
     }
 
-    nNextLink = this->m_linktoslot.m_next;
-    if ((int)nNextLink < 0) {
-      piVar2 = (int*)~nNextLink;
+    intptr_t nNextLink2 = this->m_linktoslot.m_next;
+    if (nNextLink2 < 0) {
+      pPrevLink2 = (TSLink<::StringEntryNode>**)~nNextLink2;
     } else {
-      piVar2 = (int*)((char*)pTVar1 + (nNextLink - nHeadEntry->m_next));
+      pPrevLink2 = (TSLink<::StringEntryNode>**)((char*)pTVar1 + (nNextLink2 - nHeadEntry->m_next));
     }
 
-    *piVar2 = (int)nHeadEntry;
+    *pPrevLink2 = nHeadEntry;
     pTVar1->m_prevlink->m_next = this->m_linktoslot.m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
@@ -314,11 +313,11 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
     TSExplicitList<::StringEntryNode, -572662307>* pTVar1;
     ::StringEntryNode* pNode;
-    int* pSlot;
-    int* pPrevLink;
-    int nHeadEntry;
+    TSLink<::StringEntryNode>* pSlot;
+    TSLink<::StringEntryNode>** pPrevLink;
+    intptr_t nNextLink;
+    TSLink<::StringEntryNode>* pHeadEntry;
     int nLinkOffset;
-    uint32_t nNextLink;
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
     int32_t iBucket = 0;
@@ -335,20 +334,20 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_
         }
         if (bUnlinkOnly) {
           nLinkOffset = pTVar1[iBucket].m_linkoffset;
-          nHeadEntry = *(int*)((intptr_t)&pNode->m_hashval + nLinkOffset);
-          pSlot = (int*)((intptr_t)&pNode->m_hashval + nLinkOffset);
-          if (nHeadEntry) {
-            nNextLink = pSlot[1];
-            if ((int)nNextLink < 0) {
-              pPrevLink = (int*)~nNextLink;
+          pHeadEntry = *(TSLink<::StringEntryNode>**)((intptr_t)&pNode->m_hashval + nLinkOffset);
+          pSlot = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + nLinkOffset);
+          if (pHeadEntry) {
+            nNextLink = pSlot->m_next;
+            if (nNextLink < 0) {
+              pPrevLink = (TSLink<::StringEntryNode>**)~nNextLink;
             } else {
-              pPrevLink = (int*)((intptr_t)pSlot + (nNextLink - *(int*)(nHeadEntry + 4)));
+              pPrevLink = (TSLink<::StringEntryNode>**)((char*)pSlot + (nNextLink - pHeadEntry->m_next));
             }
 
-            *pPrevLink = nHeadEntry;
-            *(int*)(*pSlot + 4) = pSlot[1];
-            *pSlot = 0;
-            pSlot[1] = 0;
+            *pPrevLink = pHeadEntry;
+            pSlot->m_prevlink->m_next = pSlot->m_next;
+            pSlot->m_prevlink = 0;
+            pSlot->m_next = 0;
           }
         } else {
           this->pVtable->InternalDelete(this, pNode);
@@ -361,7 +360,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<StringEntryNode, -572662307> that no member owns
 void __thiscall Destructor_Unreferenced(TSExplicitList<::StringEntryNode, -572662307>* pThis) {
-    int* pPrevLink;
+    TSLink<::StringEntryNode>** pPrevLink;
     pThis->UnlinkAll();
     TSLink<::StringEntryNode>* pTVar1 = &pThis->m_terminator;
     TSLink<::StringEntryNode>* nHeadEntry = pTVar1->m_prevlink;
@@ -369,8 +368,8 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::StringEntryNode, -57266
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
-    *pPrevLink = (int)nHeadEntry;
+    pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
+    *pPrevLink = nHeadEntry;
     pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;

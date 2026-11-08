@@ -22,7 +22,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2CUnitEventStrc) == 0x20, "D2_NEW_
 
 #ifndef RECON_FPTD_fnCUnitEventCallback
 #define RECON_FPTD_fnCUnitEventCallback
-typedef int32_t (__fastcall *fnCUnitEventCallback)(D2UnitStrc * pUnit, D2UnitStrc * pOwnerUnit, uint32_t dwArg1, uint32_t dwArg2, uint32_t dwEventData1, uint32_t dwEventData2);
+typedef int32_t (__fastcall *fnCUnitEventCallback)(int nClientEvent, D2UnitStrc * pOwnerUnit, D2UnitStrc * pMissile, uint32_t dwArg2, uint32_t dwEventData1, uint32_t dwEventData2);
 #endif
 
 namespace D2Client::UNIT::CUnitEvent {
@@ -51,7 +51,7 @@ void __fastcall FreeEventList(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\CUnitEvent.cpp
-D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * pEventUnit, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int nEventType, int nEventState) {
+D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, int nClientEvent, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int nEventType, int nEventState) {
     if (!pUnit) {
       return nullptr;
     }
@@ -61,7 +61,7 @@ D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * 
     pNewEvent->dwEventData1 = dwEventData1;
     pNewEvent->dwEventData2 = dwEventData2;
     pNewEvent->pfnCallback = pfnCallback;
-    pNewEvent->pUnit = pEventUnit;
+    pNewEvent->nClientEvent = nClientEvent;
     pNewEvent->pPrev = pUnit->uSideData.pClientSide.pCUnitEventList;
     pNewEvent->nEventType = nEventType;
     pNewEvent->nEventState = nEventState;

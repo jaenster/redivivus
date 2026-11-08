@@ -2246,10 +2246,10 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
     wszTempConversionBuffer[9] = 0;
     uint16_t* pwSeparator = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2ItemsTxt* nMinDefense = (D2ItemsTxt*)(uint32_t)pStatRecord->nMinDam;
+    int nMinDefense = (int)pStatRecord->nMinDam;
     uint32_t nMaxDefense = (uint32_t)pStatRecord->nMaxDam;
     uint32_t nTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_AnyShield);
-    int nStatRecord = (int)nMinDefense;
+    int nStatRecord = nMinDefense;
     if (nTypeCheck) {
       D2UnitStrc* pPlayerUnit_lcl;
       *(uint16_t*)(char*)&pUnit = 0xd8c;
@@ -2260,7 +2260,7 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
         if (iStateCheck) {
           nSkillLevel = D2Common::Skills::GetSkillLevel(pPlayerUnit_lcl, pSkill, 1);
           nSkillDmgCalc = D2Common::Skills::SKILL_CalcMinDamage(pPlayerUnit_lcl, 0x75, nSkillLevel, 1);
-          nStatRecord = (int)(nMinDefense->szFlippyFile + (nSkillDmgCalc >> 8));
+          nStatRecord = (int)(nMinDefense + (nSkillDmgCalc >> 8));
           nSkillDmgCalc = D2Common::Skills::SKILL_CalcMaxDamage(pPlayerUnit_lcl, 0x75, nSkillLevel, 1);
           nMaxDefense += nSkillDmgCalc >> 8;
         }
@@ -7026,6 +7026,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     D2MonStatsTxt* pMonStatsTxt;
     uint16_t nAffixId;
     D2MagicAffixTxt* pPrefixAffix;
+    uint8_t* pwRareNameSuffix;
     uint8_t* pcNameDst;
     char* pwLocaleStr2;
     uint16_t* pwFormatStr;
@@ -7246,7 +7247,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           if (pPrefixAffix) {
             if (*(uint16_t*)(pPrefixAffix->name + 0xc)) {
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pPrefixAffix->name + 0xc));
-              pcNameDst = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+              pwRareNameSuffix = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pPrefixAffix2->name + 0xc));
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPrefix, pwLocaleStr);
             } else {
@@ -7258,19 +7259,19 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               strcat((char*)__frame0.szUtf8Buf, ")");
               pcNameDst = pcNameDst + strlen((char*)pcNameDst) + 1;
               D2Lang::UTF8_ConvertToWideChar(wszPrefix, (char*)__frame0.szUtf8Buf, 0x200);
-              pcNameDst += -(int)(__frame0.szUtf8Buf + 1);
+              pwRareNameSuffix = pcNameDst - (int)(__frame0.szUtf8Buf + 1);
               pUnit = pUnitSaved;
               pItemsTxt = pItemsTxtSaved;
             }
           } else {
             wszPrefix[0] = L'\0';
-            pcNameDst = wszEarLevel[0];
+            pwRareNameSuffix = wszEarLevel[0];
           }
           if (pSuffixAffix) {
             if (pSuffixAffix->wNameStrId) {
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
               nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-              pcNameDst += nErrorLine;
+              pwRareNameSuffix += nErrorLine;
               if (pPrefixAffix2) {
                 pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
                 D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, pwLocaleStr);
@@ -7287,7 +7288,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               strcat((char*)__frame0.szUtf8Buf, ")");
               D2Lang::UTF8_ConvertToWideChar(wszNameScratch, (char*)__frame0.szUtf8Buf, 0x200);
               nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszNameScratch);
-              pcNameDst += nErrorLine;
+              pwRareNameSuffix += nErrorLine;
               if (pPrefixAffix2) {
                 D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, wszNameScratch);
                 pUnit = pUnitSaved;
@@ -7304,7 +7305,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
 
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
           nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((intptr_t)(pcNameDst + nErrorLine + 3) >= (int)nSize) {
+          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= (int)nSize) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x822);
             exit(-1);
           }
@@ -7405,23 +7406,23 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           if (pPrefixAffix) {
             if (pPrefixAffix->wNameStr) {
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix->wNameStr);
-              pcNameDst = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+              pwRareNameSuffix = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix->wNameStr);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPrefix, pwLocaleStr);
             } else {
               __frame0.szUtf8Buf[0] = 0x28;
               __frame0.szUtf8Buf[1] = 0;
               strcat((char*)__frame0.szUtf8Buf, pPrefixAffix->name);
-              pcNameDst = __frame0.szUtf8Buf;
+              pwRareNameSuffix = __frame0.szUtf8Buf;
               strcat((char*)__frame0.szUtf8Buf, ")");
-              pcNameDst = pcNameDst + strlen((char*)pcNameDst) + 1;
+              pwRareNameSuffix = pwRareNameSuffix + strlen((char*)pwRareNameSuffix) + 1;
               D2Lang::UTF8_ConvertToWideChar(wszPrefix, (char*)__frame0.szUtf8Buf, 0x200);
-              pcNameDst += -(int)(__frame0.szUtf8Buf + 1);
+              pwRareNameSuffix += -(int)(__frame0.szUtf8Buf + 1);
               pUnit = pUnitSaved;
             }
           } else {
             wszPrefix[0] = L'\0';
-            pcNameDst = wszEarLevel[0];
+            pwRareNameSuffix = wszEarLevel[0];
           }
 
           pPrefixAffix = pPrefixAffix2;
@@ -7429,7 +7430,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             if (pPrefixAffix2->wNameStr) {
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix2->wNameStr);
               nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-              pcNameDst += nErrorLine;
+              pwRareNameSuffix += nErrorLine;
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix->wNameStr);
               D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, pwLocaleStr);
             } else {
@@ -7461,7 +7462,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               pbyUtf8Scan = __frame0.szUtf8Buf;
               strcat((char*)__frame0.szUtf8Buf, ")");
               pbyUtf8Scan = pbyUtf8Scan + strlen((char*)pbyUtf8Scan) + 1;
-              pcNameDst = pbyUtf8Scan + ((intptr_t)pcNameDst - (int)(__frame0.szUtf8Buf + 1));
+              pwRareNameSuffix = pbyUtf8Scan + ((intptr_t)pwRareNameSuffix - (int)(__frame0.szUtf8Buf + 1));
               D2Lang::UTF8_ConvertToWideChar(wszScratch, (char*)__frame0.szUtf8Buf, 0x200);
               D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, wszScratch);
               pUnit = pUnitSaved;
@@ -7473,7 +7474,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           pItemsTxt = pItemsTxtSaved;
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxtSaved->wNameStr);
           nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((intptr_t)(pcNameDst + nErrorLine + 3) >= (int)nSize) {
+          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= (int)nSize) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c5);
             exit(-1);
           }
@@ -8805,6 +8806,7 @@ void __stdcall DRAW_UI_Inventory() {
     int32_t nDrawFlags;
     GLOBALPALLETE nGlobalPaletteShift;
     D2GamePalShiftGreenBloodStrc* pPalette;
+    int32_t nSlotItem;
     int nMouseX;
     nMouseX = Cursor::GetMouseX();
     int32_t nLArmItem;
@@ -8885,7 +8887,7 @@ void __stdcall DRAW_UI_Inventory() {
           }
 
           D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-          pSlotItem = (D2UnitStrc*)nLArmItem;
+          nSlotItem = nLArmItem;
           bIsTwoHandedEquipped = nMouseX;
           bIsExpansion = INV_IsMouseOverTransmuteBtn(nMouseX, nLArmItem);
           if (bIsExpansion) {
@@ -8896,7 +8898,7 @@ void __stdcall DRAW_UI_Inventory() {
             nDrawTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pwszText);
             nDrawY = gnPanelOffsetX - nDrawTextWidth / 2 + 0x121;
           } else {
-            bIsExpansion = CheckSomeCoords(bIsTwoHandedEquipped, (int32_t)pSlotItem);
+            bIsExpansion = CheckSomeCoords(bIsTwoHandedEquipped, nSlotItem);
             if (!bIsExpansion) {
               goto draw_inventory_panel;
             }
@@ -9300,6 +9302,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     int32_t nTxCost;
     D2ItemsTxt* pItemsTxt;
     uint32_t nCheckResult;
+    int32_t nTargetItemGUID;
     uint8_t nPacketId;
     uint32_t nDifficulty;
     bool bIsOwnUnit;
@@ -9310,9 +9313,10 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     int dwPacketArg4;
     int32_t nSoundParam2;
     int32_t nInventory;
+    int32_t nInventory2;
     D2UnitStrc* pUnit2;
-    D2InventoryStrc* pInvWork;
-    pInvWork = pInventory;
+    D2InventoryStrc* pInventory_00;
+    pInventory_00 = pInventory;
     uint8_t cPage;
     cPage = (uint8_t)nPage;
     BOOL bReturnValue;
@@ -9335,7 +9339,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     nCallResult = Cursor::GetItemType();
     if (nCallResult == 6) {
       pCursorItem_lcl = Cursor::GetCursorItem();
-      pTargetItem = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInvWork, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
+      pTargetItem = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory_00, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
       if (!pCursorItem_lcl) {
         return bReturnValue;
       }
@@ -9366,7 +9370,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
 
     nCallResult = Cursor::GetItemType();
     if (nCallResult == 8) {
-      pCursorItem_lcl = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInvWork, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
+      pCursorItem_lcl = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory_00, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
       if (!pCursorItem_lcl) {
         return bReturnValue;
       }
@@ -9404,7 +9408,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     }
     if (!pCursorItem_lcl) {
       eInventoryPage ePage;
-      pCursorItem_lcl = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInvWork, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
+      pCursorItem_lcl = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory_00, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
       if (!pCursorItem_lcl) {
         return bReturnValue;
       }
@@ -9439,9 +9443,9 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
 
       /* int vKey for GetAsyncKeyState */ /* 0x11 GetAsyncKeyState = Control Button */ sCtrlKeyState = GetAsyncKeyState(0x11);
       if (sCtrlKeyState < 0) {
-        nItemType = npcmenu::GetInteractedUnitGuid((int*)&nInventory);
+        nItemType = npcmenu::GetInteractedUnitGuid((int*)&nInventory2);
         if (nItemType) {
-          pTargetItem = UNIT::Player::UNITS_FindClientSideUnit(nInventory, UNIT_MONSTER);
+          pTargetItem = UNIT::Player::UNITS_FindClientSideUnit(nInventory2, UNIT_MONSTER);
           if (pTargetItem) {
             nItemType = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemFlag_Monster(pCursorItem_lcl);
             if (nItemType) {
@@ -9490,13 +9494,13 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
       return 1;
     }
 
-    D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInvWork, pCursorItem_lcl, gpInventoryContextUi, gaInventorySelectState, eInvPage, &targetItem, (int*)&nCollisionCount, nPage);
+    D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInventory_00, pCursorItem_lcl, gpInventoryContextUi, gaInventorySelectState, eInvPage, &targetItem, (int*)&nCollisionCount, nPage);
     D2UnitStrc* nOccupancyItemPtr;
     nOccupancyItemPtr = 0;
     nGridCellY = 1;
     if (nCollisionCount >= 2) {
       pUnit2 = 0;
-      D2Common::INVENTORY::Inventory::INVENTORY_CheckGridOccupancy(pInvWork, pCursorItem_lcl, gpInventoryContextUi, gaInventorySelectState, eInvPage, (D2UnitStrc**)&pUnit2, nPage, 1);
+      D2Common::INVENTORY::Inventory::INVENTORY_CheckGridOccupancy(pInventory_00, pCursorItem_lcl, gpInventoryContextUi, gaInventorySelectState, eInvPage, (D2UnitStrc**)&pUnit2, nPage, 1);
       if (!pUnit2 || (pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(*(uint32_t*)((char*)pUnit2 + 4)) , pItemsTxt->dwCode != 0x20786f62)) {
         goto place_or_use_on_item;
       }
@@ -9510,7 +9514,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
           nItemType = GAME::Game::CLIENT_CheckExpansion();
           pTargetItem = pUnit;
           nTxCost = D2Common::Units::GetInventoryPage(pUnit, '\x03', nItemType);
-          nCallResult = D2Common::INVENTORY::Inventory::INVENTORY_FindItemGridPosition(pInvWork, pCursorItem_lcl, nTxCost, (int*)&y, (int*)&pInventory, 3);
+          nCallResult = D2Common::INVENTORY::Inventory::INVENTORY_FindItemGridPosition(pInventory_00, pCursorItem_lcl, nTxCost, (int*)&y, (int*)&pInventory, 3);
           if (nCallResult) {
             if (!targetItem) {
               nTxCost = -1;
@@ -9533,7 +9537,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
       if (!nGridCellY) {
         return bReturnValue;
       }
-      nItemType = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridOccupancy(pInvWork, pCursorItem_lcl, gpInventoryContextUi, gaInventorySelectState, eInvPage, &nOccupancyItemPtr, nPage, 0);
+      nItemType = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridOccupancy(pInventory_00, pCursorItem_lcl, gpInventoryContextUi, gaInventorySelectState, eInvPage, &nOccupancyItemPtr, nPage, 0);
       if (!nItemType) {
         return bReturnValue;
       }
@@ -9551,16 +9555,16 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
         return bReturnValue;
       }
       if (!nOccupancyItemPtr) {
-        pInvWork = (D2InventoryStrc*)-1;
+        nTargetItemGUID = -1;
       } else {
-        pInvWork = (D2InventoryStrc*)nOccupancyItemPtr->nUnitGUID;
+        nTargetItemGUID = nOccupancyItemPtr->nUnitGUID;
       }
 
       /* 1f [DWORD cursor item id] [DWORD buffer item id] [DWORD xpos] [DWORD ypos] */ nPacketId = 0x1f;
       pTargetItem = (D2UnitStrc*)gpInventoryContextUi;
       dwPacketArg4 = gaInventorySelectState;
       send_place_item:
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(nPacketId, pCursorItem_lcl->nUnitGUID, (int32_t)pInvWork, (int32_t)pTargetItem, dwPacketArg4);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(nPacketId, pCursorItem_lcl->nUnitGUID, nTargetItemGUID, (int32_t)pTargetItem, dwPacketArg4);
     } else {
       place_or_use_on_item:
       if (!targetItem || nCollisionCount != 1) {
@@ -9575,8 +9579,8 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
           }
         }
 
-        INV_CalcGridCellFromMouse(pCursorItem_lcl, x, y, (uint32_t*)&pInventory, (uint32_t*)&pUnit, &pInvLayout->slotWidth);
-        nItemType = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInvWork, pCursorItem_lcl, (int32_t)pInventory, (int32_t)pUnit, eInvPage, (D2UnitStrc**)&nGridCellY, (int*)&nGridCellX, nPage);
+        INV_CalcGridCellFromMouse(pCursorItem_lcl, x, y, (uint32_t*)&nInventory, (uint32_t*)&pUnit, &pInvLayout->slotWidth);
+        nItemType = D2Common::INVENTORY::Inventory::INVENTORY_CheckGridCollisions(pInventory_00, pCursorItem_lcl, nInventory, (int32_t)pUnit, eInvPage, (D2UnitStrc**)&nGridCellY, (int*)&nGridCellX, nPage);
         if (!nItemType) {
           return bReturnValue;
         }
@@ -9594,7 +9598,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
         /* Insert item into buffer 18 [DWORD id] [DWORD xpos] [DWORD ypos] [DWORD
                          buffer] */ dwPacketArg4 = (uint8_t)nPage;
         nPacketId = 0x18;
-        pInvWork = pInventory;
+        nTargetItemGUID = nInventory;
         pTargetItem = pUnit;
         goto send_place_item;
       }
@@ -9634,13 +9638,13 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
           if (nCheckResult) {
             nTargetSuffix = D2Common::ITEMS::Items::GetMagicSuffix(targetItem, 0);
             uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pCursorItem_lcl, 0);
-            pInvWork = pInventory;
+            pInventory_00 = pInventory;
             if (uVar1 == nTargetSuffix) {
               nItemType = UNIT::PlayerIsUnInterruptable(pCursorItem_lcl);
-              pInvWork = pInventory;
+              pInventory_00 = pInventory;
               if (!nItemType) {
                 nCallResult = INV_CheckActionThrottle();
-                pInvWork = pInventory;
+                pInventory_00 = pInventory;
                 if (nCallResult && g_nCurrentInventoryPage != 0xb) {
                   SpellSel::SPELLSEL_ClearChargedSkillBindings();
                   if (!targetItem) {
@@ -9654,7 +9658,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
                   Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(targetItem), nullptr, 0, 0, 0);
                   nGridCellY = 0;
                   bReturnValue = 1;
-                  pInvWork = pInventory;
+                  pInventory_00 = pInventory;
                 }
               }
             }

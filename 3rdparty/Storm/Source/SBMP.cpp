@@ -380,7 +380,7 @@ static int __stdcall SBMP_LoadFromMemory(uint8_t * pData, uint32_t dataSize, uin
       return 1;
     }
 
-    bPaletteDecoded = SBMP_DecodeTGAPixels(pData + (uint32_t)*pData + nColorMapSize + 0x12, pData, (int)(pData + (dataSize - (intptr_t)(pData + (uint32_t)*pData + nColorMapSize + 0x12))), pixels, nMaxPixelBytes);
+    bPaletteDecoded = SBMP_DecodeTGAPixels(pData + (uint32_t)*pData + nColorMapSize + 0x12, pData, (int)(pData - (pData + (uint32_t)*pData + nColorMapSize + 0x12) + dataSize), pixels, nMaxPixelBytes);
     if (bPaletteDecoded) {
       return 1;
     }

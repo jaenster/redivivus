@@ -490,14 +490,6 @@ BOOL __fastcall SendToClientLocal(D2QServerStrc * pQServer, D2QServerClientConne
 
 // NOTE: Register params: pQServer (ECX): D2QServerStrc *, nWorkerIndex (EDX): int
 int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWorkerIndex, uint32_t dwTimeoutMs) {
-    // Frame slots -20..-12 are ONE object: &dwBytesTransferred is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwBytesTransferred;
-      uint32_t ulCompletionKey;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     D2QServerClientPacketStrc* pMemoryToFree;
     BOOL bGqcsResult;
     char* dwLogMsg2;
@@ -507,6 +499,8 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
     D2QServerClientConnectionStrc* pClient;
     bool bIsWriteOverlapped;
     bool bIsReadOverlapped;
+    DWORD dwBytesTransferred;
+    uint32_t ulCompletionKey;
     LPOVERLAPPED pOverlapped;
     uint8_t byOverlapFlags;
     CRITICAL_SECTION* pClientLock;
@@ -524,14 +518,14 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
       D2QServerStrc* pQServerRef;
       pQServerRef = pQServer;
       /* DWORD dwMilliseconds for GetQueuedCompletionStatus */ /* LPOVERLAPPED * lpOverlapped for GetQueuedCompletionStatus */ /* PULONG_PTR lpCompletionKey for GetQueuedCompletionStatus */ /* LPDWORD lpNumberOfBytesTransferred for GetQueuedCompletionStatus */ /* HANDLE CompletionPort for GetQueuedCompletionStatus */ pClient = 0;
-      bGqcsResult = GetQueuedCompletionStatus(pQServerRef->aIoCompletionPorts[nWorkerIndex], &__frame0.dwBytesTransferred, (PULONG_PTR)&__frame0.ulCompletionKey, &pOverlapped, dwTimeoutMs);
+      bGqcsResult = GetQueuedCompletionStatus(pQServerRef->aIoCompletionPorts[nWorkerIndex], &dwBytesTransferred, (PULONG_PTR)&ulCompletionKey, &pOverlapped, dwTimeoutMs);
       bIsWriteOverlapped = false;
       bIsReadOverlapped = false;
       if (!bGqcsResult && !pOverlapped) {
         handle_completion:
         dwTickStart = GetLastError();
         if (bGqcsResult) {
-          if (!__frame0.dwBytesTransferred) {
+          if (!dwBytesTransferred) {
             if (bIsWriteOverlapped) {
               dwLogMsg2 = "READ";
             } else {
@@ -577,7 +571,7 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
 
             /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pClient->clientLock);
             pClient->dwReadFlags &= ~QSRV_READFLAG_PENDING_IO;
-            pClient->nBytesRead += __frame0.dwBytesTransferred;
+            pClient->nBytesRead += dwBytesTransferred;
             nHighResTime = LogManager::LOGMGR_GetHighResolutionTime();
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pClient->dwLastRecvTick = nHighResTime;
             LeaveCriticalSection(&pClient->clientLock);
@@ -605,7 +599,7 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
 
         RemoveClientAndClearLog(pQServerLocal, pClient);
       } else {
-        pClient = FindClientByClientId(pQServerRef, __frame0.ulCompletionKey);
+        pClient = FindClientByClientId(pQServerRef, ulCompletionKey);
         if (pClient) {
           byOverlapFlags = (uint8_t)pOverlapped[1].Internal;
           pClientFromOverlapped = 0;
@@ -679,6 +673,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     HANDLE hThread;
     char optTcpNoDelay[4];
     sockaddr bindAddr;
+    uint32_t* pIocp2;
     uint32_t nPortLocal = nPort;
     int32_t pIocp = (int32_t)CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
     if (!(HANDLE)pIocp) {
@@ -732,12 +727,12 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
         ErrorManager::StubHook1(pQServer->aAcceptThreadIds[nResult], hThread);
         if (pQServer->bUseDedicatedIoWorkers) {
           pThreadArgs = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\QServer\\QServerNT.cpp", 0xb5);
-          pIocp = (int32_t)(pQServer->aIoWorkerThreadIds + nResult);
+          pIocp2 = (uint32_t*)(pQServer->aIoWorkerThreadIds + nResult);
           /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ *pThreadArgs = (uint32_t)(uintptr_t)pQServer;
           pThreadArgs[1] = nResult;
-          hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp);
+          hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp2);
           pQServer->aIoWorkerThreadHandles[nResult] = hThread;
-          ErrorManager::StubHook1(*(uint32_t*)pIocp, hThread);
+          ErrorManager::StubHook1(*pIocp2, hThread);
         }
 
         return hListenSocket;

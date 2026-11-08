@@ -386,7 +386,11 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
     char* pszScan;
     bool bTokenMatch;
     char* pszPadded;
-    uint32_t nPszPadded;
+    int nOutput;
+    int nPszPadded;
+    uint32_t nPszPadded2;
+    int nPszPadded3;
+    uint32_t nPszPadded4;
     D2CubeOutputStrc* pOutputCopy;
     pOutputCopy = pOutput;
     if (*pszField == '\"') {
@@ -444,18 +448,18 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
               pOutputCopy->nType = 0xfe;
             } else {
               if ((uint32_t)(int)strlen(pszItemCodeField) <= 4) {
-                CUBE_PadItemCodeString(pszItemCodeField, (char*)&pszPadded);
-                pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine((uint32_t)pszPadded, (int*)&pszPadded);
+                CUBE_PadItemCodeString(pszItemCodeField, (char*)&nPszPadded4);
+                pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nPszPadded4, (int*)&nPszPadded3);
                 if (pItemsTxt) {
                   pOutputCopy->nType = 0xfc;
-                  pOutputCopy->nItemClassId = (uint16_t)(uintptr_t)pszPadded;
+                  pOutputCopy->nItemClassId = (uint16_t)nPszPadded3;
                   pszCursor = szPaddedCode;
                   goto parse_modifiers;
                 }
               }
               if ((uint32_t)(int)strlen(pszItemCodeField) <= 4) {
-                CUBE_PadItemCodeString(pszItemCodeField, (char*)&nPszPadded);
-                nItemTypeClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, nPszPadded, 0);
+                CUBE_PadItemCodeString(pszItemCodeField, (char*)&nPszPadded2);
+                nItemTypeClassId = Fog::Src::Excel::GetClassIdFromName(DATATBLS::MonsterTbls::sgtDataTable.pTxtItemTypesLink, nPszPadded2, 0);
                 if (nItemTypeClassId >= 0) {
                   pOutputCopy->nType = 0xfd;
                   pOutputCopy->nItemClassId = (uint16_t)nItemTypeClassId;
@@ -473,22 +477,22 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
                   return;
                 }
 
-                DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItems[nLinkIndex].dwItemCode, (int*)&pOutput);
+                DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItems[nLinkIndex].dwItemCode, (int*)&nOutput);
                 pOutputCopy->wFlagsAndUpgrade |= 8;
                 pOutputCopy->nType = 0xfc;
                 pOutputCopy->nQuality = 5;
                 pOutputCopy->nUniqueItemId = (short int)nLinkIndex + 1;
-                pOutputCopy->nItemClassId = (uint16_t)(uintptr_t)pOutput;
+                pOutputCopy->nItemClassId = (uint16_t)nOutput;
                 pOutputCopy->nILvl = (uint8_t)DATATBLS::MonsterTbls::sgtDataTable.pTxtSetItems[nLinkIndex].lvl;
                 return;
               }
 
-              DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItems[nLinkIndex].dwItemCode, (int*)&pszPadded);
+              DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItems[nLinkIndex].dwItemCode, (int*)&nPszPadded);
               pOutputCopy->wFlagsAndUpgrade |= 8;
               pOutputCopy->nType = 0xfc;
               pOutputCopy->nQuality = 7;
               pOutputCopy->nUniqueItemId = (short int)nLinkIndex + 1;
-              pOutputCopy->nItemClassId = (uint16_t)(uintptr_t)pszPadded;
+              pOutputCopy->nItemClassId = (uint16_t)nPszPadded;
               pOutputCopy->nILvl = (uint8_t)DATATBLS::MonsterTbls::sgtDataTable.pTxtUniqueItems[nLinkIndex].lvl;
               pszCursor = szPaddedCode;
             }

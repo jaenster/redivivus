@@ -18,19 +18,19 @@
 struct D2UnitStrc;
 #ifndef RECON_FPTD_fnCUnitEventCallback
 #define RECON_FPTD_fnCUnitEventCallback
-typedef int32_t (__fastcall *fnCUnitEventCallback)(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwnerUnit, uint32_t dwArg1, uint32_t dwArg2, uint32_t dwEventData1, uint32_t dwEventData2);
+typedef int32_t (__fastcall *fnCUnitEventCallback)(int nClientEvent, struct D2UnitStrc * pOwnerUnit, struct D2UnitStrc * pMissile, uint32_t dwArg2, uint32_t dwEventData1, uint32_t dwEventData2);
 #endif
 
 // Data types
 #ifndef D2_DEFINED_D2CUnitEventStrc
 #define D2_DEFINED_D2CUnitEventStrc
 struct D2CUnitEventStrc {
-    /* 0x00 */ struct D2UnitStrc * pUnit;
+    /* 0x00 */ int nClientEvent;
     /* 0x04 */ int nEventType;
     /* 0x08 */ int nEventState;
     /* 0x0C */ uint32_t dwEventData1;
     /* 0x10 */ uint32_t dwEventData2;
-    /* 0x14 */ int32_t (__fastcall *pfnCallback)(struct D2UnitStrc *, struct D2UnitStrc *, uint32_t, uint32_t, uint32_t, uint32_t); // dispatched event callback (__fastcall: ECX=pUnit, EDX=pOwnerUnit)
+    /* 0x14 */ int32_t (__fastcall *pfnCallback)(int, struct D2UnitStrc *, struct D2UnitStrc *, uint32_t, uint32_t, uint32_t); // dispatched event callback (__fastcall: ECX=pUnit, EDX=pOwnerUnit)
     /* 0x18 */ struct D2CUnitEventStrc * pNext;
     /* 0x1C */ struct D2CUnitEventStrc * pPrev;
 };
@@ -44,7 +44,7 @@ namespace D2Client::UNIT::CUnitEvent {
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall FreeEventList(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\CUnitEvent.cpp
-struct D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(struct D2UnitStrc * pUnit, struct D2UnitStrc * pEventUnit, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int nEventType, int nEventState);
+struct D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(struct D2UnitStrc * pUnit, int nClientEvent, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int nEventType, int nEventState);
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall CUNITEVENT_RemoveByTypeAndState(struct D2UnitStrc * pUnit, int32_t nEventType, int32_t nEventState);
 #endif // D2_MODULE_D2Client

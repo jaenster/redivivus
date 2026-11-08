@@ -467,7 +467,6 @@
       ],
       "usedTypes": [
         "D2ChatDlgUnknown_0x10",
-        "LPRECT",
         "int32_t",
         "uint32_t"
       ]
@@ -506,7 +505,6 @@
       ],
       "usedTypes": [
         "D2ChatDlgUnknown_0x10",
-        "LPRECT",
         "int32_t"
       ]
     },

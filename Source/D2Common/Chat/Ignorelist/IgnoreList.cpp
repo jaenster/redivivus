@@ -64,19 +64,21 @@ int32_t __thiscall AppendLineToFile(::IgnoreList * pThis, char * szLine) {
 
 // Writes the ignore list to its file: one ignored name pattern per line, then each ignored account prefixed with '!'.
 int32_t __thiscall SaveToFile(::IgnoreList * pThis) {
+    intptr_t uEntryOffset;
+    intptr_t uAccountEntry;
     FILE* pFile = fopen(pThis->szIgnoreFilePath, "w");
     if (!pFile) {
       return 0;
     }
 
-    uint32_t uEntryOffset = pThis->tIgnoredPatterns.tFullList.m_terminator.m_next;
-    for (uEntryOffset = (int)uEntryOffset <= 0 ? 0 : uEntryOffset; 0 < (int)uEntryOffset; uEntryOffset = *(uint32_t*)(pThis->tIgnoredPatterns.tFullList.m_linkoffset + uEntryOffset + 4)) {
+    uint32_t uVar1 = pThis->tIgnoredPatterns.tFullList.m_terminator.m_next;
+    for (uEntryOffset = (int)uVar1 <= 0 ? 0 : uVar1; 0 < uEntryOffset; uEntryOffset = *(int*)(pThis->tIgnoredPatterns.tFullList.m_linkoffset + uEntryOffset + 4)) {
       fprintf(pFile, "%s\n", *(uint32_t*)(uEntryOffset + 0x14));
     }
 
-    uEntryOffset = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
-    for (uEntryOffset = (int)uEntryOffset <= 0 ? 0 : uEntryOffset; 0 < (int)uEntryOffset; uEntryOffset = *(uint32_t*)(pThis->tIgnoredAccounts.tFullList.m_linkoffset + uEntryOffset + 4)) {
-      fprintf(pFile, "!%s\n", *(uint32_t*)(uEntryOffset + 0x14));
+    uVar1 = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
+    for (uAccountEntry = (int)uVar1 <= 0 ? 0 : uVar1; 0 < uAccountEntry; uAccountEntry = *(int*)(pThis->tIgnoredAccounts.tFullList.m_linkoffset + uAccountEntry + 4)) {
+      fprintf(pFile, "!%s\n", *(uint32_t*)(uAccountEntry + 0x14));
     }
 
     fclose(pFile);
@@ -149,20 +151,20 @@ int32_t __thiscall RemoveByAccountName(::IgnoreList * pThis, char * szAccountNam
 int32_t __thiscall CheckAccountNameIgnored(::IgnoreList * pThis, char * szAccountName) {
     int _bIsEnabled;
     bool bIsEnabled;
-    char* pcMatch;
     ::StringEntryNode* pCurEntry;
     char szAccountLower[256];
     char szPatternLower[256];
+    intptr_t nFirstLink;
     if (szAccountName && *szAccountName != '\0') {
-      uint32_t uVar1;
+      char* pcMatch;
       _bIsEnabled = pThis->_vfptr->GetPersistentSetting(pThis);
       if (_bIsEnabled) {
         pCurEntry = pThis->tIgnoredAccounts.Ptr(szAccountName);
         if (!pCurEntry) {
           Storm::Source::SSTR::SStrCopy(szAccountLower, szAccountName, 0x7fffffff);
           Storm::Source::SSTR::SStrLower(szAccountLower);
-          uVar1 = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
-          pCurEntry = (::StringEntryNode*)((int)uVar1 <= 0 ? 0 : uVar1);
+          nFirstLink = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
+          pCurEntry = (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
           while (true) {
             if ((intptr_t)pCurEntry <= 0) {
               return 0;

@@ -19,8 +19,10 @@
       ],
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -40,6 +42,7 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "uint32_t"
       ]
     },
@@ -81,7 +84,7 @@
         "MappingEntryNode",
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -99,6 +102,7 @@
       ],
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSLink<MappingEntryNode>",
         "uint32_t"
       ]
     },
@@ -137,7 +141,8 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
-        "uint32_t"
+        "TSLink<MappingEntryNode> *",
+        "intptr_t"
       ]
     },
     {
@@ -159,6 +164,7 @@
         "MappingEntryNode",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "int32_t",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -180,6 +186,8 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -224,6 +232,7 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "uint32_t"
       ]
     },
@@ -248,6 +257,7 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "uint32_t"
       ]
     },
@@ -270,6 +280,7 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "uint32_t"
       ]
     },
@@ -325,6 +336,7 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "TSLink<MappingEntryNode> *",
         "uint32_t"
       ]
     },
@@ -346,9 +358,10 @@
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "int32_t",
-        "pfnEHHandlerRoutine",
-        "uint32_t"
+        "intptr_t",
+        "pfnEHHandlerRoutine"
       ]
     },
     {
@@ -411,6 +424,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -529,6 +544,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -595,6 +612,7 @@
         "MappingEntryNode",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "TSLink<MappingEntryNode>",
+        "TSLink<MappingEntryNode> *",
         "int32_t",
         "uint32_t"
       ]

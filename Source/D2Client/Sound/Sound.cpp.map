@@ -157,6 +157,9 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc"
       ]
     },
     {
@@ -312,7 +315,7 @@
       ],
       "usedTypes": [
         "D2SoundChannelStrc",
-        "int32_t"
+        "intptr_t"
       ]
     },
     {

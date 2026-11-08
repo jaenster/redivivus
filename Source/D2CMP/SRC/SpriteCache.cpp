@@ -236,7 +236,7 @@ void __fastcall SPRITECACHE_ReleaseHashEntry(D2GfxHashEntryStrc * pHashEntry) {
         exit(-1);
       }
 
-      (*gpfnSpriteCacheValidateCallback)((void*)pDVar1->eUnitType, (void*)pDVar1->nClassId, (void*)pDVar1->nMode);
+      (*gpfnSpriteCacheValidateCallback)(pDVar1->eUnitType, pDVar1->nClassId, pDVar1->nMode);
     }
 
     GfxHash::GFX_UnlinkCacheEntry(D2GfxMemoryStrc_0089db60.pMemory, gaGfxHashTable, pHashEntry);
@@ -736,7 +736,7 @@ static D2CelFileCacheEntryStrc * __stdcall SPRITECACHE_LoadDCC(char * szText, ch
         return nullptr;
       }
 
-      pNewHashEntry = CelDataHash::CELDATAHASH_AllocEntry((D2PoolManagerStrc*)gCelDataCacheLru.pAllocator, (D2CelDataHashTableStrc*)gaCelDataHashTable, 0, szCelName);
+      pNewHashEntry = CelDataHash::CELDATAHASH_AllocEntry((D2PoolManagerStrc*)gCelDataCacheLru.pAllocator, (D2CelDataHashTableStrc*)gaCelDataHashTable, nullptr, szCelName);
       if (!pNewHashEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x413);
         exit(-1);

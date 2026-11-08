@@ -1348,8 +1348,8 @@ void __fastcall dShadowPass(D2GameViewStrc * pGameView) {
     uint8_t byRed;
     uint8_t byGreen;
     uint8_t byBlue;
+    D2DrlgTileDataStrc* pWallTileEntry;
     D2Wall2DrawEntryStrc* pShadowNode;
-    int* pWallTileEntry;
     int nGridCount = pGameView->sWall2.nWall2GridDim;
     nGridCount *= nGridCount;
     pWall2Entry = pGameView->sWall2.pWall2;
@@ -1366,8 +1366,8 @@ void __fastcall dShadowPass(D2GameViewStrc * pGameView) {
             if (bIsPerspective) {
               D2gfx::D2GFX::D2GFX_DrawShadowTile(*(D2TileLibraryEntryStrc**)((char*)pShadowNode->pData + 0x18), pShadowNode->nX, pShadowNode->nY, 4, nScreenPanels);
             } else {
-              pWallTileEntry = (int*)pShadowNode->pData;
-              D2gfx::D2GFX::D2GFX_DrawShadowTile((D2TileLibraryEntryStrc*)pWallTileEntry[6], pGameView->pView.left - pGameView->nCenterX + *pWallTileEntry, pWallTileEntry[1] - pGameView->nCenterY + pGameView->pView.top, 4, nScreenPanels);
+              pWallTileEntry = (D2DrlgTileDataStrc*)pShadowNode->pData;
+              D2gfx::D2GFX::D2GFX_DrawShadowTile(pWallTileEntry->pTileLibraryEntry, pGameView->pView.left - pGameView->nCenterX + pWallTileEntry->nScreenX, pWallTileEntry->nScreenY - pGameView->nCenterY + pGameView->pView.top, 4, nScreenPanels);
             }
           } else {
             if (pShadowNode->dwType & 2) {

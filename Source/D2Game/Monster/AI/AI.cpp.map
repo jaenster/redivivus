@@ -949,7 +949,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "fpMonsterAiForEach",
-        "uint32_t"
+        "uint32_t",
+        "uintptr_t"
       ]
     },
     {
@@ -973,7 +974,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "fpMonsterAiForEach",
-        "uint32_t"
+        "uint32_t",
+        "uintptr_t"
       ]
     },
     {
@@ -1000,7 +1002,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "fpMonsterAiForEach",
-        "uint32_t"
+        "uint32_t",
+        "uintptr_t"
       ]
     },
     {
@@ -1042,7 +1045,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "fpMonsterAiForEach",
-        "uint32_t"
+        "uint32_t",
+        "uintptr_t"
       ]
     },
     {
@@ -1068,7 +1072,8 @@
         "SGAMEDATA",
         "fpMonsterAiForEach",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uintptr_t"
       ]
     },
     {
@@ -3426,6 +3431,7 @@
         "CheckMonsterType"
       ],
       "usedTypes": [
+        "D2AiMinionHealScanStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
@@ -3459,14 +3465,13 @@
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
+        "D2AiMinionHealScanStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
-        "int64_t",
         "uint32_t"
       ]
     },
@@ -6261,7 +6266,7 @@
         "MONSTERAI_IsValidResurrectionTarget"
       ],
       "usedTypes": [
-        "D2MonsterAiParameterStruct",
+        "D2AiShadowMasterScanStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterClassId",
@@ -6286,7 +6291,8 @@
       "usedTypes": [
         "D2DataTableTxtStrc",
         "D2UnitStrc",
-        "eD2States"
+        "eD2States",
+        "uint8_t"
       ]
     },
     {
@@ -6374,10 +6380,10 @@
       ],
       "usedTypes": [
         "D2AiParamStrc",
+        "D2AiShadowMasterScanStrc",
         "D2AiSkillCandidateStrc",
         "D2MissilesTxt",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2SeedStrc",
         "D2SkillStrc",
         "D2SkillsTxt",
@@ -7040,16 +7046,15 @@
         "ResetCombatTargetAndIdle"
       ],
       "usedTypes": [
+        "D2AiMinionHealScanStrc",
         "D2AiParamStrc",
         "D2MonStatsTxt",
-        "D2MonsterAiParameterStruct",
         "D2RoomStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
         "int32_t",
-        "int64_t",
         "uint32_t"
       ]
     },

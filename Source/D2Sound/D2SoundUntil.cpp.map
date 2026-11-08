@@ -16,6 +16,9 @@
       "calledFunctions": [
         "SOUND_sD2SoundSmp_Alloc",
         "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "intptr_t"
       ]
     },
     {
@@ -53,7 +56,7 @@
       ],
       "usedTypes": [
         "D2SoundListNodeStrc",
-        "int32_t"
+        "intptr_t"
       ]
     },
     {

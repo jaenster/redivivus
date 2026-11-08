@@ -211,8 +211,11 @@
         "WND_InsertListNode"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -249,6 +252,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -303,6 +307,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<WNDREC>",
+        "TSLink<WNDREC> *",
         "TSList<WNDREC, TSGetLink<WNDREC>>",
         "uint32_t"
       ]
@@ -323,6 +329,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -400,6 +407,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormWndRecStrc",
         "uint32_t"
       ]
@@ -420,6 +428,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "StormWndRecStrc",
         "uint32_t"
@@ -754,6 +763,9 @@
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
         "Unreferenced_00420da0"
+      ],
+      "usedTypes": [
+        "BigBuffer"
       ]
     },
     {
@@ -807,6 +819,7 @@
         "WND_EntryArray_FreeEntries"
       ],
       "usedTypes": [
+        "BigStack",
         "int32_t"
       ]
     },
@@ -824,6 +837,8 @@
         "WND_EntryArray_AllocOrReuse"
       ],
       "usedTypes": [
+        "BigBuffer",
+        "BigStack",
         "int32_t"
       ]
     },

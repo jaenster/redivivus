@@ -39,6 +39,7 @@
         "TILEPROJECT_GetProjectId"
       ],
       "usedTypes": [
+        "D2TileLibraryHeaderStrc",
         "int32_t"
       ]
     },
@@ -147,6 +148,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2TileLibraryEntryStrc",
         "int32_t"
       ]
     },

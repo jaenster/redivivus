@@ -1244,12 +1244,12 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
     }
 }
 
-int32_t __fastcall DC6_AssignParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit, DC6 * pDC6, int32_t nDirection, int32_t nFrameNumber, int * pnOutItemClassId, uint8_t nComponentType, D2UnitStrc * pEquipContext) {
+int32_t __fastcall DC6_AssignParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit, DC6 * pDC6, int32_t nDirection, int32_t nFrameNumber, int * pnOutItemClassId, uint8_t nComponentType, int32_t nMode) {
     pGfxData->pDC6 = pDC6;
     pGfxData->nDirection = nDirection;
     pGfxData->nFrameNumber = nFrameNumber;
     pGfxData->nComponentType = nComponentType;
-    int32_t nResult = GFXUTIL_BuildCofParams(pGfxData, pUnit, (int32_t)pEquipContext, pnOutItemClassId);
+    int32_t nResult = GFXUTIL_BuildCofParams(pGfxData, pUnit, nMode, pnOutItemClassId);
     return nResult;
 }
 

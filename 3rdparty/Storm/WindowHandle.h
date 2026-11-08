@@ -90,11 +90,11 @@ int Unreferenced_00420ae0();
 LRESULT __stdcall GenericWndProc(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam);
 uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId);
 int __fastcall Unreferenced_00420d80(uint32_t * param_1);
-int __fastcall Unreferenced_00420da0(int param_1);
+int __fastcall Unreferenced_00420da0(struct BigBuffer * param_1);
 uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes);
 struct BigBuffer * __thiscall WND_EntryArray_AllocNext(struct BigStack * pThis, int * pnCount);
-void __thiscall WND_EntryArray_FreeEntries(int32_t pThis, int32_t nFreeCount);
-int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntry, int32_t bAllocNew);
+void __thiscall WND_EntryArray_FreeEntries(struct BigStack * pThis, int32_t nFreeCount);
+struct BigBuffer * __thiscall WND_EntryArray_AllocOrReuse(struct BigStack * pThis, struct BigBuffer * pReuseEntry, int32_t bAllocNew);
 void StaticInit_gWndTrackingList();
 // Runs at exit: removes every element from the tracked window list, then unlinks the list head itself.
 void StaticFini_gWndTrackingList();

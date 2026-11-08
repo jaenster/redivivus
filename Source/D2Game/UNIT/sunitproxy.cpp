@@ -116,20 +116,20 @@ void __fastcall SUNITPROXY_AddItemToNpcProxy(D2UnitStrc * pNpcUnit, ::SGAMEDATA 
 }
 
 // @sourcefile .\UNIT\sunitproxy.cpp
-static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGame, void * * pTradeList) {
+static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGame, D2NpcItemTablesStrc * pTradeList) {
     void* nNpcTradeIdx;
     if (nNpcTableIdx >= 0x11) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
       exit(-1);
     }
 
-    pTradeList[1] = (void*)gaNpcItemTables[nNpcTableIdx].nTradeCount;
-    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
-    *pTradeList = nNpcTradeIdx;
-    memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pTradeItems, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc);
-    pTradeList[3] = (void*)gaNpcItemTables[nNpcTableIdx].nQuestCount;
+    pTradeList->nTradeCount = gaNpcItemTables[nNpcTableIdx].nTradeCount;
+    uint8_t* pAllocBuffer = (uint8_t*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
+    pTradeList->pTradeItems = pAllocBuffer;
+    memcpy(pAllocBuffer, gaNpcItemTables[nNpcTableIdx].pTradeItems, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc);
+    pTradeList->nQuestCount = gaNpcItemTables[nNpcTableIdx].nQuestCount;
     nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4, ".\\UNIT\\sunitproxy.cpp", 0xab);
-    pTradeList[2] = nNpcTradeIdx;
+    pTradeList->pQuestItems = nNpcTradeIdx;
     memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pQuestItems, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4);
 }
 
@@ -535,58 +535,58 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
                     if (iVar1 != 0x195) {
                       switch (iVar1) {
                         case 0x101:
-                          SUNITPROXY_InitNpcTradeItems(0xc, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(0xc, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                         break;
                         case 0xfe:
-                          SUNITPROXY_InitNpcTradeItems(7, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(7, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->flags0x0C = 1;
                         break;
                         case 0x9a:
-                          SUNITPROXY_InitNpcTradeItems(2, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(2, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                         break;
                         case 0xb2:
-                          SUNITPROXY_InitNpcTradeItems(3, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(3, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                         break;
                         case 0xfc:
-                          SUNITPROXY_InitNpcTradeItems(10, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(10, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                         break;
                         case 0xfd:
-                          SUNITPROXY_InitNpcTradeItems(6, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(6, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                         break;
                         case 0x94:
-                          SUNITPROXY_InitNpcTradeItems(0, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(0, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         break;
                         case 0xb1:
-                          SUNITPROXY_InitNpcTradeItems(5, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(5, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         break;
                         case 0xca:
-                          SUNITPROXY_InitNpcTradeItems(4, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(4, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         break;
                         case 0xff:
-                          SUNITPROXY_InitNpcTradeItems(8, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(8, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         break;
                         case 0x93:
                           nTradeItemIdx = 1;
                         goto init_trade_with_all_flags;
                         case 199:
-                          SUNITPROXY_InitNpcTradeItems(9, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                          SUNITPROXY_InitNpcTradeItems(9, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                         ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->flags0x0C = 1;
                         break;
                       }
                     } else {
                       nTradeItemIdx = 0xd;
                       init_trade_with_all_flags:
-                      SUNITPROXY_InitNpcTradeItems(nTradeItemIdx, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                      SUNITPROXY_InitNpcTradeItems(nTradeItemIdx, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                       ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                       ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                       ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->flags0x0C = 1;
@@ -594,19 +594,19 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
                   } else {
                     switch (iVar1) {
                       case 0x1ff:
-                        SUNITPROXY_InitNpcTradeItems(0xf, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                        SUNITPROXY_InitNpcTradeItems(0xf, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                       ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 1;
                       ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 1;
                       break;
                       case 0x202:
-                        SUNITPROXY_InitNpcTradeItems(0xf, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                        SUNITPROXY_InitNpcTradeItems(0xf, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                       ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->flags0x0C = 1;
                       break;
                       case 0x200:
                         nTradeItemIdx = 0x10;
                       goto init_trade_with_all_flags;
                       case 0x201:
-                        SUNITPROXY_InitNpcTradeItems(0xe, pGame, (void**)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
+                        SUNITPROXY_InitNpcTradeItems(0xe, pGame, (D2NpcItemTablesStrc*)&((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.pTradeList1);
                       break;
                     }
                   }

@@ -1533,7 +1533,7 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "D2UnitDataPlayerStrc",
+        "D2UnitDataMonsterStrc",
         "D2UnitStrc"
       ]
     },
@@ -2073,6 +2073,7 @@
         "WARDEN_DecryptBuffer"
       ],
       "usedTypes": [
+        "D2WardenModuleStrc",
         "int32_t",
         "pfnWardenCreateInterface",
         "uint8_t"

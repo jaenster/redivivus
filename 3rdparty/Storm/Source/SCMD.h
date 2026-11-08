@@ -44,6 +44,14 @@ struct ARGLIST {
 
 #endif // D2_DEFINED_ARGLIST
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
+struct CMDERROR {
+    /* 0x00 */ uint32_t dwErrorCode;
+    /* 0x04 */ char * pszItem;
+    /* 0x08 */ char * pszErrorText;
+};
+
+#endif // D2_MODULE_Storm
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct __attribute__((packed)) StormCmdArgDefStrc {
     /* 0x00 */ struct StormCmdArgDefStrc * pPrev; // list link; SCmdRegisterArgument @006c4580 writes *pNewNode and pNewNode[1] as the two link words
     /* 0x04 */ struct StormCmdArgDefStrc * pNext; // walked by SCMD_ParseArgument off gpStormCmdListHeadSlash / gpStormCmdListHeadBackslash
@@ -86,7 +94,7 @@ int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnkn
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 int __fastcall Unreferenced_006c4010(struct StormLinkStrc * param_1);
-uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset);
+uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, intptr_t nBaseOffset);
 int __fastcall Unreferenced_006c40b0(struct StormLinkedListStrc * param_1);
 int __fastcall Unreferenced_006c40d0(struct StormLinkStrc * param_1);
 ::SCMD * __thiscall SCMD_GetListHead(::SCMD * pThis, ::SCMD * pNode);

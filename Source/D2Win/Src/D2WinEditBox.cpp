@@ -514,7 +514,7 @@ static void __stdcall D2WINEDITBOX_HandleTextSelection(int * pEditBox, int * pX,
 
           bLineWrapped = true;
           locate_cursor_and_advance:
-          nPcVar1 = (int)(szEditText + (pEditBox[0x97] - (intptr_t)pcVar1));
+          nPcVar1 = (int)(szEditText - pcVar1 + pEditBox[0x97]);
           if (*pX == -1 && nPcVar1 >= 0 && nPcVar1 <= nLoopCount) {
             nClampedX = nLineWidth;
             if (nPcVar1) {
@@ -719,7 +719,7 @@ BOOL __stdcall D2WINEDITBOX_CreateControl(D2ControlMsg * pControl, int eFormType
             }
 
             pCurrentDrawOp = pEditBox->nCursorIndex;
-            pEditBox->nCursorIndex = (int32_t)(pszLineStart + (eRelX - (intptr_t)szConvertedText) - 1);
+            pEditBox->nCursorIndex = (int32_t)(pszLineStart - szConvertedText + eRelX - 1);
             bCursorPlaced = true;
           }
           if (bLineWrapped) {
@@ -1098,7 +1098,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         pbClipSrc = (uint8_t*)D2WINEDITBOX_GetTextBuffer();
       pbClipEnd = pbClipSrc;
       pbClipEnd = pbClipEnd + strlen((char*)pbClipEnd) + 1;
-      if ((intptr_t)(pbClipEnd + (nCallbackResult - (intptr_t)(pbClipSrc + 1))) > (int)(pEditBox->nMaxLength - 1)) {
+      if ((int)(pbClipEnd - (pbClipSrc + 1) + nCallbackResult) > (int)(pEditBox->nMaxLength - 1)) {
         return 0;
       }
 
@@ -1726,7 +1726,7 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
             }
 
             strncpy(szLineSegment, pcLineStart, nLineCharCount);
-            pcLineEnd[(intptr_t)(szLineSegment - (intptr_t)pcLineStart)] = '\0';
+            pcLineEnd[(int)(szLineSegment - pcLineStart)] = '\0';
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineSegment, szLineSegment, 0x100);
             D2WinFont::TEXT_CalcTextDimensions(wszLineSegment, &nSelSegWidth, &nSegHeight);
             nSelMin = nX;
@@ -1767,11 +1767,11 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
 
       draw_line_text:
       strncpy(szLineSegment, pcLineStart, nLineCharCount);
-      pcLineEnd[(intptr_t)(szLineSegment - (intptr_t)pcLineStart)] = '\0';
+      pcLineEnd[(int)(szLineSegment - pcLineStart)] = '\0';
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineSegment, szLineSegment, 0x100);
       D2WinFont::DRAW_text(wszLineSegment, nX, nYEnd_00, pEditBox->nMaxValue, 0);
       if (bCursorVisible && !bCursorDrawn) {
-        nPcLineStart = (int)(szFullText + (pEditBox->nCursorIndex - (intptr_t)pcLineStart));
+        nPcLineStart = (int)(szFullText - pcLineStart + pEditBox->nCursorIndex);
         if (nPcLineStart >= 0 && nPcLineStart <= (int)nLineCharCount) {
           nSelMin = nX;
           if (nPcLineStart) {

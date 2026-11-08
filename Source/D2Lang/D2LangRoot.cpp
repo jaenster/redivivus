@@ -304,7 +304,7 @@ uint16_t * __fastcall UTF8_ConvertToWideChar(uint16_t * wszText, char * szText, 
           return wszText;
         }
 
-        nCharWidth = D2Lang::UTF8_DecodeNextChar((uint8_t*)(szText + nBytesConsumed), (uint16_t*)pWOut, (int32_t)(pszScanEnd + (-nBytesConsumed - (intptr_t)(szText + 1))));
+        nCharWidth = D2Lang::UTF8_DecodeNextChar((uint8_t*)(szText + nBytesConsumed), (uint16_t*)pWOut, (int32_t)(pszScanEnd - (szText + 1) - nBytesConsumed));
         nWideCharIdx++;
         pWOut++;
         if (nCharWidth == -1) {

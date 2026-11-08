@@ -46,7 +46,7 @@ namespace D2Win::Forms {
 // Registers window message/command/key handler based on type. Type 0 = message handler (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Register* function.
 void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, int32_t pCallback);
 // Unregisters window message/command/key handler. Type 0 = message (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Unregister* function.
-void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, void * pMessage, void * pCallback);
+void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, void * pCallback);
 // Registers multiple window handlers from array. Each array entry contains {type, message, callback} triplet. Iterates array and calls RegisterWindowHandler for each entry.
 void __fastcall D2WIN_RegisterWindowHandlerArray(HWND hHandle, struct D2WinWndHandlerStrc * pHandlerArray, int32_t nHandlerCount);
 // Unregisters multiple window handlers from array. Iterates array and calls UnregisterWindowHandler for each {type, message, callback} triplet.

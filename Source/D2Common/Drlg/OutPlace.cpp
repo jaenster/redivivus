@@ -38,7 +38,7 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 #endif
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
 #endif
 
 static int gRoadPresetIdLookupTable[24] = {

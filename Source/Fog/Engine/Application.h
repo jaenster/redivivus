@@ -116,7 +116,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList);
 // Enumerates loaded modules into pModuleList: tries DEBUG_EnumerateModulesViaPsapi, then ...ViaToolhelp32, then tail-jumps to ...ViaPEB; returns the first success in AL.
 // Provenance: asm 00404f20..00404f3f; unreferenced in 1.14d (EnumerateAndDumpAllFunctions inlines the same chain at 00402f1f).
 bool __stdcall DEBUG_EnumerateModules(int * pModuleList);
-void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader);
+void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, uint8_t * pOptHeader);
 void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader);
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);

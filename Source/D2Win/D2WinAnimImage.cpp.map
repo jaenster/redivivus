@@ -118,6 +118,7 @@
         "D2WinAnimImage",
         "D2WinAnimImageNotifyStrc",
         "DC6",
+        "DC6 *",
         "int32_t",
         "uint32_t"
       ]

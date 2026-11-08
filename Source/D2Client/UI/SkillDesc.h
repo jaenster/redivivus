@@ -29,7 +29,7 @@ typedef uint32_t eD2Skills;
 typedef uint32_t eD2States;
 #ifndef RECON_FPTD_pfnSkillDescWeaponDmgCalc
 #define RECON_FPTD_pfnSkillDescWeaponDmgCalc
-typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(struct D2UnitStrc * pUnit, int * pnParam, uint32_t * pnOut1, uint32_t dwParam0, uint32_t dwParam1, int32_t nParam, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
+typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(struct D2UnitStrc * pUnit, int * pnParam, uint32_t * pnOut1, int32_t * dwParam0, uint32_t dwParam1, int32_t nParam, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
 #endif
 
 // Data types
@@ -125,14 +125,14 @@ int __stdcall SKILLDESC_AccumulateAuraBonusDmg(struct D2UnitStrc * pUnit, int * 
 uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText);
 void __stdcall SKILLDESC_FormatDecimalRange(uint16_t * wszText, int32_t bPrefixSign);
 int __stdcall SKILLDESC_CalcElemDamageRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pnColor, struct D2SkillStrc * pSkill);
-void __fastcall SKILLDESC_CalcAttackRateForWeapon(struct D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, uint32_t param_1, uint32_t dwParam1, int32_t nSkillLevel, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
+void __fastcall SKILLDESC_CalcAttackRateForWeapon(struct D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, int32_t * param_1, uint32_t dwParam1, int32_t nSkillLevel, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
 void __fastcall SKILLDESC_CalcEquippedAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcCompareAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __stdcall SKILLDESC_CalcDualWieldDmg(struct D2SkillStrc * pSkill, int32_t * param_1, struct D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2);
 void __fastcall SKILLDESC_CalcDualWieldWithAR(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldWithARState(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldSimple(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
-void __fastcall SKILLDESC_DrawDamageWithRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pnColor, int32_t nDamagePctBonus, int32_t nFlatDamageBonus, struct D2SkillStrc * pSkill, uint32_t nSrcDamage, struct D2UnitStrc * pUnit2);
+void __fastcall SKILLDESC_DrawDamageWithRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, int32_t nDamagePctBonus, int32_t nFlatDamageBonus, struct D2SkillStrc * pSkill, uint32_t nSrcDamage, struct D2UnitStrc * pUnit2);
 void __fastcall SKILLDESC_DrawTwoLineText(uint16_t * wszText1, uint16_t * wszText2, int32_t nXLeft, int32_t nYBase, int32_t nXRight, int32_t dwColor1, int32_t dwColor2);
 void __fastcall SKILLDESC_DrawSkillDmgElemental(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 // @sourcefile .\UI\SkillDesc.cpp
@@ -144,7 +144,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType2(struct D2UnitStrc * pUnit, struct D2
 // @sourcefile .\UI\SkillDesc.cpp
 void __fastcall SKILLDESC_DrawSkillDmgType3(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 void __fastcall SKILLDESC_DrawSkillDmgBasic(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
-void __fastcall SKILLDESC_CalcAuraDamageRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pElemType, int32_t nAuraBonusPct, uint32_t dwParam1, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
+void __fastcall SKILLDESC_CalcAuraDamageRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pElemType, int32_t nAuraBonusPct, uint32_t dwParam1, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
 void __fastcall SKILLDESC_DrawSkillDmgAura(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 void __fastcall SKILLDESC_DrawSkillDmgAuraElem(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 void __fastcall SKILLDESC_DrawSkillDmgDualWield(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);

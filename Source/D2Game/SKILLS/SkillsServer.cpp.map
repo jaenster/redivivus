@@ -746,7 +746,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {
@@ -2887,10 +2888,10 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2States",
-        "uint32_t"
+        "eD2States"
       ]
     },
     {

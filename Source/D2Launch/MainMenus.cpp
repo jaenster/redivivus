@@ -87,31 +87,31 @@ int32_t gaMenuFormFontParamsFont8[2] = { 0x8, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormF
 int32_t gaMenuTextBoxScrollbarGeom0[3] = { 0x30, 0x1f5, 0x13f }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom0, "gaMenuTextBoxScrollbarGeom0");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesAssassin[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreateAssassin,
+        /* .ppBaseImage = */ gaDC6CharCreateAssassin,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x3
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAssassin[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x3
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[2],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAssassin[2],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[3],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAssassin[3],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[4],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAssassin[4],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
@@ -119,31 +119,31 @@ FORMS_AnimFrameStrc gaCharSelectAnimFramesAssassin[5] = {
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesAssassin, "gaCharSelectAnimFramesAssassin");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesDruid[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreateDruid,
+        /* .ppBaseImage = */ gaDC6CharCreateDruid,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateDruid[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[2],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateDruid[2],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[3],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateDruid[3],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[4],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateDruid[4],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
@@ -151,31 +151,31 @@ FORMS_AnimFrameStrc gaCharSelectAnimFramesDruid[5] = {
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesDruid, "gaCharSelectAnimFramesDruid");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesAmazon[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreateAmazon,
+        /* .ppBaseImage = */ gaDC6CharCreateAmazon,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x3
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAmazon[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x3
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[2],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAmazon[2],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[3],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAmazon[3],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[4],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateAmazon[4],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
@@ -183,63 +183,63 @@ FORMS_AnimFrameStrc gaCharSelectAnimFramesAmazon[5] = {
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesAmazon, "gaCharSelectAnimFramesAmazon");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesNecromancer[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreateNecromancer,
+        /* .ppBaseImage = */ gaDC6CharCreateNecromancer,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x3
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateNecromancer[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x3
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[2],
-        /* .ppOverlayImage = */ (void*)gaDC6CharCreateNecromancerSel,
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateNecromancer[2],
+        /* .ppOverlayImage = */ gaDC6CharCreateNecromancerSel,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[3],
-        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateNecromancerSel[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateNecromancer[3],
+        /* .ppOverlayImage = */ (DC6**)&gaDC6CharCreateNecromancerSel[1],
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[4],
-        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateNecromancerSel[2],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateNecromancer[4],
+        /* .ppOverlayImage = */ (DC6**)&gaDC6CharCreateNecromancerSel[2],
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     }
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesNecromancer, "gaCharSelectAnimFramesNecromancer");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesBarbarian[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreateBarbarian,
+        /* .ppBaseImage = */ gaDC6CharCreateBarbarian,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateBarbarian[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[2],
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_barbarian_bafws,
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateBarbarian[2],
+        /* .ppOverlayImage = */ &DC6_FrontEnd_barbarian_bafws,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[3],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateBarbarian[3],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[4],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateBarbarian[4],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
@@ -247,63 +247,63 @@ FORMS_AnimFrameStrc gaCharSelectAnimFramesBarbarian[5] = {
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesBarbarian, "gaCharSelectAnimFramesBarbarian");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesSorceress[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreateSorceress,
+        /* .ppBaseImage = */ gaDC6CharCreateSorceress,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateSorceress[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[2],
-        /* .ppOverlayImage = */ (void*)gaDC6CharCreateSorceressSel,
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateSorceress[2],
+        /* .ppOverlayImage = */ gaDC6CharCreateSorceressSel,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[3],
-        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateSorceressSel[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateSorceress[3],
+        /* .ppOverlayImage = */ (DC6**)&gaDC6CharCreateSorceressSel[1],
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[4],
-        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateSorceressSel[2],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreateSorceress[4],
+        /* .ppOverlayImage = */ (DC6**)&gaDC6CharCreateSorceressSel[2],
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     }
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesSorceress, "gaCharSelectAnimFramesSorceress");
 FORMS_AnimFrameStrc gaCharSelectAnimFramesPaladin[5] = {
     {
-        /* .ppBaseImage = */ (void*)gaDC6CharCreatePaladin,
+        /* .ppBaseImage = */ gaDC6CharCreatePaladin,
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[1],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreatePaladin[1],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[2],
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_paladin_pafws,
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreatePaladin[2],
+        /* .ppOverlayImage = */ &DC6_FrontEnd_paladin_pafws,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[3],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreatePaladin[3],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x2
     },
     {
-        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[4],
+        /* .ppBaseImage = */ (DC6**)&gaDC6CharCreatePaladin[4],
         /* .ppOverlayImage = */ nullptr,
         /* .nDrawMode = */ 0x5,
         /* .nFrameDelay = */ 0x1
@@ -311,64 +311,64 @@ FORMS_AnimFrameStrc gaCharSelectAnimFramesPaladin[5] = {
 }; D2_GLOBAL_GUARD(gaCharSelectAnimFramesPaladin, "gaCharSelectAnimFramesPaladin");
 FORMS_AnimFrameStrc gaMainMenuLogoLeftAnimFrames[5] = {
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireLeft,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireLeft,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireLeft,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireLeft,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireLeft,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     }
 }; D2_GLOBAL_GUARD(gaMainMenuLogoLeftAnimFrames, "gaMainMenuLogoLeftAnimFrames");
 FORMS_AnimFrameStrc gaMainMenuLogoRightAnimFrames[5] = {
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireRight,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireRight,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireRight,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireRight,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
-        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .ppBaseImage = */ &DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ &DC6_FrontEnd_D2logoFireRight,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     }
@@ -5992,29 +5992,30 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
     long int nVerMinor;
     D2ControlStrc* pForm4;
     D2ControlStrc* nFlagsOrForm5;
+    uint32_t nFlagsOrForm52;
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
     D2Sound::Src::D2SoundFast::SOUND_StopMusic();
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
     int32_t nReadResult = Storm::Source::SReg::SRegLoadString("Diablo II", "Aux Battle.net", 0, szRegVersion, 100);
     if (nReadResult) {
-      nFlagsOrForm5 = (D2ControlStrc*)0x22;
-      sscanf(szRegVersion, "%ld.%ld.%ld.%ld", &nVerMajor, &nVerMinor, (long int*)&pForm4, (long int*)&nFlagsOrForm5);
-      if ((uintptr_t)nFlagsOrForm5 & 1) {
+      nFlagsOrForm52 = 0x22;
+      sscanf(szRegVersion, "%ld.%ld.%ld.%ld", &nVerMajor, &nVerMinor, (long int*)&pForm4, (long int*)&nFlagsOrForm52);
+      if (nFlagsOrForm52 & 1) {
         byCineLevel = 7;
       } else {
-        if ((char)(uintptr_t)nFlagsOrForm5 < '\0') {
+        if ((char)nFlagsOrForm52 < '\0') {
           byCineLevel = 6;
-        } else if ((uintptr_t)nFlagsOrForm5 & 0x10) {
+        } else if (nFlagsOrForm52 & 0x10) {
           byCineLevel = 5;
         } else {
-          if ((uintptr_t)nFlagsOrForm5 & 8) {
+          if (nFlagsOrForm52 & 8) {
             byCineLevel = 4;
           } else {
-            if ((uintptr_t)nFlagsOrForm5 & 0x40) {
+            if (nFlagsOrForm52 & 0x40) {
               byCineLevel = 3;
             } else {
-              byCineLevel = ((uintptr_t)nFlagsOrForm5 & 4) != 0 ? 2 : 1;
+              byCineLevel = (nFlagsOrForm52 & 4) != 0 ? 2 : 1;
             }
           }
         }
@@ -6164,12 +6165,12 @@ void __stdcall UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons(
 
 bool fpRequiredUserAction() {
     // Static local variables (originally global data)
-    static int fpLoadVideoMpqCallback; D2_STATIC_GUARD_BSS(fpLoadVideoMpqCallback, "D2Launch::MainMenus::fpRequiredUserAction::fpLoadVideoMpqCallback");
+    static fpLoadVideoMpqFiles fpLoadVideoMpqCallback; D2_STATIC_GUARD_BSS(fpLoadVideoMpqCallback, "D2Launch::MainMenus::fpRequiredUserAction::fpLoadVideoMpqCallback");
 
     UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons();
     gbCinematicsMenuShown = 0;
     ::fpInsertPlayCd = 0;
-    fpLoadVideoMpqCallback = (int)D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles;
+    fpLoadVideoMpqCallback = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles;
     gbCdCheckPassed[0] = 1;
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollDisconnectFlagPump);
     FORMS_DestroyList();
@@ -7564,14 +7565,14 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
         pszNameSrc = pszSrc + 4;
         pszDescDst = pszNameSrc;
         pszDescDst = pszDescDst + strlen((char*)pszDescDst) + 1;
-        nPszDescDst = (int)(pszDescDst + (1 - (intptr_t)(pszSrc + 5)));
+        nPszDescDst = (int)(pszDescDst - (pszSrc + 5) + 1);
         pcVar1 = (char*)D2_ALLOC_AT((size_t)nPszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
         pRealmEntry->szName = pcVar1;
         Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, nPszDescDst);
         pszNameSrc += nPszDescDst;
         pszSrc = pszNameSrc;
         pszSrc = pszSrc + strlen((char*)pszSrc) + 1;
-        nPszSrc = (int)(pszSrc + (1 - (intptr_t)(pszNameSrc + 1)));
+        nPszSrc = (int)(pszSrc - (pszNameSrc + 1) + 1);
         pcVar1 = (char*)D2_ALLOC_AT((size_t)nPszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
         pRealmEntry->szDescription = pcVar1;
         Storm::Source::SSTR::SStrCopy(pcVar1, (char*)pszNameSrc, nPszSrc);
@@ -9136,7 +9137,7 @@ static BOOL MAINMENU_IsValidEmailAddress(char * szText) {
       pszDot = Storm::Source::SSTR::SStrChr(pszAtSign, '.');
       if (pszDot && pszAtSign > szText && pszDot > pszAtSign + 1) {
         nTextLen = Storm::Source::SSTR::SStrLen(szText);
-        if ((int)nTextLen > (intptr_t)(pszDot + (1 - (intptr_t)szText))) {
+        if ((int)nTextLen > (int)(pszDot - szText + 1)) {
           bIsValidEmail = 1;
         }
       }

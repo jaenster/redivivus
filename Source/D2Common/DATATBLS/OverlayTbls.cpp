@@ -254,28 +254,35 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
       return 0;
     }
 
-    D2UnitStrc* pCompCodeStr = (D2UnitStrc*)DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
+    uint32_t dwCompCode = DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
     D2RoomStrc* pRoom = Units::UNITS_GetRoom(pUnit);
+    D2UnitStrc* pDVar1 = (D2UnitStrc*)dwCompCode;
     if (pRoom) {
       eAct neAct;
       eLevelId = DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       neAct = Drlg::GetActNoFromLevelNumber(eLevelId);
+      pDVar1 = (D2UnitStrc*)dwCompCode;
       if (neAct == ACT_II) {
         nBaseClassId = MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
         nBaseClassId = MonsterTbls::ValidateClassId(nBaseClassId);
         if (nBaseClassId) {
-          if (nBaseClassId == 0xaa && gnOverlayTblsMaxId[nComponentIdx]) {
-            return gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];
+          pDVar1 = (D2UnitStrc*)dwCompCode;
+          if (nBaseClassId == 0xaa) {
+            pDVar1 = (D2UnitStrc*)dwCompCode;
+            if (gnOverlayTblsMaxId[nComponentIdx]) {
+              return gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];
+            }
           }
         } else {
+          pDVar1 = (D2UnitStrc*)dwCompCode;
           if (gnOverlayTblsCount[nComponentIdx]) {
-            pCompCodeStr = (D2UnitStrc*)gnOverlayTblsCount[nComponentIdx][nVariantIdx];
+            pDVar1 = (D2UnitStrc*)gnOverlayTblsCount[nComponentIdx][nVariantIdx];
           }
         }
       }
     }
 
-    uint32_t nUnit = (uint32_t)pCompCodeStr;
+    uint32_t nUnit = (uint32_t)pDVar1;
     return nUnit;
 }
 

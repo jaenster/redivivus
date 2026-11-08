@@ -1468,7 +1468,8 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
       } while (nStatCount < MonsterTbls::sgtDataTable.nTxtItemStatCostSize);
     }
 
-    nStatOrdinal = 0;
+    int nStatOrdinal2;
+    nStatOrdinal2 = 0x0;
     nStatCount = MonsterTbls::sgtDataTable.nTxtItemStatCostSize;
     if (MonsterTbls::sgtDataTable.nTxtItemStatCostSize > 0) {
       D2ItemStatCostTxt* pDVar1;
@@ -1494,7 +1495,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
               if ((int)(uint32_t)(uint16_t)pDepArrayCur[-1] >= MonsterTbls::sgtDataTable.nTxtItemStatCostSize) {
                 add_op_base_dependent:
                 if (uSlot8.pDepSlot < 0x40) {
-                  pDVar1[nOpBaseStatId].aOpBaseDependents[uSlot8.pDepSlot] = (short int)(uintptr_t)nStatOrdinal;
+                  pDVar1[nOpBaseStatId].aOpBaseDependents[uSlot8.pDepSlot] = (short int)nStatOrdinal2;
                 }
                 break;
               }
@@ -1538,7 +1539,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
                 if (nStatCount >= 0x10) {
                   break;
                 }
-                MonsterTbls::sgtDataTable.pTxtItemStatCost[nOpBaseStatId].aOpRelations[nStatCount].nSourceStat = (short int)(uintptr_t)nStatOrdinal;
+                MonsterTbls::sgtDataTable.pTxtItemStatCost[nOpBaseStatId].aOpRelations[nStatCount].nSourceStat = (short int)nStatOrdinal2;
                 MonsterTbls::sgtDataTable.pTxtItemStatCost[nOpBaseStatId].aOpRelations[nStatCount].nSourceOp = *pOp;
                 MonsterTbls::sgtDataTable.pTxtItemStatCost[nOpBaseStatId].aOpRelations[nStatCount].nOpBaseStat = *pOpBase;
                 MonsterTbls::sgtDataTable.pTxtItemStatCost[nOpBaseStatId].aOpRelations[nStatCount].nSourceOpParam = *pOpParam;
@@ -1586,9 +1587,9 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
         pHasOpBaseDeps += 0x144;
         pHasOp45Dep += 0x144;
         pOp += 0x144;
-        nStatOrdinal = (short int*)((char*)nStatOrdinal + 1);
+        nStatOrdinal2++;
         nStatByteOffset += 0x144;
-      } while ((intptr_t)nStatOrdinal < nStatCount);
+      } while (nStatOrdinal2 < nStatCount);
     }
 
     int nDescPriorityCopyIdx = 0;

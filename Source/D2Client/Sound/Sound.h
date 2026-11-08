@@ -251,7 +251,7 @@ struct D2SoundChannelStrc * __stdcall SOUND_GetChannelArray();
 struct D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int param_1);
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void __stdcall SOUNDINST_StopChannel(int * pSoundInst);
+void __stdcall SOUNDINST_StopChannel(struct D2SoundChannelStrc * pSoundInst);
 int __fastcall Unreferenced_004b9560(int param_1);
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle);
 int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle);

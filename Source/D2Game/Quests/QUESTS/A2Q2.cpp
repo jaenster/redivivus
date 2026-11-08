@@ -538,7 +538,7 @@ BOOL __fastcall Unreferenced_00599bf0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // No QuestRecord writes (counting only).
 BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA2Q2Strc* pA1Q1Scratch;
-    BOOL bPortalActive = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
+    BOOL bPortalActive = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
     if (bPortalActive) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x20317274;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);
@@ -584,7 +584,7 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * 
 BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
-    BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
+    BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
     if (nDropIdx) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x2066736d;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);
@@ -635,7 +635,7 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * 
 BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
-    BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
+    BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
     if (nDropIdx) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x20786f62;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);

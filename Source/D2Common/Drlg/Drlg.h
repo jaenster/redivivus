@@ -59,7 +59,7 @@ typedef int (__fastcall *fpLevelDataFn1)(struct D2DrlgLevelPlacementStrc * pLeve
 #endif
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(struct D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(struct D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
 #endif
 
 // Data types
@@ -434,7 +434,7 @@ int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(struct D2DrlgLevelPlace
 int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(struct D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax);
 int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(struct D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax);
 // For outdoor (eDrlgType==3) Act 1 wilderness levels, walks the gaWildernessLevelSeedOffsets table and OR-writes orientation/connectivity flags into the level's pDrlgLevelData. Each 30-entry table record encodes five conditional rules matching level ID, excluded IDs, and two direction-table values; matching rules contribute a flag bit to the level data.
-void __fastcall ACT1_fpLevelDataFn2_A(struct D2DrlgLevelStrc * pLevel, int nNodeOffset, eD2LevelId * nDirTableBase);
+void __fastcall ACT1_fpLevelDataFn2_A(struct D2DrlgLevelStrc * pLevel, int nNodeOffset, int * nDirTableBase);
 // Lays out a connected group of DRLG levels from a level-data list. Seeds a temporary placement struct from the DRLG seed, fills each node's world size from LevelDefs (per difficulty), then drives a placement callback per node with backtracking (failed placement rewinds to the previous node). Second pass allocates each level (GetLevelAndAlloc), copies computed world position/size, sets the preset file for Rogue Encampment (1) / Lut Gholein (0x28) from the placement direction, and for Black Marsh (6) picks the Outer Cloister (0x1b) layout file via seed advance, invokes the optional per-level callback, and wires prev/next warp connections (skipped for act 4). Inputs: level-data list, two optional callbacks, target DRLG.
 void __stdcall DRLGLEVEL_ParseLevelData(struct D2DrlgLevelDataList * pLevelData, fpLevelDataFn1 fnPlacementValidator, fpLevelDataFn2 fnLevelDataCallback, struct D2DrlgStrc * pDrlg);
 void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, struct D2DrlgVertexStrc * pnCellNode, int32_t nFlag);
@@ -462,9 +462,9 @@ void __fastcall DRLGOUTROOM_FindRightExitPosition(struct D2DrlgLevelStrc * pLeve
 // Shifts 3x3 neighbor buffer up one row and reads new values.
 void __stdcall DRLGOUTROOM_SlideGridNeighborBuffer(struct D2DrlgGridStrc * pGrid, int32_t nRow, int32_t nCol, int * pNeighborBuffer);
 // Autotiling: computes 8-bit neighbor mask, looks up wall orientation from 256-entry table.
-void __stdcall DRLGOUTROOM_ComputeWallOrientations(struct D2DrlgLevelStrc * pLevel);
+void __stdcall DRLGOUTROOM_ComputeWallOrientations(struct D2RoomExStrc * pLevel);
 // Orchestrator: initializes grid, clips vertices, computes wall orientations for Act1 outdoor rooms.
-void __fastcall DRLGOUTROOM_InitAct1RoomGridCells(struct D2DrlgLevelStrc * pLevel, struct D2DrlgLevelStrc * pLevelRoom);
+void __fastcall DRLGOUTROOM_InitAct1RoomGridCells(struct D2DrlgLevelStrc * pLevel, struct D2RoomExStrc * pLevelRoom);
 // Builds the wilderness outdoor-level exit-point array. For levels with linked orth (sub-level) data, emits one exit per orth link (positioned by DrlgDirection NE/NW/SE/SW or special 0x1a), setting eType from the direction. For grid-based levels, scans the level's preset + outdoor grid cells, classifying each cell's GetGridFlags preset code (4/5/6/7/0x18/0x19/0x1c/0x33/0x34) into an exit eType (0..3, 4=none) and recording world X/Y. Increments pDrlgLevelData->nExitCount per emitted exit (into aExitPoints1), then snaps each vertex to the grid via DRLGOUTROOM_SnapVertexToGrid. Side effect: populates the level's exit-point table used for connecting adjacent wilderness levels.
 void __stdcall DRLGOUTROOM_BuildExitPointArray(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor wilderness level generation: computes target positions for each of a level's exits, writing into the wilderness level data's aExitPoints4 array. If the level has the left-exit flag (0x10) and DRLGOUTROOM_FindLeftExitPosition yields a valid cell, all exits are placed along that left edge (eType 0 or 2 by X comparison). Otherwise it averages the existing exit grid positions (or uses the grid center for a single exit) and does an 8-ring spiral search (gaExitSpiralOffsetX/Y) for the first empty grid cell via DRLGOUTDOOR_IsGridCellEmpty, placing exit 0 there (eType 4) and copying it to the rest. Finally snaps every exit vertex to the grid via DRLGOUTROOM_SnapVertexToGrid.

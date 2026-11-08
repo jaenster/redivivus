@@ -111,6 +111,32 @@ struct __attribute__((packed)) D2AiListStrc {
 
 #endif // D2_DEFINED_D2AiListStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiMinionHealScanStrc {
+    /* 0x00 */ int32_t nHealRange;
+    /* 0x04 */ int32_t nBuffRange;
+    /* 0x08 */ int32_t nLifePctThreshold;
+    /* 0x0C */ struct D2UnitStrc * pHealTarget;
+    /* 0x10 */ struct D2UnitStrc * pBuffTarget;
+    /* 0x14 */ int32_t nCandidateCount;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct D2AiShadowMasterScanStrc {
+    /* 0x00 */ struct D2UnitStrc * pOwner;
+    /* 0x04 */ struct D2UnitStrc * pNearestEnemy;
+    /* 0x08 */ int32_t nNearestEnemyDist;
+    /* 0x0C */ int32_t nCloseEnemyCount;
+    /* 0x10 */ struct D2UnitStrc * pOwnerNearestEnemy;
+    /* 0x14 */ int32_t nOwnerNearestEnemyDist;
+    /* 0x18 */ int32_t nOwnerCloseEnemyCount;
+    /* 0x1C */ int32_t nInRangeCount;
+    /* 0x20 */ int32_t nMinionCount;
+    /* 0x24 */ struct D2UnitStrc * pResurrectTarget;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2AiSkillCandidateStrc {
     /* 0x00 */ struct D2SkillStrc * pSkill;
     /* 0x04 */ eD2Skills eSkillId;
@@ -416,7 +442,7 @@ void __fastcall AI_Fn1_Succubus(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, 
 void __fastcall AI_Fn1_SuccubusWitch(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall HirelingRandomMoveCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // ForEach callback used by Baal's heal-minion AI. Scans for living, allied Wave-of-Destruction minions (classId 0x1C5) that are not already bloodlusted and are within range. Populates pSearchParams[3] with the lowest-HP candidate and pSearchParams[4] with the nearest non-champion candidate.
-uint32_t __fastcall AI_Baal_FindMinionToHeal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, int * pSearchParams);
+uint32_t __fastcall AI_Baal_FindMinionToHeal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2AiMinionHealScanStrc * pScan);
 // Per-tick AI #1 for the Overseer/whip demon (server-side; also drives Baal-minion-style healers). First calls Q31_OnOverseerDeath (Act5 quest hook). If currently attacking and off cooldown (pMonsterAiGeneral->dwArg0 < game frame) and an alive attacker exists that has Skill1 slotted, casts Skill1 (whip/morph) at the attacker and arms a per-difficulty cooldown. While engaged it may seed-roll into ending the attack (modes 4/5). Otherwise it scans nearby minions via ForEach + AI_Baal_FindMinionToHeal collecting a heal target (nMaxScanRadius), a buff target (nGridIndex), and a resurrect target (pBestSwitchUnit), then probabilistically casts Skill2 (heal) on the heal target, Skill3 (buff, skipped if alignment==2) on the buff target, or resurrects/walks. Falls back to approach/walk-to-target or PlanNextAiMove. All decisions seed- and TreasureClass-AI-word driven. No return.
 void __fastcall AI_Fn1_Overseer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 uint32_t __fastcall MONSTERAI_CountGolemReviveMonsters(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonsterCandidate, int * pCounter);
@@ -562,7 +588,7 @@ void __fastcall AITHINK_Fn0_ShadowMaster(::SGAMEDATA * pGame, struct D2UnitStrc 
 void __fastcall AITHINK_Fn0_ShadowMasterNoInit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 uint32_t __fastcall MONSTERAI_IsValidResurrectionTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Unit-scan callback for Baal's AI target search. For each nearby unit (pOtherUnit): counts allied minions matching Baal's specific servant class IDs (Destruction, Sentries, Creeper) into pScan->nMinionCount; for hostile attackable units, updates pScan closest/in-range/resurrection-target fields and nInRangeCount/nMaxScanRadius counters. Returns 0 always.
-uint32_t __fastcall AI_Baal_FindEnemyAndMinionCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOtherUnit, struct D2MonsterAiParameterStruct * pScan);
+uint32_t __fastcall AI_Baal_FindEnemyAndMinionCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOtherUnit, struct D2AiShadowMasterScanStrc * pScan);
 // Returns non-zero if pUnit already has an active state belonging to the same state group as eState (as defined in StatesTxt.group). Iterates all entries in pTxtStates, skips eState itself, and calls UNIT_GetUnitState for any state sharing the same group value. Used to prevent applying conflicting status effects (e.g. two states from the same exclusive group) to a monster simultaneously.
 BOOL __fastcall MONSTERAI_HasConflictingStateInGroup(struct D2UnitStrc * pUnit, eD2States eState);
 // Helper used by monster AIs to cast a skill on a target unit. Guards against self-targeting and invalid states. Resolves the skill struct via GetSkillByIdAndOwner; if the skill requires a melee weapon class and no pParam6 is provided, commands a run-to-unit approach instead. Otherwise calls SERVER_UNIT_CastSkill with the skill's mode. Skips cast if caster is in town. Returns 1 on successful cast/approach command, 0 if aborted.

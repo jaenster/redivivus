@@ -996,6 +996,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1082,6 +1083,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1099,7 +1101,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_004168f0"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -1117,6 +1120,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1135,6 +1139,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1153,6 +1158,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1429,7 +1435,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_00417900"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -1515,8 +1522,11 @@
         "TSList_FILEREC_LinkNode"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -1570,9 +1580,11 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "int *",
         "int32_t",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -1607,8 +1619,11 @@
         "SFILE_InsertFileRecordIntoList3"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -1661,8 +1676,11 @@
         "SFILE_InsertFileRecordIntoList4"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -1685,7 +1703,7 @@
       ]
     },
     {
-      "name": "SFILE_RemoveFileRecordFromList1",
+      "name": "TSList_UnlinkNode_00417e90",
       "address": "00417e90",
       "lines": [
         {
@@ -1695,10 +1713,11 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_RemoveFileRecordFromList1"
+        "TSList_UnlinkNode_00417e90"
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -1830,7 +1849,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_004183f0"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -1847,7 +1867,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_00418430"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -1881,12 +1902,15 @@
         "SFILE_InsertFileRecordIntoList5"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
-      "name": "SFILE_RemoveFileRecordFromList2",
+      "name": "TSList_UnlinkNode_00418560",
       "address": "00418560",
       "lines": [
         {
@@ -1896,10 +1920,11 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_RemoveFileRecordFromList2"
+        "TSList_UnlinkNode_00418560"
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -1922,7 +1947,7 @@
       ]
     },
     {
-      "name": "SFILE_CompareFileRecord4",
+      "name": "TSList_RawNext_004185d0",
       "address": "004185d0",
       "lines": [
         {
@@ -1932,7 +1957,7 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_CompareFileRecord4"
+        "TSList_RawNext_004185d0"
       ],
       "usedTypes": [
         "StormLinkStrc",
@@ -1941,7 +1966,7 @@
       ]
     },
     {
-      "name": "SFILE_RemoveFileRecordFromList3",
+      "name": "TSList_UnlinkNode_004185f0",
       "address": "004185f0",
       "lines": [
         {
@@ -1951,16 +1976,17 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_RemoveFileRecordFromList3"
+        "TSList_UnlinkNode_004185f0"
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
     },
     {
-      "name": "SFILE_RemoveFileRecordFromList4",
+      "name": "TSList_UnlinkNode_00418660",
       "address": "00418660",
       "lines": [
         {
@@ -1970,16 +1996,17 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_RemoveFileRecordFromList4"
+        "TSList_UnlinkNode_00418660"
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
     },
     {
-      "name": "SFILE_CompareFileRecord5",
+      "name": "TSList_RawNext_004186d0",
       "address": "004186d0",
       "lines": [
         {
@@ -1989,7 +2016,7 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_CompareFileRecord5"
+        "TSList_RawNext_004186d0"
       ],
       "usedTypes": [
         "StormLinkStrc",
@@ -1998,7 +2025,7 @@
       ]
     },
     {
-      "name": "SFILE_CompareFileRecord6",
+      "name": "TSList_RawNext_004186f0",
       "address": "004186f0",
       "lines": [
         {
@@ -2008,7 +2035,7 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_CompareFileRecord6"
+        "TSList_RawNext_004186f0"
       ],
       "usedTypes": [
         "StormLinkStrc",
@@ -2017,7 +2044,7 @@
       ]
     },
     {
-      "name": "SFILE_RemoveFileRecordFromList5",
+      "name": "TSList_UnlinkNode_00418710",
       "address": "00418710",
       "lines": [
         {
@@ -2027,10 +2054,11 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "SFILE_RemoveFileRecordFromList5"
+        "TSList_UnlinkNode_00418710"
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2049,7 +2077,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_004187c0"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2066,7 +2095,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_00418800"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2083,7 +2113,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_00418840"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2100,7 +2131,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_00418880"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2117,7 +2149,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_004188c0"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2134,6 +2167,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<ARCHIVEREC>",
+        "TSLink<ARCHIVEREC> *",
         "TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>",
         "uint32_t"
       ]
@@ -2152,6 +2187,8 @@
         "SFILE_CloseStreamHandle2"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2170,6 +2207,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<FILEREC>",
+        "TSLink<FILEREC> *",
         "TSList<FILEREC, TSGetLink<FILEREC>>",
         "uint32_t"
       ]
@@ -2188,6 +2227,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<EVENTREC>",
+        "TSLink<EVENTREC> *",
         "TSList<EVENTREC, TSGetLink<EVENTREC>>",
         "uint32_t"
       ]
@@ -2206,6 +2247,8 @@
         "SFILE_CloseStreamHandle5"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2242,7 +2285,8 @@
         "SMemFree"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2315,7 +2359,8 @@
         "SFILE_CloseAllOpenFiles1_Unref_00418ba0"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2332,7 +2377,8 @@
         "SFILE_CloseAllOpenFiles1"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2349,7 +2395,8 @@
         "SFILE_CloseAllOpenFiles2"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -2368,6 +2415,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2388,6 +2436,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2408,6 +2457,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2428,6 +2478,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2465,6 +2516,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -2622,6 +2674,7 @@
       ],
       "usedTypes": [
         "D2ArchiveStrc",
+        "D2ArchiveStrc *",
         "uint8_t"
       ]
     },
@@ -2658,7 +2711,8 @@
         "SFILE_FreeArchiveRecord"
       ],
       "usedTypes": [
-        "D2MPQFileStrc"
+        "D2MPQFileStrc",
+        "D2MPQFileStrc *"
       ]
     },
     {
@@ -2775,6 +2829,7 @@
       "usedTypes": [
         "StormEventRecStrc",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t"
       ]
     },
@@ -2845,6 +2900,7 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc",
+        "D2MPQFileStrc *",
         "uint32_t"
       ]
     },
@@ -2886,6 +2942,7 @@
       ],
       "usedTypes": [
         "D2StormAudioStreamRec",
+        "D2StormAudioStreamRec *",
         "pfnEHHandlerRoutine",
         "uint32_t"
       ]
@@ -2929,7 +2986,8 @@
         "SFileCloseFile"
       ],
       "usedTypes": [
-        "D2ArchiveStrc"
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
       ]
     },
     {
@@ -3013,6 +3071,7 @@
       ],
       "usedTypes": [
         "D2StormAudioStreamRec",
+        "D2StormAudioStreamRec *",
         "uint32_t"
       ]
     },
@@ -3035,6 +3094,7 @@
       "usedTypes": [
         "D2StormAsyncOpStrc",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "pfnEHHandlerRoutine",
         "uint32_t"
       ]
@@ -3127,6 +3187,7 @@
         "D2StormAsyncOpStrc",
         "StormEventRecStrc",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t"
       ]
     },
@@ -3182,6 +3243,7 @@
         "D2StormAsyncOpStrc",
         "StormEventRecStrc",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "int32_t",
         "uint32_t",
         "uint8_t"
@@ -3285,6 +3347,7 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "D2StormAudioStreamRec",
+        "D2StormAudioStreamRec *",
         "uint32_t"
       ]
     },

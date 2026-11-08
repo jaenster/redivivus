@@ -588,19 +588,20 @@ D2ArchiveStrc * __fastcall ARCHIVE_LoadDataTables(D2PoolManagerStrc * pMemory, c
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2BinFieldInputStrc * pBinFieldInput, int * nTxtTableSize, int32_t nEndOffset) {
     int nStrCmpResult;
-    D2ArchiveStrc* pArchiveTxt;
     D2BinFieldExcelStrc* pBinField;
+    size_t nTxtLineCount;
     void* pDataTable;
     char* szEffectiveName;
     char* pNameEnd;
     D2ArchiveStrc** pParsedData;
+    int32_t nRecordCount;
     size_t nBinAllocSize;
     char szTableNameBuf[256];
     uint32_t dwStackCookie;
     int32_t nErrorLine;
     uint32_t nSize = 0;
     if (MonsterTbls::sgtDataTable.bUseTxt) {
-      size_t nTxtLineCount;
+      D2ArchiveStrc* pArchiveTxt;
       nStrCmpResult = _stricmp(szTableName, "leveldefs");
       if (!nStrCmpResult) {
         nErrorLine = 0x8b9;
@@ -655,18 +656,18 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       exit(-1);
     }
     if (gpaMiscTxtTables) {
-      pArchiveTxt = pArchive2->pPrevLink;
+      nRecordCount = (int32_t)pArchive2->pPrevLink;
       pParsedData = &pArchive2->pNext;
     } else {
       pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pArchive2, nSize);
-      pArchiveTxt = (D2ArchiveStrc*)Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
-      pParsedData = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, (int)pArchiveTxt * nEndOffset, ".\\DATATBLS\\DataTbls.cpp", 0x904);
-      memset(pParsedData, 0, (intptr_t)pArchiveTxt * nEndOffset);
-      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pParsedData, (size_t)pArchiveTxt, nEndOffset);
+      nRecordCount = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
+      pParsedData = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, nRecordCount * nEndOffset, ".\\DATATBLS\\DataTbls.cpp", 0x904);
+      memset(pParsedData, 0, nRecordCount * nEndOffset);
+      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pParsedData, nRecordCount, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
     }
     if (nTxtTableSize) {
-      *nTxtTableSize = (int)pArchiveTxt;
+      *nTxtTableSize = nRecordCount;
     }
 
     return pParsedData;

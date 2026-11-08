@@ -39,32 +39,32 @@ static int32_t gaMultiTextBoxScrollbarGeom4[3] = { 0x2f4, 0x187, 0xee }; D2_STAT
 namespace D2Multi::ChatDlg {
 static FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5] = {
     {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     },
     {
-        /* .ppBaseImage = */ (void*)&gpDC6D2LogoBlackBnet,
-        /* .ppOverlayImage = */ (void*)&gpDC6D2LogoBnet,
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
         /* .nDrawMode = */ 0x3,
         /* .nFrameDelay = */ 0x1
     }

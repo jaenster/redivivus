@@ -299,7 +299,7 @@ void __fastcall Server_SelectSkill(struct D2UnitStrc * pUnit, int32_t leftOrRigh
 void __fastcall ClearSkills(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Applies STATE_stunned to a non-boss, non-special monster unit. Skips if already STATE_uninterruptable. Allocates a stat list expiring in 100 game frames, attaches STATE_stunned state, schedules a game event, then interrupts the monster's current AI by calling SetCurrentSkill(Neutral) and MONSTERAI_ExecuteLifecycleTransition. Extends existing stun timeout if a stun statlist is already present.
 void __thiscall SKILL_ApplyStunState(void * pThis, struct D2UnitStrc * pUnit, eD2States eState);
-void __fastcall SKILL_StunExpireAndRestoreAi(struct D2UnitStrc * pUnit, eD2States eState, uint32_t pStatListEx);
+void __fastcall SKILL_StunExpireAndRestoreAi(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatListEx);
 struct D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, eD2States pfnMenuInstance);
 #endif // D2_MODULE_D2Game

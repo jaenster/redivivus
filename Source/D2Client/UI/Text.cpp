@@ -65,7 +65,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TextBoxStrc) == 0x2c, "D2_NEW_AT(
 
 #ifndef RECON_FPTD_pfnTextScrollComplete
 #define RECON_FPTD_pfnTextScrollComplete
-typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
+typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, int bDismissed);
 #endif
 #ifndef RECON_FPTD_fpDialogFunc
 #define RECON_FPTD_fpDialogFunc
@@ -2435,10 +2435,10 @@ static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
     uint32_t nFontHeight;
     RECT rcFrame;
     TEXT_DrawScrollingTextBox_Slotm10 uSlot10;
-    D2TextLineStrc* pLastVisibleLine;
     int nBottomCropOffset;
     int nSingleLineY;
     int nTopCropHeight;
+    int nLastVisibleLine;
     if (!ppwszText) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x70d);
       exit(-1);
@@ -2452,13 +2452,13 @@ static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
       ppwszText->dwUnused1A = dwNow;
       ppwszText->dwUnused1E = dwNow;
     } else {
-      pLastVisibleLine = 0;
+      nLastVisibleLine = 0x0;
       if (ppwszText->dwUnused1A == dwNow) {
         if (!ppwszText->dwUnused22) {
           ppwszText->wUnused2A++;
         } else {
           ppwszText->dwUnused26 += ppwszText->dwUnused22;
-          pLastVisibleLine = (D2TextLineStrc*)ppwszText->dwUnused26;
+          nLastVisibleLine = (int)ppwszText->dwUnused26;
         }
       } else {
         ppwszText->dwUnused26 = 0;
@@ -2469,7 +2469,7 @@ static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
         ppwszText->dwUnused1A = dwNow;
       }
 
-      ppwszText->unk0x08 = ((int)pLastVisibleLine + (dwNow - ppwszText->dwUnused1E >> 2)) * ppwszText->nScrollRateCopy;
+      ppwszText->unk0x08 = (nLastVisibleLine + (dwNow - ppwszText->dwUnused1E >> 2)) * ppwszText->nScrollRateCopy;
     }
     if (!gnTextScrollBoxHeight && (gnTextDisplayMode || gbTextScrollBoxVisible)) {
       Engine::Gfx::D2GFX_DrawSolidRectExBySize(gnTextBoxExclusionX, gnScrollingTextBoxTopY - 5, 0x145, 0x7a, 0, DRAW_TRANSPARENT);
@@ -2482,6 +2482,7 @@ static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
 
     D2TextLineStrc* pLine;
     pLine = ppwszText->pLineList;
+    D2TextLineStrc* pLastVisibleLine;
     pLastVisibleLine = 0;
     uSlot10.nFirstVisibleYOffset = 0;
     uint32_t nLastVisibleYOffset;
@@ -3805,9 +3806,9 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
 }
 
 void __fastcall TEXT_FreeHoverText(D2HoverTextStrc * pHover) {
-    uint32_t* pMemoryToFree = (uint32_t*)D2Common::Chat::HOVERTEXT_GetTextLineList(pHover);
+    D2TextLineStrc** pMemoryToFree = (D2TextLineStrc**)D2Common::Chat::HOVERTEXT_GetTextLineList(pHover);
     if (pMemoryToFree) {
-      TEXT_FreeTextLineList((D2TextLineStrc*)*pMemoryToFree);
+      TEXT_FreeTextLineList(*pMemoryToFree);
       D2_FREE_AT(pMemoryToFree, ".\\UI\\text.cpp", 0x68e);
       D2Common::Chat::HOVERTEXT_SetTextLineList(pHover, nullptr);
     }
@@ -6836,7 +6837,7 @@ static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, D2TextBoxStrc * pT
 
       TEXT_CloseScrollingText();
       if (gpTextScrollCompleteCallback) {
-        nHandlerCount = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 0, nullptr);
+        nHandlerCount = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 0, 0);
         return nHandlerCount;
       }
       if (gbTextStaticPopupActive == 1) {
@@ -6879,7 +6880,7 @@ int __stdcall TEXT_HandleEscapeKey() {
       if (gpTextScrollCompleteCallback) {
         TEXT_CloseScrollingText();
         ui::UI_UpdateCursorAnimationTimer();
-        nResult = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 1, (void*)gpTextDismissCallback);
+        nResult = (*gpTextScrollCompleteCallback)(gpTextScrollCompleteParam, 1, gpTextDismissCallback);
         if (nResult) {
           gpTextDismissCallback = 0;
           return 1;

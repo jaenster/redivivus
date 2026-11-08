@@ -57,9 +57,9 @@ BOOL __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
     uint32_t nBufSize = pSoundStream->nSoundDataBytes;
     int* pWavData = D2Sound::Src::D2SoundSmp::SOUNDSMP_ParseWavHeader((int*)pSoundStream->pSoundDataBuffer, &nBufSize, &sWaveFormat);
     if (pWavData && sWaveFormat.wBitsPerSample == 0x10 && sWaveFormat.nSamplesPerSec == 0x5622) {
-      pSoundStream->aWavDataPtrAndSize[0] = (int32_t)pWavData;
+      pSoundStream->pWavData = pWavData;
       pSoundStream->Stereo = sWaveFormat.nChannels == 2;
-      pSoundStream->aWavDataPtrAndSize[1] = nBufSize;
+      pSoundStream->nWavDataSize = nBufSize;
       return 1;
     }
 
@@ -392,7 +392,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundCh
 }
 
 // Recomputes and re-applies a positional sound channel's mixing state (__fastcall, ECX=pSoundChannel). Reads the channel's sound descriptor (pSoundChannel[2]) and its sounds.txt line; halts via Fog::ErrorManager if descriptor is null. Computes effective volume by chaining music/master volume, per-channel left/right multipliers (skipping certain reserved sound-id ranges and Solo lines), and positional bias from the mixer. If the new volume and the descriptor's 3D position (offsets 0xC/0x10/0x14/0x20) match the channel's cached copy (pSoundChannel[3..7]) it returns 0 early (no change); otherwise distance-attenuates volume via falloff min/max, calls SOUNDSMP_CalculateVolumeAndPan/SetPan/Set3DPosition/SetEaxObstruction/SetVolume, caches the new pos+volume into the channel, and returns the descriptor pointer. Side-effects: drives the underlying audio mixer sample.
-int __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChannel) {
+void __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChannel) {
     int nMixerMode;
     uint32_t nBytesRemaining;
     float* pByteA;
@@ -500,7 +500,7 @@ int __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChanne
         }
       }
       if (!nMixerMode) {
-        return 0;
+        return;
       }
     }
 
@@ -532,7 +532,6 @@ int __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChanne
     pSoundChannel->dwLastPosZ = nSoundDescSaved->fPosZ;
     pSoundChannel->nLastVolume = fVolume;
     pSoundChannel->dwLastEaxObstruction = nSoundDescSaved->fUnitDistance;
-    return (int)nSoundDescSaved;
 }
 
 BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {

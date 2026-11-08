@@ -36,8 +36,7 @@
       ],
       "usedTypes": [
         "TSLink<CELLIST>",
-        "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -55,8 +54,7 @@
       ],
       "usedTypes": [
         "TSLink<CELLIST>",
-        "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -129,8 +127,7 @@
       ],
       "usedTypes": [
         "TSLink<CELLIST>",
-        "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -166,7 +163,7 @@
       ],
       "usedTypes": [
         "TSExplicitList<CELLIST, -572662307>",
-        "uint32_t"
+        "TSLink<CELLIST>"
       ]
     },
     {
@@ -223,7 +220,8 @@
         "CELLIST",
         "TSHashTable<CELLIST, HASHKEY_NONE>",
         "TSLink<CELLIST>",
-        "uint32_t"
+        "TSLink<CELLIST> *",
+        "intptr_t"
       ]
     },
     {
@@ -280,6 +278,7 @@
         "CELLIST",
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
         "uint32_t"
       ]
     },
@@ -298,8 +297,8 @@
       ],
       "usedTypes": [
         "TSExplicitList<CELLIST, -572662307>",
-        "int32_t",
-        "uint32_t"
+        "TSLink<CELLIST>",
+        "int32_t"
       ]
     },
     {
@@ -336,8 +335,8 @@
       ],
       "usedTypes": [
         "TSExplicitList<CELLIST, -572662307>",
-        "int32_t",
-        "uint32_t"
+        "TSLink<CELLIST>",
+        "int32_t"
       ]
     },
     {
@@ -355,7 +354,7 @@
       ],
       "usedTypes": [
         "TSExplicitList<CELLIST, -572662307>",
-        "uint32_t"
+        "TSLink<CELLIST>"
       ]
     },
     {
@@ -392,7 +391,8 @@
       "usedTypes": [
         "TSHashObject<CELLIST, HASHKEY_NONE>",
         "TSLink<CELLIST>",
-        "uint32_t"
+        "TSLink<CELLIST> *",
+        "intptr_t"
       ]
     },
     {
@@ -412,6 +412,8 @@
         "CELLIST",
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -432,6 +434,7 @@
         "CELLIST",
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
         "uint32_t"
       ]
     },
@@ -469,7 +472,9 @@
       ],
       "usedTypes": [
         "TSExplicitList<CELLIST, -572662307>",
-        "uint32_t"
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t"
       ]
     },
     {
@@ -487,7 +492,9 @@
       ],
       "usedTypes": [
         "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
-        "uint32_t"
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>> *",
+        "intptr_t"
       ]
     },
     {
@@ -544,7 +551,10 @@
       ],
       "usedTypes": [
         "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
         "int32_t",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -565,6 +575,7 @@
       "usedTypes": [
         "TSExplicitList<CELLIST, -572662307>",
         "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
         "uint32_t"
       ]
     },
@@ -585,7 +596,8 @@
       "usedTypes": [
         "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
         "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
-        "uint32_t"
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>> *",
+        "intptr_t"
       ]
     },
     {
@@ -671,6 +683,8 @@
         "TSExplicitList<CELLIST, -572662307>",
         "TSHashTable<CELLIST, HASHKEY_NONE>",
         "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -793,6 +807,8 @@
         "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
         "TSHashObjectChunk<CELLIST, HASHKEY_NONE>",
         "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>> *",
+        "intptr_t",
         "uint32_t"
       ]
     }

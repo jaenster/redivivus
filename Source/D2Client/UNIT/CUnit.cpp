@@ -203,10 +203,10 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
     }
 
     memset(&spriteParams, 0, 0x48);
-    D2UnitStrc* pEquipContext = (D2UnitStrc*)-1;
+    int32_t nOffset = -1;
     int* pFrameCountOut = &__frame0.nFrameCountOut;
     uint32_t nFrameLocal = nFrame;
-    int32_t nOffset = Engine::GfxUtil::DC6_AssignParams(&spriteParams, pUnit, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrameLocal, pFrameCountOut, (uint8_t)nAnimMode, pEquipContext);
+    nOffset = Engine::GfxUtil::DC6_AssignParams(&spriteParams, pUnit, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrameLocal, pFrameCountOut, (uint8_t)nAnimMode, nOffset);
     if (!nOffset) {
       return 0;
     }

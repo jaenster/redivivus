@@ -85,7 +85,7 @@ uint32_t __thiscall ARCHIVE_GetNodeValue(StormLinkedListStrc * pThis, StormLinkS
 }
 
 void __thiscall ARCHIVE_UnlinkNode(StormLinkedListStrc * pThis, int * pNode) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     if (!pNode) {
       pNode = (int*)&pThis->head;
     }
@@ -95,8 +95,8 @@ void __thiscall ARCHIVE_UnlinkNode(StormLinkedListStrc * pThis, int * pNode) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-    *pPrevLink = (int)nNext;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *pPrevLink = nNext;
     ((StormLinkStrc*)pNode)->pPrevLink->pNext = ((StormLinkStrc*)pNode)->pNext;
     ((StormLinkStrc*)pNode)->pPrevLink = 0;
     ((StormLinkStrc*)pNode)->pNext = 0;
@@ -174,28 +174,28 @@ int __fastcall Unreferenced_0045bcb0(int param_1) {
 }
 
 void __fastcall ARCHIVE_ClearList(StormLinkedListStrc * nList) {
-    int* pPrevLink;
-    int* pNode;
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* pNode;
     while (true) {
-      int nNext;
-      pNode = (intptr_t)(int*)nList->head.pNext > 0 ? (int*)nList->head.pNext : 0;
+      StormLinkStrc* pNext;
+      pNode = (intptr_t)(StormLinkStrc*)nList->head.pNext > 0 ? (StormLinkStrc*)nList->head.pNext : 0;
       if (!pNode) {
         break;
       }
 
-      nNext = *pNode;
-      if (nNext) {
-        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-        *pPrevLink = nNext;
-        *(int*)(*pNode + 4) = pNode[1];
-        *pNode = 0;
-        pNode[1] = 0;
+      pNext = pNode->pPrevLink;
+      if (pNext) {
+        pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+        *pPrevLink = pNext;
+        pNode->pPrevLink->pNext = pNode->pNext;
+        pNode->pPrevLink = 0;
+        pNode->pNext = 0;
       }
     }
 }
 
 void __fastcall ARCHIVE_ClearAndFreeHead(StormLinkedListStrc * nList) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     ARCHIVE_ClearList(nList);
     StormLinkStrc* pSVar1 = &nList->head;
     StormLinkStrc* nNext = pSVar1->pPrevLink;
@@ -203,8 +203,8 @@ void __fastcall ARCHIVE_ClearAndFreeHead(StormLinkedListStrc * nList) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
-    *pPrevLink = (int)nNext;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pSVar1, -1);
+    *pPrevLink = nNext;
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
@@ -233,38 +233,38 @@ int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t 
     return ppNode;
 }
 
-int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree) {
-    int nNext = *pNode;
+int * __thiscall ARCHIVE_FreeNode(StormLinkStrc * pNode, uint8_t byFree) {
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* nNext = pNode->pPrevLink;
     if (nNext) {
-      int* pPrevLink;
-      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+      pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
       *pPrevLink = nNext;
-      *(int*)(*pNode + 4) = pNode[1];
-      *pNode = 0;
-      pNode[1] = 0;
+      pNode->pPrevLink->pNext = pNode->pNext;
+      pNode->pPrevLink = 0;
+      pNode->pNext = 0;
     }
     if (byFree & 1) {
       Storm::Source::SMem::SMemFree(pNode, "delete", -1, 0);
     }
 
-    return pNode;
+    return (int*)pNode;
 }
 
-uint32_t __thiscall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, int * pNode) {
-    StormLinkStrc* pSVar1 = (StormLinkStrc*)pNode;
+uint32_t __thiscall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, StormLinkStrc * pNode) {
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* pSVar1 = pNode;
     if (!pNode) {
       pSVar1 = &pThis->head;
     }
 
     uint32_t nValue = pSVar1->pNext;
-    int nNext = *pNode;
+    StormLinkStrc* nNext = pNode->pPrevLink;
     if (nNext) {
-      int* pPrevLink;
-      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+      pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
       *pPrevLink = nNext;
-      *(int*)(*pNode + 4) = pNode[1];
-      *pNode = 0;
-      pNode[1] = 0;
+      pNode->pPrevLink->pNext = pNode->pNext;
+      pNode->pPrevLink = 0;
+      pNode->pNext = 0;
     }
 
     Storm::Source::SMem::SMemFree(pNode, s___AUTALLOCREC___00711480, -2, 0);
@@ -274,6 +274,7 @@ uint32_t __thiscall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, int * pNode)
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport() {
+    int** pNewRec;
     int* pInsertLink;
     TALLOCREC* pRec;
     int* pPrevLink;
@@ -281,7 +282,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
     int32_t ppTmp;
     SMemHeapDetailsStrc* pSrcInfo;
     uint16_t* pScan;
-    int** ppWalk;
+    uint32_t* pdwCopyDst;
     SMemHeapDetailsStrc sHeapDetails;
     SMemBlockDetailsStrc sBlockInfo;
     StormLinkedListStrc pListTail;
@@ -293,11 +294,11 @@ void ARCHIVE_WriteMemoryCheckReport() {
     pListTail.head.pPrevLink = &pListTail.head;
     pListTail.nLinkOffset = 0;
     pListTail.head.pNext = ~(uintptr_t)pListTail.head.pPrevLink;
-    uint16_t** pHeapEnum = 0;
+    uint32_t nHeapId = 0;
     sHeapDetails.dwSize = 0x128;
-    int nResult = Storm::Source::SMem::SMemFindNextHeap(0, (int*)&pHeapEnum, &sHeapDetails);
+    int nResult = Storm::Source::SMem::SMemFindNextHeap(0, (int*)&nHeapId, &sHeapDetails);
     while (nResult) {
-      int** pNewRec;
+      int** ppiVar1;
       int** pNewRecNew = (int**)Storm::Source::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
       if (pNewRecNew) {
         *pNewRecNew = 0;
@@ -308,14 +309,14 @@ void ARCHIVE_WriteMemoryCheckReport() {
       }
 
       pSrcInfo = &sHeapDetails;
-      ppWalk = pNewRec + 2;
+      pdwCopyDst = (uint32_t*)(pNewRec + 2);
       for (nResult = 0x4a; nResult; nResult--) {
-        *ppWalk = (int*)pSrcInfo->dwSize;
+        *pdwCopyDst = pSrcInfo->dwSize;
         pSrcInfo = (SMemHeapDetailsStrc*)&pSrcInfo->hHeap;
-        ppWalk++;
+        pdwCopyDst++;
       }
 
-      if (pListTail.head.pNext <= 0 || (ppWalk = (int**)pListTail.head.pNext , (uintptr_t)*(int**)(pListTail.head.pNext + 300) < sHeapDetails.dwAllocatedBytes)) {
+      if (pListTail.head.pNext <= 0 || (ppiVar1 = (int**)pListTail.head.pNext , (uintptr_t)*(int**)(pListTail.head.pNext + 300) < sHeapDetails.dwAllocatedBytes)) {
         pNextNode = *pNewRec;
         if (pNextNode) {
           pPrevLink = pNewRec[1];
@@ -348,17 +349,17 @@ void ARCHIVE_WriteMemoryCheckReport() {
         pListTail.head.pNext = (intptr_t)pNewRec;
       } else {
         do {
-          ppInsertAfter = ppWalk;
-          ppWalk = (int**)ppInsertAfter[1];
-          if ((intptr_t)ppWalk <= 0) {
+          ppInsertAfter = ppiVar1;
+          ppiVar1 = (int**)ppInsertAfter[1];
+          if ((intptr_t)ppiVar1 <= 0) {
             break;
           }
-        } while ((uintptr_t)ppWalk[0x4b] > sHeapDetails.dwAllocatedBytes);
+        } while ((uintptr_t)ppiVar1[0x4b] > sHeapDetails.dwAllocatedBytes);
 
         ARCHIVE_LinkNode((int**)&pListTail, pNewRec, 1, ppInsertAfter);
       }
 
-      nResult = Storm::Source::SMem::SMemFindNextHeap((uint32_t)pHeapEnum, (int*)&pHeapEnum, &sHeapDetails);
+      nResult = Storm::Source::SMem::SMemFindNextHeap(nHeapId, (int*)&nHeapId, &sHeapDetails);
       hFileTmp = hFile;
     }
 
@@ -392,13 +393,13 @@ void ARCHIVE_WriteMemoryCheckReport() {
     ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL MAX:       %10d\n", nTotalRegions);
     ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL REGIONS:   %10d\n\n\n\n\n", nTotalReserved);
     ARCHIVE_WriteFormattedText(hFileTmp, "================================================\n\n");
-    pHeapEnum = (uint16_t**)Storm::Source::SMem::SMemGetHeapByCaller((int*)"SOURCE\\D2HELL\\Src\\Archive.cpp", 0xf5);
+    nHeapId = Storm::Source::SMem::SMemGetHeapByCaller((int*)"SOURCE\\D2HELL\\Src\\Archive.cpp", 0xf5);
     nResult = 0;
     sBlockInfo.dwSize = 0x1c;
     uint16_t* pBlock = 0;
     nTotalReserved = 0;
     nTotalBytes = 0;
-    int bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(pHeapEnum, nullptr, &pBlock, (int*)&sBlockInfo);
+    int bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(nHeapId, nullptr, &pBlock, (int*)&sBlockInfo);
     do {
       if (!bFoundNextBlock) {
         ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL MEMORY: %8d\n", nResult);
@@ -432,7 +433,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         }
       }
 
-      bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(pHeapEnum, (uint8_t*)pBlock, &pBlock, (int*)&sBlockInfo);
+      bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(nHeapId, (uint8_t*)pBlock, &pBlock, (int*)&sBlockInfo);
     } while (true);
 }
 

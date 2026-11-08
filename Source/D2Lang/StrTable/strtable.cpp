@@ -583,7 +583,7 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
         pcFormatted = s__not_xlated_call_ken_w_00730520;
         pcVar1 = pcFormatted + strlen(pcFormatted);
         pcFormatted = pcVar1 + 1;
-        pcFormatted = (char*)D2_ALLOC_AT((size_t)(pcVar1 + (intptr_t)(pbKeyCopy + (-(intptr_t)&s__not_xlated_call_ken_w_00730520 - (intptr_t)pbSrc)) + 1), ".\\StrTable\\strtable.cpp", 0x26c);
+        pcFormatted = (char*)D2_ALLOC_AT((size_t)(pcVar1 + (int)(pbKeyCopy - pbSrc - (intptr_t)&s__not_xlated_call_ken_w_00730520) + 1), ".\\StrTable\\strtable.cpp", 0x26c);
         strcpy(pcFormatted, (char*)pbKey);
         pcSuffixDst = s__not_xlated_call_ken_w_00730520;
         pcSuffixEnd = pcSuffixDst + strlen(pcSuffixDst);
@@ -607,7 +607,7 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
           pcSuffixDst++;
         }
 
-        pcKeyEnd = Unicode::UNISYS::UNICODE_GetWideCharCount(pcFormatted, (int32_t)(pcVar1 + (intptr_t)(pbKeyCopy + (-(intptr_t)&s__not_xlated_call_ken_w_00730520 - (intptr_t)pbSrc))));
+        pcKeyEnd = Unicode::UNISYS::UNICODE_GetWideCharCount(pcFormatted, (int32_t)(pcVar1 + (int)(pbKeyCopy - pbSrc - (intptr_t)&s__not_xlated_call_ken_w_00730520)));
         wszText = (uint16_t*)D2_ALLOC_AT(pcKeyEnd * 2 + 2, ".\\StrTable\\strtable.cpp", 0x271);
         pCacheNode->wszText = (uint16_t*)wszText;
         UTF8_ConvertToWideChar(wszText, pcFormatted, pcKeyEnd);

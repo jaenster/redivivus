@@ -863,13 +863,13 @@ static uint8_t * __fastcall SKILLS_WriteValueToBuffer(uint8_t * pBase, int nValu
         return pWritePtr + 2;
       }
     } else if (nValue + 0x8000U <= 0xffff) {
-      if ((intptr_t)(pWritePtr + (3 - (intptr_t)pBase)) < nBufferSize) {
+      if ((int)(pWritePtr - pBase + 3) < nBufferSize) {
         *pWritePtr = 8;
         *(short int*)(pWritePtr + 1) = (short int)nValue;
         pStruct->anWussieMonsterGUIDs[9]++;
         return pWritePtr + 3;
       }
-    } else if ((intptr_t)(pWritePtr + (5 - (intptr_t)pBase)) < nBufferSize) {
+    } else if ((int)(pWritePtr - pBase + 5) < nBufferSize) {
       *pWritePtr = 9;
       *(int*)(pWritePtr + 1) = nValue;
       pStruct->anWussieMonsterGUIDs[9]++;
@@ -889,13 +889,13 @@ static uint8_t * __fastcall SKILLS_WriteValueToBuffer2(uint8_t * pBase, int nVal
         return pWritePtr + 2;
       }
     } else if (nValue + 0x8000U <= 0xffff) {
-      if ((intptr_t)(pWritePtr + (3 - (intptr_t)pBase)) < nBufferSize) {
+      if ((int)(pWritePtr - pBase + 3) < nBufferSize) {
         *pWritePtr = '\x05';
         *(short int*)(pWritePtr + 1) = (short int)nValue;
         pStruct->anWussieMonsterGUIDs[9]++;
         return pWritePtr + 3;
       }
-    } else if ((intptr_t)(pWritePtr + (5 - (intptr_t)pBase)) < nBufferSize) {
+    } else if ((int)(pWritePtr - pBase + 5) < nBufferSize) {
       *pWritePtr = '\x06';
       *(int*)(pWritePtr + 1) = nValue;
       pStruct->anWussieMonsterGUIDs[9]++;

@@ -6,7 +6,6 @@
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
 #include "Source/D2Common/Txt/Skills.h"
-#include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -218,11 +217,11 @@ void __stdcall SetOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
 BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     int nClassId;
     if (pMissile && pUnit && pMissile->eUnitType == UNIT_MISSILE) {
-      D2UnitDataPlayerStrc* pDVar1;
+      D2UnitDataMissileStrc* pDVar1;
       nClassId = pMissile->nClassId;
       if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize && ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-        pDVar1 = pMissile->pUnitData.pUnitDataPlayer;
-        if (pDVar1 && pDVar1->pQuestRecord[2] == (D2BitBufferStrc*)pUnit->eUnitType && pDVar1->pWaypoint[0] == (D2WaypointStrc*)pUnit->nUnitGUID) {
+        pDVar1 = pMissile->pUnitData.pUnitDataMissile;
+        if (pDVar1 && pDVar1->eOwnerType == pUnit->eUnitType && pDVar1->nOwnerGUID == pUnit->nUnitGUID) {
           return 1;
         }
       }
@@ -400,16 +399,16 @@ void __stdcall SetHomeType(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
 
 void __stdcall GetHomeType(D2UnitStrc * pUnit, int * nHomeType, int * nHomeGUID) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
-      D2UnitDataPlayerStrc* pUnitDataMissile;
-      pUnitDataMissile = pUnit->pUnitData.pUnitDataPlayer;
+      D2UnitDataMissileStrc* pUnitDataMissile;
+      pUnitDataMissile = pUnit->pUnitData.pUnitDataMissile;
       if (!pUnitDataMissile) {
         *nHomeType = 0;
         *nHomeGUID = -1;
         return;
       }
 
-      *nHomeType = (int)pUnitDataMissile->pWaypoint[1];
-      *nHomeGUID = (int)pUnitDataMissile->pWaypoint[2];
+      *nHomeType = pUnitDataMissile->eTargetType;
+      *nHomeGUID = pUnitDataMissile->nTargetGUID;
       return;
     }
 
@@ -1049,12 +1048,13 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.
 void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pMissile, int32_t nLevel) {
     BOOL _bHasBonusStats;
+    D2UnitStrc* pDVar1;
     bool bHasBonusStats;
     int32_t nElemMinDmg;
     int32_t nMasteryElemMin;
     int32_t nMasteryElemMax;
     D2SkillsTxt* pSkillTxt;
-    D2UnitStrc* nFinalElemMinDmg;
+    int32_t nFinalElemMinDmg;
     int nStatVal;
     uint32_t nMercType;
     uint32_t nMercTypeCheck;
@@ -1089,12 +1089,12 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       nElemMinDmg = GetMinElemDamage(pMissile, pUnit, nMissileId, nLevel);
       nElemMaxDmg = GetMaxElemDamage(pMissile, pUnit, nMissileId, nLevel);
       nElemLength = GetElementalLength(pMissile, pUnit, nMissileId, nLevel);
-      nFinalElemMinDmg = (D2UnitStrc*)nElemMinDmg;
+      pDVar1 = (D2UnitStrc*)nElemMinDmg;
       if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         nMasteryElemMin = CalculateMasteryBonus(pUnit, nElemType, nElemMinDmg);
         nMasteryElemMax = CalculateMasteryBonus(pUnit, nElemType, nElemMaxDmg);
         nElemMaxDmg += nMasteryElemMax;
-        nFinalElemMinDmg = (D2UnitStrc*)(nElemMinDmg + nMasteryElemMin);
+        pDVar1 = (D2UnitStrc*)(nElemMinDmg + nMasteryElemMin);
       }
     } else {
       nSkillId = (int)nMissileSkillId;
@@ -1119,12 +1119,13 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       nCalcMinDmg = Skills::SKILL_CalcMinDamage(pUnit, nSkillId, nLevel, 0);
       nCalcMaxDmg = Skills::SKILL_CalcMaxDamage(pUnit, nSkillId, nLevel, 0);
       nElemType = (eD2ElementalDamageTypeDWORD)pSkillTxt->EType;
-      nFinalElemMinDmg = (D2UnitStrc*)Skills::SERVER_MinDamage(pUnit, nSkillId, nLevel, 1);
+      nFinalElemMinDmg = Skills::SERVER_MinDamage(pUnit, nSkillId, nLevel, 1);
       nElemMaxDmg = Skills::SERVER_MaxDamage(pUnit, nSkillId, nLevel, 1);
       nElemLength = Skills::SKILLS_GetElementalLength(pUnit, nSkillId, nLevel, 1);
+      pDVar1 = (D2UnitStrc*)nFinalElemMinDmg;
     }
 
-    int nUnit = (int)nFinalElemMinDmg;
+    int nUnit = (int)pDVar1;
     if (pMissileTxt->Holy & 1U) {
       pMissileDamageData->nFlags |= 0x100;
     }

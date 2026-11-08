@@ -448,31 +448,17 @@ static void TILECMP_Generate25SubTiles(D2TileCmpTileSetStrc * pTileSet, void * p
     }
 }; D2_STATIC_GUARD(gaTileCmpSubTileOffsets, "D2CMP::SRC::Tilecmp::TILECMP_Generate25SubTiles::gaTileCmpSubTileOffsets");
 
-    // Frame slots -24..-4 are ONE object: &dwSubTileField4 is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t dwSubTileField4;
-      uint32_t dwSubTileField3;
-      uint32_t dwSubTileField2;
-      uint32_t dwSubTileField1;
-      uint32_t dwSubTileField0;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 20, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     D2TileCmpTileNodeStrc* pNewNode;
     uint32_t bHasPixelData;
     int iSubTile = 0;
     do {
       char cSubTileCol;
-      __frame0.dwSubTileField4 = 0;
-      __frame0.dwSubTileField3 = 0;
-      __frame0.dwSubTileField2 = 0;
-      __frame0.dwSubTileField1 = 0;
-      __frame0.dwSubTileField0 = 0;
-      TILECMP_ExtractIsometricSubTile((D2TileCmpTileNodeStrc*)&__frame0.dwSubTileField4, pDT1Data, pTileSet->dwTransparentColor, gaTileCmpSubTileOffsets[iSubTile].nPixelCol, gaTileCmpSubTileOffsets[iSubTile].nPixelRow);
+      D2TileCmpTileNodeStrc sSubTile = {0};
+      TILECMP_ExtractIsometricSubTile(&sSubTile, pDT1Data, pTileSet->dwTransparentColor, gaTileCmpSubTileOffsets[iSubTile].nPixelCol, gaTileCmpSubTileOffsets[iSubTile].nPixelRow);
       cSubTileCol = (char)(iSubTile / 5);
-      bHasPixelData = __frame0.dwSubTileField3 & 0x10000;
-      __frame0.dwSubTileField3 = (uint32_t)((uint32_t)__frame0.dwSubTileField3 & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)((uint16_t)(uint8_t)cSubTileCol << 8 | (uint16_t)(uint8_t)((char)iSubTile + cSubTileCol * -5)));
+      bHasPixelData = *(uint32_t*)((char*)&sSubTile + 4) & 0x10000;
+      *(uint8_t*)((char*)&sSubTile.wUnk_04 + 1) = cSubTileCol;
+      *(uint8_t*)(char*)&sSubTile.wUnk_04 = (char)iSubTile + cSubTileCol * -5;
       if (bHasPixelData) {
         pNewNode = D2_NEW_AT(D2TileCmpTileNodeStrc, ".\\SRC\\Tilecmp.cpp", 0x1a7);
         if (!pNewNode) {
@@ -480,14 +466,14 @@ static void TILECMP_Generate25SubTiles(D2TileCmpTileSetStrc * pTileSet, void * p
           exit(-1);
         }
 
-        pNewNode->wOffsetX = (uint16_t)__frame0.dwSubTileField4;
-        pNewNode->wOffsetY = *(uint16_t*)((char*)&__frame0.dwSubTileField4 + 2);
-        pNewNode->wUnk_04 = (uint16_t)__frame0.dwSubTileField3;
-        pNewNode->wFlags = (uint16_t)((uint32_t)__frame0.dwSubTileField3 >> 16);
-        pNewNode->wPixelSize = (uint16_t)__frame0.dwSubTileField2;
-        pNewNode->wUnk_0A = (uint16_t)((uint32_t)__frame0.dwSubTileField2 >> 16);
-        pNewNode->pPixelBuf = (uint8_t*)__frame0.dwSubTileField1;
-        pNewNode->pNext = (D2TileCmpTileNodeStrc*)__frame0.dwSubTileField0;
+        pNewNode->wOffsetX = sSubTile.wOffsetX;
+        pNewNode->wOffsetY = sSubTile.wOffsetY;
+        pNewNode->wUnk_04 = sSubTile.wUnk_04;
+        pNewNode->wFlags = sSubTile.wFlags;
+        pNewNode->wPixelSize = sSubTile.wPixelSize;
+        pNewNode->wUnk_0A = sSubTile.wUnk_0A;
+        pNewNode->pPixelBuf = sSubTile.pPixelBuf;
+        pNewNode->pNext = sSubTile.pNext;
         pNewNode->pNext = pTileSet->pNodeHead;
         pTileSet->nNodeCount++;
         pTileSet->pNodeHead = pNewNode;
@@ -862,7 +848,7 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         return;
       }
 
-      pTileCmpHdr->pTiles = (D2TileLibraryEntryStrc*)(((D2TileLibraryEntryStrc*)(pTileCmpHdr->pTiles->abSubTileFlags - 0x28))->abSubTileFlags + (intptr_t)&pTileCmpHdr[-1].field_0xec);
+      pTileCmpHdr->pTiles = (D2TileLibraryEntryStrc*)(pTileCmpHdr->szLibraryName + (intptr_t)(pTileCmpHdr->pTiles->abSubTileFlags - 0x30));
       if (szText) {
         nCurTilePixelTotal = 8 - (int)szText;
         do {
@@ -872,14 +858,14 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         } while (byStrChar != '\0');
       }
 
-      pTileSetData = (uint8_t*)(&pTileCmpHdr[1].nVersion + pTileCmpHdr->nTiles * 0x18);
+      pTileSetData = (uint8_t*)(pTileCmpHdr[1].szLibraryName + pTileCmpHdr->nTiles * 0x60 - 8);
       iTileSet = 0;
       if (pTileCmpHdr->nTiles > 0) {
         szText = 0;
         do {
           pBVar1 = pTileCmpHdr->pTiles->abSubTileFlags;
-          *(uint8_t**)(szText + (intptr_t)(pBVar1 + 0x30)) = &pTileCmpHdr->field_0x8;
-          *(int*)(szText + (intptr_t)(pBVar1 + 0x2c)) = (intptr_t)&pTileCmpHdr->nVersion + *(int*)(szText + (intptr_t)(pBVar1 + 0x20));
+          *(char**)(szText + (intptr_t)(pBVar1 + 0x30)) = pTileCmpHdr->szLibraryName;
+          *(char**)(szText + (intptr_t)(pBVar1 + 0x2c)) = pTileCmpHdr->szLibraryName + *(int*)(szText + (intptr_t)(pBVar1 + 0x20)) - 8;
           nCurTilePixelTotal = *(int*)(szText + (intptr_t)(pBVar1 + 0x28)) * 0x14;
           nTileSetByteOffset = 0;
           if (*(int*)(szText + (intptr_t)(pBVar1 + 0x28)) > 0) {
@@ -887,7 +873,7 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
             do {
               nNodePixelOffset = *(int*)(szText + (intptr_t)(pBVar1 + 0x2c));
               pNodePixelPtr = (int*)(nNodePixelOffset + 0x10 + iTileSetIter);
-              *pNodePixelPtr = (int)((int)pTileSetData + *pNodePixelPtr);
+              *pNodePixelPtr = (int)(pTileSetData + *pNodePixelPtr);
               nTileSetByteOffset++;
               nCurTilePixelTotal += (uint32_t)*(uint16_t*)(nNodePixelOffset + iTileSetIter + 10);
               iTileSetIter += 0x14;
@@ -896,7 +882,7 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
 
           szText += 0x60;
           iTileSet++;
-          pTileSetData = (uint8_t*)((char*)pTileSetData + nCurTilePixelTotal);
+          pTileSetData += nCurTilePixelTotal;
         } while (iTileSet < pTileCmpHdr->nTiles);
       }
 
@@ -916,8 +902,8 @@ void __stdcall TILECMP_FixupMinimalPointers(D2TileLibraryHeaderStrc * pTileCmpHd
       return;
     }
 
-    pTileCmpHdr->pTiles = (D2TileLibraryEntryStrc*)(((D2TileLibraryEntryStrc*)(pTileCmpHdr->pTiles->abSubTileFlags - 0x28))->abSubTileFlags + (intptr_t)&pTileCmpHdr[-1].field_0xec);
-    int iTileSet = (intptr_t)&pTileCmpHdr->field_0x8 - (int)szText;
+    pTileCmpHdr->pTiles = (D2TileLibraryEntryStrc*)(pTileCmpHdr->szLibraryName + (intptr_t)(pTileCmpHdr->pTiles->abSubTileFlags - 0x30));
+    int iTileSet = (intptr_t)pTileCmpHdr->szLibraryName - (intptr_t)szText;
     do {
       byStrChar = *szText;
       szText[iTileSet] = byStrChar;
@@ -929,7 +915,7 @@ void __stdcall TILECMP_FixupMinimalPointers(D2TileLibraryHeaderStrc * pTileCmpHd
       D2TileLibraryEntryStrc* pDVar1;
       do {
         pDVar1 = pTileCmpHdr->pTiles;
-        *(uint8_t**)&pDVar1[iTileSet].szFilePath = &pTileCmpHdr->field_0x8;
+        pDVar1[iTileSet].szFilePath = pTileCmpHdr->szLibraryName;
         if ((int)pDVar1[iTileSet].pSubTiles) {
           TILECMP_FixupMinimalPointers_HaltTail(0x3a2);
         }
@@ -1219,16 +1205,16 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
 
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_ShallowCopyZeroPointers(D2TileLibraryHeaderStrc * pSrcDt1, void * * ppDt1Copy, size_t * pnSize) {
-    uint32_t* pTileSetEntry;
+    char* pTileSetEntry;
     int iCount;
     size_t nAllocSize;
     if (!pSrcDt1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (D2TileLibraryHeaderStrc*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x493);
       exit(-1);
     } else {
-      void* pDstBlock;
+      D2TileLibraryHeaderStrc* pDstBlock;
       nAllocSize = pSrcDt1->nTiles * 0x60 + 0x114;
-      pDstBlock = D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", 0x49a);
+      pDstBlock = (D2TileLibraryHeaderStrc*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", 0x49a);
       if (!pDstBlock) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (D2TileLibraryHeaderStrc*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x49b);
         exit(-1);
@@ -1236,19 +1222,19 @@ void __stdcall TILECMP_ShallowCopyZeroPointers(D2TileLibraryHeaderStrc * pSrcDt1
 
       memset(pDstBlock, 0, nAllocSize);
       memcpy(pDstBlock, pSrcDt1, nAllocSize);
-      *(int*)((char*)pDstBlock + 0x110) = (int)pDstBlock + 0x114;
-      if (*(int*)((char*)pDstBlock + 0x10c) > 0) {
-        pTileSetEntry = (uint32_t*)((char*)pDstBlock + 0x164);
+      pDstBlock->pTiles = (D2TileLibraryEntryStrc*)(pDstBlock + 1);
+      if (pDstBlock->nTiles > 0) {
+        pTileSetEntry = pDstBlock[1].szLibraryName + 0x48;
         iCount = 0;
         do {
-          pTileSetEntry[1] = 0;
-          *pTileSetEntry = 0;
+          *(uint32_t*)(pTileSetEntry + 4) = 0;
+          *(uint32_t*)pTileSetEntry = 0;
           iCount++;
-          pTileSetEntry += 0x18;
-        } while (iCount < *(int*)((char*)pDstBlock + 0x10c));
+          pTileSetEntry += 0x60;
+        } while (iCount < pDstBlock->nTiles);
       }
 
-      *(uint32_t*)((char*)pDstBlock + 4) &= 4;
+      pDstBlock->dwFlags &= 4;
       *ppDt1Copy = pDstBlock;
       *pnSize = nAllocSize;
       return;

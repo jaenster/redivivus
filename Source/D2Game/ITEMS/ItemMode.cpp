@@ -94,6 +94,9 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
     uint32_t nChargedSkillId;
     eD2States eState;
     bool bStateActivate;
+    int nItemOwner;
+    int nItemOwner2;
+    int nItemOwner3;
     eD2Skills fOldMaxStat;
     fOldMaxStat = eSkill;
     if (!pGame) {
@@ -136,12 +139,12 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
     nSkillLevel = nOldValue;
     switch (eStat) {
       case UNITSTAT_maxhp:
-        if (nNewValue != nOldValue && nOldValue > 0 && (pItemOwner = (D2UnitStrc*)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) , (intptr_t)pItemOwner > 0)) {
+        if (nNewValue != nOldValue && nOldValue > 0 && (nItemOwner3 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) , nItemOwner3 > 0)) {
           if (nSkillLevel <= 0x100) {
             nOldValue = 0x100;
           }
 
-          nNewValue = (int)((float)nNewValue / (float)nOldValue * (float)(int)pItemOwner);
+          nNewValue = (int)((float)nNewValue / (float)nOldValue * (float)nItemOwner3);
           fScaledHp = (int)(float)nNewValue;
           nSkillLevel = fScaledHp;
           if (fScaledHp <= 1) {
@@ -167,12 +170,12 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         }
       break;
       case UNITSTAT_maxmana:
-        if (nNewValue != nOldValue && nOldValue > 0 && (pItemOwner = (D2UnitStrc*)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0) , (intptr_t)pItemOwner > 0)) {
+        if (nNewValue != nOldValue && nOldValue > 0 && (nItemOwner2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0) , nItemOwner2 > 0)) {
           if (nSkillLevel <= 0x100) {
             nOldValue = 0x100;
           }
 
-          nNewValue = (int)((float)nNewValue / (float)nOldValue * (float)(int)pItemOwner);
+          nNewValue = (int)((float)nNewValue / (float)nOldValue * (float)nItemOwner2);
           fScaledHp = (int)(float)nNewValue;
           nSkillLevel = fScaledHp;
           if (fScaledHp <= 1) {
@@ -191,12 +194,12 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         }
       break;
       case UNITSTAT_maxstamina:
-        if (nNewValue != nOldValue && nOldValue > 0 && (pItemOwner = (D2UnitStrc*)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stamina, 0) , (intptr_t)pItemOwner > 0)) {
+        if (nNewValue != nOldValue && nOldValue > 0 && (nItemOwner = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stamina, 0) , nItemOwner > 0)) {
           if (nSkillLevel <= 0x100) {
             nOldValue = 0x100;
           }
 
-          nNewValue = (int)((float)nNewValue / (float)nOldValue * (float)(int)pItemOwner);
+          nNewValue = (int)((float)nNewValue / (float)nOldValue * (float)nItemOwner);
           fScaledHp = (int)(float)nNewValue;
           nSkillLevel = fScaledHp;
           if (fScaledHp <= 1) {
@@ -6534,6 +6537,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
     uint32_t dwCarriedGUID;
     eD2UnitType eUnitType;
     POINT* pNewPosition;
+    int32_t nPlayerInventory;
     if (!pUnit) {
       nClassId = -1;
     } else {
@@ -6581,11 +6585,11 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
         bInTrade = D2Common::Units::GetInventoryPage(pUnit2, eInvPage, pGame->bExpansion);
         eUnitType = pCarriedItem->eUnitType;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          pPlayerInventory = (D2InventoryStrc*)pCarriedItem->pPath.pStaticPath->nPosY;
+          nPlayerInventory = pCarriedItem->pPath.pStaticPath->nPosY;
         } else if (pCarriedItem->pPath.pDynamicPath) {
-          pPlayerInventory = (D2InventoryStrc*)D2Common::PATH::DynamicPath::GetYPos(pCarriedItem->pPath.pDynamicPath);
+          nPlayerInventory = D2Common::PATH::DynamicPath::GetYPos(pCarriedItem->pPath.pDynamicPath);
         } else {
-          pPlayerInventory = 0;
+          nPlayerInventory = 0x0;
         }
 
         eUnitType = pCarriedItem->eUnitType;
@@ -6597,7 +6601,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
           nPutResult = 0;
         }
 
-        D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x813, pCubeInventory, nPutResult, (int32_t)pPlayerInventory, (eInventoryPage)bInTrade, 0, nSrcInvPage);
+        D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x813, pCubeInventory, nPutResult, nPlayerInventory, (eInventoryPage)bInTrade, 0, nSrcInvPage);
         D2Common::Units::SetupUpdateFlag(pCubeItem, 4);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pCarriedItem, INVPAGE_INVENTORY);
         dwCarriedGUID = pCarriedItem->nUnitGUID;

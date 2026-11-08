@@ -1621,11 +1621,11 @@
         "NET_D2GS_SERVER_Send_0x26_CHATSTART"
       ],
       "usedTypes": [
+        "D2ChatBroadcastCtx",
         "D2ClientStrc",
         "D2GSPacketSrv0x26",
         "D2UnitStrc",
         "SGAMEDATA",
-        "char *",
         "uint32_t"
       ]
     },
@@ -1650,11 +1650,11 @@
         "NET_D2GS_SERVER_Send_0x26_CHATSTART"
       ],
       "usedTypes": [
+        "D2ChatBroadcastCtx",
         "D2ClientStrc",
         "D2GSPacketSrv0x26",
         "D2UnitStrc",
         "SGAMEDATA",
-        "char *",
         "int32_t",
         "uint32_t"
       ]

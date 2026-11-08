@@ -1229,11 +1229,11 @@ eD2UnitType __fastcall CLIENT_FindNearbyCorpseCallback(D2UnitStrc * pSourceUnit,
 }
 
 void __fastcall CLIENT_RegisterActiveUnitInSlot(D2UnitStrc * nUnitId) {
-    uint32_t* pSlot = (uint32_t*)gaActiveUnitSlots;
+    D2UnitStrc** pSlot = gaActiveUnitSlots;
     int nSlotIndex = 0;
     do {
       if (!*pSlot) {
-        *pSlot = (uint32_t)nUnitId;
+        *pSlot = nUnitId;
         return;
       }
 
@@ -1243,10 +1243,10 @@ void __fastcall CLIENT_RegisterActiveUnitInSlot(D2UnitStrc * nUnitId) {
 }
 
 void __fastcall CLIENT_UnregisterActiveUnitFromSlot(D2UnitStrc * nUnitId) {
-    uint32_t* pSlot = (uint32_t*)gaActiveUnitSlots;
+    D2UnitStrc** pSlot = gaActiveUnitSlots;
     int nSlotIndex = 0;
     do {
-      if ((D2UnitStrc*)*pSlot == nUnitId) {
+      if (*pSlot == nUnitId) {
         *pSlot = 0;
         return;
       }

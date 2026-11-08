@@ -192,6 +192,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -265,8 +266,11 @@
         "SSYSTEM_ListUnlinkAndInsert"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -303,6 +307,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -357,6 +362,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<HANDLER>",
+        "TSLink<HANDLER> *",
         "TSList<HANDLER, TSGetLink<HANDLER>>",
         "uint32_t"
       ]
@@ -377,6 +384,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -435,6 +443,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t",
         "uint8_t"
       ]
@@ -457,6 +466,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "int32_t",
         "pfnSErrDisplayCallback",
         "uint32_t"
@@ -500,6 +510,7 @@
       "usedTypes": [
         "HANDLER",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]

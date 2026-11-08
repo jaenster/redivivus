@@ -68,7 +68,7 @@ public:
     /* 0x00 */ TSLink<T>* m_prevlink; // previous node's link, or the list head's own terminator link
     /* 0x04 */ intptr_t m_next; // address of the next element (not its link), or ~address of the list terminator at the end
 
-    TSLink<T>* NextLink(int32_t nLinkOffset);
+    TSLink<T>* NextLink(intptr_t nLinkOffset);
 };
 
 template<class T, class TGetLink>
@@ -687,18 +687,18 @@ template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __thiscall TSHashTabl
 template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
 
 // TSLink<CELLIST>
-template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(int32_t nLinkOffset);
+template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(intptr_t nLinkOffset);
 
 // TSLink<MappingEntryNode>
-template<> TSLink<::MappingEntryNode>* TSLink<MappingEntryNode>::NextLink(int32_t nLinkOffset);
+template<> TSLink<::MappingEntryNode>* TSLink<MappingEntryNode>::NextLink(intptr_t nLinkOffset);
 
 // TSLink<SGAMEDATA>
 // Returns the link after this one; a negative link offset is derived from the neighbour.
 // Byte-identical to TSLink<CELLIST>::NextLink 00601bc0; T not proven (no xrefs), filed with the SGAMEDATA block.
-template<> TSLink<::SGAMEDATA>* TSLink<SGAMEDATA>::NextLink(int32_t nLinkOffset);
+template<> TSLink<::SGAMEDATA>* TSLink<SGAMEDATA>::NextLink(intptr_t nLinkOffset);
 
 // TSLink<StringEntryNode>
-template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(int32_t nLinkOffset);
+template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(intptr_t nLinkOffset);
 
 // TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>
 template<> __attribute__((noinline)) inline void TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>::UnlinkAll();
@@ -778,9 +778,9 @@ void __thiscall Destructor_UnwindThunk(TSGrowableArray<TSExplicitList<SGAMEDATA,
 // Same code as TSGrowableArray<TSExplicitList<CELLIST,..>>::SetCount_Unreferenced 00603850.
 void __thiscall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * pThis, uint32_t nCount);
 // stpl-orphan: a COMDAT copy in TSLink<CELLIST> that no member owns
-TSLink<::CELLIST>* __thiscall NextLink_Unreferenced(TSLink<::CELLIST>* pThis, int32_t nLinkOffset);
+TSLink<::CELLIST>* __thiscall NextLink_Unreferenced(TSLink<::CELLIST>* pThis, intptr_t nLinkOffset);
 // stpl-orphan: a COMDAT copy in TSLink<CELLIST> that no member owns
-TSLink<::CELLIST>* __thiscall NextLink_Unreferenced2(TSLink<::CELLIST>* pThis, int32_t nLinkOffset);
+TSLink<::CELLIST>* __thiscall NextLink_Unreferenced2(TSLink<::CELLIST>* pThis, intptr_t nLinkOffset);
 // stpl-orphan: a COMDAT copy in TSExplicitList<CELLIST, -572662307> that no member owns
 TSLink<::CELLIST>* __thiscall Link_Unreferenced(TSExplicitList<::CELLIST, -572662307>* pThis, ::CELLIST * ptr);
 // stpl-orphan: a COMDAT copy in TSExplicitList<CELLIST, -572662307> that no member owns

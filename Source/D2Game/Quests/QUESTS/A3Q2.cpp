@@ -510,7 +510,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc *
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
-    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
+    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
@@ -555,7 +555,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
-    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
+    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
@@ -600,7 +600,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
-    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
+    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
     if (!nGoldPiles) {
       return 0;
     }

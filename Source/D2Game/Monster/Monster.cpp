@@ -682,12 +682,12 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
             break;
           }
           if ((uint8_t)uMonTxt.pMonPropTxt->chance[(int)nParam][nPlayerCount] <= '\0') {
-            D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, 0, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, 0);
+            D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, 0);
           } else {
             DVar1 = D2_SEED_NEXT(pUnit->sSeed);
             pUnit->sSeed = DVar1;
             if ((int)(DVar1.nSeedLow % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[(int)nParam][nPlayerCount]) {
-              D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, 0, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, 0);
+              D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, 0);
             }
           }
 

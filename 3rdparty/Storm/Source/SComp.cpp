@@ -192,14 +192,14 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_00779214 = {}; D2_STATIC_GUARD(lp
 namespace Storm::Source::SComp {
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -384,8 +384,8 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
 
     uint32_t nStepSize;
     do {
-      if ((intptr_t)(pOutCur + (2 - (intptr_t)pOutStart)) > (int)nMaxOutSize) {
-        return (uint32_t)(pOutCur + (2 - (intptr_t)pOutStart));
+      if ((int)((char*)pOutCur - (char*)pOutStart + 2) > (int)nMaxOutSize) {
+        return (uint32_t)((char*)pOutCur - (char*)pOutStart + 2);
       }
       if (nChannels == 2) {
         nChannel = (uint32_t)!nChannel;
@@ -1182,14 +1182,14 @@ int __fastcall Unreferenced_0041e930(StormLinkStrc * param_1) {
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -1239,14 +1239,14 @@ int __fastcall Unreferenced_0041ea60(int param_1) {
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -1262,7 +1262,7 @@ int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrD
 }
 
 void __thiscall LINKEDLIST_UnlinkNode(StormLinkedListStrc * pThis, int * pNode) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     if (!pNode) {
       pNode = (int*)&pThis->head;
     }
@@ -1272,8 +1272,8 @@ void __thiscall LINKEDLIST_UnlinkNode(StormLinkedListStrc * pThis, int * pNode) 
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-    *pPrevLink = (int)pNext;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *pPrevLink = pNext;
     ((StormLinkStrc*)pNode)->pPrevLink->pNext = ((StormLinkStrc*)pNode)->pNext;
     ((StormLinkStrc*)pNode)->pPrevLink = 0;
     ((StormLinkStrc*)pNode)->pNext = 0;
@@ -1285,60 +1285,61 @@ uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * param_1) {
     return param_1;
 }
 
-int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, uint16_t * * pBitBuf) {
-    uint32_t nQuickIdx;
+int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, D2BitStreamReaderStrc * pBitBuf) {
+    uint32_t uVar2;
     D2CompressHuffNodeStrc* pTreeNode;
-    uint16_t** pnBitsLeft;
-    uint16_t* wBits;
+    uint32_t* pnBitsLeft;
+    uint32_t wBits;
     uint16_t wRefill;
-    uint16_t** pBitBufAlias = pBitBuf;
-    uint32_t wWord = (uint32_t)pBitBuf[2];
+    D2BitStreamReaderStrc* pDVar3 = pBitBuf;
+    uint32_t wWord = pBitBuf->nBitCount;
     if (wWord <= 7) {
-      wRefill = **pBitBuf;
-      pBitBuf[2] = (uint16_t*)(wWord + 0x10);
-      pBitBuf[1] = (uint16_t*)((uintptr_t)pBitBuf[1] | (uint32_t)wRefill << (uint8_t)wWord);
-      (*pBitBuf)++;
+      wRefill = *pBitBuf->pCur;
+      pBitBuf->nBitCount = wWord + 0x10;
+      pBitBuf->dwBitBuffer |= (uint32_t)wRefill << (uint8_t)wWord;
+      pBitBuf->pCur++;
     }
 
-    uint16_t* dwBitAccum = pBitBuf[1];
-    uint32_t* pQuickFill = pThis->aQuickTable + ((uintptr_t)dwBitAccum & 0x7f) * 3;
+    uint32_t nQuickIdx = pBitBuf->dwBitBuffer;
+    uint32_t* pQuickFill = pThis->aQuickTable + (nQuickIdx & 0x7f) * 3;
     bool bNeedRebuild = *pQuickFill != pThis->nEpoch;
     if (!bNeedRebuild) {
-      nQuickIdx = pQuickFill[1];
-      if (nQuickIdx <= 7) {
-        pBitBuf[2] = (uint16_t*)((char*)pBitBuf[2] - nQuickIdx);
-        pBitBuf[1] = (uint16_t*)((uintptr_t)dwBitAccum >> (uint8_t)nQuickIdx);
+      wBits = pQuickFill[1];
+      if (wBits <= 7) {
+        pBitBuf->nBitCount -= wBits;
+        pBitBuf->dwBitBuffer = nQuickIdx >> (uint8_t)wBits;
         return pQuickFill[2];
       }
 
-      pBitBuf[2] = (uint16_t*)((char*)pBitBuf[2] - 7);
-      pBitBuf[1] = (uint16_t*)((uintptr_t)dwBitAccum >> 7);
+      pBitBuf->nBitCount -= 7;
+      pBitBuf->dwBitBuffer = nQuickIdx >> 7;
       pTreeNode = (D2CompressHuffNodeStrc*)pQuickFill[2];
     } else {
-      nQuickIdx = *(uint32_t*)(*(int*)pThis->nActiveListSelf + 4);
-      pTreeNode = (D2CompressHuffNodeStrc*)((int)nQuickIdx <= 0 ? 0 : nQuickIdx);
+      D2CompressHuffNodeStrc* pDVar1;
+      pDVar1 = pThis->pActiveListSelf->pNext->nPrevOffset;
+      pTreeNode = (intptr_t)pDVar1 <= 0 ? nullptr : pDVar1;
     }
 
     uint32_t nBitCount = 0;
-    pBitBuf = 0;
+    uint32_t nBitBuf = 0x0;
     do {
-      wBits = pBitBufAlias[1];
+      wBits = pDVar3->dwBitBuffer;
       pTreeNode = pTreeNode->pSibling;
-      pnBitsLeft = pBitBufAlias + 2;
-      *pnBitsLeft = (uint16_t*)((char*)*pnBitsLeft - 1);
-      pBitBufAlias[1] = (uint16_t*)((uintptr_t)wBits >> 1);
+      pnBitsLeft = &pDVar3->nBitCount;
+      (*pnBitsLeft)--;
+      pDVar3->dwBitBuffer = wBits >> 1;
       if (!*pnBitsLeft) {
-        pBitBufAlias[1] = *(uint16_t**)*pBitBufAlias;
-        *pBitBufAlias += 2;
-        pBitBufAlias[2] = (uint16_t*)0x20;
+        pDVar3->dwBitBuffer = *(uint32_t*)pDVar3->pCur;
+        pDVar3->pCur = (uint16_t*)((char*)pDVar3->pCur + 4);
+        pDVar3->nBitCount = 0x20;
       }
-      if ((uintptr_t)wBits & 1) {
+      if (wBits & 1) {
         pTreeNode = pTreeNode->nPrevOffset;
       }
 
       nBitCount = (intptr_t)&((D2CompressHuffNodeStrc*)nBitCount)->pNext + 1;
       if ((D2CompressHuffNodeStrc*)nBitCount == (D2CompressHuffNodeStrc*)0x7) {
-        pBitBuf = (uint16_t**)pTreeNode;
+        nBitBuf = (uint32_t)pTreeNode;
       }
     } while (pTreeNode->pSibling);
 
@@ -1346,15 +1347,14 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, uint16_t *
       return pTreeNode->nSymbol;
     }
     if (nBitCount > (uintptr_t)(D2CompressHuffNodeStrc*)0x7) {
-      uint32_t uVar1;
-      uVar1 = pThis->nEpoch;
+      uVar2 = pThis->nEpoch;
       pQuickFill[1] = nBitCount;
-      *pQuickFill = uVar1;
-      pQuickFill[2] = (uint32_t)pBitBuf;
+      *pQuickFill = uVar2;
+      pQuickFill[2] = nBitBuf;
       return pTreeNode->nSymbol;
     }
 
-    nQuickIdx = 0xffffffffU >> D2_SHIFT_COUNT(0x20 - nBitCount) & (uintptr_t)dwBitAccum & 0x7f;
+    nQuickIdx = 0xffffffffU >> D2_SHIFT_COUNT(0x20 - nBitCount) & nQuickIdx & 0x7f;
     int nQuickStep = 1 << D2_SHIFT_COUNT(nBitCount);
     pQuickFill = pThis->aQuickTable + nQuickIdx * 3 + 2;
     do {
@@ -1369,14 +1369,14 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, uint16_t *
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -1393,25 +1393,22 @@ StormLinkedListStrc * __fastcall Unreferenced_0041ed70(StormLinkedListStrc * par
 }
 
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef) {
-    int* pLinkTarget;
-    int** pNodeCur = pNode;
+    int* piVar1;
+    uint32_t pNeighbor2;
+    StormLinkStrc* pNodeCur = (StormLinkStrc*)pNode;
     if (!pNode) {
-      pNodeCur = pListHead + 1;
+      pNodeCur = (StormLinkStrc*)(pListHead + 1);
     }
 
-    int* pNeighbor = *pNodeCur;
+    StormLinkStrc* pNeighbor = pNodeCur->pPrevLink;
     if (pNeighbor) {
-      pLinkTarget = pNodeCur[1];
-      if ((intptr_t)pLinkTarget < 0) {
-        pLinkTarget = (int*)~(uintptr_t)pLinkTarget;
-      } else {
-        pLinkTarget = (int*)((intptr_t)pLinkTarget + ((intptr_t)pNodeCur - pNeighbor[1]));
-      }
-
-      *pLinkTarget = (int)pNeighbor;
-      (*pNodeCur)[1] = (int)pNodeCur[1];
-      *pNodeCur = 0;
-      pNodeCur[1] = 0;
+      StormLinkStrc** pLinkTarget;
+      pNeighbor2 = pNodeCur->pNext;
+      pLinkTarget = (StormLinkStrc**)D2_StormNextLink(pNodeCur, -1);
+      *pLinkTarget = pNeighbor;
+      pNodeCur->pPrevLink->pNext = pNodeCur->pNext;
+      pNodeCur->pPrevLink = 0;
+      pNodeCur->pNext = 0;
     }
     if (!pInsertRef) {
       pInsertRef = pListHead + 1;
@@ -1420,52 +1417,52 @@ void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nI
     switch (nInsertAtHead) {
       case 1:
         {
-          *pNodeCur = (int*)pInsertRef;
-          pNodeCur[1] = pInsertRef[1];
-          pNeighbor = *pListHead;
-          pLinkTarget = pInsertRef[1];
-          if ((intptr_t)pLinkTarget < 0) {
-            *(int***)~(uintptr_t)pLinkTarget = (int**)pNodeCur;
-            pInsertRef[1] = (int*)pNode;
+          pNodeCur->pPrevLink = (StormLinkStrc*)pInsertRef;
+          pNodeCur->pNext = ((StormLinkStrc*)pInsertRef)->pNext;
+          piVar1 = *pListHead;
+          pNeighbor2 = ((StormLinkStrc*)pInsertRef)->pNext;
+          if ((int)pNeighbor2 < 0) {
+            *(StormLinkStrc**)~pNeighbor2 = (StormLinkStrc*)pNodeCur;
+            ((StormLinkStrc*)pInsertRef)->pNext = (intptr_t)pNode;
             return;
           }
-          if ((intptr_t)pNeighbor < 0) {
-            pNeighbor = (int*)((char*)pInsertRef - (*pInsertRef)[1]);
+          if ((intptr_t)piVar1 < 0) {
+            piVar1 = (int*)((char*)pInsertRef - ((StormLinkStrc*)pInsertRef)->pPrevLink->pNext);
           }
 
-          *(int***)((intptr_t)pLinkTarget + (intptr_t)pNeighbor) = (int**)pNodeCur;
-          pInsertRef[1] = (int*)pNode;
+          *(StormLinkStrc**)(pNeighbor2 + (char*)piVar1) = (StormLinkStrc*)pNodeCur;
+          ((StormLinkStrc*)pInsertRef)->pNext = (intptr_t)pNode;
           return;
         }
       default:
         {
-          pNeighbor = *pInsertRef;
-          *pNodeCur = pNeighbor;
-          pNodeCur[1] = (int*)pNeighbor[1];
-          pNeighbor[1] = (int)pNode;
-          *pInsertRef = (int*)pNodeCur;
+          pNeighbor = ((StormLinkStrc*)pInsertRef)->pPrevLink;
+          pNodeCur->pPrevLink = pNeighbor;
+          pNodeCur->pNext = pNeighbor->pNext;
+          pNeighbor->pNext = (intptr_t)pNode;
+          ((StormLinkStrc*)pInsertRef)->pPrevLink = pNodeCur;
           return;
         }
     }
 }
 
 void __fastcall LINKEDLIST_UnlinkAll(StormLinkedListStrc * pList) {
-    int* pPrevLink;
-    int* pNode;
+    StormLinkStrc** pPrevLink;
+    StormLinkStrc* pNode;
     while (true) {
-      int pNext;
-      pNode = (intptr_t)(int*)pList->head.pNext > 0 ? (int*)pList->head.pNext : 0;
+      StormLinkStrc* pNext;
+      pNode = (intptr_t)(StormLinkStrc*)pList->head.pNext > 0 ? (StormLinkStrc*)pList->head.pNext : 0;
       if (!pNode) {
         break;
       }
 
-      pNext = *pNode;
+      pNext = pNode->pPrevLink;
       if (pNext) {
-        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+        pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
-        *(int*)(*pNode + 4) = pNode[1];
-        *pNode = 0;
-        pNode[1] = 0;
+        pNode->pPrevLink->pNext = pNode->pNext;
+        pNode->pPrevLink = 0;
+        pNode->pNext = 0;
       }
     }
 }
@@ -1490,7 +1487,7 @@ void __fastcall LINKEDLIST_NodeDestructor(void * pNode) {
 }
 
 D2CompressHuffNodeStrc * __thiscall HUFFMAN_AllocateNode(D2HuffmanContextStrc * pThis, int32_t nInsertMode) {
-    D2CompressHuffNodeStrc* pNode = (D2CompressHuffNodeStrc*)pThis->nFreeListBack;
+    D2CompressHuffNodeStrc* pNode = pThis->nFreeListBack;
     if ((intptr_t)pNode <= 0 || !pNode) {
       pNode = pThis->aNodes + pThis->nNodeCount;
       pThis->nNodeCount++;
@@ -3834,8 +3831,12 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
     D2CompressHuffNodeStrc* pDVar1;
     D2CompressHuffNodeStrc* pSortedNext;
     D2CompressHuffNodeStrc** pLink;
-    int* piVar2;
-    uint32_t* pLinkTarget;
+    uint32_t* pPrevLink;
+    D2CompressHuffNodeStrc** pUnlinkSlot2;
+    D2CompressHuffNodeStrc** piVar2;
+    D2CompressHuffNodeStrc** pLinkTarget;
+    D2CompressHuffNodeStrc** pUnlinkSlot3;
+    D2CompressHuffNodeStrc** pUnlinkSlot;
     D2CompressHuffNodeStrc* nLinkOff;
     uint32_t nWeightB;
     D2CompressHuffNodeStrc* pInsertPos;
@@ -3901,8 +3902,8 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         }
         if (nLinkOff->pNext) {
           pNewNode = nLinkOff->nPrevOffset;
-          pLinkTarget = (uint32_t*)D2_StormNextLink(nLinkOff, -1);
-          *pLinkTarget = (uint32_t)(uintptr_t)nLinkOff->pNext;
+          pPrevLink = (uint32_t*)D2_StormNextLink(nLinkOff, -1);
+          *pPrevLink = (uint32_t)(uintptr_t)nLinkOff->pNext;
           nLinkOff->pNext->nPrevOffset = nLinkOff->nPrevOffset;
           nLinkOff->pNext = 0;
           nLinkOff->nPrevOffset = 0;
@@ -3940,8 +3941,8 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
           pNewNode = pSortedNext->pNext;
           if (pNewNode) {
             pDVar1 = pSortedNext->nPrevOffset;
-            piVar2 = (int*)D2_StormNextLink(pSortedNext, -1);
-            *piVar2 = (int)pNewNode;
+            pUnlinkSlot2 = (D2CompressHuffNodeStrc**)D2_StormNextLink(pSortedNext, -1);
+            *pUnlinkSlot2 = pNewNode;
             pSortedNext->pNext->nPrevOffset = pSortedNext->nPrevOffset;
             pSortedNext->pNext = 0;
             pSortedNext->nPrevOffset = 0;
@@ -3981,8 +3982,8 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         pNewNode = nLinkOff->pNext;
         if (pNewNode) {
           pDVar1 = nLinkOff->nPrevOffset;
-          piVar2 = (int*)D2_StormNextLink(nLinkOff, -1);
-          *piVar2 = (int)pNewNode;
+          piVar2 = (D2CompressHuffNodeStrc**)D2_StormNextLink(nLinkOff, -1);
+          *piVar2 = pNewNode;
           nLinkOff->pNext->nPrevOffset = nLinkOff->nPrevOffset;
           nLinkOff->pNext = 0;
           nLinkOff->nPrevOffset = 0;
@@ -3994,16 +3995,16 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         pNewNode = pEncoder->pWeightedListHead;
         nTmp = pEncoder->nFreeListLinkOff;
         if ((intptr_t)pNewNode < 0) {
-          pLinkTarget = (uint32_t*)~(uintptr_t)pNewNode;
+          pLinkTarget = (D2CompressHuffNodeStrc**)~(uintptr_t)pNewNode;
         } else {
           if (nTmp < 0) {
             nTmp = (intptr_t)ppListSentinel - (intptr_t)(*ppListSentinel)->nPrevOffset;
           }
 
-          pLinkTarget = (uint32_t*)((intptr_t)&pNewNode->pNext + nTmp);
+          pLinkTarget = (D2CompressHuffNodeStrc**)((intptr_t)&pNewNode->pNext + nTmp);
         }
 
-        *pLinkTarget = (uint32_t)(uintptr_t)nLinkOff;
+        *pLinkTarget = nLinkOff;
         pEncoder->pWeightedListHead = pSortedNext;
         pSortedNext->pParent = 0;
         pSortedNext->pSibling = 0;
@@ -4041,8 +4042,8 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
 
       pInsertPos = pDVar1->pNext;
       if (pInsertPos) {
-        piVar2 = (int*)D2_StormNextLink(pDVar1, -1);
-        *piVar2 = (int)pInsertPos;
+        pUnlinkSlot = (D2CompressHuffNodeStrc**)D2_StormNextLink(pDVar1, -1);
+        *pUnlinkSlot = pInsertPos;
         pDVar1->pNext->nPrevOffset = pDVar1->nPrevOffset;
         pDVar1->pNext = 0;
         pDVar1->nPrevOffset = 0;
@@ -4083,8 +4084,8 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         pDVar1 = pNewNode->pNext;
         if (pDVar1) {
           pInsertPos = pNewNode->nPrevOffset;
-          piVar2 = (int*)D2_StormNextLink(pNewNode, -1);
-          *piVar2 = (int)pDVar1;
+          pUnlinkSlot3 = (D2CompressHuffNodeStrc**)D2_StormNextLink(pNewNode, -1);
+          *pUnlinkSlot3 = pDVar1;
           pNewNode->pNext->nPrevOffset = pNewNode->nPrevOffset;
           pNewNode->pNext = 0;
           pNewNode->nPrevOffset = 0;
@@ -4116,8 +4117,8 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
 
 void __thiscall COMPRESS_UpdateFrequencies(D2CompressEncoderStrc * pEncoder, D2CompressHuffNodeStrc * pSymbolNode) {
     D2CompressHuffNodeStrc* pPrev;
-    int* pPrevLink;
-    uint32_t* pPrevLinkSlot;
+    D2CompressHuffNodeStrc** pPrevLink;
+    D2CompressHuffNodeStrc** pPrevLinkSlot;
     D2CompressHuffNodeStrc* pInsertAfter;
     D2CompressHuffNodeStrc* nPrevOffsetVal;
     D2CompressHuffNodeStrc* pNeighbor;
@@ -4147,12 +4148,12 @@ void __thiscall COMPRESS_UpdateFrequencies(D2CompressEncoderStrc * pEncoder, D2C
         pNeighbor = pPrev->pNext;
         if (pNeighbor) {
           if ((intptr_t)nPrevOffsetVal < 0) {
-            pPrevLink = (int*)~(uintptr_t)nPrevOffsetVal;
+            pPrevLink = (D2CompressHuffNodeStrc**)~(uintptr_t)nPrevOffsetVal;
           } else {
-            pPrevLink = (int*)((char*)nPrevOffsetVal + ((intptr_t)pPrev - (intptr_t)pNeighbor->nPrevOffset));
+            pPrevLink = (D2CompressHuffNodeStrc**)((char*)nPrevOffsetVal + ((intptr_t)pPrev - (intptr_t)pNeighbor->nPrevOffset));
           }
 
-          *pPrevLink = (int)pNeighbor;
+          *pPrevLink = pNeighbor;
           pPrev->pNext->nPrevOffset = pPrev->nPrevOffset;
           pPrev->pNext = 0;
           pPrev->nPrevOffset = 0;
@@ -4166,12 +4167,12 @@ void __thiscall COMPRESS_UpdateFrequencies(D2CompressEncoderStrc * pEncoder, D2C
         if (pPrev) {
           nPrevOffsetVal = pSymbolNode->nPrevOffset;
           if ((intptr_t)nPrevOffsetVal < 0) {
-            pPrevLinkSlot = (uint32_t*)~(uintptr_t)nPrevOffsetVal;
+            pPrevLinkSlot = (D2CompressHuffNodeStrc**)~(uintptr_t)nPrevOffsetVal;
           } else {
-            pPrevLinkSlot = (uint32_t*)((char*)nPrevOffsetVal + ((intptr_t)pSymbolNode - (intptr_t)pPrev->nPrevOffset));
+            pPrevLinkSlot = (D2CompressHuffNodeStrc**)((char*)nPrevOffsetVal + ((intptr_t)pSymbolNode - (intptr_t)pPrev->nPrevOffset));
           }
 
-          *pPrevLinkSlot = (uint32_t)pPrev;
+          *pPrevLinkSlot = pPrev;
           pSymbolNode->pNext->nPrevOffset = pSymbolNode->nPrevOffset;
           pSymbolNode->pNext = 0;
           pSymbolNode->nPrevOffset = 0;
@@ -4203,7 +4204,7 @@ void __thiscall COMPRESS_UpdateFrequencies(D2CompressEncoderStrc * pEncoder, D2C
 }
 
 void __fastcall COMPRESS_FlushEncoderState(StormLinkedListStrc * pEncoder) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     LINKEDLIST_UnlinkAll(pEncoder);
     StormLinkStrc* pSVar1 = &pEncoder->head;
     StormLinkStrc* pNode = pSVar1->pPrevLink;
@@ -4211,8 +4212,8 @@ void __fastcall COMPRESS_FlushEncoderState(StormLinkedListStrc * pEncoder) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
-    *pPrevLink = (int)pNode;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pSVar1, -1);
+    *pPrevLink = pNode;
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
@@ -4239,8 +4240,8 @@ D2CompressEncoderStrc * __fastcall HUFFMAN_InitContext(D2CompressEncoderStrc * p
 void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int nSymbol) {
     D2CompressHuffNodeStrc* pDVar1;
     uint32_t* pInsertSlot;
-    int* pLink;
-    D2CompressHuffNodeStrc* pParent = (D2CompressHuffNodeStrc*)((intptr_t)pEncoder->pWeightedListHead <= 0 ? 0 : (uint32_t)pEncoder->pWeightedListHead);
+    D2CompressHuffNodeStrc** pLink;
+    D2CompressHuffNodeStrc* pParent = (intptr_t)pEncoder->pWeightedListHead <= 0 ? nullptr : pEncoder->pWeightedListHead;
     D2CompressHuffNodeStrc* pNodeB = (D2CompressHuffNodeStrc*)pEncoder->ppFreeListTailLink;
     if ((intptr_t)pNodeB <= 0 || !pNodeB) {
       pNodeB = pEncoder->aNodePool + pEncoder->nNodeCount;
@@ -4254,9 +4255,10 @@ void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int nSym
 
     D2CompressHuffNodeStrc* pLinkTarget = pLinkB->pNext;
     if (pLinkTarget) {
+      D2CompressHuffNodeStrc** pPrevLink;
       pDVar1 = pLinkB->nPrevOffset;
-      pLink = (int*)D2_StormNextLink(pLinkB, -1);
-      *pLink = (int)pLinkTarget;
+      pPrevLink = (D2CompressHuffNodeStrc**)D2_StormNextLink(pLinkB, -1);
+      *pPrevLink = pLinkTarget;
       pLinkB->pNext->nPrevOffset = pLinkB->nPrevOffset;
       pLinkB->pNext = 0;
       pLinkB->nPrevOffset = 0;
@@ -4301,8 +4303,8 @@ void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int nSym
     pLinkTarget = pLinkB->pNext;
     if (pLinkTarget) {
       pDVar1 = pLinkB->nPrevOffset;
-      pLink = (int*)D2_StormNextLink(pLinkB, -1);
-      *pLink = (int)pLinkTarget;
+      pLink = (D2CompressHuffNodeStrc**)D2_StormNextLink(pLinkB, -1);
+      *pLink = pLinkTarget;
       pLinkB->pNext->nPrevOffset = pLinkB->nPrevOffset;
       pLinkB->pNext = 0;
       pLinkB->nPrevOffset = 0;
@@ -4336,13 +4338,14 @@ void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int nSym
 }
 
 void __fastcall COMPRESS_DestroyEncoderContext(D2CompressEncoderStrc * pEncoder) {
-    int* pPrevLink;
+    D2CompressHuffNodeStrc** pPrevLink;
+    D2CompressHuffNodeStrc** pPrevLink2;
     LINKEDLIST_UnlinkAll((StormLinkedListStrc*)&pEncoder->nFreeListLinkOff);
     D2CompressHuffNodeStrc** ppDVar1 = &pEncoder->pSortedListRoot;
     D2CompressHuffNodeStrc* pNode = *ppDVar1;
     if (pNode) {
-      pPrevLink = (int*)D2_StormNextLink(ppDVar1, -1);
-      *pPrevLink = (int)pNode;
+      pPrevLink = (D2CompressHuffNodeStrc**)D2_StormNextLink(ppDVar1, -1);
+      *pPrevLink = pNode;
       (*ppDVar1)->nPrevOffset = pEncoder->pWeightedListHead;
       *ppDVar1 = 0;
       pEncoder->pWeightedListHead = 0;
@@ -4352,8 +4355,8 @@ void __fastcall COMPRESS_DestroyEncoderContext(D2CompressEncoderStrc * pEncoder)
     ppDVar1 = &pEncoder->pFreeListSentinel;
     pNode = *ppDVar1;
     if (pNode) {
-      pPrevLink = (int*)D2_StormNextLink(ppDVar1, -1);
-      *pPrevLink = (int)pNode;
+      pPrevLink2 = (D2CompressHuffNodeStrc**)D2_StormNextLink(ppDVar1, -1);
+      *pPrevLink2 = pNode;
       (*ppDVar1)->nPrevOffset = (D2CompressHuffNodeStrc*)pEncoder->ppFreeListTailLink;
       *ppDVar1 = 0;
       pEncoder->ppFreeListTailLink = 0;
@@ -4362,42 +4365,42 @@ void __fastcall COMPRESS_DestroyEncoderContext(D2CompressEncoderStrc * pEncoder)
     _eh_vector_destructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, LINKEDLIST_NodeDestructor);
 }
 
-int __thiscall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, uint8_t * pDst, int32_t nDstMax, uint16_t * * pBitBuf) {
+int __thiscall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, uint8_t * pDst, int32_t nDstMax, D2BitStreamReaderStrc * pBitBuf) {
     uint16_t wRefill;
-    uint16_t** pBitBufAlias = pBitBuf;
+    D2BitStreamReaderStrc* pBitBuf_00 = pBitBuf;
     if (!nDstMax) {
       return 0;
     }
 
-    uint32_t wWord = (uint32_t)pBitBuf[2];
+    uint32_t wWord = pBitBuf->nBitCount;
     if (wWord <= 8) {
-      wRefill = **pBitBuf;
-      pBitBuf[2] = (uint16_t*)(wWord + 0x10);
-      pBitBuf[1] = (uint16_t*)((uintptr_t)pBitBuf[1] | (uint32_t)wRefill << (uint8_t)wWord);
-      (*pBitBuf)++;
+      wRefill = *pBitBuf->pCur;
+      pBitBuf->nBitCount = wWord + 0x10;
+      pBitBuf->dwBitBuffer |= (uint32_t)wRefill << (uint8_t)wWord;
+      pBitBuf->pCur++;
     }
 
-    uint16_t* puVar1 = pBitBuf[1];
-    pBitBuf[2] += -4;
-    pBitBuf[1] = (uint16_t*)((uintptr_t)puVar1 >> 8);
-    COMPRESS_InitEncoderContext((D2CompressEncoderStrc*)pDecoderCtx, (int**)(uint8_t)(uint32_t)puVar1);
-    pBitBuf = (uint16_t**)pDst;
-    pDecoderCtx->nUnused0 = (uint32_t)((char)(uintptr_t)puVar1 == '\0');
+    uint32_t uVar1 = pBitBuf->dwBitBuffer;
+    pBitBuf->nBitCount -= 8;
+    pBitBuf->dwBitBuffer = uVar1 >> 8;
+    COMPRESS_InitEncoderContext((D2CompressEncoderStrc*)pDecoderCtx, (int**)(uint8_t)uVar1);
+    pBitBuf = (D2BitStreamReaderStrc*)pDst;
+    pDecoderCtx->nUnused0 = (uint32_t)((char)uVar1 == '\0');
     while (true) {
       int32_t nSymbol;
-      nSymbol = HUFFMAN_DecodeSymbol(pDecoderCtx, pBitBufAlias);
+      nSymbol = HUFFMAN_DecodeSymbol(pDecoderCtx, pBitBuf_00);
       if (nSymbol == 0x101) {
-        puVar1 = pBitBufAlias[2];
-        if (puVar1 < (uint16_t*)0x9) {
-          wRefill = **pBitBufAlias;
-          pBitBufAlias[2] = puVar1 + 8;
-          pBitBufAlias[1] = (uint16_t*)((uintptr_t)pBitBufAlias[1] | (uint32_t)wRefill << D2_SHIFT_COUNT((uintptr_t)puVar1));
-          (*pBitBufAlias)++;
+        uVar1 = pBitBuf_00->nBitCount;
+        if (uVar1 <= 8) {
+          wRefill = *pBitBuf_00->pCur;
+          pBitBuf_00->nBitCount = uVar1 + 0x10;
+          pBitBuf_00->dwBitBuffer |= (uint32_t)wRefill << (uint8_t)uVar1;
+          pBitBuf_00->pCur++;
         }
 
-        pBitBufAlias[2] += -4;
-        nSymbol = (uint8_t)(uint32_t)pBitBufAlias[1];
-        pBitBufAlias[1] = (uint16_t*)((uintptr_t)pBitBufAlias[1] >> 8);
+        pBitBuf_00->nBitCount -= 8;
+        nSymbol = (uint8_t)pBitBuf_00->dwBitBuffer;
+        pBitBuf_00->dwBitBuffer >>= 8;
         COMPRESS_EncodeSymbol((D2CompressEncoderStrc*)pDecoderCtx, nSymbol);
         if (!pDecoderCtx->nUnused0) {
           COMPRESS_UpdateFrequencies((D2CompressEncoderStrc*)pDecoderCtx, pDecoderCtx->_pad306C[nSymbol]);
@@ -4407,8 +4410,8 @@ int __thiscall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, uint8
         break;
       }
 
-      *(char*)pBitBuf = (char)nSymbol;
-      pBitBuf = (uint16_t**)((char*)pBitBuf + 1);
+      *(char*)&pBitBuf->pCur = (char)nSymbol;
+      pBitBuf = (D2BitStreamReaderStrc*)((intptr_t)&pBitBuf->pCur + 1);
       nDstMax--;
       if (!nDstMax) {
         return (intptr_t)pBitBuf - (intptr_t)pDst;
@@ -4515,20 +4518,20 @@ void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_
     int sListHead[3];
     LINKEDLIST_Unlink((D2BitStreamReaderStrc*)sListHead, pBitStreamCtx);
     HUFFMAN_ConstructorWithTable(&aHuffCtx);
-    int pBytesWritten = HUFFMAN_DecompressBlock(&aHuffCtx, pDst, *pnDstSize, (uint16_t**)sListHead);
+    int pBytesWritten = HUFFMAN_DecompressBlock(&aHuffCtx, pDst, *pnDstSize, (D2BitStreamReaderStrc*)sListHead);
     *pnDstSize = pBytesWritten;
     COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)&aHuffCtx);
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_00420430(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;

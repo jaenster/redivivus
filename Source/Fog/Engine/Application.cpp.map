@@ -124,7 +124,6 @@
       "usedTypes": [
         "CV_INFO_PDB70",
         "D2FogDebugModuleEntryStrc",
-        "int32_t",
         "uint32_t",
         "uint8_t"
       ]
@@ -264,8 +263,8 @@
         "DEBUG_ExtractDebugDirectory64"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {

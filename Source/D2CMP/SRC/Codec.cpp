@@ -244,7 +244,7 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, D2CodecFrameBoundsStrc 
         nXRemainder = pIterState[3];
         nYRemainder = nFrameEntry->nXOffset2 - pFrameBounds->nMinY - uVar2;
         pIterState[4] = nYRemainder;
-        pIterState[5] = nFrameEntry->nStrideValue1;
+        pIterState[5] = (int)nFrameEntry->pSrcRow;
         pIterState[6] = nFrameEntry->nStrideValue0;
         nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * pFrameBounds->nBlockStride;
         pIterState[7] = nFrameWidth;
@@ -389,7 +389,7 @@ void __fastcall CODEC_BuildInversePaletteFromBitmask(uint8_t * pInversePalette, 
     int i = 0;
     int nMappedCount = 0;
     do {
-      if ((pPaletteData + i)[(intptr_t)(aUsedFlags - (intptr_t)pPaletteData)]) {
+      if ((pPaletteData + i)[(int)(aUsedFlags - pPaletteData)]) {
         pPaletteData[i] = (uint8_t)nMappedCount;
         pInversePalette[nMappedCount] = (uint8_t)i;
         nMappedCount++;
@@ -578,7 +578,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
 
           nPixelMask = nBitsRead | -16;
           pNextOutPixel = pOutPixel + 4;
-          nPrevPixelOffset2 = (int)(nPrevPixelOffset - (intptr_t)pOutPixel);
+          nPrevPixelOffset2 = (int)(nPrevPixelOffset - pOutPixel);
           nPixelSlot = 4;
           byPrevColor = 0;
           pPixelSlotPtr = pNextOutPixel;
@@ -725,7 +725,7 @@ BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block 
     int nRunStart;
     size_t nRunLen;
     int nNonZeroEnd;
-    uint8_t* pSrcRow = (uint8_t*)pSrcImage->nStrideValue1;
+    uint8_t* pSrcRow = pSrcImage->pSrcRow;
     uint32_t nRowStride = pSrcImage->nStrideValue0;
     if (!pSrcImage->nStride) {
       pSrcRow += (pSrcImage->nWidth - 1) * nRowStride;

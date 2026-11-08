@@ -670,7 +670,6 @@
         "exit"
       ],
       "usedTypes": [
-        "D2ArchiveStrc",
         "D2BinFieldExcelStrc",
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",

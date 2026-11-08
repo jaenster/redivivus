@@ -21,18 +21,19 @@ struct SMemHeapDetailsStrc;
 typedef void (__stdcall *pfnSMemDumpCallback)(uint32_t dwUserArg, char * szLine);
 #endif
 
-// Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct D2FogHeapBlockHdrStrc {
-    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+struct D2FogHeapBlockHdrStrc;
 
-    /* 0x00 */ uint16_t wBlockSize; // total block size in bytes (includes header)
-    /* 0x02 */ uint8_t byPadding; // extra padding bytes between header and user data
-    /* 0x03 */ uint8_t byFlags; // flags: bit0=debug-tail,bit1=free,bit2=large(VirtualAlloc),bit4=prev-free-adjacent,bit6=temp,bit7=leak-protected
-    /* 0x04 */ uint32_t dwHeapSignature; // lo16=upper16(heap ptr),hi16=0x6f6d magic — written from heap+0x0c
+// Data types
+#ifndef D2_DEFINED_D2FogHeapBlockLinkUnion
+#define D2_DEFINED_D2FogHeapBlockLinkUnion
+union D2FogHeapBlockLinkUnion {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint32_t dwHeapSignature;
+    /* 0x00 */ struct D2FogHeapBlockHdrStrc * pNextFree;
 };
 
-#endif // D2_MODULE_Storm
+#endif // D2_DEFINED_D2FogHeapBlockLinkUnion
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2FogHeapDescStrc {
     /* 0x00 */ uint8_t * pNext; // next heap in bucket chain
@@ -84,6 +85,16 @@ union SMemReallocInPlace_Slotm10 {
 };
 
 #endif // D2_MODULE_Storm
+#ifndef D2_DEFINED_D2FogHeapBlockHdrStrc
+#define D2_DEFINED_D2FogHeapBlockHdrStrc
+struct __attribute__((packed)) D2FogHeapBlockHdrStrc {
+    /* 0x00 */ uint16_t wBlockSize; // total block size in bytes (includes header)
+    /* 0x02 */ uint8_t byPadding; // extra padding bytes between header and user data
+    /* 0x03 */ uint8_t byFlags; // flags: bit0=debug-tail,bit1=free,bit2=large(VirtualAlloc),bit4=prev-free-adjacent,bit6=temp,bit7=leak-protected
+    /* 0x04 */ D2FogHeapBlockLinkUnion uLink; // lo16=upper16(heap ptr),hi16=0x6f6d magic — written from heap+0x0c
+};
+
+#endif // D2_DEFINED_D2FogHeapBlockHdrStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct __attribute__((packed)) D2FogLargeBlockHdrStrc {
     /* 0x00 */ uint32_t nSize;
@@ -98,7 +109,7 @@ namespace Storm::Source::SMem {
 // Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
 // The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
 __attribute__((noinline)) inline void MISC_OperatorDeleteShim(void * p);
-int32_t __stdcall SMemFindNextBlock(uint16_t * * nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
+int32_t __stdcall SMemFindNextBlock(uint32_t nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
 int32_t __stdcall SMemFindNextHeap(uint32_t nCurHeapId, int * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
 int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
 uint32_t __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags);

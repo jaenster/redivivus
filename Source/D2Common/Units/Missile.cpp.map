@@ -596,7 +596,7 @@
         "GetHomeType"
       ],
       "usedTypes": [
-        "D2UnitDataPlayerStrc",
+        "D2UnitDataMissileStrc",
         "D2UnitStrc"
       ]
     },

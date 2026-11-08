@@ -3000,6 +3000,7 @@
       "usedTypes": [
         "D2DataTableTxtStrc",
         "D2SkillStrc",
+        "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"

@@ -312,6 +312,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -330,6 +331,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t"
       ]
     },
@@ -420,8 +422,11 @@
         "LINKEDLIST_LinkNode"
       ],
       "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "int *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -458,6 +463,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -512,6 +518,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<BREAKCMD>",
+        "TSLink<BREAKCMD> *",
         "TSList<BREAKCMD, TSGetLink<BREAKCMD>>",
         "uint32_t"
       ]
@@ -532,6 +540,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -590,6 +599,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t",
         "uint8_t"
       ]
@@ -611,6 +621,7 @@
       "usedTypes": [
         "StormBreakCmdStrc",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t"
       ]
     },
@@ -631,6 +642,7 @@
       "usedTypes": [
         "BREAKCMD",
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -673,7 +685,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0044de90"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -690,7 +703,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0044ecc0"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -724,7 +738,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0045b9f0"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -741,7 +756,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0045ba30"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -758,7 +774,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_00601bf0"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -775,7 +792,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_00601d60"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -809,7 +827,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_00601f60"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -843,7 +862,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_006024a0"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -860,7 +880,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0060e3b0"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -911,7 +932,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0060e690"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -928,7 +950,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_0060e760"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {
@@ -945,7 +968,8 @@
         "LINKEDLIST_UnlinkSelf_Unref_006c4070"
       ],
       "usedTypes": [
-        "StormLinkStrc"
+        "StormLinkStrc",
+        "StormLinkStrc *"
       ]
     },
     {

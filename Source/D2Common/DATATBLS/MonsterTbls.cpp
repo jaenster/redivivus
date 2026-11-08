@@ -193,7 +193,7 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
 
     char* pcEndPtr = szText;
     pcEndPtr = pcEndPtr + strlen(pcEndPtr) + 1;
-    char* pModeLink = szText;
+    uint32_t dwModeCode = (uint32_t)szText;
     if ((uint32_t)((intptr_t)pcEndPtr - (intptr_t)(szText + 1)) <= 3) {
       char cModeChar;
       pcEndPtr = szText;
@@ -203,8 +203,8 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
         pcEndPtr++;
       } while (cModeChar != '\0');
 
-      FilterNameString((char*)&nSkillIdx, (char*)&pModeLink);
-      nModeId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMonModeLink, (uint32_t)pModeLink, 1);
+      FilterNameString((char*)&nSkillIdx, (char*)&dwModeCode);
+      nModeId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMonModeLink, dwModeCode, 1);
       cModeChar = (char)nModeId;
       pRecord[nSlotIdx + 0x180] = cModeChar;
       if (cModeChar >= 0 && cModeChar != '\x0e') {

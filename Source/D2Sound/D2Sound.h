@@ -66,9 +66,9 @@ DWORD __stdcall SOUND_GetSound3DFlag();
 } // namespace D2Sound
 namespace D2Sound::D2SoundUntil {
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
-void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, void * pItem);
+void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, intptr_t pItem);
 void __fastcall SOUND_sD2SoundSmp_Free(struct D2SoundListNodeStrc * * ppListHead, intptr_t nSearchValue);
-BOOL __fastcall SOUNDUTIL_FindInLinkedList(struct D2SoundListNodeStrc * pNode, int32_t nSearchValue);
+BOOL __fastcall SOUNDUTIL_FindInLinkedList(struct D2SoundListNodeStrc * pNode, intptr_t nSearchValue);
 void __fastcall SOUNDUTIL_FreeLinkedList(struct D2SoundListNodeStrc * * ppListHead);
 void __fastcall SOUNDUTIL_AppendToLinkedList(struct D2SoundListNodeStrc * * ppListHead, intptr_t dwNodeValue);
 } // namespace D2Sound::D2SoundUntil

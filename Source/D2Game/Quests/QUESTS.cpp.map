@@ -1711,11 +1711,11 @@
         "SetEvent"
       ],
       "usedTypes": [
-        "D2DrlgActStrc *",
+        "D2ObjectOperateFnArg",
         "D2ObjectsTxt",
         "D2UnitStrc",
         "POINT",
-        "SGAMEDATA *"
+        "eD2UnitFlags"
       ]
     },
     {

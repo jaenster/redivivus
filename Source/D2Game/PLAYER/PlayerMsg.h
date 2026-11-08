@@ -892,9 +892,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x12_CancelChanneledSkill(::SGAMEDATA * 
 // Input sanitized via STRING_CutStringBeginingTillFoundString — filtered messages silently dropped.
 eD2ServerIncomingStatus __fastcall SCMD_0x14_OverheadMessage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x14_OverheadMessage * pPacket, uint32_t nSize);
 // ForEachClient callback for public chat broadcast. Checks squelch/mute flags and ignore list between sender and recipient, then sends 0x26 chat packet if not blocked.
-void __fastcall CHAT_BroadcastToClient(struct D2ClientStrc * pClient, char * * pContext);
+void __fastcall CHAT_BroadcastToClient(struct D2ClientStrc * pClient, struct D2ChatBroadcastCtx * pContext);
 // ForEachClient callback for whisper delivery. Compares each client's character name to the target name. If matched and not squelched, delivers whisper via 0x26 packet and sets g_bWhisperDelivered=1. If matched but squelched, sets g_bWhisperSquelched=1.
-void __fastcall CHAT_DeliverWhisper(struct D2ClientStrc * pClient, char * * pContext);
+void __fastcall CHAT_DeliverWhisper(struct D2ClientStrc * pClient, struct D2ChatBroadcastCtx * pContext);
 void __fastcall NET_D2GS_SERVER_Send_0x26_Chat(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x26 * pPacket);
 // C->S 0x15 Chat/Whisper (variable size)
 // [op:1][msgId:1][msgType:1][locale:1][msg:str][target:str]

@@ -21,7 +21,6 @@ struct D2MagicAffixTxt;
 struct D2RareAffixTxt;
 struct D2StatListExStrc;
 struct D2UnitStrc;
-struct SGAMEDATA;
 
 // Data types
 #ifndef D2_DEFINED_D2MagixAffixModStrc
@@ -69,12 +68,12 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(struct D2UnitStrc * pUnit, struct D2RareAff
 uint32_t __stdcall ITEMMOD_MatchesRepairType(struct D2UnitStrc * pUnit, char * szRepairModes);
 void __stdcall ITEMMOD_RollGemRuneType(struct D2UnitStrc * pUnit);
 // Already-documented (existing description is accurate and detailed — expansion property pipeline iterating up to 7 func slots from D2PropertiesTxt).
-void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, struct D2SetsTxtFStrc * pSetsTxtF, int32_t nState, uint32_t dwStatListFlags, uint32_t pContextUnit);
+void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, void * dwParam2, uint32_t dwParam3, uint32_t dwParam4, struct D2SetsTxtFStrc * pSetsTxtF, int32_t nState, uint32_t dwStatListFlags, uint32_t pContextUnit);
 // Applies socketed-item / affix property modifiers onto a unit's stat list, dispatched by dwParam1 (property source: 0/2/5=3 props, 1=2 props from a magic affix via ITEMMOD_GetPropertyFromAffix; 3=unique item's 12 sEntry props; 4=set item's sEntry props plus the 10 partial-set bonus entries from sEntryEx keyed by item version). For affix cases it loops over the affix's property list, stopping at a negative fcode, calling ITEMMOD_ApplyPropertyToUnitStats for each. pUnit is the item being applied; pUnit2 the affected owner unit. No return value.
 void __stdcall ApplyRuneAndGemStats(uint32_t nType, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pUnit, struct D2MagicAffixTxt * pMagicAffixLine, uint32_t nGemModType, uint32_t bClearStat);
 void __stdcall RollRunewordMostlikely(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t dwParam);
 // @sourcefile .\ITEMS\ItemMods.cpp
-void __stdcall ITEMMOD_ApplyRunewordProperties(struct D2UnitStrc * pUnit, struct D2SetsTxtFStrc * pProperty, ::SGAMEDATA * pGame);
+void __stdcall ITEMMOD_ApplyRunewordProperties(struct D2UnitStrc * pUnit, struct D2SetsTxtFStrc * pProperty, int32_t bExpansion);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 // Returns pTxtLine + 0xc + nMod * 0x10 (nMod in EAX, the line in ECX); halts (ItemMods.cpp line 129, nMod < MAX_UNIQUE_ITEM_PROPERTIES && nMod >= 0) when nMod >= 12.

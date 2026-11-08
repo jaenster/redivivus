@@ -2503,7 +2503,7 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     do {
       byChar = abKeyBuf[nVal];
       pbScan = abKeyBuf + nVal;
-      nHash = (uintptr_t)(pbScan + (0x16 - (intptr_t)(abKeyBuf + 0xf))) & 0xf;
+      nHash = (uint32_t)(pbScan - (abKeyBuf + 0xf) + 0x16) & 0xf;
       nVal--;
       *pbScan = abKeyBuf[nHash];
       abKeyBuf[nHash] = byChar;

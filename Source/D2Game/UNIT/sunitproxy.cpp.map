@@ -107,9 +107,10 @@
         "memcpy"
       ],
       "usedTypes": [
+        "D2NpcItemTablesStrc",
         "SGAMEDATA",
         "int32_t",
-        "void *"
+        "uint8_t"
       ]
     },
     {

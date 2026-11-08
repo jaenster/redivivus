@@ -915,6 +915,7 @@ eD2UnitType __stdcall GetTargetTypeFromDynamicUnit(D2UnitStrc * pUnit) {
 
 int32_t __stdcall GetTargetGUIDFromDynamicUnit(D2UnitStrc * pUnit) {
     eD2UnitType eOwnUnitType;
+    int32_t nUnit;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x8ca);
       exit(-1);
@@ -926,8 +927,8 @@ int32_t __stdcall GetTargetGUIDFromDynamicUnit(D2UnitStrc * pUnit) {
         exit(-1);
       }
 
-      PATH::DynamicPath::GetTargetTypeAndGUID(pUnit->pPath.pDynamicPath, &eUnitType, (int*)&pUnit);
-      return (int32_t)pUnit;
+      PATH::DynamicPath::GetTargetTypeAndGUID(pUnit->pPath.pDynamicPath, &eUnitType, (int*)&nUnit);
+      return nUnit;
     }
 }
 
@@ -2998,7 +2999,7 @@ D2TimerArgStrc * __fastcall GetTimerArg(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return (D2TimerArgStrc*)pUnit->uSideData.pClientSide.dwSfxTicks;
+    return pUnit->uSideData.pServerSide.pTimerArgs;
 }
 
 // @sourcefile .\UNITS\Units.cpp

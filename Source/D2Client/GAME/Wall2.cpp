@@ -1105,7 +1105,9 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
     D2Wall2CellStrc* pGridCellVoid;
     D2TileLibraryEntryStrc* pTileLibEntry;
     int nRoom;
+    int32_t nRoom2;
     int nDrawContext;
+    int32_t nDrawContext2;
     D2Wall2DrawContextStrc* pDVar1 = pDrawContext;
     D2RoomStrc* pRoom_00 = pRoom;
     D2GameViewStrc* pGameView = pDrawContext->pGameView;
@@ -1178,9 +1180,9 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
       }
       if (!pDVar1->nTickCount) {
         for (pUnit = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFirstUnitInRoom(pRoom_00); pUnit; pUnit = pUnit->pRoomNext) {
-          nRoom = D2Common::Units::GetTargetX(pUnit);
-          nDrawContext = D2Common::Units::GetTargetY(pUnit);
-          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(nRoom, nDrawContext, (int32_t*)&nRoom, (int32_t*)&nDrawContext);
+          nRoom2 = D2Common::Units::GetTargetX(pUnit);
+          nDrawContext2 = D2Common::Units::GetTargetY(pUnit);
+          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(nRoom2, nDrawContext2, (int32_t*)&nRoom, (int32_t*)&nDrawContext);
           nCellX = nRoom - pGameView->sWall2.nWall2GridOriginX;
           nCellY = nDrawContext - pGameView->sWall2.nWall2GridOriginY;
           if (nCellX >= 0 && nCellY >= 0) {

@@ -863,7 +863,7 @@ void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
       nRowOffset = 0x8e;
       do {
         pSoundRow = (D2SoundsTxt*)(pTxtSounds->Filename + nRowOffset);
-        if (!*(int*)((char*)pTxtSounds->aWavDataPtrAndSize + nRowOffset + 0x12) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
+        if (!*(int*)((char*)pTxtSounds->aRecentSoundHistory + nRowOffset + 0x22) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
           if (!dwTick || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
             SOUNDHDR_LoadSoundFile(nRowIndex, (uint32_t)!dwTick, 1);
             if (pSoundRow->nLoadState == 1) {

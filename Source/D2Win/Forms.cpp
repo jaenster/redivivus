@@ -58,35 +58,35 @@ void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, 
 }
 
 // Unregisters window message/command/key handler. Type 0 = message (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Unregister* function.
-void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, void * pMessage, void * pCallback) {
+void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, void * pCallback) {
     if (hHandle) {
       switch (nHandlerType) {
         case 0:
           {
-            if (pMessage == (void*)0x111) {
+            if (nMessage == 0x111) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
               exit(-1);
-            } else if (pMessage == (void*)0x101) {
+            } else if (nMessage == 0x101) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x35);
               exit(-1);
             } else {
-              if (pMessage == (void*)0x100) {
+              if (nMessage == 0x100) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36);
                 exit(-1);
               }
 
-              Storm::WindowHandle::SMsgUnregisterMessage(hHandle, (uint32_t)pMessage, (char*)pCallback);
+              Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, (char*)pCallback);
               return;
             }
           }
         case 1:
-          Storm::WindowHandle::SMsgUnregisterCommand(hHandle, (uint32_t)pMessage, (char*)pCallback);
+          Storm::WindowHandle::SMsgUnregisterCommand(hHandle, nMessage, (char*)pCallback);
         return;
         case 2:
-          Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, (uint32_t)pMessage, (char*)pCallback);
+          Storm::WindowHandle::SMsgUnregisterKeyUp(hHandle, nMessage, (char*)pCallback);
         return;
         case 3:
-          Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, (uint32_t)pMessage, (char*)pCallback);
+          Storm::WindowHandle::SMsgUnregisterKeyDown(hHandle, nMessage, (char*)pCallback);
         default:
           return;
       }
@@ -135,7 +135,7 @@ void __fastcall D2WIN_UnregisterWindowHandlerArray(HWND hHandle, D2WinWndHandler
 
       pHandlerEntry = &pHandlerArray->nMessage;
       do {
-        D2WIN_UnregisterWindowHandler(hHandle, pHandlerEntry[-1], (void*)*pHandlerEntry, (void*)pHandlerEntry[1]);
+        D2WIN_UnregisterWindowHandler(hHandle, pHandlerEntry[-1], *pHandlerEntry, (void*)pHandlerEntry[1]);
         pHandlerEntry += 3;
         nHandlerCount--;
       } while (nHandlerCount);

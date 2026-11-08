@@ -14,9 +14,9 @@ void __thiscall Destructor(::CELLIST * pThis) {
     TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
-      int* pBackLink;
-      pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
-      *pBackLink = (int)nNext;
+      TSLink<::TCELENTRY>** pBackLink;
+      pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pTVar1, -1);
+      *pBackLink = nNext;
       pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
       pTVar1->m_next = 0;
@@ -30,9 +30,9 @@ void __thiscall Destructor(::CELLIST * pThis) {
     TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
-      int* pBackLink;
-      pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
-      *pBackLink = (int)nNext;
+      TSLink<::TCELENTRY>** pBackLink;
+      pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pTVar1, -1);
+      *pBackLink = nNext;
       pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
       pTVar1->m_next = 0;

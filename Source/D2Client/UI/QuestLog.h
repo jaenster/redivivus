@@ -119,7 +119,7 @@ void __stdcall FreeQuestImages();
 void __stdcall QUESTLOG_FreeQuestImages_Thunk();
 int __stdcall CloseQuestLogWeird(DWORD bAdjustMouse);
 void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct);
-int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, void * pDismissCallback);
+int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, int bDismissed);
 void __stdcall QUESTLOG_OnCloseClick(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall QUESTLOG_HandleSpecialPacket(struct D2GSPacketSrv0x50 * pPacket);
 void __stdcall QUESTLOG_CloseAndFreeImages();

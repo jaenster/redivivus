@@ -1707,7 +1707,7 @@ void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct) {
     } while (nIndex < gQuestLog.nQuestLogQuestCount);
 }
 
-int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, void * pDismissCallback) {
+int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, int bDismissed) {
     gQuestLog.bQuestLogButtonDown = 0;
     Text::TEXT_SetScrollCompleteCallback(nullptr, pUserParam);
     return 0;

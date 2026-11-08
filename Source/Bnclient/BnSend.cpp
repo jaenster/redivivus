@@ -475,9 +475,9 @@ void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
     pszCursor = pszText2End + 1;
     pszCursor = __frame0.szPacketBuf;
     pszCursor = pszCursor + strlen(pszCursor) + 1;
-    char* pszScanEnd = __frame0.szPacketBuf + 1 + (int)(pszCursor + (0x207 - (intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520)));
+    char* pszScanEnd = __frame0.szPacketBuf + 1 + (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207);
     pszScanEnd = pszScanEnd + strlen(pszScanEnd) + 1;
-    NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (intptr_t)(pszCursor + (0x207 - (intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520)))) + (intptr_t)(pszText2End + 0x410)));
+    NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207)) + (intptr_t)(pszText2End + 0x410)));
 }
 
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
@@ -1501,7 +1501,7 @@ size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
           nBytesProcessed++;
         } while (*pScanPtr != -1);
       }
-      if (pBytes + (nSize - (intptr_t)pScanPtr) < (char*)0x4 || (wPacketSize = (uint32_t)*(uint16_t*)(pScanPtr + 2) , (intptr_t)(pBytes + (nSize - (intptr_t)pScanPtr)) < (int)wPacketSize)) {
+      if (pBytes + (nSize - (intptr_t)pScanPtr) < (char*)0x4 || (wPacketSize = (uint32_t)*(uint16_t*)(pScanPtr + 2) , (int)(pBytes - pScanPtr + nSize) < (int)wPacketSize)) {
         memcpy(pBytes, pScanPtr, (size_t)(pBytes + (nSize - (intptr_t)pScanPtr)));
         return (size_t)(pBytes + (nSize - (intptr_t)pScanPtr));
       }
@@ -1634,23 +1634,20 @@ void __fastcall BNSEND_SetGlobalFlag(uint32_t dwThreadInitFlag) {
 
 // Battle.net connection orchestrator. Manages full logon sequence: server selection via fastest-connect test (select() on 64 candidate sockets, 5-second timeout per batch), protocol init (0x01 byte), SID_AUTHINFO (0x50) handshake, SID_AUTHCHECK (0x51) version/CD-key verification. Uses non-blocking socket multiplexing across up to 32 server candidates. Connection state machine: 2=searching, 3=accessing accounts, 4=checking version. Stores final socket in g_pBNetSocketData via InterlockedCompareExchange.
 void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
-    // Frame slots -8508..-8 are ONE object: &nAddrLen is passed out and the callee reaches the rest by byte offset.
+    // Frame slots -8496..-8 are ONE object: &nSIDState is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      int nAddrLen;
-      DWORD dwBatchStartTick;
-      uint8_t* pCandidateSlotNext;
       int nSIDState;
       int nSelectTimeouts;
       int nCandidateCount;
       char* pszNextServer;
       D2NetDataStrc* pWinnerSocket;
-      uint8_t __pad32[3];
+      uint8_t __pad20[3];
       char bProtocolByte;
       uint8_t aCandidates[8448];
       uint8_t sockaddrPeer[16];
     };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8500, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8488, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     D2NetDataStrc* pNetData;
     DWORD dwCurrentTick;
@@ -1663,16 +1660,19 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     uint32_t uWriteFDCount;
     int iVar2;
     uint32_t uExceptFDCount;
-    uint8_t* pCandidateSlot;
-    uint8_t* pCandidateIter;
+    D2NetDataStrc** pCandidateSlot;
+    D2NetDataStrc** pCandidateIter;
     int nLoopCounter;
     fd_set fdWriteSet;
     fd_set fdExceptSet;
     int nSIDStateCheck[2];
     timeval tvTimeout;
+    int nAddrLen;
+    uint8_t* pCandidateSlotNext;
     bool bTooManyTimeouts;
     char cChar;
     SOCKET hSock;
+    uint8_t* pbVar3;
     Debug::DEBUG_Trace("sFastestConnect()");
     memset(__frame0.aCandidates, 0, 0x2100);
     BnDownload::BNDOWNLOAD_ResetState(0x66);
@@ -1688,17 +1688,18 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     pszToken = strtok(szServerList, " ,;");
     __frame0.nCandidateCount = 0;
     __frame0.pszNextServer = pszToken;
-    __frame0.dwBatchStartTick = GetTickCount();
+    DWORD dwBatchStartTick;
+    dwBatchStartTick = GetTickCount();
     fnInterlockedCompareExchange pfnInterlocked;
     pfnInterlocked = d2_InterlockedCompareExchange;
-    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ __frame0.dwBatchStartTick -= 5000;
+    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ dwBatchStartTick -= 5000;
     tvTimeout.tv_usec = 0;
     __frame0.nSelectTimeouts = 0;
     /* LONG * Destination for InterlockedCompareExchange */ tvTimeout.tv_sec = 1;
     pNetData = (D2NetDataStrc*)InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
     __frame0.pWinnerSocket = pNetData;
     if (!pNetData) {
-      __frame0.pCandidateSlotNext = __frame0.aCandidates;
+      pCandidateSlotNext = __frame0.aCandidates;
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ while (true) {
         __frame0.pWinnerSocket = pNetData;
         lInterlockedResult = (*pfnInterlocked)(&Target_00881bfc, 0, 0);
@@ -1707,22 +1708,16 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
         }
 
         dwCurrentTick = GetTickCount();
-        if (dwCurrentTick - __frame0.dwBatchStartTick >= 5000) {
-          __frame0.dwBatchStartTick = GetTickCount();
+        if (dwCurrentTick - dwBatchStartTick >= 5000) {
+          dwBatchStartTick = GetTickCount();
           if (pszToken && *pszToken != '\0' && __frame0.nCandidateCount < 0x20) {
             Debug::DEBUG_Trace("  Try to connect to %s", pszToken);
-            pCandidateIter = __frame0.pCandidateSlotNext;
-            iVar2 = (int)__frame0.pCandidateSlotNext - (int)pszToken;
-            do {
-              cChar = *pszToken;
-              pszToken[iVar2] = cChar;
-              pszToken++;
-            } while (cChar != '\0');
-
-            pNetData = Fog::Src::Safesock::Create((char*)__frame0.pCandidateSlotNext, 0x17e0, (LPTHREAD_START_ROUTINE)BnetReadFunction, (LPVOID)0x0, "Client->BNet", 1);
+            pbVar3 = pCandidateSlotNext;
+            strcpy((char*)pCandidateSlotNext, pszToken);
+            pNetData = Fog::Src::Safesock::Create((char*)pCandidateSlotNext, 0x17e0, (LPTHREAD_START_ROUTINE)BnetReadFunction, (LPVOID)0x0, "Client->BNet", 1);
             __frame0.nCandidateCount++;
-            *(D2NetDataStrc**)(pCandidateIter + 0x100) = (D2NetDataStrc*)pNetData;
-            __frame0.pCandidateSlotNext = pCandidateIter + 0x108;
+            *(D2NetDataStrc**)(pbVar3 + 0x100) = (D2NetDataStrc*)pNetData;
+            pCandidateSlotNext = pbVar3 + 0x108;
             pszToken = strtok(nullptr, " ,;");
             __frame0.pszNextServer = pszToken;
           }
@@ -1734,11 +1729,11 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
         fdWriteSet.fd_count = 0;
         fdExceptSet.fd_count = 0;
         if (__frame0.nCandidateCount > 0) {
-          pCandidateSlot = __frame0.aCandidates + 0x100;
+          pCandidateSlot = (D2NetDataStrc**)(__frame0.aCandidates + 0x100);
           nLoopCounter = __frame0.nCandidateCount;
           do {
-            if (*(int*)pCandidateSlot) {
-              hSock = *(SOCKET*)(*(int*)pCandidateSlot + 8);
+            if (*pCandidateSlot) {
+              hSock = (*pCandidateSlot)->hSocket;
               if (uWriteFDCount < 0x40) {
                 fdWriteSet.fd_array[uWriteFDCount] = hSock;
                 uWriteFDCount = fdWriteSet.fd_count + 1;
@@ -1753,7 +1748,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               iVar2++;
             }
 
-            pCandidateSlot += 0x108;
+            pCandidateSlot += 0x42;
             nLoopCounter--;
           } while (nLoopCounter);
 
@@ -1778,26 +1773,26 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
             WSAGetLastError();
             pszToken = __frame0.pszNextServer;
           } else {
-            pCandidateIter = __frame0.aCandidates + 0x100;
+            pCandidateIter = (D2NetDataStrc**)(__frame0.aCandidates + 0x100);
             nLoopCounter = __frame0.nCandidateCount;
             do {
-              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pCandidateIter) {
-                nFDResult = __WSAFDIsSet(*(SOCKET*)(*(int*)pCandidateIter + 8), &fdExceptSet);
+              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*pCandidateIter) {
+                nFDResult = __WSAFDIsSet((*pCandidateIter)->hSocket, &fdExceptSet);
                 if (nFDResult) {
-                  Fog::Src::Safesock::Free(*(D2NetDataStrc**)pCandidateIter);
-                  memset(pCandidateIter, 0, 4 * sizeof(pCandidateIter[0]));
+                  Fog::Src::Safesock::Free(*pCandidateIter);
+                  *pCandidateIter = 0;
                 }
               }
 
-              pCandidateIter += 0x108;
+              pCandidateIter += 0x42;
               nLoopCounter--;
             } while (nLoopCounter);
 
             nLoopCounter = 0;
-            pCandidateIter = __frame0.aCandidates + 0x100;
+            pbVar3 = __frame0.aCandidates + 0x100;
             do {
-              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pCandidateIter) {
-                nFDResult = __WSAFDIsSet(*(SOCKET*)(*(int*)pCandidateIter + 8), &fdWriteSet);
+              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pbVar3) {
+                nFDResult = __WSAFDIsSet(*(SOCKET*)(*(int*)pbVar3 + 8), &fdWriteSet);
                 if (nFDResult) {
                   /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, *(LONG*)(__frame0.aCandidates + nLoopCounter * 0x108 + 0x100), 0);
                   if (!lInterlockedResult) {
@@ -1811,7 +1806,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               }
 
               nLoopCounter++;
-              pCandidateIter += 0x108;
+              pbVar3 += 0x108;
             } while (nLoopCounter < iVar2);
 
             pNetData = __frame0.pWinnerSocket;
@@ -1841,16 +1836,16 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
       }
     }
     if (__frame0.nCandidateCount > 0) {
-      pCandidateIter = __frame0.aCandidates + 0x100;
+      pbVar3 = __frame0.aCandidates + 0x100;
       iVar2 = __frame0.nCandidateCount;
       do {
-        pCandidate = *(D2NetDataStrc**)pCandidateIter;
+        pCandidate = *(D2NetDataStrc**)pbVar3;
         if (pCandidate && pCandidate != pNetData) {
           Fog::Src::Safesock::Free(pCandidate);
-          memset(pCandidateIter, 0, 4 * sizeof(pCandidateIter[0]));
+          memset(pbVar3, 0, 4 * sizeof(pbVar3[0]));
         }
 
-        pCandidateIter += 0x108;
+        pbVar3 += 0x108;
         iVar2--;
         pfnInterlocked = d2_InterlockedCompareExchange;
       } while (iVar2);
@@ -1868,10 +1863,10 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
       return;
     }
 
-    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ __frame0.nAddrLen = 0x10;
+    /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAddrLen = 0x10;
     pCandidate = (D2NetDataStrc*)(*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0);
     if (pCandidate) {
-      bAuthInfoAccepted = Fog::Src::Safesock::GetPeerNameDoesReturn(pCandidate, (sockaddr*)__frame0.sockaddrPeer, &__frame0.nAddrLen);
+      bAuthInfoAccepted = Fog::Src::Safesock::GetPeerNameDoesReturn(pCandidate, (sockaddr*)__frame0.sockaddrPeer, &nAddrLen);
       if (bAuthInfoAccepted) {
         /* in_addr in for inet_ntoa */ pszToken = inet_ntoa((in_addr)*(uint32_t*)((char*)&__frame0.sockaddrPeer + 4));
         Bnet::BnetLog_WriteLine("Connected to server %s", pszToken);

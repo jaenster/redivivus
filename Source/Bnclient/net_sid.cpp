@@ -473,7 +473,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, size_t nS
     if ((uintptr_t)(pszEnd + (9 - (intptr_t)(pBytes + 9))) < nSize) {
       pszEnd = szText1;
       pszEnd = pszEnd + strlen(pszEnd) + 1;
-      BnSend::BNSEND_SendString(szText1 + (intptr_t)(pszEnd + (1 - (intptr_t)(pBytes + 9))));
+      BnSend::BNSEND_SendString(szText1 + (int)(pszEnd - (pBytes + 9) + 1));
     }
 
     BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7fffffff, 3, 0, 0, (FILETIME*)pBytes, szText1, nullptr);
@@ -578,8 +578,8 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
       szFilenameScan = szText1;
       szFilenameScan = szFilenameScan + strlen(szFilenameScan) + 1;
       g_dwLastAdId = dwAdIdReg;
-      if (*szText1 != '\0' && szText1[(intptr_t)(szFilenameScan + (1 - (intptr_t)(pBytes + 0x11)))] != '\0') {
-        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (intptr_t)(szFilenameScan + (1 - (intptr_t)(pBytes + 0x11))));
+      if (*szText1 != '\0' && szText1[(int)(szFilenameScan - (pBytes + 0x11) + 1)] != '\0') {
+        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (int)(szFilenameScan - (pBytes + 0x11) + 1));
       }
 
       return 1;
@@ -1339,42 +1339,35 @@ int Unreferenced_00521ba0() {
 // - Country name (null-terminated string): From GetLocaleInfo(LOCALE_SENGCOUNTRY)
 // Server responds with SID_AUTH_INFO containing version check challenge.
 int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
-    // Frame slots -388..-8 are ONE object: &nSockAddrLen is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nSockAddrLen;
-      SID_C2S_AuthInfo sAuthInfoPacket;
-      uint8_t __pad300[16];
-      uint32_t szCountryAbbrevBuf[16];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 380, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint32_t dwUILanguage;
     _SYSTEMTIME stLocalTime;
     _SYSTEMTIME stUtcTime;
     _FILETIME ftUtc;
     _FILETIME ftLocal;
+    SID_C2S_AuthInfo sAuthInfoPacket;
     sockaddr_in nsockaddr;
-    memset(&__frame0.sAuthInfoPacket, 0, 0x128);
-    __frame0.sAuthInfoPacket.dwProtocolId = 0;
-    memcpy(__frame0.sAuthInfoPacket.szPlatform, "68XI", 4);
+    uint32_t szCountryAbbrevBuf[16];
+    memset(&sAuthInfoPacket, 0, 0x128);
+    sAuthInfoPacket.dwProtocolId = 0;
+    memcpy(sAuthInfoPacket.szPlatform, "68XI", 4);
     BOOL bIsExpansion;
     bIsExpansion = BnSend::D2CheckExpansionGame();
-    __frame0.sAuthInfoPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
-    __frame0.sAuthInfoPacket.dwVersion = 0xe;
-    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(__frame0.sAuthInfoPacket.szLangAbbrev, 3);
-    __frame0.nSockAddrLen = 0x10;
+    sAuthInfoPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
+    sAuthInfoPacket.dwVersion = 0xe;
+    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(sAuthInfoPacket.szLangAbbrev, 3);
+    int nSockAddrLen;
+    nSockAddrLen = 0x10;
     uint32_t bGotLocalIp;
-    bGotLocalIp = BnSend::BNSEND_GetSocketAddress((sockaddr*)&nsockaddr, &__frame0.nSockAddrLen);
-    __frame0.sAuthInfoPacket.dwLocalIp = bGotLocalIp ? nsockaddr.sin_addr : 0;
+    bGotLocalIp = BnSend::BNSEND_GetSocketAddress((sockaddr*)&nsockaddr, &nSockAddrLen);
+    sAuthInfoPacket.dwLocalIp = bGotLocalIp ? nsockaddr.sin_addr : 0;
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&stUtcTime);
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&stLocalTime);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&stUtcTime, &ftUtc);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&stLocalTime, &ftLocal);
     int64_t llTimeDiff;
     llTimeDiff = _alldiv(ftUtc.dwLowDateTime - ftLocal.dwLowDateTime, ftUtc.dwHighDateTime - ftLocal.dwHighDateTime - (uint32_t)(ftUtc.dwLowDateTime < ftLocal.dwLowDateTime), 600000000, 0);
-    __frame0.sAuthInfoPacket.nTzBias = (int)llTimeDiff;
-    __frame0.sAuthInfoPacket.dwLocaleId = GetUserDefaultLCID();
+    sAuthInfoPacket.nTzBias = (int)llTimeDiff;
+    sAuthInfoPacket.dwLocaleId = GetUserDefaultLCID();
     HMODULE hKernel32;
     hKernel32 = LoadLibraryA("kernel32.dll");
     if (hKernel32) {
@@ -1382,7 +1375,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnGetSystemDefaultUILanguage = GetProcAddress(hKernel32, "GetSystemDefaultUILanguage");
       if (pfnGetSystemDefaultUILanguage) {
         dwUILanguage = (*pfnGetSystemDefaultUILanguage)();
-        /* HMODULE hLibModule for FreeLibrary */ __frame0.sAuthInfoPacket.dwLanguageId = (uint16_t)dwUILanguage;
+        /* HMODULE hLibModule for FreeLibrary */ sAuthInfoPacket.dwLanguageId = (uint16_t)dwUILanguage;
         FreeLibrary(hKernel32);
         goto add_country_and_send;
       }
@@ -1392,14 +1385,14 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
 
     LANGID wLangId;
     wLangId = GetSystemDefaultLangID();
-    __frame0.sAuthInfoPacket.dwLanguageId = (uint32_t)wLangId;
+    sAuthInfoPacket.dwLanguageId = (uint32_t)wLangId;
     add_country_and_send:
-    /* int cchData for GetLocaleInfoA */ /* LPSTR lpLCData for GetLocaleInfoA */ /* LCTYPE LCType for GetLocaleInfoA */ /* LCID Locale for GetLocaleInfoA */ GetLocaleInfoA(0x400, 7, (LPSTR)__frame0.szCountryAbbrevBuf, 0x40);
-    /* int cchData for GetLocaleInfoA */ /* LPSTR lpLCData for GetLocaleInfoA */ __frame0.szCountryAbbrevBuf[0] &= 0xffffff;
-    /* LCTYPE LCType for GetLocaleInfoA */ /* LCID Locale for GetLocaleInfoA */ __frame0.sAuthInfoPacket.dwCountryAbbrev = __frame0.szCountryAbbrevBuf[0];
-    GetLocaleInfoA(0x400, 0x1002, __frame0.sAuthInfoPacket.szCountryName, 0x100);
-    bGotLocalIp = Storm::Source::SSTR::SStrLen(__frame0.sAuthInfoPacket.szCountryName);
-    BnSend::NET_SID_CLIENT_Send(0x50, (char*)&__frame0.sAuthInfoPacket, bGotLocalIp + 0x29);
+    /* int cchData for GetLocaleInfoA */ /* LPSTR lpLCData for GetLocaleInfoA */ /* LCTYPE LCType for GetLocaleInfoA */ /* LCID Locale for GetLocaleInfoA */ GetLocaleInfoA(0x400, 7, (LPSTR)szCountryAbbrevBuf, 0x40);
+    /* int cchData for GetLocaleInfoA */ /* LPSTR lpLCData for GetLocaleInfoA */ szCountryAbbrevBuf[0] &= 0xffffff;
+    /* LCTYPE LCType for GetLocaleInfoA */ /* LCID Locale for GetLocaleInfoA */ sAuthInfoPacket.dwCountryAbbrev = szCountryAbbrevBuf[0];
+    GetLocaleInfoA(0x400, 0x1002, sAuthInfoPacket.szCountryName, 0x100);
+    bGotLocalIp = Storm::Source::SSTR::SStrLen(sAuthInfoPacket.szCountryName);
+    BnSend::NET_SID_CLIENT_Send(0x50, (char*)&sAuthInfoPacket, bGotLocalIp + 0x29);
     return 1;
 }
 
@@ -2213,9 +2206,9 @@ void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed) {
     do {
       pRandBufPos = hashWorkBuf + nXorIdx;
       *pRandBufPos ^= hashWorkBuf[nXorIdx % 0x14 + 0xb0];
-      hashWorkBuf[nXorIdx + 1] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (1 - (intptr_t)hashWorkBuf)) / 0x14 * -0x14 + 0xb1];
-      hashWorkBuf[nXorIdx + 2] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (2 - (intptr_t)hashWorkBuf)) / 0x14 * -0x14 + 0xb2];
-      hashWorkBuf[nXorIdx + 3] ^= hashWorkBuf[nXorIdx + (uintptr_t)(pRandBufPos + (3 - (intptr_t)hashWorkBuf)) / 0x14 * -0x14 + 0xb3];
+      hashWorkBuf[nXorIdx + 1] ^= hashWorkBuf[nXorIdx + (uint32_t)(pRandBufPos - hashWorkBuf + 1) / 0x14 * -0x14 + 0xb1];
+      hashWorkBuf[nXorIdx + 2] ^= hashWorkBuf[nXorIdx + (uint32_t)(pRandBufPos - hashWorkBuf + 2) / 0x14 * -0x14 + 0xb2];
+      hashWorkBuf[nXorIdx + 3] ^= hashWorkBuf[nXorIdx + (uint32_t)(pRandBufPos - hashWorkBuf + 3) / 0x14 * -0x14 + 0xb3];
       nXorIdx += 4;
     } while (nXorIdx < 0x70);
 

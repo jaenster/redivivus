@@ -2792,7 +2792,7 @@ static inline void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) 
 }
 
 void __fastcall AllocUnitSfxData(D2UnitStrc * pUnit, int32_t nChannelHandle) {
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc((void*)UNITSND_GetSfxDataListHead(pUnit), (void*)nChannelHandle);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc((void*)UNITSND_GetSfxDataListHead(pUnit), nChannelHandle);
 }
 
 void __fastcall FreeSfxData(D2UnitStrc * pUnit, int32_t nSearchValue) {

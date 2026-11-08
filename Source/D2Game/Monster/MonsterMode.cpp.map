@@ -70,6 +70,7 @@
         "MONSTERMODE_GetStoredPosition"
       ],
       "usedTypes": [
+        "D2MonsterPathParamStrc",
         "int32_t",
         "uint8_t"
       ]

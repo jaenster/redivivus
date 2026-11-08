@@ -770,12 +770,12 @@ struct __attribute__((packed)) D2ControlStrc {
 #ifndef D2_DEFINED_D2CUnitEventStrc
 #define D2_DEFINED_D2CUnitEventStrc
 struct D2CUnitEventStrc {
-    /* 0x00 */ struct D2UnitStrc * pUnit;
+    /* 0x00 */ int nClientEvent;
     /* 0x04 */ int nEventType;
     /* 0x08 */ int nEventState;
     /* 0x0C */ uint32_t dwEventData1;
     /* 0x10 */ uint32_t dwEventData2;
-    /* 0x14 */ int32_t (__fastcall *pfnCallback)(struct D2UnitStrc *, struct D2UnitStrc *, uint32_t, uint32_t, uint32_t, uint32_t); // dispatched event callback (__fastcall: ECX=pUnit, EDX=pOwnerUnit)
+    /* 0x14 */ int32_t (__fastcall *pfnCallback)(int, struct D2UnitStrc *, struct D2UnitStrc *, uint32_t, uint32_t, uint32_t); // dispatched event callback (__fastcall: ECX=pUnit, EDX=pOwnerUnit)
     /* 0x18 */ struct D2CUnitEventStrc * pNext;
     /* 0x1C */ struct D2CUnitEventStrc * pPrev;
 };
@@ -3127,7 +3127,8 @@ struct __attribute__((packed)) D2SoundsTxt {
     /* 0x64 */ int32_t aRecentSoundHistory[2]; // Recent sound indices for group randomization dedup
     /* 0x6C */ void * pSoundDataBuffer; // Loaded WAV data pointer (FreeClientMemory)
     /* 0x70 */ int32_t nSoundDataBytes; // Loaded buffer size in bytes
-    /* 0x74 */ int32_t aWavDataPtrAndSize[2]; // Unknown
+    /* 0x74 */ int * pWavData; // Unknown
+    /* 0x78 */ int32_t nWavDataSize;
     /* 0x7C */ uint32_t nLRUTimestamp; // LRU eviction tick (gnCurrentGameAudioVolume)
     /* 0x80 */ uint8_t nBlockCount; // Unknown
     /* 0x81 */ uint8_t bFileNotFound; // Set to 1 when file open fails

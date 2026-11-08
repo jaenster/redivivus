@@ -1944,25 +1944,28 @@ BOOL __fastcall IsPortalFromDuriel(::SGAMEDATA * pGame, POINT * pPoint, eD2Level
     return 0;
 }
 
-BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(::SGAMEDATA * * ppGame) {
+BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(D2ObjectOperateFnArg * pOperation) {
     POINT sCoords;
-    D2UnitStrc* pObjectUnit = (D2UnitStrc*)ppGame[1];
+    D2UnitStrc* pObjectUnit = pOperation->sArg.pVictim;
     if (pObjectUnit && pObjectUnit->eAnimMode.ePlayerMode != Death) {
       return 0;
     }
 
     D2Common::Units::GetCoords(pObjectUnit, &sCoords);
-    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine((int32_t)ppGame[4]);
+    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+    D2UnitStrc* pDVar1 = pOperation->sArg.pVictim;
     if (pObjectsTxt->Mode[1]) {
-      D2Common::Units::SetupUpdateFlag((D2UnitStrc*)ppGame[1], 1);
-      GAME::Event::SetEvent(*ppGame, (D2UnitStrc*)ppGame[1], 1, (pObjectsTxt->FrameCnt[1] >> 8) + (*ppGame)->dwGameFrame, 0, 0);
+      ::SGAMEDATA* pGame;
+      D2Common::Units::SetupUpdateFlag(pDVar1, 1);
+      pGame = pOperation->sArg.pGame;
+      GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
     } else {
-      D2Common::Units::SetupUpdateFlag((D2UnitStrc*)ppGame[1], 2);
+      D2Common::Units::SetupUpdateFlag(pDVar1, 2);
     }
-    if (ppGame[1]) {
-      D2DrlgActStrc** ppActField;
-      ppActField = ppGame[1]->pAct + 2;
-      *ppActField = (D2DrlgActStrc*)((uintptr_t)*ppActField & -3);
+
+    pDVar1 = pOperation->sArg.pVictim;
+    if (pDVar1) {
+      pDVar1->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
 
     return 1;

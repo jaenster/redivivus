@@ -5,21 +5,21 @@
 
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
 
-|At this commit|Ghidra database v2017|
+|At this commit|Ghidra database v2025|
 |-|-|
 |Build|every translation unit compiles with a strict `-std=c++17`, no `-fpermissive`; the executable links with no undefined symbol|
 |Play|single player works; a full playthrough has been completed on the Visual C++ 2005 build|
 |Modules|22 libraries, one per original module; 4 strict, with no include the original DLL imports did not allow|
-|64-bit|all 463 files compile for x64 with Visual C++ 2005; 1,967 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) by that compiler|
+|64-bit|all 463 files compile for x64 with Visual C++ 2005; 1,295 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) by that compiler|
 
 Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler of the original:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|7,769 of 14,626 (53.1%)|
-|Functions without placeholders|7,144 of 14,626 (48.8%), not counting 625 recovered unreferenced functions|
-|Code|629,839 of 2,598,518 bytes (24.24%)|
-|Instructions|1,814,822 of 2,598,518 bytes (69.8%), counting identical instructions in functions that still differ|
+|Functions|7,773 of 14,626 (53.1%)|
+|Functions without placeholders|7,148 of 14,626 (48.9%), not counting 625 recovered unreferenced functions|
+|Code|630,199 of 2,598,518 bytes (24.25%)|
+|Instructions|1,814,965 of 2,598,518 bytes (69.8%), counting identical instructions in functions that still differ|
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">

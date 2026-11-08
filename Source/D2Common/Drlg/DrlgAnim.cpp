@@ -3,6 +3,7 @@
 #include "Source/D2Common/Drlg/DrlgAnim.h"
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Common/D2RoomExStrc.h"
+#include "Source/D2Common/D2TileLibraryEntryStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgGridStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgTileDataStrc.h"
@@ -176,6 +177,7 @@ void __fastcall AnimateTiles(D2RoomExStrc * pRoomEx) {
 // Builds the animated-tile frame chains for a generated room. Scans the room's tile-entry array (stride 0x30 (0xc dwords)) for tiles flagged animated (TILEPROJECT_GetTileCount bit 0x100), looks up all project tile variants into a 40-entry result buffer, allocates a D2DrlgAnimTileGridStrc from the DRLG memory pool plus a per-frame ppTileData array, and creates floor/shadow/wall tile data for each animation frame (selecting CreateFloor/Shadow/WallTileData by entry type), tagging each with flag 8. Links the new anim-tile grid onto the room's pRoomTiles->pAnimTiles list. Halts on frame-count inconsistencies. Stack-guarded.
 // @sourcefile .\DRLG\DrlgAnim.cpp
 void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStrc * pRoomEx, int nFrameStep, D2DrlgTileDataStrc * pTiles, int nTileCount) {
+    D2TileLibraryEntryStrc* nTileType;
     uint32_t nMatchCount;
     uint32_t nIndex;
     D2DrlgAnimTileGridStrc* pAnimTileGrid;
@@ -188,10 +190,10 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
     D2TileLibraryEntryStrc* aTileResults[40];
     int i;
     uint32_t nFrameIter;
-    int nWorldPosY;
+    uint8_t* nWorldPosY;
     uint32_t nCellGridFlags;
-    int nWorldPosX;
-    int* pTileEntryPtr;
+    uint8_t* nWorldPosX;
+    D2TileLibraryEntryStrc** pTileEntryPtr;
     D2RoomExStrc* pRoomExIter;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     D2DrlgGridStrc* pGridsCtx = pGrids;
@@ -207,7 +209,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
         do {
           pRoomExIter = pRoomExCtx;
           if ((D2TileLibraryEntryStrc*)*pTileEntryIter) {
-            pTileEntryPtr = pTileEntryIter;
+            pTileEntryPtr = (D2TileLibraryEntryStrc**)pTileEntryIter;
             nMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((D2TileLibraryEntryStrc*)*pTileEntryIter);
             if (nMatchCount & 0x100) {
               nCellGridFlags = DrlgGrid::GetGridFlags(pGridsCtx + (((uint32_t)pTileEntryIter[-1] >> 0xe & 7) - 1), pTileEntryIter[-4], pTileEntryIter[-3]);
@@ -256,12 +258,12 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
                 exit(-1);
               }
 
-              *pTileEntryPtr = (int)aTileResults[nIndex];
+              *pTileEntryPtr = aTileResults[nIndex];
               *pAnimTileGrid->ppTileData = (D2DrlgTileDataStrc*)(pTileEntryPtr - 6);
               nFrameIter = 1;
-              nWorldPosX = pRoomExCtx->sCoords.WorldPosition.x + pTileEntryPtr[-4];
-              nWorldPosY = pRoomExCtx->sCoords.WorldPosition.y + pTileEntryPtr[-3];
-              pTileEntryIter = pTileEntryPtr;
+              nWorldPosX = pTileEntryPtr[-4]->abSubTileFlags + pRoomExCtx->sCoords.WorldPosition.x - 0x28;
+              nWorldPosY = pTileEntryPtr[-3]->abSubTileFlags + pRoomExCtx->sCoords.WorldPosition.y - 0x28;
+              pTileEntryIter = (int*)pTileEntryPtr;
               if (nMatchCount > 1) {
                 do {
                   nIndex = 0;
@@ -283,21 +285,21 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
                     exit(-1);
                   }
 
-                  nLibEntry = pTileEntryPtr[1];
-                  if (nLibEntry) {
-                    if (nLibEntry != 0xd) {
-                      pTileCreated = RoomTile::DRLGROOMTILE_CreateWallTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex], nLibEntry);
+                  nTileType = pTileEntryPtr[1];
+                  if (nTileType) {
+                    if (nTileType != (D2TileLibraryEntryStrc*)0xd) {
+                      pTileCreated = RoomTile::DRLGROOMTILE_CreateWallTileData(pRoomExCtx, nullptr, (int)nWorldPosX, (int)nWorldPosY, nCellGridFlags, aTileResults[nIndex], (int)nTileType);
                     } else {
-                      pTileCreated = RoomTile::DRLGROOMTILE_CreateShadowTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
+                      pTileCreated = RoomTile::DRLGROOMTILE_CreateShadowTileData(pRoomExCtx, nullptr, (int)nWorldPosX, (int)nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
                     }
                   } else {
-                    pTileCreated = RoomTile::DRLGROOMTILE_CreateFloorTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
+                    pTileCreated = RoomTile::DRLGROOMTILE_CreateFloorTileData(pRoomExCtx, nullptr, (int)nWorldPosX, (int)nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
                   }
 
                   pAnimTileGrid->ppTileData[nFrameIter] = pTileCreated;
                   pTileCreated->nFlags |= 8;
                   nFrameIter++;
-                  pTileEntryIter = pTileEntryPtr;
+                  pTileEntryIter = (int*)pTileEntryPtr;
                 } while (nFrameIter < nMatchCount);
               }
             }
@@ -305,7 +307,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
 
           i++;
           pTileEntryIter += 0xc;
-          pTileEntryPtr = pTileEntryIter;
+          pTileEntryPtr = (D2TileLibraryEntryStrc**)pTileEntryIter;
         } while (i < nTileCount);
       }
     }

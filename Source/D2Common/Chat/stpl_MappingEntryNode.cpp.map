@@ -37,8 +37,7 @@
       ],
       "usedTypes": [
         "TSLink<MappingEntryNode>",
-        "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {

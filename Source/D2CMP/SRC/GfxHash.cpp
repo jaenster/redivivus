@@ -35,7 +35,7 @@ namespace D2CMP::SRC::GfxHash {
 // @sourcefile .\SRC\GfxHash.cpp
 void __thiscall GFXHASH_UnlinkCacheEntry(uint8_t * pHashTable, D2PoolManagerStrc * pMemory, D2GfxHashEntryStrc * pEntry) {
     pfnCelPixelDataFree pFreeCallback;
-    int* pFrameData;
+    uint8_t* pFrameData;
     void* nErrAddress;
     int nFrameByteOffset;
     uint32_t nFrameIdx;
@@ -46,30 +46,30 @@ void __thiscall GFXHASH_UnlinkCacheEntry(uint8_t * pHashTable, D2PoolManagerStrc
     D2CelCacheBlockStrc* pCacheBlock = pEntry->pCacheBlock;
     D2AsyncData_Line0x128* pAsyncData = pCacheBlock->tDecode.pAsyncData;
     if (pAsyncData) {
-      int* pPixelData;
+      uint8_t* puVar1;
       if (pCacheBlock->tDecode.bFramesBuilt) {
         pFreeCallback = CelCmp::CELCMP_GetPixelDataFreeCallback();
-        pFrameData = (int*)Fog::Src::AsyncData::ASYNCDATA_GetResult(pAsyncData);
+        pFrameData = (uint8_t*)Fog::Src::AsyncData::ASYNCDATA_GetResult(pAsyncData);
         if (!pFrameData) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5f);
           exit(-1);
         }
 
-        nErrAddress = (void*)pFrameData[6];
+        nErrAddress = *(void**)(pFrameData + 0x18);
         nFrameByteOffset = 0;
         nFrameIdx = 0;
         if ((uint32_t)((uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount) > 0) {
           do {
-            pPixelData = *(int**)(nFrameByteOffset + 0x18 + (char*)pFrameData);
-            if (pPixelData) {
+            if (*(int**)(pFrameData + nFrameByteOffset + 0x18)) {
               if (pFreeCallback) {
-                (*pFreeCallback)(pPixelData);
+                (*pFreeCallback)(*(int**)(pFrameData + nFrameByteOffset + 0x18));
               }
 
-              *(uint32_t*)(nFrameByteOffset + 0x18 + (char*)pFrameData) = 0;
+              puVar1 = pFrameData + nFrameByteOffset + 0x18;
+              *(uint32_t*)puVar1 = 0;
             }
 
-            nFrameByteOffset = nFrameByteOffset + 0x23 + *(int*)(nFrameByteOffset + 0x1c + (char*)pFrameData) + *(int*)(nFrameByteOffset + 0x14 + (char*)pFrameData);
+            nFrameByteOffset = nFrameByteOffset + 0x23 + *(int*)(pFrameData + nFrameByteOffset + 0x1c) + *(int*)(pFrameData + nFrameByteOffset + 0x14);
             nFrameIdx++;
           } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
         }

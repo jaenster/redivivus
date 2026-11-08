@@ -341,13 +341,13 @@ void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
-void __thiscall SRP_GenerateAccountCredentials(void * pThis, char * pCredsBuf, char * szUsername, char * szPassword) {
+void __thiscall SRP_GenerateAccountCredentials(D2Srp * * pThis, char * pCredsBuf, char * szUsername, char * szPassword) {
     Storm::Source::SSTR::SStrCopy(pCredsBuf, szUsername, 0x7fffffff);
     Storm::Source::SSTR::SStrCopy(pCredsBuf + 0x20, szPassword, 0x7fffffff);
-    SRP_ExtractSessionKeyBytes((D2Srp**)pThis, pCredsBuf + 0x40, 0x20);
+    SRP_ExtractSessionKeyBytes(pThis, pCredsBuf + 0x40, 0x20);
     BigData* pPasswordHash = SHA::SHA1_FromBigIntBytes(pCredsBuf + 0x40, 0x20);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
-    SHA::SHA1_BigIntPowMod(pVerifier, *(BigData**)(*(int*)pThis + 4), pPasswordHash, *(BigData**)(*(int*)pThis + 8));
+    SHA::SHA1_BigIntPowMod(pVerifier, (*pThis)->pGenerator, pPasswordHash, (*pThis)->pModulusN);
     SHA::SHA1_BigIntFree(pPasswordHash);
     SHA::SHA1_ToBigIntBytes(pVerifier, (uint8_t*)(pCredsBuf + 0x60), 0x20);
     SHA::SHA1_BigIntFree(pVerifier);
@@ -469,17 +469,17 @@ uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32
     return (uint32_t)(nCompareResult == 1);
 }
 
-void __thiscall SRP_ServerComputePublicB(void * pThis, uint8_t * nContextBase) {
+void __thiscall SRP_ServerComputePublicB(D2Srp * * pThis, uint8_t * nContextBase) {
     BigData* pSmallKeyBigInt = SHA::SHA1_FromBigIntBytes(nContextBase + 0x20, 0x20);
-    SRP_ExtractSessionKeyBytes((D2Srp**)pThis, nContextBase + 0x80, 0x20);
+    SRP_ExtractSessionKeyBytes(pThis, nContextBase + 0x80, 0x20);
     BigData* pRandomKeyBigInt = SHA::SHA1_FromBigIntBytes(nContextBase + 0x80, 0x20);
     BigData* pPublicB = SHA::SHA1_BigIntFromUnsigned(0);
-    SHA::SHA1_BigIntPowMod(pPublicB, *(BigData**)(*(int*)pThis + 4), pRandomKeyBigInt, *(BigData**)(*(int*)pThis + 8));
+    SHA::SHA1_BigIntPowMod(pPublicB, (*pThis)->pGenerator, pRandomKeyBigInt, (*pThis)->pModulusN);
     SHA::SHA1_BigIntAdd(pPublicB, pPublicB, pSmallKeyBigInt);
-    int nCmpResult = SHA::SHA1_CompareBigInt(pPublicB, *(BigData**)(*(int*)pThis + 8));
+    int nCmpResult = SHA::SHA1_CompareBigInt(pPublicB, (*pThis)->pModulusN);
     while (nCmpResult > 0) {
-      SHA::SHA1_BigIntSub(pPublicB, pPublicB, *(BigData**)(*(int*)pThis + 8));
-      nCmpResult = SHA::SHA1_CompareBigInt(pPublicB, *(BigData**)(*(int*)pThis + 8));
+      SHA::SHA1_BigIntSub(pPublicB, pPublicB, (*pThis)->pModulusN);
+      nCmpResult = SHA::SHA1_CompareBigInt(pPublicB, (*pThis)->pModulusN);
     }
 
     SHA::SHA1_BigIntFree(pRandomKeyBigInt);

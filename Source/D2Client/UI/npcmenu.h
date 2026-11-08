@@ -119,7 +119,7 @@ int32_t __stdcall GetInteractedUnitClassId();
 void __stdcall NPCMENU_SelectRandomDialogOption(struct D2NPCSpeechStrc * pSpeech);
 void __stdcall NPCMENU_RandomizeAllNpcDialogs();
 uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind);
-int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, void * pDismissCallback);
+int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, int bDismissed);
 void Unreferenced_004b1970();
 void __fastcall NPCMENU_AddHandledMessageId(short wMsgId);
 bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId);

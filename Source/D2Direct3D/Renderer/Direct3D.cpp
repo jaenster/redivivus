@@ -3183,6 +3183,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     IDirect3DTexture2* lpD3DTexture;
     uint8_t* pbPixelData;
     int nTexWidth;
+    uint8_t* pbOutlineDst;
     IDirectDrawSurface7* pDestSurface;
     int nTmp;
     uint8_t cPixel;
@@ -3194,28 +3195,28 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       exit(-1);
     }
 
-    int pbSrcPixel = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
+    int iVar1 = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
     int nMipIdx = nMode;
     if (nMode == 4) {
       nMipIdx = 1;
     }
-    if (!*(int*)(pbSrcPixel + nMipIdx * 8)) {
+    if (!*(int*)(iVar1 + nMipIdx * 8)) {
       iMipLevel = pTexInfo->nWidth;
       if (iMipLevel <= 0x20 && pTexInfo->nHeight <= 0x20) {
-        *(uint32_t*)(pbSrcPixel + nMipIdx * 8) = 3;
+        *(uint32_t*)(iVar1 + nMipIdx * 8) = 3;
       } else if (iMipLevel <= 0x80 && pTexInfo->nHeight <= 0x80) {
-        *(uint32_t*)(pbSrcPixel + nMipIdx * 8) = 2;
+        *(uint32_t*)(iVar1 + nMipIdx * 8) = 2;
       } else {
         if (iMipLevel > 0x100 || pTexInfo->nHeight > 0x100) {
           return 0;
         }
 
-        *(uint32_t*)(pbSrcPixel + nMipIdx * 8) = 1;
+        *(uint32_t*)(iVar1 + nMipIdx * 8) = 1;
       }
     }
 
-    iMipLevel = *(int*)(pbSrcPixel + nMipIdx * 8);
-    int* pnCacheNodeIdx = (int*)(pbSrcPixel + 4 + nMipIdx * 8);
+    iMipLevel = *(int*)(iVar1 + nMipIdx * 8);
+    int* pnCacheNodeIdx = (int*)(iVar1 + 4 + nMipIdx * 8);
     D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
     if (*pnCacheNodeIdx && (*(uint8_t**)(*pnCacheNodeIdx * 0x20 - 0x14 + (&INT_00970ec4)[iMipLevel * 7]) == pPalette || nMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
@@ -3231,9 +3232,9 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     IDirectDrawSurface7* pDestSurface_00 = (IDirectDrawSurface7*)gD3DGenericTextureCache.apSpriteTextures[iMipLevel + 2];
     IDirect3DTexture2* lpD3DTexture_00 = gD3DGenericTextureCache.apSpriteTextures[iMipLevel - 1];
     if (!*pnCacheNodeIdx) {
-      int32_t iVar1;
-      iVar1 = d3dTextureCache::D3DTEXCACHE_EnsureAvailableNode(pCache);
-      *pnCacheNodeIdx = iVar1;
+      int32_t iVar2;
+      iVar2 = d3dTextureCache::D3DTEXCACHE_EnsureAvailableNode(pCache);
+      *pnCacheNodeIdx = iVar2;
     }
 
     uint8_t* pcSrcPixel = gpD3DTextureSpritePoolMemory0;
@@ -3249,7 +3250,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       nTmp = *(int*)(iCacheNodeIdx - 0x10 + (&INT_00970ec4)[iMipLevel * 7]);
       iMipLevel = iCacheNodeIdx - 0x20 + (&INT_00970ec4)[iMipLevel * 7];
       pbPixelData = gpD3DTextureSpritePoolMemory0;
-      *(int*)(iMipLevel + 4) = pbSrcPixel;
+      *(int*)(iMipLevel + 4) = iVar1;
       *(int*)(iMipLevel + 8) = nMipIdx;
       *(uint8_t**)(iMipLevel + 0xc) = (uint8_t*)pPalette;
       if (!nTmp) {
@@ -3275,7 +3276,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
           case 2:
             D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame(pTexInfo->pSprite, -pTexInfo->nOffsetX, pTexInfo->nTexHeight - pTexInfo->nOffsetY - 1, 0, 0, pcSrcPixel, pTexInfo->nTexHeight, pTexInfo->nTexWidth, nullptr, nullptr, pPalette);
           pRemapTable = gpPaletteTable[0x46];
-          pbSrcPixel = 0;
+          iVar1 = 0;
           pbOutlinePixel = gpD3DTextureSpritePoolMemory0;
           if (pTexInfo->nTexArea > 0) {
             do {
@@ -3283,9 +3284,9 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
                 *pbOutlinePixel = pRemapTable[*pbOutlinePixel];
               }
 
-              pbSrcPixel++;
+              iVar1++;
               pbOutlinePixel++;
-            } while (pbSrcPixel < pTexInfo->nTexArea);
+            } while (iVar1 < pTexInfo->nTexArea);
           }
 
           break;
@@ -3304,20 +3305,20 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
           memset(gpD3DTextureSpritePoolMemory1, 0, pTexInfo->nTexArea);
           nTexWidth = pTexInfo->nTexWidth;
           pcSrcPixel = gpD3DTextureSpritePoolMemory0 + nTexWidth;
-          pbSrcPixel = nTexWidth + (int)pbPixelData;
+          pbOutlineDst = (uint8_t*)(nTexWidth + (char*)pbPixelData);
           pPalette = (uint8_t*)(pTexInfo->nTexArea + nTexWidth * -2);
           if ((intptr_t)pPalette > 0) {
             do {
               cPixel = *pcSrcPixel;
               pcSrcPixel++;
               if (cPixel != '\0') {
-                *(uint8_t*)(pbSrcPixel - pTexInfo->nTexWidth) = nOutlineColor;
-                *(uint8_t*)(pbSrcPixel - 1) = nOutlineColor;
-                *(uint8_t*)(pbSrcPixel + 1) = nOutlineColor;
-                *(uint8_t*)(pbSrcPixel + pTexInfo->nTexWidth) = nOutlineColor;
+                pbOutlineDst[-pTexInfo->nTexWidth] = nOutlineColor;
+                pbOutlineDst[-1] = nOutlineColor;
+                pbOutlineDst[1] = nOutlineColor;
+                pbOutlineDst[pTexInfo->nTexWidth] = nOutlineColor;
               }
 
-              pbSrcPixel++;
+              pbOutlineDst++;
               pPalette--;
             } while (pPalette);
           }

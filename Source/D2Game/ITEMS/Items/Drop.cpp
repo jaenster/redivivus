@@ -1242,12 +1242,13 @@ static BOOL ITEM_FallbackToRareQuality(int * pnSeed, D2ItemGenContextStrc * pIte
 
 // Apply quality tier to item and generate affixes based on quality type (magic/rare/set/unique/superior)
 int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * ppItem, D2ItemGenContextStrc * pItemGenContext) {
-    uint16_t wItemVersion;
+    uint16_t wAutoMagic;
     int32_t iVar1;
     BOOL nCrudeResult;
+    uint16_t wItemVersion;
+    uint32_t nSeedLow;
     D2SeedStrc* pSeed;
     uint32_t uVar2;
-    uint32_t nAutoMagicAffixId;
     D2MagicAffixTxt* pMagicAffixLine;
     uint32_t nSeedLowBackup;
     D2UnitStrc* pItem;
@@ -1323,10 +1324,10 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     switch (nAffixLoopIdx) {
       case 1:
         pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
-      nAutoMagicAffixId = D2Common::Seed::GetSeed_nSeedLow(pSeed);
+      nSeedLow = D2Common::Seed::GetSeed_nSeedLow(pSeed);
       nCrudeResult = SKILLS::Items::ITEMMOD_ApplyCrudeQualityVersioned(*ppItem, pItemGenContext);
       if (!nCrudeResult) {
-        ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nAutoMagicAffixId);
+        ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLow);
       }
 
       break;
@@ -1336,10 +1337,10 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       case 3:
         D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(*ppItem, -1);
       pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
-      nAutoMagicAffixId = D2Common::Seed::GetSeed_nSeedLow(pSeed);
+      nSeedLow = D2Common::Seed::GetSeed_nSeedLow(pSeed);
       nCrudeResult = SKILLS::Items::ITEMMOD_RollSuperiorQualityMods(*ppItem, pItemGenContext);
       if (!nCrudeResult) {
-        ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nAutoMagicAffixId);
+        ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLow);
       }
 
       break;
@@ -1453,10 +1454,10 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
         D2Common::ITEMS::Items::SetRarePrefix(*ppItem, 0);
       D2Common::ITEMS::Items::SetRareSuffix(*ppItem, 0);
       pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
-      nAutoMagicAffixId = D2Common::Seed::GetSeed_nSeedLow(pSeed);
+      nSeedLow = D2Common::Seed::GetSeed_nSeedLow(pSeed);
       nCrudeResult = SKILLS::Items::ITEMMOD_RollRareAffixes(*ppItem, pItemGenContext);
       if (!nCrudeResult) {
-        ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nAutoMagicAffixId);
+        ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLow);
       }
 
       break;
@@ -1521,10 +1522,10 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
 
       case 9:
         if ((uint16_t)pItemTxt->wAutoPrefix) {
-          nAutoMagicAffixId = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
-          if ((uint16_t)(short int)nAutoMagicAffixId > 0) {
-            D2Common::ITEMS::Items::SetAutoMagic(*ppItem, (short int)nAutoMagicAffixId);
-            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint16_t)nAutoMagicAffixId);
+          wAutoMagic = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
+          if (wAutoMagic > 0) {
+            D2Common::ITEMS::Items::SetAutoMagic(*ppItem, wAutoMagic);
+            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wAutoMagic);
             D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
           }
         }
@@ -2730,11 +2731,11 @@ void __fastcall DROP_SpawnRandomItemInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRo
 
     int32_t nRolledClassId = ITEMDROP_RollItemClassByLevel(pGame, pRoomSeed, -1, 0, 0, nItemLevel);
     ptCandidatePos = *pCoordsIn;
-    pCoordsIn = (POINT*)(ptCandidatePos.x + 2);
+    LONG nCoordsIn = ptCandidatePos.x + 2;
     int nOffsetY = ptCandidatePos.y + 3;
-    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nCoordsIn, nOffsetY);
     if (pSpawnRoom) {
-      ptSpawnPos.x = (LONG)pCoordsIn;
+      ptSpawnPos.x = nCoordsIn;
       ptSpawnPos.y = nOffsetY;
     } else {
       ptSpawnPos.x = ptCandidatePos.x;
@@ -2796,11 +2797,11 @@ void __fastcall DROP_SpawnGoldInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
     }
 
     ptCandidatePos = *pCoordsIn;
-    pCoordsIn = (POINT*)(ptCandidatePos.x + 2);
+    LONG nCoordsIn = ptCandidatePos.x + 2;
     int nOffsetY = ptCandidatePos.y + 3;
-    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (int32_t)pCoordsIn, nOffsetY);
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nCoordsIn, nOffsetY);
     if (pSpawnRoom) {
-      ptSpawnPos.x = (LONG)pCoordsIn;
+      ptSpawnPos.x = nCoordsIn;
       ptSpawnPos.y = nOffsetY;
     } else {
       ptSpawnPos.x = ptCandidatePos.x;
@@ -2886,6 +2887,7 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
     POINT ptSpawnPos;
     D2SeedStrc* pRoomSeed;
     D2ItemGenContextStrc sItemGenCtx;
+    LONG nCoordsIn;
     D2RoomStrc* pCoordsIn = (D2RoomStrc*)pCoords;
     D2RoomStrc* pRoomSaved = pRoom;
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -2916,11 +2918,11 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
       D2RoomStrc* pSpawnRoom;
       ptCandidatePos.x = (LONG)pCoordsIn->ppRoomList;
       ptCandidatePos.y = pCoordsIn->nClientsMax;
-      pCoordsIn = (D2RoomStrc*)(ptCandidatePos.x + 2);
+      nCoordsIn = ptCandidatePos.x + 2;
       nRollRetry = ptCandidatePos.y + 3;
-      pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoomSaved, (int32_t)pCoordsIn, nRollRetry);
+      pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoomSaved, nCoordsIn, nRollRetry);
       if (pSpawnRoom) {
-        ptSpawnPos.x = (LONG)pCoordsIn;
+        ptSpawnPos.x = nCoordsIn;
         ptSpawnPos.y = nRollRetry;
       } else {
         ptSpawnPos.x = ptCandidatePos.x;
@@ -2991,11 +2993,11 @@ void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POI
     int32_t nRolledClassId = ITEMDROP_RollEliteItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nTCFilter, nMonsterLevel, bIsMonsterFlag);
     ptCandidatePos = *pCoordsIn;
     int nOffsetX = ptCandidatePos.x + 2;
-    pCoordsIn = (POINT*)(ptCandidatePos.y + 3);
-    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nOffsetX, (int32_t)pCoordsIn);
+    LONG nCoordsIn = ptCandidatePos.y + 3;
+    D2RoomStrc* pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nOffsetX, nCoordsIn);
     if (pSpawnRoom) {
       ptSpawnPos.x = nOffsetX;
-      ptSpawnPos.y = (LONG)pCoordsIn;
+      ptSpawnPos.y = nCoordsIn;
     } else {
       ptSpawnPos.x = ptCandidatePos.x;
       ptSpawnPos.y = ptCandidatePos.y;

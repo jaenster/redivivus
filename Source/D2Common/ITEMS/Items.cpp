@@ -4228,7 +4228,7 @@ static void __stdcall ITEM_ResolvePercentStatToBaseValue(eD2UnitStat nRecipeType
 }
 
 // Canonical D2 item bit-stream reader: deserializes one item from a D2BitBufferStrc into pUnit's item data + stat list (inverse of SerializeComplexItem). Reads version(10b), location code (ground=X/Y 16b each; else bodyloc+cell+inv page), item code (resolved to ClassId), flags, quality (switch over eD2ItemQuality decoding magic/set/rare/unique/crafted affix IDs, automod, charm), GUID/level/personalized char name, runeword and ear/bodypart data, then base stats (gold, defense, weapon min/max dmg with ethereal*3/2 and low-quality*3/4 scaling, durability) and a property/stat-list loop (9-bit stat IDs, grouped set/charge/on-hit-skill/skill-tab stats) via STATLIST_SetUnitStat. Field bit widths gated by item save/wire version (nParam2: <0x5d/<0x60 compact). __stdcall; returns 1 on success, -1 on parse error.
-int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, uint32_t nParam1, D2ItemStatCostTxt * pItemStatCostTxt, uint32_t * pnSocketedItemCount, uint32_t nFileVersion) {
+int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, uint32_t nParam1, int32_t bIsExtended, uint32_t * pnSocketedItemCount, uint32_t nFileVersion) {
     int16_t wAffixAdj;
     uint32_t nCoord;
     eD2ItemFlag eItemFlags;
@@ -4304,7 +4304,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     if (nClassId >= 0 && pUnit) {
       pUnit->nClassId = nClassId;
     }
-    if (pItemStatCostTxt) {
+    if (bIsExtended) {
       if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
         if (pUnit->pUnitData.pUnitDataItem) {
           pUnit->pUnitData.pUnitDataItem->nItemLevel = 1;
@@ -4355,7 +4355,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
 
     D2MagicAffixTableStrc* pAffixTable;
     pAffixTable = DATATBLS::ItemTbls::TXT_MagicAffixes_GetTableInfo();
-    *(uint16_t*)(char*)&pItemStatCostTxt = (short int)(((intptr_t)pAffixTable->pPrefixStart - (intptr_t)pAffixTable->pTable) / 0x90);
+    *(uint16_t*)(char*)&bIsExtended = (short int)(((intptr_t)pAffixTable->pPrefixStart - (intptr_t)pAffixTable->pTable) / 0x90);
     short int wAffixIdx;
     wAffixIdx = (short int)(((intptr_t)pAffixTable->pAutoMagicStart - (intptr_t)pAffixTable->pTable) / 0x90);
     switch (nFileVersion) {
@@ -4368,13 +4368,13 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       case 0x51:
 
       case 0x52:
-        *(uint16_t*)(char*)&pItemStatCostTxt = (short int)(uintptr_t)pItemStatCostTxt - 0x295;
+        *(uint16_t*)(char*)&bIsExtended = (short int)bIsExtended - 0x295;
       wAffixIdx += -0x4ee;
       break;
       case 0x53:
 
       case 0x54:
-        *(uint16_t*)(char*)&pItemStatCostTxt = (short int)(uintptr_t)pItemStatCostTxt - 0x2a2;
+        *(uint16_t*)(char*)&bIsExtended = (short int)bIsExtended - 0x2a2;
       wAffixIdx += -0x4f1;
       break;
       case 0x55:
@@ -4382,11 +4382,11 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       case 0x56:
 
       case 0x57:
-        *(uint16_t*)(char*)&pItemStatCostTxt = (short int)(uintptr_t)pItemStatCostTxt - 0x2a3;
+        *(uint16_t*)(char*)&bIsExtended = (short int)bIsExtended - 0x2a3;
       wAffixIdx += -0x4f2;
       break;
       case 0x58:
-        *(uint16_t*)(char*)&pItemStatCostTxt = (short int)(uintptr_t)pItemStatCostTxt - 0x2d9;
+        *(uint16_t*)(char*)&bIsExtended = (short int)bIsExtended - 0x2d9;
       wAffixIdx += -0x5a0;
     }
 
@@ -4446,7 +4446,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0xb);
           wAffixAdj = 0;
           if ((uint16_t)(short int)nBitVal > 0) {
-            wAffixAdj = (short int)nBitVal + (short int)(uintptr_t)pItemStatCostTxt;
+            wAffixAdj = (short int)nBitVal + (short int)bIsExtended;
           }
 
           SetMagixPrefix(pUnit, wAffixAdj, 0);
@@ -4493,7 +4493,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
             wAffixIdx++;
           }
           if ((uint16_t)wAffixIdx > 0) {
-            wAffixIdx += (short int)(uintptr_t)pItemStatCostTxt;
+            wAffixIdx += (short int)bIsExtended;
           }
           if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
             *(short int*)((char*)pUnit->pUnitData.pUnitDataItem->wMagicPrefix + nStatVal - 0x3e) = wAffixIdx;
@@ -4539,7 +4539,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0xb);
           wAffixAdj = 0;
           if ((uint16_t)(short int)nBitVal > 0) {
-            wAffixAdj = (short int)nBitVal + (short int)(uintptr_t)pItemStatCostTxt;
+            wAffixAdj = (short int)nBitVal + (short int)bIsExtended;
           }
 
           SetMagixPrefix(pUnit, wAffixAdj, 0);
@@ -4686,13 +4686,13 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     nBitVal = ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
     if (nBitVal) {
       if (sgptDataTable->nTxtItemStatCostSize <= 0x1f) {
-        pItemStatCostTxt = 0;
+        bIsExtended = 0;
       } else {
-        pItemStatCostTxt = sgptDataTable->pTxtItemStatCost + 0x1f;
+        bIsExtended = (int32_t)(sgptDataTable->pTxtItemStatCost + 0x1f);
       }
 
-      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)pItemStatCostTxt->saveBits[nStatIndex]);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nBitVal - pItemStatCostTxt->saveAdd[nStatIndex], 0);
+      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)*(uint8_t*)(bIsExtended + 0x19 + nStatIndex));
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nBitVal - *(int*)(bIsExtended + 0x1c + nStatIndex * 4), 0);
       if (!pUnit) {
         nBitVal = -1;
       } else {
@@ -4708,13 +4708,13 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)(uint8_t)pItemsTxt->bBlock, 0);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, -pItemsTxt->dwSpeed, 0);
       if (sgptDataTable->nTxtItemStatCostSize <= 0x49) {
-        pItemStatCostTxt = 0;
+        bIsExtended = 0;
       } else {
-        pItemStatCostTxt = sgptDataTable->pTxtItemStatCost + 0x49;
+        bIsExtended = (int32_t)(sgptDataTable->pTxtItemStatCost + 0x49);
       }
 
-      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)pItemStatCostTxt->saveBits[nStatIndex]);
-      nStatVal = nBitVal - pItemStatCostTxt->saveAdd[nStatIndex];
+      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)*(uint8_t*)(bIsExtended + 0x19 + nStatIndex));
+      nStatVal = nBitVal - *(int*)(bIsExtended + 0x1c + nStatIndex * 4);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdurability, nStatVal, 0);
       if (nStatVal) {
         if (sgptDataTable->nTxtItemStatCostSize <= 0x48) {
@@ -4924,16 +4924,16 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     nStatListIdx = -1;
     do {
       if ((int)nStatListIdx < 0) {
-        pItemStatCostTxt = 0;
+        bIsExtended = 0;
         nParam1 = 0x40;
         read_stat_list:
-        pStatsEx = Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(pUnit, (eD2States)pItemStatCostTxt, nParam1);
+        pStatsEx = Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(pUnit, bIsExtended, nParam1);
         if (!pStatsEx) {
           nClassId = Units::GetGUID(pUnit);
           eQualityType = QUALITY_MAGIC;
           pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(Units::GetMemPool(pUnit), nParam1, (int32_t)pStatsEx, eQualityType, nClassId);
           Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
-          Stats::StatsEx::SetState(pStatsEx, (eD2States)pItemStatCostTxt);
+          Stats::StatsEx::SetState(pStatsEx, bIsExtended);
         }
 
         eStatId = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 9);
@@ -5337,12 +5337,12 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         }
       } else {
         if (bExtended && nStatListIdx == nStatVal - 1U) {
-          pItemStatCostTxt = (D2ItemStatCostTxt*)0xab;
+          bIsExtended = 0xab;
           nParam1 = 0x40;
           goto read_stat_list;
         }
         if (nSetBitMask & 1 << D2_SHIFT_COUNT(nStatListIdx)) {
-          pItemStatCostTxt = (D2ItemStatCostTxt*)aSetItemsStateList[nStatListIdx];
+          bIsExtended = aSetItemsStateList[nStatListIdx];
           nParam1 = 0x2040;
           goto read_stat_list;
         }
@@ -5446,7 +5446,7 @@ int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData,
         *pnSocketedItemCount = 0;
       }
     } else {
-      nDeserializeResult = ITEM_DeserializeFromBitBuffer(pUnit, &sBitBuffer, bCheckHeader, (D2ItemStatCostTxt*)(uint32_t)bIsExtended, pnSocketedItemCount, nVersion);
+      nDeserializeResult = ITEM_DeserializeFromBitBuffer(pUnit, &sBitBuffer, bCheckHeader, (uint32_t)bIsExtended, pnSocketedItemCount, nVersion);
     }
     if (nDeserializeResult < 1) {
       *pUnitDataItemDetails = 1;

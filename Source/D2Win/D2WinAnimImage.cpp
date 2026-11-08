@@ -89,7 +89,7 @@ BOOL __fastcall DrawAnim(::D2WinAnimImage * pAnimImage) {
     }
 
     int nMouseY = Src::D2WinMain::nPosY;
-    DC6** pFrameEntry = (DC6**)pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage;
+    DC6** pFrameEntry = pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage;
     DC6* pDC6 = 0;
     if (pFrameEntry) {
       pDC6 = *pFrameEntry;
@@ -142,12 +142,12 @@ static BOOL D2WINANIMIMAGE_UpdateFrame(::D2WinAnimImage * pAnimImage) {
       }
     }
 
-    uint32_t* pFrameEntry;
-    pFrameEntry = (uint32_t*)pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage;
+    DC6** pFrameEntry;
+    pFrameEntry = pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage;
     int nFrames;
     nFrames = 1;
     if (pFrameEntry) {
-      pDC6Next = (DC6*)*pFrameEntry;
+      pDC6Next = *pFrameEntry;
       if (pDC6Next) {
         nFrames = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC6Next);
       }
@@ -174,7 +174,7 @@ static BOOL D2WINANIMIMAGE_UpdateFrame(::D2WinAnimImage * pAnimImage) {
     dwTick = GetTickCount();
     pAnimImage->dwAnimStartTick = dwTick;
     wrap_frame_counter:
-    if (nAnimState != pAnimImage->nAnimState && (pFrameEntry = (uint32_t*)pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage , pFrameEntry != 0) && (pDC6Next = (DC6*)*pFrameEntry , pDC6Next != 0)) {
+    if (nAnimState != pAnimImage->nAnimState && (pFrameEntry = pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage , pFrameEntry != 0) && (pDC6Next = *pFrameEntry , pDC6Next != 0)) {
       D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC6Next);
     }
     if (pAnimImage->nCurrentFrame > nFrames) {
@@ -214,12 +214,12 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
     DC6* pDC6 = 0;
     DC6* pOverlayDC6 = 0;
     if (eFrameType) {
-      pOverlayEntry = (DC6**)eFrameType[pAnimImage->nAnimState].ppBaseImage;
+      pOverlayEntry = eFrameType[pAnimImage->nAnimState].ppBaseImage;
       if (pOverlayEntry) {
         pDC6 = *pOverlayEntry;
       }
       if (eFrameType[pAnimImage->nAnimState].ppOverlayImage) {
-        pOverlayDC6 = *(DC6**)eFrameType[pAnimImage->nAnimState].ppOverlayImage;
+        pOverlayDC6 = *eFrameType[pAnimImage->nAnimState].ppOverlayImage;
       }
 
       eOverlayDrawMode = eFrameType[pAnimImage->nAnimState].nDrawMode;

@@ -46,14 +46,14 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2SoundListNodeStrc) == 0x8, "D2_NE
 namespace D2Sound::D2SoundUntil {
 
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
-void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, void * pItem) {
-    uint32_t* pNewNode = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\D2SoundUtil.cpp", 0xd5);
+void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, intptr_t pItem) {
+    intptr_t* pNewNode = (intptr_t*)D2_ALLOC_AT(8, ".\\Src\\D2SoundUtil.cpp", 0xd5);
     *pNewNode = 0;
     pNewNode[1] = 0;
-    uint32_t dwOldHead = *(uint32_t*)pListHead;
-    *pNewNode = (uint32_t)(uintptr_t)pItem;
+    intptr_t dwOldHead = *(intptr_t*)pListHead;
+    *pNewNode = pItem;
     pNewNode[1] = dwOldHead;
-    *(uint32_t**)pListHead = (uint32_t*)pNewNode;
+    *(intptr_t**)pListHead = (intptr_t*)pNewNode;
 }
 
 void __fastcall SOUND_sD2SoundSmp_Free(D2SoundListNodeStrc * * ppListHead, intptr_t nSearchValue) {
@@ -88,7 +88,7 @@ void __fastcall SOUND_sD2SoundSmp_Free(D2SoundListNodeStrc * * ppListHead, intpt
     D2_FREE_AT(pMemoryToFree, ".\\Src\\D2SoundUtil.cpp", 0xf1);
 }
 
-BOOL __fastcall SOUNDUTIL_FindInLinkedList(D2SoundListNodeStrc * pNode, int32_t nSearchValue) {
+BOOL __fastcall SOUNDUTIL_FindInLinkedList(D2SoundListNodeStrc * pNode, intptr_t nSearchValue) {
     while (true) {
       if (!pNode) {
         return 0;
@@ -323,19 +323,11 @@ void __fastcall SOUNDUTIL_ReadVersionResourceToBuffer(LPCSTR szText, uint32_t nB
 }
 
 BOOL __fastcall SOUNDUTIL_GetFileVersionInfo(LPCSTR szText, uint32_t * pnFileVerProduct, uint32_t * pnFileVerMS, uint32_t * pnFileVerLS) {
-    // Frame slots -20..-4 are ONE object: &nVerBlockLen is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t nVerBlockLen;
-      uint32_t* pnMajorVer;
-      VS_FIXEDFILEINFO* pVerInfo;
-      uint32_t nResourceSizeOut;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    __frame0.nResourceSizeOut = 0;
-    __frame0.pnMajorVer = pnFileVerProduct;
-    BOOL bReadOk = SOUNDUTIL_ReadVersionResource(szText, &__frame0.nResourceSizeOut, nullptr);
+    uint32_t nVerBlockLen;
+    VS_FIXEDFILEINFO* pVerInfo;
+    uint32_t nResourceSizeOut = 0;
+    uint32_t* pnMajorVer = pnFileVerProduct;
+    BOOL bReadOk = SOUNDUTIL_ReadVersionResource(szText, &nResourceSizeOut, nullptr);
     if (bReadOk) {
       return 0;
     }
@@ -346,28 +338,28 @@ BOOL __fastcall SOUNDUTIL_GetFileVersionInfo(LPCSTR szText, uint32_t * pnFileVer
     }
 
     /* DWORD dwErrCode for SetLastError */ SetLastError(0);
-    uint32_t nResourceSizeCopy = __frame0.nResourceSizeOut;
-    if (!__frame0.nResourceSizeOut) {
+    uint32_t nResourceSizeCopy = nResourceSizeOut;
+    if (!nResourceSizeOut) {
       return 0;
     }
 
-    void* pBlock = D2_ALLOC_AT(__frame0.nResourceSizeOut, ".\\Src\\D2SoundUtil.cpp", 0x21c);
-    __frame0.nResourceSizeOut = nResourceSizeCopy;
-    bReadOk = SOUNDUTIL_ReadVersionResource(szText, &__frame0.nResourceSizeOut, pBlock);
+    void* pBlock = D2_ALLOC_AT(nResourceSizeOut, ".\\Src\\D2SoundUtil.cpp", 0x21c);
+    nResourceSizeOut = nResourceSizeCopy;
+    bReadOk = SOUNDUTIL_ReadVersionResource(szText, &nResourceSizeOut, pBlock);
     if (!bReadOk) {
       D2_FREE_AT(pBlock, ".\\Src\\D2SoundUtil.cpp", 0x221);
       return 0;
     }
 
-    /* PUINT puLen for VerQueryValueA */ /* LPVOID * lplpBuffer for VerQueryValueA */ /* LPCSTR lpSubBlock for VerQueryValueA */ /* LPCVOID pBlock for VerQueryValueA */ bReadOk = VerQueryValueA(pBlock, "\\", (LPVOID*)&__frame0.pVerInfo, &__frame0.nVerBlockLen);
+    /* PUINT puLen for VerQueryValueA */ /* LPVOID * lplpBuffer for VerQueryValueA */ /* LPCSTR lpSubBlock for VerQueryValueA */ /* LPCVOID pBlock for VerQueryValueA */ bReadOk = VerQueryValueA(pBlock, "\\", (LPVOID*)&pVerInfo, &nVerBlockLen);
     if (!bReadOk) {
       D2_FREE_AT(pBlock, ".\\Src\\D2SoundUtil.cpp", 0x229);
       return 0;
     }
 
-    *__frame0.pnMajorVer = (uint32_t)*(uint16_t*)((intptr_t)&__frame0.pVerInfo->dwFileVersionMS + 2);
-    *pnFileVerMS = (uint32_t)(uint16_t)__frame0.pVerInfo->dwFileVersionMS;
-    *pnFileVerLS = (uint32_t)(uint16_t)__frame0.pVerInfo->dwFileVersionLS;
+    *pnMajorVer = (uint32_t)*(uint16_t*)((intptr_t)&pVerInfo->dwFileVersionMS + 2);
+    *pnFileVerMS = (uint32_t)(uint16_t)pVerInfo->dwFileVersionMS;
+    *pnFileVerLS = (uint32_t)(uint16_t)pVerInfo->dwFileVersionLS;
     return 1;
 }
 

@@ -54,7 +54,7 @@ typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc 
 #endif
 #ifndef RECON_FPTD_pfnTextScrollComplete
 #define RECON_FPTD_pfnTextScrollComplete
-typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
+typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, int bDismissed);
 #endif
 #ifndef RECON_FPTD_pfnEHHandlerRoutine
 #define RECON_FPTD_pfnEHHandlerRoutine
@@ -3843,7 +3843,7 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     } while (true);
 }
 
-int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, void * pDismissCallback) {
+int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, int bDismissed) {
     D2UnitStrc* pDVar1;
     if (gnNpcMenuActiveMode == '\x01') {
       uint16_t wDialogStringId;

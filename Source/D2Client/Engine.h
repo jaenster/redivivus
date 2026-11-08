@@ -64,7 +64,7 @@ uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
 // Alternate draw mode game loop with different event handler table and loop function
 uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal);
 void __fastcall CLIENT_SetUnitFlag(struct D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet);
-void __fastcall Unreferenced_00460760(int param_1, int param_2);
+void __fastcall Unreferenced_00460760(struct D2UnitStrc * param_1, int param_2);
 int __fastcall Unreferenced_004607d0(struct D2UnitStrc * param_1);
 int __fastcall Unreferenced_004607f0(struct D2UnitStrc * param_1);
 int __fastcall Unreferenced_00460810(struct D2UnitStrc * param_1);

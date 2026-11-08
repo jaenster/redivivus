@@ -2207,7 +2207,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * 
           }
 
           pbVar4 = pdwReadPos;
-          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 + (nBytesRemaining - (intptr_t)pdwReadPos)), 0, (short int**)&pdwReadPos);
+          nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, pdwReadPos, nVersion, (int32_t)(pbVar3 - pdwReadPos + nBytesRemaining), 0, (short int**)&pdwReadPos);
           if (!nErrorLine) {
             ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
             ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);

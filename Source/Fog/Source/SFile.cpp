@@ -385,8 +385,8 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
         if (bRead) {
           pcLen = szOldSavePath;
           pcLen = pcLen + strlen(pcLen) + 1;
-          if (pcLen[(intptr_t)(szOldSavePath + (-1 - (intptr_t)(szOldSavePath + 1)))] == '\\') {
-            pcLen[(intptr_t)(szOldSavePath + (-1 - (intptr_t)(szOldSavePath + 1)))] = '\0';
+          if (pcLen[(int)(szOldSavePath - (szOldSavePath + 1) - 1)] == '\\') {
+            pcLen[(int)(szOldSavePath - (szOldSavePath + 1) - 1)] = '\0';
           }
 
           /* LPCSTR lpFileName for GetFileAttributesA */ dwAttributes = GetFileAttributesA(szOldSavePath);

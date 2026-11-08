@@ -1158,11 +1158,12 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
     short int* pMonSkillEntry;
     uint8_t bRemove;
     uint16_t wSkillId;
+    int nMonSkillEntry;
     D2ClientStrc* pClientSaved = pClient;
     if (!pUnit) {
-      pMonSkillEntry = (short int*)-1;
+      nMonSkillEntry = -1;
     } else {
-      pMonSkillEntry = (short int*)pUnit->nClassId;
+      nMonSkillEntry = pUnit->nClassId;
     }
 
     ::SGAMEDATA* pGameSaved = pGame;
@@ -1188,7 +1189,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
       if (pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 4U) {
         GAME::SCmd::NET_D2GS_SERVER_Send_0x60_SETWARPDEST(pClient, pUnit);
         pGame_00 = pGameSaved;
-        if ((short int)(uintptr_t)pMonSkillEntry == 0x3b) {
+        if ((short int)nMonSkillEntry == 0x3b) {
           pPlayerUnit_lcl = SUnit::UNITS_FindPortalOwnerUnit(pGameSaved, pUnit);
           dwTargetGUID = -1;
           if (pPlayerUnit_lcl) {

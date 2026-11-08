@@ -44,12 +44,12 @@ int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename) {
     exit(-1);
 }
 
-void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, int32_t pProject) {
-    if (!pProject) {
+void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, D2TileLibraryHeaderStrc * pTileLibrary) {
+    if (!pTileLibrary) {
       return;
     }
 
-    int nProjectId = SRC::TileProjects::TILEPROJECT_GetProjectId((char*)(pProject + 8));
+    int nProjectId = SRC::TileProjects::TILEPROJECT_GetProjectId(pTileLibrary->szLibraryName);
     if (!nProjectId) {
       return;
     }
@@ -122,13 +122,13 @@ uint32_t __stdcall TILEPROJECT_GetTileCount(D2TileLibraryEntryStrc * pTileEntry)
     return (uint32_t)(uint16_t)pTileEntry->nFlags;
 }
 
-uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
+int __stdcall TILEPROJECT_GetTileDataPtr(D2TileLibraryEntryStrc * nParam) {
     if (!nParam) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7c);
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0xc);
+    return nParam->nWidth;
 }
 
 int __stdcall TILEPROJECT_GetAnimatedTileDataPtr(D2TileLibraryEntryStrc * pTileLibraryEntry) {

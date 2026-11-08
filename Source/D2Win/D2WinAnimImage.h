@@ -32,8 +32,8 @@ typedef void (__stdcall *fpD2WinAnimImageNotify)(void * pNotify);
 #ifndef D2_DEFINED_FORMS_AnimFrameStrc
 #define D2_DEFINED_FORMS_AnimFrameStrc
 struct FORMS_AnimFrameStrc {
-    /* 0x00 */ void * ppBaseImage; // Address of a struct DC6* global (so the table sees the image once it loads). Semantically struct DC6**, but declared void* because the initializer emitter renders a double-pointer slot as (struct DC6*)&global - a hard 'cannot convert struct DC6* to struct DC6**'. Readers cast explicitly: D2WinAnimImage::Draw 005005b0, DrawAnim 005003a0.
-    /* 0x04 */ void * ppOverlayImage; // Second image drawn over the base, 0 when unused. void* for the same emitter reason as ppBaseImage.
+    /* 0x00 */ struct DC6 * * ppBaseImage; // Address of a struct DC6* global (so the table sees the image once it loads). Semantically struct DC6**, but declared void* because the initializer emitter renders a double-pointer slot as (struct DC6*)&global - a hard 'cannot convert struct DC6* to struct DC6**'. Readers cast explicitly: D2WinAnimImage::Draw 005005b0, DrawAnim 005003a0.
+    /* 0x04 */ struct DC6 * * ppOverlayImage; // Second image drawn over the base, 0 when unused. void* for the same emitter reason as ppBaseImage.
     /* 0x08 */ int32_t nDrawMode; // DRAWMODE passed to D2GFX_DrawImage for the overlay (row[2])
     /* 0x0C */ int32_t nFrameDelay; // Frame interval scale: (row[3] * 1000) / 25 milliseconds
 };

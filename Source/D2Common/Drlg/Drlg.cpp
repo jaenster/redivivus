@@ -73,7 +73,7 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 #endif
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
 #endif
 
 int gaWildernessLevelSeedOffsets[170] = {
@@ -2999,7 +2999,7 @@ int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
 }
 
 // For outdoor (eDrlgType==3) Act 1 wilderness levels, walks the gaWildernessLevelSeedOffsets table and OR-writes orientation/connectivity flags into the level's pDrlgLevelData. Each 30-entry table record encodes five conditional rules matching level ID, excluded IDs, and two direction-table values; matching rules contribute a flag bit to the level data.
-void __fastcall ACT1_fpLevelDataFn2_A(D2DrlgLevelStrc * pLevel, int nNodeOffset, eD2LevelId * nDirTableBase) {
+void __fastcall ACT1_fpLevelDataFn2_A(D2DrlgLevelStrc * pLevel, int nNodeOffset, int * nDirTableBase) {
     eD2LevelId eLevelId;
     if (pLevel->eDrlgType != 3) {
       return;
@@ -3203,7 +3203,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
       }
       link_level_warps:
       if (fnLevelDataCallback) {
-        (*fnLevelDataCallback)(pDrlgLevel, fnPlacementValidator, (int)pLevelUnknown.aCurrentDir);
+        (*fnLevelDataCallback)(pDrlgLevel, fnPlacementValidator, pLevelUnknown.aCurrentDir);
       }
       if (pDrlg->nActNo != 4) {
         if (eD2LevelIdPrev != LEVEL_None) {
@@ -3279,7 +3279,7 @@ void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(D2RoomExStrc * pRoomEx) {
     } while (nGridHeight < 8);
 
     if (neAct == ACT_I) {
-      DRLGOUTROOM_InitAct1RoomGridCells(pLevel, (D2DrlgLevelStrc*)pRoomEx);
+      DRLGOUTROOM_InitAct1RoomGridCells(pLevel, pRoomEx);
     }
 
     RoomTile::DRLGROOMTILE_AllocRoomTileGrid(pRoomEx);
@@ -3695,21 +3695,21 @@ static void DRLGGRID_SetOutRoomEdgeFlags(D2DrlgLevelStrc * pDrlgLevelData, D2Roo
 }
 
 // Autotiling: computes 8-bit neighbor mask, looks up wall orientation from 256-entry table.
-void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2DrlgLevelStrc * pLevel) {
+void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2RoomExStrc * pLevel) {
     int nNeighborMask;
     int nY;
     int aNeighborFlags[9];
     int eCenterNextSaved;
-    int iVar1 = pLevel->sCoordinatesAndSize.WorldPosition.y;
+    D2DrlgRoomExDataMazeStrc* pDVar1 = pLevel->pRoomExData.pRoomExDataMazeRoom;
     int nRowOffset = 1;
-    if (!(0 < pLevel->aSpawnPoints[1].nY + 1)) {
+    if (!(0 < pLevel->sCoords.WorldSize.x + 1)) {
       return;
     }
 
-    D2DrlgGridStrc* pDrlgGrid = (D2DrlgGridStrc*)(iVar1 + 0x3c);
+    D2DrlgGridStrc* pDrlgGrid = &pDVar1->pCellGrid;
     do {
       int nRow;
-      eCenterNextSaved = pLevel->aSpawnPoints[1].nSpawnType;
+      eCenterNextSaved = pLevel->sCoords.WorldSize.y;
       nRow = eCenterNextSaved + 1;
       DRLGOUTROOM_InitGridNeighborBuffer(nRow, (eD2GridCellFlags*)aNeighborFlags, pDrlgGrid, nRowOffset);
       for (; nRow >= 1; nRow--) {
@@ -3750,7 +3750,7 @@ void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2DrlgLevelStrc * pLevel) {
             nNeighborMask++;
           }
           if (nNeighborMask && gaWallNeighborOrientTable[nNeighborMask]) {
-            DrlgGrid::AlterGridFlag((D2DrlgGridStrc*)(iVar1 + 0x28), nRowOffset - 1, eCenterNextSaved, (uint32_t)gaWallNeighborOrientTable[nNeighborMask] << 8 | 0x82, 3);
+            DrlgGrid::AlterGridFlag(&pDVar1->pFloorGrid, nRowOffset - 1, eCenterNextSaved, (uint32_t)gaWallNeighborOrientTable[nNeighborMask] << 8 | 0x82, 3);
           }
         }
 
@@ -3771,13 +3771,13 @@ void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2DrlgLevelStrc * pLevel) {
       }
 
       nRowOffset++;
-    } while (nRowOffset <= pLevel->aSpawnPoints[1].nY + 1);
+    } while (nRowOffset <= pLevel->sCoords.WorldSize.x + 1);
 }
 
 // Orchestrator: initializes grid, clips vertices, computes wall orientations for Act1 outdoor rooms.
-void __fastcall DRLGOUTROOM_InitAct1RoomGridCells(D2DrlgLevelStrc * pLevel, D2DrlgLevelStrc * pLevelRoom) {
-    DrlgGrid::DRLGGRID_InitGridCells(pLevel->pDrlg->pMemoryPool, (D2DrlgGridStrc*)(pLevelRoom->sCoordinatesAndSize.WorldPosition.y + 0x3c), pLevelRoom->aSpawnPoints[1].nY + 3, pLevelRoom->aSpawnPoints[1].nSpawnType + 3);
-    DRLGGRID_SetOutRoomEdgeFlags(pLevel, (D2RoomExStrc*)pLevelRoom);
+void __fastcall DRLGOUTROOM_InitAct1RoomGridCells(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pLevelRoom) {
+    DrlgGrid::DRLGGRID_InitGridCells(pLevel->pDrlg->pMemoryPool, &pLevelRoom->pRoomExData.pRoomExDataMazeRoom->pCellGrid, pLevelRoom->sCoords.WorldSize.x + 3, pLevelRoom->sCoords.WorldSize.y + 3);
+    DRLGGRID_SetOutRoomEdgeFlags(pLevel, pLevelRoom);
     DRLGOUTROOM_ComputeWallOrientations(pLevelRoom);
 }
 

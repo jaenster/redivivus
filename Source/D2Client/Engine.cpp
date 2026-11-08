@@ -483,12 +483,12 @@ void __fastcall CLIENT_SetUnitFlag(D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet
     *(uint16_t*)pFlags &= ~wFlag;
 }
 
-void __fastcall Unreferenced_00460760(int param_1, int param_2) {
-    if (!(param_1 && !*(int*)param_1 && *(int*)(param_1 + 0x14))) {
+void __fastcall Unreferenced_00460760(D2UnitStrc * param_1, int param_2) {
+    if (!(param_1 && param_1->eUnitType == UNIT_PLAYER && param_1->pUnitData.pUnitDataPlayer)) {
       return;
     }
 
-    *(int*)(*(int*)(param_1 + 0x14) + 0x150) = param_2;
+    param_1->pUnitData.pUnitDataPlayer->bHasPendingInteract = param_2;
 }
 
 int __fastcall Unreferenced_004607d0(D2UnitStrc * param_1) {

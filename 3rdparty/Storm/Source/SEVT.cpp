@@ -502,27 +502,27 @@ uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList) {
 }
 
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
-uint32_t __thiscall LINKEDLIST_GetNodeOffset(StormLinkStrc * pListInfo, int pNode) {
+uint32_t __thiscall LINKEDLIST_GetNodeOffset(StormLinkStrc * pListInfo, intptr_t pNode) {
     uint32_t nOffset = pListInfo->pNext;
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
     if (pNode < 0) {
-      pNode = (int)pListInfo - pListInfo->pPrevLink->pNext;
+      pNode = (intptr_t)pListInfo - pListInfo->pPrevLink->pNext;
     }
 
     return nOffset + pNode;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf(StormLinkStrc * pNode) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     StormLinkStrc* pNext = pNode->pPrevLink;
     if (!pNext) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-    *pPrevLink = (int)pNext;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *pPrevLink = pNext;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -592,25 +592,22 @@ int32_t __thiscall LINKEDLIST_GetNextOrHead(int32_t pThis, int32_t nNode) {
 // everywhere else (ARCHIVE_LinkNode @0045bbe0, SFILE_InsertFileRecordIntoList1..5). This was the only
 // false one.
 void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t nInsertMode, int * * ppTargetList) {
-    int* pLinkSlot;
-    int** pTargetNode = ppNodeSlot;
+    int* piVar1;
+    uint32_t piVar2;
+    StormLinkStrc* pTargetNode = (StormLinkStrc*)ppNodeSlot;
     if (!ppNodeSlot) {
-      pTargetNode = pList + 1;
+      pTargetNode = (StormLinkStrc*)(pList + 1);
     }
 
-    int* pPrevNode = *pTargetNode;
+    StormLinkStrc* pPrevNode = pTargetNode->pPrevLink;
     if (pPrevNode) {
-      pLinkSlot = pTargetNode[1];
-      if ((intptr_t)pLinkSlot < 0) {
-        pLinkSlot = (int*)~(uintptr_t)pLinkSlot;
-      } else {
-        pLinkSlot = (int*)((intptr_t)pLinkSlot + ((intptr_t)pTargetNode - pPrevNode[1]));
-      }
-
-      *pLinkSlot = (int)pPrevNode;
-      (*pTargetNode)[1] = (int)pTargetNode[1];
-      *pTargetNode = 0;
-      pTargetNode[1] = 0;
+      StormLinkStrc** pLinkSlot;
+      piVar2 = pTargetNode->pNext;
+      pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pTargetNode, -1);
+      *pLinkSlot = pPrevNode;
+      pTargetNode->pPrevLink->pNext = pTargetNode->pNext;
+      pTargetNode->pPrevLink = 0;
+      pTargetNode->pNext = 0;
     }
     if (!ppTargetList) {
       ppTargetList = pList + 1;
@@ -619,30 +616,30 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
     switch (nInsertMode) {
       case 1:
         {
-          *pTargetNode = (int*)ppTargetList;
-          pTargetNode[1] = ppTargetList[1];
-          pPrevNode = *pList;
-          pLinkSlot = ppTargetList[1];
-          if ((intptr_t)pLinkSlot < 0) {
-            *(int***)~(uintptr_t)pLinkSlot = (int**)pTargetNode;
-            ppTargetList[1] = (int*)ppNodeSlot;
+          pTargetNode->pPrevLink = (StormLinkStrc*)ppTargetList;
+          pTargetNode->pNext = ((StormLinkStrc*)ppTargetList)->pNext;
+          piVar1 = *pList;
+          piVar2 = ((StormLinkStrc*)ppTargetList)->pNext;
+          if ((int)piVar2 < 0) {
+            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)pTargetNode;
+            ((StormLinkStrc*)ppTargetList)->pNext = (intptr_t)ppNodeSlot;
             return;
           }
-          if ((intptr_t)pPrevNode < 0) {
-            pPrevNode = (int*)((char*)ppTargetList - (*ppTargetList)[1]);
+          if ((intptr_t)piVar1 < 0) {
+            piVar1 = (int*)((char*)ppTargetList - ((StormLinkStrc*)ppTargetList)->pPrevLink->pNext);
           }
 
-          *(int***)((intptr_t)pLinkSlot + (intptr_t)pPrevNode) = (int**)pTargetNode;
-          ppTargetList[1] = (int*)ppNodeSlot;
+          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)pTargetNode;
+          ((StormLinkStrc*)ppTargetList)->pNext = (intptr_t)ppNodeSlot;
           return;
         }
       default:
         {
-          pPrevNode = *ppTargetList;
-          *pTargetNode = pPrevNode;
-          pTargetNode[1] = (int*)pPrevNode[1];
-          pPrevNode[1] = (int)ppNodeSlot;
-          *ppTargetList = (int*)pTargetNode;
+          pPrevNode = ((StormLinkStrc*)ppTargetList)->pPrevLink;
+          pTargetNode->pPrevLink = pPrevNode;
+          pTargetNode->pNext = pPrevNode->pNext;
+          pPrevNode->pNext = (intptr_t)ppNodeSlot;
+          ((StormLinkStrc*)ppTargetList)->pPrevLink = pTargetNode;
           return;
         }
     }
@@ -658,7 +655,7 @@ uint32_t __thiscall LINKEDLIST_GetCountMasked(StormLinkedListStrc * pThis, Storm
 }
 
 void __thiscall LINKEDLIST_GetHead(StormLinkedListStrc * pThis, StormLinkStrc * pListHead) {
-    int* pLinkSlot;
+    StormLinkStrc** pLinkSlot;
     if (!pListHead) {
       pListHead = &pThis->head;
     }
@@ -668,8 +665,8 @@ void __thiscall LINKEDLIST_GetHead(StormLinkedListStrc * pThis, StormLinkStrc * 
       return;
     }
 
-    pLinkSlot = (int*)D2_StormNextLink(pListHead, -1);
-    *pLinkSlot = (int)nNextNode;
+    pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pListHead, -1);
+    *pLinkSlot = nNextNode;
     pListHead->pPrevLink->pNext = pListHead->pNext;
     pListHead->pPrevLink = 0;
     pListHead->pNext = 0;
@@ -697,22 +694,22 @@ intptr_t __thiscall LINKEDLIST_GetValueAtIndex(StormLinkedListStrc * pListHead, 
 } // namespace Storm::Source::SEVT
 
 template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREAKCMD>>::UnlinkAll() {
-    int* pLinkSlot;
-    int* pNode;
+    TSLink<BREAKCMD>** pLinkSlot;
+    TSLink<BREAKCMD>* pNode;
     while (true) {
-      int nPrevLink;
-      pNode = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      TSLink<BREAKCMD>* nPrevLink;
+      pNode = (intptr_t)(TSLink<BREAKCMD>*)this->m_terminator.m_next > 0 ? (TSLink<BREAKCMD>*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
 
-      nPrevLink = *pNode;
+      nPrevLink = pNode->m_prevlink;
       if (nPrevLink) {
-        pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
+        pLinkSlot = (TSLink<BREAKCMD>**)D2_StormNextLink(pNode, -1);
         *pLinkSlot = nPrevLink;
-        *(int*)(*pNode + 4) = pNode[1];
-        *pNode = 0;
-        pNode[1] = 0;
+        pNode->m_prevlink->m_next = pNode->m_next;
+        pNode->m_prevlink = 0;
+        pNode->m_next = 0;
       }
     }
 }
@@ -720,7 +717,7 @@ template<> __attribute__((noinline)) inline void TSList<BREAKCMD, TSGetLink<BREA
 namespace Storm::Source::SEVT {
 
 void __fastcall LINKEDLIST_InsertHead(StormLinkedListStrc * pList) {
-    int* pLinkSlot;
+    StormLinkStrc** pLinkSlot;
     ((TSList<BREAKCMD, TSGetLink<BREAKCMD>>*)pList)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pList->head;
     StormLinkStrc* nNextNode = pSVar1->pPrevLink;
@@ -728,8 +725,8 @@ void __fastcall LINKEDLIST_InsertHead(StormLinkedListStrc * pList) {
       return;
     }
 
-    pLinkSlot = (int*)D2_StormNextLink(pSVar1, -1);
-    *pLinkSlot = (int)nNextNode;
+    pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pSVar1, -1);
+    *pLinkSlot = nNextNode;
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
@@ -763,9 +760,9 @@ int * * __thiscall LINKEDLIST_AllocNode(int * * pListHead, int32_t pList, int32_
 int * __thiscall LINKEDLIST_UnlinkAndFree(StormLinkStrc * pNode, uint8_t bFreeMemory) {
     StormLinkStrc* nNextNode = pNode->pPrevLink;
     if (nNextNode) {
-      int* pLinkSlot;
-      pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
-      *pLinkSlot = (int)nNextNode;
+      StormLinkStrc** pLinkSlot;
+      pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+      *pLinkSlot = nNextNode;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
@@ -799,9 +796,9 @@ int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
 
     StormLinkStrc* nNextNode = pNode->link.pPrevLink;
     if (nNextNode) {
-      int* pLinkSlot;
-      pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
-      *pLinkSlot = (int)nNextNode;
+      StormLinkStrc** pLinkSlot;
+      pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+      *pLinkSlot = nNextNode;
       pNode->link.pPrevLink->pNext = pNode->link.pNext;
       pNode->link.pPrevLink = 0;
       pNode->link.pNext = 0;
@@ -826,9 +823,9 @@ BREAKCMD * __thiscall LINKEDLIST_UnlinkFreeAndGetCount(StormLinkedListStrc * pLi
     uint32_t uCount = nNextNode->pNext;
     nNextNode = pNode->pPrevLink;
     if (nNextNode) {
-      int* pLinkSlot;
-      pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
-      *pLinkSlot = (int)nNextNode;
+      StormLinkStrc** pLinkSlot;
+      pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+      *pLinkSlot = nNextNode;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
@@ -942,28 +939,28 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044de90(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0044ecc0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -974,56 +971,56 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0044ed00(int * pList) {
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045b9f0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045ba30(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601bf0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601d60(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -1034,14 +1031,14 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_00601f00(int * pList) {
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00601f60(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -1052,28 +1049,28 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_006020b0(int * pList) {
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_006024a0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e3b0(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -1088,42 +1085,42 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0060e5d0(int * pList) {
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e690(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0060e760(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
 }
 
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_006c4070(StormLinkStrc * pNode) {
-    int* piVar3;
+    StormLinkStrc** piVar3;
     StormLinkStrc* pSVar1 = pNode->pPrevLink;
     if (!pSVar1) {
       return;
     }
 
-    piVar3 = (int*)D2_StormNextLink(pNode, -1);
-    *piVar3 = (int)pSVar1;
+    piVar3 = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *piVar3 = pSVar1;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;

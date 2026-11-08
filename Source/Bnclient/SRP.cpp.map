@@ -428,7 +428,8 @@
         "SHA1_ToBigIntBytes"
       ],
       "usedTypes": [
-        "BigData"
+        "BigData",
+        "D2Srp *"
       ]
     },
     {
@@ -530,6 +531,7 @@
       ],
       "usedTypes": [
         "BigData",
+        "D2Srp *",
         "uint8_t"
       ]
     },

@@ -1373,7 +1373,7 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
     int nStateCount;
     short int sStateGroup;
     if ((int)eState >= 0) {
-      int pStateTxtRaw;
+      uint8_t* pStateTxt;
       nStateCount = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize;
       D2StatesTxt* pStatesTxt = (int)eState < nStateCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
       if (pStatesTxt) {
@@ -1387,11 +1387,11 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
             do {
               if (eState_00 != eState || bRemoveOnly) {
                 if ((int)eState_00 < 0 || (int)eState_00 >= pDataTable->nTxtStatesSize) {
-                  pStateTxtRaw = 0;
+                  pStateTxt = 0;
                 } else {
-                  pStateTxtRaw = (int)pDataTable->pTxtStates->overlay + nStateTxtStride - 2;
+                  pStateTxt = (uint8_t*)&pDataTable->pTxtStates[nStateTxtStride].state;
                 }
-                if (*(short int*)(pStateTxtRaw + 0x1e) == sStateGroup) {
+                if (*(short int*)(pStateTxt + 0x1e) == sStateGroup) {
                   nStateGroup = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState_00);
                   pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                   if (nStateGroup) {
@@ -1408,7 +1408,7 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
                 }
               }
 
-              nStateTxtStride += 0x3c;
+              nStateTxtStride++;
               eState_00 += STATE_freeze;
             } while ((int)eState_00 < nStateCount);
           }
@@ -4455,7 +4455,7 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
     pUnit->eUnitFlags &= ~UNITFLAG_DOUPDATE;
 }
 
-void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eState, uint32_t pStatListEx) {
+void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatListEx) {
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     BOOL eUninterruptState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (eUninterruptState) {
@@ -4466,7 +4466,7 @@ void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eStat
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pAiGeneral, 0);
     }
 
-    DefaultExpireFunction(pUnit, eState, (D2StatListExStrc*)pStatListEx);
+    DefaultExpireFunction(pUnit, eState, pStatListEx);
 }
 
 D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl) {

@@ -2666,8 +2666,8 @@ uint8_t * __fastcall Unreferenced_004637f0(D2UnitStrc * param_1) {
 }
 
 uint16_t * __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return (uint16_t*)pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      return pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.wszMonsterName;
     }
 
     return nullptr;

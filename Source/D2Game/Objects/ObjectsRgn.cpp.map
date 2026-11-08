@@ -264,10 +264,8 @@
         "QUEST_GetLevelQuestStatus"
       ],
       "usedTypes": [
-        "D2ObjectRngStrc",
         "SGAMEDATA",
-        "eD2LevelId",
-        "int32_t"
+        "eD2LevelId"
       ]
     },
     {
@@ -304,10 +302,8 @@
         "OBJECTRGN_CheckPointsCapacity"
       ],
       "usedTypes": [
-        "D2ObjectRngStrc",
         "SGAMEDATA",
-        "eD2LevelId",
-        "int32_t"
+        "eD2LevelId"
       ]
     },
     {
@@ -342,11 +338,9 @@
         "OBJECT_IsPositionNearSpawnPoint2"
       ],
       "usedTypes": [
-        "D2ObjectRngStrc",
         "SGAMEDATA",
         "eD2LevelId",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -383,11 +377,9 @@
         "OBJECT_IsPositionNearSpawnPoint1"
       ],
       "usedTypes": [
-        "D2ObjectRngStrc",
         "SGAMEDATA",
         "eD2LevelId",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

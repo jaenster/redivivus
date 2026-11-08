@@ -33,7 +33,7 @@ uint8_t __fastcall Q14_IsSevenTombsNotStarted(::SGAMEDATA * pGame);
 // Q14 predicate: true if The Seven Tombs is introduced and stateFlag != 0 (any progress made).
 uint8_t __fastcall Q14_IsSevenTombsAtState1(::SGAMEDATA * pGame);
 // Q14 predicate: returns false (0) whenever The Seven Tombs is introduced (the inner test is a decompiler tautology bVar1||!bVar1). Effectively: true (1) only if quest data missing or not introduced. Used as a "not active yet" gate.
-int __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame);
+bool __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame);
 // Q14 accessor: returns the "town/Duriel portal already created" flag from A2Q6 data (field_0x0B). Returns 1 (treat as created) if quest not introduced. Used to gate the stairs-to-tombs operate and portal creation.
 uint8_t __fastcall Q14_GetPortalCreatedFlag(struct D2QuestArgStrc * pQuestArgs);
 // IterateAllUnits callback for Q14_IsNpcStationary: if the player is within collision

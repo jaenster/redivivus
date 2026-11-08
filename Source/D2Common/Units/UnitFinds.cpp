@@ -86,14 +86,15 @@ D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType
     int nUnitClassId;
     D2RoomStrc** ppAdjacentRooms;
     D2UnitStrc* pUnitIter;
+    int nRoom;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x31);
       exit(-1);
     }
 
-    DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&pRoom);
+    DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoom);
     int nAdjacentRoomIdx = 0;
-    /* Room turns to nCounter */ if ((intptr_t)pRoom <= 0) {
+    /* Room turns to nCounter */ if (nRoom <= 0) {
       return nullptr;
     }
 
@@ -114,7 +115,7 @@ D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType
       }
 
       nAdjacentRoomIdx++;
-    } while (nAdjacentRoomIdx < (intptr_t)pRoom);
+    } while (nAdjacentRoomIdx < nRoom);
 
     return nullptr;
 }

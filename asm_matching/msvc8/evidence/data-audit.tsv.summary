@@ -1,4 +1,4 @@
-tree b1ce265a8-dirty; Ghidra v2017 extents (dataextent.tsv); 463 objects (build/obj/ + Source/globals/)
+tree dca182b15-dirty; Ghidra v2021 extents (dataextent.tsv); 463 objects (build/obj/ + Source/globals/)
 Initialised game data: 2013 of 2302 symbols MATCH (87.45%), 345657 of 348945 bytes (99.06%); bytes equal in place 345693 (99.07%)
   uncompared: 284 game items (3216 bytes) that no data symbol of ours pairs with
   left out: 622 runtime-only items (17085 bytes), 371 import slots, 336 compiler EH/RTTI items

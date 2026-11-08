@@ -77,8 +77,8 @@ void __fastcall ARCHIVE_ClearList(struct StormLinkedListStrc * nList);
 void __fastcall ARCHIVE_ClearAndFreeHead(struct StormLinkedListStrc * nList);
 uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * param_1);
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
-int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree);
-uint32_t __thiscall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, int * pNode);
+int * __thiscall ARCHIVE_FreeNode(struct StormLinkStrc * pNode, uint8_t byFree);
+uint32_t __thiscall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport();

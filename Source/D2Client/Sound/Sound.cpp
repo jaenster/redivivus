@@ -116,7 +116,7 @@ D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
       if (!pChannel->pListNode) {
         memset(pChannel, 0, 0x59);
         pChannel->pListNode = (int*)0x1;
-        D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&gpActiveSoundChannelsHead, pChannel);
+        D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&gpActiveSoundChannelsHead, (intptr_t)pChannel);
         pChannel->nChannelHandle = gpSoundChannelsArray + 1;
         gpSoundChannelsArray++;
         return pChannel;
@@ -145,11 +145,11 @@ D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int param_1) {
 
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void __stdcall SOUNDINST_StopChannel(int * pSoundInst) {
-    if (pSoundInst[0xc] == 1) {
-      GAME::Sound::SOUND_StopAndDetach((D2ClientSoundChannelStrc*)pSoundInst[0xb]);
+void __stdcall SOUNDINST_StopChannel(D2SoundChannelStrc * pSoundInst) {
+    if (pSoundInst->nPlayMode == 1) {
+      GAME::Sound::SOUND_StopAndDetach(pSoundInst->pClientChannel);
     }
-    if (!pSoundInst[0xb]) {
+    if (!pSoundInst->pClientChannel) {
       return;
     }
 
@@ -295,7 +295,7 @@ D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, i
 
 // Returns the first active sound channel other than pExcludeChannel that is in streaming play mode (nPlayMode 1), has nSoundId in 0xb76..0x1230 and, when nListKey is non-zero, holds nListKey in its list; NULL if there is none.
 // @provenance 1.14d asm 004b9700 (RET 4, key in EBX); formerly misnamed SOUND_SetChannelVolume.
-static D2SoundChannelStrc * __stdcall SOUND_FindActiveStreamChannel(D2SoundChannelStrc * pExcludeChannel, int32_t nListKey) {
+static D2SoundChannelStrc * __stdcall SOUND_FindActiveStreamChannel(D2SoundChannelStrc * pExcludeChannel, intptr_t nListKey) {
     D2SoundChannelStrc* nChannelData;
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     while (true) {
@@ -487,7 +487,7 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
       pChannel->nPriorityByte += 0x50;
     }
     if (pUnit) {
-      D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&pChannel->pUnitList, pUnit);
+      D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&pChannel->pUnitList, (intptr_t)pUnit);
       UNIT::UnitSnd::AllocUnitSfxData(pUnit, pChannel->nChannelHandle);
     }
 
@@ -705,7 +705,7 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
 }
 
 uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * nSoundId) {
-    D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, (int32_t)nSoundId);
+    D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, (intptr_t)nSoundId);
     return (uint32_t)(pChannel != 0);
 }
 
@@ -945,7 +945,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
           exit(-1);
         }
         if (!pSoundsTxt->Loop || pSoundsTxt->Duration || pChanEntry->bStopFlag) {
-          D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, pChanEntry);
+          D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, (intptr_t)pChanEntry);
         } else {
           if (pChanEntry->bFadeActive) {
             pChanEntry->nPriority = pChanEntry->nFadeDir;
@@ -1084,12 +1084,12 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
             if ((!pSoundsTxt->Defer_Inst || pChanEntry->pUnitList || !__frame0.fClosestDist.nValue) && pTrackedUnit) {
               if (!pSoundsTxt->Stop_Inst) {
                 pChanEntry->bStopFlag = 1;
-                D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, pChanEntry);
+                D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, (intptr_t)pChanEntry);
                 continue;
               }
 
               pTrackedUnit->bStopFlag = 1;
-              D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, pTrackedUnit);
+              D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, (intptr_t)pTrackedUnit);
             }
 
             nFadeVolStart = *(int*)pChanEntry->undefined_0x41;
@@ -1128,7 +1128,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
             __frame0.pSoundsTxtLocal = SoundHdr::TXT_sounds_GetLineBySoundId(pChanEntry->nSoundId);
           }
           if (!pChanEntry->pClientChannel && !__frame0.pSoundsTxtLocal->Loop && (!__frame0.pSoundsTxtLocal->Async_Only || __frame0.pSoundsTxtLocal->nLoadState != 1)) {
-            D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, pChanEntry);
+            D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&__frame0.pFreeChannelList, (intptr_t)pChanEntry);
           }
         }
 

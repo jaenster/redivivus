@@ -85,10 +85,10 @@ void __fastcall ResetEngagedCombatAndStats(D2UnitStrc * pUnit) {
     *(volatile uint8_t*)0x20 = 0;
 }
 
-void __fastcall MONSTERMODE_GetStoredPosition(int32_t pMonData, int32_t * pOutStoredX, int32_t * pOutStoredY, uint8_t * pOutStoredFlags) {
-    *pOutStoredX = *(int32_t*)(pMonData + 0x18);
-    *pOutStoredY = *(int32_t*)(pMonData + 0x1c);
-    *pOutStoredFlags = *(uint8_t*)(pMonData + 0x20);
+void __fastcall MONSTERMODE_GetStoredPosition(D2MonsterPathParamStrc * pMonData, int32_t * pOutStoredX, int32_t * pOutStoredY, uint8_t * pOutStoredFlags) {
+    *pOutStoredX = pMonData->nPathTypeOverride;
+    *pOutStoredY = pMonData->nVelocityOverride;
+    *pOutStoredFlags = pMonData->nStepsOverride;
 }
 
 int __fastcall Unreferenced_005a6250(int param_1) {

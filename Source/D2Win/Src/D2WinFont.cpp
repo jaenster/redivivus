@@ -75,7 +75,7 @@ static void __stdcall D2WINFONT_BuildFontPath(char * szPathOut, int32_t nFontInd
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBasePath, "%s\\%s\\", "DATA\\LOCAL", "Font");
     char* pcScan = szBasePath;
     pcScan = pcScan + strlen(pcScan) + 1;
-    if (nBufferSize <= (intptr_t)(pcScan + (0x14 - (intptr_t)(szBasePath + 1)))) {
+    if (nBufferSize <= (int)(pcScan - (szBasePath + 1) + 0x14)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
     }
@@ -97,7 +97,7 @@ static void __stdcall GetFontTablePath(int32_t nBufSize, int32_t nFontIndex, LPS
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBasePath, "%s\\%s\\", "DATA\\LOCAL", "Font");
     char* pcScan = szBasePath;
     pcScan = pcScan + strlen(pcScan) + 1;
-    if (nBufSize <= (intptr_t)(pcScan + (0x14 - (intptr_t)(szBasePath + 1)))) {
+    if (nBufSize <= (int)(pcScan - (szBasePath + 1) + 0x14)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
       exit(-1);
     }
@@ -445,11 +445,10 @@ static void __stdcall D2WINFONT_DrawWideString(uint16_t * wszText, int32_t nX, i
 }
 
 // Wide string renderer with custom draw mode (transparency, blending). Processes color codes, newlines, horizontal centering, glyph rendering. Returns pointer to last processed glyph data.
-static void * __stdcall D2WINFONT_DrawWideStringWithDrawMode(int32_t nX, uint16_t * wszText, GLOBALPALLETE eGlobalPalette, int32_t nY, int32_t nWidth, int32_t bCenterHorizontally, DRAWMODE eDrawMode) {
+static void __stdcall D2WINFONT_DrawWideStringWithDrawMode(int32_t nX, uint16_t * wszText, GLOBALPALLETE eGlobalPalette, int32_t nY, int32_t nWidth, int32_t bCenterHorizontally, DRAWMODE eDrawMode) {
     int32_t nLineWidth;
-    uint32_t nFontHeight;
-    D2FontGlyphStrc* pNextChar;
-    D2FontGlyphStrc* pColorArgChar;
+    D2FontGlyphStrc* pCurGlyphEntry;
+    uint16_t* pColorArgChar;
     D2GfxDataStrc sGfxData;
     uint16_t wszColorMarker[2];
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
@@ -463,63 +462,57 @@ static void * __stdcall D2WINFONT_DrawWideStringWithDrawMode(int32_t nX, uint16_
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
-    D2FontGlyphStrc* pCurGlyphEntry = (D2FontGlyphStrc*)gppDC6FontCache;
-    if (nStrLen > 0) {
+    if (nStrLen <= 0) {
+      return;
+    }
+
+    do {
       uint16_t wCharCode;
-      do {
-        wCharCode = ((D2FontGlyphStrc*)wszText)->wCharCode;
-        pNextChar = (D2FontGlyphStrc*)((D2FontGlyphStrc*)wszText)->abUnverified;
-        if (((D2FontGlyphStrc*)wszText)->wCharCode < 0x100 && ((D2FontGlyphStrc*)wszText)->wCharCode == 0xff) {
-          wszColorMarker[0] = *(uint16_t*)pNextChar;
-          pColorArgChar = (D2FontGlyphStrc*)(((D2FontGlyphStrc*)wszText)->abUnverified + 2);
-          nLineWidth = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN(wszColorMarker, gwFontHeightDefault, 1);
-          if (!nLineWidth) {
-            if (!(nCharIndex + 2 < nStrLen)) {
-              eGlobalPalette = 0;
-              pCurGlyphEntry = 0;
-              pNextChar = pColorArgChar;
-              nCharIndex += 2;
-            } else {
-              nCharIndex += 3;
-              eGlobalPalette = pColorArgChar->wCharCode - 0x30;
-              pNextChar = (D2FontGlyphStrc*)(((D2FontGlyphStrc*)wszText)->abUnverified + 4);
-              pCurGlyphEntry = pColorArgChar;
-              if ((int)eGlobalPalette >= 0xd) {
-                eGlobalPalette = 0;
-              }
-            }
+      wCharCode = *wszText;
+      pColorArgChar = wszText + 1;
+      if ((uint16_t)*wszText < 0x100 && *wszText == L'\xff') {
+        wszColorMarker[0] = *pColorArgChar;
+        pColorArgChar = wszText + 2;
+        nLineWidth = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN((uint16_t*)wszColorMarker, gwFontHeightDefault, 1);
+        if (!nLineWidth) {
+          if (!(nCharIndex + 2 < nStrLen)) {
+            eGlobalPalette = 0;
+            nCharIndex += 2;
           } else {
-            pNextChar = (D2FontGlyphStrc*)((D2FontGlyphStrc*)wszText)->abUnverified;
-            pCurGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
-            sGfxData.nFrameNumber = (int)*(uint16_t*)(pCurGlyphEntry->abUnverified + 6);
-            D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, eDrawMode, eGlobalPalette);
-            nPositionX += (uint32_t)pCurGlyphEntry->abUnverified[1];
-            nCharIndex++;
+            nCharIndex += 3;
+            eGlobalPalette = (uint16_t)*pColorArgChar - 0x30;
+            pColorArgChar = wszText + 3;
+            if ((int)eGlobalPalette >= 0xd) {
+              eGlobalPalette = 0;
+            }
           }
-        } else if (wCharCode != 10) {
+        } else {
+          pColorArgChar = wszText + 1;
           pCurGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
           sGfxData.nFrameNumber = (int)*(uint16_t*)(pCurGlyphEntry->abUnverified + 6);
           D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, eDrawMode, eGlobalPalette);
           nPositionX += (uint32_t)pCurGlyphEntry->abUnverified[1];
           nCharIndex++;
-        } else {
-          nPositionX = nX;
-          if (bCenterHorizontally) {
-            nLineWidth = D2WINFONT_GetFirstLinePixelWidth((uint16_t*)pNextChar);
-            nPositionX = (nWidth - nLineWidth >> 1) + nX;
-          }
-
-          nFontHeight = (uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight;
-          pCurGlyphEntry = (D2FontGlyphStrc*)(nFontHeight * -0x66666670);
-          nY += (int)(nFontHeight * -0x10) / 10;
-          nCharIndex++;
+        }
+      } else if (wCharCode != L'\n') {
+        pCurGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
+        sGfxData.nFrameNumber = (int)*(uint16_t*)(pCurGlyphEntry->abUnverified + 6);
+        D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, eDrawMode, eGlobalPalette);
+        nPositionX += (uint32_t)pCurGlyphEntry->abUnverified[1];
+        nCharIndex++;
+      } else {
+        nPositionX = nX;
+        if (bCenterHorizontally) {
+          nLineWidth = D2WINFONT_GetFirstLinePixelWidth((uint16_t*)pColorArgChar);
+          nPositionX = (nWidth - nLineWidth >> 1) + nX;
         }
 
-        wszText = (uint16_t*)pNextChar;
-      } while (nCharIndex < nStrLen);
-    }
+        nY += (int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * -0x10) / 10;
+        nCharIndex++;
+      }
 
-    return pCurGlyphEntry;
+      wszText = pColorArgChar;
+    } while (nCharIndex < nStrLen);
 }
 
 // Renders wide string with vertical crop region (startY, endY). Used for scrollable text boxes. Handles color codes, image glyphs (0xFFÿ prefix), newlines. Checks renderer mode and applies vertical clipping per glyph.

@@ -38,7 +38,9 @@
       "usedTypes": [
         "TCELENTRY",
         "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -58,7 +60,7 @@
       "usedTypes": [
         "TCELENTRY",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -77,6 +79,7 @@
       "usedTypes": [
         "TCELENTRY",
         "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
       ]
@@ -113,6 +116,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
       ]
@@ -133,8 +138,9 @@
       ],
       "usedTypes": [
         "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {

@@ -542,7 +542,7 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
         nErrLine = 0x1a0;
         Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1a0, 0);
       } else {
-        pLoadedLib = WARDEN_DecryptBuffer((int*)ppModule, 1);
+        pLoadedLib = WARDEN_DecryptBuffer(ppModule, 1);
         ppModule->pfnCreateInterface = pLoadedLib;
         if (pLoadedLib) {
           Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1b0, 0);

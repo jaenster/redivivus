@@ -4688,7 +4688,7 @@ D2UnitStrc * __stdcall GetCarriedItem(D2UnitStrc * pUnit) {
       return nullptr;
     }
 
-    return (D2UnitStrc*)(pUnit->eUnitType != UNIT_ITEM ? 0 : (uint32_t)pUnit);
+    return pUnit->eUnitType != UNIT_ITEM ? nullptr : pUnit;
 }
 
 int32_t __stdcall ITEM_GetGUID(D2UnitStrc * pUnit) {
@@ -4721,7 +4721,7 @@ D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(D2InventoryStrc * pInventory, D2U
       D2TradeRecordStrc** ppTradeCopyInventory;
       ppTradeCopyInventory = &pUnit->pUnitData.pUnitDataPlayer->pTradeCopyInventory;
       if (ppTradeCopyInventory) {
-        return (D2UnitStrc*)(pInventory != (D2InventoryStrc*)*ppTradeCopyInventory ? 0 : (uint32_t)pUnit);
+        return pInventory != (D2InventoryStrc*)*ppTradeCopyInventory ? nullptr : pUnit;
       }
     }
 
@@ -4856,7 +4856,7 @@ static BOOL __stdcall INVENTORY_CanTransferMercItems(D2UnitStrc * pUnit, D2Inven
         pCurrentItem = 0;
         pNextItem = 0;
       } else {
-        pCurrentItem = (D2UnitStrc*)(pNextItem->eUnitType != UNIT_ITEM ? 0 : (uint32_t)pNextItem);
+        pCurrentItem = pNextItem->eUnitType != UNIT_ITEM ? nullptr : pNextItem;
         if (pNextItem->eUnitType != UNIT_ITEM) {
           pNextItem = 0;
         } else {

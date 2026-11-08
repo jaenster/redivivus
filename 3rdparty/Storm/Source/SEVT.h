@@ -125,7 +125,7 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uint32_t nSubId, uint32_
 BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId);
 uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList);
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
-uint32_t __thiscall LINKEDLIST_GetNodeOffset(struct StormLinkStrc * pListInfo, int pNode);
+uint32_t __thiscall LINKEDLIST_GetNodeOffset(struct StormLinkStrc * pListInfo, intptr_t pNode);
 void __fastcall LINKEDLIST_UnlinkSelf(struct StormLinkStrc * pNode);
 void __fastcall Unreferenced_004269a0(struct StormLinkedListStrc * param_1);
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.

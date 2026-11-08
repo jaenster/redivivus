@@ -427,7 +427,7 @@ void __stdcall DrawCursor() {
     } else {
       int32_t nResult;
       memset(&sGfxData, 0, 0x48);
-      nResult = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', (D2UnitStrc*)-1);
+      nResult = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', -1);
       if (nResult) {
         nSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
         if (nSpriteLoaded) {
@@ -493,7 +493,7 @@ void __stdcall UI_DrawCursorWithItem() {
       }
     } else {
       memset(&sGfxData, 0, 0x48);
-      nClampedY = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', (D2UnitStrc*)-1);
+      nClampedY = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', -1);
       if (nClampedY) {
         nCursorIndex = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
         if (nCursorIndex) {

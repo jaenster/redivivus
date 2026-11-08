@@ -67,6 +67,7 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
     int* pSlotEntry;
     int nSlotCount;
     uint32_t nNameLast;
+    int nNpcUnit2;
     D2GameNpcStrc* pDVar2 = nNpcUnit;
     if (nNpcUnit->sTrade.bHirelingsInitialized) {
       return;
@@ -83,12 +84,12 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
     memset(pNpcDataBlock, 0, 0x450);
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     D2MercForHire* pNpcDataRaw = pDVar2->pHirelingSlots;
-    uint32_t nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nNpcClassId, (uint32_t*)&nNpcUnit, &nNameLast, nullptr);
+    uint32_t nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nNpcClassId, (uint32_t*)&nNpcUnit2, &nNameLast, nullptr);
     if (nHirelingCount == -1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
       exit(-1);
     }
-    if ((intptr_t)nNpcUnit <= (int)nNameLast) {
+    if (nNpcUnit2 <= (int)nNameLast) {
       D2SeedStrc DVar1;
       nSlotCount = 0;
       pSlotEntry = &pNpcDataRaw->bActive;
@@ -97,7 +98,7 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
           break;
         }
 
-        ((D2MercForHire*)(pSlotEntry - 2))->nNameStringId = (short int)(uintptr_t)nNpcUnit + (short int)nSlotCount;
+        ((D2MercForHire*)(pSlotEntry - 2))->nNameStringId = (short int)nNpcUnit2 + (short int)nSlotCount;
         DVar1 = D2_SEED_NEXT(*pNpcControl);
         pNpcControl->nSeedHigh = DVar1.nSeedHigh;
         pNpcControl->nSeedLow = DVar1.nSeedLow;
@@ -106,7 +107,7 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
         *pSlotEntry = 0;
         pSlotEntry[1] = 0;
         pSlotEntry += 4;
-      } while ((intptr_t)&nNpcUnit->nMonStatsId + nSlotCount <= (int)nNameLast);
+      } while ((intptr_t)&((D2GameNpcStrc*)nNpcUnit2)->nMonStatsId + nSlotCount <= (int)nNameLast);
     }
 
     nNpcUnit = 0;

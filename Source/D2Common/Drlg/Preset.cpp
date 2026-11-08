@@ -577,15 +577,6 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     // Static local variables (originally global data)
     static char * gpD2DrlgFileBuffer = (char *)&D2Common::Drlg::Preset::s_HDM_006ee7c0; D2_STATIC_GUARD(gpD2DrlgFileBuffer, "D2Common::Drlg::Preset::ParsePresetsOfDrlgFile::gpD2DrlgFileBuffer");
 
-    // Frame slots -16..-4 are ONE object: &szItemCode is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int szItemCode;
-      int32_t nDs1Version;
-      int nWallLayerIdx;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int nStrLen;
     int nCharLower;
     D2MonPresetTxt* pMonPresetTxt;
@@ -603,6 +594,8 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     int32_t pClassId;
     uint32_t nUnitCount;
     uint32_t nPresetCount;
+    int szItemCode;
+    int nWallLayerIdx;
     uint8_t byPresetType;
     uint32_t eCellUnitType;
     uint32_t* pnPosY;
@@ -611,14 +604,15 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     int32_t* pDs1File;
     pDs1File = (int32_t*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, pBuffer, nullptr, ".\\DRLG\\Preset.cpp", 0x300);
     pFile->pDS1File = pDs1File;
-    __frame0.nDs1Version = *pDs1File;
+    int32_t nDs1Version;
+    nDs1Version = *pDs1File;
     pFile->nWidth = pDs1File[1];
     uint32_t* pMonStatCursor;
     pMonStatCursor = (uint32_t*)(pDs1File + 3);
     uint32_t nActId;
     nActId = 0;
     pFile->nHeight = pDs1File[2];
-    if (__frame0.nDs1Version >= 8) {
+    if (nDs1Version >= 8) {
       nActId = *pMonStatCursor;
       pMonStatCursor = (uint32_t*)(pDs1File + 4);
       if ((int)nActId > 4) {
@@ -627,11 +621,11 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     }
 
     pFile->nAct = 0;
-    if (__frame0.nDs1Version >= 10) {
+    if (nDs1Version >= 10) {
       pFile->nAct = *pMonStatCursor;
       pMonStatCursor++;
     }
-    if (__frame0.nDs1Version >= 3) {
+    if (nDs1Version >= 3) {
       i = *pMonStatCursor;
       pMonStatCursor++;
       if ((int)i > 0) {
@@ -645,14 +639,14 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
 
     int eUnitType;
     eUnitType = (pFile->nHeight + 1) * (pFile->nWidth + 1);
-    if (__frame0.nDs1Version - 9U <= 4) {
+    if (nDs1Version >= 0x9 && nDs1Version <= 0xd) {
       pMonStatCursor += 2;
     }
-    if (__frame0.nDs1Version >= 4) {
+    if (nDs1Version >= 4) {
       void** ppLayer;
       pMonStatCheck = pMonStatCursor + 1;
       pFile->nWallLayers = *pMonStatCursor;
-      if (__frame0.nDs1Version >= 0x10) {
+      if (nDs1Version >= 0x10) {
         pFile->nFloorLayers = *pMonStatCheck;
         pMonStatCheck = pMonStatCursor + 2;
       } else {
@@ -691,25 +685,25 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
       pFile->nWallLayers = 1;
       pMonStatCheck = pMonStatCursor + eUnitType + eUnitType;
     }
-    if (__frame0.nDs1Version < 7) {
-      __frame0.nWallLayerIdx = 0;
+    if (nDs1Version < 7) {
+      nWallLayerIdx = 0;
       if (pFile->nWallLayers > 0) {
         pBuffer = (char*)pFile->pTileTypeLayer;
         do {
           pPathEntry = *(int**)pBuffer;
           if (eUnitType > 0) {
-            __frame0.szItemCode = eUnitType;
+            szItemCode = eUnitType;
             do {
               nStrLen = DrlgAnim::DRLGANIM_GetOrientationFromIndex(*pPathEntry);
               *pPathEntry = nStrLen;
               pPathEntry++;
-              __frame0.szItemCode--;
-            } while (__frame0.szItemCode);
+              szItemCode--;
+            } while (szItemCode);
           }
 
           pBuffer += 4;
-          __frame0.nWallLayerIdx++;
-        } while (__frame0.nWallLayerIdx < pFile->nWallLayers);
+          nWallLayerIdx++;
+        } while (nWallLayerIdx < pFile->nWallLayers);
       }
     }
 
@@ -720,7 +714,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
       pFile->pSubstGroupTags = pCursor2;
       pCursor2 += eUnitType;
     }
-    if (__frame0.nDs1Version > 1) {
+    if (nDs1Version > 1) {
       nUnitCount = *pCursor2;
       pCursor2++;
       pCursor = pCursor2;
@@ -728,13 +722,13 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
         do {
           eUnitType = *pCursor;
           pClassId = pCursor[1];
-          __frame0.nWallLayerIdx = 0;
+          nWallLayerIdx = 0;
           nBuffer = pClassId;
           switch (eUnitType) {
             case 1:
               {
-                __frame0.nWallLayerIdx = 1;
-                if (__frame0.nDs1Version > 4) {
+                nWallLayerIdx = 1;
+                if (nDs1Version > 4) {
                   nPresetCount = 0;
                   pMonPresetTxt = DATATBLS::MonsterTbls::MONSTERTBLS_GetMonPresetRecord(nActId, (int*)&nPresetCount);
                   if (pMonPresetTxt && nBuffer < (int)nPresetCount) {
@@ -781,7 +775,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
 
                       convert_to_object_preset:
                       eUnitType = 2;
-                      __frame0.nWallLayerIdx = 0;
+                      nWallLayerIdx = 0;
                       pBuffer = (char*)pClassId;
                       break;
                     }
@@ -804,7 +798,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
               }
             case 2:
               {
-                if (__frame0.nDs1Version > 5) {
+                if (nDs1Version > 5) {
                   if (pClassId < 0x96) {
                     pClassId = gpsPresetObjectTable[(int)(pClassId + nActId * 0x96)];
                   } else {
@@ -818,40 +812,40 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                   pClassId = -1;
                 }
 
-                __frame0.nWallLayerIdx = 0;
+                nWallLayerIdx = 0;
                 pBuffer = (char*)pClassId;
                 break;
               }
             case 4:
               {
-                if (__frame0.nDs1Version > 4) {
-                  strncpy((char*)&__frame0.szItemCode, (&gpD2DrlgFileBuffer)[pClassId], 4);
-                  __frame0.szItemCode &= 0xffffff;
+                if (nDs1Version > 4) {
+                  strncpy((char*)&szItemCode, (&gpD2DrlgFileBuffer)[pClassId], 4);
+                  szItemCode &= 0xffffff;
                   nStrLen = 0;
                   do {
-                    nCharLower = tolower((int)*(char*)((intptr_t)&__frame0.szItemCode + nStrLen));
-                    *(char*)((intptr_t)&__frame0.szItemCode + nStrLen) = (char)nCharLower;
+                    nCharLower = tolower((int)*(char*)((intptr_t)&szItemCode + nStrLen));
+                    *(char*)((intptr_t)&szItemCode + nStrLen) = (char)nCharLower;
                     nStrLen++;
                   } while (nStrLen < 3);
 
-                  if ((char)__frame0.szItemCode == '\0') {
-                    __frame0.nWallLayerIdx = 0x202020;
-                  } else if (*(uint8_t*)((char*)&__frame0.szItemCode + 1) == '\0') {
-                    __frame0.nWallLayerIdx = (int)((uint32_t)__frame0.nWallLayerIdx & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)__frame0.szItemCode));
-                    __frame0.nWallLayerIdx = (uint32_t)((uint32_t)(uint16_t)0x20 << 16 | (uint32_t)(uint16_t)__frame0.nWallLayerIdx);
+                  if ((char)szItemCode == '\0') {
+                    nWallLayerIdx = 0x202020;
+                  } else if (*(uint8_t*)((char*)&szItemCode + 1) == '\0') {
+                    nWallLayerIdx = (int)((uint32_t)nWallLayerIdx & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)szItemCode));
+                    nWallLayerIdx = (uint32_t)((uint32_t)(uint16_t)0x20 << 16 | (uint32_t)(uint16_t)nWallLayerIdx);
                   } else {
-                    __frame0.nWallLayerIdx = (int)((uint32_t)__frame0.nWallLayerIdx & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)__frame0.szItemCode);
-                    __frame0.nWallLayerIdx = (uint32_t)((uint32_t)(uint16_t)0x20 << 16 | (uint32_t)(uint16_t)__frame0.nWallLayerIdx);
-                    if (*(uint8_t*)((char*)&__frame0.szItemCode + 2) != '\0') {
-                      __frame0.nWallLayerIdx = __frame0.szItemCode & 0xffffff;
+                    nWallLayerIdx = (int)((uint32_t)nWallLayerIdx & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)szItemCode);
+                    nWallLayerIdx = (uint32_t)((uint32_t)(uint16_t)0x20 << 16 | (uint32_t)(uint16_t)nWallLayerIdx);
+                    if (*(uint8_t*)((char*)&szItemCode + 2) != '\0') {
+                      nWallLayerIdx = szItemCode & 0xffffff;
                     }
                   }
 
-                  __frame0.nWallLayerIdx = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)__frame0.nWallLayerIdx & 0xffffffu));
-                  DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(__frame0.nWallLayerIdx, (int*)&nBuffer);
+                  nWallLayerIdx = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)nWallLayerIdx & 0xffffffu));
+                  DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nWallLayerIdx, (int*)&nBuffer);
                 }
 
-                __frame0.nWallLayerIdx = 3;
+                nWallLayerIdx = 3;
                 pClassId = nBuffer;
                 break;
               }
@@ -860,12 +854,12 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
           add_preset_unit:
           pCursor2 = pCursor + 4;
           nPresetCount = 0;
-          if (__frame0.nDs1Version > 5) {
+          if (nDs1Version > 5) {
             nPresetCount = *pCursor2;
             pCursor2 = pCursor + 5;
           }
-          if (pClassId >= 0 && (eUnitType != 1 || __frame0.nDs1Version > 4)) {
-            pPreset = DrlgRoom::AllocPresetUnit(nullptr, nullptr, eUnitType, pClassId, __frame0.nWallLayerIdx, pCursor[2], pCursor[3]);
+          if (pClassId >= 0 && (eUnitType != 1 || nDs1Version > 4)) {
+            pPreset = DrlgRoom::AllocPresetUnit(nullptr, nullptr, eUnitType, pClassId, nWallLayerIdx, pCursor[2], pCursor[3]);
             pPreset->pPresetUnitNext = pFile->pPresetUnit;
             pFile->pPresetUnit = pPreset;
             pPreset->nFlags |= nPresetCount;
@@ -876,8 +870,8 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
         } while (nUnitCount);
       }
     }
-    if (__frame0.nDs1Version >= 0xc && pFile->nAct - 1U <= 1) {
-      if (__frame0.nDs1Version >= 0x12) {
+    if (nDs1Version >= 0xc && pFile->nAct - 1U <= 1) {
+      if (nDs1Version >= 0x12) {
         pCursor2++;
       }
 
@@ -896,7 +890,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
           *(uint32_t*)((intptr_t)&pFile->pSubstGroups->tBox.nWidth + nCharLower) = pCursor[2];
           pCursor2 = pCursor + 4;
           *(uint32_t*)((intptr_t)&pFile->pSubstGroups->tBox.nHeight + nCharLower) = pCursor[3];
-          if (__frame0.nDs1Version >= 0xd) {
+          if (nDs1Version >= 0xd) {
             *(uint32_t*)((intptr_t)&pFile->pSubstGroups->nVariantCount + nCharLower) = *pCursor2;
             pCursor2 = pCursor + 5;
           }
@@ -907,7 +901,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
         } while (nStrLen < pFile->nSubstGroups);
       }
     }
-    if (__frame0.nDs1Version < 0xe) {
+    if (nDs1Version < 0xe) {
       return;
     }
 
@@ -939,7 +933,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                 *(uint32_t*)((intptr_t)&pPreset->pMapAI->pPosition->nYpos + nStrLen) = pCursor[1];
                 pDVar2 = pPreset->pMapAI->pPosition;
                 pCursor2 = pCursor + 2;
-                if (__frame0.nDs1Version >= 0xf) {
+                if (nDs1Version >= 0xf) {
                   *(uint32_t*)((intptr_t)&pDVar2->nDirection + nStrLen) = *pCursor2;
                   pCursor2 = pCursor + 3;
                 } else {
@@ -959,7 +953,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
         }
 
         pCursor2 += nPcVar1 * 2;
-        if (__frame0.nDs1Version >= 0xf) {
+        if (nDs1Version >= 0xf) {
           pCursor2 += nPcVar1;
         }
       }
@@ -2199,13 +2193,13 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
     DrlgGrid::AlterAllGridFlags(pDrlgGrid, nFlags, 0);
     D2LvlPrestTxt* pLvlPrest = pDrlgMap->pTxtLevelPrest;
     int nScanMode = pLvlPrest->Scan;
-    int* pPopsCount = (int*)pLvlPrest->Pops;
+    int32_t nPopsCount = pLvlPrest->Pops;
     int nPopCount = 0;
-    if (!nScanMode && !pPopsCount) {
+    if (!nScanMode && !nPopsCount) {
       return;
     }
 
-    pPopsConfig = pPopsCount;
+    int32_t nPopsConfig = nPopsCount;
     AllocDrlgFile(&pDrlgMap->pDrlgFile, uSlot10.pDrlg->pDS1MemPool, pLvlPrest->File[pDrlgMap->nRandomMapFileSelector]);
     D2PoolManagerStrc* pMemoryOrXIndex = nXIndex;
     DRLGPRESET_AddPresetUnitToDrlgMap(nXIndex, pDrlgMap, &pLevel->sSeed);
@@ -2222,22 +2216,22 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
       }
 
       {
-        if (pPopsCount) {
-          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, (int)pPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8bf);
+        if (nPopsCount) {
+          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8bf);
           pDrlgMap->pPopsIndex = pAllocatedArray;
-          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, (int)pPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8c0);
+          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8c0);
           pDrlgMap->pPopsSubIndex = pAllocatedArray;
-          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, (int)pPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8c1);
+          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8c1);
           pDrlgMap->pPopsOrientation = pAllocatedArray;
-          pPosLocationArray = (D2DrlgCoordStrc*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, (intptr_t)pPopsCount << 4, ".\\DRLG\\Preset.cpp", 0x8c2);
+          pPosLocationArray = (D2DrlgCoordStrc*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount << 4, ".\\DRLG\\Preset.cpp", 0x8c2);
           pDrlgMap->pPosLocation = pPosLocationArray;
         }
 
-        nPopsArrayBytes = (intptr_t)pPopsCount * 4;
+        nPopsArrayBytes = nPopsCount * 4;
         memset(pDrlgMap->pPopsIndex, 0, nPopsArrayBytes);
         memset(pDrlgMap->pPopsSubIndex, 0, nPopsArrayBytes);
         memset(pDrlgMap->pPopsOrientation, 0, nPopsArrayBytes);
-        memset(pDrlgMap->pPosLocation, 0, (intptr_t)pPopsCount << 4);
+        memset(pDrlgMap->pPosLocation, 0, nPopsCount << 4);
         pDrlgFile = pDrlgMap->pDrlgFile;
         D2DrlgCoordStrc fileCoords = {0};
         D2DrlgGridStrc wallGrid = {0};
@@ -2276,7 +2270,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
 
                         DrlgGrid::AlterGridFlag(pDrlgGrid, nCellFlags, nErrLine, 1 << (char)nTileType + 4U, 0);
                       }
-                      if (pPopsConfig && nTileType >= 0x8 && nTileType <= 0x1d) {
+                      if (nPopsConfig && nTileType >= 0x8 && nTileType <= 0x1d) {
                         nVisIndex = 0;
                         if (nPopCount > 0) {
                           pIndexIter = (uint32_t*)pDrlgMap->pPopsIndex;
@@ -2335,11 +2329,11 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
             DrlgGrid::ResetGrid(&wallGrid);
             pLayerEntry = pLayerPtr + 1;
             uSlot10.nWallLayerIndex++;
-            pPopsCount = pPopsConfig;
+            nPopsCount = nPopsConfig;
             pLayerPtr = pLayerEntry;
           } while (uSlot10.nWallLayerIndex < pDrlgFile->nWallLayers);
         }
-        if (pPopsCount) {
+        if (nPopsCount) {
           DRLGPRESET_InitDrlgMapPopLocations(nPopCount, pDrlgMap);
         }
         if (!nScanMode) {

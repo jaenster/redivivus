@@ -230,13 +230,13 @@ void __stdcall SErrSetLastError(DWORD dwErrCode) {
     SetLastError(dwErrCode);
 }
 
-uint32_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, int pBase) {
+uint32_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, intptr_t pBase) {
     uint32_t nOffset = pNode->pNext;
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
     if (pBase < 0) {
-      pBase = (int)pNode - pNode->pPrevLink->pNext;
+      pBase = (intptr_t)pNode - pNode->pPrevLink->pNext;
     }
 
     return nOffset + pBase;
@@ -295,25 +295,22 @@ int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {
 }
 
 void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget) {
-    int* ppPrevLink;
-    int** pEffectiveNode = pNode;
+    int* piVar1;
+    uint32_t piVar2;
+    StormLinkStrc* pEffectiveNode = (StormLinkStrc*)pNode;
     if (!pNode) {
-      pEffectiveNode = pList + 1;
+      pEffectiveNode = (StormLinkStrc*)(pList + 1);
     }
 
-    int* pLink = *pEffectiveNode;
+    StormLinkStrc* pLink = pEffectiveNode->pPrevLink;
     if (pLink) {
-      ppPrevLink = pEffectiveNode[1];
-      if ((intptr_t)ppPrevLink < 0) {
-        ppPrevLink = (int*)~(uintptr_t)ppPrevLink;
-      } else {
-        ppPrevLink = (int*)((intptr_t)ppPrevLink + ((intptr_t)pEffectiveNode - pLink[1]));
-      }
-
-      *ppPrevLink = (int)pLink;
-      (*pEffectiveNode)[1] = (int)pEffectiveNode[1];
-      *pEffectiveNode = 0;
-      pEffectiveNode[1] = 0;
+      StormLinkStrc** ppPrevLink;
+      piVar2 = pEffectiveNode->pNext;
+      ppPrevLink = (StormLinkStrc**)D2_StormNextLink(pEffectiveNode, -1);
+      *ppPrevLink = pLink;
+      pEffectiveNode->pPrevLink->pNext = pEffectiveNode->pNext;
+      pEffectiveNode->pPrevLink = 0;
+      pEffectiveNode->pNext = 0;
     }
     if (!ppTarget) {
       ppTarget = pList + 1;
@@ -322,30 +319,30 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
     switch (nInsertMode) {
       case 1:
         {
-          *pEffectiveNode = (int*)ppTarget;
-          pEffectiveNode[1] = ppTarget[1];
-          pLink = *pList;
-          ppPrevLink = ppTarget[1];
-          if ((intptr_t)ppPrevLink < 0) {
-            *(int***)~(uintptr_t)ppPrevLink = (int**)pEffectiveNode;
-            ppTarget[1] = (int*)pNode;
+          pEffectiveNode->pPrevLink = (StormLinkStrc*)ppTarget;
+          pEffectiveNode->pNext = ((StormLinkStrc*)ppTarget)->pNext;
+          piVar1 = *pList;
+          piVar2 = ((StormLinkStrc*)ppTarget)->pNext;
+          if ((int)piVar2 < 0) {
+            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)pEffectiveNode;
+            ((StormLinkStrc*)ppTarget)->pNext = (intptr_t)pNode;
             return;
           }
-          if ((intptr_t)pLink < 0) {
-            pLink = (int*)((char*)ppTarget - (*ppTarget)[1]);
+          if ((intptr_t)piVar1 < 0) {
+            piVar1 = (int*)((char*)ppTarget - ((StormLinkStrc*)ppTarget)->pPrevLink->pNext);
           }
 
-          *(int***)((intptr_t)ppPrevLink + (intptr_t)pLink) = (int**)pEffectiveNode;
-          ppTarget[1] = (int*)pNode;
+          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)pEffectiveNode;
+          ((StormLinkStrc*)ppTarget)->pNext = (intptr_t)pNode;
           return;
         }
       default:
         {
-          pLink = *ppTarget;
-          *pEffectiveNode = pLink;
-          pEffectiveNode[1] = (int*)pLink[1];
-          pLink[1] = (int)pNode;
-          *ppTarget = (int*)pEffectiveNode;
+          pLink = ((StormLinkStrc*)ppTarget)->pPrevLink;
+          pEffectiveNode->pPrevLink = pLink;
+          pEffectiveNode->pNext = pLink->pNext;
+          pLink->pNext = (intptr_t)pNode;
+          ((StormLinkStrc*)ppTarget)->pPrevLink = pEffectiveNode;
           return;
         }
     }
@@ -360,7 +357,7 @@ uint32_t __thiscall SSYSTEM_ListGetNext(StormLinkedListStrc * pList, StormLinkSt
 }
 
 void __thiscall SSYSTEM_ListUnlink(StormLinkedListStrc * pThis, StormLinkStrc * pNode) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     if (!pNode) {
       pNode = &pThis->head;
     }
@@ -370,8 +367,8 @@ void __thiscall SSYSTEM_ListUnlink(StormLinkedListStrc * pThis, StormLinkStrc * 
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-    *pPrevLink = (int)pNext;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *pPrevLink = pNext;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -400,22 +397,22 @@ intptr_t __thiscall SSYSTEM_ListGetData(StormLinkedListStrc * pList, StormLinkSt
 // TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
 // Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
 template<> __attribute__((noinline)) inline void TSList<HANDLER, TSGetLink<HANDLER>>::UnlinkAll() {
-    int* pPrevLink;
-    int* pNode;
+    TSLink<::HANDLER>** pPrevLink;
+    TSLink<::HANDLER>* nPrevLink;
     while (true) {
-      int nPrevLink;
-      pNode = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      TSLink<::HANDLER>* pNode;
+      pNode = (intptr_t)(TSLink<::HANDLER>*)this->m_terminator.m_next > 0 ? (TSLink<::HANDLER>*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
 
-      nPrevLink = *pNode;
+      nPrevLink = pNode->m_prevlink;
       if (nPrevLink) {
-        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+        pPrevLink = (TSLink<::HANDLER>**)D2_StormNextLink(pNode, -1);
         *pPrevLink = nPrevLink;
-        *(int*)(*pNode + 4) = pNode[1];
-        *pNode = 0;
-        pNode[1] = 0;
+        pNode->m_prevlink->m_next = pNode->m_next;
+        pNode->m_prevlink = 0;
+        pNode->m_next = 0;
       }
     }
 }
@@ -425,7 +422,7 @@ namespace Storm::Source::SErr {
 // TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
 // Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
 void __fastcall TSList_HANDLER_Destructor(StormLinkedListStrc * pList) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     ((TSList<::HANDLER, TSGetLink<::HANDLER>>*)pList)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pList->head;
     StormLinkStrc* pNext = pSVar1->pPrevLink;
@@ -433,8 +430,8 @@ void __fastcall TSList_HANDLER_Destructor(StormLinkedListStrc * pList) {
       return;
     }
 
-    pPrevLink = (int*)D2_StormNextLink(pSVar1, -1);
-    *pPrevLink = (int)pNext;
+    pPrevLink = (StormLinkStrc**)D2_StormNextLink(pSVar1, -1);
+    *pPrevLink = pNext;
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
@@ -464,11 +461,11 @@ int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int
 }
 
 int * __thiscall SSYSTEM_ListFreeNode(StormLinkStrc * pNode, uint8_t bFreeMemory) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     StormLinkStrc* pNext = pNode->pPrevLink;
     if (pNext) {
-      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-      *pPrevLink = (int)pNext;
+      pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+      *pPrevLink = pNext;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
@@ -486,7 +483,7 @@ int * __thiscall SSYSTEM_ListFreeNode(StormLinkStrc * pNode, uint8_t bFreeMemory
 // @oracle-basis Callee set {EnterCriticalSection, SMemAlloc, LeaveCriticalSection} is the oracle's exactly and is unique in the module - SErrRegisterMessageSource uses HeapAlloc, not SMemAlloc, which is what separates the two registration APIs in both builds. Arity 1 = 1.
 // @pairs-with SErrUnregisterHandler 0041d110, which walks the same list and removes the node whose +8 equals its argument.
 void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     uint32_t* pPrevSlot;
     StormLinkStrc* pNewCallback;
     SERR_InternalEnterCriticalSection();
@@ -502,8 +499,8 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
 
     StormLinkStrc* pNextNode = pNode->pPrevLink;
     if (pNextNode) {
-      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-      *pPrevLink = (int)pNextNode;
+      pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+      *pPrevLink = pNextNode;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
@@ -555,7 +552,7 @@ void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
 }
 
 ::HANDLER * __thiscall SSYSTEM_ListRemoveAndFree(StormLinkedListStrc * pList, StormLinkStrc * pNode) {
-    int* pPrevLink;
+    StormLinkStrc** pPrevLink;
     StormLinkStrc* pNext = pNode;
     if (!pNode) {
       pNext = &pList->head;
@@ -564,8 +561,8 @@ void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
     uint32_t nResultOffset = pNext->pNext;
     pNext = pNode->pPrevLink;
     if (pNext) {
-      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
-      *pPrevLink = (int)pNext;
+      pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+      *pPrevLink = pNext;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;

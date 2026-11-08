@@ -345,8 +345,8 @@ void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
 
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     uint16_t* pNameBuf = (uint16_t*)D2_ALLOC_AT(nStrLen * 2 + 2, ".\\Monsters\\MONSTERS.CPP", 0xc3);
-    pUnit->pUnitData.pUnitDataPlayer->nPortalFlags = (int32_t)pNameBuf;
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)pUnit->pUnitData.pUnitDataPlayer->nPortalFlags, wszText);
+    pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.wszMonsterName = pNameBuf;
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.wszMonsterName, wszText);
 }
 
 uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
@@ -678,18 +678,20 @@ void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 700);
       exit(-1);
     } else {
-      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(pUnit->nClassId, nullptr, (eD2Skills*)&pUnit);
-      if (!((intptr_t)pUnit < 4)) {
+      int nUnit;
+      int nClassId = pUnit->nClassId;
+      DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, (eD2Skills*)&nUnit);
+      if (!(nUnit < 4)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c8);
         exit(-1);
       }
-      if (!((intptr_t)pUnit >= 0)) {
+      if (!(nUnit >= 0)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c9);
         exit(-1);
       }
 
-      *pdwAnimFlags = gdwMonStatAnimFlagsTable[(intptr_t)pUnit].dwFlags;
-      *pdwValidFlags = gdwMonStatAnimFlagsTable[(intptr_t)pUnit].dwValidFlags;
+      *pdwAnimFlags = gdwMonStatAnimFlagsTable[nUnit].dwFlags;
+      *pdwValidFlags = gdwMonStatAnimFlagsTable[nUnit].dwValidFlags;
       return;
     }
 }

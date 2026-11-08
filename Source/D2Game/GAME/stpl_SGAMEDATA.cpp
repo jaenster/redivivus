@@ -20,7 +20,6 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode) {
     int* pBackLink;
-    uint32_t nHashLinkOffset;
     if (!pNode->m_linktoslot.m_next) {
       return;
     }
@@ -28,8 +27,9 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     TSLink<::SGAMEDATA>* pTVar1 = &pNode->m_linktoslot;
     TSLink<::SGAMEDATA>* nLinkValue = pTVar1->m_prevlink;
     if (nLinkValue) {
+      intptr_t nHashLinkOffset;
       nHashLinkOffset = pNode->m_linktoslot.m_next;
-      if ((int)nHashLinkOffset < 0) {
+      if (nHashLinkOffset < 0) {
         pBackLink = (int*)~nHashLinkOffset;
       } else {
         pBackLink = (int*)((char*)pTVar1 + (nHashLinkOffset - nLinkValue->m_next));
@@ -47,11 +47,11 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       return;
     }
 
-    nHashLinkOffset = pNode->m_linktofull.m_next;
-    if ((int)nHashLinkOffset < 0) {
-      pBackLink = (int*)~nHashLinkOffset;
+    intptr_t nHashLinkOffset2 = pNode->m_linktofull.m_next;
+    if (nHashLinkOffset2 < 0) {
+      pBackLink = (int*)~nHashLinkOffset2;
     } else {
-      pBackLink = (int*)((char*)pTVar1 + (nHashLinkOffset - nLinkValue->m_next));
+      pBackLink = (int*)((char*)pTVar1 + (nHashLinkOffset2 - nLinkValue->m_next));
     }
 
     *pBackLink = (int)nLinkValue;
@@ -73,8 +73,8 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::Next(::SGAMEDATA
       return (::SGAMEDATA*)((int)*(uint32_t*)(pNode->szGameName + this->m_linkoffset - 0x26) <= 0 ? 0 : *(uint32_t*)(pNode->szGameName + this->m_linkoffset - 0x26));
     }
 
-    uint32_t dwNext = this->m_terminator.m_next;
-    return (::SGAMEDATA*)((int)dwNext <= 0 ? 0 : dwNext);
+    intptr_t dwNext = this->m_terminator.m_next;
+    return (::SGAMEDATA*)(dwNext <= 0 ? 0 : dwNext);
 }
 
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Unlock(int32_t nLockedHandle) {
@@ -107,16 +107,16 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGAMEDATA * pNode) {
     TSLink<::SGAMEDATA>* pSlotPtr = !pNode ? &this->m_terminator : (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
-    uint32_t nSlotValue = pSlotPtr->m_next;
+    intptr_t nSlotValue = pSlotPtr->m_next;
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
-    return (::SGAMEDATA*)((int)nSlotValue <= 0 ? 0 : nSlotValue);
+    return (::SGAMEDATA*)(nSlotValue <= 0 ? 0 : nSlotValue);
 }
 
 // Register arguments: only this (ECX, the hash table); EDX is first written at 0052e653 from [ECX+0x1c] (1.14d asm).
 template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
     ::SGAMEDATA* pBucketHead = (::SGAMEDATA*)this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_terminator.m_next;
-    ::SGAMEDATA* pGame = (::SGAMEDATA*)((intptr_t)pBucketHead <= 0 ? 0 : (uint32_t)pBucketHead);
+    ::SGAMEDATA* pGame = (intptr_t)pBucketHead <= 0 ? nullptr : pBucketHead;
     while (true) {
       if ((intptr_t)pGame <= 0) {
         return nullptr;
@@ -193,8 +193,9 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     TSLink<::SGAMEDATA>* pPendingHead2;
     int* pOldBucket2;
     TSExplicitList<::SGAMEDATA, -572662307>* pNodeNext;
-    int nResetBucketOffset;
     TSExplicitList<::SGAMEDATA, -572662307> pendingList;
+    int nOldBucketIdx;
+    intptr_t nBucketNextLink;
     TSLink<::SGAMEDATA>* pNodeData;
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     uint32_t nNewMask = pThis->nSlotMask + 1;
@@ -209,30 +210,29 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     pendingList.m_terminator.m_next = nOldBucket;
     uint32_t nBucketIdx = 0;
     if (nNewMask) {
-      int nOldBucketIdx;
       nOldBucketIdx = 0;
       pPendingHead2 = pendingList.m_terminator.m_prevlink;
       do {
         while (true) {
-          nResetBucketOffset = pThis->tSlotListArray.m_data[nOldBucketIdx].m_terminator.m_next;
-          if (0 >= nResetBucketOffset) {
+          nBucketNextLink = pThis->tSlotListArray.m_data[nOldBucketIdx].m_terminator.m_next;
+          if (0 >= nBucketNextLink) {
             break;
           }
 
-          pBackLink = (TSLink<::SGAMEDATA>*)(nResetBucketOffset + 4);
+          pBackLink = (TSLink<::SGAMEDATA>*)(nBucketNextLink + 4);
           pNodeData = pBackLink->m_prevlink;
           if (pNodeData) {
             pOldBucket2 = (int*)D2_StormNextLink(pBackLink, -1);
             *pOldBucket2 = (int)pNodeData;
-            pBackLink->m_prevlink->m_next = *(intptr_t*)(nResetBucketOffset + 8);
+            pBackLink->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
             pBackLink->m_prevlink = 0;
-            *(uint32_t*)(nResetBucketOffset + 8) = 0;
+            *(uint32_t*)(nBucketNextLink + 8) = 0;
             pPendingHead2 = pendingList.m_terminator.m_prevlink;
           }
 
           pBackLink->m_prevlink = pPendingHead2;
-          *(intptr_t*)(nResetBucketOffset + 8) = pPendingHead2->m_next;
-          pPendingHead2->m_next = nResetBucketOffset;
+          *(intptr_t*)(nBucketNextLink + 8) = pPendingHead2->m_next;
+          pPendingHead2->m_next = nBucketNextLink;
           pPendingHead2 = pBackLink;
           pThis = pQServerStateSaved;
           pendingList.m_terminator.m_prevlink = pBackLink;
@@ -247,10 +247,11 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     uint32_t* pOldBucket = nNewBucketCount;
     pThis->tSlotListArray.SetCount((uint32_t)nNewBucketCount);
     if (pOldBucket) {
+      int nResetBucketOffset;
       nResetBucketOffset = 0;
       nBucketIdx = (uint32_t)pOldBucket;
       do {
-        pNodeNext = (TSExplicitList<::SGAMEDATA, -572662307>*)((intptr_t)&pThis->tSlotListArray.m_data->m_linkoffset + nResetBucketOffset);
+        pNodeNext = &pThis->tSlotListArray.m_data[nResetBucketOffset];
         if (pNodeNext->m_linkoffset != 4) {
           pNodeNext->UnlinkAll();
           pPendingHead2 = &pNodeNext->m_terminator;
@@ -259,7 +260,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
           pNodeNext->m_terminator.m_next = ~(uintptr_t)pPendingHead2;
         }
 
-        nResetBucketOffset += 0xc;
+        nResetBucketOffset++;
         nBucketIdx--;
       } while (nBucketIdx);
 

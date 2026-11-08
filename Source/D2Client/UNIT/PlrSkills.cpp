@@ -1297,7 +1297,7 @@ void __fastcall STATES_DispatchSetFunc(D2UnitStrc * pUnit, eD2States eState) {
 
     eD2Skills eModSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
     int nModLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
-    SKILLS::Skills::AttachClientStateHandler(pUnit, (D2UnitStrc*)(int)pDVar1->cltevent, eModSkill, nModLevel, (int)pDVar1->clteventfunc, 1, eState);
+    SKILLS::Skills::AttachClientStateHandler(pUnit, (int)pDVar1->cltevent, eModSkill, nModLevel, (int)pDVar1->clteventfunc, 1, eState);
 }
 
 // Dispatches the removal function for a state being stripped from pUnit. Looks up the state's remfunc index in D2StatesTxt, bounds-checks against STATESREMFUNC table (max 0x1e entries), calls the matching removal callback if non-null, then removes any unit-event of type 1 tied to the state if a matching stat-list exists. Validates pUnit non-null and eState in-range before any action.

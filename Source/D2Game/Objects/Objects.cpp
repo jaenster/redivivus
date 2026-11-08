@@ -1981,7 +1981,6 @@ D2UnitStrc * __fastcall Objects_PopulateFn6_Corpse(::SGAMEDATA * pGame, D2RoomSt
 
 // Room-population helper (populate function index 8). Skips the room if a level quest-status check fails or nDensity exceeds 0x80. Advances the room seed and bails if the seed mod 100 exceeds nChancePercent. Otherwise calls OBJECT_PlaceWithCallback to spawn the object (nObjectClassId) in the room using a 2*SizeX+1 by 2*SizeY+1 footprint, sets UNITFLAG_TARGETABLE based on the object's Selectable field, then registers the spawn position via AddPointsToLevelRngPoints2.
 D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
-    bool bQuestComplete;
     int nY;
     int nX;
     D2SeedStrc* pRoomSeed;
@@ -1989,8 +1988,8 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
     eD2UnitType eUnitType;
     ::SGAMEDATA* pGameSave = pGame;
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
-    int32_t nErrLine = ObjectsRgn::QUEST_GetLevelQuestStatus(pGame, eLevelId);
-    if ((char)nErrLine != '\0') {
+    bool bQuestComplete = ObjectsRgn::QUEST_GetLevelQuestStatus(pGame, eLevelId);
+    if (bQuestComplete) {
       return nullptr;
     }
     if (nDensity > 0x80) {
@@ -2017,7 +2016,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
       return nullptr;
     }
 
-    D2UnitStrc* pSpawnedUnit = OBJECT_PlaceWithCallback(pGameSave, nObjectClassId, nObjSizeX * 2 + 1, nObjSizeY * 2 + 1, pRoom, eLevelId, ObjectsRgn::OBJECT_IsPositionNearSpawnPoint2);
+    D2UnitStrc* pSpawnedUnit = OBJECT_PlaceWithCallback(pGameSave, nObjectClassId, nObjSizeX * 2 + 1, nObjSizeY * 2 + 1, pRoom, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECT_IsPositionNearSpawnPoint2);
     if (pSpawnedUnit) {
       if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {
         pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
@@ -2943,10 +2942,10 @@ void __fastcall Objects_InitFn16_Well(D2ObjectInitFnArg * pInitArg) {
 
 // Server-side object spawner for one object class in a room. Reads ObjectsTxt for nObjectClassId (size/orientation/selectable), advances the room RNG seed, and decides whether to spawn: a density-region check (OBJECTRGN_CheckDensityThreshold) either forces placement (up to 30 retries) or gates it on nChancePercent vs the seed roll. On success calls OBJECT_PlaceAtBiasedPosition near a spawn point, sets/clears UNITFLAG_TARGETABLE from the Selectable column, and for density spawns remaps to a shrine (OBJECT_SelectRandomShrineType, ShrinesTxt line 2) and bumps the level spawn count. Finally records the placed object's X/Y into the level RNG point set via AddPointsToLevelRngPoints1.
 D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
-    bool bCapacityFull;
     D2UnitStrc* pUnit;
     D2ShrinesTxt* pShrinesTxt;
     int nY;
+    int32_t nXPos;
     D2SeedStrc* pRoomSeed;
     D2DrlgRoomCoordsStrc sRoomCoords;
     eD2UnitType eUnitType;
@@ -2987,16 +2986,16 @@ D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, 
       }
     }
 
-    int32_t nXPos;
-    nXPos = ObjectsRgn::OBJECTRGN_CheckPointsCapacity(pGameLocal, eLevelId);
-    if ((char)nXPos != '\0') {
+    bool bCapacityFull;
+    bCapacityFull = ObjectsRgn::OBJECTRGN_CheckPointsCapacity(pGameLocal, eLevelId);
+    if (bCapacityFull) {
       return nullptr;
     }
 
     for (; nMaxRetries > 0; nMaxRetries--) {
       D2ObjectsTxt* pObjectsTxtSave;
       pObjectsTxtSave = pObjectsTxt;
-      pUnit = OBJECT_PlaceAtBiasedPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom, (uint32_t)(uint8_t)pObjectsTxtSave->Orientation, eLevelId, ObjectsRgn::OBJECT_IsPositionNearSpawnPoint1);
+      pUnit = OBJECT_PlaceAtBiasedPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom, (uint32_t)(uint8_t)pObjectsTxtSave->Orientation, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECT_IsPositionNearSpawnPoint1);
       if (pUnit) {
         if (pObjectsTxtSave->Selectable[pUnit->eAnimMode.ePlayerMode]) {
           pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;

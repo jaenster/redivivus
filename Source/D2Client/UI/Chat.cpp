@@ -854,7 +854,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
           Storm::Source::SSTR::SStrCopy(szOutParam, szToken, 0x7fffffff);
           pScan = szToken;
           pScan = pScan + strlen(pScan) + 1;
-          *ppszText += (intptr_t)(pScan + nCmdLen + (1 - (intptr_t)(szToken + 1)));
+          *ppszText += (int)(pScan - (szToken + 1) + nCmdLen + 1);
           *pbCommandType = (char)gaChatCommandTable[nCmdIndex].nCommandType;
           return 1;
         }

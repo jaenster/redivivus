@@ -20,7 +20,8 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
-        "uint32_t"
+        "TSLink<SGAMEDATA> *",
+        "intptr_t"
       ]
     },
     {
@@ -40,6 +41,7 @@
       "usedTypes": [
         "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
         "uint32_t"
       ]
     },
@@ -58,7 +60,10 @@
         "SMemFree"
       ],
       "usedTypes": [
+        "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
         "uint32_t"
       ]
     },
@@ -80,6 +85,8 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -119,6 +126,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
         "uint32_t"
       ]
     },
@@ -143,6 +151,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
         "uint32_t"
       ]
     },
@@ -165,6 +174,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
         "uint32_t"
       ]
     },
@@ -254,6 +264,8 @@
       "usedTypes": [
         "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -276,6 +288,7 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "TSLink<SGAMEDATA> *",
         "uint32_t"
       ]
     },
@@ -296,8 +309,10 @@
       ],
       "usedTypes": [
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
-        "pfnEHHandlerRoutine",
-        "uint32_t"
+        "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
+        "intptr_t",
+        "pfnEHHandlerRoutine"
       ]
     },
     {
@@ -317,6 +332,8 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -414,6 +431,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "TSLink<SGAMEDATA>",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -512,6 +530,8 @@
         "SGAMEDATA",
         "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
         "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "TSLink<SGAMEDATA> *",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
         "uint32_t"
       ]
@@ -592,8 +612,10 @@
       ],
       "usedTypes": [
         "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
+        "TSLink<SGAMEDATA> *",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
-        "uint32_t"
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
+        "intptr_t"
       ]
     },
     {
@@ -648,6 +670,8 @@
         "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
         "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
+        "intptr_t",
         "uint32_t"
       ]
     }

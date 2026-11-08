@@ -2617,11 +2617,11 @@ void __fastcall PROFCORE_RegisterSlot(uint32_t nSlotId, uint8_t * pSlotData, uin
 
 int Unreferenced_00611650() {
     // Static local variables (originally global data)
-    static unsigned int gpfnProfCoreInitCallback; D2_STATIC_GUARD_BSS(gpfnProfCoreInitCallback, "D2Common::Logging::ProfCore::Unreferenced_00611650::gpfnProfCoreInitCallback");
+    static fpProfCoreInitCb gpfnProfCoreInitCallback; D2_STATIC_GUARD_BSS(gpfnProfCoreInitCallback, "D2Common::Logging::ProfCore::Unreferenced_00611650::gpfnProfCoreInitCallback");
 
     if (gpfnProfCoreInitCallback) {
-      int iVar1;
-      iVar1 = (*(code*)gpfnProfCoreInitCallback)();
+      int32_t iVar1;
+      iVar1 = (*gpfnProfCoreInitCallback)();
       return iVar1;
     }
 

@@ -907,7 +907,8 @@
         "Free"
       ],
       "usedTypes": [
-        "D2HoverTextStrc"
+        "D2HoverTextStrc",
+        "D2TextLineStrc *"
       ]
     },
     {

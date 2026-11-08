@@ -1901,7 +1901,7 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc",
-        "D2DrlgLevelStrc"
+        "D2RoomExStrc"
       ]
     },
     {
@@ -1921,7 +1921,8 @@
         "DRLGOUTROOM_ComputeWallOrientations"
       ],
       "usedTypes": [
-        "D2DrlgLevelStrc"
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc"
       ]
     },
     {

@@ -54,20 +54,13 @@ uint8_t __fastcall Q14_IsSevenTombsAtState1(::SGAMEDATA * pGame) {
 }
 
 // Q14 predicate: returns false (0) whenever The Seven Tombs is introduced (the inner test is a decompiler tautology bVar1||!bVar1). Effectively: true (1) only if quest data missing or not introduced. Used as a "not active yet" gate.
-int __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame) {
+bool __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
-    if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    if (pQuestData && pQuestData->bIsNotIntroduction != '\0' && (pQuestData->nStateFlag == 1 || !pQuestData->nStateFlag)) {
+      return false;
     }
 
-    uint8_t nStateFlag = pQuestData->nStateFlag;
-    uint32_t uVar1 = (uint32_t)((uintptr_t)pQuestData >> 8) & 0xffffffu;
-    pQuestData = (D2QuestDataStrc*)(uint32_t)((uint32_t)((uint32_t)uVar1 & 0xffffffu) << 8 | (uint32_t)(uint8_t)nStateFlag);
-    if (!(nStateFlag == 1 || !nStateFlag)) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pQuestData >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
-    }
-
-    return (uint32_t)uVar1 << 8;
+    return true;
 }
 
 // Q14 accessor: returns the "town/Duriel portal already created" flag from A2Q6 data (field_0x0B). Returns 1 (treat as created) if quest not introduced. Used to gate the stairs-to-tombs operate and portal creation.

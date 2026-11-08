@@ -151,25 +151,22 @@ int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode) {
 }
 
 void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode, int * * ppAnchor) {
-    int* pBacklink;
-    int** ppCur = pNode;
+    int* piVar1;
+    uint32_t piTmp;
+    StormLinkStrc* ppCur = (StormLinkStrc*)pNode;
     if (!pNode) {
-      ppCur = ppList + 1;
+      ppCur = (StormLinkStrc*)(ppList + 1);
     }
 
-    int* piNext = *ppCur;
+    StormLinkStrc* piNext = ppCur->pPrevLink;
     if (piNext) {
-      pBacklink = ppCur[1];
-      if ((intptr_t)pBacklink < 0) {
-        pBacklink = (int*)~(uintptr_t)pBacklink;
-      } else {
-        pBacklink = (int*)((intptr_t)pBacklink + ((intptr_t)ppCur - piNext[1]));
-      }
-
-      *pBacklink = (int)piNext;
-      (*ppCur)[1] = (int)ppCur[1];
-      *ppCur = 0;
-      ppCur[1] = 0;
+      StormLinkStrc** pBacklink;
+      piTmp = ppCur->pNext;
+      pBacklink = (StormLinkStrc**)D2_StormNextLink(ppCur, -1);
+      *pBacklink = piNext;
+      ppCur->pPrevLink->pNext = ppCur->pNext;
+      ppCur->pPrevLink = 0;
+      ppCur->pNext = 0;
     }
     if (!ppAnchor) {
       ppAnchor = ppList + 1;
@@ -178,30 +175,30 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
     switch (nMode) {
       case 1:
         {
-          *ppCur = (int*)ppAnchor;
-          ppCur[1] = ppAnchor[1];
-          piNext = *ppList;
-          pBacklink = ppAnchor[1];
-          if ((intptr_t)pBacklink < 0) {
-            *(int***)~(uintptr_t)pBacklink = (int**)ppCur;
-            ppAnchor[1] = (int*)pNode;
+          ppCur->pPrevLink = (StormLinkStrc*)ppAnchor;
+          ppCur->pNext = ((StormLinkStrc*)ppAnchor)->pNext;
+          piVar1 = *ppList;
+          piTmp = ((StormLinkStrc*)ppAnchor)->pNext;
+          if ((int)piTmp < 0) {
+            *(StormLinkStrc**)~piTmp = (StormLinkStrc*)ppCur;
+            ((StormLinkStrc*)ppAnchor)->pNext = (intptr_t)pNode;
             return;
           }
-          if ((intptr_t)piNext < 0) {
-            piNext = (int*)((char*)ppAnchor - (*ppAnchor)[1]);
+          if ((intptr_t)piVar1 < 0) {
+            piVar1 = (int*)((char*)ppAnchor - ((StormLinkStrc*)ppAnchor)->pPrevLink->pNext);
           }
 
-          *(int***)((intptr_t)pBacklink + (intptr_t)piNext) = (int**)ppCur;
-          ppAnchor[1] = (int*)pNode;
+          *(StormLinkStrc**)(piTmp + (char*)piVar1) = (StormLinkStrc*)ppCur;
+          ((StormLinkStrc*)ppAnchor)->pNext = (intptr_t)pNode;
           return;
         }
       default:
         {
-          piNext = *ppAnchor;
-          *ppCur = piNext;
-          ppCur[1] = (int*)piNext[1];
-          piNext[1] = (int)pNode;
-          *ppAnchor = (int*)ppCur;
+          piNext = ((StormLinkStrc*)ppAnchor)->pPrevLink;
+          ppCur->pPrevLink = piNext;
+          ppCur->pNext = piNext->pNext;
+          piNext->pNext = (intptr_t)pNode;
+          ((StormLinkStrc*)ppAnchor)->pPrevLink = ppCur;
           return;
         }
     }
@@ -216,7 +213,7 @@ uint32_t __thiscall WND_GetNodeMaskedOffset(StormLinkedListStrc * pThis, StormLi
 }
 
 void __thiscall WND_UnlinkListNode(StormLinkedListStrc * pThis, StormLinkStrc * pNode) {
-    int* pBacklink;
+    StormLinkStrc** pBacklink;
     if (!pNode) {
       pNode = &pThis->head;
     }
@@ -226,8 +223,8 @@ void __thiscall WND_UnlinkListNode(StormLinkedListStrc * pThis, StormLinkStrc * 
       return;
     }
 
-    pBacklink = (int*)D2_StormNextLink(pNode, -1);
-    *pBacklink = (int)nNext;
+    pBacklink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
+    *pBacklink = nNext;
     pNode->pPrevLink->pNext = pNode->pNext;
     pNode->pPrevLink = 0;
     pNode->pNext = 0;
@@ -254,22 +251,22 @@ intptr_t __thiscall WND_GetNodeData(StormLinkedListStrc * pThis, StormLinkStrc *
 } // namespace Storm::WindowHandle
 
 template<> __attribute__((noinline)) inline void TSList<WNDREC, TSGetLink<WNDREC>>::UnlinkAll() {
-    int* pBacklink;
-    int* pNode;
+    TSLink<WNDREC>** pBacklink;
+    TSLink<WNDREC>* pNode;
     while (true) {
-      int nNext;
-      pNode = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      TSLink<WNDREC>* nNext;
+      pNode = (intptr_t)(TSLink<WNDREC>*)this->m_terminator.m_next > 0 ? (TSLink<WNDREC>*)this->m_terminator.m_next : 0;
       if (!pNode) {
         break;
       }
 
-      nNext = *pNode;
+      nNext = pNode->m_prevlink;
       if (nNext) {
-        pBacklink = (int*)D2_StormNextLink(pNode, -1);
+        pBacklink = (TSLink<WNDREC>**)D2_StormNextLink(pNode, -1);
         *pBacklink = nNext;
-        *(int*)(*pNode + 4) = pNode[1];
-        *pNode = 0;
-        pNode[1] = 0;
+        pNode->m_prevlink->m_next = pNode->m_next;
+        pNode->m_prevlink = 0;
+        pNode->m_next = 0;
       }
     }
 }
@@ -277,7 +274,7 @@ template<> __attribute__((noinline)) inline void TSList<WNDREC, TSGetLink<WNDREC
 namespace Storm::WindowHandle {
 
 void __fastcall WND_DetachAndClearChildren(StormLinkedListStrc * pWindow) {
-    int* pBacklink;
+    StormLinkStrc** pBacklink;
     ((TSList<WNDREC, TSGetLink<WNDREC>>*)pWindow)->UnlinkAll();
     StormLinkStrc* pSVar1 = &pWindow->head;
     StormLinkStrc* nNext = pSVar1->pPrevLink;
@@ -285,8 +282,8 @@ void __fastcall WND_DetachAndClearChildren(StormLinkedListStrc * pWindow) {
       return;
     }
 
-    pBacklink = (int*)D2_StormNextLink(pSVar1, -1);
-    *pBacklink = (int)nNext;
+    pBacklink = (StormLinkStrc**)D2_StormNextLink(pSVar1, -1);
+    *pBacklink = nNext;
     pSVar1->pPrevLink->pNext = pSVar1->pNext;
     pSVar1->pPrevLink = 0;
     pSVar1->pNext = 0;
@@ -347,9 +344,9 @@ void __stdcall SMSG_AddWindow(HWND hWnd) {
 
     StormLinkStrc* nNext = pRecord->link.pPrevLink;
     if (nNext) {
-      int* pBacklink;
-      pBacklink = (int*)D2_StormNextLink(pRecord, -1);
-      *pBacklink = (int)nNext;
+      StormLinkStrc** pBacklink;
+      pBacklink = (StormLinkStrc**)D2_StormNextLink(pRecord, -1);
+      *pBacklink = nNext;
       pRecord->link.pPrevLink->pNext = pRecord->link.pNext;
       pRecord->link.pPrevLink = 0;
       pRecord->link.pNext = 0;
@@ -371,9 +368,9 @@ uint32_t __thiscall WND_RemoveAndFreeRecord(StormLinkedListStrc * pListHead, Sto
     uint32_t nResult = pSVar1->link.pNext;
     StormLinkStrc* nNext = pRecord->link.pPrevLink;
     if (nNext) {
-      int* pBacklink;
-      pBacklink = (int*)D2_StormNextLink(pRecord, -1);
-      *pBacklink = (int)nNext;
+      StormLinkStrc** pBacklink;
+      pBacklink = (StormLinkStrc**)D2_StormNextLink(pRecord, -1);
+      *pBacklink = nNext;
       pRecord->link.pPrevLink->pNext = pRecord->link.pNext;
       pRecord->link.pPrevLink = 0;
       pRecord->link.pNext = 0;
@@ -578,8 +575,8 @@ int __fastcall Unreferenced_00420d80(uint32_t * param_1) {
     return 0;
 }
 
-int __fastcall Unreferenced_00420da0(int param_1) {
-    return *(int*)(param_1 + 4) - *(int*)(param_1 + 0x10);
+int __fastcall Unreferenced_00420da0(BigBuffer * param_1) {
+    return param_1->nCount - param_1->nStartWord;
 }
 
 uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes) {
@@ -596,16 +593,16 @@ BigBuffer * __thiscall WND_EntryArray_AllocNext(BigStack * pThis, int * pnCount)
     return pThis->aBuffers + uVar1;
 }
 
-void __thiscall WND_EntryArray_FreeEntries(int32_t pThis, int32_t nFreeCount) {
-    *(int*)(pThis + 0x140) -= nFreeCount;
+void __thiscall WND_EntryArray_FreeEntries(BigStack * pThis, int32_t nFreeCount) {
+    pThis->nUsed -= nFreeCount;
 }
 
-int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntry, int32_t bAllocNew) {
+BigBuffer * __thiscall WND_EntryArray_AllocOrReuse(BigStack * pThis, BigBuffer * pReuseEntry, int32_t bAllocNew) {
     if (bAllocNew) {
-      int nIndex;
-      nIndex = *(int*)(pThis + 0x140);
-      *(int*)(pThis + 0x140) = nIndex + 1;
-      return pThis + nIndex * 0x14;
+      uint32_t uVar1;
+      uVar1 = pThis->nUsed;
+      pThis->nUsed = uVar1 + 1;
+      return pThis->aBuffers + uVar1;
     }
 
     return pReuseEntry;

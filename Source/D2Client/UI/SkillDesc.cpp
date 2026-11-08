@@ -25,7 +25,7 @@
 
 #ifndef RECON_FPTD_pfnSkillDescWeaponDmgCalc
 #define RECON_FPTD_pfnSkillDescWeaponDmgCalc
-typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(D2UnitStrc * pUnit, int * pnParam, uint32_t * pnOut1, uint32_t dwParam0, uint32_t dwParam1, int32_t nParam, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2);
+typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(D2UnitStrc * pUnit, int * pnParam, uint32_t * pnOut1, int32_t * dwParam0, uint32_t dwParam1, int32_t nParam, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2);
 #endif
 
 static eD2States gaeSetBonusStates[6] = { STATE_itemset1, STATE_itemset2, STATE_itemset3, STATE_itemset4, STATE_itemset5, STATE_itemset6 }; D2_STATIC_GUARD(gaeSetBonusStates, "gaeSetBonusStates");
@@ -1102,6 +1102,8 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
     int nRepairCostBase;
     char szValueBuffer[12];
     uint16_t wszValueFormatted[10];
+    uint16_t* pStatId;
+    D2SkillsTxt* pSkillsTxt;
     uint16_t* pStatParam;
     D2CharStatsTxt* pCharStatsTxt;
     uint16_t* pRepairCostFinal;
@@ -1150,7 +1152,8 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       }
     }
 
-    nStatId = (int32_t)D2Lang::StrTable::strtable::GetLocaleString(wStrId);
+    uint16_t* pStatId2;
+    pStatId2 = (uint16_t*)D2Lang::StrTable::strtable::GetLocaleString(wStrId);
     Storm::Source::SSTR::SStrPrintf(szValueBuffer, 10, "%i", nGroupValue);
     wszValueFormatted[0] = L'\0';
     wszValueFormatted[1] = L'\0';
@@ -1195,7 +1198,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       case 9:
         if (nDescriptionValue != 1) {
           if (nDescriptionValue == 2) {
-            D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+            D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
             D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
             wszSecondaryStr = wszValueFormatted;
             break;
@@ -1218,13 +1221,13 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszValueFormatted);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatList2);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-          wszSecondaryStr = (uint16_t*)nStatId;
+          wszSecondaryStr = pStatId2;
         } else {
           if (nDescriptionValue != 2) {
             goto text_only;
           }
 
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
           if (nGroupValue >= 0) {
             D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszLocaleStr);
@@ -1244,15 +1247,15 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, wszValueFormatted);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatList2);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-        wszSecondaryStr = (uint16_t*)nStatId;
+        wszSecondaryStr = pStatId2;
       } else {
         if (nDescriptionValue != 2) {
           text_only:
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
           goto append_descstr2;
         }
 
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszValueFormatted);
         wszSecondaryStr = pStatList2;
@@ -1344,7 +1347,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         return 0;
       }
 
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszOutputBuffer, (uint16_t*)nStatId, nGroupValue, wszLocaleStr);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszOutputBuffer, pStatId2, nGroupValue, wszLocaleStr);
       goto append_descstr2;
       case 0x11:
 
@@ -1387,20 +1390,20 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       if (nDescriptionValue == 1) {
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszFormatBuffer);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-        wszSecondaryStr = (uint16_t*)nStatId;
+        wszSecondaryStr = pStatId2;
       } else {
         if (nDescriptionValue != 2) {
           goto append_descstr2;
         }
 
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, (uint16_t*)nStatId);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatId2);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
         wszSecondaryStr = wszFormatBuffer;
       }
 
       break;
       case 0x13:
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszOutputBuffer, (uint16_t*)nStatId, nGroupValue);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszOutputBuffer, pStatId2, nGroupValue);
       goto append_descstr2;
       case 0x14:
 
@@ -1415,7 +1418,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         goto text_only;
       }
 
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
       if (nGroupValue >= 0) {
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszLocaleStr);
@@ -1435,9 +1438,9 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszValueFormatted);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatList2);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, (uint16_t*)nStatId);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatId2);
         } else if (nDescriptionValue == 2) {
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
           if (nGroupValue >= 0) {
             D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszLocaleStr);
@@ -1446,7 +1449,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszValueFormatted);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatList2);
         } else {
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
         }
       pMonTypeLine = GetMonTypeLine(nStatParam);
       if (!pMonTypeLine) {
@@ -1468,14 +1471,14 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, wszValueFormatted);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatList2);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, (uint16_t*)nStatId);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatId2);
       } else if (nDescriptionValue == 2) {
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszValueFormatted);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatList2);
       } else {
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
       }
 
       wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
@@ -1502,7 +1505,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatParam);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pRepairCostFinal3);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszFormatBuffer, (uint16_t*)nStatId, nGroupValue & 0xff, nGroupValue >> 8);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszFormatBuffer, pStatId2, nGroupValue & 0xff, nGroupValue >> 8);
       wszSecondaryStr = wszFormatBuffer;
       break;
       case 0x19:
@@ -1523,13 +1526,13 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         value_then_text:
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, wszLocaleStr);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-        wszSecondaryStr = (uint16_t*)nStatId;
+        wszSecondaryStr = pStatId2;
       } else {
         if (nDescriptionValue != 2) {
           goto append_descstr2;
         }
 
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, (uint16_t*)nStatId);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszOutputBuffer, pStatId2);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
         wszSecondaryStr = wszFormatBuffer;
       }
@@ -1567,7 +1570,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       wszSecondaryStr = D2Lang::StrTable::strtable::GetLocaleString(pCharStatsLine->StrClassOnly);
       break;
       case 0x1c:
-        if (!nGroupValue || (nStatId = (int32_t)D2Common::Skills::TXT_Skills_GetLine(nStatParam) , !(D2SkillsTxt*)nStatId)) {
+        if (!nGroupValue || (pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(nStatParam) , !pSkillsTxt)) {
           goto append_descstr2;
         }
       if (!pUnit || (pPlayerUnit_lcl = pUnit , pUnit->eUnitType != UNIT_PLAYER)) {
@@ -1578,12 +1581,12 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       } else {
         iVar1 = pPlayerUnit_lcl->nClassId;
       }
-      if (*(char*)(nStatId + 0xc) == iVar1 && nGroupValue > 3) {
+      if (*(char*)((char*)pSkillsTxt + 0xc) == iVar1 && nGroupValue > 3) {
         nGroupValue = 3;
       }
 
-      nStatId = (int32_t)D2Lang::StrTable::strtable::GetLocaleString(0xfa3);
-      if (!(uint16_t*)nStatId) {
+      pStatId = (uint16_t*)D2Lang::StrTable::strtable::GetLocaleString(0xfa3);
+      if (!pStatId) {
         goto append_descstr2;
       }
 
@@ -1604,7 +1607,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
 
       pRepairCostFinal = pStatValue;
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatValue);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, (uint16_t*)nStatId);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pStatId);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, pRepairCostFinal);
       break;
       default:
@@ -3838,7 +3841,7 @@ static void __stdcall SKILLDESC_CalcAttackRateBonus(int * pnAttackRate, int32_t 
     *pnColor = 1;
 }
 
-void __fastcall SKILLDESC_CalcAttackRateForWeapon(D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, uint32_t param_1, uint32_t dwParam1, int32_t nSkillLevel, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2) {
+void __fastcall SKILLDESC_CalcAttackRateForWeapon(D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, int32_t * param_1, uint32_t dwParam1, int32_t nSkillLevel, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2) {
     SKILLDESC_CalcAttackRateBonus(pnAttackRate, (int32_t*)pnColor, nSkillLevel, pSkill, pUnit2, pUnit);
 }
 
@@ -4083,7 +4086,7 @@ static void __stdcall SKILLDESC_CalcDualWieldDamage(int32_t * pdwParam1, int32_t
     } else {
       pActiveWeapon = SKILLDESC_GetPrimaryWeapon(pUnit2);
       if (pActiveWeapon) {
-        (*pfnCalcWeaponDmg)(pUnit2, pdwParam3, (uint32_t*)pdwParam4, (uint32_t)dwParam2, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
+        (*pfnCalcWeaponDmg)(pUnit2, pdwParam3, (uint32_t*)pdwParam4, dwParam2, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
       } else {
         *pdwParam3 = 0;
         *pdwParam4 = 0;
@@ -4097,7 +4100,7 @@ static void __stdcall SKILLDESC_CalcDualWieldDamage(int32_t * pdwParam1, int32_t
       }
     }
 
-    (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, (uint32_t)dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
+    (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
 }
 
 void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * pSkill, int32_t * param_1, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2) {
@@ -4135,9 +4138,9 @@ void __fastcall SKILLDESC_CalcDualWieldSimple(D2UnitStrc * pUnit, D2SkillStrc * 
     *pnMaxColor = 0;
 }
 
-void __fastcall SKILLDESC_DrawDamageWithRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pnColor, int32_t nDamagePctBonus, int32_t nFlatDamageBonus, D2SkillStrc * pSkill, uint32_t nSrcDamage, D2UnitStrc * pUnit2) {
-    SKILLDESC_CalcWeaponDamageRange(pUnit, pnMinDamage, pnMaxDamage, (int32_t*)pnColor, nFlatDamageBonus, pSkill, nSrcDamage, pUnit2, 0, nDamagePctBonus);
-    SKILLDESC_CalcElemDamageRange(pUnit, pnMinDamage, pnMaxDamage, pnColor, pSkill);
+void __fastcall SKILLDESC_DrawDamageWithRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, int32_t nDamagePctBonus, int32_t nFlatDamageBonus, D2SkillStrc * pSkill, uint32_t nSrcDamage, D2UnitStrc * pUnit2) {
+    SKILLDESC_CalcWeaponDamageRange(pUnit, pnMinDamage, pnMaxDamage, pnColor, nFlatDamageBonus, pSkill, nSrcDamage, pUnit2, 0, nDamagePctBonus);
+    SKILLDESC_CalcElemDamageRange(pUnit, pnMinDamage, pnMaxDamage, (uint32_t*)pnColor, pSkill);
 }
 
 static void __stdcall SKILLDESC_DrawElemDamageWithRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, D2UnitStrc * pUnit2, D2SkillStrc * pSkill, int32_t nSrcDamage) {
@@ -4565,7 +4568,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType3(D2UnitStrc * pUnit, D2SkillStrc * pS
     pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa0c), nSkillLevelTmp);
     nSkillLevelTmp = nSkillLevel;
     uint32_t uDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa0d), nSkillLevelTmp);
-    SKILLDESC_DrawDamageWithRange(pUnit, (int*)&nMinDamage, &nMaxDamage, (uint32_t*)&pSkillsTxt, pDamCalc2, uDamCalc2, pSkill, 0, nullptr);
+    SKILLDESC_DrawDamageWithRange(pUnit, (int*)&nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, pDamCalc2, uDamCalc2, pSkill, 0, nullptr);
     SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, (int32_t)pSkillsTxt, nY, nXRight, nXLeft);
 }
 
@@ -4581,7 +4584,7 @@ void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pS
     SKILLDESC_DrawDamageNumbers(nMaxDmgShifted, nMaxDmgShifted, 0, nY, nXRight, nXLeft);
 }
 
-void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pElemType, int32_t nAuraBonusPct, uint32_t dwParam1, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2) {
+void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pElemType, int32_t nAuraBonusPct, uint32_t dwParam1, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2) {
     int32_t nMaxDmgTmp;
     int nStatTmp;
     BOOL eConcState;
@@ -4652,7 +4655,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
 
       pUnit2 = 0;
       pnMaxDamage = 0;
-      SKILLDESC_CalcElemDamageRange(pUnit, (int*)&pUnit2, (int*)&pnMaxDamage, pElemType, pSkill);
+      SKILLDESC_CalcElemDamageRange(pUnit, (int*)&pUnit2, (int*)&pnMaxDamage, (uint32_t*)pElemType, pSkill);
       if ((intptr_t)pnMaxDamage < (intptr_t)pUnit2) {
         pnMaxDamage = (int*)pUnit2;
       }
@@ -4793,7 +4796,7 @@ void __fastcall SKILLDESC_DrawSkillDmgAuraElem(D2UnitStrc * pUnit, D2SkillStrc *
 
     uint8_t byDmgShiftFactor = pSkillsTxt->SrcDam;
     pSkillsTxt = 0;
-    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (uint32_t*)&pSkillsTxt, 0, 0, pSkill, 0, nullptr);
+    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, 0, 0, pSkill, 0, nullptr);
     nMinDamage *= (uint32_t)byDmgShiftFactor;
     nMinDamage = nMinDamage / 128;
     nMaxDamage *= (uint32_t)byDmgShiftFactor;
@@ -4815,7 +4818,7 @@ void __fastcall SKILLDESC_DrawSkillDmgDualWield(D2UnitStrc * pUnit, D2SkillStrc 
       return;
     }
 
-    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (uint32_t*)&pSkillsTxt, 0, 0, pSkill, 0, pPrimaryWeapon);
+    SKILLDESC_CalcAuraDamageRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&pSkillsTxt, 0, 0, pSkill, 0, pPrimaryWeapon);
     SKILLDESC_GetSecondaryWeapon(pUnit);
     SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, (int32_t)pSkillsTxt, nY, nXRight, nXLeft);
 }
@@ -4842,7 +4845,7 @@ void __fastcall SKILLDESC_DrawSkillDmgComplex(D2UnitStrc * pUnit, D2SkillStrc * 
     nPhysColorIdx = 0;
     D2UnitStrc* pUnitSaved;
     pUnitSaved = pUnit;
-    SKILLDESC_CalcAuraDamageRange(pUnit, &nPhysMinDmg, &nPhysMaxDmg, (uint32_t*)&nPhysColorIdx, 0, 0, pSkill, 0, nullptr);
+    SKILLDESC_CalcAuraDamageRange(pUnit, &nPhysMinDmg, &nPhysMaxDmg, &nPhysColorIdx, 0, 0, pSkill, 0, nullptr);
     int nPhysMinShifted;
     nPhysMinShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nPhysMinDmg, (uint32_t)byDmgShiftFactor, 0x80);
     nPhysMinDmg = nPhysMinShifted;
@@ -6308,6 +6311,7 @@ int __stdcall SKILLDESC_HasAnyClassSkill(D2UnitStrc * pUnit) {
 
     int32_t nClassId;
     D2SkillStrc* pSkill;
+    D2SkillsTxt* pSkillTxt;
     if (gnCachedClassSkillResult) {
       return 1;
     }
@@ -6322,10 +6326,10 @@ int __stdcall SKILLDESC_HasAnyClassSkill(D2UnitStrc * pUnit) {
     D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
       if ((int)eSkill >= 0 && (int)eSkill < nSkillCount) {
-        nSkillCount = (int)pDataTable->pTxtSkills->srvprgfunc + nSkillTxtOffset - 0x30;
-        if (nSkillCount) {
+        pSkillTxt = &pDataTable->pTxtSkills[nSkillTxtOffset];
+        if (pSkillTxt) {
           nClassId = D2Common::Units::GetClassId(pUnit);
-          if (*(char*)(nSkillCount + 0xc) == (char)nClassId) {
+          if (pSkillTxt->charclass == (char)nClassId) {
             pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
             pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (pSkill) {
@@ -6341,7 +6345,7 @@ int __stdcall SKILLDESC_HasAnyClassSkill(D2UnitStrc * pUnit) {
       }
 
       nSkillCount = pDataTable->nTxtSkillsCount;
-      nSkillTxtOffset += 0x23c;
+      nSkillTxtOffset++;
       eSkill += SKILL_Kick;
     } while ((int)eSkill < nSkillCount);
 
@@ -7218,6 +7222,8 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
     int bAtMaxLevel;
     int32_t nNextSkillLevel;
     int bIsPassive;
+    D2SkillsTxt* pSkillTxt2;
+    D2SkillsTxt* pSkillTxt;
     bool bSectionHasDescLine;
     if (!pUnit) {
       return;
@@ -7365,7 +7371,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
     }
 
     D2SkillDescTxt* pSkillDescTxt;
-    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (nIter = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , pSkillDescTxt = nIter >= 0 && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter : nullptr)) {
+    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills , nIter = (int)pSkillTxt->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , pSkillDescTxt = nIter >= 0 && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter : nullptr)) {
       wStrId = pSkillDescTxt->strLong;
     } else {
       wStrId = 0x1506;
@@ -7382,7 +7388,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
       pWszLocale += 2;
     }
 
-    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (nIter = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , nIter >= 0 && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter)) {
+    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (pSkillTxt2 = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills , nIter = (int)pSkillTxt2->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , nIter >= 0 && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter)) {
       wStrId = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc[nIter].strName;
     } else {
       wStrId = 0x1506;
@@ -7427,6 +7433,8 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
     uint16_t wszLevelBuf[64];
     int nTooltipHeight;
     int bIsPassive;
+    D2SkillsTxt* pSkillTxt2;
+    D2SkillsTxt* pSkillTxt;
     if (!pUnit) {
       return;
     }
@@ -7583,7 +7591,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
     pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
     append_desc_and_name:
-    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (nIter = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , nIter >= 0) && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter) {
+    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills , nIter = (int)pSkillTxt->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , nIter >= 0) && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter) {
       wStrId = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc[nIter].strLong;
     } else {
       wStrId = 0x1506;
@@ -7599,7 +7607,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
       pWszLocale += 2;
     }
 
-    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (nIter = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , nIter >= 0 && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter)) {
+    if ((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (pSkillTxt2 = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills , nIter = (int)pSkillTxt2->srvprgfunc + nSkillTxtOffset - 0x30 , nIter != 0) && (nIter = (int)*(short int*)(nIter + 0x194) , nIter >= 0 && nIter < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nIter)) {
       wStrId = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc[nIter].strName;
     } else {
       wStrId = 0x1506;

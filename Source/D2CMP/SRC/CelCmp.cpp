@@ -2387,7 +2387,7 @@ void __stdcall CELCMP_FreeCelFileAndData(DC6 * pDC6) {
 void __stdcall CELCMP_AddCelFrameToCache(uint32_t nCelListKey, uint32_t * pSrcPixels, uint32_t dwImageByteStride, uint32_t nHeight, uint32_t dwPixelWidth, uint32_t nOffsetX, uint32_t nOffsetY, uint32_t nParam7) {
     ::TCELENTRY* pNewFrame;
     uint8_t* pPixelBuf;
-    int* pBackLink;
+    TSLink<::TCELENTRY>** pBackLink;
     uint32_t uRowPitch;
     int bCriticalLocked;
     TSLink<::TCELENTRY>* uPrevHeadNode;
@@ -2421,8 +2421,8 @@ void __stdcall CELCMP_AddCelFrameToCache(uint32_t nCelListKey, uint32_t * pSrcPi
 
       uPrevHeadNode = pNewFrame->m_link.m_prevlink;
       if (uPrevHeadNode) {
-        pBackLink = (int*)D2_StormNextLink(pNewFrame, -1);
-        *pBackLink = (int)uPrevHeadNode;
+        pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pNewFrame, -1);
+        *pBackLink = uPrevHeadNode;
         pNewFrame->m_link.m_prevlink->m_next = pNewFrame->m_link.m_next;
         pNewFrame->m_link.m_prevlink = 0;
         pNewFrame->m_link.m_next = 0;

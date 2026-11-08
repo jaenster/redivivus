@@ -656,7 +656,7 @@ void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
     }
 
     *pTerminator = '\0';
-    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)(pTerminator + (1 - (intptr_t)&sPacket)));
+    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)((char*)pTerminator - (char*)&sPacket + 1));
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x66(void * pData, uint32_t nLen) {

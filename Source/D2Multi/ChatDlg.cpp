@@ -958,7 +958,7 @@ void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240() {
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
-static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(LPRECT pRect, int32_t nLength, char * pString) {
+static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(int32_t nColor, int32_t nLength, char * pString) {
     D2ChatDlgUnknown_0x10* pNode = D2_NEW_AT(D2ChatDlgUnknown_0x10, ".\\Src\\ChatDlg.cpp", 0xc1d);
     memset(pNode, 0, sizeof(*pNode));
     if (!pNode) {
@@ -966,7 +966,7 @@ static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(LPRECT pRect, int32_t nLen
     }
     if (!pString) {
       pNode->pszText = 0;
-      pNode->lpRect = pRect;
+      pNode->nColor = nColor;
       pNode->nLength = nLength;
       return pNode;
     }
@@ -979,7 +979,7 @@ static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(LPRECT pRect, int32_t nLen
       Storm::Source::SSTR::SStrCopy(szBufferOutput, pString, 0x7fffffff);
     }
 
-    pNode->lpRect = pRect;
+    pNode->nColor = nColor;
     pNode->nLength = nLength;
     return pNode;
 }
@@ -996,8 +996,8 @@ void CHATDLG_FreeChatMsgNode(void * * pChatNode) {
     D2_FREE_AT(pChatNode, ".\\Src\\ChatDlg.cpp", 0xc39);
 }
 
-static void StoreData(LPRECT pRect, int32_t nLength, char * szText) {
-    D2ChatDlgUnknown_0x10* pChatNode = StoreChatMsg(pRect, nLength, szText);
+static void StoreData(int32_t nColor, int32_t nLength, char * szText) {
+    D2ChatDlgUnknown_0x10* pChatNode = StoreChatMsg(nColor, nLength, szText);
     if (!pChatNode) {
       return;
     }
@@ -1046,7 +1046,7 @@ void __stdcall CHATDLG_ProcessPendingMessages() {
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpChatMessagesTextBox);
       }
       if (pMemoryToFree->pszText) {
-        CHATDLG_AddMultiLineText(gpChatMessagesTextBox, 0, pMemoryToFree->pszText, (int32_t)pMemoryToFree->lpRect);
+        CHATDLG_AddMultiLineText(gpChatMessagesTextBox, 0, pMemoryToFree->pszText, pMemoryToFree->nColor);
         if (pMemoryToFree->pszText) {
           D2_FREE_AT(pMemoryToFree->pszText, ".\\Src\\ChatDlg.cpp", 0xc38);
         }
@@ -1091,9 +1091,9 @@ void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * psz
     FILETIME utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, 0x49ef6eff < nUnixTime ? 3 : 2, 10000000, 0));
     /* LPFILETIME lpLocalFileTime for FileTimeToLocalFileTime */ /* FILETIME * lpFileTime for FileTimeToLocalFileTime */ FileTimeToLocalFileTime(&utcFileTime, &localFileTime);
     CHATDLG_FormatFileTimeToDate(&localFileTime, 0x40, szDateStr);
-    StoreData((LPRECT)0x0, 0, szDateStr);
-    StoreData((LPRECT)(void*)0x4, 0, pszMsgLocal);
-    StoreData((LPRECT)0x0, 0, "");
+    StoreData(0, 0, szDateStr);
+    StoreData(4, 0, pszMsgLocal);
+    StoreData(0, 0, "");
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
@@ -1105,7 +1105,7 @@ void __stdcall CHATDLG_EnqueueClearMessage() {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ pNode->pszText = 0;
-    pNode->lpRect = (LPRECT)0x0;
+    pNode->nColor = 0;
     pNode->nLength = 1;
     EnterCriticalSection(&lpCriticalSection_0077ae28);
     D2ChatDlgUnknown_0x10* pNewHead = pNode;
@@ -1949,11 +1949,11 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
         pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;
         pcChannelEnd = szChannelName;
         pcChannelEnd = pcChannelEnd + strlen(pcChannelEnd) + 1;
-        if ((intptr_t)(pcInputEnd + (intptr_t)(pcChannelEnd + (-(intptr_t)(szChannelName + 1) - (intptr_t)(szInputText + 1)))) <= 0xff) {
+        if ((intptr_t)(pcInputEnd + (int)(pcChannelEnd - (szInputText + 1) - (intptr_t)(szChannelName + 1))) <= 0xff) {
           strncpy(szArgPrefix, szInputText, nSize);
           szArgPrefix[nSize] = '\0';
           strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (intptr_t)(szInputText + 1))));
-          szArgRemainder[(intptr_t)(pcInputEnd + (-nSize - (intptr_t)(szInputText + 1)))] = '\0';
+          szArgRemainder[(int)(pcInputEnd - (szInputText + 1) - nSize)] = '\0';
           sprintf(szInputText, "%s%s%s", szArgPrefix, szChannelName, szArgRemainder);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, szInputText, 0x100);
           D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, wszResult);

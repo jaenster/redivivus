@@ -1974,7 +1974,7 @@
       "usedTypes": [
         "D2SetsTxtFStrc",
         "D2UnitStrc",
-        "SGAMEDATA"
+        "int32_t"
       ]
     }
   ]

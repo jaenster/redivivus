@@ -38,7 +38,7 @@
         "SGAMEDATA",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "TSLink<SGAMEDATA>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -75,7 +75,7 @@
       "usedTypes": [
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -173,7 +173,7 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -275,6 +275,7 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "TSLink<SGAMEDATA>",
+        "intptr_t",
         "uint32_t"
       ]
     },

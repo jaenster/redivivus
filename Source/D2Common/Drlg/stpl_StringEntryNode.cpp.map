@@ -53,6 +53,7 @@
       ],
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>",
         "uint32_t"
       ]
     },
@@ -90,8 +91,8 @@
       ],
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
-        "int32_t",
-        "uint32_t"
+        "TSLink<StringEntryNode>",
+        "int32_t"
       ]
     },
     {
@@ -111,6 +112,8 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -149,6 +152,7 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
         "uint32_t"
       ]
     },
@@ -168,7 +172,7 @@
       "usedTypes": [
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -189,7 +193,7 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -226,7 +230,9 @@
       ],
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
-        "uint32_t"
+        "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
+        "intptr_t"
       ]
     },
     {
@@ -244,6 +250,7 @@
       ],
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>",
         "uint32_t"
       ]
     },
@@ -262,6 +269,7 @@
       ],
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>",
         "uint32_t"
       ]
     },
@@ -281,7 +289,7 @@
       "usedTypes": [
         "StringEntryNode",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -302,7 +310,7 @@
         "TSHashObject<StringEntryNode, HASHKEY_STRI>",
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -321,8 +329,10 @@
       ],
       "usedTypes": [
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+        "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
         "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -342,6 +352,7 @@
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
+        "TSLink<StringEntryNode> *",
         "uint32_t"
       ]
     },

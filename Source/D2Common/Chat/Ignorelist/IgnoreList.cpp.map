@@ -106,7 +106,7 @@
         "FILE",
         "IgnoreList",
         "int32_t",
-        "uint32_t"
+        "intptr_t"
       ]
     },
     {
@@ -217,7 +217,8 @@
       "usedTypes": [
         "IgnoreList",
         "StringEntryNode",
-        "int32_t"
+        "int32_t",
+        "intptr_t"
       ]
     },
     {

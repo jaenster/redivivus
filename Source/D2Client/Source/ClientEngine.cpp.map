@@ -982,7 +982,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "uint32_t"
+        "D2UnitStrc *"
       ]
     },
     {
@@ -1000,7 +1000,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "uint32_t"
+        "D2UnitStrc *"
       ]
     },
     {

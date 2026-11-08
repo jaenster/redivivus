@@ -78,13 +78,13 @@ uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDir
     return nFormat;
 }
 
-uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t pComp8) {
+int __stdcall TILEPROJECT_GetSoundIndexIndex(D2TileLibraryEntryStrc * pComp8) {
     if (!pComp8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x82);
       exit(-1);
     }
 
-    return *(uint32_t*)(pComp8 + 0x10);
+    return pComp8->nHeightToBottom;
 }
 
 uint32_t __stdcall TILEPROJECT_GetMainIndex(D2TileLibraryEntryStrc * pComp24) {
@@ -96,13 +96,13 @@ uint32_t __stdcall TILEPROJECT_GetMainIndex(D2TileLibraryEntryStrc * pComp24) {
     return (uint32_t)((uint32_t)(uint16_t)(short int)((uintptr_t)pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)pComp24->nRoofHeight);
 }
 
-uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24) {
+char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(D2TileLibraryEntryStrc * pComp24) {
     if (!pComp24) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
       exit(-1);
     }
 
-    return *(uint32_t*)(pComp24 + 0x58);
+    return pComp24->szFilePath;
 }
 
 void __stdcall D2CMP_MinDouble(double fParam1, double fParam2) {

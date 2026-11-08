@@ -462,7 +462,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
       } while (cCurChar != '\0');
 
       if (nRemaining) {
-        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
+        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep - szSrcPath - 1) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
       }
 
       truncate:
@@ -470,7 +470,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
     }
 
     pLastSep = pLastSep + strlen(pLastSep) + 1;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep - szSrcPath - 1) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (intptr_t)szSrcPath)) < nDestSize));
 }
 
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {
@@ -583,7 +583,7 @@ bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicat
     startupInfo.cb = 0x44;
     memset(&startupInfo.lpReserved, 0, 0x40);
     _PROCESS_INFORMATION processInfo = {0};
-    BOOL bCreated = CreateProcessW((LPCWSTR)(lpApplicationName ? (uint32_t)wszAppName : 0), (LPWSTR)(szCommandLine ? (uint32_t)wszCommandLine : 0), (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCWSTR)0x0, &startupInfo, &processInfo);
+    BOOL bCreated = CreateProcessW(lpApplicationName ? (LPCWSTR)wszAppName : nullptr, szCommandLine ? (LPWSTR)wszCommandLine : nullptr, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCWSTR)0x0, &startupInfo, &processInfo);
     if (bCreated) {
       /* HANDLE hObject for CloseHandle */ CloseHandle(processInfo.hProcess);
       /* HANDLE hObject for CloseHandle */ CloseHandle(processInfo.hThread);

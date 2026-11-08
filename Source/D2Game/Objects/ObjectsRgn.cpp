@@ -326,20 +326,18 @@ void __fastcall Objects_InitFn17_Waypoint(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
 }
 
-int32_t __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel) {
-    D2ObjectRngStrc* pLevelRng = pGame->pObjectControl->aLevelsRng[eLevel];
-    int* pnPointsSize2 = &pLevelRng->nPointsSize2;
-    if (*pnPointsSize2 == 4) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+bool __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel) {
+    D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
+    int iVar2 = pDVar1->nPointsSize2;
+    if (iVar2 != 4) {
+      int iVar3;
+      iVar3 = pDVar1->nMinDistance;
+      if (iVar2 <= iVar3 / 8) {
+        return false;
+      }
     }
 
-    int nPoints = pLevelRng->nMinDistance + (pLevelRng->nMinDistance >> 0x1f & 7U);
-    pLevelRng = (D2ObjectRngStrc*)(nPoints >> 3);
-    if (*pnPointsSize2 <= (intptr_t)pLevelRng) {
-      return (uint32_t)((uint32_t)(nPoints >> 0xb) & 0xffffffu) << 8;
-    }
-
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
 uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2LevelId eLevel) {
@@ -351,57 +349,56 @@ uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2Level
     return 0;
 }
 
-int32_t __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eLevel) {
-    D2ObjectRngStrc* pLevelRng = pGame->pObjectControl->aLevelsRng[eLevel];
-    int* pnPointsSize1 = &pLevelRng->nPointsSize1;
-    if (*pnPointsSize1 == 10) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+bool __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eLevel) {
+    D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
+    int iVar2 = pDVar1->nPointsSize1;
+    if (iVar2 != 10) {
+      int iVar3;
+      iVar3 = pDVar1->nMinDistance;
+      if (iVar2 <= iVar3 / 8) {
+        return false;
+      }
     }
 
-    int nPoints = pLevelRng->nMinDistance + (pLevelRng->nMinDistance >> 0x1f & 7U);
-    pLevelRng = (D2ObjectRngStrc*)(nPoints >> 3);
-    if (*pnPointsSize1 <= (intptr_t)pLevelRng) {
-      return (uint32_t)((uint32_t)(nPoints >> 0xb) & 0xffffffu) << 8;
-    }
-
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pLevelRng >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
 void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10++;
 }
 
-uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
-    D2ObjectRngStrc* pRngOrDelta = pGame->pObjectControl->aLevelsRng[eLevel];
-    int* pnPointsSize = &pRngOrDelta->nPointsSize2;
+bool __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
+    D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
+    int iVar2 = pDVar1->nPointsSize2;
     int i = 0;
-    if (*pnPointsSize <= 0) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    if (iVar2 <= 0) {
+      return true;
     }
 
-    LONG* pnPointY = &pRngOrDelta->aPoints2[0].y;
+    LONG* pnPointY = &pDVar1->aPoints2[0].y;
     do {
-      pRngOrDelta = (D2ObjectRngStrc*)(((POINT*)(pnPointY - 1))->x - nX);
-      if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
+      int pRngOrDelta;
+      pRngOrDelta = ((POINT*)(pnPointY - 1))->x - nX;
+      if (pRngOrDelta < 0) {
+        pRngOrDelta = -pRngOrDelta;
       }
-      if ((intptr_t)pRngOrDelta < 100) {
-        return (uintptr_t)pRngOrDelta & -256;
+      if (pRngOrDelta < 100) {
+        return false;
       }
 
-      pRngOrDelta = (D2ObjectRngStrc*)(*pnPointY - nY);
-      if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
+      pRngOrDelta = *pnPointY - nY;
+      if (pRngOrDelta < 0) {
+        pRngOrDelta = -pRngOrDelta;
       }
-      if ((intptr_t)pRngOrDelta < 100) {
-        return (uintptr_t)pRngOrDelta & -256;
+      if (pRngOrDelta < 100) {
+        return false;
       }
 
       i++;
       pnPointY += 2;
-    } while (i < *pnPointsSize);
+    } while (i < iVar2);
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
 void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
@@ -415,37 +412,38 @@ void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLeve
     pRng->nPointsSize2++;
 }
 
-uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
-    D2ObjectRngStrc* pRngOrDelta = pGame->pObjectControl->aLevelsRng[eLevel];
-    int* pnPointsSize = &pRngOrDelta->nPointsSize1;
+bool __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
+    D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
+    int iVar2 = pDVar1->nPointsSize1;
     int i = 0;
-    if (*pnPointsSize <= 0) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    if (iVar2 <= 0) {
+      return true;
     }
 
-    LONG* pnPointY = &pRngOrDelta->aPoints1[0].y;
+    LONG* pnPointY = &pDVar1->aPoints1[0].y;
     do {
-      pRngOrDelta = (D2ObjectRngStrc*)(((POINT*)(pnPointY - 1))->x - nX);
-      if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
+      int pRngOrDelta;
+      pRngOrDelta = ((POINT*)(pnPointY - 1))->x - nX;
+      if (pRngOrDelta < 0) {
+        pRngOrDelta = -pRngOrDelta;
       }
-      if ((intptr_t)pRngOrDelta < 0x32) {
-        return (uintptr_t)pRngOrDelta & -256;
+      if (pRngOrDelta < 0x32) {
+        return false;
       }
 
-      pRngOrDelta = (D2ObjectRngStrc*)(*pnPointY - nY);
-      if ((intptr_t)pRngOrDelta < 0) {
-        pRngOrDelta = (D2ObjectRngStrc*)-(intptr_t)pRngOrDelta;
+      pRngOrDelta = *pnPointY - nY;
+      if (pRngOrDelta < 0) {
+        pRngOrDelta = -pRngOrDelta;
       }
-      if ((intptr_t)pRngOrDelta < 0x32) {
-        return (uintptr_t)pRngOrDelta & -256;
+      if (pRngOrDelta < 0x32) {
+        return false;
       }
 
       i++;
       pnPointY += 2;
-    } while (i < *pnPointsSize);
+    } while (i < iVar2);
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pRngOrDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
 void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {

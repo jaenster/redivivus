@@ -325,6 +325,7 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
     int nScreenY;
     int nScreenX;
     uint8_t byColor;
+    D2RoomCoordListStrc* pRoomCoordList;
     D2DrlgTileDataStrc* pWallTiles = D2Common::DUNGEON::Dungeon::DRLGROOM_GetWallTilesFromRoom(pRoom, (int*)&nTileCount);
     if (!pWallTiles && nTileCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2d5);
@@ -379,11 +380,11 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
       return;
     }
 
-    for (nScreenY = (int)D2Common::DUNGEON::Dungeon::GetCoordList(pRoom); (D2RoomCoordListStrc*)nScreenY; nScreenY = *(int*)(nScreenY + 0x2c)) {
-      rect.left = ((D2RoomCoordListStrc*)nScreenY)->pBox.nPosX;
-      rect.right = ((D2RoomCoordListStrc*)nScreenY)->pBox.nWidth;
-      anYCoords[0] = ((D2RoomCoordListStrc*)nScreenY)->pBox.nPosY;
-      anYCoords[1] = ((D2RoomCoordListStrc*)nScreenY)->pBox.nHeight;
+    for (pRoomCoordList = D2Common::DUNGEON::Dungeon::GetCoordList(pRoom); pRoomCoordList; pRoomCoordList = (D2RoomCoordListStrc*)*(int*)((char*)pRoomCoordList + 0x2c)) {
+      rect.left = pRoomCoordList->pBox.nPosX;
+      rect.right = pRoomCoordList->pBox.nWidth;
+      anYCoords[0] = pRoomCoordList->pBox.nPosY;
+      anYCoords[1] = pRoomCoordList->pBox.nHeight;
       nTmp = 0;
       rect.top = rect.left;
       rect.bottom = rect.right;

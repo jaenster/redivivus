@@ -9,22 +9,22 @@
 
 
 template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Clear() {
-    int* pBackLink;
-    int* pObject;
+    TSLink<::TCELENTRY>** pBackLink;
+    TSLink<::TCELENTRY>* nNext;
     while (true) {
-      int nNext;
-      pObject = (intptr_t)(int*)this->m_terminator.m_next > 0 ? (int*)this->m_terminator.m_next : 0;
+      TSLink<::TCELENTRY>* pObject;
+      pObject = (intptr_t)(TSLink<::TCELENTRY>*)this->m_terminator.m_next > 0 ? (TSLink<::TCELENTRY>*)this->m_terminator.m_next : 0;
       if (!pObject) {
         break;
       }
 
-      nNext = *pObject;
+      nNext = pObject->m_prevlink;
       if (nNext) {
-        pBackLink = (int*)D2_StormNextLink(pObject, -1);
+        pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pObject, -1);
         *pBackLink = nNext;
-        *(int*)(*pObject + 4) = pObject[1];
-        *pObject = 0;
-        pObject[1] = 0;
+        pObject->m_prevlink->m_next = pObject->m_next;
+        pObject->m_prevlink = 0;
+        pObject->m_next = 0;
       }
 
       Storm::Source::SMem::SMemFree(pObject, D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14, -2, 0);
@@ -37,17 +37,17 @@ template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::DeleteNode(::T
       pTVar1 = (::TCELENTRY*)&this->m_terminator;
     }
 
-    uint32_t uReturnLink = pTVar1->m_link.m_next;
+    intptr_t uReturnLink = pTVar1->m_link.m_next;
     TSLink<::TCELENTRY>* nNext = ptr->m_link.m_prevlink;
     if (nNext) {
-      int* pTargetLink;
-      pTargetLink = (int*)D2_StormNextLink(ptr, -1);
-      *pTargetLink = (int)nNext;
+      TSLink<::TCELENTRY>** pTargetLink;
+      pTargetLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(ptr, -1);
+      *pTargetLink = nNext;
       ptr->m_link.m_prevlink->m_next = ptr->m_link.m_next;
       ptr->m_link.m_prevlink = 0;
       ptr->m_link.m_next = 0;
     }
 
     Storm::Source::SMem::SMemFree(ptr, D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14, -2, 0);
-    return (::TCELENTRY*)((int)uReturnLink <= 0 ? 0 : uReturnLink);
+    return (::TCELENTRY*)(uReturnLink <= 0 ? 0 : uReturnLink);
 }

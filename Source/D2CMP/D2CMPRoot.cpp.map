@@ -83,6 +83,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2TileLibraryEntryStrc",
         "int32_t"
       ]
     },
@@ -125,6 +126,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2TileLibraryEntryStrc",
         "int32_t"
       ]
     },

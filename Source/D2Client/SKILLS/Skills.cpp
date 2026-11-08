@@ -546,13 +546,14 @@ BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
 
 void __stdcall MISSILE_SetSpeedByDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nTargetX;
+    int32_t nUnit2;
     D2UnitStrc* pTarget = pUnit2;
-    BOOL bGotCoords = GetCooordinates(pUnit2, &nTargetX, (int32_t*)&pUnit2);
+    BOOL bGotCoords = GetCooordinates(pUnit2, &nTargetX, (int32_t*)&nUnit2);
     if (!bGotCoords) {
       return;
     }
 
-    int32_t nDistance = D2Common::Collision::GetDistanceToXY(pTarget, nTargetX, (int32_t)pUnit2);
+    int32_t nDistance = D2Common::Collision::GetDistanceToXY(pTarget, nTargetX, nUnit2);
     if (nDistance < 1) {
       nDistance = 1;
     }
@@ -2517,13 +2518,13 @@ void __fastcall SKILLS_CltAllocStatListForSkill(D2UnitStrc * pUnit, int32_t nAtt
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\SKILLS\\Skills.cpp", 0x9e5);
 }
 
-D2CUnitEventStrc * __fastcall AttachClientStateHandler(D2UnitStrc * pUnit, D2UnitStrc * pEventUnit, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nEventType, int32_t nEventState) {
+D2CUnitEventStrc * __fastcall AttachClientStateHandler(D2UnitStrc * pUnit, int nClientEvent, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nEventType, int32_t nEventState) {
     // Static local variables (originally global data)
     static fnCUnitEventCallback STATESCLTEVENTFUNC[2] = { nullptr, (fnCUnitEventCallback)&D2Client::SKILLS::SkillsSor::SKILLSSOR_StateCltEventFn01_ChillingArmor }; D2_STATIC_GUARD(STATESCLTEVENTFUNC, "D2Client::SKILLS::Skills::AttachClientStateHandler::STATESCLTEVENTFUNC");
 
     if (nHandlerIdx <= 1 && STATESCLTEVENTFUNC[nHandlerIdx]) {
       D2CUnitEventStrc* pCUnitEvent;
-      pCUnitEvent = UNIT::CUnitEvent::CUNITEVENT_Alloc(pUnit, pEventUnit, nMsgParam1, nMsgParam2, STATESCLTEVENTFUNC[nHandlerIdx], nEventType, nEventState);
+      pCUnitEvent = UNIT::CUnitEvent::CUNITEVENT_Alloc(pUnit, nClientEvent, nMsgParam1, nMsgParam2, STATESCLTEVENTFUNC[nHandlerIdx], nEventType, nEventState);
       return pCUnitEvent;
     }
 

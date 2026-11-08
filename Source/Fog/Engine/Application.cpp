@@ -147,7 +147,7 @@ uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t 
     return nDataSize & -256;
 }
 
-static uint32_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, uint8_t * nBaseAddress, int32_t pDirEntries, D2FogDebugModuleEntryStrc * pOutput) {
+static uint32_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, uint8_t * nBaseAddress, uint8_t * pDirEntries, D2FogDebugModuleEntryStrc * pOutput) {
     uint8_t bVar1;
     BOOL bIsBadPtr;
     uint32_t nParseResult;
@@ -236,11 +236,11 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
     bIsValidImage = DEBUG_ParsePEDebugDirectory(&nDirSize, &nDirRVA, (short int*)(pNtHeader + 6));
     uint32_t nCount = nDirSize;
     if ((char)bIsValidImage != '\0' && nDirRVA && nDirSize) {
-      void* pDebugDir;
-      pDebugDir = (void*)(nDirRVA + (char*)pModuleBase);
+      uint8_t* pDebugDir;
+      pDebugDir = (uint8_t*)(nDirRVA + (char*)pModuleBase);
       /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pDebugDir, nDirSize);
       if (!bIsBadPtr && nCount >= 0x1c) {
-        DEBUG_ParseDebugDataDirectory(nCount, (uint8_t*)pModuleBase, (int32_t)pDebugDir, ppModuleBase);
+        DEBUG_ParseDebugDataDirectory(nCount, (uint8_t*)pModuleBase, pDebugDir, ppModuleBase);
       }
     }
 
@@ -468,7 +468,7 @@ bool __stdcall DEBUG_EnumerateModules(int * pModuleList) {
     return bVar1;
 }
 
-void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader) {
+void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, uint8_t * pOptHeader) {
     if (*(uint32_t*)(pOptHeader + 0x6c) <= 6) {
       return;
     }

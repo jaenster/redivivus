@@ -2360,15 +2360,15 @@ static BOOL __stdcall CHAT_IsInteractingWithOtherPlayer(D2UnitStrc * pUnit, ::SG
 }
 
 // ForEachClient callback for public chat broadcast. Checks squelch/mute flags and ignore list between sender and recipient, then sends 0x26 chat packet if not blocked.
-void __fastcall CHAT_BroadcastToClient(D2ClientStrc * pClient, char * * pContext) {
+void __fastcall CHAT_BroadcastToClient(D2ClientStrc * pClient, D2ChatBroadcastCtx * pContext) {
     D2UnitStrc* pRecipient;
     uint32_t nSquelchFlags;
     BOOL bIgnored;
     ::SGAMEDATA* pGame = GAME::Clients::CLIENT_GetGame(pClient);
-    D2GSPacketSrv0x26* pPacketData = (D2GSPacketSrv0x26*)*pContext;
-    if (pContext[2] != (char*)-1) {
+    D2GSPacketSrv0x26* pPacketData = pContext->pPacketData;
+    if (pContext->nSenderGUID != -1) {
       D2UnitStrc* pSender;
-      pSender = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, (uint32_t)pContext[2]);
+      pSender = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pContext->nSenderGUID);
       pRecipient = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (pSender && pRecipient && pSender != pRecipient) {
         nSquelchFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pRecipient, pSender, 4);
@@ -2397,19 +2397,19 @@ void __fastcall CHAT_BroadcastToClient(D2ClientStrc * pClient, char * * pContext
 }
 
 // ForEachClient callback for whisper delivery. Compares each client's character name to the target name. If matched and not squelched, delivers whisper via 0x26 packet and sets g_bWhisperDelivered=1. If matched but squelched, sets g_bWhisperSquelched=1.
-void __fastcall CHAT_DeliverWhisper(D2ClientStrc * pClient, char * * pContext) {
+void __fastcall CHAT_DeliverWhisper(D2ClientStrc * pClient, D2ChatBroadcastCtx * pContext) {
     D2UnitStrc* pRecipient;
     uint32_t nSquelchFlags;
     ::SGAMEDATA* pGame = GAME::Clients::CLIENT_GetGame(pClient);
-    D2GSPacketSrv0x26* pPacketData = (D2GSPacketSrv0x26*)*pContext;
+    D2GSPacketSrv0x26* pPacketData = pContext->pPacketData;
     char* szClientName = GAME::Clients::GetCharName(pClient);
-    int32_t nNameCmp = Storm::Source::SSTR::SStrCmpI(szClientName, pContext[1] + 0x103, 0x7fffffff);
+    int32_t nNameCmp = Storm::Source::SSTR::SStrCmpI(szClientName, pContext->pChatMessage->szTarget, 0x7fffffff);
     if (nNameCmp) {
       return;
     }
-    if (pContext[2] != (char*)-1) {
+    if (pContext->nSenderGUID != -1) {
       D2UnitStrc* pSender;
-      pSender = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, (uint32_t)pContext[2]);
+      pSender = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pContext->nSenderGUID);
       pRecipient = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (pSender && pRecipient) {
         nSquelchFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pRecipient, pSender, 4);

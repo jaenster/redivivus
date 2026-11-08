@@ -1003,7 +1003,7 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
       exit(-1);
     }
 
-    return (::SGAMEDATA*)pUnit->uSideData.pClientSide.dwSfxAsyncTicks;
+    return pUnit->uSideData.pServerSide.pGame;
 }
 
 // 2022.01.09 - dzik

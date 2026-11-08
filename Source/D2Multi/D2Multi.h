@@ -59,9 +59,9 @@ struct D2ChannelUserStrc {
 #endif // D2_DEFINED_D2ChannelUserStrc
 #ifndef D2_DEFINED_D2ChatDlgUnknown_0x10
 #define D2_DEFINED_D2ChatDlgUnknown_0x10
-struct __attribute__((packed)) D2ChatDlgUnknown_0x10 {
+struct D2ChatDlgUnknown_0x10 {
     /* 0x00 */ char * pszText; // Heap copy of the chat line, allocated at .\Src\ChatDlg.cpp:0xc28 and NULL when the caller passed no string.
-    /* 0x04 */ LPRECT lpRect;
+    /* 0x04 */ int32_t nColor;
     /* 0x08 */ int32_t nLength;
     /* 0x0C */ struct D2ChatDlgUnknown_0x10 * pNext;
 };

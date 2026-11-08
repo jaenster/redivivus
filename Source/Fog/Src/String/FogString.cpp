@@ -187,7 +187,7 @@ uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, size_t n
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x100);
         exit(-1);
       } else {
-        if (!((intptr_t)(pbWrite2 + (1 - (intptr_t)pbDst)) <= (int)nBufSize)) {
+        if (!((int)(pbWrite2 - pbDst + 1) <= (int)nBufSize)) {
           ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x101);
           exit(-1);
         }

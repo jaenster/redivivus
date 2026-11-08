@@ -85,6 +85,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "CMDERROR",
         "pfnSCmdErrorCallback",
         "uint32_t"
       ]
@@ -144,6 +145,7 @@
       ],
       "usedTypes": [
         "SCMD",
+        "intptr_t",
         "uint32_t"
       ]
     },
@@ -324,6 +326,8 @@
         "UnlinkAll"
       ],
       "usedTypes": [
+        "TSLink<CMDDEF>",
+        "TSLink<CMDDEF> *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
       ]
@@ -344,6 +348,7 @@
       ],
       "usedTypes": [
         "StormLinkStrc",
+        "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
       ]
@@ -426,6 +431,7 @@
       "usedTypes": [
         "SCMDCALLBACK",
         "StormCmdArgDefStrc",
+        "StormCmdArgDefStrc *",
         "int32_t",
         "uint32_t"
       ]
@@ -465,6 +471,8 @@
       ],
       "usedTypes": [
         "SCMD",
+        "StormLinkStrc",
+        "StormLinkStrc *",
         "uint32_t"
       ]
     },

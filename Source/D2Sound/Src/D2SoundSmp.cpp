@@ -275,7 +275,7 @@ D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSamplePa
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
-    D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&gpSoundSampleList, pSoundSmp);
+    D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&gpSoundSampleList, (intptr_t)pSoundSmp);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
     return pSoundSmp;
 }

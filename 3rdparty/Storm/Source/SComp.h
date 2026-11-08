@@ -124,9 +124,9 @@ struct __attribute__((packed)) D2HuffmanContextStrc {
     /* 0x0008 */ D2CompressHuffNodeStrc aNodes[515]; // 0x203 tree nodes at 0x18 bytes each (ends at 0x3050)
     /* 0x3050 */ int32_t nFreeCount; // free-list count sentinel at 0x3050
     /* 0x3054 */ int32_t nFreeListSelf; // free-list sentinel self-ptr at 0x3054
-    /* 0x3058 */ int32_t nFreeListBack; // free-list sentinel back-link ~self at 0x3058
+    /* 0x3058 */ struct D2CompressHuffNodeStrc * nFreeListBack; // free-list sentinel back-link ~self at 0x3058
     /* 0x305C */ int32_t nActiveCount; // active-list count at 0x305C
-    /* 0x3060 */ int32_t nActiveListSelf; // active-list sentinel self-ptr at 0x3060
+    /* 0x3060 */ struct D2CompressHuffNodeStrc * pActiveListSelf; // active-list sentinel self-ptr at 0x3060
     /* 0x3064 */ int32_t nActiveListBack; // active-list sentinel back-link ~self at 0x3064
     /* 0x3068 */ int32_t nNodeCount; // nodes allocated so far at 0x3068
     /* 0x306C */ struct D2CompressHuffNodeStrc * _pad306C[258]; // symbol-to-node lookup table (0x102 entries); same layout as D2CompressEncoderStrc.apSymbolNodes
@@ -199,7 +199,7 @@ void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(struct StormLinkStrc * 
 int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrDefault);
 void __thiscall LINKEDLIST_UnlinkNode(struct StormLinkedListStrc * pThis, int * pNode);
 uint32_t * __fastcall Unreferenced_0041ebb0(uint32_t * param_1);
-int32_t __thiscall HUFFMAN_DecodeSymbol(struct D2HuffmanContextStrc * pThis, uint16_t * * pBitBuf);
+int32_t __thiscall HUFFMAN_DecodeSymbol(struct D2HuffmanContextStrc * pThis, struct D2BitStreamReaderStrc * pBitBuf);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(struct StormLinkStrc * pNode);
 struct StormLinkedListStrc * __fastcall Unreferenced_0041ed70(struct StormLinkedListStrc * param_1);
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef);
@@ -213,7 +213,7 @@ void __fastcall COMPRESS_FlushEncoderState(struct StormLinkedListStrc * pEncoder
 // Initialise a Huffman encoder/decoder context: zero all linked-list sentinels, set epoch to 1, clear node-count and quick-table epoch
 struct D2CompressEncoderStrc * __fastcall HUFFMAN_InitContext(struct D2CompressEncoderStrc * pEncoder);
 void __thiscall COMPRESS_EncodeSymbol(struct D2CompressEncoderStrc * pEncoder, int nSymbol);
-int __thiscall HUFFMAN_DecompressBlock(struct D2HuffmanContextStrc * pDecoderCtx, uint8_t * pDst, int32_t nDstMax, uint16_t * * pBitBuf);
+int __thiscall HUFFMAN_DecompressBlock(struct D2HuffmanContextStrc * pDecoderCtx, uint8_t * pDst, int32_t nDstMax, struct D2BitStreamReaderStrc * pBitBuf);
 int __thiscall COMPRESS_EncodeBuffer(struct D2CompressEncoderStrc * pHuffCtx, struct D2BitStreamWriterStrc * pBitStream, uint8_t * pbSrc, int32_t nSrcLen, int * * nTableSel);
 struct D2CompressEncoderStrc * __fastcall HUFFMAN_Constructor(struct D2CompressEncoderStrc * pEncoder);
 struct D2HuffmanContextStrc * __fastcall HUFFMAN_ConstructorWithTable(struct D2HuffmanContextStrc * pHuffCtx);

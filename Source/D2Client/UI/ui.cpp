@@ -93,7 +93,7 @@ typedef void (*fpSpinnerRepeatAction)();
 #endif
 #ifndef RECON_FPTD_pfnTextScrollComplete
 #define RECON_FPTD_pfnTextScrollComplete
-typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
+typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, int bDismissed);
 #endif
 
 static D2UIFlagInitStrc gUIFlagDrawConsoleInit[4] = {
@@ -3022,7 +3022,7 @@ DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename) {
     char* pszDst = pszNameDst;
     while (cChar != '\0') {
       *pszDst = cChar;
-      cChar = pszDst[(intptr_t)(pFilename + (1 - (intptr_t)pszNameDst))];
+      cChar = pszDst[(int)(pFilename - pszNameDst + 1)];
       pszDst++;
     }
 
@@ -10158,7 +10158,7 @@ void __stdcall DRAW_UI_CASH() {
       }
 
       memset(&sGfxData, 0, 0x48);
-      bDC6Loaded = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nDC6Handle, '\x01', (D2UnitStrc*)-1);
+      bDC6Loaded = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nDC6Handle, '\x01', -1);
       if (!bDC6Loaded) {
         return;
       }

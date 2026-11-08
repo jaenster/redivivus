@@ -24,6 +24,7 @@ struct D2UIMouseMsgStrc;
 struct D2UnitFindArgStrc;
 struct D2UnitStrc;
 struct D2WardenModuleObjectStrc;
+struct D2WardenModuleStrc;
 struct EHExceptionRecord;
 struct EHRegistrationNode;
 struct SGAMEDATA;
@@ -186,13 +187,13 @@ void __stdcall DRAW_WORLD_SetWarpFadeTimer();
 // Draws the post-warp black fade-out over the play area, ramping alpha down over 500 ms.
 void __stdcall dSceneTransitionDraw();
 void __stdcall DRAW_WORLD_ClearWarpFadeTimer();
-int __fastcall CUNITEVENT_DispatchCallbacks(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwnerUnit, uint32_t dwParam3, uint32_t dwParam4);
+int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, struct D2UnitStrc * pOwnerUnit, struct D2UnitStrc * pMissile, uint32_t dwParam4);
 uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam);
 // TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY);
 int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId);
-pfnWardenCreateInterface __thiscall WARDEN_DecryptBuffer(int * ppModule, int32_t nOrdinal);
+pfnWardenCreateInterface __thiscall WARDEN_DecryptBuffer(struct D2WardenModuleStrc * ppModule, int32_t nOrdinal);
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
 uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSize, uint32_t * * ppOutput, uint32_t nOutputSize);
 // RC4 key schedule: fills pRc4State's 256-byte S-box with 0..255, zeroes the i/j bytes at +0x100/+0x101, then swaps S[i] with S[j], j += S[i] + pKey[i % nKeyLength].

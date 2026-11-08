@@ -95,13 +95,13 @@ void __fastcall AllocObjectControlSub0x1110(::SGAMEDATA * pGame, struct D2UnitSt
 // Object initializer for region-based objects (objrgn.cpp). Walks the pSub0x1110 linked list looking for an entry whose room matches pInitArg->pRoom (or whose coords fall inside that room). If found and the object is absent or dead, schedules a game event using the object's FrameCnt animation timing, then frees the entry. If not found and the room is a town room, calls SetupUpdateFlag(obj, 2).
 // @sourcefile .\OBJECTS\objrgn.cpp
 void __fastcall Objects_InitFn17_Waypoint(struct D2ObjectInitFnArg * pInitArg);
-int32_t __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel);
+bool __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel);
 uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2LevelId eLevel);
-int32_t __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eLevel);
+bool __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eLevel);
 void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId eLevel);
-uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
+bool __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
 void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
-uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
+bool __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
 void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
 // Resolves the monster class ID to use for object-mode spawns in a given room/level. If the level's cached nMonClassId is invalid, builds an act-specific table of valid skeleton/zombie base IDs, searches the room's monster region entries for a matching class range, caches the result in pLevelRng->nMonClassId, and returns it. Falls back to 0xEA (default skeleton) if no region match is found.
 int32_t __fastcall OBJECT_HandleObjectMode(struct D2ObjectModeArg * pObjectModeArg);

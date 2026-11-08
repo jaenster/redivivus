@@ -90,10 +90,10 @@ D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(D2CelDataHashTabl
 }
 
 // @sourcefile .\SRC\CelDataHash.cpp
-D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(D2PoolManagerStrc * pPoolManager, D2CelDataHashTableStrc * pHashTable, uint32_t nRefCount, char * szFileName) {
+D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(D2PoolManagerStrc * pPoolManager, D2CelDataHashTableStrc * pHashTable, void * nRefCount, char * szFileName) {
     char byChar;
     D2CelDataHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pPoolManager, D2CelDataHashEntryStrc, ".\\SRC\\CelDataHash.cpp", 0x88);
-    pNewEntry->pData = (void*)nRefCount;
+    pNewEntry->pData = nRefCount;
     uint32_t nRawHash = Storm::Source::SSTR::SStrHash(szFileName, 1, 0);
     uint32_t nBucketIdx = ((nRawHash >> 8 ^ nRawHash) >> 0x10 ^ nRawHash >> 8 ^ nRawHash) & 0x1ff;
     pNewEntry->pPrev = 0;

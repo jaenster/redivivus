@@ -456,26 +456,26 @@ int32_t __stdcall GetLinkNodeIndex(D2TxtLinkStrc * pLink, char * szItemCode, uin
     return -1;
 }
 
-static uint8_t * __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
+static void __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
     int nCmpResult = *(int*)pbyte;
     do {
-      uint8_t* pNode;
+      uint8_t* pbVar1;
       if (!nCmpResult) {
         *(uint8_t**)pbyte = (uint8_t*)pKey;
-        return pbyte;
+        return;
       }
 
-      pNode = *(uint8_t**)pbyte;
-      nCmpResult = strcmp((char*)pKey, (char*)pNode);
+      pbVar1 = *(uint8_t**)pbyte;
+      nCmpResult = strcmp((char*)pKey, (char*)pbVar1);
       if (nCmpResult < 0) {
-        pbyte = pNode + 0x24;
+        pbyte = pbVar1 + 0x24;
       } else {
         if (nCmpResult <= 0) {
-          pNode = (uint8_t*)D2_FREE_POOL_AT(nullptr, pKey, ".\\Src\\Excel\\Excel.cpp", 0x4a7);
-          return pNode;
+          D2_FREE_POOL_AT(nullptr, pKey, ".\\Src\\Excel\\Excel.cpp", 0x4a7);
+          return;
         }
 
-        pbyte = pNode + 0x28;
+        pbyte = pbVar1 + 0x28;
       }
 
       nCmpResult = *(int*)pbyte;

@@ -1115,7 +1115,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
               sProperty.fcode = *(int*)(pModEntry - 10);
               sProperty.fmin = (int)*(short int*)(pModEntry - 4);
               sProperty.fmax = (int)*(short int*)(pModEntry - 2);
-              D2Common::ITEMS::ItemMods::ITEMMOD_ApplyRunewordProperties(pDVar2, &sProperty, (::SGAMEDATA*)pGameLocal->bExpansion);
+              D2Common::ITEMS::ItemMods::ITEMMOD_ApplyRunewordProperties(pDVar2, &sProperty, pGameLocal->bExpansion);
             }
           }
         }

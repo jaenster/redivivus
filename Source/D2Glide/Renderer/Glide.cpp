@@ -1701,12 +1701,12 @@ static int RENDERER_GLIDE_GetSpriteMetadata(D2GfxDataStrc * pGfxData, GlideTexIn
     ppMetadata->pSprite = pGfxData;
     int32_t nDimension = D2CMP::SRC::CelCmp::GetDC6Width(pGfxData->pDC6Block);
     ppMetadata->nWidth = nDimension;
-    uint32_t* nDC6OffsetX = (uint32_t*)D2CMP::SRC::CelCmp::GetDC6OffsetX(pGfxData->pDC6Block);
-    ppMetadata->nLeft = (int32_t)nDC6OffsetX;
-    uint32_t* nDC6Height = (uint32_t*)D2CMP::SRC::CelCmp::GetDC6Height(pGfxData->pDC6Block);
-    ppMetadata->nHeight = (int32_t)nDC6Height;
-    uint32_t* nDC6OffsetY = (uint32_t*)D2CMP::SRC::CelCmp::GetDC6OffsetY(pGfxData->pDC6Block);
-    ppMetadata->nTop = (int32_t)nDC6OffsetY;
+    int32_t nDC6OffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pGfxData->pDC6Block);
+    ppMetadata->nLeft = nDC6OffsetX;
+    int32_t nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pGfxData->pDC6Block);
+    ppMetadata->nHeight = nDC6Height;
+    int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pGfxData->pDC6Block);
+    ppMetadata->nTop = nDC6OffsetY;
     return 1;
 }
 

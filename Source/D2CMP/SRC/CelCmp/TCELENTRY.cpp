@@ -12,9 +12,9 @@ namespace D2CMP::SRC::CelCmp::TCELENTRY {
 ::TCELENTRY * __thiscall ScalarDeletingDestructor(::TCELENTRY * pThis, uint32_t dwFlags) {
     TSLink<::TCELENTRY>* nNext = pThis->m_link.m_prevlink;
     if (nNext) {
-      int* pBackLink;
-      pBackLink = (int*)D2_StormNextLink(pThis, -1);
-      *pBackLink = (int)nNext;
+      TSLink<::TCELENTRY>** pBackLink;
+      pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pThis, -1);
+      *pBackLink = nNext;
       pThis->m_link.m_prevlink->m_next = pThis->m_link.m_next;
       pThis->m_link.m_prevlink = 0;
       pThis->m_link.m_next = 0;

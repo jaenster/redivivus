@@ -1001,7 +1001,7 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
         } while (nCandidateLen < 0x204);
 
         if (nCandidateLen >= nBestLen) {
-          pCmpState->distance = (uint32_t)(pbSrcPos + (nCandidateLen - (intptr_t)pbCandidateMatch) - 1);
+          pCmpState->distance = (uint32_t)(pbSrcPos - pbCandidateMatch + nCandidateLen - 1);
           nBestLen = nCandidateLen;
           if (nCandidateLen > 10) {
             if (nCandidateLen == 0x204) {
@@ -1075,7 +1075,7 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
               }
 
               if (nCandidateLen >= nBestLen) {
-                pCmpState->distance = (uint32_t)(pbSrcPos + (-1 - (intptr_t)pbCandidateMatch));
+                pCmpState->distance = (uint32_t)(pbSrcPos - pbCandidateMatch - 1);
                 if (nCandidateLen > nBestLen) {
                   if (nCandidateLen == 0x204) {
                     return 0x204;

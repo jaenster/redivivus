@@ -5542,7 +5542,7 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
         }
       }
 
-      CUNITEVENT_DispatchCallbacks(nullptr, pTarget, (uint32_t)pUnit, 0);
+      CUNITEVENT_DispatchCallbacks(0, pTarget, pUnit, 0);
       nCltHitFuncIdx = pMissileTxt->nCltHitFunc;
       if (nCltHitFuncIdx > 0 && nCltHitFuncIdx < MISSILESCLTHITFUNCS_SIZE && MISSILESCLTHITFUNCS[nCltHitFuncIdx]) {
         nMissileClassId = (*MISSILESCLTHITFUNCS[nCltHitFuncIdx])(pUnit, pTarget);

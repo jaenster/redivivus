@@ -47,7 +47,7 @@ void __fastcall CELDATAHASH_InitHashTable(void * pHashTable);
 void __fastcall GFX_FreeAllCacheEntries(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable);
 struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(struct D2CelDataHashTableStrc * pHashTable, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
-struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, struct D2CelDataHashTableStrc * pHashTable, uint32_t nRefCount, char * szFileName);
+struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, struct D2CelDataHashTableStrc * pHashTable, void * nRefCount, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
 void __fastcall GFX_RemoveCacheEntry(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable, struct D2CelDataHashEntryStrc * pEntry);
 void __stdcall IGNORELIST_Initialize_Unref_0060b130();

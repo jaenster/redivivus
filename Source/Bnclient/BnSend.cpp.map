@@ -1614,6 +1614,7 @@
       ],
       "usedTypes": [
         "D2NetDataStrc",
+        "D2NetDataStrc *",
         "SOCKET",
         "fd_set",
         "fnInterlockedCompareExchange",

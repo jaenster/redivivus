@@ -89,7 +89,8 @@ struct __attribute__((packed)) D2SoundsTxt {
     /* 0x64 */ int32_t aRecentSoundHistory[2]; // Recent sound indices for group randomization dedup
     /* 0x6C */ void * pSoundDataBuffer; // Loaded WAV data pointer (FreeClientMemory)
     /* 0x70 */ int32_t nSoundDataBytes; // Loaded buffer size in bytes
-    /* 0x74 */ int32_t aWavDataPtrAndSize[2]; // Unknown
+    /* 0x74 */ int * pWavData; // Unknown
+    /* 0x78 */ int32_t nWavDataSize;
     /* 0x7C */ uint32_t nLRUTimestamp; // LRU eviction tick (gnCurrentGameAudioVolume)
     /* 0x80 */ uint8_t nBlockCount; // Unknown
     /* 0x81 */ uint8_t bFileNotFound; // Set to 1 when file open fails
@@ -147,7 +148,7 @@ struct D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t n
 uint32_t __fastcall SOUND_GetPlaybackStatus(int * * ppnParam);
 void __stdcall SOUND_ShutdownAudio();
 // Recomputes and re-applies a positional sound channel's mixing state (__fastcall, ECX=pSoundChannel). Reads the channel's sound descriptor (pSoundChannel[2]) and its sounds.txt line; halts via Fog::ErrorManager if descriptor is null. Computes effective volume by chaining music/master volume, per-channel left/right multipliers (skipping certain reserved sound-id ranges and Solo lines), and positional bias from the mixer. If the new volume and the descriptor's 3D position (offsets 0xC/0x10/0x14/0x20) match the channel's cached copy (pSoundChannel[3..7]) it returns 0 early (no change); otherwise distance-attenuates volume via falloff min/max, calls SOUNDSMP_CalculateVolumeAndPan/SetPan/Set3DPosition/SetEaxObstruction/SetVolume, caches the new pos+volume into the channel, and returns the descriptor pointer. Side-effects: drives the underlying audio mixer sample.
-int __fastcall SOUND_UpdateChannelParams(struct D2ClientSoundChannelStrc * pSoundChannel);
+void __fastcall SOUND_UpdateChannelParams(struct D2ClientSoundChannelStrc * pSoundChannel);
 BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer);
 // Sets the global BackgroundSoundsActive flag then reinitializes the audio stream channels to apply the change. Queries the current mixer mode (DirectSound=1 or Sound3D=2), checks whether the corresponding subsystem is initialized, and calls SOUND_ShutdownAudio + SOUND_InitStreamChannels. Falls back to mixer mode 0 on init failure and adjusts the stored mixer setting accordingly.
 void __fastcall SOUND_SetBackgroundSoundsActive(uint32_t bActive);

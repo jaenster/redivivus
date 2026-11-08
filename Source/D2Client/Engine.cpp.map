@@ -587,6 +587,9 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "Unreferenced_00460760"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
       ]
     },
     {

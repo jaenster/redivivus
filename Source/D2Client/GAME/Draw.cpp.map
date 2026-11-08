@@ -488,6 +488,7 @@
         "WALL2_DrawWallTilesWithAlpha"
       ],
       "usedTypes": [
+        "D2DrlgTileDataStrc",
         "D2GameViewStrc",
         "D2Wall2CellStrc",
         "D2Wall2DrawEntryStrc",
