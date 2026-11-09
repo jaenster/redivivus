@@ -298,7 +298,6 @@
         "D2UnitStrc",
         "D2UnknownCreateMonsterStrc",
         "SGAMEDATA",
-        "eD2Skills",
         "eD2UnitType",
         "int32_t",
         "uint16_t"

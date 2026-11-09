@@ -632,6 +632,7 @@
         "TEXT_PrintGameString"
       ],
       "usedTypes": [
+        "ChatCommandProcessor_Slotm",
         "D2BNetClientCallbacksStrc",
         "D2ChatPacketBuildStrc",
         "IgnoreList",
@@ -639,8 +640,7 @@
         "WCHAR",
         "eD2GSGameType",
         "int32_t",
-        "uint16_t",
-        "wchar_t"
+        "uint16_t"
       ]
     },
     {

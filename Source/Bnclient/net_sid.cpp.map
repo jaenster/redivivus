@@ -330,6 +330,9 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "Unreferenced_00520c30"
+      ],
+      "usedTypes": [
+        "uint8_t"
       ]
     },
     {

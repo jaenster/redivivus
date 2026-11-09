@@ -1,4 +1,4 @@
-libcmt.lib + libcpmt.lib functions (sp1): 8595, of which our image links 1117
+libcmt.lib + libcpmt.lib functions (sp1): 8595, of which our image links 1118
 original functions the funcmap leaves unpaired: 1434 (160089 bytes)
 paired with a library function: 642 (128969 bytes), of which our image links 602
   lib-exact     493

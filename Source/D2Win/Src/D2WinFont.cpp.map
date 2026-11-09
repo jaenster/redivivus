@@ -201,8 +201,7 @@
       "usedTypes": [
         "D2FontGlyphStrc",
         "WCHAR",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -226,8 +225,7 @@
       "usedTypes": [
         "D2FontGlyphStrc",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ]
     },
     {

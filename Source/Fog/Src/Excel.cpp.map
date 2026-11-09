@@ -340,7 +340,6 @@
         "exit"
       ],
       "usedTypes": [
-        "D2ArchiveStrc",
         "D2BinFieldExcelStrc",
         "int32_t",
         "uint32_t"

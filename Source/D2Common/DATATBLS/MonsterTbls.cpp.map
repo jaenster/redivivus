@@ -218,7 +218,6 @@
         "MONSTERTBLS_GetUpgradeDataByMonStatsId"
       ],
       "usedTypes": [
-        "eD2Skills",
         "int32_t",
         "uint32_t"
       ]

@@ -1187,13 +1187,30 @@
       "calledFunctions": [
         "Skills_SrvDoFunc_058_ReviveCorpseCheck",
         "GetTargetEx",
-        "CorpseConsumedCheck"
+        "CorpseConsumedCheck",
+        "SKILLNEC_ApplyBloodCost",
+        "SKILLNEC_ReviveCorpse",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_CalculateLevelScaledStats",
+        "RANDOM_RandomNumberSelector",
+        "STATLIST_SetUnitStat",
+        "D2ApplyPercent",
+        "SKILLNEC_ApplySummonBuffs",
+        "SKILLNEC_ApplyReviveToCorpse",
+        "D2GetSkillCalc",
+        "SKILL_ResummonPet",
+        "CreateUnitNode",
+        "PATH_UpdateCollisionWidth"
       ],
       "usedTypes": [
+        "D2MonStatsInitStrc",
+        "D2SkillsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {

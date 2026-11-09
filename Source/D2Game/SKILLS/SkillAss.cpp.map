@@ -1585,8 +1585,7 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

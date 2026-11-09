@@ -631,6 +631,7 @@
       ],
       "usedTypes": [
         "D2MissilesTxt",
+        "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
       ]

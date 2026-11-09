@@ -437,7 +437,8 @@
       "calledFunctions": [
         "Q34_SpawnNihlathakPortalTimer",
         "GetQuestDataByQuestNoInternal",
-        "Q34_SpawnNihlathakPortal"
+        "Q34_SpawnNihlathakPortal",
+        "SetEvent"
       ],
       "usedTypes": [
         "D2QuestDataA5Q4Strc",

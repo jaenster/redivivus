@@ -4686,8 +4686,7 @@
         "D2ControlMsg",
         "OnPress",
         "WCHAR",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -4753,8 +4752,7 @@
         "OnPress",
         "WCHAR",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ]
     },
     {

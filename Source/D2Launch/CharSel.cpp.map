@@ -156,6 +156,7 @@
       "usedTypes": [
         "WCHAR",
         "WCHAR[256]",
+        "int32_t",
         "uint32_t"
       ]
     },

@@ -3531,8 +3531,7 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -3566,8 +3565,7 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
