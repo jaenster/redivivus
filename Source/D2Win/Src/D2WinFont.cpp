@@ -38,7 +38,7 @@ void * aFontNames[14] = {
     (void*)(char*)"Font30",
     (void*)(char*)"Font42",
     (void*)(char*)"FontFormal10",
-    (void *)(char*)"FontFormal12",
+    (void*)(char*)"FontFormal12",
     (void*)(char*)"Font6",
     (void*)(char*)"Font24",
     (void*)(char*)"FontFormal11",
