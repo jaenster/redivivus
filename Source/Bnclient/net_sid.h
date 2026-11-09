@@ -156,7 +156,7 @@ BOOL __fastcall NET_SID_CLIENT_WaitForPacketId(uint8_t nPacketId);
 BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t nPacketId);
 void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId);
 uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId);
-int __fastcall Unreferenced_00520c30(int param_1, int param_2);
+int __fastcall Unreferenced_00520c30(uint8_t param_1, int param_2);
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize);
 // SID_CREATEACCOUNT (0x2A) response handler. Legacy account creation result. Receives (DWORD)Status where 0=success, 1=name too short, 2=invalid characters, 3=prohibited word, 4=already exists, 5=still processing. Stores status in global g_dwSIDCreateAccountStatus.
 BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount(char * pBytes, size_t nSize);

@@ -2975,10 +2975,10 @@ void __stdcall INV_FreeBodySlotImages() {
 
 uint8_t Unreferenced_00486ad0() {
     // Static local variables (originally global data)
-    static uint8_t gbInvImageLoadToggle; D2_STATIC_GUARD_BSS(gbInvImageLoadToggle, "D2Client::UI::Inv::Unreferenced_00486ad0::gbInvImageLoadToggle");
+    static bool gbInvImageLoadToggle; D2_STATIC_GUARD_BSS(gbInvImageLoadToggle, "D2Client::UI::Inv::Unreferenced_00486ad0::gbInvImageLoadToggle");
 
-    gbInvImageLoadToggle = gbInvImageLoadToggle == '\0';
-    return (bool)gbInvImageLoadToggle;
+    gbInvImageLoadToggle = !gbInvImageLoadToggle;
+    return gbInvImageLoadToggle;
 }
 
 int32_t __stdcall INV_GetGoldButtonX() {

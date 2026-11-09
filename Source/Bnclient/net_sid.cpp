@@ -314,9 +314,9 @@ uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId) {
     return g_SIDPacketResponseFlags[nPacketId];
 }
 
-int __fastcall Unreferenced_00520c30(int param_1, int param_2) {
-    g_SIDPacketResponseFlags[param_1 & 0xffU] = param_2;
-    return param_1 & 0xffU;
+int __fastcall Unreferenced_00520c30(uint8_t param_1, int param_2) {
+    g_SIDPacketResponseFlags[param_1] = param_2;
+    return (uint32_t)param_1;
 }
 
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize) {

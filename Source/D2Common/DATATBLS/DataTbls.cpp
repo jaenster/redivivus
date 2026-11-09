@@ -353,9 +353,9 @@ D2AnimDataStrc * __stdcall TXT_AnimTbls_Get() {
 }
 
 D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(int32_t nDifficulty) {
-    DWORD nIndex = nDifficulty <= 0 ? 0 : nDifficulty;
-    if ((int)nIndex >= (int)(MonsterTbls::sgtDataTable.nTxtDifficultyLevelsSize - 1U)) {
-      nIndex = MonsterTbls::sgtDataTable.nTxtDifficultyLevelsSize - 1U;
+    int nIndex = nDifficulty <= 0 ? 0 : nDifficulty;
+    if (nIndex >= MonsterTbls::sgtDataTable.nTxtDifficultyLevelsSize - 1) {
+      nIndex = MonsterTbls::sgtDataTable.nTxtDifficultyLevelsSize - 1;
     }
 
     return MonsterTbls::sgtDataTable.pTxtDifficultyLevels + nIndex;
