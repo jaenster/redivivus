@@ -1066,8 +1066,8 @@ D2UnitStrc * __fastcall SpawnMonsterInRoomCoordList(::SGAMEDATA * pGame, D2RoomS
     sMonsterSpawnData.nClassId = nClassId;
     sMonsterSpawnData.eMode = eMode;
     sMonsterSpawnData.pRoom = pRoom;
-    sMonsterSpawnData.pGame = pGame;
     sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+    sMonsterSpawnData.pGame = pGame;
     sMonsterSpawnData.pCoordList = pCoordList;
     sMonsterSpawnData.nFlags = nFlags;
     sMonsterSpawnData.nGUID = 0;

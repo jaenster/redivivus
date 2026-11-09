@@ -1160,8 +1160,7 @@ void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {
     BOOL bShowTooltips = 0;
     BOOL bWeaponSwap = 0;
     gSpellSelGridRegion.sGridIndex[0] = 0;
-    int nGridStartX = ui::ScreenSizeX - 0x80;
-    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
 void __stdcall Unreferenced_004aa6e0() {
@@ -1180,8 +1179,7 @@ void __stdcall Unreferenced_004aa710() {
     BOOL bChargedOnly = 0;
     BOOL bShowTooltips = 1;
     BOOL bWeaponSwap = 0;
-    int nGridStartX = ui::ScreenSizeX - 0x80;
-    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nGridStartX, bWeaponSwap, bShowTooltips, bChargedOnly);
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
 void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nSteps) {
@@ -1279,16 +1277,16 @@ void __stdcall SPELLSEL_ClearWaitingForSkillFlag() {
 
 int __stdcall SPELLSEL_IsWaitingForSkill() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    if (!pUnit) {
+    if (pUnit) {
+      BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
+      if (!eState) {
+        return BooleanWaitingForSkillingMaybe;
+      }
+
+      return 1;
+    } else {
       return BooleanWaitingForSkillingMaybe;
     }
-
-    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (!eState) {
-      return BooleanWaitingForSkillingMaybe;
-    }
-
-    return 1;
 }
 
 void __stdcall ARCHIVE_LoadSpellsClassSkilltree() {

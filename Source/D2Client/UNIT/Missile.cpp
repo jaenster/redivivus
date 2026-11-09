@@ -1717,7 +1717,7 @@ void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUni
       }
     }
 
-    uint32_t nModulo = 4;
+    int nModulo = 4;
     if (nLevel < 3) {
       nModulo = 1;
     } else if (nLevel < 6) {

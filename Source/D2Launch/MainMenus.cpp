@@ -7806,12 +7806,12 @@ BOOL __stdcall UIMENU_ConnectToServerCallback(D2ControlStrc * pUnusedArg) {
     int nParsed = sscanf(acStack_414, "%d.%d.%d.%d", &nOctet1, &nOctet2, &nOctet3, &nOctet4);
     if (nParsed != 4) {
       pszResolvedIp = Fog::Src::Safesock::inet_nameToIp(acStack_414);
-      if (!pszResolvedIp) {
+      if (pszResolvedIp) {
+        strcpy(acStack_414, pszResolvedIp);
+      } else {
         D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpMainMenuFormPtrs, "");
         return 1;
       }
-
-      strcpy(acStack_414, pszResolvedIp);
     }
 
     pszResolvedIp = acStack_414;

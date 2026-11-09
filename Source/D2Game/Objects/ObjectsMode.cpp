@@ -1231,7 +1231,10 @@ uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUn
     BOOL _bIsAlly;
     bool bIsAlly;
     bool bIsDead;
-    if (!(pUnit != pUnit2 && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
+    if (pUnit == pUnit2) {
+      return 0;
+    }
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

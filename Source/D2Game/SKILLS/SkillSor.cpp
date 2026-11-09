@@ -765,7 +765,6 @@ void __fastcall BlazePath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
     eD2Skills eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
     int nSkillLvlSaved = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
-    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     if (!((int)eSkill > 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return;
     }
@@ -779,7 +778,7 @@ void __fastcall BlazePath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     eMissilesId eSrvMissileId = (eMissilesId)pSkillTxt->srvmissile[1];
-    if (!((int)eSrvMissileId >= 0 && (int)eSrvMissileId < pDataTable->nTxtMissilesSize)) {
+    if (!((int)eSrvMissileId >= 0 && (int)eSrvMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
     }
 

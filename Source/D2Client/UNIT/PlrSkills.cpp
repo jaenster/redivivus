@@ -848,7 +848,7 @@ void __fastcall PLRSKILLS_StateRemFn11_StackOverlay(D2UnitStrc * pUnit, eD2State
       return;
     }
 
-    short int nOverlayMax = pDVar1->overlay[1];
+    int nOverlayMax = pDVar1->overlay[1];
     int nOverlayIdx = (int)pDVar1->overlay[0];
     if (nOverlayIdx >= 0) {
       for (; nOverlayIdx <= nOverlayMax; nOverlayIdx++) {

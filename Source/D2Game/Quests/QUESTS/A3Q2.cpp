@@ -150,8 +150,8 @@ bool __fastcall Q19_SequenceFilter(D2QuestDataStrc * pQuestData) {
 static void __fastcall Q19_SendQuestStatePacket(uint8_t bStateByte, D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2GSPacketSrv0x5D aPacketFrame;
     memset(&aPacketFrame, 0, sizeof(aPacketFrame));
-    aPacketFrame.nFilterStatus = bStateByte;
     aPacketFrame.nAlertFlags = pQuestData->nQuestPacketFlags;
+    aPacketFrame.nFilterStatus = bStateByte;
     aPacketFrame.nPacketId = ']';
     aPacketFrame.nQuestId = '\x10';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pQuestArgs->pPlayer, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q2.cpp", 0x238);

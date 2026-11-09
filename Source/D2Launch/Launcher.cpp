@@ -526,8 +526,8 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
 
 static void __fastcall LAUNCHER_ShowOogErrorDialog_ForEnterEmail(eOogErrorCode eErrorCode, void * pCustomData) {
     D2OogErrorDataStrc sErrorData;
-    sErrorData.pCustomData = pCustomData;
     sErrorData.eErrorCode = eErrorCode;
+    sErrorData.pCustomData = pCustomData;
     ShowOogErrorDialog(&sErrorData);
 }
 

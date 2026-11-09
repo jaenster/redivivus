@@ -1052,9 +1052,9 @@ void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2Pool
 // Spawns repeated object presets (class 0x41) along a vertical line in world coords from start to end, spaced by 0x28. Prepends each to pMap->pPresetUnit and marks flag bit 0x1.
 static void CreateObjectPresets(int nWorldX, int nWorldY, D2DrlgMapStrc * pMap, D2PoolManagerStrc * pMemory) {
     int32_t worldYStart = 0;
-    int worldYEnd = pMap->pDrlgFile->nHeight + nWorldY;
     int worldX = nWorldX;
     int worldY = nWorldY;
+    int worldYEnd = pMap->pDrlgFile->nHeight + nWorldY;
     Transform::CoordsRoomToWorld(&worldX, &worldY);
     Transform::CoordsRoomToWorld(&worldYStart, &worldYEnd);
     while (worldY < worldYEnd) {

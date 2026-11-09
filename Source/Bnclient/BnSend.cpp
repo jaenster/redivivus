@@ -2558,7 +2558,6 @@ int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCal
     g_pfnNewsChannelCallback = 1;
     g_pfnMotdCallback = pfnMotdCallback;
     g_pfnNewsCallback = pfnNewsCallback;
-    uint32_t dwTimestampPacket = (uint32_t)pfnMotdCallback;
     if (g_nNewsMaxCacheSize.pEntries) {
       Storm::Source::SMem::SMemFree(g_nNewsMaxCacheSize.pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
     }
@@ -2573,7 +2572,7 @@ int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCal
       BNNEWS_InvokeCallbacks();
     }
 
-    dwTimestampPacket = g_dwNewsTimestamp;
+    uint32_t dwTimestampPacket = g_dwNewsTimestamp;
     NET_SID_CLIENT_Send(0x46, (char*)&dwTimestampPacket, 4);
     return 1;
 }
@@ -3028,8 +3027,8 @@ static int32_t __stdcall BNSEND_PrepareCDKeyHash(uint32_t nToken, uint32_t nServ
           aCDKeyHashInput[3] = nPublic2;
           aCDKeyHashInput[4] = 0;
           pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
-          pOutHash->nKeyLength = pKeyLenPtr;
           pOutHash->nProduct = aCDKeyHashInput[3];
+          pOutHash->nKeyLength = pKeyLenPtr;
           pOutHash->nUnused = aCDKeyHashInput[4];
           pOutHash->nPublic = aCDKeyHashInput[2];
           _net_sid::XSHA1((D2XSHA1Strc*)pOutHash->abHash, (char*)aCDKeyHashInput, 0x18);

@@ -42,12 +42,10 @@ void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, int32_t nStateId, int32_t b
     if (!(pGfxFlags && nStateId >= 0 && nStateId < ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
-
-    uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + (nStateId >> 5));
     if (bSet) {
-      *pFlagWord |= Fog::BitBuffer::gadwBitMasks[nStateId & 0x1fU];
+      *(uint32_t*)(pGfxFlags + (nStateId >> 5)) |= Fog::BitBuffer::gadwBitMasks[nStateId & 0x1fU];
     } else {
-      *pFlagWord &= Fog::BitBuffer::gadwInvBitMasks[nStateId & 0x1fU];
+      *(uint32_t*)(pGfxFlags + (nStateId >> 5)) &= Fog::BitBuffer::gadwInvBitMasks[nStateId & 0x1fU];
     }
 
     Unit::ROOM_LinkUnitToUpdateList(pUnit);

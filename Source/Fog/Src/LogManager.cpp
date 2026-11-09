@@ -1265,7 +1265,7 @@ char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, i
 
 // Writes one log record to its log file, prefixed with the record's time of day.
 void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
-    D2LogRecordStrc* nSlot = pLogRecord;
+    D2LogRecordStrc* nSlot;
     if (pLogRecord->nType != 1) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x2a1);
       exit(-1);

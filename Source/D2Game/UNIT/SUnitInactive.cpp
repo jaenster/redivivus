@@ -232,11 +232,11 @@ static void SUNITINACTIVE_RemoveInactiveMonsterByClassId(uint8_t byActNo, ::SGAM
           if (pCurMonster->nClassId == (uint32_t)nClassId) {
             if (pCurMonster == pInactiveList->pInactiveMonsters) {
               pInactiveList->pInactiveMonsters = pCurMonster->pNext;
+              Ai::AiGeneral::ClearMinionList(pGame, pCurMonster->pMinionList);
             } else {
               pPrevMonster->pNext = pCurMonster->pNext;
+              Ai::AiGeneral::ClearMinionList(pGame, pCurMonster->pMinionList);
             }
-
-            Ai::AiGeneral::ClearMinionList(pGame, pCurMonster->pMinionList);
             if (pCurMonster->pAiGeneral) {
               D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pCurMonster->pAiGeneral);
             }

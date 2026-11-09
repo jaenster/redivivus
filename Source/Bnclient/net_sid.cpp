@@ -1306,7 +1306,7 @@ void __stdcall NET_SID_CLIENT_FreeSRP() {
 }
 
 int Unreferenced_00521ba0() {
-    uint32_t uVar3;
+    uint16_t uVar3;
     HMODULE hModule = LoadLibraryA("kernel32.dll");
     if (hModule) {
       FARPROC pFVar2;
@@ -1314,7 +1314,7 @@ int Unreferenced_00521ba0() {
       if (pFVar2) {
         uVar3 = (*pFVar2)();
         FreeLibrary(hModule);
-        return (uint16_t)uVar3;
+        return uVar3;
       }
 
       FreeLibrary(hModule);
@@ -2464,7 +2464,7 @@ static int32_t NET_SID_CLIENT_DecodeAndValidateBuffer(int * pnData, uint32_t nDa
 
 static uint32_t * NET_SID_CLIENT_LoadAndDecodeCDKeyFile(uint32_t * szFileName, DWORD * pdwFileSize) {
     *pdwFileSize = 0x400;
-    uint32_t* pLoadedKeyBuf = szFileName;
+    uint32_t* pLoadedKeyBuf;
     Storm::Source::SFile::SFileLoadFile((char*)szFileName, (void**)&pLoadedKeyBuf, pdwFileSize, 1, (LPOVERLAPPED)0x0);
     if (!(pLoadedKeyBuf && *pdwFileSize)) {
       return nullptr;

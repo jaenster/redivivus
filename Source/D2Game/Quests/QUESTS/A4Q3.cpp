@@ -571,6 +571,7 @@ void __fastcall Q28_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     BOOL bRewardAwaits = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
     if (bRewardAwaits) {
       nGossipMsgIdx = 2;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipMsgIdx);
     } else {
       D2UnitStrc* pQuestItem;
       if (!pQuestArgs->pPlayer) {
@@ -630,9 +631,8 @@ void __fastcall Q28_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       }
 
       nGossipMsgIdx = 1;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipMsgIdx);
     }
-
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipMsgIdx);
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_02 (state-handler slot 2): on Cain (monstats 0xf6) interaction, if the quest was accepted (bForgeQuestAccepted): broadcast internal state 4 if hammer already obtained else 1, clear bForgeQuestAccepted+eFlags, null out the slot-2 handler (one-shot), and re-sync all players via Q28_PlayerUpdateForgeState.

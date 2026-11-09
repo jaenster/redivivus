@@ -1760,8 +1760,8 @@ int __stdcall CHATDLG_PollUserProfileReply(int nFrameIndex) {
 uint32_t __fastcall CHATDLG_SendProfileData(char * szAccount, char * szSex, char * szLocation, char * szDescription) {
     char* aszProfileValues[3];
     aszProfileValues[1] = szLocation;
-    aszProfileValues[2] = szDescription;
     aszProfileValues[0] = szSex;
+    aszProfileValues[2] = szDescription;
     uint32_t nResult = pNetworkUnknown->pfnSendWriteUserData(szAccount, 3, gaszChatDlgProfileKeys, aszProfileValues);
     return nResult;
 }
@@ -2644,8 +2644,8 @@ BOOL __stdcall CHATDLG_OnPressLadderExpansionHardcore(D2ControlMsg * pControlMsg
 // Provenance: asm 00440ca0..00440d01; key strings at 006d4ee0, 006d4ecc, 006d4eb8.
 uint32_t __fastcall CHATDLG_ReadUserProfile(char * szAccount, char * szSex, char * szLocation, char * szDescription) {
     gapszProfileReadBuffers[1] = szLocation;
-    gapszProfileReadBuffers[2] = szDescription;
     gapszProfileReadBuffers[0] = szSex;
+    gapszProfileReadBuffers[2] = szDescription;
     pNetworkUnknown->pfnSendReadUserData(szAccount, 3, 1, gaszChatDlgProfileKeys);
     gbChatOptionButtonState = 0;
     uint16_t* pwszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x147b);

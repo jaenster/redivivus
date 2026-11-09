@@ -243,26 +243,22 @@ void __fastcall ClearStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    int32_t nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_strength, 0);
-    nStatDelta = (uint32_t)pCharStats->str - nCurrentStat;
+    nStatDelta = (uint32_t)pCharStats->str - D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_strength, 0);
     if (nStatDelta) {
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, -nStatDelta, 0);
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_strength, nStatDelta, 0);
       D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
     }
 
-    nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_energy, 0);
-    PLAYER_AddEnergyStatPoints(pUnit, (uint32_t)pCharStats->_int - nCurrentStat);
-    nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_dexterity, 0);
-    nStatDelta = (uint32_t)pCharStats->dex - nCurrentStat;
+    PLAYER_AddEnergyStatPoints(pUnit, (uint32_t)pCharStats->_int - D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_energy, 0));
+    nStatDelta = (uint32_t)pCharStats->dex - D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_dexterity, 0);
     if (nStatDelta) {
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, -nStatDelta, 0);
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_dexterity, nStatDelta, 0);
       D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
     }
 
-    nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_vitality, 0);
-    PLAYER_AddVitalityStatPoints((uint32_t)pCharStats->vit - nCurrentStat, pUnit);
+    PLAYER_AddVitalityStatPoints((uint32_t)pCharStats->vit - D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_vitality, 0), pUnit);
 }
 
 BOOL __fastcall PLAYER_AssignStatPoint(D2UnitStrc * pUnit, uint32_t eStatType) {

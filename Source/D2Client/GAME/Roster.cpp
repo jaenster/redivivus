@@ -1282,16 +1282,15 @@ void __fastcall FreeAllRosterPlayer(int32_t nOwnerGUID, int32_t nRosterGUID) {
 
 BOOL __fastcall ROSTER_CheckPlayerCanLoot(int32_t nLooterGUID, int32_t nOwnerGUID) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nOwnerGUID);
-    if (!pRoster) {
-      return 0;
-    }
-    if (nLooterGUID == pRoster->nRosterGUID) {
-      return 1;
-    }
+    if (pRoster) {
+      if (nLooterGUID == pRoster->nRosterGUID) {
+        return 1;
+      }
 
-    uint32_t bCanLoot = UNIT::PlayerList::GetFlag(pRoster->nRosterGUID, nLooterGUID, 1);
-    if (bCanLoot) {
-      return 1;
+      uint32_t bCanLoot = UNIT::PlayerList::GetFlag(pRoster->nRosterGUID, nLooterGUID, 1);
+      if (bCanLoot) {
+        return 1;
+      }
     }
 
     return 0;

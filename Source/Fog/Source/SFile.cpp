@@ -24,8 +24,8 @@ void __fastcall SFILE_InitializeFileSystem(BOOL bResult, BOOL bSeekOptimization)
     Storm::Source::SFile::SFileEnableDirectAccess(bResult);
     Storm::Source::SFile::SFileSetIoErrorMode(0, nullptr);
     Storm::Source::SFile::SFileEnableSeekOptimization(bSeekOptimization);
-    dwSysOptionBuf[0] = 0x8000;
     D2Ini_bUseDirect = bResult;
+    dwSysOptionBuf[0] = 0x8000;
     Storm::Source::SSystem::SSYSTEM_SetSystemOption(2, dwSysOptionBuf, 4);
     dwSysOptionBuf[1] = 1;
     Storm::Source::SSystem::SSYSTEM_SetSystemOption(1, dwSysOptionBuf + 1, 4);

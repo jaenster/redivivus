@@ -2705,8 +2705,8 @@ int __fastcall Unreferenced_0049dac0(uint8_t * param_1) {
 int __fastcall Unreferenced_0049dae0(D2TextBoxStrc * param_1, D2CoordStrc * param_2) {
     int iVar2;
     uint16_t uVar1 = param_1->nWidth;
-    param_2->nY += -0x32;
     param_2->nX -= (uint32_t)(uVar1 >> 1);
+    param_2->nY += -0x32;
     iVar2 = param_2->nY + param_1->nLineCount * -0xf - 3;
     param_2->nY = iVar2;
     return iVar2;

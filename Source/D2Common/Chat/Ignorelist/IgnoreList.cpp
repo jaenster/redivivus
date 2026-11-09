@@ -349,12 +349,13 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
         if (szLineBuf[0] == '!' && szLineBuf[1] != '\0') {
           pszLine = szLineBuf + 1;
           pHashTable = &pThis->tIgnoredAccounts;
+          pHashTable->New(pszLine, 0, 0);
         } else {
           pszLine = szLineBuf;
           pHashTable = &pThis->tIgnoredPatterns;
+          pHashTable->New(pszLine, 0, 0);
         }
 
-        pHashTable->New(pszLine, 0, 0);
         pszLine = fgets(szLineBuf, 0x100, pFile);
       }
 

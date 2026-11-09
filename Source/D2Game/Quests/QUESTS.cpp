@@ -2144,8 +2144,7 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2Unit
 
 D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique) {
     int32_t nMonstatClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetPresetActValue(nAct, nSuperUnique);
-    LONG nY = pPoint->y;
-    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pPoint->x, nY);
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pPoint->x, pPoint->y);
     if (pRoom) {
       D2UnitStrc* pSpawnedMonster;
       pSpawnedMonster = Monsters::Spawn::SpawnMonster(pGame, pRoom, nMonstatClassId, pPoint->x, pPoint->y, 1);
@@ -3212,8 +3211,8 @@ void __fastcall PlaceJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pO
     }
 
     nSpawnX.x = pObjectInitArg->nX;
-    nSpawnX.y = pObjectInitArg->nY;
     D2RoomStrc* pSpawnRoom = pObjectInitArg->pRoom;
+    nSpawnX.y = pObjectInitArg->nY;
     FindSpawnableLocation(pSpawnRoom, &nSpawnX, 2, 0x100, &pSpawnRoom, 10, 100);
     D2UnitStrc* pSevenTombsData = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, pSpawnRoom, nSpawnX.x, nSpawnX.y, 0xc9, eD2MonsterAnimMode_ns::Neutral, -1, 0);
     if (!pSevenTombsData) {

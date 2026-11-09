@@ -1801,8 +1801,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x60_SETWARPDEST(D2ClientStrc * pClient, D2
     D2GSPacketSrv0x60 aPacket;
     aPacket.nPacketId = '`';
     aPacket.nPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
-    aPacket.dwUnitGUID = pUnit->nUnitGUID;
     aPacket.nParam2 = pUnit->pUnitData.pUnitDataMonster->Components[0];
+    aPacket.dwUnitGUID = pUnit->nUnitGUID;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 7, pClient);
 }
 

@@ -104,13 +104,12 @@ static void EVENT_RemoveAndRecycleTimer(D2TimerStrc * pTimer, ::SGAMEDATA * pGam
     D2TimerStrc** ppBucket;
     uint32_t nFrame;
     uint16_t nFlags = pTimer->nFlags;
-    D2TimerQueueStrc* pEventControl = pGame->pTimerQueue;
     if (nFlags & 1) {
       pTimer->nFlags = nFlags | 8;
       return;
     }
-    if (pTimer == pEventControl->pTimerTemp) {
-      pEventControl->pTimerTemp = pTimer->pNextTimerList;
+    if (pTimer == pGame->pTimerQueue->pTimerTemp) {
+      pGame->pTimerQueue->pTimerTemp = pTimer->pNextTimerList;
     }
     if (pTimer->pPrevTimerList) {
       pTimer->pPrevTimerList->pNextTimerList = pTimer->pNextTimerList;
@@ -147,7 +146,7 @@ static void EVENT_RemoveAndRecycleTimer(D2TimerStrc * pTimer, ::SGAMEDATA * pGam
       }
     }
 
-    D2TimerListStrc* pDVar1 = pEventControl->pTimerList;
+    D2TimerListStrc* pDVar1 = pGame->pTimerQueue->pTimerList;
     pTimer->pNextTimerList = pDVar1->pFirstList;
     pTimer->pPrevTimerList = 0;
     pDVar1->pFirstList = pTimer;

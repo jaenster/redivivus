@@ -100,7 +100,25 @@ namespace D2Client::UI::Waypoint {
 
 static int32_t WAYPOINT_GetActIndexFromMouse(int32_t nMouseX, int32_t nMouseY) {
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (!bIsExpansion || (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , !bIsExpansion)) {
+    if (!(!bIsExpansion || (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , !bIsExpansion))) {
+      if (nMouseY > 0x1e) {
+        return -1;
+      }
+      if (nMouseX > 0x140) {
+        return -1;
+      }
+      if (nMouseX < 0x40) {
+        return 0;
+      }
+      if (nMouseX < 0x80) {
+        return 1;
+      }
+      if (nMouseX < 0xc0) {
+        return 2;
+      }
+
+      return nMouseX >= 0x100 ? 4 : 3;
+    } else {
       if (nMouseY > 0x1e || nMouseX > 0x140) {
         return -1;
       }
@@ -113,23 +131,6 @@ static int32_t WAYPOINT_GetActIndexFromMouse(int32_t nMouseX, int32_t nMouseY) {
 
       return nMouseX >= 0xf0 ? 3 : 2;
     }
-    if (nMouseY > 0x1e) {
-      return -1;
-    }
-    if (nMouseX > 0x140) {
-      return -1;
-    }
-    if (nMouseX < 0x40) {
-      return 0;
-    }
-    if (nMouseX < 0x80) {
-      return 1;
-    }
-    if (nMouseX < 0xc0) {
-      return 2;
-    }
-
-    return nMouseX >= 0x100 ? 4 : 3;
 }
 
 static int32_t WAYPOINT_GetWaypointIndexFromMouse(int32_t nMouseX, int32_t nMouseY) {

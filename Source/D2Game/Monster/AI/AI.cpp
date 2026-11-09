@@ -2067,12 +2067,13 @@ int __fastcall Unreferenced_005dc840(D2UnitStrc * param_1) {
       eD2UnitType eVar1;
       eVar1 = param_1->eUnitType;
       if ((int)eVar1 >= 0) {
-        if ((int)eVar1 <= 1) {
+        if ((int)eVar1 > 1) {
+          if (eVar1 == UNIT_MISSILE) {
+            return 1;
+          }
+        } else {
           BVar2 = UNIT::SUnit::CheckForModeZeroDeath(param_1);
           return (uint32_t)!BVar2;
-        }
-        if (eVar1 == UNIT_MISSILE) {
-          return 1;
         }
       }
     }
@@ -2408,7 +2409,10 @@ int __fastcall AI_ForEachFn09_FindOwnMinionCorpse(uint32_t pGame, D2UnitStrc * p
 uint32_t __fastcall AI_ForEachFn12_CountClassInRange(uint32_t pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2AiClassCountScanStrc * pScan) {
     BOOL _bIsDead;
     bool bIsDead;
-    if (!((pOther ? pOther->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pOther->nClassId == pScan->nClassId)) {
+    if ((pOther ? pOther->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 0;
+    }
+    if (pOther->nClassId != pScan->nClassId) {
       return 0;
     }
 
@@ -6459,8 +6463,8 @@ void __fastcall AITHINK_Fn1_MinionSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUni
       short int nCooldown;
       nCooldown = pMonStats->aip[2][pGame->nDifficulty];
       nGameFrame = pGame->dwGameFrame;
-      pAiGeneral->dwArg1++;
       pAiGeneral->dwArg0 = nCooldown + nGameFrame;
+      pAiGeneral->dwArg1++;
       SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pAttacker, 0, 0);
       return;
     }
@@ -14990,13 +14994,10 @@ void __fastcall BaalThroneClearFunc(D2UnitStrc * pUnit, int32_t nMonsterPresetId
     }
 
     SERVER_UNIT_CastSkill(pGame, pUnit, 10, SKILL_BaalMonsterSpawn, nullptr, nErrorCode, nPosY + 0xd);
-    int* pWaveArg = &pAiParam->pMonsterAiGeneral->dwArg0;
-    (*pWaveArg)++;
+    pAiParam->pMonsterAiGeneral->dwArg0++;
     pAiParam->pMonsterAiGeneral->dwArg2 = pGame->dwGameFrame + 100;
-    pWaveArg = &pAiParam->pMonsterAiGeneral->dwArg1;
-    *pWaveArg |= 2;
-    pWaveArg = &pAiParam->pMonsterAiGeneral->dwArg1;
-    *pWaveArg &= -2;
+    pAiParam->pMonsterAiGeneral->dwArg1 |= 2;
+    pAiParam->pMonsterAiGeneral->dwArg1 &= -2;
 }
 
 void __fastcall AITHINK_Fn0_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
@@ -15296,9 +15297,9 @@ uint32_t __fastcall MONSTERAI_FindEnergyMonster(uint32_t dwUnused, D2UnitStrc * 
 
 void __fastcall AITHINK_Fn1_PutridDefiler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sEnergySearchParams;
-    int nDistanceToTarget = pAiParam->nDistanceToTarget;
     D2UnitStrc* pCachedTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    int nDistanceToTarget = pAiParam->nDistanceToTarget;
     if (pCachedTarget && pAiParam->bEngagedInCombat) {
       AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pCachedTarget);
       return;
@@ -16194,6 +16195,8 @@ void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
         AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
         return;
       }
+
+      PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][nDifficulty]);
     } else {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
@@ -16202,9 +16205,9 @@ void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
         MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
         return;
       }
-    }
 
-    PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][nDifficulty]);
+      PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][nDifficulty]);
+    }
 }
 
 // Unit-iteration callback used to locate a dead Fallen corpse eligible for revival by a Fallen Shaman. Accepts pCandidate if: it is a different monster unit; its base MonStats ID is 0x13 (Fallen) or 0x3A (Carver); alignment is neutral (0) and the corpse-dead flag (eUnitFlags bit 1) is set; has no passive or light state active; is in death animation mode (Kick); and is within the search radius stored in pOutResult[3]. On match, stores candidate in pOutResult[0], distance in pOutResult[2], and increments count at pOutResult[1].
@@ -16748,6 +16751,8 @@ void __fastcall AITHINK_Fn1_Swarm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
         return;
       }
+
+      PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][nSeedHighScratch]);
     } else {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
@@ -16756,9 +16761,9 @@ void __fastcall AITHINK_Fn1_Swarm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
         return;
       }
-    }
 
-    PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][nSeedHighScratch]);
+      PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][nSeedHighScratch]);
+    }
 }
 
 // Per-tick AI think handler (Function1) for the Scarab / Beetle monster family. If carrying a CmdId==1 minion-spawn command (created via CreateMinion when an unowned scarab rolls under its TreasureClass-based spawn chance), it either casts Skill1 when engaged or walks to the target. Otherwise runs the standard approach/skill loop: when not in combat it approaches the target (dwArg0 state toggles walk vs. charge); when engaged it rolls per-difficulty MonStats chances to retreat (PlanNextAiMove), cast Skill1 (SERVER_UNIT_CastSkill via Sk1mode), or end the think via CalledOnEndAiFunction1 (mode 4/5). Uses the unit seed LCG for all probability rolls. Side effects: mutates pUnit->sSeed, AiGeneral->dwArg0, issues walk/cast commands.
@@ -19190,6 +19195,8 @@ void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, D2UnitStrc * pUn
         SetCombatStateAndApproachTarget(pGame, pUnit, pTarget, 2, 0);
         return;
       }
+
+      PlanNextAiMove(pGame, pUnit, (int)nMonStatsBase->aip[2][nSeedLowScratch]);
     } else {
       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = sNewSeed;
@@ -19205,9 +19212,9 @@ void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, D2UnitStrc * pUn
         MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
         return;
       }
-    }
 
-    PlanNextAiMove(pGame, pUnit, (int)nMonStatsBase->aip[2][nSeedLowScratch]);
+      PlanNextAiMove(pGame, pUnit, (int)nMonStatsBase->aip[2][nSeedLowScratch]);
+    }
 }
 
 int __fastcall Unreferenced_005f6e20(uint8_t * param_1) {
@@ -21480,8 +21487,8 @@ void __fastcall AI_Fn1_AbyssKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2SeedStrc* pSeed = &pUnit->sSeed;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     int32_t nHpPct = D2Common::Units::GetCurrentLifePercentage(pUnit);
     if (pMonStats->aSkill[1] >= 0) {
       int nAuraSkillId;

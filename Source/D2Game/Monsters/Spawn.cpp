@@ -1016,7 +1016,7 @@ static void __stdcall MONSTER_InitWanderingMonsterRegion(D2MonsterRegionStrc * p
 }
 
 static void __stdcall MONSTER_InitWanderingForLevel(::SGAMEDATA * pGame, eD2LevelId eLevel, D2RoomStrc * pRoom, D2LevelsTxt * pLevelsTxt) {
-    D2SeedStrc* pRoomSeed = !pRoom ? 0 : &pRoom->sSeed;
+    D2SeedStrc* pRoomSeed = pRoom ? &pRoom->sSeed : 0;
     D2SeedStrc seedRolled = D2_SEED_NEXT(*pRoomSeed);
     *pRoomSeed = seedRolled;
     if ((int)(seedRolled.nSeedLow % 100) >= 3) {

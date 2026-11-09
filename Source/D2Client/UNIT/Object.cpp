@@ -911,7 +911,7 @@ static void __stdcall OBJECT_PlayShrineSound(D2UnitStrc * pUnit, D2UnitStrc * pS
 // Server-side shrine/well activation dispatch: looks up D2ShrinesTxt.nCode or D2ObjectsTxt.ShrineFunction, finds the activating player, calls fpServerActivate callback, then plays activation sound
 static void __stdcall OBJECT_DispatchShrineServerActivate(int * pMessage, D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectsTxt;
-    uint8_t byShrineCode;
+    int byShrineCode;
     D2ShrinesTxt* pShrinesTxt = 0;
     BOOL bIsShrine = D2Common::Units::IsShrine(pUnit);
     if (bIsShrine) {

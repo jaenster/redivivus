@@ -120,13 +120,11 @@ BOOL __fastcall Q04_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (!pPlayerData) {
       return 0;
     }
-
-    uint8_t nStateFlag = pPlayerData->nStateFlag;
-    if (nStateFlag == 2) {
+    if (pPlayerData->nStateFlag == 2) {
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x02);
       return 0;
     }
-    if (nStateFlag >= 3 && nStateFlag <= 5) {
+    if (pPlayerData->nStateFlag >= 3 && pPlayerData->nStateFlag <= 5) {
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x03);
     }
 

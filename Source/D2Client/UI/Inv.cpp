@@ -2400,8 +2400,7 @@ static void AppendQuanity(uint16_t * wszText, D2UnitStrc * pUnit) {
       }
     }
 
-    uint16_t* pwQuantityString = D2Lang::StrTable::strtable::GetLocaleString(0xd86);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwQuantityString);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, D2Lang::StrTable::strtable::GetLocaleString(0xd86));
     nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
     Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 10, "%ld", nQuantity);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);

@@ -183,14 +183,14 @@ int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClient
       pModCheck = SHA::SHA1_BigIntFromUnsigned(0);
       SHA::SHA1_BigIntAddValue(pModCheck, pSharedBase, 1);
       nCmpResult = SHA::SHA1_CompareBigInt(pModCheck, pThis->pModulusN);
-      if (nCmpResult) {
+      if (!nCmpResult) {
+        SHA::SHA1_BigIntFree(pModCheck);
+      } else {
         SHA::SHA1_BigIntFree(pModCheck);
         SHA::SHA1_BigIntPowMod(*ppSharedSecret, pSharedBase, *ppPrivateKey, pThis->pModulusN);
         SHA::SHA1_BigIntFree(pSharedBase);
         return 1;
       }
-
-      SHA::SHA1_BigIntFree(pModCheck);
     }
 
     SHA::SHA1_BigIntFree(pSharedBase);

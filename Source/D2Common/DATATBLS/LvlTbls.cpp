@@ -738,19 +738,17 @@ D2LvlPrestTxt * __stdcall TXT_LvlPrest_GetLine(int32_t nLvlPrestId) {
 
 D2LvlPrestTxt * __fastcall TXT_LvlPrest_FindLineByLevelId(eD2LevelId eLevel) {
     int i = 0;
-    if (ITEMS::Items::sgptDataTable->nTxtLvlPrestSize <= 0) {
-      return nullptr;
+    if (ITEMS::Items::sgptDataTable->nTxtLvlPrestSize > 0) {
+      eD2LevelId* pLevelIdField = &MonsterTbls::sgtDataTable.pTxtLvlPrest->LevelId;
+      do {
+        if (*pLevelIdField == eLevel) {
+          return MonsterTbls::sgtDataTable.pTxtLvlPrest + i;
+        }
+
+        i++;
+        pLevelIdField += 0x6c;
+      } while (i < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize);
     }
-
-    eD2LevelId* pLevelIdField = &MonsterTbls::sgtDataTable.pTxtLvlPrest->LevelId;
-    do {
-      if (*pLevelIdField == eLevel) {
-        return MonsterTbls::sgtDataTable.pTxtLvlPrest + i;
-      }
-
-      i++;
-      pLevelIdField += 0x6c;
-    } while (i < ITEMS::Items::sgptDataTable->nTxtLvlPrestSize);
 
     return nullptr;
 }

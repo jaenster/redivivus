@@ -364,26 +364,26 @@ static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSoc
     }
 
     while (true) {
-      if (nOffset >= nTotalSize) {
+      if (nOffset < nTotalSize) {
+        len = nTotalSize - nOffset;
+        if (len > 0x5b4) {
+          len = 0x5b4;
+        }
+
+        /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nNumberOfBytesToWrite = recv(hSocket, szRecvChunk, len, 0);
+        if (nNumberOfBytesToWrite == -1 || (int)nNumberOfBytesToWrite <= 0 || gbBnetDownloadCancelFlag) {
+          break;
+        }
+
+        Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)szRecvChunk, nNumberOfBytesToWrite, &nBytesWritten, (LPOVERLAPPED)0x0);
+        /* FILETIME * lpLastWriteTime for SetFileTime */ /* FILETIME * lpLastAccessTime for SetFileTime */ /* FILETIME * lpCreationTime for SetFileTime */ /* HANDLE hFile for SetFileTime */ SetFileTime(hFile, pFileTime, pFileTime, pFileTime);
+        nOffset += nNumberOfBytesToWrite;
+        if (nProgressMode == -0x7ffffffe) {
+          gnNetworkSendState = nOffset * 100 / nTotalSize;
+        }
+      } else {
         Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
         return 1;
-      }
-
-      len = nTotalSize - nOffset;
-      if (len > 0x5b4) {
-        len = 0x5b4;
-      }
-
-      /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nNumberOfBytesToWrite = recv(hSocket, szRecvChunk, len, 0);
-      if (nNumberOfBytesToWrite == -1 || (int)nNumberOfBytesToWrite <= 0 || gbBnetDownloadCancelFlag) {
-        break;
-      }
-
-      Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)szRecvChunk, nNumberOfBytesToWrite, &nBytesWritten, (LPOVERLAPPED)0x0);
-      /* FILETIME * lpLastWriteTime for SetFileTime */ /* FILETIME * lpLastAccessTime for SetFileTime */ /* FILETIME * lpCreationTime for SetFileTime */ /* HANDLE hFile for SetFileTime */ SetFileTime(hFile, pFileTime, pFileTime, pFileTime);
-      nOffset += nNumberOfBytesToWrite;
-      if (nProgressMode == -0x7ffffffe) {
-        gnNetworkSendState = nOffset * 100 / nTotalSize;
       }
     }
 

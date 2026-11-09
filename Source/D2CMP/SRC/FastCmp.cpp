@@ -1306,7 +1306,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, ui
 }
 
 BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520() {
-    bool bVar1 = !gbCodecUseFallbackDecompressor;
+    int bVar1 = !gbCodecUseFallbackDecompressor;
     gbCodecUseFallbackDecompressor = (uint32_t)bVar1;
     return (uint32_t)bVar1;
 }

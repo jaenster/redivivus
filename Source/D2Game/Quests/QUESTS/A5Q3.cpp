@@ -296,7 +296,6 @@ static void Q33_CleanupQuestMonsters(D2QuestDataStrc * pQuestData) {
     BOOL bHasAiSubsystem;
     D2MonsterKillStrc sMonsterKill;
     eD2UnitType eUnitType;
-    int32_t nAnyaGUID;
     D2QuestDataA5Q3Strc* pSpecificData = pQuestData->pQuestSpecificData.pA5Q3;
     if (pSpecificData->bFrozenAnyaSpawned && pSpecificData->nAnyaState != 2) {
       D2MonsterAiStrc* pMonsterAi;
@@ -315,9 +314,8 @@ static void Q33_CleanupQuestMonsters(D2QuestDataStrc * pQuestData) {
 
         Monster::MonsterMode::SetCurrentSkill(pAnyaUnit, eD2MonsterAnimMode_ns::Dead, &sMonsterKill);
         Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pQuestData->pGame, &sMonsterKill, 1);
-        nAnyaGUID = pSpecificData->nFrozenAnyaGUID;
         eUnitType = pAnyaUnit->eUnitType;
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pAnyaUnit), eUnitType, nAnyaGUID);
+        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pAnyaUnit), eUnitType, pSpecificData->nFrozenAnyaGUID);
         D2Common::Units::RemoveCollision_Vector(pAnyaUnit);
         D2Common::Unit::RemoveUnitFromRoom(pAnyaUnit);
       } else {
@@ -1809,20 +1807,19 @@ void __thiscall Q33_OnPresetObjectLoad2(void * pThis, D2MapAIStrc * pMapAI) {
     }
 
     D2QuestDataA5Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q3;
-    D2MapAIStrc** pDrlgMapField = &pQuestSpecificData->pAnyaRescuedDrlgMap;
     D2MapAIStrc* pCopiedPreset = D2Common::Drlg::Preset::DRLGPRESET_CopyMapAI(pQuestData->pGame->pMemoryPool, pMapAI);
-    *pDrlgMapField = pCopiedPreset;
+    pQuestSpecificData->pAnyaRescuedDrlgMap = pCopiedPreset;
     if (!pQuestSpecificData->bAnyaMonsterAlive) {
       return;
     }
 
     D2UnitStrc* pAnyaCorpse = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pQuestSpecificData->nAnyaCorpseGUID);
-    if (!(pAnyaCorpse && *pDrlgMapField && (*pDrlgMapField)->pPosition && !pQuestSpecificData->bAnyaRescuedMapTaken)) {
+    if (!(pAnyaCorpse && pQuestSpecificData->pAnyaRescuedDrlgMap && pQuestSpecificData->pAnyaRescuedDrlgMap->pPosition && !pQuestSpecificData->bAnyaRescuedMapTaken)) {
       return;
     }
 
     D2MapAIStrc** ppMonsterMapAi = Ai::AiGeneral::GetMonsterMapAi(pAnyaCorpse);
-    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(pDrlgMapField, ppMonsterMapAi);
+    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pQuestSpecificData->pAnyaRescuedDrlgMap, ppMonsterMapAi);
     pQuestSpecificData->bAnyaRescuedMapTaken = 1;
 }
 

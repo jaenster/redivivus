@@ -2761,7 +2761,7 @@ DWORD __stdcall QSERVER_PlayerMessageThread(D2PlayerMessageThreadArgsStrc * lpTh
 // GAME_CreatePlayerMessageThread - Spawns worker thread for processing player messages asynchronously.
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_CreatePlayerMessageThread(int32_t nGameToken, int32_t nClientId, char * szMessageBuffer) {
-    DWORD dwThreadId = nGameToken;
+    DWORD dwThreadId;
     D2PlayerMessageThreadArgsStrc* lpParameter = D2_NEW_POOL_AT(nullptr, D2PlayerMessageThreadArgsStrc, ".\\GAME\\Game.cpp", 0x1621);
     if (!lpParameter) {
       return;
@@ -3197,7 +3197,9 @@ void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
     if (pGame) {
       BOOL bIsInGame;
       bIsInGame = Clients::IsClientInGame(pGame, nClientId);
-      if (bIsInGame) {
+      if (!bIsInGame) {
+        Server::Unlock(pGame);
+      } else {
         pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
         pDrlgActNull = Clients::CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 1, nullptr, 0, 0);
         if (pDrlgActNull) {
@@ -3215,8 +3217,6 @@ void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
         SRVLog(6, "[JOIN 5] %d clientid, SrvJoinAct: Added to game.", nClientId);
         return;
       }
-
-      Server::Unlock(pGame);
     }
 
     SRVLog(6, "[JOIN]  SrvJoinAct: No game found for client(%d)", nClientId);

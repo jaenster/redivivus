@@ -209,8 +209,7 @@ BOOL __fastcall EndScene2() {
     /* BOOL bForceBkgd for SelectPalette */ /* HPALETTE hPal for SelectPalette */ /* HDC hdc for SelectPalette */ SelectPalette(hdc, RENDERER_WINDOWED_hPalette, 0);
     /* HDC hdc for RealizePalette */ RealizePalette(hdc);
     tagRECT* lpRect = &sClientRect;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    /* HWND hWnd for GetClientRect */ GetClientRect(hWnd, lpRect);
+    /* HWND hWnd for GetClientRect */ GetClientRect(D2gfx::D2GFX::GetHwnd(), lpRect);
     /* DWORD rop for StretchBlt */ /* int hSrc for StretchBlt */ /* int wSrc for StretchBlt */ /* int ySrc for StretchBlt */ /* int xSrc for StretchBlt */ /* HDC hdcSrc for StretchBlt */ /* int hDest for StretchBlt */ /* int wDest for StretchBlt */ /* int yDest for StretchBlt */ /* int xDest for StretchBlt */ /* HDC hdcDest for StretchBlt */ StretchBlt(hdc, 0, 0, sClientRect.right - sClientRect.left, sClientRect.bottom - sClientRect.top, hdc_00, 0, 0, RENDERER_nWindowWidth, RENDERER_nWindowHeight, 0xcc0020);
     GdiFlush();
     /* HDC hdc for DeleteDC */ DeleteDC(hdc_00);

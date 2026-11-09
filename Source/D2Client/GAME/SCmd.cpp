@@ -1323,8 +1323,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x07_NEWROOM(char * pBytes) {
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM(char * pBytes) {
     D2RoomStrc* pRoom;
-    uint16_t nY = *(uint16_t*)(pBytes + 3);
     uint16_t nX = *(uint16_t*)(pBytes + 1);
+    uint16_t nY = *(uint16_t*)(pBytes + 3);
     if (!Game::sgpDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59e);
       exit(-1);
@@ -2485,10 +2485,9 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT(char * pBytes) {
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x5B(D2GSPacketSrv0x5B * pBytes) {
     char cCur;
-    char* szGuildTag = pBytes->szGuildTag;
-    char* pScan = szGuildTag;
+    char* pScan = pBytes->szGuildTag;
     pScan = pScan + strlen(pScan) + 1;
-    Roster::ROSTER_AllocOrUpdatePlayer(pBytes->nPlayerGUID, (uint32_t)pBytes->nCharType, pBytes->szPlayerName, pBytes->nPlayerLevel, pBytes->nPartyId, pBytes->nUnused, (uint32_t)(uint16_t)pBytes->bInParty, pBytes->nGuildFlags, szGuildTag, szGuildTag + (int)(pScan - (pBytes->szGuildTag + 1) + 1));
+    Roster::ROSTER_AllocOrUpdatePlayer(pBytes->nPlayerGUID, (uint32_t)pBytes->nCharType, pBytes->szPlayerName, pBytes->nPlayerLevel, pBytes->nPartyId, pBytes->nUnused, (uint32_t)(uint16_t)pBytes->bInParty, pBytes->nGuildFlags, pBytes->szGuildTag, pBytes->szGuildTag + (int)(pScan - (pBytes->szGuildTag + 1) + 1));
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x5C(D2GSPacketSrv0x5C * pBytes) {

@@ -119,8 +119,7 @@ int Unreferenced_004fab60() {
     UINT uType = 0x31;
     char* lpCaption = "Diablo II";
     char* lpText = "Insert Cinematics Disc";
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    int iVar1 = MessageBoxA(hWnd, lpText, lpCaption, uType);
+    int iVar1 = MessageBoxA(D2gfx::D2GFX::GetHwnd(), lpText, lpCaption, uType);
     return (uint32_t)(iVar1 == 1);
 }
 

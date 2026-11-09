@@ -1287,7 +1287,7 @@ BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, D2MonsterKillStrc
       pDynamicPath = pUnit->pPath.pDynamicPath;
       D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
       nMonStatsRow = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-      if (nMonStatsRow < 0 || nMonStatsRow >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsRow != 0x4e) {
+      if ((nMonStatsRow < 0 || nMonStatsRow >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsRow != 0x4e) != 0) {
         D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 5);
       } else {
         D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 10);

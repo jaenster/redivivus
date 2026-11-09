@@ -137,19 +137,18 @@ void __thiscall Q17_SetupHratliMapAi(void * pThis, D2MapAIStrc * pMapAI) {
     }
 
     D2QuestDataA3Q0Strc* pA3Q0Data = pQuestData->pQuestSpecificData.pA3Q0;
-    D2MapAIStrc** ppSrcMapAI = &pA3Q0Data->pDrlgMap;
-    *ppSrcMapAI = pMapAI;
+    pA3Q0Data->pDrlgMap = pMapAI;
     if (!pA3Q0Data->bHratliMapAiSet) {
       return;
     }
 
     D2UnitStrc* pMonster = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pA3Q0Data->nHratliGUID);
-    if (!(pMonster && *ppSrcMapAI && (*ppSrcMapAI)->pPosition && !pA3Q0Data->bDrlgMapTaken)) {
+    if (!(pMonster && pA3Q0Data->pDrlgMap && pA3Q0Data->pDrlgMap->pPosition && !pA3Q0Data->bDrlgMapTaken)) {
       return;
     }
 
     D2MapAIStrc** ppDstMapAI = Ai::AiGeneral::GetMonsterMapAi(pMonster);
-    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(ppSrcMapAI, ppDstMapAI);
+    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pA3Q0Data->pDrlgMap, ppDstMapAI);
     pA3Q0Data->bDrlgMapTaken = true;
 }
 

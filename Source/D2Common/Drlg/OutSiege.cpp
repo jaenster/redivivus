@@ -140,9 +140,11 @@ void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
       }
 
       nXIter++;
-      if (nXIter >= pWildData->nGridCoordsHeight) {
-        return;
+      if (nXIter < pWildData->nGridCoordsHeight) {
+        continue;
       }
+
+      return;
     }
 
     Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, nXIter, 0x38b, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);

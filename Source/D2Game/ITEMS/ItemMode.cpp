@@ -1717,7 +1717,10 @@ static void ITEMMODE_GetItemTypeFlags(D2UnitStrc * pOwner, int32_t * pnTypeFlags
 }
 
 static BOOL ITEMMODE_CheckItemTypeConflict(int * pnExistingTypeFlags, int * pnNewTypeFlags) {
-    if (!((!*pnNewTypeFlags || !pnExistingTypeFlags[2]) && (!pnNewTypeFlags[2] || !*pnExistingTypeFlags) && (!pnNewTypeFlags[1] || !pnExistingTypeFlags[3]) && (!pnNewTypeFlags[3] || !pnExistingTypeFlags[1]))) {
+    if (*pnNewTypeFlags && pnExistingTypeFlags[2] || pnNewTypeFlags[2] && *pnExistingTypeFlags) {
+      return 1;
+    }
+    if (pnNewTypeFlags[1] && pnExistingTypeFlags[3] || pnNewTypeFlags[3] && pnExistingTypeFlags[1]) {
       return 1;
     }
     if (!((!pnNewTypeFlags[5] || pnNewTypeFlags[6] || !pnExistingTypeFlags[4]) && (!pnExistingTypeFlags[5] || pnExistingTypeFlags[6] || !pnNewTypeFlags[4]) && (!pnNewTypeFlags[5] || pnNewTypeFlags[6] || !pnExistingTypeFlags[5] || pnExistingTypeFlags[6] || !pnNewTypeFlags[7] || !pnExistingTypeFlags[7]) && (!pnNewTypeFlags[9] || !pnExistingTypeFlags[9]))) {

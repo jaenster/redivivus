@@ -1764,7 +1764,14 @@ static void INVENTORY_RemoveItemFromOwner(D2InventoryStrc * pInventory, D2UnitSt
     D2UnitStrc* pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
     while (true) {
       D2UnitStrc* pCarriedItem;
-      if (!pCurItem) {
+      if (pCurItem) {
+        pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
+        if (pCarriedItem == pUnit) {
+          break;
+        }
+
+        pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
+      } else {
         pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
         if (!(pCurItem && pCurItem == pUnit)) {
           return;
@@ -1773,13 +1780,6 @@ static void INVENTORY_RemoveItemFromOwner(D2InventoryStrc * pInventory, D2UnitSt
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
         return;
       }
-
-      pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
-      if (pCarriedItem == pUnit) {
-        break;
-      }
-
-      pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
     }
 
     D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pUnit);

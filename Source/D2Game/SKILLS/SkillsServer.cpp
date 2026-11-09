@@ -2255,23 +2255,19 @@ void __fastcall SKILLS_DispatchStateActiveFunc(::SGAMEDATA * pGame, D2UnitStrc *
     if (!pSkillsTxt) {
       return;
     }
-
-    short int nAuraState = pSkillsTxt->aurastate;
-    if (!(nAuraState >= 0 && (int)nAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
+    if (!(pSkillsTxt->aurastate >= 0 && (int)pSkillsTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
-    D2StatesTxt* pStatesTxt = D2Common::DATATBLS::DataTbls::TXT_States_GetLine((int)nAuraState);
+    D2StatesTxt* pStatesTxt = D2Common::DATATBLS::DataTbls::TXT_States_GetLine((int)pSkillsTxt->aurastate);
     if (!pStatesTxt) {
       return;
     }
-
-    nAuraState = pStatesTxt->srvactivefunc;
-    if (!(nAuraState >= 0 && nAuraState < 0xbf && SKILLSRVDOFUNCS[nAuraState])) {
+    if (!(pStatesTxt->srvactivefunc >= 0 && pStatesTxt->srvactivefunc < 0xbf && SKILLSRVDOFUNCS[pStatesTxt->srvactivefunc])) {
       return;
     }
 
-    (*SKILLSRVDOFUNCS[nAuraState])(pGame, pUnit, nSkillId, nSkillLvl);
+    (*SKILLSRVDOFUNCS[pStatesTxt->srvactivefunc])(pGame, pUnit, nSkillId, nSkillLvl);
 }
 
 void __fastcall SKILLS_DispatchSrvDoFunc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nSrvDoFuncIdx, eD2Skills eSkill, int32_t nSkillLvl) {

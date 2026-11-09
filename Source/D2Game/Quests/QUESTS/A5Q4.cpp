@@ -556,7 +556,6 @@ void __fastcall Q34_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A5Q4 (Betrayal of Harrogath) NPC active-filter predicate for Nihlathak (classId 0x200). When nStateFlag!=0: returns true if Prison of Ice is done and Betrayal is neither Completed nor RewardAwaits. When nStateFlag==0: returns true if JustCompleted is set and Step0x04 is NOT set. Read-only on QuestRecord; controls whether Nihlathak shows as an active quest NPC for this player.
 bool __fastcall Q34_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    eD2Quests nQuestId;
     if (nTargetClassId == 0x200) {
       BOOL BVar1;
       if (pQuestData->nStateFlag == 1) {
@@ -573,16 +572,14 @@ bool __fastcall Q34_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
           return false;
         }
 
-        nQuestId = pQuestData->nQuestIdReal;
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, nQuestId, QUESTSTATE_RewardAwaits);
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
       } else {
         BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
         if (!BVar1) {
           return false;
         }
 
-        nQuestId = QUEST_BetrayalOfHaggorath;
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, nQuestId, QUESTSTATE_Step0x04);
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x04);
       }
       if (!BVar1) {
         return true;

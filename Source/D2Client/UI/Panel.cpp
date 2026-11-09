@@ -132,7 +132,7 @@ void __stdcall LoadPanelImages() {
     char* ppszPath;
     btn = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\btn");
     uint32_t nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    bool bExpansion = false;
+    int bExpansion = false;
     BOOL bResult = Fog::D2CheckExpansionGame();
     if (bResult) {
       bResult = GAME::Game::CLIENT_CheckExpansion();
@@ -652,7 +652,7 @@ void __stdcall PANEL_DrawRunButton() {
     sGfxData.nDirection = 0;
     BOOL bAlwaysRun = GAME::Game::GetGlobalAlwaysRun();
     if (bAlwaysRun) {
-      if (!gpPanelRunButton || nMouseX < ui::ScreenSizeX / 2 - 0x91 || nMouseX > ui::ScreenSizeX / 2 - 0x80 || nMouseY < Inv::ScreenSizeY - 0x1c || nMouseY > Inv::ScreenSizeY - 8) {
+      if ((!gpPanelRunButton || nMouseX < ui::ScreenSizeX / 2 - 0x91) != 0 || nMouseX > ui::ScreenSizeX / 2 - 0x80 || nMouseY < Inv::ScreenSizeY - 0x1c || nMouseY > Inv::ScreenSizeY - 8) {
         sGfxData.nFrameNumber = 2;
       } else {
         sGfxData.nFrameNumber = 3;

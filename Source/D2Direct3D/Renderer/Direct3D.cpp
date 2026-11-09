@@ -38,13 +38,13 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NEW_AT(D2RendererCoreStrc): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 
-#ifndef RECON_FPTD_DDS_Flip
-#define RECON_FPTD_DDS_Flip
-typedef HRESULT (__stdcall *DDS_Flip)(void * This, void * lpDDSurfaceTargetOverride, DWORD dwFlags);
-#endif
 #ifndef RECON_FPTD_pfnEHHandlerRoutine
 #define RECON_FPTD_pfnEHHandlerRoutine
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
+#endif
+#ifndef RECON_FPTD_DDS_Flip
+#define RECON_FPTD_DDS_Flip
+typedef HRESULT (__stdcall *DDS_Flip)(void * This, void * lpDDSurfaceTargetOverride, DWORD dwFlags);
 #endif
 #ifndef RECON_FPTD_fnBinkFrameCallback
 #define RECON_FPTD_fnBinkFrameCallback
@@ -487,11 +487,10 @@ int __fastcall CheckGamma() {
 }
 
 BOOL __fastcall EndScene2() {
-    DDS_Flip pDVar1 = g_pD3DSurfaceBackbuffer->lpVtbl->Flip;
     if (pD2GFXRenderedDataStrc->bVSync) {
-      (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 1);
+      (*g_pD3DSurfaceBackbuffer->lpVtbl->Flip)(g_pD3DSurfaceBackbuffer, nullptr, 1);
     } else {
-      (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 9);
+      (*g_pD3DSurfaceBackbuffer->lpVtbl->Flip)(g_pD3DSurfaceBackbuffer, nullptr, 9);
     }
 
     return 1;
@@ -2826,13 +2825,12 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, HWND hW
 int Unreferenced_006b5520() {
     HRESULT HVar2;
     RENDERER_D3D_ClearBackbuffer();
-    DDS_Flip pDVar1 = g_pD3DSurfaceBackbuffer->lpVtbl->Flip;
     if (pD2GFXRenderedDataStrc->bVSync) {
-      HVar2 = (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 1);
+      HVar2 = (*g_pD3DSurfaceBackbuffer->lpVtbl->Flip)(g_pD3DSurfaceBackbuffer, nullptr, 1);
       return HVar2;
     }
 
-    HVar2 = (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 9);
+    HVar2 = (*g_pD3DSurfaceBackbuffer->lpVtbl->Flip)(g_pD3DSurfaceBackbuffer, nullptr, 9);
     return HVar2;
 }
 
@@ -4531,8 +4529,8 @@ static void __thiscall RENDERER_D3D_CalculateViewportRect(RECT * pRect, int nScr
     pRect->top = 0;
     pRect->bottom = RENDERER_nWindowHeight - 0x2f;
     if (!nParam1) {
-      pRect->bottom += 0x20;
       pRect->left = -0x20;
+      pRect->bottom += 0x20;
       switch (nScreenPanels) {
         case 1:
           {

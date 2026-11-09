@@ -58853,7 +58853,7 @@ void __fastcall UI_SLIDER_ApplyAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseM
 }
 
 void __fastcall UI_SLIDER_InitAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    uint32_t nAutomapMode = (uint32_t)pItem;
+    uint32_t nAutomapMode;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "AutoMapMode", 0, (int32_t*)&nAutomapMode);
     if (nAutomapMode > 2) {
       nAutomapMode = 0;
@@ -58874,7 +58874,7 @@ void __fastcall UI_SLIDER_ApplyAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseM
 }
 
 void __fastcall UI_SLIDER_InitAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    uint32_t nAutomapFade = (uint32_t)pItem;
+    uint32_t nAutomapFade;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "AutoMapFade", 0, (int32_t*)&nAutomapFade);
     if (nAutomapFade > 4) {
       nAutomapFade = 0;

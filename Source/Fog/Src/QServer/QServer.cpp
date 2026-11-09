@@ -678,15 +678,16 @@ uint32_t __stdcall GetClientSocketByToken(D2QServerStrc * pQServer, uint32_t nCl
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
     D2QServerClientConnectionStrc* pClientConn = pQServer->pQServerClientList[nBucketIndex];
     while (true) {
-      if (!pClientConn) {
+      if (pClientConn) {
+        if (pClientConn->nClientToken == nClientToken) {
+          break;
+        }
+
+        pClientConn = pClientConn->pNextByToken;
+      } else {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
         return -1;
       }
-      if (pClientConn->nClientToken == nClientToken) {
-        break;
-      }
-
-      pClientConn = pClientConn->pNextByToken;
     }
 
     uint32_t dwSocket = pClientConn->socket;

@@ -287,15 +287,13 @@ void __fastcall AllocObjectControlSub0x1110(::SGAMEDATA * pGame, D2UnitStrc * pU
 void __fastcall Objects_InitFn17_Waypoint(D2ObjectInitFnArg * pInitArg) {
     D2ObjectsTxt* pObjectsTxt;
     int nCoord;
-    D2RoomStrc* pRoom;
     D2UnitStrc* pUnit;
     D2ObjectControlStrc* pObjectControl = pInitArg->pGame->pObjectControl;
     D2ObjectControlSub0x1110* pSub0x1110 = pObjectControl->pSub0x1110;
     if (pSub0x1110) {
       int32_t dwUnitClassId;
-      pRoom = pInitArg->pRoom;
       do {
-        if (pSub0x1110->pRoom == pRoom || pRoom && (nCoord = pSub0x1110->sCoords.x , nCoord >= pRoom->sCoords.dwXStart) && nCoord < pRoom->sCoords.dwXSize + pRoom->sCoords.dwXStart && (nCoord = pSub0x1110->sCoords.y , nCoord >= pRoom->sCoords.dwYStart && nCoord < pRoom->sCoords.dwYSize + pRoom->sCoords.dwYStart)) {
+        if (pSub0x1110->pRoom == pInitArg->pRoom || pInitArg->pRoom && (nCoord = pSub0x1110->sCoords.x , nCoord >= pInitArg->pRoom->sCoords.dwXStart) && nCoord < pInitArg->pRoom->sCoords.dwXSize + pInitArg->pRoom->sCoords.dwXStart && (nCoord = pSub0x1110->sCoords.y , nCoord >= pInitArg->pRoom->sCoords.dwYStart && nCoord < pInitArg->pRoom->sCoords.dwYSize + pInitArg->pRoom->sCoords.dwYStart)) {
           pUnit = pInitArg->pObject;
           if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
             D2Common::Units::SetupUpdateFlag(pUnit, 1);

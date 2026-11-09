@@ -388,7 +388,6 @@ uint32_t __stdcall FOG_AddTxtLinkRecord(D2TxtLinkStrc * pTxtLink, uint32_t nItem
 
 char * __fastcall FOG_GetRecordField(D2TxtLinkNodeStrc * pClientSideData, int nLinkIndex) {
     char* nSearchResult;
-    char* nNotFoundSentinel = gnExcelRecordFieldNotFound;
     if (!pClientSideData) {
       return gnExcelRecordFieldNotFound;
     }
@@ -397,17 +396,17 @@ char * __fastcall FOG_GetRecordField(D2TxtLinkNodeStrc * pClientSideData, int nL
     }
     if (pClientSideData->pPrevious) {
       nSearchResult = FOG_GetRecordField(pClientSideData->pPrevious, nLinkIndex);
-      if (nSearchResult != nNotFoundSentinel) {
+      if (nSearchResult != gnExcelRecordFieldNotFound) {
         return nSearchResult;
       }
     }
     if (!pClientSideData->pNext) {
-      return nNotFoundSentinel;
+      return gnExcelRecordFieldNotFound;
     }
 
     nSearchResult = FOG_GetRecordField(pClientSideData->pNext, nLinkIndex);
-    if (nSearchResult == nNotFoundSentinel) {
-      return nNotFoundSentinel;
+    if (nSearchResult == gnExcelRecordFieldNotFound) {
+      return gnExcelRecordFieldNotFound;
     }
 
     return nSearchResult;

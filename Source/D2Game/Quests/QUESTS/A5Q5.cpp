@@ -1011,12 +1011,11 @@ void __fastcall QUEST_OnPlayerLeaveArreatSummit(::SGAMEDATA * pGame, D2UnitStrc 
 
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RiteOfPassage);
     pQuestData->pQuestSpecificData.pA5Q5->nResurrectionCount--;
-    D2QuestDataA5Q5Strc* pA5Q5Specific = pQuestData->pQuestSpecificData.pA5Q5;
-    if (!(!pA5Q5Specific->nResurrectionCount && pA5Q5Specific->bAncientsActive)) {
+    if (!(!pQuestData->pQuestSpecificData.pA5Q5->nResurrectionCount && pQuestData->pQuestSpecificData.pA5Q5->bAncientsActive)) {
       return;
     }
 
-    pA5Q5Specific->bAncientsFightStarted = 1;
+    pQuestData->pQuestSpecificData.pA5Q5->bAncientsFightStarted = 1;
 }
 
 // [A5Q5 = Rite of Passage] GetQuestDataAncients: BOOL accessor returning !bAncientsFightStarted (A5Q5 +0x11) (i.e. whether the Ancients fight is NOT currently engaged). No quest-state writes.

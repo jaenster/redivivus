@@ -317,7 +317,7 @@ static uint32_t __stdcall SELECT_IsDoorBlockingUnit(D2UnitStrc * pUnit, D2UnitSt
     D2ObjectsTxt* pObjectsTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit2);
     if (pObjectsTxt->Orientation == '\x01') {
       if (ptTargetCoord.nY <= ptDoorCoord.nY || ptTargetCoord.nY >= ptPlayerCoord.nY) {
-        if (ptDoorCoord.nY <= ptTargetCoord.nY) {
+        if (ptTargetCoord.nY >= ptDoorCoord.nY) {
           return 1;
         }
         if (ptTargetCoord.nY <= ptPlayerCoord.nY) {

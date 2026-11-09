@@ -493,7 +493,6 @@ void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fOb
 
 // Set the EAX room-level obstruction on the 3D sound buffer; clamps to -10000 for DS3D or passes a float to the EAX property set
 void __fastcall SOUNDSMP_SetEaxRoomLevel(D2SoundSmpStrc * pSoundSmp, float fParam) {
-    int nEaxLevel = (int)pSoundSmp;
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x359);
       exit(-1);
@@ -518,7 +517,7 @@ void __fastcall SOUNDSMP_SetEaxRoomLevel(D2SoundSmpStrc * pSoundSmp, float fPara
     }
 
     float fVar2 = SOUNDSMP_ClampVolume(0.0, 1.0, fParam);
-    nEaxLevel = (int)fVar2;
+    int nEaxLevel = (int)fVar2;
     pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 5, nullptr, 0, &nEaxLevel, 4);
     pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 4, nullptr, 0, &nEaxLevel, 4);
 }
@@ -588,7 +587,7 @@ uint32_t __stdcall SOUNDSMP_GetEffectiveVolume() {
 
 BOOL __fastcall SOUNDSMP_OpenAndStreamFile(int * * ppnParam, char * szText, int32_t nLooping, int32_t bIsLooping) {
     int32_t nLine;
-    D2MPQFileStrc* pArchive = (D2MPQFileStrc*)ppnParam;
+    D2MPQFileStrc* pArchive;
     if (!ppnParam) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3db);
       exit(-1);

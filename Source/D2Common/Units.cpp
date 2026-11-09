@@ -1066,12 +1066,12 @@ void __stdcall RefreshInventory(D2UnitStrc * pUnit, BOOL bHasInventory) {
       Unit::ROOM_LinkUnitToUpdateList(pUnit);
     }
     if (pUnit) {
-      if (!bHasInventory) {
+      if (bHasInventory) {
+        pUnit->eUnitFlagsEx |= UNITFLAGEX_HASINV;
+      } else {
         pUnit->eUnitFlagsEx &= ~UNITFLAGEX_HASINV;
         return;
       }
-
-      pUnit->eUnitFlagsEx |= UNITFLAGEX_HASINV;
     }
     if (!(bHasInventory && pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
@@ -1875,7 +1875,7 @@ void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer)
 }
 
 int32_t __stdcall GetBeltType(D2UnitStrc * pUnit) {
-    if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
+    if ((!pUnit || pUnit->eUnitType != UNIT_ITEM) != 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf20);
       exit(-1);
     } else {

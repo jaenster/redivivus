@@ -458,7 +458,7 @@ void __fastcall TSLink_TMESSAGESOURCE_Unlink(StormLinkStrc * pLink) {
 }
 
 StormLinkStrc * __thiscall LINKEDLIST_GetOffset(StormLinkedListStrc * pList, void * pItem) {
-    StormLinkStrc* pOffsetResult = !pItem ? &pList->head : (StormLinkStrc*)(pList->nLinkOffset + (char*)pItem);
+    StormLinkStrc* pOffsetResult = pItem ? (StormLinkStrc*)(pList->nLinkOffset + (char*)pItem) : &pList->head;
     return pOffsetResult;
 }
 

@@ -177,8 +177,7 @@ static uint32_t GFXHASH_CalcHashKey(D2GfxDataStrc * pGfxData, uint32_t * pnDirec
     uint32_t nHashAccum;
     uint32_t nDirIdx = GFXHASH_CalcDirectionIndex(pGfxData, pnDirectionDivisor, pCelEntry);
     *pnDirectionIndex = nDirIdx;
-    eD2UnitType eUnitType = pGfxData->eUnitType;
-    if (eUnitType == UNIT_COUNT && pGfxData->dwFlags & 2 || eUnitType == UNIT_MISSILE || eUnitType == UNIT_ITEM) {
+    if (pGfxData->eUnitType == UNIT_COUNT && pGfxData->dwFlags & 2 || pGfxData->eUnitType == UNIT_MISSILE || pGfxData->eUnitType == UNIT_ITEM) {
       if (!pGfxData->szFilename) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c);
         exit(-1);

@@ -85,7 +85,7 @@ static void __stdcall SendPlayerInfo(uint16_t wRelationFlag, uint32_t nRelationS
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, int * pnError) {
     uint32_t bIsConnected;
-    uint8_t nPartyEventCode;
+    int nPartyEventCode;
     uint8_t bEventType;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PartyScreen.cpp", 0x4a);
     uint32_t bIsConnectedFlag = GAME::Clients::CLIENT_TestFileFlags(pClient, 4);

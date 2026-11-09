@@ -2861,25 +2861,25 @@ void __fastcall QUESTLOG_ToggleQuestScreen(DWORD bAdjustMouse) {
         }
       }
     } else {
-      if (gQuestLog.bQuestLogOpen != 1) {
+      if (gQuestLog.bQuestLogOpen == 1) {
+        gQuestLog.bQuestLogOpen = 0;
+        bItemDescDirty = INV_GetItemDescDirtyFlag();
+        if (bItemDescDirty == '\0') {
+          dwTickOrFlag = ui::SetUIFlag(UI_QUESTSCREEN, UI_SET, bAdjustMouse);
+          if (dwTickOrFlag == 1) {
+            LoadQuestimages();
+            gQuestLog.bQuestLogOpen = 2;
+            QUESTLOG_SetActiveActFromPlayerRoom();
+            QUESTLOG_LoadQuestIconsForAct(gQuestLog.nQuestLogActiveAct_b, 0);
+            GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x40);
+            return;
+          }
+        }
+      } else {
         CloseQuestLogWeird(bAdjustMouse);
         gQuestLog.bQuestLogScreenOpen = GetTickCount();
         Text::TEXT_HandleEscapeKey_Thunk();
         return;
-      }
-
-      gQuestLog.bQuestLogOpen = 0;
-      bItemDescDirty = INV_GetItemDescDirtyFlag();
-      if (bItemDescDirty == '\0') {
-        dwTickOrFlag = ui::SetUIFlag(UI_QUESTSCREEN, UI_SET, bAdjustMouse);
-        if (dwTickOrFlag == 1) {
-          LoadQuestimages();
-          gQuestLog.bQuestLogOpen = 2;
-          QUESTLOG_SetActiveActFromPlayerRoom();
-          QUESTLOG_LoadQuestIconsForAct(gQuestLog.nQuestLogActiveAct_b, 0);
-          GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x40);
-          return;
-        }
       }
     }
 }

@@ -355,7 +355,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Clears bScoreDirty flag on player's D2UnitDataPlayerArenaStrc. Halts if unit is null, not player type, or has no arena data.
 void __fastcall ARENA_ClearScoreDirty(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+    if ((!pUnit || pUnit->eUnitType != UNIT_PLAYER) != 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc5);
       exit(-1);
     } else {

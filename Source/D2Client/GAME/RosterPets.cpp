@@ -400,7 +400,7 @@ void __stdcall ROSTER_UpdateHostileColors() {
           bHostile = ROSTER_AreUnitsHostile(pPlayer, pRosterUnit);
           BOOL bNotHostile = !bHostile;
           UNIT::CUnit::SetGfxSequenceData(pRosterUnit, bNotHostile);
-          BOOL bNotHostile_ = !bHostile;
+          BOOL bNotHostile_ = bNotHostile;
           UNIT::CUnit::SetPalShiftIndex(pRosterUnit, bNotHostile_);
         }
       }
@@ -456,16 +456,17 @@ void __fastcall ROSTERPETS_GetPetData(int32_t nRosterGUID, int * pnSkillId, int 
     D2RosterPetStrc* pRosterPet;
     pRosterPet = RosterPets::pRosterPet;
     while (true) {
-      if (!pRosterPet) {
+      if (pRosterPet) {
+        if (pRosterPet->nRosterGUID == nRosterGUID) {
+          break;
+        }
+
+        pRosterPet = pRosterPet->pNext;
+      } else {
         *pnSkillId = 0;
         *pnField6_0x18 = 0;
         return;
       }
-      if (pRosterPet->nRosterGUID == nRosterGUID) {
-        break;
-      }
-
-      pRosterPet = pRosterPet->pNext;
     }
 
     *pnSkillId = pRosterPet->field5_0x14;

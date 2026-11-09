@@ -454,7 +454,7 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
     int32_t nPosXY;
     int nSumModeOrSpawnMode;
     D2SkillsTxt* pSkillsTxt;
-    short int nSpawnId;
+    int nSpawnId;
     if (!bUseMonStatsSpawn || !pUnit || pUnit->eUnitType != UNIT_MONSTER) {
       pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
       if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
@@ -498,7 +498,7 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
           }
         }
 
-        return (int)nSpawnId;
+        return nSpawnId;
       }
     }
 

@@ -1569,7 +1569,6 @@ int32_t __fastcall PropertyFunc_SimpleStatWithRoll(int32_t nType, D2UnitStrc * p
 }
 
 void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
-    int32_t nTempStat;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x706);
       exit(-1);
@@ -1579,8 +1578,7 @@ void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
     uint32_t bIsWeapon = Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon);
     uint16_t nLayer = 0;
     if (bIsWeapon) {
-      nTempStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_mindamage, 0);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, nTempStat * 3 / 2, nLayer);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_mindamage, 0) * 3 / 2, nLayer);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxdamage, 0) * 3 / 2, 0);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_mindamage, 0) * 3 / 2, 0);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, 0) * 3 / 2, 0);
@@ -1589,8 +1587,7 @@ void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
       return;
     }
 
-    nTempStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
-    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nTempStat * 3 / 2, nLayer);
+    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0) * 3 / 2, nLayer);
 }
 
 // Returns 1 if the given automod entry (nParam points to an AutomagicTxt record) can be applied to pUnit. Rejects stackable items, throwables, items without inventory slots, and items whose type matches the automod's exclusion list; passes only if the item type matches at least one inclusion entry.

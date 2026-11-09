@@ -127,19 +127,18 @@ void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, D2MapAIStrc * pMapAI) {
     }
 
     D2QuestDataA3Q6Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q6;
-    D2MapAIStrc** pDrlgMapPtr = &pQuestSpecificData->pDrlgMap;
-    *pDrlgMapPtr = pMapAI;
+    pQuestSpecificData->pDrlgMap = pMapAI;
     if (pQuestSpecificData->nDarkWandererMapAiState == '\0') {
       return;
     }
 
     D2UnitStrc* pMonster = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_MONSTER, pQuestSpecificData->nDarkWandererGUID);
-    if (!(pMonster && *pDrlgMapPtr && (*pDrlgMapPtr)->pPosition && !pQuestSpecificData->bDrlgMapTaken)) {
+    if (!(pMonster && pQuestSpecificData->pDrlgMap && pQuestSpecificData->pDrlgMap->pPosition && !pQuestSpecificData->bDrlgMapTaken)) {
       return;
     }
 
     D2MapAIStrc** ppDstMapAI = Ai::AiGeneral::GetMonsterMapAi(pMonster);
-    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(pDrlgMapPtr, ppDstMapAI);
+    D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pQuestSpecificData->pDrlgMap, ppDstMapAI);
     pQuestSpecificData->bDrlgMapTaken = true;
 }
 

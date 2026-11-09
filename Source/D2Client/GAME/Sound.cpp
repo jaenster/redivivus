@@ -58,8 +58,8 @@ BOOL __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
     int* pWavData = D2Sound::Src::D2SoundSmp::SOUNDSMP_ParseWavHeader((int*)pSoundStream->pSoundDataBuffer, &nBufSize, &sWaveFormat);
     if (pWavData && sWaveFormat.wBitsPerSample == 0x10 && sWaveFormat.nSamplesPerSec == 0x5622) {
       pSoundStream->pWavData = pWavData;
-      pSoundStream->Stereo = sWaveFormat.nChannels == 2;
       pSoundStream->nWavDataSize = nBufSize;
+      pSoundStream->Stereo = sWaveFormat.nChannels == 2;
       return 1;
     }
 

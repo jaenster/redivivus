@@ -711,7 +711,7 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
     int i;
     uint16_t nStringIndex;
     uint16_t wszTooltip[200];
-    bool bHasCommand = false;
+    int bHasCommand = false;
     int nCommandId = 0x39;
     switch (nButtonFrame) {
       case 0:
