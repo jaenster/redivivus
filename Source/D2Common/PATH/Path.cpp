@@ -1779,29 +1779,33 @@ void __stdcall PATH_CheckCollisionFlags(D2DynamicPathStrc * pDynamicPath, D2Unit
 
 uint32_t __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY) {
     D2RoomStrc* pBetterRoom;
-    int32_t nErrorLine;
-    if (pbCollisionType && (!*pbCollisionType || *pbCollisionType == 1)) {
-      uint16_t eCollisionResult2;
-      eCollisionResult2 = Collision::UpdateGetCollision_Type(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pRoom, nTargetX, nTargetY, pDynamicPath->nUnitWidth, pDynamicPath->nCollisionFlag, pDynamicPath->nCollisionPattern);
-      if (eCollisionResult2) {
-        return 0;
-      }
-      if (pDynamicPath->pRoom != pRoom) {
-        pDynamicPath->nFlags |= 1;
-      }
-
-      DRLGPATH_SetPathPosition(nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000, pRoom, pDynamicPath);
-      pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
-      if (pBetterRoom) {
-        PATH_ResetPathState(pDynamicPath);
-        return 1;
-      }
-
-      nErrorLine = 0x524;
+    if (!pbCollisionType) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50d);
+      exit(-1);
+    }
+    if (!(!*pbCollisionType || *pbCollisionType == 1)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50d);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
-    exit(-1);
+    uint16_t eCollisionResult2;
+    eCollisionResult2 = Collision::UpdateGetCollision_Type(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pRoom, nTargetX, nTargetY, pDynamicPath->nUnitWidth, pDynamicPath->nCollisionFlag, pDynamicPath->nCollisionPattern);
+    if (eCollisionResult2) {
+      return 0;
+    }
+    if (pDynamicPath->pRoom != pRoom) {
+      pDynamicPath->nFlags |= 1;
+    }
+
+    DRLGPATH_SetPathPosition(nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000, pRoom, pDynamicPath);
+    pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nTargetX, nTargetY);
+    if (!pBetterRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x524);
+      exit(-1);
+    }
+
+    PATH_ResetPathState(pDynamicPath);
+    return 1;
 }
 
 BOOL __stdcall IsAllyOf(D2UnitStrc * pUnit, D2UnitStrc * pRosterUnit) {

@@ -294,7 +294,7 @@ int Unreferenced_0052bfe0() {
       }
 
       ppSVar2 += 4;
-    } while ((intptr_t)ppSVar2 < (intptr_t)&gaQServerGameByToken + 4104);
+    } while ((intptr_t)ppSVar2 < (intptr_t)((char*)&gaQServerGameByToken + sizeof(gaQServerGameByToken) + 4));
 
     return iVar1;
 }

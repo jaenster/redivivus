@@ -3613,7 +3613,7 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
 
               fScreenMinX.nValue++;
               pfVertexSlot += 3;
-            } while ((intptr_t)pfVertexSlot < (intptr_t)((char*)&gGlidePerspectiveVertexBuffer + 52));
+            } while ((intptr_t)pfVertexSlot < (intptr_t)((char*)&gaGlidePerspectiveVertices + sizeof(gaGlidePerspectiveVertices) + 56));
 
             (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsA);
             (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsB);

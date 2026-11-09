@@ -1199,40 +1199,44 @@ static BOOL __stdcall DRLGPATH_FindNonBlockedDirectionFromTriplet(uint32_t nPack
     int32_t iVar2;
     int32_t iVar3;
     eCollisionFlags eCollisionFlag;
-    uint32_t nErrLine;
     D2RoomStrc* pRoom;
     D2UnitStrc* pDVar1 = pPathTypeArg->pDynamicPath->pOwner;
-    if (pDVar1 && (pDVar1->eUnitType == UNIT_PLAYER || pDVar1 && pDVar1->eUnitType == UNIT_MONSTER)) {
-      eD2CollisionShapeType nType;
-      iVar3 = pPathTypeArg->nCollisionPattern;
-      pRoom = pPathTypeArg->pRoom;
-      nType = pPathTypeArg->nUnitWidth;
-      iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[*pnDirTriplet * 2] + (short int)nPackedPos), (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[*pnDirTriplet * 2 + 1] + *(uint16_t*)((char*)&nPackedPos + 2)), nType, iVar3);
-      if (!iVar2) {
-        *pnChosenDir = *pnDirTriplet;
-        return 1;
-      }
-
-      iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[1] * 2] + (short int)nPackedPos), (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[1] * 2 + 1] + *(uint16_t*)((char*)&nPackedPos + 2)), nType, iVar3);
-      if (!iVar2) {
-        *pnChosenDir = pnDirTriplet[1];
-        return 1;
-      }
-      if (pnDirTriplet[2] != 0xff) {
-        iVar3 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[2] * 2] + (short int)nPackedPos), (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[2] * 2 + 1] + *(uint16_t*)((char*)&nPackedPos + 2)), nType, iVar3);
-        if (!iVar3) {
-          *pnChosenDir = pnDirTriplet[2];
-          return 1;
-        }
-
-        return 0;
-      }
-
-      nErrLine = 0x4c;
+    if (!pDVar1) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
+      exit(-1);
+    }
+    if (!(pDVar1->eUnitType == UNIT_PLAYER || pDVar1 && pDVar1->eUnitType == UNIT_MONSTER)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), nErrLine);
-    exit(-1);
+    eD2CollisionShapeType nType;
+    iVar3 = pPathTypeArg->nCollisionPattern;
+    pRoom = pPathTypeArg->pRoom;
+    nType = pPathTypeArg->nUnitWidth;
+    iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[*pnDirTriplet * 2] + (short int)nPackedPos), (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[*pnDirTriplet * 2 + 1] + *(uint16_t*)((char*)&nPackedPos + 2)), nType, iVar3);
+    if (!iVar2) {
+      *pnChosenDir = *pnDirTriplet;
+      return 1;
+    }
+
+    iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[1] * 2] + (short int)nPackedPos), (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[1] * 2 + 1] + *(uint16_t*)((char*)&nPackedPos + 2)), nType, iVar3);
+    if (!iVar2) {
+      *pnChosenDir = pnDirTriplet[1];
+      return 1;
+    }
+    if (pnDirTriplet[2] == 0xff) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4c);
+      exit(-1);
+    }
+
+    iVar3 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[2] * 2] + (short int)nPackedPos), (uint32_t)(uint16_t)((short int)gPathDirectionOffsetsX[pnDirTriplet[2] * 2 + 1] + *(uint16_t*)((char*)&nPackedPos + 2)), nType, iVar3);
+    if (!iVar3) {
+      *pnChosenDir = pnDirTriplet[2];
+      return 1;
+    }
+
+    return 0;
 }
 
 // Raycasts a straight line from a packed source coord (nParam, hi/lo = x/y) toward a packed destination coord (*pnParam) in fixed-point 16.16, stepping by the normalized velocity vector (pVelocity[0]/[1]) along the major axis. At each cell transition it calls Collision::CheckCollision_BlockPlayer_Type with the path's unit width and collision pattern. Returns 1 if the line is clear; on a blocked cell returns 0 and writes the last free position back into *pnParam. Degenerate inputs trigger ERROR_UnrecoverableInternalError_Halt.

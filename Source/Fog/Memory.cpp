@@ -879,7 +879,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
           if (!((int)nSlotIndex < (int)lpCriticalSection->nBlocks)) {
             nErrAddress = ReallocTrackedAllocation(pManager, pMemoryToRealloc, nAllocSize, szFile, nLine);
             if (!nErrAddress) {
-              Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), (int32_t)0x648);
+              Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x648);
               exit(-1);
             }
 
@@ -896,7 +896,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
               LeaveCriticalSection(&lpCriticalSection->pSync);
               nErrAddress = Memory::Alloc(pOrigManager, nAllocSize, szFile, nLine);
               if (!nErrAddress) {
-                Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), (int32_t)0x68b);
+                Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x68b);
                 exit(-1);
               }
 
@@ -905,7 +905,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
               return nErrAddress;
             } else {
               LeaveCriticalSection(&lpCriticalSection->pSync);
-              Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), (int32_t)0x6a0);
+              Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x6a0);
               exit(-1);
             }
           }
@@ -915,7 +915,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
       }
     }
     if (!nErrAddress) {
-      Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), (int32_t)szFile);
+      Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x62d);
       exit(-1);
     }
 

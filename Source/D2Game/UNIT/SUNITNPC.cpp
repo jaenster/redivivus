@@ -638,7 +638,6 @@ void __fastcall SUNITNPC_RepairAllItems(D2UnitStrc * pPlayer, D2InventoryStrc * 
 int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SeedStrc * pSeed, uint32_t dwReserved, uint32_t * pdwOutItemCode, uint32_t * pdwReservedOut) {
     uint32_t nModulo;
     D2SeedStrc* pDVar1;
-    int32_t unaff_EDI;
     int nNpcIndex;
     uint8_t bHasStore;
     uint32_t nSeed;
@@ -646,29 +645,37 @@ int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * 
     D2GameNpcStrc* pGameNpc = sunitproxy::GetGameNpcByUnit(pGame, pUnit, &nNpcIndex);
     D2SeedStrc* pSeedSave = pSeed;
     if (pGameNpc) {
-      if (pGameNpc != (D2GameNpcStrc*)-32 && (bHasStore = pGameNpc->sTrade.bHasStore , bHasStore != 0)) {
-        nModulo = pGameNpc->sTrade.nTradeList1;
-        if (nModulo && pGameNpc->sTrade.pTradeList1) {
-          pDVar1 = (D2SeedStrc*)D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nModulo);
-          *pSeedSave = D2_SEED_NEXT(*pSeedSave);
-          pSeed = pDVar1;
-          D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode, (int*)&nSeed);
-          D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01(nSeed);
-          *pdwOutItemCode = pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode;
-          *pdwReservedOut = dwReservedSave;
-          return 1;
-        }
-        if (bHasStore) {
-          *pdwOutItemCode = 0;
-          return 0;
-        }
+      if (pGameNpc == (D2GameNpcStrc*)-32) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x383);
+        exit(-1);
       }
-    } else {
-      unaff_EDI = 0x389;
-    }
+      if (!(bHasStore = pGameNpc->sTrade.bHasStore , bHasStore != 0)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x384);
+        exit(-1);
+      }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), unaff_EDI);
-    exit(-1);
+      nModulo = pGameNpc->sTrade.nTradeList1;
+      if (nModulo && pGameNpc->sTrade.pTradeList1) {
+        pDVar1 = (D2SeedStrc*)D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nModulo);
+        *pSeedSave = D2_SEED_NEXT(*pSeedSave);
+        pSeed = pDVar1;
+        D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode, (int*)&nSeed);
+        D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01(nSeed);
+        *pdwOutItemCode = pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode;
+        *pdwReservedOut = dwReservedSave;
+        return 1;
+      }
+      if (!bHasStore) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x384);
+        exit(-1);
+      }
+
+      *pdwOutItemCode = 0;
+      return 0;
+    } else {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x389);
+      exit(-1);
+    }
 }
 
 BOOL __fastcall CheckIfPlayerCanAffordCost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nCost) {

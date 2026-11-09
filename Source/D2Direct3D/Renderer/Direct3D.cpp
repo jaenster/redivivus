@@ -4963,7 +4963,7 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
 
               fLayerIndex.nValue++;
               pfVertexOuter += 3;
-            } while ((intptr_t)pfVertexOuter < (intptr_t)((char*)&gaD3DPerspectiveVertices + 64));
+            } while ((intptr_t)pfVertexOuter < (intptr_t)((char*)&gaD3DPerspectiveStripVertices + sizeof(gaD3DPerspectiveStripVertices) + 64));
 
             g_pD3DDevice->lpVtbl->DrawIndexedPrimitive(g_pD3DDevice, 5, 0x1c4, gaD3DPerspectiveStripVertices, 0xf, gaD3DPerspectiveStripIndices, 0x16, 0x1c);
             nMidZ = 1;

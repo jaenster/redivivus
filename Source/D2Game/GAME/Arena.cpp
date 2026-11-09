@@ -116,53 +116,58 @@ void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     D2UnitDataPlayerArenaStrc* pArenaData;
     eD2ArenaFlags* peArenaFlags;
     if (!pUnit2 || pUnit2->eUnitType != UNIT_PLAYER) {
-      dwParam = 0x73;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
+      exit(-1);
     } else {
       D2UnitDataPlayerStrc* pPlayerData;
       pPlayerData = D2Common::Units::GetPlayerData(pUnit2);
       pArenaData = pPlayerData->pArena;
-      if (pArenaData && pGame->pArenaCtrl) {
-        pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
-        if (nScoreType < 7) {
-          switch (nScoreType) {
-            case 0:
-
-            case 1:
-
-            case 3:
-
-            case 4:
-
-            case 6:
-              pArenaData->nScore += (&pArenaTxt->dwSuicide)[nScoreType];
-            break;
-            case 2:
-
-            case 5:
-              pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-            if (!pPlayerData->pArena) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), dwParam);
-              exit(-1);
-            }
-
-            pArenaData->nScore += (&pArenaTxt->dwSuicide)[nScoreType] * pPlayerData->pArena->nScore / 100;
-          }
-
-          pArenaData->bScoreDirty = 1;
-          if (pGame->pArenaCtrl) {
-            peArenaFlags = &pGame->pArenaCtrl->eArenaFlags;
-            *peArenaFlags |= ARENAFLAG_ScoresDirty;
-            D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-            return;
-          }
-
-          dwParam = 0x94;
-        }
+      if (!pArenaData) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x77);
+        exit(-1);
       }
-    }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), dwParam);
-    exit(-1);
+      pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
+      if (!(nScoreType < 7)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7d);
+        exit(-1);
+      }
+
+      switch (nScoreType) {
+        case 0:
+
+        case 1:
+
+        case 3:
+
+        case 4:
+
+        case 6:
+          pArenaData->nScore += (&pArenaTxt->dwSuicide)[nScoreType];
+        break;
+        case 2:
+
+        case 5:
+          pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+        if (!pPlayerData->pArena) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c);
+          exit(-1);
+        }
+
+        pArenaData->nScore += (&pArenaTxt->dwSuicide)[nScoreType] * pPlayerData->pArena->nScore / 100;
+      }
+
+      pArenaData->bScoreDirty = 1;
+      if (!pGame->pArenaCtrl) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x94);
+        exit(-1);
+      }
+
+      peArenaFlags = &pGame->pArenaCtrl->eArenaFlags;
+      *peArenaFlags |= ARENAFLAG_ScoresDirty;
+      D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
+      return;
+    }
 }
 
 // Server-side PvP/PK Arena scoring handler invoked when a unit dies. No-op unless the game has an active D2ArenaControlStrc. Reads each combatant's D2UnitDataPlayerArenaStrc and adjusts nScore from the ArenaTxt record for the relevant outcome: suicide (self-kill), player-kill / player-death (with flat dwPlayerKill/dwPlayerDeath plus a percentage of the opponent's score), and monster-kill / monster-death. On each adjustment sets bScoreDirty, OR's ARENAFLAG_ScoresDirty into the control flags, and calls ROOM_LinkUnitToUpdateList to schedule a score sync. Missing arena data on an expected player triggers ERROR_UnrecoverableInternalError_Halt with the source line.
