@@ -235,7 +235,7 @@ D2SoundEnvironTxt * __fastcall GetSoundEnvironLine(int32_t nSoundEnviron) {
 // @sourcefile .\Sound\SoundHdr.cpp
 void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     uint8_t byMatCount;
-    D2ArchiveStrc* pD2File;
+    char* pD2File;
     D2BinFieldExcelStrc* pBinExcel;
     D2SoundsTxt* pSounds;
     D2SoundEnvironTxt* pSoundEnviron;
@@ -250,7 +250,6 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     int32_t nLine;
     int nSong;
     uint32_t* pFileSize;
-    char* szSourceFile;
     D2BinFieldInputStrc sounds[24] = {
       {"Filename", FIELDTYPE_ASCII, 0x3b, 0, 0},
       {"Volume", FIELDTYPE_CHAR, 0, 0x3c, 0},
@@ -316,9 +315,9 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
 
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\sounds.txt", "DATA\\GLOBAL\\EXCEL");
       nLine = 0x101;
-      szSourceFile = ".\\Sound\\SoundHdr.cpp";
+      pD2File = ".\\Sound\\SoundHdr.cpp";
       pFileSize = &nFileSize;
-      pD2File = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, szSourceFile, nLine);
+      pD2File = (char*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, pD2File, nLine);
       pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
       nTxtSoundsSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
       pSounds = (D2SoundsTxt*)D2_ALLOC_AT(nTxtSoundsSize * 0x8e, ".\\Sound\\SoundHdr.cpp", 0x106);
@@ -328,9 +327,9 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\soundenviron.txt", "DATA\\GLOBAL\\EXCEL");
       nLine = 0x10d;
-      szSourceFile = ".\\Sound\\SoundHdr.cpp";
+      pD2File = ".\\Sound\\SoundHdr.cpp";
       pFileSize = &nFileSize;
-      pD2File = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, szSourceFile, nLine);
+      pD2File = (char*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, pD2File, nLine);
       pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
       nTxtSoundEnvironSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
       pSoundEnviron = (D2SoundEnvironTxt*)D2_ALLOC_AT(nTxtSoundEnvironSize * 0x58, ".\\Sound\\SoundHdr.cpp", 0x112);

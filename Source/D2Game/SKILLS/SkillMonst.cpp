@@ -245,7 +245,7 @@ BOOL __fastcall Skills_SrvDoFunc_085_FireUpgradedMissile(::SGAMEDATA * pGame, D2
       nClassId = -1;
     }
 
-    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, &eSkill);
+    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, (int32_t*)&eSkill);
     eMissilesId eMissileUpgraded = nMissileBase + eSkill;
     if ((int)eMissileUpgraded >= 0 && (int)eMissileUpgraded < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       SkillsServer::CreatingAMissile(pGame, eMissileUpgraded, pUnit, eSkillOrig, nSkillLvl, 0, 0, 0, 0, 0);

@@ -14,14 +14,11 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
-// Forward declarations
-struct D2ArchiveStrc;
-
 // Data types
 #ifndef D2_DEFINED_D2BinFieldExcelStrc
 #define D2_DEFINED_D2BinFieldExcelStrc
 struct __attribute__((packed)) D2BinFieldExcelStrc {
-    /* 0x00 */ struct D2ArchiveStrc * pD2Archive;
+    /* 0x00 */ char * pD2Archive;
     /* 0x04 */ char * pDataStart; // Pointer to start of data rows in the TSV buffer (after the header row)
     /* 0x08 */ size_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
     /* 0x0C */ int nColumnCount; // Number of tab-separated columns counted in the header row

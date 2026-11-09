@@ -22,7 +22,6 @@ struct D2AllStatesDataTbl;
 struct D2AnimDataBucketStrc;
 struct D2AnimDataRecordStrc;
 struct D2AnimDataStrc;
-struct D2ArchiveStrc;
 struct D2ArenaTxt;
 struct D2ArmTypeTxt;
 struct D2BeltsTxt;
@@ -375,7 +374,7 @@ struct D2AutoMapLvlTbls {
 #ifndef D2_DEFINED_D2BinFieldExcelStrc
 #define D2_DEFINED_D2BinFieldExcelStrc
 struct __attribute__((packed)) D2BinFieldExcelStrc {
-    /* 0x00 */ struct D2ArchiveStrc * pD2Archive;
+    /* 0x00 */ char * pD2Archive;
     /* 0x04 */ char * pDataStart; // Pointer to start of data rows in the TSV buffer (after the header row)
     /* 0x08 */ size_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
     /* 0x0C */ int nColumnCount; // Number of tab-separated columns counted in the header row
@@ -8206,7 +8205,7 @@ void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_
 } // namespace D2Common::DATATBLS::BeltsTbls
 namespace D2Common::DATATBLS::DataTbls {
 __attribute__((noinline)) inline struct D2StatesTxt * __fastcall TXT_States_GetLine(eD2States eState);
-__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, uint32_t n100Percent);
+__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, int32_t n100Percent);
 __attribute__((noinline)) inline struct D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId);
 __attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(eD2Skills eSkill);
 DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel);
@@ -8336,7 +8335,7 @@ __attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_MonStats2_GetFlags
 __attribute__((noinline)) inline int32_t __fastcall ValidateClassId(int32_t nClassId);
 __attribute__((noinline)) inline uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
 __attribute__((noinline)) inline int32_t __fastcall CheckMonStatId(int32_t nMonStatsId);
-int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, eD2Skills * eSkill);
+int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, int32_t * eSkill);
 // Computes level/difficulty-scaled monster combat stats from monstats.txt + monlvl.txt into the caller-supplied pnOutStats[] array. Inputs: nMonStatsId (monstats row), bIsChampion (selects champion HP/AC/XP/TH/DM column triplet), nDifficultyIdx (0-2, clamped), nMonLevel (clamped to monlvl table), nStatFlags (bitmask 0x1..0x100 selecting which stat groups to fill: HP, AC, XP, to-hit/damage, elemental). Per the monstat noRatio flag, values are either taken raw from the monstats row or scaled against the monlvl base via D2ApplyPercent(base, percent, 100). Returns 1 on success, 0 if the monstats/monlvl row is out of range or null. Pure stat computation; no unit mutation.
 BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bIsChampion, uint32_t nDifficultyIdx, int32_t nMonLevel, uint32_t nStatFlags, struct D2MonStatsInitStrc * pOutStats);
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(struct D2UnitStrc * pUnit);
@@ -9291,7 +9290,7 @@ int32_t __stdcall GetUnitSizeY(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTargetX(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTargetY(struct D2UnitStrc * pUnit);
 // NOTE: Return type changed void→short int (1 callers, MEDIUM confidence)
-short __stdcall GetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
+void __stdcall GetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
 void __stdcall GetTargetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
 // Returns nothing: every exit leaves AddCollision_Vector's or GetUnitSizeY's EAX, and none of the 17 call sites reads it.
 void __stdcall BlockCollisionPath(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
@@ -9514,24 +9513,24 @@ __attribute__((noinline)) inline D2StatesTxt * __fastcall TXT_States_GetLine(eD2
 #endif // D2_DEFINED_INLINE_00452040
 #ifndef D2_DEFINED_INLINE_00483360
 #define D2_DEFINED_INLINE_00483360
-__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, uint32_t n100Percent) {
+__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, int32_t n100Percent) {
     if (!n100Percent) {
       return 0;
     }
     if (nValue > 0x100000) {
-      if ((int)n100Percent <= nValue >> 4) {
-        return nValue / (int)n100Percent * nPercent;
+      if (n100Percent <= nValue >> 4) {
+        return nValue / n100Percent * nPercent;
       }
     } else {
       if (nPercent <= 0x10000) {
-        return nValue * nPercent / (int)n100Percent;
+        return nValue * nPercent / n100Percent;
       }
-      if ((int)n100Percent <= nPercent >> 4) {
-        return nPercent / (int)n100Percent * nValue;
+      if (n100Percent <= nPercent >> 4) {
+        return nPercent / n100Percent * nValue;
       }
     }
 
-    int64_t qwResult = (int64_t)nValue * (int64_t)nPercent / (int)n100Percent;
+    int64_t qwResult = _alldiv((uint32_t)((int64_t)nValue * (int64_t)nPercent), (uint32_t)((uint64_t)((int64_t)nValue * (int64_t)nPercent) >> 0x20), n100Percent, n100Percent >> 0x1f);
     return (int32_t)qwResult;
 }
 #endif // D2_DEFINED_INLINE_00483360

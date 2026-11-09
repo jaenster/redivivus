@@ -2824,10 +2824,9 @@ static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(D2UnitStrc * pCas
 // State-expire callback for the Assassin conversion (Mind Blast convert) effect. Resets the unit's alignment to hostile, clears the conversion state, frees monster target nodes, then restores pre-conversion level/HP from the STATE_conversion_save stat list (scaling current HP proportionally). Removes all flag-8 stat lists (the conversion buff layers).
 void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     int nConvMaxHp;
-    int32_t nTxtMaxHp;
-    uint32_t nHpShifted;
-    uint32_t nHpResult;
-    uint32_t nMaxHpShifted;
+    int32_t nHpShifted;
+    int32_t nHpResult;
+    int32_t nMaxHpShifted;
     UNIT::SUnit::SetAlignment(pUnit, '\0', 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
@@ -2837,16 +2836,16 @@ void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState
       int nConvLevel;
       nConvLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_conversion_level, 0);
       nConvMaxHp = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_conversion_maxhp, 0);
-      nTxtMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-      nMaxHpShifted = nTxtMaxHp >> 8;
+      nMaxHpShifted = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nMaxHpShifted >>= 8;
       nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nConvMaxHp, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8, nMaxHpShifted);
       nHpResult = nHpShifted;
-      if ((int)nHpShifted <= 1) {
+      if (nHpShifted <= 1) {
         nHpResult = 1;
       }
-      if ((int)nHpResult < (int)nMaxHpShifted) {
+      if (nHpResult < nMaxHpShifted) {
         nMaxHpShifted = nHpShifted;
-        if ((int)nHpShifted <= 1) {
+        if (nHpShifted <= 1) {
           nMaxHpShifted = 1;
         }
       }
@@ -2874,14 +2873,13 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     int nHpScaledFull;
     uint32_t nAlignment;
     int nHpFinal;
-    int nMaxHpFinal;
     uint32_t nConvertRoll = SKILLAMZ_GetGuidedArrowPiercingBonus(pUnit2, nParam->nStunLength, pUnit);
     if (!nConvertRoll) {
       return 0;
     }
 
     nConvertRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, nParam->nStunChance);
-    int nCasterLevel = nConvertRoll + pGame->dwGameFrame + nParam->nConvertChance;
+    int nExpireFrame = nConvertRoll + pGame->dwGameFrame + nParam->nConvertChance;
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_conversion);
     if (!pStatList) {
       if (!pUnit2) {
@@ -2892,7 +2890,7 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
         eOwnerUnitType = pUnit2->eUnitType;
       }
 
-      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0x802, nCasterLevel, eOwnerUnitType, nMaxHpShifted);
+      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0x802, nExpireFrame, eOwnerUnitType, nMaxHpShifted);
       if (!pStatList) {
         return 0;
       }
@@ -2903,8 +2901,8 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_conversion, 1);
     }
 
-    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nCasterLevel);
-    GAME::Event::SetEvent(pGame, pUnit, 0xc, nCasterLevel, 0, 0);
+    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nExpireFrame);
+    GAME::Event::SetEvent(pGame, pUnit, 0xc, nExpireFrame, 0, 0);
     SkillsServer::SKILLS_FreeMonsterMinions(pUnit);
     UNIT::SUnit::SetAlignment(pUnit, '\x02', 1);
     GAME::Targets::CreateUnitNode(pGame, pUnit, nullptr, pUnit2->nNodeTableIndex);
@@ -2916,9 +2914,9 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     }
 
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit2, nullptr);
-    nConvertRoll = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    nCasterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_level, 0);
-    if (!(nConvertRoll && nCasterLevel < (int)nConvertRoll)) {
+    nExpireFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+    int nCasterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_level, 0);
+    if (!(nExpireFrame && nCasterLevel < nExpireFrame)) {
       return 1;
     }
 
@@ -2941,14 +2939,14 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       nHpScaledFull = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
       nMaxHpShifted = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_level, nConvertRoll, 0);
+      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_level, nExpireFrame, 0);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_maxhp, nMaxHpShifted >> 8, 0);
-      nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHpScaledFull >> 8, nCasterLevel, nConvertRoll);
+      nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHpScaledFull >> 8, nCasterLevel, nExpireFrame);
       nHpScaledFull = nHpShifted * 0x100;
-      nMaxHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpShifted >> 8, nCasterLevel, nConvertRoll);
-      nMaxHpFinal = nMaxHpShifted * 0x100;
-      if (nMaxHpFinal < 1) {
-        nMaxHpFinal = 1;
+      nMaxHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpShifted >> 8, nCasterLevel, nExpireFrame);
+      nExpireFrame = nMaxHpShifted * 0x100;
+      if (nExpireFrame < 1) {
+        nExpireFrame = 1;
       }
 
       nHpResultLo = nHpScaledFull;
@@ -2956,8 +2954,8 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
         nHpResultLo = 1;
       }
 
-      nHpFinal = nMaxHpFinal;
-      if (nHpResultLo < nMaxHpFinal) {
+      nHpFinal = nExpireFrame;
+      if (nHpResultLo < nExpireFrame) {
         nHpFinal = nHpScaledFull;
         if (nHpScaledFull <= 1) {
           nHpFinal = 1;
@@ -2966,7 +2964,7 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nCasterLevel, 0);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHpFinal, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nMaxHpFinal, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nExpireFrame, 0);
     }
 
     return 1;

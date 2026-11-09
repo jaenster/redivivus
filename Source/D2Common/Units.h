@@ -60,7 +60,7 @@ int32_t __stdcall GetUnitSizeY(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTargetX(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTargetY(struct D2UnitStrc * pUnit);
 // NOTE: Return type changed void→short int (1 callers, MEDIUM confidence)
-short __stdcall GetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
+void __stdcall GetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
 void __stdcall GetTargetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
 // Returns nothing: every exit leaves AddCollision_Vector's or GetUnitSizeY's EAX, and none of the 17 call sites reads it.
 void __stdcall BlockCollisionPath(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);

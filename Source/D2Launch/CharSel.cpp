@@ -263,7 +263,7 @@ static uint32_t CHARSEL_IsBetaRealm(uint16_t * wszText) {
 
     uint16_t (*ppwszRealmName)[256] = pBetaRealmNames;
     do {
-      uint32_t nRealmCmp;
+      int32_t nRealmCmp;
       nRealmCmp = D2Lang::Unicode::UNISYS::STRING_CompareWideStrings(wszText, *ppwszRealmName);
       if (!nRealmCmp) {
         return 1;

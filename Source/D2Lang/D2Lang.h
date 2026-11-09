@@ -95,10 +95,10 @@ int __fastcall TABLES_LoadStrings(struct D2PoolManagerStrc * pPoolManager, char 
 } // namespace D2Lang::StrTable::strtable
 namespace D2Lang::Unicode::UNISYS {
 __attribute__((noinline)) inline void __fastcall STRING_ZeroOneWCHAR(void * pBuffer);
-uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wszText2);
+int32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wszText2);
 int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars);
 int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16_t * pwszText2);
-uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars);
+int32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars);
 uint16_t * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind);
 uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2);
 uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars);

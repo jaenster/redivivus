@@ -151,7 +151,7 @@ void __stdcall MONSTERTBLS_FreeTransformArrays() {
     }
 }
 
-int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, eD2Skills * eSkill) {
+int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, int32_t * eSkill) {
     if (nMonStatsId >= 0 && nMonStatsId < sgtDataTable.nTxtMonStatsSize) {
       if (pUpgradeCount) {
         *pUpgradeCount = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nMaxChainId;
@@ -166,7 +166,7 @@ int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, ui
       *pUpgradeCount = 0;
     }
     if (eSkill) {
-      *eSkill = SKILL_Attack;
+      *eSkill = 0;
     }
 
     return 0;

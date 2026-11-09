@@ -2998,7 +2998,7 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
     uint32_t* pArchive;
     D2BinFieldExcelStrc* pBinFieldExcel;
     size_t pRowCountOrData;
-    D2ArchiveStrc** pRecord;
+    uint32_t* pRecord;
     char szFilePath[260];
     uint32_t nFileSize = 0;
     if (gbLoadBinFiles) {
@@ -3013,17 +3013,17 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
 
       pArchive = (uint32_t*)D2COMP_LoadExcelTxtFile(pMemory, szTxtName, ".txt", &nFileSize);
     }
-    if (!(D2ArchiveStrc*)pArchive) {
+    if (!pArchive) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9e3);
       exit(-1);
     }
     if (gbLoadBinFiles) {
-      pRowCountOrData = (size_t)((D2ArchiveStrc*)pArchive)->pPrevLink;
-      pRecord = &((D2ArchiveStrc*)pArchive)->pNext;
+      pRowCountOrData = *pArchive;
+      pRecord = pArchive + 1;
     } else {
-      pBinFieldExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData((D2ArchiveStrc*)pArchive, nFileSize);
+      pBinFieldExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData((char*)pArchive, nFileSize);
       pRowCountOrData = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinFieldExcel);
-      pRecord = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, pRowCountOrData * nLineLength, ".\\Src\\D2Comp.cpp", 0x9fa);
+      pRecord = (uint32_t*)D2_ALLOC_POOL_AT(nullptr, pRowCountOrData * nLineLength, ".\\Src\\D2Comp.cpp", 0x9fa);
       memset(pRecord, 0, pRowCountOrData * nLineLength);
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinFieldExcel, pBinFields, (char*)pRecord, pRowCountOrData, nLineLength);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinFieldExcel);

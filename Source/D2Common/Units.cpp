@@ -696,7 +696,7 @@ void __stdcall SetTargetY(D2UnitStrc * pUnit, int32_t nTargetY) {
 }
 
 // NOTE: Return type changed void→short int (1 callers, MEDIUM confidence)
-short __stdcall GetCoords(D2UnitStrc * pUnit, POINT * pPoint) {
+void __stdcall GetCoords(D2UnitStrc * pUnit, POINT * pPoint) {
     int32_t nLine;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 1994);
@@ -710,18 +710,17 @@ short __stdcall GetCoords(D2UnitStrc * pUnit, POINT * pPoint) {
         pPoint->x = nLine;
         nLine = PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
         pPoint->y = nLine;
-        return (short int)nLine;
+        return;
       }
 
       pPoint->x = 0;
       pPoint->y = 0;
-    } else {
-      D2StaticPathStrc* pDVar1 = pUnit->pPath.pStaticPath;
-      pPoint->x = pDVar1->nPosX;
-      pPoint->y = pDVar1->nPosY;
+      return;
     }
 
-    return (short int)(uintptr_t)pPoint;
+    D2StaticPathStrc* pDVar1 = pUnit->pPath.pStaticPath;
+    pPoint->x = pDVar1->nPosX;
+    pPoint->y = pDVar1->nPosY;
 }
 
 void __stdcall GetTargetCoords(D2UnitStrc * pUnit, POINT * pPoint) {

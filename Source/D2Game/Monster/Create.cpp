@@ -638,7 +638,7 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
 
 // Spawns the initial minion pack for a monster whose MonStats entry defines minion1/minion2. Special-cases class 0x105 (uses AssignMinionOwner + SpawnMinions directly). For SetBoss monsters, assigns owner and interleaves spawns between minion1/minion2 type slots for a count drawn from PartyMin/PartyMax; registers each spawned minion via AssignMinionOwner + AddMinionToList. No-ops if the class id is out of range or MonStats is null.
 static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitStrc * pUnit) {
-    eD2Skills eUpgradeSkill;
+    int32_t eUpgradeSkill;
     eD2UnitType eUnitType;
     BOOL bMinionIsLeader;
     int32_t nTmp;

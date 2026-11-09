@@ -168,7 +168,7 @@ struct D2SoundSmpStrc {
     /* 0x30 */ uint32_t nLoopEnd; // loop end offset (0xFFFFFFFF = no loop)
     /* 0x34 */ int32_t dwFlags; // creation flags (bit0=stereo, bit1=3D, bit2=EAX)
     /* 0x38 */ int32_t nVolume; // current volume level
-    /* 0x3C */ uint32_t fEaxObstruction; // EAX obstruction level (float). SOUNDSMP_SetEaxObstruction stores fParam here and, at EAX quality 2, sets gEAXPropertyGuid_Obstruction with (1.0-fParam) clamped 0..1; SOUNDSMP_SetVolume attenuates by (1 - this)
+    /* 0x3C */ float fEaxObstruction; // EAX obstruction level (float). SOUNDSMP_SetEaxObstruction stores fParam here and, at EAX quality 2, sets gEAXPropertyGuid_Obstruction with (1.0-fParam) clamped 0..1; SOUNDSMP_SetVolume attenuates by (1 - this)
     /* 0x40 */ int bLooping; // was pDS3DBufferAlt; never called through - zeroed by SOUNDSMP_Reset, gates write-pos wraparound in SOUNDSMP_WriteToBuffer
     /* 0x44 */ uint32_t nMinBufSize; // minimum buffer size threshold
     /* 0x48 */ struct D2MPQFileStrc * pStreamFile; // SFile async-stream handle; SFILE_CancelAsyncRequestsForHandle/CloseFileWrapper/GetStreamInfo

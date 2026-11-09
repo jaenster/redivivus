@@ -571,7 +571,7 @@ static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWOR
       return;
     }
 
-    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(pUnit2->nClassId, nullptr, (eD2Skills*)&nDifficulty);
+    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(pUnit2->nClassId, nullptr, &nDifficulty);
     DWORD nUpgradedClassId = D2Common::Monsters::MONSTERS::MONSTER_GetMonsterClassByDifficulty(nNewClassId, nDifficulty);
     Monster::MONSTER_TransformMonsterClass(pGame, pUnit2, nUpgradedClassId, dwParam);
     if (pUnit2->eUnitType == UNIT_MONSTER && pUnit2->pUnitData.pUnitDataMonster) {
@@ -666,7 +666,7 @@ BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGam
         nMonClassId = -1;
       }
 
-      D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonClassId, nullptr, &eSkill);
+      D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonClassId, nullptr, (int32_t*)&eSkill);
       SkillsServer::CreatingAMissile(pGame, eSkill + nBaseMissileId, pUnit, eSkill_00, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }

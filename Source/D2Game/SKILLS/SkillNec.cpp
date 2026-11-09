@@ -1506,10 +1506,11 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     uint32_t nRandOrLevel;
     nRandOrLevel = D2Common::Seed::RANDOM_RandomNumberSelector(&pCorpseTarget->sSeed, nCorpseHpRaw - nDamage);
     nDamage = nRandOrLevel + nDamage;
-    nRandOrLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0);
-    nCorpseMaxHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    if (nRandOrLevel && nCorpseMaxHp < (int)nRandOrLevel) {
-      nDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nCorpseMaxHp, nRandOrLevel);
+    nCorpseMaxHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0);
+    int nPercent;
+    nPercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+    if (nCorpseMaxHp && nPercent < nCorpseMaxHp) {
+      nDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nPercent, nCorpseMaxHp);
     }
 
     memset(&damageEvent, 0, 0x70);
@@ -2328,7 +2329,7 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
 // Item-event callback for Necromancer aura-based stat absorption (e.g. Life Tap / Decrepify drain effects). Looks up the skill's aura state on pUnit, reads the absorb-capacity stat (aurastat[1]) and current absorb-pool stat (aurastat[0]) from the state's stat list, subtracts incoming damage (pParam+8) from the pool, and either removes the state entirely when exhausted or updates the visual intensity via D2StatesTogglegfx when the pool percentage changes by more than 4 points.
 BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitStat eAuraStat;
-    uint32_t nMaxAbsorbCapacity;
+    int nAbsorbedAmt;
     int32_t nValue;
     int nAbsorbDelta;
     short int nAuraStateId;
@@ -2355,28 +2356,28 @@ BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnit
           return 0;
         }
 
-        nMaxAbsorbCapacity = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
-        if ((int)nMaxAbsorbCapacity > 0) {
+        nAbsorbDelta = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
+        if (nAbsorbDelta > 0) {
           eAuraStat = (eD2UnitStat)pSkillTxt->aurastat[0];
           if ((int)eAuraStat < 0 || (int)eAuraStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
             return 0;
           }
 
-          nAbsorbDelta = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
-          if (nAbsorbDelta > 0) {
+          nAbsorbedAmt = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
+          if (nAbsorbedAmt > 0) {
             nIncomingDmg = pDamage->dwPhysDamage;
-            if (!(nAbsorbDelta > nIncomingDmg)) {
-              pDamage->dwPhysDamage = nIncomingDmg - nAbsorbDelta;
-              nAbsorbDelta = 0;
+            if (!(nAbsorbedAmt > nIncomingDmg)) {
+              pDamage->dwPhysDamage = nIncomingDmg - nAbsorbedAmt;
+              nAbsorbedAmt = 0;
             } else {
-              nAbsorbDelta -= nIncomingDmg;
+              nAbsorbedAmt -= nIncomingDmg;
               pDamage->dwPhysDamage = 0;
             }
 
-            D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eAuraStat, nAbsorbDelta, 0);
+            D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eAuraStat, nAbsorbedAmt, 0);
           }
-          if (nAbsorbDelta) {
-            nValue = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAbsorbDelta, 100, nMaxAbsorbCapacity);
+          if (nAbsorbedAmt) {
+            nValue = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAbsorbedAmt, 100, nAbsorbDelta);
             nAbsorbDelta = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_unsentparam1, 0);
             nAbsorbDelta = nValue - nAbsorbDelta;
             if (nAbsorbDelta < 0) {
@@ -2490,7 +2491,7 @@ BOOL __fastcall ITEMEVENT_LifeTap(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2Un
 
 // Item-event callback that drains life from a revived necromancer minion back to its owner. Fires when pUnit is a monster with pParam->offset_0x4c damage dealt. Looks up the owner via GetOwnerUnit, checks owner is alive and above 0xFF HP, reads the monster's Skill1 leech rate from MonStats.txt via GetSkillParam4, subtracts a percentage of the dealt damage from owner HP (floor 0x100), and reduces the tracked damage value in pParam.
 BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nValue;
+    int32_t nDivisor;
     if (!(pUnit && pDamage && pUnit->eUnitType == UNIT_MONSTER && pDamage->dwDmgTotal > 0)) {
       return 0;
     }
@@ -2514,12 +2515,12 @@ BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEv
     if (pMonStatsTxt && pMonStatsTxt->aSkill[0] >= 0) {
       int32_t nLeechAmt;
       nLeechAmt = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pDamage->dwDmgTotal, D2Common::DATATBLS::DataTbls::GetSkillParam4((int)pMonStatsTxt->aSkill[0]), 100);
-      nValue = nOwnerCurHp - nLeechAmt;
-      if (nValue < 0x100) {
-        nValue = 0x100;
+      nDivisor = nOwnerCurHp - nLeechAmt;
+      if (nDivisor < 0x100) {
+        nDivisor = 0x100;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_hitpoints, nValue, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_hitpoints, nDivisor, 0);
       pDamage->dwDmgTotal -= nLeechAmt;
       pDamage->dwDmgTotal = pDamage->dwDmgTotal <= 0 ? 0 : pDamage->dwDmgTotal;
       return 1;

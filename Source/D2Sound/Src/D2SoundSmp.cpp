@@ -378,7 +378,7 @@ void __fastcall SOUNDSMP_SetVolume(D2SoundSmpStrc * ppSoundSmp, int nVolume) {
       }
     }
 
-    nErrorAddr = (int)((1.0 - (float)ppSoundSmp->fEaxObstruction) * (float)nErrorAddr);
+    nErrorAddr = (int)((1.0 - ppSoundSmp->fEaxObstruction) * (float)nErrorAddr);
     apply_volume:
     fVar1 = SOUNDSMP_ClampVolume(0.0, 255.0, (float)nErrorAddr);
     ppSoundSmp->pDSBuffer->lpVtbl->SetVolume(ppSoundSmp->pDSBuffer, (int)fVar1);

@@ -1227,7 +1227,6 @@ static int32_t SKILLDRUID_GetSummonHealthBonus(int * pnAbsorb, int32_t nAbsorbDe
 BOOL __fastcall ITEMEVENT_DruidSummonHpAura(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bPctChanged;
     bool bPctChanged;
-    int nLastAbsorbPct;
     int32_t nAbsorbCtx0;
     int32_t nAbsorbCtx1;
     int32_t nAbsorbCtx2;
@@ -1262,8 +1261,8 @@ BOOL __fastcall ITEMEVENT_DruidSummonHpAura(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    uint32_t n100Percent = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
-    if ((int)n100Percent > 0) {
+    int n100Percent = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eAuraStat, 0);
+    if (n100Percent > 0) {
       eAuraStat = (eD2UnitStat)pSkillTxt->aurastat[0];
       if ((int)eAuraStat >= 0 && (int)eAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         int32_t nAbsorbCur;
@@ -1282,8 +1281,8 @@ BOOL __fastcall ITEMEVENT_DruidSummonHpAura(::SGAMEDATA * pGame, uint32_t nUnitE
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eAuraStat, nAbsorbCur, 0);
           if (nAbsorbCur > 0) {
             nAbsorbCur = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAbsorbCur, 100, n100Percent);
-            nLastAbsorbPct = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_unsentparam1, 0);
-            _bPctChanged = (uint32_t)(nAbsorbCur - nLastAbsorbPct >= 5);
+            n100Percent = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_unsentparam1, 0);
+            _bPctChanged = (uint32_t)(nAbsorbCur - n100Percent >= 5);
             if (!_bPctChanged) {
               return 1;
             }

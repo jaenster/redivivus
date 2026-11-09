@@ -1325,7 +1325,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
     D2StatInfoStrc* pBaseStatInfo;
     D2StatStrc* pBaseStatEntry;
     eD2UnitType eOwnerType;
-    uint32_t n100Percent;
+    int32_t n100Percent;
     D2DrlgActStrc* pDrlgAct;
     D2StatInfoStrc* pListBaseStats;
     D2UnitStrc* pOwner;

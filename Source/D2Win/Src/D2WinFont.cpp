@@ -250,7 +250,7 @@ int32_t __fastcall DRAW_text0(uint16_t * wszText) {
 }
 
 static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
-    uint32_t nColorCmpResult;
+    int32_t nColorCmpResult;
     D2FontGlyphStrc* pGlyphEntry;
     int32_t nStrLen;
     int nCharPos = 0;
@@ -305,7 +305,7 @@ static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
 }
 
 static int32_t D2WINFONT_GetFirstLinePixelWidth(uint16_t * pwszString) {
-    uint32_t nColorCmpResult;
+    int32_t nColorCmpResult;
     D2FontGlyphStrc* pGlyphEntry;
     int nCharPos;
     int32_t nLineWidth;

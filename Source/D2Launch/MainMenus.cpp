@@ -9458,26 +9458,25 @@ BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(D2ControlMsg * pControlMsg) {
     int32_t nMsgBoxArg5;
     int32_t nMsgBoxArg7;
     int32_t nMsgBoxArg8;
-    int32_t nMsgBoxTitleId;
     OnPress pAccountResult;
     OnPress pfnBtn2Press;
     OnPress pfnBtn3Press;
     uint16_t* pwszEmail1 = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpnEmailBuffer->sControl);
     uint16_t* pwszEmail2 = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlEnterEmailInput->sControl);
-    uint32_t nEmailCmp = D2Lang::Unicode::UNISYS::STRING_CompareWideStrings(pwszEmail1, pwszEmail2);
+    int32_t nEmailCmp = D2Lang::Unicode::UNISYS::STRING_CompareWideStrings(pwszEmail1, pwszEmail2);
     if (!nEmailCmp) {
       D2Lang::WideCharToUTF8(szEmail, pwszEmail1, 0x100);
       pAccountResult = (OnPress)MAINMENU_IsValidEmailAddress(szEmail);
       if (!pAccountResult) {
         OnPress pfnBtn1Press;
         nMsgBoxArg5 = 1;
-        nMsgBoxTitleId = 0x13ee;
+        nEmailCmp = 0x13ee;
         pfnBtn1Press = (OnPress)MAINMENU_DismissPopup;
         pfnBtn2Press = pAccountResult;
         pfnBtn3Press = pAccountResult;
         pwszEmail1 = D2Lang::StrTable::strtable::GetLocaleString(0x2b5d);
         pwszEmail2 = D2Lang::StrTable::strtable::GetLocaleString(0x2b5c);
-        MAINMENU_CreateMessageBox(pwszEmail2, pwszEmail1, nMsgBoxTitleId, (int32_t)pAccountResult, pfnBtn1Press, pfnBtn2Press, nMsgBoxArg5, (int32_t)pfnBtn3Press);
+        MAINMENU_CreateMessageBox(pwszEmail2, pwszEmail1, nEmailCmp, (int32_t)pAccountResult, pfnBtn1Press, pfnBtn2Press, nMsgBoxArg5, (int32_t)pfnBtn3Press);
         return 1;
       }
 

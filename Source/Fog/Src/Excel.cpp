@@ -162,7 +162,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
     int nErrorAddress;
     nErrorAddress = 0;
     char* pColNameIter;
-    pColNameIter = (char*)pBinFieldExcel->pD2Archive;
+    pColNameIter = pBinFieldExcel->pD2Archive;
     uint32_t nColumnIndex;
     nColumnIndex = 0;
     if ((uint32_t)pBinFieldExcel->nColumnCount > 0) {
@@ -539,13 +539,13 @@ int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
-D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(D2ArchiveStrc * pD2Archive, size_t nSize) {
-    D2ArchiveStrc* pScanPos;
-    D2ArchiveStrc* pLineStart;
-    D2ArchiveStrc* pNextLineStart;
+D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(char * pD2Archive, size_t nSize) {
+    char* pScanPos;
+    char* pLineStart;
+    char* pNextLineStart;
     char cNextChar;
-    D2ArchiveStrc* pCurPos;
-    pCurPos = (D2ArchiveStrc*)(pD2Archive->szArchivePath + (nSize - 8));
+    char* pCurPos;
+    pCurPos = pD2Archive + nSize;
     D2BinFieldExcelStrc* pBinFieldExcel;
     pBinFieldExcel = D2_NEW_POOL_AT(nullptr, D2BinFieldExcelStrc, ".\\Src\\Excel\\Excel.cpp", 0x4d);
     pBinFieldExcel->pD2Archive = pD2Archive;
@@ -559,19 +559,19 @@ D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(D2ArchiveS
           goto error;
         }
 
-        pD2Archive = (D2ArchiveStrc*)((intptr_t)&pScanPos->pPrevLink + 1);
-        if (*(char*)&pScanPos->pPrevLink != '\t') {
+        pD2Archive = pScanPos + 1;
+        if (*pScanPos != '\t') {
           break;
         }
 
-        *(char*)&pScanPos->pPrevLink = '\0';
+        *pScanPos = '\0';
         pBinFieldExcel->nColumnCount++;
       }
-    } while (*(char*)&pScanPos->pPrevLink != '\r');
+    } while (*pScanPos != '\r');
 
     char cCurChar;
-    cCurChar = *(char*)&pD2Archive->pPrevLink;
-    *(char*)&pScanPos->pPrevLink = '\0';
+    cCurChar = *pD2Archive;
+    *pScanPos = '\0';
     if (cCurChar != '\n') {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x5c);
       exit(-1);
@@ -579,7 +579,7 @@ D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(D2ArchiveS
 
     int32_t nCmp;
     pBinFieldExcel->nColumnCount++;
-    pScanPos = (D2ArchiveStrc*)((intptr_t)&pScanPos->pPrevLink + 2);
+    pScanPos += 2;
     if (pScanPos >= pCurPos) {
       error:
       D2_FREE_AT(pBinFieldExcel->pD2Archive, ".\\Src\\Excel\\Excel.cpp", 0x9a);
@@ -587,36 +587,36 @@ D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(D2ArchiveS
       return nullptr;
     }
     if ((uint32_t)pBinFieldExcel->nColumnCount <= 0x118) {
-      pBinFieldExcel->pDataStart = (char*)pScanPos;
+      pBinFieldExcel->pDataStart = pScanPos;
       pLineStart = pScanPos;
       do {
         pNextLineStart = pScanPos;
         if (pNextLineStart < pCurPos) {
-          pScanPos = (D2ArchiveStrc*)((intptr_t)&pNextLineStart->pPrevLink + 1);
-          if (*(char*)&pNextLineStart->pPrevLink == '\t') {
-            *(char*)&pNextLineStart->pPrevLink = '\0';
+          pScanPos = pNextLineStart + 1;
+          if (*pNextLineStart == '\t') {
+            *pNextLineStart = '\0';
             continue;
           }
-          if (*(char*)&pNextLineStart->pPrevLink != '\r') {
+          if (*pNextLineStart != '\r') {
             continue;
           }
 
-          cNextChar = *(char*)&pScanPos->pPrevLink;
-          *(char*)&pNextLineStart->pPrevLink = '\0';
+          cNextChar = *pScanPos;
+          *pNextLineStart = '\0';
           if (cNextChar != '\n') {
             ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x75);
             exit(-1);
           }
 
-          pNextLineStart = (D2ArchiveStrc*)((intptr_t)&pNextLineStart->pPrevLink + 2);
+          pNextLineStart += 2;
           /* Count lines and add value */ pBinFieldExcel->nLinesCount++;
         }
 
-        nCmp = Storm::Source::SSTR::SStrCmp((char*)pLineStart, "Expansion", 10);
+        nCmp = Storm::Source::SSTR::SStrCmp(pLineStart, "Expansion", 10);
         if (!nCmp) {
           pBinFieldExcel->nLinesCount--;
           Storm::Source::SMem::SMemCopy(pLineStart, pNextLineStart, (intptr_t)pCurPos - (intptr_t)pNextLineStart);
-          pCurPos = (D2ArchiveStrc*)((char*)pCurPos + ((intptr_t)pLineStart - (intptr_t)pNextLineStart));
+          pCurPos += (intptr_t)pLineStart - (intptr_t)pNextLineStart;
           pNextLineStart = pLineStart;
         }
 

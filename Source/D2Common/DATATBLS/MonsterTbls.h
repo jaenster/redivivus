@@ -28,7 +28,6 @@ struct D2ParsedTreasureClassStrc;
 struct D2PoolManagerStrc;
 struct D2SuperUniquesTxt;
 struct D2UnitStrc;
-typedef uint32_t eD2Skills;
 
 // Data types
 #ifndef D2_DEFINED_D2MonItemPercentTxt
@@ -94,7 +93,7 @@ __attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_MonStats2_GetFlags
 __attribute__((noinline)) inline int32_t __fastcall ValidateClassId(int32_t nClassId);
 __attribute__((noinline)) inline uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
 __attribute__((noinline)) inline int32_t __fastcall CheckMonStatId(int32_t nMonStatsId);
-int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, eD2Skills * eSkill);
+int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, int32_t * eSkill);
 // Computes level/difficulty-scaled monster combat stats from monstats.txt + monlvl.txt into the caller-supplied pnOutStats[] array. Inputs: nMonStatsId (monstats row), bIsChampion (selects champion HP/AC/XP/TH/DM column triplet), nDifficultyIdx (0-2, clamped), nMonLevel (clamped to monlvl table), nStatFlags (bitmask 0x1..0x100 selecting which stat groups to fill: HP, AC, XP, to-hit/damage, elemental). Per the monstat noRatio flag, values are either taken raw from the monstats row or scaled against the monlvl base via D2ApplyPercent(base, percent, 100). Returns 1 on success, 0 if the monstats/monlvl row is out of range or null. Pure stat computation; no unit mutation.
 BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bIsChampion, uint32_t nDifficultyIdx, int32_t nMonLevel, uint32_t nStatFlags, struct D2MonStatsInitStrc * pOutStats);
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(struct D2UnitStrc * pUnit);

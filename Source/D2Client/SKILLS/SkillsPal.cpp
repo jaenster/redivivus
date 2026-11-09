@@ -449,7 +449,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
 
     int32_t nLineNo = 0x1ca;
     char* szSkillsBarCpp = ".\\SKILLS\\SkillsPal.cpp";
-    uint32_t nPctDivisor = 100;
+    int32_t nPctDivisor = 100;
     nClassId = D2Common::Skills::SKILLS_GetManaCostMultiplier(eSkill);
     nBaseVelocity = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nBaseVelocity, nClassId + nVelocityPct, nPctDivisor);
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, nBaseVelocity, szSkillsBarCpp, nLineNo);

@@ -15,7 +15,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2ArchiveStrc;
 struct D2BinFieldExcelStrc;
 struct D2TxtLinkNodeStrc;
 struct D2TxtLinkStrc;
@@ -65,7 +64,7 @@ int32_t __stdcall GetLinkNodeIndex(struct D2TxtLinkStrc * pLink, char * szItemCo
 // @sourcefile .\Src\Excel\Excel.cpp
 int __stdcall FOG_ParseStringField(struct D2TxtLinkStrc * pTxtLink, char * szText);
 // @sourcefile .\Src\Excel\Excel.cpp
-struct D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(struct D2ArchiveStrc * pD2Archive, size_t nSize);
+struct D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(char * pD2Archive, size_t nSize);
 // Two passes over the txt rows: pass 1 resolves link-type columns (CODE*/NAME_I*), pass 2 parses every
 // mapped column into the record and pass 2b default-fills the mapped fields that had no column.
 void __stdcall TXT_ParseDataAndPutIntoStructure(struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput, char * pRecord, size_t nLinesCount, int nEndOffset);

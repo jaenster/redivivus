@@ -31,24 +31,24 @@ __attribute__((noinline)) inline D2StatesTxt * __fastcall TXT_States_GetLine(eD2
 
 #ifndef D2_DEFINED_INLINE_00483360
 #define D2_DEFINED_INLINE_00483360
-__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, uint32_t n100Percent) {
+__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, int32_t n100Percent) {
     if (!n100Percent) {
       return 0;
     }
     if (nValue > 0x100000) {
-      if ((int)n100Percent <= nValue >> 4) {
-        return nValue / (int)n100Percent * nPercent;
+      if (n100Percent <= nValue >> 4) {
+        return nValue / n100Percent * nPercent;
       }
     } else {
       if (nPercent <= 0x10000) {
-        return nValue * nPercent / (int)n100Percent;
+        return nValue * nPercent / n100Percent;
       }
-      if ((int)n100Percent <= nPercent >> 4) {
-        return nPercent / (int)n100Percent * nValue;
+      if (n100Percent <= nPercent >> 4) {
+        return nPercent / n100Percent * nValue;
       }
     }
 
-    int64_t qwResult = (int64_t)nValue * (int64_t)nPercent / (int)n100Percent;
+    int64_t qwResult = _alldiv((uint32_t)((int64_t)nValue * (int64_t)nPercent), (uint32_t)((uint64_t)((int64_t)nValue * (int64_t)nPercent) >> 0x20), n100Percent, n100Percent >> 0x1f);
     return (int32_t)qwResult;
 }
 #endif // D2_DEFINED_INLINE_00483360

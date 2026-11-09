@@ -34,7 +34,7 @@ namespace D2Common::DATATBLS::DataTbls {
 
 // Function declarations
 __attribute__((noinline)) inline struct D2StatesTxt * __fastcall TXT_States_GetLine(eD2States eState);
-__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, uint32_t n100Percent);
+__attribute__((noinline)) inline int32_t __fastcall D2ApplyPercent(int32_t nValue, int32_t nPercent, int32_t n100Percent);
 __attribute__((noinline)) inline struct D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId);
 __attribute__((noinline)) inline int32_t __fastcall GetSkillParam4(eD2Skills eSkill);
 DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel);

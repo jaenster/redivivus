@@ -617,7 +617,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
         exit(-1);
       }
 
-      pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pArchiveTxt, nSize);
+      pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData((char*)pArchiveTxt, nSize);
       nTxtLineCount = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
       nBinAllocSize = nTxtLineCount * nEndOffset;
       pDataTable = D2_ALLOC_POOL_AT(nullptr, nBinAllocSize, ".\\DATATBLS\\DataTbls.cpp", 0x8c9);
@@ -659,7 +659,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       nRecordCount = (int32_t)pArchive2->pPrevLink;
       pParsedData = &pArchive2->pNext;
     } else {
-      pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pArchive2, nSize);
+      pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData((char*)pArchive2, nSize);
       nRecordCount = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
       pParsedData = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, nRecordCount * nEndOffset, ".\\DATATBLS\\DataTbls.cpp", 0x904);
       memset(pParsedData, 0, nRecordCount * nEndOffset);

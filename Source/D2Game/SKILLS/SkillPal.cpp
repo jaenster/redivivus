@@ -753,13 +753,13 @@ BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       nVelocityPct = 0x32;
     }
 
-    nClassId = 0x330;
+    int32_t nLine = 0x330;
     char* pVelFileRef = ".\\SKILLS\\SkilPal.cpp";
-    uint32_t nVelDivisor = 100;
+    nClassId = 100;
     nChargeCalc = D2Common::Skills::SKILLS_GetManaCostMultiplier(eSkill);
-    nChargeCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nBaseVel.nBaseVel2, nChargeCalc + nVelocityPct, nVelDivisor);
+    nChargeCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nBaseVel.nBaseVel2, nChargeCalc + nVelocityPct, nClassId);
     pDynPath = pDynPathCharge;
-    D2Common::PATH::DynamicPath::SetVelocities(pDynPathCharge, nChargeCalc, pVelFileRef, nClassId);
+    D2Common::PATH::DynamicPath::SetVelocities(pDynPathCharge, nChargeCalc, pVelFileRef, nLine);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
     D2Common::Skills::SKILL_SetFlags(pSkill, 0x1001);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
@@ -1222,8 +1222,7 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
     int32_t nMinExpiryFrame;
     D2StatListExStrc* pConvStatList;
     eD2UnitType eTargetType;
-    uint32_t nTargetLevel;
-    int nCurHpRaw;
+    int nPercent;
     int32_t nHpScaleResult;
     int nScaledMaxHp;
     uint32_t dwAlignment;
@@ -1293,9 +1292,9 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
         pConvStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit_00, 8);
       }
 
-      nTargetLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_level, 0);
-      nConvertCheckOrFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-      if (!(nTargetLevel && nConvertCheckOrFrame < (int)nTargetLevel)) {
+      nConvertCheckOrFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_level, 0);
+      nPercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+      if (!(nConvertCheckOrFrame && nPercent < nConvertCheckOrFrame)) {
         return 1;
       }
 
@@ -1311,16 +1310,16 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
 
       D2Common::Stats::StatsEx::SetState(pConvStatList, STATE_conversion_save);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit_00, pConvStatList, 1);
-      nCurHpRaw = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_hitpoints, 0);
+      nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_hitpoints, 0);
       nDuration = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit_00);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_level, nTargetLevel, 0);
+      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_level, nConvertCheckOrFrame, 0);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_maxhp, nDuration >> 8, 0);
-      nHpScaleResult = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCurHpRaw >> 8, nConvertCheckOrFrame, nTargetLevel);
+      nHpScaleResult = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCurHp >> 8, nPercent, nConvertCheckOrFrame);
       nCurHp = nHpScaleResult * 0x100;
-      nDuration = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDuration >> 8, nConvertCheckOrFrame, nTargetLevel);
-      nCurHpRaw = nDuration * 0x100;
-      if (nCurHpRaw < 1) {
-        nCurHpRaw = 1;
+      nDuration = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDuration >> 8, nPercent, nConvertCheckOrFrame);
+      nConvertCheckOrFrame = nDuration * 0x100;
+      if (nConvertCheckOrFrame < 1) {
+        nConvertCheckOrFrame = 1;
       }
 
       nScaledMaxHp = nCurHp;
@@ -1328,17 +1327,17 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
         nScaledMaxHp = 1;
       }
 
-      nFinalHp = nCurHpRaw;
-      if (nScaledMaxHp < nCurHpRaw) {
+      nFinalHp = nConvertCheckOrFrame;
+      if (nScaledMaxHp < nConvertCheckOrFrame) {
         nFinalHp = nCurHp;
         if (nCurHp <= 1) {
           nFinalHp = 1;
         }
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_level, nConvertCheckOrFrame, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_level, nPercent, 0);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_hitpoints, nFinalHp, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_maxhp, nCurHpRaw, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_maxhp, nConvertCheckOrFrame, 0);
       return 1;
     }
 
