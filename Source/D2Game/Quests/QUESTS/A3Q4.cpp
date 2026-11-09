@@ -211,9 +211,9 @@ void __fastcall Q21_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // Quest event 2 (NPC deactivate, dialog closed) for Q21: by the target NPC class (254 Alkor, 245 Cain, 264 Meshif) clears the matching talked-to byte in the quest data, clears the low flag byte and calls QUEST_SetStateAndBroadcast with Q21_PlayerNotifyCompleted (state 5 for Alkor, which also sets byte +0; 2 and 4 for Cain's two talks; 3 for Meshif).
 // Evidence: Q21_Callback11_ScrollMessage stores it at sStateFunctions slot 2 (+0xa8) after each talk; [EDX+8] is pQuestArgs->pTarget, [EAX+4] its class id. Was the label Q21_Callback_02 (kept as a secondary label).
 void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    short int nNpcClassId = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
+    int32_t nNpcClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     D2QuestDataA3Q4Strc* pQuestDataA3Q4 = pQuestData->pQuestSpecificData.pA3Q4;
-    if (nNpcClassId == 0xfe) {
+    if ((short int)nNpcClassId == 0xfe) {
       if (pQuestDataA3Q4->bRewardGivenToAlchemist == '\x01') {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, 1);
@@ -221,7 +221,7 @@ void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         pQuestDataA3Q4->bBirdDropped = '\x01';
         return;
       }
-    } else if (nNpcClassId == 0xf5) {
+    } else if ((short int)nNpcClassId == 0xf5) {
       if (pQuestDataA3Q4->bCainToldAboutTome == '\x01') {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, 1);
@@ -233,7 +233,7 @@ void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         pQuestDataA3Q4->bAlchemistTradedBird = '\0';
         return;
       }
-    } else if (nNpcClassId == 0x108 && pQuestDataA3Q4->bJadeGivenToMeshif == '\x01') {
+    } else if ((short int)nNpcClassId == 0x108 && pQuestDataA3Q4->bJadeGivenToMeshif == '\x01') {
       pQuestData->nQuestPacketFlags = '\0';
       QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, 1);
       pQuestDataA3Q4->bJadeGivenToMeshif = '\0';

@@ -1410,7 +1410,7 @@ void __stdcall SOUND_ShutdownSystem() {
     int nChanHandle;
     uint32_t nFadeOutMs;
     D2SoundChannelStrc* pMatchChannelData;
-    uint8_t byFadeOut;
+    int32_t byFadeOut;
     D2SoundChannelNodeStrc** pChanListNode;
     D2SoundChannelNodeStrc* pChanSearchNode;
     D2SoundListNodeStrc* pGlobal3Ref;

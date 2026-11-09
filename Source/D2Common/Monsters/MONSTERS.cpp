@@ -451,7 +451,6 @@ BOOL __stdcall CheckIfMonsterIsDead(D2UnitStrc * pUnit) {
 
 // Resolves the monster class ID, world position, and animation mode to use when summoning or spawning a unit. If pUnit is a live monster and nParam1 is set, reads spawn data (spawn/spawnx/spawny/spawnmode) from MonStats.txt. Otherwise reads summon/summode from Skills.txt for skill nParam2. Writes results to pnMode, pnParam1 (X), pnParam2 (Y); returns the monster class ID or -1 if not found.
 int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpawn, int32_t nSkillId, int32_t nMode, int * pnMode, int * pnSpawnX, int * pnSpawnY) {
-    int32_t nPosXY;
     int nSumModeOrSpawnMode;
     D2SkillsTxt* pSkillsTxt;
     int nSpawnId;
@@ -459,12 +458,10 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
       pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
       if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         if (pnSpawnX) {
-          nPosXY = Units::GetXPosFromDynamicPathUnit(pUnit);
-          *pnSpawnX = nPosXY;
+          *pnSpawnX = Units::GetXPosFromDynamicPathUnit(pUnit);
         }
         if (pnSpawnY) {
-          nPosXY = Units::GetYPosFromDynamicPathUnit(pUnit);
-          *pnSpawnY = nPosXY;
+          *pnSpawnY = Units::GetYPosFromDynamicPathUnit(pUnit);
         }
         if (pnMode) {
           nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
@@ -483,12 +480,10 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
       if (pMonStatsTxt) {
         nSpawnId = pMonStatsTxt->spawn;
         if (pnSpawnX) {
-          nPosXY = Units::GetXPosFromDynamicPathUnit(pUnit);
-          *pnSpawnX = nPosXY + pMonStatsTxt->spawnx;
+          *pnSpawnX = Units::GetXPosFromDynamicPathUnit(pUnit) + pMonStatsTxt->spawnx;
         }
         if (pnSpawnY) {
-          nPosXY = Units::GetYPosFromDynamicPathUnit(pUnit);
-          *pnSpawnY = nPosXY + pMonStatsTxt->spawny;
+          *pnSpawnY = Units::GetYPosFromDynamicPathUnit(pUnit) + pMonStatsTxt->spawny;
         }
         if (pnMode) {
           nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;

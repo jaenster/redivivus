@@ -105,9 +105,9 @@ BOOL __fastcall Q33_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 // If Malah was talked to -> advance to stateFlag 1 (broadcast). If quest active && Scroll-of-Resistance collected && prev<4
 // -> advance to stateFlag 4 (Anya freed / scroll obtained), broadcasting via Q33_NotifyQuestState.
 void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    short int nTargetClassId = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
+    int32_t nTargetClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
-    if (nTargetClassId != 0x201) {
+    if ((short int)nTargetClassId != 0x201) {
       return;
     }
     if (pA5Q3Data->bMalachaiTalked) {

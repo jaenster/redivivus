@@ -7999,14 +7999,21 @@ void __stdcall INPUT_ConfigMouseButtonHandler(D2UIMouseMsgStrc * pMsg) {
 
     short int nMouseButton;
     nMouseButton = *(short int*)((intptr_t)&pMsg->nWParam + 2);
-    if (nMouseButton != 1) {
-      if (nMouseButton != 2) {
-        goto consume_click;
-      }
-
-      nKeyCode = 0x102;
-    } else {
-      nKeyCode = 0x101;
+    switch (nMouseButton) {
+      case 1:
+        {
+          nKeyCode = 0x101;
+          break;
+        }
+      default:
+        {
+          goto consume_click;
+        }
+      case 2:
+        {
+          nKeyCode = 0x102;
+          break;
+        }
     }
 
     UI_ConfigSetKeyBinding(nKeyCode);

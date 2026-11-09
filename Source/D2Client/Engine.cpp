@@ -596,7 +596,7 @@ void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadius
     if (eUnitType == UNIT_PLAYER) {
       nLightRadius = 0xd;
     } else {
-      uint8_t bVar1;
+      int32_t bVar1;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
       if (!pMonStats2) {
         return;
@@ -604,7 +604,7 @@ void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadius
 
       bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetMaxLightRadiusFromEquipment(pUnit);
       nLightRadius = (uint32_t)bVar1;
-      if ((uint32_t)bVar1 < (uint32_t)pMonStats2->byLight) {
+      if (bVar1 < pMonStats2->byLight) {
         nLightRadius = (uint32_t)pMonStats2->byLight;
       }
     }

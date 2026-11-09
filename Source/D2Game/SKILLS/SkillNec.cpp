@@ -326,15 +326,23 @@ void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     int32_t sAuraTargetState = pSkillsTxt->auratargetstate;
-    if (sAuraTargetState != 0x17) {
-      if (sAuraTargetState != 0x1b) {
-        nFunctionId = sAuraTargetState == 0x38 ? 0xb : 0;
-      } else {
-        nFunctionId = 0xc;
-      }
-    } else {
-      nFunctionId = 10;
+    switch (sAuraTargetState) {
+      case 0x17:
+        {
+          nFunctionId = 10;
+          break;
+        }
+      case 0x1b:
+        {
+          nFunctionId = 0xc;
+          break;
+        }
+      default:
+        {
+          nFunctionId = sAuraTargetState == 0x38 ? 0xb : 0;
+        }
     }
+
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit->pUnitData.pUnitDataMonster->pAiGeneral, nFunctionId);
       return;
@@ -966,8 +974,8 @@ static void __stdcall SKILLNEC_SetSkeletonComponentsByMasteryLvl(D2UnitStrc * pS
 
     D2SeedStrc llRandState;
     llRandState = D2_SEED_NEXT(pSeedUnit->sSeed);
-    uint8_t byRandComponent;
-    byRandComponent = (uint8_t)llRandState.nSeedLow & 3;
+    int32_t byRandComponent;
+    byRandComponent = llRandState.nSeedLow & 3;
     pSeedUnit->sSeed = llRandState;
     if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER) {
       if (pSkeletonUnit->pUnitData.pUnitDataMonster) {

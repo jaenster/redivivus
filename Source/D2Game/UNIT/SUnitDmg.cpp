@@ -3267,7 +3267,7 @@ int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nMultiplicand, int32_t nMult
       return nMultiplicand;
     }
 
-    uint8_t byShift = (uint8_t)nShiftBits;
+    int32_t byShift = nShiftBits;
     if (nMultiplicand > 0x7fffffff >> D2_SHIFT_COUNT((char)(nMultiplier >> D2_SHIFT_COUNT(byShift)) + byShift)) {
       return (nMultiplicand >> D2_SHIFT_COUNT(byShift)) * nMultiplier;
     }

@@ -1175,7 +1175,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
 
         byOutputType = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pDVar2);
         pSourceItem = (uint32_t)byOutputType;
-        if ((uint32_t)pOutputEntry->nQuantity <= (uint32_t)byOutputType) {
+        if (byOutputType >= pOutputEntry->nQuantity) {
           pSourceItem = (uint32_t)pOutputEntry->nQuantity;
         }
 

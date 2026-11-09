@@ -3493,90 +3493,102 @@ uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(D2SkillStrc * pSkill, D2U
     if (!pDVar1 || !(*((uint8_t*)pDVar1 + 0x8) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
       BOOL bGotWeaponInfo;
       nWeaponReqType = pDVar1->skill;
-      if (nWeaponReqType != 2) {
-        if (nWeaponReqType != 4) {
-          if (nWeaponReqType != 5) {
-            return 1;
-          }
-          if (!pInventory) {
-            return 0;
-          }
-
-          bGotWeaponInfo = Units::CanDualWield(pUnit);
-          if (!bGotWeaponInfo) {
-            return 0;
-          }
-
-          bHasAmmo = 0;
-          bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-          if (bGotWeaponInfo) {
-            if (!nHandedness) {
-              bHasAmmo = ITEMS::Items::ITEMS_IsA(pWeapon, ITEMTYPE_Weapon);
-              return bHasAmmo;
+      switch (nWeaponReqType) {
+        case 2:
+          {
+            bHasAmmo = 0;
+            if (!pInventory) {
+              return 0;
             }
 
-            pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
-            if (pAltWeapon) {
-              bHasAmmo = ITEMS::Items::ITEMS_IsA(pAltWeapon, ITEMTYPE_Weapon);
-              return bHasAmmo;
-            }
-          }
-        } else {
-          bHasAmmo = 0;
-          if (!pInventory) {
-            return 0;
-          }
-
-          bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-          if (bGotWeaponInfo) {
-            if (nHandedness) {
-              pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
-              if (pAltWeapon) {
-                bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAltWeapon);
-                if (!bHasAmmo) {
-                  bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pAltWeapon, UNITSTAT_item_throwable, 0);
+            bGotWeaponInfo = Units::CanDualWield(pUnit);
+            if (bGotWeaponInfo) {
+              bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
+              if (bGotWeaponInfo) {
+                if (!nHandedness) {
+                  pWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+                }
+                if (pWeapon) {
+                  bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
+                  if (!bHasAmmo) {
+                    bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_throwable, 0);
+                    return bHasAmmo;
+                  }
                 }
               }
             } else {
-              bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
-              if (!bHasAmmo) {
-                bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_throwable, 0);
-                return bHasAmmo;
+              bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
+              if (bGotWeaponInfo && nHandedness) {
+                bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
+                if (!bHasAmmo) {
+                  bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_throwable, 0);
+                  return bHasAmmo;
+                }
               }
             }
-          }
-        }
-      } else {
-        bHasAmmo = 0;
-        if (!pInventory) {
-          return 0;
-        }
 
-        bGotWeaponInfo = Units::CanDualWield(pUnit);
-        if (bGotWeaponInfo) {
-          bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-          if (bGotWeaponInfo) {
-            if (!nHandedness) {
-              pWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+            break;
+          }
+        case 4:
+          {
+            bHasAmmo = 0;
+            if (!pInventory) {
+              return 0;
             }
-            if (pWeapon) {
-              bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
-              if (!bHasAmmo) {
-                bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_throwable, 0);
+
+            bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
+            if (bGotWeaponInfo) {
+              if (nHandedness) {
+                pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+                if (pAltWeapon) {
+                  bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAltWeapon);
+                  if (!bHasAmmo) {
+                    bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pAltWeapon, UNITSTAT_item_throwable, 0);
+                  }
+                }
+              } else {
+                bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
+                if (!bHasAmmo) {
+                  bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_throwable, 0);
+                  return bHasAmmo;
+                }
+              }
+            }
+
+            break;
+          }
+        case 5:
+          {
+            if (!pInventory) {
+              return 0;
+            }
+
+            bGotWeaponInfo = Units::CanDualWield(pUnit);
+            if (!bGotWeaponInfo) {
+              return 0;
+            }
+
+            bHasAmmo = 0;
+            bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
+            if (bGotWeaponInfo) {
+              if (!nHandedness) {
+                bHasAmmo = ITEMS::Items::ITEMS_IsA(pWeapon, ITEMTYPE_Weapon);
+                return bHasAmmo;
+              }
+
+              pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+              if (pAltWeapon) {
+                bHasAmmo = ITEMS::Items::ITEMS_IsA(pAltWeapon, ITEMTYPE_Weapon);
                 return bHasAmmo;
               }
             }
+
+            break;
           }
-        } else {
-          bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-          if (bGotWeaponInfo && nHandedness) {
-            bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
-            if (!bHasAmmo) {
-              bHasAmmo = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_throwable, 0);
-              return bHasAmmo;
-            }
+        default:
+          {
+            return 1;
           }
-        }
       }
     } else {
       bHasAmmo = 0;

@@ -1630,23 +1630,23 @@ void __stdcall NET_SID_ClearSrpPassword() {
 }
 
 uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex) {
-    int8_t nNibbleShift = ((uint8_t)nNibbleIndex & 7) * '\x04';
+    int32_t nNibbleShift = (nNibbleIndex & 7) * 4;
     return (pCdKeyData[3 - (nNibbleIndex >> 3)] & 0xf << nNibbleShift) >> nNibbleShift;
 }
 
 void __fastcall NET_SID_CLIENT_SetCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue) {
     int nWordIndex = 3 - (nNibbleIndex >> 3);
-    int8_t nBitShift = ((uint8_t)nNibbleIndex & 7) * '\x04';
+    int32_t nBitShift = (nNibbleIndex & 7) * 4;
     pCdKeyData[nWordIndex] = ~(0xf << nBitShift) & pCdKeyData[nWordIndex] | (nNibbleValue & 0xf) << nBitShift;
 }
 
 int __fastcall Unreferenced_00522570(uint32_t * param_1, int param_2) {
-    uint8_t bVar1 = (uint8_t)param_2 & 0x1f;
+    int32_t bVar1 = param_2 & 0x1f;
     return (param_1[3 - ((uint32_t)param_2 >> 5)] & 1 << bVar1) >> bVar1;
 }
 
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue) {
-    uint8_t byBitPos = (uint8_t)nBitIndex & 0x1f;
+    int32_t byBitPos = nBitIndex & 0x1f;
     int nWordIndex = 3 - (nBitIndex >> 5);
     pCdKeyData[nWordIndex] = (nBitValue & 1) << byBitPos | ~(1 << byBitPos) & pCdKeyData[nWordIndex];
 }

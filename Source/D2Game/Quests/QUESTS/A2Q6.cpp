@@ -269,9 +269,9 @@ void __fastcall Q14_PlayCompletionSoundAll(::SGAMEDATA * pGame) {
 // A2Q6 "The Seven Tombs" — talk callback for state 2 (slot fpQuestStateHandler[2]). On talking to Cain(0xfb): if bCainSaved, broadcasts quest state 4 then clears the slot. On talking to Jerhyn(0xc9): if field_0x08 set, broadcasts state 1; else if field_0x0A set, broadcasts state 6; then clears the slot and re-syncs every player's quest record via Q14_UpdateQuestRecordStep. Drives the post-Duriel Jerhyn/Cain dialogue that gates the reward & Act3 travel. (eFlags zeroed before each broadcast.)
 void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame;
-    short int nNpcClassId = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
+    int32_t nNpcClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     D2QuestDataA2Q6Strc* pDVar1 = pQuestData->pQuestSpecificData.pA2Q6;
-    if (nNpcClassId == 0xfb) {
+    if ((short int)nNpcClassId == 0xfb) {
       if (pDVar1->bTyraelPortalFlag == 1) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
@@ -279,7 +279,7 @@ void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
         return;
       }
-    } else if (nNpcClassId == 0xc9) {
+    } else if ((short int)nNpcClassId == 0xc9) {
       if (pDVar1->bJerhynSpokeFlag == 1) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, 1);
