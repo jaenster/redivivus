@@ -42,13 +42,12 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2GameViewStrc) == 0xeabc, "D2_NEW_AT(D2GameViewStrc): the 32-bit layout must be the 0xeabc bytes 1.14d allocates");
 
 
-static D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gaSpriteArcaneStarYOffset; D2_STATIC_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
+static D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gArcaneStarSeed; D2_STATIC_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
 namespace D2Client::GAME::View {
 D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "D2Client::GAME::View::gAncientsCloudSeed");
 } // namespace D2Client::GAME::View
 static uint8_t gaArcaneStarColors[256] = {}; D2_STATIC_GUARD(gaArcaneStarColors, "gaArcaneStarColors");
-uint32_t gaSpriteArcaneStarYOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarYOffset, "gaSpriteArcaneStarYOffset");
-static uint32_t gaSpriteArcaneStarXOffset = 0; D2_STATIC_GUARD(gaSpriteArcaneStarXOffset, "gaSpriteArcaneStarXOffset");
+D2SeedStrc gArcaneStarSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gArcaneStarSeed, "gArcaneStarSeed");
 int nScaleFactor = 0; D2_GLOBAL_GUARD(nScaleFactor, "nScaleFactor");
 static int32_t gaArcaneStarYPos[256] = {}; D2_STATIC_GUARD(gaArcaneStarYPos, "gaArcaneStarYPos");
 static uint8_t gPaletteTransitionTable[12544] = {}; D2_STATIC_GUARD(gPaletteTransitionTable, "gPaletteTransitionTable");

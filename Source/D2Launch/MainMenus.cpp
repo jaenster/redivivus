@@ -9507,12 +9507,10 @@ BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit) {
     uint16_t* pwszOldEmail;
     uint16_t* pwszNewEmail1;
     uint16_t* pwszNewEmail2;
-    uint32_t nEmailCmp;
+    int32_t nEmailCmp;
     BOOL bResult;
     uint16_t nStrId;
-    int32_t nButton1LabelId;
-    char aBuffer[256];
-    char szNewEmail2[256];
+    uint16_t aBuffer[256];
     char szNewEmail1[256];
     char szAccount[256];
     char szOldEmail[256];
@@ -9538,7 +9536,7 @@ BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit) {
             D2Lang::WideCharToUTF8(szAccount, pwszAccount, 0x100);
             D2Lang::WideCharToUTF8(szOldEmail, pwszOldEmail, 0x100);
             D2Lang::WideCharToUTF8(szNewEmail1, pwszNewEmail1, 0x100);
-            D2Lang::WideCharToUTF8(szNewEmail2, pwszNewEmail1, 0x100);
+            D2Lang::WideCharToUTF8((char*)(aBuffer + 0x80), pwszNewEmail1, 0x100);
             bResult = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
             if (bResult) {
               bResult = Launcher::gpBNetCallbacks->pfnSendChangeEmail(szAccount, szOldEmail, szNewEmail1);
@@ -9564,9 +9562,9 @@ BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit) {
         nMsgBoxArg7 = 1;
         pfnBtn2Press = 0;
         nMsgBoxArg5 = 0;
-        nButton1LabelId = 0x13ee;
+        nEmailCmp = 0x13ee;
         pfnBtn1Press = (OnPress)MAINMENU_DismissPopup;
-        MAINMENU_CreateMessageBox(nullptr, D2Lang::StrTable::strtable::GetLocaleString(nStrId), nButton1LabelId, nMsgBoxArg5, pfnBtn1Press, pfnBtn2Press, nMsgBoxArg7, nMsgBoxArg8);
+        MAINMENU_CreateMessageBox(nullptr, D2Lang::StrTable::strtable::GetLocaleString(nStrId), nEmailCmp, nMsgBoxArg5, pfnBtn1Press, pfnBtn2Press, nMsgBoxArg7, nMsgBoxArg8);
         return 1;
       }
     }

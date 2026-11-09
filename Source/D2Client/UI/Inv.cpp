@@ -7046,8 +7046,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     uint16_t wszBaseName[512];
     uint16_t wszSuffix[512];
     uint16_t wszScratch[512];
-    uint16_t wszNameScratch[256];
-    uint16_t wszPlayerName[256];
+    uint16_t wszNameScratch[512];
     char szEarLevelStr[20];
     uint8_t* wszEarLevel[2];
     D2MagicAffixTxt* pPrefixAffix2;
@@ -7166,7 +7165,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             byEarLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit);
             Storm::Source::SSTR::SStrPrintf(szEarLevelStr, 3, "%d", (uint32_t)byEarLevel);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)wszEarLevel, szEarLevelStr, 3);
-            Fog::File::CONTAINER_InitializeBuffer(wszPlayerName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+            Fog::File::CONTAINER_InitializeBuffer(wszNameScratch + 0x100, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             pcNameSrc = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
             strcpy(__frame0.szPlayerNameCopy, pcNameSrc);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)__frame0.szUtf8Buf, __frame0.szPlayerNameCopy, 0x100);

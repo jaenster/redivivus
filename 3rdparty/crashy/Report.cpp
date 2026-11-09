@@ -43,12 +43,12 @@ void __thiscall Destructor(::Report * pThis) {
 }
 
 int8_t __thiscall Open(::Report * pThis, char * szFileName) {
+    bool bSuccess;
     bool bGotPath;
     tm localTime;
     __time64_t tTime = _time64(nullptr);
     _localtime64_s(&localTime, &tTime);
     if (gszCrashLogTempDir[0] == '\0') {
-      bool bSuccess;
       bSuccess = File::FILETOOLS_GetTempPath_UTF8(gszCrashLogTempDir);
       if (bSuccess) {
         bSuccess = File::STRING_AppendBlizzardErrorSubfolderToPath(gszCrashLogTempDir);
@@ -66,8 +66,8 @@ int8_t __thiscall Open(::Report * pThis, char * szFileName) {
       return '\0';
     }
 
-    uint8_t Var1 = (uint8_t)File::FILETOOLS_CreateFolder_UTF8(szDest);
-    if ((uint8_t)(uint32_t)Var1 == '\0') {
+    bSuccess = File::FILETOOLS_CreateFolder_UTF8(szDest);
+    if (!bSuccess) {
       return '\0';
     }
 

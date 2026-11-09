@@ -16,7 +16,7 @@
 // Forward declarations
 struct D2SeedStrc;
 
-extern uint32_t gaSpriteArcaneStarYOffset;
+extern D2SeedStrc gArcaneStarSeed;
 extern int nScaleFactor;
 
 namespace D2Client::GAME::View {

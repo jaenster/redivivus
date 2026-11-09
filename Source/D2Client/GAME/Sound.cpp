@@ -455,9 +455,9 @@ void __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChann
         }
       }
     }
-    if (!(fVolume != (float)pSoundChannel->nLastVolume || (float)pSoundChannel->dwLastEaxObstruction != pActiveSound->fUnitDistance)) {
+    if (!(fVolume != (float)pSoundChannel->nLastVolume || pSoundChannel->dwLastEaxObstruction != pActiveSound->fUnitDistance)) {
       nBytesRemaining = 0xc;
-      pByteA = (float*)&pSoundChannel->dwLastPosX;
+      pByteA = &pSoundChannel->dwLastPosX;
       pByteB = &pActiveSound->fPosX;
       do {
         if (*pByteB != *pByteA) {
@@ -530,7 +530,7 @@ void __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChann
     pSoundChannel->dwLastPosX = nSoundDescSaved->fPosX;
     pSoundChannel->dwLastPosY = nSoundDescSaved->fPosY;
     pSoundChannel->dwLastPosZ = nSoundDescSaved->fPosZ;
-    pSoundChannel->nLastVolume = fVolume;
+    pSoundChannel->nLastVolume = (int32_t)fVolume;
     pSoundChannel->dwLastEaxObstruction = nSoundDescSaved->fUnitDistance;
 }
 
@@ -683,11 +683,11 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
       D2Sound::Src::D2SoundSmp::SOUNDSMP_SetEaxRoomLevel(pPlayingChannel->pSoundSmp, fReverbLevel);
     }
 
-    pPlayingChannel->dwLastEaxObstruction = 0;
+    pPlayingChannel->dwLastEaxObstruction = 0.0;
     pPlayingChannel->nLastVolume = -1;
-    pPlayingChannel->dwLastPosX = 0;
-    pPlayingChannel->dwLastPosY = 0;
-    pPlayingChannel->dwLastPosZ = 0;
+    pPlayingChannel->dwLastPosX = 0.0;
+    pPlayingChannel->dwLastPosY = 0.0;
+    pPlayingChannel->dwLastPosZ = 0.0;
     SOUND_UpdateChannelParams(pPlayingChannel);
     D2SoundChannelStrc* pSoundDescBackup = pSoundDesc;
     if (!pSoundTxt->Stream) {

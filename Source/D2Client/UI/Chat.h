@@ -30,6 +30,27 @@ typedef tagCANDIDATELIST * LPCANDIDATELIST;
 
 #endif // _WIN32
 
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct __attribute__((packed)) ChatCommandProcessor_Slotm580_At208 {
+    /* 0x000 */ BYTE _pad0[520];
+    /* 0x208 */ uint16_t wszMsgBuffer4[260]; // WCHAR[260], CONTAINER_InitializeBuffer(2, 0x104) at 0047c74c
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At208 {
+    /* 0x000 */ BYTE _pad0[520];
+    /* 0x208 */ uint16_t wszMsgBuffer2[260]; // WCHAR[260], CONTAINER_InitializeBuffer(2, 0x104) at 0047c601
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At30c {
+    /* 0x000 */ BYTE _pad0[780];
+    /* 0x30C */ char szCommandParam[260]; // CHAT_ExtractCommandParameter(0x104)
+};
+
+#endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2ChatCommandStrc
 #define D2_DEFINED_D2ChatCommandStrc
 struct __attribute__((packed)) D2ChatCommandStrc {
@@ -60,6 +81,21 @@ struct D2ChatPlayerNameNodeStrc {
 };
 
 #endif // D2_DEFINED_D2ChatPlayerNameNodeStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union ChatCommandProcessor_Slotm580 {
+    /* 0x00 */ uint16_t wszMsgBuffer3[520]; // WCHAR[520], CONTAINER_InitializeBuffer(2, 0x208)
+    /* 0x00 */ ChatCommandProcessor_Slotm580_At208 sMsgBuffer4;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union ChatCommandProcessor_Slotm990 {
+    /* 0x00 */ uint16_t wszMsgBuffer1[520]; // WCHAR[520], CONTAINER_InitializeBuffer(2, 0x208) at 0047c8d2
+    /* 0x00 */ ChatCommandProcessor_Slotm990_At208 sMsgBuffer2;
+    /* 0x00 */ ChatCommandProcessor_Slotm990_At30c sCommandParam;
+};
+
+#endif // D2_MODULE_D2Client
 namespace D2Client::UI::Chat {
 
 // Function declarations

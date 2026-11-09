@@ -2753,7 +2753,7 @@ void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
         /* .nDirection = */ 0x3
     }
 }; D2_STATIC_GUARD(gaDrlgRoomReplacementsA, "D2Common::Drlg::Maze::ReplaceRooms::gaDrlgRoomReplacementsA");
-    static D2DrlgReplaceRoomStrc gaDrlgRoomReplacementsB[3] = {
+    static D2DrlgReplaceRoomStrc gaDrlgRoomReplacementsB[4] = {
     {
         /* .nSourceLevelPrestId = */ 0x412,
         /* .nDestLevelPrestId = */ 0x419,
@@ -2771,6 +2771,12 @@ void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
         /* .nDestLevelPrestId = */ 0x41c,
         /* .nDestPickedFile = */ -0x1,
         /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x414,
+        /* .nDestLevelPrestId = */ 0x41b,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
     }
 }; D2_STATIC_GUARD(gaDrlgRoomReplacementsB, "D2Common::Drlg::Maze::ReplaceRooms::gaDrlgRoomReplacementsB");
 

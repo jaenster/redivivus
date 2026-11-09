@@ -169,9 +169,6 @@ void __fastcall SKILLNEC_InitializeSummon(::SGAMEDATA * pGame, struct D2UnitStrc
 BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server DoFunc for Necromancer Iron Golem (skill 57). Verifies a valid ground item target via SrvStFunc_20, then summons the golem via SKILL_CreateSummon using the skill's pettype/petmax calculus. On success, consumes the target item (removes it from the room and equips it to the golem), initializes the summon, broadcasts ally info to the client, and adds the golem to the unit node table. Returns 1 on success, 0 on failure.
 BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-// Necromancer Revive skill server handler. Removes the corpse's collision footprint, finds a free spawn coordinate near the corpse via GetFreeCoordinates_WithNeighboorRooms, sets UNITFLAG_TARGETABLE/CANBEATTACKED/etc, triggers mage-think AI, transitions the unit through a Death lifecycle event, frees its minions and clears its right skill, then relocates the unit to the new position — effectively converting a corpse into a living Revived monster.
-void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __stdcall SKILLNEC_ApplyReviveToCorpse(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, struct D2UnitStrc * pUnit2);
 BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server-side skill DoFunc 60 (Necromancer golem summon at cursor, e.g. Blood/Clay/Iron/Fire golem). Resolves the cursor/target position, finds a valid non-town room nearby (DRLGROOM_FindBetterNearbyRoom). Resolves the summon's monster class id and pettype via SKILLS_GetSummonMonsterClassId, then creates the golem with SKILL_CreateSummon at the target position. On success: assigns the caster as minion owner (AssignMinionOwner), applies umods (InitUmods) and summon buffs (SKILLNEC_ApplySummonBuffs), registers it in the targets node table. If the golem's room is not in town and a server missile (srvmissilea) is configured with calc[1]/2 > 1, fires two CreatingMissile missiles perpendicular to the caster-to-golem vector (an emerge/spawn effect), each retargeted to the golem GUID. Returns 1 on full success (missiles spawned), 0 on failure or invalid target. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.
 BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -192,6 +189,6 @@ BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEv
 BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl);
 int32_t __fastcall BloodGolemLifeLeech(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHealAmount);
 #endif // D2_MODULE_D2Game
-// 7 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Game::SKILLS::SkillNec

@@ -685,19 +685,10 @@ void __fastcall MISSILE_RemoveClientSide(D2UnitStrc * pUnit) {
 
 // Computes and stores the pierce count for missile pUnit against target pUnit2 (player or monster only). Checks MissilesTxt pierce flag (bit 2); if set, sums UNITSTAT_skill_pierce + UNITSTAT_item_pierce on the target, then runs a seeded RNG loop (up to 4 iterations) comparing random%100 against pierce chance to count successful pierces. Writes the result to missile's UNITSTAT_pierce_idx stat. Uses UNITSTAT_pierce_idx on the target as the RNG seed index for non-local players.
 static void __stdcall MISSILE_CalculatePierceCount(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    // Frame slots -16..-4 are ONE object: &nSeedLow is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nSeedLow;
-      int32_t nSeedHigh;
-      int32_t nPierceCount;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int32_t _nSeedLow;
     D2MissilesTxt* pMissileTxt;
     D2UnitStrc* pLocalPlayer;
-    __frame0.nPierceCount = 0;
+    D2SeedStrc sSeed;
+    int32_t nPierceCount = 0;
     if (!(!pUnit2 || pUnit2->eUnitType == UNIT_PLAYER || pUnit2->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -725,21 +716,21 @@ static void __stdcall MISSILE_CalculatePierceCount(D2UnitStrc * pUnit, D2UnitStr
       nMissileClassId = 0;
     }
 
-    D2Common::Seed::InitSeed_Param_666((D2SeedStrc*)&__frame0.nSeedLow, nMissileClassId);
+    D2Common::Seed::InitSeed_Param_666(&sSeed, nMissileClassId);
     while (true) {
-      if (__frame0.nPierceCount >= 4) {
+      if (nPierceCount >= 4) {
         break;
       }
 
-      _nSeedLow = D2_SEED_NEXT_VAL(_nSeedLow);
-      if ((int)(__frame0.nSeedLow + (int)((uint32_t)_nSeedLow / 100) * -100) >= nPierceChance) {
+      sSeed = D2_SEED_NEXT_VAL(sSeed);
+      if ((int)(sSeed.nSeedLow % 100) >= nPierceChance) {
         break;
       }
 
-      __frame0.nPierceCount++;
+      nPierceCount++;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, __frame0.nPierceCount, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, nPierceCount, 0);
 }
 
 // Constructs and spawns a missile unit from a D2SkillArgStrc request. Resolves spawn position (explicit X/Y or owner/source unit position), finds the containing room, computes velocity from missiles.txt Vel/VelLev scaled by skill level (with slowmissiles state applied), determines the target (unit, fixed point, or direction next to caster), then creates a UNIT_MISSILE via CreateMissileOrMonster. Sets anim frames/speed, path velocities/acceleration/max-velocity, owner, skill, level, pierce count, lightmap, optional particle/projectile init, plays the travel sound, and dispatches unique-monster mod attacks. Returns the new missile unit, or NULL on any failure (bad txt index, no room, no path). Used by the skill/missile firing pipeline.

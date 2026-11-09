@@ -580,11 +580,11 @@ struct D2ClientSoundChannelStrc {
     /* 0x00 */ struct D2SoundSmpStrc * pSoundSmp; // sample instance
     /* 0x04 */ int32_t nChannelType; // 0/1/2/6 speaker-config channel type
     /* 0x08 */ struct D2SoundChannelStrc * pActiveSound; // active sound request; +4 sound id, +0x2c/+0x30 state, +0x34 priority, +0x41 stream progress
-    /* 0x0C */ uint32_t dwLastPosX;
-    /* 0x10 */ uint32_t dwLastPosY;
-    /* 0x14 */ uint32_t dwLastPosZ;
-    /* 0x18 */ uint32_t nLastVolume;
-    /* 0x1C */ uint32_t dwLastEaxObstruction;
+    /* 0x0C */ float dwLastPosX;
+    /* 0x10 */ float dwLastPosY;
+    /* 0x14 */ float dwLastPosZ;
+    /* 0x18 */ int32_t nLastVolume;
+    /* 0x1C */ float dwLastEaxObstruction;
 };
 #endif // D2_DEFINED_D2ClientSoundChannelStrc
 #ifndef D2_DEFINED_D2ClientVisibilityEntryStrc

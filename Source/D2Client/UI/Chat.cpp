@@ -1248,11 +1248,8 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
     uint16_t* pwFormatArg;
     uint16_t* pwMessage;
     char* pdwChatBodyDst;
-    uint16_t wszMsgBuffer1[260];
-    uint16_t wszMsgBuffer2[130];
-    char szCommandParam[260];
-    uint16_t wszMsgBuffer3[260];
-    uint16_t wszMsgBuffer4[260];
+    ChatCommandProcessor_Slotm990 uMsgBuffer1;
+    ChatCommandProcessor_Slotm580 uMsgBuffer3;
     D2ChatPacketBuildStrc sChatPacket;
     uint16_t wszAccountName[34];
     char szExtractedAccount[20];
@@ -1324,8 +1321,8 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
       pIgnoreListVtable = ppIgnoreList2->_vfptr;
       nCmpResult = ppIgnoreList->_vfptr->GetPersistentSetting(ppIgnoreList);
       pIgnoreListVtable->SavePersistentSetting(ppIgnoreList2, (uint32_t)!nCmpResult);
-      Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer2, 2, 0x104, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-      D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer2, "<BattleNet>: ", 0x208);
+      Fog::File::CONTAINER_InitializeBuffer(uMsgBuffer1.wszMsgBuffer1 + 0x104, 2, 0x104, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      D2Lang::UTF8_ConvertToWideChar(uMsgBuffer1.wszMsgBuffer1 + 0x104, "<BattleNet>: ", 0x208);
       ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
       nCmpResult = ppIgnoreList->_vfptr->GetPersistentSetting(ppIgnoreList);
       wStringId = 0x2ba1;
@@ -1334,18 +1331,18 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
       }
 
       pwLocaleString = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszMsgBuffer2, pwLocaleString);
-      pwMessage = wszMsgBuffer2;
+      D2Lang::Unicode::UNISYS::AppendToBuffer(uMsgBuffer1.wszMsgBuffer1 + 0x104, pwLocaleString);
+      pwMessage = uMsgBuffer1.wszMsgBuffer1 + 0x104;
     } else {
       nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/ignore ");
       if (!nCmpResult || (nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/squelch ") , !nCmpResult)) {
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer1, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(&uMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(&uMsgBuffer1, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x22, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         CHAT_ExtractCommandParameter(0x11, pszInput, szExtractedAccount);
         nCmpResult = Storm::Source::SSTR::SStrCmpI(szExtractedAccount + 1, ClientModeInGame::D2IniData_client->szLastBnetAccount, 0x7fffffff);
         if (nCmpResult) {
-          D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer1, "<BattleNet>: ", 0x208);
+          D2Lang::UTF8_ConvertToWideChar(uMsgBuffer1.wszMsgBuffer1, "<BattleNet>: ", 0x208);
           D2Lang::UTF8_ConvertToWideChar(wszAccountName, szExtractedAccount, 0x22);
           ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
           nCmpResult = ppIgnoreList->_vfptr->AddByPattern(ppIgnoreList, szExtractedAccount);
@@ -1356,8 +1353,8 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
 
           pwLocaleString = wszAccountName;
           pwFormatArg = D2Lang::StrTable::strtable::GetLocaleString(0x2ba3);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszMsgBuffer3, pwFormatArg, pwLocaleString);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszMsgBuffer1, wszMsgBuffer3);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, uMsgBuffer3.wszMsgBuffer3, pwFormatArg, pwLocaleString);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(uMsgBuffer1.wszMsgBuffer1, uMsgBuffer3.wszMsgBuffer3);
         }
       } else {
         nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/unignore ");
@@ -1366,19 +1363,19 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
           if (nCmpResult) {
             nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/filtermsg ");
             if (!nCmpResult) {
-              Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-              CHAT_ExtractCommandParameter(0x104, pszInput, szCommandParam);
-              D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer3, "<BattleNet>: ", 0x208);
+              Fog::File::CONTAINER_InitializeBuffer(&uMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+              CHAT_ExtractCommandParameter(0x104, pszInput, uMsgBuffer1.sCommandParam.szCommandParam);
+              D2Lang::UTF8_ConvertToWideChar(uMsgBuffer3.wszMsgBuffer3, "<BattleNet>: ", 0x208);
               ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-              nCmpResult = ppIgnoreList->_vfptr->AddByAccountName(ppIgnoreList, szCommandParam);
+              nCmpResult = ppIgnoreList->_vfptr->AddByAccountName(ppIgnoreList, uMsgBuffer1.sCommandParam.szCommandParam);
               wStringId = 0x2ba7;
               if (!nCmpResult) {
                 wStringId = 0x2ba8;
               }
 
               pwLocaleString = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
-              D2Lang::Unicode::UNISYS::AppendToBuffer(wszMsgBuffer3, pwLocaleString);
-              pwMessage = wszMsgBuffer3;
+              D2Lang::Unicode::UNISYS::AppendToBuffer(uMsgBuffer3.wszMsgBuffer3, pwLocaleString);
+              pwMessage = (uint16_t*)&uMsgBuffer3;
             } else {
               nCmpResult = CHAT_CompareCaseInsensitive(pszInput, "/unfiltermsg ");
               if (nCmpResult) {
@@ -1425,30 +1422,30 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
                 goto close_chatbox;
               }
 
-              Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer4, 2, 0x104, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-              CHAT_ExtractCommandParameter(0x104, pszInput, szCommandParam);
-              D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer4, "<BattleNet>: ", 0x208);
+              Fog::File::CONTAINER_InitializeBuffer(uMsgBuffer3.wszMsgBuffer3 + 0x104, 2, 0x104, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+              CHAT_ExtractCommandParameter(0x104, pszInput, uMsgBuffer1.sCommandParam.szCommandParam);
+              D2Lang::UTF8_ConvertToWideChar(uMsgBuffer3.wszMsgBuffer3 + 0x104, "<BattleNet>: ", 0x208);
               ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-              nCmpResult = ppIgnoreList->_vfptr->RemoveByAccountName(ppIgnoreList, szCommandParam);
+              nCmpResult = ppIgnoreList->_vfptr->RemoveByAccountName(ppIgnoreList, uMsgBuffer1.sCommandParam.szCommandParam);
               wStringId = 0x2ba9;
               if (!nCmpResult) {
                 wStringId = 0x2baa;
               }
 
               pwLocaleString = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
-              D2Lang::Unicode::UNISYS::AppendToBuffer(wszMsgBuffer4, pwLocaleString);
-              pwMessage = wszMsgBuffer4;
+              D2Lang::Unicode::UNISYS::AppendToBuffer(uMsgBuffer3.wszMsgBuffer3 + 0x104, pwLocaleString);
+              pwMessage = uMsgBuffer3.wszMsgBuffer3 + 0x104;
             }
 
             goto print_reply;
           }
         }
 
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-        Fog::File::CONTAINER_InitializeBuffer(wszMsgBuffer1, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(&uMsgBuffer3, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(&uMsgBuffer1, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x22, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
         CHAT_ExtractCommandParameter(0x11, pszInput, szExtractedAccount);
-        D2Lang::UTF8_ConvertToWideChar(wszMsgBuffer1, "<BattleNet>: ", 0x208);
+        D2Lang::UTF8_ConvertToWideChar(uMsgBuffer1.wszMsgBuffer1, "<BattleNet>: ", 0x208);
         D2Lang::UTF8_ConvertToWideChar(wszAccountName, szExtractedAccount, 0x22);
         ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
         nCmpResult = ppIgnoreList->_vfptr->RemoveByPattern(ppIgnoreList, szExtractedAccount);
@@ -1462,11 +1459,11 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
           pwFormatArg = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
         }
 
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszMsgBuffer3, pwFormatArg, pwLocaleString);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszMsgBuffer1, wszMsgBuffer3);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, uMsgBuffer3.wszMsgBuffer3, pwFormatArg, pwLocaleString);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(uMsgBuffer1.wszMsgBuffer1, uMsgBuffer3.wszMsgBuffer3);
       }
 
-      pwMessage = wszMsgBuffer1;
+      pwMessage = (uint16_t*)&uMsgBuffer1;
     }
 
     print_reply:

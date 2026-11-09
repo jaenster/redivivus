@@ -689,7 +689,6 @@ bool __fastcall FILETOOLS_CreateDirectoryW(LPWSTR lpPathName) {
 }
 
 bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName) {
-    uint32_t extraout_var;
     uint16_t wszPath[260];
     int nConverted = MultiByteToWideChar(0xfde9, 0, szPathName, -1, (LPWSTR)wszPath, 0x104);
     if (!nConverted) {
@@ -697,7 +696,7 @@ bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName) {
     }
 
     bool bCreated = FILETOOLS_CreateDirectoryW((LPWSTR)wszPath);
-    return (bool)(uint8_t)(float)(uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)bCreated);
+    return bCreated;
 }
 
 } // namespace Fog::File

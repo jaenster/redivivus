@@ -4869,21 +4869,19 @@ static BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(int nScre
 
 // Renders wall/ground tiles with full perspective transformation and vertex lighting. Builds 15-vertex triangle fan (4 corners + center + 10 edge midpoints) by transforming isometric coords (X,Y,Z) to screen space via AdjustPerspectivePosition. Applies per-vertex colors from pLightColors array (4 corner colors, center interpolated). Uses ground tile index table at 0x0074c100 to map tile type (0-9) and subtile (0-4) to 3D vertex offsets. Renders via DrawIndexedPrimitive with gaD3DPerspectiveStripIndices index buffer.
 static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPanels, D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLightColors, uint8_t nAlpha) {
+    uint32_t uVar3;
+    int nBias;
+    int iVar4;
     short int* pSubtileOffset;
     int nTileTableIdx;
+    int iVar5;
     D2D3DVertexStrc* pfVertexOuter;
     int nFixedY0;
+    int iVar6;
+    int iVar7;
     D2D3DVertexStrc* pfVertex;
     RECT nViewportLeft;
-    D2GfxLightStrc aVertexColors;
-    int nMidZFixed;
-    D2GfxLightStrc nMidYFixed;
-    int nMidX;
-    int nMidY;
-    int nX0;
-    int nY0;
-    int nZ0;
-    D2GfxLightStrc fSubtileIndex;
+    D2GfxLightStrc aVertexColors[3];
     D2FloatIntUnion fLayerIndex;
     int nX1;
     int nY1;
@@ -4895,30 +4893,27 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
     BOOL nMidZ = 0;
     int nPanelOffset = 0;
     RENDERER_D3D_CalculateViewportRect(&nViewportLeft, nScreenPanels, &nPanelOffset, 1);
-    uint32_t nTileType = pTile->nDirection;
-    if (nTileType <= 9) {
+    uint32_t uVar1 = pTile->nDirection;
+    if (uVar1 <= 9) {
       int nTileIndex = 0;
       if (pTile->nSubTiles > 0) {
-        int nBias;
+        float fVar2;
         do {
           pSubtileOffset = &pTile->pSubTiles[nTileIndex].nOffsetX;
           fLayerIndex = d2_bits_as<D2FloatIntUnion>((int)pSubtileOffset[1]);
-          fSubtileIndex = (D2GfxLightStrc)((int)*pSubtileOffset >> 5);
-          if ((uint32_t)d2_bits_of(fSubtileIndex) > 4) {
+          uVar3 = (int)*pSubtileOffset >> 5;
+          if (uVar3 > 4) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x21b);
             exit(-1);
           }
 
-          nTileTableIdx = (int)d2_bits_of(fSubtileIndex) + nTileType * 6;
+          nTileTableIdx = uVar3 + uVar1 * 6;
           nFixedY0 = gaD3DWallCornerTable[nTileTableIdx].nY + nPosY * 0x2000;
           nBias = gaD3DWallCornerTable[nTileTableIdx].nZ - (int)d2_bits_of(fLayerIndex);
           nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + nPosX * 0x2000;
           nZ1 = gaD3DWallCornerTable[nTileTableIdx + 1].nZ - (int)d2_bits_of(fLayerIndex);
           nY1 = gaD3DWallCornerTable[nTileTableIdx + 1].nY + nPosY * 0x2000;
           nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + nPosX * 0x2000;
-          nX0 = nTileTableIdx;
-          nY0 = nFixedY0;
-          nZ0 = nBias;
           Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias, &nScreenX, &nScreenY);
           gaD3DPerspectiveStripVertices[0].fX = (float)nScreenX;
           gaD3DPerspectiveStripVertices[0].fY = (float)nScreenY;
@@ -4933,41 +4928,40 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
           gaD3DPerspectiveStripVertices[2].fY = (float)nScreenY;
           fLayerIndex.fValue = (float)nViewportLeft.left;
           if (fLayerIndex.fValue < gaD3DPerspectiveStripVertices[0].fX != (fLayerIndex.fValue == gaD3DPerspectiveStripVertices[0].fX) && gaD3DPerspectiveStripVertices[0].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0].fY) && gaD3DPerspectiveStripVertices[0].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[0xc].fX && gaD3DPerspectiveStripVertices[0xc].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xc].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xc].fY) && gaD3DPerspectiveStripVertices[0xc].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[0xe].fX && gaD3DPerspectiveStripVertices[0xe].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xe].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xe].fY) && gaD3DPerspectiveStripVertices[0xe].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[2].fX && gaD3DPerspectiveStripVertices[2].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[2].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[2].fY) && gaD3DPerspectiveStripVertices[2].fY < (float)nViewportLeft.bottom) {
-            aVertexColors = pLightColors[(int)d2_bits_of(fSubtileIndex)];
-            nMidYFixed = pLightColors[(int)d2_bits_of(fSubtileIndex) + 1];
-            nMidZ = nBias + nZ1 >> 1;
-            nMidX = nTileTableIdx + nX1 >> 1;
-            nMidZFixed = ((((int)(((uint32_t)d2_bits_of(nMidYFixed) >> 0x18) + ((uint32_t)d2_bits_of(aVertexColors) >> 0x18)) >> 1) * 0x100 + ((int)((uint8_t)((uint32_t)d2_bits_of(nMidYFixed) >> 0x10) + (uint8_t)((uint32_t)d2_bits_of(aVertexColors) >> 0x10)) >> 1)) * 0x100 + ((int)(((uint32_t)d2_bits_of(nMidYFixed) >> 8 & 0xff) + ((uint32_t)d2_bits_of(aVertexColors) >> 8 & 0xff)) >> 1)) * 0x100 + ((int)((uint8_t)(uint32_t)d2_bits_of(aVertexColors) + (uint8_t)(uint32_t)d2_bits_of(nMidYFixed)) >> 1);
-            nMidY = nFixedY0 + nY1 >> 1;
-            fSubtileIndex = nMidYFixed;
+            iVar5 = nTileTableIdx + nX1;
+            iVar4 = nBias + nZ1;
+            iVar6 = nFixedY0 + nY1;
+            aVertexColors[0] = pLightColors[uVar3];
+            aVertexColors[2] = pLightColors[uVar3 + 1];
+            aVertexColors[1] = (D2GfxLightStrc)(((((int)(((uint32_t)d2_bits_of(aVertexColors[2]) >> 0x18) + ((uint32_t)d2_bits_of(aVertexColors[0]) >> 0x18)) >> 1) * 0x100 + ((int)((uint8_t)((uint32_t)d2_bits_of(aVertexColors[2]) >> 0x10) + (uint8_t)((uint32_t)d2_bits_of(aVertexColors[0]) >> 0x10)) >> 1)) * 0x100 + ((int)(((uint32_t)d2_bits_of(aVertexColors[2]) >> 8 & 0xff) + ((uint32_t)d2_bits_of(aVertexColors[0]) >> 8 & 0xff)) >> 1)) * 0x100 + ((int)((uint8_t)(uint32_t)d2_bits_of(aVertexColors[0]) + (uint8_t)(uint32_t)d2_bits_of(aVertexColors[2])) >> 1));
             d3dFloorCache::D3D_RenderSubtileToTexture(&pTile->pSubTiles[nTileIndex]);
-            fSubtileIndex = (D2GfxLightStrc)(float)nPanelOffset;
+            fVar2 = (float)nPanelOffset;
             fLayerIndex.fValue = 0.0;
             pfVertexOuter = gaD3DPerspectiveStripVertices + 2;
             do {
               fLayerIter = fLayerIndex;
               if (fLayerIndex.nValue && fLayerIndex.nValue != 4) {
-                nTileTableIdx = fLayerIndex.nValue * -8;
-                Renderer::AdjustPerspectivePosition(nX0, nY0, nTileTableIdx + nZ0, &nScreenX, &nScreenY);
+                iVar7 = fLayerIndex.nValue * -8;
+                Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, iVar7 + nBias, &nScreenX, &nScreenY);
                 pfVertexOuter[-2].fX = (float)nScreenX;
                 pfVertexOuter[-2].fY = (float)nScreenY;
-                Renderer::AdjustPerspectivePosition(nX1, nY1, nTileTableIdx + nZ1, &nScreenX, &nScreenY);
+                Renderer::AdjustPerspectivePosition(nX1, nY1, iVar7 + nZ1, &nScreenX, &nScreenY);
                 pfVertexOuter->fX = (float)nScreenX;
                 pfVertexOuter->fY = (float)nScreenY;
               }
 
-              Renderer::AdjustPerspectivePosition(nMidX, nMidY, nMidZ + fLayerIter.nValue * -8, &nScreenX, &nScreenY);
-              nTileTableIdx = 0;
+              Renderer::AdjustPerspectivePosition(iVar5 >> 1, iVar6 >> 1, (iVar4 >> 1) + fLayerIter.nValue * -8, &nScreenX, &nScreenY);
+              iVar7 = 0;
               pfVertex = pfVertexOuter - 2;
               pfVertexOuter[-1].fX = (float)nScreenX;
               pfVertexOuter[-1].fY = (float)nScreenY;
               do {
-                nVertexColor = (&aVertexColors)[nTileTableIdx];
-                pfVertex->fX = (float)d2_bits_to_float(fSubtileIndex) + pfVertex->fX;
+                nVertexColor = aVertexColors[iVar7];
+                pfVertex->fX = fVar2 + pfVertex->fX;
                 RENDERER_D3D_SetTextureStageColor(pfVertex, (uint32_t)d2_bits_of(nVertexColor), nAlpha);
-                nTileTableIdx++;
+                iVar7++;
                 pfVertex++;
-              } while (nTileTableIdx < 3);
+              } while (iVar7 < 3);
 
               fLayerIndex.nValue++;
               pfVertexOuter += 3;
@@ -5632,8 +5626,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
     uint16_t* pIndexedPixels;
     uint8_t* pOutputPixel;
     uint32_t nPaletteIdx;
-    uint8_t aPixelData;
-    uint8_t aImagePixelData[28079];
+    uint8_t aPixelData[28080];
     uint8_t aPaletteRGBA[1024];
     uint32_t nImgBpp;
     uint32_t nImgHeight;
@@ -5674,27 +5667,27 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       nFileSize = 0;
       bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&pVersion, &nFileSize, 0, 3, (LPOVERLAPPED)0x0);
       if (bFileLoaded && pVersion) {
-        nPixelCol = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, nFileSize, aPaletteRGBA, &aPixelData, 0x6db0, &nImgWidth, &nImgBpp, &nImgHeight);
+        nPixelCol = Storm::Source::SBMP::SBmpDecodeImage(2, pVersion, nFileSize, aPaletteRGBA, aPixelData, 0x6db0, &nImgWidth, &nImgBpp, &nImgHeight);
         Storm::Source::SMem::SMemFree(pVersion, ".\\Src\\d3dSmack.cpp", 0xda, 0);
         if (nPixelCol && nImgWidth == 0x1d4 && nImgBpp == 0x3c && nImgHeight == 8) {
-          pOutputPixel = aImagePixelData;
+          pOutputPixel = aPixelData + 1;
           pCurOutputRow = (uint16_t*)pSmackerDecodeBuffer;
           nRowsRemaining = 0x3c;
           do {
             nPixelCol = 0;
             pIndexedPixels = pCurOutputRow;
             do {
-              nPaletteIdx = (uint32_t)(uint8_t)pOutputPixel[nPixelCol - 1];
+              nPaletteIdx = (uint32_t)pOutputPixel[nPixelCol - 1];
               *pIndexedPixels = ((uint16_t)(aPaletteRGBA[nPaletteIdx * 4] & 0xf8) << 5 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 1] & 0xf8)) * 4 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 2] >> 3);
-              nPaletteIdx = (uint32_t)(uint8_t)pOutputPixel[nPixelCol];
+              nPaletteIdx = (uint32_t)pOutputPixel[nPixelCol];
               pIndexedPixels[1] = ((uint16_t)(aPaletteRGBA[nPaletteIdx * 4] & 0xf8) << 5 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 1] & 0xf8)) * 4 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 2] >> 3);
-              nPaletteIdx = (uint32_t)(uint8_t)pOutputPixel[nPixelCol + 1];
+              nPaletteIdx = (uint32_t)pOutputPixel[nPixelCol + 1];
               pIndexedPixels[2] = ((uint16_t)(aPaletteRGBA[nPaletteIdx * 4] & 0xf8) << 5 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 1] & 0xf8)) * 4 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 2] >> 3);
-              nPaletteIdx = (uint32_t)(uint8_t)pOutputPixel[nPixelCol + 2];
+              nPaletteIdx = (uint32_t)pOutputPixel[nPixelCol + 2];
               pIndexedPixels[3] = ((uint16_t)(aPaletteRGBA[nPaletteIdx * 4] & 0xf8) << 5 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 1] & 0xf8)) * 4 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 2] >> 3);
-              nPaletteIdx = (uint32_t)(uint8_t)pOutputPixel[nPixelCol + 3];
+              nPaletteIdx = (uint32_t)pOutputPixel[nPixelCol + 3];
               pIndexedPixels[4] = ((uint16_t)(aPaletteRGBA[nPaletteIdx * 4] & 0xf8) << 5 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 1] & 0xf8)) * 4 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 2] >> 3);
-              nPaletteIdx = (uint32_t)(uint8_t)pOutputPixel[nPixelCol + 4];
+              nPaletteIdx = (uint32_t)pOutputPixel[nPixelCol + 4];
               pIndexedPixels[5] = ((uint16_t)(aPaletteRGBA[nPaletteIdx * 4] & 0xf8) << 5 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 1] & 0xf8)) * 4 | (uint16_t)(aPaletteRGBA[nPaletteIdx * 4 + 2] >> 3);
               nPixelCol += 6;
               pIndexedPixels += 6;

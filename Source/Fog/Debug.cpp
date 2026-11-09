@@ -1030,7 +1030,6 @@ static void FormatModuleDebugString(char * szText, D2FogDebugModuleEntryStrc * p
 void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput) {
     int nWritten;
     char szParamDetail[84];
-    uint32_t nSymDisplacement;
     *szOutput = '\0';
     szParamDetail[0] = '\0';
     if (pAddrInfo->b10 != '\0') {
@@ -1047,7 +1046,7 @@ void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, char * pS
       nOffset += nWritten;
     }
     if (*pSymInfo != '\0' || (uint32_t)*(int*)(pSymInfo + 0x200) > 0) {
-      nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, " %s+%llu", pSymInfo, (uint64_t)nSymDisplacement << 0x20);
+      nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, " %s+%llu", pSymInfo, *(uint32_t*)(pSymInfo + 0x200), 0);
       nOffset += nWritten;
     }
 

@@ -236,7 +236,8 @@ BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, D2Uni
       return 0;
     }
 
-    CorpseConsumedCheck(pTarget);
+    BOOL BVar1 = CorpseConsumedCheck(pTarget);
+    return BVar1;
 }
 
 void __fastcall SKILLNEC_OnCurseExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
@@ -1684,7 +1685,7 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Necromancer Revive skill server handler. Removes the corpse's collision footprint, finds a free spawn coordinate near the corpse via GetFreeCoordinates_WithNeighboorRooms, sets UNITFLAG_TARGETABLE/CANBEATTACKED/etc, triggers mage-think AI, transitions the unit through a Death lifecycle event, frees its minions and clears its right skill, then relocates the unit to the new position — effectively converting a corpse into a living Revived monster.
-void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nPosY;
     int32_t nX;
     D2SkillStrc* pSkill;
@@ -1766,7 +1767,7 @@ void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, pRoom, ptRevivePos.x, ptRevivePos.y, 0, 0);
 }
 
-void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
+static void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
     int32_t nOwnerGUID;
     eD2UnitType eOwnerUnitType;
     D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
@@ -1802,16 +1803,60 @@ void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills eSkill
 }
 
 BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    D2MonStatsInitStrc local_4c;
+    int32_t local_14;
+    D2SkillsTxt* local_10 = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (eSkill == SKILL_Attack) {
       return 0;
     }
 
+    uint8_t local_5 = local_10->pettype;
+    if ((int)(uint32_t)local_5 >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+      local_5 = 0;
+    }
+
+    D2UnitStrc* local_c = pUnit;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!pTarget) {
+    BOOL BVar1 = pTarget ? CorpseConsumedCheck(pTarget) : 0;
+    if (!BVar1) {
       return 0;
     }
 
-    CorpseConsumedCheck(pTarget);
+    SKILLNEC_ApplyBloodCost(pGame, local_c, eSkill, nSkillLvl);
+    SKILLNEC_ReviveCorpse(pGame, pTarget);
+    if (pGame->nGameType != SGAMETYPE_BNET_HOST || (local_14 = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
+      local_14 = 1;
+    }
+
+    memset(&local_4c, 0, 0x38);
+    int32_t iVar3 = pTarget->nClassId;
+    D2MonStatsInitStrc* pOutStats = &local_4c;
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(iVar3, local_14, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0), 1, pOutStats);
+    uint32_t uVar4 = D2Common::Seed::RANDOM_RandomNumberSelector(&pTarget->sSeed, local_4c.nMaxHP - local_4c.nMinHP + 1);
+    int nValue = (uVar4 + local_4c.nMinHP) * 0x100;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_maxhp, nValue, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nValue, 0);
+    local_14 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(local_c, UNITSTAT_level, 0);
+    int iVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
+    if (iVar2 && local_14 < iVar2) {
+      iVar3 = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, local_14, iVar2);
+      if (iVar3 < 1) {
+        iVar3 = 1;
+      }
+
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_maxhp, iVar3, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, iVar3, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_level, local_14, 0);
+    }
+
+    SKILLNEC_ApplySummonBuffs(pGame, local_c, pTarget, eSkill, nSkillLvl, 0);
+    SKILLNEC_ApplyReviveToCorpse(local_c, eSkill, nSkillLvl, pGame, pTarget);
+    D2UnitStrc* pOwner = local_c;
+    iVar3 = D2Common::Skills::D2GetSkillCalc(local_c, local_10->petmax, eSkill, nSkillLvl);
+    PLAYER::PlayerPets::SKILL_ResummonPet(pGame, pOwner, pTarget, (uint32_t)local_5, iVar3);
+    GAME::Targets::CreateUnitNode(pGame, pTarget, nullptr, pOwner->nNodeTableIndex);
+    D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pTarget);
+    return 1;
 }
 
 // Server-side skill DoFunc 60 (Necromancer golem summon at cursor, e.g. Blood/Clay/Iron/Fire golem). Resolves the cursor/target position, finds a valid non-town room nearby (DRLGROOM_FindBetterNearbyRoom). Resolves the summon's monster class id and pettype via SKILLS_GetSummonMonsterClassId, then creates the golem with SKILL_CreateSummon at the target position. On success: assigns the caster as minion owner (AssignMinionOwner), applies umods (InitUmods) and summon buffs (SKILLNEC_ApplySummonBuffs), registers it in the targets node table. If the golem's room is not in town and a server missile (srvmissilea) is configured with calc[1]/2 > 1, fires two CreatingMissile missiles perpendicular to the caster-to-golem vector (an emerge/spawn effect), each retargeted to the golem GUID. Returns 1 on full success (missiles spawned), 0 on failure or invalid target. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.

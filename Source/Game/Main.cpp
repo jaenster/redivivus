@@ -1583,7 +1583,7 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
     char* pszModeStr;
     char* pszCmdToken = szText;
     pszCmdToken = pszCmdToken + strlen(pszCmdToken) + 1;
-    char* szCmdLineCopy = (char*)D2_ALLOC_AT((size_t)(pszCmdToken + (1 - (intptr_t)(szText + 1))), ".\\DUNGEON\\Dungeon.cpp", 0x1ba);
+    char* szCmdLineCopy = (char*)D2_ALLOC_AT((size_t)(pszCmdToken + (1 - (intptr_t)(szText + 1))), ".\\Main.cpp", 0x1ba);
     Storm::Source::SSTR::SStrCopy(szCmdLineCopy, szText, (int32_t)(pszCmdToken - (szText + 1) + 1));
     pszCmdToken = strtok(szCmdLineCopy, "-");
     while (pszCmdToken) {
@@ -1603,7 +1603,7 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
       pszCmdToken = strtok(nullptr, "-");
     }
 
-    D2_FREE_AT(szCmdLineCopy, ".\\DUNGEON\\Dungeon.cpp", 0x1e0);
+    D2_FREE_AT(szCmdLineCopy, ".\\Main.cpp", 0x1e0);
     return 1;
 }
 

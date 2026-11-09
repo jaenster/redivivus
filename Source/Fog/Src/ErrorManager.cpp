@@ -262,7 +262,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     nSysLocaleIdx = D2Lang::StrTable::strtable::STRTABLE_GetRegistryLanguage();
     _3rdparty::crashy::Printf(pReport, "<Locale.System> %s\n", gaLanguageNames[nSysLocaleIdx]);
     _3rdparty::crashy::Printf(pReport, "<Game.Type> %s\n", "Client");
-    _3rdparty::crashy::Printf(pReport, "DATA\\LOCAL", "79b7ae8fe1e97d05d57ebdc4b65bf012d38c797e");
+    _3rdparty::crashy::Printf(pReport, "<Game.Build> %s\n", "79b7ae8fe1e97d05d57ebdc4b65bf012d38c797e");
     memset(aLogFilePaths, 0, 0x54);
     LogManager::InitLogFilePathPointers(aLogFilePaths, 0x15);
     uint32_t nLogIdx = 0;
@@ -562,7 +562,7 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
         Debug::EnumerateAndDumpAllFunctions(FILETOOLS_WriteOneStringToFile, &crashFile);
         _3rdparty::crashy::Printf(&crashFile, "<:Inspector.DebugModules>\n");
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.HashBlock:>\n");
-        _3rdparty::crashy::Printf(&crashFile, "[JOIN]  SrvRecvDatabaseCharacter: Didn\'t recv full char from db - CSResult(%d), ClientID(%d)");
+        _3rdparty::crashy::Printf(&crashFile, "DBG-OPTIONS<FunctionsOnly>\n");
         if ((D2CrashFrameStrc*)pCrashInfo->apFrameAddrs) {
           File::CRASH_FormatStackTrace(pCrashInfo->dwThreadId, (D2CrashFrameStrc*)pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\0');
         } else {

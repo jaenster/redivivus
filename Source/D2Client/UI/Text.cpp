@@ -2222,8 +2222,7 @@ static uint32_t gbTextScrollBoxAnimating = 0; D2_STATIC_GUARD(gbTextScrollBoxAni
 static uint32_t gbTextScrollBoxActive = 0; D2_STATIC_GUARD(gbTextScrollBoxActive, "gbTextScrollBoxActive");
 static uint32_t gbTextStaticPopupActive = 0; D2_STATIC_GUARD(gbTextStaticPopupActive, "gbTextStaticPopupActive");
 static uint32_t gpTextStaticPopupBox = 0; D2_STATIC_GUARD(gpTextStaticPopupBox, "gpTextStaticPopupBox");
-static int gaTextStaticPopupRect = 0; D2_STATIC_GUARD(gaTextStaticPopupRect, "gaTextStaticPopupRect");
-static unsigned int gnTextStaticPopupHeight = {}; D2_STATIC_GUARD(gnTextStaticPopupHeight, "gnTextStaticPopupHeight");
+static int gaTextStaticPopupRect[2] = {}; D2_STATIC_GUARD(gaTextStaticPopupRect, "gaTextStaticPopupRect");
 static int gaQuestScrollRect = 0; D2_STATIC_GUARD(gaQuestScrollRect, "gaQuestScrollRect");
 static D2ScreenMessageListStrc ScreenMessagesMaybe = {}; D2_STATIC_GUARD(ScreenMessagesMaybe, "ScreenMessagesMaybe");
 static D2ScreenMessageListStrc ScreenPartyMessages = {}; D2_STATIC_GUARD(ScreenPartyMessages, "ScreenPartyMessages");
@@ -2335,7 +2334,6 @@ void __stdcall TEXT_InitTextDisplaySettings() {
     memset(&gbTextStaticPopupActive, 0, sizeof(gbTextStaticPopupActive));
     memset(&gpTextStaticPopupBox, 0, sizeof(gpTextStaticPopupBox));
     memset(&gaTextStaticPopupRect, 0, sizeof(gaTextStaticPopupRect));
-    memset(&gnTextStaticPopupHeight, 0, sizeof(gnTextStaticPopupHeight));
     memset(&gaQuestScrollRect, 0, sizeof(gaQuestScrollRect));
     memset(&ScreenMessagesMaybe, 0, sizeof(ScreenMessagesMaybe));
     memset(&ScreenPartyMessages, 0, sizeof(ScreenPartyMessages));
@@ -6581,7 +6579,6 @@ D2TextLineStrc * __stdcall TEXT_ParseMultilineString(uint16_t * pwszInput, int *
     uint16_t* pwszLineCopy;
     int iLineLen;
     int nLine2Len;
-    char szLogBuf[80];
     uint16_t wszLineBuf[100];
     D2TextLineStrc* pHeadOrNew;
     D2TextLineStrc* pHead;
@@ -6594,7 +6591,7 @@ D2TextLineStrc * __stdcall TEXT_ParseMultilineString(uint16_t * pwszInput, int *
     bool bIsFirstLine;
     bIsFirstLine = true;
     do {
-      char szUtf8Buf[20];
+      char szUtf8Buf[100];
       if (wCur == L'\0') {
         return pHead;
       }
@@ -6671,7 +6668,7 @@ D2TextLineStrc * __stdcall TEXT_ParseMultilineString(uint16_t * pwszInput, int *
             nScrollRate = atoi(szUtf8Buf);
             *pnScrollRate = (uint16_t)nScrollRate;
           } else {
-            /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szLogBuf, "line 0 of string does not contain scroll rate");
+            /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szUtf8Buf + 0x14, "line 0 of string does not contain scroll rate");
             *pnScrollRate = 8;
           }
         }
@@ -6728,7 +6725,7 @@ D2TextLineStrc * __stdcall TEXT_ParseMultilineString(uint16_t * pwszInput, int *
       nLineWStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszLineBuf);
       nPixelWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLineBuf);
       if (nPixelWidth >= 0x134) {
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szLogBuf, "line %d of string is too long", *pnLineCount);
+        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szUtf8Buf + 0x14, "line %d of string is too long", *pnLineCount);
       }
 
       pwszLineCopy = (uint16_t*)D2_ALLOC_AT(nLineWStrLen * 2 + 2, ".\\UI\\text.cpp", 0x5eb);
@@ -7179,7 +7176,7 @@ void __fastcall TEXT_DrawMessageLogAndOverhead(D2GameViewStrc * pGameView) {
         gbTextStaticPopupActive = 0;
         gnTextNpcInteractGuid = 0;
       } else {
-        TEXT_DrawTextBoxWithBorderCheck(gpStaticTextPopup, &gaTextStaticPopupRect);
+        TEXT_DrawTextBoxWithBorderCheck(gpStaticTextPopup, gaTextStaticPopupRect);
       }
 
       nVisibleCount += (uint32_t)bPopupAlive;
@@ -7398,8 +7395,8 @@ void __fastcall TEXT_ShowStaticTextPopup(uint16_t wStringId) {
     gdwTextPopupExpireTime = dwTickCount + (nSavedFont + 0x19) * 200;
     gpTextStaticPopupBox = 1;
     gbTextStaticPopupActive = 1;
-    gnTextStaticPopupHeight = 100 - (gpStaticTextPopup->nHeight >> 2);
-    gaTextStaticPopupRect = 0x140 - (uint32_t)(gpStaticTextPopup->nWidth >> 1);
+    gaTextStaticPopupRect[1] = 100 - (uint32_t)(gpStaticTextPopup->nHeight >> 2);
+    gaTextStaticPopupRect[0] = 0x140 - (uint32_t)(gpStaticTextPopup->nWidth >> 1);
 }
 
 void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
