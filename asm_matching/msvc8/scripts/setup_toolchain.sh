@@ -61,7 +61,15 @@ VC8="$WINEPREFIX/drive_c/vc8"
 if [ ! -f "$WINEPREFIX/system.reg" ]; then
     echo "creating wine prefix $WINEPREFIX"
     wineboot --init >/dev/null 2>&1
-    wineserver -w
+    # Ubuntu's wine package exposes wineserver-stable, not always wineserver.
+    if command -v wineserver >/dev/null 2>&1; then
+        wineserver -w
+    elif command -v wineserver-stable >/dev/null 2>&1; then
+        wineserver-stable -w
+    else
+        echo "missing wineserver or wineserver-stable" >&2
+        exit 2
+    fi
 fi
 
 # ---- RTM ------------------------------------------------------------------------
